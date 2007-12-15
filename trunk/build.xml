@@ -1,1 +1,3 @@
-test
+<project name="web2Project" default="dist" basedir=".">
+
+</project>
