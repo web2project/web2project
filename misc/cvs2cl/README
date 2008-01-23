@@ -1,0 +1,27 @@
+cvs2cl.pl by kripper
+
+A hacked version of cvs2cl used to update DP's Changelog file
+
+How To by John Pritchard (20 Feb 2003)
+
+SITUATION 
+You have a WIN2K workstation with Cygwin, WINCVS, and SSH capabilities installed. You want to execute Kripper's web2Project script "cvs2cl.pl" to create a ChangeLog from the web2Project CVSROOT.
+
+EXECUTION
+1) Make sure you have a working copy of web2Project downloaded. Basically, you just need access to the cvs2cl.pl script. Navigate to the root of the web2project installation.
+
+C:\{path}\web2project\>
+
+2) Set path to the SourceForge web2Project repository:
+
+C:\{path}\web2project\> set CVSROOT=:ext:{username}@cvs.sourceforge.net:/cvsroot/web2project
+C:\{path}\web2project\> set CVS_RSH=ssh
+
+3) Run the "cvs2cl.pl" script
+C:\{path}\web2project\> perl misc\cvs2cl\cvs2cl.pl --dp
+
+(run "perl misc\cvs2cl\cvs2cl.pl --dp --accum" to only add new CL info to the existing, perhaps wrapped ChangeLog file)
+
+OK this is all that is necessary to generate a new ChangeLog file that is nicely formatted with Kripper's web2project output. Very nice tool provided by Kripper.
+
+4) Your web2project Root will now contain a new "ChangeLog" file. Simply check this into CVS to update the ChangeLog. 
