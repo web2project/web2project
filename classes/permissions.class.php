@@ -1226,6 +1226,10 @@ class w2Pacl extends gacl_api {
 			return array();
 		}
 
+		/*echo('<pre>');
+		print_r(debug_backtrace());
+		echo('</pre>');*/
+
 		if (!count($mod_class)) {
 			$q = new DBQuery;
 			$q->addTable('modules');

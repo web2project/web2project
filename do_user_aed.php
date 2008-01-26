@@ -108,7 +108,7 @@ if (!$contact->bind($_POST)) {
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('User');
 
-$isNewUser = !(w2PgetParam($_REQUEST, 'user_id'], 0));
+$isNewUser = !(w2PgetParam($_REQUEST, 'user_id', 0));
 if ($isNewUser) {
 	// check if a user with the param Username already exists
 	$userEx = false;
@@ -147,17 +147,18 @@ if (($msg = $contact->store())) {
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		if ($isNewUser)
+		if ($isNewUser) {
 			notifyNewUser($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
+		}
 		notifyHR('hr@yourdomain.com', 'w2P System Human Resources', $contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password'], $obj->user_id);
 
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addQuery('ct.contact_email');
-		$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
+		$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact', 'inner');
 		$q->addWhere('u.user_username = "admin"');
 		$admin_user = $q->loadList();
-		//notifyAdmin($admin_user[0]['contact_email'], 'dotProject Administrator', $contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password'], $obj->user_id);
+		//notifyAdmin($admin_user[0]['contact_email'], 'web2Project Administrator', $contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password'], $obj->user_id);
 
 	}
 }

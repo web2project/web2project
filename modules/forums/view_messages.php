@@ -8,6 +8,9 @@ $sort = w2PgetParam($_REQUEST, 'sort', 'asc');
 $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
 $hideEmail = w2PgetConfig('hide_email_addresses', false);
 
+require_once ($AppUI->getLibraryClass('PEAR/BBCodeParser'));
+$bbparser = new HTML_BBCodeParser();
+
 $q = new DBQuery;
 $q->addTable('forums');
 $q->addTable('forum_messages');
@@ -16,7 +19,7 @@ $q->addJoin('forum_visits', 'v', 'visit_user = ' . $AppUI->user_id . ' AND visit
 $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 $q->addWhere('forum_id = message_forum AND (message_id = ' . $message_id . ' OR message_parent = ' . $message_id . ')');
-$q->addOrder("message_date $sort");
+$q->addOrder('message_date ' . $sort);
 
 $messages = $q->loadList();
 
@@ -180,7 +183,7 @@ foreach ($messages as $row) {
 		$s .= '</td>';
 		$s .= '<td valign="top" style="' . $style . '">';
 		$s .= '<font size="2"><strong>' . $row['message_title'] . '</strong><hr size=1>';
-		$row['message_body'] = preg_replace("/([\w]+:\/\/[\w-\+?&;#~=\.\/\@]+[\w\/])/i","<a target=\"_blank\" href=\"$1\">$1</a>", $row['message_body']);
+		$row['message_body'] = $bbparser->qparse($row['message_body']);
 		$s .= str_replace(chr(13), '&nbsp;<br />', $row['message_body']);
 		$s .= '</font></td>';
 
@@ -223,7 +226,7 @@ foreach ($messages as $row) {
 			$s .= '<a name="' . $row['message_id'] . '" href="#' . $row['message_id'] . '" onclick="toggle(' . $row['message_id'] . ')">';
 			$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
 			$s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
-			$row['message_body'] = preg_replace("/([\w]+:\/\/[\w-\+?&;#~=\.\/\@]+[\w\/])/i","<a target=\"_blank\" href=\"$1\">$1</a>", $row['message_body']);
+			$row['message_body'] = $bbparser->qparse($row['message_body']);
 			$s .= str_replace(chr(13), "&nbsp;<br />", $row['message_body']);
 			$s .= '</div></td>';
 
@@ -245,7 +248,7 @@ foreach ($messages as $row) {
 				$s .= '<a href="#" onclick="toggle(' . $row['message_id'] . ')">';
 				$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
 				$side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
-				$row['message_body'] = preg_replace("/([\w]+:\/\/[\w-\+?&;#~=\.\/\@]+[\w\/])/i","<a target=\"_blank\" href=\"$1\">$1</a>", $row['message_body']);
+				$row['message_body'] = $bbparser->qparse($row['message_body']);
 				$side .= str_replace(chr(13), '&nbsp;<br />', $row['message_body']);
 				$side .= '</div>';
 				$s .= '</td>';

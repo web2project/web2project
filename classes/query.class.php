@@ -68,6 +68,8 @@ class DBQuery {
 	/**< Name of the table to create */
 	var $create_definition;
 	/**< Array containing information about the table definition */
+	var $include_count = false;
+	/**< Bollean to count of rows in query */
 	var $_table_prefix;
 	/**< Internal string, table prefix, prepended to all queries */
 	var $_query_id = null;
