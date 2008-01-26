@@ -226,10 +226,10 @@ class CDepartment extends CW2pObject {
 
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
-				//If 0 (All Items of a module) are not permited then just add the allowed items only
+				//If 0 (All Items of a module) is not permited then just add the allowed items only
 				$query->addWhere('(' . ((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ') OR ' . ((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IS NULL)');
 			} else {
-				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+				//If 0 (All Items of a module) is permited then don't add a where clause so the user is permitted to see all
 			}
 			//Denials are only required if we were able to see anything in the first place so now we handle the denials
 			if (count($deny)) {

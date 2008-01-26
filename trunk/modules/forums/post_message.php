@@ -160,6 +160,28 @@ if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the
 </tr>
 <tr>
 	<td>
+	</td>
+	<td align="left">
+		<small><b><?php echo $AppUI->_('BBCode Ready');?>!</b></small>
+		<?php echo w2PshowImage('log-info.gif','','','BBCode Tags Accepted','
+		[b][/b] Bold. Example: [b]<b>This text will be bold</b>[/b]<br />
+		[i][/i] Italic. Example: [i]<i>This text will be in italic</i>[/i]<br />
+		[u][/u] Underlined. Example: [u]<u>This text will be underlined</u>[/u]<br />
+		[s][/s] Scratched. Example: [s]<del>This text will be scratched</del>[/s]<br />
+		[sub][/sub] Subscript. Example: [sub]<sub>This text will be subscript</sub>[/sub]<br />
+		[sup][/sup] Superscript. Example: [sup]<sup>This text will be superscript</sup>[/sup]<br />
+		[email][/email] Email Address. Example: [email]my@mail.net[/email]<br />
+		[color=color_name][/color] Colorized Text. Example: [color=blue]I am Blue[/color]<br />
+		[size=size_value][/size], [font=font_name][/font] and [align=left|center|right][align] Format Text. Example: [align=right]I am on the Right[/align]<br />
+		[url=url_address][/url] Link. Example: [url=http://web2project.net]web2Project[/url]<br />
+		[list][/list],[ulist][/ulist] and [li][/li] Lists.<br />
+		[quote][/quote] Quoted Text. Example: [quote]<q>This text will be superscript</q>[/quote]<br />
+		[code][/code] Text in code format. Example: [code]//This is a code comment;[/code]<br />
+		'); ?>
+	</td>
+</tr>
+<tr>
+	<td>
 		<input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';" />
 	</td>
 	<td align="right"><?php
