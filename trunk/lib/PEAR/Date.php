@@ -176,7 +176,7 @@ class Date
                 }
                 break;
             case DATE_FORMAT_UNIXTIME:
-                $this->setDate(date("Y-m-d H:i:s", $date));
+                $this->setDate(date("Y-m-d H:i:s", intval($date)));
                 break;
         }
     }
