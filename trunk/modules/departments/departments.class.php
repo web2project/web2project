@@ -82,25 +82,25 @@ class CDepartment extends CW2pObject {
 	function delete() {
 		$q = new DBQuery;
 		$q->addTable('departments', 'dep');
-		$q->addQuery('dep.*');
+		$q->addQuery('dep.dept_id');
 		$q->addWhere('dep.dept_parent = ' . $this->dept_id);
-		$res = $q->exec();
+		$rows = $q->loadList();
+		$q->clear();
 
-		if (db_num_rows($res)) {
-			$q->clear();
+		if (count($rows)) {
 			return 'deptWithSub';
 		}
+		
+		$q->addTable('project_departments', 'pd');
+		$q->addQuery('pd.project_id');
+		$q->addWhere('pd.department_id = ' . $this->dept_id);
+		$rows = $q->loadList();
 		$q->clear();
-		$q->addTable('projects', 'p');
-		$q->addQuery('p.*');
-		$q->addWhere('p.project_department = ' . $this->dept_id);
-		$res = $q->exec();
 
-		if (db_num_rows($res)) {
-			$q->clear();
+		if (count($rows)) {
 			return 'deptWithProject';
 		}
-		$q->clear();
+
 		$q->addQuery('*');
 		$q->setDelete('departments');
 		$q->addWhere('dept_id = ' . $this->dept_id);
