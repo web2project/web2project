@@ -1236,9 +1236,9 @@ class CInfoTabBox extends CTabBox_core {
 						$s .= 'javascript:show_tab(' . $k . ')';
 					} else {
 						if ($m == 'projectdesigner' && strpos($v[1], 'Invoices') === false) {
-							$s .= $this->baseHRef . 'infotab_bil=' . $k . '#fbt';
+							$s .= $this->baseHRef . 'infotab_bil=' . $k . '#billings';
 						} elseif ($m == 'projectdesigner') {
-							$s .= $this->baseHRef . 'infotab_inv=' . $k . '#fit';
+							$s .= $this->baseHRef . 'infotab_inv=' . $k . '#invoices';
 						} else {
 							$s .= $this->baseHRef . 'infotab=' . $k;
 						}
