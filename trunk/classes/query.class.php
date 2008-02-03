@@ -81,7 +81,7 @@ class DBQuery {
 
 	/** DBQuery constructor
 	 *
-	 * @param $prefix Database table prefix - will be appended to all dotProject table names
+	 * @param $prefix Database table prefix - will be appended to all web2project table names
 	 * @param $query_db Database type
 	 */
 	function DBQuery($prefix = null, $query_db = null) {
