@@ -70,7 +70,7 @@ foreach ($root_tasks as $root_task) {
 }
 
 $project = new CProject();
-$sprojects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra);
+$sprojects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $q = new DBQuery;
 $q->addTable('projects');
 $q->addQuery('projects.project_id, company_name');

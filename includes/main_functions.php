@@ -112,7 +112,7 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 		$q->addWhere('pr.project_id != ' . $excludeProjWithId);
 	}
 	$proj = new CProject();
-	$proj->setAllowedSQL($user_id, $q);
+	$proj->setAllowedSQL($user_id, $q, null, 'pr');
 	$q->addOrder('co.company_name, project_name');
 	$projects = $q->loadList();
 	$s = "\n" . '<select name="' . $select_name . '" ' . $select_attribs . '>';

@@ -918,7 +918,7 @@ class CEvent extends CW2pObject {
 		require_once ($AppUI->getModuleClass('projects'));
 		$oPrj = new CProject();
 
-		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name');
+		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
 		if (count($aPrjs)) {
 			$buffer = '(event_project IN (' . implode(',', array_keys($aPrjs)) . ') OR event_project IS NULL OR event_project = "" OR event_project = 0)';
 

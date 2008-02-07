@@ -53,7 +53,7 @@ if ($obj->file_task) {
 
 $extra = array('where' => 'project_active<>0');
 $project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra);
+$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $projects = arrayMerge(array('0' => $AppUI->_('All')), $projects);
 ?>
 

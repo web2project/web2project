@@ -1833,7 +1833,7 @@ class CTask extends CW2pObject {
 		global $AppUI;
 		$oPrj = new CProject();
 
-		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name');
+		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
 		if (count($aPrjs)) {
 			$buffer = '(task_project IN (' . implode(',', array_keys($aPrjs)) . '))';
 

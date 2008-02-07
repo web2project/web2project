@@ -39,7 +39,7 @@ $q->addTable('projects', 'pr');
 $q->addQuery('pr.project_id, project_name');
 $q->addWhere('project_active <> 0');
 $q->addOrder('project_name');
-$projObj->setAllowedSQL($AppUI->user_id, $q);
+$projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 if (isset($company_id)) {
 	$q->addWhere('project_company = ' . $company_id);
 }

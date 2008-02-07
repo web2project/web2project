@@ -158,7 +158,7 @@ if ($do_report) {
 	}
 
 	$proj = &new CProject;
-	$proj->setAllowedSQL($AppUI->user_id, $q);
+	$proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
 	$obj = &new CTask;
 	$obj->setAllowedSQL($AppUI->user_id, $q);
