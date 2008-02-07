@@ -777,7 +777,7 @@ $folders_avail = getFolderSelectList();
 $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
 
 $project = new CProject();
-$sprojects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra);
+$sprojects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $q = new DBQuery;
 $q->addTable('projects', 'pr');
 $q->addQuery('pr.project_id, company_name');

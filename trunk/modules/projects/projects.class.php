@@ -245,7 +245,7 @@ class CProject extends CW2pObject {
 	 **	@see	w2PObject::getAllowedRecords
 	 **/
 
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
 		$oCpy = new CCompany();
 
 		$aCpies = $oCpy->getAllowedRecords($uid, 'company_id, company_name');
@@ -282,7 +282,7 @@ class CProject extends CW2pObject {
 				$extra['where'] = '1 = 0';
 			}
 		}
-		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
+		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra, $table_alias);
 
 	}
 
@@ -297,14 +297,14 @@ class CProject extends CW2pObject {
 		return array_merge($where, $project_where);
 	}
 
-	function setAllowedSQL($uid, &$query, $index = null) {
+	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
 		$oCpy = new CCompany;
-		parent::setAllowedSQL($uid, $query, $index);
-		$oCpy->setAllowedSQL($uid, $query, 'project_company');
+		parent::setAllowedSQL($uid, $query, $index, $key);
+		$oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '').'project_company');
 		//Department permissions
 		$oDpt = new CDepartment();
 		$query->leftJoin('project_departments', '', 'pr.project_id = project_departments.project_id');
-		$oDpt->setAllowedSQL($uid, $query, 'department_id');
+		$oDpt->setAllowedSQL($uid, $query, 'project_departments.department_id');
 	}
 
 	/**
@@ -375,7 +375,7 @@ class CProject extends CW2pObject {
 		$q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
 		$q->addTable('projects', 'pr');
 		$q->addOrder('project_short_name');
-		$this->setAllowedSQL($userId, $q);
+		$this->setAllowedSQL($userId, $q, null, 'pr');
 		$allowedProjectRows = $q->exec();
 
 		return $allowedProjectRows;
@@ -390,7 +390,7 @@ class CProject extends CW2pObject {
 		$q->addWhere('ut.user_id = ' . $userId);
 		$q->addGroup('pr.project_id');
 		$q->addOrder('project_name');
-		$this->setAllowedSQL($userId, $q);
+		$this->setAllowedSQL($userId, $q, null, 'pr');
 		$allowedProjectRows = $q->exec();
 
 		return $allowedProjectRows;
@@ -738,64 +738,66 @@ function projects_list_data($user_id = false) {
 	// 16 August 2003
 	// get the list of permitted companies
 	$obj = new CCompany();
-	$companies = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+	$companies = $obj->getAllowedRecords($AppUI->user_id, 'companies.company_id,companies.company_name', 'companies.company_name');
 	if (count($companies) == 0) {
 		$companies = array();
 	}
 
-	$q->addTable('projects');
-	$q->addQuery('projects.project_id, project_status, project_color_identifier, project_type, project_name, project_description, project_duration, project_parent, project_original_parent, 
+	$q->addTable('projects', 'pr');
+	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type, project_name, project_description, project_duration, project_parent, project_original_parent, 
 		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
 		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, tt.total_tasks, tsy.my_tasks,
 		ts.project_percent_complete, user_username, project_active');
 	$q->addQuery('CONCAT(ct.contact_first_name, " ", ct.contact_last_name) AS owner_name');
-	$q->addJoin('companies', 'com', 'projects.project_company = company_id');
-	$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
-	$q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
-	$q->addJoin('users', 'u', 'projects.project_owner = u.user_id');
+//	$q->addJoin('companies', 'com', 'projects.project_company = com.company_id');
+//	$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
+//	$q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
+	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
 	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
-	$q->addJoin('tasks_critical', 'tc', 'projects.project_id = tc.task_project');
-	$q->addJoin('tasks_problems', 'tp', 'projects.project_id = tp.task_project');
-	$q->addJoin('tasks_sum', 'ts', 'projects.project_id = ts.task_project');
-	$q->addJoin('tasks_total', 'tt', 'projects.project_id = tt.task_project');
-	$q->addJoin('tasks_summy', 'tsy', 'projects.project_id = tsy.task_project');
+	$q->addJoin('tasks_critical', 'tc', 'pr.project_id = tc.task_project');
+	$q->addJoin('tasks_problems', 'tp', 'pr.project_id = tp.task_project');
+	$q->addJoin('tasks_sum', 'ts', 'pr.project_id = ts.task_project');
+	$q->addJoin('tasks_total', 'tt', 'pr.project_id = tt.task_project');
+	$q->addJoin('tasks_summy', 'tsy', 'pr.project_id = tsy.task_project');
 	if ($addProjectsWithAssignedTasks)
-		$q->addJoin('tasks_users', 'tu', 'projects.project_id = tu.task_project');
+		$q->addJoin('tasks_users', 'tu', 'pr.project_id = tu.task_project');
 	// DO we have to include the above DENY WHERE restriction, too?
 	//$q->addJoin('', '', '');
 	//if (isset($department)) {
 	//	$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
 	//}
 	if (!isset($department) && $company_id && !$addPwOiD) {
-		$q->addWhere('projects.project_company = "' . $company_id . '"');
+		$q->addWhere('pr.project_company = "' . $company_id . '"');
 	}
 	if ($projectTypeId > -1) {
-		$q->addWhere('projects.project_type = ' . $projectTypeId);
+		$q->addWhere('pr.project_type = ' . $projectTypeId);
 	}
 	if (isset($department) && !$addPwOiD) {
 		$q->addWhere('pd.department_id in ( ' . implode(',', $dept_ids) . ' )');
 	}
 	if ($user_id && $addProjectsWithAssignedTasks) {
-		$q->addWhere('(tu.user_id = ' . $user_id . ' OR projects.project_owner = ' . $user_id . ' )');
+		$q->addWhere('(tu.user_id = ' . $user_id . ' OR pr.project_owner = ' . $user_id . ' )');
 	} elseif ($user_id) {
-		$q->addWhere('projects.project_owner = ' . $user_id);
+		$q->addWhere('pr.project_owner = ' . $user_id);
 	}
 	if ($owner > 0) {
-		$q->addWhere('projects.project_owner = ' . $owner);
+		$q->addWhere('pr.project_owner = ' . $owner);
 	}
 	if (trim($search_text)) {
-		$q->addWhere('projects.project_name like "%' . $search_text . '%" OR projects.project_description like "%' . $search_text . '%"');
+		$q->addWhere('pr.project_name like "%' . $search_text . '%" OR pr.project_description like "%' . $search_text . '%"');
 	}
 	// Show Projects where the Project Owner is in the given department
 	if ($addPwOiD && !empty($owner_ids)) {
-		$q->addWhere('projects.project_owner IN (' . implode(',', $owner_ids) . ')');
+		$q->addWhere('pr.project_owner IN (' . implode(',', $owner_ids) . ')');
 	}
 
-	$q->addGroup('projects.project_id');
+	$q->addGroup('pr.project_id');
 	$q->addOrder($orderby . ' ' .$orderdir);
-	$obj->setAllowedSQL($AppUI->user_id, $q);
+//	$obj->setAllowedSQL($AppUI->user_id, $q, null, 'co');
+	$prj = new CProject();
+	$prj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 	$dpt = new CDepartment();
-	$dpt->setAllowedSQL($AppUI->user_id, $q);
+//	$dpt->setAllowedSQL($AppUI->user_id, $q);
 	$projects = $q->loadList();
 
 	// get the list of permitted companies

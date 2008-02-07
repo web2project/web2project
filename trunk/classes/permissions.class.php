@@ -1251,7 +1251,11 @@ class w2Pacl extends gacl_api {
 		require_once ($AppUI->getModuleClass($mod_class['mod_directory']));
 		$obj = new $mod_class['mod_main_class'];
 		$allowedRecords = array();
+		if ($module == 'projects') {
+			$allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label'], '', null, null, 'projects');
+		} else {
 		$allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label']);
+		}
 
 		/*print_r(isset($allowedRecords[$item]));
 		print_r('Result:'.$item.'>count='.count($allowedRecords));die;*/

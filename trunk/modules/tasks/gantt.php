@@ -35,7 +35,7 @@ $q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project', 'inner');
 $q->addWhere('project_active <> 0');
 $q->addGroup('pr.project_id');
 $q->addOrder('project_name');
-$project->setAllowedSQL($AppUI->user_id, $q);
+$project->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $projects = $q->loadHashList('project_id');
 $q->clear();
 

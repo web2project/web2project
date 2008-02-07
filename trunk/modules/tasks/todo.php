@@ -99,7 +99,7 @@ $AppUI->savePlace();
 $proj = &new CProject;
 $tobj = &new CTask;
 
-$allowedProjects = $proj->getAllowedSQL($AppUI->user_id);
+$allowedProjects = $proj->getAllowedSQL($AppUI->user_id,'pr.project_id');
 $allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');
 
 // query my sub-tasks (ignoring task parents)

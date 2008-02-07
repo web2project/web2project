@@ -32,7 +32,7 @@ $proj = new CProject();
 // filtering by companies
 // get the list of visible companies
 $extra = array('join' => 'project_departments', 'on' => 'projects.project_id = project_departments.project_id');
-$projects = $proj->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra);
+$projects = $proj->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $projFilter = arrayMerge(array('all' => $AppUI->_('All Projects')), $projects);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
@@ -291,7 +291,7 @@ if ($do_report) {
 	$q->addOrder('task_project');
 	$q->addOrder('task_end_date');
 	$q->addOrder('task_start_date');
-	$proj->setAllowedSQL($AppUI->user_id, $q);
+	$proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
 	$task_list_hash = $q->loadHashList('task_id');
 	$q->clear();

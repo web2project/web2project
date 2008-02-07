@@ -46,7 +46,7 @@ $view_options = $q->loadList();
 $project_id = intval(w2PgetParam($_REQUEST, 'project_id', 0));
 $extra = array('where' => 'project_active<>0');
 $project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra);
+$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $q = new DBQuery;
 $q->addTable('projects');
 $q->addQuery('projects.project_id, company_name');

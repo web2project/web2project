@@ -340,7 +340,7 @@ class CW2pObject {
 	 *	@return array
 	 */
 	// returns a list of records exposed to the user
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit("FATAL ERROR<br />" . get_class($this) . "::getAllowedRecords failed");
@@ -371,7 +371,7 @@ class CW2pObject {
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
 				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$this->_query->addWhere("$this->_tbl_key IN (" . implode(',', $allow) . ")");
+				$this->_query->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
 			} else {
 				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
 			}
@@ -379,7 +379,7 @@ class CW2pObject {
 			if (count($deny)) {
 				if ((array_search('0', $deny)) === false) {
 					//If 0 (All Items of a module) are not on the denial array then just deny the denied items
-					$this->_query->addWhere("$this->_tbl_key NOT IN (" . implode(",", $deny) . ")");
+					$this->_query->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
 				} elseif ((array_search('0', $allow)) === false) {
 					//If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
 				} else {

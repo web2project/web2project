@@ -96,7 +96,7 @@ $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
 require_once $AppUI->getModuleClass('projects');
 $project = &new CProject;
-$allowedProjects = $project->getAllowedSQL($AppUI->user_id);
+$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'p.project_id');
 
 if (count($allowedProjects)) {
 	$where_list = implode(' AND ', $allowedProjects);

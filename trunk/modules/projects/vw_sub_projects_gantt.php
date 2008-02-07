@@ -60,7 +60,7 @@ if (!($department > 0) && $company_id != 0) {
 
 $q->addWhere('project_original_parent = ' . $original_project_id);
 
-$pjobj->setAllowedSQL($AppUI->user_id, $q);
+$pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $q->addGroup('pr.project_id');
 //bl
 $q->addOrder('project_name, task_start_date DESC');

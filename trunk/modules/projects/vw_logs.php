@@ -137,12 +137,13 @@ $logs = $q->loadList();
 
 $s = '';
 $hrs = 0;
+$canEdit = $perms->checkModule('task_log', 'edit');
 foreach ($logs as $row) {
 	$task_log_date = intval($row['task_log_date']) ? new CDate($row['task_log_date']) : null;
 
 	$s .= '<tr bgcolor="white" valign="top">';
 	$s .= "\n\t<td>";
-	if ($perms->checkModuleItem('tasks', 'edit', $row['task_id'])) {
+	if ($canEdit) {
 		$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=" . $row['task_id'] . "&tab=1&task_log_id=" . @$row['task_log_id'] . "\">" . "\n\t\t\t" . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
 	}
 	$s .= "\n\t</td>";

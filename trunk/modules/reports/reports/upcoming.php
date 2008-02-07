@@ -79,7 +79,7 @@ if ($project_id != 0) {
 }
 $q->addWhere('task_end_date BETWEEN "' . $date->format(FMT_DATETIME_MYSQL) . '" AND "' . $next_week->format(FMT_DATETIME_MYSQL) . '"');
 $proj = &new CProject;
-$proj->setAllowedSQL($AppUI->user_id, $q);
+$proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
 $obj = &new CTask;
 $obj->setAllowedSQL($AppUI->user_id, $q);

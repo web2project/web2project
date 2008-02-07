@@ -98,7 +98,7 @@ class CForum extends CW2pObject {
 		require_once ($AppUI->getModuleClass('projects'));
 		$oPrj = new CProject();
 
-		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name');
+		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
 		if (count($aPrjs)) {
 			$buffer = '(forum_project IN (' . implode(',', array_keys($aPrjs)) . ') OR forum_project IS NULL OR forum_project = "" OR forum_project = 0)';
 

@@ -35,8 +35,8 @@ $extra = array('from' => 'files', 'where' => 'projects.project_id = file_project
 
 //get "Allowed" projects for filter list ("All" is always allowed when basing permission on projects)
 $project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra);
-$allowedProjects = array_keys($projects);
+$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
+$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_RAW)), $projects);
 
 // get SQL for allowed projects/tasks
@@ -90,6 +90,8 @@ foreach ($file_types as $file_type) {
 	$q->addQuery('count(file_id)');
 	$q->addTable('files', 'f');
 	$q->addJoin('projects', 'p', 'p.project_id = file_project');
+	$q->addJoin('project_departments', 'pd', 'p.project_id = pd.project_id');
+	$q->addJoin('departments', '', 'pd.department_id = dept_id');
 	$q->addJoin('tasks', 't', 't.task_id = file_task');
 	if (count($allowedProjects)) {
 		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');

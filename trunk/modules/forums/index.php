@@ -46,7 +46,7 @@ $q->addJoin('forum_watch', 'w', 'watch_user = ' . $AppUI->user_id . ' AND watch_
 $q->addJoin('forum_visits', 'v', 'visit_user = ' . $AppUI->user_id . ' AND visit_forum = forum_id and visit_message = c.message_id');
 $q->addJoin('contacts', 'cts', 'contact_id = u.user_contact');
 
-$project->setAllowedSQL($AppUI->user_id, $q);
+$project->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $forum->setAllowedSQL($AppUI->user_id, $q);
 
 $q->addWhere('user_id = forum_owner AND pr.project_id = forum_project');

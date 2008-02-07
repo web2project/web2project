@@ -66,13 +66,14 @@ $logs = $q->loadList();
 
 $s = '';
 $hrs = 0;
+$canEdit = $perms->checkModule('task_log', 'edit');
 foreach ($logs as $row) {
 	$task_log_date = intval($row['task_log_date']) ? new CDate($row['task_log_date']) : null;
 	$style = $row['task_log_problem'] ? 'background-color:#cc6666;color:#ffffff' : '';
 
 	$s .= '<tr bgcolor="white" valign="top">';
 	$s .= "\n\t<td>";
-	if ($perms->checkModule('task_log', 'edit')) {
+	if ($canEdit) {
 		if ($tab == -1) {
 			$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=$task_id&tab=" . $AppUI->getState('TaskLogVwTab');
 		} else {

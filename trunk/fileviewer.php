@@ -108,7 +108,7 @@ if ($file_id) {
 	require_once ($AppUI->getModuleClass('projects'));
 	require_once ($AppUI->getModuleClass('files'));
 	$project = &new CProject;
-	$allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id, project_name');
+	$allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id, project_name', '', null, null, 'projects');
 	$fileclass = &new CFile;
 	$fileclass->load($file_id);
 	$allowedFiles = $fileclass->getAllowedRecords($AppUI->user_id, 'file_id, file_name');

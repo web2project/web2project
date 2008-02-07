@@ -81,7 +81,7 @@ if ($addPwOiD && !empty($owner_ids)) {
 if ($showInactive != '1') {
 	$q->addWhere('project_active <> 0');
 }
-$pjobj->setAllowedSQL($AppUI->user_id, $q);
+$pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $AppUI->getModuleClass('departments');
 $q->addGroup('pr.project_id');
 $q->addOrder('project_name, task_end_date DESC');

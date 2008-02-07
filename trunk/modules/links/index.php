@@ -24,7 +24,7 @@ require_once ($AppUI->getModuleClass('projects'));
 $extra = array('from' => 'links', 'where' => 'projects.project_id = link_project');
 
 $project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra);
+$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
 // setup the title block

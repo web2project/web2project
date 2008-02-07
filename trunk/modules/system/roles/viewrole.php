@@ -40,5 +40,5 @@ if (!is_array($role)) {
 	$tabBox = new CTabBox('?m=system&u=roles&a=viewrole&role_id=' . $role_id, W2P_BASE_DIR . '/modules/system/roles/', $tab);
 	$tabBox->add('vw_role_perms', 'Permissions');
 	$tabBox->show();
-	} // End of check for valid role
+} // End of check for valid role
 ?>

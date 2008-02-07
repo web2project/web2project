@@ -221,7 +221,7 @@ $pq->addTable('projects', 'pr');
 $pq->addWhere('project_company = "' . $company_id . '"');
 $pq->addWhere('( project_active <> 0 or pr.project_id = "' . $task_project . '")');
 $pq->addOrder('project_name');
-$project->setAllowedSQL($AppUI->user_id, $pq);
+$project->setAllowedSQL($AppUI->user_id, $pq, null, 'pr');
 $projects = $pq->loadHashList();
 ?>
 <script language="JavaScript">

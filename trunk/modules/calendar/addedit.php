@@ -102,7 +102,7 @@ $prj = &new CProject;
 $allowedProjects = $prj->getAllowedSQL($AppUI->user_id);
 
 if (count($allowedProjects)) {
-	$prj->setAllowedSQL($AppUI->user_id, $q);
+	$prj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 }
 $q->addOrder('project_name');
 
