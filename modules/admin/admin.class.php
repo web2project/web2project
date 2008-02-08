@@ -113,7 +113,150 @@ class CUser extends CW2pObject {
 	}
 
 	function delete($oid = null) {
+		global $AppUI;
 		$id = $this->user_id;
+		//check if the user is related to anything and disallow deletion if he is.
+		//companies: is he a owner of any company?
+		$q = new DBQuery;
+		$q->addQuery('count(company_id)');
+		$q->addTable('companies');
+		$q->addWhere('company_owner = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Companies') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//departments: is he a owner of any department?
+		$q = new DBQuery;
+		$q->addQuery('count(dept_id)');
+		$q->addTable('departments');
+		$q->addWhere('dept_owner = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Departments') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//events: is he a owner of any event?
+		$q = new DBQuery;
+		$q->addQuery('count(event_id)');
+		$q->addTable('events');
+		$q->addWhere('event_owner = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Events') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//files: is he a owner of any file?
+		$q = new DBQuery;
+		$q->addQuery('count(file_id)');
+		$q->addTable('files');
+		$q->addWhere('file_owner = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Files') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//forums: is he a owner of any forum?
+		$q = new DBQuery;
+		$q->addQuery('count(forum_id)');
+		$q->addTable('forums');
+		$q->addWhere('forum_owner = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forums') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//forums: is he a moderator of any forum?
+		$q = new DBQuery;
+		$q->addQuery('count(forum_id)');
+		$q->addTable('forums');
+		$q->addWhere('forum_moderated = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forums') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Forum Moderator') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//forums: is he a message creator on any forum?
+		$q = new DBQuery;
+		$q->addQuery('count(message_id)');
+		$q->addTable('forum_messages');
+		$q->addWhere('message_author = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forum Messages') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Author') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//forums: is he a message creator on any forum?
+		$q = new DBQuery;
+		$q->addQuery('count(message_id)');
+		$q->addTable('forum_messages');
+		$q->addWhere('message_editor = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forum Messages') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Editor') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//links: is he a owner of any link?
+		$q = new DBQuery;
+		$q->addQuery('count(link_id)');
+		$q->addTable('links');
+		$q->addWhere('link_owner = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Links') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//projects: is he related to any project?
+		$q = new DBQuery;
+		$q->addQuery('count(project_id)');
+		$q->addTable('projects');
+		$q->addWhere('(project_owner = ' . $this->user_id . ' OR project_creator = ' . $this->user_id . ' OR project_updator = ' . $this->user_id . ')');
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Projects') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner, Creator or Updator') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//tasks: is he related to any task?
+		$q = new DBQuery;
+		$q->addQuery('count(task_id)');
+		$q->addTable('tasks');
+		$q->addWhere('(task_owner = ' . $this->user_id . ' OR task_creator = ' . $this->user_id . ' OR task_updator = ' . $this->user_id . ')');
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Tasks') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner, Creator or Updator') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//events: is he related to any event?
+		$q = new DBQuery;
+		$q->addQuery('count(event_id)');
+		$q->addTable('user_events');
+		$q->addWhere('user_id = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Events') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Attendee') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//tasks: is he related to any event?
+		$q = new DBQuery;
+		$q->addQuery('count(task_id)');
+		$q->addTable('user_tasks');
+		$q->addWhere('user_id = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Tasks') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Assignee') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		//tasks: is he related to any pins?
+		$q = new DBQuery;
+		$q->addQuery('count(task_id)');
+		$q->addTable('user_task_pin');
+		$q->addWhere('user_id = ' . $this->user_id);
+		$result = $q->loadResult();
+		$q->clear();
+		if ($result) {
+			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Tasks') . ' ' . $AppUI->_('pinned') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
+		}
+		
 		$result = parent::delete($oid);
 		if (!$result) {
 			$acl = &$GLOBALS['AppUI']->acl();
