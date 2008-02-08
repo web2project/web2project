@@ -1,5 +1,5 @@
 <?php
-// $Id$
+// $Id$URL$ $
 
 /*
 All files in this work, except the modules/ticketsmith directory, are now
@@ -8,7 +8,8 @@ under the Voxel Public License.  See modules/ticketsmith/LICENSE
 for details. Please note that included libraries in lib may have their
 own license.
 
-Copyright (c) 2003-2005 The web2Project Development Team <w2p-developers@web2project.net>
+Copyright (c) 2007-2008 The web2Project Development Team <w2p-developers@web2project.net>
+Copyright (c) 2003-2005 The dotProject Development Team <core-developers@dotproject.net>
 
 This file is part of web2Project.
 

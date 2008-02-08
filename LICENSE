@@ -1,10 +1,8 @@
-All files in this work, except the modules/ticketsmith directory, are now
-covered by the following copyright notice.  The ticketsmith module is
-under the Voxel Public License.  See modules/ticketsmith/LICENSE
-for details.  Please note that included libraries in the lib directory
-may have their own license.
+All files in this work are now covered by the following copyright notice.
+Please note that included libraries in the lib directory may have their own license.
 
-Copyright (c) 2003-2005 The web2Project Development Team <core-developers@web2project.net>
+Copyright (c) 2007-2008 The web2Project Development Team <w2p-developers@web2project.net>
+Copyright (c) 2003-2005 The dotProject Development Team <core-developers@dotproject.net>
 
     This file is part of web2Project.
 
@@ -24,12 +22,16 @@ Copyright (c) 2003-2005 The web2Project Development Team <core-developers@web2pr
 
 The full text of the GPL is in the COPYING file.
 
-
-
-Gnome Icons
+Icons
 -------------------------------------------------------------------------------
-Gnome icons included with web2Project have been sourced from GNU GPL products.
-
+icons included with web2Project have been sourced from GNU GPL products:
+Cezanne
+Crystal
+CrystalClear
+CrystalOSX
+NuoveXT1.6
+Tango
+VistaInspirate
 
 several graphics
 -------------------------------------------------------------------------------
@@ -37,5 +39,5 @@ several graphics
 ./modules/tasks/images/exchange.png
 ./modules/tasks/images/remove.png
 
-These graphics have been created and generously donated to web2project
+These graphics have been created and generously donated to dotproject
 by Jochen Wendebaum, wendebaum at users dot sourceforge dot net.
