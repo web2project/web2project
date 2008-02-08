@@ -45,9 +45,9 @@ if (!($rows = $q->loadList())) {
 		$s .= '<tr>';
 		$s .= '<td>';
 		if ($row['project_priority'] < 0) {
-			$s .= '<img src="' . w2PfindImage('icons/low.gif') . '" width=13 height=16>';
+			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width=13 height=16>';
 		} elseif ($row["project_priority"] > 0) {
-			$s .= '<img src="' . w2PfindImage('icons/' . $row['project_priority'] . '.gif') . '" width=13 height=16>';
+			$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '" width=13 height=16>';
 		}
 
 		$s .= '</td>';
