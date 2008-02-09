@@ -450,9 +450,10 @@ function displayFiles($folder) {
 
 	$qv = new DBQuery();
 	$qv->addTable('files');
-	$qv->addQuery('files.file_id, file_version, file_project, file_name, file_task, file_description, user_username as file_owner, file_size, file_category, file_type, file_date, file_folder_name');
+	$qv->addQuery('files.file_id, file_version, file_project, file_name, file_task, file_description, user_username as file_owner, file_size, file_category, file_type, file_date, file_folder_name, file_co_reason, contact_first_name, contact_last_name');
 	$qv->addJoin('projects', 'p', 'p.project_id = file_project');
 	$qv->addJoin('users', 'u', 'u.user_id = file_owner');
+	$qv->addJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 	$qv->addJoin('tasks', 't', 't.task_id = file_task');
 	$qv->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
 	$qv->addWhere('file_folder = ' . $folder);
@@ -549,7 +550,7 @@ function displayFiles($folder) {
 		echo '<a href="./fileviewer.php?file_id=' . $file['file_id'] . '" title="' . $file['file_description'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $row['file_name'] . '</a>'; ?>
 		</td>
 		<td width="20%"><?php echo $file['file_description']; ?></td>
-		<td width="5%" nowrap="nowrap" align="center">
+		<td width="5%" nowrap="nowrap" align="right">
 	        <?php
 		$hidden_table = '';
 		echo $row['file_lastversion'];
@@ -597,13 +598,13 @@ function displayFiles($folder) {
 	                        title="' . $file_row['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $file_row['file_name'] . '
 	                </a></td>
 	                <td width="20%">' . $file_row['file_description'] . '</td>
-	                <td width="5%" nowrap="nowrap" align="center">' . $file_row['file_version'] . '</td>
-	                <td width="10%" nowrap="nowrap" align="center"><a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . ($file_row['file_category'] + 1) . '">' . $file_types[$file_row['file_category'] + 1] . '</a></td>
-	                <td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=' . $file_row['file_task'] . '">' . $row['task_name'] . '</a></td>
+	                <td width="5%" nowrap="nowrap" align="right">' . $file_row['file_version'] . '</td>
+	                <td width="10%" nowrap="nowrap" align="left"><a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . ($file_row['file_category'] + 1) . '">' . $file_types[$file_row['file_category'] + 1] . '</a></td>
+	                <td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=' . $file_row['file_task'] . '">' . $row['task_name'] . '</a></td>
 	                <td width="15%" nowrap="nowrap">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</td>
 	                <td width="5%" nowrap="nowrap" align="right">' . intval($file_row['file_size'] / 1024) . 'kb </td>
 	                <td width="15%" nowrap="nowrap">' . $file_row['file_type'] . '</td>
-	                <td width="15%" nowrap="nowrap" align="right">' . $file_date->format($df . ' ' . $tf) . '</td>
+	                <td width="15%" nowrap="nowrap" align="center">' . $file_date->format($df . ' ' . $tf) . '</td>
         			<td width="10%">' . $row['file_co_reason'] . '</td>
         			<td nowrap="nowrap" align="center">';
 					if ($canEdit && empty($file_row['file_checkout'])) {
@@ -647,12 +648,12 @@ function displayFiles($folder) {
 		}
 ?>
 	        </td>
-	        <td width="10%" nowrap="nowrap" align="center"><a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&view=categories&tab=<?php echo ($file['file_category']); ?>"><?php echo $file_types[$file["file_category"]]; ?></a></td> 
-			<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $file['task_id']; ?>"><?php echo $file['task_name']; ?></a></td>
+	        <td width="10%" nowrap="nowrap" align="left"><a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&view=categories&tab=<?php echo ($file['file_category']); ?>"><?php echo $file_types[$file["file_category"]]; ?></a></td> 
+			<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $file['task_id']; ?>"><?php echo $file['task_name']; ?></a></td>
 			<td width="15%" nowrap="nowrap"><?php echo $file['contact_first_name'] . ' ' . $file['contact_last_name']; ?></td>
 			<td width="5%" nowrap="nowrap" align="right"><?php echo intval($file['file_size'] / 1024); ?> kb</td>
 			<td width="15%" nowrap="nowrap"><?php echo $file['file_type']; ?></td>
-			<td width="15%" nowrap="nowrap" align="right"><?php echo $file_date->format($df . ' ' . $tf); ?></td>
+			<td width="15%" nowrap="nowrap" align="center"><?php echo $file_date->format($df . ' ' . $tf); ?></td>
 	        <td width="10%"><?php echo $file['file_co_reason']; ?></td>
 	        <td nowrap="nowrap" align="center">
         <?php if ($canEdit && empty($row['file_checkout'])) { ?>
