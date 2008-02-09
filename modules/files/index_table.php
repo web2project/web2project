@@ -198,9 +198,6 @@ function expand(id){
 
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
-	<th nowrap="nowrap">&nbsp;</th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('co') ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Checkout Reason') ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('Description'); ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('Versions'); ?></th>
@@ -211,6 +208,9 @@ function expand(id){
 	<th nowrap="nowrap"><?php echo $AppUI->_('Size'); ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></a></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('Checkout Reason') ?></th>
+	<th nowrap="nowrap"><?php echo $AppUI->_('co') ?></th>
+	<th nowrap="nowrap">&nbsp;</th>
 </tr>
 <?php
 $fp = -1;
@@ -239,33 +239,7 @@ foreach ($files as $file_row) {
 	$fp = $latest_file['file_project'];
 ?>
 <tr>
-	<td nowrap="nowrap" width="20">
-	<?php if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
-		echo "\n" . '<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] . '">';
-		echo w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files');
-		echo "\n</a>";
-	}
-?>
-	</td>
-		<td nowrap="nowrap">
-		<?php if ($canEdit && empty($latest_file['file_checkout'])) {
-?>
-				<a href="?m=files&a=co&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files'); ?></a>
-		<?php } else
-		if ($latest_file['file_checkout'] == $AppUI->user_id) { ?>
-				<a href="?m=files&a=addedit&ci=1&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files'); ?></a>
-		<?php } else {
-			if ($latest_file['file_checkout'] == 'final') {
-				echo 'final';
-			} else {
-				echo $latest_file['co_contact_first_name'] . ' ' . $latest_file['co_contact_last_name'] . '<br>(' . $latest_file['co_user'] . ')';
-			}
-		}
-?>
-				
-		</td>
-		<td width="10%"><?php echo $latest_file['file_co_reason']; ?></td>
-		<td nowrap="8%">
+	<td nowrap="8%">
 		<?php
 	$fnamelen = 32;
 	$filename = $latest_file['file_name'];
@@ -281,7 +255,7 @@ foreach ($files as $file_row) {
 ?>
 	</td>
 	<td width="20%"><?php echo $latest_file['file_description']; ?></td>
-	<td width="5%" nowrap="nowrap" align="center">
+	<td width="5%" nowrap="nowrap" align="right">
 		<?php
 	$hidden_table = '';
 	echo $file_row['file_lastversion'];
@@ -290,7 +264,6 @@ foreach ($files as $file_row) {
 		$hidden_table = '<tr><td colspan="20">
 <table style="display: none" id="versions_' . $latest_file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
-		<th nowrap="nowrap">&nbsp;</th>
 		<th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
 		<th nowrap="nowrap">' . $AppUI->_('Description') . '</th>
 		<th nowrap="nowrap">' . $AppUI->_('Versions') . '</th>
@@ -301,33 +274,32 @@ foreach ($files as $file_row) {
 		<th nowrap="nowrap">' . $AppUI->_('Size') . '</th>
 		<th nowrap="nowrap">' . $AppUI->_('Type') . '</a></th>
 		<th nowrap="nowrap">' . $AppUI->_('Date') . '</th>
+		<th nowrap="nowrap">&nbsp;</th>
 </tr>
 ';
 		foreach ($file_versions as $file) {
 			if ($file['file_version_id'] == $latest_file['file_version_id']) {
 				$file_icon = getIcon($file['file_type']);
 				$hdate = new Date($file['file_date']);
+				$hidden_table .= '<tr>';
 				$hidden_table .= '
-					  <tr>
-					  <td nowrap="nowrap" width="20">&nbsp;';
-				if ($canEdit && $w2Pconfig['files_show_versions_edit']) {
-					$hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
-				}
-				$hidden_table .= '
-					  </td>
 					  <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" 
 							  title="' . $file['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $file['file_name'] . '
 					  </a></td>
 					  <td width="20%">' . $file['file_description'] . '</td>
-					  <td width="5%" nowrap="nowrap" align="center">' . $file['file_version'] . '</td>
-					  <td width="10%" nowrap="nowrap" align="center">' . $file_types[$file['file_category']] . '</td>
-					  <td width="10%" nowrap="nowrap" align="center">' . (($file['file_folder_name'] != '') ? '<a href="' . W2P_BASE_URL . '/index.php?m=files&tab=' . (count($file_types) + 1) . '&folder=' . $file['file_folder_id'] . '">' . w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files') . $file['file_folder_name'] . '</a>' : 'Root') . '</td>
+					  <td width="5%" nowrap="nowrap" align="right">' . $file['file_version'] . '</td>
+					  <td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
+					  <td width="10%" nowrap="nowrap" align="left">' . (($file['file_folder_name'] != '') ? '<a href="' . W2P_BASE_URL . '/index.php?m=files&tab=' . (count($file_types) + 1) . '&folder=' . $file['file_folder_id'] . '">' . w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files') . $file['file_folder_name'] . '</a>' : 'Root') . '</td>
 					  <td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=' . $file['file_task'] . '">' . $file['task_name'] . '</a></td>
 					  <td width="15%" nowrap="nowrap">' . $file['contact_first_name'] . ' ' . $file['contact_last_name'] . '</td>
 					  <td width="5%" nowrap="nowrap" align="right">' . file_size(intval($file['file_size'])) . '</td>
 					  <td nowrap="nowrap">' . substr($file['file_type'], strpos($file['file_type'], '/') + 1) . '</td>
-					  <td width="15%" nowrap="nowrap" align="right">' . $hdate->format($df . ' ' . $tf) . '</td>
-					  </tr>';
+					  <td width="15%" nowrap="nowrap" align="center">' . $hdate->format($df . ' ' . $tf) . '</td>
+					  <td nowrap="nowrap" width="20">';
+				if ($canEdit && $w2Pconfig['files_show_versions_edit']) {
+					$hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
+				}
+				$hidden_table .= '</td><tr>';
 			}
 		}
 		$hidden_table .= '</table>';
@@ -335,15 +307,41 @@ foreach ($files as $file_row) {
 	}
 ?>
 		</td>
-		<td width="10%" nowrap="nowrap" align="center"><?php echo $file_types[$latest_file['file_category']]; ?></td> 
-	<td width="10%" nowrap="nowrap" align="center"><?php
+		<td width="10%" nowrap="nowrap" align="left"><?php echo $file_types[$latest_file['file_category']]; ?></td> 
+	<td width="10%" nowrap="nowrap" align="left"><?php
 	echo ($latest_file['file_folder_name'] != '') ? '<a href="' . W2P_BASE_URL . '/index.php?m=files&tab=' . (count($file_types) + 1) . '&folder=' . $latest_file['file_folder_id'] . '">' . w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files') . $latest_file['file_folder_name'] . '</a>' : 'Root';
 ?></td>
-	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task']; ?>"><?php echo $latest_file["task_name"]; ?></a></td>
+	<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task']; ?>"><?php echo $latest_file["task_name"]; ?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $latest_file['contact_first_name'] . ' ' . $latest_file['contact_last_name']; ?></td>
 	<td width="5%" nowrap="nowrap" align="right"><?php echo file_size(intval($latest_file["file_size"])); ?></td>
 	<td nowrap="nowrap"><?php echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'], '/') + 1)); ?></td>
-	<td width="15%" nowrap="nowrap" align="right"><?php echo $file_date->format($df . ' ' . $tf); ?></td>
+	<td width="15%" nowrap="nowrap" align="center"><?php echo $file_date->format($df . ' ' . $tf); ?></td>
+	<td width="10%"><?php echo $latest_file['file_co_reason']; ?></td>
+	<td nowrap="nowrap">
+	<?php if ($canEdit && empty($latest_file['file_checkout'])) {
+?>
+			<a href="?m=files&a=co&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files'); ?></a>
+	<?php } else
+	if ($latest_file['file_checkout'] == $AppUI->user_id) { ?>
+			<a href="?m=files&a=addedit&ci=1&file_id=<?php echo $latest_file['file_id']; ?>"><?php echo w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files'); ?></a>
+	<?php } else {
+		if ($latest_file['file_checkout'] == 'final') {
+			echo 'final';
+		} else {
+			echo $latest_file['co_contact_first_name'] . ' ' . $latest_file['co_contact_last_name'] . '<br>(' . $latest_file['co_user'] . ')';
+		}
+	}
+?>
+			
+	</td>
+	<td nowrap="nowrap" width="20">
+	<?php if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
+		echo "\n" . '<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] . '">';
+		echo w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files');
+		echo "\n</a>";
+	}
+?>
+	</td>
 </tr>
 <?php
 	echo $hidden_table;
