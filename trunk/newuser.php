@@ -1,4 +1,4 @@
-<?php /* STYLE/DEFAULT $Id$ */
+<?php /* $Id$ $URL$ */
 $uistyle = 'web2project';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

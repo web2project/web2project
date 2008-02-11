@@ -1,4 +1,4 @@
-<?php /* INCLUDES $Id$ */
+<?php /* $Id$ $URL$ */
 ##
 ## Global General Purpose Functions
 ##

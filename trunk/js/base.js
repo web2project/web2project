@@ -1,3 +1,4 @@
+/* $Id$ $URL$ */
 /* Copyright 2003,2004 Adam Donnison <adam@saki.com.au>
 
     This file is part of the collected works of Adam Donnison.

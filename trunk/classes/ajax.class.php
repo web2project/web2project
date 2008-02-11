@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 include_once $AppUI->getLibraryClass('xajax/xajax_core/xajax.inc');
 $xajax = new xajax();
 //Comment next line to turn debuggin off

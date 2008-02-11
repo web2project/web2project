@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 // Entries in the LANGUAGES array are elements that describe the
 // countries and language variants supported by this locale pack.
 // Elements are keyed by the ISO 2 character language code in lowercase

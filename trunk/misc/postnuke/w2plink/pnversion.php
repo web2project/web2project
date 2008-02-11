@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 /*
 * PostNuke/SHIM login manager module.  Migrates Postnuke logins
 * and permissions to the SHIM (SISSI release and later).

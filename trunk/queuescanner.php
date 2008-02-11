@@ -1,5 +1,4 @@
-<?php
-// $Id$ $URL$
+<?php /* $Id$ $URL$ */
 
 /*
 All files in this work, except the modules/ticketsmith directory, are now

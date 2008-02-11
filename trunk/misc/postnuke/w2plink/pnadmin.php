@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 // $Id: pnadmin.php
 // LICENSE
 //

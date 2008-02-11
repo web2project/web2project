@@ -1,4 +1,4 @@
-<?php /* CONTACTS $Id: updatecontact.php,v 1.00 */
+<?php /* $Id$ $URL$ */
 require_once 'base.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
 

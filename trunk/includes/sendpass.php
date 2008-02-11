@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 /**
  * @package web2project
  * @subpackage core

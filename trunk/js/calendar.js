@@ -1,3 +1,4 @@
+/* $Id$ $URL$ */
 var hourMSecs = 3600*1000;
 
 /**

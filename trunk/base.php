@@ -1,5 +1,4 @@
-<?php
-/* $Id$ $URL$ */
+<?php /* $Id$ $URL$ */
 
 /* 
 Copyright (c) 2007-2008 The web2Project Development Team <w2p-developers@web2project.net>

@@ -1,5 +1,4 @@
-<?php
-// $Id$
+<?php /* $Id$ $URL$ */
 
 /**
  * Copyright 2005, the web2Project Team.
