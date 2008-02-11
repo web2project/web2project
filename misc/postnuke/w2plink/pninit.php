@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 function dplink_init() {
 	pnModSetVar('w2plink', 'url', '/web2project');
 	pnModSetVar('w2plink', 'use_window', 0);

@@ -1,4 +1,4 @@
-<?php /* CONTACTS $Id: updatecontact.php,v 1.00 */
+<?php /* $Id$ $URL$ */
 require_once 'base.php';
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');

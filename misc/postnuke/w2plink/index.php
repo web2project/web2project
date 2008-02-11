@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 
 if (!defined('LOADED_AS_MODULE')) {
 	die('You cannot access this file directly.');

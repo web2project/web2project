@@ -1,4 +1,4 @@
-<?php /* INCLUDES $Id$ */
+<?php /* $Id$ $URL$ */
 /**
  * Generic functions based on library function (that is, non-db specific)
  *

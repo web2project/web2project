@@ -1,5 +1,4 @@
-<?php
-// $Id$
+<?php /* $Id$ $URL$ */
 
 /**
  * Event handling queue class.

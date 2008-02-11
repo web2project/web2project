@@ -1,3 +1,4 @@
+/* $Id$ $URL$ */
 /**
  * Support for collapsible views. 
  *

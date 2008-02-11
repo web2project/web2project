@@ -1,4 +1,4 @@
-<?php /* ADMIN $Id$ */
+<?php /* $Id$ $URL$ */
 //add or edit a system user
 
 if (!defined('W2P_BASE_DIR')) {

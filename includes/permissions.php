@@ -1,4 +1,4 @@
-<?php /* INCLUDES $Id$ */
+<?php /* $Id$ $URL$ */
 /*
 * Compatibility layer for handling old-style permissions checks against the
 * new PHPGACL library.

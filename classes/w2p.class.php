@@ -1,4 +1,4 @@
-<?php /* CLASSES $Id$ */
+<?php /* $Id$ $URL$ */
 
 /**
  *	@package web2project
