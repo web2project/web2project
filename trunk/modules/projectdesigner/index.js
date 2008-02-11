@@ -1,3 +1,4 @@
+/* $Id$ $URL$ */
 function expand_colapse(id, table_name, option) {
       
       var expand = (option == 'expand' ? 1 : 0);

@@ -1,4 +1,4 @@
-<?php /* STYLE/DEFAULT $Id$ */
+<?php /* $Id$ $URL$ */
 
 class CTitleBlock extends CTitleBlock_core {
 }

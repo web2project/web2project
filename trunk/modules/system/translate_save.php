@@ -1,4 +1,4 @@
-<?php /* SYSTEM $Id$ */
+<?php /* $Id$ $URL$ */
 /**
  * Processes the entries in the translation form.
  * @version $Revision$

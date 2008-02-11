@@ -1,3 +1,4 @@
+/* $Id$ $URL$ */
 // Javascript for handling the tabs used for tasks.
 
 var resourcestuff = null;

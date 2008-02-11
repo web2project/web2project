@@ -1,4 +1,4 @@
-<?php /* SMARTSEARCH$Id$ */
+<?php /* $Id$ $URL$ */
 /**
 * helpdesk_log Class
 */

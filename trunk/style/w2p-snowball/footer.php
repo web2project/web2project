@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 global $a, $AppUI;
 if (function_exists('styleRenderBoxBottom')) {
 	echo styleRenderBoxBottom();

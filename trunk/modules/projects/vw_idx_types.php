@@ -1,4 +1,4 @@
-<?php /* PROJECTS $Id$ */
+<?php /* $Id$ $URL$ */
 global $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, $currentTabName, $st_projects_arr;
 
 $check = $AppUI->_('All Projects', UI_OUTPUT_RAW);
