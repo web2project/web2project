@@ -1,3 +1,4 @@
+/* $Id$ $URL$ */
 var delete_msg = '';
 var can_delete = false;
 

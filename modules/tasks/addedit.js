@@ -1,4 +1,4 @@
-// $Id$
+/* $Id$ $URL$ */
 var calendarField = '';
 var calWin = null;
 

@@ -1,4 +1,4 @@
-// $Id$
+/* $Id$ $URL$ */
 // Task view support routines.
 function popEmailContacts() {
 	updateEmailContacts();

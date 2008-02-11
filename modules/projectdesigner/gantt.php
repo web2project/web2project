@@ -1,4 +1,4 @@
-<?php /* PROJECTDESIGNER $Id$ */
+<?php /* $Id$ $URL$ */
 
 /*
 * Gantt.php - by J. Christopher Pereira

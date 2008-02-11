@@ -1,4 +1,4 @@
-<?php /* PROJECTS $Id$ */
+<?php /* $Id$ $URL$ */
 global $AppUI, $w2Pconfig;
 // check permissions for this module
 $perms = &$AppUI->acl();
