@@ -131,6 +131,7 @@ class CProject extends CW2pObject {
 		foreach ($files_to_delete as $file_id) {
 			$file = new CFile();
 			$file->file_id = $file_id;
+			$file->file_project = $this->project_id;
 			$file->delete();
 		}
 		// remove the project-contacts and project-departments map
