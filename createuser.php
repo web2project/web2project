@@ -37,7 +37,7 @@ $rnd = strtoupper(rnd_string());
 $uid = urlencode(md5_encrypt($rnd));
 $cid = md5_encrypt($rnd);
 
-$countries = array('0' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
+$countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
 
 ?>
 <script language="javascript">
