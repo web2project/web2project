@@ -3,7 +3,7 @@ $dialog = w2PgetParam($_GET, 'dialog', 0);
 if ($dialog) {
 	$page_title = '';
 } else {
-	$page_title = $w2Pconfig['page_title'] . '&nbsp;' . $AppUI->getVersion();
+	$page_title = ($w2Pconfig['page_title'] == 'web2Project') ? $w2Pconfig['page_title'] . '&nbsp;' . $AppUI->getVersion() : $w2Pconfig['page_title'];
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -12,7 +12,7 @@ if ($dialog) {
 <head>
 	<meta name="Description" content="web2Project WebbPlatsen Redmond Theme" />
 	<meta name="Version" content="<?php echo @$AppUI->getVersion(); ?>" />
-	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'ISO-8859-1'; ?>" />
+	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
 	<title><?php echo @w2PgetConfig('page_title'); ?></title>
 	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" />
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
@@ -23,18 +23,58 @@ if ($dialog) {
           } 
      ?>
 	<?php $AppUI->loadHeaderJS(); ?>
+	<script>
+		function gt_hide_tabs() {
+			var tabs = document.getElementsByTagName('td');
+			var i;
+			for (i = 0, i_cmp = tabs.length; i < i_cmp; i++) {
+				if (tabs[i].className == 'tabon')
+					tabs[i].className = 'taboff';
+			}
+			var divs = document.getElementsByTagName('div');
+			for (i =0, i_cmp = divs.length; i < i_cmp; i++) {
+				if (divs[i].className == 'tab')
+					divs[i].style.display = 'none';
+			}
+			var imgs = document.getElementsByTagName('img');
+			for (i = 0, i_cmp = imgs.length; i < i_cmp; i++) {
+				if (imgs[i].id) {
+					if (imgs[i].id.substr(0,8) == 'lefttab_')
+						imgs[i].src = './style/<?php echo $uistyle; ?>/bar_top_left.gif';
+					else if (imgs[i].id.substr(0,9) == 'righttab_')
+						imgs[i].src = './style/<?php echo $uistyle; ?>/bar_top_right.gif';
+				}
+			}
+		}
+		function gt_show_tab(i) {
+			var tab = document.getElementById('tab_' + i);
+			tab.style.display = 'block';
+			tab = document.getElementById('toptab_' + i);
+			tab.className = 'tabon';
+			var img = document.getElementById('lefttab_' + i);
+			img.src = './style/<?php echo $uistyle; ?>/bar_top_Selectedleft.gif';
+			img = document.getElementById('righttab_' + i);
+			img.src = './style/<?php echo $uistyle; ?>/bar_top_Selectedright.gif';
+		}
+		hide_tab_function = gt_hide_tabs;
+		show_tab_function = gt_show_tab;
+	</script>
 </head>
 
 <body onload="this.focus();">
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
-	<td><table class="banner" width='100%' cellpadding="3" cellspacing="0" border="0" background="style/<?php echo $uistyle; ?>/titlegrad.jpg"><tr>
-	<th align="left"><strong><a href='http://www.dotproject.net/' <?php if ($dialog)
-	echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle; ?>/wp_icon.gif" border="0" /></a></strong></th>
-	<th align="right" width='95'><?php
-echo '<a href="' . $w2Pconfig['base_url'] . '"><img src="style/' . $uistyle . '/title.png" border="0" /></a>';
-?></th>
-	</tr></table></td>
+	<td>
+		<table class="banner" width='100%' cellpadding="3" cellspacing="0" border="0" background="style/<?php echo $uistyle; ?>/titlegrad.jpg">
+		<tr>
+			<th align="left"><strong><a href='http://www.w8.se/' <?php if ($dialog)
+			echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle; ?>/wp_icon.gif" border="0" /></a></strong></th>
+			<th align="right" width='95'><?php
+			echo '<a href="http://www.web2project.net/">' . w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true) . '<img src="style/' . $uistyle . '/title.png" border="0" /></a>';?>
+			</th>
+		</tr>
+		</table>
+	</td>
 </tr>
 <?php if (!$dialog) {
 	// top navigation menu
@@ -97,7 +137,7 @@ echo '<a href="' . $w2Pconfig['base_url'] . '"><img src="style/' . $uistyle . '/
 	echo "</td>\n";
 
 	$df = $AppUI->getPref('SHDATEFORMAT');
-	$df .= " " . $AppUI->getPref('TIMEFORMAT');
+	$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 	$cf = $df;
 	$cal_df = $cf;
 	$cal_df = str_replace('%S', '%s', $cal_df);
@@ -119,7 +159,7 @@ echo '<a href="' . $w2Pconfig['base_url'] . '"><img src="style/' . $uistyle . '/
 	<td>
 		<table cellspacing="0" cellpadding="3" border="0" width="100%">
 		<tr>
-		<td width="70%">
+		<td width="75%">
 			<table cellspacing="0" cellpadding="3" border="0" width="100%">
 			<tr>
 				<td width="83%"><?php echo $AppUI->_('Welcome') . ' ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '. ' . $AppUI->_('Server time is') . ' ' . date($df); ?></td>
@@ -136,8 +176,7 @@ echo '<a href="' . $w2Pconfig['base_url'] . '"><img src="style/' . $uistyle . '/
 					  	}
 						?> 
         </td></form></tr></table></td>
-		<td width="20%">
-			
+		<td width="275" nowrap="nowrap">		
 			<table cellspacing="0" cellpadding="3" border="0" width="100%">
 			<tr>
 				<td nowrap="nowrap" align="right">

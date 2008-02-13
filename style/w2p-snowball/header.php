@@ -72,7 +72,7 @@ if ($dialog) {
 				&nbsp;
 			</th>
 			<th style="background: url(style/<?php echo $uistyle; ?>/title_bkgd.jpg);" align="right" width="123"><a href='http://www.web2project.net/' <?php if ($dialog)
-	echo 'target="_blank"'; ?>><img src="style/<?php echo $uistyle; ?>/title.jpg" border="0" class="banner" align="left" /></th>
+			echo 'target="_blank"'; ?>><?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?><img src="style/<?php echo $uistyle; ?>/title.jpg" border="0" class="banner" align="left" /><?php echo w2PendTip();?></th>
 			<th style="background: url(style/<?php echo $uistyle; ?>/title_bkgd.jpg);" align="right" width="5">
 				<!--a little spacer-->
 				&nbsp;
@@ -82,7 +82,6 @@ if ($dialog) {
 	</td>
 </tr>
 <?php if (!$dialog) {
-	//Pedro A.	<script type="text/javascript" src="<?php echo "{$w2Pconfig['base_url']}/lib/fckeditor/fckeditor.js""></script>
 	// top navigation menu
 	$nav = $AppUI->getMenuModules();
 	$perms = &$AppUI->acl();
