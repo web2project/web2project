@@ -58,6 +58,13 @@ if (1 == 1) {
 	}
 	$text .= sprintf("%s\r\n", "");
 	$q->clear();
+	require_once $AppUI->getModuleClass('companies');
+	$company =& new CCompany;
+	$allowedCompanies = $company->getAllowedSQL($AppUI->user_id);
+	
+	require_once $AppUI->getModuleClass('departments');
+	$department =& new CDepartment;
+	$allowedDepartments = $department->getAllowedSQL($AppUI->user_id);
 	$q = new DBQuery;
 	$q->addTable('contacts', 'con');
 	$q->leftJoin('companies', 'co', 'co.company_id = con.contact_company');
@@ -65,6 +72,21 @@ if (1 == 1) {
 	$q->addQuery('con.*');
 	$q->addQuery('co.company_name');
 	$q->addQuery('de.dept_name');
+	$q->addWhere('
+		(contact_private=0
+			OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
+			OR contact_owner IS NULL OR contact_owner = 0
+		)');
+	if (count($allowedCompanies)) {
+		$comp_where = implode(' AND ', $allowedCompanies);
+		$q->addWhere('( (' . $comp_where . ') OR contact_company = 0 )');
+	}
+	if (count($allowedDepartments)) {
+		$dpt_where = implode(' AND ', $allowedDepartments);
+		$q->addWhere('( (' . $dpt_where . ') OR contact_department = 0 )');
+	}
+	$q->addOrder('contact_first_name');
+	$q->addOrder('contact_last_name');
 	$contacts = $q->loadList();
 	$q->clear();
 	foreach ($contacts as $row) {
