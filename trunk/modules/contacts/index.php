@@ -177,7 +177,8 @@ $titleBlock = new CTitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a
 $titleBlock->addCell($a2z);
 if ($canEdit) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new contact') . '">', '', '<form action="?m=contacts&a=addedit" method="post">', '</form>');
-	$titleBlock->addCrumbRight('<a href="./index.php?m=contacts&a=csvexport&suppressHeaders=true">' . $AppUI->_('CSV Download') . "</a> | " . '<a href="./index.php?m=contacts&a=vcardimport&dialog=0">' . $AppUI->_('Import vCard') . '</a>');
+	$titleBlock->addCrumb('?m=contacts&a=csvexport&suppressHeaders=1', 'CSV Download');
+	$titleBlock->addCrumb('?m=contacts&a=vcardimport&dialog=0', 'Import vCard');
 }
 $titleBlock->show();
 
