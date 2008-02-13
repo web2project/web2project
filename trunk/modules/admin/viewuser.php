@@ -146,12 +146,32 @@ function popChgPwd() {
 			<td class="hilite" width="100%"><?php echo @$user['contact_birthday']; ?></td>
 		</tr>
 		<tr>
-			<td align="right" nowrap="nowrap">ICQ#:</td>
+			<td align="right" nowrap="nowrap">Jabber:</td>
+			<td class="hilite" width="100%"><?php echo @$user['contact_jabber']; ?></td>
+		</tr>
+		<tr>
+			<td align="right" nowrap="nowrap">ICQ:</td>
 			<td class="hilite" width="100%"><?php echo @$user['contact_icq']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">AOL Nick:</td>
 			<td class="hilite" width="100%"><a href="aim:<?php echo @$user['contact_aol']; ?>"><?php echo @$user['contact_aol']; ?></a></td>
+		</tr>
+		<tr>
+			<td align="right" nowrap="nowrap">MSN:</td>
+			<td class="hilite" width="100%"><?php echo @$user['contact_msn']; ?></td>
+		</tr>
+		<tr>
+			<td align="right" nowrap="nowrap">Yahoo:</td>
+			<td class="hilite" width="100%"><a href="ymsgr:sendIM?<?php echo @$user['contact_yahoo']; ?>"><?php echo @$user['contact_yahoo']; ?></a></td>
+		</tr>
+		<tr>
+			<td align="right" nowrap="nowrap">Skype:</td>
+			<td class="hilite" width="100%"><a href="skype:<?php echo @$user['contact_skype']; ?>"><?php echo @$user['contact_skype']; ?></a></td>
+		</tr>
+		<tr>
+			<td align="right" nowrap="nowrap">Google:</td>
+			<td class="hilite" width="100%"><a href="google:<?php echo @$user['contact_google']; ?>"><?php echo @$user['contact_google']; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
