@@ -109,11 +109,11 @@ if ($start_date && $end_date) {
 // until a new SetFont call is executed again on the same object e subobjects.
 //
 // LOGIC: $graph->scale->actinfo->SetFont(font name, font style, font size);
-// EXAMPLE: $graph->scale->actinfo->SetFont(FF_ARIAL, FS_BOLD, 10);
+// EXAMPLE: $graph->scale->actinfo->SetFont(FF_CUSTOM, FS_BOLD, 10);
 //
 // Here is a list of possibilities you can use for the first parameter of the SetFont method:
 // TTF Font families (you must have them installed to use them):
-// FF_COURIER, FF_VERDANA, FF_TIMES, FF_COMIC, FF_ARIAL, FF_GEORGIA, FF_TREBUCHE
+// FF_COURIER, FF_VERDANA, FF_TIMES, FF_COMIC, FF_CUSTOM, FF_GEORGIA, FF_TREBUCHE
 // Internal fonts:
 // FF_FONT0, FF_FONT1, FF_FONT2
 //
@@ -123,7 +123,7 @@ if ($start_date && $end_date) {
 
 // Pedro A.
 // This one will affect the captions of the columns on the left side, where you have the projects/tasks and dates
-$graph->scale->actinfo->SetFont(FF_ARIAL, FS_NORMAL, 8);
+$graph->scale->actinfo->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 $graph->scale->actinfo->vgrid->SetColor('gray');
 $graph->scale->actinfo->SetColor('darkgray');
 
@@ -141,10 +141,10 @@ $graph->scale->tableTitle->Set($tableTitle);
 
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
-if (is_file(TTF_DIR . "arialbd.ttf")) { // Pedro A.
+if (is_file(TTF_DIR . "FreeSans.ttf")) { // Pedro A.
 	// This one will affect the title of the graph if you'd want to change its font you'd do something like:
 	//    $graph->scale->tableTitle->SetFont(FF_FONT2);
-	$graph->scale->tableTitle->SetFont(FF_ARIAL, FS_BOLD, 10);
+	$graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 10);
 }
 
 $graph->scale->SetTableTitleBackground('#eeeeee');
@@ -348,7 +348,7 @@ if (is_array($projects)) {
 		// Pedro A.
 		// This one will affect the style for the project names, alternative example:
 		//      $bar->title->SetFont(FF_FONT1);
-		$bar->title->SetFont(FF_ARIAL, FS_BOLD, 7);
+		$bar->title->SetFont(FF_CUSTOM, FS_BOLD, 7);
 		$bar->SetFillColor('#' . $p['project_color_identifier']);
 		$bar->SetPattern(BAND_SOLID, '#' . $p['project_color_identifier']);
 
@@ -359,7 +359,7 @@ if (is_array($projects)) {
 		// Pedro A.
 		// This one will affect the style for the caption of the projects status that appear on the right of the bar if they are selected to show, alternative example:
 		//    $bar->title->SetFont(FF_FONT0);
-		$bar->caption->SetFont(FF_ARIAL, FS_NORMAL, 8);
+		$bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 
 		// gray out templates, completes, on ice, on hold
 		if ($p['project_active'] < 1 || $p['project_percentage_complete'] > 99.9) {
@@ -412,7 +412,7 @@ if (is_array($projects)) {
 					// Pedro A.
 					// This one will affect the style for the tasks names non milestones, alternative example:
 					//                      $bar2->title->SetFont(FF_FONT0);
-					$bar2->title->SetFont(FF_ARIAL, FS_NORMAL, 7);
+					$bar2->title->SetFont(FF_CUSTOM, FS_NORMAL, 7);
 					$bar2->SetFillColor('#' . $p['project_color_identifier']);
 					$graph->Add($bar2);
 				} else {
@@ -421,7 +421,7 @@ if (is_array($projects)) {
 					// Pedro A.
 					// This one will affect the style for the milestones tasks names, alternative example:
 					//                      $bar2->title->SetFont(FF_FONT0);
-					$bar2->title->SetFont(FF_ARIAL, FS_NORMAL, 7);
+					$bar2->title->SetFont(FF_CUSTOM, FS_NORMAL, 7);
 					$graph->Add($bar2);
 				}
 
@@ -460,7 +460,7 @@ $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
 // Pedro A.
 // This one will affect the style for the "Today" expression on the graphs bottom, alternative example:
 // $vline->title->SetFont(FF_FONT0);
-$vline->title->SetFont(FF_ARIAL, FS_BOLD, 9);
+$vline->title->SetFont(FF_CUSTOM, FS_BOLD, 9);
 $graph->Add($vline);
 $graph->Stroke();
 ?>
