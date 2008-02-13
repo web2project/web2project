@@ -76,15 +76,15 @@ function delIt(){
 		<table border="0" cellpadding="1" cellspacing="1">
 		<tr>
 			<td align="right"><?php echo $AppUI->_('First Name'); ?>:</td>
-			<td><?php echo @$row->contact_first_name; ?></td>
+			<td><?php echo $row->contact_first_name; ?></td>
 		</tr>
 		<tr>
 			<td align="right">&nbsp;&nbsp;<?php echo $AppUI->_('Last Name'); ?>:</td>
-			<td><?php echo @$row->contact_last_name; ?></td>
+			<td><?php echo $row->contact_last_name; ?></td>
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Display Name'); ?>: </td>
-			<td><?php echo @$row->contact_order_by; ?></td>
+			<td><?php echo $row->contact_order_by; ?></td>
 		</tr>
 		</table>
 	</td>
@@ -96,7 +96,7 @@ function delIt(){
 		<tr>
 			<td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_('Waiting Update'); ?>?:</td>
 			<td align="center">
-				<input type="checkbox" value="1" name="contact_updateasked" disabled="disabled" <?php echo @$row->contact_updatekey ? 'checked="checked"' : ''; ?> />
+				<input type="checkbox" value="1" name="contact_updateasked" disabled="disabled" <?php echo $row->contact_updatekey ? 'checked="checked"' : ''; ?> />
 			</td>
 		</tr>	
 		<tr>
@@ -104,7 +104,7 @@ function delIt(){
 $last_ask = new CDate($row->contact_updateasked);
 ?>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Last Update Requested'); ?>:</td>
-			<td align="center" nowrap="nowrap"><?php echo @$row->contact_updateasked ? $last_ask->format($df) : ''; ?></td>
+			<td align="center" nowrap="nowrap"><?php echo $row->contact_updateasked ? $last_ask->format($df) : ''; ?></td>
 		</tr>	
 		<tr>
 		<tr>
@@ -112,7 +112,7 @@ $last_ask = new CDate($row->contact_updateasked);
 $lastupdated = new CDate($row->contact_lastupdate);
 ?>
 			<td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_('Last Updated'); ?>:</td>
-			<td align="center" nowrap="nowrap"><?php echo (@$row->contact_lastupdate && @!($row->contact_lastupdate == 0)) ? $lastupdated->format($df) : ''; ?></td>
+			<td align="center" nowrap="nowrap"><?php echo ($row->contact_lastupdate && !($row->contact_lastupdate == 0)) ? $lastupdated->format($df) : ''; ?></td>
 		</tr>	
 		</table>
 	</td>
@@ -122,12 +122,12 @@ $lastupdated = new CDate($row->contact_lastupdate);
 		<table border="0" cellpadding="1" cellspacing="1" class="details" width="100%">
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Job Title'); ?>:</td>
-			<td><?php echo @$row->contact_job; ?></td>
+			<td><?php echo $row->contact_job; ?></td>
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Company'); ?>:</td>
 			<?php if ($perms->checkModuleItem('companies', 'access', $row->contact_company)) { ?>
-            			<td nowrap="nowrap"> <?php echo "<a href='?m=companies&a=view&company_id=" . @$row->contact_company . "'>" . htmlspecialchars($company_detail['company_name'], ENT_QUOTES) . '</a>'; ?></td>
+            			<td nowrap="nowrap"> <?php echo "<a href='?m=companies&a=view&company_id=" . $row->contact_company . "'>" . htmlspecialchars($company_detail['company_name'], ENT_QUOTES) . '</a>'; ?></td>
 			<?php } else { ?>
 						<td nowrap="nowrap"><?php echo htmlspecialchars($company_detail['company_name'], ENT_QUOTES); ?></td>
 			<?php } ?>
@@ -142,89 +142,89 @@ if (isset($_SESSION['all_tabs']['departments'])) {
 <?php } ?>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Title'); ?>:</td>
-			<td><?php echo @$row->contact_title; ?></td>
+			<td><?php echo $row->contact_title; ?></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Type'); ?>:</td>
-			<td><?php echo @$row->contact_type; ?></td>
+			<td><?php echo $row->contact_type; ?></td>
 		</tr>
 		<tr>
 			<td align="right" valign="top" width="100"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td>
-                    <?php echo @$row->contact_address1; ?><br />
-			        <?php echo @$row->contact_address2; ?><br />
-			        <?php echo @$row->contact_city . ', ' . @$row->contact_state . ' ' . @$row->contact_zip; ?><br />
-			        <?php echo ($countries[@$row->contact_country] ? $countries[$row->contact_country] : $row->contact_country); ?>
+                    <?php echo $row->contact_address1; ?><br />
+			        <?php echo $row->contact_address2; ?><br />
+			        <?php echo $row->contact_city . ', ' . $row->contact_state . ' ' . $row->contact_zip; ?><br />
+			        <?php echo ($countries[$row->contact_country] ? $countries[$row->contact_country] : $row->contact_country); ?>
 			        
            </td>
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Map Address'); ?>:</td>
-			<td><a target="_blank" href="http://maps.google.com/maps?q=<?php echo @$row->contact_address1; ?>+<?php echo @$row->contact_address2; ?>+<?php echo @$row->contact_city; ?>+<?php echo @$row->contact_state; ?>+<?php echo @$row->contact_zip; ?>+<?php echo @$row->contact_country; ?>"><?php echo w2PshowImage('googlemaps.gif', 55, 22, 'Find It on Google'); ?></a></td>
+			<td><a target="_blank" href="http://maps.google.com/maps?q=<?php echo $row->contact_address1; ?>+<?php echo $row->contact_address2; ?>+<?php echo $row->contact_city; ?>+<?php echo $row->contact_state; ?>+<?php echo $row->contact_zip; ?>+<?php echo $row->contact_country; ?>"><?php echo w2PshowImage('googlemaps.gif', 55, 22, 'Find It on Google'); ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Work Phone'); ?>:</td>
-			<td><?php echo @$row->contact_phone; ?></td>
+			<td><?php echo $row->contact_phone; ?></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Home Phone'); ?>:</td>
-			<td><?php echo @$row->contact_phone2; ?></td>
+			<td><?php echo $row->contact_phone2; ?></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Fax'); ?>:</td>
-			<td><?php echo @$row->contact_fax; ?></td>
+			<td><?php echo $row->contact_fax; ?></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Mobile Phone'); ?>:</td>
-			<td><?php echo @$row->contact_mobile; ?></td>
+			<td><?php echo $row->contact_mobile; ?></td>
 		</tr>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Email'); ?>:</td>
-			<td nowrap="nowrap"><a href="mailto:<?php echo @$row->contact_email; ?>"><?php echo @$row->contact_email; ?></a></td>
+			<td nowrap="nowrap"><a href="mailto:<?php echo $row->contact_email; ?>"><?php echo $row->contact_email; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Email'); ?>2:</td>
-			<td nowrap="nowrap"><a href="mailto:<?php echo @$row->contact_email2; ?>"><?php echo @$row->contact_email2; ?></a></td>
+			<td nowrap="nowrap"><a href="mailto:<?php echo $row->contact_email2; ?>"><?php echo $row->contact_email2; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Homepage'); ?>:</td>
-			<td nowrap="nowrap"><a href="<?php echo @$row->contact_url; ?>"><?php echo @$row->contact_url; ?></a></td>
+			<td nowrap="nowrap"><a href="<?php echo $row->contact_url; ?>"><?php echo $row->contact_url; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right">Jabber:</td>
-			<td><?php echo @$row->contact_jabber; ?></td>
+			<td><?php echo $row->contact_jabber; ?></td>
 		</tr>
 		<tr>
 			<td align="right">ICQ:</td>
-			<td><?php echo @$row->contact_icq; ?></td>
+			<td><?php echo $row->contact_icq; ?></td>
 		</tr>
 		<tr>
 			<td align="right">AOL:</td>
-			<td><?php echo @$row->contact_aol; ?></td>
+			<td><a href="aim:<?php echo $row->contact_aol; ?>"><?php echo $row->contact_aol; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right">MSN:</td>
-			<td><?php echo @$row->contact_msn; ?></td>
+			<td><?php echo $row->contact_msn; ?></td>
 		</tr>
 		<tr>
 			<td align="right">Yahoo:</td>
-			<td><?php echo @$row->contact_yahoo; ?></td>
+			<td><a href="ymsgr:sendIM?<?php echo $row->contact_yahoo; ?>"><?php echo $row->contact_yahoo; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right">Skype:</td>
-			<td><?php echo @$row->contact_skype; ?></td>
+			<td><a href="skype:<?php echo $row->contact_skype; ?>"><?php echo $row->contact_skype; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right">Google:</td>
-			<td><?php echo @$row->contact_google; ?></td>
+			<td><a href="google:<?php echo $row->contact_google; ?>"><?php echo $row->contact_google; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Birthday'); ?>:</td>
-			<td nowrap="nowrap"><?php echo @substr($row->contact_birthday, 0, 10); ?></td>
+			<td nowrap="nowrap"><?php echo substr($row->contact_birthday, 0, 10); ?></td>
 		</tr>		
 <?php
 require_once ($AppUI->getSystemClass('CustomFields'));
-$custom_fields = new CustomFields($m, $a, @$row->contact_id, 'view');
+$custom_fields = new CustomFields($m, $a, $row->contact_id, 'view');
 if ($custom_fields->count()) {
 ?>
 		<th colspan="2">
@@ -244,7 +244,7 @@ if ($custom_fields->count()) {
 	</td>
 	<td valign="top" width="50%">
 		<strong><?php echo $AppUI->_('Contact Notes'); ?></strong><br />
-		<?php echo @nl2br($row->contact_notes); ?>
+		<?php echo nl2br($row->contact_notes); ?>
 	</td>
 </tr>
 <tr>
