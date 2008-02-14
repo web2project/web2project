@@ -3,14 +3,18 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-if (!($user_id = w2PgetParam($_REQUEST, 'user_id', 0)))
+if (!($user_id = w2PgetParam($_REQUEST, 'user_id', 0))) {
 	$user_id = @$AppUI->user_id;
+}
 
 // check for a non-zero user id
 if ($user_id) {
 	$old_pwd = db_escape(trim(w2PgetParam($_POST, 'old_pwd', null)));
 	$new_pwd1 = db_escape(trim(w2PgetParam($_POST, 'new_pwd1', null)));
 	$new_pwd2 = db_escape(trim(w2PgetParam($_POST, 'new_pwd2', null)));
+
+	$perms = &$AppUI->acl();
+	$canAdminEdit = $perms->checkModule('admin', 'edit');
 
 	// has the change form been posted
 	if ($new_pwd1 && $new_pwd2 && $new_pwd1 == $new_pwd2) {
@@ -21,7 +25,7 @@ if ($user_id) {
 		$q->addQuery('user_id');
 		$q->addWhere('user_password = "' . $old_md5 . '"');
 		$q->addWhere('user_id = ' . $user_id);
-		if ($AppUI->user_type == 1 || $q->loadResult() == $user_id) {
+		if ($canAdminEdit || $q->loadResult() == $user_id) {
 			require_once ($AppUI->getModuleClass('admin'));
 			$user = new CUser();
 			$user->user_id = $user_id;
@@ -30,10 +34,24 @@ if ($user_id) {
 			if (($msg = $user->store())) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR);
 			} else {
+				echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
+				if (function_exists('styleRenderBoxTop')) {
+					echo styleRenderBoxTop();
+				}
+				echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">';
+				echo '<tr><td>';
 				echo $AppUI->_('chgpwUpdated');
+				echo '</td></tr></table>';
 			}
 		} else {
+			echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
+			if (function_exists('styleRenderBoxTop')) {
+				echo styleRenderBoxTop();
+			}
+			echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">';
+			echo '<tr><td>';
 			echo $AppUI->_('chgpwWrongPW');
+			echo '</td></tr></table>';
 		}
 	} else {
 ?>
@@ -66,7 +84,7 @@ function submitIt() {
 <form name="frmEdit" method="post" onsubmit="return false">
 <input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
 <table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">
-<?php if ($AppUI->user_type != 1) {
+<?php if (!$canAdminEdit) {
 ?>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Current Password'); ?></td>
@@ -90,6 +108,13 @@ function submitIt() {
 <?php
 	}
 } else {
+	echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
+	if (function_exists('styleRenderBoxTop')) {
+		echo styleRenderBoxTop();
+	}
+	echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">';
+	echo '<tr><td>';
 	echo $AppUI->_('chgpwLogin');
+	echo '</td></tr></table>';
 }
 ?>
