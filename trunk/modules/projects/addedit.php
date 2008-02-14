@@ -369,7 +369,7 @@ $custom_fields->printHTML();
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?></td>
 			<td nowrap ="nowrap">
-				<?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', $row->project_priority, true); ?> *
+				<?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', ($row->project_priority ? $row->project_priority : 0), true); ?> *
 			</td>
 		</tr>
 		<tr>
