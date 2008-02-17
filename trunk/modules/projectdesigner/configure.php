@@ -11,9 +11,9 @@ if (getDenyEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-@include_once ('./functions/admin_func.php');
+$utypes = w2PgetSysVal('UserType');
 
-$CONFIG_FILE = './modules/projectdesigner/config.php';
+$CONFIG_FILE = W2P_BASE_DIR . '/modules/projectdesigner/config.php';
 
 $AppUI->savePlace();
 

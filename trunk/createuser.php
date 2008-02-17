@@ -19,7 +19,6 @@ $AppUI = new CAppUI();
 include_once W2P_BASE_DIR . '/classes/w2p.class.php';
 require_once W2P_BASE_DIR . '/classes/date.class.php';
 require_once W2P_BASE_DIR . '/modules/admin/admin.class.php';
-require_once W2P_BASE_DIR . '/functions/admin_func.php';
 // Create the roles class container
 require_once W2P_BASE_DIR . '/modules/system/roles/roles.class.php';
 

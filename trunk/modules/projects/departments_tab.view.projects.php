@@ -45,7 +45,6 @@ $addPwOiD = $AppUI->getState('addProjWithOwnerInDep', 0);
 
 $extraGet = '&user_id=' . $user_id;
 
-require (W2P_BASE_DIR . '/functions/projects_func.php');
 require_once ($AppUI->getModuleClass('projects'));
 
 // collect the full projects list data via function in projects.class.php
