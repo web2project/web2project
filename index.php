@@ -213,7 +213,6 @@ $u = $AppUI->checkFileName(w2PgetCleanParam($_GET, 'u', ''));
 
 setlocale(LC_TIME, $AppUI->user_lang);
 $m_config = w2PgetConfig($m);
-@include_once W2P_BASE_DIR . '/functions/' . $m . '_func.php';
 
 // TODO: canRead/Edit assignements should be moved into each file
 

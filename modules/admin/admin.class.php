@@ -3,6 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+// user types
+$utypes = w2PgetSysVal('UserType');
+
 /**
  * User Class
  */
@@ -14,25 +17,6 @@ class CUser extends CW2pObject {
 	var $user_type = null;
 	var $user_contact = null;
 	var $user_signature = null;
-	/*	var $user_first_name = NULL;
-	var $user_last_name = NULL;
-	var $user_company = NULL;
-	var $user_department = NULL;
-	var $user_email = NULL;
-	var $user_phone = NULL;
-	var $user_home_phone = NULL;
-	var $user_mobile = NULL;
-	var $user_address1 = NULL;
-	var $user_address2 = NULL;
-	var $user_city = NULL;
-	var $user_state = NULL;
-	var $user_zip = NULL;
-	var $user_country = NULL;
-	var $user_icq = NULL;
-	var $user_aol = NULL;
-	var $user_birthday = NULL;
-	var $user_pic = NULL;
-	var $user_owner = NULL; */
 
 	function CUser() {
 		$this->CW2pObject('users', 'user_id');

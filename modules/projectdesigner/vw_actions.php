@@ -84,7 +84,6 @@ asort($sprojects);
 $sprojects = arrayMerge(array('' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')'), $sprojects);
 
 //lets addthe reference to percent
-@include_once ('./functions/tasks_func.php');
 $spercent = arrayMerge(array('' => '(Progress)'), $percent);
 ?>
             <form name='frm_bulk' method='POST' action='?m=projectdesigner&a=do_task_bulk_aed'>

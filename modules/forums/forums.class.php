@@ -5,6 +5,14 @@ if (!defined('W2P_BASE_DIR')) {
 
 require_once ($AppUI->getSystemClass('libmail'));
 
+$filters = array('- Filters -');
+
+if ($a == 'viewer') {
+	array_push($filters, 'My Watched', 'Last 30 days');
+} else {
+	array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
+}
+
 class CForum extends CW2pObject {
 	var $forum_id = null;
 	var $forum_project = null;
