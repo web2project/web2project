@@ -82,7 +82,6 @@ require_once ($AppUI->getSystemClass('date'));
 require_once ($AppUI->getSystemClass('w2p'));
 require_once ($AppUI->getSystemClass('query'));
 
-require_once W2P_BASE_DIR . '/misc/debug.php';
 //Now that we have $AppUI lets add our ajax functions in
 //require_once($AppUI->getSystemClass('ajax'));
 
@@ -137,7 +136,7 @@ if (isset($_REQUEST['login'])) {
 }
 
 // supported since PHP 4.2
-// writeDebug( var_export( $AppUI, true ), 'AppUI', __FILE__, __LINE__ );
+// w2PwriteDebug( var_export( $AppUI, true ), 'AppUI', __FILE__, __LINE__ );
 
 // set the default ui style
 $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');

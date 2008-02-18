@@ -48,7 +48,6 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	$AppUI->checkStyle();
 
 	require_once ($AppUI->getSystemClass('w2p'));
-	require_once (W2P_BASE_DIR . '/misc/debug.php');
 
 	if ($AppUI->doLogin())
 		$AppUI->loadPrefs(0);
