@@ -1499,4 +1499,25 @@ function w2PcheckCharset($charset) {
 	return $charset;
 }
 
+/**
+ *    Write debugging to debug.log file
+ *
+ *    @param string $s the debug message
+ *    @param string $t the header of the message
+ *    @param string $f the script filename
+ *    @param string $l the script line 
+ *    @access public
+ */
+$debug_file = W2P_BASE_DIR . '/files/debug.log';
+function w2PwriteDebug($s, $t = '', $f = '?', $l = '?') {
+	global $debug, $debug_file;
+	if ($debug && ($fp = fopen($debug_file, "at"))) {
+		fputs($fp, "Debug message from file [$f], line [$l], at: " . strftime('%H:%S'));
+		if ($t) {
+			fputs($fp, "\n * * $t * *\n");
+		}
+		fputs($fp, "\n$s\n\n");
+		fclose($fp);
+	}
+}
 ?>
