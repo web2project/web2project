@@ -11,7 +11,7 @@ $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_nam
 	DATE_FORMAT(forum_last_date, "%d-%b-%Y %H:%i" ) forum_last_date,
 	project_name, project_color_identifier, project_id');
 $q->addJoin('projects', 'p', 'project_id = forum_project', 'inner');
-$q->addWhere('forum_project = ' . $project_id);
+$q->addWhere('forum_project = ' . (int)$project_id);
 $q->addOrder('forum_project, forum_name');
 $rc = $q->exec(ADODB_FETCH_ASSOC);
 ?>

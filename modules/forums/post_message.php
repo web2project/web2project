@@ -22,7 +22,7 @@ $q = new DBQuery;
 $q->addTable('forums');
 $q->addTable('projects');
 $q->addQuery('forum_name, forum_owner, forum_moderated, project_name, project_id');
-$q->addWhere('forums.forum_id = ' . $forum_id);
+$q->addWhere('forums.forum_id = ' . (int)$forum_id);
 $q->addWhere('forums.forum_project = projects.project_id');
 $res = $q->exec();
 $forum_info = $q->fetchRow();
@@ -34,7 +34,7 @@ $q = new DBQuery;
 $q->addTable('forum_messages');
 $q->addQuery('forum_messages.*, user_username');
 $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
-$q->addWhere('message_id = ' . ($message_id ? $message_id : $message_parent));
+$q->addWhere('message_id = ' . (int)($message_id ? $message_id : $message_parent));
 $res = $q->exec();
 echo db_error();
 $message_info = $q->fetchRow();
@@ -43,7 +43,7 @@ $q->clear();
 //pull message information from last response
 if ($message_parent != -1) {
 	$q->addTable('forum_messages');
-	$q->addWhere('message_parent = ' . ($message_id ? $message_id : $message_parent));
+	$q->addWhere('message_parent = ' . (int)($message_id ? $message_id : $message_parent));
 	$q->addOrder('message_id DESC'); // fetch last message first
 	$q->setLimit(1);
 	$res = $q->exec();

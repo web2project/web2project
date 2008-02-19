@@ -26,9 +26,9 @@ $q->addQuery('v1.visit_user');
 $q->addJoin('users', 'u', 'fm1.message_author = u.user_id', 'inner');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 $q->addJoin('forum_messages', 'fm2', 'fm1.message_id = fm2.message_parent');
-$q->addJoin('forum_watch', 'fw', 'watch_user = ' . $AppUI->user_id . ' AND watch_topic = fm1.message_id');
-$q->addJoin('forum_visits', 'v1', 'v1.visit_user = ' . $AppUI->user_id . ' AND v1.visit_message = fm1.message_id');
-$q->addWhere('fm1.message_forum = ' . $forum_id);
+$q->addJoin('forum_watch', 'fw', 'watch_user = ' . (int)$AppUI->user_id . ' AND watch_topic = fm1.message_id');
+$q->addJoin('forum_visits', 'v1', 'v1.visit_user = ' . (int)$AppUI->user_id . ' AND v1.visit_message = fm1.message_id');
+$q->addWhere('fm1.message_forum = ' . (int)$forum_id);
 
 switch ($f) {
 	case 1:

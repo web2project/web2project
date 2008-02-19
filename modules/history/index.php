@@ -93,7 +93,7 @@ if (!empty($_REQUEST['project_id'])) {
 	$q = new DBQuery;
 	$q->addTable('tasks');
 	$q->addQuery('task_id');
-	$q->addWhere('task_project = ' . $project_id);
+	$q->addWhere('task_project = ' . (int)$project_id);
 	$project_tasks = implode(',', $q->loadColumn());
 	if (!empty($project_tasks)) {
 		$project_tasks = 'OR (history_table = "tasks" AND history_item IN (' . $project_tasks . '))';
@@ -101,13 +101,13 @@ if (!empty($_REQUEST['project_id'])) {
 
 	$q->addTable('files');
 	$q->addQuery('file_id');
-	$q->addWhere('file_project = ' . $project_id);
+	$q->addWhere('file_project = ' . (int)$project_id);
 	$project_files = implode(',', $q->loadColumn());
 	if (!empty($project_files)) {
 		$project_files = 'OR (history_table = "files" AND history_item IN (' . $project_files . '))';
 	}
 
-	$filter[] = '((history_table = "projects" AND history_item = "' . $project_id .'") ' . $project_tasks . ' ' . $project_files . ')';
+	$filter[] = '((history_table = "projects" AND history_item = "' . (int)$project_id .'") ' . $project_tasks . ' ' . $project_files . ')';
 }
 
 $page = isset($_REQUEST['pg']) ? (int)$_REQUEST['pg'] : 1;

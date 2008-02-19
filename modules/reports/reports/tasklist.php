@@ -209,7 +209,7 @@ if ($do_report) {
 
 		$q = new DBQuery;
 		$q->addTable('user_tasks');
-		$q->addWhere('task_id = ' . $task_id);
+		$q->addWhere('task_id = ' . (int)$task_id);
 		$sql_user = $q->exec();
 
 		$users = null;
@@ -225,7 +225,7 @@ if ($do_report) {
 			$q->addTable('contacts', 'c');
 			$q->addQuery('contact_first_name, contact_last_name');
 			$q->addWhere('u.user_contact = c.contact_id');
-			$q->addWhere('user_id = ' . $Task_User['user_id']);
+			$q->addWhere('user_id = ' . (int)$Task_User['user_id']);
 
 			$sql_user_array = $q->exec();
 			$q->clear();

@@ -19,10 +19,10 @@ $proFilter = w2PgetParam($_REQUEST, 'proFilter', '-1');
 if ($proFilter == '-2') {
 	$filter1[] = 'project_status != 3 ';
 } elseif ($proFilter != '-1') {
-	$filter1[] = 'project_status = ' . $proFilter;
+	$filter1[] = 'project_status = ' . (int)$proFilter;
 }
 if ($company_id != 0) {
-	$filter1[] = 'project_company = ' . $company_id;
+	$filter1[] = 'project_company = ' . (int)$company_id;
 }
 //$filter1 = ($proFilter == '-1') ? '' : " AND project_status = $proFilter ";
 if ($showInactive != '1') {

@@ -19,7 +19,7 @@ if (isset($_GET['update_project_status']) && isset($_GET['project_status']) && i
 			$r = new DBQuery;
 			$r->addTable('projects');
 			$r->addUpdate('project_status', '' . w2PgetParam($_GET, 'project_status', null));
-			$r->addWhere('project_id   = ' . $project_id);
+			$r->addWhere('project_id   = ' . (int)$project_id);
 			$r->exec();
 			$r->clear();
 		}

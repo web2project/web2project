@@ -45,7 +45,7 @@ $q = new DBQuery;
 //check that project has tasks; otherwise run seperate query
 $q->addTable('tasks');
 $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
-$q->addWhere('task_project = ' . $project_id);
+$q->addWhere('task_project = ' . (int)$project_id);
 $hasTasks = $q->loadResult();
 $q->clear();
 
@@ -59,7 +59,7 @@ if ($hasTasks) {
 	$q->addJoin('users', 'u', 'user_id = project_owner', 'inner');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 	$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
-	$q->addWhere('project_id = ' . $project_id . ' AND t1.task_id = t1.task_parent');
+	$q->addWhere('project_id = ' . (int)$project_id . ' AND t1.task_id = t1.task_parent');
 	$q->addGroup('project_id');
 	$q->loadObject($obj);
 } else {
@@ -68,7 +68,7 @@ if ($hasTasks) {
 	$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
 	$q->addJoin('users', 'u', 'user_id = project_owner', 'inner');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-	$q->addWhere('project_id = ' . $project_id);
+	$q->addWhere('project_id = ' . (int)$project_id);
 	$q->addGroup('project_id');
 	$q->loadObject($obj);
 }
@@ -90,7 +90,7 @@ if ($hasTasks) {
 	$q->addTable('task_log');
 	$q->addTable('tasks');
 	$q->addQuery('ROUND(SUM(task_log_hours),2)');
-	$q->addWhere('task_log_task = task_id AND task_project = ' . $project_id);
+	$q->addWhere('task_log_task = task_id AND task_project = ' . (int)$project_id);
 	$worked_hours = $q->loadResult();
 	$q->clear();
 	$worked_hours = rtrim($worked_hours, '.');
@@ -99,13 +99,13 @@ if ($hasTasks) {
 	// same milestone comment as above, also applies to dynamic tasks
 	$q->addTable('tasks');
 	$q->addQuery('ROUND(SUM(task_duration),2)');
-	$q->addWhere('task_project = ' . $project_id . ' AND task_duration_type = 24 AND task_dynamic != 1');
+	$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 24 AND task_dynamic != 1');
 	$days = $q->loadResult();
 	$q->clear();
 
 	$q->addTable('tasks');
 	$q->addQuery('ROUND(SUM(task_duration),2)');
-	$q->addWhere('task_project = ' . $project_id . ' AND task_duration_type = 1 AND task_dynamic != 1');
+	$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 1 AND task_dynamic != 1');
 	$hours = $q->loadResult();
 	$q->clear();
 	$total_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
@@ -115,14 +115,14 @@ if ($hasTasks) {
 	$q->addTable('tasks', 't');
 	$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
 	$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-	$q->addWhere('t.task_project = ' . $project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic != 1');
+	$q->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic != 1');
 	$total_project_days = $q->loadResult();
 	$q->clear();
 
 	$q->addTable('tasks', 't');
 	$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
 	$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-	$q->addWhere('t.task_project = ' . $project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic != 1');
+	$q->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic != 1');
 	$total_project_hours = $q->loadResult();
 	$q->clear();
 
@@ -338,7 +338,7 @@ $q = new DBQuery;
 $q->addTable('departments', 'a');
 $q->addTable('project_departments', 'b');
 $q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
-$q->addWhere('a.dept_id = b.department_id and b.project_id = ' . $project_id);
+$q->addWhere('a.dept_id = b.department_id and b.project_id = ' . (int)$project_id);
 $department = new CDepartment;
 $department->setAllowedSQL($AppUI->user_id, $q);
 $depts = $q->loadHashList('dept_id');
@@ -368,7 +368,7 @@ $q->addTable('contacts', 'a');
 $q->addTable('project_contacts', 'b');
 $q->addJoin('departments', 'c', 'a.contact_department = c.dept_id', 'left outer');
 $q->addQuery('a.contact_id, a.contact_first_name, a.contact_last_name, a.contact_email, a.contact_phone, c.dept_name');
-$q->addWhere('a.contact_id = b.contact_id and b.project_id = ' . $project_id . ' AND (contact_owner = "' . $AppUI->user_id . '" OR contact_private="0")');
+$q->addWhere('a.contact_id = b.contact_id and b.project_id = ' . (int)$project_id . ' AND (contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
 $department->setAllowedSQL($AppUI->user_id, $q);
 $contacts = $q->loadHashList('contact_id');
 if (count($contacts) > 0) {
@@ -414,7 +414,7 @@ if (count($contacts) > 0) {
 $q = new DBQuery();
 $q->addTable('projects');
 $q->addQuery('COUNT(project_id)');
-$q->addWhere('project_original_parent = ' . ($obj->project_original_parent ? $obj->project_original_parent : $project_id));
+$q->addWhere('project_original_parent = ' . (int)($obj->project_original_parent ? $obj->project_original_parent : $project_id));
 $count_projects = $q->loadResult();
 $canReadMultiProjects = $perms->checkModule('admin', 'view');
 if ($count_projects > 1 && $canReadMultiProjects) {

@@ -44,7 +44,7 @@ if (count($allowedCompanies) > 0) {
 	$q->addWhere('0=1');
 }
 if ($companiesType) {
-	$q->addWhere('c.company_type = ' . $company_type_filter);
+	$q->addWhere('c.company_type = ' . (int)$company_type_filter);
 }
 if ($search_string != '') {
 	$q->addWhere('c.company_name LIKE "%'.$search_string.'%"');

@@ -111,12 +111,12 @@ $q->addQuery('tp.task_pinned');
 $q->addTable('projects', 'pr');
 $q->addTable('tasks', 'ta');
 $q->addTable('user_tasks', 'ut');
-$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . $user_id);
+$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
 $q->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 
 $q->addWhere('ut.task_id = ta.task_id');
-$q->addWhere('ut.user_id = "' . $user_id . '"');
+$q->addWhere('ut.user_id = ' . (int)$user_id);
 $q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
 $q->addWhere('ta.task_status = "0"');
 $q->addWhere('pr.project_id = ta.task_project');

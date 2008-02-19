@@ -51,14 +51,14 @@ $q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, pr
 $q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
 $q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
 if ($department > 0) {
-	$q->addWhere('project_departments.department_id = ' . $department);
+	$q->addWhere('project_departments.department_id = ' . (int)$department);
 }
 
 if (!($department > 0) && $company_id != 0) {
-	$q->addWhere('project_company = ' . $company_id);
+	$q->addWhere('project_company = ' . (int)$company_id);
 }
 
-$q->addWhere('project_original_parent = ' . $original_project_id);
+$q->addWhere('project_original_parent = ' . (int)$original_project_id);
 
 $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $q->addGroup('pr.project_id');
@@ -220,7 +220,7 @@ if (is_array($projects)) {
 		$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_id, project_name, task_dynamic');
 		$q->addJoin('projects', 'p', 'project_id = t.task_project');
 		$q->addOrder('project_id, task_start_date');
-		$q->addWhere('project_original_parent = ' . $original_project_id);
+		$q->addWhere('project_original_parent = ' . (int)$original_project_id);
 
 		//$tasks = $q->loadList();
 		$task = &new CTask;

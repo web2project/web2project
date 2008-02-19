@@ -31,7 +31,7 @@ $q->addQuery('con.contact_first_name');
 $q->addQuery('con.contact_last_name');
 $q->addJoin('users', 'u', 'u.user_id = companies.company_owner', 'inner');
 $q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id', 'inner');
-$q->addWhere('companies.company_id = ' . $company_id);
+$q->addWhere('companies.company_id = ' . (int)$company_id);
 $obj = null;
 $q->loadObject($obj);
 $q->clear();

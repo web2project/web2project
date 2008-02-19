@@ -65,8 +65,8 @@ if (isset($_GET['pin'])) {
 		$q->addInsert('task_id', $task_id);
 	} else {
 		$q->setDelete('user_task_pin');
-		$q->addWhere('user_id = ' . $AppUI->user_id);
-		$q->addWhere('task_id = ' . $task_id);
+		$q->addWhere('user_id = ' . (int)$AppUI->user_id);
+		$q->addWhere('task_id = ' . (int)$task_id);
 	}
 
 	if (!$q->exec()) {
@@ -184,12 +184,12 @@ $q->leftJoin('users', 'assignees', 'assignees.user_id = ut.user_id');
 $q->leftJoin('contacts', 'co', 'co.contact_id = usernames.user_contact');
 $q->leftJoin('task_log', 'tlog', 'tlog.task_log_task = tasks.task_id AND tlog.task_log_problem > 0');
 $q->leftJoin('files', 'f', 'tasks.task_id = f.file_task');
-$q->leftJoin('user_task_pin', 'pin', 'tasks.task_id = pin.task_id AND pin.user_id = ' . $AppUI->user_id);
+$q->leftJoin('user_task_pin', 'pin', 'tasks.task_id = pin.task_id AND pin.user_id = ' . (int)$AppUI->user_id);
 $q->leftJoin('event_queue', 'evtq', 'tasks.task_id = evtq.queue_origin_id AND evtq.queue_module = "tasks"');
 $q->leftJoin('project_departments', 'project_departments', 'projects.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 
-$q->addWhere('task_project = ' . $project_id);
+$q->addWhere('task_project = ' . (int)$project_id);
 
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'task_project');
 if (count($allowedProjects)) {
@@ -215,7 +215,7 @@ foreach ($tasks as $row) {
 	$q->addTable('user_tasks', 'ut');
 	$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
 	$q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
-	$q->addWhere('ut.task_id = ' . $row['task_id']);
+	$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
 	$q->addGroup('ut.user_id');
 	$q->addOrder('perc_assignment desc, user_username');
 
@@ -223,7 +223,7 @@ foreach ($tasks as $row) {
 	$row['task_assigned_users'] = $q->loadList();
 	$q->addQuery('count(task_id) as children');
 	$q->addTable('tasks');
-	$q->addWhere('task_parent = ' . $row['task_id']);
+	$q->addWhere('task_parent = ' . (int)$row['task_id']);
 	$q->addWhere('task_id <> task_parent');
 	$row['children'] = $q->loadResult();
 	$row['style'] = taskstyle_pd($row);

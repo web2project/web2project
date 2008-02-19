@@ -9,7 +9,7 @@ $q->addQuery('*');
 $q->addJoin('tasks', '', 'task_project = project_id');
 
 if (!empty($project_id)) {
-	$q->addWhere('project_id = ' . $project_id);
+	$q->addWhere('project_id = ' . (int)$project_id);
 }
 $obj = &new CTask;
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
@@ -28,7 +28,7 @@ $q->addJoin('users', '', 'user_tasks.user_id = users.user_id');
 $q->addJoin('contacts', '', 'users.user_contact = contact_id');
 $q->addJoin('task_log', '', 'task_log_task = tasks.task_id AND task_log_creator = users.user_id');
 if (!empty($project_id)) {
-	$q->addWhere('project_id = ' . $project_id);
+	$q->addWhere('project_id = ' . (int)$project_id);
 }
 $q->addGroup('tasks.task_id');
 $q->addGroup('users.user_id');
@@ -95,7 +95,7 @@ $q = new DBQuery;
 $q->addTable('files');
 $q->addQuery('sum(file_size)');
 if ($project_id) {
-	$q->addWhere('file_project = ' . $project_id);
+	$q->addWhere('file_project = ' . (int)$project_id);
 } else {
 	$q->addWhere('file_project = 0');
 }

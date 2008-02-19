@@ -50,7 +50,7 @@ if ($deps) {
 	$q->addTable('tasks', 't');
 	$q->addTable('task_dependencies', 'td');
 	$q->addQuery('t.task_id, t.task_name');
-	$q->addWhere('td.dependencies_task_id = ' . $task_id);
+	$q->addWhere('td.dependencies_task_id = ' . (int)$task_id);
 	$q->addWhere('t.task_id = td.dependencies_req_task_id');
 }
 $taskDep = $q->loadHashList();

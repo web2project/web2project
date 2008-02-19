@@ -710,7 +710,7 @@ class CAppUI {
 		$q->addTable('users');
 		$q->addQuery('user_id, contact_first_name as user_first_name, contact_last_name as user_last_name, contact_company as user_company, contact_department as user_department, contact_email as user_email, user_type');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-		$q->addWhere('user_id = ' . $user_id . ' AND user_username = "' . $username . '"');
+		$q->addWhere('user_id = ' . (int)$user_id . ' AND user_username = "' . $username . '"');
 		$sql = $q->prepare();
 		$q->loadObject($this);
 		$q->clear();
@@ -805,7 +805,7 @@ class CAppUI {
 		$q = new DBQuery;
 		$q->addTable('user_preferences');
 		$q->addQuery('pref_name, pref_value');
-		$q->addWhere('pref_user = ' . $uid);
+		$q->addWhere('pref_user = ' . (int)$uid);
 		$prefs = $q->loadHashList();
 		$this->user_prefs = array_merge($this->user_prefs, $prefs);
 	}

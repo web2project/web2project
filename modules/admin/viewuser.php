@@ -54,7 +54,7 @@ $q->addQuery('con.*, company_id, company_name, dept_name, dept_id');
 $q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
 $q->addJoin('companies', 'com', 'contact_company = company_id');
 $q->addJoin('departments', 'dep', 'dept_id = contact_department');
-$q->addWhere('u.user_id = ' . $user_id);
+$q->addWhere('u.user_id = ' . (int)$user_id);
 $user = $q->loadHash();
 $q->clear();
 

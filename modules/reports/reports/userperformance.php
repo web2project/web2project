@@ -143,7 +143,7 @@ if ($do_report) {
 		foreach ($user_list as $user_id => $user) {
 			$q->addTable('user_tasks', 'ut');
 			$q->addQuery('task_id');
-			$q->addWhere('user_id = "' . $user_id . '"');
+			$q->addWhere('user_id = ' . (int)$user_id);
 			$tasks_id = $q->loadColumn();
 			$q->clear();
 

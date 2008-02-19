@@ -23,7 +23,7 @@ $forum_id = intval(w2PgetParam($_GET, 'forum_id', 0));
 //Pull forum information
 $q = &new DBQuery;
 $q->addTable('forums');
-$q->addWhere('forums.forum_id = ' . $forum_id);
+$q->addWhere('forums.forum_id = ' . (int)$forum_id);
 $res = $q->exec(ADODB_FETCH_ASSOC);
 echo db_error();
 $forum_info = $q->fetchRow();
@@ -41,7 +41,7 @@ $q->addWhere('project_active <> 0');
 $q->addOrder('project_name');
 $projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 if (isset($company_id)) {
-	$q->addWhere('project_company = ' . $company_id);
+	$q->addWhere('project_company = ' . (int)$company_id);
 }
 $projects = array('0' => '') + $q->loadHashList();
 echo db_error();

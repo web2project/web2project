@@ -42,8 +42,8 @@ $q->addQuery('LENGTH(l.message_body) message_length, watch_user, l.message_paren
 $q->addQuery('count(distinct v.visit_message) as visit_count, count(distinct c.message_id) as message_count');
 $q->addJoin('forum_messages', 'l', 'l.message_id = forum_last_id');
 $q->addJoin('forum_messages', 'c', 'c.message_forum = forum_id');
-$q->addJoin('forum_watch', 'w', 'watch_user = ' . $AppUI->user_id . ' AND watch_forum = forum_id');
-$q->addJoin('forum_visits', 'v', 'visit_user = ' . $AppUI->user_id . ' AND visit_forum = forum_id and visit_message = c.message_id');
+$q->addJoin('forum_watch', 'w', 'watch_user = ' . (int)$AppUI->user_id . ' AND watch_forum = forum_id');
+$q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = forum_id and visit_message = c.message_id');
 $q->addJoin('contacts', 'cts', 'contact_id = u.user_contact');
 
 $project->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
@@ -53,16 +53,16 @@ $q->addWhere('user_id = forum_owner AND pr.project_id = forum_project');
 
 switch ($f) {
 	case 1:
-		$q->addWhere('project_active <> 0 AND forum_owner = ' . $AppUI->user_id);
+		$q->addWhere('project_active <> 0 AND forum_owner = ' . (int)$AppUI->user_id);
 		break;
 	case 2:
 		$q->addWhere('project_active <> 0 AND watch_user IS NOT NULL');
 		break;
 	case 3:
-		$q->addWhere('project_active <> 0 AND project_owner = ' . $AppUI->user_id);
+		$q->addWhere('project_active <> 0 AND project_owner = ' . (int)$AppUI->user_id);
 		break;
 	case 4:
-		$q->addWhere('project_active <> 0 AND project_company = ' . $AppUI->user_company);
+		$q->addWhere('project_active <> 0 AND project_company = ' . (int)$AppUI->user_company);
 		break;
 	case 5:
 		$q->addWhere('project_active = 0');

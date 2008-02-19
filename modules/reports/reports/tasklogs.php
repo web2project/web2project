@@ -178,10 +178,10 @@ if ($do_report) {
 	$q->addWhere('task_log_task > 0');
 
 	if ($project_id) {
-		$q->addWhere('projects.project_id = ' . $project_id);
+		$q->addWhere('projects.project_id = ' . (int)$project_id);
 	}
 	if ($company_id) {
-		$q->addWhere('c.company_id = ' . $company_id);
+		$q->addWhere('c.company_id = ' . (int)$company_id);
 	}
 
 	if (!$log_all) {
@@ -192,7 +192,7 @@ if ($do_report) {
 		$q->addWhere('task_log_hours > 0');
 	}
 	if ($log_userfilter) {
-		$q->addWhere('task_log_creator = ' . $log_userfilter);
+		$q->addWhere('task_log_creator = ' . (int)$log_userfilter);
 	}
 
 	$proj = &new CProject;

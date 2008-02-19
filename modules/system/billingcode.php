@@ -18,7 +18,7 @@ $q->addTable('billingcode', 'bc');
 $q->addQuery('billingcode_id, billingcode_name, billingcode_value, billingcode_desc, billingcode_status');
 $q->addOrder('billingcode_name ASC');
 //$q->addWhere('bc.billingcode_status = 0');
-$q->addWhere('company_id = ' . $company_id);
+$q->addWhere('company_id = ' . (int)$company_id);
 $billingcodes = $q->loadList();
 $q->clear();
 
@@ -115,7 +115,7 @@ foreach ($billingcodes as $code) {
 if (isset($_GET['billingcode_id'])) {
 	$q->addQuery('*');
 	$q->addTable('billingcode');
-	$q->addWhere('billingcode_id = ' . w2PgetParam($_GET, 'billingcode_id', 0));
+	$q->addWhere('billingcode_id = ' . (int)w2PgetParam($_GET, 'billingcode_id', 0));
 	list($obj) = $q->loadList();
 
 	echo '

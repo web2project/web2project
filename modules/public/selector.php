@@ -66,7 +66,7 @@ switch ($table) {
 			$q->addQuery('CONCAT_WS(": ",company_name,dept_name) AS dept_name');
 		}
 		if ($company_id) {
-			$q->addWhere('dept_company = ' . $company_id);
+			$q->addWhere('dept_company = ' . (int)$company_id);
 			$q->addOrder('dept_name');
 		} else {
 			$q->addOrder('company_name, dept_name');
@@ -92,11 +92,11 @@ switch ($table) {
 		if ($user_id > 0) {
 			$q->addTable('project_contacts', 'b');
 			$q->addWhere('b.project_id = projects.project_id');
-			$q->addWhere('b.contact_id = ' . $user_id);
+			$q->addWhere('b.contact_id = ' . (int)$user_id);
 		}
 		$q->addWhere(selPermWhere($obj, 'projects.project_id', 'project_name', ''));
 		if ($project_company) {
-			$q->addWhere('project_company = ' . $project_company);
+			$q->addWhere('project_company = ' . (int)$project_company);
 		}
 		break;
 
@@ -107,7 +107,7 @@ switch ($table) {
 		$q->addQuery('task_id, task_name, task_parent');
 		$q->addOrder('task_parent, task_parent = task_id desc');
 		if ($task_project)
-			$q->addWhere('task_project = ' . $task_project);
+			$q->addWhere('task_project = ' . (int)$task_project);
 		$task_list = $q->loadList();
 		$level = 0;
 		$query_result = array();

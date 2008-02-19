@@ -31,7 +31,7 @@ $q->addQuery('forum_id, forum_project,	forum_description, forum_owner, forum_nam
 	project_name, project_color_identifier');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 $q->addWhere('user_id = forum_owner');
-$q->addWhere('forum_id = ' . $forum_id);
+$q->addWhere('forum_id = ' . (int)$forum_id);
 $q->addWhere('forum_project = project_id');
 $q->exec(ADODB_FETCH_ASSOC);
 $forum = $q->fetchRow();

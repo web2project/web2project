@@ -17,7 +17,7 @@ $q->addQuery('c.resource_type_name');
 $q->addTable('resources', 'a');
 $q->addJoin('resource_tasks', 'b', 'b.resource_id = a.resource_id', 'inner');
 $q->addJoin('resource_types', 'c', 'c.resource_type_id = a.resource_type', 'inner');
-$q->addWhere('b.task_id = ' . $task_id);
+$q->addWhere('b.task_id = ' . (int)$task_id);
 $resources = $q->loadHashList('resource_id');
 
 // Determine any other clashes.

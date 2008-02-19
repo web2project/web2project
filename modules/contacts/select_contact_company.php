@@ -17,7 +17,7 @@ switch ($table_name) {
 		$id_field = 'dept_id';
 		$name_field = 'dept_name';
 		$selection_string = 'Department';
-		$filter = 'dept_company = ' . w2PgetParam($_GET, 'company_id', 0);
+		$filter = 'dept_company = ' . (int)w2PgetParam($_GET, 'company_id', 0);
 		$additional_get_information = 'company_id=' . w2PgetParam($_GET, 'company_id', 0);
 		break;
 }

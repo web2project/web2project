@@ -151,10 +151,10 @@ if ($do_report) {
 	$q->addWhere('t.task_id = ut.task_id');
 
 	if ($user_id) {
-		$q->addWhere('t.task_owner = "' . $user_id . '"');
+		$q->addWhere('t.task_owner = ' . (int)$user_id);
 	}
 	if ($project_id != 0) {
-		$q->addWhere('t.task_project="' . $project_id . '"');
+		$q->addWhere('t.task_project = ' . (int)$project_id);
 	}
 
 	$proj = &new CProject;

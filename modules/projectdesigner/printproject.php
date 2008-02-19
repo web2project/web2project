@@ -67,7 +67,7 @@ $q = new DBQuery;
 //check that project has tasks; otherwise run seperate query
 $q->addTable('tasks');
 $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
-$q->addWhere('task_project = ' . $project_id);
+$q->addWhere('task_project = ' . (int)$project_id);
 $hasTasks = $q->loadResult();
 $q->clear();
 
@@ -81,7 +81,7 @@ if ($hasTasks) {
 	$q->addJoin('users', 'u', 'user_id = project_owner');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
 	$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-	$q->addWhere('projects.project_id = ' . $project_id . ' AND t1.task_id = t1.task_parent');
+	$q->addWhere('projects.project_id = ' . (int)$project_id . ' AND t1.task_id = t1.task_parent');
 	$q->addGroup('projects.project_id');
 	$q->loadObject($obj);
 } else {
@@ -90,7 +90,7 @@ if ($hasTasks) {
 	$q->addJoin('companies', 'com', 'company_id = project_company');
 	$q->addJoin('users', 'u', 'user_id = project_owner');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-	$q->addWhere('projects.project_id = ' . $project_id);
+	$q->addWhere('projects.project_id = ' . (int)$project_id);
 	$q->addGroup('projects.project_id');
 	$q->loadObject($obj);
 }
@@ -112,7 +112,7 @@ if ($hasTasks) {
 	$q->addTable('task_log');
 	$q->addTable('tasks');
 	$q->addQuery('ROUND(SUM(task_log_hours),2)');
-	$q->addWhere('task_log_task = task_id AND task_project = ' . $project_id);
+	$q->addWhere('task_log_task = task_id AND task_project = ' . (int)$project_id);
 	$worked_hours = $q->loadResult();
 	$q->clear();
 	$worked_hours = rtrim($worked_hours, '.');
@@ -121,13 +121,13 @@ if ($hasTasks) {
 	// same milestone comment as above, also applies to dynamic tasks
 	$q->addTable('tasks');
 	$q->addQuery('ROUND(SUM(task_duration),2)');
-	$q->addWhere('task_project = ' . $project_id . ' AND task_duration_type = 24 AND task_dynamic != 1');
+	$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 24 AND task_dynamic != 1');
 	$days = $q->loadResult();
 	$q->clear();
 
 	$q->addTable('tasks');
 	$q->addQuery('ROUND(SUM(task_duration),2)');
-	$q->addWhere('task_project = ' . $project_id . ' AND task_duration_type = 1 AND task_dynamic != 1');
+	$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 1 AND task_dynamic != 1');
 	$hours = $q->loadResult();
 	$q->clear();
 	$total_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
@@ -137,14 +137,14 @@ if ($hasTasks) {
 	$q->addTable('tasks', 't');
 	$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
 	$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-	$q->addWhere('t.task_project = ' . $project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic != 1');
+	$q->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic != 1');
 	$total_project_days_sql = $q->prepare();
 
 	$q2 = new DBQuery;
 	$q2->addTable('tasks', 't');
 	$q2->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
 	$q2->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-	$q2->addWhere('t.task_project = ' . $project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic != 1');
+	$q2->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic != 1');
 
 	$total_project_hours = $q->loadResult() * $w2Pconfig['daily_working_hours'] + $q2->loadResult();
 	$q->clear();

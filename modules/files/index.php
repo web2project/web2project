@@ -103,20 +103,20 @@ foreach ($file_types as $file_type) {
 		$q->addWhere($catsql);
 	}
 	if ($company_id) {
-		$q->addWhere('project_company = ' . $company_id);
+		$q->addWhere('project_company = ' . (int)$company_id);
 	}
 	if ($project_id) {
-		$q->addWhere('file_project = ' . $project_id);
+		$q->addWhere('file_project = ' . (int)$project_id);
 	}
 	if ($task_id) {
-		$q->addWhere('file_task = ' . $task_id);
+		$q->addWhere('file_task = ' . (int)$task_id);
 	}
 	$key = array_search($file_type, $fts);
 	if ($i > 0 || !$tabbed) {
-		$q->addWhere('file_category = ' . $key);
+		$q->addWhere('file_category = ' . (int)$key);
 	}
 	if ($project_id > 0) {
-		$q->addWhere('file_project = ' . $project_id);
+		$q->addWhere('file_project = ' . (int)$project_id);
 	}
 	$tabBox->add('index_table', $file_type . ' (' . $q->loadResult() . ')');
 	++$i;

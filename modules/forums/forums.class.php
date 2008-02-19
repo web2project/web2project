@@ -78,19 +78,19 @@ class CForum extends CW2pObject {
 	function delete() {
 		$q = new DBQuery;
 		$q->setDelete('forum_visits');
-		$q->addWhere('visit_forum = ' . $this->forum_id);
+		$q->addWhere('visit_forum = ' . (int)$this->forum_id);
 		$q->exec(); // No error if this fails, it is not important.
 		$q->clear();
 
 		$q->setDelete('forums');
-		$q->addWhere('forum_id = ' . $this->forum_id);
+		$q->addWhere('forum_id = ' . (int)$this->forum_id);
 		if (!$q->exec()) {
 			$q->clear();
 			return db_error();
 		}
 		$q->clear();
 		$q->setDelete('forum_messages');
-		$q->addWhere('message_forum = ' . $this->forum_id);
+		$q->addWhere('message_forum = ' . (int)$this->forum_id);
 		if (!$q->exec()) {
 			$result = db_error();
 		} else {
@@ -170,7 +170,7 @@ class CForumMessage {
 			// First we need to remove any forum visits for this message
 			// otherwise nobody will see that it has changed.
 			$q->setDelete('forum_visits');
-			$q->addWhere('visit_message = ' . $this->message_id);
+			$q->addWhere('visit_message = ' . (int)$this->message_id);
 			$q->exec(); // No error if this fails, it is not important.
 			$ret = db_updateObject('forum_messages', $this, 'message_id', false); // ! Don't update null values
 			$q->clear();
@@ -181,7 +181,7 @@ class CForumMessage {
 
 			$q->addTable('forum_messages');
 			$q->addQuery('count(message_id), MAX(message_date)');
-			$q->addWhere('message_forum = ' . $this->message_forum);
+			$q->addWhere('message_forum = ' . (int)$this->message_forum);
 
 			$res = $q->exec();
 			echo db_error(); ## TODO handle error better
@@ -210,18 +210,18 @@ class CForumMessage {
 	function delete() {
 		$q = new DBQuery;
 		$q->setDelete('forum_visits');
-		$q->addWhere('visit_message = ' . $this->message_id);
+		$q->addWhere('visit_message = ' . (int)$this->message_id);
 		$q->exec(); // No error if this fails, it is not important.
 		$q->clear();
 
 		$q->addTable('forum_messages');
 		$q->addQuery('message_forum');
-		$q->addWhere('message_id = ' . $this->message_id);
+		$q->addWhere('message_id = ' . (int)$this->message_id);
 		$forumId = $q->loadResult();
 		$q->clear();
 
 		$q->setDelete('forum_messages');
-		$q->addWhere('message_id = ' . $this->message_id);
+		$q->addWhere('message_id = ' . (int)$this->message_id);
 		if (!$q->exec()) {
 			$result = db_error();
 		} else {
@@ -231,13 +231,13 @@ class CForumMessage {
 
 		$q->addTable('forum_messages');
 		$q->addQuery('COUNT(message_id)');
-		$q->addWhere('message_forum = ' . $forumId);
+		$q->addWhere('message_forum = ' . (int)$forumId);
 		$messageCount = $q->loadResult();
 		$q->clear();
 
 		$q->addTable('forums');
 		$q->addUpdate('forum_message_count', $messageCount);
-		$q->addWhere('forum_id = ' . $forumId);
+		$q->addWhere('forum_id = ' . (int)$forumId);
 		$q->exec();
 		$q->clear();
 
@@ -254,7 +254,7 @@ class CForumMessage {
 		$q->addTable('users', 'u');
 		$q->addQuery('contact_email, contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-		$q->addWhere('user_id = "' . $this->message_author . '"');
+		$q->addWhere('user_id = ' . (int)$this->message_author);
 		$res = $q->exec();
 		if ($row = $q->fetchRow()) {
 			$message_from = $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '<' . $row['contact_email'] . '>';
@@ -290,7 +290,7 @@ class CForumMessage {
 		if ($AllCount < 1) //message is only delivered to users that checked the forum watch
 			{
 			$q->addTable('forum_watch');
-			$q->addWhere('user_id = watch_user AND (watch_forum = ' . $this->message_forum . ' OR watch_topic = ' . $this->message_parent . ')');
+			$q->addWhere('user_id = watch_user AND (watch_forum = ' . (int)$this->message_forum . ' OR watch_topic = ' . (int)$this->message_parent . ')');
 		}
 
 		if (!($res = $q->exec(ADODB_FETCH_ASSOC))) {

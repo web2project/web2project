@@ -75,7 +75,7 @@ $q->addJoin('users', 'b', 'a.task_owner = b.user_id', 'inner');
 $q->addJoin('contacts', 'ct', 'ct.contact_id = b.user_contact', 'inner');
 $q->addWhere('task_percent_complete < 100');
 if ($project_id != 0) {
-	$q->addWhere('task_project = ' . $project_id);
+	$q->addWhere('task_project = ' . (int)$project_id);
 }
 $q->addWhere('task_end_date BETWEEN "' . $date->format(FMT_DATETIME_MYSQL) . '" AND "' . $next_week->format(FMT_DATETIME_MYSQL) . '"');
 $proj = &new CProject;

@@ -9,14 +9,14 @@ global $AppUI, $project_id, $df, $canEdit, $m, $tab;
 $q = new DBQuery;
 $q->addQuery('project_company');
 $q->addTable('projects');
-$q->addWhere('project_id = ' . $project_id);
+$q->addWhere('project_id = ' . (int)$project_id);
 $company_id = $q->loadResult();
 
 $q->addTable('billingcode');
 $q->addQuery('billingcode_id, billingcode_name');
 $q->addOrder('billingcode_name');
 $q->addWhere('billingcode_status = 0');
-$q->addWhere('(company_id = 0 OR company_id = ' . $company_id . ')');
+$q->addWhere('(company_id = 0 OR company_id = ' . (int)$company_id . ')');
 $task_log_costcodes = $q->loadHashList();
 array_unshift($task_log_costcodes, '');
 
@@ -25,7 +25,7 @@ $q->addTable('billingcode');
 $q->addQuery('billingcode_id, billingcode_name');
 $q->addOrder('billingcode_name');
 $q->addWhere('billingcode_status = 1');
-$q->addWhere('(company_id = 0 OR company_id = ' . $company_id . ')');
+$q->addWhere('(company_id = 0 OR company_id = ' . (int)$company_id . ')');
 $task_log_costcodes = array_merge($task_log_costcodes, $q->loadHashList());
 
 $users = w2PgetUsers();
@@ -118,7 +118,7 @@ $q->addJoin('contacts', 'ct', 'contact_id = user_contact');
 $q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
 //already included bY the setAllowedSQL function
 //$q->addJoin('projects', 'p', 'task_project = p.project_id');
-$q->addWhere('task_project = ' . $project_id);
+$q->addWhere('task_project = ' . (int)$project_id);
 if ($user_id > 0) {
 	$q->addWhere('task_log_creator=' . $user_id);
 }

@@ -20,7 +20,7 @@ $q = new DBQuery;
 $q->addTable('departments', 'dep');
 $q->addQuery('dep.*, company_name');
 $q->addJoin('companies', 'com', 'com.company_id = dep.dept_company', 'inner');
-$q->addWhere('dep.dept_id = ' . $dept_id);
+$q->addWhere('dep.dept_id = ' . (int)$dept_id);
 $drow = $q->loadHash();
 $q->clear();
 if (!$drow && $dept_id > 0) {
@@ -38,7 +38,7 @@ if (!$drow && $dept_id > 0) {
 	$q = new DBQuery;
 	$q->addTable('companies', 'com');
 	$q->addQuery('company_name');
-	$q->addWhere('com.company_id = ' . $company_id);
+	$q->addWhere('com.company_id = ' . (int)$company_id);
 	$company_name = $q->loadResult();
 	$q->clear();
 	if (!$dept_id && $company_name === null) {
@@ -52,7 +52,7 @@ if (!$drow && $dept_id > 0) {
 		$q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dept_id, dept_name, dept_parent');
-		$q->addWhere('dep.dept_company = ' . $company_id);
+		$q->addWhere('dep.dept_company = ' . (int)$company_id);
 		$q->addWhere('dep.dept_id != ' . $dept_id);
 		$department = new CDepartment;
 		$department->setAllowedSQL($AppUI->user_id, $q);

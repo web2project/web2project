@@ -32,7 +32,7 @@ class CDepartment extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.*');
-		$q->addWhere('dep.dept_id = ' . $oid);
+		$q->addWhere('dep.dept_id = ' . (int)$oid);
 		$result = $q->loadObject($this);
 		$q->clear();
 		return $result;
@@ -83,7 +83,7 @@ class CDepartment extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.dept_id');
-		$q->addWhere('dep.dept_parent = ' . $this->dept_id);
+		$q->addWhere('dep.dept_parent = ' . (int)$this->dept_id);
 		$rows = $q->loadList();
 		$q->clear();
 
@@ -93,7 +93,7 @@ class CDepartment extends CW2pObject {
 		
 		$q->addTable('project_departments', 'pd');
 		$q->addQuery('pd.project_id');
-		$q->addWhere('pd.department_id = ' . $this->dept_id);
+		$q->addWhere('pd.department_id = ' . (int)$this->dept_id);
 		$rows = $q->loadList();
 		$q->clear();
 
@@ -103,7 +103,7 @@ class CDepartment extends CW2pObject {
 
 		$q->addQuery('*');
 		$q->setDelete('departments');
-		$q->addWhere('dept_id = ' . $this->dept_id);
+		$q->addWhere('dept_id = ' . (int)$this->dept_id);
 		if (!$q->exec()) {
 			$result = db_error();
 		} else {

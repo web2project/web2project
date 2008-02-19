@@ -52,7 +52,7 @@ if ($project_id && !array_key_exists($row->project_company, $companies)) {
 	$q = new DBQuery;
 	$q->addTable('companies');
 	$q->addQuery('company_name');
-	$q->addWhere('companies.company_id = ' . $row->project_company);
+	$q->addWhere('companies.company_id = ' . (int)$row->project_company);
 	$companies[$row->project_company] = $q->loadResult();
 	$q->clear();
 }
@@ -89,7 +89,7 @@ if ($project_id) {
 	$q->addTable('project_departments', 'pd');
 	$q->addTable('departments', 'deps');
 	$q->addQuery('department_id');
-	$q->addWhere('project_id = ' . $project_id);
+	$q->addWhere('project_id = ' . (int)$project_id);
 	$q->addWhere('pd.department_id = deps.dept_id');
 	$department = new CDepartment;
 	$department->setAllowedSQL($AppUI->user_id, $q);
@@ -109,7 +109,7 @@ if ($project_id) {
 	$q = &new DBQuery;
 	$q->addTable('project_contacts');
 	$q->addQuery('contact_id');
-	$q->addWhere('project_id = ' . $project_id);
+	$q->addWhere('project_id = ' . (int)$project_id);
 	$res = &$q->exec();
 	for ($res; !$res->EOF; $res->MoveNext()) {
 		$selected_contacts[] = $res->fields['contact_id'];
@@ -463,7 +463,7 @@ if ($row->project_id) {
 	$q->clear();
 	$q->addTable('project_contacts', 'pc');
 	$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
-	$q->addWhere('pc.project_id = "' . $row->project_id . '"');
+	$q->addWhere('pc.project_id = ' . (int)$row->project_id);
 	$q->addQuery('pc.contact_id');
 	$q->addQuery('c.contact_first_name, c.contact_last_name');
 	$req = &$q->exec();
@@ -531,7 +531,7 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 	$q = new DBQuery;
 	$q->addTable('departments');
 	$q->addQuery('dept_id, dept_name');
-	$q->addWhere('dept_parent = "' . $dept_parent . '" AND dept_company = "' . $company_id . '"');
+	$q->addWhere('dept_parent = ' . (int)$dept_parent . ' AND dept_company = ' . (int)$company_id);
 	$q->addOrder('dept_name');
 	$department = new CDepartment;
 	$department->setAllowedSQL($AppUI->user_id, $q);

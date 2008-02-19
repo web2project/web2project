@@ -97,13 +97,13 @@ function showcompany($company, $restricted = false) {
 	$q = new DBQuery;
 	$q->addTable('projects');
 	$q->addQuery('project_id, project_name');
-	$q->addWhere('project_company = ' . $company);
+	$q->addWhere('project_company = ' . (int)$company);
 	$projects = $q->loadHashList();
 	$q->clear();
 
 	$q->addTable('companies');
 	$q->addQuery('company_name');
-	$q->addWhere('company_id = ' . $company);
+	$q->addWhere('company_id = ' . (int)$company);
 	$company_name = $q->loadResult();
 	$q->clear();
 
@@ -131,7 +131,7 @@ function showcompany($company, $restricted = false) {
 		$q->addTable('tasks');
 		$q->addTable('task_log');
 		$q->addQuery('task_log_costcode, SUM(task_log_hours) as hours');
-		$q->addWhere('project_id = ' . $project);
+		$q->addWhere('project_id = ' . (int)$project);
 
 		if ($log_start_date != 0 && !$log_all) {
 			$q->addWhere('task_log_date >=' . $log_start_date);
@@ -140,7 +140,7 @@ function showcompany($company, $restricted = false) {
 			$q->addWhere('task_log_date <=' . $log_end_date);
 		}
 		if ($restricted) {
-			$q->addWhere('task_log_creator = "' . $AppUI->user_id . '"');
+			$q->addWhere('task_log_creator = ' . (int)$AppUI->user_id);
 		}
 
 		$q->addWhere('project_id = task_project');
@@ -192,7 +192,7 @@ if ($do_report) {
 	} else {
 		$q->addTable('companies');
 		$q->addQuery('company_id');
-		$q->addWhere('company_owner = "' . $AppUI->user_id . '"');
+		$q->addWhere('company_owner = ' . (int)$AppUI->user_id);
 	}
 
 	$companies = $q->loadColumn();

@@ -65,8 +65,8 @@ if (isset($_GET['pin'])) {
 		$q->addInsert('task_id', $task_id);
 	} else {
 		$q->setDelete('user_task_pin');
-		$q->addWhere('user_id = ' . $AppUI->user_id);
-		$q->addWhere('task_id = ' . $task_id);
+		$q->addWhere('user_id = ' . (int)$AppUI->user_id);
+		$q->addWhere('task_id = ' . (int)$task_id);
 	}
 
 	if (!$q->exec()) {
@@ -190,15 +190,15 @@ $q->leftJoin('task_log', 'tlog', 'tlog.task_log_task = tasks.task_id AND tlog.ta
 $q->leftJoin('files', 'f', 'tasks.task_id = f.file_task');
 $q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-$q->leftJoin('user_task_pin', 'pin', 'tasks.task_id = pin.task_id AND pin.user_id = ' . $AppUI->user_id);
+$q->leftJoin('user_task_pin', 'pin', 'tasks.task_id = pin.task_id AND pin.user_id = ' . (int)$AppUI->user_id);
 
-$project_id ? $q->addWhere('task_project = ' . $project_id) : $q->addWhere('project_active <> 0');
+$project_id ? $q->addWhere('task_project = ' . (int)$project_id) : $q->addWhere('project_active <> 0');
 
 /*if ($f != 'children') {
 $q->addWhere('tasks.task_id = task_parent');
 }*/
 if ($project_id) {
-	$q->addWhere('task_project = ' . $project_id);
+	$q->addWhere('task_project = ' . (int)$project_id);
 	//if we are on a project context make sure we show all tasks
 	$f = 'all';
 }
@@ -216,11 +216,11 @@ switch ($f) {
 	case 'all':
 		break;
 	case 'myfinished7days':
-		$q->addWhere('ut.user_id = ' . $user_id);
+		$q->addWhere('ut.user_id = ' . (int)$user_id);
 	case 'allfinished7days': // patch 2.12.04 tasks finished in the last 7 days
 		//$q->addTable('user_tasks');
 		$q->addTable('user_tasks');
-		$q->addWhere('user_tasks.user_id = ' . $user_id);
+		$q->addWhere('user_tasks.user_id = ' . (int)$user_id);
 		$q->addWhere('user_tasks.task_id = tasks.task_id');
 
 		$q->addWhere('task_percent_complete = 100');
@@ -229,21 +229,21 @@ switch ($f) {
 		break;
 	case 'children':
 		// patch 2.13.04 2, fixed ambigious task_id
-		$q->addWhere('task_parent = ' . $task_id);
+		$q->addWhere('task_parent = ' . (int)$task_id);
 		$q->addWhere('tasks.task_id <> ' . $task_id);
 		break;
 	case 'myproj':
-		$q->addWhere('project_owner = ' . $user_id);
+		$q->addWhere('project_owner = ' . (int)$user_id);
 		break;
 	case 'mycomp':
 		if (!$AppUI->user_company) {
 			$AppUI->user_company = 0;
 		}
-		$q->addWhere('project_company = ' . $AppUI->user_company);
+		$q->addWhere('project_company = ' . (int)$AppUI->user_company);
 		break;
 	case 'myunfinished':
 		$q->addTable('user_tasks');
-		$q->addWhere('user_tasks.user_id = ' . $user_id);
+		$q->addWhere('user_tasks.user_id = ' . (int)$user_id);
 		$q->addWhere('user_tasks.task_id = tasks.task_id');
 		$q->addWhere('(task_percent_complete < 100 OR task_end_date = "")');
 		break;
@@ -255,11 +255,11 @@ switch ($f) {
 		$q->addWhere('ut_empty.task_id IS NULL');
 		break;
 	case 'taskcreated':
-		$q->addWhere('task_owner = ' . $user_id);
+		$q->addWhere('task_owner = ' . (int)$user_id);
 		break;
 	default:
 		$q->addTable('user_tasks');
-		$q->addWhere('user_tasks.user_id = ' . $user_id);
+		$q->addWhere('user_tasks.user_id = ' . (int)$user_id);
 		$q->addWhere('user_tasks.task_id = tasks.task_id');
 		break;
 }
@@ -280,16 +280,16 @@ if ($min_view && isset($_GET['task_status'])) {
 }
 
 if ($task_status) {
-	$q->addWhere('task_status = ' . $task_status);
+	$q->addWhere('task_status = ' . (int)$task_status);
 }
 if ($task_type) {
 	if ($task_type <> -1) {
-		$q->addWhere('task_type = ' . $task_type);
+		$q->addWhere('task_type = ' . (int)$task_type);
 	}
 }
 if ($task_owner) {
 	if ($task_owner <> -1) {
-		$q->addWhere('task_owner = ' . $task_owner);
+		$q->addWhere('task_owner = ' . (int)$task_owner);
 	}
 }
 // patch 2.12.04 text search
@@ -335,7 +335,7 @@ foreach ($tasks as $row) {
 	$q->addTable('user_tasks', 'ut');
 	$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
 	$q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id', 'inner');
-	$q->addWhere('ut.task_id = ' . $row['task_id']);
+	$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
 	$q->addGroup('ut.user_id');
 	$q->addOrder('perc_assignment desc, contact_first_name, contact_last_name');
 

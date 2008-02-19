@@ -217,7 +217,7 @@ if ($sub_form) {
 				$q->addTable('tasks', 't');
 				$q->addUpdate('task_start_date', $obj->task_start_date);
 				$q->addUpdate('task_end_date', $obj->task_end_date);
-				$q->addWhere('task_id = ' . $obj->task_id);
+				$q->addWhere('task_id = ' . (int)$obj->task_id);
 				$q->addWhere('task_dynamic <> 1');
 				$q->exec();
 				$q->clear();

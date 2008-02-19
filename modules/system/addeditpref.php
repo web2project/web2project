@@ -16,7 +16,7 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 $q = new DBQuery;
 $q->addTable('user_preferences');
 $q->addQuery('pref_name, pref_value');
-$q->addWhere('pref_user = ' . $user_id);
+$q->addWhere('pref_user = ' . (int)$user_id);
 $prefs = $q->loadHashList();
 $q->clear();
 

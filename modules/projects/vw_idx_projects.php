@@ -243,7 +243,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 			$q = new DBQuery();
 			$q->addTable('projects');
 			$q->addQuery('COUNT(project_id)');
-			$q->addWhere('project_original_parent = ' . $row['project_id']);
+			$q->addWhere('project_original_parent = ' . (int)$row['project_id']);
 			$count_projects = $q->loadResult();
 
 			if ($level) {

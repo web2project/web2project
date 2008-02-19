@@ -45,7 +45,7 @@ function resource_postsave() {
 		// list.
 		$q = new DBQuery;
 		$q->setDelete('resource_tasks');
-		$q->addWhere('task_id = ' . $obj->task_id);
+		$q->addWhere('task_id = ' . (int)$obj->task_id);
 		$q->exec();
 		$q->clear();
 		if (count($value)) {

@@ -168,7 +168,7 @@ $q->addJoin('projects', 'p', 'p.project_id = file_project');
 $q->addJoin('users', 'u', 'u.user_id = file_owner');
 $q->addJoin('tasks', 't', 't.task_id = file_task');
 $q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-$q->addWhere('file_folder = ' . $folder);
+$q->addWhere('file_folder = ' . (int)$folder);
 if (count($deny1) > 0) {
 	$q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
 }
@@ -176,14 +176,14 @@ if (count($deny2) > 0) {
 	$q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
 }
 if ($project_id) {
-	$q->addWhere('file_project = ' . $project_id);
+	$q->addWhere('file_project = ' . (int)$project_id);
 }
 if ($task_id) {
-	$q->addWhere('file_task = ' . $task_id);
+	$q->addWhere('file_task = ' . (int)$task_id);
 }
 if ($company_id) {
 	$q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
-	$q->addWhere('company_id = ' . $company_id);
+	$q->addWhere('company_id = ' . (int)$company_id);
 	$q->addWhere('company_id IN (' . $allowed_companies . ')');
 }
 
@@ -372,7 +372,7 @@ function countFiles($folder) {
 	$q->addJoin('users', 'u', 'u.user_id = file_owner');
 	$q->addJoin('tasks', 't', 't.task_id = file_task');
 	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-	$q->addWhere('file_folder = ' . $folder);
+	$q->addWhere('file_folder = ' . (int)$folder);
 	if (count($deny1) > 0) {
 		$q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
 	}
@@ -380,14 +380,14 @@ function countFiles($folder) {
 		$q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
 	}
 	if ($project_id) {
-		$q->addWhere('file_project = ' . $project_id);
+		$q->addWhere('file_project = ' . (int)$project_id);
 	}
 	if ($task_id) {
-		$q->addWhere('file_task = ' . $task_id);
+		$q->addWhere('file_task = ' . (int)$task_id);
 	}
 	if ($company_id) {
 		$q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
-		$q->addWhere('company_id = ' . $company_id);
+		$q->addWhere('company_id = ' . (int)$company_id);
 		$q->addWhere('company_id IN (' . $allowed_companies . ')');
 	}
 
@@ -418,7 +418,7 @@ function displayFiles($folder) {
 	$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 	$q->addJoin('tasks', 't', 't.task_id = file_task');
 	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-	$q->addWhere('file_folder = ' . $folder);
+	$q->addWhere('file_folder = ' . (int)$folder);
 	if (count($deny1) > 0) {
 		$q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
 	}
@@ -426,14 +426,14 @@ function displayFiles($folder) {
 		$q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
 	}
 	if ($project_id) {
-		$q->addWhere('file_project = ' . $project_id);
+		$q->addWhere('file_project = ' . (int)$project_id);
 	}
 	if ($task_id) {
-		$q->addWhere('file_task = ' . $task_id);
+		$q->addWhere('file_task = ' . (int)$task_id);
 	}
 	if ($company_id) {
 		$q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
-		$q->addWhere('company_id = ' . $company_id);
+		$q->addWhere('company_id = ' . (int)$company_id);
 		$q->addWhere('company_id IN (' . $allowed_companies . ')');
 	}
 
@@ -455,16 +455,16 @@ function displayFiles($folder) {
 	$qv->addJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 	$qv->addJoin('tasks', 't', 't.task_id = file_task');
 	$qv->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-	$qv->addWhere('file_folder = ' . $folder);
+	$qv->addWhere('file_folder = ' . (int)$folder);
 	if ($project_id) {
-		$qv->addWhere('file_project = ' . $project_id);
+		$qv->addWhere('file_project = ' . (int)$project_id);
 	}
 	if ($task_id) {
-		$qv->addWhere('file_task = ' . $task_id);
+		$qv->addWhere('file_task = ' . (int)$task_id);
 	}
 	if ($company_id) {
 		$qv->innerJoin('companies', 'co', 'co.company_id = p.project_company');
-		$qv->addWhere('company_id = ' . $company_id);
+		$qv->addWhere('company_id = ' . (int)$company_id);
 		$qv->addWhere('company_id IN (' . $allowed_companies . ')');
 	}
 
@@ -620,7 +620,7 @@ function displayFiles($folder) {
 								$q4->addTable('files');
 								$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
 								$q4->addJoin('contacts', 'co', 'co.contact_id = cu.user_contact', 'inner');
-								$q4->addWhere('file_id = ' . $file_row['file_id']);
+								$q4->addWhere('file_id = ' . (int)$file_row['file_id']);
 								$co_user = array();
 								$co_user = $q4->loadList();
 								$co_user = $co_user[0];
@@ -669,7 +669,7 @@ function displayFiles($folder) {
 					$q4->addTable('files');
 					$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
 					$q4->addJoin('contacts', 'co', 'co.contact_id = cu.user_contact', 'inner');
-					$q4->addWhere('file_id = ' . $file['file_id']);
+					$q4->addWhere('file_id = ' . (int)$file['file_id']);
 					$co_user = array();
 					$co_user = $q4->loadList();
 					$co_user = $co_user[0];

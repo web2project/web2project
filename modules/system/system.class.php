@@ -53,7 +53,7 @@ class CPreferences {
 	function delete() {
 		$q = new DBQuery;
 		$q->setDelete('user_preferences');
-		$q->addWhere('pref_user = ' . $this->pref_user);
+		$q->addWhere('pref_user = ' . (int)$this->pref_user);
 		$q->addWhere('pref_name = "' . $this->pref_name . '"');
 		if (!$q->exec()) {
 			$q->clear();
@@ -133,7 +133,7 @@ class CModule extends CW2pObject {
 	function remove() {
 		$q = new DBQuery;
 		$q->setDelete('modules');
-		$q->addWhere('mod_id = ' . $this->mod_id);
+		$q->addWhere('mod_id = ' . (int)$this->mod_id);
 		if (!$q->exec()) {
 			$q->clear();
 			return db_error();
@@ -172,13 +172,13 @@ class CModule extends CW2pObject {
 			if ($other_new) { //make sure value was set.
 				$q->addTable('modules');
 				$q->addUpdate('mod_ui_order', '' . $other_new);
-				$q->addWhere('mod_ui_order = ' . $new_ui_order);
+				$q->addWhere('mod_ui_order = ' . (int)$new_ui_order);
 				$q->exec();
 				$q->clear();
 			}
 			$q->addTable('modules');
 			$q->addUpdate('mod_ui_order', $new_ui_order);
-			$q->addWhere('mod_id = ' . $this->mod_id);
+			$q->addWhere('mod_id = ' . (int)$this->mod_id);
 			$q->exec();
 			$q->clear();
 
@@ -211,7 +211,7 @@ class CConfig extends CW2pObject {
 		$this->_query->clear();
 		$this->_query->addTable('config_list');
 		$this->_query->addOrder('config_list_id');
-		$this->_query->addWhere('config_id = ' . $id);
+		$this->_query->addWhere('config_id = ' . (int)$id);
 		$result = $this->_query->loadHashList('config_list_id');
 		$this->_query->clear();
 		return $result;
@@ -245,7 +245,7 @@ class bcode extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('billingcode');
 		$q->addUpdate('billingcode_status', '1');
-		$q->addWhere('billingcode_id="' . $this->_billingcode_id . '"');
+		$q->addWhere('billingcode_id = ' . (int)$this->_billingcode_id);
 		if (!$q->exec()) {
 			$q->clear();
 			return db_error();
@@ -260,7 +260,7 @@ class bcode extends CW2pObject {
 		$q->addQuery('billingcode_id');
 		$q->addTable('billingcode');
 		$q->addWhere('billingcode_name = "' . $this->billingcode_name . '"');
-		$q->addWhere('company_id = ' . $this->company_id);
+		$q->addWhere('company_id = ' . (int)$this->company_id);
 		$found_id = $q->loadResult();
 		$q->clear();
 
@@ -273,7 +273,7 @@ class bcode extends CW2pObject {
 			$q->addUpdate('billingcode_value', $this->billingcode_value);
 			$q->addUpdate('billingcode_status', $this->billingcode_status);
 			$q->addUpdate('company_id', $this->company_id);
-			$q->addWhere('billingcode_id = ' . $this->_billingcode_id);
+			$q->addWhere('billingcode_id = ' . (int)$this->_billingcode_id);
 			$q->exec();
 			$q->clear();
 		} elseif (!($ret = $q->insertObject('billingcode', $this, 'billingcode_id'))) {

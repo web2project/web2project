@@ -57,7 +57,7 @@ function getEventTooltip($event_id) {
 	$q->addQuery('event_start_date, event_end_date, event_project, event_type, event_recurs, event_times_recuring, event_description, project_name, company_name');
 	$q->leftJoin('projects', 'p', 'event_project = project_id');
 	$q->leftJoin('companies', 'c', 'project_company = company_id');
-	$q->addWhere('event_id = ' . $event_id);
+	$q->addWhere('event_id = ' . (int)$event_id);
 	$row = $q->loadHash();
 	$q->clear();
 

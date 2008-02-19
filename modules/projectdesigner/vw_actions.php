@@ -29,7 +29,7 @@ $task_project = $project_id ? $project_id : ($obj->task_project ? $obj->task_pro
 $q = new DBQuery;
 $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
 $q->addTable('tasks');
-$q->addWhere('task_project = ' . $task_project);
+$q->addWhere('task_project = ' . (int)$task_project);
 $q->addWhere('task_id = task_parent');
 $q->addOrder('task_start_date');
 $root_tasks = $q->loadHashList('task_id');
@@ -42,7 +42,7 @@ $task_parent_options = "";
 $q = new DBQuery;
 $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
 $q->addTable('tasks');
-$q->addWhere('task_project = ' . $task_project);
+$q->addWhere('task_project = ' . (int)$task_project);
 $q->addWhere('task_id <> task_parent');
 $q->addOrder('task_start_date');
 

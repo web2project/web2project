@@ -14,7 +14,7 @@ $q->addTable('users');
 $q->addQuery('user_id, user_username, contact_first_name, contact_last_name');
 $q->addJoin('contacts', 'c', 'users.user_contact = contact_id', 'inner');
 $q->addJoin('departments', 'd', 'd.dept_id = contact_department');
-$q->addWhere('contact_company = ' . $company_id);
+$q->addWhere('contact_company = ' . (int)$company_id);
 $q->addOrder('contact_last_name');
 $oDpt = new CDepartment();
 $aDptsAllowed = $oDpt->getAllowedRecords($AppUI->user_id, 'dept_id, dept_name');
