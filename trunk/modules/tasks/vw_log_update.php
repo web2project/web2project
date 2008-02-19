@@ -299,7 +299,7 @@ $task_email_title = array();
 $q = new DBQuery;
 $q->addTable('task_contacts', 'tc');
 $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id', 'inner');
-$q->addWhere('tc.task_id = "' . $task_id . '"');
+$q->addWhere('tc.task_id = ' . (int)$task_id);
 $q->addQuery('tc.contact_id');
 $q->addQuery('c.contact_first_name, c.contact_last_name');
 $req = &$q->exec();
@@ -322,7 +322,7 @@ if ($tt) {
 $q->clear();
 $q->addTable('project_contacts', 'pc');
 $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
-$q->addWhere('pc.project_id = "' . $obj->task_project . '"');
+$q->addWhere('pc.project_id = ' . (int)$obj->task_project);
 $q->addQuery('pc.contact_id');
 $q->addQuery('c.contact_first_name, c.contact_last_name');
 $req = &$q->exec();

@@ -142,7 +142,7 @@ class CProject extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
-		$q->addWhere('task_project = ' . $this->project_id);
+		$q->addWhere('task_project = ' . (int)$this->project_id);
 		$tasks_to_delete = $q->loadColumn();
 		$q->clear();
 		foreach ($tasks_to_delete as $task_id) {
@@ -162,7 +162,7 @@ class CProject extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('files');
 		$q->addQuery('file_id');
-		$q->addWhere('file_project = ' . $this->project_id);
+		$q->addWhere('file_project = ' . (int)$this->project_id);
 		$files_to_delete = $q->loadColumn();
 		$q->clear();
 		foreach ($files_to_delete as $file_id) {
@@ -425,7 +425,7 @@ class CProject extends CW2pObject {
 		$q->addTable('projects');
 		$q->addJoin('tasks', 't', 't.task_project = pr.project_id');
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-		$q->addWhere('ut.user_id = ' . $userId);
+		$q->addWhere('ut.user_id = ' . (int)$userId);
 		$q->addGroup('pr.project_id');
 		$q->addOrder('project_name');
 		$this->setAllowedSQL($userId, $q, null, 'pr');
@@ -443,7 +443,7 @@ class CProject extends CW2pObject {
 		$project_id = !empty($project_id) ? $project_id : $this->project_id;
 		$q = new DBQuery;
 		$q->addTable('tasks');
-		$q->addWhere('task_project = ' . $project_id . ' AND !isnull( task_end_date ) AND task_end_date !=  "0000-00-00 00:00:00"');
+		$q->addWhere('task_project = ' . (int)$project_id . ' AND !isnull( task_end_date ) AND task_end_date !=  "0000-00-00 00:00:00"');
 		$q->addOrder('task_end_date DESC');
 		$q->setLimit($limit);
 
@@ -531,7 +531,7 @@ class CProject extends CW2pObject {
 		$q->addQuery('oc.contact_email as owner_email, oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name');
 		$q->addJoin('users', 'o', 'o.user_id = p.project_owner', 'inner');
 		$q->addJoin('contacts', 'oc', 'oc.contact_id = o.user_contact', 'inner');
-		$q->addWhere('p.project_id = ' . $this->project_id);
+		$q->addWhere('p.project_id = ' . (int)$this->project_id);
 		$users = $q->loadList();
 		$q->clear();
 
@@ -581,7 +581,7 @@ class CProject extends CW2pObject {
 		$q->addQuery('pc.project_id, pc.contact_id');
 		$q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
 		$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
-		$q->addWhere('pc.project_id = ' . $this->project_id);
+		$q->addWhere('pc.project_id = ' . (int)$this->project_id);
 		$users = $q->loadList();
 		$q->clear();
 
@@ -679,7 +679,7 @@ function projects_list_data($user_id = false) {
 			SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete, SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_duration');
 	if ($user_id) {
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
-		$q->addWhere('ut.user_id = ' . $user_id);
+		$q->addWhere('ut.user_id = ' . (int)$user_id);
 	}
 	$q->addWhere('tasks.task_id = tasks.task_parent');
 	$q->addGroup('task_project');
@@ -692,7 +692,7 @@ function projects_list_data($user_id = false) {
 	$q->addQuery('task_project, COUNT(distinct tasks.task_id) AS total_tasks');
 	if ($user_id) {
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
-		$q->addWhere('ut.user_id = ' . $user_id);
+		$q->addWhere('ut.user_id = ' . (int)$user_id);
 	}
 	$q->addGroup('task_project');
 	$tasks_total = $q->exec();
@@ -703,9 +703,9 @@ function projects_list_data($user_id = false) {
 	$q->addTable('tasks');
 	$q->addQuery('task_project, COUNT(distinct task_id) AS my_tasks');
 	if ($user_id) {
-		$q->addWhere('task_owner = ' . $user_id);
+		$q->addWhere('task_owner = ' . (int)$user_id);
 	} else {
-		$q->addWhere('task_owner = ' . $AppUI->user_id);
+		$q->addWhere('task_owner = ' . (int)$AppUI->user_id);
 	}
 	$q->addGroup('task_project');
 	$tasks_summy = $q->exec();
@@ -739,7 +739,7 @@ function projects_list_data($user_id = false) {
 		$q->addQuery('ut.user_id');
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 		if ($user_id) {
-			$q->addWhere('ut.user_id = ' . $user_id);
+			$q->addWhere('ut.user_id = ' . (int)$user_id);
 		}
 		$q->addOrder('task_end_date DESC');
 		$q->addGroup('task_project');
@@ -753,7 +753,7 @@ function projects_list_data($user_id = false) {
 		$q->addTable('users');
 		$q->addQuery('user_id');
 		$q->addJoin('contacts', 'c', 'c.contact_id = user_contact', 'inner');
-		$q->addWhere('c.contact_department = ' . $department);
+		$q->addWhere('c.contact_department = ' . (int)$department);
 		$owner_ids = $q->loadColumn();
 		$q->clear();
 	}
@@ -805,21 +805,21 @@ function projects_list_data($user_id = false) {
 	//	$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
 	//}
 	if (!isset($department) && $company_id && !$addPwOiD) {
-		$q->addWhere('pr.project_company = "' . $company_id . '"');
+		$q->addWhere('pr.project_company = ' . (int)$company_id);
 	}
 	if ($projectTypeId > -1) {
-		$q->addWhere('pr.project_type = ' . $projectTypeId);
+		$q->addWhere('pr.project_type = ' . (int)$projectTypeId);
 	}
 	if (isset($department) && !$addPwOiD) {
 		$q->addWhere('pd.department_id in ( ' . implode(',', $dept_ids) . ' )');
 	}
 	if ($user_id && $addProjectsWithAssignedTasks) {
-		$q->addWhere('(tu.user_id = ' . $user_id . ' OR pr.project_owner = ' . $user_id . ' )');
+		$q->addWhere('(tu.user_id = ' . (int)$user_id . ' OR pr.project_owner = ' . (int)$user_id . ' )');
 	} elseif ($user_id) {
-		$q->addWhere('pr.project_owner = ' . $user_id);
+		$q->addWhere('pr.project_owner = ' . (int)$user_id);
 	}
 	if ($owner > 0) {
-		$q->addWhere('pr.project_owner = ' . $owner);
+		$q->addWhere('pr.project_owner = ' . (int)$owner);
 	}
 	if (trim($search_text)) {
 		$q->addWhere('pr.project_name like "%' . $search_text . '%" OR pr.project_description like "%' . $search_text . '%"');
@@ -994,10 +994,10 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
 	$q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
 	$q->addQuery('projects.project_id, project_name, project_parent');
 	if ($original_project_id) {
-		$q->addWhere('project_original_parent = ' . $original_project_id);
+		$q->addWhere('project_original_parent = ' . (int)$original_project_id);
 	}
 	if ($project_status >= 0) {
-		$q->addWhere('project_status = ' . $project_status);
+		$q->addWhere('project_status = ' . (int)$project_status);
 	}
 	if ($active_only) {
 		$q->addWhere('project_active = 1');

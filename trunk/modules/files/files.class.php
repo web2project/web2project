@@ -90,7 +90,7 @@ class CFile extends CW2pObject {
 		$this->_query->clear();
 		$this->_query->addTable('projects');
 		$this->_query->addQuery('project_owner');
-		$this->_query->addWhere('project_id = ' . $this->file_project);
+		$this->_query->addWhere('project_id = ' . (int)$this->file_project);
 		$res = $this->_query->exec(ADODB_FETCH_ASSOC);
 		if ($res && $row = $q->fetchRow()) {
 			if ($row['project_owner'] == $AppUI->user_id)
@@ -116,7 +116,7 @@ class CFile extends CW2pObject {
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', $userId);
 		$q->addUpdate('file_co_reason', $coReason);
-		$q->addWhere('file_id = ' . $fileId);
+		$q->addWhere('file_id = ' . (int)$fileId);
 		$q->exec();
 		$q->clear();
 
@@ -135,7 +135,7 @@ class CFile extends CW2pObject {
 		$q = new DBQuery;
 		$q->setDelete('files_index');
 		$q->addQuery('*');
-		$q->addWhere('file_id = ' . $this->file_id);
+		$q->addWhere('file_id = ' . (int)$this->file_id);
 		if (!$q->exec()) {
 			$q->clear();
 			return db_error();
@@ -144,7 +144,7 @@ class CFile extends CW2pObject {
 		$q->clear();
 		$q->setDelete('files');
 		$q->addQuery('*');
-		$q->addWhere('file_id = ' . $this->file_id);
+		$q->addWhere('file_id = ' . (int)$this->file_id);
 		if (!$q->exec()) {
 			$q->clear();
 			return db_error();
@@ -339,7 +339,7 @@ class CFile extends CW2pObject {
 				$q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
 				$q->addJoin('users', 'a', 'a.user_id = u.user_id');
 				$q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
-				$q->addWhere('t.task_id = ' . $this->_task->task_id);
+				$q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
 				$this->_users = $q->loadList();
 			} else {
 				//find project owner and notify him about new or modified file
@@ -348,7 +348,7 @@ class CFile extends CW2pObject {
 				$q->addTable('projects', 'p');
 				$q->addQuery('u.*');
 				$q->addWhere('p.project_owner = u.user_id');
-				$q->addWhere('p.project_id = ' . $this->file_project);
+				$q->addWhere('p.project_id = ' . (int)$this->file_project);
 				$this->_users = $q->loadList();
 			}
 			$body .= "\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
@@ -411,7 +411,7 @@ class CFile extends CW2pObject {
 				$q->addTable('project_contacts', 'pc');
 				$q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
 				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addWhere('pc.project_id = ' . $this->_project->project_id);
+				$q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
 				$sql = '(' . $q->prepare() . ')';
 				$q->clear();
 				//$sql = "(SELECT contacts.contact_last_name, contacts.contact_email, contacts.contact_first_name FROM project_contacts INNER JOIN contacts ON (project_contacts.contact_id = contacts.contact_id) WHERE (project_contacts.project_id = ".$this->_project->project_id.")) ";
@@ -419,7 +419,7 @@ class CFile extends CW2pObject {
 				$q->addTable('task_contacts', 'tc');
 				$q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
 				$q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-				$q->addWhere('tc.task_id = ' . $this->_task->task_id);
+				$q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
 				$sql .= '(' . $q->prepare() . ')';
 				$q->clear();
 				//$sql .= "(SELECT contacts.contact_last_name, contacts.contact_email, contacts.contact_first_name FROM task_contacts INNER JOIN contacts ON (task_contacts.contact_id = contacts.contact_id) WHERE (task_contacts.task_id = ".$this->_task->task_id."));";
@@ -430,7 +430,7 @@ class CFile extends CW2pObject {
 				$q->addQuery('pc.project_id, pc.contact_id');
 				$q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
 				$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addWhere('pc.project_id = ' . $this->file_project);
+				$q->addWhere('pc.project_id = ' . (int)$this->file_project);
 
 				$this->_users = $q->loadList();
 				$q->clear();
@@ -466,7 +466,7 @@ class CFile extends CW2pObject {
 		$this->_query->addTable('users', 'a');
 		$this->_query->addJoin('contacts', 'b', 'b.contact_id = a.user_contact', 'inner');
 		$this->_query->addQuery('contact_first_name, contact_last_name');
-		$this->_query->addWhere('a.user_id = ' . $this->file_owner);
+		$this->_query->addWhere('a.user_id = ' . (int)$this->file_owner);
 		if ($qid = &$this->_query->exec()) {
 			$owner = $qid->fields['contact_first_name'] . ' ' . $qid->fields['contact_last_name'];
 		}
@@ -483,7 +483,7 @@ class CFile extends CW2pObject {
 		$this->_query->clear();
 		$this->_query->addTable('tasks');
 		$this->_query->addQuery('task_name');
-		$this->_query->addWhere('task_id = ' . $this->file_task);
+		$this->_query->addWhere('task_id = ' . (int)$this->file_task);
 		if ($qid = &$this->_query->exec()) {
 			if ($qid->fields['task_name'])
 				$taskname = $qid->fields['task_name'];

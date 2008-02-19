@@ -17,7 +17,7 @@ if (isset($_GET['contact_id']) && !(w2PgetParam($_GET, 'contact_id', '') == ''))
 	$q = new DBQuery;
 	$q->addTable('contacts');
 	$q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
-	$q->addWhere('contact_id = ' . $contact_id);
+	$q->addWhere('contact_id = ' . (int)$contact_id);
 	$contacts = $q->loadList();
 
 	//foreach ($contacts as $row) {

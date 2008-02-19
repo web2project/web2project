@@ -44,7 +44,7 @@ if ($addPwOiD && $department > 0) {
 	$q->addTable('users');
 	$q->addQuery('user_id');
 	$q->addJoin('contacts', 'c', 'c.contact_id = user_contact', 'inner');
-	$q->addWhere('c.contact_department = ' . $department);
+	$q->addWhere('c.contact_department = ' . (int)$department);
 	$owner_ids = $q->loadColumn();
 	$q->clear();
 }
@@ -61,17 +61,17 @@ $q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, pr
 $q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
 $q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
 if ($department > 0 && !$addPwOiD) {
-	$q->addWhere('project_departments.department_id = ' . $department);
+	$q->addWhere('project_departments.department_id = ' . (int)$department);
 }
 if ($proFilter == '-3') {
-	$q->addWhere('project_owner = ' . $user_id);
+	$q->addWhere('project_owner = ' . (int)$user_id);
 } elseif ($proFilter == '-2') {
 	$q->addWhere('project_status != 3');
 } elseif ($proFilter != '-1') {
-	$q->addWhere('project_status = ' . $proFilter);
+	$q->addWhere('project_status = ' . (int)$proFilter);
 }
 if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
-	$q->addWhere('project_company = ' . $company_id);
+	$q->addWhere('project_company = ' . (int)$company_id);
 }
 // Show Projects where the Project Owner is in the given department
 if ($addPwOiD && !empty($owner_ids)) {
@@ -271,7 +271,7 @@ if (is_array($projects)) {
 			$q->addTable('tasks');
 			$q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_milestone, tasks.task_dynamic');
 			$q->addJoin('projects', 'p', 'p.project_id = tasks.task_project');
-			$q->addWhere('p.project_id = ' . $p['project_id']);
+			$q->addWhere('p.project_id = ' . (int)$p['project_id']);
 			if ($sortTasksByName) {
 				$q->addOrder('tasks.task_name');
 			} else {
@@ -308,7 +308,7 @@ if (is_array($projects)) {
 				$q->addTable('user_tasks', 't');
 				$q->addQuery('DISTINCT user_username, t.task_id');
 				$q->addJoin('users', 'u', 'u.user_id = t.user_id', 'inner');
-				$q->addWhere('t.task_id = ' . $t['task_id']);
+				$q->addWhere('t.task_id = ' . (int)$t['task_id']);
 				$q->addOrder('user_username ASC');
 				$workers = $q->loadList();
 				$q->clear();

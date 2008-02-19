@@ -25,7 +25,7 @@ if (!$ok) {
 		if ($cmd == 'remove') {
 			$q = new DBQuery;
 			$q->setDelete('modules');
-			$q->addWhere('mod_id = "' . $mod_id . '"');
+			$q->addWhere('mod_id = ' . (int)$mod_id);
 			$q->exec();
 			$q->clear();
 			echo db_error();

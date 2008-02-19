@@ -68,7 +68,7 @@ class CSysVal extends CW2pObject {
 		$q = new DBQuery;
 		if ($this->sysval_key_id && $this->sysval_title) {
 			$q->setDelete('sysvals');
-			$q->addWhere('sysval_key_id = ' . $this->sysval_key_id);
+			$q->addWhere('sysval_key_id = ' . (int)$this->sysval_key_id);
 			$q->addWhere('sysval_title = "' . $this->sysval_title . '"');
 			if (!$q->exec()) {
 				$q->clear();
@@ -109,7 +109,7 @@ function parseFormatSysval($text, $syskey) {
 	$q = new DBQuery;
 	$q->addTable('syskeys');
 	$q->addQuery('syskey_type, syskey_sep1, syskey_sep2');
-	$q->addWhere('syskey_id = "' . $syskey . '"');
+	$q->addWhere('syskey_id = ' . (int)$syskey);
 	$q->exec();
 	$row = $q->fetchRow();
 	$q->clear();

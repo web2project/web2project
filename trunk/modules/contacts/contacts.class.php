@@ -131,7 +131,7 @@ class CContact extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('companies');
 		$q->addQuery('company_id');
-		$q->addWhere('company_name = ' . $this->contact_company);
+		$q->addWhere('company_name = ' . (int)$this->contact_company);
 		$company_id = $q->loadResult();
 		$q->clear();
 		return $company_id;
@@ -141,7 +141,7 @@ class CContact extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('companies');
 		$q->addQuery('company_name');
-		$q->addWhere('company_id = ' . $this->contact_company);
+		$q->addWhere('company_id = ' . (int)$this->contact_company);
 		$company_name = $q->loadResult();
 		$q->clear();
 		return $company_name;
@@ -159,7 +159,7 @@ class CContact extends CW2pObject {
 		if ($this->is_alpha($this->contact_company)) {
 			$q->addWhere('company_name = ' . $q->quote($this->contact_company));
 		} else {
-			$q->addWhere('company_id = "' . $this->contact_company . '"');
+			$q->addWhere('company_id = ' . (int)$this->contact_company);
 		}
 		$result = $q->loadHash();
 		$q->clear();
@@ -177,7 +177,7 @@ class CContact extends CW2pObject {
 		if ($this->is_alpha($this->contact_department)) {
 			$q->addWhere('dept_name = ' . $q->quote($this->contact_department));
 		} else {
-			$q->addWhere('dept_id = "' . $this->contact_department . '"');
+			$q->addWhere('dept_id = ' . (int)$this->contact_department);
 		}
 		$result = $q->loadHash();
 		$q->clear();
@@ -188,7 +188,7 @@ class CContact extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('contacts');
 		$q->addQuery('contact_updatekey');
-		$q->addWhere('contact_id = ' . $this->contact_id);
+		$q->addWhere('contact_id = ' . (int)$this->contact_id);
 		$updatekey = $q->loadResult();
 		$q->clear();
 		return $updatekey;
@@ -207,7 +207,7 @@ class CContact extends CW2pObject {
 			$q = new DBQuery;
 			$q->addTable('companies');
 			$q->addQuery('company_id, company_name');
-			$q->addWhere('company_id = ' . $this->contact_company);
+			$q->addWhere('company_id = ' . (int)$this->contact_company);
 			$contact_company = $q->loadHashList();
 			$q->clear();
 

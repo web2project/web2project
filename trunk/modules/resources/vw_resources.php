@@ -14,7 +14,7 @@ if (!$tabbed) {
 }
 
 if ($currentTabId) {
-	$query->addWhere('resource_type = ' . $_SESSION['resource_type_list'][$currentTabId]['resource_type_id']);
+	$query->addWhere('resource_type = ' . (int)$_SESSION['resource_type_list'][$currentTabId]['resource_type_id']);
 }
 $res = &$query->exec();
 ?>

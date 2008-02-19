@@ -1467,7 +1467,7 @@ function getPermission($mod, $perm, $item_id = 0) {
 		$q = new DBQuery;
 		$q->addTable('tasks');
 		$q->addQuery('task_project');
-		$q->addWhere('task_id = ' . $item_id);
+		$q->addWhere('task_id = ' . (int)$item_id);
 		$project_id = $q->loadResult();
 		$result = getPermission('projects', $perm, $project_id);
 	}

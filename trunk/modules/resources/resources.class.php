@@ -57,7 +57,7 @@ class CResource extends CW2pObject {
 		$result = 'All Resources';
 		$this->_query->clear();
 		$this->_query->addTable('resource_types');
-		$this->_query->addWhere('resource_type_id = ' . $this->resource_type);
+		$this->_query->addWhere('resource_type_id = ' . (int)$this->resource_type);
 		$res = &$this->_query->exec(ADODB_FETCH_ASSOC);
 		if ($row = $this->_query->fetchRow()) {
 			$result = $row['resource_type_name'];

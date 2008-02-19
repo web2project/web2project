@@ -21,13 +21,13 @@ if ($_POST['user'] != '') {
 	$q->addQuery('gp.*');
 	$q->addWhere('user_id IN (' . implode(',', array_keys($users)) . ')');
 	if ($_POST['user']) {
-		$q->addWhere('user_id="' . $_POST['user'] . '"');
+		$q->addWhere('user_id = ' . (int)$_POST['user']);
 	}
 	if ($_POST['module']) {
-		$q->addWhere('module="' . $_POST['module'] . '"');
+		$q->addWhere('module = "' . $_POST['module'] . '"');
 	}
 	if ($_POST['action']) {
-		$q->addWhere('action="' . $_POST['action'] . '"');
+		$q->addWhere('action = "' . $_POST['action'] . '"');
 	}
 	$q->addOrder('user_name');
 	$q->addOrder('module');

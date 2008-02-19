@@ -19,7 +19,7 @@ class events extends smartsearch {
 
 	function events() {
 		global $AppUI;
-		$this->table_extra = '(event_private = 0 or event_owner = ' . $AppUI->user_id . ')';
+		$this->table_extra = '(event_private = 0 or event_owner = ' . (int)$AppUI->user_id . ')';
 	}
 
 	function cevents() {

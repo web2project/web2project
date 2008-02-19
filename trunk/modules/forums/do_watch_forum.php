@@ -12,7 +12,7 @@ if ($watch) {
 	// clear existing watches
 	$q = new DBQuery;
 	$q->setDelete('forum_watch');
-	$q->addWhere('watch_user = ' . $AppUI->user_id);
+	$q->addWhere('watch_user = ' . (int)$AppUI->user_id);
 	$q->addWhere('watch_' . $watch . ' IS NOT NULL');
 	if (!$q->exec()) {
 		$AppUI->setMsg(db_error(), UI_MSG_ERROR);

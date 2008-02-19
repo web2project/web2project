@@ -98,13 +98,13 @@ class CUser extends CW2pObject {
 
 	function delete($oid = null) {
 		global $AppUI;
-		$id = $this->user_id;
+		$id = (int)$this->user_id;
 		//check if the user is related to anything and disallow deletion if he is.
 		//companies: is he a owner of any company?
 		$q = new DBQuery;
 		$q->addQuery('count(company_id)');
 		$q->addTable('companies');
-		$q->addWhere('company_owner = ' . $this->user_id);
+		$q->addWhere('company_owner = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -114,7 +114,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(dept_id)');
 		$q->addTable('departments');
-		$q->addWhere('dept_owner = ' . $this->user_id);
+		$q->addWhere('dept_owner = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -124,7 +124,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(event_id)');
 		$q->addTable('events');
-		$q->addWhere('event_owner = ' . $this->user_id);
+		$q->addWhere('event_owner = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -134,7 +134,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(file_id)');
 		$q->addTable('files');
-		$q->addWhere('file_owner = ' . $this->user_id);
+		$q->addWhere('file_owner = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -144,7 +144,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(forum_id)');
 		$q->addTable('forums');
-		$q->addWhere('forum_owner = ' . $this->user_id);
+		$q->addWhere('forum_owner = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -154,7 +154,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(forum_id)');
 		$q->addTable('forums');
-		$q->addWhere('forum_moderated = ' . $this->user_id);
+		$q->addWhere('forum_moderated = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -164,7 +164,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(message_id)');
 		$q->addTable('forum_messages');
-		$q->addWhere('message_author = ' . $this->user_id);
+		$q->addWhere('message_author = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -174,7 +174,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(message_id)');
 		$q->addTable('forum_messages');
-		$q->addWhere('message_editor = ' . $this->user_id);
+		$q->addWhere('message_editor = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -184,7 +184,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(link_id)');
 		$q->addTable('links');
-		$q->addWhere('link_owner = ' . $this->user_id);
+		$q->addWhere('link_owner = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -194,7 +194,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(project_id)');
 		$q->addTable('projects');
-		$q->addWhere('(project_owner = ' . $this->user_id . ' OR project_creator = ' . $this->user_id . ' OR project_updator = ' . $this->user_id . ')');
+		$q->addWhere('(project_owner = ' . $id . ' OR project_creator = ' . $id . ' OR project_updator = ' . $id . ')');
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -204,7 +204,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(task_id)');
 		$q->addTable('tasks');
-		$q->addWhere('(task_owner = ' . $this->user_id . ' OR task_creator = ' . $this->user_id . ' OR task_updator = ' . $this->user_id . ')');
+		$q->addWhere('(task_owner = ' . $id . ' OR task_creator = ' . $id . ' OR task_updator = ' . $id . ')');
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -214,7 +214,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(event_id)');
 		$q->addTable('user_events');
-		$q->addWhere('user_id = ' . $this->user_id);
+		$q->addWhere('user_id = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -224,7 +224,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(task_id)');
 		$q->addTable('user_tasks');
-		$q->addWhere('user_id = ' . $this->user_id);
+		$q->addWhere('user_id = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -234,7 +234,7 @@ class CUser extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('count(task_id)');
 		$q->addTable('user_task_pin');
-		$q->addWhere('user_id = ' . $this->user_id);
+		$q->addWhere('user_id = ' . $id);
 		$result = $q->loadResult();
 		$q->clear();
 		if ($result) {
@@ -247,7 +247,7 @@ class CUser extends CW2pObject {
 			$acl->deleteLogin($id);
 			$q = new DBQuery;
 			$q->setDelete('user_preferences');
-			$q->addWhere('pref_user = ' . $this->user_id);
+			$q->addWhere('pref_user = ' . $id);
 			$q->exec();
 			$q->clear();
 		}

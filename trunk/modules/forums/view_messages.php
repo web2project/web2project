@@ -15,10 +15,10 @@ $q = new DBQuery;
 $q->addTable('forums');
 $q->addTable('forum_messages');
 $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email, user_username, forum_moderated, visit_user');
-$q->addJoin('forum_visits', 'v', 'visit_user = ' . $AppUI->user_id . ' AND visit_forum = ' . $forum_id . ' AND visit_message = forum_messages.message_id');
+$q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = ' . (int)$forum_id . ' AND visit_message = forum_messages.message_id');
 $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-$q->addWhere('forum_id = message_forum AND (message_id = ' . $message_id . ' OR message_parent = ' . $message_id . ')');
+$q->addWhere('forum_id = message_forum AND (message_id = ' . (int)$message_id . ' OR message_parent = ' . (int)$message_id . ')');
 $q->addOrder('message_date ' . $sort);
 
 $messages = $q->loadList();
@@ -143,7 +143,7 @@ foreach ($messages as $row) {
 	$q->addTable('users');
 	$q->addQuery('DISTINCT contact_email, contact_first_name, contact_last_name, user_username');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-	$q->addWhere('users.user_id = ' . $row["message_editor"]);
+	$q->addWhere('users.user_id = ' . (int)$row['message_editor']);
 	$editor = $q->loadList();
 
 	$date = intval($row['message_date']) ? new CDate($row['message_date']) : null;

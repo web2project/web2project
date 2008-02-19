@@ -137,7 +137,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	$q->addQuery('task_start_date, task_end_date, task_project, task_type, task_description, task_percent_complete, project_name, company_name');
 	$q->addJoin('projects', 'p', 'task_project = project_id', 'inner');
 	$q->addJoin('companies', 'c', 'project_company = company_id', 'inner');
-	$q->addWhere('task_id = ' . $task_id);
+	$q->addWhere('task_id = ' . (int)$task_id);
 	$row = $q->loadHash();
 	$q->clear();
 

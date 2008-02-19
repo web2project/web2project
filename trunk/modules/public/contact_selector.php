@@ -130,11 +130,11 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 	// Contacts for this company only
 	$q->addTable('companies', 'c');
 	$q->addQuery('c.company_name');
-	$q->addWhere('company_id = ' . $company_id);
+	$q->addWhere('company_id = ' . (int)$company_id);
 	$company_name = $q->loadResult();
 	$q->clear();
 	$company_name_sql = db_escape($company_name);
-	$where = ' ( contact_company = "' . $company_name_sql . '" or contact_company = "' . $company_id . '" )';
+	$where = ' (contact_company = "' . $company_name_sql . '" or contact_company = ' . (int)$company_id . ')';
 	$where_dept = ('contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . '))');
 }
 

@@ -30,7 +30,7 @@ $q->leftJoin('users', 'u', 'link_owner = user_id');
 $q->leftJoin('contacts', 'c', 'user_contact = contact_id');
 $q->leftJoin('projects', 'p', 'project_id = link_project');
 $q->leftJoin('tasks', 't', 'task_id = link_task');
-$q->addWhere('link_id = ' . $link_id);
+$q->addWhere('link_id = ' . (int)$link_id);
 
 // check if this record has dependancies to prevent deletion
 $msg = '';
@@ -66,7 +66,7 @@ if ($obj->link_task) {
 	$q->clear();
 	$q->addQuery('task_name');
 	$q->addTable('tasks');
-	$q->addWhere('task_id = ' . $link_task);
+	$q->addWhere('task_id = ' . (int)$link_task);
 	$task_name = $q->loadResult();
 } else {
 	$task_name = '';

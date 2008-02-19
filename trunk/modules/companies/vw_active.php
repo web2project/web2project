@@ -20,7 +20,7 @@ $q->addTable('projects');
 $q->addQuery('project_id, project_name, project_start_date, project_status, project_target_budget, project_start_date, project_priority, contact_first_name, contact_last_name');
 $q->addJoin('users', 'u', 'u.user_id = projects.project_owner', 'inner');
 $q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id', 'inner');
-$q->addWhere('projects.project_company = ' . $company_id);
+$q->addWhere('projects.project_company = ' . (int)$company_id);
 
 include_once ($AppUI->getModuleClass('projects'));
 $projObj = new CProject();

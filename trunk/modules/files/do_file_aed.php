@@ -142,7 +142,7 @@ if (!$file_id) {
 		$q = new DBQuery;
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', '');
-		$q->addWhere('file_version_id = ' . $obj->file_version_id);
+		$q->addWhere('file_version_id = ' . (int)$obj->file_version_id);
 		$q->exec();
 		$q->clear();
 	}

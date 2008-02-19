@@ -53,7 +53,7 @@ if ($obj->event_project) {
 	$q = new DBQuery;
 	$q->addTable('projects');
 	$q->addQuery('project_name');
-	$q->addWhere('project_id = ' . $obj->event_project);
+	$q->addWhere('project_id = ' . (int)$obj->event_project);
 	$event_project = $q->loadResult();
 }
 

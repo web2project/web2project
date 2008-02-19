@@ -479,7 +479,7 @@ class CEvent extends CW2pObject {
 			// delete user_events relationship
 			$q = new DBQuery;
 			$q->setDelete('user_events');
-			$q->addWhere('event_id = ' . $this->event_id);
+			$q->addWhere('event_id = ' . (int)$this->event_id);
 			$deleted = ((!$q->exec()) ? $AppUI->_('Could not delete Event-User relationship') . '. ' . db_error() : null);
 			$q->clear;
 		}
@@ -581,7 +581,7 @@ class CEvent extends CW2pObject {
 			$p = &$AppUI->acl();
 
 			if ($p->checkModuleItem('projects', 'view', $project_id, $user_id)) {
-				$allowedProjects = array('p.project_id = ' . $project_id);
+				$allowedProjects = array('p.project_id = ' . (int)$project_id);
 			} else {
 				$allowedProjects = array('1=0');
 			}
@@ -603,7 +603,7 @@ class CEvent extends CW2pObject {
 			$$query_set->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 			$$query_set->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 			if ($company_id) {
-				$$query_set->addWhere('project_company = ' . $company_id);
+				$$query_set->addWhere('project_company = ' . (int)$company_id);
 			} else {
 				if (($AppUI->getState('CalIdxCompany'))) {
 					$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
@@ -617,13 +617,13 @@ class CEvent extends CW2pObject {
 			switch ($filter) {
 				case 'my':
 					$$query_set->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id =' . $user_id);
-					$$query_set->addWhere('(ue.user_id = ' . $user_id . ') AND (event_private=0 OR event_owner=' . $user_id . ')');
+					$$query_set->addWhere('(ue.user_id = ' . (int)$user_id . ') AND (event_private=0 OR event_owner=' . (int)$user_id . ')');
 					break;
 				case 'own':
-					$$query_set->addWhere('event_owner =' . $user_id);
+					$$query_set->addWhere('event_owner =' . (int)$user_id);
 					break;
 				case 'all':
-					$$query_set->addWhere('(event_private=0 OR event_owner=' . $user_id . ')');
+					$$query_set->addWhere('(event_private=0 OR event_owner=' . (int)$user_id . ')');
 					break;
 			}
 
@@ -694,7 +694,7 @@ class CEvent extends CW2pObject {
 		$q->addTable('user_events', 'ue');
 		$q->addTable('contacts', 'con');
 		$q->addQuery('u.user_id, CONCAT_WS(" ",contact_first_name, contact_last_name)');
-		$q->addWhere('ue.event_id = ' . $this->event_id);
+		$q->addWhere('ue.event_id = ' . (int)$this->event_id);
 		$q->addWhere('user_contact = contact_id');
 		$q->addWhere('ue.user_id = u.user_id');
 		$assigned = $q->loadHashList();
@@ -706,7 +706,7 @@ class CEvent extends CW2pObject {
 		global $AppUI;
 		$q = new DBQuery;
 		$q->setDelete('user_events');
-		$q->addWhere('event_id = ' . $this->event_id);
+		$q->addWhere('event_id = ' . (int)$this->event_id);
 		$q->exec();
 		$q->clear();
 

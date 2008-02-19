@@ -38,7 +38,7 @@ class CProjectDesignerOptions extends CW2pObject {
 		$q->addReplace('pd_option_view_actions', $this->pd_option_view_actions);
 		$q->addReplace('pd_option_view_addtasks', $this->pd_option_view_addtasks);
 		$q->addReplace('pd_option_view_files', $this->pd_option_view_files);
-		$q->addWhere('pd_option_user = ' . $this->pd_option_user);
+		$q->addWhere('pd_option_user = ' . (int)$this->pd_option_user);
 		$q->exec();
 	}
 }
@@ -57,7 +57,7 @@ function getCriticalTasksInverted($project_id = null, $limit = 1) {
 	} else {
 		$q = new DBQuery;
 		$q->addTable('tasks');
-		$q->addWhere('task_project = ' . $project_id  . ' AND !isnull( task_end_date ) AND task_end_date !=  "0000-00-00 00:00:00"');
+		$q->addWhere('task_project = ' . (int)$project_id  . ' AND !isnull( task_end_date ) AND task_end_date !=  "0000-00-00 00:00:00"');
 		$q->addOrder('task_start_date ASC');
 		$q->setLimit($limit);
 
@@ -105,7 +105,7 @@ function get_actual_end_date_pd($task_id, $task) {
 	} else {
 		$q->addQuery('MAX(task_log_date) AS actual_end_date');
 		$q->addTable('task_log');
-		$q->addWhere('task_log_task = ' . $task_id);
+		$q->addWhere('task_log_task = ' . (int)$task_id);
 	}
 
 	$task_log_end_date = $q->loadResult();
@@ -368,7 +368,7 @@ function get_dependencies_pd($task_id) {
 	$q->addTable('tasks', 't');
 	$q->addTable('task_dependencies', 'td');
 	$q->addQuery('t.task_id, t.task_name');
-	$q->addWhere('td.dependencies_task_id = ' . $task_id);
+	$q->addWhere('td.dependencies_task_id = ' . (int)$task_id);
 	$q->addWhere('t.task_id = td.dependencies_req_task_id');
 	$taskDep = $q->loadHashList();
 }
