@@ -171,7 +171,6 @@ if ($AppUI->doLogin()) {
 $AppUI->setUserLocale();
 
 // bring in the rest of the support and localisation files
-require_once W2P_BASE_DIR . '/includes/permissions.php';
 $perms = &$AppUI->acl();
 
 $def_a = 'index';
