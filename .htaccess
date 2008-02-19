@@ -4,6 +4,7 @@
 <IfModule mod_php4.c>
   php_value magic_quotes_gpc                0
   php_value register_globals                0
+  php_value allow_url_fopen                 0
   php_value session.auto_start              0
 </IfModule>
 
@@ -11,6 +12,7 @@
 <IfModule sapi_apache2.c>
   php_value magic_quotes_gpc                0
   php_value register_globals                0
+  php_value allow_url_fopen                 0
   php_value session.auto_start              0
 </IfModule>
 
@@ -18,6 +20,7 @@
 <IfModule mod_php5.c>
   php_value magic_quotes_gpc                0
   php_value register_globals                0
+  php_value allow_url_fopen                 0
   php_value session.auto_start              0
 </IfModule>
 
