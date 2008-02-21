@@ -192,7 +192,7 @@ if (is_array($selected) && count($selected)) {
 			$bulk_task_assign = ',';
 			$tmp_ar = explode(';', $bulk_task_hperc_assign);
 			$hperc_assign_ar = array();
-			for ($i = 0, $_cmp = sizeof($tmp_ar); $i < $i_cmp; $i++) {
+			for ($i = 0, $i_cmp = sizeof($tmp_ar); $i < $i_cmp; $i++) {
 				$tmp = explode('=', $tmp_ar[$i]);
 				if (count($tmp) > 1) {
 					$hperc_assign_ar[$tmp[0]] = $tmp[1];
