@@ -811,7 +811,7 @@ function projects_list_data($user_id = false) {
 		$q->addWhere('pr.project_type = ' . (int)$projectTypeId);
 	}
 	if (isset($department) && !$addPwOiD) {
-		$q->addWhere('pd.department_id in ( ' . implode(',', $dept_ids) . ' )');
+		$q->addWhere('project_departments.department_id in ( ' . implode(',', $dept_ids) . ' )');
 	}
 	if ($user_id && $addProjectsWithAssignedTasks) {
 		$q->addWhere('(tu.user_id = ' . (int)$user_id . ' OR pr.project_owner = ' . (int)$user_id . ' )');
