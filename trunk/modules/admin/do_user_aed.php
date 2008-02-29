@@ -102,7 +102,6 @@ function notifyNewUser($address, $username, $logname, $logpwd) {
 			$email = "web2project@" . $AppUI->cfg['site_domain'];
 		}
 
-		$mail->From("\"{$AppUI->user_first_name} {$AppUI->user_last_name}\" <{$email}>");
 		$mail->To($address);
 		$mail->Subject('New Account Created - web2Project Project Management System');
 		$mail->Body($username . ",\n\n" . "An access account has been created for you in our web2Project project management system.\n\n" . "You can access it here at " . $w2Pconfig['base_url'] . "\n\n" . "Your username is: " . $logname . "\n" . "Your password is: " . $logpwd . "\n\n" .

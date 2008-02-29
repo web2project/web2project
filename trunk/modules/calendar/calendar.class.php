@@ -768,7 +768,6 @@ class CEvent extends CW2pObject {
 		} else {
 			$mail->Subject($type . ' ' . $AppUI->_('Event') . ': ' . $this->event_title, $locale_char_set);
 		}
-		$mail->From('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
 
 		$body = '';
 		if ($clash) {

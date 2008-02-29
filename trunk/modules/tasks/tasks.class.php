@@ -760,7 +760,6 @@ class CTask extends CW2pObject {
 			$body = ($AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ':	' . $this->task_name . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $this->task_description . "\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW) . ': ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . "\n\n" . $AppUI->_('Progress', UI_OUTPUT_RAW) . ': ' . $this->task_percent_complete . '%' . "\n\n" . w2PgetParam($_POST, 'task_log_description'));
 
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-			$mail->From('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
 		}
 
 		if ($mail->ValidEmail($users[0]['owner_email'])) {
@@ -821,7 +820,6 @@ class CTask extends CW2pObject {
 				$body .= "\n\n" . $comment;
 			}
 			$mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
-			$mail->From('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
 		}
 
 		$mail_owner = $AppUI->getPref('MAILALL');
@@ -965,7 +963,6 @@ class CTask extends CW2pObject {
 		$q->clear();
 
 		$mail->Body($body, $char_set);
-		$mail->From($AppUI->user_first_name . ' ' . $AppUI->user_last_name . ' <' . $AppUI->user_email . '>');
 
 		$recipient_list = '';
 		foreach ($mail_recipients as $email => $name) {
@@ -1815,7 +1812,6 @@ class CTask extends CW2pObject {
 				$mail->To($contact['contact_email']);
 			}
 		}
-		$mail->From($owner_email);
 		$mail->Subject($subject, $locale_char_set);
 		$mail->Body($body, $locale_char_set);
 		return $mail->Send();

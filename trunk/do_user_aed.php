@@ -179,7 +179,6 @@ function notifyNewUser($address, $username, $logname, $logpwd) {
 			$email = 'web2project@web2project.net';
 		}
 
-		$mail->From('"' . w2PgetConfig('company_name') . '" <' . w2PgetConfig('admin_username') . '@' . w2PgetConfig('site_domain') . '>');
 		$mail->To($address);
 		$mail->Subject('New Account Created');
 		$mail->Body('You have signed up for a new account on ' . w2PgetConfig('company_name') . ".\n\n" . "Once the administrator approves your request, you will receive an email with confirmation.\n" . "Your login information are below for your own record:\n\n" . 'Username:	' . $logname . "\n" . 'Password:	' . $logpwd . "\n\n" . "You may login at the following URL: " . W2P_BASE_URL . "\n\n" . "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name') . " Support Staff.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****');
@@ -197,7 +196,6 @@ function notifyHR($address, $username, $uaddress, $uusername, $logname, $logpwd,
 			$email = 'web2project@web2project.net';
 		}
 
-		$mail->From('"' . w2PgetConfig('company_name') . '" <' . w2PgetConfig('admin_username') . '@' . w2PgetConfig('site_domain') . '>');
 		$mail->To($address);
 		$mail->Subject('New External User Created');
 		$mail->Body('A new user has signed up on ' . w2PgetConfig('company_name') . ". Please go through the user details below:\n" . 'Name:	' . $uusername . "\n" . 'Username:	' . $logname . "\n" . 'Email:	' . $uaddress . "\n\n" . 'You may check this account at the following URL: ' . W2P_BASE_URL . '/index.php?m=admin&a=viewuser&user_id=' . $userid . "\n\n" . "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name') . " Taskforce.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****');

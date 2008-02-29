@@ -313,7 +313,6 @@ class CForumMessage {
 		$body .= "\n\n$this->message_body";
 
 		$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "");
-		$mail->From($AppUI->_('forumEmailFrom', UI_OUTPUT_RAW));
 
 		while ($row = $q->fetchRow()) {
 			if ($mail->ValidEmail($row['contact_email'])) {

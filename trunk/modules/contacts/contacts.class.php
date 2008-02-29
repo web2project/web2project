@@ -223,7 +223,6 @@ class CContact extends CW2pObject {
 			//                  print_r($contact_company);
 			//                  print_r($body);
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "");
-			$mail->From('"' . $AppUI->user_first_name . " " . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
 		}
 
 		if ($mail->ValidEmail($this->contact_email)) {

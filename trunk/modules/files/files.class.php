@@ -359,7 +359,6 @@ class CFile extends CW2pObject {
 
 			//send mail
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-			$mail->From('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
 
 			if (intval($this->_task->task_id) != 0) {
 				foreach ($this->_users as $row) {
@@ -444,7 +443,6 @@ class CFile extends CW2pObject {
 
 			//send mail
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-			$mail->From('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
 
 			foreach ($this->_users as $row) {
 
