@@ -542,7 +542,7 @@ class CProject extends CW2pObject {
 				$body = $AppUI->_('Project') . ": $this->project_name Has Been Submitted Via Project Manager. You can view the Project by clicking: ";
 			}
 			$body .= "\n" . $AppUI->_('URL') . ":     {$w2Pconfig['base_url']}/index.php?m=projects&a=view&project_id=$this->project_id";
-			$body .= "\n\n(You are receiving this email because you are the broker to this project)";
+			$body .= "\n\n(You are receiving this email because you are the owner to this project)";
 			$body .= "\n\n" . $AppUI->_('Description') . ':' . "\n$this->project_description";
 			if (intval($isNotNew)) {
 				$body .= "\n\n" . $AppUI->_('Updater') . ': ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
@@ -555,7 +555,6 @@ class CProject extends CW2pObject {
 			}
 
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-			$mail->From('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
 		}
 		if ($mail->ValidEmail($users[0]['owner_email'])) {
 			$mail->To($users[0]['owner_email'], true);
@@ -605,7 +604,6 @@ class CProject extends CW2pObject {
 			}
 
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-			$mail->From('"' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '" <' . $AppUI->user_email . '>');
 		}
 		foreach ($users as $row) {
 			if ($mail->ValidEmail($row['contact_email'])) {
