@@ -120,11 +120,11 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 		$where = '0' . $where;
 	}
 	$where = (($where) ? ('contact_company IN(' . $where . ')') : '');
-	$where_dept = ('contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . '))');
+	$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
 } elseif (!$company_id) {
 	//  Contacts from all allowed companies
-	$where = ('contact_company = "" OR contact_company IS NULL OR contact_company = 0 OR (contact_company IN ("' . implode('","', array_values($aCpies_esc)) . '"))' . ' OR ( contact_company IN ("' . implode('","', array_keys($aCpies_esc)) . '"))');
-	$where_dept = ('contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . '))');
+	$where = '(contact_company = "" OR contact_company IS NULL OR contact_company = 0 OR (contact_company IN ("' . implode('","', array_values($aCpies_esc)) . '"))' . ' OR ( contact_company IN ("' . implode('","', array_keys($aCpies_esc)) . '")))';
+	$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
 	$company_name = $AppUI->_('Allowed Companies');
 } else {
 	// Contacts for this company only
@@ -134,8 +134,8 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 	$company_name = $q->loadResult();
 	$q->clear();
 	$company_name_sql = db_escape($company_name);
-	$where = ' (contact_company = "' . $company_name_sql . '" or contact_company = ' . (int)$company_id . ')';
-	$where_dept = ('contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . '))');
+	$where = '(contact_company = "' . $company_name_sql . '" or contact_company = ' . (int)$company_id . ')';
+	$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
 }
 
 // This should now work on company ID, but we need to be able to handle both
@@ -153,7 +153,6 @@ if ($where_dept) { // Don't assume where is set. Change needed to fix Mantis Bug
 }
 $q->addWhere('(contact_owner = "' . $AppUI->user_id . '" OR contact_private = "0")');
 $q->addOrder('company_name, contact_company, dept_name, contact_department, contact_last_name'); // May need to review this.
-
 $contacts = $q->loadHashList('contact_id');
 ?>
 
