@@ -529,8 +529,8 @@ class CProject extends CW2pObject {
 		$q->addTable('projects', 'p');
 		$q->addQuery('p.project_id');
 		$q->addQuery('oc.contact_email as owner_email, oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name');
-		$q->addJoin('users', 'o', 'o.user_id = p.project_owner', 'inner');
-		$q->addJoin('contacts', 'oc', 'oc.contact_id = o.user_contact', 'inner');
+		$q->leftJoin('users', 'o', 'o.user_id = p.project_owner');
+		$q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
 		$q->addWhere('p.project_id = ' . (int)$this->project_id);
 		$users = $q->loadList();
 		$q->clear();
