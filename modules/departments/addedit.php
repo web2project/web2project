@@ -14,6 +14,8 @@ if (!$canEdit) {
 }
 
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
+// load the department types
+$types = w2PgetSysVal('DepartmentType');
 
 // pull data for this department
 $q = new DBQuery;
@@ -74,6 +76,7 @@ if (!$drow && $dept_id > 0) {
 	// setup the title block
 	$ttl = $company_id > 0 ? 'Edit Department' : 'Add Department';
 	$titleBlock = new CTitleBlock($ttl, 'departments.png', $m, $m . '.' . $a);
+	$titleBlock->addCrumb('?m=departments', 'department list');
 	$titleBlock->addCrumb('?m=companies', 'companies list');
 	$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
 	$titleBlock->show();
@@ -113,6 +116,12 @@ function submitIt() {
 	<td>
 		<input type="text" class="text" name="dept_name" value="<?php echo @$drow['dept_name']; ?>" size="50" maxlength="255" />
 		<span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span>
+	</td>
+</tr>
+<tr>
+	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
+	<td>
+		<input type="text" class="text" name="dept_email" value="<?php echo @$drow['dept_email']; ?>" size="50" maxlength="255" />
 	</td>
 </tr>
 <tr>
@@ -183,6 +192,14 @@ function submitIt() {
 	<td>
 <?php
 	echo arraySelect($owners, 'dept_owner', 'size="1" class="text"', $drow['dept_owner']);
+?>
+	</td>
+</tr>
+<tr>
+	<td align="right"><?php echo $AppUI->_('Type'); ?>:</td>
+	<td>
+<?php
+	echo arraySelect($types, 'dept_type', 'size="1" class="text"', $drow['dept_type'], true);
 ?>
 	</td>
 </tr>
