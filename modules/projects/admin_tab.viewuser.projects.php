@@ -62,12 +62,12 @@ projects_list_data($user_id);
 		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_priority" class="hdr"><?php echo $AppUI->_('P'); ?></a>
 	</th>
 	<th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
-	</th>
-	<th nowrap="nowrap">
 		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_name" class="hdr"><?php echo $AppUI->_('Project Name'); ?></a>
 	</th>
-          <th nowrap="nowrap">
+	<th nowrap="nowrap">
+		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
+	</th>
+     <th nowrap="nowrap">
 		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_start_date" class="hdr"><?php echo $AppUI->_('Start'); ?></a>
 	</th>
 	<th nowrap="nowrap">
@@ -110,8 +110,8 @@ foreach ($projects as $row) {
 		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 		$s = '<tr>';
-		$s .= '<td width="65" align="center" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
-		$s .= $CT . '<font color="' . bestColor($row["project_color_identifier"]) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
+		$s .= '<td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
+		$s .= $CT . '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
 		$s .= $CR . '</td>';
 
 		$s .= $CR . '<td align="center">';
@@ -122,16 +122,15 @@ foreach ($projects as $row) {
 		}
 		$s .= $CR . '</td>';
 
-		$s .= $CR . '<td width="30%">';
-		$s .= $CT . '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a>';
-
-		$s .= $CR . '</td>';
-
-		$s .= $CR . '<td width="100%">';
+		$s .= $CR . '<td width="40%">';
 		$s .= $CT . '<a href="?m=projects&a=view&project_id=' . $row['project_id'] . '" ><span title="' . (nl2br(htmlspecialchars($row['project_description'])) ? htmlspecialchars($row['project_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['project_description'])) : '') . '" >' . htmlspecialchars($row['project_name'], ENT_QUOTES) . '</span></a>';
 		$s .= $CR . '</td>';
+		
+		$s .= $CR . '<td width="30%">';
+		$s .= $CT . '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a>';
+		$s .= $CR . '</td>';
 		$s .= $CR . '<td nowrap="nowrap" align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
-		$s .= $CR . '<td nowrap="nowrap" align="center">' . ($row['project_duration'] > 0 ? $row['project_duration'] . $AppUI->_('h') : '-') . '</td>';
+		$s .= $CR . '<td nowrap="nowrap" align="right">' . ($row['project_duration'] > 0 ? round($row['project_duration'], 0) . $AppUI->_('h') : '-') . '</td>';
 		$s .= $CR . '<td nowrap="nowrap" align="center" nowrap="nowrap" style="background-color:' . $priority[$row['project_priority']]['color'] . '">';
 		$s .= $CT . ($end_date ? $end_date->format($df) : '-');
 		$s .= $CR . '</td>';
@@ -145,11 +144,11 @@ foreach ($projects as $row) {
 		$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
 		$s .= $CR . $row['task_log_problem'] ? '</a>' : '';
 		$s .= $CR . '</td>';
-		$s .= $CR . '<td align="center" nowrap="nowrap">' . htmlspecialchars($row['user_username'], ENT_QUOTES) . '</td>';
+		$s .= $CR . '<td align="center" nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td>';
 		$s .= $CR . '<td align="center" nowrap="nowrap">';
 		$s .= $CT . $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
 		$s .= $CR . '</td>';
-		$s .= $CR . '<td align="center" nowrap="nowrap">' . $AppUI->_($pstatus[$row['project_status']]) . '</td>';
+		$s .= $CR . '<td align="left" nowrap="nowrap">' . $AppUI->_($pstatus[$row['project_status']]) . '</td>';
 		$s .= $CR . '</tr>';
 		echo $s;
 	}

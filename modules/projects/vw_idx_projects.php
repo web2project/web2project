@@ -226,7 +226,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 			} else {
 				$s .= '<tr>';
 			}
-			$s .= '<td width="65" align="center" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
+			$s .= '<td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
 			$s .= $CT . '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
 			$s .= $CR . '</td>';
 
@@ -256,7 +256,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 			$s .= $CR . '</td>';
 
 			$s .= $CR . '<td width="30%">';
-			$s .= $CT . '<a href="?m=companies&a=view&company_id=' . $row["project_company"] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a>';
+			$s .= $CT . '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a>';
 			$s .= $CR . '</td>';
 
 			$s .= $CR . '<td nowrap="nowrap" align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
@@ -282,7 +282,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 			$s .= $CR . '</td>';
 
 			if ($show_all_projects) {
-				$s .= $CR . '<td align="center" nowrap="nowrap">';
+				$s .= $CR . '<td align="left" nowrap="nowrap">';
 				$s .= $CT . $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectTypes[0] ? $project_types[$row['project_status'] + 2] : $project_types[$row['project_status'] + 1]);
 				$s .= $CR . '</td>';
 			}
