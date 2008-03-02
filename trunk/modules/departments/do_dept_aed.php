@@ -27,7 +27,7 @@ if ($del) {
 	if (($msg = $dept->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		$isNotNew = @$_POST['department_id'];
+		$isNotNew = $_POST['dept_id'];
 		$AppUI->setMsg($isNotNew ? 'updated' : 'inserted', UI_MSG_OK, true);
 	}
 	$AppUI->redirect();

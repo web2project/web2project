@@ -23,6 +23,8 @@ class CDepartment extends CW2pObject {
 	var $dept_url = null;
 	var $dept_desc = null;
 	var $dept_owner = null;
+	var $dept_email = null;
+	var $dept_type = null;
 
 	function CDepartment() {
 		$this->CW2pObject('departments', 'dept_id');

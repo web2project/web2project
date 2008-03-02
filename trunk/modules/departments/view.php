@@ -27,6 +27,8 @@ if (isset($_GET['tab'])) {
 $tab = $AppUI->getState('DeptVwTab') !== null ? $AppUI->getState('DeptVwTab') : 0;
 
 $countries = w2PgetSysVal('GlobalCountries');
+// load the department types
+$types = w2PgetSysVal('DepartmentType');
 
 if ($dept_id > 0) {
 	// pull data
@@ -58,6 +60,7 @@ if (!$dept) {
 			$titleBlock->addCell();
 			$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '">', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '&dept_parent=' . $dept_id . '" method="post">', '</form>');
 		}
+		$titleBlock->addCrumb('?m=departments', 'department list');
 		$titleBlock->addCrumb('?m=companies', 'company list');
 		$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
 		if ($canEdit) {
@@ -106,15 +109,23 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['contact_first_name'] . ' ' . @$dept['contact_last_name']; ?></td>
+			<td bgcolor="#ffffff" width="100%"><?php echo $dept['contact_first_name'] . ' ' . $dept['contact_last_name']; ?></td>
+		</tr>
+		<tr>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
+			<td bgcolor="#ffffff" width="100%"><?php echo $types[$dept['dept_type']]; ?></td>
+		</tr>
+		<tr>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
+			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_email']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['dept_phone']; ?></td>
+			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_phone']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo @$dept['dept_fax']; ?></td>
+			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_fax']; ?></td>
 		</tr>
 		<tr valign="top">
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
