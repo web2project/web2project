@@ -44,7 +44,9 @@ class CDepartment extends CW2pObject {
 		if (!is_array($hash)) {
 			return get_class($this) . "::bind failed";
 		} else {
-			bindHashToObject($hash, $this);
+			$q = new DBQuery;
+			$q->bindHashToObject($hash, $this);
+			$q->clear();
 			return null;
 		}
 	}
