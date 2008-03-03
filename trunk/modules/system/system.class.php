@@ -22,7 +22,9 @@ class CPreferences {
 		if (!is_array($hash)) {
 			return 'CPreferences::bind failed';
 		} else {
-			bindHashToObject($hash, $this);
+			$q = new DBQuery;
+			$q->bindHashToObject($hash, $this);
+			$q->clear();
 			return null;
 		}
 	}
@@ -236,7 +238,9 @@ class bcode extends CW2pObject {
 		if (!is_array($hash)) {
 			return 'Billing Code::bind failed';
 		} else {
-			bindHashToObject($hash, $this);
+			$q = new DBQuery;
+			$q->bindHashToObject($hash, $this);
+			$q->clear();
 			return null;
 		}
 	}

@@ -35,7 +35,9 @@ class CForum extends CW2pObject {
 		if (!is_array($hash)) {
 			return "CForum::bind failed";
 		} else {
-			bindHashToObject($hash, $this);
+			$q = new DBQuery;
+			$q->bindHashToObject($hash, $this);
+			$q->clear();
 			return null;
 		}
 	}
@@ -147,7 +149,9 @@ class CForumMessage {
 		if (!is_array($hash)) {
 			return 'CForumMessage::bind failed';
 		} else {
-			bindHashToObject($hash, $this);
+			$q = new DBQuery;
+			$q->bindHashToObject($hash, $this);
+			$q->clear();
 			return null;
 		}
 	}
@@ -172,7 +176,8 @@ class CForumMessage {
 			$q->setDelete('forum_visits');
 			$q->addWhere('visit_message = ' . (int)$this->message_id);
 			$q->exec(); // No error if this fails, it is not important.
-			$ret = db_updateObject('forum_messages', $this, 'message_id', false); // ! Don't update null values
+			$q->clear();
+			$ret = $q->updateObject('forum_messages', $this, 'message_id', false); // ! Don't update null values
 			$q->clear();
 		} else {
 			$this->message_date = db_datetime(time());

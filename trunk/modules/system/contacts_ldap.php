@@ -247,11 +247,15 @@ if (isset($test) || isset($import)) {
 				if (isset($contact_list[$pairs['contact_first_name'] . ' ' . $pairs['contact_last_name']])) {
 					//if it does, remove the old one.
 					$pairs['contact_id'] = $contact_list[$pairs['contact_first_name'] . ' ' . $pairs['contact_last_name']];
-					db_updateArray($sql_table, $pairs, 'contact_id');
+					$q = new DBQuery;
+					$q->updateArray($sql_table, $pairs, 'contact_id');
+					$q->clear();
 					echo '<td><span style="color:#880000;">There is a duplicate record for ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . ', the record has been updated.</span></td>' . "\n";
 				} else {
 					echo '<td>Adding ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . '.</td>' . "\n";
-					db_insertArray($sql_table, $pairs);
+					$q = new DBQuery;
+					$q->insertArray($sql_table, $pairs);
+					$q->clear();
 				}
 			}
 			print "</tr>\n";

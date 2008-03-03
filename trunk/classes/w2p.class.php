@@ -84,8 +84,8 @@ class CW2pObject {
 					$filtered_hash[$k] = $v;
 				}
 			}
-
-			bindHashToObject($filtered_hash, $this);
+			$this->_query->bindHashToObject($filtered_hash, $this);
+			$this->_query->clear();
 			return true;
 		}
 	}
