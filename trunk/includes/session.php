@@ -20,7 +20,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-require_once W2P_BASE_DIR . '/includes/db_connect.php';
 require_once W2P_BASE_DIR . '/classes/query.class.php';
 require_once W2P_BASE_DIR . '/classes/ui.class.php';
 require_once W2P_BASE_DIR . '/classes/event_queue.class.php';

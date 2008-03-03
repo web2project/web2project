@@ -165,4 +165,26 @@ function db_dateTime2unix($time) {
 	//		return -1;
 	//	}
 }
+
+// make the connection to the db
+db_connect(w2PgetConfig('dbhost'), w2PgetConfig('dbname'), w2PgetConfig('dbuser'), w2PgetConfig('dbpass'), w2PgetConfig('dbpersist'));
+
+/*
+* Having successfully established the database connection now,
+* we will hurry up to load the system configuration details from the database.
+*/
+
+$sql = 'SELECT config_name, config_value, config_type FROM ' . w2PgetConfig('dbprefix') . 'config';
+$rs = $db->Execute($sql);
+
+if ($rs) { // Won't work in install mode.
+	$rsArr = $rs->GetArray();
+
+	foreach ($rsArr as $c) {
+		if ($c['config_type'] == 'checkbox') {
+			$c['config_value'] = ($c['config_value'] == 'true') ? true : false;
+		}
+		$w2Pconfig[$c['config_name']] = $c['config_value'];
+	}
+}
 ?>
