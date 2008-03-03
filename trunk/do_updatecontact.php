@@ -9,7 +9,6 @@ if (!isset($GLOBALS['OS_WIN'])) {
 // tweak for pathname consistence on windows machines
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-require_once W2P_BASE_DIR . '/includes/db_connect.php';
 require_once W2P_BASE_DIR . '/classes/query.class.php';
 require_once W2P_BASE_DIR . '/classes/ui.class.php';
 $AppUI = new CAppUI();
@@ -22,8 +21,8 @@ $msg = '';
 $updatekey = w2PgetParam($_POST, 'updatekey', 0);
 $q = new DBQuery;
 $q->addTable('contacts');
-$q->addQuery("contact_id");
-$q->addWhere("contact_updatekey='$updatekey'");
+$q->addQuery('contact_id');
+$q->addWhere('contact_updatekey = "' . $updatekey . '"');
 $contactkey = $q->loadList();
 $q->clear();
 
@@ -32,7 +31,7 @@ $contact_id = @$contactkey[0]['contact_id'] ? $contactkey[0]['contact_id'] : 0;
 // check permissions for this record
 
 if (!$contact_id) {
-	echo ($AppUI->_("You are not authorized to use this page. If you should be authorized please contact Bruce Bodger to give you another valid link, thank you."));
+	echo ($AppUI->_('You are not authorized to use this page. If you should be authorized please contact Bruce Bodger to give you another valid link, thank you.'));
 	exit;
 }
 
@@ -40,7 +39,7 @@ if (!$obj->bind($_POST)) {
 	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	$AppUI->redirect();
 }
-require_once ("./classes/CustomFields.class.php");
+require_once W2P_BASE_DIR . '/classes/CustomFields.class.php';
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Contact');
@@ -51,7 +50,7 @@ if (($msg = $obj->store())) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
 	echo $AppUI->_('There was an error recording your contact data, please contact the system administrator. Thank you very much.');
 } else {
-	$custom_fields = new CustomFields('contacts', 'addedit', $obj->contact_id, "edit", 1);
+	$custom_fields = new CustomFields('contacts', 'addedit', $obj->contact_id, 'edit', 1);
 	$custom_fields->bind($_POST);
 	$sql = $custom_fields->store($obj->contact_id); // Store Custom Fields
 
