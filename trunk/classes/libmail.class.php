@@ -258,7 +258,7 @@ class Mail extends PHPMailer {
 	 *        $mail->Body( "m?l en fran?ais avec des accents", "iso-8859-1" );
 	 */
 	function Body($body, $charset = '') {
-		$this->Body = $body;
+		$this->Body = w2PHTMLDecode($body);
 
 		if (!empty($charset)) {
 			@($this->charset = strtolower($charset));
