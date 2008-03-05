@@ -99,6 +99,8 @@ class CTask extends CW2pObject {
 
 		$this->task_percent_complete = intval($this->task_percent_complete);
 
+		$this->task_target_budget = $this->task_target_budget ? $this->task_target_budget : 0.00;
+
 		if (!$this->task_duration || $this->task_milestone) {
 			$this->task_duration = '0';
 		}

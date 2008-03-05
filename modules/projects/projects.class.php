@@ -93,6 +93,10 @@ class CProject extends CW2pObject {
 		// ensure changes of state in checkboxes is captured
 		$this->project_active = intval($this->project_active);
 		$this->project_private = intval($this->project_private);
+
+		$this->project_target_budget = $this->project_target_budget ? $this->project_target_budget : 0.00;
+		$this->project_actual_budget = $this->project_actual_budget ? $this->project_actual_budget : 0.00;
+
 		// Make sure project_short_name is the right size (issue for languages with encoded characters)
 		if (strlen($this->project_short_name) > 10) {
 			$this->project_short_name = substr($this->project_short_name, 0, 10);
