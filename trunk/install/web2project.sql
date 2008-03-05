@@ -158,11 +158,11 @@ INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`
 INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(49, 'ldap_user_filter', '(uid=%USERNAME%)', 'ldap', 'text');
 INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(50, 'postnuke_allow_login', 'true', 'auth', 'checkbox');
 INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(51, 'mail_transport', 'smtp', 'mail', 'select');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(52, 'mail_host', 'mail.web2project.net', 'mail', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(53, 'mail_port', '26', 'mail', 'text');
+INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(52, 'mail_host', 'mail.yourdomain.com', 'mail', 'text');
+INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(53, 'mail_port', '25', 'mail', 'text');
 INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(54, 'mail_auth', 'true', 'mail', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(55, 'mail_user', 'dev+web2project.net', 'mail', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(56, 'mail_pass', 'devpasswd', 'mail', 'password');
+INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(55, 'mail_user', 'smtpuser', 'mail', 'text');
+INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(56, 'mail_pass', 'smtppasswd', 'mail', 'password');
 INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(57, 'mail_defer', 'false', 'mail', 'checkbox');
 INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(58, 'mail_timeout', '30', 'mail', 'text');
 INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES(59, 'task_reminder_control', 'false', 'task_reminder', 'checkbox');
