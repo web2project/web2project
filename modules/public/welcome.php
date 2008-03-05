@@ -21,11 +21,11 @@ $titleBlock->show();
 		</p>
 		<ul>
 		<li>Secure Web-based infrastructure capable of managing any amount of projects, companies, departments and users</li>
-		<li>Modular integration of features lets you add and remove various modules that aids the Project Manager in his job from the most clean to the most mean of the Business Environments</li>
+		<li>Modular integration of features lets you add and remove various modules that aid the Project Manager in his job from the most clean to the most mean of the Business Environments</li>
 		<li>Centralizes Project communication and avoids confusion and risks</li>
 		<li>Keeps the Project Manager on track with Gantt Charts</li>
 		<li>Role based permission system makes the user setup effort easier and gives the Project Manager more control over sensitive data</li>
-		<li>Gets your live organized with calendars showing the tasks and events</li>
+		<li>Gets your life organized with calendars showing the tasks and events</li>
 		</ul>
 	</td>
 </tr>
@@ -64,7 +64,7 @@ $titleBlock->show();
 </th>
 <tr>
 	<td width="100%" valign="top">
-		<p><b>web2Project</b> is free software, you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version.
+		<p><b>web2Project</b> is free software. You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version.
 		<br />web2Project is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 		<br />See the GNU General Public License for more details.
 		<br />
