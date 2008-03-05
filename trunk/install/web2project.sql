@@ -76,7 +76,7 @@ CREATE TABLE `companies` (
   `company_country` varchar(100) NOT NULL default '',
   `company_primary_url` varchar(255) default '',
   `company_owner` int(11) NOT NULL default '0',
-  `company_description` text NOT NULL,
+  `company_description` text,
   `company_type` int(3) NOT NULL default '0',
   `company_email` varchar(255) default NULL,
   `company_custom` longtext,
