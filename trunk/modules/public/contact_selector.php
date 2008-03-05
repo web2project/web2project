@@ -15,49 +15,20 @@ if (w2PgetParam($_POST, 'selected_contacts_id')) {
 ?>
 <script language="javascript">
 // ECMA Script section Carsten Menke <menke@smp-synergie.de>
-function setContactIDs (method,querystring) {
+function setContactIDs(method, querystring) {
 	var URL = 'index.php?m=public&a=contact_selector';
-    
-	// !! DO NOT USE !!
-	//
-	//    document.frmContactSelect.elements['contact_id[]');
-	//
-	// as the length of the array is undefined if there is just 1 contact Field present
-	
 	var field = document.getElementsByName('contact_id[]');
 	var selected_contacts_id = document.frmContactSelect.selected_contacts_id;
 	var tmp = new Array();
-	var tmp2 = new Array();
-	tmp = selected_contacts_id.value.split(',');
     
 	if (method == 'GET' && querystring){
 		URL += '&' + querystring;
 	}
 	
-	// We copy the values of tmp to tmp2, using
-	// the value of tmp as an indice for tmp2, therefore
-	// we can later on easily check if a checked field exists
-	// we do not use the associative Array hack here, because
-	// then methods like tmp2.length would not work.
-    
-	for (i = 0, i_cmp = tmp.length; i < i_cmp; i++) {
-		tmp2[tmp[i]] = tmp[i];
-	}
-	for (i = 0, i_cmp = field.length; i < i_cmp; i++) {
-		if (field[i].checked == true && !tmp2[field[i].value]) {
-			tmp2[field[i].value] = field[i].value;
-		} else if (tmp2[field[i].value]) {
-			delete tmp2[field[i].value];
-		} else{ 
-		  i = i; // does nothing, for looks and so any bad JS interpreters don't freak out
-		}
-	}
-	tmp = new Array();
 	var count = 0;
-	for (i = 0, i_cmp = tmp2.length; i < i_cmp; i++){
-		if (tmp2[i]) {
-		  tmp[count] = tmp2[i];
-		  count++;
+	for (i = 0, i_cmp = field.length; i < i_cmp; i++) {
+		if (field[i].checked) {
+			tmp[count++] = field[i].value;
 		}
 	}
 	selected_contacts_id.value = tmp.join(',');
@@ -120,11 +91,19 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 		$where = '0' . $where;
 	}
 	$where = (($where) ? ('contact_company IN(' . $where . ')') : '');
-	$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
+	if (count($aDpts)) {
+		$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
+	} else {
+		$where_dept = '(contact_department = 0)';
+	}
 } elseif (!$company_id) {
 	//  Contacts from all allowed companies
 	$where = '(contact_company = "" OR contact_company IS NULL OR contact_company = 0 OR (contact_company IN ("' . implode('","', array_values($aCpies_esc)) . '"))' . ' OR ( contact_company IN ("' . implode('","', array_keys($aCpies_esc)) . '")))';
-	$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
+	if (count($aDpts)) {
+		$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
+	} else {
+		$where_dept = '(contact_department = 0)';
+	}
 	$company_name = $AppUI->_('Allowed Companies');
 } else {
 	// Contacts for this company only
@@ -135,7 +114,11 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 	$q->clear();
 	$company_name_sql = db_escape($company_name);
 	$where = '(contact_company = "' . $company_name_sql . '" or contact_company = ' . (int)$company_id . ')';
-	$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
+	if (count($aDpts)) {
+		$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
+	} else {
+		$where_dept = '(contact_department = 0)';
+	}
 }
 
 // This should now work on company ID, but we need to be able to handle both
