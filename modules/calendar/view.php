@@ -7,7 +7,7 @@ $event_id = intval(w2PgetParam($_GET, 'event_id', 0));
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canRead = $perms->checkModuleItem($m, 'edit', $event_id);
+$canRead = $perms->checkModuleItem($m, 'view', $event_id);
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }

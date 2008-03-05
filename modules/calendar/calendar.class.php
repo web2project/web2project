@@ -921,17 +921,17 @@ class CEvent extends CW2pObject {
 		if (count($aPrjs)) {
 			$buffer = '(event_project IN (' . implode(',', array_keys($aPrjs)) . ') OR event_project IS NULL OR event_project = "" OR event_project = 0)';
 
-			if ($extra['where'] != "") {
+			if ($extra['where'] != '') {
 				$extra['where'] = $extra['where'] . ' AND ' . $buffer;
 			} else {
 				$extra['where'] = $buffer;
 			}
 		} else {
-			// There are no allowed projects, so don't allow tasks.
+			// There are no allowed projects, so only allow events with no project.
 			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND 1 = 0 ';
+				$extra['where'] = $extra['where'] . ' AND (event_project IS NULL OR event_project = "" OR event_project = 0) ';
 			} else {
-				$extra['where'] = '1 = 0';
+				$extra['where'] = '(event_project IS NULL OR event_project = "" OR event_project = 0)';
 			}
 		}
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
