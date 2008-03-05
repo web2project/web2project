@@ -64,7 +64,8 @@ class CForum extends CW2pObject {
 				addHistory('forums', $this->forum_id, 'update', $this->forum_name);
 			}
 		} else {
-			$this->forum_create_date = db_datetime(time());
+			$date = new CDate();			
+			$this->forum_create_date = $date->format(FMT_DATETIME_MYSQL);
 			$q = new DBQuery;
 			$ret = $q->insertObject('forums', $this, 'forum_id');
 			$q->clear();
@@ -180,9 +181,12 @@ class CForumMessage {
 			$ret = $q->updateObject('forum_messages', $this, 'message_id', false); // ! Don't update null values
 			$q->clear();
 		} else {
-			$this->message_date = db_datetime(time());
-			$new_id = db_insertObject('forum_messages', $this, 'message_id'); ## TODO handle error now
+			$date = new CDate();			
+			$this->message_date = $date->format(FMT_DATETIME_MYSQL);
+			
+			$new_id = $q->insertObject('forum_messages', $this, 'message_id'); ## TODO handle error now
 			echo db_error(); ## TODO handle error better
+			$q->clear();
 
 			$q->addTable('forum_messages');
 			$q->addQuery('count(message_id), MAX(message_date)');
