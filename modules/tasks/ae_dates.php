@@ -64,12 +64,12 @@ $cwd_conv = array_map('cal_work_day_conv', $cwd);
 $cwd_hr = implode(', ', $cwd_conv);
 
 function cal_work_day_conv($val) {
-	global $locale_char_set;
-	setlocale(LC_TIME, 'en_US');
+	global $locale_char_set, $AppUI;
+	setlocale(LC_TIME, 'en');
 	$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
 	setlocale(LC_ALL, $AppUI->user_lang);
 
-	$day_name = $wk[($val - LOCALE_FIRST_DAY) % 7];
+	$day_name = $AppUI->_($wk[($val - LOCALE_FIRST_DAY) % 7]);
 	if ($locale_char_set == 'utf-8' && function_exists('utf8_encode')) {
 		$day_name = utf8_encode($day_name);
 	}
