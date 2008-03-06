@@ -460,6 +460,19 @@ class CEvent extends CW2pObject {
 		$this->event_private = intval($this->event_private);
 		$this->event_type = intval($this->event_type);
 		$this->event_cwd = intval($this->event_cwd);
+		//If the event recurs then set the end date day to be equal to the start date day and keep the hour:minute of the end date
+		//so that the event starts recurring from the start day onwards n times after the start date for the period given
+		//Meaning: The event end date day is useless as far as recurring events are concerned.
+		if ($this->event_recurs) {
+			$start_date = new CDate($this->event_start_date);
+			$end_date = new CDate($this->event_end_date);
+			$hour = $end_date->getHour();
+			$minute = $end_date->getMinute();
+			$end_date->setDate($start_date->getDate());
+			$end_date->setHour($hour);
+			$end_date->setMinute($minute);
+			$this->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
+		}
 		return null;
 	}
 
@@ -599,7 +612,7 @@ class CEvent extends CW2pObject {
 			$$query_set->addQuery('e.*');
 			$$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
 
-			$$query_set->addJoin('projects', 'p', 'p.project_id =  e.event_project');
+			$$query_set->leftJoin('projects', 'p', 'p.project_id =  e.event_project');
 			$$query_set->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 			$$query_set->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 			if ($company_id) {
@@ -611,19 +624,19 @@ class CEvent extends CW2pObject {
 			}
 
 			if (count($allowedProjects)) {
-				$$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ' ) ' . (($AppUI->getState('CalIdxCompany')) ? '' : $project_id ? '' : ' OR event_project = 0 ') . ')');
+				$$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ' ) ' . (($AppUI->getState('CalIdxCompany')) ? '' : ($project_id ? '' : ' OR event_project = 0 ')) . ')');
 			}
 
 			switch ($filter) {
 				case 'my':
 					$$query_set->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id =' . $user_id);
-					$$query_set->addWhere('(ue.user_id = ' . (int)$user_id . ') AND (event_private=0 OR event_owner=' . (int)$user_id . ')');
+					$$query_set->addWhere('(ue.user_id = ' . (int)$user_id . ') AND (event_private = 0 OR event_owner=' . (int)$user_id . ')');
 					break;
 				case 'own':
 					$$query_set->addWhere('event_owner =' . (int)$user_id);
 					break;
 				case 'all':
-					$$query_set->addWhere('(event_private=0 OR event_owner=' . (int)$user_id . ')');
+					$$query_set->addWhere('(event_private = 0 OR event_owner=' . (int)$user_id . ')');
 					break;
 			}
 
@@ -632,11 +645,10 @@ class CEvent extends CW2pObject {
 				// following line is only good for *non-recursive* events
 				$$query_set->addWhere("(event_start_date <= '$db_end' AND event_end_date >= '$db_start' " . "OR event_start_date BETWEEN '$db_start' AND '$db_end')");
 				$eventList = $$query_set->loadList();
-			} else
-				if ($query_set == 'r') { // assemble query for recursive events
-					$$query_set->addWhere('(event_recurs > 0)');
-					$eventListRec = $$query_set->loadList();
-				}
+			} elseif ($query_set == 'r') { // assemble query for recursive events
+				$$query_set->addWhere('(event_recurs > 0)');
+				$eventListRec = $$query_set->loadList();
+			}
 		}
 
 		//Calculate the Length of Period (Daily, Weekly, Monthly View)

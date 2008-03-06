@@ -327,7 +327,7 @@ echo arraySelect($projects, 'event_project', 'size="1" class="text"', (@$obj->ev
 			<td><?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $obj->event_recurs, true); ?></td>
 			<td align="right">x</td>
 			<td>
-				<input type="text"  name="event_times_recuring" value="<?php echo ((isset($obj->event_times_recuring)) ? ($obj->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
+				<input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($obj->event_times_recuring)) ? ($obj->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
 			</td>
 		</tr>
 		<?php /* FUNCTIONALITY NOT YET ENABLED ?>
