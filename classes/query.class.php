@@ -1081,21 +1081,21 @@ class DBQuery {
 		if ($bindAll) {
 			foreach ($hash as $k => $v) {
 				//$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes( $hash[$k] ) : $hash[$k];
-				$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes(w2Phtml_entity_decode($hash[$k])) : w2Phtml_entity_decode($hash[$k]);
+				$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes(w2PHTMLDecode($hash[$k])) : w2PHTMLDecode($hash[$k]);
 			}
 		} else {
 			if ($prefix) {
 				foreach (get_object_vars($obj) as $k => $v) {
 					if (isset($hash[$prefix . $k])) {
 						//$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes( $hash[$k] ) : $hash[$k];
-						$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes(w2Phtml_entity_decode($hash[$k])) : w2Phtml_entity_decode($hash[$k]);
+						$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes(w2PHTMLDecode($hash[$k])) : w2PHTMLDecode($hash[$k]);
 					}
 				}
 			} else {
 				foreach (get_object_vars($obj) as $k => $v) {
 					if (isset($hash[$k])) {
 						//$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes( $hash[$k] ) : $hash[$k];
-						$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes(w2Phtml_entity_decode($hash[$k])) : w2Phtml_entity_decode($hash[$k]);
+						$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes(w2PHTMLDecode($hash[$k])) : w2PHTMLDecode($hash[$k]);
 					}
 				}
 			}
