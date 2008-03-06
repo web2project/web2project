@@ -123,13 +123,13 @@ class CMonthCalendar {
 		$this->next_year = new CDate($date);
 		$this->next_year->setYear($this->next_year->getYear() + 1);
 
-		setlocale(LC_TIME, 'en_US');
+		setlocale(LC_TIME, 'en');
 		$date = Date_Calc::beginOfPrevMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
 		setlocale(LC_ALL, $AppUI->user_lang);
 
 		$this->prev_month = new CDate($date);
 
-		setlocale(LC_TIME, 'en_US');
+		setlocale(LC_TIME, 'en');
 		$date = Date_Calc::beginOfNextMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
 		setlocale(LC_ALL, $AppUI->user_lang);
 		$this->next_month = new CDate($date);
@@ -268,7 +268,7 @@ class CMonthCalendar {
 	function _drawDays() {
 		global $AppUI, $locale_char_set;
 
-		setlocale(LC_TIME, 'en_US');
+		setlocale(LC_TIME, 'en');
 		$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
 		setlocale(LC_ALL, $AppUI->user_lang);
 
@@ -295,7 +295,7 @@ class CMonthCalendar {
 		$this_day = intval($date->getDay());
 		$this_month = intval($date->getMonth());
 		$this_year = intval($date->getYear());
-		setlocale(LC_TIME, 'en_US');
+		setlocale(LC_TIME, 'en');
 		$cal = Date_Calc::getCalendarMonth($this_month, $this_year, '%Y%m%d%w', LOCALE_FIRST_DAY);
 		setlocale(LC_ALL, $AppUI->user_lang);
 
@@ -652,7 +652,7 @@ class CEvent extends CW2pObject {
 		}
 
 		//Calculate the Length of Period (Daily, Weekly, Monthly View)
-		setlocale(LC_TIME, 'en_US');
+		setlocale(LC_TIME, 'en');
 		$periodLength = Date_Calc::dateDiff($start_date->getDay(), $start_date->getMonth(), $start_date->getYear(), $end_date->getDay(), $end_date->getMonth(), $end_date->getYear());
 		setlocale(LC_ALL, $AppUI->user_lang);
 
