@@ -1342,7 +1342,7 @@ class CTitleBlock_core {
 	 */
 	function addCrumbDelete($title, $canDelete = '', $msg = '') {
 		global $AppUI;
-		$this->addCrumbRight('<table cellspacing="0" cellpadding="0" border="0"?<tr><td>' . '<a class="delete" href="javascript:delIt()" title="' . ($canDelete ? '' : $msg) . '"><span>' . $AppUI->_($title) . '</span></a>' . '</td></tr></table>');
+		$this->addCrumbRight('<table cellspacing="0" cellpadding="0" border="0"><tr><td>' . '<a class="delete" href="javascript:delIt()" title="' . ($canDelete ? '' : $msg) . '"><span>' . $AppUI->_($title) . '</span></a>' . '</td></tr></table>');
 	}
 	/**
 	 * The drawing function
@@ -1399,7 +1399,7 @@ class CTitleBlock_core {
 			//			$s .= "\n\t\t" . implode( ' <strong>:</strong> ', $crumbs );
 			$s .= "\n\t\t" . implode('', $crumbs);
 			//			$s .= "\n\t</td>";
-			$s .= "\n\t".'</td></ul></div>';
+			$s .= "\n\t".'</ul></div></td>';
 
 			foreach ($this->cells2 as $c) {
 				$s .= $c[2] ? "\n$c[2]" : '';
