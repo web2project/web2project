@@ -27,7 +27,6 @@ require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 define('QUERY_STYLE_ASSOC', ADODB_FETCH_ASSOC);
 define('QUERY_STYLE_NUM', ADODB_FETCH_NUM);
 define('QUERY_STYLE_BOTH', ADODB_FETCH_BOTH);
-// {{{ DBQuery class
 /**
  * Database query class
  *
@@ -52,6 +51,8 @@ class DBQuery {
 	/**< ORDER BY component of the query */
 	var $group_by;
 	/**< GROUP BY component of the query */
+	var $having;
+	/**< HAVING component of the query */
 	var $limit;
 	/**< LIMIT component of the query */
 	var $offset;
@@ -193,7 +194,7 @@ class DBQuery {
 	 * @param $check_array defaults to true, iterates through each element in $value and adds them seperately to the clause
 	 */
 	function addClause($clause, $value, $check_array = true) {
-		dprint(__file__, __line__, 8, "Adding '$value' to $clause clause");
+		//dprint(__file__, __line__, 8, "Adding '$value' to $clause clause");
 		if (!isset($this->$clause)) {
 			$this->$clause = array();
 		}
@@ -534,6 +535,22 @@ class DBQuery {
 		$this->addClause('group_by', $group);
 	}
 
+	/** Add a HAVING sub clause
+	 * 
+	 * The having clause can be built up one
+	 * part at a time and the resultant query will put in the 'and'
+	 * between each component.
+	 *
+	 * Remember: 
+	 * "the SQL standard requires that HAVING must reference only columns in the 
+	 * GROUP BY clause or columns used in aggregate functions"
+	 *
+	 * @param	$query	HAVING subclause to use, not including HAVING keyword
+	 */
+	function addHaving($query) {
+		$this->addClause('having', $query);
+	}
+
 	/** Set a row limit on the query
 	 *
 	 * Set a limit on the query.  This is done in a database-independent
@@ -680,6 +697,7 @@ class DBQuery {
 		$q .= $this->make_join($this->join);
 		$q .= $this->make_where_clause($this->where);
 		$q .= $this->make_group_clause($this->group_by);
+		$q .= $this->make_having_clause($this->having);
 		$q .= $this->make_order_clause($this->order_by);
 		// TODO: Prepare limit as well
 		return $q;
@@ -1139,10 +1157,8 @@ class DBQuery {
 
 		if (!$this->exec(ADODB_FETCH_NUM)) {
 			$AppUI->setMsg($this->_db->ErrorMsg(), UI_MSG_ERROR);
-		} else {
-			if ($data = $this->fetchRow()) {
-				$result = $data[0];
-			}
+		} elseif ($data = $this->fetchRow()) {
+			$result = $data[0];
 		}
 		$this->clear();
 		return $result;
@@ -1163,10 +1179,9 @@ class DBQuery {
 				$started = false;
 				$result = ' WHERE ' . implode(' AND ', $where_clause);
 			}
-		} else
-			if (strlen($where_clause) > 0) {
-				$result = ' WHERE ' . $where_clause;
-			}
+		} elseif (strlen($where_clause) > 0) {
+			$result = ' WHERE ' . $where_clause;
+		}
 		return $result;
 	}
 
@@ -1184,10 +1199,8 @@ class DBQuery {
 		if (is_array($order_clause)) {
 			$started = false;
 			$result = ' ORDER BY ' . implode(',', $order_clause);
-		} else {
-			if (strlen($order_clause) > 0) {
-				$result = ' ORDER BY ' . $order_clause;
-			}
+		} elseif (strlen($order_clause) > 0) {
+			$result = ' ORDER BY ' . $order_clause;
 		}
 		return $result;
 	}
@@ -1206,10 +1219,9 @@ class DBQuery {
 		if (is_array($group_clause)) {
 			$started = false;
 			$result = ' GROUP BY ' . implode(',', $group_clause);
-		} else
-			if (strlen($group_clause) > 0) {
-				$result = ' GROUP BY ' . $group_clause;
-			}
+		} elseif (strlen($group_clause) > 0) {
+			$result = ' GROUP BY ' . $group_clause;
+		}
 		return $result;
 	}
 
@@ -1239,6 +1251,27 @@ class DBQuery {
 			}
 		} else {
 			$result .= ' LEFT JOIN ' . $this->quote_db($this->_table_prefix . $join_clause);
+		}
+		return $result;
+	}
+
+	/** Create a having clause based upon supplied field.
+	 *
+	 * @param	$having_clause Either string or array of subclauses.
+	 * @return SQL HAVING clause as a string.
+	 */
+	function make_having_clause($having_clause) {
+		$result = '';
+		if (!isset($having_clause)) {
+			return $result;
+		}
+		if (is_array($having_clause)) {
+			if (count($having_clause)) {
+				$started = false;
+				$result = ' HAVING ' . implode(' AND ', $having_clause);
+			}
+		} elseif (strlen($having_clause) > 0) {
+			$result = ' HAVING ' . $having_clause;
 		}
 		return $result;
 	}
