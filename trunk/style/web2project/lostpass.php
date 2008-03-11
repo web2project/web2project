@@ -53,11 +53,11 @@ echo styleRenderBoxTop();
 </tr>
 <tr>
 	<td style="padding:6px" align="right" nowrap="nowrap"><?php echo $AppUI->_('Username'); ?>:</td>
-	<td style="padding:6px" align="left" nowrap="nowrap"><input type="text" size="25" maxlength="20" name="checkusername" class="text" /></td>
+	<td style="padding:6px" align="left" nowrap="nowrap"><input type="text" size="25" maxlength="255" name="checkusername" class="text" /></td>
 </tr>
 <tr>
 	<td style="padding:6px" align="right" nowrap="nowrap"><?php echo $AppUI->_('EMail'); ?>:</td>
-	<td style="padding:6px" align="left" nowrap="nowrap"><input type="email" size="25" maxlength="32" name="checkemail" class="text" /></td>
+	<td style="padding:6px" align="left" nowrap="nowrap"><input type="email" size="25" maxlength="255" name="checkemail" class="text" /></td>
 </tr>
 <tr>
 	<td style="padding:6px" align="left" nowrap="nowrap"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" width="32" height="24" border="0" alt="web2Project logo" /></a></td>

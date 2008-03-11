@@ -27,11 +27,11 @@
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Username'); ?>:</td>
-	<td align="left" nowrap="nowrap"><input type="text" size="25" maxlength="20" name="checkusername" class="text" /></td>
+	<td align="left" nowrap="nowrap"><input type="text" size="25" maxlength="255" name="checkusername" class="text" /></td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('EMail'); ?>:</td>
-	<td align="left" nowrap="nowrap"><input type="email" size="25" maxlength="64" name="checkemail" class="text" /></td>
+	<td align="left" nowrap="nowrap"><input type="email" size="25" maxlength="255" name="checkemail" class="text" /></td>
 </tr>
 <tr>
 	<td align="left" nowrap="nowrap"><a href="http://www.dotproject.net/"><img src="./style/web2project/w2p_icon.gif" width="120" height="20" border="0" alt="dotProject logo" /></a></td>
