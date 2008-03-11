@@ -28,7 +28,7 @@
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Username'); ?>:</td>
-	<td align="left" nowrap="nowrap"><input type="text" size="25" maxlength="20" name="username" class="text" /></td>
+	<td align="left" nowrap="nowrap"><input type="text" size="25" maxlength="255" name="username" class="text" /></td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Password'); ?>:</td>
