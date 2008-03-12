@@ -8,9 +8,6 @@ $sort = w2PgetParam($_REQUEST, 'sort', 'asc');
 $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
 $hideEmail = w2PgetConfig('hide_email_addresses', false);
 
-require_once ($AppUI->getLibraryClass('PEAR/BBCodeParser'));
-$bbparser = new HTML_BBCodeParser();
-
 $q = new DBQuery;
 $q->addTable('forums');
 $q->addTable('forum_messages');
@@ -159,7 +156,7 @@ foreach ($messages as $row) {
 
 		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
 		if (!$hideEmail) {
-			$s .= '<a href="mailto:' . $row["contact_email"] . '">';
+			$s .= '<a href="mailto:' . $row['contact_email'] . '">';
 		}
 		$s .= '<font size="2">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</font>';
 		if (!$hideEmail) {
@@ -194,7 +191,7 @@ foreach ($messages as $row) {
 		$s .= '<td valign="top" align="right" style="' . $style . '">';
 
 		//the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
-		$canEdit = $perms->checkModuleItem('forums', 'edit', $row['message_id']);
+		$canEdit = $perms->checkModule('forums', 'edit');
 		if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $perms->checkModule('admin', 'edit'))) {
 			$s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
 			// edit message

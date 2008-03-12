@@ -140,7 +140,12 @@ if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the
 
 <tr><td align="right"><?php echo $AppUI->_('Author') ?>:</td><td align="left"><?php echo w2PgetUsername($message_info['user_username']) ?> (<?php echo $date->format($df . ' ' . $tf); ?>)</td></tr>
 <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
-<tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left"><textarea name="message_parent_body" cols="60" readonly="readonly" style="height:100px; font-size:8pt"><?php echo $message_info['message_body']; ?></textarea></td></tr>
+<tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
+<?php 
+	$message = $bbparser->qparse($message_info['message_body']);
+	$message = str_replace(chr(13), '&nbsp;<br />', $message);
+	echo $message; 
+?></td></tr>
 <tr><td colspan="2" align="left"><hr /></td></tr>
 <?php
 } //end of if-condition
@@ -149,7 +154,7 @@ if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the
 <tr>
 	<td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
 	<td>
-		<input type="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message_info['message_title']; ?>" size="50" maxlength="250" />
+		<input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message_info['message_title']; ?>" size="50" maxlength="250" />
 	</td>
 </tr>
 <tr>
@@ -186,7 +191,8 @@ if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the
 	</td>
 	<td align="right"><?php
 $canEdit = $perms->checkModuleItem('forums', 'edit', $row['message_id']);
-if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $perms->checkModule('admin', 'edit'))) {
+$canAdd = $perms->checkModule('forums', 'add');
+if (($canEdit && ($AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $perms->checkModule('admin', 'edit'))) || ($canAdd && !$row['message_id'])) {
 	echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()">';
 }
 ?></td>
