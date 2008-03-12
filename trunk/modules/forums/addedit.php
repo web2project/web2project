@@ -48,7 +48,11 @@ echo db_error();
 
 $perms = &$AppUI->acl();
 $permittedUsers = &$perms->getPermittedUsers();
-$users = array('0' => '') + $permittedUsers;
+if(count($permittedUsers)){
+	$users = array(0 => '') + $permittedUsers;
+} else {
+	$users = array(0 => '');
+}
 // setup the title block
 $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
 $titleBlock = new CTitleBlock($ttl, 'support.png', $m, $m . '.' . $a);

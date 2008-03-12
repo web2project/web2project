@@ -4,6 +4,8 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 require_once ($AppUI->getSystemClass('libmail'));
+require_once ($AppUI->getLibraryClass('PEAR/BBCodeParser'));
+$bbparser = new HTML_BBCodeParser();
 
 $filters = array('- Filters -');
 
@@ -119,11 +121,11 @@ class CForum extends CW2pObject {
 				$extra['where'] = $buffer;
 			}
 		} else {
-			// There are no allowed projects, so don't allow tasks.
+			// There are no allowed projects, so only allow forums with no project associated.
 			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND 1 = 0 ';
+				$extra['where'] = $extra['where'] . ' AND (forum_project IS NULL OR forum_project = "" OR forum_project = 0) ';
 			} else {
-				$extra['where'] = '1 = 0';
+				$extra['where'] = '(forum_project IS NULL OR forum_project = "" OR forum_project = 0)';
 			}
 		}
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
