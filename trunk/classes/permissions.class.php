@@ -1253,7 +1253,7 @@ class w2Pacl extends gacl_api {
 		if ($module == 'projects') {
 			$allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label'], '', null, null, 'projects');
 		} else {
-		$allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label']);
+			$allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label']);
 		}
 
 		/*print_r(isset($allowedRecords[$item]));
