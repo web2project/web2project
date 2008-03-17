@@ -201,6 +201,7 @@ class CW2pObject {
 	 *	@return null|string null if successful otherwise returns and error message
 	 */
 	function store($updateNulls = false) {
+		global $AppUI;
 
 		$this->w2PTrimAll();
 
@@ -223,7 +224,7 @@ class CW2pObject {
 
 		if ($ret) {
 			// only record history if an update or insert actually occurs.
-			addHistory($this->_tbl . '_' . $store_type . '(' . $this->$k . ')', 0, $this->_tbl);
+			addHistory($this->_tbl, $this->$k, $store_type, $AppUI->_('ACTION') . ': ' . $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->$k);
 		}
 		return ((!$ret) ? (get_class($this) . "::store failed <br />" . db_error()) : null);
 	}
