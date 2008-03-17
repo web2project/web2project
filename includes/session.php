@@ -38,10 +38,10 @@ function w2PsessionRead($id) {
 	$q->addQuery('session_data');
 	$q->addQuery('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) as session_lifespan');
 	$q->addQuery('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) as session_idle');
-	$q->addWhere('session_id = "'.$id.'"');
+	$q->addWhere('session_id = \''.$id.'\'');
 	$qid = &$q->exec();
 	if (!$qid || $qid->EOF) {
-		dprint(__file__, __line__, 11, "Failed to retrieve session $id");
+		dprint(__file__, __line__, 11, 'Failed to retrieve session ' . $id);
 		$data = "";
 	} else {
 		$max = w2PsessionConvertTime('max_lifetime');
@@ -67,7 +67,7 @@ function w2PsessionWrite($id, $data) {
 	$q = new DBQuery;
 	$q->addQuery('count(session_id) as row_count');
 	$q->addTable('sessions');
-	$q->addWhere('session_id = "'.$id.'"');
+	$q->addWhere('session_id = \''.$id.'\'');
 
 	if ($qid = &$q->exec() && (@$qid->fields['row_count'] > 0 || @$qid->fields[0] > 0)) {
 		//dprint(__file__, __line__, 11, "Updating session $id");
@@ -100,14 +100,14 @@ function w2PsessionDestroy($id, $user_access_log_id = 0) {
 	$q2 = new DBQuery;
 	$q2->addTable('sessions');
 	$q2->addQuery('session_user');
-	$q2->addWhere('session_id = "' . $id . '"');
+	$q2->addWhere('session_id = \'' . $id . '\'');
 	$q->addWhere('user_access_log_id = ( ' . $q2->prepare() . ' )');
 	$q->exec();
 	$q->clear();
 	$q2->clear();
 
 	$q->setDelete('sessions');
-	$q->addWhere('session_id = "'.$id.'"');
+	$q->addWhere('session_id = \''.$id.'\'');
 	$q->exec();
 	$q->clear();
 

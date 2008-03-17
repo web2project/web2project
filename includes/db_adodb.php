@@ -20,10 +20,22 @@ $db = NewADOConnection(w2PgetConfig('dbtype'));
 function db_connect($host = 'localhost', $dbname, $user = 'root', $passwd = '', $persist = false) {
 	global $db, $ADODB_FETCH_MODE;
 
-	if ($persist) {
-		$db->PConnect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
-	} else {
-		$db->Connect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
+	switch (strtolower(trim(w2PgetConfig('dbtype')))) {
+		case 'oci8' || 'oracle':
+			if ($persist) {
+				$db->PConnect($host, $user, $passwd, $dbname) or print_r('FATAL ERROR: Connection to database server failed');
+			} else {
+				$db->Connect($host, $user, $passwd, $dbname) or print_r('FATAL ERROR: Connection to database server failed');
+			}
+			if (!defined('ADODB_ASSOC_CASE')) define('ADODB_ASSOC_CASE', 0);
+			break;
+		default:
+		//mySQL
+			if ($persist) {
+				$db->PConnect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
+			} else {
+				$db->Connect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
+			}
 	}
 
 	$ADODB_FETCH_MODE = ADODB_FETCH_BOTH;
@@ -180,11 +192,24 @@ $rs = $db->Execute($sql);
 if ($rs) { // Won't work in install mode.
 	$rsArr = $rs->GetArray();
 
-	foreach ($rsArr as $c) {
-		if ($c['config_type'] == 'checkbox') {
-			$c['config_value'] = ($c['config_value'] == 'true') ? true : false;
-		}
-		$w2Pconfig[$c['config_name']] = $c['config_value'];
+	switch (strtolower(trim(w2PgetConfig('dbtype')))) {
+		case 'oci8':
+		case 'oracle':
+			foreach ($rsArr as $c) {
+				if ($c['CONFIG_TYPE'] == 'checkbox') {
+					$c['CONFIG_VALUE'] = ($c['CONFIG_VALUES'] == 'true') ? true : false;
+				}
+				$w2Pconfig[$c['CONFIG_NAME']] = $c['CONFIG_VALUE'];
+			}
+			break;
+		default:
+		//mySQL
+			foreach ($rsArr as $c) {
+				if ($c['config_type'] == 'checkbox') {
+					$c['config_value'] = ($c['config_value'] == 'true') ? true : false;
+				}
+				$w2Pconfig[$c['config_name']] = $c['config_value'];
+			}
 	}
 }
 ?>
