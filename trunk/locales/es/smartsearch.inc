@@ -1,7 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"Empty"=>"VacÃ­o",
+"Empty"=>"Vacío",
 "Events"=>"Eventos",
 "Files Content"=>"Contenido de los Ficheros",
 "Forum Messages"=>"Mensajes del Foro",
