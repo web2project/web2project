@@ -20,7 +20,7 @@ $q->addOrder('contact_first_name');
 $contacts = $q->loadHashList('contact_id');
 
 foreach ($contacts as $contact_id => $contact_data) {
-	echo '<tr><td>' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</td>';
+	echo '<tr><td><a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</a></td>';
 	echo '<td>' . $contact_data['contact_email'] . '</td>';
 	echo '<td>' . $contact_data['contact_phone'] . '</td></tr>';
 }

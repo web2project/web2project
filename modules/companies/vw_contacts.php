@@ -43,6 +43,7 @@ if (!($rows = $q->loadList())) {
 <tr>
 	<th><?php echo $AppUI->_('Name'); ?></td>
 	<th><?php echo $AppUI->_('e-mail'); ?></td>
+	<th><?php echo $AppUI->_('Phone'); ?></td>
 	<th><?php echo $AppUI->_('Department'); ?></td>
 </tr>
 <?php
@@ -54,12 +55,13 @@ if (!($rows = $q->loadList())) {
 		$s .= '<tr><td>';
 		$s .= '<a href="./index.php?m=contacts&a=view&contact_id=' . $row['contact_id'] . '">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</a>';
 		$s .= '<td><a href="mailto:' . $row['contact_email'] . '">' . $row['contact_email'] . '</a></td>';
+		$s .= '<td>' . $row['contact_phone'] . '</td>';
 		$s .= '<td>' . $dept_detail['dept_name'] . '</td>';
 		$s .= '</tr>';
 	}
 }
 
-$s .= '<tr><td colspan="3" align="right" valign="top" style="background-color:#ffffff">';
+$s .= '<tr><td colspan="4" align="right" valign="top" style="background-color:#ffffff">';
 $s .= '<input type="button" class=button value="' . $AppUI->_('new contact') . '" onClick="javascript:window.location=\'./index.php?m=contacts&a=addedit&company_id=' . $company_id . '&company_name=' . $obj->company_name . '\'">';
 $s .= '</td></tr>';
 $s .= '</table>';
