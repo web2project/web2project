@@ -5,7 +5,9 @@ if (!defined('W2P_BASE_DIR')) {
 
 $contact_id = intval(w2PgetParam($_GET, 'contact_id', 0));
 $company_id = intval(w2PgetParam($_REQUEST, 'company_id', 0));
+$dept_id = intval(w2PgetParam($_REQUEST, 'dept_id', 0));
 $company_name = ($_REQUEST['company_name'] ? $_REQUEST['company_name'] : null);
+$dept_name = ($_REQUEST['dept_name'] ? $_REQUEST['dept_name'] : null);
 
 // check permissions for this record
 $perms = &$AppUI->acl();
@@ -52,6 +54,8 @@ $dept_detail = $row->getDepartmentDetails();
 if ($contact_id == 0 && $company_id > 0) {
 	$company_detail['company_id'] = $company_id;
 	$company_detail['company_name'] = $company_name;
+	$dept_detail['dept_id'] = $dept_id;
+	$dept_detail['dept_name'] = $dept_name;
 }
 
 ?>
