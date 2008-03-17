@@ -1,7 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-"classic"=>"Estilo ClÃ¡sico de web2Project",
+"classic"=>"Estilo Clásico de web2Project",
 "default"=>"Estilo predeterminado",
-"demo1"=>"Estilo de demostraciÃ³n",
+"demo1"=>"Estilo de demostración",
 "dp-grey-theme"=>"Estilo Gris de Linea Delgada",
