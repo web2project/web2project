@@ -21,11 +21,12 @@ function db_connect($host = 'localhost', $dbname, $user = 'root', $passwd = '', 
 	global $db, $ADODB_FETCH_MODE;
 
 	switch (strtolower(trim(w2PgetConfig('dbtype')))) {
-		case 'oci8' || 'oracle':
+		case 'oci8':
+		case 'oracle':
 			if ($persist) {
-				$db->PConnect($host, $user, $passwd, $dbname) or print_r('FATAL ERROR: Connection to database server failed');
+				$db->PConnect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
 			} else {
-				$db->Connect($host, $user, $passwd, $dbname) or print_r('FATAL ERROR: Connection to database server failed');
+				$db->Connect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
 			}
 			if (!defined('ADODB_ASSOC_CASE')) define('ADODB_ASSOC_CASE', 0);
 			break;
