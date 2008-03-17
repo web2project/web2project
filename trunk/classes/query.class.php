@@ -650,121 +650,237 @@ class DBQuery {
 	/** Prepare the SELECT component of the SQL query
 	 */
 	function prepareSelect() {
-		$q = 'SELECT ';
-		if ($this->include_count) {
-			$q .= 'SQL_CALC_FOUND_ROWS ';
-		}
-		if (isset($this->query)) {
-			if (is_array($this->query)) {
-				$inselect = false;
-				$q .= implode(',', $this->query);
-			} else {
-				$q .= $this->query;
-			}
-		} else {
-			$q .= '*';
-		}
-		$q .= ' FROM (';
-		if (isset($this->table_list)) {
-			if (is_array($this->table_list)) {
-				$intable = false;
-				/* added brackets for MySQL > 5.0.12 compatibility
-				** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
-				*/
-				$q .= '(';
-				foreach ($this->table_list as $table_id => $table) {
-					if ($intable) {
-						$q .= ',';
-					} else {
-						$intable = true;
-					}
-					$q .= $this->quote_db($this->_table_prefix . $table);
-					if (!is_numeric($table_id)) {
-						$q .= ' AS ' . $table_id;
-					}
+		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
+			case 'oci8':
+			case 'oracle':
+				$q = 'SELECT ';
+				if ($this->include_count) {
+					//$q .= 'SQL_CALC_FOUND_ROWS ';
 				}
-				/* added brackets for MySQL > 5.0.12 compatibility
-				** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
-				*/
-				$q .= ')';
-			} else {
-				$q .= $this->_table_prefix . $this->table_list;
-			}
-			$q .= ')';
-		} else {
-			return false;
+				if (isset($this->query)) {
+					if (is_array($this->query)) {
+						$inselect = false;
+						$q .= implode(',', $this->query);
+					} else {
+						$q .= $this->query;
+					}
+				} else {
+					$q .= '*';
+				}
+				$q .= ' FROM ';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						$intable = false;
+						foreach ($this->table_list as $table_id => $table) {
+							if ($intable) {
+								$q .= ',';
+							} else {
+								$intable = true;
+							}
+							$q .= $this->_table_prefix . $table;
+							if (!is_numeric($table_id)) {
+								$q .= ' ' . $table_id;
+							}
+						}
+					} else {
+						$q .= $this->_table_prefix . $this->table_list;
+					}
+				} else {
+					return false;
+				}
+				$q .= $this->make_join($this->join);
+				$q .= $this->make_where_clause($this->where);
+				$q .= $this->make_group_clause($this->group_by);
+				$q .= $this->make_having_clause($this->having);
+				$q .= $this->make_order_clause($this->order_by);
+				// TODO: Prepare limit as well
+				return $q;
+				break;
+			default:
+			//mySQL
+				$q = 'SELECT ';
+				if ($this->include_count) {
+					$q .= 'SQL_CALC_FOUND_ROWS ';
+				}
+				if (isset($this->query)) {
+					if (is_array($this->query)) {
+						$inselect = false;
+						$q .= implode(',', $this->query);
+					} else {
+						$q .= $this->query;
+					}
+				} else {
+					$q .= '*';
+				}
+				$q .= ' FROM (';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						$intable = false;
+						/* added brackets for MySQL > 5.0.12 compatibility
+						** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
+						*/
+						$q .= '(';
+						foreach ($this->table_list as $table_id => $table) {
+							if ($intable) {
+								$q .= ',';
+							} else {
+								$intable = true;
+							}
+							$q .= $this->quote_db($this->_table_prefix . $table);
+							if (!is_numeric($table_id)) {
+								$q .= ' AS ' . $table_id;
+							}
+						}
+						/* added brackets for MySQL > 5.0.12 compatibility
+						** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
+						*/
+						$q .= ')';
+					} else {
+						$q .= $this->_table_prefix . $this->table_list;
+					}
+					$q .= ')';
+				} else {
+					return false;
+				}
+				$q .= $this->make_join($this->join);
+				$q .= $this->make_where_clause($this->where);
+				$q .= $this->make_group_clause($this->group_by);
+				$q .= $this->make_having_clause($this->having);
+				$q .= $this->make_order_clause($this->order_by);
+				// TODO: Prepare limit as well
+				return $q;
 		}
-		$q .= $this->make_join($this->join);
-		$q .= $this->make_where_clause($this->where);
-		$q .= $this->make_group_clause($this->group_by);
-		$q .= $this->make_having_clause($this->having);
-		$q .= $this->make_order_clause($this->order_by);
-		// TODO: Prepare limit as well
-		return $q;
 	}
 
 	/** Prepare the UPDATE component of the SQL query
 	 */
 	function prepareUpdate() {
 		// You can only update one table, so we get the table detail
-		$q = 'UPDATE ';
-		if (isset($this->table_list)) {
-			if (is_array($this->table_list)) {
-				reset($this->table_list);
-				// Grab the first record
-				list($key, $table) = each($this->table_list);
-			} else {
-				$table = $this->table_list;
-			}
-		} else {
-			return false;
+		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
+			case 'oci8':
+			case 'oracle':
+				$q = 'UPDATE ';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						reset($this->table_list);
+						// Grab the first record
+						list($key, $table) = each($this->table_list);
+					} else {
+						$table = $this->table_list;
+					}
+				} else {
+					return false;
+				}
+				$q .= $this->_table_prefix . $table;
+		
+				$q .= ' SET ';
+				$sets = '';
+				foreach ($this->update_list as $field => $value) {
+					if ($sets) {
+						$sets .= ', ';
+					}
+					$sets .= $field . ' = ' . $this->quote($value);
+				}
+				$q .= $sets;
+				$q .= $this->make_where_clause($this->where);
+				return $q;
+				break;
+			default:
+			//mySQL
+				$q = 'UPDATE ';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						reset($this->table_list);
+						// Grab the first record
+						list($key, $table) = each($this->table_list);
+					} else {
+						$table = $this->table_list;
+					}
+				} else {
+					return false;
+				}
+				$q .= $this->quote_db($this->_table_prefix . $table);
+		
+				$q .= ' SET ';
+				$sets = '';
+				foreach ($this->update_list as $field => $value) {
+					if ($sets) {
+						$sets .= ', ';
+					}
+					$sets .= $this->quote_db($field) . ' = ' . $this->quote($value);
+				}
+				$q .= $sets;
+				$q .= $this->make_where_clause($this->where);
+				return $q;
 		}
-		$q .= $this->quote_db($this->_table_prefix . $table);
-
-		$q .= ' SET ';
-		$sets = '';
-		foreach ($this->update_list as $field => $value) {
-			if ($sets) {
-				$sets .= ', ';
-			}
-			$sets .= $this->quote_db($field) . ' = ' . $this->quote($value);
-		}
-		$q .= $sets;
-		$q .= $this->make_where_clause($this->where);
-		return $q;
 	}
 
 	/** Prepare the INSERT component of the SQL query
 	 */
 	function prepareInsert() {
-		$q = 'INSERT INTO ';
-		if (isset($this->table_list)) {
-			if (is_array($this->table_list)) {
-				reset($this->table_list);
-				// Grab the first record
-				list($key, $table) = each($this->table_list);
-			} else {
-				$table = $this->table_list;
-			}
-		} else {
-			return false;
+		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
+			case 'oci8':
+			case 'oracle':
+				$q = 'INSERT INTO ';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						reset($this->table_list);
+						// Grab the first record
+						list($key, $table) = each($this->table_list);
+					} else {
+						$table = $this->table_list;
+					}
+				} else {
+					return false;
+				}
+				$q .= $this->_table_prefix . $table;
+		
+				$fieldlist = '';
+				$valuelist = '';
+				foreach ($this->value_list as $field => $value) {
+					if ($fieldlist) {
+						$fieldlist .= ',';
+					}
+					if ($valuelist) {
+						$valuelist .= ',';
+					}
+					$fieldlist .= trim($field);
+					$valuelist .= $value;
+				}
+				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
+				return $q;
+				break;
+			default:
+			//mySQL
+				$q = 'INSERT INTO ';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						reset($this->table_list);
+						// Grab the first record
+						list($key, $table) = each($this->table_list);
+					} else {
+						$table = $this->table_list;
+					}
+				} else {
+					return false;
+				}
+				$q .= $this->quote_db($this->_table_prefix . $table);
+		
+				$fieldlist = '';
+				$valuelist = '';
+				foreach ($this->value_list as $field => $value) {
+					if ($fieldlist) {
+						$fieldlist .= ',';
+					}
+					if ($valuelist) {
+						$valuelist .= ',';
+					}
+					$fieldlist .= $this->quote_db(trim($field));
+					$valuelist .= $value;
+				}
+				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
+				return $q;
 		}
-		$q .= $this->quote_db($this->_table_prefix . $table);
-
-		$fieldlist = '';
-		$valuelist = '';
-		foreach ($this->value_list as $field => $value) {
-			if ($fieldlist) {
-				$fieldlist .= ',';
-			}
-			if ($valuelist) {
-				$valuelist .= ',';
-			}
-			$fieldlist .= $this->quote_db(trim($field));
-			$valuelist .= $value;
-		}
-		$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
-		return $q;
 	}
 
 	/** Prepare the INSERT component of the SQL query
@@ -803,53 +919,109 @@ class DBQuery {
 	/** Prepare the REPLACE component of the SQL query
 	 */
 	function prepareReplace() {
-		$q = 'REPLACE INTO ';
-		if (isset($this->table_list)) {
-			if (is_array($this->table_list)) {
-				reset($this->table_list);
-				// Grab the first record
-				list($key, $table) = each($this->table_list);
-			} else {
-				$table = $this->table_list;
-			}
-		} else {
-			return false;
+		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
+			case 'oci8':
+			case 'oracle':
+				$q = 'REPLACE INTO ';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						reset($this->table_list);
+						// Grab the first record
+						list($key, $table) = each($this->table_list);
+					} else {
+						$table = $this->table_list;
+					}
+				} else {
+					return false;
+				}
+				$q .= $this->_table_prefix . $table;
+		
+				$fieldlist = '';
+				$valuelist = '';
+				foreach ($this->value_list as $field => $value) {
+					if ($fieldlist) {
+						$fieldlist .= ',';
+					}
+					if ($valuelist) {
+						$valuelist .= ',';
+					}
+					$fieldlist .= trim($field);
+					$valuelist .= $value;
+				}
+				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
+				return $q;
+				break;
+			default:
+			//mySQL
+				$q = 'REPLACE INTO ';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						reset($this->table_list);
+						// Grab the first record
+						list($key, $table) = each($this->table_list);
+					} else {
+						$table = $this->table_list;
+					}
+				} else {
+					return false;
+				}
+				$q .= $this->quote_db($this->_table_prefix . $table);
+		
+				$fieldlist = '';
+				$valuelist = '';
+				foreach ($this->value_list as $field => $value) {
+					if ($fieldlist) {
+						$fieldlist .= ',';
+					}
+					if ($valuelist) {
+						$valuelist .= ',';
+					}
+					$fieldlist .= $this->quote_db(trim($field));
+					$valuelist .= $value;
+				}
+				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
+				return $q;
 		}
-		$q .= $this->quote_db($this->_table_prefix . $table);
-
-		$fieldlist = '';
-		$valuelist = '';
-		foreach ($this->value_list as $field => $value) {
-			if ($fieldlist) {
-				$fieldlist .= ',';
-			}
-			if ($valuelist) {
-				$valuelist .= ',';
-			}
-			$fieldlist .= $this->quote_db(trim($field));
-			$valuelist .= $value;
-		}
-		$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
-		return $q;
 	}
 
 	/** Prepare the DELETE component of the SQL query
 	 */
 	function prepareDelete() {
-		$q = 'DELETE FROM ';
-		if (isset($this->table_list)) {
-			if (is_array($this->table_list)) {
-				// Grab the first record
-				list($key, $table) = each($this->table_list);
-			} else {
-				$table = $this->table_list;
-			}
-		} else {
-			return false;
+		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
+			case 'oci8':
+			case 'oracle':
+				$q = 'DELETE FROM ';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						// Grab the first record
+						list($key, $table) = each($this->table_list);
+					} else {
+						$table = $this->table_list;
+					}
+				} else {
+					return false;
+				}
+				$q .= $this->_table_prefix . $table;
+				$q .= $this->make_where_clause($this->where);
+				return $q;
+				break;
+			default:
+			//mySQL
+				$q = 'DELETE FROM ';
+				if (isset($this->table_list)) {
+					if (is_array($this->table_list)) {
+						// Grab the first record
+						list($key, $table) = each($this->table_list);
+					} else {
+						$table = $this->table_list;
+					}
+				} else {
+					return false;
+				}
+				$q .= $this->quote_db($this->_table_prefix . $table);
+				$q .= $this->make_where_clause($this->where);
+				return $q;
 		}
-		$q .= $this->quote_db($this->_table_prefix . $table);
-		$q .= $this->make_where_clause($this->where);
-		return $q;
 	}
 
 	/** Prepare the ALTER component of the SQL query
