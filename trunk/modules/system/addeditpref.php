@@ -51,6 +51,12 @@ function submitIt() {
 		mask += 4;
 	}
 	defs.value = mask;
+	var expanded = document.getElementById('tasks_expanded');
+	var mask = 0;
+	if (form.expanded.checked) {
+		mask += 1;
+	}
+	expanded.value = mask;
 	form.submit();
 }
 </script>
@@ -77,7 +83,7 @@ $temp = $AppUI->setWarning(false);
 $langlist = array();
 foreach ($LANGUAGES as $lang => $langinfo)
 	$langlist[$lang] = $langinfo[1];
-echo arraySelect($langlist, 'pref_name[LOCALE]', 'class=text size=1', @$prefs['LOCALE'], true);
+echo arraySelect($langlist, 'pref_name[LOCALE]', 'class=text size=1', $prefs['LOCALE'], true);
 $AppUI->setWarning($temp);
 ?>
 	</td>
@@ -88,7 +94,7 @@ $AppUI->setWarning($temp);
 	<td>
 <?php
 $tabview = array('either', 'tabbed', 'flat');
-echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class=text size=1', @$prefs['TABVIEW'], true);
+echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class=text size=1', $prefs['TABVIEW'], true);
 ?>
 	</td>
 </tr>
@@ -115,7 +121,7 @@ $f = '%Y/%b/%d';
 $dates[$f] = $ex->format($f);
 $f = '%Y/%m/%d';
 $dates[$f] = $ex->format($f);
-echo arraySelect($dates, 'pref_name[SHDATEFORMAT]', 'class=text size=1', @$prefs['SHDATEFORMAT'], false);
+echo arraySelect($dates, 'pref_name[SHDATEFORMAT]', 'class=text size=1', $prefs['SHDATEFORMAT'], false);
 ?>
 	</td>
 </tr>
@@ -132,7 +138,7 @@ $f = '%H:%M';
 $times[$f] = $ex->format($f) . ' (24)';
 $f = '%H:%M:%S';
 $times[$f] = $ex->format($f) . ' (24)';
-echo arraySelect($times, 'pref_name[TIMEFORMAT]', 'class=text size=1', @$prefs['TIMEFORMAT'], false);
+echo arraySelect($times, 'pref_name[TIMEFORMAT]', 'class=text size=1', $prefs['TIMEFORMAT'], false);
 ?>
 	</td>
 </tr>
@@ -151,7 +157,7 @@ else
 foreach (array_keys($LANGUAGES) as $lang) {
 	$currencies[$lang] = formatCurrency($currEx, $AppUI->setUserLocale($lang, false));
 }
-echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', @$prefs['CURRENCYFORM'], false);
+echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', $prefs['CURRENCYFORM'], false);
 ?>
 	</td>
 </tr>
@@ -172,7 +178,7 @@ $AppUI->setWarning($temp);
 	<td align="right"><?php echo $AppUI->_('User Task Assignment Maximum'); ?>:</td>
 	<td>
 <?php
-$tam = (@$prefs['TASKASSIGNMAX'] > 0) ? $prefs['TASKASSIGNMAX'] : 100;
+$tam = ($prefs['TASKASSIGNMAX'] > 0) ? $prefs['TASKASSIGNMAX'] : 100;
 $taskAssMax = array();
 for ($i = 5; $i <= 200; $i += 5) {
 	$taskAssMax[$i] = $i . '%';
@@ -187,7 +193,7 @@ echo arraySelect($taskAssMax, 'pref_name[TASKASSIGNMAX]', 'class=text size=1', $
 	<td>
 <?php
 require_once $AppUI->getModuleClass('calendar');
-echo arraySelect($event_filter_list, 'pref_name[EVENTFILTER]', 'class=text size=1', @$prefs['EVENTFILTER'], true);
+echo arraySelect($event_filter_list, 'pref_name[EVENTFILTER]', 'class=text size=1', $prefs['EVENTFILTER'], true);
 ?>
 	</td>
 </tr>
@@ -197,7 +203,7 @@ echo arraySelect($event_filter_list, 'pref_name[EVENTFILTER]', 'class=text size=
 <?php
 $notify_filter = array(0 => 'Do not include task/event owner', 1 => 'Include task/event owner');
 
-echo arraySelect($notify_filter, 'pref_name[MAILALL]', 'class=text size=1', @$prefs['MAILALL'], true);
+echo arraySelect($notify_filter, 'pref_name[MAILALL]', 'class=text size=1', $prefs['MAILALL'], true);
 
 ?>
 	</td>
@@ -205,7 +211,7 @@ echo arraySelect($notify_filter, 'pref_name[MAILALL]', 'class=text size=1', @$pr
 <tr>
 	<td align="right"><?php echo $AppUI->_('Task Log Email Defaults'); ?>:</td>
 	<td>
-		<input type='hidden' name='pref_name[TASKLOGEMAIL]' id='task_log_email_defaults' value='<?php echo @$prefs['TASKLOGEMAIL']; ?>'>
+		<input type="hidden" name="pref_name[TASKLOGEMAIL]" id="task_log_email_defaults" value="<?php echo $prefs['TASKLOGEMAIL']; ?>" />
 <?php
 if (!isset($prefs['TASKLOGEMAIL'])) {
 	$prefs['TASKLOGEMAIL'] = 0;
@@ -234,7 +240,7 @@ echo ' />';
 <tr>
 	<td align="right"><?php echo $AppUI->_('Task Log Email Subject'); ?>:</td>
 	<td>
-		<input type="text" class="text" name="pref_name[TASKLOGSUBJ]" value="<?php echo @$prefs['TASKLOGSUBJ']; ?>" />
+		<input type="text" class="text" name="pref_name[TASKLOGSUBJ]" value="<?php echo $prefs['TASKLOGSUBJ']; ?>" />
 	</td>
 </tr>
 <tr>
@@ -243,13 +249,26 @@ echo ' />';
 	<?php
 $record_method['0'] = $AppUI->_('None');
 $record_method['1'] = $AppUI->_('Append to Log');
-echo arraySelect($record_method, 'pref_name[TASKLOGNOTE]', 'class=text size=1', @$prefs['TASKLOGNOTE'], false);
+echo arraySelect($record_method, 'pref_name[TASKLOGNOTE]', 'class="text" size="1"', $prefs['TASKLOGNOTE'], false);
 ?>
 	</td>
 </tr>
-
+<tr>
+	<td align="right"><?php echo $AppUI->_('Show Parent Tasks Expanded by Default'); ?>:</td>
+	<td>
+		<input type="hidden" name="pref_name[TASKSEXPANDED]" id="tasks_expanded" value="<?php echo $prefs['TASKSEXPANDED']; ?>" />
+<?php
+		echo '<input type="checkbox" name="expanded"';
+		if ($prefs['TASKSEXPANDED']) {
+			echo ' checked="checked"';
+		}
+		echo ' />';
+?>
+	</td>
+</tr>
 <tr>
 	<td align="left"><input class="button"  type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" /></td>
 	<td align="right"><input class="button" type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /></td>
 </tr>
 </table>
+</form>

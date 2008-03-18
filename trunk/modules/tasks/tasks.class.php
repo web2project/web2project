@@ -1990,7 +1990,7 @@ class CTaskLog extends CW2pObject {
 
 function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hideOpenCloseLink = false, $allowRepeat = false) {
 	global $AppUI, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
-	global $tasks_opened, $tasks_closed, $m, $a, $history_active;
+	global $tasks_opened, $tasks_closed, $m, $a, $history_active, $expanded;
 
 	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
 	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
@@ -2046,7 +2046,11 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	}
 
 	//     $s = "\n<tr id=\"project_".$arr['task_project'].'_level>'.$level.'<task_'.$arr['task_id']."_\" ".((($level>0 && !($m=='tasks' && $a=='view')) || ($m=='tasks' && ($a=='' || $a=='index'))) ? 'style="display:none"' : '').'>';
-	$s = '<tr id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
+	if ($expanded) {
+		$s = '<tr id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_" >';
+	} else {
+		$s = '<tr id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
+	}
 	// edit icon
 	$s .= '<td align="center">';
 	//Don't do item level checkings here, let the addedit interfaces do that for speed sake
@@ -2093,7 +2097,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	if ($arr['task_description']) {
 		$s .= w2PtoolTip('Task Description', $arr['task_description'], true);
 	}
-	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" border="0" align="center" style="display:none" /><img onclick="expand_collapse(\'project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" border="0" align="center" /></a>';
+	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
 	if ($arr['task_nr_of_children']) {
 		$is_parent = true;
 	} else {

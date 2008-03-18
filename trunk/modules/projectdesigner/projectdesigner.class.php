@@ -121,7 +121,7 @@ function get_actual_end_date_pd($task_id, $task) {
 
 function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	global $AppUI, $w2Pconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
-	global $task_access, $task_priority, $PROJDESIGN_CONFIG, $m;
+	global $task_access, $task_priority, $PROJDESIGN_CONFIG, $m, $expanded;
 
 	$types = w2Pgetsysval('TaskType');
 
@@ -171,7 +171,11 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 		$days = $now->dateDiff($end_date) * $sign;
 	}
 
-	$s = "\n<tr id=\"project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_\" onmouseover=\"highlight_tds(this, true, " . $a['task_id'] . ")\" onmouseout=\"highlight_tds(this, false, " . $a['task_id'] . ")\" onclick=\"select_box('selected_task', '" . $a['task_id'] . "', 'project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_','frm_tasks')\" " . ($level ? 'style="display:none"' : '') . '>'; // edit icon
+	if ($expanded) {
+		$s = "\n<tr id=\"project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_\" onmouseover=\"highlight_tds(this, true, " . $a['task_id'] . ")\" onmouseout=\"highlight_tds(this, false, " . $a['task_id'] . ")\" onclick=\"select_box('selected_task', '" . $a['task_id'] . "', 'project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_','frm_tasks')\">"; // edit icon
+	} else {
+		$s = "\n<tr id=\"project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_\" onmouseover=\"highlight_tds(this, true, " . $a['task_id'] . ")\" onmouseout=\"highlight_tds(this, false, " . $a['task_id'] . ")\" onclick=\"select_box('selected_task', '" . $a['task_id'] . "', 'project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_','frm_tasks')\" " . ($level ? 'style="display:none"' : '') . '>'; // edit icon
+	}
 	$s .= "\n\t<td>";
 	//$canEdit = !getDenyEdit( 'tasks', $a['task_id'] );
 	$canEdit = true;
@@ -249,7 +253,7 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	if ($a['task_description']) {
 		$s .= w2PtoolTip('Task Description', $a['task_description'], true);
 	}
-	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '__collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" border="0" align="center" style="display:none" /><img onclick="expand_collapse(\'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '__expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" border="0" align="center" /></a>';
+	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '__collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '__expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
 	$taskObj = new CTask;
 	$taskObj->load($a['task_id']);
 	if (count($taskObj->getChildren())) {
