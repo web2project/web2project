@@ -231,7 +231,7 @@ class CFile extends CW2pObject {
 	function indexStrings() {
 		global $AppUI, $w2Pconfig;
 		// get the parser application
-		$parser = @$w2Pconfig['parser_' . $this->file_type];
+		$parser = $w2Pconfig['parser_' . $this->file_type];
 		if (!$parser)
 			$parser = $w2Pconfig['parser_default'];
 		if (!$parser)

@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $config = array('mod_name' => 'Resources', 'mod_version' => '1.0.1', 'mod_directory' => 'resources', 'mod_setup_class' => 'SResource', 'mod_type' => 'user', 'mod_ui_name' => 'Resources', 'mod_ui_icon' => 'resources.png', 'mod_description' => '', 'permissions_item_table' => 'resources', 'permissions_item_field' => 'resource_id', 'permissions_item_label' => 'resource_name', 'mod_main_class' => 'CResource');
 
-if (@$a == 'setup') {
+if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 

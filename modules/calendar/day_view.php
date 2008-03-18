@@ -31,7 +31,7 @@ if (isset($_REQUEST['company_id'])) {
 }
 $company_id = $AppUI->getState('CalIdxCompany', $AppUI->user_company);
 
-$event_filter = $AppUI->checkPrefState('CalIdxFilter', @w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');
+$event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');
 
 $AppUI->setState('CalDayViewTab', w2PgetParam($_GET, 'tab', $tab));
 $tab = $AppUI->getState('CalDayViewTab', '0');

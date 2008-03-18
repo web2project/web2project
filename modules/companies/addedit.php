@@ -92,31 +92,31 @@ function testURL( x ) {
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Company Name'); ?>:</td>
 		<td>
-			<input type="text" class="text" name="company_name" value="<?php echo w2PformSafe(@$obj->company_name); ?>" size="50" maxlength="255" /> (<?php echo $AppUI->_('required'); ?>)
+			<input type="text" class="text" name="company_name" value="<?php echo w2PformSafe($obj->company_name); ?>" size="50" maxlength="255" /> (<?php echo $AppUI->_('required'); ?>)
 		</td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Email'); ?>:</td>
 		<td>
-			<input type="text" class="text" name="company_email" value="<?php echo w2PformSafe(@$obj->company_email); ?>" size="30" maxlength="255" />
+			<input type="text" class="text" name="company_email" value="<?php echo w2PformSafe($obj->company_email); ?>" size="30" maxlength="255" />
 		</td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
 		<td>
-			<input type="text" class="text" name="company_phone1" value="<?php echo w2PformSafe(@$obj->company_phone1); ?>" maxlength="30" />
+			<input type="text" class="text" name="company_phone1" value="<?php echo w2PformSafe($obj->company_phone1); ?>" maxlength="30" />
 		</td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Phone'); ?>2:</td>
 		<td>
-			<input type="text" class="text" name="company_phone2" value="<?php echo w2PformSafe(@$obj->company_phone2); ?>" maxlength="50" />
+			<input type="text" class="text" name="company_phone2" value="<?php echo w2PformSafe($obj->company_phone2); ?>" maxlength="50" />
 		</td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Fax'); ?>:</td>
 		<td>
-			<input type="text" class="text" name="company_fax" value="<?php echo w2PformSafe(@$obj->company_fax); ?>" maxlength="30" />
+			<input type="text" class="text" name="company_fax" value="<?php echo w2PformSafe($obj->company_fax); ?>" maxlength="30" />
 		</td>
 	</tr>
 	<tr>
@@ -127,35 +127,35 @@ function testURL( x ) {
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Address'); ?>1:</td>
-		<td><input type="text" class="text" name="company_address1" value="<?php echo w2PformSafe(@$obj->company_address1); ?>" size="50" maxlength="255" /></td>
+		<td><input type="text" class="text" name="company_address1" value="<?php echo w2PformSafe($obj->company_address1); ?>" size="50" maxlength="255" /></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Address'); ?>2:</td>
-		<td><input type="text" class="text" name="company_address2" value="<?php echo w2PformSafe(@$obj->company_address2); ?>" size="50" maxlength="255" /></td>
+		<td><input type="text" class="text" name="company_address2" value="<?php echo w2PformSafe($obj->company_address2); ?>" size="50" maxlength="255" /></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('City'); ?>:</td>
-		<td><input type="text" class="text" name="company_city" value="<?php echo w2PformSafe(@$obj->company_city); ?>" size="50" maxlength="50" /></td>
+		<td><input type="text" class="text" name="company_city" value="<?php echo w2PformSafe($obj->company_city); ?>" size="50" maxlength="50" /></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('State'); ?>:</td>
-		<td><input type="text" class="text" name="company_state" value="<?php echo w2PformSafe(@$obj->company_state); ?>" maxlength="50" /></td>
+		<td><input type="text" class="text" name="company_state" value="<?php echo w2PformSafe($obj->company_state); ?>" maxlength="50" /></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Zip'); ?>:</td>
-		<td><input type="text" class="text" name="company_zip" value="<?php echo w2PformSafe(@$obj->company_zip); ?>" maxlength="15" /></td>
+		<td><input type="text" class="text" name="company_zip" value="<?php echo w2PformSafe($obj->company_zip); ?>" maxlength="15" /></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Country'); ?>:</td>
 		<td>
 <?php
-			echo arraySelect($countries, 'company_country', 'size="1" class="text"', @$obj->company_country ? $obj->company_country : 0);
+			echo arraySelect($countries, 'company_country', 'size="1" class="text"', $obj->company_country ? $obj->company_country : 0);
 ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right">
-			URL http://<a name="x"></a></td><td><input type="text" class="text" value="<?php echo w2PformSafe(@$obj->company_primary_url); ?>" name="company_primary_url" size="50" maxlength="255" />
+			URL http://<a name="x"></a></td><td><input type="text" class="text" value="<?php echo w2PformSafe($obj->company_primary_url); ?>" name="company_primary_url" size="50" maxlength="255" />
 			<a href="#x" onclick="testURL('CompanyURLOne')">[<?php echo $AppUI->_('test'); ?>]</a>
 		</td>
 	</tr>
@@ -164,7 +164,7 @@ function testURL( x ) {
 		<td align="right"><?php echo $AppUI->_('Company Owner'); ?>:</td>
 		<td>
 	<?php
-echo arraySelect($owners, 'company_owner', 'size="1" class="text"', @$obj->company_owner ? $obj->company_owner : $AppUI->user_id);
+echo arraySelect($owners, 'company_owner', 'size="1" class="text"', $obj->company_owner ? $obj->company_owner : $AppUI->user_id);
 ?>
 		</td>
 	</tr>
@@ -173,7 +173,7 @@ echo arraySelect($owners, 'company_owner', 'size="1" class="text"', @$obj->compa
 		<td align="right"><?php echo $AppUI->_('Type'); ?>:</td>
 		<td>
 	<?php
-echo arraySelect($types, 'company_type', 'size="1" class="text"', @$obj->company_type, true);
+echo arraySelect($types, 'company_type', 'size="1" class="text"', $obj->company_type, true);
 ?>
 		</td>
 	</tr>
@@ -181,7 +181,7 @@ echo arraySelect($types, 'company_type', 'size="1" class="text"', @$obj->company
 	<tr>
 		<td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
 		<td align="left">
-			<textarea cols="70" rows="10" class="textarea" name="company_description"><?php echo @$obj->company_description; ?></textarea>
+			<textarea cols="70" rows="10" class="textarea" name="company_description"><?php echo $obj->company_description; ?></textarea>
 		</td>
 	</tr>
 </table>

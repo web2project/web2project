@@ -23,9 +23,9 @@ $locales = $AppUI->readDirs('locales');
 ob_start();
 // read language files from module's locale directory preferrably
 if (file_exists(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en.inc')) {
-	@readfile(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en.inc');
+	readfile(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en.inc');
 } else {
-	@readfile(W2P_BASE_DIR . '/locales/en/' . $modules[$module] . '.inc');
+	readfile(W2P_BASE_DIR . '/locales/en/' . $modules[$module] . '.inc');
 }
 eval("\$english=array(" . ob_get_contents() . "\n'0');");
 ob_end_clean();
@@ -43,9 +43,9 @@ if ($lang != 'en') {
 	ob_start();
 	// read language files from module's locale directory preferrably
 	if (file_exists(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/' . $lang . '.inc')) {
-		@readfile(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/' . $lang . '.inc');
+		readfile(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/' . $lang . '.inc');
 	} else {
-		@readfile(W2P_BASE_DIR . '/locales/' . $lang . '/' . $modules[$module] . '.inc');
+		readfile(W2P_BASE_DIR . '/locales/' . $lang . '/' . $modules[$module] . '.inc');
 	}
 	eval("\$locale=array(" . ob_get_contents() . "\n'0');");
 	ob_end_clean();
@@ -95,7 +95,7 @@ foreach ($trans as $k => $langs) {
 ?>
 <tr>
 	<td><?php
-	if ($k != @$langs['english']) {
+	if ($k != $langs['english']) {
 		$k = w2PformSafe($k, true);
 		if ($lang == 'en') {
 			echo '<input type="text" name="trans[' . $index . '][abbrev]" value="' . $k . '" size="20" class="text" />';
@@ -107,8 +107,8 @@ foreach ($trans as $k => $langs) {
 	}
 ?></td>
 	<td><?php
-	//$langs['english'] = htmlspecialchars( @$langs['english'], ENT_QUOTES );
-	$langs['english'] = w2PformSafe(@$langs['english'], true);
+	//$langs['english'] = htmlspecialchars( $langs['english'], ENT_QUOTES );
+	$langs['english'] = w2PformSafe($langs['english'], true);
 	if ($lang == 'en') {
 		if (strlen($langs['english']) < 40) {
 			echo '<input type="text" name="trans[' . $index . '][english]" value="' . $langs['english'] . '" size="40" class="text" />';
@@ -123,7 +123,7 @@ foreach ($trans as $k => $langs) {
 ?></td>
 	<td><?php
 	if ($lang != 'en') {
-		$langs['lang'] = w2PformSafe(@$langs['lang'], true);
+		$langs['lang'] = w2PformSafe($langs['lang'], true);
 		if (strlen($langs['lang']) < 40) {
 			echo '<input type="text" name="trans[' . $index . '][lang]" value="' . $langs['lang'] . '" size="40" class="text" />';
 		} else {

@@ -379,7 +379,7 @@ if (is_array($projects)) {
 			// insert tasks into Gantt Chart
 			// cycle for tasks for each project
 			//$row = 1;
-			for ($i = 0, $i_cmp = count(@$gantt_arr[$p['project_id']]); $i < $i_cmp; $i++) {
+			for ($i = 0, $i_cmp = count($gantt_arr[$p['project_id']]); $i < $i_cmp; $i++) {
 				$t = $gantt_arr[$p['project_id']][$i][0];
 				/* $handle = fopen ( 'gantt3.txt', 'a+');
 				$data = print_r($t, true);

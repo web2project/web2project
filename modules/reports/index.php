@@ -93,7 +93,7 @@ if ($report_type) {
 		$desc_file = str_replace('.php', '.' . $AppUI->user_locale . '.txt', $v);
 		$desc = @file(W2P_BASE_DIR . '/modules/reports/reports/' . $desc_file);
 
-		$description = @$desc[0] ? $desc[0] : $v;
+		$description = $desc[0] ? $desc[0] : $v;
 
 		$tmp_reports[$description]['file'] = $v;
 		$tmp_reports[$description]['name'] = $description;
@@ -113,10 +113,10 @@ if ($report_type) {
 			echo "&" . $desc[2];
 		}
 		echo '">';
-		echo @$v['name'];
+		echo $v['name'];
 		echo '</a>';
 		echo "\n</td>";
-		echo "\n<td>" . (@$desc[1] ? "- $desc[1]" : '') . '</td>';
+		echo "\n<td>" . ($desc[1] ? "- $desc[1]" : '') . '</td>';
 		echo "\n</tr>";
 	}
 	echo '</table>';

@@ -109,31 +109,31 @@ function popChgPwd() {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
 			<td class="hilite" width="100%">
-				<a href="?m=companies&a=view&company_id=<?php echo @$user['contact_company']; ?>"><?php echo @$user['company_name']; ?></a>
+				<a href="?m=companies&a=view&company_id=<?php echo $user['contact_company']; ?>"><?php echo $user['company_name']; ?></a>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
 			<td class="hilite" width="100%">
-				<a href="?m=departments&a=view&dept_id=<?php echo @$user['contact_department']; ?>"><?php echo $user['dept_name']; ?></a>
+				<a href="?m=departments&a=view&dept_id=<?php echo $user['contact_department']; ?>"><?php echo $user['dept_name']; ?></a>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo @$user['contact_phone']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user['contact_phone']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Home Phone'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo @$user['contact_phone2']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user['contact_phone2']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Mobile'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo @$user['contact_mobile']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user['contact_mobile']; ?></td>
 		</tr>
 		<tr valign="top">
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td class="hilite" width="100%"><?php
-	echo @$user['contact_address1'] . (($user['contact_address2']) ? '<br />' . $user['contact_address2'] : '') . '<br />' . $user['contact_city'] . '&nbsp;&nbsp;' . $user['contact_state'] . '&nbsp;&nbsp;' . $user['contact_zip'] . '<br />' . ($countries[$user['contact_country']] ? $countries[$user['contact_country']] : $user['contact_country']);
+	echo $user['contact_address1'] . (($user['contact_address2']) ? '<br />' . $user['contact_address2'] : '') . '<br />' . $user['contact_city'] . '&nbsp;&nbsp;' . $user['contact_state'] . '&nbsp;&nbsp;' . $user['contact_zip'] . '<br />' . ($countries[$user['contact_country']] ? $countries[$user['contact_country']] : $user['contact_country']);
 ?></td>
 		</tr>
 		</table>
@@ -143,39 +143,39 @@ function popChgPwd() {
 		<table width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Birthday'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo @$user['contact_birthday']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user['contact_birthday']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">Jabber:</td>
-			<td class="hilite" width="100%"><?php echo @$user['contact_jabber']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user['contact_jabber']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">ICQ:</td>
-			<td class="hilite" width="100%"><?php echo @$user['contact_icq']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user['contact_icq']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">AOL Nick:</td>
-			<td class="hilite" width="100%"><a href="aim:<?php echo @$user['contact_aol']; ?>"><?php echo @$user['contact_aol']; ?></a></td>
+			<td class="hilite" width="100%"><a href="aim:<?php echo $user['contact_aol']; ?>"><?php echo $user['contact_aol']; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">MSN:</td>
-			<td class="hilite" width="100%"><?php echo @$user['contact_msn']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user['contact_msn']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">Yahoo:</td>
-			<td class="hilite" width="100%"><a href="ymsgr:sendIM?<?php echo @$user['contact_yahoo']; ?>"><?php echo @$user['contact_yahoo']; ?></a></td>
+			<td class="hilite" width="100%"><a href="ymsgr:sendIM?<?php echo $user['contact_yahoo']; ?>"><?php echo $user['contact_yahoo']; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">Skype:</td>
-			<td class="hilite" width="100%"><a href="skype:<?php echo @$user['contact_skype']; ?>"><?php echo @$user['contact_skype']; ?></a></td>
+			<td class="hilite" width="100%"><a href="skype:<?php echo $user['contact_skype']; ?>"><?php echo $user['contact_skype']; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">Google:</td>
-			<td class="hilite" width="100%"><a href="google:<?php echo @$user['contact_google']; ?>"><?php echo @$user['contact_google']; ?></a></td>
+			<td class="hilite" width="100%"><a href="google:<?php echo $user['contact_google']; ?>"><?php echo $user['contact_google']; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo '<a href="mailto:' . @$user['contact_email'] . '">' . @$user['contact_email'] . '</a>'; ?></td>
+			<td class="hilite" width="100%"><?php echo '<a href="mailto:' . $user['contact_email'] . '">' . $user['contact_email'] . '</a>'; ?></td>
 		</tr>
 		<tr>
 			<td colspan="2"><strong><?php echo $AppUI->_('Signature'); ?>:</strong></td>

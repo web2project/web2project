@@ -34,7 +34,7 @@ if ($can_edit_time_information) {
 								<br />
 								<?php echo arraySelect($task_access, 'task_access', 'class="text"', intval($obj->task_access), true); ?>
 								<br /><?php echo $AppUI->_('Web Address'); ?>
-								<br /><input type="text" class="text" name="task_related_url" value="<?php echo @$obj->task_related_url; ?>" size="40" maxlength="255" />
+								<br /><input type="text" class="text" name="task_related_url" value="<?php echo $obj->task_related_url; ?>" size="40" maxlength="255" />
 
 							</td>
 							<td valign='top'>
@@ -70,7 +70,7 @@ if ($department_selection_list != "") {
 					<?php echo $task_parent_options; ?>
 				</select>
 			</td>
-			<td><?php echo $w2Pconfig['currency_symbol'] ?><input type="text" class="text" name="task_target_budget" value="<?php echo @$obj->task_target_budget; ?>" size="10" maxlength="10" /></td>
+			<td><?php echo $w2Pconfig['currency_symbol'] ?><input type="text" class="text" name="task_target_budget" value="<?php echo $obj->task_target_budget; ?>" size="10" maxlength="10" /></td>
 		</tr>
 	<?php if ($task_id > 0) { ?>
 		<tr>
@@ -90,7 +90,7 @@ if ($department_selection_list != "") {
 		<table><tr><td align="left">
 		<?php echo $AppUI->_('Description'); ?>:
 		<br />
-		<textarea name="task_description" class="textarea" cols="60" rows="10"><?php echo @$obj->task_description; ?></textarea>
+		<textarea name="task_description" class="textarea" cols="60" rows="10"><?php echo $obj->task_description; ?></textarea>
 		</td></tr></table><br />
 		<?php
 require_once ($AppUI->getSystemClass('CustomFields'));

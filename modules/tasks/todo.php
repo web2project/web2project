@@ -177,7 +177,7 @@ $priorities = array('1' => 'high', '0' => 'normal', '-1' => 'low');
 global $durnTypes;
 $durnTypes = w2PgetSysVal('TaskDurationType');
 
-if (!@$min_view) {
+if (!$min_view) {
 	$titleBlock = new CTitleBlock('My Tasks To Do', 'applet-48.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=tasks', 'tasks list');
 	$titleBlock->show();

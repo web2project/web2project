@@ -17,7 +17,7 @@ $style = (($obj->project_percent_complete < 99.99 && $today > $end_date) && !emp
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Project Name'); ?>:&nbsp;</strong></td>
-			<td class="hilite"><?php echo htmlspecialchars(@$obj->project_name, ENT_QUOTES); ?></td>
+			<td class="hilite"><?php echo htmlspecialchars($obj->project_name, ENT_QUOTES); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
@@ -25,7 +25,7 @@ $style = (($obj->project_percent_complete < 99.99 && $today > $end_date) && !emp
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
-			<td class="hilite"><?php echo htmlspecialchars(@$obj->project_short_name, ENT_QUOTES); ?></td>
+			<td class="hilite"><?php echo htmlspecialchars($obj->project_short_name, ENT_QUOTES); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
@@ -336,7 +336,7 @@ $userAlloc = $tempoTask->getAllocation('user_id');
 reset($projects);
 
 foreach ($projects as $k => $p) {
-	$tnums = count(@$p['tasks']);
+	$tnums = count($p['tasks']);
 	// don't show project if it has no tasks
 	// patch 2.12.04, show project if it is the only project in
 	if ($tnums > 0 || $project_id == $p['project_id']) {

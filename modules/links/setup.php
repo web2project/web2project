@@ -27,7 +27,7 @@ $config['permissions_item_table'] = 'links';
 $config['permissions_item_field'] = 'link_id';
 $config['permissions_item_label'] = 'link_name';
 
-if (@$a == 'setup') {
+if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 

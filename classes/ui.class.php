@@ -310,7 +310,7 @@ class CAppUI {
 		$LANGUAGES = $this->loadLanguages();
 
 		if (!$loc) {
-			$loc = @$this->user_prefs['LOCALE'] ? $this->user_prefs['LOCALE'] : w2PgetConfig('host_locale');
+			$loc = $this->user_prefs['LOCALE'] ? $this->user_prefs['LOCALE'] : w2PgetConfig('host_locale');
 		}
 
 		if (isset($LANGUAGES[$loc]))
@@ -393,7 +393,7 @@ class CAppUI {
 					include_once W2P_BASE_DIR . '/locales/' . $lang . '/lang.php';
 				}
 			}
-			@$_SESSION['LANGUAGES'] = &$LANGUAGES;
+			$_SESSION['LANGUAGES'] = &$LANGUAGES;
 		}
 		return $LANGUAGES;
 	}
@@ -429,13 +429,13 @@ class CAppUI {
 		if (empty($str)) {
 			return '';
 		}
-		$x = @$GLOBALS['translate'][$str];
+		$x = $GLOBALS['translate'][$str];
 
 		if ($x) {
 			$str = $x;
 		} else
 			if (w2PgetConfig('locale_warn')) {
-				if ($this->base_locale != $this->user_locale || ($this->base_locale == $this->user_locale && !in_array($str, @$GLOBALS['translate']))) {
+				if ($this->base_locale != $this->user_locale || ($this->base_locale == $this->user_locale && !in_array($str, $GLOBALS['translate']))) {
 					$str .= w2PgetConfig('locale_alert');
 				}
 			}
@@ -486,7 +486,7 @@ class CAppUI {
 	 * @param string
 	 */
 	function setWarning($state = true) {
-		$temp = @$this->cfg['locale_warn'];
+		$temp = $this->cfg['locale_warn'];
 		$this->cfg['locale_warn'] = $state;
 		return $temp;
 	}
@@ -500,10 +500,10 @@ class CAppUI {
 	 */
 	function savePlace($query = '') {
 		if (!$query) {
-			$query = @$_SERVER['QUERY_STRING'];
+			$query = $_SERVER['QUERY_STRING'];
 		}
-		if ($query != @$this->state['SAVEDPLACE']) {
-			$this->state['SAVEDPLACE-1'] = @$this->state['SAVEDPLACE'];
+		if ($query != $this->state['SAVEDPLACE']) {
+			$this->state['SAVEDPLACE-1'] = $this->state['SAVEDPLACE'];
 			$this->state['SAVEDPLACE'] = $query;
 		}
 	}
@@ -518,7 +518,7 @@ class CAppUI {
 	 * @return string
 	 */
 	function getPlace() {
-		return @$this->state['SAVEDPLACE'];
+		return $this->state['SAVEDPLACE'];
 	}
 	/**
 	 * Redirects the browser to a new page.
@@ -682,7 +682,7 @@ class CAppUI {
 		require_once W2P_BASE_DIR . '/classes/authenticator.class.php';
 
 		$auth_method = w2PgetConfig('auth_method', 'sql');
-		if (@$_POST['login'] != 'login' && @$_POST['login'] != $this->_('login', UI_OUTPUT_RAW) && $_REQUEST['login'] != $auth_method) {
+		if ($_POST['login'] != 'login' && $_POST['login'] != $this->_('login', UI_OUTPUT_RAW) && $_REQUEST['login'] != $auth_method) {
 			die('You have chosen to log in using an unsupported or disabled login method');
 		}
 		$auth = &getauth($auth_method);
@@ -786,7 +786,7 @@ class CAppUI {
 	 * @param string Name of the preference
 	 */
 	function getPref($name) {
-		return @$this->user_prefs[$name];
+		return $this->user_prefs[$name];
 	}
 	/**
 	 * Sets the value of a user preference specified by name
@@ -1027,7 +1027,7 @@ class CTabBox_core {
 
 	function isTabbed() {
 		global $AppUI;
-		if ($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) {
+		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
 			return false;
 		}
 		return true;
@@ -1046,7 +1046,7 @@ class CTabBox_core {
 		reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
-		if (@$AppUI->getPref('TABVIEW') == 0) {
+		if ($AppUI->getPref('TABVIEW') == 0) {
 			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
 			$s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=0"><span>' . $AppUI->_('tabbed') . '</span></a> ';
 			$s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=-1"><span>' . $AppUI->_('flat') . '</span></a>';
@@ -1060,7 +1060,7 @@ class CTabBox_core {
 			}
 		}
 
-		if ($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) {
+		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
@@ -1198,7 +1198,7 @@ class CInfoTabBox extends CTabBox_core {
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
 		}
 
-		if ($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) {
+		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {

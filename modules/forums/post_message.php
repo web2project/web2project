@@ -51,9 +51,9 @@ if ($message_parent != -1) {
 	$last_message_info = $q->fetchRow();
 	if (!$last_message_info) { // if it's first response, use original message
 		$last_message_info = &$message_info;
-		$last_message_info['message_body'] = wordwrap(@$last_message_info['message_body'], 50, "\n> ");
+		$last_message_info['message_body'] = wordwrap($last_message_info['message_body'], 50, "\n> ");
 	} else {
-		$last_message_info['message_body'] = str_replace("\n", "\n> ", @$last_message_info['message_body']);
+		$last_message_info['message_body'] = str_replace("\n", "\n> ", $last_message_info['message_body']);
 	}
 	$q->clear();
 }

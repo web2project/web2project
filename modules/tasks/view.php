@@ -161,13 +161,13 @@ function delIt() {
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
 			<td style="background-color:#<?php echo $obj->project_color_identifier; ?>">
 				<font color="<?php echo bestColor($obj->project_color_identifier); ?>">
-					<?php echo @$obj->project_name; ?>
+					<?php echo $obj->project_name; ?>
 				</font>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task'); ?>:</td>
-			<td class="hilite"><strong><?php echo @$obj->task_name; ?></strong></td>
+			<td class="hilite"><strong><?php echo $obj->task_name; ?></strong></td>
 		</tr>
 		<?php if ($obj->task_parent != $obj->task_id) {
 	$obj_parent = new CTask();
@@ -175,12 +175,12 @@ function delIt() {
 ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Parent'); ?>:</td>
-			<td class="hilite"><a href="<?php echo "./index.php?m=tasks&a=view&task_id=" . @$obj_parent->task_id; ?>"><?php echo @$obj_parent->task_name; ?></a></td>
+			<td class="hilite"><a href="<?php echo "./index.php?m=tasks&a=view&task_id=" . $obj_parent->task_id; ?>"><?php echo $obj_parent->task_name; ?></a></td>
 		</tr>
 		<?php } ?>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-			<td class="hilite"> <?php echo @$obj->username; ?></td>
+			<td class="hilite"> <?php echo $obj->username; ?></td>
 		</tr>				<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
 			<td class="hilite">
@@ -192,7 +192,7 @@ echo $AppUI->_($task_priotities[$obj->task_priority]);
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Web Address'); ?>:</td>
-			<td class="hilite" width="300"><a href="<?php echo @$obj->task_related_url; ?>" target="task<?php echo $task_id; ?>"><?php echo @$obj->task_related_url; ?></a></td>
+			<td class="hilite" width="300"><a href="<?php echo $obj->task_related_url; ?>" target="task<?php echo $task_id; ?>"><?php echo $obj->task_related_url; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Milestone'); ?>:</td>
@@ -205,11 +205,11 @@ echo $AppUI->_($task_priotities[$obj->task_priority]);
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-			<td class="hilite" width="300"><?php echo @$obj->task_percent_complete; ?>%</td>
+			<td class="hilite" width="300"><?php echo $obj->task_percent_complete; ?>%</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
-			<td class="hilite" width="300"><?php echo (@$obj->task_hours_worked + @rtrim($obj->log_hours_worked, "0")); ?></td>
+			<td class="hilite" width="300"><?php echo ($obj->task_hours_worked + @rtrim($obj->log_hours_worked, '0')); ?></td>
 		</tr>
 		<tr>
 			<td nowrap="nowrap" colspan="2"><strong><?php echo $AppUI->_('Dates and Targets'); ?></strong></td>

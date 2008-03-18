@@ -127,9 +127,9 @@ foreach ($projects as $row_proj) {
 			$row = $projects[$project['project_id']];
 			//            	if ($show_all_projects || ($row_st->project_status == $project_status_filter)) {
 			$none = false;
-			$start_date = intval(@$row['project_start_date']) ? new CDate($row['project_start_date']) : null;
-			$end_date = intval(@$row['project_end_date']) ? new CDate($row['project_end_date']) : null;
-			// $actual_end_date = intval( @$row['project_actual_end_date'] ) ? new CDate( $row['project_actual_end_date'] ) : null;
+			$start_date = intval($row['project_start_date']) ? new CDate($row['project_start_date']) : null;
+			$end_date = intval($row['project_end_date']) ? new CDate($row['project_end_date']) : null;
+			// $actual_end_date = intval( $row['project_actual_end_date'] ) ? new CDate( $row['project_actual_end_date'] ) : null;
 			// $style = (( $actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 			if ($level) { 

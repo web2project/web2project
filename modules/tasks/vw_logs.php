@@ -80,7 +80,7 @@ foreach ($logs as $row) {
 			$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=$task_id&tab=1";
 
 		}
-		$s .= '&task_log_id=' . @$row['task_log_id'] . "#log\">" . "\n\t\t\t" . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
+		$s .= '&task_log_id=' . $row['task_log_id'] . "#log\">" . "\n\t\t\t" . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
 	}
 	$s .= "\n\t</td>";
 	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : '-') . '</td>';
@@ -94,15 +94,15 @@ foreach ($logs as $row) {
 		}
 	}
 	$s .= '<td align="center" valign="middle">' . $reference_image . '</td>';
-	$s .= '<td width="30%" style="' . $style . '">' . @$row['task_log_name'] . '</td>';
-	$s .= !empty($row['task_log_related_url']) ? '<td><a href="' . @$row['task_log_related_url'] . '" title="' . @$row['task_log_related_url'] . '">' . $AppUI->_('URL') . '</a></td>' : '<td></td>';
+	$s .= '<td width="30%" style="' . $style . '">' . $row['task_log_name'] . '</td>';
+	$s .= !empty($row['task_log_related_url']) ? '<td><a href="' . $row['task_log_related_url'] . '" title="' . $row['task_log_related_url'] . '">' . $AppUI->_('URL') . '</a></td>' : '<td></td>';
 	$s .= '<td width="100">' . $row['real_name'] . '</td>';
 	$s .= '<td width="100" align="right">' . sprintf('%.2f', $row['task_log_hours']) . '<br />(';
 	$minutes = (int)(($row['task_log_hours'] - ((int)$row['task_log_hours'])) * 60);
 	$minutes = ((strlen($minutes) == 1) ? ('0' . $minutes) : $minutes);
 	$s .= (int)$row['task_log_hours'] . ':' . $minutes . ')</td>';
 	$s .= '<td width="100">' . $row['task_log_costcode'] . '</td>';
-	$s .= '<td>' . '<a name="tasklog' . @$row['task_log_id'] . '"></a>';
+	$s .= '<td>' . '<a name="tasklog' . $row['task_log_id'] . '"></a>';
 
 	// dylan_cuthbert: auto-transation system in-progress, leave these lines
 	$transbrk = "\n[translation]\n";

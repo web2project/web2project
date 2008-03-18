@@ -257,7 +257,7 @@ var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours'))
 <tr>
 	<td colspan="2" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>" >
 		<font color="<?php echo bestColor($project->project_color_identifier); ?>">
-			<strong><?php echo $AppUI->_('Project'); ?>: <?php echo @$project->project_name; ?></strong>
+			<strong><?php echo $AppUI->_('Project'); ?>: <?php echo $project->project_name; ?></strong>
 		</font>
 	</td>
 </tr>

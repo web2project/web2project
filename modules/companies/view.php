@@ -114,34 +114,34 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td class="hilite"><?php echo @$obj->company_phone1; ?></td>
+			<td class="hilite"><?php echo $obj->company_phone1; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>2:</td>
-			<td class="hilite"><?php echo @$obj->company_phone2; ?></td>
+			<td class="hilite"><?php echo $obj->company_phone2; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-			<td class="hilite"><?php echo @$obj->company_fax; ?></td>
+			<td class="hilite"><?php echo $obj->company_fax; ?></td>
 		</tr>
 		<tr valign="top">
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td class="hilite">
-			<a href="http://maps.google.com/maps?q=<?php echo @$obj->company_address1; ?>+<?php echo @$obj->company_address2; ?>+<?php echo @$obj->company_city; ?>+<?php echo @$obj->company_state; ?>+<?php echo @$obj->company_zip; ?>+<?php echo @$obj->company_country; ?>" target="_blank">
+			<a href="http://maps.google.com/maps?q=<?php echo $obj->company_address1; ?>+<?php echo $obj->company_address2; ?>+<?php echo $obj->company_city; ?>+<?php echo $obj->company_state; ?>+<?php echo $obj->company_zip; ?>+<?php echo $obj->company_country; ?>" target="_blank">
 			<img align="right" border="0" src="<?php echo w2PfindImage('googlemaps.gif'); ?>" width="55" height="22" alt="Find It on Google" /></a>
 			<?php
-				echo @$obj->company_address1 . (($obj->company_address2) ? '<br />' . $obj->company_address2 : '') . (($obj->company_city) ? '<br />' . $obj->company_city : '') . (($obj->company_state) ? '<br />' . $obj->company_state : '') . (($obj->company_zip) ? '<br />' . $obj->company_zip : '') . (($obj->company_country) ? '<br />' . $countries[$obj->company_country] : '');?>
+				echo $obj->company_address1 . (($obj->company_address2) ? '<br />' . $obj->company_address2 : '') . (($obj->company_city) ? '<br />' . $obj->company_city : '') . (($obj->company_state) ? '<br />' . $obj->company_state : '') . (($obj->company_zip) ? '<br />' . $obj->company_zip : '') . (($obj->company_country) ? '<br />' . $countries[$obj->company_country] : '');?>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
 			<td class="hilite">
-				<a href="http://<?php echo @$obj->company_primary_url; ?>" target="Company"><?php echo @$obj->company_primary_url; ?></a>
+				<a href="http://<?php echo $obj->company_primary_url; ?>" target="Company"><?php echo $obj->company_primary_url; ?></a>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-			<td class="hilite"><?php echo $AppUI->_($types[@$obj->company_type]); ?></td>
+			<td class="hilite"><?php echo $AppUI->_($types[$obj->company_type]); ?></td>
 		</tr>
 		</table>
 

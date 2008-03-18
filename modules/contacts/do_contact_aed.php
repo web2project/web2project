@@ -30,7 +30,7 @@ if ($del) {
 		$AppUI->redirect("m=contacts");
 	}
 } else {
-	$isNotNew = @$_POST['contact_id'];
+	$isNotNew = $_POST['contact_id'];
 
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);

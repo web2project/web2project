@@ -16,8 +16,8 @@ include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
 
 $showLabels = w2PgetParam($_REQUEST, 'showLabels', false);
 $sortByName = w2PgetParam($_REQUEST, 'sortByName', false);
-$project_id = defVal(@$_REQUEST['project_id'], 0);
-$f = defVal(@$_REQUEST['f'], 0);
+$project_id = defVal($_REQUEST['project_id'], 0);
+$f = defVal($_REQUEST['f'], 0);
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -45,9 +45,9 @@ $q->clear();
 ** so we have to tweak a little bit,
 ** also we do not have a special project available
 */
-$caller = defVal(@$_REQUEST['caller'], null);
+$caller = defVal($_REQUEST['caller'], null);
 if ($caller == 'todo') {
-	$user_id = defVal(@w2PgetParam($_REQUEST, 'user_id', null), 0);
+	$user_id = defVal(w2PgetParam($_REQUEST, 'user_id', null), 0);
 
 	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . w2PgetUsername($user_id);
 	$projects[$project_id]['project_color_identifier'] = 'ff6000';
@@ -224,7 +224,7 @@ $graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
 //$graph->scale->day->SetStyle(DAYSTYLE_SHORTDATE2);
 
 $pLocale = setlocale(LC_TIME, 0); // get current locale for LC_TIME
-$res = @setlocale(LC_TIME, $AppUI->user_lang[2]);
+$res = setlocale(LC_TIME, $AppUI->user_lang[2]);
 if ($res) { // Setting locale doesn't fail
 	$graph->scale->SetDateLocale($AppUI->user_lang[2]);
 }
@@ -274,7 +274,7 @@ if ($start_date && $end_date) {
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
 	$d_end = new CDate();
-	for ($i = 0, $i_cmp = count(@$gantt_arr); $i < $i_cmp; $i++) {
+	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$a = $gantt_arr[$i][0];
 		$start = substr($a['task_start_date'], 0, 10);
 		$end = substr($a['task_end_date'], 0, 10);
@@ -361,7 +361,7 @@ if ($hide_task_groups) {
 }
 
 $row = 0;
-for ($i = 0, $i_cmp = count(@$gantt_arr); $i < $i_cmp; $i++) {
+for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
 	$a = $gantt_arr[$i][0];
 	$level = $gantt_arr[$i][1];

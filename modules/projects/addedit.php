@@ -314,7 +314,7 @@ if ($department_selection_list != '') {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
 			<td>
-				<input type="Text" name="project_target_budget" value="<?php echo @$row->project_target_budget; ?>" maxlength="10" class="text" />
+				<input type="Text" name="project_target_budget" value="<?php echo $row->project_target_budget; ?>" maxlength="10" class="text" />
 			</td>
 		</tr>
 		<tr>
@@ -335,7 +335,7 @@ if ($department_selection_list != '') {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
 			<td>
-				<input type="text" name="project_actual_budget" value="<?php echo @$row->project_actual_budget; ?>" size="10" maxlength="10" class="text"/>
+				<input type="text" name="project_actual_budget" value="<?php echo $row->project_actual_budget; ?>" size="10" maxlength="10" class="text"/>
 			</td>
 		</tr>
 		<tr>
@@ -344,13 +344,13 @@ if ($department_selection_list != '') {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?></td>
 			<td colspan="2">
-				<input type="text" name="project_url" value='<?php echo @$row->project_url; ?>' size="40" maxlength="255" class="text" />
+				<input type="text" name="project_url" value='<?php echo $row->project_url; ?>' size="40" maxlength="255" class="text" />
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?></td>
 			<td colspan="2">
-				<input type="Text" name="project_demo_url" value='<?php echo @$row->project_demo_url; ?>' size="40" maxlength="255" class="text" />
+				<input type="Text" name="project_demo_url" value='<?php echo $row->project_demo_url; ?>' size="40" maxlength="255" class="text" />
 			</td>
 		</tr>
 		<tr>
@@ -375,19 +375,19 @@ $custom_fields->printHTML();
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?></td>
 			<td colspan="3">
-				<input type="text" name="project_short_name" value="<?php echo w2PformSafe(@$row->project_short_name); ?>" size="10" maxlength="10" class="text" /> *
+				<input type="text" name="project_short_name" value="<?php echo w2PformSafe($row->project_short_name); ?>" size="10" maxlength="10" class="text" /> *
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier'); ?></td>
 			<td nowrap="nowrap">
-				<input type="text" name="project_color_identifier" value="<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
+				<input type="text" name="project_color_identifier" value="<?php echo ($row->project_color_identifier) ? $row->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
 			</td>
 			<td nowrap="nowrap" align="right">
 				<a href="#" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color'); ?></a>
 			</td>
 			<td nowrap="nowrap">
-				<a href="#" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo (@$row->project_color_identifier) ? @$row->project_color_identifier : 'FFFFFF'; ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
+				<a href="#" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo ($row->project_color_identifier) ? $row->project_color_identifier : 'FFFFFF'; ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
 			</td>
 		</tr>
 		<tr>
@@ -409,7 +409,7 @@ $custom_fields->printHTML();
 						<?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $row->project_status, true); ?>
 					</td>
 					<td>
-						<strong><?php echo sprintf("%.1f%%", @$row->project_percent_complete); ?></strong>
+						<strong><?php echo sprintf("%.1f%%", $row->project_percent_complete); ?></strong>
 					</td>
 					<td>
 						<input type="checkbox" value="1" name="project_active" <?php echo $row->project_active || $project_id == 0 ? 'checked="checked"' : ''; ?> />
@@ -429,7 +429,7 @@ $custom_fields->printHTML();
 		<tr>
 			<td colspan="4">
 				<?php echo $AppUI->_('Description'); ?><br />
-				<textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe(@$row->project_description); ?></textarea>
+				<textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe($row->project_description); ?></textarea>
 			</td>
 		</tr>
 <tr valign="middle">

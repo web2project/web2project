@@ -15,7 +15,7 @@ $config['mod_ui_icon'] = 'projectdesigner.jpg';
 $config['mod_description'] = 'A module to design projects';
 $config['mod_config'] = true;
 
-if (@$a == 'setup') {
+if ($a == 'setup') {
 	echo dPshowModuleConfig($config);
 }
 

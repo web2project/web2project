@@ -114,60 +114,60 @@ function submitIt() {
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department Name'); ?>:</td>
 	<td>
-		<input type="text" class="text" name="dept_name" value="<?php echo @$drow['dept_name']; ?>" size="50" maxlength="255" />
+		<input type="text" class="text" name="dept_name" value="<?php echo $drow['dept_name']; ?>" size="50" maxlength="255" />
 		<span class="smallNorm">(<?php echo $AppUI->_('required'); ?>)</span>
 	</td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
 	<td>
-		<input type="text" class="text" name="dept_email" value="<?php echo @$drow['dept_email']; ?>" size="50" maxlength="255" />
+		<input type="text" class="text" name="dept_email" value="<?php echo $drow['dept_email']; ?>" size="50" maxlength="255" />
 	</td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
 	<td>
-		<input type="text" class="text" name="dept_phone" value="<?php echo @$drow['dept_phone']; ?>" maxlength="30" />
+		<input type="text" class="text" name="dept_phone" value="<?php echo $drow['dept_phone']; ?>" maxlength="30" />
 	</td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
 	<td>
-		<input type="text" class="text" name="dept_fax" value="<?php echo @$drow['dept_fax']; ?>" maxlength="30" />
+		<input type="text" class="text" name="dept_fax" value="<?php echo $drow['dept_fax']; ?>" maxlength="30" />
 	</td>
 </tr>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Address'); ?>1:</td>
-	<td><input type="text" class="text" name="dept_address1" value="<?php echo @$drow['dept_address1']; ?>" size="50" maxlength="255" /></td>
+	<td><input type="text" class="text" name="dept_address1" value="<?php echo $drow['dept_address1']; ?>" size="50" maxlength="255" /></td>
 </tr>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Address'); ?>2:</td>
-	<td><input type="text" class="text" name="dept_address2" value="<?php echo @$drow['dept_address2']; ?>" size="50" maxlength="255" /></td>
+	<td><input type="text" class="text" name="dept_address2" value="<?php echo $drow['dept_address2']; ?>" size="50" maxlength="255" /></td>
 </tr>
 <tr>
 	<td align="right"><?php echo $AppUI->_('City'); ?>:</td>
-	<td><input type="text" class="text" name="dept_city" value="<?php echo @$drow['dept_city']; ?>" size="50" maxlength="50" /></td>
+	<td><input type="text" class="text" name="dept_city" value="<?php echo $drow['dept_city']; ?>" size="50" maxlength="50" /></td>
 </tr>
 <tr>
 	<td align="right"><?php echo $AppUI->_('State'); ?>:</td>
-	<td><input type="text" class="text" name="dept_state" value="<?php echo @$drow['dept_state']; ?>" maxlength="50" /></td>
+	<td><input type="text" class="text" name="dept_state" value="<?php echo $drow['dept_state']; ?>" maxlength="50" /></td>
 </tr>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Zip'); ?>:</td>
-	<td><input type="text" class="text" name="dept_zip" value="<?php echo @$drow['dept_zip']; ?>" maxlength="15" /></td>
+	<td><input type="text" class="text" name="dept_zip" value="<?php echo $drow['dept_zip']; ?>" maxlength="15" /></td>
 </tr>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Country'); ?>:</td>
 	<td>
 <?php
-		echo arraySelect($countries, 'dept_country', 'size="1" class="text"', @$drow['dept_country'] ? $drow['dept_country'] : 0);
+		echo arraySelect($countries, 'dept_country', 'size="1" class="text"', $drow['dept_country'] ? $drow['dept_country'] : 0);
 ?>
 	</td>
 </tr>
 <tr>
 	<td align="right"><?php echo $AppUI->_('URL'); ?><a name="x"></a></td>
 	<td>
-		<input type="text" class="text" value="<?php echo @$drow['dept_url']; ?>" name="dept_url" size="50" maxlength="255" />
+		<input type="text" class="text" value="<?php echo $drow['dept_url']; ?>" name="dept_url" size="50" maxlength="255" />
 		<a href="#x" onclick="testURL('dept_url')">[<?php echo $AppUI->_('test'); ?>]</a>
 	</td>
 </tr>
@@ -179,7 +179,7 @@ function submitIt() {
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department Parent'); ?>:</td>
 	<td>
 <?php
-		echo arraySelectTree($depts, 'dept_parent', 'class=text size=1', @$drow['dept_parent']);
+		echo arraySelectTree($depts, 'dept_parent', 'class=text size=1', $drow['dept_parent']);
 ?>
 	</td>
 </tr>
@@ -206,7 +206,7 @@ function submitIt() {
 <tr>
 	<td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
 	<td align="left">
-		<textarea cols="70" rows="10" class="textarea" name="dept_desc"><?php echo @$drow['dept_desc']; ?></textarea>
+		<textarea cols="70" rows="10" class="textarea" name="dept_desc"><?php echo $drow['dept_desc']; ?></textarea>
 	</td>
 </tr>
 

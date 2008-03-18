@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 if (!($user_id = w2PgetParam($_REQUEST, 'user_id', 0))) {
-	$user_id = @$AppUI->user_id;
+	$user_id = $AppUI->user_id;
 }
 
 // check for a non-zero user id

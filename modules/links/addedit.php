@@ -61,7 +61,7 @@ if ($obj->link_project) {
 }
 if ($obj->link_task) {
 	$link_task = $obj->link_task;
-	$task_name = @$obj->task_name;
+	$task_name = $obj->task_name;
 } elseif ($link_task) {
 	$q->clear();
 	$q->addQuery('task_name');

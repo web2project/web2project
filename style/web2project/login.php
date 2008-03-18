@@ -8,11 +8,11 @@ if (!defined('W2P_BASE_DIR')) {
 	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title><?php echo @$w2Pconfig['page_title']; ?></title>
+	<title><?php echo $w2Pconfig['page_title']; ?></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
-       	<title><?php echo @$w2Pconfig['company_name']; ?> :: web2Project Login</title>
+       	<title><?php echo $w2Pconfig['company_name']; ?> :: web2Project Login</title>
 	<meta http-equiv="Pragma" content="no-cache" />
-	<meta name="Version" content="<?php echo @$AppUI->getVersion(); ?>" />
+	<meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
 	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" />
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
@@ -51,7 +51,7 @@ echo styleRenderBoxTop();
 ?>
 </td></tr>
 <tr>
-	<th style="padding:6px" colspan="2"><em><?php echo @$w2Pconfig['company_name']; ?></em></th>
+	<th style="padding:6px" colspan="2"><em><?php echo $w2Pconfig['company_name']; ?></em></th>
 </tr>
 <tr>
 	<td style="padding:6px" align="right" nowrap="nowrap"><?php echo $AppUI->_('Username'); ?>:</td>
@@ -79,9 +79,9 @@ echo styleRenderBoxBottom();
 ?>
 </td></tr>
 </table>
-<?php if (@$AppUI->getVersion()) { ?>
+<?php if ($AppUI->getVersion()) { ?>
 <div align="center">
-	<span style="font-size:7pt">Version <?php echo @$AppUI->getVersion(); ?></span>
+	<span style="font-size:7pt">Version <?php echo $AppUI->getVersion(); ?></span>
 </div>
 <?php } ?>
 </form>

@@ -40,7 +40,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 	$did_selected = 0;
 	foreach ($arr as $k => $v) {
 		if ($translate) {
-			$v = @$AppUI->_($v);
+			$v = $AppUI->_($v);
 			// This is supplied to allow some Hungarian characters to
 			// be translated correctly. There are probably others.
 			// As such a more general approach probably based upon an
@@ -69,7 +69,7 @@ function arraySelectTree(&$arr, $select_name, $select_attribs, $selected, $trans
 	foreach ($arr as $k => $v) {
 		$id = $v[0];
 		$pt = $v[2];
-		$list = @$children[$pt] ? $children[$pt] : array();
+		$list = $children[$pt] ? $children[$pt] : array();
 		array_push($list, $v);
 		$children[$pt] = $list;
 	}
@@ -78,7 +78,7 @@ function arraySelectTree(&$arr, $select_name, $select_attribs, $selected, $trans
 }
 
 function tree_recurse($id, $indent, $list, $children) {
-	if (@$children[$id]) {
+	if ($children[$id]) {
 		foreach ($children[$id] as $v) {
 			$id = $v[0];
 			$txt = $v[1];

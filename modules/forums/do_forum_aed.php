@@ -26,7 +26,7 @@ if ($del) {
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		$isNotNew = @$_POST['forum_id'];
+		$isNotNew = $_POST['forum_id'];
 		$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);
 	}
 	$AppUI->redirect();

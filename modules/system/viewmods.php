@@ -82,9 +82,9 @@ foreach ($modules as $row) {
 
 	// check for upgrades
 	$ok = file_exists(W2P_BASE_DIR . '/modules/' . $row['mod_directory'] . '/setup.php');
-	if ($ok)
+	if ($ok) {
 		include_once (W2P_BASE_DIR . '/modules/' . $row['mod_directory'] . '/setup.php');
-	//	$ok = @include_once( W2P_BASE_DIR.'/modules/'.$row['mod_directory'].'/setup.php' );
+	}
 	if ($ok) {
 		if ($config['mod_version'] != $row['mod_version'] && $canEdit) {
 			$s .= ' | <a href="' . $query_string . '&cmd=upgrade" onclick="return window.confirm(' . "'" . $AppUI->_('Are you sure?') . "'" . ');" >' . $AppUI->_('upgrade') . '</a>';
