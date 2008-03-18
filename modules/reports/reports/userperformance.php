@@ -111,12 +111,12 @@ if ($do_report) {
 	$q->addWhere('t.task_milestone = 0');
 
 	if ($project_id != 0) {
-		$q->addWhere('t.task_project="' . $project_id . '"');
+		$q->addWhere('t.task_project = \'' . $project_id . '\'');
 	}
 
 	if (!$log_all) {
-		$q->addWhere('t.task_start_date >= "' . $start_date->format(FMT_DATETIME_MYSQL) . '"');
-		$q->addWhere('t.task_start_date <= "' . $end_date->format(FMT_DATETIME_MYSQL) . '"');
+		$q->addWhere('t.task_start_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
+		$q->addWhere('t.task_start_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
 	}
 	$q->addGroup('t.task_id');
 

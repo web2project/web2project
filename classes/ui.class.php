@@ -710,7 +710,7 @@ class CAppUI {
 		$q->addTable('users');
 		$q->addQuery('user_id, contact_first_name as user_first_name, contact_last_name as user_last_name, contact_company as user_company, contact_department as user_department, contact_email as user_email, user_type');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-		$q->addWhere('user_id = ' . (int)$user_id . ' AND user_username = "' . $username . '"');
+		$q->addWhere('user_id = ' . (int)$user_id . ' AND user_username = \'' . $username . '\'');
 		$sql = $q->prepare();
 		$q->loadObject($this);
 		$q->clear();
@@ -749,7 +749,7 @@ class CAppUI {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
-		$q->addWhere('user_id = "' . $user_id . '" AND (date_time_out="0000-00-00 00:00:00" OR isnull(date_time_out)) ');
+		$q->addWhere('user_id = \'' . $user_id . '\' AND (date_time_out = \'0000-00-00 00:00:00\' OR isnull(date_time_out)) ');
 		if ($user_id > 0) {
 			$q->exec();
 			$q->clear();
@@ -854,7 +854,7 @@ class CAppUI {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_active');
-		$q->addWhere('mod_directory = "' . $module . '"');
+		$q->addWhere('mod_directory = \'' . $module . '\'');
 		$result = $q->loadResult();
 		$q->clear();
 		return $result;

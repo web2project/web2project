@@ -78,7 +78,7 @@ $q->addWhere('task_percent_complete = 100');
 if ($project_id != 0) {
 	$q->addWhere('task_project = ' . (int)$project_id);
 }
-$q->addWhere('task_end_date BETWEEN "' . $last_week->format(FMT_DATETIME_MYSQL) . '" AND "' . $date->format(FMT_DATETIME_MYSQL) . '"');
+$q->addWhere('task_end_date BETWEEN \'' . $last_week->format(FMT_DATETIME_MYSQL) . '\' AND \'' . $date->format(FMT_DATETIME_MYSQL) . '\'');
 $proj = &new CProject;
 $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 

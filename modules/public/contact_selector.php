@@ -98,7 +98,7 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 	}
 } elseif (!$company_id) {
 	//  Contacts from all allowed companies
-	$where = '(contact_company = "" OR contact_company IS NULL OR contact_company = 0 OR (contact_company IN ("' . implode('","', array_values($aCpies_esc)) . '"))' . ' OR ( contact_company IN ("' . implode('","', array_keys($aCpies_esc)) . '")))';
+	$where = '(contact_company = "" OR contact_company IS NULL OR contact_company = 0 OR (contact_company IN (\'' . implode('","', array_values($aCpies_esc)) . '\'))' . ' OR ( contact_company IN (\'' . implode('","', array_keys($aCpies_esc)) . '\')))';
 	if (count($aDpts)) {
 		$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
 	} else {
@@ -113,7 +113,7 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 	$company_name = $q->loadResult();
 	$q->clear();
 	$company_name_sql = db_escape($company_name);
-	$where = '(contact_company = "' . $company_name_sql . '" or contact_company = ' . (int)$company_id . ')';
+	$where = '(contact_company = \'' . $company_name_sql . '\' or contact_company = ' . (int)$company_id . ')';
 	if (count($aDpts)) {
 		$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
 	} else {
@@ -134,7 +134,7 @@ if ($where) { // Don't assume where is set. Change needed to fix Mantis Bug 0002
 if ($where_dept) { // Don't assume where is set. Change needed to fix Mantis Bug 0002056
 	$q->addWhere($where_dept);
 }
-$q->addWhere('(contact_owner = "' . $AppUI->user_id . '" OR contact_private = "0")');
+$q->addWhere('(contact_owner = \'' . $AppUI->user_id . '\' OR contact_private = \'0\')');
 $q->addOrder('company_name, contact_company, dept_name, contact_department, contact_last_name'); // May need to review this.
 $contacts = $q->loadHashList('contact_id');
 ?>

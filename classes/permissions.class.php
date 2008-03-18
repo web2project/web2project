@@ -269,7 +269,7 @@ class w2Pacl extends gacl_api {
 		$q = new DBQuery;
 		$q->addTable('gacl_axo_map');
 		$q->addQuery('acl_id');
-		$q->addWhere('value = "' . $mod . '"');
+		$q->addWhere('value = \'' . $mod . '\'');
 		$acls = $q->loadHashList('acl_id');
 		$q->clear();
 
@@ -976,7 +976,7 @@ class w2Pacl extends gacl_api {
 		}
 		$q = new DBQuery;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
-		$q->addWhere('acl_id = "' . $acl_id . '"');
+		$q->addWhere('acl_id = \'' . $acl_id . '\'');
 		$result = $q->exec();
 		$q->clear();
 		return $result;
@@ -994,7 +994,7 @@ class w2Pacl extends gacl_api {
 		}
 		$q = new DBQuery;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
-		$q->addWhere('module = "' . $module . '"');
+		$q->addWhere('module = \'' . $module . '\'');
 		$result = $q->exec();
 		$q->clear();
 		return $result;
@@ -1012,7 +1012,7 @@ class w2Pacl extends gacl_api {
 		}
 		$q = new DBQuery;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
-		$q->addWhere('user_id = "' . $user_id . '"');
+		$q->addWhere('user_id = \'' . $user_id . '\'');
 		$result = $q->exec();
 		$q->clear();
 		return $result;
@@ -1040,10 +1040,10 @@ class w2Pacl extends gacl_api {
 		$q->leftJoin($this->_db_acl_prefix . 'aro', 'd', 'c.value=d.section_value,' . w2PgetConfig('dbprefix') . $this->_db_acl_prefix . 'axo_sections e');
 		$q->leftJoin($this->_db_acl_prefix . 'axo', 'f', 'e.value=f.section_value');
 		if ($user_id) {
-			$q->addWhere('d.value = "' . $user_id . '"');
+			$q->addWhere('d.value = \'' . $user_id . '\'');
 		}
 		if ($user_aro_id) {
-			$q->addWhere('d.id = "' . $user_aro_id . '"');
+			$q->addWhere('d.id = \'' . $user_aro_id . '\'');
 		}
 		if ($role_id) {
 			$role_users = $this->getRoleUsers($role_id);
@@ -1055,7 +1055,7 @@ class w2Pacl extends gacl_api {
 			}
 		}
 		if ($module) {
-			$q->addWhere('f.value = "' . $module . '"');
+			$q->addWhere('f.value = \'' . $module . '\'');
 		}
 		//Make sure things without axos are not ported, this would make addon modules to carry wrong soft denials affecting visible addon modules
 		$q->addWhere('f.value IS NOT NULL');
@@ -1131,16 +1131,16 @@ class w2Pacl extends gacl_api {
 		$q = new DBQuery;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
 		if ($user_id) {
-			$q->addWhere('user_id = "' . $user_id . '"');
+			$q->addWhere('user_id = \'' . $user_id . '\'');
 		}
 		if ($user_aro_id) {
 			$qui = new DBQuery;
 			$qui->addTable($this->_db_acl_prefix . 'aro');
 			$qui->addQuery('value');
-			$qui->addWhere('id = "' . $user_aro_id . '"');
+			$qui->addWhere('id = \'' . $user_aro_id . '\'');
 			$id = $qui->loadResult();
 			if ($id) {
-				$q->addWhere('user_id = "' . $id . '"');
+				$q->addWhere('user_id = \'' . $id . '\'');
 			}
 		}
 		if ($role_id) {
@@ -1153,7 +1153,7 @@ class w2Pacl extends gacl_api {
 			}
 		}
 		if ($module) {
-			$q->addWhere('module = "' . $module . '"');
+			$q->addWhere('module = \'' . $module . '\'');
 		}
 		$q->exec();
 		$q->clear();
@@ -1202,10 +1202,10 @@ class w2Pacl extends gacl_api {
 		$q = new DBQuery;
 		$q->addTable($this->_db_acl_prefix . 'permissions');
 		$q->addQuery('access');
-		$q->addWhere('module="' . $module . '"');
-		$q->addWhere('action="' . $op . '"');
+		$q->addWhere('module = \'' . $module . '\'');
+		$q->addWhere('action = \'' . $op . '\'');
 		$q->addWhere('item_id="0"');
-		$q->addWhere('user_id="' . $userid . '"');
+		$q->addWhere('user_id = \'' . $userid . '\'');
 		$q->addOrder('acl_id DESC');
 		if (W2P_PERFORMANCE_DEBUG) {
 			$startTime = array_sum(explode(' ', microtime()));
@@ -1233,7 +1233,7 @@ class w2Pacl extends gacl_api {
 			$q = new DBQuery;
 			$q->addTable('modules');
 			$q->addQuery('mod_main_class, permissions_item_table, permissions_item_field, permissions_item_label, mod_directory');
-			$q->addWhere('mod_directory="' . $module . '"');
+			$q->addWhere('mod_directory = \'' . $module . '\'');
 			$q->addWhere('mod_active="1"');
 			$mod_class = $q->loadHash();
 		}
@@ -1333,10 +1333,10 @@ class w2Pacl extends gacl_api {
 				$q = new DBQuery;
 				$q->addTable($this->_db_acl_prefix . 'permissions');
 				$q->addQuery('access, acl_id');
-				$q->addWhere('module="' . $module . '"');
-				$q->addWhere('action="' . $op . '"');
-				$q->addWhere('user_id="' . $userid . '"');
-				$q->addWhere('(item_id="' . $item . '" OR item_id="0")');
+				$q->addWhere('module = \'' . $module . '\'');
+				$q->addWhere('action = \'' . $op . '\'');
+				$q->addWhere('user_id = \'' . $userid . '\'');
+				$q->addWhere('(item_id = \'' . $item . '\' OR item_id = \'0\')');
 				$q->addOrder('item_id DESC, acl_id DESC');
 				//print_r($q->prepare());
 				$result = array();
@@ -1356,9 +1356,9 @@ class w2Pacl extends gacl_api {
 		$q = new DBQuery;
 		$q->addTable($this->_db_acl_prefix . 'permissions');
 		$q->addQuery('acl_id, access, item_id');
-		$q->addWhere('module="' . $module . '"');
-		$q->addWhere('action="' . $op . '"');
-		$q->addWhere('user_id="' . $userid . '"');
+		$q->addWhere('module = \'' . $module . '\'');
+		$q->addWhere('action = \'' . $op . '\'');
+		$q->addWhere('user_id = \'' . $userid . '\'');
 		$q->addOrder('acl_id DESC');
 		if (W2P_PERFORMANCE_DEBUG) {
 			$startTime = array_sum(explode(' ', microtime()));

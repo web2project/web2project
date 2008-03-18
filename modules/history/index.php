@@ -82,7 +82,7 @@ $filter_param = w2PgetParam($_REQUEST, 'filter', '');
 $filter = array();
 if ($filter_param) {
 	$in_filter = $_REQUEST['filter'];
-	$filter[] = 'history_table = "' . $_REQUEST['filter'] . '" ';
+	$filter[] = 'history_table = \'' . $_REQUEST['filter'] . '\' ';
 } else {
 	$in_filter = '';
 }

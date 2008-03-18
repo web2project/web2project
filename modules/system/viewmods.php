@@ -16,7 +16,7 @@ $q = new DBQuery;
 $q->addQuery('*');
 $q->addTable('modules');
 foreach ($hidden_modules as $no_show) {
-	$q->addWhere('mod_directory <> "' . $no_show . '"');
+	$q->addWhere('mod_directory <> \'' . $no_show . '\'');
 }
 $q->addOrder('mod_ui_order');
 $modules = $q->loadList();

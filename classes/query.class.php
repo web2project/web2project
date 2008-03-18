@@ -1523,7 +1523,7 @@ class DBQuery {
 			}
 
 			if ($k == $keyName) { // PK not to be updated
-				$this->addWhere($keyName . '="' . db_escape($v) . '"');
+				$this->addWhere($keyName . ' = \'' . db_escape($v) . '\'');
 				continue;
 			}
 			$fields[] = $k;
@@ -1590,7 +1590,7 @@ class DBQuery {
 				continue;
 			}
 			if ($k == $keyName) { // PK not to be updated
-				$this->addWhere($keyName . '="' . db_escape($v) . '"');
+				$this->addWhere($keyName . ' = \'' . db_escape($v) . '\'');
 				continue;
 			}
 			if ($v === null && !$updateNulls) {

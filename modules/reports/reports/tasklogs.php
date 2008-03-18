@@ -185,8 +185,8 @@ if ($do_report) {
 	}
 
 	if (!$log_all) {
-		$q->addWhere('task_log_date >= "' . $start_date->format(FMT_DATETIME_MYSQL) . '"');
-		$q->addWhere('task_log_date <= "' . $end_date->format(FMT_DATETIME_MYSQL) . '"');
+		$q->addWhere('task_log_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
+		$q->addWhere('task_log_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
 	}
 	if ($log_ignore) {
 		$q->addWhere('task_log_hours > 0');

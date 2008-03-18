@@ -63,7 +63,7 @@ $contact = new CContact();
 $q = new DBQuery;
 $q->addTable('users', 'u');
 $q->addQuery('COUNT(u.user_id)');
-$q->addWhere('u.user_username = "' . $_POST['user_username'] . '"');
+$q->addWhere('u.user_username = \'' . $_POST['user_username'] . '\'');
 $usr_count = $q->loadResult();
 if ($usr_count) {
 	error_reporting(0);
@@ -80,7 +80,7 @@ $q->clear();
 $q = new DBQuery;
 $q->addTable('contacts', 'c');
 $q->addQuery('COUNT(c.contact_id)');
-$q->addWhere('c.contact_email = "' . $_POST['contact_email'] . '"');
+$q->addWhere('c.contact_email = \'' . $_POST['contact_email'] . '\'');
 $ct_count = $q->loadResult();
 if ($ct_count) {
 	error_reporting(0);

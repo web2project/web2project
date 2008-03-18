@@ -24,10 +24,10 @@ if ($_POST['user'] != '') {
 		$q->addWhere('user_id = ' . (int)$_POST['user']);
 	}
 	if ($_POST['module']) {
-		$q->addWhere('module = "' . $_POST['module'] . '"');
+		$q->addWhere('module = \'' . $_POST['module'] . '\'');
 	}
 	if ($_POST['action']) {
-		$q->addWhere('action = "' . $_POST['action'] . '"');
+		$q->addWhere('action = \'' . $_POST['action'] . '\'');
 	}
 	$q->addOrder('user_name');
 	$q->addOrder('module');
@@ -57,13 +57,13 @@ foreach ($permissions as $permission) {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('permissions_item_field,permissions_item_label');
-		$q->addWhere('mod_directory = "' . $permission['module'] . '"');
+		$q->addWhere('mod_directory = \'' . $permission['module'] . '\'');
 		$field = $q->loadHash();
 
 		$q = new DBQuery;
 		$q->addTable($permission['module']);
 		$q->addQuery($field['permissions_item_label']);
-		$q->addWhere($field['permissions_item_field'] . '="' . $permission['item_id'] . '"');
+		$q->addWhere($field['permissions_item_field'] . ' = \'' . $permission['item_id'] . '\'');
 		$item = $q->loadResult();
 	}
 	if (!($permission['item_id'] && !$permission['acl_id'])) {
