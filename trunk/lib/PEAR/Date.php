@@ -284,7 +284,9 @@ class Date
                         $output .= Date_Calc::getWeekdayFullname($this->day,$this->month,$this->year);
                         break;
                     case "b":
+						setlocale(LC_TIME, 'en');
                         $output .= Date_Calc::getMonthAbbrname($this->month);
+						setlocale(LC_ALL, $AppUI->user_lang);
                         break;
                     case "B":
                         $output .= Date_Calc::getMonthFullname($this->month);

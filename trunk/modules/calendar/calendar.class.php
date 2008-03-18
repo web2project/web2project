@@ -243,7 +243,9 @@ class CMonthCalendar {
 		if ($this->clickMonth) {
 			$s .= '<a href="index.php?m=' . $m . '&amp;date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
 		}
+		setlocale(LC_TIME, 'en');
 		$s .= $AppUI->_($this->this_month->format('%B')) . ' ' . $AppUI->_($this->this_month->format('%Y')) . (($this->clickMonth) ? '</a>' : '');
+		setlocale(LC_ALL, $AppUI->user_lang);
 		$s .= '</th>';
 
 		if ($this->showArrows) {
