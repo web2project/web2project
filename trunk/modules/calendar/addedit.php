@@ -265,18 +265,18 @@ function removeUser() {
 		<tr>	
 			<td width="20%" align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title'); ?>:</td>
 			<td width="20%">
-				<input type="text" class="text" size="25" name="event_title" value="<?php echo @$obj->event_title; ?>" maxlength="255" />
+				<input type="text" class="text" size="25" name="event_title" value="<?php echo $obj->event_title; ?>" maxlength="255" />
 			</td>
 			<td align="left" rowspan="4" valign="top" colspan="2" width="40%">
 			<?php echo $AppUI->_('Description'); ?> :<br/>
-				<textarea class="textarea" name="event_description" rows="5" cols="45"><?php echo @$obj->event_description; ?></textarea></td>
+				<textarea class="textarea" name="event_description" rows="5" cols="45"><?php echo $obj->event_description; ?></textarea></td>
 			</td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Type'); ?>:</td>
 			<td>
 		<?php
-echo arraySelect($types, 'event_type', 'size="1" class="text"', @$obj->event_type, true);
+echo arraySelect($types, 'event_type', 'size="1" class="text"', $obj->event_type, true);
 ?>
 			</td>
 		</tr>
@@ -285,7 +285,7 @@ echo arraySelect($types, 'event_type', 'size="1" class="text"', @$obj->event_typ
 			<td align="right"><?php echo $AppUI->_('Project'); ?>:</td>
 			<td>
 		<?php
-echo arraySelect($projects, 'event_project', 'size="1" class="text"', (@$obj->event_project ? $obj->event_project : 0));
+echo arraySelect($projects, 'event_project', 'size="1" class="text"', ($obj->event_project ? $obj->event_project : 0));
 ?>
 			</td>
 		</tr>
@@ -294,7 +294,7 @@ echo arraySelect($projects, 'event_project', 'size="1" class="text"', (@$obj->ev
 		<tr>
 			<td align="right" nowrap="nowrap"><label for="event_private"><?php echo $AppUI->_('Private Entry'); ?>:</label></td>
 			<td>
-				<input type="checkbox" value="1" name="event_private" id="event_private" <?php echo (@$obj->event_private ? 'checked="checked"' : ''); ?> />
+				<input type="checkbox" value="1" name="event_private" id="event_private" <?php echo ($obj->event_private ? 'checked="checked"' : ''); ?> />
 			</td>
 		</tr>
 		<tr>
@@ -362,7 +362,7 @@ echo arraySelect($projects, 'event_project', 'size="1" class="text"', (@$obj->ev
 		<tr>
 			<td align="right" nowrap="nowrap"><label for="event_cwd"><?php echo $AppUI->_('Show only on Working Days'); ?>:</label></td>
 			<td>
-				<input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php echo (@$obj->event_cwd ? 'checked="checked"' : ''); ?> />
+				<input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php echo ($obj->event_cwd ? 'checked="checked"' : ''); ?> />
 			</td>
 			<td align="right"><label for="mail_invited"><?php echo $AppUI->_('Mail Attendees?'); ?></label> <input type="checkbox" name="mail_invited" id="mail_invited" checked="checked" /></td>
 		</tr>

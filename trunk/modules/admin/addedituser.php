@@ -171,7 +171,7 @@ function setDept( key, val ) {
     <td align="right" width="35%" nowrap="nowrap">* <?php echo $AppUI->_('Login Name'); ?>:</td>
     <td>
 <?php
-	if (@$user["user_username"]) {
+	if ($user["user_username"]) {
 		echo '<input type="hidden" class="text" name="user_username" value="' . $user['user_username'] . '" />';
 		echo '<strong>' . $user["user_username"] . '</strong>';
 	} else {
@@ -229,8 +229,8 @@ function setDept( key, val ) {
 <tr>
     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
     <td>
-        <input type="hidden" name="contact_department" value="<?php echo @$user['contact_department']; ?>" />
-        <input type="text" class="text" name="dept_name" value="<?php echo @$user['dept_name']; ?>" size="40" disabled="disabled" />
+        <input type="hidden" name="contact_department" value="<?php echo $user['contact_department']; ?>" />
+        <input type="text" class="text" name="dept_name" value="<?php echo $user['dept_name']; ?>" size="40" disabled="disabled" />
         <input type="button" class="button" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
     </td>
 </tr>
@@ -240,7 +240,7 @@ function setDept( key, val ) {
 </tr>
 <tr>
     <td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Email') . ' ' . $AppUI->_('Signature'); ?>:</td>
-    <td><textarea class="text" cols="50" name="user_signature" style="height: 50px"><?php echo @$user["user_signature"]; ?></textarea></td>
+    <td><textarea class="text" cols="50" name="user_signature" style="height: 50px"><?php echo $user["user_signature"]; ?></textarea></td>
 </tr>
 <?php if ($user_id) { ?>
 	<tr>

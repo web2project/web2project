@@ -333,7 +333,7 @@ function showWeeks() {
 	$table_rows = '';
 
 	foreach ($user_list as $user_id => $user_data) {
-		@$user_names[$user_id] = $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'];
+		$user_names[$user_id] = $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'];
 		if (isset($user_usage[$user_id])) {
 			$table_rows .= '<tr><td nowrap="nowrap">(' . $user_data['user_username'] . ') ' . $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'] . '</td>';
 			$actual_date = $sd;
@@ -450,7 +450,7 @@ function showDays() {
 	$table_rows = '';
 
 	foreach ($user_list as $user_id => $user_data) {
-		@$user_names[$user_id] = $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'];
+		$user_names[$user_id] = $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'];
 		if (isset($user_usage[$user_id])) {
 			$table_rows .= '<tr><td nowrap="nowrap">(' . $user_data['user_username'] . ') ' . $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'] . '</td>';
 			$actual_date = $start_date;

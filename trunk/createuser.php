@@ -106,7 +106,7 @@ echo styleRenderBoxTop();
     <td align="right" width="230">* <?php echo $AppUI->_('Login Name'); ?>:</td>
     <td colspan="2">
 <?php
-if (@$user['user_username']) {
+if ($user['user_username']) {
 	echo '<input type="hidden" class="text" name="user_username" value="' . $user['user_username'] . '" />';
 	echo '<strong>' . $user["user_username"] . '</strong>';
 } else {

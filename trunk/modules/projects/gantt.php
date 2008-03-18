@@ -105,7 +105,7 @@ $graph->SetBox(true, array(0, 0, 0), 2);
 $graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
 
 $pLocale = setlocale(LC_TIME, 0); // get current locale for LC_TIME
-$res = @setlocale(LC_TIME, $AppUI->user_lang[2]);
+$res = setlocale(LC_TIME, $AppUI->user_lang[2]);
 if ($res) { // Setting locale doesn't fail
 	$graph->scale->SetDateLocale($AppUI->user_lang[2]);
 }
@@ -146,7 +146,7 @@ if ($start_date && $end_date) {
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
 	$d_end = new CDate();
-	for ($i = 0, $i_cmp = count(@$projects); $i < $i_cmp; $i++) {
+	for ($i = 0, $i_cmp = count($projects); $i < $i_cmp; $i++) {
 		$start = substr($p['project_start_date'], 0, 10);
 		$end = substr($p['project_end_date'], 0, 10);
 

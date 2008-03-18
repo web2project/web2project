@@ -22,7 +22,7 @@ if (isset($_REQUEST['company_id'])) {
 }
 $company_id = $AppUI->getState('CalIdxCompany') !== null ? $AppUI->getState('CalIdxCompany') : $AppUI->user_company;
 
-$event_filter = $AppUI->checkPrefState('CalIdxFilter', @w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');
+$event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');
 
 // get the passed timestamp (today if none)
 $date = w2PgetParam($_GET, 'date', null);

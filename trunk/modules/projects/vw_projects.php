@@ -129,10 +129,10 @@ foreach ($projects as $row) {
 		((!$row['project_active'] && $project_status_filter == -3)) //flat archived projects
 		) {
 		$none = false;
-		$start_date = intval(@$row['project_start_date']) ? new CDate($row['project_start_date']) : null;
-		$end_date = intval(@$row['project_end_date']) ? new CDate($row['project_end_date']) : null;
-		$adjusted_end_date = intval(@$row['project_end_date_adjusted']) ? new CDate($row['project_end_date_adjusted']) : null;
-		$actual_end_date = intval(@$row['project_actual_end_date']) ? new CDate($row['project_actual_end_date']) : null;
+		$start_date = intval($row['project_start_date']) ? new CDate($row['project_start_date']) : null;
+		$end_date = intval($row['project_end_date']) ? new CDate($row['project_end_date']) : null;
+		$adjusted_end_date = intval($row['project_end_date_adjusted']) ? new CDate($row['project_end_date_adjusted']) : null;
+		$actual_end_date = intval($row['project_actual_end_date']) ? new CDate($row['project_actual_end_date']) : null;
 		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 		$s = '<tr>';

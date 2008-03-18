@@ -79,7 +79,7 @@ if ($canDelete) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Max Allocation %'); ?>:</td>
-			<td class="hilite"><?php echo @$obj->resource_max_allocation; ?></td>
+			<td class="hilite"><?php echo $obj->resource_max_allocation; ?></td>
 		</table>
 
 	</td>

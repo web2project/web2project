@@ -23,7 +23,7 @@ $config['mod_ui_name'] = 'History';
 $config['mod_ui_icon'] = '';
 $config['mod_description'] = 'A module for tracking changes';
 
-if (@$a == 'setup') {
+if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 

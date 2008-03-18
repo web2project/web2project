@@ -26,7 +26,7 @@ if ($del) {
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		$isNotNew = @$_POST['message_id'];
+		$isNotNew = $_POST['message_id'];
 		$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);
 	}
 	$parent = ($obj->message_parent == -1) ? $obj->message_id : $obj->message_parent;

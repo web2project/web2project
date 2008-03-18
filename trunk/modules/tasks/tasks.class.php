@@ -977,7 +977,7 @@ class CTask extends CW2pObject {
 		}
 		$mail->Send();
 		// Now update the log
-		$save_email = @$AppUI->getPref('TASKLOGNOTE');
+		$save_email = $AppUI->getPref('TASKLOGNOTE');
 		if ($save_email) {
 			$log->task_log_description .= "\nEmailed " . date('d/m/Y H:i:s') . " to:\n{$recipient_list}";
 			return true;

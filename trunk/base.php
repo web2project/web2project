@@ -59,7 +59,7 @@ function safe_get_env($name) {
 $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
 $baseUrl .= safe_get_env('HTTP_HOST');
 $pathInfo = safe_get_env('PATH_INFO');
-if (@$pathInfo) {
+if ($pathInfo) {
 	$baseUrl .= str_replace('\\', '/', dirname($pathInfo));
 } else {
 	$baseUrl .= str_replace('\\', '/', dirname(safe_get_env('SCRIPT_NAME')));

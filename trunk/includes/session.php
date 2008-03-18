@@ -69,7 +69,7 @@ function w2PsessionWrite($id, $data) {
 	$q->addTable('sessions');
 	$q->addWhere('session_id = \''.$id.'\'');
 
-	if ($qid = &$q->exec() && (@$qid->fields['row_count'] > 0 || @$qid->fields[0] > 0)) {
+	if ($qid = &$q->exec() && ($qid->fields['row_count'] > 0 || $qid->fields[0] > 0)) {
 		//dprint(__file__, __line__, 11, "Updating session $id");
 		$q->query = null;
 		$q->addUpdate('session_data', $data);

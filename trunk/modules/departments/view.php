@@ -132,7 +132,7 @@ function delIt() {
 			<td bgcolor="#ffffff">
 			<a href="http://maps.google.com/maps?q=<?php echo $dept['dept_address1']; ?>+<?php echo $dept['dept_address2']; ?>+<?php echo $dept['dept_city']; ?>+<?php echo $dept['dept_state']; ?>+<?php echo $dept['dept_zip']; ?>+<?php echo $dept['dept_country']; ?>" target="_blank">
 			<img align="right" border="0" src="<?php echo w2PfindImage('googlemaps.gif'); ?>" width="55" height="22" alt="Find It on Google" /></a>
-<?php		echo @$dept['dept_address1'] . (($dept['dept_address2']) ? '<br />' . $dept['dept_address2'] : '') . '<br />' . $dept['dept_city'] . '&nbsp;&nbsp;' . $dept['dept_state'] . '&nbsp;&nbsp;' . $dept['dept_zip'] . (($dept['dept_country']) ? '<br />' . $countries[$dept['dept_country']] : '');?>
+<?php		echo $dept['dept_address1'] . (($dept['dept_address2']) ? '<br />' . $dept['dept_address2'] : '') . '<br />' . $dept['dept_city'] . '&nbsp;&nbsp;' . $dept['dept_state'] . '&nbsp;&nbsp;' . $dept['dept_zip'] . (($dept['dept_country']) ? '<br />' . $countries[$dept['dept_country']] : '');?>
 		</td>
 		</tr>
 		</table>

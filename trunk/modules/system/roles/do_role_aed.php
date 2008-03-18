@@ -22,7 +22,7 @@ if ($del) {
 	if (($msg = $role->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		$isNotNew = @$_POST['role_id'];
+		$isNotNew = $_POST['role_id'];
 		$AppUI->setMsg('Role ' . ($isNotNew ? 'updated' : 'inserted'), UI_MSG_OK);
 	}
 }

@@ -72,7 +72,7 @@ function taskstyle_pd($task) {
 
 	if ($start_date && !$end_date) {
 		$end_date = $start_date;
-		$end_date->addSeconds(@$task['task_duration'] * $task['task_duration_type'] * SEC_HOUR);
+		$end_date->addSeconds($task['task_duration'] * $task['task_duration_type'] * SEC_HOUR);
 	} else
 		if (!$start_date) {
 			return '';
@@ -130,7 +130,7 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$fdf = $df . ' ' . $tf;
 	$perms = &$AppUI->acl();
-	$show_all_assignees = @$w2Pconfig['show_all_task_assignees'] ? true : false;
+	$show_all_assignees = $w2Pconfig['show_all_task_assignees'] ? true : false;
 
 	$done[] = $a['task_id'];
 
@@ -193,7 +193,7 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	. "\n\t\t</a>".w2PendTip();
 	$s .= "\n\t</td>";*/
 	// New Log
-	/*        if (@$a['task_log_problem']>0) {
+	/*        if ($a['task_log_problem']>0) {
 	$s .= '<td align="center" valign="middle"><a href="?m=tasks&a=view&task_id='.$a['task_id'].'&tab=0&problem=1">';
 	$s .= dPshowImage( './images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!' );
 	$s .='</a></td>';
@@ -212,7 +212,7 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 		if ($a['task_priority'] > 0) {
 			$s .= "\n\t\t<img src=\"" . w2PfindImage('icons/priority+' . $a['task_priority'] . '.gif') . '" width=13 height=16>';
 		}
-	$s .= @$a['file_count'] > 0 ? '<img src="' . w2PfindImage('clip.png') . '" alt="F">' : '';
+	$s .= $a['file_count'] > 0 ? '<img src="' . w2PfindImage('clip.png') . '" alt="F">' : '';
 	$s .= '</td>';
 	// access
 	$s .= "\n\t" . '<td nowrap="nowrap">';
@@ -388,7 +388,7 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$fdf = $df . " " . $tf;
 	$perms = &$AppUI->acl();
-	$show_all_assignees = @$w2Pconfig['show_all_task_assignees'] ? true : false;
+	$show_all_assignees = $w2Pconfig['show_all_task_assignees'] ? true : false;
 
 	$done[] = $a['task_id'];
 

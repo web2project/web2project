@@ -24,7 +24,7 @@ $config['mod_ui_icon'] = 'communicate.gif';
 $config['mod_description'] = '';
 $config['mod_config'] = true; // show 'configure' link in viewmods
 
-if (@$a == 'setup') {
+if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 

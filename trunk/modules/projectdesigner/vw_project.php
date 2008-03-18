@@ -12,7 +12,7 @@ if (!defined('W2P_BASE_DIR')) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
-			<td class="hilite"><?php echo htmlspecialchars(@$obj->project_short_name, ENT_QUOTES); ?></td>
+			<td class="hilite"><?php echo htmlspecialchars($obj->project_short_name, ENT_QUOTES); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
@@ -36,7 +36,7 @@ if (!defined('W2P_BASE_DIR')) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-			<td class="hilite"><?php echo $w2Pconfig['currency_symbol'] ?><?php echo @$obj->project_target_budget; ?></td>
+			<td class="hilite"><?php echo $w2Pconfig['currency_symbol'] ?><?php echo $obj->project_target_budget; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
@@ -44,11 +44,11 @@ if (!defined('W2P_BASE_DIR')) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-			<td class="hilite"><a href="<?php echo @$obj->project_url; ?>" target="_new"><?php echo @$obj->project_url; ?></a></td>
+			<td class="hilite"><a href="<?php echo $obj->project_url; ?>" target="_new"><?php echo $obj->project_url; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
-			<td class="hilite"><a href="<?php echo @$obj->project_demo_url; ?>" target="_new"><?php echo @$obj->project_demo_url; ?></a></td>
+			<td class="hilite"><a href="<?php echo $obj->project_demo_url; ?>" target="_new"><?php echo $obj->project_demo_url; ?></a></td>
 		</tr>
 		<tr>
 			<td colspan="2">

@@ -6,9 +6,9 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab, $cal_sdf;
 $AppUI->loadCalendarJS();
 
-$min_view = defVal(@$min_view, false);
-$project_id = defVal(@w2PgetParam($_GET, 'project_id', null), 0);
-$user_id = defVal(@w2PgetParam($_GET, 'user_id', null), $AppUI->user_id);
+$min_view = defVal($min_view, false);
+$project_id = defVal(w2PgetParam($_GET, 'project_id', null), 0);
+$user_id = defVal(w2PgetParam($_GET, 'user_id', null), $AppUI->user_id);
 // sdate and edate passed as unix time stamps
 $sdate = w2PgetParam($_POST, 'project_start_date', 0);
 $edate = w2PgetParam($_POST, 'project_end_date', 0);
@@ -69,7 +69,7 @@ if ($display_option == 'custom') {
 }
 
 // setup the title block
-if (!@$min_view) {
+if (!$min_view) {
 	$titleBlock = new CTitleBlock('Gantt Chart', 'applet-48.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=' . $m, 'projects list');
 	$titleBlock->show();

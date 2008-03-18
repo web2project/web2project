@@ -19,9 +19,9 @@ $uistyle = 'web2project';
 include 'createuser.php';
 ?>
 
-<?php if (@$AppUI->getVersion()) { ?>
+<?php if ($AppUI->getVersion()) { ?>
 <div align="center">
-	<span style="font-size:7pt">Version <?php echo @$AppUI->getVersion(); ?></span>
+	<span style="font-size:7pt">Version <?php echo $AppUI->getVersion(); ?></span>
 </div>
 <?php } ?>
 <div align="center">

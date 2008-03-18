@@ -23,7 +23,7 @@ if ($del) {
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		$AppUI->setMsg(@$_POST['syskey_id'] ? 'updated' : 'inserted', UI_MSG_OK, true);
+		$AppUI->setMsg($_POST['syskey_id'] ? 'updated' : 'inserted', UI_MSG_OK, true);
 	}
 }
 $AppUI->redirect('m=system&u=syskeys&a=keys');

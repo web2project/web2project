@@ -108,7 +108,7 @@ echo $AppUI->_($forum_id ? 'Edit' : 'Add') . ' ' . $AppUI->_('Forum');
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Forum Name'); ?>:</td>
 			<td>
-				<input type="text" class="text" size="25" name="forum_name" value="<?php echo @$forum_info['forum_name']; ?>" maxlength="50" style="width:200px;" />
+				<input type="text" class="text" size="25" name="forum_name" value="<?php echo $forum_info['forum_name']; ?>" maxlength="50" style="width:200px;" />
 			</td>
 		</tr>
 		<tr>
@@ -138,22 +138,22 @@ echo arraySelect($users, 'forum_moderated', 'size="1" class="text"', $forum_info
 		<?php if ($forum_id) { ?>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Created On'); ?></td>
-			<td bgcolor="#ffffff"><?php echo @$forum_info['forum_create_date']; ?></td>
+			<td bgcolor="#ffffff"><?php echo $forum_info['forum_create_date']; ?></td>
 		</tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Last Post'); ?>:</td>
-			<td bgcolor="#ffffff"><?php echo @$forum_info['forum_last_date']; ?></td>
+			<td bgcolor="#ffffff"><?php echo $forum_info['forum_last_date']; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Message Count'); ?>:</td>
-			<td bgcolor="#ffffff"><?php echo @$forum_info['forum_message_count']; ?></td>
+			<td bgcolor="#ffffff"><?php echo $forum_info['forum_message_count']; ?></td>
 		</tr>
 		<?php } ?>
 		</table>
 	</td>
 	<td valign="top" width="50%">
 		<strong><?php echo $AppUI->_('Description'); ?></strong><br />
-		<textarea class="textarea" cols="50" rows="7" name="forum_description"><?php echo @$forum_info['forum_description']; ?></textarea>
+		<textarea class="textarea" cols="50" rows="7" name="forum_description"><?php echo $forum_info['forum_description']; ?></textarea>
 	</td>
 </tr>
 

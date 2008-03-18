@@ -5,13 +5,13 @@ if (!defined('W2P_BASE_DIR')) {
 
 $del = isset($_POST['del']) ? $_POST['del'] : 0;
 $rm = isset($_POST['rm']) ? $_POST['rm'] : 0;
-$hassign = @$_POST['hassign'];
-$htasks = @$_POST['htasks'];
+$hassign = $_POST['hassign'];
+$htasks = $_POST['htasks'];
 $store = w2PgetParam($_POST, 'store', 0);
 $chUTP = w2PgetParam($_POST, 'chUTP', 0);
 $percentage_assignment = w2PgetParam($_POST, 'percentage_assignment');
 $user_task_priority = w2PgetParam($_POST, 'user_task_priority');
-$user_id = @$_POST['user_id'];
+$user_id = $_POST['user_id'];
 
 // prepare the percentage of assignment per user as required by CTask::updateAssigned()
 $hperc_assign_ar = array();

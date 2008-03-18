@@ -17,7 +17,7 @@ class CTabBox extends CTabBox_core {
 		reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
-		if (@$AppUI->getPref('TABVIEW') == 0) {
+		if ($AppUI->getPref('TABVIEW') == 0) {
 			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
 			$s .= "<tr>\n";
 			$s .= '<td nowrap="nowrap">';
@@ -33,7 +33,7 @@ class CTabBox extends CTabBox_core {
 			}
 		}
 
-		if ($this->active < 0 || @$AppUI->getPref('TABVIEW') == 2) {
+		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
 			foreach ($this->tabs as $k => $v) {

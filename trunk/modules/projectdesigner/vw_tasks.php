@@ -293,7 +293,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
 reset($projects);
 
 foreach ($projects as $k => $p) {
-	$tnums = count(@$p['tasks']);
+	$tnums = count($p['tasks']);
 	// don't show project if it has no tasks
 	// patch 2.12.04, show project if it is the only project in view
 	if ($tnums > 0 || $project_id == $p['project_id']) {

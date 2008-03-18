@@ -26,7 +26,7 @@ $q->addWhere('contact_updatekey = \'' . $updatekey . '\'');
 $contactkey = $q->loadList();
 $q->clear();
 
-$contact_id = @$contactkey[0]['contact_id'] ? $contactkey[0]['contact_id'] : 0;
+$contact_id = $contactkey[0]['contact_id'] ? $contactkey[0]['contact_id'] : 0;
 
 // check permissions for this record
 
@@ -44,7 +44,7 @@ require_once W2P_BASE_DIR . '/classes/CustomFields.class.php';
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Contact');
 
-$isNotNew = @$_POST['contact_id'];
+$isNotNew = $_POST['contact_id'];
 
 if (($msg = $obj->store())) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
@@ -62,6 +62,6 @@ if (($msg = $obj->store())) {
 	$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);
 	//            echo $AppUI->_('Your contact data has been recorded sucessfully. Thank you very much.');
 	//            echo "<script>if(confirm('".$AppUI->_('Your contact data has  been recorded sucessfully. Thank you very much.')."')){self.close();} else {self.close();};</script>";
-	echo ('Your contact data has been recorded successfully. Your may now close your browser window<br></br>Thank you very much, ' . @$obj->contact_first_name);
+	echo ('Your contact data has been recorded successfully. Your may now close your browser window<br></br>Thank you very much, ' . $obj->contact_first_name);
 }
 ?>

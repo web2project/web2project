@@ -46,7 +46,7 @@ if ($del) {
 	}
 	$AppUI->redirect('m=calendar');
 } else {
-	$isNotNew = @$_POST['event_id'];
+	$isNotNew = $_POST['event_id'];
 	if (!$isNotNew) {
 		$obj->event_owner = $AppUI->user_id;
 	}
@@ -67,7 +67,7 @@ if ($del) {
 			if (isset($_POST['event_assigned']))
 				$obj->updateAssigned(explode(",", $_POST['event_assigned']));
 			if (isset($_POST['mail_invited'])) {
-				$obj->notify(@$_POST['event_assigned'], $isNotNew);
+				$obj->notify($_POST['event_assigned'], $isNotNew);
 			}
 		}
 	}

@@ -361,11 +361,11 @@ class CW2pObject {
 		$this->_query->addQuery($fields);
 		$this->_query->addTable($this->_tbl);
 
-		if (@$extra['from']) {
+		if ($extra['from']) {
 			$this->_query->addTable($extra['from']);
 		}
 
-		if (@$extra['join'] && @$extra['on']) {
+		if ($extra['join'] && $extra['on']) {
 			$this->_query->addJoin($extra['join'], $extra['join'], $extra['on']);
 		}
 

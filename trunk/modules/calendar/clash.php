@@ -322,7 +322,7 @@ function clash_mail() {
 	if (!$obj->bind($_SESSION['add_event_post'])) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	} else {
-		$obj->notify(@$_SESSION['add_event_post']['event_assigned'], w2PgetParam($_REQUEST, 'event_id', 0) ? false : true, true);
+		$obj->notify($_SESSION['add_event_post']['event_assigned'], w2PgetParam($_REQUEST, 'event_id', 0) ? false : true, true);
 		$AppUI->setMsg('Mail sent', UI_MSG_OK);
 	}
 	clear_clash();

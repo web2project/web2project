@@ -54,7 +54,7 @@ if ($del) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 		$AppUI->redirect();
 	} else {
-		$AppUI->setMsg(@$_POST['task_log_id'] ? 'updated' : 'inserted', UI_MSG_OK, true);
+		$AppUI->setMsg($_POST['task_log_id'] ? 'updated' : 'inserted', UI_MSG_OK, true);
 	}
 }
 $task = new CTask();

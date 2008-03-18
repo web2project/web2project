@@ -144,11 +144,11 @@ foreach ($logs as $row) {
 	$s .= '<tr bgcolor="white" valign="top">';
 	$s .= "\n\t<td>";
 	if ($canEdit) {
-		$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=" . $row['task_id'] . "&tab=1&task_log_id=" . @$row['task_log_id'] . "\">" . "\n\t\t\t" . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
+		$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=" . $row['task_id'] . "&tab=1&task_log_id=" . $row['task_log_id'] . "\">" . "\n\t\t\t" . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
 	}
 	$s .= "\n\t</td>";
 	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : '-') . '</td>';
-	$s .= '<td width="30%"><a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=0">' . @$row['task_log_name'] . '</a></td>';
+	$s .= '<td width="30%"><a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=0">' . $row['task_log_name'] . '</a></td>';
 	$s .= '<td width="100">' . $row['real_name'] . '</td>';
 	$s .= '<td width="100" align="right">' . sprintf('%.2f', $row['task_log_hours']) . '</td>';
 	$s .= '<td width="100">' . $row['task_log_costcode'] . '</td>';

@@ -41,8 +41,8 @@ $txt = "##\n## DO NOT MODIFY THIS FILE BY HAND!\n##\n";
 if ($lang == 'en') {
 	// editing the english file
 	foreach ($trans as $langs) {
-		if ((@$langs['abbrev'] || $langs['english']) && empty($langs['del'])) {
-			$langs['abbrev'] = addslashes(stripslashes(@$langs['abbrev']));
+		if (($langs['abbrev'] || $langs['english']) && empty($langs['del'])) {
+			$langs['abbrev'] = addslashes(stripslashes($langs['abbrev']));
 			$langs['english'] = addslashes(stripslashes($langs['english']));
 			if (!empty($langs['abbrev'])) {
 				$txt .= "\"{$langs['abbrev']}\"=>";

@@ -84,7 +84,7 @@ if ($del) {
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		$isNotNew = @$_POST['project_id'];
+		$isNotNew = $_POST['project_id'];
 		// check project parents and reset them to self if they do not exist
 		if (!$obj->project_parent) {
 			$obj->project_parent = $obj->project_id;
