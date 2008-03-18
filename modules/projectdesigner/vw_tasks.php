@@ -6,22 +6,9 @@ global $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTyp
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
-/*      tasks.php
-
-This file contains common task list rendering code used by
-modules/tasks/index.php and modules/projects/vw_tasks.php
-
-in
-
-External used variables:
-* $min_view: hide some elements when active (used in the vw_tasks.php)
-* $project_id
-* $f
-* $query_string
-*/
 
 if (empty($query_string)) {
-	$query_string = "?m=$m&amp;a=$a";
+	$query_string = '?m=' . $m . '&amp;a=' . $a;
 }
 
 // Number of columns (used to calculate how many columns to span things through)
@@ -269,7 +256,9 @@ foreach ($projects as $k => $p) {
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $tempoTask = new CTask();
 $userAlloc = $tempoTask->getAllocation('user_id');
-$open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" style="display:none" /><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" /></a>' . w2PendTip();
+global $expanded;
+$expanded = $AppUI->getPref('TASKSEXPANDED');
+$open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
 ?>
 <form name='frm_tasks'>
 <table id="tblTasks" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
