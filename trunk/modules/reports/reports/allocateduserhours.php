@@ -134,12 +134,12 @@ if ($do_report) {
 	$q->addTable('projects', 'pr');
 	$q->addQuery('t.*, ut.*, pr.project_name');
 	$q->addWhere('( task_start_date
-			   BETWEEN "' . $start_date->format(FMT_DATETIME_MYSQL) . '" 
-	                AND "' . $end_date->format(FMT_DATETIME_MYSQL) . '" 
-	           OR task_end_date	BETWEEN "' . $start_date->format(FMT_DATETIME_MYSQL) . '" 
-	                AND "' . $end_date->format(FMT_DATETIME_MYSQL) . '" 
-		   OR ( task_start_date <= "' . $start_date->format(FMT_DATETIME_MYSQL) . '"
-	                AND task_end_date >= "' . $end_date->format(FMT_DATETIME_MYSQL) . '") )');
+			   BETWEEN \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\' 
+	                AND \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\' 
+	           OR task_end_date	BETWEEN \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\' 
+	                AND \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\' 
+		   OR ( task_start_date <= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'
+	                AND task_end_date >= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\') )');
 	$q->addWhere('task_end_date IS NOT NULL');
 	$q->addWhere('task_end_date != "0000-00-00 00:00:00"');
 	$q->addWhere('task_start_date IS NOT NULL');

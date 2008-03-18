@@ -225,7 +225,7 @@ switch ($f) {
 
 		$q->addWhere('task_percent_complete = 100');
 		//TODO: use date class to construct date.
-		$q->addWhere('task_end_date >= "' . date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d') - 7, date('Y'))) . '"');
+		$q->addWhere('task_end_date >= \'' . date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d') - 7, date('Y'))) . '\'');
 		break;
 	case 'children':
 		// patch 2.13.04 2, fixed ambigious task_id

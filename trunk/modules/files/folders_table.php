@@ -301,7 +301,7 @@ function getFolders($parent, $level = 0) {
 	global $AppUI, $allowed_folders_ary, $denied_folders_ary, $tab, $m, $a, $company_id, $allowed_companies, $project_id, $task_id, $current_uri, $file_types;
 	// retrieve all children of $parent
 
-	$folder_where = 'file_folder_parent="' . $parent . '"';
+	$folder_where = 'file_folder_parent = \'' . $parent . '\'';
 	//   $folder_where .= (count($denied_folders_ary) > 0) ? "\nAND file_folder_id NOT IN (" . implode(",", $denied_folders_ary) . ")" : "";
 
 	$q = new DBQuery();

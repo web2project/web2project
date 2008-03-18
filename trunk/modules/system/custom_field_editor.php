@@ -38,7 +38,7 @@ foreach ($modules as $module) {
 
 	$q = new DBQuery;
 	$q->addTable('custom_fields_struct');
-	$q->addWhere('field_module = "' . strtolower($module["mod_name"]) . '"');
+	$q->addWhere('field_module = \'' . strtolower($module["mod_name"]) . '\'');
 	$q->addOrder('field_order ASC');
 	$custom_fields = $q->loadList();
 	$q->clear();

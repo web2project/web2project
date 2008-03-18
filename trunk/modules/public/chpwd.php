@@ -23,7 +23,7 @@ if ($user_id) {
 		$q = new DBQuery;
 		$q->addTable('users');
 		$q->addQuery('user_id');
-		$q->addWhere('user_password = "' . $old_md5 . '"');
+		$q->addWhere('user_password = \'' . $old_md5 . '\'');
 		$q->addWhere('user_id = ' . (int)$user_id);
 		if ($canAdminEdit || $q->loadResult() == $user_id) {
 			require_once ($AppUI->getModuleClass('admin'));

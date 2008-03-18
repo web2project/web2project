@@ -56,7 +56,7 @@ class CPreferences {
 		$q = new DBQuery;
 		$q->setDelete('user_preferences');
 		$q->addWhere('pref_user = ' . (int)$this->pref_user);
-		$q->addWhere('pref_name = "' . $this->pref_name . '"');
+		$q->addWhere('pref_name = \'' . $this->pref_name . '\'');
 		if (!$q->exec()) {
 			$q->clear();
 			return db_error();
@@ -96,7 +96,7 @@ class CModule extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory');
-		$q->addWhere('mod_directory = "' . $this->mod_directory . '"');
+		$q->addWhere('mod_directory = \'' . $this->mod_directory . '\'');
 		if ($temp = $q->loadHash()) {
 			// the module is already installed
 			// TODO: check for older version - upgrade
@@ -263,7 +263,7 @@ class bcode extends CW2pObject {
 		$q = new DBQuery;
 		$q->addQuery('billingcode_id');
 		$q->addTable('billingcode');
-		$q->addWhere('billingcode_name = "' . $this->billingcode_name . '"');
+		$q->addWhere('billingcode_name = \'' . $this->billingcode_name . '\'');
 		$q->addWhere('company_id = ' . (int)$this->company_id);
 		$found_id = $q->loadResult();
 		$q->clear();

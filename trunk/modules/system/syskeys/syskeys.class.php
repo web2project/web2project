@@ -69,7 +69,7 @@ class CSysVal extends CW2pObject {
 		if ($this->sysval_key_id && $this->sysval_title) {
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_key_id = ' . (int)$this->sysval_key_id);
-			$q->addWhere('sysval_title = "' . $this->sysval_title . '"');
+			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
 			if (!$q->exec()) {
 				$q->clear();
 				return get_class($this) . '::store failed: ' . db_error();
@@ -94,7 +94,7 @@ class CSysVal extends CW2pObject {
 		$q = new DBQuery;
 		if ($this->sysval_title) {
 			$q->setDelete('sysvals');
-			$q->addWhere('sysval_title = "' . $this->sysval_title . '"');
+			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
 			if (!$q->exec()) {
 				$q->clear();
 				return get_class($this) . '::delete failed <br />' . db_error();

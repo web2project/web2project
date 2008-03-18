@@ -87,7 +87,7 @@ $q->addTable('contacts', 'a');
 $q->leftJoin('companies', 'b', 'a.contact_company = b.company_id');
 $q->leftJoin('departments', '', 'contact_department = dept_id');
 $q->leftJoin('users', '', 'contact_id = user_contact');
-$q->addWhere('(contact_first_name LIKE "' . $where . '%" OR contact_last_name LIKE "' . $where . '%" ' . $additional_filter . ')');
+$q->addWhere('(contact_first_name LIKE \'' . $where . '%\' OR contact_last_name LIKE \'' . $where . '%\' ' . $additional_filter . ')');
 $q->addWhere('
 	(contact_private=0
 		OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
@@ -236,7 +236,7 @@ for ($z = 0; $z < $carrWidth; $z++) {
 		$q = new DBQuery;
 		$q->addTable('projects');
 		$q->addQuery('count(project_id)');
-		$q->addWhere('project_contacts like "' . $carr[$z][$x]['contact_id'] . ',%" or project_contacts like "%,' . $carr[$z][$x]['contact_id'] . ',%" or project_contacts like "%,' . $carr[$z][$x]['contact_id'] . '" or project_contacts like "' . $carr[$z][$x]['contact_id'] . '"');
+		$q->addWhere('project_contacts like \'' . $carr[$z][$x]['contact_id'] . ',%\' or project_contacts like \'%,' . $carr[$z][$x]['contact_id'] . ',%\' or project_contacts like \'%,' . $carr[$z][$x]['contact_id'] . '\' or project_contacts like \'' . $carr[$z][$x]['contact_id'] . '\'');
 
 		$res = $q->exec();
 		$projects_contact = $q->fetchRow();

@@ -129,7 +129,7 @@ if ($hide_complete) {
 	$q->addWhere('task_percent_complete < 100');
 }
 if ($cost_code != '0') {
-	$q->addWhere('task_log_costcode = "' . $cost_code . '"');
+	$q->addWhere('task_log_costcode = \'' . $cost_code . '\'');
 }
 $q->addOrder('task_log_date');
 $project->setAllowedSQL($AppUI->user_id, $q, 'task_project');

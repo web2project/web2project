@@ -264,8 +264,8 @@ if ($do_report) {
 	// Let's figure out which users we have
 	$user_list = w2PgetUsersHashList();
 
-	$ss = '"' . $start_date->format(FMT_DATETIME_MYSQL) . '"';
-	$se = '"' . $end_date->format(FMT_DATETIME_MYSQL) . '"';
+	$ss = '\'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'';
+	$se = '\'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'';
 
 	$and = false;
 	$where = false;
@@ -281,11 +281,11 @@ if ($do_report) {
 	$q->addWhere('(task_percent_complete < 100)');
 
 	if ($project_id != 'all') {
-		$q->addWhere('t.task_project="' . $project_id . '"');
+		$q->addWhere('t.task_project=\'' . $project_id . '\'');
 	}
 
 	if ($company_id != 'all') {
-		$q->addWhere('p.project_company="' . $company_id . '"');
+		$q->addWhere('p.project_company = \'' . $company_id . '\'');
 	}
 
 	$q->addOrder('task_project');

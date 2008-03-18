@@ -22,7 +22,7 @@ $updatekey = w2PgetParam($_POST, 'updatekey', 0);
 $q = new DBQuery;
 $q->addTable('contacts');
 $q->addQuery('contact_id');
-$q->addWhere('contact_updatekey = "' . $updatekey . '"');
+$q->addWhere('contact_updatekey = \'' . $updatekey . '\'');
 $contactkey = $q->loadList();
 $q->clear();
 

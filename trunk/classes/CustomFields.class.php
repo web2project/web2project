@@ -330,7 +330,7 @@ class CustomFields {
 		// Get Custom Fields for this Module
 		$q = new DBQuery;
 		$q->addTable('custom_fields_struct');
-		$q->addWhere('field_module = "' . $this->m . '" AND	field_page = "' . $this->a . '"');
+		$q->addWhere('field_module = \'' . $this->m . '\' AND field_page = \'' . $this->a . '\'');
 		if ($published) {
 			$q->addWhere('field_published = 1');
 		}
@@ -525,7 +525,7 @@ class CustomFields {
 		$q->addQuery('cfv.value_charvalue');
 		$q->addJoin('custom_fields_struct', 'cfs', 'cfs.field_id = cfv.value_field_id');
 		$q->addJoin($moduleTable, 'm', 'm.' . $moduleTableId . ' = cfv. value_object_id');
-		$q->addWhere('cfs.field_module = "' . $this->m . '"');
+		$q->addWhere('cfs.field_module = \'' . $this->m . '\'');
 		$q->addWhere('cfv.value_charvalue LIKE "%' . $keyword . '%"');
 		return $q->loadList();
 	}

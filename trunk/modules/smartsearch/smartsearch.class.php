@@ -137,9 +137,9 @@ class smartsearch {
 					if ($this->search_options['ignore_specchar'] == 'on') {
 						$tmppattern = recode2regexp_utf8($or_keyword);
 						if ($this->search_options['ignore_case'] == 'on') {
-							$sql .= ' ' . $field . ' REGEXP "' . $tmppattern . '" or ';
+							$sql .= ' ' . $field . ' REGEXP \'' . $tmppattern . '\' or ';
 						} else {
-							$sql .= ' ' . $field . ' REGEXP BINARY "' . $tmppattern . '" or ';
+							$sql .= ' ' . $field . ' REGEXP BINARY \'' . $tmppattern . '\' or ';
 						}
 					} else
 						if ($this->search_options['ignore_case'] == 'on') {

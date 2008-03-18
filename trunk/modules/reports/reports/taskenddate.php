@@ -104,8 +104,8 @@ if ($do_report) {
 	$q->addWhere('p.project_id   = t.task_project');
 	$q->addWhere('t.task_dynamic = "0"');
 	$q->addWhere('t.task_owner = u.user_id');
-	$q->addWhere('task_end_date >= "' . $start_date->format(FMT_DATETIME_MYSQL) . '"');
-	$q->addWhere('task_end_date <= "' . $end_date->format(FMT_DATETIME_MYSQL) . '"');
+	$q->addWhere('task_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
+	$q->addWhere('task_end_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
 
 	$q->addOrder('project_name ASC');
 	$q->addOrder('task_end_date ASC');
