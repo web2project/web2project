@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 global $showEditCheckbox, $tasks, $priorities;
-global $m, $a, $date, $other_users, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id;
+global $m, $a, $date, $other_users, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id, $task_type;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 $perms = &$AppUI->acl();
@@ -18,14 +18,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 	<td width="50%">
 	<?php
 if ($other_users) {
-	echo $AppUI->_("Show Todo for:") . '<select name="show_user_todo" onchange="document.form_buttons.submit()">';
-
-	$q = new DBQuery;
-	$q->addTable('users');
-	$q->addTable('contacts');
-	$q->addQuery('user_id, user_username, contact_first_name, contact_last_name');
-	$q->addWhere('user_contact = contact_id');
-	$q->addOrder('contact_first_name, contact_last_name');
+	echo $AppUI->_("Show Todo for:") . '<select name="show_user_todo" class="text" onchange="document.form_buttons.submit()">';
 
 	if (($rows = w2PgetUsersList())) {
 		foreach ($rows as $row) {
@@ -80,6 +73,14 @@ if ($other_users) {
 		<label for="show_empty_date"><?php echo $AppUI->_('Empty Dates'); ?></label>
 	</td>
 </tr>
+<tr>
+	<td colspan = "12" align="right">
+<?php
+	$types = array('' => '(Task Type Filter)') + w2PgetSysVal('TaskType');
+	echo arraySelect($types, 'task_type', 'class="text" onchange="document.form_buttons.submit()"', $task_type, true);
+?>
+	</td>
+</tr>
 </form>
 </table>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
@@ -96,7 +97,6 @@ if ($other_users) {
 	<th nowrap="nowrap"><?php sort_by_item_title('Due In', 'task_due_in', SORT_NUMERIC, '&a=todo'); ?></th>
 	<?php if (w2PgetConfig('direct_edit_assignment')) { ?><th width="0">&nbsp;</th><?php } ?>
 </tr>
-
 <?php
 
 /*** Tasks listing ***/
