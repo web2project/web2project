@@ -307,6 +307,7 @@ td.tabon {
         border-bottom: none;
         */
         background: #ffffff url('bar_top_Selectedmiddle.gif') repeat-x top;
+        font-weight: bold; 
 }
 td.taboff {
         /* border-top: solid #a9d4ff 1px;
@@ -315,6 +316,7 @@ td.taboff {
         border-bottom: solid #a9d4ff 2px;
         */
         background: #ffffff url('bar_top_middle.gif') repeat-x top;
+        font-weight: normal; 
 }
 td.tabsp {
         border-bottom: solid #a9d4ff 2px;

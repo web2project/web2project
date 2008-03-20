@@ -374,7 +374,7 @@ function addComponent() {
 	htmltxt = '';
 	htmltxt +='<input type="hidden" id="add_task_line_'+line_nr+'" name="add_task_line_'+line_nr+'" value="'+line_nr+'" />';
 	htmltxt +='<input type="text" class="text" style="width:200px;" name="add_task_name_'+line_nr+'" value="" />';
-	htmltxt +='&nbsp;<?php echo w2PtoolTip('add tasks panel', 'click here to add a description to this task and/or edit other available options.<br />click again to collapse it.'); ?><a href="#component'+li+'_desc" onclick="expand_colapse(\'component'+li+'_desc\', \'tblProjects\')"><img id="component'+li+'_desc_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"><img id="component'+li+'_desc_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0" style="display:none"></a><?php echo w2PendTip(); ?>';
+	htmltxt +='&nbsp;<?php echo w2PtoolTip('add tasks panel', 'click here to add a description to this task and/or edit other available options.<br />click again to collapse it.'); ?><a href="#component'+li+'_desc" onclick="expand_collapse(\'component'+li+'_desc\', \'tblProjects\')"><img id="component'+li+'_desc_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"><img id="component'+li+'_desc_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0" style="display:none"></a><?php echo w2PendTip(); ?>';
 	oCell.innerHTML =htmltxt;
 	newtr.appendChild(oCell);
 	oCell = document.createElement('td');
@@ -545,7 +545,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td style="background-color:#<?php echo $obj->project_color_identifier; ?>" colspan="1">
            	<?php
-	echo '<a href="#fp" name="fp" style="display:block" onclick="expand_colapse(\'project\', \'tblProjects\')">'
+	echo '<a href="#fp" name="fp" style="display:block" onclick="expand_collapse(\'project\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' . $AppUI->_('Project') . ': ' . $obj->project_name . '<strong></font>';
@@ -556,7 +556,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" style="background-color:#<?php echo $obj->project_color_identifier; ?>" align="right" colspan="1">
            	<?php
-	echo '<a href="#fp" name="fp" style="display:block" onclick="expand_colapse(\'project\', \'tblProjects\')">'
+	echo '<a href="#fp" name="fp" style="display:block" onclick="expand_collapse(\'project\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<img id="project_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="project_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '>';
@@ -596,7 +596,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="#fg" name="fg" style="display:block" onclick="expand_colapse(\'gantt\', \'tblProjects\')">'
+	echo '<a href="#fg" name="fg" style="display:block" onclick="expand_collapse(\'gantt\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Gantt Chart') . '<strong></font>';
@@ -607,7 +607,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="#fg" name="fg" style="display:block" onclick="expand_colapse(\'gantt\', \'tblProjects\')">'
+	echo '<a href="#fg" name="fg" style="display:block" onclick="expand_collapse(\'gantt\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<img id="gantt_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="gantt_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
@@ -650,7 +650,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="#ft" name="ft" style="display:block" onclick="expand_colapse(\'tasks\', \'tblProjects\')">'
+	echo '<a href="#ft" name="ft" style="display:block" onclick="expand_collapse(\'tasks\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Tasks') . '<strong></font>';
@@ -661,7 +661,7 @@ function setDate( frm_name, f_date ) {
 ?>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="#ft" name="ft" style="display:block" onclick="expand_colapse(\'tasks\', \'tblProjects\')">'
+	echo '<a href="#ft" name="ft" style="display:block" onclick="expand_collapse(\'tasks\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<img id="tasks_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="tasks_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
@@ -704,7 +704,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="#fa" name="fa" style="display:block" onclick="expand_colapse(\'actions\', \'tblProjects\')">'
+	echo '<a href="#fa" name="fa" style="display:block" onclick="expand_collapse(\'actions\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Actions') . '<strong></font>';
@@ -715,7 +715,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="#fa" name="fa" style="display:block" onclick="expand_colapse(\'actions\', \'tblProjects\')">'
+	echo '<a href="#fa" name="fa" style="display:block" onclick="expand_collapse(\'actions\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<img id="actions_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="actions_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
@@ -758,7 +758,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="#fat" name="fat" style="display:block" onclick="expand_colapse(\'addtsks\', \'tblProjects\')">'
+	echo '<a href="#fat" name="fat" style="display:block" onclick="expand_collapse(\'addtsks\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Add Tasks') . '<strong></font>';
@@ -769,7 +769,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="#fat" name="fat" style="display:block" onclick="expand_colapse(\'addtsks\', \'tblProjects\')">'
+	echo '<a href="#fat" name="fat" style="display:block" onclick="expand_collapse(\'addtsks\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<img id="addtsks_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="addtsks_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
@@ -812,7 +812,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="#fbt" name="fbt" style="display:block" onclick="expand_colapse(\'files\', \'tblProjects\')">'
+	echo '<a href="#fbt" name="fbt" style="display:block" onclick="expand_collapse(\'files\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Files') . '<strong></font>';
@@ -823,7 +823,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="#fbt" name="fbt" style="display:block" onclick="expand_colapse(\'files\', \'tblProjects\')">'
+	echo '<a href="#fbt" name="fbt" style="display:block" onclick="expand_collapse(\'files\', \'tblProjects\')">'
 ?>
             	<?php
 	echo '<img id="files_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="files_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';

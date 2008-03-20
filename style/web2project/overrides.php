@@ -77,7 +77,7 @@ class CTabBox extends CTabBox_core {
 				} else {
 					$s .= $this->baseHRef . 'tab=' . $k;
 				}
-				$s .= '">' . ($sel ? '<b>' : '') . ($v[2] ? $v[1] : $AppUI->_($v[1])) . ($sel ? '</b>' : '') . '</a>&nbsp;</td>';
+				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a>&nbsp;</td>';
 				$s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>';
 				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '"/></td>';
 			}
