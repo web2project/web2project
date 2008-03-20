@@ -739,3 +739,19 @@ img {
 label {
 	vertical-align: 25%;
 }
+
+TD.weekDay  {
+	height:360px;
+	vertical-align: top;
+	padding: 0px 4px 1px 4px;
+	border: 1px solid #ccc;
+	text-align: left;
+}
+TD.weekendDay  {
+	height:360px;
+	vertical-align: top;
+	padding: 0px 4px 1px 4px;
+	border: 1px solid #ccc;
+	text-align: left;
+	background-color:#F0F0F0;
+}
