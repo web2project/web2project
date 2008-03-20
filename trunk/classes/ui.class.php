@@ -877,6 +877,10 @@ class CAppUI {
 	 */
 	function loadHeaderJS() {
 		global $m, $a;
+
+		// load the js base.php
+		include w2PgetConfig('root_dir') . '/js/base.php';
+
 		// Search for the javascript files to load.
 		if (!isset($m)) {
 			return;
@@ -891,18 +895,7 @@ class CAppUI {
 			$base .= '/';
 		}
 		// Load the basic javascript used by all modules.
-		$jsdir = dir($root.'js');
-
-		$js_files = array();
-		while (($entry = $jsdir->read()) !== false) {
-			if (substr($entry, -3) == '.js') {
-				$js_files[] = $entry;
-			}
-		}
-		asort($js_files);
-		while (list(, $js_file_name) = each($js_files)) {
-			echo '<script type="text/javascript" src="'.$base.'js/'.$js_file_name.'"></script>'."\n";
-		}
+		echo '<script type="text/javascript" src="'.$base.'js/base.js"></script>'."\n";
 
 		// additionally load mootools
 		echo '<script type="text/javascript" src="'.$base.'lib/mootools/mootools.js"></script>'."\n";
@@ -937,16 +930,6 @@ class CAppUI {
 		echo '			if (span.getAttribute(\'title\')) as.push(span);';
 		echo '		});';
 		echo '		new Tips(as), {';
-/*		echo '			maxTitleChars: 100,';
-		echo '			initialize:function(){';
-		echo '				this.fx = new Fx.Style(this.toolTip, \'opacity\', {duration: 200, wait: false}).set(0);';
-		echo '			},';
-		echo '			onShow: function(toolTip) {';
-		echo '				this.fx.start(1);';
-		echo '			},';
-		echo '			onHide: function(toolTip) {';
-		echo '				this.fx.start(0);';
-		echo '			}';*/
 		echo '		}';
 		echo '}';
 		echo '</script>';

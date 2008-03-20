@@ -353,12 +353,14 @@ A.hdr:link, A.hdr:active, A.hdr:visited {
 td.tabon {
 	background: #D4D0C8;
     background-image: url('tabSelectedBg.png');
+        font-weight: bold; 
 }
 td.taboff {
 	background: #D4D0C8;
 	background-image: url('tabBg.png');
     background-position : bottom;
     background-repeat   : repeat-x;
+        font-weight: normal; 
 	}
 td.tabsp {
 	border-bottom: solid #808080 1px;
