@@ -1,5 +1,4 @@
-# $Id: session.php 102 2008-03-18 19:52:59Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/includes/session.php $
-# The concept for this was taken from the Drupal project by D. Keith Casey Jr.  - caseydk@users.sourceforge.net
+#  The concept for this was taken from the Drupal project by D. Keith Casey Jr.  - caseydk@users.sourceforge.net
 
 # PHP 4, Apache 1
 <IfModule mod_php4.c>
