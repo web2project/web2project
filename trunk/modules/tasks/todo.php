@@ -15,6 +15,12 @@ if (isset($_GET['tab'])) {
 }
 $tab = $AppUI->getState('ToDoTab') !== null ? $AppUI->getState('ToDoTab') : 0;
 
+if (isset($_POST['task_type'])) {
+	$AppUI->setState('ToDoTaskType', w2PgetParam($_POST, 'task_type', ''));
+}
+global $task_type;
+$task_type = $AppUI->getState('ToDoTaskType') !== null ? $AppUI->getState('ToDoTaskType') : '';
+
 $project_id = intval(w2PgetParam($_GET, 'project_id', 0));
 $date = (!w2PgetParam($_GET, 'date', '') == '') ? $this_day->format(FMT_TIMESTAMP_DATE) : intval(w2PgetParam($_GET, 'date', ''));
 $user_id = $AppUI->user_id;
@@ -136,7 +142,10 @@ if ($showPinned) {
 	$q->addWhere('task_pinned = 1');
 }
 if (!$showEmptyDate) {
-	$q->addWhere('ta.task_start_date <> "" AND ta.task_start_date <> "0000-00-00 00:00:00"');
+	$q->addWhere('ta.task_start_date <> \'\' AND ta.task_start_date <> \'0000-00-00 00:00:00\'');
+}
+if ($task_type != '') {
+	$q->addWhere('ta.task_type = ' . $task_type);
 }
 
 if (count($allowedTasks)) {
