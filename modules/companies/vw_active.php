@@ -29,7 +29,7 @@ if (count($projList)) {
 	$q->addWhere('NOT (project_id IN (' . implode(',', $projList) . ') )');
 }
 
-$q->addWhere('projects.project_active <> 0');
+$q->addWhere('projects.project_active = 1');
 $q->addOrder($sort);
 $s = '';
 
