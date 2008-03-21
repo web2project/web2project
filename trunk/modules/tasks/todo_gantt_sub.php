@@ -15,7 +15,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 	<td width="50%">
 	<?php
 if ($other_users) {
-	echo $AppUI->_('Show Todo for:') . '<select name="show_user_todo" onchange="document.form_buttons.submit()">';
+	echo $AppUI->_('Show Todo for:') . '<select name="show_user_todo" class="text" onchange="document.form_buttons.submit()">';
 	if (($rows = w2PgetUsersList())) {
 		foreach ($rows as $row) {
 			if ($user_id == $row['user_id']) {

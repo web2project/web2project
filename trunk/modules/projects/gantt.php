@@ -64,14 +64,12 @@ if ($department > 0 && !$addPwOiD) {
 	$q->addWhere('project_departments.department_id = ' . (int)$department);
 }
 if ($proFilter == '-3') {
-	$q->addWhere('project_owner = ' . (int)$user_id);
-} elseif ($proFilter == '-2') {
-	$q->addWhere('project_status != 3');
+	$q->addWhere('pr.project_owner = ' . (int)$user_id);
 } elseif ($proFilter != '-1') {
-	$q->addWhere('project_status = ' . (int)$proFilter);
+	$q->addWhere('pr.project_status = ' . (int)$proFilter);
 }
 if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
-	$q->addWhere('project_company = ' . (int)$company_id);
+	$q->addWhere('pr.project_company = ' . (int)$company_id);
 }
 // Show Projects where the Project Owner is in the given department
 if ($addPwOiD && !empty($owner_ids)) {
@@ -79,12 +77,15 @@ if ($addPwOiD && !empty($owner_ids)) {
 }
 
 if ($showInactive != '1') {
-	$q->addWhere('project_active <> 0');
+	$q->addWhere('pr.project_active = 1');
+	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+		$q->addWhere('pr.project_status <> ' . $template_status);
+	}
 }
 $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $AppUI->getModuleClass('departments');
 $q->addGroup('pr.project_id');
-$q->addOrder('project_name, task_end_date DESC');
+$q->addOrder('pr.project_name, task_end_date DESC');
 
 $projects = $q->loadList();
 $q->clear();

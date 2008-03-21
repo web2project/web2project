@@ -204,7 +204,7 @@ function showFullProject() {
 			</td>
 			<td align="center" valign="bottom" nowrap="nowrap">
 				<input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-				<label for="showArcProjs"><?php echo $AppUI->_('Archived Projects'); ?></label>
+				<label for="showArcProjs"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
 			</td>
 <!--			<td align="center" valign="bottom" nowrap="nowrap">
 				<input type="checkbox" name="showHoldProjs" id="showHoldProjs" <?php echo $showHoldProjs ? 'checked="checked"' : ''; ?> />

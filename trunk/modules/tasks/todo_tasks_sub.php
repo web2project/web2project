@@ -18,14 +18,15 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 	<td width="50%">
 	<?php
 if ($other_users) {
-	echo $AppUI->_("Show Todo for:") . '<select name="show_user_todo" class="text" onchange="document.form_buttons.submit()">';
+	echo '<select name="show_user_todo" class="text" onchange="document.form_buttons.submit()">';
 
+	echo '<option value="0" selected="selected">(' . $AppUI->_("Show Todo for") . ')</option>';
 	if (($rows = w2PgetUsersList())) {
 		foreach ($rows as $row) {
 			if ($user_id == $row['user_id']) {
-				echo '<option value="' . $row['user_id'] . '" selected="selected">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
+				echo '<option value="' . $row['user_id'] . '" selected="selected">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</option>';
 			} else {
-				echo '<option value="' . $row['user_id'] . '">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
+				echo '<option value="' . $row['user_id'] . '">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</option>';
 			}
 		}
 	}
@@ -46,7 +47,7 @@ if ($other_users) {
 		<input type="checkbox" name="show_arc_proj" id="show_arc_proj" onclick="document.form_buttons.submit()" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
 	</td>
 	<td nowrap="nowrap">
-		<label for="show_arc_proj"><?php echo $AppUI->_('Archived Projects'); ?></label>
+		<label for="show_arc_proj"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
 	</td>
 <!--	<td>
 		<input type="checkbox" name="show_hold_proj" id="show_hold_proj" onclick="document.form_buttons.submit()" <?php echo $showHoldProjs ? 'checked="checked"' : ''; ?> />

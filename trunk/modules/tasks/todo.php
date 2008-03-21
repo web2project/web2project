@@ -127,7 +127,10 @@ $q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is nu
 $q->addWhere('ta.task_status = "0"');
 $q->addWhere('pr.project_id = ta.task_project');
 if (!$showArcProjs) {
-	$q->addWhere('project_active <> 0');
+	$q->addWhere('project_active = 1');
+	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+		$q->addWhere('project_status <> ' . $template_status);
+	}
 }
 if (!$showLowTasks) {
 	$q->addWhere('task_priority >= 0');

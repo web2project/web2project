@@ -274,6 +274,10 @@ if ($do_report) {
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.*');
 	$q->addJoin('projects', 'pr', 'pr.project_id = t.task_project', 'inner');
+	$q->addWhere('pr.project_active = 1');
+	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+		$q->addWhere('pr.project_status <> ' . $template_status);
+	}
 
 	if ($use_period) {
 		$q->addWhere('(( task_start_date >= ' . $ss . ' AND task_start_date <= ' . $se . ' ) OR ' . '  ( task_end_date <= ' . $se . ' AND task_end_date >= ' . $ss . ' ))');

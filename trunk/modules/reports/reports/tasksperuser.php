@@ -162,6 +162,10 @@ if ($do_report) {
 	$q->addJoin('projects', '', 'projects.project_id = task_project', 'inner');
 	$q->addJoin('project_departments', '', 'project_departments.project_id = projects.project_id');
 	$q->addJoin('departments', '', 'department_id = dept_id');
+	$q->addWhere('project_active = 1');
+	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+		$q->addWhere('project_status <> ' . $template_status);
+	}
 
 	if ($use_period) {
 		$q->addWhere('( (task_start_date >= ' . $ss . ' AND task_start_date <= ' . $se . ') OR ' . '(task_end_date <= ' . $se . ' AND task_end_date >= ' . $ss . ') )');
