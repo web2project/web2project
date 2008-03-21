@@ -72,7 +72,7 @@ if ($obj->link_task) {
 	$task_name = '';
 }
 
-$extra = array('where' => 'project_active <> 0');
+$extra = array('where' => 'project_active = 1');
 $project = new CProject();
 $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);

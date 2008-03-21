@@ -35,7 +35,7 @@ $q = new DBQuery;
 $q->addTable('departments');
 $q->addQuery('departments.*, COUNT(ct.contact_department) dept_users, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
 $q->addJoin('project_departments', 'pd', 'pd.department_id = dept_id');
-$q->addJoin('projects', 'p', 'pd.project_id = p.project_id AND p.project_active <> 0');
+$q->addJoin('projects', 'p', 'pd.project_id = p.project_id AND p.project_active = 1');
 $q->leftJoin('users', 'u', 'dept_owner = u.user_id');
 $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
 $q->addJoin('projects', 'p2', 'pd.project_id = p2.project_id AND p2.project_active = 0');
