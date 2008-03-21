@@ -72,7 +72,7 @@ if (!$user) {
 	if ($canEdit || $user_id == $AppUI->user_id) {
 		$titleBlock->addCrumb('?m=admin&a=addedituser&user_id='.$user_id, 'edit this user');
 		$titleBlock->addCrumb('?m=system&a=addeditpref&user_id='.$user_id, 'edit preferences');
-		$titleBlock->addCrumbRight('<div class="crumb"><ul><li style="float:right;"><a href="#" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
+		$titleBlock->addCrumbRight('<div class="crumb"><ul><li style="float:right;"><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
 		$titleBlock->addCell('<td align="right" width="100%"><input type="button" class=button value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>');
 	}
 	$titleBlock->show();

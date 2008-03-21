@@ -260,7 +260,7 @@ foreach ($files as $file_row) {
 	$hidden_table = '';
 	echo $file_row['file_lastversion'];
 	if ($file_row['file_versions'] > 1) {
-		echo ' <a href="#" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $file_row['file_versions'] . ')</a>';
+		echo ' <a href="javascript: void(0);" onclick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $file_row['file_versions'] . ')</a>';
 		$hidden_table = '<tr><td colspan="20">
 <table style="display: none" id="versions_' . $latest_file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>

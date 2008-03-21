@@ -156,7 +156,7 @@ if (function_exists('styleRenderBoxTop')) {
 ?>
 <table width="100%" class="std">
 <tr><td>
-<h4><a href="#" onclick="window.location.href=setContactIDs('GET','dialog=1&<?php if (!is_null($call_back))
+<h4><a href="javascript: void(0);" onclick="window.location.href=setContactIDs('GET','dialog=1&<?php if (!is_null($call_back))
 	echo 'call_back=' . $call_back . '&'; ?>show_all=1');"><?php echo $AppUI->_('View all allowed companies'); ?></a></h4>
 <hr />
 <h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>

@@ -220,7 +220,7 @@ foreach ($messages as $row) {
 				$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
 				$s .= '<font size="1">' . $editor[0]['contact_first_name'] . ' ' . $editor[0]['contact_last_name'] . '</font></a>';
 			}
-			$s .= '<a name="' . $row['message_id'] . '" href="#' . $row['message_id'] . '" onclick="toggle(' . $row['message_id'] . ')">';
+			$s .= '<a name="' . $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
 			$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
 			$s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
 			$row['message_body'] = $bbparser->qparse($row['message_body']);
@@ -242,7 +242,7 @@ foreach ($messages as $row) {
 					$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
 					$s .= '<font size="1">' . $editor[0]['contact_first_name'] . ' ' . $editor[0]['contact_last_name'] . '</font></a>';
 				}
-				$s .= '<a href="#" onclick="toggle(' . $row['message_id'] . ')">';
+				$s .= '<a href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
 				$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
 				$side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
 				$row['message_body'] = $bbparser->qparse($row['message_body']);

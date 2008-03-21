@@ -168,7 +168,7 @@ function submitIt() {
 	<td align="right"><?php echo $AppUI->_('URL'); ?><a name="x"></a></td>
 	<td>
 		<input type="text" class="text" value="<?php echo $drow['dept_url']; ?>" name="dept_url" size="50" maxlength="255" />
-		<a href="#x" onclick="testURL('dept_url')">[<?php echo $AppUI->_('test'); ?>]</a>
+		<a href="javascript: void(0);" onclick="testURL('dept_url')">[<?php echo $AppUI->_('test'); ?>]</a>
 	</td>
 </tr>
 

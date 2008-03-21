@@ -144,7 +144,7 @@ if ($dialog) {
 			<table cellspacing="0" cellpadding="3" border="0" width="100%">
 			<tr>
 				<td nowrap="nowrap" align="right">
-					<a class="button" href="#" onclick="javascript:window.open('?m=help&dialog=1&hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
+					<a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&dialog=1&hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
 				</td>
 				<td nowrap="nowrap" align="right">
 					<a class="button" href="./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
