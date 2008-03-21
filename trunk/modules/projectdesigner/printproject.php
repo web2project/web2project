@@ -212,7 +212,7 @@ echo '<strong> Project Report <strong>';
 ?>
             	</td>
         <!--	    <td width="22" align="right">
-				<a href="#" onclick="var img=document.getElementById('imghd'); img.style.display='none'; window.print(); window.close();">
+				<a href="javascript: void(0);" onclick="var img=document.getElementById('imghd'); img.style.display='none'; window.print(); window.close();">
       			<img id="imghd" src="./modules/projectdesigner/images/printer.png" border="0" width="22" heigth="22" alt="print project" title="print project"/>
       			</a>
       			</td>-->  

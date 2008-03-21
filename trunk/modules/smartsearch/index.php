@@ -133,7 +133,7 @@ $titleBlock->show();
 			</div>
 			<div id="div_selmodules" name="div_selmodules"  style="<?php echo ($ssearch['mod_selection'] == "on" ? 'display:block' : 'display:none'); ?> ">
 				<table cellspacing="0" cellpadding="0" border="0">
-				<tr><td nowrap="nowrap" colspan="2"><a href="#" onclick="selModAll(this)"><?php echo $AppUI->_('Select all'); ?></a> | <a href="#" onclick="deselModAll(this)"><?php echo $AppUI->_('Deselect all'); ?></a></td></tr>
+				<tr><td nowrap="nowrap" colspan="2"><a href="javascript: void(0);" onclick="selModAll(this)"><?php echo $AppUI->_('Select all'); ?></a> | <a href="javascript: void(0);" onclick="deselModAll(this)"><?php echo $AppUI->_('Deselect all'); ?></a></td></tr>
 						<?php
 $objarray = array();
 foreach ($files as $tmp) {

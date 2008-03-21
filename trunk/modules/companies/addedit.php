@@ -156,7 +156,7 @@ function testURL( x ) {
 	<tr>
 		<td align="right">
 			URL http://<a name="x"></a></td><td><input type="text" class="text" value="<?php echo w2PformSafe($obj->company_primary_url); ?>" name="company_primary_url" size="50" maxlength="255" />
-			<a href="#x" onclick="testURL('CompanyURLOne')">[<?php echo $AppUI->_('test'); ?>]</a>
+			<a href="javascript: void(0);" onclick="testURL('CompanyURLOne')">[<?php echo $AppUI->_('test'); ?>]</a>
 		</td>
 	</tr>
 	

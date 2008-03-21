@@ -167,7 +167,7 @@ else
 	<td nowrap="nowrap">
 		<input type="hidden" name="task_log_date" id="task_log_date" value="<?php echo $log_date ? $log_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
 		<input type="text" name="log_date" id="log_date" onchange="setDate('editFrm', 'log_date');" value="<?php echo $log_date ? $log_date->format($df) : ""; ?>" class="text" />
-		<a href="#" onclick="return showCalendar('log_date', '<?php echo $df ?>', 'editFrm', null, true)">
+		<a href="javascript: void(0);" onclick="return showCalendar('log_date', '<?php echo $df ?>', 'editFrm', null, true)">
 			<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
 		</a>
 	</td>
@@ -230,7 +230,7 @@ if ($obj->canUserEditTimeInformation()) {
 ?>
 			<input type="hidden" name="task_end_date" id="task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
 			<input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ""; ?>" class="text" />
-			<a href="#" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
+			<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
 				<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0">
 			</a>
 		</td>

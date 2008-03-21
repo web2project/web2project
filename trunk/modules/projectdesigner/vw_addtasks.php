@@ -122,7 +122,7 @@ function addTasks() {
 <table width="100%">
 <tr>
 	<td align="left" width="20">
- 		<?php echo w2PtoolTip('add tasks', 'click here to add a new task to this project'); ?><a href="#bottom" onclick="addComponent()">
+ 		<?php echo w2PtoolTip('add tasks', 'click here to add a new task to this project'); ?><a href="javascript: void(0);" onclick="addComponent()">
 			<img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" title="<?php echo $AppUI->_('Add Line'); ?>" alt="<?php echo $AppUI->_('Add Line'); ?>" border="0" />
 		</a><?php echo w2PendTip(); ?>
 	</td>

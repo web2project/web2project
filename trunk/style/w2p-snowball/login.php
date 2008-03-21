@@ -66,11 +66,11 @@ echo styleRenderBoxTop();
 	<td style="padding:6px" align="right" valign="bottom" nowrap="nowrap"><input type="submit" name="login" value="<?php echo $AppUI->_('login'); ?>" class="button" /></td>
 </tr>
 <tr>
-	<td style="padding:6px" colspan="2" nowrap="nowrap"><a href="#" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a></td>
+	<td style="padding:6px" colspan="2" nowrap="nowrap"><a href="javascript: void(0);" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a></td>
 </tr>
 <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
 	<tr>
-	     <td style="padding:6px" colspan="2" nowrap="nowrap"><a href="#" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('I want to signup for a new account please.'); ?></a></td>
+	     <td style="padding:6px" colspan="2" nowrap="nowrap"><a href="javascript: void(0);" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('I want to signup for a new account please.'); ?></a></td>
 	</tr>
 <?php } ?>
 <tr><td colspan="2">

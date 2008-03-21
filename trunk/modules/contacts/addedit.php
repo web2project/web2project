@@ -180,7 +180,7 @@ function updateVerify() {
 			<td align="right">&nbsp;&nbsp;<?php echo $AppUI->_('Last Name'); ?>:</td>
 			<td>
 				<input type="text" class="text" size="25" name="contact_last_name" value="<?php echo $row->contact_last_name; ?>" maxlength="50" <?php if ($contact_id == 0) { ?> onBlur="orderByName('name')"<?php } ?> />
-				<a href="#" onclick="orderByName('name')">[<?php echo $AppUI->_('use in display'); ?>]</a>
+				<a href="javascript: void(0);" onclick="orderByName('name')">[<?php echo $AppUI->_('use in display'); ?>]</a>
 			</td>
 		</tr>
 		<tr>
@@ -239,7 +239,7 @@ $lastupdated = new CDate($row->contact_lastupdate);
 				<input type="text" class="text" name="contact_company_name" value="<?php echo $company_detail['company_name'];?>" maxlength="100" size="25" />
 				<input type="button" class="button" value="<?php echo $AppUI->_('select company...'); ?>..." onclick="popCompany()" />
 				<input type='hidden' name='contact_company' value="<?php echo $company_detail['company_id']; ?>" />
-				<a href="#" onclick="orderByName('company')">[<?php echo $AppUI->_('use in display'); ?>]</a>
+				<a href="javascript: void(0);" onclick="orderByName('company')">[<?php echo $AppUI->_('use in display'); ?>]</a>
 				</td>
 		</tr>
 		<tr>

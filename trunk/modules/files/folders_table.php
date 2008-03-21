@@ -331,7 +331,7 @@ function getFolders($parent, $level = 0) {
 				'</a>';
 			}
 			if ($file_count > 0) {
-				echo ' <a href="#ff' . $row['file_folder_id'] . '" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a>';
+				echo ' <a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a>';
 			}
 			echo "</td>\n";
 			echo '	<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post">
@@ -341,7 +341,7 @@ function getFolders($parent, $level = 0) {
 				<input type="hidden" name="redirect" value="' . $current_uri . '" />
 				</form>';
 			echo '<td align="right" width="64" nowrap="nowrap">' . "\n";
-			echo '<a href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '16', '16', 'edit icon', 'edit this folder', 'files') . '</a>' . '<a href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'new folder', 'add a new subfolder', 'files') . '</a>' . '<a href="#" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>' . '<a href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id .
+			echo '<a href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '16', '16', 'edit icon', 'edit this folder', 'files') . '</a>' . '<a href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'new folder', 'add a new subfolder', 'files') . '</a>' . '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>' . '<a href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id .
 				'&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a>';
 			echo "</td></tr></table></span>\n";
 			if ($file_count > 0) {
@@ -554,7 +554,7 @@ function displayFiles($folder) {
 		$hidden_table = '';
 		echo $row['file_lastversion'];
 		if ($row['file_versions'] > 1) {
-			echo ' <a href="#" onClick="expand(\'versions_' . $file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
+			echo ' <a href="javascript: void(0);" onClick="expand(\'versions_' . $file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
 			$hidden_table = '<tr><td colspan="20">
 	<table style="display: none" id="versions_' . $file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 	<tr>
@@ -631,7 +631,7 @@ function displayFiles($folder) {
 						$hidden_table .= '</td>';
 					$hidden_table .= '<td nowrap="nowrap" align="right" width="52">';
 					if ($canEdit && (empty($file_row['file_checkout']) || ($file_row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id)))) {
-						$hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file_row['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>" . '<a href="#" onclick="document.frm_duplicate_sub_file_' . $file_row['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . "</a>" . '<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_delete_sub_file_' . $file_row['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . "</a>";
+						$hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file_row['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>" . '<a href="javascript: void(0);" onclick="document.frm_duplicate_sub_file_' . $file_row['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . "</a>" . '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_delete_sub_file_' . $file_row['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . "</a>";
 					}
 					$hidden_table .= '</td>';
 					$hidden_table .= '<td nowrap="nowrap" align="right" width="1">';
@@ -684,8 +684,8 @@ function displayFiles($folder) {
 				echo '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">';
 				echo w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files');
 				echo "</a>";
-				echo '<a href="#" onclick="document.frm_duplicate_file_' . $file['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . '</a>';
-				echo '<a href="#" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_' . $file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
+				echo '<a href="javascript: void(0);" onclick="document.frm_duplicate_file_' . $file['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . '</a>';
+				echo '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_' . $file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
 			}
 ?>
 		<td nowrap="nowrap" align="center" width="1">

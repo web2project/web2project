@@ -39,7 +39,7 @@
 	<td align="right" valign="bottom" nowrap="nowrap"><input type="submit" name="login" value="<?php echo $AppUI->_('login'); ?>" class="button" /></td>
 </tr>
 <tr>
-	<td colspan="2"><a href="#" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a></td>
+	<td colspan="2"><a href="javascript: void(0);" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a></td>
 </tr>
 </table>
 <?php if ($AppUI->getVersion()) { ?>
