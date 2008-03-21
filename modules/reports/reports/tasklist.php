@@ -156,6 +156,10 @@ if ($do_report) {
 		$q->addTable('projects', 'b');
 		$q->addQuery('a.*, b.project_name');
 		$q->addWhere('a.task_project = b.project_id');
+		$q->addWhere('b.project_active = 1');
+		if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+			$q->addWhere('b.project_status <> ' . $template_status);
+		}
 	} else {
 		$q = new DBQuery;
 		$q->addTable('tasks', 'a');

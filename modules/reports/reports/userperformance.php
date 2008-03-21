@@ -106,9 +106,14 @@ if ($do_report) {
 	$q = new DBQuery;
 	$q->addTable('tasks', 't');
 	$q->addTable('user_tasks', 'ut');
+	$q->addJoin('projects', '', 'project_id = task_project', 'inner');
 	$q->addQuery('t.task_id, round(t.task_duration * IF(t.task_duration_type = 24, ' . $working_hours . ', t.task_duration_type)/count(ut.task_id),2) as hours_allocated');
 	$q->addWhere('t.task_id = ut.task_id');
 	$q->addWhere('t.task_milestone = 0');
+	$q->addWhere('project_active = 1');
+	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+		$q->addWhere('project_status <> ' . $template_status);
+	}
 
 	if ($project_id != 0) {
 		$q->addWhere('t.task_project = \'' . $project_id . '\'');
@@ -168,11 +173,11 @@ if ($do_report) {
 					$complete = ($percent[0] == 100);
 
 					if ($complete) {
-						$hours_allocated_complete += $task_list[$task_id]["hours_allocated"];
+						$hours_allocated_complete += $task_list[$task_id]['hours_allocated'];
 						$hours_worked_complete += $hours_worked;
 					}
 
-					$total_hours_allocated += $task_list[$task_id]["hours_allocated"];
+					$total_hours_allocated += $task_list[$task_id]['hours_allocated'];
 					$total_hours_worked += $hours_worked;
 				}
 			}

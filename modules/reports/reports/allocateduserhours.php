@@ -141,14 +141,18 @@ if ($do_report) {
 		   OR ( task_start_date <= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'
 	                AND task_end_date >= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\') )');
 	$q->addWhere('task_end_date IS NOT NULL');
-	$q->addWhere('task_end_date != "0000-00-00 00:00:00"');
+	$q->addWhere('task_end_date <> \'0000-00-00 00:00:00\'');
 	$q->addWhere('task_start_date IS NOT NULL');
-	$q->addWhere('task_start_date != "0000-00-00 00:00:00"');
-	$q->addWhere('task_dynamic !="1"');
-	$q->addWhere('task_milestone = "0"');
+	$q->addWhere('task_start_date <> \'0000-00-00 00:00:00\'');
+	$q->addWhere('task_dynamic <> 1');
+	$q->addWhere('task_milestone = 0');
 	$q->addWhere('task_duration  > 0');
 	$q->addWhere('t.task_project = pr.project_id');
 	$q->addWhere('t.task_id = ut.task_id');
+	$q->addWhere('pr.project_active = 1');
+	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+		$q->addWhere('pr.project_status <> ' . $template_status);
+	}
 
 	if ($user_id) {
 		$q->addWhere('t.task_owner = ' . (int)$user_id);

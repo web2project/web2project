@@ -132,6 +132,10 @@ function showcompany($company, $restricted = false) {
 		$q->addTable('task_log');
 		$q->addQuery('task_log_costcode, SUM(task_log_hours) as hours');
 		$q->addWhere('project_id = ' . (int)$project);
+		$q->addWhere('project_active = 1');
+		if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+			$q->addWhere('project_status <> ' . $template_status);
+		}
 
 		if ($log_start_date != 0 && !$log_all) {
 			$q->addWhere('task_log_date >=' . $log_start_date);

@@ -39,7 +39,6 @@ if (isset($_POST['proFilter'])) {
 $proFilter = $AppUI->getState('ProjectIdxFilter') !== null ? $AppUI->getState('ProjectIdxFilter') : '-1';
 
 $projFilter = arrayMerge(array('-1' => 'All Projects'), $projectStatus);
-$projFilter = arrayMerge(array('-2' => 'All w/o in progress'), $projFilter);
 if ($AppUI->user_id == $user_id) {
 	$projFilter = arrayMerge(array('-3' => 'My projects'), $projFilter);
 } else {
@@ -175,7 +174,7 @@ function showFullProject() {
                                 <input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label></td>
                         </td>
                         <td>
-                                <input type="checkbox" value="1" name="showInactive" id="showInactive" <?php echo (($showInactive == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showInactive"><?php echo $AppUI->_('Show Archived'); ?></label></td>
+                                <input type="checkbox" value="1" name="showInactive" id="showInactive" <?php echo (($showInactive == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showInactive"><?php echo $AppUI->_('Show Archived/Templates'); ?></label></td>
                         </td>
                         <td>
                                 <input type="checkbox" value="1" name="showAllGantt" id="showAllGantt" <?php echo (($showAllGantt == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showAllGantt"><?php echo $AppUI->_('Show Tasks'); ?></label></td>

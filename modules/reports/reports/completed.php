@@ -75,6 +75,10 @@ $q->addWhere('a.task_project = pr.project_id');
 $q->addJoin('users', 'b', 'a.task_owner = b.user_id', 'inner');
 $q->addJoin('contacts', 'ct', 'ct.contact_id = b.user_contact', 'inner');
 $q->addWhere('task_percent_complete = 100');
+$q->addWhere('pr.project_active = 1');
+if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+	$q->addWhere('pr.project_status <> ' . $template_status);
+}
 if ($project_id != 0) {
 	$q->addWhere('task_project = ' . (int)$project_id);
 }
