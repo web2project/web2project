@@ -347,7 +347,7 @@
 "tasks_ajax_list_tooltip"=>"Se o seu browser não suporta AJAX, desligue esta opção. ",
 "tasks_group_title"=>"Tarefas",
 "template_projects_status_id_title"=>"Id de Estado de Projectos Modelo",
-"template_projects_status_id_tooltip"=>"Insira nesta caixa a Chave de Identificação de Estado para Projects Modelo conforme aparece nos Valores de Procura do Sistema para a o tipo ProjectType.",
+"template_projects_status_id_tooltip"=>"Insira nesta caixa a Chave de Identificação de Estado para Projects Modelo conforme aparece nos Valores de Procura do Sistema para a o tipo ProjectStatus.",
 "tls_item_title"=>"TLS",
 "updated"=>"actualizado",
 "upgrade"=>"actualizar",
