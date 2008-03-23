@@ -107,7 +107,7 @@ function getEventTooltip($event_id) {
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Recurs') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . $AppUI->_($recurs[$row['event_recurs']]) . " (" . $row['event_times_recuring'] . "&nbsp;" . $AppUI->_('times') . ")" . '</td>';
+	$tt .= '			<td nowrap="nowrap">' . $AppUI->_($recurs[$row['event_recurs']]) . ($row['event_recurs'] ? ' (' . $row['event_times_recuring'] . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Attendees') . '</td>';

@@ -29,6 +29,10 @@ if (!$del && $start_date->compare($start_date, $end_date) >= 0) {
 	exit;
 }
 
+if (!$obj->event_recurs) {
+	$obj->event_times_recuring = 0;
+}
+
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Event');
 $do_redirect = true;

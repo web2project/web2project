@@ -123,7 +123,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>
-			<td class="hilite"><?php echo $AppUI->_($recurs[$obj->event_recurs]) . ' (' . $obj->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')'; ?></td>
+			<td class="hilite"><?php echo $AppUI->_($recurs[$obj->event_recurs]) . ($obj->event_recurs ? ' (' . $obj->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : ''); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Attendees'); ?>:</td>
