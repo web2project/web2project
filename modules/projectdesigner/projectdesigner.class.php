@@ -143,22 +143,14 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	$style = '';
 	if ($start_date) {
 		if (!$end_date) {
-			/*
-			** end date calc has been moved to calcEndByStartAndDuration()-function
-			** called from array_csort and tasks.php 
-			** perhaps this fallback if-clause could be deleted in the future, 
-			** didn't want to remove it shortly before the 2.0.2
-
-			*/
 			$end_date = new CDate('0000-00-00 00:00:00');
 		}
 
 		if ($now->after($start_date) && $a['task_percent_complete'] == 0) {
 			$style = 'background-color:#ffeebb';
-		} else
-			if ($now->after($start_date) && $a['task_percent_complete'] < 100) {
-				$style = 'background-color:#e6eedd';
-			}
+		} elseif ($now->after($start_date) && $a['task_percent_complete'] < 100) {
+			$style = 'background-color:#e6eedd';
+		}
 
 		if ($now->after($end_date)) {
 			$sign = -1;
@@ -176,64 +168,44 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	} else {
 		$s = "\n<tr id=\"project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_\" onmouseover=\"highlight_tds(this, true, " . $a['task_id'] . ")\" onmouseout=\"highlight_tds(this, false, " . $a['task_id'] . ")\" onclick=\"select_box('selected_task', '" . $a['task_id'] . "', 'project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_','frm_tasks')\" " . ($level ? 'style="display:none"' : '') . '>'; // edit icon
 	}
-	$s .= "\n\t<td>";
-	//$canEdit = !getDenyEdit( 'tasks', $a['task_id'] );
+	$s .= '<td>';
 	$canEdit = true;
-	//$canViewLog = $perms->checkModuleItem('task_log', 'view', $a['task_id']);
 	$canViewLog = true;
 	if ($canEdit) {
-		$s .= w2PtoolTip('edit tasks panel', 'click to edit this task') . "\n\t\t<a href=\"?m=tasks&a=addedit&task_id={$a['task_id']}\">" . "\n\t\t\t" . '<img src="' . w2PfindImage('icons/pencil.gif') . '" border="0" width="12" height="12" />' . "\n\t\t</a>" . w2PendTip();
+		$s .= w2PtoolTip('edit tasks panel', 'click to edit this task') . '<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('icons/pencil.gif') . '" border="0" width="12" height="12" /></a>' . w2PendTip();
 	}
-	$s .= "\n\t</td>";
-	// pinned
-	/*        $pin_prefix = $a['task_pinned']?'':'un';
-	$s .= "\n\t<td>";
-	$s .=  w2PtoolTip('edit tasks panel',$AppUI->_( $pin_prefix . 'pin task' ))."\n\t\t<a href=\"?m=tasks&pin=" . ($a['task_pinned']?0:1) . "&task_id={$a['task_id']}\">"
-	. "\n\t\t\t".''.w2PfindImage('icons/' . $pin_prefix . 'pin.gif') border="0" width="12" height="12">'
-	. "\n\t\t</a>".w2PendTip();
-	$s .= "\n\t</td>";*/
-	// New Log
-	/*        if ($a['task_log_problem']>0) {
-	$s .= '<td align="center" valign="middle"><a href="?m=tasks&a=view&task_id='.$a['task_id'].'&tab=0&problem=1">';
-	$s .= dPshowImage( './images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!' );
-	$s .='</a></td>';
-	} else if ($canViewLog) {
-	$s .= "\n\t<td><a href=\"?m=tasks&a=view&task_id=" . $a['task_id'] . '&tab=1">' . $AppUI->_('Log') . '</a></td>';
-	} else {
-	$s .= "\n\t<td></td>";
-	}*/
+	$s .= '</td>';
 	// percent complete
-	$s .= "\n\t<td align=\"right\">" . intval($a['task_percent_complete']) . '%</td>';
+	$s .= '<td align="right">' . intval($a['task_percent_complete']) . '%</td>';
 	// priority
-	$s .= "\n\t<td align='center' nowrap='nowrap'>";
+	$s .= '<td align="center" nowrap="nowrap">';
 	if ($a['task_priority'] < 0) {
-		$s .= "\n\t\t<img src=\"" . w2PfindImage('icons/priority-' . -$a['task_priority'] . '.gif') . '" width=13 height=16>';
-	} else
-		if ($a['task_priority'] > 0) {
-			$s .= "\n\t\t<img src=\"" . w2PfindImage('icons/priority+' . $a['task_priority'] . '.gif') . '" width=13 height=16>';
-		}
-	$s .= $a['file_count'] > 0 ? '<img src="' . w2PfindImage('clip.png') . '" alt="F">' : '';
+		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$a['task_priority'] . '.gif') . '" width="13" height="16" />';
+	} elseif ($a['task_priority'] > 0) {
+		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['task_priority'] . '.gif') . '" width="13" height="16" />';
+	}
+	$s .= $a['file_count'] > 0 ? '<img src="' . w2PfindImage('clip.png') . '" alt="' . $AppUI->_('Files') . ' />' : '';
 	$s .= '</td>';
 	// access
-	$s .= "\n\t" . '<td nowrap="nowrap">';
+	$s .= '<td nowrap="nowrap">';
 	$s .= substr($task_access[$a['task_access']], 0, 3);
 	$s .= '</td>';
 	// type
-	$s .= "\n\t" . '<td nowrap="nowrap">';
+	$s .= '<td nowrap="nowrap">';
 	$s .= substr($types[$a['task_type']], 0, 3);
 	$s .= '</td>';
 	// type
-	$s .= "\n\t" . '<td nowrap="nowrap">';
+	$s .= '<td nowrap="nowrap">';
 	$s .= $a['queue_id'] ? 'Yes' : '';
 	$s .= '</td>';
 	// inactive
-	$s .= "\n\t" . '<td nowrap="nowrap">';
+	$s .= '<td nowrap="nowrap">';
 	$s .= $a['task_status'] == '-1' ? 'Yes' : '';
 	$s .= '</td>';
 	// add log
-	$s .= "\n\t" . '<td align="center" nowrap="nowrap">';
+	$s .= '<td align="center" nowrap="nowrap">';
 	if ($a['task_dynamic'] != 1) {
-		$s .= w2PtoolTip('tasks', 'add work log to this task') . "\n\t\t<a href=\"?m=tasks&a=view&tab=1&project_id={$a['task_project']}&task_id={$a['task_id']}\">" . "\n\t\t\t" . '<img src="' . w2PfindImage('add.png', $m) . '" border="0" width="16" height="16" />' . "\n\t\t</a>" . w2PendTip();
+		$s .= w2PtoolTip('tasks', 'add work log to this task') . '<a href="?m=tasks&a=view&tab=1&project_id=' . $a['task_project'] . '&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('add.png', $m) . '" border="0" width="16" height="16" /></a>' . w2PendTip();
 	}
 	$s .= '</td>';
 	// dots
@@ -263,67 +235,52 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	}
 	if ($a['task_milestone'] > 0) {
 		$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ><b>' . $a['task_name'] . '</b></a> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" /></td>';
-	} else
-		if ($a['task_dynamic'] == '1' || $is_parent) {
-			if (!$today_view) {
-				$s .= $open_link;
-			}
-			if ($a['task_dynamic'] == '1') {
-				$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ><b><i>' . $a['task_name'] . '</i></b></a></td>';
-			} else {
-				$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" >' . $a['task_name'] . '</a></td>';
-			}
+	} elseif ($a['task_dynamic'] == '1' || $is_parent) {
+		$s .= $open_link;
+		if ($a['task_dynamic'] == '1') {
+			$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ><b><i>' . $a['task_name'] . '</i></b></a></td>';
 		} else {
 			$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" >' . $a['task_name'] . '</a></td>';
 		}
-		if ($a['task_description']) {
-			$s .= w2PendTip();
-		}
-	if ($today_view) { // Show the project name
-		$s .= '<td>';
-		$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $a['task_project'] . '">';
-		$s .= '<span style="padding:2px;background-color:#' . $a['project_color_identifier'] . ';color:' . bestColor($a['project_color_identifier']) . '">' . $a['project_name'] . '</span>';
-		$s .= '</a></td>';
+	} else {
+		$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" >' . $a['task_name'] . '</a></td>';
+	}
+	if ($a['task_description']) {
+		$s .= w2PendTip();
 	}
 	// task description
 	if ($PROJDESIGN_CONFIG['show_task_descriptions']) {
 		$s .= '<td align="justified">' . $a['task_description'] . '</td>';
 	}
 	// task owner
-	$s .= '<td align="center">' . '<a href="?m=admin&a=viewuser&user_id=' . $a['user_id'] . '">' . $a['contact_first_name'] . ' ' . $a['contact_last_name'] . '</a></td>';
-	if (!$today_view) {
-		$s .= '<td id="ignore_td_' . $a['task_id'] . '" nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
-		//		        $s .= '<td nowrap="nowrap" align="center" style="'.$style.'">'.($start_date ? $start_date->format( $tf ) : '-').'</td>';
-	}
+	$s .= '<td align="left">' . '<a href="?m=admin&a=viewuser&user_id=' . $a['user_id'] . '">' . $a['contact_first_name'] . ' ' . $a['contact_last_name'] . '</a></td>';
+	$s .= '<td id="ignore_td_' . $a['task_id'] . '" nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
 	// duration or milestone
-	$s .= '<td id="ignore_td_' . $a['task_id'] . '" align="center" nowrap="nowrap" style="' . $style . '">';
-	$s .= $a['task_duration'] . ' ' . $AppUI->_($durnTypes[$a['task_duration_type']]);
+	$s .= '<td id="ignore_td_' . $a['task_id'] . '" align="right" nowrap="nowrap" style="' . $style . '">';
+	$s .= $a['task_duration'] . ' ' . substr($AppUI->_($durnTypes[$a['task_duration_type']]), 0, 1);
 	$s .= '</td>';
 	$s .= '<td id="ignore_td_' . $a['task_id'] . '" nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
 	if (isset($a['task_assigned_users']) && ($assigned_users = $a['task_assigned_users'])) {
 		$a_u_tmp_array = array();
 		if ($show_all_assignees) {
-			$s .= '<td align="center">';
+			$s .= '<td align="left">';
 			foreach ($assigned_users as $val) {
-				//$a_u_tmp_array[] = "<A href='mailto:".$val['user_email']."'>".$val['user_username']."</A>";
 				$aInfo = '<a href="?m=admin&a=viewuser&user_id=' . $val['user_id'] . '"';
 				$aInfo .= 'title="' . $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' . '">';
-				$aInfo .= $val['contact_first_name'] . ' ' . $val['contact_last_name'] . " (" . $val['perc_assignment'] . "%)</a>";
+				$aInfo .= $val['contact_first_name'] . ' ' . $val['contact_last_name'] . " (" . $val['perc_assignment'] . '%)</a>';
 				$a_u_tmp_array[] = $aInfo;
 			}
 			$s .= join(', ', $a_u_tmp_array);
 			$s .= '</td>';
 		} else {
-			$s .= '<td align="center" nowrap="nowrap">';
+			$s .= '<td align="left" nowrap="nowrap">';
 			$s .= '<a href="?m=admin&a=viewuser&user_id=' . $assigned_users[0]['user_id'] . '"';
 			$s .= 'title="' . $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' . '">';
 			$s .= $assigned_users[0]['contact_first_name'] . ' ' . $assigned_users[0]['contact_last_name'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>';
 			if ($a['assignee_count'] > 1) {
 				$id = $a['task_id'];
-				$s .= " <a href=\"javascript: void(0);\"  onclick=\"toggle_users('users_$id');\" title=\"" . join(', ', $a_u_tmp_array) . "\">(+" . ($a['assignee_count'] - 1) . ")</a>";
-
+				$s .= '<a href="javascript: void(0);"  onclick="toggle_users(\'users_' . $id . '\');" title="' . join(', ', $a_u_tmp_array) . '">(+' . ($a['assignee_count'] - 1) . ')</a>';
 				$s .= '<span style="display: none" id="users_' . $id . '">';
-
 				$a_u_tmp_array[] = $assigned_users[0]['user_username'];
 				for ($i = 1, $i_cmp = count($assigned_users); $i < $i_cmp; $i++) {
 					$a_u_tmp_array[] = $assigned_users[$i]['user_username'];
@@ -335,14 +292,14 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 			}
 			$s .= '</td>';
 		}
-	} elseif (!$today_view) {
+	} else {
 		// No users asigned to task
 		$s .= '<td align="center">-</td>';
 	}
 
 	// Assignment checkbox
 	if ($showEditCheckbox) {
-		$s .= "\n\t" . '<td align="center"><input type="checkbox" onclick="select_box(\'selected_task\', ' . $a['task_id'] . ',\'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $a['task_id'] . '" name="selected_task[' . $a['task_id'] . ']" value="' . $a['task_id'] . '"/></td>';
+		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'selected_task\', ' . $a['task_id'] . ',\'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $a['task_id'] . '" name="selected_task[' . $a['task_id'] . ']" value="' . $a['task_id'] . '"/></td>';
 	}
 	$s .= '</tr>';
 	echo $s;
@@ -401,13 +358,6 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	$style = '';
 	if ($start_date) {
 		if (!$end_date) {
-			/*
-			** end date calc has been moved to calcEndByStartAndDuration()-function
-			** called from array_csort and tasks.php 
-			** perhaps this fallback if-clause could be deleted in the future, 
-			** didn't want to remove it shortly before the 2.0.2
-
-			*/
 			$end_date = new CDate('0000-00-00 00:00:00');
 		}
 
@@ -441,9 +391,7 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 		$s .= '&nbsp;<!--<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" title="' . $alt . '">--><b>' . $a["task_name"] . '</b><!--</a>--> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" /></td>';
 	} else
 		if ($a['task_dynamic'] == '1') {
-			if (!$today_view) {
-				$s .= $open_link;
-			}
+			$s .= $open_link;
 			$s .= $a['task_name'];
 		} else {
 			$s .= $a['task_name'];
