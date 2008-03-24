@@ -44,7 +44,7 @@ $q->addWhere('pdo.pd_option_user = ' . (int)$AppUI->user_id);
 $view_options = $q->loadList();
 
 $project_id = intval(w2PgetParam($_REQUEST, 'project_id', 0));
-$extra = array('where' => 'project_active<>0');
+$extra = array('where' => 'project_active = 1');
 $project = new CProject();
 $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $q = new DBQuery;
@@ -159,7 +159,7 @@ if (!$project_id) {
 	$obj = null;
 	if ($hasTasks) {
 		$q->addTable('projects');
-		$q->addQuery('company_name, CONCAT_WS(" ",contact_first_name,contact_last_name) user_name, ' . 'projects.*,' . " SUM(t1.task_duration * t1.task_percent_complete" . " * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))" . " / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))" . " AS project_percent_complete");
+		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
 		$q->addJoin('companies', 'com', 'company_id = project_company');
 		$q->addJoin('users', 'u', 'user_id = project_owner');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact');
@@ -181,7 +181,7 @@ if (!$project_id) {
 
 	if (!$obj) {
 		$AppUI->setMsg('Project');
-		$AppUI->setMsg("invalidID", UI_MSG_ERROR, true);
+		$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 		$AppUI->redirect();
 	} else {
 		$AppUI->savePlace();
@@ -204,13 +204,13 @@ if (!$project_id) {
 		// same milestone comment as above, also applies to dynamic tasks
 		$q->addTable('tasks');
 		$q->addQuery('ROUND(SUM(task_duration),2)');
-		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 24 AND task_dynamic != 1');
+		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 24 AND task_dynamic = 0');
 		$days = $q->loadResult();
 		$q->clear();
 
 		$q->addTable('tasks');
 		$q->addQuery('ROUND(SUM(task_duration),2)');
-		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 1 AND task_dynamic != 1');
+		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 1 AND task_dynamic = 0');
 		$hours = $q->loadResult();
 		$q->clear();
 		$total_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
@@ -220,14 +220,14 @@ if (!$project_id) {
 		$q->addTable('tasks', 't');
 		$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
 		$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-		$q->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic != 1');
+		$q->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic = 0');
 		$total_project_days_sql = $q->prepare();
 
 		$q2 = new DBQuery;
 		$q2->addTable('tasks', 't');
 		$q2->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
 		$q2->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-		$q2->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic != 1');
+		$q2->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic = 0');
 
 		$total_project_hours = $q->loadResult() * $w2Pconfig['daily_working_hours'] + $q2->loadResult();
 		$q->clear();
@@ -274,10 +274,10 @@ if (!$project_id) {
 		}
 	}
 	$titleBlock->addCell();
-	$titleBlock->addCell(w2PtoolTip($m, 'print project') . "<a href=\"javascript: void(0);\" onclick =\"window.open('index.php?m=projectdesigner&a=printproject&dialog=1&suppressHeaders=1&project_id=$project_id', 'printproject','width=1200, height=600, menubar=1, scrollbars=1')\">
-      		<img src=\"" . w2PfindImage('printer.png') . "\" border=\"0\" width=\"22\" heigth\"22\" />
+	$titleBlock->addCell(w2PtoolTip($m, 'print project') . '<a href="javascript: void(0);" onclick ="window.open(\'index.php?m=projectdesigner&a=printproject&dialog=1&suppressHeaders=1&project_id=' . $project_id . '\', \'printproject\',\'width=1200, height=600, menubar=1, scrollbars=1\')">
+      		<img src="' . w2PfindImage('printer.png') . '" border="0" width="22" heigth"22" />
       		</a>
-      		" . w2PendTip());
+      		' . w2PendTip());
 	$titleBlock->addCell(w2PtoolTip($m, 'expand all panels') . '<a href="javascript: void(0);" onclick ="expandAll()">
       		<img src="' . w2PfindImage('down.png', $m) . '" border="0" width="22" heigth="22" />
       		</a>
@@ -296,12 +296,12 @@ if (!$project_id) {
 <form name="frmWorkspace" action="?m=<?php echo $m; ?>" method="post">
 	<input type="hidden" name="dosql" value="do_projectdesigner_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
-      <input type="hidden" name="opt_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
-      <input type="hidden" name="opt_view_gantt" value="<?php echo (isset($view_options[0]['pd_option_view_gantt']) ? $view_options[0]['pd_option_view_gantt'] : 1); ?>" />
-      <input type="hidden" name="opt_view_tasks" value="<?php echo (isset($view_options[0]['pd_option_view_tasks']) ? $view_options[0]['pd_option_view_tasks'] : 1); ?>" />
-      <input type="hidden" name="opt_view_actions" value="<?php echo (isset($view_options[0]['pd_option_view_actions']) ? $view_options[0]['pd_option_view_actions'] : 1); ?>" />
-      <input type="hidden" name="opt_view_addtsks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
-      <input type="hidden" name="opt_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
+	<input type="hidden" name="opt_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
+	<input type="hidden" name="opt_view_gantt" value="<?php echo (isset($view_options[0]['pd_option_view_gantt']) ? $view_options[0]['pd_option_view_gantt'] : 1); ?>" />
+	<input type="hidden" name="opt_view_tasks" value="<?php echo (isset($view_options[0]['pd_option_view_tasks']) ? $view_options[0]['pd_option_view_tasks'] : 1); ?>" />
+	<input type="hidden" name="opt_view_actions" value="<?php echo (isset($view_options[0]['pd_option_view_actions']) ? $view_options[0]['pd_option_view_actions'] : 1); ?>" />
+	<input type="hidden" name="opt_view_addtsks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
+	<input type="hidden" name="opt_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
 </form>
 
 <?php
@@ -325,7 +325,7 @@ if (!$project_id) {
 	if ($canEdit) {
 ?>
 function delIt() {
-	if (confirm( "<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Project', UI_OUTPUT_JS) . '?'; ?>" )) {
+	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Project', UI_OUTPUT_JS) . '?'; ?>' )) {
 		document.frmDelete.submit();
 	}
 }
@@ -571,7 +571,7 @@ function setDate( frm_name, f_date ) {
 <tr id="project" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
 	<?php
 	if ($canReadProject) {
-		require (w2PgetConfig('root_dir') . "/modules/projectdesigner/vw_project.php");
+		require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_project.php');
 	} else {
 		echo $AppUI->_('You do not have permission to view tasks');
 	}
@@ -624,7 +624,7 @@ function setDate( frm_name, f_date ) {
 	<td colspan="2" class="hilite">
 	<?php
 	if ($canViewTasks) {
-		require (w2PgetConfig('root_dir') . "/modules/projectdesigner/vw_gantt.php");
+		require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_gantt.php');
 	} else {
 		echo $AppUI->_('You do not have permission to view tasks');
 	}
@@ -678,7 +678,7 @@ function setDate( frm_name, f_date ) {
 	<td colspan="2" class="hilite">
 	<?php
 	if ($canViewTasks) {
-		require (w2PgetConfig('root_dir') . "/modules/projectdesigner/vw_tasks.php");
+		require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_tasks.php');
 	} else {
 		echo $AppUI->_('You do not have permission to view tasks');
 	}
@@ -732,7 +732,7 @@ function setDate( frm_name, f_date ) {
 	<td colspan="2" class="hilite">
 	<?php
 	if ($canEditTasks) {
-		require w2PgetConfig('root_dir') . "/modules/projectdesigner/vw_actions.php";
+		require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_actions.php';
 	} else {
 		echo $AppUI->_('You do not have permission to edit tasks');
 	}
@@ -786,7 +786,7 @@ function setDate( frm_name, f_date ) {
 	<td colspan="2" class="hilite">
 	<?php
 	if ($canAddTasks) {
-		require w2PgetConfig('root_dir') . "/modules/projectdesigner/vw_addtasks.php";
+		require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_addtasks.php';
 	} else {
 		echo $AppUI->_('You do not have permission to add tasks');
 	}
@@ -842,7 +842,7 @@ function setDate( frm_name, f_date ) {
 	//Permission check here
 	$canViewFiles = $perms->checkModule('files', 'view');
 	if ($canViewFiles) {
-		require w2PgetConfig('root_dir') . "/modules/projectdesigner/vw_files.php";
+		require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_files.php';
 	} else {
 		echo $AppUI->_('You do not have permission to view files');
 	}
