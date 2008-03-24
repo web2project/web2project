@@ -164,9 +164,9 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	}
 
 	if ($expanded) {
-		$s = "\n<tr id=\"project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_\" onmouseover=\"highlight_tds(this, true, " . $a['task_id'] . ")\" onmouseout=\"highlight_tds(this, false, " . $a['task_id'] . ")\" onclick=\"select_box('selected_task', '" . $a['task_id'] . "', 'project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_','frm_tasks')\">"; // edit icon
+		$s = '<tr id="project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\',\'frm_tasks\')">'; // edit icon
 	} else {
-		$s = "\n<tr id=\"project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_\" onmouseover=\"highlight_tds(this, true, " . $a['task_id'] . ")\" onmouseout=\"highlight_tds(this, false, " . $a['task_id'] . ")\" onclick=\"select_box('selected_task', '" . $a['task_id'] . "', 'project_" . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . "_','frm_tasks')\" " . ($level ? 'style="display:none"' : '') . '>'; // edit icon
+		$s = '<tr id="project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\',\'frm_tasks\')" ' . ($level ? 'style="display:none"' : '') . '>'; // edit icon
 	}
 	$s .= '<td>';
 	$canEdit = true;
@@ -184,7 +184,7 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	} elseif ($a['task_priority'] > 0) {
 		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['task_priority'] . '.gif') . '" width="13" height="16" />';
 	}
-	$s .= $a['file_count'] > 0 ? '<img src="' . w2PfindImage('clip.png') . '" alt="' . $AppUI->_('Files') . ' />' : '';
+	$s .= $a['file_count'] > 0 ? '<img src="' . w2PfindImage('clip.png') . '" alt="' . $AppUI->_('Files') . '" />' : '';
 	$s .= '</td>';
 	// access
 	$s .= '<td nowrap="nowrap">';
