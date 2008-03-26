@@ -28,42 +28,42 @@ function addTasks() {
 	var ok = true;
 	for (i=0,i_cmp=f.length;i<i_cmp;i++){
 		var tempobj=f.elements[i]
-		if (tempobj.name.substring(0,14)=="add_task_name_"){
-			if (((tempobj.type=="text"||tempobj.type=="textarea")&&tempobj.value=="")||(tempobj.type.toString().charAt(0)=="s"&&tempobj.selectedIndex==-1)){
-				alert( "At least one task name is lacking." );
+		if (tempobj.name.substring(0,14)=='add_task_name_'){
+			if (((tempobj.type=='text'||tempobj.type=='textarea')&&tempobj.value=='')||(tempobj.type.toString().charAt(0)=='s'&&tempobj.selectedIndex==-1)){
+				alert('<?php echo $AppUI->_('At least one task name is lacking.');?>');
 				f.elements[i].focus();
 				ok = false;
 				break;
 			}
 		}
 	}            	
-      for (i=0,i_cmp=f.length;i<i_cmp;i++){
-          var tempobj=f.elements[i]
-          if (tempobj.name.substring(0,20)=="add_task_start_date_"){
-             var int_st_date = new String(tempobj.name);
-             var int_en_date = new String(int_st_date.replace(/start_date_/,'end_date_'));
-             var st_date = new String(tempobj.name.replace(/add_task_/,''));
-             var en_date = new String(st_date.replace(/start_date_/,'end_date_'));
-             st_date = eval('f.'+st_date);
-             en_date = eval('f.'+en_date);
-             int_st_date = eval('f.'+int_st_date+'.value');
-             int_en_date = eval('f.'+int_en_date+'.value');
-             var sDate = new Date(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
-             var eDate = new Date(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
-             var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
-             var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
-             //alert(int_st_date);
-             if (s > e && int_st_date.length>0 && int_en_date.length>0){
-                st_date.style.backgroundColor = "red";
-                en_date.style.backgroundColor = "red";
-	          ok = false;
-                break;
-             } else {
-                st_date.style.backgroundColor = "";
-                en_date.style.backgroundColor = "";
-             }
-          }
-      }            	
+	for (i=0,i_cmp=f.length;i<i_cmp;i++){
+		var tempobj=f.elements[i]
+		if (tempobj.name.substring(0,20)=='add_task_start_date_'){
+			var int_st_date = new String(tempobj.name);
+			var int_en_date = new String(int_st_date.replace(/start_date_/,'end_date_'));
+			var st_date = new String(tempobj.name.replace(/add_task_/,''));
+			var en_date = new String(st_date.replace(/start_date_/,'end_date_'));
+			st_date = eval('f.'+st_date);
+			en_date = eval('f.'+en_date);
+			int_st_date = eval('f.'+int_st_date+'.value');
+			int_en_date = eval('f.'+int_en_date+'.value');
+			var sDate = new Date(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
+			var eDate = new Date(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
+			var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
+			var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
+			//alert(int_st_date);
+			if (s > e && int_st_date.length>0 && int_en_date.length>0){
+				st_date.style.backgroundColor = 'red';
+				en_date.style.backgroundColor = 'red';
+				ok = false;
+				break;
+			} else {
+				st_date.style.backgroundColor = '';
+				en_date.style.backgroundColor = '';
+			}
+		}
+	}            	
 	if (ok) {
 		f.submit();
 	}
@@ -123,7 +123,7 @@ function addTasks() {
 <tr>
 	<td align="left" width="20">
  		<?php echo w2PtoolTip('add tasks', 'click here to add a new task to this project'); ?><a href="javascript: void(0);" onclick="addComponent()">
-			<img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" title="<?php echo $AppUI->_('Add Line'); ?>" alt="<?php echo $AppUI->_('Add Line'); ?>" border="0" />
+			<img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" border="0" />
 		</a><?php echo w2PendTip(); ?>
 	</td>
 </tr>
