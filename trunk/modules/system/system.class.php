@@ -160,34 +160,56 @@ class CModule extends CW2pObject {
 	function move($dirn) {
 		$new_ui_order = $this->mod_ui_order;
 
+		$q = new DBQuery;
+		$q->addTable('modules');
+		$q->addWhere('mod_id <> ' . (int)$this->mod_id);
+		$q->addOrder('mod_ui_order');
+		$modules = $q->loadList();
+		$q->clear();
+
 		if ($dirn == 'moveup') {
 			$other_new = $new_ui_order;
 			$new_ui_order--;
-		} else
-			if ($dirn == 'movedn') {
-				$other_new = $new_ui_order;
-				$new_ui_order++;
-			}
+		} elseif ($dirn == 'movedn') {
+			$other_new = $new_ui_order;
+			$new_ui_order++;
+		} elseif ($dirn == 'movefirst') {
+			$other_new = $new_ui_order;
+			$new_ui_order = 1;
+		} elseif ($dirn == 'movelast') {
+			$other_new = $new_ui_order;
+			$new_ui_order = count($modules) + 1;
+		}
+		print_r($modules);
 
 		if ($new_ui_order) { //make sure we aren't going "up" to 0
 			$q = new DBQuery;
-			if ($other_new) { //make sure value was set.
-				$q->addTable('modules');
-				$q->addUpdate('mod_ui_order', '' . $other_new);
-				$q->addWhere('mod_ui_order = ' . (int)$new_ui_order);
-				$q->exec();
-				$q->clear();
-			}
 			$q->addTable('modules');
 			$q->addUpdate('mod_ui_order', $new_ui_order);
-			$q->addWhere('mod_id = ' . (int)$this->mod_id);
+			$q->addWhere('mod_id = ' . $this->mod_id);
 			$q->exec();
 			$q->clear();
-
-			$this->mod_ui_order = $new_ui_order;
+			$idx = 1;
+			foreach ($modules as $module) {
+				if ((int)$idx != (int)$new_ui_order) {
+					$q->addTable('modules');
+					$q->addUpdate('mod_ui_order', $idx);
+					$q->addWhere('mod_id = ' . $module['mod_id']);
+					$q->exec();
+					$q->clear();
+					$idx++;
+				} else {
+					$q->addTable('modules');
+					$q->addUpdate('mod_ui_order', $idx + 1);
+					$q->addWhere('mod_id = ' . $module['mod_id']);
+					$q->exec();
+					$q->clear();
+					$idx = $idx + 2;
+				}
+			}		
 		}
+		//die;
 	}
-
 	// overridable functions
 	function moduleInstall() {
 		return null;
