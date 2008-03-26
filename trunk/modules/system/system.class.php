@@ -181,7 +181,7 @@ class CModule extends CW2pObject {
 			$new_ui_order = count($modules) + 1;
 		}
 
-		if ($new_ui_order) { //make sure we aren't going "up" to 0
+		if ($new_ui_order && ($new_ui_order <= count($modules) + 1)) { //make sure we aren't going "up" to 0
 			$q = new DBQuery;
 			$q->addTable('modules');
 			$q->addUpdate('mod_ui_order', $new_ui_order);
