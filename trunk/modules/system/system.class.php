@@ -180,7 +180,6 @@ class CModule extends CW2pObject {
 			$other_new = $new_ui_order;
 			$new_ui_order = count($modules) + 1;
 		}
-		print_r($modules);
 
 		if ($new_ui_order) { //make sure we aren't going "up" to 0
 			$q = new DBQuery;
@@ -208,7 +207,6 @@ class CModule extends CW2pObject {
 				}
 			}		
 		}
-		//die;
 	}
 	// overridable functions
 	function moduleInstall() {
