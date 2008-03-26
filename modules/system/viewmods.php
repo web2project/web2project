@@ -46,29 +46,20 @@ foreach ($modules as $row) {
 	if (isset($modFiles[$row['mod_directory']])) {
 		$modFiles[$row['mod_directory']] = '';
 	}
-	$query_string = "?m=$m&a=domodsql&mod_id={$row['mod_id']}";
+	$query_string = '?m=' . $m . '&a=domodsql&mod_id=' . $row['mod_id'];
 	$s = '';
-	// arrows
-	// TODO: sweep this block of code and add line returns to improve View Source readability [kobudo 14 Feb 2003]
-	// Line returns after </td> tags would be a good start [as well as <tr> and </tr> tags]
-	$s .= '<td align="center">';
-	$s .= '<img src="' . w2PfindImage('icons/updown.gif') . '" width="10" height="15" border=0 usemap="#arrow' . $row['mod_id'] . '" />';
+	$s .= '<td width="64" align="center">';
 	if ($canEdit) {
-		$s .= '<map name="arrow' . $row['mod_id'] . '">';
-		if ($row['mod_ui_order'] > 0)
-			$s .= '<area coords="0,0,10,7" href="' . $query_string . '&cmd=moveup">';
-		$s .= '<area coords="0,8,10,14" href="' . $query_string . '&cmd=movedn">';
-		$s .= '</map>';
+		$s .= w2PtoolTip('Modules', 'Move to First') . '<a href="' . $query_string . '&cmd=movefirst"><img src="' . w2PfindImage('icons/2uparrow.png') . '" border="0"/></a>' . w2PendTip();
+		$s .= w2PtoolTip('Modules', 'Move Up') . '<a href="' . $query_string . '&cmd=moveup"><img src="' . w2PfindImage('icons/1uparrow.png') . '" border="0"/></a>' . w2PendTip();
+		$s .= w2PtoolTip('Modules', 'Move Down') . '<a href="' . $query_string . '&cmd=movedn"><img src="' . w2PfindImage('icons/1downarrow.png') . '" border="0"/></a>' . w2PendTip();
+		$s .= w2PtoolTip('Modules', 'Move to Last') . '<a href="' . $query_string . '&cmd=movelast"><img src="' . w2PfindImage('icons/2downarrow.png') . '" border="0"/></a>' . w2PendTip();
 	}
 	$s .= '</td>';
 
 	$s .= '<td width="1%" nowrap="nowrap">' . $AppUI->_($row['mod_name']) . '</td>';
 	$s .= '<td>';
 	$s .= '<img src="' . w2PfindImage('obj/dot' . ($row['mod_active'] ? 'green' : 'yellowanim') . '.gif') . '" />&nbsp;';
-	// John changes Module Terminology to be more descriptive of current Module State... [14 Feb 2003]
-	// Status term "deactivate" changed to "Active"
-	// Status term "activate" changed to "Disabled"
-	//$s .= '<a href="'.$query_string . '&cmd=toggle&">'.($row['mod_active'] ? $AppUI->_('deactivate') : $AppUI->_('activate')).'</a>';
 	if ($canEdit) {
 		$s .= '<a href="' . $query_string . '&cmd=toggle&">';
 	}
@@ -107,11 +98,6 @@ foreach ($modules as $row) {
 
 	$s .= '<td>';
 	$s .= '<img src="' . w2PfindImage('/obj/' . ($row['mod_ui_active'] ? 'dotgreen.gif' : 'dotredanim.gif')) . '" />&nbsp;';
-	//	$s .= $row['mod_ui_active'] ? '<span style="color:green">'.$AppUI->_('on') : '<span style="color:red">'.$AppUI->_('off');
-	// John changes Module Terminology to be more descriptive of current Module State... [14 Feb 2003]
-	// Menu Status term "show" changed to "Visible"
-	// Menu Status term "activate" changed to "Disabled"
-	//$s .= '<a href="'.$query_string . '&cmd=toggleMenu">'.($row['mod_ui_active'] ? $AppUI->_('hide') : $AppUI->_('show')).'</a></td>';
 	if ($canEdit) {
 		$s .= '<a href="' . $query_string . '&cmd=toggleMenu">';
 	}
@@ -121,7 +107,7 @@ foreach ($modules as $row) {
 	}
 	$s .= '</td>';
 
-	$s .= '<td>' . $row['mod_ui_order'] . '</td>';
+	$s .= '<td align="right">' . $row['mod_ui_order'] . '</td>';
 
 	echo '<tr>' . $s . '</tr>';
 }

@@ -17,7 +17,7 @@ if ($mod_id) {
 	$obj->mod_directory = $mod_directory;
 }
 
-$ok = @include_once (W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
+$ok = include_once(W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
 
 if (!$ok) {
 	if ($obj->mod_type != 'core') {
@@ -47,6 +47,8 @@ if (!$setupclass) {
 switch ($cmd) {
 	case 'moveup':
 	case 'movedn':
+	case 'movefirst':
+	case 'movelast':
 		$obj->move($cmd);
 		$AppUI->setMsg('Module re-ordered', UI_MSG_OK);
 		break;
