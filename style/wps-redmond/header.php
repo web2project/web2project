@@ -95,8 +95,10 @@ if ($dialog) {
 	if ($perms->checkModule('projects', 'add')) {
 		$newItem['projects'] = 'Project';
 	}
-
-	echo arraySelect($newItem, 'm', 'style="font-size:10px" onChange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if(mod) f.submit();"', '', true);
+	if ($perms->checkModule('admin', 'add')) {
+		$newItem['admin'] = 'User';
+	}
+	echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
 
 	echo "</td>\n";
 
