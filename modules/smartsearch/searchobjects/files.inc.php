@@ -13,8 +13,8 @@ class files extends smartsearch {
 	var $table_link = 'index.php?m=files&a=addedit&file_id=';
 	var $table_title = 'Files';
 	var $table_orderby = 'file_name';
-	var $search_fields = array('file_real_filename', 'file_name', 'file_description', 'file_type');
-	var $display_fields = array('file_real_filename', 'file_name', 'file_description', 'file_type');
+	var $search_fields = array('file_name', 'file_description', 'file_type', 'file_version', 'file_co_reason');
+	var $display_fields = array('file_name', 'file_description', 'file_type', 'file_version', 'file_co_reason');
 	var $follow_up_link = 'fileviewer.php?file_id=';
 
 	function cfiles() {
