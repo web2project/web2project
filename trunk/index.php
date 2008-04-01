@@ -125,7 +125,7 @@ if (isset($_REQUEST['login'])) {
 	@include_once W2P_BASE_DIR . '/locales/core.php';
 	$ok = $AppUI->login($username, $password);
 	if (!$ok) {
-		$AppUI->setMsg('Login Failed');
+		$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
 	} else {
 		//Register login in user_acces_log
 		$AppUI->registerLogin();

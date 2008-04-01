@@ -59,7 +59,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 		if (!$ok) {
 			//display login failed message
 			$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
-			$AppUI->setMsg('Login Failed');
+			$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
 			require W2P_BASE_DIR . '/style/' . $uistyle . '/login.php';
 			session_unset();
 			exit;
