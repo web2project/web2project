@@ -248,7 +248,7 @@ class CContact extends CW2pObject {
 
 		$aCpies = $oCpy->getAllowedRecords($uid, 'company_id, company_name');
 		if (count($aCpies)) {
-			$buffer = '(contact_company IN (' . implode(',', array_keys($aCpies)) . ') OR contact_company IS NULL OR contact_company = "" OR contact_company = 0)';
+			$buffer = '(contact_company IN (' . implode(',', array_keys($aCpies)) . ') OR contact_company IS NULL OR contact_company = \'\' OR contact_company = 0)';
 
 			//Department permissions
 			$oDpt = new CDepartment();
@@ -260,7 +260,7 @@ class CContact extends CW2pObject {
 				$dpt_buffer = '(contact_department = 0)';
 			}
 
-			if ($extra['where'] != "") {
+			if ($extra['where'] != '') {
 				$extra['where'] = $extra['where'] . ' AND ' . $buffer . ' AND ' . $dpt_buffer;
 			} else {
 				$extra['where'] = $buffer . ' AND ' . $dpt_buffer;
@@ -268,9 +268,9 @@ class CContact extends CW2pObject {
 		} else {
 			// There are no allowed companies, so don't allow projects.
 			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND 1 = 0 ';
+				$extra['where'] = $extra['where'] . ' AND (contact_company IS NULL OR contact_company = \'\' OR contact_company = 0) ';
 			} else {
-				$extra['where'] = '1 = 0';
+				$extra['where'] = 'contact_company IS NULL OR contact_company = \'\' OR contact_company = 0';
 			}
 		}
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
