@@ -5,17 +5,14 @@ The home page is http://www.web2project.net/
 The sourceforge page is http://sourceforge.net/projects/web2project
 
 Installing/Upgrading:  The quick way:
-	Point your browser to the install directory.
+Point your browser to the install directory.
 
-Installation instructions are at http://docs.web2project.net/tiki-index.php?page=Installation+Instructions
+Installation instructions are at http://docs.web2project.net/
 
-Support forums are at http://www.web2project.net/modules.php?op=modload&name=PNphpBB2&file=index
+Support forums are at http://forums.web2project.net/
 
-Bug reports can be lodged at http://www.web2project.net/mantis/
+Bug reports can be lodged at http://bugs.web2project.net/
 
-IRC channel is irc://irc.freenode.net/web2project or #web2project on irc.freenode.net
+web2Project is released under GPL.
 
-As of version 2.0, web2Project is released under GPL.
-1.0.2 and previous versions were released under BSD license.
 Parts of web2Project include libraries from other projects which are used and re-released under their original licence.
-
