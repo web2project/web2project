@@ -545,7 +545,7 @@ class CProject extends CW2pObject {
 			} else {
 				$body = $AppUI->_('Project') . ": $this->project_name Has Been Submitted Via Project Manager. You can view the Project by clicking: ";
 			}
-			$body .= "\n" . $AppUI->_('URL') . ":     {$w2Pconfig['base_url']}/index.php?m=projects&a=view&project_id=$this->project_id";
+			$body .= "\n" . $AppUI->_('URL') . ':     ' . w2PgetConfig('base_url') . '/index.php?m=projects&a=view&project_id=' . $this->project_id;
 			$body .= "\n\n(You are receiving this email because you are the owner to this project)";
 			$body .= "\n\n" . $AppUI->_('Description') . ':' . "\n$this->project_description";
 			if (intval($isNotNew)) {
@@ -594,7 +594,7 @@ class CProject extends CW2pObject {
 			} else {
 				$body = $AppUI->_('Project') . ": $this->project_name Has Been Submitted Via Project Manager. You can view the Project by clicking: ";
 			}
-			$body .= "\n" . $AppUI->_('URL') . ":     {$w2Pconfig['base_url']}/index.php?m=projects&a=view&project_id=$this->project_id";
+			$body .= "\n" . $AppUI->_('URL') . ':     ' . w2PgetConfig('base_url') . '/index.php?m=projects&a=view&project_id=' . $this->project_id;
 			$body .= "\n\n(You are receiving this message because you are a contact or assignee for this Project)";
 			$body .= "\n\n" . $AppUI->_('Description') . ':' . "\n$this->project_description";
 			if (intval($isNotNew)) {

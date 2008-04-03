@@ -39,9 +39,6 @@ if (W2P_PERFORMANCE_DEBUG) {
 	$w2p_performance_dbqueries = 0;
 }
 
-global $baseDir;
-global $baseUrl;
-
 $baseDir = dirname(__file__);
 
 // only rely on env variables if not using a apache handler

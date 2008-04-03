@@ -792,7 +792,7 @@ class CEvent extends CW2pObject {
 		}
 		$body .= $AppUI->_('Event') . ":\t" . $this->event_title . "\n";
 		if (!$clash) {
-			$body .= $AppUI->_('URL') . ":\t" . $w2Pconfig['base_url'] . "/index.php?m=calendar&a=view&event_id=" . $this->event_id . "\n";
+			$body .= $AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=calendar&a=view&event_id=" . $this->event_id . "\n";
 		}
 		$body .= $AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . "\n";
 		$body .= $AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . "\n";

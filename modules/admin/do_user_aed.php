@@ -104,7 +104,7 @@ function notifyNewUser($address, $username, $logname, $logpwd) {
 
 		$mail->To($address);
 		$mail->Subject('New Account Created - web2Project Project Management System');
-		$mail->Body($username . ",\n\n" . "An access account has been created for you in our web2Project project management system.\n\n" . "You can access it here at " . $w2Pconfig['base_url'] . "\n\n" . "Your username is: " . $logname . "\n" . "Your password is: " . $logpwd . "\n\n" .
+		$mail->Body($username . ",\n\n" . "An access account has been created for you in our web2Project project management system.\n\n" . "You can access it here at " . w2PgetConfig('base_url') . "\n\n" . "Your username is: " . $logname . "\n" . "Your password is: " . $logpwd . "\n\n" .
 			"This account will allow you to see and interact with projects. If you have any questions please contact us.");
 		$mail->Send();
 	}

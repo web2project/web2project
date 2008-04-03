@@ -19,7 +19,7 @@ if ($dialog) {
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
 	<?php 
           if (is_object($xajax)) {
-               $xajax->printJavascript($w2Pconfig['base_url'] . '/lib/xajax');
+               $xajax->printJavascript(w2PgetConfig('base_url') . '/lib/xajax');
           } 
      ?>
 	<?php $AppUI->loadHeaderJS(); ?>
