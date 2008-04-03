@@ -45,7 +45,7 @@ if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
 }
 
 function notifyNewUser($address, $username) {
-	global $AppUI, $baseUrl;
+	global $AppUI;
 	$mail = new Mail;
 	if ($mail->ValidEmail($address)) {
 		if ($mail->ValidEmail($AppUI->user_email)) {

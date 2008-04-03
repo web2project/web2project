@@ -49,14 +49,10 @@ $w2Pconfig['dbpersist'] = false;
 
 /***************** Configuration for DEVELOPERS use only! ******/
 // Root directory is now automatically set to avoid
-// getting it wrong. It is also deprecated as $baseDir
-// is now set in top-level files index.php and fileviewer.php.
-// All code should start to use $baseDir instead of root_dir.
-$w2Pconfig['root_dir'] = $baseDir;
+// getting it wrong.
+$w2Pconfig['root_dir'] = W2P_BASE_DIR;
 
 // Base Url is now automatically set to avoid
-// getting it wrong. It is also deprecated as $baseUrl
-// is now set in top-level files index.php and fileviewer.php.
-// All code should start to use $baseUrl instead of base_url.
-$w2Pconfig['base_url'] = $baseUrl;
+// getting it wrong.
+$w2Pconfig['base_url'] = W2P_BASE_URL;
 ?>
