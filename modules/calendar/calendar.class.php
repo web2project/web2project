@@ -226,7 +226,7 @@ class CMonthCalendar {
 		global $AppUI, $m, $a, $locale_char_set;
 		$url = 'index.php?m=' . $m;
 		$url .= $a ? '&amp;a=' . $a : '';
-		$url .= isset($_GET['dialog']) ? "&amp;dialog=1" : '';
+		$url .= isset($_GET['dialog']) ? '&amp;dialog=1' : '';
 
 		$s = '<table border="0" cellspacing="0" cellpadding="3" width="100%" class="' . $this->styleTitle . '">';
 		$s .= '<tr>';
@@ -361,7 +361,7 @@ class CMonthCalendar {
 				if ($this->showHighlightedDays && isset($this->highlightedDays[$day])) {
 					$html .= ' style="border: 1px solid ' . $this->highlightedDays[$day] . '"';
 				}
-				$html .= ' onclick="' . $this->dayFunc . "('" . $day . "','" . $this_day->format($df) . "')" . '">';
+				$html .= ' onclick="' . $this->dayFunc . '(\'' . $day . '\',\'' . $this_day->format($df) . '\')' . '">';
 				if ($m == $this_month) {
 					if ($this->dayFunc) {
 						$html .= "<a href=\"javascript:$this->dayFunc('$day','" . $this_day->format($df) . "')\" class=\"$class\">";
@@ -388,7 +388,7 @@ class CMonthCalendar {
 	 *
 	 */
 	function _drawWeek($dateObj) {
-		$href = "javascript:$this->weekFunc(" . $dateObj->getTimestamp() . ",'" . $dateObj->toString() . "')";
+		$href = "javascript:$this->weekFunc(" . $dateObj->getTimestamp() . ',\'' . $dateObj->toString() . '\')';
 		$w = '        <td class="week">';
 		$w .= $this->dayFunc ? '<a href="' . $href . '">' : '';
 		$w .= '<img src="' . w2PfindImage('view.week.gif') . '" width="16" height="15" border="0" alt="Week View" /></a>';
@@ -645,7 +645,7 @@ class CEvent extends CW2pObject {
 			if ($query_set == 'q') { // assemble query for non-recursive events
 				$$query_set->addWhere('(event_recurs <= 0)');
 				// following line is only good for *non-recursive* events
-				$$query_set->addWhere("(event_start_date <= '$db_end' AND event_end_date >= '$db_start' " . "OR event_start_date BETWEEN '$db_start' AND '$db_end')");
+				$$query_set->addWhere('(event_start_date <= \'' . $db_end . '\' AND event_end_date >= \'' . $db_start . '\' OR event_start_date BETWEEN \'' . $db_start . '\' AND \'' . $db_end . '\')');
 				$eventList = $$query_set->loadList();
 			} elseif ($query_set == 'r') { // assemble query for recursive events
 				$$query_set->addWhere('(event_recurs > 0)');
@@ -678,7 +678,7 @@ class CEvent extends CW2pObject {
 				//only show hourly recurrent event one time and add string 'hourly'
 				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j == 0) {
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
-					$eventListRec[$i]['event_title'] = $eventListRec[$i]['event_title'] . " (" . $AppUI->_('Hourly') . ")";
+					$eventListRec[$i]['event_title'] = $eventListRec[$i]['event_title'] . ' (' . $AppUI->_('Hourly') . ')';
 				}
 				//Weekly and Monthly View and higher recurrence mode
 				//show all events of recurrence > 1
@@ -707,7 +707,7 @@ class CEvent extends CW2pObject {
 		$q->addTable('users', 'u');
 		$q->addTable('user_events', 'ue');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('u.user_id, CONCAT_WS(" ",contact_first_name, contact_last_name)');
+		$q->addQuery('u.user_id, CONCAT_WS(\' \',contact_first_name, contact_last_name)');
 		$q->addWhere('ue.event_id = ' . (int)$this->event_id);
 		$q->addWhere('user_contact = contact_id');
 		$q->addWhere('ue.user_id = u.user_id');
@@ -745,7 +745,7 @@ class CEvent extends CW2pObject {
 	function notify($assignees, $update = false, $clash = false) {
 		global $AppUI, $locale_char_set, $w2Pconfig;
 		$mail_owner = $AppUI->getPref('MAILALL');
-		$assignee_list = explode(",", $assignees);
+		$assignee_list = explode(',', $assignees);
 		$owner_is_assigned = in_array($this->event_owner, $assignee_list);
 		if ($mail_owner && !$owner_is_assigned && $this->event_owner) {
 			array_push($assignee_list, $this->event_owner);
@@ -858,9 +858,9 @@ class CEvent extends CW2pObject {
 		$q->addTable('events', 'e');
 		$q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, e.event_start_date, e.event_end_date');
 		$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-		$q->addWhere("event_start_date <= '" . $end_date->format(FMT_DATETIME_MYSQL) . "'");
-		$q->addWhere("event_end_date >= '" . $start_date->format(FMT_DATETIME_MYSQL) . "'");
-		$q->addWhere("( e.event_owner in (" . implode(',', $users) . ") OR ue.user_id in (" . implode(',', $users) . ") )");
+		$q->addWhere('event_start_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
+		$q->addWhere('event_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
+		$q->addWhere('(e.event_owner IN (' . implode(',', $users) . ') OR ue.user_id IN (' . implode(',', $users) . ') )');
 		$q->addWhere('e.event_id <>' . $this->event_id);
 
 		$result = $q->exec();
@@ -881,8 +881,8 @@ class CEvent extends CW2pObject {
 			$q->addTable('users', 'u');
 			$q->addTable('contacts', 'con');
 			$q->addQuery('user_id');
-			$q->addQuery('CONCAT_WS(" ",contact_first_name,contact_last_name)');
-			$q->addWhere("user_id in (" . implode(",", $clash) . ")");
+			$q->addQuery('CONCAT_WS(\' \',contact_first_name,contact_last_name)');
+			$q->addWhere('user_id in (' . implode(',', $clash) . ')');
 			$q->addWhere('user_contact = contact_id');
 			return $q->loadHashList();
 		} else {
@@ -906,12 +906,12 @@ class CEvent extends CW2pObject {
 		$q->addTable('events', 'e');
 		$q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, e.event_start_date, e.event_end_date');
 		$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-		$q->addWhere("event_start_date >= '$start_date'
-     	  		AND event_end_date <= '$end_date'
-     	  		AND EXTRACT(HOUR_MINUTE FROM e.event_end_date) >= '$start_time'
-     	  		AND EXTRACT(HOUR_MINUTE FROM e.event_start_date) <= '$end_time'
-     	  		AND ( e.event_owner in (" . implode(",", $users) . ")
-     	 		OR ue.user_id in (" . implode(",", $users) . ") )");
+		$q->addWhere('event_start_date >= \'' . $start_date . '\'
+     	  		AND event_end_date <= \'' . $end_date . '\'
+     	  		AND EXTRACT(HOUR_MINUTE FROM e.event_end_date) >= \'' . $start_time . '\'
+     	  		AND EXTRACT(HOUR_MINUTE FROM e.event_start_date) <= \'' . $end_time . '\'
+     	  		AND ( e.event_owner in (' . implode(',', $users) . ')
+     	 		OR ue.user_id in (' . implode(',', $users) . ') )');
 		$result = $q->exec();
 		if (!$result) {
 			return false;

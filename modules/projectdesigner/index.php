@@ -167,7 +167,7 @@ if (!$project_id) {
 		$q->loadObject($obj);
 	} else {
 		$q->addTable('projects');
-		$q->addQuery('company_name, CONCAT_WS(" ",contact_first_name,contact_last_name) user_name, projects.*, (0.0) AS project_percent_complete');
+		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, (0.0) AS project_percent_complete');
 		$q->addJoin('companies', 'com', 'company_id = project_company');
 		$q->addJoin('users', 'u', 'user_id = project_owner');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact');

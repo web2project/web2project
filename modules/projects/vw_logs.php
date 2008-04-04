@@ -111,7 +111,7 @@ $q = new DBQuery;
 $q->addTable('task_log');
 $q->addQuery('task_log.*, user_username, task_id');
 $q->addQuery('billingcode_name as task_log_costcode');
-$q->addQuery('CONCAT(contact_first_name, " ", contact_last_name) AS real_name');
+$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS real_name');
 $q->addJoin('users', 'u', 'user_id = task_log_creator');
 $q->addJoin('tasks', 't', 'task_log_task = t.task_id');
 $q->addJoin('contacts', 'ct', 'contact_id = user_contact');

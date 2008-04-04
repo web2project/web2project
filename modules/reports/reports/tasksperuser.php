@@ -265,7 +265,7 @@ if ($do_report) {
 
 		foreach ($user_list as $user_id => $user_data) {
 
-			$tmpuser = "<tr><td align='left' nowrap='nowrap' bgcolor='#D0D0D0'><font color='black'><B>" . $user_data["contact_first_name"] . " " . $user_data['contact_last_name'] . '</b></font></td>';
+			$tmpuser = "<tr><td align='left' nowrap='nowrap' bgcolor='#D0D0D0'><font color='black'><B>" . $user_data["contact_first_name"] . ' ' . $user_data['contact_last_name'] . '</b></font></td>';
 			for ($w = 0, $w_cmp = (1 + ($project_id == 0 ? 1 : 0) + weekCells($display_week_hours, $sss, $sse)); $w <= $w_cmp; $w++) {
 				$tmpuser .= '<td bgcolor="#D0D0D0">&nbsp;</td>';
 			}

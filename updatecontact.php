@@ -49,7 +49,7 @@ if (!$row->load($contact_id) && $contact_id > 0) {
 	}
 
 $df = $AppUI->getPref('SHDATEFORMAT');
-$df .= " " . $AppUI->getPref('TIMEFORMAT');
+$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 // setup the title block
 $ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';

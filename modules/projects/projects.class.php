@@ -788,7 +788,7 @@ function projects_list_data($user_id = false) {
 		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
 		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, tt.total_tasks, tsy.my_tasks,
 		ts.project_percent_complete, user_username, project_active');
-	$q->addQuery('CONCAT(ct.contact_first_name, " ", ct.contact_last_name) AS owner_name');
+	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
 //	$q->addJoin('companies', 'com', 'projects.project_company = com.company_id');
 //	$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
 //	$q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');

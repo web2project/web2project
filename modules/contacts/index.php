@@ -22,12 +22,12 @@ if (isset($_GET['where'])) {
 if (isset($_GET['search_string'])) {
 	$AppUI->setState('ContIdxWhere', '%' . $_GET['search_string']);
 	// Added the first % in order to find instrings also
-	$additional_filter = 'OR contact_first_name like "%' . $_GET['search_string'] . '%"
-	                      OR contact_last_name  like "%' . $_GET['search_string'] . '%"
-	                      OR CONCAT(contact_first_name, " ", contact_last_name)  like "%' . $_GET['search_string'] . '%"
-						  OR company_name       like "%' . $_GET['search_string'] . '%"
-						  OR contact_notes      like "%' . $_GET['search_string'] . '%"
-						  OR contact_email      like "%' . $_GET['search_string'] . '%"';
+	$additional_filter = 'OR contact_first_name like \'%' . $_GET['search_string'] . '%\'
+	                      OR contact_last_name  like \'%' . $_GET['search_string'] . '%\'
+	                      OR CONCAT(contact_first_name, \' \', contact_last_name)  like \'%' . $_GET['search_string'] . '%\'
+						  OR company_name       like \'%' . $_GET['search_string'] . '%\'
+						  OR contact_notes      like \'%' . $_GET['search_string'] . '%\'
+						  OR contact_email      like \'%' . $_GET['search_string'] . '%\'';
 }
 $where = $AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '%';
 

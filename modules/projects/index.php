@@ -91,7 +91,7 @@ $bufferUser .= '<option value="0">' . $AppUI->_('All Users');
 
 $q = new DBQuery();
 $q->addTable('projects', 'p');
-$q->addQuery('user_id, concat(contact_first_name, " ", contact_last_name)');
+$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
 $q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
 $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 $q->addOrder('contact_first_name, contact_last_name');

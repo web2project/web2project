@@ -189,7 +189,7 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':&nbsp;' . '<inpu
 
 $q = new DBQuery();
 $q->addTable('projects', 'p');
-$q->addQuery('user_id, concat(contact_first_name, " ", contact_last_name)');
+$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
 $q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
 $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 $q->addOrder('contact_first_name, contact_last_name');
@@ -201,7 +201,7 @@ echo $AppUI->_('Owner') . ':&nbsp;' . arraySelect($user_list, 'project_owner', '
 
 $q = new DBQuery();
 $q->addTable('projects', 'p');
-$q->addQuery('user_id, concat(contact_first_name, " ", contact_last_name)');
+$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
 $q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
 $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 $q->addOrder('contact_first_name, contact_last_name');
@@ -212,7 +212,7 @@ $user_list = $user_list + $q->loadHashList();
 // requestors combo
 /*$q = new DBQuery();
 $q->addTable('projects','p');
-$q->addQuery('user_id, concat(contact_first_name, " ", contact_last_name)');
+$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
 $q->addJoin('users', 'u', 'u.user_id = p.project_requested_by', 'inner');
 $q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
 $q->addOrder('contact_first_name, contact_last_name');

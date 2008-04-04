@@ -418,7 +418,7 @@ if (!$suppressHeaders) {
 		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">w2P DBQueries executed: ' . $w2p_performance_dbqueries . ' queries</p>');
 		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">w2P Old Queries executed: ' . $w2p_performance_old_dbqueries . ' queries</p>');
 		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">w2P Total Queries executed: ' . (int)($w2p_performance_old_dbqueries + $w2p_performance_dbqueries) . ' queries</p>');
-		printf('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Page generated in %.3f seconds</p>', (array_sum(explode(" ", microtime())) - $w2p_performance_time));
+		printf('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Page generated in %.3f seconds</p>', (array_sum(explode(' ', microtime())) - $w2p_performance_time));
 	}
     echo '</div>';
 }
