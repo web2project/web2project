@@ -163,7 +163,7 @@ if ($do_report) {
 
 	$q = new DBQuery;
 	$q->addTable('task_log', 't');
-	$q->addQuery('t.*, CONCAT_WS(" ",contact_first_name,contact_last_name) AS creator, billingcode_value, ROUND((billingcode_value * t.task_log_hours), 2) AS amount, c.company_name, project_name, ts.task_name');
+	$q->addQuery('t.*, CONCAT_WS(\' \',contact_first_name,contact_last_name) AS creator, billingcode_value, ROUND((billingcode_value * t.task_log_hours), 2) AS amount, c.company_name, project_name, ts.task_name');
 
 	$q->addJoin('tasks', 'ts', 'ts.task_id = t.task_log_task');
 	$q->addJoin('projects', '', 'projects.project_id = ts.task_project');
@@ -295,7 +295,7 @@ if ($do_report) {
 		if ($log_userfilter) {
 			$q = new DBQuery;
 			$q->addTable('contacts');
-			$q->addQuery('CONCAT(contact_first_name, " ", contact_last_name)');
+			$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name)');
 			$q->addJoin('users', '', 'user_contact = contact_id', 'inner');
 			$q->addWhere('user_id=' . $log_userfilter);
 			$uname = 'User: ' . $q->loadResult();

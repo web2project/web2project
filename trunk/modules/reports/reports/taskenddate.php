@@ -88,7 +88,7 @@ if ($do_report) {
 	$q->addTable('users', 'u');
 	$q->addTable('projects', 'p');
 	$q->addQuery('t.*, p.project_name, u.user_username');
-	$q->addQuery('CONCAT(contact_first_name, " ", contact_last_name) AS user_username');
+	$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS user_username');
 	$q->leftJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
 	$q->addWhere('p.project_active = 1');
 	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {

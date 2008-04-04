@@ -27,7 +27,7 @@ $q->leftJoin('task_log', 'tl', 'tl.task_log_task = task_id');
 $q->addWhere('task_id = ' . (int)$task_id);
 $q->addQuery('tasks.*');
 $q->addQuery('project_name, project_color_identifier');
-$q->addQuery('CONCAT(contact_first_name, " ", contact_last_name) as username');
+$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
 $q->addQuery('ROUND(SUM(task_log_hours),2) as log_hours_worked');
 $q->addGroup('task_id');
 

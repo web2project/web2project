@@ -36,7 +36,7 @@ $q->addTable('users', 'u');
 $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name');
 $q->addQuery('forum_moderated, forum_create_date, forum_last_date');
 $q->addQuery('sum(if(c.message_parent=-1,1,0)) as forum_topics, sum(if(c.message_parent>0,1,0)) as forum_replies');
-$q->addQuery('user_username, project_name, project_color_identifier, CONCAT(contact_first_name," ",contact_last_name) owner_name');
+$q->addQuery('user_username, project_name, project_color_identifier, CONCAT(contact_first_name,\' \',contact_last_name) owner_name');
 $q->addQuery('SUBSTRING(l.message_body,1,' . $max_msg_length . ') message_body');
 $q->addQuery('LENGTH(l.message_body) message_length, watch_user, l.message_parent, l.message_id');
 $q->addQuery('count(distinct v.visit_message) as visit_count, count(distinct c.message_id) as message_count');

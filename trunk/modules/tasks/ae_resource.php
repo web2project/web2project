@@ -15,7 +15,7 @@ if ($task_id == 0) {
 	// Pull users on this task
 	$q = new DBQuery;
 	$q->addTable('user_tasks');
-	$q->addQuery('user_tasks.user_id, perc_assignment, concat_ws(" ", contact_first_name, contact_last_name) as contact_name');
+	$q->addQuery('user_tasks.user_id, perc_assignment, concat_ws(\' \', contact_first_name, contact_last_name) as contact_name');
 	$q->addWhere('task_id = ' . (int)$task_id);
 	$q->addWhere('task_id <> 0');
 	$q->addJoin('users', '', 'users.user_id = user_tasks.user_id', 'inner');

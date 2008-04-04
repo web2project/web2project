@@ -14,7 +14,7 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 $df = $AppUI->getPref('SHDATEFORMAT');
-$df .= " " . $AppUI->getPref('TIMEFORMAT');
+$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 // load the record data
 $msg = '';

@@ -127,7 +127,7 @@ switch ($table) {
 		break;
 	case 'users':
 		$title = 'User';
-		$q->addQuery('user_id,CONCAT_WS(" ",contact_first_name,contact_last_name)');
+		$q->addQuery('user_id,CONCAT_WS(\' \',contact_first_name,contact_last_name)');
 		$q->addOrder('contact_first_name');
 		$q->addTable('contacts', 'b');
 		$q->addWhere('user_contact = contact_id');

@@ -79,7 +79,7 @@ if (function_exists('styleRenderBoxTop')) {
 	<td nowrap='nowrap'>
 	   <?php
 echo $AppUI->_('Tasks created by');
-echo " ";
+echo ' ';
 echo getUsersCombo($user_id);
 ?>
 	</td>

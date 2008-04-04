@@ -197,7 +197,7 @@ class CContact extends CW2pObject {
 	function updateNotify() {
 		global $AppUI, $w2Pconfig, $locale_char_set;
 		$df = $AppUI->getPref('SHDATEFORMAT');
-		$df .= " " . $AppUI->getPref('TIMEFORMAT');
+		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 		$mail = new Mail;
 

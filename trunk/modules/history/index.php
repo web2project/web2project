@@ -117,7 +117,7 @@ if ($filter_param != '') {
 	$q = new DBQuery;
 	$q->includeCount();
 	$q->addQuery('history_id, history_item, history_table, history_description, history_action');
-	$q->addQuery('CONCAT(contact_first_name, " ", contact_last_name) AS history_user_name');
+	$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS history_user_name');
 	$q->addTable('history', 'h');
 	$q->addTable('users');
 	$q->addWhere('history_user = user_id');
