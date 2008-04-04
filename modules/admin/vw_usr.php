@@ -43,13 +43,13 @@ foreach ($users as $row) {
 		<table cellspacing="0" cellpadding="0" border="0">
 		<tr>
 			<td>
-				<a href="./index.php?m=admin&a=addedituser&user_id=<?php echo $row["user_id"]; ?>" title="<?php echo $AppUI->_('edit'); ?>">
+				<a href="./index.php?m=admin&a=addedituser&user_id=<?php echo $row['user_id']; ?>" title="<?php echo $AppUI->_('edit'); ?>">
 					<?php echo w2PshowImage('icons/stock_edit-16.png', 16, 16, ''); ?>
 				</a>
 			</td>
 			<td>
-				<a href="?m=admin&a=viewuser&user_id=<?php echo $row["user_id"]; ?>&tab=1" title="">
-					<img src="<?php echo w2PfindImage('obj/lock.gif'); ?>" width="16" height="16" border="0" alt="<?php echo $AppUI->_('edit permissions'); ?>">
+				<a href="?m=admin&a=viewuser&user_id=<?php echo $row['user_id']; ?>&tab=1" title="">
+					<img src="<?php echo w2PfindImage('obj/lock.gif'); ?>" width="16" height="16" border="0" alt="<?php echo $AppUI->_('edit permissions'); ?>" />
 				</a>
 			</td>
 			<td>
@@ -73,7 +73,7 @@ foreach ($users as $row) {
 	       <?php
 		$q = new DBQuery;
 		$q->addTable('user_access_log', 'ual');
-		$q->addQuery('user_access_log_id, ( unix_timestamp( now( ) ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours, ( unix_timestamp( now( ) ) - unix_timestamp( date_time_last_action ) ) / 3600 as 		idle, if(isnull(date_time_out) or date_time_out ="0000-00-00 00:00:00","1","0") as online');
+		$q->addQuery('user_access_log_id, ( unix_timestamp( now( ) ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours, ( unix_timestamp( now( ) ) - unix_timestamp( date_time_last_action ) ) / 3600 as idle, if(isnull(date_time_out) or date_time_out =\'0000-00-00 00:00:00\',\'1\',\'0\') as online');
 		$q->addWhere('user_id = ' . (int)$row['user_id']);
 		$q->addOrder('user_access_log_id DESC');
 		$q->setLimit(1);

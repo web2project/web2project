@@ -44,7 +44,7 @@ class CUser extends CW2pObject {
 			$perm_func = 'updateLogin';
 			$q->addTable('users');
 			$q->addQuery('user_password');
-			$q->addWhere("user_id = $this->user_id");
+			$q->addWhere('user_id = ' . $this->user_id);
 			$pwd = $q->loadResult();
 			if (!$this->user_password) {
 				//if the user didn't provide a password keep the old one
@@ -73,7 +73,7 @@ class CUser extends CW2pObject {
 			//Insert Default Preferences
 			//Lets check if the user has allready default users preferences set, if not insert the default ones
 			$q->addTable('user_preferences', 'upr');
-			$q->addWhere("upr.pref_user = $this->user_id");
+			$q->addWhere('upr.pref_user = ' . $this->user_id);
 			$uprefs = $q->loadList();
 			$q->clear();
 			if (!count($uprefs) && $this->user_id > 0) {

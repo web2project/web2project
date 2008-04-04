@@ -63,7 +63,7 @@ switch ($table) {
 		if ($hide_company == 1) {
 			$q->addQuery('dept_name');
 		} else {
-			$q->addQuery('CONCAT_WS(": ",company_name,dept_name) AS dept_name');
+			$q->addQuery('CONCAT_WS(\': \',company_name,dept_name) AS dept_name');
 		}
 		if ($company_id) {
 			$q->addWhere('dept_company = ' . (int)$company_id);

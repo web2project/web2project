@@ -15,7 +15,7 @@ $tab = $AppUI->getState('RoleVwTab') !== null ? $AppUI->getState('RoleVwTab') : 
 
 if (!is_array($role)) {
 	$titleBlock = new CTitleBlock('Invalid Role', 'main-settings.png', $m, $m . '.' . $a);
-	$titleBlock->addCrumb("?m=system&u=roles", "role list");
+	$titleBlock->addCrumb('?m=system&u=roles', 'role list');
 	$titleBlock->show();
 } else {
 	$titleBlock = new CTitleBlock('View Role', 'main-settings.png', $m, $m . '.' . $a);

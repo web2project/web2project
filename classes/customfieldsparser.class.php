@@ -37,7 +37,7 @@ class CustomFieldsParser {
 				$this->id_field_name = 'company_id';
 				break;
 			default:
-				$AppUI->setMsg("Invalid custom field record type: $custom_record_type");
+				$AppUI->setMsg('Invalid custom field record type: ' . $custom_record_type);
 				break;
 		}
 
@@ -67,7 +67,7 @@ class CustomFieldsParser {
 		$q = new DBQuery;
 		$q->addTable($this->table_name);
 		$q->addQuery($this->field_name);
-		$q->addWhere("{$this->id_field_name} = {$this->row_id}");
+		$q->addWhere($this->id_field_name . ' = ' . $this->row_id);
 		$previous_data = $q->loadResult();
 
 		if ($previous_data != '') {
@@ -82,43 +82,43 @@ class CustomFieldsParser {
 	function _getLabelHTML($field_config) {
 		if ($field_config['type'] == 'label') {
 			$separador = '';
-			$colspan = "colspan='2'";
+			$colspan = 'colspan="2"';
 			$field_config['name'] = '<b>' . $field_config['name'] . '</b>';
 		} else {
 			$separador = ':';
 			$colspan = '';
 		}
 
-		return "<td $colspan>" . $field_config['name'] . " $separador</td>";
+		return '<td ' . $colspan . '>' . $field_config['name'] . ' ' . $separador . '</td>';
 	}
 
 	function parseEditField($key) {
 		$field_config = unserialize($this->fields_array[$key]);
-		$parsed = "<tr id='custom_tr_$key'>";
+		$parsed = '<tr id="custom_tr_' . $key . '">';
 
 		$parsed .= $this->_getLabelHTML($field_config);
 		switch ($field_config['type']) {
 			case 'text':
-				$parsed .= "<td align='left'><input type='text' name='custom_$key' class='text' " . $field_config['options'] . " value='" . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . "' /></td>";
+				$parsed .= '<td align="left"><input type="text" name="custom_' . $key .'" class="text" ' . $field_config['options'] . ' value="' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '" /></td>';
 				break;
 			case 'href':
-				$parsed .= "<td align='left'><input type='text' name='custom_$key' class='text' " . $field_config['options'] . " value='" . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . "' /></td>";
+				$parsed .= '<td align="left"><input type="text" name="custom_' . $key . '" class="text" ' . $field_config['options'] . ' value="' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '" /></td>';
 				break;
 			case 'select':
-				$parsed .= "<td align='left'>" . arraySelect(explode(',', $field_config['selects']), "custom_$key", 'size="1" class="text" ' . $field_config['options'], (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</td>';
+				$parsed .= '<td align="left">' . arraySelect(explode(',', $field_config['selects']), 'custom_' . $key, 'size="1" class="text" ' . $field_config['options'], (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</td>';
 				break;
 			case 'textarea':
-				$parsed .= "<td align='left'><textarea name='custom_$key' class='textarea'" . $field_config['options'] . '>' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '</textarea></td>';
+				$parsed .= '<td align="left"><textarea name="custom_' . $key . '" class="textarea" ' . $field_config['options'] . '>' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '</textarea></td>';
 				break;
 			case 'checkbox':
 				$options_array = explode(',', $field_config['selects']);
-				$parsed .= "<td align='left'>";
+				$parsed .= '<td align="left">';
 				foreach ($options_array as $option) {
 					$checked = '';
 					if (isset($this->previous_data[$key]) && array_key_exists($option, array_flip($this->previous_data[$key]))) {
 						$checked = 'checked';
 					}
-					$parsed .= "<input type='checkbox' value='$option' name='custom_" . $key . "[]' class='text' style='border:0' $checked " . $field_config['options'] . "  />$option<br />";
+					$parsed .= '<input type="checkbox" value="' . $option . '" name="custom_' . $key . '[]" class="text" style="border:0" ' . $checked . ' ' . $field_config['options'] . ' />' . $option . '<br />';
 					$checked = '';
 				}
 				$parsed .= '</td>';
@@ -130,7 +130,7 @@ class CustomFieldsParser {
 
 	function parseViewField($key) {
 		$field_config = unserialize($this->fields_array[$key]);
-		$parsed = "<tr id='custom_tr_$key'>";
+		$parsed = '<tr id="custom_tr_' . $key . '">';
 		$parsed .= $this->_getLabelHTML($field_config);
 		switch ($field_config['type']) {
 			case 'text':
@@ -154,7 +154,7 @@ class CustomFieldsParser {
 					if (isset($this->previous_data[$key]) && array_key_exists($option, array_flip($this->previous_data[$key]))) {
 						$checked = 'checked';
 					}
-					$parsed .= "<input type='checkbox' value='$option' name='custom_" . $key . "[]' class='text' locked style='border:0' $checked " . $field_config['options'] . " disabled />$option<br />";
+					$parsed .= '<input type="checkbox" value="' . $option . '" name="custom_' . $key . '[]" class="text" locked style="border:0" ' . $checked . ' ' . $field_config['options'] . ' disabled />' . $option . '<br />';
 				}
 				$parsed .= '</td>';
 				break;
@@ -215,7 +215,7 @@ class CustomFieldsParser {
 		$record_type = $this->custom_record_types[$key];
 
 		$record_type = str_replace(' ', '_', $record_type);
-		$parsed .= "function show$record_type(){\n";
+		$parsed .= 'function show' . $record_type . "(){\n";
 
 		foreach ($this->_getVisibleKeysForType($record_type) as $visible_key) {
 			$parsed .= "document.getElementById('custom_tr_$visible_key').style.display='';\n";

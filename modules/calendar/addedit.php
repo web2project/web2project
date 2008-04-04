@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 
-$event_id = intval(w2PgetParam($_GET, "event_id", 0));
+$event_id = intval(w2PgetParam($_GET, 'event_id', 0));
 $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
 
 $perms = &$AppUI->acl();
@@ -82,7 +82,7 @@ if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->ev
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock(($event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock(($event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=calendar', 'month view');
 if ($event_id) {
 	$titleBlock->addCrumb('?m=calendar&amp;a=view&event_id=' . $event_id, 'view this event');
@@ -149,7 +149,7 @@ if (!$event_id && !$is_clash) {
 
 $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month', 'Quarterly', 'Every 6 months', 'Every Year');
 
-$remind = array("900" => '15 mins', "1800" => '30 mins', "3600" => '1 hour', "7200" => '2 hours', "14400" => '4 hours', "28800" => '8 hours', "56600" => '16 hours', "86400" => '1 day', "172800" => '2 days');
+$remind = array('900' => '15 mins', '1800' => '30 mins', '3600' => '1 hour', '7200' => '2 hours', '14400' => '4 hours', '28800' => '8 hours', '56600' => '16 hours', '86400' => '1 day', '172800' => '2 days');
 
 // build array of times in 30 minute increments
 $times = array();
@@ -170,12 +170,12 @@ function submitIt(){
 		return;
 	}
 	if (form.event_start_date.value.length < 1){
-		alert('<?php echo $AppUI->_("Please enter a start date", UI_OUTPUT_JS); ?>');
+		alert('<?php echo $AppUI->_('Please enter a start date', UI_OUTPUT_JS); ?>');
 		form.event_start_date.focus();
 		return;
 	}
 	if (form.event_end_date.value.length < 1){
-		alert('<?php echo $AppUI->_("Please enter an end date", UI_OUTPUT_JS); ?>');
+		alert('<?php echo $AppUI->_('Please enter an end date', UI_OUTPUT_JS); ?>');
 		form.event_end_date.focus();
 		return;
 	}
@@ -192,23 +192,24 @@ function submitIt(){
 	var users = form.event_assigned;
 	users.value = '';
 	for (var i = 0; i < len; i++) {
-		if (i)
-			users.value += ",";
+		if (i) {
+			users.value += ',';
+		}
 		users.value += assigned.options[i].value;
 	}
 	form.submit();
 }
 
 function setDate( frm_name, f_date ) {
-	fld_date = eval( "document." + frm_name + "." + f_date );
-	fld_real_date = eval( "document." + frm_name + "." + "event_" + f_date );
+	fld_date = eval( 'document.' + frm_name + '.' + f_date );
+	fld_real_date = eval( 'document.' + frm_name + '.' + 'event_' + f_date );
 	if (fld_date.value.length>0) {
       if ((parseDate(fld_date.value))==null) {
             alert('The Date/Time you typed does not match your prefered format, please retype.');
             fld_real_date.value = '';
             fld_date.style.backgroundColor = 'red';
         } else {
-        	fld_real_date.value = formatDate(parseDate(fld_date.value), "yyyyMMdd");
+        	fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
         	fld_date.value = formatDate(parseDate(fld_date.value), "<?php echo $cal_sdf ?>");
             fld_date.style.backgroundColor = '';
   		}
@@ -223,16 +224,16 @@ function addUser() {
 	var au = form.assigned.length -1;
 	//gets value of percentage assignment of selected resource
 
-	var users = "x";
+	var users = 'x';
 
 	//build array of assiged users
 	for (au; au > -1; au--) {
-		users = users + "," + form.assigned.options[au].value + ","
+		users = users + ',' + form.assigned.options[au].value + ','
 	}
 
 	//Pull selected resources and add them to list
 	for (fl; fl > -1; fl--) {
-		if (form.resources.options[fl].selected && users.indexOf( "," + form.resources.options[fl].value + "," ) == -1) {
+		if (form.resources.options[fl].selected && users.indexOf( ',' + form.resources.options[fl].value + ',' ) == -1) {
 			t = form.assigned.length
 			opt = new Option( form.resources.options[fl].text, form.resources.options[fl].value);
 			form.assigned.options[t] = opt

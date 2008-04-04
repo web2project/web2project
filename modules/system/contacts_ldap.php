@@ -146,7 +146,7 @@ if (isset($test) || isset($import)) {
 
 	if (!function_exists('ldap_bind') || !@ldap_bind($ds, $bind_name, $bind_password)) {
 		print '<span style="color:red;font-weight:bold;">ldap_bind failed.</span>' . "\n";
-		if (function_exists("ldap_error")) {
+		if (function_exists('ldap_error')) {
 			print ldap_error($ds) . "\n";
 		}
 	} else {
@@ -171,7 +171,7 @@ if (isset($test) || isset($import)) {
 		print 'Search completed Sucessfully.' . "\n";
 	} else {
 		print '<span style="color:red;font-weight:bold;">ldap_search failed.</span>' . "\n";
-		if (function_exists("ldap_error")) {
+		if (function_exists('ldap_error')) {
 			print 'Search Error: [' . ldap_errno($ds) . '] ' . ldap_error($ds) . "\n";
 		}		
 	}

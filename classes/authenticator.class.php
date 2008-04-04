@@ -10,11 +10,11 @@ if (!defined('W2P_BASE_DIR')) {
 
 function &getAuth($auth_mode) {
 	switch ($auth_mode) {
-		case "ldap":
+		case 'ldap':
 			$auth = new LDAPAuthenticator();
 			return $auth;
 			break;
-		case "pn":
+		case 'pn':
 			$auth = new PostNukeAuthenticator();
 			return $auth;
 			break;
@@ -72,7 +72,7 @@ class PostNukeAuthenticator extends SQLAuthenticator {
 		$q = new DBQuery;
 		$q->addTable('users');
 		$q->addQuery('user_id, user_password, user_contact');
-		$q->addWhere("user_username = '$username'");
+		$q->addWhere('user_username = \'' . $username . '\'');
 		if (!$rs = $q->exec()) {
 			die($AppUI->_('Failed to get user details') . ' - error was ' . $db->ErrorMsg());
 		}
@@ -88,7 +88,7 @@ class PostNukeAuthenticator extends SQLAuthenticator {
 			$q->clear();
 			$q->addTable('users');
 			$q->addUpdate('user_password', $passwd);
-			$q->addWhere("user_id = {$this->user_id}");
+			$q->addWhere('user_id = ' . $this->user_id);
 			if (!$q->exec()) {
 				die($AppUI->_('Could not update user credentials'));
 			}
@@ -97,7 +97,7 @@ class PostNukeAuthenticator extends SQLAuthenticator {
 			$q->addUpdate('contact_first_name', $first_name);
 			$q->addUpdate('contact_last_name', $last_name);
 			$q->addUpdate('contact_email', $email);
-			$q->addWhere("contact_id = {$row['user_contact']}");
+			$q->addWhere('contact_id = ' . $row['user_contact']);
 			if (!$q->exec()) {
 				die($AppUI->_('Could not update user details'));
 			}
@@ -109,18 +109,18 @@ class PostNukeAuthenticator extends SQLAuthenticator {
 	function createsqluser($username, $password, $email, $first, $last) {
 		global $db, $AppUI;
 
-		require_once ($AppUI->getModuleClass("contacts"));
+		require_once ($AppUI->getModuleClass('contacts'));
 
 		$c = new CContact();
 		$c->contact_first_name = $first;
 		$c->contact_last_name = $last;
 		$c->contact_email = $email;
-		$c->contact_order_by = "$last, $first";
+		$c->contact_order_by = $first . ' ' . $last;
 
 		$q = new DBQuery;
 		$q->insertObject('contacts', $c, 'contact_id');
 		$q->clear();
-		$contact_id = ($c->contact_id == null) ? "NULL" : $c->contact_id;
+		$contact_id = ($c->contact_id == null) ? 'NULL' : $c->contact_id;
 		if (!$c->contact_id) {
 			die($AppUI->_('Failed to create user details'));
 		}
@@ -155,7 +155,7 @@ class SQLAuthenticator {
 		$q = new DBQuery;
 		$q->addTable('users');
 		$q->addQuery('user_id, user_password');
-		$q->addWhere("user_username = '$username'");
+		$q->addWhere('user_username = \'' . $username . '\'');
 		if (!$rs = $q->exec()) {
 			$q->clear();
 			return false;
@@ -223,7 +223,7 @@ class LDAPAuthenticator extends SQLAuthenticator {
 		@ldap_set_option($rs, LDAP_OPT_PROTOCOL_VERSION, $this->ldap_version);
 		@ldap_set_option($rs, LDAP_OPT_REFERRALS, 0);
 
-		//$ldap_bind_dn = "cn=".$this->ldap_search_user.",".$this->base_dn;
+		//$ldap_bind_dn = 'cn='.$this->ldap_search_user.','.$this->base_dn;
 		$ldap_bind_dn = empty($this->ldap_search_user) ? null : $this->ldap_search_user;
 		$ldap_bind_pw = empty($this->ldap_search_pass) ? null : $this->ldap_search_pass;
 
@@ -231,30 +231,30 @@ class LDAPAuthenticator extends SQLAuthenticator {
 			// Uncomment for LDAP debugging
 			/*
 			$error_msg = ldap_error($rs);
-			die("Couldnt Bind Using ".$ldap_bind_dn."@".$this->ldap_host.":".$this->ldap_port." Because:".$error_msg);
+			die('Couldnt Bind Using '.$ldap_bind_dn.'@'.$this->ldap_host.':'.$this->ldap_port.' Because:'.$error_msg);
 			*/
 			return false;
 		} else {
-			$filter_r = html_entity_decode(str_replace("%USERNAME%", $username, $this->filter), ENT_COMPAT, 'UTF-8');
+			$filter_r = html_entity_decode(str_replace('%USERNAME%', $username, $this->filter), ENT_COMPAT, 'UTF-8');
 			$result = @ldap_search($rs, $this->base_dn, $filter_r);
 			if (!$result) {
 				return false; // ldap search returned nothing or error
 			}
 
 			$result_user = ldap_get_entries($rs, $result);
-			if ($result_user["count"] == 0) {
+			if ($result_user['count'] == 0) {
 				return false; // No users match the filter
 			}
 
 			$first_user = $result_user[0];
-			$ldap_user_dn = $first_user["dn"];
+			$ldap_user_dn = $first_user['dn'];
 
 			// Bind with the dn of the user that matched our filter (only one user should match sAMAccountName or uid etc..)
 
 			if (!$bind_user = @ldap_bind($rs, $ldap_user_dn, $password)) {
 				/*
 				$error_msg = ldap_error($rs);
-				die("Couldnt Bind Using ".$ldap_user_dn."@".$this->ldap_host.":".$this->ldap_port." Because:".$error_msg);
+				die('Couldnt Bind Using '.$ldap_user_dn.'@'.$this->ldap_host.':'.$this->ldap_port.' Because:'.$error_msg);
 				*/
 				return false;
 			} else {
@@ -273,7 +273,7 @@ class LDAPAuthenticator extends SQLAuthenticator {
 		$q = new DBQuery;
 		$result = false;
 		$q->addTable('users');
-		$q->addWhere("user_username = '$username'");
+		$q->addWhere('user_username = \'' . $username . '\'');
 		$rs = $q->exec();
 		if ($rs->RecordCount() > 0) {
 			$result = true;
@@ -286,18 +286,18 @@ class LDAPAuthenticator extends SQLAuthenticator {
 		global $db;
 		$q = new DBQuery;
 		$q->addTable('users');
-		$q->addWhere("user_username = '$username'");
+		$q->addWhere('user_username = \'' . $username . '\'');
 		$rs = $q->exec();
 		$row = $rs->FetchRow();
 		$q->clear();
-		return $row["user_id"];
+		return $row['user_id'];
 	}
 
 	function createsqluser($username, $password, $ldap_attribs = array()) {
 		global $db, $AppUI;
 		$hash_pass = MD5($password);
 
-		require_once ($AppUI->getModuleClass("contacts"));
+		require_once ($AppUI->getModuleClass('contacts'));
 
 		if (!count($ldap_attribs) == 0) {
 			// Contact information based on the inetOrgPerson class schema

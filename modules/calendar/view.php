@@ -58,7 +58,7 @@ if ($obj->event_project) {
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock('View Event', 'myevo-appointments.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock('View Event', 'myevo-appointments.png', $m, $m . '.' . $a);
 if ($canEdit) {
 	$titleBlock->addCell();
 	$titleBlock->addCell('
@@ -115,11 +115,11 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Starts'); ?>:</td>
-			<td class="hilite"><?php echo $start_date ? $start_date->format("$df $tf") : '-'; ?></td>
+			<td class="hilite"><?php echo $start_date ? $start_date->format($df . ' ' . $tf) : '-'; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Ends'); ?>:</td>
-			<td class="hilite"><?php echo $end_date ? $end_date->format("$df $tf") : '-'; ?></td>
+			<td class="hilite"><?php echo $end_date ? $end_date->format($df . ' ' . $tf) : '-'; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>

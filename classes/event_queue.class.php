@@ -90,7 +90,7 @@ class EventQueue {
 	function remove($id) {
 		$q = new DBQuery;
 		$q->setDelete($this->table);
-		$q->addWhere('queue_id = "'.$id.'"');
+		$q->addWhere('queue_id = \'' . $id . '\'');
 		$q->exec();
 		$q->clear();
 	}
@@ -102,10 +102,10 @@ class EventQueue {
 	function find($module, $type, $id = null) {
 		$q = new DBQuery;
 		$q->addTable($this->table);
-		$q->addWhere('queue_module = "'.$module.'"');
-		$q->addWhere('queue_type = "'.$type.'"');
+		$q->addWhere('queue_module = \'' . $module . '\'');
+		$q->addWhere('queue_type = \'' . $type . '\'');
 		if (isset($id)) {
-			$q->addWhere('queue_origin_id = "'.$id.'"');
+			$q->addWhere('queue_origin_id = \'' . $id . '\'');
 		}
 		return $q->loadHashList('queue_id');
 	}
@@ -127,19 +127,19 @@ class EventQueue {
 		if (strpos($fields['queue_callback'], '::') !== false) {
 			list($class, $method) = explode('::', $fields['queue_callback']);
 			if (!class_exists($class)) {
-				dprint(__file__, __line__, 2, "Cannot process event: Class $class does not exist");
+				dprint(__file__, __line__, 2, 'Cannot process event: Class ' . $class . ' does not exist');
 				return false;
 			}
 			$object = new $class;
 			if (!method_exists($object, $method)) {
-				dprint(__file__, __line__, 2, "Cannot process event: Method $class::$method does not exist");
+				dprint(__file__, __line__, 2, 'Cannot process event: Method ' . $class . '::' . $method . ' does not exist');
 				return false;
 			}
 			return $object->$method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
 		} else {
 			$method = $fields['queue_callback'];
 			if (!function_exists($method)) {
-				dprint(__file__, __line__, 2, "Cannot process event: Function $method does not exist");
+				dprint(__file__, __line__, 2, 'Cannot process event: Function ' . $method . ' does not exist');
 				return false;
 			}
 			return $method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
@@ -186,7 +186,7 @@ class EventQueue {
 		$q = new DBQuery;
 		if (count($this->delete_list)) {
 			$q->setDelete($this->table);
-			$q->addWhere("queue_id in (" . implode(',', $this->delete_list) . ")");
+			$q->addWhere('queue_id in (' . implode(',', $this->delete_list) . ')');
 			$q->exec();
 			$q->clear();
 		}

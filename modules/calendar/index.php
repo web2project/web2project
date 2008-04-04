@@ -39,9 +39,9 @@ $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 #echo '<pre>';print_r($events);echo '</pre>';
 // setup the title block
-$titleBlock = new CTitleBlock('Monthly Calendar', 'myevo-appointments.png', $m, "$m.$a");
+$titleBlock = new CTitleBlock('Monthly Calendar', 'myevo-appointments.png', $m, $m . '.' . $a);
 $titleBlock->addCell($AppUI->_('Company') . ':');
-$titleBlock->addCrumb("?m=calendar&a=year_view&date=" . $date, "year view");
+$titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $date, 'year view');
 $titleBlock->addCell(arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id), '', '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany">', '</form>');
 $titleBlock->addCell($AppUI->_('Event Filter') . ':');
 $titleBlock->addCell(arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"', $event_filter, true), '', "<Form action='{$_SERVER['REQUEST_URI']}' method='post' name='pickFilter'>", '</form>');

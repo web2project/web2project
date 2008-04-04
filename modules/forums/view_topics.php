@@ -39,7 +39,7 @@ switch ($f) {
 		break;
 }
 $q->addGroup('fm1.message_id, fm1.message_parent');
-$q->addOrder("$orderby $orderdir");
+$q->addOrder($orderby . ' ' . $orderdir);
 $topics = $q->loadList();
 
 $crumbs = array();

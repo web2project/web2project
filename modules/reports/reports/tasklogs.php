@@ -198,7 +198,7 @@ if ($do_report) {
 	$proj = &new CProject;
 	$allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
 	if (count($allowedProjects)) {
-		$q->addWhere(implode(" AND ", $allowedProjects));
+		$q->addWhere(implode(' AND ', $allowedProjects));
 	}
 
 	$q->addOrder('creator');

@@ -76,7 +76,7 @@ $titleBlock->show();
 		<a href="<?php echo '?m=calendar&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></A>
 	</td>
 	<th width="100%">
-		<span style="font-size:12pt"><?php echo $AppUI->_('Week') . ' ' . $first_time->format("%U - %Y") . ' - ' . $AppUI->_($first_time->format('%B')); ?></span>
+		<span style="font-size:12pt"><?php echo $AppUI->_('Week') . ' ' . $first_time->format('%U - %Y') . ' - ' . $AppUI->_($first_time->format('%B')); ?></span>
 	</th>
 	<td>
 		<a href="<?php echo '?m=calendar&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></A>

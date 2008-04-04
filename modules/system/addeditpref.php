@@ -9,7 +9,7 @@ if (!defined('W2P_BASE_DIR')) {
 $user_id = w2PgetParam($_GET, 'user_id', '0');
 // Check permissions
 if (!$canEdit && $user_id != $AppUI->user_id) {
-	$AppUI->redirect("m=public&a=access_denied");
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 // load the preferences
