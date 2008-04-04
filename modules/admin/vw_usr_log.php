@@ -58,8 +58,8 @@ function setDate( frm_name, f_date ) {
 	<tr align="center">
 		<td align="right" width="45%" ><?php echo $AppUI->_('Start Date'); ?></td>
 			<td width="55%" align="left">
-				<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ""; ?>" />
-				<input type="text" name="start_date" id="start_date" onchange="setDate('frmDate', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ""; ?>" class="text" />
+				<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+				<input type="text" name="start_date" id="start_date" onchange="setDate('frmDate', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
 				<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'frmDate', null, true)">
 				<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" /></a>
 			</td>

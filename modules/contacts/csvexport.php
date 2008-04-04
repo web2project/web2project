@@ -104,7 +104,7 @@ if (1 == 1) {
 		settype($row['contact_mobile'], 'string');
 		$text .= sprintf("\"%s\",,,,,,,,\"\",\"0/0/00\",", '' . $row['contact_mobile']);
 		// Fields 51- 60
-		if ($row['contact_type'] != "") {
+		if ($row['contact_type'] != '') {
 			$categories = "web2Project; " . $row['contact_type'];
 		} else {
 			$categories = "web2Project;";

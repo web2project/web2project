@@ -98,7 +98,7 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 	}
 } elseif (!$company_id) {
 	//  Contacts from all allowed companies
-	$where = '(contact_company = "" OR contact_company IS NULL OR contact_company = 0 OR (contact_company IN (\'' . implode('","', array_values($aCpies_esc)) . '\'))' . ' OR ( contact_company IN (\'' . implode('","', array_keys($aCpies_esc)) . '\')))';
+	$where = '(contact_company = \'\' OR contact_company IS NULL OR contact_company = 0 OR (contact_company IN (\'' . implode('","', array_values($aCpies_esc)) . '\'))' . ' OR ( contact_company IN (\'' . implode('","', array_keys($aCpies_esc)) . '\')))';
 	if (count($aDpts)) {
 		$where_dept = '(contact_department = 0 OR (contact_department IN (' . implode(',', array_keys($aDpts)) . ')))';
 	} else {

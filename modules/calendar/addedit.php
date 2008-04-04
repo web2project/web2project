@@ -190,7 +190,7 @@ function submitIt(){
 	var assigned = form.assigned;
 	var len = assigned.length;
 	var users = form.event_assigned;
-	users.value = "";
+	users.value = '';
 	for (var i = 0; i < len; i++) {
 		if (i)
 			users.value += ",";
@@ -213,7 +213,7 @@ function setDate( frm_name, f_date ) {
             fld_date.style.backgroundColor = '';
   		}
 	} else {
-      	fld_real_date.value = "";
+      	fld_real_date.value = '';
 	}
 }
 
@@ -301,7 +301,7 @@ echo arraySelect($projects, 'event_project', 'size="1" class="text"', ($obj->eve
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
 			<td nowrap="nowrap">
 				<input type="hidden" name="event_start_date" id="event_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-				<input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ""; ?>" class="text" />
+				<input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
 				<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
 					<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
 				</a>

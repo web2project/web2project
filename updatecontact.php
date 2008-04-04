@@ -99,7 +99,7 @@ function orderByName( x ){
 
 <form name="changecontact" action="do_updatecontact.php" method="post">
 	<input type="hidden" name="contact_project" value="0" />
-	<input type="hidden" name="contact_unique_update" value="<?php echo uniqid(""); ?>" />
+	<input type="hidden" name="contact_unique_update" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="updatekey" value="<?php echo $updatekey; ?>" />
 	<input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
 	<input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id; ?>" />

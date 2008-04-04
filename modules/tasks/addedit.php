@@ -68,7 +68,7 @@ $users = $perms->getPermittedUsers('tasks');
 
 function getSpaces($amount) {
 	if ($amount == 0) {
-		return "";
+		return '';
 	}
 	return str_repeat('&nbsp;', $amount);
 }

@@ -113,7 +113,7 @@ class CForum extends CW2pObject {
 
 		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
 		if (count($aPrjs)) {
-			$buffer = '(forum_project IN (' . implode(',', array_keys($aPrjs)) . ') OR forum_project IS NULL OR forum_project = "" OR forum_project = 0)';
+			$buffer = '(forum_project IN (' . implode(',', array_keys($aPrjs)) . ') OR forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
 
 			if ($extra['where'] != '') {
 				$extra['where'] = $extra['where'] . ' AND ' . $buffer;
@@ -123,9 +123,9 @@ class CForum extends CW2pObject {
 		} else {
 			// There are no allowed projects, so only allow forums with no project associated.
 			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND (forum_project IS NULL OR forum_project = "" OR forum_project = 0) ';
+				$extra['where'] = $extra['where'] . ' AND (forum_project IS NULL OR forum_project = \'\' OR forum_project = 0) ';
 			} else {
-				$extra['where'] = '(forum_project IS NULL OR forum_project = "" OR forum_project = 0)';
+				$extra['where'] = '(forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
 			}
 		}
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
@@ -313,7 +313,7 @@ class CForumMessage {
 		}
 
 		$mail = new Mail;
-		$mail->Subject("$subj_prefix $this->message_title", isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "");
+		$mail->Subject("$subj_prefix $this->message_title", isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
 		$body = $body_msg;
 
@@ -323,7 +323,7 @@ class CForumMessage {
 		$body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=' . $this->message_forum;
 		$body .= "\n\n$this->message_body";
 
-		$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : "");
+		$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
 		while ($row = $q->fetchRow()) {
 			if ($mail->ValidEmail($row['contact_email'])) {

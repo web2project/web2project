@@ -42,7 +42,7 @@ function w2PsessionRead($id) {
 	$qid = &$q->exec();
 	if (!$qid || $qid->EOF) {
 		dprint(__file__, __line__, 11, 'Failed to retrieve session ' . $id);
-		$data = "";
+		$data = '';
 	} else {
 		$max = w2PsessionConvertTime('max_lifetime');
 		$idle = w2PsessionConvertTime('idle_time');

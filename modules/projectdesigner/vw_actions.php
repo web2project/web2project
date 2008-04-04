@@ -36,7 +36,7 @@ $root_tasks = $q->loadHashList('task_id');
 $q->clear();
 $projTasks = array();
 global $task_parent_options;
-$task_parent_options = "";
+$task_parent_options = '';
 
 // Now lets get non-root tasks, grouped by the task parent
 $q = new DBQuery;
@@ -136,7 +136,7 @@ $spercent = arrayMerge(array('' => '(Progress)'), $percent);
       			<select name="bulk_task_assign_perc" class="text">
       			<?php
 for ($i = 5; $i <= 100; $i += 5) {
-	echo '<option ' . (($i == 100) ? "selected=\"true\"" : "") . " value=\"" . $i . "\">" . $i . "%</option>";
+	echo '<option ' . (($i == 100) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
 }
 ?>
                         			</select><br /><br />
@@ -203,9 +203,10 @@ for ($i = 5; $i <= 100; $i += 5) {
 
 <?php
 function getSpaces($amount) {
-	if ($amount == 0)
-		return "";
-	return str_repeat("&nbsp;", $amount);
+	if ($amount == 0) {
+		return '';
+	}
+	return str_repeat('&nbsp;', $amount);
 }
 
 function constructTaskTree($task_data, $parents, $all_tasks, $depth = 0) {

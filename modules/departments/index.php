@@ -32,7 +32,7 @@ $obj = new CDepartment();
 $deny = $obj->getDeniedRecords($AppUI->user_id);
 
 // Company search by Kist
-$search_string = w2PgetParam($_REQUEST, 'search_string', "");
+$search_string = w2PgetParam($_REQUEST, 'search_string', '');
 if ($search_string != '') {
 	$search_string = $search_string == '-1' ? '' : $search_string;
 	$AppUI->setState('dept_search_string', $search_string);
