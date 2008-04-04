@@ -47,7 +47,7 @@ $q->clear();
 */
 $caller = defVal($_REQUEST['caller'], null);
 if ($caller == 'todo') {
-	$user_id = defVal(w2PgetParam($_REQUEST, 'user_id', null), 0);
+	$user_id = defVal(w2PgetParam($_REQUEST, 'user_id', 0), 0);
 
 	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . w2PgetUsername($user_id);
 	$projects[$project_id]['project_color_identifier'] = 'ff6000';
@@ -173,23 +173,34 @@ if ($actual_end_date->after($project->project_end_date)) {
 
 foreach ($proTasks as $row) {
 
-	// calculate or set blank task_end_date if unset
-	if ($row['task_end_date'] == '0000-00-00 00:00:00') {
-		if ($row['task_duration'] && $row['task_start_date'] != '0000-00-00 00:00:00') {
-			$row['task_end_date'] = substr(db_unix2dateTime(db_dateTime2unix($row['task_start_date']) + SECONDS_PER_DAY * convert2days($row['task_duration'], $row['task_duration_type'])), 1, -1);
-		} else {
-			$row['task_end_date'] = $p_end_date;
-		}
-	}
-
+	//Check if start date exists, if not try giving it the end date.
+	//If the end date does not exist then set it for today.
+	//This avoids jpgraphs internal errors that render the gantt completely useless
 	if ($row['task_start_date'] == '0000-00-00 00:00:00') {
-		$row['task_start_date'] = $project->project_start_date; //date('Y-m-d H:i:s');
+		if ($row['task_end_date'] == '0000-00-00 00:00:00') {
+			$todaydate = new CDate();
+			$row['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+		} else {
+			$row['task_start_date'] = $row['task_end_date'];
+		}
 	}
 
 	$tsd = new CDate($row['task_start_date']);
 
 	if ($tsd->before(new CDate($start_min))) {
 		$start_min = $row['task_start_date'];
+	}
+
+	//Check if end date exists, if not try giving it the start date.
+	//If the start date does not exist then set it for today.
+	//This avoids jpgraphs internal errors that render the gantt completely useless
+	if ($row['task_end_date'] == '0000-00-00 00:00:00') {
+		if ($row['task_duration']) {
+			$row['task_end_date'] = db_unix2dateTime(db_dateTime2unix($row['task_start_date']) + SECONDS_PER_DAY * convert2days($row['task_duration'], $row['task_duration_type']));
+		} else {
+			$todaydate = new CDate();
+			$row['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+		}
 	}
 
 	$ted = new CDate($row['task_end_date']);
@@ -236,7 +247,9 @@ setlocale(LC_TIME, $pLocale);
 if ($start_date && $end_date) {
 	$graph->SetDateRange($start_date, $end_date);
 }
-$graph->scale->actinfo->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+	$graph->scale->actinfo->SetFont(FF_CUSTOM);
+}
 $graph->scale->actinfo->vgrid->SetColor('gray');
 $graph->scale->actinfo->SetColor('darkgray');
 
@@ -258,8 +271,12 @@ $graph->scale->tableTitle->Set($projects[$project_id]['project_name']);
 
 // Use TTF font if it exists
 // try commenting out the following two lines if gantt charts do not display
-$graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
+if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+	$graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
+}
 $graph->scale->SetTableTitleBackground('#' . $projects[$project_id]['project_color_identifier']);
+$font_color = bestColor('#' . $projects[$project_id]['project_color_identifier']);
+$graph->scale->tableTitle->SetColor($font_color);
 $graph->scale->tableTitle->Show(true);
 
 //-----------------------------------------
@@ -272,7 +289,6 @@ $graph->scale->tableTitle->Show(true);
 if ($start_date && $end_date) {
 	$min_d_start = new CDate($start_date);
 	$max_d_end = new CDate($end_date);
-	$graph->SetDateRange($start_date, $end_date);
 } else {
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
@@ -286,14 +302,14 @@ if ($start_date && $end_date) {
 		$d_end->Date($end);
 
 		if ($i == 0) {
-			$min_d_start = $d_start;
-			$max_d_end = $d_end;
+			$min_d_start = $d_start->duplicate();
+			$max_d_end = $d_end->duplicate();
 		} else {
 			if (Date::compare($min_d_start, $d_start) > 0) {
-				$min_d_start = $d_start;
+				$min_d_start = $d_start->duplicate();
 			}
 			if (Date::compare($max_d_end, $d_end) < 0) {
-				$max_d_end = $d_end;
+				$max_d_end = $d_end->duplicate();
 			}
 		}
 	}
@@ -512,10 +528,13 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 			$bar = new GanttBar($row++, array($name, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
 		}
 		$bar->progress->Set(min(($progress / 100), 1));
-		$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-
+		if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+			$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+		}
 		if ($a['task_dynamic'] == 1) {
-			$bar->title->SetFont(FF_CUSTOM, FS_BOLD, 8);
+			if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+				$bar->title->SetFont(FF_CUSTOM, FS_BOLD, 8);
+			}
 			$bar->rightMark->Show();
 			$bar->rightMark->SetType(MARK_RIGHTTRIANGLE);
 			$bar->rightMark->SetWidth(3);
@@ -534,7 +553,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	//adding captions
 	$bar->caption = new TextProperty($caption);
 	$bar->caption->Align('left', 'center');
-	$bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+	if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+		$bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+	}
 
 	// show tasks which are both finished and past in (dark)gray
 	if ($progress >= 100 && $end_date->isPast() && get_class($bar) == 'ganttbar') {
@@ -565,9 +586,11 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	$graph->Add($bar);
 }
 unset($gantt_arr);
-$today = date('y-m-d');
-$vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
-$vline->title->SetFont(FF_CUSTOM, FS_BOLD, 10);
+$today = new CDate();
+$vline = new GanttVLine($today->format(FMT_TIMESTAMP_DATE), $AppUI->_('Today', UI_OUTPUT_RAW));
+if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+	$vline->title->SetFont(FF_CUSTOM, FS_BOLD, 10);
+}
 $graph->Add($vline);
 $graph->Stroke();
 ?>

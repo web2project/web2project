@@ -30,89 +30,50 @@ $q->addTable('projects', 'pr');
 $q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date');
 $q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
 $q->addWhere('project_active = 1');
+if ($project_id) {
+	$q->addWhere('pr.project_id = ' . (int)$project_id);
+}
 $q->addGroup('pr.project_id');
 $q->addOrder('project_name');
 $project->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $projects = $q->loadHashList('project_id');
 $q->clear();
 
-##############################################
-/* gantt is called now by the todo page, too.
-** there is a different filter approach in todo
-** so we have to tweak a little bit,
-** also we do not have a special project available
-*/
-$caller = defVal($_REQUEST['caller'], null);
-if ($caller == 'todo') {
-	$user_id = defVal(w2PgetParam($_REQUEST, 'user_id', 0), 0);
-
-	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . w2PgetUsername($user_id);
-	$projects[$project_id]['project_color_identifier'] = 'ff6000';
-
-	$showLabels = w2PgetParam($_REQUEST, 'showLabels', false);
-	$showPinned = w2PgetParam($_REQUEST, 'showPinned', false);
-	$showArcProjs = w2PgetParam($_REQUEST, 'showArcProjs', false);
-	$showHoldProjs = w2PgetParam($_REQUEST, 'showHoldProjs', false);
-	$showDynTasks = w2PgetParam($_REQUEST, 'showDynTasks', false);
-	$showLowTasks = w2PgetParam($_REQUEST, 'showLowTasks', true);
-
-	$q = new DBQuery;
-	$q->addQuery('ta.*');
-	$q->addQuery('project_name, project_id, project_color_identifier');
-	$q->addQuery('tp.task_pinned');
-	$q->addTable('projects', 'pr');
-	$q->addTable('tasks', 'ta');
-	$q->addTable('user_tasks', 'ut');
-	$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
-
-	$q->addWhere('ut.task_id = ta.task_id');
-	$q->addWhere('ut.user_id = ' . (int)$user_id);
-	$q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
-	$q->addWhere('ta.task_status = "0"');
-	$q->addWhere('pr.project_id = ta.task_project');
-
-	$q->addGroup('ta.task_id');
-	$q->addOrder('ta.task_end_date');
-	$q->addOrder('task_priority DESC');
-	##############################################################
-} else {
-	// pull tasks
-	$q = new DBQuery;
-	$q->addTable('tasks', 't');
-	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_name, task_dynamic');
-	$q->addJoin('projects', 'p', 'project_id = t.task_project');
-	$q->addWhere('project_active = 1');
-	$q->addOrder('project_id, task_start_date');
-	if ($project_id) {
-		$q->addWhere('task_project = ' . (int)$project_id);
-	}
-	switch ($f) {
-		case 'all':
-			$q->addWhere('task_status > -1');
-			break;
-		case 'myproj':
-			$q->addWhere('task_status > -1');
-			$q->addWhere('project_owner = ' . (int)$AppUI->user_id);
-			break;
-		case 'mycomp':
-			$q->addWhere('task_status > -1');
-			$q->addWhere('project_company = ' . (int)$AppUI->user_company);
-			break;
-		case 'myinact':
-			$q->addTable('user_tasks', 'ut');
-			$q->addWhere('task_project = p.project_id');
-			$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
-			$q->addWhere('ut.task_id = t.task_id');
-			break;
-		default:
-			$q->addTable('user_tasks', 'ut');
-			$q->addWhere('task_status > -1');
-			$q->addWhere('task_project = p.project_id');
-			$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
-			$q->addWhere('ut.task_id = t.task_id');
-			break;
-	}
-
+// pull tasks
+$q = new DBQuery;
+$q->addTable('tasks', 't');
+$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_name, task_dynamic');
+$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
+$q->addWhere('project_active = 1');
+$q->addOrder('project_id, task_start_date');
+if ($project_id) {
+	$q->addWhere('task_project = ' . (int)$project_id);
+}
+switch ($f) {
+	case 'all':
+		$q->addWhere('task_status > -1');
+		break;
+	case 'myproj':
+		$q->addWhere('task_status > -1');
+		$q->addWhere('project_owner = ' . (int)$AppUI->user_id);
+		break;
+	case 'mycomp':
+		$q->addWhere('task_status > -1');
+		$q->addWhere('project_company = ' . (int)$AppUI->user_company);
+		break;
+	case 'myinact':
+		$q->addTable('user_tasks', 'ut');
+		$q->addWhere('task_project = p.project_id');
+		$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
+		$q->addWhere('ut.task_id = t.task_id');
+		break;
+	default:
+		$q->addTable('user_tasks', 'ut');
+		$q->addWhere('task_status > -1');
+		$q->addWhere('task_project = p.project_id');
+		$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
+		$q->addWhere('ut.task_id = t.task_id');
+		break;
 }
 
 // get any specifically denied tasks
@@ -128,21 +89,33 @@ $start_min = date('Y-m-d H:i:s');
 //pull the tasks into an array
 foreach ($proTasks as $row) {
 
+	//Check if start date exists, if not try giving it the end date.
+	//If the end date does not exist then set it for today.
+	//This avoids jpgraphs internal errors that render the gantt completely useless
 	if ($row['task_start_date'] == '0000-00-00 00:00:00') {
-		$row['task_start_date'] = date('Y-m-d H:i:s');
+		if ($row['task_end_date'] == '0000-00-00 00:00:00') {
+			$todaydate = new CDate();
+			$row['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+		} else {
+			$row['task_start_date'] = $row['task_end_date'];
+		}
 	}
 
 	$tsd = new CDate($row['task_start_date']);
 
-	if ($tsd->before(new CDate($start_min)))
+	if ($tsd->before(new CDate($start_min))) {
 		$start_min = $row['task_start_date'];
+	}
 
-	// calculate or set blank task_end_date if unset
+	//Check if end date exists, if not try giving it the start date.
+	//If the start date does not exist then set it for today.
+	//This avoids jpgraphs internal errors that render the gantt completely useless
 	if ($row['task_end_date'] == '0000-00-00 00:00:00') {
 		if ($row['task_duration']) {
 			$row['task_end_date'] = db_unix2dateTime(db_dateTime2unix($row['task_start_date']) + SECONDS_PER_DAY * convert2days($row['task_duration'], $row['task_duration_type']));
 		} else {
-			$row['task_end_date'] = '';
+			$todaydate = new CDate();
+			$row['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
 		}
 	}
 
@@ -158,11 +131,14 @@ $q->clear();
 $width = w2PgetParam($_GET, 'width', 600);
 //consider critical (concerning end date) tasks as well
 $start_min = substr($criticalTasksInverted[0]['task_start_date'], 0, 10);
-if ($start_min == '0000-00-00') {
+if ($start_min == '0000-00-00' || !$start_min) {
 	$start_min = $projects[$project_id]['project_start_date'];
 }
 //	$end_max = ($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date'];
 $end_max = substr($criticalTasks[0]['task_end_date'], 0, 10);
+if ($end_max == '0000-00-00' || !$end_max) {
+	$end_max = $projects[$project_id]['project_end_date'];
+}
 $start_date = w2PgetParam($_GET, 'start_date', $start_min);
 $end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
@@ -177,12 +153,12 @@ $graph->SetBox(true, array(0, 0, 0), 2);
 $graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
 //$graph->scale->day->SetStyle(DAYSTYLE_SHORTDATE2);
 
-// This configuration variable is obsolete
-$jpLocale = w2PgetConfig('jpLocale');
-if ($jpLocale) {
-	$graph->scale->SetDateLocale($jpLocale);
+$pLocale = setlocale(LC_TIME, 0); // get current locale for LC_TIME
+$res = setlocale(LC_TIME, $AppUI->user_lang[2]);
+if ($res) { // Setting locale doesn't fail
+	$graph->scale->SetDateLocale($AppUI->user_lang[2]);
 }
-//$graph->scale->SetDateLocale( $AppUI->user_locale );
+setlocale(LC_TIME, $pLocale);
 
 if ($start_date && $end_date) {
 	$graph->SetDateRange($start_date, $end_date);
@@ -193,19 +169,10 @@ if (is_file(TTF_DIR . 'FreeSans.ttf')) {
 $graph->scale->actinfo->vgrid->SetColor('gray');
 $graph->scale->actinfo->SetColor('darkgray');
 
-if ($caller == 'todo') {
-	if ($showWork == '1') {
-		$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Project name', UI_OUTPUT_RAW), $AppUI->_('Work', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(180, 50, 60, 60, 60));
-	} else {
-		$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Project name', UI_OUTPUT_RAW), $AppUI->_('Dur.', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(180, 50, 60, 60, 60));
-	}
+if ($showWork == '1') {
+	$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Work', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(230, 60, 60, 60));
 } else {
-	if ($showWork == '1') {
-		$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Work', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(210, 45, 75, 75));
-	} else {
-		$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Dur.', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(210, 45, 75, 75));
-	}
-
+	$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Dur.', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(230, 60, 60, 60));
 }
 $graph->scale->tableTitle->Set($projects[$project_id]['project_name']);
 
@@ -229,9 +196,10 @@ $graph->scale->tableTitle->Show(true);
 if ($start_date && $end_date) {
 	$min_d_start = new CDate($start_date);
 	$max_d_end = new CDate($end_date);
-	$graph->SetDateRange($start_date, $end_date);
 } else {
 	// find out DateRange from gant_arr
+	$min_d_start = new CDate();
+	$max_d_end = new CDate();
 	$d_start = new CDate();
 	$d_end = new CDate();
 	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
@@ -243,14 +211,14 @@ if ($start_date && $end_date) {
 		$d_end->Date($end);
 
 		if ($i == 0) {
-			$min_d_start = $d_start;
-			$max_d_end = $d_end;
+			$min_d_start = $d_start->duplicate();
+			$max_d_end = $d_end->duplicate();
 		} else {
 			if (Date::compare($min_d_start, $d_start) > 0) {
-				$min_d_start = $d_start;
+				$min_d_start = $d_start->duplicate();
 			}
 			if (Date::compare($max_d_end, $d_end) < 0) {
-				$max_d_end = $d_end;
+				$max_d_end = $d_end->duplicate();
 			}
 		}
 	}
@@ -262,12 +230,11 @@ $day_diff = $min_d_start->dateDiff($max_d_end);
 if ($day_diff > 240) {
 	//more than 240 days
 	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
-} else
-	if ($day_diff > 90) {
-		//more than 90 days and less of 241
-		$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
-		$graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
-	}
+} elseif ($day_diff > 90) {
+	//more than 90 days and less of 241
+	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
+	$graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
+}
 
 //This kludgy function echos children tasks as threads
 
@@ -338,10 +305,15 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
 	if ($caller == 'todo') {
 		$pname = $a['project_name'];
-		if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
-			$pname = utf8_decode($pname);
+		if ($locale_char_set == 'utf-8') {
+			if (function_exists('mb_substr')) {
+				$pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
+			} elseif (function_exists('utf8_decode')) {
+				$pname = utf8_decode($pname);
+			}
+		} else {
+			$pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
 		}
-		$pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
 	}
 	//using new jpGraph determines using Date object instead of string
 	$start = $a['task_start_date'];
@@ -383,17 +355,20 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$q = new DBQuery;
 		$q->addTable('user_tasks', 'ut');
 		$q->addTable('users', 'u');
+		$q->addTable('contacts', 'c');
 		$q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
+		$q->addQuery('c.contact_first_name, c.contact_last_name');
 		$q->addWhere('u.user_id = ut.user_id');
+		$q->addWhere('u.user_contact = c.contact_id');
 		$q->addWhere('ut.task_id = ' . (int)$a['task_id']);
 		$res = $q->loadList();
 		foreach ($res as $rw) {
 			switch ($rw['perc_assignment']) {
 				case 100:
-					$caption = $caption . '' . $rw['user_username'] . ';';
+					$caption = $caption . '' . $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
 					break;
 				default:
-					$caption = $caption . '' . $rw['user_username'] . '[' . $rw['perc_assignment'] . '%];';
+					$caption = $caption . '' . $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
 					break;
 			}
 		}
@@ -428,7 +403,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 			$work_hours = 0;
 			$q = new DBQuery;
 			$q->addTable('tasks', 't');
-			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
+			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
 			$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
 			$q->addWhere('t.task_duration_type = 24');
 			$q->addWhere('t.task_id = ' . (int)$a['task_id']);
@@ -439,7 +414,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
 			$q = new DBQuery;
 			$q->addTable('tasks', 't');
-			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
+			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
 			$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
 			$q->addWhere('t.task_duration_type = 1');
 			$q->addWhere('t.task_id = ' . (int)$a['task_id']);
@@ -492,6 +467,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	//adding captions
 	$bar->caption = new TextProperty($caption);
 	$bar->caption->Align('left', 'center');
+	if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+		$bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+	}
 
 	// show tasks which are both finished and past in (dark)gray
 	if ($progress >= 100 && $end_date->isPast() && get_class($bar) == 'ganttbar') {
@@ -520,8 +498,8 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	$q->clear();
 	$graph->Add($bar);
 }
-$today = date('y-m-d');
-$vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
+$today = new CDate();
+$vline = new GanttVLine($today->format(FMT_TIMESTAMP_DATE), $AppUI->_('Today', UI_OUTPUT_RAW));
 if (is_file(TTF_DIR . 'FreeSans.ttf')) {
 	$vline->title->SetFont(FF_CUSTOM, FS_BOLD, 10);
 }

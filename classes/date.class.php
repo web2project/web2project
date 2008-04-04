@@ -367,5 +367,23 @@ class CDate extends Date {
 
 		return $wd;
 	}
+
+	/**
+	 *	Clone the current CDate object
+	 *
+	 *	@return	object	The new record object or null if error
+	 **/
+	function duplicate() {
+
+		// In php4 assignment does a shallow copy
+		// in php5 clone is required
+		if (version_compare(phpversion(), '5') >= 0) {
+			$newObj = clone($this);
+		} else {
+			$newObj = $this;
+		}
+
+		return $newObj;
+	}
 }
 ?>
