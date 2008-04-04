@@ -252,10 +252,10 @@ switch ($f) {
 		$q->addTable('user_tasks');
 		$q->addWhere('user_tasks.user_id = ' . (int)$user_id);
 		$q->addWhere('user_tasks.task_id = tasks.task_id');
-		$q->addWhere('(task_percent_complete < 100 OR task_end_date = "")');
+		$q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
 		break;
 	case 'allunfinished':
-		$q->addWhere('(task_percent_complete < 100 OR task_end_date = "")');
+		$q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
 		break;
 	case 'unassigned':
 		$q->leftJoin('user_tasks', 'ut_empty', 'tasks.task_id = ut_empty.task_id');
@@ -592,19 +592,6 @@ foreach ($projects as $k => $p) {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
 			} else {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
-			}
-		} else {
-			/* we have to calculate the end_date via start_date+duration for
-			** end='0000-00-00 00:00:00' if array_csort function is not used
-			** as it is normally done in array_csort function in order to economise
-			** cpu time as we have to go through the array there anyway
-			*/
-			if (is_array($p['tasks'])) {
-				foreach ($p['tasks'] as $j => $task_change_end_date) {
-					if ($task_change_end_date['task_end_date'] == '0000-00-00 00:00:00') {
-						$task_change_end_date['task_end_date'] = calcEndByStartAndDuration($task_change_end_date);
-					}
-				}
 			}
 		}
 

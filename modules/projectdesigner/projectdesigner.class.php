@@ -343,7 +343,7 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	$now = new CDate();
 	$tf = $AppUI->getPref('TIMEFORMAT');
 	$df = $AppUI->getPref('SHDATEFORMAT');
-	$fdf = $df . " " . $tf;
+	$fdf = $df . ' ' . $tf;
 	$perms = &$AppUI->acl();
 	$show_all_assignees = $w2Pconfig['show_all_task_assignees'] ? true : false;
 

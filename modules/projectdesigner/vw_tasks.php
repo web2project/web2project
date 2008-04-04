@@ -227,32 +227,6 @@ foreach ($tasks as $row) {
 $showEditCheckbox = isset($canEditTasks) && $canEditTasks || $perms->checkModule('admin', 'view');
 $AppUI->setState('tasks_opened', $tasks_opened);
 
-foreach ($projects as $k => $p) {
-	global $done;
-	$done = array();
-	if ($task_sort_item1 != '') {
-		if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
-			$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
-		} else {
-			$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
-		}
-	} else {
-		/* we have to calculate the end_date via start_date+duration for
-		** end='0000-00-00 00:00:00' if array_csort function is not used
-		** as it is normally done in array_csort function in order to economise
-		** cpu time as we have to go through the array there anyway
-		*/
-		for ($j = 0, $j_cmp = count($p['tasks']); $j < $j_cmp; $j++) {
-			if ($p['tasks'][$j]['task_end_date'] == '0000-00-00 00:00:00' || $p['tasks'][$j]['task_end_date'] == null) {
-				$p['tasks'][$j]['task_end_date'] = calcEndByStartAndDuration($p['tasks'][$j]);
-			}
-		}
-	}
-
-	$p['tasks_count'] = count($p['tasks']);
-	$projects[$k] = $p;
-}
-
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $tempoTask = new CTask();
 $userAlloc = $tempoTask->getAllocation('user_id');
@@ -301,24 +275,11 @@ foreach ($projects as $k => $p) {
 		global $done;
 		$done = array();
 
-		if ($task_sort_item1 != "") {
-			if ($task_sort_item2 != "" && $task_sort_item1 != $task_sort_item2)
+		if ($task_sort_item1 != '') {
+			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2)
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
 			else
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
-		} else {
-
-			/* we have to calculate the end_date via start_date+duration for
-			** end='0000-00-00 00:00:00' if array_csort function is not used
-			** as it is normally done in array_csort function in order to economise
-			** cpu time as we have to go through the array there anyway
-			*/
-			for ($j = 0, $j_cmp = count($p['tasks']); $j < $j_cmp; $j++) {
-				if ($p['tasks'][$j]['task_end_date'] == '0000-00-00 00:00:00') {
-					$p['tasks'][$j]['task_end_date'] = calcEndByStartAndDuration($p['tasks'][$j]);
-				}
-			}
-
 		}
 
 		for ($i = 0; $i < $tnums; $i++) {
