@@ -19,7 +19,7 @@ $q->addOrder('contact_last_name');
 $oDpt = new CDepartment();
 $aDptsAllowed = $oDpt->getAllowedRecords($AppUI->user_id, 'dept_id, dept_name');
 if (count($aDptsAllowed)) {
-	$q->addWhere('(dept_id IN (' . implode(',', array_keys($aDptsAllowed)) . ') OR dept_id IS NULL OR dept_id=0 OR dept_id="")');
+	$q->addWhere('(dept_id IN (' . implode(',', array_keys($aDptsAllowed)) . ') OR dept_id IS NULL OR dept_id=0 OR dept_id=\'\')');
 }
 
 if (!($rows = $q->loadList())) {

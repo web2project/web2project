@@ -48,7 +48,7 @@ if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view'
 	echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
 }
 // Let's check if the actual company has departments registered
-if ($department_selection_list != "") {
+if ($department_selection_list != '') {
 ?>
 								<br />
 								<?php echo $AppUI->_('Departments'); ?><br />

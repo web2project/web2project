@@ -36,7 +36,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 		return '';
 	}
 	reset($arr);
-	$s = "\n".'<select name="'.$select_name.'" '.$select_attribs.'>';
+	$s = '<select name="'.$select_name.'" '.$select_attribs.'>';
 	$did_selected = 0;
 	foreach ($arr as $k => $v) {
 		if ($translate) {
@@ -48,12 +48,12 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 			$v = str_replace('&#369;', 'ï¿½', $v);
 			$v = str_replace('&#337;', 'ï¿½', $v);
 		}
-		$s .= "\n\t".'<option value="' . $k . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . ">" . $v . '</option>';
+		$s .= '<option value="' . $k . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . '>' . $v . '</option>';
 		if (($k == $selected && strcmp($k, $selected) == 0)) {
 			$did_selected = 1;
 		}
 	}
-	$s .= "\n".'</select>'."\n";
+	$s .= '</select>';
 	return $s;
 }
 
@@ -83,8 +83,8 @@ function tree_recurse($id, $indent, $list, $children) {
 			$id = $v[0];
 			$txt = $v[1];
 			$pt = $v[2];
-			$list[$id] = "$indent $txt";
-			$list = tree_recurse($id, "$indent--", $list, $children);
+			$list[$id] = $indent . ' ' . $txt;
+			$list = tree_recurse($id, $indent . '--', $list, $children);
 		}
 	}
 	return $list;
@@ -115,17 +115,17 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 	$proj->setAllowedSQL($user_id, $q, null, 'pr');
 	$q->addOrder('co.company_name, project_name');
 	$projects = $q->loadList();
-	$s = "\n" . '<select name="' . $select_name . '" ' . $select_attribs . '>';
-	$s .= "\n\t" . '<option value="0" ' . ($selected == 0 ? 'selected="selected"' : '') . ' >' . $AppUI->_('None') . '</option>';
+	$s = '<select name="' . $select_name . '" ' . $select_attribs . '>';
+	$s .= '<option value="0" ' . ($selected == 0 ? 'selected="selected"' : '') . ' >' . $AppUI->_('None') . '</option>';
 	$current_company = '';
 	foreach ($projects as $p) {
 		if ($p['company_name'] != $current_company) {
 			$current_company = $p['company_name'];
-			$s .= "\n" . '<optgroup label="' . $current_company . '" >' . $current_company . '</optgroup>';
+			$s .= '<optgroup label="' . $current_company . '" >' . $current_company . '</optgroup>';
 		}
-		$s .= "\n\t" . '<option value="' . $p['project_id'] . '" ' . ($selected == $p['project_id'] ? 'selected="selected"' : '') . '>&nbsp;&nbsp;&nbsp;' . $p['project_name'] . '</option>';
+		$s .= '<option value="' . $p['project_id'] . '" ' . ($selected == $p['project_id'] ? 'selected="selected"' : '') . '>&nbsp;&nbsp;&nbsp;' . $p['project_name'] . '</option>';
 	}
-	$s .= "\n" . '</select>' . "\n";
+	$s .= '</select>';
 	return $s;
 }
 
@@ -160,7 +160,7 @@ function contextHelp($title, $link = '') {
 
 function w2PcontextHelp($title, $link = '') {
 	global $AppUI;
-	return '<a href="#' . $link . "\" onclick=\"javascript:window.open('?m=help&amp;dialog=1&amp;hid=$link', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')\">" . $AppUI->_($title) . '</a>';
+	return '<a href="#' . $link . '" onclick="javascript:window.open(\'?m=help&amp;dialog=1&amp;hid=' . $link . '\', \'contexthelp\', \'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes\')">' . $AppUI->_($title) . '</a>';
 }
 
 /**
@@ -193,7 +193,7 @@ function w2PgetUsernameFromID($user) {
 	$q->addTable('users');
 	$q->addQuery('contact_first_name, contact_last_name');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-	$q->addWhere('user_id = \'' . $user . "'");
+	$q->addWhere('user_id = \'' . $user . '\'');
 	$r = $q->loadList();
 	return $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'];
 }
@@ -202,7 +202,7 @@ function w2PgetUsers($module = '') {
 	global $AppUI;
 	$q = new DBQuery;
 	$q->addTable('users');
-	$q->addQuery('user_id, concat_ws(" ", contact_first_name, contact_last_name) as name');
+	$q->addQuery('user_id, concat_ws(\' \', contact_first_name, contact_last_name) as name');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 	$q->addOrder('contact_first_name,contact_last_name');
 
@@ -212,7 +212,7 @@ function w2PgetUsers($module = '') {
 	$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
 	$q->addJoin('companies', 'com', 'company_id = contact_company');
 	if ($companies) {
-		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company="" OR contact_company IS NULL OR contact_company = 0)');
+		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 	}
 	require_once ($AppUI->getModuleClass('departments'));
 	$dpt = new CDepartment();
@@ -231,13 +231,13 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
 	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
-		 contact_email, company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name," ",contact_last_name) contact_name, user_type');
+		 contact_email, company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 	if ($stub) {
-		$q->addWhere("(UPPER(user_username) LIKE '$stub%' or UPPER(contact_first_name) LIKE '$stub%' OR UPPER(contact_last_name) LIKE '$stub%')");
+		$q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
 	} elseif ($where) {
-		$where = $q->quote("%$where%");
-		$q->addWhere("(UPPER(user_username) LIKE $where or UPPER(contact_first_name) LIKE $where OR UPPER(contact_last_name) LIKE $where)");
+		$where = $q->quote('%' . $where . '%');
+		$q->addWhere('(UPPER(user_username) LIKE ' . $where . ' OR UPPER(contact_first_name) LIKE ' . $where . ' OR UPPER(contact_last_name) LIKE ' . $where . ')');
 	}
 
 	$q->addGroup('user_id');
@@ -249,7 +249,7 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
 	$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
 	$q->addJoin('companies', 'com', 'company_id = contact_company');
 	if ($companies) {
-		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company="" OR contact_company IS NULL OR contact_company = 0)');
+		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 	}
 	require_once ($AppUI->getModuleClass('departments'));
 	$dpt = new CDepartment();
@@ -268,13 +268,13 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
-		 contact_email, company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name," ",contact_last_name) contact_name, user_type');
+		 contact_email, company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 	if ($stub) {
-		$q->addWhere("(UPPER(user_username) LIKE '$stub%' or UPPER(contact_first_name) LIKE '$stub%' OR UPPER(contact_last_name) LIKE '$stub%')");
+		$q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
 	} elseif ($where) {
-		$where = $q->quote("%$where%");
-		$q->addWhere("(UPPER(user_username) LIKE $where or UPPER(contact_first_name) LIKE $where OR UPPER(contact_last_name) LIKE $where)");
+		$where = $q->quote('%' . $where . '%');
+		$q->addWhere('(UPPER(user_username) LIKE ' . $where . ' OR UPPER(contact_first_name) LIKE ' . $where . ' OR UPPER(contact_last_name) LIKE ' . $where . ')');
 	}
 
 	$q->addGroup('user_id');
@@ -286,7 +286,7 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 	$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
 	$q->addJoin('companies', 'com', 'company_id = contact_company');
 	if ($companies) {
-		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company="" OR contact_company IS NULL OR contact_company = 0)');
+		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 	}
 	require_once ($AppUI->getModuleClass('departments'));
 	$dpt = new CDepartment();
@@ -513,10 +513,9 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 		return;
 	}
 	$description = str_replace("'", "\'", $description);
-	//	$hsql = "select * from modules where mod_name = 'History' and mod_active = 1";
 	$q = new DBQuery;
 	$q->addTable('modules');
-	$q->addWhere("mod_name = 'History' and mod_active = 1");
+	$q->addWhere('mod_name = \'History\' and mod_active = 1');
 	$qid = $q->exec();
 
 	if (!$qid || db_num_rows($qid) == 0) {
@@ -574,7 +573,7 @@ function w2PuserHasRole($name) {
 	$q->addTable('roles', 'r');
 	$q->addTable('user_roles', 'ur');
 	$q->addQuery('r.role_id');
-	$q->addWhere("ur.user_id=$uid AND ur.role_id=r.role_id AND r.role_name='$name'");
+	$q->addWhere('ur.user_id = ' . $uid . ' AND ur.role_id = r.role_id AND r.role_name = \'' . $name . '\'');
 	return $q->loadResult();
 }
 
@@ -597,7 +596,7 @@ function w2PformatDuration($x) {
 	}
 
 	if ($str == '') {
-		$str = $AppUI->_("n/a");
+		$str = $AppUI->_('n/a');
 	}
 
 	return $str;
@@ -608,7 +607,7 @@ function w2PformatDuration($x) {
  */
 function w2PsetMicroTime() {
 	global $microTimeSet;
-	list($usec, $sec) = explode(" ", microtime());
+	list($usec, $sec) = explode(' ', microtime());
 	$microTimeSet = (float)$usec + (float)$sec;
 }
 
@@ -690,7 +689,7 @@ function formatCurrency($number, $format) {
 	// revert to the system default.
 	if ($locale_char_set != 'utf-8' || !setlocale(LC_MONETARY, $format . '.UTF8')) {
 		if (!setlocale(LC_MONETARY, $format)) {
-			setlocale(LC_MONETARY, "");
+			setlocale(LC_MONETARY, '');
 		}
 	}
 
@@ -723,10 +722,10 @@ function formatCurrency($number, $format) {
 	$numeric_portion = number_format(abs($number), $mondat['int_frac_digits'], $mondat['mon_decimal_point'], $mondat['mon_thousands_sep']);
 	// Not sure, but most countries don't put the sign in if it is positive.
 	$letter = 'p';
-	$currency_prefix = "";
-	$currency_suffix = "";
-	$prefix = "";
-	$suffix = "";
+	$currency_prefix = '';
+	$currency_suffix = '';
+	$prefix = '';
+	$suffix = '';
 	if ($number < 0) {
 		$sign = $mondat['negative_sign'];
 		$letter = 'n';
@@ -750,24 +749,24 @@ function formatCurrency($number, $format) {
 		}
 	}
 	$currency .= $currency_prefix . $mondat['int_curr_symbol'] . $currency_suffix;
-	$space = "";
+	$space = '';
 	if ($mondat[$letter . '_sep_by_space']) {
 		$space = ' ';
 	}
 	if ($mondat[$letter . '_cs_precedes']) {
-		$result = "$currency$space$numeric_portion";
+		$result = $currency . $space . $numeric_portion;
 	} else {
-		$result = "$numeric_portion$space$currency";
+		$result = $numeric_portion . $space . $currency;
 	}
 	return $result;
 }
 
 function format_backtrace($bt, $file, $line, $msg) {
-	echo "<pre>\n";
-	echo "ERROR: $file($line): $msg\n";
-	echo "Backtrace:\n";
+	echo '<pre>';
+	echo 'ERROR: ' . $file . '(' . $line . ') : ' . $msg . "\n";
+	echo 'Backtrace:' . "\n";
 	foreach ($bt as $level => $frame) {
-		echo "$level $frame[file]:$frame[line] $frame[function](";
+		echo $level . ' ' . $frame['file'] . ':' . $frame['line'] . ' ' . $frame['function'] . '(';
 		$in = false;
 		foreach ($frame['args'] as $arg) {
 			if ($in) {
@@ -786,11 +785,11 @@ function dprint($file, $line, $level, $msg) {
 	$max_level = (int)w2PgetConfig('debug');
 	$display_debug = w2PgetConfig('display_debug', false);
 	if ($level <= $max_level) {
-		error_log("$file($line): $msg");
+		error_log($file . '(' . $line . '): ' . $msg);
 		if ($display_debug) {
-			echo "$file($line): $msg <br />";
+			echo $file . '(' . $line . '): ' . $msg . ' <br />';
 		}
-		if ($level == 0 && $max_level > 0 && version_compare(phpversion(), "4.3.0") >= 0) {
+		if ($level == 0 && $max_level > 0 && version_compare(phpversion(), '4.3.0') >= 0) {
 			format_backtrace(debug_backtrace(), $file, $line, $msg);
 		}
 	}
@@ -856,8 +855,8 @@ function findCrumbModules($module, $file = null) {
  * @param char $title
  * @desc Show an estructure (array/object) formatted
  */
-function showFVar(&$var, $title = "") {
-	echo "<h1>$title</h1";
+function showFVar(&$var, $title = '') {
+	echo '<h1>' . $title . '</h1>';
 	echo '<pre>';
 	print_r($var);
 	echo '</pre>';
@@ -872,7 +871,7 @@ function getUsersCombo($default_user_id = 0, $first_option = 'All users') {
 	global $AppUI;
 
 	$parsed = '<select name="user_id" class="text">';
-	if ($first_option != "") {
+	if ($first_option != '') {
 		$parsed .= '<option value="0" ' . (!$default_user_id ? 'selected="selected"' : '') . '>' . $AppUI->_($first_option) . '</option>';
 	}
 	foreach (getUsersArray() as $user_id => $user) {
@@ -1027,7 +1026,7 @@ function w2PHTMLDecode($txt) {
 	global $locale_char_set;
 
 	if (!$locale_char_set) {
-		$locale_char_set = "utf-8";
+		$locale_char_set = 'utf-8';
 	}
 
 	if (is_object($txt)) {

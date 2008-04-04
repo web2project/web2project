@@ -113,7 +113,7 @@ if ($can_edit_time_information) {
 			<tr>
 				<td>
 					<select name="all_tasks" class="text" style="width:220px" size="10" class="text" multiple="multiple">
-						<?php echo str_replace("selected", "", $task_parent_options); // we need to remove selected added from task_parent options ?>
+						<?php echo str_replace('selected', '', $task_parent_options); // we need to remove selected added from task_parent options ?>
 					</select>
 				</td>
 				<td>

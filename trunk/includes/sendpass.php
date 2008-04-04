@@ -45,7 +45,7 @@ function sendNewPass() {
 	$m->From('web2Project@' . w2PgetConfig('site_domain'));
 	$m->To($confirmEmail);
 	$m->Subject($subject);
-	$m->Body($message, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ""); // set the body
+	$m->Body($message, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
 	$m->Send(); // send the mail
 
 	$newpass = md5($newpass);

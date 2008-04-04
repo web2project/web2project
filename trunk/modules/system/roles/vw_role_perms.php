@@ -12,7 +12,7 @@ $q = new DBQuery;
 $q->addTable('modules', 'm');
 $q->addQuery('mod_id, mod_name, permissions_item_table, permissions_item_field, permissions_item_label');
 $q->addWhere('permissions_item_table is not null');
-$q->addWhere('permissions_item_table <> ""');
+$q->addWhere('permissions_item_table <> \'\'');
 $pgo_list = $q->loadHashList('mod_name');
 $q->clear();
 

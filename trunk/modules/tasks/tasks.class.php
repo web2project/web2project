@@ -1966,7 +1966,7 @@ class CTaskLog extends CW2pObject {
 
 		$aTasks = $oTsk->getAllowedRecords($uid, 'task_id, task_name');
 		if (count($aTasks)) {
-			$buffer = '(task_log_task IN (' . implode(',', array_keys($aTasks)) . ') OR task_log_task IS NULL OR task_log_task = "" OR task_log_task = 0)';
+			$buffer = '(task_log_task IN (' . implode(',', array_keys($aTasks)) . ') OR task_log_task IS NULL OR task_log_task = \'\' OR task_log_task = 0)';
 
 			if ($extra['where'] != '') {
 				$extra['where'] = $extra['where'] . ' AND ' . $buffer;

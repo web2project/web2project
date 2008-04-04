@@ -344,8 +344,8 @@ foreach ($projects as $k => $p) {
 		global $done;
 		$done = array();
 
-		if ($task_sort_item1 != "") {
-			if ($task_sort_item2 != "" && $task_sort_item1 != $task_sort_item2) {
+		if ($task_sort_item1 != '') {
+			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
 			} else {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);

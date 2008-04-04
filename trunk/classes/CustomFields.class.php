@@ -491,7 +491,7 @@ class CustomFields {
 
 	function getHTML() {
 		if ($this->count() == 0) {
-			return "";
+			return '';
 		} else {
 			$html = '';
 			if (!$this->published) {
@@ -526,7 +526,7 @@ class CustomFields {
 		$q->addJoin('custom_fields_struct', 'cfs', 'cfs.field_id = cfv.value_field_id');
 		$q->addJoin($moduleTable, 'm', 'm.' . $moduleTableId . ' = cfv. value_object_id');
 		$q->addWhere('cfs.field_module = \'' . $this->m . '\'');
-		$q->addWhere('cfv.value_charvalue LIKE "%' . $keyword . '%"');
+		$q->addWhere('cfv.value_charvalue LIKE \'%' . $keyword . '%\'');
 		return $q->loadList();
 	}
 }

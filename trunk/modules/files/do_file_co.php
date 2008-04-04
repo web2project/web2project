@@ -41,7 +41,7 @@ $session_id = SID;
 session_write_close();
 // are the params empty
 // Fix to handle cookieless sessions
-if ($session_id != "") {
+if ($session_id != '') {
 	$params .= "&" . $session_id;
 }
 //        header( "Refresh: 0; URL=fileviewer.php?$params" );

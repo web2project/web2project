@@ -70,7 +70,7 @@ class CW2pObject {
 	 */
 	function bind($hash) {
 		if (!is_array($hash)) {
-			$this->_error = get_class($this) . "::bind failed.";
+			$this->_error = get_class($this) . '::bind failed.';
 			return false;
 		} else {
 			/*
@@ -188,7 +188,7 @@ class CW2pObject {
 	function w2PTrimAll() {
 		$trim_arr = get_object_vars($this);
 		foreach ($trim_arr as $trim_key => $trim_val) {
-			if (!(strcasecmp(gettype($trim_val), "string"))) {
+			if (!(strcasecmp(gettype($trim_val), 'string'))) {
 				$this->{$trim_key} = trim($trim_val);
 			}
 		}
@@ -207,7 +207,7 @@ class CW2pObject {
 
 		$msg = $this->check();
 		if ($msg) {
-			return get_class($this) . "::store-check failed<br />$msg";
+			return get_class($this) . '::store-check failed ' . $msg;
 		}
 		$k = $this->_tbl_key;
 		if ($this->$k) {
@@ -226,7 +226,7 @@ class CW2pObject {
 			// only record history if an update or insert actually occurs.
 			addHistory($this->_tbl, $this->$k, $store_type, $AppUI->_('ACTION') . ': ' . $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->$k);
 		}
-		return ((!$ret) ? (get_class($this) . "::store failed <br />" . db_error()) : null);
+		return ((!$ret) ? (get_class($this) . '::store failed ' . db_error()) : null);
 	}
 
 	/**
@@ -253,16 +253,16 @@ class CW2pObject {
 			$this->$k = intval($oid);
 		}
 		if (is_array($joins)) {
-			$select = "$k";
-			$join = "";
+			$select = $k;
+			$join = '';
 
 			$q = new DBQuery;
 			$q->addTable($this->_tbl);
-			$q->addWhere("$k = '" . $this->$k . "'");
+			$q->addWhere($k . ' = \'' . $this->$k . '\'');
 			$q->addGroup($k);
 			foreach ($joins as $table) {
-				$q->addQuery("COUNT(DISTINCT {$table['idfield']}) AS {$table['idfield']}");
-				$q->addJoin($table['name'], $table['name'], "{$table['joinfield']} = $k");
+				$q->addQuery('COUNT(DISTINCT ' . $table['idfield'] . ') AS ' . $table['idfield']);
+				$q->addJoin($table['name'], $table['name'], $table['joinfield'] . ' = ' . $k);
 			}
 			$obj = null;
 			$q->loadObject($obj);
@@ -281,7 +281,7 @@ class CW2pObject {
 			}
 
 			if (count($msg)) {
-				$msg = $AppUI->_("noDeleteRecord") . ": " . implode(', ', $msg);
+				$msg = $AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
 				return false;
 			} else {
 				return true;
@@ -308,7 +308,7 @@ class CW2pObject {
 
 		$q = new DBQuery;
 		$q->setDelete($this->_tbl);
-		$q->addWhere($this->_tbl_key . " = '" . $this->$k . "'");
+		$q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
 		$result = ((!$q->exec()) ? db_error() : null);
 		if (!$result) {
 			// only record history if deletion actually occurred
@@ -325,7 +325,7 @@ class CW2pObject {
 	 */
 	function getDeniedRecords($uid) {
 		$uid = intval($uid);
-		$uid || exit("FATAL ERROR<br />" . get_class($this) . "::getDeniedRecords failed, user id = 0");
+		$uid || exit('FATAL ERROR ' . get_class($this) . '::getDeniedRecords failed, user id = 0');
 
 		$perms = &$GLOBALS['AppUI']->acl();
 		return $perms->getDeniedItems($this->_tbl, $uid);
@@ -344,14 +344,14 @@ class CW2pObject {
 	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
-		$uid || exit("FATAL ERROR<br />" . get_class($this) . "::getAllowedRecords failed");
+		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
 		/*print_r('Deny:');
 		print_r($deny);
 		print_r('Allow:');
 		print_r($allow);*/
-		//if (! $perms->checkModule($this->_tbl, "view", $uid )) {
+		//if (! $perms->checkModule($this->_tbl, 'view', $uid )) {
 		//  if (! count($allow))
 		//    return array();	// No access, and no allow overrides, so nothing to show.
 		//} else {
@@ -407,7 +407,7 @@ class CW2pObject {
 	function getAllowedSQL($uid, $index = null) {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
-		$uid || exit("FATAL ERROR<br />" . get_class($this) . "::getAllowedSQL failed");
+		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
 		/*		print_r('allow:');
@@ -416,9 +416,9 @@ class CW2pObject {
 		print_r($deny);
 		print_r('deny:');
 		print_r($deny);
-		if (! $perms->checkModule($this->_tbl, "view", $uid )) {
+		if (! $perms->checkModule($this->_tbl, 'view', $uid )) {
 		if (! count($allow))
-		return array("1=0");*/ // No access, and no allow overrides, so nothing to show.
+		return array('1=0');*/ // No access, and no allow overrides, so nothing to show.
 		//} else {
 		//  $allow = array();	// Full access, allow overrides don't mean anything.
 		//}
@@ -430,7 +430,7 @@ class CW2pObject {
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
 				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$where[] = "$index IN (" . implode(',', $allow) . ")";
+				$where[] = $index  . ' IN (' . implode(',', $allow) . ')';
 			} else {
 				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
 			}
@@ -438,7 +438,7 @@ class CW2pObject {
 			if (count($deny)) {
 				if ((array_search('0', $deny)) === false) {
 					//If 0 (All Items of a module) are not on the denial array then just deny the denied items
-					$where[] = "$index NOT IN (" . implode(",", $deny) . ")";
+					$where[] = $index . ' NOT IN (' . implode(',', $deny) . ')';
 				} elseif ((array_search('0', $allow)) === false) {
 					//If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
 				} else {
@@ -456,7 +456,7 @@ class CW2pObject {
 	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
-		$uid || exit("FATAL ERROR<br />" . get_class($this) . "::getAllowedSQL failed");
+		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
 		// Make sure that we add the table otherwise dependencies break
@@ -464,14 +464,14 @@ class CW2pObject {
 			if (!$key) {
 				$key = substr($this->_tbl, 0, 2);
 			}
-			$query->leftJoin($this->_tbl, $key, "$key.$this->_tbl_key = $index");
+			$query->leftJoin($this->_tbl, $key, $key . '.' . $this->_tbl_key . ' = ' . $index);
 		}
-		//		if (! $perms->checkModule($this->_tbl, "view", $uid )) {
+		//		if (! $perms->checkModule($this->_tbl, 'view', $uid )) {
 		//		  if (! count($allow)) {
 		// We need to ensure that we don't just break complex SQLs, but
 		// instead limit to a nonsensical value.  This assumes that the
 		// key is auto-incremented.
-		//		    $query->addWhere("$this->_tbl_key = 0");
+		//		    $query->addWhere($this->_tbl_key . ' = 0');
 		//		    return;
 		//			}
 		//		}
@@ -479,7 +479,7 @@ class CW2pObject {
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
 				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$query->addWhere(((!$key) ? '' : "$key.") . "$this->_tbl_key IN (" . implode(',', $allow) . ")");
+				$query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
 			} else {
 				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
 			}
@@ -487,7 +487,7 @@ class CW2pObject {
 			if (count($deny)) {
 				if ((array_search('0', $deny)) === false) {
 					//If 0 (All Items of a module) are not on the denial array then just deny the denied items
-					$query->addWhere(((!$key) ? '' : "$key.") . "$this->_tbl_key NOT IN (" . implode(",", $deny) . ")");
+					$query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
 				} elseif ((array_search('0', $allow)) === false) {
 					//If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
 				} else {
