@@ -10,10 +10,10 @@ $end_date = intval($date_reg) ? new CDate(w2PgetParam($_REQUEST, 'log_end_date',
 $df = $AppUI->getPref('SHDATEFORMAT');
 global $currentTabId, $cal_sdf;
 if ($a = w2PgetParam($_REQUEST, 'a', '') == '') {
-	$a = "&tab={$currentTabId}&showdetails=1";
+	$a = '&tab=' . $currentTabId . '&showdetails=1';
 } else {
 	$user_id = w2PgetParam($_REQUEST, 'user_id', 0);
-	$a = "&a=viewuser&user_id={$user_id}&tab={$currentTabId}&showdetails=1";
+	$a = '&a=viewuser&user_id=' . $user_id . '&tab=' . $currentTabId . '&showdetails=1';
 }
 
 $AppUI->loadCalendarJS();
@@ -94,10 +94,10 @@ if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
 	$q->addWhere('ual.user_id = u.user_id');
 	$q->addWhere('user_contact = contact_id ');
 	if ($user_id != 0) {
-		$q->addWhere("ual.user_id='$user_id'");
+		$q->addWhere('ual.user_id = \'' . $user_id . '\'');
 	}
-	$q->addWhere("ual.date_time_in >='$start_date'");
-	$q->addWhere("ual.date_time_out <='$end_date'");
+	$q->addWhere('ual.date_time_in >=\'' . $start_date . '\'');
+	$q->addWhere('ual.date_time_out <= \'' . $end_date . '\'');
 	$q->addGroup('ual.date_time_last_action DESC');
 	$logs = $q->loadList();
 ?>
@@ -120,4 +120,3 @@ if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
 <?php } ?>
 </table>
 <?php } ?>
-

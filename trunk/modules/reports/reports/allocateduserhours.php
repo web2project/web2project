@@ -349,7 +349,7 @@ function showWeeks() {
 			if(isset($user_usage[$user_id][$awoy])){
 			$hours = number_format($user_usage[$user_id][$awoy],2);
 			$table_rows .= $hours;
-			$percentage_used = round(($hours/(w2PgetConfig("daily_working_hours")*count(explode(",",w2PgetConfig("cal_working_days")))) )*100);
+			$percentage_used = round(($hours/(w2PgetConfig('daily_working_hours')*count(explode(',',w2PgetConfig('cal_working_days')))) )*100);
 			$bar_color       = "blue";
 			if($percentage_used > 100){
 			$bar_color = "red";
@@ -381,8 +381,8 @@ function showWeeks() {
 		}
 	}
 	/*
-	$total_hours_capacity = $week_difference * count(explode(",",w2PgetConfig("cal_working_days"))) * w2PgetConfig("daily_working_hours") * count($user_usage);		
-	$total_hours_capacity_all = $week_difference * count(explode(",",w2PgetConfig("cal_working_days"))) *w2PgetConfig("daily_working_hours") * count($user_list);
+	$total_hours_capacity = $week_difference * count(explode(',',w2PgetConfig('cal_working_days'))) * w2PgetConfig('daily_working_hours') * count($user_usage);		
+	$total_hours_capacity_all = $week_difference * count(explode(',',w2PgetConfig('cal_working_days'))) *w2PgetConfig('daily_working_hours') * count($user_list);
 	*/
 	$total_hours_capacity = $working_days_count / 2 * w2PgetConfig('daily_working_hours') * count($user_usage);
 	$total_hours_capacity_all = $working_days_count / 2 * w2PgetConfig('daily_working_hours') * count($user_list);
@@ -462,10 +462,10 @@ function showDays() {
 			for($i=0; $i<=$days_difference; $i++){	
 			if(($actual_date->isWorkingDay()) || (!$actual_date->isWorkingDay() && !$hideNonWd)) {
 			$table_rows .= "<td>";
-			if(isset($user_usage[$user_id][$actual_date->format("%Y%m%d")])){
-			$hours       = number_format($user_usage[$user_id][$actual_date->format("%Y%m%d")],2);
+			if(isset($user_usage[$user_id][$actual_date->format('%Y%m%d')])){
+			$hours       = number_format($user_usage[$user_id][$actual_date->format('%Y%m%d')],2);
 			$table_rows .= $hours;
-			$percentage_used = round($hours/w2PgetConfig("daily_working_hours")*100);
+			$percentage_used = round($hours/w2PgetConfig('daily_working_hours')*100);
 			$bar_color       = "blue";
 			if($percentage_used > 100){
 			$bar_color = "red";

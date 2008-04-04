@@ -301,7 +301,7 @@ if ($task_owner) {
 }
 // patch 2.12.04 text search
 if ($search_text = $AppUI->getState('searchtext')) {
-	$q->addWhere('( task_name LIKE ("%' . $search_text . '%") OR task_description LIKE ("%' . $search_text . '%") )');
+	$q->addWhere('( task_name LIKE (\'%' . $search_text . '%\') OR task_description LIKE (\'%' . $search_text . '%\') )');
 }
 
 // filter tasks considering task and project permissions

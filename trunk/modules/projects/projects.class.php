@@ -114,9 +114,9 @@ class CProject extends CW2pObject {
 
 			$q = new DBQuery;
 			$q->addTable('projects');
-			$q->addQuery(" SUM(t1.task_duration * t1.task_percent_complete" . " * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))" . " / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}" . ", t1.task_duration_type)) AS project_percent_complete");
+			$q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
 			$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
-			$q->addWhere(" project_id = $oid AND t1.task_id = t1.task_parent");
+			$q->addWhere('project_id = ' . $oid . ' AND t1.task_id = t1.task_parent');
 			$this->project_percent_complete = $q->loadResult();
 		}
 		return $result;

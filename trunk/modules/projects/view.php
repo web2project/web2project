@@ -54,7 +54,7 @@ $q->clear();
 $obj = null;
 if ($hasTasks) {
 	$q->addTable('projects');
-	$q->addQuery("company_name, CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, " . 'projects.*,' . " SUM(t1.task_duration * t1.task_percent_complete" . " * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))" . " / SUM(t1.task_duration * IF(t1.task_duration_type = 24, {$working_hours}, t1.task_duration_type))" . " AS project_percent_complete");
+	$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
 	$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
 	$q->leftJoin('users', 'u', 'user_id = project_owner');
 	$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
@@ -64,7 +64,7 @@ if ($hasTasks) {
 	$q->loadObject($obj);
 } else {
 	$q->addTable('projects');
-	$q->addQuery("company_name, CONCAT_WS(' ',contact_first_name,contact_last_name) user_name, " . 'projects.*, ' . "(0.0) AS project_percent_complete");
+	$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, (0.0) AS project_percent_complete');
 	$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
 	$q->leftJoin('users', 'u', 'user_id = project_owner');
 	$q->leftJoin('contacts', 'con', 'contact_id = user_contact');

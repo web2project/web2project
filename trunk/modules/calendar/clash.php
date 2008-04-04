@@ -344,7 +344,7 @@ function clash_accept() {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
 		if (isset($_SESSION['add_event_attendees']) && $_SESSION['add_event_attendees'])
-			$obj->updateAssigned(explode(",", $_SESSION['add_event_attendees']));
+			$obj->updateAssigned(explode(',', $_SESSION['add_event_attendees']));
 		if (isset($_SESSION['add_event_mail']) && $_SESSION['add_event_mail'] == 'on')
 			$obj->notify($_SESSION['add_event_attendees'], !$is_new);
 		$AppUI->setMsg($is_new ? 'added' : 'updated', UI_MSG_OK, true);

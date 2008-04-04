@@ -61,7 +61,7 @@ if ($duplicate) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 			$AppUI->redirect($redirect);
 		} else {
-			$AppUI->setMsg("duplicated", UI_MSG_OK, true);
+			$AppUI->setMsg('duplicated', UI_MSG_OK, true);
 			$AppUI->redirect($redirect);
 		}
 	}

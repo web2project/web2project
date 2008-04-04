@@ -27,7 +27,7 @@ if ($del) {
 		$AppUI->redirect();
 	} else {
 		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
-		$AppUI->redirect("m=contacts");
+		$AppUI->redirect('m=contacts');
 	}
 } else {
 	$isNotNew = $_POST['contact_id'];

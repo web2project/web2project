@@ -222,7 +222,7 @@ if ($obj->canUserEditTimeInformation()) {
 ?>
 	<tr>
 		<td align='right'>
-			<?php echo $AppUI->_("Task end date"); ?>
+			<?php echo $AppUI->_('Task end date'); ?>
 		</td>
 		<td>
 			<?php

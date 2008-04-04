@@ -135,7 +135,7 @@ if (!isset($company_id)) {
 
 $obj = new CCompany();
 $allowed_companies_ary = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
-$allowed_companies = implode(",", array_keys($allowed_companies_ary));
+$allowed_companies = implode(',', array_keys($allowed_companies_ary));
 
 if (!isset($task_id)) {
 	$task_id = w2PgetParam($_REQUEST, 'task_id', 0);
@@ -302,7 +302,7 @@ function getFolders($parent, $level = 0) {
 	// retrieve all children of $parent
 
 	$folder_where = 'file_folder_parent = \'' . $parent . '\'';
-	//   $folder_where .= (count($denied_folders_ary) > 0) ? "\nAND file_folder_id NOT IN (" . implode(",", $denied_folders_ary) . ")" : "";
+	//   $folder_where .= (count($denied_folders_ary) > 0) ? "\nAND file_folder_id NOT IN (" . implode(',', $denied_folders_ary) . ")" : "";
 
 	$q = new DBQuery();
 	$q->addTable('file_folders');

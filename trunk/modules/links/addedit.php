@@ -42,7 +42,7 @@ $q->loadObject($obj);
 // load the record data
 if (!$obj && $link_id > 0) {
 	$AppUI->setMsg('Link');
-	$AppUI->setMsg("invalidID", UI_MSG_ERROR, true);
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
 
@@ -139,7 +139,7 @@ function setTask( key, val ) {
                 <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Category'); ?>:</td>
                         <td align="left">
-                                <?php echo arraySelect(w2PgetSysVal("LinkType"), 'link_category', '', $obj->link_category, true); ?>
+                                <?php echo arraySelect(w2PgetSysVal('LinkType'), 'link_category', '', $obj->link_category, true); ?>
                         <td>
 
 		<tr>

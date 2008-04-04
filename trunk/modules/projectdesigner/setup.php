@@ -66,7 +66,7 @@ class projectDesigner {
 	function configure() {
 		global $AppUI;
 
-		$AppUI->redirect("m=projectdesigner&a=configure");
+		$AppUI->redirect('m=projectdesigner&a=configure');
 
 		return true;
 	}

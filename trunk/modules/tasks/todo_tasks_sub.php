@@ -20,7 +20,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 if ($other_users) {
 	echo '<select name="show_user_todo" class="text" onchange="document.form_buttons.submit()">';
 
-	echo '<option value="0" selected="selected">(' . $AppUI->_("Show Todo for") . ')</option>';
+	echo '<option value="0" selected="selected">(' . $AppUI->_('Show Todo for') . ')</option>';
 	if (($rows = w2PgetUsersList())) {
 		foreach ($rows as $row) {
 			if ($user_id == $row['user_id']) {

@@ -55,8 +55,8 @@ function showcodes(&$a) {
 	echo $s;
 }
 
-$titleBlock = new CTitleBlock('Edit Billing Codes', 'myevo-weather.png', $m, "$m.$a");
-$titleBlock->addCrumb("?m=system", "system admin");
+$titleBlock = new CTitleBlock('Edit Billing Codes', 'myevo-weather.png', $m, $m . '.' . $a);
+$titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>
 <script type="text/javascript" language="javascript">

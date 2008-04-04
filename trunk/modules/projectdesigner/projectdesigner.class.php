@@ -267,7 +267,7 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 			foreach ($assigned_users as $val) {
 				$aInfo = '<a href="?m=admin&a=viewuser&user_id=' . $val['user_id'] . '"';
 				$aInfo .= 'title="' . $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' . '">';
-				$aInfo .= $val['contact_first_name'] . ' ' . $val['contact_last_name'] . " (" . $val['perc_assignment'] . '%)</a>';
+				$aInfo .= $val['contact_first_name'] . ' ' . $val['contact_last_name'] . ' (' . $val['perc_assignment'] . '%)</a>';
 				$a_u_tmp_array[] = $aInfo;
 			}
 			$s .= join(', ', $a_u_tmp_array);
@@ -382,7 +382,7 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	// name link
 	$alt = strlen($a['task_description']) > 80 ? substr($a["task_description"], 0, 80) . '...' : $a['task_description'];
 	// instead of the statement below
-	$alt = str_replace("\"", "&quot;", $alt);
+	$alt = str_replace('"', "&quot;", $alt);
 	$alt = str_replace("\r", ' ', $alt);
 	$alt = str_replace("\n", ' ', $alt);
 

@@ -33,7 +33,7 @@ if ($del) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 		$AppUI->redirect();
 	} else {
-		$AppUI->setMsg("deleted", UI_MSG_ALERT, true);
+		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
 		$AppUI->redirect();
 	}
 	return;
@@ -58,11 +58,11 @@ if ($isNewUser) {
 
 	// Iterate the above userNameExistenceCheck for each user
 	foreach ($users as $usrs) {
-		$usrLst = array_map("userExistence", $usrs);
+		$usrLst = array_map('userExistence', $usrs);
 	}
 	// If userName already exists quit with error and do nothing
 	if ($userEx == true) {
-		$AppUI->setMsg("already exists. Try another username.", UI_MSG_ERROR, true);
+		$AppUI->setMsg('already exists. Try another username.', UI_MSG_ERROR, true);
 		$AppUI->redirect();
 	}
 

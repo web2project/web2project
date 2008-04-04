@@ -100,7 +100,7 @@ if ($can_edit_time_information) {
 } else {
 ?>
 			<tr>
-					<td colspan="2"><?php echo $AppUI->_("Only the task owner, project owner, or system administrator is able to edit time related information."); ?></td>
+					<td colspan="2"><?php echo $AppUI->_('Only the task owner, project owner, or system administrator is able to edit time related information.'); ?></td>
 				</tr>
 			<?php
 } // end of can_edit_time_information

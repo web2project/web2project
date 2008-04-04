@@ -276,7 +276,7 @@ class CForumMessage {
 		$q->clear();
 		$q->addTable('forums');
 		$q->addQuery('forum_name');
-		$q->addWhere("forum_id = '{$this->message_forum}'");
+		$q->addWhere('forum_id = \'' . $this->message_forum . '\'');
 		$res = $q->exec();
 		if ($row = $q->fetchRow()) {
 			$forum_name = $row['forum_name'];
@@ -313,7 +313,7 @@ class CForumMessage {
 		}
 
 		$mail = new Mail;
-		$mail->Subject("$subj_prefix $this->message_title", isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+		$mail->Subject($subj_prefix . ' ' . $this->message_title, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
 		$body = $body_msg;
 
