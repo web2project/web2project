@@ -73,21 +73,19 @@ $rows = $q->loadList();
 </tr>
 <?php
 $s = '';
-$CR = "\n"; // Why is this needed as a variable?
-
 $none = true;
 foreach ($rows as $row) {
 	$none = false;
-	$s .= $CR . '<tr>';
-	$s .= $CR . '<td>' . (trim($row['company_description']) ? w2PtoolTip($row['company_name'], $row['company_description']) : '') . '<a href="./index.php?m=companies&a=view&company_id=' . $row['company_id'] . '" >' . $row['company_name'] . '</a>' . (trim($row['company_description']) ? w2PendTip() : '') . '</td>';
-	$s .= $CR . '<td width="125" align="right" nowrap="nowrap">' . $row['countp'] . '</td>';
-	$s .= $CR . '<td width="125" align="right" nowrap="nowrap">' . $row['inactive'] . '</td>';
-	$s .= $CR . '<td align="left" nowrap="nowrap">' . $AppUI->_($types[$row['company_type']]) . '</td>';
-	$s .= $CR . '</tr>';
+	$s .= '<tr>';
+	$s .= '<td>' . (trim($row['company_description']) ? w2PtoolTip($row['company_name'], $row['company_description']) : '') . '<a href="./index.php?m=companies&a=view&company_id=' . $row['company_id'] . '" >' . $row['company_name'] . '</a>' . (trim($row['company_description']) ? w2PendTip() : '') . '</td>';
+	$s .= '<td width="125" align="right" nowrap="nowrap">' . $row['countp'] . '</td>';
+	$s .= '<td width="125" align="right" nowrap="nowrap">' . $row['inactive'] . '</td>';
+	$s .= '<td align="left" nowrap="nowrap">' . $AppUI->_($types[$row['company_type']]) . '</td>';
+	$s .= '</tr>';
 }
-echo "$s\n";
+echo $s;
 if ($none) {
-	echo $CR . '<tr><td colspan="5">' . $AppUI->_('No companies available') . '</td></tr>';
+	echo '<tr><td colspan="5">' . $AppUI->_('No companies available') . '</td></tr>';
 }
 ?>
 </table>

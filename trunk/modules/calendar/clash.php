@@ -54,20 +54,20 @@ if (isset($_REQUEST['clash_action'])) {
 	$_SESSION['add_event_attendees'] = $_POST['event_assigned'];
 	$_SESSION['add_event_mail'] = isset($_POST['mail_invited']) ? $_POST['mail_invited'] : 'off';
 
-	echo '<table width="100%" class="std"><tr><td><b>' . $AppUI->_('clashEvent') . '</b></tr></tr>';
+	$s = '<table width="100%" class="std"><tr><td><b>' . $AppUI->_('clashEvent') . '</b></tr></tr>';
 	foreach ($clash as $user) {
-		echo '<tr><td>' . $user . '</td></tr>'."\n";
+		$s .= '<tr><td>' . $user . '</td></tr>';
 	}
-	echo '</table>' . "\n";
+	$s .= '</table>';
 	$calurl = W2P_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
-	echo '<a href="javascript: void(0);" onclick="set_clash_action(\'suggest\');">' . $AppUI->_('Suggest Alternative') . '</a> : ';
-	echo '<a href="javascript: void(0);" onclick="set_clash_action(\'cancel\');">' . $AppUI->_('Cancel') . '</a> : ';
-	echo '<a href="javascript: void(0);" onclick="set_clash_action(\'mail\');">' . $AppUI->_('Mail Request') . '</a> : ';
-	echo '<a href="javascript: void(0);" onclick="set_clash_action(\'accept\');">' . $AppUI->_('Book Event Despite Conflict') . '</a>'."\n";
-	echo '<form name="clash_form" method="POST" action="'.$calurl.'">';
-	echo "<input type='hidden' name='clash_action' value='cancel'>";
-	echo "</form>\n";
-
+	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'suggest\');">' . $AppUI->_('Suggest Alternative') . '</a> : ';
+	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'cancel\');">' . $AppUI->_('Cancel') . '</a> : ';
+	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'mail\');">' . $AppUI->_('Mail Request') . '</a> : ';
+	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'accept\');">' . $AppUI->_('Book Event Despite Conflict') . '</a>';
+	$s .= '<form name="clash_form" method="POST" action="' . $calurl . '">';
+	$s .= '<input type="hidden" name="clash_action" value="cancel">';
+	$s .= '</form>';
+	echo $s;
 }
 
 // Clash functions.

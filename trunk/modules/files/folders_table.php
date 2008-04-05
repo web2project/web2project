@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id, $allowed_companies, $showProject;
 
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
@@ -9,92 +10,6 @@ if (!defined('W2P_BASE_DIR')) {
 // add to allow for returning to other modules besides Files
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'] . $current_uriArray['fragment'];
-
-function showfnavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder) {
-
-	global $AppUI, $tab, $m, $a;
-	$xpg_break = false;
-	$xpg_prev_page = $xpg_next_page = 1;
-
-	echo "\t" . '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
-
-	if ($xpg_totalrecs > $xpg_pagesize) {
-		$xpg_prev_page = $page - 1;
-		$xpg_next_page = $page + 1;
-		// left buttoms
-		if ($xpg_prev_page > 0) {
-			echo '<td align="left" width="15%">';
-			echo '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=1">';
-			echo '<img src="' . w2PfindImage('navfirst.gif') . '" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $xpg_prev_page . '">';
-			echo '<img src="' . w2PfindImage('navleft.gif') . '" border="0" Alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
-		} else {
-			echo '<td width="15%">&nbsp;</td>' . "\n";
-		}
-
-		// central text (files, total pages, ...)
-		echo '<td align="center" width="70%">';
-		//echo "$xpg_totalrecs " . $AppUI->_('File(s)') . " ($xpg_total_pages " . $AppUI->_('Page(s)') . ")";
-		echo $xpg_totalrecs . ' ' . $AppUI->_('File(s)') . ' ' . $AppUI->_('Pages') . ':';
-		echo ' [ ';
-
-		// begin page numbers
-		for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
-			if ($n == $page) {
-				echo '<b>' . $n . '</b></a>';
-			} else {
-				echo '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $n . '">';
-				echo $n . '</a>';
-			}
-			if ($n >= 30 + $page - 15) {
-				$xpg_break = true;
-				break;
-			} else
-				if ($n < $xpg_total_pages) {
-					echo ' | ';
-				}
-		}
-
-		if (!isset($xpg_break)) { // are we supposed to break ?
-			if ($n == $page) {
-				echo '<' . $n . '</a>';
-			} else {
-				echo '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '">';
-				echo $n . '</a>';
-			}
-		}
-		echo ' ] ';
-		// end page numbers
-
-		echo '</td>';
-
-		// right buttoms
-		if ($xpg_next_page <= $xpg_total_pages) {
-			echo '<td align="right" width="15%">';
-			echo '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $xpg_next_page . '">';
-			echo '<img src="' . w2PfindImage('navright.gif') . '" border="0" Alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $xpg_total_pages . '">';
-			echo '<img src="' . w2PfindImage('navlast.gif') . '" border="0" Alt="Last Page"></a></td>';
-		} else {
-			echo '<td width="15%">&nbsp;</td></tr>' . "\n";
-		}
-		// Page numbered list, up to 30 pages
-		//echo "<tr><td colspan=\"3\" align=\"center\">";
-		// was page numbers
-		//echo "</td></tr>";
-	} else { // or we dont have any files..
-		echo '<td align="center">';
-		if ($xpg_next_page > $xpg_total_pages) {
-			echo $xpg_sqlrecs . ' ' . $AppUI->_('Files') . ' ';
-		}
-		echo '</td></tr>';
-	}
-	echo '</table>';
-}
-
-global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id, $allowed_companies, $showProject;
-
-//require_once( W2P_BASE_DIR."/modules/files/index_table.lib.php");
 
 // ****************************************************************************
 // Page numbering variables
@@ -114,6 +29,71 @@ global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders
 // $xpg_sqlcount    - SELECT for the COUNT total
 // $xpg_sqlquery    - SELECT for the SELECT LIMIT
 // $xpg_result      - pointer to results from SELECT LIMIT
+function showfnavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder) {
+	global $AppUI, $tab, $m, $a;
+	$xpg_break = false;
+	$xpg_prev_page = $xpg_next_page = 1;
+
+	$s = '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
+
+	if ($xpg_totalrecs > $xpg_pagesize) {
+		$xpg_prev_page = $page - 1;
+		$xpg_next_page = $page + 1;
+		// left buttoms
+		if ($xpg_prev_page > 0) {
+			$s .= '<td align="left" width="15%"><a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=1"><img src="' . w2PfindImage('navfirst.gif') . '" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
+			$s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $xpg_prev_page . '"><img src="' . w2PfindImage('navleft.gif') . '" border="0" Alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
+		} else {
+			$s .= '<td width="15%">&nbsp;</td>';
+		}
+
+		// central text (files, total pages, ...)
+		$s .= '<td align="center" width="70%">';
+		//$s .= "$xpg_totalrecs " . $AppUI->_('File(s)') . " ($xpg_total_pages " . $AppUI->_('Page(s)') . ")";
+		$s .= $xpg_totalrecs . ' ' . $AppUI->_('File(s)') . ' ' . $AppUI->_('Pages') . ': [ ';
+
+		// begin page numbers
+		for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
+			if ($n == $page) {
+				$s .= '<b>' . $n . '</b></a>';
+			} else {
+				$s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $n . '"></a>';
+			}
+			if ($n >= 30 + $page - 15) {
+				$xpg_break = true;
+				break;
+			} else
+				if ($n < $xpg_total_pages) {
+					$s .= ' | ';
+				}
+		}
+
+		if (!isset($xpg_break)) { // are we supposed to break ?
+			if ($n == $page) {
+				$s .= '<' . $n . '</a>';
+			} else {
+				$s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '"></a>';
+			}
+		}
+		$s .= ' ] </td>';
+
+		// right buttoms
+		if ($xpg_next_page <= $xpg_total_pages) {
+			$s .= '<td align="right" width="15%"><a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $xpg_next_page . '"><img src="' . w2PfindImage('navright.gif') . '" border="0" Alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
+			$s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $xpg_total_pages . '"><img src="' . w2PfindImage('navlast.gif') . '" border="0" Alt="Last Page"></a></td>';
+		} else {
+			$s .= '<td width="15%">&nbsp;</td></tr>';
+		}
+	} else { // or we dont have any files..
+		$s .= '<td align="center">';
+		if ($xpg_next_page > $xpg_total_pages) {
+			$s .= $xpg_sqlrecs . ' ' . $AppUI->_('Files') . ' ';
+		}
+		$s .= '</td></tr>';
+	}
+	$s .= '</table>';
+	return $s;
+}
 
 $page = w2PgetParam($_GET, 'page', 1);
 
@@ -312,52 +292,53 @@ function getFolders($parent, $level = 0) {
 	$folders = $q->loadList();
 	$q->clear();
 
+	$s = '';
 	// display each child
 	foreach ($folders as $row) {
 		if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
 			// indent and display the title of this child
 			$file_count = countFiles($row['file_folder_id']);
-			echo '<ul><li><table width="100%"><tr><td><span class="folder-name">';
+			$s .= '<ul><li><table width="100%"><tr><td><span class="folder-name">';
 			if ($m == 'files') {
-				echo '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&folder=' . $row['file_folder_id'] . '" name="ff' . $row['file_folder_id'] . '">';
+				$s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&folder=' . $row['file_folder_id'] . '" name="ff' . $row['file_folder_id'] . '">';
 			}
 
-			echo w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files');
+			$s .= w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files');
 			if ($m == 'files') {
 				'</a>' . '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&folder=' . $row['file_folder_id'] . '" name="ff' . $row['file_folder_id'] . '">';
 			}
-			echo $row['file_folder_name'];
+			$s .= $row['file_folder_name'];
 			if ($m == 'files') {
 				'</a>';
 			}
 			if ($file_count > 0) {
-				echo ' <a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a>';
+				$s .= ' <a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a>';
 			}
-			echo "</td>\n";
-			echo '	<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post">
+			$s .= '</td><form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post">
 				<input type="hidden" name="dosql" value="do_folder_aed" />
 				<input type="hidden" name="del" value="1" />
 				<input type="hidden" name="file_folder_id" value="' . $row['file_folder_id'] . '" />
 				<input type="hidden" name="redirect" value="' . $current_uri . '" />
 				</form>';
-			echo '<td align="right" width="64" nowrap="nowrap">' . "\n";
-			echo '<a href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '16', '16', 'edit icon', 'edit this folder', 'files') . '</a>' . '<a href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'new folder', 'add a new subfolder', 'files') . '</a>' . '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>' . '<a href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id .
+			$s .= '<td align="right" width="64" nowrap="nowrap">';
+			$s .= '<a href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '16', '16', 'edit icon', 'edit this folder', 'files') . '</a>' . '<a href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'new folder', 'add a new subfolder', 'files') . '</a>' . '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>' . '<a href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id .
 				'&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a>';
-			echo "</td></tr></table></span>\n";
+			$s .= '</td></tr></table></span>';
 			if ($file_count > 0) {
-				echo '<div class="files-list" id="files_' . $row['file_folder_id'] . '" style="display: none;">';
-				displayFiles($row['file_folder_id']);
-				echo "</div>";
+				$s .= '<div class="files-list" id="files_' . $row['file_folder_id'] . '" style="display: none;">';
+				$s .= displayFiles($row['file_folder_id']);
+				$s .= "</div>";
 			}
 		}
 		// call this function again to display this
 		// child's children
 		if (!getFolders($row['file_folder_id'], $level + 1)) {
-			echo "</li>";
+			$s .= '</li>';
 		} else {
-			echo "</li></ul>";
+			$s .= '</li></ul>';
 		}
 	}
+	echo $s;
 	return true;
 }
 
@@ -403,8 +384,8 @@ function displayFiles($folder) {
 	global $xpg_totalrecs, $xpg_total_pages, $page;
 	global $company_id, $allowed_companies, $current_uri, $w2Pconfig;
 
-	$canEdit = !getDenyEdit('files', $folder);
-	$canRead = !getDenyRead('files', $folder);
+	//$canEdit = !getDenyEdit('files', $folder);
+	//$canRead = !getDenyRead('files', $folder);
 
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$tf = $AppUI->getPref('TIMEFORMAT');
@@ -470,33 +451,34 @@ function displayFiles($folder) {
 
 	$files = array();
 	$file_versions = array();
-	if ($canRead) {
+	//if ($canRead) {
 		$files = $q->loadList();
 		$file_versions = $qv->loadList();
 		$q->clear();
 		$qv->clear();
-	}
+	//}
 	if ($files === array()) {
 		return 0;
 	}
-?>
-	<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-	<tr>
-		<th nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?></th>
-		<th><?php echo $AppUI->_('Description'); ?></th>
-		<th><?php echo $AppUI->_('Versions'); ?></th>
-	    <th><?php echo $AppUI->_('Category'); ?></th>
-		<th nowrap="nowrap"><?php echo $AppUI->_('Task Name'); ?></th>
-		<th><?php echo $AppUI->_('Owner'); ?></th>
-		<th><?php echo $AppUI->_('Size'); ?></th>
-		<th><?php echo $AppUI->_('Type'); ?></a></th>
-		<th><?php echo $AppUI->_('Date'); ?></th>
-    	<th nowrap="nowrap"><?php echo $AppUI->_('co Reason') ?></th>
-    	<th><?php echo $AppUI->_('co') ?></th>
-		<th nowrap="nowrap" width="1"></th>
-		<th nowrap="nowrap" width="1"></th>
-	</tr>
-<?php
+	
+	$s = '
+		<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+		<tr>
+			<th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
+			<th>' . $AppUI->_('Description') . '</th>
+			<th>' . $AppUI->_('Versions') . '</th>
+		    <th>' . $AppUI->_('Category') . '</th>
+			<th nowrap="nowrap">' . $AppUI->_('Task Name') . '</th>
+			<th>' . $AppUI->_('Owner') . '</th>
+			<th>' . $AppUI->_('Size') . '</th>
+			<th>' . $AppUI->_('Type') . '</a></th>
+			<th>' . $AppUI->_('Date') . '</th>
+	    	<th nowrap="nowrap">' . $AppUI->_('co Reason') . '</th>
+	    	<th>' . $AppUI->_('co') . '</th>
+			<th nowrap="nowrap" width="1"></th>
+			<th nowrap="nowrap" width="1"></th>
+		</tr>';
+
 	$fp = -1;
 	$file_date = new CDate();
 
@@ -510,17 +492,13 @@ function displayFiles($folder) {
 				$row['project_color_identifier'] = 'f4efe3';
 			}
 			if ($showProject) {
-				$s = '<tr>';
-				$s .= '<td colspan="20" style="background-color:#' . $row['project_color_identifier'] . '">';
-				$s .= '<font color="' . bestColor($row['project_color_identifier']) . '">';
+				$s .= '<tr><td colspan="20" style="background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">';
 				if ($row['file_project'] > 0) {
 					$href = './index.php?m=projects&a=view&project_id=' . $row['file_project'];
 				} else {
 					$href = './index.php?m=projects';
 				}
-				$s .= '<a href="' . $href . '">' . $row['project_name'] . '</a>';
-				$s .= '</font></td></tr>';
-				echo $s;
+				$s .= '<a href="' . $href . '">' . $row['project_name'] . '</a></font></td></tr>';
 			}
 		}
 		$fp = $row['file_project'];
@@ -529,86 +507,77 @@ function displayFiles($folder) {
 		} else {
 			$file = $row;
 		}
-?>
-	<form name="frm_remove_file_<?php echo $file['file_id']; ?>" action="?m=files" method="post">
-	<input type="hidden" name="dosql" value="do_file_aed" />
-	<input type="hidden" name="del" value="1" />
-	<input type="hidden" name="file_id" value="<?php echo $file['file_id']; ?>" />
-	<input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
-	</form>		
-	<form name="frm_duplicate_file_<?php echo $file['file_id']; ?>" action="?m=files" method="post">
-	<input type="hidden" name="dosql" value="do_file_aed" />
-	<input type="hidden" name="duplicate" value="1" />
-	<input type="hidden" name="file_id" value="<?php echo $file['file_id']; ?>" />
-	<input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
-	</form>		
-	<tr>
-		<td nowrap="8%">
-		<?php
+		$s .= '
+			<form name="frm_remove_file_' . $file['file_id'] . '" action="?m=files" method="post">
+			<input type="hidden" name="dosql" value="do_file_aed" />
+			<input type="hidden" name="del" value="1" />
+			<input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
+			<input type="hidden" name="redirect" value="' . $current_uri . '" />
+			</form>		
+			<form name="frm_duplicate_file_' . $file['file_id'] . '" action="?m=files" method="post">
+			<input type="hidden" name="dosql" value="do_file_aed" />
+			<input type="hidden" name="duplicate" value="1" />
+			<input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
+			<input type="hidden" name="redirect" value="' . $current_uri . '" />
+			</form>		
+			<tr>
+				<td nowrap="8%">';
 		$file_icon = getIcon($row['file_type']);
-		echo '<a href="./fileviewer.php?file_id=' . $file['file_id'] . '" title="' . $file['file_description'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $row['file_name'] . '</a>'; ?>
-		</td>
-		<td width="20%"><?php echo $file['file_description']; ?></td>
-		<td width="5%" nowrap="nowrap" align="right">
-	        <?php
+		$s .= '<a href="./fileviewer.php?file_id=' . $file['file_id'] . '" title="' . $file['file_description'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $row['file_name'] . '</a></td><td width="20%">' . $file['file_description'] . '</td><td width="5%" nowrap="nowrap" align="right">';
 		$hidden_table = '';
-		echo $row['file_lastversion'];
+		$s .= $row['file_lastversion'];
 		if ($row['file_versions'] > 1) {
-			echo ' <a href="javascript: void(0);" onClick="expand(\'versions_' . $file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
+			$s .= ' <a href="javascript: void(0);" onClick="expand(\'versions_' . $file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
 			$hidden_table = '<tr><td colspan="20">
-	<table style="display: none" id="versions_' . $file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-	<tr>
-	        <th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
-	        <th>' . $AppUI->_('Description') . '</th>
-	        <th>' . $AppUI->_('Versions') . '</th>
-	        <th>' . $AppUI->_('Category') . '</th>
-	        <th nowrap="nowrap">' . $AppUI->_('Task Name') . '</th>
-	        <th>' . $AppUI->_('Owner') . '</th>
-	        <th>' . $AppUI->_('Size') . '</th>
-	        <th>' . $AppUI->_('Type') . '</a></th>
-	        <th>' . $AppUI->_('Date') . '</th>
-    		<th nowrap="nowrap">' . $AppUI->_('co Reason') . '</th>
-    		<th>' . $AppUI->_('co') . '</th>
-	        <th nowrap width="1"></th>
-	        <th nowrap width="1"></th>
-	</tr>
-	';
-			foreach ($file_versions as $file_row)
+							<table style="display: none" id="versions_' . $file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+							<tr>
+							        <th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
+							        <th>' . $AppUI->_('Description') . '</th>
+							        <th>' . $AppUI->_('Versions') . '</th>
+							        <th>' . $AppUI->_('Category') . '</th>
+							        <th nowrap="nowrap">' . $AppUI->_('Task Name') . '</th>
+							        <th>' . $AppUI->_('Owner') . '</th>
+							        <th>' . $AppUI->_('Size') . '</th>
+							        <th>' . $AppUI->_('Type') . '</a></th>
+							        <th>' . $AppUI->_('Date') . '</th>
+						    		<th nowrap="nowrap">' . $AppUI->_('co Reason') . '</th>
+						    		<th>' . $AppUI->_('co') . '</th>
+							        <th nowrap width="1"></th>
+							        <th nowrap width="1"></th>
+							</tr>';
+			foreach ($file_versions as $file_row) {
 				if ($file_row['file_name'] == $row['file_name'] && $file_row['file_project'] == $row['file_project']) {
 					$file_icon = getIcon($file_row['file_type']);
 					$file_date = new CDate($file_row['file_date']);
-					$hidden_table .= '	
-			<form name="frm_delete_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post">
-			<input type="hidden" name="dosql" value="do_file_aed" />
-			<input type="hidden" name="del" value="1" />
-			<input type="hidden" name="file_id" value="' . $file_row['file_id'] . '" />
-			<input type="hidden" name="redirect" value="' . $current_uri . '" />
-			</form>';
-					$hidden_table .= '	
-			<form name="frm_duplicate_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post">
-			<input type="hidden" name="dosql" value="do_file_aed" />
-			<input type="hidden" name="duplicate" value="1" />
-			<input type="hidden" name="file_id" value="' . $file_row['file_id'] . '" />
-			<input type="hidden" name="redirect" value="' . $current_uri . '" />
-			</form>';
-					$hidden_table .= '
-	        <tr>
-	                <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file_row['file_id'] . '" 
-	                        title="' . $file_row['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $file_row['file_name'] . '
-	                </a></td>
-	                <td width="20%">' . $file_row['file_description'] . '</td>
-	                <td width="5%" nowrap="nowrap" align="right">' . $file_row['file_version'] . '</td>
-	                <td width="10%" nowrap="nowrap" align="left"><a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . ($file_row['file_category'] + 1) . '">' . $file_types[$file_row['file_category'] + 1] . '</a></td>
-	                <td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=' . $file_row['file_task'] . '">' . $row['task_name'] . '</a></td>
-	                <td width="15%" nowrap="nowrap">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</td>
-	                <td width="5%" nowrap="nowrap" align="right">' . intval($file_row['file_size'] / 1024) . 'kb </td>
-	                <td width="15%" nowrap="nowrap">' . $file_row['file_type'] . '</td>
-	                <td width="15%" nowrap="nowrap" align="center">' . $file_date->format($df . ' ' . $tf) . '</td>
-        			<td width="10%">' . $row['file_co_reason'] . '</td>
-        			<td nowrap="nowrap" align="center">';
-					if ($canEdit && empty($file_row['file_checkout'])) {
+					$hidden_table .= '<form name="frm_delete_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post">
+									<input type="hidden" name="dosql" value="do_file_aed" />
+									<input type="hidden" name="del" value="1" />
+									<input type="hidden" name="file_id" value="' . $file_row['file_id'] . '" />
+									<input type="hidden" name="redirect" value="' . $current_uri . '" />
+									</form>';
+					$hidden_table .= '<form name="frm_duplicate_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post">
+									<input type="hidden" name="dosql" value="do_file_aed" />
+									<input type="hidden" name="duplicate" value="1" />
+									<input type="hidden" name="file_id" value="' . $file_row['file_id'] . '" />
+									<input type="hidden" name="redirect" value="' . $current_uri . '" />
+									</form>';
+					$hidden_table .= '<tr>
+					                <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file_row['file_id'] . '" 
+					                        title="' . $file_row['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $file_row['file_name'] . '
+					                </a></td>
+					                <td width="20%">' . $file_row['file_description'] . '</td>
+					                <td width="5%" nowrap="nowrap" align="right">' . $file_row['file_version'] . '</td>
+					                <td width="10%" nowrap="nowrap" align="left"><a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . ($file_row['file_category'] + 1) . '">' . $file_types[$file_row['file_category'] + 1] . '</a></td>
+					                <td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=' . $file_row['file_task'] . '">' . $row['task_name'] . '</a></td>
+					                <td width="15%" nowrap="nowrap">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</td>
+					                <td width="5%" nowrap="nowrap" align="right">' . intval($file_row['file_size'] / 1024) . 'kb </td>
+					                <td width="15%" nowrap="nowrap">' . $file_row['file_type'] . '</td>
+					                <td width="15%" nowrap="nowrap" align="center">' . $file_date->format($df . ' ' . $tf) . '</td>
+				        			<td width="10%">' . $row['file_co_reason'] . '</td>
+				        			<td nowrap="nowrap" align="center">';
+					if (empty($file_row['file_checkout'])) {
 						$hidden_table .= '<a href="?m=files&a=co&file_id=' . $file_row['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
-					} else
+					} else {
 						if ($row['file_checkout'] == $AppUI->user_id) {
 							$hidden_table .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $file_row['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
 						} else {
@@ -628,8 +597,8 @@ function displayFiles($folder) {
 								$hidden_table .= $co_user['contact_first_name'] . ' ' . $co_user['contact_last_name'] . '<br>(' . $co_user['co_user'] . ')';
 							}
 						}
-						$hidden_table .= '</td>';
-					$hidden_table .= '<td nowrap="nowrap" align="right" width="52">';
+					}
+					$hidden_table .= '</td><td nowrap="nowrap" align="right" width="52">';
 					if ($canEdit && (empty($file_row['file_checkout']) || ($file_row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id)))) {
 						$hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file_row['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>" . '<a href="javascript: void(0);" onclick="document.frm_duplicate_sub_file_' . $file_row['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . "</a>" . '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_delete_sub_file_' . $file_row['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . "</a>";
 					}
@@ -642,70 +611,60 @@ function displayFiles($folder) {
 					$hidden_table .= '</td>';
 					$hidden_table .= '</tr>';
 				}
+			}
 			$hidden_table .= '</table>';
-			//$hidden_table .= '</span>';
 		}
-?>
-	        </td>
-	        <td width="10%" nowrap="nowrap" align="left"><a href="./index.php?m=<?php echo $m; ?>&a=<?php echo $a; ?>&view=categories&tab=<?php echo ($file['file_category']); ?>"><?php echo $file_types[$file["file_category"]]; ?></a></td> 
-			<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $file['task_id']; ?>"><?php echo $file['task_name']; ?></a></td>
-			<td width="15%" nowrap="nowrap"><?php echo $file['contact_first_name'] . ' ' . $file['contact_last_name']; ?></td>
-			<td width="5%" nowrap="nowrap" align="right"><?php echo intval($file['file_size'] / 1024); ?> kb</td>
-			<td width="15%" nowrap="nowrap"><?php echo $file['file_type']; ?></td>
-			<td width="15%" nowrap="nowrap" align="center"><?php echo $file_date->format($df . ' ' . $tf); ?></td>
-	        <td width="10%"><?php echo $file['file_co_reason']; ?></td>
-	        <td nowrap="nowrap" align="center">
-        <?php if ($canEdit && empty($row['file_checkout'])) { ?>
-                <a href="?m=files&a=co&file_id=<?php echo $file['file_id']; ?>"><?php echo w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files'); ?></a>
-        <?php } else
-			if ($row['file_checkout'] == $AppUI->user_id) { ?>
-                <a href="?m=files&a=addedit&ci=1&file_id=<?php echo $file['file_id']; ?>"><?php echo w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files'); ?></a>
-        <?php } else {
-				if ($file['file_checkout'] == 'final') {
-					echo 'final';
-				} else {
-					$q4 = new DBQuery;
-					$q4->addQuery('file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name');
-					$q4->addTable('files');
-					$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-					$q4->addJoin('contacts', 'co', 'co.contact_id = cu.user_contact', 'inner');
-					$q4->addWhere('file_id = ' . (int)$file['file_id']);
-					$co_user = array();
-					$co_user = $q4->loadList();
-					$co_user = $co_user[0];
-					$q4->clear();
-					echo $co_user['contact_first_name'] . ' ' . $co_user['contact_last_name'] . '<br>(' . $co_user['co_user'] . ')';
-				}
+		$s .= '</td>
+				<td width="10%" nowrap="nowrap" align="left"><a href="./index.php?m=' . $m . '&a=' . $a . '&view=categories&tab=' . ($file['file_category']) . '">' . $file_types[$file['file_category']] . '</a></td> 
+				<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=' . $file['task_id'] . '">' . $file['task_name'] . '</a></td>
+				<td width="15%" nowrap="nowrap">' . $file['contact_first_name'] . ' ' . $file['contact_last_name'] . '</td>
+				<td width="5%" nowrap="nowrap" align="right">' . intval($file['file_size'] / 1024) . ' kb</td>
+				<td width="15%" nowrap="nowrap">' . $file['file_type'] . '</td>
+				<td width="15%" nowrap="nowrap" align="center">' . $file_date->format($df . ' ' . $tf) . '</td>
+				<td width="10%">' . $file['file_co_reason'] . '</td>
+				<td nowrap="nowrap" align="center">';
+        if (empty($row['file_checkout'])) {
+        	$s .= '<a href="?m=files&a=co&file_id=' . $file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
+        } elseif ($row['file_checkout'] == $AppUI->user_id) {
+            $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
+        } else {
+			if ($file['file_checkout'] == 'final') {
+				$s .= 'final';
+			} else {
+				$q4 = new DBQuery;
+				$q4->addQuery('file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name');
+				$q4->addTable('files');
+				$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
+				$q4->addJoin('contacts', 'co', 'co.contact_id = cu.user_contact', 'inner');
+				$q4->addWhere('file_id = ' . (int)$file['file_id']);
+				$co_user = array();
+				$co_user = $q4->loadList();
+				$co_user = $co_user[0];
+				$q4->clear();
+				$s .= $co_user['contact_first_name'] . ' ' . $co_user['contact_last_name'] . '<br>(' . $co_user['co_user'] . ')';
 			}
-?>                
-        </td>
-		<td nowrap="nowrap" align="center" width="52">
-		<?php if ($canEdit && (empty($file['file_checkout']) || ($file['file_checkout'] == 'final' && ($canEdit || $file['project_owner'] == $AppUI->user_id)))) {
-				echo '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">';
-				echo w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files');
-				echo "</a>";
-				echo '<a href="javascript: void(0);" onclick="document.frm_duplicate_file_' . $file['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . '</a>';
-				echo '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_' . $file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
-			}
-?>
-		<td nowrap="nowrap" align="center" width="1">
-		<?php if ($canEdit && (empty($file['file_checkout']) || ($file['file_checkout'] == 'final' && ($canEdit || $file['project_owner'] == $AppUI->user_id)))) {
+		}
+		$s .= '</td><td nowrap="nowrap" align="center" width="52">';
+		if ($canEdit && (empty($file['file_checkout']) || ($file['file_checkout'] == 'final' && ($canEdit || $file['project_owner'] == $AppUI->user_id)))) {
+			$s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
+			$s .= '<a href="javascript: void(0);" onclick="document.frm_duplicate_file_' . $file['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . '</a>';
+			$s .= '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_' . $file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
+		}
+		$s .= '<td nowrap="nowrap" align="center" width="1">';
+		if ($canEdit && (empty($file['file_checkout']) || ($file['file_checkout'] == 'final' && ($canEdit || $file['project_owner'] == $AppUI->user_id)))) {
 			$bulk_op = 'onchange="(this.checked) ? addBulkComponent(' . $file['file_id'] . ') : removeBulkComponent(' . $file['file_id'] . ')"';
-			echo '<input type="checkbox" ' . $bulk_op . ' name="chk_sel_file_' . $file['file_id'] . '" />';
+			$s .= '<input type="checkbox" ' . $bulk_op . ' name="chk_sel_file_' . $file['file_id'] . '" />';
 		}
-?>		
-		</td>
-	</tr>
-	<?php echo $hidden_table; ?>
-	<?php
+		$s .= '</td></tr>';
+		$s .= $hidden_table;
 		$hidden_table = '';
-	} ?>
-	</table>
-	<?php
-	if ($xpg_totalrecs > $xpg_pagesize) {
-		showfnavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder);
 	}
-	echo "<br />";
+	$s .= '</table>';
+	if ($xpg_totalrecs > $xpg_pagesize) {
+		$s .= showfnavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder);
+	}
+	$s .= '<br />';
+	return $s;
 }
 
 /**** Main Program ****/
@@ -723,29 +682,25 @@ if ($folder > 0) {
 }
 
 if ($folder) { ?>
-<table border="0" cellpadding="4" cellspacing="0" width="100%">
-<tr>
-	<td nowrap="nowrap">
-		<a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'folder icon', 'back to root folder', 'files'); ?></a>
-		<?php if (array_key_exists($cfObj->file_folder_parent, $allowed_folders_ary)): ?>
-		<a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo w2PshowImage('back.png', '22', '22', 'folder icon', 'back to parent folder', 'files'); ?></a>
-		<?php endif;
-		//if ($allowed_folders_ary[$folder] == -1): ?>
-		<a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a>
-		<?php //endif; ?>
-	</td>
-</tr>
-</table>
+	<table border="0" cellpadding="4" cellspacing="0" width="100%">
+	<tr>
+		<td nowrap="nowrap">
+			<a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'folder icon', 'back to root folder', 'files'); ?></a>
+			<?php if (array_key_exists($cfObj->file_folder_parent, $allowed_folders_ary)): ?>
+			<a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo w2PshowImage('back.png', '22', '22', 'folder icon', 'back to parent folder', 'files'); ?></a>
+			<?php endif;
+			//if ($allowed_folders_ary[$folder] == -1): ?>
+			<a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a>
+			<?php //endif; ?>
+		</td>
+	</tr>
+	</table>
 <?php
 }
 
 ?>
    
 <div id="folder-list" style="background-color:white;layer-background-color:white;">
-<?php
-//	if (!$limited OR $folder != 0):
-
-?>
 	<span class="folder-name-current">
 <?php
 echo w2PshowImage('folder5_small.png', '16', '16', '', '', 'files');
@@ -761,7 +716,7 @@ endif;
 if (countFiles($folder) > 0) {
 	displayfiles($folder);
 } elseif (!$limited or $folder != 0) {
-	echo "no files";
+	echo $AppUI->_('no files');
 }
 getFolders($folder);
 ?>

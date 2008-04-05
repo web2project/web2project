@@ -597,80 +597,68 @@ class CFileFolder extends CW2pObject {
 }
 
 function shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page) {
-
 	global $AppUI;
 	$xpg_break = false;
 	$xpg_prev_page = $xpg_next_page = 1;
 
-	echo "\t" . '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
+	$s = '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
 
 	if ($xpg_totalrecs > $xpg_pagesize) {
 		$xpg_prev_page = $page - 1;
 		$xpg_next_page = $page + 1;
 		// left buttoms
 		if ($xpg_prev_page > 0) {
-			echo '<td align="left" width="15%">';
-			echo '<a href="./index.php?m=files&amp;page=1">';
-			echo '<img src="' . w2PfindImage('navfirst.gif') . '" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=files&amp;page=' . $xpg_prev_page . '">';
-			echo '<img src="' . w2PfindImage('navleft.gif') . '" border="0" Alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
+			$s .= '<td align="left" width="15%"><a href="./index.php?m=files&amp;page=1"><img src="' . w2PfindImage('navfirst.gif') . '" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
+			$s .= '<a href="./index.php?m=files&amp;page=' . $xpg_prev_page . '"><img src="' . w2PfindImage('navleft.gif') . '" border="0" Alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
 		} else {
-			echo '<td width="15%">&nbsp;</td>' . "\n";
+			$s .= '<td width="15%">&nbsp;</td>';
 		}
 
 		// central text (files, total pages, ...)
-		echo '<td align="center" width="70%">';
-		echo $xpg_totalrecs . ' ' . $AppUI->_('File(s)') . ' (' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)') . ')';
-		echo '</td>';
+		$s .= '<td align="center" width="70%">' . $xpg_totalrecs . ' ' . $AppUI->_('File(s)') . ' (' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)') . ')</td>';
 
 		// right buttoms
 		if ($xpg_next_page <= $xpg_total_pages) {
-			echo '<td align="right" width="15%">';
-			echo '<a href="./index.php?m=files&amp;page=' . $xpg_next_page . '">';
-			echo '<img src="' . w2PfindImage('navright.gif') . '" border="0" Alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=files&amp;page=' . $xpg_total_pages . '">';
-			echo '<img src="' . w2PfindImage('navlast.gif') . '" border="0" Alt="Last Page"></a></td>';
+			$s .= '<td align="right" width="15%"><a href="./index.php?m=files&amp;page=' . $xpg_next_page . '"><img src="' . w2PfindImage('navright.gif') . '" border="0" Alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
+			$s .= '<a href="./index.php?m=files&amp;page=' . $xpg_total_pages . '"><img src="' . w2PfindImage('navlast.gif') . '" border="0" Alt="Last Page"></a></td>';
 		} else {
-			echo '<td width="15%">&nbsp;</td></tr>' . "\n";
+			$s .= '<td width="15%">&nbsp;</td></tr>';
 		}
 		// Page numbered list, up to 30 pages
-		echo '<tr><td colspan="3" align="center">';
-		echo " [ ";
+		$s .= '<tr><td colspan="3" align="center"> [ ';
 
 		for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
 			if ($n == $page) {
-				echo '<b>' . $n . '</b></a>';
+				$s .= '<b>' . $n . '</b></a>';
 			} else {
-				echo '<a href="./index.php?m=files&amp;page=' . $n . '">';
-				echo $n . '</a>';
+				$s .= '<a href="./index.php?m=files&amp;page=' . $n . '">' . $n . '</a>';
 			}
 			if ($n >= 30 + $page - 15) {
 				$xpg_break = true;
 				break;
 			} else
 				if ($n < $xpg_total_pages) {
-					echo ' | ';
+					$s .= ' | ';
 				}
 		}
 
 		if (!isset($xpg_break)) { // are we supposed to break ?
 			if ($n == $page) {
-				echo '<' . $n . '</a>';
+				$s .= '<' . $n . '</a>';
 			} else {
-				echo '<a href="./index.php?m=files&amp;page=' . $xpg_total_pages . '">';
-				echo $n . '</a>';
+				$s .= '<a href="./index.php?m=files&amp;page=' . $xpg_total_pages . '">' . $n . '</a>';
 			}
 		}
-		echo ' ] ';
-		echo '</td></tr>';
+		$s .= ' ] </td></tr>';
 	} else { // or we dont have any files..
-		echo '<td align="center">';
+		$s .= '<td align="center">';
 		if ($xpg_next_page > $xpg_total_pages) {
-			echo $xpg_sqlrecs . ' ' . $AppUI->_('Files') . ' ';
+			$s .= $xpg_sqlrecs . ' ' . $AppUI->_('Files') . ' ';
 		}
-		echo '</td></tr>';
+		$s .= '</td></tr>';
 	}
-	echo '</table>';
+	$s .= '</table>';
+	echo $s;
 }
 
 function file_size($size) {

@@ -88,8 +88,6 @@ function expand_multiproject(id, table_name) {
 </tr>
 
 <?php
-$CR = "\n";
-$CT = "\n\t";
 $none = true;
 
 //Tabbed view
@@ -137,11 +135,7 @@ foreach ($projects as $row_proj) {
 			} else {
 				$s = '<tr>';
 			}
-			$s .= '<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row["project_color_identifier"] . '">';
-			$s .= $CT . '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
-			$s .= $CR . '</td>';
-
-			$s .= $CR . '<td width="50%">';
+			$s .= '<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row["project_color_identifier"] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td><td width="50%">';
 
 			$q = new DBQuery();
 			$q->addTable('projects');
@@ -150,62 +144,46 @@ foreach ($projects as $row_proj) {
 			$count_projects = $q->loadResult();
 
 			if ($level) {
-				$s .= $CT . str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . '<img src="./images/corner-dots.gif" width="16" height="12" border="0">&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars($row['project_description'], ENT_QUOTES) . '">' . $row['project_name'] . '</a>';
+				$s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . '<img src="./images/corner-dots.gif" width="16" height="12" border="0">&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars($row['project_description'], ENT_QUOTES) . '">' . $row['project_name'] . '</a>';
 			} elseif ($count_projects > 1 && !$level) {
-				$s .= $CT . '<a href="javascript: void(0);" onClick="expand_multiproject(\'multiproject_' . $row['project_id'] . '\', \'tblProjects\')"><img id="multiproject_' . $row['project_id'] . '_expand" src="./images/icons/expand.gif" width="12" height="12" border="0"><img id="multiproject_' . $row['project_id'] . '_collapse" src="./images/icons/collapse.gif" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars($row['project_description'], ENT_QUOTES) . '">' . $row['project_name'] . '</a>';
+				$s .= '<a href="javascript: void(0);" onClick="expand_multiproject(\'multiproject_' . $row['project_id'] . '\', \'tblProjects\')"><img id="multiproject_' . $row['project_id'] . '_expand" src="./images/icons/expand.gif" width="12" height="12" border="0"><img id="multiproject_' . $row['project_id'] . '_collapse" src="./images/icons/collapse.gif" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars($row['project_description'], ENT_QUOTES) . '">' . $row['project_name'] . '</a>';
 			} else {
-				$s .= $CT . '<a href="./index.php?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars($row['project_description'], ENT_QUOTES) . '">' . $row['project_name'] . '</a>';
+				$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars($row['project_description'], ENT_QUOTES) . '">' . $row['project_name'] . '</a>';
 			}
-			$s .= $CR . '</td>';
-
-			$s .= $CR . '<td width="30%">';
+			$s .= '</td><td width="30%">';
 			if ($perms->checkModuleItem('companies', 'access', $row['project_company'])) {
-				$s .= $CT . '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" title="' . htmlspecialchars($row['company_description'], ENT_QUOTES) . '">' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</a>';
+				$s .= '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" title="' . htmlspecialchars($row['company_description'], ENT_QUOTES) . '">' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</a>';
 			} else {
-				$s .= $CT . htmlspecialchars($row['company_name'], ENT_QUOTES);
+				$s .= htmlspecialchars($row['company_name'], ENT_QUOTES);
 			}
-			$s .= $CR . '</td>';
-
-			$s .= $CR . '<td align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
-			$s .= $CR . '<td align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
-			/*$s .= $CR . '<td align="center">';
+			$s .= '</td><td align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td><td align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
+			/*$s .= '<td align="center">';
 			$s .= $actual_end_date ? '<a href="?m=tasks&a=view&task_id='.$row["critical_task"].'">' : '';
 			$s .= $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format( $df ).'</span>' : '-';
 			$s .= $actual_end_date ? '</a>' : '';*/
-			$s .= $CR . '<td align="center" nowrap="nowrap">';
-			$s .= $CT . $project_status[$row['project_status']];
-			$s .= $CR . '</td>';
-			$s .= $CR . '</td>';
+			$s .= '<td align="center" nowrap="nowrap">' . $project_status[$row['project_status']] . '</td>';
 
-			$s .= $CR . '<td nowrap="nowrap">' . htmlspecialchars($row['user_username'], ENT_QUOTES) . '</td>';
-			$s .= $CR . '<td align="center" nowrap="nowrap">';
-			$s .= $CT . $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
-			$s .= $CR . '</td>';
-			//		if($show_all_projects){
-			$s .= $CR . '<td align="center" nowrap="nowrap">';
-			$s .= $CT . $row['project_type'] == 0 ? $AppUI->_('Unknown') : $project_types[$row['project_type']];
-			$s .= $CR . '</td>';
-			//		}
-			$s .= $CR . '<td align="center">';
+			$s .= '<td nowrap="nowrap">' . htmlspecialchars($row['user_username'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
+			$s .= $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
+			$s .= '</td><td align="center" nowrap="nowrap">';
+			$s .= $row['project_type'] == 0 ? $AppUI->_('Unknown') : $project_types[$row['project_type']];
+			$s .= '</td><td align="center">';
 			$s .= $row['task_log_problem'] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
 			$s .= $row['task_log_problem'] ? dPshowImage('./images/icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
-			$s .= $CR . $row['task_log_problem'] ? '</a>' : '';
-			$s .= $CR . '</td>';
-			$s .= $CR . '<td align="center">';
+			$s .= $row['task_log_problem'] ? '</a>' : '';
+			$s .= '</td><td align="center">';
 			if ($perms->checkModuleItem('projects', 'edit', $row['project_id'])) {
-				$s .= $CT . '<input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" />';
+				$s .= '<input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" />';
 			} else {
-				$s .= $CT . '&nbsp;';
+				$s .= '&nbsp;';
 			}
-			$s .= $CR . '</td>';
-
-			$s .= $CR . '</tr>';
+			$s .= '</td></tr>';
 			/*                        if (!$level && $count_projects>1) {
 			$multiproject_id = $row['project_id'];
-			$s .= $CR . '<div style="display: none;" id="multiproject_'.$multiproject_id.'">';
+			$s .= '<div style="display: none;" id="multiproject_'.$multiproject_id.'">';
 			}                                       		
 			if (($count_projects==$st_projects_counter) && $level && $count_projects>1)      
-			$s .= $CR . '</div>';      
+			$s .= '</div>';      
 			if ($count_projects>1)
 			$st_projects_counter++;*/
 			echo $s;
@@ -215,16 +193,17 @@ foreach ($projects as $row_proj) {
 	}
 }
 if ($none) {
-	echo $CR . '<tr><td colspan="20">' . $AppUI->_('No projects available') . '</td></tr>';
+	echo '<tr><td colspan="20">' . $AppUI->_('No projects available') . '</td></tr>';
 } else {
 ?>
 <tr>
 	<td colspan="20" align="right">
 		<?php
-	echo '<input type="submit" class="button" value="' . $AppUI->_('Update projects status') . '" />';
-	echo '<input type="hidden" name="update_project_status" value="1" />';
-	echo '<input type="hidden" name="m" value="projects" />';
-	echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', 2, true);
+			$s = '<input type="submit" class="button" value="' . $AppUI->_('Update projects status') . '" />';
+			$s .= '<input type="hidden" name="update_project_status" value="1" />';
+			$s .= '<input type="hidden" name="m" value="projects" />';
+			$s .= arraySelect($pstatus, 'project_status', 'size="1" class="text"', 2, true);
+			echo $s;
 	// 2 will be the next step
 }
 ?>

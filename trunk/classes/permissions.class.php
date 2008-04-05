@@ -257,13 +257,13 @@ class w2Pacl extends gacl_api {
 	** @cause		#2140
 	**
 	** @access 	public
-	** @param		string	module (directory) name
+	** @param	string	module (directory) name
 	** @return
 	*/
 
 	function deleteModuleItems($mod) {
 		// Declaring the return string
-		$ret = null;
+		$res = null;
 
 		// Fetching module-associated ACL ID's
 		$q = new DBQuery;
@@ -279,7 +279,7 @@ class w2Pacl extends gacl_api {
 			$q->setDelete('gacl_aco_map');
 			$q->addWhere('acl_id = ' . $acl);
 			if (!$q->exec()) {
-				$ret .= is_null($ret) ? "\n\t" . db_error() : db_error();
+				$res .= is_null($res) ? db_error() : "\n\t" . db_error();
 			}
 			$q->clear();
 
@@ -288,7 +288,7 @@ class w2Pacl extends gacl_api {
 			$q->setDelete('gacl_aro_map');
 			$q->addWhere('acl_id = ' . $acl);
 			if (!$q->exec()) {
-				$ret .= "\n\t" . db_error();
+				$res .= "\n\t" . db_error();
 			}
 			$q->clear();
 
@@ -297,7 +297,7 @@ class w2Pacl extends gacl_api {
 			$q->setDelete('gacl_acl');
 			$q->addWhere('id = ' . $acl);
 			if (!$q->exec()) {
-				$ret .= "\n\t" . db_error();
+				$res .= "\n\t" . db_error();
 			}
 			$q->clear();
 		}
@@ -307,7 +307,7 @@ class w2Pacl extends gacl_api {
 			dprint(__FILE__, __LINE__, 0, 'Failed to recalc module Permissions');
 		}
 		// Returning null (no error) or database error message (error)
-		return $ret.$res;
+		return $res;
 	}
 
 	function deleteGroupItem($item, $group = 'all', $section = 'app', $type = 'axo') {

@@ -168,8 +168,6 @@ if ($show_all_projects) {
 </tr>
 
 <?php
-$CR = "\n";
-$CT = "\n\t";
 $none = true;
 
 //foreach ($projects as $row) {
@@ -221,24 +219,21 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 
 			$s = '';
 			if ($level) {
-				$s .= $CR . '<tr style="display:none" id="multiproject_tr_' . $row['project_original_parent'] . '_' . $row['project_id'] . '_">';
-				$s .= $CR . '<div id="multiproject_' . $row['project_original_parent'] . '_' . $row['project_id'] . '">';
+				$s .= '<tr style="display:none" id="multiproject_tr_' . $row['project_original_parent'] . '_' . $row['project_id'] . '_">';
+				$s .= '<div id="multiproject_' . $row['project_original_parent'] . '_' . $row['project_id'] . '">';
 			} else {
 				$s .= '<tr>';
 			}
 			$s .= '<td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
-			$s .= $CT . '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
-			$s .= $CR . '</td>';
+			$s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td>';
 
-			$s .= $CR . '<td align="center">';
+			$s .= '<td align="center">';
 			if ($row['project_priority'] < 0) {
 				$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width=13 height=16>';
 			} elseif ($row['project_priority'] > 0) {
 				$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width=13 height=16>';
 			}
-			$s .= $CR . '</td>';
-
-			$s .= $CR . '<td width="40%">';
+			$s .= '</td><td width="40%">';
 
 			$q = new DBQuery();
 			$q->addTable('projects');
@@ -247,50 +242,35 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 			$count_projects = $q->loadResult();
 
 			if ($level) {
-				$s .= $CT . str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
+				$s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
 			} elseif ($count_projects > 1 && !$level) {
-				$s .= $CT . w2PtoolTip('multi-project parent', 'this project is a parent on a multi-project structure<br />click to show/hide its children.') . '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')"><img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0"><img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row['project_name'] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
+				$s .= w2PtoolTip('multi-project parent', 'this project is a parent on a multi-project structure<br />click to show/hide its children.') . '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')"><img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0"><img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row['project_name'] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
 			} else {
-				$s .= $CT . '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
+				$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
 			}
-			$s .= $CR . '</td>';
+			$s .= '</td><td width="30%"><a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a></td>';
 
-			$s .= $CR . '<td width="30%">';
-			$s .= $CT . '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a>';
-			$s .= $CR . '</td>';
-
-			$s .= $CR . '<td nowrap="nowrap" align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
-			$s .= $CR . '<td nowrap="nowrap" align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
-			$s .= $CR . '<td nowrap="nowrap" align="center">';
+			$s .= '<td nowrap="nowrap" align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
+			$s .= '<td nowrap="nowrap" align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
+			$s .= '<td nowrap="nowrap" align="center">';
 			$s .= $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">' : '';
 			$s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
 			$s .= $actual_end_date ? '</a>' : '';
-			$s .= $CR . '</td>';
-
-			$s .= $CR . '<td align="center">';
+			$s .= '</td><td align="center">';
 			$s .= $row['task_log_problem'] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
 			$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
-			$s .= $CR . $row['task_log_problem'] ? '</a>' : '';
-			$s .= $CR . '</td>';
-
-			$s .= $CR . '<td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td>';
-			$s .= $CR . '<td align="center" nowrap="nowrap">';
-			$s .= $CT . $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
-			$s .= $CR . '</td>';
-			$s .= $CR . '<td align="center">';
-			$s .= $CT . '<input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" />';
-			$s .= $CR . '</td>';
+			$s .= $row['task_log_problem'] ? '</a>' : '';
+			$s .= '</td><td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
+			$s .= $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
+			$s .= '</td><td align="center"><input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" /></td>';
 
 			if ($show_all_projects) {
-				$s .= $CR . '<td align="left" nowrap="nowrap">';
-				$s .= $CT . $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectTypes[0] ? $project_types[$row['project_status'] + 2] : $project_types[$row['project_status'] + 1]);
-				$s .= $CR . '</td>';
+				$s .= '<td align="left" nowrap="nowrap">';
+				$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectTypes[0] ? $project_types[$row['project_status'] + 2] : $project_types[$row['project_status'] + 1]);
+				$s .= '</td>';
 			}
 
 			if ($level) {
-				//$s .= '			</tr>';
-				//$s .= '		</table>';
-				//$s .= '</td>';
 				$s .= '</div>';
 				$s .= '</tr>';
 			} else {
@@ -302,17 +282,18 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 	}
 }
 if ($none) {
-	echo $CR . '<tr><td colspan="12">' . $AppUI->_('No projects available') . '</td></tr>';
+	echo '<tr><td colspan="12">' . $AppUI->_('No projects available') . '</td></tr>';
 } else {
 ?>
 <tr>
 	<td colspan="12" align="right">
 		<?php
-	echo "<input type='submit' class='button' value='" . $AppUI->_('Update projects status') . "' />";
-	echo "<input type='hidden' name='update_project_status' value='1' />";
-	echo "<input type='hidden' name='m' value='projects' />";
-	echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter + 1, true);
-	// 2 will be the next step
+		$s = '<input type="submit" class="button" value="' . $AppUI->_('Update projects status') . '" />';
+		$s .= '<input type="hidden" name="update_project_status" value="1" />';
+		$s .= '<input type="hidden" name="m" value="projects" />';
+		$s .= arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter + 1, true);
+		echo $s;
+		// 2 will be the next step
 }
 ?>
 	</td>

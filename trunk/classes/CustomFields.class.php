@@ -495,18 +495,18 @@ class CustomFields {
 		} else {
 			$html = '';
 			if (!$this->published) {
-				$html = '<table width="100%">' . "\n";
+				$html = '<table width="100%">';
 			}
 
 			foreach ($this->fields as $cfield) {
 				if (!$this->published) {
-					$html .= "\t" . '<tr><td nowrap="nowrap">' . $cfield->getHTML($this->mode) . '</td></tr>' . "\n";
+					$html .= "\t" . '<tr><td nowrap="nowrap">' . $cfield->getHTML($this->mode) . '</td></tr>';
 				} else {
-					$html .= "\t" . '<tr><td align="right" nowrap="nowrap">' . $cfield->getHTML($this->mode) . '</td></tr>' . "\n";
+					$html .= "\t" . '<tr><td align="right" nowrap="nowrap">' . $cfield->getHTML($this->mode) . '</td></tr>';
 				}
 			}
 			if (!$this->published) {
-				$html .= '</table>' . "\n";
+				$html .= '</table>';
 			}
 			return $html;
 		}
@@ -642,7 +642,7 @@ class CustomOptionList {
 	}
 
 	function getHTML($field_name, $selected) {
-		$html = '<select name="' . $field_name . '">' . "\n";
+		$html = '<select name="' . $field_name . '">';
 		foreach ($this->options as $i => $opt) {
 			$html .= "\t" . '<option value="' . $i . '"';
 			if ($i == $selected) {
@@ -650,7 +650,7 @@ class CustomOptionList {
 			}
 			$html .= '>' . $opt . '</option>';
 		}
-		$html .= '</select>' . "\n";
+		$html .= '</select>';
 		return $html;
 	}
 }
