@@ -37,7 +37,7 @@ foreach ($rs as $c) {
 	switch ($c['config_type']) {
 		case 'select':
 			// Build the select list.
-			$entry = '<select class="text" name="w2Pcfg[' . $c['config_name'] . ']">' . "\n";
+			$entry = '<select class="text" name="w2Pcfg[' . $c['config_name'] . ']">';
 			// Find the detail relating to this entry.
 			$children = $w2Pcfg->getChildren($c['config_id']);
 			foreach ($children as $child) {
@@ -45,7 +45,7 @@ foreach ($rs as $c) {
 				if ($child['config_list_name'] == $c['config_value']) {
 					$entry .= ' selected="selected"';
 				}
-				$entry .= '>' . $AppUI->_($child['config_list_name'] . '_item_title') . '</option>' . "\n";
+				$entry .= '>' . $AppUI->_($child['config_list_name'] . '_item_title') . '</option>';
 			}
 			$entry .= '</select>';
 			break;
@@ -63,7 +63,7 @@ foreach ($rs as $c) {
 	}
 
 	if ($c['config_group'] != $last_group) {
-		$output .= '<tr><td colspan="2"><b>' . $AppUI->_($c['config_group'] . '_group_title') . '</b></td></tr>' . "\n";
+		$output .= '<tr><td colspan="2"><b>' . $AppUI->_($c['config_group'] . '_group_title') . '</b></td></tr>';
 		$last_group = $c['config_group'];
 	}
 	$output .= '<tr><td class="item" width="20%">' . $AppUI->_($c['config_name'] . '_title') . '</td><td align="left">
@@ -82,7 +82,7 @@ echo '<form name="cfgFrm" action="index.php?m=system&a=systemconfig" method="pos
 echo '<tr><td colspan="2">';
 if (is_dir(W2P_BASE_DIR . '/install')) {
 	$AppUI->setMsg('You have not removed your install directory, this is a major security risk!', UI_MSG_ALERT);
-	echo '<span class="error">' . $AppUI->getMsg() . '</span>' . "\n";
+	echo '<span class="error">' . $AppUI->getMsg() . '</span>';
 }
 echo $AppUI->_('syscfg_intro');
 echo '</td></tr>';

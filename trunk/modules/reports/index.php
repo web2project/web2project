@@ -61,17 +61,18 @@ if (!$suppressHeaders) {
 }
 
 $report_type_var = w2PgetParam($_GET, 'report_type', '');
-if (!empty($report_type_var))
+if (!empty($report_type_var)) {
 	$report_type_var = '&report_type=' . $report_type;
+}
 
 if (!$suppressHeaders) {
-	if (!isset($display_project_name))
+	if (!isset($display_project_name)) {
 		$display_project_name = $AppUI->_('All');
+	}
 	echo $AppUI->_('Selected Project') . ': <b>' . $display_project_name . '</b>';
 ?>
 <form name="changeMe" action="./index.php?m=reports<?php echo $report_type_var; ?>" method="post">
-<?php echo $AppUI->_('Projects') . ':'; ?>
-<?php echo arraySelect($project_list, 'project_id', 'size="1" class="text" onchange="changeIt();"', $project_id, false); ?>
+<?php echo $AppUI->_('Projects') . ':' . arraySelect($project_list, 'project_id', 'size="1" class="text" onchange="changeIt();"', $project_id, false); ?>
 </form>
 
 <?php
@@ -84,8 +85,9 @@ if ($report_type) {
 	if (function_exists('styleRenderBoxTop')) {
 		echo styleRenderBoxTop();
 	}
-	echo '<table width="100%" class="std">';
-	echo '<tr><td><h2>' . $AppUI->_('Reports Available') . '</h2></td></tr>';
+	$s = '';
+	$s .= '<table width="100%" class="std">';
+	$s .= '<tr><td><h2>' . $AppUI->_('Reports Available') . '</h2></td></tr>';
 
 	$tmp_reports = array();
 	foreach ($reports as $v) {
@@ -107,18 +109,13 @@ if ($report_type) {
 		$desc_file = str_replace('.php', '.' . $AppUI->user_locale . '.txt', $v['file']);
 		$desc = @file(W2P_BASE_DIR . '/modules/reports/reports/' . $desc_file);
 
-		echo "\n<tr>";
-		echo "\n	<td><a href=\"index.php?m=reports&project_id=$project_id&report_type=$type";
+		$s .= '<tr><td><a href="index.php?m=reports&project_id=' . $project_id . '&report_type=' . $type;
 		if (isset($desc[2])) {
-			echo "&" . $desc[2];
+			$s .= '&' . $desc[2];
 		}
-		echo '">';
-		echo $v['name'];
-		echo '</a>';
-		echo "\n</td>";
-		echo "\n<td>" . ($desc[1] ? "- $desc[1]" : '') . '</td>';
-		echo "\n</tr>";
+		$s .= '">' . $v['name'] . '</a></td><td>' . ($desc[1] ? "- $desc[1]" : '') . '</td></tr>';
 	}
-	echo '</table>';
+	$s .= '</table>';
+	echo $s;
 }
 ?>
