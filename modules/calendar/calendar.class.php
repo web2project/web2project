@@ -203,15 +203,15 @@ class CMonthCalendar {
 		if ($this->showTitle) {
 			$s .= $this->_drawTitle();
 		}
-		$s .= '<table border="0" cellspacing="1" cellpadding="2" width="100%" class="' . $this->styleMain . "\">\n";
+		$s .= '<table border="0" cellspacing="1" cellpadding="2" width="100%" class="' . $this->styleMain . '">';
 
 		if ($this->showDays) {
-			$s .= $this->_drawDays() . "\n";
+			$s .= $this->_drawDays();
 		}
 
 		$s .= $this->_drawMain();
 
-		$s .= "</table>\n";
+		$s .= '</table>';
 
 		return $s;
 	}
@@ -413,7 +413,7 @@ class CMonthCalendar {
 			$href = isset($e['href']) ? $e['href'] : null;
 			$alt = isset($e['alt']) ? str_replace("\n", ' ', $e['alt']) : null;
 
-			$s .= '<br />'."\n";
+			$s .= '<br />';
 			$s .= $href ? '<a href="'.$href.'" class="event" title="'.$alt.'">' : '';
 			$s .= $e['text'];
 			$s .= $href ? '</a>' : '';
@@ -641,14 +641,16 @@ class CEvent extends CW2pObject {
 					$$query_set->addWhere('(event_private = 0 OR event_owner=' . (int)$user_id . ')');
 					break;
 			}
-
+			
 			if ($query_set == 'q') { // assemble query for non-recursive events
 				$$query_set->addWhere('(event_recurs <= 0)');
 				// following line is only good for *non-recursive* events
 				$$query_set->addWhere('(event_start_date <= \'' . $db_end . '\' AND event_end_date >= \'' . $db_start . '\' OR event_start_date BETWEEN \'' . $db_start . '\' AND \'' . $db_end . '\')');
+				//print_r($q->prepare());
 				$eventList = $$query_set->loadList();
 			} elseif ($query_set == 'r') { // assemble query for recursive events
 				$$query_set->addWhere('(event_recurs > 0)');
+				//print_r($r->prepare());
 				$eventListRec = $$query_set->loadList();
 			}
 		}

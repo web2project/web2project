@@ -117,8 +117,6 @@ if ($project_status_filter < 0) {
 </tr>
 
 <?php
-$CR = "\n";
-$CT = "\n\t";
 $none = true;
 
 //print_r($currentTabId.'.'.$show_all_projects.'.'.count($project_types).'.'.$project_status_filter);
@@ -135,58 +133,36 @@ foreach ($projects as $row) {
 		$actual_end_date = intval($row['project_actual_end_date']) ? new CDate($row['project_actual_end_date']) : null;
 		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
-		$s = '<tr>';
-		$s .= '<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row['project_color_identifier'] . '">';
-		$s .= $CT . '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf("%.1f%%", $row['project_percent_complete']) . '</font>';
-		$s .= $CR . '</td>';
-
-		$s .= $CR . '<td align="center">';
+		$s = '<tr><td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf("%.1f%%", $row['project_percent_complete']) . '</font></td><td align="center">';
 		if ($row['project_priority'] < 0) {
 			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width=13 height=16>';
 		} else
 			if ($row['project_priority'] > 0) {
 				$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width=13 height=16>';
 			}
-		$s .= $CR . '</td>';
+		$s .= '</td><td nowrap="nowrap">' . $row['project_id'] . '</td><td width="40%">' . htmlspecialchars($row['project_name']) . '</td>';
+		$s .= '<td width="30%">' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</td>';
 
-		$s .= $CR . '<td nowrap="nowrap">';
-		$s .= $CT . $row['project_id'];
-		$s .= $CR . '</td>';
-
-		$s .= $CR . '<td width="40%">';
-		$s .= $CT . htmlspecialchars($row['project_name']);
-		$s .= $CR . '</td>';
-
-		$s .= $CR . '<td width="30%">';
-		$s .= $CT . htmlspecialchars($row['company_name'], ENT_QUOTES);
-
-		$s .= $CR . '</td>';
-
-		$s .= $CR . '<td align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
-		$s .= $CR . '<td align="center" nowrap="nowrap">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
-		$s .= $CR . '<td align="center">';
+		$s .= '<td align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td><td align="center" nowrap="nowrap">' . ($end_date ? $end_date->format($df) : '-') . '</td><td align="center">';
 		$s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
-		$s .= $CR . '</td>';
-
-		$s .= $CR . '<td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td>';
-		$s .= $CR . '<td align="center" nowrap="nowrap">';
-		$s .= $CT . $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
-		$s .= $CR . '</td>';
+		$s .= '</td><td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
+		$s .= $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
+		$s .= '</td>';
 
 		if ($show_all_projects) {
-			$s .= $CR . '<td align="center" nowrap="nowrap">';
-			$s .= $CT . $row['project_status'] == 0 ? $AppUI->_('Not Defined') : $projectTypes[$row['project_status']];
-			$s .= $CR . '</td>';
+			$s .= '<td align="center" nowrap="nowrap">';
+			$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : $projectTypes[$row['project_status']];
+			$s .= '</td>';
 		}
 
-		$s .= $CR . '</tr>';
+		$s .= '</tr>';
 		echo $s;
 
 		echo '<tr><td height="1" colspan="12" style="border-bottom: 1px solid;padding:0px;" bgcolor="#FFFFFF"><img src="' . w2PfindImage('shim.gif') . '"></td></tr>';
 	}
 }
 if ($none) {
-	echo $CR . '<tr><td colspan="10">' . $AppUI->_('No projects available') . '</td></tr>';
+	echo '<tr><td colspan="10">' . $AppUI->_('No projects available') . '</td></tr>';
 }
 ?>
 	</td>

@@ -268,7 +268,7 @@ function showchilddept(&$a, $level = 1) {
 		}
 	}
 
-	$s .= '&nbsp;&nbsp;' . $a['dept_name'] . '</option>' . "\n";
+	$s .= '&nbsp;&nbsp;' . $a['dept_name'] . '</option>';
 	$buffer .= $s;
 
 	//	echo $s;

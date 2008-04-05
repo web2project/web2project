@@ -1569,7 +1569,7 @@ class DBQuery {
 			return false;
 		}
 		$id = db_insert_id();
-		($verbose) && print 'id=[' . $id . ']<br />' . "\n";
+		($verbose) && print 'id=[' . $id . '] ';
 		if ($keyName && $id) {
 			$object->$keyName = $id;
 		}

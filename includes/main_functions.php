@@ -6,7 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$CR = "\n";
 define('SECONDS_PER_DAY', 60 * 60 * 24);
 
 ##
@@ -939,12 +938,12 @@ function dpRealPath($file) {
 */
 function w2PrequiredFields($requiredFields) {
 	global $AppUI, $m;
-	$buffer = 'var foc=false;' . "\n";
+	$buffer = 'var foc=false;';
 
 	if (!empty($requiredFields)) {
 		foreach ($requiredFields as $rf => $comparator) {
-			$buffer .= "\n" . 'if (' . $rf . html_entity_decode($comparator, ENT_QUOTES) . ') {' . "\n";
-			$buffer .= "\t" . 'msg += "\n' . $AppUI->_('required_field_' . $rf, UI_OUTPUT_JS) . '";' . "\n";
+			$buffer .= 'if (' . $rf . html_entity_decode($comparator, ENT_QUOTES) . ') {';
+			$buffer .= 'msg += "\n' . $AppUI->_('required_field_' . $rf, UI_OUTPUT_JS) . '";';
 
 			/* MSIE cannot handle the focus command for some disabled or hidden fields like the start/end date fields
 			** Another workaround would be to check whether the field is disabled, 
@@ -953,11 +952,9 @@ function w2PrequiredFields($requiredFields) {
 			** System Value it's IMHO more safe to disable the focus for MSIE.
 			*/
 			$r = strstr($rf, '.');
-			$buffer .= "\t" . 'if((foc==false) && (navigator.userAgent.indexOf(\'MSIE\')== -1)) {' . "\n";
-			$buffer .= "\t\t" . 'f.' . substr($r, 1, strpos($r, '.', 1) - 1) . '.focus();' . "\n";
-			$buffer .= "\t\t" . 'foc=true;' . "\n";
-			$buffer .= "\t}\n";
-			$buffer .= "}\n";
+			$buffer .= 'if((foc==false) && (navigator.userAgent.indexOf(\'MSIE\')== -1)) {';
+			$buffer .= 'f.' . substr($r, 1, strpos($r, '.', 1) - 1) . '.focus();';
+			$buffer .= 'foc=true;}}';
 		}
 	}
 	return $buffer;

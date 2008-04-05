@@ -895,10 +895,10 @@ class CAppUI {
 			$base .= '/';
 		}
 		// Load the basic javascript used by all modules.
-		echo '<script type="text/javascript" src="'.$base.'js/base.js"></script>'."\n";
+		echo '<script type="text/javascript" src="'.$base.'js/base.js"></script>';
 
 		// additionally load mootools
-		echo '<script type="text/javascript" src="'.$base.'lib/mootools/mootools.js"></script>'."\n";
+		echo '<script type="text/javascript" src="'.$base.'lib/mootools/mootools.js"></script>';
 
 		$this->getModuleJS($m, $a, true);
 	}
@@ -914,11 +914,11 @@ class CAppUI {
 		}
 		if ($load_all || !$file) {
 			if (file_exists($root . 'modules/' . $module . '/' . $module . '.module.js')) {
-				echo '<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' . $module . '.module.js"></script>' . "\n";
+				echo '<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' . $module . '.module.js"></script>';
 			}
 		}
 		if (isset($file) && file_exists($root . 'modules/' . $module . '/' . $file . '.js')) {
-			echo '<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' . $file . '.js"></script>' . "\n";
+			echo '<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' . $file . '.js"></script>';
 		}
 	}
 
@@ -939,14 +939,14 @@ class CAppUI {
 		global $AppUI;
 		//echo '<style type="text/css">@import url('.w2PgetConfig('base_url').'/lib/jscalendar/calendar-win2k-1.css);</style>';
 		echo '<style type="text/css">@import url(' . w2PgetConfig('base_url') . '/lib/jscalendar/skins/aqua/theme.css);</style>';
-		echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/js/calendar.js"></script>' . "\n";
-		echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar.js"></script>' . "\n";
+		echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/js/calendar.js"></script>';
+		echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar.js"></script>';
 		if (file_exists(w2PgetConfig('root_dir') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js')) {
-			echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>' . "\n";
+			echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>';
 		} else {
-			echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-en.js"></script>' . "\n";
+			echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-en.js"></script>';
 		}
-		echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar-setup.js"></script>' . "\n";
+		echo '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar-setup.js"></script>';
 		include w2PgetConfig('root_dir') . '/js/calendar.php';
 	}
 }
@@ -1057,36 +1057,30 @@ class CTabBox_core {
 			echo '</table>';
 		} else {
 			// tabbed view
-			$s = '<table width="100%" border="0" cellpadding="3" cellspacing="0">' . "\n" . '<tr>';
+			$s = '<table width="100%" border="0" cellpadding="3" cellspacing="0"><tr>';
 			if (count($this->tabs) - 1 < $this->active) {
 				//Last selected tab is not available in this view. eg. Child tasks
 				$this->active = 0;
 			}
 			foreach ($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
-				$s .= "\n\t<td width=\"1%\" nowrap=\"nowrap\" class=\"tabsp\">";
-				$s .= "\n\t\t<img src=\"" . w2PfindImage('shim.gif') . "\" height=\"1\" width=\"1\" alt=\"\" />";
-				$s .= "\n\t</td>";
-				$s .= "\n\t<td id=\"toptab_" . $k . "\" width=\"1%\" nowrap=\"nowrap\"";
+				$s .= '<td width="1%" nowrap="nowrap" class="tabsp"><img src="' . w2PfindImage('shim.gif') . '" height="1" width="1" alt="" /></td>';
+				$s .= '<td id="toptab_' . $k . '" width="1%" nowrap="nowrap"';
 				if ($js_tabs) {
-					$s .= " class=\"$class\"";
+					$s .= ' class="' . $class . '"';
 				}
-				$s .= ">";
-				$s .= "\n\t\t<a href=\"";
+				$s .= '><a href="';
 				if ($this->javascript) {
-					$s .= "javascript:" . $this->javascript . "({$this->active}, $k)";
+					$s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
 				} elseif ($js_tabs) {
 					$s .= 'javascript:show_tab(' . $k . ')';
 				} else {
 					$s .= $this->baseHRef . "tab=$k";
 				}
-				$s .= "\">" . ($v[2] ? $v[1] : $AppUI->_($v[1])) . "</a>";
-				$s .= "\n\t</td>";
+				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a></td>';
 			}
-			$s .= "\n\t<td nowrap=\"nowrap\" class=\"tabsp\">&nbsp;</td>";
-			$s .= "\n</tr>";
-			$s .= "\n<tr>";
-			$s .= '<td width="100%" colspan="' . (count($this->tabs) * 2 + 1) . '" class="tabox">';
+			$s .= '<td nowrap="nowrap" class="tabsp">&nbsp;</td></tr>';
+			$s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 2 + 1) . '" class="tabox">';
 			echo $s;
 			//Will be null if the previous selection tab is not available in the new window eg. Children tasks
 			if ($this->baseInc . $this->tabs[$this->active][0] != '') {
@@ -1103,7 +1097,7 @@ class CTabBox_core {
 					echo '</div>';
 				}
 			}
-			echo "\n</td>\n</tr>\n</table>";
+			echo '</td></tr></table>';
 		}
 	}
 
@@ -1208,12 +1202,12 @@ class CInfoTabBox extends CTabBox_core {
 				$s .= '<td valign="middle"><img src="./style/' . $uistyle . '/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" border="0" alt="" /></td>';
 				$s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap"';
 				// if ($js_tabs)
-				$s .= " class=\"$class\"";
+				$s .= ' class="' . $class . '"';
 				// else
 				// $s .= ' background="./style/'.$uistyle.'/bar_top_'.$sel.'middle.gif"';
 				$s .= '>&nbsp;<a href="';
 				if ($this->javascript)
-					$s .= "javascript:" . $this->javascript . "({$this->active}, $k)";
+					$s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
 				else
 					if ($js_tabs) {
 						$s .= 'javascript:show_tab(' . $k . ')';
@@ -1337,34 +1331,21 @@ class CTitleBlock_core {
 		if (!$uistyle) {
 			$uistyle = 'web2project';
 		}
-		$CR = "\n";
-		$CT = "\n\t";
-		$s = $CR . '<table width="100%" border="0" cellpadding="1" cellspacing="1">';
-		$s .= $CR . '<tr>';
+		$s = '<table width="100%" border="0" cellpadding="1" cellspacing="1"><tr>';
 		if ($this->icon) {
-			$s .= $CR . '<td width="42">';
+			$s .= '<td width="42">';
 			$s .= w2PshowImage($this->icon, '', '', '', '', $this->module);
 			$s .= '</td>';
 		}
-		$s .= $CR . '<td align="left" width="100%" nowrap="nowrap"><h1>' . $AppUI->_($this->title) . '</h1></td>';
+		$s .= '<td align="left" width="100%" nowrap="nowrap"><h1>' . $AppUI->_($this->title) . '</h1></td>';
 		foreach ($this->cells1 as $c) {
-			$s .= $c[2] ? $CR . $c[2] : '';
-			$s .= $CR . '<td align="right" nowrap="nowrap"' . ($c[0] ? (' ' . $c[0]) : '') . '>';
-			$s .= $c[1] ? $CT . $c[1] : '&nbsp;';
-			$s .= $CR . '</td>';
-			$s .= $c[3] ? $CR . $c[3] : '';
+			$s .= $c[2] ? $c[2] : '';
+			$s .= '<td align="right" nowrap="nowrap"' . ($c[0] ? (' ' . $c[0]) : '') . '>';
+			$s .= $c[1] ? $c[1] : '&nbsp;';
+			$s .= '</td>';
+			$s .= $c[3] ? $c[3] : '';
 		}
-		/*if ($this->showhelp) {
-		$s .= '<td nowrap="nowrap" width="20" align="right">';
-		//$s .= $CT . contextHelp( '<img src="./images/obj/help.gif" width="14" height="16" border="0" alt="'.$AppUI->_( 'Help' ).'" />', $this->helpref );
-
-		$s .= "\n\t<a href=\"#".$this->helpref."\" onclick=\"javascript:window.open('?m=help&dialog=1&hid=".$this->helpref."', 'contexthelp', width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes)\" title=\"".$AppUI->_( 'Help' )."\">";
-		$s .= "\n\t\t" . w2PshowImage( './images/icons/stock_help-16.png', '16', '16', $AppUI->_( 'Help' ) );
-		$s .= "\n\t</a>";
-		$s .= "\n</td>";
-		}*/
-		$s .= "\n</tr>";
-		$s .= "\n</table>";
+		$s .= '</tr></table>';
 
 		if (count($this->crumbs) || count($this->cells2)) {
 			$crumbs = array();
@@ -1375,24 +1356,22 @@ class CTitleBlock_core {
 				//				$crumbs[] = "<a href=\"$k\">$t</a>";
 				$crumbs[] = '<li><a href="'.$k.'"><span>'.$t.'</span></a></li>';
 			}
-			$s .= "\n".'<table border="0" cellpadding="0" cellspacing="0" width="100%">';
-			$s .= "\n".'<tr>';
+			$s .= '<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>';
 			//			$s .= "\n\t<td nowrap=\"nowrap\">";
-			$s .= "\n\t".'<td height="20" nowrap="nowrap"><div class="'.$class.'"><ul>';
+			$s .= '<td height="20" nowrap="nowrap"><div class="'.$class.'"><ul>';
 			//			$s .= "\n\t\t" . implode( ' <strong>:</strong> ', $crumbs );
-			$s .= "\n\t\t" . implode('', $crumbs);
+			$s .= implode('', $crumbs);
 			//			$s .= "\n\t</td>";
-			$s .= "\n\t".'</ul></div></td>';
+			$s .= '</ul></div></td>';
 
 			foreach ($this->cells2 as $c) {
-				$s .= $c[2] ? "\n$c[2]" : '';
-				$s .= "\n\t".'<td align="right" nowrap="nowrap" ' . ($c[0] ? " $c[0]" : '') . '>';
-				$s .= $c[1] ? "\n\t$c[1]" : '&nbsp;';
-				$s .= "\n\t</td>";
-				$s .= $c[3] ? "\n\t$c[3]" : '';
+				$s .= $c[2] ? $c[2] : '';
+				$s .= '<td align="right" nowrap="nowrap" ' . ($c[0] ? " $c[0]" : '') . '>';
+				$s .= $c[1] ? $c[1] : '&nbsp;';
+				$s .= '</td>';
+				$s .= $c[3] ? $c[3] : '';
 			}
-
-			$s .= "\n</tr>\n</table>";
+			$s .= '</tr></table>';
 		}
 		echo '' . $s;
 		if (($a != 'index' || $m == 'system' || $m == 'calendar' || $m == 'smartsearch') && !$AppUI->boxTopRendered && function_exists('styleRenderBoxTop')) {

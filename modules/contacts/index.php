@@ -157,16 +157,16 @@ $form = '<form action="./index.php" method="get">' . $AppUI->_('Search for') . '
 		 </form>';
 // En of contact search form
 
-$a2z = "\n" . '<table cellpadding="2" cellspacing="1" border="0">';
-$a2z .= "\n" . '<tr>';
+$a2z = '<table cellpadding="2" cellspacing="1" border="0">';
+$a2z .= '<tr>';
 $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show') . ': </td>';
 $a2z .= '<td><a href="./index.php?m=contacts&where=0">' . $AppUI->_('All') . '</a></td>';
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = strpos($let, "$cu") > 0 ? '<a href="?m=contacts&where=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
-	$a2z .= "\n\t" . '<td>' . $cell . '</td>';
+	$cell = strpos($let, $cu) > 0 ? '<a href="?m=contacts&where=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
+	$a2z .= '<td>' . $cell . '</td>';
 }
-$a2z .= "\n" . '</tr>' . "\n" . '<tr><td colspan="28">' . $form . '</td></tr></table>';
+$a2z .= '</tr><tr><td colspan="28">' . $form . '</td></tr></table>';
 
 // setup the title block
 

@@ -364,7 +364,7 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 		$days = $now->dateDiff($end_date) * $sign;
 	}
 
-	$s = "\n<tr>";
+	$s = '<tr>';
 
 	// dots
 	if ($today_view) {
@@ -397,7 +397,7 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 			$s .= $a['task_name'];
 		}
 		// percent complete
-		$s .= "\n\t" . '<td align="right">' . intval($a['task_percent_complete']) . '%</td>';
+		$s .= '<td align="right">' . intval($a['task_percent_complete']) . '%</td>';
 	if ($today_view) { // Show the project name
 		$s .= '<td>';
 		$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $a['task_project'] . '">';

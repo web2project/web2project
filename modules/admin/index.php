@@ -66,16 +66,15 @@ foreach ($arr as $L) {
 	}
 }
 
-$a2z = "\n<table cellpadding=\"2\" cellspacing=\"1\" border=\"0\">";
-$a2z .= "\n<tr>";
+$a2z = '<table cellpadding="2" cellspacing="1" border="0"><tr>';
 $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show') . ': </td>';
 $a2z .= '<td><a href="./index.php?m=admin&stub=0">' . $AppUI->_('All') . '</a></td>';
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = strpos($let, "$cu") > 0 ? "<a href=\"?m=admin&stub=$cu\">$cu</a>" : "<font color=\"#999999\">$cu</font>";
-	$a2z .= "\n\t<td>$cell</td>";
+	$cell = strpos($let, $cu) > 0 ? '<a href="?m=admin&stub=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
+	$a2z .= '<td>' . $cell . '</td>';
 }
-$a2z .= "\n</tr>\n</table>";
+$a2z .= '</tr></table>';
 
 // setup the title block
 $titleBlock = new CTitleBlock('User Management', 'helix-setup-users.png', $m, "$m.$a");

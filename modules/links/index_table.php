@@ -2,88 +2,11 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+global $AppUI, $deny1, $canRead, $canEdit;
 
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
 $m = 'links';
-function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page) {
-
-	global $AppUI, $m;
-	$xpg_break = false;
-	$xpg_prev_page = $xpg_next_page = 0;
-
-	echo "\t" . '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
-
-	if ($xpg_totalrecs > $xpg_pagesize) {
-		$xpg_prev_page = $page - 1;
-		$xpg_next_page = $page + 1;
-		// left buttoms
-		if ($xpg_prev_page > 0) {
-			echo '<td align="left" width="15%">';
-			echo '<a href="./index.php?m=' . $m . 'links&amp;page=1">';
-			echo '<img src="' . w2PfindImage('navfirst.gif') . '" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=' . $m . '&amp;page=' . $xpg_prev_page . '">';
-			echo '<img src="' . w2PfindImage('navleft.gif') . '" border="0" Alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
-		} else {
-			echo '<td width="15%">&nbsp;</td>'. "\n";
-		}
-
-		// central text (files, total pages, ...)
-		echo '<td align="center" width="70%">';
-		echo $xpg_totalrecs . ' ' . $AppUI->_('Link(s)') . ' (' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)') . ')';
-		echo "</td>";
-
-		// right buttoms
-		if ($xpg_next_page <= $xpg_total_pages) {
-			echo '<td align="right" width="15%">';
-			echo '<a href="./index.php?m=' . $m . '&amp;page=' . $xpg_next_page . '">';
-			echo '<img src="' . w2PfindImage('navright.gif') . '" border="0" Alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
-			echo '<a href="./index.php?m=' . $m . '&amp;page=' . $xpg_total_pages . '">';
-			echo '<img src="' . w2PfindImage('navlast.gif') . '" border="0" Alt="Last Page"></a></td>';
-		} else {
-			echo '<td width="15%">&nbsp;</td></tr>' . "\n";
-		}
-		// Page numbered list, up to 30 pages
-		echo '<tr><td colspan="3" align="center">';
-		echo ' [ ';
-
-		for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
-			if ($n == $page) {
-				echo '<b>' . $n . '</b></a>';
-			} else {
-				echo '<a href="./index.php?m=' . $m . '&amp;page=' . $n . '">' . $n . '</a>';
-			}
-			if ($n >= 30 + $page - 15) {
-				$xpg_break = true;
-				break;
-			} elseif ($n < $xpg_total_pages) {
-				echo ' | ';
-			}
-		}
-
-		if (!isset($xpg_break)) { // are we supposed to break ?
-			if ($n == $page) {
-				echo '<' . $n . '</a>';
-			} else {
-				echo '<a href="./index.php?m=' . $m . '&amp;page=' . $xpg_total_pages . '">';
-				echo $n . '</a>';
-			}
-		}
-		echo ' ] ';
-		echo '</td></tr>';
-	} else { // or we dont have any files..
-		echo '<td align="center">';
-		if ($xpg_next_page > $xpg_total_pages) {
-			echo $xpg_sqlrecs . ' ' . $m . ' ';
-		}
-		echo '</td></tr>';
-	}
-	echo '</table>';
-}
-
-global $AppUI, $deny1, $canRead, $canEdit;
-
-//require_once( W2P_BASE_DIR.'/modules/files/index_table.lib.php');
 
 // ****************************************************************************
 // Page numbering variables
@@ -103,6 +26,71 @@ global $AppUI, $deny1, $canRead, $canEdit;
 // $xpg_sqlcount    - SELECT for the COUNT total
 // $xpg_sqlquery    - SELECT for the SELECT LIMIT
 // $xpg_result      - pointer to results from SELECT LIMIT
+function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page) {
+
+	global $AppUI, $m;
+	$xpg_break = false;
+	$xpg_prev_page = $xpg_next_page = 0;
+
+	$s = '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
+
+	if ($xpg_totalrecs > $xpg_pagesize) {
+		$xpg_prev_page = $page - 1;
+		$xpg_next_page = $page + 1;
+		// left buttoms
+		if ($xpg_prev_page > 0) {
+			$s .= '<td align="left" width="15%"><a href="./index.php?m=' . $m . 'links&amp;page=1"><img src="' . w2PfindImage('navfirst.gif') . '" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
+			$s .= '<a href="./index.php?m=' . $m . '&amp;page=' . $xpg_prev_page . '"><img src="' . w2PfindImage('navleft.gif') . '" border="0" Alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
+		} else {
+			$s .= '<td width="15%">&nbsp;</td>';
+		}
+
+		// central text (files, total pages, ...)
+		$s .= '<td align="center" width="70%">' . $xpg_totalrecs . ' ' . $AppUI->_('Link(s)') . ' (' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)') . ')</td>';
+
+		// right buttoms
+		if ($xpg_next_page <= $xpg_total_pages) {
+			$s .= '<td align="right" width="15%"><a href="./index.php?m=' . $m . '&amp;page=' . $xpg_next_page . '"><img src="' . w2PfindImage('navright.gif') . '" border="0" Alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
+			$s .= '<a href="./index.php?m=' . $m . '&amp;page=' . $xpg_total_pages . '"><img src="' . w2PfindImage('navlast.gif') . '" border="0" Alt="Last Page"></a></td>';
+		} else {
+			$s .= '<td width="15%">&nbsp;</td></tr>';
+		}
+		// Page numbered list, up to 30 pages
+		$s .= '<tr><td colspan="3" align="center"> [ ';
+
+		for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
+			if ($n == $page) {
+				$s .= '<b>' . $n . '</b></a>';
+			} else {
+				$s .= '<a href="./index.php?m=' . $m . '&amp;page=' . $n . '">' . $n . '</a>';
+			}
+			if ($n >= 30 + $page - 15) {
+				$xpg_break = true;
+				break;
+			} elseif ($n < $xpg_total_pages) {
+				$s .= ' | ';
+			}
+		}
+
+		if (!isset($xpg_break)) { // are we supposed to break ?
+			if ($n == $page) {
+				$s .= '<' . $n . '</a>';
+			} else {
+				$s .= '<a href="./index.php?m=' . $m . '&amp;page=' . $xpg_total_pages . '">';
+				$s .= $n . '</a>';
+			}
+		}
+		$s .= ' ] </td></tr>';
+	} else { // or we dont have any files..
+		$s .= '<td align="center">';
+		if ($xpg_next_page > $xpg_total_pages) {
+			$s .= $xpg_sqlrecs . ' ' . $m . ' ';
+		}
+		$s .= '</td></tr>';
+	}
+	$s .= '</table>';
+	echo $s;
+}
 
 $tab = $AppUI->getState('LinkIdxTab') !== null ? $AppUI->getState('LinkIdxTab') : 0;
 $page = w2PgetParam($_GET, 'page', 1);
@@ -221,20 +209,18 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 <tr>
 	<td nowrap="nowrap" width="20">
 	<?php if ($canEdit) {
-		echo "\n" . '<a href="./index.php?m=' . $m . '&a=addedit&link_id=' . $row['link_id'] . '">';
-		echo w2PshowImage('icons/stock_edit-16.png', '16', '16');
-		echo "\n</a>";
+		echo '<a href="./index.php?m=' . $m . '&a=addedit&link_id=' . $row['link_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', '16', '16') . '</a>';
 	}
 ?>
 	</td>
 	<td nowrap="8%">
-		<?php echo '<a href="' . $row['link_url'] . '" title="' . $row['link_description'] . '" target="_blank">' . $row['link_name'] . '</a>'; ?>
+		<?php echo '<a href="' . $row['link_url'] . '" target="_blank">' . $row['link_name'] . '</a>'; ?>
 	</td>
 	<td width="20%"><?php echo $row['link_description']; ?></td>
         <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']]; ?></td> 
-	<td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['task_id']; ?>"><?php echo $row['task_name']; ?></a></td>
+	<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['task_id']; ?>"><?php echo $row['task_name']; ?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $row['contact_first_name'] . ' ' . $row['contact_last_name']; ?></td>
-	<td width="15%" nowrap="nowrap" align="right"><?php echo $link_date->format($df . ' ' . $tf); ?></td>
+	<td width="15%" nowrap="nowrap" align="center"><?php echo $link_date->format($df . ' ' . $tf); ?></td>
 </tr>
 <?php } ?>
 </table>

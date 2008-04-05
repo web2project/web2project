@@ -94,32 +94,24 @@ $tab = w2PgetParam($_REQUEST, 'tab', 0);
 
 <?php
 foreach ($rows as $row) {
-	echo ('  <tr>' . "\n");
-	echo ('    <td align="center" nowrap="nowrap">' . "\n");
+	$s = '<tr>';
+	$s .= '<td align="center" nowrap="nowrap">';
 	if ($canEdit && $canDelete) {
-		echo ('<input type="button" class="button" value="' . $AppUI->_('logout_session') . "\" onclick=\"javascript:window.location='./index.php?m=admin&tab=3&out_session=" . $row['session_id'] . '&out_user_log_id=' . $row['user_access_log_id'] . '&out_user_id=' . $row['u_user_id'] . '&out_name=' . $row['contact_first_name'] .
-			'%20' . $row['contact_last_name'] . "';\"></input>\n");
+		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_session') . '" onclick="javascript:window.location=\'./index.php?m=admin&tab=3&out_session=' . $row['session_id'] . '&out_user_log_id=' . $row['user_access_log_id'] . '&out_user_id=' . $row['u_user_id'] . '&out_name=' . $row['contact_first_name'] . '%20' . $row['contact_last_name'] . '\';"></input>';
 	}
-	echo ('    </td>' . "\n");
-	echo ('    <td align="center" nowrap="nowrap">' . "\n");
+	$s .= '</td><td align="center" nowrap="nowrap">';
 	if ($canEdit && $canDelete && $logoutUserFlag) {
-		echo ('<input type="button" class=button value="' . $AppUI->_('logout_user') . "\" onClick=\"javascript:window.location='./index.php?m=admin&tab=3&out_user_id=" . $row['u_user_id'] . '&out_name=' . $row['contact_first_name'] . '%20' . $row['contact_last_name'] . "';\"></input>\n");
+		$s .= '<input type="button" class=button value="' . $AppUI->_('logout_user') . '" onclick="javascript:window.location=\'./index.php?m=admin&tab=3&out_user_id=' . $row['u_user_id'] . '&out_name=' . $row['contact_first_name'] . '%20' . $row['contact_last_name'] . '\';"></input>';
 	}
-	echo ('    </td>' . "\n");
-	echo ('    <td><a href="./index.php?m=admin&a=viewuser&user_id=' . $row['u_user_id'] . '">' . $row['user_username'] . "</a></td>\n");
-	echo ('    <td>');
-
+	$s .= '</td><td><a href="./index.php?m=admin&a=viewuser&user_id=' . $row['u_user_id'] . '">' . $row['user_username'] . '</a></td><td>';
 	if ($row['contact_first_name'] || $row['contact_last_name']) {
-		echo ($row['contact_first_name'] . ' ' . $row['contact_last_name']);
+		$s .= ($row['contact_first_name'] . ' ' . $row['contact_last_name']);
 	} else {
-		echo ('<span style="font-style: italic">unknown</span>');
+		$s .= ('<span style="font-style: italic">unknown</span>');
 	}
-
-	echo ('</td>' . "\n");
-	echo ('    <td><a href="./index.php?m=companies&a=view&company_id=' . $row['contact_company'] . '">' . $row['company_name'] . "</a></td>\n");
-	echo ('    <td>' . $row['date_time_in'] . "</td>\n");
-	echo ('    <td>' . $row['user_ip'] . "</td>\n");
-	echo ("  </tr>\n");
+	$s .= '</td><td><a href="./index.php?m=companies&a=view&company_id=' . $row['contact_company'] . '">' . $row['company_name'] . '</a></td>';
+	$s .= '<td>' . $row['date_time_in'] . '</td><td>' . $row['user_ip'] . '</td></tr>';
+	echo $s;
 }
 ?>
 </table>
