@@ -56,7 +56,7 @@ if ($dialog) {
 	<tbody>
 	<form name="frm_new" method="GET" action="./index.php">
 <?php
-	echo '<input type="hidden" name="a" value="addedit" />' . "\n";
+	echo '<input type="hidden" name="a" value="addedit" />';
 
 	//build URI string
 	if (isset($company_id)) {
@@ -80,7 +80,6 @@ if ($dialog) {
 		}
 	}
 	echo implode('', $links);
-	echo "\n";
 ?>
 		</ul>
 		</td>
@@ -108,7 +107,7 @@ if ($dialog) {
 			$newItem['admin'] = 'User';
 		}
 		echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
-		echo '</td>' . "\n";
+		echo '</td>';
 	}
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$df .= ' ' . $AppUI->getPref('TIMEFORMAT');

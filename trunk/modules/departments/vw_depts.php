@@ -86,19 +86,12 @@ if (count($rows)) {
 			findchilddept($rows, $row['dept_id']);
 		}
 		$none = false;
-		echo '<tr>';
-		echo '<td>' . (trim($row['dept_description']) ? w2PtoolTip($row['dept_name'], $row['dept_description']) : '') . '<a href="./index.php?m=departments&a=view&dept_id=' . $row['dept_id'] . '" >' . $row['dept_name'] . '</a>' . (trim($row['dept_description']) ? w2PendTip() : '') . '</td>';
+		echo '<tr><td>' . (trim($row['dept_description']) ? w2PtoolTip($row['dept_name'], $row['dept_description']) : '') . '<a href="./index.php?m=departments&a=view&dept_id=' . $row['dept_id'] . '" >' . $row['dept_name'] . '</a>' . (trim($row['dept_description']) ? w2PendTip() : '') . '</td>';
 		echo '<td width="125" align="right" nowrap="nowrap">' . $row['countp'] . '</td>';
 		echo '<td width="125" align="right" nowrap="nowrap">' . $row['inactive'] . '</td>';
-		echo '<td align="left" nowrap="nowrap">' . $AppUI->_($types[$row['dept_type']]) . '</td>';
-		echo '</tr>';
+		echo '<td align="left" nowrap="nowrap">' . $AppUI->_($types[$row['dept_type']]) . '</td></tr>';
 	}
 } else {
 	echo '<td colspan="4">' . $AppUI->_('No data available') . '</td>';
 }
-
-echo '</tr>';
-echo '
-	</td>
-</tr>
-</table>';
+echo '</tr></td></tr></table>';

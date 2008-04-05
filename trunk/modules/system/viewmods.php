@@ -128,7 +128,7 @@ foreach ($modFiles as $v) {
 			$s .= '</a>';
 		}
 		$s .= '</td>';
-		echo "<tr>$s</tr>";
+		echo '<tr>' . $s . '</tr>';
 	}
 
 }

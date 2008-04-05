@@ -19,11 +19,13 @@ $q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private =
 $q->addOrder('contact_first_name');
 $contacts = $q->loadHashList('contact_id');
 
+$s = '';
 foreach ($contacts as $contact_id => $contact_data) {
-	echo '<tr><td><a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</a></td>';
-	echo '<td>' . $contact_data['contact_email'] . '</td>';
-	echo '<td>' . $contact_data['contact_phone'] . '</td></tr>';
+	$s .= '<tr><td><a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</a></td>';
+	$s .= '<td>' . $contact_data['contact_email'] . '</td>';
+	$s .= '<td>' . $contact_data['contact_phone'] . '</td></tr>';
 }
+echo $s;
 echo '
 <tr><td colspan="3" align="right" valign="top" style="background-color:#ffffff">
 <input type="button" class="button" value="' . $AppUI->_('new contact') . '" onclick="javascript:window.location=\'./index.php?m=contacts&a=addedit&company_id=' . $company_id . '&company_name=' . $dept['company_name'] . '&dept_id=' . $dept['dept_id'] . '&dept_name=' . $dept['dept_name'] . '\'">

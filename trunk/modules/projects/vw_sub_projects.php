@@ -27,6 +27,7 @@ $structprojects = getStructuredProjects($original_project_id);
 </tr>
 <?php
 //while ($line = mysql_fetch_array($res, MYSQL_ASSOC)) {
+$s = '';
 foreach ($st_projects_arr as $project) {
 	$line = $project[0];
 	$level = $project[1];
@@ -42,23 +43,22 @@ foreach ($st_projects_arr as $project) {
 		$x++;
 		$row_class = ($x % 2) ? 'style="background:#fff;"' : 'style="background:#f0f0f0;"';
 		$row_classr = ($x % 2) ? 'style="background:#fff;text-align:right;"' : 'style="background:#f0f0f0;text-align:right;"';
-		echo "<tr>\n";
-		echo '<td ' . $row_class . ' align="center"><a href="./index.php?m=projects&a=addedit&project_id=' . $line['project_id'] . '"><img src="' . w2PfindImage('icons/' . ($project_id == $line['project_id'] ? 'pin' : 'pencil') . '.gif') . '" border=0 /></b></a></td>' . "\r\n";
-		echo '<td ' . $row_classr . ' nowrap="nowrap">' . $line['project_id'] . "</td>\n";
+		$s .= '<tr><td ' . $row_class . ' align="center"><a href="./index.php?m=projects&a=addedit&project_id=' . $line['project_id'] . '"><img src="' . w2PfindImage('icons/' . ($project_id == $line['project_id'] ? 'pin' : 'pencil') . '.gif') . '" border=0 /></b></a></td>';
+		$s .= '<td ' . $row_classr . ' nowrap="nowrap">' . $line['project_id'] . '</td>';
 		if ($level) {
-			$s = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . w2PshowImage('corner-dots.gif', 16, 12) . '&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $line['project_id'] . '">' . $line['project_name'] . '</a>';
+			$sd = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . w2PshowImage('corner-dots.gif', 16, 12) . '&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $line['project_id'] . '">' . $line['project_name'] . '</a>';
 		} else {
-			$s = '<a href="./index.php?m=projects&a=view&project_id=' . $line['project_id'] . '">' . $line['project_name'] . '</a>';
+			$sd = '<a href="./index.php?m=projects&a=view&project_id=' . $line['project_id'] . '">' . $line['project_name'] . '</a>';
 		}
-		echo '<td ' . $row_class . '>' . $s . "</td>\n";
-		echo '<td ' . $row_class . '><a href="./index.php?m=companies&a=view&company_id=' . $s_project->project_company . '">' . $s_company->company_name . "</a></td>\n";
-		echo '<td ' . $row_class . ' align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
-		echo '<td ' . $row_class . ' align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
-		echo '<td ' . $row_class . ' align="center">' . $projectPriority[$s_project->project_priority] . '</td>';
-		echo '<td ' . $row_class . ' align="center">' . $projectStatus[$s_project->project_status] . '</td>';
-		echo "\t</tr>\n";
+		$s .= '<td ' . $row_class . '>' . $sd . '</td>';
+		$s .= '<td ' . $row_class . '><a href="./index.php?m=companies&a=view&company_id=' . $s_project->project_company . '">' . $s_company->company_name . '</a></td>';
+		$s .= '<td ' . $row_class . ' align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
+		$s .= '<td ' . $row_class . ' align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
+		$s .= '<td ' . $row_class . ' align="center">' . $projectPriority[$s_project->project_priority] . '</td>';
+		$s .= '<td ' . $row_class . ' align="center">' . $projectStatus[$s_project->project_status] . '</td></tr>';
 	}
 }
+echo $s;
 ?>
 </table>
 <table width="100%" border="0" cellpadding="5" cellspacing="1">

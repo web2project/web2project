@@ -2263,9 +2263,11 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	if ($task_sort_item1 == $item_name) {
 		$item_order = $task_sort_order1;
 	}
-
+	
+	$s = '';
+	
 	if (isset($item_order)) {
-		echo ('<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" />');
+		$s .= ('<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" />');
 	} else {
 		$item_order = SORT_DESC;
 	}
@@ -2273,26 +2275,23 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	/* flip the sort order for the link */
 	$item_order = ($item_order == SORT_ASC) ? SORT_DESC : SORT_ASC;
 	if ($m == 'tasks') {
-		echo ('<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&a=view&task_id=' . $task_id) : $a));
+		$s .= ('<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&a=view&task_id=' . $task_id) : $a));
 	} else {
-		echo ('<a href="./index.php?m=projects' . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : ''));
+		$s .= ('<a href="./index.php?m=projects' . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : ''));
 	}
-	echo '&task_sort_item1=' . $item_name;
-	echo '&task_sort_type1=' . $item_type;
-	echo '&task_sort_order1=' . $item_order;
+	$s .= '&task_sort_item1=' . $item_name;
+	$s .= '&task_sort_type1=' . $item_type;
+	$s .= '&task_sort_order1=' . $item_order;
 	if ($task_sort_item1 == $item_name) {
-		echo '&task_sort_item2=' . $task_sort_item2;
-		echo '&task_sort_type2=' . $task_sort_type2;
-		echo '&task_sort_order2=' . $task_sort_order2;
+		$s .= '&task_sort_item2=' . $task_sort_item2;
+		$s .= '&task_sort_type2=' . $task_sort_type2;
+		$s .= '&task_sort_order2=' . $task_sort_order2;
 	} else {
-		echo '&task_sort_item2=' . $task_sort_item1;
-		echo '&task_sort_type2=' . $task_sort_type1;
-		echo '&task_sort_order2=' . $task_sort_order1;
+		$s .= '&task_sort_item2=' . $task_sort_item1;
+		$s .= '&task_sort_type2=' . $task_sort_type1;
+		$s .= '&task_sort_order2=' . $task_sort_order1;
 	}
-	echo '" class="hdr">';
-
-	echo $AppUI->_($title);
-
-	echo '</a>';
+	$s .= '" class="hdr">' . $AppUI->_($title) . '</a>';
+	echo $s;
 }
 ?>

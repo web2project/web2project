@@ -51,7 +51,7 @@ if ($dialog) {
 	<tbody>
 	<form name="frm_new" method="GET" action="./index.php">
 <?php
-	echo '<input type="hidden" name="a" value="addedit" />' . "\n";
+	echo '<input type="hidden" name="a" value="addedit" />';
 
 	//build URI string
 	if (isset($company_id)) {
@@ -73,7 +73,6 @@ if ($dialog) {
 		}
 	}
 	echo implode(' | ', $links);
-	echo "\n";
 ?>
 		</td>
 		<form name="frm_new" method="GET" action="./index.php">
