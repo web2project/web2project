@@ -24,19 +24,19 @@ class CTabBox extends CTabBox_core {
 		// tabbed / flat view options
 		if ($AppUI->getPref('TABVIEW') == 0) {
 			if ($opt_flat) {
-				$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
-				$s .= '<tr>' . "\n";
+				$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
+				$s .= '<tr>';
 				$s .= '<td width="10" nowrap="nowrap">';
 				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=0"><span>' . $AppUI->_('tabbed') . '</span></a>';
 				$s .= '</td>';
 				$s .= '<td nowrap="nowrap">';
 				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=-1"><span>' . $AppUI->_('flat') . '</span></a>';
-				$s .= '</td>' ."\n" . $extra . "\n" . '</tr>' . "\n" . '</table>' . "\n";
+				$s .= '</td>' . $extra . '</tr></table>';
 				echo $s;
 			}
 		} else {
 			if ($extra) {
-				echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n" . '<tr>' . "\n" . $extra . '</tr>' . "\n" . '</table>' . "\n";
+				echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr>' . '</table>';
 			} else {
 				# echo "<img src=\"".w2PfindImage('shim.gif')."\" height=\"10\" width=\"1\" alt=\"\" />";
 			}
@@ -44,16 +44,16 @@ class CTabBox extends CTabBox_core {
 
 		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
-			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
+			$s = '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
-				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</strong></td></tr>' . "\n";
-				echo '<tr><td>';
+				$s .= '<tr><td><strong>' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</strong></td></tr><tr><td>';
 				$currentTabId = $k;
 				$currentTabName = $v[1];
 				include $this->baseInc . $v[0] . '.php';
-				echo '</td></tr>' . "\n";
+				$s .= '</td></tr>';
 			}
-			echo '</table>'  ."\n";
+			$s .= '</table>';
+			echo $s;
 		} else {
 			// tabbed view
 			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
@@ -67,9 +67,7 @@ class CTabBox extends CTabBox_core {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
 				$sel = ($k == $this->active) ? 'Selected' : '';
 				$s .= '<td valign="middle"><img src="./style/' . $uistyle . '/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" border="0" alt="" /></td>';
-				$s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap"';
-				$s .= ' class="' . $class . '"';
-				$s .= '>&nbsp;<a href="';
+				$s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap" class="' . $class . '">&nbsp;<a href="';
 				if ($this->javascript) {
 					$s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
 				} elseif ($js_tabs) {
@@ -102,8 +100,9 @@ class CTabBox extends CTabBox_core {
 			if ($this->tabs[$this->active][0] != '') {
 				$currentTabId = $this->active;
 				$currentTabName = $this->tabs[$this->active][1];
-				if (!$js_tabs)
+				if (!$js_tabs) {
 					require $this->baseInc . $this->tabs[$this->active][0] . '.php';
+				}
 			}
 			if ($js_tabs) {
 				foreach ($this->tabs as $k => $v) {
@@ -113,10 +112,10 @@ class CTabBox extends CTabBox_core {
 					require $this->baseInc . $v[0] . '.php';
 					echo '</div>';
 					echo '<script language="JavaScript" type="text/javascript">
-<!--
-show_tab(' . $this->active . ');
-//-->
-</script>';
+						<!--
+						show_tab(' . $this->active . ');
+						//-->
+						</script>';
 				}
 			}
 			echo '</td></tr></table>';

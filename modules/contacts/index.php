@@ -266,85 +266,33 @@ for ($z = 0; $z < $carrWidth; $z++) {
 		<tr>
 			<?php
 		reset($showfields);
+		$s = '';
 		while (list($key, $val) = each($showfields)) {
 			if (strlen($carr[$z][$x][$key]) > 0) {
 				if ($val == 'contact_email') {
-					echo '<tr>';
-					echo '<td class="hilite" colspan="2">';
-					echo '<a href="mailto:' . $carr[$z][$x][$key] . '" class="mailto">' . $carr[$z][$x][$key] . "</a>\n";
-					echo '</td>';
-					echo '</tr>';
+					$s .= '<tr><td class="hilite" colspan="2"><a href="mailto:' . $carr[$z][$x][$key] . '" class="mailto">' . $carr[$z][$x][$key] . '</a></td></tr>';
 				} elseif ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {
 					//Don't do a thing
 				} elseif ($val == 'company_name') {
-					echo '<tr>';
-					echo '<td width="35%">';
-					echo '<strong>' . $AppUI->_('Company') . ':</strong>';
-					echo '</td>';
-					echo '<td class="hilite" width="65%">';
-					echo $carr[$z][$x][$key];
-					echo '</td>';
-					echo '</tr>';
+					$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Company') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 				} elseif ($val == 'dept_name') {
-					echo '<tr>';
-					echo '<td width="35%">';
-					echo '<strong>' . $AppUI->_('Department') . ':</strong>';
-					echo '</td>';
-					echo '<td class="hilite" width="65%">';
-					echo $carr[$z][$x][$key];
-					echo '</td>';
-					echo '</tr>';
+					$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Department') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 				} elseif ($val == 'contact_phone') {
-					echo '<tr>';
-					echo '<td width="35%">';
-					echo '<strong>' . $AppUI->_('Work Phone') . ':</strong>';
-					echo '</td>';
-					echo '<td class="hilite" width="65%">';
-					echo $carr[$z][$x][$key];
-					echo '</td>';
-					echo '</tr>';
+					$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Work Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 				} elseif ($val == 'contact_phone2') {
-					echo '<tr>';
-					echo '<td width="35%">';
-					echo '<strong>' . $AppUI->_('Home Phone') . ':</strong>';
-					echo '</td>';
-					echo '<td class="hilite" width="65%">';
-					echo $carr[$z][$x][$key];
-					echo '</td>';
-					echo '</tr>';
+					$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Home Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 				} elseif ($val == 'contact_mobile') {
-					echo '<tr>';
-					echo '<td width="35%">';
-					echo '<strong>' . $AppUI->_('Mobile Phone') . ':</strong>';
-					echo '</td>';
-					echo '<td class="hilite" width="65%">';
-					echo $carr[$z][$x][$key];
-					echo '</td>';
-					echo '</tr>';
+					$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Mobile Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 				} elseif ($val == 'contact_fax') {
-					echo '<tr>';
-					echo '<td width="35%">';
-					echo '<strong>' . $AppUI->_('Fax') . ':</strong>';
-					echo '</td>';
-					echo '<td class="hilite" width="65%">';
-					echo $carr[$z][$x][$key];
-					echo '</td>';
-					echo '</tr>';
+					$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Fax') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 				} elseif ($val == 'contact_country' && $carr[$z][$x][$key]) {
-					echo '<tr>';
-					echo '<td class="hilite" colspan="2">';
-					echo ($countries[$carr[$z][$x][$key]] ? $countries[$carr[$z][$x][$key]] : $carr[$z][$x][$key]) . '<br />';
-					echo '</td>';
-					echo '</tr>';
+					$s .= '<tr><td class="hilite" colspan="2">' . ($countries[$carr[$z][$x][$key]] ? $countries[$carr[$z][$x][$key]] : $carr[$z][$x][$key]) . '<br /></td></tr>';
 				} elseif ($val != 'contact_country') {
-					echo '<tr>';
-					echo '<td class="hilite" colspan="2">';
-					echo $carr[$z][$x][$key] . '<br />';
-					echo '</td>';
-					echo '</tr>';
+					$s .= '<tr><td class="hilite" colspan="2">' . $carr[$z][$x][$key] . '<br /></td></tr>';
 				}
 			}
 		}
+		echo $s;
 ?>
 		</table>
 		</td>

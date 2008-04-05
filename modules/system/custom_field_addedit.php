@@ -195,14 +195,16 @@ foreach ($html_types as $k => $ht) {
 			<input type="hidden" name="delete_item" value="0" id="delete_item" />
 			<table>
 			<?php
+$s = '';
 foreach ($select_items as $itm) {
-	echo '<tr><td>';
-	echo '<li>' . $itm . "</li>\n";
-	echo '<input type="hidden" name="select_items[]" value="' . $itm . '" />';
-	echo '</td><td>';
-	echo '<a href="javascript:deleteItem(\'' . $itm . '\')">[Delete]</a>';
-	echo '</td></tr>';
+	$s .= '<tr><td>';
+	$s .= '<li>' . $itm . '</li>';
+	$s .= '<input type="hidden" name="select_items[]" value="' . $itm . '" />';
+	$s .= '</td><td>';
+	$s .= '<a href="javascript:deleteItem(\'' . $itm . '\')">[Delete]</a>';
+	$s .= '</td></tr>';
 }
+echo $s;
 ?>
 			<tr><td>
 			<li><input type="text" name="select_newitem" /></td><td><input type="button" value="<?php echo $AppUI->_('Add') ?>" onclick="javascript:addSelectItem()" /></li>

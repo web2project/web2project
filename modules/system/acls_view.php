@@ -75,8 +75,6 @@ $users = array('' => '(' . $AppUI->_('Select User') . ')') + $users;
 $user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', ($_POST['user'] != '' ? $_POST['user'] : ''));
 $module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', ($_POST['module'] ? $_POST['module'] : 0));
 $action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', ($_POST['action'] ? $_POST['action'] : 0));
-echo $AppUI->_('View Users Permissions') . ':';
-echo '<form action="?m=system&a=acls_view" method="post" name="pickUser">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form>' . '</form>';
-echo '<br />';
-echo ($table);
+echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
+echo $table;
 ?>

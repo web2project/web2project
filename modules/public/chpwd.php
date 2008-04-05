@@ -38,20 +38,14 @@ if ($user_id) {
 				if (function_exists('styleRenderBoxTop')) {
 					echo styleRenderBoxTop();
 				}
-				echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">';
-				echo '<tr><td>';
-				echo $AppUI->_('chgpwUpdated');
-				echo '</td></tr></table>';
+				echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwUpdated') . '</td></tr></table>';
 			}
 		} else {
 			echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
 			if (function_exists('styleRenderBoxTop')) {
 				echo styleRenderBoxTop();
 			}
-			echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">';
-			echo '<tr><td>';
-			echo $AppUI->_('chgpwWrongPW');
-			echo '</td></tr></table>';
+			echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwWrongPW') . '</td></tr></table>';
 		}
 	} else {
 ?>
@@ -112,9 +106,6 @@ function submitIt() {
 	if (function_exists('styleRenderBoxTop')) {
 		echo styleRenderBoxTop();
 	}
-	echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">';
-	echo '<tr><td>';
-	echo $AppUI->_('chgpwLogin');
-	echo '</td></tr></table>';
+	echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwLogin') . '</td></tr></table>';
 }
 ?>

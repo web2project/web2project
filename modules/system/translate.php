@@ -81,62 +81,57 @@ $titleBlock->show();
 	<th width="5%" nowrap="nowrap"><?php echo $AppUI->_('delete'); ?></th>
 </tr>
 <?php
+$s = '';
 $index = 0;
 if ($lang == 'en') {
-	echo '<tr>';
-	echo '<td><input type="text" name="trans[' . $index . '][abbrev]" value="" size="20" class="text" /></td>';
-	echo '<td><input type="text" name="trans[' . $index . '][english]" value="" size="40" class="text" /></td>';
-	echo '<td colspan="2">' . $AppUI->_('New Entry') . '</td>';
-	echo '</tr>';
+	$s .= '<tr>';
+	$s .= '<td><input type="text" name="trans[' . $index . '][abbrev]" value="" size="20" class="text" /></td>';
+	$s .= '<td><input type="text" name="trans[' . $index . '][english]" value="" size="40" class="text" /></td>';
+	$s .= '<td colspan="2">' . $AppUI->_('New Entry') . '</td>';
+	$s .= '</tr>';
 }
 
 $index++;
 foreach ($trans as $k => $langs) {
-?>
-<tr>
-	<td><?php
+	$s .= '<tr><td>';
 	if ($k != $langs['english']) {
 		$k = w2PformSafe($k, true);
 		if ($lang == 'en') {
-			echo '<input type="text" name="trans[' . $index . '][abbrev]" value="' . $k . '" size="20" class="text" />';
+			$s .= '<input type="text" name="trans[' . $index . '][abbrev]" value="' . $k . '" size="20" class="text" />';
 		} else {
-			echo $k;
+			$s .= $k;
 		}
 	} else {
-		echo '&nbsp;';
+		$s .= '&nbsp;';
 	}
-?></td>
-	<td><?php
+	$s .= '</td><td>';
 	//$langs['english'] = htmlspecialchars( $langs['english'], ENT_QUOTES );
 	$langs['english'] = w2PformSafe($langs['english'], true);
 	if ($lang == 'en') {
 		if (strlen($langs['english']) < 40) {
-			echo '<input type="text" name="trans[' . $index . '][english]" value="' . $langs['english'] . '" size="40" class="text" />';
+			$s .= '<input type="text" name="trans[' . $index . '][english]" value="' . $langs['english'] . '" size="40" class="text" />';
 		} else {
 			$rows = round(strlen($langs['english'] / 35)) + 1;
-			echo '<textarea name="trans[' . $index . '][english]"  cols="40" class="small" rows="' . $rows . '">' . $langs['english'] . '</textarea>';
+			$s .= '<textarea name="trans[' . $index . '][english]"  cols="40" class="small" rows="' . $rows . '">' . $langs['english'] . '</textarea>';
 		}
 	} else {
-		echo $langs['english'];
-		echo '<input type="hidden" name="trans[' . $index . '][english]" value="' . ($k ? $k : $langs['english']) . '" size="20" class="text" />';
+		$s .= $langs['english'];
+		$s .= '<input type="hidden" name="trans[' . $index . '][english]" value="' . ($k ? $k : $langs['english']) . '" size="20" class="text" />';
 	}
-?></td>
-	<td><?php
+	$s .= '</td><td>';
 	if ($lang != 'en') {
 		$langs['lang'] = w2PformSafe($langs['lang'], true);
 		if (strlen($langs['lang']) < 40) {
-			echo '<input type="text" name="trans[' . $index . '][lang]" value="' . $langs['lang'] . '" size="40" class="text" />';
+			$s .= '<input type="text" name="trans[' . $index . '][lang]" value="' . $langs['lang'] . '" size="40" class="text" />';
 		} else {
 			$rows = round(strlen($langs['lang'] / 35)) + 1;
-			echo '<textarea name="trans[' . $index . '][lang]" cols="40" class="small" rows="' . $rows . '">' . $langs['lang'] . '</textarea>';
+			$s .= '<textarea name="trans[' . $index . '][lang]" cols="40" class="small" rows="' . $rows . '">' . $langs['lang'] . '</textarea>';
 		}
 	}
-?></td>
-	<td align="center"><input type="checkbox" name="trans[<?php echo $index; ?>][del]" /></td>
-</tr>
-<?php
+	$s .= '</td><td align="center"><input type="checkbox" name="trans[' . $index . '][del]" /></td></tr>';
 	$index++;
 }
+echo $s;
 ?>
 <tr>
 	<td colspan="4" align="right">

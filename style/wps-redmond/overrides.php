@@ -18,16 +18,14 @@ class CTabBox extends CTabBox_core {
 		$s = '';
 		// tabbed / flat view options
 		if ($AppUI->getPref('TABVIEW') == 0) {
-			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
-			$s .= "<tr>\n";
-			$s .= '<td nowrap="nowrap">';
+			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
 			$s .= '<a href="' . $this->baseHRef . 'tab=0">' . $AppUI->_('tabbed') . '</a> : ';
 			$s .= '<a href="' . $this->baseHRef . 'tab=-1">' . $AppUI->_('flat') . '</a>';
-			$s .= '</td>' . "\n" . $extra . "\n</tr>\n</table>\n";
+			$s .= '</td>' . $extra . '</tr></table>';
 			echo $s;
 		} else {
 			if ($extra) {
-				echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n<tr>\n" . $extra . "</tr>\n</table>\n";
+				echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
 			} else {
 				echo '<img src="./shim.gif" height="10" width="1" alt="" />';
 			}
@@ -35,20 +33,19 @@ class CTabBox extends CTabBox_core {
 
 		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
-			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">' . "\n";
+			$s = '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
-				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</strong></td></tr>' . "\n";
-				echo '<tr><td>';
+				$s .= '<tr><td><strong>' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</strong></td></tr><tr><td>';
 				$currentTabId = $k;
 				$currentTabName = $v[1];
 				include $this->baseInc . $v[0] . '.php';
-				echo '</td></tr>' . "\n";
+				$s .= '</td></tr>';
 			}
-			echo '</table>' . "\n";
+			$s .= '</table>';
+			echo $s;
 		} else {
 			// tabbed view
-			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
-			$s .= '<tr><td><table border="0" cellpadding="0" cellspacing="0">';
+			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td><table border="0" cellpadding="0" cellspacing="0">';
 
 			if (count($this->tabs) - 1 < $this->active) {
 				//Last selected tab is not available in this view. eg. Child tasks
@@ -80,7 +77,7 @@ class CTabBox extends CTabBox_core {
 			$s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 4 + 1) . '" class="tabox">';
 			echo $s;
 			//Will be null if the previous selection tab is not available in the new window eg. Children tasks
-			if ($this->tabs[$this->active][0] != "") {
+			if ($this->tabs[$this->active][0] != '') {
 				$currentTabId = $this->active;
 				$currentTabName = $this->tabs[$this->active][1];
 				if (!$js_tabs) {
@@ -95,10 +92,10 @@ class CTabBox extends CTabBox_core {
 					require $this->baseInc . $v[0] . '.php';
 					echo '</div>';
 					echo '<script language="JavaScript" type="text/javascript">
-<!--
-show_tab(' . $this->active . ');
-//-->
-</script>';
+						<!--
+						show_tab(' . $this->active . ');
+						//-->
+						</script>';
 				}
 			}
 			echo '</td></tr></table>';

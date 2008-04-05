@@ -28,13 +28,13 @@ $q->addWhere('mod_name IN (\'Companies\', \'Projects\', \'Tasks\', \'Calendar\',
 $modules = $q->loadList();
 $q->clear();
 
-echo '<table width="100%" class="std" cellpadding="2">';
+$s = '<table width="100%" class="std" cellpadding="2">';
 
 foreach ($modules as $module) {
-	echo '<tr valign="bottom"><td colspan="4">';
-	echo '<h3><span title="' . $AppUI->_('Add Custom Field') . '::' . $AppUI->_('Click this icon to Add a new Custom Field to this Module.') . '"><a href="?m=system&a=custom_field_addedit&module=' . $module['mod_name'] . '"><img src="' . w2PfindImage('icons/edit_add.png') . '" align="center" width="16" height="16" border="0"></a></span>';
-	echo $AppUI->_($module['mod_name']) . '</h3>';
-	echo '</td></tr>';
+	$s .= '<tr valign="bottom"><td colspan="4">';
+	$s .= '<h3><span title="' . $AppUI->_('Add Custom Field') . '::' . $AppUI->_('Click this icon to Add a new Custom Field to this Module.') . '"><a href="?m=system&a=custom_field_addedit&module=' . $module['mod_name'] . '"><img src="' . w2PfindImage('icons/edit_add.png') . '" align="center" width="16" height="16" border="0"></a></span>';
+	$s .= $AppUI->_($module['mod_name']) . '</h3>';
+	$s .= '</td></tr>';
 
 	$q = new DBQuery;
 	$q->addTable('custom_fields_struct');
@@ -44,32 +44,33 @@ foreach ($modules as $module) {
 	$q->clear();
 
 	if (count($custom_fields)) {
-		echo '<th width="10"></th>';
-		echo '<th width="10"></th>';
-		echo '<th>' . $AppUI->_('Name') . '</th>';
-		echo '<th>' . $AppUI->_('Description') . '</th>';
-		echo '<th>' . $AppUI->_('Type') . '</th>';
-		echo '<th>' . $AppUI->_('Pub.') . '</th>';
-		echo '<th>' . $AppUI->_('Order') . '</th>';
+		$s .= '<th width="10"></th>';
+		$s .= '<th width="10"></th>';
+		$s .= '<th>' . $AppUI->_('Name') . '</th>';
+		$s .= '<th>' . $AppUI->_('Description') . '</th>';
+		$s .= '<th>' . $AppUI->_('Type') . '</th>';
+		$s .= '<th>' . $AppUI->_('Pub.') . '</th>';
+		$s .= '<th>' . $AppUI->_('Order') . '</th>';
 	}
 
 	foreach ($custom_fields as $f) {
-		echo '<tr><td class="hilite" width="10">';
-		echo '<span title="' . $AppUI->_('Edit Custom Field') . '::' . $AppUI->_('Click this icon to Edit this Custom Field.') . '"><a href="?m=system&a=custom_field_addedit&module=' . $module['mod_name'] . '&field_id=' . $f['field_id'] . '"><img src="' . w2PfindImage('icons/stock_edit-16.png') . '" align="center" width="16" height="16" border="0"></a></span>';
-		echo '</td><td class="hilite" width="10">';
-		echo '<span title="' . $AppUI->_('Delete Custom Field') . '::' . $AppUI->_('Click this icon to Delete this Custom Field.') . '"><a href="?m=system&a=custom_field_addedit&field_id=' . $f['field_id'] . '&delete=1"><img src="' . w2PfindImage('icons/stock_delete-16.png') . '" align="center" width="16" height="16" border="0"></a> ';
-		echo '<td class="hilite">';
-		echo stripslashes($f['field_name']);
-		echo '</td><td class="hilite">';
-		echo stripslashes($f['field_description']);
-		echo '</td><td class="hilite">';
-		echo $html_types[$f['field_htmltype']];
-		echo "</td><td class=\"hilite\">";
-		echo $yesno[$f['field_published']];
-		echo '</td><td class="hilite" style="text-align:right;">';
-		echo stripslashes($f['field_order']);
-		echo '</td></tr>';
+		$s .= '<tr><td class="hilite" width="10">';
+		$s .= '<span title="' . $AppUI->_('Edit Custom Field') . '::' . $AppUI->_('Click this icon to Edit this Custom Field.') . '"><a href="?m=system&a=custom_field_addedit&module=' . $module['mod_name'] . '&field_id=' . $f['field_id'] . '"><img src="' . w2PfindImage('icons/stock_edit-16.png') . '" align="center" width="16" height="16" border="0"></a></span>';
+		$s .= '</td><td class="hilite" width="10">';
+		$s .= '<span title="' . $AppUI->_('Delete Custom Field') . '::' . $AppUI->_('Click this icon to Delete this Custom Field.') . '"><a href="?m=system&a=custom_field_addedit&field_id=' . $f['field_id'] . '&delete=1"><img src="' . w2PfindImage('icons/stock_delete-16.png') . '" align="center" width="16" height="16" border="0"></a> ';
+		$s .= '<td class="hilite">';
+		$s .= stripslashes($f['field_name']);
+		$s .= '</td><td class="hilite">';
+		$s .= stripslashes($f['field_description']);
+		$s .= '</td><td class="hilite">';
+		$s .= $html_types[$f['field_htmltype']];
+		$s .= "</td><td class=\"hilite\">";
+		$s .= $yesno[$f['field_published']];
+		$s .= '</td><td class="hilite" style="text-align:right;">';
+		$s .= stripslashes($f['field_order']);
+		$s .= '</td></tr>';
 	}
 }
-echo '</table>';
+$s .= '</table>';
+echo $s;
 ?>
