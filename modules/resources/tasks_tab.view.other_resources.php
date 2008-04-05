@@ -46,7 +46,7 @@ foreach ($resources as $res) {
 	if (isset($resource_tasks[$res['resource_id']]) && $resource_tasks[$res['resource_id']] > $res['resource_max_allocation']) {
 		$output .= 'OVERALLOCATED';
 	}
-	$output .= '&nbsp;</td></tr>' . "\n";
+	$output .= '&nbsp;</td></tr>';
 	echo $output;
 }
 ?>

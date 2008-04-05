@@ -73,18 +73,13 @@ class smartsearch {
 						$tmplink = $this->table_link . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $this->table_key)] . $this->table_link2 . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $this->table_key2)];
 					}
 					//--MSy--
-					$outstring .= '<tr>';
-					$outstring .= '<td>';
-					$outstring .= '<a href = "' . $tmplink . '">' . highlight($display_val, $this->keywords) . "</a>\n";
-					$outstring .= "</td>\n";
-					$outstring .= '</tr>';
+					$outstring .= '<tr><td><a href = "' . $tmplink . '">' . highlight($display_val, $this->keywords) . '</a></td></tr>';
 				}
 			}
 			$outstring = '<tr><th><b>' . $AppUI->_($this->table_title) . ' (' . $subrecord_count . ')' . '</b></th></tr> ' . "\n" . $outstring;
 		} else {
 			if ($this->search_options['show_empty'] == 'on') {
-				$outstring = '<tr><th><b>' . $AppUI->_($this->table_title) . ' (0)' . '</b></th></tr> ' . "\n";
-				$outstring .= '<tr><td>' . $AppUI->_('Empty') . '</td></tr>';
+				$outstring = '<tr><th><b>' . $AppUI->_($this->table_title) . ' (0)' . '</b></th></tr><tr><td>' . $AppUI->_('Empty') . '</td></tr>';
 			}
 		}
 		return $outstring;

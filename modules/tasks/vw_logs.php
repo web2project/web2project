@@ -71,21 +71,19 @@ foreach ($logs as $row) {
 	$task_log_date = intval($row['task_log_date']) ? new CDate($row['task_log_date']) : null;
 	$style = $row['task_log_problem'] ? 'background-color:#cc6666;color:#ffffff' : '';
 
-	$s .= '<tr bgcolor="white" valign="top">';
-	$s .= "\n\t<td>";
+	$s .= '<tr bgcolor="white" valign="top"><td>';
 	if ($canEdit) {
 		if ($tab == -1) {
-			$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=$task_id&tab=" . $AppUI->getState('TaskLogVwTab');
+			$s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=' . $AppUI->getState('TaskLogVwTab');
 		} else {
-			$s .= "\n\t\t<a href=\"?m=tasks&a=view&task_id=$task_id&tab=1";
+			$s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=1';
 
 		}
-		$s .= '&task_log_id=' . $row['task_log_id'] . "#log\">" . "\n\t\t\t" . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
+		$s .= '&task_log_id=' . $row['task_log_id'] . '#log">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a>';
 	}
-	$s .= "\n\t</td>";
-	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : '-') . '</td>';
+	$s .= '</td><td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : '-') . '</td>';
 	//$s .= '<td align="center" valign="middle">'.($row['task_log_problem'] ?  w2PshowImage('icons/mark-as-important-16.png', 16, 16, 'Problem', 'Problem' ) : '').'</td>';
-	$reference_image = "-";
+	$reference_image = '-';
 	if ($row['task_log_reference'] > 0) {
 		if (isset($taskLogReferenceImage[$row['task_log_reference']])) {
 			$reference_image = w2PshowImage($taskLogReferenceImage[$row['task_log_reference']], 16, 16, $taskLogReference[$row['task_log_reference']], $taskLogReference[$row['task_log_reference']]);
@@ -101,8 +99,7 @@ foreach ($logs as $row) {
 	$minutes = (int)(($row['task_log_hours'] - ((int)$row['task_log_hours'])) * 60);
 	$minutes = ((strlen($minutes) == 1) ? ('0' . $minutes) : $minutes);
 	$s .= (int)$row['task_log_hours'] . ':' . $minutes . ')</td>';
-	$s .= '<td width="100">' . $row['task_log_costcode'] . '</td>';
-	$s .= '<td>' . '<a name="tasklog' . $row['task_log_id'] . '"></a>';
+	$s .= '<td width="100">' . $row['task_log_costcode'] . '</td><td>' . '<a name="tasklog' . $row['task_log_id'] . '"></a>';
 
 	// dylan_cuthbert: auto-transation system in-progress, leave these lines
 	$transbrk = "\n[translation]\n";
@@ -119,13 +116,11 @@ foreach ($logs as $row) {
 	}
 	// end auto-translation code
 
-	$s .= '</td>';
-	$s .= "\n\t<td>";
+	$s .= '</td><td>';
 	if ($canDelete) {
-		$s .= "\n\t\t<a href=\"javascript:delIt2({$row['task_log_id']});\" title=\"" . $AppUI->_('delete log') . "\">" . "\n\t\t\t" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "\n\t\t</a>";
+		$s .= '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' . $AppUI->_('delete log') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
 	}
-	$s .= "\n\t</td>";
-	$s .= '</tr>';
+	$s .= '</td></tr>';
 	$hrs += (float)$row['task_log_hours'];
 }
 $s .= '<tr bgcolor="white" valign="top">';

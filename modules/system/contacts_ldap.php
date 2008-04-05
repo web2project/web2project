@@ -85,7 +85,8 @@ if ($proto == '3') {
 	echo ' checked="checked"';
 }
 echo ' />';
-?></td>
+?>
+		</td>
 	</tr>
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Bind Name'); ?>:</td>
@@ -110,47 +111,46 @@ echo ' />';
 		<td colspan="2">
 <pre>
 <?php
-echo '<b>';
+$s = '<b>';
 if (isset($test)) {
-	echo $test;
+	$s .= $test;
 }
 if (isset($import)) {
-	echo $import;
+	$s .= $import;
 }
-echo "</b>\n<hr>";
+$s .= '</b><hr />';
 if (isset($test) || isset($import)) {
-
 	if (function_exists('ldap_connect')) {
 		$ds = @ldap_connect($server, $port);
 	} else {
-		print '<span style="color:red;font-weight:bold;">ldap_connect function is not installed.</span>' . "\n";
+		$s .= '<span style="color:red;font-weight:bold;">ldap_connect function is not installed.</span>';
 		$ds = false;
 	}
 	 
 
 	if (!$ds) {
 		if (function_exists('ldap_error')) {
-			print ldap_error($ds) . "\n";
+			$s .= ldap_error($ds);
 		} else {
-			print '<span style="color:red;font-weight:bold;">ldap_connect failed.</span>' . "\n";
+			$s .= '<span style="color:red;font-weight:bold;">ldap_connect failed.</span>';
 		}
 	} else {
-		print 'ldap_connect succeeded.' . "\n";
+		$s .= 'ldap_connect succeeded.';
 	}
 
 	if (function_exists('ldap_set_option')) {
 		@ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $proto);
 	} else {
-		print '<span style="color:red;font-weight:bold;">ldap_set_option function is not installed.</span>' . "\n";
+		$s .= '<span style="color:red;font-weight:bold;">ldap_set_option function is not installed.</span>';
 	}
 
 	if (!function_exists('ldap_bind') || !@ldap_bind($ds, $bind_name, $bind_password)) {
-		print '<span style="color:red;font-weight:bold;">ldap_bind failed.</span>' . "\n";
+		$s .= '<span style="color:red;font-weight:bold;">ldap_bind failed.</span>';
 		if (function_exists('ldap_error')) {
-			print ldap_error($ds) . "\n";
+			$s .= ldap_error($ds);
 		}
 	} else {
-		print 'ldap_bind successful.' . "\n";
+		$s .= 'ldap_bind successful.';
 	}
 
 	$return_types = array();
@@ -158,8 +158,8 @@ if (isset($test) || isset($import)) {
 		$return_types[] = $ldap;
 	}
 
-	print 'basedn: ' . $dn . '<br>';
-	print 'expression: ' . $filter . '<br>';
+	$s .= 'basedn: ' . $dn . '<br>';
+	$s .= 'expression: ' . $filter . '<br>';
 
 	if (function_exists('ldap_search')) {
 		$sr = @ldap_search($ds, $dn, $filter, $return_types);
@@ -168,36 +168,32 @@ if (isset($test) || isset($import)) {
 	}
 
 	if ($sr) {
-		print 'Search completed Sucessfully.' . "\n";
+		$s .= 'Search completed Sucessfully.';
 	} else {
-		print '<span style="color:red;font-weight:bold;">ldap_search failed.</span>' . "\n";
+		$s .= '<span style="color:red;font-weight:bold;">ldap_search failed.</span>';
 		if (function_exists('ldap_error')) {
-			print 'Search Error: [' . ldap_errno($ds) . '] ' . ldap_error($ds) . "\n";
+			$s .= 'Search Error: [' . ldap_errno($ds) . '] ' . ldap_error($ds);
 		}		
 	}
 
+	$s .= '</pre>';
 
-?>
-</pre>
-<?php
-	//	print "Result Count:".(ldap_count_entries($ds,$sr))."\n";
+	//	$s .= "Result Count:".(ldap_count_entries($ds,$sr));
 	if (function_exists('ldap_get_entries')) {
 		$info = ldap_get_entries($ds, $sr);
 	} else {
-		print '<span style="color:red;font-weight:bold;">ldap_get_entries is not installed.</span>' . "\n";
+		$s .= '<span style="color:red;font-weight:bold;">ldap_get_entries is not installed.</span>';
 		$info = array();		
 	}
 	
 	if (!$info['count']) {
-		print 'No users were found.' . "\n";
+		$s .= 'No users were found.';
 	} else {
-		print 'Total Users Found:' . $info['count'] . "\n<hr>";
-?>
-<table border="0" cellpadding="1" cellspacing="0" width="98%" class="std">
-<?php
+		$s .= 'Total Users Found:' . $info['count'] . '<hr />';
+		$s .= '<table border="0" cellpadding="1" cellspacing="0" width="98%" class="std">';
 		if (isset($test)) {
 			foreach ($sql_ldap_mapping as $ldap => $sql) {
-				print '<th>' . $sql . '</th>';
+				$s .= '<th>' . $sql . '</th>';
 			}
 		} else {
 			$q = new DBQuery;
@@ -214,7 +210,7 @@ if (isset($test) || isset($import)) {
 
 		for ($i = 0, $i_cmp = $info['count']; $i < $i_cmp; $i++) {
 			$pairs = array();
-			print "<tr>\n";
+			$s .= '<tr>';
 			foreach ($sql_ldap_mapping as $ldap_name => $sql_name) {
 				unset($val);
 				if (isset($info[$i][$ldap_name][0])) {
@@ -223,21 +219,15 @@ if (isset($test) || isset($import)) {
 				if (isset($val)) {
 					//if an email address is not specified in Domino you get a crazy value for this field that looks like FOO/BAR%NAME@domain.com  This'll filter those values out.
 					if (isset($test) && $sql_name == 'contact_email' && substr_count($val, '%') > 0) {
-?>
-						<td><span style="color:#880000;"><?php echo $AppUI->_('bad email address') ?></span></td>
-					<?php
+						$s .= '<td><span style="color:#880000;">' . $AppUI->_('bad email address') . '</span></td>';
 						continue;
 					}
 					$pairs[$sql_name] = $val;
 					if (isset($test)) {
-?>
-						<td><?php echo $val ?></td>
-					<?php
+						$s .= '<td>' .  $val . '</td>';
 					}
 				} else {
-?>
-						<td>-</td>
-					<?php
+					$s .= '<td>-</td>';
 				}
 			}
 
@@ -250,34 +240,34 @@ if (isset($test) || isset($import)) {
 					$q = new DBQuery;
 					$q->updateArray($sql_table, $pairs, 'contact_id');
 					$q->clear();
-					echo '<td><span style="color:#880000;">There is a duplicate record for ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . ', the record has been updated.</span></td>' . "\n";
+					$s .= '<td><span style="color:#880000;">There is a duplicate record for ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . ', the record has been updated.</span></td>';
 				} else {
-					echo '<td>Adding ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . '.</td>' . "\n";
+					$s .= '<td>Adding ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . '.</td>';
 					$q = new DBQuery;
 					$q->insertArray($sql_table, $pairs);
 					$q->clear();
 				}
 			}
-			print "</tr>\n";
+			$s .= '</tr>';
 
 			/*
 			for ($ii=0, $ii_cmp=$info[$i]['count']; $ii<$ii_cmp; $ii++){
 			$data = $info[$i][$ii];
 			for ($iii=0, $iii_cmp=$info[$i][$data]['count']; $iii<$iii_cmp; $iii++) {
-			echo $data.':&nbsp;&nbsp;'.$info[$i][$data][$iii]."\n";
+			echo $data.':&nbsp;&nbsp;'.$info[$i][$data][$iii];
 			}
 			}
 			*/
-			echo "\n";
 		}
-		echo '</table>';
+		$s .= '</table>';
 	}
 	if (function_exists('ldap_close')) {
 		ldap_close($ds);
 	} else {
-		print '<span style="color:red;font-weight:bold;">ldap_close is not installed.</span>' . "\n";
+		$s .= '<span style="color:red;font-weight:bold;">ldap_close is not installed.</span>';
 	}
 }
+echo $s;
 
 function clean_value($str) {
 	$bad_values = array("'");

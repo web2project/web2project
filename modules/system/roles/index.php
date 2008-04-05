@@ -70,7 +70,6 @@ function delIt(id) {
 
 function showRow($role = null) {
 	global $canEdit, $canDelete, $role_id, $AppUI, $modules;
-	$CR = "\n";
 	$id = $role['id'];
 	$name = $role['value'];
 	$description = $role['name'];
@@ -82,34 +81,21 @@ function showRow($role = null) {
 		$s .= '<input type="hidden" name="dosql" value="do_role_aed" />';
 		$s .= '<input type="hidden" name="del" value="0" />';
 		$s .= '<input type="hidden" name="role_id" value="' . $id . '" />';
-		$s .= '<tr>' . $CR;
-		$s .= '<td>&nbsp;</td>';
+		$s .= '<tr><td>&nbsp;</td>';
 		$s .= '<td valign="top"><input type="text" name="role_name" value="' . $name . '" class="text" /></td>';
-		$s .= "<td valign='top'><input type='text' name='role_description' class='text' value='$description'></td>";
+		$s .= '<td valign="top"><input type="text" name="role_description" class="text" value="' . $description . '"></td>';
 		$s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button" /></td>';
 	} else {
-		$s .= '<tr>' . $CR;
-		$s .= '<td width="50" valign="top">';
+		$s .= '<tr><td width="50" valign="top">';
 		if ($canEdit) {
-			$s .= '<a href="?m=system&u=roles&role_id=' . $id . '">';
-			$s .= w2PshowImage('icons/stock_edit-16.png');
-			$s .= '</a><a href="?m=system&u=roles&a=viewrole&role_id=' . $id . '" title="">';
-			$s .= w2PshowImage('obj/lock.gif');
-			$s .= '</a>';
+			$s .= '<a href="?m=system&u=roles&role_id=' . $id . '">' . w2PshowImage('icons/stock_edit-16.png') . '</a><a href="?m=system&u=roles&a=viewrole&role_id=' . $id . '" title="">' . w2PshowImage('obj/lock.gif') . '</a>';
 		}
 		if ($canDelete) {
-			$s .= "<a href='javascript:delIt($id)'>";
-			$s .= w2PshowImage('icons/stock_delete-16.png');
-			$s .= "</a>";
+			$s .= '<a href=\'javascript:delIt(' . $id . ')\'>' . w2PshowImage('icons/stock_delete-16.png') . '</a>';
 		}
-		$s .= "</td>$CR";
-		$s .= '<td valign="top">' . $name . '</td>' . $CR;
-		$s .= '<td valign="top">' . $AppUI->_($description) . '</td>' . $CR;
-		$s .= '<td valign="top" width="16">';
-		$s .= '&nbsp;';
-		$s .= '</td>' . $CR;
+		$s .= '</td><td valign="top">' . $name . '</td><td valign="top">' . $AppUI->_($description) . '</td><td valign="top" width="16">&nbsp;</td>';
 	}
-	$s .= '</tr>' . $CR;
+	$s .= '</tr>';
 	return $s;
 }
 

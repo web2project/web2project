@@ -171,7 +171,7 @@ $selected_departments = $obj->task_departments != '' ? explode(',', $obj->task_d
 $departments_count = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
 if ($department_selection_list != '') {
-	$department_selection_list = ('<select name="dept_ids[]" class="text">' . "\n" . '<option value="0"></option>' . "\n" . $department_selection_list . "\n" . '</select>');
+	$department_selection_list = ('<select name="dept_ids[]" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
 }
 
 function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent = 0, $spaces = 0) {
