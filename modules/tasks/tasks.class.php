@@ -2267,17 +2267,18 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	$s = '';
 	
 	if (isset($item_order)) {
-		$s .= ('<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" />');
+		$show_icon = true;
 	} else {
+		$show_icon = false;
 		$item_order = SORT_DESC;
 	}
 
 	/* flip the sort order for the link */
 	$item_order = ($item_order == SORT_ASC) ? SORT_DESC : SORT_ASC;
 	if ($m == 'tasks') {
-		$s .= ('<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&a=view&task_id=' . $task_id) : $a));
+		$s .= '<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&a=view&task_id=' . $task_id) : $a);
 	} else {
-		$s .= ('<a href="./index.php?m=projects' . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : ''));
+		$s .= '<a href="./index.php?m=projects' . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : '');
 	}
 	$s .= '&task_sort_item1=' . $item_name;
 	$s .= '&task_sort_type1=' . $item_type;
@@ -2291,7 +2292,10 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 		$s .= '&task_sort_type2=' . $task_sort_type1;
 		$s .= '&task_sort_order2=' . $task_sort_order1;
 	}
-	$s .= '" class="hdr">' . $AppUI->_($title) . '</a>';
+	$s .= '" class="hdr">' . $AppUI->_($title);
+	if ($show_icon) {
+		$s .= '&nbsp;<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" border="0" /></a>';
+	}
 	echo $s;
 }
 ?>
