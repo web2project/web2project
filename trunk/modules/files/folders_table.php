@@ -588,7 +588,7 @@ function displayFiles($folder) {
 								$q4->addQuery('file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name');
 								$q4->addTable('files');
 								$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-								$q4->addJoin('contacts', 'co', 'co.contact_id = cu.user_contact', 'inner');
+								$q4->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
 								$q4->addWhere('file_id = ' . (int)$file_row['file_id']);
 								$co_user = array();
 								$co_user = $q4->loadList();
@@ -635,7 +635,7 @@ function displayFiles($folder) {
 				$q4->addQuery('file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name');
 				$q4->addTable('files');
 				$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-				$q4->addJoin('contacts', 'co', 'co.contact_id = cu.user_contact', 'inner');
+				$q4->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
 				$q4->addWhere('file_id = ' . (int)$file['file_id']);
 				$co_user = array();
 				$co_user = $q4->loadList();
