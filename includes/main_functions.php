@@ -192,7 +192,7 @@ function w2PgetUsernameFromID($user) {
 	$q->addTable('users');
 	$q->addQuery('contact_first_name, contact_last_name');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-	$q->addWhere('user_id = \'' . $user . '\'');
+	$q->addWhere('user_id = ' . (int)$user);
 	$r = $q->loadList();
 	return $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'];
 }

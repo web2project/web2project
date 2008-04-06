@@ -296,10 +296,10 @@ class CForumMessage {
 		$q->clear();
 		$q->addTable('users');
 		$q->addQuery('DISTINCT contact_email, user_id, contact_first_name, contact_last_name');
-		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
 
-		if ($AllCount < 1) //message is only delivered to users that checked the forum watch
-			{
+		if ($AllCount < 1) {
+		//message is only delivered to users that checked the forum watch
 			$q->addTable('forum_watch');
 			$q->addWhere('user_id = watch_user AND (watch_forum = ' . (int)$this->message_forum . ' OR watch_topic = ' . (int)$this->message_parent . ')');
 		}
@@ -317,11 +317,11 @@ class CForumMessage {
 
 		$body = $body_msg;
 
-		$body .= "\n\n" . $AppUI->_('Forum', UI_OUTPUT_RAW) . ": $forum_name";
-		$body .= "\n" . $AppUI->_('Subject', UI_OUTPUT_RAW) . ": {$this->message_title}";
-		$body .= "\n" . $AppUI->_('Message From', UI_OUTPUT_RAW) . ": $message_from";
+		$body .= "\n\n" . $AppUI->_('Forum', UI_OUTPUT_RAW) . ': ' . $forum_name;
+		$body .= "\n" . $AppUI->_('Subject', UI_OUTPUT_RAW) . ': ' . $this->message_title;
+		$body .= "\n" . $AppUI->_('Message From', UI_OUTPUT_RAW) . ': ' . $message_from;
 		$body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=' . $this->message_forum;
-		$body .= "\n\n$this->message_body";
+		$body .= "\n\n" . $this->message_body;
 
 		$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 

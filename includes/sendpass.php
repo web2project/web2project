@@ -39,7 +39,7 @@ function sendNewPass() {
 
 	$newpass = makePass();
 	$message = $AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' ' . $checkusername . ' ' . $AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' ' . $_live_site . ' ' . $AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' ' . $newpass . ' ' . $AppUI->_('sendpass3', UI_OUTPUT_RAW);
-	$subject = "$_sitename :: " . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . " - $checkusername";
+	$subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
 
 	$m = new Mail; // create the mail
 	$m->From('web2Project@' . w2PgetConfig('site_domain'));

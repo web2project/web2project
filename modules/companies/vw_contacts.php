@@ -20,7 +20,7 @@ $q->addQuery('dept_name');
 $q->addTable('contacts', 'a');
 $q->leftJoin('companies', 'b', 'a.contact_company = b.company_id');
 $q->leftJoin('departments', '', 'contact_department = dept_id');
-$q->addWhere('contact_company = \'' . addslashes($obj->company_name) . '\' OR contact_company = ' . (int)$obj->company_id);
+$q->addWhere('contact_company = ' . (int)$obj->company_id);
 $q->addWhere('
 	(contact_private=0
 		OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
