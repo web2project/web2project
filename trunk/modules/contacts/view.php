@@ -132,14 +132,10 @@ $lastupdated = new CDate($row->contact_lastupdate);
 						<td nowrap="nowrap"><?php echo htmlspecialchars($company_detail['company_name'], ENT_QUOTES); ?></td>
 			<?php } ?>
 		</tr>
-<?php
-if (isset($_SESSION['all_tabs']['departments'])) {
-?>
 		<tr>
 			<td align="right" width="100"><?php echo $AppUI->_('Department'); ?>:</td>
 			<td nowrap="nowrap"><?php echo $dept_detail['dept_name']; ?></td>
 		</tr>
-<?php } ?>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Title'); ?>:</td>
 			<td><?php echo $row->contact_title; ?></td>
