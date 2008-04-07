@@ -21,14 +21,13 @@ if (isset($links[$dayStamp])) {
 		$alt = isset($e['alt']) ? $e['alt'] : null;
 
 		$s .= '<tr><td>';
-		$s .= $href ? "<a href=\"$href\" class=\"event\" title=\"$alt\">" : '';
-		$s .= "{$e['text']}";
+		$s .= $href ? '<a href="' . $href . '" class="event" title="' . $alt . '">' : '';
+		$s .= $e['text'];
 		$s .= $href ? '</a>' : '';
 		$s .= '</td></tr>';
 	}
 }
 echo $s;
-
 echo '</table>';
 
 $min_view = 1;
