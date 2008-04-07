@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$showEditCheckbox = true;
+$showEditCheckbox = w2PgetConfig('direct_edit_assignment');
 // Project status from sysval, defined as a constant
 $project_on_hold_status = 4;
 $perms = &$AppUI->acl();

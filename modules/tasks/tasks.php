@@ -353,7 +353,7 @@ foreach ($tasks as $row) {
 	$projects[$row['task_project']]['tasks'][] = $row;
 }
 
-$showEditCheckbox = ((isset($canEdit) && $canEdit && $w2Pconfig['direct_edit_assignment']) ? true : false);
+$showEditCheckbox = ((isset($canEdit) && $canEdit && w2PgetConfig('direct_edit_assignment')) ? true : false);
 global $history_active;
 $history_active = !empty($mods['history']) && !getDenyRead('history');
 ?>
@@ -487,16 +487,19 @@ if ($project_id) {
 	<th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC); ?></th>
 	<th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC); ?>&nbsp;&nbsp;</th>
 	<th nowrap="nowrap"><?php sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC); ?></th>
-<?php if (!empty($mods['history']) && !getDenyRead('history')) { ?>
+<?php 
+if (!empty($mods['history']) && !getDenyRead('history')) { ?>
 	<th nowrap="nowrap"><?php sort_by_item_title('Last Update', 'last_update', SORT_NUMERIC); ?></th>
-<?php } else {
+<?php
+} else {
 	$cols--;
-} ?>
-  <?php if ($showEditCheckbox) {
+} 
+if ($showEditCheckbox) {
 	echo '<th width="1">&nbsp;</th>';
 } else {
 	$cols--;
-} ?>
+} 
+?>
 </tr>
 <?php
 reset($projects);
