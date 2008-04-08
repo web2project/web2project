@@ -145,16 +145,16 @@ if ($dialog) {
 			<table cellspacing="0" cellpadding="3" border="0" width="100%">
 			<tr>
 				<td nowrap="nowrap" align="right">
-					<a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&dialog=1&hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
+					<input type="button" class="button" value="<?php echo $AppUI->_('Help'); ?>" onclick="javascript:window.open('?m=help&dialog=1&hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')" />
 				</td>
 				<td nowrap="nowrap" align="right">
-					<a class="button" href="./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
+					<input type="button" class="button" value="<?php echo $AppUI->_('My Info'); ?>" onclick="javascript:window.location='./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id; ?>'" />
 				</td>
 	<?php
 	if ($perms->checkModule('tasks', 'access')) {
 ?>
 				<td nowrap="nowrap" align="right">
-					<a class="button" href="./index.php?m=tasks&a=todo"><span><b><?php echo $AppUI->_('Todo'); ?></b></span></a>
+					<input type="button" class="button" value="<?php echo $AppUI->_('Todo'); ?>" onclick="javascript:window.location='./index.php?m=tasks&a=todo'" />
 				</td>
 	<?php
 	}
@@ -162,11 +162,11 @@ if ($dialog) {
 		$now = new CDate();
 ?>
 				<td nowrap="nowrap" align="right">
-					<a class="button" href="./index.php?m=calendar&a=day_view&date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
+					<input type="button" class="button" value="<?php echo $AppUI->_('Today'); ?>" onclick="javascript:window.location='./index.php?m=calendar&a=day_view&date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>'" />
 				</td>
 	<?php } ?>
 					<td nowrap="nowrap" align="right">
-						<a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
+						<input type="button" class="button" value="<?php echo $AppUI->_('Logout'); ?>" onclick="javascript:window.location='./index.php?logout=-1'" />
 					</td>
 				</td>
 			</tr>
