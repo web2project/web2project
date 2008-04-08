@@ -26,7 +26,7 @@ class CTabBox extends CTabBox_core {
 			if ($opt_flat) {
 				$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 				$s .= '<tr>';
-				$s .= '<td width="10" nowrap="nowrap">';
+				$s .= '<td width="54" nowrap="nowrap">';
 				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=0"><span>' . $AppUI->_('tabbed') . '</span></a>';
 				$s .= '</td>';
 				$s .= '<td nowrap="nowrap">';
