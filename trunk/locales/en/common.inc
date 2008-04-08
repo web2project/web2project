@@ -234,3 +234,4 @@
 'Zip',
 'Zip Code',
 'Server time is',
+'newAccountSignup'=>'I want to signup for a new account please.',

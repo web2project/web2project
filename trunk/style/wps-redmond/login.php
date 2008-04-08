@@ -6,7 +6,7 @@
 <head>
 	<title><?php echo $w2Pconfig['page_title']; ?></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
-       	<title><?php echo $w2Pconfig['company_name']; ?> :: dotProject Login</title>
+    <title><?php echo $w2Pconfig['company_name']; ?></title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
 	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" />
@@ -35,12 +35,17 @@
 	<td align="left" nowrap="nowrap"><input type="password" size="25" maxlength="32" name="password" class="text" /></td>
 </tr>
 <tr>
-	<td align="left" nowrap="nowrap"><a href="http://www.dotproject.net/"><img src="./style/web2project/w2p_icon.gif" border="0" alt="dotProject logo" /></a></td>
+	<td align="left" nowrap="nowrap"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" border="0" alt="web2Project" /></a></td>
 	<td align="right" valign="bottom" nowrap="nowrap"><input type="submit" name="login" value="<?php echo $AppUI->_('login'); ?>" class="button" /></td>
 </tr>
 <tr>
 	<td colspan="2"><a href="javascript: void(0);" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a></td>
 </tr>
+<?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
+	<tr>
+	     <td style="padding:6px" colspan="2" nowrap="nowrap"><a href="javascript: void(0);" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('newAccountSignup'); ?></a></td>
+	</tr>
+<?php } ?>
 </table>
 <?php if ($AppUI->getVersion()) { ?>
 <div align="center">

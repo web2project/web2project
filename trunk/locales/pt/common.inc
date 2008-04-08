@@ -233,3 +233,4 @@
 'tabbed'=>'tabelado',
 'test'=>'teste',
 'updated'=>'actualizado',
+'newAccountSignup'=>'Quero criar uma nova conta de Utilizador.',
