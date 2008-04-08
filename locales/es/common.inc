@@ -234,3 +234,4 @@
 'tabbed'=>'pestañas',
 'test'=>'prueba',
 'updated'=>'modificado',
+'newAccountSignup'=>'Quiero crear una nueva cuenta de Usuario.',

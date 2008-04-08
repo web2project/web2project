@@ -70,7 +70,7 @@ echo styleRenderBoxTop();
 </tr>
 <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
 	<tr>
-	     <td style="padding:6px" colspan="2" nowrap="nowrap"><a href="javascript: void(0);" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('I want to signup for a new account please.'); ?></a></td>
+	     <td style="padding:6px" colspan="2" nowrap="nowrap"><a href="javascript: void(0);" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('newAccountSignup'); ?></a></td>
 	</tr>
 <?php } ?>
 <tr><td colspan="2">
