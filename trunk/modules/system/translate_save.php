@@ -45,9 +45,9 @@ if ($lang == 'en') {
 			$langs['abbrev'] = addslashes(stripslashes($langs['abbrev']));
 			$langs['english'] = addslashes(stripslashes($langs['english']));
 			if (!empty($langs['abbrev'])) {
-				$txt .= "\"{$langs['abbrev']}\"=>";
+				$txt .= '\'' . $langs['abbrev'] . '\'=>';
 			}
-			$txt .= "\"{$langs['english']}\",\n";
+			$txt .= '\'' . $langs['english'] . '\',' . "\n";
 		}
 	}
 } else {
@@ -57,7 +57,7 @@ if ($lang == 'en') {
 			$langs['english'] = stripslashes($langs['english']);
 			$langs['lang'] = addslashes(stripslashes($langs['lang']));
 			//fwrite( $fp, "\"{$langs['english']}\"=>\"{$langs['lang']}\",\n" );
-			$txt .= "\"{$langs['english']}\"=>\"{$langs['lang']}\",\n";
+			$txt .= '\'' . $langs['english'] . '\'=>\'' . $langs['lang'] . '\',' . "\n";
 		}
 	}
 }
