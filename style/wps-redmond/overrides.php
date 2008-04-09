@@ -33,16 +33,15 @@ class CTabBox extends CTabBox_core {
 
 		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
-			$s = '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
+			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
-				$s .= '<tr><td><strong>' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</strong></td></tr><tr><td>';
+				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</strong></td></tr><tr><td>';
 				$currentTabId = $k;
 				$currentTabName = $v[1];
 				include $this->baseInc . $v[0] . '.php';
-				$s .= '</td></tr>';
+				echo '</td></tr>';
 			}
-			$s .= '</table>';
-			echo $s;
+			echo '</table>';
 		} else {
 			// tabbed view
 			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td><table border="0" cellpadding="0" cellspacing="0">';
