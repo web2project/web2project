@@ -201,8 +201,8 @@ if (is_array($projects)) {
 		}
 
 		//using new jpGraph determines using Date object instead of string
-		$start = ($p['project_start_date'] > '0000-00-00 00:00:00') ? $p['project_start_date'] : date('Y-m-d H:i:s');
-		$end_date = ($p['project_end_date'] > '0000-00-00 00:00:00') ? $p['project_end_date'] : date('Y-m-d H:i:s', time());
+		$start = ($p['project_start_date'] > '0000-00-00 00:00:00') ? $p['project_start_date'] : '';
+		$end_date = ($p['project_end_date'] > '0000-00-00 00:00:00') ? $p['project_end_date'] : '';
 
 		$end_date = new CDate($end_date);
 		//	$end->addDays(0);
@@ -233,7 +233,7 @@ if (is_array($projects)) {
 		}
 		$enddate = new CDate($end);
 		$startdate = new CDate($start);
-		$actual_end = $p['project_actual_end_date'] ? $p['project_actual_end_date'] : $end;
+		$actual_end = intval($p['project_actual_end_date']) ? $p['project_actual_end_date'] : $end;
 
 		$actual_enddate = new CDate($actual_end);
 		$actual_enddate = $actual_enddate->after($startdate) ? $actual_enddate : $enddate;
@@ -270,7 +270,7 @@ if (is_array($projects)) {
 
 			$q = new DBQuery;
 			$q->addTable('tasks');
-			$q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_milestone, tasks.task_dynamic');
+			$q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_duration, tasks.task_duration_type, tasks.task_milestone, tasks.task_dynamic');
 			$q->addJoin('projects', 'p', 'p.project_id = tasks.task_project');
 			$q->addWhere('p.project_id = ' . (int)$p['project_id']);
 			if ($sortTasksByName) {
@@ -281,14 +281,34 @@ if (is_array($projects)) {
 			$tasks = $q->loadList();
 			$q->clear();
 			foreach ($tasks as $t) {
-				if ($t['task_end_date'] == null) {
-					$t['task_end_date'] = $t['task_start_date'];
+				//Check if start date exists, if not try giving it the end date.
+				//If the end date does not exist then set it for today.
+				//This avoids jpgraphs internal errors that render the gantt completely useless
+				if ($t['task_start_date'] == '0000-00-00 00:00:00') {
+					if ($t['task_end_date'] == '0000-00-00 00:00:00') {
+						$todaydate = new CDate();
+						$t['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+					} else {
+						$t['task_start_date'] = $t['task_end_date'];
+					}
+				}
+						
+				//Check if end date exists, if not try giving it the start date.
+				//If the start date does not exist then set it for today.
+				//This avoids jpgraphs internal errors that render the gantt completely useless
+				if ($t['task_end_date'] == '0000-00-00 00:00:00') {
+					if ($t['task_duration']) {
+						$t['task_end_date'] = db_unix2dateTime(db_dateTime2unix($t['task_start_date']) + SECONDS_PER_DAY * convert2days($t['task_duration'], $t['task_duration_type']));
+					} else {
+						$todaydate = new CDate();
+						$t['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+					}
 				}
 
-				$tStart = ($t['task_start_date'] > '0000-00-00 00:00:00') ? $t['task_start_date'] : $start;
-				$tEnd = ($t['task_end_date'] > '0000-00-00 00:00:00') ? $t['task_end_date'] : $end;
-				$tStartObj = new CDate($tStart);
-				$tEndObj = new CDate($tEnd);
+				$tStart = intval($t['task_start_date']) ? $t['task_start_date'] : $start;
+				$tEnd = intval($t['task_end_date']) ? $t['task_end_date'] : $end;
+				$tStartObj = new CDate($t['task_start_date']);
+				$tEndObj = new CDate($t['task_end_date']);
 
 				if ($t['task_milestone'] != 1) {
 					$bar2 = new GanttBar($row++, array(substr(' --' . $t['task_name'], 0, 20) . '...', $tStartObj->format($df), $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', $t['task_dynamic'] == 1 ? 0.1 : 0.6);
@@ -307,17 +327,18 @@ if (is_array($projects)) {
 				// Insert workers for each task into Gantt Chart
 				$q = new DBQuery;
 				$q->addTable('user_tasks', 't');
-				$q->addQuery('DISTINCT user_username, t.task_id');
+				$q->addQuery('DISTINCT contact_first_name, contact_last_name, t.task_id');
 				$q->addJoin('users', 'u', 'u.user_id = t.user_id', 'inner');
+				$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
 				$q->addWhere('t.task_id = ' . (int)$t['task_id']);
 				$q->addOrder('user_username ASC');
 				$workers = $q->loadList();
 				$q->clear();
-				$workersName = '';
+				//$workersName = '';
 				foreach ($workers as $w) {
-					$workersName .= ' ' . $w['user_username'];
+					//$workersName .= ' ' . $w['contact_first_name'] . ' ' . $w['contact_last_name'];
 
-					$bar3 = new GanttBar($row++, array('   * ' . $w['user_username'], ' ', ' ', ' '), $tStartObj->format(FMT_DATETIME_MYSQL), $tEndObj->format(FMT_DATETIME_MYSQL), 0.6);
+					$bar3 = new GanttBar($row++, array('   * ' . $w['contact_first_name'] . ' ' . $w['contact_last_name'], ' ', ' ', ' '), $tStartObj->format(FMT_DATETIME_MYSQL), $tEndObj->format(FMT_DATETIME_MYSQL), 0.6);
 					$bar3->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
 					$bar3->title->SetColor(bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000'));
 					$bar3->SetFillColor('#' . $p['project_color_identifier']);
