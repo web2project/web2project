@@ -10,7 +10,7 @@ $obj = new CConfig();
 $q = new DBQuery;
 $q->addTable('config');
 $q->addUpdate('config_value', 'false');
-$q->addWhere('config_type="checkbox"');
+$q->addWhere('config_type = \'checkbox\'');
 $rs = $q->loadResult();
 $q->clear();
 

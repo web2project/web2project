@@ -71,12 +71,12 @@ if ($caller == 'todo') {
 	$q->addWhere('ut.task_id = ta.task_id');
 	$q->addWhere('ut.user_id = ' . (int)$user_id);
 	$q->addWhere('(ta.task_percent_complete < 100 OR ta.task_percent_complete is null)');
-	$q->addWhere('ta.task_status = "0"');
+	$q->addWhere('ta.task_status = 0');
 	$q->addWhere('pr.project_id = ta.task_project');
 	if (!$showArcProjs) {
 		$q->addWhere('pr.project_active = 1');
 		if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-			$q->addWhere('pr.project_status <> ' . $template_status);
+			$q->addWhere('pr.project_status <> ' . (int)$template_status);
 		}
 	}
 	if (!$showLowTasks) {
@@ -570,7 +570,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	$q = new DBQuery;
 	$q->addTable('task_dependencies');
 	$q->addQuery('dependencies_task_id');
-	$q->addWhere('dependencies_req_task_id=' . $a['task_id']);
+	$q->addWhere('dependencies_req_task_id=' . (int)$a['task_id']);
 	$query = $q->loadList();
 
 	foreach ($query as $dep) {

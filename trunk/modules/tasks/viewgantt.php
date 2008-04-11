@@ -241,7 +241,7 @@ if ($a != 'todo') {
 	$q = new DBQuery;
 	$q->addTable('tasks');
 	$q->addQuery('COUNT(task_id) AS N');
-	$q->addWhere('task_project=' . $project_id);
+	$q->addWhere('task_project=' . (int)$project_id);
 	$cnt = $q->loadList();
 	$q->clear();
 } else {

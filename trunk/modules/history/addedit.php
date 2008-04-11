@@ -45,7 +45,7 @@ if ($action) {
 		}
 		$q->addTable('history');
 		$q->addUpdate('history_item = history_id');
-		$q->addWhere('history_table = "history"');
+		$q->addWhere('history_table = \'history\'');
 		$okMsg = 'History deleted';
 	}
 	$q->clear();

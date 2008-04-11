@@ -28,7 +28,7 @@ if (count($resources)) {
 	$q->addQuery('b.resource_id, sum(b.percent_allocated) as total_allocated');
 	$q->addTable('tasks', 'a');
 	$q->addJoin('resource_tasks', 'b', 'b.task_id = a.task_id', 'inner');
-	$q->addWhere('b.resource_id in (' . implode(',', array_keys($resources)) . ')');
+	$q->addWhere('b.resource_id IN (' . implode(',', array_keys($resources)) . ')');
 	$q->addWhere('task_start_date <= \'' . $obj->task_end_date . '\'');
 	$q->addWhere('task_end_date >= \'' . $obj->task_start_date . '\'');
 	$q->addGroup('resource_id');

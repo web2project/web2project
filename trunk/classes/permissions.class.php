@@ -1051,7 +1051,7 @@ class w2Pacl extends gacl_api {
 				$q->addWhere('d.value IN (' . implode(',', array_keys($role_users)) . ')');
 			} else {
 				//If there are no users affected then make it so nothing is recalculated
-				$q->addWhere('d.value = "0"');
+				$q->addWhere('d.value = 0');
 			}
 		}
 		if ($module) {
@@ -1204,8 +1204,8 @@ class w2Pacl extends gacl_api {
 		$q->addQuery('access');
 		$q->addWhere('module = \'' . $module . '\'');
 		$q->addWhere('action = \'' . $op . '\'');
-		$q->addWhere('item_id="0"');
-		$q->addWhere('user_id = \'' . $userid . '\'');
+		$q->addWhere('item_id = 0');
+		$q->addWhere('user_id = ' . (int)$userid);
 		$q->addOrder('acl_id DESC');
 		if (W2P_PERFORMANCE_DEBUG) {
 			$startTime = array_sum(explode(' ', microtime()));
@@ -1234,7 +1234,7 @@ class w2Pacl extends gacl_api {
 			$q->addTable('modules');
 			$q->addQuery('mod_main_class, permissions_item_table, permissions_item_field, permissions_item_label, mod_directory');
 			$q->addWhere('mod_directory = \'' . $module . '\'');
-			$q->addWhere('mod_active="1"');
+			$q->addWhere('mod_active = 1');
 			$mod_class = $q->loadHash();
 		}
 
@@ -1335,8 +1335,8 @@ class w2Pacl extends gacl_api {
 				$q->addQuery('access, acl_id');
 				$q->addWhere('module = \'' . $module . '\'');
 				$q->addWhere('action = \'' . $op . '\'');
-				$q->addWhere('user_id = \'' . $userid . '\'');
-				$q->addWhere('(item_id = \'' . $item . '\' OR item_id = \'0\')');
+				$q->addWhere('user_id = ' . (int)$userid);
+				$q->addWhere('(item_id = ' . (int)$item . ' OR item_id = 0)');
 				$q->addOrder('item_id DESC, acl_id DESC');
 				//print_r($q->prepare());
 				$result = array();
@@ -1358,7 +1358,7 @@ class w2Pacl extends gacl_api {
 		$q->addQuery('acl_id, access, item_id');
 		$q->addWhere('module = \'' . $module . '\'');
 		$q->addWhere('action = \'' . $op . '\'');
-		$q->addWhere('user_id = \'' . $userid . '\'');
+		$q->addWhere('user_id = ' . (int)$userid);
 		$q->addOrder('acl_id DESC');
 		if (W2P_PERFORMANCE_DEBUG) {
 			$startTime = array_sum(explode(' ', microtime()));
@@ -1391,7 +1391,7 @@ function getReadableModule() {
 	$q = new DBQuery;
 	$q->addTable('modules');
 	$q->addQuery('mod_directory');
-	$q->addWhere('mod_active > 0');
+	$q->addWhere('mod_active = 1');
 	$q->addOrder('mod_ui_order');
 	$modules = $q->loadColumn();
 	foreach ($modules as $mod) {

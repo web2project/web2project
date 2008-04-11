@@ -55,7 +55,7 @@ if (!$drow && $dept_id > 0) {
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dept_id, dept_name, dept_parent');
 		$q->addWhere('dep.dept_company = ' . (int)$company_id);
-		$q->addWhere('dep.dept_id != ' . $dept_id);
+		$q->addWhere('dep.dept_id <> ' . $dept_id);
 		$department = new CDepartment;
 		$department->setAllowedSQL($AppUI->user_id, $q);
 		$depts = $q->loadArrayList();

@@ -186,7 +186,7 @@ class EventQueue {
 		$q = new DBQuery;
 		if (count($this->delete_list)) {
 			$q->setDelete($this->table);
-			$q->addWhere('queue_id in (' . implode(',', $this->delete_list) . ')');
+			$q->addWhere('queue_id IN (' . implode(',', $this->delete_list) . ')');
 			$q->exec();
 			$q->clear();
 		}

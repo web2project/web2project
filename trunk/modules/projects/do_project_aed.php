@@ -73,7 +73,7 @@ if ($del) {
 	$q->addTable('users');
 	$q->addQuery('user_id, contact_company as user_company, contact_department as user_department');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-	$q->addWhere('user_id = ' . $owner_id);
+	$q->addWhere('user_id = ' . (int)$owner_id);
 	$broker = $q->loadList();
 	//print_r($broker);die;
 	$q->clear();

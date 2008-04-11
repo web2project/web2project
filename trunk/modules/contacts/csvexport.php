@@ -122,8 +122,8 @@ if (1 == 1) {
 		$q->addQuery('cfv.value_charvalue, cfl.list_value');
 		$q->leftJoin('custom_fields_values', 'cfv', 'cfv.value_field_id = cfs.field_id');
 		$q->leftJoin('custom_fields_lists', 'cfl', 'cfl.list_option_id = cfv.value_intvalue');
-		$q->addWhere('cfs.field_module = "contacts"');
-		$q->addWhere("cfv.value_object_id = '" . $row['contact_id'] . "'");
+		$q->addWhere('cfs.field_module = \'contacts\'');
+		$q->addWhere('cfv.value_object_id = \'' . $row['contact_id'] . '\'');
 		$custom_fields = $q->loadList();
 		$q->clear();
 		foreach ($custom_fields as $f) {

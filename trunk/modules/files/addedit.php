@@ -317,7 +317,7 @@ function getHelpdeskFolder() {
 	$q = new DBQuery();
 	$q->addTable('file_folders', 'ff');
 	$q->addQuery('file_folder_id');
-	$q->addWhere('ff.file_folder_name = "Helpdesk"');
+	$q->addWhere('ff.file_folder_name = \'Helpdesk\'');
 	$ffid = $q->loadResult();
 	$q->clear();
 	return intval($ffid);

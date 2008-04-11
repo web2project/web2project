@@ -348,7 +348,7 @@ class CTask extends CW2pObject {
 			//Update start date
 			$q->addTable('tasks');
 			$q->addQuery('MIN(task_start_date)');
-			$q->addWhere('task_parent = ' . (int)$modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND ! isnull(task_start_date)' . " AND task_start_date <>	'0000-00-00 00:00:00'");
+			$q->addWhere('task_parent = ' . (int)$modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_start_date)' . " AND task_start_date <>	'0000-00-00 00:00:00'");
 			$d = $q->loadResult();
 			$q->clear();
 			if ($d) {
@@ -360,7 +360,7 @@ class CTask extends CW2pObject {
 			//Update end date
 			$q->addTable('tasks');
 			$q->addQuery('MAX(task_end_date)');
-			$q->addWhere('task_parent = ' . (int)$modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND ! isnull(task_end_date)');
+			$q->addWhere('task_parent = ' . (int)$modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_end_date)');
 			$modified_task->task_end_date = $q->loadResult();
 			$q->clear();
 
@@ -534,7 +534,7 @@ class CTask extends CW2pObject {
 
 		//split out related departments and store them seperatly.
 		$q->setDelete('task_departments');
-		$q->addWhere('task_id=' . $this->task_id);
+		$q->addWhere('task_id=' . (int)$this->task_id);
 		$q->exec();
 		$q->clear();
 		// print_r($this->task_departments);
@@ -551,7 +551,7 @@ class CTask extends CW2pObject {
 
 		//split out related contacts and store them seperatly.
 		$q->setDelete('task_contacts');
-		$q->addWhere('task_id=' . $this->task_id);
+		$q->addWhere('task_id=' . (int)$this->task_id);
 		$q->exec();
 		$q->clear();
 		if (!empty($this->task_contacts)) {
@@ -605,7 +605,7 @@ class CTask extends CW2pObject {
 		$this->_action = 'deleted';
 		// delete linked user tasks
 		$q->setDelete('user_tasks');
-		$q->addWhere('task_id=' . $this->task_id);
+		$q->addWhere('task_id=' . (int)$this->task_id);
 		if (!($q->exec())) {
 			return db_error();
 		}
@@ -620,7 +620,7 @@ class CTask extends CW2pObject {
 		$childrenlist = $this->getDeepChildren();
 
 		$q->setDelete('tasks');
-		$q->addWhere('task_id=' . $this->task_id);
+		$q->addWhere('task_id=' . (int)$this->task_id);
 		if (!($q->exec())) {
 			return db_error();
 		} elseif ($this->task_parent != $this->task_id) {
@@ -661,7 +661,7 @@ class CTask extends CW2pObject {
 		if (!empty($childrenlist)) {
 			$q->addWhere('dependencies_task_id IN (' . implode(', ', $childrenlist) . ', ' . $this->task_id . ')');
 		} else {
-			$q->addWhere('dependencies_task_id=' . $this->task_id);
+			$q->addWhere('dependencies_task_id=' . (int)$this->task_id);
 		}
 
 		if (!($q->exec())) {
@@ -678,7 +678,7 @@ class CTask extends CW2pObject {
 		$q = &new DBQuery;
 		// delete all current entries
 		$q->setDelete('task_dependencies');
-		$q->addWhere('dependencies_task_id=' . $this->task_id);
+		$q->addWhere('dependencies_task_id=' . (int)$this->task_id);
 		$q->exec();
 		$q->clear();
 
@@ -735,7 +735,7 @@ class CTask extends CW2pObject {
 
 		$q->addTable('projects');
 		$q->addQuery('project_name');
-		$q->addWhere('project_id=' . $this->task_project);
+		$q->addWhere('project_id=' . (int)$this->task_project);
 		$projname = htmlspecialchars_decode($q->loadResult());
 		$q->clear();
 		$mail = new Mail;
@@ -781,7 +781,7 @@ class CTask extends CW2pObject {
 
 		$q->addTable('projects');
 		$q->addQuery('project_name');
-		$q->addWhere('project_id=' . $this->task_project);
+		$q->addWhere('project_id=' . (int)$this->task_project);
 		$projname = htmlspecialchars_decode($q->loadResult());
 		$q->clear();
 
@@ -853,7 +853,7 @@ class CTask extends CW2pObject {
 			$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
 			$q->addWhere('ut.task_id = ' . (int)$this->task_id);
 			if (!$AppUI->getPref('MAILALL')) {
-				$q->addWhere('ua.user_id <>' . $AppUI->user_id);
+				$q->addWhere('ua.user_id <>' . (int)$AppUI->user_id);
 			}
 			$req = &$q->exec(QUERY_STYLE_NUM);
 			for ($req; !$req->EOF; $req->MoveNext()) {
@@ -897,7 +897,7 @@ class CTask extends CW2pObject {
 			if (strlen($others) > 0) {
 				$q->addTable('contacts', 'c');
 				$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
-				$q->addWhere('c.contact_id in (' . $others . ')');
+				$q->addWhere('c.contact_id IN (' . $others . ')');
 				$req = &$q->exec(QUERY_STYLE_NUM);
 				for ($req; !$req->EOF; $req->MoveNext()) {
 					list($email, $first, $last) = $req->fields;
@@ -931,7 +931,7 @@ class CTask extends CW2pObject {
 
 		$q->addTable('projects');
 		$q->addQuery('project_name');
-		$q->addWhere('project_id=' . $this->task_project);
+		$q->addWhere('project_id=' . (int)$this->task_project);
 		$projname = htmlspecialchars_decode($q->loadResult());
 		$q->clear();
 
@@ -1025,7 +1025,7 @@ class CTask extends CW2pObject {
 		$q->addWhere('(projects.project_id = project_departments.project_id OR project_departments.project_id IS NULL)');
 		$q->addWhere('(departments.dept_id = project_departments.department_id OR dept_id IS NULL)');
 		$q->addQuery('DISTINCT t.task_id, t.task_name, t.task_start_date, t.task_end_date, t.task_duration' . ', t.task_duration_type, projects.project_color_identifier AS color, projects.project_name, t.task_milestone');
-		$q->addWhere('task_status > -1' . " AND (task_start_date <= '{$db_end}' AND (task_end_date >= '{$db_start}'" . " OR  task_end_date = '0000-00-00 00:00:00' OR task_end_date = NULL))");
+		$q->addWhere('task_status > -1' . ' AND (task_start_date <= \'' . $db_end . '\' AND (task_end_date >= \'' . $db_start . '\' OR task_end_date = \'0000-00-00 00:00:00\' OR task_end_date = NULL))');
 		if ($user_id) {
 			$q->addWhere('ut.user_id = ' . (int)$user_id);
 		}
@@ -1069,7 +1069,7 @@ class CTask extends CW2pObject {
 				// protected
 				$q->addTable('users');
 				$q->addQuery('user_company');
-				$q->addWhere('user_id=' . $user_id . ' OR user_id=' . $this->task_owner);
+				$q->addWhere('user_id=' . (int)$user_id . ' OR user_id=' . (int)$this->task_owner);
 				$user_owner_companies = $q->loadColumn();
 				$q->clear();
 				$company_match = true;
@@ -1083,7 +1083,7 @@ class CTask extends CW2pObject {
 				$company_match = ((isset($company_match)) ? $company_match : true);
 				$q->addTable('user_tasks');
 				$q->addQuery('COUNT(task_id)');
-				$q->addWhere('user_id=' . $user_id . ' AND task_id=' . $this->task_id);
+				$q->addWhere('user_id=' . (int)$user_id . ' AND task_id=' . (int)$this->task_id);
 				$count = $q->loadResult();
 				$q->clear();
 				$retval = (($company_match && $count > 0) || $this->task_owner == $user_id);

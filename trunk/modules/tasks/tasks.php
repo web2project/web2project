@@ -43,7 +43,7 @@ $q = new DBQuery();
 $q->addQuery('task_id');
 $q->addTable('tasks');
 if ($project_id) {
-	$q->addWhere('task_project=' . $project_id);
+	$q->addWhere('task_project=' . (int)$project_id);
 }
 //$q->addWhere('task_dynamic=1');
 $all_tasks = $q->loadList();

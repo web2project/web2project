@@ -158,7 +158,7 @@ if ($do_report) {
 		$q->addWhere('a.task_project = b.project_id');
 		$q->addWhere('b.project_active = 1');
 		if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-			$q->addWhere('b.project_status <> ' . $template_status);
+			$q->addWhere('b.project_status <> ' . (int)$template_status);
 		}
 	} else {
 		$q = new DBQuery;

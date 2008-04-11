@@ -79,20 +79,20 @@ if (is_array($selected) && count($selected)) {
 			$q = new DBQuery;
 			$q->addTable('tasks');
 			$q->addUpdate('task_percent_complete', '100');
-			$q->addWhere('task_id=' . $val);
+			$q->addWhere('task_id=' . (int)$val);
 		} else
 			if ($task_priority == 'd') {
 				// delete task
 				$q = new DBQuery;
 				$q->setDelete('tasks');
-				$q->addWhere('task_id=' . $val);
+				$q->addWhere('task_id=' . (int)$val);
 			} else
 				if ($task_priority > -2 && $task_priority < 2) {
 					// set priority
 					$q = new DBQuery;
 					$q->addTable('tasks');
 					$q->addUpdate('task_priority', $task_priority);
-					$q->addWhere('task_id=' . $val);
+					$q->addWhere('task_id=' . (int)$val);
 				}
 		$q->exec();
 		echo db_error();
@@ -124,19 +124,19 @@ $q->leftJoin('departments', 'departments', 'departments.dept_id = project_depart
 $q->addWhere('ut.task_id = ta.task_id');
 $q->addWhere('ut.user_id = ' . (int)$user_id);
 $q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
-$q->addWhere('ta.task_status = "0"');
+$q->addWhere('ta.task_status = 0');
 $q->addWhere('pr.project_id = ta.task_project');
 if (!$showArcProjs) {
 	$q->addWhere('project_active = 1');
 	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('project_status <> ' . $template_status);
+		$q->addWhere('project_status <> ' . (int)$template_status);
 	}
 }
 if (!$showLowTasks) {
 	$q->addWhere('task_priority >= 0');
 }
 if (!$showHoldProjs) {
-	$q->addWhere('project_status <> ' . $project_on_hold_status);
+	$q->addWhere('project_status <> ' . (int)$project_on_hold_status);
 }
 if (!$showDynTasks) {
 	$q->addWhere('task_dynamic <> 1');
@@ -148,7 +148,7 @@ if (!$showEmptyDate) {
 	$q->addWhere('ta.task_start_date <> \'\' AND ta.task_start_date <> \'0000-00-00 00:00:00\'');
 }
 if ($task_type != '') {
-	$q->addWhere('ta.task_type = ' . $task_type);
+	$q->addWhere('ta.task_type = ' . (int)$task_type);
 }
 
 if (count($allowedTasks)) {
