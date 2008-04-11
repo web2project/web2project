@@ -568,7 +568,7 @@ foreach ($projects as $k => $p) {
 	<td align="center">
 <?php
 				echo ('<a href="javascript:chAssignment(' . $p['project_id'] . ', 0, 0);">' . w2PshowImage('add.png', 16, 16, 'Assign Users', 'Assign selected Users to selected Tasks', 'tasks') . "</a>\n");
-				echo ('<a href=2javascript:chAssignment(' . $p['project_id'] . ', 1, 1);">' . w2PshowImage('remove.png', 16, 16, 'Unassign Users', 'Unassign Users from Task', 'tasks') . "</a>\n");
+				echo ('<a href="javascript:chAssignment(' . $p['project_id'] . ', 1, 1);">' . w2PshowImage('remove.png', 16, 16, 'Unassign Users', 'Unassign Users from Task', 'tasks') . "</a>\n");
 
 ?>
 	<br />
