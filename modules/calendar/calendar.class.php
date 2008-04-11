@@ -884,7 +884,7 @@ class CEvent extends CW2pObject {
 			$q->addTable('contacts', 'con');
 			$q->addQuery('user_id');
 			$q->addQuery('CONCAT_WS(\' \',contact_first_name,contact_last_name)');
-			$q->addWhere('user_id in (' . implode(',', $clash) . ')');
+			$q->addWhere('user_id IN (' . implode(',', $clash) . ')');
 			$q->addWhere('user_contact = contact_id');
 			return $q->loadHashList();
 		} else {

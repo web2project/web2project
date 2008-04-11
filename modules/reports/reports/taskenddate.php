@@ -92,7 +92,7 @@ if ($do_report) {
 	$q->leftJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
 	$q->addWhere('p.project_active = 1');
 	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('p.project_status <> ' . $template_status);
+		$q->addWhere('p.project_status <> ' . (int)$template_status);
 	}
 
 	if ($user_id > 0) {
@@ -106,7 +106,7 @@ if ($do_report) {
 	}
 
 	$q->addWhere('p.project_id   = t.task_project');
-	$q->addWhere('t.task_dynamic = "0"');
+	$q->addWhere('t.task_dynamic = 0');
 	$q->addWhere('t.task_owner = u.user_id');
 	$q->addWhere('task_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
 	$q->addWhere('task_end_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');

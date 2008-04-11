@@ -112,11 +112,11 @@ if ($do_report) {
 	$q->addWhere('t.task_milestone = 0');
 	$q->addWhere('project_active = 1');
 	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('project_status <> ' . $template_status);
+		$q->addWhere('project_status <> ' . (int)$template_status);
 	}
 
 	if ($project_id != 0) {
-		$q->addWhere('t.task_project = \'' . $project_id . '\'');
+		$q->addWhere('t.task_project = ' . (int)$project_id);
 	}
 
 	if (!$log_all) {
@@ -160,14 +160,14 @@ if ($do_report) {
 					// Now let's figure out how many time did the user spent in this task
 					$q->addTable('task_log');
 					$q->addQuery('SUM(task_log_hours)');
-					$q->addWhere('task_log_task =' . $task_id);
-					$q->addWhere('task_log_creator =' . $user_id);
+					$q->addWhere('task_log_task =' . (int)$task_id);
+					$q->addWhere('task_log_creator =' . (int)$user_id);
 					$hours_worked = round($q->loadResult(), 2);
 					$q->clear();
 
 					$q->addTable('tasks');
 					$q->addQuery('task_percent_complete');
-					$q->addWhere('task_id =' . $task_id);
+					$q->addWhere('task_id =' . (int)$task_id);
 					$percent = $q->loadColumn();
 					$q->clear();
 					$complete = ($percent[0] == 100);

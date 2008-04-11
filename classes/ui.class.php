@@ -749,7 +749,7 @@ class CAppUI {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
-		$q->addWhere('user_id = \'' . $user_id . '\' AND (date_time_out = \'0000-00-00 00:00:00\' OR isnull(date_time_out)) ');
+		$q->addWhere('user_id = ' . (int)$user_id . ' AND (date_time_out = \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
 		if ($user_id > 0) {
 			$q->exec();
 			$q->clear();
@@ -831,7 +831,7 @@ class CAppUI {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name');
-		$q->addWhere('mod_active > 0');
+		$q->addWhere('mod_active = 1');
 		$q->addOrder('mod_directory');
 		return ($q->loadHashList());
 	}
@@ -845,7 +845,7 @@ class CAppUI {
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name, mod_ui_icon');
 		$q->addWhere('mod_active > 0 AND mod_ui_active > 0 AND mod_directory <> \'public\'');
-		$q->addWhere('mod_type != \'utility\'');
+		$q->addWhere('mod_type <> \'utility\'');
 		$q->addOrder('mod_ui_order');
 		return ($q->loadList());
 	}

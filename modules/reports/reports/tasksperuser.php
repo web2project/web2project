@@ -164,7 +164,7 @@ if ($do_report) {
 	$q->addJoin('departments', '', 'department_id = dept_id');
 	$q->addWhere('project_active = 1');
 	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('project_status <> ' . $template_status);
+		$q->addWhere('project_status <> ' . (int)$template_status);
 	}
 
 	if ($use_period) {

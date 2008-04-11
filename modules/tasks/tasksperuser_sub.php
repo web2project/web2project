@@ -276,7 +276,7 @@ if ($do_report) {
 	$q->addJoin('projects', 'pr', 'pr.project_id = t.task_project', 'inner');
 	$q->addWhere('pr.project_active = 1');
 	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('pr.project_status <> ' . $template_status);
+		$q->addWhere('pr.project_status <> ' . (int)$template_status);
 	}
 
 	if ($use_period) {
@@ -285,11 +285,11 @@ if ($do_report) {
 	$q->addWhere('(task_percent_complete < 100)');
 
 	if ($project_id != 'all') {
-		$q->addWhere('t.task_project=\'' . $project_id . '\'');
+		$q->addWhere('t.task_project=' . (int)$project_id);
 	}
 
 	if ($company_id != 'all') {
-		$q->addWhere('p.project_company = \'' . $company_id . '\'');
+		$q->addWhere('p.project_company = ' . (int)$company_id);
 	}
 
 	$q->addOrder('task_project');

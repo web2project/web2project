@@ -126,7 +126,7 @@ $q = new DBQuery;
 $q->addTable('tasks');
 $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
 $q->addWhere('task_project = ' . (int)$task_project);
-$q->addWhere('task_id != task_parent');
+$q->addWhere('task_id <> task_parent');
 $q->addOrder('task_start_date');
 
 $parents = array();

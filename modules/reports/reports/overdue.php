@@ -75,7 +75,7 @@ $q->addJoin('contacts', 'ct', 'ct.contact_id = b.user_contact', 'inner');
 $q->addWhere('task_percent_complete < 100');
 $q->addWhere('pr.project_active = 1');
 if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-	$q->addWhere('pr.project_status <> ' . $template_status);
+	$q->addWhere('pr.project_status <> ' . (int)$template_status);
 }
 if ($project_id != 0) {
 	$q->addWhere('task_project = ' . (int)$project_id);
@@ -106,7 +106,7 @@ if (count($tasks)) {
 	$q->addTable('user_tasks', 'a');
 	$q->addJoin('users', 'b', 'a.user_id = b.user_id', 'inner');
 	$q->addJoin('contacts', 'c', 'b.user_contact = c.contact_id', 'inner');
-	$q->addWhere('a.task_id in (' . implode(',', $task_list) . ')');
+	$q->addWhere('a.task_id IN (' . implode(',', $task_list) . ')');
 	$res = $q->exec();
 	if (!$res) {
 		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
@@ -128,7 +128,7 @@ if ($hasResources && count($tasks)) {
 	$q->addQuery('a.*, b.resource_name');
 	$q->addTable('resource_tasks', 'a');
 	$q->addJoin('resources', 'b', 'a.resource_id = b.resource_id', 'inner');
-	$q->addWhere('a.task_id in (' . implode(',', $task_list) . ')');
+	$q->addWhere('a.task_id IN (' . implode(',', $task_list) . ')');
 	$res = $q->exec();
 	if (!$res) {
 		$AppUI->setMsg(db_error(), UI_MSG_ERROR);

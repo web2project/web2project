@@ -151,7 +151,7 @@ if ($do_report) {
 	$q->addWhere('t.task_id = ut.task_id');
 	$q->addWhere('pr.project_active = 1');
 	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('pr.project_status <> ' . $template_status);
+		$q->addWhere('pr.project_status <> ' . (int)$template_status);
 	}
 
 	if ($user_id) {

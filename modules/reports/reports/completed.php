@@ -108,7 +108,7 @@ if (count($tasks)) {
 	$q->addTable('user_tasks', 'a');
 	$q->addJoin('users', 'b', 'a.user_id = b.user_id', 'inner');
 	$q->addJoin('contacts', 'c', 'b.user_contact = c.contact_id', 'inner');
-	$q->addWhere('a.task_id in (' . implode(',', $task_list) . ')');
+	$q->addWhere('a.task_id IN (' . implode(',', $task_list) . ')');
 	$res = $q->exec();
 	if (!$res) {
 		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
@@ -130,7 +130,7 @@ if ($hasResources && count($tasks)) {
 	$q->addQuery('a.*, b.resource_name');
 	$q->addTable('resource_tasks', 'a');
 	$q->addJoin('resources', 'b', 'a.resource_id = b.resource_id', 'inner');
-	$q->addWhere('a.task_id in (' . implode(',', $task_list) . ')');
+	$q->addWhere('a.task_id IN (' . implode(',', $task_list) . ')');
 	$res = $q->exec();
 	if (!$res) {
 		$AppUI->setMsg(db_error(), UI_MSG_ERROR);

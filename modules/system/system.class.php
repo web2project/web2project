@@ -106,7 +106,7 @@ class CModule extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('MAX(mod_ui_order)');
-		$q->addWhere('mod_name NOT LIKE "Public"');
+		$q->addWhere('mod_name NOT LIKE \'Public\'');
 		// We need to account for "pre-installed" modules that are "UI Inaccessible"
 		// in order to make sure we get the "correct" initial value for .
 		// mod_ui_order values of "UI Inaccessible" modules are irrelevant
@@ -185,7 +185,7 @@ class CModule extends CW2pObject {
 			$q = new DBQuery;
 			$q->addTable('modules');
 			$q->addUpdate('mod_ui_order', $new_ui_order);
-			$q->addWhere('mod_id = ' . $this->mod_id);
+			$q->addWhere('mod_id = ' . (int)$this->mod_id);
 			$q->exec();
 			$q->clear();
 			$idx = 1;
@@ -193,14 +193,14 @@ class CModule extends CW2pObject {
 				if ((int)$idx != (int)$new_ui_order) {
 					$q->addTable('modules');
 					$q->addUpdate('mod_ui_order', $idx);
-					$q->addWhere('mod_id = ' . $module['mod_id']);
+					$q->addWhere('mod_id = ' . (int)$module['mod_id']);
 					$q->exec();
 					$q->clear();
 					$idx++;
 				} else {
 					$q->addTable('modules');
 					$q->addUpdate('mod_ui_order', $idx + 1);
-					$q->addWhere('mod_id = ' . $module['mod_id']);
+					$q->addWhere('mod_id = ' . (int)$module['mod_id']);
 					$q->exec();
 					$q->clear();
 					$idx = $idx + 2;

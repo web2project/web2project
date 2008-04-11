@@ -51,7 +51,7 @@ if (($deptsType && $currentTabId && $tabbed) || (!$tabbed)) {
 	$q->addWhere('dept_type = ' . (int)$dept_type_filter);
 }
 if ($search_string != '') {
-	$q->addWhere('dept_name LIKE "%'.$search_string.'%"');
+	$q->addWhere('dept_name LIKE \'%'.$search_string.'%\'');
 }
 if ($owner_filter_id > 0) {
 	$q->addWhere('dept_owner = '.$owner_filter_id);

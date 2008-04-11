@@ -134,7 +134,7 @@ function showcompany($company, $restricted = false) {
 		$q->addWhere('project_id = ' . (int)$project);
 		$q->addWhere('project_active = 1');
 		if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-			$q->addWhere('project_status <> ' . $template_status);
+			$q->addWhere('project_status <> ' . (int)$template_status);
 		}
 
 		if ($log_start_date != 0 && !$log_all) {

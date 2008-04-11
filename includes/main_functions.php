@@ -108,7 +108,7 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 	$q->addTable('projects', 'pr');
 	$q->addQuery('pr.project_id, co.company_name, project_name');
 	if (!empty($excludeProjWithId)) {
-		$q->addWhere('pr.project_id != ' . $excludeProjWithId);
+		$q->addWhere('pr.project_id <> ' . $excludeProjWithId);
 	}
 	$proj = new CProject();
 	$proj->setAllowedSQL($user_id, $q, null, 'pr');

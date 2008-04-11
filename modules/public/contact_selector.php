@@ -134,7 +134,7 @@ if ($where) { // Don't assume where is set. Change needed to fix Mantis Bug 0002
 if ($where_dept) { // Don't assume where is set. Change needed to fix Mantis Bug 0002056
 	$q->addWhere($where_dept);
 }
-$q->addWhere('(contact_owner = \'' . $AppUI->user_id . '\' OR contact_private = \'0\')');
+$q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
 $q->addOrder('company_name, contact_company, dept_name, contact_department, contact_last_name'); // May need to review this.
 $contacts = $q->loadHashList('contact_id');
 ?>

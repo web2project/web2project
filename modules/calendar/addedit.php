@@ -51,7 +51,7 @@ if ($is_clash) {
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
 		$q->addQuery('user_id, CONCAT_WS(\' \' , contact_first_name, contact_last_name)');
-		$q->addWhere('user_id in ('.$assignee_list.')');
+		$q->addWhere('user_id IN ('.$assignee_list.')');
 		$q->addWhere('user_contact = contact_id');
 		$assigned = $q->loadHashList();
 	} else {

@@ -430,7 +430,7 @@ if (is_array($projects)) {
 				$q->addTable('user_tasks', 't');
 				$q->addQuery('DISTINCT user_username, t.task_id');
 				$q->addJoin('users', 'u', 'u.user_id = t.user_id', 'inner');
-				$q->addWhere('t.task_id = ' . $t['task_id']);
+				$q->addWhere('t.task_id = ' . (int)$t['task_id']);
 				$q->addOrder('user_username ASC');
 				$workers = $q->loadList();
 				$q->clear();

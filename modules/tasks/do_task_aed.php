@@ -35,7 +35,7 @@ if ($sub_form) {
 	// Include any files for handling module-specific requirements
 	foreach (findTabModules('tasks', 'addedit') as $mod) {
 		$fname = W2P_BASE_DIR . '/modules/' . $mod . '/tasks_dosql.addedit.php';
-		//dprint(__file__, __line__, 3, "checking for $fname");
+		//dprint(__file__, __line__, 3, 'checking for ' . $fname);
 		if (file_exists($fname)) {
 			require_once $fname;
 		}
@@ -48,8 +48,6 @@ if ($sub_form) {
 		foreach ($pre_save as $pre_save_function) {
 			$pre_save_function();
 		}
-	//} else {
-		//dprint(__file__, __line__, 2, 'No pre_save functions.');
 	}
 
 	// Find the task if we are set
@@ -153,10 +151,6 @@ if ($sub_form) {
 				$obj->addReminder();
 			}
 			$AppUI->setMsg($task_id ? 'Task updated' : 'Task added', UI_MSG_OK);
-		}
-
-		if (isset($hassign)) {
-			$obj->updateAssigned($hassign, $hperc_assign_ar);
 		}
 
 		if (isset($hassign)) {

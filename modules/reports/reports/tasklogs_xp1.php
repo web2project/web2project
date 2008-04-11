@@ -279,7 +279,7 @@ if ($do_report) {
 			$q = new DBQuery;
 			$q->addTable('projects');
 			$q->addQuery('project_name');
-			$q->addWhere('project_id=' . $project_id);
+			$q->addWhere('project_id=' . (int)$project_id);
 			$pname = 'Project: ' . $q->loadResult();
 		} else {
 			$pname = 'All Companies and All Projects';
@@ -290,7 +290,7 @@ if ($do_report) {
 			$q = new DBQuery;
 			$q->addTable('companies');
 			$q->addQuery('company_name');
-			$q->addWhere('company_id=' . $company_id);
+			$q->addWhere('company_id=' . (int)$company_id);
 			$cname = 'Company: ' . $q->loadResult();
 		} else {
 			$cname = 'All Companies and All Projects';
@@ -302,7 +302,7 @@ if ($do_report) {
 			$q->addTable('contacts');
 			$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name)');
 			$q->addJoin('users', '', 'user_contact = contact_id', 'inner');
-			$q->addWhere('user_id=' . $log_userfilter);
+			$q->addWhere('user_id =' . (int)$log_userfilter);
 			$uname = 'User: ' . $q->loadResult();
 		} else {
 			$uname = 'All Users';

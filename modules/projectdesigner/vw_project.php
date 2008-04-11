@@ -143,7 +143,7 @@ $q->addTable('contacts', 'a');
 $q->addTable('project_contacts', 'b');
 $q->addJoin('departments', 'c', 'a.contact_department = c.dept_id', 'left outer');
 $q->addQuery('a.contact_id, a.contact_first_name, a.contact_last_name, a.contact_email, a.contact_phone, c.dept_name');
-$q->addWhere('a.contact_id = b.contact_id and b.project_id = ' . (int)$project_id . ' and (contact_owner = ' . (int)$AppUI->user_id . ' or contact_private = 0)');
+$q->addWhere('a.contact_id = b.contact_id AND b.project_id = ' . (int)$project_id . ' AND (contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
 $department->setAllowedSQL($AppUI->user_id, $q);
 $contacts = $q->loadHashList('contact_id');
 if (count($contacts) > 0) {

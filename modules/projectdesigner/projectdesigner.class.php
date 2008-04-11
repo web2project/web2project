@@ -57,7 +57,7 @@ function getCriticalTasksInverted($project_id = null, $limit = 1) {
 	} else {
 		$q = new DBQuery;
 		$q->addTable('tasks');
-		$q->addWhere('task_project = ' . (int)$project_id  . ' AND !isnull( task_end_date ) AND task_end_date !=  "0000-00-00 00:00:00"');
+		$q->addWhere('task_project = ' . (int)$project_id  . ' AND NOT ISNULL( task_end_date ) AND task_end_date <>  \'0000-00-00 00:00:00\'');
 		$q->addOrder('task_start_date ASC');
 		$q->setLimit($limit);
 

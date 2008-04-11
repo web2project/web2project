@@ -155,12 +155,12 @@ class CProject extends CW2pObject {
 			$q->exec();
 			$q->clear();
 			$q->setDelete('task_dependencies');
-			$q->addWhere('dependencies_req_task_id =' . $task_id);
+			$q->addWhere('dependencies_req_task_id =' . (int)$task_id);
 			$q->exec();
 			$q->clear();
 		}
 		$q->setDelete('tasks');
-		$q->addWhere('task_project =' . $this->project_id);
+		$q->addWhere('task_project =' . (int)$this->project_id);
 		$q->exec();
 		$q->clear();
 		$q = new DBQuery;
@@ -172,20 +172,20 @@ class CProject extends CW2pObject {
 		foreach ($files_to_delete as $file_id) {
 			$file = new CFile();
 			$file->file_id = $file_id;
-			$file->file_project = $this->project_id;
+			$file->file_project = (int)$this->project_id;
 			$file->delete();
 		}
 		// remove the project-contacts and project-departments map
 		$q->setDelete('project_contacts');
-		$q->addWhere('project_id =' . $this->project_id);
+		$q->addWhere('project_id =' . (int)$this->project_id);
 		$q->exec();
 		$q->clear();
 		$q->setDelete('project_departments');
-		$q->addWhere('project_id =' . $this->project_id);
+		$q->addWhere('project_id =' . (int)$this->project_id);
 		$q->exec();
 		$q->clear();
 		$q->setDelete('projects');
-		$q->addWhere('project_id =' . $this->project_id);
+		$q->addWhere('project_id =' . (int)$this->project_id);
 
 		if (!$q->exec()) {
 			$result = db_error();
@@ -209,7 +209,7 @@ class CProject extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
-		$q->addWhere('task_project =' . $from_project_id);
+		$q->addWhere('task_project =' . (int)$from_project_id);
 		$tasks = array_flip($q->loadColumn());
 		$q->clear();
 
@@ -447,7 +447,7 @@ class CProject extends CW2pObject {
 		$project_id = !empty($project_id) ? $project_id : $this->project_id;
 		$q = new DBQuery;
 		$q->addTable('tasks');
-		$q->addWhere('task_project = ' . (int)$project_id . ' AND !isnull( task_end_date ) AND task_end_date !=  "0000-00-00 00:00:00"');
+		$q->addWhere('task_project = ' . (int)$project_id . ' AND NOT ISNULL( task_end_date ) AND task_end_date <>  \'0000-00-00 00:00:00\'');
 		$q->addOrder('task_end_date DESC');
 		$q->setLimit($limit);
 
@@ -478,7 +478,7 @@ class CProject extends CW2pObject {
 		//split out related departments and store them seperatly.
 		$q = new DBQuery;
 		$q->setDelete('project_departments');
-		$q->addWhere('project_id=' . $this->project_id);
+		$q->addWhere('project_id=' . (int)$this->project_id);
 		$q->exec();
 		$q->clear();
 		if ($this->project_departments) {
@@ -494,7 +494,7 @@ class CProject extends CW2pObject {
 
 		//split out related contacts and store them seperatly.
 		$q->setDelete('project_contacts');
-		$q->addWhere('project_id=' . $this->project_id);
+		$q->addWhere('project_id=' . (int)$this->project_id);
 		$q->exec();
 		$q->clear();
 		if ($this->project_contacts) {
@@ -728,7 +728,7 @@ function projects_list_data($user_id = false) {
 	$q->addTable('tasks');
 	$q->addQuery('task_project, task_log_problem');
 	$q->addJoin('task_log', 'tl', 'tl.task_log_task = task_id', 'inner');
-	$q->addWhere('task_log_problem > "0"');
+	$q->addWhere('task_log_problem = 1');
 	$q->addGroup('task_project');
 	$tasks_problems = $q->exec();
 	$q->clear();
@@ -824,7 +824,7 @@ function projects_list_data($user_id = false) {
 		$q->addWhere('pr.project_owner = ' . (int)$owner);
 	}
 	if (trim($search_text)) {
-		$q->addWhere('pr.project_name like "%' . $search_text . '%" OR pr.project_description like "%' . $search_text . '%"');
+		$q->addWhere('pr.project_name LIKE \'%' . $search_text . '%\' OR pr.project_description LIKE \'%' . $search_text . '%\'');
 	}
 	// Show Projects where the Project Owner is in the given department
 	if ($addPwOiD && !empty($owner_ids)) {

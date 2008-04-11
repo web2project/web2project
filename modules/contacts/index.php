@@ -236,7 +236,7 @@ for ($z = 0; $z < $carrWidth; $z++) {
 		$q = new DBQuery;
 		$q->addTable('projects');
 		$q->addQuery('count(project_id)');
-		$q->addWhere('project_contacts like \'' . $carr[$z][$x]['contact_id'] . ',%\' or project_contacts like \'%,' . $carr[$z][$x]['contact_id'] . ',%\' or project_contacts like \'%,' . $carr[$z][$x]['contact_id'] . '\' or project_contacts like \'' . $carr[$z][$x]['contact_id'] . '\'');
+		$q->addWhere('project_contacts LIKE \'' . $carr[$z][$x]['contact_id'] . ',%\' OR project_contacts LIKE \'%,' . $carr[$z][$x]['contact_id'] . ',%\' OR project_contacts LIKE \'%,' . $carr[$z][$x]['contact_id'] . '\' OR project_contacts LIKE \'' . $carr[$z][$x]['contact_id'] . '\'');
 
 		$res = $q->exec();
 		$projects_contact = $q->fetchRow();

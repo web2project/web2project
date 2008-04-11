@@ -44,7 +44,7 @@ if ($obj->file_task) {
 	$q = new DBQuery;
 	$q->addTable('tasks');
 	$q->addQuery('task_name');
-	$q->addWhere('task_id=' . $file_task);
+	$q->addWhere('task_id=' . (int)$file_task);
 	$task_name = $q->loadResult();
 	$q->clear();
 } else {
