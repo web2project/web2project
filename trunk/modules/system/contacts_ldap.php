@@ -19,7 +19,7 @@ $sql_table = 'contacts';
 // or
 //	"telephonenumber2" => "contact_phone2",
 
-$sql_ldap_mapping = array('givenname' => 'contact_first_name', 'sn' => 'contact_last_name', 'title' => 'contact_title', 'companyname' => 'contact_company', 'department' => 'contact_department', 'employeeid' => 'contact_type', 'mail' => 'contact_email', 'telephonenumber' => 'contact_phone', 'physicaldeliveryofficename' => 'contact_phone2', 'postaladdress' => 'contact_address1', 'l' => 'contact_city', 'st' => 'contact_state', 'postalcode' => 'contact_zip', 'c' => 'contact_country');
+$sql_ldap_mapping = array('givenname' => 'first_name', 'sn' => 'last_name', 'title' => 'job', 'o' => 'company', 'ou' => 'department', 'personaltitle' => 'title', 'employeetype' => 'type', 'mail' => 'email', 'telephonenumber' => 'phone', 'homephone' => 'phone2', 'fax' => 'fax', 'mobile' => 'mobile', 'postaladdress' => 'address1', 'l' => 'city', 'st' => 'state', 'postalcode' => 'zip', 'c' => 'country', 'comment' => 'notes');
 
 $titleBlock = new CTitleBlock('Import Contacts from LDAP Directory', '', 'admin', '');
 $titleBlock->addCrumb('?m=system', 'system admin');
@@ -29,13 +29,11 @@ if (isset($_POST['server'])) {
 	$AppUI->setState('LDAPServer', $_POST['server']);
 }
 $server = $AppUI->getState('LDAPServer', '');
-//$server = 'KMP00';
 
 if (isset($_POST['bind_name'])) {
 	$AppUI->setState('LDAPBindName', $_POST['bind_name']);
 }
 $bind_name = $AppUI->getState('LDAPBindName', '');
-//$bind_name = 'dcordes';
 
 $bind_password = w2PgetParam($_POST, 'bind_password', '');
 
@@ -105,7 +103,7 @@ echo ' />';
 		<td><input type="text" class="text" name="filter" value="<?php echo $filter; ?>" size="100" /></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="right"><input type="submit" name="test" value="<?php echo $AppUI->_('Test Connection and Query'); ?>" /><input type="submit" name="import" value="<?php echo $AppUI->_('Import Users'); ?>" /></td>
+		<td colspan="2" align="right"><input type="submit" name="test" value="<?php echo $AppUI->_('Test Connection and Query'); ?>" /><input type="submit" name="import" value="<?php echo $AppUI->_('Import Contacts'); ?>" /></td>
 	</tr>
 	<tr>
 		<td colspan="2">
@@ -123,7 +121,7 @@ if (isset($test) || isset($import)) {
 	if (function_exists('ldap_connect')) {
 		$ds = @ldap_connect($server, $port);
 	} else {
-		$s .= '<span style="color:red;font-weight:bold;">ldap_connect function is not installed.</span>';
+		$s .= '<span style="color:red;font-weight:bold;">ldap_connect function is not installed.</span><br />';
 		$ds = false;
 	}
 	 
@@ -132,25 +130,25 @@ if (isset($test) || isset($import)) {
 		if (function_exists('ldap_error')) {
 			$s .= ldap_error($ds);
 		} else {
-			$s .= '<span style="color:red;font-weight:bold;">ldap_connect failed.</span>';
+			$s .= '<span style="color:red;font-weight:bold;">ldap_connect failed.</span><br />';
 		}
 	} else {
-		$s .= 'ldap_connect succeeded.';
+		$s .= 'ldap_connect succeeded.<br />';
 	}
 
 	if (function_exists('ldap_set_option')) {
 		@ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $proto);
 	} else {
-		$s .= '<span style="color:red;font-weight:bold;">ldap_set_option function is not installed.</span>';
+		$s .= '<span style="color:red;font-weight:bold;">ldap_set_option function is not installed.</span><br />';
 	}
 
 	if (!function_exists('ldap_bind') || !@ldap_bind($ds, $bind_name, $bind_password)) {
-		$s .= '<span style="color:red;font-weight:bold;">ldap_bind failed.</span>';
+		$s .= '<span style="color:red;font-weight:bold;">ldap_bind failed.</span><br />';
 		if (function_exists('ldap_error')) {
 			$s .= ldap_error($ds);
 		}
 	} else {
-		$s .= 'ldap_bind successful.';
+		$s .= 'ldap_bind successful.<br />';
 	}
 
 	$return_types = array();
@@ -158,8 +156,8 @@ if (isset($test) || isset($import)) {
 		$return_types[] = $ldap;
 	}
 
-	$s .= 'basedn: ' . $dn . '<br>';
-	$s .= 'expression: ' . $filter . '<br>';
+	$s .= 'basedn: ' . $dn . '<br />';
+	$s .= 'expression: ' . $filter . '<br />';
 
 	if (function_exists('ldap_search')) {
 		$sr = @ldap_search($ds, $dn, $filter, $return_types);
@@ -168,11 +166,11 @@ if (isset($test) || isset($import)) {
 	}
 
 	if ($sr) {
-		$s .= 'Search completed Sucessfully.';
+		$s .= 'Search completed Sucessfully.<br />';
 	} else {
-		$s .= '<span style="color:red;font-weight:bold;">ldap_search failed.</span>';
+		$s .= '<span style="color:red;font-weight:bold;">ldap_search failed.</span><br />';
 		if (function_exists('ldap_error')) {
-			$s .= 'Search Error: [' . ldap_errno($ds) . '] ' . ldap_error($ds);
+			$s .= 'Search Error: [' . ldap_errno($ds) . '] ' . ldap_error($ds) . '<br />';
 		}		
 	}
 
@@ -180,16 +178,16 @@ if (isset($test) || isset($import)) {
 
 	//	$s .= "Result Count:".(ldap_count_entries($ds,$sr));
 	if (function_exists('ldap_get_entries')) {
-		$info = ldap_get_entries($ds, $sr);
+		$info = @ldap_get_entries($ds, $sr);
 	} else {
-		$s .= '<span style="color:red;font-weight:bold;">ldap_get_entries is not installed.</span>';
+		$s .= '<span style="color:red;font-weight:bold;">ldap_get_entries is not installed.</span><br />';
 		$info = array();		
 	}
 	
 	if (!$info['count']) {
-		$s .= 'No users were found.';
+		$s .= 'No contacts were found.';
 	} else {
-		$s .= 'Total Users Found:' . $info['count'] . '<hr />';
+		$s .= 'Total Contacts Found:' . $info['count'] . '<hr />';
 		$s .= '<table border="0" cellpadding="1" cellspacing="0" width="98%" class="std">';
 		if (isset($test)) {
 			foreach ($sql_ldap_mapping as $ldap => $sql) {
@@ -216,18 +214,23 @@ if (isset($test) || isset($import)) {
 				if (isset($info[$i][$ldap_name][0])) {
 					$val = clean_value($info[$i][$ldap_name][0]);
 				}
+				if ($val && $ldap_name == 'postaladdress') {
+					$val = str_replace('$', "\r", $val);
+				}
 				if (isset($val)) {
 					//if an email address is not specified in Domino you get a crazy value for this field that looks like FOO/BAR%NAME@domain.com  This'll filter those values out.
-					if (isset($test) && $sql_name == 'contact_email' && substr_count($val, '%') > 0) {
+					if (isset($test) && $ldap_name == 'mail' && substr_count($val, '%') > 0) {
 						$s .= '<td><span style="color:#880000;">' . $AppUI->_('bad email address') . '</span></td>';
 						continue;
 					}
-					$pairs[$sql_name] = $val;
+					$pairs['contact_' . $sql_name] = $val;
 					if (isset($test)) {
 						$s .= '<td>' .  $val . '</td>';
 					}
 				} else {
-					$s .= '<td>-</td>';
+					if (isset($test)) {
+						$s .= '<td>-</td>';
+					}
 				}
 			}
 
@@ -237,12 +240,54 @@ if (isset($test) || isset($import)) {
 				if (isset($contact_list[$pairs['contact_first_name'] . ' ' . $pairs['contact_last_name']])) {
 					//if it does, remove the old one.
 					$pairs['contact_id'] = $contact_list[$pairs['contact_first_name'] . ' ' . $pairs['contact_last_name']];
+
+					//Try to find a matching company name in the system, if not them set contact_company to 0 
+					$q = new DBQuery;
+					$q->addQuery('company_id');
+					$q->addTable('companies');
+					$q->addWhere('company_name LIKE \'' . w2Phtmlspecialchars(trim($pairs['contact_company'])) . '\'');
+					$company_id = $q->loadResult();
+					$pairs['contact_company'] = $company_id ? $company_id : 0;
+					$q->clear();
+
+					//Try to find a matching department name in the system, if not them set contact_department to 0 
+					$q = new DBQuery;
+					$q->addQuery('dept_id');
+					$q->addTable('departments');
+					$q->addWhere('dept_name LIKE \'' . w2Phtmlspecialchars(trim($pairs['contact_department'])) . '\'');
+					$dept_id = $q->loadResult();
+					$pairs['contact_department'] = $dept_id ? $dept_id : 0;
+					$q->clear();
+					
 					$q = new DBQuery;
 					$q->updateArray($sql_table, $pairs, 'contact_id');
 					$q->clear();
 					$s .= '<td><span style="color:#880000;">There is a duplicate record for ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . ', the record has been updated.</span></td>';
 				} else {
+					//If the contact has no name, go to the next
+					if (!trim($pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'])) {
+						continue;
+					}
 					$s .= '<td>Adding ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . '.</td>';
+
+					//Try to find a matching company name in the system, if not them set contact_company to 0 
+					$q = new DBQuery;
+					$q->addQuery('company_id');
+					$q->addTable('companies');
+					$q->addWhere('company_name LIKE \'' . w2Phtmlspecialchars(trim($pairs['contact_company'])) . '\'');
+					$company_id = $q->loadResult();
+					$pairs['contact_company'] = $company_id ? $company_id : 0;
+					$q->clear();
+
+					//Try to find a matching department name in the system, if not them set contact_department to 0 
+					$q = new DBQuery;
+					$q->addQuery('dept_id');
+					$q->addTable('departments');
+					$q->addWhere('dept_name LIKE \'' . w2Phtmlspecialchars(trim($pairs['contact_department'])) . '\'');
+					$dept_id = $q->loadResult();
+					$pairs['contact_department'] = $dept_id ? $dept_id : 0;
+					$q->clear();
+
 					$q = new DBQuery;
 					$q->insertArray($sql_table, $pairs);
 					$q->clear();
