@@ -42,7 +42,7 @@ $w2Pconfig['dbhost'] = 'localhost';
 $w2Pconfig['dbname'] = 'web2project'; // Change to match your web2Project Database Name
 $w2Pconfig['dbuser'] = 'w2p_user'; // Change to match your MySQL Username
 $w2Pconfig['dbpass'] = 'w2p_pass'; // Change to match your MySQL Password
-$w2Pconfig['dbprefix'] = 'w2p_prefix_'; // Change to match the prefix used for db table names
+$w2Pconfig['dbprefix'] = ''; // Change to match the prefix used for db table names, example: $w2Pconfig['dbprefix'] = 'w2p_prefix_';
 
 // set this value to true to use persistent database connections
 $w2Pconfig['dbpersist'] = false;
