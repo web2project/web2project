@@ -924,14 +924,14 @@ class CAppUI {
 
 	function loadFooterJS() {
 		$s = '<script type="text/javascript">';
-		$s .= 'window.onload=function() {';
+		$s .= 'window.addEvent(\'domready\', function(){';
 		$s .= '		var as = [];';
 		$s .= '		$$(\'span\').each(function(span){';
 		$s .= '			if (span.getAttribute(\'title\')) as.push(span);';
 		$s .= '		});';
 		$s .= '		new Tips(as), {';
 		$s .= '		}';
-		$s .= '}';
+		$s .= '});';
 		$s .= '</script>';
 		echo $s;
 	}
