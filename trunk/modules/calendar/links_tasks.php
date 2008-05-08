@@ -15,7 +15,7 @@ if (!defined('W2P_BASE_DIR')) {
  */
 function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id = 0, $minical = false) {
 	global $a, $AppUI, $w2Pconfig;
-	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id);
+	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, 0);
 
 	$durnTypes = w2PgetSysVal('TaskDurationType');
 	$df = $AppUI->getPref('SHDATEFORMAT');
