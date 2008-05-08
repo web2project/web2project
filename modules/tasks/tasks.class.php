@@ -1015,15 +1015,13 @@ class CTask extends CW2pObject {
 		$allow = $obj->getAllowedSQL($AppUI->user_id);
 
 		$q->addTable('tasks', 't');
-		$q->addTable('project_departments');
-		$q->addTable('departments');
 		if ($user_id) {
 			$q->innerJoin('user_tasks', 'ut', 't.task_id=ut.task_id');
 		}
 		$q->innerJoin('projects', 'projects', 't.task_project = projects.project_id');
+		$q->leftJoin('project_departments', '', 'projects.project_id = project_departments.project_id');
+		$q->leftJoin('departments', '', 'departments.dept_id = project_departments.department_id');
 
-		$q->addWhere('(projects.project_id = project_departments.project_id OR project_departments.project_id IS NULL)');
-		$q->addWhere('(departments.dept_id = project_departments.department_id OR dept_id IS NULL)');
 		$q->addQuery('DISTINCT t.task_id, t.task_name, t.task_start_date, t.task_end_date, t.task_duration' . ', t.task_duration_type, projects.project_color_identifier AS color, projects.project_name, t.task_milestone');
 		$q->addWhere('task_status > -1' . ' AND (task_start_date <= \'' . $db_end . '\' AND (task_end_date >= \'' . $db_start . '\' OR task_end_date = \'0000-00-00 00:00:00\' OR task_end_date = NULL))');
 		if ($user_id) {
@@ -1045,9 +1043,9 @@ class CTask extends CW2pObject {
 		$q->addOrder('t.task_start_date');
 
 		// assemble query
+		//echo '<pre>' . $q->prepare() . '</pre>';
 		$result = $q->loadList();
 		$q->clear();
-		//echo "<pre>$sql</pre>";
 		// execute and return
 		return $result;
 	}
