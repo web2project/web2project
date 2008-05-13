@@ -3,14 +3,14 @@
   THEME ..... wps-redmond
   VERSION ... 2006-02-17
   AUTHOR .... Mats Djärf <md@w8.se>
-  WWW ....... www.w8.se/dotproject
+  WWW ....... www.w8.se/
  -----------------------------------------------------------------------------
 
   INSTALLATION
   ------------
-  1. Put this directory in your dotProject style directory
+  1. Put this directory in your web2Project style directory
  
-  2. Login into dotProject and change theme
+  2. Login into web2Project and change theme
  
   3. ENJOY!
      
