@@ -58,9 +58,9 @@ $orderby = $AppUI->getState('ProjIdxOrderBy') ? $AppUI->getState('ProjIdxOrderBy
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
 
 if (isset($_POST['project_owner'])) { // this means that
-	$AppUI->setState('proj_project_owner', $_POST['project_owner']);
+	$AppUI->setState('ProjIdxowner', $_POST['project_owner']);
 }
-$project_owner = $AppUI->getState('proj_project_owner');
+$owner = $AppUI->getState('ProjIdxowner');
 
 // collect the full projects list data via function in projects.class.php
 projects_list_data();
