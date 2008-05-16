@@ -197,7 +197,7 @@ $q->addWhere('user_id > 0');
 $q->addWhere('p.project_owner IS NOT NULL');
 $user_list = array(0 => '(all)');
 $user_list = $user_list + $q->loadHashList();
-echo $AppUI->_('Owner') . ':&nbsp;' . arraySelect($user_list, 'project_owner', 'size="1" disabled class="text"', $project_owner, false);
+echo $AppUI->_('Owner') . ':&nbsp;' . arraySelect($user_list, 'project_owner', 'size="1" disabled class="text"', $owner, false);
 
 $q = new DBQuery();
 $q->addTable('projects', 'p');
