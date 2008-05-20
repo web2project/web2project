@@ -81,10 +81,12 @@ class CFile extends CW2pObject {
 	function canAdmin() {
 		global $AppUI;
 
-		if (!$this->file_project)
+		if (!$this->file_project) {
 			return false;
-		if (!$this->file_id)
+		}
+		if (!$this->file_id) {
 			return false;
+		}
 
 		$result = false;
 		$this->_query->clear();
@@ -92,9 +94,10 @@ class CFile extends CW2pObject {
 		$this->_query->addQuery('project_owner');
 		$this->_query->addWhere('project_id = ' . (int)$this->file_project);
 		$res = $this->_query->exec(ADODB_FETCH_ASSOC);
-		if ($res && $row = $q->fetchRow()) {
-			if ($row['project_owner'] == $AppUI->user_id)
+		if ($res && $row = $this->_query->fetchRow()) {
+			if ($row['project_owner'] == $AppUI->user_id) {
 				$result = true;
+			}
 		}
 		$this->_query->clear();
 		return $result;
