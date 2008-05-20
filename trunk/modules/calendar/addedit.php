@@ -9,8 +9,8 @@ $event_id = intval(w2PgetParam($_GET, 'event_id', 0));
 $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
 
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule($m, 'add');
-$canEdit = $perms->checkModuleItem($m, 'edit', $event_id);
+$canAuthor = $perms->checkModule('calendar', 'add');
+$canEdit = $perms->checkModuleItem('calendar', 'edit', $event_id);
 
 // check permissions
 if (!$canAuthor && !$event_id) {

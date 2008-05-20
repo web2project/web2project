@@ -7,6 +7,31 @@ require_once ($AppUI->getSystemClass('libmail'));
 include $AppUI->getModuleClass('contacts');
 $del = isset($_REQUEST['del']) ? w2PgetParam($_REQUEST, 'del', false) : false;
 $contact_id = isset($_POST['contact_id']) ? $_POST['contact_id'] : 0;
+$isNewUser = !(w2PgetParam($_REQUEST, 'user_id', 0));
+
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModule('admin', 'delete')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+	if (!$perms->checkModule('users', 'delete')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNewUser) {
+	if (!$perms->checkModule('admin', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+	if (!$perms->checkModule('users', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('admin', 'edit')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+	if (!$perms->checkModule('users', 'edit')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
 
 $obj = new CUser();
 $contact = new CContact();
@@ -38,7 +63,6 @@ if ($del) {
 	}
 	return;
 }
-$isNewUser = !(w2PgetParam($_REQUEST, 'user_id', 0));
 if ($isNewUser) {
 	// check if a user with the param Username already exists
 	$userEx = false;

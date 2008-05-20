@@ -3,8 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-// only user_type of Administrator (1) can access this page
-if (!$canEdit || $AppUI->user_type != 1) {
+// check permissions
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('system', 'edit')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

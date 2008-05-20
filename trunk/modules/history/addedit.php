@@ -16,7 +16,12 @@ if ($action) {
 	$history_project = w2PgetParam($_POST, 'history_project', '');
 	$userid = $AppUI->user_id;
 
+	$perms = &$AppUI->acl();
+
 	if ($action == 'add') {
+		if (!$perms->checkModule('history', 'add')) {
+			$AppUI->redirect('m=public&a=access_denied');
+		}
 		$q->addTable('history');
 		$q->addInsert('history_table', "history");
 		$q->addInsert('history_action', "add");
@@ -26,12 +31,18 @@ if ($action) {
 		$q->addInsert('history_project', $history_project);
 		$okMsg = 'History added';
 	} elseif ($action == 'update') {
+		if (!$perms->checkModule('history', 'edit')) {
+			$AppUI->redirect('m=public&a=access_denied');
+		}
 		$q->addTable('history');
 		$q->addUpdate('history_description', $history_description);
 		$q->addUpdate('history_project', $history_project);
 		$q->addWhere('history_id =' . $history_id);
 		$okMsg = 'History updated';
 	} elseif ($action == 'del') {
+		if (!$perms->checkModule('history', 'delete')) {
+			$AppUI->redirect('m=public&a=access_denied');
+		}
 		$q->setDelete('history');
 		$q->addWhere('history_id =' . $history_id);
 		$okMsg = 'History deleted';

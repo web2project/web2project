@@ -4,6 +4,23 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = w2PgetParam($_POST, 'del', 0);
+$resource_id = intval(w2PgetParam($_POST, 'resource_id', 0));
+$isNotNew = $_POST['resource_id'];
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModuleItem('resources', 'delete', $resource_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModuleItem('resources', 'edit', $resource_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('resources', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
+
 $obj = &new CResource;
 $msg = '';
 

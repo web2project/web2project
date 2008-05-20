@@ -5,7 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 // check permissions
-if (!$canEdit) {
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('system', 'edit')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

@@ -9,10 +9,17 @@ $redirect = w2PgetParam($_POST, 'redirect', '');
 $bulk_file_project = w2PgetParam($_POST, 'bulk_file_project', 'O');
 $bulk_file_folder = w2PgetParam($_POST, 'bulk_file_folder', 'O');
 //print_r($_POST);die;
+
+$perms = &$AppUI->acl();
+
 if (is_array($selected) && count($selected)) {
 	$upd_file = new CFile();
 	foreach ($selected as $key => $val) {
 		if ($key) {
+			//If user is not permitted to edit then fail silently
+			if (!$perms->checkModuleItem('files', 'edit', $key)) {
+				continue;
+			}
 			$upd_file->load($key);
 		}
 

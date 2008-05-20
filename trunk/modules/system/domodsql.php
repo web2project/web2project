@@ -3,6 +3,11 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('system', 'edit')) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 ##
 ## Activate or move a module entry
 ##

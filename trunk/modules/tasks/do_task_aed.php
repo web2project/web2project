@@ -19,6 +19,22 @@ $notify = setItem('task_notify', 0);
 $comment = setItem('email_comment', '');
 $sub_form = isset($_POST['sub_form']) ? $_POST['sub_form'] : 0;
 
+$isNotNew = $_POST['task_id'];
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModuleItem('tasks', 'delete', $task_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModuleItem('tasks', 'edit', $task_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('tasks', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
+
 if ($sub_form) {
 	// in add-edit, so set it to what it should be
 	$AppUI->setState('TaskAeTabIdx', $_POST['newTab']);

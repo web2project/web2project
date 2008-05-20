@@ -9,6 +9,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not call this file directly.');
 }
 
+// check permissions
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('system', 'edit')) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 $module = w2PgetParam($_POST, 'module', 0);
 $lang = w2PgetParam($_POST, 'lang', $AppUI->user_locale);
 

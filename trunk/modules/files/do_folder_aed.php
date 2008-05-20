@@ -7,6 +7,22 @@ $file_folder_id = intval(w2PgetParam($_POST, 'file_folder_id', 0));
 $del = intval(w2PgetParam($_POST, 'del', 0));
 $redirect = w2PgetParam($_POST, 'redirect', '');
 
+$isNotNew = $_POST['file_folder_id'];
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModule('files', 'delete')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModule('files', 'edit')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('files', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
+
 $obj = new CFileFolder();
 if ($file_folder_id) {
 	$obj->_message = 'updated';

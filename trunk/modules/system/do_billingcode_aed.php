@@ -6,6 +6,11 @@ if (!defined('W2P_BASE_DIR')) {
 $del = isset($_POST['del']) ? $_POST['del'] : 0;
 $edit = isset($_POST['edit']) ? $_POST['edit'] : 0;
 
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('system', 'edit')) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 $obj = new bcode();
 $obj->_billingcode_id = isset($_POST['billingcode_id']) ? $_POST['billingcode_id'] : 0;
 

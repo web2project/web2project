@@ -11,7 +11,15 @@ $dept_name = ($_REQUEST['dept_name'] ? $_REQUEST['dept_name'] : null);
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-if (!($canEdit = $perms->checkModuleItem('contacts', 'edit', $contact_id))) {
+$canAuthor = $perms->checkModule('contacts', 'add');
+$canEdit = $perms->checkModuleItem('contacts', 'edit', $contact_id);
+
+// check permissions
+if (!$canAuthor && !$contact_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+if (!$canEdit && $contact_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

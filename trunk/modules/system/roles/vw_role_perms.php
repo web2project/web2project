@@ -5,7 +5,13 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $role_id, $canEdit, $canDelete, $tab;
 
+// Get the permissions for this module
 $perms = &$AppUI->acl();
+$canEdit = $perms->checkModule('roles', 'edit');
+if (!$canEdit) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 $module_list = $perms->getModuleList();
 $pgos = array();
 $q = new DBQuery;

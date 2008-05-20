@@ -6,7 +6,11 @@ if (!defined('W2P_BASE_DIR')) {
 ##
 ## add or edit a user preferences
 ##
+
 $user_id = w2PgetParam($_GET, 'user_id', '0');
+$perms = &$AppUI->acl();
+// check permissions for this record
+$canEdit = $perms->checkModule('system', 'edit');
 // Check permissions
 if (!$canEdit && $user_id != $AppUI->user_id) {
 	$AppUI->redirect('m=public&a=access_denied');
