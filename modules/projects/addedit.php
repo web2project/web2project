@@ -15,8 +15,8 @@ $structprojects = arrayMerge(array('0' => array(0 => 0, 1 => '(' . $AppUI->_('No
 
 $perms = &$AppUI->acl();
 // check permissions for this record
-$canEdit = $perms->checkModuleItem($m, 'edit', $project_id);
-$canAuthor = $perms->checkModuleItem($m, 'add');
+$canEdit = $perms->checkModuleItem('projects', 'edit', $project_id);
+$canAuthor = $perms->checkModuleItem('projects', 'add');
 if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }

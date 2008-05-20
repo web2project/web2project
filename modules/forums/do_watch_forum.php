@@ -3,6 +3,11 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('forums', 'view')) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 ##
 ## Change forum watches
 ##

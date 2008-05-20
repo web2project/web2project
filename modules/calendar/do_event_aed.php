@@ -8,6 +8,23 @@ $msg = '';
 
 $del = w2PgetParam($_POST, 'del', 0);
 
+$isNotNew = $_POST['event_id'];
+$event_id = intval(w2PgetParam($_POST, 'event_id', 0));
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModuleItem('calendar', 'delete', $event_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModuleItem('calendar', 'edit', $event_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('calendar', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
+
 // bind the POST parameter to the object record
 if (!$obj->bind($_POST)) {
 	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
@@ -50,7 +67,6 @@ if ($del) {
 	}
 	$AppUI->redirect('m=calendar');
 } else {
-	$isNotNew = $_POST['event_id'];
 	if (!$isNotNew) {
 		$obj->event_owner = $AppUI->user_id;
 	}
@@ -76,6 +92,7 @@ if ($del) {
 		}
 	}
 }
-if ($do_redirect)
+if ($do_redirect) {
 	$AppUI->redirect();
+}
 ?>

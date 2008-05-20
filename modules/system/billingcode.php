@@ -9,7 +9,8 @@ if (!defined('W2P_BASE_DIR')) {
 $company_id = 0;
 $company_id = isset($_REQUEST['company_id']) ? w2PgetParam($_REQUEST, 'company_id', 0) : 0;
 // Check permissions
-if (!$canEdit) {
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('system', 'edit')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

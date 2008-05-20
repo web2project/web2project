@@ -146,7 +146,7 @@ if (($msg = $contact->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
 		if ($isNewUser) {
-			notifyNewUser($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
+			notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
 		}
 		notifyHR('hr@yourdomain.com', 'w2P System Human Resources', $contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password'], $obj->user_id);
 
@@ -168,7 +168,7 @@ echo "
       </script>
 ";
 
-function notifyNewUser($address, $username, $logname, $logpwd) {
+function notifyNewExternalUser($address, $username, $logname, $logpwd) {
 	global $AppUI;
 	$mail = new Mail;
 	if ($mail->ValidEmail($address)) {

@@ -259,4 +259,20 @@ class CUser extends CW2pObject {
 	}
 }
 
+function notifyNewUser($address, $username) {
+	global $AppUI;
+	$mail = new Mail;
+	if ($mail->ValidEmail($address)) {
+		if ($mail->ValidEmail($AppUI->user_email)) {
+			$email = $AppUI->user_email;
+		} else {
+			return false;
+		}
+
+		$mail->To($address);
+		$mail->Subject('New Account Created');
+		$mail->Body("Dear $username,\n\n" . "Congratulations! Your account has been activated by the administrator.\n" . "Please use the login information provided earlier.\n\n" . "You may login at the following URL: " . W2P_BASE_URL . "\n\n" . "If you have any difficulties or questions, please ask the administrator for help.\n" . "Assuring you the best of our attention at all time.\n\n" . "Our Warmest Regards,\n\n" . "The Support Staff.\n\n" . "****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****");
+		$mail->Send();
+	}
+}
 ?>

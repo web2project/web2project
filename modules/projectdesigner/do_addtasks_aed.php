@@ -4,6 +4,11 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI;
 
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('tasks', 'add')) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 //Lets store the panels view options of the user:
 $pdo = new CProjectDesignerOptions();
 $pdo->pd_option_user = $AppUI->user_id;

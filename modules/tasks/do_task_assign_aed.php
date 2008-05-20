@@ -13,6 +13,8 @@ $percentage_assignment = w2PgetParam($_POST, 'percentage_assignment');
 $user_task_priority = w2PgetParam($_POST, 'user_task_priority');
 $user_id = $_POST['user_id'];
 
+$perms = &$AppUI->acl();
+
 // prepare the percentage of assignment per user as required by CTask::updateAssigned()
 $hperc_assign_ar = array();
 if (isset($hassign)) {
@@ -42,6 +44,11 @@ for ($i = 0; $i <= $sizeof; $i++) {
 
 	// verify that task_id is not NULL
 	if ($_POST['task_id'] > 0) {
+		//check permissions, if user does not have permission then fail silently
+		if (!$perms->checkModuleItem('tasks', 'edit', $_POST['task_id'])) {
+			continue;
+		}
+		
 		$obj = new CTask();
 
 		if (!$obj->bind($_POST)) {

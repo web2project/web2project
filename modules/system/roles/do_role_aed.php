@@ -3,6 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+// check permissions
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('roles', 'edit')) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 $del = isset($_POST['del']) ? $_POST['del'] : 0;
 
 $role = &new CRole();

@@ -6,7 +6,20 @@ if (!defined('W2P_BASE_DIR')) {
 // Add / Edit forum
 
 $forum_id = intval(w2PgetParam($_GET, 'forum_id', 0));
+
+// check permissions for this record
 $perms = &$AppUI->acl();
+$canAuthor = $perms->checkModule('forums', 'add');
+$canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
+
+// check permissions
+if (!$canAuthor && !$forum_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+if (!$canEdit && $forum_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
 
 // check permissions for this record
 $canAdd = $perms->checkModule($m, 'add');

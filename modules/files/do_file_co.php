@@ -7,6 +7,11 @@ if (!defined('W2P_BASE_DIR')) {
 $file_id = intval(w2PgetParam($_POST, 'file_id', 0));
 $coReason = w2PgetParam($_POST, 'file_co_reason', '');
 
+$perms = &$AppUI->acl();
+if (!$perms->checkModuleItem('files', 'edit', $file_id)) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 $obj = new CFile();
 if ($file_id) {
 	$obj->_message = 'updated';

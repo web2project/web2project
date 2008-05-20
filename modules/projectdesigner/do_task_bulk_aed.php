@@ -32,6 +32,11 @@ if ($bulk_task_end_date) {
 $bulk_move_date = intval(w2PgetParam($_POST, 'bulk_move_date', ''));
 $bulk_task_percent_complete = w2PgetParam($_POST, 'bulk_task_percent_complete', '');
 
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('tasks', 'edit')) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 //Lets store the panels view options of the user:
 $pdo = new CProjectDesignerOptions();
 $pdo->pd_option_user = $AppUI->user_id;

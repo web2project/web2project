@@ -36,13 +36,14 @@ if (!$task_project) {
 // check permissions
 if ($task_id) {
 	// we are editing an existing task
-	$canEdit = $perms->checkModuleItem($m, 'edit', $task_id);
+	$canEdit = $perms->checkModuleItem('tasks', 'edit', $task_id);
 } else {
 	// do we have access on this project?
 	$canEdit = $perms->checkModuleItem('projects', 'view', $task_project);
 	// And do we have add permission to tasks?
-	if ($canEdit)
+	if ($canEdit) {
 		$canEdit = $perms->checkModule('tasks', 'add');
+	}
 }
 
 if (!$canEdit) {

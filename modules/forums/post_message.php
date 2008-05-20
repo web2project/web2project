@@ -8,6 +8,15 @@ $message_id = isset($_GET['message_id']) ? w2PgetParam($_GET, 'message_id', 0) :
 $message_parent = isset($_GET['message_parent']) ? w2PgetParam($_GET, 'message_parent', null) : -1;
 $forum_id = w2PgetParam($_REQUEST, 'forum_id', 0);
 
+$perms = &$AppUI->acl();
+$canAdd = $perms->checkModuleItem('forums', 'view', $forum_id);
+$canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
+
+// check permissions
+if (!$canAdd) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 // Build a back-url for when the back button is pressed
 $back_url_params = array();
 foreach ($_GET as $k => $v) {
@@ -190,8 +199,6 @@ if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the
 		<input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';" />
 	</td>
 	<td align="right"><?php
-$canEdit = $perms->checkModuleItem('forums', 'edit', $row['message_id']);
-$canAdd = $perms->checkModule('forums', 'add');
 if (($canEdit && ($AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $perms->checkModule('admin', 'edit'))) || ($canAdd && !$row['message_id'])) {
 	echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()">';
 }

@@ -10,10 +10,18 @@ $preserve = $w2Pconfig['files_ci_preserve_attr'];
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canEdit = $perms->checkModuleItem($m, 'edit', $file_id);
-if (!$canEdit) {
+$canAuthor = $perms->checkModule('files', 'add');
+$canEdit = $perms->checkModuleItem('files', 'edit', $file_id);
+
+// check permissions
+if (!$canAuthor && !$file_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
+
+if (!$canEdit && $file_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 if (file_exists(W2P_BASE_DIR . '/modules/helpdesk/config.php')) {
 	include (W2P_BASE_DIR . '/modules/helpdesk/config.php');
 }

@@ -7,6 +7,23 @@ $del = w2PgetParam($_POST, 'del', 0);
 $obj = new CCompany();
 $msg = '';
 
+$isNotNew = $_POST['company_id'];
+$company_id = intval(w2PgetParam($_POST, 'company_id', 0));
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModuleItem('companies', 'delete', $company_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModuleItem('companies', 'edit', $company_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('companies', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
+
 if (!$obj->bind($_POST)) {
 	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	$AppUI->redirect();

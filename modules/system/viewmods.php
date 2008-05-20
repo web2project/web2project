@@ -3,13 +3,15 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
-
-$canEdit = !getDenyEdit($m);
-$canRead = !getDenyRead($m);
+// check permissions
+$perms = &$AppUI->acl();
+$canEdit = $perms->checkModule('system', 'edit');
+$canRead = $perms->checkModule('system', 'view');
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
+
+$AppUI->savePlace();
 
 $hidden_modules = array('public', 'install', );
 $q = new DBQuery;

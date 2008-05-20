@@ -3,6 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+// check permissions
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('system', 'edit')) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 $obj = new CSysVal();
 $post = array('sysval_title' => w2PgetParam($_POST, 'sysval_title'), 'sysval_key_id' => w2PgetParam($_POST, 'sysval_key_id'), 'sysval_value' => w2PgetParam($_POST, 'sysval_value'), );
 $svid = array('sysval_title' => w2PgetParam($_POST, 'sysval_id'));

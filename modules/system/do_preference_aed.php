@@ -4,6 +4,16 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = isset($_POST['del']) ? $_POST['del'] : 0;
+$pref_user = intval(w2PgetParam($_POST, 'pref_user', 0));
+
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('system', 'edit') && !$pref_user) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+if (!($AppUI->user_id == $pref_user) && $pref_user) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
 
 $obj = new CPreferences();
 $obj->pref_user = isset($_POST['pref_user']) ? $_POST['pref_user'] : 0;

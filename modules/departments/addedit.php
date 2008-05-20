@@ -7,9 +7,17 @@ if (!defined('W2P_BASE_DIR')) {
 $dept_id = isset($_GET['dept_id']) ? w2PgetParam($_GET, 'dept_id', 0) : 0;
 $company_id = isset($_GET['company_id']) ? w2PgetParam($_GET, 'company_id', 0) : 0;
 
-// check permissions for this department
-$canEdit = !getDenyEdit($m, $dept_id);
-if (!$canEdit) {
+// check permissions for this record
+$perms = &$AppUI->acl();
+$canAuthor = $perms->checkModule('departments', 'add');
+$canEdit = $perms->checkModuleItem('departments', 'edit', $dept_id);
+
+// check permissions
+if (!$canAuthor && !$dept_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+if (!$canEdit && $dept_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

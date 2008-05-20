@@ -8,6 +8,12 @@ if (!defined('W2P_BASE_DIR')) {
 *
 */
 
+// check permissions
+$perms = &$AppUI->acl();
+if (!$perms->checkModule('system', 'edit')) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 $AppUI->savePlace();
 
 require_once ($AppUI->getSystemClass('CustomFields'));

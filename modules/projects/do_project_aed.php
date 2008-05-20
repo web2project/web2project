@@ -3,6 +3,24 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$del = w2PgetParam($_POST, 'del', 0);
+$project_id = intval(w2PgetParam($_POST, 'project_id', 0));
+$isNotNew = $_POST['project_id'];
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModuleItem('projects', 'delete', $project_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModuleItem('projects', 'edit', $project_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('projects', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
+
 $obj = new CProject();
 $msg = '';
 
@@ -35,11 +53,8 @@ if (!w2PgetParam($_POST, 'project_departments', 0)) {
 	$obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
 }
 
-$del = w2PgetParam($_POST, 'del', 0);
-
 // prepare (and translate) the module name ready for the suffix
 if ($del) {
-	$project_id = w2PgetParam($_POST, 'project_id', 0);
 	$canDelete = $obj->canDelete($msg, $project_id);
 	if (!$canDelete) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);

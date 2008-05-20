@@ -19,6 +19,22 @@ if ($notcont != '0') {
 	$notcont = '1';
 }
 
+$isNotNew = $_POST['file_id'];
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModuleItem('files', 'edit', $file_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('files', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
+
 $obj = new CFile();
 if ($file_id) {
 	$obj->_message = 'updated';

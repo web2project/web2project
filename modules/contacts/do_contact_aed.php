@@ -6,6 +6,22 @@ if (!defined('W2P_BASE_DIR')) {
 $obj = new CContact();
 $msg = '';
 
+$isNotNew = $_POST['contact_id'];
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModule('contacts', 'delete')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModule('contacts', 'edit')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('contacts', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
+
 $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
 if ($notifyasked != 0) {
 	$notifyasked = 1;
@@ -30,8 +46,6 @@ if ($del) {
 		$AppUI->redirect('m=contacts');
 	}
 } else {
-	$isNotNew = $_POST['contact_id'];
-
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {

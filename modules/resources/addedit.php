@@ -7,8 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 $resource_id = intval(w2PgetParam($_GET, 'resource_id', null));
 $perms = &$AppUI->acl();
 $canDelete = $perms->checkModuleItem('resources', 'delete', $resource_id);
-$canView = $perms->checkModuleItem('resources', 'view', $resource_id);
-if ((!$resource_id && !$perms->checkModule('resources', 'add')) || !$canView || !$canEdit) {
+if ((!$resource_id && !$perms->checkModule('resources', 'add')) || !$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

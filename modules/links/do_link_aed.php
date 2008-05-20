@@ -12,6 +12,22 @@ if ($not != '0') {
 	$not = '1';
 }
 
+$isNotNew = $_POST['link_id'];
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModuleItem('links', 'delete', $link_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModuleItem('links', 'edit', $link_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('links', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
+
 $obj = new CLink();
 if ($link_id) {
 	$obj->_message = 'updated';

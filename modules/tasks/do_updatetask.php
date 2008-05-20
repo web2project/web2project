@@ -20,6 +20,21 @@ function cleanText($text) {
 $notify_owner = isset($_POST['task_log_notify_owner']) ? $_POST['task_log_notify_owner'] : 0;
 
 $del = w2PgetParam($_POST, 'del', 0);
+$isNotNew = $_POST['task_log_id'];
+$perms = &$AppUI->acl();
+if ($del) {
+	if (!$perms->checkModule('task_log', 'delete')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($isNotNew) {
+	if (!$perms->checkModule('task_log', 'edit')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} else {
+	if (!$perms->checkModule('task_log', 'add')) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+}
 
 $obj = new CTaskLog();
 

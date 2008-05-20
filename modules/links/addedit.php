@@ -7,8 +7,15 @@ $link_id = intval(w2PgetParam($_GET, 'link_id', 0));
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canEdit = $perms->checkModuleItem($m, 'edit', $link_id);
-if (!$canEdit) {
+$canAuthor = $perms->checkModule('links', 'add');
+$canEdit = $perms->checkModuleItem('links', 'edit', $link_id);
+
+// check permissions
+if (!$canAuthor && !$link_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+if (!$canEdit && $link_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

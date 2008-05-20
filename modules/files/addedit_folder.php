@@ -11,6 +11,20 @@ $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'] . $referrerArray['fragment'];
 
 // check permissions for this record
+$perms = &$AppUI->acl();
+$canAuthor = $perms->checkModule('files', 'add');
+$canEdit = $perms->checkModule('files', 'edit');
+
+// check permissions
+if (!$canAuthor && !$folder) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+if (!$canEdit && $folder) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+// check permissions for this record
 if ($folder == 0) {
 	$canEdit = true;
 } else {

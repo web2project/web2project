@@ -10,9 +10,9 @@ $perms = &$AppUI->acl();
 // If the company exists we need edit permission,
 // If it is a new company we need add permission on the module.
 if ($company_id) {
-	$canEdit = $perms->checkModuleItem($m, 'edit', $company_id);
+	$canEdit = $perms->checkModuleItem('companies', 'edit', $company_id);
 } else {
-	$canEdit = $perms->checkModule($m, 'add');
+	$canEdit = $perms->checkModule('companies', 'add');
 }
 
 if (!$canEdit) {
