@@ -29,7 +29,6 @@ $q = new DBQuery;
 $q->addTable('projects', 'pr');
 $q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date');
 $q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
-$q->addWhere('project_active = 1');
 if ($project_id) {
 	$q->addWhere('pr.project_id = ' . (int)$project_id);
 }
@@ -44,7 +43,6 @@ $q = new DBQuery;
 $q->addTable('tasks', 't');
 $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_name, task_dynamic');
 $q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
-$q->addWhere('project_active = 1');
 $q->addOrder('project_id, task_start_date');
 if ($project_id) {
 	$q->addWhere('task_project = ' . (int)$project_id);
