@@ -275,4 +275,22 @@ function notifyNewUser($address, $username) {
 		$mail->Send();
 	}
 }
+
+function notifyNewUserCredentials($address, $username, $logname, $logpwd) {
+	global $AppUI, $w2Pconfig;
+	$mail = new Mail;
+	if ($mail->ValidEmail($address)) {
+		if ($mail->ValidEmail($AppUI->user_email)) {
+			$email = $AppUI->user_email;
+		} else {
+			$email = "web2project@" . $AppUI->cfg['site_domain'];
+		}
+
+		$mail->To($address);
+		$mail->Subject('New Account Created - web2Project Project Management System');
+		$mail->Body($username . ",\n\n" . "An access account has been created for you in our web2Project project management system.\n\n" . "You can access it here at " . w2PgetConfig('base_url') . "\n\n" . "Your username is: " . $logname . "\n" . "Your password is: " . $logpwd . "\n\n" .
+			"This account will allow you to see and interact with projects. If you have any questions please contact us.");
+		$mail->Send();
+	}
+}
 ?>
