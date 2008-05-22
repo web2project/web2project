@@ -1,4 +1,11 @@
 /* $Id$ $URL$ */
+function update_workspace(id) {
+	var tr = document.getElementById(id);
+	(tr.style.display == "none") ? eval('document.frmWorkspace.opt_view_'+id+'.value=0') : eval('document.frmWorkspace.opt_view_'+id+'.value=1');      
+	(tr.style.display == "none") ? eval('document.editFrm.opt_view_'+id+'.value=0') : eval('document.editFrm.opt_view_'+id+'.value=1');      
+	(tr.style.display == "none") ? eval('document.frm_bulk.opt_view_'+id+'.value=0') : eval('document.frm_bulk.opt_view_'+id+'.value=1');      
+}
+
 function expandAll() {
       expand_collapse('project', 'tblProjects', 'expand');
       expand_collapse('gantt', 'tblProjects', 'expand');
@@ -6,6 +13,12 @@ function expandAll() {
       expand_collapse('actions', 'tblProjects', 'expand');
       expand_collapse('addtsks', 'tblProjects', 'expand');
       expand_collapse('files', 'tblProjects', 'expand');
+      update_workspace('project');
+      update_workspace('gantt');
+      update_workspace('tasks');
+      update_workspace('actions');
+      update_workspace('addtsks');
+      update_workspace('files');
 }
 
 function collapseAll() {
@@ -15,6 +28,12 @@ function collapseAll() {
       expand_collapse('actions', 'tblProjects', 'collapse');
       expand_collapse('addtsks', 'tblProjects', 'collapse');
       expand_collapse('files', 'tblProjects', 'collapse');
+      update_workspace('project');
+      update_workspace('gantt');
+      update_workspace('tasks');
+      update_workspace('actions');
+      update_workspace('addtsks');
+      update_workspace('files');
 }
 
 /**
