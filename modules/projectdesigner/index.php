@@ -540,7 +540,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td style="background-color:#<?php echo $obj->project_color_identifier; ?>" colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse(\'project\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse(\'project\', \'tblProjects\');update_workspace(\'project\');">'
 ?>
             	<?php
 	echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' . $AppUI->_('Project') . ': ' . $obj->project_name . '<strong></font>';
@@ -551,7 +551,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" style="background-color:#<?php echo $obj->project_color_identifier; ?>" align="right" colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse(\'project\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse(\'project\', \'tblProjects\');update_workspace(\'project\');">'
 ?>
             	<?php
 	echo '<img id="project_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="project_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '>';
@@ -591,7 +591,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse(\'gantt\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse(\'gantt\', \'tblProjects\');update_workspace(\'gantt\');">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Gantt Chart') . '<strong></font>';
@@ -602,7 +602,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse(\'gantt\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse(\'gantt\', \'tblProjects\');update_workspace(\'gantt\');">'
 ?>
             	<?php
 	echo '<img id="gantt_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="gantt_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
@@ -645,7 +645,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="ft" style="display:block" onclick="expand_collapse(\'tasks\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="ft" style="display:block" onclick="expand_collapse(\'tasks\', \'tblProjects\');update_workspace(\'tasks\');">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Tasks') . '<strong></font>';
@@ -656,7 +656,7 @@ function setDate( frm_name, f_date ) {
 ?>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="ft" style="display:block" onclick="expand_collapse(\'tasks\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="ft" style="display:block" onclick="expand_collapse(\'tasks\', \'tblProjects\');update_workspace(\'tasks\');">'
 ?>
             	<?php
 	echo '<img id="tasks_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="tasks_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
@@ -699,7 +699,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fa" style="display:block" onclick="expand_collapse(\'actions\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fa" style="display:block" onclick="expand_collapse(\'actions\', \'tblProjects\');update_workspace(\'actions\');">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Actions') . '<strong></font>';
@@ -710,7 +710,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fa" style="display:block" onclick="expand_collapse(\'actions\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fa" style="display:block" onclick="expand_collapse(\'actions\', \'tblProjects\');update_workspace(\'actions\');">'
 ?>
             	<?php
 	echo '<img id="actions_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="actions_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
@@ -753,7 +753,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fat" style="display:block" onclick="expand_collapse(\'addtsks\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fat" style="display:block" onclick="expand_collapse(\'addtsks\', \'tblProjects\');update_workspace(\'addtsks\');">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Add Tasks') . '<strong></font>';
@@ -764,7 +764,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fat" style="display:block" onclick="expand_collapse(\'addtsks\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fat" style="display:block" onclick="expand_collapse(\'addtsks\', \'tblProjects\');update_workspace(\'addtsks\');">'
 ?>
             	<?php
 	echo '<img id="addtsks_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="addtsks_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
@@ -807,7 +807,7 @@ function setDate( frm_name, f_date ) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fbt" style="display:block" onclick="expand_collapse(\'files\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fbt" style="display:block" onclick="expand_collapse(\'files\', \'tblProjects\');update_workspace(\'files\');">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Files') . '<strong></font>';
@@ -818,7 +818,7 @@ function setDate( frm_name, f_date ) {
             	</td>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fbt" style="display:block" onclick="expand_collapse(\'files\', \'tblProjects\')">'
+	echo '<a href="javascript: void(0);" name="fbt" style="display:block" onclick="expand_collapse(\'files\', \'tblProjects\');update_workspace(\'files\');">'
 ?>
             	<?php
 	echo '<img id="files_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="files_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
