@@ -54,7 +54,7 @@ if (!defined('W2P_BASE_DIR')) {
 			<td colspan="2">
 			<?php
 require_once ('./classes/CustomFields.class.php');
-$custom_fields = new CustomFields($m, $a, $obj->project_id, 'view');
+$custom_fields = new CustomFields('projects', $a, $obj->project_id, 'view');
 $custom_fields->printHTML();
 ?>
 			</td>
