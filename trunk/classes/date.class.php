@@ -378,12 +378,149 @@ class CDate extends Date {
 		// In php4 assignment does a shallow copy
 		// in php5 clone is required
 		if (version_compare(phpversion(), '5') >= 0) {
-			$newObj = clone($this);
+			$newObj = clone ($this);
 		} else {
 			$newObj = $this;
 		}
 
 		return $newObj;
+	}
+
+	/* Calculating a future date considering a given duration
+	**
+	** Respects non-working days and the working hours and the begining and end of days
+	**
+	**
+	** @param	durn		Duration to be added to the date
+	** @param	durnType	Duration Type: 1=hours, 24=days
+	** @return	cdate		The CDate object of the finish date
+	*/
+	function calcFinish($durn, $durnType) {
+
+		// since one will alter the date ($this) one better copies it to a new instance
+		$f = new CDate();
+		$f->copy($this);
+
+		// get w2P time constants
+		$cal_day_start = intval(w2PgetConfig('cal_day_start'));
+		$cal_day_end = intval(w2PgetConfig('cal_day_end'));
+		$workHours = intval(w2PgetConfig('daily_working_hours'));
+		$workingDays = w2PgetConfig('cal_working_days');
+		$working_days = explode(',', $workingDays);
+
+		//temporary variables
+		$inc = floor($durn);
+		$hoursToAddToLastDay = 0;
+		$hoursToAddToFirstDay = $durn;
+		$fullWorkingDays = 0;
+		$int_st_hour = $f->getHour();
+		//catch the gap between the working hours and the open hours (like lunch periods)
+		$workGap = $cal_day_end - $cal_day_start - $workHours;
+
+		// calculate the number of non-working days
+		$k = 7 - count($working_days);
+
+		$durnMins = ($durn - $inc) * 60;
+		if (($f->getMinute() + $durnMins) >= 60) {
+			$inc++;
+		}
+
+		$mins = ($f->getMinute() + $durnMins) % 60;
+		if ($mins > 38) {
+			$f->setMinute(45);
+		} elseif ($mins > 23) {
+			$f->setMinute(30);
+		} elseif ($mins > 8) {
+			$f->setMinute(15);
+		} else {
+			$f->setMinute(0);
+		}
+
+		// jump over to the first working day
+		for ($i = 0; $i < $k; $i++) {
+			if (array_search($f->getDayOfWeek(), $working_days) === false) {
+				$f->addDays(1);
+			}
+		}
+
+		if ($durnType == 24) {
+			if ($f->getHour() == $cal_day_start && $f->getMinute() == 0) {
+				$fullWorkingDays = ceil($inc);
+				$f->setMinute(0);
+			} else {
+				$fullWorkingDays = ceil($inc) + 1;
+			}
+
+			// Include start day as a working day (if it is one)
+			if (!(array_search($f->getDayOfWeek(), $working_days) === false)) {
+				$fullWorkingDays--;
+			}
+
+			for ($i = 0; $i < $fullWorkingDays; $i++) {
+				$f->addDays(1);
+				if (array_search($f->getDayOfWeek(), $working_days) === false) {
+					$i--;
+				}
+			}
+
+			if ($f->getHour() == $cal_day_start && $f->getMinute() == 0) {
+				$f->setHour($cal_day_end);
+				$f->setMinute(0);
+			}
+		} else {
+			$hoursToAddToFirstDay = $inc;
+			if ($f->getHour() + $inc > ($cal_day_end - $workGap)) {
+				$hoursToAddToFirstDay = ($cal_day_end - $workGap) - $f->getHour();
+			}
+			if ($hoursToAddToFirstDay > $workHours) {
+				$hoursToAddToFirstDay = $workHours;
+			}
+			$inc -= $hoursToAddToFirstDay;
+			$hoursToAddToLastDay = $inc % $workHours;
+			$fullWorkingDays = floor(($inc - $hoursToAddToLastDay) / $workHours);
+
+			if ($hoursToAddToLastDay <= 0 && !($hoursToAddToFirstDay == $workHours)) {
+				$f->setHour($f->getHour() + $hoursToAddToFirstDay);
+			} elseif ($hoursToAddToLastDay == 0) {
+				$f->setHour($f->getHour() + $hoursToAddToFirstDay + $workGap);
+			} else {
+				$f->setHour($cal_day_start + $hoursToAddToLastDay);
+				$f->addDays(1);
+			}
+
+			if (($f->getHour() == $cal_day_end || ($f->getHour() - $int_st_hour) == ($workHours + $workGap)) && $mins > 0) {
+				$f->addDays(1);
+				$f->setHour($cal_day_start);
+			}
+
+			// boolean for setting later if we just found a non-working day
+			// and therefore do not have to add a day in the next loop
+			// (which would have caused to not respecting multiple non-working days after each other)
+			$g = false;
+			for ($i = 0, $i_cmp = ceil($fullWorkingDays); $i < $i_cmp; $i++) {
+				if (!$g) {
+					$f->addHours(1);
+				}
+				$g = false;
+				// calculate overriden non-working days
+				if (array_search($f->getDayOfWeek(), $working_days) === false) {
+					$f->addDays(1);
+					$i--;
+					$g = true;
+				}
+			}
+		}
+
+		// if there was no fullworkingday we have to check whether the end day is a working day
+		// and in the negative case postpone the end date by appropriate days
+		for ($i = 0, $i_cmp = 7 - count($working_days); $i < $i_cmp; $i++) {
+			// override  possible non-working enddays
+			if (array_search($f->getDayOfWeek(), $working_days) === false) {
+				$f->addDays(1);
+			}
+		}
+
+		return $f;
 	}
 }
 ?>

@@ -890,7 +890,7 @@ class CAppUI {
 			$root .= '/';
 		}
 
-		$base = w2PgetConfig('base_url');
+		$base = W2P_BASE_URL;
 		if (substr($base, -1) != '/') {
 			$base .= '/';
 		}
