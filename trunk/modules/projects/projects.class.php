@@ -855,7 +855,7 @@ function projects_list_data($user_id = false) {
 	$rows = $q->loadList();
 
 	//display the select list
-	$buffer = '<select name="department" onChange="document.pickCompany.submit()" class="text">';
+	$buffer = '<select name="department" id="department" onChange="document.pickCompany.submit()" class="text" style="width: 200px;">';
 	$company = '';
 
 	foreach ($company_array as $key => $c_name) {
