@@ -35,7 +35,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 		return '';
 	}
 	reset($arr);
-	$s = '<select name="'.$select_name.'" '.$select_attribs.'>';
+	$s = '<select id="'.$select_name.'" name="'.$select_name.'" '.$select_attribs.'>';
 	$did_selected = 0;
 	foreach ($arr as $k => $v) {
 		if ($translate) {
