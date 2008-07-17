@@ -985,27 +985,27 @@ xajax.doneLoadingFunction = hideLoadingMessage;
 if (typeof(xajax) != 'undefined') {
 	xajax.callback.global.onRequest = 
 	    function(){
-	               if (navigator.userAgent.indexOf('MSIE') != -1) {
+	               /*if (navigator.userAgent.indexOf('MSIE') != -1) {
 	                  AllByTag.hide("SELECT");   
-	               }
+	               }*/
 	               xajax.$('loadingMessage').style.display='block';
 	               if (navigator.userAgent.indexOf('MSIE') != -1) {
-	                   xajax.$('w2PfadeDIV').style['filter'] = 'alpha(opacity=30)';
+	                   document.body.style['filter'] = 'alpha(opacity=80)';
 	               } else {
-	                   xajax.$('w2PfadeDIV').style.opacity=.3;
+	                   document.body.style.opacity=.8;
 	               }
 	    };
 	    
 	function hideLoadingMessage() {
 	    xajax.$('loadingMessage').style.display = 'none';
 	    if (navigator.userAgent.indexOf('MSIE') != -1) {
-	       xajax.$('w2PfadeDIV').style['filter'] = 'alpha(opacity=100)';
+	       document.body.style['filter'] = 'alpha(opacity=100)';
 	    } else {
-	       xajax.$('w2PfadeDIV').style.opacity=1;        
+	       document.body.style.opacity=1;        
 	    }
-	    if (navigator.userAgent.indexOf('MSIE') != -1) {
+	    /*if (navigator.userAgent.indexOf('MSIE') != -1) {
 	      AllByTag.show("SELECT");   
-	    }
+	    }*/
 	}
 	xajax.callback.global.onComplete = hideLoadingMessage;
 }
