@@ -104,6 +104,13 @@ class CTask extends CW2pObject {
 		if (!$this->task_duration || $this->task_milestone) {
 			$this->task_duration = '0';
 		}
+		if ($this->task_milestone) {
+			if ($this->task_start_date && $this->task_start_date != '0000-00-00 00:00:00') {
+				$this->task_end_date = $this->task_start_date;
+			} else {
+				$this->task_start_date = $this->task_end_date;
+			}
+		}
 		if (!$this->task_creator) {
 			$this->task_creator = $AppUI->user_id;
 		}
