@@ -2097,8 +2097,8 @@ CREATE TABLE `tasks_problems` (
 CREATE TABLE `tasks_sum` (
   `task_project` int(11) default NULL,
   `total_tasks` int(6) default NULL,
-  `project_percent_complete` varchar(11) default NULL,
-  `project_duration` varchar(11) default NULL,
+  `project_percent_complete` float default NULL,
+  `project_duration` float default NULL,
   KEY `task_project` (`task_project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
