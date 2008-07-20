@@ -2283,7 +2283,7 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	if ($m == 'tasks') {
 		$s .= '<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&a=view&task_id=' . $task_id) : $a);
 	} else {
-		$s .= '<a href="./index.php?m=projects' . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : '');
+		$s .= '<a href="./index.php?m=projects&bypass=1' . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : '');
 	}
 	$s .= '&task_sort_item1=' . $item_name;
 	$s .= '&task_sort_type1=' . $item_type;
