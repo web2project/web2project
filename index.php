@@ -1,6 +1,6 @@
 <?php /* $Id$ $URL$ */
 
-/* 
+/*
 Copyright (c) 2007-2008 The web2Project Development Team <w2p-developers@web2project.net>
 Copyright (c) 2003-2005 The dotProject Development Team <core-developers@dotproject.net>
 
@@ -82,7 +82,7 @@ require_once ($AppUI->getSystemClass('w2p'));
 require_once ($AppUI->getSystemClass('query'));
 
 //Now that we have $AppUI lets add our ajax functions in
-//require_once($AppUI->getSystemClass('ajax'));
+//require_once ($AppUI->getSystemClass('ajax'));
 
 //Function for update lost action in user_access_log
 $AppUI->updateLastAction($last_insert_id);
@@ -188,11 +188,11 @@ if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 }
 // set the action from the url
 $a = $AppUI->checkFileName(w2PgetCleanParam($_GET, 'a', $def_a));
-if ($m=='projects' && $a=='view' && $w2Pconfig['projectdesigner_view_project'] && !w2PgetParam($_GET, 'bypass') && !(isset($_GET['tab']))) {
-      if ($AppUI->isActiveModule('projectdesigner')) {
-	     $m = 'projectdesigner';
-	     $a = 'index';
-      }
+if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project'] && !w2PgetParam($_GET, 'bypass') && !(isset($_GET['tab']))) {
+	if ($AppUI->isActiveModule('projectdesigner')) {
+		$m = 'projectdesigner';
+		$a = 'index';
+	}
 }
 
 /* This check for $u implies that a file located in a subdirectory of higher depth than 1
@@ -244,7 +244,7 @@ if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.
 // further down the track.
 $modajax = $AppUI->getModuleAjax($m);
 if (file_exists($modajax)) {
-	include_once($modajax);
+	include_once ($modajax);
 }
 if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php')) {
 	include_once W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php';
@@ -259,25 +259,8 @@ if (isset($_REQUEST['dosql'])) {
 
 // start output proper
 include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-ob_start();
+ob_start('ob_gzhandler');
 if (!$suppressHeaders) {
-	echo '
-		<!--AJAX loading messagebox -->
-		<div id="loadingMessage" style="position: absolute; left: 50%; top: 50%;display: none;">
-		<table width="80" cellpadding="2" cellspacing="2" border="0" class="std" style="border-width:1px;border-color:black;background-color:white;">
-		<tr>
-			<td style="font-size:11px;font-weight:bold;">
-			Loading...
-			</td>
-			<td>';
-	echo w2PshowImage( 'progress.gif', '10', '10', 'spinner', 'Loading...' );
-	echo '
-			</td>
-		</tr>
-		</table>
-		</div>
-		<!--End AJAX loading messagebox -->';
-    echo '<div id="w2PfadeDIV" style="width:100%;height:100%;">';
 	require W2P_BASE_DIR . '/style/' . $uistyle . '/header.php';
 }
 
@@ -420,7 +403,23 @@ if (!$suppressHeaders) {
 		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">w2P Total Queries executed: ' . (int)($w2p_performance_old_dbqueries + $w2p_performance_dbqueries) . ' queries</p>');
 		printf('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Page generated in %.3f seconds</p>', (array_sum(explode(' ', microtime())) - $w2p_performance_time));
 	}
-    echo '</div>';
+	echo '</div>';
+	echo '
+		<!--AJAX loading messagebox -->
+		<div id="loadingMessage" style="alpha(opacity=100);opacity:1;position: fixed; left: 50%; top: 0;display: none;">
+		<table width="80" cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<td>
+				<b>' . $AppUI->_('Loading') . '</b>
+			</td>
+			<td>';
+	echo w2PshowImage('progress.gif', '10', '10', 'spinner', 'Loading...');
+	echo '
+			</td>
+		</tr>
+		</table>
+		</div>
+		<!--End AJAX loading messagebox -->';
 }
 ob_end_flush();
 ?>
