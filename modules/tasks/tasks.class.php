@@ -2282,6 +2282,8 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	$item_order = ($item_order == SORT_ASC) ? SORT_DESC : SORT_ASC;
 	if ($m == 'tasks') {
 		$s .= '<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&a=view&task_id=' . $task_id) : $a);
+	} elseif ($m == 'calendar') {
+		$s .= '<a href="./index.php?m=calendar&a=day_view';
 	} else {
 		$s .= '<a href="./index.php?m=projects&bypass=1' . (($project_id > 0) ? ('&a=view&project_id=' . $project_id) : '');
 	}
