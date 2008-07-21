@@ -38,7 +38,6 @@
 'co'=>'contrôle',
 'delete file'=>'supprimer le fichier',
 'download'=>'télécharger',
-'fileIdError'=>'Une référence de fichier invalide a été passée à cette fonction',
 'files list'=>'liste des fichiers',
 'filesDelete'=>'Etes-vous certain de vouloir effacer ce fichier?',
 'new file'=>'nouveau fichier',

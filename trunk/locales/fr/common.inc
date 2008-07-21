@@ -221,3 +221,4 @@
 'tabbed'=>'onglets',
 'test'=>'test',
 'updated'=>'mis-à-jour',
+'fileIdError'=>'Une référence de fichier invalide a été passée à cette fonction',

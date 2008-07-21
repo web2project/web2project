@@ -3,7 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-ob_start();
+if ($loginFromPage == 'index.php') {
+	ob_start('ob_gzhandler');
+} else {
+	ob_start();
+}
+
 @readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc');
 
 // language files for specific locales and specific modules (for external modules) should be

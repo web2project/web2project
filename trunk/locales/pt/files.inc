@@ -52,7 +52,6 @@
 'co Reason'=>'Razão co',
 'delete file'=>'apagar Ficheiro',
 'download'=>'download',
-'fileIdError'=>'Um Manipulador de Ficheiro inválido foi passado à função',
 'files list'=>'lista de ficheiros',
 'filesDelete'=>'Tem certeza de que deseja apagar este Ficheiro?',
 'new file'=>'novo ficheiro',
