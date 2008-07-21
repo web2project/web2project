@@ -3,11 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-if ($loginFromPage == 'index.php') {
-	ob_start('ob_gzhandler');
-} else {
-	ob_start();
-}
+ob_start();
 
 @readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc');
 
