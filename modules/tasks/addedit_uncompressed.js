@@ -552,16 +552,18 @@ function fd_seed()
 
 // Sub-form specific functions.
 function checkDates(form) {
-	if (can_edit_time_information && check_task_dates) {
-		if (!form.task_start_date.value) {
-			alert( task_start_msg );
-			form.task_start_date.focus();
-			return false;
-		}
-		if (!form.task_end_date.value) {
-			alert( task_end_msg );
-			form.task_end_date.focus();
-			return false;
+	if (can_edit_time_information) {
+		if (check_task_dates) {
+			if (!form.task_start_date.value) {
+				alert( task_start_msg );
+				form.task_start_date.focus();
+				return false;
+			}
+			if (!form.task_end_date.value) {
+				alert( task_end_msg );
+				form.task_end_date.focus();
+				return false;
+			}
 		}
 		//check if the start date is > then end date
 		var int_st_date = new String(form.task_start_date.value + form.start_hour.value + form.start_minute.value);
@@ -570,8 +572,10 @@ function checkDates(form) {
 		var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
 		var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
 		if ( s > e ) {
-			alert( 'End date is before start date!');
-			return false;
+			if (form.task_start_date.value && form.task_end_date.value) {
+				alert( 'End date is before start date!');
+				return false;
+			}
 		}
 	}
 	return true;
