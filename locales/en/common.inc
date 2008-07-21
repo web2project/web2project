@@ -235,3 +235,5 @@
 'Zip Code',
 'Server time is',
 'newAccountSignup'=>'I want to signup for a new account please.',
+'fileIdError'=>'An invalid file handle was passed to the function',
+'noFileError'=>'The file handler is wrong or the file does not physically exist on the disk',

@@ -24,7 +24,6 @@
 'download',
 'Edit File',
 'File could not be written',
-'fileIdError'=>'An invalid file handle was passed to the function',
 'File Name',
 'File(s)',
 'filesDelete'=>'Are you sure that you want to delete this file?',

@@ -90,6 +90,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	}
 }
 $AppUI = &$_SESSION['AppUI'];
+include_once W2P_BASE_DIR . '/locales/core.php';
 
 $perms = &$AppUI->acl();
 

@@ -234,3 +234,5 @@
 'test'=>'teste',
 'updated'=>'actualizado',
 'newAccountSignup'=>'Quero criar uma nova conta de Utilizador.',
+'fileIdError'=>'Um Manipulador de Ficheiro inválido foi passado à função',
+'noFileError'=>'O identificador do ficheiro está errado ou o ficheiro não existe fisicamente no disco',

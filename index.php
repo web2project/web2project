@@ -101,7 +101,7 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	$uistyle = w2PgetConfig('host_style');
 	$AppUI->setUserLocale();
 	@include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-	@include_once W2P_BASE_DIR . '/locales/core.php';
+	include_once W2P_BASE_DIR . '/locales/core.php';
 	setlocale(LC_TIME, $AppUI->user_lang);
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
 		require W2P_BASE_DIR . '/includes/sendpass.php';
@@ -122,7 +122,7 @@ if (isset($_REQUEST['login'])) {
 	$redirect = w2PgetCleanParam($_POST, 'redirect', '');
 	$AppUI->setUserLocale();
 	@include_once (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
-	@include_once W2P_BASE_DIR . '/locales/core.php';
+	include_once W2P_BASE_DIR . '/locales/core.php';
 	$ok = $AppUI->login($username, $password);
 	if (!$ok) {
 		$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
@@ -150,7 +150,7 @@ if ($AppUI->doLogin()) {
 	// load basic locale settings
 	$AppUI->setUserLocale();
 	@include_once ('./locales/' . $AppUI->user_locale . '/locales.php');
-	@include_once ('./locales/core.php');
+	include_once ('./locales/core.php');
 	setlocale(LC_TIME, $AppUI->user_lang);
 	$redirect = $_SERVER['QUERY_STRING'] ? strip_tags($_SERVER['QUERY_STRING']) : '';
 	if (strpos($redirect, 'logout') !== false) {
@@ -206,7 +206,7 @@ $u = $AppUI->checkFileName(w2PgetCleanParam($_GET, 'u', ''));
 
 // load module based locale settings
 @include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-@include_once W2P_BASE_DIR . '/locales/core.php';
+include_once W2P_BASE_DIR . '/locales/core.php';
 
 setlocale(LC_TIME, $AppUI->user_lang);
 $m_config = w2PgetConfig($m);

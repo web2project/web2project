@@ -433,12 +433,11 @@ class CAppUI {
 
 		if ($x) {
 			$str = $x;
-		} else
-			if (w2PgetConfig('locale_warn')) {
-				if ($this->base_locale != $this->user_locale || ($this->base_locale == $this->user_locale && !in_array($str, $GLOBALS['translate']))) {
-					$str .= w2PgetConfig('locale_alert');
-				}
+		} elseif (w2PgetConfig('locale_warn')) {
+			if ($this->base_locale != $this->user_locale || ($this->base_locale == $this->user_locale && !in_array($str, $GLOBALS['translate']))) {
+				$str .= w2PgetConfig('locale_alert');
 			}
+		}
 		switch ($flags & UI_CASE_MASK) {
 			case UI_CASE_UPPER:
 				$str = strtoupper($str);
@@ -567,7 +566,7 @@ class CAppUI {
 	 * the existing message is overwritten with $msg.
 	 */
 	function setMsg($msg, $msgNo = 0, $append = false) {
-		$msg = $this->_($msg);
+		$msg = $this->_($msg, UI_OUTPUT_RAW);
 		$this->msg = $append ? $this->msg . ' ' . $msg : $msg;
 		$this->msgNo = $msgNo;
 	}

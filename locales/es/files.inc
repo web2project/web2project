@@ -56,7 +56,6 @@
 'co Reason'=>'Razón co',
 'delete file'=>'eliminar fichero',
 'download'=>'descargar',
-'fileIdError'=>'Se ha pasado un ID de fichero incorrecto a esta función',
 'files list'=>'listado de ficheros',
 'filesDelete'=>'¿Está seguro que desea eliminar este fichero?',
 'new file'=>'nuevo fichero',

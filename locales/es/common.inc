@@ -235,3 +235,5 @@
 'test'=>'prueba',
 'updated'=>'modificado',
 'newAccountSignup'=>'Quiero crear una nueva cuenta de Usuario.',
+'fileIdError'=>'Se ha pasado un ID de fichero incorrecto a esta función',
+'noFileError'=>'El ID de fichero és incorrecto o lo fichero no hay en disco',

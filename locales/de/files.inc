@@ -39,7 +39,6 @@
 'co'=>'co',
 'delete file'=>'Datei löschen',
 'download'=>'herunterladen',
-'fileIdError'=>'Der Funktion wurde ein falsches Dateihandle übergeben',
 'files list'=>'Dateiliste',
 'filesDelete'=>'Soll diese Datei wirklich gelöscht werden?',
 'new file'=>'Neue Datei',
