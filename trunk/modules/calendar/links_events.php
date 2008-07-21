@@ -90,11 +90,11 @@ function getEventTooltip($event_id) {
 	if ($row['event_project']) {
 		$tt .= '		<tr>';
 		$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Company') . '</td>';
-		$tt .= '			<td width="100%" nowrap="nowrap">' . $event_company . '</td>';
+		$tt .= '			<td width="100%">' . $event_company . '</td>';
 		$tt .= '		</tr>';
 		$tt .= '		<tr>';
 		$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Project') . '</td>';
-		$tt .= '			<td width="100%" nowrap="nowrap">' . $event_project . '</td>';
+		$tt .= '			<td width="100%">' . $event_project . '</td>';
 		$tt .= '		</tr>';
 	}
 	$tt .= '		<tr>';

@@ -160,11 +160,11 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Company') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap">' . $task_company . '</td>';
+	$tt .= '			<td width="100%">' . $task_company . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Project') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap">' . $task_project . '</td>';
+	$tt .= '			<td width="100%">' . $task_project . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Type') . '</td>';
