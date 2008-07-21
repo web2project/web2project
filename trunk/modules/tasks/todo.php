@@ -61,6 +61,8 @@ $showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
 $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 
+global $task_sort_item1, $task_sort_type1, $task_sort_order1;
+global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 $task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', '');
 $task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
 $task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', '');
