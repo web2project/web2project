@@ -96,9 +96,10 @@ class w2Pacl extends gacl_api {
 			return $this->checkModule($module, $op, $userid);
 		}
 
-		$result = $this->w2Pacl_query('application', $op, 'user', $userid, $module, $item, null);
+		$result = $this->w2Pacl_query('application', $op, 'user', $userid, $module, $item);
 		// If there is no acl_id then we default back to the parent lookup
-		//print_r('hi:'.$module.$op.$userid.'>'.$item.'='.$result.' ');
+		/*print_r('hi:'.$module.$op.$userid.'>'.$item.'='.$result.' ');
+		print_r($result);*/
 		if (!$result || !$result['acl_id']) {
 			dprint(__file__, __line__, 2, "checkModuleItem($module, $op, $userid) did not return a record");
 			//return $this->checkModule($module, $op, $userid);
@@ -1255,12 +1256,12 @@ class w2Pacl extends gacl_api {
 		} else {
 			$allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label']);
 		}
-
-		/*print_r(isset($allowedRecords[$item]));
+		/*print_r($allowedRecords[(int)$item]);	
+		print_r(intval(isset($allowedRecords[(int)$item])));
 		print_r('Result:'.$item.'>count='.count($allowedRecords));die;*/
 
 		if (count($allowedRecords)) {
-			if (isset($allowedRecords[$item])) {
+			if (isset($allowedRecords[(int)$item])) {
 				return array('access' => 1, 'acl_id' => 'checked');
 			} else {
 				return array();

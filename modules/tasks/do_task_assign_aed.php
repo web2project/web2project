@@ -36,8 +36,7 @@ if (isset($htasks)) {
 		}
 	}
 }
-
-$sizeof = sizeof($htasks_ar);
+$sizeof = count($htasks_ar);
 for ($i = 0; $i <= $sizeof; $i++) {
 
 	$_POST['task_id'] = $htasks_ar[$i];
@@ -60,20 +59,14 @@ for ($i = 0; $i <= $sizeof; $i++) {
 			$overAssignment = $obj->updateAssigned($hassign, $hperc_assign_ar, true, true);
 			if ($overAssignment) {
 				$AppUI->setMsg('Some Users could not be unassigned from Task', UI_MSG_ERROR);
+			}
+		} elseif (($rm || $del)) {
+			if (($msg = $obj->removeAssigned($user_id))) {
+				$AppUI->setMsg($msg, UI_MSG_ERROR);
 			} else {
-				// Don't do anything because we might have other tasks to change
-				// $AppUI->setMsg( 'User(s) unassigned from Task', UI_MSG_OK);
-				// $AppUI->redirect();
+				$AppUI->setMsg('User unassigned from Task', UI_MSG_OK);
 			}
-		} else
-			if (($rm || $del)) {
-				if (($msg = $obj->removeAssigned($user_id))) {
-					$AppUI->setMsg($msg, UI_MSG_ERROR);
-
-				} else {
-					$AppUI->setMsg('User unassigned from Task', UI_MSG_OK);
-				}
-			}
+		}
 		if (isset($hassign) && !$del == 1) {
 			$overAssignment = $obj->updateAssigned($hassign, $hperc_assign_ar, false, false);
 			//check if OverAssignment occured, database has not been updated in this case
@@ -96,7 +89,6 @@ for ($i = 0; $i <= $sizeof; $i++) {
 			} else {
 				$AppUI->setMsg('Task(s) updated', UI_MSG_OK, true);
 			}
-
 		}
 	}
 }

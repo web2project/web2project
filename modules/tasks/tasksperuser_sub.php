@@ -50,6 +50,10 @@ if (!$log_start_date) {
 	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
+
+// get Users with all Allocation info (e.g. their freeCapacity)
+$tempoTask = new CTask();
+$userAlloc = $tempoTask->getAllocation('user_id', null, true);
 ?>
 
 <script language="javascript">
@@ -257,10 +261,6 @@ if (function_exists('styleRenderBoxTop')) {
 ?>
 <?php
 if ($do_report) {
-	// get Users with all Allocation info (e.g. their freeCapacity)
-	$tempoTask = new CTask();
-	$userAlloc = $tempoTask->getAllocation('user_id');
-
 	// Let's figure out which users we have
 	$user_list = w2PgetUsersHashList();
 
