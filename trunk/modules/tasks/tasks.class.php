@@ -334,7 +334,7 @@ class CTask extends CW2pObject {
 			$real_children_hours_worked = (float)$q->loadResult();
 			$q->clear();
 
-			//"days"
+			//days
 			$q->addTable('tasks');
 			$q->addQuery('SUM(task_percent_complete * task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
 			$q->addWhere('task_parent = ' . (int)$modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type <> 1 ');
@@ -355,7 +355,7 @@ class CTask extends CW2pObject {
 			//Update start date
 			$q->addTable('tasks');
 			$q->addQuery('MIN(task_start_date)');
-			$q->addWhere('task_parent = ' . (int)$modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_start_date)' . " AND task_start_date <>	'0000-00-00 00:00:00'");
+			$q->addWhere('task_parent = ' . (int)$modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_start_date)' . ' AND task_start_date <>	\'0000-00-00 00:00:00\'');
 			$d = $q->loadResult();
 			$q->clear();
 			if ($d) {
@@ -979,14 +979,14 @@ class CTask extends CW2pObject {
 				$mail->To($email);
 				$recipient_list .= $email . ' (' . $name . ")\n";
 			} else {
-				$recipient_list .= "Invalid email address '{$email}' for {$name}, not sent\n";
+				$recipient_list .= 'Invalid email address \'' . $email . '\' for ' . $name . ', not sent' . "\n";
 			}
 		}
 		$mail->Send();
 		// Now update the log
 		$save_email = $AppUI->getPref('TASKLOGNOTE');
 		if ($save_email) {
-			$log->task_log_description .= "\nEmailed " . date('d/m/Y H:i:s') . " to:\n{$recipient_list}";
+			$log->task_log_description .= "\n" . 'Emailed ' . date('d/m/Y H:i:s') . ' to:' . "\n" . $recipient_list;
 			return true;
 		}
 
@@ -1401,7 +1401,6 @@ class CTask extends CW2pObject {
 		// get Allocation info in order to check if overAssignment occurs
 		$alloc = $this->getAllocation('user_id');
 		$overAssignment = false;
-
 		foreach ($tarr as $user_id) {
 			if (intval($user_id) > 0) {
 				$perc = $perc_assign[$user_id];
@@ -1439,37 +1438,65 @@ class CTask extends CW2pObject {
 	 *	@param array users	 an array of user_ids calculating their assignment capacity
 	 *	@return array		 returns hashList of extent of utilization for assignment of the users
 	 */
-	function getAllocation($hash = null, $users = null) {
-		$q = &new DBQuery;
-		// retrieve the systemwide default preference for the assignment maximum
-		$q->addTable('user_preferences');
-		$q->addQuery('pref_value');
-		$q->addWhere('pref_user = 0 AND pref_name = \'' . TASKASSIGNMAX . '\'');
-		$sysChargeMax = $q->loadHash();
-		$q->clear();
-		if (!$sysChargeMax) {
-			$scm = 0;
+	function getAllocation($hash = null, $users = null, $get_user_list = false) {
+		global $AppUI;
+		if (!w2PgetConfig('check_overallocation')) {
+			if ($get_user_list) {
+				$users_list = w2PgetUsersHashList();
+				foreach ($users_list as $key => $user) {
+					$users_list[$key]['userFC'] = $user['contact_name'];
+				}
+				$hash = $users_list;
+			} else {
+				$hash = array();
+			}
 		} else {
-			$scm = $sysChargeMax['pref_value'];
+			$q = &new DBQuery;
+			// retrieve the systemwide default preference for the assignment maximum
+			$q->addTable('user_preferences');
+			$q->addQuery('pref_value');
+			$q->addWhere('pref_user = 0 AND pref_name = \'' . TASKASSIGNMAX . '\'');
+			$sysChargeMax = $q->loadHash();
+			$q->clear();
+			if (!$sysChargeMax) {
+				$scm = 0;
+			} else {
+				$scm = $sysChargeMax['pref_value'];
+			}
+	
+			/*
+			* provide actual assignment charge, individual chargeMax 
+			* and freeCapacity of users' assignments to tasks
+			*/
+			$q->addTable('users', 'u');
+			$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
+			$q->leftJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
+			$q->leftJoin('user_preferences', 'up', 'up.pref_user = u.user_id');
+			$q->addQuery('u.user_id, CONCAT(CONCAT_WS(\' [\', CONCAT_WS(\' \', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0)), \'%]\') AS userFC, IFNULL(SUM(ut.perc_assignment), 0) AS charge, u.user_username, IFNULL(up.pref_value,' . $scm . ') AS chargeMax, IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0) AS freeCapacity');
+			if (!empty($users)) { // use userlist if available otherwise pull data for all users
+				$q->addWhere('u.user_id IN (' . implode(',', $users) . ')');
+			}
+			$q->addGroup('u.user_id');
+			$q->addOrder('contact_first_name, contact_last_name');
+			// get CCompany() to filter by company
+			require_once ($AppUI->getModuleClass('companies'));
+			$obj = new CCompany();
+			$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
+			$q->addJoin('companies', 'com', 'company_id = contact_company');
+			if ($companies) {
+				$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
+			}
+			require_once ($AppUI->getModuleClass('departments'));
+			$dpt = new CDepartment();
+			$depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
+			$q->addJoin('departments', 'dep', 'dept_id = contact_department');
+			if ($depts) {
+				$q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
+			}
+			$hash = $q->loadHashList($hash);
+			$q->clear();
+			//echo "<pre>$sql</pre>";
 		}
-
-		/*
-		* provide actual assignment charge, individual chargeMax 
-		* and freeCapacity of users' assignments to tasks
-		*/
-		$q->addTable('users', 'u');
-		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->leftJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
-		$q->leftJoin('user_preferences', 'up', 'up.pref_user = u.user_id');
-		$q->addQuery('u.user_id, CONCAT(CONCAT_WS(\' [\', CONCAT_WS(\' \', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0)), \'%]\') AS userFC, IFNULL(SUM(ut.perc_assignment), 0) AS charge, u.user_username, IFNULL(up.pref_value,' . $scm . ') AS chargeMax, IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0) AS freeCapacity');
-		if (!empty($users)) { // use userlist if available otherwise pull data for all users
-			$q->addWhere('u.user_id IN (' . implode(',', $users) . ')');
-		}
-		$q->addGroup('u.user_id');
-		$q->addOrder('contact_last_name, contact_first_name');
-		$hash = $q->loadHashList($hash);
-		$q->clear();
-		//echo "<pre>$sql</pre>";
 		return $hash;
 	}
 
@@ -2058,10 +2085,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	}
 	// edit icon
 	$s .= '<td align="center">';
-	//Don't do item level checkings here, let the addedit interfaces do that for speed sake
-	//$canEdit = !getDenyEdit('tasks', $arr['task_id']);
 	$canEdit = true;
-	//$canViewLog = $perms->checkModuleItem('task_log', 'view', $arr['task_id']);
 	$canViewLog = true;
 	if ($canEdit) {
 		$s .= w2PtoolTip('edit task', 'click to edit this task') . '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PshowImage('icons/pencil.gif', 12 , 12). '</a>' . w2PendTip();
@@ -2132,27 +2156,22 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	if (!$today_view) {
 		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&a=viewuser&user_id=' . $arr['user_id'] . '">' . $arr['owner'] . '</a>' . '</td>');
 	}
-	// $s .= '<td nowrap="nowrap" align="center">' . $arr['user_username'] . '</td>';
 	if (isset($arr['task_assigned_users']) && ($assigned_users = $arr['task_assigned_users'])) {
 		$a_u_tmp_array = array();
 		if ($show_all_assignees) {
 			$s .= '<td align="center">';
 			foreach ($assigned_users as $val) {
-				/*
-				$a_u_tmp_array[] = ('<a href="mailto:' . $val['user_email'] . '">' 
-				. $val['user_username'] . '</a>'); 
-				*/
-				$a_u_tmp_array[] = ('<a href="?m=admin&a=viewuser&user_id=' . $val['user_id'] . '"' . 'title="' . $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
+				$a_u_tmp_array[] = ('<a href="?m=admin&a=viewuser&user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
 			}
 			$s .= join(', ', $a_u_tmp_array) . '</td>';
 		} else {
-			$s .= ('<td align="center" nowrap="nowrap">' . '<a href="?m=admin&a=viewuser&user_id=' . $assigned_users[0]['user_id'] . '" title="' . $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%">' . $assigned_users[0]['assignee'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
+			$s .= ('<td align="center" nowrap="nowrap">' . '<a href="?m=admin&a=viewuser&user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['assignee'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
 			if ($arr['assignee_count'] > 1) {
 				$s .= (' <a href="javascript: void(0);" onclick="toggle_users(' . "'users_" . $arr['task_id'] . "'" . ');" title="' . join(', ', $a_u_tmp_array) . '">(+' . ($arr['assignee_count'] - 1) . ')</a>' . '<span style="display: none" id="users_' . $arr['task_id'] . '">');
 				$a_u_tmp_array[] = $assigned_users[0]['assignee'];
 				for ($i = 1, $i_cmp = count($assigned_users); $i < $i_cmp; $i++) {
 					$a_u_tmp_array[] = $assigned_users[$i]['assignee'];
-					$s .= ('<br /><a href="?m=admin&a=viewuser&user_id=' . $assigned_users[$i]['user_id'] . '" title="' . $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%">' . $assigned_users[$i]['assignee'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>');
+					$s .= ('<br /><a href="?m=admin&a=viewuser&user_id=' . $assigned_users[$i]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[$i]['assignee'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>');
 				}
 				$s .= '</span>';
 			}

@@ -432,8 +432,7 @@ function chAssignment(project_id, rmUser, del) {
 		} 
 		else if (a == 0) {
 			alert ('<?php echo $AppUI->_('Please select at least one Assignee!', UI_OUTPUT_JS); ?>');
-		} 
-		else {
+		} else {
 			f.rm.value = rmUser;
 			f.del.value = del;
 			f.project_id.value = project_id;
@@ -504,6 +503,12 @@ if ($showEditCheckbox) {
 <?php
 reset($projects);
 
+if ($w2Pconfig['direct_edit_assignment']) {
+	// get Users with all Allocation info (e.g. their freeCapacity)
+	// but do it only when direct_edit_assignment is on and only once.
+	$tempoTask = new CTask();
+	$userAlloc = $tempoTask->getAllocation('user_id', null, true);
+}
 foreach ($projects as $k => $p) {
 	$tnums = count($p['tasks']);
 	// don't show project if it has no tasks
@@ -548,9 +553,6 @@ foreach ($projects as $k => $p) {
   </td>
 <?php
 			if ($w2Pconfig['direct_edit_assignment']) {
-				// get Users with all Allocation info (e.g. their freeCapacity)
-				$tempoTask = new CTask();
-				$userAlloc = $tempoTask->getAllocation('user_id');
 ?>
   <td colspan="3" align="right" valign="middle">
   <table width="100%" border="0">
