@@ -382,10 +382,7 @@ function displayFiles($folder) {
 	global $m, $a, $tab, $AppUI, $xpg_min, $xpg_pagesize;
 	global $deny1, $deny2, $project_id, $task_id, $showProject, $file_types, $cfObj;
 	global $xpg_totalrecs, $xpg_total_pages, $page;
-	global $company_id, $allowed_companies, $current_uri, $w2Pconfig;
-
-	//$canEdit = !getDenyEdit('files', $folder);
-	//$canRead = !getDenyRead('files', $folder);
+	global $company_id, $allowed_companies, $current_uri, $w2Pconfig, $canEdit, $canRead;
 
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$tf = $AppUI->getPref('TIMEFORMAT');
@@ -668,8 +665,8 @@ function displayFiles($folder) {
 }
 
 /**** Main Program ****/
-$canEdit = !getDenyEdit($m, $folder);
-$canRead = !getDenyRead($m, $folder);
+$canEdit = !getDenyEdit($m);
+$canRead = !getDenyRead($m);
 //echo $folder . ":" . $canEdit . ":" . $canRead;
 //if (!$canEdit && !$canRead) {
 //	$AppUI->redirect( "m=public&a=access_denied" );

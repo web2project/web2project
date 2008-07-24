@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $m, $obj, $task_id, $w2Pconfig;
 if (!getDenyRead('files')) {
-	if (!getDenyEdit('files')) {
+	if (!getDenyAdd('files')) {
 		echo '<a href="./index.php?m=files&a=addedit&project_id=' . $obj->task_project . '&file_task=' . $task_id . '">' . $AppUI->_('Attach a file') . '</a>';
 	}
 	echo w2PshowImage('stock_attach-16.png', 16, 16, '');
