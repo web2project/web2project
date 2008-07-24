@@ -1483,4 +1483,7 @@ function getDenyEdit($mod, $item_id = 0) {
 	return !getPermission($mod, 'edit', $item_id);
 }
 
+function getDenyAdd($mod, $item_id = 0) {
+	return !getPermission($mod, 'add', $item_id);
+}
 ?>

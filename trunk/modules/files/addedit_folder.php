@@ -26,9 +26,7 @@ if (!$canEdit && $folder) {
 
 // check permissions for this record
 if ($folder == 0) {
-	$canEdit = true;
-} else {
-	$canEdit = !getDenyEdit($m, $folder);
+	$canEdit = $canAuthor;
 }
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
