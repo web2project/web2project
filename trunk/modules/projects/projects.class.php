@@ -447,7 +447,7 @@ class CProject extends CW2pObject {
 		$project_id = !empty($project_id) ? $project_id : $this->project_id;
 		$q = new DBQuery;
 		$q->addTable('tasks');
-		$q->addWhere('task_project = ' . (int)$project_id . ' AND NOT ISNULL( task_end_date ) AND task_end_date <>  \'0000-00-00 00:00:00\'');
+		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_end_date IS NOT NULL AND task_end_date <>  \'0000-00-00 00:00:00\'');
 		$q->addOrder('task_end_date DESC');
 		$q->setLimit($limit);
 
@@ -715,10 +715,13 @@ function projects_list_data($user_id = false) {
 
 	// support critical tasks
 	$q->addInsertSelect('tasks_critical');
-	$q->addTable('tasks');
-	$q->addQuery('task_project, task_id AS critical_task, MAX(task_end_date) AS project_actual_end_date');
-	$q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
-	$q->addOrder('task_end_date DESC');
+	$q->addTable('tasks', 't');
+	$q->addQuery('task_project, task_id AS critical_task, task_end_date AS project_actual_end_date');
+	$sq = new DBQuery;
+	$sq->addTable('tasks', 'st');
+	$sq->addQuery('MAX(task_end_date)');
+	$sq->addWhere('st.task_project = t.task_project');
+	$q->addWhere('task_end_date = (' . $sq->prepare() . ')');
 	$q->addGroup('task_project');
 	$tasks_critical = $q->exec();
 	$q->clear();
