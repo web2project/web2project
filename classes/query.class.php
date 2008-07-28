@@ -693,7 +693,7 @@ class DBQuery {
 				$q .= $this->make_group_clause($this->group_by);
 				$q .= $this->make_having_clause($this->having);
 				$q .= $this->make_order_clause($this->order_by);
-				// TODO: Prepare limit as well
+				$q .= $this->make_limit_clause($this->limit, $this->offset);
 				return $q;
 				break;
 			default:
@@ -747,7 +747,7 @@ class DBQuery {
 				$q .= $this->make_group_clause($this->group_by);
 				$q .= $this->make_having_clause($this->having);
 				$q .= $this->make_order_clause($this->order_by);
-				// TODO: Prepare limit as well
+				$q .= $this->make_limit_clause($this->limit, $this->offset);
 				return $q;
 		}
 	}
@@ -1082,11 +1082,7 @@ class DBQuery {
 					$qid->Close();
 				}
 			}
-			if (isset($this->limit)) {
-				$this->_query_id = $this->_db->SelectLimit($q, $this->limit, $this->offset);
-			} else {
-				$this->_query_id = $this->_db->Execute($q);
-			}
+			$this->_query_id = $this->_db->Execute($q);
 			if (!$this->_query_id) {
 				$error = $this->_db->ErrorMsg();
 				dprint(__file__, __line__, 0, "query failed($q)" . ' - error was: <span style="color:red">' . $error . '</span>');
@@ -1444,6 +1440,28 @@ class DBQuery {
 			}
 		} elseif (strlen($having_clause) > 0) {
 			$result = ' HAVING ' . $having_clause;
+		}
+		return $result;
+	}
+
+	/** Create a limit clause
+	 *
+	 * @param	$limit	Either integer with nr of records to retrieve or array with offset and nr of records to retrieve .
+	 * @param	$offset	integer of offset from where it should start retrieving.
+	 * @return	SQL LIMIT clause as a string.
+	 */
+	function make_limit_clause($limit, $offset) {
+		$result = '';
+		if (!isset($limit)) {
+			return $result;
+		}
+
+		if (is_array($limit) && (count($limit) == 2)) {
+			$result = ' LIMIT ' . implode(',', $limit);
+		} elseif (isset($limit) && ($offset <= 0)) {
+			$result = ' LIMIT ' . intval($limit);
+		} elseif (isset($limit) && ($offset > 0)) {
+			$result = ' LIMIT ' . intval($offset) . ', ' . intval($limit);
 		}
 		return $result;
 	}
