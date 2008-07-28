@@ -113,10 +113,19 @@ if (!empty($_REQUEST['project_id'])) {
 $page = isset($_REQUEST['pg']) ? (int)$_REQUEST['pg'] : 1;
 $limit = isset($_REQUEST['limit']) ? (int)$_REQUEST['limit'] : 100;
 $offset = ($page - 1) * $limit;
-if ($filter_param != '') {
+if ($filter_param != '' || $page) {
 	$q = new DBQuery;
-	$q->includeCount();
-	$q->addQuery('history_id, history_item, history_table, history_description, history_action');
+	$q->addQuery('COUNT(history_id) AS hits');
+	$q->addTable('history', 'h');
+	$q->addTable('users');
+	$q->addWhere('history_user = user_id');
+	$q->addTable('contacts');
+	$q->addWhere('contact_id = user_contact');
+	$q->addWhere($filter);
+	$count = intval($q->loadResult());
+
+	$q = new DBQuery;
+	$q->addQuery('history_date, history_id, history_item, history_table, history_description, history_action');
 	$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS history_user_name');
 	$q->addTable('history', 'h');
 	$q->addTable('users');
@@ -130,7 +139,7 @@ if ($filter_param != '') {
 } else {
 	$history = array();
 }
-$count = count($history);
+
 $pages = (int)($count / $limit) + 1;
 $max_pages = 20;
 if ($pages > $max_pages) {
