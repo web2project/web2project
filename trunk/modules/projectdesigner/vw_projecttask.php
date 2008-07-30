@@ -52,22 +52,9 @@ global $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTyp
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
-/*      tasks.php
-
-This file contains common task list rendering code used by
-modules/tasks/index.php and modules/projects/vw_tasks.php
-
-in
-
-External used variables:
-* $min_view: hide some elements when active (used in the vw_tasks.php)
-* $project_id
-* $f
-* $query_string
-*/
 
 if (empty($query_string)) {
-	$query_string = "?m=$m&amp;a=$a";
+	$query_string = '?m=' . $m . '&amp;a=' . $a;
 }
 
 // Number of columns (used to calculate how many columns to span things through)
@@ -76,25 +63,6 @@ $cols = 13;
 /****
 // Let's figure out which tasks are selected
 */
-
-global $tasks_opened;
-global $tasks_closed;
-
-$tasks_closed = array();
-$tasks_opened = $AppUI->getState('tasks_opened');
-if (!$tasks_opened) {
-	$tasks_opened = array();
-}
-$q = new DBQuery();
-$q->addQuery('task_id');
-$q->addTable('tasks');
-$q->addWhere('task_project=' . $project_id);
-$all_tasks = $q->loadList();
-foreach ($all_tasks as $key => $open_task) {
-	$tasks_opened[] = $open_task['task_id'];
-}
-
-$task_id = intval(w2PgetParam($_GET, 'task_id', 0));
 $q = new DBQuery;
 $pinned_only = intval(w2PgetParam($_GET, 'pinned', 0));
 if (isset($_GET['pin'])) {
@@ -119,25 +87,9 @@ if (isset($_GET['pin'])) {
 	}
 
 	$AppUI->redirect('', -1);
-} else
-	if ($task_id > 0) {
-		$tasks_opened[] = $task_id;
-	}
+}
 
 $AppUI->savePlace();
-
-if (($open_task_id = w2PgetParam($_GET, 'open_task_id', 0)) > 0 && !in_array($_GET['open_task_id'], $tasks_opened)) {
-	$tasks_opened[] = $_GET['open_task_id'];
-}
-
-// Closing tasks needs also to be within tasks iteration in order to
-// close down all child tasks
-if (($close_task_id = w2PgetParam($_GET, 'close_task_id', 0)) > 0) {
-	closeOpenedTask($close_task_id);
-}
-
-// We need to save tasks_opened until the end because some tasks are closed within tasks iteration
-/// End of tasks_opened routine
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $taskPriority = w2PgetSysVal('TaskPriority');
@@ -164,10 +116,10 @@ $q->addQuery('projects.project_id, project_color_identifier, project_name');
 $q->addQuery('SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) / SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete');
 $q->addQuery('company_name');
 $q->addTable('projects');
-$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
-$q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
 $q->leftJoin('tasks', 't1', 'projects.project_id = t1.task_project');
 $q->leftJoin('companies', 'c', 'company_id = project_company');
+$q->leftJoin('project_departments', 'project_departments', 'projects.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
+$q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 $q->addWhere('t1.task_id = t1.task_parent');
 $q->addWhere('projects.project_id=' . $project_id);
 if (count($allowedProjects)) {
@@ -183,13 +135,13 @@ $q2->addQuery('projects.project_id, COUNT(t1.task_id) as total_tasks');
 $perms = &$AppUI->acl();
 $projects = array();
 if ($canViewTasks) {
-	$prc = $q->exec(ADODB_FETCH_ASSOC);
+	$prc = $q->exec();
 	echo db_error();
 	while ($row = $q->fetchRow()) {
 		$projects[$row['project_id']] = $row;
 	}
 
-	$prc2 = $q2->exec(ADODB_FETCH_ASSOC);
+	$prc2 = $q2->exec();
 	echo db_error();
 	while ($row2 = $q2->fetchRow()) {
 		$projects[$row2['project_id']] = ((!($projects[$row2['project_id']])) ? array() : $projects[$row2['project_id']]);
@@ -223,7 +175,7 @@ if (!empty($mods['history']) && !getDenyRead('history')) {
 	$q->addQuery('MAX(history_date) as last_update');
 	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
 }
-$q->leftJoin('projects', 'p', 'p.project_id = task_project');
+$q->leftJoin('projects', 'projects', 'projects.project_id = task_project');
 $q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');
 $q->leftJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 $q->leftJoin('users', 'assignees', 'assignees.user_id = ut.user_id');
@@ -231,18 +183,12 @@ $q->leftJoin('contacts', 'co', 'co.contact_id = usernames.user_contact');
 $q->leftJoin('task_log', 'tlog', 'tlog.task_log_task = tasks.task_id AND tlog.task_log_problem > 0');
 $q->leftJoin('files', 'f', 'tasks.task_id = f.file_task');
 $q->leftJoin('user_task_pin', 'pin', 'tasks.task_id = pin.task_id AND pin.user_id = ' . (int)$AppUI->user_id);
-//$user_id = $user_id ? $user_id : $AppUI->user_id;
 $q->leftJoin('event_queue', 'evtq', 'tasks.task_id = evtq.queue_origin_id AND evtq.queue_module = "tasks"');
-$q->addJoin('project_departments', 'pd', 'pd.project_id = p.project_id');
-$q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
+$q->leftJoin('project_departments', 'project_departments', 'projects.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
+$q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 
-//if ($f != 'children') {
-//	$q->addWhere('tasks.task_id = task_parent');
-//}
-
-//if ($project_id) {
 $q->addWhere('task_project = ' . (int)$project_id);
-//}
+
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'task_project');
 if (count($allowedProjects)) {
 	$q->addWhere($allowedProjects);
@@ -253,7 +199,7 @@ if (count($allowedTasks)) {
 	$q->addWhere($allowedTasks);
 }
 $q->addGroup('tasks.task_id');
-$q->addOrder('p.project_id, task_start_date');
+$q->addOrder('projects.project_id, task_start_date');
 if ($canViewTasks) {
 	$tasks = $q->loadList();
 }
@@ -279,8 +225,6 @@ foreach ($tasks as $row) {
 	$q->addWhere('task_id <> task_parent');
 	$row['children'] = $q->loadResult();
 	$row['style'] = taskstyle_pd($row);
-	//	$row['canEdit'] = !getDenyEdit( 'tasks', $row['task_id'] );
-	//	$row['canViewLog'] = $perms->checkModuleItem('task_log', 'view', $row['task_id']);
 	$i = count($projects[$row['task_project']]['tasks']) + 1;
 	$row['task_number'] = $i;
 	$row['node_id'] = 'node_' . $i . '-' . $row['task_id'];
@@ -291,34 +235,7 @@ foreach ($tasks as $row) {
 	$projects[$row['task_project']]['tasks'][] = $row;
 }
 
-$showEditCheckbox = isset($canEditTasks) && $canEditTasks;
-$AppUI->setState('tasks_opened', $tasks_opened);
-
-foreach ($projects as $k => $p) {
-	global $done;
-	$done = array();
-	if ($task_sort_item1 != '') {
-		if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
-			$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
-		} else {
-			$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
-		}
-	} else {
-		/* we have to calculate the end_date via start_date+duration for
-		** end='0000-00-00 00:00:00' if array_csort function is not used
-		** as it is normally done in array_csort function in order to economise
-		** cpu time as we have to go through the array there anyway
-		*/
-		for ($j = 0, $j_cmp = count($p['tasks']); $j < $j_cmp; $j++) {
-			if ($p['tasks'][$j]['task_end_date'] == '0000-00-00 00:00:00' || $p['tasks'][$j]['task_end_date'] == null) {
-				$p['tasks'][$j]['task_end_date'] = calcEndByStartAndDuration($p['tasks'][$j]);
-			}
-		}
-	}
-
-	$p['tasks_count'] = count($p['tasks']);
-	$projects[$k] = $p;
-}
+$showEditCheckbox = isset($canEditTasks) && $canEditTasks || $perms->checkModule('admin', 'view');
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $tempoTask = new CTask();
@@ -337,61 +254,26 @@ reset($projects);
 
 foreach ($projects as $k => $p) {
 	$tnums = count($p['tasks']);
-	// don't show project if it has no tasks
-	// patch 2.12.04, show project if it is the only project in
+	//echo '<pre>'; print_r($p['tasks']); echo '</pre>';
 	if ($tnums > 0 || $project_id == $p['project_id']) {
-		//echo '<pre>'; print_r($p); echo '</pre>';
-		global $done;
-		$done = array();
-
 		if ($task_sort_item1 != '') {
 			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
 			} else {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
 			}
-		} else {
-
-			/* we have to calculate the end_date via start_date+duration for
-			** end='0000-00-00 00:00:00' if array_csort function is not used
-			** as it is normally done in array_csort function in order to economise
-			** cpu time as we have to go through the array there anyway
-			*/
-			for ($j = 0, $j_cmp = count($p['tasks']); $j < $j_cmp; $j++) {
-				if ($p['tasks'][$j]['task_end_date'] == '0000-00-00 00:00:00') {
-					$p['tasks'][$j]['task_end_date'] = calcEndByStartAndDuration($p['tasks'][$j]);
-				}
-			}
-
 		}
 
 		for ($i = 0; $i < $tnums; $i++) {
 			$t = $p['tasks'][$i];
 
 			if ($t['task_parent'] == $t['task_id']) {
-				$is_opened = in_array($t['task_id'], $tasks_opened);
-				showtask_pr($t, 0, $is_opened);
-				if ($is_opened || $t['task_dynamic'] == 0) {
-					findchild_pr($p['tasks'], $t['task_id']);
-				}
-			}
-
-		}
-		// check that any 'orphaned' user tasks are also display
-		for ($i = 0; $i < $tnums; $i++) {
-			if (!in_array($p['tasks'][$i]['task_id'], $done)) {
-				if ($p['tasks'][$i]['task_dynamic'] && in_array($p['tasks'][$i]['task_parent'], $tasks_closed)) {
-					closeOpenedTask($p['tasks'][$i]['task_id']);
-				}
-				if (in_array($p['tasks'][$i]['task_parent'], $tasks_opened)) {
-					showtask_pr($p['tasks'][$i], 1, false);
-				}
+				showtask_pr($t, 0);
+				findchild_pr($p['tasks'], $t['task_id']);
 			}
 		}
 	}
 }
-
-$AppUI->setState('tasks_opened', $tasks_opened);
 ?>
 </table >
 <?php

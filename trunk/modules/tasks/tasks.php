@@ -7,7 +7,6 @@ global $m, $a, $project_id, $f, $min_view, $query_string, $durnTypes;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
-global $tasks_opened, $tasks_closed;
 /*
 tasks.php
 
@@ -33,25 +32,8 @@ $cols = 13;
 /*
 * Let's figure out which tasks are selected
 */
-
-$tasks_closed = array();
-$tasks_opened = $AppUI->getState('tasks_opened');
-if (!$tasks_opened) {
-	$tasks_opened = array();
-}
-$q = new DBQuery();
-$q->addQuery('task_id');
-$q->addTable('tasks');
-if ($project_id) {
-	$q->addWhere('task_project=' . (int)$project_id);
-}
-//$q->addWhere('task_dynamic=1');
-$all_tasks = $q->loadList();
-foreach ($all_tasks as $key => $open_task) {
-	$tasks_opened[] = $open_task['task_id'];
-}
-
 $task_id = intval(w2PgetParam($_GET, 'task_id', 0));
+
 $q = new DBQuery;
 $pinned_only = intval(w2PgetParam($_GET, 'pinned', 0));
 if (isset($_GET['pin'])) {
@@ -201,17 +183,14 @@ if ($project_id) {
 	}
 }
 
-/*if ($f != 'children') {
-$q->addWhere('tasks.task_id = task_parent');
-}*/
 if ($project_id) {
 	$q->addWhere('task_project = ' . (int)$project_id);
 	//if we are on a project context make sure we show all tasks
 	$f = 'all';
 }
 if ($task_id) {
-	//if we are on a task context make sure we show the children tasks
-	$f = 'children';
+	//if we are on a task context make sure we show ALL the children tasks
+	$f = 'deepchildren';
 }
 if ($pinned_only) {
 	$q->addWhere('task_pinned = 1');
@@ -235,8 +214,14 @@ switch ($f) {
 		$q->addWhere('task_end_date >= \'' . date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d') - 7, date('Y'))) . '\'');
 		break;
 	case 'children':
-		// patch 2.13.04 2, fixed ambigious task_id
 		$q->addWhere('task_parent = ' . (int)$task_id);
+		$q->addWhere('tasks.task_id <> ' . $task_id);
+		break;
+	case 'deepchildren':
+		$taskobj = new CTask;
+		$taskobj->load((int)$task_id);
+		$deepchildren = $taskobj->getDeepChildren();
+		$q->addWhere('tasks.task_id IN (' . implode(',', $deepchildren) . ')');
 		$q->addWhere('tasks.task_id <> ' . $task_id);
 		break;
 	case 'myproj':
@@ -272,7 +257,7 @@ switch ($f) {
 }
 
 if (($project_id || $task_id) && $showIncomplete) {
-	$q->addWhere('( task_percent_complete < 100 or task_percent_complete is null )');
+	$q->addWhere('( task_percent_complete < 100 OR task_percent_complete IS NULL)');
 }
 
 $task_status = 0;
@@ -299,9 +284,11 @@ if ($task_owner) {
 		$q->addWhere('task_owner = ' . (int)$task_owner);
 	}
 }
-// patch 2.12.04 text search
-if ($search_text = $AppUI->getState('searchtext')) {
-	$q->addWhere('( task_name LIKE (\'%' . $search_text . '%\') OR task_description LIKE (\'%' . $search_text . '%\') )');
+
+if (($project_id || !$task_id) && !$min_view) {
+	if ($search_text = $AppUI->getState('searchtext')) {
+		$q->addWhere('( task_name LIKE (\'%' . $search_text . '%\') OR task_description LIKE (\'%' . $search_text . '%\') )');
+	}
 }
 
 // filter tasks considering task and project permissions
@@ -328,6 +315,7 @@ if (!$min_view && $f2 != 'all') {
 
 $q->addGroup('tasks.task_id');
 $q->addOrder('p.project_id, task_start_date');
+//print_r($q->prepare());
 if ($canViewTask) {
 	$tasks = $q->loadList();
 }
@@ -446,7 +434,8 @@ function chAssignment(project_id, rmUser, del) {
 
 <?php 
 global $expanded;
-$expanded = $AppUI->getPref('TASKSEXPANDED');
+//if we are on a task view context then all subtasks are expanded by default, on other contexts config option stands.
+$expanded = $task_id ? true : $AppUI->getPref('TASKSEXPANDED');
 if ($project_id) {
 	$open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
 ?>
@@ -511,8 +500,7 @@ if ($w2Pconfig['direct_edit_assignment']) {
 }
 foreach ($projects as $k => $p) {
 	$tnums = count($p['tasks']);
-	// don't show project if it has no tasks
-	// patch 2.12.04, show project if it is the only project in view
+	//echo '<pre>'; print_r($p['tasks']); echo '</pre>';
 	if ($tnums > 0 || $project_id == $p['project_id']) {
 		//echo '<pre>'; print_r($p); echo '</pre>';
 		if (!$min_view) {
@@ -619,41 +607,23 @@ foreach ($projects as $k => $p) {
 					// already user sorted so there is no call for a "task tree" or "open/close" links
 					showtask($t1, -1, true, false, true);
 				} else {
-					if ($t1['task_parent'] == $t1['task_id']) {
-						$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
-
+					if ($t1['task_parent'] == $t1['task_id'] && !$task_id) {
+						//Here we are NOT on a task view context
+						
 						//check for child
 						$no_children = empty($children_of[$t1['task_id']]);
 
-						showtask($t1, 0, $is_opened, false, $no_children);
-						if ($is_opened && !($no_children)) {
-							findchild($p['tasks'], $t1['task_id']);
-						}
-					} elseif (!(in_array($t1['task_parent'], $tasks_filtered))) {
-						/*
-						* don't "mess with" display when showing "Child tasks" 
-						* (or similiar filters that don't involve "breaking apart" a task tree 
-						* for that matter, even though they might not use this page ever)
-						*/
-						if ((in_array($f, $never_show_with_dots))) {
-							showtask($t1, 1, true, false, true);
-						} else {
-							//display as close to "tree-like" as possible
-							$is_opened = (!($t1['task_dynamic']) || !(in_array($t1['task_id'], $tasks_closed)));
+						showtask($t1, 0, true, false, $no_children);
+						findchild($p['tasks'], $t1['task_id']);
+					} elseif ($t1['task_parent'] == $task_id && $task_id) {
+						//Here we are on a task view context
+	
+						//check for child
+						$no_children = empty($children_of[$t1['task_id']]);
 
-							//check for child
-							$no_children = empty($children_of[$t1['task_id']]);
-
-							showtask($t1, -1, $is_opened, false, $no_children); // indeterminate depth for child task
-							if ($is_opened && !($no_children)) {
-								findchild($p['tasks'], $t1['task_id']);
-							}
-						}
+						showtask($t1, 0, true, false, $no_children);
+						findchild($p['tasks'], $t1['task_id']);
 					}
-					/*
-					* MerlinYoda: Not 100% sure if moving code from below to above always puts orphan trees 
-					* closer to their ancestors. At worst it just displays orphans a little earlier
-					*/
 				}
 			}
 		}
@@ -662,9 +632,6 @@ foreach ($projects as $k => $p) {
 ?>
 <tr>
   <td colspan="<?php echo $cols; ?>" align="right">
-	<!--<a href="<?php echo 'index.php' . $query_string . '&open_task_all=1'; ?>"><?php echo $AppUI->_('Open'); ?></a> :
-	<a href="<?php echo 'index.php' . $query_string . '&close_task_all=1'; ?>"><?php echo $AppUI->_('Close All Tasks'); ?></a>
-	&nbsp;(<?php echo $AppUI->_('On Page'); ?>)&nbsp;-->
   <input type="button" class="button" value="<?php echo $AppUI->_('Reports'); ?>" 
    onclick="javascript:window.location='index.php?m=reports&project_id=<?php echo $k; ?>';" />
   <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart'); ?>" 
@@ -676,10 +643,6 @@ foreach ($projects as $k => $p) {
 		}
 	}
 }
-
-$AppUI->setState('tasks_opened', $tasks_opened);
-$AppUI->setState('tasks_closed', $tasks_closed);
-
 $AppUI->savePlace();
 
 ?>
