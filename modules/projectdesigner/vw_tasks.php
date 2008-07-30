@@ -17,28 +17,8 @@ $cols = 13;
 /****
 // Let's figure out which tasks are selected
 */
-
-global $tasks_opened;
-global $tasks_closed;
-
-$tasks_closed = array();
-$tasks_opened = $AppUI->getState('tasks_opened');
-if (!$tasks_opened) {
-	$tasks_opened = array();
-}
-$q = new DBQuery();
-$q->addQuery('task_id');
-$q->addTable('tasks');
-if ($project_id) {
-	$q->addWhere('task_project=' . $project_id);
-}
-$q->addWhere('task_dynamic=1');
-$all_tasks = $q->loadList();
-foreach ($all_tasks as $key => $open_task) {
-	$tasks_opened[] = $open_task['task_id'];
-}
-
 $task_id = intval(w2PgetParam($_GET, 'task_id', 0));
+
 $q = new DBQuery;
 $pinned_only = intval(w2PgetParam($_GET, 'pinned', 0));
 if (isset($_GET['pin'])) {
@@ -63,24 +43,9 @@ if (isset($_GET['pin'])) {
 	}
 
 	$AppUI->redirect('', -1);
-} elseif ($task_id > 0) {
-	$tasks_opened[] = $task_id;
 }
 
 $AppUI->savePlace();
-
-if (($open_task_id = w2PgetParam($_GET, 'open_task_id', 0)) > 0 && !in_array($_GET['open_task_id'], $tasks_opened)) {
-	$tasks_opened[] = $_GET['open_task_id'];
-}
-
-// Closing tasks needs also to be within tasks iteration in order to
-// close down all child tasks
-if (($close_task_id = w2PgetParam($_GET, 'close_task_id', 0)) > 0) {
-	closeOpenedTask($close_task_id);
-}
-
-// We need to save tasks_opened until the end because some tasks are closed within tasks iteration
-/// End of tasks_opened routine
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $taskPriority = w2PgetSysVal('TaskPriority');
@@ -139,6 +104,7 @@ if ($canViewTasks) {
 	}
 }
 $q->clear();
+$q2->clear();
 
 $q->addQuery('tasks.task_id, task_parent, task_name');
 $q->addQuery('task_start_date, task_end_date, task_dynamic');
@@ -162,7 +128,7 @@ $q->addTable('tasks');
 $mods = $AppUI->getActiveModules();
 if (!empty($mods['history']) && !getDenyRead('history')) {
 	$q->addQuery('MAX(history_date) as last_update');
-	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table="tasks"');
+	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
 }
 $q->leftJoin('projects', 'projects', 'projects.project_id = task_project');
 $q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');
@@ -225,7 +191,6 @@ foreach ($tasks as $row) {
 }
 
 $showEditCheckbox = isset($canEditTasks) && $canEditTasks || $perms->checkModule('admin', 'view');
-$AppUI->setState('tasks_opened', $tasks_opened);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $tempoTask = new CTask();
@@ -268,51 +233,25 @@ reset($projects);
 
 foreach ($projects as $k => $p) {
 	$tnums = count($p['tasks']);
-	// don't show project if it has no tasks
-	// patch 2.12.04, show project if it is the only project in view
+	//echo '<pre>'; print_r($p['tasks']); echo '</pre>';
 	if ($tnums > 0 || $project_id == $p['project_id']) {
-		//echo '<pre>'; print_r($p); echo '</pre>';
-		global $done;
-		$done = array();
-
 		if ($task_sort_item1 != '') {
-			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2)
+			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
-			else
+			} else {
 				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
+			}
 		}
 
 		for ($i = 0; $i < $tnums; $i++) {
 			$t = $p['tasks'][$i];
-
 			if ($t['task_parent'] == $t['task_id']) {
-				$is_opened = in_array($t['task_id'], $tasks_opened);
-				showtask_pd($t, 0, $is_opened);
-				if ($is_opened || $t['task_dynamic'] == 0) {
-					findchild_pd($p['tasks'], $t['task_id']);
-				}
-			}
-
-			if ($search_text) {
-				if (strpos($t['task_name'], $search_text) !== false || strpos($t['task_description'], $search_text) !== false)
-					showtask_pd($t, 1, false);
-			}
-		}
-		// check that any 'orphaned' user tasks are also display
-		for ($i = 0; $i < $tnums; $i++) {
-			if (!in_array($p['tasks'][$i]['task_id'], $done)) {
-				if ($p['tasks'][$i]['task_dynamic'] && in_array($p['tasks'][$i]['task_parent'], $tasks_closed)) {
-					closeOpenedTask($p['tasks'][$i]['task_id']);
-				}
-				if (in_array($p['tasks'][$i]['task_parent'], $tasks_opened)) {
-					showtask_pd($p['tasks'][$i], 1, false);
-				}
+				showtask_pd($t, 0);
+				findchild_pd($p['tasks'], $t['task_id']);
 			}
 		}
 	}
 }
-
-$AppUI->setState('tasks_opened', $tasks_opened);
 ?>
 </table>
 </form>

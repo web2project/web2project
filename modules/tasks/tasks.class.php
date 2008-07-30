@@ -1552,20 +1552,14 @@ class CTask extends CW2pObject {
 
 	// Returns task deep children IDs
 	function getDeepChildren() {
-		$q = &new DBQuery;
-
-		$q->addTable('tasks');
-		$q->addQuery('task_id');
-		$q->addWhere('task_parent = ' . (int)$this->task_id);
-		$children = $q->loadColumn();
-		$q->clear();
+		$children = $this->getChildren();
 
 		if ($children) {
 			$deep_children = array();
 			$tempTask = &new CTask();
 			foreach ($children as $child) {
 				$tempTask->peek($child);
-				$deep_children = array_merge($deep_children, $this->getChildren());
+				$deep_children = array_merge($deep_children, $tempTask->getDeepChildren());
 			}
 
 			return array_merge($children, $deep_children);
@@ -2021,12 +2015,8 @@ class CTaskLog extends CW2pObject {
 //This kludgy function echos children tasks as threads
 
 function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hideOpenCloseLink = false, $allowRepeat = false) {
-	global $AppUI, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
-	global $tasks_opened, $tasks_closed, $m, $a, $history_active, $expanded;
-
-	$tasks_closed = (($tasks_closed) ? $tasks_closed : array());
-	$tasks_opened = (($tasks_opened) ? $tasks_opened : array());
-	$done = (($done) ? $done : array());
+	global $AppUI, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
+	global $m, $a, $history_active, $expanded;
 
 	$now = new CDate();
 	$tf = $AppUI->getPref('TIMEFORMAT');
@@ -2034,13 +2024,6 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	$perms = &$AppUI->acl();	
 	$fdf = $df . ' ' . $tf;
 	$show_all_assignees = w2PgetConfig('show_all_task_assignees', false);
-
-	if (!(in_array($arr['task_id'], $done))) {
-		$done[] = $arr['task_id'];
-	} elseif (!($allowRepeat)) {
-		//by default, we shouldn't allow repeat displays of the same task
-		return;
-	}
 
 	$start_date = intval($arr['task_start_date']) ? new CDate($arr['task_start_date']) : null;
 	$end_date = intval($arr['task_end_date']) ? new CDate($arr['task_end_date']) : null;
@@ -2199,18 +2182,14 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 
 function findchild(&$tarr, $parent, $level = 0) {
 	global $projects;
-	global $tasks_opened;
 
 	$level = $level + 1;
 	$n = count($tarr);
 
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			$is_opened = in_array($tarr[$x]['task_id'], $tasks_opened);
-			showtask($tarr[$x], $level, $is_opened);
-			if ($is_opened || !$tarr[$x]['task_dynamic']) {
-				findchild($tarr, $tarr[$x]['task_id'], $level);
-			}
+			showtask($tarr[$x], $level, true);
+			findchild($tarr, $tarr[$x]['task_id'], $level);
 		}
 	}
 }

@@ -119,7 +119,7 @@ function get_actual_end_date_pd($task_id, $task) {
 
 //This kludgy function echos children tasks as threads on project designer (_pd)
 
-function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
+function showtask_pd(&$a, $level = 0, $today_view = false) {
 	global $AppUI, $w2Pconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $task_access, $task_priority, $PROJDESIGN_CONFIG, $m, $expanded;
 
@@ -307,18 +307,14 @@ function showtask_pd(&$a, $level = 0, $is_opened = true, $today_view = false) {
 
 function findchild_pd(&$tarr, $parent, $level = 0) {
 	global $projects;
-	global $tasks_opened;
 
 	$level = $level + 1;
 	$n = count($tarr);
 
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			$is_opened = in_array($tarr[$x]['task_id'], $tasks_opened);
-			showtask_pd($tarr[$x], $level, $is_opened);
-			if ($is_opened || !$tarr[$x]['task_dynamic']) {
-				findchild_pd($tarr, $tarr[$x]['task_id'], $level);
-			}
+			showtask_pd($tarr[$x], $level);
+			findchild_pd($tarr, $tarr[$x]['task_id'], $level);
 		}
 	}
 }
@@ -334,7 +330,7 @@ function get_dependencies_pd($task_id) {
 	$taskDep = $q->loadHashList();
 }
 
-function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
+function showtask_pr(&$a, $level = 0, $today_view = false) {
 	global $AppUI, $w2Pconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $task_access, $task_priority;
 
@@ -367,11 +363,7 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 	$s = '<tr>';
 
 	// dots
-	if ($today_view) {
-		$s .= '<td nowrap="nowrap">';
-	} else {
-		$s .= '<td nowrap width="20%">';
-	}
+	$s .= '<td nowrap width="20%">';
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
 			$s .= '<img src="' . w2PfindImage('corner-dots.gif', $m) . '" width="16" height="12" border="0" />';
@@ -380,33 +372,24 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 		}
 	}
 	// name link
-	$alt = strlen($a['task_description']) > 80 ? substr($a["task_description"], 0, 80) . '...' : $a['task_description'];
+	$alt = strlen($a['task_description']) > 80 ? substr($a['task_description'], 0, 80) . '...' : $a['task_description'];
 	// instead of the statement below
 	$alt = str_replace('"', "&quot;", $alt);
 	$alt = str_replace("\r", ' ', $alt);
 	$alt = str_replace("\n", ' ', $alt);
 
-	$open_link = $is_opened ? "<!--<a href='index.php$query_string&close_task_id=" . $a["task_id"] . "'>--><img src='" . w2PfindImage('icons/collapse.gif', $m) . "' border='0' align='center' /><!--</a>-->" : "<!--<a href='index.php$query_string&open_task_id=" . $a["task_id"] . "'>--><img src='images/icons/expand.gif' border='0' /><!--</a>-->";
+	$open_link = w2PshowImage('collapse.gif');
 	if ($a['task_milestone'] > 0) {
 		$s .= '&nbsp;<!--<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" title="' . $alt . '">--><b>' . $a["task_name"] . '</b><!--</a>--> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" /></td>';
-	} else
-		if ($a['task_dynamic'] == '1') {
-			$s .= $open_link;
-			$s .= $a['task_name'];
-		} else {
-			$s .= $a['task_name'];
-		}
-		// percent complete
-		$s .= '<td align="right">' . intval($a['task_percent_complete']) . '%</td>';
-	if ($today_view) { // Show the project name
-		$s .= '<td>';
-		$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $a['task_project'] . '">';
-		$s .= '<span style="padding:2px;background-color:#' . $a['project_color_identifier'] . ';color:' . bestColor($a['project_color_identifier']) . '">' . $a['project_name'] . '</span>';
-		$s .= '</a></td>';
+	} elseif ($a['task_dynamic'] == '1') {
+		$s .= $open_link;
+		$s .= '<strong>' . $a['task_name'] . '</strong>';
+	} else {
+		$s .= $a['task_name'];
 	}
-	if (!$today_view) {
-		$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
-	}
+	// percent complete
+	$s .= '<td align="right">' . intval($a['task_percent_complete']) . '%</td>';
+	$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
 	$s .= '</td>';
 	$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
 	$s .= '</td>';
@@ -416,18 +399,14 @@ function showtask_pr(&$a, $level = 0, $is_opened = true, $today_view = false) {
 
 function findchild_pr(&$tarr, $parent, $level = 0) {
 	global $projects;
-	global $tasks_opened;
 
 	$level = $level + 1;
 	$n = count($tarr);
 
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			$is_opened = in_array($tarr[$x]['task_id'], $tasks_opened);
-			showtask_pr($tarr[$x], $level, $is_opened);
-			if ($is_opened || !$tarr[$x]['task_dynamic']) {
-				findchild_pr($tarr, $tarr[$x]['task_id'], $level);
-			}
+			showtask_pr($tarr[$x], $level);
+			findchild_pr($tarr, $tarr[$x]['task_id'], $level);
 		}
 	}
 }
