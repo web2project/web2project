@@ -9,10 +9,7 @@ $AppUI->loadCalendarJS();
 $perms = &$AppUI->acl();
 
 // check permissions
-if (!$perms->checkModuleItem('tasks', 'edit', $task_id)) {
-	$AppUI->redirect('m=publice&a=access_denied');
-}
-
+$canEditTask = $perms->checkModuleItem('tasks', 'edit', $task_id);
 $canViewTask = $perms->checkModuleItem('tasks', 'view', $task_id);
 $canEdit = $perms->checkModule('task_log', 'edit');
 $canAdd = $perms->checkModule('task_log', 'add');
@@ -151,10 +148,7 @@ function setDate( frm_name, f_date ) {
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="task_log_id" value="<?php echo $log->task_log_id; ?>" />
 	<input type="hidden" name="task_log_task" value="<?php echo $log->task_log_task; ?>" />
-	<input type="hidden" name="task_log_creator" value="<?php if ($log->task_log_creator == 0)
-	echo $AppUI->user_id;
-else
-	echo $log->task_log_creator; ?>" />
+	<input type="hidden" name="task_log_creator" value="<?php echo ($log->task_log_creator == 0 ? $AppUI->user_id : $log->task_log_creator); ?>" />
 	<input type="hidden" name="task_log_name" value="Update :<?php echo $log->task_log_name; ?>" />
 <table cellspacing="1" cellpadding="2" border="0" width="100%">
 <tr>
@@ -173,13 +167,13 @@ else
 	</td>
 </tr>
 <tr>
-	<td align="right"><?php echo $AppUI->_('Progress'); ?></td>
+	<td align="right"><?php echo ($canEditTask ? $AppUI->_('Progress') : ''); ?></td>
 	<td>
 		<table>
 		   <tr>
 		      <td>
 <?php
-echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $obj->task_percent_complete) . '%';
+echo ($canEditTask ? arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $obj->task_percent_complete) . '%' : '<input type="hidden" name="task_percent_complete" value="0" />');
 ?>
 		      </td>
 		      <td valign="middle" >
@@ -192,7 +186,6 @@ if ($obj->task_owner != $AppUI->user_id) {
 		   </tr>
 		</table>
 	</td>
-
 </tr>
 <tr>
 	<td align="right">
@@ -213,25 +206,23 @@ if ($obj->task_owner != $AppUI->user_id) {
 <?php
 echo arraySelect($task_log_costcodes, 'task_log_costcodes', 'size="1" class="text" onchange="javascript:task_log_costcode.value = this.options[this.selectedIndex].value;"', $log->task_log_costcode);
 ?>
-		-><input type="text" style="text-align:right;" class="text" name="task_log_costcode" value="<?php echo $log->task_log_costcode; ?>" maxlength="8" size="6" />
+		-&gt;<input type="text" style="text-align:right;" class="text" name="task_log_costcode" value="<?php echo $log->task_log_costcode; ?>" maxlength="8" size="6" />
 	</td>
 </tr>
 
 <?php
-if ($obj->canUserEditTimeInformation()) {
+if ($obj->canUserEditTimeInformation() && $canEditTask) {
+	$end_date = intval($obj->task_end_date) ? new CDate($obj->task_end_date) : null;
 ?>
 	<tr>
 		<td align='right'>
 			<?php echo $AppUI->_('Task end date'); ?>
 		</td>
 		<td>
-			<?php
-	$end_date = intval($obj->task_end_date) ? new CDate($obj->task_end_date) : null;
-?>
 			<input type="hidden" name="task_end_date" id="task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
 			<input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
 			<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
-				<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0">
+				<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
 			</a>
 		</td>
 	</tr>
@@ -244,34 +235,32 @@ if ($obj->canUserEditTimeInformation()) {
 <table width='100%'>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Summary'); ?>:</td>
-        <td valign="middle">
-                <table width="100%">
-                        <tr>
-                                <td align="left">
-                                        <input type="text" class="text" name="task_log_name" value="<?php echo $log->task_log_name; ?>" maxlength="255" size="30" />
-                                </td>
-                                <td align="center"><label for="task_log_problem"><?php echo $AppUI->_('Problem'); ?>:</label>
-                                        <input type="checkbox" value="1" name="task_log_problem" id="task_log_problem" <?php if ($log->task_log_problem) {
-	echo 'checked="checked"';
-} ?> />
-                                </td>
-                        </tr>
-                </table>
+    <td valign="middle">
+        <table width="100%">
+            <tr>
+                <td align="left">
+                    <input type="text" class="text" name="task_log_name" value="<?php echo $log->task_log_name; ?>" maxlength="255" size="30" />
+                </td>
+                <td align="center"><label for="task_log_problem"><?php echo $AppUI->_('Problem'); ?>:</label>
+                    <input type="checkbox" value="1" name="task_log_problem" id="task_log_problem" <?php echo ($log->task_log_problem ? 'checked="checked"' : ''); ?> />
+                </td>
+            </tr>
+        </table>
 	</td>
 </tr>
 <tr>
-        <td align="right" valign="middle"><?php echo $AppUI->_('Reference'); ?>:</td>
-        <td valign="middle">
-                <?php echo arraySelect($taskLogReference, 'task_log_reference', 'size="1" class="text"', $log->task_log_reference, true); ?>
+    <td align="right" valign="middle"><?php echo $AppUI->_('Reference'); ?>:</td>
+    <td valign="middle">
+        <?php echo arraySelect($taskLogReference, 'task_log_reference', 'size="1" class="text"', $log->task_log_reference, true); ?>
 	</td>
 </tr>
 <tr>
-        <td align="right">
+    <td align="right">
 		<?php echo $AppUI->_('URL'); ?>:
 	</td>
-        <td>
-                <input type="text" class="text" name="task_log_related_url" value="<?php echo ($log->task_log_related_url); ?>" size="50" maxlength="255" title="<?php echo $AppUI->_('Must in general be entered with protocol name, e.g. http://...'); ?>"/>
-        </td>
+    <td>
+        <input type="text" class="text" name="task_log_related_url" value="<?php echo ($log->task_log_related_url); ?>" size="50" maxlength="255" title="<?php echo $AppUI->_('Must in general be entered with protocol name, e.g. http://...'); ?>"/>
+    </td>
 </tr>
 <tr>
 	<td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
@@ -287,14 +276,7 @@ $tl = $AppUI->getPref('TASKLOGEMAIL');
 $ta = $tl & 1;
 $tt = $tl & 2;
 $tp = $tl & 4;
-?>
-		<input type="checkbox" name="email_assignees" id="email_assignees" <?php
-if ($ta) {
-	echo 'checked="checked"';
-}
-?> /><label for="email_assignees"><?php echo $AppUI->_('Task Assignees'); ?></label>
-		<input type="hidden" name="email_task_list" id="email_task_list"
-		  value="<?php
+
 $task_email_title = array();
 $q = new DBQuery;
 $q->addTable('task_contacts', 'tc');
@@ -303,22 +285,12 @@ $q->addWhere('tc.task_id = ' . (int)$task_id);
 $q->addQuery('tc.contact_id');
 $q->addQuery('c.contact_first_name, c.contact_last_name');
 $req = &$q->exec();
-$cid = array();
+$cidtc = array();
 for ($req; !$req->EOF; $req->MoveNext()) {
-	$cid[] = $req->fields['contact_id'];
+	$cidtc[] = $req->fields['contact_id'];
 	$task_email_title[] = $req->fields['contact_first_name'] . ' ' . $req->fields['contact_last_name'];
 }
-echo implode(',', $cid);
-?>" />
-		<input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',', $task_email_title)); ?>';"
-		onmouseout="window.status = '';"
-		name="email_task_contacts" id="email_task_contacts" <?php
-if ($tt) {
-	echo 'checked="checked"';
-}
-?> /><label for="email_task_contacts"><?php echo $AppUI->_('Task Contacts'); ?></label>
-		<input type="hidden" name="email_project_list" id="email_project_list"
-		  value="<?php
+
 $q->clear();
 $q->addTable('project_contacts', 'pc');
 $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
@@ -326,30 +298,24 @@ $q->addWhere('pc.project_id = ' . (int)$obj->task_project);
 $q->addQuery('pc.contact_id');
 $q->addQuery('c.contact_first_name, c.contact_last_name');
 $req = &$q->exec();
-$cid = array();
+$cidpc = array();
 $proj_email_title = array();
 for ($req; !$req->EOF; $req->MoveNext()) {
-	if (!in_array($req->fields['contact_id'], $cid)) {
-		$cid[] = $req->fields['contact_id'];
+	if (!in_array($req->fields['contact_id'], $cidpc)) {
+		$cidpc[] = $req->fields['contact_id'];
 		$proj_email_title[] = $req->fields['contact_first_name'] . ' ' . $req->fields['contact_last_name'];
 	}
 }
-echo implode(',', $cid);
 $q->clear();
-?>" />
-		<input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',', $proj_email_title)); ?>';" 
-		 onmouseout="window.status = '';"
-		 name="email_project_contacts" id="email_project_contacts" <?php
-if ($tp) {
-	echo 'checked="checked"';
-}
-?> /><label for="email_project_contacts"><?php echo $AppUI->_('Project Contacts'); ?></label>
-		<input type='hidden' name='email_others' id='email_others' value='' />
-		<?php
-if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
 ?>
-		<input type='button' class='button' value='<?php echo $AppUI->_('Other Contacts...'); ?>' onclick='javascript:popEmailContacts();' />
-
+		<input type="checkbox" name="email_assignees" id="email_assignees" <?php echo ($ta ? 'checked="checked"' : '');?> /><label for="email_assignees"><?php echo $AppUI->_('Task Assignees'); ?></label>
+		<input type="hidden" name="email_task_list" id="email_task_list" value="<?php echo implode(',', $cidtc);?>" />
+		<input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',', $task_email_title)); ?>';" onmouseout="window.status = '';" name="email_task_contacts" id="email_task_contacts" <?php echo ($tt ? 'checked="checked"' : ''); ?> /><label for="email_task_contacts"><?php echo $AppUI->_('Task Contacts'); ?></label>
+		<input type="hidden" name="email_project_list" id="email_project_list" value="<?php echo implode(',', $cidpc); ?>" />
+		<input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',', $proj_email_title)); ?>';" onmouseout="window.status = '';" name="email_project_contacts" id="email_project_contacts" <?php echo ($tp ? 'checked="checked"' : ''); ?> /><label for="email_project_contacts"><?php echo $AppUI->_('Project Contacts'); ?></label>
+		<input type='hidden' name='email_others' id='email_others' value='' />
+		<?php if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) { ?>
+			<input type='button' class='button' value='<?php echo $AppUI->_('Other Contacts...'); ?>' onclick='javascript:popEmailContacts();' />
 		<?php } ?>
 	</td>
 </tr>

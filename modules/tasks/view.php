@@ -452,20 +452,15 @@ if ($obj->task_dynamic != 1) {
 	if ($perms->checkModule('task_log', 'view')) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_logs', 'Task Logs');
 	}
-	// fixed bug that w2P automatically jumped to access denied if user does not
-	// have read-write permissions on task_id and this tab is opened by default (session_vars)
-	// only if user has r-w perms on this task, new or edit log is beign showed
-	if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
-		if ($task_log_id == 0) {
-			if ($perms->checkModule('task_log', 'add')) {
-				$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
-			}
-		} elseif ($perms->checkModule('task_log', 'edit')) {
-			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Edit Log');
-		} elseif ($perms->checkModule('task_log', 'add')) {
-			$tabBox_show = 1;
+	if ($task_log_id == 0) {
+		if ($perms->checkModule('task_log', 'add')) {
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 		}
+	} elseif ($perms->checkModule('task_log', 'edit')) {
+		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Edit Log');
+	} elseif ($perms->checkModule('task_log', 'add')) {
+		$tabBox_show = 1;
+		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 	}
 }
 
