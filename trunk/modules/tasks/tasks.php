@@ -263,17 +263,19 @@ if (($project_id || $task_id) && $showIncomplete) {
 $task_status = 0;
 if ($min_view && isset($_GET['task_status'])) {
 	$task_status = intval(w2PgetParam($_GET, 'task_status', null));
-	//} else if (stristr($currentTabName, 'inactive')) {
-} elseif ($currentTabId == 1) {
-	$task_status = '-1';
+} elseif ($currentTabId == 1 && $project_id) {
+	$task_status = -1;
 } elseif (!$currentTabName) {
 	// If we aren't tabbed we are in the tasks list.
 	$task_status = intval($AppUI->getState('inactive'));
 }
 
-if ($task_status) {
+//When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
+//When in a project view or in the tasks list, show the active or the inactive tasks depending on the selected tab or button.
+if (!$task_id) {
 	$q->addWhere('task_status = ' . (int)$task_status);
 }
+
 if ($task_type) {
 	if ($task_type <> -1) {
 		$q->addWhere('task_type = ' . (int)$task_type);
@@ -607,8 +609,8 @@ foreach ($projects as $k => $p) {
 					// already user sorted so there is no call for a "task tree" or "open/close" links
 					showtask($t1, -1, true, false, true);
 				} else {
-					if ($t1['task_parent'] == $t1['task_id'] && !$task_id) {
-						//Here we are NOT on a task view context
+					if (($t1['task_parent'] == $t1['task_id']) && !$task_id) {
+						//Here we are NOT on a task view context, like the tasks module list or the project view tasks list.
 						
 						//check for child
 						$no_children = empty($children_of[$t1['task_id']]);
@@ -623,6 +625,9 @@ foreach ($projects as $k => $p) {
 
 						showtask($t1, 0, true, false, $no_children);
 						findchild($p['tasks'], $t1['task_id']);
+					} elseif ($task_status < 0) {
+						//Here we are on a inactive task list context
+						showtask($t1, -1, true, false, true);
 					}
 				}
 			}
