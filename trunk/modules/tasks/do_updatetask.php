@@ -72,31 +72,37 @@ if ($del) {
 		$AppUI->setMsg($_POST['task_log_id'] ? 'updated' : 'inserted', UI_MSG_OK, true);
 	}
 }
+
 $task = new CTask();
 $task->load($obj->task_log_task);
-$task->htmlDecode();
-$task->check();
-$task_end_date = new CDate($task->task_end_date);
-$task->task_percent_complete = w2PgetParam($_POST, 'task_percent_complete', null);
 
-if (w2PgetParam($_POST, 'task_end_date', '') != '') {
-	$new_date = new CDate($_POST['task_end_date']);
-	$new_date->setTime($task_end_date->hour, $task_end_date->minute, $task_end_date->second);
-	$task->task_end_date = $new_date->format(FMT_DATETIME_MYSQL);
+$canEditTask = $perms->checkModuleItem('tasks', 'edit', $task_id);
+if ($canEditTask) {
+	$task->htmlDecode();
+	$task->check();
+	$task_end_date = new CDate($task->task_end_date);
+	$task->task_percent_complete = w2PgetParam($_POST, 'task_percent_complete', null);
+	
+	if (w2PgetParam($_POST, 'task_end_date', '') != '') {
+		$new_date = new CDate($_POST['task_end_date']);
+		$new_date->setTime($task_end_date->hour, $task_end_date->minute, $task_end_date->second);
+		$task->task_end_date = $new_date->format(FMT_DATETIME_MYSQL);
+	}
+	
+	if ($task->task_percent_complete >= 100 && (!$task->task_end_date || $task->task_end_date == '0000-00-00 00:00:00')) {
+		$task->task_end_date = $obj->task_log_date;
+	}
+	
+	if (($msg = $task->store())) {
+		$AppUI->setMsg($msg, UI_MSG_ERROR, true);
+	}
+	
+	$new_task_end = new CDate($task->task_end_date);
+	if ($new_task_end->dateDiff($task_end_date)) {
+		$task->addReminder();
+	}
 }
 
-if ($task->task_percent_complete >= 100 && (!$task->task_end_date || $task->task_end_date == '0000-00-00 00:00:00')) {
-	$task->task_end_date = $obj->task_log_date;
-}
-
-if (($msg = $task->store())) {
-	$AppUI->setMsg($msg, UI_MSG_ERROR, true);
-}
-
-$new_task_end = new CDate($task->task_end_date);
-if ($new_task_end->dateDiff($task_end_date)) {
-	$task->addReminder();
-}
 if ($notify_owner) {
 	if ($msg = $task->notifyOwner()) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
