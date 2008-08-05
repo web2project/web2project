@@ -567,7 +567,7 @@ CREATE TABLE `forum_visits` (
   `visit_forum` int(10) NOT NULL default '0',
   `visit_message` int(10) NOT NULL default '0',
   `visit_date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  KEY `idx_fv` (`visit_user`,`visit_forum`,`visit_message`)
+  PRIMARY KEY ( `visit_user` , `visit_forum`, `visit_message` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -577,9 +577,11 @@ CREATE TABLE `forum_visits` (
 --
 
 CREATE TABLE `forum_watch` (
+  `watch_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `watch_user` int(10) unsigned NOT NULL default '0',
   `watch_forum` int(10) unsigned default NULL,
   `watch_topic` int(10) unsigned default NULL,
+  PRIMARY KEY (`watch_id`),
   KEY `idx_fw1` (`watch_user`,`watch_forum`),
   KEY `idx_fw2` (`watch_user`,`watch_topic`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Links users to the forums/messages they are watching';
@@ -642,7 +644,8 @@ INSERT INTO `gacl_acl_sections` (`id`, `value`, `order_value`, `name`, `hidden`)
 --
 
 CREATE TABLE `gacl_acl_seq` (
-  `id` int(11) NOT NULL default '0'
+  `id` int(11) NOT NULL default '0',
+  PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -735,7 +738,8 @@ INSERT INTO `gacl_aco_sections` (`id`, `value`, `order_value`, `name`, `hidden`)
 --
 
 CREATE TABLE `gacl_aco_sections_seq` (
-  `id` int(11) NOT NULL default '0'
+  `id` int(11) NOT NULL default '0',
+  PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -751,7 +755,8 @@ INSERT INTO `gacl_aco_sections_seq` (`id`) VALUES(11);
 --
 
 CREATE TABLE `gacl_aco_seq` (
-  `id` int(11) NOT NULL default '0'
+  `id` int(11) NOT NULL default '0',
+  PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -821,7 +826,8 @@ INSERT INTO `gacl_aro_groups` (`id`, `parent_id`, `lft`, `rgt`, `name`, `value`)
 --
 
 CREATE TABLE `gacl_aro_groups_id_seq` (
-  `id` int(11) NOT NULL default '0'
+  `id` int(11) NOT NULL default '0',
+  PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -898,7 +904,8 @@ INSERT INTO `gacl_aro_sections` (`id`, `value`, `order_value`, `name`, `hidden`)
 --
 
 CREATE TABLE `gacl_aro_sections_seq` (
-  `id` int(11) NOT NULL default '0'
+  `id` int(11) NOT NULL default '0',
+  PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -914,7 +921,8 @@ INSERT INTO `gacl_aro_sections_seq` (`id`) VALUES(10);
 --
 
 CREATE TABLE `gacl_aro_seq` (
-  `id` int(11) NOT NULL default '0'
+  `id` int(11) NOT NULL default '0',
+  PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -1005,7 +1013,8 @@ INSERT INTO `gacl_axo_groups` (`id`, `parent_id`, `lft`, `rgt`, `name`, `value`)
 --
 
 CREATE TABLE `gacl_axo_groups_id_seq` (
-  `id` int(11) NOT NULL default '0'
+  `id` int(11) NOT NULL default '0',
+  PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -1085,7 +1094,8 @@ INSERT INTO `gacl_axo_sections` (`id`, `value`, `order_value`, `name`, `hidden`)
 --
 
 CREATE TABLE `gacl_axo_sections_seq` (
-  `id` int(11) NOT NULL default '0'
+  `id` int(11) NOT NULL default '0',
+  PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -1101,7 +1111,8 @@ INSERT INTO `gacl_axo_sections_seq` (`id`) VALUES(11);
 --
 
 CREATE TABLE `gacl_axo_seq` (
-  `id` int(11) NOT NULL default '0'
+  `id` int(11) NOT NULL default '0',
+  PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -1237,7 +1248,6 @@ INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `ac
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'system', 0, 'access', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'tasks', 0, 'access', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'task_log', 0, 'access', 1, 11);
-INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'ticketsmith', 0, 'access', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'users', 0, 'access', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'acl', 0, 'access', 1, 12);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'admin', 0, 'add', 1, 11);
@@ -1260,7 +1270,6 @@ INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `ac
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'system', 0, 'add', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'tasks', 0, 'add', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'task_log', 0, 'add', 1, 11);
-INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'ticketsmith', 0, 'add', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'users', 0, 'add', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'acl', 0, 'add', 0, 0);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'admin', 0, 'delete', 1, 11);
@@ -1283,7 +1292,6 @@ INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `ac
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'system', 0, 'delete', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'tasks', 0, 'delete', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'task_log', 0, 'delete', 1, 11);
-INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'ticketsmith', 0, 'delete', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'users', 0, 'delete', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'acl', 0, 'delete', 0, 0);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'admin', 0, 'edit', 1, 11);
@@ -1306,7 +1314,6 @@ INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `ac
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'system', 0, 'edit', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'tasks', 0, 'edit', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'task_log', 0, 'edit', 1, 11);
-INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'ticketsmith', 0, 'edit', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'users', 0, 'edit', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'acl', 0, 'edit', 0, 0);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'admin', 0, 'view', 1, 11);
@@ -1329,7 +1336,6 @@ INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `ac
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'system', 0, 'view', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'tasks', 0, 'view', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'task_log', 0, 'view', 1, 11);
-INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'ticketsmith', 0, 'view', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'users', 0, 'view', 1, 11);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'acl', 0, 'view', 0, 0);
 INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `action`, `access`, `acl_id`) VALUES(1, 'admin', 'links', 0, 'view', 1, 11);
@@ -1527,6 +1533,7 @@ CREATE TABLE `projects` (
 CREATE TABLE `project_contacts` (
   `project_id` int(10) NOT NULL default '0',
   `contact_id` int(10) NOT NULL default '0',
+  PRIMARY KEY ( `project_id` , `contact_id` ),
   KEY `project_id` (`project_id`),
   KEY `contact_id` (`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -1540,6 +1547,7 @@ CREATE TABLE `project_contacts` (
 CREATE TABLE `project_departments` (
   `project_id` int(10) NOT NULL default '0',
   `department_id` int(10) NOT NULL default '0',
+  PRIMARY KEY ( `project_id` , `department_id` ),
   KEY `project_id` (`project_id`),
   KEY `department_id` (`department_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -1591,6 +1599,7 @@ CREATE TABLE `resource_tasks` (
   `resource_id` int(11) NOT NULL default '0',
   `task_id` int(11) NOT NULL default '0',
   `percent_allocated` int(11) NOT NULL default '100',
+  PRIMARY KEY ( `resource_id` , `task_id` ),
   KEY `resource_id` (`resource_id`),
   KEY `task_id` (`task_id`,`resource_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -1690,9 +1699,6 @@ CREATE TABLE `sysvals` (
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(43, 1, 'CompanyType', 'Supplier', '3');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(44, 1, 'CompanyType', 'Consultant', '4');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(513, 1, 'GlobalCountries', 'Saint Kitts & Nevis Anguilla', 'KN');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(105, 1, 'TicketPriority', 'Low', '0');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(106, 1, 'TicketPriority', 'Normal', '1');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(110, 1, 'TicketStatus', 'Open', '0');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(42, 1, 'CompanyType', 'Vendor', '2');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(70, 1, 'ProjectRequiredFields', '<3', 'f.project_name.value.length');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(512, 1, 'GlobalCountries', 'Comoros', 'KM');
@@ -1754,11 +1760,6 @@ INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_val
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(504, 1, 'GlobalCountries', 'Italy', 'IT');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(155, 1, 'TaskLogReferenceImage', 'a', '1');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(154, 1, 'TaskLogReferenceImage', 'i', '0');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(107, 1, 'TicketPriority', 'High', '2');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(108, 1, 'TicketPriority', 'Highest', '3');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(109, 1, 'TicketPriority', '911', '4');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(111, 1, 'TicketStatus', 'Closed', '1');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(112, 1, 'TicketStatus', 'Deleted', '2');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(116, 1, 'UserType', 'Director', '3');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(117, 1, 'UserType', 'Branch Manager', '4');
 INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES(118, 1, 'UserType', 'Manager', '5');
@@ -2073,7 +2074,7 @@ CREATE TABLE `tasks_critical` (
   `task_project` int(11) default NULL,
   `critical_task` int(11) default NULL,
   `project_actual_end_date` datetime default NULL,
-  KEY `task_project` (`task_project`)
+  PRIMARY KEY (`task_project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -2085,7 +2086,7 @@ CREATE TABLE `tasks_critical` (
 CREATE TABLE `tasks_problems` (
   `task_project` int(11) default NULL,
   `task_log_problem` tinyint(1) default NULL,
-  KEY `task_project` (`task_project`)
+  PRIMARY KEY (`task_project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -2099,7 +2100,7 @@ CREATE TABLE `tasks_sum` (
   `total_tasks` int(6) default NULL,
   `project_percent_complete` float default NULL,
   `project_duration` float default NULL,
-  KEY `task_project` (`task_project`)
+  PRIMARY KEY (`task_project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -2111,7 +2112,7 @@ CREATE TABLE `tasks_sum` (
 CREATE TABLE `tasks_summy` (
   `task_project` int(11) default NULL,
   `my_tasks` varchar(10) default NULL,
-  KEY `task_project` (`task_project`)
+  PRIMARY KEY (`task_project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -2123,7 +2124,7 @@ CREATE TABLE `tasks_summy` (
 CREATE TABLE `tasks_total` (
   `task_project` int(11) default NULL,
   `total_tasks` int(11) default NULL,
-  KEY `task_project` (`task_project`)
+  PRIMARY KEY (`task_project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -2135,7 +2136,7 @@ CREATE TABLE `tasks_total` (
 CREATE TABLE `tasks_users` (
   `task_project` int(11) default NULL,
   `user_id` int(11) default NULL,
-  KEY `task_project` (`task_project`)
+  PRIMARY KEY (`task_project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -2147,6 +2148,7 @@ CREATE TABLE `tasks_users` (
 CREATE TABLE `task_contacts` (
   `task_id` int(10) NOT NULL default '0',
   `contact_id` int(10) NOT NULL default '0',
+  PRIMARY KEY ( `task_id` , `contact_id` ),
   KEY `task_id` (`task_id`),
   KEY `contact_id` (`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -2160,6 +2162,7 @@ CREATE TABLE `task_contacts` (
 CREATE TABLE `task_departments` (
   `task_id` int(10) NOT NULL default '0',
   `department_id` int(10) NOT NULL default '0',
+  PRIMARY KEY ( `task_id` , `department_id` ),
   KEY `task_id` (`task_id`),
   KEY `department_id` (`department_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -2270,7 +2273,7 @@ CREATE TABLE `user_access_log` (
 CREATE TABLE `user_events` (
   `user_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
-  KEY `uek1` (`user_id`,`event_id`),
+  PRIMARY KEY ( `user_id` , `event_id` ),
   KEY `uek2` (`event_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -2284,7 +2287,7 @@ CREATE TABLE `user_preferences` (
   `pref_user` varchar(12) NOT NULL default '',
   `pref_name` varchar(72) NOT NULL default '',
   `pref_value` varchar(32) NOT NULL default '',
-  KEY `pref_user` (`pref_user`,`pref_name`),
+  PRIMARY KEY ( `pref_user` , `pref_name` ),
   KEY `pref_user_2` (`pref_user`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -2358,14 +2361,16 @@ CREATE TABLE `user_task_pin` (
 --
 
 CREATE TABLE `w2pversion` (
+  `code_revision` INT(11) UNSIGNED NOT NULL DEFAULT '0',
   `code_version` varchar(10) NOT NULL default '',
   `db_version` int(11) NOT NULL default '0',
   `last_db_update` date NOT NULL default '0000-00-00',
-  `last_code_update` date NOT NULL default '0000-00-00'
+  `last_code_update` date NOT NULL default '0000-00-00',
+  PRIMARY KEY  (`code_revision`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `w2pversion`
 --
 
-INSERT INTO `w2pversion` (`code_version`, `db_version`, `last_db_update`, `last_code_update`) VALUES('0.9.9', 1, '2008-03-02', '2008-03-02');
+INSERT INTO `w2pversion` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`) VALUES(199, '0.9.9', 1, '2008-08-05', '2008-08-05');
