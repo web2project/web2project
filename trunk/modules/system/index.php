@@ -74,6 +74,7 @@ $titleBlock->show();
 		<a href="?m=system&u=roles"><?php echo $AppUI->_('User Roles'); ?></a>
 		<br /><a href="?m=system&a=acls_view"><?php echo $AppUI->_('Users Permissions Information'); ?></a>
 		<br /><a href="?m=system&a=contacts_ldap"><?php echo $AppUI->_('Import Contacts'); ?></a>
+		<br /><a href="?m=system&a=phpinfo&suppressHeaders=1"><?php echo $AppUI->_('PHP Info'); ?></a>
 	</td>
 </tr>
 </table>
