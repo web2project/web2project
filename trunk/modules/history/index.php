@@ -19,7 +19,13 @@ function show_history($history) {
 	global $AppUI;
 	$id = $history['history_item'];
 	$module = $history['history_table'];
-	$table_id = (substr($module, -1) == 's' ? substr($module, 0, -1) : $module) . '_id';
+	if ($module == 'companies') {
+		$table_id = 'company_id';
+	} elseif ($module == 'modules') {
+		$table_id = 'mod_id';
+	} else {
+		$table_id = (substr($module, -1) == 's' ? substr($module, 0, -1) : $module) . '_id';
+	}
 
 	if ($module == 'login') {
 		return $AppUI->_('User') . ' "' . $history['history_description'] . '" ' . $AppUI->_($history['history_action']);
@@ -96,7 +102,7 @@ if (!empty($_REQUEST['project_id'])) {
 	$q->addWhere('task_project = ' . (int)$project_id);
 	$project_tasks = implode(',', $q->loadColumn());
 	if (!empty($project_tasks)) {
-		$project_tasks = 'OR (history_table = "tasks" AND history_item IN (' . $project_tasks . '))';
+		$project_tasks = 'OR (history_table = \'tasks\' AND history_item IN (' . $project_tasks . '))';
 	}
 
 	$q->addTable('files');
@@ -104,10 +110,10 @@ if (!empty($_REQUEST['project_id'])) {
 	$q->addWhere('file_project = ' . (int)$project_id);
 	$project_files = implode(',', $q->loadColumn());
 	if (!empty($project_files)) {
-		$project_files = 'OR (history_table = "files" AND history_item IN (' . $project_files . '))';
+		$project_files = 'OR (history_table = \'files\' AND history_item IN (' . $project_files . '))';
 	}
 
-	$filter[] = '((history_table = "projects" AND history_item = "' . (int)$project_id .'") ' . $project_tasks . ' ' . $project_files . ')';
+	$filter[] = '((history_table = \'projects\' AND history_item = \'' . (int)$project_id .'\') ' . $project_tasks . ' ' . $project_files . ')';
 }
 
 $page = isset($_REQUEST['pg']) ? (int)$_REQUEST['pg'] : 1;
@@ -158,18 +164,13 @@ if ($pages > $max_pages) {
 <?php echo $AppUI->_('Changes to'); ?>:
         <select name="filter" class="text" onchange="document.filter.submit()">
                 <option value="">(<?php echo $AppUI->_('Select Filter'); ?>)</option>
-                <option value="0" <?php if ($in_filter == '0')
-	echo 'selected="selected"'; ?>><?php echo $AppUI->_('Show all'); ?></option>
-                <option value="projects" <?php if ($in_filter == 'projects')
-	echo 'selected="selected"'; ?>><?php echo $AppUI->_('Projects'); ?></option>
-                <option value="tasks" <?php if ($in_filter == 'tasks')
-	echo 'selected="selected"'; ?>><?php echo $AppUI->_('Tasks'); ?></option>
-                <option value="files" <?php if ($in_filter == 'files')
-	echo 'selected="selected"'; ?>><?php echo $AppUI->_('Files'); ?></option>
-                <option value="forums" <?php if ($in_filter == 'forums')
-	echo 'selected="selected"'; ?>><?php echo $AppUI->_('Forums'); ?></option>
-                <option value="login" <?php if ($in_filter == 'login')
-	echo 'selected="selected"'; ?>><?php echo $AppUI->_('Login/Logouts'); ?></option>
+                <option value="0" <?php if ($in_filter == '0') echo 'selected="selected"'; ?>><?php echo $AppUI->_('Show all'); ?></option>
+                <option value="companies" <?php if ($in_filter == 'companies') echo 'selected="selected"'; ?>><?php echo $AppUI->_('Companies'); ?></option>
+                <option value="projects" <?php if ($in_filter == 'projects') echo 'selected="selected"'; ?>><?php echo $AppUI->_('Projects'); ?></option>
+                <option value="tasks" <?php if ($in_filter == 'tasks') echo 'selected="selected"'; ?>><?php echo $AppUI->_('Tasks'); ?></option>
+                <option value="files" <?php if ($in_filter == 'files') echo 'selected="selected"'; ?>><?php echo $AppUI->_('Files'); ?></option>
+                <option value="forums" <?php if ($in_filter == 'forums') echo 'selected="selected"'; ?>><?php echo $AppUI->_('Forums'); ?></option>
+                <option value="login" <?php if ($in_filter == 'login') echo 'selected="selected"'; ?>><?php echo $AppUI->_('Login/Logouts'); ?></option>
         </select>
 	<?php
 if ($pages > 1) {
@@ -216,7 +217,6 @@ foreach ($history as $row) {
 	<td align="left"><?php echo $row['history_user_name'] ?></td>
 </tr>	
 <?php
-	//}
 }
 ?>
 </table>

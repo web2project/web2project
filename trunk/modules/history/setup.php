@@ -32,12 +32,12 @@ class CSetupHistory {
 	function install() {
 		$sql = ' ( 
 			history_id int(10) unsigned NOT NULL auto_increment,
-			history_date datetime NOT NULL default "0000-00-00 00:00:00",		  
-			history_user int(10) NOT NULL default "0",
-			history_action varchar(20) NOT NULL default "modify",
+			history_date datetime NOT NULL default \'0000-00-00 00:00:00\',		  
+			history_user int(10) NOT NULL default \'0\',
+			history_action varchar(20) NOT NULL default \'modify\',
 			history_item int(10) NOT NULL,
-			history_table varchar(20) NOT NULL default "",
-			history_project int(10) NOT NULL default "0",
+			history_table varchar(20) NOT NULL default \'\',
+			history_project int(10) NOT NULL default \'0\',
 			history_name varchar(255),
 			history_changes text,
 			history_description text,
@@ -49,7 +49,7 @@ class CSetupHistory {
 		$q->createTable('history', $sql);
 		$q->exec();
 		$q->clear();
-		return db_error();
+		return (db_error() ? false : true);
 	}
 
 	function remove() {
@@ -57,24 +57,12 @@ class CSetupHistory {
 		$q->dropTable('history');
 		$q->exec();
 		$q->clear();
-		return db_error();
+		return (db_error() ? false : true);
 	}
 
 	function upgrade($old_version) {
 		$q = new DBQuery;
 		switch ($old_version) {
-			case '0.1':
-				$q->alterTable('history');
-				$q->addField('history_table', 'varchar(15) NOT NULL default ""');
-				$q->addField('history_action', 'varchar(10) NOT NULL default "modify"');
-				$q->dropField('history_module');
-				$q->exec();
-				$q->clear();
-			case '0.2':
-				$q->alterTable('history');
-				$q->addField('history_item', 'int(10) NOT NULL');
-				$q->exec();
-				$q->clear();
 			case '0.3':
 				$q->alterTable('history');
 				$q->addIndex('index_history_item', '(history_item)');
@@ -93,8 +81,7 @@ class CSetupHistory {
 			case '0.32':
 				break;
 		}
-		return db_error();
+		return (db_error() ? false : true);
 	}
 }
-
 ?>
