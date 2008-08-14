@@ -15,9 +15,9 @@ debug 			= FALSE
 ;
 db_type 		= "mysql"
 db_host			= "localhost"
-db_user			= "goodman_dprj1"
-db_password		= "Xn5Ojw6SgMdK"
-db_name			= "goodman_dprj1"
+db_user			= "root"
+db_password		= ""
+db_name			= "web2project"
 db_table_prefix		= "gacl_"
 
 ;
