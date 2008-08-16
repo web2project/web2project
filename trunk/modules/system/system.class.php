@@ -113,6 +113,7 @@ class CModule extends CW2pObject {
 		// and should probably be set to 0 so as not to interfere.
 
 		$this->mod_ui_order = $q->loadResult() + 1;
+		$this->store();
 
 		$perms = &$GLOBALS['AppUI']->acl();
 		$perms->addModule($this->mod_directory, $this->mod_name);
@@ -128,7 +129,6 @@ class CModule extends CW2pObject {
 		if (isset($this->permissions_item_table) && $this->permissions_item_table) {
 			$perms->addModuleSection($this->permissions_item_table);
 		}
-		$this->store();
 		return true;
 	}
 
