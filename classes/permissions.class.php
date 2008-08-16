@@ -180,8 +180,8 @@ class w2Pacl extends gacl_api {
 			dprint(__file__, __line__, 0, 'Failed to add module permission object');
 		}
 		$recalc = $this->recalcPermissions(null, null, null, $mod);
-		if (! $recalc) {
-			dprint(__FILE__, __LINE__, 0, 'Failed to recalc module Permissions');
+		if (!$recalc) {
+			dprint(__file__, __line__, 0, 'Failed to recalc module Permissions');
 		}
 		return $res;
 	}
@@ -192,8 +192,8 @@ class w2Pacl extends gacl_api {
 			dprint(__file__, __line__, 0, 'Failed to add module permission section');
 		}
 		$recalc = $this->recalcPermissions(null, null, null, $mod);
-		if (! $recalc) {
-			dprint(__FILE__, __LINE__, 0, 'Failed to recalc module Permissions');
+		if (!$recalc) {
+			dprint(__file__, __line__, 0, 'Failed to recalc module Permissions');
 		}
 		return $res;
 	}
@@ -201,8 +201,8 @@ class w2Pacl extends gacl_api {
 	function addModuleItem($mod, $itemid, $itemdesc) {
 		$res = $this->add_object($mod, $itemdesc, $itemid, 0, 0, 'axo');
 		$recalc = $this->recalcPermissions(null, null, null, $mod);
-		if (! $recalc) {
-			dprint(__FILE__, __LINE__, 0, 'Failed to recalc module Permissions');
+		if (!$recalc) {
+			dprint(__file__, __line__, 0, 'Failed to recalc module Permissions');
 		}
 		return $res;
 	}
@@ -210,10 +210,6 @@ class w2Pacl extends gacl_api {
 	function addGroupItem($item, $group = 'all', $section = 'app', $type = 'axo') {
 		if ($gid = $this->get_group_id($group, null, $type)) {
 			$res = $this->add_group_object($gid, $section, $item, $type);
-		}
-		$recalc = $this->recalcPermissions();
-		if (!$recalc) {
-			dprint(__file__, __line__, 0, 'Failed to recalc Permissions');
 		}
 		return $res;
 	}
@@ -228,8 +224,8 @@ class w2Pacl extends gacl_api {
 			dprint(__file__, __line__, 0, 'Failed to remove module permission object');
 		}
 		$recalc = $this->removeModulePermissions($mod);
-		if (! $recalc) {
-			dprint(__FILE__, __LINE__, 0, 'Failed to recalc Permissions');
+		if (!$recalc) {
+			dprint(__file__, __line__, 0, 'Failed to recalc Permissions');
 		}
 		return $id;
 	}
@@ -243,10 +239,10 @@ class w2Pacl extends gacl_api {
 			dprint(__file__, __line__, 0, 'Failed to remove module permission section');
 		}
 		$recalc = $this->recalcPermissions(null, null, null, $mod);
-		if (! $recalc) {
-			dprint(__FILE__, __LINE__, 0, 'Failed to recalc module Permissions');
+		if (!$recalc) {
+			dprint(__file__, __line__, 0, 'Failed to recalc module Permissions');
 		}
-		return $id.$res;
+		return $id . $res;
 	}
 
 	/*
@@ -304,8 +300,8 @@ class w2Pacl extends gacl_api {
 		}
 
 		$recalc = $this->recalcPermissions(null, null, null, $mod);
-		if (! $recalc) {
-			dprint(__FILE__, __LINE__, 0, 'Failed to recalc module Permissions');
+		if (!$recalc) {
+			dprint(__file__, __line__, 0, 'Failed to recalc module Permissions');
 		}
 		// Returning null (no error) or database error message (error)
 		return $res;
@@ -314,10 +310,6 @@ class w2Pacl extends gacl_api {
 	function deleteGroupItem($item, $group = 'all', $section = 'app', $type = 'axo') {
 		if ($gid = $this->get_group_id($group, null, $type)) {
 			$res = $this->del_group_object($gid, $section, $item, $type);
-		}
-		$recalc = $this->recalcPermissions();
-		if (!$recalc) {
-			dprint(__file__, __line__, 0, 'Failed to recalc Permissions');
 		}
 		return $res;
 	}
@@ -559,6 +551,23 @@ class w2Pacl extends gacl_api {
 		$q->addWhere('a.id = g2.aro_id');
 		$q->addWhere('g1.id = ' . $role);
 		$q->addOrder('g1.value');
+
+		$result = array();
+		$result = $q->loadHashList();
+		$q->clear();
+		if (count($result)) {
+			return $result;
+		} else {
+			return false;
+		}
+	}
+
+	// Returns the group of users that have a role (and therefore can login)
+	// Not provided in original phpGacl, but useful.
+	function getUsersWithRole() {
+		$q = new DBQuery;
+		$q->addTable($this->_db_acl_prefix . 'groups_aro_map', 'g');
+		$q->addQuery('DISTINCT(g.aro_id)');
 
 		$result = array();
 		$result = $q->loadHashList();
@@ -1025,9 +1034,17 @@ class w2Pacl extends gacl_api {
 	 * @param mixed $user_id
 	 * @param mixed $user_aro_id
 	 * @param mixed $role_id
+	 * @param mixed $module
 	 * @return
 	 */
-	function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '') {
+	function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $method = 1) {
+		/*echo '<pre>';
+		print_r(debug_backtrace());
+		echo '</pre>';die;*/
+
+		//@ini_set('max_execution_time', 180);
+		//@ini_set('memory_limit', '128M');
+
 		$q = new DBQuery;
 		$q->addTable($this->_db_acl_prefix . 'aco_sections', 'a');
 		$q->addQuery('a.value AS a_value, a.name AS a_name,
@@ -1042,9 +1059,12 @@ class w2Pacl extends gacl_api {
 		$q->leftJoin($this->_db_acl_prefix . 'axo', 'f', 'e.value=f.section_value');
 		if ($user_id) {
 			$q->addWhere('d.value = \'' . $user_id . '\'');
-		}
-		if ($user_aro_id) {
+		} elseif ($user_aro_id) {
 			$q->addWhere('d.id = \'' . $user_aro_id . '\'');
+		} else {
+			//only recalculate permissions for users able to login (that have at least one role)
+			$active_users = $this->getUsersWithRole();
+			$q->addWhere('d.id IN (' . implode(',', array_keys($active_users)) . ')');
 		}
 		if ($role_id) {
 			$role_users = $this->getRoleUsers($role_id);
@@ -1064,7 +1084,7 @@ class w2Pacl extends gacl_api {
 		//$q->addOrder('a.value, b.value, c.value, d.value, e.value, f.value');
 		//print_r('User ID:'.$user_id);
 		//print_r(' User ARO ID:'.$user_aro_id);
-		//print_r(' SQL: '.$q->prepare());
+		//print_r(' SQL: '.$q->prepare());die;
 		$rows = $q->loadList();
 		$q->clear();
 
@@ -1072,7 +1092,7 @@ class w2Pacl extends gacl_api {
 		print_r($rows);
 		echo("</pre>");*/
 		$total_rows = count($rows);
-		
+
 		$acls = array();
 
 		while (list(, $row) = @each($rows)) {
@@ -1094,28 +1114,21 @@ class w2Pacl extends gacl_api {
 			) = $row;*/
 
 			$aco_section_value = $row['a_value'];
-			$aco_section_name = $row['a_name'];
 			$aco_value = $row['b_value'];
-			$aco_name = $row['b_name'];
 
 			$aro_section_value = $row['c_value'];
-			$aro_section_name = $row['c_name'];
 			$aro_value = $row['d_value'];
 			$aro_name = $row['d_name'];
 
 			$axo_section_value = $row['e_value'];
-			$axo_section_name = $row['e_name'];
 			$axo_value = $row['f_value'];
-			$axo_nam = $row['f_name'];
 
 			$acl_result = $this->acl_query($aco_section_value, $aco_value, $aro_section_value, $aro_value, $axo_section_value, $axo_value);
 
 			$acl_id = &$acl_result['acl_id'];
 			$access = &$acl_result['allow'];
 
-			$acls[] = array('aco_section_value' => $aco_section_value, 'aco_section_name' => $aco_section_name, 'aco_value' => $aco_value, 'aco_name' => $aco_name, 'aro_section_value' => $aro_section_value,
-				'aro_section_name' => $aro_section_name, 'aro_value' => $aro_value, 'aro_name' => $aro_name, 'axo_section_value' => $axo_section_value, 'axo_section_name' => $axo_section_name, 'axo_value' => $axo_value,
-				'axo_name' => $axo_name, 'acl_id' => $acl_id, 'access' => $access, );
+			$acls[] = array('aco_section_value' => $aco_section_value, 'aco_value' => $aco_value, 'aro_section_value' => $aro_section_value, 'aro_value' => $aro_value, 'aro_name' => $aro_name, 'axo_section_value' => $axo_section_value, 'axo_value' => $axo_value, 'acl_id' => $acl_id, 'access' => $access, );
 		}
 		/*echo("<pre>");
 		print_r($acls);
@@ -1123,9 +1136,13 @@ class w2Pacl extends gacl_api {
 
 		$user_permissions = array();
 		foreach ($acls as $key => $acl) {
-			$user_permissions[$acl['aro_value']][$key] = array('user_id' => $acl['aro_value'], 'user_name' => $acl['aro_name'], 'module' => ($acl['axo_section_value'] == 'app' || $acl['axo_section_value'] ==
-				'sys' ? $acl['axo_value'] : $acl['axo_section_value']), 'item_id' => ($acl['axo_section_value'] == 'app' || $acl['axo_section_value'] == 'sys' ? 0 : $acl['axo_value']), 'action' => $acl['aco_value'],
-				'access' => ($acl['access'] ? 1 : 0), 'acl_id' => $acl['acl_id'], 'acl_parent' => $parents[($acl['axo_section_value'] == 'app' || $acl['axo_section_value'] == 'sys' ? $acl['axo_value'] : $acl['axo_section_value'])], );
+			$user_permissions[$acl['aro_value']][$key]['user_id'] = $acl['aro_value'];
+			$user_permissions[$acl['aro_value']][$key]['user_name'] = $acl['aro_name'];
+			$user_permissions[$acl['aro_value']][$key]['module'] = ($acl['axo_section_value'] == 'app' || $acl['axo_section_value'] == 'sys') ? $acl['axo_value'] : $acl['axo_section_value'];
+			$user_permissions[$acl['aro_value']][$key]['item_id'] = ($acl['axo_section_value'] == 'app' || $acl['axo_section_value'] == 'sys') ? 0 : $acl['axo_value'];
+			$user_permissions[$acl['aro_value']][$key]['action'] = $acl['aco_value'];
+			$user_permissions[$acl['aro_value']][$key]['access'] = $acl['access'] ? 1 : 0;
+			$user_permissions[$acl['aro_value']][$key]['acl_id'] = $acl['acl_id'];
 		}
 
 		// Now that we have the users permissions lets delete the existing ones and insert the new ones
@@ -1256,7 +1273,7 @@ class w2Pacl extends gacl_api {
 		} else {
 			$allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label']);
 		}
-		/*print_r($allowedRecords[(int)$item]);	
+		/*print_r($allowedRecords[(int)$item]);
 		print_r(intval(isset($allowedRecords[(int)$item])));
 		print_r('Result:'.$item.'>count='.count($allowedRecords));die;*/
 
