@@ -126,7 +126,6 @@ if (count($allowedProjects)) {
 	$q->addWhere($allowedProjects);
 }
 $q->addGroup('projects.project_id');
-$q->addOrder('project_name');
 
 $q2 = new DBQuery;
 $q2 = $q;
@@ -199,7 +198,7 @@ if (count($allowedTasks)) {
 	$q->addWhere($allowedTasks);
 }
 $q->addGroup('tasks.task_id');
-$q->addOrder('projects.project_id, task_start_date');
+$q->addOrder('task_start_date');
 if ($canViewTasks) {
 	$tasks = $q->loadList();
 }

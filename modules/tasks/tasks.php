@@ -95,7 +95,9 @@ $q->leftJoin('project_departments', 'project_departments', 'p.project_id = proje
 $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 $q->addWhere($where_list . (($where_list) ? ' AND ' : '') . 't1.task_id = t1.task_parent');
 $q->addGroup('p.project_id');
-$q->addOrder('project_name');
+if (!$project_id && !$task_id) {
+	$q->addOrder('project_name');
+}
 
 $q2 = new DBQuery;
 $q2->addTable('projects');
@@ -316,7 +318,11 @@ if (!$min_view && $f2 != 'all') {
 }
 
 $q->addGroup('tasks.task_id');
-$q->addOrder('p.project_id, task_start_date');
+if (!$project_id && !$task_id) {
+	$q->addOrder('p.project_id, task_start_date');
+} else {
+	$q->addOrder('task_start_date');
+}
 //print_r($q->prepare());
 if ($canViewTask) {
 	$tasks = $q->loadList();
