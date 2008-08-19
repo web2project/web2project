@@ -10,8 +10,6 @@ $reminded = intval(w2PgetParam($_GET, 'reminded', 0));
 // check permissions for this record
 $canRead = !getDenyRead($m, $task_id);
 $canEdit = !getDenyEdit($m, $task_id);
-// check permissions for this record
-$canReadModule = !getDenyRead($m);
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
