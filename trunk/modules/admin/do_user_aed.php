@@ -6,7 +6,8 @@ if (!defined('W2P_BASE_DIR')) {
 require_once ($AppUI->getSystemClass('libmail'));
 include $AppUI->getModuleClass('contacts');
 $del = isset($_REQUEST['del']) ? w2PgetParam($_REQUEST, 'del', false) : false;
-$contact_id = isset($_POST['contact_id']) ? $_POST['contact_id'] : 0;
+$contact_id = isset($_POST['contact_id']) ? w2PgetParam($_POST, 'contact_id', 0) : 0;
+$user_id = isset($_REQUEST['user_id']) ? w2PgetParam($_REQUEST, 'user_id', 0) : 0;
 $isNewUser = !(w2PgetParam($_REQUEST, 'user_id', 0));
 
 $perms = &$AppUI->acl();
@@ -25,11 +26,13 @@ if ($del) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!$perms->checkModule('admin', 'edit')) {
-		$AppUI->redirect('m=public&a=access_denied');
-	}
-	if (!$perms->checkModule('users', 'edit')) {
-		$AppUI->redirect('m=public&a=access_denied');
+	if ($user_id != $AppUI->user_id) {
+		if (!$perms->checkModule('admin', 'edit')) {
+			$AppUI->redirect('m=public&a=access_denied');
+		}
+		if (!$perms->checkModule('users', 'edit')) {
+			$AppUI->redirect('m=public&a=access_denied');
+		}
 	}
 }
 
