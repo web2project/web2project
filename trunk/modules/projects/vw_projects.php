@@ -1,12 +1,12 @@
 <?php /* $Id$ $URL$ */
-global $AppUI, $projects, $company_id, $pstatus, $project_types, $project_status_filter, $currentTabId, $currentTabName, $projectDesigner;
+global $AppUI, $projects, $company_id, $pstatus, $project_statuses, $project_status_filter, $currentTabId, $currentTabName, $projectDesigner;
 
 $perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 //$df = '%m/%d/%y';
 // Let's check if the user submited the change status form
 
-$projectTypes = w2PgetSysVal('ProjectStatus');
+$projectStatuses = w2PgetSysVal('ProjectStatus');
 
 $show_all_projects = false;
 $currentTabId = ($AppUI->getState('ProjIdxTab') !== null ? $AppUI->getState('ProjIdxTab') : 0);
@@ -19,11 +19,11 @@ if ($currentTabId == 0 || $currentTabId == -1) {
 } elseif ($currentTabId == 1) {
 	$project_status_filter = -2;
 //Archived
-} elseif ($currentTabId == count($project_types) - 1) {
+} elseif ($currentTabId == count($project_statuses) - 1) {
 	$project_status_filter = -3;
 	//The other project status
 } else {
-	$project_status_filter = ($projectTypes[0] ? $currentTabId - 2 : $currentTabId - 1);
+	$project_status_filter = ($projectStatuses[0] ? $currentTabId - 2 : $currentTabId - 1);
 }
 
 $show_all_projects = false;
@@ -119,7 +119,7 @@ if ($project_status_filter < 0) {
 <?php
 $none = true;
 
-//print_r($currentTabId.'.'.$show_all_projects.'.'.count($project_types).'.'.$project_status_filter);
+//print_r($currentTabId.'.'.$show_all_projects.'.'.count($project_statuses).'.'.$project_status_filter);
 
 foreach ($projects as $row) {
 	if (($show_all_projects || ($row['project_active'] && $row['project_status'] == $project_status_filter)) || //tabbed view
@@ -151,7 +151,7 @@ foreach ($projects as $row) {
 
 		if ($show_all_projects) {
 			$s .= '<td align="center" nowrap="nowrap">';
-			$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : $projectTypes[$row['project_status']];
+			$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : $projectStatuses[$row['project_status']];
 			$s .= '</td>';
 		}
 
