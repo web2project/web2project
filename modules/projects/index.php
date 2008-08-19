@@ -80,6 +80,12 @@ if (isset($_GET['orderby'])) {
 $orderby = $AppUI->getState('ProjIdxOrderBy') ? $AppUI->getState('ProjIdxOrderBy') : 'project_end_date';
 $AppUI->setState('ProjIdxOrderDir', $orderdir);
 
+// prepare the type filter
+if (isset($_POST['project_type'])) {
+	$AppUI->setState('ProjIdxType', intval($_POST['project_type']));
+}
+$project_type = $AppUI->getState('ProjIdxType') !== null ? $AppUI->getState('ProjIdxType') : -1;
+
 // prepare the users filter
 if (isset($_POST['project_owner'])) {
 	$AppUI->setState('ProjIdxowner', intval($_POST['project_owner']));
@@ -102,13 +108,15 @@ $user_list = $user_list + $q->loadHashList();
 
 // collect the full projects list data via function in projects.class.php
 projects_list_data();
+
+$project_types = array(-1 => '(all)') + w2PgetSysVal('ProjectType');
+
 //$search_text = '';
 $bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>';
 
 // setup the title block
 $titleBlock = new CTitleBlock('Projects', 'applet3-48.png', $m, $m . '.' . $a);
-$titleBlock->addCell($AppUI->_('Search') . ':');
-$titleBlock->addCell($bufferSearch, '', '<form action="?m=projects" method="post" name="searchfilter">', '</form>');
+$titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="searchfilter"><td nowrap="nowrap" align="right">' . $AppUI->_('Search') . ':</td><td nowrap="nowrap" align="left">' . $bufferSearch . '</form></tr><tr><form action="?m=projects" method="post" name="typeIdForm"><td nowrap="nowrap" align="right">' . $AppUI->_('Type') . '</td><td nowrap="nowrap" align="left">' . arraySelect($project_types, 'project_type', 'size="1" class="text" onChange="document.typeIdForm.submit();"', $project_type, false) . '</td></form></tr></table>', '', '', '');
 $titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="pickCompany"><td nowrap="nowrap" align="right">' . $AppUI->_('Company') . '</td><td nowrap="nowrap" align="left">' . $buffer . '</td></form></tr><tr><form action="?m=projects" method="post" name="userIdForm"><td nowrap="nowrap" align="right">' . $AppUI->_('Owner') . '</td><td nowrap="nowrap" align="left">' . arraySelect($user_list, 'project_owner', 'size="1" class="text" onChange="document.userIdForm.submit();"', $owner, false) . '</td></form></tr></table>', '', '', '');
 if ($canAuthor) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post">', '</form>');
@@ -120,12 +128,12 @@ $titleBlock->addCell('<span title="' . $AppUI->_('Projects') . '::' . $AppUI->_(
 
 $titleBlock->show();
 
-$project_types = w2PgetSysVal('ProjectStatus');
+$project_statuses = w2PgetSysVal('ProjectStatus');
 
 $active = 0;
 $archived = 0;
 
-foreach ($project_types as $key => $value) {
+foreach ($project_statuses as $key => $value) {
 	$counter[$key] = 0;
 	if (is_array($projects)) {
 		foreach ($projects as $p) {
@@ -134,7 +142,7 @@ foreach ($project_types as $key => $value) {
 			}
 		}
 	}
-	$project_types[$key] = $AppUI->_($project_types[$key], UI_OUTPUT_RAW) . ' (' . $counter[$key] . ')';
+	$project_statuses[$key] = $AppUI->_($project_statuses[$key], UI_OUTPUT_RAW) . ' (' . $counter[$key] . ')';
 }
 
 if (is_array($projects)) {
@@ -147,7 +155,7 @@ if (is_array($projects)) {
 	}
 }
 
-$project_types[] = $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archived . ')';
+$project_statuses[] = $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archived . ')';
 
 // Only display the All option in tabbed view, in plain mode it would just repeat everything else
 // already in the page
@@ -156,27 +164,23 @@ $is_tabbed = $tabBox->isTabbed();
 if ($tabBox->isTabbed()) {
 	// This will overwrited the initial tab, so we need to add that separately.
 	$allactive = (int)count($projects) - (int)($archived);
-	array_unshift($project_types, $AppUI->_('All Projects', UI_OUTPUT_RAW) . ' (' . count($projects) . ')', $AppUI->_('All Active', UI_OUTPUT_RAW) . ' (' . $allactive . ')');
+	array_unshift($project_statuses, $AppUI->_('All Projects', UI_OUTPUT_RAW) . ' (' . count($projects) . ')', $AppUI->_('All Active', UI_OUTPUT_RAW) . ' (' . $allactive . ')');
 }
 
-/**
- * Now, we will figure out which vw_idx file are available
- * for each project type using the $fixed_project_type_file array 
- */
-$project_type_file = array();
+$project_status_file = array();
 
-foreach ($project_types as $project_type) {
-	$project_type = trim($project_type);
-	if (isset($fixed_project_type_file[$project_type])) {
-		$project_file_type[$project_type] = $fixed_project_type_file[$project_type];
+foreach ($project_statuses as $project_status) {
+	$project_status = trim($project_status);
+	if (isset($fixed_project_status_file[$project_status])) {
+		$project_file_status[$project_status] = $fixed_project_status_file[$project_status];
 	} else { // if there is no fixed vw_idx file, we will use vw_idx_proposed
-		$project_file_type[$project_type] = 'vw_idx_projects';
+		$project_file_status[$project_status] = 'vw_idx_projects';
 	}
 }
 
 // tabbed information boxes
-foreach ($project_types as $project_type) {
-	$tabBox->add($project_file_type[$project_type], $project_type, true);
+foreach ($project_statuses as $project_status) {
+	$tabBox->add($project_file_status[$project_status], $project_status, true);
 }
 $min_view = true;
 $tabBox->add('viewgantt', 'Gantt');
