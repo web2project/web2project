@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $projects, $company_id, $pstatus, $project_types, $currentTabId, $currentTabName, $is_tabbed, $st_projects_arr;
+global $AppUI, $projects, $company_id, $pstatus, $project_statuses, $currentTabId, $currentTabName, $is_tabbed, $st_projects_arr;
 
 $perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -15,7 +15,7 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 //LIMIT ' . $xpg_min . ', ' . $xpg_pagesize ;
 // counts total recs from selection
 
-$projectTypes = w2PgetSysVal('ProjectStatus');
+$projectStatuses = w2PgetSysVal('ProjectStatus');
 
 //Tabbed view
 if ($is_tabbed) {
@@ -29,11 +29,11 @@ if ($is_tabbed) {
 	} elseif ($currentTabId == 1) {
 		$project_status_filter = -2;
 	//Archived
-	} elseif ($currentTabId == count($project_types) - 1) {
+	} elseif ($currentTabId == count($project_statuses) - 1) {
 		$project_status_filter = -3;
 		//The other project status
 	} else {
-		$project_status_filter = ($projectTypes[0] ? $currentTabId - 2 : $currentTabId - 1);
+		$project_status_filter = ($projectStatuses[0] ? $currentTabId - 2 : $currentTabId - 1);
 	}
 
 	$show_all_projects = false;
@@ -105,11 +105,11 @@ if ($is_tabbed) {
 	//flat view
 	$project_status_filter = $currentTabId;
 
-	if ($currentTabId == count($project_types) - 1) {
+	if ($currentTabId == count($project_statuses) - 1) {
 		$project_status_filter = -3;
 		//The other project status
 	} else {
-		$project_status_filter = ($projectTypes[0] ? $currentTabId : $currentTabId + 1);
+		$project_status_filter = ($projectStatuses[0] ? $currentTabId : $currentTabId + 1);
 	}
 	$xpg_totalrecs = count($projects);
 	$xpg_pagesize = count($projects);
@@ -266,7 +266,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 
 			if ($show_all_projects) {
 				$s .= '<td align="left" nowrap="nowrap">';
-				$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectTypes[0] ? $project_types[$row['project_status'] + 2] : $project_types[$row['project_status'] + 1]);
+				$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectStatuses[0] ? $project_statuses[$row['project_status'] + 2] : $project_statuses[$row['project_status'] + 1]);
 				$s .= '</td>';
 			}
 
