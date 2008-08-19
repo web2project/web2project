@@ -633,7 +633,7 @@ current viewing user $AppUI->user_id is used.
 */
 
 function projects_list_data($user_id = false) {
-	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $w2Pconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy, $tasks_total, $owner, $projectTypeId, $search_text;
+	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $w2Pconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy, $tasks_total, $owner, $projectTypeId, $search_text, $project_type;
 
 	$addProjectsWithAssignedTasks = $AppUI->getState('addProjWithTasks') ? $AppUI->getState('addProjWithTasks') : 0;
 
@@ -812,8 +812,8 @@ function projects_list_data($user_id = false) {
 	if (!isset($department) && $company_id && !$addPwOiD) {
 		$q->addWhere('pr.project_company = ' . (int)$company_id);
 	}
-	if ($projectTypeId > -1) {
-		$q->addWhere('pr.project_type = ' . (int)$projectTypeId);
+	if ($project_type > -1) {
+		$q->addWhere('pr.project_type = ' . (int)$project_type);
 	}
 	if (isset($department) && !$addPwOiD) {
 		$q->addWhere('project_departments.department_id in ( ' . implode(',', $dept_ids) . ' )');
