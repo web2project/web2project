@@ -259,7 +259,12 @@ if (isset($_REQUEST['dosql'])) {
 
 // start output proper
 include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-ob_start('ob_gzhandler');
+if ($_REQUEST['dosql'] == 'do_file_co') {
+	ob_start();
+} else {
+	ob_start('ob_gzhandler');
+}
+
 if (!$suppressHeaders) {
 	require W2P_BASE_DIR . '/style/' . $uistyle . '/header.php';
 }
