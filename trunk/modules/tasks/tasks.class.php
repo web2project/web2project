@@ -474,6 +474,14 @@ class CTask extends CW2pObject {
 		}
 		if ($this->task_id) {
 			addHistory('tasks', $this->task_id, 'update', $this->task_name, $this->task_project);
+			if ($this->task_start_date == '') {
+				$this->task_start_date = '0000-00-00 00:00:00';
+			}
+			if ($this->task_end_date == '') {
+				$this->task_end_date = '0000-00-00 00:00:00';
+			}
+			$ret = $q->updateObject('tasks', $this, 'task_id');
+			$q->clear();
 			$this->_action = 'updated';
 
 			// Load and globalize the old, not yet updated task object
