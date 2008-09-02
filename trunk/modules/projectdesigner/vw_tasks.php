@@ -65,7 +65,7 @@ $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
 $project = &new CProject;
 // $allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'project_id, project_name');
-$allowedProjects = $project->getAllowedSQL($AppUI->user_id);
+$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'projects.project_id');
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
 $q->addQuery('projects.project_id, project_color_identifier, project_name');
