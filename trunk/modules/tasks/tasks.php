@@ -610,6 +610,11 @@ foreach ($projects as $k => $p) {
 
 		//start displaying tasks
 		if (is_array($p['tasks'])) {
+			global $shown_tasks;
+			$shown_tasks = array();
+			$parent_tasks = array();
+			reset($p);
+			//1st pass) parent tasks and its children
 			foreach ($p['tasks'] as $i => $t1) {
 				if ($task_sort_item1) {
 					// already user sorted so there is no call for a "task tree" or "open/close" links
@@ -622,6 +627,7 @@ foreach ($projects as $k => $p) {
 						$no_children = empty($children_of[$t1['task_id']]);
 
 						showtask($t1, 0, true, false, $no_children);
+						$shown_tasks[] = $t1['task_id'];
 						findchild($p['tasks'], $t1['task_id']);
 					} elseif ($t1['task_parent'] == $task_id && $task_id) {
 						//Here we are on a task view context
@@ -630,11 +636,24 @@ foreach ($projects as $k => $p) {
 						$no_children = empty($children_of[$t1['task_id']]);
 
 						showtask($t1, 0, true, false, $no_children);
+						$shown_tasks[] = $t1['task_id'];
 						findchild($p['tasks'], $t1['task_id']);
-					} elseif ($task_status < 0) {
-						//Here we are on a inactive task list context
-						showtask($t1, -1, true, false, true);
 					}
+				}
+			}
+			reset($p);
+			//2nd pass parentless tasks
+			foreach ($p['tasks'] as $i => $t1) {
+				if (!in_array($t1['task_id'], $shown_tasks)) {
+					//Here we are on a parentless task context, this can happen because we are:
+					//1) displaying filtered tasks that could be showing only child tasks and not its parents due to filtering.
+					//2) in a situation where child tasks are active and parent tasks are inactive or vice-versa.
+					//
+					//The IF condition makes sure:
+					//1) The parent task has been displayed and passed through the findchild first, so child tasks are not erroneously displayed as orphan (parentless) 
+					//2) Only not displayed yet tasks are shown so we don't show duplicates due to findchild that may cause duplicate showtasks for level 1 (and higher) tasks.
+					showtask($t1, -1, true, false, true);
+					$shown_tasks[] = $t1['task_id'];
 				}
 			}
 		}

@@ -2189,7 +2189,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 }
 
 function findchild(&$tarr, $parent, $level = 0) {
-	global $projects;
+	global $shown_tasks;
 
 	$level = $level + 1;
 	$n = count($tarr);
@@ -2197,6 +2197,7 @@ function findchild(&$tarr, $parent, $level = 0) {
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
 			showtask($tarr[$x], $level, true);
+			$shown_tasks[] = $tarr[$x]['task_id'];			
 			findchild($tarr, $tarr[$x]['task_id'], $level);
 		}
 	}
