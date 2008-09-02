@@ -16,20 +16,17 @@ if ($sort == 'project_priority') {
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $q = new DBQuery;
-$q->addTable('projects');
-$q->addQuery('project_id, project_name, project_start_date, project_status, project_target_budget, project_start_date, project_priority, contact_first_name, contact_last_name');
-$q->leftJoin('users', 'u', 'u.user_id = projects.project_owner');
+$q->addTable('projects', 'pr');
+$q->addQuery('pr.project_id, project_name, project_start_date, project_status, project_target_budget, project_start_date, project_priority, contact_first_name, contact_last_name');
+$q->leftJoin('users', 'u', 'u.user_id = pr.project_owner');
 $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-$q->addWhere('projects.project_company = ' . (int)$company_id);
+$q->addWhere('pr.project_company = ' . (int)$company_id);
 
 include_once ($AppUI->getModuleClass('projects'));
 $projObj = new CProject();
-$projList = $projObj->getDeniedRecords($AppUI->user_id);
-if (count($projList)) {
-	$q->addWhere('NOT (project_id IN (' . implode(',', $projList) . ') )');
-}
+$projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
-$q->addWhere('projects.project_active = 1');
+$q->addWhere('pr.project_active = 1');
 $q->addOrder($sort);
 $s = '';
 
