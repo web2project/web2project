@@ -249,8 +249,8 @@ CREATE TABLE `contacts` (
   `contact_updatekey` varchar(32) default NULL,
   `contact_lastupdate` datetime default NULL,
   `contact_updateasked` datetime default NULL,
-  `contact_skype` varchar(100) NOT NULL,
-  `contact_google` varchar(255) NOT NULL,
+  `contact_skype` varchar(100) default NULL,
+  `contact_google` varchar(255) default NULL,
   PRIMARY KEY  (`contact_id`),
   KEY `idx_oby` (`contact_order_by`),
   KEY `idx_co` (`contact_company`),
@@ -1456,7 +1456,7 @@ INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mo
 INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mod_setup_class`, `mod_type`, `mod_active`, `mod_ui_name`, `mod_ui_icon`, `mod_ui_order`, `mod_ui_active`, `mod_description`, `permissions_item_table`, `permissions_item_field`, `permissions_item_label`, `mod_main_class`) VALUES(7, 'Forums', 'forums', '1.0.0', '', 'core', 1, 'Forums', 'support.png', 7, 1, '', 'forums', 'forum_id', 'forum_name', 'CForum');
 INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mod_setup_class`, `mod_type`, `mod_active`, `mod_ui_name`, `mod_ui_icon`, `mod_ui_order`, `mod_ui_active`, `mod_description`, `permissions_item_table`, `permissions_item_field`, `permissions_item_label`, `mod_main_class`) VALUES(9, 'User Administration', 'admin', '1.0.0', '', 'core', 1, 'User Admin', 'helix-setup-users.png', 18, 1, '', 'users', 'user_id', 'user_username', '');
 INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mod_setup_class`, `mod_type`, `mod_active`, `mod_ui_name`, `mod_ui_icon`, `mod_ui_order`, `mod_ui_active`, `mod_description`, `permissions_item_table`, `permissions_item_field`, `permissions_item_label`, `mod_main_class`) VALUES(10, 'System Administration', 'system', '1.0.0', '', 'core', 1, 'System Admin', '48_my_computer.png', 19, 1, '', '', '', '', '');
-INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mod_setup_class`, `mod_type`, `mod_active`, `mod_ui_name`, `mod_ui_icon`, `mod_ui_order`, `mod_ui_active`, `mod_description`, `permissions_item_table`, `permissions_item_field`, `permissions_item_label`, `mod_main_class`) VALUES(12, 'Help', 'help', '1.0.0', '', 'core', 1, 'Help', 'dp.gif', 21, 0, '', '', '', '', '');
+INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mod_setup_class`, `mod_type`, `mod_active`, `mod_ui_name`, `mod_ui_icon`, `mod_ui_order`, `mod_ui_active`, `mod_description`, `permissions_item_table`, `permissions_item_field`, `permissions_item_label`, `mod_main_class`) VALUES(12, 'Help', 'help', '1.0.0', '', 'core', 1, 'Help', 'w2p.gif', 21, 0, '', '', '', '', '');
 INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mod_setup_class`, `mod_type`, `mod_active`, `mod_ui_name`, `mod_ui_icon`, `mod_ui_order`, `mod_ui_active`, `mod_description`, `permissions_item_table`, `permissions_item_field`, `permissions_item_label`, `mod_main_class`) VALUES(13, 'Public', 'public', '1.0.0', '', 'core', 1, 'Public', 'users.gif', 21, 0, '', '', '', '', '');
 INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mod_setup_class`, `mod_type`, `mod_active`, `mod_ui_name`, `mod_ui_icon`, `mod_ui_order`, `mod_ui_active`, `mod_description`, `permissions_item_table`, `permissions_item_field`, `permissions_item_label`, `mod_main_class`) VALUES(14, 'SmartSearch', 'smartsearch', '2.0', 'SSearchNS', 'user', 1, 'SmartSearch', 'kfind.png', 9, 0, 'A module to search keywords and find the needle in the haystack', NULL, NULL, NULL, '');
 INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mod_setup_class`, `mod_type`, `mod_active`, `mod_ui_name`, `mod_ui_icon`, `mod_ui_order`, `mod_ui_active`, `mod_description`, `permissions_item_table`, `permissions_item_field`, `permissions_item_label`, `mod_main_class`) VALUES(37, 'ProjectDesigner', 'projectdesigner', '1.0', 'projectDesigner', 'user', 1, 'ProjectDesigner', 'projectdesigner.jpg', 25, 0, 'A module to design projects', NULL, NULL, NULL, '');
@@ -2206,8 +2206,8 @@ CREATE TABLE `task_log` (
   `task_log_changelog_datetime` datetime default NULL,
   `task_log_changelog_duration` varchar(50) NOT NULL default '',
   `task_log_changelog_expected_downtime` int(1) unsigned NOT NULL default '0',
-  `task_log_changelog_description` text NOT NULL,
-  `task_log_changelog_backout_plan` text NOT NULL,
+  `task_log_changelog_description` text,
+  `task_log_changelog_backout_plan` text,
   PRIMARY KEY  (`task_log_id`),
   KEY `idx_log_task` (`task_log_task`),
   KEY `task_log_date` (`task_log_date`),
