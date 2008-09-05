@@ -406,13 +406,13 @@ function defVal($var, $def) {
 
 /**
  * Utility function to return a value from a named array or a specified default, and avoid poisoning the URL by denying:
- * 1) the use of spaces (for SQL injection)
- * 2) the use of < (for XSS injection)
+ * 1) the use of spaces (for SQL and XSS injection)
+ * 2) the use of <, ", [, ; and { (for XSS injection)
  */
 function w2PgetParam(&$arr, $name, $def = null) {
 	global $AppUI;
-	if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false) || ($arr == $_POST)) {
-		return isset($arr[$name]) ? $arr[$name] : $def;
+	if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false && strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false && strpos($arr[$name], ';') === false && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
+		return isset($arr[$name]) ? $arr[$name] : $def;		
 	} else {
 		/*echo('<pre>');
 		print_r(debug_backtrace());
