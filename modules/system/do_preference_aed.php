@@ -11,7 +11,7 @@ if (!$perms->checkModule('system', 'edit') && !$pref_user) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-if (!($AppUI->user_id == $pref_user) && $pref_user) {
+if ((!($AppUI->user_id == $pref_user) && (!$perms->checkModule('admin', 'edit'))) && $pref_user) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
