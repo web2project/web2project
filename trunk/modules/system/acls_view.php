@@ -17,7 +17,7 @@ echo("</pre>");*/
 
 if ($_POST['user'] != '') {
 	$q = new DBQuery;
-	$q->addTable($perms->_db_table_prefix . 'permissions', 'gp');
+	$q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
 	$q->addQuery('gp.*');
 	$q->addWhere('user_id IN (' . implode(',', array_keys($users)) . ')');
 	if ($_POST['user']) {
