@@ -65,6 +65,10 @@ $project = new CProject();
 $project->load($task_project);
 
 //Pull all users
+// TODO: There's an issue that can arise if a user is assigned full access to 
+//   a company which is not their own.  They will be allowed to create 
+//   projects but not create tasks since the task_owner dropdown does not get 
+//   populated by the "getPermittedUsers" function.
 $users = $perms->getPermittedUsers('tasks');
 
 function getSpaces($amount) {
