@@ -24,18 +24,19 @@ $utypes = w2PgetSysVal('UserType');
 		<a href="?m=admin&a=index&orderby=user_type" class="hdr"><?php echo $AppUI->_('Type'); ?></a>
 	</th>
 	<th>
-		<a href="?m=admin&a=index&orderby=contact_company" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
+		<a href="?m=admin&a=index&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
 	</th>
 	<th>
-		<a href="?m=admin&a=index&orderby=contact_company" class="hdr"><?php echo $AppUI->_('Department'); ?></a>
+		<a href="?m=admin&a=index&orderby=dept_name" class="hdr"><?php echo $AppUI->_('Department'); ?></a>
 	</th>
 </tr>
 <?php
 
 $perms = &$AppUI->acl();
 foreach ($users as $row) {
-	if ($perms->isUserPermitted($row['user_id']) != $canLogin)
+	if ($perms->isUserPermitted($row['user_id']) != $canLogin) {
 		continue;
+	}
 ?>
 <tr>
 	<td width="30" align="center" nowrap="nowrap">
@@ -112,7 +113,7 @@ foreach ($users as $row) {
 		<a href="./index.php?m=companies&a=view&company_id=<?php echo $row['contact_company']; ?>"><?php echo $row['company_name']; ?></a>
 	</td>
 	<td>
-		<a href="./index.php?m=departments&a=view&dept_id=<?php echo $row['contact_department']; ?>"><?php echo $row['dept_name']; ?></a>
+		<a href="./index.php?m=departments&a=view&dept_id=<?php echo $row['dept_id']; ?>"><?php echo $row['dept_name']; ?></a>
 	</td>
 </tr>
 <?php } ?>
