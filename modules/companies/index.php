@@ -45,7 +45,11 @@ if ($search_string != '') {
 $search_string = w2PformSafe($search_string, true);
 
 $perms = &$AppUI->acl();
-$owner_list = array(0 => $AppUI->_('All', UI_OUTPUT_RAW)) + $perms->getPermittedUsers('companies');
+
+$baseArray = array(0 => $AppUI->_('All', UI_OUTPUT_RAW));
+$allowedArray = $perms->getPermittedUsers('companies');
+$owner_list = is_array($allowedArray) ? array_merge($baseArray, $allowedArray) : $baseArray;
+
 $owner_combo = arraySelect($owner_list, 'owner_filter_id', 'class="text" onchange="javascript:document.searchform.submit()"', $owner_filter_id, false);
 
 // setup the title block
