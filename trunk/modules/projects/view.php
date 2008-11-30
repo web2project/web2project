@@ -453,8 +453,10 @@ if ($canViewTask) {
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks');
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks (Inactive)');
 }
-if ($perms->checkModule('forums', 'view')) {
-	$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_forums', 'Forums');
+if ( $AppUI->isActiveModule('forums') ) { 
+	if ($perms->checkModule('forums', 'view')) {
+		$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_forums', 'Forums');
+	}
 }
 if ($canViewTask) {
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/viewgantt', 'Gantt Chart');
