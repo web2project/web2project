@@ -562,6 +562,9 @@ class w2Pacl extends gacl_api {
 		}
 	}
 
+	public function getActiveUsers() {
+		return $this->getUsersWithRole();
+	}
 	// Returns the group of users that have a role (and therefore can login)
 	// Not provided in original phpGacl, but useful.
 	function getUsersWithRole() {
