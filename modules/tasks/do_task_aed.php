@@ -10,14 +10,14 @@ function setItem($item_name, $defval = null) {
 	return $defval;
 }
 $adjustStartDate = setItem('set_task_start_date');
-$del = isset($_POST['del']) ? $_POST['del'] : 0;
+$del = intval(w2PgetParam($_POST, 'del', 0));
 $task_id = setItem('task_id', 0);
 $hassign = setItem('hassign');
 $hperc_assign = setItem('hperc_assign');
 $hdependencies = setItem('hdependencies');
 $notify = setItem('task_notify', 0);
 $comment = setItem('email_comment', '');
-$sub_form = isset($_POST['sub_form']) ? $_POST['sub_form'] : 0;
+$sub_form = intval(w2PgetParam($_POST, 'sub_form', 0));
 
 $isNotNew = $_POST['task_id'];
 $perms = &$AppUI->acl();
