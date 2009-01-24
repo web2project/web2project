@@ -25,7 +25,7 @@ class CContact extends CW2pObject {
 	/**
  	@var string */
 	var $contact_last_name = null;
-	var $contact_order_by = null;
+	var $contact_order_by = '';
 	var $contact_title = null;
 	var $contact_job = null;
 	var $contact_birthday = null;
@@ -66,8 +66,8 @@ class CContact extends CW2pObject {
 	}
 	
 	function store() {
-		if($this->contact_order_by == '' || $this->contact_order_by == null) {
-			$this->contact_order_by = $this->contact_first_name + ' ' + $this->contact_last_name;
+		if($this->contact_order_by == '' || $this->contact_order_by == null || $this->contact_order_by == '0' ) {
+			$this->contact_order_by = trim($this->contact_first_name.' '.$this->contact_last_name);
 		}
 		parent::store();
 	}
