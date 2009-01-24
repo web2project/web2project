@@ -66,7 +66,13 @@ class CContact extends CW2pObject {
 	}
 	
 	function store() {
-		if($this->contact_order_by == '' || $this->contact_order_by == null || $this->contact_order_by == '0' ) {
+		/*
+		 *  This  validates that any Contact saved will have a Display Name as
+		 * required by various dropdowns, etc throughout the system.  This is
+		 * mostly required when Contacts are generated via programatic methods and
+		 * not through the add/edit UI.
+		 */
+		if($this->contact_order_by == '' || $this->contact_order_by == null) {
 			$this->contact_order_by = trim($this->contact_first_name.' '.$this->contact_last_name);
 		}
 		parent::store();
