@@ -80,8 +80,8 @@ function submitIt() {
 		alert( '<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>' );
 		form.contact_last_name.focus();
 	} else if (form.contact_order_by.value.length < 1) {
-		alert( '<?php echo $AppUI->_('contactsOrderBy', UI_OUTPUT_JS); ?>' );
-		form.contact_order_by.focus();
+		orderByName('name');
+		form.submit();
 	} else if (form.contact_email.value.length < 1 && form.contact_updateask.checked) {
 		alert( '<?php echo $AppUI->_('You must enter a valid email before using the contact update feature.', UI_OUTPUT_JS); ?>' );
 		form.contact_email.focus();
