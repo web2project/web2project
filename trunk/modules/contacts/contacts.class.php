@@ -64,6 +64,13 @@ class CContact extends CW2pObject {
 	function CContact() {
 		$this->CW2pObject('contacts', 'contact_id');
 	}
+	
+	function store() {
+		if($this->contact_order_by == '' || $this->contact_order_by == null) {
+			$this->contact_order_by = $this->contact_first_name + ' ' + $this->contact_last_name;
+		}
+		parent::store();
+	}
 
 	function check() {
 		if ($this->contact_id === null) {
