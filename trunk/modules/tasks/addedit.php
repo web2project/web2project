@@ -270,7 +270,7 @@ var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours'))
 <tr valign="top">
 	<td>
 		<?php echo $AppUI->_('Task Name'); ?> *
-		<br /><input type="text" class="text" name="task_name" value="<?php echo ($obj->task_name); ?>" size="40" maxlength="255" />
+		<br /><input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($obj->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
 	</td>
 	<td>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">

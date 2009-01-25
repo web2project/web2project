@@ -411,7 +411,9 @@ function defVal($var, $def) {
  */
 function w2PgetParam(&$arr, $name, $def = null) {
 	global $AppUI;
-	if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false && strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false && strpos($arr[$name], ';') === false && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
+	if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false 
+		&& strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false 
+		&& strpos($arr[$name], ';') === false && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
 		return isset($arr[$name]) ? $arr[$name] : $def;		
 	} else {
 		/*echo('<pre>');
@@ -1030,7 +1032,7 @@ function w2PHTMLDecode($txt) {
 		foreach (get_object_vars($txt) as $k => $v) {
 			$obj->$k = html_entity_decode($v, ENT_COMPAT);
 		}
-	} else
+	} else {
 		if (is_array($txt)) {
 			foreach ($txt as $k => $v) {
 				$txt[$k] = html_entity_decode($v, ENT_COMPAT);
@@ -1038,7 +1040,8 @@ function w2PHTMLDecode($txt) {
 		} else {
 			$txt = html_entity_decode($txt, ENT_COMPAT);
 		}
-		return $txt;
+	}
+	return $txt;
 }
 
 function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '') {
