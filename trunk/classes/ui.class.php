@@ -848,7 +848,18 @@ class CAppUI {
 		$q->addOrder('mod_ui_order');
 		return ($q->loadList());
 	}
-
+	/**
+	 * Gets a list of the active modules
+	 * @return array Named array list in the form 'module directory'=>'module name'
+	 */
+	public function getLoadableModuleList() {
+		$q = new DBQuery;
+		$q->addTable('modules', 'm');
+		$q->addQuery('mod_directory, mod_main_class');
+		$q->addWhere('mod_active = 1');
+		$q->addWhere("mod_main_class <> ''");
+		return ($q->loadList());
+	}
 	function isActiveModule($module) {
 		$q = new DBQuery;
 		$q->addTable('modules');
