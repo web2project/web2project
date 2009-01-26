@@ -2290,32 +2290,33 @@ CREATE TABLE `user_preferences` (
 -- Dumping data for table `user_preferences`
 --
 
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'CURRENCYFORM', 'en');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'EVENTFILTER', 'all');
 INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'LOCALE', 'en');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'TABVIEW', '0');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'MAILALL', '0');
 INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'SHDATEFORMAT', '%d/%m/%Y');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'TIMEFORMAT', '%I:%M %p');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'TABVIEW', '0');
 INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'TASKASSIGNMAX', '100');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'USERFORMAT', 'user');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'UISTYLE', 'web2project');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'LOCALE', 'en');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TABVIEW', '0');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'SHDATEFORMAT', '%d/%b/%Y');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TIMEFORMAT', '%I:%M %p');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'UISTYLE', 'web2project');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TASKASSIGNMAX', '100');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'USERFORMAT', 'user');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'CURRENCYFORM', 'en');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'EVENTFILTER', 'my');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'MAILALL', '0');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TASKLOGEMAIL', '0');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TASKLOGSUBJ', '');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TASKLOGNOTE', '0');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'TASKLOGEMAIL', '0');
 INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'TASKLOGNOTE', '0');
 INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'TASKLOGSUBJ', '');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'TASKLOGEMAIL', '0');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'MAILALL', '0');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'EVENTFILTER', 'all');
-INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'CURRENCYFORM', 'en');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'TIMEFORMAT', '%I:%M %p');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'UISTYLE', 'web2project');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('0', 'USERFORMAT', 'user');
+
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'CURRENCYFORM', 'en');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'EVENTFILTER', 'my');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'LOCALE', 'en');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'MAILALL', '0');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'SHDATEFORMAT', '%d/%b/%Y');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TABVIEW', '0');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TASKASSIGNMAX', '100');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TASKLOGEMAIL', '0');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TASKLOGNOTE', '0');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TASKLOGSUBJ', '');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'TIMEFORMAT', '%I:%M %p');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'UISTYLE', 'web2project');
+INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES ('1', 'USERFORMAT', 'user');
 
 -- --------------------------------------------------------
 
