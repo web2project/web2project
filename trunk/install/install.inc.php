@@ -34,6 +34,24 @@
 	 flush();
 	}
 
+	function w2pgetIniSize($val) {
+	   $val = trim($val);
+	   if (strlen($val <= 1)) return $val;
+	   $last = $val{strlen($val)-1};
+	   switch($last) {
+	       case 'k':
+	       case 'K':
+	           return (int) $val * 1024;
+	           break;
+	       case 'm':
+	       case 'M':
+	           return (int) $val * 1048576;
+	           break;
+	       default:
+	           return $val;
+	   }
+	}
+
 	#
 	# function to return a default value if a variable is not set
 	#
@@ -131,7 +149,7 @@
 			'db_version' => '1'
 		);
 		if ($mode == 'upgrade') {
-			$res = $db->Execute('SELECT * FROM dpversion LIMIT 1');
+			$res = $db->Execute('SELECT * FROM w2pversion LIMIT 1');
 			if ($res && $res->RecordCount() > 0) {
 				$row = $res->FetchRow();
 				$result['last_db_update'] = str_replace('-', '', $row['last_db_update']);

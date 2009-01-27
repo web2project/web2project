@@ -21,34 +21,82 @@
 
 	The full text of the GPL is in the COPYING file.
 */
-
 	require_once '../base.php';
+	require_once W2P_BASE_DIR . '/includes/main_functions.php';
+	require_once W2P_BASE_DIR . '/install/manager.class.php';
+	require_once W2P_BASE_DIR . '/install/install.inc.php';
+
+	$step = trim( w2PgetCleanParam( $_POST, 'step', '' ) );
+	$manager = new UpgradeManager();
 ?>
 <html>
 	<head>
-		<title>web2Project Installer</title>
-		<meta name="Description" content="web2Project Installer">
+		<title>web2Project Update Manager</title>
+		<meta name="Description" content="web2Project Update Manager">
 	 	<link rel="stylesheet" type="text/css" href="../style/web2project/main.css">
 	</head>
 	<body>
 		<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
 			<tr>
-			  <td class="item" colspan="2">Welcome to the web2Project Installer! It 
-			  will setup the database for web2Project and create an appropriate config file.
-				In some cases a manual installation cannot be avoided.
-			  </td>
+			  <td class="item" colspan="2">Welcome to the web2Project Update Manager!</td>
 			</tr>
-			<tr>
-				<td colspan="2">&nbsp;</td>
-			</tr>
-			<tr>
-				<td class="title" colspan="2">There is an initial Check for (minimal) 
-				requirements appended below for troubleshooting. At minimum, a database 
-				and corresponding database connection must be available.  In addition 
-				../includes/config.php should be writable for the webserver.</td>
-			</tr>
+			<?php
+			$action = $manager->getActionRequired();
+			switch ($action) {
+				case 'install':
+					?>
+					<tr>
+						<td colspan="2">This system will help you perform each of the required steps to prepare your web2project installation.</td>
+					</tr>
+					<?php if ($step == '') { ?>
+						<tr>
+							<td colspan="2">
+								When you're ready to being, simply 
+							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form">
+							  	<input type="hidden" name="step" value="check" />
+							  	<input class="button" type="submit" name="next" value="Start Installation &raquo;" />
+								</form>
+							</td>
+						</tr>
+					<?php
+					}
+					break;
+				case 'convert':
+					?>
+					<tr>
+						<td colspan="2">This is where the conversion script kicks in.</td>
+					</tr>
+					<?php
+					break;
+				case 'upgrade':
+					?>
+					<tr>
+						<td colspan="2">This is where the upgrade script kicks in.</td>
+					</tr>
+					<?php
+					break;
+				default:
+					?>
+					<tr>
+						<td colspan="2">You've attempted to perform an invalid action. Stop that.</td>
+					</tr>
+					<?php
+			}
+
+			switch ($step) {
+				case 'check':
+					include_once('install/check.php');
+					break;
+				case 'dbcreds':
+					include_once('install/dbcreds.php');
+					break;
+				case 'perform':
+					include_once('install/perform.php');
+					break;					
+				default:
+					//do nothing
+			}
+			?>
 		</table>
-		<br />
-		<?php include_once('vw_idx_check.php'); ?>
 	</body>
 </html>
