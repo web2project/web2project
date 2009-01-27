@@ -1,45 +1,29 @@
-<?php // $Id: vw_idx_check.php,v 1.8.8.2 2007/02/26 21:04:48 merlinyoda Exp $
-
+<?php
 	if (!defined('W2P_BASE_DIR')) {
 		die('You should not access this file directly.');
 	}
 	
 	$failedImg = '<img src="../style/web2project/images/log-error.gif" width="16" height="16" align="middle" alt="Failed"/>';
 	$okImg = '<img src="../style/web2project/images/log-notice.gif" width="16" height="16" align="middle" alt="OK"/>';
-	
-	$cfgDir = isset($cfgDir) ? $cfgDir : W2P_BASE_DIR.'/includes';
-	$cfgFile = isset($cfgFile) ? $cfgFile : W2P_BASE_DIR.'/includes/config.php';
-	$filesDir = isset($filesDir) ? $filesDir : W2P_BASE_DIR.'/files';
-	$locEnDir = isset($locEnDir) ? $locEnDir : W2P_BASE_DIR.'/locales/en';
-	$tmpDir = isset($tmpDir) ? $tmpDir : W2P_BASE_DIR.'/files/temp';
-	$tblwidth = isset($tblwidth) ? $tblwidth : '90%';
 	$chmod = 0777;
 	
-	function w2pgetIniSize($val) {
-	   $val = trim($val);
-	   if (strlen($val <= 1)) return $val;
-	   $last = $val{strlen($val)-1};
-	   switch($last) {
-	       case 'k':
-	       case 'K':
-	           return (int) $val * 1024;
-	           break;
-	       case 'm':
-	       case 'M':
-	           return (int) $val * 1048576;
-	           break;
-	       default:
-	           return $val;
-	   }
-	}
-	
 	$continue = true;
-
 ?>
 
-<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="<?php echo $tblwidth; ?>" align="center">
+<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
 	<tr>
-		<td class="title" colspan="2">Check for Requirements</td>
+		<td class="title" colspan="2">Step 1: Check System Settings</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			There is an initial Check for (minimal) requirements appended below for 
+			troubleshooting. At minimum, a database and corresponding database 
+			connection must be available.  In addition ../includes/config.php should 
+			be writable for the webserver.
+		</td>
+	</tr>
+	<tr>
+		<td class="title" colspan="2">Confirm Requirements</td>
 	</tr>
 	<tr>
 		<td class="item">PHP Version &gt;= 5.0</td>
@@ -169,14 +153,14 @@
 	</tr>
 	<?php
 		$okMessage = '';
-		if (!file_exists($cfgFile) && is_writable( $cfgDir )) {
-			$fh = fopen($cfgFile, 'w');
+		if (!file_exists($manager->getConfigFile()) && is_writable( $manager->getConfigDir() )) {
+			$fh = fopen($manager->getConfigFile(), 'w');
 			fclose($fh);
 		}
-		if ( (file_exists( $cfgFile ) && !is_writable( $cfgFile )) || (!file_exists( $cfgFile ) && !(is_writable( $cfgDir ))) ) {
-		  @chmod( $cfgFile, $chmod );
-		  @chmod( $cfgDir, $chmod );
-			$filemode = @fileperms($cfgFile);
+		if ( (file_exists( $manager->getConfigFile() ) && !is_writable( $manager->getConfigFile() )) || (!file_exists( $manager->getConfigFile() ) && !(is_writable( $manager->getConfigDir() ))) ) {
+		  @chmod( $manager->getConfigFile(), $chmod );
+		  @chmod( $manager->getConfigDir(), $chmod );
+			$filemode = @fileperms($manager->getConfigFile());
 			if ($filemode & 2) {
 				$okMessage='<span class="error"> World Writable</span>';
 			}
@@ -184,49 +168,49 @@
 	?>
 	<tr>
 	  <td class="item">./includes/config.php writable?</td>
-	  <td align="left"><?php echo ( is_writable( $cfgFile ) || is_writable( $cfgDir ))  ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> Configuration process can still be continued. Configuration file will be displayed at the end, just copy & paste this and upload.</span>';?></td>
+	  <td align="left"><?php echo ( is_writable( $manager->getConfigFile() ) || is_writable( $manager->getConfigDir ))  ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> Configuration process can still be continued. Configuration file will be displayed at the end, just copy & paste this and upload.</span>';?></td>
 	</tr>
 	<?php
 		$okMessage = "";
-		if (!is_writable( $filesDir )) {
-			@chmod( $filesDir, $chmod );
+		if (!is_writable( $manager->getUploadDir() )) {
+			@chmod( $manager->getUploadDir(), $chmod );
 		}
-		$filemode = @fileperms($filesDir);
+		$filemode = @fileperms($manager->getUploadDir());
 		if ($filemode & 2) {
 			$okMessage='<span class="error"> World Writable</span>';
 		}
 	?>
 	<tr>
 	  <td class="item">./files writable?</td>
-	  <td align="left"><?php echo is_writable( $filesDir ) ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> File upload functionality will be disabled</span>';?></td>
+	  <td align="left"><?php echo is_writable( $manager->getUploadDir() ) ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> File upload functionality will be disabled</span>';?></td>
 	</tr>
 	<?php
 		$okMessage = "";
-		if (!is_writable( $tmpDir )) {
-			@chmod( $tmpDir, $chmod );
+		if (!is_writable( $manager->getTempDir() )) {
+			@chmod( $manager->getTempDir(), $chmod );
 		}
-		$filemode = @fileperms($tmpDir);
+		$filemode = @fileperms($manager->getTempDir());
 		if ($filemode & 2) {
 			$okMessage='<span class="error"> World Writable</span>';
 		}
 	?>
 	<tr>
 	  <td class="item">./files/temp writable?</td>
-	  <td align="left"><?php echo is_writable( $tmpDir ) ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> PDF report generation will be disabled</span>';?></td>
+	  <td align="left"><?php echo is_writable( $manager->getTempDir() ) ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> PDF report generation will be disabled</span>';?></td>
 	</tr>
 	<?php
 		$okMessage = "";
-		if (!is_writable( $locEnDir )) {
-			@chmod( $locEnDir, $chmod );
+		if (!is_writable( $manager->getLanguageDir() )) {
+			@chmod( $manager->getLanguageDir(), $chmod );
 		}
-		$filemode = @fileperms($locEnDir);
+		$filemode = @fileperms($manager->getLanguageDir());
 		if ($filemode & 2) {
 			$okMessage='<span class="error"> World Writable</span>';
 		}
 	?>
 	<tr>
 	  <td class="item">./locales/en writable?</td>
-	  <td align="left"><?php echo is_writable( $locEnDir ) ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> Translation files cannot be saved. Check /locales and subdirectories for permissions.</span>';?></td>
+	  <td align="left"><?php echo is_writable( $manager->getLanguageDir() ) ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> Translation files cannot be saved. Check /locales and subdirectories for permissions.</span>';?></td>
 	</tr>
 	<tr>
 		<td class="title" colspan="2"><br />Check requirements for optional components</td>
@@ -274,13 +258,13 @@
 	</tr>
 	<tr>
 	  <td colspan="2" align="center">
-		  <form action="db.php" method="post" name="form" id="form">
+		  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form">
 		  	<?php if ($continue) { ?>
-		  		<input class="button" type="submit" name="next" value="Start <?php echo "Installation"; ?>" />
+		  		<input type="hidden" name="step" value="dbcreds" />
+		  		<input class="button" type="submit" name="next" value="Continue to Step 2 &raquo;" />
 		  	<?php } else { ?>
 		  		<input class="button" type="button" value="Installation Stopped" onClick="alert('The above issues must be fixed before continuing.')" />
 		  	<?php } ?> 
-				<input type="hidden" name="mode" value="<?php echo $mode; ?>" />
 			</form>
 		</td>
 	</tr>

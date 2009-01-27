@@ -39,7 +39,7 @@
 	Order deny,allow
 	Deny from all
 </FilesMatch>
-<FilesMatch "(index.php|queuescanner.php|fileviewer.php|updatecontact.php|do_updatecontact.php|db.php|newuser.php|createuser.php|do_user_aed.php|CaptchaImage.php)$">
+<FilesMatch "(index.php|calendar.php|queuescanner.php|fileviewer.php|updatecontact.php|do_updatecontact.php|newuser.php|createuser.php|do_user_aed.php|CaptchaImage.php)$">
 	Order deny,allow
 	Allow from all
 </FilesMatch>
