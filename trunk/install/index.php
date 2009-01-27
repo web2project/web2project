@@ -47,7 +47,6 @@
 				and corresponding database connection must be available.  In addition 
 				../includes/config.php should be writable for the webserver.</td>
 			</tr>
-			<!-- TODO: write functionality for upgrading. -->
 		</table>
 		<br />
 		<?php include_once('vw_idx_check.php'); ?>

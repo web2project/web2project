@@ -44,7 +44,7 @@
 					<td class="title" colspan="2">Database Settings</td>
 				</tr>
 				<tr>
-					<td class="item">Database Server Type</td>
+					<td class="item" width="50%">Database Server Type</td>
 					<td align="left">
 						<select name="dbtype" size="1" style="width:200px;" class="text" disabled="true">
 							<option value="mysql" selected="selected">MySQL</option>
@@ -74,8 +74,12 @@
 					<td align="left"><input type="checkbox" name="dbpersist" value="1" <?php echo ($w2Pconfig['dbpersist']==true) ? 'checked="checked"' : ''; ?> title="Use a persistent Connection to your Database Server." /></td>
 				</tr>
 				<tr>
-					<td class="item">Specify an Admin Password</td>
-					<td align="left"><input class="button" type="password" name="adminpass" value="" title="The password for the admin user." /></td>
+					<td class="item">Specify a password for the Admin account<br />
+					<span style="font-style: italic; ">After installation is complete, you will log in using the username "admin" (no quotes) and this password.  If you do not provide one, "passwd" (no quotes) will be used.</span>
+					</td>
+					<td align="left">
+						<input class="button" type="password" name="adminpass" value="" title="The password for the admin user." />
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2">&nbsp;</td>

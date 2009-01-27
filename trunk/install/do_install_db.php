@@ -8,7 +8,7 @@
 
 	require_once W2P_BASE_DIR.'/install/install.inc.php';
 	
-	$AppUI =& new InstallerUI; // Fake AppUI class to appease the db_connect utilities.
+	$AppUI = new InstallerUI; // Fake AppUI class to appease the db_connect utilities.
 	
 	$dbMsg = '';
 	$cFileMsg = 'Not Created';
@@ -22,8 +22,9 @@
 	$dbpass = trim( w2PgetCleanParam( $_POST, 'dbpass', '' ) );
 	$adminpass = trim( w2PgetCleanParam( $_POST, 'adminpass', 'passwd' ) );
 
-	$dbdrop = w2PgetCleanParam( $_POST, 'dbdrop', false );
-	$mode = w2PgetCleanParam( $_POST, 'mode', 'install' );
+	//$dbdrop = w2PgetCleanParam( $_POST, 'dbdrop', false );
+	//$mode = w2PgetCleanParam( $_POST, 'mode', 'install' );
+	$mode = 'install';
 	$dbpersist = w2PgetCleanParam( $_POST, 'dbpersist', false );
 
 	$do_db = isset($_POST['do_db']);
@@ -103,13 +104,27 @@
 								$db_version = InstallGetVersion($mode, $db);
 							
 								$code_updated = '';
-								if ($mode == 'install') {
-								  w2pmsg('Installing database');
-								  InstallLoadSql(W2P_BASE_DIR.'/install/install/web2project.mysql.sql', null, $adminpass);
-								  // After all the updates, find the new version information.
-								  $new_version = InstallGetVersion($mode, $db);
-								  $lastDBUpdate = $new_version['last_db_update'];
-								  $code_updated = $new_version['last_code_update'];
+								if ($mode == 'install') {								  
+									/*
+									 *  There  needs to be a better way of doing this one.. the
+									 * goal is to prevent the db loading script from loading a
+									 * second time.  This will attempt to query the db and if it
+									 * succeeds (aka the db is loaded), it will skip the loading
+									 * and continue.  If it fails (aka the db is not loaded), it
+									 * will attempt to load the db as normal.
+									 */
+									$sql = "SELECT * FROM w2pversion";
+									$res = $db->Execute($sql);
+									if ($res && $res->RecordCount() > 0) {
+										w2pmsg('Skipping database install. The database is already installed.');
+									} else {
+									  w2pmsg('Installing database');
+									  InstallLoadSql(W2P_BASE_DIR.'/install/install/web2project.mysql.sql', null, $adminpass);
+									  // After all the updates, find the new version information.
+									  $new_version = InstallGetVersion($mode, $db);
+									  $lastDBUpdate = $new_version['last_db_update'];
+									  $code_updated = $new_version['last_code_update'];										
+									}
 								}
 							
 								$dbError = $db->ErrorNo();
