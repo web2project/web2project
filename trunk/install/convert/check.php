@@ -108,6 +108,9 @@
 	<tr>
 		<td colspan="2">&nbsp;</td>
 	</tr>
+		<tr>
+			<td class="item" align="left" colspan="2" style="text-align: center;"><b class="error">Please confirm that your database has been backed up properly before running this process.  You can never have too many backups.</b></td>
+		</tr>
 	<tr>
 	  <td colspan="2" align="center">
 		  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form">

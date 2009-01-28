@@ -26,10 +26,9 @@
 					//TODO: Add check to see if the user has access to system admin
 					if (isset($dPconfig)) {
 						$this->configOptions = $dPconfig;
-						$w2Pconfig = $dPconfig;
-
 						$this->action = 'convert';
 					} else {
+						$this->configOptions = $w2Pconfig;
 						$this->action = 'upgrade';
 					}
 				}
@@ -65,42 +64,46 @@
 		}
 		
 		public function convertDotProject() {
-			//TODO: get dP version
-			//TODO: apply the changes for each step
 			$dpVersion = '';
-			$totalErrors = 0;
-			$allErrors = array();
 
+			$allErrors = array();
 			$dbConn = $this->_openDBConnection();
+			$sql = "SELECT * FROM dpversion ORDER BY db_version DESC";
+			$res = $dbConn->Execute($sql);
+			if ($res && $res->RecordCount() > 0) {
+				$dpVersion = $res->fields['code_version'];
+			}
 
 			switch ($dpVersion) {
-				case '1.0.2':
-					$allErrors[] = "Unfortunately, we can't upgrade from dotProject v1.x.  Please upgrade to dotProject 2.x first.";
-					break;
 				case '2.0':
+					$errorMessages = $this->_applySQLUpdates('dp20_to_201.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
 				case '2.0.1':
+					$errorMessages = $this->_applySQLUpdates('dp201_to_202.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
 				case '2.0.2':
 				case '2.0.3':
 				case '2.0.4':
 				case '2.1-rc1':
+					$errorMessages = $this->_applySQLUpdates('dp21rc1_to_21rc2.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
 				case '2.1-rc2':
 				case '2.1':
-					list ($errorCount, $errorMessages) = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
-					$totalErrors += $errorCount;
+				case '2.1.1':
+				case '2.1.2':
+					$errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
 					$allErrors = array_merge($allErrors, $errorMessages);
 
 					$recordsUpdated = $this->_scrubDotProjectData($dbConn);
 
-					list ($errorCount, $errorMessages) = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
-					$totalErrors += $errorCount;
+					$errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
 					$allErrors = array_merge($allErrors, $errorMessages);
 					break;
-				case '2.1.1':
-				case '2.1.2':
 				default:
+					$allErrors[] = "Unfortunately, we can't upgrade from versions of dotProject prior to the official 2.0 release.  Please upgrade to dotProject 2.x first.";
 			}
-			echo $totalErrors."<br />";
-			print_r($allErrors);
+			
+			return $allErrors;
 		}
 
 
@@ -114,7 +117,6 @@
 			$query = fread(fopen($sqlfile, "r"), filesize($sqlfile));
 			$pieces  = $this->_splitSQLUpdates($query);
 			$pieceCount = count($pieces);
-			$errorCount = 0;
 			$errorMessages = array();
 
 			for ($i=0; $i < $pieceCount; $i++) {
@@ -126,14 +128,13 @@
 					 * pain and ends up loading all kinds of unnecessary stuff.
 					 */
 					if (!$result = $dbConn->Execute($pieces[$i])) {
-						$errorCount++;
 						$dbErr = true;
 						$errorMessages[] = $dbConn->ErrorMsg();
 					}
 				}
 			}
 
-			return array ($errorCount, $errorMessages);
+			return $errorMessages;
 		}
 		private function _splitSQLUpdates($sql) {
 			return explode(';', $sql);
@@ -166,7 +167,6 @@
 			$recordsUpdated = 0;
 
 			$sql = "SELECT * FROM sysvals WHERE sysval_value like '%|%' ORDER BY sysval_id ASC";
-
 			$res = $dbConn->Execute($sql);
 			if ($res->RecordCount() > 0) {
 				while (!$res->EOF) {
