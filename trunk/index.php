@@ -31,6 +31,11 @@ require_once 'base.php';
 clearstatcache();
 if (is_file(W2P_BASE_DIR . '/includes/config.php')) {
 	require_once W2P_BASE_DIR . '/includes/config.php';
+	if (isset($dPconfig)) {
+		echo '<html><head><meta http-equiv="refresh" content="5; URL=' . W2P_BASE_URL . '/install/index.php"></head><body>';
+		echo 'Fatal Error. It appears you\'re converting from dotProject.<br/><a href="./install/index.php">' . 'Click Here To Start the Conversion!</a> (forwarded in 5 sec.)</body></html>';
+		exit();		
+	}
 } else {
 	echo '<html><head><meta http-equiv="refresh" content="5; URL=' . W2P_BASE_URL . '/install/index.php"></head><body>';
 	echo 'Fatal Error. You haven\'t created a config file yet.<br/><a href="./install/index.php">' . 'Click Here To Start Installation and Create One!</a> (forwarded in 5 sec.)</body></html>';

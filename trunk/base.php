@@ -67,6 +67,14 @@ $baseUrl = preg_replace('#/$#D', '', $baseUrl);
 define('W2P_BASE_DIR', $baseDir);
 define('W2P_BASE_URL', $baseUrl);
 
+/* 
+ *  This  is set to get past the dotProject security sentinel.  It is only
+ * required during the conversion process to load config.php.  Hopefully we 
+ * will be able to kill this off down the road or someone can come up with a
+ * better idea.
+ */  
+define('DP_BASE_DIR', $baseDir);
+
 // required includes for start-up
 global $w2Pconfig;
 $w2Pconfig = array();
