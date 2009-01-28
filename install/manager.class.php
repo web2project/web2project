@@ -185,16 +185,16 @@
 				case '2.1':
 				case '2.1.1':
 				case '2.1.2':
-					//$errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
-					//$allErrors = array_merge($allErrors, $errorMessages);
+					$errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
 
 					$recordsUpdated = $this->_scrubDotProjectData($dbConn);
 
-					//$errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
-					//$allErrors = array_merge($allErrors, $errorMessages);
+					$errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
 
-					//$errorMessages = $this->upgradeSystem($dbConn);
-					//$allErrors = array_merge($allErrors, $errorMessages);
+					$errorMessages = $this->upgradeSystem($dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
 
 					break;
 				default:
