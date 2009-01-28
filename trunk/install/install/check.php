@@ -18,8 +18,9 @@
 		<td colspan="2">
 			There is an initial Check for (minimal) requirements appended below for 
 			troubleshooting. At minimum, a database and corresponding database 
-			connection must be available.  In addition ../includes/config.php should 
-			be writable for the webserver.
+			connection must be available in addition to PHP5, the GD libraries 
+			installed for Gantt charts, and file_uploads should be allowed.  In 
+			addition ../includes/config.php should be writable for the webserver.
 		</td>
 	</tr>
 	<tr>
@@ -57,19 +58,6 @@
 		<?php 
 			if (!extension_loaded('gd')) {
 				echo '<b class="error">'.$failedImg.'</b> <span class="item">GANTT Chart functionality may not work correctly.</span>';
-				$continue = false;
-			} else {
-				echo '<b class="ok">'.$okImg.'</b>';
-			}
-		?>
-		</td>
-	</tr>
-	<tr>
-		<td class="item">Zlib compression Support</td>
-		<td align="left">
-		<?php 
-			if (!extension_loaded('zlib')) {
-				echo '<b class="error">'.$failedImg.'</b> <span class="item">Some non-core modules may have restricted operation.</span>';
 				$continue = false;
 			} else {
 				echo '<b class="ok">'.$okImg.'</b>';
@@ -219,6 +207,15 @@
 		<td class="item">LDAP Support</td>
 		<td align="left"><?php echo function_exists( 'ldap_connect' ) ? '<b class="ok">'.$okImg.'</b><span class="item"> </span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
 	</tr>
+	<tr>
+		<td class="item">Zlib compression Support</td>
+		<td align="left">
+		<?php 
+			echo (!extension_loaded('zlib')) ? '<b class="error">'.$failedImg.'</b> <span class="item">Some non-core modules may have restricted operation.</span>' : '<b class="ok">'.$okImg.'</b>';
+		?>
+		</td>
+	</tr>
+	
 	<tr>
 		<td class="title" colspan="2"><br/>Recommended PHP Settings</td>
 	</tr>

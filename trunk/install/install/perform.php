@@ -13,6 +13,8 @@
 	$dbname = trim( w2PgetCleanParam( $_POST, 'dbname', '' ) );
 	$dbuser = trim( w2PgetCleanParam( $_POST, 'dbuser', '' ) );
 	$dbpass = trim( w2PgetCleanParam( $_POST, 'dbpass', '' ) );
+	$dbprefix = trim( w2PgetCleanParam( $_POST, 'dbprefix', '' ) );
+	//TODO: add support for database prefixes
 	$adminpass = trim( w2PgetCleanParam( $_POST, 'adminpass', 'passwd' ) );
 	$dbpersist = w2PgetCleanParam( $_POST, 'dbpersist', false );
 
@@ -135,6 +137,7 @@
 				$config = str_replace('[DBNAME]', $dbname, $config);
 				$config = str_replace('[DBUSER]', $dbuser, $config);
 				$config = str_replace('[DBPASS]', $dbpass, $config);
+				$config = str_replace('[DBPREFIX]', $dbprefix, $config);
 				//TODO: add support for configurable persistent connections
 			
 				$config = trim($config);
@@ -166,19 +169,19 @@
 		<td class="item" align="left"><b style="color:<?php echo $cFileErr ? 'red' : 'green'; ?>"><?php echo $cFileMsg; ?></b></td>
 	</tr>
 	<?php if(($do_cfg || $do_db_cfg) && $cFileErr){ ?>
-	<tr>
-		<td class="item" align="left" colspan="2">The following Content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand. Delete all empty lines and empty spaces after '?>' and save. This file should be readable by the webserver.</td>
-	</tr>
-	<tr>
-		<td align="center" colspan="2"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation." /><?php echo $msg.$config; ?></textarea></td>
-	</tr>
+		<tr>
+			<td class="item" align="left" colspan="2">The following Content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand and save.  This file must be readable by the webserver.</td>
+		</tr>
+		<tr>
+			<td align="center" colspan="2"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation." /><?php echo $msg.$config; ?></textarea></td>
+		</tr>
 	<?php } ?>
 	<tr>
 		<td class="item" align="center" colspan="2"><br/><b><a href="<?php echo '../index.php?m=system&a=systemconfig'; ?>">Login and Configure the web2project System Environment</a></b></td>
 	</tr>
 	<tr>
 		<td class="item" align="center" colspan="2">
-			<p>The Administrator login has been set to <b>admin</b> with the password <?php echo ($adminpass == 'passwd') ? 'of <b>passwd</b>' : 'you set' ?>.</b>. It is a good idea to change this password when you first log in</p>
+			<p>The Administrator login has been set to <b>admin</b> with the password <?php echo ($adminpass == 'passwd') ? 'of <b>passwd</b>' : 'you set' ?></b>. It is a good idea to change this password when you first log in</p>
 		</td>
 	</tr>
 </table>

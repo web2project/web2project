@@ -11,6 +11,7 @@
 		private $uploadDir = '';
 		private $languageDir = '';
 		private $tempDir = '';
+		private $configOptions = array();
 		
 		public function getActionRequired() {
 
@@ -23,6 +24,7 @@
 	
 					//TODO: Add check to see if the user has access to system admin
 					if (isset($dPconfig)) {
+						$this->configOptions = $dPconfig;
 						$this->action = 'convert';
 					} else {
 						$this->action = 'upgrade';
@@ -54,6 +56,21 @@
 		}
 		public function getTempDir() {
 			return $this->tempDir;
+		}
+		public function getConfigOptions() {
+			return $this->configOptions;
+		}
+		
+		public function convertDotProject() {
+			//TODO: get dP version
+			//TODO: apply the changes for each step
+			switch ($dpVersion) {
+				case '1.0':
+					echo $dpVersion;
+					break;
+				default:
+					echo 'apply some changes';
+			}
 		}
 	}
 ?>

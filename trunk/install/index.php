@@ -66,7 +66,18 @@
 					<tr>
 						<td colspan="2">This is where the conversion script kicks in.</td>
 					</tr>
+					<?php if ($step == '') { ?>
+						<tr>
+							<td colspan="2">
+								When you're ready to being, simply 
+							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form">
+							  	<input type="hidden" name="step" value="check" />
+							  	<input class="button" type="submit" name="next" value="Start Conversion &raquo;" />
+								</form>
+							</td>
+						</tr>
 					<?php
+					}
 					break;
 				case 'upgrade':
 					?>
@@ -82,17 +93,23 @@
 					</tr>
 					<?php
 			}
-
-			switch ($step) {
-				case 'check':
+echo $action.'/'.$step;
+			switch ($action.'/'.$step) {
+				case 'install/check':
 					include_once('install/check.php');
 					break;
-				case 'dbcreds':
+				case 'install/dbcreds':
 					include_once('install/dbcreds.php');
 					break;
-				case 'perform':
+				case 'install/perform':
 					include_once('install/perform.php');
-					break;					
+					break;
+				case 'convert/check':
+					include_once('convert/check.php');
+					break;
+				case 'convert/perform':
+					include_once('convert/perform.php');
+					break;
 				default:
 					//do nothing
 			}
