@@ -185,20 +185,21 @@
 				case '2.1':
 				case '2.1.1':
 				case '2.1.2':
-					$errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
+					//$errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
+					//$allErrors = array_merge($allErrors, $errorMessages);
 
 					$recordsUpdated = $this->_scrubDotProjectData($dbConn);
 
-					$errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
+					//$errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
+					//$allErrors = array_merge($allErrors, $errorMessages);
 
-					$errorMessages = $this->upgradeSystem($dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
+					//$errorMessages = $this->upgradeSystem($dbConn);
+					//$allErrors = array_merge($allErrors, $errorMessages);
 
 					break;
 				default:
-					$allErrors[] = "Unfortunately, we can't upgrade from versions of dotProject prior to the official 2.0 release.  Please upgrade to dotProject 2.x first.";
+					$allErrors[] = "Unfortunately, we can't determine which version of dotProject you're using.  To be safe, we're not going to do anything.";
+					$allErrors[] = "If you are using dotProject 1.x, please use their methods to upgrade to dotProject v2.x before you go any further.";
 			}
 			
 			return $allErrors;
@@ -223,8 +224,7 @@
 					$values = explode("\n", $fields['sysval_value']); 
 					foreach ($values as $syskey) {
 						$sysvalValId = substr($syskey, 0, strpos($syskey, '|'));
-						$sysvalValue = substr($syskey, strpos($syskey, '|') + 1, -1);
-						
+						$sysvalValue = substr(trim(' '.$syskey.' '), strpos($syskey, '|') + 1);
 						$sql = "INSERT INTO sysvals (sysval_key_id, sysval_title, sysval_value, sysval_value_id) " .
 								"VALUES ($sysvalKeyId, '$sysvalTitle', '$sysvalValue', $sysvalValId)";
 						$dbConn->Execute($sql);
