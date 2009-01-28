@@ -93,7 +93,7 @@
 					</tr>
 					<?php
 			}
-echo $action.'/'.$step;
+//echo $action.'/'.$step;
 			switch ($action.'/'.$step) {
 				case 'install/check':
 					include_once('install/check.php');

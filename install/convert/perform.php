@@ -7,34 +7,55 @@
 	<tr>
 		<td class="title" colspan="2">Step 3: Update Database &amp; Write Configuration</td>
 	</tr>
-	<tr>
-		<td colspan="2">
-			<pre><?php $manager->convertDotProject(); ?></pre>
-		</td>
-	</tr>
 	<?php
+		$errorMessages = $manager->convertDotProject();
 
-	$dpConfig = $manager->getConfigOptions();
-	$config = file_get_contents('../includes/config-dist.php');
-	$config = str_replace('[DBTYPE]', $dpConfig['dbtype'], $config);
-	$config = str_replace('[DBHOST]', $dpConfig['dbhost'], $config);
-	$config = str_replace('[DBNAME]', $dpConfig['dbname'], $config);
-	$config = str_replace('[DBUSER]', $dpConfig['dbuser'], $config);
-	$config = str_replace('[DBPASS]', $dpConfig['dbpass'], $config);
-	$config = str_replace('[DBPREFIX]', '', $config);
-	//TODO: add support for configurable persistent connections
+		if (count($errorMessages) > 0) {
+			?>
+			<tr>
+				<td colspan="2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the system update.</b></td>
+			</tr>
+			<?php
+			foreach ($errorMessages as $message) {
+				?>
+				<tr><td colspan="2"><?php echo $message; ?></td></tr>
+				<?php
+			}
+			?>
+			<tr>
+				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.  It's possible that your dotProject database was not the version it claimed to be.</td>
+			</tr>
+			<?php
+		} else {
+			?>
+			<tr>
+				<td colspan="2">Your system update went smoothly without any errors.</td>
+			</tr>
+			<?php
+		}
 
-	$config = trim($config);
+		$dpConfig = $manager->getConfigOptions();
+		$config = file_get_contents('../includes/config-dist.php');
+		$config = str_replace('[DBTYPE]', $dpConfig['dbtype'], $config);
+		$config = str_replace('[DBHOST]', $dpConfig['dbhost'], $config);
+		$config = str_replace('[DBNAME]', $dpConfig['dbname'], $config);
+		$config = str_replace('[DBUSER]', $dpConfig['dbuser'], $config);
+		$config = str_replace('[DBPASS]', $dpConfig['dbpass'], $config);
+		$config = str_replace('[DBPREFIX]', '', $config);
+		//TODO: add support for configurable persistent connections
 
-	if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
-		fputs( $fp, $config, strlen( $config ) );
-		fclose( $fp );
-		$cFileMsg = 'Config file written successfully'."\n";
-	} else {
-		$cFileErr = true;
-		$cFileMsg = 'Config file could not be written'."\n";
-	}
+		$config = trim($config);
+	
+		if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
+			fputs( $fp, $config, strlen( $config ) );
+			fclose( $fp );
+			$cFileMsg = 'Config file written successfully'."\n";
+		} else {
+			$cFileErr = true;
+			$cFileMsg = 'Config file could not be written'."\n";
+		}
 	?>
+	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 		<td class="title">Config File Creation Feedback:</td>
 		<td class="item" align="left"><b style="color:<?php echo $cFileErr ? 'red' : 'green'; ?>"><?php echo $cFileMsg; ?></b></td>
