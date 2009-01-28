@@ -2369,4 +2369,5 @@ CREATE TABLE `w2pversion` (
 -- Dumping data for table `w2pversion`
 --
 
-INSERT INTO `w2pversion` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`) VALUES (199, '0.9.9', 1, '2008-08-05', '2008-08-05');
+INSERT INTO `w2pversion` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`) 
+	VALUES (199, '0.9.9', 1, now(), now());

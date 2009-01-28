@@ -93,22 +93,21 @@
 					</tr>
 					<?php
 			}
-//echo $action.'/'.$step;
+
 			switch ($action.'/'.$step) {
 				case 'install/check':
-					include_once('install/check.php');
-					break;
 				case 'install/dbcreds':
-					include_once('install/dbcreds.php');
-					break;
 				case 'install/perform':
-					include_once('install/perform.php');
-					break;
 				case 'convert/check':
-					include_once('convert/check.php');
-					break;
 				case 'convert/perform':
-					include_once('convert/perform.php');
+				case 'upgrade/check':
+				case 'upgrade/perform':
+					/*
+					 *  Doing  something like this is often a security risk.  It's not in
+					 * this case as we know *exactly* what both $action and $step will be
+					 * if we reach this include.
+					 */
+					include_once $action.'/'.$step.'.php';
 					break;
 				default:
 					//do nothing
