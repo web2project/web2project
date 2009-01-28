@@ -5,7 +5,7 @@
 ?>
 <table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
 	<tr>
-		<td class="title" colspan="2">Step 3: Update Database &amp; Write Configuration</td>
+		<td class="title" colspan="2">Step 2: Update Database &amp; Write Configuration</td>
 	</tr>
 	<?php
 		$errorMessages = $manager->convertDotProject();

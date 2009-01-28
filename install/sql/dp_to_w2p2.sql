@@ -20,8 +20,8 @@
 -- (C) 2008 WEB2PROJECT DEVELOPMENT TEAM
 --
 
-ALTER TABLE `projects` ADD `project_parent` INT(11) DEFAULT 0 NOT NULL;
-ALTER TABLE `projects` ADD `project_original_parent` INT(11) DEFAULT 0 NOT NULL;
+ALTER TABLE `projects` ADD `project_parent` INT(10) DEFAULT 0 NOT NULL;
+ALTER TABLE `projects` ADD `project_original_parent` INT(10) DEFAULT 0 NOT NULL;
 ALTER TABLE `projects` ADD `project_location` VARCHAR(255) DEFAULT "" NOT NULL;
 ALTER TABLE `companies` ADD `company_country` VARCHAR(100) DEFAULT '' NOT NULL;
 INSERT INTO `config` VALUES (0, 'activate_external_user_creation', 'true', '', 'checkbox');
@@ -38,8 +38,8 @@ ALTER TABLE `modules` ADD `mod_main_class` varchar(30) NOT NULL default '';
 -- 
 
 CREATE TABLE `tasks_critical` (
-  `task_project` int(11) default NULL,
-  `critical_task` int(11) default NULL,
+  `task_project` INT(10) default NULL,
+  `critical_task` INT(10) default NULL,
   `project_actual_end_date` datetime default NULL
 ) ENGINE=MyISAM;
 
@@ -50,7 +50,7 @@ CREATE TABLE `tasks_critical` (
 -- 
 
 CREATE TABLE `tasks_problems` (
-  `task_project` int(11) default NULL,
+  `task_project` INT(10) default NULL,
   `task_log_problem` tinyint(1) default NULL
 ) ENGINE=MyISAM;
 
@@ -61,7 +61,7 @@ CREATE TABLE `tasks_problems` (
 -- 
 
 CREATE TABLE `tasks_sum` (
-  `task_project` int(11) default NULL,
+  `task_project` INT(10) default NULL,
   `total_tasks` int(6) default NULL,
   `project_percent_complete` varchar(11) default NULL,
   `project_duration` varchar(11) default NULL
@@ -74,7 +74,7 @@ CREATE TABLE `tasks_sum` (
 -- 
 
 CREATE TABLE `tasks_summy` (
-  `task_project` int(11) default NULL,
+  `task_project` INT(10) default NULL,
   `my_tasks` varchar(10) default NULL
 ) ENGINE=MyISAM;
 
@@ -85,8 +85,8 @@ CREATE TABLE `tasks_summy` (
 -- 
 
 CREATE TABLE `tasks_total` (
-  `task_project` int(11) default NULL,
-  `total_tasks` int(11) default NULL
+  `task_project` INT(10) default NULL,
+  `total_tasks` INT(10) default NULL
 ) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
@@ -96,8 +96,8 @@ CREATE TABLE `tasks_total` (
 -- 
 
 CREATE TABLE `tasks_users` (
-  `task_project` int(11) default NULL,
-  `user_id` int(11) default NULL
+  `task_project` INT(10) default NULL,
+  `user_id` INT(10) default NULL
 ) ENGINE=MyISAM;
 
 #Fix the permissions fields of the modules table to properly use the permissions system
@@ -492,8 +492,8 @@ DELETE FROM project_departments USING project_departments LEFT JOIN departments 
 #New fields needed for departments and user deletion check
 ALTER TABLE `departments` ADD `dept_email` VARCHAR(255) DEFAULT '' NOT NULL;
 ALTER TABLE `departments` ADD `dept_type` INT(3) UNSIGNED NOT NULL DEFAULT '0';
-ALTER TABLE `projects` ADD `project_updator` INT(11) DEFAULT 0 NOT NULL;
-ALTER TABLE `tasks` ADD `task_updator` INT(11) DEFAULT 0 NOT NULL;
+ALTER TABLE `projects` ADD `project_updator` INT(10) DEFAULT 0 NOT NULL;
+ALTER TABLE `tasks` ADD `task_updator` INT(10) DEFAULT 0 NOT NULL;
 
 #new PHPMailer SMTP options
 INSERT INTO `config` VALUES(0, 'mail_secure', '', 'mail', 'select');
@@ -595,3 +595,10 @@ DELETE FROM `config` WHERE `config_name` = 'link_tickets_kludge';
 # By changing those fields data types from VARCHAR to FLOAT.
 ALTER TABLE `tasks_sum` CHANGE `project_percent_complete` `project_percent_complete` FLOAT NULL DEFAULT NULL;
 ALTER TABLE `tasks_sum` CHANGE `project_duration` `project_duration` FLOAT NULL DEFAULT NULL; 
+
+#20090128
+ALTER TABLE `w2pversion` ADD `code_revision` INT( 10 ) NOT NULL FIRST ;
+ALTER TABLE `w2pversion` ADD PRIMARY KEY ( `code_revision` );
+TRUNCATE TABLE `w2pversion`;
+INSERT INTO `w2pversion` (`code_revision` ,`code_version` ,`db_version` ,`last_db_update` ,`last_code_update`)
+	VALUES ('250', '0.9.9', '1', now(), now());

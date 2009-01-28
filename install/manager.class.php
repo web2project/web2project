@@ -62,7 +62,19 @@
 		public function getConfigOptions() {
 			return $this->configOptions;
 		}
-		
+
+		public function upgradeSystem($dbConn) {
+			$errorMessages = array();
+
+			$sql = "SELECT max(db_version) FROM w2pversion";
+			$res = $dbConn->Execute($sql);
+			if ($res && $res->RecordCount() > 0) {
+				$w2pVersion = $res->fields['db_version'];
+			}
+			//TODO: Iterate over database update scripts applying each one as we go.
+
+			return $errorMessages;
+		}
 		public function convertDotProject() {
 			$dpVersion = '';
 
@@ -98,6 +110,10 @@
 
 					$errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
 					$allErrors = array_merge($allErrors, $errorMessages);
+
+					$errorMessages = $this->upgradeSystem($dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
+
 					break;
 				default:
 					$allErrors[] = "Unfortunately, we can't upgrade from versions of dotProject prior to the official 2.0 release.  Please upgrade to dotProject 2.x first.";
