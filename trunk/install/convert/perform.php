@@ -13,8 +13,8 @@
 		</td>
 	</tr>
 	<?php
-	$dpConfig = $manager->getConfigOptions();
 
+	$dpConfig = $manager->getConfigOptions();
 	$config = file_get_contents('../includes/config-dist.php');
 	$config = str_replace('[DBTYPE]', $dpConfig['dbtype'], $config);
 	$config = str_replace('[DBHOST]', $dpConfig['dbhost'], $config);
