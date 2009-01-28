@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -18,10 +18,10 @@ if (!defined('W2P_BASE_DIR')) {
 
 $w2Pconfig['dbtype'] = '[DBTYPE]'; // ONLY MySQL is supported at present
 $w2Pconfig['dbhost'] = '[DBHOST]';
-$w2Pconfig['dbname'] = '[DBNAME]'; // Change to match your web2Project Database Name
-$w2Pconfig['dbuser'] = '[DBUSER]'; // Change to match your MySQL Username
-$w2Pconfig['dbpass'] = '[DBPASS]'; // Change to match your MySQL Password
-$w2Pconfig['dbprefix'] = ''; // Change to match the prefix used for db table names, example: $w2Pconfig['dbprefix'] = 'w2p_prefix_';
+$w2Pconfig['dbname'] = '[DBNAME]'; // Your web2Project Database Name
+$w2Pconfig['dbuser'] = '[DBUSER]'; // Your MySQL Username
+$w2Pconfig['dbpass'] = '[DBPASS]'; // Your MySQL Password
+$w2Pconfig['dbprefix'] = '[DBPREFIX]'; // The prefix used for db table names
 
 // set this value to true to use persistent database connections
 $w2Pconfig['dbpersist'] = false;
