@@ -81,10 +81,6 @@ class w2Pacl extends gacl_api {
 		}
 
 		$result = $this->w2Pacl_check('application', $op, 'user', $userid, 'app', $module);
-		//print_r('hi:'.$module.$op.$userid.'>'.$result.' ');
-		//$result = $this->checkModuleItem($module, $op, '0', $userid);
-
-		//dprint(__file__, __line__, 2, "checkModule( $module, $op, $userid) returned $result");
 		return $result;
 	}
 
@@ -98,14 +94,10 @@ class w2Pacl extends gacl_api {
 
 		$result = $this->w2Pacl_query('application', $op, 'user', $userid, $module, $item);
 		// If there is no acl_id then we default back to the parent lookup
-		/*print_r('hi:'.$module.$op.$userid.'>'.$item.'='.$result.' ');
-		print_r($result);*/
 		if (!$result || !$result['acl_id']) {
 			dprint(__file__, __line__, 2, "checkModuleItem($module, $op, $userid) did not return a record");
-			//return $this->checkModule($module, $op, $userid);
 			return false;
 		}
-		//dprint(__file__, __line__, 2, "checkModuleItem($module, $op, $userid) returned $result[access]");
 		return $result['access'];
 	}
 
