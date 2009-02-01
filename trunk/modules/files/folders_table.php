@@ -332,14 +332,23 @@ function getFolders($parent, $level = 0) {
 		}
 		// call this function again to display this
 		// child's children
+		// getFolders *always* returns true, so there's no point in checking it
+		$s .= getFolders($row['file_folder_id'], $level + 1).'</li></ul>';
+/*
 		if (!getFolders($row['file_folder_id'], $level + 1)) {
 			$s .= '</li>';
 		} else {
 			$s .= '</li></ul>';
 		}
+*/
 	}
-	echo $s;
-	return true;
+	/*
+	 *  getFolders  would *alway* return true and would echo the results.  It
+	 * makes more sense to simply return the results.  Then the calling code can
+	 * echo it, capture it for parsing, or whatever else needs to be done.  There
+	 * should be less inadvertent actions as a result.
+	 */
+	return $s;
 }
 
 function countFiles($folder) {
@@ -667,10 +676,6 @@ function displayFiles($folder) {
 /**** Main Program ****/
 $canEdit = !getDenyEdit($m);
 $canRead = !getDenyRead($m);
-//echo $folder . ":" . $canEdit . ":" . $canRead;
-//if (!$canEdit && !$canRead) {
-//	$AppUI->redirect( "m=public&a=access_denied" );
-//}
 
 if ($folder > 0) {
 	$cfObj->load($folder);
@@ -711,11 +716,11 @@ if ($cfObj->file_folder_description != ''): ?>
 <?php
 endif;
 if (countFiles($folder) > 0) {
-	displayfiles($folder);
+	echo displayfiles($folder);
 } elseif (!$limited or $folder != 0) {
 	echo $AppUI->_('no files');
 }
-getFolders($folder);
+echo getFolders($folder);
 ?>
 </div>
 
