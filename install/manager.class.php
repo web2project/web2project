@@ -27,23 +27,24 @@
 					if (isset($dPconfig)) {
 						$this->configOptions = $dPconfig;
 						$this->action = 'convert';
-					} else {
+					} elseif (isset($w2Pconfig)) {
 						$this->configOptions = $w2Pconfig;
 						$this->action = 'upgrade';
+					} else {
+						/*
+						 *  This  case should never be reached because if there is a config.
+						 * php file, it should load either the $dPconfig or $w2Pconfig
+						 * depending on whether it's an conversion or upgrade respectively.
+						 * If we reach here, we have this strange situation of a mostly
+						 * "configured" system that doesn't have the configuration values
+						 * required.
+						 */
+						$this->action = 'install';
 					}
 				}
 			}
 			return $this->action;
 		}
-
-		private function _prepareConfiguration() {
-			$this->configDir = W2P_BASE_DIR.'/includes';
-			$this->configFile = W2P_BASE_DIR.'/includes/config.php';
-			$this->uploadDir = W2P_BASE_DIR.'/files';
-			$this->languageDir = W2P_BASE_DIR.'/locales/en';
-			$this->tempDir = W2P_BASE_DIR.'/files/temp';
-		}
-		
 		public function getConfigDir() {
 			return $this->configDir;
 		}
@@ -62,7 +63,6 @@
 		public function getConfigOptions() {
 			return $this->configOptions;
 		}
-
 		public function upgradeSystem() {
 			$allErrors = array();
 
@@ -89,6 +89,67 @@
 
 			return $allErrors;
 		}
+		public function convertDotProject() {
+			$dpVersion = '';
+
+			$allErrors = array();
+			$dbConn = $this->_openDBConnection();
+			$sql = "SELECT * FROM dpversion ORDER BY db_version DESC";
+			$res = $dbConn->Execute($sql);
+			if ($res && $res->RecordCount() > 0) {
+				$dpVersion = $res->fields['code_version'];
+			}
+
+			switch ($dpVersion) {
+				case '2.0':
+					$errorMessages = $this->_applySQLUpdates('dp20_to_201.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
+				case '2.0.1':
+					$errorMessages = $this->_applySQLUpdates('dp201_to_202.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
+				case '2.0.2':
+				case '2.0.3':
+				case '2.0.4':
+				case '2.1-rc1':
+					$errorMessages = $this->_applySQLUpdates('dp21rc1_to_21rc2.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
+				case '2.1-rc2':
+				case '2.1':
+				case '2.1.1':
+				case '2.1.2':
+					$errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
+
+					$recordsUpdated = $this->_scrubDotProjectData($dbConn);
+
+					$errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
+
+					$errorMessages = $this->upgradeSystem($dbConn);
+					$allErrors = array_merge($allErrors, $errorMessages);
+
+					break;
+				default:
+					$allErrors[] = "Unfortunately, we can't determine which version of dotProject you're using.  To be safe, we're not going to do anything.";
+					$allErrors[] = "If you are using dotProject 1.x, please use their methods to upgrade to dotProject v2.x before you go any further.";
+			}
+			
+			return $allErrors;
+		}
+		public function createConfigString($dbConfig) {
+			$configFile = file_get_contents('../includes/config-dist.php');
+			$configFile = str_replace('[DBTYPE]', $dbConfig['dbtype'], $configFile);
+			$configFile = str_replace('[DBHOST]', $dbConfig['dbhost'], $configFile);
+			$configFile = str_replace('[DBNAME]', $dbConfig['dbname'], $configFile);
+			$configFile = str_replace('[DBUSER]', $dbConfig['dbuser'], $configFile);
+			$configFile = str_replace('[DBPASS]', $dbConfig['dbpass'], $configFile);
+			$configFile = str_replace('[DBPREFIX]', '', $configFile);
+			//TODO: add support for configurable persistent connections
+			$configFile = trim($configFile);
+
+			return $configFile;
+		}
+
 		private function _getMaxVersion() {
 			$migrations = array();
 
@@ -104,9 +165,13 @@
 
 			return $migrations;
 		}
-
-
-
+		private function _prepareConfiguration() {
+			$this->configDir = W2P_BASE_DIR.'/includes';
+			$this->configFile = W2P_BASE_DIR.'/includes/config.php';
+			$this->uploadDir = W2P_BASE_DIR.'/files';
+			$this->languageDir = W2P_BASE_DIR.'/locales/en';
+			$this->tempDir = W2P_BASE_DIR.'/files/temp';
+		}
 		private function _applySQLUpdates($sqlfile, $dbConn) {
 			$sqlfile = W2P_BASE_DIR.'/install/sql/'.$sqlfile;
 			if (!file_exists($sqlfile) || filesize($sqlfile) == 0) {
@@ -155,54 +220,6 @@
 				$dbConnection = false;
 			}
 			return $db;
-		}
-
-		public function convertDotProject() {
-			$dpVersion = '';
-
-			$allErrors = array();
-			$dbConn = $this->_openDBConnection();
-			$sql = "SELECT * FROM dpversion ORDER BY db_version DESC";
-			$res = $dbConn->Execute($sql);
-			if ($res && $res->RecordCount() > 0) {
-				$dpVersion = $res->fields['code_version'];
-			}
-
-			switch ($dpVersion) {
-				case '2.0':
-					$errorMessages = $this->_applySQLUpdates('dp20_to_201.sql', $dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
-				case '2.0.1':
-					$errorMessages = $this->_applySQLUpdates('dp201_to_202.sql', $dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
-				case '2.0.2':
-				case '2.0.3':
-				case '2.0.4':
-				case '2.1-rc1':
-					$errorMessages = $this->_applySQLUpdates('dp21rc1_to_21rc2.sql', $dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
-				case '2.1-rc2':
-				case '2.1':
-				case '2.1.1':
-				case '2.1.2':
-					$errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
-
-					$recordsUpdated = $this->_scrubDotProjectData($dbConn);
-
-					$errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
-
-					$errorMessages = $this->upgradeSystem($dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
-
-					break;
-				default:
-					$allErrors[] = "Unfortunately, we can't determine which version of dotProject you're using.  To be safe, we're not going to do anything.";
-					$allErrors[] = "If you are using dotProject 1.x, please use their methods to upgrade to dotProject v2.x before you go any further.";
-			}
-			
-			return $allErrors;
 		}
 		private function _scrubDotProjectData($dbConn) {			
 			/*

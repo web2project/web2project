@@ -113,7 +113,7 @@
 					} else {
 						$dbMsg = 'Database successfully setup<br />';
 					}
-				
+
 					w2pmsg('Updating version information');
 					// No matter what occurs we should update the database version in the w2pversion table.
 					if (empty($lastDBUpdate)) {
@@ -131,17 +131,11 @@
 					}
 				}
 
-				$config = file_get_contents('../includes/config-dist.php');
-				$config = str_replace('[DBTYPE]', $dbtype, $config);
-				$config = str_replace('[DBHOST]', $dbhost, $config);
-				$config = str_replace('[DBNAME]', $dbname, $config);
-				$config = str_replace('[DBUSER]', $dbuser, $config);
-				$config = str_replace('[DBPASS]', $dbpass, $config);
-				$config = str_replace('[DBPREFIX]', $dbprefix, $config);
-				//TODO: add support for configurable persistent connections
-			
-				$config = trim($config);
-			
+				$dbConfig = array ('dbtype' => $dbtype, 'dbhost' => $dbhost, 
+						'dbname' => $dbname, 'dbuser' => $dbuser, 'dbpass' => $dbpass, 
+						'prefix' => $dbprefix);
+				$config = $manager->createConfigString($dbConfig);
+
 				if ($do_cfg || $do_db_cfg){
 					if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
 						fputs( $fp, $config, strlen( $config ) );

@@ -46,7 +46,7 @@
 				case 'install':
 					?>
 					<tr>
-						<td colspan="2">This system will help you perform each of the required steps to prepare your web2project installation.</td>
+						<td colspan="2">This system will help you perform each of the required steps to prepare your web2project installation.  It's a three step process.  First we'll confirm that all the requirements are met, then we'll get the database credentials, then we'll load the system.</td>
 					</tr>
 					<?php if ($step == '') { ?>
 						<tr>
@@ -64,7 +64,7 @@
 				case 'convert':
 					?>
 					<tr>
-						<td colspan="2">This is where the conversion script kicks in.</td>
+						<td colspan="2">This is where the conversion script kicks in.  It's a two step process.  First we'll confirm that all the requirements are met, then we'll convert your existing data.<br />You shouldn't have to do anything manually except log in at the end.</td>
 					</tr>
 					<?php if ($step == '') { ?>
 						<tr>
