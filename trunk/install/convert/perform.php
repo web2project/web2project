@@ -35,17 +35,8 @@
 		}
 
 		$dpConfig = $manager->getConfigOptions();
-		$config = file_get_contents('../includes/config-dist.php');
-		$config = str_replace('[DBTYPE]', $dpConfig['dbtype'], $config);
-		$config = str_replace('[DBHOST]', $dpConfig['dbhost'], $config);
-		$config = str_replace('[DBNAME]', $dpConfig['dbname'], $config);
-		$config = str_replace('[DBUSER]', $dpConfig['dbuser'], $config);
-		$config = str_replace('[DBPASS]', $dpConfig['dbpass'], $config);
-		$config = str_replace('[DBPREFIX]', '', $config);
-		//TODO: add support for configurable persistent connections
+		$config = $manager->createConfigString($dpConfig);
 
-		$config = trim($config);
-	
 		if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
 			fputs( $fp, $config, strlen( $config ) );
 			fclose( $fp );

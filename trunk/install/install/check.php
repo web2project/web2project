@@ -258,7 +258,7 @@
 		  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form">
 		  	<?php if ($continue) { ?>
 		  		<input type="hidden" name="step" value="dbcreds" />
-		  		<input class="button" type="submit" name="next" value="Continue to Step 2 &raquo;" />
+		  		<input class="button" type="submit" name="next" value="Set System Credentials &raquo;" />
 		  	<?php } else { ?>
 		  		<input class="button" type="button" value="Installation Stopped" onClick="alert('The above issues must be fixed before continuing.')" />
 		  	<?php } ?> 
