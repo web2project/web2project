@@ -171,7 +171,7 @@
 		</tr>
 	<?php } ?>
 	<tr>
-		<td class="item" align="center" colspan="2"><br/><b><a href="<?php echo '../index.php?m=system&a=systemconfig'; ?>">Login and Configure the web2project System Environment</a></b></td>
+		<td class="item" align="center" colspan="2"><br/><b><a href="../index.php?m=system&amp;a=systemconfig">Login and Check the web2project System Environment</a></b></td>
 	</tr>
 	<tr>
 		<td class="item" align="center" colspan="2">

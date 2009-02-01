@@ -9,6 +9,11 @@ $perms = &$AppUI->acl();
 if (!$perms->checkModule('system', 'edit')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
+$reset = intval(w2PgetParam($_GET, 'reset', 0));
+if ($reset == 1) {
+	$obj = &$AppUI->acl();
+	$obj->recalcPermissions();
+} 
 
 $w2Pcfg = new CConfig();
 
@@ -75,22 +80,14 @@ foreach ($rs as $c) {
 	';
 
 }
-echo '<form name="cfgFrm" action="index.php?m=system&a=systemconfig" method="post">';
 ?>
-<input type="hidden" name="dosql" value="do_systemconfig_aed" />
-<table cellspacing="0" cellpadding="3" border="0" class="std" width="100%" align="center">
-	<?php
-echo '<tr><td colspan="2">';
-if (is_dir(W2P_BASE_DIR . '/install')) {
-	$AppUI->setMsg('You have not removed your install directory, this is a major security risk!', UI_MSG_ALERT);
-	echo '<span class="error">' . $AppUI->getMsg() . '</span>';
-}
-echo $AppUI->_('syscfg_intro');
-echo '</td></tr>';
-
-echo $output;
-?>
-	<tr>
- 		<td align="right" colspan="2"><input class="button" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('Save'); ?>" /></td>
-	</tr>
-</table></form>
+<form name="cfgFrm" action="index.php?m=system&a=systemconfig" method="post">
+	<input type="hidden" name="dosql" value="do_systemconfig_aed" />
+	<table cellspacing="0" cellpadding="3" border="0" class="std" width="100%" align="center">
+		<tr><td colspan="2"><?php echo $AppUI->_('syscfg_intro'); ?></td></tr>
+		<?php echo $output; ?>
+		<tr>
+	 		<td align="right" colspan="2"><input class="button" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('Save'); ?>" /></td>
+		</tr>
+	</table>
+</form>
