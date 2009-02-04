@@ -11,10 +11,14 @@ $post_message = isset($_GET['post_message']) ? w2PgetParam($_GET, 'post_message'
 $f = w2PgetParam($_POST, 'f', 0);
 
 // check permissions
-$canRead = !getDenyRead($m, $forum_id);
-$canEdit = !getDenyEdit($m, $forum_id);
+$perms = &$AppUI->acl();
+$canAuthor = $perms->checkModule('forums', 'add');
+$canDelete = $perms->checkModule('forums', 'delete');
+$canRead = $perms->checkModuleItem('forums', 'view', $forum_id);
+$canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
+$canAdminEdit = $perms->checkModule('admin', 'edit');
 
-if (!$canRead || ($post_message & !$canEdit)) {
+if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
