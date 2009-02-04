@@ -307,3 +307,4 @@ class bcode extends CW2pObject {
 		}
 	}
 }
+?>
