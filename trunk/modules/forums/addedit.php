@@ -21,13 +21,6 @@ if (!$canEdit && $forum_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// check permissions for this record
-$canAdd = $perms->checkModule($m, 'add');
-$canEdit = $perms->checkModuleItem($m, 'edit', $forum_id);
-if (!$canEdit || !$canAdd) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
-
 // load the companies class to retrieved denied projects
 require_once ($AppUI->getModuleClass('projects'));
 

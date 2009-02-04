@@ -2,20 +2,14 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-
 // Add / Edit forum
 $message_id = isset($_GET['message_id']) ? w2PgetParam($_GET, 'message_id', 0) : 0;
 $message_parent = isset($_GET['message_parent']) ? w2PgetParam($_GET, 'message_parent', null) : -1;
 $forum_id = w2PgetParam($_REQUEST, 'forum_id', 0);
 
 $perms = &$AppUI->acl();
-$canAdd = $perms->checkModuleItem('forums', 'view', $forum_id);
+$canAdd = $perms->checkModuleItem('forums', 'add');
 $canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
-
-// check permissions
-if (!$canAdd) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
 
 // Build a back-url for when the back button is pressed
 $back_url_params = array();
@@ -36,16 +30,14 @@ $q->addWhere('forums.forum_project = projects.project_id');
 $res = $q->exec();
 $forum_info = $q->fetchRow();
 $q->clear();
-echo db_error();
 
 //pull message information
 $q = new DBQuery;
 $q->addTable('forum_messages');
 $q->addQuery('forum_messages.*, user_username');
-$q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
+$q->leftJoin('users', 'u', 'message_author = u.user_id');
 $q->addWhere('message_id = ' . (int)($message_id ? $message_id : $message_parent));
 $res = $q->exec();
-echo db_error();
 $message_info = $q->fetchRow();
 $q->clear();
 
@@ -56,7 +48,6 @@ if ($message_parent != -1) {
 	$q->addOrder('message_id DESC'); // fetch last message first
 	$q->setLimit(1);
 	$res = $q->exec();
-	echo db_error();
 	$last_message_info = $q->fetchRow();
 	if (!$last_message_info) { // if it's first response, use original message
 		$last_message_info = &$message_info;
@@ -65,6 +56,11 @@ if ($message_parent != -1) {
 		$last_message_info['message_body'] = str_replace("\n", "\n> ", $last_message_info['message_body']);
 	}
 	$q->clear();
+}
+
+// check permissions
+if (!((($canEdit || $AppUI->user_id == $forum_info['forum_moderated'] || $AppUI->user_id == $message_info['message_author'] || $perms->checkModule('admin', 'edit')) && ($message_info['message_id'])) || ($canAdd && !$message_info['message_id']))) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
 $crumbs = array();
@@ -79,7 +75,7 @@ if ($message_parent > -1) {
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-if ($canEdit) {
+if ($canEdit || $canAdd) {
 ?>
 function submitIt(){
 	var form = document.changeforum;
@@ -152,7 +148,7 @@ if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the
 <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
 <?php 
 	$message = $bbparser->qparse($message_info['message_body']);
-	$message = str_replace(chr(13), '&nbsp;<br />', $message);
+	$message = nl2br($message);
 	echo $message; 
 ?></td></tr>
 <tr><td colspan="2" align="left"><hr /></td></tr>
@@ -199,9 +195,7 @@ if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the
 		<input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';" />
 	</td>
 	<td align="right"><?php
-if (($canEdit && ($AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $perms->checkModule('admin', 'edit'))) || ($canAdd && !$row['message_id'])) {
 	echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()">';
-}
 ?></td>
 </tr>
 </form>

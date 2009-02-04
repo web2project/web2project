@@ -55,7 +55,7 @@ if ($viewtype != 'normal') {
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-if ($canEdit) {
+if ($canAuthor || $canEdit) {
 ?>
 function delIt(id) {
 	var form = document.messageForm;
@@ -100,7 +100,7 @@ if (function_exists('styleRenderBoxTop')) {
 		<td width="100%" align="right">
 	        <?php $sort = ($sort == 'asc') ? 'desc' : 'asc'; ?>
 			<input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
-		<?php if ($canEdit) { ?>
+		<?php if ($canAuthor) { ?>
 			<input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
 			<input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
 		<?php } ?>
@@ -191,13 +191,14 @@ foreach ($messages as $row) {
 		$s .= '<td valign="top" align="right" style="' . $style . '">';
 
 		//the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
-		$canEdit = $perms->checkModule('forums', 'edit');
-		if ($canEdit && ($AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $perms->checkModule('admin', 'edit'))) {
+		if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
 			$s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
 			// edit message
 			$s .= '<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
 			$s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
 			$s .= '</td><td>';
+		}
+		if ($canDelete || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
 			// delete message
 			$s .= '<a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
 			$s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
@@ -275,7 +276,7 @@ if ($viewtype == 'single') {
 		<td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
 		<td width="100%" align="right">
 			<input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
-		<?php if ($canEdit) { ?>
+		<?php if ($canAuthor) { ?>
 			<input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
 			<input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
 		<?php } ?>
