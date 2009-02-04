@@ -21,10 +21,10 @@ class CContact extends CW2pObject {
 	var $contact_id = null;
 	/**
  	@var string */
-	var $contact_first_name = null;
+	var $contact_first_name = '';
 	/**
  	@var string */
-	var $contact_last_name = null;
+	var $contact_last_name = '';
 	var $contact_order_by = '';
 	var $contact_title = null;
 	var $contact_job = null;
@@ -72,9 +72,21 @@ class CContact extends CW2pObject {
 		 * mostly required when Contacts are generated via programatic methods and
 		 * not through the add/edit UI.
 		 */
-		if($this->contact_order_by == '' || $this->contact_order_by == null) {
-			$this->contact_order_by = trim($this->contact_first_name.' '.$this->contact_last_name);
+		if(strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
+			//TODO: this should use the USERFORMAT to determine how display names are generated
+			if ($this->contact_first_name == null && $this->contact_last_name == null) {
+				$this->contact_order_by = $this->contact_email;
+			} else {
+				$this->contact_order_by = trim($this->contact_first_name.' '.$this->contact_last_name);
+			}
 		}
+		if($this->contact_first_name == null) {
+			$this->contact_first_name = '';
+		}
+		if($this->contact_last_name == null) {
+			$this->contact_last_name = '';
+		}
+
 		parent::store();
 	}
 
@@ -287,6 +299,20 @@ class CContact extends CW2pObject {
 			}
 		}
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
+	}
+	
+	public function cron_hook() {
+		$q = new DBQuery;
+		$q->addTable('contacts');
+		$q->addQuery('contact_id');
+		$q->addWhere('contact_first_name IS NULL');
+		$contactIdList = $q->loadList();
+
+		foreach($contactIdList as $contactId) {
+			$myContact = new CContact();
+			$myContact = $myContact->load($contactId['contact_id']);
+			$myContact->store();
+		}
 	}
 }
 ?>
