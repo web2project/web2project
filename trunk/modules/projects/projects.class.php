@@ -175,6 +175,10 @@ class CProject extends CW2pObject {
 			$file->file_project = (int)$this->project_id;
 			$file->delete();
 		}
+		$q->setDelete('events');
+		$q->addWhere('event_project =' . (int)$this->project_id);
+		$q->exec();
+		$q->clear();
 		// remove the project-contacts and project-departments map
 		$q->setDelete('project_contacts');
 		$q->addWhere('project_id =' . (int)$this->project_id);
