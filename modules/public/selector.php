@@ -6,10 +6,9 @@ if (!defined('W2P_BASE_DIR')) {
 function selPermWhere($obj, $idfld, $namefield, $prefix = '') {
 	global $AppUI;
 
-	$allowed = $obj->getAllowedRecords($AppUI->user_id, "$idfld, $namefield");
+	$allowed = $obj->getAllowedRecords($AppUI->user_id, $idfld . ', ' . $namefield, '', '', '', $prefix);
 	if (count($allowed)) {
-		$prfx = $prefix ? $prefix . '.' : '';
-		return ' ' . $prfx . $idfld . ' IN (' . implode(',', array_keys($allowed)) . ') ';
+		return ' ' . $idfld . ' IN (' . implode(',', array_keys($allowed)) . ') ';
 	} else {
 		return null;
 	}
@@ -94,7 +93,7 @@ switch ($table) {
 			$q->addWhere('b.project_id = projects.project_id');
 			$q->addWhere('b.contact_id = ' . (int)$user_id);
 		}
-		$q->addWhere(selPermWhere($obj, 'projects.project_id', 'project_name', ''));
+		$q->addWhere(selPermWhere($obj, 'projects.project_id', 'project_name', 'projects'));
 		if ($project_company) {
 			$q->addWhere('project_company = ' . (int)$project_company);
 		}
