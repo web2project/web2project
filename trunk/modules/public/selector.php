@@ -191,15 +191,15 @@ if (!$ok) {
 		<div style="white-space:normal; overflow:auto; "  id="selector">
 		<ul style="padding-left:0px">
 		<?php
-	if (count($list) > 1) {
-		//		echo arraySelect( $list, 'list', ' size="8"', 0 );
-		foreach ($list as $key => $val) {
-			echo '<li><a href="javascript:setClose(\'' . $key . '\',\'' . addslashes($val) . '\');">' . $val . '</a></li>';
-		}
-	} else {
-		echo $AppUI->_('no' . $table);
-	}
-?>
+			if (count($list) > 1) {
+				foreach ($list as $key => $val) {
+					$name = htmlspecialchars($val, ENT_QUOTES);
+					echo '<li><a href="javascript:setClose(\'' . $key . '\',\'' . $name . '\');">' . $val . '</a></li>';
+				}
+			} else {
+				echo $AppUI->_('no' . $table);
+			}
+		?>
 		</ul>
 		</div>
 	</td>

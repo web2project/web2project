@@ -17,7 +17,7 @@ $obj = &$AppUI->acl();
 
 $AppUI->setMsg('Permission');
 if ($del) {
-	if ($obj->del_acl($_REQUEST['permission_id'])) {
+	if ($obj->del_acl($_POST['permission_id'])) {
 		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
 		$obj->recalcPermissions(null, $_POST['permission_user']);
 		$AppUI->redirect();
