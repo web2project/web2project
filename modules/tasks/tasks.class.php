@@ -405,9 +405,31 @@ class CTask extends CW2pObject {
 			$newObj->task_parent = '';
 		}
 		$newObj->store();
+		$this->copyAssignedUsers($newObj->task_id);
 
 		return $newObj;
 	} // end of copy()
+
+	function copyAssignedUsers($destTask_id) {
+		$q = new DBQuery;
+		$q->addQuery('user_id, user_type, task_id, perc_assignment, user_task_priority');
+		$q->addTable('user_tasks', 'ut');
+		$q->addWhere('ut.task_id = ' . $this->task_id);
+		$user_tasks = $q->loadList();
+		$q->clear();
+		foreach ($user_tasks as $user_task) {
+			$q = new DBQuery;
+			$q->addReplace('user_id', $user_task['user_id']);
+			$q->addReplace('user_type', $user_task['user_type']);
+			$q->addReplace('task_id', $destTask_id);
+			$q->addReplace('perc_assignment', $user_task['perc_assignment']);
+			$q->addReplace('user_task_priority', $user_task['user_task_priority']);
+			$q->addTable('user_tasks', 'ut');
+			$q->exec();
+			$q->clear();
+		}
+
+	}
 
 	function deepCopy($destProject_id = 0, $destTask_id = 0) {
 		$children = $this->getChildren();
@@ -515,6 +537,14 @@ class CTask extends CW2pObject {
 			if (($this->task_end_date != $oTsk->task_end_date) || ($this->task_dynamic != $oTsk->task_dynamic) || ($this->task_milestone == '1')) {
 				$this->shiftDependentTasks();
 			}
+			
+			if (!$this->task_parent) {
+				$q->addTable('tasks');
+				$q->addUpdate('task_parent', $this->task_id);
+				$q->addWhere('task_id = ' . (int)$this->task_id);
+				$q->exec();
+				$q->clear();
+			}
 		} else {
 			$this->_action = 'added';
 			if ($this->task_start_date == '') {
@@ -537,14 +567,6 @@ class CTask extends CW2pObject {
 				// importing tasks do not update dynamics
 				$importing_tasks = true;
 			}
-
-			// insert entry in user tasks
-			$q->addTable('user_tasks');
-			$q->addInsert('user_id', $AppUI->user_id);
-			$q->addInsert('task_id', $this->task_id);
-			$q->addInsert('user_type', '0');
-			$q->exec();
-			$q->clear();
 		}
 
 		//split out related departments and store them seperatly.
