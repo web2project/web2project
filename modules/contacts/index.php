@@ -117,7 +117,7 @@ if (count($rows)) {
 	echo db_error();
 	$rn = 0;
 }
-$t = floor($rn / $carrWidth);
+$t = ceil($rn / $carrWidth);
 
 if ($rn < ($carrWidth * $carrHeight)) {
 	$i = 0;
@@ -220,48 +220,52 @@ for ($z = 0; $z < $carrWidth; $z++) {
 		<td>
 		<table width="100%" cellspacing="0" cellpadding="1" class="std">
 		<tr>
-            <?php $contactid = $carr[$z][$x]['contact_id']; ?>
-			<th style="text-align:left" nowrap="nowrap" width="50%">
-				<a href="./index.php?m=contacts&a=view&contact_id=<?php echo $contactid; ?>"><strong><?php echo ($carr[$z][$x]['contact_title'] ? $carr[$z][$x]['contact_title'] . ' ' : '') . $carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name']; ?></strong></a>
-			</th>
-			<th style="text-align:right" nowrap="nowrap" width="50%">
-                <?php if ($carr[$z][$x]['user_id']) {
-			echo '<a href="./index.php?m=admin&a=viewuser&user_id=' . $carr[$z][$x]['user_id'] . '">' . w2PshowImage('icons/users.gif', '', '', $m, 'This Contact is also a User, click to view its details.') . '</a>';
-		}
-?>
-				<a href="?m=contacts&a=vcardexport&suppressHeaders=true&contact_id=<?php echo $contactid; ?>" ><?php echo w2PshowImage('vcard.png', '', '', $m, 'export vCard of this contact'); ?></a>
-                <a href="?m=contacts&a=addedit&contact_id=<?php echo $contactid; ?>"><?php echo w2PshowImage('icons/pencil.gif', '', '', $m, 'edit this contact'); ?></a>
-<?php
-		$q->clear();
-		$q = new DBQuery;
-		$q->addTable('projects');
-		$q->addQuery('count(project_id)');
-		$q->addWhere('project_contacts LIKE \'' . $carr[$z][$x]['contact_id'] . ',%\' OR project_contacts LIKE \'%,' . $carr[$z][$x]['contact_id'] . ',%\' OR project_contacts LIKE \'%,' . $carr[$z][$x]['contact_id'] . '\' OR project_contacts LIKE \'' . $carr[$z][$x]['contact_id'] . '\'');
-
-		$res = $q->exec();
-		$projects_contact = $q->fetchRow();
-		$q->clear();
-		if ($projects_contact[0] > 0)
-			echo '<a href="" onclick="	window.open(\'./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=' . $carr[$z][$x]['contact_id'] . '\', \'selector\', \'left=50,top=50,height=250,width=400,resizable\');return false;">' . w2PshowImage('projects.png', '', '', $m, 'click to view projects associated with this contact') . '</a>';
-		if ($carr[$z][$x]['contact_updateasked'] && (!$carr[$z][$x]['contact_lastupdate'] || $carr[$z][$x]['contact_lastupdate'] == 0) && $carr[$z][$x]['contact_updatekey']) {
-			$last_ask = new CDate($carr[$z][$x]['contact_updateasked']);
-			$df = $AppUI->getPref('SHDATEFORMAT');
-			$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-			echo w2PshowImage('log-info.gif', null, null, 'info', 'Waiting for Contact Update Information. (Asked on: ' . $last_ask->format($df) . ')');
-		} elseif ($carr[$z][$x]['contact_updateasked'] && (!$carr[$z][$x]['contact_lastupdate'] || $carr[$z][$x]['contact_lastupdate'] == 0) && !$carr[$z][$x]['contact_updatekey']) {
-			$last_ask = new CDate($carr[$z][$x]['contact_updateasked']);
-			$df = $AppUI->getPref('SHDATEFORMAT');
-			$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-			echo w2PshowImage('log-error.gif', null, null, 'info', 'Waiting for too long! (Asked on ' . $last_ask->format($df) . ')');
-		} elseif ($carr[$z][$x]['contact_lastupdate'] && !$carr[$z][$x]['contact_updatekey']) {
-			$last_ask = new CDate($carr[$z][$x]['contact_lastupdate']);
-			$df = $AppUI->getPref('SHDATEFORMAT');
-			$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-			echo w2PshowImage('log-notice.gif', null, null, 'info', 'Update sucessfully done on: ' . $last_ask->format($df) . '');
-		} else {
-		}
-?>
-			</th>
+			<td width="100%" colspan="2">
+				<table width="100%" cellspacing="0" cellpadding="1" class="">
+		            <?php $contactid = $carr[$z][$x]['contact_id']; ?>
+					<th style="text-align:left" width="70%">
+						<a href="./index.php?m=contacts&a=view&contact_id=<?php echo $contactid; ?>"><strong><?php echo ($carr[$z][$x]['contact_title'] ? $carr[$z][$x]['contact_title'] . ' ' : '') . $carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name']; ?></strong></a>
+					</th>
+					<th style="text-align:right" nowrap="nowrap" width="30%">
+		                <?php if ($carr[$z][$x]['user_id']) {
+					echo '<a href="./index.php?m=admin&a=viewuser&user_id=' . $carr[$z][$x]['user_id'] . '">' . w2PshowImage('icons/users.gif', '', '', $m, 'This Contact is also a User, click to view its details.') . '</a>';
+				}
+		?>
+						<a href="?m=contacts&a=vcardexport&suppressHeaders=true&contact_id=<?php echo $contactid; ?>" ><?php echo w2PshowImage('vcard.png', '', '', $m, 'export vCard of this contact'); ?></a>
+		                <a href="?m=contacts&a=addedit&contact_id=<?php echo $contactid; ?>"><?php echo w2PshowImage('icons/pencil.gif', '', '', $m, 'edit this contact'); ?></a>
+		<?php
+				$q->clear();
+				$q = new DBQuery;
+				$q->addTable('projects');
+				$q->addQuery('count(project_id)');
+				$q->addWhere('project_contacts LIKE \'' . $carr[$z][$x]['contact_id'] . ',%\' OR project_contacts LIKE \'%,' . $carr[$z][$x]['contact_id'] . ',%\' OR project_contacts LIKE \'%,' . $carr[$z][$x]['contact_id'] . '\' OR project_contacts LIKE \'' . $carr[$z][$x]['contact_id'] . '\'');
+		
+				$res = $q->exec();
+				$projects_contact = $q->fetchRow();
+				$q->clear();
+				if ($projects_contact[0] > 0)
+					echo '<a href="" onclick="	window.open(\'./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=' . $carr[$z][$x]['contact_id'] . '\', \'selector\', \'left=50,top=50,height=250,width=400,resizable\');return false;">' . w2PshowImage('projects.png', '', '', $m, 'click to view projects associated with this contact') . '</a>';
+				if ($carr[$z][$x]['contact_updateasked'] && (!$carr[$z][$x]['contact_lastupdate'] || $carr[$z][$x]['contact_lastupdate'] == 0) && $carr[$z][$x]['contact_updatekey']) {
+					$last_ask = new CDate($carr[$z][$x]['contact_updateasked']);
+					$df = $AppUI->getPref('SHDATEFORMAT');
+					$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+					echo w2PshowImage('log-info.gif', null, null, 'info', 'Waiting for Contact Update Information. (Asked on: ' . $last_ask->format($df) . ')');
+				} elseif ($carr[$z][$x]['contact_updateasked'] && (!$carr[$z][$x]['contact_lastupdate'] || $carr[$z][$x]['contact_lastupdate'] == 0) && !$carr[$z][$x]['contact_updatekey']) {
+					$last_ask = new CDate($carr[$z][$x]['contact_updateasked']);
+					$df = $AppUI->getPref('SHDATEFORMAT');
+					$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+					echo w2PshowImage('log-error.gif', null, null, 'info', 'Waiting for too long! (Asked on ' . $last_ask->format($df) . ')');
+				} elseif ($carr[$z][$x]['contact_lastupdate'] && !$carr[$z][$x]['contact_updatekey']) {
+					$last_ask = new CDate($carr[$z][$x]['contact_lastupdate']);
+					$df = $AppUI->getPref('SHDATEFORMAT');
+					$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+					echo w2PshowImage('log-notice.gif', null, null, 'info', 'Update sucessfully done on: ' . $last_ask->format($df) . '');
+				} else {
+				}
+		?>
+					</th>
+				</table>
+			</td>
 		</tr>
 		<tr>
 			<?php
