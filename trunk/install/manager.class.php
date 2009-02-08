@@ -63,28 +63,40 @@
 		public function getConfigOptions() {
 			return $this->configOptions;
 		}
+		public function setConfigOptions($dbConfig) {
+			$this->configOptions = $dbConfig;
+		}
 		public function upgradeSystem() {
 			$allErrors = array();
+			//TODO: add support for database prefixes
 
 			$dbConn = $this->_openDBConnection();
-			$sql = "SELECT max(db_version) FROM w2pversion";
-			$res = $dbConn->Execute($sql);
-			if ($res && $res->RecordCount() > 0) {
-				$currentVersion = $res->fields['db_version'];
-			}
-			echo $currentVersion."<br />";
+			if ($dbConn) {
+				$sql = "SELECT max(db_version) FROM w2pversion";
+				$res = $dbConn->Execute($sql);
 
-			$migrations = $this->_getMaxVersion();
-
-			if ($currentVersion < count($migrations)) {
-				$migration = 1;
-				foreach ($migrations as $update) {
-					$errorMessages = $this->_applySQLUpdates($update, $dbConn);
-					$allErrors = array_merge($allErrors, $errorMessages);
-					$sql = "UPDATE w2pversion SET db_version = $migration";
-					$migration++;
-					$dbConn->Execute($sql);
+				if ($res && $res->RecordCount() > 0) {
+					$currentVersion = $res->fields['db_version'];
+				} else {
+					$currentVersion = 0;
 				}
+
+				$migrations = $this->_getMaxVersion();
+
+				if ($currentVersion < count($migrations)) {
+					$migration = 1;
+					foreach ($migrations as $update) {
+						$errorMessages = $this->_applySQLUpdates($update, $dbConn);
+						$allErrors = array_merge($allErrors, $errorMessages);
+						$sql = "UPDATE w2pversion SET db_version = $migration";
+						//TODO: update the code revision
+						//TODO: update the version number
+						$migration++;
+						$dbConn->Execute($sql);
+					}
+				}
+			} else {
+				$allErrors[] = 'Update failed. Database connection was not found.';
 			}
 
 			return $allErrors;
@@ -157,12 +169,11 @@
 			$dir_handle = @opendir($path) or die("Unable to open $path");
 
 			while ($file = readdir($dir_handle)) {
-			   $migration = substr($file, 0, 3);
-			   if ((int) $migration > 1) {
+			   $migrationNumber = substr($file, 0, 3);
+			   if ((int) $migrationNumber > 0) {
 			     $migrations[] = $file;
 			   }
 			}
-
 			return $migrations;
 		}
 		private function _prepareConfiguration() {
