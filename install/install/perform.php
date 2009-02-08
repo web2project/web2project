@@ -6,15 +6,12 @@
 	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 	require_once W2P_BASE_DIR . '/includes/version.php';
 
-	$AppUI = new InstallerUI; // Fake AppUI class to appease the db_connect utilities.
-
 	$dbtype = trim( w2PgetCleanParam( $_POST, 'dbtype', 'mysql' ) );
 	$dbhost = trim( w2PgetCleanParam( $_POST, 'dbhost', '' ) );
 	$dbname = trim( w2PgetCleanParam( $_POST, 'dbname', '' ) );
 	$dbuser = trim( w2PgetCleanParam( $_POST, 'dbuser', '' ) );
 	$dbpass = trim( w2PgetCleanParam( $_POST, 'dbpass', '' ) );
 	$dbprefix = trim( w2PgetCleanParam( $_POST, 'dbprefix', '' ) );
-	//TODO: add support for database prefixes
 	$adminpass = trim( w2PgetCleanParam( $_POST, 'adminpass', 'passwd' ) );
 	$dbpersist = w2PgetCleanParam( $_POST, 'dbpersist', false );
 
@@ -33,31 +30,49 @@
 	 'root_dir' => $baseDir,
 	 'base_url' => $baseUrl
 	);
+	$manager->setConfigOptions($w2Pconfig);
 
-	$db = NewADOConnection($dbtype);
-	
-	if(!empty($db)) {
-	  $dbc = $db->Connect($dbhost, $dbuser, $dbpass);
-	  if ($dbc) {
-	    $existing_db = $db->SelectDB($dbname);
-	  }
-	} else { 
-		$dbc = false;
-	}
-	
-	$dbMsg = '';
+	$dbMsg = 'Not Created';
 	$cFileMsg = 'Not Created';
 	$dbErr = false;
 	$cFileErr = false;
+	$errorMessages = array();
+
+	if (($do_db || $do_db_cfg)) {
+/*
+		TODO: Do we need to worry about creating the database or just allow the user to handle it?
+		if (! $existing_db) {
+			w2pmsg('Creating new Database');
+			$db->Execute('CREATE DATABASE '.$dbname);
+			$dbError = $db->ErrorNo();
+			if ($dbError <> 0 && $dbError <> 1007) {
+				$dbErr = true;
+				$dbMsg .= 'A Database Error occurred. Database has not been created! The provided database details are probably not correct.<br>'.$db->ErrorMsg().'<br>';
+			}
+		}
+*/
+		$errorMessages = $manager->upgradeSystem();
+		if (count($errorMessages) == 0) {
+			$dbMsg = 'Created';
+		} else {
+			$dbMsg = 'Created, some problems have occurred.';
+		}
+	}
 	
-	// Version array for moving from version to version.
-	$versionPath = array();
-	
-	$lastDBUpdate = '';
-	$current_version = $w2p_version_major . '.' . $w2p_version_minor;
-	$current_version .= isset($w2p_version_patch) ? ('.'.$w2p_version_patch) : '';
-	$current_version .= isset($w2p_version_prepatch) ? ('-'.$w2p_version_prepatch) : '';
+	$config = $manager->createConfigString($w2Pconfig);
+
+	if ($do_cfg || $do_db_cfg){
+		if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
+			fputs( $fp, $config, strlen( $config ) );
+			fclose( $fp );
+			$cFileMsg = 'Config file written successfully'."\n";
+		} else {
+			$cFileErr = true;
+			$cFileMsg = 'Config file could not be written'."\n";
+		}
+	}
 ?>
+
 <table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
 	<tr>
 		<td class="title" colspan="2">Step 3: Create Database &amp; Write Configuration</td>
@@ -70,85 +85,21 @@
 	  </td>
 	</tr>
 	<tr><td colspan="2">&nbsp;</td></tr>
-	<tr>
-		<td colspan="2">
-			<pre><?php
-				if ($dbc && ($do_db || $do_db_cfg)) {
-					if (! $existing_db) {
-						w2pmsg('Creating new Database');
-						$db->Execute('CREATE DATABASE '.$dbname);
-						$dbError = $db->ErrorNo();
-						if ($dbError <> 0 && $dbError <> 1007) {
-							$dbErr = true;
-							$dbMsg .= 'A Database Error occurred. Database has not been created! The provided database details are probably not correct.<br>'.$db->ErrorMsg().'<br>';
-						}
-					}
-
-					// For some reason a db->SelectDB call here doesn't work.
-					$db->Execute('USE ' . $dbname);
-					$db_version = InstallGetVersion($mode, $db);
-				
-					$code_updated = '';
-
-					$sql = "SELECT * FROM w2pversion";
-					$res = $db->Execute($sql);
-					if ($res && $res->RecordCount() > 0) {
-						w2pmsg('Skipping database install. The database is already installed.');
-					} else {
-					  w2pmsg('Installing database');
-					  InstallLoadSql(W2P_BASE_DIR.'/sql/001_base_install.mysql.sql', null, $adminpass);
-					  // After all the updates, find the new version information.
-					  $new_version = InstallGetVersion($mode, $db);
-					  $lastDBUpdate = $new_version['last_db_update'];
-					  $code_updated = $new_version['last_code_update'];										
-					}
-				
-					$dbError = $db->ErrorNo();
-					if ($dbError <> 0 && $dbError <> 1007) {
-						$dbErr = true;
-						$dbMsg .= 'A Database Error occurred. Database has probably not been populated completely!<br>'.$db->ErrorMsg().'<br>';
-					}
-					if ($dbErr) {
-						$dbMsg = 'DB setup incomplete - the following errors occured:<br />'.$dbMsg;
-					} else {
-						$dbMsg = 'Database successfully setup<br />';
-					}
-
-					w2pmsg('Updating version information');
-					// No matter what occurs we should update the database version in the w2pversion table.
-					if (empty($lastDBUpdate)) {
-						$lastDBUpdate = $code_updated;
-					}
-					$sql = "UPDATE w2pversion SET db_version = '$w2p_version_major',
-						last_db_update = '$lastDBUpdate', code_version = '$current_version',
-						last_code_update = '$code_updated' WHERE 1";
-					$db->Execute($sql);
-				} else {
-					$dbMsg = 'Not Created';
-					if (! $dbc) {
-						$dbErr=1;
-						$dbMsg .= '<br/>No Database Connection available! '  . ($db ? $db->ErrorMsg() : '');
-					}
+	<?php
+		if (count($errorMessages) > 0) { ?>
+			<tr>
+				<td colspan="2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the installation.</b></td>
+			</tr>
+			<?php
+				foreach ($errorMessages as $message) { 
+					?><tr><td colspan="2"><?php echo $message; ?></td></tr><?php
 				}
-
-				$dbConfig = array ('dbtype' => $dbtype, 'dbhost' => $dbhost, 
-						'dbname' => $dbname, 'dbuser' => $dbuser, 'dbpass' => $dbpass, 
-						'prefix' => $dbprefix);
-				$config = $manager->createConfigString($dbConfig);
-
-				if ($do_cfg || $do_db_cfg){
-					if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
-						fputs( $fp, $config, strlen( $config ) );
-						fclose( $fp );
-						$cFileMsg = 'Config file written successfully'."\n";
-					} else {
-						$cFileErr = true;
-						$cFileMsg = 'Config file could not be written'."\n";
-					}
-				}
-			?></pre>
-		</td>
-	</tr>
+			?>
+			<tr>
+				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.  It's possible that your dotProject database was not the version it claimed to be.</td>
+			</tr><?php
+		}
+	?>
 	<tr>
 		<td class="title" valign="top">Database Installation Feedback:</td>
 		<td class="item">
