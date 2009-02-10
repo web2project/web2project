@@ -3,11 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-// Pedro A.
-// The next lines tries to increase the processing time for php to render the image, that might be usefull when the system has
-// several projects.
-ini_set('max_execution_time', 180);
-ini_set('memory_limit', $w2Pconfig['reset_memory_limit']);
+w2PsetExecutionConditions($w2Pconfig);
 
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));

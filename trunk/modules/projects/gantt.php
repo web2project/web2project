@@ -5,8 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $sortTasksByName, $user_id, $w2Pconfig;
 
-ini_set('max_execution_time', 180);
-ini_set('memory_limit', $w2Pconfig['reset_memory_limit']);
+w2PsetExecutionConditions($w2Pconfig);
 
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));

@@ -9,7 +9,7 @@ if (!defined('W2P_BASE_DIR')) {
 */
 global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id, $w2Pconfig;
 
-ini_set('memory_limit', $w2Pconfig['reset_memory_limit']);
+w2PsetExecutionConditions($w2Pconfig);
 
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));

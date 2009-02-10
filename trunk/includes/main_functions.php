@@ -612,6 +612,13 @@ function w2PsetMicroTime() {
 	$microTimeSet = (float)$usec + (float)$sec;
 }
 
+function w2PsetExecutionConditions($w2Pconfig) {
+
+	$memoryLimt = ($w2Pconfig['reset_memory_limit'] != '') ? $w2Pconfig['reset_memory_limit'] : '64M';
+	ini_set('max_execution_time', 180);
+	ini_set('memory_limit', $memoryLimt);
+}
+
 /**
  */
 function w2PgetMicroDiff() {
