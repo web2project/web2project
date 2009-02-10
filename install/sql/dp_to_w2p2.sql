@@ -493,16 +493,19 @@ ALTER TABLE `projects` ADD `project_updator` INT(10) DEFAULT 0 NOT NULL;
 ALTER TABLE `tasks` ADD `task_updator` INT(10) DEFAULT 0 NOT NULL;
 
 #new PHPMailer SMTP options
-INSERT INTO `config` VALUES(0, 'mail_secure', '', 'mail', 'select');
-INSERT INTO `config` VALUES(0, 'mail_debug', 'false', 'mail', 'checkbox');
-INSERT INTO `config_list` VALUES(0, 68, '');
-INSERT INTO `config_list` VALUES(0, 68, 'tls');
-INSERT INTO `config_list` VALUES(0, 68, 'ssl');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_secure', '', 'mail', 'select');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_debug', 'false', 'mail', 'checkbox');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_secure'), '');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_secure'), 'tls');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_secure'), 'ssl');
 
 #Department types
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES (0, 1, 'DepartmentType', 'Not Defined', '0');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES (0, 1, 'DepartmentType', 'Profit', '1');
-INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES (0, 1, 'DepartmentType', 'Cost', '2');
+INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES (1, 'DepartmentType', 'Not Defined', '0');
+INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES (1, 'DepartmentType', 'Profit', '1');
+INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES (1, 'DepartmentType', 'Cost', '2');
 
 #Company Description fix 20080304
 ALTER TABLE `companies` CHANGE `company_description` `company_description` TEXT NULL;
@@ -513,6 +516,9 @@ INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` ) VALU
 
 #Add config key to set the Template status id, so we can remove them from calculations
 INSERT INTO `config` VALUES (0, 'template_projects_status_id', '', 'projects', 'text');
+
+#Add the reset_memory_limit for converted systems
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('reset_memory_limit', '64M', 'admin_system', 'text');
 
 #Fix Config Groupings in a more readeable way:
 UPDATE `config` SET `config_group` = 'admin_system' WHERE `config_name` = 'company_name';
