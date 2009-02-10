@@ -92,75 +92,75 @@ CREATE TABLE `config` (
 -- Dumping data for table `config`
 --
 
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (1, 'host_locale', 'en', 'admin_system', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (2, 'check_overallocation', 'false', 'tasks', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (3, 'currency_symbol', '$', 'budgeting', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (4, 'host_style', 'web2project', 'admin_system', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (5, 'company_name', 'web2Project Development', 'admin_system', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (6, 'page_title', 'web2Project', 'admin_system', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (7, 'site_domain', 'web2project.net', 'admin_system', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (8, 'email_prefix', '[web2Project]', 'mail', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (9, 'admin_username', 'admin', 'admin_users', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (10, 'username_min_len', '4', 'admin_users', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (11, 'password_min_len', '4', 'admin_users', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (12, 'enable_gantt_charts', 'true', 'admin_system', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (13, 'log_changes', 'true', 'admin_system', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (14, 'check_task_dates', 'true', 'tasks', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (15, 'locale_warn', 'false', 'locales', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (16, 'locale_alert', '^', 'locales', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (17, 'daily_working_hours', '8.0', 'calendar', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (18, 'display_debug', 'false', 'admin_system', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (20, 'show_all_task_assignees', 'false', 'tasks', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (21, 'direct_edit_assignment', 'true', 'tasks', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (22, 'restrict_color_selection', 'false', 'projects', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (23, 'cal_day_view_show_minical', 'true', 'calendar', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (24, 'cal_day_start', '8', 'calendar', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (25, 'cal_day_end', '17', 'calendar', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (26, 'cal_day_increment', '15', 'calendar', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (27, 'cal_working_days', '1,2,3,4,5', 'calendar', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (28, 'restrict_task_time_editing', 'false', 'tasks', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (29, 'default_view_m', 'calendar', 'startup', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (30, 'default_view_a', 'day_view', 'startup', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (31, 'default_view_tab', '1', 'startup', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (32, 'index_max_file_size', '-1', 'files', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (33, 'session_handling', 'app', 'session', 'select');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (34, 'session_idle_time', '2d', 'session', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (35, 'session_max_lifetime', '1m', 'session', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (36, 'debug', '1', 'admin_system', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (37, 'parser_default', '/usr/bin/strings', 'files', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (38, 'parser_application/msword', '/usr/bin/strings', 'files', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (39, 'parser_text/html', '/usr/bin/strings', 'files', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (40, 'parser_application/pdf', '/usr/bin/pdftotext', 'files', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (41, 'files_ci_preserve_attr', 'true', 'files', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (42, 'files_show_versions_edit', 'false', 'files', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (43, 'reset_memory_limit', '64M', 'admin_system', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (44, 'auth_method', 'sql', 'auth', 'select');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (45, 'ldap_host', 'localhost', 'ldap', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (46, 'ldap_port', '389', 'ldap', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (47, 'ldap_version', '3', 'ldap', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (48, 'ldap_base_dn', 'dc=web2project,dc=net', 'ldap', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (49, 'ldap_user_filter', '(uid=%USERNAME%)', 'ldap', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (50, 'postnuke_allow_login', 'true', 'auth', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (51, 'mail_transport', 'smtp', 'mail', 'select');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (52, 'mail_host', 'mail.yourdomain.com', 'mail', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (53, 'mail_port', '25', 'mail', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (54, 'mail_auth', 'true', 'mail', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (55, 'mail_user', 'smtpuser', 'mail', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (56, 'mail_pass', 'smtppasswd', 'mail', 'password');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (57, 'mail_defer', 'false', 'mail', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (58, 'mail_timeout', '30', 'mail', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (59, 'task_reminder_control', 'false', 'tasks', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (60, 'task_reminder_days_before', '1', 'tasks', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (61, 'task_reminder_repeat', '100', 'tasks', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (62, 'session_gc_scan_queue', 'false', 'session', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (63, 'ldap_search_user', 'Manager', 'ldap', 'text');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (64, 'ldap_search_pass', 'secret', 'ldap', 'password');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (65, 'ldap_allow_login', 'true', 'ldap', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (66, 'activate_external_user_creation', 'true', 'admin_users', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (67, 'projectdesigner_view_project', 'false', 'projects', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (68, 'mail_secure', '', 'mail', 'select');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (69, 'mail_debug', 'false', 'mail', 'checkbox');
-INSERT INTO `config` (`config_id`, `config_name`, `config_value`, `config_group`, `config_type`) VALUES (70, 'template_projects_status_id', '6', 'projects', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('host_locale', 'en', 'admin_system', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('check_overallocation', 'false', 'tasks', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('currency_symbol', '$', 'budgeting', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('host_style', 'web2project', 'admin_system', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('company_name', 'web2Project Development', 'admin_system', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('page_title', 'web2Project', 'admin_system', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('site_domain', 'web2project.net', 'admin_system', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('email_prefix', '[web2Project]', 'mail', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('admin_username', 'admin', 'admin_users', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('username_min_len', '4', 'admin_users', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('password_min_len', '4', 'admin_users', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('enable_gantt_charts', 'true', 'admin_system', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('log_changes', 'true', 'admin_system', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('check_task_dates', 'true', 'tasks', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('locale_warn', 'false', 'locales', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('locale_alert', '^', 'locales', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('daily_working_hours', '8.0', 'calendar', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('display_debug', 'false', 'admin_system', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('show_all_task_assignees', 'false', 'tasks', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('direct_edit_assignment', 'true', 'tasks', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('restrict_color_selection', 'false', 'projects', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('cal_day_view_show_minical', 'true', 'calendar', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('cal_day_start', '8', 'calendar', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('cal_day_end', '17', 'calendar', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('cal_day_increment', '15', 'calendar', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('cal_working_days', '1,2,3,4,5', 'calendar', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('restrict_task_time_editing', 'false', 'tasks', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('default_view_m', 'calendar', 'startup', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('default_view_a', 'day_view', 'startup', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('default_view_tab', '1', 'startup', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('index_max_file_size', '-1', 'files', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('session_handling', 'app', 'session', 'select');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('session_idle_time', '2d', 'session', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('session_max_lifetime', '1m', 'session', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('debug', '1', 'admin_system', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('parser_default', '/usr/bin/strings', 'files', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('parser_application/msword', '/usr/bin/strings', 'files', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('parser_text/html', '/usr/bin/strings', 'files', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('parser_application/pdf', '/usr/bin/pdftotext', 'files', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('files_ci_preserve_attr', 'true', 'files', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('files_show_versions_edit', 'false', 'files', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('reset_memory_limit', '64M', 'admin_system', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('auth_method', 'sql', 'auth', 'select');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('ldap_host', 'localhost', 'ldap', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('ldap_port', '389', 'ldap', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('ldap_version', '3', 'ldap', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('ldap_base_dn', 'dc=web2project,dc=net', 'ldap', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('ldap_user_filter', '(uid=%USERNAME%)', 'ldap', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('postnuke_allow_login', 'true', 'auth', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_transport', 'smtp', 'mail', 'select');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_host', 'mail.yourdomain.com', 'mail', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_port', '25', 'mail', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_auth', 'true', 'mail', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_user', 'smtpuser', 'mail', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_pass', 'smtppasswd', 'mail', 'password');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_defer', 'false', 'mail', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_timeout', '30', 'mail', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('task_reminder_control', 'false', 'tasks', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('task_reminder_days_before', '1', 'tasks', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('task_reminder_repeat', '100', 'tasks', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('session_gc_scan_queue', 'false', 'session', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('ldap_search_user', 'Manager', 'ldap', 'text');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('ldap_search_pass', 'secret', 'ldap', 'password');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('ldap_allow_login', 'true', 'ldap', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('activate_external_user_creation', 'true', 'admin_users', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('projectdesigner_view_project', 'false', 'projects', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_secure', '', 'mail', 'select');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_debug', 'false', 'mail', 'checkbox');
+INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('template_projects_status_id', '6', 'projects', 'text');
 
 -- --------------------------------------------------------
 
@@ -180,26 +180,26 @@ CREATE TABLE `config_list` (
 -- Dumping data for table `config_list`
 --
 
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(1, (SELECT `config_id` FROM `config` WHERE `config_name` = 'auth_method'), 'sql');
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(2, (SELECT `config_id` FROM `config` WHERE `config_name` = 'auth_method'), 'ldap');
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(3, (SELECT `config_id` FROM `config` WHERE `config_name` = 'auth_method'), 'pn');
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(4, (SELECT `config_id` FROM `config` WHERE `config_name` = 'session_handling'), 'app');
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(5, (SELECT `config_id` FROM `config` WHERE `config_name` = 'session_handling'), 'php');
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(6, (SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_transport'), 'php');
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(7, (SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_transport'), 'smtp');
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(8, (SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_secure'), '');
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(9, (SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_secure'), 'tls');
-INSERT INTO `config_list` (`config_list_id`, `config_id`, `config_list_name`) VALUES 
-	(10, (SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_secure'), 'ssl');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'auth_method'), 'sql');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'auth_method'), 'ldap');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'auth_method'), 'pn');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'session_handling'), 'app');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'session_handling'), 'php');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_transport'), 'php');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_transport'), 'smtp');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_secure'), '');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_secure'), 'tls');
+INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES 
+	((SELECT `config_id` FROM `config` WHERE `config_name` = 'mail_secure'), 'ssl');
 
 -- --------------------------------------------------------
 
