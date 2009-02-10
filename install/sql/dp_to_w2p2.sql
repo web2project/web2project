@@ -461,18 +461,13 @@ ALTER TABLE `task_departments` ADD INDEX ( `task_id` );
 ALTER TABLE `task_departments` ADD INDEX ( `department_id` );
 ALTER TABLE `user_task_pin` ADD INDEX ( `task_id` );
 
-
-
-
-
-
 #Deprecated tables
-#TODO:  add if exists check DROP TABLE `custom_fields_option_id`;
-#TODO:  add if exists check DROP TABLE `custom_fields_struct_id`;
-#TODO:  add if exists check DROP TABLE `custom_fields_values_id`;
-DROP TABLE `permissions`;
-DROP TABLE `roles`;
-DROP TABLE `user_roles`;
+DROP TABLE IF EXISTS `custom_fields_option_id`;
+DROP TABLE IF EXISTS `custom_fields_struct_id`;
+DROP TABLE IF EXISTS `custom_fields_values_id`;
+DROP TABLE IF EXISTS `permissions`;
+DROP TABLE IF EXISTS `roles`;
+DROP TABLE IF EXISTS `user_roles`;
 
 #Table renames
 RENAME TABLE dpversion TO w2pversion;
