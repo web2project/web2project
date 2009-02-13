@@ -267,6 +267,23 @@ class CUser extends CW2pObject {
 		
 		return $userId;
 	}
+	
+	public static function generateUserToken($userId, $token = '') {
+		$q = new DBQuery;		
+		$q->setDelete('user_feeds');
+		$q->addWhere('feed_user = ' . $userId);
+		$q->addWhere("feed_token = '$token'");
+		$q->exec();
+		$q->clear();
+		
+		$token = md5(time().$userId.$token.time());
+		$q->addTable('user_feeds');
+		$q->addInsert('feed_user', $userId);
+		$q->addInsert('feed_token', $token);
+		$q->exec();
+
+		return true;
+	}
 }
 
 function notifyNewUser($address, $username) {

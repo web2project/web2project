@@ -50,10 +50,12 @@ $tab = $AppUI->getState('UserVwTab') !== null ? $AppUI->getState('UserVwTab') : 
 $q = new DBQuery;
 $q->addTable('users', 'u');
 $q->addQuery('u.*');
+$q->addQuery('uf.feed_token');
 $q->addQuery('con.*, company_id, company_name, dept_name, dept_id');
 $q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
 $q->addJoin('companies', 'com', 'contact_company = company_id');
 $q->addJoin('departments', 'dep', 'dept_id = contact_department');
+$q->addJoin('user_feeds', 'uf', 'feed_user = u.user_id');
 $q->addWhere('u.user_id = ' . (int)$user_id);
 $user = $q->loadHash();
 $q->clear();
@@ -72,7 +74,7 @@ if (!$user) {
 	if ($canEdit || $user_id == $AppUI->user_id) {
 		$titleBlock->addCrumb('?m=admin&a=addedituser&user_id='.$user_id, 'edit this user');
 		$titleBlock->addCrumb('?m=system&a=addeditpref&user_id='.$user_id, 'edit preferences');
-		$titleBlock->addCrumbRight('<div class="crumb"><ul><li style="float:right;"><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
+		$titleBlock->addCrumbRight('<div class="crumb"><ul style="float:right;"><li><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
 		$titleBlock->addCell('<td align="right" width="100%"><input type="button" class=button value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>');
 	}
 	$titleBlock->show();
@@ -176,6 +178,23 @@ function popChgPwd() {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
 			<td class="hilite" width="100%"><?php echo '<a href="mailto:' . $user['contact_email'] . '">' . $user['contact_email'] . '</a>'; ?></td>
+		</tr>
+		<tr>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calendar Feed'); ?>:</td>
+			<td class="hilite" width="100%">
+				<?php if ($user['feed_token'] != '') { 
+					$calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user['feed_token'];
+					?>
+					<a href="<?php echo $calendarFeed; ?>">calendar feed</a>
+				<?php } ?>
+				&nbsp;&nbsp;&nbsp;
+				<form name="regenerateToken" action="./index.php?m=admin" method="post">
+					<input type="hidden" name="user_id" value="<?php echo intval($user['user_id']); ?>" />
+					<input type="hidden" name="dosql" value="do_user_token" />
+					<input type="hidden" name="token" value="<?php echo $user['feed_token']; ?>" />
+					<input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" />
+				</form>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="2"><strong><?php echo $AppUI->_('Signature'); ?>:</strong></td>
