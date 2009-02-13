@@ -1928,6 +1928,46 @@ class CTask extends CW2pObject {
 		return $assigned;
 	}
 
+	public function calendar_hook($userId) {
+		/*
+		 * This list of fields - id, name, description, startDate, endDate,
+		 * updatedDate - are named specifically for the iCal creation.
+		 * If you change them, it's probably going to break.  So don't do that.
+		 */
+
+		return $this->getTaskList($userId);
+	}
+
+	public function getTaskList($userId, $days = 30) {
+		/*
+		 * This list of fields - id, name, description, startDate, endDate,
+		 * updatedDate - are named specifically for the iCal creation.
+		 * If you change them, it's probably going to break.  So don't do that.
+		 */
+
+		$q = new DBQuery();
+		$q->addQuery('t.task_id as id');
+		$q->addQuery('task_name as name');
+		$q->addQuery('task_description as description');
+		$q->addQuery('task_start_date as startDate');
+		$q->addQuery('task_end_date as endDate');
+		$q->addQuery('now() as updatedDate');
+		$q->addTable('tasks', 't');
+
+		$q->addWhere("task_start_date < DATE_ADD(CURDATE(), INTERVAL $days DAY)");
+		$q->addWhere('task_percent_complete < 100');
+		$q->addWhere('task_dynamic = 0');
+
+		$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+		$q->addWhere("ut.user_id = $userId");
+		
+		$q->innerJoin('projects', 'p', 'p.project_id = t.task_project');
+		$q->addWhere('project_active > 0');
+
+		$q->addOrder('task_start_date, task_end_date');
+
+		return $q->loadList();		
+	}
 }
 
 /**

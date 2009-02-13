@@ -953,6 +953,34 @@ class CEvent extends CW2pObject {
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 
 	}
+	
+	public function calendar_hook($userId) {
+		return $this->getCalendarEvents($userId);
+	}
+	public function getCalendarEvents($userId, $days = 30) {
+		/*
+		 * This list of fields - id, name, description, startDate, endDate,
+		 * updatedDate - are named specifically for the iCal creation.
+		 * If you change them, it's probably going to break.  So don't do that.
+		 */
+
+		$q = new DBQuery();
+		$q->addQuery('e.event_id as id');
+		$q->addQuery('event_title as name');
+		$q->addQuery('event_description as description');
+		$q->addQuery('event_start_date as startDate');
+		$q->addQuery('event_end_date as endDate');
+		$q->addQuery('now() as updatedDate');
+		$q->addTable('events', 'e');
+
+		$q->addWhere("event_start_date > now()");
+		$q->addWhere("event_start_date < DATE_ADD(CURDATE(), INTERVAL $days DAY)");
+		$q->innerJoin('user_events', 'ue', 'ue.event_id = e.event_id');
+		$q->addWhere("ue.user_id = $userId");
+		$q->addOrder('event_start_date');
+
+		return $q->loadList();		
+	}
 }
 
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
