@@ -257,6 +257,16 @@ class CUser extends CW2pObject {
 	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		return w2PgetUsers();
 	}
+	
+	public static function getUserIdByToken($token) {
+		$q = new DBQuery;
+		$q->addQuery('feed_user');
+		$q->addTable('user_feeds');
+		$q->addWhere("feed_token = '$token'");
+		$userId = $q->loadResult();
+		
+		return $userId;
+	}
 }
 
 function notifyNewUser($address, $username) {
