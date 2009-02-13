@@ -64,7 +64,10 @@
 				case 'convert':
 					?>
 					<tr>
-						<td colspan="2">This is where the conversion script kicks in.  It's a two step process.  First we'll confirm that all the requirements are met, then we'll convert your existing data.<br />You shouldn't have to do anything manually except log in at the end.</td>
+						<td colspan="2">This is where the conversion script kicks in.  
+							It's a two step process.  First we'll confirm that all the 
+							requirements are met, then we'll convert your existing data.<br />
+							You shouldn't have to do anything manually except log in at the end.</td>
 					</tr>
 					<?php if ($step == '') { ?>
 						<tr>
@@ -82,9 +85,23 @@
 				case 'upgrade':
 					?>
 					<tr>
-						<td colspan="2">This is where the upgrade script kicks in.</td>
+						<td colspan="2">This is where the upgrade script kicks in.  It's a 
+							two step process.  First we'll confirm that all the requirements 
+							are met, then we'll upgrade your system.<br />
+							You shouldn't have to do anything manually.</td>
 					</tr>
+					<?php if ($step == '') { ?>
+						<tr>
+							<td colspan="2">
+								When you're ready to being, simply 
+							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form">
+							  	<input type="hidden" name="step" value="check" />
+							  	<input class="button" type="submit" name="next" value="Start Upgrade &raquo;" />
+								</form>
+							</td>
+						</tr>
 					<?php
+					}
 					break;
 				default:
 					?>

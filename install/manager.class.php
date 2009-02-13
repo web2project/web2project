@@ -76,7 +76,7 @@
 				$res = $dbConn->Execute($sql);
 
 				if ($res && $res->RecordCount() > 0) {
-					$currentVersion = $res->fields['db_version'];
+					$currentVersion = $res->fields[0];
 				} else {
 					$currentVersion = 0;
 				}
@@ -86,13 +86,15 @@
 				if ($currentVersion < count($migrations)) {
 					$migration = 1;
 					foreach ($migrations as $update) {
-						$errorMessages = $this->_applySQLUpdates($update, $dbConn);
-						$allErrors = array_merge($allErrors, $errorMessages);
-						$sql = "UPDATE w2pversion SET db_version = $migration";
-						//TODO: update the code revision
-						//TODO: update the version number
+						if ($migration > $currentVersion) {
+							$errorMessages = $this->_applySQLUpdates($update, $dbConn);
+							$allErrors = array_merge($allErrors, $errorMessages);
+							$sql = "UPDATE w2pversion SET db_version = $migration";
+							//TODO: update the code revision
+							//TODO: update the version number
+							$dbConn->Execute($sql);
+						}
 						$migration++;
-						$dbConn->Execute($sql);
 					}
 				}
 			} else {
