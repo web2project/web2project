@@ -1934,8 +1934,16 @@ class CTask extends CW2pObject {
 		 * updatedDate - are named specifically for the iCal creation.
 		 * If you change them, it's probably going to break.  So don't do that.
 		 */
+		$taskArray = array();
+		$taskList = $this->getTaskList($userId);
 
-		return $this->getTaskList($userId);
+		//TODO: A user should be able to select if they get distinct start/end dates or two tasks for each task.
+		foreach ($taskList as $taskItem) {			
+			$taskArray[] = array_merge($taskItem, array('endDate' => $taskItem['startDate'], 'name' => 'Start: '.$taskItem['name']));
+			$taskArray[] = array_merge($taskItem, array('startDate' => $taskItem['endDate'], 'name' => 'End: '.$taskItem['name']));
+		}
+
+		return $taskArray;
 	}
 
 	public function getTaskList($userId, $days = 30) {
