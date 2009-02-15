@@ -882,142 +882,143 @@ class CTask extends CW2pObject {
 		global $AppUI, $locale_char_set, $w2Pconfig;
 
 		$mail_recipients = array();
-		$q = &new DBQuery;
-		if (isset($assignees) && $assignees == 'on') {
-			$q->addTable('user_tasks', 'ut');
-			$q->leftJoin('users', 'ua', 'ua.user_id = ut.user_id');
-			$q->leftJoin('contacts', 'c', 'c.contact_id = ua.user_contact');
-			$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
-			$q->addWhere('ut.task_id = ' . (int)$this->task_id);
-			if (!$AppUI->getPref('MAILALL')) {
-				$q->addWhere('ua.user_id <>' . (int)$AppUI->user_id);
-			}
-			$req = &$q->exec(QUERY_STYLE_NUM);
-			for ($req; !$req->EOF; $req->MoveNext()) {
-				list($email, $first, $last) = $req->fields;
-				if (!isset($mail_recipients[$email])) {
-					$mail_recipients[$email] = trim($first) . ' ' . trim($last);
-				}
-			}
-			$q->clear();
-		}
-		if (isset($task_contacts) && $task_contacts == 'on') {
-			$q->addTable('task_contacts', 'tc');
-			$q->leftJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-			$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
-			$q->addWhere('tc.task_id = ' . (int)$this->task_id);
-			$req = &$q->exec(QUERY_STYLE_NUM);
-			for ($req; !$req->EOF; $req->MoveNext()) {
-				list($email, $first, $last) = $req->fields;
-				if (!isset($mail_recipients[$email])) {
-					$mail_recipients[$email] = $first . ' ' . $last;
-				}
-			}
-			$q->clear();
-		}
-		if (isset($project_contacts) && $project_contacts == 'on') {
-			$q->addTable('project_contacts', 'pc');
-			$q->leftJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-			$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
-			$q->addWhere('pc.project_id = ' . (int)$this->task_project);
-			$req = &$q->exec(QUERY_STYLE_NUM);
-			for ($req; !$req->EOF; $req->MoveNext()) {
-				list($email, $first, $last) = $req->fields;
-				if (!isset($mail_recipients[$email])) {
-					$mail_recipients[$email] = $first . ' ' . $last;
-				}
-			}
-			$q->clear();
-		}
-		if (isset($others)) {
-			$others = trim($others, " \r\n\t,"); // get rid of empty elements.
-			if (strlen($others) > 0) {
-				$q->addTable('contacts', 'c');
+		$q = new DBQuery;
+		if ((int) $this->task_id > 0 && (int) $this->task_project > 0) {
+			if (isset($assignees) && $assignees == 'on') {
+				$q->addTable('user_tasks', 'ut');
+				$q->leftJoin('users', 'ua', 'ua.user_id = ut.user_id');
+				$q->leftJoin('contacts', 'c', 'c.contact_id = ua.user_contact');
 				$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
-				$q->addWhere('c.contact_id IN (' . $others . ')');
-				$req = &$q->exec(QUERY_STYLE_NUM);
-				for ($req; !$req->EOF; $req->MoveNext()) {
-					list($email, $first, $last) = $req->fields;
-					if (!isset($mail_recipients[$email])) {
-						$mail_recipients[$email] = $first . ' ' . $last;
+				$q->addWhere('ut.task_id = ' . $this->task_id);
+				if (!$AppUI->getPref('MAILALL')) {
+					$q->addWhere('ua.user_id <>' . (int)$AppUI->user_id);
+				}
+				$assigneeList = $q->loadList();
+				$q->clear();
+	
+				foreach ($assigneeList as $myContact) {
+					$mail_recipients[$myContact['contact_email']] = trim($myContact['contact_first_name'].' '.$myContact['contact_last_name']);
+				}
+			}
+			if (isset($task_contacts) && $task_contacts == 'on') {
+				$q->addTable('task_contacts', 'tc');
+				$q->leftJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
+				$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
+				$q->addWhere('tc.task_id = ' . $this->task_id);
+				$contactList = $q->loadList();
+				$q->clear();
+
+				foreach ($contactList as $myContact) {
+					$mail_recipients[$myContact['contact_email']] = trim($myContact['contact_first_name'].' '.$myContact['contact_last_name']);
+				}
+			}
+			if (isset($project_contacts) && $project_contacts == 'on') {
+				$q->addTable('project_contacts', 'pc');
+				$q->leftJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
+				$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
+				$q->addWhere('pc.project_id = ' . $this->task_project);
+				$projectContactList = $q->loadList();
+				$q->clear();
+
+				foreach ($projectContactList as $myContact) {
+					$mail_recipients[$myContact['contact_email']] = trim($myContact['contact_first_name'].' '.$myContact['contact_last_name']);
+				}
+			}
+			if (isset($others)) {
+				$others = trim($others, " \r\n\t,"); // get rid of empty elements.
+				if (strlen($others) > 0) {
+					$q->addTable('contacts', 'c');
+					$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
+					$q->addWhere('c.contact_id IN (' . $others . ')');
+					$otherContacts = $q->loadList();
+					$q->clear();
+
+					foreach ($otherContacts as $myContact) {
+						$mail_recipients[$myContact['contact_email']] = trim($myContact['contact_first_name'].' '.$myContact['contact_last_name']);
 					}
+				}
+			}
+			if (isset($extras) && $extras) {
+				// Search for semi-colons, commas or spaces and allow any to be separators
+				$extra_list = preg_split('/[\s,;]+/', $extras);
+				foreach ($extra_list as $email) {
+					if ($email && !isset($mail_recipients[$email])) {
+						$mail_recipients[$email] = trim($email);
+					}
+				}
+			}
+			$q->clear(); // Reset to the default state.
+			if (count($mail_recipients) == 0) {
+				return false;
+			}
+	
+			// Build the email and send it out.
+			$char_set = isset($locale_char_set) ? $locale_char_set : '';
+			$mail = new Mail;
+			// Grab the subject from user preferences
+			$prefix = $AppUI->getPref('TASKLOGSUBJ');
+			$mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
+	
+			$q->addTable('projects');
+			$q->addQuery('project_name');
+			$q->addWhere('project_id=' . (int)$this->task_project);
+			$projname = htmlspecialchars_decode($q->loadResult());
+			$q->clear();
+	
+			$body = $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n";
+			if ($this->task_parent != $this->task_id) {
+				$q->addTable('tasks');
+				$q->addQuery('task_name');
+				$q->addWhere('task_id = ' . (int)$this->task_parent);
+				$req = &$q->exec(QUERY_STYLE_NUM);
+				if ($req) {
+					$body .= $AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': ' . htmlspecialchars_decode($req->fields[0]) . "\n";
 				}
 				$q->clear();
 			}
-		}
-		if (isset($extras) && $extras) {
-			// Search for semi-colons, commas or spaces and allow any to be separators
-			$extra_list = preg_split('/[\s,;]+/', $extras);
-			foreach ($extra_list as $email) {
-				if ($email && !isset($mail_recipients[$email])) {
-					$mail_recipients[$email] = $email;
+			$body .= $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n";
+			$task_types = w2PgetSysVal('TaskType');
+			$body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
+			$body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n";
+			$body .= $AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . $log->task_log_name . "\n\n";
+			$body .= $log->task_log_description;
+	
+			// Append the user signature to the email - if it exists.
+			$q->addTable('users');
+			$q->addQuery('user_signature');
+			$q->addWhere('user_id = ' . (int)$AppUI->user_id);
+			if ($res = $q->exec()) {
+				if ($res->fields['user_signature']) {
+					$body .= "\n--\n" . $res->fields['user_signature'];
 				}
 			}
-		}
-		$q->clear(); // Reset to the default state.
-		if (count($mail_recipients) == 0) {
-			return false;
-		}
-
-		// Build the email and send it out.
-		$char_set = isset($locale_char_set) ? $locale_char_set : '';
-		$mail = new Mail;
-		// Grab the subject from user preferences
-		$prefix = $AppUI->getPref('TASKLOGSUBJ');
-		$mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
-
-		$q->addTable('projects');
-		$q->addQuery('project_name');
-		$q->addWhere('project_id=' . (int)$this->task_project);
-		$projname = htmlspecialchars_decode($q->loadResult());
-		$q->clear();
-
-		$body = $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n";
-		if ($this->task_parent != $this->task_id) {
-			$q->addTable('tasks');
-			$q->addQuery('task_name');
-			$q->addWhere('task_id = ' . (int)$this->task_parent);
-			$req = &$q->exec(QUERY_STYLE_NUM);
-			if ($req) {
-				$body .= $AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': ' . htmlspecialchars_decode($req->fields[0]) . "\n";
-			}
 			$q->clear();
-		}
-		$body .= $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n";
-		$task_types = w2PgetSysVal('TaskType');
-		$body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
-		$body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n";
-		$body .= $AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . $log->task_log_name . "\n\n";
-		$body .= $log->task_log_description;
+	
+			$mail->Body($body, $char_set);
+	
+			$recipient_list = '';
+			$toList = array();
 
-		// Append the user signature to the email - if it exists.
-		$q->addTable('users');
-		$q->addQuery('user_signature');
-		$q->addWhere('user_id = ' . (int)$AppUI->user_id);
-		if ($res = $q->exec()) {
-			if ($res->fields['user_signature']) {
-				$body .= "\n--\n" . $res->fields['user_signature'];
+			foreach ($mail_recipients as $email => $name) {
+				if ($mail->ValidEmail($email)) {
+					$toList[$email] = $email;
+					$recipient_list .= $email . ' (' . $name . ")\n";
+				} else {
+					$recipient_list .= 'Invalid email address \'' . $email . '\' for ' . $name . ', not sent' . "\n";
+				}
 			}
-		}
-		$q->clear();
 
-		$mail->Body($body, $char_set);
+			$sendToList = array_keys ($mail_recipients);
+			$mail->To($sendToList, true);
+			$mail->Send();
 
-		$recipient_list = '';
-		foreach ($mail_recipients as $email => $name) {
-			if ($mail->ValidEmail($email)) {
-				$mail->To($email);
-				$recipient_list .= $email . ' (' . $name . ")\n";
-			} else {
-				$recipient_list .= 'Invalid email address \'' . $email . '\' for ' . $name . ', not sent' . "\n";
+			// Now update the log
+			$save_email = $AppUI->getPref('TASKLOGNOTE');
+			if ($save_email) {
+				//TODO: This is where #38 - http://bugs.web2project.net/view.php?id=38 - should be applied if a change is necessary.
+				$log->task_log_description .= "\n" . 'Emailed ' . date('l F j, Y H:i:s') . ' to:' . "\n" . $recipient_list;
+				return true;
 			}
-		}
-		$mail->Send();
-		// Now update the log
-		$save_email = $AppUI->getPref('TASKLOGNOTE');
-		if ($save_email) {
-			$log->task_log_description .= "\n" . 'Emailed ' . date('d/m/Y H:i:s') . ' to:' . "\n" . $recipient_list;
-			return true;
 		}
 
 		return false; // No update needed.
