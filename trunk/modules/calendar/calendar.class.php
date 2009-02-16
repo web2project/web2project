@@ -979,7 +979,7 @@ class CEvent extends CW2pObject {
 		$q->addWhere("ue.user_id = $userId");
 		$q->addOrder('event_start_date');
 
-		return $q->loadList();		
+		return $q->loadList();
 	}
 }
 
