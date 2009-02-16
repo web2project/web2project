@@ -65,17 +65,6 @@
 		?>
 		</td>
 	</tr>
-	<?php
-		$maxfileuploadsize = min(w2pgetIniSize(ini_get('upload_max_filesize')), w2pgetIniSize(ini_get('post_max_size')));
-		$memory_limit = w2pgetIniSize(ini_get('memory_limit'));
-		if ($memory_limit > 0 && $memory_limit < $maxfileuploadsize) $maxfileuploadsize = $memory_limit;
-		// Convert back to human readable numbers
-		if ($maxfileuploadsize > 1048576) {
-			$maxfileuploadsize = (int)($maxfileuploadsize / 1048576) . 'M';
-		} else if ($maxfileuploadsize > 1024) {
-			$maxfileuploadsize = (int)($maxfileuploadsize / 1024) . 'K';
-		}
-	?>
 	<tr>
 		<td class="item">File Uploads</td>
 		<td align="left">
@@ -84,7 +73,7 @@
 				echo '<b class="error">'.$failedImg.'</b> <span class="warning">Upload functionality will not be available.</span>';
 				$continue = false;
 			} else {
-				echo '<b class="ok">'.$okImg.'</b> <span class="item">(Max File Upload Size: '. $maxfileuploadsize .')</span>';
+				echo '<b class="ok">'.$okImg.'</b> <span class="item">(Max File Upload Size: '. $manager->getMaxFileUpload() .')</span>';
 			}
 		?>
 		</td>

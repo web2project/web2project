@@ -163,7 +163,37 @@
 
 			return $configFile;
 		}
+		public function getMaxFileUpload() {
+			$maxfileuploadsize = min($this->_getIniSize(ini_get('upload_max_filesize')), $this->_getIniSize(ini_get('post_max_size')));
+			$memory_limit = $this->_getIniSize(ini_get('memory_limit'));
+			if ($memory_limit > 0 && $memory_limit < $maxfileuploadsize) $maxfileuploadsize = $memory_limit;
+			// Convert back to human readable numbers
+			if ($maxfileuploadsize > 1048576) {
+				$maxfileuploadsize = (int)($maxfileuploadsize / 1048576) . 'M';
+			} else if ($maxfileuploadsize > 1024) {
+				$maxfileuploadsize = (int)($maxfileuploadsize / 1024) . 'K';
+			}
+			
+			return $maxfileuploadsize;
+		}
 
+		private function _getIniSize($val) {
+		   $val = trim($val);
+		   if (strlen($val <= 1)) return $val;
+		   $last = $val{strlen($val)-1};
+		   switch($last) {
+		       case 'k':
+		       case 'K':
+		           return (int) $val * 1024;
+		           break;
+		       case 'm':
+		       case 'M':
+		           return (int) $val * 1048576;
+		           break;
+		       default:
+		           return $val;
+		   }
+		}
 		private function _getMaxVersion() {
 			$migrations = array();
 
