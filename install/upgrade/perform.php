@@ -2,6 +2,11 @@
 	if (!defined('W2P_BASE_DIR')) {
 		die('You should not access this file directly.');
 	}
+
+	/*
+	 * TODO: There needs to be a check in here to make sure the person attempting
+	 * the upgrade has system edit permissions.
+	 */
 ?>
 <table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
 	<tr>

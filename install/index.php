@@ -24,7 +24,6 @@
 	require_once '../base.php';
 	require_once W2P_BASE_DIR . '/includes/main_functions.php';
 	require_once W2P_BASE_DIR . '/install/manager.class.php';
-	require_once W2P_BASE_DIR . '/install/install.inc.php';
 
 	$step = trim( w2PgetCleanParam( $_POST, 'step', '' ) );
 	$manager = new UpgradeManager();
@@ -46,7 +45,11 @@
 				case 'install':
 					?>
 					<tr>
-						<td colspan="2">This system will help you perform each of the required steps to prepare your web2project installation.  It's a three step process.  First we'll confirm that all the requirements are met, then we'll get the database credentials, then we'll load the system.</td>
+						<td colspan="2">This system will help you perform each of the 
+							required steps to prepare your web2project installation.  It's 
+							a three step process.  First we'll confirm that all the 
+							requirements are met, then we'll get the database credentials, 
+							then we'll load the system.</td>
 					</tr>
 					<?php if ($step == '') { ?>
 						<tr>
