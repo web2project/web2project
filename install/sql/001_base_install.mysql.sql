@@ -285,7 +285,7 @@ CREATE TABLE `custom_fields_lists` (
 --
 
 CREATE TABLE `custom_fields_struct` (
-  `field_id` int(10) NOT NULL default '0',
+  `field_id` int(10) NOT NULL auto_increment,
   `field_module` varchar(30) default NULL,
   `field_page` varchar(30) default NULL,
   `field_htmltype` varchar(20) default NULL,
@@ -309,7 +309,7 @@ CREATE TABLE `custom_fields_struct` (
 --
 
 CREATE TABLE `custom_fields_values` (
-  `value_id` int(10) NOT NULL default '0',
+  `value_id` int(10) NOT NULL auto_increment,
   `value_module` varchar(30) default NULL,
   `value_object_id` int(10) default NULL,
   `value_field_id` int(10) default NULL,
