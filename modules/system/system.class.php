@@ -129,6 +129,25 @@ class CModule extends CW2pObject {
 		if (isset($this->permissions_item_table) && $this->permissions_item_table) {
 			$perms->addModuleSection($this->permissions_item_table);
 		}
+		
+		$q->clear();
+		$q->addTable('modules');
+		$q->addQuery('mod_id, mod_name');
+		$q->addOrder('mod_ui_order ASC');
+		$q->addOrder('mod_ui_active DESC');
+		$q->addOrder('mod_directory ASC');
+		$moduleList = $q->loadList();
+		
+		$i = 1;
+		foreach ($moduleList as $module) {
+			$q->clear();
+			$q->addTable('modules');
+			$q->addUpdate('mod_ui_order', $i);
+			$q->addWhere('mod_id = ' . $module['mod_id']);
+			$q->exec();
+			$i++;
+		}
+		
 		return true;
 	}
 
