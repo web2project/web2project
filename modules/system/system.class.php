@@ -102,18 +102,11 @@ class CModule extends CW2pObject {
 			// TODO: check for older version - upgrade
 			return false;
 		}
-
-		$q = new DBQuery;
-		$q->addTable('modules');
-		$q->addQuery('MAX(mod_ui_order)');
-		$q->addWhere('mod_name NOT LIKE \'Public\'');
-		// We need to account for "pre-installed" modules that are "UI Inaccessible"
-		// in order to make sure we get the "correct" initial value for .
-		// mod_ui_order values of "UI Inaccessible" modules are irrelevant
-		// and should probably be set to 0 so as not to interfere.
-
-		$this->mod_ui_order = $q->loadResult() + 1;
+		// This arbitrarily places it at the end of the list.
+		$this->mod_ui_order = 100;
 		$this->store();
+
+		$this->_compactModuleUIOrder();
 
 		$perms = &$GLOBALS['AppUI']->acl();
 		$perms->addModule($this->mod_directory, $this->mod_name);
@@ -129,12 +122,13 @@ class CModule extends CW2pObject {
 		if (isset($this->permissions_item_table) && $this->permissions_item_table) {
 			$perms->addModuleSection($this->permissions_item_table);
 		}
-		
-		$q->clear();
+		return true;
+	}
+	private function _compactModuleUIOrder() {
+		$q = new DBQuery;
 		$q->addTable('modules');
-		$q->addQuery('mod_id, mod_name');
+		$q->addQuery('mod_id');
 		$q->addOrder('mod_ui_order ASC');
-		$q->addOrder('mod_ui_active DESC');
 		$q->addOrder('mod_directory ASC');
 		$moduleList = $q->loadList();
 		
@@ -146,9 +140,7 @@ class CModule extends CW2pObject {
 			$q->addWhere('mod_id = ' . $module['mod_id']);
 			$q->exec();
 			$i++;
-		}
-		
-		return true;
+		}		
 	}
 
 	function remove() {
@@ -172,6 +164,7 @@ class CModule extends CW2pObject {
 			if (isset($this->permissions_item_table) && $this->permissions_item_table) {
 				$perms->deleteModuleSection($this->permissions_item_table);
 			}
+			$this->_compactModuleUIOrder();
 			return null;
 		}
 	}
