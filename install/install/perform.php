@@ -13,6 +13,7 @@
 	$dbpass = trim( w2PgetCleanParam( $_POST, 'dbpass', '' ) );
 	$dbprefix = trim( w2PgetCleanParam( $_POST, 'dbprefix', '' ) );
 	$adminpass = trim( w2PgetCleanParam( $_POST, 'adminpass', 'passwd' ) );
+	$adminpass = ($adminpass == '') ? 'passwd' : $adminpass;
 	$dbpersist = w2PgetCleanParam( $_POST, 'dbpersist', false );
 
 	$do_db = isset($_POST['do_db']);
@@ -28,10 +29,26 @@
 	 'dbuser' => $dbuser,
 	 'dbpersist' => $dbpersist,
 	 'root_dir' => $baseDir,
-	 'base_url' => $baseUrl
+	 'base_url' => $baseUrl,
+	 'adminpass' => $adminpass
 	);
-	$manager->setConfigOptions($w2Pconfig);
-
+	if (!$manager->testDatabaseCredentials($w2Pconfig)) {
+		?>
+		<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
+			<tr>
+			  <td colspan="2" align="center">
+			  	<b class="error">Your database credentials failed.  System installation has stopped.  Please check them and try again.</b><br /><br />
+				  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form">
+			  		<input type="hidden" name="step" value="dbcreds" />
+			  		<input class="button" type="submit" name="next" value="Reset System Credentials &raquo;" />
+					</form>
+				</td>
+			</tr>
+		</table>
+		<?php		
+		die();
+	}
+	
 	$dbMsg = 'Not Created';
 	$cFileMsg = 'Not Created';
 	$dbErr = false;
@@ -97,7 +114,8 @@
 			?>
 			<tr>
 				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.  It's possible that your dotProject database was not the version it claimed to be.</td>
-			</tr><?php
+			</tr>
+			<?php
 		}
 	?>
 	<tr>
