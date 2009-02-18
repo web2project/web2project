@@ -2,9 +2,6 @@
 	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 
 	class UpgradeManager {
-		private $currentVersion = '';
-		private $toConvert = false;
-		private $toInstall = false;
 		private $action = '';
 		
 		private $configDir = '';
@@ -63,7 +60,7 @@
 		public function getConfigOptions() {
 			return $this->configOptions;
 		}
-		public function setConfigOptions($dbConfig) {
+		private function _setConfigOptions($dbConfig) {
 			$this->configOptions = $dbConfig;
 		}
 		public function upgradeSystem() {
@@ -176,6 +173,18 @@
 			
 			return $maxfileuploadsize;
 		}
+		public function testDatabaseCredentials($w2Pconfig) {
+			$result = false;
+			
+			$this->_setConfigOptions($w2Pconfig);
+
+			$dbConn = $this->_openDBConnection();
+			if ($dbConn) {
+				$result = true;
+			}
+
+			return $result;
+		}
 
 		private function _getIniSize($val) {
 		   $val = trim($val);
@@ -234,6 +243,9 @@
 					 * really not.  With all of the dependencies, it just gets to be a huge
 					 * pain and ends up loading all kinds of unnecessary stuff.
 					 */
+					if (strpos($pieces[$i], '[ADMINPASS]') !== false) {
+						$pieces[$i] = str_replace('[ADMINPASS]', $this->configOptions['adminpass'], $pieces[$i]);
+					}
 					if (!$result = $dbConn->Execute($pieces[$i])) {
 						$dbErr = true;
 						$errorMessages[] = $dbConn->ErrorMsg();
@@ -252,15 +264,20 @@
 			 * really not.  With all of the dependencies, it just gets to be a huge
 			 * pain and ends up loading all kinds of unnecessary stuff.
 			 */
+			$db = false;
 
-			$db = NewADOConnection($this->configOptions['dbtype']);
-			if(!empty($db)) {
-			  $dbConnection = $db->Connect($this->configOptions['dbhost'], $this->configOptions['dbuser'], $this->configOptions['dbpass']);
-			  if ($dbConnection) {
-			    $existing_db = $db->SelectDB($this->configOptions['dbname']);
-			  }
-			} else { 
-				$dbConnection = false;
+			try {
+				$db = NewADOConnection($this->configOptions['dbtype']);
+				if(!empty($db)) {
+				  $dbConnection = $db->Connect($this->configOptions['dbhost'], $this->configOptions['dbuser'], $this->configOptions['dbpass']);
+				  if ($dbConnection) {
+				    $existing_db = $db->SelectDB($this->configOptions['dbname']);
+				  }
+				} else { 
+					$dbConnection = false;
+				}
+			} catch (Exception $exc) {
+				echo 'Your database credentials do not work.';
 			}
 			return $db;
 		}

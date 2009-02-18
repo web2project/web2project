@@ -1,16 +1,12 @@
--- $Id: web2project.sql 225 2008-09-03 19:42:13Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/install/web2project.sql $
--- WEB2PROJECT MANUAL DATABASE CREATION
+-- WEB2PROJECT DATABASE CONVERSION SCRIPT
 -- USE THIS FILE FOR TESTING PURPOSES ONLY!
--- WITH A NORMAL WEB2PROJECT INSTALL YOU WILL NOT NEED TO USE THIS FILE BECAUSE ALL DATABASE CREATION PROCEDURES SHOULD BE HANDLED BY WEB2PROJECT INSTALLER.
--- USE THIS FILE AT YOUR OWN RISK AND DON'T FORGET TO BACKUP ANY IMPORTANT DATA OR FILES BEFORE USING IT.
+-- WITH A NORMAL WEB2PROJECT INSTALL YOU WILL NOT NEED TO USE THIS FILE 
+-- BECAUSE ALL DATABASE CREATION PROCEDURES SHOULD BE HANDLED BY WEB2PROJECT 
+-- INSTALLER.
 
 -- HOW TO USE THIS FILE:
--- 1) YOU SHOULD CREATE A NEW EMPTY DATABASE AND THEN IMPORT THIS SCRIPT INTO IT USING PHPMYADMIN.
--- NOTE: IF YOU WANT TO USE TABLE NAMES WITH PREFIXES PLEASE REPLACE IN THIS SQL FILE ALL REFERENCES TO CREATE TABLE ` TO CREATE TABLE `yourprefix_
--- THEN YOU CAN IMPORT THE SQL SCRIPT WITH PHPMYADMIN. KEEP IN MIND THAT YOU WILL HAVE TO SET THAT PREFIX ON THE includes/config.php FILE WITH $w2Pconfig['dbprefix'] = 'yourprefix_';
--- 2) CHANGE YOUR includes/config.php TO POINT TO THE DATABASE WITH THE CORRECT SETTINGS.
--- 3) AFTER THAT YOU CAN POINT YOUR BROWSER TO YOUR WEB2PROJECT SITE AND LOGIN WITH USER admin AND PASSWORD passwd
-
+-- 1) DON'T.  PLEASE USE THE INSTALLER INSTEAD.
+--
 -- PLEASE PROVIDE US WITH FEEDBACK ON OUR FORUMS AT:
 -- http://forums.web2project.net
 --
@@ -18,7 +14,7 @@
 -- THANK YOU VERY MUCH.
 
 --
--- (C) 2008 WEB2PROJECT DEVELOPMENT TEAM
+-- (C) 2009 WEB2PROJECT DEVELOPMENT TEAM
 --
 
 -- --------------------------------------------------------
@@ -2238,7 +2234,7 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `user_contact`, `user_username`, `user_password`, `user_parent`, `user_type`, `user_signature`, `user_empireint_special`, `user_department`, `user_company`) VALUES (1, 1, 'admin', md5('passwd'), 0, 1, '', 0, 0, 0);
+INSERT INTO `users` (`user_id`, `user_contact`, `user_username`, `user_password`, `user_parent`, `user_type`, `user_signature`, `user_empireint_special`, `user_department`, `user_company`) VALUES (1, 1, 'admin', md5('[ADMINPASS]'), 0, 1, '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
