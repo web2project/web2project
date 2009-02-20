@@ -28,8 +28,8 @@ if (!defined('W2P_BASE_DIR')) {
 		
 		private function formatDate($mysqlDate, $myTimezoneOffset) {
 			$rawDate = strtotime($mysqlDate);
-			$rawDate += $myTimezoneOffset;
-			
+			$rawDate += -$myTimezoneOffset;
+
 			$myDatetime = date('Ymd His', $rawDate);
 			$myDatetime = str_replace(' ', 'T', $myDatetime).'Z';
 
