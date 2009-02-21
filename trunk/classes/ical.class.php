@@ -28,10 +28,18 @@ if (!defined('W2P_BASE_DIR')) {
 		
 		private function formatDate($mysqlDate, $myTimezoneOffset) {
 			$rawDate = strtotime($mysqlDate);
-			$rawDate += -$myTimezoneOffset;
+			$secondsPerDay = 86400;
 
-			$myDatetime = date('Ymd His', $rawDate);
-			$myDatetime = str_replace(' ', 'T', $myDatetime).'Z';
+			if (($rawDate % $secondsPerDay) == -$myTimezoneOffset) {
+				$myDatetime = date('Ymd', $rawDate);
+			} elseif (($rawDate - $myTimezoneOffset) % $secondsPerDay == 0 ) {
+				$myDatetime = date('Ymd', $rawDate);
+			} else {
+				$rawDate += -$myTimezoneOffset;
+				$rawDate += (date('I') == 0) ? -60*60 : 0;
+				$myDatetime = date('Ymd His', $rawDate);
+				$myDatetime = str_replace(' ', 'T', $myDatetime).'Z';
+			}
 
 			return $myDatetime;
 		}

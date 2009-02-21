@@ -15,10 +15,10 @@
 	$userId = CUser::getUserIdByToken($token);
 	
 	switch ($format) {
-		//TODO: We only output in iCal, are there others we need to consider?
-		case 'ical':
+		//TODO: We only output in vCal, are there others we need to consider?
+		case 'vcal':
 		default:
-			$format = 'ical';
+			$format = 'vcal';
 			header ( 'Content-Type: text/calendar' );
 			header ( 'Content-disposition: attachment; filename="calendar.ics' );
 			break;
@@ -27,7 +27,8 @@
 	if ($userId > 0) {
 		$moduleList = $AppUI->getLoadableModuleList();
 
-		$calendarHeader = "BEGIN:VCALENDAR\nCALSCALE:GREGORIAN\nVERSION:2.0\n";
+		$myTimezoneName = date('e');
+		$calendarHeader = "BEGIN:VCALENDAR\nPRODID:-//web2project//EN\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-TIMEZONE:{$myTimezoneName}\n";
 		$calendarFooter = "END:VCALENDAR";
 
 		//TODO: get the users' timezone for display processes
