@@ -3,13 +3,14 @@
 
 	class UpgradeManager {
 		private $action = '';
-		
+
 		private $configDir = '';
 		private $configFile = '';
 		private $uploadDir = '';
 		private $languageDir = '';
 		private $tempDir = '';
 		private $configOptions = array();
+		private $updatesApplied = array();
 		
 		public function getActionRequired() {
 
@@ -79,14 +80,16 @@
 				}
 
 				$migrations = $this->_getMaxVersion();
+				$migration = 0;
 
 				if ($currentVersion < count($migrations)) {
-					$migration = 1;
 					foreach ($migrations as $update) {
-						if ($migration > $currentVersion) {
+						$myIndex = (int) substr($update, 0, 3);
+						if ($myIndex > $currentVersion) {
+							$this->updatesApplied[] = $update;
 							$errorMessages = $this->_applySQLUpdates($update, $dbConn);
 							$allErrors = array_merge($allErrors, $errorMessages);
-							$sql = "UPDATE w2pversion SET db_version = $migration";
+							$sql = "UPDATE w2pversion SET db_version = $myIndex";
 							//TODO: update the code revision
 							//TODO: update the version number
 							$dbConn->Execute($sql);
@@ -99,6 +102,9 @@
 			}
 
 			return $allErrors;
+		}
+		public function getUpdatesApplied() {
+			return $this->updatesApplied;
 		}
 		public function convertDotProject() {
 			$dpVersion = '';
