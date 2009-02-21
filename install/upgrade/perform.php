@@ -15,6 +15,19 @@
 	<?php
 		$errorMessages = $manager->upgradeSystem();
 
+		$updatesApplied = $manager->getUpdatesApplied();
+		if (count($updatesApplied) > 0) { 
+			foreach ($updatesApplied as $update) {
+				?>
+				<tr><td colspan="2">Database update - <?php echo $update; ?> - applied</td></tr>
+				<?php
+			}
+		} else {
+			?>
+			<tr><td colspan="2">No database updates applied</td></tr>
+			<?php			
+		}
+
 		if (count($errorMessages) > 0) {
 			?>
 			<tr>
