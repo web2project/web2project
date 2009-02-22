@@ -654,9 +654,23 @@ class CProject extends CW2pObject {
 
 			$department = new CDepartment;
 			$department->setAllowedSQL($AppUI->user_id, $q);
+
 			return $q->loadHashList('dept_id');
 		}
 	}
+	public static function getOwners() {
+		$q = new DBQuery();
+		$q->addTable('projects', 'p');
+		$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
+		$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
+		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+		$q->addOrder('contact_first_name, contact_last_name');
+		$q->addWhere('user_id > 0');
+		$q->addWhere('p.project_owner IS NOT NULL');
+
+		return $q->loadHashList();
+	}
+
 	public function hasChildProjects() {
 		// Note that this returns the *count* of projects.  If this is zero, it 
 		//   is evaluated as false, otherwise it is considered true.

@@ -95,16 +95,7 @@ $owner = $AppUI->getState('ProjIdxowner') !== null ? $AppUI->getState('ProjIdxow
 $bufferUser = '<select name="show_owner" onchange="document.pickUser.submit()" class="text">';
 $bufferUser .= '<option value="0">' . $AppUI->_('All Users');
 
-$q = new DBQuery();
-$q->addTable('projects', 'p');
-$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
-$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
-$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-$q->addOrder('contact_first_name, contact_last_name');
-$q->addWhere('user_id > 0');
-$q->addWhere('p.project_owner IS NOT NULL');
-$user_list = array(0 => '(all)');
-$user_list = $user_list + $q->loadHashList();
+$user_list = array(0 => '(all)') + CProject::getOwners();
 
 // collect the full projects list data via function in projects.class.php
 projects_list_data();
