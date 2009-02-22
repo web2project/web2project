@@ -27,6 +27,13 @@ $users = w2PgetUsers();
 // load the record data
 $project = new CProject();
 
+// get a list of permitted companies
+require_once ($AppUI->getModuleClass('companies'));
+
+$company = new CCompany();
+$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+$companies = arrayMerge(array('0' => ''), $companies);
+
 if (!$project->load($project_id, false) && $project_id > 0) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -39,13 +46,6 @@ if (!$project->load($project_id, false) && $project_id > 0) {
 if ($project_id == 0 && $company_id > 0) {
 	$project->project_company = $company_id;
 }
-
-// get a list of permitted companies
-require_once ($AppUI->getModuleClass('companies'));
-
-$company = new CCompany();
-$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
-$companies = arrayMerge(array('0' => ''), $companies);
 
 // add in the existing company if for some reason it is dis-allowed
 if ($project_id && !array_key_exists($project->project_company, $companies)) {
