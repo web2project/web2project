@@ -6,31 +6,13 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $project_id, $df, $canEdit, $m, $tab;
 
 // Lets check which cost codes have been used before
-$q = new DBQuery;
-$q->addQuery('project_company');
-$q->addTable('projects');
-$q->addWhere('project_id = ' . (int)$project_id);
-$company_id = $q->loadResult();
+$company_id = CProject::getCompany($project_id);
 
-$q->addTable('billingcode');
-$q->addQuery('billingcode_id, billingcode_name');
-$q->addOrder('billingcode_name');
-$q->addWhere('billingcode_status = 0');
-$q->addWhere('(company_id = 0 OR company_id = ' . (int)$company_id . ')');
-$task_log_costcodes = $q->loadHashList();
-array_unshift($task_log_costcodes, '');
-
-// Show deleted codes separately (at the end)
-$q->addTable('billingcode');
-$q->addQuery('billingcode_id, billingcode_name');
-$q->addOrder('billingcode_name');
-$q->addWhere('billingcode_status = 1');
-$q->addWhere('(company_id = 0 OR company_id = ' . (int)$company_id . ')');
-$task_log_costcodes = array_merge($task_log_costcodes, $q->loadHashList());
+$task_log_costcodes =  array(0 => '(all)') + CProject::getBillingCodes($company_id, true);
 
 $users = w2PgetUsers();
 
-$cost_code = w2PgetParam($_GET, 'cost_code', '0');
+$cost_code = w2PgetParam($_GET, 'cost_code', 0);
 
 if (isset($_GET['user_id'])) {
 	$AppUI->setState('ProjectsTaskLogsUserFilter', w2PgetParam($_GET, 'user_id', 0));
@@ -110,7 +92,7 @@ $canDelete = $perms->checkModule('task_log', 'delete');
 
 // Pull the task comments
 $project = new CProject;
-$logs = $project->getTaskLogs($AppUI, $project_id, $user_id, $hide_inactive, $cost_code);
+$logs = $project->getTaskLogs($AppUI, $project_id, $user_id, $hide_inactive, $hide_complete, $cost_code);
 
 $s = '';
 $hrs = 0;
