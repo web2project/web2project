@@ -39,35 +39,8 @@ $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : n
 $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
 
-$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
-
-$hasTasks = CProject::hasTasks($project_id);
-
 // load the record data
-// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-$q = new DBQuery;
-
-if ($hasTasks) {
-	$q->addTable('projects');
-	$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
-	$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
-	$q->leftJoin('users', 'u', 'user_id = project_owner');
-	$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
-	$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
-	$q->addWhere('project_id = ' . (int)$project_id . ' AND t1.task_id = t1.task_parent');
-	$q->addGroup('project_id');
-	$q->loadObject($project);
-} else {
-	$q->addTable('projects');
-	$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, (0.0) AS project_percent_complete');
-	$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
-	$q->leftJoin('users', 'u', 'user_id = project_owner');
-	$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
-	$q->addWhere('project_id = ' . (int)$project_id);
-	$q->addGroup('project_id');
-	$q->loadObject($project);
-}
-$q->clear();
+$project = $project->fullLoad($project_id);
 
 if (!$project) {
 	$AppUI->setMsg('Project');
@@ -77,15 +50,10 @@ if (!$project) {
 	$AppUI->savePlace();
 }
 
-if ($hasTasks) {
+$worked_hours = $project->getWorkedHours();
+$total_hours = $project->getTotalHours();
+$total_project_hours = $project->getTotalProjectHours();
 
-	$worked_hours = $project->getWorkedHours();
-	$total_hours = $project->getTotalHours();
-	$total_project_hours = $project->getTotalProjectHours();
-
-} else { //no tasks in project so "fake" project data
-	$worked_hours = $total_hours = $total_project_hours = 0.00;
-}
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 

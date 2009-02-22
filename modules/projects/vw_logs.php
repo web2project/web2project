@@ -73,8 +73,11 @@ function delIt2(id) {
 	<td width="98%">&nbsp;</td>
 	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive') ?></label></td>
 	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_complete" id="hide_complete" <?php echo $hide_complete ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_complete"><?php echo $AppUI->_('Hide 100% Complete') ?></label></td>
+	<!--
+	disabled this filter for now... something is wrong with the userId portion...
 	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('User Filter') ?></td>
 	<td width="1%"><?php echo arraySelect($users, 'user_id', 'size="1" class="text" id="medium" onchange="document.frmFilter.submit()"', $user_id) ?></td>
+	-->
 	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('Cost Code Filter') ?></td>
 	<td width="1%"><?php echo arraySelect($task_log_costcodes, 'cost_code', 'size="1" class="text" onchange="document.frmFilter.submit()"', $cost_code) ?></td>
 </tr>
@@ -104,36 +107,10 @@ function delIt2(id) {
 // Winnow out the tasks we are not allowed to view.
 $perms = &$AppUI->acl();
 $canDelete = $perms->checkModule('task_log', 'delete');
-$project = &new CProject;
 
 // Pull the task comments
-$q = new DBQuery;
-$q->addTable('task_log');
-$q->addQuery('task_log.*, user_username, task_id');
-$q->addQuery('billingcode_name as task_log_costcode');
-$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS real_name');
-$q->addJoin('users', 'u', 'user_id = task_log_creator');
-$q->addJoin('tasks', 't', 'task_log_task = t.task_id');
-$q->addJoin('contacts', 'ct', 'contact_id = user_contact');
-$q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
-//already included bY the setAllowedSQL function
-//$q->addJoin('projects', 'p', 'task_project = p.project_id');
-$q->addWhere('task_project = ' . (int)$project_id);
-if ($user_id > 0) {
-	$q->addWhere('task_log_creator=' . $user_id);
-}
-if ($hide_inactive) {
-	$q->addWhere('task_status>=0');
-}
-if ($hide_complete) {
-	$q->addWhere('task_percent_complete < 100');
-}
-if ($cost_code != '0') {
-	$q->addWhere('task_log_costcode = \'' . $cost_code . '\'');
-}
-$q->addOrder('task_log_date');
-$project->setAllowedSQL($AppUI->user_id, $q, 'task_project');
-$logs = $q->loadList();
+$project = new CProject;
+$logs = $project->getTaskLogs($AppUI, $project_id, $user_id, $hide_inactive, $cost_code);
 
 $s = '';
 $hrs = 0;
