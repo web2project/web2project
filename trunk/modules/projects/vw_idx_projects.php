@@ -179,7 +179,6 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 		((!$row['project_active'] && $project_status_filter == -3) && !$is_tabbed) //flat archived projects
 		) {
 
-		//unset($st_projects_arr);
 		$st_projects_arr = array();
 		$sp_obj = new CProject();
 		$sp_obj->load($project_id);
@@ -200,16 +199,11 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 			$project = $st_project[0];
 			$level = $st_project[1];
 			if ($project['project_id']) {
-				//$row_st = new CProject();
-				//$row_st->load($project['project_id']);
 				if ($is_tabbed) {
 					$row = $all_projects[getProjectIndex($all_projects, $project['project_id'])];
 				} else {
 					$row = $projects[getProjectIndex($projects, $project['project_id'])];
 				}
-				//foreach(get_object_vars($row_st) as $field=>$data) {
-				//	$row[$field] = $data;
-				//}
 			}
 			$none = false;
 			$start_date = intval($row['project_start_date']) ? new CDate($row['project_start_date']) : null;
