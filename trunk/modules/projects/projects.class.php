@@ -264,25 +264,21 @@ class CProject extends CW2pObject {
 
 			// Fix parent Task
 			// This task had a parent task, adjust it to new parent task_id
-			if ($newTask->task_id != $newTask->task_parent)
+			if ($newTask->task_id != $newTask->task_parent) {
 				$newTask->task_parent = $tasks[$newTask->task_parent]->task_id;
+			}
 
 			// Fix task start date from project start date offset
 			$origDate->setDate($newTask->task_start_date);
-			//$destDate->setDate ($origDate->getTime() + $timeOffset , DATE_FORMAT_UNIXTIME );
 			$origDate->addDays($timeOffset);
 			$destDate = $origDate;
-			//$destDate = $destDate->next_working_day( );
 			$newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);
 
 			// Fix task end date from start date + work duration
-			//$newTask->calc_task_end_date();
 			if (!empty($newTask->task_end_date) && $newTask->task_end_date != '0000-00-00 00:00:00') {
 				$origDate->setDate($newTask->task_end_date);
-				//$destDate->setDate ($origDate->getTime() + $timeOffset , DATE_FORMAT_UNIXTIME );
 				$origDate->addDays($timeOffset);
 				$destDate = $origDate;
-				//$destDate = $destDate->next_working_day();
 				$newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
 			}
 
@@ -422,15 +418,6 @@ class CProject extends CW2pObject {
 			$q->addWhere('NOT (department_id IS NULL)');
 		}
 
-		/*If (count($aCpiesAllowed)) {
-		$q->addWhere('NOT (project_company IN (' . implode (',', array_keys($aCpiesAllowed)) . '))');
-		}*/
-		//Department permissions
-		/*If (count($aDptsAllowed)) {
-		$q->addWhere('NOT (department_id IN (' . implode (',', array_keys($aDptsAllowed)) . '))');
-		} else {
-		$q->addWhere('NOT (department_id IS NULL)');
-		}*/
 		$aBuf2 = $q->loadColumn();
 		$q->clear();
 
@@ -1050,9 +1037,6 @@ function projects_list_data($user_id = false) {
 		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, tt.total_tasks, tsy.my_tasks,
 		ts.project_percent_complete, user_username, project_active');
 	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
-//	$q->addJoin('companies', 'com', 'projects.project_company = com.company_id');
-//	$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
-//	$q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
 	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
 	$q->addJoin('tasks_critical', 'tc', 'pr.project_id = tc.task_project');
@@ -1060,13 +1044,9 @@ function projects_list_data($user_id = false) {
 	$q->addJoin('tasks_sum', 'ts', 'pr.project_id = ts.task_project');
 	$q->addJoin('tasks_total', 'tt', 'pr.project_id = tt.task_project');
 	$q->addJoin('tasks_summy', 'tsy', 'pr.project_id = tsy.task_project');
-	if ($addProjectsWithAssignedTasks)
+	if ($addProjectsWithAssignedTasks) {
 		$q->addJoin('tasks_users', 'tu', 'pr.project_id = tu.task_project');
-	// DO we have to include the above DENY WHERE restriction, too?
-	//$q->addJoin('', '', '');
-	//if (isset($department)) {
-	//	$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
-	//}
+	}
 	if (!isset($department) && $company_id && !$addPwOiD) {
 		$q->addWhere('pr.project_company = ' . (int)$company_id);
 	}
@@ -1094,11 +1074,9 @@ function projects_list_data($user_id = false) {
 
 	$q->addGroup('pr.project_id');
 	$q->addOrder($orderby . ' ' .$orderdir);
-//	$obj->setAllowedSQL($AppUI->user_id, $q, null, 'co');
 	$prj = new CProject();
 	$prj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 	$dpt = new CDepartment();
-//	$dpt->setAllowedSQL($AppUI->user_id, $q);
 	$projects = $q->loadList();
 
 	// get the list of permitted companies
