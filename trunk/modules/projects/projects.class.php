@@ -121,6 +121,25 @@ class CProject extends CW2pObject {
 		}
 		return $result;
 	}
+	public function fullLoad($projectId) {
+		global $w2Pconfig;
+		
+		$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
+
+		// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
+		$q = new DBQuery;
+		$q->addTable('projects');
+		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
+		$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'left');
+		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
+		$q->leftJoin('users', 'u', 'user_id = project_owner');
+		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
+		$q->addWhere('project_id = ' . (int) $projectId);
+		$q->addGroup('project_id');
+		$q->loadObject($this);
+		
+		return $this;
+	}
 	// overload canDelete
 	function canDelete(&$msg, $oid = null) {
 		// TODO: check if user permissions are considered when deleting a project
@@ -645,7 +664,9 @@ class CProject extends CW2pObject {
 		}
 	}
 	public static function getDepartments($AppUI, $projectId) {
-		if ($AppUI->isActiveModule('departments')) {
+		$perms = $AppUI->acl();
+
+		if ($AppUI->isActiveModule('departments') && $perms->checkModule('departments', 'view')) {
 			$q = new DBQuery;
 			$q->addTable('departments', 'a');
 			$q->addTable('project_departments', 'b');
@@ -659,7 +680,9 @@ class CProject extends CW2pObject {
 		}
 	}
 	public static function getForums($AppUI, $projectId) {
-		if ($AppUI->isActiveModule('forums')) {
+		$perms = $AppUI->acl();
+
+		if ($AppUI->isActiveModule('forums') && $perms->checkModule('forums', 'view')) {
 			$q = new DBQuery;
 			$q->addTable('forums');
 			$q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name, forum_message_count,
@@ -733,7 +756,7 @@ class CProject extends CW2pObject {
 		$q->addTable('tasks');
 		$q->addQuery('ROUND(SUM(task_log_hours),2)');
 		$q->addWhere('task_log_task = task_id AND task_project = ' . (int) $this->project_id);
-		$worked_hours = $q->loadResult();
+		$worked_hours = 0 + $q->loadResult();
 
 		return rtrim($worked_hours, '.');
 	}
@@ -785,6 +808,36 @@ class CProject extends CW2pObject {
 		$total_project_hours = $total_project_days * $w2Pconfig['daily_working_hours'] + $total_project_hours;
 
 		return rtrim($total_project_hours, '.');
+	}
+	public function getTaskLogs($AppUI, $projectId, $user_id = 0, $hide_inactive = 0, $hide_complete, $cost_code = 0) {
+
+		$q = new DBQuery;
+		$q->addTable('task_log');
+		$q->addQuery('task_log.*, user_username, task_id');
+		$q->addQuery('billingcode_name as task_log_costcode');
+		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
+		$q->addJoin('users', 'u', 'user_id = task_log_creator');
+		$q->addJoin('tasks', 't', 'task_log_task = t.task_id');
+		$q->addJoin('contacts', 'ct', 'contact_id = user_contact');
+		$q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
+
+		$q->addWhere('task_project = ' . (int) $projectId);
+		if ($user_id > 0) {
+			$q->addWhere('task_log_creator=' . $user_id);
+		}
+		if ($hide_inactive) {
+			$q->addWhere('task_status>=0');
+		}
+		if ($hide_complete) {
+			$q->addWhere('task_percent_complete < 100');
+		}
+		if ($cost_code != '0') {
+			$q->addWhere('task_log_costcode = \'' . $cost_code . '\'');
+		}
+		$q->addOrder('task_log_date');
+		$this->setAllowedSQL($AppUI->user_id, $q, 'task_project');
+
+		return $q->loadList();
 	}
 }
 
