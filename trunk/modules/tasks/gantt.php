@@ -3,10 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-/*
-* Gantt.php - by J. Christopher Pereira
-* TASKS $Id$
-*/
 global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id, $w2Pconfig;
 
 w2PsetExecutionConditions($w2Pconfig);
@@ -23,21 +19,11 @@ $f = defVal($_REQUEST['f'], 0);
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 require_once $AppUI->getModuleClass('projects');
-$project = &new CProject;
+$project = new CProject;
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 
 // pull valid projects and their percent complete information
-
-$q = new DBQuery;
-$q->addTable('projects', 'pr');
-$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date');
-$q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project', 'inner');
-$q->addWhere('project_active = 1');
-$q->addGroup('pr.project_id');
-$q->addOrder('project_name');
-$project->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-$projects = $q->loadHashList('project_id');
-$q->clear();
+$projects = $project->getAllowedProjects($AppUI->user_id);
 
 ##############################################
 /* gantt is called now by the todo page, too.
@@ -149,7 +135,7 @@ if ($caller == 'todo') {
 }
 
 // get any specifically denied tasks
-$task = &new CTask;
+$task = new CTask;
 $task->setAllowedSQL($AppUI->user_id, $q);
 
 $proTasks = $q->loadHashList('task_id');
@@ -217,12 +203,12 @@ foreach ($proTasks as $row) {
 $q->clear();
 unset($proTasks);
 
-$width = min(w2PgetParam($_GET, 'width', 600), 1400);
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
 	$start_min = $projects[$project_id]['project_start_date'];
 	$end_max = ($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date'];
 }
+$width = min(w2PgetParam($_GET, 'width', 600), 1400);
 $start_date = w2PgetParam($_GET, 'start_date', $start_min);
 $end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
@@ -230,12 +216,10 @@ $count = 0;
 
 $graph = new GanttGraph($width);
 $graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);
-//$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY);
 
 $graph->SetFrame(false);
 $graph->SetBox(true, array(0, 0, 0), 2);
 $graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
-//$graph->scale->day->SetStyle(DAYSTYLE_SHORTDATE2);
 
 $pLocale = setlocale(LC_TIME, 0); // get current locale for LC_TIME
 $res = setlocale(LC_TIME, $AppUI->user_lang[2]);
