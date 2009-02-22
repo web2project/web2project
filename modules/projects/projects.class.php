@@ -621,6 +621,17 @@ class CProject extends CW2pObject {
 		}
 		return '';
 	}
+	public function getAllowedProjects($userId) {
+		$q = new DBQuery;
+		$q->addTable('projects', 'pr');
+		$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date');
+		$q->addWhere('project_active = 1');
+		$q->addGroup('pr.project_id');
+		$q->addOrder('project_name');
+		$this->setAllowedSQL($userId, $q, null, 'pr');
+		
+		return $q->loadHashList('project_id');
+	}
 }
 
 /* The next lines of code have resided in projects/index.php before
