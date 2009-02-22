@@ -685,15 +685,21 @@ class CProject extends CW2pObject {
 		return $q->loadHashList();
 	}
 
-	public function hasChildProjects() {
+	public function hasChildProjects($projectId = 0) {
 		// Note that this returns the *count* of projects.  If this is zero, it 
 		//   is evaluated as false, otherwise it is considered true.
 		$q = new DBQuery();
 		$q->addTable('projects');
 		$q->addQuery('COUNT(project_id)');
-		$q->addWhere('project_original_parent = ' . (int)($this->project_original_parent ? $this->project_original_parent : $this->project_id));
+		if ($projectId > 0) {
+			$q->addWhere('project_original_parent = ' . $projectId);
+		} else {
+			$q->addWhere('project_original_parent = ' . (int)($this->project_original_parent ? $this->project_original_parent : $this->project_id));
+		}
 		
-		return $q->loadResult();
+		// I hate how this one works... since the default project parent is 
+		//   itself, so this will always have at least one result. 
+		return $q->loadResult()-1;
 	}
 	
 	public static function hasTasks($projectId) {
