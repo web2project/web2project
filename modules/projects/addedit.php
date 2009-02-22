@@ -21,20 +21,13 @@ if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// get a list of permitted companies
-require_once ($AppUI->getModuleClass('companies'));
-
-$row = new CCompany();
-$companies = $row->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
-$companies = arrayMerge(array('0' => ''), $companies);
-
 // pull users
 $users = w2PgetUsers();
 
 // load the record data
-$row = new CProject();
+$project = new CProject();
 
-if (!$row->load($project_id, false) && $project_id > 0) {
+if (!$project->load($project_id, false) && $project_id > 0) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
@@ -44,21 +37,23 @@ if (!$row->load($project_id, false) && $project_id > 0) {
 }
 
 if ($project_id == 0 && $company_id > 0) {
-	$row->project_company = $company_id;
+	$project->project_company = $company_id;
 }
 
+// get a list of permitted companies
+require_once ($AppUI->getModuleClass('companies'));
+
+$company = new CCompany();
+$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+$companies = arrayMerge(array('0' => ''), $companies);
+
 // add in the existing company if for some reason it is dis-allowed
-if ($project_id && !array_key_exists($row->project_company, $companies)) {
-	$q = new DBQuery;
-	$q->addTable('companies');
-	$q->addQuery('company_name');
-	$q->addWhere('companies.company_id = ' . (int)$row->project_company);
-	$companies[$row->project_company] = $q->loadResult();
-	$q->clear();
+if ($project_id && !array_key_exists($project->project_company, $companies)) {
+	$companies[$project->project_company] = $company->load($project->project_company)->company_name;
 }
 
 // get critical tasks (criteria: task_end_date)
-$criticalTasks = ($project_id > 0) ? $row->getCriticalTasks() : null;
+$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks() : null;
 
 // get ProjectPriority from sysvals
 $projectPriority = w2PgetSysVal('ProjectPriority');
@@ -66,9 +61,9 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$start_date = new CDate($row->project_start_date);
+$start_date = new CDate($project->project_start_date);
 
-$end_date = intval($row->project_end_date) ? new CDate($row->project_end_date) : null;
+$end_date = intval($project->project_end_date) ? new CDate($project->project_end_date) : null;
 $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new CDate($criticalTasks[0]['task_end_date']) : null;
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
@@ -82,7 +77,7 @@ if ($project_id != 0) {
 $titleBlock->show();
 
 //Build display list for departments
-$company_id = $row->project_company;
+$company_id = $project->project_company;
 $selected_departments = array();
 if ($project_id) {
 	$myDepartments = CProject::getDepartments($AppUI, $project_id);
@@ -218,7 +213,7 @@ function setDepartment(department_id_string){
 <form name="editFrm" action="./index.php?m=projects" method="post">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
-	<input type="hidden" name="project_creator" value="<?php echo is_null($row->project_creator) ? $AppUI->user_id : $row->project_creator; ?>" />
+	<input type="hidden" name="project_creator" value="<?php echo is_null($project->project_creator) ? $AppUI->user_id : $project->project_creator; ?>" />
 	<input name='project_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
 <tr>
 	<td>
@@ -234,31 +229,31 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name'); ?></td>
 			<td width="100%" colspan="2">
-				<input type="text" name="project_name" value="<?php echo htmlspecialchars($row->project_name, ENT_QUOTES); ?>" size="25" maxlength="50" onblur="setShort();" class="text" /> *
+				<input type="text" name="project_name" value="<?php echo htmlspecialchars($project->project_name, ENT_QUOTES); ?>" size="25" maxlength="50" onblur="setShort();" class="text" /> *
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Parent Project'); ?></td>
 			<td colspan="2">
-                    <?php echo arraySelectTree($structprojects, 'project_parent', 'style="width:250px;" class="text"', $row->project_parent ? $row->project_parent : 0) ?>
+                    <?php echo arraySelectTree($structprojects, 'project_parent', 'style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?></td>
 			<td colspan="2">
-				<?php echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $row->project_owner ? $row->project_owner : $AppUI->user_id) ?>
+				<?php echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id) ?>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?></td>
 			<td width="100%" nowrap="nowrap" colspan="2">
-				<?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $row->project_company); ?> *
+				<?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $project->project_company); ?> *
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?></td>
 				<td width="100%" colspan="2">
-					<input type="text" name="project_location" value="<?php echo w2PformSafe($row->project_location); ?>" size="25" maxlength="50" class="text" />
+					<input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
 			</td>
 		</tr>
 		<tr>
@@ -296,7 +291,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
 			<td>
-				<input type="Text" name="project_target_budget" value="<?php echo $row->project_target_budget; ?>" maxlength="10" class="text" />
+				<input type="Text" name="project_target_budget" value="<?php echo $project->project_target_budget; ?>" maxlength="10" class="text" />
 			</td>
 		</tr>
 		<tr>
@@ -317,7 +312,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
 			<td>
-				<input type="text" name="project_actual_budget" value="<?php echo $row->project_actual_budget; ?>" size="10" maxlength="10" class="text"/>
+				<input type="text" name="project_actual_budget" value="<?php echo $project->project_actual_budget; ?>" size="10" maxlength="10" class="text"/>
 			</td>
 		</tr>
 		<tr>
@@ -326,20 +321,20 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?></td>
 			<td colspan="2">
-				<input type="text" name="project_url" value='<?php echo $row->project_url; ?>' size="40" maxlength="255" class="text" />
+				<input type="text" name="project_url" value='<?php echo $project->project_url; ?>' size="40" maxlength="255" class="text" />
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?></td>
 			<td colspan="2">
-				<input type="Text" name="project_demo_url" value='<?php echo $row->project_demo_url; ?>' size="40" maxlength="255" class="text" />
+				<input type="Text" name="project_demo_url" value='<?php echo $project->project_demo_url; ?>' size="40" maxlength="255" class="text" />
 			</td>
 		</tr>
 		<tr>
 			<td align="right" colspan="3">
 				<?php
 					require_once ($AppUI->getSystemClass('CustomFields'));
-					$custom_fields = new CustomFields($m, $a, $row->project_id, 'edit');
+					$custom_fields = new CustomFields($m, $a, $project->project_id, 'edit');
 					$custom_fields->printHTML();
 				?>
 			</td>
@@ -351,31 +346,31 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?></td>
 			<td nowrap ="nowrap">
-				<?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', ($row->project_priority ? $row->project_priority : 0), true); ?> *
+				<?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', ($project->project_priority ? $project->project_priority : 0), true); ?> *
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?></td>
 			<td colspan="3">
-				<input type="text" name="project_short_name" value="<?php echo w2PformSafe($row->project_short_name); ?>" size="10" maxlength="10" class="text" /> *
+				<input type="text" name="project_short_name" value="<?php echo w2PformSafe($project->project_short_name); ?>" size="10" maxlength="10" class="text" /> *
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier'); ?></td>
 			<td nowrap="nowrap">
-				<input type="text" name="project_color_identifier" value="<?php echo ($row->project_color_identifier) ? $row->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
+				<input type="text" name="project_color_identifier" value="<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
 			</td>
 			<td nowrap="nowrap" align="right">
 				<a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color'); ?></a>
 			</td>
 			<td nowrap="nowrap">
-				<a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo ($row->project_color_identifier) ? $row->project_color_identifier : 'FFFFFF'; ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
+				<a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type'); ?></td>
 			<td colspan="3">
-				<?php echo arraySelect($ptype, 'project_type', 'size="1" class="text"', $row->project_type, true); ?> *
+				<?php echo arraySelect($ptype, 'project_type', 'size="1" class="text"', $project->project_type, true); ?> *
 			</td>
 		</tr>
 		<tr>
@@ -388,13 +383,13 @@ function setDepartment(department_id_string){
 				</tr>
 				<tr>
 					<td>
-						<?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $row->project_status, true); ?>
+						<?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project->project_status, true); ?>
 					</td>
 					<td>
-						<strong><?php echo sprintf("%.1f%%", $row->project_percent_complete); ?></strong>
+						<strong><?php echo sprintf("%.1f%%", $project->project_percent_complete); ?></strong>
 					</td>
 					<td>
-						<input type="checkbox" value="1" name="project_active" <?php echo $row->project_active || $project_id == 0 ? 'checked="checked"' : ''; ?> />
+						<input type="checkbox" value="1" name="project_active" <?php echo $project->project_active || $project_id == 0 ? 'checked="checked"' : ''; ?> />
 					</td>
 				</tr>
 				</table>
@@ -411,7 +406,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td colspan="4">
 				<?php echo $AppUI->_('Description'); ?><br />
-				<textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe($row->project_description); ?></textarea>
+				<textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe($project->project_description); ?></textarea>
 			</td>
 		</tr>
 <tr valign="middle">
@@ -428,8 +423,8 @@ if ($tt)
 ?> /><?php echo $AppUI->_('Project Owner'); ?>
 		<input type='hidden' name='email_project_owner' id='email_project_owner'
 		  value='<?php
-if ($row->project_owner) {
-	echo ($row->project_owner);
+if ($project->project_owner) {
+	echo ($project->project_owner);
 } else {
 	echo '0';
 }
