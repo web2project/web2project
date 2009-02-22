@@ -12,17 +12,10 @@ $structprojs = getProjects();
 // Let's update project status!
 if (isset($_GET['update_project_status']) && isset($_GET['project_status']) && isset($_GET['project_id'])) {
 	$projects_id = w2PgetParam($_GET, 'project_id', array()); // This must be an array
+	$statusId = w2PgetParam($_GET, 'project_status', 0);
 
 	foreach ($projects_id as $project_id) {
-		//do the edit checking here, because it will be a lot less and it will be faster
-		if ($perms->checkModuleItem('projects', 'edit', $project_id)) {
-			$r = new DBQuery;
-			$r->addTable('projects');
-			$r->addUpdate('project_status', '' . w2PgetParam($_GET, 'project_status', null));
-			$r->addWhere('project_id   = ' . (int)$project_id);
-			$r->exec();
-			$r->clear();
-		}
+		CProject::updateStatus($AppUI, $project_id, $statusId);
 	}
 }
 
