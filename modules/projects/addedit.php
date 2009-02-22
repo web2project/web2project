@@ -85,16 +85,10 @@ $titleBlock->show();
 $company_id = $row->project_company;
 $selected_departments = array();
 if ($project_id) {
-	$q = &new DBQuery;
-	$q->addTable('project_departments', 'pd');
-	$q->addTable('departments', 'deps');
-	$q->addQuery('department_id');
-	$q->addWhere('project_id = ' . (int)$project_id);
-	$q->addWhere('pd.department_id = deps.dept_id');
-	$department = new CDepartment;
-	$department->setAllowedSQL($AppUI->user_id, $q);
-	$selected_departments = $q->loadColumn();
+	$myDepartments = CProject::getDepartments($AppUI, $project_id);
+	$selected_departments = array_keys($myDepartments);
 }
+
 $departments_count = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
 if ($department_selection_list != '' || $project_id) {
@@ -105,16 +99,10 @@ if ($department_selection_list != '' || $project_id) {
 
 // Get contacts list
 $selected_contacts = array();
+
 if ($project_id) {
-	$q = &new DBQuery;
-	$q->addTable('project_contacts');
-	$q->addQuery('contact_id');
-	$q->addWhere('project_id = ' . (int)$project_id);
-	$res = &$q->exec();
-	for ($res; !$res->EOF; $res->MoveNext()) {
-		$selected_contacts[] = $res->fields['contact_id'];
-	}
-	$q->clear();
+	$myContacts = CProject::getContacts($AppUI, $project_id);
+	$selected_contacts = array_keys($myContacts);
 }
 if ($project_id == 0 && $contact_id > 0) {
 	$selected_contacts[] = '' . $contact_id;
@@ -173,12 +161,12 @@ function submitIt() {
 	*/
 
 	<?php
-/*
-** Automatic required fields generated from System Values
-*/
-$requiredFields = w2PgetSysVal('ProjectRequiredFields');
-echo w2PrequiredFields($requiredFields);
-?>
+		/*
+		** Automatic required fields generated from System Values
+		*/
+		$requiredFields = w2PgetSysVal('ProjectRequiredFields');
+		echo w2PrequiredFields($requiredFields);
+	?>
 
 	if (msg.length < 1) {
 		f.submit();
@@ -210,10 +198,7 @@ function popDepartment() {
             + f.project_company.options[f.project_company.selectedIndex].value
             + '&dept_id='
             + selected_departments_id;
-//prompt('',url);
         window.open(url,'dept','left=50,top=50,height=250,width=400,resizable');
-
-//	window.open('./index.php?m=public&a=selector&dialog=1&call_back=setDepartment&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
 function setDepartment(department_id_string){
@@ -261,15 +246,14 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?></td>
 			<td colspan="2">
-<?php echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $row->project_owner ? $row->project_owner : $AppUI->user_id) ?>
+				<?php echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $row->project_owner ? $row->project_owner : $AppUI->user_id) ?>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?></td>
 			<td width="100%" nowrap="nowrap" colspan="2">
-<?php
-echo arraySelect($companies, 'project_company', 'class="text" size="1"', $row->project_company);
-?> *</td>
+				<?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $row->project_company); ?> *
+			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?></td>
@@ -287,18 +271,16 @@ echo arraySelect($companies, 'project_company', 'class="text" size="1"', $row->p
 				</a>
 			</td>
 			<td rowspan="6" valign="top">
-					<?php
-if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
-	echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
-}
-// Let's check if the actual company has departments registered
-if ($department_selection_list != '') {
-?>
-								<br />
-								<?php echo $department_selection_list; ?>
-							<?php
-}
-?>
+				<?php
+					if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+						echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
+					}
+					// Let's check if the actual company has departments registered
+					if ($department_selection_list != '') { 
+						?><br /><?php 
+						echo $department_selection_list;
+					}
+				?>
 			</td>
 		</tr>
 		<tr>
@@ -320,16 +302,16 @@ if ($department_selection_list != '') {
 		<tr>
 			<td colspan="2"><hr noshade="noshade" size="1" /></td>
 		</tr>
-<tr>
+		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date'); ?></td>
 			<td nowrap="nowrap">
-                                <?php if ($project_id > 0) { ?>
-                                        <?php echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : ''; ?>
-                                        <?php echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-'; ?>
-                                        <?php echo $actual_end_date ? '</a>' : ''; ?>
-                                <?php } else {
-	echo $AppUI->_('Dynamically calculated');
-} ?>
+        <?php if ($project_id > 0) {
+          echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
+          echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
+          echo $actual_end_date ? '</a>' : '';
+        } else {
+					echo $AppUI->_('Dynamically calculated');
+				} ?>
 			</td>
 		</tr>
 		<tr>
@@ -355,11 +337,11 @@ if ($department_selection_list != '') {
 		</tr>
 		<tr>
 			<td align="right" colspan="3">
-			<?php
-require_once ($AppUI->getSystemClass('CustomFields'));
-$custom_fields = new CustomFields($m, $a, $row->project_id, 'edit');
-$custom_fields->printHTML();
-?>
+				<?php
+					require_once ($AppUI->getSystemClass('CustomFields'));
+					$custom_fields = new CustomFields($m, $a, $row->project_id, 'edit');
+					$custom_fields->printHTML();
+				?>
 			</td>
 		</tr>
 		</table>
@@ -423,7 +405,7 @@ $custom_fields->printHTML();
 				<?php echo $AppUI->_('Import tasks from'); ?>:<br/>
 			</td>
 			<td colspan="3">
-<?php echo projectSelectWithOptGroup($AppUI->user_id, 'import_tasks_from', 'size="1" class="text"', false, $project_id); ?>
+				<?php echo projectSelectWithOptGroup($AppUI->user_id, 'import_tasks_from', 'size="1" class="text"', false, $project_id); ?>
 			</td>
 		</tr>
 		<tr>
@@ -452,45 +434,8 @@ if ($row->project_owner) {
 	echo '0';
 }
 ?>' />
-<input type='checkbox' name='email_project_contacts_box' id='email_project_contacts_box' <?php
-if ($tp) {
-	echo "checked='checked'";
-}
-?> /><?php echo $AppUI->_('Project Contacts'); ?>
-<input type='hidden' name='email_project_contacts' id='email_project_contacts'
-		  value='<?php
-if ($row->project_id) {
-	$q->clear();
-	$q->addTable('project_contacts', 'pc');
-	$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
-	$q->addWhere('pc.project_id = ' . (int)$row->project_id);
-	$q->addQuery('pc.contact_id');
-	$q->addQuery('c.contact_first_name, c.contact_last_name');
-	$req = &$q->exec();
-	$cid = array();
-	$proj_email_title = array();
-	for ($req; !$req->EOF; $req->MoveNext()) {
-		if (!in_array($req->fields['contact_id'], $cid)) {
-			$cid[] = $req->fields['contact_id'];
-			$proj_email_title[] = $req->fields['contact_first_name'] . ' ' . $req->fields['contact_last_name'];
-		}
-	}
-	echo implode(',', $cid);
-	$q->clear();
-} else {
-	echo '0';
-}
-?>' />
-								<div align="left">
-									<br />
-									<br />
-									<br />
-									<h2><font color="#0066ff"><u></u></font></h2>
-									<p>
-			<p>
-										
-									</p>
-								</div>
+<input type='checkbox' name='email_project_contacts_box' id='email_project_contacts_box' <?php echo ($tp) ? 'checked="checked"' : ''; ?> />
+<?php echo $AppUI->_('Project Contacts'); ?>
 							</td>
 							<td></td>
 				</tr>
