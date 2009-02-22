@@ -2,14 +2,24 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+
 // Add / Edit forum
-$message_id = isset($_GET['message_id']) ? w2PgetParam($_GET, 'message_id', 0) : 0;
-$message_parent = isset($_GET['message_parent']) ? w2PgetParam($_GET, 'message_parent', null) : -1;
+$message_id = w2PgetParam($_GET, 'message_id', 0);
+$message_parent = w2PgetParam($_GET, 'message_parent', -1);
 $forum_id = w2PgetParam($_REQUEST, 'forum_id', 0);
 
 $perms = &$AppUI->acl();
 $canAdd = $perms->checkModuleItem('forums', 'add');
 $canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
+
+// check permissions
+if (!$canEdit && !$canAdd) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+//Pull forum information
+$myForum = new CForum();
+$myForum->load($forum_id);
 
 // Build a back-url for when the back button is pressed
 $back_url_params = array();
@@ -19,17 +29,6 @@ foreach ($_GET as $k => $v) {
 	}
 }
 $back_url = implode('&', $back_url_params);
-
-//Pull forum information
-$q = new DBQuery;
-$q->addTable('forums');
-$q->addTable('projects');
-$q->addQuery('forum_name, forum_owner, forum_moderated, project_name, project_id');
-$q->addWhere('forums.forum_id = ' . (int)$forum_id);
-$q->addWhere('forums.forum_project = projects.project_id');
-$res = $q->exec();
-$forum_info = $q->fetchRow();
-$q->clear();
 
 //pull message information
 $q = new DBQuery;
@@ -56,11 +55,6 @@ if ($message_parent != -1) {
 		$last_message_info['message_body'] = str_replace("\n", "\n> ", $last_message_info['message_body']);
 	}
 	$q->clear();
-}
-
-// check permissions
-if (!((($canEdit || $AppUI->user_id == $forum_info['forum_moderated'] || $AppUI->user_id == $message_info['message_author'] || $perms->checkModule('admin', 'edit')) && ($message_info['message_id'])) || ($canAdd && !$message_info['message_id']))) {
-	$AppUI->redirect('m=public&a=access_denied');
 }
 
 $crumbs = array();
@@ -119,7 +113,7 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_forum" value="<?php echo $forum_id; ?>" />
 	<input type="hidden" name="message_parent" value="<?php echo $message_parent; ?>" />
-	<input type="hidden" name="message_published" value="<?php echo $forum_info['forum_moderated'] ? '1' : '0'; ?>" />
+	<input type="hidden" name="message_published" value="<?php echo $myForum->forum_moderated ? '1' : '0'; ?>" />
 	<input type="hidden" name="message_author" value="<?php echo (isset($message_info['message_author']) && ($message_id || $message_parent < 0)) ? $message_info['message_author'] : $AppUI->user_id; ?>" />
 	<input type="hidden" name="message_editor" value="<?php echo (isset($message_info['message_author']) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0'; ?>" />
 	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />

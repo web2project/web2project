@@ -3,6 +3,13 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
+$perms = &$AppUI->acl();
+
+$canRead = $perms->checkModuleItem('forums', 'view', null);
+if (!$canRead) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 $AppUI->savePlace();
 
 // retrieve any state parameters
