@@ -583,13 +583,7 @@ class CProject extends CW2pObject {
 			$mail->Subject("Project Submitted: $this->project_name ", $locale_char_set);
 		}
 
-		$q = new DBQuery;
-		$q->addTable('project_contacts', 'pc');
-		$q->addQuery('pc.project_id, pc.contact_id');
-		$q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
-		$q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
-		$q->addWhere('pc.project_id = ' . (int)$this->project_id);
-		$users = $q->loadList();
+		$users = CProject::getContacts($AppUI, $this->project_id);
 		$q->clear();
 
 		if (count($users)) {

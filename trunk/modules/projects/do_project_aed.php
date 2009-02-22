@@ -78,24 +78,6 @@ if ($del) {
 		$AppUI->redirect('m=projects');
 	}
 } else {
-	/*      $owner_id = $obj->project_owner;
-	if ($obj->project_id) {
-	$old_obj = new CProject();
-	$old_obj->load($obj->project_id);
-	}
-	if (($owner_id != $old_obj->project_owner) || !$obj->project_id) {
-	$q  = new DBQuery;
-	$q->addTable('users');
-	$q->addQuery('user_id, contact_company as user_company, contact_department as user_department');
-	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-	$q->addWhere('user_id = ' . (int)$owner_id);
-	$broker = $q->loadList();
-	//print_r($broker);die;
-	$q->clear();
-	$obj->project_company = $broker[0]['user_company'];
-	$obj->project_departments = $broker[0]['user_department'];
-	}*/
-
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
