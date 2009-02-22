@@ -123,7 +123,7 @@ class CProject extends CW2pObject {
 	}
 	public function fullLoad($projectId) {
 		global $w2Pconfig;
-		
+
 		$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
 		// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
@@ -136,9 +136,11 @@ class CProject extends CW2pObject {
 		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
 		$q->addWhere('project_id = ' . (int) $projectId);
 		$q->addGroup('project_id');
+		$this->company_name = '';
+		$this->user_name = '';
 		$q->loadObject($this);
-		
-		return $this;
+
+		return ($this);
 	}
 	// overload canDelete
 	function canDelete(&$msg, $oid = null) {
@@ -695,6 +697,39 @@ class CProject extends CW2pObject {
 			return $q->loadHashList('forum_id');
 		}
 	}
+	public static function getCompany($projectId) {
+		$q = new DBQuery;
+		$q->addQuery('project_company');
+		$q->addTable('projects');
+		$q->addWhere('project_id = ' . (int) $projectId);
+
+		return $q->loadResult();
+	}
+	public static function getBillingCodes($companyId, $all = false) {
+		$q = new DBQuery;
+		$q->addTable('billingcode');
+		$q->addQuery('billingcode_id, billingcode_name');
+		$q->addOrder('billingcode_name');
+		$q->addWhere('billingcode_status = 0');
+		$q->addWhere('(company_id = 0 OR company_id = ' . (int) $companyId . ')');
+		$task_log_costcodes = $q->loadHashList();
+
+		if ($all) {
+			$q->clear();
+			$q->addTable('billingcode');
+			$q->addQuery('billingcode_id, billingcode_name');
+			$q->addOrder('billingcode_name');
+			$q->addWhere('billingcode_status = 1');
+			$q->addWhere('(company_id = 0 OR company_id = ' . (int) $companyId . ')');
+
+			$billingCodeList = $q->loadHashList();
+			foreach($billingCodeList as $id => $code) {
+				$task_log_costcodes[$id] = $code;
+			}			
+		}
+
+		return $task_log_costcodes;
+	}
 	public static function getOwners() {
 		$q = new DBQuery();
 		$q->addTable('projects', 'p');
@@ -711,12 +746,11 @@ class CProject extends CW2pObject {
 		$perms = $AppUI->acl();
 
 		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId > 0) {
-			$r = new DBQuery;
-			$r->addTable('projects');
-			$r->addUpdate('project_status', $statusId);
-			$r->addWhere('project_id   = ' . (int) $projectId);
-			$r->exec();
-			$r->clear();
+			$q = new DBQuery;
+			$q->addTable('projects');
+			$q->addUpdate('project_status', $statusId);
+			$q->addWhere('project_id   = ' . (int) $projectId);
+			$q->exec();
 		}
 	}
 
@@ -811,11 +845,13 @@ class CProject extends CW2pObject {
 	}
 	public function getTaskLogs($AppUI, $projectId, $user_id = 0, $hide_inactive = 0, $hide_complete, $cost_code = 0) {
 
+echo "$projectId, $user_id = 0, $hide_inactive = 0, $hide_complete = '', $cost_code = 0";
+
 		$q = new DBQuery;
 		$q->addTable('task_log');
 		$q->addQuery('task_log.*, user_username, task_id');
-		$q->addQuery('billingcode_name as task_log_costcode');
 		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
+		$q->addQuery('billingcode_name as task_log_costcode');
 		$q->addJoin('users', 'u', 'user_id = task_log_creator');
 		$q->addJoin('tasks', 't', 'task_log_task = t.task_id');
 		$q->addJoin('contacts', 'ct', 'contact_id = user_contact');
@@ -831,8 +867,8 @@ class CProject extends CW2pObject {
 		if ($hide_complete) {
 			$q->addWhere('task_percent_complete < 100');
 		}
-		if ($cost_code != '0') {
-			$q->addWhere('task_log_costcode = \'' . $cost_code . '\'');
+		if ($cost_code > 0) {
+			$q->addWhere("billingcode_id = $cost_code");
 		}
 		$q->addOrder('task_log_date');
 		$this->setAllowedSQL($AppUI->user_id, $q, 'task_project');
