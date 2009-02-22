@@ -632,6 +632,37 @@ class CProject extends CW2pObject {
 		
 		return $q->loadHashList('project_id');
 	}
+	public static function getContacts($AppUI, $projectId) {
+		$perms = $AppUI->acl();
+
+		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+			$q = new DBQuery;
+			$q->addTable('contacts', 'c');
+			$q->addJoin('project_contacts', 'pc', 'pc.contact_id = c.contact_id', 'inner');
+			$q->leftJoin('departments', 'd', 'd.dept_id = c.contact_department');
+			$q->addWhere('pc.project_id = ' . (int) $projectId);
+			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+			$q->addQuery('contact_phone, dept_name');
+			$q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
+
+			$department = new CDepartment;
+			$department->setAllowedSQL($AppUI->user_id, $q);
+			return $q->loadHashList('contact_id');
+		}
+	}
+	public static function getDepartments($AppUI, $projectId) {
+		if ($AppUI->isActiveModule('departments')) {
+			$q = new DBQuery;
+			$q->addTable('departments', 'a');
+			$q->addTable('project_departments', 'b');
+			$q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
+			$q->addWhere('a.dept_id = b.department_id and b.project_id = ' . (int) $projectId);
+
+			$department = new CDepartment;
+			$department->setAllowedSQL($AppUI->user_id, $q);
+			return $q->loadHashList('dept_id');
+		}
+	}
 }
 
 /* The next lines of code have resided in projects/index.php before

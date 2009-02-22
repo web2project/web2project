@@ -250,14 +250,16 @@ echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' 
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual End Date'); ?>:</td>
 			<td class="hilite">
-             <?php if ($project_id > 0) { ?>
-                    <?php echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : ''; ?>
-                    <?php echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-'; ?>
-                    <?php echo $actual_end_date ? '</a>' : ''; ?>
-             <?php } else {
+				<?php
+					if ($project_id > 0) {
+						echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
+						echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
+						echo $actual_end_date ? '</a>' : '';
+					} else {
 						echo $AppUI->_('Dynamically calculated');
-} ?>
-            </td>
+					}
+				?>
+			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
@@ -277,11 +279,11 @@ echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' 
 		</tr>
 		<tr>
 			<td colspan="2">
-			<?php
-require_once ($AppUI->getSystemClass('CustomFields'));
-$custom_fields = new CustomFields($m, $a, $obj->project_id, 'view');
-$custom_fields->printHTML();
-?>
+				<?php
+					require_once ($AppUI->getSystemClass('CustomFields'));
+					$custom_fields = new CustomFields($m, $a, $obj->project_id, 'view');
+					$custom_fields->printHTML();
+				?>
 			</td>
 		</tr>
 		<tr>
@@ -334,110 +336,88 @@ $custom_fields->printHTML();
 			<td class="hilite" width="100%"><?php echo $total_project_hours ?></td>
 		</tr>				
 		<?php
-$q = new DBQuery;
-$q->addTable('departments', 'a');
-$q->addTable('project_departments', 'b');
-$q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
-$q->addWhere('a.dept_id = b.department_id and b.project_id = ' . (int)$project_id);
-$department = new CDepartment;
-$department->setAllowedSQL($AppUI->user_id, $q);
-$depts = $q->loadHashList('dept_id');
-if (count($depts) > 0) {
-?>
+		$depts = CProject::getDepartments($AppUI, $obj->project_id);
+
+		if (count($depts) > 0) { ?>
 		    <tr>
 		    	<td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
 		    </tr>
 		    <tr>
 		    	<td colspan='3' class="hilite">
 		    		<?php
-	foreach ($depts as $dept_id => $dept_info) {
-		echo '<div>' . $dept_info['dept_name'];
-		if ($dept_info['dept_phone'] != '') {
-			echo '( ' . $dept_info['dept_phone'] . ' )';
-		}
-		echo '</div>';
-	}
-?>
+							foreach ($depts as $dept_id => $dept_info) {
+								echo '<div>' . $dept_info['dept_name'];
+								if ($dept_info['dept_phone'] != '') {
+									echo '( ' . $dept_info['dept_phone'] . ' )';
+								}
+								echo '</div>';
+							}
+						?>
 		    	</td>
 		    </tr>
-	 		<?php
-}
-
-$q = new DBQuery;
-$q->addTable('contacts', 'a');
-$q->addTable('project_contacts', 'b');
-$q->addJoin('departments', 'c', 'a.contact_department = c.dept_id', 'left outer');
-$q->addQuery('a.contact_id, a.contact_first_name, a.contact_last_name, a.contact_email, a.contact_phone, c.dept_name');
-$q->addWhere('a.contact_id = b.contact_id and b.project_id = ' . (int)$project_id . ' AND (contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
-$department->setAllowedSQL($AppUI->user_id, $q);
-$contacts = $q->loadHashList('contact_id');
-if (count($contacts) > 0) {
-?>
-			    <tr>
-			    	<td><strong><?php echo $AppUI->_('Contacts'); ?></strong></td>
-			    </tr>
-			    <tr>
-			    	<td colspan='3' class="hilite">
-			    		<?php
-	echo '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
-	echo '<tr><th>' . $AppUI->_('Name') . '</th><th>' . $AppUI->_('Email') . '</th><th>' . $AppUI->_('Phone') . '</th><th>' . $AppUI->_('Department') . '</th></tr>';
-	foreach ($contacts as $contact_id => $contact_data) {
-		echo '<tr>';
-		echo '<td class="hilite">';
-		$canEdit = $perms->checkModuleItem('contacts', 'edit', $contact_id);
-		if ($canEdit) {
-			echo '<a href="index.php?m=contacts&a=view&contact_id=' . $contact_id . '">';
+			<?php
 		}
-		echo $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'];
-		if ($canEdit) {
-			echo '</a>';
-		}
-		echo '</td>';
-		echo '<td class="hilite"><a href="mailto:' . $contact_data['contact_email'] . '">' . $contact_data['contact_email'] . '</a></td>';
-		echo '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
-		echo '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
-		echo '</tr>';
-	}
-	echo '</table>';
-?>
-			    	</td>
-			    </tr>
-			    <tr>
-			    	<td>
-		 <?php
-} ?>
+		$contacts = CProject::getContacts($AppUI, $obj->project_id);
+		if (count($contacts) > 0) { ?>
+		  <tr>
+		  	<td><strong><?php echo $AppUI->_('Contacts'); ?></strong></td>
+		  </tr>
+		  <tr>
+		  	<td colspan='3' class="hilite">
+		  		<?php
+						echo '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
+						echo '<tr><th>' . $AppUI->_('Name') . '</th><th>' . $AppUI->_('Email') . '</th><th>' . $AppUI->_('Phone') . '</th><th>' . $AppUI->_('Department') . '</th></tr>';
+						foreach ($contacts as $contact_id => $contact_data) {
+							echo '<tr>';
+							echo '<td class="hilite">';
+							$canEdit = $perms->checkModuleItem('contacts', 'edit', $contact_id);
+							if ($canEdit) {
+								echo '<a href="index.php?m=contacts&a=view&contact_id=' . $contact_id . '">';
+							}
+							echo $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'];
+							if ($canEdit) {
+								echo '</a>';
+							}
+							echo '</td>';
+							echo '<td class="hilite"><a href="mailto:' . $contact_data['contact_email'] . '">' . $contact_data['contact_email'] . '</a></td>';
+							echo '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
+							echo '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
+							echo '</tr>';
+						}
+						echo '</table>';
+					?>
+		  	</td>
+		  </tr>
+		<?php } ?>
 		</table>
 	</td>
 </tr>
 <?php
-//lets add the subprojects table
-$q = new DBQuery();
-$q->addTable('projects');
-$q->addQuery('COUNT(project_id)');
-$q->addWhere('project_original_parent = ' . (int)($obj->project_original_parent ? $obj->project_original_parent : $project_id));
-$count_projects = $q->loadResult();
-$canReadMultiProjects = $perms->checkModule('admin', 'view');
-if ($count_projects > 1 && $canReadMultiProjects) {
-?>
-<tr>
-	<td colspan="2">
-	<?php
-	echo w2PtoolTip('Multiproject', 'Click to Show/Hide Structure', true) . '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject\', \'tblProjects\')"><img id="multiproject_expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0"><img id="multiproject_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . w2PendTip();
-	echo '<strong>' . $AppUI->_('This Project is Part of the Following Multi-Project Structure') . ':<strong>';
-?>
-	</td>
-</tr>
-<tr id="multiproject" style="visibility:collapse;display:none;">
-	<td colspan="2" class="hilite">
-	<?php
-	require (w2PgetConfig('root_dir') . '/modules/projects/vw_sub_projects.php');
-?>
-	</td>
-</tr>
-<?php
-}
-//here finishes the subproject structure
-
+	//lets add the subprojects table
+	$q = new DBQuery();
+	$q->addTable('projects');
+	$q->addQuery('COUNT(project_id)');
+	$q->addWhere('project_original_parent = ' . (int)($obj->project_original_parent ? $obj->project_original_parent : $project_id));
+	$count_projects = $q->loadResult();
+	$canReadMultiProjects = $perms->checkModule('admin', 'view');
+	if ($count_projects > 1 && $canReadMultiProjects) { ?>
+		<tr>
+			<td colspan="2">
+				<?php
+					echo w2PtoolTip('Multiproject', 'Click to Show/Hide Structure', true) . '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject\', \'tblProjects\')"><img id="multiproject_expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0"><img id="multiproject_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . w2PendTip();
+					echo '<strong>' . $AppUI->_('This Project is Part of the Following Multi-Project Structure') . ':<strong>';
+				?>
+			</td>
+		</tr>
+		<tr id="multiproject" style="visibility:collapse;display:none;">
+			<td colspan="2" class="hilite">
+				<?php
+					require (w2PgetConfig('root_dir') . '/modules/projects/vw_sub_projects.php');
+				?>
+			</td>
+		</tr>
+	<?php }
+	//here finishes the subproject structure
 ?>
 </table>
 
