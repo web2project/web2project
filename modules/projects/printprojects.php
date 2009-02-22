@@ -10,11 +10,6 @@ if (!$canView) {
 // load the companies class to retrieved denied companies
 require_once ($AppUI->getModuleClass('companies'));
 
-// End of project status update
-/*if (isset( $_POST['projsearchtext'] )) {
-$AppUI->setState( 'projsearchtext', $_POST['projsearchtext']);
-} */
-
 $search_text = $AppUI->getState('projsearchtext') ? $AppUI->getState('projsearchtext') : '';
 
 $projectDesigner = $AppUI->getState('ProjIdxProjectDesigner') !== null ? $AppUI->getState('ProjIdxProjectDesigner') : 0;
@@ -97,144 +92,106 @@ TABLE.prjprint TR {
 	
 </style>
 <table width="100%" class="prjprint">
+	<tr>
+		<td style="border: outset #d1d1cd 1px;" colspan="3">  
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">	
+	      <tr>
+	      	<td width="22">&nbsp;</td>
+	      	<td align="center"  colspan="2">
+	      		<?php echo '<strong> Projects List <strong>'; ?>
+	      	</td>
+	    	</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td style="border: outset #d1d1cd 1px;" colspan="3">  
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">	
+	      <tr>
+	      	<td width="22">&nbsp;</td>
+	      	<td align="center"  colspan="2">
+						<?php
+							$project_statuses = w2PgetSysVal('ProjectStatus');
+							
+							$active = 0;
+							$archived = 0;
+							
+							foreach ($project_statuses as $key => $value) {
+								$counter[$key] = 0;
+								if (is_array($projects)) {
+									foreach ($projects as $p) {
+										if ($p['project_status'] == $key && $p['project_active'] > 0) {
+											++$counter[$key];
+										}
+									}
+								}
+								$project_statuses[$key] = $AppUI->_($project_statuses[$key], UI_OUTPUT_RAW) . ' (' . $counter[$key] . ')';
+							}
+							
+							if (is_array($projects)) {
+								foreach ($projects as $p) {
+									if ($p['project_active'] == 0) {
+										++$archived;
+									} else {
+										++$active;
+									}
+								}
+							}
+	
+							$fixed_project_status_file = array($AppUI->_('In Progress', UI_OUTPUT_RAW) . ' (' . $active . ')' => 'vw_idx_active', $AppUI->_('Complete', UI_OUTPUT_RAW) . ' (' . $complete . ')' => 'vw_idx_complete', $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archive . ')' => 'vw_idx_archived');
+							// we need to manually add Archived project type because this status is defined by
+							// other field (Active) in the project table, not project_status
+							$project_statuses[] = $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archived . ')';
+							
+							// Only display the All option in tabbed view, in plain mode it would just repeat everything else
+							// already in the page
+							$tabBox = new CTabBox('?m=projects', W2P_BASE_DIR . '/modules/projects/', $tab);
+							// This will overwrited the initial tabs, so we need to add that separately.
+							$allactive = (int)count($projects) - (int)($archived);
+							array_unshift($project_statuses, $AppUI->_('All Projects', UI_OUTPUT_RAW) . ' (' . count($projects) . ')', $AppUI->_('All Active', UI_OUTPUT_RAW) . ' (' . $allactive . ')');
+							
+							//Tabbed view
+							$currentTabId = ($AppUI->getState('ProjIdxTab') !== null ? $AppUI->getState('ProjIdxTab') : 0);
+							
+							$show_all_projects = false;
+							if ($currentTabId == 0 || $currentTabId == -1) {
+								$show_all_projects = true;
+								//set it to 0 again in case we are on a flat view
+								$currentTabId == 0;
+							}
+							
+							$project_status_filter = $currentTabId - 1;
+							
+							$currentTabName = $project_statuses[$currentTabId];
+							echo '<strong>' . $AppUI->_('Status') . ' (' . $AppUI->_('Records') . '): ' . $currentTabName . '<strong>';
+						?>
+					</td>
+	      </tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td style="border: outset #d1d1cd 1px;" colspan="3">  
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">	
+	            <tr>
+	            	<td align="center"  colspan="2">
+		            	<?php
+										$txt = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':&nbsp;' . '<input type="text" disabled class="text" SIZE="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>&nbsp;';
+										$txt .= $AppUI->_('Type') . ':&nbsp;' . arraySelect($project_types, 'project_type', 'size="1" disabled class="text"', $project_type, false);
 
-<tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="3">  
-		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">	
-            <tr>
-            	<td width="22">
-            	&nbsp;
-            	</td>
-            	<td align="center"  colspan="2">
-            	<?php
-echo '<strong> Projects List <strong>';
-?>
-            	</td>
-      	</tr>
-      	</table>
-	</td>
-</tr>
-<tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="3">  
-		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">	
-            <tr>
-            	<td width="22">
-            	&nbsp;
-            	</td>
-            	<td align="center"  colspan="2">
-            	<?php
-$project_statuses = w2PgetSysVal('ProjectStatus');
+										$user_list = array(0 => '(all)') + CProject::getOwners();
 
-$active = 0;
-$archived = 0;
-
-foreach ($project_statuses as $key => $value) {
-	$counter[$key] = 0;
-	if (is_array($projects)) {
-		foreach ($projects as $p) {
-			if ($p['project_status'] == $key && $p['project_active'] > 0) {
-				++$counter[$key];
-			}
-		}
-	}
-	$project_statuses[$key] = $AppUI->_($project_statuses[$key], UI_OUTPUT_RAW) . ' (' . $counter[$key] . ')';
-}
-
-if (is_array($projects)) {
-	foreach ($projects as $p) {
-		if ($p['project_active'] == 0) {
-			++$archived;
-		} else {
-			++$active;
-		}
-	}
-}
-
-$fixed_project_status_file = array($AppUI->_('In Progress', UI_OUTPUT_RAW) . ' (' . $active . ')' => 'vw_idx_active', $AppUI->_('Complete', UI_OUTPUT_RAW) . ' (' . $complete . ')' => 'vw_idx_complete', $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archive . ')' => 'vw_idx_archived');
-// we need to manually add Archived project type because this status is defined by
-// other field (Active) in the project table, not project_status
-$project_statuses[] = $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archived . ')';
-
-// Only display the All option in tabbed view, in plain mode it would just repeat everything else
-// already in the page
-$tabBox = new CTabBox('?m=projects', W2P_BASE_DIR . '/modules/projects/', $tab);
-// This will overwrited the initial tabs, so we need to add that separately.
-$allactive = (int)count($projects) - (int)($archived);
-array_unshift($project_statuses, $AppUI->_('All Projects', UI_OUTPUT_RAW) . ' (' . count($projects) . ')', $AppUI->_('All Active', UI_OUTPUT_RAW) . ' (' . $allactive . ')');
-
-//Tabbed view
-$currentTabId = ($AppUI->getState('ProjIdxTab') !== null ? $AppUI->getState('ProjIdxTab') : 0);
-
-$show_all_projects = false;
-if ($currentTabId == 0 || $currentTabId == -1) {
-	$show_all_projects = true;
-	//set it to 0 again in case we are on a flat view
-	$currentTabId == 0;
-}
-
-$project_status_filter = $currentTabId - 1;
-
-$currentTabName = $project_statuses[$currentTabId];
-echo '<strong>' . $AppUI->_('Status') . ' (' . $AppUI->_('Records') . '): ' . $currentTabName . '<strong>';
-?>
-            	</td>
-      	</tr>
-      	</table>
-	</td>
-</tr>
-<tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="3">  
-		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">	
-            <tr>
-            	<td align="center"  colspan="2">
-            	<?php
-$txt = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':&nbsp;' . '<input type="text" disabled class="text" SIZE="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>&nbsp;';
-$txt .= $AppUI->_('Type') . ':&nbsp;' . arraySelect($project_types, 'project_type', 'size="1" disabled class="text"', $project_type, false);
-
-$q = new DBQuery();
-$q->addTable('projects', 'p');
-$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
-$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
-$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-$q->addOrder('contact_first_name, contact_last_name');
-$q->addWhere('user_id > 0');
-$q->addWhere('p.project_owner IS NOT NULL');
-$user_list = array(0 => '(all)');
-$user_list = $user_list + $q->loadHashList();
-$txt .= $AppUI->_('Owner') . ':&nbsp;' . arraySelect($user_list, 'project_owner', 'size="1" disabled class="text"', $owner, false);
-
-$q = new DBQuery();
-$q->addTable('projects', 'p');
-$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
-$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
-$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-$q->addOrder('contact_first_name, contact_last_name');
-$q->addWhere('user_id > 0');
-$user_list = array(0 => '(all)');
-$user_list = $user_list + $q->loadHashList();
-
-// requestors combo
-/*$q = new DBQuery();
-$q->addTable('projects','p');
-$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
-$q->addJoin('users', 'u', 'u.user_id = p.project_requested_by', 'inner');
-$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-$q->addOrder('contact_first_name, contact_last_name');
-$q->addWhere('p.project_requested_by<>0');
-$req_list = array (0 =>'(all)');
-$req_list = $req_list + $q->loadHashList();
-echo $AppUI->_('Requested By') . ':&nbsp;'.
-arraySelect($req_list, "project_requested_by", "size='1' class='text' disabled", $project_requested_by, false);*/
-
-$txt .= $AppUI->_('Company') . ':&nbsp;' . str_replace('<select', '<select disabled="disabled"', $buffer);
-echo $txt;
-?>            
-            	</td>
-      	</tr>
-      	</table>
-	</td>
-</tr>
-<?php
-require (W2P_BASE_DIR . '/modules/projects/vw_projects.php');
-?>
+										$txt .= $AppUI->_('Owner') . ':&nbsp;' . arraySelect($user_list, 'project_owner', 'size="1" disabled class="text"', $owner, false);
+										
+										$txt .= $AppUI->_('Company') . ':&nbsp;' . str_replace('<select', '<select disabled="disabled"', $buffer);
+										echo $txt;
+									?>  
+	            	</td>
+	      	</tr>
+	      	</table>
+		</td>
+	</tr>
+	<?php
+		require (W2P_BASE_DIR . '/modules/projects/vw_projects.php');
+	?>
 </table>
