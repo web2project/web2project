@@ -657,6 +657,89 @@ class CProject extends CW2pObject {
 			return $q->loadHashList('dept_id');
 		}
 	}
+	public function hasChildProjects() {
+		// Note that this returns the *count* of projects.  If this is zero, it 
+		//   is evaluated as false, otherwise it is considered true.
+		$q = new DBQuery();
+		$q->addTable('projects');
+		$q->addQuery('COUNT(project_id)');
+		$q->addWhere('project_original_parent = ' . (int)($this->project_original_parent ? $this->project_original_parent : $this->project_id));
+		
+		return $q->loadResult();
+	}
+	
+	public static function hasTasks($projectId) {
+		// Note that this returns the *count* of tasks.  If this is zero, it is 
+		//   evaluated as false, otherwise it is considered true.
+		$q = new DBQuery;
+		$q->addTable('tasks');
+		$q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
+		$q->addWhere('task_project = ' . (int) $projectId);
+
+		return $q->loadResult();
+	}
+	public function getWorkedHours() {
+		// now milestones are summed up, too, for consistence with the tasks duration sum
+		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
+		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
+		$q = new DBQuery;
+		$q->addTable('task_log');
+		$q->addTable('tasks');
+		$q->addQuery('ROUND(SUM(task_log_hours),2)');
+		$q->addWhere('task_log_task = task_id AND task_project = ' . (int) $this->project_id);
+		$worked_hours = $q->loadResult();
+
+		return rtrim($worked_hours, '.');
+	}
+	public function getTotalHours() {
+		global $w2Pconfig;
+
+		// now milestones are summed up, too, for consistence with the tasks duration sum
+		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
+		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
+		$q = new DBQuery;
+		$q->addTable('tasks');
+		$q->addQuery('ROUND(SUM(task_duration),2)');
+		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
+		$days = $q->loadResult();
+		$q->clear();
+	
+		$q->addTable('tasks');
+		$q->addQuery('ROUND(SUM(task_duration),2)');
+		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 1 AND task_dynamic <> 1');
+		$hours = $q->loadResult();
+		return $days * $w2Pconfig['daily_working_hours'] + $hours;
+	}
+	public function getTotalProjectHours() {
+		global $w2Pconfig;
+
+		// now milestones are summed up, too, for consistence with the tasks duration sum
+		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
+		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
+		
+		// I'm really not sure why this is calculated and treated differently 
+		//   from the "total hours" calculation above.  I simply copied this from 
+		//  the projects/view.php file to get data calls out of the view.  Any 
+		//  further info or explanation would be appreciated. - caseydk
+		$total_project_hours = 0;
+
+		$q = new DBQuery;
+		$q->addTable('tasks', 't');
+		$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
+		$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
+		$q->addWhere('t.task_project = ' . (int) $this->project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic <> 1');
+		$total_project_days = $q->loadResult();
+		$q->clear();
+	
+		$q->addTable('tasks', 't');
+		$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
+		$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
+		$q->addWhere('t.task_project = ' . (int) $this->project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic <> 1');
+		$total_project_hours = $q->loadResult();
+		$total_project_hours = $total_project_days * $w2Pconfig['daily_working_hours'] + $total_project_hours;
+
+		return rtrim($total_project_hours, '.');
+	}
 }
 
 /* The next lines of code have resided in projects/index.php before

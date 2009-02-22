@@ -23,17 +23,17 @@ $tab = $AppUI->getState('ProjVwTab') !== null ? $AppUI->getState('ProjVwTab') : 
 
 // check if this record has dependencies to prevent deletion
 $msg = '';
-$obj = new CProject();
+$project = new CProject();
 // Now check if the proect is editable/viewable.
-$denied = $obj->getDeniedRecords($AppUI->user_id);
+$denied = $project->getDeniedRecords($AppUI->user_id);
 if (in_array($project_id, $denied)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$canDelete = $obj->canDelete($msg, $project_id);
+$canDelete = $project->canDelete($msg, $project_id);
 
 // get critical tasks (criteria: task_end_date)
-$criticalTasks = ($project_id > 0) ? $obj->getCriticalTasks($project_id) : null;
+$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 
 // get ProjectPriority from sysvals
 $projectPriority = w2PgetSysVal('ProjectPriority');
@@ -41,17 +41,12 @@ $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
 
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
-$q = new DBQuery;
-//check that project has tasks; otherwise run seperate query
-$q->addTable('tasks');
-$q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
-$q->addWhere('task_project = ' . (int)$project_id);
-$hasTasks = $q->loadResult();
-$q->clear();
+$hasTasks = CProject::hasTasks($project_id);
 
 // load the record data
 // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-$obj = null;
+$q = new DBQuery;
+
 if ($hasTasks) {
 	$q->addTable('projects');
 	$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
@@ -61,7 +56,7 @@ if ($hasTasks) {
 	$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
 	$q->addWhere('project_id = ' . (int)$project_id . ' AND t1.task_id = t1.task_parent');
 	$q->addGroup('project_id');
-	$q->loadObject($obj);
+	$q->loadObject($project);
 } else {
 	$q->addTable('projects');
 	$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, (0.0) AS project_percent_complete');
@@ -70,11 +65,11 @@ if ($hasTasks) {
 	$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
 	$q->addWhere('project_id = ' . (int)$project_id);
 	$q->addGroup('project_id');
-	$q->loadObject($obj);
+	$q->loadObject($project);
 }
 $q->clear();
 
-if (!$obj) {
+if (!$project) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
@@ -82,53 +77,12 @@ if (!$obj) {
 	$AppUI->savePlace();
 }
 
-// worked hours
-// now milestones are summed up, too, for consistence with the tasks duration sum
-// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
-// more info on http://www.mysql.com/doc/en/Problems_with_float.html
 if ($hasTasks) {
-	$q->addTable('task_log');
-	$q->addTable('tasks');
-	$q->addQuery('ROUND(SUM(task_log_hours),2)');
-	$q->addWhere('task_log_task = task_id AND task_project = ' . (int)$project_id);
-	$worked_hours = $q->loadResult();
-	$q->clear();
-	$worked_hours = rtrim($worked_hours, '.');
 
-	// total hours
-	// same milestone comment as above, also applies to dynamic tasks
-	$q->addTable('tasks');
-	$q->addQuery('ROUND(SUM(task_duration),2)');
-	$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
-	$days = $q->loadResult();
-	$q->clear();
+	$worked_hours = $project->getWorkedHours();
+	$total_hours = $project->getTotalHours();
+	$total_project_hours = $project->getTotalProjectHours();
 
-	$q->addTable('tasks');
-	$q->addQuery('ROUND(SUM(task_duration),2)');
-	$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 1 AND task_dynamic <> 1');
-	$hours = $q->loadResult();
-	$q->clear();
-	$total_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
-
-	$total_project_hours = 0;
-
-	$q->addTable('tasks', 't');
-	$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
-	$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-	$q->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic <> 1');
-	$total_project_days = $q->loadResult();
-	$q->clear();
-
-	$q->addTable('tasks', 't');
-	$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
-	$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-	$q->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic <> 1');
-	$total_project_hours = $q->loadResult();
-	$q->clear();
-
-	$total_project_hours = $total_project_days * $w2Pconfig['daily_working_hours'] + $total_project_hours;
-	//due to the round above, we don't want to print decimals unless they really exist
-	//$total_project_hours = rtrim($total_project_hours, "0");
 } else { //no tasks in project so "fake" project data
 	$worked_hours = $total_hours = $total_project_hours = 0.00;
 }
@@ -136,8 +90,8 @@ if ($hasTasks) {
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 // create Date objects from the datetime fields
-$start_date = intval($obj->project_start_date) ? new CDate($obj->project_start_date) : null;
-$end_date = intval($obj->project_end_date) ? new CDate($obj->project_end_date) : null;
+$start_date = intval($project->project_start_date) ? new CDate($project->project_start_date) : null;
+$end_date = intval($project->project_end_date) ? new CDate($project->project_end_date) : null;
 $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new CDate($criticalTasks[0]['task_end_date']) : null;
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
@@ -212,9 +166,9 @@ function delIt() {
 </form>
 <table id="tblProjects" border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
-	<td style="border: outset #d1d1cd 1px;background-color:#<?php echo $obj->project_color_identifier; ?>" colspan="2">
+	<td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2">
 	<?php
-echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' . $obj->project_name . '<strong></font>';
+echo '<font color="' . bestColor($project->project_color_identifier) . '"><strong>' . $project->project_name . '<strong></font>';
 ?>
 	</td>
 </tr>
@@ -225,19 +179,19 @@ echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' 
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-			<?php if ($perms->checkModuleItem('companies', 'access', $obj->project_company)) { ?>
-            			<td class="hilite" width="100%"> <?php echo '<a href="?m=companies&a=view&company_id=' . $obj->project_company . '">' . htmlspecialchars($obj->company_name, ENT_QUOTES) . '</a>'; ?></td>
+			<?php if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
+            			<td class="hilite" width="100%"> <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?></td>
 			<?php } else { ?>
-            			<td class="hilite" width="100%"><?php echo htmlspecialchars($obj->company_name, ENT_QUOTES); ?></td>
+            			<td class="hilite" width="100%"><?php echo htmlspecialchars($project->company_name, ENT_QUOTES); ?></td>
 			<?php } ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
-			<td class="hilite"><?php echo $obj->project_location; ?></td>
+			<td class="hilite"><?php echo $project->project_location; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
-			<td class="hilite"><?php echo htmlspecialchars($obj->project_short_name, ENT_QUOTES); ?></td>
+			<td class="hilite"><?php echo htmlspecialchars($project->project_short_name, ENT_QUOTES); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
@@ -263,25 +217,25 @@ echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' 
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-			<td class="hilite"><?php echo $w2Pconfig['currency_symbol'] ?><?php echo $obj->project_target_budget; ?></td>
+			<td class="hilite"><?php echo $w2Pconfig['currency_symbol'] ?><?php echo $project->project_target_budget; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-			<td class="hilite"><?php echo $obj->user_name; ?></td>
+			<td class="hilite"><?php echo $project->user_name; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-			<td class="hilite"><a href="<?php echo $obj->project_url; ?>" target="_new"><?php echo $obj->project_url; ?></a></td>
+			<td class="hilite"><a href="<?php echo $project->project_url; ?>" target="_new"><?php echo $project->project_url; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
-			<td class="hilite"><a href="<?php echo $obj->project_demo_url; ?>" target="_new"><?php echo $obj->project_demo_url; ?></a></td>
+			<td class="hilite"><a href="<?php echo $project->project_demo_url; ?>" target="_new"><?php echo $project->project_demo_url; ?></a></td>
 		</tr>
 		<tr>
 			<td colspan="2">
 				<?php
 					require_once ($AppUI->getSystemClass('CustomFields'));
-					$custom_fields = new CustomFields($m, $a, $obj->project_id, 'view');
+					$custom_fields = new CustomFields($m, $a, $project->project_id, 'view');
 					$custom_fields->printHTML();
 				?>
 			</td>
@@ -292,7 +246,7 @@ echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' 
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 			<tr>
 				<td class="hilite">
-					<?php echo str_replace(chr(10), '<br>', $obj->project_description); ?>&nbsp;
+					<?php echo str_replace(chr(10), '<br>', $project->project_description); ?>&nbsp;
 				</td>
 			</tr>
 			</table>
@@ -305,23 +259,23 @@ echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' 
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($pstatus[$obj->project_status]); ?></td>
+			<td class="hilite" width="100%"><?php echo $AppUI->_($pstatus[$project->project_status]); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
-			<td class="hilite" width="100%" style="background-color:<?php echo $projectPriorityColor[$obj->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$obj->project_priority]); ?></td>
+			<td class="hilite" width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($ptype[$obj->project_type]); ?></td>
+			<td class="hilite" width="100%"><?php echo $AppUI->_($ptype[$project->project_type]); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-			<td class="hilite" width="100%"><?php printf('%.1f%%', $obj->project_percent_complete); ?></td>
+			<td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $obj->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
+			<td class="hilite" width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
@@ -336,7 +290,7 @@ echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' 
 			<td class="hilite" width="100%"><?php echo $total_project_hours ?></td>
 		</tr>				
 		<?php
-		$depts = CProject::getDepartments($AppUI, $obj->project_id);
+		$depts = CProject::getDepartments($AppUI, $project->project_id);
 
 		if (count($depts) > 0) { ?>
 		    <tr>
@@ -357,7 +311,7 @@ echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' 
 		    </tr>
 			<?php
 		}
-		$contacts = CProject::getContacts($AppUI, $obj->project_id);
+		$contacts = CProject::getContacts($AppUI, $project->project_id);
 		if (count($contacts) > 0) { ?>
 		  <tr>
 		  	<td><strong><?php echo $AppUI->_('Contacts'); ?></strong></td>
@@ -394,13 +348,8 @@ echo '<font color="' . bestColor($obj->project_color_identifier) . '"><strong>' 
 </tr>
 <?php
 	//lets add the subprojects table
-	$q = new DBQuery();
-	$q->addTable('projects');
-	$q->addQuery('COUNT(project_id)');
-	$q->addWhere('project_original_parent = ' . (int)($obj->project_original_parent ? $obj->project_original_parent : $project_id));
-	$count_projects = $q->loadResult();
 	$canReadMultiProjects = $perms->checkModule('admin', 'view');
-	if ($count_projects > 1 && $canReadMultiProjects) { ?>
+	if ($project->hasChildProjects() && $canReadMultiProjects) { ?>
 		<tr>
 			<td colspan="2">
 				<?php
