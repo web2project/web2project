@@ -257,6 +257,22 @@ class CTask extends CW2pObject {
 		// return whether the object load process has been successful or not
 		return $loaded;
 	}
+	public function fullLoad($taskId) {
+		$q = new DBQuery;
+		$q->addTable('tasks');
+		$q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
+		$q->addJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'inner');
+		$q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
+		$q->leftJoin('task_log', 'tl', 'tl.task_log_task = task_id');
+		$q->addWhere('task_id = ' . (int) $taskId);
+		$q->addQuery('tasks.*');
+		$q->addQuery('project_name, project_color_identifier');
+		$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
+		$q->addQuery('ROUND(SUM(task_log_hours),2) as log_hours_worked');
+		$q->addGroup('task_id');
+
+		$q->loadObject($this, true, false);
+	}
 
 	/*
 	* call the load function but don't update dynamics
@@ -1451,16 +1467,68 @@ class CTask extends CW2pObject {
 		return $overAssignment;
 	}
 
-	function getAssignedUsers() {
-		$q = &new DBQuery;
+	public function getAssignedUsers($taskId) {
+		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
 		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name');
-		$q->addWhere('ut.task_id = ' . (int)$this->task_id);
-		$result = $q->loadHashList('user_id');
-		$q->clear();
-		return $result;
+		$q->addWhere('ut.task_id = ' . (int) $taskId);
+
+		return $q->loadHashList('user_id');
+	}
+	
+	public function getDependencyList($taskId) {
+		$q = new DBQuery;
+		$q->addQuery('td.dependencies_req_task_id, t.task_name');
+		$q->addTable('tasks', 't');
+		$q->addTable('task_dependencies', 'td');
+		$q->addWhere('td.dependencies_req_task_id = t.task_id');
+		$q->addWhere('td.dependencies_task_id = ' . (int) $taskId);
+		
+		return $q->loadHashList();
+	}
+	public function getDependentTaskList($taskId) {
+		$q = new DBQuery;
+		$q->addQuery('td.dependencies_task_id, t.task_name');
+		$q->addTable('tasks', 't');
+		$q->addTable('task_dependencies', 'td');
+		$q->addWhere('td.dependencies_task_id = t.task_id');
+		$q->addWhere('td.dependencies_req_task_id = ' . $taskId);
+
+		return $q->loadHashList();
+	}
+	public function getTaskDepartments($AppUI, $taskId) {
+		if ($AppUI->isActiveModule('departments')) {
+			$q = new DBQuery;
+			$q->addTable('departments', 'd');
+			$q->addTable('task_departments', 't');
+			$q->addWhere('t.department_id = d.dept_id');
+			$q->addWhere('t.task_id = ' . (int) $taskId);
+			$q->addQuery('dept_id, dept_name, dept_phone');
+
+			$department = new CDepartment;
+			$department->setAllowedSQL($AppUI->user_id, $q);
+			return $q->loadHashList('dept_id');
+		}
+	}
+	public function getTaskContacts($AppUI, $taskId) {
+		$perms = $AppUI->acl();
+
+		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+			$q = new DBQuery;
+			$q->addTable('contacts', 'c');
+			$q->addJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id', 'inner');
+			$q->leftJoin('departments', 'd', 'dept_id = contact_department');
+			$q->addWhere('tc.task_id = ' . (int) $taskId);
+			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+			$q->addQuery('contact_phone, dept_name');
+			$q->addWhere('(contact_owner = ' . (int) $AppUI->user_id . ' OR contact_private = 0)');
+
+			$department = new CDepartment;
+			$department->setAllowedSQL($AppUI->user_id, $q);
+			return $q->loadHashList('contact_id');
+		}
 	}
 
 	/**
