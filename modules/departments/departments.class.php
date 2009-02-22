@@ -253,6 +253,17 @@ class CDepartment extends CW2pObject {
 			$query->addWhere('((0=1) OR ' . ((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IS NULL)');
 		}
 	}
+	public static function getDepartmentList($AppUI, $companyId, $departmentId = 0) {
+		$q = new DBQuery;
+		$q->addTable('departments');
+		$q->addQuery('dept_id, dept_name');
+		$q->addWhere('dept_parent = ' . (int) $departmentId . ' AND dept_company = ' . (int) $companyId);
+		$q->addOrder('dept_name');
+		$department = new CDepartment;
+		$department->setAllowedSQL($AppUI->user_id, $q);
+		
+		return $q->loadHashList('dept_id');
+	}
 }
 
 //writes out a single <option> element for display of departments

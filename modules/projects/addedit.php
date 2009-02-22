@@ -468,15 +468,7 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 		$departments_count++;
 	}
 
-	$q = new DBQuery;
-	$q->addTable('departments');
-	$q->addQuery('dept_id, dept_name');
-	$q->addWhere('dept_parent = ' . (int)$dept_parent . ' AND dept_company = ' . (int)$company_id);
-	$q->addOrder('dept_name');
-	$department = new CDepartment;
-	$department->setAllowedSQL($AppUI->user_id, $q);
-
-	$depts_list = $q->loadHashList('dept_id');
+	$depts_list = CDepartment::getDepartmentList($AppUI, $company_id, $dept_parent);
 
 	foreach ($depts_list as $dept_id => $dept_info) {
 		$selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
