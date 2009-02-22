@@ -112,6 +112,8 @@ foreach ($projects as $row_proj) {
 			$st_projects_arr[0][1] = 0;
 		}
 
+		$tmpProject = new CProject();
+
 		$st_projects_counter = 1;
 		foreach ($st_projects_arr as $st_project) {
 			$multiproject_id = 0;
@@ -137,15 +139,11 @@ foreach ($projects as $row_proj) {
 			}
 			$s .= '<td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row["project_color_identifier"] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td><td width="50%">';
 
-			$q = new DBQuery();
-			$q->addTable('projects');
-			$q->addQuery('COUNT(project_id)');
-			$q->addWhere('project_original_parent = ' . (int)$row['project_id']);
-			$count_projects = $q->loadResult();
+			$count_projects = $tmpProject->hasChildProjects($row['project_id']);
 
 			if ($level) {
 				$s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . '<img src="./images/corner-dots.gif" width="16" height="12" border="0">&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars($row['project_description'], ENT_QUOTES) . '">' . $row['project_name'] . '</a>';
-			} elseif ($count_projects > 1 && !$level) {
+			} elseif ($count_projects > 0 && !$level) {
 				$s .= '<a href="javascript: void(0);" onClick="expand_multiproject(\'multiproject_' . $row['project_id'] . '\', \'tblProjects\')"><img id="multiproject_' . $row['project_id'] . '_expand" src="./images/icons/expand.gif" width="12" height="12" border="0"><img id="multiproject_' . $row['project_id'] . '_collapse" src="./images/icons/collapse.gif" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars($row['project_description'], ENT_QUOTES) . '">' . $row['project_name'] . '</a>';
 			} else {
 				$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row['project_id'] . '" title="' . htmlspecialchars($row['project_description'], ENT_QUOTES) . '">' . $row['project_name'] . '</a>';

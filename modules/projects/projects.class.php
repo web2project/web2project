@@ -684,6 +684,18 @@ class CProject extends CW2pObject {
 
 		return $q->loadHashList();
 	}
+	public static function updateStatus($AppUI, $projectId, $statusId) {
+		$perms = $AppUI->acl();
+
+		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId > 0) {
+			$r = new DBQuery;
+			$r->addTable('projects');
+			$r->addUpdate('project_status', $statusId);
+			$r->addWhere('project_id   = ' . (int) $projectId);
+			$r->exec();
+			$r->clear();
+		}
+	}
 
 	public function hasChildProjects($projectId = 0) {
 		// Note that this returns the *count* of projects.  If this is zero, it 
