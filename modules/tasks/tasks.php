@@ -42,21 +42,14 @@ if (isset($_GET['pin'])) {
 
 	// load the record data
 	if ($pin) {
-		$q->addTable('user_task_pin');
-		$q->addInsert('user_id', $AppUI->user_id);
-		$q->addInsert('task_id', $task_id);
+		$msg = CTask::pinUserTask($AppUI->user_id, $task_id);
 	} else {
-		$q->setDelete('user_task_pin');
-		$q->addWhere('user_id = ' . (int)$AppUI->user_id);
-		$q->addWhere('task_id = ' . (int)$task_id);
+		$msg = CTask::unpinUserTask($AppUI->user_id, $task_id);
 	}
 
-	if (!$q->exec()) {
-		$AppUI->setMsg('ins/del err', UI_MSG_ERROR, true);
-	} else {
-		$q->clear();
+	if (!$msg) {
+		$AppUI->setMsg($msg, UI_MSG_ERROR, true);
 	}
-
 	$AppUI->redirect('', -1);
 }
 

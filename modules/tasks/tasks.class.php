@@ -1977,6 +1977,30 @@ class CTask extends CW2pObject {
 
 		return $q->loadList();		
 	}
+	public static function pinUserTask($userId, $taskId) {
+		$q = new DBQuery;
+		$q->addTable('user_task_pin');
+		$q->addInsert('user_id', (int) $userId);
+		$q->addInsert('task_id', (int) $taskId);
+
+		if (!$q->exec()) {
+			return 'Error pinning task';
+		} else {
+			return true;
+		}
+	}
+	public static function unpinUserTask($userId, $taskId) {
+		$q = new DBQuery;
+		$q->setDelete('user_task_pin');
+		$q->addWhere('user_id = ' . (int) $userId);
+		$q->addWhere('task_id = ' . (int) $taskId);
+		
+		if (!$q->exec()) {
+			return 'Error unpinning task';
+		} else {
+			return true;
+		}
+	}
 }
 
 /**
