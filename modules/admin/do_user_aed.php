@@ -67,32 +67,11 @@ if ($del) {
 	return;
 }
 if ($isNewUser) {
-	// check if a user with the param Username already exists
-	$userEx = false;
-
-	function userExistence($userName) {
-		global $obj, $userEx;
-		if ($userName == $obj->user_username) {
-			$userEx = true;
-		}
-	}
-
-	//pull a list of existing usernames
-	$q = new DBQuery;
-	$q->addTable('users', 'u');
-	$q->addQuery('user_username');
-	$users = $q->loadList();
-
-	// Iterate the above userNameExistenceCheck for each user
-	foreach ($users as $usrs) {
-		$usrLst = array_map('userExistence', $usrs);
-	}
 	// If userName already exists quit with error and do nothing
-	if ($userEx == true) {
+	if (CUser::exists($obj->user_username) == true) {
 		$AppUI->setMsg('already exists. Try another username.', UI_MSG_ERROR, true);
 		$AppUI->redirect();
 	}
-
 	$contact->contact_owner = $AppUI->user_id;
 }
 
