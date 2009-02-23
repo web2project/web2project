@@ -47,18 +47,8 @@ if (isset($_GET['tab'])) {
 $tab = $AppUI->getState('UserVwTab') !== null ? $AppUI->getState('UserVwTab') : 0;
 
 // pull data
-$q = new DBQuery;
-$q->addTable('users', 'u');
-$q->addQuery('u.*');
-$q->addQuery('uf.feed_token');
-$q->addQuery('con.*, company_id, company_name, dept_name, dept_id');
-$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
-$q->addJoin('companies', 'com', 'contact_company = company_id');
-$q->addJoin('departments', 'dep', 'dept_id = contact_department');
-$q->addJoin('user_feeds', 'uf', 'feed_user = u.user_id');
-$q->addWhere('u.user_id = ' . (int)$user_id);
-$user = $q->loadHash();
-$q->clear();
+$user = new CUser();
+$user->fullLoad($user_id);
 
 if (!$user) {
 	$titleBlock = new CTitleBlock('Invalid User ID', 'helix-setup-user.png', $m, "$m.$a");
@@ -80,62 +70,61 @@ if (!$user) {
 	$titleBlock->show();
 ?>
 <script language="javascript">
-<?php
-	// security improvement:
-	// some javascript functions may not appear on client side in case of user not having write permissions
-	// else users would be able to arbitrarily run 'bad' functions
-	if ($canEdit || $user_id == $AppUI->user_id) {
-?>
-function popChgPwd() {
-	window.open( './index.php?m=public&a=chpwd&dialog=1&user_id=<?php echo $user['user_id']; ?>', 'chpwd', 'top=250,left=250,width=350, height=220, scrollbars=no' );
-}
-<?php } ?>
+	<?php
+		// security improvement:
+		// some javascript functions may not appear on client side in case of user not having write permissions
+		// else users would be able to arbitrarily run 'bad' functions
+		if ($canEdit || $user_id == $AppUI->user_id) {
+	?>
+	function popChgPwd() {
+		window.open( './index.php?m=public&a=chpwd&dialog=1&user_id=<?php echo $user->user_id; ?>', 'chpwd', 'top=250,left=250,width=350, height=220, scrollbars=no' );
+	}
+	<?php } ?>
 </script>
-
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr valign="top">
 	<td width="50%">
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Login Name'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user['user_username']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->user_username; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('User Type'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($utypes[$user['user_type']]); ?></td>
+			<td class="hilite" width="100%"><?php echo $AppUI->_($utypes[$user->user_type]); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Real Name'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user['contact_first_name'] . ' ' . $user['contact_last_name']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->contact_first_name . ' ' . $user->contact_last_name; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
 			<td class="hilite" width="100%">
-				<a href="?m=companies&a=view&company_id=<?php echo $user['contact_company']; ?>"><?php echo $user['company_name']; ?></a>
+				<a href="?m=companies&a=view&company_id=<?php echo $user->contact_company; ?>"><?php echo $user->company_name; ?></a>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
 			<td class="hilite" width="100%">
-				<a href="?m=departments&a=view&dept_id=<?php echo $user['contact_department']; ?>"><?php echo $user['dept_name']; ?></a>
+				<a href="?m=departments&a=view&dept_id=<?php echo $user->contact_department; ?>"><?php echo $user->dept_name; ?></a>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user['contact_phone']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->contact_phone; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Home Phone'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user['contact_phone2']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->contact_phone2; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Mobile'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user['contact_mobile']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->contact_mobile; ?></td>
 		</tr>
 		<tr valign="top">
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td class="hilite" width="100%"><?php
-	echo $user['contact_address1'] . (($user['contact_address2']) ? '<br />' . $user['contact_address2'] : '') . '<br />' . $user['contact_city'] . '&nbsp;&nbsp;' . $user['contact_state'] . '&nbsp;&nbsp;' . $user['contact_zip'] . '<br />' . ($countries[$user['contact_country']] ? $countries[$user['contact_country']] : $user['contact_country']);
+	echo $user->contact_address1 . (($user->contact_address2) ? '<br />' . $user->contact_address2 : '') . '<br />' . $user->contact_city . '&nbsp;&nbsp;' . $user->contact_state . '&nbsp;&nbsp;' . $user->contact_zip . '<br />' . ($countries[$user->contact_country] ? $countries[$user->contact_country] : $user->contact_country);
 ?></td>
 		</tr>
 		</table>
@@ -145,53 +134,53 @@ function popChgPwd() {
 		<table width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Birthday'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user['contact_birthday']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->contact_birthday; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">Jabber:</td>
-			<td class="hilite" width="100%"><?php echo $user['contact_jabber']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->contact_jabber; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">ICQ:</td>
-			<td class="hilite" width="100%"><?php echo $user['contact_icq']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->contact_icq; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">AOL Nick:</td>
-			<td class="hilite" width="100%"><a href="aim:<?php echo $user['contact_aol']; ?>"><?php echo $user['contact_aol']; ?></a></td>
+			<td class="hilite" width="100%"><a href="aim:<?php echo $user->contact_aol; ?>"><?php echo $user->contact_aol; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">MSN:</td>
-			<td class="hilite" width="100%"><?php echo $user['contact_msn']; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->contact_msn; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">Yahoo:</td>
-			<td class="hilite" width="100%"><a href="ymsgr:sendIM?<?php echo $user['contact_yahoo']; ?>"><?php echo $user['contact_yahoo']; ?></a></td>
+			<td class="hilite" width="100%"><a href="ymsgr:sendIM?<?php echo $user->contact_yahoo; ?>"><?php echo $user->contact_yahoo; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">Skype:</td>
-			<td class="hilite" width="100%"><a href="skype:<?php echo $user['contact_skype']; ?>"><?php echo $user['contact_skype']; ?></a></td>
+			<td class="hilite" width="100%"><a href="skype:<?php echo $user->contact_skype; ?>"><?php echo $user->contact_skype; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap">Google:</td>
-			<td class="hilite" width="100%"><a href="google:<?php echo $user['contact_google']; ?>"><?php echo $user['contact_google']; ?></a></td>
+			<td class="hilite" width="100%"><a href="google:<?php echo $user->contact_google; ?>"><?php echo $user->contact_google; ?></a></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo '<a href="mailto:' . $user['contact_email'] . '">' . $user['contact_email'] . '</a>'; ?></td>
+			<td class="hilite" width="100%"><?php echo '<a href="mailto:' . $user->contact_email . '">' . $user->contact_email . '</a>'; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calendar Feed'); ?>:</td>
 			<td class="hilite" width="100%">
-				<?php if ($user['feed_token'] != '') { 
-					$calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user['feed_token'];
+				<?php if ($user->feed_token != '') { 
+					$calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token;
 					?>
 					<a href="<?php echo $calendarFeed; ?>">calendar feed</a>
 				<?php } ?>
 				&nbsp;&nbsp;&nbsp;
 				<form name="regenerateToken" action="./index.php?m=admin" method="post">
-					<input type="hidden" name="user_id" value="<?php echo intval($user['user_id']); ?>" />
+					<input type="hidden" name="user_id" value="<?php echo intval($user->user_id); ?>" />
 					<input type="hidden" name="dosql" value="do_user_token" />
-					<input type="hidden" name="token" value="<?php echo $user['feed_token']; ?>" />
+					<input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
 					<input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" />
 				</form>
 			</td>
@@ -201,7 +190,7 @@ function popChgPwd() {
 		</tr>
 		<tr>
 			<td class="hilite" width="100%" colspan="2">
-				<?php echo str_replace(chr(10), '<br />', $user['user_signature']); ?>&nbsp;
+				<?php echo str_replace(chr(10), '<br />', $user->user_signature); ?>&nbsp;
 			</td>
 		</tr>
 		</table>
