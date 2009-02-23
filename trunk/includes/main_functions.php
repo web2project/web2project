@@ -197,15 +197,15 @@ function w2PgetUsernameFromID($user) {
 	return $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'];
 }
 
-function w2PgetUsers($module = '') {
+function w2PgetUsers() {
 	global $AppUI;
+
 	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('user_id, concat_ws(\' \', contact_first_name, contact_last_name) as name');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 	$q->addOrder('contact_first_name,contact_last_name');
 
-	// get CCompany() to filter by company
 	require_once ($AppUI->getModuleClass('companies'));
 	$obj = new CCompany();
 	$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
@@ -213,16 +213,19 @@ function w2PgetUsers($module = '') {
 	if ($companies) {
 		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 	}
-	require_once ($AppUI->getModuleClass('departments'));
-	$dpt = new CDepartment();
-	$depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
-	$q->addJoin('departments', 'dep', 'dept_id = contact_department');
-	if ($depts) {
-		$q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
-	}
-	//print_r($q->prepare());
+	
+	if ($AppUI->isActiveModule('departments')) {
+		require_once ($AppUI->getModuleClass('departments'));
 
-	return arrayMerge(array(0 => $AppUI->_('All Users')), $q->loadHashList());
+		$dpt = new CDepartment();
+		$depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
+		$q->addJoin('departments', 'dep', 'dept_id = contact_department');
+		if ($depts) {
+			$q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
+		}
+	}
+
+	return $q->loadHashList();
 }
 
 function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_name, contact_last_name') {
