@@ -300,6 +300,60 @@ class CContact extends CW2pObject {
 		}
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
+	public static function searchContacts($AppUI, $where, $searchString = '') {
+		$showfields = array('contact_address1' => 'contact_address1', 'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city', 'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip', 'contact_country' => 'contact_country', 'contact_company' => 'contact_company', 'company_name' => 'company_name', 'dept_name' => 'dept_name', 'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2', 'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax', 'contact_email' => 'contact_email');
+
+		if ($searchString != '') {
+			$additional_filter = "OR contact_first_name like '%$searchString%' OR contact_last_name  like '%$searchString%'
+			                      OR CONCAT(contact_first_name, ' ', contact_last_name)  like '%$searchString%'
+								  					OR company_name like '%$searchString%' OR contact_notes like '%$searchString%'
+								  					OR contact_email like '%$searchString%'";
+		}
+		// assemble the sql statement
+		$q = new DBQuery;
+		$q->addQuery('contact_id, contact_order_by');
+		$q->addQuery($showfields);
+		$q->addQuery('contact_first_name, contact_last_name, contact_phone, contact_title');
+		$q->addQuery('contact_updatekey, contact_updateasked, contact_lastupdate');
+		$q->addQuery('user_id');
+		$q->addTable('contacts', 'a');
+		$q->leftJoin('companies', 'b', 'a.contact_company = b.company_id');
+		$q->leftJoin('departments', '', 'contact_department = dept_id');
+		$q->leftJoin('users', '', 'contact_id = user_contact');
+		$q->addWhere("(contact_first_name LIKE '$where%' OR contact_last_name LIKE '$where%' " . $additional_filter . ")");
+		$q->addWhere('
+			(contact_private=0
+				OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
+				OR contact_owner IS NULL OR contact_owner = 0
+			)');
+		$company = new CCompany;
+		$company->setAllowedSQL($AppUI->user_id, $q);
+
+		$department = new CDepartment;
+		$department->setAllowedSQL($AppUI->user_id, $q);
+
+		$q->addOrder('contact_first_name');
+		$q->addOrder('contact_last_name');
+
+		return $q->loadList();
+	}
+	public static function getLetters($AppUI) {
+		$letters = '';
+
+		$search_map = array('contact_first_name', 'contact_last_name');
+		foreach ($search_map as $search_name) {
+			$q = new DBQuery;
+			$q->addTable('contacts');
+			$q->addQuery('DISTINCT SUBSTRING(' . $search_name . ',1,1) as L');
+			$q->addWhere('contact_private=0 OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ') OR contact_owner IS NULL OR contact_owner = 0');
+			$arr = $q->loadList();
+
+			foreach ($arr as $L) {
+				$letters .= $L['L'];
+			}
+		}
+		return $letters;
+	}
 	
 	public function cron_hook() {
 		$q = new DBQuery;
