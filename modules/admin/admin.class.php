@@ -257,7 +257,21 @@ class CUser extends CW2pObject {
 	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		return w2PgetUsers();
 	}
-	
+	public function fullLoad($userId) {
+		$q = new DBQuery;
+		$q->addTable('users', 'u');
+		$q->addQuery('u.*');
+		$q->addQuery('uf.feed_token');
+		$q->addQuery('con.*, company_id, company_name, dept_name, dept_id');
+		$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
+		$q->addJoin('companies', 'com', 'contact_company = company_id');
+		$q->addJoin('departments', 'dep', 'dept_id = contact_department');
+		$q->addJoin('user_feeds', 'uf', 'feed_user = u.user_id');
+		$q->addWhere('u.user_id = ' . (int) $userId);
+
+		$q->loadObject($this, true, false);
+	}
+
 	public static function getUserIdByToken($token) {
 		$q = new DBQuery;
 		$q->addQuery('feed_user');
