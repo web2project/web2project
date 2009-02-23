@@ -108,7 +108,7 @@ $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show') . ': </td>';
 $a2z .= '<td><a href="./index.php?m=contacts&where=0">' . $AppUI->_('All') . '</a></td>';
 
 // Pull First Letters
-$letters = CContact::getLetters($AppUI);
+$letters = CContact::getFirstLetters($AppUI->user_id);
 
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);

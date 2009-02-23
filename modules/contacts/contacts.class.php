@@ -337,22 +337,26 @@ class CContact extends CW2pObject {
 
 		return $q->loadList();
 	}
-	public static function getLetters($AppUI) {
+	public static function getFirstLetters($userId, $onlyUsers = false) {
 		$letters = '';
 
 		$search_map = array('contact_first_name', 'contact_last_name');
 		foreach ($search_map as $search_name) {
 			$q = new DBQuery;
 			$q->addTable('contacts');
-			$q->addQuery('DISTINCT SUBSTRING(' . $search_name . ',1,1) as L');
-			$q->addWhere('contact_private=0 OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ') OR contact_owner IS NULL OR contact_owner = 0');
+			$q->addQuery('DISTINCT SUBSTRING(' . $search_name . ', 1, 1) as L');
+			if ($onlyUsers) {
+				//$q->addTable('users', 'u');
+				$q->addJoin('users', 'u', 'user_contact = contact_id', 'inner');
+			}
+			$q->addWhere('contact_private=0 OR (contact_private=1 AND contact_owner=' .(int) $userId. ') OR contact_owner IS NULL OR contact_owner = 0');
 			$arr = $q->loadList();
 
 			foreach ($arr as $L) {
 				$letters .= $L['L'];
 			}
 		}
-		return $letters;
+		return strtoupper($letters);
 	}
 	
 	public function cron_hook() {
