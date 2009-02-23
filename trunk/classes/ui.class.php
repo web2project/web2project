@@ -820,7 +820,7 @@ class CAppUI {
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name');
 		$q->addOrder('mod_directory');
-		return ($q->loadHashList());
+		return $q->loadHashList();
 	}
 	/**
 	 * Gets a list of the active modules
@@ -832,7 +832,7 @@ class CAppUI {
 		$q->addQuery('mod_directory, mod_ui_name');
 		$q->addWhere('mod_active = 1');
 		$q->addOrder('mod_directory');
-		return ($q->loadHashList());
+		return $q->loadHashList();
 	}
 	/**
 	 * Gets a list of the modules that should appear in the menu
@@ -846,7 +846,7 @@ class CAppUI {
 		$q->addWhere("mod_active > 0 AND mod_ui_active > 0 AND mod_directory <> 'public'");
 		$q->addWhere("mod_type <> 'utility'");
 		$q->addOrder('mod_ui_order');
-		return ($q->loadList());
+		return $q->loadList();
 	}
 	/**
 	 * Gets a list of the active modules
@@ -858,16 +858,22 @@ class CAppUI {
 		$q->addQuery('mod_directory, mod_main_class');
 		$q->addWhere('mod_active = 1');
 		$q->addWhere("mod_main_class <> ''");
-		return ($q->loadList());
+		return $q->loadList();
 	}
-	function isActiveModule($module) {
+	public function getPermissionableModuleList() {
+		$q = new DBQuery;
+		$q->addTable('modules', 'm');
+		$q->addQuery('mod_id, mod_name, permissions_item_table, permissions_item_field, permissions_item_label');
+		$q->addWhere('permissions_item_table is not null');
+		$q->addWhere("permissions_item_table <> ''");
+		return $q->loadHashList('mod_name');
+	}
+	public function isActiveModule($module) {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_active');
-		$q->addWhere('mod_directory = \'' . $module . '\'');
-		$result = $q->loadResult();
-		$q->clear();
-		return $result;
+		$q->addWhere("mod_directory = '$module'");
+		return $q->loadResult();
 	}
 
 	/**
