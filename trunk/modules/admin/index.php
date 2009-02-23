@@ -13,6 +13,8 @@ if (!$perms->checkModule('users', 'view')) {
 
 $AppUI->savePlace();
 
+require_once ($AppUI->getModuleClass('contacts'));
+
 if (isset($_GET['tab'])) {
 	$AppUI->setState('UserIdxTab', w2PgetParam($_GET, 'tab', null));
 }
@@ -35,43 +37,15 @@ $orderby = $AppUI->getState('UserIdxOrderby') ? $AppUI->getState('UserIdxOrderby
 $orderby = ($tab == 3 || ($orderby != 'date_time_in' && $orderby != 'user_ip')) ? $orderby : 'user_username';
 
 // Pull First Letters
-$let = ":";
-$q = new DBQuery;
-$q->addTable('users', 'u');
-$q->addQuery('DISTINCT UPPER(SUBSTRING(user_username, 1, 1)) AS L');
-$arr = $q->loadList();
-foreach ($arr as $L) {
-	$let .= $L['L'];
-}
-
-$q = new DBQuery;
-$q->addTable('users', 'u');
-$q->addQuery('DISTINCT UPPER(SUBSTRING(contact_first_name, 1, 1)) AS L');
-$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-$arr = $q->loadList();
-foreach ($arr as $L) {
-	if ($L['L']) {
-		$let .= strpos($let, $L['L']) ? '' : $L['L'];
-	}
-}
-
-$q = new DBQuery;
-$q->addTable('users', 'u');
-$q->addQuery('DISTINCT UPPER(SUBSTRING(contact_last_name, 1, 1)) AS L');
-$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-$arr = $q->loadList();
-foreach ($arr as $L) {
-	if ($L['L']) {
-		$let .= strpos($let, $L['L']) ? '' : $L['L'];
-	}
-}
+$letters = CUser::getFirstLetters();
+$letters = $letters.CContact::getFirstLetters($AppUI->user_id, true);
 
 $a2z = '<table cellpadding="2" cellspacing="1" border="0"><tr>';
 $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show') . ': </td>';
 $a2z .= '<td><a href="./index.php?m=admin&stub=0">' . $AppUI->_('All') . '</a></td>';
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = strpos($let, $cu) > 0 ? '<a href="?m=admin&stub=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
+	$cell = strpos($letters, $cu) > 0 ? '<a href="?m=admin&stub=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
 	$a2z .= '<td>' . $cell . '</td>';
 }
 $a2z .= '</tr></table>';

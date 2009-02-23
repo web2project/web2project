@@ -284,6 +284,19 @@ class CUser extends CW2pObject {
 
 		return true;
 	}
+	public static function getFirstLetters() {
+		$letters = '';
+
+		$q = new DBQuery;
+		$q->addTable('users', 'u');
+		$q->addQuery('DISTINCT SUBSTRING(user_username, 1, 1) as L');
+		$arr = $q->loadList();
+
+		foreach ($arr as $L) {
+			$letters .= $L['L'];
+		}
+		return strtoupper($letters);
+	}
 }
 
 function notifyNewUser($address, $username) {
