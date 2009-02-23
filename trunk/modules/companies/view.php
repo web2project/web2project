@@ -23,23 +23,14 @@ $tab = $AppUI->getState('CompVwTab') !== null ? $AppUI->getState('CompVwTab') : 
 
 // check if this record has dependencies to prevent deletion
 $msg = '';
-$obj = new CCompany();
-$canDelete = $obj->canDelete($msg, $company_id);
+$company = new CCompany();
+$canDelete = $company->canDelete($msg, $company_id);
+
+$company->loadFull($company_id);
 
 // load the record data
-$q = new DBQuery;
-$q->addTable('companies');
-$q->addQuery('companies.*');
-$q->addQuery('con.contact_first_name');
-$q->addQuery('con.contact_last_name');
-$q->leftJoin('users', 'u', 'u.user_id = companies.company_owner');
-$q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-$q->addWhere('companies.company_id = ' . (int)$company_id);
-$obj = null;
-$q->loadObject($obj);
-$q->clear();
 
-if (!$obj) {
+if (!$company) {
 	$AppUI->setMsg('Company');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
@@ -85,84 +76,80 @@ function delIt() {
 <?php } ?>
 </script>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
-
-<?php if ($canDelete) {
-?>
-<form name="frmDelete" action="./index.php?m=companies" method="post">
-	<input type="hidden" name="dosql" value="do_company_aed" />
-	<input type="hidden" name="del" value="1" />
-	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
-</form>
+<?php if ($canDelete) { ?>
+	<form name="frmDelete" action="./index.php?m=companies" method="post">
+		<input type="hidden" name="dosql" value="do_company_aed" />
+		<input type="hidden" name="del" value="1" />
+		<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
+	</form>
 <?php } ?>
-
-<tr>
-	<td valign="top" width="50%">
-		<strong><?php echo $AppUI->_('Details'); ?></strong>
-		<table cellspacing="1" cellpadding="2" width="100%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $obj->company_name; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $obj->contact_first_name . ' ' . $obj->contact_last_name; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $obj->company_email; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td class="hilite"><?php echo $obj->company_phone1; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>2:</td>
-			<td class="hilite"><?php echo $obj->company_phone2; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-			<td class="hilite"><?php echo $obj->company_fax; ?></td>
-		</tr>
-		<tr valign="top">
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
-			<td class="hilite">
-			<a href="http://maps.google.com/maps?q=<?php echo $obj->company_address1; ?>+<?php echo $obj->company_address2; ?>+<?php echo $obj->company_city; ?>+<?php echo $obj->company_state; ?>+<?php echo $obj->company_zip; ?>+<?php echo $obj->company_country; ?>" target="_blank">
-			<img align="right" border="0" src="<?php echo w2PfindImage('googlemaps.gif'); ?>" width="55" height="22" alt="Find It on Google" /></a>
+	
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+	<tr>
+		<td valign="top" width="50%">
+			<strong><?php echo $AppUI->_('Details'); ?></strong>
+			<table cellspacing="1" cellpadding="2" width="100%">
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
+					<td class="hilite" width="100%"><?php echo $company->company_name; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
+					<td class="hilite" width="100%"><?php echo $company->contact_first_name . ' ' . $company->contact_last_name; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
+					<td class="hilite" width="100%"><?php echo $company->company_email; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
+					<td class="hilite"><?php echo $company->company_phone1; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>2:</td>
+					<td class="hilite"><?php echo $company->company_phone2; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
+					<td class="hilite"><?php echo $company->company_fax; ?></td>
+				</tr>
+				<tr valign="top">
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
+					<td class="hilite">
+					<a href="http://maps.google.com/maps?q=<?php echo $company->company_address1; ?>+<?php echo $company->company_address2; ?>+<?php echo $company->company_city; ?>+<?php echo $company->company_state; ?>+<?php echo $company->company_zip; ?>+<?php echo $company->company_country; ?>" target="_blank">
+					<img align="right" border="0" src="<?php echo w2PfindImage('googlemaps.gif'); ?>" width="55" height="22" alt="Find It on Google" /></a>
+					<?php
+						echo $company->company_address1 . (($company->company_address2) ? '<br />' . $company->company_address2 : '') . (($company->company_city) ? '<br />' . $company->company_city : '') . (($company->company_state) ? '<br />' . $company->company_state : '') . (($company->company_zip) ? '<br />' . $company->company_zip : '') . (($company->company_country) ? '<br />' . $countries[$company->company_country] : '');?>
+					</td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
+					<td class="hilite">
+						<a href="http://<?php echo $company->company_primary_url; ?>" target="Company"><?php echo $company->company_primary_url; ?></a>
+					</td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
+					<td class="hilite"><?php echo $AppUI->_($types[$company->company_type]); ?></td>
+				</tr>
+			</table>
+		</td>
+		<td width="50%" valign="top">
+			<strong><?php echo $AppUI->_('Description'); ?></strong>
+			<table cellspacing="0" cellpadding="2" border="0" width="100%">
+				<tr>
+					<td class="hilite">
+						<?php echo str_replace(chr(10), '<br />', $company->company_description); ?>&nbsp;
+					</td>
+				</tr>		
+			</table>
 			<?php
-				echo $obj->company_address1 . (($obj->company_address2) ? '<br />' . $obj->company_address2 : '') . (($obj->company_city) ? '<br />' . $obj->company_city : '') . (($obj->company_state) ? '<br />' . $obj->company_state : '') . (($obj->company_zip) ? '<br />' . $obj->company_zip : '') . (($obj->company_country) ? '<br />' . $countries[$obj->company_country] : '');?>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-			<td class="hilite">
-				<a href="http://<?php echo $obj->company_primary_url; ?>" target="Company"><?php echo $obj->company_primary_url; ?></a>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-			<td class="hilite"><?php echo $AppUI->_($types[$obj->company_type]); ?></td>
-		</tr>
-		</table>
-
-	</td>
-	<td width="50%" valign="top">
-		<strong><?php echo $AppUI->_('Description'); ?></strong>
-		<table cellspacing="0" cellpadding="2" border="0" width="100%">
-		<tr>
-			<td class="hilite">
-				<?php echo str_replace(chr(10), '<br />', $obj->company_description); ?>&nbsp;
-			</td>
-		</tr>
-		
-		</table>
-		<?php
-require_once ($AppUI->getSystemClass('CustomFields'));
-$custom_fields = new CustomFields($m, $a, $obj->company_id, 'view');
-$custom_fields->printHTML();
-?>
-	</td>
-</tr>
+				require_once ($AppUI->getSystemClass('CustomFields'));
+				$custom_fields = new CustomFields($m, $a, $company->company_id, 'view');
+				$custom_fields->printHTML();
+			?>
+		</td>
+	</tr>
 </table>
 
 <?php
@@ -175,4 +162,3 @@ $tabBox->add($moddir . 'vw_depts', 'Departments');
 $tabBox->add($moddir . 'vw_users', 'Users');
 $tabBox->add($moddir . 'vw_contacts', 'Contacts');
 $tabBox->show();
-?>
