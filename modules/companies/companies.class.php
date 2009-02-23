@@ -11,6 +11,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 require_once ($AppUI->getSystemClass('w2p'));
 require_once ($AppUI->getModuleClass('departments'));
+require_once ($AppUI->getModuleClass('projects'));
 
 /**
  *	Companies Class
@@ -83,6 +84,30 @@ class CCompany extends CW2pObject {
 		$q->addWhere('companies.company_id = ' . (int) $companyId);
 
 		$q->loadObject($this, true, false);
+	}
+	
+	public static function getProjects($AppUI, $companyId, $active = 1, $sort = 'project_name') {
+		$fields = 'pr.project_id, project_name, project_start_date, ' .
+				'project_status, project_target_budget, project_start_date, ' .
+				'project_priority, contact_first_name, contact_last_name';
+
+		$q = new DBQuery;
+		$q->addTable('projects', 'pr');
+		$q->addQuery($fields);
+		$q->leftJoin('users', 'u', 'u.user_id = pr.project_owner');
+		$q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+		$q->addWhere('pr.project_company = ' . (int) $companyId);
+		
+		$projObj = new CProject();
+		$projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+		
+		$q->addWhere('pr.project_active = '. (int) $active);
+		
+		if (strpos($fields, $sort) !== false) {
+			$q->addOrder($sort);
+		}
+		
+		return $q->loadList();
 	}
 }
 ?>

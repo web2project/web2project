@@ -15,47 +15,45 @@ if ($sort == 'project_priority') {
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$q = new DBQuery;
-$q->addTable('projects', 'pr');
-$q->addQuery('pr.project_id, project_name, project_start_date, project_status, project_target_budget, project_start_date, project_priority, contact_first_name, contact_last_name');
-$q->leftJoin('users', 'u', 'u.user_id = pr.project_owner');
-$q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-$q->addWhere('pr.project_company = ' . (int)$company_id);
+$projects = CCompany::getProjects($AppUI, $company_id, 1, $sort);
 
-include_once ($AppUI->getModuleClass('projects'));
-$projObj = new CProject();
-$projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-
-$q->addWhere('pr.project_active = 1');
-$q->addOrder($sort);
-$s = '';
-
-if (!($rows = $q->loadList())) {
-	$s .= $AppUI->_('No data available') . '<br />' . $AppUI->getMsg();
-} else {
-	$s .= '<tr>';
-	$s .= '<th><a style="color:white" href="index.php?m=companies&a=view&company_id=' . $company_id . '&sort=project_priority">' . $AppUI->_('P') . '</a></th>' .
-		'<th><a style="color:white" href="index.php?m=companies&a=view&company_id=' . $company_id . '&sort=project_name">' . $AppUI->_('Name') . '</a></th>' . '<th>' . $AppUI->_('Owner') . '</th>' . '<th>' .
-		$AppUI->_('Started') . '</th>' . '<th>' . $AppUI->_('Status') . '</th>' . '<th>' . $AppUI->_('Budget') . '</th>' . '</tr>';
-	foreach ($rows as $row) {
-		$start_date = new CDate($row['project_start_date']);
-		$s .= '<tr>';
-		$s .= '<td>';
-		if ($row['project_priority'] < 0) {
-			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width=13 height=16>';
-		} elseif ($row["project_priority"] > 0) {
-			$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '" width=13 height=16>';
-		}
-
-		$s .= '</td>';
-		$s .= '<td width="100%">';
-		$s .= '<a href="?m=projects&a=view&project_id=' . $row['project_id'] . '">' . $row['project_name'] . '</a></td>';
-		$s .= '<td nowrap="nowrap">' . $row['contact_first_name'] . '&nbsp;' . $row['contact_last_name'] . '</td>';
-		$s .= '<td nowrap="nowrap">' . $start_date->format($df) . '</td>';
-		$s .= '<td nowrap="nowrap">' . $AppUI->_($pstatus[$row['project_status']]) . '</td>';
-		$s .= '<td nowrap="nowrap" align="right">' . $w2Pconfig['currency_symbol'] . $row['project_target_budget'] . '</td>';
-		$s .= '</tr>';
+?><table cellpadding="2" cellspacing="1" border="0" width="100%" class="tbl"><?php
+if (count($projects) > 0) {
+	?>
+	<tr>
+		<th><a style="color:white" href="index.php?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=project_priority"><?php echo $AppUI->_('P'); ?></a></th>
+		<th><a style="color:white" href="index.php?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=project_name"><?php echo $AppUI->_('Name'); ?></a></th>
+		<th><?php echo $AppUI->_('Owner'); ?></th>
+		<th><?php echo $AppUI->_('Started'); ?></th>
+		<th><?php echo $AppUI->_('Status'); ?></th>
+		<th><?php echo $AppUI->_('Budget'); ?></th>
+	</tr>
+	<?php
+	foreach ($projects as $project) {
+		$start_date = new CDate($project['project_start_date']);
+		?>
+		<tr>
+			<td>
+				<?php
+					if ($project['project_priority'] < 0) {
+						echo '<img src="' . w2PfindImage('icons/priority-' . -$project['project_priority'] . '.gif') . '" width=13 height=16>';
+					} elseif ($project["project_priority"] > 0) {
+						echo '<img src="' . w2PfindImage('icons/priority+' . $project['project_priority'] . '.gif') . '" width=13 height=16>';
+					} 
+				?>
+			</td>
+			<td>
+				<a href="?m=projects&a=view&project_id=<?php echo $project['project_id']; ?>"><?php echo $project['project_name']; ?></a>
+			</td>
+			<td nowrap="nowrap"><?php echo $project['contact_first_name']; ?>&nbsp;<?php echo $project['contact_last_name']; ?></td>
+			<td nowrap="nowrap"><?php echo $start_date->format($df); ?></td>
+			<td nowrap="nowrap"><?php echo $AppUI->_($pstatus[$project['project_status']]); ?></td>
+			<td nowrap="nowrap"><?php echo $w2Pconfig['currency_symbol'] . $project['project_target_budget']; ?></td>
+		</tr>
+		<?php
 	}
+} else {
+	?><tr><td colspan="5"><?php echo $AppUI->_('No data available') . '<br />' . $AppUI->getMsg(); ?></td></tr><?php
 }
-echo '<table cellpadding="2" cellspacing="1" border="0" width="100%" class="tbl">' . $s . '</table>';
 ?>
+</table>
