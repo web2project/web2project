@@ -109,5 +109,63 @@ class CCompany extends CW2pObject {
 		
 		return $q->loadList();
 	}
+	public static function getContacts($AppUI, $companyId) {
+		$perms = $AppUI->acl();
+
+		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+			$q = new DBQuery;
+			$q->addQuery('a.*');
+			$q->addQuery('dept_name');
+			$q->addTable('contacts', 'a');
+			$q->leftJoin('companies', 'b', 'a.contact_company = b.company_id');
+			$q->leftJoin('departments', '', 'contact_department = dept_id');
+			$q->addWhere('contact_company = ' . (int) $companyId);
+			$q->addWhere('
+				(contact_private=0
+					OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
+					OR contact_owner IS NULL OR contact_owner = 0
+				)');
+
+			$department = new CDepartment;
+			$department->setAllowedSQL($AppUI->user_id, $q);
+
+			$q->addOrder('contact_first_name');
+			$q->addOrder('contact_last_name');
+			
+			return $q->loadHashList('contact_id');
+		}
+	}
+	public static function getUsers($AppUI, $companyId) {
+		$q = new DBQuery;
+		$q->addTable('users');
+		$q->addQuery('user_id, user_username, contact_first_name, contact_last_name');
+		$q->addJoin('contacts', 'c', 'users.user_contact = contact_id', 'inner');
+		$q->addJoin('departments', 'd', 'd.dept_id = contact_department');
+		$q->addWhere('contact_company = ' . (int) $companyId);
+		$q->addOrder('contact_last_name');
+
+		$department = new CDepartment;
+		$department->setAllowedSQL($AppUI->user_id, $q);
+		
+		return $q->loadHashList('user_id');
+	}
+	public static function getDepartments($AppUI, $companyId) {
+		$perms = $AppUI->acl();
+
+		if ($AppUI->isActiveModule('departments') && $perms->checkModule('departments', 'view')) {
+			$q = new DBQuery;
+			$q->addTable('departments');
+			$q->addQuery('departments.*, COUNT(contact_department) dept_users');
+			$q->addJoin('contacts', 'c', 'c.contact_department = dept_id');
+			$q->addWhere('dept_company = ' . (int) $companyId);
+			$q->addGroup('dept_id');
+			$q->addOrder('dept_parent, dept_name');
+
+			$department = new CDepartment;
+			$department->setAllowedSQL($AppUI->user_id, $q);
+
+			return $q->loadHashList('dept_id');
+		}
+	}
 }
 ?>
