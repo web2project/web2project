@@ -5,31 +5,31 @@ if (!defined('W2P_BASE_DIR')) {
 $utypes = w2PgetSysVal('UserType');
 ?>
 <table cellpadding="2" cellspacing="1" border="0" width="100%" class="tbl">
-<tr>
-	<th>
-		&nbsp;
-	</th>
-	<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
-	<th width="125">
-	           <?php echo $AppUI->_('Login History'); ?>
-	</th>
-	<?php } ?>
-	<th width="150">
-		<a href="?m=admin&a=index&orderby=user_username" class="hdr"><?php echo $AppUI->_('Login Name'); ?></a>
-	</th>
-	<th>
-		<a href="?m=admin&a=index&orderby=contact_last_name" class="hdr"><?php echo $AppUI->_('Real Name'); ?></a>
-	</th>
-	<th>
-		<a href="?m=admin&a=index&orderby=user_type" class="hdr"><?php echo $AppUI->_('Type'); ?></a>
-	</th>
-	<th>
-		<a href="?m=admin&a=index&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
-	</th>
-	<th>
-		<a href="?m=admin&a=index&orderby=dept_name" class="hdr"><?php echo $AppUI->_('Department'); ?></a>
-	</th>
-</tr>
+	<tr>
+		<th>
+			&nbsp;
+		</th>
+		<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
+			<th width="125">
+				<?php echo $AppUI->_('Login History'); ?>
+			</th>
+		<?php } ?>
+		<th width="150">
+			<a href="?m=admin&a=index&orderby=user_username" class="hdr"><?php echo $AppUI->_('Login Name'); ?></a>
+		</th>
+		<th>
+			<a href="?m=admin&a=index&orderby=contact_last_name" class="hdr"><?php echo $AppUI->_('Real Name'); ?></a>
+		</th>
+		<th>
+			<a href="?m=admin&a=index&orderby=user_type" class="hdr"><?php echo $AppUI->_('Type'); ?></a>
+		</th>
+		<th>
+			<a href="?m=admin&a=index&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
+		</th>
+		<th>
+			<a href="?m=admin&a=index&orderby=dept_name" class="hdr"><?php echo $AppUI->_('Department'); ?></a>
+		</th>
+	</tr>
 <?php
 
 $perms = &$AppUI->acl();
@@ -80,7 +80,7 @@ foreach ($users as $row) {
 		$q->setLimit(1);
 		$user_logs = $q->loadList();
 
-		if ($user_logs)
+		if ($user_logs) {
 			foreach ($user_logs as $row_log) {
 				if ($row_log['online'] == '1') {
 					echo '<span style="color: green">' . $row_log['hours'] . ' ' . $AppUI->_('hrs.') . '( ' . $row_log['idle'] . ' ' . $AppUI->_('hrs.') . ' ' . $AppUI->_('idle') . ') - ' . $AppUI->_('Online');
@@ -88,8 +88,9 @@ foreach ($users as $row) {
 					echo '<span style="color: red">' . $AppUI->_('Offline');
 				}
 			}
-		else
+		} else {
 			echo '<span style="color: grey">' . $AppUI->_('Never Visited');
+		}
 		echo '</span>';
 	} ?>
 	</td>

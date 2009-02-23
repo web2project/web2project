@@ -7,14 +7,9 @@ global $AppUI, $user_id, $canEdit, $canDelete, $tab;
 
 $perms = &$AppUI->acl();
 $module_list = $perms->getModuleList();
+
 $pgos = array();
-$q = new DBQuery;
-$q->addTable('modules', 'm');
-$q->addQuery('mod_id, mod_name, permissions_item_table, permissions_item_field, permissions_item_label');
-$q->addWhere('permissions_item_table is not null');
-$q->addWhere('permissions_item_table <> \'\'');
-$pgo_list = $q->loadHashList('mod_name');
-$q->clear();
+$pgo_list = $AppUI->getPermissionableModuleList();
 
 // Build an intersection array for the modules and their listing
 $modules = array();
