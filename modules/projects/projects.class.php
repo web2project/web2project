@@ -645,7 +645,11 @@ class CProject extends CW2pObject {
 			$q->addWhere('pc.project_id = ' . (int) $projectId);
 			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
 			$q->addQuery('contact_phone, dept_name');
-			$q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
+			$q->addWhere('
+				(contact_private=0
+					OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
+					OR contact_owner IS NULL OR contact_owner = 0
+				)');
 
 			$department = new CDepartment;
 			$department->setAllowedSQL($AppUI->user_id, $q);
@@ -831,8 +835,6 @@ class CProject extends CW2pObject {
 		return rtrim($total_project_hours, '.');
 	}
 	public function getTaskLogs($AppUI, $projectId, $user_id = 0, $hide_inactive = 0, $hide_complete, $cost_code = 0) {
-
-echo "$projectId, $user_id = 0, $hide_inactive = 0, $hide_complete = '', $cost_code = 0";
 
 		$q = new DBQuery;
 		$q->addTable('task_log');
