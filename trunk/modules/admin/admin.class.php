@@ -311,6 +311,15 @@ class CUser extends CW2pObject {
 		}
 		return strtoupper($letters);
 	}
+	public static function exists($username) {
+		$q = new DBQuery;
+		$q->addTable('users', 'u');
+		$q->addQuery('user_username');
+		$q->addWhere("user_username = '$username'");
+		$users = $q->loadList();
+		
+		return (count($users) > 0) ? true : false; 
+	}
 }
 
 function notifyNewUser($address, $username) {
