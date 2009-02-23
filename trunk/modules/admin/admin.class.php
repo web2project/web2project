@@ -281,7 +281,6 @@ class CUser extends CW2pObject {
 		
 		return $userId;
 	}
-	
 	public static function generateUserToken($userId, $token = '') {
 		$q = new DBQuery;		
 		$q->setDelete('user_feeds');
@@ -319,6 +318,23 @@ class CUser extends CW2pObject {
 		$users = $q->loadList();
 		
 		return (count($users) > 0) ? true : false; 
+	}
+	public static function getLogs($userId, $startDate, $endDate) {
+		$q = new DBQuery;
+		$q->addTable('user_access_log', 'ual');
+		$q->addTable('users', 'u');
+		$q->addTable('contacts', 'c');
+		$q->addQuery('ual.*, u.*, c.*');
+		$q->addWhere('ual.user_id = u.user_id');
+		$q->addWhere('user_contact = contact_id ');
+		if ($userId > 0) {
+			$q->addWhere('ual.user_id = ' . (int) $userId);
+		}
+		$q->addWhere("ual.date_time_in  >= '$startDate'");
+		$q->addWhere("ual.date_time_out <= '$endDate'");
+		$q->addGroup('ual.date_time_last_action DESC');
+
+		return $q->loadList();
 	}
 }
 

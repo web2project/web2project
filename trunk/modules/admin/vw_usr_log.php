@@ -81,42 +81,28 @@ function setDate( frm_name, f_date ) {
 </table>
 </form>
 
-<?php
-if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
-	$start_date = date('Y-m-d', strtotime(w2PgetParam($_REQUEST, 'log_start_date', date('Y-m-d'))));
-	$end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d'))));
-
-	$q = new DBQuery;
-	$q->addTable('user_access_log', 'ual');
-	$q->addTable('users', 'u');
-	$q->addTable('contacts', 'c');
-	$q->addQuery('ual.*, u.*, c.*');
-	$q->addWhere('ual.user_id = u.user_id');
-	$q->addWhere('user_contact = contact_id ');
-	if ($user_id != 0) {
-		$q->addWhere('ual.user_id = ' . (int)$user_id);
-	}
-	$q->addWhere('ual.date_time_in >=\'' . $start_date . '\'');
-	$q->addWhere('ual.date_time_out <= \'' . $end_date . '\'');
-	$q->addGroup('ual.date_time_last_action DESC');
-	$logs = $q->loadList();
-?>
-<table align="center" class="tbl" width="50%">
-<tr>
-	<th nowrap="nowrap" ><?php echo $AppUI->_('Name(s)'); ?></th>
-	<th nowrap="nowrap" ><?php echo $AppUI->_('Last Name'); ?></th>
-	<th nowrap="nowrap" ><?php echo $AppUI->_('Internet Address'); ?></th>
-	<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time IN'); ?></th>
-	<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time OUT'); ?></th>
-</tr>
-<?php foreach ($logs as $detail) { ?>
-	<tr>
-		<td align="center"><?php echo $detail['contact_first_name']; ?></td>
-		<td align="center"><?php echo $detail['contact_last_name']; ?></td>
-		<td align="center"><?php echo $detail['user_ip']; ?></td>
-		<td align="center"><?php echo $detail['date_time_in']; ?></td>
-		<td align="center"><?php echo $detail['date_time_out']; ?></td>
-	</tr>
-<?php } ?>
-</table>
+	<?php
+	if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
+		$start_date = date('Y-m-d', strtotime(w2PgetParam($_REQUEST, 'log_start_date', date('Y-m-d'))));
+		$end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d'))));
+		$logs = CUser::getLogs($userId, $start_date, $end_date);
+	?>
+	<table align="center" class="tbl" width="50%">
+		<tr>
+			<th nowrap="nowrap" ><?php echo $AppUI->_('Name(s)'); ?></th>
+			<th nowrap="nowrap" ><?php echo $AppUI->_('Last Name'); ?></th>
+			<th nowrap="nowrap" ><?php echo $AppUI->_('Internet Address'); ?></th>
+			<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time IN'); ?></th>
+			<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time OUT'); ?></th>
+		</tr>
+		<?php foreach ($logs as $detail) { ?>
+			<tr>
+				<td align="center"><?php echo $detail['contact_first_name']; ?></td>
+				<td align="center"><?php echo $detail['contact_last_name']; ?></td>
+				<td align="center"><?php echo $detail['user_ip']; ?></td>
+				<td align="center"><?php echo $detail['date_time_in']; ?></td>
+				<td align="center"><?php echo $detail['date_time_out']; ?></td>
+			</tr>
+		<?php } ?>
+	</table>
 <?php } ?>
