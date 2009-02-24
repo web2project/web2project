@@ -60,7 +60,6 @@ if ($del) {
 			$obj->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
 			$obj->contact_lastupdate = '';
 			$obj->updateNotify();
-			//            } elseif (!$notifyasked && $obj->contact_updatekey) {
 		} elseif ($notifyasked && $updatekey) {
 		} else {
 			$obj->contact_updatekey = '';
