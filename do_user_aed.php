@@ -156,8 +156,6 @@ if (($msg = $contact->store())) {
 		$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact', 'inner');
 		$q->addWhere('u.user_username = \'admin\'');
 		$admin_user = $q->loadList();
-		//notifyAdmin($admin_user[0]['contact_email'], 'web2Project Administrator', $contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password'], $obj->user_id);
-
 	}
 }
 
