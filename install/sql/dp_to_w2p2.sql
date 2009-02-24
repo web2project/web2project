@@ -602,3 +602,7 @@ ALTER TABLE `w2pversion` ADD PRIMARY KEY ( `code_revision` );
 TRUNCATE TABLE `w2pversion`;
 INSERT INTO `w2pversion` (`code_revision` ,`code_version` ,`db_version` ,`last_db_update` ,`last_code_update`)
 	VALUES ('250', '0.9.9', '1', now(), now());
+
+#20090224
+ALTER TABLE `custom_fields_struct` ADD `field_published` TINYINT( 1 ) NOT NULL DEFAULT '0';
+UPDATE `custom_fields_struct` SET field_published = 1;
