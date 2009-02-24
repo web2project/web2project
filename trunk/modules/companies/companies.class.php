@@ -142,7 +142,7 @@ class CCompany extends CW2pObject {
 		$q->addJoin('contacts', 'c', 'users.user_contact = contact_id', 'inner');
 		$q->addJoin('departments', 'd', 'd.dept_id = contact_department');
 		$q->addWhere('contact_company = ' . (int) $companyId);
-		$q->addOrder('contact_last_name');
+		$q->addOrder('contact_last_name, contact_first_name');
 
 		$department = new CDepartment;
 		$department->setAllowedSQL($AppUI->user_id, $q);
