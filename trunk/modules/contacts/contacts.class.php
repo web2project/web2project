@@ -392,6 +392,13 @@ class CContact extends CW2pObject {
 		
 		return $q->loadResult();
 	}
+	public function clearOldUpdatekeys($days_for_update) {
+		$q = new DBQuery;
+		$q->addTable('contacts');
+		$q->addUpdate('contact_updatekey', '');
+		$q->addWhere("(TO_DAYS(NOW()) - TO_DAYS(contact_updateasked) >= $days_for_update)");
+		$q->exec();
+	}
 
 	public function cron_hook() {
 		$q = new DBQuery;
@@ -405,6 +412,11 @@ class CContact extends CW2pObject {
 			$myContact = $myContact->load($contactId['contact_id']);
 			$myContact->store();
 		}
+
+		//To Bruce: Clean updatekeys based on datediff to warn about long waiting.
+		//TODO: This should be converted to a system configuration value
+		$days_for_update = 5;
+		$this->clearOldUpdatekeys($days_for_update);
 	}
 }
 ?>
