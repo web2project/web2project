@@ -17,6 +17,8 @@ if (!$canEdit && !$canAdd) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+require_once ($AppUI->getModuleClass('contacts'));
+
 //Pull forum information
 $myForum = new CForum();
 $myForum->load($forum_id);
@@ -33,8 +35,7 @@ $back_url = implode('&', $back_url_params);
 //pull message information
 $q = new DBQuery;
 $q->addTable('forum_messages');
-$q->addQuery('forum_messages.*, user_username');
-$q->leftJoin('users', 'u', 'message_author = u.user_id');
+$q->addQuery('forum_messages.*');
 $q->addWhere('message_id = ' . (int)($message_id ? $message_id : $message_parent));
 $res = $q->exec();
 $message_info = $q->fetchRow();
@@ -136,8 +137,10 @@ echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message');
 if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
 	$date = intval($message_info['message_date']) ? new CDate($message_info['message_date']) : new CDate();
 ?>
-
-<tr><td align="right"><?php echo $AppUI->_('Author') ?>:</td><td align="left"><?php echo w2PgetUsername($message_info['user_username']) ?> (<?php echo $date->format($df . ' ' . $tf); ?>)</td></tr>
+<tr>
+	<td align="right"><?php echo $AppUI->_('Author') ?>:</td>
+	<td align="left"><?php echo CContact::getContactByUserid($message_info['message_author']); ?> (<?php echo $date->format($df . ' ' . $tf); ?>)</td>
+</tr>
 <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
 <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
 <?php 
