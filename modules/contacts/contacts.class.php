@@ -245,8 +245,6 @@ class CContact extends CW2pObject {
 			$body .= "\n\nThank you. I look forward to seeing you again, soon.";
 			$body .= "\n\nBest Regards,";
 			$body .= "\n\n$AppUI->user_first_name $AppUI->user_last_name";
-			//                  print_r($contact_company);
-			//                  print_r($body);
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}
 
@@ -386,7 +384,15 @@ class CContact extends CW2pObject {
 
 		return $result;
 	}
-	
+	public static function getContactByUpdatekey($updateKey) {
+		$q = new DBQuery;
+		$q->addTable('contacts');
+		$q->addQuery('contact_id');
+		$q->addWhere("contact_updatekey= '$updateKey'");
+		
+		return $q->loadResult();
+	}
+
 	public function cron_hook() {
 		$q = new DBQuery;
 		$q->addTable('contacts');
