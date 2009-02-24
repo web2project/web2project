@@ -89,7 +89,7 @@
 							$this->updatesApplied[] = $update;
 							$errorMessages = $this->_applySQLUpdates($update, $dbConn);
 							$allErrors = array_merge($allErrors, $errorMessages);
-							$sql = "UPDATE w2pversion SET db_version = $myIndex";
+							$sql = "INSERT INTO w2pversion SET db_version = $myIndex, last_db_update = now()";
 							//TODO: update the code revision
 							//TODO: update the version number
 							$dbConn->Execute($sql);
