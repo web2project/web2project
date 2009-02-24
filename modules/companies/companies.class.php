@@ -95,7 +95,8 @@ class CCompany extends CW2pObject {
 		$q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
 
 		$oCpy = new CCompany();
-		$where = $this->getAllowedSQL($AppUI->user_id, 'company_id');
+		$where = $this->getAllowedSQL($AppUI->user_id, 'c.company_id');
+		$q->addWhere($where);
 
 		if ($companyType > -1) {
 			$q->addWhere('c.company_type = ' . (int) $companyType);
