@@ -29,9 +29,8 @@
 	foreach ($moduleList as $module) {
 		include_once ($AppUI->getModuleClass($module['mod_directory']));
 		$object = new $module['mod_main_class']();
-		
+
 		if (method_exists($object, 'cron_hook')) {
-			$itemList = $object->cron_hook();
+			$object->cron_hook();
 		}
 	}
-?>
