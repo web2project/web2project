@@ -31,15 +31,6 @@ if ($searchString != '') {
 
 $orderby = 'contact_first_name';
 
-//To Bruce: Clean updatekeys based on datediff to warn about long waiting.
-$days_for_update = 5;
-$q = new DBQuery;
-$q->addTable('contacts');
-$q->addUpdate('contact_updatekey', '');
-$q->addWhere('(TO_DAYS(NOW()) - TO_DAYS(contact_updateasked) >=' . $days_for_update . ')');
-$q->exec();
-$q->clear();
-
 require_once $AppUI->getModuleClass('companies');
 $company =& new CCompany;
 $allowedCompanies = $company->getAllowedSQL($AppUI->user_id);
@@ -176,7 +167,6 @@ if (function_exists('styleRenderBoxTop')) {
 													<a href="?m=contacts&a=vcardexport&suppressHeaders=true&contact_id=<?php echo $contactid; ?>" ><?php echo w2PshowImage('vcard.png', '', '', $m, 'export vCard of this contact'); ?></a>
 													<a href="?m=contacts&a=addedit&contact_id=<?php echo $contactid; ?>"><?php echo w2PshowImage('icons/pencil.gif', '', '', $m, 'edit this contact'); ?></a>
 													<?php
-														$q->clear();
 														$q = new DBQuery;
 														$q->addTable('projects');
 														$q->addQuery('count(project_id)');
