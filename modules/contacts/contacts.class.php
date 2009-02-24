@@ -358,6 +358,34 @@ class CContact extends CW2pObject {
 		}
 		return strtoupper($letters);
 	}
+	/*
+	 *  I  don't like this function, it seems to be used for either the username
+	 * or the userId, I'd rather it be one or the other...
+	 */
+	public static function getContactByUsername($username) {
+		$q = new DBQuery;
+		$q->addTable('users');
+		$q->addQuery('contact_first_name, contact_last_name');
+		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+		$q->addWhere("user_username like '$username'");
+		$q->setLimit(1);
+		$r = $q->loadResult();
+		$result = (is_array($r)) ? $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'] : 'User Not Found';
+
+		return $result;
+	}
+	public static function getContactByUserid($userId) {
+		$q = new DBQuery;
+		$q->addTable('users');
+		$q->addQuery('contact_first_name, contact_last_name');
+		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+		$q->addWhere('user_id = ' . (int) $userId);
+		$q->setLimit(1);
+		$r = $q->loadList();
+		$result = (is_array($r)) ? $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'] : 'User Not Found';
+
+		return $result;
+	}
 	
 	public function cron_hook() {
 		$q = new DBQuery;

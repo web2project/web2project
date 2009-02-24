@@ -7,6 +7,7 @@ global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, $showPinn
 
 w2PsetExecutionConditions($w2Pconfig);
 
+require_once ($AppUI->getModuleClass('contacts'));
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
 
@@ -35,7 +36,7 @@ $caller = defVal($_REQUEST['caller'], null);
 if ($caller == 'todo') {
 	$user_id = defVal(w2PgetParam($_REQUEST, 'user_id', 0), 0);
 
-	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . w2PgetUsername($user_id);
+	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . CContact::getContactByUserid($user_id);
 	$projects[$project_id]['project_color_identifier'] = 'ff6000';
 
 	$showLabels = w2PgetParam($_REQUEST, 'showLabels', false);

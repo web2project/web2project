@@ -15,6 +15,8 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+require_once ($AppUI->getModuleClass('contacts'));
+
 $perms = &$AppUI->acl();
 
 // check if this record has dependencies to prevent deletion
@@ -223,7 +225,7 @@ function delIt() {
 					$s = count($users) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
 					foreach ($users as $row) {
 						$s .= '<tr>';
-						$s .= '<td class="hilite"><a href="mailto:' . $row['contact_email'] . '">' . w2PgetUsernameFromID($row['user_id']) . '</a></td>';
+						$s .= '<td class="hilite"><a href="mailto:' . $row['contact_email'] . '">' . CContact::getContactByUserid($row['user_id']) . '</a></td>';
 						$s .= '<td class="hilite" align="right">' . $row['perc_assignment'] . '%</td>';
 						$s .= '</tr>';
 					}

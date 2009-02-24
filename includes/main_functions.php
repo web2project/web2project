@@ -173,28 +173,23 @@ function w2PgetConfig($key, $default = null) {
 	if (array_key_exists($key, $w2Pconfig)) {
 		return $w2Pconfig[$key];
 	} else {
+		
 		return $default;
 	}
 }
 
-function w2PgetUsername($user) {
-	$q = new DBQuery;
-	$q->addTable('users');
-	$q->addQuery('contact_first_name, contact_last_name');
-	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-	$q->addWhere('user_username like \'' . $user . '\' OR user_id = ' . (int)$user);
-	$r = $q->loadList();
-	return $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'];
+function w2PgetUsername($username) {
+	global $AppUI;
+	require_once ($AppUI->getModuleClass('contacts'));
+
+	return CContact::getContactByUsername($username);
 }
 
-function w2PgetUsernameFromID($user) {
-	$q = new DBQuery;
-	$q->addTable('users');
-	$q->addQuery('contact_first_name, contact_last_name');
-	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-	$q->addWhere('user_id = ' . (int)$user);
-	$r = $q->loadList();
-	return $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'];
+function w2PgetUsernameFromID($userId) {
+	global $AppUI;
+	require_once ($AppUI->getModuleClass('contacts'));
+
+	return CContact::getContactByUserid($userId);
 }
 
 function w2PgetUsers() {

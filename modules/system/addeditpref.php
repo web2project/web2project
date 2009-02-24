@@ -16,6 +16,8 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+require_once ($AppUI->getModuleClass('contacts'));
+
 // load the preferences
 $q = new DBQuery;
 $q->addTable('user_preferences');
@@ -26,7 +28,7 @@ $q->clear();
 
 // get the user name
 if ($user_id) {
-	$user = w2PgetUsernameFromID($user_id);
+	$user = CContact::getContactByUserid($user_id);
 } else {
 	$user = 'Default';
 }
