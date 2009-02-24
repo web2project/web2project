@@ -102,4 +102,3 @@ foreach ($types as $type => $type_name) {
 }
 
 $tabBox->show();
-?>
