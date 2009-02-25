@@ -271,6 +271,15 @@ class CUser extends CW2pObject {
 
 		$q->loadObject($this, true, false);
 	}
+	public function validatePassword($userId, $password) {
+		$q = new DBQuery;
+		$q->addTable('users');
+		$q->addQuery('user_id');
+		$q->addWhere('user_password = \'' . md5($password) . '\'');
+		$q->addWhere('user_id = ' . (int) $userId);
+
+		return ($q->loadResult() == $userId);
+	}
 
 	public static function getUserIdByToken($token) {
 		$q = new DBQuery;

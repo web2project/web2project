@@ -18,16 +18,11 @@ if ($user_id) {
 
 	// has the change form been posted
 	if ($new_pwd1 && $new_pwd2 && $new_pwd1 == $new_pwd2) {
-		// check that the old password matches
-		$old_md5 = md5($old_pwd);
-		$q = new DBQuery;
-		$q->addTable('users');
-		$q->addQuery('user_id');
-		$q->addWhere('user_password = \'' . $old_md5 . '\'');
-		$q->addWhere('user_id = ' . (int)$user_id);
-		if ($canAdminEdit || $q->loadResult() == $user_id) {
-			require_once ($AppUI->getModuleClass('admin'));
-			$user = new CUser();
+		require_once ($AppUI->getModuleClass('admin'));
+
+		$user = new CUser();
+
+		if ($canAdminEdit || $user->validatePassword($user_id, $old_pwd)) {
 			$user->user_id = $user_id;
 			$user->user_password = $new_pwd1;
 
@@ -48,58 +43,57 @@ if ($user_id) {
 			echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwWrongPW') . '</td></tr></table>';
 		}
 	} else {
-?>
-<script language="javascript">
-function submitIt() {
-	var f = document.frmEdit;
-	var msg = '';
-
-	if (f.new_pwd1.value.length < <?php echo w2PgetConfig('password_min_len'); ?>) {
-        	msg += "<?php echo $AppUI->_('chgpwValidNew', UI_OUTPUT_JS); ?>" + <?php echo w2PgetConfig('password_min_len'); ?>;
-			f.new_pwd1.focus();
-	}
-	if (f.new_pwd1.value != f.new_pwd2.value) {
-		msg += "\n<?php echo $AppUI->_('chgpwNoMatch', UI_OUTPUT_JS); ?>";
-		f.new_pwd2.focus();
-	}
-	if (msg.length < 1) {
-		f.submit();
-	} else {
-		alert(msg);
-	}
-}
-</script>
-<h1><?php echo $AppUI->_('Change User Password'); ?></h1>
-<?php
-		if (function_exists('styleRenderBoxTop')) {
-			echo styleRenderBoxTop();
+		?>
+		<script language="javascript">
+		function submitIt() {
+			var f = document.frmEdit;
+			var msg = '';
+		
+			if (f.new_pwd1.value.length < <?php echo w2PgetConfig('password_min_len'); ?>) {
+		        	msg += "<?php echo $AppUI->_('chgpwValidNew', UI_OUTPUT_JS); ?>" + <?php echo w2PgetConfig('password_min_len'); ?>;
+					f.new_pwd1.focus();
+			}
+			if (f.new_pwd1.value != f.new_pwd2.value) {
+				msg += "\n<?php echo $AppUI->_('chgpwNoMatch', UI_OUTPUT_JS); ?>";
+				f.new_pwd2.focus();
+			}
+			if (msg.length < 1) {
+				f.submit();
+			} else {
+				alert(msg);
+			}
 		}
-?>
-<form name="frmEdit" method="post" onsubmit="return false">
-<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
-<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">
-<?php if (!$canAdminEdit) {
-?>
-<tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Current Password'); ?></td>
-	<td><input type="password" name="old_pwd" class="text" /></td>
-</tr>
-<?php } ?>
-<tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('New Password'); ?></td>
-	<td><input type="password" name="new_pwd1" class="text" /></td>
-</tr>
-<tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Repeat New Password'); ?></td>
-	<td><input type="password" name="new_pwd2" class="text" /></td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-	<td align="right" nowrap="nowrap"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" /></td>
-</tr>
-<form>
-</table>
-<?php
+		</script>
+		<h1><?php echo $AppUI->_('Change User Password'); ?></h1>
+		<?php
+			if (function_exists('styleRenderBoxTop')) {
+				echo styleRenderBoxTop();
+			}
+		?>
+		<form name="frmEdit" method="post" onsubmit="return false">
+			<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
+			<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">
+				<?php if (!$canAdminEdit) { ?>
+					<tr>
+						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Current Password'); ?></td>
+						<td><input type="password" name="old_pwd" class="text" /></td>
+					</tr>
+				<?php } ?>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('New Password'); ?></td>
+					<td><input type="password" name="new_pwd1" class="text" /></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Repeat New Password'); ?></td>
+					<td><input type="password" name="new_pwd2" class="text" /></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td align="right" nowrap="nowrap"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" /></td>
+				</tr>
+			</table>
+		<form>
+		<?php
 	}
 } else {
 	echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
