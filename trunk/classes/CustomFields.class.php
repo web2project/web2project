@@ -529,6 +529,29 @@ class CustomFields {
 		$q->addWhere('cfv.value_charvalue LIKE \'%' . $keyword . '%\'');
 		return $q->loadList();
 	}
+	public static function getCustomFieldList($module) {
+		$q = new DBQuery;
+		$q->addTable('custom_fields_struct', 'cfs');
+		$q->addWhere("cfs.field_module = '$module'");
+		$q->addOrder('cfs.field_order');
+
+		return $q->loadList();
+	}
+	public static function getCustomFieldByModule($AppUI, $module, $objectId) {
+		$perms = $AppUI->acl();
+		$canRead = !$perms->checkModule($module, 'view', $objectId);
+
+		if ($canRead) {
+			$q = new DBQuery;
+			$q->addTable('custom_fields_struct', 'cfs');
+			$q->addQuery('cfv.value_charvalue, cfl.list_value');
+			$q->leftJoin('custom_fields_values', 'cfv', 'cfv.value_field_id = cfs.field_id');
+			$q->leftJoin('custom_fields_lists', 'cfl', 'cfl.list_option_id = cfv.value_intvalue');
+			$q->addWhere("cfs.field_module = '$module'");
+			$q->addWhere('cfv.value_object_id ='. $objectId);
+			return $q->loadList();
+		}
+	}
 }
 
 class CustomOptionList {
