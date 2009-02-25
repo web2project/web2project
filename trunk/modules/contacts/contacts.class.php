@@ -66,6 +66,20 @@ class CContact extends CW2pObject {
 	function CContact() {
 		$this->CW2pObject('contacts', 'contact_id');
 	}
+
+	public function fullLoad($AppUI, $contactId) {
+		$perms = $AppUI->acl();
+		$canRead = $perms->checkModule('contacts', 'view', $contactId);
+
+		if (!$canRead) {
+			$q = new DBQuery;
+			$q->addTable('contacts');
+			$q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
+			$q->addWhere('contact_id = ' . (int) $contactId);
+	
+			$q->loadObject($this);
+		}
+	}
 	
 	function store() {
 		/*
