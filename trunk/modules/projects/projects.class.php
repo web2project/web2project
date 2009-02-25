@@ -139,8 +139,6 @@ class CProject extends CW2pObject {
 		$this->company_name = '';
 		$this->user_name = '';
 		$q->loadObject($this);
-
-		return ($this);
 	}
 	// overload canDelete
 	function canDelete(&$msg, $oid = null) {
