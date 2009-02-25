@@ -11,6 +11,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 require_once ($AppUI->getSystemClass('w2p'));
 require_once ($AppUI->getSystemClass('libmail'));
+require_once $AppUI->getModuleClass('companies');
+require_once $AppUI->getModuleClass('departments');
 
 /**
  * Contacts class
@@ -392,6 +394,15 @@ class CContact extends CW2pObject {
 		
 		return $q->loadResult();
 	}
+	public static function getProjects($contactId) {
+		$q = new DBQuery;
+		$q->addTable('projects');
+		$q->addQuery('project_id');
+		$q->addWhere("project_contacts =  $contactId");
+									
+		return $q->loadList();
+	}
+
 	public function clearOldUpdatekeys($days_for_update) {
 		$q = new DBQuery;
 		$q->addTable('contacts');
@@ -399,7 +410,6 @@ class CContact extends CW2pObject {
 		$q->addWhere("(TO_DAYS(NOW()) - TO_DAYS(contact_updateasked) >= $days_for_update)");
 		$q->exec();
 	}
-
 	public function cron_hook() {
 		$q = new DBQuery;
 		$q->addTable('contacts');

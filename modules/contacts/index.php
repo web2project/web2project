@@ -31,14 +31,6 @@ if ($searchString != '') {
 
 $orderby = 'contact_first_name';
 
-require_once $AppUI->getModuleClass('companies');
-$company =& new CCompany;
-$allowedCompanies = $company->getAllowedSQL($AppUI->user_id);
-
-require_once $AppUI->getModuleClass('departments');
-$department =& new CDepartment;
-$allowedDepartments = $department->getAllowedSQL($AppUI->user_id);
-
 $search_map = array($orderby, 'contact_first_name', 'contact_last_name');
 
 // optional fields shown in the list (could be modified to allow breif and verbose, etc)
@@ -167,16 +159,10 @@ if (function_exists('styleRenderBoxTop')) {
 													<a href="?m=contacts&a=vcardexport&suppressHeaders=true&contact_id=<?php echo $contactid; ?>" ><?php echo w2PshowImage('vcard.png', '', '', $m, 'export vCard of this contact'); ?></a>
 													<a href="?m=contacts&a=addedit&contact_id=<?php echo $contactid; ?>"><?php echo w2PshowImage('icons/pencil.gif', '', '', $m, 'edit this contact'); ?></a>
 													<?php
-														$q = new DBQuery;
-														$q->addTable('projects');
-														$q->addQuery('count(project_id)');
-														$q->addWhere('project_contacts LIKE \'' . $carr[$z][$x]['contact_id'] . ',%\' OR project_contacts LIKE \'%,' . $carr[$z][$x]['contact_id'] . ',%\' OR project_contacts LIKE \'%,' . $carr[$z][$x]['contact_id'] . '\' OR project_contacts LIKE \'' . $carr[$z][$x]['contact_id'] . '\'');
-							
-														$res = $q->exec();
-														$projects_contact = $q->fetchRow();
-														$q->clear();
-														if ($projects_contact[0] > 0)
+														$projectList = CContact::getProjects($contactid);
+														if (count($projectList) > 0) {
 															echo '<a href="" onclick="	window.open(\'./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=' . $carr[$z][$x]['contact_id'] . '\', \'selector\', \'left=50,top=50,height=250,width=400,resizable\');return false;">' . w2PshowImage('projects.png', '', '', $m, 'click to view projects associated with this contact') . '</a>';
+														}
 														if ($carr[$z][$x]['contact_updateasked'] && (!$carr[$z][$x]['contact_lastupdate'] || $carr[$z][$x]['contact_lastupdate'] == 0) && $carr[$z][$x]['contact_updatekey']) {
 															$last_ask = new CDate($carr[$z][$x]['contact_updateasked']);
 															$df = $AppUI->getPref('SHDATEFORMAT');
