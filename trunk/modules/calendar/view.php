@@ -15,11 +15,11 @@ $canEdit = $perms->checkModuleItem($m, 'edit', $event_id);
 
 // check if this record has dependencies to prevent deletion
 $msg = '';
-$obj = new CEvent();
-$canDelete = $obj->canDelete($msg, $event_id);
+$event = new CEvent();
+$canDelete = $event->canDelete($msg, $event_id);
 
 // load the record data
-if (!$obj->load($event_id)) {
+if (!$event->load($event_id)) {
 	$AppUI->setMsg('Event');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
@@ -28,7 +28,7 @@ if (!$obj->load($event_id)) {
 }
 
 //check if the user has view permission over the project
-if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->event_project)) {
+if ($event->event_project && !$perms->checkModuleItem('projects', 'view', $event->event_project)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
@@ -38,23 +38,20 @@ $types = w2PgetSysVal('EventType');
 // load the event recurs types
 $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month', 'Quarterly', 'Every 6 months', 'Every Year');
 
-$assigned = $obj->getAssigned();
+$assigned = $event->getAssigned();
 
-if (($obj->event_owner != $AppUI->user_id) && !($perms->checkModule('admin', 'view'))) {
+if (($event->event_owner != $AppUI->user_id) && !($perms->checkModule('admin', 'view'))) {
 	$canEdit = false;
 }
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
-$start_date = $obj->event_start_date ? new CDate($obj->event_start_date) : new CDate();
-$end_date = $obj->event_end_date ? new CDate($obj->event_end_date) : new CDate();
-if ($obj->event_project) {
-	$q = new DBQuery;
-	$q->addTable('projects');
-	$q->addQuery('project_name');
-	$q->addWhere('project_id = ' . (int)$obj->event_project);
-	$event_project = $q->loadResult();
+$start_date = $event->event_start_date ? new CDate($event->event_start_date) : new CDate();
+$end_date = $event->event_end_date ? new CDate($event->event_end_date) : new CDate();
+if ($event->event_project) {
+	$project = new CProject();
+	$event_project = $project->load($event->event_project)->project_name;
 }
 
 // setup the title block
@@ -97,66 +94,66 @@ function delIt() {
 	<input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />
 </form>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
-<tr>
-	<td valign="top" width="50%">
-		<strong><?php echo $AppUI->_('Details'); ?></strong>
-		<table cellspacing="1" cellpadding="2" width="100%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $obj->event_title; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($types[$obj->event_type]); ?></td>
-		</tr>	
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
-			<td class="hilite" width="100%"><a href='?m=projects&a=view&project_id=<?php echo $obj->event_project ?>'><?php echo $event_project; ?></a></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Starts'); ?>:</td>
-			<td class="hilite"><?php echo $start_date ? $start_date->format($df . ' ' . $tf) : '-'; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Ends'); ?>:</td>
-			<td class="hilite"><?php echo $end_date ? $end_date->format($df . ' ' . $tf) : '-'; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>
-			<td class="hilite"><?php echo $AppUI->_($recurs[$obj->event_recurs]) . ($obj->event_recurs ? ' (' . $obj->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : ''); ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Attendees'); ?>:</td>
-			<td class="hilite"><?php
-if (is_array($assigned)) {
-	$start = false;
-	foreach ($assigned as $user) {
-		if ($start)
-			echo '<br/>';
-		else
-			$start = true;
-		echo $user;
-	}
-}
-?>
-		</tr>
-		</table>
-	</td>
-	<td width="50%" valign="top">
-		<strong><?php echo $AppUI->_('Description'); ?></strong>
-		<table cellspacing="0" cellpadding="2" border="0" width="100%">
-		<tr>
-			<td class="hilite">
-				<?php echo str_replace(chr(10), '<br />', $obj->event_description); ?>&nbsp;
-			</td>
-		</tr>
-		</table>
-		<?php
-require_once $AppUI->getSystemClass('CustomFields');
-$custom_fields = new CustomFields($m, $a, $obj->event_id, 'view');
-$custom_fields->printHTML();
-?>
-
-	</td>
-</tr>
+	<tr>
+		<td valign="top" width="50%">
+			<strong><?php echo $AppUI->_('Details'); ?></strong>
+			<table cellspacing="1" cellpadding="2" width="100%">
+			<tr>
+				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title'); ?>:</td>
+				<td class="hilite" width="100%"><?php echo $event->event_title; ?></td>
+			</tr>
+			<tr>
+				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
+				<td class="hilite" width="100%"><?php echo $AppUI->_($types[$event->event_type]); ?></td>
+			</tr>	
+			<tr>
+				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
+				<td class="hilite" width="100%"><a href='?m=projects&a=view&project_id=<?php echo $event->event_project ?>'><?php echo $event_project; ?></a></td>
+			</tr>
+			<tr>
+				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Starts'); ?>:</td>
+				<td class="hilite"><?php echo $start_date ? $start_date->format($df . ' ' . $tf) : '-'; ?></td>
+			</tr>
+			<tr>
+				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Ends'); ?>:</td>
+				<td class="hilite"><?php echo $end_date ? $end_date->format($df . ' ' . $tf) : '-'; ?></td>
+			</tr>
+			<tr>
+				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>
+				<td class="hilite"><?php echo $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : ''); ?></td>
+			</tr>
+			<tr>
+				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Attendees'); ?>:</td>
+				<td class="hilite">
+					<?php
+						if (is_array($assigned)) {
+							$start = false;
+							foreach ($assigned as $user) {
+								if ($start)
+									echo '<br/>';
+								else
+									$start = true;
+								echo $user;
+							}
+						}
+					?>
+			</tr>
+			</table>
+		</td>
+		<td width="50%" valign="top">
+			<strong><?php echo $AppUI->_('Description'); ?></strong>
+			<table cellspacing="0" cellpadding="2" border="0" width="100%">
+				<tr>
+					<td class="hilite">
+						<?php echo str_replace(chr(10), '<br />', $event->event_description); ?>&nbsp;
+					</td>
+				</tr>
+			</table>
+			<?php
+				require_once $AppUI->getSystemClass('CustomFields');
+				$custom_fields = new CustomFields($m, $a, $event->event_id, 'view');
+				$custom_fields->printHTML();
+			?>
+		</td>
+	</tr>
 </table>

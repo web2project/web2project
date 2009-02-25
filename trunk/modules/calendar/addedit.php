@@ -29,12 +29,13 @@ $obj = new CEvent();
 
 if ($is_clash) {
 	$obj->bind($_SESSION['add_event_post']);
-} else
+} else {
 	if (!$obj->load($event_id) && $event_id) {
 		$AppUI->setMsg('Event');
 		$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 		$AppUI->redirect();
 	}
+}
 
 // load the event types
 $types = w2PgetSysVal('EventType');
@@ -54,9 +55,8 @@ if ($is_clash) {
 		$q->addWhere('user_id IN ('.$assignee_list.')');
 		$q->addWhere('user_contact = contact_id');
 		$assigned = $q->loadHashList();
-	} else {
 	}
-} else
+} else {
 	if ($event_id == 0) {
 		$assigned[$AppUI->user_id] = $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
 	} else {
@@ -72,6 +72,7 @@ if ($is_clash) {
 		unset($_SESSION['add_event_clash']);
 		unset($_SESSION['event_is_clash']);
 	}
+}
 if ($_GET['event_project']) {
 	$obj->event_project = w2PgetParam($_GET, 'event_project', 0);
 }
