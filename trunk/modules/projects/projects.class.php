@@ -590,7 +590,6 @@ class CProject extends CW2pObject {
 		}
 
 		$users = CProject::getContacts($AppUI, $this->project_id);
-		$q->clear();
 
 		if (count($users)) {
 			if (intval($isNotNew)) {
