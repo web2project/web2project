@@ -63,6 +63,7 @@ if (!$user) {
 	}
 	if ($canEdit || $user_id == $AppUI->user_id) {
 		$titleBlock->addCrumb('?m=admin&a=addedituser&user_id='.$user_id, 'edit this user');
+		$titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$user->contact_id, 'edit this contact');
 		$titleBlock->addCrumb('?m=system&a=addeditpref&user_id='.$user_id, 'edit preferences');
 		$titleBlock->addCrumbRight('<div class="crumb"><ul style="float:right;"><li><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
 		$titleBlock->addCell('<td align="right" width="100%"><input type="button" class=button value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>');
@@ -123,9 +124,12 @@ if (!$user) {
 		</tr>
 		<tr valign="top">
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
-			<td class="hilite" width="100%"><?php
-	echo $user->contact_address1 . (($user->contact_address2) ? '<br />' . $user->contact_address2 : '') . '<br />' . $user->contact_city . '&nbsp;&nbsp;' . $user->contact_state . '&nbsp;&nbsp;' . $user->contact_zip . '<br />' . ($countries[$user->contact_country] ? $countries[$user->contact_country] : $user->contact_country);
-?></td>
+			<td class="hilite" width="100%">
+				<?php echo $user->contact_address1; ?><br />
+        <?php echo ($user->contact_address2 == '') ? '' : $user->contact_address2.'<br />'; ?>
+        <?php echo $user->contact_city . ', ' . $user->contact_state . ' ' . $user->contact_zip; ?><br />
+        <?php echo ($countries[$user->contact_country] ? $countries[$user->contact_country] : $user->contact_country); ?>
+			</td>
 		</tr>
 		</table>
 
