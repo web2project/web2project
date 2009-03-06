@@ -564,7 +564,6 @@ class w2Pacl extends gacl_api {
 		$q->addTable($this->_db_acl_prefix . 'groups_aro_map', 'g');
 		$q->addQuery('DISTINCT(g.aro_id)');
 
-		$result = array();
 		$result = $q->loadHashList();
 		$q->clear();
 		if (count($result)) {
