@@ -77,6 +77,9 @@ if (!$user && $user_id > 0) {
 	}
 	if ($user_id > 0) {
 		$titleBlock->addCrumb('?m=admin&a=viewuser&user_id=' . $user_id, 'view this user');
+		if ($user['contact_id'] > 0) {
+			$titleBlock->addCrumb('?m=contacts&a=view&contact_id='.$user['contact_id'], 'view this contact');
+		}
 		if ($canEdit || $user_id == $AppUI->user_id) {
 			$titleBlock->addCrumb('?m=system&a=addeditpref&user_id=' . $user_id, 'edit preferences');
 		}
