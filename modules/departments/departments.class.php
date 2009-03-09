@@ -287,6 +287,17 @@ class CDepartment extends CW2pObject {
 		
 		return $q->loadHashList('dept_id');
 	}
+	public static function getContactList($AppUI, $deptId) {
+		$q = new DBQuery;
+		$q->addTable('contacts', 'con');
+		$q->addQuery('contact_id, con.contact_first_name');
+		$q->addQuery('con.contact_last_name, contact_email, contact_phone');
+		$q->addWhere('contact_department = ' . (int) $deptId);
+		$q->addWhere('(contact_owner = ' . (int) $AppUI->user_id . ' OR contact_private = 0)');
+		$q->addOrder('contact_first_name');
+
+		return $q->loadHashList('contact_id');
+	}
 }
 
 //writes out a single <option> element for display of departments
