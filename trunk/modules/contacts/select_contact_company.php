@@ -4,45 +4,45 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $table_name = w2PgetParam($_GET, 'table_name', 'companies');
+$company_id = (int) w2PgetParam($_GET, 'company_id', 0);
+$dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
+$select_list = array();
 
 switch ($table_name) {
 	case 'companies':
+		require_once ($AppUI->getModuleClass('companies'));
+
 		$id_field = 'company_id';
 		$name_field = 'company_name';
 		$selection_string = 'Company';
-		$filter = null;
-		$additional_get_information = '';
+		$dataId = $company_id;
+
+		$q = new DBQuery;
+		$q->addTable('companies');
+		$q->addQuery('company_id, company_name');
+		$q->addOrder('company_name');
+	
+		$company = new CCompany;
+		$company->setAllowedSQL($AppUI->user_id, $q);	
+		$select_list = $q->loadHashList();
+
 		break;
 	case 'departments':
+		require_once ($AppUI->getModuleClass('departments'));
+		
 		$id_field = 'dept_id';
 		$name_field = 'dept_name';
 		$selection_string = 'Department';
-		$filter = 'dept_company = ' . (int)w2PgetParam($_GET, 'company_id', 0);
-		$additional_get_information = 'company_id=' . w2PgetParam($_GET, 'company_id', 0);
+		$dataId = $dept_id;
+
+		$deptList = CDepartment::getDepartmentList($AppUI, $company_id, null);
+		foreach($deptList as $dept) {
+			$select_list[$dept['dept_id']] = $dept['dept_name'];
+		}
 		break;
 }
+$select_list = array('0' => '') + $select_list;
 
-$q = new DBQuery;
-$q->addTable($table_name);
-$q->addQuery($id_field . ', ' . $name_field);
-if ($filter != null) {
-	$q->addWhere($filter);
-}
-$q->addOrder($name_field);
-if ($table_name == 'companies') {
-	require_once ($AppUI->getModuleClass('companies'));
-	$company = new CCompany;
-	$company->setAllowedSQL($AppUI->user_id, $q);	
-} elseif ($table_name == 'departments') {
-	require_once ($AppUI->getModuleClass('departments'));
-	$department = new CDepartment;
-	$department->setAllowedSQL($AppUI->user_id, $q);
-} 
-$company_list = array('0' => '') + $q->loadHashList();
-
-?>
-
-<?php
 if (w2PgetParam($_POST, $id_field, 0) != 0) {
 	$q = new DBQuery;
 	$q->addTable($table_name);
@@ -73,29 +73,27 @@ if (w2PgetParam($_POST, $id_field, 0) != 0) {
 	foreach ($update_fields as $record_field => $contact_field) {
 		$data_update_script .= 'opener.document.changecontact.' . $contact_field . '.value = \'' . $r_data[$record_field] . "';\n";
 	}
-?>
-			<script language='javascript'>
-				<?php echo $data_update_script; ?>
-				self.close();
-			</script>
-		<?php
+	?>
+		<script language='javascript'>
+			<?php echo $data_update_script; ?>
+			self.close();
+		</script>
+	<?php
 } else {
-?>
-		
+	?>
 		<form name="frmSelector" action="./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=<?php echo $table_name . '&' . $additional_get_information; ?>" method="post">
-<br />
-<?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
-?>
+			<?php
+				if (function_exists('styleRenderBoxTop')) {
+					echo styleRenderBoxTop();
+				}
+			?>
 			<table width="100%" cellspacing="0" cellpadding="3" border="0" class="std">
 			<tr>
 				<td colspan="2">
-			<?php
-	echo $AppUI->_('Select') . ' ' . $AppUI->_($selection_string) . ':<br />';
-	echo arraySelect($company_list, $id_field, 'class="text" style="width:300px" size="10"', $company_id);
-?>
+					<?php
+						echo $AppUI->_('Select') . ' ' . $AppUI->_($selection_string) . ':<br />';
+						echo arraySelect($select_list, $id_field, 'class="text" style="width:300px" size="10"', $dataId);
+					?>
 				</td>
 			</tr>
 			<tr>
