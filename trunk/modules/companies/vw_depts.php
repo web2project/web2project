@@ -9,20 +9,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $company_id, $canEdit;
 
-$q = new DBQuery;
-$q->addTable('departments');
-$q->addQuery('departments.*, COUNT(contact_department) dept_users');
-$q->addJoin('contacts', 'c', 'c.contact_department = dept_id');
-$q->addWhere('dept_company = ' . (int)$company_id);
-$q->addGroup('dept_id');
-$q->addOrder('dept_parent, dept_name');
-
-//Department permissions
-$oDpt = new CDepartment();
-$aDptsAllowed = $oDpt->getAllowedRecords($AppUI->user_id, 'dept_id, dept_name');
-if (count($aDptsAllowed)) {
-	$q->addWhere('dept_id IN (' . implode(',', array_keys($aDptsAllowed)) . ')');
-}
+$depts = CCompany::getDepartments($AppUI, $company_id);
 
 // function renamed to avoid naming clash
 function showchilddept_comp(&$a, $level = 0) {
@@ -64,10 +51,7 @@ function findchilddept_comp(&$tarr, $parent, $level = 0) {
 $s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">';
 $s .= '<tr>';
 
-$rows = $q->loadList();
-$q->clear();
-
-if (count($rows)) {
+if (count($depts)) {
 	$s .= '<th>&nbsp;</th>';
 	$s .= '<th width="100%">' . $AppUI->_('Name') . '</th>';
 	$s .= '<th>' . $AppUI->_('Users') . '</th>';
@@ -78,10 +62,10 @@ if (count($rows)) {
 $s .= '</tr>';
 echo $s;
 
-foreach ($rows as $row) {
-	if ($row['dept_parent'] == 0) {
-		showchilddept_comp($row);
-		findchilddept_comp($rows, $row['dept_id']);
+foreach ($depts as $dept) {
+	if ($dept['dept_parent'] == 0) {
+		showchilddept_comp($dept);
+		findchilddept_comp($depts, $dept['dept_id']);
 	}
 }
 
