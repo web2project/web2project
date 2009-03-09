@@ -5,8 +5,9 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $department, $min_view;
 $dept_id = isset($_GET['dept_id']) ? w2PgetParam($_GET, 'dept_id', 0) : (isset($department) ? $department : 0);
-$department = $dept_id;
+//$department = $dept_id;
 
+$department = new CDepartment();
 // check permissions
 $canRead = !getDenyRead($m, $dept_id);
 $canEdit = !getDenyEdit($m, $dept_id);
@@ -30,29 +31,16 @@ $countries = w2PgetSysVal('GlobalCountries');
 // load the department types
 $types = w2PgetSysVal('DepartmentType');
 
-if ($dept_id > 0) {
-	// pull data
-	$q = new DBQuery;
-	$q->addTable('companies', 'com');
-	$q->addTable('departments', 'dep');
-	$q->addQuery('dep.*, company_name');
-	$q->addQuery('con.contact_first_name');
-	$q->addQuery('con.contact_last_name');
-	$q->addJoin('users', 'u', 'u.user_id = dep.dept_owner');
-	$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-	$q->addWhere('dep.dept_id = ' . (int)$dept_id);
-	$q->addWhere('dep.dept_company = company_id');
-	$dept = $q->loadHash();
-	$q->clear();
-}
-if (!$dept) {
+$department->fullLoad($dept_id);
+
+if (!$department) {
 	$titleBlock = new CTitleBlock('Invalid Department ID', 'departments.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=companies', 'companies list');
 	$titleBlock->show();
 } elseif ($dept_id <= 0) {
 	echo $AppUI->_('Please choose a Department first!');
 } else {
-	$company_id = $dept['dept_company'];
+	$company_id = $department->dept_company;
 	if (!$min_view) {
 		// setup the title block
 		$titleBlock = new CTitleBlock('View Department', 'departments.png', $m, $m . '.' . $a);
@@ -95,64 +83,62 @@ function delIt() {
 </form>
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
-<tr valign="top">
-	<td width="50%">
-		<strong><?php echo $AppUI->_('Details'); ?></strong>
-		<table cellspacing="1" cellpadding="2" border="0" width="100%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept['company_name']; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_name']; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept['contact_first_name'] . ' ' . $dept['contact_last_name']; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $types[$dept['dept_type']]; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_email']; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_phone']; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-			<td bgcolor="#ffffff" width="100%"><?php echo $dept['dept_fax']; ?></td>
-		</tr>
-		<tr valign="top">
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
-			<td bgcolor="#ffffff">
-			<a href="http://maps.google.com/maps?q=<?php echo $dept['dept_address1']; ?>+<?php echo $dept['dept_address2']; ?>+<?php echo $dept['dept_city']; ?>+<?php echo $dept['dept_state']; ?>+<?php echo $dept['dept_zip']; ?>+<?php echo $dept['dept_country']; ?>" target="_blank">
-			<img align="right" border="0" src="<?php echo w2PfindImage('googlemaps.gif'); ?>" width="55" height="22" alt="Find It on Google" /></a>
-<?php		echo $dept['dept_address1'] . (($dept['dept_address2']) ? '<br />' . $dept['dept_address2'] : '') . '<br />' . $dept['dept_city'] . '&nbsp;&nbsp;' . $dept['dept_state'] . '&nbsp;&nbsp;' . $dept['dept_zip'] . (($dept['dept_country']) ? '<br />' . $countries[$dept['dept_country']] : '');?>
+	<tr valign="top">
+		<td width="50%">
+			<strong><?php echo $AppUI->_('Details'); ?></strong>
+			<table cellspacing="1" cellpadding="2" border="0" width="100%">
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
+					<td bgcolor="#ffffff" width="100%"><?php echo $department->company_name; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
+					<td bgcolor="#ffffff" width="100%"><?php echo $department->dept_name; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
+					<td bgcolor="#ffffff" width="100%"><?php echo $department->contact_first_name . ' ' . $department->contact_last_name; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
+					<td bgcolor="#ffffff" width="100%"><?php echo $types[$department->dept_type]; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
+					<td bgcolor="#ffffff" width="100%"><?php echo $department->dept_email; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
+					<td bgcolor="#ffffff" width="100%"><?php echo $department->dept_phone; ?></td>
+				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
+					<td bgcolor="#ffffff" width="100%"><?php echo $department->dept_fax; ?></td>
+				</tr>
+				<tr valign="top">
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
+					<td bgcolor="#ffffff">
+						<a href="http://maps.google.com/maps?q=<?php echo $department->dept_address1; ?>+<?php echo $department->dept_address2; ?>+<?php echo $department->dept_city; ?>+<?php echo $department->dept_state; ?>+<?php echo $department->dept_zip; ?>+<?php echo $department->dept_country; ?>" target="_blank">
+						<img align="right" border="0" src="<?php echo w2PfindImage('googlemaps.gif'); ?>" width="55" height="22" alt="Find It on Google" /></a>
+						<?php	echo $department->dept_address1 . (($department->dept_address2) ? '<br />' . $department->dept_address2 : '') . '<br />' . $department->dept_city . '&nbsp;&nbsp;' . $department->dept_state . '&nbsp;&nbsp;' . $department->dept_zip . (($department->dept_country) ? '<br />' . $countries[$department->dept_country] : '');?>
+					</td>
+				</tr>
+			</table>
 		</td>
-		</tr>
-		</table>
-	</td>
-	<td width="50%">
-		<strong><?php echo $AppUI->_('Description'); ?></strong>
-		<table cellspacing="1" cellpadding="2" border="0" width="100%">
-		<tr>
-			<td bgcolor="#ffffff" width="100%"><?php echo str_replace(chr(10), '<br />', $dept['dept_desc']); ?>&nbsp;</td>
-		</tr>
-		</table>
-	</td>
-</tr>
+		<td width="50%">
+			<strong><?php echo $AppUI->_('Description'); ?></strong>
+			<table cellspacing="1" cellpadding="2" border="0" width="100%">
+			<tr>
+				<td bgcolor="#ffffff" width="100%"><?php echo str_replace(chr(10), '<br />', $department->dept_desc); ?>&nbsp;</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
 </table>
 <?php
-
 	// tabbed information boxes
 	$tabBox = new CTabBox('?m=departments&a=' . $a . '&dept_id=' . $dept_id, '', $tab);
 	$tabBox->add(W2P_BASE_DIR . '/modules/departments/vw_contacts', 'Contacts');
 	// include auto-tabs with 'view' explicitly instead of $a, because this view is also included in the main index site
 	$tabBox->show();
 }
-?>
