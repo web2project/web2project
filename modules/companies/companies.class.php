@@ -191,7 +191,7 @@ class CCompany extends CW2pObject {
 			$department = new CDepartment;
 			$department->setAllowedSQL($AppUI->user_id, $q);
 
-			return $q->loadHashList('dept_id');
+			return $q->loadList();
 		}
 	}
 }
