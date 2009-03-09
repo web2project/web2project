@@ -8,23 +8,23 @@ if (!defined('W2P_BASE_DIR')) {
 ##
 
 class CDepartment extends CW2pObject {
-	var $dept_id = null;
-	var $dept_parent = null;
-	var $dept_company = null;
-	var $dept_name = null;
-	var $dept_phone = null;
-	var $dept_fax = null;
-	var $dept_address1 = null;
-	var $dept_address2 = null;
-	var $dept_city = null;
-	var $dept_state = null;
-	var $dept_zip = null;
-	var $dept_country = null;
-	var $dept_url = null;
-	var $dept_desc = null;
-	var $dept_owner = null;
-	var $dept_email = null;
-	var $dept_type = null;
+	public $dept_id = null;
+	public $dept_parent = null;
+	public $dept_company = null;
+	public $dept_name = null;
+	public $dept_phone = null;
+	public $dept_fax = null;
+	public $dept_address1 = null;
+	public $dept_address2 = null;
+	public $dept_city = null;
+	public $dept_state = null;
+	public $dept_zip = null;
+	public $dept_country = null;
+	public $dept_url = null;
+	public $dept_desc = null;
+	public $dept_owner = null;
+	public $dept_email = null;
+	public $dept_type = null;
 
 	function CDepartment() {
 		$this->CW2pObject('departments', 'dept_id');
@@ -35,9 +35,27 @@ class CDepartment extends CW2pObject {
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.*');
 		$q->addWhere('dep.dept_id = ' . (int)$oid);
-		$result = $q->loadObject($this);
-		$q->clear();
-		return $result;
+
+		return $q->loadObject($this);
+	}
+	public function fullLoad($deptId) {
+
+		$q = new DBQuery;
+		$q->addTable('companies', 'com');
+		$q->addTable('departments', 'dep');
+		$q->addQuery('dep.*, company_name');
+		$q->addQuery('con.contact_first_name');
+		$q->addQuery('con.contact_last_name');
+		$q->addJoin('users', 'u', 'u.user_id = dep.dept_owner');
+		$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+		$q->addWhere('dep.dept_id = ' . (int) $deptId);
+		$q->addWhere('dep.dept_company = company_id');
+
+		$this->company_name = '';
+		$this->contact_first_name = '';
+		$this->contact_last_name = '';
+
+		$q->loadObject($this);
 	}
 
 	function bind($hash) {
@@ -46,7 +64,7 @@ class CDepartment extends CW2pObject {
 		} else {
 			$q = new DBQuery;
 			$q->bindHashToObject($hash, $this);
-			$q->clear();
+
 			return null;
 		}
 	}
