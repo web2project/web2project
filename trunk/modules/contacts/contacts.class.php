@@ -9,8 +9,8 @@ if (!defined('W2P_BASE_DIR')) {
  *	@version $Revision$
  */
 
-require_once ($AppUI->getSystemClass('w2p'));
-require_once ($AppUI->getSystemClass('libmail'));
+require_once $AppUI->getSystemClass('w2p');
+require_once $AppUI->getSystemClass('libmail');
 require_once $AppUI->getModuleClass('companies');
 require_once $AppUI->getModuleClass('departments');
 
@@ -173,9 +173,8 @@ class CContact extends CW2pObject {
 		$q->addTable('companies');
 		$q->addQuery('company_id');
 		$q->addWhere('company_name = ' . (int)$this->contact_company);
-		$company_id = $q->loadResult();
-		$q->clear();
-		return $company_id;
+
+		return $q->loadResult();
 	}
 
 	function getCompanyName() {
@@ -183,9 +182,8 @@ class CContact extends CW2pObject {
 		$q->addTable('companies');
 		$q->addQuery('company_name');
 		$q->addWhere('company_id = ' . (int)$this->contact_company);
-		$company_name = $q->loadResult();
-		$q->clear();
-		return $company_name;
+
+		return $q->loadResult();
 	}
 
 	function getCompanyDetails() {
@@ -202,9 +200,8 @@ class CContact extends CW2pObject {
 		} else {
 			$q->addWhere('company_id = ' . (int)$this->contact_company);
 		}
-		$result = $q->loadHash();
-		$q->clear();
-		return $result;
+
+		return $q->loadHash();
 	}
 
 	function getDepartmentDetails() {
@@ -220,19 +217,23 @@ class CContact extends CW2pObject {
 		} else {
 			$q->addWhere('dept_id = ' . (int)$this->contact_department);
 		}
-		$result = $q->loadHash();
-		$q->clear();
-		return $result;
+
+		return $q->loadHash();
 	}
 
-	function getUpdateKey() {
+	public function getUpdateKey() {
 		$q = new DBQuery;
 		$q->addTable('contacts');
 		$q->addQuery('contact_updatekey');
 		$q->addWhere('contact_id = ' . (int)$this->contact_id);
-		$updatekey = $q->loadResult();
-		$q->clear();
-		return $updatekey;
+
+		return $q->loadResult();
+	}
+	public function clearUpdateKey() {
+		$rnow = new CDate();
+		$this->contact_updatekey = '';
+		$this->contact_lastupdate = $rnow->format(FMT_DATETIME_MYSQL);
+		$this->store();
 	}
 
 	function updateNotify() {
@@ -373,16 +374,13 @@ class CContact extends CW2pObject {
 		}
 		return strtoupper($letters);
 	}
-	/*
-	 *  I  don't like this function, it seems to be used for either the username
-	 * or the userId, I'd rather it be one or the other...
-	 */
+
 	public static function getContactByUsername($username) {
 		$q = new DBQuery;
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-		$q->addWhere("user_username like '$username'");
+		$q->addWhere("user_username like '%$username%'");
 		$q->setLimit(1);
 		$r = $q->loadResult();
 		$result = (is_array($r)) ? $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'] : 'User Not Found';
@@ -397,6 +395,18 @@ class CContact extends CW2pObject {
 		$q->addWhere('user_id = ' . (int) $userId);
 		$q->setLimit(1);
 		$r = $q->loadList();
+		$result = (is_array($r)) ? $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'] : 'User Not Found';
+
+		return $result;
+	}
+	public static function getContactByEmail($email) {
+		$q = new DBQuery;
+		$q->addTable('users');
+		$q->addQuery('contact_first_name, contact_last_name');
+		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+		$q->addWhere("contact_email = '$email'");
+		$q->setLimit(1);
+		$r = $q->loadResult();
 		$result = (is_array($r)) ? $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'] : 'User Not Found';
 
 		return $result;
