@@ -11,57 +11,55 @@ require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 require_once W2P_BASE_DIR . '/classes/query.class.php';
 require_once W2P_BASE_DIR . '/classes/ui.class.php';
+
 $AppUI = new CAppUI();
 require_once W2P_BASE_DIR . '/classes/date.class.php';
 require_once W2P_BASE_DIR . '/modules/contacts/contacts.class.php';
+require_once W2P_BASE_DIR . '/classes/CustomFields.class.php';
 
-$obj = new CContact();
 $msg = '';
 
 $updatekey = w2PgetParam($_POST, 'updatekey', 0);
-$q = new DBQuery;
-$q->addTable('contacts');
-$q->addQuery('contact_id');
-$q->addWhere('contact_updatekey = \'' . $updatekey . '\'');
-$contactkey = $q->loadList();
-$q->clear();
+$contactkey = CContact::getContactByUpdatekey($updatekey);
 
-$contact_id = $contactkey[0]['contact_id'] ? $contactkey[0]['contact_id'] : 0;
+$contact = new CContact();
+$q = new DBQuery;
+
+$contact_id = $contactkey ? $contactkey : 0;
 
 // check permissions for this record
 
 if (!$contact_id) {
-	echo ($AppUI->_('You are not authorized to use this page. If you should be authorized please contact Bruce Bodger to give you another valid link, thank you.'));
+	echo $AppUI->_('You are not authorized to use this page. If you should be authorized please contact Bruce Bodger to give you another valid link, thank you.');
 	exit;
 }
 
-if (!$obj->bind($_POST)) {
-	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+if (!$contact->bind($_POST)) {
+	$AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
 	$AppUI->redirect();
 }
-require_once W2P_BASE_DIR . '/classes/CustomFields.class.php';
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Contact');
 
 $isNotNew = $_POST['contact_id'];
 
-if (($msg = $obj->store())) {
+if (($msg = $contact->store())) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
-	echo $AppUI->_('There was an error recording your contact data, please contact the system administrator. Thank you very much.');
+	$msg = $AppUI->_('There was an error recording your contact data, please contact the system administrator. Thank you very much.');
 } else {
-	$custom_fields = new CustomFields('contacts', 'addedit', $obj->contact_id, 'edit', 1);
+	$custom_fields = new CustomFields('contacts', 'addedit', $contact->contact_id, 'edit', 1);
 	$custom_fields->bind($_POST);
-	$sql = $custom_fields->store($obj->contact_id); // Store Custom Fields
-
-	$rnow = new CDate();
-	$obj->contact_updatekey = '';
-	$obj->contact_lastupdate = $rnow->format(FMT_DATETIME_MYSQL);
-	$obj->store();
+	$custom_fields->store($contact->contact_id);
+	
+	$contact->clearUpdateKey();
 
 	$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);
-	//            echo $AppUI->_('Your contact data has been recorded sucessfully. Thank you very much.');
-	//            echo "<script>if(confirm('".$AppUI->_('Your contact data has  been recorded sucessfully. Thank you very much.')."')){self.close();} else {self.close();};</script>";
-	echo ('Your contact data has been recorded successfully. Your may now close your browser window<br></br>Thank you very much, ' . $obj->contact_first_name);
+	echo $AppUI->_('Your contact data has been recorded successfully. Your may now close your browser windoq.  Thank you very much, ' . $contact->contact_first_name);
 }
 ?>
+<html>
+	<body>
+		<?php echo $msg; ?>
+	</body>
+</html>

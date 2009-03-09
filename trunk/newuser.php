@@ -1,11 +1,33 @@
 <?php /* $Id$ $URL$ */
+require_once 'base.php';
+require_once W2P_BASE_DIR . '/includes/config.php';
+
+if (!isset($GLOBALS['OS_WIN'])) {
+	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, 'WIN') !== false);
+}
+
+// tweak for pathname consistence on windows machines
+require_once W2P_BASE_DIR . '/includes/main_functions.php';
+require_once W2P_BASE_DIR . '/includes/db_adodb.php';
+require_once W2P_BASE_DIR . '/classes/query.class.php';
+require_once W2P_BASE_DIR . '/classes/ui.class.php';
+
+$AppUI = new CAppUI();
+include_once W2P_BASE_DIR . '/classes/w2p.class.php';
+require_once W2P_BASE_DIR . '/classes/date.class.php';
+
+if (w2PgetConfig('activate_external_user_creation') != 'true') {
+	echo $AppUI->_('You should not access this file directly');
+	die();
+}
+
 $uistyle = 'web2project';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
-		<title><?php echo 'New User Signup'; ?></title>
+		<title><?php echo $AppUI->_('New User Signup'); ?></title>
 		<meta http-equiv="Content-Type" content="text/html;charset=<?php echo 'UTF-8'; ?>" />
 		<meta http-equiv="Pragma" content="no-cache" />
 		<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" />
@@ -24,10 +46,6 @@ $uistyle = 'web2project';
 		<div align="center">
 			<?php
 				echo '<span class="error">' . $AppUI->getMsg() . '</span>';
-				$msg = '';
-				$msg .= phpversion() < '4.1' ? '<br /><span class="warning">WARNING: web2project is NOT SUPPORT for this PHP Version (' . phpversion() . ')</span>' : '';
-				$msg .= function_exists('mysql_pconnect') ? '' : '<br /><span class="warning">WARNING: PHP may not be compiled with MySQL support.  This will prevent proper operation of web2Project.  Please check you system setup.</span>';
-				echo $msg;
 			?>
 		</div>
 	</body>

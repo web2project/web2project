@@ -1,31 +1,11 @@
 <?php /* $Id$ $URL$ */
-require_once 'base.php';
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
-require_once W2P_BASE_DIR . '/includes/config.php';
 
-if (!isset($GLOBALS['OS_WIN'])) {
-	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, 'WIN') !== false);
-}
-
-// tweak for pathname consistence on windows machines
-require_once W2P_BASE_DIR . '/includes/main_functions.php';
-require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-require_once W2P_BASE_DIR . '/classes/query.class.php';
-require_once W2P_BASE_DIR . '/classes/ui.class.php';
-$AppUI = new CAppUI();
-include_once W2P_BASE_DIR . '/classes/w2p.class.php';
-require_once W2P_BASE_DIR . '/classes/date.class.php';
 require_once W2P_BASE_DIR . '/modules/admin/admin.class.php';
-// Create the roles class container
 require_once W2P_BASE_DIR . '/modules/system/roles/roles.class.php';
-
 require_once W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-if (w2PgetConfig('activate_external_user_creation') != 'true') {
-	die('You should not access this file directly');
-}
-
 require_once W2P_BASE_DIR . '/lib/captcha/Captcha.class.php';
 require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 /*
