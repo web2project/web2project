@@ -91,8 +91,8 @@ function submitIt() {
 }
 
 function popDepartment() {
-//        window.open('./index.php?m=public&a=selector&dialog=1&callback=setDepartment&table=departments&hide_company=1&company_id=' + window.company_id, 'department','left=50,top=50,height=250,width=400,resizable');
-	window.open('./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=departments&company_id='+window.company_id, 'company', 'left=50,top=50,height=320,width=400,resizable');
+	var f = document.changecontact;
+	window.open('./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=departments&company_id='+f.contact_company.value+'&dept_id='+f.contact_department.value, 'company', 'left=50,top=50,height=320,width=400,resizable');
 }
 
 function setDepartment( key, val ){
@@ -104,8 +104,9 @@ function setDepartment( key, val ){
 }
 
 function popCompany() {
-//        window.open('./index.php?m=public&a=selector&dialog=1&callback=setCompany&table=companies', 'company','left=50,top=50,height=250,width=400,resizable');
+	var f = document.changecontact;
 	window.open('./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=companies&company_id=<?php echo $company_detail['company_id']; ?>', 'company', 'left=50,top=50,height=320,width=400,resizable');
+	//window.open('./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=companies&company_id='+f.contact_company.value, 'company', 'left=50,top=50,height=320,width=400,resizable');
 }
 
 function setCompany( key, val ){
@@ -217,16 +218,12 @@ function updateVerify() {
 			</td>
 		</tr>	
 		<tr>
-<?php
-$last_ask = new CDate($row->contact_updateasked);
-?>
+			<?php $last_ask = new CDate($row->contact_updateasked); ?>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Last Update Requested'); ?>:</td>
 			<td align="center" nowrap="nowrap"><?php echo $row->contact_updateasked ? $last_ask->format($df) : ''; ?></td>
 		</tr>	
 		<tr>
-<?php
-$lastupdated = new CDate($row->contact_lastupdate);
-?>
+			<?php $lastupdated = new CDate($row->contact_lastupdate); ?>
 			<td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_('Last Updated'); ?>:</td>
 			<td align="center" nowrap="nowrap"><?php echo ($row->contact_lastupdate && @!($row->contact_lastupdate == 0)) ? $lastupdated->format($df) : ''; ?></td>
 		</tr>	
@@ -254,7 +251,6 @@ $lastupdated = new CDate($row->contact_lastupdate);
 			<td align="right"><?php echo $AppUI->_('Department'); ?>:</td>
 			<td nowrap="nowrap">
 				<input type="text" class="text" name="contact_department_name" value="<?php echo $dept_detail['dept_name']; ?>" maxlength="100" size="25" />
-
 				<input type='hidden' name='contact_department' value='<?php echo $dept_detail['dept_id']; ?>' />
 				<input type="button" class="button" value="<?php echo $AppUI->_('select department...'); ?>" onclick="popDepartment()" />
 				</td>

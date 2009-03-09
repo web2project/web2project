@@ -19,49 +19,51 @@ require_once $AppUI->getModuleClass('departments');
  */
 class CContact extends CW2pObject {
 	/**
- 	@var int */
-	var $contact_id = null;
+ 	@public int */
+	public $contact_id = null;
 	/**
- 	@var string */
-	var $contact_first_name = '';
+ 	@public string */
+	public $contact_first_name = '';
 	/**
- 	@var string */
-	var $contact_last_name = '';
-	var $contact_order_by = '';
-	var $contact_title = null;
-	var $contact_job = null;
-	var $contact_birthday = null;
-	var $contact_company = null;
-	var $contact_department = null;
-	var $contact_type = null;
-	var $contact_email = null;
-	var $contact_email2 = null;
-	var $contact_phone = null;
-	var $contact_phone2 = null;
-	var $contact_fax = null;
-	var $contact_mobile = null;
-	var $contact_address1 = null;
-	var $contact_address2 = null;
-	var $contact_city = null;
-	var $contact_state = null;
-	var $contact_zip = null;
-	var $contact_url = null;
-	var $contact_icq = null;
-	var $contact_aol = null;
-	var $contact_yahoo = null;
-	var $contact_msn = null;
-	var $contact_jabber = null;
-	var $contact_skype = null;
-	var $contact_google = null;
-	var $contact_notes = null;
-	var $contact_project = null;
-	var $contact_country = null;
-	var $contact_icon = null;
-	var $contact_owner = null;
-	var $contact_private = null;
-	var $contact_updatekey = null;
-	var $contact_lastupdate = null;
-	var $contact_updateasked = null;
+ 	@public string */
+	public $contact_last_name = '';
+	public $contact_order_by = '';
+	public $contact_title = null;
+	public $contact_job = null;
+	public $contact_birthday = null;
+	public $contact_company = null;
+	public $contact_department = null;
+	public $contact_type = null;
+	public $contact_email = null;
+	public $contact_email2 = null;
+	public $contact_phone = null;
+	public $contact_phone2 = null;
+	public $contact_fax = null;
+	public $contact_mobile = null;
+	public $contact_address1 = null;
+	public $contact_address2 = null;
+	public $contact_city = null;
+	public $contact_state = null;
+	public $contact_zip = null;
+	public $contact_url = null;
+	public $contact_icq = null;
+	public $contact_aol = null;
+	public $contact_yahoo = null;
+	public $contact_msn = null;
+	public $contact_jabber = null;
+	public $contact_skype = null;
+	public $contact_google = null;
+	public $contact_notes = null;
+	public $contact_project = null;
+	public $contact_country = null;
+	public $contact_icon = null;
+	public $contact_owner = null;
+	public $contact_private = null;
+	public $contact_updatekey = null;
+	public $contact_lastupdate = null;
+	public $contact_updateasked = null;
+	
+	public $contact_methods = array();
 
 	function CContact() {
 		$this->CW2pObject('contacts', 'contact_id');
@@ -76,7 +78,7 @@ class CContact extends CW2pObject {
 			$q->addTable('contacts');
 			$q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
 			$q->addWhere('contact_id = ' . (int) $contactId);
-	
+
 			$q->loadObject($this);
 		}
 	}

@@ -257,7 +257,10 @@ class CDepartment extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('departments');
 		$q->addQuery('dept_id, dept_name');
-		$q->addWhere('dept_parent = ' . (int) $departmentId . ' AND dept_company = ' . (int) $companyId);
+		if (is_int($departmentId)) {
+			$q->addWhere('dept_parent = ' . (int) $departmentId);
+		}
+		$q->addWhere('dept_company = ' . (int) $companyId);
 		$q->addOrder('dept_name');
 		$department = new CDepartment;
 		$department->setAllowedSQL($AppUI->user_id, $q);
