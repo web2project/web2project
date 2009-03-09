@@ -25,8 +25,8 @@ INSERT INTO `config` VALUES (0, 'activate_external_user_creation', 'true', '', '
 ALTER TABLE `contacts` ADD `contact_updatekey` VARCHAR( 32 ) NULL DEFAULT NULL;
 ALTER TABLE `contacts` ADD `contact_lastupdate` DATETIME NULL DEFAULT NULL;
 ALTER TABLE `contacts` ADD `contact_updateasked` DATETIME NULL DEFAULT NULL;
-ALTER TABLE `contacts` ADD `contact_skype` VARCHAR( 100 ) NOT NULL;
-ALTER TABLE `contacts` ADD `contact_google` VARCHAR( 255 ) NOT NULL;
+ALTER TABLE `contacts` ADD `contact_skype` VARCHAR( 100 ) default '';
+ALTER TABLE `contacts` ADD `contact_google` VARCHAR( 255 ) default '';
 ALTER TABLE `departments` ADD `dept_country` VARCHAR(100) DEFAULT '' NOT NULL;
 ALTER TABLE `modules` ADD `mod_main_class` varchar(30) NOT NULL default '';
 
@@ -606,3 +606,6 @@ INSERT INTO `w2pversion` (`code_revision` ,`code_version` ,`db_version` ,`last_d
 #20090224
 ALTER TABLE `custom_fields_struct` ADD `field_published` TINYINT( 1 ) NOT NULL DEFAULT '0';
 UPDATE `custom_fields_struct` SET field_published = 1;
+
+#20090309
+UPDATE `projects` SET `project_parent` = `project_id`, `project_original_parent` = `project_id`;
