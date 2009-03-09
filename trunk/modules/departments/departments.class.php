@@ -30,11 +30,13 @@ class CDepartment extends CW2pObject {
 		$this->CW2pObject('departments', 'dept_id');
 	}
 
-	function load($oid) {
+	function load($deptId) {
 		$q = new DBQuery;
 		$q->addTable('departments', 'dep');
-		$q->addQuery('dep.*');
-		$q->addWhere('dep.dept_id = ' . (int)$oid);
+		$q->addQuery('dep.*, company_name');
+		$q->addJoin('companies', 'com', 'com.company_id = dep.dept_company', 'inner');
+		$q->addWhere('dep.dept_id = ' . (int) $deptId);
+		$this->company_name = '';
 
 		return $q->loadObject($this);
 	}
