@@ -40,7 +40,7 @@ class CDepartment extends CW2pObject {
 
 		return $q->loadObject($this);
 	}
-	public function fullLoad($deptId) {
+	public function loadFull($deptId) {
 
 		$q = new DBQuery;
 		$q->addTable('companies', 'com');
@@ -58,6 +58,38 @@ class CDepartment extends CW2pObject {
 		$this->contact_last_name = '';
 
 		$q->loadObject($this);
+	}
+	public function getFilteredDepartmentList($AppUI, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
+
+		$q = new DBQuery;
+		$q->addTable('departments');
+		$q->addQuery('departments.*, COUNT(ct.contact_department) dept_users, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
+		$q->addJoin('project_departments', 'pd', 'pd.department_id = dept_id');
+		$q->addJoin('projects', 'p', 'pd.project_id = p.project_id AND p.project_active = 1');
+		$q->leftJoin('users', 'u', 'dept_owner = u.user_id');
+		$q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+		$q->addJoin('projects', 'p2', 'pd.project_id = p2.project_id AND p2.project_active = 0');
+		$q->addJoin('contacts', 'ct', 'ct.contact_department = dept_id');
+		$q->addGroup('dept_id');
+		$q->addOrder('dept_parent, dept_name');
+
+		$oCpy = new CCompany();
+		$where = $this->getAllowedSQL($AppUI->user_id, 'c.company_id');
+		$q->addWhere($where);
+
+		if ($deptType > -1) {
+			$q->addWhere('dept_type = ' . (int) $deptType);
+		}
+		if ($searchString != '') {
+			$q->addWhere("dept_name LIKE '%$searchString%'");
+		}
+		if ($ownerId > 0) {
+			$q->addWhere('dept_owner = '.$ownerId);
+		}
+		$q->addGroup('dept_id');
+		$q->addOrder($orderby . ' ' . $orderdir);
+		
+		return $q->loadList();
 	}
 
 	function bind($hash) {

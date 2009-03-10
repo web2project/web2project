@@ -31,7 +31,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 // load the department types
 $types = w2PgetSysVal('DepartmentType');
 
-$department->fullLoad($dept_id);
+$department->loadFull($dept_id);
 
 if (!$department) {
 	$titleBlock = new CTitleBlock('Invalid Department ID', 'departments.png', $m, $m . '.' . $a);
