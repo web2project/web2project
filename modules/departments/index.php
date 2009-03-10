@@ -40,8 +40,6 @@ if ($search_string != '') {
 	$search_string = $AppUI->getState('dept_search_string');
 }
 
-// $canEdit = !getDenyEdit( $m );
-// retrieve list of records
 $search_string = w2PformSafe($search_string, true);
 
 $perms = &$AppUI->acl();
@@ -51,20 +49,19 @@ $owner_combo = arraySelect($owner_list, 'owner_filter_id', 'class="text" onchang
 // setup the title block
 $titleBlock = new CTitleBlock('Departments', 'departments.png', $m, $m . '.' . $a);
 $titleBlock->addCell('<form name="searchform" action="?m=departments&amp;search_string=' . $search_string . '" method="post">
-						<table>
-							<tr>
-                      			<td>
-                                    <strong>' . $AppUI->_('Search') . '</strong>
-                                    <input class="text" type="text" name="search_string" value="' . $search_string . '" /><br />
-						<a href="index.php?m=departments&search_string=-1">' . $AppUI->_('Reset search') . "</a></td>
-								<td valign='top'>
-									<strong>" . $AppUI->_('Owner filter') . '</strong> ' . $owner_combo . '
-								</td>
-							</tr>
-						</table>
-                      </form>');
-
-$search_string = addslashes($search_string);
+		<table>
+			<tr>
+				<td>
+					<strong>' . $AppUI->_('Search') . '</strong>
+					<input class="text" type="text" name="search_string" value="' . $search_string . '" /><br />
+					<a href="index.php?m=departments&search_string=-1">' . $AppUI->_('Reset search') . '</a>
+				</td>
+				<td valign="top">
+					<strong>'. $AppUI->_('Owner filter') . '</strong> ' . $owner_combo . '
+				</td>
+			</tr>
+		</table>
+	</form>');
 
 $titleBlock->show();
 
