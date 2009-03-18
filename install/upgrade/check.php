@@ -45,7 +45,7 @@
 		<td class="item">Server API</td>
 		<td align="left">
 		<?php 
-			if (php_sapi_name() == 'cgi') {
+			if (strtolower(php_sapi_name()) == 'cgi') {
 				echo '<b class="error">'.$failedImg.' CGI mode is likely to have problems</b>';
 				$continue = false;
 			} else {
