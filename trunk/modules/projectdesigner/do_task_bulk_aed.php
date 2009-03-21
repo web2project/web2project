@@ -12,7 +12,6 @@ $bulk_task_priority = w2PgetParam($_POST, 'bulk_task_priority', '');
 $bulk_task_access = w2PgetParam($_POST, 'bulk_task_access', '');
 $bulk_task_assign = w2PgetParam($_POST, 'bulk_task_assign', '');
 $bulk_task_hperc_assign = w2PgetParam($_POST, 'bulk_task_hperc_assign', '');
-//$bulk_task_assign_perc = w2PgetParam( $_POST, 'bulk_task_assign_perc', '' );
 $bulk_task_unassign = w2PgetParam($_POST, 'bulk_task_unassign', '');
 $bulk_task_other = w2PgetParam($_POST, 'bulk_task_other', '');
 $bulk_task_owner = w2PgetParam($_POST, 'bulk_task_owner', '');
@@ -56,7 +55,7 @@ if (is_array($selected) && count($selected)) {
 		}
 
 		//Action: Modify Percent Complete
-		if (isset($_POST['bulk_task_percent_complete']) && $bulk_task_percent_complete != '' && $bulk_task_percent_complete) {
+		if ($bulk_task_percent_complete != '' && ((int) $_POST['bulk_task_percent_complete'] == (int) $bulk_task_percent_complete)) {
 			if ($upd_task->task_id) {
 				$upd_task->task_percent_complete = $bulk_task_percent_complete;
 				$upd_task->store();
