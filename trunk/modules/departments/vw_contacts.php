@@ -20,7 +20,7 @@ foreach ($contacts as $contact_id => $contact_data) {
 ?>
 	<tr>
 		<td colspan="3" align="right" valign="top" style="background-color:#ffffff">
-			<input type="button" class="button" value="<?php $AppUI->_('new contact'); ?>" onclick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id='<?php echo $company_id; ?>&company_name=<?php echo $dept['company_name']; ?>&dept_id=<?php echo $dept['dept_id']; ?>&dept_name=<?php echo $dept['dept_name']; ?>'">
+			<input type="button" class="button" value="<?php echo $AppUI->_('new contact'); ?>" onclick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company_id; ?>&company_name=<?php echo $dept['company_name']; ?>&dept_id=<?php echo $dept['dept_id']; ?>&dept_name=<?php echo $dept['dept_name']; ?>'">			
 		</td>
 	</tr>
 </table>
