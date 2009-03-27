@@ -3,10 +3,18 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not call this file directly.');
 }
 $AppUI->savePlace();
+
 $sort = w2PgetParam($_REQUEST, 'sort', 'asc');
 $forum_id = w2PgetParam($_REQUEST, 'forum_id', 0);
 $message_id = w2PgetParam($_REQUEST, 'message_id', 0);
 $perms = &$AppUI->acl();
+
+$q = new DBQuery;
+$q->addQuery('f.forum_name, p.project_name');
+$q->addTable('forums', 'f');
+$q->addJoin('projects', 'p', 'p.project_id = f.forum_project', 'inner');
+$q->addWhere('f.forum_id = ' . (int) $forum_id);
+$forum = $q->loadHash();
 
 if (!$perms->checkModuleItem('forums', 'view', $message_id)) {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -59,7 +67,8 @@ require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 $pdf = &new Cezpdf($paper = 'A4', $orientation = 'portrait');
 $pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 $pdf->selectFont($font_dir . '/Helvetica.afm');
-$pdf->ezText('Project: ' . $forum['project_name'] . '   Forum: ' . $forum['forum_name']);
+$pdf->ezText('Project: ' . $forum['project_name']);
+$pdf->ezText('Forum: ' . $forum['forum_name']);
 $pdf->ezText('Topic: ' . $topic);
 $pdf->ezText('');
 $options = array('showLines' => 1, 'showHeadings' => 1, 'fontSize' => 8, 'rowGap' => 2, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500');
