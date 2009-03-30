@@ -142,50 +142,52 @@ $contacts = $q->loadHashList('contact_id');
 <form action="index.php?m=public&a=contact_selector&dialog=1&<?php if (!is_null($call_back))
 	echo 'call_back=' . $call_back . '&'; ?>company_id=<?php echo $company_id ?>" method='post' name='frmContactSelect'>
 
-<?php
-$actual_department = '';
-$actual_company = '';
-$companies_names = array(0 => $AppUI->_('Select a company')) + $aCpies;
-echo arraySelect($companies_names, 'company_id', 'onchange="document.frmContactSelect.contacts_submited.value=0; ' . 'setContactIDs(); document.frmContactSelect.submit();"', 0);
-?>
-<br /><br />
-<?php
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
-?>
-<table width="100%" class="std">
-<tr><td>
-<h4><a href="javascript: void(0);" onclick="window.location.href=setContactIDs('GET','dialog=1&<?php if (!is_null($call_back))
-	echo 'call_back=' . $call_back . '&'; ?>show_all=1');"><?php echo $AppUI->_('View all allowed companies'); ?></a></h4>
-<hr />
-<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
-<?php
-foreach ($contacts as $contact_id => $contact_data) {
-	if (!$contact_data['company_name']) {
-		$contact_company = $contact_data['contact_company'];
-	} else {
-		$contact_company = $contact_data['company_name'];
-	}
-	if ($contact_company && $contact_company != $actual_company) {
-		echo '<h4>' . $contact_company . '</h4>';
-		$actual_company = $contact_company;
-	}
-	$contact_department = $contact_data['dept_name'] ? $contact_data['dept_name'] : $contact_data['contact_department'];
-	if ($contact_department && $contact_department != $actual_department) {
-		echo '<h5>' . $contact_department . '</h5>';
-		$actual_department = $contact_department;
-	}
-	$checked = in_array($contact_id, $contacts_id) ? 'checked="checked"' : '';
-	echo '<input type="checkbox" name="contact_id[]" id="contact_' . $contact_id . '" value="' . $contact_id . '" ' . $checked . ' />';
-	echo '<label for="contact_' . $contact_id . '">' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</label>';
-	echo '<br />';
-}
-?>
-<hr />
-<input name="contacts_submited" type="hidden" value="1" />
-<input name="selected_contacts_id" type="hidden" value="<?php echo $selected_contacts_id; ?>" />
-<input type="submit" value="<?php echo $AppUI->_('Continue'); ?>" onclick="setContactIDs()" class="button" />
-</td></tr>
-</table>
+	<?php
+		$actual_department = '';
+		$actual_company = '';
+		$companies_names = array(0 => $AppUI->_('Select a company')) + $aCpies;
+		echo arraySelect($companies_names, 'company_id', 'onchange="document.frmContactSelect.contacts_submited.value=0; ' . 'setContactIDs(); document.frmContactSelect.submit();"', 0);
+	?>
+	<br /><br />
+	<?php
+		if (function_exists('styleRenderBoxTop')) {
+			echo styleRenderBoxTop();
+		}
+	?>
+	<table width="100%" class="std">
+		<tr>
+			<td>
+				<h4><a href="javascript: void(0);" onclick="window.location.href=setContactIDs('GET','dialog=1&<?php if (!is_null($call_back))
+					echo 'call_back=' . $call_back . '&'; ?>show_all=1');"><?php echo $AppUI->_('View all allowed companies'); ?></a></h4>
+				<hr />
+				<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
+					<?php
+						foreach ($contacts as $contact_id => $contact_data) {
+							if (!$contact_data['company_name']) {
+								$contact_company = $contact_data['contact_company'];
+							} else {
+								$contact_company = $contact_data['company_name'];
+							}
+							if ($contact_company && $contact_company != $actual_company) {
+								echo '<h4>' . $contact_company . '</h4>';
+								$actual_company = $contact_company;
+							}
+							$contact_department = $contact_data['dept_name'] ? $contact_data['dept_name'] : $contact_data['contact_department'];
+							if ($contact_department && $contact_department != $actual_department) {
+								echo '<h5>' . $contact_department . '</h5>';
+								$actual_department = $contact_department;
+							}
+							$checked = in_array($contact_id, $contacts_id) ? 'checked="checked"' : '';
+							echo '<input type="checkbox" name="contact_id[]" id="contact_' . $contact_id . '" value="' . $contact_id . '" ' . $checked . ' />';
+							echo '<label for="contact_' . $contact_id . '">' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</label>';
+							echo '<br />';
+						}
+					?>
+				<hr />
+				<input name="contacts_submited" type="hidden" value="1" />
+				<input name="selected_contacts_id" type="hidden" value="<?php echo $selected_contacts_id; ?>" />
+				<input type="submit" value="<?php echo $AppUI->_('Continue'); ?>" onclick="setContactIDs();" class="button" />
+			</td>
+		</tr>
+	</table>
 </form>

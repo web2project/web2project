@@ -170,13 +170,13 @@ function submitIt() {
 	}
 }
 
-var selected_contacts_id = '<?php echo implode(',', $selected_contacts); ?>';
-
 function popContacts() {
+	var selected_contacts_id = document.getElementById('project_contacts').value;
 	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
 function setContacts(contact_id_string){
+	var selected_contacts_id = document.getElementById('project_contacts').value;
 	if(!contact_id_string){
 		contact_id_string = '';
 	}
@@ -214,7 +214,7 @@ function setDepartment(department_id_string){
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 	<input type="hidden" name="project_creator" value="<?php echo is_null($project->project_creator) ? $AppUI->user_id : $project->project_creator; ?>" />
-	<input name='project_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
+	<input type="hidden" name="project_contacts" id="project_contacts" value="<?php echo implode(',', $selected_contacts); ?>" />
 <tr>
 	<td>
 		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
