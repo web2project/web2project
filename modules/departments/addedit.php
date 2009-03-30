@@ -45,10 +45,15 @@ if (!$department && $dept_id > 0) {
 
 	// collect all the departments in the company
 	if ($company_id) {
-		$depts = CDepartment::getDepartmentList($AppUI, $company_id, $dept_id);
-
-		//TODO: Must add a "no select" option
-		//$depts = array(array('dept_id' => 0, 'dept_name' => $AppUI->_('Select Unit'))) + $depts;
+		$q = new DBQuery;
+		$q->addTable('departments', 'dep');
+		$q->addQuery('dept_id, dept_name, dept_parent');
+		$q->addWhere('dep.dept_company = ' . (int) $company_id);
+		$q->addWhere('dep.dept_id <> ' . $dept_id);
+		$department = new CDepartment;
+		$department->setAllowedSQL($AppUI->user_id, $q);
+		$depts = $q->loadArrayList();
+		$depts['0'] = array(0, '- ' . $AppUI->_('Select Unit') . ' -', -1);
 	}
 
 	// setup the title block
