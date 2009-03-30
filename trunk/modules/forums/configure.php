@@ -14,9 +14,9 @@ $q = new DBQuery;
 
 if (isset($_POST['forcewatch']) && isset($_POST['forcesubmit'])) { // insert row into forum_watch for forcing Watch
 	$q->addTable('forum_watch');
-	$q->addInsert('watch_user', 0);
-	$q->addInsert('watch_forum', 0);
-	$q->addInsert('watch_topic', 0);
+	$q->addInsert('watch_user', '0');
+	$q->addInsert('watch_forum', '0');
+	$q->addInsert('watch_topic', '0');
 	if (!$q->exec()) {
 		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
 	} else {
@@ -36,7 +36,6 @@ if (isset($_POST['forcewatch']) && isset($_POST['forcesubmit'])) { // insert row
 	}
 	$q->clear();
 	$AppUI->redirect('m=forums&a=configure');
-
 }
 
 // SQL-Query to check if the message should be delivered to all users (forced) (checkbox)
