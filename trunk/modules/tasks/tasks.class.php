@@ -1350,7 +1350,7 @@ class CTask extends CW2pObject {
 		$duration = $this->task_duration * ($this->task_duration_type == 24 ? w2PgetConfig('daily_working_hours') : $this->task_duration_type);
 		$task_start_date = new CDate($this->task_start_date);
 		$task_finish_date = new CDate($this->task_end_date);
-		$assigned_users = $this->getAssignedUsers();
+		$assigned_users = $this->getAssignedUsers($this->task_id);
 		if ($use_percent_assigned) {
 			$number_assigned_users = 0;
 			foreach ($assigned_users as $u) {
@@ -1388,7 +1388,7 @@ class CTask extends CW2pObject {
 		$duration = $this->task_duration * ($this->task_duration_type == 24 ? w2PgetConfig('daily_working_hours') : $this->task_duration_type);
 		$task_start_date = new CDate($this->task_start_date);
 		$task_finish_date = new CDate($this->task_end_date);
-		$assigned_users = $this->getAssignedUsers();
+		$assigned_users = $this->getAssignedUsers($this->task_id);
 		if ($use_percent_assigned) {
 			$number_assigned_users = 0;
 			foreach ($assigned_users as $u) {
