@@ -184,82 +184,71 @@ function chPriority(user_id) {
 <?php } ?>
 </script>
 <form name="editFrm" action="index.php?m=tasks&a=tasksperuser" method="post">
-<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
-<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
-<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
-
-<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
-<tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
-	<td nowrap="nowrap">
-		<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-		<input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-		<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
-			<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
-	</td>
-	<td nowrap="nowrap">
-                <?php
-$system_users = w2PgetUsers();
-?>
-                <?php echo arraySelect($system_users, 'log_userfilter', 'class="text" style="width: 200px"', $log_userfilter); ?>
-	</td>
-	<td nowrap="nowrap">
-                <!-- // not in use anymore <input type="checkbox" name="log_all_projects" <?php if ($log_all_projects)
-	echo "checked" ?> >
-		<?php /* echo $AppUI->_( 'Log All Projects' ); */ ?>
-		</input>
-		<br> -->
-		<input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ($display_week_hours)
-		echo 'checked="checked"' ?> />
-		<label for="display_week_hours"><?php echo $AppUI->_('Display allocated hours/week'); ?></label>
-		<br />
-		<input type="checkbox" name="use_period" id="use_period" <?php if ($use_period)
-	echo 'checked="checked"' ?> />
-		<label for="use_period"><?php echo $AppUI->_('Use the period'); ?></label>
-	</td>
-	<td align="left" width="50%" nowrap="nowrap">
-		<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
-	</td>
-</tr>
-<tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?>:</td>
-	<td>
-		<input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-		<input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-		<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
-			<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
-	</td>
-         <td nowrap="nowrap" colspan="1" align="left"><?php echo $AppUI->_('Projects'); ?>:
-                <?php echo arraySelect($projFilter, 'project_id', 'size=1 class=text', $project_id, false); ?>
-	</td>
-        <td><input type="checkbox" name="show_orphaned" id="show_orphaned" <?php if ($show_orphaned)
-	echo 'checked="checked"' ?> />
-		<label for="show_orphaned"><?php echo $AppUI->_('Hide orphaned tasks'); ?></label>
-        </td>
-        <td>
-        <?php echo $AppUI->_('Levels to display'); ?>
-		<input type="text" name="max_levels" size="10" maxlength="3" value="<?php echo $max_levels; ?>" />
-	</td>
-</tr>
-<tr>
-	<td colspan="5" align="left" nowrap="nowrap"><?php echo $AppUI->_('P') . "&nbsp;=&nbsp;" . $AppUI->_('User specific Task Priority'); ?></td>
-</tr>
-</table>
-<?php
-if (function_exists('styleRenderBoxBottom')) {
-	echo styleRenderBoxBottom();
-}
-?>
+	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
+	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
+	<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
+	
+	<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+		<tr>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
+			<td nowrap="nowrap">
+				<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+				<input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+				<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
+					<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+				</a>
+			</td>
+			<td nowrap="nowrap">
+				<?php $system_users = w2PgetUsers(); ?>
+				<?php echo arraySelect($system_users, 'log_userfilter', 'class="text" style="width: 200px"', $log_userfilter); ?>
+			</td>
+			<td nowrap="nowrap">
+				<input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ($display_week_hours) { echo 'checked="checked"'; } ?> />
+				<label for="display_week_hours"><?php echo $AppUI->_('Display allocated hours/week'); ?></label><br />
+				<input type="checkbox" name="use_period" id="use_period" <?php if ($use_period) { echo 'checked="checked"'; } ?> />
+				<label for="use_period"><?php echo $AppUI->_('Use the period'); ?></label>
+			</td>
+			<td align="left" width="50%" nowrap="nowrap">
+				<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?>:</td>
+			<td>
+				<input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+				<input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+				<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
+					<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+				</a>
+			</td>
+			<td nowrap="nowrap" colspan="1" align="left"><?php echo $AppUI->_('Projects'); ?>:
+				<?php echo arraySelect($projFilter, 'project_id', 'size=1 class=text', $project_id, false); ?>
+			</td>
+		  <td>
+				<input type="checkbox" name="show_orphaned" id="show_orphaned" <?php if ($show_orphaned) { echo 'checked="checked"'; } ?> />
+				<label for="show_orphaned"><?php echo $AppUI->_('Hide orphaned tasks'); ?></label>
+			</td>
+			<td>
+				<?php echo $AppUI->_('Levels to display'); ?>
+				<input type="text" name="max_levels" size="10" maxlength="3" value="<?php echo $max_levels; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="5" align="left" nowrap="nowrap"><?php echo $AppUI->_('P') . "&nbsp;=&nbsp;" . $AppUI->_('User specific Task Priority'); ?></td>
+		</tr>
+	</table>
+	<?php
+		if (function_exists('styleRenderBoxBottom')) {
+			echo styleRenderBoxBottom();
+		}
+	?>
 </form>
 <br />
 <?php
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
-?>
-<?php
+	if (function_exists('styleRenderBoxTop')) {
+		echo styleRenderBoxTop();
+	}
+
 if ($do_report) {
 	// Let's figure out which users we have
 	$user_list = w2PgetUsersHashList();
@@ -306,7 +295,7 @@ if ($do_report) {
 	foreach ($task_list_hash as $task_id => $task_data) {
 		$task = new CTask();
 		$task->bind($task_data);
-		$task_users = $task->getAssignedUsers();
+		$task_users = $task->getAssignedUsers($task_id);
 		foreach (array_keys($task_users) as $key => $uid) {
 			$user_assigned_tasks[$uid][] = $task_id;
 		}
@@ -316,10 +305,6 @@ if ($do_report) {
 		$i += 1;
 	}
 	$Ntasks = $i;
-
-	//for($i=0;$i<$Ntasks;$i++) {
-	//print $task_list[$i]->task_name."<br>\n";
-	//}
 
 	$user_usage = array();
 	$task_dates = array();
@@ -382,19 +367,19 @@ if ($do_report) {
 			}
 
 			$tmpuser = '<form name="assFrm' . $user_id . '" action="index.php?m=tasks&a=tasksperuser" method="post">
-				<input type="hidden" name="chUTP" value="0" />
-                                <input type="hidden" name="del" value="1" />
-                                <input type="hidden" name="rm" value="0" />
-                                <input type="hidden" name="store" value="0" />
-                                <input type="hidden" name="dosql" value="do_task_assign_aed" />
-                                <input type="hidden" name="user_id" value="' . $user_id . '" />
-                                <input type="hidden" name="hassign" />
-                                <input type="hidden" name="htasks" />
-                                <tr>
-                                <td align="center" bgcolor="#D0D0D0"><input onclick="javascript:checkAll(' . $user_id . ');" type="checkbox" name="master" value="true"/></td>
-                                <td colspan="2" align="left" nowrap="nowrap" bgcolor="#D0D0D0">
-                                <font color="black">
-                                <b><a href="index.php?m=calendar&a=day_view&user_id=' . $user_id . '&tab=1">' . $userAlloc[$user_id]['userFC'] . '</a></b></font></td>';
+					<input type="hidden" name="chUTP" value="0" />
+          <input type="hidden" name="del" value="1" />
+          <input type="hidden" name="rm" value="0" />
+          <input type="hidden" name="store" value="0" />
+          <input type="hidden" name="dosql" value="do_task_assign_aed" />
+          <input type="hidden" name="user_id" value="' . $user_id . '" />
+          <input type="hidden" name="hassign" />
+          <input type="hidden" name="htasks" />
+          <tr>
+          <td align="center" bgcolor="#D0D0D0"><input onclick="javascript:checkAll(' . $user_id . ');" type="checkbox" name="master" value="true"/></td>
+          <td colspan="2" align="left" nowrap="nowrap" bgcolor="#D0D0D0">
+          <font color="black">
+          <b><a href="index.php?m=calendar&a=day_view&user_id=' . $user_id . '&tab=1">' . $userAlloc[$user_id]['userFC'] . '</a></b></font></td>';
 			for ($w = 0; $w <= (4 + weekCells($display_week_hours, $sss, $sse)); $w++) {
 				$tmpuser .= '<td bgcolor="#D0D0D0"></td>';
 			}
@@ -417,23 +402,21 @@ if ($do_report) {
 
 			$zi = 0;
 			foreach ($task_list as $task) {
-				//if (!isChildTask($task)) {
-					if (isMemberOfTask($task_list, $Ntasks, $user_id, $task)) {
+				if (isMemberOfTask($task_list, $Ntasks, $user_id, $task)) {
+					$tmptasks .= displayTask($task_list, $task, 0, $display_week_hours, $sss, $sse, $user_id);
+					// Get children
+					$tmptasks .= doChildren($task_list, $Ntasks, $task->task_id, $user_id, 1, $max_levels, $display_week_hours, $sss, $sse);
+				} else {
+					// we have to process children task the user
+					// is member of, but member of their parent task.
+					// Also show the parent task then before the children.
+					$tmpChild = '';
+					$tmpChild = doChildren($task_list, $Ntasks, $task->task_id, $user_id, 1, $max_levels, $display_week_hours, $sss, $sse);
+					if ($tmpChild > '') {
 						$tmptasks .= displayTask($task_list, $task, 0, $display_week_hours, $sss, $sse, $user_id);
-						// Get children
-						$tmptasks .= doChildren($task_list, $Ntasks, $task->task_id, $user_id, 1, $max_levels, $display_week_hours, $sss, $sse);
-					} else {
-						// we have to process children task the user
-						// is member of, but member of their parent task.
-						// Also show the parent task then before the children.
-						$tmpChild = '';
-						$tmpChild = doChildren($task_list, $Ntasks, $task->task_id, $user_id, 1, $max_levels, $display_week_hours, $sss, $sse);
-						if ($tmpChild > '') {
-							$tmptasks .= displayTask($task_list, $task, 0, $display_week_hours, $sss, $sse, $user_id);
-							$tmptasks .= $tmpChild;
-						}
+						$tmptasks .= $tmpChild;
 					}
-				//}
+				}
 			}
 			if ($tmptasks != '') {
 				$table_rows .= $tmpuser;
@@ -465,11 +448,9 @@ function isMemberOfTask($list, $N, $user_id, $task) {
 	global $user_assigned_tasks;
 
 	if (isset($user_assigned_tasks[$user_id])) {
-		if (in_array($task->task_id, $user_assigned_tasks[$user_id]))
+		if (in_array($task->task_id, $user_assigned_tasks[$user_id])) {
 			return true;
-		// else if ( $task->task_id != $task->task_parent
-		//&& in_array($task->task_parent, $user_assigned_tasks[$user_id]))
-		//	return true;
+		}
 	}
 	return false;
 }
@@ -568,7 +549,6 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 			$tmp .= '<option value="' . $u['user_id'] . '">' . w2PformSafe($u['userFC']) . '</option>';
 		}
 		$tmp .= '</select>';
-		//$tmp.= arraySelect( $user_list, 'add_users', 'class="text" STYLE="width: 200px" size="'.($zz-1).'" multiple="multiple"',NULL );
 		$tmp .= '</td>';
 	}
 
@@ -620,8 +600,7 @@ function weekCells($display_allocated_hours, $fromPeriod, $toPeriod) {
 
 	$s = new CDate($fromPeriod);
 	$e = new CDate($toPeriod);
-	$sw = getBeginWeek($s); //intval($s->Format('%U'));
-	//$ew=getEndWeek($e); //intval($e->Format('%U'));
+	$sw = getBeginWeek($s);
 	$dw = ceil($e->dateDiff($s) / 7);
 	$ew = $sw + $dw;
 
@@ -639,15 +618,13 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 
 	$s = new CDate($fromPeriod);
 	$e = new CDate($toPeriod);
-	$sw = getBeginWeek($s); //intval($s->Format('%U'));
-	//$ew=getEndWeek($e); //intval($e->Format('%U'));
+	$sw = getBeginWeek($s);
 	$dw = ceil($e->dateDiff($s) / 7);
 	$ew = $sw + $dw;
 
 	$st = new CDate($task->task_start_date);
 	$et = new CDate($task->task_end_date);
-	$stw = getBeginWeek($st); //intval($st->Format('%U'));
-	//$etw=getEndWeek($et); //intval($et->Format('%U'));
+	$stw = getBeginWeek($st);
 	$dtw = ceil($et->dateDiff($st) / 7);
 	$etw = $stw + $dtw;
 
@@ -749,8 +726,6 @@ if (!$show_orphaned) {
 	$zi = 0;
 	foreach ($orphTasks as $task) {
 		$tmptasks .= displayTask($orphTasks, $task, 0, $display_week_hours, $sss, $sse, $user_id);
-		// do we need to get the children?
-		//$tmptasks.=doChildren($orphTasks,$Ntasks,$task->task_id,$user_id,1,$max_levels,$display_week_hours,$sss,$sse);
 	}
 	if ($tmptasks != '') {
 		echo $tmpuser;
