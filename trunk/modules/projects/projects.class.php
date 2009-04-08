@@ -1017,6 +1017,7 @@ function projects_list_data($user_id = false) {
 		addDeptId($rows, $department);
 		$dept_ids[] = $department->dept_id;
 	}
+	$dept_ids[0] = 0;
 	$q->clear();
 
 	// retrieve list of records
