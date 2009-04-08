@@ -199,7 +199,7 @@ if ($do_report) {
 		$task = new CTask();
 		$task->bind($task_data);
 		$task_list[$i] = $task;
-		$task_assigned_users[$i] = $task->getAssignedUsers();
+		$task_assigned_users[$i] = $task->getAssignedUsers($task_id);
 		$i += 1;
 	}
 	$Ntasks = $i;
@@ -321,7 +321,6 @@ function isMemberOfTask($list, $Lusers, $N, $user_id, $task) {
 		;
 	$users = $Lusers[$i];
 
-	//$users=$Lusers[$task->getAssignedUsers();
 	foreach ($users as $task_user_id => $user_data) {
 		if ($task_user_id == $user_id) {
 			return true;

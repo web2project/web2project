@@ -199,7 +199,7 @@ if ($do_report) {
 			$day_difference = $task_end_date->dateDiff($task_start_date);
 			$actual_date = $task_start_date;
 
-			$users = $task->getAssignedUsers();
+			$users = $task->getAssignedUsers($task->task_id);
 
 			if ($coarseness == 1) {
 				userUsageDays();
