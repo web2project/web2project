@@ -116,7 +116,7 @@ input.button {
 }
 
 input.button:hover {
-	color: #FFFFFF;
+	color: #000000;
 }
 
 input.button:active {
