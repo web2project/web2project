@@ -232,6 +232,7 @@ if ($sub_form) {
 				$q->exec();
 				$q->clear();
 			}
+			$obj->pushDependencies($obj->task_id, $obj->task_end_date);
 		}
 		// If there is a set of post_save functions, then we process them
 

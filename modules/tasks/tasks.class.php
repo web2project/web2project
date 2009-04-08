@@ -747,6 +747,59 @@ class CTask extends CW2pObject {
 			}
 		}
 	}
+	
+	public function pushDependencies($taskId, $lastEndDate) {
+
+		$q = new DBQuery;
+		$q->addQuery('td.dependencies_task_id, t.task_start_date');
+		$q->addQuery('t.task_end_date, t.task_duration, t.task_duration_type');
+		$q->addTable('task_dependencies', 'td');
+		$q->leftJoin('tasks', 't', 't.task_id = td.dependencies_task_id');
+		$q->addWhere('td.dependencies_req_task_id = ' . (int) $taskId);
+		$q->addWhere("t.task_start_date < '$lastEndDate'");
+		$q->addWhere('t.task_dynamic = 31');
+		$q->addOrder('t.task_start_date');
+
+		$cascadingTasks = $q->loadList();
+		foreach ($cascadingTasks as $nextTask) {
+/** BEGIN: nasty task update code - very similar to lines 192 in do_task_aed.php **/
+			$tsd = new CDate($nextTask['task_start_date']);
+			$ted = new CDate($nextTask['task_end_date']);
+
+			$nsd = new CDate($lastEndDate);
+			$nsd = $nsd->next_working_day();
+			$ned = new CDate();
+			$ned->copy($nsd);
+
+			if (empty($tsd)) {
+				// appropriately calculated end date via start+duration
+				$ned->addDuration($nextTask['task_duration'], $nextTask['task_duration_type']);
+			} else {
+				// calc task time span start - end
+				$d = $tsd->calcDuration($ted);
+
+				// Re-add (keep) task time span for end date.
+				// This is independent from $obj->task_duration.
+				// The value returned by Date::Duration() is always in hours ('1')
+				$ned->addDuration($d, '1');				
+			}
+			// prefer tue 16:00 over wed 8:00 as an end date
+			$ned = $ned->prev_working_day();
+
+			$task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+			$task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+
+			$q = new DBQuery;
+			$q->addTable('tasks', 't');
+			$q->addUpdate('task_start_date', $task_start_date);
+			$q->addUpdate('task_end_date', $task_end_date);
+			$q->addWhere('task_id = ' . $nextTask['dependencies_task_id']);
+			$q->exec();
+/** END: nasty task update code - very similar to lines 192 in do_task_aed.php **/
+
+			$this->pushDependencies($nextTask['dependencies_task_id'], $task_end_date);
+		} 
+	}
 
 	/**
 	 *		  Retrieve the tasks dependencies
