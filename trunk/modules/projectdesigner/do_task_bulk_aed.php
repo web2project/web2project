@@ -91,6 +91,7 @@ if (is_array($selected) && count($selected)) {
 			if ($upd_task->task_id) {
 				$upd_task->task_end_date = $bulk_end_date;
 				$upd_task->store();
+				$upd_task->pushDependencies($upd_task->task_id, $upd_task->task_end_date);
 			}
 		}
 
