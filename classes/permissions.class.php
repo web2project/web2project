@@ -122,7 +122,8 @@ class w2Pacl extends gacl_api {
 
 	function addLogin($login, $username) {
 		$res = $this->add_object('user', $username, $login, 1, 0, 'aro');
-		if (!$res) {
+
+		if ((int) $res == 0) {
 			dprint(__file__, __line__, 0, 'Failed to add user permission object');
 		}
 		$recalc = $this->recalcPermissions($login);
