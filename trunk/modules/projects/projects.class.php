@@ -1015,7 +1015,7 @@ function projects_list_data($user_id = false) {
 		$q->addOrder('dept_parent,dept_name');
 		$rows = $q->loadList();
 		addDeptId($rows, $department);
-		$dept_ids[] = $department->dept_id;
+		$dept_ids[] = isset($department->dept_id) ? $department->dept_id : 0;
 	}
 	$dept_ids[0] = 0;
 	$q->clear();
