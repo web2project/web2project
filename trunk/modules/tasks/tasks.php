@@ -322,24 +322,26 @@ if ($canViewTask) {
 }
 
 // POST PROCESSING TASKS
-foreach ($tasks as $row) {
-	//add information about assigned users into the page output
-	$q->clear();
-	$q->addQuery('ut.user_id,	u.user_username');
-	$q->addQuery('contact_email, ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
-	$q->addQuery('CONCAT(contact_first_name, \' \',contact_last_name) AS assignee');
-	$q->addTable('user_tasks', 'ut');
-	$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
-	$q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id', 'inner');
-	$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
-	$q->addGroup('ut.user_id');
-	$q->addOrder('perc_assignment desc, contact_first_name, contact_last_name');
-
-	$assigned_users = array();
-	$row['task_assigned_users'] = $q->loadList();
-
-	//pull the final task row into array
-	$projects[$row['task_project']]['tasks'][] = $row;
+if (count($tasks) > 0) {
+	foreach ($tasks as $row) {
+		//add information about assigned users into the page output
+		$q->clear();
+		$q->addQuery('ut.user_id,	u.user_username');
+		$q->addQuery('contact_email, ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
+		$q->addQuery('CONCAT(contact_first_name, \' \',contact_last_name) AS assignee');
+		$q->addTable('user_tasks', 'ut');
+		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
+		$q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id', 'inner');
+		$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
+		$q->addGroup('ut.user_id');
+		$q->addOrder('perc_assignment desc, contact_first_name, contact_last_name');
+	
+		$assigned_users = array();
+		$row['task_assigned_users'] = $q->loadList();
+	
+		//pull the final task row into array
+		$projects[$row['task_project']]['tasks'][] = $row;
+	}
 }
 
 $showEditCheckbox = ((isset($canEdit) && $canEdit && w2PgetConfig('direct_edit_assignment')) ? true : false);
