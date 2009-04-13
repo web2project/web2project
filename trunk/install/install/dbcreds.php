@@ -12,9 +12,10 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				These are the credentials used to access your database.  In order to 
-				proceed, your database must exist and the specified user should have 
-				access to create tables. 
+				This installer does not create your database, it only loads it. 
+				Therefore, you have to create your own database and database user 
+				before continuing.  The database user must have permission to create 
+				tables.  Once you have those user credentials, please use them here. 
 			</td>
 		</tr>
 		<tr>
@@ -53,6 +54,18 @@
 			</td>
 			<td align="left">
 				<input class="button" type="password" name="adminpass" value="" title="The password for the admin user." />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="item" align="left" colspan="2" style="text-align: center;">
+				<b class="error">
+					If you haven't created your database yet, your installation will 
+					fail and the next screen will have lots of errors.<br />Save yourself 
+					(and us!) some time and make sure your database exists.  Thanks! 
+				</b>
 			</td>
 		</tr>
 		<tr>
