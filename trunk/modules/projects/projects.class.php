@@ -1016,8 +1016,8 @@ function projects_list_data($user_id = false) {
 		$rows = $q->loadList();
 		addDeptId($rows, $department);
 		$dept_ids[] = isset($department->dept_id) ? $department->dept_id : 0;
+		$dept_ids[] = ($department > 0) ? $department : 0;
 	}
-	$dept_ids[0] = 0;
 	$q->clear();
 
 	// retrieve list of records
