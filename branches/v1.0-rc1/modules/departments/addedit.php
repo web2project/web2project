@@ -50,7 +50,6 @@ if (!$department && $dept_id > 0) {
 		$q->addQuery('dept_id, dept_name, dept_parent');
 		$q->addWhere('dep.dept_company = ' . (int) $company_id);
 		$q->addWhere('dep.dept_id <> ' . $dept_id);
-		$department = new CDepartment;
 		$department->setAllowedSQL($AppUI->user_id, $q);
 		$depts = $q->loadArrayList();
 		$depts['0'] = array(0, '- ' . $AppUI->_('Select Unit') . ' -', -1);
