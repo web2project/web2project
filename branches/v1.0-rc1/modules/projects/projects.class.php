@@ -83,7 +83,7 @@ class CProject extends CW2pObject {
 	var $project_type = null;
 	var $project_parent = null;
 	var $project_original_parent = null;
-	var $project_location = null;
+	var $project_location = '';
 
 	function CProject() {
 		$this->CW2pObject('projects', 'project_id');
