@@ -81,7 +81,7 @@ $company_id = $project->project_company;
 $selected_departments = array();
 if ($project_id) {
 	$myDepartments = CProject::getDepartments($AppUI, $project_id);
-	$selected_departments = array_keys($myDepartments);
+	$selected_departments = (count($myDepartments) > 0 ) ? array_keys($myDepartments) : array();
 }
 
 $departments_count = 0;
