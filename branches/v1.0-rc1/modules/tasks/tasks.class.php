@@ -953,6 +953,14 @@ class CTask extends CW2pObject {
 		$mail_recipients = array();
 		$q = new DBQuery;
 		if ((int) $this->task_id > 0 && (int) $this->task_project > 0) {
+			$q->addTable('users', 'u');
+			$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+			$q->addQuery('c.contact_first_name, c.contact_last_name');
+			$q->addWhere('u.user_id=' . (int)$log->task_log_creator);
+			$row = $q->loadHash();
+			$creatorname = htmlspecialchars_decode($row['contact_first_name']) . ' ' . htmlspecialchars_decode($row['contact_last_name']);
+			$q->clear();
+
 			if (isset($assignees) && $assignees == 'on') {
 				$q->addTable('user_tasks', 'ut');
 				$q->leftJoin('users', 'ua', 'ua.user_id = ut.user_id');
@@ -1049,7 +1057,9 @@ class CTask extends CW2pObject {
 			$task_types = w2PgetSysVal('TaskType');
 			$body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
 			$body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n";
-			$body .= $AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . $log->task_log_name . "\n\n";
+			$body .= $AppUI->_('User', UI_OUTPUT_RAW) . ': ' . $creatorname . "\n";
+			$body .= $AppUI->_('Hours', UI_OUTPUT_RAW) . ': ' . $log->task_log_hours . "\n";
+			$body .= $AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . $log->task_log_name . "\n\n"; 
 			$body .= $log->task_log_description;
 	
 			// Append the user signature to the email - if it exists.
@@ -1062,7 +1072,6 @@ class CTask extends CW2pObject {
 				}
 			}
 			$q->clear();
-	
 			$mail->Body($body, $char_set);
 	
 			$recipient_list = '';
