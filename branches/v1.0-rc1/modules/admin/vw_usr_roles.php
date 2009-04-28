@@ -30,11 +30,16 @@ if ($canEdit) {
 ?>
 function delIt(id) {
 	if (confirm( 'Are you sure you want to delete this role?' )) {
-		var f = document.frmPerms;
+		var f = document.frmRoles;
 		f.del.value = 1;
 		f.role_id.value = id;
 		f.submit();
 	}
+}
+function clearIt(){
+	var f = document.frmRoles;
+	f.sqlaction2.value = "<?php echo $AppUI->_('add'); ?>";
+	f.user_role.selectedIndex = 0;
 }
 <?php
 } ?>
@@ -72,35 +77,34 @@ foreach ($user_roles as $row) {
 
 <?php if ($canEdit) { ?>
 
-<table cellspacing="1" cellpadding="2" border="0" class="std" width="100%">
-<form name="frmPerms" method="post" action="?m=admin">
+<form name="frmRoles" method="post" action="?m=admin">
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="dosql" value="do_userrole_aed" />
 	<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
 	<input type="hidden" name="user_name" value="<?php echo $user_name; ?>" />
 	<input type="hidden" name="role_id" value="" />
-<tr>
-	<th colspan='2'><?php echo $AppUI->_('Add Role'); ?></th>
-</tr>
-<tr>
-	<td colspan='2' width="100%"><?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', '', true); ?></td>
-</tr>
-<tr>
-	<td>
-		<input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button" name="sqlaction" onclick="clearIt();" />
-	</td>
-	<td align="right">
-		<?php
-	if (!count($user_roles)) {
-		echo $AppUI->_('Notify New User Activation'); ?> 
-				<input type='checkbox' name='notify_new_user' />&nbsp;&nbsp;&nbsp;&nbsp;
-		<?php
-	}
-?>
-		<input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button" name="sqlaction2" />
-	</td>
-</tr>
-</table>
+	<table cellspacing="1" cellpadding="2" border="0" class="std" width="100%">
+		<tr>
+			<th colspan='2'><?php echo $AppUI->_('Add Role'); ?></th>
+		</tr>
+		<tr>
+			<td colspan='2' width="100%"><?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', '', true); ?></td>
+		</tr>
+		<tr>
+			<td>
+				<input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button" name="sqlaction" onclick="clearIt();" />
+			</td>
+			<td align="right">
+				<?php
+					if (!count($user_roles)) {
+						echo $AppUI->_('Notify New User Activation');
+						?> <input type='checkbox' name='notify_new_user' />&nbsp;&nbsp;&nbsp;&nbsp;<?php
+					}
+				?>
+				<input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button" name="sqlaction2" />
+			</td>
+		</tr>
+	</table>
 </form>
 
 <?php } ?>
