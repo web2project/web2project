@@ -21,9 +21,6 @@ if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// pull users
-$users = w2PgetUsers();
-
 // load the record data
 $project = new CProject();
 
@@ -241,7 +238,11 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?></td>
 			<td colspan="2">
-				<?php echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id) ?>
+				<?php
+					// pull users
+					$users = $perms->getPermittedUsers('projects');
+					echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id);
+				?>
 			</td>
 		</tr>
 		<tr>

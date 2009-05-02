@@ -173,8 +173,9 @@ function submitIt() {
 			<td align="right"><?php echo $AppUI->_('Owner'); ?>:</td>
 			<td>
 				<?php
-					// collect all the users for the department owner list
-					$owners =array('' => $AppUI->_('(Select a user)')) +  w2PgetUsers();
+					// collect all active users for the department owner list
+					$users = $perms->getPermittedUsers('projects');
+					$owners =array('' => $AppUI->_('(Select a user)')) +  $users;
 					echo arraySelect($owners, 'dept_owner', 'size="1" class="text"', $department->dept_owner);
 				?>
 			</td>
