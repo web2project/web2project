@@ -178,7 +178,6 @@ function setContacts(contact_id_string){
 		contact_id_string = '';
 	}
 	document.editFrm.project_contacts.value = contact_id_string;
-	document.editFrm.email_project_contacts.value = contact_id_string;
 	selected_contacts_id = contact_id_string;
 }
 
