@@ -136,7 +136,6 @@ class CProject extends CW2pObject {
 		$q->leftJoin('users', 'u', 'user_id = project_owner');
 		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
 		$q->addWhere('project_id = ' . (int) $projectId);
-		$q->addWhere('t1.task_id = t1.task_parent');
 		$q->addGroup('project_id');
 
 		$this->company_name = '';
