@@ -38,6 +38,7 @@ switch ($table) {
 		$q->addQuery('company_id, company_name');
 		$q->addOrder('company_name');
 		$q->addWhere(selPermWhere($obj, 'company_id', 'company_name'));
+		$resultList = $q->loadHashList();
 		break;
 	case 'departments':
 		// known issue: does not filter out denied companies
@@ -70,32 +71,26 @@ switch ($table) {
 		} else {
 			$q->addOrder('company_name, dept_name');
 		}
+		$resultList = $q->loadHashList();
 		break;
 	case 'files':
 		$title = 'File';
 		$q->addQuery('file_id,file_name');
 		$q->addOrder('file_name');
+		$resultList = $q->loadHashList();
 		break;
 	case 'forums':
 		$title = 'Forum';
 		$q->addQuery('forum_id,forum_name');
 		$q->addOrder('forum_name');
+		$resultList = $q->loadHashList();
 		break;
 	case 'projects':
 		$project_company = w2PgetParam($_GET, 'project_company', 0);
 
-		$title = 'Project';
-		$obj = &new CProject;
-		$q->addQuery('projects.project_id, project_name');
-		$q->addOrder('project_name');
-		if ($user_id > 0) {
-			$q->addTable('project_contacts', 'b');
-			$q->addWhere('b.project_id = projects.project_id');
-			$q->addWhere('b.contact_id = ' . (int)$user_id);
-		}
-		$q->addWhere(selPermWhere($obj, 'projects.project_id', 'project_name', 'projects'));
-		if ($project_company) {
-			$q->addWhere('project_company = ' . (int)$project_company);
+		$projectList = CCompany::getProjects($AppUI, $project_company);
+		foreach ($projectList as $project) {
+			$resultList[$project['project_id']] = $project['project_name'];
 		}
 		break;
 
@@ -123,6 +118,7 @@ switch ($table) {
 			}
 			$query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
 		}
+		$resultList = $q->loadHashList();
 		break;
 	case 'users':
 		$title = 'User';
@@ -130,11 +126,13 @@ switch ($table) {
 		$q->addOrder('contact_first_name');
 		$q->addTable('contacts', 'b');
 		$q->addWhere('user_contact = contact_id');
+		$resultList = $q->loadHashList();
 		break;
 	case 'SGD':
 		$title = 'Document';
 		$q->addQuery('SGD_id, SGD_name');
 		$q->addOrder('SGD_name');
+		$resultList = $q->loadHashList();
 		break;
 	default:
 		$ok = false;
@@ -149,7 +147,7 @@ if (!$ok) {
 		echo '<br />ok = ' . $ok . "\n";
 	}
 } else {
-	$list = arrayMerge(array(0 => $AppUI->_('[none]')), $query_result ? $query_result : $q->loadHashList());
+	$list = arrayMerge(array(0 => $AppUI->_('[none]')), $query_result ? $query_result : $resultList);
 	echo db_error();
 ?>
 <script language="javascript">
