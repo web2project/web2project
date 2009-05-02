@@ -88,7 +88,12 @@ switch ($table) {
 	case 'projects':
 		$project_company = w2PgetParam($_GET, 'project_company', 0);
 
-		$projectList = CCompany::getProjects($AppUI, $project_company);
+		if ($user_id > 0) {
+			require_once $AppUI->getModuleClass('contacts');
+			$projectList = CContact::getProjects($user_id);
+		} else {
+			$projectList = CCompany::getProjects($AppUI, $project_company);
+		}
 		foreach ($projectList as $project) {
 			$resultList[$project['project_id']] = $project['project_name'];
 		}
