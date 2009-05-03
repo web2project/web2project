@@ -225,7 +225,7 @@ function delIt() {
 					$s = count($users) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
 					foreach ($users as $row) {
 						$s .= '<tr>';
-						$s .= '<td class="hilite"><a href="mailto:' . $row['contact_email'] . '">' . CContact::getContactByUserid($row['user_id']) . '</a></td>';
+						$s .= '<td class="hilite"><a href="mailto:' . $row['user_email'] . '">' . CContact::getContactByUserid($row['user_id']) . '</a></td>';
 						$s .= '<td class="hilite" align="right">' . $row['perc_assignment'] . '%</td>';
 						$s .= '</tr>';
 					}

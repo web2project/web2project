@@ -21,9 +21,6 @@ if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// pull users
-$users = w2PgetUsers();
-
 // load the record data
 $project = new CProject();
 
@@ -81,7 +78,7 @@ $company_id = $project->project_company;
 $selected_departments = array();
 if ($project_id) {
 	$myDepartments = CProject::getDepartments($AppUI, $project_id);
-	$selected_departments = array_keys($myDepartments);
+	$selected_departments = (count($myDepartments) > 0 ) ? array_keys($myDepartments) : array();
 }
 
 $departments_count = 0;
@@ -181,7 +178,6 @@ function setContacts(contact_id_string){
 		contact_id_string = '';
 	}
 	document.editFrm.project_contacts.value = contact_id_string;
-	document.editFrm.email_project_contacts.value = contact_id_string;
 	selected_contacts_id = contact_id_string;
 }
 
@@ -241,7 +237,11 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?></td>
 			<td colspan="2">
-				<?php echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id) ?>
+				<?php
+					// pull users
+					$users = $perms->getPermittedUsers('projects');
+					echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id);
+				?>
 			</td>
 		</tr>
 		<tr>

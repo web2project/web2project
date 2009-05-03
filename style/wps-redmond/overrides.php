@@ -27,7 +27,7 @@ class CTabBox extends CTabBox_core {
 			if ($extra) {
 				echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
 			} else {
-				echo '<img src="./shim.gif" height="10" width="1" alt="" />';
+				echo '<img src="./style/'.$uistyle.'/images/shim.gif" height="10" width="1" alt="" />';
 			}
 		}
 
@@ -70,7 +70,7 @@ class CTabBox extends CTabBox_core {
 				}
 				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a>&nbsp;</td>';
 				$s .= '<td valign="middle" width="3"><img src="./style/' . $uistyle . '/tab' . $sel . 'Right.png" width="3" height="28" border="0" alt="" /></td>';
-				$s .= '<td width="3" class="tabsp"><img src="./shim.gif" height="1" width="3" /></td>';
+				$s .= '<td width="3" class="tabsp"><img src="./style/'.$uistyle.'/images/shim.gif" height="1" width="3" /></td>';
 			}
 			$s .= '</table></td></tr>';
 			$s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 4 + 1) . '" class="tabox">';

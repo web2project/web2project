@@ -19,7 +19,7 @@
 
 ALTER TABLE `projects` ADD `project_parent` INT(10) DEFAULT 0 NOT NULL;
 ALTER TABLE `projects` ADD `project_original_parent` INT(10) DEFAULT 0 NOT NULL;
-ALTER TABLE `projects` ADD `project_location` VARCHAR(255) DEFAULT "" NOT NULL;
+ALTER TABLE `projects` ADD `project_location` VARCHAR(255) DEFAULT '' NOT NULL;
 ALTER TABLE `companies` ADD `company_country` VARCHAR(100) DEFAULT '' NOT NULL;
 INSERT INTO `config` VALUES (0, 'activate_external_user_creation', 'true', '', 'checkbox');
 ALTER TABLE `contacts` ADD `contact_updatekey` VARCHAR( 32 ) NULL DEFAULT NULL;

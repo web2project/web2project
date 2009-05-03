@@ -123,7 +123,9 @@ class CCompany extends CW2pObject {
 		$q->addQuery($fields);
 		$q->leftJoin('users', 'u', 'u.user_id = pr.project_owner');
 		$q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-		$q->addWhere('pr.project_company = ' . (int) $companyId);
+		if ((int) $companyId > 0) {
+			$q->addWhere('pr.project_company = ' . (int) $companyId);
+		}
 		
 		$projObj = new CProject();
 		$projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');

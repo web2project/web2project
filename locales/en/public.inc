@@ -2,7 +2,7 @@
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
 'Access Denied',
-'accessDeniedMsg'=>'You have attemped to access an item in web2Project without the sufficient permissions to do so. Please contact the web2Project System Administrator.',
+'accessDeniedMsg'=>'You have attempted to access an item in web2Project without the sufficient permissions to do so. Please contact the web2Project System Administrator.',
 'Allowed Companies',
 'chgpwLogin'=>'User does not exist',
 'chgpwUpdated'=>'Your password has been updated',

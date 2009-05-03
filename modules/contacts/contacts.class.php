@@ -423,9 +423,10 @@ class CContact extends CW2pObject {
 	}
 	public static function getProjects($contactId) {
 		$q = new DBQuery;
-		$q->addTable('projects');
-		$q->addQuery('project_id');
-		$q->addWhere("project_contacts =  $contactId");
+		$q->addQuery('p.project_id, p.project_name');
+		$q->addTable('project_contacts', 'pc');
+		$q->addJoin('projects', 'p', 'p.project_id = pc.project_id', 'inner');
+		$q->addWhere("contact_id =  $contactId");
 									
 		return $q->loadList();
 	}

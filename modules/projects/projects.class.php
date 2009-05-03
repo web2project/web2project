@@ -83,7 +83,7 @@ class CProject extends CW2pObject {
 	var $project_type = null;
 	var $project_parent = null;
 	var $project_original_parent = null;
-	var $project_location = null;
+	var $project_location = '';
 
 	function CProject() {
 		$this->CW2pObject('projects', 'project_id');
@@ -129,13 +129,15 @@ class CProject extends CW2pObject {
 		// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 		$q = new DBQuery;
 		$q->addTable('projects');
-		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
+		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
+		$q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
 		$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'left');
 		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
 		$q->leftJoin('users', 'u', 'user_id = project_owner');
 		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
 		$q->addWhere('project_id = ' . (int) $projectId);
 		$q->addGroup('project_id');
+
 		$this->company_name = '';
 		$this->user_name = '';
 		$q->loadObject($this);
@@ -920,9 +922,9 @@ function projects_list_data($user_id = false) {
 	// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 	$q->addInsertSelect('tasks_sum');
 	$q->addTable('tasks');
-	$q->addQuery('task_project, COUNT(distinct tasks.task_id) AS total_tasks, 
-			SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type))/
-			SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete, SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_duration');
+	$q->addQuery('task_project, COUNT(distinct tasks.task_id) AS total_tasks'); 
+	$q->addQuery('SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) / SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete');
+	$q->addQuery('SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_duration');
 	if ($user_id) {
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 		$q->addWhere('ut.user_id = ' . (int)$user_id);

@@ -1501,7 +1501,7 @@ CREATE TABLE `projects` (
   `project_subpriority` tinyint(4) default '0',
   `project_end_date_adjusted` datetime NOT NULL default '0000-00-00 00:00:00',
   `project_end_date_adjusted_user` int(10) NOT NULL default '0',
-  `project_location` varchar(128) NOT NULL,
+  `project_location` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`project_id`),
   KEY `idx_project_owner` (`project_owner`),
   KEY `idx_sdate` (`project_start_date`),

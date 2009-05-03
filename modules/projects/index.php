@@ -145,7 +145,7 @@ $project_statuses[] = $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archived . 
 // already in the page
 $tabBox = new CTabBox('?m=projects', W2P_BASE_DIR . '/modules/projects/', $tab);
 $is_tabbed = $tabBox->isTabbed();
-if ($tabBox->isTabbed()) {
+if ($is_tabbed) {
 	// This will overwrited the initial tab, so we need to add that separately.
 	$allactive = (int)count($projects) - (int)($archived);
 	array_unshift($project_statuses, $AppUI->_('All Projects', UI_OUTPUT_RAW) . ' (' . count($projects) . ')', $AppUI->_('All Active', UI_OUTPUT_RAW) . ' (' . $allactive . ')');

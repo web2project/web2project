@@ -253,7 +253,7 @@ var cal_day_end = <?php echo intval(w2PgetConfig('cal_day_end')); ?>;
 var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours')); ?>;
 </script>
 
-<form name="editFrm" action="?m=tasks&project_id=<?php echo $task_project; ?>" method="post">
+<form name="editFrm" action="?m=tasks&project_id=<?php echo $task_project; ?>" method="post" onSubmit="return submitIt(document.editFrm);">
 	<input name="dosql" type="hidden" value="do_task_aed" />
 	<input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 	<input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />

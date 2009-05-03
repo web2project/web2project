@@ -50,7 +50,6 @@ if (!$department && $dept_id > 0) {
 		$q->addQuery('dept_id, dept_name, dept_parent');
 		$q->addWhere('dep.dept_company = ' . (int) $company_id);
 		$q->addWhere('dep.dept_id <> ' . $dept_id);
-		$department = new CDepartment;
 		$department->setAllowedSQL($AppUI->user_id, $q);
 		$depts = $q->loadArrayList();
 		$depts['0'] = array(0, '- ' . $AppUI->_('Select Unit') . ' -', -1);
@@ -174,8 +173,9 @@ function submitIt() {
 			<td align="right"><?php echo $AppUI->_('Owner'); ?>:</td>
 			<td>
 				<?php
-					// collect all the users for the department owner list
-					$owners =array('' => $AppUI->_('(Select a user)')) +  w2PgetUsers();
+					// collect all active users for the department owner list
+					$users = $perms->getPermittedUsers('projects');
+					$owners =array('' => $AppUI->_('(Select a user)')) +  $users;
 					echo arraySelect($owners, 'dept_owner', 'size="1" class="text"', $department->dept_owner);
 				?>
 			</td>
