@@ -32,9 +32,6 @@ if (!$company && $company_id > 0) {
 	$AppUI->redirect();
 }
 
-// collect all the users for the company owner list
-$owners = w2PgetUsers();
-
 // setup the title block
 $ttl = $company_id > 0 ? 'Edit Company' : 'Add Company';
 $titleBlock = new CTitleBlock($ttl, 'handshake.png', $m, $m . '.' . $a);
@@ -147,7 +144,8 @@ function testURL( x ) {
 						<td align="right"><?php echo $AppUI->_('Company Owner'); ?>:</td>
 						<td>
 							<?php
-								echo arraySelect($owners, 'company_owner', 'size="1" class="text"', $company->company_owner ? $company->company_owner : $AppUI->user_id);
+								$users = $perms->getPermittedUsers('companies');
+								echo arraySelect($users, 'company_owner', 'size="1" class="text"', $company->company_owner ? $company->company_owner : $AppUI->user_id);
 							?>
 						</td>
 					</tr>

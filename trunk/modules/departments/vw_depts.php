@@ -13,22 +13,13 @@ global $orderby;
 global $orderdir;
 
 $types = w2PgetSysVal('DepartmentType');
+$dept_type_filter = $currentTabId-1;
+
 // get any records denied from viewing
 
-$obj = new CDepartment();
-$allowedDepts = $obj->getAllowedRecords($AppUI->user_id, 'dept_id, dept_name');
-
-$dept_type_filter = $currentTabId;
-//Not Defined
-$deptsType = true;
-if ($currentTabName == 'All Departments') {
-	$deptssType = false;
-}
-if ($currentTabName == 'Not Defined') {
-	$dept_type_filter = 0;
-}
-
-$deptList = $obj->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
+$dept = new CDepartment();
+$allowedDepts = $dept->getAllowedRecords($AppUI->user_id, 'dept_id, dept_name');
+$deptList = $dept->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
 
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">

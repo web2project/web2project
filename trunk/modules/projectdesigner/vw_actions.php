@@ -16,8 +16,8 @@ $sother = array('' => '(Other Operations)', '1' => 'Mark Tasks as Finished', '8'
 
 //Pull all users
 $users = $perms->getPermittedUsers();
-$sowners = array('' => '(Task Owner)') + $users;
-$sassign = array('' => '(Assign User)') + $users;
+$sowners = array('' => '(Task Owner)') + $perms->getPermittedUsers('tasks');
+$sassign = array('' => '(Assign User)') + $perms->getPermittedUsers('tasks');
 $sunassign = array('' => '(Unassign User)') + $users;
 
 $obj = &new CTask;

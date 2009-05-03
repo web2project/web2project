@@ -24,8 +24,6 @@ if (isset($_REQUEST['owner_filter_id'])) {
 		$AppUI->setState('dept_owner_filter_id', $owner_filter_id);
 	}
 }
-// load the department types
-$types = w2PgetSysVal('DepartmentType');
 
 // get any records denied from viewing
 $obj = new CDepartment();
@@ -64,31 +62,23 @@ $titleBlock->addCell('<form name="searchform" action="?m=departments&amp;search_
 	</form>');
 
 $titleBlock->show();
-
 if (isset($_GET['tab'])) {
 	$AppUI->setState('DeptIdxTab', w2PgetParam($_GET, 'tab', null));
 }
 $deptsTypeTab = defVal($AppUI->getState('DeptIdxTab'), 0);
-
 $deptsType = $deptsTypeTab;
 
+// load the department types
+$deptTypes = w2PgetSysVal('DepartmentType');
+
 $tabBox = new CTabBox('?m=departments', W2P_BASE_DIR . '/modules/departments/', $deptsTypeTab);
-if ($tabbed = $tabBox->isTabbed()) {
-	$add_na = true;
-	if (isset($types[0])) { // They have a Not Defined entry.
-		$add_na = false;
-		$types[] = $types[0];
-	}
-	$types[0] = 'All Departments';
-	if ($add_na) {
-		$types[] = 'Not Defined';
-	}
-}
-$type_filter = array();
-foreach ($types as $type => $type_name) {
-	$type_filter[] = $type;
-	$tabBox->add('vw_depts', $type_name);
+if ($tabBox->isTabbed()) {
+	array_unshift($deptTypes, $AppUI->_('All Departments', UI_OUTPUT_RAW));	
 }
 
+// tabbed information boxes
+foreach ($deptTypes as $deptType) {
+	$tabBox->add('vw_depts', $deptType);
+}
 $tabBox->show();
 ?>
