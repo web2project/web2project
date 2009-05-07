@@ -252,4 +252,3 @@ if ($sub_form) {
 	}
 
 } // end of if subform
-?>

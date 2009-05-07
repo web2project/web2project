@@ -570,6 +570,8 @@ class CTask extends CW2pObject {
 				$this->task_end_date = '0000-00-00 00:00:00';
 			}
 			$ret = $q->insertObject('tasks', $this, 'task_id');
+			$this->task_id = db_insert_id(); 
+
 			$q->clear();
 			addHistory('tasks', $this->task_id, 'add', $this->task_name, $this->task_project);
 
@@ -584,6 +586,7 @@ class CTask extends CW2pObject {
 				$importing_tasks = true;
 			}
 		}
+		$this->pushDependencies($this->task_id, $this->task_end_date);
 
 		//split out related departments and store them seperatly.
 		$q->setDelete('task_departments');
@@ -2537,4 +2540,3 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	}
 	echo $s;
 }
-?>
