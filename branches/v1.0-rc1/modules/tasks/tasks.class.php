@@ -1489,7 +1489,7 @@ class CTask extends CW2pObject {
 	//using user allocation percentage ($perc_assign)
 	// @return returns the Names of the over-assigned users (if any), otherwise false
 	function updateAssigned($cslist, $perc_assign, $del = true, $rmUsers = false) {
-		$q = &new DBQuery;
+		$q = new DBQuery;
 
 		// process assignees
 		$tarr = explode(',', $cslist);
@@ -1604,6 +1604,7 @@ class CTask extends CW2pObject {
 	 */
 	function getAllocation($hash = null, $users = null, $get_user_list = false) {
 		global $AppUI;
+
 		if (!w2PgetConfig('check_overallocation')) {
 			if ($get_user_list) {
 				$users_list = w2PgetUsersHashList();
@@ -1615,7 +1616,7 @@ class CTask extends CW2pObject {
 				$hash = array();
 			}
 		} else {
-			$q = &new DBQuery;
+			$q = new DBQuery;
 			// retrieve the systemwide default preference for the assignment maximum
 			$q->addTable('user_preferences');
 			$q->addQuery('pref_value');
@@ -1627,7 +1628,7 @@ class CTask extends CW2pObject {
 			} else {
 				$scm = $sysChargeMax['pref_value'];
 			}
-	
+
 			/*
 			* provide actual assignment charge, individual chargeMax 
 			* and freeCapacity of users' assignments to tasks
@@ -1636,7 +1637,11 @@ class CTask extends CW2pObject {
 			$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
 			$q->leftJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 			$q->leftJoin('user_preferences', 'up', 'up.pref_user = u.user_id');
-			$q->addQuery('u.user_id, CONCAT(CONCAT_WS(\' [\', CONCAT_WS(\' \', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0)), \'%]\') AS userFC, IFNULL(SUM(ut.perc_assignment), 0) AS charge, u.user_username, IFNULL(up.pref_value,' . $scm . ') AS chargeMax, IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0) AS freeCapacity');
+			$q->addWhere("up.pref_name = 'TASKASSIGNMAX'");
+			$q->addQuery('u.user_id, CONCAT(CONCAT_WS(\' [\', CONCAT_WS(\' \', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0)), \'%]\') AS userFC, IFNULL(SUM(ut.perc_assignment), 0) AS charge');
+			$q->addQuery('u.user_username, IFNULL(up.pref_value,' . $scm . ') AS chargeMax');
+			$q->addQuery('IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0) AS freeCapacity');
+
 			if (!empty($users)) { // use userlist if available otherwise pull data for all users
 				$q->addWhere('u.user_id IN (' . implode(',', $users) . ')');
 			}
@@ -1659,7 +1664,6 @@ class CTask extends CW2pObject {
 			}
 			$hash = $q->loadHashList($hash);
 			$q->clear();
-			//echo "<pre>$sql</pre>";
 		}
 		return $hash;
 	}
