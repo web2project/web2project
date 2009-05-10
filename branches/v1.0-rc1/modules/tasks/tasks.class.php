@@ -1603,6 +1603,13 @@ class CTask extends CW2pObject {
 	 *	@return array		 returns hashList of extent of utilization for assignment of the users
 	 */
 	function getAllocation($hash = null, $users = null, $get_user_list = false) {
+		/*
+		 * TODO: The core of this function has been simplified to always return 100%
+		 * free capacity available.  The allocation checking (aka resource
+		 * management) is a complex subject which is currently not even close to be
+		 * handled properly.
+		 */
+
 		global $AppUI;
 
 		if (!w2PgetConfig('check_overallocation')) {
@@ -1640,7 +1647,7 @@ class CTask extends CW2pObject {
 			$q->addWhere("up.pref_name = 'TASKASSIGNMAX'");
 			$q->addQuery('u.user_id, CONCAT(CONCAT_WS(\' [\', CONCAT_WS(\' \', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0)), \'%]\') AS userFC, IFNULL(SUM(ut.perc_assignment), 0) AS charge');
 			$q->addQuery('u.user_username, IFNULL(up.pref_value,' . $scm . ') AS chargeMax');
-			$q->addQuery('IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0) AS freeCapacity');
+			$q->addQuery('IFNULL(up.pref_value, ' . $scm . ') AS freeCapacity');
 
 			if (!empty($users)) { // use userlist if available otherwise pull data for all users
 				$q->addWhere('u.user_id IN (' . implode(',', $users) . ')');
@@ -1662,6 +1669,7 @@ class CTask extends CW2pObject {
 			if ($depts) {
 				$q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
 			}
+
 			$hash = $q->loadHashList($hash);
 			$q->clear();
 		}
