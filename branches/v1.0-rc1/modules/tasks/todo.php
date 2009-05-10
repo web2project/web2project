@@ -126,6 +126,9 @@ $q->leftJoin('departments', 'departments', 'departments.dept_id = project_depart
 $q->addWhere('ut.task_id = ta.task_id');
 $q->addWhere('ut.user_id = ' . (int)$user_id);
 $q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
+
+$myDate = date('Y-m-d H:i:s', strtotime($date));
+$q->addWhere("(ta.task_start_date <= '$myDate' AND ta.task_end_date >= '$myDate')");
 $q->addWhere('ta.task_status = 0');
 $q->addWhere('pr.project_id = ta.task_project');
 if (!$showArcProjs) {
@@ -165,7 +168,6 @@ $q->addGroup('ta.task_id');
 $q->addOrder('ta.task_end_date');
 $q->addOrder('task_priority DESC');
 
-//echo "<pre>$sql</pre>";
 global $tasks;
 $tasks = $q->loadList();
 $q->clear();
