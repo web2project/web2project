@@ -22,7 +22,8 @@ global $task_type;
 $task_type = $AppUI->getState('ToDoTaskType') !== null ? $AppUI->getState('ToDoTaskType') : '';
 
 $project_id = intval(w2PgetParam($_GET, 'project_id', 0));
-$date = (!w2PgetParam($_GET, 'date', '') == '') ? $this_day->format(FMT_TIMESTAMP_DATE) : intval(w2PgetParam($_GET, 'date', ''));
+$date = (intval(w2PgetParam($_GET, 'date', '')) > 0) ? $this_day->format(FMT_TIMESTAMP_DATE) : date('Y-m-d');
+
 $user_id = $AppUI->user_id;
 $no_modify = false;
 $other_users = false;
