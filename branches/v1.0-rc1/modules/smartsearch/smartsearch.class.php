@@ -23,17 +23,6 @@ class smartsearch {
 	var $tmppattern = '';
 	var $display_val = '';
 	var $search_options = null;
-	//	$search_options['display_all_flds']=='on'		display all fields
-	//	$search_options['display_all_flds']==''		display only first 2 fields from display_fields array
-	//	$search_opts['keywords']==array() 			array of searched keywords
-	//	$search_options['ignore_specchar']=='on'	enable  ignoring special eastern national characters / czech and slovak /
-	//	$search_options['ignore_specchar']==''		disable ignoring  special eastern national characters / czech and slovak /
-	//	$search_options['ignore_case']==''			match case
-	//	$search_options['ignore_case']=='on'		ignore case 	/default/
-	//	$search_options['show_empty']==''			hide modules with empty results	/default/
-	//	$search_options['show_empty']=='on'			show modules with empty results
-	//	$search_options['all_words']==''			any of the words	/default/
-	//	$search_options['all_words']=='on'			match all words
 
 	function smartsearch() {
 		return null;
