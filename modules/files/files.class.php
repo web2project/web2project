@@ -484,10 +484,11 @@ class CFile extends CW2pObject {
 		$this->_query->addQuery('task_name');
 		$this->_query->addWhere('task_id = ' . (int)$this->file_task);
 		if ($qid = &$this->_query->exec()) {
-			if ($qid->fields['task_name'])
+			if ($qid->fields['task_name']) {
 				$taskname = $qid->fields['task_name'];
-			else
+			} else {
 				$taskname = $qid->fields[0];
+			}
 		}
 		$this->_query->clear();
 		return $taskname;

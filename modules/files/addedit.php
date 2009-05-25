@@ -175,7 +175,7 @@ function setTask( key, val ) {
 	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />
 <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 <tr>
-	<td width="100%" valign="top" align="center">
+	<td width="80%" valign="top" align="center">
 		<table cellspacing="1" cellpadding="2" width="60%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder'); ?>:</td>
@@ -248,7 +248,13 @@ $custom_fields->printHTML();
 		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>'; }" />
 	</td>
 	<td align="right">
-		<input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+		<?php
+		if (substr(sprintf('%o', fileperms(W2P_BASE_DIR.'/files')), -4) == '0777') {
+			?><input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /><?php
+		} else {
+			?><span class="error">File uploads not allowed. Please check permissions on the /files directory.</span><?php
+		}
+		?>
 	</td>
 </tr>
 </form>

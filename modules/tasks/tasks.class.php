@@ -570,6 +570,8 @@ class CTask extends CW2pObject {
 				$this->task_end_date = '0000-00-00 00:00:00';
 			}
 			$ret = $q->insertObject('tasks', $this, 'task_id');
+			$this->task_id = db_insert_id(); 
+
 			$q->clear();
 			addHistory('tasks', $this->task_id, 'add', $this->task_name, $this->task_project);
 
@@ -584,6 +586,7 @@ class CTask extends CW2pObject {
 				$importing_tasks = true;
 			}
 		}
+		$this->pushDependencies($this->task_id, $this->task_end_date);
 
 		//split out related departments and store them seperatly.
 		$q->setDelete('task_departments');
@@ -752,7 +755,7 @@ class CTask extends CW2pObject {
 
 		$q = new DBQuery;
 		$q->addQuery('td.dependencies_task_id, t.task_start_date');
-		$q->addQuery('t.task_end_date, t.task_duration, t.task_duration_type');
+		$q->addQuery('t.task_end_date, t.task_duration, t.task_duration_type, t.task_parent');
 		$q->addTable('task_dependencies', 'td');
 		$q->leftJoin('tasks', 't', 't.task_id = td.dependencies_task_id');
 		$q->addWhere('td.dependencies_req_task_id = ' . (int) $taskId);
@@ -797,8 +800,10 @@ class CTask extends CW2pObject {
 			$q->exec();
 /** END: nasty task update code - very similar to lines 192 in do_task_aed.php **/
 
+			$this->load($nextTask['task_parent']);
+			$this->updateDynamics(true);
 			$this->pushDependencies($nextTask['dependencies_task_id'], $task_end_date);
-		} 
+		}
 	}
 
 	/**
@@ -1486,7 +1491,7 @@ class CTask extends CW2pObject {
 	//using user allocation percentage ($perc_assign)
 	// @return returns the Names of the over-assigned users (if any), otherwise false
 	function updateAssigned($cslist, $perc_assign, $del = true, $rmUsers = false) {
-		$q = &new DBQuery;
+		$q = new DBQuery;
 
 		// process assignees
 		$tarr = explode(',', $cslist);
@@ -1600,7 +1605,15 @@ class CTask extends CW2pObject {
 	 *	@return array		 returns hashList of extent of utilization for assignment of the users
 	 */
 	function getAllocation($hash = null, $users = null, $get_user_list = false) {
+		/*
+		 * TODO: The core of this function has been simplified to always return 100%
+		 * free capacity available.  The allocation checking (aka resource
+		 * management) is a complex subject which is currently not even close to be
+		 * handled properly.
+		 */
+
 		global $AppUI;
+
 		if (!w2PgetConfig('check_overallocation')) {
 			if ($get_user_list) {
 				$users_list = w2PgetUsersHashList();
@@ -1612,7 +1625,7 @@ class CTask extends CW2pObject {
 				$hash = array();
 			}
 		} else {
-			$q = &new DBQuery;
+			$q = new DBQuery;
 			// retrieve the systemwide default preference for the assignment maximum
 			$q->addTable('user_preferences');
 			$q->addQuery('pref_value');
@@ -1624,7 +1637,7 @@ class CTask extends CW2pObject {
 			} else {
 				$scm = $sysChargeMax['pref_value'];
 			}
-	
+
 			/*
 			* provide actual assignment charge, individual chargeMax 
 			* and freeCapacity of users' assignments to tasks
@@ -1633,7 +1646,11 @@ class CTask extends CW2pObject {
 			$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
 			$q->leftJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 			$q->leftJoin('user_preferences', 'up', 'up.pref_user = u.user_id');
-			$q->addQuery('u.user_id, CONCAT(CONCAT_WS(\' [\', CONCAT_WS(\' \', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0)), \'%]\') AS userFC, IFNULL(SUM(ut.perc_assignment), 0) AS charge, u.user_username, IFNULL(up.pref_value,' . $scm . ') AS chargeMax, IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0) AS freeCapacity');
+			$q->addWhere("up.pref_name = 'TASKASSIGNMAX'");
+			$q->addQuery('u.user_id, CONCAT(CONCAT_WS(\' [\', CONCAT_WS(\' \', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0)), \'%]\') AS userFC, IFNULL(SUM(ut.perc_assignment), 0) AS charge');
+			$q->addQuery('u.user_username, IFNULL(up.pref_value,' . $scm . ') AS chargeMax');
+			$q->addQuery('IFNULL(up.pref_value, ' . $scm . ') AS freeCapacity');
+
 			if (!empty($users)) { // use userlist if available otherwise pull data for all users
 				$q->addWhere('u.user_id IN (' . implode(',', $users) . ')');
 			}
@@ -1654,9 +1671,9 @@ class CTask extends CW2pObject {
 			if ($depts) {
 				$q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
 			}
+
 			$hash = $q->loadHashList($hash);
 			$q->clear();
-			//echo "<pre>$sql</pre>";
 		}
 		return $hash;
 	}
@@ -2059,7 +2076,7 @@ class CTask extends CW2pObject {
 		return $assigned;
 	}
 
-	public function calendar_hook($userId) {
+	public function hook_calendar($userId) {
 		/*
 		 * This list of fields - id, name, description, startDate, endDate,
 		 * updatedDate - are named specifically for the iCal creation.
@@ -2537,4 +2554,3 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	}
 	echo $s;
 }
-?>

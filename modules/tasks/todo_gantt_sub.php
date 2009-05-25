@@ -13,21 +13,13 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 <input type="hidden" name="show_form" value="1" />
 <tr>
 	<td width="50%">
-	<?php
-if ($other_users) {
-	echo $AppUI->_('Show Todo for:') . '<select name="show_user_todo" class="text" onchange="document.form_buttons.submit()">';
-	if (($rows = w2PgetUsersList())) {
-		foreach ($rows as $row) {
-			if ($user_id == $row['user_id']) {
-				echo '<option value="' . $row['user_id'] . '" selected="selected">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
-			} else {
-				echo '<option value="' . $row['user_id'] . '">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
+		<?php
+			if ($other_users) {
+				$selectedUser = w2PgetParam($_POST, 'show_user_todo', $AppUI->user_id);
+				$users = $perms->getPermittedUsers('tasks');
+				echo arraySelect($users, 'show_user_todo', 'class="text" onchange="document.form_buttons.submit()"', $selectedUser);
 			}
-		}
-	}
-}
-?>
-		</select>
+		?>
 	</td>
 </tr>
 </form>

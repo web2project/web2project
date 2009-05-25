@@ -48,7 +48,7 @@
 		<?php		
 		die();
 	}
-	
+
 	$dbMsg = 'Not Created';
 	$cFileMsg = 'Not Created';
 	$dbErr = false;
@@ -56,18 +56,6 @@
 	$errorMessages = array();
 
 	if (($do_db || $do_db_cfg)) {
-/*
-		TODO: Do we need to worry about creating the database or just allow the user to handle it?
-		if (! $existing_db) {
-			w2pmsg('Creating new Database');
-			$db->Execute('CREATE DATABASE '.$dbname);
-			$dbError = $db->ErrorNo();
-			if ($dbError <> 0 && $dbError <> 1007) {
-				$dbErr = true;
-				$dbMsg .= 'A Database Error occurred. Database has not been created! The provided database details are probably not correct.<br>'.$db->ErrorMsg().'<br>';
-			}
-		}
-*/
 		$errorMessages = $manager->upgradeSystem();
 		if (count($errorMessages) == 0) {
 			$dbMsg = 'Created';
