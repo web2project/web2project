@@ -755,7 +755,7 @@ class CTask extends CW2pObject {
 
 		$q = new DBQuery;
 		$q->addQuery('td.dependencies_task_id, t.task_start_date');
-		$q->addQuery('t.task_end_date, t.task_duration, t.task_duration_type');
+		$q->addQuery('t.task_end_date, t.task_duration, t.task_duration_type, t.task_parent');
 		$q->addTable('task_dependencies', 'td');
 		$q->leftJoin('tasks', 't', 't.task_id = td.dependencies_task_id');
 		$q->addWhere('td.dependencies_req_task_id = ' . (int) $taskId);
@@ -800,8 +800,10 @@ class CTask extends CW2pObject {
 			$q->exec();
 /** END: nasty task update code - very similar to lines 192 in do_task_aed.php **/
 
+			$this->load($nextTask['task_parent']);
+			$this->updateDynamics(true);
 			$this->pushDependencies($nextTask['dependencies_task_id'], $task_end_date);
-		} 
+		}
 	}
 
 	/**
