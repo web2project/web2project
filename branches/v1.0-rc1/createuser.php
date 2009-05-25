@@ -81,11 +81,10 @@ function submitIt(){
 						echo '<strong>' . $user["user_username"] . '</strong>';
 					} else {
 						echo '<input type="text" class="text" name="user_username" value="' . $user['user_username'] . '" maxlength="255" size="40" />';
-						//	echo ' <span class="smallNorm">(' . $AppUI->_('required') . ')</span>';
 					}
 				?>
 			</td>
-			<td class="right-brdr"><img src="/style/default/images/spacer.gif" width="1" height="1" /></td>
+			<td class="right-brdr"><img src="./style/web2project/images/shim.gif" width="1" height="1" /></td>
 		</tr>
 		<tr>
 		  <td align="right">* <?php echo $AppUI->_('Password'); ?>:</td>
