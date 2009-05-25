@@ -117,7 +117,6 @@ if (($msg = $contact->store())) {
 	} else {
 		if ($isNewUser) {
 			notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password']);
-			$w2p
 		}
 		notifyHR('hr@yourdomain.com', 'w2P System Human Resources', $contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password'], $user->user_id);
 
