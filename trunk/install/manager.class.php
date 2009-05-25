@@ -181,11 +181,12 @@
 		}
 		public function testDatabaseCredentials($w2Pconfig) {
 			$result = false;
-			
+
 			$this->_setConfigOptions($w2Pconfig);
 
 			$dbConn = $this->_openDBConnection();
-			if ($dbConn) {
+
+			if (!$dbConn) {
 				$result = true;
 			}
 
@@ -285,6 +286,7 @@
 			} catch (Exception $exc) {
 				echo 'Your database credentials do not work.';
 			}
+
 			return $db;
 		}
 		private function _scrubDotProjectData($dbConn) {			

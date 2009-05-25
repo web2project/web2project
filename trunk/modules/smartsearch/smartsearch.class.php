@@ -23,17 +23,6 @@ class smartsearch {
 	var $tmppattern = '';
 	var $display_val = '';
 	var $search_options = null;
-	//	$search_options['display_all_flds']=='on'		display all fields
-	//	$search_options['display_all_flds']==''		display only first 2 fields from display_fields array
-	//	$search_opts['keywords']==array() 			array of searched keywords
-	//	$search_options['ignore_specchar']=='on'	enable  ignoring special eastern national characters / czech and slovak /
-	//	$search_options['ignore_specchar']==''		disable ignoring  special eastern national characters / czech and slovak /
-	//	$search_options['ignore_case']==''			match case
-	//	$search_options['ignore_case']=='on'		ignore case 	/default/
-	//	$search_options['show_empty']==''			hide modules with empty results	/default/
-	//	$search_options['show_empty']=='on'			show modules with empty results
-	//	$search_options['all_words']==''			any of the words	/default/
-	//	$search_options['all_words']=='on'			match all words
 
 	function smartsearch() {
 		return null;
@@ -207,51 +196,51 @@ function recode2regexp_utf8($input) {
 		switch ($input[$i]) {
 			case 'A':
 			case 'a':
-				$result .= '(a|A!|A¤|A?|A„)';
+				$result .= '(a|A!|Aï¿½|A?|Aï¿½)';
 				break;
 			case 'C':
 			case 'c':
-				$result .= '(c|Ä?|ÄO)';
+				$result .= '(c|ï¿½?|ï¿½O)';
 				break;
 			case 'D':
 			case 'd':
-				$result .= '(d|Ä?|ÄŽ)';
+				$result .= '(d|ï¿½?|ÄŽ)';
 				break;
 			case 'E':
 			case 'e':
-				$result .= '(e|A©|Ä›|A‰|Äš)';
+				$result .= '(e|Aï¿½|Ä›|Aï¿½|Äš)';
 				break;
 			case 'I':
 			case 'i':
-				$result .= '(i|A­|A?)';
+				$result .= '(i|Aï¿½|A?)';
 				break;
 			case 'L':
 			case 'l':
-				$result .= '(l|Äo|Ä3|Ä1|Ä1)';
+				$result .= '(l|ï¿½o|ï¿½3|ï¿½1|ï¿½1)';
 				break;
 			case 'N':
 			case 'n':
-				$result .= '(n|A^|A‡)';
+				$result .= '(n|A^|Aï¿½)';
 				break;
 			case 'O':
 			case 'o':
-				$result .= '(o|A3|A´|A“|A”)';
+				$result .= '(o|A3|Aï¿½|Aï¿½|Aï¿½)';
 				break;
 			case 'R':
 			case 'r':
-				$result .= '(r|A•|A™|A”|A~)';
+				$result .= '(r|Aï¿½|Aï¿½|Aï¿½|A~)';
 				break;
 			case 'S':
 			case 's':
-				$result .= '(s|A!|A )';
+				$result .= '(s|A!|Aï¿½)';
 				break;
 			case 'T':
 			case 't':
-				$result .= '(t|AY|A¤)';
+				$result .= '(t|AY|Aï¿½)';
 				break;
 			case 'U':
 			case 'u':
-				$result .= '(u|Ao|A—|Aš|A®)';
+				$result .= '(u|Ao|Aï¿½|Aï¿½|Aï¿½)';
 				break;
 			case 'Y':
 			case 'y':

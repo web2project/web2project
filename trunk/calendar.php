@@ -37,8 +37,8 @@
 		foreach ($moduleList as $module) {
 			include_once ($AppUI->getModuleClass($module['mod_directory']));
 			$object = new $module['mod_main_class']();
-			if (method_exists($object, 'calendar_hook')) {
-				$itemList = $object->calendar_hook($userId);
+			if (method_exists($object, 'hook_calendar')) {
+				$itemList = $object->hook_calendar($userId);
 				if (is_array($itemList)) {
 					foreach ($itemList as $calendarItem) {
 						$buffer .= w2piCal::formatCalendarItem($calendarItem, $myTimezoneOffset);

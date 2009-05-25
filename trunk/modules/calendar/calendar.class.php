@@ -954,7 +954,7 @@ class CEvent extends CW2pObject {
 
 	}
 	
-	public function calendar_hook($userId) {
+	public function hook_calendar($userId) {
 		return $this->getCalendarEvents($userId);
 	}
 	public function getCalendarEvents($userId, $days = 30) {

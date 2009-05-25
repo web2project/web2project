@@ -113,12 +113,14 @@ if ($sub_form) {
 
 	//format hperc_assign user_id=percentage_assignment;user_id=percentage_assignment;user_id=percentage_assignment;
 	$tmp_ar = explode(';', $hperc_assign);
+	$i_cmp = sizeof($tmp_ar);
+
 	$hperc_assign_ar = array();
-	for ($i = 0, $i_cmp = sizeof($tmp_ar); $i < $i_cmp; $i++) {
+	for ($i = 0; $i < $i_cmp; $i++) {
 		$tmp = explode('=', $tmp_ar[$i]);
 		if (count($tmp) > 1) {
 			$hperc_assign_ar[$tmp[0]] = $tmp[1];
-		} else {
+		} elseif ($tmp[0] != '') {
 			$hperc_assign_ar[$tmp[0]] = 100;
 		}
 	}
@@ -252,4 +254,3 @@ if ($sub_form) {
 	}
 
 } // end of if subform
-?>
