@@ -438,7 +438,7 @@ class CContact extends CW2pObject {
 		$q->addWhere("(TO_DAYS(NOW()) - TO_DAYS(contact_updateasked) >= $days_for_update)");
 		$q->exec();
 	}
-	public function cron_hook() {
+	public function hook_cron() {
 		$q = new DBQuery;
 		$q->addTable('contacts');
 		$q->addQuery('contact_id');

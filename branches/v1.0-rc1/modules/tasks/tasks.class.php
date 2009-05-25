@@ -2076,7 +2076,7 @@ class CTask extends CW2pObject {
 		return $assigned;
 	}
 
-	public function calendar_hook($userId) {
+	public function hook_calendar($userId) {
 		/*
 		 * This list of fields - id, name, description, startDate, endDate,
 		 * updatedDate - are named specifically for the iCal creation.
