@@ -81,18 +81,19 @@
 		</td>
 	</tr>
 	<tr>
+		<td class="title" colspan="2"><br />Check requirements for optional components</td>
+	</tr>
+	<tr>
 		<td class="item">Session Save Path writable?</td>
 		<td align="left">
 			<?php 
 				$sspath = ini_get('session.save_path');
 				if (! $sspath) {
 					echo '<b class="error">'.$failedImg.'</b> <span class="warning">session.save_path</span> <b class="error">is not set</b>';
-					$continue = false;
 				} else if (is_dir($sspath) && is_writable($sspath)) {
 					echo "<b class='ok'>$okImg</b> <span class='item'>($sspath)</span>";
 				} else {
 					echo '<b class="error">'.$failedImg.'</b> <span class="warning">'.$sspath.'</span><b class="error"> not existing or not writable</b>';
-					$continue = false;
 				}
 			?>
 		</td>
