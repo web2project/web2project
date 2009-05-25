@@ -59,10 +59,10 @@ include $AppUI->getModuleClass('contacts');
 $username = w2PgetParam($_POST, 'user_username', 0);
 $contactListByUsername = CContact::getContactByUsername($username);
 
-if (count($contactListByUsername) > 0) {
+if ($contactListByUsername != 'User Not Found') {
 	error_reporting(0);
 	echo "<script language='javascript'>
-          alert('The user name you selected already exists, please select another or if that user name is yours request the password recovery through the dedicated link.');
+          alert('The username you selected already exists, please select another or if that user name is yours request the password recovery through the dedicated link.');
           history.go(-2);
         </script>";
 	die();
@@ -71,7 +71,7 @@ if (count($contactListByUsername) > 0) {
 $email = w2PgetParam($_POST, 'contact_email', 0);
 $contactListByEmail = CContact::getContactByEmail($email);
 
-if (count($contactListByEmail) > 0) {
+if ($contactListByEmail != 'User Not Found') {
 	error_reporting(0);
 	echo "<script language='javascript'>
           alert('The email you selected already exists, please select another or if that email is yours request the password recovery through the dedicated link.');
