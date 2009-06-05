@@ -470,6 +470,7 @@ class CProject extends CW2pObject {
 
 		$this->w2PTrimAll();
 
+		$this->project_target_budget = str_replace(',', '', $this->project_target_budget);
 		$msg = $this->check();
 		if ($msg) {
 			return get_class($this) . '::store-check failed - ' . $msg;
