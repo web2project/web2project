@@ -128,7 +128,10 @@
 		</tr>
 	<?php } ?>
 	<tr>
-		<td class="item" align="center" colspan="2"><br/><b><a href="../index.php?m=system&amp;a=systemconfig">Login and Check the web2project System Environment</a></b></td>
+		<td class="item" align="center" colspan="2">
+			<?php if ($cFileErr) { ?><b style="color: red;">You MUST manually create ./includes/config.php before continuing.</b><br /><?php } ?>
+			<b><a href="../index.php?m=system&amp;a=systemconfig">Login and Check the web2project System Environment</a></b>
+		</td>
 	</tr>
 	<tr>
 		<td class="item" align="center" colspan="2">
