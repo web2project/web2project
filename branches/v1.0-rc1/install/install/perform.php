@@ -37,7 +37,7 @@
 		<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
 			<tr>
 			  <td colspan="2" align="center">
-			  	<b class="error">Your database credentials failed.  System installation has stopped.  Please check them and try again.</b><br /><br />
+			  	<b class="error">Your database credentials failed.  System installation has stopped.  Please correct them and try again.</b><br /><br />
 				  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form">
 			  		<input type="hidden" name="step" value="dbcreds" />
 			  		<input class="button" type="submit" name="next" value="Reset System Credentials &raquo;" />
