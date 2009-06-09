@@ -291,7 +291,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
 			<td>
-				<input type="Text" name="project_target_budget" value="<?php echo $project->project_target_budget; ?>" maxlength="10" class="text" />
+				<input type="Text" name="project_target_budget" value="<?php echo $project->project_target_budget; ?>" maxlength="15" class="text" />
 			</td>
 		</tr>
 		<tr>

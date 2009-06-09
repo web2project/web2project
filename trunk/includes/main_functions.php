@@ -336,8 +336,10 @@ function w2PfindImage($name, $module = null) {
 		return './style/' . w2PgetConfig('host_style') . '/images/icons/' . $name;
 	} elseif (file_exists(W2P_BASE_DIR . '/style/' . w2PgetConfig('host_style') . '/images/obj/' . $name)) {
 		return './style/' . w2PgetConfig('host_style') . '/images/obj/' . $name;
+	} elseif (file_exists(W2P_BASE_DIR . '/style/web2project/images/obj/' . $name)) {
+		return './style/web2project/images/obj/' . $name;
 	} else {
-		return './style/' . w2PgetConfig('host_style') . '/images/' . $name;
+		return './style/web2project/images/' . $name;
 	}
 }
 

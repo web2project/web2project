@@ -69,6 +69,7 @@
 			//TODO: add support for database prefixes
 
 			$dbConn = $this->_openDBConnection();
+
 			if ($dbConn) {
 				$sql = "SELECT max(db_version) FROM w2pversion";
 				$res = $dbConn->Execute($sql);
@@ -185,8 +186,7 @@
 			$this->_setConfigOptions($w2Pconfig);
 
 			$dbConn = $this->_openDBConnection();
-
-			if (!$dbConn) {
+			if ($dbConn->_errorMsg == '') {
 				$result = true;
 			}
 
@@ -286,7 +286,6 @@
 			} catch (Exception $exc) {
 				echo 'Your database credentials do not work.';
 			}
-
 			return $db;
 		}
 		private function _scrubDotProjectData($dbConn) {			
