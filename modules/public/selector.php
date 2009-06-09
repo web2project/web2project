@@ -44,8 +44,6 @@ switch ($table) {
 		// known issue: does not filter out denied companies
 		$title = 'Department';
 		$company_id = w2PgetParam($_GET, 'company_id', 0);
-		//$ok &= $company_id;  // Is it safe to delete this line ??? [kobudo 13 Feb 2003]
-		//$where = selPermWhere( 'companies', 'company_id' );
 		$obj = &new CDepartment;
 		$q->addWhere(selPermWhere($obj, 'dept_id', 'dept_name'));
 		$q->addWhere('dept_company = company_id ');
@@ -106,7 +104,9 @@ switch ($table) {
 		$q->addQuery('task_id, task_name, task_parent');
 		$q->addOrder('task_parent, task_parent = task_id desc');
 		if ($task_project)
+		{
 			$q->addWhere('task_project = ' . (int)$task_project);
+		}
 		$task_list = $q->loadList();
 		$level = 0;
 		$query_result = array();
@@ -123,7 +123,6 @@ switch ($table) {
 			}
 			$query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
 		}
-		$resultList = $q->loadHashList();
 		break;
 	case 'users':
 		$title = 'User';

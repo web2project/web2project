@@ -296,7 +296,7 @@ class CTask extends CW2pObject {
 
 		if ($modified_task->task_dynamic == '1') {
 			//Update allocated hours based on children with duration type of 'hours'
-			$q->addTable($this->_tbl);
+			$q->addTable('tasks');
 			$q->addQuery('SUM(task_duration * task_duration_type)');
 			$q->addWhere('task_parent = ' . (int)$modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type = 1 ');
 			$q->addGroup('task_parent');
@@ -308,7 +308,7 @@ class CTask extends CW2pObject {
 			* use the daily working hours instead of the full 24 hours to calculate 
 			* dynamic task duration!
 			*/
-			$q->addTable($this->_tbl);
+			$q->addTable('tasks');
 			$q->addQuery(' SUM(task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
 			$q->addWhere('task_parent = ' . (int)$modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type <> 1 ');
 			$q->addGroup('task_parent');
@@ -752,7 +752,6 @@ class CTask extends CW2pObject {
 	}
 	
 	public function pushDependencies($taskId, $lastEndDate) {
-
 		$q = new DBQuery;
 		$q->addQuery('td.dependencies_task_id, t.task_start_date');
 		$q->addQuery('t.task_end_date, t.task_duration, t.task_duration_type, t.task_parent');
@@ -764,6 +763,8 @@ class CTask extends CW2pObject {
 		$q->addOrder('t.task_start_date');
 
 		$cascadingTasks = $q->loadList();
+		$q->clear();
+
 		foreach ($cascadingTasks as $nextTask) {
 /** BEGIN: nasty task update code - very similar to lines 192 in do_task_aed.php **/
 			$tsd = new CDate($nextTask['task_start_date']);
@@ -798,10 +799,9 @@ class CTask extends CW2pObject {
 			$q->addUpdate('task_end_date', $task_end_date);
 			$q->addWhere('task_id = ' . $nextTask['dependencies_task_id']);
 			$q->exec();
+			$q->clear();
 /** END: nasty task update code - very similar to lines 192 in do_task_aed.php **/
 
-			$this->load($nextTask['task_parent']);
-			$this->updateDynamics(true);
 			$this->pushDependencies($nextTask['dependencies_task_id'], $task_end_date);
 		}
 	}

@@ -3,7 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id, $w2Pconfig;
+global $caller, $locale_char_set, $showWork, $sortByName, $showLabels;
+global $gantt_arr, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks;
+global $showLowTasks, $user_id, $w2Pconfig;
 
 w2PsetExecutionConditions($w2Pconfig);
 
@@ -24,7 +26,7 @@ $project = new CProject;
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 
 // pull valid projects and their percent complete information
-$projects = $project->getAllowedProjects($AppUI->user_id);
+$projects = $project->getAllowedProjects($AppUI->user_id, false);
 
 ##############################################
 /* gantt is called now by the todo page, too.
@@ -95,7 +97,7 @@ if ($caller == 'todo') {
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_name, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
-	$q->addWhere('project_active = 1');
+	//$q->addWhere('project_active = 1');
 
 	if ($sortByName) {
 		$q->addOrder('project_id, t.task_name, task_start_date');
@@ -585,4 +587,3 @@ if (is_file(TTF_DIR . 'FreeSans.ttf')) {
 }
 $graph->Add($vline);
 $graph->Stroke();
-?>

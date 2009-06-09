@@ -37,7 +37,7 @@
 		<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
 			<tr>
 			  <td colspan="2" align="center">
-			  	<b class="error">Your database credentials failed.  System installation has stopped.  Please check them and try again.</b><br /><br />
+			  	<b class="error">Your database credentials failed.  System installation has stopped.  Please correct them and try again.</b><br /><br />
 				  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form">
 			  		<input type="hidden" name="step" value="dbcreds" />
 			  		<input class="button" type="submit" name="next" value="Reset System Credentials &raquo;" />
@@ -128,7 +128,10 @@
 		</tr>
 	<?php } ?>
 	<tr>
-		<td class="item" align="center" colspan="2"><br/><b><a href="../index.php?m=system&amp;a=systemconfig">Login and Check the web2project System Environment</a></b></td>
+		<td class="item" align="center" colspan="2">
+			<?php if ($cFileErr) { ?><b style="color: red;">You MUST manually create ./includes/config.php before continuing.</b><br /><?php } ?>
+			<b><a href="../index.php?m=system&amp;a=systemconfig">Login and Check the web2project System Environment</a></b>
+		</td>
 	</tr>
 	<tr>
 		<td class="item" align="center" colspan="2">
