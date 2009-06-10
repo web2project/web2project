@@ -21,65 +21,65 @@ class CMonthCalendar {
 	/**#@+
 	* @var Date
 	*/
-	var $this_month;
-	var $prev_month;
-	var $next_month;
-	var $prev_year;
-	var $next_year;
+	public $this_month;
+	public $prev_month;
+	public $next_month;
+	public $prev_year;
+	public $next_year;
 	/**#@-*/
 
 	/**
  	@var string The css style name of the Title */
-	var $styleTitle;
+	public $styleTitle;
 
 	/**
  	@var string The css style name of the main calendar */
-	var $styleMain;
+	public $styleMain;
 
 	/**
  	@var string The name of the javascript function that a 'day' link should call when clicked */
-	var $callback;
+	public $callback;
 
 	/**
  	@var boolean Show the heading */
-	var $showHeader;
+	public $showHeader;
 
 	/**
  	@var boolean Show the previous/next month arrows */
-	var $showArrows;
+	public $showArrows;
 
 	/**
  	@var boolean Show the day name column headings */
-	var $showDays;
+	public $showDays;
 
 	/**
  	@var boolean Show the week link (no pun intended) in the first column */
-	var $showWeek;
+	public $showWeek;
 
 	/**
  	@var boolean Show the month name as link */
-	var $clickMonth;
+	public $clickMonth;
 
 	/**
  	@var boolean Show events in the calendar boxes */
-	var $showEvents;
+	public $showEvents;
 
 	/**
  	@var string */
-	var $dayFunc;
+	public $dayFunc;
 
 	/**
  	@var string */
-	var $weekFunc;
+	public $weekFunc;
 
 	/**
  	@var boolean Show highlighting in the calendar boxes */
-	var $showHighlightedDays;
+	public $showHighlightedDays;
 
 	/**
 	 * @param Date $date
 	 */
-	function CMonthCalendar($date = null) {
+	public function CMonthCalendar($date = null) {
 		$this->setDate($date);
 
 		$this->classes = array();
@@ -110,7 +110,7 @@ class CMonthCalendar {
 	 *
 	 * @param [type] $date
 	 */
-	function setDate($date = null) {
+	public function setDate($date = null) {
 		$this->this_month = new CDate($date);
 
 		$d = $this->this_month->getDay();
@@ -142,7 +142,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	function setStyles($title, $main) {
+	public function setStyles($title, $main) {
 		$this->styleTitle = $title;
 		$this->styleMain = $main;
 	}
@@ -155,7 +155,7 @@ class CMonthCalendar {
 	 * @param string $day
 	 * @param string $week
 	 */
-	function setLinkFunctions($day = '', $week = '') {
+	public function setLinkFunctions($day = '', $week = '') {
 		$this->dayFunc = $day;
 		$this->weekFunc = $week;
 	}
@@ -166,7 +166,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	function setCallback($function) {
+	public function setCallback($function) {
 		$this->callback = $function;
 	}
 
@@ -176,7 +176,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	function setEvents($e) {
+	public function setEvents($e) {
 		$this->events = $e;
 	}
 
@@ -187,7 +187,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	function setHighlightedDays($hd) {
+	public function setHighlightedDays($hd) {
 		$this->highlightedDays = $hd;
 	}
 
@@ -198,7 +198,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	function show() {
+	public function show() {
 		$s = '';
 		if ($this->showTitle) {
 			$s .= $this->_drawTitle();
@@ -222,7 +222,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	function _drawTitle() {
+	public function _drawTitle() {
 		global $AppUI, $m, $a, $locale_char_set;
 		$url = 'index.php?m=' . $m;
 		$url .= $a ? '&amp;a=' . $a : '';
@@ -267,7 +267,7 @@ class CMonthCalendar {
 	 *
 	 * @return string Returns table a row with the day names
 	 */
-	function _drawDays() {
+	public function _drawDays() {
 		global $AppUI, $locale_char_set;
 
 		setlocale(LC_TIME, 'en');
@@ -288,7 +288,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	function _drawMain() {
+	public function _drawMain() {
 		global $AppUI;
 		$today = new CDate();
 		$today = $today->format('%Y%m%d%w');
@@ -387,7 +387,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	function _drawWeek($dateObj) {
+	public function _drawWeek($dateObj) {
 		$href = "javascript:$this->weekFunc(" . $dateObj->getTimestamp() . ',\'' . $dateObj->toString() . '\')';
 		$w = '        <td class="week">';
 		$w .= $this->dayFunc ? '<a href="' . $href . '">' : '';
@@ -403,7 +403,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	function _drawEvents($day) {
+	public function _drawEvents($day) {
 		$s = '';
 		if (!isset($this->events[$day]) || $this->styleMain == 'minical') {
 			return '';
@@ -431,33 +431,33 @@ class CMonthCalendar {
 class CEvent extends CW2pObject {
 	/**
  	@var int */
-	var $event_id = null;
+	public $event_id = null;
 
 	/**
  	@var string The title of the event */
-	var $event_title = null;
+	public $event_title = null;
 
-	var $event_start_date = null;
-	var $event_end_date = null;
-	var $event_parent = null;
-	var $event_description = null;
-	var $event_times_recuring = null;
-	var $event_recurs = null;
-	var $event_remind = null;
-	var $event_icon = null;
-	var $event_owner = null;
-	var $event_project = null;
-	var $event_private = null;
-	var $event_type = null;
-	var $event_notify = null;
-	var $event_cwd = null;
+	public $event_start_date = null;
+	public $event_end_date = null;
+	public $event_parent = null;
+	public $event_description = null;
+	public $event_times_recuring = null;
+	public $event_recurs = null;
+	public $event_remind = null;
+	public $event_icon = null;
+	public $event_owner = null;
+	public $event_project = null;
+	public $event_private = null;
+	public $event_type = null;
+	public $event_notify = null;
+	public $event_cwd = null;
 
-	function CEvent() {
+	public function CEvent() {
 		$this->CW2pObject('events', 'event_id');
 	}
 
 	// overload check operation
-	function check() {
+	public function check() {
 		// ensure changes to check boxes and select lists are honoured
 		$this->event_private = intval($this->event_private);
 		$this->event_type = intval($this->event_type);
@@ -484,7 +484,7 @@ class CEvent extends CW2pObject {
 	 *	@author gregorerhardt
 	 *	@return null|string null if successful otherwise returns and error message
 	 */
-	function delete() {
+	public function delete() {
 		global $AppUI;
 		// call default delete method first
 		$deleted = parent::delete($this->event_id);
@@ -513,7 +513,7 @@ class CEvent extends CW2pObject {
 	 * @param integer Time of Recurrence
 	 * @return array Calculated Start and End Dates for the recurrent Event for the given Period
 	 */
-	function getRecurrentEventforPeriod($start_date, $end_date, $event_start_date, $event_end_date, $event_recurs, $event_times_recuring, $j) {
+	public function getRecurrentEventforPeriod($start_date, $end_date, $event_start_date, $event_end_date, $event_recurs, $event_times_recuring, $j) {
 
 		//this array will be returned
 		$transferredEvent = array();
@@ -578,7 +578,7 @@ class CEvent extends CW2pObject {
 	 * @param Date End date of the period
 	 * @return array A list of events
 	 */
-	function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0) {
+	public function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0) {
 		global $AppUI;
 
 		// the event times are stored as unix time stamps, just to be different
@@ -704,7 +704,7 @@ class CEvent extends CW2pObject {
 		return $eventList;
 	}
 
-	function &getAssigned() {
+	public function &getAssigned() {
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('user_events', 'ue');
@@ -717,7 +717,7 @@ class CEvent extends CW2pObject {
 		return $assigned;
 	}
 
-	function updateAssigned($assigned) {
+	public function updateAssigned($assigned) {
 		// First remove the assigned from the user_events table
 		global $AppUI;
 		$q = new DBQuery;
@@ -744,7 +744,7 @@ class CEvent extends CW2pObject {
 		}
 	}
 
-	function notify($assignees, $update = false, $clash = false) {
+	public function notify($assignees, $update = false, $clash = false) {
 		global $AppUI, $locale_char_set, $w2Pconfig;
 		$mail_owner = $AppUI->getPref('MAILALL');
 		$assignee_list = explode(',', $assignees);
@@ -835,7 +835,7 @@ class CEvent extends CW2pObject {
 		}
 	}
 
-	function checkClash($userlist = null) {
+	public function checkClash($userlist = null) {
 		global $AppUI;
 		if (!isset($userlist)) {
 			return false;
@@ -893,7 +893,7 @@ class CEvent extends CW2pObject {
 
 	}
 
-	function getEventsInWindow($start_date, $end_date, $start_time, $end_time, $users = null) {
+	public function getEventsInWindow($start_date, $end_date, $start_time, $end_time, $users = null) {
 		global $AppUI;
 
 		if (!isset($users)) {
@@ -928,7 +928,7 @@ class CEvent extends CW2pObject {
 		return $eventlist;
 	}
 
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
 		require_once ($AppUI->getModuleClass('projects'));
 		$oPrj = new CProject();
