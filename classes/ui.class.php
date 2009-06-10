@@ -858,6 +858,7 @@ class CAppUI {
 		$q->addQuery('mod_directory, mod_main_class');
 		$q->addWhere('mod_active = 1');
 		$q->addWhere("mod_main_class <> ''");
+		$q->addOrder('mod_ui_order');
 		return $q->loadList();
 	}
 	public function getPermissionableModuleList() {
