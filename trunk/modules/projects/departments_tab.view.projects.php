@@ -47,8 +47,20 @@ $extraGet = '&user_id=' . $user_id;
 
 require_once ($AppUI->getModuleClass('projects'));
 
+
 // collect the full projects list data via function in projects.class.php
+/*
+ *  TODO:  This is a *nasty* *nasty* kludge that should be cleaned up.
+ * Unfortunately due to the global variables from dotProject, we're stuck with
+ * this mess for now.
+ * 
+ * My God have mercy on our souls for the atrocity we're about to commit.
+ */ 
+$tmpDepartments = $department;
+$department = 1; 
 projects_list_data($user_id);
+$department = $tmpDepartments;
+
 ?>
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
