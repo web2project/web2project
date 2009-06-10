@@ -20,42 +20,42 @@ require_once ($AppUI->getModuleClass('projects'));
 class CCompany extends CW2pObject {
 	/**
  	@var int Primary Key */
-	var $company_id = null;
+	public $company_id = null;
 	/**
  	@var string */
-	var $company_name = null;
+	public $company_name = null;
 
 	// these next fields should be ported to a generic address book
-	var $company_phone1 = null;
-	var $company_phone2 = null;
-	var $company_fax = null;
-	var $company_address1 = null;
-	var $company_address2 = null;
-	var $company_city = null;
-	var $company_state = null;
-	var $company_zip = null;
-	var $company_country = null;
-	var $company_email = null;
+	public $company_phone1 = null;
+	public $company_phone2 = null;
+	public $company_fax = null;
+	public $company_address1 = null;
+	public $company_address2 = null;
+	public $company_city = null;
+	public $company_state = null;
+	public $company_zip = null;
+	public $company_country = null;
+	public $company_email = null;
 	/**
  	@var string */
-	var $company_primary_url = null;
+	public $company_primary_url = null;
 	/**
  	@var int */
-	var $company_owner = null;
+	public $company_owner = null;
 	/**
  	@var string */
-	var $company_description = null;
+	public $company_description = null;
 	/**
  	@var int */
-	var $company_type = null;
-	var $company_custom = null;
+	public $company_type = null;
+	public $company_custom = null;
 
-	function CCompany() {
+	public function CCompany() {
 		$this->CW2pObject('companies', 'company_id');
 	}
 
 	// overload check
-	function check() {
+	public function check() {
 		if ($this->company_id === null) {
 			return 'company id is NULL';
 		}
@@ -65,7 +65,7 @@ class CCompany extends CW2pObject {
 	}
 
 	// overload canDelete
-	function canDelete(&$msg, $oid = null) {
+	public function canDelete(&$msg, $oid = null) {
 		$tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
 		$tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
 		$tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');
