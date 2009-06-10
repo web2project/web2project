@@ -65,7 +65,7 @@ class CContact extends CW2pObject {
 	
 	public $contact_methods = array();
 
-	function CContact() {
+	public function CContact() {
 		$this->CW2pObject('contacts', 'contact_id');
 	}
 
@@ -83,7 +83,7 @@ class CContact extends CW2pObject {
 		}
 	}
 	
-	function store() {
+	public function store() {
 		/*
 		 *  This  validates that any Contact saved will have a Display Name as
 		 * required by various dropdowns, etc throughout the system.  This is
@@ -108,7 +108,7 @@ class CContact extends CW2pObject {
 		parent::store();
 	}
 
-	function check() {
+	public function check() {
 		if ($this->contact_id === null) {
 			return 'contact id is NULL';
 		}
@@ -118,7 +118,7 @@ class CContact extends CW2pObject {
 		return null; // object is ok
 	}
 
-	function canDelete(&$msg, $oid = null, $joins = null) {
+	public function canDelete(&$msg, $oid = null, $joins = null) {
 		global $AppUI;
 		if ($oid) {
 			// Check to see if there is a user
@@ -135,7 +135,7 @@ class CContact extends CW2pObject {
 		return parent::canDelete($msg, $oid, $joins);
 	}
 
-	function isUser($oid = null) {
+	public function isUser($oid = null) {
 		global $AppUI;
 
 		if (!$oid) {
@@ -159,7 +159,7 @@ class CContact extends CW2pObject {
 		}
 	}
 
-	function is_alpha($val) {
+	public function is_alpha($val) {
 		// If the field consists solely of numerics, then we return it as an integer
 		// otherwise we return it as an alpha
 
@@ -170,7 +170,7 @@ class CContact extends CW2pObject {
 		return true;
 	}
 
-	function getCompanyID() {
+	public function getCompanyID() {
 		$q = new DBQuery;
 		$q->addTable('companies');
 		$q->addQuery('company_id');
@@ -179,7 +179,7 @@ class CContact extends CW2pObject {
 		return $q->loadResult();
 	}
 
-	function getCompanyName() {
+	public function getCompanyName() {
 		$q = new DBQuery;
 		$q->addTable('companies');
 		$q->addQuery('company_name');
@@ -188,7 +188,7 @@ class CContact extends CW2pObject {
 		return $q->loadResult();
 	}
 
-	function getCompanyDetails() {
+	public function getCompanyDetails() {
 		$result = array('company_id' => 0, 'company_name' => '');
 		if (!$this->contact_company) {
 			return $result;
@@ -206,7 +206,7 @@ class CContact extends CW2pObject {
 		return $q->loadHash();
 	}
 
-	function getDepartmentDetails() {
+	public function getDepartmentDetails() {
 		$result = array('dept_id' => 0, 'dept_name' => '');
 		if (!$this->contact_department) {
 			return $result;
@@ -238,7 +238,7 @@ class CContact extends CW2pObject {
 		$this->store();
 	}
 
-	function updateNotify() {
+	public function updateNotify() {
 		global $AppUI, $w2Pconfig, $locale_char_set;
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
@@ -282,7 +282,7 @@ class CContact extends CW2pObject {
 	 **	@see	w2PObject::getAllowedRecords
 	 **/
 
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
 		require_once ($AppUI->getModuleClass('companies'));
 		require_once ($AppUI->getModuleClass('departments'));
