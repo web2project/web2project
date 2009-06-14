@@ -203,10 +203,10 @@ if ($obj->task_owner != $AppUI->user_id) {
 		<?php echo $AppUI->_('Cost Code'); ?>
 	</td>
 	<td>
-<?php
-echo arraySelect($task_log_costcodes, 'task_log_costcodes', 'size="1" class="text" onchange="javascript:task_log_costcode.value = this.options[this.selectedIndex].value;"', $log->task_log_costcode);
-?>
-		-&gt;<input type="text" style="text-align:right;" class="text" name="task_log_costcode" value="<?php echo $log->task_log_costcode; ?>" maxlength="8" size="6" />
+		<?php
+			echo arraySelect($task_log_costcodes, 'task_log_costcodes', 'size="1" class="text" onchange="javascript:task_log_costcode.value = this.options[this.selectedIndex].value;"', $log->task_log_costcode);
+		?>
+		<input type="hidden" name="task_log_costcode" value="<?php echo $log->task_log_costcode; ?>" />
 	</td>
 </tr>
 
