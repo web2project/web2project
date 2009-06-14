@@ -27,7 +27,9 @@ if (count($contacts) > 0) {
 	<?php
 	foreach ($contacts as $contact_id => $contact_data) {
 		echo '<tr><td class="hilite">';
+		echo '<a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">'; 
 		echo $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'];
+		echo '</a>';
 		echo '</td>';
 		echo '<td class="hilite"><a href="mailto:' . $contact_data['contact_email'] . '">' . $contact_data['contact_email'] . '</a></td>';
 		echo '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
