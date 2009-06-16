@@ -185,7 +185,7 @@ function delIt() {
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
-				<td class="hilite" width="300"><?php echo ($obj->task_hours_worked + @rtrim($obj->log_hours_worked, '0')); ?></td>
+				<td class="hilite" width="300"><?php echo $obj->task_hours_worked; ?></td>
 			</tr>
 			<tr>
 				<td nowrap="nowrap" colspan="2"><strong><?php echo $AppUI->_('Dates and Targets'); ?></strong></td>
