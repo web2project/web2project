@@ -263,12 +263,10 @@ class CTask extends CW2pObject {
 		$q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
 		$q->addJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'inner');
 		$q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
-		$q->leftJoin('task_log', 'tl', 'tl.task_log_task = task_id');
 		$q->addWhere('task_id = ' . (int) $taskId);
 		$q->addQuery('tasks.*');
 		$q->addQuery('project_name, project_color_identifier');
 		$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
-		$q->addQuery('ROUND(SUM(task_log_hours),2) as log_hours_worked');
 		$q->addGroup('task_id');
 
 		$q->loadObject($this, true, false);
@@ -2148,6 +2146,13 @@ class CTask extends CW2pObject {
 			return true;
 		}
 	}
+	public static function updateHoursWorked($taskId, $totalHours) {
+		$q = new DBQuery;
+		$q->addTable('tasks');
+		$q->addUpdate('task_hours_worked', $totalHours + 0);
+		$q->addWhere('task_id = '.$taskId);
+		$q->exec();
+	}
 }
 
 /**
@@ -2171,6 +2176,30 @@ class CTaskLog extends CW2pObject {
 
 		// ensure changes to checkboxes are honoured
 		$this->task_log_problem = intval($this->task_log_problem);
+	}
+
+	public function store() {
+		parent::store();
+		$this->updateHoursWorked($this->task_log_task);
+	}
+	public function delete() {
+		$q = new DBQuery();
+		$q->addQuery('task_log_task');
+		$q->addTable('task_log');
+		$q->addWhere('task_log_id = ' . (int) $this->task_log_id);
+		$task_log_task = $q->loadResult();
+
+		parent::delete();
+		$this->updateHoursWorked($task_log_task);
+	}
+	private function updateHoursWorked($task_log_task) {
+		$q = new DBQuery();
+		$q->addQuery('SUM(task_log_hours)');
+		$q->addTable('task_log');
+		$q->addWhere('task_log_task = ' . (int) $task_log_task);
+		$totalHours = $q->loadResult(); 
+		
+		CTask::updateHoursWorked($task_log_task, $totalHours);
 	}
 
 	function w2PTrimAll() {
