@@ -23,7 +23,7 @@ $task_type = $AppUI->getState('ToDoTaskType') !== null ? $AppUI->getState('ToDoT
 
 $project_id = intval(w2PgetParam($_GET, 'project_id', 0));
 $this_day = new CDate();
-$date = (intval(w2PgetParam($_GET, 'date', '')) > 0) ? $this_day->format(FMT_TIMESTAMP_DATE) : date('Y-m-d');
+$date = (intval(w2PgetParam($_GET, 'date', '')) > 0) ? $this_day->format(FMT_TIMESTAMP_DATE) : '';
 
 $user_id = $AppUI->user_id;
 $no_modify = false;
@@ -129,8 +129,6 @@ $q->addWhere('ut.task_id = ta.task_id');
 $q->addWhere('ut.user_id = ' . (int)$user_id);
 $q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
 
-$myDate = date('Y-m-d H:i:s', strtotime($date));
-$q->addWhere("(ta.task_start_date <= '$myDate' AND ta.task_end_date >= '$myDate')");
 $q->addWhere('ta.task_status = 0');
 $q->addWhere('pr.project_id = ta.task_project');
 if (!$showArcProjs) {
