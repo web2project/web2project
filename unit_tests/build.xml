@@ -40,7 +40,8 @@
 	<target name="lint">
 		<phplint haltonfailure="true">
 			<fileset dir="..">
-				<include name="**/*.php"/>
+				<include name="**/*.php" />
+				<exclude name="lib/" />
 			</fileset>
 		</phplint>
   	</target>
