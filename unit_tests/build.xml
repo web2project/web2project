@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<project name="web2project Unit Tests" basedir="." default="report">
+    <target name="report">
+        <phpunit codecoverage="true" haltonfailure="true" haltonerror="true">
+            <formatter type="plain" usefile="false"/>
+            <batchtest>
+                <fileset dir="modules">
+                    <include name="*.test.php"/>
+                </fileset>
+            </batchtest>
+            <formatter  type="xml" todir="reports" outfile="logfile.xml"/>
+        </phpunit>
+        <phpunitreport  infile="reports/logfile.xml"
+            styledir="/usr/share/php/data/phing/etc/"
+            todir="reports"
+            format="noframes" />
+    </target>
+</project>
