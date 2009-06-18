@@ -139,9 +139,10 @@ class CCompany extends CW2pObject {
 		return $q->loadList();
 	}
 	public static function getContacts($AppUI, $companyId) {
+		$results = array();
 		$perms = $AppUI->acl();
 
-		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view') && (int) $companyId > 0) {
 			$q = new DBQuery;
 			$q->addQuery('a.*');
 			$q->addQuery('dept_name');
@@ -160,10 +161,13 @@ class CCompany extends CW2pObject {
 
 			$q->addOrder('contact_first_name');
 			$q->addOrder('contact_last_name');
-			
-			return $q->loadHashList('contact_id');
+
+			$results = $q->loadHashList('contact_id');
 		}
+
+		return $results;
 	}
+
 	public static function getUsers($AppUI, $companyId) {
 		$q = new DBQuery;
 		$q->addTable('users');
