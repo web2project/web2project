@@ -17,7 +17,7 @@ class CSysKey extends CW2pObject {
 	public $syskey_sep1 = null;
 	public $syskey_sep2 = null;
 
-	function CSysKey($name = null, $label = null, $type = '0', $sep1 = "\n", $sep2 = '|') {
+	public function CSysKey($name = null, $label = null, $type = '0', $sep1 = "\n", $sep2 = '|') {
 		$this->CW2pObject('syskeys', 'syskey_id');
 		$this->syskey_name = $name;
 		$this->syskey_label = $label;
@@ -38,7 +38,7 @@ class CSysVal extends CW2pObject {
 	public $sysval_value_id = null;
 	public $sysval_value = null;
 
-	function check() {
+	public function check() {
 		//print_r($this);die;
 		if ($this->sysval_key_id == 0) {
 			return 'Key Type cannot be empty';
@@ -49,14 +49,14 @@ class CSysVal extends CW2pObject {
 		return null;
 	}
 
-	function CSysVal($key = null, $title = null, $value = null) {
+	public function CSysVal($key = null, $title = null, $value = null) {
 		$this->CW2pObject('sysvals', 'sysval_id');
 		$this->sysval_key_id = $key;
 		$this->sysval_title = $title;
 		$this->sysval_value = $value;
 	}
 
-	function store() {
+	public function store() {
 		$this->w2PTrimAll();
 
 		$msg = $this->check();
@@ -90,7 +90,7 @@ class CSysVal extends CW2pObject {
 		return null;
 	}
 
-	function delete() {
+	public function delete() {
 		$q = new DBQuery;
 		if ($this->sysval_title) {
 			$q->setDelete('sysvals');

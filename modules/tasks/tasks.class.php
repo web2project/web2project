@@ -78,16 +78,16 @@ class CTask extends CW2pObject {
 	public $task_custom = null;
 	public $task_type = null;
 
-	function CTask() {
+	public function CTask() {
 		$this->CW2pObject('tasks', 'task_id');
 	}
 
-	function __toString() {
+	public function __toString() {
 		return $this->link . '/' . $this->type . '/' . $this->length;
 	}
 
 	// overload check
-	function check() {
+	public function check() {
 		global $AppUI;
 
 		if ($this->task_id === null) {
@@ -229,7 +229,7 @@ class CTask extends CW2pObject {
 	* @return any result from the database operation
 	*/
 
-	function load($oid = null, $strip = false, $skipUpdate = false) {
+	public function load($oid = null, $strip = false, $skipUpdate = false) {
 		// use parent function to load the given object
 		$loaded = parent::load($oid, $strip);
 
@@ -275,12 +275,12 @@ class CTask extends CW2pObject {
 	/*
 	* call the load function but don't update dynamics
 	*/
-	function peek($oid = null, $strip = false) {
+	public function peek($oid = null, $strip = false) {
 		$loadme = $this->load($oid, $strip, true);
 		return $loadme;
 	}
 
-	function updateDynamics($fromChildren = false) {
+	public function updateDynamics($fromChildren = false) {
 		//Has a parent or children, we will check if it is dynamic so that it's info is updated also
 		$q = &new DBQuery;
 		$modified_task = new CTask();
@@ -400,7 +400,7 @@ class CTask extends CW2pObject {
 	* @param int id of the destination project
 	* @return object The new record object or null if error
 	*/
-	function copy($destProject_id = 0, $destTask_id = -1) {
+	public function copy($destProject_id = 0, $destTask_id = -1) {
 		$newObj = $this->duplicate();
 
 		// Copy this task to another project if it's specified
@@ -424,7 +424,7 @@ class CTask extends CW2pObject {
 		return $newObj;
 	} // end of copy()
 
-	function copyAssignedUsers($destTask_id) {
+	public function copyAssignedUsers($destTask_id) {
 		$q = new DBQuery;
 		$q->addQuery('user_id, user_type, task_id, perc_assignment, user_task_priority');
 		$q->addTable('user_tasks', 'ut');
@@ -445,7 +445,7 @@ class CTask extends CW2pObject {
 
 	}
 
-	function deepCopy($destProject_id = 0, $destTask_id = 0) {
+	public function deepCopy($destProject_id = 0, $destTask_id = 0) {
 		$children = $this->getChildren();
 		$newObj = $this->copy($destProject_id, $destTask_id);
 		$new_id = $newObj->task_id;
@@ -462,7 +462,7 @@ class CTask extends CW2pObject {
 		return $newObj;
 	}
 
-	function move($destProject_id = 0, $destTask_id = -1) {
+	public function move($destProject_id = 0, $destTask_id = -1) {
 		if ($destProject_id != 0) {
 			$this->task_project = $destProject_id;
 		}
@@ -474,7 +474,7 @@ class CTask extends CW2pObject {
 		}
 	}
 
-	function deepMove($destProject_id = 0, $destTask_id = 0) {
+	public function deepMove($destProject_id = 0, $destTask_id = 0) {
 		$this->move($destProject_id, $destTask_id);
 		$children = $this->getDeepChildren();
 		if (!empty($children)) {
@@ -491,7 +491,7 @@ class CTask extends CW2pObject {
 	/**
 	 * @todo Parent store could be partially used
 	 */
-	function store() {
+	public function store() {
 		global $AppUI;
 		$q = &new DBQuery;
 
@@ -654,7 +654,7 @@ class CTask extends CW2pObject {
 	 * @todo Parent store could be partially used
 	 * @todo Can't delete a task with children
 	 */
-	function delete() {
+	public function delete() {
 		$q = &new DBQuery;
 		$this->_action = 'deleted';
 		// delete linked user tasks
@@ -728,7 +728,7 @@ class CTask extends CW2pObject {
 		return null;
 	}
 
-	function updateDependencies($cslist) {
+	public function updateDependencies($cslist) {
 		$q = &new DBQuery;
 		// delete all current entries
 		$q->setDelete('task_dependencies');
@@ -810,7 +810,7 @@ class CTask extends CW2pObject {
 	 *		  @author		 handco		   <handco@users.sourceforge.net>
 	 *		  @return		 string		   comma delimited list of tasks id's
 	 **/
-	function getDependencies() {
+	public function getDependencies() {
 		// Call the static method for this object
 		$result = $this->staticGetDependencies($this->task_id);
 		return $result;
@@ -823,7 +823,7 @@ class CTask extends CW2pObject {
 	 *		  @param		integer		   ID of the task we want dependencies
 	 *		  @return		 string		   comma delimited list of tasks id's
 	 **/
-	function staticGetDependencies($taskId) {
+	public function staticGetDependencies($taskId) {
 		$q = &new DBQuery;
 		if (empty($taskId)) {
 			return '';
@@ -838,7 +838,7 @@ class CTask extends CW2pObject {
 		return $result;
 	} // end of staticGetDependencies ()
 
-	function notifyOwner() {
+	public function notifyOwner() {
 		$q = &new DBQuery;
 		global $AppUI, $locale_char_set;
 
@@ -882,7 +882,7 @@ class CTask extends CW2pObject {
 	}
 
 	//additional comment will be included in email body
-	function notify($comment = '') {
+	public function notify($comment = '') {
 		$q = &new DBQuery;
 		global $AppUI, $locale_char_set;
 		$df = $AppUI->getPref('SHDATEFORMAT');
@@ -950,7 +950,7 @@ class CTask extends CW2pObject {
 	 * Email the task log to assignees, task contacts, project contacts, and others
 	 * based upon the information supplied by the user.
 	 */
-	function email_log(&$log, $assignees, $task_contacts, $project_contacts, $others, $extras) {
+	public function email_log(&$log, $assignees, $task_contacts, $project_contacts, $others, $extras) {
 		global $AppUI, $locale_char_set, $w2Pconfig;
 
 		$mail_recipients = array();
@@ -1110,7 +1110,7 @@ class CTask extends CW2pObject {
 	 * @param Date End date of the period
 	 * @param integer The target company
 	 */
-	function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null) {
+	public function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null) {
 		global $AppUI;
 		$q = &new DBQuery;
 		// convert to default db time stamp
@@ -1169,7 +1169,7 @@ class CTask extends CW2pObject {
 		return $result;
 	}
 
-	function canAccess($user_id) {
+	public function canAccess($user_id) {
 		$q = &new DBQuery;
 
 		// Let's see if this user has admin privileges
@@ -1223,7 +1223,7 @@ class CTask extends CW2pObject {
 	 *		 @param	 boolean		 true if is a dep call (recurse call)
 	 *		 @param	 boolean		 false for no recursion (needed for calc_end_date)
 	 **/
-	function dependentTasks($taskId = false, $isDep = false, $recurse = true) {
+	public function dependentTasks($taskId = false, $isDep = false, $recurse = true) {
 		$q = &new DBQuery;
 		static $aDeps = false;
 		// Initialize the dependencies array
@@ -1270,7 +1270,7 @@ class CTask extends CW2pObject {
 	*		 shift dependents tasks dates
 	*		 @return void
 	*/
-	function shiftDependentTasks() {
+	public function shiftDependentTasks() {
 		// Get tasks that depend on this task
 		$csDeps = explode(',', $this->dependentTasks('', '', false));
 
@@ -1300,7 +1300,7 @@ class CTask extends CW2pObject {
 	*		   
 	*		  @param				integer task_id of task to update
 	*/
-	function update_dep_dates($task_id) {
+	public function update_dep_dates($task_id) {
 		global $tracking_dynamics;
 		$q = &new DBQuery;
 
@@ -1376,7 +1376,7 @@ class CTask extends CW2pObject {
 	
 	*/
 
-	function get_deps_max_end_date($taskObj) {
+	public function get_deps_max_end_date($taskObj) {
 		global $tracked_dynamics;
 		$q = &new DBQuery;
 
@@ -1411,7 +1411,7 @@ class CTask extends CW2pObject {
 	 * Function that returns the amount of hours this
 	 * task consumes per user each day
 	 */
-	function getTaskDurationPerDay($use_percent_assigned = false) {
+	public function getTaskDurationPerDay($use_percent_assigned = false) {
 		$duration = $this->task_duration * ($this->task_duration_type == 24 ? w2PgetConfig('daily_working_hours') : $this->task_duration_type);
 		$task_start_date = new CDate($this->task_start_date);
 		$task_finish_date = new CDate($this->task_end_date);
@@ -1449,7 +1449,7 @@ class CTask extends CW2pObject {
 	 * Function that returns the amount of hours this
 	 * task consumes per user each week
 	 */
-	function getTaskDurationPerWeek($use_percent_assigned = false) {
+	public function getTaskDurationPerWeek($use_percent_assigned = false) {
 		$duration = $this->task_duration * ($this->task_duration_type == 24 ? w2PgetConfig('daily_working_hours') : $this->task_duration_type);
 		$task_start_date = new CDate($this->task_start_date);
 		$task_finish_date = new CDate($this->task_end_date);
@@ -1477,7 +1477,7 @@ class CTask extends CW2pObject {
 	}
 
 	// unassign a user from task
-	function removeAssigned($user_id) {
+	public function removeAssigned($user_id) {
 		$q = &new DBQuery;
 		// delete all current entries
 		$q->setDelete('user_tasks');
@@ -1488,7 +1488,7 @@ class CTask extends CW2pObject {
 
 	//using user allocation percentage ($perc_assign)
 	// @return returns the Names of the over-assigned users (if any), otherwise false
-	function updateAssigned($cslist, $perc_assign, $del = true, $rmUsers = false) {
+	public function updateAssigned($cslist, $perc_assign, $del = true, $rmUsers = false) {
 		$q = new DBQuery;
 
 		// process assignees
@@ -1602,7 +1602,7 @@ class CTask extends CW2pObject {
 	 *	@param array users	 an array of user_ids calculating their assignment capacity
 	 *	@return array		 returns hashList of extent of utilization for assignment of the users
 	 */
-	function getAllocation($hash = null, $users = null, $get_user_list = false) {
+	public function getAllocation($hash = null, $users = null, $get_user_list = false) {
 		/*
 		 * TODO: The core of this function has been simplified to always return 100%
 		 * free capacity available.  The allocation checking (aka resource
@@ -1676,7 +1676,7 @@ class CTask extends CW2pObject {
 		return $hash;
 	}
 
-	function getUserSpecificTaskPriority($user_id = 0, $task_id = null) {
+	public function getUserSpecificTaskPriority($user_id = 0, $task_id = null) {
 		$q = &new DBQuery;
 		// use task_id of given object if the optional parameter task_id is empty
 		$task_id = empty($task_id) ? $this->task_id : $task_id;
@@ -1689,7 +1689,7 @@ class CTask extends CW2pObject {
 		return $prio ? $priority['user_task_priority'] : null;
 	}
 
-	function updateUserSpecificTaskPriority($user_task_priority = 0, $user_id = 0, $task_id = null) {
+	public function updateUserSpecificTaskPriority($user_task_priority = 0, $user_id = 0, $task_id = null) {
 		$q = &new DBQuery;
 		// use task_id of given object if the optional parameter task_id is empty
 		$task_id = empty($task_id) ? $this->task_id : $task_id;
@@ -1702,7 +1702,7 @@ class CTask extends CW2pObject {
 		$q->clear();
 	}
 
-	function getProject() {
+	public function getProject() {
 		$q = &new DBQuery;
 
 		$q->addTable('projects');
@@ -1714,7 +1714,7 @@ class CTask extends CW2pObject {
 	}
 
 	//Returns task children IDs
-	function getChildren() {
+	public function getChildren() {
 		$q = &new DBQuery;
 
 		$q->addTable('tasks');
@@ -1727,7 +1727,7 @@ class CTask extends CW2pObject {
 	}
 
 	// Returns task deep children IDs
-	function getDeepChildren() {
+	public function getDeepChildren() {
 		$children = $this->getChildren();
 
 		if ($children) {
@@ -1747,7 +1747,7 @@ class CTask extends CW2pObject {
 	 * This function, recursively, updates all tasks status
 	 * to the one passed as parameter
 	 */
-	function updateSubTasksStatus($new_status, $task_id = null) {
+	public function updateSubTasksStatus($new_status, $task_id = null) {
 		$q = &new DBQuery;
 
 		if (is_null($task_id)) {
@@ -1783,7 +1783,7 @@ class CTask extends CW2pObject {
 	 * This function recursively updates all tasks project
 	 * to the one passed as parameter
 	 */
-	function updateSubTasksProject($new_project, $task_id = null) {
+	public function updateSubTasksProject($new_project, $task_id = null) {
 		$q = &new DBQuery;
 
 		if (is_null($task_id)) {
@@ -1814,7 +1814,7 @@ class CTask extends CW2pObject {
 		}
 	}
 
-	function canUserEditTimeInformation() {
+	public function canUserEditTimeInformation() {
 		global $AppUI;
 
 		$project = new CProject();
@@ -1856,7 +1856,7 @@ class CTask extends CW2pObject {
 	 * and days to trigger before event overdue is
 	 * set in the system config.
 	 */
-	function addReminder() {
+	public function addReminder() {
 		$day = 86400;
 
 		if (!w2PgetConfig('task_reminder_control')) {
@@ -1918,7 +1918,7 @@ class CTask extends CW2pObject {
 	 * @return		  mixed		   true, dequeue event, false, event stays in queue.
 	 * -1, event is destroyed.
 	 */
-	function remind($module, $type, $id, $owner, &$args) {
+	public function remind($module, $type, $id, $owner, &$args) {
 		global $locale_char_set, $AppUI;
 		$q = &new DBQuery;
 
@@ -2024,7 +2024,7 @@ class CTask extends CW2pObject {
 	/**
 	 *
 	 */
-	function clearReminder($dont_check = false) {
+	public function clearReminder($dont_check = false) {
 		$ev = new EventQueue;
 
 		$event_list = $ev->find('tasks', 'remind', $this->task_id);
@@ -2037,7 +2037,7 @@ class CTask extends CW2pObject {
 		}
 	}
 
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
 		$oPrj = new CProject();
 
@@ -2061,7 +2061,7 @@ class CTask extends CW2pObject {
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
 
-	function &getAssigned() {
+	public function &getAssigned() {
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('user_tasks', 'ut');
@@ -2171,7 +2171,7 @@ class CTaskLog extends CW2pObject {
 	public $task_log_reference = null;
 	public $task_log_related_url = null;
 
-	function CTaskLog() {
+	public function CTaskLog() {
 		$this->CW2pObject('task_log', 'task_log_id');
 
 		// ensure changes to checkboxes are honoured
@@ -2202,19 +2202,19 @@ class CTaskLog extends CW2pObject {
 		CTask::updateHoursWorked($task_log_task, $totalHours);
 	}
 
-	function w2PTrimAll() {
+	public function w2PTrimAll() {
 		$spacedDescription = $this->task_log_description;
 		parent::w2PTrimAll();
 		$this->task_log_description = $spacedDescription;
 	}
 
 	// overload check method
-	function check() {
+	public function check() {
 		$this->task_log_hours = (float)$this->task_log_hours;
 		return null;
 	}
 
-	function canDelete(&$msg, $oid = null, $joins = null) {
+	public function canDelete(&$msg, $oid = null, $joins = null) {
 		global $AppUI;
 		$q = &new DBQuery;
 
@@ -2265,7 +2265,7 @@ class CTaskLog extends CW2pObject {
 		return true;
 	}
 
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
 		$oTsk = new CTask();
 

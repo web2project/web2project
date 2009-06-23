@@ -19,15 +19,15 @@ if ($a == 'setup') {
 
 class CSetupReports {
 
-	function install() {
+	public function install() {
 		return null;
 	}
 
-	function remove() {
+	public function remove() {
 		return null;
 	}
 
-	function upgrade() {
+	public function upgrade() {
 		return null;
 	}
 }

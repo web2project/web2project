@@ -18,11 +18,11 @@ class CUser extends CW2pObject {
 	public $user_contact = null;
 	public $user_signature = null;
 
-	function CUser() {
+	public function CUser() {
 		$this->CW2pObject('users', 'user_id');
 	}
 
-	function check() {
+	public function check() {
 		if ($this->user_id === null) {
 			return 'user id is NULL';
 		}
@@ -33,7 +33,7 @@ class CUser extends CW2pObject {
 		return null; // object is ok
 	}
 
-	function store() {
+	public function store() {
 		$msg = $this->check();
 		if ($msg) {
 			return get_class($this) . '::store-check failed';
@@ -96,7 +96,7 @@ class CUser extends CW2pObject {
 		}
 	}
 
-	function delete($oid = null) {
+	public function delete($oid = null) {
 		global $AppUI;
 		$id = (int)$this->user_id;
 		//check if the user is related to anything and disallow deletion if he is.
@@ -254,7 +254,7 @@ class CUser extends CW2pObject {
 		return $result;
 	}
 
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		return w2PgetUsers();
 	}
 	public function fullLoad($userId) {

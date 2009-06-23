@@ -34,11 +34,11 @@ if ($a == 'setup') {
 // TODO: To be completed later as needed.
 class CSetupLinks {
 
-	function configure() {
+	public function configure() {
 		return true;
 	}
 
-	function remove() {
+	public function remove() {
 		$q = new DBQuery();
 		$q->dropTable('links');
 		$q->exec();
@@ -49,11 +49,11 @@ class CSetupLinks {
 		$q->exec();
 	}
 
-	function upgrade($old_version) {
+	public function upgrade($old_version) {
 		return true;
 	}
 
-	function install() {
+	public function install() {
 		$q = new DBQuery();
 		$q->createTable('links');
 		$q->createDefinition('(
@@ -101,6 +101,4 @@ KEY idx_link_parent ( link_parent )
 		$q->exec();
 		return null;
 	}
-
 }
-?>

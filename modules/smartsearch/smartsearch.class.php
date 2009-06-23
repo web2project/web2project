@@ -24,11 +24,11 @@ class smartsearch {
 	public $display_val = '';
 	public $search_options = null;
 
-	function smartsearch() {
+	public function smartsearch() {
 		return null;
 	}
 
-	function fetchResults(&$permissions, &$record_count) {
+	public function fetchResults(&$permissions, &$record_count) {
 		global $AppUI;
 		$q = $this->_buildQuery();
 		$results = null;
@@ -74,15 +74,15 @@ class smartsearch {
 		return $outstring;
 	}
 
-	function setKeyword($keyw) {
+	public function setKeyword($keyw) {
 		$this->keyword = $keyw;
 	}
-	function setAdvanced($search_opts) {
+	public function setAdvanced($search_opts) {
 		$this->search_options = $search_opts;
 		$this->keywords = $search_opts['keywords'];
 	}
 
-	function _buildQuery() {
+	public function _buildQuery() {
 		$q = new DBQuery;
 
 		if ($this->table_alias) {

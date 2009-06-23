@@ -39,7 +39,7 @@ class CFile extends CW2pObject {
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
 	//public $file_helpdesk_item = NULL;
 
-	function CFile() {
+	public function CFile() {
 		global $AppUI, $helpdesk_available;
 		if ($helpdesk_available) {
 			$this->file_helpdesk_item = null;
@@ -47,7 +47,7 @@ class CFile extends CW2pObject {
 		$this->CW2pObject('files', 'file_id');
 	}
 
-	function store() {
+	public function store() {
 		global $helpdesk_available;
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			$this->addHelpDeskTaskLog();
@@ -55,7 +55,7 @@ class CFile extends CW2pObject {
 		parent::store();
 	}
 
-	function addHelpDeskTaskLog() {
+	public function addHelpDeskTaskLog() {
 		global $AppUI, $helpdesk_available;
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 
@@ -78,7 +78,7 @@ class CFile extends CW2pObject {
 		return null;
 	}
 
-	function canAdmin() {
+	public function canAdmin() {
 		global $AppUI;
 
 		if (!$this->file_project) {
@@ -103,7 +103,7 @@ class CFile extends CW2pObject {
 		return $result;
 	}
 
-	function check() {
+	public function check() {
 		// ensure the integrity of some variables
 		$this->file_id = intval($this->file_id);
 		$this->file_version_id = intval($this->file_version_id);
@@ -114,7 +114,7 @@ class CFile extends CW2pObject {
 		return null; // object is ok
 	}
 
-	function checkout($userId, $fileId, $coReason) {
+	public function checkout($userId, $fileId, $coReason) {
 		$q = new DBQuery;
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', $userId);
@@ -126,7 +126,7 @@ class CFile extends CW2pObject {
 		return true;
 	}
 
-	function delete() {
+	public function delete() {
 		global $helpdesk_available;
 		if (!$this->canDelete($msg))
 			return $msg;
@@ -161,13 +161,13 @@ class CFile extends CW2pObject {
 	}
 
 	// delete File from File System
-	function deleteFile() {
+	public function deleteFile() {
 		global $w2Pconfig;
 		return @unlink(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename);
 	}
 
 	// move the file if the affiliated project was changed
-	function moveFile($oldProj, $realname) {
+	public function moveFile($oldProj, $realname) {
 		global $AppUI, $w2Pconfig;
 		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
 			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0777);
@@ -185,7 +185,7 @@ class CFile extends CW2pObject {
 	}
 
 	// duplicate a file into root
-	function duplicateFile($oldProj, $realname) {
+	public function duplicateFile($oldProj, $realname) {
 		global $AppUI, $w2Pconfig;
 		if (!is_dir(W2P_BASE_DIR . '/files/0')) {
 			$res = mkdir(W2P_BASE_DIR . '/files/0', 0777);
@@ -204,7 +204,7 @@ class CFile extends CW2pObject {
 	}
 
 	// move a file from a temporary (uploaded) location to the file system
-	function moveTemp($upload) {
+	public function moveTemp($upload) {
 		global $AppUI, $w2Pconfig;
 		// check that directories are created
 		if (!is_dir(W2P_BASE_DIR . '/files')) {
@@ -231,7 +231,7 @@ class CFile extends CW2pObject {
 	}
 
 	// parse file for indexing
-	function indexStrings() {
+	public function indexStrings() {
 		global $AppUI, $w2Pconfig;
 		// get the parser application
 		$parser = $w2Pconfig['parser_' . $this->file_type];
@@ -290,7 +290,7 @@ class CFile extends CW2pObject {
 	}
 
 	//function notifies about file changing
-	function notify() {
+	public function notify() {
 		global $AppUI, $w2Pconfig, $locale_char_set, $helpdesk_available;
 		// if helpdesk_item is available send notification to assigned users
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
@@ -385,7 +385,7 @@ class CFile extends CW2pObject {
 		}
 	} //notify
 
-	function notifyContacts() {
+	public function notifyContacts() {
 		global $AppUI, $w2Pconfig, $locale_char_set;
 		//if no project specified than we will not do anything
 		if ($this->file_project != 0) {
@@ -456,7 +456,7 @@ class CFile extends CW2pObject {
 		}
 	}
 
-	function getOwner() {
+	public function getOwner() {
 		$owner = '';
 		if (!$this->file_owner)
 			return $owner;
@@ -474,7 +474,7 @@ class CFile extends CW2pObject {
 		return $owner;
 	}
 
-	function getTaskName() {
+	public function getTaskName() {
 		$taskname = '';
 		if (!$this->file_task)
 			return $taskname;
@@ -513,11 +513,11 @@ class CFileFolder extends CW2pObject {
  	@param string file_folder_description The folder's description **/
 	public $file_folder_description = null;
 
-	function CFileFolder() {
+	public function CFileFolder() {
 		$this->CW2pObject('file_folders', 'file_folder_id');
 	}
 
-	function getAllowedRecords($uid) {
+	public function getAllowedRecords($uid) {
 		$q = new DBQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('*');
@@ -526,13 +526,13 @@ class CFileFolder extends CW2pObject {
 		return $q->loadHashList();
 	}
 
-	function check() {
+	public function check() {
 		$this->file_folder_id = intval($this->file_folder_id);
 		$this->file_folder_parent = intval($this->file_folder_parent);
 		return null;
 	}
 
-	function delete($oid = null) {
+	public function delete($oid = null) {
 		$k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
@@ -554,7 +554,7 @@ class CFileFolder extends CW2pObject {
 		}
 	}
 
-	function canDelete(&$msg, $oid) {
+	public function canDelete(&$msg, $oid) {
 		global $AppUI;
 		$q = new DBQuery();
 		$q->addTable('file_folders');
@@ -579,7 +579,7 @@ class CFileFolder extends CW2pObject {
 
 	/**
  	@return string Returns the name of the parent folder or null if no parent was found **/
-	function getParentFolderName() {
+	public function getParentFolderName() {
 		$q = new DBQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('file_folder_name');
@@ -587,7 +587,7 @@ class CFileFolder extends CW2pObject {
 		return $q->loadResult();
 	}
 
-	function countFolders() {
+	public function countFolders() {
 		$q = new DBQuery();
 		$q->addTable($this->_tbl);
 		$q->addQuery('COUNT(' . $this->_tbl_key. ' )');

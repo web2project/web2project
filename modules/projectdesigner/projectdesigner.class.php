@@ -24,11 +24,11 @@ class CProjectDesignerOptions extends CW2pObject {
 	public $pd_option_view_addtasks = null;
 	public $pd_option_view_files = null;
 
-	function CProjectDesignerOptions() {
+	public function CProjectDesignerOptions() {
 		$this->CW2pObject('project_designer_options', 'pd_option_id');
 	}
 
-	function store() {
+	public function store() {
 		$q = new DBQuery;
 		$q->addTable('project_designer_options');
 		$q->addReplace('pd_option_user', $this->pd_option_user);

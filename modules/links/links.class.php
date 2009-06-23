@@ -22,11 +22,11 @@ class CLink extends CW2pObject {
 	public $link_date = null;
 	public $link_category = null;
 
-	function CLink() {
+	public function CLink() {
 		$this->CW2pObject('links', 'link_id');
 	}
 
-	function check() {
+	public function check() {
 		// ensure the integrity of some variables
 		$this->link_id = intval($this->link_id);
 		$this->link_parent = intval($this->link_parent);
@@ -37,7 +37,7 @@ class CLink extends CW2pObject {
 		return null; // object is ok
 	}
 
-	function delete() {
+	public function delete() {
 		global $w2Pconfig;
 		$this->_message = "deleted";
 
