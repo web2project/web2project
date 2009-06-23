@@ -32,12 +32,12 @@ function &getAuth($auth_mode) {
  */
 class PostNukeAuthenticator extends SQLAuthenticator {
 
-	function PostNukeAuthenticator() {
+	public function PostNukeAuthenticator() {
 		global $w2Pconfig;
 		$this->fallback = isset($w2Pconfig['postnuke_allow_login']) ? $w2Pconfig['postnuke_allow_login'] : false;
 	}
 
-	function authenticate($username, $password) {
+	public function authenticate($username, $password) {
 		global $db, $AppUI;
 		if (!isset($_REQUEST['userdata'])) { // fallback to SQL Authentication if PostNuke fails.
 			if ($this->fallback) {
@@ -106,7 +106,7 @@ class PostNukeAuthenticator extends SQLAuthenticator {
 		return true;
 	}
 
-	function createsqluser($username, $password, $email, $first, $last) {
+	public function createsqluser($username, $password, $email, $first, $last) {
 		global $db, $AppUI;
 
 		require_once ($AppUI->getModuleClass('contacts'));
@@ -147,7 +147,7 @@ class SQLAuthenticator {
 	public $user_id;
 	public $username;
 
-	function authenticate($username, $password) {
+	public function authenticate($username, $password) {
 		global $db, $AppUI;
 
 		$this->username = $username;
@@ -173,7 +173,7 @@ class SQLAuthenticator {
 		return false;
 	}
 
-	function userId() {
+	public function userId() {
 		return $this->user_id;
 	}
 }
@@ -190,7 +190,7 @@ class LDAPAuthenticator extends SQLAuthenticator {
 	public $user_id;
 	public $username;
 
-	function LDAPAuthenticator() {
+	public function LDAPAuthenticator() {
 		global $w2Pconfig;
 
 		$this->fallback = isset($w2Pconfig['ldap_allow_login']) ? $w2Pconfig['ldap_allow_login'] : false;
@@ -204,7 +204,7 @@ class LDAPAuthenticator extends SQLAuthenticator {
 		$this->filter = $w2Pconfig['ldap_user_filter'];
 	}
 
-	function authenticate($username, $password) {
+	public function authenticate($username, $password) {
 		global $w2Pconfig;
 		$this->username = $username;
 
@@ -268,7 +268,7 @@ class LDAPAuthenticator extends SQLAuthenticator {
 		}
 	}
 
-	function userExists($username) {
+	public function userExists($username) {
 		global $db;
 		$q = new DBQuery;
 		$result = false;
@@ -282,7 +282,7 @@ class LDAPAuthenticator extends SQLAuthenticator {
 		return $result;
 	}
 
-	function userId($username) {
+	public function userId($username) {
 		global $db;
 		$q = new DBQuery;
 		$q->addTable('users');
@@ -293,7 +293,7 @@ class LDAPAuthenticator extends SQLAuthenticator {
 		return $row['user_id'];
 	}
 
-	function createsqluser($username, $password, $ldap_attribs = array()) {
+	public function createsqluser($username, $password, $ldap_attribs = array()) {
 		global $db, $AppUI;
 		$hash_pass = MD5($password);
 
@@ -334,8 +334,4 @@ class LDAPAuthenticator extends SQLAuthenticator {
 		$acl = &$AppUI->acl();
 		$acl->insertUserRole($acl->get_group_id('anon'), $this->user_id);
 	}
-
 }
-
-
-?>

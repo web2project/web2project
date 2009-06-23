@@ -21,7 +21,7 @@ class EventQueue {
 	public $delete_list = array();
 	public $event_count = 0;
 
-	function EventQueue() {
+	public function EventQueue() {
 	}
 
 	/**
@@ -39,7 +39,7 @@ class EventQueue {
 	 * @param integer $repeat_count number of times to repeat
 	 * @return integer queue id
 	 */
-	function add($callback, &$args, $module, $sysmodule = false, $id = 0, $type = '', $date = 0, $repeat_interval = 0, $repeat_count = 1) {
+	public function add($callback, &$args, $module, $sysmodule = false, $id = 0, $type = '', $date = 0, $repeat_interval = 0, $repeat_count = 1) {
 		global $AppUI;
 
 		if (!isset($AppUI)) {
@@ -87,7 +87,7 @@ class EventQueue {
 	 * Remove the event from the queue. 
 	 * 
 	 */
-	function remove($id) {
+	public function remove($id) {
 		$q = new DBQuery;
 		$q->setDelete($this->table);
 		$q->addWhere('queue_id = \'' . $id . '\'');
@@ -99,7 +99,7 @@ class EventQueue {
 	 * Find a queue record (or records) based upon the
 	 * 
 	 */
-	function find($module, $type, $id = null) {
+	public function find($module, $type, $id = null) {
 		$q = new DBQuery;
 		$q->addTable($this->table);
 		$q->addWhere('queue_module = \'' . $module . '\'');
@@ -114,7 +114,7 @@ class EventQueue {
 	 * Execute a queue entry.  This involves resolving the
 	 * method to execute and passing the arguments to it.
 	 */
-	function execute(&$fields) {
+	public function execute(&$fields) {
 		global $AppUI;
 
 		if (isset($fields['queue_module_type']) && $fields['queue_module_type'] == 'system') {
@@ -153,7 +153,7 @@ class EventQueue {
 	 * it is a repeatable event the repeat time is added to the
 	 * start time and the repeat count (if set) is decremented.
 	 */
-	function scan() {
+	public function scan() {
 		$q = new DBQuery;
 		$q->addTable($this->table);
 		$now = time();
@@ -172,7 +172,7 @@ class EventQueue {
 		$this->commit_updates();
 	}
 
-	function update_event(&$fields) {
+	public function update_event(&$fields) {
 		if ($fields['queue_repeat_interval'] > 0 && $fields['queue_repeat_count'] > 0) {
 			$fields['queue_start'] += $fields['queue_repeat_interval'];
 			$fields['queue_repeat_count']--;
@@ -182,7 +182,7 @@ class EventQueue {
 		}
 	}
 
-	function commit_updates() {
+	public function commit_updates() {
 		$q = new DBQuery;
 		if (count($this->delete_list)) {
 			$q->setDelete($this->table);
@@ -202,6 +202,4 @@ class EventQueue {
 		}
 		$this->update_list = array();
 	}
-
 }
-?>

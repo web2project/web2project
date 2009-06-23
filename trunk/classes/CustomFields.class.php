@@ -675,4 +675,3 @@ class CustomOptionList {
 		return $html;
 	}
 }
-?>

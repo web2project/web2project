@@ -122,7 +122,7 @@ class CAppUI {
 
 	 * CAppUI Constructor
 	 */
-	function CAppUI() {
+	public function CAppUI() {
 		$this->state = array();
 
 		$this->user_id = -1;
@@ -148,7 +148,7 @@ class CAppUI {
 	 * @param string $name The class root file name (excluding .class.php)
 	 * @return string The path to the include file
 	 */
-	function getSystemClass($name = null) {
+	public function getSystemClass($name = null) {
 		if ($name) {
 			return W2P_BASE_DIR . '/classes/' . $name . '.class.php';
 		}
@@ -160,7 +160,7 @@ class CAppUI {
 	 * @param string $name The class root file name (excluding .class.php)
 	 * @return string The path to the include file
 	 */
-	function getLibraryClass($name = null) {
+	public function getLibraryClass($name = null) {
 		if ($name) {
 			return W2P_BASE_DIR . '/lib/' . $name . '.php';
 		}
@@ -171,7 +171,7 @@ class CAppUI {
 	 * @param string $name The class root file name (excluding .class.php)
 	 * @return string The path to the include file
 	 */
-	function getModuleClass($name = null) {
+	public function getModuleClass($name = null) {
 		if ($name) {
 			return W2P_BASE_DIR . '/modules/' . $name . '/' . $name . '.class.php';
 		}
@@ -182,7 +182,7 @@ class CAppUI {
 * @param string $name The class root file name (excluding .ajax.php)
 * @return string The path to the include file
  */
-	function getModuleAjax( $name=null ) {
+	public function getModuleAjax( $name=null ) {
 		if ($name) {
 			return W2P_BASE_DIR . '/modules/' . $name . '/' . $name . '.ajax.php';
 		}
@@ -192,7 +192,7 @@ class CAppUI {
 	 * Determines the version.
 	 * @return String value indicating the current web2project version
 	 */
-	function getVersion() {
+	public function getVersion() {
 		global $w2Pconfig;
 		if (!isset($this->version_major)) {
 			include_once W2P_BASE_DIR . '/includes/version.php';
@@ -213,7 +213,7 @@ class CAppUI {
 	/**
 	 * Checks that the current user preferred style is valid/exists.
 	 */
-	function checkStyle() {
+	public function checkStyle() {
 		// check if default user's uistyle is installed
 		$uistyle = $this->getPref('UISTYLE');
 
@@ -230,7 +230,7 @@ class CAppUI {
 	 * @param string The path to read.
 	 * @return array A named array of the directories (the key and value are identical).
 	 */
-	function readDirs($path) {
+	public function readDirs($path) {
 		$dirs = array();
 		$d = dir(W2P_BASE_DIR . '/' . $path);
 		while (false !== ($name = $d->read())) {
@@ -248,7 +248,7 @@ class CAppUI {
 	 * @param string A regular expression to filter by.
 	 * @return array A named array of the files (the key and value are identical).
 	 */
-	function readFiles($path, $filter = '.') {
+	public function readFiles($path, $filter = '.') {
 		$files = array();
 
 		if (is_dir($path) && ($handle = opendir($path))) {
@@ -269,7 +269,7 @@ class CAppUI {
 	 * @param string The file name.
 	 * @return array A named array of the files (the key and value are identical).
 	 */
-	function checkFileName($file) {
+	public function checkFileName($file) {
 		global $AppUI;
 
 		// define bad characters and their replacement
@@ -292,7 +292,7 @@ class CAppUI {
 	 * @param string The file name.
 	 * @return array A named array of the files (the key and value are identical).
 	 */
-	function makeFileNameSafe($file) {
+	public function makeFileNameSafe($file) {
 		$file = str_replace('../', '', $file);
 		$file = str_replace('..\\', '', $file);
 		return $file;
@@ -304,7 +304,7 @@ class CAppUI {
 	 * Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
 	 * @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
 	 */
-	function setUserLocale($loc = '', $set = true) {
+	public function setUserLocale($loc = '', $set = true) {
 		global $locale_char_set;
 
 		$LANGUAGES = $this->loadLanguages();
@@ -348,7 +348,7 @@ class CAppUI {
 		}
 	}
 
-	function findLanguage($language, $country = false) {
+	public function findLanguage($language, $country = false) {
 		$LANGUAGES = $this->loadLanguages();
 		$language = strtolower($language);
 		if ($country) {
@@ -381,7 +381,7 @@ class CAppUI {
 	 * Load the known language codes for loaded locales
 	 *
 	 */
-	function loadLanguages() {
+	public function loadLanguages() {
 
 		if (isset($_SESSION['LANGUAGES'])) {
 			$LANGUAGES = &$_SESSION['LANGUAGES'];
@@ -412,7 +412,7 @@ class CAppUI {
 	 * @param int Option flags, can be case handling or'd with output styles
 	 * @return string
 	 */
-	function _($str, $flags = 0) {
+	public function _($str, $flags = 0) {
 		if (is_array($str)) {
 			$translated = array();
 			foreach ($str as $s) {
@@ -424,7 +424,7 @@ class CAppUI {
 		}
 	}
 
-	function __($str, $flags = 0) {
+	public function __($str, $flags = 0) {
 		$str = trim($str);
 		if (empty($str)) {
 			return '';
@@ -484,7 +484,7 @@ class CAppUI {
 	 * Set the display of warning for untranslated strings
 	 * @param string
 	 */
-	function setWarning($state = true) {
+	public function setWarning($state = true) {
 		$temp = $this->cfg['locale_warn'];
 		$this->cfg['locale_warn'] = $state;
 		return $temp;
@@ -497,7 +497,7 @@ class CAppUI {
 	 * would be a nonsense in this case.
 	 * @param string If not set then the current url query string is used
 	 */
-	function savePlace($query = '') {
+	public function savePlace($query = '') {
 		if (!$query) {
 			$query = $_SERVER['QUERY_STRING'];
 		}
@@ -509,14 +509,14 @@ class CAppUI {
 	/**
 	 * Resets the internal variable
 	 */
-	function resetPlace() {
+	public function resetPlace() {
 		$this->state['SAVEDPLACE'] = '';
 	}
 	/**
 	 * Get the saved place (usually one that could contain an edit button)
 	 * @return string
 	 */
-	function getPlace() {
+	public function getPlace() {
 		return $this->state['SAVEDPLACE'];
 	}
 	/**
@@ -529,7 +529,7 @@ class CAppUI {
 	 * @param string The URL query string to append to the URL
 	 * @param string A marker for a historic 'place, only -1 or an empty string is valid.
 	 */
-	function redirect($params = '', $hist = '') {
+	public function redirect($params = '', $hist = '') {
 		$session_id = SID;
 
 		session_write_close();
@@ -565,7 +565,7 @@ class CAppUI {
 	 * @param boolean If true, $msg is appended to the current string otherwise
 	 * the existing message is overwritten with $msg.
 	 */
-	function setMsg($msg, $msgNo = 0, $append = false) {
+	public function setMsg($msg, $msgNo = 0, $append = false) {
 		$msg = $this->_($msg, UI_OUTPUT_RAW);
 		$this->msg = $append ? $this->msg . ' ' . $msg : $msg;
 		$this->msgNo = $msgNo;
@@ -574,7 +574,7 @@ class CAppUI {
 	 * Display the formatted message and icon
 	 * @param boolean If true the current message state is cleared.
 	 */
-	function getMsg($reset = true) {
+	public function getMsg($reset = true) {
 		$img = '';
 		$class = '';
 		$msg = $this->msg;
@@ -614,7 +614,7 @@ class CAppUI {
 	 * @param string The label or key of the state variable
 	 * @param mixed Value to assign to the label/key
 	 */
-	function setState($label, $value = null) {
+	public function setState($label, $value = null) {
 		if (isset($value)) {
 			$this->state[$label] = $value;
 		}
@@ -624,7 +624,7 @@ class CAppUI {
 	 * If a default value is supplied and no value is found, set the default.
 	 * @return mixed
 	 */
-	function getState($label, $default_value = null) {
+	public function getState($label, $default_value = null) {
 		if (array_key_exists($label, $this->state)) {
 			return $this->state[$label];
 		} else
@@ -636,7 +636,7 @@ class CAppUI {
 			}
 	}
 
-	function checkPrefState($label, $value, $prefname, $default_value = null) {
+	public function checkPrefState($label, $value, $prefname, $default_value = null) {
 		// Check if we currently have it set
 		if (isset($value)) {
 			$result = $value;
@@ -677,7 +677,7 @@ class CAppUI {
 	 * @param string The user password
 	 * @return boolean True if successful, false if not
 	 */
-	function login($username, $password) {
+	public function login($username, $password) {
 		require_once W2P_BASE_DIR . '/classes/authenticator.class.php';
 
 		$auth_method = w2PgetConfig('auth_method', 'sql');
@@ -730,7 +730,7 @@ class CAppUI {
 	/**
 	*@Function for regiser log in dotprojet table "user_access_log"
 	*/
-	function registerLogin() {
+	public function registerLogin() {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addInsert('user_id', '' . $this->user_id);
@@ -744,7 +744,7 @@ class CAppUI {
 	/**
 	 *@Function for register log out in web2project table "user_acces_log"
 	 */
-	function registerLogout($user_id) {
+	public function registerLogout($user_id) {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
@@ -758,7 +758,7 @@ class CAppUI {
 	/**
 	 *@Function for update table user_acces_log in field date_time_lost_action
 	 */
-	function updateLastAction($last_insert_id) {
+	public function updateLastAction($last_insert_id) {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_last_action', date('Y-m-d H:i:s'));
@@ -772,19 +772,19 @@ class CAppUI {
 	/**
 	* @deprecated
 	*/
-	function logout() {
+	public function logout() {
 	}
 	/**
 	 * Checks whether there is any user logged in.
 	 */
-	function doLogin() {
+	public function doLogin() {
 		return ($this->user_id < 0) ? true : false;
 	}
 	/**
 	 * Gets the value of the specified user preference
 	 * @param string Name of the preference
 	 */
-	function getPref($name) {
+	public function getPref($name) {
 		return $this->user_prefs[$name];
 	}
 	/**
@@ -792,7 +792,7 @@ class CAppUI {
 	 * @param string Name of the preference
 	 * @param mixed The value of the preference
 	 */
-	function setPref($name, $val) {
+	public function setPref($name, $val) {
 		$this->user_prefs[$name] = $val;
 	}
 	/**
@@ -800,7 +800,7 @@ class CAppUI {
 	 * preferences variable.
 	 * @param int User id number
 	 */
-	function loadPrefs($uid = 0) {
+	public function loadPrefs($uid = 0) {
 		$q = new DBQuery;
 		$q->addTable('user_preferences');
 		$q->addQuery('pref_name, pref_value');
@@ -815,7 +815,7 @@ class CAppUI {
 	 * Gets a list of the installed modules
 	 * @return array Named array list in the form 'module directory'=>'module name'
 	 */
-	function getInstalledModules() {
+	public function getInstalledModules() {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name');
@@ -826,7 +826,7 @@ class CAppUI {
 	 * Gets a list of the active modules
 	 * @return array Named array list in the form 'module directory'=>'module name'
 	 */
-	function getActiveModules() {
+	public function getActiveModules() {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name');
@@ -839,7 +839,7 @@ class CAppUI {
 	 * @return array Named array list in the form
 	 * ['module directory', 'module name', 'module_icon']
 	 */
-	function getMenuModules() {
+	public function getMenuModules() {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name, mod_ui_icon');
@@ -881,7 +881,7 @@ class CAppUI {
 	 * Returns the global dpACL class or creates it as neccessary.
 	 * @return object w2Pacl
 	 */
-	function &acl() {
+	public function &acl() {
 		if (!isset($GLOBALS['acl'])) {
 			$GLOBALS['acl'] = &new w2Pacl;
 		}
@@ -892,7 +892,7 @@ class CAppUI {
 	 * Find and add to output the file tags required to load module-specific
 	 * javascript.
 	 */
-	function loadHeaderJS() {
+	public function loadHeaderJS() {
 		global $m, $a;
 
 		// load the js base.php
@@ -920,7 +920,7 @@ class CAppUI {
 		$this->getModuleJS($m, $a, true);
 	}
 
-	function getModuleJS($module, $file = null, $load_all = false) {
+	public function getModuleJS($module, $file = null, $load_all = false) {
 		$root = W2P_BASE_DIR;
 		if (substr($root, -1) != '/') {
 			$root .= '/';
@@ -939,7 +939,7 @@ class CAppUI {
 		}
 	}
 
-	function loadFooterJS() {
+	public function loadFooterJS() {
 		$s = '<script type="text/javascript">';
 		$s .= 'window.addEvent(\'domready\', function(){';
 		$s .= '		var as = [];';
@@ -953,7 +953,7 @@ class CAppUI {
 		echo $s;
 	}
 
-	function loadCalendarJS() {
+	public function loadCalendarJS() {
 		global $AppUI;
 		//$s = '<style type="text/css">@import url('.w2PgetConfig('base_url').'/lib/jscalendar/calendar-win2k-1.css);</style>';
 		$s = '<style type="text/css">@import url(' . w2PgetConfig('base_url') . '/lib/jscalendar/skins/aqua/theme.css);</style>';
@@ -999,7 +999,7 @@ class CTabBox_core {
 	 * @param string Optional javascript method to be used to execute tabs.
 	 *	Must support 2 arguments, currently active tab, new tab to activate.
 	 */
-	function CTabBox_core($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
+	public function CTabBox_core($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
 		$this->tabs = array();
 		$this->active = $active;
 		$this->baseHRef = ($baseHRef ? $baseHRef . '&' : '?');
@@ -1010,7 +1010,7 @@ class CTabBox_core {
 	 * Gets the name of a tab
 	 * @return string
 	 */
-	function getTabName($idx) {
+	public function getTabName($idx) {
 		return $this->tabs[$idx][1];
 	}
 	/**
@@ -1018,7 +1018,7 @@ class CTabBox_core {
 	 * @param string File to include
 	 * @param The display title/name of the tab
 	 */
-	function add($file, $title, $translated = false, $key = null) {
+	public function add($file, $title, $translated = false, $key = null) {
 		$t = array($file, $title, $translated);
 		if (isset($key)) {
 			$this->tabs[$key] = $t;
@@ -1027,7 +1027,7 @@ class CTabBox_core {
 		}
 	}
 
-	function isTabbed() {
+	public function isTabbed() {
 		global $AppUI;
 		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
 			return false;
@@ -1042,7 +1042,7 @@ class CTabBox_core {
 	 *
 	 * @param string Can't remember whether this was useful
 	 */
-	function show($extra = '', $js_tabs = false) {
+	public function show($extra = '', $js_tabs = false) {
 		global $AppUI, $currentTabId, $currentTabName;
 		$this->loadExtras($m, $a);
 		reset($this->tabs);
@@ -1120,7 +1120,7 @@ class CTabBox_core {
 		}
 	}
 
-	function loadExtras($module, $file = null) {
+	public function loadExtras($module, $file = null) {
 		global $AppUI;
 		if (!isset($_SESSION['all_tabs']) || !isset($_SESSION['all_tabs'][$module])) {
 			return false;
@@ -1145,7 +1145,7 @@ class CTabBox_core {
 		return $tab_count;
 	}
 
-	function findTabModule($tab) {
+	public function findTabModule($tab) {
 		global $AppUI, $m, $a;
 
 		if (!isset($_SESSION['all_tabs']) || !isset($_SESSION['all_tabs'][$m])) {
@@ -1182,7 +1182,7 @@ class CTabBox_core {
  * @access public
  */
 class CInfoTabBox extends CTabBox_core {
-	function show($extra = '', $js_tabs = false, $alignment = 'left') {
+	public function show($extra = '', $js_tabs = false, $alignment = 'left') {
 		global $AppUI, $w2Pconfig, $currentInfoTabId, $currentInfoTabName, $m, $a;
 		$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
 		if (!$uistyle) {
@@ -1299,7 +1299,7 @@ class CTitleBlock_core {
 	 * have permission to view the help module, then the context help icon is
 	 * not displayed.
 	 */
-	function CTitleBlock_core($title, $icon = '', $module = '', $helpref = '') {
+	public function CTitleBlock_core($title, $icon = '', $module = '', $helpref = '') {
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->module = $module;
@@ -1314,7 +1314,7 @@ class CTitleBlock_core {
 	 *
 	 * Cells are added from left to right.
 	 */
-	function addCell($data = '', $attribs = '', $prefix = '', $suffix = '') {
+	public function addCell($data = '', $attribs = '', $prefix = '', $suffix = '') {
 		$this->cells1[] = array($attribs, $data, $prefix, $suffix);
 	}
 	/**
@@ -1322,7 +1322,7 @@ class CTitleBlock_core {
 	 *
 	 * Cells are added from left to right.
 	 */
-	function addCrumb($link, $label, $icon = '') {
+	public function addCrumb($link, $label, $icon = '') {
 		$this->crumbs[$link] = array($label, $icon);
 	}
 	/**
@@ -1330,20 +1330,20 @@ class CTitleBlock_core {
 	 *
 	 * Cells are added from left to right.
 	 */
-	function addCrumbRight($data = '', $attribs = '', $prefix = '', $suffix = '') {
+	public function addCrumbRight($data = '', $attribs = '', $prefix = '', $suffix = '') {
 		$this->cells2[] = array($attribs, $data, $prefix, $suffix);
 	}
 	/**
 	 * Creates a standarised, right-aligned delete bread-crumb and icon.
 	 */
-	function addCrumbDelete($title, $canDelete = '', $msg = '') {
+	public function addCrumbDelete($title, $canDelete = '', $msg = '') {
 		global $AppUI;
 		$this->addCrumbRight('<table cellspacing="0" cellpadding="0" border="0"><tr><td>' . '<a class="delete" href="javascript:delIt()" title="' . ($canDelete ? '' : $msg) . '"><span>' . $AppUI->_($title) . '</span></a>' . '</td></tr></table>');
 	}
 	/**
 	 * The drawing function
 	 */
-	function show() {
+	public function show() {
 		global $AppUI, $a, $m, $tab, $infotab;
 		$this->loadExtraCrumbs($m, $a);
 		$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
@@ -1399,7 +1399,7 @@ class CTitleBlock_core {
 		}
 	}
 
-	function loadExtraCrumbs($module, $file = null) {
+	public function loadExtraCrumbs($module, $file = null) {
 		global $AppUI;
 		if (!isset($_SESSION['all_crumbs']) || !isset($_SESSION['all_crumbs'][$module])) {
 			return false;
@@ -1424,7 +1424,7 @@ class CTitleBlock_core {
 		return $crumb_count;
 	}
 
-	function findCrumbModule($crumb) {
+	public function findCrumbModule($crumb) {
 		global $AppUI, $m, $a;
 
 		if (!isset($_SESSION['all_crumbs']) || !isset($_SESSION['all_crumbs'][$m])) {
@@ -1450,6 +1450,3 @@ class CTitleBlock_core {
 		return false;
 	}
 }
-// !! Ensure there is no white space after this close php tag.
-
-?>
