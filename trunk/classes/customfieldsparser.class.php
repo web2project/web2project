@@ -4,15 +4,15 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 class CustomFieldsParser {
-	var $fields_array = array();
-	var $custom_record_type;
-	var $previous_data = array();
-	var $row_id = 0;
-	var $custom_record_types = array();
+	public $fields_array = array();
+	public $custom_record_type;
+	public $previous_data = array();
+	public $row_id = 0;
+	public $custom_record_types = array();
 
-	var $table_name = 'tasks';
-	var $field_name = 'task_custom';
-	var $id_field_name = 'task_id';
+	public $table_name = 'tasks';
+	public $field_name = 'task_custom';
+	public $id_field_name = 'task_id';
 
 	/**
 	 * @return CustomFieldsParser

@@ -40,7 +40,7 @@ require_once W2P_BASE_DIR . '/lib/phpgacl/gacl_api.class.php';
  */
 class w2Pacl extends gacl_api {
 
-	var $_db_acl_prefix = 'gacl_';
+	public $_db_acl_prefix = 'gacl_';
 
 	function w2Pacl($opts = null) {
 		global $db;

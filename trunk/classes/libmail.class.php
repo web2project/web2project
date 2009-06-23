@@ -42,15 +42,15 @@ class Mail extends PHPMailer {
 	 *    list of To addresses
 	 *    @var    array
 	 */
-	var $ato = array();
+	public $ato = array();
 	/**
 	 *    @var    array
 	 */
-	var $acc = array();
+	public $acc = array();
 	/**
 	 *    @var    array
 	 */
-	var $abcc = array();
+	public $abcc = array();
 	/**
 	 *    paths of attached files
 	 *    @var array
@@ -60,9 +60,9 @@ class Mail extends PHPMailer {
 	 *    character set of message
 	 *    @var string
 	 */
-	var $receipt = false;
-	var $useRawAddress = true;
-	var $defer;
+	public $receipt = false;
+	public $useRawAddress = true;
+	public $defer;
 
 	/**
 	 *    Mail constructor
