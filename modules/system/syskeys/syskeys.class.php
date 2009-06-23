@@ -10,12 +10,12 @@ include_once ($AppUI->getSystemClass('w2p'));
 ##
 
 class CSysKey extends CW2pObject {
-	var $syskey_id = null;
-	var $syskey_name = null;
-	var $syskey_label = null;
-	var $syskey_type = null;
-	var $syskey_sep1 = null;
-	var $syskey_sep2 = null;
+	public $syskey_id = null;
+	public $syskey_name = null;
+	public $syskey_label = null;
+	public $syskey_type = null;
+	public $syskey_sep1 = null;
+	public $syskey_sep2 = null;
 
 	function CSysKey($name = null, $label = null, $type = '0', $sep1 = "\n", $sep2 = '|') {
 		$this->CW2pObject('syskeys', 'syskey_id');
@@ -32,11 +32,11 @@ class CSysKey extends CW2pObject {
 ##
 
 class CSysVal extends CW2pObject {
-	var $sysval_id = null;
-	var $sysval_key_id = null;
-	var $sysval_title = null;
-	var $sysval_value_id = null;
-	var $sysval_value = null;
+	public $sysval_id = null;
+	public $sysval_key_id = null;
+	public $sysval_title = null;
+	public $sysval_value_id = null;
+	public $sysval_value = null;
 
 	function check() {
 		//print_r($this);die;
@@ -146,4 +146,3 @@ function parseFormatSysval($text, $syskey) {
 	}
 	return $arr;
 }
-?>

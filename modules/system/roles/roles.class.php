@@ -24,10 +24,10 @@ if (!defined('W2P_BASE_DIR')) {
  * deleted, unless the user is.
  */
 class CRole {
-	var $role_id = null;
-	var $role_name = null;
-	var $role_description = null;
-	var $perms = null;
+	public $role_id = null;
+	public $role_name = null;
+	public $role_description = null;
+	public $perms = null;
 
 	function CRole($name = '', $description = '') {
 		$this->role_name = $name;
@@ -111,4 +111,3 @@ class CRole {
 		return true;
 	}
 }
-?>

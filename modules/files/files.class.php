@@ -18,26 +18,26 @@ if ($helpdesk_available = $AppUI->isActiveModule('helpdesk')) {
  */
 class CFile extends CW2pObject {
 
-	var $file_id = null;
-	var $file_version_id = null;
-	var $file_project = null;
-	var $file_real_filename = null;
-	var $file_task = null;
-	var $file_name = null;
-	var $file_parent = null;
-	var $file_description = null;
-	var $file_type = null;
-	var $file_owner = null;
-	var $file_date = null;
-	var $file_size = null;
-	var $file_version = null;
-	var $file_category = null;
-	var $file_folder = null;
-	var $file_checkout = null;
-	var $file_co_reason = null;
+	public $file_id = null;
+	public $file_version_id = null;
+	public $file_project = null;
+	public $file_real_filename = null;
+	public $file_task = null;
+	public $file_name = null;
+	public $file_parent = null;
+	public $file_description = null;
+	public $file_type = null;
+	public $file_owner = null;
+	public $file_date = null;
+	public $file_size = null;
+	public $file_version = null;
+	public $file_category = null;
+	public $file_folder = null;
+	public $file_checkout = null;
+	public $file_co_reason = null;
 
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
-	//var $file_helpdesk_item = NULL;
+	//public $file_helpdesk_item = NULL;
 
 	function CFile() {
 		global $AppUI, $helpdesk_available;
@@ -502,16 +502,16 @@ class CFile extends CW2pObject {
 class CFileFolder extends CW2pObject {
 	/**
  	@param int file_folder_id **/
-	var $file_folder_id = null;
+	public $file_folder_id = null;
 	/**
  	@param int file_folder_parent The id of the parent folder **/
-	var $file_folder_parent = null;
+	public $file_folder_parent = null;
 	/**
  	@param string file_folder_name The folder's name **/
-	var $file_folder_name = null;
+	public $file_folder_name = null;
 	/**
  	@param string file_folder_description The folder's description **/
-	var $file_folder_description = null;
+	public $file_folder_description = null;
 
 	function CFileFolder() {
 		$this->CW2pObject('file_folders', 'file_folder_id');
@@ -742,4 +742,3 @@ function getFolderSelectList() {
 	$folders = arrayMerge(array('0' => array(0, $AppUI->_('Root'), -1)), $q->loadHashList('file_folder_id'));
 	return $folders;
 }
-?>

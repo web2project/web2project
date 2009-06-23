@@ -11,16 +11,16 @@ require_once ($AppUI->getModuleClass('projects'));
  */
 class CLink extends CW2pObject {
 
-	var $link_id = null;
-	var $link_project = null;
-	var $link_url = null;
-	var $link_task = null;
-	var $link_name = null;
-	var $link_parent = null;
-	var $link_description = null;
-	var $link_owner = null;
-	var $link_date = null;
-	var $link_category = null;
+	public $link_id = null;
+	public $link_project = null;
+	public $link_url = null;
+	public $link_task = null;
+	public $link_name = null;
+	public $link_parent = null;
+	public $link_description = null;
+	public $link_owner = null;
+	public $link_date = null;
+	public $link_category = null;
 
 	function CLink() {
 		$this->CW2pObject('links', 'link_id');
@@ -51,4 +51,3 @@ class CLink extends CW2pObject {
 		return null;
 	}
 }
-?>

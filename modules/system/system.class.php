@@ -10,9 +10,9 @@ $fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries',
  * Preferences class
  */
 class CPreferences {
-	var $pref_user = null;
-	var $pref_name = null;
-	var $pref_value = null;
+	public $pref_user = null;
+	public $pref_name = null;
+	public $pref_value = null;
 
 	function CPreferences() {
 		// empty constructor
@@ -71,22 +71,22 @@ class CPreferences {
  * Module class
  */
 class CModule extends CW2pObject {
-	var $mod_id = null;
-	var $mod_name = null;
-	var $mod_directory = null;
-	var $mod_version = null;
-	var $mod_setup_class = null;
-	var $mod_type = null;
-	var $mod_active = null;
-	var $mod_ui_name = null;
-	var $mod_ui_icon = null;
-	var $mod_ui_order = null;
-	var $mod_ui_active = null;
-	var $mod_description = null;
-	var $permissions_item_label = null;
-	var $permissions_item_field = null;
-	var $permissions_item_table = null;
-	var $mod_main_class = null;
+	public $mod_id = null;
+	public $mod_name = null;
+	public $mod_directory = null;
+	public $mod_version = null;
+	public $mod_setup_class = null;
+	public $mod_type = null;
+	public $mod_active = null;
+	public $mod_ui_name = null;
+	public $mod_ui_icon = null;
+	public $mod_ui_order = null;
+	public $mod_ui_active = null;
+	public $mod_description = null;
+	public $permissions_item_label = null;
+	public $permissions_item_field = null;
+	public $permissions_item_table = null;
+	public $mod_main_class = null;
 
 	function CModule() {
 		$this->CW2pObject('modules', 'mod_id');
@@ -254,13 +254,13 @@ class CConfig extends CW2pObject {
 }
 
 class bcode extends CW2pObject {
-	var $_billingcode_id = null;
-	var $company_id;
-	var $billingcode_id = null;
-	var $billingcode_desc;
-	var $billingcode_name;
-	var $billingcode_value;
-	var $billingcode_status;
+	public $_billingcode_id = null;
+	public $company_id;
+	public $billingcode_id = null;
+	public $billingcode_desc;
+	public $billingcode_name;
+	public $billingcode_value;
+	public $billingcode_status;
 
 	function bcode() {
 		$this->CW2pObject('billingcode', 'billingcode_id');
@@ -319,4 +319,3 @@ class bcode extends CW2pObject {
 		}
 	}
 }
-?>

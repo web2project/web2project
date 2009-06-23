@@ -15,14 +15,14 @@ require_once ($AppUI->getModuleClass('tasks'));
  * CProjectDesignerOptions Class
  */
 class CProjectDesignerOptions extends CW2pObject {
-	var $pd_option_id = null;
-	var $pd_option_user = null;
-	var $pd_option_view_project = null;
-	var $pd_option_view_gantt = null;
-	var $pd_option_view_tasks = null;
-	var $pd_option_view_actions = null;
-	var $pd_option_view_addtasks = null;
-	var $pd_option_view_files = null;
+	public $pd_option_id = null;
+	public $pd_option_user = null;
+	public $pd_option_view_project = null;
+	public $pd_option_view_gantt = null;
+	public $pd_option_view_tasks = null;
+	public $pd_option_view_actions = null;
+	public $pd_option_view_addtasks = null;
+	public $pd_option_view_files = null;
 
 	function CProjectDesignerOptions() {
 		$this->CW2pObject('project_designer_options', 'pd_option_id');
@@ -410,4 +410,3 @@ function findchild_pr(&$tarr, $parent, $level = 0) {
 		}
 	}
 }
-?>

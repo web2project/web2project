@@ -7,15 +7,15 @@ if (!defined('W2P_BASE_DIR')) {
  * events Class
  */
 class events extends smartsearch {
-	var $table = 'events';
-	var $table_module = 'calendar';
-	var $table_key = 'event_id';
-	var $table_extra = '';
-	var $table_link = 'index.php?m=calendar&a=view&event_id=';
-	var $table_title = 'Events';
-	var $table_orderby = 'event_start_date';
-	var $search_fields = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
-	var $display_fields = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
+	public $table = 'events';
+	public $table_module = 'calendar';
+	public $table_key = 'event_id';
+	public $table_extra = '';
+	public $table_link = 'index.php?m=calendar&a=view&event_id=';
+	public $table_title = 'Events';
+	public $table_orderby = 'event_start_date';
+	public $search_fields = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
+	public $display_fields = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
 
 	function events() {
 		global $AppUI;
@@ -26,4 +26,3 @@ class events extends smartsearch {
 		return new events();
 	}
 }
-?>
