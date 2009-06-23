@@ -16,17 +16,17 @@ if ($a == 'viewer') {
 }
 
 class CForum extends CW2pObject {
-	var $forum_id = null;
-	var $forum_project = null;
-	var $forum_status = null;
-	var $forum_owner = null;
-	var $forum_name = null;
-	var $forum_create_date = null;
-	var $forum_last_date = null;
-	var $forum_last_id = null;
-	var $forum_message_count = null;
-	var $forum_description = null;
-	var $forum_moderated = null;
+	public $forum_id = null;
+	public $forum_project = null;
+	public $forum_status = null;
+	public $forum_owner = null;
+	public $forum_name = null;
+	public $forum_create_date = null;
+	public $forum_last_date = null;
+	public $forum_last_id = null;
+	public $forum_message_count = null;
+	public $forum_description = null;
+	public $forum_moderated = null;
 
 	function CForum() {
 		// empty constructor
@@ -134,15 +134,15 @@ class CForum extends CW2pObject {
 }
 
 class CForumMessage {
-	var $message_id = null;
-	var $message_forum = null;
-	var $message_parent = null;
-	var $message_author = null;
-	var $message_editor = null;
-	var $message_title = null;
-	var $message_date = null;
-	var $message_body = null;
-	var $message_published = null;
+	public $message_id = null;
+	public $message_forum = null;
+	public $message_parent = null;
+	public $message_author = null;
+	public $message_editor = null;
+	public $message_title = null;
+	public $message_date = null;
+	public $message_body = null;
+	public $message_published = null;
 
 	function CForumMessage() {
 		// empty constructor

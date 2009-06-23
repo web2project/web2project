@@ -57,33 +57,33 @@ $priority = array(
  * The Project Class
  */
 class CProject extends CW2pObject {
-	var $project_id = null;
-	var $project_company = null;
-	var $project_department = null;
-	var $project_name = null;
-	var $project_short_name = null;
-	var $project_owner = null;
-	var $project_url = null;
-	var $project_demo_url = null;
-	var $project_start_date = null;
-	var $project_end_date = null;
-	var $project_actual_end_date = null;
-	var $project_status = null;
-	var $project_percent_complete = null;
-	var $project_color_identifier = null;
-	var $project_description = null;
-	var $project_target_budget = null;
-	var $project_actual_budget = null;
-	var $project_creator = null;
-	var $project_active = null;
-	var $project_private = null;
-	var $project_departments = null;
-	var $project_contacts = null;
-	var $project_priority = null;
-	var $project_type = null;
-	var $project_parent = null;
-	var $project_original_parent = null;
-	var $project_location = '';
+	public $project_id = null;
+	public $project_company = null;
+	public $project_department = null;
+	public $project_name = null;
+	public $project_short_name = null;
+	public $project_owner = null;
+	public $project_url = null;
+	public $project_demo_url = null;
+	public $project_start_date = null;
+	public $project_end_date = null;
+	public $project_actual_end_date = null;
+	public $project_status = null;
+	public $project_percent_complete = null;
+	public $project_color_identifier = null;
+	public $project_description = null;
+	public $project_target_budget = null;
+	public $project_actual_budget = null;
+	public $project_creator = null;
+	public $project_active = null;
+	public $project_private = null;
+	public $project_departments = null;
+	public $project_contacts = null;
+	public $project_priority = null;
+	public $project_type = null;
+	public $project_parent = null;
+	public $project_original_parent = null;
+	public $project_location = '';
 
 	function CProject() {
 		$this->CW2pObject('projects', 'project_id');
@@ -1274,4 +1274,3 @@ function getProjectIndex($arraylist, $project_id) {
 	}
 	return $result;
 }
-?>

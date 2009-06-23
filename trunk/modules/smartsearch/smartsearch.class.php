@@ -5,24 +5,24 @@ if (!defined('W2P_BASE_DIR')) {
 
 class smartsearch {
 
-	var $table = null;
-	var $table_alias = null;
-	var $table_module = null;
-	var $table_key = null; // primary key in searched table
-	var $table_key2 = null; // primary key in parent table
-	var $table_link = null; // first part of link
-	var $table_link2 = null; // second part of link
-	var $table_title = null;
-	var $table_orderby = null;
-	var $table_extra = null;
-	var $search_fields = array();
-	var $display_fields = array();
-	var $table_joins = array();
-	var $keyword = null;
-	var $keywords = null;
-	var $tmppattern = '';
-	var $display_val = '';
-	var $search_options = null;
+	public $table = null;
+	public $table_alias = null;
+	public $table_module = null;
+	public $table_key = null; // primary key in searched table
+	public $table_key2 = null; // primary key in parent table
+	public $table_link = null; // first part of link
+	public $table_link2 = null; // second part of link
+	public $table_title = null;
+	public $table_orderby = null;
+	public $table_extra = null;
+	public $search_fields = array();
+	public $display_fields = array();
+	public $table_joins = array();
+	public $keyword = null;
+	public $keywords = null;
+	public $tmppattern = '';
+	public $display_val = '';
+	public $search_options = null;
 
 	function smartsearch() {
 		return null;
@@ -255,4 +255,3 @@ function recode2regexp_utf8($input) {
 		}
 	return $result;
 }
-?>

@@ -10,13 +10,13 @@ $utypes = w2PgetSysVal('UserType');
  * User Class
  */
 class CUser extends CW2pObject {
-	var $user_id = null;
-	var $user_username = null;
-	var $user_password = null;
-	var $user_parent = null;
-	var $user_type = null;
-	var $user_contact = null;
-	var $user_signature = null;
+	public $user_id = null;
+	public $user_username = null;
+	public $user_password = null;
+	public $user_parent = null;
+	public $user_type = null;
+	public $user_contact = null;
+	public $user_signature = null;
 
 	function CUser() {
 		$this->CW2pObject('users', 'user_id');
@@ -381,4 +381,3 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd) {
 		$mail->Send();
 	}
 }
-?>

@@ -10,12 +10,12 @@ require_once $AppUI->getSystemClass('w2p');
 require_once $AppUI->getSystemClass('query');
 
 class CResource extends CW2pObject {
-	var $resource_id = null;
-	var $resource_key = null;
-	var $resource_name = null;
-	var $resource_type = null;
-	var $resource_max_allocation = null;
-	var $resource_note = null;
+	public $resource_id = null;
+	public $resource_key = null;
+	public $resource_name = null;
+	public $resource_type = null;
+	public $resource_max_allocation = null;
+	public $resource_note = null;
 
 	function CResource() {
 		parent::CW2pObject('resources', 'resource_id');
@@ -66,4 +66,3 @@ class CResource extends CW2pObject {
 		return $result;
 	}
 }
-?>

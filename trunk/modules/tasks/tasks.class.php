@@ -43,40 +43,40 @@ $tracking_dynamics = array('0' => '21', '1' => '31');
 class CTask extends CW2pObject {
 	/**
  	@var int */
-	var $task_id = null;
+	public $task_id = null;
 	/**
  	@var string */
-	var $task_name = null;
+	public $task_name = null;
 	/**
  	@var int */
-	var $task_parent = null;
-	var $task_milestone = null;
-	var $task_project = null;
-	var $task_owner = null;
-	var $task_start_date = null;
-	var $task_duration = null;
-	var $task_duration_type = null;
+	public $task_parent = null;
+	public $task_milestone = null;
+	public $task_project = null;
+	public $task_owner = null;
+	public $task_start_date = null;
+	public $task_duration = null;
+	public $task_duration_type = null;
 	/**
  	@deprecated */
-	var $task_hours_worked = null;
-	var $task_end_date = null;
-	var $task_status = null;
-	var $task_priority = null;
-	var $task_percent_complete = null;
-	var $task_description = null;
-	var $task_target_budget = null;
-	var $task_related_url = null;
-	var $task_creator = null;
+	public $task_hours_worked = null;
+	public $task_end_date = null;
+	public $task_status = null;
+	public $task_priority = null;
+	public $task_percent_complete = null;
+	public $task_description = null;
+	public $task_target_budget = null;
+	public $task_related_url = null;
+	public $task_creator = null;
 
-	var $task_order = null;
-	var $task_client_publish = null;
-	var $task_dynamic = null;
-	var $task_access = null;
-	var $task_notify = null;
-	var $task_departments = null;
-	var $task_contacts = null;
-	var $task_custom = null;
-	var $task_type = null;
+	public $task_order = null;
+	public $task_client_publish = null;
+	public $task_dynamic = null;
+	public $task_access = null;
+	public $task_notify = null;
+	public $task_departments = null;
+	public $task_contacts = null;
+	public $task_custom = null;
+	public $task_type = null;
 
 	function CTask() {
 		$this->CW2pObject('tasks', 'task_id');
@@ -2159,17 +2159,17 @@ class CTask extends CW2pObject {
  * CTaskLog Class
  */
 class CTaskLog extends CW2pObject {
-	var $task_log_id = null;
-	var $task_log_task = null;
-	var $task_log_name = null;
-	var $task_log_description = null;
-	var $task_log_creator = null;
-	var $task_log_hours = null;
-	var $task_log_date = null;
-	var $task_log_costcode = null;
-	var $task_log_problem = null;
-	var $task_log_reference = null;
-	var $task_log_related_url = null;
+	public $task_log_id = null;
+	public $task_log_task = null;
+	public $task_log_name = null;
+	public $task_log_description = null;
+	public $task_log_creator = null;
+	public $task_log_hours = null;
+	public $task_log_date = null;
+	public $task_log_costcode = null;
+	public $task_log_problem = null;
+	public $task_log_reference = null;
+	public $task_log_related_url = null;
 
 	function CTaskLog() {
 		$this->CW2pObject('task_log', 'task_log_id');

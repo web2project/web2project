@@ -7,17 +7,16 @@ if (!defined('W2P_BASE_DIR')) {
  * tasks Class
  */
 class tasks extends smartsearch {
-	var $table = 'tasks';
-	var $table_module = 'tasks';
-	var $table_key = 'task_id';
-	var $table_link = 'index.php?m=tasks&a=view&task_id=';
-	var $table_title = 'Tasks';
-	var $table_orderby = 'task_name';
-	var $search_fields = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
-	var $display_fields = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
+	public $table = 'tasks';
+	public $table_module = 'tasks';
+	public $table_key = 'task_id';
+	public $table_link = 'index.php?m=tasks&a=view&task_id=';
+	public $table_title = 'Tasks';
+	public $table_orderby = 'task_name';
+	public $search_fields = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
+	public $display_fields = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
 
 	function ctasks() {
 		return new tasks();
 	}
 }
-?>
