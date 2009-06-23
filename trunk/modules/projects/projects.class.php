@@ -85,11 +85,11 @@ class CProject extends CW2pObject {
 	public $project_original_parent = null;
 	public $project_location = '';
 
-	function CProject() {
+	public function CProject() {
 		$this->CW2pObject('projects', 'project_id');
 	}
 
-	function check() {
+	public function check() {
 		// ensure changes of state in checkboxes is captured
 		$this->project_active = intval($this->project_active);
 		$this->project_private = intval($this->project_private);
@@ -107,7 +107,7 @@ class CProject extends CW2pObject {
 		return null; // object is ok
 	}
 
-	function load($oid = null, $strip = true) {
+	public function load($oid = null, $strip = true) {
 		$result = parent::load($oid, $strip);
 		if ($result && $oid) {
 			$working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
@@ -143,7 +143,7 @@ class CProject extends CW2pObject {
 		$q->loadObject($this);
 	}
 	// overload canDelete
-	function canDelete(&$msg, $oid = null) {
+	public function canDelete(&$msg, $oid = null) {
 		// TODO: check if user permissions are considered when deleting a project
 		global $AppUI;
 		$perms = &$AppUI->acl();
@@ -161,7 +161,7 @@ class CProject extends CW2pObject {
 		*/
 	}
 
-	function delete() {
+	public function delete() {
 		$this->load($this->project_id);
 		addHistory('projects', $this->project_id, 'delete', $this->project_name, $this->project_id);
 		$q = new DBQuery;
@@ -226,7 +226,7 @@ class CProject extends CW2pObject {
 	 *	@param	int		Project ID of the tasks come from.
 	 *	@return	bool	
 	 **/
-	function importTasks($from_project_id) {
+	public function importTasks($from_project_id) {
 
 		// Load the original
 		$origProject = new CProject();
@@ -308,7 +308,7 @@ class CProject extends CW2pObject {
 	 **	@see	w2PObject::getAllowedRecords
 	 **/
 
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
 		$oCpy = new CCompany();
 
 		$aCpies = $oCpy->getAllowedRecords($uid, 'company_id, company_name');
@@ -349,7 +349,7 @@ class CProject extends CW2pObject {
 
 	}
 
-	function getAllowedSQL($uid, $index = null) {
+	public function getAllowedSQL($uid, $index = null) {
 		$oCpy = new CCompany();
 		$where = $oCpy->getAllowedSQL($uid, 'project_company');
 
@@ -360,7 +360,7 @@ class CProject extends CW2pObject {
 		return array_merge($where, $project_where);
 	}
 
-	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
+	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
 		$oCpy = new CCompany;
 		parent::setAllowedSQL($uid, $query, $index, $key);
 		$oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '').'project_company');
@@ -377,7 +377,7 @@ class CProject extends CW2pObject {
 	 *	@author	handco <handco@sourceforge.net>
 	 *	@see	w2PObject::getAllowedRecords
 	 */
-	function getDeniedRecords($uid) {
+	public function getDeniedRecords($uid) {
 		$aBuf1 = parent::getDeniedRecords($uid);
 
 		$oCpy = new CCompany();
@@ -424,7 +424,7 @@ class CProject extends CW2pObject {
 		return array_merge($aBuf1, $aBuf2);
 
 	}
-	function getAllowedProjectsInRows($userId) {
+	public function getAllowedProjectsInRows($userId) {
 		$q = new DBQuery;
 		$q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
 		$q->addTable('projects', 'pr');
@@ -434,7 +434,7 @@ class CProject extends CW2pObject {
 
 		return $allowedProjectRows;
 	}
-	function getAssignedProjectsInRows($userId) {
+	public function getAssignedProjectsInRows($userId) {
 		$q = new DBQuery;
 
 		$q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
@@ -455,7 +455,7 @@ class CProject extends CW2pObject {
 	 * @param int SQL-limit to limit the number of returned tasks
 	 * @return array List of criticalTasks
 	 */
-	function getCriticalTasks($project_id = null, $limit = 1) {
+	public function getCriticalTasks($project_id = null, $limit = 1) {
 		$project_id = !empty($project_id) ? $project_id : $this->project_id;
 		$q = new DBQuery;
 		$q->addTable('tasks');
@@ -466,7 +466,7 @@ class CProject extends CW2pObject {
 		return $q->loadList();
 	}
 
-	function store() {
+	public function store() {
 
 		$this->w2PTrimAll();
 
@@ -531,7 +531,7 @@ class CProject extends CW2pObject {
 
 	}
 
-	function notifyOwner($isNotNew) {
+	public function notifyOwner($isNotNew) {
 		global $AppUI, $w2Pconfig, $locale_char_set;
 
 		$mail = new Mail;
@@ -581,7 +581,7 @@ class CProject extends CW2pObject {
 		return '';
 	}
 
-	function notifyContacts($isNotNew) {
+	public function notifyContacts($isNotNew) {
 		global $AppUI, $w2Pconfig, $locale_char_set;
 
 		$mail = new Mail;

@@ -30,12 +30,9 @@ if ($a == 'setup') {
 
 class CSetupForums {
 
-	function configure() { // configure this module
+	public function configure() { // configure this module
 		global $AppUI;
 		$AppUI->redirect('m=forums&a=configure'); // load module specific configuration page
 		return true;
 	}
-
 }
-
-?>

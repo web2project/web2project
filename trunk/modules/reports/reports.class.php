@@ -5,6 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 require_once $AppUI->getModuleClass('projects');
 
 class w2PReport {
-	function w2PReport() {
+	public function w2PReport() {
 	}
 }

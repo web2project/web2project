@@ -17,11 +17,11 @@ class CResource extends CW2pObject {
 	public $resource_max_allocation = null;
 	public $resource_note = null;
 
-	function CResource() {
+	public function CResource() {
 		parent::CW2pObject('resources', 'resource_id');
 	}
 
-	function &loadTypes() {
+	public function &loadTypes() {
 		// If we have loaded the resource types before then we don't need to
 		// load them again.
 		if (isset($_SESSION['resource_type_list'])) {
@@ -44,7 +44,7 @@ class CResource extends CW2pObject {
 		return $typelist;
 	}
 
-	function typeSelect() {
+	public function typeSelect() {
 		$typelist = &$this->loadTypes();
 		$result = array();
 		foreach ($typelist as $type) {
@@ -53,7 +53,7 @@ class CResource extends CW2pObject {
 		return $result;
 	}
 
-	function getTypeName() {
+	public function getTypeName() {
 		$result = 'All Resources';
 		$this->_query->clear();
 		$this->_query->addTable('resource_types');

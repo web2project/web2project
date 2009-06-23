@@ -26,11 +26,11 @@ class CDepartment extends CW2pObject {
 	public $dept_email = null;
 	public $dept_type = null;
 
-	function CDepartment() {
+	public function CDepartment() {
 		$this->CW2pObject('departments', 'dept_id');
 	}
 
-	function load($deptId) {
+	public function load($deptId) {
 		$q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.*, company_name');
@@ -92,7 +92,7 @@ class CDepartment extends CW2pObject {
 		return $q->loadList();
 	}
 
-	function bind($hash) {
+	public function bind($hash) {
 		if (!is_array($hash)) {
 			return get_class($this) . "::bind failed";
 		} else {
@@ -103,7 +103,7 @@ class CDepartment extends CW2pObject {
 		}
 	}
 
-	function check() {
+	public function check() {
 		if ($this->dept_id === null) {
 			return 'department id is NULL';
 		}
@@ -114,7 +114,7 @@ class CDepartment extends CW2pObject {
 		return null; // object is ok
 	}
 
-	function store() {
+	public function store() {
 		$msg = $this->check();
 		if ($msg) {
 			return get_class($this) . '::store-check failed - ' . $msg;
@@ -135,7 +135,7 @@ class CDepartment extends CW2pObject {
 		}
 	}
 
-	function delete() {
+	public function delete() {
 		$q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.dept_id');
@@ -178,7 +178,7 @@ class CDepartment extends CW2pObject {
 	 *	@return array
 	 */
 	// returns a list of records exposed to the user
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
@@ -229,7 +229,7 @@ class CDepartment extends CW2pObject {
 		return $this->_query->loadHashList($index);
 	}
 
-	function getAllowedSQL($uid, $index = null) {
+	public function getAllowedSQL($uid, $index = null) {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
@@ -265,7 +265,7 @@ class CDepartment extends CW2pObject {
 		return $where;
 	}
 
-	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
+	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
@@ -372,4 +372,3 @@ function addDeptId($dataset, $parent) {
 		}
 	}
 }
-?>

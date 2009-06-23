@@ -21,7 +21,7 @@ if ($a == 'setup') {
 
 class projectDesigner {
 
-	function install() {
+	public function install() {
 		$success = 1;
 
 		$bulk_sql[] = '
@@ -46,7 +46,7 @@ class projectDesigner {
 		return $success;
 	}
 
-	function remove() {
+	public function remove() {
 		$success = 1;
 
 		$bulk_sql[] = 'DROP TABLE project_designer_options';
@@ -59,11 +59,11 @@ class projectDesigner {
 		return $success;
 	}
 
-	function upgrade() {
+	public function upgrade() {
 		return null;
 	}
 
-	function configure() {
+	public function configure() {
 		global $AppUI;
 
 		$AppUI->redirect('m=projectdesigner&a=configure');

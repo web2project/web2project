@@ -14,11 +14,11 @@ class CPreferences {
 	public $pref_name = null;
 	public $pref_value = null;
 
-	function CPreferences() {
+	public function CPreferences() {
 		// empty constructor
 	}
 
-	function bind($hash) {
+	public function bind($hash) {
 		if (!is_array($hash)) {
 			return 'CPreferences::bind failed';
 		} else {
@@ -29,12 +29,12 @@ class CPreferences {
 		}
 	}
 
-	function check() {
+	public function check() {
 		// TODO MORE
 		return null; // object is ok
 	}
 
-	function store() {
+	public function store() {
 		$msg = $this->check();
 		if ($msg) {
 			return 'CPreference::store-check failed ' . $msg;
@@ -52,7 +52,7 @@ class CPreferences {
 		}
 	}
 
-	function delete() {
+	public function delete() {
 		$q = new DBQuery;
 		$q->setDelete('user_preferences');
 		$q->addWhere('pref_user = ' . (int)$this->pref_user);
@@ -88,11 +88,11 @@ class CModule extends CW2pObject {
 	public $permissions_item_table = null;
 	public $mod_main_class = null;
 
-	function CModule() {
+	public function CModule() {
 		$this->CW2pObject('modules', 'mod_id');
 	}
 
-	function install() {
+	public function install() {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory');
@@ -143,7 +143,7 @@ class CModule extends CW2pObject {
 		}		
 	}
 
-	function remove() {
+	public function remove() {
 		$q = new DBQuery;
 		$q->setDelete('modules');
 		$q->addWhere('mod_id = ' . (int)$this->mod_id);
@@ -169,7 +169,7 @@ class CModule extends CW2pObject {
 		}
 	}
 
-	function move($dirn) {
+	public function move($dirn) {
 		$new_ui_order = $this->mod_ui_order;
 
 		$q = new DBQuery;
@@ -221,13 +221,13 @@ class CModule extends CW2pObject {
 		}
 	}
 	// overridable functions
-	function moduleInstall() {
+	public function moduleInstall() {
 		return null;
 	}
-	function moduleRemove() {
+	public function moduleRemove() {
 		return null;
 	}
-	function moduleUpgrade() {
+	public function moduleUpgrade() {
 		return null;
 	}
 }
@@ -237,11 +237,11 @@ class CModule extends CW2pObject {
  */
 class CConfig extends CW2pObject {
 
-	function CConfig() {
+	public function CConfig() {
 		$this->CW2pObject('config', 'config_id');
 	}
 
-	function getChildren($id) {
+	public function getChildren($id) {
 		$this->_query->clear();
 		$this->_query->addTable('config_list');
 		$this->_query->addOrder('config_list_id');
@@ -262,11 +262,11 @@ class bcode extends CW2pObject {
 	public $billingcode_value;
 	public $billingcode_status;
 
-	function bcode() {
+	public function bcode() {
 		$this->CW2pObject('billingcode', 'billingcode_id');
 	}
 
-	function bind($hash) {
+	public function bind($hash) {
 		if (!is_array($hash)) {
 			return 'Billing Code::bind failed';
 		} else {
@@ -277,7 +277,7 @@ class bcode extends CW2pObject {
 		}
 	}
 
-	function delete() {
+	public function delete() {
 		$q = new DBQuery;
 		$q->addTable('billingcode');
 		$q->addUpdate('billingcode_status', '1');
@@ -291,7 +291,7 @@ class bcode extends CW2pObject {
 		}
 	}
 
-	function store() {
+	public function store() {
 		$q = new DBQuery;
 		$q->addQuery('billingcode_id');
 		$q->addTable('billingcode');

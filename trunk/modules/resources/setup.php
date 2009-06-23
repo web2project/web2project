@@ -10,7 +10,7 @@ if ($a == 'setup') {
 }
 
 class SResource {
-	function install() {
+	public function install() {
 		$ok = true;
 		$q = new DBQuery;
 		$sql = '(
@@ -62,7 +62,7 @@ class SResource {
 		return null;
 	}
 
-	function remove() {
+	public function remove() {
 		$q = new DBQuery;
 		$q->dropTable('resources');
 		$q->exec();
@@ -76,7 +76,7 @@ class SResource {
 		return null;
 	}
 
-	function upgrade($old_version) {
+	public function upgrade($old_version) {
 		switch ($old_version) {
 			case '1.0':
 				$q = new DBQuery;

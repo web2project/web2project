@@ -29,13 +29,13 @@ class CRole {
 	public $role_description = null;
 	public $perms = null;
 
-	function CRole($name = '', $description = '') {
+	public function CRole($name = '', $description = '') {
 		$this->role_name = $name;
 		$this->role_description = $description;
 		$this->perms = &$GLOBALS['AppUI']->acl();
 	}
 
-	function bind($hash) {
+	public function bind($hash) {
 		if (!is_array($hash)) {
 			return get_class($this) . "::bind failed";
 		} else {
@@ -46,12 +46,12 @@ class CRole {
 		}
 	}
 
-	function check() {
+	public function check() {
 		// Not really much to check, just return OK for this iteration.
 		return null; // object is ok
 	}
 
-	function store() {
+	public function store() {
 		$msg = $this->check();
 		if ($msg) {
 			return get_class($this) . '::store-check failed ' . $msg;
@@ -68,7 +68,7 @@ class CRole {
 		}
 	}
 
-	function delete() {
+	public function delete() {
 		// Delete a role requires deleting all of the ACLs associated
 		// with this role, and all of the group data for the role.
 		if ($this->perms->checkModule('roles', 'delete')) {
@@ -80,24 +80,24 @@ class CRole {
 		}
 	}
 
-	function __sleep() {
+	public function __sleep() {
 		return array('role_id', 'role_name', 'role_description');
 	}
 
-	function __wakeup() {
+	public function __wakeup() {
 		$this->perms = &$GLOBALS['AppUI']->acl();
 	}
 
 	/**
 	 * Return a list of known roles.
 	 */
-	function getRoles() {
+	public function getRoles() {
 		$role_parent = $this->perms->get_group_id('role');
 		$roles = $this->perms->getChildren($role_parent);
 		return $roles;
 	}
 
-	function rename_array(&$roles, $from, $to) {
+	public function rename_array(&$roles, $from, $to) {
 		if (count($from) != count($to)) {
 			return false;
 		}

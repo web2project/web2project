@@ -28,12 +28,12 @@ class CForum extends CW2pObject {
 	public $forum_description = null;
 	public $forum_moderated = null;
 
-	function CForum() {
+	public function CForum() {
 		// empty constructor
 		parent::CW2pObject('forums', 'forum_id');
 	}
 
-	function bind($hash) {
+	public function bind($hash) {
 		if (!is_array($hash)) {
 			return "CForum::bind failed";
 		} else {
@@ -44,7 +44,7 @@ class CForum extends CW2pObject {
 		}
 	}
 
-	function check() {
+	public function check() {
 		if ($this->forum_id === null) {
 			return 'forum_id is NULL';
 		}
@@ -52,7 +52,7 @@ class CForum extends CW2pObject {
 		return null; // object is ok
 	}
 
-	function store() {
+	public function store() {
 		$msg = $this->check();
 		if ($msg) {
 			return 'CForum::store-check failed ' . $msg;
@@ -80,7 +80,7 @@ class CForum extends CW2pObject {
 		}
 	}
 
-	function delete() {
+	public function delete() {
 		$q = new DBQuery;
 		$q->setDelete('forum_visits');
 		$q->addWhere('visit_forum = ' . (int)$this->forum_id);
@@ -106,7 +106,7 @@ class CForum extends CW2pObject {
 		return $result;
 	}
 
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
 		require_once ($AppUI->getModuleClass('projects'));
 		$oPrj = new CProject();
@@ -144,11 +144,11 @@ class CForumMessage {
 	public $message_body = null;
 	public $message_published = null;
 
-	function CForumMessage() {
+	public function CForumMessage() {
 		// empty constructor
 	}
 
-	function bind($hash) {
+	public function bind($hash) {
 		if (!is_array($hash)) {
 			return 'CForumMessage::bind failed';
 		} else {
@@ -159,7 +159,7 @@ class CForumMessage {
 		}
 	}
 
-	function check() {
+	public function check() {
 		if ($this->message_id === null) {
 			return 'message_id is NULL';
 		}
@@ -167,7 +167,7 @@ class CForumMessage {
 		return null; // object is ok
 	}
 
-	function store() {
+	public function store() {
 		$msg = $this->check();
 		if ($msg) {
 			return 'CForumMessage::store-check failed ' . $msg;
@@ -218,7 +218,7 @@ class CForumMessage {
 		}
 	}
 
-	function delete() {
+	public function delete() {
 		$q = new DBQuery;
 		$q->setDelete('forum_visits');
 		$q->addWhere('visit_message = ' . (int)$this->message_id);
@@ -255,7 +255,7 @@ class CForumMessage {
 		return $result;
 	}
 
-	function sendWatchMail($debug = false) {
+	public function sendWatchMail($debug = false) {
 		global $AppUI, $debug, $w2Pconfig;
 		$subj_prefix = $AppUI->_('forumEmailSubj', UI_OUTPUT_RAW);
 		$body_msg = $AppUI->_('forumEmailBody', UI_OUTPUT_RAW);

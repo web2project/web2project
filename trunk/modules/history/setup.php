@@ -29,7 +29,7 @@ if ($a == 'setup') {
 
 class CSetupHistory {
 
-	function install() {
+	public function install() {
 		$sql = ' ( 
 			history_id int(10) unsigned NOT NULL auto_increment,
 			history_date datetime NOT NULL default \'0000-00-00 00:00:00\',		  
@@ -52,7 +52,7 @@ class CSetupHistory {
 		return (db_error() ? false : true);
 	}
 
-	function remove() {
+	public function remove() {
 		$q = new DBQuery;
 		$q->dropTable('history');
 		$q->exec();
@@ -60,7 +60,7 @@ class CSetupHistory {
 		return (db_error() ? false : true);
 	}
 
-	function upgrade($old_version) {
+	public function upgrade($old_version) {
 		$q = new DBQuery;
 		switch ($old_version) {
 			case '0.3':
@@ -84,4 +84,3 @@ class CSetupHistory {
 		return (db_error() ? false : true);
 	}
 }
-?>
