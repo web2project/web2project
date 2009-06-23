@@ -144,8 +144,8 @@ class PostNukeAuthenticator extends SQLAuthenticator {
 }
 
 class SQLAuthenticator {
-	var $user_id;
-	var $username;
+	public $user_id;
+	public $username;
 
 	function authenticate($username, $password) {
 		global $db, $AppUI;
@@ -179,16 +179,16 @@ class SQLAuthenticator {
 }
 
 class LDAPAuthenticator extends SQLAuthenticator {
-	var $ldap_host;
-	var $ldap_port;
-	var $ldap_version;
-	var $base_dn;
-	var $ldap_search_user;
-	var $ldap_search_pass;
-	var $filter;
+	public $ldap_host;
+	public $ldap_port;
+	public $ldap_version;
+	public $base_dn;
+	public $ldap_search_user;
+	public $ldap_search_pass;
+	public $filter;
 
-	var $user_id;
-	var $username;
+	public $user_id;
+	public $username;
 
 	function LDAPAuthenticator() {
 		global $w2Pconfig;

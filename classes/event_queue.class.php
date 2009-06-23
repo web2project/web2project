@@ -16,10 +16,10 @@ if (!defined('W2P_BASE_DIR')) {
 
 class EventQueue {
 
-	var $table = 'event_queue';
-	var $update_list = array();
-	var $delete_list = array();
-	var $event_count = 0;
+	public $table = 'event_queue';
+	public $update_list = array();
+	public $delete_list = array();
+	public $event_count = 0;
 
 	function EventQueue() {
 	}

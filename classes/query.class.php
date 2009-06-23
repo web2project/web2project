@@ -41,43 +41,43 @@ define('QUERY_STYLE_BOTH', ADODB_FETCH_BOTH);
  * @copyright	(c) 2003 Adam Donnison
  */
 class DBQuery {
-	var $query;
+	public $query;
 	/**< Contains the query after it has been built. */
-	var $table_list;
+	public $table_list;
 	/**< Array of tables to be queried */
-	var $where;
+	public $where;
 	/**< WHERE component of the query */
-	var $order_by;
+	public $order_by;
 	/**< ORDER BY component of the query */
-	var $group_by;
+	public $group_by;
 	/**< GROUP BY component of the query */
-	var $having;
+	public $having;
 	/**< HAVING component of the query */
-	var $limit;
+	public $limit;
 	/**< LIMIT component of the query */
-	var $offset;
+	public $offset;
 	/**< offset of the LIMIT component */
-	var $join;
+	public $join;
 	/**< JOIN component of the query */
-	var $type;
+	public $type;
 	/**< Query type eg. 'select', 'update' */
-	var $update_list;
+	public $update_list;
 	/**< Array of fields->values to update */
-	var $value_list;
+	public $value_list;
 	/**< Array of values used in INSERT or REPLACE statements */
-	var $create_table;
+	public $create_table;
 	/**< Name of the table to create */
-	var $create_definition;
+	public $create_definition;
 	/**< Array containing information about the table definition */
-	var $include_count = false;
+	public $include_count = false;
 	/**< Bollean to count of rows in query */
-	var $_table_prefix;
+	public $_table_prefix;
 	/**< Internal string, table prefix, prepended to all queries */
-	var $_query_id = null;
+	public $_query_id = null;
 	/**< Handle to the query result */
-	var $_old_style = null;
+	public $_old_style = null;
 	/**< Use the old style of fetch mode with ADODB */
-	var $_db = null;
+	public $_db = null;
 	/**< Handle to the database connection */
 
 	/** DBQuery constructor

@@ -40,83 +40,83 @@ require_once W2P_BASE_DIR . '/classes/permissions.class.php';
 class CAppUI {
 	/**
  	@var array generic array for holding the state of anything */
-	var $state = null;
+	public $state = null;
 	/**
  	@var int */
-	var $user_id = null;
+	public $user_id = null;
 	/**
  	@var string */
-	var $user_first_name = null;
+	public $user_first_name = null;
 	/**
  	@var string */
-	var $user_last_name = null;
+	public $user_last_name = null;
 	/**
  	@var string */
-	var $user_company = null;
+	public $user_company = null;
 	/**
  	@var int */
-	var $user_department = null;
+	public $user_department = null;
 	/**
  	@var string */
-	var $user_email = null;
+	public $user_email = null;
 	/**
  	@var int */
-	var $user_type = null;
+	public $user_type = null;
 	/**
  	@var array */
-	var $user_prefs = null;
+	public $user_prefs = null;
 	/**
  	@var int Unix time stamp */
-	var $day_selected = null;
+	public $day_selected = null;
 
 	// localisation
 	/**
  	@var string */
-	var $user_locale = null;
+	public $user_locale = null;
 	/**
  	@var string */
-	var $user_lang = null;
+	public $user_lang = null;
 	/**
  	@var string */
-	var $base_locale = 'en'; // do not change - the base 'keys' will always be in english
+	public $base_locale = 'en'; // do not change - the base 'keys' will always be in english
 
 	/**
  	@var string Message string*/
-	var $msg = '';
+	public $msg = '';
 	/**
  	@var string */
-	var $msgNo = '';
+	public $msgNo = '';
 	/**
  	@var string Default page for a redirect call*/
-	var $defaultRedirect = '';
+	public $defaultRedirect = '';
 
 	/**
  	@var array Configuration variable array*/
-	var $cfg = null;
+	public $cfg = null;
 
 	/**
  	@var integer Version major */
-	var $version_major = null;
+	public $version_major = null;
 
 	/**
  	@var integer Version minor */
-	var $version_minor = null;
+	public $version_minor = null;
 
 	/**
  	@var integer Version patch level */
-	var $version_patch = null;
+	public $version_patch = null;
 
 	/**
  	@var string Version string */
-	var $version_string = null;
+	public $version_string = null;
 
 	/**
  	@var integer for register log ID */
-	var $last_insert_id = null;
+	public $last_insert_id = null;
 
 	/**
  	@var string */
-	var $user_style = null;
+	public $user_style = null;
 
 	/**
 
@@ -976,20 +976,20 @@ class CAppUI {
 class CTabBox_core {
 	/**
  	@var array */
-	var $tabs = null;
+	public $tabs = null;
 	/**
  	@var int The active tab */
-	var $active = null;
+	public $active = null;
 	/**
  	@var string The base URL query string to prefix tab links */
-	var $baseHRef = null;
+	public $baseHRef = null;
 	/**
  	@var string The base path to prefix the include file */
-	var $baseInc;
+	public $baseInc;
 	/**
 
 	 * the active tab, and the selected tab **/
-	var $javascript = null;
+	public $javascript = null;
 
 	/**
 	 * Constructor
@@ -1279,19 +1279,19 @@ show_tab(' . $this->active . ');
 class CTitleBlock_core {
 	/**
  	@var string The main title of the page */
-	var $title = '';
+	public $title = '';
 	/**
  	@var string The name of the icon used to the left of the title */
-	var $icon = '';
+	public $icon = '';
 	/**
  	@var string The name of the module that this title block is displaying in */
-	var $module = '';
+	public $module = '';
 	/**
  	@var array An array of the table 'cells' to the right of the title block and for bread-crumbs */
-	var $cells = null;
+	public $cells = null;
 	/**
  	@var string The reference for the context help system */
-	var $helpref = '';
+	public $helpref = '';
 	/**
 	 * The constructor
 	 *

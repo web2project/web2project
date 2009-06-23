@@ -23,24 +23,24 @@ class CW2pObject {
 	/**
 	 *	@var string Name of the table prefix in the db schema
 	 */
-	var $_tbl_prefix = '';
+	public $_tbl_prefix = '';
 	/**
 	 *	@var string Name of the table in the db schema relating to child class
 	 */
-	var $_tbl = '';
+	public $_tbl = '';
 	/**
 	 *	@var string Name of the primary key field in the table
 	 */
-	var $_tbl_key = '';
+	public $_tbl_key = '';
 	/**
 	 *	@var string Error message
 	 */
-	var $_error = '';
+	public $_error = '';
 
 	/**
 	 * @var object Query Handler
 	 */
-	var $_query;
+	public $_query;
 
 	/**
 	 *	Object constructor to set table and key field
