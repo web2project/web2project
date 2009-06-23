@@ -67,7 +67,7 @@ class Mail extends PHPMailer {
 	/**
 	 *    Mail constructor
 	 */
-	function Mail() {
+	public function Mail() {
 		$this->autoCheck(true);
 		$this->defer = w2PgetConfig('mail_defer');
 		$this->canEncode = function_exists('imap_8bit') && 'us-ascii' != $this->charset;
@@ -98,7 +98,7 @@ class Mail extends PHPMailer {
 	 *    @param boolean    $bool set to TRUE to turn on the auto validation
 	 *    @access public
 	 */
-	function autoCheck($bool) {
+	public function autoCheck($bool) {
 		$this->checkAddress = (bool)$bool;
 		return true;
 	}
@@ -107,7 +107,7 @@ class Mail extends PHPMailer {
 	 *    Define the subject line of the email
 	 *    @param string $subject any monoline string
 	 */
-	function Subject($subject, $charset = '') {
+	public function Subject($subject, $charset = '') {
 		$this->Subject = w2PgetConfig('email_prefix') . ' ' . $subject;
 		return true;
 	}
@@ -116,7 +116,7 @@ class Mail extends PHPMailer {
 	 *    set the sender of the mail
 	 *    @param string $from should be an email address
 	 */
-	function From($from, $fromname = '') {
+	public function From($from, $fromname = '') {
 		if (!is_string($from)) {
 			return false;
 		}
@@ -132,7 +132,7 @@ class Mail extends PHPMailer {
 	 *    set the Reply-to header
 	 *    @param string $email should be an email address
 	 */
-	function ReplyTo($address) {
+	public function ReplyTo($address) {
 		if (!is_string($address)) {
 			return false;
 		}
@@ -148,7 +148,7 @@ class Mail extends PHPMailer {
 	 *    when the receiver opens the message.
 	 *    @warning this functionality is *not* a standard, thus only some mail clients are compliants.
 	 */
-	function Receipt() {
+	public function Receipt() {
 		$this->receipt = true;
 		return true;
 	}
@@ -162,7 +162,7 @@ class Mail extends PHPMailer {
 	 *    @param string $to email address, accept both a single address or an array of addresses
 	 *    @param boolean $reset resets the current array
 	 */
-	function To($to, $reset = false) {
+	public function To($to, $reset = false) {
 		if (is_array($to)) {
 			$this->ato = $to;
 		} else {
@@ -199,7 +199,7 @@ class Mail extends PHPMailer {
 	 *    set the CC headers ( carbon copy )
 	 *    $cc : email address(es), accept both array and string
 	 */
-	function Cc($cc) {
+	public function Cc($cc) {
 		if (is_array($cc)) {
 			$this->acc = $cc;
 		} else {
@@ -227,7 +227,7 @@ class Mail extends PHPMailer {
 	 *    set the Bcc headers ( blank carbon copy ).
 	 *    $bcc : email address(es), accept both array and string
 	 */
-	function Bcc($bcc) {
+	public function Bcc($bcc) {
 		if (is_array($bcc)) {
 			$this->abcc = $bcc;
 		} else {
@@ -257,7 +257,7 @@ class Mail extends PHPMailer {
 	 *        default to us-ascii
 	 *        $mail->Body( "m?l en fran?ais avec des accents", "iso-8859-1" );
 	 */
-	function Body($body, $charset = '') {
+	public function Body($body, $charset = '') {
 		$this->Body = w2PHTMLDecode($body);
 
 		if (!empty($charset)) {
@@ -273,7 +273,7 @@ class Mail extends PHPMailer {
 	 *        $priority : integer taken between 1 (highest) and 5 ( lowest )
 	 *        ex: $mail->Priority(1) ; => Highest
 	 */
-	function Priority($priority) {
+	public function Priority($priority) {
 		if ((!intval($priority)) || (intval($priority) < 1) || (intval($priority) > 5)) {
 			return false;
 		}
@@ -287,7 +287,7 @@ class Mail extends PHPMailer {
 	 *    Overload the Send method from PHPMailer to provide defered mails
 	 *    @access public
 	 */
-	function Send() {
+	public function Send() {
 		if ($this->defer) {
 			return $this->QueueMail();
 		} else {
@@ -295,7 +295,7 @@ class Mail extends PHPMailer {
 		}
 	}
 
-	function getHostName() {
+	public function getHostName() {
 		// Grab the server address, return a hostname for it.
 		if ($host = gethostbyaddr($_SERVER['SERVER_ADDR'])) {
 			return $host;
@@ -310,7 +310,7 @@ class Mail extends PHPMailer {
 	 *
 	 * @access private
 	 */
-	function QueueMail() {
+	public function QueueMail() {
 		global $AppUI;
 
 		require_once $AppUI->getSystemClass('event_queue');
@@ -324,7 +324,7 @@ class Mail extends PHPMailer {
 	 *
 	 * @access private
 	 */
-	function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
+	public function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
 		extract($args);
 		if ($this->transport == 'smtp') {
 			$this->IsSMTP();
@@ -342,7 +342,7 @@ class Mail extends PHPMailer {
 	 *
 	 *    @return string
 	 */
-	function Get() {
+	public function Get() {
 		$mail = $this->CreateHeader();
 		$mail .= $this->CreateBody();
 		return $mail;
@@ -354,7 +354,7 @@ class Mail extends PHPMailer {
 	 *    @param string $address : email address to check
 	 *    @return TRUE if email adress is ok
 	 */
-	function ValidEmail($address) {
+	public function ValidEmail($address) {
 		if (preg_match('/^(.*)\<(.+)\>$/D', $address, $regs)) {
 			$address = $regs[2];
 		}
@@ -367,7 +367,7 @@ class Mail extends PHPMailer {
 	 *    @return if unvalid, output an error message and exit, this may -should- be customized
 	 */
 
-	function CheckAdresses($aad) {
+	public function CheckAdresses($aad) {
 		foreach ($aad as $ad) {
 			if (!$this->ValidEmail($ad)) {
 				echo 'Class Mail, method Mail : invalid address ' . $ad;
@@ -379,10 +379,7 @@ class Mail extends PHPMailer {
 	/**
 	 * alias for the mispelled CheckAdresses
 	 */
-	function CheckAddresses($aad) {
+	public function CheckAddresses($aad) {
 		return $this->CheckAdresses($aad);
 	}
-
-
-} // class Mail
-?>
+}

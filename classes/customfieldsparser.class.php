@@ -19,7 +19,7 @@ class CustomFieldsParser {
 	 * @param char Field type: TaskCustomFields, CompanyCustomFields
 	 * @desc Constructor
 	 */
-	function CustomFieldsParser($custom_record_type, $row_id = 0) {
+	public function CustomFieldsParser($custom_record_type, $row_id = 0) {
 		$this->custom_record_type = $custom_record_type;
 
 		$this->_fetchFields();
@@ -47,11 +47,11 @@ class CustomFieldsParser {
 		}
 	}
 
-	function _fetchFields() {
+	public function _fetchFields() {
 		$this->fields_array = w2PgetSysVal($this->custom_record_type);
 	}
 
-	function _fetchCustomRecordTypes() {
+	public function _fetchCustomRecordTypes() {
 		switch ($this->custom_record_type) {
 			case 'TaskCustomFields':
 				$field_types = 'TaskType';
@@ -63,7 +63,7 @@ class CustomFieldsParser {
 		$this->custom_record_types = w2PgetSysVal($field_types);
 	}
 
-	function _fetchPreviousData() {
+	public function _fetchPreviousData() {
 		$q = new DBQuery;
 		$q->addTable($this->table_name);
 		$q->addQuery($this->field_name);
@@ -79,7 +79,7 @@ class CustomFieldsParser {
 		$this->previous_data = $previous_data;
 	}
 
-	function _getLabelHTML($field_config) {
+	public function _getLabelHTML($field_config) {
 		if ($field_config['type'] == 'label') {
 			$separador = '';
 			$colspan = 'colspan="2"';
@@ -92,7 +92,7 @@ class CustomFieldsParser {
 		return '<td ' . $colspan . '>' . $field_config['name'] . ' ' . $separador . '</td>';
 	}
 
-	function parseEditField($key) {
+	public function parseEditField($key) {
 		$field_config = unserialize($this->fields_array[$key]);
 		$parsed = '<tr id="custom_tr_' . $key . '">';
 
@@ -128,7 +128,7 @@ class CustomFieldsParser {
 		return $parsed;
 	}
 
-	function parseViewField($key) {
+	public function parseViewField($key) {
 		$field_config = unserialize($this->fields_array[$key]);
 		$parsed = '<tr id="custom_tr_' . $key . '">';
 		$parsed .= $this->_getLabelHTML($field_config);
@@ -163,7 +163,7 @@ class CustomFieldsParser {
 		return $parsed;
 	}
 
-	function parseTableForm($edit = false, $record_type = null) {
+	public function parseTableForm($edit = false, $record_type = null) {
 		$parsed = '<table>';
 
 		$visible_keys = array();
@@ -190,7 +190,7 @@ class CustomFieldsParser {
 		return $parsed;
 	}
 
-	function _getVisibleKeysForType($record_type) {
+	public function _getVisibleKeysForType($record_type) {
 		if (!isset($this->visible_keys)) {
 			$this->visible_keys = array();
 		}
@@ -210,7 +210,7 @@ class CustomFieldsParser {
 		return $this->visible_keys[$record_type];
 	}
 
-	function _parseShowFunction($key) {
+	public function _parseShowFunction($key) {
 		$parsed = '';
 		$record_type = $this->custom_record_types[$key];
 
@@ -225,7 +225,7 @@ class CustomFieldsParser {
 		return $parsed;
 	}
 
-	function parseShowFunctions() {
+	public function parseShowFunctions() {
 		$parsed = '';
 
 		foreach ($this->custom_record_types as $key => $record_type) {
@@ -234,7 +234,7 @@ class CustomFieldsParser {
 		return $parsed;
 	}
 
-	function showHideAllRowsFunction() {
+	public function showHideAllRowsFunction() {
 		$parsed = "function hideAllRows(){\n";
 		foreach ($this->fields_array as $key => $field_config) {
 			$field_config = unserialize($field_config);
@@ -245,6 +245,4 @@ class CustomFieldsParser {
 		$parsed .= "}\n";
 		return $parsed;
 	}
-
 }
-?>

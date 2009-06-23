@@ -42,7 +42,7 @@ class w2Pacl extends gacl_api {
 
 	public $_db_acl_prefix = 'gacl_';
 
-	function w2Pacl($opts = null) {
+	public function w2Pacl($opts = null) {
 		global $db;
 
 		if (!is_array($opts)) {
@@ -64,7 +64,7 @@ class w2Pacl extends gacl_api {
 		parent::gacl_api($opts);
 	}
 
-	function checkLogin($login) {
+	public function checkLogin($login) {
 		// Simple ARO<->ACO check, no AXO's required.
 		$result = $this->acl_check('system', 'login', 'user', $login);
 		//recalc the users permissions at login time:
@@ -75,7 +75,7 @@ class w2Pacl extends gacl_api {
 		return $result;
 	}
 
-	function checkModule($module, $op, $userid = null) {
+	public function checkModule($module, $op, $userid = null) {
 		if (!$userid) {
 			$userid = $GLOBALS['AppUI']->user_id;
 		}
@@ -84,7 +84,7 @@ class w2Pacl extends gacl_api {
 		return $result;
 	}
 
-	function checkModuleItem($module, $op, $item = null, $userid = null) {
+	public function checkModuleItem($module, $op, $item = null, $userid = null) {
 		if (!$userid) {
 			$userid = $GLOBALS['AppUI']->user_id;
 		}
@@ -108,7 +108,7 @@ class w2Pacl extends gacl_api {
 	 * actively denied.  Any other combination is a soft-deny (i.e. not
 	 * strictly allowed, but not actively denied.
 	 */
-	function checkModuleItemDenied($module, $op, $item, $user_id = null) {
+	public function checkModuleItemDenied($module, $op, $item, $user_id = null) {
 		if (!$user_id) {
 			$user_id = $GLOBALS['AppUI']->user_id;
 		}
@@ -120,7 +120,7 @@ class w2Pacl extends gacl_api {
 		}
 	}
 
-	function addLogin($login, $username) {
+	public function addLogin($login, $username) {
 		$res = $this->add_object('user', $username, $login, 1, 0, 'aro');
 
 		if ((int) $res == 0) {
@@ -133,7 +133,7 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function updateLogin($login, $username) {
+	public function updateLogin($login, $username) {
 		$id = $this->get_object_id('user', $login, 'aro');
 		if (!$id) {
 			return $this->addLogin($login, $username);
@@ -149,7 +149,7 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function deleteLogin($login) {
+	public function deleteLogin($login) {
 		$id = $this->get_object_id('user', $login, 'aro');
 		if ($id) {
 			$id = $this->del_object($id, 'aro', true);
@@ -164,7 +164,7 @@ class w2Pacl extends gacl_api {
 		return $id;
 	}
 
-	function addModule($mod, $modname) {
+	public function addModule($mod, $modname) {
 		$res = $this->add_object('app', $modname, $mod, 1, 0, 'axo');
 		if ($res) {
 			$res = $this->addGroupItem($mod);
@@ -179,7 +179,7 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function addModuleSection($mod) {
+	public function addModuleSection($mod) {
 		$res = $this->add_object_section(ucfirst($mod) . ' Record', $mod, 0, 0, 'axo');
 		if (!$res) {
 			dprint(__file__, __line__, 0, 'Failed to add module permission section');
@@ -191,7 +191,7 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function addModuleItem($mod, $itemid, $itemdesc) {
+	public function addModuleItem($mod, $itemid, $itemdesc) {
 		$res = $this->add_object($mod, $itemdesc, $itemid, 0, 0, 'axo');
 		$recalc = $this->recalcPermissions(null, null, null, $mod);
 		if (!$recalc) {
@@ -200,14 +200,14 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function addGroupItem($item, $group = 'all', $section = 'app', $type = 'axo') {
+	public function addGroupItem($item, $group = 'all', $section = 'app', $type = 'axo') {
 		if ($gid = $this->get_group_id($group, null, $type)) {
 			$res = $this->add_group_object($gid, $section, $item, $type);
 		}
 		return $res;
 	}
 
-	function deleteModule($mod) {
+	public function deleteModule($mod) {
 		$id = $this->get_object_id('app', $mod, 'axo');
 		if ($id) {
 			$this->deleteGroupItem($mod);
@@ -223,7 +223,7 @@ class w2Pacl extends gacl_api {
 		return $id;
 	}
 
-	function deleteModuleSection($mod) {
+	public function deleteModuleSection($mod) {
 		$id = $this->get_object_section_section_id(null, $mod, 'axo');
 		if ($id) {
 			$id = $this->del_object_section($id, 'axo', true);
@@ -251,7 +251,7 @@ class w2Pacl extends gacl_api {
 	** @return
 	*/
 
-	function deleteModuleItems($mod) {
+	public function deleteModuleItems($mod) {
 		// Declaring the return string
 		$res = null;
 
@@ -300,14 +300,14 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function deleteGroupItem($item, $group = 'all', $section = 'app', $type = 'axo') {
+	public function deleteGroupItem($item, $group = 'all', $section = 'app', $type = 'axo') {
 		if ($gid = $this->get_group_id($group, null, $type)) {
 			$res = $this->del_group_object($gid, $section, $item, $type);
 		}
 		return $res;
 	}
 
-	function isUserPermitted($userid, $module = null) {
+	public function isUserPermitted($userid, $module = null) {
 		if ($module) {
 			return $this->checkModule($module, 'view', $userid);
 		} else {
@@ -317,7 +317,7 @@ class w2Pacl extends gacl_api {
 		}
 	}
 
-	function getPermittedUsers($module = null) {
+	public function getPermittedUsers($module = null) {
 		// Not as pretty as I'd like, but we can do it reasonably well.
 		// Check to see if we are allowed to see other users.
 		// If not we can only see ourselves.
@@ -332,7 +332,7 @@ class w2Pacl extends gacl_api {
 		return $userlist;
 	}
 
-	function getItemACLs($module, $uid = null) {
+	public function getItemACLs($module, $uid = null) {
 		if (!$uid) {
 			$uid = $GLOBALS['AppUI']->user_id;
 		}
@@ -342,19 +342,19 @@ class w2Pacl extends gacl_api {
 		//    return $this->search_acl("application", "view", false, $uid, false, $module, false, false, false);
 	}
 
-	function getUserACLs($uid = null) {
+	public function getUserACLs($uid = null) {
 		if (!$uid) {
 			$uid = $GLOBALS['AppUI']->user_id;
 		}
 		return $this->search_acl('application', false, 'user', $uid, null, false, false, false, false);
 	}
 
-	function getRoleACLs($role_id) {
+	public function getRoleACLs($role_id) {
 		$role = $this->getRole($role_id);
 		return $this->search_acl('application', false, false, false, $role['name'], false, false, false, false);
 	}
 
-	function getRole($role_id) {
+	public function getRole($role_id) {
 		$data = $this->get_group_data($role_id);
 		if ($data) {
 			return array('id' => $data[0], 'parent_id' => $data[1], 'value' => $data[2], 'name' => $data[3], 'lft' => $data[4], 'rgt' => $data[5]);
@@ -363,7 +363,7 @@ class w2Pacl extends gacl_api {
 		}
 	}
 
-	function &getDeniedItems($module, $uid = null) {
+	public function &getDeniedItems($module, $uid = null) {
 		$items = array();
 		if (!$uid) {
 			$uid = $GLOBALS['AppUI']->user_id;
@@ -386,7 +386,7 @@ class w2Pacl extends gacl_api {
 	}
 
 	// This is probably redundant.
-	function &getAllowedItems($module, $uid = null) {
+	public function &getAllowedItems($module, $uid = null) {
 		$items = array();
 		if (!$uid) {
 			$uid = $GLOBALS['AppUI']->user_id;
@@ -410,7 +410,7 @@ class w2Pacl extends gacl_api {
 	// Copied from get_group_children in the parent class, this version returns
 	// all of the fields, rather than just the group ids.  This makes it a bit
 	// more efficient as it doesn't need the get_group_data call for each row.
-	function getChildren($group_id, $group_type = 'ARO', $recurse = 'NO_RECURSE') {
+	public function getChildren($group_id, $group_type = 'ARO', $recurse = 'NO_RECURSE') {
 		//$this->debug_text("get_group_children(): Group_ID: $group_id Group Type: $group_type Recurse: $recurse");
 
 		switch (strtolower(trim($group_type))) {
@@ -451,13 +451,13 @@ class w2Pacl extends gacl_api {
 		return $result;
 	}
 
-	function insertRole($value, $name) {
+	public function insertRole($value, $name) {
 		$role_parent = $this->get_group_id('role');
 		$value = str_replace(' ', '_', $value);
 		return $this->add_group($value, $name, $role_parent);
 	}
 
-	function updateRole($id, $value, $name) {
+	public function updateRole($id, $value, $name) {
 		$res = $this->edit_group($id, $value, $name);
 		$recalc = $this->recalcPermissions(null, null, $id);
 		if (!$recalc) {
@@ -466,7 +466,7 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function deleteRole($id) {
+	public function deleteRole($id) {
 		// Delete all of the group assignments before deleting group.
 		$objs = $this->get_group_objects($id);
 		foreach ($objs as $section => $value) {
@@ -480,7 +480,7 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function insertUserRole($role, $user) {
+	public function insertUserRole($role, $user) {
 		// Check to see if the user ACL exists first.
 		$id = $this->get_object_id('user', $user, 'aro');
 		if (!$id) {
@@ -508,7 +508,7 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function deleteUserRole($role, $user) {
+	public function deleteUserRole($role, $user) {
 		$res = $this->del_group_object($role, 'user', $user);
 		$recalc = $this->recalcPermissions($user);
 		if (!$recalc) {
@@ -519,7 +519,7 @@ class w2Pacl extends gacl_api {
 
 	// Returns the group ids of all groups this user is mapped to.
 	// Not provided in original phpGacl, but useful.
-	function getUserRoles($user) {
+	public function getUserRoles($user) {
 		$id = $this->get_object_id('user', $user, 'aro');
 		$result = $this->get_group_map($id);
 		if (!is_array($result)) {
@@ -530,7 +530,7 @@ class w2Pacl extends gacl_api {
 
 	// Returns the group of users under a role
 	// Not provided in original phpGacl, but useful.
-	function getRoleUsers($role = null) {
+	public function getRoleUsers($role = null) {
 		if (!$role) {
 			return false;
 		}
@@ -560,7 +560,7 @@ class w2Pacl extends gacl_api {
 	}
 	// Returns the group of users that have a role (and therefore can login)
 	// Not provided in original phpGacl, but useful.
-	function getUsersWithRole() {
+	public function getUsersWithRole() {
 		$q = new DBQuery;
 		$q->addTable($this->_db_acl_prefix . 'groups_aro_map', 'g');
 		$q->addQuery('DISTINCT(g.aro_id)');
@@ -576,7 +576,7 @@ class w2Pacl extends gacl_api {
 
 	// Return a list of module groups and modules that a user can
 	// be permitted access to.
-	function getModuleList() {
+	public function getModuleList() {
 		$result = array();
 		// First grab all the module groups.
 		$parent_id = $this->get_group_id('mod', null, 'axo');
@@ -603,11 +603,11 @@ class w2Pacl extends gacl_api {
 
 	// An assignable module is one where there is a module sub-group
 	// Effectivly we just list those module in the section "modname"
-	function getAssignableModules() {
+	public function getAssignableModules() {
 		return $this->get_object_sections(null, 0, 'axo', 'value not in ("sys", "app")');
 	}
 
-	function getPermissionList() {
+	public function getPermissionList() {
 		$list = $this->get_objects_full('application', 0, 'aco');
 		// We only need the id and the name
 		$result = array();
@@ -620,7 +620,7 @@ class w2Pacl extends gacl_api {
 		return $result;
 	}
 
-	function get_group_map($id, $group_type = 'ARO') {
+	public function get_group_map($id, $group_type = 'ARO') {
 		//$this->debug_text("get_group_map(): Assigned ID: $id Group Type: $group_type");
 
 		switch (strtolower(trim($group_type))) {
@@ -662,7 +662,7 @@ class w2Pacl extends gacl_api {
 	/*======================================================================*\
 	Function:	get_object()
 	\*======================================================================*/
-	function get_object_full($value = null, $section_value = null, $return_hidden = 1, $object_type = null) {
+	public function get_object_full($value = null, $section_value = null, $return_hidden = 1, $object_type = null) {
 
 		switch (strtolower(trim($object_type))) {
 			case 'aco':
@@ -725,7 +725,7 @@ class w2Pacl extends gacl_api {
 	Purpose:	Grabs all Objects in the database, or specific to a section_value
 	returns format suitable for add_acl and is_conflicting_acl
 	\*======================================================================*/
-	function get_objects_full($section_value = null, $return_hidden = 1, $object_type = null, $limit_clause = null) {
+	public function get_objects_full($section_value = null, $return_hidden = 1, $object_type = null, $limit_clause = null) {
 		switch (strtolower(trim($object_type))) {
 			case 'aco':
 				$object_type = 'aco';
@@ -785,7 +785,7 @@ class w2Pacl extends gacl_api {
 		return $retarr;
 	}
 
-	function get_object_sections($section_value = null, $return_hidden = 1, $object_type = null, $limit_clause = null) {
+	public function get_object_sections($section_value = null, $return_hidden = 1, $object_type = null, $limit_clause = null) {
 		switch (strtolower(trim($object_type))) {
 			case 'aco':
 				$object_type = 'aco';
@@ -849,7 +849,7 @@ class w2Pacl extends gacl_api {
 	}
 
 	/** Called from do_perms_aed, allows us to add a new ACL */
-	function addUserPermission() {
+	public function addUserPermission() {
 		// Need to have a user id,
 		// parse the permissions array
 		if (!is_array($_POST['permission_type'])) {
@@ -909,7 +909,7 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function addRolePermission() {
+	public function addRolePermission() {
 		if (!is_array($_POST['permission_type'])) {
 			$this->debug_text('you must select at least one permission');
 			return false;
@@ -960,12 +960,12 @@ class w2Pacl extends gacl_api {
 	}
 
 	// Some function overrides.
-	function debug_text($text) {
+	public function debug_text($text) {
 		$this->_debug_msg = $text;
 		dprint(__file__, __line__, 9, $text);
 	}
 
-	function msg() {
+	public function msg() {
 		return $this->_debug_msg;
 	}
 
@@ -975,7 +975,7 @@ class w2Pacl extends gacl_api {
 	 * @param mixed $module
 	 * @return
 	 */
-	function removeACLPermissions($acl_id = null) {
+	public function removeACLPermissions($acl_id = null) {
 		if (!$acl_id) {
 			return 'Can not remove acl permissions: no acl id given.';
 		}
@@ -993,7 +993,7 @@ class w2Pacl extends gacl_api {
 	 * @param mixed $module
 	 * @return
 	 */
-	function removeModulePermissions($module = null) {
+	public function removeModulePermissions($module = null) {
 		if (!$module) {
 			return 'Can not remove modules permissions: no module name given.';
 		}
@@ -1011,7 +1011,7 @@ class w2Pacl extends gacl_api {
 	 * @param mixed $user_id
 	 * @return
 	 */
-	function removePermissions($user_id = null) {
+	public function removePermissions($user_id = null) {
 		if (!$user_id) {
 			return 'Can not remove users permissions: no user given.';
 		}
@@ -1032,7 +1032,7 @@ class w2Pacl extends gacl_api {
 	 * @param mixed $module
 	 * @return
 	 */
-	function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $method = 1) {
+	public function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $method = 1) {
 		/*echo '<pre>';
 		print_r(debug_backtrace());
 		echo '</pre>';die;*/
@@ -1210,7 +1210,7 @@ class w2Pacl extends gacl_api {
 	 * @param mixed $module it passes the modules name
 	 * @return
 	 */
-	function w2Pacl_check($application = 'application', $op, $user = 'user', $userid, $app = 'app', $module) {
+	public function w2Pacl_check($application = 'application', $op, $user = 'user', $userid, $app = 'app', $module) {
 		global $w2p_performance_acltime, $w2p_performance_aclchecks;
 		$q = new DBQuery;
 		$q->addTable($this->_db_acl_prefix . 'permissions');
@@ -1231,7 +1231,7 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
 
-	function w2Pacl_nuclear($userid, $module, $item, $mod_class = array()) {
+	public function w2Pacl_nuclear($userid, $module, $item, $mod_class = array()) {
 		global $AppUI;
 		//This is a sensitive function so if the minimum permission request arguments are not provided don't permit anything to this item
 		if (!$userid || !$module || !$item) {
@@ -1295,7 +1295,7 @@ class w2Pacl extends gacl_api {
 	 * @param mixed $item
 	 * @return
 	 */
-	function w2Pacl_query($application = 'application', $op, $user = 'user', $userid, $module, $item) {
+	public function w2Pacl_query($application = 'application', $op, $user = 'user', $userid, $module, $item) {
 		global $w2p_performance_acltime, $w2p_performance_aclchecks;
 		//Basically the view action is nuclear when it comes to cascading, therefore all the others are straight forward
 		//So if there is no specific permissions regarding the item, then it is the module that determines the permission.
@@ -1364,7 +1364,7 @@ class w2Pacl extends gacl_api {
 		}
 	}
 
-	function w2Psearch_acl($application = 'application', $op, $user = 'user', $userid, $module) {
+	public function w2Psearch_acl($application = 'application', $op, $user = 'user', $userid, $module) {
 		global $w2p_performance_acltime, $w2p_performance_aclchecks;
 		$q = new DBQuery;
 		$q->addTable($this->_db_acl_prefix . 'permissions');
@@ -1498,4 +1498,3 @@ function getDenyEdit($mod, $item_id = 0) {
 function getDenyAdd($mod, $item_id = 0) {
 	return !getPermission($mod, 'add', $item_id);
 }
-?>

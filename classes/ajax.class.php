@@ -6,13 +6,11 @@ $xajax = new xajax();
 
 class w2PajaxResponse extends xajaxResponse {
 
-	function addCreateOptions($sSelectId, $options) {
+	public function addCreateOptions($sSelectId, $options) {
 		if (sizeof($options) > 0) {
 			foreach ($options as $key => $option) {
 				$this->script("addOption('" . $sSelectId . "','" . $key . "','" . $option . "');");
 			}
 		}
 	}
-
 }
-?>

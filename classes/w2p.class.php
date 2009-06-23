@@ -49,7 +49,7 @@ class CW2pObject {
 	 *	@param string $table name of the table in the db schema relating to child class
 	 *	@param string $key name of the primary key field in the table
 	 */
-	function CW2pObject($table, $key) {
+	public function CW2pObject($table, $key) {
 		$this->_tbl = $table;
 		$this->_tbl_key = $key;
 		$this->_tbl_prefix = w2PgetConfig('dbprefix', '');
@@ -58,7 +58,7 @@ class CW2pObject {
 	/**
 	 *	@return string Returns the error message
 	 */
-	function getError() {
+	public function getError() {
 		return $this->_error;
 	}
 	/**
@@ -68,7 +68,7 @@ class CW2pObject {
 	 *	@param array $hash named array
 	 *	@return null|string	null is operation was satisfactory, otherwise returns an error
 	 */
-	function bind($hash) {
+	public function bind($hash) {
 		if (!is_array($hash)) {
 			$this->_error = get_class($this) . '::bind failed.';
 			return false;
@@ -95,7 +95,7 @@ class CW2pObject {
 	 *	@param int $oid optional argument, if not specifed then the value of current key is used
 	 *	@return any result from the database operation
 	 */
-	function load($oid = null, $strip = true) {
+	public function load($oid = null, $strip = true) {
 		$k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
@@ -121,7 +121,7 @@ class CW2pObject {
 	 *	Returns an array, keyed by the key field, of all elements that meet
 	 *	the where clause provided. Ordered by $order key.
 	 */
-	function loadAll($order = null, $where = null) {
+	public function loadAll($order = null, $where = null) {
 		$this->_query->clear();
 		$this->_query->addTable($this->_tbl);
 		if ($order) {
@@ -140,7 +140,7 @@ class CW2pObject {
 	 *	@param string $alias optional alias for table queries.
 	 *	@return DBQuery object
 	 */
-	function &getQuery($alias = null) {
+	public function &getQuery($alias = null) {
 		$this->_query->clear();
 		$this->_query->addTable($this->_tbl, $alias);
 		return $this->_query;
@@ -152,7 +152,7 @@ class CW2pObject {
 	 *	Can be overloaded/supplemented by the child class
 	 *	@return null if the object is ok
 	 */
-	function check() {
+	public function check() {
 		return null;
 	}
 
@@ -162,7 +162,7 @@ class CW2pObject {
 	 *	@author	handco <handco@users.sourceforge.net>
 	 *	@return	object	The new record object or null if error
 	 **/
-	function duplicate() {
+	public function duplicate() {
 		$_key = $this->_tbl_key;
 
 		// In php4 assignment does a shallow copy
@@ -185,7 +185,7 @@ class CW2pObject {
 	 *	Can be overloaded/supplemented by the child class
 	 *	@return none
 	 */
-	function w2PTrimAll() {
+	public function w2PTrimAll() {
 		$trim_arr = get_object_vars($this);
 		foreach ($trim_arr as $trim_key => $trim_val) {
 			if (!(strcasecmp(gettype($trim_val), 'string'))) {
@@ -200,7 +200,7 @@ class CW2pObject {
 	 *	Can be overloaded/supplemented by the child class
 	 *	@return null|string null if successful otherwise returns and error message
 	 */
-	function store($updateNulls = false) {
+	public function store($updateNulls = false) {
 		global $AppUI;
 
 		$this->w2PTrimAll();
@@ -238,7 +238,7 @@ class CW2pObject {
 	 *	@param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
 	 *	@return true|false
 	 */
-	function canDelete(&$msg, $oid = null, $joins = null) {
+	public function canDelete(&$msg, $oid = null, $joins = null) {
 		global $AppUI;
 
 		// First things first.  Are we allowed to delete?
@@ -297,7 +297,7 @@ class CW2pObject {
 	 *	Can be overloaded/supplemented by the child class
 	 *	@return null|string null if successful otherwise returns and error message
 	 */
-	function delete($oid = null) {
+	public function delete($oid = null) {
 		$k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
@@ -323,7 +323,7 @@ class CW2pObject {
 	 *	@param int User id number
 	 *	@return array
 	 */
-	function getDeniedRecords($uid) {
+	public function getDeniedRecords($uid) {
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getDeniedRecords failed, user id = 0');
 
@@ -341,7 +341,7 @@ class CW2pObject {
 	 *	@return array
 	 */
 	// returns a list of records exposed to the user
-	function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
@@ -404,7 +404,7 @@ class CW2pObject {
 		return $this->_query->loadHashList($index);
 	}
 
-	function getAllowedSQL($uid, $index = null) {
+	public function getAllowedSQL($uid, $index = null) {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
@@ -453,7 +453,7 @@ class CW2pObject {
 		return $where;
 	}
 
-	function setAllowedSQL($uid, &$query, $index = null, $key = null) {
+	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
@@ -504,7 +504,7 @@ class CW2pObject {
 	/*
 	* Decode HTML entities in object vars
 	*/
-	function htmlDecode() {
+	public function htmlDecode() {
 		foreach (get_object_vars($this) as $k => $v) {
 			if (is_array($v) or is_object($v) or $v == null) {
 				continue;
@@ -516,4 +516,3 @@ class CW2pObject {
 		}
 	}
 }
-?>

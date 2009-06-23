@@ -42,7 +42,7 @@ class CDate extends Date {
 	 * The convertTZ calls are time intensive calls.	 When a compare call is
 	 * made in a recussive loop the lag can be significant.
 	 */
-	function compare($d1, $d2, $convertTZ = false) {
+	public function compare($d1, $d2, $convertTZ = false) {
 		if ($convertTZ) {
 			$d1->convertTZ(new Date_TimeZone('UTC'));
 			$d2->convertTZ(new Date_TimeZone('UTC'));
@@ -71,7 +71,7 @@ class CDate extends Date {
 	 * @param int Positive or negative number of days
 	 * @author J. Christopher Pereira <kripper@users.sf.net>
 	 */
-	function addDays($n) {
+	public function addDays($n) {
 		$timeStamp = $this->getTime();
 		$oldHour = $this->getHour();
 		$this->setDate($timeStamp + SEC_DAY * ceil($n), DATE_FORMAT_UNIXTIME);
@@ -87,7 +87,7 @@ class CDate extends Date {
 	 * @param int Positive or negative number of months
 	 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 	 */
-	function addMonths($n) {
+	public function addMonths($n) {
 		$an = abs($n);
 		$years = floor($an / 12);
 		$months = $an % 12;
@@ -114,7 +114,7 @@ class CDate extends Date {
 	 * @param Date The date to compare to
 	 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 	 */
-	function dateDiff($when) {
+	public function dateDiff($when) {
 		if (!is_object($when)) {
 			return false;
 		}
@@ -128,13 +128,13 @@ class CDate extends Date {
 	 * @param int second
 	 * @author Andrew Eddie <eddieajau@users.sourceforge.net>
 	 */
-	function setTime($h = 0, $m = 0, $s = 0) {
+	public function setTime($h = 0, $m = 0, $s = 0) {
 		$this->setHour($h);
 		$this->setMinute($m);
 		$this->setSecond($s);
 	}
 
-	function isWorkingDay() {
+	public function isWorkingDay() {
 		global $AppUI;
 
 		$working_days = w2PgetConfig('cal_working_days');
@@ -142,14 +142,14 @@ class CDate extends Date {
 		return in_array($this->getDayOfWeek(), $working_days);
 	}
 
-	function getAMPM() {
+	public function getAMPM() {
 		return (($this->getHour() > 11) ? 'pm' : 'am');
 	}
 
 	/* Return date obj for the end of the next working day
 	** @param	bool	Determine whether to set time to start of day or preserve the time of the given object
 	*/
-	function next_working_day($preserveHours = false) {
+	public function next_working_day($preserveHours = false) {
 		global $AppUI;
 		$do = $this;
 		$end = intval(w2PgetConfig('cal_day_end'));
@@ -169,7 +169,7 @@ class CDate extends Date {
 	/* Return date obj for the end of the previous working day
 	** @param	bool	Determine whether to set time to end of day or preserve the time of the given object
 	*/
-	function prev_working_day($preserveHours = false) {
+	public function prev_working_day($preserveHours = false) {
 		global $AppUI;
 		$do = $this;
 		$end = intval(w2PgetConfig('cal_day_end'));
@@ -193,7 +193,7 @@ class CDate extends Date {
 	** @return	obj	Shifted DateObj
 	*/
 
-	function addDuration($duration = '8', $durationType = '1') {
+	public function addDuration($duration = '8', $durationType = '1') {
 		// using a sgn function lets us easily cover
 		// prospective and retrospective calcs at the same time
 
@@ -287,7 +287,7 @@ class CDate extends Date {
 	** @param	obj	DateObject	may be viewed as end date
 	** @return	int							working duration in hours
 	*/
-	function calcDuration($e) {
+	public function calcDuration($e) {
 
 		// since one will alter the date ($this) one better copies it to a new instance
 		$s = new CDate();
@@ -342,7 +342,7 @@ class CDate extends Date {
 		return $duration * $sgn;
 	}
 
-	function workingDaysInSpan($e) {
+	public function workingDaysInSpan($e) {
 		global $AppUI;
 
 		// assume start is before end and set a default signum for the duration
@@ -373,7 +373,7 @@ class CDate extends Date {
 	 *
 	 *	@return	object	The new record object or null if error
 	 **/
-	function duplicate() {
+	public function duplicate() {
 
 		// In php4 assignment does a shallow copy
 		// in php5 clone is required
@@ -395,7 +395,7 @@ class CDate extends Date {
 	** @param	durnType	Duration Type: 1=hours, 24=days
 	** @return	cdate		The CDate object of the finish date
 	*/
-	function calcFinish($durn, $durnType) {
+	public function calcFinish($durn, $durnType) {
 
 		// since one will alter the date ($this) one better copies it to a new instance
 		$f = new CDate();
@@ -523,4 +523,3 @@ class CDate extends Date {
 		return $f;
 	}
 }
-?>

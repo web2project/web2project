@@ -85,7 +85,7 @@ class DBQuery {
 	 * @param $prefix Database table prefix - will be appended to all web2project table names
 	 * @param $query_db Database type
 	 */
-	function DBQuery($prefix = null, $query_db = null) {
+	public function DBQuery($prefix = null, $query_db = null) {
 		global $db;
 
 		if (isset($prefix)) {
@@ -100,7 +100,7 @@ class DBQuery {
 
 	/** Clear the current query and all set options
 	 */
-	function clear() {
+	public function clear() {
 		global $ADODB_FETCH_MODE;
 		if (isset($this->_old_style)) {
 			$ADODB_FETCH_MODE = $this->_old_style;
@@ -125,7 +125,7 @@ class DBQuery {
 		$this->_query_id = null;
 	}
 
-	function clearQuery() {
+	public function clearQuery() {
 		if ($this->_query_id) {
 			$this->_query_id->Close();
 		}
@@ -135,7 +135,7 @@ class DBQuery {
 	/** Get database specific SQL used to concatenate strings.
 	 * @return String containing SQL to concatenate supplied strings
 	 */
-	function concat() {
+	public function concat() {
 		$arr = func_get_args();
 		$conc_str = call_user_func_array(array(&$this->_db, 'Concat'), $arr);
 		return $conc_str;
@@ -146,7 +146,7 @@ class DBQuery {
 	 * Calls the ADODB IfNull method
 	 * @return String containing SQL to check for null field value
 	 */
-	function ifNull($field, $nullReplacementValue) {
+	public function ifNull($field, $nullReplacementValue) {
 		return $this->_db->IfNull($field, $nullReplacementValue);
 	}
 
@@ -158,7 +158,7 @@ class DBQuery {
 	 * @param	$name	Data to add
 	 * @param	$id	Index to use in array.
 	 */
-	function addMap($varname, $name, $id) {
+	public function addMap($varname, $name, $id) {
 		if (!isset($this->$varname)) {
 			$this->$varname = array();
 		}
@@ -181,7 +181,7 @@ class DBQuery {
 	 * @param	$name	Name of table, without prefix.
 	 * @param	$id	Alias for use in query/where/group clauses.
 	 */
-	function addTable($name, $id = null) {
+	public function addTable($name, $id = null) {
 		$this->addMap('table_list', $name, ($id ? $id : $name));
 	}
 
@@ -193,7 +193,7 @@ class DBQuery {
 	 * @param $value the clause value
 	 * @param $check_array defaults to true, iterates through each element in $value and adds them seperately to the clause
 	 */
-	function addClause($clause, $value, $check_array = true) {
+	public function addClause($clause, $value, $check_array = true) {
 		//dprint(__file__, __line__, 8, "Adding '$value' to $clause clause");
 		if (!isset($this->$clause)) {
 			$this->$clause = array();
@@ -215,7 +215,7 @@ class DBQuery {
 	 *
 	 * @param	$query	Query string to use.
 	 */
-	function addQuery($query) {
+	public function addQuery($query) {
 		$this->addClause('query', $query);
 	}
 
@@ -225,7 +225,7 @@ class DBQuery {
 	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
 	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
 	 */
-	function addInsert($field, $value = null, $set = false, $func = false) {
+	public function addInsert($field, $value = null, $set = false, $func = false) {
 		if (is_array($field) && $value == null) {
 			foreach ($field as $f => $v) {
 				$this->addMap('value_list', $f, $v);
@@ -255,7 +255,7 @@ class DBQuery {
 			$this->type = 'insert';
 	}
 
-	function addInsertSelect($table) {
+	public function addInsertSelect($table) {
 		$this->create_table = $table;
 		$this->type = 'insert_select';
 	}
@@ -267,7 +267,7 @@ class DBQuery {
 	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
 	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
 	 */
-	function addReplace($field, $value, $set = false, $func = false) {
+	public function addReplace($field, $value, $set = false, $func = false) {
 		$this->addInsert($field, $value, $set, $func);
 		$this->type = 'replace';
 	}
@@ -277,7 +277,7 @@ class DBQuery {
 	 * @param $value The value to set $field to
 	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
 	 */
-	function addUpdate($field, $value = null, $set = false) {
+	public function addUpdate($field, $value = null, $set = false) {
 		if (is_array($field) && $value == null) {
 			foreach ($field as $f => $v) {
 				$this->addMap('update_list', $f, $v);
@@ -307,7 +307,7 @@ class DBQuery {
 	/** Create a database table
 	 * @param $table the name of the table to create
 	 */
-	function createTable($table, $def = null) {
+	public function createTable($table, $def = null) {
 		$this->type = 'createPermanent';
 		$this->create_table = $table;
 		if ($def) {
@@ -315,19 +315,19 @@ class DBQuery {
 		}
 	}
 
-	function createDatabase($database) {
+	public function createDatabase($database) {
 		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
 		$dict->CreateDatabase($database);
 	}
 
-	function DDcreateTable($table, $def, $opts) {
+	public function DDcreateTable($table, $def, $opts) {
 		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
 		$query_array = $dict->ChangeTableSQL(w2PgetConfig('dbprefix') . $table, $def, $opts);
 		//returns 0 - failed, 1 - executed with errors, 2 - success
 		return $dict->ExecuteSQLArray($query_array);
 	}
 
-	function DDcreateIndex($name, $table, $cols, $opts) {
+	public function DDcreateIndex($name, $table, $cols, $opts) {
 		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
 		$query_array = $dict->CreateIndexSQL($name, $table, $cols, $opts);
 		//returns 0 - failed, 1 - executed with errors, 2 - success
@@ -337,7 +337,7 @@ class DBQuery {
 	/** Create a temporary database table
 	 * @param $table the name of the temporary table to create.
 	 */
-	function createTemp($table) {
+	public function createTemp($table) {
 		$this->type = 'create';
 		$this->create_table = $table;
 	}
@@ -347,7 +347,7 @@ class DBQuery {
 	 * Use dropTemp() to drop temporary tables
 	 * @param $table the name of the table to drop.
 	 */
-	function dropTable($table) {
+	public function dropTable($table) {
 		$this->type = 'drop';
 		$this->create_table = $table;
 	}
@@ -355,7 +355,7 @@ class DBQuery {
 	/** Drop a temporary table from the database
 	 * @param $table the name of the temporary table to drop
 	 */
-	function dropTemp($table) {
+	public function dropTemp($table) {
 		$this->type = 'drop';
 		$this->create_table = $table;
 	}
@@ -363,7 +363,7 @@ class DBQuery {
 	/** Alter a database table
 	 * @param $table the name of the table to alter
 	 */
-	function alterTable($table) {
+	public function alterTable($table) {
 		$this->create_table = $table;
 		$this->type = 'alter';
 	}
@@ -372,7 +372,7 @@ class DBQuery {
 	 * @param $name The name of the field
 	 * @param $type The type of field to create
 	 */
-	function addField($name, $type) {
+	public function addField($name, $type) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
@@ -384,7 +384,7 @@ class DBQuery {
 	 * @param $name The name of the field
 	 * @param $type The type of the field
 	 */
-	function alterField($name, $type) {
+	public function alterField($name, $type) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
@@ -394,7 +394,7 @@ class DBQuery {
 	/** Drop a field from table definition or from an existing table
 	 * @param $name The name of the field to drop
 	 */
-	function dropField($name) {
+	public function dropField($name) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
@@ -403,7 +403,7 @@ class DBQuery {
 
 	/** Add an index
 	 */
-	function addIndex($name, $type) {
+	public function addIndex($name, $type) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
@@ -412,7 +412,7 @@ class DBQuery {
 
 	/** Drop an index
 	 */
-	function dropIndex($name) {
+	public function dropIndex($name) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
@@ -421,7 +421,7 @@ class DBQuery {
 
 	/** Remove a primary key attribute from a field
 	 */
-	function dropPrimary() {
+	public function dropPrimary() {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
@@ -431,11 +431,11 @@ class DBQuery {
 	/** Set a table creation definition from supplied array
 	 * @param $def Array containing table definition
 	 */
-	function createDefinition($def) {
+	public function createDefinition($def) {
 		$this->create_definition = $def;
 	}
 
-	function setDelete($table) {
+	public function setDelete($table) {
 		$this->type = 'delete';
 		$this->addMap('table_list', $table, null);
 	}
@@ -450,7 +450,7 @@ class DBQuery {
 	 *
 	 * @param	$query	Where subclause to use, not including WHERE keyword
 	 */
-	function addWhere($query) {
+	public function addWhere($query) {
 		if (isset($query)) {
 			$this->addClause('where', $query);
 		}
@@ -468,7 +468,7 @@ class DBQuery {
 	 *				or array of join fieldnames, e.g. array('id', 'name);
 	 *				Both are correctly converted into a join clause.
 	 */
-	function addJoin($table, $alias, $join, $type = 'left') {
+	public function addJoin($table, $alias, $join, $type = 'left') {
 		$var = array('table' => $table, 'alias' => $alias, 'condition' => $join, 'type' => $type);
 
 		$this->addClause('join', $var, false);
@@ -482,7 +482,7 @@ class DBQuery {
 	 * @param $alias Alias to use instead of table name
 	 * @param $join Join condition
 	 */
-	function leftJoin($table, $alias, $join) {
+	public function leftJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'left');
 	}
 
@@ -494,7 +494,7 @@ class DBQuery {
 	 * @param $alias Alias to use instead of table name
 	 * @param $join Join condition
 	 */
-	function rightJoin($table, $alias, $join) {
+	public function rightJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'right');
 	}
 
@@ -506,7 +506,7 @@ class DBQuery {
 	 * @param $alias Alias to use instead of table name
 	 * @param $join Join condition
 	 */
-	function innerJoin($table, $alias, $join) {
+	public function innerJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'inner');
 	}
 
@@ -518,7 +518,7 @@ class DBQuery {
 	 *
 	 * @param	$order	Order by field.
 	 */
-	function addOrder($order) {
+	public function addOrder($order) {
 		if (isset($order)) {
 			$this->addClause('order_by', $order);
 		}
@@ -531,7 +531,7 @@ class DBQuery {
 	 *
 	 * @param	$group	Field name to group by.
 	 */
-	function addGroup($group) {
+	public function addGroup($group) {
 		$this->addClause('group_by', $group);
 	}
 
@@ -547,7 +547,7 @@ class DBQuery {
 	 *
 	 * @param	$query	HAVING subclause to use, not including HAVING keyword
 	 */
-	function addHaving($query) {
+	public function addHaving($query) {
 		$this->addClause('having', $query);
 	}
 
@@ -559,7 +559,7 @@ class DBQuery {
 	 * @param	$limit	Number of rows to limit.
 	 * @param	$start	First row to start extraction(row offset).
 	 */
-	function setLimit($limit, $start = -1) {
+	public function setLimit($limit, $start = -1) {
 		$this->limit = $limit;
 		$this->offset = $start;
 	}
@@ -568,7 +568,7 @@ class DBQuery {
 	 * Set include count feature, grabs the count of rows that
 	 * would have been returned had no limit been set.
 	 */
-	function includeCount() {
+	public function includeCount() {
 		$this->include_count = true;
 	}
 	/** Set a limit on the query based on pagination.
@@ -576,7 +576,7 @@ class DBQuery {
 	 * @param $page     the current page
 	 * @param $pagesize the size of pages
 	 */
-	function setPageLimit($page = 0, $pagesize = 0) {
+	public function setPageLimit($page = 0, $pagesize = 0) {
 		if ($page == 0) {
 			global $tpl;
 			$page = $tpl->page;
@@ -593,7 +593,7 @@ class DBQuery {
 	 * @param $clear Boolean, Clear the query after it has been executed
 	 * @return String containing the SQL statement
 	 */
-	function prepare($clear = false) {
+	public function prepare($clear = false) {
 		switch ($this->type) {
 			case 'select':
 				$q = $this->prepareSelect();
@@ -649,7 +649,7 @@ class DBQuery {
 
 	/** Prepare the SELECT component of the SQL query
 	 */
-	function prepareSelect() {
+	public function prepareSelect() {
 		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
 			case 'oci8':
 			case 'oracle':
@@ -754,7 +754,7 @@ class DBQuery {
 
 	/** Prepare the UPDATE component of the SQL query
 	 */
-	function prepareUpdate() {
+	public function prepareUpdate() {
 		// You can only update one table, so we get the table detail
 		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
 			case 'oci8':
@@ -817,7 +817,7 @@ class DBQuery {
 
 	/** Prepare the INSERT component of the SQL query
 	 */
-	function prepareInsert() {
+	public function prepareInsert() {
 		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
 			case 'oci8':
 			case 'oracle':
@@ -885,7 +885,7 @@ class DBQuery {
 
 	/** Prepare the INSERT component of the SQL query
 	 */
-	function prepareInsertSelect() {
+	public function prepareInsertSelect() {
 		$q = 'INSERT INTO ';
 		if (isset($this->table_list)) {
 			if (is_array($this->table_list)) {
@@ -918,7 +918,7 @@ class DBQuery {
 
 	/** Prepare the REPLACE component of the SQL query
 	 */
-	function prepareReplace() {
+	public function prepareReplace() {
 		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
 			case 'oci8':
 			case 'oracle':
@@ -986,7 +986,7 @@ class DBQuery {
 
 	/** Prepare the DELETE component of the SQL query
 	 */
-	function prepareDelete() {
+	public function prepareDelete() {
 		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
 			case 'oci8':
 			case 'oracle':
@@ -1027,7 +1027,7 @@ class DBQuery {
 	/** Prepare the ALTER component of the SQL query
 	 * @todo add ALTER DROP/CHANGE/MODIFY/IMPORT/DISCARD/.. definitions: http://dev.mysql.com/doc/mysql/en/alter-table.html
 	 */
-	function prepareAlter() {
+	public function prepareAlter() {
 		$q = 'ALTER TABLE ' . $this->quote_db($this->_table_prefix . $this->create_table) . ' ';
 		if (isset($this->create_definition)) {
 			if (is_array($this->create_definition)) {
@@ -1054,7 +1054,7 @@ class DBQuery {
 	 * @param $debug Defaults to false. If true, debug output includes explanation of query
 	 * @return Handle to the query result
 	 */
-	function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
+	public function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
 		global $ADODB_FETCH_MODE, $w2p_performance_dbtime, $w2p_performance_dbqueries;
 
 		if (W2P_PERFORMANCE_DEBUG) {
@@ -1105,7 +1105,7 @@ class DBQuery {
 	/** Fetch the first row of the results
 	 * @return First row as array
 	 */
-	function fetchRow() {
+	public function fetchRow() {
 		if (!$this->_query_id) {
 			return false;
 		}
@@ -1118,7 +1118,7 @@ class DBQuery {
 	 * @param $maxrows Maximum number of rows to return
 	 * @return Array of associative arrays containing row field values
 	 */
-	function loadList($maxrows = null) {
+	public function loadList($maxrows = null) {
 		global $AppUI;
 
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
@@ -1145,7 +1145,7 @@ class DBQuery {
 	 * @param $index Defaults to null, the field to use for array keys
 	 * @return Associative array of rows, keyed with the field indicated by the $index parameter
 	 */
-	function loadHashList($index = null) {
+	public function loadHashList($index = null) {
 
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
 			exit($this->_db->ErrorMsg());
@@ -1178,7 +1178,7 @@ class DBQuery {
 	/** Load a single result row as an associative array
 	 * @return Associative array of field names to values
 	 */
-	function loadHash() {
+	public function loadHash() {
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
 			exit($this->_db->ErrorMsg());
 		}
@@ -1193,7 +1193,7 @@ class DBQuery {
 	 * @param $index Field index to use for naming the array keys.
 	 * @return Associative array containing result rows
 	 */
-	function loadArrayList($index = 0) {
+	public function loadArrayList($index = 0) {
 
 		if (!$this->exec(ADODB_FETCH_NUM)) {
 			exit($this->_db->ErrorMsg());
@@ -1210,7 +1210,7 @@ class DBQuery {
 	/** Load an indexed array containing the first column of results only
 	 * @return Indexed array of first column values
 	 */
-	function loadColumn() {
+	public function loadColumn() {
 		if (!$this->exec(ADODB_FETCH_NUM)) {
 			die($this->_db->ErrorMsg());
 		}
@@ -1228,7 +1228,7 @@ class DBQuery {
 	 * @param $strip Defaults to true
 	 * @return True on success.
 	 */
-	function loadObject(&$object, $bindAll = false, $strip = true) {
+	public function loadObject(&$object, $bindAll = false, $strip = true) {
 		if (!$this->exec(ADODB_FETCH_NUM)) {
 			die($this->_db->ErrorMsg());
 		}
@@ -1260,7 +1260,7 @@ class DBQuery {
 	 * @param $checkSlashes Defaults to true, strip any slashes from the hash values
 	 * @param $bindAll Bind all values regardless of their existance as defined instance variables
 	 */
-	function bindHashToObject($hash, &$obj, $prefix = null, $checkSlashes = true, $bindAll = false) {
+	public function bindHashToObject($hash, &$obj, $prefix = null, $checkSlashes = true, $bindAll = false) {
 		is_array($hash) or die('bindHashToObject : hash expected');
 		is_object($obj) or die('bindHashToObject : object expected');
 
@@ -1291,7 +1291,7 @@ class DBQuery {
 	 * @param $mode Defaults to 'REPLACE'
 	 * @return True on success, false if there was an error.
 	 */
-	function execXML($xml, $mode = 'REPLACE') {
+	public function execXML($xml, $mode = 'REPLACE') {
 		global $AppUI;
 
 		include_once W2P_BASE_DIR . '/lib/adodb/adodb-xmlschema.inc.php';
@@ -1315,7 +1315,7 @@ class DBQuery {
 	/** Load a single column result from a single row
 	 * @return Value of the row column
 	 */
-	function loadResult() {
+	public function loadResult() {
 		global $AppUI;
 
 		$result = false;
@@ -1334,7 +1334,7 @@ class DBQuery {
 	 * @param	$where_clause Either string or array of subclauses.
 	 * @return SQL WHERE clause as a string.
 	 */
-	function make_where_clause($where_clause) {
+	public function make_where_clause($where_clause) {
 		$result = '';
 		if (!isset($where_clause)) {
 			return $result;
@@ -1355,7 +1355,7 @@ class DBQuery {
 	 * @param	$order_clause	Either string or array of subclauses.
 	 * @return SQL ORDER BY clause as a string.
 	 */
-	function make_order_clause($order_clause) {
+	public function make_order_clause($order_clause) {
 		$result = '';
 		if (!isset($order_clause)) {
 			return $result;
@@ -1375,7 +1375,7 @@ class DBQuery {
 	 * @param	$group_clause	Either string or array of subclauses.
 	 * @return SQL GROUP BY clause as a string.
 	 */
-	function make_group_clause($group_clause) {
+	public function make_group_clause($group_clause) {
 		$result = '';
 		if (!isset($group_clause)) {
 			return $result;
@@ -1395,7 +1395,7 @@ class DBQuery {
 	 * @param	$join_clause	Either string or array of subclauses.
 	 * @return SQL JOIN condition as a string.
 	 */
-	function make_join($join_clause) {
+	public function make_join($join_clause) {
 		$result = '';
 		if (!isset($join_clause)) {
 			return $result;
@@ -1425,7 +1425,7 @@ class DBQuery {
 	 * @param	$having_clause Either string or array of subclauses.
 	 * @return SQL HAVING clause as a string.
 	 */
-	function make_having_clause($having_clause) {
+	public function make_having_clause($having_clause) {
 		$result = '';
 		if (!isset($having_clause)) {
 			return $result;
@@ -1447,7 +1447,7 @@ class DBQuery {
 	 * @param	$offset	integer of offset from where it should start retrieving.
 	 * @return	SQL LIMIT clause as a string.
 	 */
-	function make_limit_clause($limit, $offset) {
+	public function make_limit_clause($limit, $offset) {
 		$result = '';
 		if (!isset($limit)) {
 			return $result;
@@ -1463,7 +1463,7 @@ class DBQuery {
 		return $result;
 	}
 
-	function foundRows() {
+	public function foundRows() {
 		global $db;
 		$result = false;
 		if ($this->include_count) {
@@ -1480,7 +1480,7 @@ class DBQuery {
 	 * @param	$string	A string to add quotes to.
 	 * @return The quoted string
 	 */
-	function quote($string) {
+	public function quote($string) {
 		if (is_int($string)) {
 			return $string;
 		} else {
@@ -1492,7 +1492,7 @@ class DBQuery {
 	 * @param $string The identifier to quote
 	 * @return The quoted identifier
 	 */
-	function quote_db($string) {
+	public function quote_db($string) {
 		return $this->_db->nameQuote . $string . $this->_db->nameQuote;
 	}
 
@@ -1503,7 +1503,7 @@ class DBQuery {
 	 *
 	 * @param [type] $verbose
 	 */
-	function insertArray($table, &$hash, $verbose = false) {
+	public function insertArray($table, &$hash, $verbose = false) {
 		$this->addTable($table);
 		foreach ($hash as $k => $v) {
 			if (is_array($v) or is_object($v) or $v == null) {
@@ -1530,7 +1530,7 @@ class DBQuery {
 	 *
 	 * @param [type] $verbose
 	 */
-	function updateArray($table, &$hash, $keyName, $verbose = false) {
+	public function updateArray($table, &$hash, $keyName, $verbose = false) {
 		$this->addTable($table);
 		foreach ($hash as $k => $v) {
 			if (is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field
@@ -1565,7 +1565,7 @@ class DBQuery {
 	 * @param [type] $keyName
 	 * @param [type] $verbose
 	 */
-	function insertObject($table, &$object, $keyName = null, $verbose = false) {
+	public function insertObject($table, &$object, $keyName = null, $verbose = false) {
 		$this->addTable($table);
 		foreach (get_object_vars($object) as $k => $v) {
 			if (is_array($v) or is_object($v) or $v == null) {
@@ -1598,7 +1598,7 @@ class DBQuery {
 	 *
 	 * @param [type] $updateNulls
 	 */
-	function updateObject($table, &$object, $keyName, $updateNulls = true) {
+	public function updateObject($table, &$object, $keyName, $updateNulls = true) {
 		$this->addTable($table);
 		foreach (get_object_vars($object) as $k => $v) {
 			if (is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field
@@ -1629,7 +1629,7 @@ class DBQuery {
 	 *
 	 *	@return	object	The new record object or null if error
 	 **/
-	function duplicate() {
+	public function duplicate() {
 
 		// In php4 assignment does a shallow copy
 		// in php5 clone is required
@@ -1641,6 +1641,4 @@ class DBQuery {
 
 		return $newObj;
 	}
-
 }
-?>
