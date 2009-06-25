@@ -36,6 +36,17 @@ define('SEC_DAY', 86400);
  */
 class CDate extends Date {
 
+	public function __construct($tz = '') {
+
+		parent::__construct();
+		if ($tz == '')
+		{
+			$this->setTZ(date_default_timezone_get());
+		} else
+		{
+			$this->setTZ($tz);
+		}
+	} 
 	/**
 	 * Overloaded compare method
 	 *
@@ -521,5 +532,44 @@ class CDate extends Date {
 		}
 
 		return $f;
+	}
+
+	/**
+	 * Converts this date to a new time zone
+	 *
+	 * Converts this date to a new time zone.
+	 * WARNING: This may not work correctly if your system does not allow
+	 * putenv() or if localtime() does not work in your environment. 
+	 *
+	 * @access public
+	 * @param string $tz the time zone ID - index in $GLOBALS['_DATE_TIMEZONE_DATA']
+	 */
+	public function convertTZ($tz)
+	{
+		// convert to UTC
+		$offset = intval($this->tz['offset'] / 1000);
+		if ($this->tz['hasdst']) {
+			$offset += 3600;
+		}
+		$this->addSeconds(0 - $offset);
+
+		// convert UTC to new timezone
+		$offset = intval($GLOBALS['_DATE_TIMEZONE_DATA'][$tz]['offset'] / 1000);
+		if ($this->tz['hasdst']) {
+			$offset += 3600;
+		}
+		$this->addSeconds($offset);
+
+		$this->setTZ($tz);
+	}
+	public function setTZ($tz)
+	{
+		$tz_array = $GLOBALS['_DATE_TIMEZONE_DATA'][$tz];
+		$tz_array['id'] = $tz;
+		$this->tz = $tz_array;
+	}
+	public function addSeconds( $n )
+	{
+		$this->setDate( $this->getTime() + $n, DATE_FORMAT_UNIXTIME);
 	}
 }
