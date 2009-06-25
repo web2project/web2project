@@ -16,6 +16,9 @@
                 <fileset dir="modules">
                     <include name="**/*.test.php"/>
                 </fileset>
+                <fileset dir="classes">
+                    <include name="**/*.test.php"/>
+                </fileset>
             </batchtest>
             <formatter  type="xml" todir="reports" outfile="logfile.xml"/>
         </phpunit>
