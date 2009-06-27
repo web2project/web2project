@@ -429,7 +429,7 @@ class CAppUI {
 		if (empty($str)) {
 			return '';
 		}
-		$x = $GLOBALS['translate'][$str];
+		$x = isset($GLOBALS['translate'][$str]) ? $GLOBALS['translate'][$str] : '';
 
 		if ($x) {
 			$str = $x;
@@ -785,7 +785,7 @@ class CAppUI {
 	 * @param string Name of the preference
 	 */
 	public function getPref($name) {
-		return $this->user_prefs[$name];
+		return isset($this->user_prefs[$name]) ? $this->user_prefs[$name] : '';
 	}
 	/**
 	 * Sets the value of a user preference specified by name
