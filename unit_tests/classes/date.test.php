@@ -17,9 +17,9 @@ $AppUI->login('admin', 'passwd');
 require_once W2P_BASE_DIR . '/classes/date.class.php';
 require_once 'PHPUnit/Framework.php';
 /**
- * MainFunctionsTest Class.
+ * DateTest Class.
  * 
- * Class to test the main functions include
+ * Class to test the date include
  * @author D. Keith Casey, Jr.
  * @package web2project
  * @subpackage unit_tests
