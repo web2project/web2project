@@ -218,4 +218,3 @@ function w2PsessionStart($start_vars = 'AppUI') {
 			session_register($start_vars);
 		}
 }
-?>

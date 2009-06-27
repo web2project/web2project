@@ -1526,4 +1526,3 @@ function w2PwriteDebug($s, $t = '', $f = '?', $l = '?') {
 		fclose($fp);
 	}
 }
-?>

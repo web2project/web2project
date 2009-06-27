@@ -213,4 +213,3 @@ if ($rs) { // Won't work in install mode.
 			}
 	}
 }
-?>

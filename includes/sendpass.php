@@ -74,4 +74,3 @@ function makePass() {
 	}
 	return ($makepass);
 }
-?>
