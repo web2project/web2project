@@ -411,19 +411,23 @@ function defVal($var, $def) {
  */
 function w2PgetParam(&$arr, $name, $def = null) {
 	global $AppUI;
-	if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false 
-		&& strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false 
-		&& strpos($arr[$name], ';') === false && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
-		return isset($arr[$name]) ? $arr[$name] : $def;		
+	if (isset($arr[$name])) {
+		if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false 
+			&& strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false 
+			&& strpos($arr[$name], ';') === false && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
+				return isset($arr[$name]) ? $arr[$name] : $def;
+			} else {
+				/*echo('<pre>');
+				print_r(debug_backtrace());
+				echo('</pre>');
+				print_r($arr[$name]);die;*/
+				//Hack attempt detected
+				//return isset($arr[$name]) ? str_replace(' ','',$arr[$name]) : $def;
+				$AppUI->setMsg('Poisoning attempt to the URL detected. Issue logged.', UI_MSG_ALERT);
+				$AppUI->redirect('m=public&a=access_denied');				
+			}
 	} else {
-		/*echo('<pre>');
-		print_r(debug_backtrace());
-		echo('</pre>');
-		print_r($arr[$name]);die;*/
-		//Hack attempt detected
-		//return isset($arr[$name]) ? str_replace(' ','',$arr[$name]) : $def;
-		$AppUI->setMsg('Poisoning attempt to the URL detected. Issue logged.', UI_MSG_ALERT);
-		$AppUI->redirect('m=public&a=access_denied');
+		return $def;
 	}
 }
 
