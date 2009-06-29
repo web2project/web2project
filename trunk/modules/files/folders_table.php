@@ -706,12 +706,12 @@ if ($folder) { ?>
 	<span class="folder-name-current">
 <?php
 echo w2PshowImage('folder5_small.png', '16', '16', '', '', 'files');
-echo ($cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root";
+echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root";
 ?>
 	</span>
 <?php
 //	endif;
-if ($cfObj->file_folder_description != ''): ?>
+if (isset($cfObj) && $cfObj->file_folder_description != ''): ?>
 		<p><?php echo $cfObj->file_folder_description; ?></p>
 <?php
 endif;
