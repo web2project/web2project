@@ -15,12 +15,12 @@ $users = w2PgetUsers();
 print_r($permissions);
 echo("</pre>");*/
 
-if ($_POST['user'] != '') {
+if (isset($_POST['user']) && $_POST['user'] != '') {
 	$q = new DBQuery;
 	$q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
 	$q->addQuery('gp.*');
 	$q->addWhere('user_id IN (' . implode(',', array_keys($users)) . ')');
-	if ($_POST['user']) {
+	if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
 		$q->addWhere('user_id = ' . (int)$_POST['user']);
 	}
 	if ($_POST['module']) {
@@ -72,9 +72,11 @@ foreach ($permissions as $permission) {
 }
 $table .= '</table>';
 $users = array('' => '(' . $AppUI->_('Select User') . ')') + $users;
-$user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', ($_POST['user'] != '' ? $_POST['user'] : ''));
-$module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', ($_POST['module'] ? $_POST['module'] : 0));
-$action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', ($_POST['action'] ? $_POST['action'] : 0));
+$user = (isset($_POST['user']) && $_POST['user'] != '') ?  $_POST['user'] : $AppUI->user_id;
+$user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user);
+$module = (isset($_POST['module']) && $_POST['module'] != '') ?  $_POST['module'] : '';
+$module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module);
+$action = (isset($_POST['action']) && $_POST['action'] != '') ?  $_POST['action'] : '';
+$action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action);
 echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
 echo $table;
-?>

@@ -128,7 +128,7 @@ if (!$user) {
 				<?php echo $user->contact_address1; ?><br />
         <?php echo ($user->contact_address2 == '') ? '' : $user->contact_address2.'<br />'; ?>
         <?php echo $user->contact_city . ', ' . $user->contact_state . ' ' . $user->contact_zip; ?><br />
-        <?php echo ($countries[$user->contact_country] ? $countries[$user->contact_country] : $user->contact_country); ?>
+        <?php echo isset($countries[$user->contact_country]) ? $countries[$user->contact_country] : $user->contact_country; ?>
 			</td>
 		</tr>
 		</table>

@@ -90,7 +90,7 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 	$html .= '<td width="1%" align="right" nowrap="nowrap">' . ($this_day->getMinute() ? $tm : '<b>' . $tm . '</b>') . '</td>';
 
 	$timeStamp = $this_day->format('%H%M%S');
-	if ($events2[$timeStamp]) {
+	if (isset($events2[$timeStamp])) {
 		$count = count($events2[$timeStamp]);
 		for ($j = 0; $j < $count; $j++) {
 			$row = $events2[$timeStamp][$j];
