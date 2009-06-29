@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- projectsSeed.xml - Seed data for projects test. -->
+<dataset>
+    <table name="users">
+        <column>user_id</column>
+        <column>user_contact</column>
+        <column>user_username</column>
+        <column>user_password</column>
+        <column>user_parent</column>
+        <column>user_type</column>
+        <column>user_signature</column>
+        <column>user_empireint_special</column>                             
+        <column>user_department</column>                                
+        <column>user_company</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>admin</value>
+            <value>76a2173be6393254e72ffa4d6df1030a</value>
+            <value>0</value>
+            <value>1</value>
+            <value>Admin User</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+        </row>
+    </table>
+    <table name="projects">
+        <column>project_id</column>
+        <column>project_name</column>
+        <column>project_short_name</column>
+        <column>project_owner</column>
+        <column>project_status</column>
+        <column>project_color_identifier</column>
+        <column>project_creator</column>
+        <column>project_priority</column>
+        <column>project_type</column>
+        <column>project_company</column>
+        <row>
+            <value>1</value>
+            <value>Test Project</value>
+            <value>TP</value>
+            <value>1</value>
+            <value>0</value>
+            <value>FFFFFF</value>
+            <value>1</value>
+            <value>-1</value>
+            <value>0</value>
+            <value>1</value>
+        </row>
+    </table>
+</dataset>

@@ -15,7 +15,9 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 require_once W2P_BASE_DIR . '/classes/ui.class.php';
 require_once W2P_BASE_DIR . '/classes/query.class.php';
 
-// Need this to test actions that require permissions.
+/*
+ * Need this to test actions that require permissions.
+ */
 $AppUI  = new CAppUI;
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
@@ -28,6 +30,8 @@ require_once W2P_BASE_DIR . '/modules/companies/companies.class.php';
 require_once W2P_BASE_DIR . '/modules/projects/projects.class.php';
 require_once W2P_BASE_DIR . '/modules/departments/departments.class.php';
 require_once 'PHPUnit/Framework.php';
+require_once 'PHPUnit/Extensions/Database/TestCase.php';
+
 /**
  * CompaniesTest Class.
  * 
@@ -36,49 +40,35 @@ require_once 'PHPUnit/Framework.php';
  * @package web2project
  * @subpackage unit_tests
  */
-class Companies_Test extends PHPUnit_Framework_TestCase 
+class Companies_Test extends PHPUnit_Extensions_Database_TestCase 
 {
     
     protected $backupGlobals = FALSE;
-    
+        
     /**
-     * Sets up the database for testing.
+     * Return database connection for tests
      */
-    public function testSetupDB() 
-    {        
-        $file = dirname(___FILE___) . '/db_setup.sql';
-        
-        if (!file_exists($file)) {
-            die("The file $file does not exist.");
-        }
-        
-        $str = file_get_contents($file);
-        
-        if (!$str) {
-            die("Unable to read the contents of $file.");
-        }
-
-        // split all the query's into an array
-        $sql = explode(';', $str);
+    protected function getConnection()
+    {
         $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' . 
                        w2PgetConfig('dbhost') . ';dbname=' . 
                        w2PgetConfig('dbname'), 
                        w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
-        
-        foreach ($sql as $query) {
-            
-            if (!empty($query)) {
-                try{
-                    $result = $pdo->exec($query);
-                } catch(PDOException $e) {
-                    $pdo = null;
-                    die($e->getMessage());
-                }
-            }
-        }
-        $pdo = null;
+        return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
     }
     
+    /**
+     * Set up default dataset for testing
+     */
+    protected function getDataSet()
+    {
+        return $this->createXMLDataSet($this->getDataSetPath().'companiesSeed.xml');
+    }
+    protected function getDataSetPath()
+    {
+    	return dirname(dirname(__FILE__)).'/db_files/';
+    }
+
     /**
      * Tests the Attributes of a new Companies object.
      */
@@ -171,10 +161,55 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $company->bind($post_array);
         $msg = $company->store();
         
-        // Verify we got the proper error message
+        /**
+         * Verify we got the proper error message
+         */
         $this->AssertEquals('CCompany::store-check failed company id is NULL', $msg);
         
-        // Verify that company id was not set
+        /**
+         * Verify that company id was not set
+         */
+        $this->assertNull($company->company_id);
+    }
+    
+/**
+     * Tests that the proper error message is returned when a company
+     * is attempted to be created without a name.
+     */
+    public function testCreateCompanyNoName() 
+    {        
+        $company = new CCompany();
+
+        $post_array = array(
+            'dosql'                 => 'do_company_aed',
+            'company_id'            => 0,
+            'company_name'          => '',
+            'company_email'         => 'web2project@example.org',
+            'company_phone1'        => '1.999.999.9999',
+            'company_phone2'        => '1.999.999.9998',
+            'company_fax'           => '1.999.999.9997',
+            'company_address1'      => 'Address 1',
+            'company_address2'      => 'Address 2',
+            'company_city'          => 'City',
+            'company_state'         => 'CA',
+            'company_zip'           => '90210',
+            'company_country'       => 'US',
+            'company_primary_url'   => 'web2project.org',
+            'company_owner'         => 1,
+            'company_type'          => 2,
+            'company_description'   => 'This is a company.'
+        );
+        $company->bind($post_array);
+        $msg = $company->store();
+        
+        /**
+         * Verify we got the proper error message
+         */
+        $this->AssertEquals('CCompany::store-check failed company name is NULL', $msg);
+        
+        /**
+         * Verify that company id was not set
+         */
         $this->assertNull($company->company_id);
     }
     
@@ -209,7 +244,35 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('', $msg);
         $this->assertEquals('UnitTestCompany',          $company->company_name);
-        $this->assertEquals('web2project@example.org', $company->company_email);
+        $this->assertEquals('web2project@example.org',  $company->company_email);
+        $this->assertEquals('1.999.999.9999',           $company->company_phone1);
+        $this->assertEquals('1.999.999.9998',           $company->company_phone2);
+        $this->assertEquals('1.999.999.9997',           $company->company_fax);
+        $this->assertEquals('Address 1',                $company->company_address1);
+        $this->assertEquals('Address 2',                $company->company_address2);
+        $this->assertEquals('City',                     $company->company_city);
+        $this->assertEquals('CA',                       $company->company_state);
+        $this->assertEquals('90210',                    $company->company_zip);
+        $this->assertEquals('US',                       $company->company_country);
+        $this->assertEquals('web2project.net',          $company->company_primary_url);
+        $this->assertEquals(1,                          $company->company_owner);
+        $this->assertEquals(2,                          $company->company_type);
+        $this->assertEquals('This is a company.' ,      $company->company_description);
+        
+        $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testCreateCompany.xml');        
+        $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
+    }
+    
+    /** 
+     * Tests loading the Company Object
+     */
+    public function testLoad() 
+    {        
+        $company = new CCompany();
+        $company->load(1);
+        
+        $this->assertEquals('UnitTestCompany',          $company->company_name);
+        $this->assertEquals('web2project@example.org',  $company->company_email);
         $this->assertEquals('1.999.999.9999',           $company->company_phone1);
         $this->assertEquals('1.999.999.9998',           $company->company_phone2);
         $this->assertEquals('1.999.999.9997',           $company->company_fax);
@@ -225,44 +288,15 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('This is a company.' ,      $company->company_description);
     }
     
-    /** 
-     * Tests loading the Company Object
-     */
-    public function testLoad() 
-    {        
-        $company_id = $this->createCompany();
-        
-        $company = new CCompany();
-        $company->load($company_id);
-        
-        $this->assertEquals('CreatedCompany',           $company->company_name);
-        $this->assertEquals('web2project@example.org',  $company->company_email);
-        $this->assertEquals('1.999.999.9999',           $company->company_phone1);
-        $this->assertEquals('1.999.999.9998',           $company->company_phone2);
-        $this->assertEquals('1.999.999.9997',           $company->company_fax);
-        $this->assertEquals('Address 1',                $company->company_address1);
-        $this->assertEquals('Address 2',                $company->company_address2);
-        $this->assertEquals('City',                     $company->company_city);
-        $this->assertEquals('CA',                       $company->company_state);
-        $this->assertEquals('90210',                    $company->company_zip);
-        $this->assertEquals('US',                       $company->company_country);
-        $this->assertEquals('web2project.net',          $company->company_primary_url);
-        $this->assertEquals(1,                          $company->company_owner);
-        $this->assertEquals(1,                          $company->company_type);
-        $this->assertEquals('This is a company.' ,      $company->company_description);
-    }
-    
     /**
      * Tests loading the Company Object
      */
     public function testLoadFull() 
     {        
-        $company_id = $this->createCompany();
-        
         $company = new CCompany();
-        $company->loadFull($company_id);
+        $company->loadFull(1);
         
-        $this->assertEquals('CreatedCompany',           $company->company_name);
+        $this->assertEquals('UnitTestCompany',          $company->company_name);
         $this->assertEquals('web2project@example.org',  $company->company_email);
         $this->assertEquals('1.999.999.9999',           $company->company_phone1);
         $this->assertEquals('1.999.999.9998',           $company->company_phone2);
@@ -275,7 +309,7 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('US',                       $company->company_country);
         $this->assertEquals('web2project.net',          $company->company_primary_url);
         $this->assertEquals(1,                          $company->company_owner);
-        $this->assertEquals(1,                          $company->company_type);
+        $this->assertEquals(2,                          $company->company_type);
         $this->assertEquals('This is a company.' ,      $company->company_description);
         $this->assertEquals(0,                          $company->company_module);
         $this->assertEquals(0,                          $company->company_private);
@@ -287,11 +321,9 @@ class Companies_Test extends PHPUnit_Framework_TestCase
      * Tests the update of a company
      */
     public function testUpdateCompany() 
-    {        
-        $company_id = $this->createCompany();
-        
+    {       
         $company = new CCompany();
-        $company->load($company_id);
+        $company->load(1);
         
         $post_array = array(
             'dosql'                 => 'do_company_aed',
@@ -331,22 +363,28 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(1,                              $company->company_owner);
         $this->assertEquals(2,                              $company->company_type);
         $this->assertEquals('This is an updated company.',  $company->company_description);
+        
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateCompany.xml');        
+        $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
     }
     
     /**
      * Tests the delete of a company
      */
     public function testDeleteCompany() 
-    {                
-        $company_id = $this->createCompany();
-        
+    {              
         $company = new CCompany();
-        $msg = $company->delete($company_id);
+        $msg = $company->delete(1);
+        $this->assertEquals('noDeleteRecord: Projects, Departments', $msg);
         
-        $company = new CCompany();
-        $result = $company->load($company_id);
+        $msg = $company->delete(3);      
+        $this->assertEquals('', $msg);
         
+        $result = $company->load(3);
         $this->assertFalse($result);
+        
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testDeleteCompany.xml');        
+        $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
     }
     
     /** 
@@ -355,7 +393,7 @@ class Companies_Test extends PHPUnit_Framework_TestCase
     public function testGetCompanyListNoCriteria() 
     {         
         global $AppUI;
-
+        
         $company = new CCompany();
 
         $companies = $company->getCompanyList($AppUI);
@@ -366,13 +404,13 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('CreatedCompany',              $companies[0]['company_name']);
         $this->assertEquals(1,                             $companies[0]['company_type']);
         $this->assertEquals('This is a company.',          $companies[0]['company_description']); 
-        $this->assertEquals(0,                             $companies[0]['countp']);
+        $this->assertEquals(1,                             $companies[0]['countp']);
         $this->assertEquals(0,                             $companies[0]['inactive']);
         $this->assertEquals('Admin',                       $companies[0]['contact_first_name']);
         $this->assertEquals('Person',                      $companies[0]['contact_last_name']);
         $this->assertEquals(3,                             $companies[1]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[1]['company_name']);
-        $this->assertEquals(1,                             $companies[1]['company_type']);
+        $this->assertEquals(2,                             $companies[1]['company_type']);
         $this->assertEquals('This is a company.',          $companies[1]['company_description']); 
         $this->assertEquals(0,                             $companies[1]['countp']);
         $this->assertEquals(0,                             $companies[1]['inactive']);
@@ -382,7 +420,7 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('UnitTestCompany',             $companies[2]['company_name']);
         $this->assertEquals(2,                             $companies[2]['company_type']);
         $this->assertEquals('This is a company.',          $companies[2]['company_description']); 
-        $this->assertEquals(0,                             $companies[2]['countp']);
+        $this->assertEquals(1,                             $companies[2]['countp']);
         $this->assertEquals(0,                             $companies[2]['inactive']);
         $this->assertEquals('Admin',                       $companies[2]['contact_first_name']);
         $this->assertEquals('Person',                      $companies[2]['contact_last_name']);
@@ -423,23 +461,15 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $companies = $company->getCompanyList($AppUI, 1);
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
-        $this->assertEquals(2,                             count($companies));
+        $this->assertEquals(1,                             count($companies));
         $this->assertEquals(2,                             $companies[0]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[0]['company_name']);
         $this->assertEquals(1,                             $companies[0]['company_type']);
         $this->assertEquals('This is a company.',          $companies[0]['company_description']); 
-        $this->assertEquals(0,                             $companies[0]['countp']);
+        $this->assertEquals(1,                             $companies[0]['countp']);
         $this->assertEquals(0,                             $companies[0]['inactive']);
         $this->assertEquals('Admin',                       $companies[0]['contact_first_name']);
         $this->assertEquals('Person',                      $companies[0]['contact_last_name']);
-        $this->assertEquals(3,                             $companies[1]['company_id']);
-        $this->assertEquals('CreatedCompany',              $companies[1]['company_name']);
-        $this->assertEquals(1,                             $companies[1]['company_type']);
-        $this->assertEquals('This is a company.',          $companies[1]['company_description']); 
-        $this->assertEquals(0,                             $companies[1]['countp']);
-        $this->assertEquals(0,                             $companies[1]['inactive']);
-        $this->assertEquals('Admin',                       $companies[1]['contact_first_name']);
-        $this->assertEquals('Person',                      $companies[1]['contact_last_name']);
     } 
      
     /** 
@@ -489,13 +519,13 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('CreatedCompany',              $companies[0]['company_name']);
         $this->assertEquals(1,                             $companies[0]['company_type']);
         $this->assertEquals('This is a company.',          $companies[0]['company_description']); 
-        $this->assertEquals(0,                             $companies[0]['countp']);
+        $this->assertEquals(1,                             $companies[0]['countp']);
         $this->assertEquals(0,                             $companies[0]['inactive']);
         $this->assertEquals('Admin',                       $companies[0]['contact_first_name']);
         $this->assertEquals('Person',                      $companies[0]['contact_last_name']);
         $this->assertEquals(3,                             $companies[1]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[1]['company_name']);
-        $this->assertEquals(1,                             $companies[1]['company_type']);
+        $this->assertEquals(2,                             $companies[1]['company_type']);
         $this->assertEquals('This is a company.',          $companies[1]['company_description']); 
         $this->assertEquals(0,                             $companies[1]['countp']);
         $this->assertEquals(0,                             $companies[1]['inactive']);
@@ -505,7 +535,7 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('UnitTestCompany',             $companies[2]['company_name']);
         $this->assertEquals(2,                             $companies[2]['company_type']);
         $this->assertEquals('This is a company.',          $companies[2]['company_description']); 
-        $this->assertEquals(0,                             $companies[2]['countp']);
+        $this->assertEquals(1,                             $companies[2]['countp']);
         $this->assertEquals(0,                             $companies[2]['inactive']);
         $this->assertEquals('Admin',                       $companies[2]['contact_first_name']);
         $this->assertEquals('Person',                      $companies[2]['contact_last_name']);
@@ -526,48 +556,7 @@ class Companies_Test extends PHPUnit_Framework_TestCase
     {
         global $AppUI;
 
-        // Create two companies, so we can verify that getProjects
-        // only brings back projects for the proper company
-        $company_id_1 = $this->createCompany();
-        $company_id_2 = $this->createCompany();
-
-        $project = new CProject();
-
-        $post_array = array (
-            'dosql'                     => 'do_project_aed',
-            'project_id'                => 0,
-            'project_creator'           => 1,
-            'project_name'              => 'Test Project',
-            'project_owner'             => 1,
-            'project_company'           => $company_id_1,
-            'project_priority'          => -1,
-            'project_short_name'        =>'TP',
-            'project_color_identifier'  => 'FFFFFF',
-            'project_type'              => 0,
-            'project_status'            => 0,
-            'project_active'            => 1
-        );
-        $project->bind($post_array);
-        $project->store();
-
-        $post_array = array (
-            'dosql'                     => 'do_project_aed',
-            'project_id'                => 0,
-            'project_creator'           => 1,
-            'project_name'              => 'Test Project',
-            'project_owner'             => 1,
-            'project_company'           => $company_id_2,
-            'project_priority'          => -1,
-            'project_short_name'        =>'TP',
-            'project_color_identifier'  => 'FFFFFF',
-            'project_type'              => 0,
-            'project_status'            => 0,
-            'project_active'            => 1
-        );
-        $project->bind($post_array);
-        $msg = $project->store();
-
-        $projects = CCompany::getProjects($AppUI, $company_id_1);
+        $projects = CCompany::getProjects($AppUI, 1);
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $projects);
         $this->assertEquals(1,                 count($projects));
@@ -588,11 +577,172 @@ class Companies_Test extends PHPUnit_Framework_TestCase
     {
         global $AppUI;
 
-        $company_id = $this->createCompany();
-
-        $contacts = CCompany::getContacts($AppUI, $company_id);
-
-        $this->markTestIncomplete('Cannot figure out why this does not return a result.');
+        $contacts = CCompany::getContacts($AppUI, 1);
+        
+        /**
+         * getContacts returns both an associative array as well as a indexed array
+         * so we need to check both to make sure functionality depending on either does
+         * not break.
+         */
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $contacts);
+        $this->assertEquals(2, 							count($contacts));
+        $this->assertEquals(1,                          $contacts[1]['contact_id']);
+        $this->assertEquals('Admin',                    $contacts[1]['contact_first_name']);
+        $this->assertEquals('Person',                   $contacts[1]['contact_last_name']);
+        $this->assertEquals('',                         $contacts[1]['contact_order_by']);
+        $this->assertEquals('President',                $contacts[1]['contact_title']);
+        $this->assertEquals('1983-07-22',               $contacts[1]['contact_birthday']);
+        $this->assertEquals('President',                $contacts[1]['contact_job']);
+        $this->assertEquals(1,                          $contacts[1]['contact_company']);
+        $this->assertEquals(0,                          $contacts[1]['contact_department']);
+        $this->assertEquals('person',                   $contacts[1]['contact_type']);
+        $this->assertEquals('contact1@example.org',     $contacts[1]['contact_email']);
+        $this->assertEquals('contact1_2@example.org',   $contacts[1]['contact_email2']);
+        $this->assertEquals('1.example.org',            $contacts[1]['contact_url']);
+        $this->assertEquals('1.999.999.9999',           $contacts[1]['contact_phone']);
+        $this->assertEquals('1.999.999.9998',           $contacts[1]['contact_phone2']);
+        $this->assertEquals('1.999.999.9997',           $contacts[1]['contact_fax']);
+        $this->assertEquals('1.999.999.9996',           $contacts[1]['contact_mobile']);
+        $this->assertEquals('c1 address 1',             $contacts[1]['contact_address1']);
+        $this->assertEquals('c1 address 2',             $contacts[1]['contact_address2']);
+        $this->assertEquals('c1 city',                  $contacts[1]['contact_city']);
+        $this->assertEquals('CA',                       $contacts[1]['contact_state']);
+        $this->assertEquals('90210',                    $contacts[1]['contact_zip']);
+        $this->assertEquals('US',                       $contacts[1]['contact_country']);
+        $this->assertEquals('c1jabber',                 $contacts[1]['contact_jabber']);
+        $this->assertEquals('c1icq',                    $contacts[1]['contact_icq']);
+        $this->assertEquals('c1msn',                    $contacts[1]['contact_msn']);
+        $this->assertEquals('c1yahoo',                  $contacts[1]['contact_yahoo']);
+        $this->assertEquals('c1aol',                    $contacts[1]['contact_aol']);
+        $this->assertEquals('c1s notes.',               $contacts[1]['contact_notes']);
+        $this->assertEquals(0,                          $contacts[1]['contact_project']);
+        $this->assertEquals('obj/contact',              $contacts[1]['contact_icon']);
+        $this->assertEquals(0,                          $contacts[1]['contact_owner']);
+        $this->assertEquals(0,                          $contacts[1]['contact_private']);
+        $this->assertEquals('',                         $contacts[1]['contact_updatekey']);
+        $this->assertEquals('2009-01-01 11:11:11',      $contacts[1]['contact_lastupdate']);
+        $this->assertEquals('2008-12-12 11:11:11',      $contacts[1]['contact_updateasked']);
+        $this->assertEquals('c1skype',                  $contacts[1]['contact_skype']);
+        $this->assertEquals('c1google',                 $contacts[1]['contact_google']);
+        $this->assertEquals('',                         $contacts[1]['dept_name']);
+        $this->assertEquals(1,                          $contacts[1]['0']);
+        $this->assertEquals('Admin',                    $contacts[1]['1']);
+        $this->assertEquals('Person',                   $contacts[1]['2']);
+        $this->assertEquals('',                         $contacts[1]['3']);
+        $this->assertEquals('President',                $contacts[1]['4']);
+        $this->assertEquals('1983-07-22',               $contacts[1]['5']);
+        $this->assertEquals('President',                $contacts[1]['6']);
+        $this->assertEquals(1,                          $contacts[1]['7']);
+        $this->assertEquals(0,                          $contacts[1]['8']);
+        $this->assertEquals('person',                   $contacts[1]['9']);
+        $this->assertEquals('contact1@example.org',     $contacts[1]['10']);
+        $this->assertEquals('contact1_2@example.org',   $contacts[1]['11']);
+        $this->assertEquals('1.example.org',            $contacts[1]['12']);
+        $this->assertEquals('1.999.999.9999',           $contacts[1]['13']);
+        $this->assertEquals('1.999.999.9998',           $contacts[1]['14']);
+        $this->assertEquals('1.999.999.9997',           $contacts[1]['15']);
+        $this->assertEquals('1.999.999.9996',           $contacts[1]['16']);
+        $this->assertEquals('c1 address 1',             $contacts[1]['17']);
+        $this->assertEquals('c1 address 2',             $contacts[1]['18']);
+        $this->assertEquals('c1 city',                  $contacts[1]['19']);
+        $this->assertEquals('CA',                       $contacts[1]['20']);
+        $this->assertEquals('90210',                    $contacts[1]['21']);
+        $this->assertEquals('US',                       $contacts[1]['22']);
+        $this->assertEquals('c1jabber',                 $contacts[1]['23']);
+        $this->assertEquals('c1icq',                    $contacts[1]['24']);
+        $this->assertEquals('c1msn',                    $contacts[1]['25']);
+        $this->assertEquals('c1yahoo',                  $contacts[1]['26']);
+        $this->assertEquals('c1aol',                    $contacts[1]['27']);
+        $this->assertEquals('c1s notes.',               $contacts[1]['28']);
+        $this->assertEquals(0,                          $contacts[1]['29']);
+        $this->assertEquals('obj/contact',              $contacts[1]['30']);
+        $this->assertEquals(0,                          $contacts[1]['31']);
+        $this->assertEquals(0,                          $contacts[1]['32']);
+        $this->assertEquals('',                         $contacts[1]['33']);
+        $this->assertEquals('2009-01-01 11:11:11',      $contacts[1]['34']);
+        $this->assertEquals('2008-12-12 11:11:11',      $contacts[1]['35']);
+        $this->assertEquals('c1skype',                  $contacts[1]['36']);
+        $this->assertEquals('c1google',                 $contacts[1]['37']);
+        $this->assertEquals('',                         $contacts[1]['38']);
+        $this->assertEquals(2,                          $contacts[2]['contact_id']);
+        $this->assertEquals('Contact',                  $contacts[2]['contact_first_name']);
+        $this->assertEquals('Number 1',                 $contacts[2]['contact_last_name']);
+        $this->assertEquals('',                         $contacts[2]['contact_order_by']);
+        $this->assertEquals('Vice President',           $contacts[2]['contact_title']);
+        $this->assertEquals('1973-07-22',               $contacts[2]['contact_birthday']);
+        $this->assertEquals('Vice President',           $contacts[2]['contact_job']);
+        $this->assertEquals(1,                          $contacts[2]['contact_company']);
+        $this->assertEquals(0,                          $contacts[2]['contact_department']);
+        $this->assertEquals('person',                   $contacts[2]['contact_type']);
+        $this->assertEquals('contact2@example.org',     $contacts[2]['contact_email']);
+        $this->assertEquals('contact2_2@example.org',   $contacts[2]['contact_email2']);
+        $this->assertEquals('2.example.org',            $contacts[2]['contact_url']);
+        $this->assertEquals('1.888.888.8888',           $contacts[2]['contact_phone']);
+        $this->assertEquals('1.888.888.8887',           $contacts[2]['contact_phone2']);
+        $this->assertEquals('1.888.888.8886',           $contacts[2]['contact_fax']);
+        $this->assertEquals('1.888.888.8885',           $contacts[2]['contact_mobile']);
+        $this->assertEquals('c2 address 1',             $contacts[2]['contact_address1']);
+        $this->assertEquals('c2 address 2',             $contacts[2]['contact_address2']);
+        $this->assertEquals('c2 city',                  $contacts[2]['contact_city']);
+        $this->assertEquals('CA',                       $contacts[2]['contact_state']);
+        $this->assertEquals('90211',                    $contacts[2]['contact_zip']);
+        $this->assertEquals('US',                       $contacts[2]['contact_country']);
+        $this->assertEquals('c2jabber',                 $contacts[2]['contact_jabber']);
+        $this->assertEquals('c2icq',                    $contacts[2]['contact_icq']);
+        $this->assertEquals('c2msn',                    $contacts[2]['contact_msn']);
+        $this->assertEquals('c2yahoo',                  $contacts[2]['contact_yahoo']);
+        $this->assertEquals('c2aol',                    $contacts[2]['contact_aol']);
+        $this->assertEquals('c2s notes.',               $contacts[2]['contact_notes']);
+        $this->assertEquals(0,                          $contacts[2]['contact_project']);
+        $this->assertEquals('obj/contact',              $contacts[2]['contact_icon']);
+        $this->assertEquals(0,                          $contacts[2]['contact_owner']);
+        $this->assertEquals(0,                          $contacts[2]['contact_private']);
+        $this->assertEquals('',                         $contacts[2]['contact_updatekey']);
+        $this->assertEquals('2008-01-01 11:11:11',      $contacts[2]['contact_lastupdate']);
+        $this->assertEquals('2007-12-12 11:11:11',      $contacts[2]['contact_updateasked']);
+        $this->assertEquals('c2skype',                  $contacts[2]['contact_skype']);
+        $this->assertEquals('c2google',                 $contacts[2]['contact_google']);
+        $this->assertEquals('',                         $contacts[2]['dept_name']);
+        $this->assertEquals(2,                          $contacts[2]['0']);
+        $this->assertEquals('Contact',                  $contacts[2]['1']);
+        $this->assertEquals('Number 1',                 $contacts[2]['2']);
+        $this->assertEquals('',                         $contacts[2]['3']);
+        $this->assertEquals('Vice President',           $contacts[2]['4']);
+        $this->assertEquals('1973-07-22',               $contacts[2]['5']);
+        $this->assertEquals('Vice President',           $contacts[2]['6']);
+        $this->assertEquals(1,                          $contacts[2]['7']);
+        $this->assertEquals(0,                          $contacts[2]['8']);
+        $this->assertEquals('person',                   $contacts[2]['9']);
+        $this->assertEquals('contact2@example.org',     $contacts[2]['10']);
+        $this->assertEquals('contact2_2@example.org',   $contacts[2]['11']);
+        $this->assertEquals('2.example.org',            $contacts[2]['12']);
+        $this->assertEquals('1.888.888.8888',           $contacts[2]['13']);
+        $this->assertEquals('1.888.888.8887',           $contacts[2]['14']);
+        $this->assertEquals('1.888.888.8886',           $contacts[2]['15']);
+        $this->assertEquals('1.888.888.8885',           $contacts[2]['16']);
+        $this->assertEquals('c2 address 1',             $contacts[2]['17']);
+        $this->assertEquals('c2 address 2',             $contacts[2]['18']);
+        $this->assertEquals('c2 city',                  $contacts[2]['19']);
+        $this->assertEquals('CA',                       $contacts[2]['20']);
+        $this->assertEquals('90211',                    $contacts[2]['21']);
+        $this->assertEquals('US',                       $contacts[2]['22']);
+        $this->assertEquals('c2jabber',                 $contacts[2]['23']);
+        $this->assertEquals('c2icq',                    $contacts[2]['24']);
+        $this->assertEquals('c2msn',                    $contacts[2]['25']);
+        $this->assertEquals('c2yahoo',                  $contacts[2]['26']);
+        $this->assertEquals('c2aol',                    $contacts[2]['27']);
+        $this->assertEquals('c2s notes.',               $contacts[2]['28']);
+        $this->assertEquals(0,                          $contacts[2]['29']);
+        $this->assertEquals('obj/contact',              $contacts[2]['30']);
+        $this->assertEquals(0,                          $contacts[2]['31']);
+        $this->assertEquals(0,                          $contacts[2]['32']);
+        $this->assertEquals('',                         $contacts[2]['33']);
+        $this->assertEquals('2008-01-01 11:11:11',      $contacts[2]['34']);
+        $this->assertEquals('2007-12-12 11:11:11',      $contacts[2]['35']);
+        $this->assertEquals('c2skype',                  $contacts[2]['36']);
+        $this->assertEquals('c2google',                 $contacts[2]['37']);
+        $this->assertEquals('',                         $contacts[2]['38']);
+        
     }
      
     /**
@@ -602,11 +752,31 @@ class Companies_Test extends PHPUnit_Framework_TestCase
     {
         global $AppUI;
 
-        $company_id = $this->createCompany();
+        $users = CCompany::getUsers($AppUI, 2);
 
-        $users = CCompany::getUsers($AppUI, $company_id);
-
-        $this->markTestIncomplete('Cannot figure out how to add users to a company.');
+        /**
+         * getUsers returns both an associative array as well as a indexed array
+         * so we need to check both to make sure functionality depending on either does
+         * not break.
+         */
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $users);
+        $this->assertEquals(2,                  count($users));
+        $this->assertEquals(3,                  $users[3]['user_id']);
+        $this->assertEquals('contact_number_2', $users[3]['user_username']);
+        $this->assertEquals('Contact',          $users[3]['contact_first_name']);
+        $this->assertEquals('Number 2',         $users[3]['contact_last_name']);
+        $this->assertEquals(3,                  $users[3][0]);
+        $this->assertEquals('contact_number_2', $users[3][1]);
+        $this->assertEquals('Contact',          $users[3][2]);
+        $this->assertEquals('Number 2',         $users[3][3]);
+        $this->assertEquals(4,                  $users[4]['user_id']);
+        $this->assertEquals('contact_number_3', $users[4]['user_username']);
+        $this->assertEquals('Contact',          $users[4]['contact_first_name']);
+        $this->assertEquals('Number 3',         $users[4]['contact_last_name']);
+        $this->assertEquals(4,                  $users[4][0]);
+        $this->assertEquals('contact_number_3', $users[4][1]);
+        $this->assertEquals('Contact',          $users[4][2]);
+        $this->assertEquals('Number 3',         $users[4][3]);
     }
      
     /**
@@ -616,38 +786,13 @@ class Companies_Test extends PHPUnit_Framework_TestCase
     {
         global $AppUI;
 
-        // Create two companies, so we can verify that getProjects
-        // only brings back projects for the proper company
-        $company_id_1 = $this->createCompany();
-        $company_id_2 = $this->createCompany();
-
-        $department = new CDepartment();
-
-        $post_array = array (
-            'dept_name'     => 'Department 1',
-            'dosql'         => 'do_dept_aed',
-            'dept_id'       => 0,
-            'dept_company'  => $company_id_1
-        );
-        $department->bind($post_array);
-        $department->store();
-
-        $post_array = array (
-            'dept_name'     => 'Department 1',
-            'dosql'         => 'do_dept_aed',
-            'dept_id'       => 0,
-            'dept_company'  => $company_id_2
-        );
-        $department->bind($post_array);
-        $department->store();
-
-        $departments = CCompany::getDepartments($AppUI, $company_id_1);
+        $departments = CCompany::getDepartments($AppUI, 1);
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $departments);
         $this->assertEquals(1,              count($departments));
         $this->assertEquals(1,              $departments[0]['dept_id']);
         $this->assertEquals(0,              $departments[0]['dept_parent']);
-        $this->assertEquals(10,             $departments[0]['dept_company']);
+        $this->assertEquals(1,              $departments[0]['dept_company']);
         $this->assertEquals('Department 1', $departments[0]['dept_name']);
         $this->assertEquals('',             $departments[0]['dept_phone']);
         $this->assertEquals('',             $departments[0]['dept_fax']);
@@ -663,39 +808,5 @@ class Companies_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('',             $departments[0]['dept_email']);
         $this->assertEquals(0,              $departments[0]['dept_type']);
         $this->assertEquals(0,              $departments[0]['dept_users']);
-    }
-     
-    /**
-    * Function to create a company for tests to use.
-    * 
-    * @return int
-    */
-    private function createCompany() 
-    {        
-        $company = new CCompany();
-
-        $post_array = array(
-            'dosql'                 => 'do_company_aed',
-            'company_id'            => 0,
-            'company_name'          => 'CreatedCompany',
-            'company_email'         => 'web2project@example.org',
-            'company_phone1'        => '1.999.999.9999',
-            'company_phone2'        => '1.999.999.9998',
-            'company_fax'           => '1.999.999.9997',
-            'company_address1'      => 'Address 1',
-            'company_address2'      => 'Address 2',
-            'company_city'          => 'City',
-            'company_state'         => 'CA',
-            'company_zip'           => '90210',
-            'company_country'       => 'US',
-            'company_primary_url'   => 'web2project.net',
-            'company_owner'         => 1,
-            'company_type'          => 1,
-            'company_description'   => 'This is a company.'
-        );
-        $company->bind($post_array);
-        $msg = $company->store();
-
-        return $company->company_id;
     }
 }
