@@ -41,17 +41,38 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 	public function testW2PgetParam()
 	{
 		global $AppUI;
-		$params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>');
-		
-		//echo w2PgetParam($params, 'm');
+		$params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>', 
+				'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
+
 		$this->assertEquals('projects', w2PgetParam($params, 'm'));
 
 		$this->assertEquals('', w2PgetParam($params, 'NotGonnaBeThere'));
 
 		$this->assertEquals('Some Default', w2PgetParam($params, 'NotGonnaBeThere', 'Some Default'));
-		
+
 		$this->markTestIncomplete("Currently w2PgetParam redirects for tainted names.. what do we do there?");
 		
 		$this->markTestIncomplete("Currently w2PgetParam redirects for tainted values.. what do we do there?");
 	}
+	
+	public function testW2PgetCleanParam()
+	{
+		global $AppUI;
+		$params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>', 
+				'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
+
+		$this->assertEquals('projects', w2PgetCleanParam($params, 'm'));
+
+		$this->assertEquals('', w2PgetCleanParam($params, 'NotGonnaBeThere'));
+
+		$this->assertEquals('Some Default', w2PgetCleanParam($params, 'NotGonnaBeThere', 'Some Default'));
+
+		$this->assertEquals($params['v'], w2PgetCleanParam($params, 'v', ''));
+
+		$this->assertEquals($params['html'], w2PgetCleanParam($params, 'html', ''));
+
+		$this->assertEquals($params['<script>'], w2PgetCleanParam($params, '<script>', ''));
+
+		$this->markTestIncomplete("This function does *nothing* for tainted values and I suspect it should...");
+	}	
 }

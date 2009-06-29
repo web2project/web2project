@@ -436,9 +436,10 @@ function w2PgetParam(&$arr, $name, $def = null) {
  */
 function w2PgetCleanParam(&$arr, $name, $def = null) {
 	$val = isset($arr[$name]) ? $arr[$name] : $def;
-	if (empty($val)) {
+	if (!is_null($val)) {
 		return $val;
 	}
+
 	// Code from http://quickwired.com/kallahar/smallprojects/php_xss_filter_function.php
 	// remove all non-printable characters. CR(0a) and LF(0b) and TAB(9) are allowed
 	// this prevents some character re-spacing such as <java\0script>
@@ -487,6 +488,7 @@ function w2PgetCleanParam(&$arr, $name, $def = null) {
 			if ($val_before == $val) {
 				// no replacements were made, so exit the loop
 				$found = false;
+				break;
 			}
 		}
 	}
