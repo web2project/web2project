@@ -68,7 +68,7 @@ function arraySelectTree(&$arr, $select_name, $select_attribs, $selected, $trans
 	foreach ($arr as $k => $v) {
 		$id = $v[0];
 		$pt = $v[2];
-		$list = $children[$pt] ? $children[$pt] : array();
+		$list = isset($children[$pt]) ? $children[$pt] : array();
 		array_push($list, $v);
 		$children[$pt] = $list;
 	}
@@ -77,7 +77,7 @@ function arraySelectTree(&$arr, $select_name, $select_attribs, $selected, $trans
 }
 
 function tree_recurse($id, $indent, $list, $children) {
-	if ($children[$id]) {
+	if (isset($children[$id])) {
 		foreach ($children[$id] as $v) {
 			$id = $v[0];
 			$txt = $v[1];

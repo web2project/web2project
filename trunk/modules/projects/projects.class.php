@@ -315,7 +315,7 @@ class CProject extends CW2pObject {
 		if (count($aCpies)) {
 			$buffer = '(project_company IN (' . implode(',', array_keys($aCpies)) . '))';
 
-			if (!$extra['from'] && !$extra['join']) {
+			if (!isset($extra['from']) && !isset($extra['join'])) {
 				$extra['join'] = 'project_departments';
 				$extra['on'] = 'projects.project_id = project_departments.project_id';
 			} elseif ($extra['from'] != 'project_departments' && !$extra['join']) {
@@ -332,7 +332,7 @@ class CProject extends CW2pObject {
 				$dpt_buffer = '(department_id IS NULL)';
 			}
 
-			if ($extra['where'] != '') {
+			if (isset($extra['where']) && $extra['where'] != '') {
 				$extra['where'] = $extra['where'] . ' AND ' . $buffer . ' AND ' . $dpt_buffer;
 			} else {
 				$extra['where'] = $buffer . ' AND ' . $dpt_buffer;
