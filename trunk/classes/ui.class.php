@@ -499,9 +499,10 @@ class CAppUI {
 	 */
 	public function savePlace($query = '') {
 		$query = ($query == '') ? $_SERVER['QUERY_STRING'] : $query;
-		
-		if ($query != $this->state['SAVEDPLACE']) {
-			$this->state['SAVEDPLACE-1'] = $this->state['SAVEDPLACE'];
+		$saved = (isset($this->state['SAVEDPLACE'])) ? $this->state['SAVEDPLACE'] : '';
+
+		if ($query != $saved) {
+			$this->state['SAVEDPLACE-1'] = $saved;
 			$this->state['SAVEDPLACE'] = $query;
 		}
 	}
