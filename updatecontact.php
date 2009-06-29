@@ -16,7 +16,6 @@ require_once ($AppUI->getSystemClass('date'));
 require_once ($AppUI->getModuleClass('contacts'));
 
 $updatekey = w2PgetParam($_GET, 'updatekey', 0);
-$q = new DBQuery;
 $contact_id = CContact::getContactByUpdatekey($updatekey);
 
 $company_id = intval(w2PgetParam($_REQUEST, 'company_id', 0));

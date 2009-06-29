@@ -51,10 +51,10 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	if ($AppUI->doLogin())
 		$AppUI->loadPrefs(0);
 	// check if the user is trying to log in
-	if (isset($_REQUEST['login'])) {
+	if (isset($_POST['login'])) {
 		$username = w2PgetParam($_POST, 'username', '');
 		$password = w2PgetParam($_POST, 'password', '');
-		$redirect = w2PgetParam($_REQUEST, 'redirect', '');
+		$redirect = w2PgetParam($_POST, 'redirect', '');
 		$ok = $AppUI->login($username, $password);
 		if (!$ok) {
 			//display login failed message
