@@ -18,10 +18,10 @@ if ($dialog) {
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
 	<?php 
-          if (is_object($xajax)) {
-               $xajax->printJavascript(w2PgetConfig('base_url') . '/lib/xajax');
-          } 
-     ?>
+		if (isset($xajax) && is_object($xajax)) {
+			$xajax->printJavascript(w2PgetConfig('base_url') . '/lib/xajax');
+		}
+	?>
 	<?php $AppUI->loadHeaderJS(); ?>
 </head>
 
