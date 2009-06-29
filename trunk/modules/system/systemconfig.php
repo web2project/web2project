@@ -39,6 +39,7 @@ foreach ($rs as $c) {
 
 	$tooltip = $AppUI->_($c['config_name'] . '_tooltip');
 	// extraparse the checkboxes and the select lists
+	$extra = '';
 	$value = '';
 	switch ($c['config_type']) {
 		case 'select':
@@ -56,8 +57,7 @@ foreach ($rs as $c) {
 			$entry .= '</select>';
 			break;
 		case 'checkbox':
-			$extra = ($c['config_value'] == 'true') ? 'checked="checked"':
-			'';
+			$extra = ($c['config_value'] == 'true') ? 'checked="checked"' : '';
 			$value = 'true';
 			// allow to fallthrough
 		default:
