@@ -73,9 +73,7 @@ require_once $AppUI->getModuleClass('projects');
 $project = &new CProject;
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'p.project_id');
 
-if (count($allowedProjects)) {
-	$where_list = implode(' AND ', $allowedProjects);
-}
+$where_list = (count($allowedProjects)) ? implode(' AND ', $allowedProjects) : '';
 
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
@@ -270,16 +268,11 @@ if ($min_view && isset($_GET['task_status'])) {
 if (!$task_id) {
 	$q->addWhere('task_status = ' . (int)$task_status);
 }
-
-if ($task_type) {
-	if ($task_type <> -1) {
-		$q->addWhere('task_type = ' . (int)$task_type);
-	}
+if (isset($task_type) && (int) $task_type > 0) {
+	$q->addWhere('task_type = ' . (int)$task_type);
 }
-if ($task_owner) {
-	if ($task_owner <> -1) {
-		$q->addWhere('task_owner = ' . (int)$task_owner);
-	}
+if (isset($task_owner) && (int) $task_owner > 0) {
+	$q->addWhere('task_owner = ' . (int)$task_owner);
 }
 
 if (($project_id || !$task_id) && !$min_view) {
@@ -502,8 +495,7 @@ if ($w2Pconfig['direct_edit_assignment']) {
 	$userAlloc = $tempoTask->getAllocation('user_id', null, true);
 }
 foreach ($projects as $k => $p) {
-	$tnums = count($p['tasks']);
-	//echo '<pre>'; print_r($p['tasks']); echo '</pre>';
+	$tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
 	if ($tnums > 0 || $project_id == $p['project_id']) {
 		//echo '<pre>'; print_r($p); echo '</pre>';
 		if (!$min_view) {
@@ -596,7 +588,7 @@ foreach ($projects as $k => $p) {
 		if (is_array($p['tasks'])) {
 			foreach ($p['tasks'] as $i => $t) {
 				$tasks_filtered[] = $t['task_id'];
-				$children_of[$t['task_parent']] = (($children_of[$t['task_parent']]) ? $children_of[$t['task_parent']] : array());
+				$children_of[$t['task_parent']] = (isset($t['task_parent']) && isset($children_of[$t['task_parent']]) && $children_of[$t['task_parent']]) ? $children_of[$t['task_parent']] : array();
 				if ($t['task_parent'] != $t['task_id']) {
 					array_push($children_of[$t['task_parent']], $t['task_id']);
 				}
