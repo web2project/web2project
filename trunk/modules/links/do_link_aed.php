@@ -73,4 +73,3 @@ if (($msg = $obj->store())) {
 }
 
 $AppUI->redirect();
-?>

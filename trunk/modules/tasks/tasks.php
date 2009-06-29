@@ -585,7 +585,7 @@ foreach ($projects as $k => $p) {
 
 		global $tasks_filtered, $children_of;
 		//get list of task ids and set-up array of children
-		if (is_array($p['tasks'])) {
+		if (isset($p['tasks']) && is_array($p['tasks'])) {
 			foreach ($p['tasks'] as $i => $t) {
 				$tasks_filtered[] = $t['task_id'];
 				$children_of[$t['task_parent']] = (isset($t['task_parent']) && isset($children_of[$t['task_parent']]) && $children_of[$t['task_parent']]) ? $children_of[$t['task_parent']] : array();
@@ -593,10 +593,7 @@ foreach ($projects as $k => $p) {
 					array_push($children_of[$t['task_parent']], $t['task_id']);
 				}
 			}
-		}
 
-		//start displaying tasks
-		if (is_array($p['tasks'])) {
 			global $shown_tasks;
 			$shown_tasks = array();
 			$parent_tasks = array();

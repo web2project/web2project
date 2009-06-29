@@ -14,4 +14,3 @@ if (!getDenyRead('links')) {
 	$project_id = $obj->task_project;
 	include (W2P_BASE_DIR . '/modules/links/index_table.php');
 }
-?>
