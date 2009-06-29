@@ -54,18 +54,48 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 		$this->markTestIncomplete('Need to test changing languages with not included word.');
 	}
 
-	public function testGetPref() {
+	public function testGetPref()
+	{
 		global $AppUI;
 
 		$this->assertEquals('en', $AppUI->getPref('LOCALE'));
 		$this->assertEquals('', $AppUI->getPref('NotGonnaBeThere'));
 	}
-	
-	public function testSetPref() {
+
+	public function testSetPref()
+	{
 		global $AppUI;
 
 		$this->assertEquals('en', $AppUI->getPref('LOCALE'));
 		$AppUI->setPref('AddingThis', 'Monkey');
 		$this->assertEquals('Monkey', $AppUI->getPref('AddingThis'));
+	}
+
+	public function testSavePlace()
+	{
+		global $AppUI;
+
+		$_SERVER['QUERY_STRING'] = 'testUrl';
+		$AppUI->savePlace();
+		$this->assertEquals('testUrl', $AppUI->getPlace());
+
+		$AppUI->savePlace('?m=projects&amp;a=view&amp;project_id=1');
+		$this->assertEquals('?m=projects&amp;a=view&amp;project_id=1', $AppUI->getPlace());
+	}
+
+	public function testGetPlace()
+	{
+		$this->testSavePlace();
+	}
+
+	public function testResetPlace()
+	{
+		global $AppUI;
+
+		$_SERVER['QUERY_STRING'] = 'testUrl';
+		$AppUI->savePlace();
+		$this->assertEquals('testUrl', $AppUI->getPlace());
+		$AppUI->resetPlace();
+		$this->assertEquals('', $AppUI->getPlace());
 	}
 }

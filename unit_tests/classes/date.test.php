@@ -34,10 +34,14 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
 		$myDate2 = new CDate('CST');
 		$myDate2->convertTZ('EST');
-		$this->assertEquals($myDate2->hour, $myDate1->hour+1);
-		$this->assertEquals($myDate2->minute, $myDate1->minute);
+
+		//This tweaks the test data in case the +1 is across the day change.
+		$tmpHour = ($myDate1->hour+1 >=24) ? $myDate1->hour+1-24 : $myDate1->hour+1;
+		$this->assertEquals($tmpHour, $myDate2->hour);
+		$this->assertEquals($myDate1->minute, $myDate2->minute);
 		
 		$myDate2->convertTZ('PST');
-		$this->assertEquals($myDate2->hour, $myDate1->hour-2);
+		$tmpHour = ($myDate1->hour-2 < 0) ? $myDate1->hour-2+24 : $myDate1->hour-2;
+		$this->assertEquals($tmpHour, $myDate2->hour);
 	}
 }

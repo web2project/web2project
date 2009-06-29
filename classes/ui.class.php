@@ -498,9 +498,8 @@ class CAppUI {
 	 * @param string If not set then the current url query string is used
 	 */
 	public function savePlace($query = '') {
-		if (!$query) {
-			$query = $_SERVER['QUERY_STRING'];
-		}
+		$query = ($query == '') ? $_SERVER['QUERY_STRING'] : $query;
+		
 		if ($query != $this->state['SAVEDPLACE']) {
 			$this->state['SAVEDPLACE-1'] = $this->state['SAVEDPLACE'];
 			$this->state['SAVEDPLACE'] = $query;
