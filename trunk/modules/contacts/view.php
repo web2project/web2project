@@ -124,7 +124,7 @@ function delIt(){
 						<?php echo $contact->contact_address1; ?><br />
 		        <?php echo $contact->contact_address2; ?><br />
 		        <?php echo $contact->contact_city . ', ' . $contact->contact_state . ' ' . $contact->contact_zip; ?><br />
-		        <?php echo ($countries[$contact->contact_country] ? $countries[$contact->contact_country] : $contact->contact_country); ?>
+		        <?php echo isset($countries[$contact->contact_country]) ? $countries[$contact->contact_country] : $contact->contact_country; ?>
 		     </td>
 				</tr>
 				<tr>
@@ -253,13 +253,3 @@ function delIt(){
 		</td>
 	</tr>
 </table>
-
-<?php
-// tabbed information boxes
-//$moddir = W2P_BASE_DIR . '/modules/contacts/';
-//$tabBox = new CTabBox('?m=contacts&a=view&contact_id=' . $contact_id, '', $tab);
-
-//$tabBox->add($moddir . 'vw_projects', 'Projects');
-//$tabBox->add(W2P_BASE_DIR . '/modules/skyscraper/vw_emails', 'Emails');
-
-//$tabBox->show();
