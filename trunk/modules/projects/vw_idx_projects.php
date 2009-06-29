@@ -181,7 +181,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 
 		$st_projects_arr = array();
 		$sp_obj = new CProject();
-		$sp_obj->load($project_id);
+		$sp_obj->load($row['project_id']);
 		if ($row['project_id'] == $row['project_original_parent']) {
 			if ($project_status_filter == -2) {
 				$structprojects = getStructuredProjects($row['project_original_parent'], '-1', true);
@@ -189,7 +189,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 				$structprojects = getStructuredProjects($row['project_original_parent'], '-1');
 			}
 		} else {
-			$st_projects_arr[0][0] = $row_proj;
+			$st_projects_arr[0][0] = $row['project_id'];
 			$st_projects_arr[0][1] = 0;
 		}
 
