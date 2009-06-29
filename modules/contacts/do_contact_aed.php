@@ -8,7 +8,7 @@ $msg = '';
 
 $isNotNew = $_POST['contact_id'];
 $perms = &$AppUI->acl();
-if ($del) {
+if (isset($del) && $del) {
 	if (!$perms->checkModule('contacts', 'delete')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
@@ -70,4 +70,3 @@ if ($del) {
 	}
 	$AppUI->redirect();
 }
-?>

@@ -96,4 +96,3 @@ if ($contact_id > 0) {
 	$AppUI->setMsg('contactIdError', UI_MSG_ERROR);
 	$AppUI->redirect();
 }
-?>

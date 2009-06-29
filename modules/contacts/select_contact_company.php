@@ -113,4 +113,3 @@ if (w2PgetParam($_POST, $id_field, 0) != 0) {
 		</form>
 	<?php
 }
-?>

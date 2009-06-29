@@ -37,7 +37,6 @@ $search_map = array($orderby, 'contact_first_name', 'contact_last_name');
 $showfields = array('contact_address1' => 'contact_address1', 'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city', 'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip', 'contact_country' => 'contact_country', 'contact_company' => 'contact_company', 'company_name' => 'company_name', 'dept_name' => 'dept_name', 'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2', 'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax', 'contact_email' => 'contact_email');
 
 // assemble the sql statement
-//$q = new DBQuery;
 $rows = CContact::searchContacts($AppUI, $where, $additional_filter);
 
 $carr[] = array();

@@ -320,6 +320,7 @@ class CContact extends CW2pObject {
 
 	public static function searchContacts($AppUI, $where = '', $searchString = '') {
 		$showfields = array('contact_address1' => 'contact_address1', 'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city', 'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip', 'contact_country' => 'contact_country', 'contact_company' => 'contact_company', 'company_name' => 'company_name', 'dept_name' => 'dept_name', 'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2', 'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax', 'contact_email' => 'contact_email');
+		$additional_filter = '';
 
 		if ($searchString != '') {
 			$additional_filter = "OR contact_first_name like '%$searchString%' OR contact_last_name  like '%$searchString%'
@@ -457,4 +458,3 @@ class CContact extends CW2pObject {
 		$this->clearOldUpdatekeys($days_for_update);
 	}
 }
-?>

@@ -97,5 +97,3 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 	$AppUI->setMsg('vCardImportError', UI_MSG_ERROR);
 	$AppUI->redirect();
 }
-
-?>
