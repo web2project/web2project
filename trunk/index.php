@@ -121,7 +121,7 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 // Note the change to REQUEST instead of POST.  This is so that we can
 // support alternative authentication methods such as the PostNuke
 // and HTTP auth methods now supported.
-if (isset($_REQUEST['login'])) {
+if (isset($_POST['login'])) {
 	$username = w2PgetCleanParam($_POST, 'username', '');
 	$password = w2PgetCleanParam($_POST, 'password', '');
 	$redirect = w2PgetCleanParam($_POST, 'redirect', '');
@@ -257,14 +257,13 @@ if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.
 
 // do some db work if dosql is set
 // TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
-if (isset($_REQUEST['dosql'])) {
-	//require('./dosql/' . $_REQUEST['dosql'] . '.php');
-	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $AppUI->checkFileName($_REQUEST['dosql']) . '.php';
+if (isset($_POST['dosql'])) {
+	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $AppUI->checkFileName($_POST['dosql']) . '.php';
 }
 
 // start output proper
 include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-if ($_REQUEST['dosql'] == 'do_file_co') {
+if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 	ob_start();
 } else {
 	ob_start('ob_gzhandler');
