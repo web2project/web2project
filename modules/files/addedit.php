@@ -28,7 +28,7 @@ if (file_exists(W2P_BASE_DIR . '/modules/helpdesk/config.php')) {
 $canAdmin = $perms->checkModule('system', 'edit');
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
-$referrer = $referrerArray['query'] . $referrerArray['fragment'];
+$referrer = $referrerArray['query'];
 
 // load the companies class to retrieved denied companies
 require_once ($AppUI->getModuleClass('companies'));
@@ -110,7 +110,7 @@ if ($obj->file_task) {
 	} else {
 		$task_name = '';
 	}
-	if ($obj->file_helpdesk_item) {
+	if (isset($obj->file_helpdesk_item)) {
 		$file_helpdesk_item = $obj->file_helpdesk_item;
 	}
 
@@ -336,5 +336,3 @@ function getHelpdeskFolder() {
 	$q->clear();
 	return intval($ffid);
 }
-
-?>

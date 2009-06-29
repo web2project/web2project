@@ -43,8 +43,6 @@ $q->addWhere('link_id = ' . (int)$link_id);
 $msg = '';
 $obj = new CLink();
 $canDelete = $obj->canDelete($msg, $link_id);
-
-$obj = null;
 $q->loadObject($obj);
 // load the record data
 if (!$obj && $link_id > 0) {

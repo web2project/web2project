@@ -195,7 +195,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 			$s = '<tr>';
 			$s .= '<td colspan="10" style="background-color:#' . $row['project_color_identifier'] . '" style="border: outset 2px #eeeeee">';
 			$s .= '<font color="' . bestColor($row['project_color_identifier']) . '">';
-			if ($row['project_id'] > 0)
+			if ($row['link_project'] > 0)
 				$s .= '<a href="?m=projects&a=view&project_id=' . $row['link_project'] . '">' . $row['project_name'] . '</a>';
 			else
 				$s .= $row['project_name'];
@@ -226,4 +226,3 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 </table>
 <?php
 shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
-?>

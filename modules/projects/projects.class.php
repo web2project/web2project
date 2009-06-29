@@ -318,7 +318,7 @@ class CProject extends CW2pObject {
 			if (!isset($extra['from']) && !isset($extra['join'])) {
 				$extra['join'] = 'project_departments';
 				$extra['on'] = 'projects.project_id = project_departments.project_id';
-			} elseif ($extra['from'] != 'project_departments' && !$extra['join']) {
+			} elseif ($extra['from'] != 'project_departments' && !isset($extra['join'])) {
 				$extra['join'] = 'project_departments';
 				$extra['on'] = 'projects.project_id = project_departments.project_id';
 			}

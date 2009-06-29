@@ -30,6 +30,7 @@ $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 // setup the title block
 $titleBlock = new CTitleBlock('Links', 'folder5.png', $m, "$m.$a");
 $titleBlock->addCell($AppUI->_('Search') . ':');
+$search = '';
 $titleBlock->addCell('<input type="text" class="text" SIZE="10" name="search" onChange="document.searchfilter.submit();" value=' . "'$search'" . 'title="' . $AppUI->_('Search in name and description fields', UI_OUTPUT_JS) . '"/>', '', '<form action="?m=links" method="post" id="searchfilter">', '</form>');
 $titleBlock->addCell($AppUI->_('Filter') . ':');
 $titleBlock->addCell(arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id), '', '<form name="pickProject" action="?m=links" method="post">', '</form>');
@@ -54,5 +55,3 @@ foreach ($link_types as $link_type) {
 }
 
 $tabBox->show();
-
-?>
