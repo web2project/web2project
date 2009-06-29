@@ -54,9 +54,8 @@ $cfObj = new CFileFolder();
 $allowed_folders_ary = $cfObj->getAllowedRecords($AppUI->user_id);
 $denied_folders_ary = $cfObj->getDeniedRecords($AppUI->user_id);
 
-if (count($allowed_folders_ary) < $cfObj->countFolders()) {
-	$limited = true;
-}
+$limited = (count($allowed_folders_ary) < $cfObj->countFolders()) ? true : false;
+
 if (!$limited) {
 	$canEdit = true;
 } elseif ($limited and array_key_exists($folder, $allowed_folders_ary)) {
@@ -79,9 +78,6 @@ if ($tab != -1) {
 	array_unshift($file_types, 'All Files');
 }
 
-//if ($view == 'folders') {
-//include('folders_table.php');
-//} else {
 $tabBox = new CTabBox('?m=files', W2P_BASE_DIR . '/modules/files/', $tab);
 $tabbed = $tabBox->isTabbed();
 $i = 0;
@@ -99,30 +95,25 @@ foreach ($file_types as $file_type) {
 	if (count($allowedTasks)) {
 		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
 	}
-	if ($catsql) {
+	if (isset($catsql)) {
 		$q->addWhere($catsql);
 	}
-	if ($company_id) {
+	//if (isset($task_type) && (int) $task_type > 0) {
+	if (isset($company_id) && (int) $company_id > 0) {
 		$q->addWhere('project_company = ' . (int)$company_id);
 	}
-	if ($project_id) {
+	if (isset($project_id) && (int) $project_id > 0) {
 		$q->addWhere('file_project = ' . (int)$project_id);
 	}
-	if ($task_id) {
+	if (isset($task_id) && (int) $task_id > 0) {
 		$q->addWhere('file_task = ' . (int)$task_id);
 	}
 	$key = array_search($file_type, $fts);
 	if ($i > 0 || !$tabbed) {
 		$q->addWhere('file_category = ' . (int)$key);
 	}
-	if ($project_id > 0) {
-		$q->addWhere('file_project = ' . (int)$project_id);
-	}
 	$tabBox->add('index_table', $file_type . ' (' . $q->loadResult() . ')');
 	++$i;
 }
 $tabBox->add('folders_table', 'Folder Explorer');
 $tabBox->show();
-//}
-
-?>
