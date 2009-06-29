@@ -9,7 +9,7 @@ global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders
 
 // add to allow for returning to other modules besides Files
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
-$current_uri = $current_uriArray['query'] . $current_uriArray['fragment'];
+$current_uri = $current_uriArray['query'];
 
 // ****************************************************************************
 // Page numbering variables
