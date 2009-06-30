@@ -1,7 +1,7 @@
 --
 -- Table structure for table `billingcode`
 --
-DROP TABLE `billingcode`;
+DROP TABLE IF EXISTS `billingcode`;
 
 CREATE TABLE `billingcode` (
   `billingcode_id` int(10) NOT NULL auto_increment,
@@ -21,7 +21,7 @@ CREATE TABLE `billingcode` (
 --
 -- Table structure for table `companies`
 --
-DROP TABLE `companies`;
+DROP TABLE IF EXISTS `companies`;
 
 CREATE TABLE `companies` (
   `company_id` int(10) NOT NULL auto_increment,
@@ -54,7 +54,7 @@ CREATE TABLE `companies` (
 --
 -- Table structure for table `config`
 --
-DROP TABLE `config`;
+DROP TABLE IF EXISTS `config`;
 
 CREATE TABLE `config` (
   `config_id` int(10) NOT NULL auto_increment,
@@ -145,7 +145,7 @@ INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_typ
 --
 -- Table structure for table `config_list`
 --
-DROP TABLE `config_list`;
+DROP TABLE IF EXISTS `config_list`;
 
 CREATE TABLE `config_list` (
   `config_list_id` int(10) NOT NULL auto_increment,
@@ -185,7 +185,7 @@ INSERT INTO `config_list` (`config_id`, `config_list_name`) VALUES
 --
 -- Table structure for table `contacts`
 --
-DROP TABLE `contacts`;
+DROP TABLE IF EXISTS `contacts`;
 
 CREATE TABLE `contacts` (
   `contact_id` int(10) NOT NULL auto_increment,
@@ -249,7 +249,7 @@ INSERT INTO `contacts` (`contact_id`, `contact_first_name`, `contact_last_name`,
 --
 -- Table structure for table `custom_fields_lists`
 --
-DROP TABLE `custom_fields_lists`;
+DROP TABLE IF EXISTS `custom_fields_lists`;
 
 CREATE TABLE `custom_fields_lists` (
   `field_id` int(10) default NULL,
@@ -264,7 +264,7 @@ CREATE TABLE `custom_fields_lists` (
 --
 -- Table structure for table `custom_fields_struct`
 --
-DROP TABLE `custom_fields_struct`;
+DROP TABLE IF EXISTS `custom_fields_struct`;
 
 CREATE TABLE `custom_fields_struct` (
   `field_id` int(10) NOT NULL auto_increment,
@@ -289,7 +289,7 @@ CREATE TABLE `custom_fields_struct` (
 --
 -- Table structure for table `custom_fields_values`
 --
-DROP TABLE `custom_fields_values`;
+DROP TABLE IF EXISTS `custom_fields_values`;
 
 CREATE TABLE `custom_fields_values` (
   `value_id` int(10) NOT NULL auto_increment,
@@ -313,7 +313,7 @@ CREATE TABLE `custom_fields_values` (
 --
 -- Table structure for table `departments`
 --
-DROP TABLE `departments`;
+DROP TABLE IF EXISTS `departments`;
 
 CREATE TABLE `departments` (
   `dept_id` int(10) unsigned NOT NULL auto_increment,
@@ -343,7 +343,7 @@ CREATE TABLE `departments` (
 --
 -- Table structure for table `events`
 --
-DROP TABLE `events`;
+DROP TABLE IF EXISTS `events`;
 
 CREATE TABLE `events` (
   `event_id` int(10) NOT NULL auto_increment,
@@ -379,7 +379,7 @@ CREATE TABLE `events` (
 --
 -- Table structure for table `event_contacts`
 --
-DROP TABLE `event_contacts`;
+DROP TABLE IF EXISTS `event_contacts`;
 
 CREATE TABLE `event_contacts` (
   `event_id` int(10) NOT NULL default '0',
@@ -397,7 +397,7 @@ CREATE TABLE `event_contacts` (
 --
 -- Table structure for table `event_queue`
 --
-DROP TABLE `event_queue`;
+DROP TABLE IF EXISTS `event_queue`;
 
 CREATE TABLE `event_queue` (
   `queue_id` int(10) NOT NULL auto_increment,
@@ -428,7 +428,7 @@ CREATE TABLE `event_queue` (
 --
 -- Table structure for table `files`
 --
-DROP TABLE `files`;
+DROP TABLE IF EXISTS `files`;
 
 CREATE TABLE `files` (
   `file_id` int(10) NOT NULL auto_increment,
@@ -466,7 +466,7 @@ CREATE TABLE `files` (
 --
 -- Table structure for table `files_index`
 --
-DROP TABLE `files_index`;
+DROP TABLE IF EXISTS `files_index`;
 
 CREATE TABLE `files_index` (
   `file_id` int(10) NOT NULL default '0',
@@ -481,7 +481,7 @@ CREATE TABLE `files_index` (
 --
 -- Table structure for table `file_folders`
 --
-DROP TABLE `file_folders`;
+DROP TABLE IF EXISTS `file_folders`;
 
 CREATE TABLE `file_folders` (
   `file_folder_id` int(10) NOT NULL auto_increment,
@@ -498,7 +498,7 @@ CREATE TABLE `file_folders` (
 --
 -- Table structure for table `forums`
 --
-DROP TABLE `forums`;
+DROP TABLE IF EXISTS `forums`;
 
 CREATE TABLE `forums` (
   `forum_id` int(10) NOT NULL auto_increment,
@@ -524,7 +524,7 @@ CREATE TABLE `forums` (
 --
 -- Table structure for table `forum_messages`
 --
-DROP TABLE `forum_messages`;
+DROP TABLE IF EXISTS `forum_messages`;
 
 CREATE TABLE `forum_messages` (
   `message_id` int(10) NOT NULL auto_increment,
@@ -548,7 +548,7 @@ CREATE TABLE `forum_messages` (
 --
 -- Table structure for table `forum_visits`
 --
-DROP TABLE `forum_visits`;
+DROP TABLE IF EXISTS `forum_visits`;
 
 CREATE TABLE `forum_visits` (
   `visit_user` int(10) NOT NULL default '0',
@@ -563,7 +563,7 @@ CREATE TABLE `forum_visits` (
 --
 -- Table structure for table `forum_watch`
 --
-DROP TABLE `forum_watch`;
+DROP TABLE IF EXISTS `forum_watch`;
 
 CREATE TABLE `forum_watch` (
   `watch_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -580,7 +580,7 @@ CREATE TABLE `forum_watch` (
 --
 -- Table structure for table `gacl_acl`
 --
-DROP TABLE `gacl_acl`;
+DROP TABLE IF EXISTS `gacl_acl`;
 
 CREATE TABLE `gacl_acl` (
   `id` int(10) NOT NULL default '0',
@@ -608,7 +608,7 @@ INSERT INTO `gacl_acl` (`id`, `section_value`, `allow`, `enabled`, `return_value
 --
 -- Table structure for table `gacl_acl_sections`
 --
-DROP TABLE `gacl_acl_sections`;
+DROP TABLE IF EXISTS `gacl_acl_sections`;
 
 CREATE TABLE `gacl_acl_sections` (
   `id` int(10) NOT NULL default '0',
@@ -633,7 +633,7 @@ INSERT INTO `gacl_acl_sections` (`id`, `value`, `order_value`, `name`, `hidden`)
 --
 -- Table structure for table `gacl_acl_seq`
 --
-DROP TABLE `gacl_acl_seq`;
+DROP TABLE IF EXISTS `gacl_acl_seq`;
 
 CREATE TABLE `gacl_acl_seq` (
   `id` int(10) NOT NULL default '0',
@@ -651,7 +651,7 @@ INSERT INTO `gacl_acl_seq` (`id`) VALUES (29);
 --
 -- Table structure for table `gacl_aco`
 --
-DROP TABLE `gacl_aco`;
+DROP TABLE IF EXISTS `gacl_aco`;
 
 CREATE TABLE `gacl_aco` (
   `id` int(10) NOT NULL default '0',
@@ -681,7 +681,7 @@ INSERT INTO `gacl_aco` (`id`, `section_value`, `value`, `order_value`, `name`, `
 --
 -- Table structure for table `gacl_aco_map`
 --
-DROP TABLE `gacl_aco_map`;
+DROP TABLE IF EXISTS `gacl_aco_map`;
 
 CREATE TABLE `gacl_aco_map` (
   `acl_id` int(10) NOT NULL default '0',
@@ -706,7 +706,7 @@ INSERT INTO `gacl_aco_map` (`acl_id`, `section_value`, `value`) VALUES (11, 'app
 --
 -- Table structure for table `gacl_aco_sections`
 --
-DROP TABLE `gacl_aco_sections`;
+DROP TABLE IF EXISTS `gacl_aco_sections`;
 
 CREATE TABLE `gacl_aco_sections` (
   `id` int(10) NOT NULL default '0',
@@ -731,7 +731,7 @@ INSERT INTO `gacl_aco_sections` (`id`, `value`, `order_value`, `name`, `hidden`)
 --
 -- Table structure for table `gacl_aco_sections_seq`
 --
-DROP TABLE `gacl_aco_sections_seq`;
+DROP TABLE IF EXISTS `gacl_aco_sections_seq`;
 
 CREATE TABLE `gacl_aco_sections_seq` (
   `id` int(10) NOT NULL default '0',
@@ -749,7 +749,7 @@ INSERT INTO `gacl_aco_sections_seq` (`id`) VALUES (11);
 --
 -- Table structure for table `gacl_aco_seq`
 --
-DROP TABLE `gacl_aco_seq`;
+DROP TABLE IF EXISTS `gacl_aco_seq`;
 
 CREATE TABLE `gacl_aco_seq` (
   `id` int(10) NOT NULL default '0',
@@ -767,7 +767,7 @@ INSERT INTO `gacl_aco_seq` (`id`) VALUES (15);
 --
 -- Table structure for table `gacl_aro`
 --
-DROP TABLE `gacl_aro`;
+DROP TABLE IF EXISTS `gacl_aro`;
 
 CREATE TABLE `gacl_aro` (
   `id` int(10) NOT NULL default '0',
@@ -792,7 +792,7 @@ INSERT INTO `gacl_aro` (`id`, `section_value`, `value`, `order_value`, `name`, `
 --
 -- Table structure for table `gacl_aro_groups`
 --
-DROP TABLE `gacl_aro_groups`;
+DROP TABLE IF EXISTS `gacl_aro_groups`;
 
 CREATE TABLE `gacl_aro_groups` (
   `id` int(10) NOT NULL default '0',
@@ -823,7 +823,7 @@ INSERT INTO `gacl_aro_groups` (`id`, `parent_id`, `lft`, `rgt`, `name`, `value`)
 --
 -- Table structure for table `gacl_aro_groups_id_seq`
 --
-DROP TABLE `gacl_aro_groups_id_seq`;
+DROP TABLE IF EXISTS `gacl_aro_groups_id_seq`;
 
 CREATE TABLE `gacl_aro_groups_id_seq` (
   `id` int(10) NOT NULL default '0',
@@ -841,7 +841,7 @@ INSERT INTO `gacl_aro_groups_id_seq` (`id`) VALUES (16);
 --
 -- Table structure for table `gacl_aro_groups_map`
 --
-DROP TABLE `gacl_aro_groups_map`;
+DROP TABLE IF EXISTS `gacl_aro_groups_map`;
 
 CREATE TABLE `gacl_aro_groups_map` (
   `acl_id` int(10) NOT NULL default '0',
@@ -861,7 +861,7 @@ INSERT INTO `gacl_aro_groups_map` (`acl_id`, `group_id`) VALUES (11, 11);
 --
 -- Table structure for table `gacl_aro_map`
 --
-DROP TABLE `gacl_aro_map`;
+DROP TABLE IF EXISTS `gacl_aro_map`;
 
 CREATE TABLE `gacl_aro_map` (
   `acl_id` int(10) NOT NULL default '0',
@@ -881,7 +881,7 @@ INSERT INTO `gacl_aro_map` (`acl_id`, `section_value`, `value`) VALUES (23, 'use
 --
 -- Table structure for table `gacl_aro_sections`
 --
-DROP TABLE `gacl_aro_sections`;
+DROP TABLE IF EXISTS `gacl_aro_sections`;
 
 CREATE TABLE `gacl_aro_sections` (
   `id` int(10) NOT NULL default '0',
@@ -905,7 +905,7 @@ INSERT INTO `gacl_aro_sections` (`id`, `value`, `order_value`, `name`, `hidden`)
 --
 -- Table structure for table `gacl_aro_sections_seq`
 --
-DROP TABLE `gacl_aro_sections_seq`;
+DROP TABLE IF EXISTS `gacl_aro_sections_seq`;
 
 CREATE TABLE `gacl_aro_sections_seq` (
   `id` int(10) NOT NULL default '0',
@@ -923,7 +923,7 @@ INSERT INTO `gacl_aro_sections_seq` (`id`) VALUES (10);
 --
 -- Table structure for table `gacl_aro_seq`
 --
-DROP TABLE `gacl_aro_seq`;
+DROP TABLE IF EXISTS `gacl_aro_seq`;
 
 CREATE TABLE `gacl_aro_seq` (
   `id` int(10) NOT NULL default '0',
@@ -941,7 +941,7 @@ INSERT INTO `gacl_aro_seq` (`id`) VALUES (10);
 --
 -- Table structure for table `gacl_axo`
 --
-DROP TABLE `gacl_axo`;
+DROP TABLE IF EXISTS `gacl_axo`;
 
 CREATE TABLE `gacl_axo` (
   `id` int(10) NOT NULL default '0',
@@ -989,7 +989,7 @@ INSERT INTO `gacl_axo` (`id`, `section_value`, `value`, `order_value`, `name`, `
 --
 -- Table structure for table `gacl_axo_groups`
 --
-DROP TABLE `gacl_axo_groups`;
+DROP TABLE IF EXISTS `gacl_axo_groups`;
 
 CREATE TABLE `gacl_axo_groups` (
   `id` int(10) NOT NULL default '0',
@@ -1018,7 +1018,7 @@ INSERT INTO `gacl_axo_groups` (`id`, `parent_id`, `lft`, `rgt`, `name`, `value`)
 --
 -- Table structure for table `gacl_axo_groups_id_seq`
 --
-DROP TABLE `gacl_axo_groups_id_seq`;
+DROP TABLE IF EXISTS `gacl_axo_groups_id_seq`;
 
 CREATE TABLE `gacl_axo_groups_id_seq` (
   `id` int(10) NOT NULL default '0',
@@ -1036,7 +1036,7 @@ INSERT INTO `gacl_axo_groups_id_seq` (`id`) VALUES (13);
 --
 -- Table structure for table `gacl_axo_groups_map`
 --
-DROP TABLE `gacl_axo_groups_map`;
+DROP TABLE IF EXISTS `gacl_axo_groups_map`;
 
 CREATE TABLE `gacl_axo_groups_map` (
   `acl_id` int(10) NOT NULL default '0',
@@ -1058,7 +1058,7 @@ INSERT INTO `gacl_axo_groups_map` (`acl_id`, `group_id`) VALUES (15, 13);
 --
 -- Table structure for table `gacl_axo_map`
 --
-DROP TABLE `gacl_axo_map`;
+DROP TABLE IF EXISTS `gacl_axo_map`;
 
 CREATE TABLE `gacl_axo_map` (
   `acl_id` int(10) NOT NULL default '0',
@@ -1078,7 +1078,7 @@ INSERT INTO `gacl_axo_map` (`acl_id`, `section_value`, `value`) VALUES (12, 'sys
 --
 -- Table structure for table `gacl_axo_sections`
 --
-DROP TABLE `gacl_axo_sections`;
+DROP TABLE IF EXISTS `gacl_axo_sections`;
 
 CREATE TABLE `gacl_axo_sections` (
   `id` int(10) NOT NULL default '0',
@@ -1103,7 +1103,7 @@ INSERT INTO `gacl_axo_sections` (`id`, `value`, `order_value`, `name`, `hidden`)
 --
 -- Table structure for table `gacl_axo_sections_seq`
 --
-DROP TABLE `gacl_axo_sections_seq`;
+DROP TABLE IF EXISTS `gacl_axo_sections_seq`;
 
 CREATE TABLE `gacl_axo_sections_seq` (
   `id` int(10) NOT NULL default '0',
@@ -1121,7 +1121,7 @@ INSERT INTO `gacl_axo_sections_seq` (`id`) VALUES (11);
 --
 -- Table structure for table `gacl_axo_seq`
 --
-DROP TABLE `gacl_axo_seq`;
+DROP TABLE IF EXISTS `gacl_axo_seq`;
 
 CREATE TABLE `gacl_axo_seq` (
   `id` int(10) NOT NULL default '0',
@@ -1139,7 +1139,7 @@ INSERT INTO `gacl_axo_seq` (`id`) VALUES (55);
 --
 -- Table structure for table `gacl_groups_aro_map`
 --
-DROP TABLE `gacl_groups_aro_map`;
+DROP TABLE IF EXISTS `gacl_groups_aro_map`;
 
 CREATE TABLE `gacl_groups_aro_map` (
   `group_id` int(10) NOT NULL default '0',
@@ -1158,7 +1158,7 @@ INSERT INTO `gacl_groups_aro_map` (`group_id`, `aro_id`) VALUES (11, 10);
 --
 -- Table structure for table `gacl_groups_axo_map`
 --
-DROP TABLE `gacl_groups_axo_map`;
+DROP TABLE IF EXISTS `gacl_groups_axo_map`;
 
 CREATE TABLE `gacl_groups_axo_map` (
   `group_id` int(10) NOT NULL default '0',
@@ -1222,7 +1222,7 @@ INSERT INTO `gacl_groups_axo_map` (`group_id`, `axo_id`) VALUES (13, 55);
 --
 -- Table structure for table `gacl_permissions`
 --
-DROP TABLE `gacl_permissions`;
+DROP TABLE IF EXISTS `gacl_permissions`;
 
 CREATE TABLE `gacl_permissions` (
   `user_id` int(10) NOT NULL default '0',
@@ -1365,7 +1365,7 @@ INSERT INTO `gacl_permissions` (`user_id`, `user_name`, `module`, `item_id`, `ac
 --
 -- Table structure for table `gacl_phpgacl`
 --
-DROP TABLE `gacl_phpgacl`;
+DROP TABLE IF EXISTS `gacl_phpgacl`;
 
 CREATE TABLE `gacl_phpgacl` (
   `name` varchar(230) NOT NULL default '',
@@ -1385,7 +1385,7 @@ INSERT INTO `gacl_phpgacl` (`name`, `value`) VALUES ('schema_version', '0.95');
 --
 -- Table structure for table `history`
 --
-DROP TABLE `history`;
+DROP TABLE IF EXISTS `history`;
 
 CREATE TABLE `history` (
   `history_id` int(10) unsigned NOT NULL auto_increment,
@@ -1411,7 +1411,7 @@ CREATE TABLE `history` (
 --
 -- Table structure for table `links`
 --
-DROP TABLE `links`;
+DROP TABLE IF EXISTS `links`;
 
 CREATE TABLE `links` (
   `link_id` int(10) NOT NULL auto_increment,
@@ -1437,7 +1437,7 @@ CREATE TABLE `links` (
 --
 -- Table structure for table `modules`
 --
-DROP TABLE `modules`;
+DROP TABLE IF EXISTS `modules`;
 
 CREATE TABLE `modules` (
   `mod_id` int(10) NOT NULL auto_increment,
@@ -1491,7 +1491,7 @@ INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mo
 --
 -- Table structure for table `projects`
 --
-DROP TABLE `projects`;
+DROP TABLE IF EXISTS `projects`;
 
 CREATE TABLE `projects` (
   `project_id` int(10) NOT NULL auto_increment,
@@ -1550,7 +1550,7 @@ CREATE TABLE `projects` (
 --
 -- Table structure for table `project_contacts`
 --
-DROP TABLE `project_contacts`;
+DROP TABLE IF EXISTS `project_contacts`;
 
 CREATE TABLE `project_contacts` (
   `project_id` int(10) NOT NULL default '0',
@@ -1565,7 +1565,7 @@ CREATE TABLE `project_contacts` (
 --
 -- Table structure for table `project_departments`
 --
-DROP TABLE `project_departments`;
+DROP TABLE IF EXISTS `project_departments`;
 
 CREATE TABLE `project_departments` (
   `project_id` int(10) NOT NULL default '0',
@@ -1580,7 +1580,7 @@ CREATE TABLE `project_departments` (
 --
 -- Table structure for table `project_designer_options`
 --
-DROP TABLE `project_designer_options`;
+DROP TABLE IF EXISTS `project_designer_options`;
 
 CREATE TABLE `project_designer_options` (
   `pd_option_id` int(10) NOT NULL auto_increment,
@@ -1600,7 +1600,7 @@ CREATE TABLE `project_designer_options` (
 --
 -- Table structure for table `resources`
 --
-DROP TABLE `resources`;
+DROP TABLE IF EXISTS `resources`;
 
 CREATE TABLE `resources` (
   `resource_id` int(10) NOT NULL auto_increment,
@@ -1619,7 +1619,7 @@ CREATE TABLE `resources` (
 --
 -- Table structure for table `resource_tasks`
 --
-DROP TABLE `resource_tasks`;
+DROP TABLE IF EXISTS `resource_tasks`;
 
 CREATE TABLE `resource_tasks` (
   `resource_id` int(10) NOT NULL default '0',
@@ -1640,7 +1640,7 @@ CREATE TABLE `resource_tasks` (
 --
 -- Table structure for table `resource_types`
 --
-DROP TABLE `resource_types`;
+DROP TABLE IF EXISTS `resource_types`;
 
 CREATE TABLE `resource_types` (
   `resource_type_id` int(10) NOT NULL auto_increment,
@@ -1663,7 +1663,7 @@ INSERT INTO `resource_types` (`resource_type_id`, `resource_type_name`, `resourc
 --
 -- Table structure for table `sessions`
 --
-DROP TABLE `sessions`;
+DROP TABLE IF EXISTS `sessions`;
 
 CREATE TABLE `sessions` (
   `session_id` varchar(40) NOT NULL default '',
@@ -1682,7 +1682,7 @@ CREATE TABLE `sessions` (
 --
 -- Table structure for table `syskeys`
 --
-DROP TABLE `syskeys`;
+DROP TABLE IF EXISTS `syskeys`;
 
 CREATE TABLE `syskeys` (
   `syskey_id` int(10) unsigned NOT NULL auto_increment,
@@ -1708,7 +1708,7 @@ INSERT INTO `syskeys` (`syskey_id`, `syskey_name`, `syskey_label`, `syskey_type`
 --
 -- Table structure for table `sysvals`
 --
-DROP TABLE `sysvals`;
+DROP TABLE IF EXISTS `sysvals`;
 
 CREATE TABLE `sysvals` (
   `sysval_id` int(10) unsigned NOT NULL auto_increment,
@@ -2047,7 +2047,7 @@ INSERT INTO `sysvals` (`sysval_id`, `sysval_key_id`, `sysval_title`, `sysval_val
 --
 -- Table structure for table `tasks`
 --
-DROP TABLE `tasks`;
+DROP TABLE IF EXISTS `tasks`;
 
 CREATE TABLE `tasks` (
   `task_id` int(10) NOT NULL auto_increment,
@@ -2100,7 +2100,7 @@ CREATE TABLE `tasks` (
 --
 -- Table structure for table `tasks_critical`
 --
-DROP TABLE `tasks_critical`;
+DROP TABLE IF EXISTS `tasks_critical`;
 
 CREATE TABLE `tasks_critical` (
   `task_project` int(10) default NULL,
@@ -2114,7 +2114,7 @@ CREATE TABLE `tasks_critical` (
 --
 -- Table structure for table `tasks_problems`
 --
-DROP TABLE `tasks_problems`;
+DROP TABLE IF EXISTS `tasks_problems`;
 
 CREATE TABLE `tasks_problems` (
   `task_project` int(10) default NULL,
@@ -2127,7 +2127,7 @@ CREATE TABLE `tasks_problems` (
 --
 -- Table structure for table `tasks_sum`
 --
-DROP TABLE `tasks_sum`;
+DROP TABLE IF EXISTS `tasks_sum`;
 
 CREATE TABLE `tasks_sum` (
   `task_project` int(10) default NULL,
@@ -2142,7 +2142,7 @@ CREATE TABLE `tasks_sum` (
 --
 -- Table structure for table `tasks_summy`
 --
-DROP TABLE `tasks_summy`;
+DROP TABLE IF EXISTS `tasks_summy`;
 
 CREATE TABLE `tasks_summy` (
   `task_project` int(10) default NULL,
@@ -2155,7 +2155,7 @@ CREATE TABLE `tasks_summy` (
 --
 -- Table structure for table `tasks_total`
 --
-DROP TABLE `tasks_total`;
+DROP TABLE IF EXISTS `tasks_total`;
 
 CREATE TABLE `tasks_total` (
   `task_project` int(10) default NULL,
@@ -2168,7 +2168,7 @@ CREATE TABLE `tasks_total` (
 --
 -- Table structure for table `tasks_users`
 --
-DROP TABLE `tasks_users`;
+DROP TABLE IF EXISTS `tasks_users`;
 
 CREATE TABLE `tasks_users` (
   `task_project` int(10) default NULL,
@@ -2181,7 +2181,7 @@ CREATE TABLE `tasks_users` (
 --
 -- Table structure for table `task_contacts`
 --
-DROP TABLE `task_contacts`;
+DROP TABLE IF EXISTS `task_contacts`;
 
 CREATE TABLE `task_contacts` (
   `task_id` int(10) NOT NULL default '0',
@@ -2196,7 +2196,7 @@ CREATE TABLE `task_contacts` (
 --
 -- Table structure for table `task_departments`
 --
-DROP TABLE `task_departments`;
+DROP TABLE IF EXISTS `task_departments`;
 
 CREATE TABLE `task_departments` (
   `task_id` int(10) NOT NULL default '0',
@@ -2211,7 +2211,7 @@ CREATE TABLE `task_departments` (
 --
 -- Table structure for table `task_dependencies`
 --
-DROP TABLE `task_dependencies`;
+DROP TABLE IF EXISTS `task_dependencies`;
 
 CREATE TABLE `task_dependencies` (
   `dependencies_task_id` int(10) NOT NULL default '0',
@@ -2224,7 +2224,7 @@ CREATE TABLE `task_dependencies` (
 --
 -- Table structure for table `task_log`
 --
-DROP TABLE `task_log`;
+DROP TABLE IF EXISTS `task_log`;
 
 CREATE TABLE `task_log` (
   `task_log_id` int(10) NOT NULL auto_increment,
@@ -2262,7 +2262,7 @@ CREATE TABLE `task_log` (
 --
 -- Table structure for table `users`
 --
-DROP TABLE `users`;
+DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `user_id` int(10) NOT NULL auto_increment,
@@ -2292,7 +2292,7 @@ INSERT INTO `users` (`user_id`, `user_contact`, `user_username`, `user_password`
 --
 -- Table structure for table `user_access_log`
 --
-DROP TABLE `user_access_log`;
+DROP TABLE IF EXISTS `user_access_log`;
 
 CREATE TABLE `user_access_log` (
   `user_access_log_id` int(10) unsigned NOT NULL auto_increment,
@@ -2312,7 +2312,7 @@ CREATE TABLE `user_access_log` (
 --
 -- Table structure for table `user_events`
 --
-DROP TABLE `user_events`;
+DROP TABLE IF EXISTS `user_events`;
 
 CREATE TABLE `user_events` (
   `user_id` int(10) NOT NULL default '0',
@@ -2326,7 +2326,7 @@ CREATE TABLE `user_events` (
 --
 -- Table structure for table `user_preferences`
 --
-DROP TABLE `user_preferences`;
+DROP TABLE IF EXISTS `user_preferences`;
 
 CREATE TABLE `user_preferences` (
   `pref_user` varchar(12) NOT NULL default '',
@@ -2373,7 +2373,7 @@ INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES (
 --
 -- Table structure for table `user_tasks`
 --
-DROP TABLE `user_tasks`;
+DROP TABLE IF EXISTS `user_tasks`;
 
 CREATE TABLE `user_tasks` (
   `user_id` int(10) NOT NULL default '0',
@@ -2392,7 +2392,7 @@ CREATE TABLE `user_tasks` (
 --
 -- Table structure for table `user_task_pin`
 --
-DROP TABLE `user_task_pin`;
+DROP TABLE IF EXISTS `user_task_pin`;
 
 CREATE TABLE `user_task_pin` (
   `user_id` int(10) NOT NULL default '0',
@@ -2407,7 +2407,7 @@ CREATE TABLE `user_task_pin` (
 --
 -- Table structure for table `w2pversion`
 --
-DROP TABLE `w2pversion`;
+DROP TABLE IF EXISTS `w2pversion`;
 
 CREATE TABLE `w2pversion` (
   `code_revision` int(10) UNSIGNED NOT NULL DEFAULT '0',
@@ -2423,4 +2423,4 @@ CREATE TABLE `w2pversion` (
 --
 
 INSERT INTO `w2pversion` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`) 
-	VALUES (199, '0.9.9', 1, now(), now());
+	VALUES (475, '1.0', 1, now(), now());
