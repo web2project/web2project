@@ -13,10 +13,20 @@
         <phpunit codecoverage="true" haltonfailure="false" haltonerror="true">
             <formatter type="plain" usefile="false"/>
             <batchtest>
-                <fileset dir="modules">
-                    <include name="**/*.test.php"/>
+                <fileset dir="classes">
+                	<!--
+						This test is executed separately because it can 
+						install the database for us which makes all the 
+						later tests actually work for us.
+						Woohoo.
+					-->
+	                <include name="upgrademanager.test.php"/>
                 </fileset>
                 <fileset dir="classes">
+                    <include name="**/*.test.php"/>
+					<exclude name="upgrademanager.test.php" />
+                </fileset>
+                <fileset dir="modules">
                     <include name="**/*.test.php"/>
                 </fileset>
                 <fileset dir="includes">
