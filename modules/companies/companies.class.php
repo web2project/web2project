@@ -56,10 +56,11 @@ class CCompany extends CW2pObject {
 
 	// overload check
 	public function check() {
-		if ($this->company_id === null) {
-			return 'company id is NULL';
-		}
 		$this->company_id = intval($this->company_id);
+
+		if ('' == trim($this->company_name)) {
+			return 'company name is NULL';
+		}
 
 		return null; // object is ok
 	}
