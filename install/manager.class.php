@@ -1,4 +1,5 @@
 <?php
+	
 	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 
 	class UpgradeManager {
@@ -13,6 +14,7 @@
 		private $updatesApplied = array();
 		
 		public function getActionRequired() {
+			global $w2Pconfig;
 
 			if ($this->action == '') {
 				$this->_prepareConfiguration();
@@ -28,6 +30,7 @@
 					} elseif (isset($w2Pconfig)) {
 						$this->configOptions = $w2Pconfig;
 						$this->action = 'upgrade';
+						
 					} else {
 						/*
 						 *  This  case should never be reached because if there is a config.
@@ -90,7 +93,7 @@
 							$this->updatesApplied[] = $update;
 							$errorMessages = $this->_applySQLUpdates($update, $dbConn);
 							$allErrors = array_merge($allErrors, $errorMessages);
-							$sql = "INSERT INTO w2pversion SET db_version = $myIndex, last_db_update = now()";
+							$sql = "INSERT INTO w2pversion (db_version, last_db_update) VALUES ($myIndex, now())";
 							//TODO: update the code revision
 							//TODO: update the version number
 							$dbConn->Execute($sql);
@@ -217,11 +220,12 @@
 			$dir_handle = @opendir($path) or die("Unable to open $path");
 
 			while ($file = readdir($dir_handle)) {
-			   $migrationNumber = substr($file, 0, 3);
-			   if ((int) $migrationNumber > 0) {
-			     $migrations[] = $file;
+			   $migrationNumber = (int) substr($file, 0, 3);
+			   if ($migrationNumber > 0) {
+			     $migrations[$migrationNumber] = $file;
 			   }
 			}
+			sort($migrations);
 			return $migrations;
 		}
 		private function _prepareConfiguration() {
