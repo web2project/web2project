@@ -157,48 +157,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoID()
     {
-    	$project = new CProject();
-    	
-    	$post_data = array(
-            'dosql' =>                       'do_project_aed', 
-			'project_creator' =>             1, 
-			'project_contacts' =>            '',
-			'project_name' =>                'New Project',
-			'project_parent' =>              '',
-			'project_owner' =>               1, 
-			'project_company' =>             1,
-			'project_location' =>            '', 
-			'project_start_date' =>          '20090628', 
-			'project_end_date' =>            '20090728', 
-			'project_target_budget' =>       '', 
-			'project_actual_budget' =>       '', 
-			'project_url' =>                 '', 
-			'project_demo_url' =>            '', 
-			'project_priority' =>            '-1',
-			'project_short_name' =>          'nproject',
-			'project_color_identifier' =>    'FFFFFF',
-			'project_type' =>                0,
-			'project_status' =>              0, 
-			'project_description' =>         '', 
-			'email_project_owner' =>         1,
-			'email_project_contacts' =>      1    	
-    	);
-    	
-    	$project->bind($post_data);
-    	$msg = $project->store();
-    	
-    	/**
-         * Verify we got the proper error message
-         */
-        $this->AssertEquals('CProject::store-check failed project id is NULL', $msg);
-        
-        /**
-         * Verify that project id was not set
-         */
-        $this->AssertNull($project->project_id);
+    	$this->markTestSkipped('This test has been deprecated by casting the project_id via intval().');
     }
     
-/**
+		/**
      * Tests that the proper error message is returned when no ID is passed.
      */
     public function testCreateProjectNoName()
@@ -236,11 +198,11 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify we got the proper error message
          */
-        $this->AssertEquals('CProject::store-check failed project name is NULL', $msg);
+        $this->assertEquals('CProject::store-check failed - project name is NULL', $msg);
         
         /**
          * Verify that project id was not set
          */
-        $this->AssertNull($project->project_id);
+        $this->assertEquals(0, $project->project_id);
     }
 }
