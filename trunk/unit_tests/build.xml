@@ -13,22 +13,25 @@
         <phpunit codecoverage="true" haltonfailure="false" haltonerror="true">
             <formatter type="plain" usefile="false"/>
             <batchtest>
-                <fileset dir="classes">
-                	<!--
-						This test is executed separately because it can 
-						install the database for us which makes all the 
-						later tests actually work for us.
-						Woohoo.
-					-->
-	                <include name="upgrademanager.test.php"/>
-                </fileset>
-                <fileset dir="classes">
-                    <include name="**/*.test.php"/>
-					<exclude name="upgrademanager.test.php" />
-                </fileset>
                 <fileset dir="modules">
                     <include name="**/*.test.php"/>
                 </fileset>
+
+                <fileset dir="classes">
+	                <include name="manager.test.php"/>
+                </fileset>
+
+                <fileset dir="classes">
+					<!--
+						The UpgradeManager_Test (manager.test.php) should be 
+						executed separately and before any/all of the other 
+						tests because it can build up a database for us.  Any 
+						ideas on how to do this successfully would be greatly 
+						appreciated.  - caseydk 02 July 2009
+					-->
+                    <include name="**/*.test.php"/>
+                </fileset>
+
                 <fileset dir="includes">
                     <include name="**/*.test.php"/>
                 </fileset>
@@ -43,6 +46,9 @@
 
 	<target name="standards" depends="lint">
 		<!-- This is setup to run as separate tasks due to memory/performance reasons. -->
+
+		<phpcodesniffer standard="PEAR" format="summary"
+			file="../index.php" allowedFileExtensions="php" />
 		<phpcodesniffer standard="PEAR" format="summary"
 			file="../classes" allowedFileExtensions="php" />
 		<phpcodesniffer standard="PEAR" format="summary"
@@ -51,6 +57,8 @@
 			file="../install" allowedFileExtensions="php" />
 		<phpcodesniffer standard="PEAR" format="summary"
 			file="../modules" allowedFileExtensions="php" />
+		<phpcodesniffer standard="PEAR" format="summary"
+			file="." allowedFileExtensions="php" />
 	</target>
 
 	<target name="lint">
