@@ -27,4 +27,3 @@ switch ($m) {
 }
 eval('$GLOBALS[\'translate\']=array(' . ob_get_contents() . "\n'0');");
 ob_end_clean();
-?>

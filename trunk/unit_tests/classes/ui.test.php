@@ -44,14 +44,25 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
 		$w2Pconfig['locale_warn'] = false;
 		$this->assertEquals('Company', $AppUI->__('Company'));
-		$this->assertEquals('Monkey123', $AppUI->__('Monkey123'));
+		$this->assertEquals('NoGonnaBeThere', $AppUI->__('NoGonnaBeThere'));
 
+		/* Turn on 'untranslatable' warning */
 		$w2Pconfig['locale_warn'] = true;
 		$this->assertEquals('Projects^', $AppUI->__('Projects'));
 		$this->assertEquals('Add File^', $AppUI->__('Add File'));
 
-		$this->markTestIncomplete('Need to test changing languages with translatable word.');
-		$this->markTestIncomplete('Need to test changing languages with not included word.');
+		/* Change to another language and reload tranlations */
+		$AppUI->user_locale = 'es';
+		require W2P_BASE_DIR . '/locales/core.php';
+		$this->assertEquals('Proyectos', $AppUI->__('Projects'));
+		$this->assertEquals('Ciudad', $AppUI->__('City'));
+		$this->assertEquals('StillNotThere^', $AppUI->__('StillNotThere'));
+
+		/* Change back to English and reload tranlations */
+		$AppUI->user_locale = 'en';
+		require W2P_BASE_DIR . '/locales/core.php';
+		$this->assertEquals('Projects', $AppUI->__('Projects'));
+		$this->assertEquals('NoGonnaBeThere^', $AppUI->__('NoGonnaBeThere'));
 	}
 
 	public function testGetPref()
