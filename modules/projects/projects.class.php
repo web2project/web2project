@@ -90,6 +90,12 @@ class CProject extends CW2pObject {
 	}
 
 	public function check() {
+		$this->project_id = intval($this->project_id);
+
+		if ('' == trim($this->project_name)) {
+			return 'project name is NULL';
+		}
+
 		// ensure changes of state in checkboxes is captured
 		$this->project_active = intval($this->project_active);
 		$this->project_private = intval($this->project_private);
