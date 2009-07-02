@@ -29,9 +29,9 @@ require_once W2P_BASE_DIR . '/modules/projects/projects.class.php';
 require_once W2P_BASE_DIR . '/modules/departments/departments.class.php';
 require_once 'PHPUnit/Framework.php';
 /**
- * DateTest Class.
+ * Main_Functions_Test Class.
  * 
- * Class to test the date include
+ * Class to test the main_functions include
  * @author D. Keith Casey, Jr.
  * @package web2project
  * @subpackage unit_tests
