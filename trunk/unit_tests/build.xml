@@ -18,10 +18,6 @@
                 </fileset>
 
                 <fileset dir="classes">
-	                <include name="manager.test.php"/>
-                </fileset>
-
-                <fileset dir="classes">
 					<!--
 						The UpgradeManager_Test (manager.test.php) should be 
 						executed separately and before any/all of the other 
