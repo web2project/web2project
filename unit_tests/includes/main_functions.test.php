@@ -32,7 +32,7 @@ require_once 'PHPUnit/Framework.php';
  * Main_Functions_Test Class.
  * 
  * Class to test the main_functions include
- * @author D. Keith Casey, Jr.
+ * @author D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  * @package web2project
  * @subpackage unit_tests
  */
@@ -74,5 +74,37 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 		$this->assertEquals($params['<script>'], w2PgetCleanParam($params, '<script>', ''));
 
 		$this->markTestIncomplete("This function does *nothing* for tainted values and I suspect it should...");
-	}	
+	}
+
+	public function testArrayMerge()
+	{
+		$array1 = array('a', 'b', 'c', 4 => 'd', 5 => 'e');
+		$array2 = array('z', 6 => 'y', 7 => 'x', 4 => 'w', 5 => 'v');
+		$newArray = arrayMerge($array1, $array2);
+
+		$this->assertEquals('b', $newArray[1]);		//	Tests no overwrite
+		$this->assertEquals('w', $newArray[4]);		//	Tests explicit overwrite
+		$this->assertEquals('z', $newArray[0]);		//	Tests conincidental overwrite
+	}
+	public function testW2PgetConfig()
+	{
+		global $w2Pconfig;
+
+		$this->assertEquals('web2project.net', w2PgetConfig('site_domain'));
+		$this->assertEquals(null, w2PgetConfig('NotGonnaBeThere'));
+		$this->assertEquals('Some Default', w2PgetConfig('NotGonnaBeThere', 'Some Default'));
+	}
+	public function testConvert2days()
+	{		
+		$hours = 1;		
+		$this->assertEquals(0.125, convert2days($hours, 0));
+
+		$hoursIndicator = 1;
+		$hours = 8;
+		$this->assertEquals(1, convert2days($hours, $hoursIndicator));
+
+		$dayIndicator = 24;
+		$days = 1;
+		$this->assertEquals(1, convert2days($days, $dayIndicator));
+	}
 }
