@@ -138,38 +138,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateCompanyNoID() 
     {        
-        $company = new CCompany();
-
-        $post_array = array(
-            'dosql'                 => 'do_company_aed',
-            'company_name'          => 'UnitTestCompany',
-            'company_email'         => 'web2project@example.org',
-            'company_phone1'        => '1.999.999.9999',
-            'company_phone2'        => '1.999.999.9998',
-            'company_fax'           => '1.999.999.9997',
-            'company_address1'      => 'Address 1',
-            'company_address2'      => 'Address 2',
-            'company_city'          => 'City',
-            'company_state'         => 'CA',
-            'company_zip'           => '90210',
-            'company_country'       => 'US',
-            'company_primary_url'   => 'web2project.org',
-            'company_owner'         => 1,
-            'company_type'          => 2,
-            'company_description'   => 'This is a company.'
-        );
-        $company->bind($post_array);
-        $msg = $company->store();
-        
-        /**
-         * Verify we got the proper error message
-         */
-        $this->AssertEquals('CCompany::store-check failed company id is NULL', $msg);
-        
-        /**
-         * Verify that company id was not set
-         */
-        $this->assertNull($company->company_id);
+			$this->markTestSkipped('This test has been deprecated by casting the company_id via intval().');
     }
     
 /**
@@ -201,16 +170,16 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         );
         $company->bind($post_array);
         $msg = $company->store();
-        
+
         /**
          * Verify we got the proper error message
          */
-        $this->AssertEquals('CCompany::store-check failed company name is NULL', $msg);
-        
+        $this->assertEquals('CCompany::store-check failed company name is NULL', $msg);
+
         /**
          * Verify that company id was not set
          */
-        $this->assertNull($company->company_id);
+        $this->assertEquals(0, $company->company_id);
     }
     
     /**
