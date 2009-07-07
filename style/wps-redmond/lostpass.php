@@ -1,4 +1,7 @@
 <?php /* $Id$ $URL$ */
+if (!defined('W2P_BASE_DIR')) {
+	die('You should not access this file directly');
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -6,18 +9,36 @@
 <head>
 	<title><?php echo @w2PgetConfig('page_title'); ?></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
-       	<title><?php echo $w2Pconfig['company_name']; ?> :: web2Project Login</title>
+	<title><?php echo $w2Pconfig['company_name']; ?> :: web2Project Lost Password Recovery</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
-	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
 </head>
 
 <body bgcolor="#f0f0f0" onload="document.lostpassform.checkusername.focus();">
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr>
+	<td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/w2p_logo.jpg"/></a></td>
+	<td style="background:url(./style/<?php echo $uistyle; ?>/logo_bkgd.jpg);">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tbody>
+	<tr>
+	<td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/nav_shadow.jpg) repeat-x scroll 0%;">
+		<img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/nav_shadow.jpg"/>
+	</td>
+</tr>
+</tbody>
+</table>
 <br /><br /><br /><br />
-<?php //please leave action argument empty ?>
-<!--form action="./index.php" method="post" name="loginform"-->
+<?php
+include ('overrides.php');
+?>
+<!--please leave action argument empty -->
 <form method="post" name="lostpassform">
 <table align="center" border="0" width="250" cellpadding="6" cellspacing="0" class="std">
 <input type="hidden" name="lostpass" value="1" />

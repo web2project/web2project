@@ -10,11 +10,11 @@ if ($dialog) {
 	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<meta name="Description" content="web2Project WebbPlatsen Redmond Theme" />
+	<meta name="Description" content="web2Project WebbPlatsen Redmond Style" />
 	<meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
 	<title><?php echo @w2PgetConfig('page_title'); ?></title>
-	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
 	<?php 
