@@ -106,7 +106,7 @@
 	</tr>
 	<tr>
 	  <td colspan="2" align="center">
-		  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form">
+		  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 		  	<?php if ($continue) { ?>
 		  		<input type="hidden" name="step" value="perform" />
 		  		<input class="button" type="submit" name="next" value="Perform Upgrade &raquo;" />

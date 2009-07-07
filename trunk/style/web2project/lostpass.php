@@ -9,10 +9,10 @@ if (!defined('W2P_BASE_DIR')) {
 <head>
 	<title><?php echo @w2PgetConfig('page_title'); ?></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
-       	<title><?php echo $w2Pconfig['company_name']; ?> :: web2Project Lost Password Recovery</title>
+	<title><?php echo $w2Pconfig['company_name']; ?> :: web2Project Lost Password Recovery</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
-	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
 </head>
@@ -37,8 +37,8 @@ if (!defined('W2P_BASE_DIR')) {
 <br /><br /><br /><br />
 <?php
 include ('overrides.php');
-//please leave action argument empty ?>
-<!--form action="./index.php" method="post" name="loginform"-->
+?>
+<!--please leave action argument empty -->
 <form method="post" name="lostpassform">
 <table style="border-style:none;" align="center" border="0" width="250" cellpadding="0" cellspacing="0" class="std">
 <input type="hidden" name="lostpass" value="1" />
