@@ -1,5 +1,6 @@
 <?php
-	
+	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
+
 	class UpgradeManager {
 		private $action = '';
 
@@ -93,7 +94,6 @@
 							$allErrors = array_merge($allErrors, $errorMessages);
 							$sql = "INSERT INTO w2pversion (db_version, last_db_update) VALUES ($myIndex, now())";
 							//TODO: update the code revision
-							//TODO: update the version number
 							$dbConn->Execute($sql);
 						}
 						$migration++;
