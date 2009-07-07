@@ -32,7 +32,7 @@
 	<head>
 		<title>web2Project Update Manager</title>
 		<meta name="Description" content="web2Project Update Manager">
-	 	<link rel="stylesheet" type="text/css" href="../style/web2project/main.css">
+	 	<link rel="stylesheet" type="text/css" href="../style/web2project/main.css" charset="utf-8"/>
 	</head>
 	<body>
 		<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
@@ -55,7 +55,7 @@
 						<tr>
 							<td colspan="2">
 								When you're ready to being, simply 
-							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form">
+							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form" accept-charset="utf-8">
 							  	<input type="hidden" name="step" value="check" />
 							  	<input class="button" type="submit" name="next" value="Start Installation &raquo;" />
 								</form>
@@ -76,7 +76,7 @@
 						<tr>
 							<td colspan="2">
 								When you're ready to being, simply 
-							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form">
+							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form" accept-charset="utf-8">
 							  	<input type="hidden" name="step" value="check" />
 							  	<input class="button" type="submit" name="next" value="Start Conversion &raquo;" />
 								</form>
@@ -97,7 +97,7 @@
 						<tr>
 							<td colspan="2">
 								When you're ready to being, simply 
-							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form">
+							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form" accept-charset="utf-8">
 							  	<input type="hidden" name="step" value="check" />
 							  	<input class="button" type="submit" name="next" value="Start Upgrade &raquo;" />
 								</form>
