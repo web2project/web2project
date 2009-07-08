@@ -36,9 +36,9 @@ define('SEC_DAY', 86400);
  */
 class CDate extends Date {
 
-	public function __construct($tz = '') {
+	public function __construct($datetime = '', $tz = '') {
 
-		parent::__construct();
+		parent::__construct($datetime);
 		if ($tz == '')
 		{
 			$this->setTZ(date_default_timezone_get());
@@ -559,7 +559,6 @@ class CDate extends Date {
 			$offset += 3600;
 		}
 		$this->addSeconds($offset);
-
 		$this->setTZ($tz);
 	}
 	public function setTZ($tz)

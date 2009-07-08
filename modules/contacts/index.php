@@ -60,7 +60,7 @@ if ($rn < ($carrWidth * $carrHeight)) {
 	$i = 0;
 	for ($y = 0; $y <= $carrWidth; $y++) {
 		$x = 0;
-		while (($x < $t) && ($row = $rows[$i])) {
+		while (($x < $t) && isset($rows[$i]) && ($row = $rows[$i])) {
 			$carr[$y][] = $row;
 			$x++;
 			$i++;
