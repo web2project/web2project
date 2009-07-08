@@ -270,6 +270,7 @@ class Date
      */
     function format($format)
     {
+        global $AppUI;
         $output = "";
 
         for($strpos = 0; $strpos < strlen($format); $strpos++) {
@@ -284,9 +285,9 @@ class Date
                         $output .= Date_Calc::getWeekdayFullname($this->day,$this->month,$this->year);
                         break;
                     case "b":
-						setlocale(LC_TIME, 'en');
+												setlocale(LC_TIME, 'en');
                         $output .= Date_Calc::getMonthAbbrname($this->month);
-						setlocale(LC_ALL, $AppUI->user_lang);
+												setlocale(LC_ALL, $AppUI->user_lang);
                         break;
                     case "B":
                         $output .= Date_Calc::getMonthFullname($this->month);
