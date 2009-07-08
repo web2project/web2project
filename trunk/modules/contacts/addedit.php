@@ -3,11 +3,20 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+require_once $AppUI->getModuleClass('companies');
+require_once $AppUI->getModuleClass('departments');
+
 $contact_id = intval(w2PgetParam($_GET, 'contact_id', 0));
-$company_id = intval(w2PgetParam($_REQUEST, 'company_id', 0));
-$dept_id = intval(w2PgetParam($_REQUEST, 'dept_id', 0));
-$company_name = ($_REQUEST['company_name'] ? $_REQUEST['company_name'] : null);
-$dept_name = ($_REQUEST['dept_name'] ? $_REQUEST['dept_name'] : null);
+$company_id = intval(w2PgetParam($_GET, 'company_id', 0));
+$dept_id = intval(w2PgetParam($_GET, 'dept_id', 0));
+
+$company = new CCompany();
+$company->load($company_id);
+$company_name = $company->company_name;
+
+$dept = new CDepartment();
+$dept->load($dept_id);
+$dept_name = $dept->dept_name;
 
 // check permissions for this record
 $perms = &$AppUI->acl();
