@@ -34,7 +34,14 @@ $orderby = 'contact_first_name';
 $search_map = array($orderby, 'contact_first_name', 'contact_last_name');
 
 // optional fields shown in the list (could be modified to allow breif and verbose, etc)
-$showfields = array('contact_address1' => 'contact_address1', 'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city', 'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip', 'contact_country' => 'contact_country', 'contact_company' => 'contact_company', 'company_name' => 'company_name', 'dept_name' => 'dept_name', 'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2', 'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax', 'contact_email' => 'contact_email');
+$showfields = array('contact_address1' => 'contact_address1', 
+	'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city', 
+	'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip', 
+	'contact_country' => 'contact_country', 'contact_company' => 'contact_company', 
+	'company_name' => 'company_name', 'dept_name' => 'dept_name', 
+	'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2', 
+	'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax', 
+	'contact_email' => 'contact_email', 'contact_job'=>'contact_job');
 
 // assemble the sql statement
 $rows = CContact::searchContacts($AppUI, $where, $additional_filter);
@@ -50,7 +57,7 @@ if ($rn < ($carrWidth * $carrHeight)) {
 	$i = 0;
 	for ($y = 0; $y < $carrWidth; $y++) {
 		$x = 0;
-		while (($x < $carrHeight) && ($row = $rows[$i])) {
+		while (($x < $carrHeight) && isset($rows[$i]) && ($row = $rows[$i])) {
 			$carr[$y][] = $row;
 			$x++;
 			$i++;
@@ -74,7 +81,7 @@ $tdw = floor(100 / $carrWidth);
  * Contact search form
  */
 // Let's remove the first '%' that we previously added to ContIdxWhere
-$default_search_string = w2PformSafe(substr($AppUI->getState('ContIdxWhere'), 1, strlen($AppUI->getState('ContIdxWhere'))), true);
+$default_search_string = w2PformSafe($AppUI->getState('ContIdxWhere'), true);
 
 $form = '<form action="./index.php" method="get">' . $AppUI->_('Search for') . '
            <input type="text" class="text" name="search_string" value="' . $default_search_string . '" />
@@ -196,6 +203,8 @@ if (function_exists('styleRenderBoxTop')) {
 														//Don't do a thing
 													} elseif ($val == 'company_name') {
 														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Company') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
+													} elseif ($val == 'contact_job') {
+														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Job Title') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													} elseif ($val == 'dept_name') {
 														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Department') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													} elseif ($val == 'contact_phone') {

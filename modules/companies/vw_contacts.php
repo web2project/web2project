@@ -20,6 +20,7 @@ if (count($contacts) > 0) {
 	?>
 	<tr>
 		<th><?php echo $AppUI->_('Name'); ?></th>
+		<th><?php echo $AppUI->_('Job Title'); ?></th>
 		<th><?php echo $AppUI->_('e-mail'); ?></th>
 		<th><?php echo $AppUI->_('Phone'); ?></th>
 		<th><?php echo $AppUI->_('Department'); ?></th>
@@ -31,6 +32,7 @@ if (count($contacts) > 0) {
 		echo $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'];
 		echo '</a>';
 		echo '</td>';
+		echo '<td class="hilite">' . $contact_data['contact_job'] . '</td>';
 		echo '<td class="hilite"><a href="mailto:' . $contact_data['contact_email'] . '">' . $contact_data['contact_email'] . '</a></td>';
 		echo '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
 		echo '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
@@ -42,7 +44,7 @@ if (count($contacts) > 0) {
 ?>
 
 	<tr>
-		<td colspan="4" align="right" valign="top" style="background-color:#ffffff">
+		<td colspan="5" align="right" valign="top" style="background-color:#ffffff">
 			<input type="button" class=button value="<?php echo $AppUI->_('new contact') ?>" onClick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company->company_id; ?>&company_name=<?php echo $company->company_name; ?>'">
 		</td>
 	</tr>
