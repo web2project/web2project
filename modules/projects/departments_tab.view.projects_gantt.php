@@ -3,7 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $a, $addPwOiD, $AppUI, $buffer, $company_id, $department, $dept_ids, $min_view, $m, $priority, $projects, $tab, $user_id;
+global $a, $addPwOiD, $AppUI, $buffer, $company_id, $department, $dept_id, 
+	$dept_ids, $min_view, $m, $priority, $projects, $tab, $user_id;
 
 $perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -42,5 +43,14 @@ $extraGet = '&user_id=' . $user_id;
 </table>
 <?php
 $min_view = true;
+/*
+ *  TODO:  This is a *nasty* *nasty* kludge that should be cleaned up.
+ * Unfortunately due to the global variables from dotProject, we're stuck with
+ * this mess for now.
+ * 
+ * My God have mercy on our souls for the atrocity we're about to commit.
+ */ 
+$tmpDepartments = $department;
+$department = $dept_id; 
 require (W2P_BASE_DIR . '/modules/projects/viewgantt.php');
-?>
+$department = $tmpDepartments;
