@@ -29,10 +29,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
 	public function testConvertTZ()
 	{
 
-		$myDate1 = new CDate('US/Eastern');
-		$this->assertEquals($myDate1, new CDate('US/Eastern'));
+		$myDate1 = new CDate('', 'US/Eastern');
+		$this->assertEquals($myDate1, new CDate('', 'US/Eastern'));
 
-		$myDate2 = new CDate('CST');
+		$myDate2 = new CDate('', 'CST');
 		$myDate2->convertTZ('EST');
 
 		//This tweaks the test data in case the +1 is across the day change.
