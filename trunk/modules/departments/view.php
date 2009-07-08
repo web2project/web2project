@@ -5,8 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $department, $min_view;
 $dept_id = isset($_GET['dept_id']) ? w2PgetParam($_GET, 'dept_id', 0) : (isset($department) ? $department : 0);
-//$department = $dept_id;
 
+$msg = '';
 $department = new CDepartment();
 // check permissions
 $canRead = !getDenyRead($m, $dept_id);
