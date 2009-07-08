@@ -284,8 +284,6 @@ class CContact extends CW2pObject {
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
-		require_once ($AppUI->getModuleClass('companies'));
-		require_once ($AppUI->getModuleClass('departments'));
 		$oCpy = new CCompany();
 
 		$aCpies = $oCpy->getAllowedRecords($uid, 'company_id, company_name');
