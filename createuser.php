@@ -63,7 +63,7 @@ function submitIt(){
 		Please enter the info below to create a new signup.</td>
 	</tr>
 </table>
-<form name="editFrm" action="./do_user_aed.php" method="post">
+<form name="editFrm" action="./do_user_aed.php" method="post" accept-charset="utf-8">
 	<input type="hidden" name="user_id" value="<?php echo intval($user["user_id"]); ?>" />
 	<input type="hidden" name="contact_id" value="<?php echo intval($user["contact_id"]); ?>" />
 	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />
