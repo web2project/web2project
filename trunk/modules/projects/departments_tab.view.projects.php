@@ -3,7 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $a, $addPwOiD, $addPwT, $AppUI, $buffer, $dept_id, $department, $min_view, $m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
+global $a, $addPwOiD, $addPwT, $AppUI, $buffer, $dept_id, $department, $min_view, 
+	$m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
 
 $perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -57,7 +58,7 @@ require_once ($AppUI->getModuleClass('projects'));
  * My God have mercy on our souls for the atrocity we're about to commit.
  */ 
 $tmpDepartments = $department;
-$department = 1; 
+$department = $dept_id; 
 projects_list_data($user_id);
 $department = $tmpDepartments;
 
