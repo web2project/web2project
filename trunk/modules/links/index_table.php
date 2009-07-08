@@ -2,7 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-global $AppUI, $deny1, $canRead, $canEdit;
+global $AppUI, $deny1, $canRead, $canEdit, $project_id, $task_id, $showProject;
 
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
@@ -92,13 +92,21 @@ function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page
 	echo $s;
 }
 
+if ($canEdit) {
+    $titleBlock = new CTitleBlock( 'Links', 'folder5.png', $m, "$m.$a" );
+    $titleBlock->addCell(
+        '<input type="submit" class="button" value="'.$AppUI->_('new link').'">', '',
+        '<form action="?m=links&a=addedit&project_id='.$project_id.'&task_id='.$task_id.'" method="post">', '</form>'
+    );
+    $titleBlock->show();
+}
+
 $tab = $AppUI->getState('LinkIdxTab') !== null ? $AppUI->getState('LinkIdxTab') : 0;
 $page = w2PgetParam($_GET, 'page', 1);
-$search = w2PgetParam($_REQUEST, 'search', '');
+$search = w2PgetParam($_POST, 'search', '');
 
-global $project_id, $task_id, $showProject;
 if (!isset($project_id)) {
-	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
+	$project_id = w2PgetParam($_POST, 'project_id', 0);
 }
 if (!isset($showProject)) {
 	$showProject = true;

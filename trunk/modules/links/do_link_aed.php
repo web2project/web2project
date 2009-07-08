@@ -66,10 +66,7 @@ if (!$link_id) {
 if (($msg = $obj->store())) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
 } else {
-	$obj->load($obj->file_id);
-	if ($not == '1')
-		$obj->notify();
-	$AppUI->setMsg($file_id ? 'updated' : 'added', UI_MSG_OK, true);
+	$AppUI->setMsg($link_id ? 'updated' : 'added', UI_MSG_OK, true);
 }
 
 $AppUI->redirect();
