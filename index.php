@@ -65,6 +65,9 @@ header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
 header('Cache-Control: no-cache, must-revalidate, no-store, post-check=0, pre-check=0'); // HTTP/1.1
 header('Pragma: no-cache'); // HTTP/1.0
+header("Content-type: text/html; charset=UTF-8");
+// Force POSIX locale (to prevent functions such as strtolower() from messing up UTF-8 strings)
+setlocale(LC_CTYPE, 'C');
 
 // check if session has previously been initialised
 if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
@@ -138,9 +141,6 @@ if (isset($_POST['login'])) {
 	addHistory('login', $AppUI->user_id, 'login', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 	$AppUI->redirect('' . $redirect);
 }
-
-// supported since PHP 4.2
-// w2PwriteDebug( var_export( $AppUI, true ), 'AppUI', __FILE__, __LINE__ );
 
 // set the default ui style
 $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');

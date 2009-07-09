@@ -78,5 +78,3 @@ define('DP_BASE_DIR', $baseDir);
 // required includes for start-up
 global $w2Pconfig;
 $w2Pconfig = array();
-
-?>
