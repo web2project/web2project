@@ -33,4 +33,3 @@ if ($del) {
 	}
 	$AppUI->redirect();
 }
-?>

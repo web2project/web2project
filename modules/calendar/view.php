@@ -59,7 +59,7 @@ $titleBlock = new CTitleBlock('View Event', 'myevo-appointments.png', $m, $m . '
 if ($canEdit) {
 	$titleBlock->addCell();
 	$titleBlock->addCell('
-		<form action="?m=calendar&amp;a=addedit" method="post">
+		<form action="?m=calendar&amp;a=addedit" method="post" accept-charset="utf-8">
 			<input type="submit" class="button" value="' . $AppUI->_('new event') . '" />
 		</form>', '', '', '');
 }
@@ -88,7 +88,7 @@ function delIt() {
 <?php } ?>
 </script>
 
-<form name="frmDelete" action="./index.php?m=calendar" method="post">
+<form name="frmDelete" action="./index.php?m=calendar" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_event_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />

@@ -94,7 +94,7 @@ function delIt(){
 }
 </script>
 
-<form name="changeforum" action="?m=forums" method="post">
+<form name="changeforum" action="?m=forums" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_forum_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="forum_unique_update" value="<?php echo uniqid(''); ?>" />

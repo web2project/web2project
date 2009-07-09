@@ -212,4 +212,3 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	$tt .= '</table>';
 	return $tt;
 }
-?>

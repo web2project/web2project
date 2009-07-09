@@ -10,4 +10,3 @@ $users = w2PgetUsersList($stub, $where, $orderby);
 $canLogin = true;
 
 require W2P_BASE_DIR . '/modules/admin/vw_usr.php';
-?>

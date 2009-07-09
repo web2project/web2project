@@ -162,7 +162,7 @@ function setDept( key, val ) {
 </script>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
-<form name="editFrm" action="./index.php?m=admin" method="post">
+<form name="editFrm" action="./index.php?m=admin" method="post" accept-charset="utf-8">
 	<input type="hidden" name="user_id" value="<?php echo intval($user['user_id']); ?>" />
 	<input type="hidden" name="contact_id" value="<?php echo intval($user['contact_id']); ?>" />
 	<input type="hidden" name="dosql" value="do_user_aed" />

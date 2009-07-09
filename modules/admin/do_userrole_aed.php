@@ -49,4 +49,3 @@ if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
 		$AppUI->redirect();
 	}
 }
-?>

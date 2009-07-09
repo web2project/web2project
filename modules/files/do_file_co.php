@@ -55,5 +55,3 @@ fileloader = window.open("fileviewer.php?' . $params . '", "mywindow",
 "location=1,status=1,scrollbars=0,width=20,height=20");
 fileloader.moveTo(0,0);
 </script>';
-
-?>

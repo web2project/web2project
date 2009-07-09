@@ -46,7 +46,7 @@ if (!$department) {
 		$titleBlock = new CTitleBlock('View Department', 'departments.png', $m, $m . '.' . $a);
 		if ($canEdit) {
 			$titleBlock->addCell();
-			$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '">', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '&dept_parent=' . $dept_id . '" method="post">', '</form>');
+			$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '">', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '&dept_parent=' . $dept_id . '" method="post" accept-charset="utf-8">', '</form>');
 		}
 		$titleBlock->addCrumb('?m=departments', 'department list');
 		$titleBlock->addCrumb('?m=companies', 'company list');
@@ -76,7 +76,7 @@ function delIt() {
 <?php } ?>
 </script>
 
-<form name="frmDelete" action="./index.php?m=departments" method="post">
+<form name="frmDelete" action="./index.php?m=departments" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_dept_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="dept_id" value="<?php echo $dept_id; ?>" />

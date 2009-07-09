@@ -109,7 +109,7 @@ if (function_exists('styleRenderBoxTop')) {
 }
 ?>
 
-<form name="changeforum" action="?m=forums&forum_id=<?php echo $forum_id; ?>" method="post">
+<form name="changeforum" action="?m=forums&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_forum" value="<?php echo $forum_id; ?>" />
@@ -119,7 +119,6 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="message_editor" value="<?php echo (isset($message_info['message_author']) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0'; ?>" />
 	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />
 <table cellspacing="0" cellpadding="3" border="0" width="100%" class="std">
-<!-- <form name="changeforum" action="?m=forums&a=viewposts&forum_id=<?php echo $forum_id; ?>" method="post"> -->
 <tr><td>
 	<table cellspacing="1" cellpadding="2" border="0" width="100%">
 	<tr>

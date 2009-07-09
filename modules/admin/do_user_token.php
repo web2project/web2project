@@ -9,4 +9,3 @@
 	} else {
 		$AppUI->redirect( 'm=admin' );
 	}
-?>

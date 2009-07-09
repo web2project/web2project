@@ -53,7 +53,7 @@ function setDate( frm_name, f_date ) {
 	</tr>
 </table>
 
-<form action="index.php?m=admin<?php echo $a; ?>" method="post" name="frmDate">
+<form action="index.php?m=admin<?php echo $a; ?>" method="post" name="frmDate" accept-charset="utf-8">
 <table align="center" width="100%">
 	<tr align="center">
 		<td align="right" width="45%" ><?php echo $AppUI->_('Start Date'); ?></td>

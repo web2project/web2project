@@ -52,7 +52,7 @@ if (function_exists('styleRenderBoxTop')) {
 }
 ?>
 <table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl">
-<form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post">
+<form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
 <tr><td colspan="5">
 	<table width="100%" cellspacing="1" cellpadding="2" border="0">
 	<tr>

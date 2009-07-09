@@ -41,4 +41,3 @@ if ($watch) {
 } else {
 	$AppUI->setMsg('Incorrect watch type passed to sql handler.', UI_MSG_ERROR);
 }
-?>

@@ -260,7 +260,7 @@ function removeUser() {
 <tr>
 	<td colspan="2">
 		<table width="100%" border="0" cellpadding="1" cellspacing="1">
-		<form name="editFrm" action="?m=calendar" method="post">
+		<form name="editFrm" action="?m=calendar" method="post" accept-charset="utf-8">
 			<input type="hidden" name="dosql" value="do_event_aed" />
 			<input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />
 			<input type="hidden" name="event_assigned" value="" />

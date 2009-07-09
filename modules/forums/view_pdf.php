@@ -76,4 +76,3 @@ $options = array('showLines' => 1, 'showHeadings' => 1, 'fontSize' => 8, 'rowGap
 $pdf->ezTable($pdfdata, $pdfhead, null, $options);
 
 $pdf->ezStream();
-?>

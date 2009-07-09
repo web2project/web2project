@@ -85,17 +85,17 @@ $forums = $q->loadList();
 
 // setup the title block
 $titleBlock = new CTitleBlock('Forums', 'support.png', $m, $m . '.' . $a);
-$titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true), '', '<form name="forum_filter" action="?m=forums" method="post">', '</form>');
+$titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true), '', '<form name="forum_filter" action="?m=forums" method="post" accept-charset="utf-8">', '</form>');
 
 $canAdd = $perms->checkModule($m, 'add');
 if ($canAdd) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new forum') . '">', '', '<form action="?m=forums&a=addedit" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new forum') . '">', '', '<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->show();
 ?>
 
 <table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl">
-<form name="watcher" action="./index.php?m=forums&f=<?php echo $f; ?>" method="post">
+<form name="watcher" action="./index.php?m=forums&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
 <tr>
 	<th nowrap="nowrap">&nbsp;</th>
 	<th nowrap="nowrap" width="25"><a href="?m=forums&orderby=watch_user" class="hdr"><?php echo $AppUI->_('Watch'); ?></a></th>

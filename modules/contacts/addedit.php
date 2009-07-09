@@ -181,7 +181,7 @@ function updateVerify() {
 <tr>
 	<td colspan="2">
 		<table border="0" cellpadding="1" cellspacing="1">
-		<form name="changecontact" action="?m=contacts" method="post">
+		<form name="changecontact" action="?m=contacts" method="post" accept-charset="utf-8">
 			<input type="hidden" name="dosql" value="do_contact_aed" />
 			<input type="hidden" name="del" value="0" />
 			<input type="hidden" name="contact_project" value="0" />

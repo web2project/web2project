@@ -61,7 +61,7 @@ if ($inc === null)
 
 $this_day->setTime($start, 0, 0);
 
-$html = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter">';
+$html = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8">';
 $html .= $AppUI->_('Event Filter') . ':' . arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"', $event_filter, true);
 if ($other_users) {
 	$html .= $AppUI->_('Show Events for') . ':' . '<select name="show_user_events" onchange="document.pickFilter.submit()" class="text">';
@@ -126,4 +126,3 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 
 $html .= '</table>';
 echo $html;
-?>

@@ -65,7 +65,7 @@ function submitFrm( frmName ) {
 
 }
 </script>
-<form name="frmForceWatch" method="post" action="?m=forums&a=configure">
+<form name="frmForceWatch" method="post" action="?m=forums&a=configure" accept-charset="utf-8">
 <input type="hidden" name="forcesubmit" value="true" />
 <input type="checkbox" name="forcewatch" id="forcewatch" value="dod" <?php echo $watchAll ? 'checked="checked"' : ''; ?> onclick="javascript:submitFrm('frmForceWatch');" />
 <label for="forcewatch"><?php echo $AppUI->_('forumForceWatch'); ?></label>

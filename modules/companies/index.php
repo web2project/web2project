@@ -54,7 +54,7 @@ $owner_combo = arraySelect($owner_list, 'owner_filter_id', 'class="text" onchang
 
 // setup the title block
 $titleBlock = new CTitleBlock('Companies', 'handshake.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<form name="searchform" action="?m=companies&amp;search_string=' . $search_string . '" method="post">
+$titleBlock->addCell('<form name="searchform" action="?m=companies&amp;search_string=' . $search_string . '" method="post" accept-charset="utf-8">
 						<table>
 							<tr>
                       			<td>
@@ -71,7 +71,7 @@ $titleBlock->addCell('<form name="searchform" action="?m=companies&amp;search_st
 $search_string = addslashes($search_string);
 
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '">', '', '<form action="?m=companies&a=addedit" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '">', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->show();
 

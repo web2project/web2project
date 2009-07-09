@@ -21,4 +21,3 @@ if ($hid != 'help.toc') {
 	echo '<a href="?m=help&dialog=1">' . $AppUI->_('index') . '</a>';
 }
 readfile($inc);
-?>

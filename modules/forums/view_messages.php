@@ -78,7 +78,7 @@ if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
 ?>
-<form name="messageForm" method="POST" action="?m=forums&forum_id=<?php echo $forum_id; ?>">
+<form name="messageForm" method="POST" action="?m=forums&forum_id=<?php echo $forum_id; ?>" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_id" value="0" />
@@ -90,7 +90,7 @@ if (function_exists('styleRenderBoxTop')) {
 	<tr>
 		<td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
 	        <td nowrap="nowrap">
-	<form action="<?php echo $thispage; ?>" method="post">
+	<form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8">
 	        <?php echo $AppUI->_('View') ?>: 
 	        <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
 	        <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
@@ -297,4 +297,3 @@ foreach ($new_messages as $msg_id) {
 	$q->exec();
 	$q->clear();
 }
-?>

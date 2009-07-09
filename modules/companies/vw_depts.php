@@ -81,4 +81,3 @@ echo '
 	</td>
 </tr>
 </table>';
-?>

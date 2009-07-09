@@ -46,7 +46,7 @@ $owner_combo = arraySelect($owner_list, 'owner_filter_id', 'class="text" onchang
 
 // setup the title block
 $titleBlock = new CTitleBlock('Departments', 'departments.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<form name="searchform" action="?m=departments&amp;search_string=' . $search_string . '" method="post">
+$titleBlock->addCell('<form name="searchform" action="?m=departments&amp;search_string=' . $search_string . '" method="post" accept-charset="utf-8">
 		<table>
 			<tr>
 				<td>
@@ -81,4 +81,3 @@ foreach ($deptTypes as $deptType) {
 	$tabBox->add('vw_depts', $deptType);
 }
 $tabBox->show();
-?>

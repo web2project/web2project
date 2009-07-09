@@ -95,4 +95,3 @@ if ($del) {
 if ($do_redirect) {
 	$AppUI->redirect();
 }
-?>
