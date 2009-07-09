@@ -29,10 +29,21 @@ if (file_exists($core_filename)) {
 	$filename = $core_filename;
 } else {
 	$mod_locale = W2P_BASE_DIR . '/modules/' . $module . '/locales';
-	if (is_dir($mod_locale))
-		$filename = W2P_BASE_DIR . '/modules/' . $module . '/locales/' . $lang . '.inc';
-	else
+	if (is_dir($mod_locale)) {
+		if (is_dir($mod_locale . '/' . $lang)) {
+			$filename = W2P_BASE_DIR . '/modules/' . $module . '/locales/' . $lang . '/' . $module . '.inc';
+		} else {
+			$res = mkdir($mod_locale . '/' . $lang, 0777);
+			if (!$res) {
+				$AppUI->setMsg("Could not create folder ($mod_locale " . '/' . "$lang) to save locale file.", UI_MSG_ERROR);
+				$AppUI->redirect('m=system');
+			} else {
+				$filename = W2P_BASE_DIR . '/modules/' . $module . '/locales/' . $lang . '/' . $module . '.inc';
+			}
+		}
+	} else {
 		$filename = $core_filename;
+	}
 }
 
 $fp = fopen($filename, 'wt');

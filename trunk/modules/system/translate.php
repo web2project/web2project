@@ -23,10 +23,12 @@ $locales = $AppUI->readDirs('locales');
 
 ob_start();
 // read language files from module's locale directory preferrably
-if (file_exists(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en.inc')) {
-	readfile(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en.inc');
+if (file_exists(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en/' . $modules[$module] . '.inc')) {
+	readfile(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en/' . $modules[$module] . '.inc');
 } else {
-	readfile(W2P_BASE_DIR . '/locales/en/' . $modules[$module] . '.inc');
+	if (file_exists(W2P_BASE_DIR . '/locales/en/' . $modules[$module] . '.inc')) {
+		readfile(W2P_BASE_DIR . '/locales/en/' . $modules[$module] . '.inc');
+	}
 }
 eval("\$english=array(" . ob_get_contents() . "\n'0');");
 ob_end_clean();
@@ -43,10 +45,12 @@ foreach ($english as $k => $v) {
 if ($lang != 'en') {
 	ob_start();
 	// read language files from module's locale directory preferrably
-	if (file_exists(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/' . $lang . '.inc')) {
-		readfile(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/' . $lang . '.inc');
+	if (file_exists(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/' . $lang . '/' . $modules[$module] . '.inc')) {
+		readfile(W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/' . $lang . '/' . $modules[$module] . '.inc');
 	} else {
-		readfile(W2P_BASE_DIR . '/locales/' . $lang . '/' . $modules[$module] . '.inc');
+		if (file_exists(W2P_BASE_DIR . '/locales/' . $lang . '/' . $modules[$module] . '.inc')) {
+			readfile(W2P_BASE_DIR . '/locales/' . $lang . '/' . $modules[$module] . '.inc');
+		}
 	}
 	eval("\$locale=array(" . ob_get_contents() . "\n'0');");
 	ob_end_clean();
