@@ -4,7 +4,7 @@
 	}
 	
 ?>
-<form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form">
+<form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 	<input type="hidden" name="step" value="perform" />
 	<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
 		<tr>

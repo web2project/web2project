@@ -49,7 +49,7 @@ if ($dialog) {
 	<td class="nav" align="left">
 	<table width="100%" cellpadding="0" cellspacing="0" width="100%">
 	<tbody>
-	<form name="frm_new" method="GET" action="./index.php">
+	<form name="frm_new" method="GET" action="./index.php" accept-charset="utf-8">
 <?php
 	echo '<input type="hidden" name="a" value="addedit" />';
 
@@ -75,7 +75,7 @@ if ($dialog) {
 	echo implode(' | ', $links);
 ?>
 		</td>
-		<form name="frm_new" method="GET" action="./index.php">
+		<form name="frm_new" method="GET" action="./index.php" accept-charset="utf-8">
 <?php
 	echo '<td nowrap="nowrap" align="right">';
 	$newItem = array('' => '- New Item -');
@@ -131,7 +131,7 @@ if ($dialog) {
 			</tr>
 			</table>
 		</td>
-		<td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch"  method="POST"><td>
+		<td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch" method="POST" accept-charset="utf-8"><td>
              	     <?php 
 						if ($perms->checkModule('smartsearch', 'access')) {					  
 							echo w2PshowImage('search.png') ?>&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />

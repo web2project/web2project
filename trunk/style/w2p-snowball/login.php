@@ -37,9 +37,9 @@ if (!defined('W2P_BASE_DIR')) {
 <br /><br /><br /><br />
 <?php
 include ('overrides.php');
-//please leave action argument empty ?>
-<!--form action="./index.php" method="post" name="loginform"-->
-<form method="post" action="<?php echo $loginFromPage; ?>" name="loginform">
+?>
+<!--please leave action argument empty -->
+<form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
 <table style="border-style:none;" align="center" border="0" width="250" cellpadding="0" cellspacing="0" class="std">
 <input type="hidden" name="login" value="<?php echo time(); ?>" />
 <input type="hidden" name="lostpass" value="0" />

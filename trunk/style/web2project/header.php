@@ -54,73 +54,73 @@ if ($dialog) {
 	<td align="left">
 	<table width="100%" cellpadding="0" cellspacing="0" width="100%">
 	<tbody>
-	<form name="frm_new" method="GET" action="./index.php">
-<?php
-	echo '<input type="hidden" name="a" value="addedit" />';
-
-	//build URI string
-	if (isset($company_id)) {
-		echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';
-	}
-	if (isset($task_id)) {
-		echo '<input type="hidden" name="task_parent" value="' . $task_id . '" />';
-	}
-	if (isset($file_id)) {
-		echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
-	}
-?>
+	<form name="frm_new" method="GET" action="./index.php" accept-charset="utf-8">
+	<?php
+		echo '<input type="hidden" name="a" value="addedit" />';
+	
+		//build URI string
+		if (isset($company_id)) {
+			echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';
+		}
+		if (isset($task_id)) {
+			echo '<input type="hidden" name="task_parent" value="' . $task_id . '" />';
+		}
+		if (isset($file_id)) {
+			echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
+		}
+	?>
 	<tr class="nav">
 		<td>
 		<ul>
 		<?php
-	$links = array();
-	foreach ($nav as $module) {
-		if ($perms->checkModule($module['mod_directory'], 'access')) {
-			$links[] = '<li><a href="?m=' . $module['mod_directory'] . '">' . $AppUI->_($module['mod_ui_name']) . '</a></li>';
-		}
-	}
-	echo implode('', $links);
-?>
+			$links = array();
+			foreach ($nav as $module) {
+				if ($perms->checkModule($module['mod_directory'], 'access')) {
+					$links[] = '<li><a href="?m=' . $module['mod_directory'] . '">' . $AppUI->_($module['mod_ui_name']) . '</a></li>';
+				}
+			}
+			echo implode('', $links);
+		?>
 		</ul>
 		</td>
-<?php
-	if ($AppUI->user_id > 0) {
-		//Do this check in case we are not using any user id, for example for external uses
-		echo '<td nowrap="nowrap" align="right">';
-		$newItem = array('' => '- New Item -');
-		if ($perms->checkModule('companies', 'add')) {
-			$newItem['companies'] = 'Company';
-		}
-		if ($perms->checkModule('contacts', 'add')) {
-			$newItem['contacts'] = 'Contact';
-		}
-		if ($perms->checkModule('calendar', 'add')) {
-			$newItem['calendar'] = 'Event';
-		}
-		if ($perms->checkModule('files', 'add')) {
-			$newItem['files'] = 'File';
-		}
-		if ($perms->checkModule('projects', 'add')) {
-			$newItem['projects'] = 'Project';
-		}
-		if ($perms->checkModule('admin', 'add')) {
-			$newItem['admin'] = 'User';
-		}
-		echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
-		echo '</td>';
-	}
-	$df = $AppUI->getPref('SHDATEFORMAT');
-	$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-	$cf = $df;
-	$cal_df = $cf;
-	$cal_df = str_replace('%S', '%s', $cal_df);
-	$cal_df = str_replace('%M', '%i', $cal_df);
-	$cal_df = str_replace('%p', '%a', $cal_df);
-	$cal_df = str_replace('%I', '%h', $cal_df);
-	$cal_df = str_replace('%b', '%M', $cal_df);
-	$cal_df = str_replace('%', '', $cal_df);
-	$df = $cal_df;
-?>
+		<?php
+			if ($AppUI->user_id > 0) {
+				//Do this check in case we are not using any user id, for example for external uses
+				echo '<td nowrap="nowrap" align="right">';
+				$newItem = array('' => '- New Item -');
+				if ($perms->checkModule('companies', 'add')) {
+					$newItem['companies'] = 'Company';
+				}
+				if ($perms->checkModule('contacts', 'add')) {
+					$newItem['contacts'] = 'Contact';
+				}
+				if ($perms->checkModule('calendar', 'add')) {
+					$newItem['calendar'] = 'Event';
+				}
+				if ($perms->checkModule('files', 'add')) {
+					$newItem['files'] = 'File';
+				}
+				if ($perms->checkModule('projects', 'add')) {
+					$newItem['projects'] = 'Project';
+				}
+				if ($perms->checkModule('admin', 'add')) {
+					$newItem['admin'] = 'User';
+				}
+				echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
+				echo '</td>';
+			}
+			$df = $AppUI->getPref('SHDATEFORMAT');
+			$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+			$cf = $df;
+			$cal_df = $cf;
+			$cal_df = str_replace('%S', '%s', $cal_df);
+			$cal_df = str_replace('%M', '%i', $cal_df);
+			$cal_df = str_replace('%p', '%a', $cal_df);
+			$cal_df = str_replace('%I', '%h', $cal_df);
+			$cal_df = str_replace('%b', '%M', $cal_df);
+			$cal_df = str_replace('%', '', $cal_df);
+			$df = $cal_df;
+		?>
 	</tr>
 	</form>
 	<tr>
@@ -142,12 +142,11 @@ if ($dialog) {
 			</tr>
 			</table>
 		</td>
-<?php
-	if ($AppUI->user_id > 0) {
-		//Just show this stuff if there is a user logged in
-
-?>
-		<td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch"  method="POST"><td>
+		<?php
+			if ($AppUI->user_id > 0) {
+				//Just show this stuff if there is a user logged in
+		?>
+		<td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch"  method="POST" accept-charset="utf-8"><td>
              	     <?php 
 						if ($perms->checkModule('smartsearch', 'access')) {					  
 							echo w2PshowImage('search.png') ?>&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />

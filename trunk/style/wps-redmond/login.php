@@ -19,9 +19,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 <body bgcolor="#f0f0f0" onload="document.loginform.username.focus();">
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-<?php //please leave action argument empty ?>
-<!--form action="./index.php" method="post" name="loginform"-->
-<form method="post" action="<?php echo $loginFromPage; ?>" name="loginform">
+<!--please leave action argument empty -->
+<form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
 <table align="center" border="0" width="250" cellpadding="6" cellspacing="0" class="std">
 <input type="hidden" name="login" value="<?php echo time(); ?>" />
 <input type="hidden" name="lostpass" value="0" />
