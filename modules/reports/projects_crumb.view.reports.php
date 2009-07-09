@@ -5,4 +5,3 @@ if (!defined('W2P_BASE_DIR')) {
 global $titleBlock, $project_id;
 
 $titleBlock->addCrumb('?m=reports&project_id=' . $project_id, 'reports');
-?>

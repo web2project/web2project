@@ -10,4 +10,3 @@ global $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
 $company_id = $department = 0;
 
 require (W2P_BASE_DIR . '/modules/projects/viewgantt.php');
-?>

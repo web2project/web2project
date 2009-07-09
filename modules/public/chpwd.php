@@ -70,7 +70,7 @@ if ($user_id) {
 				echo styleRenderBoxTop();
 			}
 		?>
-		<form name="frmEdit" method="post" onsubmit="return false">
+		<form name="frmEdit" method="post" onsubmit="return false" accept-charset="utf-8">
 			<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
 			<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">
 				<?php if (!$canAdminEdit) { ?>
@@ -92,7 +92,7 @@ if ($user_id) {
 					<td align="right" nowrap="nowrap"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" /></td>
 				</tr>
 			</table>
-		<form>
+		<form accept-charset="utf-8">
 		<?php
 	}
 } else {
@@ -102,4 +102,3 @@ if ($user_id) {
 	}
 	echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwLogin') . '</td></tr></table>';
 }
-?>

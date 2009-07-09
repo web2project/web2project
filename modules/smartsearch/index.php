@@ -104,7 +104,7 @@ $titleBlock = new CTitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
 $titleBlock->show();
 ?>
 	<table class="std" width="100%" cellspacing="5" cellpadding="0" border="0">
-	<form name="frmSearch" action="?m=<?php echo $m; ?>"  method="POST">
+	<form name="frmSearch" action="?m=<?php echo $m; ?>"  method="POST" accept-charset="utf-8">
 	<tr><td>
 			<table cellspacing="5" cellpadding="0" border="0">
 				<tr>
@@ -239,4 +239,3 @@ if (isset($_POST['keyword'])) {
 </table>
 <?php
 }
-?>

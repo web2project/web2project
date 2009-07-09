@@ -71,7 +71,7 @@ if (!$suppressHeaders) {
 	}
 	echo $AppUI->_('Selected Project') . ': <b>' . $display_project_name . '</b>';
 ?>
-<form name="changeMe" action="./index.php?m=reports<?php echo $report_type_var; ?>" method="post">
+<form name="changeMe" action="./index.php?m=reports<?php echo $report_type_var; ?>" method="post" accept-charset="utf-8">
 <?php echo $AppUI->_('Projects') . ':' . arraySelect($project_list, 'project_id', 'size="1" class="text" onchange="changeIt();"', $project_id, false); ?>
 </form>
 
@@ -118,4 +118,3 @@ if ($report_type) {
 	$s .= '</table>';
 	echo $s;
 }
-?>

@@ -17,12 +17,12 @@ class events extends smartsearch {
 	public $search_fields = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
 	public $display_fields = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
 
-	function events() {
+	public function events() {
 		global $AppUI;
 		$this->table_extra = '(event_private = 0 or event_owner = ' . (int)$AppUI->user_id . ')';
 	}
 
-	function cevents() {
+	public function cevents() {
 		return new events();
 	}
 }

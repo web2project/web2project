@@ -86,7 +86,7 @@ $sprojects = arrayMerge(array('' => '(' . $AppUI->_('Move to Project', UI_OUTPUT
 //lets addthe reference to percent
 $spercent = arrayMerge(array('' => '(Progress)'), $percent);
 ?>
-            <form name='frm_bulk' method='POST' action='?m=projectdesigner&a=do_task_bulk_aed'>
+            <form name="frm_bulk" method="POST" action="?m=projectdesigner&a=do_task_bulk_aed" accept-charset="utf-8">
 			<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 			<input type="hidden" name="opt_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
 			<input type="hidden" name="opt_view_gantt" value="<?php echo (isset($view_options[0]['pd_option_view_gantt']) ? $view_options[0]['pd_option_view_gantt'] : 1); ?>" />
@@ -240,4 +240,3 @@ function build_date_list(&$date_array, $row) {
 
 	$date_array[$row['task_id']] = array($row['task_name'], $sdate, $shour, $smin);
 }
-?>

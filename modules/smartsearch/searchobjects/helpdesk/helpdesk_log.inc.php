@@ -15,7 +15,7 @@ class helpdesk_log extends smartsearch {
 	public $search_fields = array('task_log_name', 'task_log_description', 'task_log_help_desk_id');
 	public $display_fields = array('task_log_name', 'task_log_description', 'task_log_help_desk_id');
 
-	function chelpdesk_log() {
+	public function chelpdesk_log() {
 		return new helpdesk_log();
 	}
 }

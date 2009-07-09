@@ -65,4 +65,3 @@ foreach ($elements as $element => $on) {
 	}
 }
 $AppUI->redirect('m=projectdesigner&project_id=' . $project_id);
-?>

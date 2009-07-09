@@ -19,7 +19,7 @@ class task_log extends smartsearch {
 	public $search_fields = array('task_log_name', 'task_log_description', 'task_log_task');
 	public $display_fields = array('task_log_name', 'task_log_description', 'task_log_task');
 
-	function ctask_log() {
+	public function ctask_log() {
 		return new task_log();
 	}
 }

@@ -183,7 +183,7 @@ function chPriority(user_id) {
 }
 <?php } ?>
 </script>
-<form name="editFrm" action="index.php?m=tasks&a=tasksperuser" method="post">
+<form name="editFrm" action="index.php?m=tasks&a=tasksperuser" method="post" accept-charset="utf-8">
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 	<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
@@ -366,7 +366,7 @@ if ($do_report) {
 				}
 			}
 
-			$tmpuser = '<form name="assFrm' . $user_id . '" action="index.php?m=tasks&a=tasksperuser" method="post">
+			$tmpuser = '<form name="assFrm' . $user_id . '" action="index.php?m=tasks&a=tasksperuser" method="post" accept-charset="utf-8">
 					<input type="hidden" name="chUTP" value="0" />
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="rm" value="0" />
@@ -685,7 +685,7 @@ function hasChildren($list, $task) {
 // show orphaned tasks
 if (!$show_orphaned) {
 	$user_id = 0; //reset user id to zero (create new object - no user)
-	$tmpuser = '<form name="assFrm' . $user_id . '" action="index.php?m=tasks&a=tasksperuser" method="post">
+	$tmpuser = '<form name="assFrm' . $user_id . '" action="index.php?m=tasks&a=tasksperuser" method="post" accept-charset="utf-8">
 				<input type="hidden" name="del" value="1" />
 				<input type="hidden" name="rm" value="0" />
 				<input type="hidden" name="store" value="0" />

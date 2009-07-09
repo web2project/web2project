@@ -13,7 +13,7 @@ class companies extends smartsearch {
 	public $search_fields = array('company_name', 'company_address1', 'company_address2', 'company_city', 'company_state', 'company_zip', 'company_primary_url', 'company_description', 'company_email');
 	public $display_fields = array('company_name', 'company_address1', 'company_address2', 'company_city', 'company_state', 'company_zip', 'company_primary_url', 'company_description', 'company_email');
 
-	function ccompanies() {
+	public function ccompanies() {
 		return new companies();
 	}
 }

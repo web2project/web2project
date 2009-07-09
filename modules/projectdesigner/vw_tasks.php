@@ -198,7 +198,7 @@ global $expanded;
 $expanded = $AppUI->getPref('TASKSEXPANDED');
 $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
 ?>
-<form name='frm_tasks'>
+<form name="frm_tasks" accept-charset="utf-8"">
 <table id="tblTasks" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 <tr>
   <td colspan="16" align='left'>

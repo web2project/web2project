@@ -459,4 +459,3 @@ $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
 $vline->title->SetFont(FF_CUSTOM, FS_BOLD, 9);
 $graph->Add($vline);
 $graph->Stroke();
-?>

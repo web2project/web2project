@@ -60,7 +60,7 @@ if ($lang != 'en') {
 ksort($trans);
 
 $titleBlock = new CTitleBlock('Translation Management', 'rdf2.png', $m, $m . '.' . $a);
-$titleBlock->addCell($AppUI->_('Module'), '', '<form action="?m=system&a=translate" method="post" name="modlang">', '');
+$titleBlock->addCell($AppUI->_('Module'), '', '<form action="?m=system&a=translate" method="post" name="modlang" accept-charset="utf-8">', '');
 $titleBlock->addCell(arraySelect($modules, 'module', 'size="1" class="text" onchange="document.modlang.submit();"', $module));
 $titleBlock->addCell($AppUI->_('Language'));
 $temp = $AppUI->setWarning(false);
@@ -71,7 +71,7 @@ $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>
 
-<form action="?m=system&a=translate_save" method="post" name="editlang">
+<form action="?m=system&a=translate_save" method="post" name="editlang" accept-charset="utf-8">
 <input type="hidden" name="module" value="<?php echo $modules[$module]; ?>" />
 <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
 <table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbl">

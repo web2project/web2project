@@ -52,7 +52,6 @@ if (isset($_POST['filter'])) {
 	$AppUI->setState('LDAPFilter', $_POST['filter']);
 }
 $filter = $AppUI->getState('LDAPFilter', '(objectclass=Person)');
-//$filter = '(objectclass=dominoPerson)';
 
 $import = w2PgetParam($_POST, 'import');
 $test = w2PgetParam($_POST, 'test');
@@ -61,7 +60,7 @@ $AppUI->setState('LDAPProto', w2PgetParam($_POST, 'ldap_proto'));
 $proto = $AppUI->getState('LDAPProto', '3');
 
 ?>
-<form method="post">
+<form method="post" accept-charset="utf-8">
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="std">
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Server'); ?>:</td>

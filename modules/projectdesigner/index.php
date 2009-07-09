@@ -72,7 +72,7 @@ if (!$project_id) {
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	$titleBlock->addCell();
 	if ($canAddProject) {
-		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post">', '</form>');
+		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 	}
 	$titleBlock->show();
 ?>
@@ -98,7 +98,7 @@ if (!$project_id) {
 	}
 ?>
 	<table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
-	<form name="prjFrm" action="?m=projectdesigner" method="post">
+	<form name="prjFrm" action="?m=projectdesigner" method="post" accept-charset="utf-8">
 	<tr>
 		<td nowrap="nowrap" style="border: outset #eeeeee 1px;background-color:#fffff" >
 			<font color="<?php echo bestColor('#ffffff'); ?>">
@@ -253,19 +253,19 @@ if (!$project_id) {
 
 	if ($canAddProject) {
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post">', '</form>');
+		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 	}
 
 	if ($canAddTask) {
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post">', '</form>');
+		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 	}
 	if ($canEditProject) {
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new event') . '">', '', '<form action="?m=calendar&a=addedit&event_project=' . $project_id . '" method="post">', '</form>');
+		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new event') . '">', '', '<form action="?m=calendar&a=addedit&event_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') . '">', '', '<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post">', '</form>');
+		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') . '">', '', '<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 		$titleBlock->addCrumb('?m=projects&a=addedit&project_id=' . $project_id, 'edit this project');
 		if ($canDeleteProject) {
 			$titleBlock->addCrumbDelete('delete project', $canDelete, $msg);
@@ -291,7 +291,7 @@ if (!$project_id) {
 	$titleBlock->addCell();
 	$titleBlock->show();
 ?>
-<form name="frmWorkspace" action="?m=<?php echo $m; ?>" method="post">
+<form name="frmWorkspace" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_projectdesigner_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 	<input type="hidden" name="opt_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
@@ -528,7 +528,7 @@ function setDate( frm_name, f_date ) {
 ?>
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="std">
 
-<form name="frmDelete" action="./index.php?m=projects" method="post">
+<form name="frmDelete" action="./index.php?m=projects" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
@@ -855,4 +855,3 @@ var original_bgc = getStyle('td_sample', 'background-color', 'backgroundColor');
 </script>
 <?php
 }
-?>

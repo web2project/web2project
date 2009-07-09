@@ -180,7 +180,7 @@ if (!$ok) {
 	}
 
 </script>
-<form name="frmSelector">
+<form name="frmSelector" accept-charset="utf-8">
 <b><?php echo $AppUI->_('Select') . ' ' . $AppUI->_($title) . ':' ?></b>
 <?php
 	if (function_exists('styleRenderBoxTop')) {

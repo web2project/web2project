@@ -119,4 +119,3 @@ if ($del) {
 	}
 	$AppUI->redirect();
 }
-?>

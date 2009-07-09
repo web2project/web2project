@@ -96,4 +96,3 @@ if ($rm && $del) {
 	$AppUI->setMsg('User(s) unassigned from Task', UI_MSG_OK);
 }
 $AppUI->redirect();
-?>

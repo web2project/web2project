@@ -57,7 +57,7 @@ $taskDep = $q->loadHashList();
 $q->clear();
 
 ?>
-<form name="dependFrm" action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post">
+<form name="dependFrm" action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" accept-charset="utf-8">
 <input name="dosql" type="hidden" value="do_task_aed" />
 <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 <input name="sub_form" type="hidden" value="1" />

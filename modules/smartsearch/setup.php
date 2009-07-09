@@ -32,5 +32,3 @@ class SSearchNS {
 		return null;
 	}
 }
-
-?>

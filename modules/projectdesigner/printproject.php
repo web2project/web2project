@@ -193,7 +193,7 @@ TABLE.prjprint TR {
 	
 </style>
 <table width="100%" class="prjprint">
-<form name="frmDelete" action="./index.php?m=projects" method="post">
+<form name="frmDelete" action="./index.php?m=projects" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />

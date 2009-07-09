@@ -117,7 +117,7 @@ if ($is_tabbed) {
 
 ?>
 
-<form action='./index.php' method='get'>
+<form action=""./index.php" method="get" accept-charset="utf-8">
 
 
 <table id="tblProjects" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
@@ -296,4 +296,3 @@ if ($none) {
 if ($is_tabbed) {
 	shownavbar_links_prj($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
 }
-?>

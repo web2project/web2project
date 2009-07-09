@@ -120,7 +120,7 @@ function setTask( key, val ) {
 
 <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 
-<form name="uploadFrm" action="?m=links" method="post">
+<form name="uploadFrm" action="?m=links" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_link_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />

@@ -81,7 +81,7 @@ function delIt2(id) {
 -->
 </script>
 
-<form name="frmDel" action="./index.php?m=system" method="post">
+<form name="frmDel" action="./index.php?m=system" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_billingcode_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
@@ -90,14 +90,14 @@ function delIt2(id) {
 <table width="100%" border="0" cellpadding="1" cellspacing="1" class="std">
 <tr>
 	<td>
-	<form name="changeMe" action="./index.php?m=system&amp;a=billingcode" method="post">
+	<form name="changeMe" action="./index.php?m=system&amp;a=billingcode" method="post" accept-charset="utf-8">
 		<?php echo arraySelect($company_list, 'company_id', 'size="1" class="text" onchange="changeIt();"', $company_id, false); ?>
 	</form>
 	</td>
 </tr>
 <tr>
 	<th width="40">&nbsp;
-	<form name="changeuser" action="./index.php?m=system" method="post">
+	<form name="changeuser" action="./index.php?m=system" method="post" accept-charset="utf-8">
 		<input type="hidden" name="dosql" value="do_billingcode_aed" />
 		<input type="hidden" name="del" value="0" />
 		<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />

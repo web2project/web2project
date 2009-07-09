@@ -54,7 +54,6 @@ if (intval($obj->task_start_date)) {
 } else {
 	$start_date = new CDate();
 }
-//$start_date = intval( $obj->task_start_date ) ? new CDate( $obj->task_start_date ) : new CDate();
 $end_date = intval($obj->task_end_date) ? new CDate($obj->task_end_date) : null;
 
 // convert the numeric calendar_working_days config array value to a human readable output format
@@ -97,7 +96,7 @@ function setDate( frm_name, f_date ) {
 }
 </script>
 
-<form name="datesFrm" action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post">
+<form name="datesFrm" action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" accept-charset="utf-8">
 <input name="dosql" type="hidden" value="do_task_aed" />
 <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 <input name="sub_form" type="hidden" value="1" />

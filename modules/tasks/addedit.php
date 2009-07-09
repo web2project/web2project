@@ -253,7 +253,7 @@ var cal_day_end = <?php echo intval(w2PgetConfig('cal_day_end')); ?>;
 var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours')); ?>;
 </script>
 
-<form name="editFrm" action="?m=tasks&project_id=<?php echo $task_project; ?>" method="post" onSubmit="return submitIt(document.editFrm);">
+<form name="editFrm" action="?m=tasks&project_id=<?php echo $task_project; ?>" method="post" onSubmit="return submitIt(document.editFrm);" accept-charset="utf-8">
 	<input name="dosql" type="hidden" value="do_task_aed" />
 	<input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 	<input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />
@@ -337,4 +337,3 @@ $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_dates', 'Dates');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_depend', 'Dependencies');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_resource', 'Human Resources');
 $tabBox->show('', true);
-?>

@@ -40,4 +40,3 @@ if ($del) {
 }
 
 $AppUI->redirect('m=system&a=billingcode&company_id=' . w2PgetParam($_REQUEST, 'company_id', null));
-?>

@@ -100,10 +100,10 @@ $bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext"
 
 // setup the title block
 $titleBlock = new CTitleBlock('Projects', 'applet3-48.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="searchfilter"><td nowrap="nowrap" align="right">' . $AppUI->_('Search') . ':</td><td nowrap="nowrap" align="left">' . $bufferSearch . '</form></tr><tr><form action="?m=projects" method="post" name="typeIdForm"><td nowrap="nowrap" align="right">' . $AppUI->_('Type') . '</td><td nowrap="nowrap" align="left">' . arraySelect($project_types, 'project_type', 'size="1" class="text" onChange="document.typeIdForm.submit();"', $project_type, false) . '</td></form></tr></table>', '', '', '');
-$titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="pickCompany"><td nowrap="nowrap" align="right">' . $AppUI->_('Company') . '</td><td nowrap="nowrap" align="left">' . $buffer . '</td></form></tr><tr><form action="?m=projects" method="post" name="userIdForm"><td nowrap="nowrap" align="right">' . $AppUI->_('Owner') . '</td><td nowrap="nowrap" align="left">' . arraySelect($user_list, 'project_owner', 'size="1" class="text" onChange="document.userIdForm.submit();"', $owner, false) . '</td></form></tr></table>', '', '', '');
+$titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="searchfilter" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Search') . ':</td><td nowrap="nowrap" align="left">' . $bufferSearch . '</form></tr><tr><form action="?m=projects" method="post" name="typeIdForm" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Type') . '</td><td nowrap="nowrap" align="left">' . arraySelect($project_types, 'project_type', 'size="1" class="text" onChange="document.typeIdForm.submit();"', $project_type, false) . '</td></form></tr></table>', '', '', '');
+$titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="pickCompany" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Company') . '</td><td nowrap="nowrap" align="left">' . $buffer . '</td></form></tr><tr><form action="?m=projects" method="post" name="userIdForm" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Owner') . '</td><td nowrap="nowrap" align="left">' . arraySelect($user_list, 'project_owner', 'size="1" class="text" onChange="document.userIdForm.submit();"', $owner, false) . '</td></form></tr></table>', '', '', '');
 if ($canAuthor) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->addCell('<span title="' . $AppUI->_('Projects') . '::' . $AppUI->_('Print projects list') . '."><a href="javascript: void(0);" onclick ="window.open(\'index.php?m=projects&a=printprojects&dialog=1&suppressHeaders=1\', \'printprojects\',\'width=1200, height=600, menubar=1, scrollbars=1\')">
 		<img src="' . w2PfindImage('printer.png') . '" border="0" width="22" heigth"22" />
@@ -169,4 +169,3 @@ foreach ($project_statuses as $project_status) {
 $min_view = true;
 $tabBox->add('viewgantt', 'Gantt');
 $tabBox->show();
-?>

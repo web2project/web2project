@@ -7,4 +7,3 @@ require_once ($AppUI->getModuleClass('files'));
 
 $showProject = false;
 require (w2PgetConfig('root_dir') . '/modules/files/index_table.php');
-?>

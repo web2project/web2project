@@ -17,7 +17,7 @@ class files extends smartsearch {
 	public $display_fields = array('file_name', 'file_description', 'file_type', 'file_version', 'file_co_reason');
 	public $follow_up_link = 'fileviewer.php?file_id=';
 
-	function cfiles() {
+	public function cfiles() {
 		return new files();
 	}
 }

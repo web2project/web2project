@@ -436,7 +436,7 @@ if ($project_id) {
 	$open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
 ?>
 <table width='100%' border='0' cellpadding='1' cellspacing='0'>
-<form name='task_list_options' method='POST' action='<?php echo $query_string; ?>'>
+<form name="task_list_options" method="POST" action=""<?php echo $query_string; ?>" accept-charset="utf-8">
 <input type='hidden' name='show_task_options' value='1' />
 <tr>
   <td align='left'>
@@ -505,7 +505,7 @@ foreach ($projects as $k => $p) {
 
 <tr>
   	<td>
-	<form name="assFrm<?php echo ($p['project_id']) ?>" action="index.php?m=<?php echo ($m); ?>&a=<?php echo ($a); ?>" method="post">
+	<form name="assFrm<?php echo ($p['project_id']) ?>" action="index.php?m=<?php echo ($m); ?>&a=<?php echo ($a); ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="rm" value="0" />
 	<input type="hidden" name="store" value="0" />

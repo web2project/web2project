@@ -60,4 +60,3 @@ if ($edit_field_id != null) {
 		$AppUI->setMsg($AppUI->_('Custom field added successfully'), UI_MSG_OK, true);
 	}
 }
-?>

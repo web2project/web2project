@@ -31,4 +31,3 @@ class CSetupReports {
 		return null;
 	}
 }
-?>

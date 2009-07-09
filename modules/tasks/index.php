@@ -51,8 +51,8 @@ $search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext') :
 $search_text = w2PformSafe($search_text, true);
 
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':');
-$titleBlock->addCell('<input type="text" class="text" size="20" name="searchtext" onChange="document.searchfilter.submit();" value="' . $search_text . '" title="' . $AppUI->_('Search in name and description fields') . '"/>
-       	<!--<input type="submit" class="button" value=">" title="' . $AppUI->_('Search in name and description fields') . '"/>-->', '', '<form action="?m=tasks" method="post" id="searchfilter">', '</form>');
+$titleBlock->addCell('<input type="text" class="text" size="20" name="searchtext" onChange="document.searchfilter.submit();" value="' . $search_text . '" title="' . $AppUI->_('Search in name and description fields') . '"/>', 
+		'', '<form action="?m=tasks" method="post" id="searchfilter" accept-charset="utf-8">', '</form>');
 
 // Let's see if this user has admin privileges
 if (!getDenyRead('admin')) {
@@ -60,16 +60,16 @@ if (!getDenyRead('admin')) {
 	$titleBlock->addCell($AppUI->_('User') . ':');
 
 	$user_list = $perms->getPermittedUsers('tasks');
-	$titleBlock->addCell(arraySelect($user_list, 'user_id', 'size="1" class="text" onChange="document.userIdForm.submit();"', $user_id, false), '', '<form action="?m=tasks" method="post" name="userIdForm">', '</form>');
+	$titleBlock->addCell(arraySelect($user_list, 'user_id', 'size="1" class="text" onChange="document.userIdForm.submit();"', $user_id, false), '', '<form action="?m=tasks" method="post" name="userIdForm" accept-charset="utf-8">', '</form>');
 }
 
 $titleBlock->addCell();
 $titleBlock->addCell($AppUI->_('Company') . ':');
-$titleBlock->addCell(arraySelect($filters2, 'f2', 'size=1 class=text onChange="document.companyFilter.submit();"', $f2, false), '', '<form action="?m=tasks" method="post" name="companyFilter">', '</form>');
+$titleBlock->addCell(arraySelect($filters2, 'f2', 'size=1 class=text onChange="document.companyFilter.submit();"', $f2, false), '', '<form action="?m=tasks" method="post" name="companyFilter" accept-charset="utf-8">', '</form>');
 
 $titleBlock->addCell();
 if ($canEdit && $project_id) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 
 $titleBlock->show();
@@ -83,7 +83,7 @@ $in = $AppUI->getState('inactive') == -1 ? '' : 'in';
 $titleBlock = new CTitleBlock('', 'shim.gif');
 $titleBlock->showhelp = false;
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Task Filter') . ':');
-$titleBlock->addCell(arraySelect($filters, 'f', 'size=1 class=text onChange="document.taskFilter.submit();"', $f, true), '', '<form action="?m=tasks" method="post" name="taskFilter">', '</form>');
+$titleBlock->addCell(arraySelect($filters, 'f', 'size=1 class=text onChange="document.taskFilter.submit();"', $f, true), '', '<form action="?m=tasks" method="post" name="taskFilter" accept-charset="utf-8">', '</form>');
 $titleBlock->addCell();
 
 $titleBlock->addCrumb('?m=tasks&a=todo&user_id=' . $user_id, 'my todo');
@@ -100,4 +100,3 @@ $titleBlock->show();
 // include the re-usable sub view
 $min_view = false;
 include (W2P_BASE_DIR . '/modules/tasks/tasks.php');
-?>

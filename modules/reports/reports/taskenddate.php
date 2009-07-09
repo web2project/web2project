@@ -40,7 +40,7 @@ function setDate( frm_name, f_date ) {
 }
 </script>
 
-<form name="editFrm" action="index.php?m=reports" method="post">
+<form name="editFrm" action="index.php?m=reports" method="post" accept-charset="utf-8">
 <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
 <?php
@@ -156,4 +156,3 @@ if ($do_report) {
 </tr>
 </table>';
 }
-?>

@@ -66,13 +66,13 @@ $department = $tmpDepartments;
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 <tr>
-	<form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="form_cb">
+	<form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="form_cb" accept-charset="utf-8">
 	<input type="hidden" name="show_form" value="1" />
 	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by'); ?>:&nbsp;</td>
 	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td><td align="right" nowrap="nowrap"><input type="checkbox" name="add_pwoid" id="add_pwoid" onclick="document.form_cb.submit()" <?php echo $addPwOiD ? 'checked="checked"' : ''; ?> /><label for="add_pwoid"><?php echo $AppUI->_('Show Projects whose Owner is Member of the Dep.'); ?>?</label></td>
-	<td align="right" nowrap="nowrap"><form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="checkPwT"><input type="checkbox" name="add_pwt" id="add_pwt" onclick="document.form_cb.submit()" <?php echo $addPwT ? 'checked="checked"' : ''; ?> /><label for="add_pwt"><?php echo $AppUI->_('Show Projects with assigned Tasks'); ?>?</label></td>
+	<td align="right" nowrap="nowrap"><form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="checkPwT" accept-charset="utf-8"><input type="checkbox" name="add_pwt" id="add_pwt" onclick="document.form_cb.submit()" <?php echo $addPwT ? 'checked="checked"' : ''; ?> /><label for="add_pwt"><?php echo $AppUI->_('Show Projects with assigned Tasks'); ?>?</label></td>
 	</form>
-	<td align="right" nowrap="nowrap"><form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject"><?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?></form></td>
+	<td align="right" nowrap="nowrap"><form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject" accept-charset="utf-8"><?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?></form></td>
 </tr>
 </table>
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">

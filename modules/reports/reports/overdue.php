@@ -156,4 +156,3 @@ foreach ($tasks as $task_id => $detail) {
 $pdf->ezTable($pdfdata, $columns, $title, $options);
 
 $pdf->ezStream();
-?>
