@@ -39,7 +39,7 @@ if (!defined('W2P_BASE_DIR')) {
 include ('overrides.php');
 ?>
 <!--please leave action argument empty -->
-<form method="post" name="lostpassform">
+<form method="post" name="lostpassform" accept-charset="utf-8">
 <table align="center" border="0" width="250" cellpadding="6" cellspacing="0" class="std">
 <input type="hidden" name="lostpass" value="1" />
 <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
