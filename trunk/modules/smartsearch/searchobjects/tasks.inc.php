@@ -16,7 +16,7 @@ class tasks extends smartsearch {
 	public $search_fields = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
 	public $display_fields = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
 
-	function ctasks() {
+	public function ctasks() {
 		return new tasks();
 	}
 }

@@ -79,4 +79,3 @@ foreach ($modules as $module) {
 }
 $s .= '</table>';
 echo $s;
-?>

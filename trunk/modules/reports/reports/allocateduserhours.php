@@ -40,7 +40,7 @@ function setDate( frm_name, f_date ) {
 }
 </script>
 
-<form name="editFrm" action="index.php?m=reports" method="post">
+<form name="editFrm" action="index.php?m=reports" method="post" accept-charset="utf-8">
 <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 <input type="hidden" name="report_category" value="<?php echo $report_category; ?>" />
 <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
@@ -499,4 +499,3 @@ function showDays() {
 	$total_hours_capacity = $working_days_count * w2PgetConfig('daily_working_hours') * count($user_usage);
 	$total_hours_capacity_all = $working_days_count * w2PgetConfig('daily_working_hours') * count($user_list);
 }
-?>

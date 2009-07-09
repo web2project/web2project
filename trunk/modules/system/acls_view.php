@@ -78,5 +78,5 @@ $module = (isset($_POST['module']) && $_POST['module'] != '') ?  $_POST['module'
 $module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module);
 $action = (isset($_POST['action']) && $_POST['action'] != '') ?  $_POST['action'] : '';
 $action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action);
-echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
+echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
 echo $table;

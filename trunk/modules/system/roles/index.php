@@ -77,7 +77,7 @@ function showRow($role = null) {
 	$s = '';
 	if (($role_id == $id || $id == 0) && $canEdit) {
 		// edit form
-		$s .= '<form name="roleFrm" method="post" action="?m=system&u=roles">';
+		$s .= '<form name="roleFrm" method="post" action="?m=system&u=roles" accept-charset="utf-8">';
 		$s .= '<input type="hidden" name="dosql" value="do_role_aed" />';
 		$s .= '<input type="hidden" name="del" value="0" />';
 		$s .= '<input type="hidden" name="role_id" value="' . $id . '" />';
@@ -110,6 +110,3 @@ if ($role_id == 0) {
 }
 ?>
 </table>
-<?php
-// Do all the tab stuff.
-?>

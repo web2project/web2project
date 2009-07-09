@@ -16,7 +16,7 @@ class forums extends smartsearch {
 	public $search_fields = array('forum_name', 'forum_description');
 	public $display_fields = array('forum_name', 'forum_description');
 
-	function cforums() {
+	public function cforums() {
 		return new forums();
 	}
 }

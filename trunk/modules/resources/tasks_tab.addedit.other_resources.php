@@ -67,8 +67,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
 }
 ?>
 </script>
-<form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>"
-  method="post" name="otherFrm">
+<form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" name="otherFrm" accept-charset="utf-8">
 <input type="hidden" name="sub_form" value="1" />
 <input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
 <input type="hidden" name="dosql" value="do_task_aed" />

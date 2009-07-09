@@ -332,4 +332,3 @@ if ($w2Pconfig['restrict_color_selection']) {
 </map>
 <?php
 }
-?>

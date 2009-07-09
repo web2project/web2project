@@ -41,4 +41,3 @@ if ($del) {
 	}
 }
 $AppUI->redirect('m=system&u=syskeys');
-?>

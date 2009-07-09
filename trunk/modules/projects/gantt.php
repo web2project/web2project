@@ -357,4 +357,3 @@ $today = date('y-m-d');
 $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
 $graph->Add($vline);
 $graph->Stroke();
-?>

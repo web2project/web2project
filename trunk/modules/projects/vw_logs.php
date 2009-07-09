@@ -50,7 +50,7 @@ function delIt2(id) {
 <?php } ?>
 </script>
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="std">
-<form name="frmFilter" action="./index.php" method="get">
+<form name="frmFilter" action="./index.php" method="get" accept-charset="utf-8">
 <tr>
 	<td width="98%">&nbsp;</td>
 	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive') ?></label></td>
@@ -70,7 +70,7 @@ function delIt2(id) {
 </form>
 </table>
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
-<form name="frmDelete2" action="./index.php?m=tasks" method="post">
+<form name="frmDelete2" action="./index.php?m=tasks" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="task_log_id" value="0" />

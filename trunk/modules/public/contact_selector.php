@@ -140,7 +140,7 @@ $contacts = $q->loadHashList('contact_id');
 ?>
 
 <form action="index.php?m=public&a=contact_selector&dialog=1&<?php if (!is_null($call_back))
-	echo 'call_back=' . $call_back . '&'; ?>company_id=<?php echo $company_id ?>" method='post' name='frmContactSelect'>
+	echo 'call_back=' . $call_back . '&'; ?>company_id=<?php echo $company_id ?>" method="post" name="frmContactSelect" accept-charset="utf-8">
 
 	<?php
 		$actual_department = '';

@@ -53,7 +53,7 @@ function showRow($id = 0, $name = '', $label = '') {
 	global $canEdit, $syskey_id, $CR, $AppUI;
 	$s = '';
 	if ($syskey_id == $id && $canEdit) {
-		$s .= '<form name="sysKeyFrm" method="post" action="?m=system&u=syskeys&a=do_syskey_aed">';
+		$s .= '<form name="sysKeyFrm" method="post" action="?m=system&u=syskeys&a=do_syskey_aed" accept-charset="utf-8">';
 		$s .= '<input type="hidden" name="del" value="0" />';
 		$s .= '<input type="hidden" name="syskey_id" value="' . $id . '" />';
 		$s .= '<tr>';

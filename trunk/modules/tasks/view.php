@@ -68,8 +68,8 @@ $durnTypes = w2PgetSysVal('TaskDurationType');
 $titleBlock = new CTitleBlock('View Task', 'applet-48.png', $m, $m . '.' . $a);
 $titleBlock->addCell();
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $obj->task_project . '&task_parent=' . $task_id . '" method="post">', '</form>');
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') . '">', '', '<form action="?m=files&a=addedit&project_id=' . $obj->task_project . '&file_task=' . $obj->task_id . '" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $obj->task_project . '&task_parent=' . $task_id . '" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') . '">', '', '<form action="?m=files&a=addedit&project_id=' . $obj->task_project . '&file_task=' . $obj->task_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->addCrumb('?m=tasks', 'tasks list');
 if ($canReadProject) {
@@ -119,7 +119,7 @@ function delIt() {
 </script>
 
 
-<form name="frmDelete" action="./index.php?m=tasks" method="post">
+<form name="frmDelete" action="./index.php?m=tasks" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_task_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
@@ -399,4 +399,3 @@ if (count($tabBox->tabs)) {
 
 if ($tabBox_show == 1)
 	$tabBox->show();
-?>

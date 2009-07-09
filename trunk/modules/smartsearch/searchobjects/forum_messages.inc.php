@@ -16,7 +16,7 @@ class forum_messages extends smartsearch {
 	public $search_fields = array('message_title', 'message_body');
 	public $display_fields = array('message_title', 'message_body');
 
-	function cforum_messages() {
+	public function cforum_messages() {
 		return new forum_messages();
 	}
 }

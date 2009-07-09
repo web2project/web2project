@@ -145,7 +145,7 @@ function showFullProject() {
 </script>
 
 
-<form name="editFrm" method="post" action="?<?php echo "m=$m&a=$a&tab=$tab&project_id=$project_id"; ?>">
+<form name="editFrm" method="post" action="?<?php echo "m=$m&a=$a&tab=$tab&project_id=$project_id"; ?>" accept-charset="utf-8">
 <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
 <table border="0" cellpadding="4" cellspacing="0" class="std" width="100%">
 <tr>

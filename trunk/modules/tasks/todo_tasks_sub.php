@@ -11,7 +11,7 @@ $perms = &$AppUI->acl();
 $canDelete = $perms->checkModuleItem($m, 'delete');
 ?>
 <table width="100%" border="0" cellpadding="1" cellspacing="0">
-<form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&a=' . $a . '&date=' . $date; ?>">
+<form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&a=' . $a . '&date=' . $date; ?>" accept-charset="utf-8">
 <input type="hidden" name="show_form" value="1" />
 
 <tr>
@@ -75,7 +75,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 </form>
 </table>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-<form name="form" method="post" action="index.php?<?php echo "m=$m&a=$a&date=$date"; ?>">
+<form name="form" method="post" action="index.php?<?php echo "m=$m&a=$a&date=$date"; ?>" accept-charset="utf-8">
 <tr>
 	<th width="10">&nbsp;</th>
 	<th width="10"><?php echo $AppUI->_('Pin'); ?></th>

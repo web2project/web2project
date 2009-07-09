@@ -503,4 +503,3 @@ if (is_file(TTF_DIR . 'FreeSans.ttf')) {
 }
 $graph->Add($vline);
 $graph->Stroke();
-?>

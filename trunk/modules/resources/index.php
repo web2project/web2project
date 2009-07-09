@@ -12,7 +12,7 @@ $canEdit = $perms->checkModule($m, 'edit');
 
 $titleBlock = &new CTitleBlock('Resources', 'resources.png', $m, $m . '.' . $a);
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new resource') . '">', '', '<form action="?m=resources&a=addedit" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new resource') . '">', '', '<form action="?m=resources&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->show();
 
@@ -29,4 +29,3 @@ foreach ($obj->loadTypes() as $type) {
 }
 
 $tabBox->show();
-?>

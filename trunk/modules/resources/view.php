@@ -34,7 +34,7 @@ if (!$obj->load($resource_id)) {
 
 $titleBlock = &new CTitleBlock('View Resource', 'resources.png', $m, $m . '.' . $a);
 if ($canAdd) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new resource') . '" />', '', '<form action="?m=resources&a=addedit" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new resource') . '" />', '', '<form action="?m=resources&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 
 $titleBlock->addCrumb('?m=resources', 'resource list');
@@ -52,7 +52,7 @@ if ($canDelete) {
   can_delete = true;
   delete_msg = '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Resource') . '?'; ?>';
 </script>
-<form name="frmDelete" action="./index.php?m=resources" method="post">
+<form name="frmDelete" action="./index.php?m=resources" method="post" accept-charset="utf-8">
   <input type="hidden" name="dosql" value="do_resource_aed" />
   <input type="hidden" name="del" value="1" />
   <input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />

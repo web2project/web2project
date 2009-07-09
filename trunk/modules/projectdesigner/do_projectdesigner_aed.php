@@ -20,4 +20,3 @@ $project_id = $elements['project_id'];
 
 $AppUI->setMsg('Your workspace has been saved', UI_MSG_OK);
 $AppUI->redirect('m=projectdesigner&project_id=' . $project_id);
-?>

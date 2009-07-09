@@ -16,7 +16,7 @@ class departments extends smartsearch {
 	public $search_fields = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
 	public $display_fields = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
 
-	function cdepartments() {
+	public function cdepartments() {
 		return new departments();
 	}
 }

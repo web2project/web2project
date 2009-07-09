@@ -71,7 +71,7 @@ function addTasks() {
 }
 </script>
 
-<form name="editFrm" action="?m=<?php echo $m; ?>" method="post">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_addtasks_aed" />
 	<input type="hidden" name="project" value="<?php echo $project_id; ?>" />
 	<input type="hidden" name="project_name" value="<?php echo $obj->project_name; ?>" />
@@ -139,5 +139,3 @@ function addTasks() {
 </tbody>
 </table>
 </form>
-<?php
-?>

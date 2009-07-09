@@ -58,4 +58,3 @@ function resource_postsave() {
 		}
 	}
 }
-?>

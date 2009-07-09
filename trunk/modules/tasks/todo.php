@@ -228,4 +228,3 @@ if ($m == 'tasks' && $a == 'todo') {
 } else {
 	include W2P_BASE_DIR . '/modules/tasks/todo_tasks_sub.php';
 }
-?>

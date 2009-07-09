@@ -281,4 +281,3 @@ if (is_array($selected) && count($selected)) {
 	}
 }
 $AppUI->redirect('m=projectdesigner&project_id=' . $project_id);
-?>

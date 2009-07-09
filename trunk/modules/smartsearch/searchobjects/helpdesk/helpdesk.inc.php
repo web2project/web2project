@@ -12,7 +12,7 @@ class helpdesk extends smartsearch {
 	public $search_fields = array('item_title', 'item_summary', 'item_os', 'item_application', 'item_requestor', 'item_requestor_email');
 	public $display_fields = array('item_title', 'item_summary', 'item_os', 'item_application', 'item_requestor', 'item_requestor_email');
 
-	function chelpdesk() {
+	public function chelpdesk() {
 		return new helpdesk();
 	}
 }

@@ -41,4 +41,3 @@ if (!is_array($role)) {
 	$tabBox->add('vw_role_perms', 'Permissions');
 	$tabBox->show();
 } // End of check for valid role
-?>

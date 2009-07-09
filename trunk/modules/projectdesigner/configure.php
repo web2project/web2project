@@ -98,7 +98,7 @@ $titleBlock->show();
 
 ?>
 
-<form method="post">
+<form method="post" accept-charset="utf-8">
 <table class="std">
 <?php
 foreach ($config_options as $key => $value) {

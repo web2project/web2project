@@ -16,7 +16,7 @@ class contacts extends smartsearch {
 	public $search_fields = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_email', 'contact_email2', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
 	public $display_fields = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_email', 'contact_email2', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
 
-	function ccontacts() {
+	public function ccontacts() {
 		return new contacts();
 	}
 }

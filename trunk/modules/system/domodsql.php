@@ -106,4 +106,3 @@ switch ($cmd) {
 		break;
 }
 $AppUI->redirect();
-?>

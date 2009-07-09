@@ -143,7 +143,7 @@ function setDate( frm_name, f_date ) {
 
 <a name="log"></a>
 <form name="editFrm" action="?m=tasks&a=view&task_id=<?php echo $task_id; ?>" method="post"
-  onsubmit='updateEmailContacts();'>
+  onsubmit="updateEmailContacts();" accept-charset="utf-8">
 	<input type="hidden" name="uniqueid" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="task_log_id" value="<?php echo $log->task_log_id; ?>" />

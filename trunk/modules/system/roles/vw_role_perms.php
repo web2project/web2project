@@ -189,7 +189,7 @@ foreach ($role_acls as $acl) {
 
 <?php if ($canEdit) { ?>
 
-<form name="frmPerms" method="post" action="?m=system&amp;u=roles">
+<form name="frmPerms" method="post" action="?m=system&amp;u=roles" accept-charset="utf-8">
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="dosql" value="do_perms_aed" />
 	<input type="hidden" name="role_id" value="<?php echo $role_id; ?>" />

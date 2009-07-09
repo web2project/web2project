@@ -16,7 +16,7 @@ class users extends smartsearch {
 	public $search_fields = array('user_username', 'user_signature');
 	public $display_fields = array('user_username', 'user_signature');
 
-	function cusers() {
+	public function cusers() {
 		return new users();
 	}
 }

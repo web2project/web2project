@@ -50,4 +50,3 @@ if ($del) {
 	}
 	$AppUI->redirect();
 }
-?>

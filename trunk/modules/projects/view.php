@@ -73,19 +73,19 @@ if (isset($_POST['searchtext'])) {
 
 $search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext') : '';
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':');
-$titleBlock->addCell('<input type="text" class="text" SIZE="10" name="searchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>
-       	<!--<input type="submit" class="button" value=">" title="' . $AppUI->_('Search in name and description fields') . '"/>-->', '', '<form action="?m=projects&a=view&project_id=' . $project_id . '" method="post" id="searchfilter">', '</form>');
+$titleBlock->addCell('<input type="text" class="text" SIZE="10" name="searchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>',
+		'', '<form action="?m=projects&a=view&project_id=' . $project_id . '" method="post" id="searchfilter" accept-charset="utf-8">', '</form>');
 
 if ($canEditT) {
 	$titleBlock->addCell();
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '" />', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '" />', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 if ($canEdit) {
 	$titleBlock->addCell();
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new event') . '" />', '', '<form action="?m=calendar&a=addedit&event_project=' . $project_id . '" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new event') . '" />', '', '<form action="?m=calendar&a=addedit&event_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 
 	$titleBlock->addCell();
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') . '" />', '', '<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') . '" />', '', '<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->addCrumb('?m=projects', 'projects list');
 if ($canEdit) {
@@ -127,7 +127,7 @@ function delIt() {
 <?php } ?>
 </script>
 
-<form name="frmDelete" action="./index.php?m=projects" method="post">
+<form name="frmDelete" action="./index.php?m=projects" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
@@ -370,4 +370,3 @@ $f = 'all';
 $min_view = true;
 
 $tabBox->show();
-?>

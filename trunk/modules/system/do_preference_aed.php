@@ -45,4 +45,3 @@ foreach ($_POST['pref_name'] as $name => $value) {
 	}
 }
 $AppUI->redirect();
-?>

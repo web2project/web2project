@@ -96,7 +96,7 @@ if ($canEdit) {
     $titleBlock = new CTitleBlock( 'Links', 'folder5.png', $m, "$m.$a" );
     $titleBlock->addCell(
         '<input type="submit" class="button" value="'.$AppUI->_('new link').'">', '',
-        '<form action="?m=links&a=addedit&project_id='.$project_id.'&task_id='.$task_id.'" method="post">', '</form>'
+        '<form action="?m=links&a=addedit&project_id='.$project_id.'&task_id='.$task_id.'" method="post" accept-charset="utf-8">', '</form>'
     );
     $titleBlock->show();
 }

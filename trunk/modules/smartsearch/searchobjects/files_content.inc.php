@@ -17,7 +17,7 @@ class files_content extends smartsearch {
 	public $search_fields = array('word');
 	public $display_fields = array('word');
 
-	function cfiles_content() {
+	public function cfiles_content() {
 		return new files_content();
 	}
 }
