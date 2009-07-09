@@ -56,4 +56,3 @@ if ($del) {
 	}
 	$AppUI->redirect();
 }
-?>

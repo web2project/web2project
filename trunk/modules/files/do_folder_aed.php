@@ -59,4 +59,3 @@ if (($msg = $obj->store())) {
 	$AppUI->setMsg($file_folder_id ? 'updated' : 'added', UI_MSG_OK, true);
 }
 $AppUI->redirect($redirect);
-?>

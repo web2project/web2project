@@ -46,7 +46,7 @@ $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
 // setup the title block
 $titleBlock = new CTitleBlock('Files', 'folder5.png', $m, "$m.$a");
 $titleBlock->addCell($AppUI->_('Filter') . ':');
-$titleBlock->addCell(arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id), '', '<form name="pickProject" action="?m=files" method="post">', '</form>');
+$titleBlock->addCell(arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id), '', '<form name="pickProject" action="?m=files" method="post" accept-charset="utf-8">', '</form>');
 
 // override the $canEdit variable passed from the main index.php in order to check folder permissions
 /** get permitted folders **/
@@ -65,8 +65,8 @@ if (!$limited) {
 }
 
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') . '">', '', '<form action="?m=files&a=addedit&folder=' . $folder . '" method="post">', '</form>');
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new folder') . '">', '', '<form action="?m=files&a=addedit_folder" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') . '">', '', '<form action="?m=files&a=addedit&folder=' . $folder . '" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new folder') . '">', '', '<form action="?m=files&a=addedit_folder" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->show();
 

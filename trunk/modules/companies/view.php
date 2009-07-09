@@ -47,9 +47,9 @@ $countries = w2PgetSysVal('GlobalCountries');
 $titleBlock = new CTitleBlock('View Company', 'handshake.png', $m, "$m.$a");
 if ($canEdit) {
 	$titleBlock->addCell();
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post">', '</form>');
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '" />', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '" method="post">', '</form>');
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '" />', '', '<form action="?m=projects&a=addedit&company_id=' . $company_id . '" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '" />', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '" />', '', '<form action="?m=projects&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->addCrumb('?m=companies', 'company list');
 if ($canEdit) {
@@ -77,7 +77,7 @@ function delIt() {
 </script>
 
 <?php if ($canDelete) { ?>
-	<form name="frmDelete" action="./index.php?m=companies" method="post">
+	<form name="frmDelete" action="./index.php?m=companies" method="post" accept-charset="utf-8">
 		<input type="hidden" name="dosql" value="do_company_aed" />
 		<input type="hidden" name="del" value="1" />
 		<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />

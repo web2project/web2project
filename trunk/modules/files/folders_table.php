@@ -314,7 +314,7 @@ function getFolders($parent, $level = 0) {
 			if ($file_count > 0) {
 				$s .= ' <a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a>';
 			}
-			$s .= '</td><form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post">
+			$s .= '</td><form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
 				<input type="hidden" name="dosql" value="do_folder_aed" />
 				<input type="hidden" name="del" value="1" />
 				<input type="hidden" name="file_folder_id" value="' . $row['file_folder_id'] . '" />
@@ -514,13 +514,13 @@ function displayFiles($folder) {
 			$file = $row;
 		}
 		$s .= '
-			<form name="frm_remove_file_' . $file['file_id'] . '" action="?m=files" method="post">
+			<form name="frm_remove_file_' . $file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
 			<input type="hidden" name="dosql" value="do_file_aed" />
 			<input type="hidden" name="del" value="1" />
 			<input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
 			<input type="hidden" name="redirect" value="' . $current_uri . '" />
 			</form>		
-			<form name="frm_duplicate_file_' . $file['file_id'] . '" action="?m=files" method="post">
+			<form name="frm_duplicate_file_' . $file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
 			<input type="hidden" name="dosql" value="do_file_aed" />
 			<input type="hidden" name="duplicate" value="1" />
 			<input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
@@ -555,13 +555,13 @@ function displayFiles($folder) {
 				if ($file_row['file_name'] == $row['file_name'] && $file_row['file_project'] == $row['file_project']) {
 					$file_icon = getIcon($file_row['file_type']);
 					$file_date = new CDate($file_row['file_date']);
-					$hidden_table .= '<form name="frm_delete_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post">
+					$hidden_table .= '<form name="frm_delete_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
 									<input type="hidden" name="dosql" value="do_file_aed" />
 									<input type="hidden" name="del" value="1" />
 									<input type="hidden" name="file_id" value="' . $file_row['file_id'] . '" />
 									<input type="hidden" name="redirect" value="' . $current_uri . '" />
 									</form>';
-					$hidden_table .= '<form name="frm_duplicate_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post">
+					$hidden_table .= '<form name="frm_duplicate_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
 									<input type="hidden" name="dosql" value="do_file_aed" />
 									<input type="hidden" name="duplicate" value="1" />
 									<input type="hidden" name="file_id" value="' . $file_row['file_id'] . '" />
@@ -749,7 +749,7 @@ $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')
 ?>
 	<tr>
 	    <td colspan="50" align="right">
-	          <form name='frm_bulk' method='POST' action='?m=files&a=do_files_bulk_aed'>
+	          <form name="frm_bulk" method="POST" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
 			  <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
 	          <table id="tbl_bulk">
 	          <tr>

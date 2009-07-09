@@ -47,4 +47,3 @@ if ($del) {
 	$parent = ($obj->message_parent == -1) ? $obj->message_id : $obj->message_parent;
 	$AppUI->redirect('m=forums&a=viewer&forum_id=' . $obj->message_forum . '&message_id=' . $parent);
 }
-?>

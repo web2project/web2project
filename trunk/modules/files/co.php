@@ -66,7 +66,7 @@ function popFile( params ) {
 
 <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 
-<form name="coFrm" action="?m=files" method="post">
+<form name="coFrm" action="?m=files" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_file_co" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_id" value="<?php echo $file_id; ?>" />

@@ -62,7 +62,7 @@ $last_ask = new CDate($contact->contact_updateasked);
 $lastupdated = new CDate($contact->contact_lastupdate);
 
 ?>
-<form name="changecontact" action="?m=contacts" method="post">
+<form name="changecontact" action="?m=contacts" method="post" accept-charset="utf-8">
         <input type="hidden" name="dosql" value="do_contact_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />

@@ -202,4 +202,3 @@ class CCompany extends CW2pObject {
 		}
 	}
 }
-?>

@@ -4,4 +4,3 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 require (W2P_BASE_DIR . '/modules/history/index.php');
-?>

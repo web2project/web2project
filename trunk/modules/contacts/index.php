@@ -83,7 +83,7 @@ $tdw = floor(100 / $carrWidth);
 // Let's remove the first '%' that we previously added to ContIdxWhere
 $default_search_string = w2PformSafe($AppUI->getState('ContIdxWhere'), true);
 
-$form = '<form action="./index.php" method="get">' . $AppUI->_('Search for') . '
+$form = '<form action="./index.php" method="get" accept-charset="utf-8">' . $AppUI->_('Search for') . '
            <input type="text" class="text" name="search_string" value="' . $default_search_string . '" />
 		   <input type="hidden" name="m" value="contacts" />
 		   <input type="submit" value=">" />
@@ -114,7 +114,7 @@ $a2z .= '</tr><tr><td colspan="28">' . $form . '</td></tr></table>';
 $titleBlock = new CTitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCell($a2z);
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new contact') . '">', '', '<form action="?m=contacts&a=addedit" method="post">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new contact') . '">', '', '<form action="?m=contacts&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 	$titleBlock->addCrumb('?m=contacts&a=csvexport&suppressHeaders=1', 'CSV Download');
 	$titleBlock->addCrumb('?m=contacts&a=vcardimport&dialog=0', 'Import vCard');
 }
@@ -132,7 +132,7 @@ $titleBlock->show();
 		}
 	}
 </script>
-<form action="./index.php" method='get' name="modProjects">
+<form action="./index.php" method='get' name="modProjects" accept-charset="utf-8">
   <input type='hidden' name='m' value='projects' />
   <input type='hidden' name='a' value='view' />
   <input type='hidden' name='project_id' />

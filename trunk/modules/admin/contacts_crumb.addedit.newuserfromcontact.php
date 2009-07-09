@@ -9,4 +9,3 @@ $canAddUsers = $perms->checkModule('admin', 'add');
 if ($canAddUsers && $contact_id && !$is_user) {
 	$titleBlock->addCrumb('?m=admin&a=addedituser&contact_id='.$contact_id, 'create a user');
 }
-?>

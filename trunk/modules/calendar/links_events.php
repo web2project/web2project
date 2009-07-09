@@ -140,4 +140,3 @@ function getEventTooltip($event_id) {
 	$tt .= '</table>';
 	return $tt;
 }
-?>

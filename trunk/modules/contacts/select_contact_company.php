@@ -81,7 +81,7 @@ if (w2PgetParam($_POST, $id_field, 0) != 0) {
 	<?php
 } else {
 	?>
-		<form name="frmSelector" action="./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=<?php echo $table_name . '&' . $additional_get_information; ?>" method="post">
+		<form name="frmSelector" action="./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=<?php echo $table_name . '&' . $additional_get_information; ?>" method="post" accept-charset="utf-8">
 			<?php
 				if (function_exists('styleRenderBoxTop')) {
 					echo styleRenderBoxTop();

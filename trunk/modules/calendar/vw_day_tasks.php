@@ -32,4 +32,3 @@ echo '</table>';
 
 $min_view = 1;
 include W2P_BASE_DIR . '/modules/tasks/todo.php';
-?>

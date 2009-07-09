@@ -181,7 +181,7 @@ if (!$user) {
 					<a href="<?php echo $calendarFeed; ?>">calendar feed</a>
 				<?php } ?>
 				&nbsp;&nbsp;&nbsp;
-				<form name="regenerateToken" action="./index.php?m=admin" method="post">
+				<form name="regenerateToken" action="./index.php?m=admin" method="post" accept-charset="utf-8">
 					<input type="hidden" name="user_id" value="<?php echo intval($user->user_id); ?>" />
 					<input type="hidden" name="dosql" value="do_user_token" />
 					<input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
@@ -211,4 +211,3 @@ if (!$user) {
 	$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_roles', 'Roles');
 	$tabBox->show();
 }
-?>

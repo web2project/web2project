@@ -47,7 +47,7 @@ $start_date = intval($forum['forum_create_date']) ? new CDate($forum['forum_crea
 
 // setup the title block
 $titleBlock = new CTitleBlock('Forum', 'support.png', $m, $m . '.' . $a);
-$titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm">', '</form>');
+$titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 ?>
 <table width="100%" cellspacing="0" cellpadding="2" border="0" class="std">
@@ -84,10 +84,10 @@ if (function_exists('styleRenderBoxBottom')) {
 }
 if ($post_message) {
 	include (W2P_BASE_DIR . '/modules/forums/post_message.php');
-} else
+} else {
 	if ($message_id == 0) {
 		include (W2P_BASE_DIR . '/modules/forums/view_topics.php');
 	} else {
 		include (W2P_BASE_DIR . '/modules/forums/view_messages.php');
 	}
-?>
+}

@@ -160,7 +160,7 @@ if ($pages > $max_pages) {
 <table width="100%" cellspacing="1" cellpadding="0" border="0">
 <tr>
     <td nowrap="nowrap" align="right">
-<form name="filter" action="?m=history" method="post" >
+<form name="filter" action="?m=history" method="post" accept-charset="utf-8">
 <?php echo $AppUI->_('Changes to'); ?>:
         <select name="filter" class="text" onchange="document.filter.submit()">
                 <option value="">(<?php echo $AppUI->_('Select Filter'); ?>)</option>

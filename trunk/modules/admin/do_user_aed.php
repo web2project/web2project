@@ -97,4 +97,3 @@ if (($msg = $contact->store())) {
 	}
 	($isNewUser) ? $AppUI->redirect('m=admin&a=viewuser&user_id=' . $obj->user_id . '&tab=2') : $AppUI->redirect();
 }
-?>

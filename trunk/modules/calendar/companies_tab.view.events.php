@@ -46,4 +46,3 @@ foreach ($events as $row) {
 }
 $html .= '</table>';
 echo $html;
-?>

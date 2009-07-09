@@ -84,7 +84,7 @@ $titleBlock->show();
 	}	
 </script>
 
-<form name="AddEdit" method="post">				
+<form name="AddEdit" method="post" accept-charset="utf-8">				
 <input name="action" type="hidden" value="<?php echo $history_id ? 'update' : 'add' ?>" />
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>

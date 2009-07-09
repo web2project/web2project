@@ -47,4 +47,3 @@ if (is_array($selected) && count($selected)) {
 	}
 }
 $AppUI->redirect($redirect);
-?>

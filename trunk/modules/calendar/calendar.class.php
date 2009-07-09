@@ -984,4 +984,3 @@ class CEvent extends CW2pObject {
 }
 
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
-?>

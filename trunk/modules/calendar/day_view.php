@@ -75,8 +75,8 @@ $titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $this_day->format(FMT_TI
 $titleBlock->addCrumb('?m=calendar&date=' . $this_day->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $this_week, 'week view');
 $titleBlock->addCell($AppUI->_('Company') . ':');
-$titleBlock->addCell(arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id), '', '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany">', '</form>');
-$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new event') . '">', '', '<form action="?m=calendar&a=addedit&date=' . $this_day->format(FMT_TIMESTAMP_DATE) . '" method="post">', '</form>');
+$titleBlock->addCell(arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id), '', '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany" accept-charset="utf-8">', '</form>');
+$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new event') . '">', '', '<form action="?m=calendar&a=addedit&date=' . $this_day->format(FMT_TIMESTAMP_DATE) . '" method="post" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 ?>
 <script language="javascript">

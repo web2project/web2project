@@ -55,7 +55,7 @@ $titleBlock = new CTitleBlock('User Management', 'helix-setup-users.png', $m, "$
 
 $where = w2PformSafe($where, true);
 
-$titleBlock->addCell('<input type="text" name="where" class="text" size="10" value="' . $where . '" />' . ' <input type="submit" value="' . $AppUI->_('search') . '" class="button" />', '', '<form action="index.php?m=admin" method="post">', '</form>');
+$titleBlock->addCell('<input type="text" name="where" class="text" size="10" value="' . $where . '" />' . ' <input type="submit" value="' . $AppUI->_('search') . '" class="button" />', '', '<form action="index.php?m=admin" method="post" accept-charset="utf-8">', '</form>');
 
 $titleBlock->addCell($a2z);
 $titleBlock->show();
@@ -92,7 +92,7 @@ $tabBox->show($extra);
 
 ?>
 
-<form name="frmDelete" action="./index.php?m=admin" method="post">
+<form name="frmDelete" action="./index.php?m=admin" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_user_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="user_id" value="0" />
