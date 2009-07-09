@@ -89,7 +89,7 @@ function orderByName( x ){
 }
 </script>
 
-<form name="changecontact" action="do_updatecontact.php" method="post">
+<form name="changecontact" action="do_updatecontact.php" method="post" accept-charset="utf-8">
 	<input type="hidden" name="contact_project" value="0" />
 	<input type="hidden" name="contact_unique_update" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="updatekey" value="<?php echo $updatekey; ?>" />
@@ -272,4 +272,3 @@ function orderByName( x ){
 if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxBottom();
 }
-?>
