@@ -108,8 +108,8 @@ for ($i = 0; $i < 7; $i++) {
 	$s .= '		<tr><td align="left"><a href="' . $href . '">';
 
 	$s .= $dayStamp == $today ? '<span style="color:red">' : '';
-	$day_string = "<strong>" . htmlentities($show_day->format('%d'), ENT_COMPAT, $locale_char_set) . '</strong>';
-	$day_name = $AppUI->_(htmlentities($show_day->format('%A'), ENT_COMPAT, $locale_char_set));
+	$day_string = "<strong>" . htmlspecialchars($show_day->format('%d'), ENT_COMPAT, $locale_char_set) . '</strong>';
+	$day_name = $AppUI->_(htmlspecialchars($show_day->format('%A'), ENT_COMPAT, $locale_char_set));
 	$s .= $day_string . ' ' . $day_name;
 	$s .= $dayStamp == $today ? '</span>' : '';
 	$s .= '</a></td></tr>';

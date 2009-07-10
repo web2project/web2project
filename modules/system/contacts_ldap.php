@@ -244,7 +244,7 @@ if (isset($test) || isset($import)) {
 					$q = new DBQuery;
 					$q->addQuery('company_id');
 					$q->addTable('companies');
-					$q->addWhere('company_name LIKE \'' . w2Phtmlspecialchars(trim($pairs['contact_company'])) . '\'');
+					$q->addWhere('company_name LIKE \'' . trim($pairs['contact_company']) . '\'');
 					$company_id = $q->loadResult();
 					$pairs['contact_company'] = $company_id ? $company_id : 0;
 					$q->clear();
@@ -253,7 +253,7 @@ if (isset($test) || isset($import)) {
 					$q = new DBQuery;
 					$q->addQuery('dept_id');
 					$q->addTable('departments');
-					$q->addWhere('dept_name LIKE \'' . w2Phtmlspecialchars(trim($pairs['contact_department'])) . '\'');
+					$q->addWhere('dept_name LIKE \'' . trim($pairs['contact_department']) . '\'');
 					$dept_id = $q->loadResult();
 					$pairs['contact_department'] = $dept_id ? $dept_id : 0;
 					$q->clear();
@@ -273,7 +273,7 @@ if (isset($test) || isset($import)) {
 					$q = new DBQuery;
 					$q->addQuery('company_id');
 					$q->addTable('companies');
-					$q->addWhere('company_name LIKE \'' . w2Phtmlspecialchars(trim($pairs['contact_company'])) . '\'');
+					$q->addWhere('company_name LIKE \'' . trim($pairs['contact_company']) . '\'');
 					$company_id = $q->loadResult();
 					$pairs['contact_company'] = $company_id ? $company_id : 0;
 					$q->clear();
@@ -282,7 +282,7 @@ if (isset($test) || isset($import)) {
 					$q = new DBQuery;
 					$q->addQuery('dept_id');
 					$q->addTable('departments');
-					$q->addWhere('dept_name LIKE \'' . w2Phtmlspecialchars(trim($pairs['contact_department'])) . '\'');
+					$q->addWhere('dept_name LIKE \'' . trim($pairs['contact_department']) . '\'');
 					$dept_id = $q->loadResult();
 					$pairs['contact_department'] = $dept_id ? $dept_id : 0;
 					$q->clear();

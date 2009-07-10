@@ -1510,7 +1510,7 @@ class DBQuery {
 				continue;
 			}
 			$fields[] = $k;
-			$values[$k] = w2Phtmlspecialchars($v);
+			$values[$k] = $v;
 		}
 		foreach ($fields as $field) {
 			$this->addInsert($field, $values[$field]);
@@ -1545,7 +1545,7 @@ class DBQuery {
 			if ($v == '') {
 				$values[$k] = 'NULL';
 			} else {
-				$values[$k] = w2Phtmlspecialchars($v);
+				$values[$k] = $v;
 			}
 		}
 		if (count($values)) {
@@ -1575,7 +1575,7 @@ class DBQuery {
 				continue;
 			}
 			$fields[] = $k;
-			$values[$k] = w2Phtmlspecialchars($v);
+			$values[$k] = $v;
 		}
 		foreach ($fields as $field) {
 			$this->addInsert($field, $values[$field]);
@@ -1612,7 +1612,7 @@ class DBQuery {
 				continue;
 			}
 			$fields[] = $k;
-			$values[$k] = w2Phtmlspecialchars($v);
+			$values[$k] = $v;
 		}
 		if (count($values)) {
 			foreach ($fields as $field) {

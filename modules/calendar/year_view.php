@@ -81,7 +81,7 @@ $next_year = (int)($next_year + 10000);
 		                	<a href="<?php echo '?m=calendar&a=year_view&date=' . $prev_year; ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" title="pre" border="0"></a>
 		                </td>
 		                <th width="100%" align="center">
-		                	<?php echo htmlentities($date->format('%Y')); ?>
+		                	<?php echo htmlspecialchars($date->format('%Y')); ?>
 		                </th>
 		                <td>
 		                	<a href="<?php echo '?m=calendar&a=year_view&date=' . $next_year; ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" title="next" border="0"></a>
