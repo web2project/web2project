@@ -72,7 +72,7 @@ function cal_work_day_conv($val) {
 	if ($locale_char_set == 'utf-8' && function_exists('utf8_encode')) {
 		$day_name = utf8_encode($day_name);
 	}
-	return htmlentities($day_name, ENT_COMPAT, $locale_char_set);
+	return htmlspecialchars($day_name, ENT_COMPAT, $locale_char_set);
 }
 ?>
 

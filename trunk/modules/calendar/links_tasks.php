@@ -203,7 +203,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;">';
-	$tt .= '				' . w2Phtmlspecialchars($row['task_description']);
+	$tt .= '				' . $row['task_description'];
 	$tt .= '			</td>';
 	$tt .= '		</tr>';
 	$tt .= '		</table>';
