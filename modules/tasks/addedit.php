@@ -8,7 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
  *
  */
 
-$task_id = intval(w2PgetParam($_REQUEST, 'task_id', 0));
+$task_id = intval(w2PgetParam($_GET, 'task_id', 0));
 $perms = &$AppUI->acl();
 
 // load the record data

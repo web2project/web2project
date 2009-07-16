@@ -36,7 +36,7 @@ define('SEC_DAY', 86400);
  */
 class CDate extends Date {
 
-	public function __construct($datetime = '', $tz = '') {
+	public function __construct($datetime = null, $tz = '') {
 
 		parent::__construct($datetime);
 		if ($tz == '')
