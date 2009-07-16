@@ -46,11 +46,8 @@ for ($current = 0 + $inc; $current < 60; $current += $inc) {
 
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
-
 if (intval($obj->task_start_date)) {
 	$start_date = new CDate($obj->task_start_date);
-} elseif ($task_id != 0) {
-	$start_date = null;
 } else {
 	$start_date = new CDate();
 }
