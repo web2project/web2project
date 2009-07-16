@@ -90,30 +90,6 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 </tr>
 <?php
 
-/*** Tasks listing ***/
-$now = new CDate();
-$df = $AppUI->getPref('SHDATEFORMAT');
-
-// generate the 'due in' value
-foreach ($tasks as $tId => $task) {
-	$sign = 1;
-	$start = intval($task['task_start_date']) ? new CDate($task['task_start_date']) : null;
-	$end = intval($task['task_end_date']) ? new CDate($task['task_end_date']) : null;
-
-	if (!$end && $start) {
-		$end = $start;
-		$end->addSeconds($task['task_duration'] * $task['task_duration_type'] * SEC_HOUR);
-	}
-
-	if ($end && $now->after($end)) {
-		$sign = -1;
-	}
-
-	$days = $end ? $now->dateDiff($end) * $sign : null;
-	$tasks[$tId]['task_due_in'] = $days;
-
-}
-
 // sorting tasks
 if ($task_sort_item1 != '') {
 	if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {

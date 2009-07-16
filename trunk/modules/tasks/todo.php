@@ -118,6 +118,8 @@ $q = new DBQuery;
 $q->addQuery('ta.*');
 $q->addQuery('project_name, pr.project_id, project_color_identifier');
 $q->addQuery('tp.task_pinned');
+$q->addQuery('DATEDIFF(ta.task_end_date, now()) as task_due_in');
+
 $q->addTable('projects', 'pr');
 $q->addTable('tasks', 'ta');
 $q->addTable('user_tasks', 'ut');
