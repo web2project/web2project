@@ -8,7 +8,7 @@ $AppUI->loadCalendarJS();
 
 $min_view = defVal($min_view, false);
 
-$project_id = defVal(w2PgetParam($_GET, 'project_id', null), 0);
+$project_id = intval(w2PgetParam($_GET, 'project_id', 0));
 
 // sdate and edate passed as unix time stamps
 $sdate = w2PgetParam($_POST, 'project_start_date', 0);
