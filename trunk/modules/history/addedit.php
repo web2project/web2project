@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$history_id = defVal(w2PgetParam($_GET, 'history_id', null), 0);
+$history_id = w2PgetParam($_GET, 'history_id', 0);
 
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');

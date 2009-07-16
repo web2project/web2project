@@ -15,8 +15,8 @@ include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
 
 $showLabels = w2PgetParam($_REQUEST, 'showLabels', false);
 $sortByName = w2PgetParam($_REQUEST, 'sortByName', false);
-$project_id = defVal($_REQUEST['project_id'], 0);
-$f = defVal($_REQUEST['f'], 0);
+$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
+$f = w2PgetParam($_REQUEST, 'f', 0);
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -34,9 +34,10 @@ $projects = $project->getAllowedProjects($AppUI->user_id, false);
 ** so we have to tweak a little bit,
 ** also we do not have a special project available
 */
-$caller = defVal($_REQUEST['caller'], null);
+$caller = w2PgetParam($_REQUEST, 'caller', null);
+
 if ($caller == 'todo') {
-	$user_id = defVal(w2PgetParam($_REQUEST, 'user_id', 0), 0);
+	$user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
 
 	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . CContact::getContactByUserid($user_id);
 	$projects[$project_id]['project_color_identifier'] = 'ff6000';

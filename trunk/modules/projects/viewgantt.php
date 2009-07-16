@@ -7,8 +7,8 @@ global $AppUI, $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id,
 $AppUI->loadCalendarJS();
 
 $min_view = defVal($min_view, false);
-$project_id = defVal(w2PgetParam($_GET, 'project_id', null), 0);
-$user_id = defVal(w2PgetParam($_GET, 'user_id', null), $AppUI->user_id);
+$project_id = w2PgetParam($_GET, 'project_id', 0);
+$user_id = w2PgetParam($_GET, 'user_id', $AppUI->user_id);
 // sdate and edate passed as unix time stamps
 $sdate = w2PgetParam($_POST, 'project_start_date', 0);
 $edate = w2PgetParam($_POST, 'project_end_date', 0);
