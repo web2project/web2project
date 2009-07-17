@@ -118,7 +118,7 @@ $q = new DBQuery;
 $q->addQuery('ta.*');
 $q->addQuery('project_name, pr.project_id, project_color_identifier');
 $q->addQuery('tp.task_pinned');
-$dateDiffString = $q->dbfnDateDiff('ta.task_end_date', $q->dbfnNow()) . 'AS task_due_in';
+$dateDiffString = $q->dbfnDateDiff('ta.task_end_date', $q->dbfnNow()) . ' AS task_due_in';
 $q->addQuery($dateDiffString);
 
 $q->addTable('projects', 'pr');
