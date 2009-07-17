@@ -970,10 +970,10 @@ class CEvent extends CW2pObject {
 		$q->addQuery('event_description as description');
 		$q->addQuery('event_start_date as startDate');
 		$q->addQuery('event_end_date as endDate');
-		$q->addQuery('now() as updatedDate');
+		$q->addQuery($q->addNow().' as updatedDate');
 		$q->addTable('events', 'e');
 
-		$q->addWhere("event_start_date > now()");
+		$q->addWhere("event_start_date > ".$q->addNow());
 		$q->addWhere("event_start_date < DATE_ADD(CURDATE(), INTERVAL $days DAY)");
 		$q->innerJoin('user_events', 'ue', 'ue.event_id = e.event_id');
 		$q->addWhere("ue.user_id = $userId");
