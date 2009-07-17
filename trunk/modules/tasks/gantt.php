@@ -469,9 +469,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$start->addDays(0);
 		$s = $start->format($df);
 		if ($caller == 'todo') {
-			$bar = new MileStone($row++, array($name, $pname, '', substr($s, 0, 10), substr($s, 0, 10)), $a['task_start_date'], $s);
+			$bar = new MileStone($row++, array($name, $pname, '', $s, $s), $a['task_start_date'], $s);
 		} else {
-			$bar = new MileStone($row++, array($name, '', substr($s, 0, 10), substr($s, 0, 10)), $a['task_start_date'], $s);
+			$bar = new MileStone($row++, array($name, '', $s, $s), $a['task_start_date'], $s);
 		}
 		$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 		//caption of milestone should be date
