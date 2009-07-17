@@ -2119,8 +2119,7 @@ class CTask extends CW2pObject {
 		$q->addWhere('project_active > 0');
 
 		$q->addOrder('task_start_date, task_end_date');
-echo $q->prepare();
-die();
+
 		return $q->loadList();		
 	}
 	public static function pinUserTask($userId, $taskId) {
