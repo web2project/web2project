@@ -551,21 +551,20 @@ class DBQuery {
 		$this->addClause('having', $query);
 	}
 
-	/** Add the token representing the 'now' datetime
+	/** Generates the token representing the 'now' datetime
 	 * 
 	 * The 'now' datetime is represented just a bit differently from database
 	 * engine to engine.  Therefore this method checks to see what database is
 	 * being used and returns the string to calculate the value.  It does *not*
 	 * calculate the value itself.
 	 */
-	public function addNow() {
+	public function dbfnNow() {
 		$dbType = strtolower(trim(w2PgetConfig('dbtype'))); 
 
     switch ($dbType) {
         case 'oci8':
         case 'oracle':
             return 'current_date';
-            break;
         default:										//mysql
             return 'NOW()';
     }
@@ -577,27 +576,24 @@ class DBQuery {
 	 * Therefore, this method checks to see what database is being used and adds a
 	 * date difference appropriately.
 	 * 
-	 * Remember:
-	 * If $date1 is smaller than $date2, this will result in a negative value.
-	 * 
 	 * @param	$date1			This is the starting date
 	 * @param	$date2			This is the ending date
-	 * @param	$fieldname	This is the name of the resulting field
-	 */
-	public function addDateDifference($date1 = '', $date2 = '', $fieldname) {
+	*/
+	public function dbfnDateDiff($date1 = '', $date2 = '') {
 		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
 		
-		$date1 = ($date1 == '') ? $this->addNow() : $date1;
-		$date2 = ($date2 == '') ? $this->addNow() : $date2;
+		$date1 = ($date1 == '') ? $this->dbfnNow() : $date1;
+		$date2 = ($date2 == '') ? $this->dbfnNow() : $date2;
 
     switch ($dbType) {
         case 'oci8':
         case 'oracle':
-					$this->addQuery("$date1 - $date2 AS $fieldname");
+					return "$date1 - $date2";
         default:										//mysql
-					$this->addQuery("DATEDIFF($date1, $date2) as $fieldname");
+					return "DATEDIFF($date1, $date2)";
     }
 	}
+
 	/** Set a row limit on the query
 	 *
 	 * Set a limit on the query.  This is done in a database-independent

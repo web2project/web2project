@@ -2105,7 +2105,7 @@ class CTask extends CW2pObject {
 		$q->addQuery('task_description as description');
 		$q->addQuery('task_start_date as startDate');
 		$q->addQuery('task_end_date as endDate');
-		$q->addQuery($q->addNow().' as updatedDate');
+		$q->addQuery($q->dbfnNow().' as updatedDate');
 		$q->addTable('tasks', 't');
 
 		$q->addWhere("task_start_date < DATE_ADD(CURDATE(), INTERVAL $days DAY)");
