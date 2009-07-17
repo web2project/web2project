@@ -970,7 +970,7 @@ class CEvent extends CW2pObject {
 		$q->addQuery('event_description as description');
 		$q->addQuery('event_start_date as startDate');
 		$q->addQuery('event_end_date as endDate');
-		$q->addQuery($q->addNow().' as updatedDate');
+		$q->addQuery($q->dbfnNow().' as updatedDate');
 		$q->addTable('events', 'e');
 
 		$q->addWhere("event_start_date > ".$q->addNow());
