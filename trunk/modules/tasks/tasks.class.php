@@ -2105,7 +2105,7 @@ class CTask extends CW2pObject {
 		$q->addQuery('task_description as description');
 		$q->addQuery('task_start_date as startDate');
 		$q->addQuery('task_end_date as endDate');
-		$q->addQuery('now() as updatedDate');
+		$q->addQuery($q->addNow().' as updatedDate');
 		$q->addTable('tasks', 't');
 
 		$q->addWhere("task_start_date < DATE_ADD(CURDATE(), INTERVAL $days DAY)");
@@ -2119,7 +2119,8 @@ class CTask extends CW2pObject {
 		$q->addWhere('project_active > 0');
 
 		$q->addOrder('task_start_date, task_end_date');
-
+echo $q->prepare();
+die();
 		return $q->loadList();		
 	}
 	public static function pinUserTask($userId, $taskId) {
