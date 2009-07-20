@@ -352,13 +352,6 @@ foreach ($projects as $p) {
 			findgchild($p['tasks'], $t['task_id']);
 		}
 	}
-
-  foreach ($parents as $id => $ok) {
-    if (!($ok)) {
-      findgchild($p['tasks'], $id);
-    }
-  }
-
 }
 
 $hide_task_groups = false;
