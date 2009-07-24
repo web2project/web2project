@@ -26,26 +26,14 @@ $link_task = intval(w2PgetParam($_GET, 'link_task', 0));
 $link_parent = intval(w2PgetParam($_GET, 'link_parent', 0));
 $link_project = intval(w2PgetParam($_GET, 'project_id', 0));
 
-$q = new DBQuery();
-$q->addQuery('links.*');
-$q->addQuery('user_username');
-$q->addQuery('contact_first_name,	contact_last_name');
-$q->addQuery('project_id');
-$q->addQuery('task_id, task_name');
-$q->addTable('links');
-$q->leftJoin('users', 'u', 'link_owner = user_id');
-$q->leftJoin('contacts', 'c', 'user_contact = contact_id');
-$q->leftJoin('projects', 'p', 'project_id = link_project');
-$q->leftJoin('tasks', 't', 'task_id = link_task');
-$q->addWhere('link_id = ' . (int)$link_id);
+$link = new CLink();
+$link->loadFull($link_id);
 
 // check if this record has dependancies to prevent deletion
 $msg = '';
-$obj = new CLink();
-$canDelete = $obj->canDelete($msg, $link_id);
-$q->loadObject($obj);
+
 // load the record data
-if (!$obj && $link_id > 0) {
+if (!$link && $link_id > 0) {
 	$AppUI->setMsg('Link');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
@@ -61,12 +49,12 @@ if ($canDelete && $link_id > 0) {
 }
 $titleBlock->show();
 
-if ($obj->link_project) {
-	$link_project = $obj->link_project;
+if ($link->link_project) {
+	$link_project = $link->link_project;
 }
-if ($obj->link_task) {
-	$link_task = $obj->link_task;
-	$task_name = $obj->task_name;
+if ($link->link_task) {
+	$link_task = $link->link_task;
+	$task_name = $link->task_name;
 } elseif ($link_task) {
 	$q->clear();
 	$q->addQuery('task_name');
@@ -130,21 +118,21 @@ function setTask( key, val ) {
 		<table cellspacing="1" cellpadding="2" width="60%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link Name'); ?>:</td>
-			<td align="left"><input type="text" class="text" name="link_name" value="<?php echo $obj->link_name; ?>"></td>
+			<td align="left"><input type="text" class="text" name="link_name" value="<?php echo $link->link_name; ?>"></td>
 	<?php if ($link_id) { ?>
 			<td>
-				<a href="<?php echo $obj->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
+				<a href="<?php echo $link->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By'); ?>:</td>
-			<td align="left" class="hilite"><?php echo $obj->contact_first_name . ' ' . $obj->contact_last_name; ?></td>
+			<td align="left" class="hilite"><?php echo $link->contact_first_name . ' ' . $link->contact_last_name; ?></td>
 	<?php } ?>
 		</tr>
                 <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Category'); ?>:</td>
                         <td align="left">
-                                <?php echo arraySelect(w2PgetSysVal('LinkType'), 'link_category', '', $obj->link_category, true); ?>
+                                <?php echo arraySelect(w2PgetSysVal('LinkType'), 'link_category', '', $link->link_category, true); ?>
                         <td>
 
 		<tr>
@@ -168,13 +156,13 @@ echo arraySelect($projects, 'link_project', 'size="1" class="text" style="width:
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
 			<td align="left">
-				<textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php echo $obj->link_description; ?></textarea>
+				<textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php echo $link->link_description; ?></textarea>
 			</td>
 		</tr>
 
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link URL'); ?>:</td>
-			<td align="left"><input type="field" name="link_url" style="width:270px" value="<?php echo $obj->link_url ?>"></td>
+			<td align="left"><input type="field" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>"></td>
 		</tr>
 		</table>
 	</td>

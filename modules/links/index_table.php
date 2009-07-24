@@ -3,6 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 global $AppUI, $deny1, $canRead, $canEdit, $project_id, $task_id, $showProject;
+require_once ($AppUI->getModuleClass('links'));
 
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
@@ -93,7 +94,7 @@ function shownavbar_links($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page
 }
 
 if ($canEdit) {
-    $titleBlock = new CTitleBlock( 'Links', 'folder5.png', $m, "$m.$a" );
+    $titleBlock = new CTitleBlock( '', '', $m, "$m.$a" );
     $titleBlock->addCell(
         '<input type="submit" class="button" value="'.$AppUI->_('new link').'">', '',
         '<form action="?m=links&a=addedit&project_id='.$project_id.'&task_id='.$task_id.'" method="post" accept-charset="utf-8">', '</form>'
@@ -109,61 +110,20 @@ if (!isset($project_id)) {
 	$project_id = w2PgetParam($_POST, 'project_id', 0);
 }
 if (!isset($showProject)) {
-	$showProject = true;
+	//$showProject = true;
 }
 
 $xpg_pagesize = 30;
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
-// load the following classes to retrieved denied records
-include_once ($AppUI->getModuleClass('projects'));
-include_once ($AppUI->getModuleClass('tasks'));
-
-$project = new CProject();
-$task = new CTask();
-
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
 $link_types = w2PgetSysVal('LinkType');
-if ($tab <= 0) {
-	$catsql = '';
-} else {
-	$catsql = 'link_category = ' . --$tab;
-}
 
-// SETUP FOR LINK LIST
-$q = new DBQuery();
-$q->addQuery('links.*');
-$q->addQuery('contact_first_name, contact_last_name');
-$q->addQuery('project_name, project_color_identifier, project_status');
-$q->addQuery('task_name, task_id');
-
-$q->addTable('links');
-
-$q->leftJoin('users', 'u', 'user_id = link_owner');
-$q->leftJoin('contacts', 'c', 'user_contact = contact_id');
-
-if (!empty($search)) {
-	$q->addWhere('(link_name LIKE \'%' . $search . '%\' OR link_description LIKE \'%' . $search . '%\')');
-}
-if ($project_id) { // Project
-	$q->addWhere('link_project = ' . (int)$project_id);
-}
-if ($task_id) { // Task
-	$q->addWhere('link_task = ' . (int)$task_id);
-}
-if ($catsql) { // Category
-	$q->addWhere($catsql);
-}
-// Permissions
-$project->setAllowedSQL($AppUI->user_id, $q, 'link_project');
-$task->setAllowedSQL($AppUI->user_id, $q, 'link_task and task_project = link_project');
-$q->addOrder('project_name, link_name');
-
-//LIMIT ' . $xpg_min . ', ' . $xpg_pagesize ;
 if ($canRead) {
-	$links = $q->loadList();
+	$link = new CLink();
+	$links = $link->getProjectTaskLinksByCategory($AppUI, $project_id, $task_id, --$tab, $search);
 } else {
 	$AppUI->redirect('m=public&a=access_denied');
 }

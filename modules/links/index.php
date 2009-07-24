@@ -53,5 +53,5 @@ foreach ($link_types as $link_type) {
 	$tabBox->add('index_table', $link_type);
 	++$i;
 }
-
+$showProject = true;
 $tabBox->show();
