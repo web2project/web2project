@@ -22,7 +22,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 ini_set('display_errors', 0);
-error_reporting(E_ALL & ~ E_NOTICE);
+if(defined('E_DEPRECATED')){ 
+	// since php 5.3
+	error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+} else {
+	error_reporting(E_ALL & ~ E_NOTICE);
+}
 define('W2P_PERFORMANCE_DEBUG', false);
 
 //Performance Debug Initialization
