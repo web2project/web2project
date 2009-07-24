@@ -129,7 +129,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$tf = $AppUI->getPref('TIMEFORMAT');
 
-	$obj = new CTask();
+	$task = new CTask();
 
 	// load the record data
 	$task->loadFull($task_id);
@@ -137,8 +137,8 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	// load the event types
 	$types = w2PgetSysVal('TaskType');
 
-	$obj->task_id = $task_id;
-	$assigned = $obj->getAssigned();
+	$task->task_id = $task_id;
+	$assigned = $task->getAssigned();
 
 	$start_date = $task->task_start_date ? new CDate($task->task_start_date) : null;
 	$end_date = $task->task_end_date ? new CDate($task->task_end_date) : null;
