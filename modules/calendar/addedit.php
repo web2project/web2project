@@ -5,6 +5,9 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 
+require_once ($AppUI->getModuleClass('projects'));
+require_once ($AppUI->getModuleClass('calendar'));
+
 $event_id = intval(w2PgetParam($_GET, 'event_id', 0));
 $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
 
@@ -48,13 +51,8 @@ $assigned = array();
 if ($is_clash) {
 	$assignee_list = $_SESSION['add_event_attendees'];
 	if (isset($assignee_list) && $assignee_list) {
-		$q = new DBQuery;
-		$q->addTable('users', 'u');
-		$q->addTable('contacts', 'con');
-		$q->addQuery('user_id, CONCAT_WS(\' \' , contact_first_name, contact_last_name)');
-		$q->addWhere('user_id IN ('.$assignee_list.')');
-		$q->addWhere('user_contact = contact_id');
-		$assigned = $q->loadHashList();
+		$event = new Event();
+		$assigned = $event->getAssigneeList($assignee_list);
 	}
 } else {
 	if ($event_id == 0) {
@@ -94,21 +92,14 @@ $titleBlock->show();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 // pull projects
-require_once ($AppUI->getModuleClass('projects'));
-$q = &new DBQuery;
-$q->addTable('projects', 'pr');
-$q->addQuery('pr.project_id, pr.project_name');
-
-$prj = &new CProject;
-$allowedProjects = $prj->getAllowedSQL($AppUI->user_id);
-
-if (count($allowedProjects)) {
-	$prj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-}
-$q->addOrder('project_name');
-
 $all_projects = '(' . $AppUI->_('All', UI_OUTPUT_RAW) . ')';
-$projects = arrayMerge(array(0 => $all_projects), $q->loadHashList());
+
+$prj = new CProject();
+$projects = $prj->getAllowedProjects($AppUI->user_id);
+foreach ($projects as $project_id => $project_info) {
+	$projects[$project_id] = $project_info['project_name'];
+}
+$projects = arrayMerge(array(0 => $all_projects), $projects);
 
 if ($event_id || $is_clash) {
 	$start_date = intval($obj->event_start_date) ? new CDate($obj->event_start_date) : null;

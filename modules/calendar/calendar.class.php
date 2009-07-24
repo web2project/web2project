@@ -704,7 +704,7 @@ class CEvent extends CW2pObject {
 		return $eventList;
 	}
 
-	public function &getAssigned() {
+	public function getAssigned() {
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('user_events', 'ue');
@@ -715,6 +715,21 @@ class CEvent extends CW2pObject {
 		$q->addWhere('ue.user_id = u.user_id');
 		$assigned = $q->loadHashList();
 		return $assigned;
+	}
+
+	/*
+	 *  I'm  not sure of the logic behind this method.  It was implemented in
+	 * addedit.php but what it actually does is kind of a mess...
+	 * 
+	 */
+	public function getAssigneeList($assignee_list) {
+		$q = new DBQuery;
+		$q->addTable('users', 'u');
+		$q->addTable('contacts', 'con');
+		$q->addQuery('user_id, CONCAT_WS(\' \' , contact_first_name, contact_last_name)');
+		$q->addWhere('user_id IN ('.$assignee_list.')');
+		$q->addWhere('user_contact = contact_id');
+		$assigned = $q->loadHashList();
 	}
 
 	public function updateAssigned($assigned) {
