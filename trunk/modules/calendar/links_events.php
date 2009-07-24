@@ -52,14 +52,9 @@ function getEventTooltip($event_id) {
 	$tf = $AppUI->getPref('TIMEFORMAT');
 
 	// load the record data
-	$q = new DBQuery;
-	$q->addTable('events', 'e');
-	$q->addQuery('event_start_date, event_end_date, event_project, event_type, event_recurs, event_times_recuring, event_description, project_name, company_name');
-	$q->leftJoin('projects', 'p', 'event_project = project_id');
-	$q->leftJoin('companies', 'c', 'project_company = company_id');
-	$q->addWhere('event_id = ' . (int)$event_id);
-	$row = $q->loadHash();
-	$q->clear();
+
+	$event = new CEvent();
+	$event->loadFull($event_id);
 
 	// load the event types
 	$types = w2PgetSysVal('EventType');
@@ -71,11 +66,11 @@ function getEventTooltip($event_id) {
 	$obj->event_id = $event_id;
 	$assigned = $obj->getAssigned();
 
-	$start_date = $row['event_start_date'] ? new CDate($row['event_start_date']) : null;
-	$end_date = $row['event_end_date'] ? new CDate($row['event_end_date']) : null;
-	if ($row['event_project']) {
-		$event_project = $row['project_name'];
-		$event_company = $row['company_name'];
+	$start_date = $event->event_start_date ? new CDate($event->event_start_date) : null;
+	$end_date = $event->event_end_date ? new CDate($event->event_end_date) : null;
+	if ($event->event_project) {
+		$event_project = $event->project_name;
+		$event_company = $event->company_name;
 	}
 
 	$tt = '<table border="0" cellpadding="0" cellspacing="0" width="96%">';
@@ -85,9 +80,9 @@ function getEventTooltip($event_id) {
 	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="text-color:white;border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Type') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap">' . $AppUI->_($types[$row['event_type']]) . '</td>';
+	$tt .= '			<td width="100%" nowrap="nowrap">' . $AppUI->_($types[$event->event_type]) . '</td>';
 	$tt .= '		</tr>	';
-	if ($row['event_project']) {
+	if ($event->event_project) {
 		$tt .= '		<tr>';
 		$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Company') . '</td>';
 		$tt .= '			<td width="100%">' . $event_company . '</td>';
@@ -107,7 +102,7 @@ function getEventTooltip($event_id) {
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Recurs') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . $AppUI->_($recurs[$row['event_recurs']]) . ($row['event_recurs'] ? ' (' . $row['event_times_recuring'] . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
+	$tt .= '			<td nowrap="nowrap">' . $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Attendees') . '</td>';
@@ -131,7 +126,7 @@ function getEventTooltip($event_id) {
 	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;">';
-	$tt .= '				' . str_replace(chr(10), "<br />", $row['event_description']) . '&nbsp;';
+	$tt .= '				' . str_replace(chr(10), "<br />", $event->event_description) . '&nbsp;';
 	$tt .= '			</td>';
 	$tt .= '		</tr>';
 	$tt .= '		</table>';
