@@ -456,6 +456,16 @@ class CEvent extends CW2pObject {
 		$this->CW2pObject('events', 'event_id');
 	}
 
+	public function loadFull($event_id) {
+		$q = new DBQuery;
+		$q->addTable('events', 'e');
+		$q->addQuery('e.*, project_name, company_name');
+		$q->leftJoin('projects', 'p', 'event_project = project_id');
+		$q->leftJoin('companies', 'c', 'project_company = company_id');
+		$q->addWhere('event_id = ' . (int) $event_id);
+		$q->loadObject($this, true, false);
+	}
+
 	// overload check operation
 	public function check() {
 		// ensure changes to check boxes and select lists are honoured

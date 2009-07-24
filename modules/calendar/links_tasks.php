@@ -132,14 +132,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	$obj = new CTask();
 
 	// load the record data
-	$q = new DBQuery;
-	$q->addTable('tasks', 't');
-	$q->addQuery('task_start_date, task_end_date, task_project, task_type, task_description, task_percent_complete, project_name, company_name');
-	$q->addJoin('projects', 'p', 'task_project = project_id', 'inner');
-	$q->addJoin('companies', 'c', 'project_company = company_id', 'inner');
-	$q->addWhere('task_id = ' . (int)$task_id);
-	$row = $q->loadHash();
-	$q->clear();
+	$task->loadFull($task_id);
 
 	// load the event types
 	$types = w2PgetSysVal('TaskType');
@@ -147,11 +140,11 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	$obj->task_id = $task_id;
 	$assigned = $obj->getAssigned();
 
-	$start_date = $row['task_start_date'] ? new CDate($row['task_start_date']) : null;
-	$end_date = $row['task_end_date'] ? new CDate($row['task_end_date']) : null;
+	$start_date = $task->task_start_date ? new CDate($task->task_start_date) : null;
+	$end_date = $task->task_end_date ? new CDate($task->task_end_date) : null;
 	// load the record data
-	$task_project = $row['project_name'];
-	$task_company = $row['company_name'];
+	$task_project = $task->project_name;
+	$task_company = $task->company_name;
 
 	$tt = '<table border="0" cellpadding="0" cellspacing="0" width="96%">';
 	$tt .= '<tr>';
@@ -168,11 +161,11 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Type') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap">' . $AppUI->_($types[$row['task_type']]) . '</td>';
+	$tt .= '			<td width="100%" nowrap="nowrap">' . $AppUI->_($types[$task->task_type]) . '</td>';
 	$tt .= '		</tr>	';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Progress') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap"><strong>' . sprintf("%.1f%%", $row['task_percent_complete']) . '</strong></td>';
+	$tt .= '			<td width="100%" nowrap="nowrap"><strong>' . sprintf("%.1f%%", $task->task_percent_complete) . '</strong></td>';
 	$tt .= '		</tr>	';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Starts') . '</td>';
@@ -203,7 +196,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false) {
 	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;">';
-	$tt .= '				' . $row['task_description'];
+	$tt .= '				' . $task->task_description;
 	$tt .= '			</td>';
 	$tt .= '		</tr>';
 	$tt .= '		</table>';
