@@ -1,9 +1,9 @@
 <?php /* $Id$ $URL$ */
-//add or edit a system user
-
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+
+require_once ($AppUI->getModuleClass('companies'));
 
 $user_id = isset($_GET['user_id']) ? w2PgetParam($_GET, 'user_id', 0) : 0;
 $contact_id = isset($_GET['contact_id']) ? w2PgetParam($_GET, 'contact_id', 0) : 0;
@@ -63,11 +63,9 @@ if (!$user && $user_id > 0) {
 		$user['contact_id'] = 0;
 	}
 	// pull companies
-	$q = new DBQuery;
-	$q->addTable('companies');
-	$q->addQuery('company_id, company_name');
-	$q->addOrder('company_name');
-	$companies = arrayMerge(array(0 => ''), $q->loadHashList());
+	$company = new CCompany();
+	$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+	$companies = arrayMerge(array('0' => ''), $companies);
 
 	// setup the title block
 	$ttl = $user_id > 0 ? 'Edit User' : 'Add User';
