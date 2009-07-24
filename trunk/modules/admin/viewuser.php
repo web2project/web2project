@@ -48,7 +48,7 @@ $tab = $AppUI->getState('UserVwTab') !== null ? $AppUI->getState('UserVwTab') : 
 
 // pull data
 $user = new CUser();
-$user->fullLoad($user_id);
+$user->loadFull($user_id);
 
 if (!$user) {
 	$titleBlock = new CTitleBlock('Invalid User ID', 'helix-setup-user.png', $m, "$m.$a");

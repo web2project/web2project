@@ -257,7 +257,14 @@ class CUser extends CW2pObject {
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		return w2PgetUsers();
 	}
+
+	/*
+	 * DEPRECATED
+	 */
 	public function fullLoad($userId) {
+		$this->loadFull($userId);
+	}
+	public function loadFull($userId) {
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addQuery('u.*');
