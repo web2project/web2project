@@ -127,33 +127,30 @@ $next_year = (int)($next_year + 10000);
 					echo '</tr></table>';
 				}
 			?>
-		</td>
-	</tr>
-	<tr>
-		<td align="center">
-			<table width="80%" class="minical">
+			<table width="100%" class="minical">
 				<tr>
-				  	 <td nowrap="nowrap"><?php echo $AppUI->_('Key'); ?>:</td>
-				     <td>&nbsp;</td>
-				     <td style="border-style:solid;border-width:1px" class="day">&nbsp;&nbsp;</td>
-				     <td nowrap="nowrap"><?php echo $AppUI->_('Day'); ?></td>
-				     <td>&nbsp;</td>
-				     <td style="border-style:solid;border-width:1px" class="event">&nbsp;&nbsp;</td>
-				     <td nowrap="nowrap"><?php echo $AppUI->_('Event'); ?></td>
-				     <td>&nbsp;</td>
-				     <td style="border-style:solid;border-width:1px" class="task">&nbsp;&nbsp;</td>
-				     <td nowrap="nowrap"><?php echo $AppUI->_('Task'); ?></td>
-				     <td>&nbsp;</td>
-				     <td style="border-style:solid;border-width:1px" class="eventtask">&nbsp;&nbsp;</td>
-				     <td nowrap="nowrap"><?php echo $AppUI->_('Event'); ?>+<?php echo $AppUI->_('Task'); ?></td>
-				     <td>&nbsp;</td>
-				     <td style="border-style:solid;border-width:1px" class="weekend">&nbsp;&nbsp;</td>
-				     <td nowrap="nowrap"><?php echo $AppUI->_('Weekend'); ?></td>
-				     <td>&nbsp;</td>
-				     <td class="today">&nbsp;&nbsp;</td>
-				     <td nowrap="nowrap"><?php echo $AppUI->_('Today'); ?></td>
-				     <td>&nbsp;</td>
-				     <td width="40%">&nbsp;</td>
+					<td valign="top" align="center" width="20%">&nbsp;</td>
+					<td nowrap="nowrap"><?php echo $AppUI->_('Key'); ?>:</td>
+					<td>&nbsp;</td>
+					<td style="border-style:solid;border-width:1px" class="day">&nbsp;&nbsp;</td>
+					<td nowrap="nowrap"><?php echo $AppUI->_('Day'); ?></td>
+					<td>&nbsp;</td>
+					<td style="border-style:solid;border-width:1px" class="event">&nbsp;&nbsp;</td>
+					<td nowrap="nowrap"><?php echo $AppUI->_('Event'); ?></td>
+					<td>&nbsp;</td>
+					<td style="border-style:solid;border-width:1px" class="task">&nbsp;&nbsp;</td>
+					<td nowrap="nowrap"><?php echo $AppUI->_('Task'); ?></td>
+					<td>&nbsp;</td>
+					<td style="border-style:solid;border-width:1px" class="eventtask">&nbsp;&nbsp;</td>
+					<td nowrap="nowrap"><?php echo $AppUI->_('Event'); ?>+<?php echo $AppUI->_('Task'); ?></td>
+					<td>&nbsp;</td>
+					<td style="border-style:solid;border-width:1px" class="weekend">&nbsp;&nbsp;</td>
+					<td nowrap="nowrap"><?php echo $AppUI->_('Weekend'); ?></td>
+					<td>&nbsp;</td>
+					<td class="today">&nbsp;&nbsp;</td>
+					<td nowrap="nowrap"><?php echo $AppUI->_('Today'); ?></td>
+					<td>&nbsp;</td>
+					<td width="20%">&nbsp;</td>
 				</tr>
 			</table>
 		</td>
