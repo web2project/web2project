@@ -69,7 +69,13 @@ class CContact extends CW2pObject {
 		$this->CW2pObject('contacts', 'contact_id');
 	}
 
+	/*
+	 * DEPRECATED
+	 */
 	public function fullLoad($AppUI, $contactId) {
+		$this->loadFull($AppUI, $contactId);
+	}
+	public function loadFull($AppUI, $contactId) {
 		$perms = $AppUI->acl();
 		$canRead = !$perms->checkModule('contacts', 'view', $contactId);
 

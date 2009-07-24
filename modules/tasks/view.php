@@ -22,7 +22,7 @@ $perms = &$AppUI->acl();
 // check if this record has dependencies to prevent deletion
 $msg = '';
 $obj = new CTask();
-$obj->fullLoad($task_id);
+$obj->loadFull($task_id);
 
 $canDelete = $obj->canDelete($msg, $task_id);
 

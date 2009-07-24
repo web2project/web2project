@@ -127,7 +127,14 @@ class CProject extends CW2pObject {
 		}
 		return $result;
 	}
+
+	/*
+	 * DEPRECATED
+	 */
 	public function fullLoad($projectId) {
+		$this->loadFull($projectId);
+	}
+	public function loadFull($projectId) {
 		global $w2Pconfig;
 
 		$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);

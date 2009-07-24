@@ -40,7 +40,7 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
 
 // load the record data
-$project->fullLoad($project_id);
+$project->loadFull($project_id);
 
 if (!$project) {
 	$AppUI->setMsg('Project');

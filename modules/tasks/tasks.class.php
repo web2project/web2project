@@ -257,7 +257,14 @@ class CTask extends CW2pObject {
 		// return whether the object load process has been successful or not
 		return $loaded;
 	}
+
+	/*
+	 * DEPRECATED
+	 */
 	public function fullLoad($taskId) {
+		$this->loadFull($taskId);
+	}
+	public function loadFull($taskId) {
 		$q = new DBQuery;
 		$q->addTable('tasks');
 		$q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
