@@ -89,35 +89,41 @@ function delIt() {
 			<table cellspacing="1" cellpadding="2" border="0" width="100%">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-					<td bgcolor="#ffffff" width="100%"><?php echo $department->company_name; ?></td>
+					<td class="hilite" width="100%">
+						<?php if ($perms->checkModuleItem('companies', 'access', $department->dept_company)) { ?>
+							<?php echo '<a href="?m=companies&a=view&company_id=' . $department->dept_company . '">' . htmlspecialchars($department->company_name, ENT_QUOTES) . '</a>'; ?>
+						<?php } else { ?>
+							<?php echo htmlspecialchars($department->company_name, ENT_QUOTES); ?>asdf
+						<?php } ?>
+					</td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
-					<td bgcolor="#ffffff" width="100%"><?php echo $department->dept_name; ?></td>
+					<td class="hilite" width="100%"><?php echo $department->dept_name; ?></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-					<td bgcolor="#ffffff" width="100%"><?php echo $department->contact_first_name . ' ' . $department->contact_last_name; ?></td>
+					<td class="hilite" width="100%"><?php echo $department->contact_first_name . ' ' . $department->contact_last_name; ?></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-					<td bgcolor="#ffffff" width="100%"><?php echo $types[$department->dept_type]; ?></td>
+					<td class="hilite" width="100%"><?php echo $types[$department->dept_type]; ?></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-					<td bgcolor="#ffffff" width="100%"><?php echo $department->dept_email; ?></td>
+					<td class="hilite" width="100%"><?php echo $department->dept_email; ?></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-					<td bgcolor="#ffffff" width="100%"><?php echo $department->dept_phone; ?></td>
+					<td class="hilite" width="100%"><?php echo $department->dept_phone; ?></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-					<td bgcolor="#ffffff" width="100%"><?php echo $department->dept_fax; ?></td>
+					<td class="hilite" width="100%"><?php echo $department->dept_fax; ?></td>
 				</tr>
 				<tr valign="top">
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
-					<td bgcolor="#ffffff">
+					<td class="hilite">
 						<a href="http://maps.google.com/maps?q=<?php echo $department->dept_address1; ?>+<?php echo $department->dept_address2; ?>+<?php echo $department->dept_city; ?>+<?php echo $department->dept_state; ?>+<?php echo $department->dept_zip; ?>+<?php echo $department->dept_country; ?>" target="_blank">
 						<img align="right" border="0" src="<?php echo w2PfindImage('googlemaps.gif'); ?>" width="55" height="22" alt="Find It on Google" /></a>
 						<?php	echo $department->dept_address1 . (($department->dept_address2) ? '<br />' . $department->dept_address2 : '') . '<br />' . $department->dept_city . '&nbsp;&nbsp;' . $department->dept_state . '&nbsp;&nbsp;' . $department->dept_zip . (($department->dept_country) ? '<br />' . $countries[$department->dept_country] : '');?>
@@ -129,7 +135,7 @@ function delIt() {
 			<strong><?php echo $AppUI->_('Description'); ?></strong>
 			<table cellspacing="1" cellpadding="2" border="0" width="100%">
 			<tr>
-				<td bgcolor="#ffffff" width="100%"><?php echo str_replace(chr(10), '<br />', $department->dept_desc); ?>&nbsp;</td>
+				<td class="hilite" width="100%"><?php echo str_replace(chr(10), '<br />', $department->dept_desc); ?>&nbsp;</td>
 			</tr>
 			</table>
 		</td>

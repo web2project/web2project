@@ -147,11 +147,13 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-			<?php if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
-            			<td class="hilite" width="100%"> <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?></td>
-			<?php } else { ?>
-            			<td class="hilite" width="100%"><?php echo htmlspecialchars($project->company_name, ENT_QUOTES); ?></td>
-			<?php } ?>
+			<td class="hilite" width="100%">
+				<?php if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
+					<?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
+				<?php } else { ?>
+	  			<?php echo htmlspecialchars($project->company_name, ENT_QUOTES); ?>
+				<?php } ?>
+			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
