@@ -136,7 +136,11 @@ function delIt() {
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
 				<td style="background-color:#<?php echo $obj->project_color_identifier; ?>">
 					<font color="<?php echo bestColor($obj->project_color_identifier); ?>">
-						<?php echo $obj->project_name; ?>
+						<?php if ($perms->checkModuleItem('projects', 'access', $obj->task_project)) { ?>
+							<?php echo "<a href='?m=projects&a=view&project_id=" . $obj->task_project . "'>" . htmlspecialchars($obj->project_name, ENT_QUOTES) . '</a>'; ?>
+						<?php } else { ?>
+							<?php echo htmlspecialchars($company_detail['company_name'], ENT_QUOTES); ?>
+						<?php } ?>
 					</font>
 				</td>
 			</tr>
