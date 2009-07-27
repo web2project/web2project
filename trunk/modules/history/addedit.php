@@ -5,6 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 $history_id = w2PgetParam($_GET, 'history_id', 0);
 
+require_once ($AppUI->getModuleClass('projects'));
+
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
@@ -85,50 +87,52 @@ $titleBlock->show();
 </script>
 
 <form name="AddEdit" method="post" accept-charset="utf-8">				
-<input name="action" type="hidden" value="<?php echo $history_id ? 'update' : 'add' ?>" />
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
-<tr>
-	<td>
-		<table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">		
+	<input name="action" type="hidden" value="<?php echo $history_id ? 'update' : 'add' ?>" />
+	<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
-			<td width="60%">
-		<?php
-		// pull the projects list
-		$q->addTable('projects');
-		$q->addQuery('project_id, project_name');
-		$q->addOrder('project_name');
-		$projects = arrayMerge(array(0 => '(' . $AppUI->_('any', UI_OUTPUT_RAW) . ')'), $q->loadHashList());
-		echo arraySelect($projects, 'history_project', 'class="text"', $history['history_project']);
-		?>
+			<td>
+				<table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">		
+					<tr>
+						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
+						<td width="60%">
+							<?php
+								// pull the projects list
+								$project = new CProject();
+								$projects = $project->getAllowedProjects($AppUI->user_id, false);
+								foreach ($projects as $project_id => $project_info) {
+									$projects[$project_id] = $project_info['project_name'];
+								}
+								$projects = arrayMerge(array(0 => $all_projects), $projects);
+								echo arraySelect($projects, 'history_project', 'class="text"', $history['history_project']);
+							?>
+						</td>
+					</tr>
+					<tr>
+						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
+						<td width="60%">
+							<textarea name="history_description" class="textarea" cols="60" rows="5"><?php echo $history['history_description']; ?></textarea>
+						</td>
+					</tr>
+				</table>		
+						
+				<table border="0" cellspacing="0" cellpadding="3" width="100%">
+					<tr>
+						<td height="40" width="30%">&nbsp;</td>
+						<td  height="40" width="35%" align="right">
+							<table>
+							<tr>
+								<td>
+									<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" />
+								</td>
+								<td>
+									<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submit()" />
+								</td>
+							</tr>
+							</table>
+						</td>
+					</tr>
+				</table>		
 			</td>
 		</tr>
-			
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
-			<td width="60%">
-				<textarea name="history_description" class="textarea" cols="60" rows="5"><?php echo $history['history_description']; ?></textarea>
-			</td>
-		</tr>	
-		</table>		
-				
-		<table border="0" cellspacing="0" cellpadding="3" width="100%">
-		<tr>
-			<td height="40" width="30%">&nbsp;</td>
-			<td  height="40" width="35%" align="right">
-				<table>
-				<tr>
-					<td>
-						<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" />
-					</td>
-					<td>
-						<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submit()" />
-					</td>
-				</tr>
-				</table>
-			</td>
-		</tr>
-		</table>		
-	</td>
-</tr>
+	</table>
 </form>
