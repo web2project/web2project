@@ -17,15 +17,12 @@ switch ($table_name) {
 		$selection_string = 'Company';
 		$dataId = $company_id;
 
-		$q = new DBQuery;
-		$q->addTable('companies');
-		$q->addQuery('company_id, company_name');
-		$q->addOrder('company_name');
-	
 		$company = new CCompany;
-		$company->setAllowedSQL($AppUI->user_id, $q);	
-		$select_list = $q->loadHashList();
+		$companyList = $company->getCompanyList($AppUI);
 
+		foreach($companyList as $comp) {
+			$select_list[$comp['company_id']] = $comp['company_name'];
+		}
 		break;
 	case 'departments':
 		require_once ($AppUI->getModuleClass('departments'));
@@ -59,7 +56,7 @@ if (w2PgetParam($_POST, $id_field, 0) != 0) {
 			$update_fields = array('company_address1' => 'contact_address1', 'company_address2' => 'contact_address2', 'company_city' => 'contact_city', 'company_state' => 'contact_state', 'company_zip' => 'contact_zip', 'company_phone1' => 'contact_phone', 'company_phone2' => 'contact_phone2', 'company_fax' => 'contact_fax');
 		}
 		$data_update_script = 'opener.setCompany(\'' . $_POST[$id_field] . '\', \'' . db_escape($r_data[$name_field]) . "');\n";
-	} else
+	} else {
 		if ($table_name == 'departments') {
 			$update_fields = array('dept_id' => 'contact_department');
 			if ($update_address) {
@@ -67,7 +64,7 @@ if (w2PgetParam($_POST, $id_field, 0) != 0) {
 			}
 			$data_update_script = 'opener.setDepartment(\'' . $_POST[$id_field] . '\', \'' . db_escape($r_data[$name_field]) . "');\n";
 		}
-
+	}
 	// Let's figure out which fields are going to
 	// be updated
 	foreach ($update_fields as $record_field => $contact_field) {
