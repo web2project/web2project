@@ -45,14 +45,9 @@ if (!$department && $dept_id > 0) {
 
 	// collect all the departments in the company
 	if ($company_id) {
-		$q = new DBQuery;
-		$q->addTable('departments', 'dep');
-		$q->addQuery('dept_id, dept_name, dept_parent');
-		$q->addWhere('dep.dept_company = ' . (int) $company_id);
-		$q->addWhere('dep.dept_id <> ' . $dept_id);
-		$department->setAllowedSQL($AppUI->user_id, $q);
-		$depts = $q->loadArrayList();
-		$depts['0'] = array(0, '- ' . $AppUI->_('Select Unit') . ' -', -1);
+		$depts = $department->loadOtherDepts($AppUI, $companyId, $removeDeptId = 0);
+		//$depts['0'] = array(0, '- ' . $AppUI->_('Select Unit') . ' -', -1);
+		$depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Unit') . ' -'), $depts);
 	}
 
 	// setup the title block
@@ -61,6 +56,7 @@ if (!$department && $dept_id > 0) {
 	$titleBlock->addCrumb('?m=departments', 'department list');
 	$titleBlock->addCrumb('?m=companies', 'companies list');
 	$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
+	$titleBlock->addCrumb('?m=departments&a=view&dept_id=' . $dept_id, 'view this department');
 	$titleBlock->show();
 ?>
 <script language="javascript">
