@@ -2366,4 +2366,4 @@ CREATE TABLE `w2pversion` (
 --
 
 INSERT INTO `w2pversion` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`) 
-	VALUES (199, '0.9.9', 1, now(), now());
+	VALUES (427, '1.0.0', 1, now(), now());
