@@ -78,13 +78,13 @@ $company_id = $project->project_company;
 $selected_departments = array();
 if ($project_id) {
 	$myDepartments = CProject::getDepartments($AppUI, $project_id);
-	$selected_departments = (count($myDepartments) > 0 ) ? array_keys($myDepartments) : array();
+	$selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
 }
 
 $departments_count = 0;
 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
 if ($department_selection_list != '' || $project_id) {
-	$department_selection_list = ($AppUI->_('Departments') . '<br /><select name="dept_ids[]" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
+	$department_selection_list = ($AppUI->_('Departments') . '<br /><select name="dept_ids[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
 } else {
 	$department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
 }
@@ -99,6 +99,12 @@ if ($project_id) {
 if ($project_id == 0 && $contact_id > 0) {
 	$selected_contacts[] = '' . $contact_id;
 }
+
+// Get the users notification options
+$tl = $AppUI->getPref('TASKLOGEMAIL');
+$ta = $tl & 1;
+$tt = $tl & 2;
+$tp = $tl & 4;
 ?>
 <script language="javascript">
 function setColor(color) {
@@ -153,12 +159,12 @@ function submitIt() {
 	*/
 
 	<?php
-		/*
-		** Automatic required fields generated from System Values
-		*/
-		$requiredFields = w2PgetSysVal('ProjectRequiredFields');
-		echo w2PrequiredFields($requiredFields);
-	?>
+/*
+** Automatic required fields generated from System Values
+*/
+$requiredFields = w2PgetSysVal('ProjectRequiredFields');
+echo w2PrequiredFields($requiredFields);
+?>
 
 	if (msg.length < 1) {
 		f.submit();
@@ -212,14 +218,6 @@ function setDepartment(department_id_string){
 	<input type="hidden" name="project_creator" value="<?php echo is_null($project->project_creator) ? $AppUI->user_id : $project->project_creator; ?>" />
 	<input type="hidden" name="project_contacts" id="project_contacts" value="<?php echo implode(',', $selected_contacts); ?>" />
 <tr>
-	<td>
-		<input class="button" type="button" name="cancel2" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
-	</td>
-	<td align="right">
-		<input class="button" type="button" name="btnFuseAction2" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt();" />
-	</td>
-</tr>
-<tr>
 	<td width="50%" valign="top">
 		<table cellspacing="0" cellpadding="2" border="0">
 		<tr>
@@ -231,7 +229,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Parent Project'); ?></td>
 			<td colspan="2">
-                    <?php echo arraySelectTree($structprojects, 'project_parent', 'style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
+				<?php echo arraySelectTree($structprojects, 'project_parent', 'style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
 			</td>
 		</tr>
 		<tr>
@@ -252,8 +250,8 @@ function setDepartment(department_id_string){
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?></td>
-				<td width="100%" colspan="2">
-					<input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
+			<td width="100%" colspan="2">
+				<input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
 			</td>
 		</tr>
 		<tr>
@@ -271,9 +269,8 @@ function setDepartment(department_id_string){
 						echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
 					}
 					// Let's check if the actual company has departments registered
-					if ($department_selection_list != '') { 
-						?><br /><?php 
-						echo $department_selection_list;
+					if ($department_selection_list != '') {
+						echo '<br />' . $department_selection_list;
 					}
 				?>
 			</td>
@@ -300,13 +297,15 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date'); ?></td>
 			<td nowrap="nowrap">
-        <?php if ($project_id > 0) {
-          echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
-          echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
-          echo $actual_end_date ? '</a>' : '';
-        } else {
+	        <?php 
+				if ($project_id > 0) {
+					echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
+					echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
+					echo $actual_end_date ? '</a>' : '';
+				} else {
 					echo $AppUI->_('Dynamically calculated');
-				} ?>
+				} 
+			?>
 			</td>
 		</tr>
 		<tr>
@@ -332,10 +331,10 @@ function setDepartment(department_id_string){
 		</tr>
 		<tr>
 			<td align="right" colspan="3">
-				<?php
-					require_once ($AppUI->getSystemClass('CustomFields'));
-					$custom_fields = new CustomFields($m, $a, $project->project_id, 'edit');
-					$custom_fields->printHTML();
+			<?php
+				require_once ($AppUI->getSystemClass('CustomFields'));
+				$custom_fields = new CustomFields($m, $a, $project->project_id, 'edit');
+				$custom_fields->printHTML();
 				?>
 			</td>
 		</tr>
@@ -409,73 +408,32 @@ function setDepartment(department_id_string){
 				<textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe($project->project_description); ?></textarea>
 			</td>
 		</tr>
-<tr valign="middle">
-						<table cellspacing="0" cellpadding="2" border="0" width="100%">
-							<td valign="middle"><?php echo $AppUI->_('Notify by Email'); ?>:
-<?php
-$tl = $AppUI->getPref('TASKLOGEMAIL');
-$ta = $tl & 1;
-$tt = $tl & 2;
-$tp = $tl & 4;
-?><input type='checkbox' name='email_project_owner_box' id='email_project_owner_box' <?php
-if ($tt)
-	echo "checked='checked'";
-?> /><?php echo $AppUI->_('Project Owner'); ?>
-		<input type='hidden' name='email_project_owner' id='email_project_owner'
-		  value='<?php
-if ($project->project_owner) {
-	echo ($project->project_owner);
-} else {
-	echo '0';
-}
-?>' />
-<input type='checkbox' name='email_project_contacts_box' id='email_project_contacts_box' <?php echo ($tp) ? 'checked="checked"' : ''; ?> />
-<?php echo $AppUI->_('Project Contacts'); ?>
-							</td>
-							<td></td>
-				</tr>
-					<?php
-//End Pedro A. Project Tabs
-
-?>
-				</table>
-			</td>
+		<tr valign="middle">
+			<table cellspacing="0" cellpadding="2" border="0" width="100%">
+			<tr>
+				<td valign="middle"><?php echo $AppUI->_('Notify by Email'); ?>:
+					<input type="checkbox" name="email_project_owner_box" id="email_project_owner_box" <?php echo ($tt ? 'checked="checked"' : '');?> />
+					<?php echo $AppUI->_('Project Owner'); ?>
+					<input type="hidden" name="email_project_owner" id="email_project_owner" value="<?php echo ($project->project_owner ? $project->project_owner : '0');?>" />
+					<input type='checkbox' name='email_project_contacts_box' id='email_project_contacts_box' <?php echo ($tp ? 'checked="checked"' : ''); ?> />
+					<?php echo $AppUI->_('Project Contacts'); ?>
+				</td>
+			</tr>
+			</table>
 		</tr>
-          <tr>
+  		<tr>
           	<td>
-          
           		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
           	</td>
           	<td align="right">
           		<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt();" />
           	</td>
-          </tr>
-          <tr>
-          	<td colspan="2">
-          * <?php echo $AppUI->_('requiredField'); ?>
-          	</td>
-          </tr>
-</form>
+    	</tr>
+     	<tr>
+          	<td colspan="2">* <?php echo $AppUI->_('requiredField'); ?>
+     		</td>
+		</tr>
+		</form>
+	</table>
+</tr>
 </table>
-</table>
-
-<?php
-function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent = 0, $spaces = 0) {
-	global $departments_count, $AppUI;
-	$parsed = '';
-
-	if ($departments_count < 6) {
-		$departments_count++;
-	}
-
-	$depts_list = CDepartment::getDepartmentList($AppUI, $company_id, $dept_parent);
-
-	foreach ($depts_list as $dept_id => $dept_info) {
-		$selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
-
-		$parsed .= '<option value="' . $dept_id . '"' . $selected . '>' . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>';
-		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces + 5);
-	}
-
-	return $parsed;
-}

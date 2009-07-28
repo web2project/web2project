@@ -1287,3 +1287,32 @@ function getProjectIndex($arraylist, $project_id) {
 	}
 	return $result;
 }
+
+/**
+ * getDepartmentSelectionList() returns a tree of departments in <option> tags (originally used on the addedit interface to display the departments of a project)
+ * 
+ * @param mixed $company_id the id of the company we are searching departments
+ * @param mixed $checked_array an array with the ids of the departments that should be selected on the list
+ * @param integer $dept_parent used when to determine the starting level on the tree, or by recursion
+ * @param integer $spaces used by recursion to add spaces to form the visual tree on the <select> element
+ * @return string returns the html <option> elements
+ */
+function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent = 0, $spaces = 0) {
+	global $departments_count, $AppUI;
+	$parsed = '';
+
+	if ($departments_count < 6) {
+		$departments_count++;
+	}
+
+	$depts_list = CDepartment::getDepartmentList($AppUI, $company_id, $dept_parent);
+
+	foreach ($depts_list as $dept_id => $dept_info) {
+		$selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
+
+		$parsed .= '<option value="' . $dept_id . '"' . $selected . '>' . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>';
+		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces + 5);
+	}
+
+	return $parsed;
+}
