@@ -266,7 +266,9 @@ include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 	ob_start();
 } else {
-	ob_start('ob_gzhandler');
+	if(!ob_start('ob_gzhandler')) { 
+		ob_start();
+	}
 }
 
 if (!$suppressHeaders) {
