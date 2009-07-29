@@ -144,6 +144,9 @@ function delIt() {
 <?php
 	// tabbed information boxes
 	$tabBox = new CTabBox('?m=departments&a=' . $a . '&dept_id=' . $dept_id, '', $tab);
+	//TODO: For some reason, I thought these tabs automatically got loaded... not sure why I have to do it manually.
+	$tabBox->add(W2P_BASE_DIR . '/modules/projects/departments_tab.view.projects', 'Projects');
+	$tabBox->add(W2P_BASE_DIR . '/modules/projects/departments_tab.view.projects_gantt', 'Project Gantt');
 	$tabBox->add(W2P_BASE_DIR . '/modules/departments/vw_contacts', 'Contacts');
 	// include auto-tabs with 'view' explicitly instead of $a, because this view is also included in the main index site
 	$tabBox->show();
