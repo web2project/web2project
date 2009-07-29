@@ -453,7 +453,7 @@ CREATE TABLE `files` (
   `file_version` float NOT NULL default '0',
   `file_icon` varchar(20) default 'obj/',
   `file_category` int(10) default '0',
-  `file_checkout` varchar(16) NOT NULL,
+  `file_checkout` varchar(16) NOT NULL default '',
   `file_co_reason` text,
   `file_version_id` int(10) NOT NULL default '0',
   `file_folder` int(10) NOT NULL default '0',
