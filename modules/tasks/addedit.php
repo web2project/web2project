@@ -179,38 +179,6 @@ if ($department_selection_list != '') {
 	$department_selection_list = ('<select name="dept_ids[]" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
 }
 
-function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent = 0, $spaces = 0) {
-	global $departments_count, $AppUI;
-	$parsed = '';
-
-	if ($departments_count < 10) {
-		$departments_count++;
-	}
-	$q = new DBQuery;
-	$q->addTable('departments');
-	$q->addQuery('dept_id, dept_name');
-	$q->addWhere('dept_parent = ' . (int)$dept_parent);
-	$q->addWhere('dept_company = ' . (int)$company_id);
-	$department = new CDepartment;
-	$department->setAllowedSQL($AppUI->user_id, $q);
-	
-	$depts_list = $q->loadHashList('dept_id');
-	$q->clear();
-
-	foreach ($depts_list as $dept_id => $dept_info) {
-		$selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
-
-		if (strlen($dept_info['dept_name']) > 30) {
-			$dept_info['dept_name'] = substr($dept_info['dept_name'], 0, 28) . '...';
-		}
-
-		$parsed .= '<option value="' . $dept_id . '"' . $selected. '>' . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>';
-		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces + 5);
-	}
-
-	return $parsed;
-}
-
 //Dynamic tasks are by default now off because of dangerous behavior if incorrectly used
 if (is_null($obj->task_dynamic)) {
 	$obj->task_dynamic = 0;
