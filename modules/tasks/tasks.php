@@ -89,6 +89,9 @@ $q->addGroup('p.project_id');
 if (!$project_id && !$task_id) {
 	$q->addOrder('project_name');
 }
+if ($project_id > 0) {
+	$q->addWhere('p.project_id = '.$project_id);
+}
 
 $q2 = new DBQuery;
 $q2->addTable('projects');
@@ -96,6 +99,9 @@ $q2->addQuery('project_id, COUNT(t1.task_id) AS total_tasks');
 $q2->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
 if ($where_list) {
 	$q2->addWhere($where_list);
+}
+if ($project_id > 0) {
+	$q2->addWhere('project_id = '.$project_id);
 }
 $q2->addGroup('project_id');
 
@@ -352,81 +358,75 @@ function toggle_users(id){
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-if (isset($canEdit) && $canEdit && $w2Pconfig['direct_edit_assignment']) {
-?>
-function checkAll(project_id) {
-	var f = eval('document.assFrm' + project_id);
-	var cFlag = f.master.checked ? false : true;
-	
-	for (var i=0, i_cmp=f.elements.length; i<i_cmp;i++) {
-		var e = f.elements[i];
-		// only if it's a checkbox.
-		if(e.type == 'checkbox' && e.checked == cFlag && e.name != 'master') {
-			e.checked = !e.checked;
-		}
-	}
-
-}
-
-function chAssignment(project_id, rmUser, del) {
-	var f = eval('document.assFrm' + project_id);
-	var fl = f.add_users.length-1;
-	var c = 0;
-	var a = 0;
-	
-	f.hassign.value = '';
-	f.htasks.value = '';
-	
-	// harvest all checked checkboxes (tasks to process)
-	for (var i=0, i_cmp=f.elements.length; i<i_cmp;i++) {
-		var e = f.elements[i];
-		// only if it's a checkbox.
-		if(e.type == 'checkbox' && e.checked == true && e.name != 'master') {
-			c++;
-			f.htasks.value = f.htasks.value +', '+ e.value;
-		}
-	}
-	
-	// harvest all selected possible User Assignees
-	for (fl; fl > -1; fl--) {
-		if (f.add_users.options[fl].selected) {
-			a++;
-			f.hassign.value = ', ' + f.hassign.value +', '+ f.add_users.options[fl].value;
-		}
-	}
-	
-	if (del == true) {
-		if (c == 0) {
-			alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
-		} 
-		else if (a == 0 && rmUser == 1){
-			alert ('<?php echo $AppUI->_('Please select at least one Assignee!', UI_OUTPUT_JS); ?>');
-		} 
-		else if (confirm('<?php echo $AppUI->_('Are you sure you want to unassign the User from Task(s)?', UI_OUTPUT_JS); ?>')) {
-			f.del.value = 1;
-			f.rm.value = rmUser;
-			f.project_id.value = project_id;
-			f.submit();
-		}
-	}
-	else {
+if (isset($canEdit) && $canEdit && $w2Pconfig['direct_edit_assignment']) { ?>
+	function checkAll(project_id) {
+		var f = eval('document.assFrm' + project_id);
+		var cFlag = f.master.checked ? false : true;
 		
-		if (c == 0) {
-			alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
-		} 
-		else if (a == 0) {
-			alert ('<?php echo $AppUI->_('Please select at least one Assignee!', UI_OUTPUT_JS); ?>');
+		for (var i=0, i_cmp=f.elements.length; i<i_cmp;i++) {
+			var e = f.elements[i];
+			// only if it's a checkbox.
+			if(e.type == 'checkbox' && e.checked == cFlag && e.name != 'master') {
+				e.checked = !e.checked;
+			}
+		}
+	
+	}
+	
+	function chAssignment(project_id, rmUser, del) {
+		var f = eval('document.assFrm' + project_id);
+		var fl = f.add_users.length-1;
+		var c = 0;
+		var a = 0;
+		
+		f.hassign.value = '';
+		f.htasks.value = '';
+		
+		// harvest all checked checkboxes (tasks to process)
+		for (var i=0, i_cmp=f.elements.length; i<i_cmp;i++) {
+			var e = f.elements[i];
+			// only if it's a checkbox.
+			if(e.type == 'checkbox' && e.checked == true && e.name != 'master') {
+				c++;
+				f.htasks.value = f.htasks.value +', '+ e.value;
+			}
+		}
+		
+		// harvest all selected possible User Assignees
+		for (fl; fl > -1; fl--) {
+			if (f.add_users.options[fl].selected) {
+				a++;
+				f.hassign.value = ', ' + f.hassign.value +', '+ f.add_users.options[fl].value;
+			}
+		}
+		
+		if (del == true) {
+			if (c == 0) {
+				alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
+			} else if (a == 0 && rmUser == 1){
+				alert ('<?php echo $AppUI->_('Please select at least one Assignee!', UI_OUTPUT_JS); ?>');
+			} else if (confirm('<?php echo $AppUI->_('Are you sure you want to unassign the User from Task(s)?', UI_OUTPUT_JS); ?>')) {
+				f.del.value = 1;
+				f.rm.value = rmUser;
+				f.project_id.value = project_id;
+				f.submit();
+			}
 		} else {
-			f.rm.value = rmUser;
-			f.del.value = del;
-			f.project_id.value = project_id;
-			f.submit();
+			
+			if (c == 0) {
+				alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
+			} else if (a == 0) {
+				alert ('<?php echo $AppUI->_('Please select at least one Assignee!', UI_OUTPUT_JS); ?>');
+			} else {
+				f.rm.value = rmUser;
+				f.del.value = del;
+				f.project_id.value = project_id;
+				f.submit();
+			}
 		}
 	}
-}
 <?php } ?>
 </script>
-
 
 <?php 
 global $expanded;
@@ -434,251 +434,242 @@ global $expanded;
 $expanded = $task_id ? true : $AppUI->getPref('TASKSEXPANDED');
 if ($project_id) {
 	$open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
-?>
-<table width='100%' border='0' cellpadding='1' cellspacing='0'>
-<form name="task_list_options" method="POST" action=""<?php echo $query_string; ?>" accept-charset="utf-8">
-<input type='hidden' name='show_task_options' value='1' />
-<tr>
-  <td align='left'>
-		<?php echo $open_link; ?>
-  </td>
-  <td align='right'>
-	<table>
-	<tr>
-	  <td><?php echo $AppUI->_('Show'); ?>:</td>
-	  <td>
-	  <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();" 
-	   <?php echo $showIncomplete ? 'checked="checked"' : ''; ?> />
-	  </td>
-	  <td><label for="show_incomplete"><?php echo $AppUI->_('Incomplete Tasks Only'); ?></label></td>
-	</tr>
-	</table>
-  </td>
-</tr>
-</form>
-</table>
+	?>
+	<form name="task_list_options" method="POST" action=""<?php echo $query_string; ?>" accept-charset="utf-8">
+		<input type='hidden' name='show_task_options' value='1' />
+		<table width='100%' border='0' cellpadding='1' cellspacing='0'>
+			<tr>
+			  <td align='left'>
+					<?php echo $open_link; ?>
+			  </td>
+			  <td align='right'>
+					<table>
+						<tr>
+						  <td><?php echo $AppUI->_('Show'); ?>:</td>
+						  <td>
+						  <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();" 
+						   <?php echo $showIncomplete ? 'checked="checked"' : ''; ?> />
+						  </td>
+						  <td><label for="show_incomplete"><?php echo $AppUI->_('Incomplete Tasks Only'); ?></label></td>
+						</tr>
+					</table>
+			  </td>
+			</tr>
+		</table>
+	</form>
 <?php } ?>
 <table id="tblProjects" width="100%" border="0" cellpadding="0" cellspacing="1" class="tbl">
-<tr>
-	<th width="10">&nbsp;</th>
-	<th width="10"><?php echo $AppUI->_('Pin'); ?></th>
-	<th width="10"><?php echo $AppUI->_('Log'); ?></th>
-	<th width="20"><?php echo $AppUI->_('Work'); ?></th>
-	<th align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
-	<th width="200"><?php sort_by_item_title('Task Name', 'task_name', SORT_STRING); ?></th>
-	<th nowrap="nowrap"><?php sort_by_item_title('Task Creator', 'user_username', SORT_STRING); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users') ?></th>
-	<th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC); ?></th>
-	<th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC); ?>&nbsp;&nbsp;</th>
-	<th nowrap="nowrap"><?php sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC); ?></th>
-<?php 
-if (!empty($mods['history']) && !getDenyRead('history')) { ?>
-	<th nowrap="nowrap"><?php sort_by_item_title('Last Update', 'last_update', SORT_NUMERIC); ?></th>
-<?php
-} else {
-	$cols--;
-} 
-if ($showEditCheckbox) {
-	echo '<th width="1">&nbsp;</th>';
-} else {
-	$cols--;
-} 
-?>
-</tr>
-<?php
-reset($projects);
-
-if ($w2Pconfig['direct_edit_assignment']) {
-	// get Users with all Allocation info (e.g. their freeCapacity)
-	// but do it only when direct_edit_assignment is on and only once.
-	$tempoTask = new CTask();
-	$userAlloc = $tempoTask->getAllocation('user_id', null, true);
-}
-foreach ($projects as $k => $p) {
-	$tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
-	if ($tnums > 0 || $project_id == $p['project_id']) {
-		//echo '<pre>'; print_r($p); echo '</pre>';
-		if (!$min_view) {
-			// not minimal view
-			$open_link = w2PtoolTip($m, 'Click to Expand/Collapse the Tasks for this Project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $p['project_id'] . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $p['project_id'] . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $p['project_id'] . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $p['project_id'] . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
-?>
-
-<tr>
-  	<td>
-	<form name="assFrm<?php echo ($p['project_id']) ?>" action="index.php?m=<?php echo ($m); ?>&a=<?php echo ($a); ?>" method="post" accept-charset="utf-8">
-	<input type="hidden" name="del" value="1" />
-	<input type="hidden" name="rm" value="0" />
-	<input type="hidden" name="store" value="0" />
-	<input type="hidden" name="dosql" value="do_task_assign_aed" />
-	<input type="hidden" name="project_id" value="<?php echo ($p['project_id']); ?>" />
-	<input type="hidden" name="hassign" />
-	<input type="hidden" name="htasks" />
-	</td>
-</tr>
-<tr>
-  <td>
-   <?php echo $open_link; ?>
-  </td>
-  <td colspan="<?php echo $w2Pconfig['direct_edit_assignment'] ? $cols - 4 : $cols - 1; ?>">
-  <table width="100%" border="0">
-  <tr>
-	<!-- patch 2.12.04 display company name next to project name -->
-	<td nowrap="nowrap" style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>">
-	<a href="./index.php?m=projects&a=view&project_id=<?php echo $k; ?>">
-	<span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
-	<strong><?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?></strong></span></a>
-	</td>
-	<td width="<?php echo (101 - intval($p['project_percent_complete'])); ?>%">
-	<?php echo (intval($p['project_percent_complete'])); ?>%
-	</td>
-  </tr>
-  </table>
-  </td>
-<?php
-			if ($w2Pconfig['direct_edit_assignment']) {
-?>
-  <td colspan="3" align="right" valign="middle">
-  <table width="100%" border="0">
-  <tr>
-	<td align="right">
-	<select name="add_users" style="width:200px" size="2" multiple="multiple" class="text" 
-	 ondblclick="javascript:chAssignment(<?php echo ($p['project_id']); ?>, 0, false)">
-<?php
-				foreach ($userAlloc as $v => $u) {
-					echo '	  <option value="' . $u['user_id'] . '">' . w2PformSafe($u['userFC']) . "</option>\n";
-				}
-?>
-	</select>
-	</td>
-	<td align="center">
-<?php
-				echo ('<a href="javascript:chAssignment(' . $p['project_id'] . ', 0, 0);">' . w2PshowImage('add.png', 16, 16, 'Assign Users', 'Assign selected Users to selected Tasks', 'tasks') . "</a>\n");
-				echo ('<a href="javascript:chAssignment(' . $p['project_id'] . ', 1, 1);">' . w2PshowImage('remove.png', 16, 16, 'Unassign Users', 'Unassign Users from Task', 'tasks') . "</a>\n");
-
-?>
-	<br />
-	<select class="text" name="percentage_assignment" title="<?php echo ($AppUI->_('Assign with Percentage')); ?>" >
-<?php
-				for ($i = 0; $i <= 100; $i += 5) {
-					echo ("\t" . '<option ' . (($i == 30) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>');
-				}
-?>
-	</select>
-	</td>
-  </tr>
-  </table>
-  </td>
-<?php
-			}
-?>
-</tr>
-<?php
-		}
-
-		if ($task_sort_item1 != '') {
-			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
-				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
+	<tr>
+		<th width="10">&nbsp;</th>
+		<th width="10"><?php echo $AppUI->_('Pin'); ?></th>
+		<th width="10"><?php echo $AppUI->_('Log'); ?></th>
+		<th width="20"><?php echo $AppUI->_('Work'); ?></th>
+		<th align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
+		<th width="200"><?php sort_by_item_title('Task Name', 'task_name', SORT_STRING); ?></th>
+		<th nowrap="nowrap"><?php sort_by_item_title('Task Creator', 'user_username', SORT_STRING); ?></th>
+		<th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users') ?></th>
+		<th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC); ?></th>
+		<th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC); ?>&nbsp;&nbsp;</th>
+		<th nowrap="nowrap"><?php sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC); ?></th>
+		<?php 
+			if (!empty($mods['history']) && !getDenyRead('history')) { 
+				?><th nowrap="nowrap"><?php sort_by_item_title('Last Update', 'last_update', SORT_NUMERIC); ?></th><?php
 			} else {
-				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
+				$cols--;
 			}
+			if ($showEditCheckbox) {
+				echo '<th width="1">&nbsp;</th>';
+			} else {
+				$cols--;
+			} 
+		?>
+	</tr>
+	<?php
+		reset($projects);
+		
+		if ($w2Pconfig['direct_edit_assignment']) {
+			// get Users with all Allocation info (e.g. their freeCapacity)
+			// but do it only when direct_edit_assignment is on and only once.
+			$tempoTask = new CTask();
+			$userAlloc = $tempoTask->getAllocation('user_id', null, true);
 		}
-
-		global $tasks_filtered, $children_of;
-		//get list of task ids and set-up array of children
-		if (isset($p['tasks']) && is_array($p['tasks'])) {
-			foreach ($p['tasks'] as $i => $t) {
-				$tasks_filtered[] = $t['task_id'];
-				$children_of[$t['task_parent']] = (isset($t['task_parent']) && isset($children_of[$t['task_parent']]) && $children_of[$t['task_parent']]) ? $children_of[$t['task_parent']] : array();
-				if ($t['task_parent'] != $t['task_id']) {
-					array_push($children_of[$t['task_parent']], $t['task_id']);
+		foreach ($projects as $k => $p) {
+			$tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
+			if ($tnums > 0 || $project_id == $p['project_id']) {
+				//echo '<pre>'; print_r($p); echo '</pre>';
+				if (!$min_view) {
+					// not minimal view
+					$open_link = w2PtoolTip($m, 'Click to Expand/Collapse the Tasks for this Project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $p['project_id'] . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $p['project_id'] . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $p['project_id'] . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $p['project_id'] . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
+					?>
+					<tr>
+					  <td>
+							<form name="assFrm<?php echo ($p['project_id']) ?>" action="index.php?m=<?php echo ($m); ?>&a=<?php echo ($a); ?>" method="post" accept-charset="utf-8">
+							<input type="hidden" name="del" value="1" />
+							<input type="hidden" name="rm" value="0" />
+							<input type="hidden" name="store" value="0" />
+							<input type="hidden" name="dosql" value="do_task_assign_aed" />
+							<input type="hidden" name="project_id" value="<?php echo ($p['project_id']); ?>" />
+							<input type="hidden" name="hassign" />
+							<input type="hidden" name="htasks" />
+						</td>
+					</tr>
+					<tr>
+					  <td>
+					   <?php echo $open_link; ?>
+					  </td>
+					  <td colspan="<?php echo $w2Pconfig['direct_edit_assignment'] ? $cols - 4 : $cols - 1; ?>">
+						  <table width="100%" border="0">
+							  <tr>
+									<!-- patch 2.12.04 display company name next to project name -->
+									<td nowrap="nowrap" style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>">
+										<a href="./index.php?m=projects&a=view&project_id=<?php echo $k; ?>">
+											<span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
+											<strong><?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?></strong></span>
+										</a>
+									</td>
+									<td width="<?php echo (101 - intval($p['project_percent_complete'])); ?>%">
+										<?php echo (intval($p['project_percent_complete'])); ?>%
+									</td>
+							  </tr>
+						  </table>
+					  </td>
+						<?php
+							if ($w2Pconfig['direct_edit_assignment']) {
+								?>
+							  <td colspan="3" align="right" valign="middle">
+								  <table width="100%" border="0">
+									  <tr>
+											<td align="right">
+												<select name="add_users" style="width:200px" size="2" multiple="multiple" class="text" ondblclick="javascript:chAssignment(<?php echo ($p['project_id']); ?>, 0, false)">
+													<?php
+															foreach ($userAlloc as $v => $u) {
+																echo '<option value="' . $u['user_id'] . '">' . w2PformSafe($u['userFC']) . "</option>\n";
+															}
+													?>
+												</select>
+											</td>
+											<td align="center">
+												<?php
+													echo ('<a href="javascript:chAssignment(' . $p['project_id'] . ', 0, 0);">' . w2PshowImage('add.png', 16, 16, 'Assign Users', 'Assign selected Users to selected Tasks', 'tasks') . "</a>\n");
+													echo ('<a href="javascript:chAssignment(' . $p['project_id'] . ', 1, 1);">' . w2PshowImage('remove.png', 16, 16, 'Unassign Users', 'Unassign Users from Task', 'tasks') . "</a>\n");
+												?>
+												<br />
+												<select class="text" name="percentage_assignment" title="<?php echo ($AppUI->_('Assign with Percentage')); ?>" >
+													<?php
+														for ($i = 0; $i <= 100; $i += 5) {
+															echo ("\t" . '<option ' . (($i == 30) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>');
+														}
+													?>
+												</select>
+											</td>
+									  </tr>
+								  </table>
+							  </td>
+								<?php
+							}
+						?>
+					</tr>
+					<?php
 				}
-			}
-
-			global $shown_tasks;
-			$shown_tasks = array();
-			$parent_tasks = array();
-			reset($p);
-			//1st pass) parent tasks and its children
-			foreach ($p['tasks'] as $i => $t1) {
-				if ($task_sort_item1) {
-					// already user sorted so there is no call for a "task tree" or "open/close" links
-					showtask($t1, -1, true, false, true);
-				} else {
-					if (($t1['task_parent'] == $t1['task_id']) && !$task_id) {
-						//Here we are NOT on a task view context, like the tasks module list or the project view tasks list.
-						
-						//check for child
-						$no_children = empty($children_of[$t1['task_id']]);
-
-						showtask($t1, 0, true, false, $no_children);
-						$shown_tasks[] = $t1['task_id'];
-						findchild($p['tasks'], $t1['task_id']);
-					} elseif ($t1['task_parent'] == $task_id && $task_id) {
-						//Here we are on a task view context
-	
-						//check for child
-						$no_children = empty($children_of[$t1['task_id']]);
-
-						showtask($t1, 0, true, false, $no_children);
-						$shown_tasks[] = $t1['task_id'];
-						findchild($p['tasks'], $t1['task_id']);
+		
+				if ($task_sort_item1 != '') {
+					if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
+						$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
+					} else {
+						$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
 					}
 				}
-			}
-			reset($p);
-			//2nd pass parentless tasks
-			foreach ($p['tasks'] as $i => $t1) {
-				if (!in_array($t1['task_id'], $shown_tasks)) {
-					//Here we are on a parentless task context, this can happen because we are:
-					//1) displaying filtered tasks that could be showing only child tasks and not its parents due to filtering.
-					//2) in a situation where child tasks are active and parent tasks are inactive or vice-versa.
-					//
-					//The IF condition makes sure:
-					//1) The parent task has been displayed and passed through the findchild first, so child tasks are not erroneously displayed as orphan (parentless) 
-					//2) Only not displayed yet tasks are shown so we don't show duplicates due to findchild that may cause duplicate showtasks for level 1 (and higher) tasks.
-					showtask($t1, -1, true, false, true);
-					$shown_tasks[] = $t1['task_id'];
+		
+				global $tasks_filtered, $children_of;
+				//get list of task ids and set-up array of children
+				if (isset($p['tasks']) && is_array($p['tasks'])) {
+					foreach ($p['tasks'] as $i => $t) {
+						$tasks_filtered[] = $t['task_id'];
+						$children_of[$t['task_parent']] = (isset($t['task_parent']) && isset($children_of[$t['task_parent']]) && $children_of[$t['task_parent']]) ? $children_of[$t['task_parent']] : array();
+						if ($t['task_parent'] != $t['task_id']) {
+							array_push($children_of[$t['task_parent']], $t['task_id']);
+						}
+					}
+		
+					global $shown_tasks;
+					$shown_tasks = array();
+					$parent_tasks = array();
+					reset($p);
+					//1st pass) parent tasks and its children
+					foreach ($p['tasks'] as $i => $t1) {
+						if (($t1['task_parent'] == $t1['task_id']) && !$task_id) {
+							//Here we are NOT on a task view context, like the tasks module list or the project view tasks list.
+							
+							//check for child
+							$no_children = empty($children_of[$t1['task_id']]);
+	
+							showtask($t1, 0, true, false, $no_children);
+							$shown_tasks[] = $t1['task_id'];
+							findchild($p['tasks'], $t1['task_id']);
+						} elseif ($t1['task_parent'] == $task_id && $task_id) {
+							//Here we are on a task view context
+		
+							//check for child
+							$no_children = empty($children_of[$t1['task_id']]);
+	
+							showtask($t1, 0, true, false, $no_children);
+							$shown_tasks[] = $t1['task_id'];
+							findchild($p['tasks'], $t1['task_id']);
+						}
+					}
+					reset($p);
+					//2nd pass parentless tasks
+					foreach ($p['tasks'] as $i => $t1) {
+						if (!in_array($t1['task_id'], $shown_tasks)) {
+							//Here we are on a parentless task context, this can happen because we are:
+							//1) displaying filtered tasks that could be showing only child tasks and not its parents due to filtering.
+							//2) in a situation where child tasks are active and parent tasks are inactive or vice-versa.
+							//
+							//The IF condition makes sure:
+							//1) The parent task has been displayed and passed through the findchild first, so child tasks are not erroneously displayed as orphan (parentless) 
+							//2) Only not displayed yet tasks are shown so we don't show duplicates due to findchild that may cause duplicate showtasks for level 1 (and higher) tasks.
+							showtask($t1, -1, true, false, true);
+							$shown_tasks[] = $t1['task_id'];
+						}
+					}
+				}
+		
+				if ($tnums && $w2Pconfig['enable_gantt_charts'] && !$min_view) {
+					?>
+					<tr>
+					  <td colspan="<?php echo $cols; ?>" align="right">
+					  <input type="button" class="button" value="<?php echo $AppUI->_('Reports'); ?>" 
+					   onclick="javascript:window.location='index.php?m=reports&project_id=<?php echo $k; ?>';" />
+					  <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart'); ?>" 
+					   onclick="javascript:window.location='index.php?m=tasks&a=viewgantt&project_id=<?php echo $k; ?>';" />
+					  </td>
+					</tr>
+					</form>
+					<?php
 				}
 			}
 		}
-
-		if ($tnums && $w2Pconfig['enable_gantt_charts'] && !$min_view) {
-?>
-<tr>
-  <td colspan="<?php echo $cols; ?>" align="right">
-  <input type="button" class="button" value="<?php echo $AppUI->_('Reports'); ?>" 
-   onclick="javascript:window.location='index.php?m=reports&project_id=<?php echo $k; ?>';" />
-  <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart'); ?>" 
-   onclick="javascript:window.location='index.php?m=tasks&a=viewgantt&project_id=<?php echo $k; ?>';" />
-  </td>
-</tr>
-</form>
-<?php
-		}
-	}
-}
-$AppUI->savePlace();
-
-?>
+		$AppUI->savePlace();
+	?>
 </table>
 <table width="100%" class="std">
-<tr>
-  	 <td nowrap="nowrap"><?php echo $AppUI->_('Key'); ?>:</td>
-     <td>&nbsp;</td>
-     <td style="border-style:solid;border-width:1px" bgcolor="#ffffff">&nbsp;&nbsp;</td>
-     <td nowrap="nowrap">=<?php echo $AppUI->_('Future Task'); ?></td>
-     <td>&nbsp;</td>
-     <td style="border-style:solid;border-width:1px" bgcolor="#e6eedd">&nbsp;&nbsp;</td>
-     <td nowrap="nowrap">=<?php echo $AppUI->_('Started and on time'); ?></td>
-     <td>&nbsp;</td>
-     <td style="border-style:solid;border-width:1px" bgcolor="#ffeebb">&nbsp;&nbsp;</td>
-     <td nowrap="nowrap">=<?php echo $AppUI->_('Should have started'); ?></td>
-     <td>&nbsp;</td>
-     <td style="border-style:solid;border-width:1px" bgcolor="#CC6666">&nbsp;&nbsp;</td>
-     <td nowrap="nowrap">=<?php echo $AppUI->_('Overdue'); ?></td>
-     <td>&nbsp;</td>
-     <td style="border-style:solid;border-width:1px" bgcolor="#aaddaa">&nbsp;&nbsp;</td>
-     <td nowrap="nowrap">=<?php echo $AppUI->_('Done'); ?></td>
-     <td width="40%">&nbsp;</td>
-</tr>
+	<tr>
+		<td nowrap="nowrap"><?php echo $AppUI->_('Key'); ?>:</td>
+		<td>&nbsp;</td>
+		<td style="border-style:solid;border-width:1px" bgcolor="#ffffff">&nbsp;&nbsp;</td>
+		<td nowrap="nowrap">=<?php echo $AppUI->_('Future Task'); ?></td>
+		<td>&nbsp;</td>
+		<td style="border-style:solid;border-width:1px" bgcolor="#e6eedd">&nbsp;&nbsp;</td>
+		<td nowrap="nowrap">=<?php echo $AppUI->_('Started and on time'); ?></td>
+		<td>&nbsp;</td>
+		<td style="border-style:solid;border-width:1px" bgcolor="#ffeebb">&nbsp;&nbsp;</td>
+		<td nowrap="nowrap">=<?php echo $AppUI->_('Should have started'); ?></td>
+		<td>&nbsp;</td>
+		<td style="border-style:solid;border-width:1px" bgcolor="#CC6666">&nbsp;&nbsp;</td>
+		<td nowrap="nowrap">=<?php echo $AppUI->_('Overdue'); ?></td>
+		<td>&nbsp;</td>
+		<td style="border-style:solid;border-width:1px" bgcolor="#aaddaa">&nbsp;&nbsp;</td>
+		<td nowrap="nowrap">=<?php echo $AppUI->_('Done'); ?></td>
+		<td width="40%">&nbsp;</td>
+	</tr>
 </table>
