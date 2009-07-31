@@ -30,6 +30,7 @@
 'files list',
 'Filter',
 'Final Version',
+'Folder',
 'Folder Name',
 'Go',
 'Major Revision',

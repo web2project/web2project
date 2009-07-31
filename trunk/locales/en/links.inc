@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+'Add Link',
 'All',
 'All Links',
 'All Projects',
@@ -16,7 +17,9 @@
 'Filter',
 'go',
 'Link Name',
+'Links',
 'Link(s)',
+'links list',
 'linksDelete'=>'Remove this link?',
 'Link URL',
 'new link',
