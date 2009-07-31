@@ -55,6 +55,36 @@ class CFile extends CW2pObject {
 		parent::store();
 	}
 
+	public static function getFileList($AppUI, $company_id, $project_id, $task_id, $category_id) {
+		$q = new DBQuery;
+		$q->addQuery('f.*');
+		$q->addTable('files', 'f');
+		$q->addJoin('projects', 'p', 'p.project_id = file_project');
+		$q->addJoin('project_departments', 'pd', 'p.project_id = pd.project_id');
+		$q->addJoin('departments', '', 'pd.department_id = dept_id');
+		$q->addJoin('tasks', 't', 't.task_id = file_task');
+
+		$project = new CProject();
+		$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
+		if (count($allowedProjects)) {
+			$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+		}
+		if (isset($company_id) && (int) $company_id > 0) {
+			$q->addWhere('project_company = ' . (int)$company_id);
+		}
+		if (isset($project_id) && (int) $project_id > 0) {
+			$q->addWhere('file_project = ' . (int)$project_id);
+		}
+		if (isset($task_id) && (int) $task_id > 0) {
+			$q->addWhere('file_task = ' . (int)$task_id);
+		}
+		if ($category_id >= 0) {
+			$q->addWhere('file_category = ' . (int) $category_id);
+		}
+
+		return $q->loadList();
+	}
+
 	public function addHelpDeskTaskLog() {
 		global $AppUI, $helpdesk_available;
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
@@ -121,9 +151,19 @@ class CFile extends CW2pObject {
 		$q->addUpdate('file_co_reason', $coReason);
 		$q->addWhere('file_id = ' . (int)$fileId);
 		$q->exec();
-		$q->clear();
 
 		return true;
+	}
+	
+	public function cancelCheckout($fileId) {
+		$q = new DBQuery;
+		$q->addTable('files');
+		$q->addUpdate('file_checkout', '');
+		$q->addWhere('file_id = ' . (int)$fileId);
+		$q->exec();
+
+		return true;
+		
 	}
 
 	public function delete() {
@@ -741,4 +781,80 @@ function getFolderSelectList() {
 	$q->addOrder('file_folder_name');
 	$folders = arrayMerge(array('0' => array(0, $AppUI->_('Root'), -1)), $q->loadHashList('file_folder_id'));
 	return $folders;
+}
+
+function getHelpdeskFolder() {
+	$q = new DBQuery();
+	$q->addTable('file_folders', 'ff');
+	$q->addQuery('file_folder_id');
+	$q->addWhere('ff.file_folder_name = \'Helpdesk\'');
+	$ffid = $q->loadResult();
+	$q->clear();
+	return intval($ffid);
+}
+
+function file_show_attr() {
+	global $AppUI, $obj, $ci, $canAdmin, $projects, $file_project, $file_task, $task_name, $preserve, $file_helpdesk_item;
+
+	if ($ci) {
+		$str_out = '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Minor Revision') . '</td><td><input type="Radio" name="revision_type" value="minor" checked />' . '</td><tr><td align="right" nowrap="nowrap">' . $AppUI->_('Major Revision') . '</td><td><input type="Radio" name="revision_type" value="major" /></td>';
+	} else {
+		$str_out = '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Version') . ':</td>';
+	}
+
+	$str_out .= '<td align="left">';
+
+	if ($ci || ($canAdmin && $obj->file_checkout == 'final')) {
+		$str_out .= '<input type="hidden" name="file_checkout" value="" /><input type="hidden" name="file_co_reason" value="" />';
+	}
+
+	if ($ci) {
+		$the_value = (strlen($obj->file_version) > 0 ? $obj->file_version + 0.01 : '1');
+		$str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
+	} else {
+		$the_value = (strlen($obj->file_version) > 0 ? $obj->file_version : '1');
+		$str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" />';
+	}
+
+	$str_out .= '</td>';
+
+	$select_disabled = ' ';
+	$onclick_task = ' onclick="popTask()" ';
+	if ($ci && $preserve) {
+		$select_disabled = ' disabled="disabled" ';
+		$onclick_task = ' ';
+		// need because when a html is disabled, it's value it's not sent in submit
+		$str_out .= '<input type="hidden" name="file_project" value="' . $file_project . '" />';
+		$str_out .= '<input type="hidden" name="file_category" value="' . $obj->file_category . '" />';
+	}
+
+	// Category
+	$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Category') . ':</td>';
+	$str_out .= '<td align="left">' . arraySelect(w2PgetSysVal('FileType'), 'file_category', '' . $select_disabled, $obj->file_category, true) . '<td>';
+
+	// ---------------------------------------------------------------------------------
+
+	if ($file_helpdesk_item) {
+		$hd_item = new CHelpDeskItem();
+		$hd_item->load($file_helpdesk_item);
+		//Helpdesk Item
+		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Helpdesk Item') . ':</td>';
+		$str_out .= '<td align="left"><strong>' . $hd_item->item_id . ' - ' . $hd_item->item_title . '</strong></td></tr>';
+		// Project
+		$str_out .= '<input type="hidden" name="file_project" value="' . $file_project . '" />';
+
+		// Task
+		$str_out .= '<input type="hidden" name="file_task" value="0" />';
+	} else {
+		// Project
+		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Project') . ':</td>';
+		$str_out .= '<td align="left">' . projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text" style="width:270px"' . $select_disabled, $file_project) . '</td></tr>';
+
+		// ---------------------------------------------------------------------------------
+
+		// Task
+		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Task') . ':</td><td align="left" colspan="2" valign="top"><input type="hidden" name="file_task" value="' . $file_task . '" /><input type="text" class="text" name="task_name" value="' . $task_name . '" size="40" disabled /><input type="button" class="button" value="' . $AppUI->_('select task') . '..."' . $onclick_task . '/></td></tr>';
+	}
+
+	return ($str_out);
 }

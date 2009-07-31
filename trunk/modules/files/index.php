@@ -36,7 +36,6 @@ $extra = array('from' => 'files', 'where' => 'projects.project_id = file_project
 //get "Allowed" projects for filter list ("All" is always allowed when basing permission on projects)
 $project = new CProject();
 $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
-$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_RAW)), $projects);
 
 // get SQL for allowed projects/tasks
@@ -80,39 +79,10 @@ if ($tab != -1) {
 
 $tabBox = new CTabBox('?m=files', W2P_BASE_DIR . '/modules/files/', $tab);
 $tabbed = $tabBox->isTabbed();
-$i = 0;
+$i = -1;
 foreach ($file_types as $file_type) {
-	$q = new DBQuery;
-	$q->addQuery('count(file_id)');
-	$q->addTable('files', 'f');
-	$q->addJoin('projects', 'p', 'p.project_id = file_project');
-	$q->addJoin('project_departments', 'pd', 'p.project_id = pd.project_id');
-	$q->addJoin('departments', '', 'pd.department_id = dept_id');
-	$q->addJoin('tasks', 't', 't.task_id = file_task');
-	if (count($allowedProjects)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
-	}
-	if (count($allowedTasks)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
-	}
-	if (isset($catsql)) {
-		$q->addWhere($catsql);
-	}
-	//if (isset($task_type) && (int) $task_type > 0) {
-	if (isset($company_id) && (int) $company_id > 0) {
-		$q->addWhere('project_company = ' . (int)$company_id);
-	}
-	if (isset($project_id) && (int) $project_id > 0) {
-		$q->addWhere('file_project = ' . (int)$project_id);
-	}
-	if (isset($task_id) && (int) $task_id > 0) {
-		$q->addWhere('file_task = ' . (int)$task_id);
-	}
-	$key = array_search($file_type, $fts);
-	if ($i > 0 || !$tabbed) {
-		$q->addWhere('file_category = ' . (int)$key);
-	}
-	$tabBox->add('index_table', $file_type . ' (' . $q->loadResult() . ')');
+	$fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $i);
+	$tabBox->add('index_table', $file_type . ' (' . count($fileList) . ')');
 	++$i;
 }
 $tabBox->add('folders_table', 'Folder Explorer');

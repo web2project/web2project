@@ -6,6 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 //addfile sql
 $file_id = intval(w2PgetParam($_POST, 'file_id', 0));
 $del = intval(w2PgetParam($_POST, 'del', 0));
+$cancel = intval(w2PgetParam($_POST, 'cancel', 0));
 $duplicate = intval(w2PgetParam($_POST, 'duplicate', 0));
 $redirect = w2PgetParam($_POST, 'redirect', '');
 global $db;
@@ -22,6 +23,10 @@ if ($notcont != '0') {
 $isNotNew = $_POST['file_id'];
 $perms = &$AppUI->acl();
 if ($del) {
+	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
+		$AppUI->redirect('m=public&a=access_denied');
+	}
+} elseif ($cancel) {
 	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
@@ -98,6 +103,12 @@ if ($del) {
 		$AppUI->setMsg('deleted', UI_MSG_OK, true);
 		$AppUI->redirect($redirect);
 	}
+}
+// cancel the file checkout
+if ($cancel) {
+	$obj->cancelCheckout($file_id);
+	$AppUI->setMsg('checkout canceled', UI_MSG_OK, true);
+	$AppUI->redirect($redirect);
 }
 
 if (!ini_get('safe_mode')) {
