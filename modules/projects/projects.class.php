@@ -447,21 +447,6 @@ class CProject extends CW2pObject {
 
 		return $allowedProjectRows;
 	}
-	public function getAssignedProjectsInRows($userId) {
-		$q = new DBQuery;
-
-		$q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
-		$q->addTable('projects');
-		$q->addJoin('tasks', 't', 't.task_project = pr.project_id');
-		$q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-		$q->addWhere('ut.user_id = ' . (int)$userId);
-		$q->addGroup('pr.project_id');
-		$q->addOrder('project_name');
-		$this->setAllowedSQL($userId, $q, null, 'pr');
-		$allowedProjectRows = $q->exec();
-
-		return $allowedProjectRows;
-	}
 
 	/** Retrieve tasks with latest task_end_dates within given project
 	 * @param int Project_id
