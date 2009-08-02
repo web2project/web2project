@@ -582,13 +582,7 @@ class CProject extends CW2pObject {
 	public function notifyContacts($isNotNew) {
 		global $AppUI, $w2Pconfig, $locale_char_set;
 
-		$mail = new Mail;
-
-		if (intval($isNotNew)) {
-			$mail->Subject("Project Updated: $this->project_name ", $locale_char_set);
-		} else {
-			$mail->Subject("Project Submitted: $this->project_name ", $locale_char_set);
-		}
+		$subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
 		$users = CProject::getContacts($AppUI, $this->project_id);
 
@@ -611,12 +605,15 @@ class CProject extends CW2pObject {
 				$body .= "\n\nProject " . $this->project_name . ' was ' . $this->_message . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
 			}
 
-			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-		}
-		foreach ($users as $row) {
-			if ($mail->ValidEmail($row['contact_email'])) {
-				$mail->To($row['contact_email'], true);
-				$mail->Send();
+			foreach ($users as $row) {
+				$mail = new Mail;
+				$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+				$mail->Subject($subject, $locale_char_set);
+
+				if ($mail->ValidEmail($row['contact_email'])) {
+					$mail->To($row['contact_email'], true);
+					$mail->Send();
+				}
 			}
 		}
 		return '';
