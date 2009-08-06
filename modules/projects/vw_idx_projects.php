@@ -9,7 +9,7 @@ $perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $page = w2PgetParam($_GET, 'page', 1);
-$xpg_pagesize = 30;
+$xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
 $projectStatuses = w2PgetSysVal('ProjectStatus');
