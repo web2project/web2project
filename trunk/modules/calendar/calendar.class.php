@@ -222,7 +222,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	public function _drawTitle() {
+	private function _drawTitle() {
 		global $AppUI, $m, $a, $locale_char_set;
 		$url = 'index.php?m=' . $m;
 		$url .= $a ? '&amp;a=' . $a : '';
@@ -244,7 +244,7 @@ class CMonthCalendar {
 			$s .= '<a href="index.php?m=' . $m . '&amp;date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
 		}
 		setlocale(LC_TIME, 'en');
-		$s .= $AppUI->_($this->this_month->format('%B')) . ' ' . $AppUI->_($this->this_month->format('%Y')) . (($this->clickMonth) ? '</a>' : '');
+		$s .= $AppUI->_($this->this_month->format('%B')) . ' ' . $this->this_month->format('%Y') . (($this->clickMonth) ? '</a>' : '');
 		setlocale(LC_ALL, $AppUI->user_lang);
 		$s .= '</th>';
 
@@ -267,7 +267,7 @@ class CMonthCalendar {
 	 *
 	 * @return string Returns table a row with the day names
 	 */
-	public function _drawDays() {
+	private function _drawDays() {
 		global $AppUI, $locale_char_set;
 
 		setlocale(LC_TIME, 'en');
@@ -288,7 +288,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	public function _drawMain() {
+	private function _drawMain() {
 		global $AppUI;
 		$today = new CDate();
 		$today = $today->format('%Y%m%d%w');
@@ -387,7 +387,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	public function _drawWeek($dateObj) {
+	private function _drawWeek($dateObj) {
 		$href = "javascript:$this->weekFunc(" . $dateObj->getTimestamp() . ',\'' . $dateObj->toString() . '\')';
 		$w = '        <td class="week">';
 		$w .= $this->dayFunc ? '<a href="' . $href . '">' : '';
@@ -403,7 +403,7 @@ class CMonthCalendar {
 	 * { Description }
 	 *
 	 */
-	public function _drawEvents($day) {
+	private function _drawEvents($day) {
 		$s = '';
 		if (!isset($this->events[$day]) || $this->styleMain == 'minical') {
 			return '';
