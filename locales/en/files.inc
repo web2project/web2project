@@ -2,6 +2,7 @@
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
 'Add File',
+'Add File Folder',
 'add new file',
 'All Files',
 'All Projects',
@@ -31,6 +32,7 @@
 'Filter',
 'Final Version',
 'Folder',
+'Folder Explorer',
 'Folder Name',
 'Go',
 'Major Revision',
@@ -48,6 +50,7 @@
 'Root',
 'select task',
 'Size',
+'Subfolder of',
 'Task',
 'Task Name',
 'Type',
