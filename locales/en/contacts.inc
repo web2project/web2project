@@ -27,6 +27,7 @@
 'edit',
 'Edit',
 'Edit Contact',
+'edit this contact',
 'Email',
 'Export vCard for',
 'Fax',
