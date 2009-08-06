@@ -379,7 +379,7 @@ class CProject extends CW2pObject {
 		$oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '').'project_company');
 		//Department permissions
 		$oDpt = new CDepartment();
-		$query->leftJoin('project_departments', '', 'pr.project_id = project_departments.project_id');
+		$query->leftJoin('project_departments', '', $key.'.project_id = project_departments.project_id');
 		$oDpt->setAllowedSQL($uid, $query, 'project_departments.department_id');
 	}
 
