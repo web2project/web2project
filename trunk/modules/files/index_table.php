@@ -21,7 +21,8 @@ if (!isset($project_id)) {
 if (!isset($showProject)) {
 	$showProject = true;
 }
-$xpg_pagesize = 30;
+
+$xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
 // load the following classes to retrieved denied records
@@ -161,11 +162,8 @@ if ($canRead) {
 }
 // counts total recs from selection
 $xpg_totalrecs = count($q->loadList());
-
-// How many pages are we dealing with here ??
-$xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 1;
-
-shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
+//TODO: I don't like the ++$tab construct here... seems kludgy.
+echo buildPaginationNav($AppUI, $m, ++$tab, $xpg_totalrecs, $xpg_pagesize, $page);
 
 ?>
 <script type="text/JavaScript">
@@ -322,4 +320,4 @@ foreach ($files as $file_row) {
 } ?>
 </table>
 <?php
-shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
+echo buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);

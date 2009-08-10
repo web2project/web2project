@@ -397,6 +397,86 @@ function w2PshowImage($src, $wid = '', $hgt = '', $alt = '', $title = '', $modul
 	return $result;
 }
 
+// ****************************************************************************
+// Page numbering variables
+// Pablo Roca (pabloroca@Xmvps.org) (Remove the X)
+// 19 August 2003
+//
+// $tab             - file category
+// $page            - actual page to show
+// $xpg_pagesize    - max rows per page
+// $xpg_min         - initial record in the SELECT LIMIT
+// $xpg_totalrecs   - total rows selected
+// $xpg_sqlrecs     - total rows from SELECT LIMIT
+// $xpg_total_pages - total pages
+// $xpg_next_page   - next pagenumber
+// $xpg_prev_page   - previous pagenumber
+// $xpg_break       - stop showing page numbered list?
+// $xpg_sqlcount    - SELECT for the COUNT total
+// $xpg_sqlquery    - SELECT for the SELECT LIMIT
+// $xpg_result      - pointer to results from SELECT LIMIT
+
+function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page) {
+  $xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 0;
+  
+  $xpg_break = false;
+  $xpg_prev_page = $xpg_next_page = 0;
+
+  $s = '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
+
+  if ($xpg_totalrecs > $xpg_pagesize) {
+    $xpg_prev_page = $page - 1;
+    $xpg_next_page = $page + 1;
+    // left buttoms
+    if ($xpg_prev_page > 0) {
+      $s .= '<td align="left" width="15%"><a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=1"><img src="' . w2PfindImage('navfirst.gif') . '" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
+      $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_prev_page . '"><img src="' . w2PfindImage('navleft.gif') . '" border="0" Alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
+    } else {
+      $s .= '<td width="15%">&nbsp;</td>';
+    }
+
+    // central text (files, total pages, ...)
+    $s .= '<td align="center" width="70%">';
+    $s .= $xpg_totalrecs . ' ' . $AppUI->_('Record(s)') . ' ' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)');
+
+    // Page numbered list, up to 30 pages
+    $s .= ' [ ';
+
+    for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
+      if ($n == $page) {
+        $s .= '<b>' . $n . '</b></a>';
+      } else {
+        $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $n . '">' . $n . '</a>';
+      }
+      if ($n >= 30 + $page - 15) {
+        $xpg_break = true;
+        break;
+      } elseif ($n < $xpg_total_pages) {
+        $s .= ' | ';
+      }
+    }
+
+    if (!isset($xpg_break)) { // are we supposed to break ?
+      if ($n == $page) {
+        $s .= '<' . $n . '</a>';
+      } else {
+        $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '">' . $n . '</a>';
+      }
+    }
+    $s .= ' ] ';
+    $s .= '</td>';
+    // right buttoms
+    if ($xpg_next_page <= $xpg_total_pages) {
+      $s .= '<td align="right" width="15%"><a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_next_page . '"><img src="' . w2PfindImage('navright.gif') . '" border="0" Alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
+      $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '"><img src="' . w2PfindImage('navlast.gif') . '" border="0" Alt="Last Page"></a></td>';
+    } else {
+      $s .= '<td width="15%">&nbsp;</td></tr>';
+    }
+  }
+  $s .= '</table>';
+  return $s;
+}
+
 /**
  * function to return a default value if a variable is not set
  */

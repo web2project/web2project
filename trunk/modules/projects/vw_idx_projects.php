@@ -93,11 +93,8 @@ if ($is_tabbed) {
 	}
 
 	$xpg_totalrecs = count($projects);
-
-	// How many pages are we dealing with here ??
-	$xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 0;
-
-	shownavbar_links_prj($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
+	echo buildPaginationNav($AppUI, $m, $currentTabId, $xpg_totalrecs, $xpg_pagesize, $page);
+  
 } else {
 	//flat view
 	$project_status_filter = $currentTabId;
@@ -292,5 +289,5 @@ if ($is_tabbed) {
 </form>
 <?php
 if ($is_tabbed) {
-	shownavbar_links_prj($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page);
+	echo buildPaginationNav($AppUI, $m, $currentTabId, $xpg_totalrecs, $xpg_pagesize, $page);
 }

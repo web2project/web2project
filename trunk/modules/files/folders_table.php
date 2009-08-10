@@ -11,90 +11,6 @@ global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'];
 
-// ****************************************************************************
-// Page numbering variables
-// Pablo Roca (pabloroca@Xmvps.org) (Remove the X)
-// 19 August 2003
-//
-// $folder          - current folder
-// $page            - actual page to show
-// $xpg_pagesize    - max rows per page
-// $xpg_min         - initial record in the SELECT LIMIT
-// $xpg_totalrecs   - total rows selected
-// $xpg_sqlrecs     - total rows from SELECT LIMIT
-// $xpg_total_pages - total pages
-// $xpg_next_page   - next pagenumber
-// $xpg_prev_page   - previous pagenumber
-// $xpg_break       - stop showing page numbered list?
-// $xpg_sqlcount    - SELECT for the COUNT total
-// $xpg_sqlquery    - SELECT for the SELECT LIMIT
-// $xpg_result      - pointer to results from SELECT LIMIT
-function showfnavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder) {
-	global $AppUI, $tab, $m, $a;
-	$xpg_break = false;
-	$xpg_prev_page = $xpg_next_page = 1;
-
-	$s = '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
-
-	if ($xpg_totalrecs > $xpg_pagesize) {
-		$xpg_prev_page = $page - 1;
-		$xpg_next_page = $page + 1;
-		// left buttoms
-		if ($xpg_prev_page > 0) {
-			$s .= '<td align="left" width="15%"><a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=1"><img src="' . w2PfindImage('navfirst.gif') . '" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
-			$s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $xpg_prev_page . '"><img src="' . w2PfindImage('navleft.gif') . '" border="0" Alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
-		} else {
-			$s .= '<td width="15%">&nbsp;</td>';
-		}
-
-		// central text (files, total pages, ...)
-		$s .= '<td align="center" width="70%">';
-		//$s .= "$xpg_totalrecs " . $AppUI->_('File(s)') . " ($xpg_total_pages " . $AppUI->_('Page(s)') . ")";
-		$s .= $xpg_totalrecs . ' ' . $AppUI->_('File(s)') . ' ' . $AppUI->_('Pages') . ': [ ';
-
-		// begin page numbers
-		for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
-			if ($n == $page) {
-				$s .= '<b>' . $n . '</b></a>';
-			} else {
-				$s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $n . '"></a>';
-			}
-			if ($n >= 30 + $page - 15) {
-				$xpg_break = true;
-				break;
-			} else
-				if ($n < $xpg_total_pages) {
-					$s .= ' | ';
-				}
-		}
-
-		if (!isset($xpg_break)) { // are we supposed to break ?
-			if ($n == $page) {
-				$s .= '<' . $n . '</a>';
-			} else {
-				$s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '"></a>';
-			}
-		}
-		$s .= ' ] </td>';
-
-		// right buttoms
-		if ($xpg_next_page <= $xpg_total_pages) {
-			$s .= '<td align="right" width="15%"><a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $xpg_next_page . '"><img src="' . w2PfindImage('navright.gif') . '" border="0" Alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
-			$s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&amp;folder=' . $folder . '&amp;page=' . $xpg_total_pages . '"><img src="' . w2PfindImage('navlast.gif') . '" border="0" Alt="Last Page"></a></td>';
-		} else {
-			$s .= '<td width="15%">&nbsp;</td></tr>';
-		}
-	} else { // or we dont have any files..
-		$s .= '<td align="center">';
-		if ($xpg_next_page > $xpg_total_pages) {
-			$s .= $xpg_sqlrecs . ' ' . $AppUI->_('Files') . ' ';
-		}
-		$s .= '</td></tr>';
-	}
-	$s .= '</table>';
-	return $s;
-}
-
 $page = w2PgetParam($_GET, 'page', 1);
 
 if (!isset($project_id)) {
@@ -121,8 +37,7 @@ if (!isset($task_id)) {
 	$task_id = w2PgetParam($_REQUEST, 'task_id', 0);
 }
 
-global $xpg_min, $xpg_pagesize;
-$xpg_pagesize = 30;
+$xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
 // load the following classes to retrieved denied records
@@ -174,12 +89,6 @@ $q->addGroup('file_name');
 // counts total recs from selection
 $xpg_totalrecs = count($q->loadList());
 $q->clear();
-
-// How many pages are we dealing with here ??
-$xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 1;
-
-//shownavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder);
-
 
 ?>
 <script type="text/JavaScript">
@@ -666,9 +575,6 @@ function displayFiles($folder) {
 		$hidden_table = '';
 	}
 	$s .= '</table>';
-	if ($xpg_totalrecs > $xpg_pagesize) {
-		$s .= showfnavbar($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page, $folder);
-	}
 	$s .= '<br />';
 	return $s;
 }
