@@ -373,7 +373,7 @@ class CProject extends CW2pObject {
 		return array_merge($where, $project_where);
 	}
 
-	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
+	public function setAllowedSQL($uid, &$query, $index = null, $key = 'pr') {
 		$oCpy = new CCompany;
 		parent::setAllowedSQL($uid, $query, $index, $key);
 		$oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '').'project_company');
@@ -1112,73 +1112,6 @@ function projects_list_data($user_id = false) {
 	}
 	$buffer .= '</select>';
 
-}
-
-function shownavbar_links_prj($xpg_totalrecs, $xpg_pagesize, $xpg_total_pages, $page) {
-
-	global $AppUI, $m, $tab;
-	$xpg_break = false;
-	$xpg_prev_page = $xpg_next_page = 0;
-
-	$s = '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
-
-	if ($xpg_totalrecs > $xpg_pagesize) {
-		$xpg_prev_page = $page - 1;
-		$xpg_next_page = $page + 1;
-		// left buttoms
-		if ($xpg_prev_page > 0) {
-			$s .= '<td align="left" width="15%"><a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=1"><img src="' . w2PfindImage('navfirst.gif') . '" border="0" Alt="First Page"></a>&nbsp;&nbsp;';
-			$s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_prev_page . '"><img src="' . w2PfindImage('navleft.gif') . '" border="0" Alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
-		} else {
-			$s .= '<td width="15%">&nbsp;</td>';
-		}
-
-		// central text (files, total pages, ...)
-		$s .= '<td align="center" width="70%">';
-		$s .= $xpg_totalrecs . ' ' . $AppUI->_('Record(s)') . ' ' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)');
-
-		// Page numbered list, up to 30 pages
-		$s .= ' [ ';
-
-		for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
-			if ($n == $page) {
-				$s .= '<b>' . $n . '</b></a>';
-			} else {
-				$s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $n . '">' . $n . '</a>';
-			}
-			if ($n >= 30 + $page - 15) {
-				$xpg_break = true;
-				break;
-			} elseif ($n < $xpg_total_pages) {
-				$s .= ' | ';
-			}
-		}
-
-		if (!isset($xpg_break)) { // are we supposed to break ?
-			if ($n == $page) {
-				$s .= '<' . $n . '</a>';
-			} else {
-				$s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '">' . $n . '</a>';
-			}
-		}
-		$s .= ' ] ';
-		$s .= '</td>';
-		// right buttoms
-		if ($xpg_next_page <= $xpg_total_pages) {
-			$s .= '<td align="right" width="15%"><a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_next_page . '"><img src="' . w2PfindImage('navright.gif') . '" border="0" Alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
-			$s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '"><img src="' . w2PfindImage('navlast.gif') . '" border="0" Alt="Last Page"></a></td>';
-		} else {
-			$s .= '<td width="15%">&nbsp;</td></tr>';
-		}
-	} else { // or we dont have any files..
-		$s .= '<td align="center">';
-		if ($xpg_next_page > $xpg_total_pages) {
-			$s .= $xpg_sqlrecs . ' ' . $m . ' ';
-		}
-		$s .= '</td></tr>';
-	}
-	$s .= '</table>';
-	echo $s;
 }
 
 function getProjects() {
