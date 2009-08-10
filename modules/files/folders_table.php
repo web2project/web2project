@@ -4,7 +4,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id, $allowed_companies, $showProject;
 
-// modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
 
 // add to allow for returning to other modules besides Files
@@ -640,15 +639,9 @@ $folders_avail = getFolderSelectList();
 $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
 
 $project = new CProject();
-$sprojects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
-$q = new DBQuery;
-$q->addTable('projects', 'pr');
-$q->addQuery('pr.project_id, company_name');
-$q->addJoin('companies', 'co', 'co.company_id = project_company');
-$idx_companies = $q->loadHashList();
-$q->clear();
-foreach ($sprojects as $prj_id => $prj_name) {
-	$sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
+$sprojects = $project->getAllowedProjects($AppUI, false);
+foreach ($sprojects as $prj_id => $proj_info) {
+	$sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
 }
 asort($sprojects);
 $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
