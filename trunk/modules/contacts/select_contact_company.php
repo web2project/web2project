@@ -40,11 +40,12 @@ switch ($table_name) {
 }
 $select_list = array('0' => '') + $select_list;
 
-if (w2PgetParam($_POST, $id_field, 0) != 0) {
+if (isset($_POST[$id_field])) {
+  $myId = w2PgetParam($_POST, $id_field, 0);
 	$q = new DBQuery;
 	$q->addTable($table_name);
 	$q->addQuery('*');
-	$q->addWhere($id_field . '=' . $_POST[$id_field]);
+	$q->addWhere($id_field . '=' . $myId);
 	$r_data = $q->loadHash();
 	$q->clear();
 	$data_update_script = '';
@@ -55,14 +56,18 @@ if (w2PgetParam($_POST, $id_field, 0) != 0) {
 		if ($update_address) {
 			$update_fields = array('company_address1' => 'contact_address1', 'company_address2' => 'contact_address2', 'company_city' => 'contact_city', 'company_state' => 'contact_state', 'company_zip' => 'contact_zip', 'company_phone1' => 'contact_phone', 'company_phone2' => 'contact_phone2', 'company_fax' => 'contact_fax');
 		}
-		$data_update_script = 'opener.setCompany(\'' . $_POST[$id_field] . '\', \'' . db_escape($r_data[$name_field]) . "');\n";
+    if ($myId > 0) {
+  		$data_update_script = "opener.setCompany($myId , '" . db_escape($r_data[$name_field]) ."');";
+    } else {
+    	$data_update_script = "opener.setCompany($myId, '');";
+    }
 	} else {
 		if ($table_name == 'departments') {
 			$update_fields = array('dept_id' => 'contact_department');
 			if ($update_address) {
 				$update_fields = array('dept_address1' => 'contact_address1', 'dept_address2' => 'contact_address2', 'dept_city' => 'contact_city', 'dept_state' => 'contact_state', 'dept_zip' => 'contact_zip', 'dept_phone' => 'contact_phone', 'dept_fax' => 'contact_fax');
 			}
-			$data_update_script = 'opener.setDepartment(\'' . $_POST[$id_field] . '\', \'' . db_escape($r_data[$name_field]) . "');\n";
+			$data_update_script = 'opener.setDepartment(\'' . $myId . '\', \'' . db_escape($r_data[$name_field]) . "');\n";
 		}
 	}
 	// Let's figure out which fields are going to
