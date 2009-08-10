@@ -70,15 +70,9 @@ function expand_multiproject(id, table_name) {
 		<a href="?m=projects&orderby=total_tasks" class="hdr"><?php echo $AppUI->_('Tasks'); ?></a>
 		<a href="?m=projects&orderby=my_tasks" class="hdr">(<?php echo $AppUI->_('My'); ?>)</a>
 	</th>
-	<?php
-//	if($show_all_projects){
-?>
-		<th nowrap="nowrap">
-			<?php echo $AppUI->_('Type'); ?>
-		</th>
-		<?php
-//	}
-?>
+	<th nowrap="nowrap">
+		<?php echo $AppUI->_('Type'); ?>
+	</th>
 	<th nowrap="nowrap">
 		<a href="?m=projects&orderby=task_log_problem" class="hdr"><?php echo $AppUI->_('P'); ?></a>
 	</th>
@@ -125,12 +119,9 @@ foreach ($projects as $row_proj) {
 				continue;
 			}
 			$row = $projects[$project['project_id']];
-			//            	if ($show_all_projects || ($row_st->project_status == $project_status_filter)) {
 			$none = false;
 			$start_date = intval($row['project_start_date']) ? new CDate($row['project_start_date']) : null;
 			$end_date = intval($row['project_end_date']) ? new CDate($row['project_end_date']) : null;
-			// $actual_end_date = intval( $row['project_actual_end_date'] ) ? new CDate( $row['project_actual_end_date'] ) : null;
-			// $style = (( $actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 			if ($level) { 
 				$s = '<tr id="multiproject_' . $row['project_original_parent'] . '_' . $row['project_id'] . '" style="visibility:collapse">';
@@ -155,10 +146,6 @@ foreach ($projects as $row_proj) {
 				$s .= htmlspecialchars($row['company_name'], ENT_QUOTES);
 			}
 			$s .= '</td><td align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td><td align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
-			/*$s .= '<td align="center">';
-			$s .= $actual_end_date ? '<a href="?m=tasks&a=view&task_id='.$row["critical_task"].'">' : '';
-			$s .= $actual_end_date ? '<span '. $style.'>'.$actual_end_date->format( $df ).'</span>' : '-';
-			$s .= $actual_end_date ? '</a>' : '';*/
 			$s .= '<td align="center" nowrap="nowrap">' . $project_status[$row['project_status']] . '</td>';
 
 			$s .= '<td nowrap="nowrap">' . htmlspecialchars($row['user_username'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
@@ -176,18 +163,8 @@ foreach ($projects as $row_proj) {
 				$s .= '&nbsp;';
 			}
 			$s .= '</td></tr>';
-			/*                        if (!$level && $count_projects>1) {
-			$multiproject_id = $row['project_id'];
-			$s .= '<div style="display: none;" id="multiproject_'.$multiproject_id.'">';
-			}                                       		
-			if (($count_projects==$st_projects_counter) && $level && $count_projects>1)      
-			$s .= '</div>';      
-			if ($count_projects>1)
-			$st_projects_counter++;*/
 			echo $s;
-			//            	}
 		}
-		//$st_projects_counter = 1;
 	}
 }
 if ($none) {
