@@ -831,7 +831,7 @@ class CProject extends CW2pObject {
 
 		return rtrim($total_project_hours, '.');
 	}
-	public function getTaskLogs($AppUI, $projectId, $user_id = 0, $hide_inactive = 0, $hide_complete, $cost_code = 0) {
+	public function getTaskLogs($AppUI, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
 
 		$q = new DBQuery;
 		$q->addTable('task_log');
