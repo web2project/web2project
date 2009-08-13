@@ -16,6 +16,8 @@ if (isset($perms)) {
         readfile(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc');
       } elseif (file_exists(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc')) {
         readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc');
+      } elseif (file_exists(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '.inc')) {
+      	readfile(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '.inc');
       }
     }
   }
@@ -26,13 +28,16 @@ if (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc') {
 }
 
 // language files for specific locales and specific modules (for external modules) should be
-// put in modules/[the-module]/locales/[the-locale]/[the-module].inc
+// put in modules/[the-module]/locales/[the-locale]/[the-module].inc or
+//        modules/[the-module]/locales/[the-locale].inc
 // this allows for module specific translations to be distributed with the module
 
 if (file_exists(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc')) {
 	readfile(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc');
 } elseif (file_exists(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc')) {
 	readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc');
+} elseif (file_exists(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '.inc')) {
+	readfile(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '.inc');
 }
 
 switch ($m) {
