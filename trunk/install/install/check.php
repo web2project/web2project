@@ -40,19 +40,6 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="item">Server API</td>
-		<td align="left">
-		<?php 
-			if (strtolower(php_sapi_name()) == 'cgi') {
-				echo '<b class="error">'.$failedImg.' CGI mode is likely to have problems</b>';
-				$continue = false;
-			} else {
-				echo '<b class="ok">'.$okImg.'</b> <span class="item">('.php_sapi_name().')</span>';
-			}
-		?>
-		</td>
-	</tr>
-	<tr>
 		<td class="item">GD Support (for GANTT Charts)</td>
 		<td align="left">
 		<?php 
@@ -202,6 +189,18 @@
 			?>
 		</td>
 	</tr>
+  <tr>
+    <td class="item">Server API</td>
+    <td align="left">
+    <?php 
+      if (strpos(strtolower(php_sapi_name()), 'cgi') !== false) {
+        echo '<b class="error">'.$failedImg.' CGI mode is likely to have problems</b>';
+      } else {
+        echo '<b class="ok">'.$okImg.'</b> <span class="item">('.php_sapi_name().')</span>';
+      }
+    ?>
+    </td>
+  </tr>
 	<tr>
 		<td class="title" colspan="2"><br/>Recommended PHP Settings</td>
 	</tr>
