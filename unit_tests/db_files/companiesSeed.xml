@@ -412,4 +412,8 @@
 			<value>0</value>
 		</row>
     </table>
+    <table name="project_departments">
+        <column>project_id</column>
+        <column>department_id</column>
+    </table>
 </dataset>

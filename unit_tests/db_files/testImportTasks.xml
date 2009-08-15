@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- projectsSeed.xml - Seed data for projects test. -->
+<dataset>
+    <table name="users">
+        <column>user_id</column>
+        <column>user_contact</column>
+        <column>user_username</column>
+        <column>user_password</column>
+        <column>user_parent</column>
+        <column>user_type</column>
+        <column>user_signature</column>
+        <column>user_empireint_special</column>                             
+        <column>user_department</column>                                
+        <column>user_company</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>admin</value>
+            <value>76a2173be6393254e72ffa4d6df1030a</value>
+            <value>0</value>
+            <value>1</value>
+            <value>Admin User</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+        </row>
+    </table>
+    <table name="projects">
+        <column>project_id</column>
+        <column>project_company</column>
+        <column>project_department</column>
+        <column>project_name</column>
+        <column>project_short_name</column>
+        <column>project_owner</column>
+        <column>project_url</column>
+        <column>project_demo_url</column>
+        <column>project_start_date</column>
+        <column>project_end_date</column>
+        <column>project_actual_end_date</column>
+        <column>project_status</column>
+        <column>project_percent_complete</column>
+        <column>project_color_identifier</column>
+        <column>project_description</column>
+        <column>project_target_budget</column>
+        <column>project_actual_budget</column>
+        <column>project_creator</column>
+        <column>project_private</column>
+        <column>project_departments</column>
+        <column>project_contacts</column>
+        <column>project_priority</column>
+        <column>project_type</column>
+        <column>project_keydate</column>
+        <column>project_keydate_pos</column>
+        <column>project_keytask</column>
+        <column>project_active</column>
+        <column>project_original_parent</column>
+        <column>project_parent</column>
+        <column>project_empireint_special</column>
+        <column>project_updator</column>
+        <column>project_created</column>
+        <column>project_updated</column>
+        <column>project_status_comment</column>
+        <column>project_subpriority</column>
+        <column>project_end_date_adjusted</column>
+        <column>project_end_date_adjusted_user</column>
+        <column>project_location</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>Test Project</value>
+            <value>TP</value>
+            <value>1</value>
+            <value>http://project1.example.org</value>
+            <value>http://project1-demo.example.org</value>
+            <value>2009-07-05</value>
+            <value>2009-07-15</value>
+            <value>2009-08-15</value>
+            <value>0</value>
+            <value>0</value>
+            <value>FFFFFF</value>
+            <value>This is a project</value>
+            <value>15.00</value>
+            <value>5.00</value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value></value>
+            <value>-1</value>
+            <value>0</value>
+            <value></value>
+            <value>0</value>
+            <value>0</value>
+            <value>1</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>2009-07-05 13:46:00</value>
+            <value>2009-07-05 13:46:00</value>
+            <value>Status Comment.</value>
+            <value>0</value>
+            <value>2009-07-05 00:00:00</value>
+            <value>0</value>
+            <value>Somewhere</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>1</value>
+            <value>0</value>
+            <value>Test Project 2</value>
+            <value>TP2</value>
+            <value>1</value>
+            <value>http://project2.example.org</value>
+            <value>http://project2-demo.example.org</value>
+            <value>2009-07-08</value>
+            <value>2009-07-18</value>
+            <value>2009-08-18</value>
+            <value>0</value>
+            <value>50</value>
+            <value>EEEEEE</value>
+            <value>This is a project 2</value>
+            <value>20.00</value>
+            <value>10.00</value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value></value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>2009-07-08 13:46:00</value>
+            <value>2009-07-08 13:46:00</value>
+            <value>Status Comment for Project 2.</value>
+            <value>0</value>
+            <value>2009-07-08 00:00:00</value>
+            <value>0</value>
+            <value>Somewhere around</value>
+        </row>
+    </table>
+    <table name="tasks">
+        <column>task_id</column>
+        <column>task_name</column>
+        <column>task_parent</column>
+        <column>task_milestone</column>
+        <column>task_project</column>
+        <column>task_owner</column>
+        <column>task_start_date</column> 
+        <column>task_duration</column>
+        <column>task_duration_type</column>
+        <column>task_hours_worked</column>
+        <column>task_end_date</column>
+        <column>task_status</column>
+        <column>task_priority</column>
+        <column>task_percent_complete</column>
+        <column>task_description</column>
+        <column>task_target_budget</column>
+        <column>task_related_url</column>
+        <column>task_creator</column>
+        <column>task_order</column>
+        <column>task_client_publish</column>
+        <column>task_dynamic</column>
+        <column>task_access</column>
+        <column>task_notify</column>
+        <column>task_departments</column>
+        <column>task_contacts</column>
+        <column>task_custom</column>
+        <column>task_type</column>
+        <column>task_updator</column>
+        <column>task_created</column>
+        <column>task_updated</column>
+        <column>task_dep_reset_dates</column>
+        <row>
+            <value>1</value>
+            <value>Task</value>
+            <value>0</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value>2009-07-05 00:00:00</value>
+            <value>2</value>
+            <value>24</value>
+            <value>0</value>
+            <value>2009-07-15 00:00:00</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>This is task 1</value>
+            <value>0</value>
+            <value></value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value></value>
+            <value></value>
+            <value></value>
+            <value>1</value>
+            <value>1</value>
+            <value>2009-07-05 15:43:00</value>
+            <value>2009-07-05 15:43:00</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>Task 2</value>
+            <value>0</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value>2009-07-06 00:00:00</value>
+            <value>3</value>
+            <value>1</value>
+            <value>0</value>
+            <value>2009-07-15 00:00:00</value>
+            <value>-1</value>
+            <value>0</value>
+            <value>100</value>
+            <value>This is task 2</value>
+            <value>0</value>
+            <value></value>
+            <value>1</value>
+            <value>2</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value></value>
+            <value></value>
+            <value></value>  
+            <value>1</value>    
+            <value>1</value>
+            <value>2009-07-08 15:43:00</value>
+            <value>2009-07-08 15:43:00</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>Task</value>
+            <value>3</value>
+            <value>0</value>
+            <value>2</value>
+            <value>1</value>
+            <value>2009-07-05 00:00:00</value>
+            <value>2</value>
+            <value>24</value>
+            <value>0</value>
+            <value>2009-07-15 00:00:00</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>This is task 1</value>
+            <value>0</value>
+            <value></value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value></value>
+            <value></value>
+            <value></value>
+            <value>1</value>
+            <value>0</value>
+            <value>Ignored in test</value>
+            <value>Ignored in test</value>
+            <value>0</value>
+        </row> 
+        <row>
+            <value>4</value>
+            <value>Task 2</value>
+            <value>4</value>
+            <value>0</value>
+            <value>2</value>
+            <value>1</value>
+            <value>2009-07-06 00:00:00</value>
+            <value>3</value>
+            <value>1</value>
+            <value>0</value>
+            <value>2009-07-15 00:00:00</value>
+            <value>-1</value>
+            <value>0</value>
+            <value>100</value>
+            <value>This is task 2</value>
+            <value>0</value>
+            <value></value>
+            <value>1</value>
+            <value>2</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value></value>
+            <value></value>
+            <value></value>
+            <value>1</value>
+            <value>0</value>
+            <value>Ignored in test</value>
+            <value>Ignored in test</value>
+            <value>0</value>
+        </row>
+    </table>
+    <table name="user_tasks">
+        <column>user_id</column>
+        <column>user_type</column>
+        <column>task_id</column>
+        <column>perc_assignment</column>
+        <column>user_task_priority</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>3</value>
+            <value>1</value>
+            <value>1</value>
+        </row>
+    </table>
+    <table name="task_dependencies">
+        <column>dependencies_task_id</column>
+        <column>dependencies_req_task_id</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>3</value>
+        </row>
+    </table>
+    <table name="files">
+        <column>file_id</column>
+        <column>file_real_filename</column>
+        <column>file_project</column>
+        <column>file_task</column>
+        <column>file_name</column>
+        <column>file_parent</column>
+        <column>file_description</column>
+        <column>file_type</column>
+        <column>file_owner</column>
+        <column>file_date</column>
+        <column>file_size</column>
+        <column>file_version</column>
+        <column>file_icon</column>
+        <column>file_category</column>
+        <column>file_checkout</column>
+        <column>file_co_reason</column>
+        <column>file_version_id</column>
+        <column>file_folder</column>
+        <column>file_helpdesk_item</column>
+        <row>
+            <value>1</value>
+            <value>picture.jpg</value>
+            <value>1</value>
+            <value>0</value>
+            <value>123.jpg</value>
+            <value>0</value>
+            <value>This is a pretty image.</value>
+            <value>image/jpeg</value>
+            <value>1</value>
+            <value>2009-07-06 31:31:27</value>
+            <value>1024</value>
+            <value>1</value>
+            <value>jpeg.jpg</value>
+            <value>1</value>
+            <value>checkout</value>
+            <value>Cause I wanted to.</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+        </row>
+    </table>
+    <table name="events">
+        <column>event_id</column>
+        <column>event_title</column>
+        <column>event_start_date</column>
+        <column>event_end_date</column>
+        <column>event_parent</column>
+        <column>event_description</column>
+        <column>event_url</column>
+        <column>event_times_recuring</column>
+        <column>event_recurs</column>
+        <column>event_remind</column>
+        <column>event_icon</column>
+        <column>event_owner</column>
+        <column>event_project</column>
+        <column>event_task</column>
+        <column>event_private</column>
+        <column>event_type</column>
+        <column>event_cwd</column>
+        <column>event_notify</column>
+        <column>event_location</column>
+        <row>
+            <value>1</value>
+            <value>Party</value>
+            <value>2009-07-06 19:00:00</value>
+            <value>2009-07-07 01:00:00</value>
+            <value>0</value>
+            <value>Wicked awesome party.</value>
+            <value>http://party.example.org</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>party.jpg</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>My House!</value>
+        </row>
+    </table>
+    <table name="project_contacts">
+        <column>project_id</column>
+        <column>contact_id</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+        </row>
+    </table>
+</dataset>
