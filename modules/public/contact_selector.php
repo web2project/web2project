@@ -146,7 +146,7 @@ $contacts = $q->loadHashList('contact_id');
 		$actual_department = '';
 		$actual_company = '';
 		$companies_names = array(0 => $AppUI->_('Select a company')) + $aCpies;
-		echo arraySelect($companies_names, 'company_id', 'onchange="document.frmContactSelect.contacts_submited.value=0; ' . 'setContactIDs(); document.frmContactSelect.submit();"', 0);
+		echo arraySelect($companies_names, 'company_id', 'onchange="document.frmContactSelect.contacts_submited.value=0; ' . 'setContactIDs(); document.frmContactSelect.submit();"', $company_id);
 	?>
 	<br /><br />
 	<?php
