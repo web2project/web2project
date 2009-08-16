@@ -278,7 +278,7 @@ if ($do_report) {
 	}
 
 	if ($company_id != 'all') {
-		$q->addWhere('p.project_company = ' . (int)$company_id);
+		$q->addWhere('pr.project_company = ' . (int)$company_id);
 	}
 
 	$q->addOrder('task_project');
