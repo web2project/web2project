@@ -166,18 +166,12 @@ if ($task_id > 0)
 	$titleBlock->addCrumb('?m=tasks&a=view&task_id=' . $obj->task_id, 'view this task');
 $titleBlock->show();
 
-// Let's gather all the necessary information from the department table
-// collect all the departments in the company
-$depts = array(0 => '');
-
-// ALTER TABLE `tasks` ADD `task_departments` CHAR( 100 ) ;
-$company_id = $project->project_company;
-$selected_departments = $obj->task_departments != '' ? explode(',', $obj->task_departments) : array();
-$departments_count = 0;
-$department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-if ($department_selection_list != '') {
-	$department_selection_list = ('<select name="dept_ids[]" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
+$department_selection_list = array();
+$deptList = CDepartment::getDepartmentList($AppUI, $project->project_company, null);
+foreach($deptList as $dept) {
+  $department_selection_list[$dept['dept_id']] = $dept['dept_name'];
 }
+$department_selection_list = arrayMerge(array('0' => ''), $department_selection_list);
 
 //Dynamic tasks are by default now off because of dangerous behavior if incorrectly used
 if (is_null($obj->task_dynamic)) {
