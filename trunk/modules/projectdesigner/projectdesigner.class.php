@@ -372,7 +372,7 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 		}
 	}
 	// name link
-	$alt = strlen($a['task_description']) > 80 ? substr($a['task_description'], 0, 80) . '...' : $a['task_description'];
+	$alt = w2PUTF8strlen($a['task_description']) > 80 ? substr($a['task_description'], 0, 80) . '...' : $a['task_description'];
 	// instead of the statement below
 	$alt = str_replace('"', "&quot;", $alt);
 	$alt = str_replace("\r", ' ', $alt);

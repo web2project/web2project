@@ -401,8 +401,7 @@ if (is_array($projects)) {
 					// ...30...28...   //more or
 					// ...20...18...   //less
 
-					//$bar2 = new GanttBar($row++, array((strlen($advance.$t['task_name']) > 35 ? substr($advance.$t['task_name'], 0, 33).'...' : $advance.$t['task_name']), $tStartObj->format($df),  $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', $t['task_dynamic'] == 1 ? 0.1 : 0.6);
-					$bar2 = new GanttBar($row++, array((strlen($advance . $t['task_name']) > 35 ? substr($advance . $t['task_name'], 0, 33) . '...' : $advance . $t['task_name']), $tStartObj->format($df), $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', $t['task_dynamic'] == 1 ? 0.1 : 0.6);
+					$bar2 = new GanttBar($row++, array((w2PUTF8strlen($advance . $t['task_name']) > 35 ? w2PUTF8substr($advance . $t['task_name'], 0, 33) . '...' : $advance . $t['task_name']), $tStartObj->format($df), $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', $t['task_dynamic'] == 1 ? 0.1 : 0.6);
 					$bar2->title->SetColor(bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000'));
 
 					// Pedro A.
