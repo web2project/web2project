@@ -1140,9 +1140,31 @@ function w2PHTMLDecode($txt) {
 /*
  * An UTF-8 aware version of strlen()
  */
-function w2PUTF8strlen($str)
-{
-  return strlen(utf8_decode($str));
+function w2PUTF8strlen($str) {
+   global $locale_char_set;
+
+   if (!$locale_char_set) {
+      $locale_char_set = 'utf-8';
+   }
+   return $locale_char_set == 'utf-8' ? strlen(utf8_decode($str)) : strlen($str);
+}
+
+function w2PUTF8substr($str, $start, $length = null) {
+   global $locale_char_set;
+
+   if (!$locale_char_set) {
+      $locale_char_set = 'utf-8';
+   }
+   if ($locale_char_set == 'utf-8') {
+      return ($length === null) ? 
+                  utf8_encode(substr(utf8_decode($str), $start)) :
+                  utf8_encode(substr(utf8_decode($str), $start, $length));
+   }
+   else {
+      return ($length === null) ? 
+                  substr($str, $start) :
+                  substr($str, $start, $length);
+   }
 }
 
 function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '') {

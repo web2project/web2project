@@ -110,13 +110,12 @@ foreach ($trans as $k => $langs) {
 		$s .= '&nbsp;';
 	}
 	$s .= '</td><td>';
-	//$langs['english'] = htmlspecialchars( $langs['english'], ENT_QUOTES );
 	$langs['english'] = w2PformSafe($langs['english'], true);
 	if ($lang == 'en') {
-		if (strlen($langs['english']) < 40) {
+		if (w2PUTF8strlen($langs['english']) < 40) {
 			$s .= '<input type="text" name="trans[' . $index . '][english]" value="' . $langs['english'] . '" size="40" class="text" />';
 		} else {
-			$rows = round(strlen($langs['english'] / 35)) + 1;
+			$rows = round(w2PUTF8strlen($langs['english'] / 35)) + 1;
 			$s .= '<textarea name="trans[' . $index . '][english]"  cols="40" class="small" rows="' . $rows . '">' . $langs['english'] . '</textarea>';
 		}
 	} else {
@@ -126,10 +125,10 @@ foreach ($trans as $k => $langs) {
 	$s .= '</td><td>';
 	if ($lang != 'en') {
 		$langs['lang'] = w2PformSafe($langs['lang'], true);
-		if (strlen($langs['lang']) < 40) {
+		if (w2PUTF8strlen($langs['lang']) < 40) {
 			$s .= '<input type="text" name="trans[' . $index . '][lang]" value="' . $langs['lang'] . '" size="40" class="text" />';
 		} else {
-			$rows = round(strlen($langs['lang'] / 35)) + 1;
+			$rows = round(w2PUTF8strlen($langs['lang'] / 35)) + 1;
 			$s .= '<textarea name="trans[' . $index . '][lang]" cols="40" class="small" rows="' . $rows . '">' . $langs['lang'] . '</textarea>';
 		}
 	}
