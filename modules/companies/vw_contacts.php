@@ -45,7 +45,7 @@ if (count($contacts) > 0) {
 
 	<tr>
 		<td colspan="5" align="right" valign="top" style="background-color:#ffffff">
-			<input type="button" class=button value="<?php echo $AppUI->_('new contact') ?>" onClick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company->company_id; ?>&company_name=<?php echo $company->company_name; ?>'">
+			<input type="button" class=button value="<?php echo $AppUI->_('new contact') ?>" onClick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company->company_id; ?>'">
 		</td>
 	</tr>
 </table>
