@@ -73,7 +73,10 @@ class CProject extends CW2pObject {
 	public $project_color_identifier = null;
 	public $project_description = null;
 	public $project_target_budget = null;
-	public $project_actual_budget = null;
+	public $project_actual_budget = null;  
+  public $project_scheduled_hours = null;
+  public $project_worked_hours = null;
+  public $project_task_count = null;
 	public $project_creator = null;
 	public $project_active = null;
 	public $project_private = null;
@@ -95,7 +98,6 @@ class CProject extends CW2pObject {
 		if ('' == trim($this->project_name)) {
 			return 'project name is NULL';
 		}
-
 		// ensure changes of state in checkboxes is captured
 		$this->project_active = intval($this->project_active);
 		$this->project_private = intval($this->project_private);
