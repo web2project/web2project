@@ -15,7 +15,9 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 require_once W2P_BASE_DIR . '/classes/ui.class.php';
 require_once W2P_BASE_DIR . '/classes/query.class.php';
 
-// Need this to test actions that require permissions.
+/*
+ * Need this to test actions that require permissions.
+ */
 $AppUI  = new CAppUI;
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
@@ -23,23 +25,30 @@ $AppUI->login('admin', 'passwd');
 
 require_once W2P_BASE_DIR . '/classes/permissions.class.php';
 require_once W2P_BASE_DIR . '/includes/session.php';
-require_once W2P_BASE_DIR . '/classes/CustomFields.class.php';
-require_once W2P_BASE_DIR . '/modules/companies/companies.class.php';
-require_once W2P_BASE_DIR . '/modules/projects/projects.class.php';
-require_once W2P_BASE_DIR . '/modules/departments/departments.class.php';
+//require_once W2P_BASE_DIR . '/classes/CustomFields.class.php';
+//require_once W2P_BASE_DIR . '/modules/companies/companies.class.php';
+//require_once W2P_BASE_DIR . '/modules/projects/projects.class.php';
+//require_once W2P_BASE_DIR . '/modules/departments/departments.class.php';
 require_once 'PHPUnit/Framework.php';
+require_once 'PHPUnit/Extensions/Database/TestCase.php';
+require_once 'PHPUnit/Extensions/Database/DataSet/DataSetFilter.php';
 /**
- * DateTest Class.
+ * PermissionsTest Class.
  * 
- * Class to test the date include
+ * Class to test the permissions class
  * @author D. Keith Casey, Jr.
  * @package web2project
  * @subpackage unit_tests
  */
 class w2Pacl_Test extends PHPUnit_Framework_TestCase 
 {
-	public function testNothing()
+	public function testDebugText()
 	{
-		$this->markTestIncomplete("w2Pacl_Test doesn't do anything yet.");
+		$perms = new w2Pacl();
+    
+    $this->assertType('w2Pacl', $perms);
+    $perms->debug_text('test message');
+    
+    $this->assertEquals('test message', $perms->msg());
 	}
 }
