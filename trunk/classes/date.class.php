@@ -554,12 +554,14 @@ class CDate extends Date {
 		$this->addSeconds(0 - $offset);
 
 		// convert UTC to new timezone
-		$offset = intval($GLOBALS['_DATE_TIMEZONE_DATA'][$tz]['offset'] / 1000);
+		$tzID = (is_object($tz)) ? $tz->id : $tz;
+    
+    $offset = intval($GLOBALS['_DATE_TIMEZONE_DATA'][$tzID]['offset'] / 1000);
 		if ($this->tz['hasdst']) {
 			$offset += 3600;
 		}
 		$this->addSeconds($offset);
-		$this->setTZ($tz);
+    $this->setTZ((is_object($tz)) ? $tz->id : $tz);
 	}
 	public function setTZ($tz)
 	{
