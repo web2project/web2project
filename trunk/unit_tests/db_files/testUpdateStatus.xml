@@ -19,6 +19,9 @@
         <column>project_description</column>
         <column>project_target_budget</column>
         <column>project_actual_budget</column>
+        <column>project_scheduled_hours</column>
+        <column>project_worked_hours</column>
+        <column>project_task_count</column>
         <column>project_creator</column>
         <column>project_private</column>
         <column>project_departments</column>
@@ -58,6 +61,9 @@
             <value>This is a project</value>
             <value>15.00</value>
             <value>5.00</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
             <value>1</value>
             <value>0</value>
             <value></value>
@@ -98,6 +104,9 @@
             <value>This is a project 2</value>
             <value>20.00</value>
             <value>10.00</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
             <value>1</value>
             <value>0</value>
             <value></value>
