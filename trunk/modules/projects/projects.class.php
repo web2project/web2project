@@ -93,11 +93,33 @@ class CProject extends CW2pObject {
 	}
 
 	public function check() {
-		$this->project_id = intval($this->project_id);
+		$errorArray = array();
+    $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-		if ('' == trim($this->project_name)) {
-			return 'project name is NULL';
+    $this->project_id = intval($this->project_id);
+
+		if ('' == $this->project_name) {
+			$errorArray['project_name'] = $baseErrorMsg . 'project name is NULL';
 		}
+    if ('' == $this->project_short_name) {
+      $errorArray['project_short_name'] = $baseErrorMsg . 'project short name is NULL';
+    }
+    if ('' == $this->project_company) {
+    	$errorArray['project_company'] = $baseErrorMsg . 'project company is NULL';
+    }
+    if ('' == $this->project_priority) {
+    	$errorArray['project_priority'] = $baseErrorMsg . 'project priority is NULL';
+    }
+    if ('' == $this->project_color_identifier) {
+      $errorArray['project_color_identifier'] = $baseErrorMsg . 'project color identifier is NULL';
+    }
+    if ('' == $this->project_type) {
+    	$errorArray['project_type'] = $baseErrorMsg . 'project type is NULL';
+    }
+    if ('' == $this->project_status) {
+      $errorArray['project_status'] = $baseErrorMsg . 'project status is NULL';
+    }
+
 		// ensure changes of state in checkboxes is captured
 		$this->project_active = intval($this->project_active);
 		$this->project_private = intval($this->project_private);
@@ -112,7 +134,7 @@ class CProject extends CW2pObject {
 		if (empty($this->project_end_date)) {
 			$this->project_end_date = null;
 		}
-		return null; // object is ok
+		return $errorArray;
 	}
 
 	public function load($oid = null, $strip = true) {
@@ -471,9 +493,10 @@ class CProject extends CW2pObject {
 		$this->w2PTrimAll();
 
 		$this->project_target_budget = str_replace(',', '', $this->project_target_budget);
-		$msg = $this->check();
-		if ($msg) {
-			return get_class($this) . '::store-check failed - ' . $msg;
+		$errorMsgArray = $this->check();
+
+		if (count($errorMsgArray) > 0) {
+      return $errorMsgArray;
 		}
 
 		if ($this->project_id) {

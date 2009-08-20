@@ -204,12 +204,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $project->bind($post_data);
-        $msg = $project->store();
+        $errorArray = $project->store();
         
         /**
          * Verify we got the proper error message
          */
-        $this->AssertEquals('CProject::store-check failed - project name is NULL', $msg);
+        $this->assertArrayHasKey('project_name', $errorArray);
         
         /**
          * Verify that project id was not set
@@ -254,12 +254,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $project->bind($post_data);
-        $msg = $project->store();
+        $errorArray = $project->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->AssertEquals('CProject::store-check failed - project company is NULL', $msg);
+        $this->assertArrayHasKey('project_company', $errorArray);
         
         /**
          * Verify that project id was not set
@@ -304,12 +304,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $project->bind($post_data);
-        $msg = $project->store();
+        $errorArray = $project->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->AssertEquals('CProject::store-check failed - project priority is NULL', $msg);
+        $this->assertArrayHasKey('project_priority', $errorArray);
         
         /**
          * Verify that project id was not set
@@ -354,12 +354,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $project->bind($post_data);
-        $msg = $project->store();
+        $errorArray = $project->store();
         
         /**
          * Verify we got the proper error message
          */
-        $this->AssertEquals('CProject::store-check failed - project short name is NULL', $msg);
+        $this->assertArrayHasKey('project_short_name', $errorArray);
         
         /**
          * Verify that project id was not set
@@ -404,12 +404,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $project->bind($post_data);
-        $msg = $project->store();
+        $errorArray = $project->store();
         
         /**
          * Verify we got the proper error message
          */
-        $this->AssertEquals('CProject::store-check failed - project color identifier is NULL', $msg);
+        $this->assertArrayHasKey('project_color_identifier', $errorArray);
         
         /**
          * Verify that project id was not set
@@ -454,12 +454,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $project->bind($post_data);
-        $msg = $project->store();
+        $errorArray = $project->store();
         
         /**
          * Verify we got the proper error message
          */
-        $this->AssertEquals('CProject::store-check failed - project type is NULL', $msg);
+        $this->assertArrayHasKey('project_type', $errorArray);
         
         /**
          * Verify that project id was not set
@@ -504,12 +504,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $project->bind($post_data);
-        $msg = $project->store();
+        $errorArray = $project->store();
         
         /**
          * Verify we got the proper error message
          */
-        $this->AssertEquals('CProject::store-check failed - project status is NULL', $msg);
+        $this->assertArrayHasKey('project_status', $errorArray);
         
         /**
          * Verify that project id was not set
@@ -555,7 +555,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         
         $project->bind($post_data);
         $msg = $project->store();
-
+        
         $this->assertEquals('',                         $msg);
         $this->assertEquals(3,                          $project->project_id);
         $this->assertEquals(1,                          $project->project_company);
@@ -616,7 +616,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $project_updated =  strtotime($project_updated);
         
         $now_secs = time();
-        $min_time = $now_secs - 10;        
+        $min_time = $now_secs - 10;
+
         $this->assertGreaterThanOrEqual($min_time, $project_created);
         $this->assertLessThanOrEqual($now_secs, $project_created);
         $this->assertGreaterThanOrEqual($min_time, $project_updated);
@@ -660,8 +661,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $project->bind($post_data);
-        $error_msg = $project->check();
-        $this->assertEquals('project name is NULL', $error_msg);
+        $errorArray = $project->check();
+        $this->assertArrayHasKey('project_name', $errorArray);
     }
     
     /**
@@ -701,8 +702,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $project->bind($post_data);
-        $error_msg = $project->check();
-        $this->assertNull($error_msg);
+        $errorArray = $project->check();
+        $this->assertEquals(0, count($errorArray));
     }
     
     /**
