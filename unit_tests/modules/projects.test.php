@@ -94,9 +94,9 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     	$this->assertObjectHasAttribute('project_description',         $project);
     	$this->assertObjectHasAttribute('project_target_budget',       $project);
     	$this->assertObjectHasAttribute('project_actual_budget',       $project);
-      $this->assertObjectHasAttribute('project_scheduled_hours',     $project);
-      $this->assertObjectHasAttribute('project_worked_hours',        $project);
-      $this->assertObjectHasAttribute('project_task_count',          $project);
+        $this->assertObjectHasAttribute('project_scheduled_hours',     $project);
+        $this->assertObjectHasAttribute('project_worked_hours',        $project);
+        $this->assertObjectHasAttribute('project_task_count',          $project);
     	$this->assertObjectHasAttribute('project_creator',             $project);
     	$this->assertObjectHasAttribute('project_active',              $project);
     	$this->assertObjectHasAttribute('project_private',             $project);
@@ -156,7 +156,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('projects',     $project->_tbl);
         $this->assertEquals('project_id',   $project->_tbl_key);
         $this->assertEquals('',             $project->_error);
-        $this->assertType('DBQuery', $project->_query);
+        $this->assertType('DBQuery',        $project->_query);
     } 
 
     /**
@@ -555,7 +555,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         
         $project->bind($post_data);
         $msg = $project->store();
-        
+
         $this->assertEquals('',                         $msg);
         $this->assertEquals(3,                          $project->project_id);
         $this->assertEquals(1,                          $project->project_company);
@@ -826,7 +826,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         
         $project->bind($post_data);
         $msg = $project->store();
-        
+
         $this->assertEquals('', $msg);
         $this->assertEquals(1,                                  $project->project_id);
         $this->assertEquals(1,                                  $project->project_company);
