@@ -501,11 +501,14 @@ class CProject extends CW2pObject {
 
 		if ($this->project_id) {
 			$q = new DBQuery;
+            $this->project_updated = $q->dbfnNow();
 			$ret = $q->updateObject('projects', $this, 'project_id', false);
 			$q->clear();
 			addHistory('projects', $this->project_id, 'update', $this->project_name, $this->project_id);
 		} else {
 			$q = new DBQuery;
+            $this->project_updated = $q->dbfnNow();
+            $this->project_created = $q->dbfnNow();
 			$ret = $q->insertObject('projects', $this, 'project_id');
 			$q->clear();
 			addHistory('projects', $this->project_id, 'add', $this->project_name, $this->project_id);
