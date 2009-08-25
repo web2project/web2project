@@ -144,94 +144,86 @@ function showFullProject() {
 
 </script>
 
-
 <form name="editFrm" method="post" action="?<?php echo "m=$m&a=$a&tab=$tab&project_id=$project_id"; ?>" accept-charset="utf-8">
-<input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
-<table border="0" cellpadding="4" cellspacing="0" class="std" width="100%">
-<tr>
-	<td align="left" valign="top" width="20">
-<?php if ($display_option != "all") { ?>
-		<a href="javascript:scrollPrev()">
-			<img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('previous'); ?>" border="0">
-		</a>
-<?php } ?>
-	</td>
+  <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
+  <table border="0" cellpadding="4" cellspacing="0" class="std" width="100%">
+    <tr>
+    	<td align="left" valign="top" width="20">
+        <?php if ($display_option != "all") { ?>
+        	<a href="javascript:scrollPrev()">
+        		<img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('previous'); ?>" border="0">
+        	</a>
+        <?php } ?>
+    	</td>
 
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('From'); ?>:</td>
-	<td align="left" nowrap="nowrap">
-		<input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-		<input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-		<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
-		<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
-	</td>
+    	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('From'); ?>:</td>
+    	<td align="left" nowrap="nowrap">
+    		<input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+    		<input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+    		<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
+    		<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
+    	</td>
 
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('To'); ?>:</td>
-	<td align="left" nowrap="nowrap">
-		<input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-		<input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-		<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
-		<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
-	<td valign="top">
-		<input type="checkbox" name="showLabels" id="showLabels" <?php echo (($showLabels == 1) ? 'checked="checked"' : ''); ?> /><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
-	</td>
-	<td valign="top">
-		<input type="checkbox" name="showWork" id="showWork" <?php echo (($showWork == 1) ? 'checked="checked"' : ''); ?> /><label for="showWork"><?php echo $AppUI->_('Show work instead of duration'); ?></label>
-	</td>	
-	<td valign="top">
-		<input type="checkbox" name="sortByName" id="sortByName" <?php echo (($sortByName == 1) ? 'checked="checked"' : ''); ?> /><label for="sortByName"><?php echo $AppUI->_('Sort by Task Name'); ?></label>
-	</td>	
-	<td align="left">
-		<input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submit();' />
-	</td>
-
-	<td align="right" valign="top" width="20">
-<?php if ($display_option != 'all') { ?>
-	  <a href="javascript:scrollNext()">
-	  	<img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('next'); ?>" border="0" />
-	  </a>
-<?php } ?>
-	</td>
-</tr>
-<?php if ($a == 'todo') { ?>
-<input type="hidden" name="show_form" value="1" />
-<tr>
-	<td align="center" valign="bottom" nowrap="nowrap" colspan="7">
-		<table width="100%" border="0" cellpadding="1" cellspacing="0">
-			<tr>
-			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showPinned" id="showPinned" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
-				<label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
-			</td>
-			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-				<label for="showArcProjs"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
-			</td>
-<!--			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showHoldProjs" id="showHoldProjs" <?php echo $showHoldProjs ? 'checked="checked"' : ''; ?> />
-				<label for="showHoldProjs"><?php echo $AppUI->_('Projects on Hold'); ?></label>
-			</td>-->
-			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showDynTasks" id="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
-				<label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-			</td>
-			<td align="center" valign="bottom" nowrap="nowrap">
-				<input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-				<label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-			</td>
-			</tr>
-		</table>
-	</td>
-</tr>
-<?php } ?>
+    	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('To'); ?>:</td>
+    	<td align="left" nowrap="nowrap">
+    		<input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+    		<input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+    		<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
+    		<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
+    	<td valign="top">
+    		<input type="checkbox" name="showLabels" id="showLabels" <?php echo (($showLabels == 1) ? 'checked="checked"' : ''); ?> /><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
+    	</td>
+    	<td valign="top">
+    		<input type="checkbox" name="showWork" id="showWork" <?php echo (($showWork == 1) ? 'checked="checked"' : ''); ?> /><label for="showWork"><?php echo $AppUI->_('Show work instead of duration'); ?></label>
+    	</td>	
+    	<td valign="top">
+    		<input type="checkbox" name="sortByName" id="sortByName" <?php echo (($sortByName == 1) ? 'checked="checked"' : ''); ?> /><label for="sortByName"><?php echo $AppUI->_('Sort by Task Name'); ?></label>
+    	</td>	
+    	<td align="left">
+    		<input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submit();' />
+    	</td>
+    	<td align="right" valign="top" width="20">
+        <?php if ($display_option != 'all') { ?>
+          <a href="javascript:scrollNext()">
+          	<img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('next'); ?>" border="0" />
+          </a>
+        <?php } ?>
+    	</td>
+    </tr>
+    <?php if ($a == 'todo') { ?>
+      <input type="hidden" name="show_form" value="1" />
+      <tr>
+      	<td align="center" valign="bottom" nowrap="nowrap" colspan="7">
+      		<table width="100%" border="0" cellpadding="1" cellspacing="0">
+      			<tr>
+      			<td align="center" valign="bottom" nowrap="nowrap">
+      				<input type="checkbox" name="showPinned" id="showPinned" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
+      				<label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
+      			</td>
+      			<td align="center" valign="bottom" nowrap="nowrap">
+      				<input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
+      				<label for="showArcProjs"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
+      			</td>
+      			<td align="center" valign="bottom" nowrap="nowrap">
+      				<input type="checkbox" name="showDynTasks" id="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
+      				<label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
+      			</td>
+      			<td align="center" valign="bottom" nowrap="nowrap">
+      				<input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
+      				<label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
+      			</td>
+      			</tr>
+      		</table>
+      	</td>
+      </tr>
+    <?php } ?>
+    <tr>
+    	<td align="center" valign="bottom" colspan="9">
+    		<?php echo "<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') . "</a> : <a href='javascript:showFullProject()'>" . ($a == 'todo' ? $AppUI->_('show all') : $AppUI->_('show full project')) . "</a><br>"; ?>
+    	</td>
+    </tr>
+  </table>
 </form>
-
-<tr>
-	<td align="center" valign="bottom" colspan="9">
-		<?php echo "<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') . "</a> : <a href='javascript:showFullProject()'>" . ($a == 'todo' ? $AppUI->_('show all') : $AppUI->_('show full project')) . "</a><br>"; ?>
-	</td>
-</tr>
-
-</table>
 
 <table cellspacing="0" cellpadding="0" border="1" align="center" class="std" width="100%">
 <tr>
