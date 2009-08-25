@@ -79,6 +79,13 @@ class DBQuery {
 	/**< Use the old style of fetch mode with ADODB */
 	public $_db = null;
 	/**< Handle to the database connection */
+    
+    /**
+     * Array of db function names
+     * @access private
+     * @var array
+     */
+    private $_db_funcs;
 
 	/** DBQuery constructor
 	 *
@@ -94,6 +101,7 @@ class DBQuery {
 			$this->_table_prefix = w2PgetConfig('dbprefix', '');
 		}
 		$this->_db = isset($query_db) ? $query_db : $db;
+        $this->_db_funcs = array($this->dbfnNow());
 
 		$this->clear();
 	}
@@ -276,8 +284,9 @@ class DBQuery {
 	 * @param $field The field to update
 	 * @param $value The value to set $field to
 	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
+     * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being updated includes a function
 	 */
-	public function addUpdate($field, $value = null, $set = false) {
+	public function addUpdate($field, $value = null, $set = false, $func = false) {
 		if (is_array($field) && $value == null) {
 			foreach ($field as $f => $v) {
 				$this->addMap('update_list', $f, $v);
@@ -299,7 +308,11 @@ class DBQuery {
 				$this->addMap('update_list', $values[$i], $fields[$i]);
 			}
 		} else {
-			$this->addMap('update_list', $value, $field);
+            if (!$func) {
+                $this->addMap('update_list', $this->quote($value), $field);
+            } else {
+                $this->addMap('update_list', $value, $field);
+            }
 		}
 		$this->type = 'update';
 	}
@@ -850,7 +863,7 @@ class DBQuery {
 					if ($sets) {
 						$sets .= ', ';
 					}
-					$sets .= $this->quote_db($field) . ' = ' . $this->quote($value);
+					$sets .= $this->quote_db($field) . ' = ' . $value;
 				}
 				$q .= $sets;
 				$q .= $this->make_where_clause($this->where);
@@ -1108,6 +1121,7 @@ class DBQuery {
 		}
 		$ADODB_FETCH_MODE = $style;
 		$this->clearQuery();
+        
 		if ($q = $this->prepare()) {
 			/*echo('<pre>');
 			print_r('executing query(' . $q . ')');
@@ -1556,7 +1570,11 @@ class DBQuery {
 			$values[$k] = $v;
 		}
 		foreach ($fields as $field) {
-			$this->addInsert($field, $values[$field]);
+            if (!in_array($values[$field], $this->_db_funcs)) {
+                $this->addInsert($field, $values[$field]);
+            } else {
+                $this->addInsert($field, $values[$field], false, true);
+            }
 		}
 
 		if (!$this->exec()) {
@@ -1593,7 +1611,11 @@ class DBQuery {
 		}
 		if (count($values)) {
 			foreach ($fields as $field) {
-				$this->addUpdate($field, $values[$field]);
+                if (!in_array($values[$field], $this->_db_funcs)) {
+                    $this->addUpdate($field, $values[$field]);
+                } else {
+                    $this->addUpdate($field, $values[$field], false, true);
+                }
 			}
 			$ret = $this->exec();
 		}
@@ -1621,7 +1643,11 @@ class DBQuery {
 			$values[$k] = $v;
 		}
 		foreach ($fields as $field) {
-			$this->addInsert($field, $values[$field]);
+            if (!in_array($values[$field], $this->_db_funcs)) {
+			    $this->addInsert($field, $values[$field]);
+            } else {
+                $this->addInsert($field, $values[$field], false, true);
+            }
 		}
 		if (!$this->exec()) {
 			return false;
@@ -1658,9 +1684,14 @@ class DBQuery {
 			$values[$k] = $v;
 		}
 		if (count($values)) {
+            
 			foreach ($fields as $field) {
-				$this->addUpdate($field, $values[$field]);
-			}
+                if (!in_array($values[$field], $this->_db_funcs)) {
+                    $this->addUpdate($field, $values[$field]);
+                } else {
+                    $this->addUpdate($field, $values[$field], false, true);
+                }
+			}            
 			return $this->exec();
 		} else {
 			return true;
