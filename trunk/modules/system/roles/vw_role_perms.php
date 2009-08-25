@@ -11,20 +11,15 @@ $canEdit = $perms->checkModule('roles', 'edit');
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-
+  
 $module_list = $perms->getModuleList();
-$pgos = array();
-$q = new DBQuery;
-$q->addTable('modules', 'm');
-$q->addQuery('mod_id, mod_name, permissions_item_table, permissions_item_field, permissions_item_label');
-$q->addWhere('permissions_item_table IS NOT NULL');
-$q->addWhere('permissions_item_table <> \'\'');
-$pgo_list = $q->loadHashList('mod_name');
-$q->clear();
+$pgo_list = $AppUI->getPermissionableModuleList();
 
 $count = 0;
-$modules = array();
 $offset = 0;
+$pgos = array();
+$modules = array();
+
 foreach ($module_list as $module) {
 	$modules[$module['type'] . ',' . $module['id']] = $module['name'];
 	if ($module['type'] = 'mod' && isset($pgo_list[$module['name']])) {
