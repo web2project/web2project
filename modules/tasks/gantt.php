@@ -139,10 +139,6 @@ if ($caller == 'todo') {
 // get any specifically denied tasks
 $task = new CTask;
 $task->setAllowedSQL($AppUI->user_id, $q);
-
-echo $q->prepare();
-die();
-
 $proTasks = $q->loadHashList('task_id');
 $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 
