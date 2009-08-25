@@ -90,8 +90,9 @@ function constructTaskTree($task_data, $depth = 0) {
 
 	if (isset($parents[$task_data['task_id']])) {
 		foreach ($parents[$task_data['task_id']] as $child_task) {
-			if ($child_task != $task_id)
+			if ($child_task != $task_id) {
 				constructTaskTree($all_tasks[$child_task], ($depth + 1));
+			}
 		}
 	}
 }
@@ -151,8 +152,9 @@ $q->clear();
 // let's iterate root tasks
 foreach ($root_tasks as $root_task) {
 	build_date_list($projTasksWithEndDates, $root_task);
-	if ($root_task['task_id'] != $task_id)
+	if ($root_task['task_id'] != $task_id) {
 		constructTaskTree($root_task);
+	}
 }
 
 // setup the title block
@@ -180,12 +182,9 @@ if (is_null($obj->task_dynamic)) {
 
 $can_edit_time_information = $obj->canUserEditTimeInformation();
 //get list of projects, for task move drop down list.
-//require_once $AppUI->getModuleClass('projects');
-//$project =& new CProject;
 $pq = new DBQuery;
 $pq->addQuery('pr.project_id, project_name');
 $pq->addTable('projects', 'pr');
-$pq->addWhere('project_company = ' . (int)$company_id);
 $pq->addWhere('( project_active = 1 or pr.project_id = ' . (int)$task_project . ')');
 $pq->addOrder('project_name');
 $project->setAllowedSQL($AppUI->user_id, $pq, null, 'pr');
@@ -293,7 +292,7 @@ if (isset($_GET['tab'])) {
 	$AppUI->setState('TaskAeTabIdx', w2PgetParam($_GET, 'tab', 0));
 }
 $tab = $AppUI->getState('TaskAeTabIdx', 0);
-$tabBox = &new CTabBox('?m=tasks&a=addedit&task_id=' . $task_id, '', $tab, '');
+$tabBox = new CTabBox('?m=tasks&a=addedit&task_id=' . $task_id, '', $tab, '');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_desc', 'Details');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_dates', 'Dates');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_depend', 'Dependencies');
