@@ -517,6 +517,14 @@ class CTask extends CW2pObject {
 		}
 		if ($this->task_id) {
 			addHistory('tasks', $this->task_id, 'update', $this->task_name, $this->task_project);
+
+      // Load and globalize the old, not yet updated task object
+      // e.g. we need some info later to calculate the shifting time for depending tasks
+      // see function update_dep_dates
+      global $oTsk;
+      $oTsk = new CTask();
+      $oTsk->peek($this->task_id);
+
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
 			}
@@ -526,13 +534,6 @@ class CTask extends CW2pObject {
 			$ret = $q->updateObject('tasks', $this, 'task_id');
 			$q->clear();
 			$this->_action = 'updated';
-
-			// Load and globalize the old, not yet updated task object
-			// e.g. we need some info later to calculate the shifting time for depending tasks
-			// see function update_dep_dates
-			global $oTsk;
-			$oTsk = new CTask();
-			$oTsk->peek($this->task_id);
 
 			// if task_status changed, then update subtasks
 			if ($this->task_status != $oTsk->task_status) {
