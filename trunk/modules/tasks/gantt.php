@@ -86,11 +86,10 @@ if ($caller == 'todo') {
 
 	if ($sortByName) {
 		$q->addOrder('ta.task_name, ta.task_end_date');
-		$q->addOrder('task_priority DESC');
 	} else {
-		$q->addOrder('ta.task_end_date');
-		$q->addOrder('task_priority DESC');
+		$q->addOrder('ta.task_end_date');		
 	}
+  $q->addOrder('task_priority DESC');
 	##############################################################
 } else {
 	// pull tasks
@@ -98,7 +97,6 @@ if ($caller == 'todo') {
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_name, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
-	//$q->addWhere('project_active = 1');
 
 	if ($sortByName) {
 		$q->addOrder('project_id, t.task_name, task_start_date');
@@ -141,6 +139,9 @@ if ($caller == 'todo') {
 // get any specifically denied tasks
 $task = new CTask;
 $task->setAllowedSQL($AppUI->user_id, $q);
+
+echo $q->prepare();
+die();
 
 $proTasks = $q->loadHashList('task_id');
 $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
