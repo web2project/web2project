@@ -278,6 +278,15 @@ class CUser extends CW2pObject {
 
 		$q->loadObject($this, true, false);
 	}
+  public function hook_cron() {
+    $q = new DBQuery;   
+    $q->setDelete('sessions');
+    $q->addWhere("session_user ='' OR session_user IS NULL");
+    $q->exec();
+    $q->clear();
+    
+    return true;
+  }
 	public function validatePassword($userId, $password) {
 		$q = new DBQuery;
 		$q->addTable('users');
