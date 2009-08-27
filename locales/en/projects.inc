@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+'required_field_f.project_short_name.value.length'=>'Please select a shortname for this project.',
 '% of work done (based on duration)',
 '(no end date)',
 '(no start date)',
