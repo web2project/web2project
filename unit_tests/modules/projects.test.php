@@ -766,7 +766,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertEquals('2009-07-15 00:00:00',              $project->project_end_date);
       $this->assertEquals('2009-08-15 00:00:00',              $project->project_actual_end_date);
       $this->assertEquals(0,                                  $project->project_status);
-      $this->assertEquals(15.789473684211,                    $project->project_percent_complete);
+      $this->assertEquals(15.7894736842105,                   $project->project_percent_complete);
       $this->assertEquals('FFFFFF',                           $project->project_color_identifier);
       $this->assertEquals('This is a project',                $project->project_description);
       $this->assertEquals('15.00',                            $project->project_target_budget);
