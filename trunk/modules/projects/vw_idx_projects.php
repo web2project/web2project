@@ -108,10 +108,9 @@ if ($is_tabbed) {
 	$xpg_totalrecs = count($projects);
 	$xpg_pagesize = count($projects);
 }
-
 ?>
 
-<form action=""./index.php" method="get" accept-charset="utf-8">
+<form action="./index.php" method="get" accept-charset="utf-8">
 
 	<table id="tblProjects" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 		<tr>
@@ -259,10 +258,12 @@ if ($is_tabbed) {
 					 * This performs the check to see if the project is already displayed
 					 * (as a sub-project).  If so, it doesn't display the project again.
 					 */
-					if (!in_array($project['project_id'], $projectArray)) {
+					if (!isset($projectArray[$project['project_id']])) {
 						echo $s;
 					}
-					$projectArray[] = $project['project_id'];
+					if ($project['project_id']) {
+						$projectArray[$project['project_id']] = $project['project_id'];
+					}
 				}
 			}
 		}
