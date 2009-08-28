@@ -133,24 +133,28 @@ $titleBlock->show();
 			</div>
 			<div id="div_selmodules" style="<?php echo ($ssearch['mod_selection'] == "on" ? 'display:block' : 'display:none'); ?> ">
 				<table cellspacing="0" cellpadding="0" border="0">
-				<tr><td nowrap="nowrap" colspan="2"><a href="javascript: void(0);" onclick="selModAll(this)"><?php echo $AppUI->_('Select all'); ?></a> | <a href="javascript: void(0);" onclick="deselModAll(this)"><?php echo $AppUI->_('Deselect all'); ?></a></td></tr>
-						<?php
-$objarray = array();
-foreach ($files as $tmp) {
-	require_once ('./modules/' . $m . '/searchobjects/' . $tmp);
-	$temp = substr($tmp, 0, -8);
-	$tempf = $temp . '()';
-	eval("\$class_obj = new $tempf;");
-	$temp_title = $class_obj->table_title;
-	$objarray[$temp] = $temp_title;
-?>							
-				<tr><td width="10" align="left"><input name="mod_<?php echo $temp; ?>" id="mod_<?php echo $temp; ?>" type="checkbox" 
-						<?php
-	echo ($ssearch['mod_' . $temp] == 'on') ? 'checked="checked"' : '';
-	echo ' /></td><td align="left"><label for="mod_' . $temp . '">' . $AppUI->_($objarray[$temp]) . '</label>';
-?> 
-				</td></tr>
-				<?php } ?>
+  				<tr>
+            <td nowrap="nowrap" colspan="2"><a href="javascript: void(0);" onclick="selModAll(this)"><?php echo $AppUI->_('Select all'); ?></a> | <a href="javascript: void(0);" onclick="deselModAll(this)"><?php echo $AppUI->_('Deselect all'); ?></a></td>
+          </tr>
+          <?php
+          $objarray = array();
+          foreach ($files as $tmp) {
+          	require_once ('./modules/' . $m . '/searchobjects/' . $tmp);
+          	$temp = substr($tmp, 0, -8);
+          	$tempf = $temp . '()';
+          	eval("\$class_obj = new $tempf;");
+          	$temp_title = $class_obj->table_title;
+          	$objarray[$temp] = $temp_title;
+            ?>
+    				<tr>
+              <td width="10" align="left"><input name="mod_<?php echo $temp; ?>" id="mod_<?php echo $temp; ?>" type="checkbox" 
+      				  <?php
+                  echo ($ssearch['mod_' . $temp] == 'on') ? 'checked="checked"' : '';
+    	             echo ' /></td><td align="left"><label for="mod_' . $temp . '">' . $AppUI->_($objarray[$temp]) . '</label>';
+                ?> 
+    				  </td>
+            </tr>
+  				<?php } ?>
 				</table>
 			</div>
 	</td></tr>
@@ -159,7 +163,7 @@ foreach ($files as $tmp) {
 <?php
 if (isset($_POST['keyword'])) {
 	$search = new smartsearch();
-	$search->keyword = addslashes($_POST['keyword']);
+  $search->keyword = addslashes($_POST['keyword']);
 
 	if (isset($_POST['keyword']) && strlen($_POST['keyword']) > 0) {
 		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword']));
@@ -213,29 +217,44 @@ if (isset($_POST['keyword'])) {
 		}
 	}
 
-?>
+  ?>
+  <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+  	<?php
+    	$perms = &$AppUI->acl();
+    	sort($files);
+    	$reccount = 0;
+    	foreach ($files as $tmp) {
+    		require_once ('./modules/' . $m . '/searchobjects/' . $tmp);
+    		$temp = substr($tmp, 0, -8);
+    		if ($ssearch['mod_selection'] == '' || $ssearch['mod_' . $temp] == 'on') {
+    			$temp .= '()';
+    			eval("\$class_search = new $temp;");
+    			$class_search->setKeyword($search->keyword);
+    			if (method_exists($class_search, 'setAdvanced')) {
+    				$class_search->setAdvanced($ssearch);
+    			}
+    			$results = $class_search->fetchResults($perms, $reccount);
+    			echo $results;
+    		}
+    	}
 
-	<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-	<?php
-	$perms = &$AppUI->acl();
-	sort($files);
-	$reccount = 0;
-	foreach ($files as $tmp) {
-		require_once ('./modules/' . $m . '/searchobjects/' . $tmp);
-		$temp = substr($tmp, 0, -8);
-		if ($ssearch['mod_selection'] == '' || $ssearch['mod_' . $temp] == 'on') {
-			$temp .= '()';
-			eval("\$class_search = new $temp;");
-			$class_search->setKeyword($search->keyword);
-			if (method_exists($class_search, 'setAdvanced')) {
-				$class_search->setAdvanced($ssearch);
-			}
-			$results = $class_search->fetchResults($perms, $reccount);
-			echo $results;
-		}
-	}
-	echo '<tr><td><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>';
-?>
-</table>
+      $moduleList = $AppUI->getLoadableModuleList();
+      foreach ($moduleList as $module) {
+        include_once ($AppUI->getModuleClass($module['mod_directory']));
+        $object = new $module['mod_main_class']();
+        if (method_exists($object, 'hook_search')) {
+        	$searchArray = $object->hook_search();
+          foreach($searchArray as $key => $value) {
+          	$search->{$key} = $value;
+          }
+          $search->setKeyword($search->keyword);
+          $search->setAdvanced($ssearch);
+          $results = $search->fetchResults($perms, $reccount);
+          echo $results;
+        }
+      }
+    	echo '<tr><td><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>';
+    ?>
+  </table>
 <?php
 }
