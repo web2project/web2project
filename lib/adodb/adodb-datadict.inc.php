@@ -1,7 +1,7 @@
 <?php
 
 /**
-  V4.96 24 Sept 2007  (c) 2000-2007 John Lim (jlim#natsoft.com.my). All rights reserved.
+  V5.09 25 June 2009   (c) 2000-2009 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -215,7 +215,6 @@ class ADODB_DataDict {
 		return $this->connection->MetaIndexes($this->TableName($table), $primary, $owner);
 	}
 	
-
 	function MetaType($t,$len=-1,$fieldobj=false)
 	{		
 		static $typeMap = array(
@@ -231,6 +230,7 @@ class ADODB_DataDict {
 		'CHARACTER' => 'C',
 		'INTERVAL' => 'C',  # Postgres
 		'MACADDR' => 'C', # postgres
+		'VAR_STRING' => 'C', # mysql
 		##
 		'LONGCHAR' => 'X',
 		'TEXT' => 'X',
@@ -258,6 +258,7 @@ class ADODB_DataDict {
 		'TIMESTAMP' => 'T',
 		'DATETIME' => 'T',
 		'TIMESTAMPTZ' => 'T',
+		'SMALLDATETIME' => 'T',
 		'T' => 'T',
 		'TIMESTAMP WITHOUT TIME ZONE' => 'T', // postgresql
 		##
@@ -369,7 +370,7 @@ class ADODB_DataDict {
 	function ExecuteSQLArray($sql, $continueOnError = true)
 	{
 		$rez = 2;
-		$conn = &$this->connection;
+		$conn = $this->connection;
 		$saved = $conn->debug;
 		foreach($sql as $line) {
 			
@@ -813,7 +814,7 @@ class ADODB_DataDict {
 	
 	
 	// return string must begin with space
-	function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint)
+	function _CreateSuffix($fname,&$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned)
 	{	
 		$suffix = '';
 		if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";
@@ -918,7 +919,7 @@ class ADODB_DataDict {
 	This function changes/adds new fields to your table. You don't
 	have to know if the col is new or not. It will check on its own.
 	*/
-	function ChangeTableSQL($tablename, $flds, $tableoptions = false)
+	function ChangeTableSQL($tablename, $flds, $tableoptions = false, $dropOldFlds=false)
 	{
 	global $ADODB_FETCH_MODE;
 	
@@ -951,13 +952,15 @@ class ADODB_DataDict {
 					$obj = $cols[$k];
 					if (isset($obj->not_null) && $obj->not_null)
 						$v = str_replace('NOT NULL','',$v);
-
+					if (isset($obj->auto_increment) && $obj->auto_increment && empty($v['AUTOINCREMENT'])) 
+					    $v = str_replace('AUTOINCREMENT','',$v);
+					
 					$c = $cols[$k];
 					$ml = $c->max_length;
 					$mt = $this->MetaType($c->type,$ml);
 					if ($ml == -1) $ml = '';
 					if ($mt == 'X') $ml = $v['SIZE'];
-					if (($mt != $v['TYPE']) ||  $ml != $v['SIZE']) {
+					if (($mt != $v['TYPE']) ||  $ml != $v['SIZE'] || (isset($v['AUTOINCREMENT']) && $v['AUTOINCREMENT'] != $obj->auto_increment)) {
 						$holdflds[$k] = $v;
 					}
 				} else {
@@ -981,8 +984,11 @@ class ADODB_DataDict {
 				$flds = Lens_ParseArgs($v,',');
 				
 				//  We are trying to change the size of the field, if not allowed, simply ignore the request.
-				if ($flds && in_array(strtoupper(substr($flds[0][1],0,4)),$this->invalidResizeTypes4)) {
-					echo "<h3>$this->alterCol cannot be changed to $flds currently</h3>";
+				// $flds[1] holds the type, $flds[2] holds the size -postnuke addition
+				if ($flds && in_array(strtoupper(substr($flds[0][1],0,4)),$this->invalidResizeTypes4)
+				 && (isset($flds[0][2]) && is_numeric($flds[0][2]))) {
+					if ($this->debug) ADOConnection::outp(sprintf("<h3>%s cannot be changed to %s currently</h3>", $flds[0][0], $flds[0][1]));
+					#echo "<h3>$this->alterCol cannot be changed to $flds currently</h3>";
 					continue;	 
 	 			}
 				$sql[] = $alter . $this->alterCol . ' ' . $v;
@@ -991,6 +997,11 @@ class ADODB_DataDict {
 			}
 		}
 		
+		if ($dropOldFlds) {
+			foreach ( $cols as $id => $v )
+			    if ( !isset($lines[$id]) ) 
+					$sql[] = $alter . $this->dropCol . ' ' . $v->name;
+		}
 		return $sql;
 	}
 } // class
