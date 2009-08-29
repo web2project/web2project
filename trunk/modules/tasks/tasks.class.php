@@ -90,9 +90,24 @@ class CTask extends CW2pObject {
 	public function check() {
 		global $AppUI;
 
-		if ($this->task_id === null) {
-			return 'task id is NULL';
+		$errorArray = array();
+		$baseErrorMsg = get_class($this) . '::store-check failed - ';
+		
+		$this->task_id = intval($this->task_id);
+		
+		if ('' == $this->task_priority) {
+			$errorArray['task_priority'] = $baseErrorMsg . 'task priority is NULL';
 		}
+		if ('' == $this->task_name) {
+			$errorArray['task_name'] = $baseErrorMsg . 'task name is NULL';
+		}
+		if ('' == $this->task_start_date) {
+			$errorArray['task_start_date'] = $baseErrorMsg . 'task start date is NULL';
+		}
+		if ('' == $this->task_end_date) {
+			$errorArray['task_end_date'] = $baseErrorMsg . 'task end date is NULL';
+		}
+		
 		// ensure changes to checkboxes are honoured
 		$this->task_milestone = intval($this->task_milestone);
 		$this->task_dynamic = intval($this->task_dynamic);
@@ -219,7 +234,7 @@ class CTask extends CW2pObject {
 			}
 		} // parent
 
-		return null;
+		return $errorArray;
 	}
 
 	/*

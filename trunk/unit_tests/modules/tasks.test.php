@@ -149,5 +149,233 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',         $task->_errors);
         $this->assertType('DBQuery',    $task->_query);
     }
+    
+    /**
+     * Tests the __toString function
+     */
+    public function test__toString()
+    {
+        $this->markTestSkipped('Function appears to be broken completely. Referencing variables that do not exist.');
+    }
+    
+    /**
+     * Tests the check function returns the proper error message when the task_id is null
+     */
+    public function testCheckTaskNoID()
+    {
+        $this->markTestSkipped('This test has been deprecated by casting the task_id via intval().');
+    }
+    
+    /**
+     * Tests the check function returns the proper error message when no name is passed
+     */
+    public function testCheckTaskNoName()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 0,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => '',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => null, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorArray = $task->check();
+       
+        $this->assertArrayHasKey('task_name', $errorArray);
+    }
+    
+    /**
+     * Tests the check function returns the proper error message when no priority is passed
+     */
+    public function testCheckTaskNoPriority()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 0,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => null,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => null, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorArray = $task->check();
+        
+        $this->assertArrayHasKey('task_priority', $errorArray);
+    }
+	
+	/**
+     * Tests the check function returns the proper error message when no start date is passed
+     */
+    public function testCheckTaskNoStartDate()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 0,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => null, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorArray = $task->check();
+        
+        $this->assertArrayHasKey('task_start_date', $errorArray);
+    }
+	
+	/**
+     * Tests the check function returns the proper error message when no end date is passed
+     */
+    public function testCheckTaskNoEndDate()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 0,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => null, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorArray = $task->check();
+        
+        $this->assertArrayHasKey('task_end_date', $errorArray);
+    }
 }
 ?>
