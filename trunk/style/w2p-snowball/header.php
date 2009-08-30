@@ -46,8 +46,6 @@ if ($dialog) {
 	</td>
 </tr>
 <?php if (!$dialog) {
-	// top navigation menu
-	$nav = $AppUI->getMenuModules();
 	$perms = &$AppUI->acl();
 ?>
 <tr>
@@ -71,17 +69,7 @@ if ($dialog) {
 ?>
 	<tr class="nav">
 		<td>
-		<ul>
-		<?php
-	$links = array();
-	foreach ($nav as $module) {
-		if ($perms->checkModule($module['mod_directory'], 'access')) {
-			$links[] = '<li><a href="?m=' . $module['mod_directory'] . '">' . $AppUI->_($module['mod_ui_name']) . '</a></li>';
-		}
-	}
-	echo implode('', $links);
-?>
-		</ul>
+      <?php echo buildHeaderNavigation($AppUI, 'ul', 'li'); ?>
 		</td>
 <?php
 	if ($AppUI->user_id > 0) {

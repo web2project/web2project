@@ -64,16 +64,9 @@ if ($dialog) {
 		echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
 	}
 ?>
+      
 		<td>
-		<?php
-	$links = array();
-	foreach ($nav as $module) {
-		if ($perms->checkModule($module['mod_directory'], 'access')) {
-			$links[] = '<a href="?m=' . $module['mod_directory'] . '">' . $AppUI->_($module['mod_ui_name']) . '</a>';
-		}
-	}
-	echo implode(' | ', $links);
-?>
+      <?php echo buildHeaderNavigation($AppUI, '', '', ' | '); ?>
 		</td>
 		<form name="frm_new" method="GET" action="./index.php" accept-charset="utf-8">
 <?php
