@@ -21,14 +21,14 @@ if ($a == 'setup') {
 class SSearchNS {
 
 	public function install() {
-		return null;
+		return true;
 	}
 
 	public function remove() {
-		return null;
+		return true;
 	}
 
 	public function upgrade() {
-		return null;
+		return true;
 	}
 }
