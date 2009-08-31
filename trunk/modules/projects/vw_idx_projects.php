@@ -238,7 +238,7 @@ if ($is_tabbed) {
 					$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
 					$s .= $row['task_log_problem'] ? '</a>' : '';
 					$s .= '</td><td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
-					$s .= $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
+					$s .= $row['project_task_count'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
 					$s .= '</td><td align="center"><input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" /></td>';
 		
 					if ($show_all_projects) {

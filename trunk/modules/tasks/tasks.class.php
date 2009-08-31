@@ -607,6 +607,7 @@ class CTask extends CW2pObject {
 				$importing_tasks = true;
 			}
 		}
+    CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
 		$this->pushDependencies($this->task_id, $this->task_end_date);
 
 		//split out related departments and store them seperatly.
@@ -747,6 +748,7 @@ class CTask extends CW2pObject {
 			$this->_action = 'deleted';
 		}
 		$q->clear();
+    CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
 
 		return null;
 	}
@@ -2145,6 +2147,13 @@ class CTask extends CW2pObject {
 
 		return $q->loadList();		
 	}
+  public function getTaskCount($projectId) {
+  	$q = new DBQuery();
+    $q->addTable('tasks');
+    $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
+    $q->addWhere('task_project = ' . (int) $projectId);
+    return $q->loadResult();
+  }
 	public static function pinUserTask($userId, $taskId) {
 		$q = new DBQuery;
 		$q->addTable('user_task_pin');
