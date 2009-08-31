@@ -243,14 +243,14 @@ if (isset($_POST['keyword'])) {
         include_once ($AppUI->getModuleClass($module['mod_directory']));
         $object = new $module['mod_main_class']();
         if (method_exists($object, 'hook_search')) {
-        	$searchArray = $object->hook_search();
+        	$search = new smartsearch();
+          $searchArray = $object->hook_search();
           foreach($searchArray as $key => $value) {
-          	$search->{$key} = $value;
+            $search->{$key} = $value;
           }
           $search->setKeyword($search->keyword);
           $search->setAdvanced($ssearch);
-          $results = $search->fetchResults($perms, $reccount);
-          echo $results;
+          echo $search->fetchResults($perms, $reccount);
         }
       }
     	echo '<tr><td><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>';
