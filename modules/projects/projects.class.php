@@ -770,6 +770,17 @@ class CProject extends CW2pObject {
 		}
 	}
 
+  public static function updateTaskCount($projectId, $taskCount) {
+
+  	if (intval($projectId) > 0 && intval($taskCount)) {
+      $q = new DBQuery;
+      $q->addTable('projects');
+      $q->addUpdate('project_task_count', intval($taskCount));
+      $q->addWhere('project_id   = ' . (int) $projectId);
+      $q->exec();
+  	}
+  }
+
 	public function hasChildProjects($projectId = 0) {
 		// Note that this returns the *count* of projects.  If this is zero, it 
 		//   is evaluated as false, otherwise it is considered true.
@@ -935,9 +946,11 @@ function projects_list_data($user_id = false) {
 	$q->exec();
 	$q->clear();
 
+  //BEGIN: Deprecated in v2.0 
 	$q->setDelete('tasks_total');
 	$q->exec();
 	$q->clear();
+  //END: Deprecated in v2.0
 
 	$q->setDelete('tasks_summy');
 	$q->exec();
@@ -975,6 +988,7 @@ function projects_list_data($user_id = false) {
 	$tasks_sum = $q->exec();
 	$q->clear();
 
+  //BEGIN: Deprecated in v2.0
 	// support task total table
 	$q->addInsertSelect('tasks_total');
 	$q->addTable('tasks');
@@ -986,6 +1000,7 @@ function projects_list_data($user_id = false) {
 	$q->addGroup('task_project');
 	$tasks_total = $q->exec();
 	$q->clear();
+  //END: Deprecated in v2.0
 
 	// support My Tasks
 	$q->addInsertSelect('tasks_summy');
@@ -1077,7 +1092,7 @@ function projects_list_data($user_id = false) {
 	$q->addTable('projects', 'pr');
 	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type, project_name, project_description, project_duration, project_parent, project_original_parent, 
 		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
-		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, tt.total_tasks, tsy.my_tasks,
+		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count, tsy.my_tasks,
 		ts.project_percent_complete, user_username, project_active');
 	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
@@ -1085,7 +1100,6 @@ function projects_list_data($user_id = false) {
 	$q->addJoin('tasks_critical', 'tc', 'pr.project_id = tc.task_project');
 	$q->addJoin('tasks_problems', 'tp', 'pr.project_id = tp.task_project');
 	$q->addJoin('tasks_sum', 'ts', 'pr.project_id = ts.task_project');
-	$q->addJoin('tasks_total', 'tt', 'pr.project_id = tt.task_project');
 	$q->addJoin('tasks_summy', 'tsy', 'pr.project_id = tsy.task_project');
 	if ($addProjectsWithAssignedTasks) {
 		$q->addJoin('tasks_users', 'tu', 'pr.project_id = tu.task_project');
