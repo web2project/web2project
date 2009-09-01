@@ -1175,7 +1175,7 @@ class DBQuery {
 	 * @param $maxrows Maximum number of rows to return
 	 * @return Array of associative arrays containing row field values
 	 */
-	public function loadList($maxrows = null) {
+	public function loadList($maxrows = -1) {
 		global $AppUI;
 
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
