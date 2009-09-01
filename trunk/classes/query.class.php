@@ -574,13 +574,13 @@ class DBQuery {
 	public function dbfnNow() {
 		$dbType = strtolower(trim(w2PgetConfig('dbtype'))); 
 
-    switch ($dbType) {
-        case 'oci8':
-        case 'oracle':
-            return 'current_date';
-        default:										//mysql
-            return 'NOW()';
-    }
+	    switch ($dbType) {
+	        case 'oci8':
+	        case 'oracle':
+	            return 'current_date';
+	        default:										//mysql
+	            return 'NOW()';
+	    }
 	}
 
 	/** Add a date difference clause and name the result
@@ -598,13 +598,13 @@ class DBQuery {
 		$date1 = ($date1 == '') ? $this->dbfnNow() : $date1;
 		$date2 = ($date2 == '') ? $this->dbfnNow() : $date2;
 
-    switch ($dbType) {
-        case 'oci8':
-        case 'oracle':
-					return "$date1 - $date2";
-        default:										//mysql
-					return "DATEDIFF($date1, $date2)";
-    }
+	    switch ($dbType) {
+	        case 'oci8':
+	        case 'oracle':
+						return $date1 . ' - ' . $date2;
+	        default:										//mysql
+						return 'DATEDIFF(' . $date1 . ', ' . $date2 . ')';
+	    }
 	}
 
 	/** Set a row limit on the query
@@ -1139,7 +1139,7 @@ class DBQuery {
 					$qid->Close();
 				}
 			}
-			$this->_query_id = $this->_db->Execute($q);
+			$this->_query_id = $this->_db->_Execute($q);
 			if (!$this->_query_id) {
 				$error = $this->_db->ErrorMsg();
 				dprint(__file__, __line__, 0, "query failed($q)" . ' - error was: <span style="color:red">' . $error . '</span>');
@@ -1185,13 +1185,7 @@ class DBQuery {
 		}
 
 		$list = array();
-		$cnt = 0;
-		while ($hash = $this->fetchRow()) {
-			$list[] = $hash;
-			if ($maxrows && $maxrows == $cnt++) {
-				break;
-			}
-		}
+		$list = $this->_query_id->GetArray($maxrows);
 		$this->clear();
 		return $list;
 	}
