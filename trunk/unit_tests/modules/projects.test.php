@@ -940,7 +940,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         
         foreach($results as $created) {
             $this->assertGreaterThanOrEqual($min_time, strtotime($created));
-            $this->assertLessThanOrEqual($now, strtotime($created));
+            $this->assertLessThanOrEqual($now_secs, strtotime($created));
         }
         
         /**
@@ -954,7 +954,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
                 
         foreach($results as $updated) {
             $this->assertGreaterThanOrEqual($min_time, strtotime($updated));
-            $this->assertLessThanOrEqual($now, strtotime($updated));
+            $this->assertLessThanOrEqual($now_secs, strtotime($updated));
         }
         
         $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testImportTasks.xml');        
