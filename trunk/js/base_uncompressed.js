@@ -29,6 +29,23 @@ if (navigator.userAgent.toLowerCase().indexOf('opera') + 1 || window.opera) {
 	navigator.family = 'opera';
 }
 
+function getInternetExplorerVersion() {
+    var rv = -1; // Return value assumes failure.
+    if (navigator.appName == 'Microsoft Internet Explorer') {
+        var ua = navigator.userAgent;
+        var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+        if (re.exec(ua) != null)
+            rv = parseFloat(RegExp.$1);
+    }
+    return rv;
+}
+var ver = getInternetExplorerVersion();
+if (ver > -1) {
+	if (ver >= 8.0) {
+		navigator.family = 'ie8';		
+	}
+}
+
 /* function center_window
  * Create the window options clause required to ensure a window is
  * centered over the calling window.  A width or height of 0 or less
@@ -310,7 +327,7 @@ function _HTMLaddHidden(id, value) {
 	var c = new Comparable;
 	c.add('id', id);
 	c.add('name', id);
-	if (navigator.family == "gecko" || navigator.family == "opera"){
+	if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
 		c.add('type', 'hidden');
 		type = 'input';
 	} else {
@@ -406,11 +423,11 @@ function ucfirst(s, delim) {
 		delim = ' ';
 	}
 	var a = s.split(delim);
-	var res = "";
+	var res = '';
 	var start = false;
 	for (var i = 0; i < a.length; i++) {
 		if (start) {
-			res += " ";
+			res += ' ';
 		} else {
 		  start = true;
 		}
@@ -663,9 +680,9 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	            var tr = document.getElementById(tr_name);
 	            if (collapse || expand) {
 	                  if (collapse) {
-	                        if (navigator.family == "gecko" || navigator.family == "opera"){            
-	                              tr.style.visibility = "collapse";
-	                              tr.style.display = "none";
+							if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
+	                              tr.style.visibility = 'collapse';
+	                              tr.style.display = 'none';
 	                              var img_expand = document.getElementById(tr_name+'_expand');
 	                              var img_collapse = document.getElementById(tr_name+'_collapse');
 	                              if (img_expand==null) {
@@ -674,10 +691,10 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              if (img_collapse==null) {
 	                              		var img_collapse = document.getElementById(id+'_collapse');
 	                              }
-	                              img_collapse.style.display = "none";
-	                              img_expand.style.display = "inline";
+	                              img_collapse.style.display = 'none';
+	                              img_expand.style.display = 'inline';
 	                        } else {
-	                              tr.style.display = "none";
+	                              tr.style.display = 'none';
 	                              var img_expand = document.getElementById(tr_name+'_expand');
 	                              var img_collapse = document.getElementById(tr_name+'_collapse');
 	                              if (img_expand==null) {
@@ -686,13 +703,13 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              if (img_collapse==null) {
 	                              		var img_collapse = document.getElementById(id+'_collapse');
 	                              }
-	                              img_collapse.style.display = "none";
-	                              img_expand.style.display = "inline";
+	                              img_collapse.style.display = 'none';
+	                              img_expand.style.display = 'inline';
 	                        }
 	                  } else {
-	                        if (navigator.family == "gecko" || navigator.family == "opera"){            
-	                              tr.style.visibility = "visible";
-	                              tr.style.display = "";
+							if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
+	                              tr.style.visibility = 'visible';
+	                              tr.style.display = '';
 	                              var img_expand = document.getElementById(tr_name+'_expand');
 	                              var img_collapse = document.getElementById(tr_name+'_collapse');
 	                              if (img_expand==null) {
@@ -701,10 +718,10 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              if (img_collapse==null) {
 	                              		var img_collapse = document.getElementById(id+'_collapse');
 	                              }
-	                              img_collapse.style.display = "inline";
-	                              img_expand.style.display = "none";
+	                              img_collapse.style.display = 'inline';
+	                              img_expand.style.display = 'none';
 	                        } else {
-	                              tr.style.display = "";
+	                              tr.style.display = '';
 	                              var img_expand = document.getElementById(tr_name+'_expand');
 	                              var img_collapse = document.getElementById(tr_name+'_collapse');
 	                              if (img_expand==null) {
@@ -713,14 +730,14 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              if (img_collapse==null) {
 	                              		var img_collapse = document.getElementById(id+'_collapse');
 	                              }
-	                              img_collapse.style.display = "inline";
-	                              img_expand.style.display = "none";
+	                              img_collapse.style.display = 'inline';
+	                              img_expand.style.display = 'none';
 	                        }
 	                  }
 	            } else {
-	                  if (navigator.family == "gecko" || navigator.family == "opera"){            
-	                        tr.style.visibility = (tr.style.visibility == '' || tr.style.visibility == "collapse") ? "visible" : "collapse";
-	                        tr.style.display = (tr.style.display == "none") ? "" : "none";
+					  if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
+	                        tr.style.visibility = (tr.style.visibility == '' || tr.style.visibility == 'collapse') ? 'visible' : 'collapse';
+	                        tr.style.display = (tr.style.display == 'none') ? '' : 'none';
 	                        var img_expand = document.getElementById(tr_name+'_expand');
 	                        var img_collapse = document.getElementById(tr_name+'_collapse');
 	                        if (img_expand==null) {
@@ -729,10 +746,10 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                        if (img_collapse==null) {
                           		var img_collapse = document.getElementById(id+'_collapse');
                             }
-	                        img_collapse.style.display = (tr.style.visibility == 'visible') ? "inline" : "none";
-	                        img_expand.style.display = (tr.style.visibility == '' || tr.style.visibility == "collapse") ? "inline" : "none";
+	                        img_collapse.style.display = (tr.style.visibility == 'visible') ? 'inline' : 'none';
+	                        img_expand.style.display = (tr.style.visibility == '' || tr.style.visibility == 'collapse') ? 'inline' : 'none';
 	                  } else {
-	                        tr.style.display = (tr.style.display == "none") ? "" : "none";
+	                        tr.style.display = (tr.style.display == 'none') ? '' : 'none';
 	                        var img_expand = document.getElementById(tr_name+'_expand');
 	                        var img_collapse = document.getElementById(tr_name+'_collapse');
 	                        if (img_expand==null) {
@@ -741,8 +758,8 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                        if (img_collapse==null) {
                           		var img_collapse = document.getElementById(id+'_collapse');
                             }
-	                        img_collapse.style.display = (tr.style.display == '') ? "inline" : "none";
-	                        img_expand.style.display = (tr.style.display == 'none') ? "inline" : "none";
+	                        img_collapse.style.display = (tr.style.display == '') ? 'inline' : 'none';
+	                        img_expand.style.display = (tr.style.display == 'none') ? 'inline' : 'none';
 	                  }
 	            }      
 //lets handle expand collapses of leveled rows (like tasks dynamics/parents) - THIS "ELSEIF" HANDLES THE PARENT TASK ROW ITSELF
@@ -760,12 +777,12 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 						var img_collapse = document.getElementById(id+'_collapse');
 					}
 					if (!(img_collapse==null)) {
-						img_collapse.style.display = (img_collapse.style.display == 'none') ? "inline" : "none";
+						img_collapse.style.display = (img_collapse.style.display == 'none') ? 'inline' : 'none';
 					}
 					if (!(img_expand==null)) {
-						img_expand.style.display = (img_expand.style.display == 'none') ? "inline" : "none";
+						img_expand.style.display = (img_expand.style.display == 'none') ? 'inline' : 'none';
 						//define what we will be doing with the rows below this one
-						opt = (img_expand.style.display == "inline") ? "collapse" : "expand";
+						opt = (img_expand.style.display == 'inline') ? 'collapse' : 'expand';
       					collapse = (opt == 'collapse' ? 1 : 0);
       					expand = (opt == 'expand' ? 1 : 0);
 					}
@@ -776,11 +793,11 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 				    current_level = parseInt(tr_name.substr(tr_name.indexOf('>')+1,tr_name.indexOf('<')-tr_name.indexOf('>')-1));
 
                     if (collapse) {
-                        if (navigator.family == "gecko" || navigator.family == "opera"){
+						if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
                         	  //if root mode is 1 hide, if not then don't do a thing
 							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
-	                              tr.style.visibility = "collapse";
-	                              tr.style.display = "none";
+	                              tr.style.visibility = 'collapse';
+	                              tr.style.display = 'none';
 	                          }
                               var img_expand = document.getElementById(tr_name+'_expand');
                               var img_collapse = document.getElementById(tr_name+'_collapse');
@@ -791,15 +808,15 @@ function expand_collapse(id, table_name, option, opt_level, root) {
                               		var img_collapse = document.getElementById(id+'_collapse');
                               }
 							  if (!(img_collapse==null)) {
-                              		img_collapse.style.display = "none";
+                              		img_collapse.style.display = 'none';
                               }
 							  if (!(img_expand==null)) {
-                              		img_expand.style.display = "inline";
+                              		img_expand.style.display = 'inline';
                               }
                     	} else {
                         	  //if root mode is 1 hide, if not then don't do a thing
 							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
-                              		tr.style.display = "none";
+                              		tr.style.display = 'none';
                               }
                               var img_expand = document.getElementById(tr_name+'_expand');
                               var img_collapse = document.getElementById(tr_name+'_collapse');
@@ -810,18 +827,18 @@ function expand_collapse(id, table_name, option, opt_level, root) {
                               		var img_collapse = document.getElementById(id+'_collapse');
                               }
 							  if (!(img_collapse==null)) {
-                              		img_collapse.style.display = "none";
+                              		img_collapse.style.display = 'none';
                               }
 							  if (!(img_expand==null)) {
-                              		img_expand.style.display = "inline";
+                              		img_expand.style.display = 'inline';
                               }
                         }
                   } else {
-                        if (navigator.family == "gecko" || navigator.family == "opera"){            
+						if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
                         	  //if root mode is 1 hide, if not then don't do a thing
 							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
-	                              tr.style.visibility = "visible";
-	                              tr.style.display = "";
+	                              tr.style.visibility = 'visible';
+	                              tr.style.display = '';
 	                          }
                               var img_expand = document.getElementById(tr_name+'_expand');
                               var img_collapse = document.getElementById(tr_name+'_collapse');
@@ -832,15 +849,15 @@ function expand_collapse(id, table_name, option, opt_level, root) {
                               		var img_collapse = document.getElementById(id+'_collapse');
                               }
 							  if (!(img_collapse==null)) {
-                              		img_collapse.style.display = "inline";
+                              		img_collapse.style.display = 'inline';
                               }
 							  if (!(img_expand==null)) {
-                              		img_expand.style.display = "none";
+                              		img_expand.style.display = 'none';
                               }
                         } else {
                         	  //if root mode is 1 hide, if not then don't do a thing
 							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
-                              		tr.style.display = "";
+                              		tr.style.display = '';
                               }
                               var img_expand = document.getElementById(tr_name+'_expand');
                               var img_collapse = document.getElementById(tr_name+'_collapse');
@@ -851,10 +868,10 @@ function expand_collapse(id, table_name, option, opt_level, root) {
                               		var img_collapse = document.getElementById(id+'_collapse');
                               }
 							  if (!(img_collapse==null)) {
-                              		img_collapse.style.display = "inline";
+                              		img_collapse.style.display = 'inline';
                               }
 							  if (!(img_expand==null)) {
-                              		img_expand.style.display = "none";
+                              		img_expand.style.display = 'none';
                               }
                         }
                   }
@@ -871,9 +888,9 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 				  }	else {
 		              var tr = document.getElementById(tr_name);
 	                  if (collapse) {
-	                        if (navigator.family == "gecko" || navigator.family == "opera"){            
-	                              tr.style.visibility = "collapse";
-	                              tr.style.display = "none";
+							if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
+	                              tr.style.visibility = 'collapse';
+	                              tr.style.display = 'none';
 	                              var img_expand = document.getElementById(tr_name+'_expand');
 	                              var img_collapse = document.getElementById(tr_name+'_collapse');
 	                              if (img_expand==null) {
@@ -883,13 +900,13 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              		var img_collapse = document.getElementById(id+'_collapse');
 	                              }
 								  if (!(img_collapse==null)) {
-	                              		img_collapse.style.display = "none";
+	                              		img_collapse.style.display = 'none';
 	                              }
 								  if (!(img_expand==null)) {
-	                              		img_expand.style.display = "inline";
+	                              		img_expand.style.display = 'inline';
 	                              }
 	                        } else {
-	                              tr.style.display = "none";
+	                              tr.style.display = 'none';
 	                              var img_expand = document.getElementById(tr_name+'_expand');
 	                              var img_collapse = document.getElementById(tr_name+'_collapse');
 	                              if (img_expand==null) {
@@ -899,16 +916,16 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              		var img_collapse = document.getElementById(id+'_collapse');
 	                              }
 								  if (!(img_collapse==null)) {
-	                              		img_collapse.style.display = "none";
+	                              		img_collapse.style.display = 'none';
 	                              }
 								  if (!(img_expand==null)) {
-	                              		img_expand.style.display = "inline";
+	                              		img_expand.style.display = 'inline';
 	                              }
 	                        }
 	                  } else {
-	                        if (navigator.family == "gecko" || navigator.family == "opera"){            
-	                              tr.style.visibility = "visible";
-	                              tr.style.display = "";
+							if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
+	                              tr.style.visibility = 'visible';
+	                              tr.style.display = '';
 	                              var img_expand = document.getElementById(tr_name+'_expand');
 	                              var img_collapse = document.getElementById(tr_name+'_collapse');
 	                              if (img_expand==null) {
@@ -918,13 +935,13 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              		var img_collapse = document.getElementById(id+'_collapse');
 	                              }
 								  if (!(img_collapse==null)) {
-	                              		img_collapse.style.display = "inline";
+	                              		img_collapse.style.display = 'inline';
 	                              }
 								  if (!(img_expand==null)) {
-	                              		img_expand.style.display = "none";
+	                              		img_expand.style.display = 'none';
 	                              }
 	                        } else {
-	                              tr.style.display = "";
+	                              tr.style.display = '';
 	                              var img_expand = document.getElementById(tr_name+'_expand');
 	                              var img_collapse = document.getElementById(tr_name+'_collapse');
 	                              if (img_expand==null) {
@@ -934,10 +951,10 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              		var img_collapse = document.getElementById(id+'_collapse');
 	                              }
 								  if (!(img_collapse==null)) {
-	                              		img_collapse.style.display = "inline";
+	                              		img_collapse.style.display = 'inline';
 	                              }
 								  if (!(img_expand==null)) {
-	                              		img_expand.style.display = "none";
+	                              		img_expand.style.display = 'none';
 	                              }
 	                        }
 	                  }
