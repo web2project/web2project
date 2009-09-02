@@ -2205,6 +2205,8 @@ class CTaskLog extends CW2pObject {
 	public $task_log_problem = null;
 	public $task_log_reference = null;
 	public $task_log_related_url = null;
+    public $task_log_created = null;
+    public $task_log_updated = null;
 
 	public function CTaskLog() {
 		$this->CW2pObject('task_log', 'task_log_id');
@@ -2214,6 +2216,15 @@ class CTaskLog extends CW2pObject {
 	}
 
 	public function store() {
+        
+        $q = new DBQuery();
+        
+        if ($this->task_log_id) {
+            $this->task_log_updated = $q->dbfnNow();
+        } else {
+            $this->task_log_created = $q->dbfnNow();
+            $this->task_log_updated = $q->dbfnNow();
+        }
 		parent::store();
 		$this->updateHoursWorked($this->task_log_task);
 	}
