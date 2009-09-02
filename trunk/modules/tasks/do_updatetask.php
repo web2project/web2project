@@ -44,7 +44,7 @@ if (!$obj->bind($_POST)) {
 }
 
 if ($obj->task_log_date) {
-	$date = new CDate($obj->task_log_date . date('Hi'));
+	$date = new CDate($obj->task_log_date);
 	$obj->task_log_date = $date->format(FMT_DATETIME_MYSQL);
 }
 $dot = strpos($obj->task_log_hours, ':');
