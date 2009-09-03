@@ -394,8 +394,14 @@ if (!$suppressHeaders) {
 		$db_info = $db->ServerInfo();
 		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">web2Project ' . $AppUI->getVersion() . '</p>');
 		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">PHP version nr: ' . phpversion() . '</p>');
-		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">DB provider and version nr: ' . $db->dataProvider . ' ' . $db_info['version'] . '</p>');
+		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">DB provider and version nr: ' . $db->dataProvider . ' ' . $db_info['version']. ' (' . $db_info['description'] . ')</p>');
 		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">DB Table Prefix: "' . w2PgetConfig('dbprefix') . '"</p>');
+		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Web Server: ' . safe_get_env('SERVER_SOFTWARE') . '</p>');
+		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Server Protocol | Gateway Interface: ' . safe_get_env('SERVER_PROTOCOL') . ' | ' . safe_get_env('GATEWAY_INTERFACE') . '</p>');
+		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Client Browser: ' . safe_get_env('HTTP_USER_AGENT') . '</p>');
+		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">URL Query: ' . safe_get_env('QUERY_STRING') . '</p>');
+		$right_now_is = new CDate();
+		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Server Time | Timezone: ' . $right_now_is->format(FMT_DATERFC822) . ' | ' . date('T') . '</p>');
 		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">PHP Max. Execution Time: ' . ini_get('max_execution_time') . ' seconds</p>');
 		print ('<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Memory Limit: ' . (ini_get('memory_limit') ? str_replace('M', ' Mb', ini_get('memory_limit')) : 'Not Defined') . '</p>');
 		if (function_exists('memory_get_usage')) {
