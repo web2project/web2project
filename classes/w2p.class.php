@@ -53,7 +53,7 @@ class CW2pObject {
 		$this->_tbl = $table;
 		$this->_tbl_key = $key;
 		$this->_tbl_prefix = w2PgetConfig('dbprefix', '');
-		$this->_query = &new DBQuery;
+		$this->_query = new DBQuery;
 	}
 	/**
 	 *	@return string Returns the error message
@@ -66,9 +66,12 @@ class CW2pObject {
 	 *
 	 *	can be overloaded/supplemented by the child class
 	 *	@param array $hash named array
+	 *  @param $prefix Defaults to null, prefix to use with hash keys
+	 *  @param $checkSlashes Defaults to true, strip any slashes from the hash values
+	 *  @param $bindAll Bind all values regardless of their existance as defined instance variables
 	 *	@return null|string	null is operation was satisfactory, otherwise returns an error
 	 */
-	public function bind($hash) {
+	public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
 		if (!is_array($hash)) {
 			$this->_error = get_class($this) . '::bind failed.';
 			return false;
@@ -84,7 +87,7 @@ class CW2pObject {
 					$filtered_hash[$k] = $v;
 				}
 			}
-			$this->_query->bindHashToObject($filtered_hash, $this);
+			$this->_query->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
 			$this->_query->clear();
 			return true;
 		}

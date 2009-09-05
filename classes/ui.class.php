@@ -119,6 +119,10 @@ class CAppUI {
 	public $user_style = null;
 
 	/**
+ 	@var integer */
+	public $user_is_admin = null;
+
+	/**
 
 	 * CAppUI Constructor
 	 */
@@ -131,6 +135,7 @@ class CAppUI {
 		$this->user_company = 0;
 		$this->user_department = 0;
 		$this->user_type = 0;
+		$this->user_is_admin = 0;
 
 		// cfg['locale_warn'] is the only cfgVariable stored in session data (for security reasons)
 		// this guarants the functionality of this->setWarning
@@ -698,7 +703,7 @@ class CAppUI {
 		// Now that the password has been checked, see if they are allowed to
 		// access the system
 		if (!isset($GLOBALS['acl'])) {
-			$GLOBALS['acl'] = &new w2Pacl;
+			$GLOBALS['acl'] = new w2Pacl;
 		}
 		if (!$GLOBALS['acl']->checkLogin($user_id)) {
 			dprint(__file__, __line__, 1, 'Permission check failed');
@@ -724,6 +729,11 @@ class CAppUI {
 		$this->loadPrefs($this->user_id);
 		$this->setUserLocale();
 		$this->checkStyle();
+
+		// Let's see if this user has admin privileges
+		if (!getDenyRead('admin')) {
+			$this->user_is_admin = 1;
+		}		
 		return true;
 	}
 	/************************************************************************************************************************
@@ -747,7 +757,7 @@ class CAppUI {
 	public function registerLogout($user_id) {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
+		$q->addUpdate('date_time_out', $q->dbfnNow());
 		$q->addWhere('user_id = ' . (int)$user_id . ' AND (date_time_out = \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
 		if ($user_id > 0) {
 			$q->exec();
@@ -761,7 +771,7 @@ class CAppUI {
 	public function updateLastAction($last_insert_id) {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_last_action', date('Y-m-d H:i:s'));
+		$q->addUpdate('date_time_last_action', $q->dbfnNow());
 		$q->addWhere('user_access_log_id = ' . $last_insert_id);
 		if ($last_insert_id > 0) {
 			$q->exec();
@@ -883,7 +893,7 @@ class CAppUI {
 	 */
 	public function &acl() {
 		if (!isset($GLOBALS['acl'])) {
-			$GLOBALS['acl'] = &new w2Pacl;
+			$GLOBALS['acl'] = new w2Pacl;
 		}
 		return $GLOBALS['acl'];
 	}
