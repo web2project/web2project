@@ -55,7 +55,6 @@ $this_week = Date_calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FI
 // prepare time period for 'events'
 $first_time = php4_clone($this_day);
 $first_time->setTime(0, 0, 0);
-$first_time->subtractSeconds(1);
 
 $last_time = php4_clone($this_day);
 $last_time->setTime(23, 59, 59);

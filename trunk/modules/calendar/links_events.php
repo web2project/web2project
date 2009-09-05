@@ -14,13 +14,13 @@ if (!defined('W2P_BASE_DIR')) {
 function getEventLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $minical = false) {
 	global $event_filter;
 	$events = CEvent::getEventsForPeriod($startPeriod, $endPeriod, $event_filter);
+	$cwd = explode(',', w2PgetConfig('cal_working_days'));
 
 	// assemble the links for the events
 	foreach ($events as $row) {
 		$start = new CDate($row['event_start_date']);
 		$end = new CDate($row['event_end_date']);
 		$date = $start;
-		$cwd = explode(',', $GLOBALS['w2Pconfig']['cal_working_days']);
 
 		for ($i = 0, $i_cmp = $start->dateDiff($end); $i <= $i_cmp; $i++) {
 			// the link

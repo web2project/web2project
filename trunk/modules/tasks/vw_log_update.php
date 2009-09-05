@@ -36,7 +36,7 @@ if (!$task->canAccess($AppUI->user_id)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$proj = &new CProject();
+$proj = new CProject();
 $proj->load($obj->task_project);
 $q = new DBQuery();
 $q->addTable('billingcode');

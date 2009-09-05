@@ -66,7 +66,6 @@ $date = new CDate($date);
 $first_time = new CDate($date);
 $first_time->setDay(1);
 $first_time->setTime(0, 0, 0);
-$first_time->subtractSeconds(1);
 $last_time = new CDate($date);
 $last_time->setDay($date->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
@@ -105,7 +104,7 @@ $last_time = new CDate($cal->prev_month);
 $last_time->setDay($cal->prev_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
 $links = array();
-getTaskLinks($first_time, $last_time, $links, 20, $company_id);
+getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
 getEventLinks($first_time, $last_time, $links, 20);
 $minical->setEvents($links);
 
