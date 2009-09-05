@@ -1173,9 +1173,10 @@ class DBQuery {
 	 *
 	 * Replaces the db_loadList() function
 	 * @param $maxrows Maximum number of rows to return
+	 * @param $index Can be used to set the keys of the resulting arrays, useful to find records by primary key.
 	 * @return Array of associative arrays containing row field values
 	 */
-	public function loadList($maxrows = -1) {
+	public function loadList($maxrows = -1, $index = -1) {
 		global $AppUI;
 
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
@@ -1186,6 +1187,15 @@ class DBQuery {
 
 		$list = array();
 		$list = $this->_query_id->GetArray($maxrows);
+		if ($index != -1) {
+			$indexed_list = array();
+			foreach ($list as $record) {
+				$indexed_list[$record[$index]] = $record;
+			}
+			unset($list);
+			$list = array();
+			$list = $indexed_list;			
+		}
 		$this->clear();
 		return $list;
 	}
