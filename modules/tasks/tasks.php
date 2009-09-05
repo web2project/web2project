@@ -70,7 +70,7 @@ if (isset($_POST['show_task_options'])) {
 $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
 require_once $AppUI->getModuleClass('projects');
-$project = &new CProject;
+$project = new CProject;
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'p.project_id');
 
 $where_list = (count($allowedProjects)) ? implode(' AND ', $allowedProjects) : '';
@@ -129,7 +129,6 @@ $q2->clear();
 
 $q->addQuery('tasks.task_id, task_parent, task_name');
 $q->addQuery('task_start_date, task_end_date, task_dynamic');
-$q->addQuery('count(tasks.task_parent) as children');
 $q->addQuery('task_pinned, pin.user_id as pin_user');
 $q->addQuery('task_priority, task_percent_complete');
 $q->addQuery('task_duration, task_duration_type');
@@ -143,11 +142,12 @@ $q->addQuery('CONCAT(co.contact_first_name,\' \', co.contact_last_name) AS owner
 $q->addQuery('task_milestone');
 $q->addQuery('count(distinct f.file_task) as file_count');
 $q->addQuery('tlog.task_log_problem');
+$q->addQuery('task_access');
 
 //subquery the parent state
 $sq = new DBQuery;
 $sq->addTable('tasks', 'stasks');
-$sq->addQuery('COUNT(task_id)');
+$sq->addQuery('COUNT(stasks.task_id)');
 $sq->addWhere('stasks.task_id <> tasks.task_id AND stasks.task_parent = tasks.task_id');
 $subquery = $sq->prepare();
 $sq->clear();
@@ -162,11 +162,11 @@ if (!empty($mods['history']) && !getDenyRead('history')) {
 }
 
 $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
-$q->addJoin('users', 'usernames', 'task_owner = usernames.user_id', 'inner');
+$q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');
 
 $q->leftJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 $q->leftJoin('users', 'assignees', 'assignees.user_id = ut.user_id');
-$q->addJoin('contacts', 'co', 'co.contact_id = usernames.user_contact', 'inner');
+$q->leftJoin('contacts', 'co', 'co.contact_id = usernames.user_contact');
 $q->leftJoin('task_log', 'tlog', 'tlog.task_log_task = tasks.task_id AND tlog.task_log_problem > 0');
 $q->leftJoin('files', 'f', 'tasks.task_id = f.file_task');
 $q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
@@ -175,6 +175,8 @@ $q->leftJoin('user_task_pin', 'pin', 'tasks.task_id = pin.task_id AND pin.user_i
 
 if ($project_id) {
 	$q->addWhere('task_project = ' . (int)$project_id);
+	//if we are on a project context make sure we show all tasks
+	$f = 'all';
 } else { 
 	$q->addWhere('project_active = 1');
 	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
@@ -182,11 +184,6 @@ if ($project_id) {
 	}
 }
 
-if ($project_id) {
-	$q->addWhere('task_project = ' . (int)$project_id);
-	//if we are on a project context make sure we show all tasks
-	$f = 'all';
-}
 if ($task_id) {
 	//if we are on a task context make sure we show ALL the children tasks
 	$f = 'deepchildren';
@@ -196,7 +193,6 @@ if ($pinned_only) {
 }
 
 $f = (($f) ? $f : '');
-$never_show_with_dots = array('children', ''); //used when displaying tasks
 switch ($f) {
 	case 'all':
 		break;
@@ -297,7 +293,7 @@ if (count($allowedProjects)) {
 	$q->addWhere($allowedProjects);
 }
 
-$obj = &new CTask;
+$obj = new CTask;
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 if (count($allowedTasks)) {
 	$q->addWhere($allowedTasks);
@@ -326,13 +322,12 @@ if (count($tasks) > 0) {
 		//add information about assigned users into the page output
 		$q->clear();
 		$q->addQuery('ut.user_id,	u.user_username');
-		$q->addQuery('contact_email, ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
+		$q->addQuery('contact_email, ut.perc_assignment');
 		$q->addQuery('CONCAT(contact_first_name, \' \',contact_last_name) AS assignee');
 		$q->addTable('user_tasks', 'ut');
 		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
 		$q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id', 'inner');
 		$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
-		$q->addGroup('ut.user_id');
 		$q->addOrder('perc_assignment desc, contact_first_name, contact_last_name');
 	
 		$assigned_users = array();
@@ -604,7 +599,7 @@ if ($project_id) {
 							$no_children = empty($children_of[$t1['task_id']]);
 	
 							showtask($t1, 0, true, false, $no_children);
-							$shown_tasks[] = $t1['task_id'];
+							$shown_tasks[$t1['task_id']] = $t1['task_id'];
 							findchild($p['tasks'], $t1['task_id']);
 						} elseif ($t1['task_parent'] == $task_id && $task_id) {
 							//Here we are on a task view context
@@ -613,14 +608,14 @@ if ($project_id) {
 							$no_children = empty($children_of[$t1['task_id']]);
 	
 							showtask($t1, 0, true, false, $no_children);
-							$shown_tasks[] = $t1['task_id'];
+							$shown_tasks[$t1['task_id']] = $t1['task_id'];
 							findchild($p['tasks'], $t1['task_id']);
 						}
 					}
 					reset($p);
 					//2nd pass parentless tasks
 					foreach ($p['tasks'] as $i => $t1) {
-						if (!in_array($t1['task_id'], $shown_tasks)) {
+						if (!isset($shown_tasks[$t1['task_id']])) {
 							//Here we are on a parentless task context, this can happen because we are:
 							//1) displaying filtered tasks that could be showing only child tasks and not its parents due to filtering.
 							//2) in a situation where child tasks are active and parent tasks are inactive or vice-versa.

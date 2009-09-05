@@ -36,7 +36,6 @@ $yy = $this_week->getYear();
 // prepare time period for 'events'
 $first_time = new CDate(Date_calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $first_time->setTime(0, 0, 0);
-$first_time->subtractSeconds(1);
 $last_time = new CDate(Date_calc::endOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $last_time->setTime(23, 59, 59);
 

@@ -106,8 +106,8 @@ if (is_array($selected) && count($selected)) {
 
 $AppUI->savePlace();
 
-$proj = &new CProject;
-$tobj = &new CTask;
+$proj = new CProject;
+$tobj = new CTask;
 
 $allowedProjects = $proj->getAllowedSQL($AppUI->user_id,'pr.project_id');
 $allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');

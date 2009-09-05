@@ -99,10 +99,11 @@ $next_year = (int)($next_year + 10000);
 				$minical->showWeek = true;
 				$minical->clickMonth = true;
 				$minical->setLinkFunctions('clickDay', 'clickWeek');
+				$s = '';
 				
 				for ($j = 0; $j < 3; $j++) {
-					echo '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
-					echo '<td valign="top" align="center" width="20%">&nbsp;</td>';
+					$s .= '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
+					$s .= '<td valign="top" align="center" width="20%">&nbsp;</td>';
 					for ($i = 0; $i <= 3; $i++) {
 						// prepare time period for minical'events'
 						$first_time = new CDate($date);
@@ -119,13 +120,14 @@ $next_year = (int)($next_year + 10000);
 						getEventLinks($first_time, $last_time, $links, 20, true);
 						$minical->setEvents($links);
 						$minical->setDate($date);
-						echo '<td valign="top" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-						echo '<td valign="top" align="center" width="200">' . $minical->show() . '</td>';
+						$s .= '<td valign="top" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
+						$s .= '<td valign="top" align="center" width="200">' . $minical->show() . '</td>';
 						$date->addMonths(1);
 					}
-					echo '<td valign="top" align="center" width="20%">&nbsp;</td>';
-					echo '</tr></table>';
+					$s .= '<td valign="top" align="center" width="20%">&nbsp;</td>';
+					$s .= '</tr></table>';
 				}
+				echo $s;
 			?>
 			<table width="100%" class="minical">
 				<tr>
