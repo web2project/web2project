@@ -104,19 +104,19 @@ class CProject extends CW2pObject {
     if ('' == $this->project_short_name) {
       $errorArray['project_short_name'] = $baseErrorMsg . 'project short name is NULL';
     }
-    if ('' == $this->project_company) {
+    if ((int) $this->project_company == 0) {
     	$errorArray['project_company'] = $baseErrorMsg . 'project company is NULL';
     }
-    if ('' == $this->project_priority) {
+    if (!is_int($this->project_priority + 0)) {
     	$errorArray['project_priority'] = $baseErrorMsg . 'project priority is NULL';
     }
     if ('' == $this->project_color_identifier) {
       $errorArray['project_color_identifier'] = $baseErrorMsg . 'project color identifier is NULL';
     }
-    if ('' == $this->project_type) {
+    if (!is_int($this->project_type + 0)) {
     	$errorArray['project_type'] = $baseErrorMsg . 'project type is NULL';
     }
-    if ('' == $this->project_status) {
+    if (!is_int($this->project_status + 0)) {
       $errorArray['project_status'] = $baseErrorMsg . 'project status is NULL';
     }
 
