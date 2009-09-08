@@ -95,17 +95,20 @@ class CTask extends CW2pObject {
 
 		$this->task_id = intval($this->task_id);
 
-		if ('' == $this->task_priority) {
+		if ($this->task_priority = '') {
 			$errorArray['task_priority'] = $baseErrorMsg . 'task priority is NULL';
 		}
-		if ('' == $this->task_name) {
+		if ($this->task_name == '') {
 			$errorArray['task_name'] = $baseErrorMsg . 'task name is NULL';
 		}
-		if ('' == $this->task_start_date) {
-			$errorArray['task_start_date'] = $baseErrorMsg . 'task start date is NULL';
-		}
-		if ('' == $this->task_end_date) {
-			$errorArray['task_end_date'] = $baseErrorMsg . 'task end date is NULL';
+		//Only check the task dates if the config option "check_task_dates" is on
+		if (w2PgetConfig('check_task_dates')) {
+			if ($this->task_start_date == '' || $this->task_start_date == '0000-00-00 00:00:00') {
+				$errorArray['task_start_date'] = $baseErrorMsg . 'task start date is NULL';
+			}
+			if ($this->task_end_date == '' || $this->task_end_date == '0000-00-00 00:00:00') {
+				$errorArray['task_end_date'] = $baseErrorMsg . 'task end date is NULL';
+			}
 		}
 
 		// ensure changes to checkboxes are honoured
