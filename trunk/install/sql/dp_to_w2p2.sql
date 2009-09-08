@@ -487,6 +487,7 @@ DELETE FROM project_departments USING project_departments LEFT JOIN departments 
 ALTER TABLE `departments` ADD `dept_email` VARCHAR(255) DEFAULT '' NOT NULL;
 ALTER TABLE `departments` ADD `dept_type` INT(3) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `projects` ADD `project_updator` INT(10) DEFAULT 0 NOT NULL;
+ALTER TABLE `projects` ADD `project_updated` datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE `tasks` ADD `task_updator` INT(10) DEFAULT 0 NOT NULL;
 
 #new PHPMailer SMTP options
