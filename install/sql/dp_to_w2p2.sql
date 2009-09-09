@@ -34,11 +34,11 @@ ALTER TABLE `modules` ADD `mod_main_class` varchar(30) NOT NULL default '';
 -- Table structure for table `tasks_critical`
 -- 
 
-CREATE TABLE `tasks_critical` (
+CREATE TABLE IF NOT EXISTS `tasks_critical` (
   `task_project` INT(10) default NULL,
   `critical_task` INT(10) default NULL,
   `project_actual_end_date` datetime default NULL
-) ENGINE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -46,10 +46,10 @@ CREATE TABLE `tasks_critical` (
 -- Table structure for table `tasks_problems`
 -- 
 
-CREATE TABLE `tasks_problems` (
+CREATE TABLE IF NOT EXISTS `tasks_problems` (
   `task_project` INT(10) default NULL,
   `task_log_problem` tinyint(1) default NULL
-) ENGINE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -57,12 +57,12 @@ CREATE TABLE `tasks_problems` (
 -- Table structure for table `tasks_sum`
 -- 
 
-CREATE TABLE `tasks_sum` (
+CREATE TABLE IF NOT EXISTS `tasks_sum` (
   `task_project` INT(10) default NULL,
   `total_tasks` int(6) default NULL,
   `project_percent_complete` varchar(11) default NULL,
   `project_duration` varchar(11) default NULL
-) ENGINE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -70,10 +70,10 @@ CREATE TABLE `tasks_sum` (
 -- Table structure for table `tasks_summy`
 -- 
 
-CREATE TABLE `tasks_summy` (
+CREATE TABLE IF NOT EXISTS `tasks_summy` (
   `task_project` INT(10) default NULL,
   `my_tasks` varchar(10) default NULL
-) ENGINE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -81,10 +81,10 @@ CREATE TABLE `tasks_summy` (
 -- Table structure for table `tasks_total`
 -- 
 
-CREATE TABLE `tasks_total` (
+CREATE TABLE IF NOT EXISTS `tasks_total` (
   `task_project` INT(10) default NULL,
   `total_tasks` INT(10) default NULL
-) ENGINE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -92,10 +92,10 @@ CREATE TABLE `tasks_total` (
 -- Table structure for table `tasks_users`
 -- 
 
-CREATE TABLE `tasks_users` (
+CREATE TABLE IF NOT EXISTS `tasks_users` (
   `task_project` INT(10) default NULL,
   `user_id` INT(10) default NULL
-) ENGINE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 #Fix the permissions fields of the modules table to properly use the permissions system
 UPDATE `modules` SET `permissions_item_table` = 'companies', `permissions_item_field` = 'company_id', `permissions_item_label` = 'company_name', `mod_main_class` = 'CCompany' WHERE  `modules`.`mod_directory` = 'companies';

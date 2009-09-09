@@ -39,13 +39,13 @@ ALTER TABLE `files` ADD `file_folder` INT(11) DEFAULT '0' NOT NULL;
 #
 # Table structure for table `file_folders`
 #
-CREATE TABLE `file_folders` (
+CREATE TABLE IF NOT EXISTS `file_folders` (
     `file_folder_id` int(11) NOT NULL auto_increment,
     `file_folder_parent` int(11) NOT NULL default '0',
     `file_folder_name` varchar(255) NOT NULL default '',
     `file_folder_description` text,
     PRIMARY KEY  (`file_folder_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 #20071113
 # Remove the NOT NULL clause from company_description to avoid issues on win plaforms
@@ -59,18 +59,18 @@ ALTER TABLE `tasks` MODIFY `task_percent_complete` tinyint(4) DEFAULT '0';
 -- Table structure for table 'gacl_permissions'
 -- 
 
-CREATE TABLE gacl_permissions (
-  user_id int(11) NOT NULL default '0',
-  user_name varchar(255) NOT NULL default '',
-  module varchar(64) NOT NULL default '',
-  item_id int(11) NOT NULL default '0',
+CREATE TABLE IF NOT EXISTS `gacl_permissions` (
+  `user_id` int(11) NOT NULL default '0',
+  `user_name` varchar(255) NOT NULL default '',
+  `module` varchar(64) NOT NULL default '',
+  `item_id` int(11) NOT NULL default '0',
   `action` varchar(32) NOT NULL default '',
-  access int(1) NOT NULL default '0',
-  acl_id int(11) NOT NULL default '0',
-  KEY user_id (user_id),
-  KEY module (module),
-  KEY item_id (item_id)
-) TYPE=MyISAM;
+  `access` int(1) NOT NULL default '0',
+  `acl_id` int(11) NOT NULL default '0',
+  KEY `user_id` (`user_id`),
+  KEY `module` (`module`),
+  KEY `item_id` (`item_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 UPDATE `user_preferences` SET `pref_value` = "web2project" WHERE `pref_name` = "UISTYLE";
 
@@ -78,7 +78,7 @@ ALTER TABLE `sysvals` ADD `sysval_value_id` VARCHAR(128) DEFAULT '0' NULL;
 
 #20090813
 #updated the database structure to handle some oddball dotProject 2.1.2 items
-CREATE TABLE `event_contacts` (
+CREATE TABLE IF NOT EXISTS `event_contacts` (
   `event_id` int(10) NOT NULL default '0',
   `contact_id` int(10) NOT NULL default '0',
   PRIMARY KEY  (`event_id`,`contact_id`)
@@ -90,7 +90,7 @@ CREATE TABLE `event_contacts` (
 -- Table structure for table `project_designer_options`
 -- 
 
-CREATE TABLE `project_designer_options` (
+CREATE TABLE IF NOT EXISTS `project_designer_options` (
   `pd_option_id` int(10) NOT NULL auto_increment,
   `pd_option_user` int(10) NOT NULL default '0',
   `pd_option_view_project` int(1) NOT NULL default '1',
@@ -109,7 +109,7 @@ CREATE TABLE `project_designer_options` (
 -- Table structure for table `resources`
 -- 
 
-CREATE TABLE `resources` (
+CREATE TABLE IF NOT EXISTS `resources` (
   `resource_id` int(11) NOT NULL auto_increment,
   `resource_name` varchar(255) NOT NULL default '',
   `resource_key` varchar(64) NOT NULL default '',
@@ -127,7 +127,7 @@ CREATE TABLE `resources` (
 -- Table structure for table `resource_tasks`
 -- 
 
-CREATE TABLE `resource_tasks` (
+CREATE TABLE IF NOT EXISTS `resource_tasks` (
   `resource_id` int(11) NOT NULL default '0',
   `task_id` int(11) NOT NULL default '0',
   `percent_allocated` int(11) NOT NULL default '100',
@@ -141,7 +141,7 @@ CREATE TABLE `resource_tasks` (
 -- Table structure for table `resource_types`
 -- 
 
-CREATE TABLE `resource_types` (
+CREATE TABLE IF NOT EXISTS `resource_types` (
   `resource_type_id` int(11) NOT NULL auto_increment,
   `resource_type_name` varchar(255) NOT NULL default '',
   `resource_type_note` text,
