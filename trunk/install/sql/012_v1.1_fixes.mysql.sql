@@ -17,7 +17,7 @@ ALTER TABLE `projects` ADD `project_created` DATETIME NOT NULL default '0000-00-
 ALTER TABLE `projects` ADD `project_updated` DATETIME NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE `projects` ADD `project_status_comment` VARCHAR(255) NOT NULL default '';
 ALTER TABLE `projects` ADD `project_subpriority` TINYINT(4) NOT NULL default 0;
-ALTER TABLE `projects` ADD `project_end_date_adjusted` DATETIME NOT NULL default '0000-00-00 00:00:00;
+ALTER TABLE `projects` ADD `project_end_date_adjusted` DATETIME NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE `projects` ADD `project_end_date_adjusted_user` INT(10) NOT NULL default 0;
 
 -- Remove all the old indexes
