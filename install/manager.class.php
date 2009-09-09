@@ -256,8 +256,16 @@
 						$pieces[$i] = str_replace('[ADMINPASS]', $this->configOptions['adminpass'], $pieces[$i]);
 					}
 					if (!$result = $dbConn->Execute($pieces[$i])) {
-						$dbErr = true;
-						$errorMessages[] = $dbConn->ErrorMsg();
+            $errorMessage = $dbConn->ErrorMsg();
+            /*
+             * TODO: I'm not happy with this solution but have yet to come up
+             * 	with another way of solving it...
+             */
+            
+            if (strpos($errorMessage, 'Duplicate column name') === false) {
+              $dbErr = true;
+              $errorMessages[] = $errorMessage;            	
+            }
 					}
 				}
 			}
