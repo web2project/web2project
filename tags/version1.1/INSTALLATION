@@ -1,0 +1,44 @@
+
+Installation of your web2project system is quite simple.
+
+Requirements:
+
+*  PHP 5.x - web2project does not work with PHP4 due to its use of the 
+public, private, and protected keywords;
+
+*  Apache 1.x+ - web2project might work with other web servers, it has not 
+been tested completely;
+
+*  Mysql 5.x+ - web2project does not currently work with other databases;
+
+0.  Uncompress your web2project archive (often named web2project.tar.gz or 
+web2project.zip) and upload it to a web-accessible directory on your web 
+server.  This will be your web2project installation.
+
+1.  Create a mysql database and a user with full access to the database.  
+Write these credentials down.  If you are converting from dotProject, copy 
+the includes/config.php file from your dotProject installation into your 
+web2project/includes/ folder.  The conversion process will retrieve and use 
+these credentials as necessary.
+
+2.  Point your browser to your web2project installation.  The install script 
+should determine whether you are doing a fresh install, updating an existing 
+installation, or even converting from dotProject.
+
+3.  
+a.  If you're installing a new system, you'll need the credentials from Step 1.
+b.  If you're upgrading an existing system, the system handles everything.
+c.  If you're converting from dotProject, the system handles the conversion.
+
+4.  After the script is complete, review the error messages.  You may have to 
+manually create your config.php file from the information displayed.
+
+5.  To have your system run maintenenace tasks - email notices, etc - set up 
+a "cronjob" along the lines of:
+
+	wget -O - -q http://{web2project installation}/queuescanner.php
+
+Where "{web2project installation}" is replaced by your system's path.  This 
+is a Linux/Unix-style example, for other operation systems, adjust accordingly.
+
+6.  Log into your system.
