@@ -409,13 +409,15 @@ if (!$suppressHeaders) {
 		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Server Protocol | Gateway Interface: ' . safe_get_env('SERVER_PROTOCOL') . ' | ' . safe_get_env('GATEWAY_INTERFACE') . '</p>');
 		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Client Browser: ' . safe_get_env('HTTP_USER_AGENT') . '</p>');
 		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">URL Query: ' . safe_get_env('QUERY_STRING') . '</p>');
-		$script_handle = fopen($module_file, "r");
-		if ($script_handle) {
-			$script_first_line = fgets($script_handle, 4096);
-			fclose($script_handle);
-		}
-		$script_first_line = substr(trim($script_first_line), 10, -4);
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">File Version ' . $script_first_line . '</p>');
+    if (file_exists($module_file)) {
+  		$script_handle = fopen($module_file, "r");
+  		if ($script_handle) {
+  			$script_first_line = fgets($script_handle, 4096);
+  			fclose($script_handle);
+  		}
+  		$script_first_line = substr(trim($script_first_line), 10, -4);
+  		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">File Version ' . $script_first_line . '</p>');
+    }
 		$right_now_is = new CDate();
 		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Server Time | Timezone: ' . $right_now_is->format(FMT_DATERFC822) . ' | ' . date('T') . '</p>');
 		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">PHP Max. Execution Time: ' . ini_get('max_execution_time') . ' seconds</p>');
