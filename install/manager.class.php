@@ -261,8 +261,8 @@
              * TODO: I'm not happy with this solution but have yet to come up
              * 	with another way of solving it...
              */
-            if (strpos($errorMessage, 'Duplicate column name') === false ||
-              strpos($errorMessage, 'key exists') === false) {
+            if (strpos($errorMessage, 'Duplicate column name') === false &&
+              strpos($errorMessage, 'column/key exists') === false) {
               $dbErr = true;
               $errorMessages[] = $errorMessage;            	
             }
