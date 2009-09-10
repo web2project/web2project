@@ -107,16 +107,16 @@ class CProject extends CW2pObject {
     if ((int) $this->project_company == 0) {
     	$errorArray['project_company'] = $baseErrorMsg . 'project company is NULL';
     }
-    if (!is_int($this->project_priority + 0)) {
+    if ('' == $this->project_priority) {
     	$errorArray['project_priority'] = $baseErrorMsg . 'project priority is NULL';
     }
     if ('' == $this->project_color_identifier) {
       $errorArray['project_color_identifier'] = $baseErrorMsg . 'project color identifier is NULL';
     }
-    if (!is_int($this->project_type + 0)) {
+    if ('' == $this->project_type) {
     	$errorArray['project_type'] = $baseErrorMsg . 'project type is NULL';
     }
-    if (!is_int($this->project_status + 0)) {
+    if ('' == $this->project_status) {
       $errorArray['project_status'] = $baseErrorMsg . 'project status is NULL';
     }
 

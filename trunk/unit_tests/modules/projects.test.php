@@ -556,7 +556,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $project->bind($post_data);
         $msg = $project->store();
         
-        $this->assertEquals('',                         $msg);
+        $this->assertEquals(0,                          count($msg));
         $this->assertEquals(3,                          $project->project_id);
         $this->assertEquals(1,                          $project->project_company);
         $this->assertEquals('',                         $project->project_department);
@@ -766,7 +766,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertEquals('2009-07-15 00:00:00',              $project->project_end_date);
       $this->assertEquals('2009-08-15 00:00:00',              $project->project_actual_end_date);
       $this->assertEquals(0,                                  $project->project_status);
-      $this->assertEquals(15.7894736842105,                   $project->project_percent_complete);
+      $this->assertEquals(15.789473684211,                    (double) $project->project_percent_complete);
       $this->assertEquals('FFFFFF',                           $project->project_color_identifier);
       $this->assertEquals('This is a project',                $project->project_description);
       $this->assertEquals('15.00',                            $project->project_target_budget);
@@ -1594,15 +1594,16 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $project = new CProject();
         
         $task_logs = $project->getTaskLogs($AppUI, 1);
+
         $this->assertEquals(8,                  count($task_logs));
-        $this->assertEquals(27,                 count($task_logs[0]));
-        $this->assertEquals(27,                 count($task_logs[1]));
-        $this->assertEquals(27,                 count($task_logs[2]));
-        $this->assertEquals(27,                 count($task_logs[3]));
-        $this->assertEquals(27,                 count($task_logs[4]));
-        $this->assertEquals(27,                 count($task_logs[5]));
-        $this->assertEquals(27,                 count($task_logs[6]));
-        $this->assertEquals(27,                 count($task_logs[7]));
+        $this->assertEquals(28,                 count($task_logs[0]));
+        $this->assertEquals(28,                 count($task_logs[1]));
+        $this->assertEquals(28,                 count($task_logs[2]));
+        $this->assertEquals(28,                 count($task_logs[3]));
+        $this->assertEquals(28,                 count($task_logs[4]));
+        $this->assertEquals(28,                 count($task_logs[5]));
+        $this->assertEquals(28,                 count($task_logs[6]));
+        $this->assertEquals(28,                 count($task_logs[7]));
         $this->assertEquals(1,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(1,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 1',       $task_logs[0]['task_log_description']);
@@ -1657,8 +1658,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $task_logs = $project->getTaskLogs($AppUI, 1, 2);
 
         $this->assertEquals(2,                  count($task_logs));
-        $this->assertEquals(27,                 count($task_logs[0]));
-        $this->assertEquals(27,                 count($task_logs[1]));
+        $this->assertEquals(28,                 count($task_logs[0]));
+        $this->assertEquals(28,                 count($task_logs[1]));
         $this->assertEquals(4,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(2,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 4',       $task_logs[0]['task_log_description']);
@@ -1683,10 +1684,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $task_logs = $project->getTaskLogs($AppUI, 1, 0, true);
 
         $this->assertEquals(4,                  count($task_logs));
-        $this->assertEquals(27,                 count($task_logs[0]));
-        $this->assertEquals(27,                 count($task_logs[1]));
-        $this->assertEquals(27,                 count($task_logs[2]));
-        $this->assertEquals(27,                 count($task_logs[3]));
+        $this->assertEquals(28,                 count($task_logs[0]));
+        $this->assertEquals(28,                 count($task_logs[1]));
+        $this->assertEquals(28,                 count($task_logs[2]));
+        $this->assertEquals(28,                 count($task_logs[3]));
         $this->assertEquals(1,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(1,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 1',       $task_logs[0]['task_log_description']);
@@ -1721,10 +1722,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $task_logs = $project->getTaskLogs($AppUI, 1, 0, false, true);
 
         $this->assertEquals(4,                  count($task_logs));
-        $this->assertEquals(27,                 count($task_logs[0]));
-        $this->assertEquals(27,                 count($task_logs[1]));
-        $this->assertEquals(27,                 count($task_logs[2]));
-        $this->assertEquals(27,                 count($task_logs[3]));
+        $this->assertEquals(28,                 count($task_logs[0]));
+        $this->assertEquals(28,                 count($task_logs[1]));
+        $this->assertEquals(28,                 count($task_logs[2]));
+        $this->assertEquals(28,                 count($task_logs[3]));
         $this->assertEquals(1,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(1,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 1',       $task_logs[0]['task_log_description']);
@@ -1759,8 +1760,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $task_logs = $project->getTaskLogs($AppUI, 1, 0, false, false, 2);
 
         $this->assertEquals(2,                  count($task_logs));
-        $this->assertEquals(27,                 count($task_logs[0]));
-        $this->assertEquals(27,                 count($task_logs[1]));
+        $this->assertEquals(28,                 count($task_logs[0]));
+        $this->assertEquals(28,                 count($task_logs[1]));
         $this->assertEquals(4,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(2,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 4',       $task_logs[0]['task_log_description']);
