@@ -86,4 +86,4 @@ ALTER TABLE `user_tasks` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `user_task_pin` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `w2pversion` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-INSERT INTO w2pversion (code_version, code_revision, last_code_update) VALUES ('1.0.6', -1, now());
+INSERT INTO w2pversion (code_version, code_revision, last_code_update) VALUES ('1.0.0', 489, now());
