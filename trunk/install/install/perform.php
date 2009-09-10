@@ -101,7 +101,7 @@
 				}
 			?>
 			<tr>
-				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.  It's possible that your dotProject database was not the version it claimed to be.</td>
+				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' are not likely to be problems.  Sit back and relax.</td>
 			</tr>
 			<?php
 		}
