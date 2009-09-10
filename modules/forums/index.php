@@ -157,12 +157,15 @@ foreach ($forums as $row) {
 <?php
 	if ($message_date !== null) {
 		echo $message_date->format($df . ' ' . $tf);
-
+/*
+		TODO: This chunk of code is a nasty mess... Someone needs to look at this for v1.2
+    
 		$last = new Date_Span();
 		$last->setFromDateDiff($now, $message_date);
 
 		echo '<br /><font color=#999966>(' . $AppUI->_('Last post') . ' ';
 		printf('%.1f', $last->format('%d'));
+
 		echo ' ' . $AppUI->_('days ago') . ') </font>';
 
 		$id = $row['message_parent'] < 0 ? $row['message_id'] : $row['message_parent'];
@@ -171,6 +174,7 @@ foreach ($forums as $row) {
 		echo '<font color=#777777>' . $row['message_body'];
 		echo $row['message_length'] > $max_msg_length ? '...' : '';
 		echo '</font></a>';
+*/
 	} else {
 		echo $AppUI->_('No posts');
 	}
