@@ -2156,7 +2156,7 @@ class CTask extends CW2pObject {
 		$q->addQuery('p.project_id, p.project_name');
 		$q->addTable('tasks', 't');
 
-		$q->addWhere('(task_start_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . 'OR task_end_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ')');
+		$q->addWhere('(task_start_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ' OR task_end_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ')');
 		$q->addWhere('task_percent_complete < 100');
 		$q->addWhere('task_dynamic = 0');
 

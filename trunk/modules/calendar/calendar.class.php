@@ -1002,7 +1002,7 @@ class CEvent extends CW2pObject {
 		$q->leftJoin('projects', 'projects', 'e.event_project = projects.project_id');
 
 		$q->addWhere('(event_start_date > ' . $q->dbfnNow() . ' OR event_end_date > ' . $q->dbfnNow() . ')');
-		$q->addWhere('(event_start_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . 'OR event_end_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ')');
+		$q->addWhere('(event_start_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ' OR event_end_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ')');
 		$q->innerJoin('user_events', 'ue', 'ue.event_id = e.event_id');
 		$q->addWhere('ue.user_id = ' . $userId);
 		$q->addOrder('event_start_date');
