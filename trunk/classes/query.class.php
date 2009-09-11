@@ -607,6 +607,26 @@ class DBQuery {
 	    }
 	}
 
+	/** Adds a given unit interval to a date
+	 * 
+	 * @param	$date			This is the date we want to add to
+	 * @param	$interval		This is how much units we will be adding to the date
+	 * @param	$unit			This is the type of unit we are adding to the date
+	*/
+	public function dbfnDateAdd($date, $interval = 0, $unit = 'DAY') {
+		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
+		
+		$date = ($date == '') ? $this->dbfnNow() : $date;
+
+	    switch ($dbType) {
+	        case 'oci8':
+	        case 'oracle':
+				return '(' . $date . ' + interval \'' . $unit . '\' ' . $interval . ')';
+	        default:										//mysql
+				return 'DATE_ADD(' . $date . ', INTERVAL ' . $interval . ' ' . $unit . ')';
+	    }
+	}
+
 	/** Set a row limit on the query
 	 *
 	 * Set a limit on the query.  This is done in a database-independent

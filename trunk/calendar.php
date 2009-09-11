@@ -13,6 +13,11 @@
 	$token = w2PgetParam($_GET, 'token', '');
 	$format = w2PgetParam($_GET, 'format', 'ical');
 	$userId = CUser::getUserIdByToken($token);
+	$AppUI->loadPrefs($userId);
+	$AppUI->user_id = $userId;
+	$AppUI->setUserLocale();
+	@include_once (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
+	include_once W2P_BASE_DIR . '/locales/core.php';
 	
 	switch ($format) {
 		//TODO: We only output in vCal, are there others we need to consider?
@@ -20,7 +25,7 @@
 		default:
 			$format = 'vcal';
 			header ( 'Content-Type: text/calendar' );
-			header ( 'Content-disposition: attachment; filename="calendar.ics' );
+			header ( 'Content-disposition: attachment; filename="calendar.ics"' );
 			break;
 	}
 

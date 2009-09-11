@@ -995,13 +995,16 @@ class CEvent extends CW2pObject {
 		$q->addQuery('event_description as description');
 		$q->addQuery('event_start_date as startDate');
 		$q->addQuery('event_end_date as endDate');
-		$q->addQuery($q->dbfnNow().' as updatedDate');
+		$q->addQuery($q->dbfnNow() . ' as updatedDate');
+		$q->addQuery('CONCAT(\''. W2P_BASE_URL . '/index.php?m=calendar&a=view&event_id=' . '\', e.event_id) as url');
+		$q->addQuery('projects.project_id, projects.project_name');
 		$q->addTable('events', 'e');
+		$q->leftJoin('projects', 'projects', 'e.event_project = projects.project_id');
 
-		$q->addWhere("event_start_date > ".$q->addNow());
-		$q->addWhere("event_start_date < DATE_ADD(CURDATE(), INTERVAL $days DAY)");
+		$q->addWhere('(event_start_date > ' . $q->dbfnNow() . ' OR event_end_date > ' . $q->dbfnNow() . ')');
+		$q->addWhere('(event_start_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . 'OR event_end_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ')');
 		$q->innerJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-		$q->addWhere("ue.user_id = $userId");
+		$q->addWhere('ue.user_id = ' . $userId);
 		$q->addOrder('event_start_date');
 
 		return $q->loadList();
