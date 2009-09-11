@@ -1,7 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-'classic'=>'Tema Clássico',
-'default'=>'Tema Padrão',
+'classic'=>'Tema ClÃ¡ssico',
+'default'=>'Tema PadrÃ£o',
 'demo1'=>'Tema Demonstrativo',
 'w2p-grey-theme'=>'Tema Cinzento',
