@@ -1,16 +1,16 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-'Advanced search'=>'Búsqueda avanzada',
+'Advanced search'=>'BÃºsqueda avanzada',
 'All words'=>'Todas las palabras',
 'Display all fields'=>'Mostrar todos los campos',
-'Empty'=>'Vacío',
+'Empty'=>'VacÃ­o',
 'Events'=>'Eventos',
 'Files Content'=>'Contenido de los Ficheros',
 'Forum Messages'=>'Mensajes del Foro',
 'Ignore case'=>'Ignorar coincidencia',
 'Ignore special chars'=>'Ignorar carateres especiales',
-'Modules selection'=>'Selección de módulos',
+'Modules selection'=>'SelecciÃ³n de mÃ³dulos',
 'Search'=>'Buscar',
 'Select all'=>'Seleccionar todos',
 'Show empty'=>'Mostrar vacios',
