@@ -21,7 +21,7 @@ along with web2Project; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 if(defined('E_DEPRECATED')){ 
 	// since php 5.3
 	error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
