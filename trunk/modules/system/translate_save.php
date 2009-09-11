@@ -71,7 +71,7 @@ if ($lang == 'en') {
 	// editing the translation
 	foreach ($trans as $langs) {
 		if (empty($langs['del'])) {
-			$langs['english'] = stripslashes($langs['english']);
+			$langs['english'] = addslashes(stripslashes($langs['english']));
 			$langs['lang'] = addslashes(stripslashes($langs['lang']));
 			//fwrite( $fp, "\"{$langs['english']}\"=>\"{$langs['lang']}\",\n" );
 			$txt .= '\'' . $langs['english'] . '\'=>\'' . $langs['lang'] . '\',' . "\n";
