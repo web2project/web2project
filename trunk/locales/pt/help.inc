@@ -1,7 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-'About Modules'=>'Acerca dos Módulos',
+'About Modules'=>'Acerca dos MÃ³dulos',
 'Access Denied'=>'Acesso Negado',
 'Adding a Company'=>'Criando uma Empresa',
 'Adding a Project'=>'Criando um Projecto',
@@ -9,10 +9,10 @@
 'Breadcrumbs'=>'Atalhos',
 'Context Help'=>'Ajuda contextual',
 'General Concepts'=>'Conceitos Gerais',
-'Getting Started'=>'Introdução',
-'Left Navigation'=>'Navegação Esquerda',
-'Saving Your Place'=>'Guardando o seu Espaço',
+'Getting Started'=>'IntroduÃ§Ã£o',
+'Left Navigation'=>'NavegaÃ§Ã£o Esquerda',
+'Saving Your Place'=>'Guardando o seu EspaÃ§o',
 'Tabbed Property Boxes'=>'Tabelas de Propriedades',
 'Top Menu'=>'Menu principal',
-'helpIntro'=>'Atalhos para tópicos internos da Ajuda',
-'index'=>'indíce',
+'helpIntro'=>'Atalhos para tÃ³picos internos da Ajuda',
+'index'=>'indÃ­ce',
