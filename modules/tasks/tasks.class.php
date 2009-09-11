@@ -2152,17 +2152,22 @@ class CTask extends CW2pObject {
 		$q->addQuery('task_start_date as startDate');
 		$q->addQuery('task_end_date as endDate');
 		$q->addQuery($q->dbfnNow() . ' as updatedDate');
+		$q->addQuery('CONCAT(\''. W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . '\', t.task_id) as url');
+		$q->addQuery('p.project_id, p.project_name');
 		$q->addTable('tasks', 't');
 
-		$q->addWhere("task_start_date < DATE_ADD(CURDATE(), INTERVAL $days DAY)");
+		$q->addWhere('(task_start_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . 'OR task_end_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ')');
 		$q->addWhere('task_percent_complete < 100');
 		$q->addWhere('task_dynamic = 0');
 
 		$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-		$q->addWhere("ut.user_id = $userId");
+		$q->addWhere('ut.user_id = ' . $userId);
 
 		$q->innerJoin('projects', 'p', 'p.project_id = t.task_project');
 		$q->addWhere('project_active > 0');
+		if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+			$q->addWhere('project_status <> ' . $template_status);
+		}
 
 		$q->addOrder('task_start_date, task_end_date');
 

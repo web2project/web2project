@@ -15,13 +15,31 @@ if (!defined('W2P_BASE_DIR')) {
 	class w2piCal {
 		
 		public static function formatCalendarItem($calendarItem, $myTimezoneOffset) {
-
+			global $AppUI;
 			$name = $calendarItem['name'];
+			$description = '';
+			$attachments = '';
+			if ($calendarItem['project_id']) {
+				$description .= $AppUI->_('Project') . ': ' . $calendarItem['project_name'];
+			} 
+			$description .= '\n--------------------------------------------------------------------------------------------------\n';
+			$description .= $AppUI->_('Description');			
+			$description .= '\n--------------------------------------------------------------------------------------------------\n';			
+			$description .= strtr($calendarItem['description'], array("\n" => '\n', "\r\n" =>'\n'));
+			$description .= '\n--------------------------------------------------------------------------------------------------\n';
+			$description .= $AppUI->_('URL');			
+			$description .= '\n--------------------------------------------------------------------------------------------------\n';			
+			if ($calendarItem['project_id']) {
+				$description .= W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . '\n';
+				$attachments .= 'ATTACH:' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\n";
+			} 
+			$description .= $calendarItem['url'];
+			$attachments .= 'ATTACH:' . $calendarItem['url'];
 			$startDate = self::formatDate($calendarItem['startDate'], $myTimezoneOffset);
 			$endDate = self::formatDate($calendarItem['endDate'], $myTimezoneOffset);
 			$updatedDate = self::formatDate($calendarItem['updatedDate'], $myTimezoneOffset);
 
-			$eventItem = "BEGIN:VEVENT\nDTSTART;VALUE=DATE-TIME:{$startDate}\nDTEND;VALUE=DATE-TIME:{$endDate}\nSUMMARY:{$name}\nDTSTAMP;VALUE=DATE:{$updatedDate}\nSEQUENCE:{$sequence}\nEND:VEVENT\n";
+			$eventItem = "BEGIN:VEVENT\nDTSTART;VALUE=DATE-TIME:{$startDate}\nDTEND;VALUE=DATE-TIME:{$endDate}\nSUMMARY:{$name}\nDESCRIPTION:{$description}\n{$attachments}\nDTSTAMP;VALUE=DATE:{$updatedDate}\nSEQUENCE:{$sequence}\nEND:VEVENT\n";
 
 			return $eventItem;
 		}
