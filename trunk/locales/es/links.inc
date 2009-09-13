@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+'Add Link'=>'Agregar Link',
 'All'=>'Todos',
 'All Links'=>'Todos los Links',
 'All Projects'=>'Todos los Proyectos',
@@ -15,6 +16,7 @@
 'Link Name'=>'Nombre Link',
 'Link URL'=>'Link URL',
 'Link(s)'=>'Links(s)',
+'Links'=>'Links',
 'Owner'=>'Propietario',
 'Page(s)'=>'Páginas',
 'Please select a project first!'=>'Por favor, seleccione un proyecto primero!',
@@ -27,6 +29,7 @@
 'Uploaded By'=>'Cargado por',
 'cancel'=>'cancelar',
 'go'=>'ir',
+'links list'=>'lista de links',
 'linksDelete'=>'Borrar este link?',
 'new link'=>'nuevo link',
 'select task'=>'seleccionar tarea',

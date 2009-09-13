@@ -2,6 +2,7 @@
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
 'Add File'=>'Agregar Fichero',
+'Add File Folder'=>'Agregar Pasta',
 'All Files'=>'Todos los Ficheros',
 'All Projects'=>'Todos los Proyectos',
 'Application'=>'Aplicación',
@@ -26,6 +27,8 @@
 'File(s)'=>'Fichero/s',
 'Filter'=>'Filtro',
 'Final Version'=>'Versión Final',
+'Folder'=>'Pasta',
+'Folder Explorer'=>'Explorar de Pastas',
 'Folder Name'=>'Nombre Carpeta',
 'Go'=>'Ir',
 'Major Revision'=>'Revisión Mayor',
@@ -40,6 +43,7 @@
 'Project'=>'Proyecto',
 'Root'=>'Raiz',
 'Size'=>'Tamaño',
+'Subfolder of'=>'Subpasta de',
 'Task'=>'Tarea',
 'Task Name'=>'Nombre Tarea',
 'Type'=>'Tipo',

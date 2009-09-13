@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+'(Select a Country)'=>'(País)',
 'Active Projects'=>'Proyecto Activos',
 'Add Company'=>'Agregar Empresa',
 'Address'=>'Dirección',
@@ -20,6 +21,7 @@
 'Details'=>'Detalles',
 'Edit Company'=>'Editar Empresa',
 'Email'=>'email',
+'Events'=>'Eventos',
 'Fax'=>'Fax',
 'Invalid Company ID'=>'ID de Empresa NO válido',
 'No companies available'=>'No existen empresas disponibles',
