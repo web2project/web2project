@@ -2,7 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-
+require_once $AppUI->getSystemClass('w2p');
 ##
 ## CDepartment Class
 ##
