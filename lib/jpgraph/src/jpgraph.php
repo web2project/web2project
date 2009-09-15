@@ -542,7 +542,7 @@ if( INSTALL_PHP_ERR_HANDLER ) {
 //Check if there were any warnings, perhaps some wrong includes by the user
 //
 if( isset($GLOBALS['php_errormsg']) && CATCH_PHPERRMSG && 
-	!preg_match('|Deprecated|', $GLOBALS['php_errormsg']) && !preg_match('|deprecated|', $GLOBALS['php_errormsg'])) { 
+	!preg_match('|Deprecated|', $GLOBALS['php_errormsg']) && !preg_match('|deprecated|', $GLOBALS['php_errormsg']) && !preg_match('|Non-static|', $GLOBALS['php_errormsg'])) {
 	JpGraphError::RaiseL(25004,$GLOBALS['php_errormsg']);
 }
 
