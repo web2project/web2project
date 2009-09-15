@@ -101,11 +101,10 @@ foreach ($topics as $row) {
 <?php if ($row['latest_reply']) {
 			echo $last->format($df . ' ' . $tf) . '<br /><font color="#999966">(';
 
-			$span = new Date_Span();
-			$span->setFromDateDiff($now, $last);
+			$span = new CDate();
+			$diff = $span->dateDiff($now, $last);
 
-			printf('%.1f', $span->format('%d'));
-			echo ' ' . $AppUI->_('days ago');
+			echo (int)$diff . ' ' . $AppUI->_('days ago');
 
 			echo ')</font>';
 		} else {
