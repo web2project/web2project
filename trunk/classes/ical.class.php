@@ -22,15 +22,15 @@ if (!defined('W2P_BASE_DIR')) {
 			if ($calendarItem['project_id']) {
 				$description .= $AppUI->_('Project') . ': ' . $calendarItem['project_name'];
 			} 
-			$description .= '\n--------------------------------------------------------------------------------------------------\n';
+			$description .= "\n--------------------------------------------------------------------------------------------------\n";
 			$description .= $AppUI->_('Description');			
-			$description .= '\n--------------------------------------------------------------------------------------------------\n';			
+			$description .= "\n--------------------------------------------------------------------------------------------------\n";			
 			$description .= strtr($calendarItem['description'], array("\n" => '\n', "\r\n" =>'\n'));
-			$description .= '\n--------------------------------------------------------------------------------------------------\n';
+			$description .= "\n--------------------------------------------------------------------------------------------------\n";
 			$description .= $AppUI->_('URL');			
-			$description .= '\n--------------------------------------------------------------------------------------------------\n';			
+			$description .= "\n--------------------------------------------------------------------------------------------------\n";			
 			if ($calendarItem['project_id']) {
-				$description .= W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . '\n';
+				$description .= W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\n";
 				$attachments .= 'ATTACH:' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\n";
 			} 
 			$description .= $calendarItem['url'];
