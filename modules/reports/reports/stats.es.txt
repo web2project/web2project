@@ -1,2 +1,2 @@
-Estadísticas de Proyectos
-Estadísticas de Proyectos, mostrando el estado de las tareas.
+EstadÃ­sticas de Proyectos
+EstadÃ­sticas de Proyectos, mostrando el estado de las tareas.
