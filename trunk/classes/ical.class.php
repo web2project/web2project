@@ -31,7 +31,7 @@ if (!defined('W2P_BASE_DIR')) {
 			$description .= '\n--------------------------------------------------------------------------------------------------\n';
 			if ($calendarItem['project_id']) {
 				$description .= W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . '\n';
-				$attachments .= 'ATTACH:' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . '\n';
+				$attachments .= 'ATTACH:' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\n";
 			} 
 			$description .= $calendarItem['url'];
 			$attachments .= 'ATTACH:' . $calendarItem['url'];
