@@ -147,11 +147,12 @@ function getTaskTooltip($task_id, $starts = false, $ends = false, $tasks_tips ) 
 	if (is_array($assigned)) {
 		$start = false;
 		foreach ($assigned as $user) {
-			if ($start)
+			if ($start) {
 				$tt .= '<br/>';
-			else
+			} else {
 				$start = true;
-			$tt .= $user;
+			}
+			$tt .= $user['user_name'] . ' ' . $user['perc_assignment'] . '%';
 		}
 	}
 	$tt .= '		</tr>';

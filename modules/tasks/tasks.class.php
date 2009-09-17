@@ -2112,11 +2112,11 @@ class CTask extends CW2pObject {
 		$q->addTable('users', 'u');
 		$q->addTable('user_tasks', 'ut');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('u.user_id, CONCAT_WS(\' \',contact_first_name, contact_last_name, CONCAT(perc_assignment, \'%\'))');
+		$q->addQuery('u.user_id, CONCAT_WS(\' \',contact_first_name, contact_last_name) AS user_name, perc_assignment');
 		$q->addWhere('ut.task_id = ' . (int)$this->task_id);
 		$q->addWhere('user_contact = contact_id');
 		$q->addWhere('ut.user_id = u.user_id');
-		$assigned = $q->loadHashList();
+		$assigned = $q->loadHashList('user_id');
 		return $assigned;
 	}
 
