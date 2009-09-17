@@ -18,9 +18,8 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 	<td width="50%">
 		<?php
 			if ($other_users) {
-				$selectedUser = w2PgetParam($_POST, 'show_user_todo', $AppUI->user_id);
 				$users = $perms->getPermittedUsers('tasks');
-				echo arraySelect($users, 'show_user_todo', 'class="text" onchange="document.form_buttons.submit()"', $selectedUser);
+				echo arraySelect($users, 'show_user_todo', 'class="text" onchange="document.form_buttons.submit()"', $user_id);
 			}
 		?>
 	</td>
