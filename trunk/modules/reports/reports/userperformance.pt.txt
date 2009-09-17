@@ -1,2 +1,2 @@
 Performance dos Utilizadores
-Relatório que mostra a quantidade de horas trabalhadas por um utilizador nas tarefas atribuidas
+RelatÃ³rio que mostra a quantidade de horas trabalhadas por um utilizador nas tarefas atribuidas
