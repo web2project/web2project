@@ -314,6 +314,7 @@ class CFile extends CW2pObject {
 		foreach ($ignore as $w) {
 			unset($wordarr[$w]);
 		}
+		$nwords_indexed = count($wordarr);
 		// insert the strings into the table
 		while (list($key, $val) = each($wordarr)) {
 			$q = new DBQuery;
@@ -326,7 +327,7 @@ class CFile extends CW2pObject {
 			$q->clear();
 		}
 
-		return nwords;
+		return (int)$nwords_indexed;
 	}
 
 	//function notifies about file changing
