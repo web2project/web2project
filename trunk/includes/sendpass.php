@@ -42,7 +42,6 @@ function sendNewPass() {
 	$subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
 
 	$m = new Mail; // create the mail
-	$m->From('web2Project@' . w2PgetConfig('site_domain'));
 	$m->To($confirmEmail);
 	$m->Subject($subject);
 	$m->Body($message, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
