@@ -358,4 +358,4 @@ ALTER TABLE `user_tasks` ADD INDEX (`task_id`);
 ALTER TABLE `user_task_pin` ADD INDEX (`user_id`);
 ALTER TABLE `user_task_pin` ADD INDEX (`task_id`);
 
-INSERT INTO w2pversion (code_version, code_revision, last_code_update) VALUES ('1.1.0', 626, now());
+INSERT INTO w2pversion (code_version, db_version, last_code_update) VALUES ('1.1.0', 626, now());
