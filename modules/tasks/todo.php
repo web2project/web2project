@@ -6,8 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $showEditCheckbox = w2PgetConfig('direct_edit_assignment');
-// Project status from sysval, defined as a constant
-$project_on_hold_status = 4;
 $perms = &$AppUI->acl();
 
 if (isset($_GET['tab'])) {
@@ -144,7 +142,9 @@ if (!$showLowTasks) {
 	$q->addWhere('task_priority >= 0');
 }
 if (!$showHoldProjs) {
-	$q->addWhere('project_status <> ' . (int)$project_on_hold_status);
+	if (($on_hold_status = w2PgetConfig('on_hold_projects_status_id')) != '') {
+		$q->addWhere('project_status <> ' . (int)$on_hold_status);
+	}
 }
 if (!$showDynTasks) {
 	$q->addWhere('task_dynamic <> 1');
