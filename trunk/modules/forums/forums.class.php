@@ -328,9 +328,9 @@ class CForumMessage {
 		while ($row = $q->fetchRow()) {
 			if ($mail->ValidEmail($row['contact_email'])) {
 				$mail->To($row['contact_email'], true);
+				$mail->Send();
 			}
 		}
-		$mail->Send();
 		$q->clear();
 		return;
 	}

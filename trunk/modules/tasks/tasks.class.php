@@ -1121,8 +1121,7 @@ class CTask extends CW2pObject {
 			}
 
 			$sendToList = array_keys($mail_recipients);
-			$mail->To($sendToList, true);
-			$mail->Send();
+			$mail->SendSeparatelyTo($sendToList);
 
 			// Now update the log
 			$save_email = $AppUI->getPref('TASKLOGNOTE');
@@ -2057,14 +2056,15 @@ class CTask extends CW2pObject {
 		$body .= ("\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $this->task_description . "\n");
 
 		$mail = new Mail;
-		foreach ($contacts as $contact) {
-			if ($mail->ValidEmail($contact['contact_email'])) {
-				$mail->To($contact['contact_email']);
-			}
-		}
 		$mail->Subject($subject, $locale_char_set);
 		$mail->Body($body, $locale_char_set);
-		return $mail->Send();
+		foreach ($contacts as $contact) {
+			if ($mail->ValidEmail($contact['contact_email'])) {
+				$mail->To($contact['contact_email'], true);
+				$mail->Send();
+			}
+		}
+		return true;
 	}
 
 	/**

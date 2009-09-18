@@ -174,6 +174,8 @@ class Mail extends PHPMailer {
 			if ($reset) {
 				unset($this->ato);
 				$this->ato = array();
+				$this->ClearAddresses();
+				$this->ClearAttachments();
 			}
 			$this->ato[] = $to;
 		}
@@ -293,6 +295,51 @@ class Mail extends PHPMailer {
 		} else {
 			return PHPMailer::Send();
 		}
+	}
+
+	/**
+	 *    SendSeparatelyTo is a workaround method to provide a way to send emails to a set of addresses in a separate way.
+	 *    PHPMailer does not support this natively so we have to workaround it.
+	 *    It picks the $to array parameter first, if it is not present, it will try to pick the $ato array property from this class
+	 *    that has been filled by calls to the To method.
+	 *    If you don't want the emails to be sent to each recipient individually, you should use the To and then the Send method instead.
+	 *    The To method stacks recipients in the ato array property, and Send sends them all in one email only.
+	 *    The SendSeparatelyTo method sends one email per recipient, and only one recipient shows in the To field.
+	 * 
+	 *    @param  $to array with email addresses
+	 *    @access public
+	 */
+	public function SendSeparatelyTo($to = array()) {
+		if (is_array($to) && count($to)) {
+			$this->ato = $to;
+		} elseif (is_array($this->ato) && count($this->ato)) {
+			//Do nothing, ato is good to go
+		} else {
+			//There is no email addresses to process, so lets just leave.
+			return false;
+		}
+
+		if ($this->checkAddress == true) {
+			$this->CheckAdresses($this->ato);
+		}
+		
+		foreach ($this->ato as $to_address) {
+			if (strpos($to_address, '<') !== false) {
+				preg_match('/^.*<([^@]+\@[a-z0-9\._-]+)>/i', $to_address, $matches);
+				if (isset($matches[1])) {
+					$to_address = $matches[1];
+				}
+			}
+			$this->ClearAddresses();
+			$this->ClearAttachments();
+			$this->AddAddress($to_address);
+			if ($this->defer) {
+				$this->QueueMail();
+			} else {
+				PHPMailer::Send();
+			}
+		}		
+		return true;
 	}
 
 	public function getHostName() {
