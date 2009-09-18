@@ -100,12 +100,8 @@ foreach ($topics as $row) {
 	<td bgcolor="#dddddd" width="150" nowrap="nowrap">
 <?php if ($row['latest_reply']) {
 			echo $last->format($df . ' ' . $tf) . '<br /><font color="#999966">(';
-
-			$span = new CDate();
-			$diff = $span->dateDiff($now, $last);
-
+			$diff = $now->dateDiff($last);
 			echo (int)$diff . ' ' . $AppUI->_('days ago');
-
 			echo ')</font>';
 		} else {
 			echo $AppUI->_('No replies');
