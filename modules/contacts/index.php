@@ -15,19 +15,12 @@ $perms = &$AppUI->acl();
 
 $countries = w2PgetSysVal('GlobalCountries');
 
-// To configure an aditional filter to use in the search string
-$additional_filter = '';
 // retrieve any state parameters
-$where = w2PgetParam($_GET, 'where', '');
-if ($where != '') {
-	$AppUI->setState('ContIdxWhere', $where);
-}
-$where = $AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '%';
-
 $searchString = w2PgetParam($_GET, 'search_string', '');
 if ($searchString != '') {
 	$AppUI->setState('ContIdxWhere', $searchString);
 }
+$where = $AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '%';
 
 $orderby = 'contact_first_name';
 
@@ -44,7 +37,7 @@ $showfields = array('contact_address1' => 'contact_address1',
 	'contact_email' => 'contact_email', 'contact_job'=>'contact_job');
 
 // assemble the sql statement
-$rows = CContact::searchContacts($AppUI, $where, $additional_filter);
+$rows = CContact::searchContacts($AppUI, $where);
 
 $carr[] = array();
 $carrWidth = 4;
