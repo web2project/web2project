@@ -204,10 +204,6 @@ if ($do_report) {
 	}
 	$Ntasks = $i;
 
-	//for($i=0;$i<$Ntasks;$i++) {
-	//print $task_list[$i]->task_name."<br>\n";
-	//}
-
 	$user_usage = array();
 	$task_dates = array();
 
@@ -342,7 +338,9 @@ function isMemberOfTask($list, $Lusers, $N, $user_id, $task) {
 }
 
 function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $log_all_projects = false) {
-	$tmp = '';
+	global $AppUI;
+
+  $tmp = '';
 	$tmp .= '<tr><td align="left" nowrap="nowrap">&#160&#160&#160';
 	for ($i = 0; $i < $level; $i++) {
 		$tmp .= '&#160&#160&#160';
@@ -369,13 +367,15 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 		}
 		$tmp .= '</td>';
 	}
+  $df = $AppUI->getPref('SHDATEFORMAT');
+
 	$tmp .= '<td nowrap="nowrap">';
 	$dt = new CDate($task->task_start_date);
-	$tmp .= $dt->format('%d-%m-%Y');
+	$tmp .= $dt->format($df);
 	$tmp .= '&#160&#160&#160</td>';
 	$tmp .= '<td nowrap="nowrap">';
 	$dt = new CDate($task->task_end_date);
-	$tmp .= $dt->format('%d-%m-%Y');
+	$tmp .= $dt->format($df);
 	$tmp .= '</td>';
 	if ($display_week_hours) {
 		$tmp .= displayWeeks($list, $task, $level, $fromPeriod, $toPeriod);
@@ -383,6 +383,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$tmp .= "</tr>\n";
 	return $tmp;
 }
+//$start_date->format($df)
 
 function isChildTask($task) {
 	return $task->task_id != $task->task_parent;
