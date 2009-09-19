@@ -392,7 +392,7 @@ if (!$suppressHeaders) {
 	require W2P_BASE_DIR . '/style/' . $uistyle . '/footer.php';
 	if (W2P_PERFORMANCE_DEBUG) {
 		$db_info = $db->ServerInfo();
-		print ('<table width="100%" cellspacing="0" cellpadding="4" border="0">');
+		print ('<table width="100%" cellspacing="0" cellpadding="4" border="0"  class="system-info">');
 		print ('<tr valign="top">');
 		print ('<td align="center" width="100%">');
 		print ('	<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">');
@@ -401,14 +401,14 @@ if (!$suppressHeaders) {
 		print ('	</tr>');
 		print ('	<tr valign="top">');
 		print ('	<td width="100%">');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000"><b>web2Project ' . $AppUI->getVersion() . '</b></p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">PHP version nr: ' . phpversion() . '</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">DB provider and version nr: ' . $db->dataProvider . ' ' . $db_info['version']. ' (' . $db_info['description'] . ')</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">DB Table Prefix: "' . w2PgetConfig('dbprefix') . '"</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Web Server: ' . safe_get_env('SERVER_SOFTWARE') . '</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Server Protocol | Gateway Interface: ' . safe_get_env('SERVER_PROTOCOL') . ' | ' . safe_get_env('GATEWAY_INTERFACE') . '</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Client Browser: ' . safe_get_env('HTTP_USER_AGENT') . '</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">URL Query: ' . safe_get_env('QUERY_STRING') . '</p>');
+		print ('		<p><b>web2Project ' . $AppUI->getVersion() . '</b></p>');
+		print ('		<p>PHP version nr: ' . phpversion() . '</p>');
+		print ('		<p>DB provider and version nr: ' . $db->dataProvider . ' ' . $db_info['version']. ' (' . $db_info['description'] . ')</p>');
+		print ('		<p>DB Table Prefix: "' . w2PgetConfig('dbprefix') . '"</p>');
+		print ('		<p>Web Server: ' . safe_get_env('SERVER_SOFTWARE') . '</p>');
+		print ('		<p>Server Protocol | Gateway Interface: ' . safe_get_env('SERVER_PROTOCOL') . ' | ' . safe_get_env('GATEWAY_INTERFACE') . '</p>');
+		print ('		<p>Client Browser: ' . safe_get_env('HTTP_USER_AGENT') . '</p>');
+		print ('		<p>URL Query: ' . safe_get_env('QUERY_STRING') . '</p>');
     if (file_exists($module_file)) {
   		$script_handle = fopen($module_file, "r");
   		if ($script_handle) {
@@ -416,12 +416,12 @@ if (!$suppressHeaders) {
   			fclose($script_handle);
   		}
   		$script_first_line = substr(trim($script_first_line), 10, -4);
-  		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">File Version ' . $script_first_line . '</p>');
+  		print ('		<p>File Version ' . $script_first_line . '</p>');
     }
 		$right_now_is = new CDate();
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Server Time | Timezone: ' . $right_now_is->format(FMT_DATERFC822) . ' | ' . date('T') . '</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">PHP Max. Execution Time: ' . ini_get('max_execution_time') . ' seconds</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Memory Limit: ' . (ini_get('memory_limit') ? str_replace('M', ' Mb', ini_get('memory_limit')) : 'Not Defined') . '</p>');
+		print ('		<p>Server Time | Timezone: ' . $right_now_is->format(FMT_DATERFC822) . ' | ' . date('T') . '</p>');
+		print ('		<p>PHP Max. Execution Time: ' . ini_get('max_execution_time') . ' seconds</p>');
+		print ('		<p>Memory Limit: ' . (ini_get('memory_limit') ? str_replace('M', ' Mb', ini_get('memory_limit')) : 'Not Defined') . '</p>');
 		print ('	</td>');
 		print ('	</tr>');
 		print ('	<tr valign="top">');
@@ -430,20 +430,20 @@ if (!$suppressHeaders) {
 		print ('	<tr valign="top">');
 		print ('	<td width="100%">');
 		if (function_exists('memory_get_usage')) {
-			print ('	<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Memory Used: ' . sprintf('%01.2f Mb', memory_get_usage() / pow(1024, 2)) . '</p>');
-			print ('	<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Memory Unused: ' . sprintf('%01d Kb', (memory_get_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
+			print ('	<p>Memory Used: ' . sprintf('%01.2f Mb', memory_get_usage() / pow(1024, 2)) . '</p>');
+			print ('	<p>Memory Unused: ' . sprintf('%01d Kb', (memory_get_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
 		}
 		if (function_exists('memory_get_peak_usage')) {
-			print ('	<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Memory Peak: ' . sprintf('%01d Kb', (memory_get_peak_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
+			print ('	<p>Memory Peak: ' . sprintf('%01d Kb', (memory_get_peak_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
 		}
-		printf('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">Setup in %.3f seconds</p>', $w2p_performance_setuptime);
-		printf('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">ACLs checked in %.3f seconds</p>', $w2p_performance_acltime);
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">ACLs nr of checks: ' . $w2p_performance_aclchecks . '</p>');
-		printf('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">w2P Data checked in %.3f seconds</p>', $w2p_performance_dbtime);
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">w2P DBQueries executed: ' . $w2p_performance_dbqueries . ' queries</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">w2P Old Queries executed: ' . $w2p_performance_old_dbqueries . ' queries</p>');
-		print ('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000">w2P Total Queries executed: ' . (int)($w2p_performance_old_dbqueries + $w2p_performance_dbqueries) . ' queries</p>');
-		printf('		<p style="margin: 0px;font-size: 7pt; text-align: center; color: #000000"><b>Page generated in %.3f seconds</b></p>', (array_sum(explode(' ', microtime())) - $w2p_performance_time));
+		printf('		<p>Setup in %.3f seconds</p>', $w2p_performance_setuptime);
+		printf('		<p>ACLs checked in %.3f seconds</p>', $w2p_performance_acltime);
+		print ('		<p>ACLs nr of checks: ' . $w2p_performance_aclchecks . '</p>');
+		printf('		<p>w2P Data checked in %.3f seconds</p>', $w2p_performance_dbtime);
+		print ('		<p>w2P DBQueries executed: ' . $w2p_performance_dbqueries . ' queries</p>');
+		print ('		<p>w2P Old Queries executed: ' . $w2p_performance_old_dbqueries . ' queries</p>');
+		print ('		<p>w2P Total Queries executed: ' . (int)($w2p_performance_old_dbqueries + $w2p_performance_dbqueries) . ' queries</p>');
+		printf('		<p><b>Page generated in %.3f seconds</b></p>', (array_sum(explode(' ', microtime())) - $w2p_performance_time));
 		print ('	</td>');
 		print ('	</tr>');
 		print ('	</table>');
@@ -469,4 +469,3 @@ if (!$suppressHeaders) {
 		<!--End AJAX loading messagebox -->';
 }
 ob_end_flush();
-?>
