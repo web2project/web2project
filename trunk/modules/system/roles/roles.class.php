@@ -64,7 +64,7 @@ class CRole {
 		if (!$ret) {
 			return get_class($this) . '::store failed';
 		} else {
-			return null;
+			return (int)$ret;
 		}
 	}
 
@@ -110,4 +110,158 @@ class CRole {
 		}
 		return true;
 	}
+	
+	/**
+	 * CRole::copyPermissions()
+	 * Method to copy the Permissions of a Role into another Role object.
+	 * 
+	 * @param integer $copy_role_id of the Role we are copying permissions from
+	 * @param integer $role_id of the Role we are copying permissions to
+	 * @return true if sucessful
+	 */
+	public function copyPermissions($copy_role_id = null, $role_id = null) {
+		global $AppUI;
+		
+		if (!$copy_role_id || !$role_id) {
+			return false;
+		}
+		
+		$perms = &$AppUI->acl();
+		//catch to be copied Role ACLs IDs
+		$role_acls = $perms->getRoleACLs($copy_role_id);
+		
+		foreach ($role_acls as $acl) {
+			//initialize acl data, so we don't fall on the situation of bleeding permissions from one ACL rule to the other.
+			$group_data = null;
+			$mod_data = null;
+			$type_map = null;
+			$aro_map = null;
+			$mod_mod = null;
+			$mod_group = null;
+			$permission_access = null;
+			$permission_type = null;
+			
+			//catch the permissions of that acl.
+			//ex: Array ( [note] => [return_value] => [enabled] => 1 [allow] => 1 [acl_id] => 14 [aco] => Array ( [application] => Array ( [0] => access ) ) [aro] => Array ( ) [axo] => Array ( ) [aro_groups] => Array ( [0] => 12 ) [axo_groups] => Array ( [0] => 13 ) ) 
+			$permission = $perms->get_acl($acl);
+		
+			if (is_array($permission)) {
+				$modlist = array();
+				$itemlist = array();
+				if (is_array($permission['axo_groups'])) {
+					foreach ($permission['axo_groups'] as $group_id) {
+						//catche Group of Permissions (All, All Non-Admin, and Admin) or Module Permissions
+						//ex: Array ( [0] => 13 [id] => 13 [1] => 10 [parent_id] => 10 [2] => non_admin [value] => non_admin [3] => Non-Admin Modules [name] => Non-Admin Modules [4] => 6 [lft] => 6 [5] => 7 [rgt] => 7 ) 
+						$group_data = $perms->get_group_data($group_id, 'axo');
+					}
+				}
+				if (is_array($permission['axo'])) {
+					foreach ($permission['axo'] as $key => $section) {
+						foreach ($section as $id) {
+							//catch Module and Module Item permissions
+							//ex.: Array ( [id] => 36 [section_value] => companies [name] => 6 [value] => 6 [order_value] => 0 [hidden] => 0 ) 
+							$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
+						}
+					}
+				}
+				$perm_type = array();
+				if (is_array($permission['aco'])) {
+					foreach ($permission['aco'] as $key => $section) {
+						foreach ($section as $value) {
+							//catch Actions of the Permission.
+							//ex: Array ( [id] => 11 [section_value] => application [name] => Access [value] => access [order_value] => 1 [hidden] => 0 ) 
+							$perm = $perms->get_object_full($value, $key, 1, 'aco');
+							$permission_type[] = $perm['id'];
+						}
+					}
+				}
+				
+				$permission_table = '' . trim($mod_data['section_value']);
+				$permission_item = (int)$mod_data['value'];
+				$permission_access = (int)$permission['allow'];
+
+				if (is_array($group_data)) {
+					$mod_id = $group_data['id'];
+					$mod_type = 'grp';
+				} else {
+					$mod_id = $mod_data['id'];
+					$mod_type = 'mod';
+				}
+
+				$mod_group = null;
+				$mod_mod = null;
+				if ($mod_type == 'grp') {
+					$mod_group = array($mod_id);
+				} else {
+					if (isset($permission_item) && $permission_item) {
+						$mod_mod = array();
+						$mod_mod[$permission_table][] = $permission_item;
+						// check if the item already exists, if not create it.
+						// First need to check if the section exists.
+						if (!$perms->get_object_section_section_id(null, $permission_table, 'axo')) {
+							$perms->addModuleSection($permission_table);
+						}
+						if (!$perms->get_object_id($permission_table, $permission_item, 'axo')) {
+							$perms->addModuleItem($permission_table, $permission_item, $permission_item);
+						}
+					} else {
+						// Get the module information
+						$mod_info = $perms->get_object_data($mod_id, 'axo');
+						$mod_mod = array();
+						$mod_mod[$mod_info[0][0]][] = $mod_info[0][1];
+					}
+				}
+				$aro_map = array($role_id);
+				// Build the permissions info
+				$type_map = array();
+				foreach ($permission_type as $tid) {
+					$type = $perms->get_object_data($tid, 'aco');
+					foreach ($type as $t) {
+						$type_map[$t[0]][] = $t[1];
+					}
+				}
+				$res = $perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
+			}
+		}
+		return true;
+	}	
+}
+
+function showRoleRow($role = null) {
+	global $canEdit, $canDelete, $role_id, $AppUI, $roles;
+
+	$id = $role['id'];
+	$name = $role['value'];
+	$description = $role['name'];
+	
+	if (!$id) {
+		$roles_arr = array(0 => '(' . $AppUI->_('Copy Role') . '...)');
+		foreach ($roles as $role) {
+			$roles_arr[$role['id']] = $role['name']; 
+		}
+	}
+
+	$s = '';
+	if (($role_id == $id || $id == 0) && $canEdit) {
+		// edit form
+		$s .= '<form name="roleFrm" method="post" action="?m=system&u=roles" accept-charset="utf-8">';
+		$s .= '<input type="hidden" name="dosql" value="do_role_aed" />';
+		$s .= '<input type="hidden" name="del" value="0" />';
+		$s .= '<input type="hidden" name="role_id" value="' . $id . '" />';
+		$s .= '<tr><td>&nbsp;</td>';
+		$s .= '<td valign="top"><input type="text" size="20" name="role_name" value="' . $name . '" class="text" /></td>';
+		$s .= '<td valign="top"><input type="text" size="50" name="role_description" class="text" value="' . $description . '">' . ($id ? '' : '&nbsp;&nbsp;&nbsp;&nbsp;' . arraySelect($roles_arr, 'copy_role_id', 'class="text"', 0)) . '</td>';
+		$s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button" /></td>';
+	} else {
+		$s .= '<tr><td width="50" valign="top">';
+		if ($canEdit) {
+			$s .= '<a href="?m=system&u=roles&role_id=' . $id . '">' . w2PshowImage('icons/stock_edit-16.png') . '</a><a href="?m=system&u=roles&a=viewrole&role_id=' . $id . '" title="">' . w2PshowImage('obj/lock.gif') . '</a>';
+		}
+		if ($canDelete) {
+			$s .= '<a href=\'javascript:delIt(' . $id . ')\'>' . w2PshowImage('icons/stock_delete-16.png') . '</a>';
+		}
+		$s .= '</td><td valign="top">' . $name . '</td><td valign="top">' . $AppUI->_($description) . '</td><td valign="top" width="16">&nbsp;</td>';
+	}
+	$s .= '</tr>';
+	return $s;
 }
