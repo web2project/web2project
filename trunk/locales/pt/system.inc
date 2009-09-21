@@ -23,6 +23,7 @@
 'Bind Name'=>'Associar Nome',
 'Bind Password'=>'Associar Password',
 'Checkbox'=>'Checkbox',
+'Copy Role'=>'Copiar Nível de Acesso',
 'Could not open locales file to save.'=>'Não foi possível abrir o ficheiro de localização para guardar.',
 'Currency Format'=>'Formato da moeda',
 'Custom Field Editor'=>'Editor de Campos Adicionais a Pedido',

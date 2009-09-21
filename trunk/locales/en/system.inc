@@ -387,3 +387,4 @@
 'tasks_group_title'=>'Tasks',
 'template_projects_status_id_title'=>'Template Projects Status Id',
 'template_projects_status_id_tooltip'=>'Type on this box the Status Id for Template Projects just like it is show in the System Lookup Values for the ProjectStatus Key.',
+'Copy Role',
