@@ -242,6 +242,9 @@ switch ($f) {
 		$q->addWhere('ut_empty.task_id IS NULL');
 		break;
 	case 'taskcreated':
+		$q->addWhere('task_creator = ' . (int)$user_id);
+		break;
+	case 'taskowned':
 		$q->addWhere('task_owner = ' . (int)$user_id);
 		break;
 	default:
@@ -461,7 +464,7 @@ if ($project_id) {
 		<th width="20"><?php echo $AppUI->_('Work'); ?></th>
 		<th align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
 		<th width="200"><?php sort_by_item_title('Task Name', 'task_name', SORT_STRING); ?></th>
-		<th nowrap="nowrap"><?php sort_by_item_title('Task Creator', 'user_username', SORT_STRING); ?></th>
+		<th nowrap="nowrap"><?php sort_by_item_title('Task Owner', 'user_username', SORT_STRING); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users') ?></th>
 		<th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC); ?></th>
 		<th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC); ?>&nbsp;&nbsp;</th>

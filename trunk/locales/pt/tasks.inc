@@ -14,6 +14,7 @@
 'All Tasks (unassigned)'=>'Todas (não atribuidas)',
 'All Tasks Finished Last 7 Days'=>'Todas Terminadas nos Últimos 7 Dias',
 'All Tasks I Have Created'=>'Todas Criadas por Mim',
+'All Tasks That I Am Owner'=>'Todas de que sou Dono',
 'All Tasks for my Company'=>'Todas da minha Empresa',
 'All Unfinished Tasks'=>'Todas por Concluir',
 'All Users'=>'Todos os Utilizadores',
