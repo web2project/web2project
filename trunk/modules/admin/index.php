@@ -45,7 +45,7 @@ $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show') . ': </td>';
 $a2z .= '<td><a href="./index.php?m=admin&stub=0">' . $AppUI->_('All') . '</a></td>';
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = strpos($letters, $cu) > 0 ? '<a href="?m=admin&stub=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
+	$cell = !(mb_strpos($letters, $cu) === false) ? '<a href="?m=admin&stub=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
 	$a2z .= '<td>' . $cell . '</td>';
 }
 $a2z .= '</tr></table>';

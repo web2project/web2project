@@ -304,11 +304,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	if ($caller == 'todo') {
 		$pname = $a['project_name'];
 		if ($locale_char_set == 'utf-8') {
-			if (function_exists('mb_substr')) {
-				$pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
-			} elseif (function_exists('utf8_decode')) {
-				$pname = utf8_decode($pname);
-			}
+			$pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
 		} else {
 			$pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
 		}
@@ -371,7 +367,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 			}
 		}
 		$q->clear();
-		$caption = substr($caption, 0, strlen($caption) - 1);
+		$caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
 	}
 
 	if ($flags == 'm') {

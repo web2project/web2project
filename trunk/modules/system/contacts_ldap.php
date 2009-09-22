@@ -244,7 +244,7 @@ if (isset($test) || isset($import)) {
 					$q = new DBQuery;
 					$q->addQuery('company_id');
 					$q->addTable('companies');
-					$q->addWhere('company_name LIKE \'' . trim($pairs['contact_company']) . '\'');
+					$q->addWhere('company_name LIKE \'' . mb_trim($pairs['contact_company']) . '\'');
 					$company_id = $q->loadResult();
 					$pairs['contact_company'] = $company_id ? $company_id : 0;
 					$q->clear();
@@ -253,7 +253,7 @@ if (isset($test) || isset($import)) {
 					$q = new DBQuery;
 					$q->addQuery('dept_id');
 					$q->addTable('departments');
-					$q->addWhere('dept_name LIKE \'' . trim($pairs['contact_department']) . '\'');
+					$q->addWhere('dept_name LIKE \'' . mb_trim($pairs['contact_department']) . '\'');
 					$dept_id = $q->loadResult();
 					$pairs['contact_department'] = $dept_id ? $dept_id : 0;
 					$q->clear();
@@ -264,7 +264,7 @@ if (isset($test) || isset($import)) {
 					$s .= '<td><span style="color:#880000;">There is a duplicate record for ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . ', the record has been updated.</span></td>';
 				} else {
 					//If the contact has no name, go to the next
-					if (!trim($pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'])) {
+					if (!mb_trim($pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'])) {
 						continue;
 					}
 					$s .= '<td>Adding ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . '.</td>';
@@ -273,7 +273,7 @@ if (isset($test) || isset($import)) {
 					$q = new DBQuery;
 					$q->addQuery('company_id');
 					$q->addTable('companies');
-					$q->addWhere('company_name LIKE \'' . trim($pairs['contact_company']) . '\'');
+					$q->addWhere('company_name LIKE \'' . mb_trim($pairs['contact_company']) . '\'');
 					$company_id = $q->loadResult();
 					$pairs['contact_company'] = $company_id ? $company_id : 0;
 					$q->clear();
@@ -282,7 +282,7 @@ if (isset($test) || isset($import)) {
 					$q = new DBQuery;
 					$q->addQuery('dept_id');
 					$q->addTable('departments');
-					$q->addWhere('dept_name LIKE \'' . trim($pairs['contact_department']) . '\'');
+					$q->addWhere('dept_name LIKE \'' . mb_trim($pairs['contact_department']) . '\'');
 					$dept_id = $q->loadResult();
 					$pairs['contact_department'] = $dept_id ? $dept_id : 0;
 					$q->clear();

@@ -304,7 +304,7 @@ class CFile extends CW2pObject {
 		$nwords = count($warr);
 		for ($x = 0; $x < $nwords; $x++) {
 			$newword = $warr[$x];
-			if (!ereg('[[:punct:]]', $newword) && strlen(trim($newword)) > 2 && !ereg('[[:digit:]]', $newword)) {
+			if (!ereg('[[:punct:]]', $newword) && mb_strlen(mb_trim($newword)) > 2 && !ereg('[[:digit:]]', $newword)) {
 				$wordarr[] = array('word' => $newword, 'wordplace' => $x);
 			}
 		}

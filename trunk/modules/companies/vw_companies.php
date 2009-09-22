@@ -44,7 +44,7 @@ $companyList = $company->getCompanyList($AppUI, $company_type_filter, $search_st
 	if (count($companyList) > 0) {
 		foreach ($companyList as $company) {
 			echo '<tr>';
-			echo '<td>' . (trim($company['company_description']) ? w2PtoolTip($company['company_name'], $company['company_description']) : '') . '<a href="./index.php?m=companies&a=view&company_id=' . $company['company_id'] . '" >' . $company['company_name'] . '</a>' . (trim($company['company_description']) ? w2PendTip() : '') . '</td>';
+			echo '<td>' . (mb_trim($company['company_description']) ? w2PtoolTip($company['company_name'], $company['company_description']) : '') . '<a href="./index.php?m=companies&a=view&company_id=' . $company['company_id'] . '" >' . $company['company_name'] . '</a>' . (mb_trim($company['company_description']) ? w2PendTip() : '') . '</td>';
 			echo '<td width="125" align="right" nowrap="nowrap">' . $company['countp'] . '</td>';
 			echo '<td width="125" align="right" nowrap="nowrap">' . $company['inactive'] . '</td>';
 			echo '<td align="left" nowrap="nowrap">' . $AppUI->_($types[$company['company_type']]) . '</td>';

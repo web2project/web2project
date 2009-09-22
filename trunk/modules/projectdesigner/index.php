@@ -329,11 +329,11 @@ function delIt() {
 }
 <?php } ?>
 
-var sel_priorities = '<?php echo str_replace(chr(10), '', $sel_priorities); ?>';
-var sel_types = '<?php echo str_replace(chr(10), '', $sel_types); ?>';
-var sel_access = '<?php echo str_replace(chr(10), '', $sel_access); ?>';
-var sel_extra = '<?php echo str_replace(chr(10), '', $sel_extra); ?>';
-var sel_durntype = '<?php echo str_replace(chr(10), '', $sel_durntype); ?>';
+var sel_priorities = '<?php echo mb_str_replace(chr(10), '', $sel_priorities); ?>';
+var sel_types = '<?php echo mb_str_replace(chr(10), '', $sel_types); ?>';
+var sel_access = '<?php echo mb_str_replace(chr(10), '', $sel_access); ?>';
+var sel_extra = '<?php echo mb_str_replace(chr(10), '', $sel_extra); ?>';
+var sel_durntype = '<?php echo mb_str_replace(chr(10), '', $sel_durntype); ?>';
 
 function addComponent() {
 	var form = document.editFrm;

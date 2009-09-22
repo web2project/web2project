@@ -94,7 +94,7 @@ $letters = CContact::getFirstLetters($AppUI->user_id);
 
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = strpos($letters, $cu) > 0 ? '<a href="?m=contacts&where=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
+	$cell = !(mb_strpos($letters, $cu) === false) ? '<a href="?m=contacts&where=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
 	$a2z .= '<td>' . $cell . '</td>';
 }
 $a2z .= '</tr><tr><td colspan="28">' . $form . '</td></tr></table>';
@@ -189,7 +189,7 @@ if (function_exists('styleRenderBoxTop')) {
 											reset($showfields);
 											$s = '';
 											while (list($key, $val) = each($showfields)) {
-												if (strlen($carr[$z][$x][$key]) > 0) {
+												if (mb_strlen($carr[$z][$x][$key]) > 0) {
 													if ($val == 'contact_email') {
 														$s .= '<td class="hilite" colspan="2"><a href="mailto:' . $carr[$z][$x][$key] . '" class="mailto">' . $carr[$z][$x][$key] . '</a></td></tr>';
 													} elseif ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {

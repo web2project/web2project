@@ -58,7 +58,7 @@ class CCompany extends CW2pObject {
 	public function check() {
 		$this->company_id = intval($this->company_id);
 
-		if ('' == trim($this->company_name)) {
+		if ('' == mb_trim($this->company_name)) {
 			return 'company name is NULL';
 		}
 

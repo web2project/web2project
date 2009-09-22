@@ -37,7 +37,7 @@ if ($contact_id > 0) {
 	$vcard->setBirthday($contact->contact_birthday);
 
 	// set a note of the contact
-	$contact->contact_notes = str_replace("\r", ' ', $contact->contact_notes);
+	$contact->contact_notes = mb_str_replace("\r", ' ', $contact->contact_notes);
 	$vcard->setNote($contact->contact_notes);
 
 	// add an organization

@@ -126,7 +126,7 @@ function getEventTooltip($event_id) {
 	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;">';
-	$tt .= '				' . str_replace(chr(10), "<br />", $event->event_description) . '&nbsp;';
+	$tt .= '				' . mb_str_replace(chr(10), "<br />", $event->event_description) . '&nbsp;';
 	$tt .= '			</td>';
 	$tt .= '		</tr>';
 	$tt .= '		</table>';

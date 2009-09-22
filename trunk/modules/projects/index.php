@@ -154,7 +154,7 @@ if ($is_tabbed) {
 $project_status_file = array();
 
 foreach ($project_statuses as $project_status) {
-	$project_status = trim($project_status);
+	$project_status = mb_trim($project_status);
 	if (isset($fixed_project_status_file[$project_status])) {
 		$project_file_status[$project_status] = $fixed_project_status_file[$project_status];
 	} else { // if there is no fixed vw_idx file, we will use vw_idx_proposed

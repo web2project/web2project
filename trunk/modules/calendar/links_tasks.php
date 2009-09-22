@@ -32,8 +32,8 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 		if (!$minical) {
 			$link['href'] = '?m=tasks&a=view&task_id=' . $row['task_id'];
 			// the link text
-			if (strlen($row['task_name']) > $strMaxLen) {
-				$row['short_name'] = substr($row['task_name'], 0, $strMaxLen) . '...';
+			if (mb_strlen($row['task_name']) > $strMaxLen) {
+				$row['short_name'] = mb_substr($row['task_name'], 0, $strMaxLen) . '...';
 			} else {
 				$row['short_name'] = $row['task_name'];
 			}
