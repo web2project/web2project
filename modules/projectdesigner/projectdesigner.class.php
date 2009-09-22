@@ -188,11 +188,11 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	$s .= '</td>';
 	// access
 	$s .= '<td nowrap="nowrap">';
-	$s .= substr($task_access[$a['task_access']], 0, 3);
+	$s .= mb_substr($task_access[$a['task_access']], 0, 3);
 	$s .= '</td>';
 	// type
 	$s .= '<td nowrap="nowrap">';
-	$s .= substr($types[$a['task_type']], 0, 3);
+	$s .= mb_substr($types[$a['task_type']], 0, 3);
 	$s .= '</td>';
 	// type
 	$s .= '<td nowrap="nowrap">';
@@ -257,7 +257,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	$s .= '<td id="ignore_td_' . $a['task_id'] . '" nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
 	// duration or milestone
 	$s .= '<td id="ignore_td_' . $a['task_id'] . '" align="right" nowrap="nowrap" style="' . $style . '">';
-	$s .= $a['task_duration'] . ' ' . substr($AppUI->_($durnTypes[$a['task_duration_type']]), 0, 1);
+	$s .= $a['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$a['task_duration_type']]), 0, 1);
 	$s .= '</td>';
 	$s .= '<td id="ignore_td_' . $a['task_id'] . '" nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
 	if (isset($a['task_assigned_users']) && ($assigned_users = $a['task_assigned_users'])) {
@@ -372,11 +372,11 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 		}
 	}
 	// name link
-	$alt = w2PUTF8strlen($a['task_description']) > 80 ? substr($a['task_description'], 0, 80) . '...' : $a['task_description'];
+	$alt = mb_strlen($a['task_description']) > 80 ? mb_substr($a['task_description'], 0, 80) . '...' : $a['task_description'];
 	// instead of the statement below
-	$alt = str_replace('"', "&quot;", $alt);
-	$alt = str_replace("\r", ' ', $alt);
-	$alt = str_replace("\n", ' ', $alt);
+	$alt = mb_str_replace('"', "&quot;", $alt);
+	$alt = mb_str_replace("\r", ' ', $alt);
+	$alt = mb_str_replace("\n", ' ', $alt);
 
 	$open_link = w2PshowImage('collapse.gif');
 	if ($a['task_milestone'] > 0) {

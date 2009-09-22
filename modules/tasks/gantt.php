@@ -451,7 +451,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 			}
 		}
 		$q->clear();
-		$caption = substr($caption, 0, strlen($caption) - 1);
+		$caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
 	}
 
 	if ($flags == 'm') {

@@ -165,11 +165,11 @@ function highlight($text, $keyval) {
 		$keys = $keyval;
 
 	foreach ($keys as $key) {
-		if (strlen($key[0]) > 0) {
+		if (mb_strlen($key[0]) > 0) {
 			$key[0] = stripslashes($key[0]);
 			$metacharacters = array('\\', '(', ')', '$', '[', '*', '+', '|', '.', '^', '?');
 			$metareplacement = array('\\\\', '\(', '\)', '\$', '\[', '\*', '\+', '\|', '\.', '\^', '\?');
-			$key[0] = str_replace($metacharacters, $metareplacement, $key[0]);
+			$key[0] = mb_str_replace($metacharacters, $metareplacement, $key[0]);
 			if (isset($ssearch['ignore_specchar']) && ($ssearch['ignore_specchar'] == 'on')) {
 				if ($ssearch['ignore_case'] == 'on') {
 					$txt = eregi_replace((recode2regexp_utf8($key[0])), '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
@@ -192,7 +192,7 @@ function highlight($text, $keyval) {
 
 function recode2regexp_utf8($input) {
 	$result = '';
-	for ($i = 0, $i_cmp = strlen($input); $i < $i_cmp; ++$i)
+	for ($i = 0, $i_cmp = mb_strlen($input); $i < $i_cmp; ++$i)
 		switch ($input[$i]) {
 			case 'A':
 			case 'a':

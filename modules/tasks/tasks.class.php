@@ -1008,7 +1008,7 @@ class CTask extends CW2pObject {
 				$q->clear();
 
 				foreach ($assigneeList as $myContact) {
-					$mail_recipients[$myContact['contact_email']] = trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
+					$mail_recipients[$myContact['contact_email']] = mb_trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
 				}
 			}
 			if (isset($task_contacts) && $task_contacts == 'on') {
@@ -1020,7 +1020,7 @@ class CTask extends CW2pObject {
 				$q->clear();
 
 				foreach ($contactList as $myContact) {
-					$mail_recipients[$myContact['contact_email']] = trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
+					$mail_recipients[$myContact['contact_email']] = mb_trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
 				}
 			}
 			if (isset($project_contacts) && $project_contacts == 'on') {
@@ -1032,7 +1032,7 @@ class CTask extends CW2pObject {
 				$q->clear();
 
 				foreach ($projectContactList as $myContact) {
-					$mail_recipients[$myContact['contact_email']] = trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
+					$mail_recipients[$myContact['contact_email']] = mb_trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
 				}
 			}
 			if (isset($others)) {
@@ -1045,7 +1045,7 @@ class CTask extends CW2pObject {
 					$q->clear();
 
 					foreach ($otherContacts as $myContact) {
-						$mail_recipients[$myContact['contact_email']] = trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
+						$mail_recipients[$myContact['contact_email']] = mb_trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
 					}
 				}
 			}
@@ -2519,7 +2519,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$s .= '<td align="center">-</td>';
 	}
 	// duration or milestone
-	$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($fdf) : '-') . '</td>' . '<td align="right" nowrap="nowrap" style="' . $style . '">' . $arr['task_duration'] . ' ' . substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1) . '</td>' . '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($fdf) : '-') . '</td>');
+	$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($fdf) : '-') . '</td>' . '<td align="right" nowrap="nowrap" style="' . $style . '">' . $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1) . '</td>' . '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($fdf) : '-') . '</td>');
 	if ($today_view) {
 		$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">' . $arr['task_due_in'] . '</td>');
 	} elseif ($history_active) {

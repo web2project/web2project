@@ -242,15 +242,15 @@ if ($do_report) {
 		<td><?php
 		// dylan_cuthbert: auto-transation system in-progress, leave these lines for time-being
 		$transbrk = "\n[translation]\n";
-		$descrip = str_replace("\n", '<br />', $log['task_log_description']);
-		$tranpos = strpos($descrip, str_replace("\n", '<br />', $transbrk));
+		$descrip = mb_str_replace("\n", '<br />', $log['task_log_description']);
+		$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
 		if ($tranpos === false)
 			echo $descrip;
 		else {
-			$descrip = substr($descrip, 0, $tranpos);
-			$tranpos = strpos($log['task_log_description'], $transbrk);
-			$transla = substr($log['task_log_description'], $tranpos + strlen($transbrk));
-			$transla = trim(str_replace("'", '"', $transla));
+			$descrip = mb_substr($descrip, 0, $tranpos);
+			$tranpos = mb_strpos($log['task_log_description'], $transbrk);
+			$transla = mb_substr($log['task_log_description'], $tranpos + mb_strlen($transbrk));
+			$transla = mb_trim(mb_str_replace("'", '"', $transla));
 			echo $descrip . '<div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
 		}
 		// dylan_cuthbert; auto-translation end

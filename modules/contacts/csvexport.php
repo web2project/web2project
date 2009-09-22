@@ -78,7 +78,7 @@ foreach ($contactList as $contact) {
 	// Fields 61- 70
 	$text .= sprintf(",,,,,\"Unspecified\",,,,,");
 	// Fields 71- 80
-	$notes = str_replace("\"", "\"\"", $contact['contact_notes']);
+	$notes = mb_str_replace("\"", "\"\"", $contact['contact_notes']);
 	$text .= sprintf("\"\",\"\",\"\",,,\"%s\",,,,\"Normal\",", $notes);
 	// Fields 81- 90
 	$text .= sprintf("\"False\",,,\"Normal\",,,,,,,");
@@ -90,7 +90,7 @@ foreach ($contactList as $contact) {
 			if ($f['value_intvalue']) {
 				$text .= sprintf("%s", $f['list_value'].",");
 			} else {
-				$text .= sprintf("%s", "\"" . str_replace("\r\n", " ", $f['value_charvalue']) . "\",");
+				$text .= sprintf("%s", "\"" . mb_str_replace("\r\n", " ", $f['value_charvalue']) . "\",");
 			}
 		}
 	}

@@ -165,7 +165,7 @@ if (isset($_POST['keyword'])) {
 	$search = new smartsearch();
   $search->keyword = addslashes($_POST['keyword']);
 
-	if (isset($_POST['keyword']) && strlen($_POST['keyword']) > 0) {
+	if (isset($_POST['keyword']) && mb_strlen($_POST['keyword']) > 0) {
 		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword']));
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
@@ -178,7 +178,7 @@ if (isset($_POST['keyword'])) {
 		}
 	}
 
-	if (isset($_POST['keyword2']) && strlen($_POST['keyword2']) > 0) {
+	if (isset($_POST['keyword2']) && mb_strlen($_POST['keyword2']) > 0) {
 		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword2']));
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
@@ -191,7 +191,7 @@ if (isset($_POST['keyword'])) {
 		}
 	}
 
-	if (isset($_POST['keyword3']) && strlen($_POST['keyword3']) > 0) {
+	if (isset($_POST['keyword3']) && mb_strlen($_POST['keyword3']) > 0) {
 		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword3']));
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
@@ -204,7 +204,7 @@ if (isset($_POST['keyword'])) {
 		}
 	}
 
-	if (isset($_POST['keyword4']) && strlen($_POST['keyword4']) > 0) {
+	if (isset($_POST['keyword4']) && mb_strlen($_POST['keyword4']) > 0) {
 		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword4']));
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);

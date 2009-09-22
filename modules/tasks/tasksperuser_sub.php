@@ -504,7 +504,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$tmp .= '<a href="?m=projects&a=view&project_id=' . $task->task_project . '" style="background-color:#' . $project['project_color_identifier'] . '; color:' . bestColor($project['project_color_identifier']) . '">' . $project['project_short_name'] . '</a>';
 	$tmp .= '</td>';
 	$tmp .= '<td align="right" nowrap="nowrap">';
-	$tmp .= $task->task_duration . '&nbsp;' . substr($AppUI->_($durnTypes[$task->task_duration_type]),0,1);
+	$tmp .= $task->task_duration . '&nbsp;' . mb_substr($AppUI->_($durnTypes[$task->task_duration_type]),0,1);
 	$tmp .= '</td>';
 	$tmp .= '<td align="center" nowrap="nowrap">';
 	$dt = new CDate($task->task_start_date);

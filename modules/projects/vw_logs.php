@@ -112,15 +112,15 @@ foreach ($logs as $row) {
 
 	// dylan_cuthbert: auto-transation system in-progress, leave these lines
 	$transbrk = "\n[translation]\n";
-	$descrip = str_replace("\n", '<br />', $row['task_log_description']);
-	$tranpos = strpos($descrip, str_replace("\n", '<br />', $transbrk));
+	$descrip = mb_str_replace("\n", '<br />', $row['task_log_description']);
+	$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
 	if ($tranpos === false) {
 		$s .= $descrip;
 	} else {
-		$descrip = substr($descrip, 0, $tranpos);
-		$tranpos = strpos($row['task_log_description'], $transbrk);
-		$transla = substr($row['task_log_description'], $tranpos + strlen($transbrk));
-		$transla = trim(str_replace("'", '"', $transla));
+		$descrip = mb_substr($descrip, 0, $tranpos);
+		$tranpos = mb_strpos($row['task_log_description'], $transbrk);
+		$transla = mb_substr($row['task_log_description'], $tranpos + mb_strlen($transbrk));
+		$transla = mb_trim(mb_str_replace("'", '"', $transla));
 		$s .= $descrip . '<div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
 	}
 	// end auto-translation code

@@ -181,7 +181,7 @@ foreach ($messages as $row) {
 		$s .= '<td valign="top" style="' . $style . '">';
 		$s .= '<font size="2"><strong>' . $row['message_title'] . '</strong><hr size=1>';
 		$row['message_body'] = $bbparser->qparse($row['message_body']);
-		$s .= str_replace(chr(13), '&nbsp;<br />', $row['message_body']);
+		$s .= mb_str_replace(chr(13), '&nbsp;<br />', $row['message_body']);
 		$s .= '</font></td>';
 
 		$s .= '</tr><tr>';
@@ -225,7 +225,7 @@ foreach ($messages as $row) {
 			$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
 			$s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
 			$row['message_body'] = $bbparser->qparse($row['message_body']);
-			$s .= str_replace(chr(13), "&nbsp;<br />", $row['message_body']);
+			$s .= mb_str_replace(chr(13), "&nbsp;<br />", $row['message_body']);
 			$s .= '</div></td>';
 
 			$s .= '</tr>';
@@ -247,7 +247,7 @@ foreach ($messages as $row) {
 				$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
 				$side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
 				$row['message_body'] = $bbparser->qparse($row['message_body']);
-				$side .= str_replace(chr(13), '&nbsp;<br />', $row['message_body']);
+				$side .= mb_str_replace(chr(13), '&nbsp;<br />', $row['message_body']);
 				$side .= '</div>';
 				$s .= '</td>';
 				if ($first) {

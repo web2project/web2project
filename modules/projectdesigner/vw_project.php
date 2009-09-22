@@ -65,7 +65,7 @@ $custom_fields->printHTML();
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 			<tr>
 				<td class="hilite">
-					<?php echo str_replace(chr(10), '<br>', $obj->project_description); ?>&nbsp;
+					<?php echo mb_str_replace(chr(10), '<br>', $obj->project_description); ?>&nbsp;
 				</td>
 			</tr>
 			</table>

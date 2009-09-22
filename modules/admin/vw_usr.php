@@ -57,7 +57,7 @@ foreach ($users as $row) {
 <?php
 		$user_display = addslashes($row['contact_first_name'] . ' ' . $row['contact_last_name']);
 
-		$user_display = trim($user_display);
+		$user_display = mb_trim($user_display);
 		if (empty($user_display))
 			$user_display = $row['user_username'];
 ?>

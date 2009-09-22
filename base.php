@@ -83,3 +83,8 @@ define('DP_BASE_DIR', $baseDir);
 // required includes for start-up
 global $w2Pconfig;
 $w2Pconfig = array();
+
+// Start up mb_string UTF-8 if available
+if (function_exists('mb_internal_encoding')) {
+	mb_internal_encoding('UTF-8');
+}

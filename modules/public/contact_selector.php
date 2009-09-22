@@ -46,7 +46,7 @@ function setContactIDs(method, querystring) {
 function remove_invalid($arr) {
 	$result = array();
 	foreach ($arr as $val) {
-		if (!empty($val) && trim($val) !== '') {
+		if (!empty($val) && mb_trim($val) !== '') {
 			$result[] = $val;
 		}
 	}

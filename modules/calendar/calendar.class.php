@@ -411,7 +411,7 @@ class CMonthCalendar {
 		$events = $this->events[$day];
 		foreach ($events as $e) {
 			$href = isset($e['href']) ? $e['href'] : null;
-			$alt = isset($e['alt']) ? str_replace("\n", ' ', $e['alt']) : null;
+			$alt = isset($e['alt']) ? mb_str_replace("\n", ' ', $e['alt']) : null;
 
 			$s .= '<br />';
 			$s .= $href ? '<a href="'.$href.'" class="event" title="'.$alt.'">' : '';

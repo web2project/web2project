@@ -128,8 +128,8 @@ class CProject extends CW2pObject {
 		$this->project_actual_budget = $this->project_actual_budget ? $this->project_actual_budget : 0.00;
 
 		// Make sure project_short_name is the right size (issue for languages with encoded characters)
-		if (strlen($this->project_short_name) > 10) {
-			$this->project_short_name = substr($this->project_short_name, 0, 10);
+		if (mb_strlen($this->project_short_name) > 10) {
+			$this->project_short_name = mb_substr($this->project_short_name, 0, 10);
 		}
 		if (empty($this->project_end_date)) {
 			$this->project_end_date = null;
@@ -874,7 +874,7 @@ class CProject extends CW2pObject {
 
 		$q = new DBQuery;
 		$q->addTable('task_log');
-		$q->addQuery('task_log.*, user_username, task_id');
+		$q->addQuery('DISTINCT task_log.*, user_username, task_id');
 		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
 		$q->addQuery('billingcode_name as task_log_costcode');
 		$q->addJoin('users', 'u', 'user_id = task_log_creator');
@@ -1121,7 +1121,7 @@ function projects_list_data($user_id = false) {
 	if ($owner > 0) {
 		$q->addWhere('pr.project_owner = ' . (int)$owner);
 	}
-	if (trim($search_text)) {
+	if (mb_trim($search_text)) {
 		$q->addWhere('pr.project_name LIKE \'%' . $search_text . '%\' OR pr.project_description LIKE \'%' . $search_text . '%\'');
 	}
 	// Show Projects where the Project Owner is in the given department

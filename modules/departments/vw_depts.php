@@ -45,7 +45,7 @@ if (count($deptList) > 0) {
 			showchilddept($dept);
 			findchilddept($deptList, $dept['dept_id']);
 		}
-		echo '<tr><td>' . (trim($dept['dept_description']) ? w2PtoolTip($dept['dept_name'], $dept['dept_description']) : '') . '<a href="./index.php?m=departments&a=view&dept_id=' . $dept['dept_id'] . '" >' . $dept['dept_name'] . '</a>' . (trim($dept['dept_description']) ? w2PendTip() : '') . '</td>';
+		echo '<tr><td>' . (mb_trim($dept['dept_desc']) ? w2PtoolTip($dept['dept_name'], $dept['dept_desc']) : '') . '<a href="./index.php?m=departments&a=view&dept_id=' . $dept['dept_id'] . '" >' . $dept['dept_name'] . '</a>' . (mb_trim($dept['dept_desc']) ? w2PendTip() : '') . '</td>';
 		echo '<td width="125" align="right" nowrap="nowrap">' . $dept['countp'] . '</td>';
 		echo '<td width="125" align="right" nowrap="nowrap">' . $dept['inactive'] . '</td>';
 		echo '<td align="left" nowrap="nowrap">' . $AppUI->_($types[$dept['dept_type']]) . '</td></tr>';

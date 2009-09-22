@@ -213,7 +213,7 @@ function constructTaskTree($task_data, $parents, $all_tasks, $depth = 0) {
 	global $projTasks, $all_tasks, $task_parent_options, $task_parent, $task_id;
 
 	$projTasks[$task_data['task_id']] = $task_data['task_name'];
-	$task_data['task_name'] = w2PUTF8strlen($task_data[1]) > 45 ? substr($task_data['task_name'], 0, 45) . "..." : $task_data['task_name'];
+	$task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . "..." : $task_data['task_name'];
 	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" >' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
 
 	if (isset($parents[$task_data['task_id']])) {

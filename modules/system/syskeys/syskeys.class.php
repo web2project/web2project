@@ -138,9 +138,9 @@ function parseFormatSysval($text, $syskey) {
 			$sep2 = empty($sep2) ? "\n" : $sep2;
 			$temp2 = explode($sep2, $item);
 			if (isset($temp2[1])) {
-				$arr[trim($temp2[0])] = trim($temp2[1]);
+				$arr[mb_trim($temp2[0])] = mb_trim($temp2[1]);
 			} else {
-				$arr[trim($temp2[0])] = trim($temp2[0]);
+				$arr[mb_trim($temp2[0])] = mb_trim($temp2[0]);
 			}
 		}
 	}

@@ -135,7 +135,7 @@ function delIt() {
 			<strong><?php echo $AppUI->_('Description'); ?></strong>
 			<table cellspacing="1" cellpadding="2" border="0" width="100%">
 			<tr>
-				<td class="hilite" width="100%"><?php echo str_replace(chr(10), '<br />', $department->dept_desc); ?>&nbsp;</td>
+				<td class="hilite" width="100%"><?php echo mb_str_replace(chr(10), '<br />', $department->dept_desc); ?>&nbsp;</td>
 			</tr>
 			</table>
 		</td>

@@ -96,12 +96,12 @@ class CContact extends CW2pObject {
 		 * mostly required when Contacts are generated via programatic methods and
 		 * not through the add/edit UI.
 		 */
-		if(strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
+		if(mb_strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
 			//TODO: this should use the USERFORMAT to determine how display names are generated
 			if ($this->contact_first_name == null && $this->contact_last_name == null) {
 				$this->contact_order_by = $this->contact_email;
 			} else {
-				$this->contact_order_by = trim($this->contact_first_name.' '.$this->contact_last_name);
+				$this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
 			}
 		}
 		if($this->contact_first_name == null) {
