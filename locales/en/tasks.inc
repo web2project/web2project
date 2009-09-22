@@ -14,6 +14,7 @@
 'All Tasks',
 'All Tasks Finished Last 7 Days',
 'All Tasks for my Company',
+'All Tasks That I Am Owner',
 'All Tasks I Have Created',
 'All Tasks (inactive)',
 'All Tasks (unassigned)',
