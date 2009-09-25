@@ -1595,55 +1595,31 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         
         $task_logs = $project->getTaskLogs($AppUI, 1);
 
-        $this->assertEquals(8,                  count($task_logs));
+        $this->assertEquals(4,                  count($task_logs));
         $this->assertEquals(27,                 count($task_logs[0]));
         $this->assertEquals(27,                 count($task_logs[1]));
         $this->assertEquals(27,                 count($task_logs[2]));
         $this->assertEquals(27,                 count($task_logs[3]));
-        $this->assertEquals(27,                 count($task_logs[4]));
-        $this->assertEquals(27,                 count($task_logs[5]));
-        $this->assertEquals(27,                 count($task_logs[6]));
-        $this->assertEquals(27,                 count($task_logs[7]));
         $this->assertEquals(1,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(1,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 1',       $task_logs[0]['task_log_description']);
         $this->assertEquals('admin',            $task_logs[0]['user_username']);
         $this->assertEquals('Admin Person',     $task_logs[0]['real_name']);
-        $this->assertEquals(1,                  $task_logs[1]['task_log_id']);
+        $this->assertEquals(2,                  $task_logs[1]['task_log_id']);
         $this->assertEquals(1,                  $task_logs[1]['task_log_task']);
-        $this->assertEquals('Task Log 1',       $task_logs[1]['task_log_description']);
+        $this->assertEquals('Task Log 2',       $task_logs[1]['task_log_description']);
         $this->assertEquals('admin',            $task_logs[1]['user_username']);
         $this->assertEquals('Admin Person',     $task_logs[1]['real_name']);
-        $this->assertEquals(2,                  $task_logs[2]['task_log_id']);
-        $this->assertEquals(1,                  $task_logs[2]['task_log_task']);
-        $this->assertEquals('Task Log 2',       $task_logs[2]['task_log_description']);
+        $this->assertEquals(3,                  $task_logs[2]['task_log_id']);
+        $this->assertEquals(2,                  $task_logs[2]['task_log_task']);
+        $this->assertEquals('Task Log 3',       $task_logs[2]['task_log_description']);
         $this->assertEquals('admin',            $task_logs[2]['user_username']);
         $this->assertEquals('Admin Person',     $task_logs[2]['real_name']);
-        $this->assertEquals(2,                  $task_logs[3]['task_log_id']);
-        $this->assertEquals(1,                  $task_logs[3]['task_log_task']);
-        $this->assertEquals('Task Log 2',       $task_logs[3]['task_log_description']);
-        $this->assertEquals('admin',            $task_logs[3]['user_username']);
-        $this->assertEquals('Admin Person',     $task_logs[3]['real_name']);
-        $this->assertEquals(3,                  $task_logs[4]['task_log_id']);
-        $this->assertEquals(2,                  $task_logs[4]['task_log_task']);
-        $this->assertEquals('Task Log 3',       $task_logs[4]['task_log_description']);
-        $this->assertEquals('admin',            $task_logs[4]['user_username']);
-        $this->assertEquals('Admin Person',     $task_logs[4]['real_name']);
-        $this->assertEquals(3,                  $task_logs[5]['task_log_id']);
-        $this->assertEquals(2,                  $task_logs[5]['task_log_task']);
-        $this->assertEquals('Task Log 3',       $task_logs[5]['task_log_description']);
-        $this->assertEquals('admin',            $task_logs[5]['user_username']);
-        $this->assertEquals('Admin Person',     $task_logs[5]['real_name']);
-        $this->assertEquals(4,                  $task_logs[6]['task_log_id']);
-        $this->assertEquals(2,                  $task_logs[6]['task_log_task']);
-        $this->assertEquals('Task Log 4',       $task_logs[6]['task_log_description']);
-        $this->assertEquals('another_admin',    $task_logs[6]['user_username']);
-        $this->assertEquals('Contact Number 1', $task_logs[6]['real_name']);
-        $this->assertEquals(4,                  $task_logs[7]['task_log_id']);
-        $this->assertEquals(2,                  $task_logs[7]['task_log_task']);
-        $this->assertEquals('Task Log 4',       $task_logs[7]['task_log_description']);
-        $this->assertEquals('another_admin',    $task_logs[7]['user_username']);
-        $this->assertEquals('Contact Number 1', $task_logs[7]['real_name']);
+        $this->assertEquals(4,                  $task_logs[3]['task_log_id']);
+        $this->assertEquals(2,                  $task_logs[3]['task_log_task']);
+        $this->assertEquals('Task Log 4',       $task_logs[3]['task_log_description']);
+        $this->assertEquals('another_admin',    $task_logs[3]['user_username']);
+        $this->assertEquals('Contact Number 1',$task_logs[3]['real_name']);
     }
     
     /**
@@ -1657,19 +1633,13 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         
         $task_logs = $project->getTaskLogs($AppUI, 1, 2);
 
-        $this->assertEquals(2,                  count($task_logs));
+        $this->assertEquals(1,                  count($task_logs));
         $this->assertEquals(27,                 count($task_logs[0]));
-        $this->assertEquals(27,                 count($task_logs[1]));
         $this->assertEquals(4,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(2,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 4',       $task_logs[0]['task_log_description']);
         $this->assertEquals('another_admin',    $task_logs[0]['user_username']);
         $this->assertEquals('Contact Number 1', $task_logs[0]['real_name']);
-        $this->assertEquals(4,                  $task_logs[1]['task_log_id']);
-        $this->assertEquals(2,                  $task_logs[1]['task_log_task']);
-        $this->assertEquals('Task Log 4',       $task_logs[1]['task_log_description']);
-        $this->assertEquals('another_admin',    $task_logs[1]['user_username']);
-        $this->assertEquals('Contact Number 1', $task_logs[1]['real_name']);
     }
 
     /**
@@ -1683,31 +1653,19 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         
         $task_logs = $project->getTaskLogs($AppUI, 1, 0, true);
 
-        $this->assertEquals(4,                  count($task_logs));
+        $this->assertEquals(2,                  count($task_logs));
         $this->assertEquals(27,                 count($task_logs[0]));
         $this->assertEquals(27,                 count($task_logs[1]));
-        $this->assertEquals(27,                 count($task_logs[2]));
-        $this->assertEquals(27,                 count($task_logs[3]));
         $this->assertEquals(1,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(1,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 1',       $task_logs[0]['task_log_description']);
         $this->assertEquals('admin',            $task_logs[0]['user_username']);
         $this->assertEquals('Admin Person',     $task_logs[0]['real_name']);
-        $this->assertEquals(1,                  $task_logs[1]['task_log_id']);
+        $this->assertEquals(2,                  $task_logs[1]['task_log_id']);
         $this->assertEquals(1,                  $task_logs[1]['task_log_task']);
-        $this->assertEquals('Task Log 1',       $task_logs[1]['task_log_description']);
+        $this->assertEquals('Task Log 2',       $task_logs[1]['task_log_description']);
         $this->assertEquals('admin',            $task_logs[1]['user_username']);
         $this->assertEquals('Admin Person',     $task_logs[1]['real_name']);
-        $this->assertEquals(2,                  $task_logs[2]['task_log_id']);
-        $this->assertEquals(1,                  $task_logs[2]['task_log_task']);
-        $this->assertEquals('Task Log 2',       $task_logs[2]['task_log_description']);
-        $this->assertEquals('admin',            $task_logs[2]['user_username']);
-        $this->assertEquals('Admin Person',     $task_logs[2]['real_name']);
-        $this->assertEquals(2,                  $task_logs[3]['task_log_id']);
-        $this->assertEquals(1,                  $task_logs[3]['task_log_task']);
-        $this->assertEquals('Task Log 2',       $task_logs[3]['task_log_description']);
-        $this->assertEquals('admin',            $task_logs[3]['user_username']);
-        $this->assertEquals('Admin Person',     $task_logs[3]['real_name']);
     }
 
     /**
@@ -1721,31 +1679,19 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         
         $task_logs = $project->getTaskLogs($AppUI, 1, 0, false, true);
 
-        $this->assertEquals(4,                  count($task_logs));
+        $this->assertEquals(2,                  count($task_logs));
         $this->assertEquals(27,                 count($task_logs[0]));
         $this->assertEquals(27,                 count($task_logs[1]));
-        $this->assertEquals(27,                 count($task_logs[2]));
-        $this->assertEquals(27,                 count($task_logs[3]));
         $this->assertEquals(1,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(1,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 1',       $task_logs[0]['task_log_description']);
         $this->assertEquals('admin',            $task_logs[0]['user_username']);
         $this->assertEquals('Admin Person',     $task_logs[0]['real_name']);
-        $this->assertEquals(1,                  $task_logs[1]['task_log_id']);
+        $this->assertEquals(2,                  $task_logs[1]['task_log_id']);
         $this->assertEquals(1,                  $task_logs[1]['task_log_task']);
-        $this->assertEquals('Task Log 1',       $task_logs[1]['task_log_description']);
+        $this->assertEquals('Task Log 2',       $task_logs[1]['task_log_description']);
         $this->assertEquals('admin',            $task_logs[1]['user_username']);
         $this->assertEquals('Admin Person',     $task_logs[1]['real_name']);
-        $this->assertEquals(2,                  $task_logs[2]['task_log_id']);
-        $this->assertEquals(1,                  $task_logs[2]['task_log_task']);
-        $this->assertEquals('Task Log 2',       $task_logs[2]['task_log_description']);
-        $this->assertEquals('admin',            $task_logs[2]['user_username']);
-        $this->assertEquals('Admin Person',     $task_logs[2]['real_name']);
-        $this->assertEquals(2,                  $task_logs[3]['task_log_id']);
-        $this->assertEquals(1,                  $task_logs[3]['task_log_task']);
-        $this->assertEquals('Task Log 2',       $task_logs[3]['task_log_description']);
-        $this->assertEquals('admin',            $task_logs[3]['user_username']);
-        $this->assertEquals('Admin Person',     $task_logs[3]['real_name']);
     }
 
     /**
@@ -1759,19 +1705,13 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         
         $task_logs = $project->getTaskLogs($AppUI, 1, 0, false, false, 2);
 
-        $this->assertEquals(2,                  count($task_logs));
+        $this->assertEquals(1,                  count($task_logs));
         $this->assertEquals(27,                 count($task_logs[0]));
-        $this->assertEquals(27,                 count($task_logs[1]));
         $this->assertEquals(4,                  $task_logs[0]['task_log_id']);
         $this->assertEquals(2,                  $task_logs[0]['task_log_task']);
         $this->assertEquals('Task Log 4',       $task_logs[0]['task_log_description']);
         $this->assertEquals('another_admin',    $task_logs[0]['user_username']);
         $this->assertEquals('Contact Number 1', $task_logs[0]['real_name']);
-        $this->assertEquals(4,                  $task_logs[1]['task_log_id']);
-        $this->assertEquals(2,                  $task_logs[1]['task_log_task']);
-        $this->assertEquals('Task Log 4',       $task_logs[1]['task_log_description']);
-        $this->assertEquals('another_admin',    $task_logs[1]['user_username']);
-        $this->assertEquals('Contact Number 1', $task_logs[1]['real_name']);
     }
 
     /**
