@@ -377,5 +377,501 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         
         $this->assertArrayHasKey('task_end_date', $errorArray);
     }
+
+    /**
+     * Tests that the check function returns the proper error message
+     * when attempting to change to dynamic and it has dependencies.
+     */
+    public function testCheckTaskDynamicWithDep()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 3,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => null, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 1,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorMsg = $task->check();
+
+        $this->assertEquals('BadDep_DynNoDep', $errorMsg);
+    }
+    
+    /**
+     * Tests that the check function returns the proper error message
+     * when attempting to update a task with a circular dependency.
+     */
+    public function testCheckTaskCircularDep()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 3,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => 4, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorMsg = $task->check();
+        
+        $this->assertEquals('BadDep_CircularDep', $errorMsg[0]);
+        $this->assertEquals('(4)', $errorMsg[1]);
+    }
+    
+    /**
+     * Tests that the check function returns the proper error message
+     * when attempting to update a task when this tasks parent depends
+     * on it.
+     */
+    public function testCheckTaskCannotDepOnParent()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 5,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => 6, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorMsg = $task->check();
+        
+        $this->assertEquals('BadDep_CannotDependOnParent', $errorMsg);
+    }
+    
+    /**
+     * Tests that the check function returns the proper error message
+     * when attempting to update a task when this tasks parent is a 
+     * child of it
+     */
+    public function testCheckTaskParentCannotBeChild()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 6,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => 7, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorMsg = $task->check();
+        
+        $this->assertEquals('BadParent_CircularParent', $errorMsg);
+    }
+    
+    /**
+     * Tests that the check function returns the proper error message
+     * when attempting to update a task when this tasks parent is a 
+     * child of it
+     */
+    public function testCheckTaskGrandParentCannotBeChild()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 10,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => 9, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorMsg = $task->check();
+        
+        $this->assertEquals('BadParent_CircularGrandParent', $errorMsg[0]);
+        $this->assertEquals('(8)', $errorMsg[1]);
+    }
+    
+    /**
+     * Tests that the check function returns the proper error message
+     * when attempting to update a task when this tasks grand parent depends
+     * on it.
+     */
+    public function testCheckTaskCannotDepOnGrandParent()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 11,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => 10, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorMsg = $task->check();
+        
+        $this->assertEquals('BadDep_CircularGrandParent', $errorMsg[0]);
+        $this->assertEquals('(9)', $errorMsg[1]);
+    }
+    
+    /**
+     * Tests that the check function returns the proper error message
+     * when attempting to update a task when this tasks grand parent depends
+     * on it.
+     */
+    public function testCheckTaskCircularDepOnParentDep()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 12,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => 11, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 0,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorMsg = $task->check();
+        
+        $this->assertEquals('BadDep_CircularDepOnParentDependent', $errorMsg[0]);
+        $this->assertEquals('(13)', $errorMsg[1]);
+    }
+
+    /**
+     * Tests that the check function returns the proper error message
+     * when attempting to update a task when this task is dynamic and
+     * its children are dependendant on its parent
+     */
+    public function testCheckTaskChildDepOnParent()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 16,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => 15, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 1,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorMsg = $task->check();
+        
+        $this->assertEquals('BadParent_ChildDepOnParent', $errorMsg);
+    }
+    
+    /**
+     * And finally lets test that check returns nothing when there are 
+     * no problems with the task.
+     */
+    public function testCheck()
+    {
+        $task = new CTask();
+        
+        $post_data = array (
+            'dosql'                 => 'do_task_aed',
+            'task_id'               => 18,
+            'task_project'          => 1,
+            'task_contacts'         => null,
+            'task_name'             => 'Test Task',
+            'task_status'           => 0,
+            'task_priority'         => 0,
+            'task_percent_complete' => 0,
+            'task_owner'            => 1,
+            'task_access'           => 0,
+            'task_related_url'      => 'http://www.example.org',
+            'task_type'             => 0,
+            'dept_ids'              => array(1),
+            'task_parent'           => 18, 
+            'task_target_budget'    => '1.00',
+            'task_description'      => 'this is a description for test task.',
+            'task_start_date'       => '200908240800',
+            'start_date'            => '24/Aug/2009',
+            'start_hour'            => '08',
+            'start_minute'          => '00',
+            'start_hour_ampm'       => 'pm',
+            'task_end_date'         => '200908261700',
+            'end_date'              => '26/Aug/2009',
+            'end_hour'              => 17,
+            'end_minute'            => 00,
+            'end_hour_ampm'         => 'pm',
+            'task_duration'         => 3,
+            'task_duration_type'    => 1,
+            'task_dynamic'          => 1,
+            'hdependencies'         => null, 
+            'hperc_assign'          => '1=100;',
+            'percentage_assignment' => 100,
+            'email_comment'         => '',
+            'task_notify'           => 1,
+            'hassign'               => 1,
+            'hresource_assign'      => '', 
+            'resource_assignment'   => 100
+        );
+        
+        $task->bind($post_data);
+        $errorMsg = $task->check();
+        
+        $this->assertEquals(array(), $errorMsg);
+    }
 }
 ?>
