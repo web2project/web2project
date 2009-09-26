@@ -25,7 +25,7 @@
 					//TODO: Add check to see if the user has access to system admin
 					if (isset($dPconfig)) {
 						$this->configOptions = $dPconfig;
-						$this->action = 'convert';
+						$this->action = 'conversion';
 					} elseif (isset($w2Pconfig)) {
 						$this->configOptions = $w2Pconfig;
 						$this->action = 'upgrade';
@@ -93,7 +93,6 @@
 							$errorMessages = $this->_applySQLUpdates($update, $dbConn);
 							$allErrors = array_merge($allErrors, $errorMessages);
 							$sql = "INSERT INTO w2pversion (db_version, last_db_update) VALUES ($myIndex, now())";
-							//TODO: update the code revision
 							$dbConn->Execute($sql);
 						}
 						$migration++;
@@ -205,7 +204,7 @@
 		           break;
 		       case 'm':
 		       case 'M':
-		           return (int) $val * 1048576;
+		           return (int)   $val * 1048576;
 		           break;
 		       default:
 		           return $val;
@@ -214,7 +213,7 @@
 		private function _getMaxVersion() {
 			$migrations = array();
 
-			$path = W2P_BASE_DIR.'/install/sql';
+			$path = W2P_BASE_DIR.'/install/sql/'.$this->configOptions['dbtype'];
 			$dir_handle = @opendir($path) or die("Unable to open $path");
 
 			while ($file = readdir($dir_handle)) {
@@ -234,7 +233,7 @@
 			$this->tempDir = W2P_BASE_DIR.'/files/temp';
 		}
 		private function _applySQLUpdates($sqlfile, $dbConn) {
-			$sqlfile = W2P_BASE_DIR.'/install/sql/'.$sqlfile;
+			$sqlfile = W2P_BASE_DIR.'/install/sql/'.$this->configOptions['dbtype'].'/'.$sqlfile;
 			if (!file_exists($sqlfile) || filesize($sqlfile) == 0) {
 				return array();
 			}
