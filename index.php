@@ -436,6 +436,8 @@ if (!$suppressHeaders) {
 		if (function_exists('memory_get_peak_usage')) {
 			print ('	<p>Memory Peak: ' . sprintf('%01d Kb', (memory_get_peak_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
 		}
+    //TODO: Add in a line about page size
+    print ('    <p>Page Size (Buffer): ' . sprintf('%01.2f kb', ob_get_length() / 1024, 2) . '</p>');
 		printf('		<p>Setup in %.3f seconds</p>', $w2p_performance_setuptime);
 		printf('		<p>ACLs checked in %.3f seconds</p>', $w2p_performance_acltime);
 		print ('		<p>ACLs nr of checks: ' . $w2p_performance_aclchecks . '</p>');
