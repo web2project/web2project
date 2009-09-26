@@ -53,4 +53,3 @@
 		}
 		echo $calendarHeader.$buffer.$calendarFooter;
 	}
-?>
