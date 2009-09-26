@@ -57,14 +57,14 @@
 								When you're ready to being, simply 
 							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form" accept-charset="utf-8">
 							  	<input type="hidden" name="step" value="check" />
-							  	<input class="button" type="submit" name="next" value="Start Installation &raquo;" />
+							  	<input class="button" type="submit" name="next" value="Start <?php echo ucwords($action); ?> &raquo;" />
 								</form>
 							</td>
 						</tr>
 					<?php
 					}
 					break;
-				case 'convert':
+				case 'conversion':
 					?>
 					<tr>
 						<td colspan="2">This is where the conversion script kicks in.  
@@ -78,7 +78,7 @@
 								When you're ready to being, simply 
 							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form" accept-charset="utf-8">
 							  	<input type="hidden" name="step" value="check" />
-							  	<input class="button" type="submit" name="next" value="Start Conversion &raquo;" />
+							  	<input class="button" type="submit" name="next" value="Start <?php echo ucwords($action); ?> &raquo;" />
 								</form>
 							</td>
 						</tr>
@@ -99,7 +99,7 @@
 								When you're ready to being, simply 
 							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form" accept-charset="utf-8">
 							  	<input type="hidden" name="step" value="check" />
-							  	<input class="button" type="submit" name="next" value="Start Upgrade &raquo;" />
+							  	<input class="button" type="submit" name="next" value="Start <?php echo ucwords($action); ?> &raquo;" />
 								</form>
 							</td>
 						</tr>
@@ -118,8 +118,8 @@
 				case 'install/check':
 				case 'install/dbcreds':
 				case 'install/perform':
-				case 'convert/check':
-				case 'convert/perform':
+				case 'conversion/check':
+				case 'conversion/perform':
 				case 'upgrade/check':
 				case 'upgrade/perform':
 					/*
