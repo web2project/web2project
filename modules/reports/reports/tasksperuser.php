@@ -383,7 +383,6 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$tmp .= "</tr>\n";
 	return $tmp;
 }
-//$start_date->format($df)
 
 function isChildTask($task) {
 	return $task->task_id != $task->task_parent;
@@ -394,6 +393,8 @@ function atoi($a) {
 }
 
 function weekDates($display_allocated_hours, $fromPeriod, $toPeriod) {
+  global $AppUI;
+
 	if ($fromPeriod == -1) {
 		return '';
 	}
@@ -408,7 +409,8 @@ function weekDates($display_allocated_hours, $fromPeriod, $toPeriod) {
 
 	$row = '';
 	for ($i = $sw; $i <= $ew; $i++) {
-		$row .= '<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $s->format('%d-%m') . '</b></font></td>';
+    $sdf = substr($AppUI->getPref('SHDATEFORMAT'), 3);
+  	$row .= '<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $s->format($sdf) . '</b></font></td>';
 		$s->addSeconds(168 * 3600); // + one week
 	}
 	return $row;
