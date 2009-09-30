@@ -243,7 +243,7 @@ if ($is_tabbed) {
 		
 					if ($show_all_projects) {
 						$s .= '<td align="left" nowrap="nowrap">';
-						$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectStatuses[0] ? $project_statuses[$row['project_status'] + 2] : $project_statuses[$row['project_status'] + 1]);
+						$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectStatuses[0] ? $AppUI->_($project_statuses[$row['project_status'] + 2]) : $AppUI->_($project_statuses[$row['project_status'] + 1]));
 						$s .= '</td>';
 					}
 		
