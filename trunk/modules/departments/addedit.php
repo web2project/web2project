@@ -45,9 +45,8 @@ if (!$department && $dept_id > 0) {
 
 	// collect all the departments in the company
 	if ($company_id) {
-		$depts = $department->loadOtherDepts($AppUI, $companyId, $removeDeptId = 0);
-		//$depts['0'] = array(0, '- ' . $AppUI->_('Select Unit') . ' -', -1);
-		$depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Unit') . ' -'), $depts);
+		$depts = $department->loadOtherDepts($AppUI, $company_id, 0);
+		$depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Department') . ' -'), $depts);
 	}
 
 	// setup the title block
@@ -156,7 +155,7 @@ function submitIt() {
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department Parent'); ?>:</td>
 					<td>
 						<?php
-							echo arraySelectTree($depts, 'dept_parent', 'class=text size=1', $department->dept_parent);
+							echo arraySelect($depts, 'dept_parent', 'class=text size=1', $department->dept_parent);
 						?>
 					</td>
 				</tr>

@@ -60,7 +60,8 @@ class CDepartment extends CW2pObject {
 		$q->loadObject($this);
 	}
 	public function loadOtherDepts($AppUI, $company_id, $removeDeptId = 0) {
-		$q = new DBQuery;
+		$results = array();
+    $q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dept_id, dept_name, dept_parent');
 		$q->addWhere('dep.dept_company = ' . (int) $company_id);
@@ -68,7 +69,13 @@ class CDepartment extends CW2pObject {
 			$q->addWhere('dep.dept_id <> ' . $removeDeptId);
 		}
 		$this->setAllowedSQL($AppUI->user_id, $q);
-		return $q->loadArrayList();
+    $q->addOrder('dept_name');
+    $deptList = $q->loadList();
+
+    foreach ($deptList as $dept) {
+    	$results[$dept['dept_id']] = $dept['dept_name']; 
+    }
+    return $results;
 	}
 
 	public function getFilteredDepartmentList($AppUI, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
