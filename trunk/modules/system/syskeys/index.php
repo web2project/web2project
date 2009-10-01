@@ -86,7 +86,7 @@ function delIt(id) {
 
 <form name="sysValFrm" method="post" action="?m=system&u=syskeys&a=do_sysval_aed" accept-charset="utf-8">
   <input type="hidden" name="del" value="0" />
-  <table border="0" cellpadding="2" cellspacing="0" width="100%" class="tbl">
+  <table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
     <tr>
     	<th>&nbsp;</th>
     	<th><?php echo $AppUI->_('Key Type'); ?></th>
@@ -96,7 +96,6 @@ function delIt(id) {
     </tr>
     <?php
     foreach ($values as $row) {
-    	echo '<tr><td colspan="12""><a name="'.$row['sysval_title'].'"> </a><hr /></td></tr>';
       echo showRow($row['sysval_title'], $row['sysval_key_id'], $row['sysval_title'], $row['sysval_value']);
     }
     // add in the new key row:
@@ -116,7 +115,7 @@ function showRow($id = '', $key = 0, $title = '', $value = '') {
   if (($sysval_id == $title) && $canEdit) {
     // edit form
     $s .= '<tr><td><input type="hidden" name="sysval_id" value="' . $title . '" />&nbsp;</td>';
-    $s .= '<td valign="top">' . arraySelect($keys, 'sysval_key_id', 'size="1" class="text"', $key) . '</td>';
+    $s .= '<td valign="top"><a name="'.$title.'"> </a>' . arraySelect($keys, 'sysval_key_id', 'size="1" class="text"', $key) . '</td>';
     $s .= '<td valign="top"><input type="text" name="sysval_title" value="' . w2PformSafe($title) . '" class="text" /></td>';
     $s .= '<td valign="top"><textarea name="sysval_value" class="small" rows="5" cols="40">' . $value . '</textarea></td>';
     $s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button" /></td><td>&nbsp;</td>';
