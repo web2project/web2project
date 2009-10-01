@@ -48,7 +48,6 @@ $obj = new CFile();
 $canDelete = $obj->canDelete($msg, $file_id);
 
 // load the record data
-// $obj = null;
 if ($file_id > 0 && !$obj->load($file_id)) {
 	$AppUI->setMsg('File');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -99,7 +98,7 @@ if ($obj->file_project) {
 if ($obj->file_task) {
 	$file_task = $obj->file_task;
 	$task_name = $obj->getTaskName();
-} else
+} else {
 	if ($file_task) {
 		$task = new CTask();
 		$task->load($file_task);
@@ -107,14 +106,10 @@ if ($obj->file_task) {
 	} else {
 		$task_name = '';
 	}
-	if (isset($obj->file_helpdesk_item)) {
-		$file_helpdesk_item = $obj->file_helpdesk_item;
-	}
-
-$extra = array('where' => 'project_active = 1');
-$project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
-$projects = arrayMerge(array('0' => $AppUI->_('None', UI_OUTPUT_RAW)), $projects);
+}
+if (isset($obj->file_helpdesk_item)) {
+	$file_helpdesk_item = $obj->file_helpdesk_item;
+}
 
 $folders = getFolderSelectList();
 ?>
