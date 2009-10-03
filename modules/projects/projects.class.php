@@ -8,13 +8,6 @@ if (!defined('W2P_BASE_DIR')) {
  *	@subpackage modules
  *	@version $Revision$
  */
-require_once ($AppUI->getSystemClass('libmail'));
-require_once ($AppUI->getSystemClass('w2p'));
-require_once ($AppUI->getLibraryClass('PEAR/Date'));
-require_once ($AppUI->getModuleClass('tasks'));
-require_once ($AppUI->getModuleClass('companies'));
-require_once ($AppUI->getModuleClass('departments'));
-require_once ($AppUI->getModuleClass('files'));
 
 // project statii
 $pstatus = w2PgetSysVal('ProjectStatus');
