@@ -42,7 +42,7 @@
 		foreach ($moduleList as $module) {
 			include_once ($AppUI->getModuleClass($module['mod_directory']));
 			$object = new $module['mod_main_class']();
-			if (method_exists($object, 'hook_calendar')) {
+			if (is_callable($object, 'hook_calendar')) {
 				$itemList = $object->hook_calendar($userId);
 				if (is_array($itemList)) {
 					foreach ($itemList as $calendarItem) {

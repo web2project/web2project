@@ -375,7 +375,7 @@ if (file_exists($module_file)) {
 	$titleBlock = new CTitleBlock('Warning', 'log-error.gif');
 	$titleBlock->show();
 
-	if (function_exists('styleRenderBoxTop')) {
+	if (is_callable('styleRenderBoxTop')) {
 		echo styleRenderBoxTop();
 	}
 	echo '<table width="100%" cellspacing="0" cellpadding="3" border="0" class="std">';
@@ -429,11 +429,11 @@ if (!$suppressHeaders) {
 		print ('	</tr>');
 		print ('	<tr valign="top">');
 		print ('	<td width="100%">');
-		if (function_exists('memory_get_usage')) {
+		if (is_callable('memory_get_usage')) {
 			print ('	<p>Memory Used: ' . sprintf('%01.2f Mb', memory_get_usage() / pow(1024, 2)) . '</p>');
 			print ('	<p>Memory Unused: ' . sprintf('%01d Kb', (memory_get_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
 		}
-		if (function_exists('memory_get_peak_usage')) {
+		if (is_callable('memory_get_peak_usage')) {
 			print ('	<p>Memory Peak: ' . sprintf('%01d Kb', (memory_get_peak_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
 		}
     print ('    <p>Page (Buffer) Size: ' . sprintf('%01.2f kb', ob_get_length() / 1024, 2) . '</p>');
