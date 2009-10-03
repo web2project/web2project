@@ -11,11 +11,16 @@ define('SECONDS_PER_DAY', 60 * 60 * 24);
 function __autoload($class_name) {
   global $AppUI;
 
-  if (file_exists(W2P_BASE_DIR.'/classes/'.$class_name.'.class.php')) {
-  	require_once W2P_BASE_DIR.'/classes/'.$class_name.'.class.php';
+  $name = strtolower($class_name);
+
+  if ($name == 'cw2pobject') {
+    require_once W2P_BASE_DIR.'/classes/w2p.class.php';
+    return;   
+  }
+  if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
+  	require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
     return;
   }
-  $name = strtolower($class_name);
   if ($name[0] == 'c') {
   	$name = substr($name, 1);
     if (substr($name, -1) == 'y') {
