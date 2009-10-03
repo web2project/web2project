@@ -9,10 +9,6 @@ if (!defined('W2P_BASE_DIR')) {
  *	@version $Revision$
  */
 
-require_once ($AppUI->getSystemClass('w2p'));
-require_once ($AppUI->getModuleClass('departments'));
-require_once ($AppUI->getModuleClass('projects'));
-
 /**
  *	Companies Class
  *	@todo Move the 'address' fields to a generic table
@@ -50,8 +46,8 @@ class CCompany extends CW2pObject {
 	public $company_type = null;
 	public $company_custom = null;
 
-	public function CCompany() {
-		$this->CW2pObject('companies', 'company_id');
+	public function __construct() {
+		parent::__construct('companies', 'company_id');
 	}
 
 	// overload check
@@ -71,7 +67,7 @@ class CCompany extends CW2pObject {
 		$tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
 		$tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');
 		// call the parent class method to assign the oid
-		return CW2pObject::canDelete($msg, $oid, $tables);
+		return parent::canDelete($msg, $oid, $tables);
 	}
 	
 	public function loadFull($companyId) {
