@@ -60,7 +60,7 @@ $outsider = $row->contact_first_name . ' ' . $row->contact_last_name;
 require W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 require W2P_BASE_DIR . '/style/' . $uistyle . '/header.php';
 
-if (function_exists('styleRenderBoxTop')) {
+if (is_callable('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
 ?>
@@ -269,6 +269,6 @@ function orderByName( x ){
 	</table>
 </form>
 <?php
-if (function_exists('styleRenderBoxTop')) {
+if (is_callable('styleRenderBoxTop')) {
 	echo styleRenderBoxBottom();
 }
