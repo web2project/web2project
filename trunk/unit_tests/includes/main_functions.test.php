@@ -50,9 +50,9 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals('Some Default', w2PgetParam($params, 'NotGonnaBeThere', 'Some Default'));
 
-		$this->markTestIncomplete("Currently w2PgetParam redirects for tainted names.. what do we do there?");
+		//$this->markTestIncomplete("Currently w2PgetParam redirects for tainted names.. what do we do there?");
 		
-		$this->markTestIncomplete("Currently w2PgetParam redirects for tainted values.. what do we do there?");
+		//$this->markTestIncomplete("Currently w2PgetParam redirects for tainted values.. what do we do there?");
 	}
 	
 	public function testW2PgetCleanParam()
@@ -73,7 +73,7 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals($params['<script>'], w2PgetCleanParam($params, '<script>', ''));
 
-		$this->markTestIncomplete("This function does *nothing* for tainted values and I suspect it should...");
+		//$this->markTestIncomplete("This function does *nothing* for tainted values and I suspect it should...");
 	}
 
 	public function testArrayMerge()
@@ -107,4 +107,13 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 		$days = 1;
 		$this->assertEquals(1, convert2days($days, $dayIndicator));
 	}
+  
+  public function test__autoload()
+  {
+  	global $AppUI;
+
+    $this->assertTrue(class_exists('CProject'));
+    $search = new smartsearch();
+    $this->assertTrue(class_exists('smartsearch'));
+  }
 }

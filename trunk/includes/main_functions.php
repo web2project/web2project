@@ -8,6 +8,32 @@ if (!defined('W2P_BASE_DIR')) {
 
 define('SECONDS_PER_DAY', 60 * 60 * 24);
 
+function __autoload($class_name) {
+  global $AppUI;
+
+  if (file_exists(W2P_BASE_DIR.'/classes/'.$class_name.'.class.php')) {
+  	require_once W2P_BASE_DIR.'/classes/'.$class_name.'.class.php';
+    return;
+  }
+  $name = strtolower($class_name);
+  if ($name[0] == 'c') {
+  	$name = substr($name, 1);
+    if (substr($name, -1) == 'y') {
+  		$name = substr($name, 0, -1).'ies';
+  	} else {
+      $name .= 's';
+  	}
+
+    if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+      require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+      return;
+    }
+  }
+  if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+    require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+    return;  	
+  }
+}
 ##
 ## Returns the best color based on a background color (x is cross-over)
 ##
