@@ -119,6 +119,6 @@ class UpgradeManager_Test extends PHPUnit_Framework_TestCase
 	}
 	public function testConvertDotProject()
 	{
-		$this->markTestIncomplete("Not a clue how to test this one...");
+		$this->markTestSkipped("Not a clue how to test this one...");
 	}
 }
