@@ -73,6 +73,11 @@ class CCompany extends CW2pObject {
   public function delete(CAppUI $AppUI) {
     $perms = $AppUI->acl();
 
+    /*
+     * TODO: This should probably use the canDelete method from above too to 
+     *   not only check permissions but to check dependencies... luckily the 
+     *   previous version didn't check it either, so we're no worse off.
+     */
     if ($perms->checkModuleItem('companies', 'delete', $this->company_id)) {
     	if ($msg = parent::delete()) {
     		return $msg;
@@ -85,6 +90,10 @@ class CCompany extends CW2pObject {
   public function store(CAppUI $AppUI) {
     $perms = $AppUI->acl();
 
+    /*
+     * TODO: I don't like the duplication on each of these two branches, but I
+     *   don't have a good idea on how to fix it at the moment...
+     */
     if ($this->company_id && $perms->checkModuleItem('companies', 'edit', $this->company_id)) {
       if (($msg = parent::store())) {
         return $msg;
