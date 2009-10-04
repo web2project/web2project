@@ -3,13 +3,15 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$company_id = intval(w2PgetParam($_GET, 'company_id', 0));
+$company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
 // check permissions for this record
 $perms = &$AppUI->acl();
 
+$canAdd = $perms->checkModuleItem($m, 'add');
 $canEdit = $perms->checkModuleItem($m, 'edit', $company_id);
 $canRead = $perms->checkModuleItem($m, 'view', $company_id);
+$canDelete = $perms->checkModuleItem($m, 'delete', $company_id);
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -17,14 +19,14 @@ if (!$canRead) {
 
 // retrieve any state parameters
 if (isset($_GET['tab'])) {
-	$AppUI->setState('CompVwTab', $_GET['tab']);
+	$AppUI->setState('CompVwTab', (int) $_GET['tab']);
 }
 $tab = $AppUI->getState('CompVwTab') !== null ? $AppUI->getState('CompVwTab') : 0;
 
 // check if this record has dependencies to prevent deletion
 $msg = '';
 $company = new CCompany();
-$canDelete = $company->canDelete($msg, $company_id);
+$deletable = $company->canDelete($msg, $company_id);
 
 $company->loadFull($company_id);
 
@@ -38,16 +40,13 @@ if (!$company) {
 	$AppUI->savePlace();
 }
 
-// load the list of project statii and company types
-$pstatus = w2PgetSysVal('ProjectStatus');
-$types = w2PgetSysVal('CompanyType');
-$countries = w2PgetSysVal('GlobalCountries');
-
 // setup the title block
 $titleBlock = new CTitleBlock('View Company', 'handshake.png', $m, "$m.$a");
+$titleBlock->addCell();
+if ($canAdd) {
+  $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');	
+}
 if ($canEdit) {
-	$titleBlock->addCell();
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '" />', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '" />', '', '<form action="?m=projects&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
@@ -55,35 +54,40 @@ $titleBlock->addCrumb('?m=companies', 'company list');
 if ($canEdit) {
 	$titleBlock->addCrumb('?m=companies&a=addedit&company_id=' . $company_id, 'edit this company');
 
-	if ($canDelete) {
-		$titleBlock->addCrumbDelete('delete company', $canDelete, $msg);
+	if ($canDelete && $deletable) {
+		$titleBlock->addCrumbDelete('delete company', $deletable, $msg);
 	}
 }
 $titleBlock->show();
 ?>
-<script language="javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-if ($canDelete) {
+if ($canDelete && $deletable) {
 ?>
-function delIt() {
-	if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Company') . '?'; ?>' )) {
-		document.frmDelete.submit();
-	}
-}
-<?php } ?>
-</script>
+  <script language="javascript">
+    function delIt() {
+    	if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Company') . '?'; ?>' )) {
+    		document.frmDelete.submit();
+    	}
+    }
+  </script>
 
-<?php if ($canDelete) { ?>
 	<form name="frmDelete" action="./index.php?m=companies" method="post" accept-charset="utf-8">
 		<input type="hidden" name="dosql" value="do_company_aed" />
 		<input type="hidden" name="del" value="1" />
 		<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 	</form>
 <?php } ?>
-	
+
+<?php
+// load the list of project statii and company types
+$pstatus = w2PgetSysVal('ProjectStatus');
+$types = w2PgetSysVal('CompanyType');
+$countries = w2PgetSysVal('GlobalCountries');
+?>
+
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 	<tr>
 		<td valign="top" width="50%">
