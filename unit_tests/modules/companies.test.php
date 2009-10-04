@@ -147,6 +147,8 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateCompanyNoName() 
     {        
+        global $AppUI;
+
         $company = new CCompany();
 
         $post_array = array(
@@ -169,7 +171,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
             'company_description'   => 'This is a company.'
         );
         $company->bind($post_array);
-        $msg = $company->store();
+        $msg = $company->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -187,6 +189,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateCompany() 
     {        
+        global $AppUI;
         $company = new CCompany();
 
         $post_array = array(
@@ -209,9 +212,9 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
             'company_description'   => 'This is a company.'
         );
         $company->bind($post_array);
-        $msg = $company->store();
+        $result = $company->store($AppUI);
         
-        $this->assertEquals('', $msg);
+        $this->assertTrue($result);
         $this->assertEquals('UnitTestCompany',          $company->company_name);
         $this->assertEquals('web2project@example.org',  $company->company_email);
         $this->assertEquals('1.999.999.9999',           $company->company_phone1);
@@ -291,6 +294,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testUpdateCompany() 
     {       
+        global $AppUI;
         $company = new CCompany();
         $company->load(1);
         
@@ -315,7 +319,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         );
         
         $company->bind($post_array);
-        $company->store();
+        $company->store($AppUI);
         
         $this->assertEquals('UpdatedCompany',               $company->company_name);
         $this->assertEquals('updated@example.org',          $company->company_email);
@@ -342,12 +346,16 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeleteCompany() 
     {              
+        global $AppUI;
+
         $company = new CCompany();
-        $msg = $company->delete(1);
+        $company->company_id = 1;
+        $msg = $company->delete($AppUI);
         $this->assertEquals('noDeleteRecord: Projects, Departments', $msg);
         
-        $msg = $company->delete(3);      
-        $this->assertEquals('', $msg);
+        $company->company_id = 3;
+        $result = $company->delete($AppUI);      
+        $this->assertTrue($result);
         
         $result = $company->load(3);
         $this->assertFalse($result);
