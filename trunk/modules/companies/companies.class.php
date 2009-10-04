@@ -69,6 +69,44 @@ class CCompany extends CW2pObject {
 		// call the parent class method to assign the oid
 		return parent::canDelete($msg, $oid, $tables);
 	}
+
+  public function delete(CAppUI $AppUI) {
+    $perms = $AppUI->acl();
+
+    if ($perms->checkModuleItem('companies', 'delete', $this->company_id)) {
+    	if ($msg = parent::delete()) {
+    		return $msg;
+    	}
+      return true;
+    }
+    return false;
+  }
+
+  public function store(CAppUI $AppUI) {
+    $perms = $AppUI->acl();
+
+    if ($this->company_id && $perms->checkModuleItem('companies', 'edit', $this->company_id)) {
+      if (($msg = parent::store())) {
+        return $msg;
+      }
+      require_once ($AppUI->getSystemClass('CustomFields'));
+      $custom_fields = new CustomFields('companies', 'addedit', $this->company_id, 'edit');
+      $custom_fields->bind($_POST);
+      $sql = $custom_fields->store($this->company_id); // Store Custom Fields
+      return true;
+    }
+    if (0 == $this->company_id && $perms->checkModuleItem('companies', 'add')) {
+      if (($msg = parent::store())) {
+        return $msg;
+      }
+      require_once ($AppUI->getSystemClass('CustomFields'));
+      $custom_fields = new CustomFields('companies', 'addedit', $this->company_id, 'edit');
+      $custom_fields->bind($_POST);
+      $sql = $custom_fields->store($this->company_id); // Store Custom Fields
+      return true;
+    }
+    return false;
+  }
 	
 	public function loadFull($companyId) {
 		$q = new DBQuery;
