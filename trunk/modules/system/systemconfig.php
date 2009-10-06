@@ -20,11 +20,8 @@ $w2Pcfg = new CConfig();
 // retrieve the system configuration data
 $rs = $w2Pcfg->loadAll('config_group');
 
-// retrieve any state parameters
-if (isset($_GET['tab'])) {
-	$AppUI->setState('ConfigIdxTab', w2PgetParam($_GET, 'tab', null));
-}
-$tab = $AppUI->getState('ConfigIdxTab') !== null ? $AppUI->getState('ConfigIdxTab') : 0;
+$tab = $AppUI->processIntState('ConfigIdxTab', $_GET, 'tab', 0);
+
 $active = intval(!$AppUI->getState('ConfigIdxTab'));
 
 $titleBlock = new CTitleBlock('System Configuration', 'control-center.png', $m);

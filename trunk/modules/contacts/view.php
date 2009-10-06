@@ -14,11 +14,7 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// retrieve any state parameters
-if (isset($_GET['tab'])) {
-	$AppUI->setState('ContactVwTab', $_GET['tab']);
-}
-$tab = $AppUI->getState('ContactVwTab') !== null ? $AppUI->getState('ContactVwTab') : 0;
+$tab = $AppUI->processIntState('ContactVwTab', $_GET, 'tab', 0);
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');

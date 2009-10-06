@@ -5,15 +5,9 @@ if (!defined('W2P_BASE_DIR')) {
 
 $AppUI->savePlace();
 
-// retrieve any state parameters
-if (isset($_REQUEST['project_id'])) {
-	$AppUI->setState('FileIdxProject', w2PgetParam($_REQUEST, 'project_id', null));
-}
+$project_id = $AppUI->processIntState('FileIdxProject', $_REQUEST, 'project_id', 0);
+$tab = $AppUI->processIntState('FileIdxTab', $_GET, 'tab', 0);
 
-$project_id = $AppUI->getState('FileIdxProject', 0);
-
-$AppUI->setState('FileIdxTab', w2PgetParam($_GET, 'tab'));
-$tab = $AppUI->getState('FileIdxTab', 0);
 $active = intval(!$AppUI->getState('FileIdxTab'));
 
 $view_temp = w2PgetParam($_GET, 'view');

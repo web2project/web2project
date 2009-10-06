@@ -8,10 +8,7 @@ $perms = &$AppUI->acl();
 $role_id = w2PgetParam($_GET, 'role_id', 0);
 $role = $perms->getRole($role_id);
 
-if (isset($_GET['tab'])) {
-	$AppUI->setState('RoleVwTab', w2PgetParam($_GET, 'tab', null));
-}
-$tab = $AppUI->getState('RoleVwTab') !== null ? $AppUI->getState('RoleVwTab') : 0;
+$tab = $AppUI->processIntState('RoleVwTab', $_GET, 'tab', 0);
 
 if (!is_array($role)) {
 	$titleBlock = new CTitleBlock('Invalid Role', 'main-settings.png', $m, $m . '.' . $a);

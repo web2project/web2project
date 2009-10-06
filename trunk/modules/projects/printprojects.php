@@ -14,17 +14,10 @@ $search_text = $AppUI->getState('projsearchtext') ? $AppUI->getState('projsearch
 
 $projectDesigner = $AppUI->getState('ProjIdxProjectDesigner') !== null ? $AppUI->getState('ProjIdxProjectDesigner') : 0;
 
-// retrieve any state parameters
-if (isset($_GET['tab'])) {
-	$AppUI->setState('ProjIdxTab', w2PgetParam($_GET, 'tab', null));
-}
-$tab = $AppUI->getState('ProjIdxTab') !== null ? $AppUI->getState('ProjIdxTab') : 1;
+$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
 $active = intval(!$AppUI->getState('ProjIdxTab'));
 
-if (isset($_POST['company_id'])) {
-	$AppUI->setState('ProjIdxCompany', intval($_POST['company_id']));
-}
-$company_id = $AppUI->getState('ProjIdxCompany') !== null ? $AppUI->getState('ProjIdxCompany') : $AppUI->user_company;
+$company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'company_id', $AppUI->user_company);
 
 $company_prefix = 'company_';
 

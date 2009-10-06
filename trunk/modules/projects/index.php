@@ -26,12 +26,8 @@ $search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('p
 
 $projectDesigner = $AppUI->getState('ProjIdxProjectDesigner') !== null ? $AppUI->getState('ProjIdxProjectDesigner') : 0;
 
-// retrieve any state parameters
-if (isset($_GET['tab'])) {
-	$AppUI->setState('ProjIdxTab', w2PgetParam($_GET, 'tab', null));
-}
+$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
 
-$tab = $AppUI->getState('ProjIdxTab') !== null ? $AppUI->getState('ProjIdxTab') : 1;
 $currentTabId = $tab;
 $active = intval(!$AppUI->getState('ProjIdxTab'));
 

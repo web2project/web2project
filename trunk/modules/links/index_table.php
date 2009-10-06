@@ -18,7 +18,7 @@ if ($canEdit) {
     $titleBlock->show();
 }
 
-$tab = $AppUI->getState('LinkIdxTab') !== null ? $AppUI->getState('LinkIdxTab') : 0;
+$tab = $AppUI->processIntState('LinkIdxTab', $_GET, 'tab', 0);
 $page = w2PgetParam($_GET, 'page', 1);
 $search = w2PgetParam($_POST, 'search', '');
 

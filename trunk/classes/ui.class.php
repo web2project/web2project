@@ -642,7 +642,7 @@ class CAppUI {
     }
 	}
   
-  public function processState($label, $valueArray = array(), $name = '', $default_value = 0) {
+  public function processIntState($label, $valueArray = array(), $name = '', $default_value = 0) {
     if(isset($valueArray)) {
     	if (isset($valueArray[$name])) {
     		$this->setState($label, (int) $valueArray[$name]);

@@ -16,25 +16,11 @@ $AppUI->savePlace();
 
 require_once ($AppUI->getModuleClass('tasks'));
 
-/* Kludge: Backward compatible function to address php5 and php4 date issue */
-function php4_clone($object) {
-	if (version_compare(phpversion(), '5.0') < 0) {
-		return $object;
-	} else {
-		return @clone ($object);
-	}
-}
-
-// retrieve any state parameters
-if (isset($_REQUEST['company_id'])) {
-	$AppUI->setState('CalIdxCompany', intval(w2PgetParam($_REQUEST, 'company_id', 0)));
-}
-$company_id = $AppUI->getState('CalIdxCompany', $AppUI->user_company);
+$company_id = $AppUI->processIntState('CalIdxCompany', $_REQUEST, 'company_id', $AppUI->user_company);
 
 $event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');
 
-$AppUI->setState('CalDayViewTab', w2PgetParam($_GET, 'tab', $tab));
-$tab = $AppUI->getState('CalDayViewTab', '0');
+$tab = $AppUI->processIntState('CalDayViewTab', $_GET, 'tab', 0);
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -53,10 +39,10 @@ $yy = $this_day->getYear();
 $this_week = Date_calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY);
 
 // prepare time period for 'events'
-$first_time = php4_clone($this_day);
+$first_time =  clone $this_day;
 $first_time->setTime(0, 0, 0);
 
-$last_time = php4_clone($this_day);
+$last_time = clone $this_day;
 $last_time->setTime(23, 59, 59);
 
 $prev_day = new CDate(Date_calc::prevDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));

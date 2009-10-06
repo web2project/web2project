@@ -92,21 +92,21 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
     $this->assertEquals('anotherValue', $AppUI->getState('testSetState'));
   }
 
-  public function testProcessState()
+  public function testProcessTabState()
   {
     global $AppUI;   
     $myArray = array('existingKey' => 13, 'existingKey2' => 42);
 
-    $AppUI->processState('testProcessState', null,     'existingKey', 9);
+    $AppUI->processIntState('testProcessState', null,     'existingKey', 9);
     $this->assertEquals(9, $AppUI->getState('testProcessState'));
 
-    $AppUI->processState('testProcessState', $myArray, 'existingKey', 9);
+    $AppUI->processIntState('testProcessState', $myArray, 'existingKey', 9);
     $this->assertEquals(13, $AppUI->getState('testProcessState'));
 
-    $AppUI->processState('testProcessNull', $myArray,  'missingKey',  14);
+    $AppUI->processIntState('testProcessNull', $myArray,  'missingKey',  14);
     $this->assertEquals(14, $AppUI->getState('testProcessNull'));
 
-    $AppUI->processState('testProcessState', $myArray, 'missingKey',  79);
+    $AppUI->processIntState('testProcessState', $myArray, 'missingKey',  79);
     $this->assertEquals(13, $AppUI->getState('testProcessState'));
   }
 

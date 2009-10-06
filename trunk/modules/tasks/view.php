@@ -43,11 +43,7 @@ if ($reminded) {
 	$obj->clearReminder();
 }
 
-// retrieve any state parameters
-if (isset($_GET['tab'])) {
-	$AppUI->setState('TaskLogVwTab', w2PgetParam($_GET, 'tab', null));
-}
-$tab = $AppUI->getState('TaskLogVwTab') !== null ? $AppUI->getState('TaskLogVwTab') : 0;
+$tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');

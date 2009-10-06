@@ -15,10 +15,7 @@ $AppUI->savePlace();
 
 require_once ($AppUI->getModuleClass('contacts'));
 
-if (isset($_GET['tab'])) {
-	$AppUI->setState('UserIdxTab', w2PgetParam($_GET, 'tab', null));
-}
-$tab = $AppUI->getState('UserIdxTab') !== null ? $AppUI->getState('UserIdxTab') : 0;
+$tab = $AppUI->processIntState('UserIdxTab', $_GET, 'tab', 0);
 
 if (isset($_GET['stub'])) {
 	$AppUI->setState('UserIdxStub', w2PgetParam($_GET, 'stub', null));
