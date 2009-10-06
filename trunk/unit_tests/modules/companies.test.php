@@ -265,8 +265,10 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testLoadFull() 
     {        
+        global $AppUI;
         $company = new CCompany();
-        $company->loadFull(1);
+
+        $company->loadFull($AppUI, 1);
         
         $this->assertEquals('UnitTestCompany',          $company->company_name);
         $this->assertEquals('web2project@example.org',  $company->company_email);

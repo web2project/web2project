@@ -632,14 +632,30 @@ class CAppUI {
 	public function getState($label, $default_value = null) {
 		if (array_key_exists($label, $this->state)) {
 			return $this->state[$label];
-		} else
+		} else {
 			if (isset($default_value)) {
 				$this->setState($label, $default_value);
 				return $default_value;
 			} else {
 				return null;
 			}
+    }
 	}
+  
+  public function processState($label, $valueArray = array(), $name = '', $default_value = 0) {
+    if(isset($valueArray)) {
+    	if (isset($valueArray[$name])) {
+    		$this->setState($label, (int) $valueArray[$name]);
+    	} else {
+    		if ($this->getState($label) === null) {
+    			$this->setState($label, (int) $default_value);
+    		}
+    	}
+    } else {
+    	$this->setState($label, (int) $default_value);
+    }
+    return $this->getState($label);
+  }
 
 	public function checkPrefState($label, $value, $prefname, $default_value = null) {
 		// Check if we currently have it set

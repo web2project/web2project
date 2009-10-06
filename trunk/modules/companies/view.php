@@ -8,27 +8,23 @@ $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 // check permissions for this record
 $perms = &$AppUI->acl();
 
+$canRead = $perms->checkModuleItem($m, 'view', $company_id);
+if (!$canRead) {
+  $AppUI->redirect('m=public&a=access_denied');
+}
+
 $canAdd = $perms->checkModuleItem($m, 'add');
 $canEdit = $perms->checkModuleItem($m, 'edit', $company_id);
-$canRead = $perms->checkModuleItem($m, 'view', $company_id);
 $canDelete = $perms->checkModuleItem($m, 'delete', $company_id);
 
-if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
+$tab = $AppUI->processState('CompVwTab', $_GET, 'tab', 0);
 
-// retrieve any state parameters
-if (isset($_GET['tab'])) {
-	$AppUI->setState('CompVwTab', (int) $_GET['tab']);
-}
-$tab = $AppUI->getState('CompVwTab') !== null ? $AppUI->getState('CompVwTab') : 0;
+$company = new CCompany();
+$company->loadFull($AppUI, $company_id);
 
 // check if this record has dependencies to prevent deletion
 $msg = '';
-$company = new CCompany();
 $deletable = $company->canDelete($msg, $company_id);
-
-$company->loadFull($company_id);
 
 // load the record data
 
