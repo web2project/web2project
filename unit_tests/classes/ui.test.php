@@ -82,6 +82,34 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 		$this->assertEquals('Monkey', $AppUI->getPref('AddingThis'));
 	}
 
+  public function testSetState()
+  {
+  	global $AppUI;
+    
+    $AppUI->setState('testSetState', 'someValue');
+    $this->assertEquals('someValue', $AppUI->getState('testSetState'));
+    $AppUI->setState('testSetState', 'anotherValue');
+    $this->assertEquals('anotherValue', $AppUI->getState('testSetState'));
+  }
+
+  public function testProcessState()
+  {
+    global $AppUI;   
+    $myArray = array('existingKey' => 13, 'existingKey2' => 42);
+
+    $AppUI->processState('testProcessState', null,     'existingKey', 9);
+    $this->assertEquals(9, $AppUI->getState('testProcessState'));
+
+    $AppUI->processState('testProcessState', $myArray, 'existingKey', 9);
+    $this->assertEquals(13, $AppUI->getState('testProcessState'));
+
+    $AppUI->processState('testProcessNull', $myArray,  'missingKey',  14);
+    $this->assertEquals(14, $AppUI->getState('testProcessNull'));
+
+    $AppUI->processState('testProcessState', $myArray, 'missingKey',  79);
+    $this->assertEquals(13, $AppUI->getState('testProcessState'));
+  }
+
 	public function testSavePlace()
 	{
 		global $AppUI;
@@ -92,11 +120,6 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
 		$AppUI->savePlace('?m=projects&amp;a=view&amp;project_id=1');
 		$this->assertEquals('?m=projects&amp;a=view&amp;project_id=1', $AppUI->getPlace());
-	}
-
-	public function testGetPlace()
-	{
-		$this->testSavePlace();
 	}
 
 	public function testResetPlace()
