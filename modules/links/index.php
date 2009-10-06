@@ -12,10 +12,7 @@ if (isset($_REQUEST['project_id'])) {
 
 $project_id = $AppUI->getState('LinkIdxProject') !== null ? $AppUI->getState('LinkIdxProject') : 0;
 
-if (w2PgetParam($_GET, 'tab', -1) != -1) {
-	$AppUI->setState('LinkIdxTab', w2PgetParam($_GET, 'tab'));
-}
-$tab = $AppUI->getState('LinkIdxTab') !== null ? $AppUI->getState('LinkIdxTab') : 0;
+$tab = $AppUI->processIntState('LinkIdxTab', $_GET, 'tab', 0);
 $active = intval(!$AppUI->getState('LinkIdxTab'));
 
 require_once ($AppUI->getModuleClass('projects'));

@@ -288,10 +288,8 @@ var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours'))
 </table>
 
 <?php
-if (isset($_GET['tab'])) {
-	$AppUI->setState('TaskAeTabIdx', w2PgetParam($_GET, 'tab', 0));
-}
-$tab = $AppUI->getState('TaskAeTabIdx', 0);
+$tab = $AppUI->processIntState('TaskAeTabIdx', $_GET, 'tab', 0);
+
 $tabBox = new CTabBox('?m=tasks&a=addedit&task_id=' . $task_id, '', $tab, '');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_desc', 'Details');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_dates', 'Dates');

@@ -8,10 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
 $showEditCheckbox = w2PgetConfig('direct_edit_assignment');
 $perms = &$AppUI->acl();
 
-if (isset($_GET['tab'])) {
-	$AppUI->setState('ToDoTab', w2PgetParam($_GET, 'tab', null));
-}
-$tab = $AppUI->getState('ToDoTab') !== null ? $AppUI->getState('ToDoTab') : 0;
+$tab = $AppUI->processIntState('ToDoTab', $_GET, 'tab', 0);
 
 if (isset($_POST['task_type'])) {
 	$AppUI->setState('ToDoTaskType', w2PgetParam($_POST, 'task_type', ''));

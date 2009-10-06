@@ -22,10 +22,7 @@ if (isset($dept_id) && $dept_id > 0) {
 }
 $dept_id = $AppUI->getState('DeptIdxDepartment') !== null ? $AppUI->getState('DeptIdxDepartment') : ($AppUI->user_department > 0 ? $AppUI->user_department : $company_prefix . $AppUI->user_company);
 
-if (isset($_GET['tab'])) {
-	$AppUI->setState('DeptVwTab', w2PgetParam($_GET, 'tab', null));
-}
-$tab = $AppUI->getState('DeptVwTab') !== null ? $AppUI->getState('DeptVwTab') : 0;
+$tab = $AppUI->processIntState('DeptVwTab', $_GET, 'tab', 0);
 
 $countries = w2PgetSysVal('GlobalCountries');
 // load the department types

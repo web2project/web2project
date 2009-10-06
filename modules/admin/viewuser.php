@@ -12,14 +12,7 @@ if ($user_id != $AppUI->user_id && (!$perms->checkModuleItem('admin', 'view', $u
 
 $AppUI->savePlace();
 
-if (isset($_POST['show_form'])) {
-	$add_pwt = w2PgetParam($_POST, 'add_pwt', 0);
-	$AppUI->setState('addProjWithTasks', $add_pwt);
-} else {
-	$AppUI->setState('addProjWithTasks', false);
-}
-
-$addPwT = $AppUI->getState('addProjWithTasks') ? $AppUI->getState('addProjWithTasks') : 0;
+$addPwT = $AppUI->processIntState('addProjWithTasks', $_POST, 'add_pwt', 0);
 
 $company_id = $AppUI->getState('UsrProjIdxCompany') !== null ? $AppUI->getState('UsrProjIdxCompany') : $AppUI->user_company;
 
@@ -41,10 +34,7 @@ if (!(strpos($department, $company_prefix) === false)) {
 	unset($department);
 }
 
-if (isset($_GET['tab'])) {
-	$AppUI->setState('UserVwTab', w2PgetParam($_GET, 'tab', null));
-}
-$tab = $AppUI->getState('UserVwTab') !== null ? $AppUI->getState('UserVwTab') : 0;
+$tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
 
 // pull data
 $user = new CUser();

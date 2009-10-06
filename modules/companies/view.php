@@ -17,7 +17,7 @@ $canAdd = $perms->checkModuleItem($m, 'add');
 $canEdit = $perms->checkModuleItem($m, 'edit', $company_id);
 $canDelete = $perms->checkModuleItem($m, 'delete', $company_id);
 
-$tab = $AppUI->processState('CompVwTab', $_GET, 'tab', 0);
+$tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
 
 $company = new CCompany();
 $company->loadFull($AppUI, $company_id);

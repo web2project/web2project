@@ -15,11 +15,7 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// retrieve any state parameters
-if (isset($_GET['tab'])) {
-	$AppUI->setState('ProjVwTab', w2PgetParam($_GET, 'tab', null));
-}
-$tab = $AppUI->getState('ProjVwTab') !== null ? $AppUI->getState('ProjVwTab') : 0;
+$tab = $AppUI->processIntState('ProjVwTab', $_GET, 'tab', 0);
 
 // check if this record has dependencies to prevent deletion
 $msg = '';
