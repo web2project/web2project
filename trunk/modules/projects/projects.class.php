@@ -92,25 +92,25 @@ class CProject extends CW2pObject {
     $this->project_id = intval($this->project_id);
 
 		if ('' == $this->project_name) {
-			$errorArray['project_name'] = $baseErrorMsg . 'project name is NULL';
+			$errorArray['project_name'] = $baseErrorMsg . 'project name is not set';
 		}
     if ('' == $this->project_short_name) {
-      $errorArray['project_short_name'] = $baseErrorMsg . 'project short name is NULL';
+      $errorArray['project_short_name'] = $baseErrorMsg . 'project short name is not set';
     }
     if ((int) $this->project_company == 0) {
-    	$errorArray['project_company'] = $baseErrorMsg . 'project company is NULL';
+    	$errorArray['project_company'] = $baseErrorMsg . 'project company is not set';
     }
-    if ('' == $this->project_priority) {
-    	$errorArray['project_priority'] = $baseErrorMsg . 'project priority is NULL';
+    if (!is_int($this->project_priority)) {
+    	$errorArray['project_priority'] = $baseErrorMsg . 'project priority is not set';
     }
     if ('' == $this->project_color_identifier) {
-      $errorArray['project_color_identifier'] = $baseErrorMsg . 'project color identifier is NULL';
+      $errorArray['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not set';
     }
-    if ('' == $this->project_type) {
-    	$errorArray['project_type'] = $baseErrorMsg . 'project type is NULL';
+    if (!is_int($this->project_type)) {
+    	$errorArray['project_type'] = $baseErrorMsg . 'project type is not set';
     }
     if ('' == $this->project_status) {
-      $errorArray['project_status'] = $baseErrorMsg . 'project status is NULL';
+      $errorArray['project_status'] = $baseErrorMsg . 'project status is not set';
     }
 
 		// ensure changes of state in checkboxes is captured
@@ -494,14 +494,14 @@ class CProject extends CW2pObject {
 
 		if ($this->project_id) {
 			$q = new DBQuery;
-            $this->project_updated = $q->dbfnNow();
+      $this->project_updated = $q->dbfnNow();
 			$ret = $q->updateObject('projects', $this, 'project_id', false);
 			$q->clear();
 			addHistory('projects', $this->project_id, 'update', $this->project_name, $this->project_id);
 		} else {
 			$q = new DBQuery;
-            $this->project_updated = $q->dbfnNow();
-            $this->project_created = $q->dbfnNow();
+      $this->project_updated = $q->dbfnNow();
+      $this->project_created = $q->dbfnNow();
 			$ret = $q->insertObject('projects', $this, 'project_id');
 			$q->clear();
 			addHistory('projects', $this->project_id, 'add', $this->project_name, $this->project_id);
