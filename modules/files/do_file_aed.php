@@ -11,14 +11,11 @@ $duplicate = intval(w2PgetParam($_POST, 'duplicate', 0));
 $redirect = w2PgetParam($_POST, 'redirect', '');
 global $db;
 
-$not = w2PgetParam($_POST, 'notify', '0');
-$notcont = w2PgetParam($_POST, 'notify_contacts', '0');
-if ($not != '0') {
-	$not = '1';
-}
-if ($notcont != '0') {
-	$notcont = '1';
-}
+$notify = w2PgetParam($_POST, 'notify', '0');
+$notify = ($notify != '0') ? '1' : '0';
+
+$notifyContacts = w2PgetParam($_POST, 'notify_contacts', '0');
+$notifyContacts = ($notifyContacts != '0') ? '1' : '0';
 
 $isNotNew = $_POST['file_id'];
 $perms = &$AppUI->acl();
@@ -49,7 +46,6 @@ if ($file_id) {
 	$obj->_message = 'added';
 }
 $obj->file_category = intval(w2PgetParam($_POST, 'file_category', 0));
-
 $version = w2PgetParam($_POST, 'file_version', 0);
 $revision_type = w2PgetParam($_POST, 'revision_type', 0);
 
@@ -94,12 +90,9 @@ if ($del) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 		$AppUI->redirect();
 	} else {
-		if ($not == '1') {
-			$obj->notify();
-		}
-		if ($notcont == '1') {
-			$obj->notifyContacts();
-		}
+		$obj->notify($notify);
+    $obj->notifyContacts($notifyContacts);
+
 		$AppUI->setMsg('deleted', UI_MSG_OK, true);
 		$AppUI->redirect($redirect);
 	}
@@ -115,8 +108,6 @@ if (!ini_get('safe_mode')) {
 	set_time_limit(600);
 }
 ignore_user_abort(1);
-
-//echo "<pre>";print_r($_POST);echo "</pre>";die;
 
 $upload = null;
 if (isset($_FILES['formfile'])) {
@@ -174,19 +165,15 @@ if (!$file_id) {
 		$q->clear();
 	}
 }
-//print_r($obj);die;
+
 if (($msg = $obj->store())) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
 } else {
 
 	// Notification
 	$obj->load($obj->file_id);
-	if ($not == '1') {
-		$obj->notify();
-	}
-	if ($notcont == '1') {
-		$obj->notifyContacts();
-	}
+	$obj->notify($notify);
+  $obj->notifyContacts($notifyContacts);
 
 	// Delete the existing (old) file in case of file replacement (through addedit not through c/o-versions)
 	if (($file_id) && ($upload['size'] > 0)) {
@@ -199,16 +186,7 @@ if (($msg = $obj->store())) {
 		$AppUI->setMsg($file_id ? 'updated' : 'added', UI_MSG_OK, true);
 	}
 
-	/* Workaround for indexing large files:
-	** Based on the value defined in config data,
-	** files with file_size greater than specified limit
-	** are not indexed for searching.
-	** Negative value :<=> no filesize limit
-	*/
-	$index_max_file_size = w2PgetConfig('index_max_file_size', 0);
-	if ($index_max_file_size < 0 || $obj->file_size <= $index_max_file_size * 1024) {
-		$indexed = $obj->indexStrings();
-		$AppUI->setMsg('; ' . $indexed . ' words indexed', UI_MSG_OK, true);
-	}
+  $indexed = $obj->indexStrings();
+  $AppUI->setMsg('; ' . $indexed . ' unique words indexed', UI_MSG_OK, true);
 }
 $AppUI->redirect($redirect);
