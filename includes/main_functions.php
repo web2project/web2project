@@ -508,7 +508,7 @@ function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $pa
   return $s;
 }
 
-function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $divingToken = '') {
+function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '') {
 	$s = '';
   $nav = $AppUI->getMenuModules();
   $perms = $AppUI->acl();
@@ -523,7 +523,7 @@ function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $divingTok
       $links[] = $link;
   	}
   }
-  $s .= implode($divingToken, $links);
+  $s .= implode($dividingToken, $links);
   $s .= ($rootTag != '') ? "</$rootTag>" : '';
   
   return $s;
