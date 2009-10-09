@@ -1220,6 +1220,7 @@ class w2Pacl extends gacl_api {
 		$q->addWhere('item_id = 0');
 		$q->addWhere('user_id = ' . (int)$userid);
 		$q->addOrder('acl_id DESC');
+
 		if (W2P_PERFORMANCE_DEBUG) {
 			$startTime = array_sum(explode(' ', microtime()));
 		}
@@ -1383,6 +1384,21 @@ class w2Pacl extends gacl_api {
 		}
 		return $res;
 	}
+  
+  /*
+   * This method is primarily for modules that don't have a set of permissions
+   * on their own.  For example, the SmartSearch module in core
+   * web2project respects the permissions of the individual items it is
+   * searching but it does not apply any permissions of its own.  
+   */
+  public function registerModule($module_name, $module_value, $section_value = 'app') {
+    $q = new DBQuery();
+    $q->addTable('gacl_axo');
+    $q->addInsert('name', $module_name);
+    $q->addInsert('value', $module_value);
+    $q->addInsert('section_value', $section_value);
+    $q->exec();
+  }
 }
 
 // The includes/permissions.php file has been ported here because it held a group of public functions for permission checking.
