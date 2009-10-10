@@ -66,7 +66,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
     }
     
     /**
-     * Tests the Attributes of a new Tasks object.
+     * Tests the Attributes of a new Files object.
      */
     public function testNewFilesAttributes() 
     {
@@ -90,7 +90,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('file_checkout',            $file);
         $this->assertObjectHasAttribute('file_co_reason',           $file);
         $this->assertObjectHasAttribute('file_folder',              $file);
-        $this->assertObjectHasAttribute('file_helpdesk_item',       $file);
         $this->assertObjectHasAttribute('file_indexed',             $file);
         $this->assertObjectHasAttribute('_tbl_prefix',              $file);
         $this->assertObjectHasAttribute('_tbl',                     $file);
@@ -100,7 +99,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
     }
     
     /**
-     * Tests the Attribute Values of a new Task object.
+     * Tests the Attribute Values of a new File object.
      */
     public function testNewFilesAttributeValues()
     {
@@ -124,7 +123,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($file->file_checkout);
         $this->assertNull($file->file_co_reason);
         $this->assertNull($file->file_folder);
-        $this->assertNull($file->file_helpdesk_item);
         $this->assertNull($file->file_indexed);
         $this->assertEquals('',         $file->_tbl_prefix);
         $this->assertEquals('files',    $file->_tbl);

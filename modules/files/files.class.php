@@ -36,7 +36,6 @@ class CFile extends CW2pObject {
 	public $file_folder = null;
 	public $file_checkout = null;
 	public $file_co_reason = null;
-  public $file_helpdesk_item = null;
   public $file_indexed = null;
 
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
@@ -323,9 +322,12 @@ class CFile extends CW2pObject {
   				$wordarr[$newword] = $x;
   			}
   		}
+
   		// filter out common strings
-  		$ignore = array();
-  		include W2P_BASE_DIR . '/modules/files/file_index_ignore.php';
+      $ignore = w2PgetSysVal('FileIndexIgnoreWords');
+      $ignore = str_replace(' ,', ',', $ignore);
+      $ignore = str_replace(', ', ',', $ignore);
+      $ignore = explode(',', $ignore);
   		foreach ($ignore as $w) {
   			unset($wordarr[$w]);
   		}
