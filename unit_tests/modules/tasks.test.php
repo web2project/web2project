@@ -25,7 +25,6 @@ $AppUI->login('admin', 'passwd');
 
 require_once W2P_BASE_DIR . '/classes/permissions.class.php';
 require_once W2P_BASE_DIR . '/includes/session.php';
-require_once W2P_BASE_DIR . '/modules/tasks/tasks.class.php';
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
 
@@ -874,4 +873,3 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(array(), $errorMsg);
     }
 }
-?>
