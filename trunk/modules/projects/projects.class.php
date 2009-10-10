@@ -100,13 +100,13 @@ class CProject extends CW2pObject {
     if ((int) $this->project_company == 0) {
     	$errorArray['project_company'] = $baseErrorMsg . 'project company is not set';
     }
-    if (!is_int($this->project_priority)) {
+    if (!is_int($this->project_priority) && '' == $this->project_priority) {
     	$errorArray['project_priority'] = $baseErrorMsg . 'project priority is not set';
     }
     if ('' == $this->project_color_identifier) {
       $errorArray['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not set';
     }
-    if (!is_int($this->project_type)) {
+    if (!is_int($this->project_type) && '' == $this->project_type) {
     	$errorArray['project_type'] = $baseErrorMsg . 'project type is not set';
     }
     if ('' == $this->project_status) {
