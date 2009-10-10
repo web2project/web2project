@@ -31,10 +31,13 @@ class CFile extends CW2pObject {
 	public $file_date = null;
 	public $file_size = null;
 	public $file_version = null;
+  public $file_icon = null;
 	public $file_category = null;
 	public $file_folder = null;
 	public $file_checkout = null;
 	public $file_co_reason = null;
+  public $file_helpdesk_item = null;
+  public $file_indexed = null;
 
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
 	//public $file_helpdesk_item = NULL;
