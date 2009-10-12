@@ -8,35 +8,47 @@ if (!defined('W2P_BASE_DIR')) {
 
 define('SECONDS_PER_DAY', 60 * 60 * 24);
 
+/*
+ * TODO: Personally, I'm already hating this autoloader... while it's great in
+ * concept, we don't have anything that resembles a real class naming convention
+ * so this ends up being nasty and getting nastier.  Hopefully, we can clean
+ * these things up for v2.0
+ */
 function __autoload($class_name) {
   global $AppUI;
 
   $name = strtolower($class_name);
 
-  if ($name == 'cw2pobject') {
-    require_once W2P_BASE_DIR.'/classes/w2p.class.php';
-    return;   
-  }
-  if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
-  	require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
-    return;
-  }
-  if ($name[0] == 'c') {
-  	$name = substr($name, 1);
-    if (substr($name, -1) == 'y') {
-  		$name = substr($name, 0, -1).'ies';
-  	} else {
-      $name .= 's';
-  	}
-
-    if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-      require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-      return;
-    }
-  }
-  if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-    require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-    return;  	
+  switch ($name) {
+  	case 'cw2pobject':
+      require_once W2P_BASE_DIR.'/classes/w2p.class.php';
+      break;
+    case 'customfields':
+      require_once W2P_BASE_DIR.'/classes/CustomFields.class.php';
+      break;
+    default:
+      if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
+        require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
+        return;
+      }
+      if ($name[0] == 'c') {
+        $name = substr($name, 1);
+        if (substr($name, -1) == 'y') {
+          $name = substr($name, 0, -1).'ies';
+        } else {
+          $name .= 's';
+        }
+    
+        if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+          require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+          return;
+        }
+      }
+      if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+        require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+        return;   
+      }
+      break;
   }
 }
 ##
@@ -201,7 +213,7 @@ function w2PcontextHelp($title, $link = '') {
  */
 function w2PgetConfig($key, $default = null) {
 	global $w2Pconfig;
-	if (array_key_exists($key, $w2Pconfig)) {
+	if (isset($w2Pconfig[$key])) {
 		return $w2Pconfig[$key];
 	} else {
 		
