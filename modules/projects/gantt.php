@@ -82,7 +82,6 @@ if ($showInactive != '1') {
 	}
 }
 $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-$AppUI->getModuleClass('departments');
 $q->addGroup('pr.project_id');
 $q->addOrder('pr.project_name, task_end_date DESC');
 

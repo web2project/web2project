@@ -5,7 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 require_once $AppUI->getSystemClass('libmail');
 require_once $AppUI->getSystemClass('w2p');
-require_once $AppUI->getModuleClass('projects');
 require_once $AppUI->getSystemClass('event_queue');
 require_once $AppUI->getSystemClass('date');
 
@@ -1700,14 +1699,12 @@ class CTask extends CW2pObject {
 			$q->addGroup('u.user_id');
 			$q->addOrder('contact_first_name, contact_last_name');
 			// get CCompany() to filter by company
-			require_once ($AppUI->getModuleClass('companies'));
 			$obj = new CCompany();
 			$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
 			$q->addJoin('companies', 'com', 'company_id = contact_company');
 			if ($companies) {
 				$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 			}
-			require_once ($AppUI->getModuleClass('departments'));
 			$dpt = new CDepartment();
 			$depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
 			$q->addJoin('departments', 'dep', 'dept_id = contact_department');

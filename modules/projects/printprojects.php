@@ -7,8 +7,6 @@ $canView = $perms->checkModule($m, 'view');
 if (!$canView) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-// load the companies class to retrieved denied companies
-require_once ($AppUI->getModuleClass('companies'));
 
 $search_text = $AppUI->getState('projsearchtext') ? $AppUI->getState('projsearchtext') : '';
 

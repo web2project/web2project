@@ -27,7 +27,6 @@ $company_id = w2PgetParam($_POST, 'company_id', 'all');
 $project_id = w2PgetParam($_POST, 'project_id', 'all');
 
 // get CProject() to filter tasks by company
-require_once ($AppUI->getModuleClass('projects'));
 $proj = new CProject();
 // filtering by companies
 // get the list of visible companies

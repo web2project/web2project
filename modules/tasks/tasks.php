@@ -69,7 +69,6 @@ if (isset($_POST['show_task_options'])) {
 }
 $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
-require_once $AppUI->getModuleClass('projects');
 $project = new CProject;
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'p.project_id');
 

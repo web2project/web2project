@@ -34,7 +34,6 @@ if (isset($_GET['project_id'])) {
 $project_id = $AppUI->getState('TaskIdxProject') ? $AppUI->getState('TaskIdxProject') : 0;
 
 // get CCompany() to filter tasks by company
-require_once ($AppUI->getModuleClass('companies'));
 $obj = new CCompany();
 $companies = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $filters2 = arrayMerge(array('all' => $AppUI->_('All Companies', UI_OUTPUT_RAW)), $companies);

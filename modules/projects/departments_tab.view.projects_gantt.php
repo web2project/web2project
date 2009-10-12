@@ -21,9 +21,6 @@ $projFilter = arrayMerge(array('-2' => 'All w/o in progress'), $projFilter);
 $projFilter = arrayMerge(array('-3' => 'All w/o archived'), $projFilter);
 natsort($projFilter);
 
-// load the companies class to retrieved denied companies
-require_once ($AppUI->getModuleClass('companies'));
-
 // retrieve any state parameters
 if (isset($_GET['tab'])) {
 	$AppUI->setState('DeptProjIdxTab', w2PgetParam($_GET, 'tab', null));

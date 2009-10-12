@@ -25,8 +25,6 @@ if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
 $project = new CProject();
 
 // get a list of permitted companies
-require_once ($AppUI->getModuleClass('companies'));
-
 $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => ''), $companies);
