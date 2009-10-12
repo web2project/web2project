@@ -872,4 +872,122 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         
         $this->assertEquals(array(), $errorMsg);
     }
+    
+    /**
+     * Testing loading a task that is not dynamic.
+     */
+    
+    public function testLoad()
+    {
+        $task = new CTask();
+        
+        $task->load(1);
+
+        $this->assertEquals(1,                      $task->task_id);
+        $this->assertEquals('Task 1',               $task->task_name);
+        $this->assertEquals(0,                      $task->task_parent);
+        $this->assertEquals('',                     $task->milestone);
+        $this->assertEquals(1,                      $task->task_project);
+        $this->assertEquals(1,                      $task->task_owner);
+        $this->assertEquals('2009-07-05 00:00:00',  $task->task_start_date);
+        $this->assertEquals(2,                      $task->task_duration);
+        $this->assertEquals(24,                     $task->task_duration_type);
+        $this->assertEquals(0,                      $task->task_hours_worked);
+        $this->assertEquals('2009-07-15 00:00:00',  $task->task_end_date);
+        $this->assertEquals(0,                      $task->task_status);
+        $this->assertEquals(0,                      $task->task_priority);
+        $this->assertEquals(0,                      $task->task_percent_complete);
+        $this->assertEquals('This is task 1',       $task->task_description);
+        $this->assertEquals(0.00,                   $task->task_target_budget);
+        $this->assertEquals('',                     $task->task_related_url);
+        $this->assertEquals(1,                      $task->task_creator);
+        $this->assertEquals(1,                      $task->task_order);
+        $this->assertEquals(1,                      $task->task_client_publish);
+        $this->assertEquals(0,                      $task->task_dynamic);
+        $this->assertEquals(1,                      $task->task_access);
+        $this->assertEquals(1,                      $task->task_notify);
+        $this->assertEquals('',                     $task->task_departments);
+        $this->assertEquals('',                     $task->task_contacts);
+        $this->assertEquals('',                     $task->task_custom);
+        $this->assertEquals(1,                      $task->task_type);
+    }
+
+    /**
+     * Tests loading a task that is dynamic skipping update.
+     */
+    public function testLoadDynamicSkipUpdate()
+    {
+        $task = new CTask();
+
+        $task->load(18, false, true);
+
+        $this->assertEquals(18,                     $task->task_id);
+        $this->assertEquals('Task 18',              $task->task_name);
+        $this->assertEquals(18,                     $task->task_parent);
+        $this->assertEquals(0,                      $task->task_milestone);
+        $this->assertEquals(1,                      $task->task_project);
+        $this->assertEquals(1,                      $task->task_owner);
+        $this->assertEquals('2009-07-06 00:00:00',  $task->task_start_date);
+        $this->assertEquals(2,                      $task->task_duration);
+        $this->assertEquals(24,                     $task->task_duration_type);
+        $this->assertEquals(0,                      $task->task_hours_worked);
+        $this->assertEquals('2009-07-16 00:00:00',  $task->task_end_date);
+        $this->assertEquals(0,                      $task->task_status);
+        $this->assertEquals(0,                      $task->task_priority);
+        $this->assertEquals(0,                      $task->task_percent_complete);
+        $this->assertEquals('This is task 18',      $task->task_description);
+        $this->assertEquals(0.00,                   $task->task_target_budget);
+        $this->assertEquals('',                     $task->task_related_url);
+        $this->assertEquals(1,                      $task->task_creator);
+        $this->assertEquals(1,                      $task->task_order);
+        $this->assertEquals(1,                      $task->task_client_publish);
+        $this->assertEquals(1,                      $task->task_dynamic);
+        $this->assertEquals(1,                      $task->task_access);
+        $this->assertEquals(1,                      $task->task_notify);
+        $this->assertEquals('',                     $task->task_departments);
+        $this->assertEquals('',                     $task->task_contacts);
+        $this->assertEquals('',                     $task->task_custom);
+        $this->assertEquals(1,                      $task->task_type);
+    }
+    
+    // 1
+    /*
+     * Tests loading a task that is dynamic not skipping update.
+     */
+    public function testLoadDynamic()
+    {
+        $task = new CTask();
+
+        $new_task = $task->load(18, false, false);
+
+        $this->assertEquals(18,                     $task->task_id);
+        $this->assertEquals('Task 18',              $task->task_name);
+        $this->assertEquals(18,                     $task->task_parent);
+        $this->assertEquals(0,                      $task->task_milestone);
+        $this->assertEquals(1,                      $task->task_project);
+        $this->assertEquals(1,                      $task->task_owner);
+        $this->assertEquals('2009-07-06 00:00:00',  $task->task_start_date);
+        $this->assertEquals(4,                      $task->task_duration);
+        $this->assertEquals(24,                     $task->task_duration_type);
+        $this->assertEquals(0,                      $task->task_hours_worked);
+        $this->assertEquals('2009-07-16 00:00:00',  $task->task_end_date);
+        $this->assertEquals(0,                      $task->task_status);
+        $this->assertEquals(0,                      $task->task_priority);
+        $this->assertEquals(0,                      $task->task_percent_complete);
+        $this->assertEquals('This is task 18',      $task->task_description);
+        $this->assertEquals(0.00,                   $task->task_target_budget);
+        $this->assertEquals('',                     $task->task_related_url);
+        $this->assertEquals(1,                      $task->task_creator);
+        $this->assertEquals(1,                      $task->task_order);
+        $this->assertEquals(1,                      $task->task_client_publish);
+        $this->assertEquals(1,                      $task->task_dynamic);
+        $this->assertEquals(1,                      $task->task_access);
+        $this->assertEquals(1,                      $task->task_notify);
+        $this->assertEquals('',                     $task->task_departments);
+        $this->assertEquals('',                     $task->task_contacts);
+        $this->assertEquals('',                     $task->task_custom);
+        $this->assertEquals(1,                      $task->task_type);
+    }
+
 }
+?>
