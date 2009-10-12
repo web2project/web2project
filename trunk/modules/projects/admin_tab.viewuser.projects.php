@@ -20,9 +20,6 @@ $projFilter = arrayMerge(array('-2' => 'All w/o in progress'), $projFilter);
 $projFilter = arrayMerge(array('-3' => 'All w/o archived'), $projFilter);
 natsort($projFilter);
 
-// load the companies class to retrieved denied companies
-require_once ($AppUI->getModuleClass('companies'));
-
 // retrieve any state parameters
 if (isset($_GET['tab'])) {
 	$AppUI->setState('UsrProjIdxTab', w2PgetParam($_GET, 'tab', null));
@@ -37,8 +34,6 @@ $orderby = $AppUI->getState('UsrProjIdxOrderBy') ? $AppUI->getState('UsrProjIdxO
 $orderdir = $AppUI->getState('UsrProjIdxOrderDir') ? $AppUI->getState('UsrProjIdxOrderDir') : 'asc';
 
 $extraGet = '&user_id=' . $user_id;
-
-require_once ($AppUI->getModuleClass('projects'));
 
 // collect the full projects list data via function in projects.class.php
 projects_list_data($user_id);

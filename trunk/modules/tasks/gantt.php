@@ -9,7 +9,6 @@ global $showLowTasks, $user_id, $w2Pconfig;
 
 w2PsetExecutionConditions($w2Pconfig);
 
-require_once ($AppUI->getModuleClass('contacts'));
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
 include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
 
@@ -21,7 +20,6 @@ $f = w2PgetParam($_REQUEST, 'f', 0);
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-require_once $AppUI->getModuleClass('projects');
 $project = new CProject;
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 

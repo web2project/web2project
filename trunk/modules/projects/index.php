@@ -5,8 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 $AppUI->savePlace();
 
-// load the companies class to retrieved denied companies
-require_once ($AppUI->getModuleClass('companies'));
 $structprojs = getProjects();
 
 // Let's update project status!

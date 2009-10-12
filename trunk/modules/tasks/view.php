@@ -15,8 +15,6 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-require_once ($AppUI->getModuleClass('contacts'));
-
 $perms = &$AppUI->acl();
 
 // check if this record has dependencies to prevent deletion

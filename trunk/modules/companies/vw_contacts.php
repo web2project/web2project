@@ -9,10 +9,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $company;
 
-// assemble the sql statement
-require_once $AppUI->getModuleClass('contacts');
-require_once $AppUI->getModuleClass('departments');
-
 $contacts = CCompany::getContacts($AppUI, $company->company_id);
 
 ?><table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl"><?php

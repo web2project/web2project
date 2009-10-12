@@ -21,9 +21,6 @@ $projFilter = arrayMerge(array('-2' => 'All w/o in progress'), $projFilter);
 $projFilter = arrayMerge(array('-3' => 'All w/o archived'), $projFilter);
 natsort($projFilter);
 
-// load the companies class to retrieved denied companies
-require_once ($AppUI->getModuleClass('companies'));
-
 // retrieve any state parameters
 if (isset($_GET['tab'])) {
 	$AppUI->setState('DeptProjIdxTab', w2PgetParam($_GET, 'tab', null));
@@ -46,16 +43,13 @@ $addPwOiD = $AppUI->getState('addProjWithOwnerInDep', 0);
 
 $extraGet = '&user_id=' . $user_id;
 
-require_once ($AppUI->getModuleClass('projects'));
-
-
 // collect the full projects list data via function in projects.class.php
 /*
  *  TODO:  This is a *nasty* *nasty* kludge that should be cleaned up.
  * Unfortunately due to the global variables from dotProject, we're stuck with
  * this mess for now.
  * 
- * My God have mercy on our souls for the atrocity we're about to commit.
+ * May God have mercy on our souls for the atrocity we're about to commit.
  */ 
 $tmpDepartments = $department;
 $department = $dept_id; 

@@ -14,7 +14,6 @@ $log_all_projects = true; // show tasks for all projects
 $df = $AppUI->getPref('SHDATEFORMAT'); // get the prefered date format
 
 // get CCompany() to filter tasks by company
-require_once ($AppUI->getModuleClass('companies'));
 $comp = new CCompany();
 $companies = $comp->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $compFilter = arrayMerge(array('all' => $AppUI->_('All Companies')), $companies);
