@@ -89,6 +89,7 @@ class CCompany extends CW2pObject {
 
   public function store(CAppUI $AppUI) {
     $perms = $AppUI->acl();
+    $stored = false;
 
     /*
      * TODO: I don't like the duplication on each of these two branches, but I
@@ -98,23 +99,21 @@ class CCompany extends CW2pObject {
       if (($msg = parent::store())) {
         return $msg;
       }
-      require_once ($AppUI->getSystemClass('CustomFields'));
-      $custom_fields = new CustomFields('companies', 'addedit', $this->company_id, 'edit');
-      $custom_fields->bind($_POST);
-      $sql = $custom_fields->store($this->company_id); // Store Custom Fields
-      return true;
+      $stored = true;
     }
     if (0 == $this->company_id && $perms->checkModuleItem('companies', 'add')) {
       if (($msg = parent::store())) {
         return $msg;
       }
-      require_once ($AppUI->getSystemClass('CustomFields'));
+      $stored = true;
+    }
+    if ($stored) {
+      //require_once ($AppUI->getSystemClass('CustomFields'));
       $custom_fields = new CustomFields('companies', 'addedit', $this->company_id, 'edit');
       $custom_fields->bind($_POST);
       $sql = $custom_fields->store($this->company_id); // Store Custom Fields
-      return true;
     }
-    return false;
+    return $stored;
   }
 	
 	public function loadFull(CAppUI $AppUI, $companyId) {
