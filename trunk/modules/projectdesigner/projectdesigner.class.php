@@ -5,11 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 //Lets require the main classes needed
 include_once (W2P_BASE_DIR. '/modules/projectdesigner/config.php');
-require_once ($AppUI->getSystemClass('libmail'));
-require_once ($AppUI->getSystemClass('w2p'));
-require_once ($AppUI->getModuleClass('companies'));
-require_once ($AppUI->getModuleClass('projects'));
-require_once ($AppUI->getModuleClass('tasks'));
 
 /**
  * CProjectDesignerOptions Class

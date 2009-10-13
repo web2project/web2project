@@ -8,8 +8,6 @@ if (!defined('W2P_BASE_DIR')) {
 ##
 
 require_once $AppUI->getLibraryClass('PEAR/Date');
-require_once $AppUI->getSystemClass('w2p');
-require_once $AppUI->getSystemClass('libmail');
 require_once $AppUI->getSystemClass('date');
 
 /**

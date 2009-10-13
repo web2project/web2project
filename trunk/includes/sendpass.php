@@ -8,7 +8,6 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-require_once ($AppUI->getSystemClass('libmail'));
 
 //
 // New password code based oncode from Mambo Open Source Core

@@ -9,11 +9,6 @@ if (!defined('W2P_BASE_DIR')) {
  *	@version $Revision$
  */
 
-require_once $AppUI->getSystemClass('w2p');
-require_once $AppUI->getSystemClass('libmail');
-require_once $AppUI->getModuleClass('companies');
-require_once $AppUI->getModuleClass('departments');
-
 /**
  * Contacts class
  */

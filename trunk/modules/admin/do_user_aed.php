@@ -3,8 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once ($AppUI->getSystemClass('libmail'));
-include $AppUI->getModuleClass('contacts');
 $del = isset($_REQUEST['del']) ? w2PgetParam($_REQUEST, 'del', false) : false;
 $contact_id = isset($_POST['contact_id']) ? w2PgetParam($_POST, 'contact_id', 0) : 0;
 $user_id = isset($_REQUEST['user_id']) ? w2PgetParam($_REQUEST, 'user_id', 0) : 0;
