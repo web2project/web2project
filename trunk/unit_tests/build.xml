@@ -75,12 +75,19 @@
 	<property name="svnUrl" value="https://web2project.svn.sourceforge.net/svnroot/web2project/${version}/" override="true"/>
 	<echo message="Working with ${svnUrl}..." />
 
+	<svncheckout
+		svnpath="/usr/bin/svn"
+		username="anony"
+		password="anony"
+		nocache="true"
+		repositoryurl="${svnUrl}"
+        todir="packaging/web2project-svn"/>
     <svnexport
         svnpath="/usr/bin/svn"
         repositoryurl="${svnUrl}"
         todir="packaging/web2project"/>
 
-    <delete dir="packaging/web2project/unit_tests/" />
+	<exec command="svn log -v packaging/web2project-svn > packaging/web2project/ChangeLog" dir="." passthru="true" />
 
     <!--
       TODO: This is duplicated from the lint target below and should be 
@@ -93,6 +100,7 @@
       </fileset>
     </phplint>
 
+    <delete dir="packaging/web2project/unit_tests/" />
     <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
       <fileset dir="packaging/">
         <include name="**/**" />
