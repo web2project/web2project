@@ -53,9 +53,6 @@ if (w2PgetConfig('activate_external_user_creation') != 'true') {
 	die('You should not access this file directly');
 }
 
-require_once $AppUI->getSystemClass('libmail');
-include $AppUI->getModuleClass('contacts');
-
 $username = w2PgetParam($_POST, 'user_username', 0);
 $contactListByUsername = CContact::getContactByUsername($username);
 
