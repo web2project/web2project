@@ -31,7 +31,7 @@
 		<td align="left">
 			<?php
 			if (version_compare(phpversion(), '5.0', '<=')) {
-				echo '<b class="error">'.$failedImg.' ('.phpversion().'): web2Project may not work. Please upgrade!</b>';
+        echo '<b class="error">'.$failedImg.' ('.phpversion().'): web2Project requires PHP 5.0+. Please upgrade!</b>';
 				$continue = false;
 			} else {
 				echo '<b class="ok">'.$okImg.'</b> <span class="item">('.phpversion().')</span>';
