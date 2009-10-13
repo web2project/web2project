@@ -26,6 +26,9 @@ function __autoload($class_name) {
     case 'customfields':
       require_once W2P_BASE_DIR.'/classes/CustomFields.class.php';
       break;
+    case 'mail':
+      require_once W2P_BASE_DIR.'/classes/libmail.class.php';
+      break;      
     default:
       if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
         require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';

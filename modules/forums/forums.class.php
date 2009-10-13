@@ -3,7 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once ($AppUI->getSystemClass('libmail'));
 require_once ($AppUI->getLibraryClass('PEAR/BBCodeParser'));
 $bbparser = new HTML_BBCodeParser();
 

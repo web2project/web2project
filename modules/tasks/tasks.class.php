@@ -3,8 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once $AppUI->getSystemClass('libmail');
-require_once $AppUI->getSystemClass('w2p');
 require_once $AppUI->getSystemClass('event_queue');
 require_once $AppUI->getSystemClass('date');
 

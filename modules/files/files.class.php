@@ -3,11 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once ($AppUI->getSystemClass('libmail'));
-require_once ($AppUI->getSystemClass('w2p'));
 require_once ($AppUI->getSystemClass('date'));
-require_once ($AppUI->getModuleClass('tasks'));
-require_once ($AppUI->getModuleClass('projects'));
+
 global $helpdesk_available;
 
 if ($helpdesk_available = $AppUI->isActiveModule('helpdesk')) {
