@@ -79,13 +79,13 @@ class DBQuery {
 	/**< Use the old style of fetch mode with ADODB */
 	public $_db = null;
 	/**< Handle to the database connection */
-    
-    /**
-     * Array of db function names
-     * @access private
-     * @var array
-     */
-    private $_db_funcs;
+
+	/**
+	 * Array of db function names
+	 * @access private
+	 * @var array
+	 */
+	private $_db_funcs;
 
 	/** DBQuery constructor
 	 *
@@ -101,7 +101,7 @@ class DBQuery {
 			$this->_table_prefix = w2PgetConfig('dbprefix', '');
 		}
 		$this->_db = isset($query_db) ? $query_db : $db;
-        $this->_db_funcs = array($this->dbfnNow());
+		$this->_db_funcs = array($this->dbfnNow());
 
 		$this->clear();
 	}
@@ -284,7 +284,7 @@ class DBQuery {
 	 * @param $field The field to update
 	 * @param $value The value to set $field to
 	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
-     * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being updated includes a function
+	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being updated includes a function
 	 */
 	public function addUpdate($field, $value = null, $set = false, $func = false) {
 		if (is_array($field) && $value == null) {
@@ -308,11 +308,11 @@ class DBQuery {
 				$this->addMap('update_list', $values[$i], $fields[$i]);
 			}
 		} else {
-            if (!$func) {
-                $this->addMap('update_list', $this->quote($value), $field);
-            } else {
-                $this->addMap('update_list', $value, $field);
-            }
+			if (!$func) {
+				$this->addMap('update_list', $this->quote($value), $field);
+			} else {
+				$this->addMap('update_list', $value, $field);
+			}
 		}
 		$this->type = 'update';
 	}
@@ -351,7 +351,7 @@ class DBQuery {
 	 * @param $table the name of the temporary table to create.
 	 */
 	public function createTemp($table) {
-		$this->type = 'create';
+		$this->type = 'createTemporary';
 		$this->create_table = $table;
 	}
 
@@ -414,13 +414,22 @@ class DBQuery {
 		$this->create_definition[] = array('action' => 'DROP', 'type' => '', 'spec' => $name);
 	}
 
-	/** Add an index
+	/** Add an index. Fields should be separated by commas to create a multi-field index
 	 */
 	public function addIndex($name, $type) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
 		}
-		$this->create_definition[] = array('action' => 'ADD', 'type' => 'INDEX', 'spec' => $name . ' ' . $type);
+		$this->create_definition[] = array('action' => 'ADD', 'type' => 'INDEX', 'spec' => '(' . $name . ') ' . $type);
+	}
+
+	/** Add a primary key attribute. Fields should be separated by commas to create a multi-field primary key
+	 */
+	public function addPrimary($name) {
+		if (!is_array($this->create_definition)) {
+			$this->create_definition = array();
+		}
+		$this->create_definition[] = array('action' => 'ADD', 'type' => 'PRIMARY KEY', 'spec' => '(' . $name . ')');
 	}
 
 	/** Drop an index
@@ -572,15 +581,15 @@ class DBQuery {
 	 * calculate the value itself.
 	 */
 	public function dbfnNow() {
-		$dbType = strtolower(trim(w2PgetConfig('dbtype'))); 
+		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
 
-	    switch ($dbType) {
-	        case 'oci8':
-	        case 'oracle':
-	            return 'current_date';
-	        default:										//mysql
-	            return 'NOW()';
-	    }
+		switch ($dbType) {
+			case 'oci8':
+			case 'oracle':
+				return 'current_date';
+			default: //mysql
+				return 'NOW()';
+		}
 	}
 
 	/** Add a date difference clause and name the result
@@ -591,20 +600,20 @@ class DBQuery {
 	 * 
 	 * @param	$date1			This is the starting date
 	 * @param	$date2			This is the ending date
-	*/
+	 */
 	public function dbfnDateDiff($date1 = '', $date2 = '') {
 		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
-		
+
 		$date1 = ($date1 == '') ? $this->dbfnNow() : $date1;
 		$date2 = ($date2 == '') ? $this->dbfnNow() : $date2;
 
-	    switch ($dbType) {
-	        case 'oci8':
-	        case 'oracle':
-						return $date1 . ' - ' . $date2;
-	        default:										//mysql
-						return 'DATEDIFF(' . $date1 . ', ' . $date2 . ')';
-	    }
+		switch ($dbType) {
+			case 'oci8':
+			case 'oracle':
+				return $date1 . ' - ' . $date2;
+			default: //mysql
+				return 'DATEDIFF(' . $date1 . ', ' . $date2 . ')';
+		}
 	}
 
 	/** Adds a given unit interval to a date
@@ -612,19 +621,19 @@ class DBQuery {
 	 * @param	$date			This is the date we want to add to
 	 * @param	$interval		This is how much units we will be adding to the date
 	 * @param	$unit			This is the type of unit we are adding to the date
-	*/
+	 */
 	public function dbfnDateAdd($date, $interval = 0, $unit = 'DAY') {
 		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
-		
+
 		$date = ($date == '') ? $this->dbfnNow() : $date;
 
-	    switch ($dbType) {
-	        case 'oci8':
-	        case 'oracle':
+		switch ($dbType) {
+			case 'oci8':
+			case 'oracle':
 				return '(' . $date . ' + interval \'' . $unit . '\' ' . $interval . ')';
-	        default:										//mysql
+			default: //mysql
 				return 'DATE_ADD(' . $date . ', INTERVAL ' . $interval . ' ' . $unit . ')';
-	    }
+		}
 	}
 
 	/** Set a row limit on the query
@@ -691,7 +700,7 @@ class DBQuery {
 			case 'delete':
 				$q = $this->prepareDelete();
 				break;
-			case 'create': // Create a temporary table
+			case 'createTemporary': // Create a temporary table
 				$s = $this->prepareSelect();
 				$q = 'CREATE TEMPORARY TABLE ' . $this->_table_prefix . $this->create_table;
 				if (!empty($this->create_definition))
@@ -701,16 +710,11 @@ class DBQuery {
 			case 'alter':
 				$q = $this->prepareAlter();
 				break;
-			case 'createPermanent': // Create a temporary table
-				//$s = $this->prepareSelect();
+			case 'createPermanent': // Create a permanent table
 				$q = 'CREATE TABLE ' . $this->_table_prefix . $this->create_table;
 				if (!empty($this->create_definition)) {
 					$q .= ' ' . $this->create_definition;
 				}
-				//$q .= ' ' . $s;
-				/*$q = array( 'table' => $this->_table_prefix . $this->create_table,
-				'definition' => $this->create_definition,
-				);*/
 				break;
 			case 'drop':
 				$q = 'DROP TABLE IF EXISTS ' . $this->_table_prefix . $this->create_table;
@@ -773,7 +777,7 @@ class DBQuery {
 				return $q;
 				break;
 			default:
-			//mySQL
+				//mySQL
 				$q = 'SELECT ';
 				if ($this->include_count) {
 					$q .= 'SQL_CALC_FOUND_ROWS ';
@@ -848,7 +852,7 @@ class DBQuery {
 					return false;
 				}
 				$q .= $this->_table_prefix . $table;
-		
+
 				$q .= ' SET ';
 				$sets = '';
 				foreach ($this->update_list as $field => $value) {
@@ -862,7 +866,7 @@ class DBQuery {
 				return $q;
 				break;
 			default:
-			//mySQL
+				//mySQL
 				$q = 'UPDATE ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
@@ -876,7 +880,7 @@ class DBQuery {
 					return false;
 				}
 				$q .= $this->quote_db($this->_table_prefix . $table);
-		
+
 				$q .= ' SET ';
 				$sets = '';
 				foreach ($this->update_list as $field => $value) {
@@ -910,7 +914,7 @@ class DBQuery {
 					return false;
 				}
 				$q .= $this->_table_prefix . $table;
-		
+
 				$fieldlist = '';
 				$valuelist = '';
 				foreach ($this->value_list as $field => $value) {
@@ -927,7 +931,7 @@ class DBQuery {
 				return $q;
 				break;
 			default:
-			//mySQL
+				//mySQL
 				$q = 'INSERT INTO ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
@@ -941,7 +945,7 @@ class DBQuery {
 					return false;
 				}
 				$q .= $this->quote_db($this->_table_prefix . $table);
-		
+
 				$fieldlist = '';
 				$valuelist = '';
 				foreach ($this->value_list as $field => $value) {
@@ -1011,7 +1015,7 @@ class DBQuery {
 					return false;
 				}
 				$q .= $this->_table_prefix . $table;
-		
+
 				$fieldlist = '';
 				$valuelist = '';
 				foreach ($this->value_list as $field => $value) {
@@ -1028,7 +1032,7 @@ class DBQuery {
 				return $q;
 				break;
 			default:
-			//mySQL
+				//mySQL
 				$q = 'REPLACE INTO ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
@@ -1042,7 +1046,7 @@ class DBQuery {
 					return false;
 				}
 				$q .= $this->quote_db($this->_table_prefix . $table);
-		
+
 				$fieldlist = '';
 				$valuelist = '';
 				foreach ($this->value_list as $field => $value) {
@@ -1082,7 +1086,7 @@ class DBQuery {
 				return $q;
 				break;
 			default:
-			//mySQL
+				//mySQL
 				$q = 'DELETE FROM ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
@@ -1141,7 +1145,7 @@ class DBQuery {
 		}
 		$ADODB_FETCH_MODE = $style;
 		$this->clearQuery();
-        
+
 		if ($q = $this->prepare()) {
 			/*echo('<pre>');
 			print_r('executing query(' . $q . ')');
@@ -1214,7 +1218,7 @@ class DBQuery {
 			}
 			unset($list);
 			$list = array();
-			$list = $indexed_list;			
+			$list = $indexed_list;
 		}
 		$this->clear();
 		return $list;
@@ -1594,11 +1598,11 @@ class DBQuery {
 			$values[$k] = $v;
 		}
 		foreach ($fields as $field) {
-            if (!in_array($values[$field], $this->_db_funcs)) {
-                $this->addInsert($field, $values[$field]);
-            } else {
-                $this->addInsert($field, $values[$field], false, true);
-            }
+			if (!in_array($values[$field], $this->_db_funcs)) {
+				$this->addInsert($field, $values[$field]);
+			} else {
+				$this->addInsert($field, $values[$field], false, true);
+			}
 		}
 
 		if (!$this->exec()) {
@@ -1635,11 +1639,11 @@ class DBQuery {
 		}
 		if (count($values)) {
 			foreach ($fields as $field) {
-                if (!in_array($values[$field], $this->_db_funcs)) {
-                    $this->addUpdate($field, $values[$field]);
-                } else {
-                    $this->addUpdate($field, $values[$field], false, true);
-                }
+				if (!in_array($values[$field], $this->_db_funcs)) {
+					$this->addUpdate($field, $values[$field]);
+				} else {
+					$this->addUpdate($field, $values[$field], false, true);
+				}
 			}
 			$ret = $this->exec();
 		}
@@ -1667,11 +1671,11 @@ class DBQuery {
 			$values[$k] = $v;
 		}
 		foreach ($fields as $field) {
-            if (!in_array($values[$field], $this->_db_funcs)) {
-			    $this->addInsert($field, $values[$field]);
-            } else {
-                $this->addInsert($field, $values[$field], false, true);
-            }
+			if (!in_array($values[$field], $this->_db_funcs)) {
+				$this->addInsert($field, $values[$field]);
+			} else {
+				$this->addInsert($field, $values[$field], false, true);
+			}
 		}
 		if (!$this->exec()) {
 			return false;
@@ -1708,14 +1712,14 @@ class DBQuery {
 			$values[$k] = $v;
 		}
 		if (count($values)) {
-            
+
 			foreach ($fields as $field) {
-                if (!in_array($values[$field], $this->_db_funcs)) {
-                    $this->addUpdate($field, $values[$field]);
-                } else {
-                    $this->addUpdate($field, $values[$field], false, true);
-                }
-			}            
+				if (!in_array($values[$field], $this->_db_funcs)) {
+					$this->addUpdate($field, $values[$field]);
+				} else {
+					$this->addUpdate($field, $values[$field], false, true);
+				}
+			}
 			return $this->exec();
 		} else {
 			return true;
@@ -1732,7 +1736,7 @@ class DBQuery {
 		// In php4 assignment does a shallow copy
 		// in php5 clone is required
 		if (version_compare(phpversion(), '5') >= 0) {
-			$newObj = clone($this);
+			$newObj = clone ($this);
 		} else {
 			$newObj = $this;
 		}
