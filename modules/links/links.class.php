@@ -20,6 +20,7 @@ class CLink extends CW2pObject {
 	public $link_description = null;
 	public $link_owner = null;
 	public $link_date = null;
+  public $link_icon = null;
 	public $link_category = null;
 
 	public function CLink() {
@@ -82,26 +83,56 @@ class CLink extends CW2pObject {
 
 	public function check() {
 		// ensure the integrity of some variables
-		$this->link_id = intval($this->link_id);
-		$this->link_parent = intval($this->link_parent);
-		$this->link_category = intval($this->link_category);
-		$this->link_task = intval($this->link_task);
-		$this->link_project = intval($this->link_project);
+    $errorArray = array();
+    $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-		return null; // object is ok
+    if ('' == $this->link_name) {
+      $errorArray['link_name'] = $baseErrorMsg . 'link name is not set';
+    }
+    if ('' == $this->link_url) {
+      $errorArray['link_url'] = $baseErrorMsg . 'link url is not set';
+    }
+    if (0 == (int) $this->link_owner) {
+      $errorArray['link_owner'] = $baseErrorMsg . 'link owner is not set';
+    }
+
+    return $errorArray;
 	}
 
-	public function delete() {
-		global $w2Pconfig;
-		$this->_message = "deleted";
+	public function delete(CAppUI $AppUI) {
+    $perms = $AppUI->acl();
 
-		// delete the main table reference
-		$q = new DBQuery();
-		$q->setDelete('links');
-		$q->addWhere('link_id = ' . (int)$this->link_id);
-		if (!$q->exec()) {
-			return db_error();
-		}
-		return null;
+    //if ($perms->checkModuleItem('links', 'delete', $this->link_id)) {
+      if ($msg = parent::delete()) {
+        return $msg;
+      }
+      return true;
+    //}
+    //return false;
 	}
+
+  public function store(CAppUI $AppUI) {
+    $perms = $AppUI->acl();
+    $stored = false;
+
+    $errorMsgArray = $this->check();
+
+    if (count($errorMsgArray) > 0) {
+      return $errorMsgArray;
+    }
+
+    if ($this->link_id && $perms->checkModuleItem('links', 'edit', $this->link_id)) {
+      if (($msg = parent::store())) {
+        return $msg;
+      }
+      $stored = true;
+    }
+    if (0 == $this->link_id && $perms->checkModuleItem('links', 'add')) {
+      if (($msg = parent::store())) {
+        return $msg;
+      }
+      $stored = true;
+    }
+    return $stored;
+  }
 }
