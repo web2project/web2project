@@ -20,7 +20,13 @@ function __autoload($class_name) {
   $name = strtolower($class_name);
 
   switch ($name) {
-  	case 'cw2pobject':
+  	case 'cappui':
+      require_once W2P_BASE_DIR . '/classes/ui.class.php';
+      break;      
+    case 'w2pacl':
+      require_once W2P_BASE_DIR . '/classes/permissions.class.php';
+      break;
+    case 'cw2pobject':
       require_once W2P_BASE_DIR.'/classes/w2p.class.php';
       break;
     case 'customfields':
@@ -28,6 +34,9 @@ function __autoload($class_name) {
       break;
     case 'mail':
       require_once W2P_BASE_DIR.'/classes/libmail.class.php';
+      break;
+    case 'dbquery':
+      require_once W2P_BASE_DIR.'/classes/query.class.php';
       break;      
     default:
       if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
