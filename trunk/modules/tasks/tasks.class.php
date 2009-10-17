@@ -74,6 +74,10 @@ class CTask extends CW2pObject {
 	public $task_contacts = null;
 	public $task_custom = null;
 	public $task_type = null;
+    public $task_created = null;
+    public $task_updated = null;
+    public $task_updator = null;
+    public $task_dep_reset_dates = null;
 
 	public function CTask() {
 		$this->CW2pObject('tasks', 'task_id');
