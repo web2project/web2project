@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$company_id = intval(w2PgetParam($_GET, 'company_id', 0));
+$company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
 // check permissions for this company
 $perms = &$AppUI->acl();
@@ -66,7 +66,7 @@ function testURL( x ) {
 	<input type="hidden" name="dosql" value="do_company_aed" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 
-	<table cellspacing="1" cellpadding="1" border="0" width='100%' class="std">
+	<table cellspacing="1" cellpadding="1" border="0" width="100%" class="std">
 		<tr>
 			<td>
 				<table>				

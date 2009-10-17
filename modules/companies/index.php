@@ -75,12 +75,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-if (isset($_GET['tab'])) {
-	$AppUI->setState('CompaniesIdxTab', w2PgetParam($_GET, 'tab', null));
-}
-$companiesTypeTab = defVal($AppUI->getState('CompaniesIdxTab'), 0);
-
-// $tabTypes = array(getCompanyTypeID('Client'), getCompanyTypeID('Supplier'), 0);
+$companiesTypeTab = $AppUI->processIntState('CompaniesIdxTab', $_GET, 'tab', 0);
 $companiesType = $companiesTypeTab;
 
 $tabBox = new CTabBox('?m=companies', W2P_BASE_DIR . '/modules/companies/', $companiesTypeTab);
