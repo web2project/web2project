@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- linksCreate.xml - Dataset to compare against after creating a link. -->
+<dataset>
+    <table name="links">
+        <column>link_id</column>
+        <column>link_url</column>
+        <column>link_project</column>
+        <column>link_task</column>
+        <column>link_name</column>
+        <column>link_parent</column>
+        <column>link_description</column>
+        <column>link_owner</column>
+        <column>link_date</column>
+        <column>link_icon</column>
+        <column>link_category</column>
+        <row>
+            <value>1</value>
+            <value>http://web2project.net</value>
+            <value>0</value>
+            <value>0</value>
+            <value>web2project homepage</value>
+            <value>0</value>
+            <value>This is web2project</value>
+            <value>1</value>
+            <value>2009-01-01</value>			
+            <value>obj/</value>
+            <value>0</value>
+        </row>
+    </table>
+</dataset>
