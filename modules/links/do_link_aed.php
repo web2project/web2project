@@ -14,7 +14,7 @@ if (!$obj->bind($_POST)) {
 $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
 
-if (is_string($result)) {
+if (is_array($result)) {
   $AppUI->setMsg($result, UI_MSG_ERROR);
   $AppUI->redirect();
 }

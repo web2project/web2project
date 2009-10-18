@@ -52,13 +52,14 @@ class CCompany extends CW2pObject {
 
 	// overload check
 	public function check() {
-		$this->company_id = intval($this->company_id);
+    $errorArray = array();
+    $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
 		if ('' == mb_trim($this->company_name)) {
-			return 'company name is NULL';
+      $errorArray['company_name'] = $baseErrorMsg . 'company name is not set';
 		}
 
-		return null; // object is ok
+		return $errorArray;
 	}
 
 	// overload canDelete
@@ -74,8 +75,8 @@ class CCompany extends CW2pObject {
     $perms = $AppUI->acl();
 
     /*
-     * TODO: This should probably use the canDelete method from above too to 
-     *   not only check permissions but to check dependencies... luckily the 
+     * TODO: This should probably use the canDelete method from above too to
+     *   not only check permissions but to check dependencies... luckily the
      *   previous version didn't check it either, so we're no worse off.
      */
     if ($perms->checkModuleItem('companies', 'delete', $this->company_id)) {
@@ -91,6 +92,13 @@ class CCompany extends CW2pObject {
     $perms = $AppUI->acl();
     $stored = false;
 
+    $errorMsgArray = $this->check();
+
+    if (count($errorMsgArray) > 0) {
+      return $errorMsgArray;
+    }
+
+    $this->company_id = (int) $this->company_id;
     /*
      * TODO: I don't like the duplication on each of these two branches, but I
      *   don't have a good idea on how to fix it at the moment...
@@ -115,7 +123,7 @@ class CCompany extends CW2pObject {
     }
     return $stored;
   }
-	
+
 	public function loadFull(CAppUI $AppUI, $companyId) {
 		$q = new DBQuery;
 		$q->addTable('companies');
@@ -152,7 +160,7 @@ class CCompany extends CW2pObject {
 		}
 		$q->addGroup('c.company_id');
 		$q->addOrder($orderby . ' ' . $orderdir);
-		
+
 		return $q->loadList();
 	}
 
@@ -169,16 +177,16 @@ class CCompany extends CW2pObject {
 		if ((int) $companyId > 0) {
 			$q->addWhere('pr.project_company = ' . (int) $companyId);
 		}
-		
+
 		$projObj = new CProject();
 		$projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-		
+
 		$q->addWhere('pr.project_active = '. (int) $active);
-		
+
 		if (strpos($fields, $sort) !== false) {
 			$q->addOrder($sort);
 		}
-		
+
 		return $q->loadList();
 	}
 	public static function getContacts($AppUI, $companyId) {
@@ -222,7 +230,7 @@ class CCompany extends CW2pObject {
 
 		$department = new CDepartment;
 		$department->setAllowedSQL($AppUI->user_id, $q);
-		
+
 		return $q->loadHashList('user_id');
 	}
 	public static function getDepartments($AppUI, $companyId) {
