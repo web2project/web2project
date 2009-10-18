@@ -24,9 +24,9 @@ class CLink extends CW2pObject {
 	public $link_category = null;
 
 	public function CLink() {
-		$this->CW2pObject('links', 'link_id');
+    parent::__construct('links', 'link_id');
 	}
-	
+
 	public function loadFull($link_id) {
 		$q = new DBQuery();
 		$q->addQuery('links.*');
@@ -45,7 +45,7 @@ class CLink extends CW2pObject {
 
 	public function getProjectTaskLinksByCategory($AppUI, $project_id = 0, $task_id = 0, $category_id = 0, $search = '') {
 		// load the following classes to retrieved denied records
-		
+
 		$project = new CProject();
 		$task = new CTask();
 
@@ -55,12 +55,12 @@ class CLink extends CW2pObject {
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addQuery('project_name, project_color_identifier, project_status');
 		$q->addQuery('task_name, task_id');
-		
+
 		$q->addTable('links');
-		
+
 		$q->leftJoin('users', 'u', 'user_id = link_owner');
 		$q->leftJoin('contacts', 'c', 'user_contact = contact_id');
-		
+
 		if ($search != '') {
 			$q->addWhere('(link_name LIKE \'%' . $search . '%\' OR link_description LIKE \'%' . $search . '%\')');
 		}
@@ -79,7 +79,7 @@ class CLink extends CW2pObject {
 		$q->addOrder('project_name, link_name');
 
 		return $q->loadList();
-	} 
+	}
 
 	public function check() {
 		// ensure the integrity of some variables
@@ -91,9 +91,6 @@ class CLink extends CW2pObject {
     }
     if ('' == $this->link_url) {
       $errorArray['link_url'] = $baseErrorMsg . 'link url is not set';
-    }
-    if (0 == (int) $this->link_owner) {
-      $errorArray['link_owner'] = $baseErrorMsg . 'link owner is not set';
     }
 
     return $errorArray;
@@ -115,6 +112,7 @@ class CLink extends CW2pObject {
     $perms = $AppUI->acl();
     $stored = false;
 
+    $this->link_owner = (int) $AppUI->user_id;
     $errorMsgArray = $this->check();
 
     if (count($errorMsgArray) > 0) {
