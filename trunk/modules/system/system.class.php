@@ -89,7 +89,7 @@ class CModule extends CW2pObject {
 	public $mod_main_class = null;
 
 	public function CModule() {
-		$this->CW2pObject('modules', 'mod_id');
+    parent::__construct('modules', 'mod_d');
 	}
 
 	public function install() {
@@ -131,7 +131,7 @@ class CModule extends CW2pObject {
 		$q->addOrder('mod_ui_order ASC');
 		$q->addOrder('mod_directory ASC');
 		$moduleList = $q->loadList();
-		
+
 		$i = 1;
 		foreach ($moduleList as $module) {
 			$q->clear();
@@ -140,7 +140,7 @@ class CModule extends CW2pObject {
 			$q->addWhere('mod_id = ' . $module['mod_id']);
 			$q->exec();
 			$i++;
-		}		
+		}
 	}
 
 	public function remove() {
@@ -217,7 +217,7 @@ class CModule extends CW2pObject {
 					$q->clear();
 					$idx = $idx + 2;
 				}
-			}		
+			}
 		}
 	}
 	// overridable functions
@@ -238,7 +238,7 @@ class CModule extends CW2pObject {
 class CConfig extends CW2pObject {
 
 	public function CConfig() {
-		$this->CW2pObject('config', 'config_id');
+    parent::__construct('config', 'config_id');
 	}
 
 	public function getChildren($id) {

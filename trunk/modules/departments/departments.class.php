@@ -27,7 +27,7 @@ class CDepartment extends CW2pObject {
 	public $dept_type = null;
 
 	public function CDepartment() {
-		$this->CW2pObject('departments', 'dept_id');
+    parent::__construct('departments', 'dept_id');
 	}
 
 	public function load($deptId) {
@@ -73,7 +73,7 @@ class CDepartment extends CW2pObject {
     $deptList = $q->loadList();
 
     foreach ($deptList as $dept) {
-    	$results[$dept['dept_id']] = $dept['dept_name']; 
+    	$results[$dept['dept_id']] = $dept['dept_name'];
     }
     return $results;
 	}
@@ -107,7 +107,7 @@ class CDepartment extends CW2pObject {
 		}
 		$q->addGroup('dept_id');
 		$q->addOrder($orderby . ' ' . $orderdir);
-		
+
 		return $q->loadList();
 	}
 
@@ -165,7 +165,7 @@ class CDepartment extends CW2pObject {
 		if (count($rows)) {
 			return 'deptWithSub';
 		}
-		
+
 		$q->addTable('project_departments', 'pd');
 		$q->addQuery('pd.project_id');
 		$q->addWhere('pd.department_id = ' . (int)$this->dept_id);
@@ -335,7 +335,7 @@ class CDepartment extends CW2pObject {
 		$q->addOrder('dept_name');
 		$department = new CDepartment;
 		$department->setAllowedSQL($AppUI->user_id, $q);
-		
+
 		return $q->loadHashList('dept_id');
 	}
 	public static function getContactList($AppUI, $deptId) {

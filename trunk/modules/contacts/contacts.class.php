@@ -57,11 +57,11 @@ class CContact extends CW2pObject {
 	public $contact_updatekey = null;
 	public $contact_lastupdate = null;
 	public $contact_updateasked = null;
-	
+
 	public $contact_methods = array();
 
 	public function CContact() {
-		$this->CW2pObject('contacts', 'contact_id');
+    parent::__construct('contacts', 'contact_id');
 	}
 
 	/*
@@ -83,7 +83,7 @@ class CContact extends CW2pObject {
 			$q->loadObject($this);
 		}
 	}
-	
+
 	public function store() {
 		/*
 		 *  This  validates that any Contact saved will have a Display Name as
@@ -276,7 +276,7 @@ class CContact extends CW2pObject {
 	}
 
 	/**
-	 **	Overload of the w2PObject::getAllowedRecords 
+	 **	Overload of the w2PObject::getAllowedRecords
 	 **	to ensure that the allowed projects are owned by allowed companies.
 	 **
 	 **	@author	handco <handco@sourceforge.net>
@@ -318,13 +318,13 @@ class CContact extends CW2pObject {
 	}
 
 	public static function searchContacts($AppUI, $where = '', $searchString = '') {
-		$showfields = array('contact_address1' => 'contact_address1', 
-			'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city', 
-			'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip', 
-			'contact_country' => 'contact_country', 'contact_company' => 'contact_company', 
-			'company_name' => 'company_name', 'dept_name' => 'dept_name', 
-			'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2', 
-			'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax', 
+		$showfields = array('contact_address1' => 'contact_address1',
+			'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city',
+			'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip',
+			'contact_country' => 'contact_country', 'contact_company' => 'contact_company',
+			'company_name' => 'company_name', 'dept_name' => 'dept_name',
+			'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2',
+			'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax',
 			'contact_email' => 'contact_email', 'contact_job'=>'contact_job');
 		$additional_filter = '';
 
@@ -425,7 +425,7 @@ class CContact extends CW2pObject {
 		$q->addTable('contacts');
 		$q->addQuery('contact_id');
 		$q->addWhere("contact_updatekey= '$updateKey'");
-		
+
 		return $q->loadResult();
 	}
 	public static function getProjects($contactId) {
@@ -434,7 +434,7 @@ class CContact extends CW2pObject {
 		$q->addTable('project_contacts', 'pc');
 		$q->addJoin('projects', 'p', 'p.project_id = pc.project_id', 'inner');
 		$q->addWhere("contact_id =  $contactId");
-									
+
 		return $q->loadList();
 	}
 

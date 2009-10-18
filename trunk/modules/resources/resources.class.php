@@ -18,7 +18,7 @@ class CResource extends CW2pObject {
 	public $resource_note = null;
 
 	public function CResource() {
-		parent::CW2pObject('resources', 'resource_id');
+    parent::__construct('resources', 'resource_id');
 	}
 
 	public function &loadTypes() {

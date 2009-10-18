@@ -20,7 +20,7 @@ class CProjectDesignerOptions extends CW2pObject {
 	public $pd_option_view_files = null;
 
 	public function CProjectDesignerOptions() {
-		$this->CW2pObject('project_designer_options', 'pd_option_id');
+    parent::__construct('project_designer_options', 'pd_option_id');
 	}
 
 	public function store() {
