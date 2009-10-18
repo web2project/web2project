@@ -80,7 +80,7 @@ class CTask extends CW2pObject {
     public $task_dep_reset_dates = null;
 
 	public function CTask() {
-		$this->CW2pObject('tasks', 'task_id');
+    parent::__construct('tasks', 'task_id');
 	}
 
 	public function __toString() {
@@ -329,7 +329,7 @@ class CTask extends CW2pObject {
 
 			/*
 			* Update allocated hours based on children with duration type of 'days'
-			* use the daily working hours instead of the full 24 hours to calculate 
+			* use the daily working hours instead of the full 24 hours to calculate
 			* dynamic task duration!
 			*/
 			$q->addTable('tasks');
@@ -1343,7 +1343,7 @@ class CTask extends CW2pObject {
 	*		  Update this task's dates in the DB.
 	*		  start date:		  based on latest end date of dependencies
 	*		  end date:			  based on start date + appropriate task time span
-	*		   
+	*
 	*		  @param				integer task_id of task to update
 	*/
 	public function update_dep_dates($task_id) {
@@ -1401,7 +1401,7 @@ class CTask extends CW2pObject {
 	/*
 	** Time related calculations have been moved to /classes/date.class.php
 	** some have been replaced with more _robust_ functions
-	** 
+	**
 	** Affected functions:
 	** prev_working_day()
 	** next_working_day()
@@ -1414,12 +1414,12 @@ class CTask extends CW2pObject {
 	*/
 
 	/*
-	
+
 	Get the last end date of all of this task's dependencies
-	
+
 	@param Task object
 	returns FMT_DATETIME_MYSQL date
-	
+
 	*/
 
 	public function get_deps_max_end_date($taskObj) {
@@ -1683,7 +1683,7 @@ class CTask extends CW2pObject {
 			}
 
 			/*
-			* provide actual assignment charge, individual chargeMax 
+			* provide actual assignment charge, individual chargeMax
 			* and freeCapacity of users' assignments to tasks
 			*/
 			$q->addTable('users', 'u');
@@ -1920,7 +1920,7 @@ class CTask extends CW2pObject {
 		$repeat = w2PgetConfig('task_reminder_repeat', 100);
 
 		/*
-		* If we don't need any arguments (and we don't) then we set this to null. 
+		* If we don't need any arguments (and we don't) then we set this to null.
 		* We can't just put null in the call to add as it is passed by reference.
 		*/
 		$args = null;
@@ -1929,7 +1929,7 @@ class CTask extends CW2pObject {
 		$old_reminders = $eq->find('tasks', 'remind', $this->task_id);
 		if (count($old_reminders)) {
 			/*
-			* It shouldn't be possible to have more than one reminder, 
+			* It shouldn't be possible to have more than one reminder,
 			* but if we do, we may as well clean them up now.
 			*/
 			foreach ($old_reminders as $old_id => $old_data) {
@@ -2231,7 +2231,7 @@ class CTaskLog extends CW2pObject {
 	public $task_log_updated = null;
 
 	public function CTaskLog() {
-		$this->CW2pObject('task_log', 'task_log_id');
+    parent::__construct('task_log', 'task_log_id');
 
 		// ensure changes to checkboxes are honoured
 		$this->task_log_problem = intval($this->task_log_problem);
@@ -2389,8 +2389,8 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		if (!$end_date) {
 			/*
 			** end date calc has been moved to calcEndByStartAndDuration()-function
-			** called from array_csort and tasks.php 
-			** perhaps this fallback if-clause could be deleted in the future, 
+			** called from array_csort and tasks.php
+			** perhaps this fallback if-clause could be deleted in the future,
 			** didn't want to remove it shortly before the 2.0.2
 			*/
 			$end_date = new CDate('0000-00-00 00:00:00');
@@ -2569,15 +2569,15 @@ function array_csort() { //coded by Ichier2003
 
 				/* we have to calculate the end_date via start_date+duration for
 				** end='0000-00-00 00:00:00' before sorting, see mantis #1509:
-				
+
 				** Task definition writes the following to the DB:
 				** A without start date: start = end = NULL
-				** B with start date and empty end date: start = startdate, 
+				** B with start date and empty end date: start = startdate,
 				end = '0000-00-00 00:00:00'
 				** C start + end date: start= startdate, end = end date
-				
-				** A the end_date for the middle task (B) is ('dynamically') calculated on display 
-				** via start_date+duration, it may be that the order gets wrong due to the fact 
+
+				** A the end_date for the middle task (B) is ('dynamically') calculated on display
+				** via start_date+duration, it may be that the order gets wrong due to the fact
 				** that sorting has taken place _before_.
 				*/
 				if ($marray[$j]['task_end_date'] == '0000-00-00 00:00:00') {
@@ -2600,7 +2600,7 @@ function array_csort() { //coded by Ichier2003
 /*
 ** Calc End Date via Startdate + Duration
 ** @param array task	A DB row from the earlier fetched tasklist
-** @return string	Return calculated end date in MySQL-TIMESTAMP format	
+** @return string	Return calculated end date in MySQL-TIMESTAMP format
 */
 
 function calcEndByStartAndDuration($task) {
@@ -2662,7 +2662,7 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
  * canTaskAccess()
  * Used to check if a user has task_access to see the task in task list context
  * (This function was optimized to try to use the DB the least possible)
- * 
+ *
  * @param mixed $task_id
  * @param mixed $task_access
  * @param mixed $task_owner

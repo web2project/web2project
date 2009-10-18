@@ -43,7 +43,7 @@ class CFile extends CW2pObject {
 		if ($helpdesk_available) {
 			$this->file_helpdesk_item = null;
 		}
-		$this->CW2pObject('files', 'file_id');
+    parent::__construct('files', 'file_id');
 	}
 
 	public function store() {
@@ -153,7 +153,7 @@ class CFile extends CW2pObject {
 
 		return true;
 	}
-	
+
 	public function cancelCheckout($fileId) {
 		$q = new DBQuery;
 		$q->addTable('files');
@@ -162,7 +162,7 @@ class CFile extends CW2pObject {
 		$q->exec();
 
 		return true;
-		
+
 	}
 
 	public function delete() {
@@ -310,7 +310,7 @@ class CFile extends CW2pObject {
   		// remove punctuation and parse the strings
   		$x = str_replace(array('.', ',', '!', '@', '(', ')'), ' ', $x);
   		$warr = split('[[:space:]]', $x);
-  
+
   		$wordarr = array();
   		$nwords = count($warr);
   		for ($x = 0; $x < $nwords; $x++) {
@@ -332,13 +332,13 @@ class CFile extends CW2pObject {
   		// insert the strings into the table
   		while (list($key, $val) = each($wordarr)) {
   			$q = new DBQuery;
-  			$q->addTable('files_index');  
+  			$q->addTable('files_index');
   			$q->addReplace('file_id', $this->file_id);
   			$q->addReplace('word', $key);
   			$q->addReplace('word_placement', $val);
   			$q->exec();
   			$q->clear();
-  		}      
+  		}
     }
 		return $nwords_indexed;
 	}
@@ -352,20 +352,20 @@ class CFile extends CW2pObject {
   		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
   			$this->_hditem = new CHelpDeskItem();
   			$this->_hditem->load($this->file_helpdesk_item);
-  
+
   			$task_log = new CHDTaskLog();
   			$task_log_help_desk_id = $this->_hditem->item_id;
   			// send notifcation about new log entry
   			// 2 = TASK_LOG
   			$this->_hditem->notify(2, $task_log->task_log_id);
-  
+
   		}
   		//if no project specified than we will not do anything
   		if ($this->file_project != 0) {
   			$this->_project = new CProject();
   			$this->_project->load($this->file_project);
   			$mail = new Mail;
-  
+
   			if ($this->file_task == 0) { //notify all developers
   				$mail->Subject($this->_project->project_name . '::' . $this->file_name, $locale_char_set);
   			} else { //notify all assigned users
@@ -373,22 +373,22 @@ class CFile extends CW2pObject {
   				$this->_task->load($this->file_task);
   				$mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
   			}
-  
+
   			$body = $AppUI->_('Project') . ': ' . $this->_project->project_name;
   			$body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id;
-  
+
   			if (intval($this->_task->task_id) != 0) {
   				$body .= "\n\n" . $AppUI->_('Task') . ':    ' . $this->_task->task_name;
   				$body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id;
   				$body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->_task->task_description;
-  
+
   				//preparing users array
   				$q = new DBQuery;
   				$q->addTable('tasks', 't');
   				$q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as
   						 creator_first_name, cc.contact_last_name as creator_last_name,
   						 oc.contact_email as owner_email, oc.contact_first_name as owner_first_name,
-  						 oc.contact_last_name as owner_last_name, a.user_id as assignee_id, 
+  						 oc.contact_last_name as owner_last_name, a.user_id as assignee_id,
   						 ac.contact_email as assignee_email, ac.contact_first_name as
   						 assignee_first_name, ac.contact_last_name as assignee_last_name');
   				$q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
@@ -415,10 +415,10 @@ class CFile extends CW2pObject {
   				$body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $this->file_id;
   				$body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->file_description;
   			}
-  
+
   			//send mail
   			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-  
+
   			if (intval($this->_task->task_id) != 0) {
   				foreach ($this->_users as $row) {
   					if ($row['assignee_id'] != $AppUI->user_id) {
@@ -451,7 +451,7 @@ class CFile extends CW2pObject {
         $this->_project = new CProject();
         $this->_project->load($this->file_project);
         $mail = new Mail;
-  
+
         if ($this->file_task == 0) { //notify all developers
           $mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name, $locale_char_set);
         } else { //notify all assigned users
@@ -459,15 +459,15 @@ class CFile extends CW2pObject {
           $this->_task->load($this->file_task);
           $mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
         }
-  
+
         $body = $AppUI->_('Project') . ': ' . $this->_project->project_name;
         $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id;
-  
+
         if (intval($this->_task->task_id) != 0) {
           $body .= "\n\n" . $AppUI->_('Task') . ':    ' . $this->_task->task_name;
           $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id;
           $body .= "\n" . $AppUI->_('Description') . ":\n" . $this->_task->task_description;
-  
+
           $q = new DBQuery;
           $q->addTable('project_contacts', 'pc');
           $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
@@ -490,22 +490,22 @@ class CFile extends CW2pObject {
           $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
           $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
           $q->addWhere('pc.project_id = ' . (int)$this->file_project);
-  
+
           $this->_users = $q->loadList();
           $q->clear();
         }
-  
+
         $body .= "\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
         if ($this->_message != 'deleted') {
           $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $this->file_id;
           $body .= "\n" . $AppUI->_('Description') . ":\n" . $this->file_description;
         }
-  
+
         //send mail
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-  
+
         foreach ($this->_users as $row) {
-  
+
           if ($mail->ValidEmail($row['contact_email'])) {
             $mail->To($row['contact_email'], true);
             $mail->Send();

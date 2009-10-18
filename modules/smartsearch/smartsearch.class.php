@@ -24,10 +24,6 @@ class smartsearch {
 	public $display_val = '';
 	public $search_options = null;
 
-	public function smartsearch() {
-		return null;
-	}
-
 	public function fetchResults(&$permissions, &$record_count) {
 		global $AppUI;
 		$q = $this->_buildQuery();

@@ -19,7 +19,7 @@ class CUser extends CW2pObject {
 	public $user_signature = null;
 
 	public function CUser() {
-		$this->CW2pObject('users', 'user_id');
+    parent::__construct('users', 'user_id');
 	}
 
 	public function check() {
@@ -240,7 +240,7 @@ class CUser extends CW2pObject {
 		if ($result) {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Tasks') . ' ' . $AppUI->_('pinned') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
-		
+
 		$result = parent::delete($oid);
 		if (!$result) {
 			$acl = &$GLOBALS['AppUI']->acl();
@@ -279,12 +279,12 @@ class CUser extends CW2pObject {
 		$q->loadObject($this, true, false);
 	}
   public function hook_cron() {
-    $q = new DBQuery;   
+    $q = new DBQuery;
     $q->setDelete('sessions');
     $q->addWhere("session_user ='' OR session_user IS NULL");
     $q->exec();
     $q->clear();
-    
+
     return true;
   }
 	public function validatePassword($userId, $password) {
@@ -303,17 +303,17 @@ class CUser extends CW2pObject {
 		$q->addTable('user_feeds');
 		$q->addWhere("feed_token = '$token'");
 		$userId = $q->loadResult();
-		
+
 		return $userId;
 	}
 	public static function generateUserToken($userId, $token = '') {
-		$q = new DBQuery;		
+		$q = new DBQuery;
 		$q->setDelete('user_feeds');
 		$q->addWhere('feed_user = ' . $userId);
 		$q->addWhere("feed_token = '$token'");
 		$q->exec();
 		$q->clear();
-		
+
 		$token = md5(time().$userId.$token.time());
 		$q->addTable('user_feeds');
 		$q->addInsert('feed_user', $userId);
@@ -341,8 +341,8 @@ class CUser extends CW2pObject {
 		$q->addQuery('user_username');
 		$q->addWhere("user_username = '$username'");
 		$users = $q->loadList();
-		
-		return (count($users) > 0) ? true : false; 
+
+		return (count($users) > 0) ? true : false;
 	}
 	public static function getLogs($userId, $startDate, $endDate) {
 		$q = new DBQuery;
