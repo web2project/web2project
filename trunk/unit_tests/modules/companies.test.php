@@ -1,6 +1,6 @@
 <?php
 /**
- * Necessary global variables 
+ * Necessary global variables
  */
 global $db;
 global $ADODB_FETCH_MODE;
@@ -27,29 +27,29 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
 
 /**
  * CompaniesTest Class.
- * 
+ *
  * Class to test the companies class
  * @author Trevor Morse<trevor.morse@gmail.com>
  * @package web2project
  * @subpackage unit_tests
  */
-class Companies_Test extends PHPUnit_Extensions_Database_TestCase 
+class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 {
-    
+
     protected $backupGlobals = FALSE;
-        
+
     /**
      * Return database connection for tests
      */
     protected function getConnection()
     {
-        $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' . 
-                       w2PgetConfig('dbhost') . ';dbname=' . 
-                       w2PgetConfig('dbname'), 
+        $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' .
+                       w2PgetConfig('dbhost') . ';dbname=' .
+                       w2PgetConfig('dbname'),
                        w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
         return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
     }
-    
+
     /**
      * Set up default dataset for testing
      */
@@ -65,10 +65,10 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests the Attributes of a new Companies object.
      */
-    public function testNewCompanyAttributes() 
-    {        
+    public function testNewCompanyAttributes()
+    {
         $company = new CCompany();
-        
+
         $this->assertType('CCompany', $company);
         $this->assertObjectHasAttribute('company_id',           $company);
         $this->assertObjectHasAttribute('company_name',         $company);
@@ -87,18 +87,18 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('company_description',  $company);
         $this->assertObjectHasAttribute('company_type',         $company);
         $this->assertObjectHasAttribute('company_custom',       $company);
-        $this->assertObjectHasAttribute('_tbl_prefix',          $company);   
+        $this->assertObjectHasAttribute('_tbl_prefix',          $company);
         $this->assertObjectHasAttribute('_tbl',                 $company);
         $this->assertObjectHasAttribute('_tbl_key',             $company);
         $this->assertObjectHasAttribute('_error',               $company);
         $this->assertObjectHasAttribute('_query',               $company);
     }
-    
+
     /**
      * Tests the Attribute Values of a new Company object.
      */
-    public function testNewCompanyAttributeValues() 
-    {        
+    public function testNewCompanyAttributeValues()
+    {
         $company = new CCompany();
         $this->assertType('CCompany', $company);
         $this->assertNull($company->company_id);
@@ -118,28 +118,28 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($company->company_description);
         $this->assertNull($company->company_type);
         $this->assertNull($company->company_custom);
-        $this->assertEquals('',             $company->_tbl_prefix); 
+        $this->assertEquals('',             $company->_tbl_prefix);
         $this->assertEquals('companies',    $company->_tbl);
         $this->assertEquals('company_id',   $company->_tbl_key);
         $this->assertEquals('',             $company->_error);
         $this->assertType('DBQuery',        $company->_query);
     }
-    
+
     /**
      * Tests that the proper error message is returned when a company
      * is attempted to be created without an id.
      */
-    public function testCreateCompanyNoID() 
-    {        
+    public function testCreateCompanyNoID()
+    {
 			$this->markTestSkipped('This test has been deprecated by casting the company_id via intval().');
     }
-    
+
 /**
      * Tests that the proper error message is returned when a company
      * is attempted to be created without a name.
      */
-    public function testCreateCompanyNoName() 
-    {        
+    public function testCreateCompanyNoName()
+    {
         global $AppUI;
 
         $company = new CCompany();
@@ -164,24 +164,24 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
             'company_description'   => 'This is a company.'
         );
         $company->bind($post_array);
-        $msg = $company->store($AppUI);
+        $errorArray = $company->store($AppUI);
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertEquals('CCompany::store-check failed company name is NULL', $msg);
+        $this->assertArrayHasKey('company_name', $errorArray);
 
         /**
          * Verify that company id was not set
          */
         $this->assertEquals(0, $company->company_id);
     }
-    
+
     /**
      * Tests the proper creation of a company
      */
-    public function testCreateCompany() 
-    {        
+    public function testCreateCompany()
+    {
         global $AppUI;
         $company = new CCompany();
 
@@ -206,7 +206,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         );
         $company->bind($post_array);
         $result = $company->store($AppUI);
-        
+
         $this->assertTrue($result);
         $this->assertEquals('UnitTestCompany',          $company->company_name);
         $this->assertEquals('web2project@example.org',  $company->company_email);
@@ -223,19 +223,19 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                          $company->company_owner);
         $this->assertEquals(2,                          $company->company_type);
         $this->assertEquals('This is a company.' ,      $company->company_description);
-        
-        $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testCreateCompany.xml');        
+
+        $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testCreateCompany.xml');
         $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
     }
-    
-    /** 
+
+    /**
      * Tests loading the Company Object
      */
-    public function testLoad() 
-    {        
+    public function testLoad()
+    {
         $company = new CCompany();
         $company->load(1);
-        
+
         $this->assertEquals('UnitTestCompany',          $company->company_name);
         $this->assertEquals('web2project@example.org',  $company->company_email);
         $this->assertEquals('1.999.999.9999',           $company->company_phone1);
@@ -252,17 +252,17 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(2,                          $company->company_type);
         $this->assertEquals('This is a company.' ,      $company->company_description);
     }
-    
+
     /**
      * Tests loading the Company Object
      */
-    public function testLoadFull() 
-    {        
+    public function testLoadFull()
+    {
         global $AppUI;
         $company = new CCompany();
 
         $company->loadFull($AppUI, 1);
-        
+
         $this->assertEquals('UnitTestCompany',          $company->company_name);
         $this->assertEquals('web2project@example.org',  $company->company_email);
         $this->assertEquals('1.999.999.9999',           $company->company_phone1);
@@ -283,16 +283,16 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Admin',                    $company->contact_first_name);
         $this->assertEquals('Person',                   $company->contact_last_name);
     }
-    
+
     /**
      * Tests the update of a company
      */
-    public function testUpdateCompany() 
-    {       
+    public function testUpdateCompany()
+    {
         global $AppUI;
         $company = new CCompany();
         $company->load(1);
-        
+
         $post_array = array(
             'dosql'                 => 'do_company_aed',
             'company_id'            => $company_id,
@@ -312,10 +312,10 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
             'company_type'          => 2,
             'company_description'   => 'This is an updated company.'
         );
-        
+
         $company->bind($post_array);
         $company->store($AppUI);
-        
+
         $this->assertEquals('UpdatedCompany',               $company->company_name);
         $this->assertEquals('updated@example.org',          $company->company_email);
         $this->assertEquals('1.777.999.9999',               $company->company_phone1);
@@ -331,41 +331,41 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                              $company->company_owner);
         $this->assertEquals(2,                              $company->company_type);
         $this->assertEquals('This is an updated company.',  $company->company_description);
-        
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateCompany.xml');        
+
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateCompany.xml');
         $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
     }
-    
+
     /**
      * Tests the delete of a company
      */
-    public function testDeleteCompany() 
-    {              
+    public function testDeleteCompany()
+    {
         global $AppUI;
 
         $company = new CCompany();
         $company->company_id = 1;
         $msg = $company->delete($AppUI);
         $this->assertEquals('noDeleteRecord: Projects, Departments', $msg);
-        
+
         $company->company_id = 3;
-        $result = $company->delete($AppUI);      
+        $result = $company->delete($AppUI);
         $this->assertTrue($result);
-        
+
         $result = $company->load(3);
         $this->assertFalse($result);
-        
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testDeleteCompany.xml');        
+
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testDeleteCompany.xml');
         $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
     }
-    
-    /** 
+
+    /**
      * Tests loading list of companies with no criteria
      */
-    public function testGetCompanyListNoCriteria() 
-    {         
+    public function testGetCompanyListNoCriteria()
+    {
         global $AppUI;
-        
+
         $company = new CCompany();
 
         $companies = $company->getCompanyList($AppUI);
@@ -375,7 +375,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(2,                             $companies[0]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[0]['company_name']);
         $this->assertEquals(1,                             $companies[0]['company_type']);
-        $this->assertEquals('This is a company.',          $companies[0]['company_description']); 
+        $this->assertEquals('This is a company.',          $companies[0]['company_description']);
         $this->assertEquals(1,                             $companies[0]['countp']);
         $this->assertEquals(0,                             $companies[0]['inactive']);
         $this->assertEquals('Admin',                       $companies[0]['contact_first_name']);
@@ -383,7 +383,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(3,                             $companies[1]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[1]['company_name']);
         $this->assertEquals(2,                             $companies[1]['company_type']);
-        $this->assertEquals('This is a company.',          $companies[1]['company_description']); 
+        $this->assertEquals('This is a company.',          $companies[1]['company_description']);
         $this->assertEquals(0,                             $companies[1]['countp']);
         $this->assertEquals(0,                             $companies[1]['inactive']);
         $this->assertEquals('Admin',                       $companies[1]['contact_first_name']);
@@ -391,7 +391,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                             $companies[2]['company_id']);
         $this->assertEquals('UnitTestCompany',             $companies[2]['company_name']);
         $this->assertEquals(2,                             $companies[2]['company_type']);
-        $this->assertEquals('This is a company.',          $companies[2]['company_description']); 
+        $this->assertEquals('This is a company.',          $companies[2]['company_description']);
         $this->assertEquals(1,                             $companies[2]['countp']);
         $this->assertEquals(0,                             $companies[2]['inactive']);
         $this->assertEquals('Admin',                       $companies[2]['contact_first_name']);
@@ -399,17 +399,17 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(4,                             $companies[3]['company_id']);
         $this->assertEquals('UpdatedCompany',              $companies[3]['company_name']);
         $this->assertEquals(2,                             $companies[3]['company_type']);
-        $this->assertEquals('This is an updated company.', $companies[3]['company_description']); 
+        $this->assertEquals('This is an updated company.', $companies[3]['company_description']);
         $this->assertEquals(0,                             $companies[3]['countp']);
         $this->assertEquals(0,                             $companies[3]['inactive']);
         $this->assertEquals('Admin',                       $companies[3]['contact_first_name']);
         $this->assertEquals('Person',                      $companies[3]['contact_last_name']);
     }
-     
-    /** 
+
+    /**
     * Tests loading list of companies by Type
     */
-    public function testGetCompanyListByTypeNoMatch() 
+    public function testGetCompanyListByTypeNoMatch()
     {
         global $AppUI;
 
@@ -420,11 +420,11 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
     }
-     
-    /** 
+
+    /**
     * Tests loading list of companies by Type
     */
-    public function testGetCompanyListByType() 
+    public function testGetCompanyListByType()
     {
         global $AppUI;
 
@@ -437,17 +437,17 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(2,                             $companies[0]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[0]['company_name']);
         $this->assertEquals(1,                             $companies[0]['company_type']);
-        $this->assertEquals('This is a company.',          $companies[0]['company_description']); 
+        $this->assertEquals('This is a company.',          $companies[0]['company_description']);
         $this->assertEquals(1,                             $companies[0]['countp']);
         $this->assertEquals(0,                             $companies[0]['inactive']);
         $this->assertEquals('Admin',                       $companies[0]['contact_first_name']);
         $this->assertEquals('Person',                      $companies[0]['contact_last_name']);
-    } 
-     
-    /** 
+    }
+
+    /**
     * Tests loading list of companies by search string
     */
-    public function testGetCompanyListByStringNoMatch() 
+    public function testGetCompanyListByStringNoMatch()
     {
         global $AppUI;
 
@@ -458,11 +458,11 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
     }
-     
-    /** 
+
+    /**
     * Tests loading list of companies by owner id
     */
-    public function testGetCompanyListByOwnerIDNoMatch() 
+    public function testGetCompanyListByOwnerIDNoMatch()
     {
         global $AppUI;
 
@@ -473,11 +473,11 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
     }
-     
-    /** 
+
+    /**
     * Tests loading list of companies by owner id
     */
-    public function testGetCompanyListByOwnerID() 
+    public function testGetCompanyListByOwnerID()
     {
         global $AppUI;
 
@@ -490,7 +490,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(2,                             $companies[0]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[0]['company_name']);
         $this->assertEquals(1,                             $companies[0]['company_type']);
-        $this->assertEquals('This is a company.',          $companies[0]['company_description']); 
+        $this->assertEquals('This is a company.',          $companies[0]['company_description']);
         $this->assertEquals(1,                             $companies[0]['countp']);
         $this->assertEquals(0,                             $companies[0]['inactive']);
         $this->assertEquals('Admin',                       $companies[0]['contact_first_name']);
@@ -498,7 +498,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(3,                             $companies[1]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[1]['company_name']);
         $this->assertEquals(2,                             $companies[1]['company_type']);
-        $this->assertEquals('This is a company.',          $companies[1]['company_description']); 
+        $this->assertEquals('This is a company.',          $companies[1]['company_description']);
         $this->assertEquals(0,                             $companies[1]['countp']);
         $this->assertEquals(0,                             $companies[1]['inactive']);
         $this->assertEquals('Admin',                       $companies[1]['contact_first_name']);
@@ -506,7 +506,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                             $companies[2]['company_id']);
         $this->assertEquals('UnitTestCompany',             $companies[2]['company_name']);
         $this->assertEquals(2,                             $companies[2]['company_type']);
-        $this->assertEquals('This is a company.',          $companies[2]['company_description']); 
+        $this->assertEquals('This is a company.',          $companies[2]['company_description']);
         $this->assertEquals(1,                             $companies[2]['countp']);
         $this->assertEquals(0,                             $companies[2]['inactive']);
         $this->assertEquals('Admin',                       $companies[2]['contact_first_name']);
@@ -514,17 +514,17 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(4,                             $companies[3]['company_id']);
         $this->assertEquals('UpdatedCompany',              $companies[3]['company_name']);
         $this->assertEquals(2,                             $companies[3]['company_type']);
-        $this->assertEquals('This is an updated company.', $companies[3]['company_description']); 
+        $this->assertEquals('This is an updated company.', $companies[3]['company_description']);
         $this->assertEquals(0,                             $companies[3]['countp']);
         $this->assertEquals(0,                             $companies[3]['inactive']);
         $this->assertEquals('Admin',                       $companies[3]['contact_first_name']);
         $this->assertEquals('Person',                      $companies[3]['contact_last_name']);
     }
-     
+
     /**
     * Tests loading list of Projects for this company.
     */
-    public function testGetProjects() 
+    public function testGetProjects()
     {
         global $AppUI;
 
@@ -541,16 +541,16 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Admin',           $projects[0]['contact_first_name']);
         $this->assertEquals('Person',          $projects[0]['contact_last_name']);
     }
-     
+
     /**
     * Tests loading list of Contacts for this company.
     */
-    public function testGetContacts() 
+    public function testGetContacts()
     {
         global $AppUI;
 
         $contacts = CCompany::getContacts($AppUI, 1);
-        
+
         /**
          * getContacts returns both an associative array as well as a indexed array
          * so we need to check both to make sure functionality depending on either does
@@ -714,13 +714,13 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('c2skype',                  $contacts[2]['36']);
         $this->assertEquals('c2google',                 $contacts[2]['37']);
         $this->assertEquals('',                         $contacts[2]['38']);
-        
+
     }
-     
+
     /**
     * Tests loading list of Users for this company.
     */
-    public function testGetUsers() 
+    public function testGetUsers()
     {
         global $AppUI;
 
@@ -750,11 +750,11 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Contact',          $users[4][2]);
         $this->assertEquals('Number 3',         $users[4][3]);
     }
-     
+
     /**
     * Tests loading list of Departments for this company.
     */
-    public function testGetDepartments() 
+    public function testGetDepartments()
     {
         global $AppUI;
 
