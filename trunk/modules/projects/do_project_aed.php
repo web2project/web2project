@@ -3,15 +3,22 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = w2PgetParam($_POST, 'del', 0);
-$project_id = intval(w2PgetParam($_POST, 'project_id', 0));
-$isNotNew = $_POST['project_id'];
+$del = (int) w2PgetParam($_POST, 'del', 0);
+
+$obj = new CProject();
+if (!$obj->bind($_POST)) {
+  $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+  $AppUI->redirect();
+}
+
+$action = ($del) ? 'deleted' : 'stored';
+
+$project_id = (int) w2PgetParam($_POST, 'project_id', 0);
+
+$isNotNew = $project_id;
 $perms = &$AppUI->acl();
 if ($del) {
-	if (!$perms->checkModuleItem('projects', 'delete', $project_id)) {
-		$AppUI->redirect('m=public&a=access_denied');
-	}
-} elseif ($isNotNew) {
+} elseif ($project_id) {
 	if (!$perms->checkModuleItem('projects', 'edit', $project_id)) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
@@ -21,18 +28,9 @@ if ($del) {
 	}
 }
 
-$obj = new CProject();
-$msg = '';
-
 $notify_owner = ($_POST['email_project_owner_box']) ? 1 : 0;
 $notify_contacts = ($_POST['email_project_contacts_box']) ? 1 : 0;
 
-if (!$obj->bind($_POST)) {
-	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-	$AppUI->redirect();
-}
-
-require_once ($AppUI->getSystemClass('CustomFields'));
 // convert dates to SQL format first
 if ($obj->project_start_date) {
 	$date = new CDate($obj->project_start_date);
@@ -55,12 +53,10 @@ if (!w2PgetParam($_POST, 'project_departments', 0)) {
 
 // prepare (and translate) the module name ready for the suffix
 if ($del) {
-	$canDelete = $obj->canDelete($msg, $project_id);
-	if (!$canDelete) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-		$AppUI->redirect();
-	}
-	if (($msg = $obj->delete())) {
+  if (!$perms->checkModuleItem('projects', 'delete', $project_id)) {
+    $AppUI->redirect('m=public&a=access_denied');
+  }
+	if (($msg = $obj->delete($AppUI))) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 		$AppUI->redirect();
 	} else {
@@ -81,7 +77,6 @@ if ($del) {
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		$isNotNew = $_POST['project_id'];
 		// check project parents and reset them to self if they do not exist
 		if (!$obj->project_parent) {
 			$obj->project_parent = $obj->project_id;
@@ -106,16 +101,16 @@ if ($del) {
 		$custom_fields->bind($_POST);
 		$sql = $custom_fields->store($obj->project_id); // Store Custom Fields
 		if ($notify_owner) {
-			if ($msg = $obj->notifyOwner($isNotNew)) {
+			if ($msg = $obj->notifyOwner($project_id)) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}
 		if ($notify_contacts) {
-			if ($msg = $obj->notifyContacts($isNotNew)) {
+			if ($msg = $obj->notifyContacts($project_id)) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}
-		$AppUI->setMsg($isNotNew ? 'Project updated' : 'Project inserted', UI_MSG_OK);
+		$AppUI->setMsg($project_id ? 'Project updated' : 'Project inserted', UI_MSG_OK);
 	}
 	$AppUI->redirect();
 }
