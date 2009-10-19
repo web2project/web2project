@@ -66,7 +66,7 @@ class CProject extends CW2pObject {
 	public $project_color_identifier = null;
 	public $project_description = null;
 	public $project_target_budget = null;
-	public $project_actual_budget = null;  
+	public $project_actual_budget = null;
   public $project_scheduled_hours = null;
   public $project_worked_hours = null;
   public $project_task_count = null;
@@ -82,14 +82,12 @@ class CProject extends CW2pObject {
 	public $project_location = '';
 
 	public function CProject() {
-		$this->CW2pObject('projects', 'project_id');
+    parent::__construct('projects', 'project_id');
 	}
 
 	public function check() {
 		$errorArray = array();
     $baseErrorMsg = get_class($this) . '::store-check failed - ';
-
-    $this->project_id = intval($this->project_id);
 
 		if ('' == $this->project_name) {
 			$errorArray['project_name'] = $baseErrorMsg . 'project name is not set';
@@ -174,87 +172,87 @@ class CProject extends CW2pObject {
 	}
 	// overload canDelete
 	public function canDelete(&$msg, $oid = null) {
-		// TODO: check if user permissions are considered when deleting a project
-		global $AppUI;
-		$perms = &$AppUI->acl();
+    /*
+     * This validates data relationships *not* permissions.
+     */
 
-		return $perms->checkModuleItem('projects', 'delete', $oid);
-
-		// NOTE: I uncommented the dependencies check since it is
-		// very anoying having to delete all tasks before being able
-		// to delete a project.
-
-		/*
-		$tables[] = array( 'label' => 'Tasks', 'name' => 'tasks', 'idfield' => 'task_id', 'joinfield' => 'task_project' );
-		// call the parent class method to assign the oid
-		return CW2pObject::canDelete( $msg, $oid, $tables );
-		*/
+		return true;
 	}
 
-	public function delete() {
-		$this->load($this->project_id);
-		addHistory('projects', $this->project_id, 'delete', $this->project_name, $this->project_id);
-		$q = new DBQuery;
-		$q->addTable('tasks');
-		$q->addQuery('task_id');
-		$q->addWhere('task_project = ' . (int)$this->project_id);
-		$tasks_to_delete = $q->loadColumn();
-		$q->clear();
-		foreach ($tasks_to_delete as $task_id) {
-			$q->setDelete('user_tasks');
-			$q->addWhere('task_id =' . $task_id);
-			$q->exec();
-			$q->clear();
-			$q->setDelete('task_dependencies');
-			$q->addWhere('dependencies_req_task_id =' . (int)$task_id);
-			$q->exec();
-			$q->clear();
-		}
-		$q->setDelete('tasks');
-		$q->addWhere('task_project =' . (int)$this->project_id);
-		$q->exec();
-		$q->clear();
-		$q = new DBQuery;
-		$q->addTable('files');
-		$q->addQuery('file_id');
-		$q->addWhere('file_project = ' . (int)$this->project_id);
-		$files_to_delete = $q->loadColumn();
-		$q->clear();
-		foreach ($files_to_delete as $file_id) {
-			$file = new CFile();
-			$file->file_id = $file_id;
-			$file->file_project = (int)$this->project_id;
-			$file->delete();
-		}
-		$q->setDelete('events');
-		$q->addWhere('event_project =' . (int)$this->project_id);
-		$q->exec();
-		$q->clear();
-		// remove the project-contacts and project-departments map
-		$q->setDelete('project_contacts');
-		$q->addWhere('project_id =' . (int)$this->project_id);
-		$q->exec();
-		$q->clear();
-		$q->setDelete('project_departments');
-		$q->addWhere('project_id =' . (int)$this->project_id);
-		$q->exec();
-		$q->clear();
-		$q->setDelete('projects');
-		$q->addWhere('project_id =' . (int)$this->project_id);
+	public function delete($AppUI) {
+    $perms = $AppUI->acl();
 
-		if (!$q->exec()) {
-			$result = db_error();
-		} else {
-			$result = null;
-		}
-		$q->clear();
-		return $result;
+    /*
+     * TODO: This should probably use the canDelete method from above too to
+     *   not only check permissions but to check dependencies... luckily the
+     *   previous version didn't check it either, so we're no worse off.
+     */
+    if ($perms->checkModuleItem('projects', 'delete', $this->project_id)) {
+  		$this->load($this->project_id);
+  		addHistory('projects', $this->project_id, 'delete', $this->project_name, $this->project_id);
+  		$q = new DBQuery;
+  		$q->addTable('tasks');
+  		$q->addQuery('task_id');
+  		$q->addWhere('task_project = ' . (int)$this->project_id);
+  		$tasks_to_delete = $q->loadColumn();
+  		$q->clear();
+  		foreach ($tasks_to_delete as $task_id) {
+  			$q->setDelete('user_tasks');
+  			$q->addWhere('task_id =' . $task_id);
+  			$q->exec();
+  			$q->clear();
+  			$q->setDelete('task_dependencies');
+  			$q->addWhere('dependencies_req_task_id =' . (int)$task_id);
+  			$q->exec();
+  			$q->clear();
+  		}
+  		$q->setDelete('tasks');
+  		$q->addWhere('task_project =' . (int)$this->project_id);
+  		$q->exec();
+  		$q->clear();
+  		$q = new DBQuery;
+  		$q->addTable('files');
+  		$q->addQuery('file_id');
+  		$q->addWhere('file_project = ' . (int)$this->project_id);
+  		$files_to_delete = $q->loadColumn();
+  		$q->clear();
+  		foreach ($files_to_delete as $file_id) {
+  			$file = new CFile();
+  			$file->file_id = $file_id;
+  			$file->file_project = (int)$this->project_id;
+  			$file->delete();
+  		}
+  		$q->setDelete('events');
+  		$q->addWhere('event_project =' . (int)$this->project_id);
+  		$q->exec();
+  		$q->clear();
+  		// remove the project-contacts and project-departments map
+  		$q->setDelete('project_contacts');
+  		$q->addWhere('project_id =' . (int)$this->project_id);
+  		$q->exec();
+  		$q->clear();
+  		$q->setDelete('project_departments');
+  		$q->addWhere('project_id =' . (int)$this->project_id);
+  		$q->exec();
+  		$q->clear();
+  		$q->setDelete('projects');
+  		$q->addWhere('project_id =' . (int)$this->project_id);
+
+  		if (!$q->exec()) {
+  			$result = db_error();
+  		} else {
+  			$result = null;
+  		}
+  		$q->clear();
+      return $result;
+    }
+		return false;
 	}
 
 	/**	Import tasks from another project
 	 *
 	 *	@param	int		Project ID of the tasks come from.
-	 *	@return	bool	
+	 *	@return	bool
 	 **/
 	public function importTasks($from_project_id) {
 
@@ -331,7 +329,7 @@ class CProject extends CW2pObject {
 	} // end of importTasks
 
 	/**
-	 **	Overload of the w2PObject::getAllowedRecords 
+	 **	Overload of the w2PObject::getAllowedRecords
 	 **	to ensure that the allowed projects are owned by allowed companies.
 	 **
 	 **	@author	handco <handco@sourceforge.net>
@@ -401,7 +399,7 @@ class CProject extends CW2pObject {
 	}
 
 	/**
-	 *	Overload of the w2PObject::getDeniedRecords 
+	 *	Overload of the w2PObject::getDeniedRecords
 	 *	to ensure that the projects owned by denied companies are denied.
 	 *
 	 *	@author	handco <handco@sourceforge.net>
@@ -491,6 +489,7 @@ class CProject extends CW2pObject {
 		if (count($errorMsgArray) > 0) {
       return $errorMsgArray;
 		}
+    $this->project_id = (int) $this->project_id;
 
 		if ($this->project_id) {
 			$q = new DBQuery;
@@ -649,7 +648,7 @@ class CProject extends CW2pObject {
 		$q->addGroup('pr.project_id');
 		$q->addOrder('project_name');
 		$this->setAllowedSQL($userId, $q, null, 'pr');
-		
+
 		return $q->loadHashList('project_id');
 	}
 	public static function getContacts($AppUI, $projectId) {
@@ -734,7 +733,7 @@ class CProject extends CW2pObject {
 			$billingCodeList = $q->loadHashList();
 			foreach($billingCodeList as $id => $code) {
 				$task_log_costcodes[$id] = $code;
-			}			
+			}
 		}
 
 		return $task_log_costcodes;
@@ -775,7 +774,7 @@ class CProject extends CW2pObject {
   }
 
 	public function hasChildProjects($projectId = 0) {
-		// Note that this returns the *count* of projects.  If this is zero, it 
+		// Note that this returns the *count* of projects.  If this is zero, it
 		//   is evaluated as false, otherwise it is considered true.
 		$q = new DBQuery();
 		$q->addTable('projects');
@@ -785,14 +784,14 @@ class CProject extends CW2pObject {
 		} else {
 			$q->addWhere('project_original_parent = ' . (int)($this->project_original_parent ? $this->project_original_parent : $this->project_id));
 		}
-		
-		// I hate how this one works... since the default project parent is 
-		//   itself, so this will always have at least one result. 
+
+		// I hate how this one works... since the default project parent is
+		//   itself, so this will always have at least one result.
 		return $q->loadResult()-1;
 	}
-	
+
 	public static function hasTasks($projectId) {
-		// Note that this returns the *count* of tasks.  If this is zero, it is 
+		// Note that this returns the *count* of tasks.  If this is zero, it is
 		//   evaluated as false, otherwise it is considered true.
 		$q = new DBQuery;
 		$q->addTable('tasks');
@@ -826,7 +825,7 @@ class CProject extends CW2pObject {
 		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
 		$days = $q->loadResult();
 		$q->clear();
-	
+
 		$q->addTable('tasks');
 		$q->addQuery('ROUND(SUM(task_duration),2)');
 		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 1 AND task_dynamic <> 1');
@@ -839,10 +838,10 @@ class CProject extends CW2pObject {
 		// now milestones are summed up, too, for consistence with the tasks duration sum
 		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
 		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
-		
-		// I'm really not sure why this is calculated and treated differently 
-		//   from the "total hours" calculation above.  I simply copied this from 
-		//  the projects/view.php file to get data calls out of the view.  Any 
+
+		// I'm really not sure why this is calculated and treated differently
+		//   from the "total hours" calculation above.  I simply copied this from
+		//  the projects/view.php file to get data calls out of the view.  Any
 		//  further info or explanation would be appreciated. - caseydk
 		$total_project_hours = 0;
 
@@ -853,7 +852,7 @@ class CProject extends CW2pObject {
 		$q->addWhere('t.task_project = ' . (int) $this->project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic <> 1');
 		$total_project_days = $q->loadResult();
 		$q->clear();
-	
+
 		$q->addTable('tasks', 't');
 		$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
 		$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
@@ -893,7 +892,7 @@ class CProject extends CW2pObject {
 
 		return $q->loadList();
 	}
-  
+
   public function hook_search() {
     $search['table'] = 'projects';
     $search['table_alias'] = 'p';
@@ -919,7 +918,7 @@ class CProject extends CW2pObject {
 **
 ** E.g. this code is used as well in a tab for the admin/viewuser site
 **
-** @mixed user_id 	userId as filter for tasks/projects that are shown, if nothing is specified, 
+** @mixed user_id 	userId as filter for tasks/projects that are shown, if nothing is specified,
 current viewing user $AppUI->user_id is used.
 */
 
@@ -939,7 +938,7 @@ function projects_list_data($user_id = false) {
 	$q->exec();
 	$q->clear();
 
-  //BEGIN: Deprecated in v2.0 
+  //BEGIN: Deprecated in v2.0
 	$q->setDelete('tasks_total');
 	$q->exec();
 	$q->clear();
@@ -969,7 +968,7 @@ function projects_list_data($user_id = false) {
 	// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 	$q->addInsertSelect('tasks_sum');
 	$q->addTable('tasks');
-	$q->addQuery('task_project, COUNT(distinct tasks.task_id) AS total_tasks'); 
+	$q->addQuery('task_project, COUNT(distinct tasks.task_id) AS total_tasks');
 	$q->addQuery('SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) / SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete');
 	$q->addQuery('SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_duration');
 	if ($user_id) {
@@ -1083,7 +1082,7 @@ function projects_list_data($user_id = false) {
 	}
 
 	$q->addTable('projects', 'pr');
-	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type, project_name, project_description, project_duration, project_parent, project_original_parent, 
+	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type, project_name, project_description, project_duration, project_parent, project_original_parent,
 		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
 		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count, tsy.my_tasks,
 		ts.project_percent_complete, user_username, project_active');
@@ -1241,7 +1240,7 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
  *
  * @param mixed $arraylist array list of project elements to search
  * @param mixed $project_id project id to search for
- * @return int returns the array key of the project record in the array list or false if not found 
+ * @return int returns the array key of the project record in the array list or false if not found
  */
 function getProjectIndex($arraylist, $project_id) {
 	$result = false;
@@ -1255,7 +1254,7 @@ function getProjectIndex($arraylist, $project_id) {
 
 /**
  * getDepartmentSelectionList() returns a tree of departments in <option> tags (originally used on the addedit interface to display the departments of a project)
- * 
+ *
  * @param mixed $company_id the id of the company we are searching departments
  * @param mixed $checked_array an array with the ids of the departments that should be selected on the list
  * @param integer $dept_parent used when to determine the starting level on the tree, or by recursion
