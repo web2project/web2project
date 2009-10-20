@@ -1102,5 +1102,116 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
         $this->assertEquals(0,                      $task->task_dep_reset_dates);
     }
+
+    /**
+     * Tests updating dynamic task when from children = true, in days
+     */ 
+    public function testUpdateDynamicsFromChildrenInDays()
+    {
+
+        $task = new CTask();
+        $task->load(21);
+        $task->updateDynamics(true);
+
+        $this->assertEquals(21,                     $task->task_id);
+        $this->assertEquals('Task 21',              $task->task_name);
+        $this->assertEquals(21,                     $task->task_parent);
+        $this->assertEquals(0,                      $task->task_milestone);
+        $this->assertEquals(1,                      $task->task_project);
+        $this->assertEquals(1,                      $task->task_owner);
+        $this->assertEquals('2009-09-09 00:00:00',  $task->task_start_date);
+        $this->assertEquals(8,                      $task->task_duration);
+        $this->assertEquals(24,                     $task->task_duration_type);
+        $this->assertEquals(37,                     $task->task_hours_worked);
+        $this->assertEquals('2009-11-02 00:00:00',  $task->task_end_date);
+        $this->assertEquals(0,                      $task->task_status);
+        $this->assertEquals(0,                      $task->task_priority);
+        $this->assertEquals(41,                     $task->task_percent_complete);
+        $this->assertEquals('This is task 21',      $task->task_description);
+        $this->assertEquals(0.00,                   $task->task_target_budget);
+        $this->assertEquals('',                     $task->task_related_url);
+        $this->assertEquals(1,                      $task->task_creator);
+        $this->assertEquals(1,                      $task->task_order);
+        $this->assertEquals(1,                      $task->task_client_publish);
+        $this->assertEquals(1,                      $task->task_dynamic);
+        $this->assertEquals(1,                      $task->task_access);
+        $this->assertEquals(1,                      $task->task_notify);
+        $this->assertEquals('',                     $task->task_departments);
+        $this->assertEquals('',                     $task->task_contacts);
+        $this->assertEquals('',                     $task->task_custom);
+        $this->assertEquals(1,                      $task->task_type);
+        $this->assertEquals(1,                      $task->task_updator);
+        $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
+        $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
+        $this->assertEquals(0,                      $task->task_dep_reset_dates);
+    }
+
+    /**
+     * Tests updating dynamic task when from children = false, in days
+     */ 
+    public function testUpdateDynamicsNotFromChildrenInDays()
+    {
+
+        $task = new CTask();
+        $task->load(22);
+        $task->updateDynamics(false);
+        $task->load(21);
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+
+        $this->assertEquals(21,                     $task->task_id);
+        $this->assertEquals('Task 21',              $task->task_name);
+        $this->assertEquals(21,                     $task->task_parent);
+        $this->assertEquals(0,                      $task->task_milestone);
+        $this->assertEquals(1,                      $task->task_project);
+        $this->assertEquals(1,                      $task->task_owner);
+        $this->assertEquals('2009-09-09 00:00:00',  $task->task_start_date);
+        $this->assertEquals(8,                      $task->task_duration);
+        $this->assertEquals(24,                     $task->task_duration_type);
+        $this->assertEquals(37,                     $task->task_hours_worked);
+        $this->assertEquals('2009-11-02 00:00:00',  $task->task_end_date);
+        $this->assertEquals(0,                      $task->task_status);
+        $this->assertEquals(0,                      $task->task_priority);
+        $this->assertEquals(41,                     $task->task_percent_complete);
+        $this->assertEquals('This is task 21',      $task->task_description);
+        $this->assertEquals(0.00,                   $task->task_target_budget);
+        $this->assertEquals('',                     $task->task_related_url);
+        $this->assertEquals(1,                      $task->task_creator);
+        $this->assertEquals(1,                      $task->task_order);
+        $this->assertEquals(1,                      $task->task_client_publish);
+        $this->assertEquals(1,                      $task->task_dynamic);
+        $this->assertEquals(1,                      $task->task_access);
+        $this->assertEquals(1,                      $task->task_notify);
+        $this->assertEquals('',                     $task->task_departments);
+        $this->assertEquals('',                     $task->task_contacts);
+        $this->assertEquals('',                     $task->task_custom);
+        $this->assertEquals(1,                      $task->task_type);
+        $this->assertEquals(1,                      $task->task_updator);
+        $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
+        $this->assertGreaterThanOrEqual($min_time,  strtotime($task->task_updated));
+        $this->assertLessThanOrEqual($now_secs,     strtotime($task->task_updated));
+        $this->assertEquals(0,                      $task->task_dep_reset_dates);
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testUpdateDynamicsNotFromChildrenInDays.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_project = 2');
+        $results = $q->loadColumn();
+
+        foreach($results as $updated) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($updated));
+            $this->assertLessThanOrEqual($now_secs, strtotime($updated));
+        }
+    }
 }
 ?>
