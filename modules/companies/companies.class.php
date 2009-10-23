@@ -83,6 +83,7 @@ class CCompany extends CW2pObject {
     	if ($msg = parent::delete()) {
     		return $msg;
     	}
+      addHistory('companies', 0, 'delete', 'Deleted', 0);
       return true;
     }
     return false;
@@ -107,12 +108,14 @@ class CCompany extends CW2pObject {
       if (($msg = parent::store())) {
         return $msg;
       }
+      addHistory('companies', $this->company_id, 'update', $this->company_name, $this->company_id);
       $stored = true;
     }
     if (0 == $this->company_id && $perms->checkModuleItem('companies', 'add')) {
       if (($msg = parent::store())) {
         return $msg;
       }
+      addHistory('companies', $this->company_id, 'add', $this->company_name, $this->company_id);
       $stored = true;
     }
     if ($stored) {
