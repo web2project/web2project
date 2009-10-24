@@ -172,6 +172,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoName()
     {
+        global $AppUI;
+
         $project = new CProject();
 
         $post_data = array(
@@ -204,7 +206,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $errorArray = $project->store();
+        $errorArray = $project->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -222,6 +224,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoCompany()
     {
+        global $AppUI;
+
         $project = new CProject();
 
         $post_data = array(
@@ -254,7 +258,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $errorArray = $project->store();
+        $errorArray = $project->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -272,6 +276,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoPriority()
     {
+        global $AppUI;
+
         $project = new CProject();
 
         $post_data = array(
@@ -304,7 +310,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $errorArray = $project->store();
+        $errorArray = $project->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -322,6 +328,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoShortName()
     {
+        global $AppUI;
+
         $project = new CProject();
 
         $post_data = array(
@@ -354,7 +362,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $errorArray = $project->store();
+        $errorArray = $project->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -372,6 +380,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoColorIdentifier()
     {
+        global $AppUI;
+
         $project = new CProject();
 
         $post_data = array(
@@ -404,7 +414,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $errorArray = $project->store();
+        $errorArray = $project->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -422,6 +432,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoType()
     {
+        global $AppUI;
+
         $project = new CProject();
 
         $post_data = array(
@@ -454,7 +466,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $errorArray = $project->store();
+        $errorArray = $project->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -472,6 +484,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoStatus()
     {
+        global $AppUI;
+
         $project = new CProject();
 
         $post_data = array(
@@ -504,7 +518,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $errorArray = $project->store();
+        $errorArray = $project->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -522,6 +536,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProject()
     {
+        global $AppUI;
+
         $project = new CProject();
 
         $post_data = array(
@@ -554,9 +570,9 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $msg = $project->store();
+        $results = $project->store($AppUI);
 
-        $this->assertEquals(0,                          count($msg));
+        $this->assertTrue($results);
         $this->assertEquals(3,                          $project->project_id);
         $this->assertEquals(1,                          $project->project_company);
         $this->assertEquals('',                         $project->project_department);
@@ -565,8 +581,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                          $project->project_owner);
         $this->assertEquals('project.example.org',      $project->project_url);
         $this->assertEquals('projectdemo.example.org',  $project->project_demo_url);
-        $this->assertEquals('20090628',                 $project->project_start_date);
-        $this->assertEquals('20090728',                 $project->project_end_date);
+        $this->assertEquals('2009-06-28 00:00:00',      $project->project_start_date);
+        $this->assertEquals('2009-07-28 23:59:59',      $project->project_end_date);
         $this->assertEquals('',                         $project->project_actual_end_date);
         $this->assertEquals(0,                          $project->project_status);
         $this->assertEquals('',                         $project->project_percent_complete);
@@ -584,11 +600,11 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                         $project->project_contacts);
         $this->assertEquals(-1,                         $project->project_priority);
         $this->assertEquals(0,                          $project->project_type);
-        $this->assertEquals('',                         $project->project_parent);
-        $this->assertEquals('',                         $project->project_original_parent);
+        $this->assertEquals(0,                          $project->project_parent);
+        $this->assertEquals(0,                          $project->project_original_parent);
         $this->assertEquals('',                         $project->project_location);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testCreateProject.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'testCreateProject.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('projects' => array('project_created', 'project_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('projects' => array('project_created', 'project_updated')));
@@ -723,7 +739,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertEquals('http://project1.example.org',      $project->project_url);
       $this->assertEquals('http://project1-demo.example.org', $project->project_demo_url);
       $this->assertEquals('2009-07-05 00:00:00',              $project->project_start_date);
-      $this->assertEquals('2009-07-15 00:00:00',              $project->project_end_date);
+      $this->assertEquals('2009-07-15 23:59:59',              $project->project_end_date);
       $this->assertEquals('2009-08-15 00:00:00',              $project->project_actual_end_date);
       $this->assertEquals(0,                                  $project->project_status);
       $this->assertEquals('',                                 $project->project_percent_complete);
@@ -763,7 +779,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertEquals('http://project1.example.org',      $project->project_url);
       $this->assertEquals('http://project1-demo.example.org', $project->project_demo_url);
       $this->assertEquals('2009-07-05 00:00:00',              $project->project_start_date);
-      $this->assertEquals('2009-07-15 00:00:00',              $project->project_end_date);
+      $this->assertEquals('2009-07-15 23:59:59',              $project->project_end_date);
       $this->assertEquals('2009-08-15 00:00:00',              $project->project_actual_end_date);
       $this->assertEquals(0,                                  $project->project_status);
       $this->assertEquals(15.789473684211,                    $project->project_percent_complete, '', 0.000000000001);
@@ -793,6 +809,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testUpdateProject()
     {
+      global $AppUI;
+
     	$project = new CProject();
     	$project->load(1);
 
@@ -826,9 +844,9 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $msg = $project->store();
+        $results = $project->store($AppUI);
 
-        $this->assertEquals('', $msg);
+        $this->assertTrue($results);
         $this->assertEquals(1,                                  $project->project_id);
         $this->assertEquals(1,                                  $project->project_company);
         $this->assertEquals(0,                                  $project->project_department);
@@ -837,8 +855,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                                  $project->project_owner);
         $this->assertEquals('project-update.example.org',       $project->project_url);
         $this->assertEquals('project-updatedemo.example.org',   $project->project_demo_url);
-        $this->assertEquals('20090728',                         $project->project_start_date);
-        $this->assertEquals('20090828',                         $project->project_end_date);
+        $this->assertEquals('2009-07-28 00:00:00',              $project->project_start_date);
+        $this->assertEquals('2009-08-28 23:59:59',              $project->project_end_date);
         $this->assertEquals('2009-08-15 00:00:00',              $project->project_actual_end_date);
         $this->assertEquals(1,                                  $project->project_status);
         $this->assertEquals('',                                 $project->project_percent_complete);
@@ -856,11 +874,11 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                                 $project->project_contacts);
         $this->assertEquals(1,                                  $project->project_priority);
         $this->assertEquals(1,                                  $project->project_type);
-        $this->assertEquals('',                                 $project->project_parent);
+        $this->assertEquals(1,                                  $project->project_parent);
         $this->assertEquals(1,                                  $project->project_original_parent);
         $this->assertEquals('Somewhere Updated',                $project->project_location);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testUpdateProject.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateProject.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('projects' => array('project_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('projects' => array('project_updated')));
@@ -903,7 +921,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $project->load(1);
         $project->delete($AppUI);
 
-        $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testDeleteProject.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testDeleteProject.xml');
         $this->assertTablesEqual($xml_dataset->getTable('projects'),            $this->getConnection()->createDataSet()->getTable('projects'));
         $this->assertTablesEqual($xml_dataset->getTable('project_contacts'),    $this->getConnection()->createDataSet()->getTable('project_contacts'));
         $this->assertTablesEqual($xml_dataset->getTable('tasks'),               $this->getConnection()->createDataSet()->getTable('tasks'));
@@ -922,7 +940,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $project->load(2);
         $project->importTasks(1);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testImportTasks.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'testImportTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
@@ -959,7 +977,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($updated));
         }
 
-        $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testImportTasks.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testImportTasks.xml');
         $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
         $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
 
@@ -1227,6 +1245,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testStore()
     {
+      global $AppUI;
 
        $project = new CProject();
        $project->load(1);
@@ -1263,11 +1282,11 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $project->bind($post_data);
-        $msg = $project->store();
+        $results = $project->store($AppUI);
 
-        $this->assertEquals('', $msg);
+        $this->assertTrue($results);
 
-        $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testStore.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testStore.xml');
         $this->assertTablesEqual($xml_dataset->getTable('project_departments'), $this->getConnection()->createDataSet()->getTable('project_departments'));
         $this->assertTablesEqual($xml_dataset->getTable('project_contacts'), $this->getConnection()->createDataSet()->getTable('project_contacts'));
     }
@@ -1302,12 +1321,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('FFFFFF',               $allowed_projects[1]['project_color_identifier']);
         $this->assertEquals('Test Project',         $allowed_projects[1]['project_name']);
         $this->assertEquals('2009-07-05 00:00:00',  $allowed_projects[1]['project_start_date']);
-        $this->assertEquals('2009-07-15 00:00:00',  $allowed_projects[1]['project_end_date']);
+        $this->assertEquals('2009-07-15 23:59:59',  $allowed_projects[1]['project_end_date']);
         $this->assertEquals(1,                      $allowed_projects[1][0]);
         $this->assertEquals('FFFFFF',               $allowed_projects[1][1]);
         $this->assertEquals('Test Project',         $allowed_projects[1][2]);
         $this->assertEquals('2009-07-05 00:00:00',  $allowed_projects[1][3]);
-        $this->assertEquals('2009-07-15 00:00:00',  $allowed_projects[1][4]);
+        $this->assertEquals('2009-07-15 23:59:59',  $allowed_projects[1][4]);
     }
 
     /**
@@ -1324,23 +1343,23 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('FFFFFF',               $allowed_projects[1]['project_color_identifier']);
         $this->assertEquals('Test Project',         $allowed_projects[1]['project_name']);
         $this->assertEquals('2009-07-05 00:00:00',  $allowed_projects[1]['project_start_date']);
-        $this->assertEquals('2009-07-15 00:00:00',  $allowed_projects[1]['project_end_date']);
+        $this->assertEquals('2009-07-15 23:59:59',  $allowed_projects[1]['project_end_date']);
         $this->assertEquals(1,                      $allowed_projects[1][0]);
         $this->assertEquals('FFFFFF',               $allowed_projects[1][1]);
         $this->assertEquals('Test Project',         $allowed_projects[1][2]);
         $this->assertEquals('2009-07-05 00:00:00',  $allowed_projects[1][3]);
-        $this->assertEquals('2009-07-15 00:00:00',  $allowed_projects[1][4]);
+        $this->assertEquals('2009-07-15 23:59:59',  $allowed_projects[1][4]);
 
         $this->assertEquals(2,                      $allowed_projects[2]['project_id']);
         $this->assertEquals('EEEEEE',               $allowed_projects[2]['project_color_identifier']);
         $this->assertEquals('Test Project 2',       $allowed_projects[2]['project_name']);
         $this->assertEquals('2009-07-08 00:00:00',  $allowed_projects[2]['project_start_date']);
-        $this->assertEquals('2009-07-18 00:00:00',  $allowed_projects[2]['project_end_date']);
+        $this->assertEquals('2009-07-18 23:59:59',  $allowed_projects[2]['project_end_date']);
         $this->assertEquals(2,                      $allowed_projects[2][0]);
         $this->assertEquals('EEEEEE',               $allowed_projects[2][1]);
         $this->assertEquals('Test Project 2',       $allowed_projects[2][2]);
         $this->assertEquals('2009-07-08 00:00:00',  $allowed_projects[2][3]);
-        $this->assertEquals('2009-07-18 00:00:00',  $allowed_projects[2][4]);
+        $this->assertEquals('2009-07-18 23:59:59',  $allowed_projects[2][4]);
     }
 
     /**
@@ -1479,7 +1498,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         global $AppUI;
 
         CProject::updateStatus($AppUI, 1, 2);
-        $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testUpdateStatus.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateStatus.xml');
         $this->assertTablesEqual($xml_dataset->getTable('projects'), $this->getConnection()->createDataSet()->getTable('projects'));
     }
 
