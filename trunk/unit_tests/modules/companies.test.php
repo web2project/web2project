@@ -224,7 +224,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(2,                          $company->company_type);
         $this->assertEquals('This is a company.' ,      $company->company_description);
 
-        $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testCreateCompany.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testCreateCompany.xml');
         $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
     }
 

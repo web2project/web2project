@@ -1,6 +1,6 @@
 <?php
 /**
- * Necessary global variables 
+ * Necessary global variables
  */
 global $db;
 global $ADODB_FETCH_MODE;
@@ -27,29 +27,29 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
 
 /**
  * TaskTest Class.
- * 
+ *
  * Class to test the tasks class
  * @author Trevor Morse<trevor.morse@gmail.com>
  * @package web2project
  * @subpackage unit_tests
  */
-class Tasks_Test extends PHPUnit_Extensions_Database_TestCase 
+class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 {
-    
+
     protected $backupGlobals = FALSE;
-    
+
     /**
      * Return database connection for tests
      */
     protected function getConnection()
     {
-        $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' . 
-                       w2PgetConfig('dbhost') . ';dbname=' . 
-                       w2PgetConfig('dbname'), 
+        $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' .
+                       w2PgetConfig('dbhost') . ';dbname=' .
+                       w2PgetConfig('dbname'),
                        w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
         return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
     }
-    
+
     /**
      * Set up default dataset for testing
      */
@@ -61,14 +61,14 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
     	return dirname(dirname(__FILE__)).'/db_files/';
     }
-    
+
     /**
      * Tests the Attributes of a new Tasks object.
      */
-    public function testNewTasksAttributes() 
-    {    
+    public function testNewTasksAttributes()
+    {
         $task = new CTask();
-        
+
         $this->assertType('CTask',                                  $task);
         $this->assertObjectHasAttribute('task_id',                  $task);
         $this->assertObjectHasAttribute('task_name',                $task);
@@ -107,14 +107,14 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('task_updated',             $task);
         $this->assertObjectHasAttribute('task_dep_reset_dates',     $task);
     }
-    
+
     /**
      * Tests the Attribute Values of a new Task object.
      */
     public function testNewTasktAttributeValues()
     {
         $task = new CTask();
-        
+
         $this->assertType('CTask', $task);
         $this->assertNull($task->task_id);
         $this->assertNull($task->task_name);
@@ -153,7 +153,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($task->task_updated);
         $this->assertNull($task->task_dep_reset_dates);
     }
-    
+
     /**
      * Tests the __toString function
      */
@@ -161,7 +161,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $this->markTestSkipped('Function appears to be broken completely. Referencing variables that do not exist.');
     }
-    
+
     /**
      * Tests the check function returns the proper error message when the task_id is null
      */
@@ -169,14 +169,14 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $this->markTestSkipped('This test has been deprecated by casting the task_id via intval().');
     }
-    
+
     /**
      * Tests the check function returns the proper error message when no name is passed
      */
     public function testCheckTaskNoName()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 0,
@@ -191,7 +191,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => null, 
+            'task_parent'           => null,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -207,29 +207,29 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorArray = $task->check();
-       
+
         $this->assertArrayHasKey('task_name', $errorArray);
     }
-    
+
     /**
      * Tests the check function returns the proper error message when no priority is passed
      */
     public function testCheckTaskNoPriority()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 0,
@@ -244,7 +244,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => null, 
+            'task_parent'           => null,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -260,29 +260,29 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorArray = $task->check();
-        
+
         $this->assertArrayHasKey('task_priority', $errorArray);
     }
-	
+
 	/**
      * Tests the check function returns the proper error message when no start date is passed
      */
     public function testCheckTaskNoStartDate()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 0,
@@ -297,7 +297,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => null, 
+            'task_parent'           => null,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '',
@@ -313,29 +313,29 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorArray = $task->check();
-        
+
         $this->assertArrayHasKey('task_start_date', $errorArray);
     }
-	
+
 	/**
      * Tests the check function returns the proper error message when no end date is passed
      */
     public function testCheckTaskNoEndDate()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 0,
@@ -350,7 +350,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => null, 
+            'task_parent'           => null,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -366,19 +366,19 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorArray = $task->check();
-        
+
         $this->assertArrayHasKey('task_end_date', $errorArray);
     }
 
@@ -389,7 +389,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCheckTaskDynamicWithDep()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 3,
@@ -404,7 +404,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => null, 
+            'task_parent'           => null,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -420,22 +420,22 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 1,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorMsg = $task->check();
 
         $this->assertEquals('BadDep_DynNoDep', $errorMsg);
     }
-    
+
     /**
      * Tests that the check function returns the proper error message
      * when attempting to update a task with a circular dependency.
@@ -443,7 +443,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCheckTaskCircularDep()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 3,
@@ -458,7 +458,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => 4, 
+            'task_parent'           => 4,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -474,23 +474,23 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorMsg = $task->check();
-        
+
         $this->assertEquals('BadDep_CircularDep', $errorMsg[0]);
         $this->assertEquals('(4)', $errorMsg[1]);
     }
-    
+
     /**
      * Tests that the check function returns the proper error message
      * when attempting to update a task when this tasks parent depends
@@ -499,7 +499,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCheckTaskCannotDepOnParent()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 5,
@@ -514,7 +514,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => 6, 
+            'task_parent'           => 6,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -530,31 +530,31 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorMsg = $task->check();
-        
+
         $this->assertEquals('BadDep_CannotDependOnParent', $errorMsg);
     }
-    
+
     /**
      * Tests that the check function returns the proper error message
-     * when attempting to update a task when this tasks parent is a 
+     * when attempting to update a task when this tasks parent is a
      * child of it
      */
     public function testCheckTaskParentCannotBeChild()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 6,
@@ -569,7 +569,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => 7, 
+            'task_parent'           => 7,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -585,31 +585,31 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorMsg = $task->check();
-        
+
         $this->assertEquals('BadParent_CircularParent', $errorMsg);
     }
-    
+
     /**
      * Tests that the check function returns the proper error message
-     * when attempting to update a task when this tasks parent is a 
+     * when attempting to update a task when this tasks parent is a
      * child of it
      */
     public function testCheckTaskGrandParentCannotBeChild()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 10,
@@ -624,7 +624,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => 9, 
+            'task_parent'           => 9,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -640,23 +640,23 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorMsg = $task->check();
-        
+
         $this->assertEquals('BadParent_CircularGrandParent', $errorMsg[0]);
         $this->assertEquals('(8)', $errorMsg[1]);
     }
-    
+
     /**
      * Tests that the check function returns the proper error message
      * when attempting to update a task when this tasks grand parent depends
@@ -665,7 +665,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCheckTaskCannotDepOnGrandParent()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 11,
@@ -680,7 +680,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => 10, 
+            'task_parent'           => 10,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -696,23 +696,23 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorMsg = $task->check();
-        
+
         $this->assertEquals('BadDep_CircularGrandParent', $errorMsg[0]);
         $this->assertEquals('(9)', $errorMsg[1]);
     }
-    
+
     /**
      * Tests that the check function returns the proper error message
      * when attempting to update a task when this tasks grand parent depends
@@ -721,7 +721,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCheckTaskCircularDepOnParentDep()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 12,
@@ -736,7 +736,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => 11, 
+            'task_parent'           => 11,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -752,19 +752,19 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 0,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorMsg = $task->check();
-        
+
         $this->assertEquals('BadDep_CircularDepOnParentDependent', $errorMsg[0]);
         $this->assertEquals('(13)', $errorMsg[1]);
     }
@@ -777,7 +777,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCheckTaskChildDepOnParent()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 16,
@@ -792,7 +792,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => 15, 
+            'task_parent'           => 15,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -808,30 +808,30 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 1,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorMsg = $task->check();
-        
+
         $this->assertEquals('BadParent_ChildDepOnParent', $errorMsg);
     }
-    
+
     /**
-     * And finally lets test that check returns nothing when there are 
+     * And finally lets test that check returns nothing when there are
      * no problems with the task.
      */
     public function testCheck()
     {
         $task = new CTask();
-        
+
         $post_data = array (
             'dosql'                 => 'do_task_aed',
             'task_id'               => 18,
@@ -846,7 +846,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_related_url'      => 'http://www.example.org',
             'task_type'             => 0,
             'dept_ids'              => array(1),
-            'task_parent'           => 18, 
+            'task_parent'           => 18,
             'task_target_budget'    => '1.00',
             'task_description'      => 'this is a description for test task.',
             'task_start_date'       => '200908240800',
@@ -862,30 +862,30 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             'task_duration'         => 3,
             'task_duration_type'    => 1,
             'task_dynamic'          => 1,
-            'hdependencies'         => null, 
+            'hdependencies'         => null,
             'hperc_assign'          => '1=100;',
             'percentage_assignment' => 100,
             'email_comment'         => '',
             'task_notify'           => 1,
             'hassign'               => 1,
-            'hresource_assign'      => '', 
+            'hresource_assign'      => '',
             'resource_assignment'   => 100
         );
-        
+
         $task->bind($post_data);
         $errorMsg = $task->check();
-        
+
         $this->assertEquals(array(), $errorMsg);
     }
-    
+
     /**
      * Testing loading a task that is not dynamic.
      */
-    
+
     public function testLoad()
     {
         $task = new CTask();
-        
+
         $task->load(1);
 
         $this->assertEquals(1,                      $task->task_id);
@@ -962,7 +962,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
         $this->assertEquals(0,                      $task->task_dep_reset_dates);
     }
-    
+
     /*
      * Tests loading a task that is dynamic not skipping update.
      */
@@ -1105,7 +1105,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
     /**
      * Tests updating dynamic task when from children = true, in days
-     */ 
+     */
     public function testUpdateDynamicsFromChildrenInDays()
     {
 
@@ -1148,7 +1148,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
     /**
      * Tests updating dynamic task when from children = false, in days
-     */ 
+     */
     public function testUpdateDynamicsNotFromChildrenInDays()
     {
 
@@ -1193,7 +1193,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertLessThanOrEqual($now_secs,     strtotime($task->task_updated));
         $this->assertEquals(0,                      $task->task_dep_reset_dates);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testUpdateDynamicsNotFromChildrenInDays.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateDynamicsNotFromChildrenInDays.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
@@ -1213,17 +1213,17 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($updated));
         }
     }
-    
+
     /**
      * Tests updating dynamic task when from children = true, in hours
-     */ 
+     */
     public function testUpdateDynamicsFromChildrenInHours()
     {
 
         $task = new CTask();
         $task->load(24);
         $task->updateDynamics(true);
-        
+
         $this->assertEquals(24,                     $task->task_id);
         $this->assertEquals('Task 24',              $task->task_name);
         $this->assertEquals(24,                     $task->task_parent);
@@ -1256,10 +1256,10 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
         $this->assertEquals(0,                      $task->task_dep_reset_dates);
     }
-    
+
     /**
      * Tests updating dynamic task when from children = false, in hours
-     */ 
+     */
     public function testUpdateDynamicsNotFromChildrenInHours()
     {
 
@@ -1267,10 +1267,10 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $task->load(25);
         $task->updateDynamics(false);
         $task->load(24);
-        
+
         $now_secs = time();
         $min_time = $now_secs - 10;
-        
+
         $this->assertEquals(24,                     $task->task_id);
         $this->assertEquals('Task 24',              $task->task_name);
         $this->assertEquals(24,                     $task->task_parent);
@@ -1301,13 +1301,13 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
         $this->assertEquals(0,                      $task->task_dep_reset_dates);
-        
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testUpdateDynamicsNotFromChildrenInHours.xml');
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateDynamicsNotFromChildrenInHours.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-        
+
         /**
          * Get updated dates to test against
          */
