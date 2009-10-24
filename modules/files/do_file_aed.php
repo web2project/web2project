@@ -74,7 +74,7 @@ if ($duplicate) {
 	} else {
 		$new_file->file_real_filename = $dup_realname;
 		$new_file->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
-		if (($msg = $new_file->store())) {
+		if (($msg = $new_file->store($AppUI))) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 			$AppUI->redirect($redirect);
 		} else {
@@ -166,7 +166,7 @@ if (!$file_id) {
 	}
 }
 
-if (($msg = $obj->store())) {
+if (($msg = $obj->store($AppUI))) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
 } else {
 
