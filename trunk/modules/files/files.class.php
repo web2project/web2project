@@ -46,12 +46,24 @@ class CFile extends CW2pObject {
     parent::__construct('files', 'file_id');
 	}
 
-	public function store() {
+	public function store(CAppUI $AppUI) {
 		global $helpdesk_available;
+
+    $perms = $AppUI->acl();
+
+    $errorMsgArray = $this->check();
+
+    if (count($errorMsgArray) > 0) {
+      return $errorMsgArray;
+    }
+
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 			$this->addHelpDeskTaskLog();
 		}
-		parent::store();
+    if (($msg = parent::store())) {
+      return $msg;
+    }
+    return true;
 	}
 
 	public static function getFileList($AppUI, $company_id, $project_id, $task_id, $category_id) {
@@ -133,14 +145,32 @@ class CFile extends CW2pObject {
 	}
 
 	public function check() {
-		// ensure the integrity of some variables
-		$this->file_id = intval($this->file_id);
-		$this->file_version_id = intval($this->file_version_id);
-		$this->file_parent = intval($this->file_parent);
-		$this->file_task = intval($this->file_task);
-		$this->file_project = intval($this->file_project);
+    $errorArray = array();
+    $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-		return null; // object is ok
+    if ('' == $this->file_real_filename) {
+      $errorArray['file_real_filename'] = $baseErrorMsg . 'file real name is not set';
+    }
+    if (!is_int($this->file_project) && '' == $this->file_project) {
+      $errorArray['file_project'] = $baseErrorMsg . 'file project is not set';
+    }
+    if (!is_int($this->file_task) && '' == $this->file_task) {
+      $errorArray['file_task'] = $baseErrorMsg . 'file task is not set';
+    }
+    if ('' == $this->file_name) {
+      $errorArray['file_name'] = $baseErrorMsg . 'file name is not set';
+    }
+    if (!is_int($this->file_parent) && '' == $this->file_parent) {
+      $errorArray['file_parent'] = $baseErrorMsg . 'file parent id is not set';
+    }
+    if ('' == $this->file_type) {
+      $errorArray['file_type'] = $baseErrorMsg . 'file type is not set';
+    }
+    if (!is_int($this->file_size) && '' == $this->file_size) {
+      $errorArray['file_size'] = $baseErrorMsg . 'file size is not set';
+    }
+
+		return $errorArray;
 	}
 
 	public function checkout($userId, $fileId, $coReason) {
