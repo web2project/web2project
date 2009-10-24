@@ -1154,8 +1154,8 @@
             <value>0</value>
             <null/>
             <null/>
-            <null/>
-            <null/>
+            <value>2009-10-19 00:00:00</value>
+            <value>2009-10-19 00:00:00</value>
         </row>
         <row>
             <value>2</value>
@@ -1180,8 +1180,8 @@
             <value>0</value>
             <null/>
             <null/>
-            <null/>
-            <null/>
+            <value>2009-10-19 00:00:00</value>
+            <value>2009-10-19 00:00:00</value>
         </row>
         <row>
             <value>3</value>
@@ -1206,8 +1206,8 @@
             <value>0</value>
             <null/>
             <null/>
-            <null/>
-            <null/>
+            <value>2009-10-19 00:00:00</value>
+            <value>2009-10-19 00:00:00</value>
         </row>
         <row>
             <value>4</value>
@@ -1232,8 +1232,8 @@
             <value>0</value>
             <null/>
             <null/>
-            <null/>
-            <null/>
+            <value>2009-10-19 00:00:00</value>
+            <value>2009-10-19 00:00:00</value>
         </row>
     </table>
 </dataset>
