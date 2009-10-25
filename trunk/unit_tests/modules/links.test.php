@@ -223,11 +223,12 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('This is web2project',    $link->link_description);
         $this->assertEquals(1,                        $link->link_owner);
         $this->assertEquals('2009-01-01',             $link->link_date);
-        //$this->assertEquals('obj/',                   $link->link_icon);
+        $this->assertEquals('',                       $link->link_icon);
         $this->assertEquals(0,                        $link->link_category);
+        $this->assertNotEquals(0,                     $link->link_id);
 
-//        $xml_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/linksTestCreate.xml');
-//        $this->assertTablesEqual($xml_dataset->getTable('links'), $this->getConnection()->createDataSet()->getTable('links'));
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'linksTestCreate.xml');
+        $this->assertTablesEqual($xml_dataset->getTable('links'), $this->getConnection()->createDataSet()->getTable('links'));
     }
 
     /**
@@ -267,29 +268,29 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
             'link_task'         => 0,
             'link_url'          => 'http://forums.web2project.net',
             'link_parent'       => '0',
-            'link_description'  => 'This is web2project forums',
+            'link_description'  => 'These are the web2project forums',
             'link_owner'        => 1,
             'link_date'         => '2009-01-01',
             'link_icon'         => '',
             'link_category'     => 0
         );
-
         $link->bind($post_array);
-        $link->store($AppUI);
+        $result = $link->store($AppUI);
 
-        $this->assertEquals('web2project Forums',              $link->link_name);
+        $this->assertTrue($result);
+        $this->assertEquals('web2project Forums',             $link->link_name);
         $this->assertEquals(0,                                $link->link_project);
         $this->assertEquals(0,                                $link->link_task);
         $this->assertEquals('http://forums.web2project.net',  $link->link_url);
         $this->assertEquals(0,                                $link->link_parent);
-        $this->assertEquals('This is web2project forums',     $link->link_description);
+        $this->assertEquals('These are the web2project forums',$link->link_description);
         $this->assertEquals(1,                                $link->link_owner);
         $this->assertEquals('2009-01-01',                     $link->link_date);
         $this->assertEquals('',                               $link->link_icon);
         $this->assertEquals(0,                                $link->link_category);
 
-//        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'linksTestUpdate.xml');
-//        $this->assertTablesEqual($xml_dataset->getTable('links'), $this->getConnection()->createDataSet()->getTable('links'));
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'linksTestUpdate.xml');
+        $this->assertTablesEqual($xml_dataset->getTable('links'), $this->getConnection()->createDataSet()->getTable('links'));
     }
 
     /**
