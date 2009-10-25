@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- linksSeed.xml - Seed data for companies test. -->
+<!-- linksCreate.xml - Dataset to compare against after creating a link. -->
 <dataset>
     <table name="links">
         <column>link_id</column>
@@ -22,7 +22,7 @@
             <value>0</value>
             <value>This is web2project</value>
             <value>1</value>
-            <value>2009-01-01</value>			
+            <value>2009-01-01 00:00:00</value>			
             <value>obj/</value>
             <value>0</value>
         </row>
@@ -35,7 +35,7 @@
             <value>0</value>
             <value>These are the web2project forums</value>
             <value>1</value>
-            <value>2009-01-01</value>			
+            <value>2009-01-01 00:00:00</value>
             <value>obj/</value>
             <value>0</value>
         </row>
@@ -48,7 +48,7 @@
             <value>0</value>
             <value>This is the web2project bug system</value>
             <value>1</value>
-            <value>2009-01-01</value>			
+            <value>2009-01-01 00:00:00</value>			
             <value>obj/</value>
             <value>0</value>
         </row>
@@ -61,7 +61,20 @@
             <value>0</value>
             <value>This is the Google main page.</value>
             <value>1</value>
-            <value>2009-01-01</value>			
+            <value>2009-01-01 00:00:00</value>			
+            <value>obj/</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>5</value>
+            <value>http://forums.web2project.net</value>
+            <value>0</value>
+            <value>0</value>
+            <value>web2project Forums</value>
+            <value>0</value>
+            <value>These are the web2project forums</value>
+            <value>1</value>
+            <value>2009-01-01 00:00:00</value>
             <value>obj/</value>
             <value>0</value>
         </row>
