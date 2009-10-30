@@ -29,12 +29,12 @@ $loginFromPage = 'index.php';
 require_once 'base.php';
 
 clearstatcache();
-if (is_file(W2P_BASE_DIR . '/includes/config.php')) {
+if (is_file(W2P_BASE_DIR . '/includes/config.php') && filesize(W2P_BASE_DIR . '/includes/config.php') > 0) {
 	require_once W2P_BASE_DIR . '/includes/config.php';
 	if (isset($dPconfig)) {
 		echo '<html><head><meta http-equiv="refresh" content="5; URL=' . W2P_BASE_URL . '/install/index.php"></head><body>';
 		echo 'Fatal Error. It appears you\'re converting from dotProject.<br/><a href="./install/index.php">' . 'Click Here To Start the Conversion!</a> (forwarded in 5 sec.)</body></html>';
-		exit();		
+		exit();
 	}
 } else {
 	echo '<html><head><meta http-equiv="refresh" content="5; URL=' . W2P_BASE_URL . '/install/index.php"></head><body>';
@@ -266,7 +266,7 @@ include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 	ob_start();
 } else {
-	if(!ob_start('ob_gzhandler')) { 
+	if(!ob_start('ob_gzhandler')) {
 		ob_start();
 	}
 }
