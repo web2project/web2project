@@ -77,17 +77,18 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
           'file_name' =>          'thisIsTheFilename',
           'file_parent' =>        1,
           'file_description' =>   'File description',
-          'file_type' =>          'jpeg/jpg',
+          'file_type' =>          'image/jpeg',
           'file_owner' =>         '1',
           'file_date' =>          '20090728',
           'file_size' =>          '0',
-          'file_version' =>       '',
+          'file_version' =>       1,
+		  'file_version_id' =>    1,
           'file_icon' =>          '',
           'file_category' =>      0,
           'file_checkout' =>      0,
           'file_co_reason' =>     '',
-          'file_folder' =>        '',
-          'file_indexed' =>       '-1'
+          'file_folder' =>        0,
+          'file_indexed' =>       0
       );
     }
 
@@ -310,28 +311,9 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
 
       $this->file->bind($this->post_data);
       $errorArray = $this->file->store($AppUI);
-
       $this->assertTrue($errorArray);
-      $this->assertEquals(1,                          $this->file->file_id);
-      $this->assertEquals('thisIsTheRealFilename',    $this->file->file_real_filename);
-      $this->assertEquals(0,                          $this->file->file_project);
-      $this->assertEquals(0,                          $this->file->file_task);
-      $this->assertEquals('thisIsTheFilename',        $this->file->file_name);
-      $this->assertEquals(1,                          $this->file->file_parent);
-      $this->assertEquals('File description',         $this->file->file_description);
-      $this->assertEquals('jpeg/jpg',                 $this->file->file_type);
-      $this->assertEquals(1,                          $this->file->file_owner);
-      $this->assertEquals('2009-07-28 23:59:59',      $this->file->file_date);
-      $this->assertEquals(0,                          $this->file->file_size);
-      $this->assertEquals('',                         $this->file->file_version);
-      $this->assertEquals('obj/',                     $this->file->file_icon);
-      $this->assertEquals(0,                          $this->file->file_category);
-      $this->assertEquals(0,                          $this->file->file_checkout);
-      $this->assertEquals('',                         $this->file->file_co_reason);
-      $this->assertEquals('',                         $this->file->file_folder);
-      $this->assertEquals(-1,                         $this->file->file_indexed);
 
-      $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'testCreateFile.xml');
+      $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'filesTestCreate.xml');
       $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('files' => array('project_created', 'project_updated')));
       $xml_db_dataset = $this->getConnection()->createDataSet();
       $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('files' => array('project_created', 'project_updated')));
