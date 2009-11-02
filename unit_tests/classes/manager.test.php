@@ -75,9 +75,9 @@ class UpgradeManager_Test extends PHPUnit_Framework_TestCase
 	{
 		$manager = new UpgradeManager();
 
-		$maxUpload = min(ini_get('upload_max_filesize'), ini_get('post_max_size'))."\n";
-		$maxUpload = str_replace("\n", '', $maxUpload);
-
+        $upload_max_filesize = str_replace('M', '', ini_get('upload_max_filesize'));
+        $post_max_size = str_replace('M', '', ini_get('post_max_size'));
+		$maxUpload = min($upload_max_filesize, $post_max_size).'M';
 		$this->assertEquals($maxUpload, $manager->getMaxFileUpload());
 	}
 
