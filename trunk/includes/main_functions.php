@@ -187,10 +187,16 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 ## Merges arrays maintaining/overwriting shared numeric indicees
 ##
 function arrayMerge($a1, $a2) {
-	foreach ($a2 as $k => $v) {
-		$a1[$k] = $v;
-	}
-	return $a1;
+  if (is_array($a1) && !is_array($a2)) {
+    return $a1;
+  }
+  if (is_array($a2) && !is_array($a1)) {
+    return $a2;
+  }  
+  foreach ($a2 as $k => $v) {
+    $a1[$k] = $v;
+  }
+  return $a1;
 }
 
 ##
