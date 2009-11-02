@@ -24,7 +24,7 @@ class SSearchNS {
     global $AppUI;
     
     $perms = $AppUI->acl();
-    return $perms->registerModule('Project Importer', 'projectimporter');
+    return $perms->registerModule('Smart Search', 'smartsearch');
 	}
 
 	public function remove() {
