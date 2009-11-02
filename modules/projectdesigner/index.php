@@ -308,6 +308,7 @@ if (!$project_id) {
 	$durntype = w2PgetSysVal('TaskDurationType');
 	include_once ($AppUI->getModuleClass('tasks'));
 	global $task_access;
+	$task_access = (is_array($task_access)) ? $task_access : array();
 	$extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inactive Task');
 	$sel_priorities = arraySelect($priorities, 'add_task_priority0', 'style="width:80px" class="text"', '0');
 	$sel_types = arraySelect($types, 'add_task_type0', 'style="width:80px" class="text"', '');
