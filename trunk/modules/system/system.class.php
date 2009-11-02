@@ -89,7 +89,7 @@ class CModule extends CW2pObject {
 	public $mod_main_class = null;
 
 	public function CModule() {
-    parent::__construct('modules', 'mod_d');
+    parent::__construct('modules', 'mod_id');
 	}
 
 	public function install() {
