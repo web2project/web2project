@@ -88,6 +88,7 @@
         todir="packaging/web2project"/>
 
 	<exec command="svn log -v packaging/web2project-svn > packaging/web2project/ChangeLog" dir="." passthru="true" />
+  	<delete dir="packaging/web2project-svn/" />
 
     <!--
       TODO: This is duplicated from the lint target below and should be 
