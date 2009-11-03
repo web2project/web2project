@@ -1322,5 +1322,383 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($updated));
         }
     }
+    
+    /**
+     * Test copying task with no project or task id passed in.
+     */
+    public function testCopyNoProjectNoTask()
+    {
+        $task = new CTask();
+        $task->load(26);
+        $new_task = $task->copy();
+        
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $this->assertEquals(27,                     $new_task->task_id);
+        $this->assertEquals('Task 26',              $new_task->task_name);
+        $this->assertEquals(24,                     $new_task->task_parent);
+        $this->assertEquals(0,                      $new_task->task_milestone);
+        $this->assertEquals(1,                      $new_task->task_project);
+        $this->assertEquals(1,                      $new_task->task_owner);
+        $this->assertEquals('2009-10-10 00:00:00',  $new_task->task_start_date);
+        $this->assertEquals(3,                      $new_task->task_duration);
+        $this->assertEquals(24,                     $new_task->task_duration_type);
+        $this->assertEquals(0,                      $new_task->task_hours_worked);
+        $this->assertEquals('2009-11-02 00:00:00',  $new_task->task_end_date);
+        $this->assertEquals(0,                      $new_task->task_status);
+        $this->assertEquals(0,                      $new_task->task_priority);
+        $this->assertEquals(67,                     $new_task->task_percent_complete);
+        $this->assertEquals('This is task 26',      $new_task->task_description);
+        $this->assertEquals(0.00,                   $new_task->task_target_budget);
+        $this->assertEquals('',                     $new_task->task_related_url);
+        $this->assertEquals(1,                      $new_task->task_creator);
+        $this->assertEquals(1,                      $new_task->task_order);
+        $this->assertEquals(1,                      $new_task->task_client_publish);
+        $this->assertEquals(0,                      $new_task->task_dynamic);
+        $this->assertEquals(1,                      $new_task->task_access);
+        $this->assertEquals(1,                      $new_task->task_notify);
+        $this->assertEquals('',                     $new_task->task_departments);
+        $this->assertEquals('',                     $new_task->task_contacts);
+        $this->assertEquals('',                     $new_task->task_custom);
+        $this->assertEquals(1,                      $new_task->task_type);
+        $this->assertEquals(1,                      $new_task->task_updator);
+        $this->assertEquals(0,                      $new_task->task_dep_reset_dates);
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testCopyNoProjectNoTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated, task_created');
+        $q->addWhere('task_id = 27');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_created']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_created']));
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
+    
+    /**
+     * Test copying task with project but no task passed
+     */
+    public function testCopyProjectNoTask()
+    {
+        $task = new CTask();
+        $task->load(26);
+        $new_task = $task->copy(2);
+        
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $this->assertEquals(27,                     $new_task->task_id);
+        $this->assertEquals('Task 26',              $new_task->task_name);
+        $this->assertEquals(24,                     $new_task->task_parent);
+        $this->assertEquals(0,                      $new_task->task_milestone);
+        $this->assertEquals(2,                      $new_task->task_project);
+        $this->assertEquals(1,                      $new_task->task_owner);
+        $this->assertEquals('2009-10-10 00:00:00',  $new_task->task_start_date);
+        $this->assertEquals(3,                      $new_task->task_duration);
+        $this->assertEquals(24,                     $new_task->task_duration_type);
+        $this->assertEquals(0,                      $new_task->task_hours_worked);
+        $this->assertEquals('2009-11-02 00:00:00',  $new_task->task_end_date);
+        $this->assertEquals(0,                      $new_task->task_status);
+        $this->assertEquals(0,                      $new_task->task_priority);
+        $this->assertEquals(67,                     $new_task->task_percent_complete);
+        $this->assertEquals('This is task 26',      $new_task->task_description);
+        $this->assertEquals(0.00,                   $new_task->task_target_budget);
+        $this->assertEquals('',                     $new_task->task_related_url);
+        $this->assertEquals(1,                      $new_task->task_creator);
+        $this->assertEquals(1,                      $new_task->task_order);
+        $this->assertEquals(1,                      $new_task->task_client_publish);
+        $this->assertEquals(0,                      $new_task->task_dynamic);
+        $this->assertEquals(1,                      $new_task->task_access);
+        $this->assertEquals(1,                      $new_task->task_notify);
+        $this->assertEquals('',                     $new_task->task_departments);
+        $this->assertEquals('',                     $new_task->task_contacts);
+        $this->assertEquals('',                     $new_task->task_custom);
+        $this->assertEquals(1,                      $new_task->task_type);
+        $this->assertEquals(1,                      $new_task->task_updator);
+        $this->assertEquals(0,                      $new_task->task_dep_reset_dates);
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testCopyProjectNoTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated, task_created');
+        $q->addWhere('task_id = 27');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_created']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_created']));
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
+    
+    /**
+     * Test copying task with no project but task passed
+     */
+    public function testCopyNoProjectTask()
+    {
+        $task = new CTask();
+        $task->load(26);
+        $new_task = $task->copy(0, 1);
+        
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $this->assertEquals(27,                     $new_task->task_id);
+        $this->assertEquals('Task 26',              $new_task->task_name);
+        $this->assertEquals(1,                      $new_task->task_parent);
+        $this->assertEquals(0,                      $new_task->task_milestone);
+        $this->assertEquals(1,                      $new_task->task_project);
+        $this->assertEquals(1,                      $new_task->task_owner);
+        $this->assertEquals('2009-10-10 00:00:00',  $new_task->task_start_date);
+        $this->assertEquals(3,                      $new_task->task_duration);
+        $this->assertEquals(24,                     $new_task->task_duration_type);
+        $this->assertEquals(0,                      $new_task->task_hours_worked);
+        $this->assertEquals('2009-11-02 00:00:00',  $new_task->task_end_date);
+        $this->assertEquals(0,                      $new_task->task_status);
+        $this->assertEquals(0,                      $new_task->task_priority);
+        $this->assertEquals(67,                     $new_task->task_percent_complete);
+        $this->assertEquals('This is task 26',      $new_task->task_description);
+        $this->assertEquals(0.00,                   $new_task->task_target_budget);
+        $this->assertEquals('',                     $new_task->task_related_url);
+        $this->assertEquals(1,                      $new_task->task_creator);
+        $this->assertEquals(1,                      $new_task->task_order);
+        $this->assertEquals(1,                      $new_task->task_client_publish);
+        $this->assertEquals(0,                      $new_task->task_dynamic);
+        $this->assertEquals(1,                      $new_task->task_access);
+        $this->assertEquals(1,                      $new_task->task_notify);
+        $this->assertEquals('',                     $new_task->task_departments);
+        $this->assertEquals('',                     $new_task->task_contacts);
+        $this->assertEquals('',                     $new_task->task_custom);
+        $this->assertEquals(1,                      $new_task->task_type);
+        $this->assertEquals(1,                      $new_task->task_updator);
+        $this->assertEquals(0,                      $new_task->task_dep_reset_dates);
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testCopyNoProjectTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated, task_created');
+        $q->addWhere('task_id = 27');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_created']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_created']));
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
+    
+    /**
+     * Test copying task with with project and task passed
+     */
+    public function testCopyProjectTask()
+    {
+        $task = new CTask();
+        $task->load(26);
+        $new_task = $task->copy(2, 1);
+        
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $this->assertEquals(27,                     $new_task->task_id);
+        $this->assertEquals('Task 26',              $new_task->task_name);
+        $this->assertEquals(1,                      $new_task->task_parent);
+        $this->assertEquals(0,                      $new_task->task_milestone);
+        $this->assertEquals(2,                      $new_task->task_project);
+        $this->assertEquals(1,                      $new_task->task_owner);
+        $this->assertEquals('2009-10-10 00:00:00',  $new_task->task_start_date);
+        $this->assertEquals(3,                      $new_task->task_duration);
+        $this->assertEquals(24,                     $new_task->task_duration_type);
+        $this->assertEquals(0,                      $new_task->task_hours_worked);
+        $this->assertEquals('2009-11-02 00:00:00',  $new_task->task_end_date);
+        $this->assertEquals(0,                      $new_task->task_status);
+        $this->assertEquals(0,                      $new_task->task_priority);
+        $this->assertEquals(67,                     $new_task->task_percent_complete);
+        $this->assertEquals('This is task 26',      $new_task->task_description);
+        $this->assertEquals(0.00,                   $new_task->task_target_budget);
+        $this->assertEquals('',                     $new_task->task_related_url);
+        $this->assertEquals(1,                      $new_task->task_creator);
+        $this->assertEquals(1,                      $new_task->task_order);
+        $this->assertEquals(1,                      $new_task->task_client_publish);
+        $this->assertEquals(0,                      $new_task->task_dynamic);
+        $this->assertEquals(1,                      $new_task->task_access);
+        $this->assertEquals(1,                      $new_task->task_notify);
+        $this->assertEquals('',                     $new_task->task_departments);
+        $this->assertEquals('',                     $new_task->task_contacts);
+        $this->assertEquals('',                     $new_task->task_custom);
+        $this->assertEquals(1,                      $new_task->task_type);
+        $this->assertEquals(1,                      $new_task->task_updator);
+        $this->assertEquals(0,                      $new_task->task_dep_reset_dates);
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testCopyProjectTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated, task_created');
+        $q->addWhere('task_id = 27');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_created']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_created']));
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
+
+    /**
+     * Tests copying assigned users from one task to another
+     */
+    public function testCopyAssignedUsers()
+    {
+        $task = new CTask();
+        $task->load(1);
+        $task->copyAssignedUsers(2);
+
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testCopyAssignedUsers.xml');
+        $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
+    }
+
+    /**
+     * Tests the deep copy function with no project or task id passed in
+     */
+    public function testDeepCopyNoProjectNoTask()
+    {
+        $task = new CTask();
+        $task->load(24);
+        $task->deepCopy();
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testDeepCopyNoProjectNoTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated, task_created');
+        $q->addWhere('task_id IN(27,28,29)');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_created']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_created']));
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
+
+    /**
+     * Tests the deep copy function with no project id passed
+     */
+    public function testDeepCopyNoProjectTask()
+    {
+        $task = new CTask();
+        $task->load(24);
+        $task->deepCopy(0, 1);
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testDeepCopyNoProjectTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated, task_created');
+        $q->addWhere('task_id IN(27,28,29)');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_created']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_created']));
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
+
+    /**
+     * Tests the deep copy function with a project and task id passed
+     */
+    public function testDeepCopyProjectTask()
+    {
+        $task = new CTask();
+        $task->load(24);
+        $task->deepCopy(2, 1);
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testDeepCopyProjectTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated, task_created');
+        $q->addWhere('task_id IN(27,28,29)');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_created']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_created']));
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
 }
 ?>
