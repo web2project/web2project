@@ -37,7 +37,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
 {
 
     protected $backupGlobals = FALSE;
-    protected $file = null;
+    protected $obj = null;
     protected $post_data = array();
 
     /**
@@ -66,7 +66,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
 
     protected function setUp()
     {
-      $this->file = new CFile();
+      $this->obj = new CFile();
 
       $this->post_data = array(
           'dosql' =>              'do_file_aed',
@@ -167,8 +167,8 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       global $AppUI;
 
       unset($this->post_data['file_real_filename']);
-      $this->file->bind($this->post_data);
-      $errorArray = $this->file->store($AppUI);
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->store($AppUI);
 
       /**
        * Verify we got the proper error message
@@ -179,7 +179,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       /**
        * Verify that project id was not set
        */
-      $this->AssertEquals(0, $this->file->file_id);
+      $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -191,8 +191,8 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       global $AppUI;
 
       unset($this->post_data['file_name']);
-      $this->file->bind($this->post_data);
-      $errorArray = $this->file->store($AppUI);
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->store($AppUI);
 
       /**
        * Verify we got the proper error message
@@ -203,7 +203,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       /**
        * Verify that project id was not set
        */
-      $this->AssertEquals(0, $this->file->file_id);
+      $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -214,8 +214,8 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       global $AppUI;
 
       unset($this->post_data['file_parent']);
-      $this->file->bind($this->post_data);
-      $errorArray = $this->file->store($AppUI);
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->store($AppUI);
 
       /**
        * Verify we got the proper error message
@@ -226,7 +226,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       /**
        * Verify that project id was not set
        */
-      $this->AssertEquals(0, $this->file->file_id);
+      $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -237,8 +237,8 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       global $AppUI;
 
       unset($this->post_data['file_type']);
-      $this->file->bind($this->post_data);
-      $errorArray = $this->file->store($AppUI);
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->store($AppUI);
 
       /**
        * Verify we got the proper error message
@@ -249,7 +249,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       /**
        * Verify that project id was not set
        */
-      $this->AssertEquals(0, $this->file->file_id);
+      $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -261,8 +261,8 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       global $AppUI;
 
       unset($this->post_data['file_size']);
-      $this->file->bind($this->post_data);
-      $errorArray = $this->file->store($AppUI);
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->store($AppUI);
 
       /**
        * Verify we got the proper error message
@@ -273,7 +273,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       /**
        * Verify that project id was not set
        */
-      $this->AssertEquals(0, $this->file->file_id);
+      $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -288,8 +288,8 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       unset($this->post_data['file_parent']);
       unset($this->post_data['file_type']);
       unset($this->post_data['file_size']);
-      $this->file->bind($this->post_data);
-      $errorArray = $this->file->check();
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->check();
 
       /**
        * Verify we got the proper error message
@@ -309,8 +309,8 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
     {
       global $AppUI;
 
-      $this->file->bind($this->post_data);
-      $errorArray = $this->file->store($AppUI);
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->store($AppUI);
       $this->assertTrue($errorArray);
 
       $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'filesTestCreate.xml');
