@@ -1700,5 +1700,50 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
         }
     }
+
+    /**
+     * Tests the move function with no project or task passed
+     */
+    public function testMoveNoProjectNoTask()
+    {
+        $this->markTestSkipped('This function does nothing with no arguments');
+    }
+
+    /**
+     * Tests the move function with a project passed but no task
+     */
+    public function testMoveProjectNoTask()
+    {
+        $task = new CTask();
+        $task->load(1);
+        $task->move(2);
+
+        $this->assertEquals(2, $task->task_project);
+    }
+
+    /**
+     * Tests the move function with a project and task passed
+     */
+    public function testMoveProjectTask()
+    {
+        $task = new CTask();
+        $task->load(1);
+        $task->move(2,2);
+
+        $this->assertEquals(2, $task->task_project);
+        $this->assertEquals(2, $task->task_parent);
+    }
+
+    /**
+     * Tests the move function with a 0 passed as the task
+     */
+    public function testMoveZeroTask()
+    {
+        $task = new CTask();
+        $task->load(1);
+        $task->move(0,0);
+
+        $this->assertEquals(1, $task->task_parent);
+    }
 }
 ?>
