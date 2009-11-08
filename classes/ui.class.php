@@ -596,7 +596,7 @@ class CAppUI {
 	  if (is_array($msg)) {
         $append = true;
         foreach ($msg as $key => $value) {
-          $this->msg .= '<br />' . $value;
+          $this->msg .= '<br />' . $this->_($value);
         }
       } else {
         $msg = $this->_($msg, UI_OUTPUT_RAW);
