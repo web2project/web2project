@@ -122,6 +122,7 @@ class CAppUI {
  	@var integer */
 	public $user_is_admin = null;
 
+	private $objStore = null;
 	/**
 
 	 * CAppUI Constructor
@@ -524,6 +525,26 @@ class CAppUI {
 	public function getPlace() {
 		return $this->state['SAVEDPLACE'];
 	}
+
+	/**
+	 * Provides a way to temporary store an object from call to call.
+	 *   
+	 * Primarily useful for holding an object after a failed validation check 
+	 * without it actually being saved.
+	 * 
+	 * @param object The item to be temporarily stored
+	 * 
+	 *
+	 */
+	public function holdObject($obj) {
+	  $this->objStore = $obj;
+	}
+	public function restoreObject() {
+	  $obj = $this->objStore;
+	  $this->objStore = null;
+	  return $obj;
+	}
+
 	/**
 	 * Redirects the browser to a new page.
 	 *
