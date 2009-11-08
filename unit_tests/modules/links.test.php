@@ -187,6 +187,29 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
+     * Tests that the proper error message is returned when a link is attempted
+     * to be created without an owner.
+     */
+    public function testCreateLinkNoOwner()
+    {
+      global $AppUI;
+
+      unset($this->post_data['link_owner']);
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->store($AppUI);
+      /**
+       * Verify we got the proper error message
+       */
+      $this->AssertEquals(1, count($errorArray));
+      $this->assertArrayHasKey('link_owner', $errorArray);
+
+      /**
+       * Verify that link id was not set
+       */
+      $this->AssertEquals(0, $this->obj->link_id);
+    }
+
+    /**
      * Tests the proper creation of a link
      */
     public function testCreateLink()

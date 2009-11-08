@@ -82,12 +82,15 @@ class CLink extends CW2pObject {
     // ensure the integrity of some variables
     $errorArray = array();
     $baseErrorMsg = get_class($this) . '::store-check failed - ';
-    
-    if ('' == $this->link_name) {
+
+    if ('' == trim($this->link_name)) {
       $errorArray['link_name'] = $baseErrorMsg . 'link name is not set';
     }
-    if ('' == $this->link_url) {
+    if ('' == trim($this->link_url)) {
       $errorArray['link_url'] = $baseErrorMsg . 'link url is not set';
+    }
+    if (0 == (int) $this->link_owner) {
+      $errorArray['link_owner'] = $baseErrorMsg . 'link owner is not set';
     }
     
     return $errorArray;
@@ -109,7 +112,6 @@ class CLink extends CW2pObject {
     $perms = $AppUI->acl();
     $stored = false;
 
-    $this->link_owner = (int) $AppUI->user_id;
     $errorMsgArray = $this->check();
 
     if (count($errorMsgArray) > 0) {
