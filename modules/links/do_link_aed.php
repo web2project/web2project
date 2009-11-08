@@ -15,7 +15,7 @@ $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
 
 if (is_array($result)) {
-  $AppUI->setMsg($result, UI_MSG_ERROR);
+  $AppUI->setMsg($result, UI_MSG_ERROR, true);
   $AppUI->redirect();
 }
 if ($result) {
