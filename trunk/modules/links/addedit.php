@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$link_id = intval(w2PgetParam($_GET, 'link_id', 0));
+$link_id = (int) w2PgetParam($_GET, 'link_id', 0);
 
 // check permissions for this record
 $perms = &$AppUI->acl();
@@ -19,18 +19,13 @@ if (!$canEdit && $link_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// load the companies class to retrieved denied companies
-require_once ($AppUI->getModuleClass('projects'));
-
-$link_task = intval(w2PgetParam($_GET, 'link_task', 0));
-$link_parent = intval(w2PgetParam($_GET, 'link_parent', 0));
-$link_project = intval(w2PgetParam($_GET, 'project_id', 0));
-
 $link = new CLink();
-$link->loadFull($link_id);
-
-// check if this record has dependancies to prevent deletion
-$msg = '';
+$obj = $AppUI->restoreObject();
+if ($obj) {
+  $link = $obj;
+} else {
+  $link->loadFull($link_id);
+}
 
 // load the record data
 if (!$link && $link_id > 0) {
@@ -49,25 +44,11 @@ if ($canDelete && $link_id > 0) {
 }
 $titleBlock->show();
 
-if ($link->link_project) {
-	$link_project = $link->link_project;
+$prj = new CProject();
+$projects = $prj->getAllowedProjects($AppUI->user_id, false);
+foreach ($projects as $project_id => $project_info) {
+	$projects[$project_id] = $project_info['project_name'];
 }
-if ($link->link_task) {
-	$link_task = $link->link_task;
-	$task_name = $link->task_name;
-} elseif ($link_task) {
-	$q->clear();
-	$q->addQuery('task_name');
-	$q->addTable('tasks');
-	$q->addWhere('task_id = ' . (int)$link_task);
-	$task_name = $q->loadResult();
-} else {
-	$task_name = '';
-}
-
-$extra = array('where' => 'project_active = 1');
-$project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
 ?>
@@ -108,72 +89,69 @@ function setTask( key, val ) {
 
 <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 
-<form name="uploadFrm" action="?m=links" method="post" accept-charset="utf-8">
-	<input type="hidden" name="dosql" value="do_link_aed" />
-	<input type="hidden" name="del" value="0" />
-	<input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
-
-<tr>
-	<td width="100%" valign="top" align="center">
-		<table cellspacing="1" cellpadding="2" width="60%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link Name'); ?>:</td>
-			<td align="left"><input type="text" class="text" name="link_name" value="<?php echo $link->link_name; ?>"></td>
-	<?php if ($link_id) { ?>
-			<td>
-				<a href="<?php echo $link->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By'); ?>:</td>
-			<td align="left" class="hilite"><?php echo $link->contact_first_name . ' ' . $link->contact_last_name; ?></td>
-	<?php } ?>
-		</tr>
-                <tr>
-                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Category'); ?>:</td>
-                        <td align="left">
-                                <?php echo arraySelect(w2PgetSysVal('LinkType'), 'link_category', '', $link->link_category, true); ?>
-                        <td>
-
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
-			<td align="left">
-			<?php
-echo arraySelect($projects, 'link_project', 'size="1" class="text" style="width:270px"', $link_project);
-?>
-			</td>
-		</tr>
-
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task'); ?>:</td>
-			<td align="left" colspan="2" valign="top">
-				<input type="hidden" name="link_task" value="<?php echo $link_task; ?>" />
-				<input type="text" class="text" name="task_name" value="<?php echo $task_name; ?>" size="40" disabled="disabled" />
-				<input type="button" class="button" value="<?php echo $AppUI->_('select task'); ?>..." onclick="popTask()" />
-			</td>
-		</tr>
-
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
-			<td align="left">
-				<textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php echo $link->link_description; ?></textarea>
-			</td>
-		</tr>
-
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link URL'); ?>:</td>
-			<td align="left"><input type="field" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>"></td>
-		</tr>
-		</table>
-	</td>
-</tr>
-<tr>
-	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=links';}" />
-	</td>
-	<td align="right">
-		<input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
-	</td>
-</tr>
-</form>
+  <form name="uploadFrm" action="?m=links" method="post" accept-charset="utf-8">
+    <input type="hidden" name="dosql" value="do_link_aed" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
+  
+    <tr>
+    	<td width="100%" valign="top" align="center">
+          <table cellspacing="1" cellpadding="2" width="60%">
+            <tr>
+            	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link Name'); ?>:</td>
+            	<td align="left"><input type="text" class="text" name="link_name" value="<?php echo $link->link_name; ?>"></td>
+              <?php if ($link_id) { ?>
+          	  <td>
+          		<a href="<?php echo $link->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
+          	  </td>
+            	<?php } ?>
+            </tr>
+            <?php if ($link_id) { ?>
+        		<tr>
+        			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By'); ?>:</td>
+        			<td align="left" class="hilite"><?php echo $link->contact_first_name . ' ' . $link->contact_last_name; ?></td>
+        		</tr>
+            <?php } ?>
+            <tr>
+              <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Category'); ?>:</td>
+              <td align="left">
+                <?php echo arraySelect(w2PgetSysVal('LinkType'), 'link_category', '', $link->link_category, true); ?>
+              <td>
+            </tr>
+            <tr>
+              <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
+              <td align="left">
+                  <?php echo arraySelect($projects, 'link_project', 'size="1" class="text" style="width:270px"', $link->link_project); ?>
+              </td>
+            </tr>
+            <tr>
+              <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task'); ?>:</td>
+              <td align="left" colspan="2" valign="top">
+                <input type="hidden" name="link_task" value="<?php echo $link->link_task; ?>" />
+                <input type="text" class="text" name="task_name" value="<?php echo $link->task_name; ?>" size="40" disabled="disabled" />
+                <input type="button" class="button" value="<?php echo $AppUI->_('select task'); ?>..." onclick="popTask()" />
+              </td>
+            </tr>
+            <tr>
+              <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
+              <td align="left">
+              	<textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php echo $link->link_description; ?></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link URL'); ?>:</td>
+              <td align="left"><input type="field" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>"></td>
+            </tr>
+		  </table>
+    	</td>
+    </tr>
+    <tr>
+    	<td>
+    		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=links';}" />
+    	</td>
+    	<td align="right">
+    		<input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+    	</td>
+    </tr>
+  </form>
 </table>

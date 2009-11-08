@@ -16,7 +16,8 @@ $result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
 
 if (is_array($result)) {
   $AppUI->setMsg($result, UI_MSG_ERROR, true);
-  $AppUI->redirect();
+  $AppUI->holdObject($obj);
+  $AppUI->redirect('m=links&a=addedit');
 }
 if ($result) {
   $AppUI->setMsg('Links '.$action, UI_MSG_OK, true);
