@@ -36,6 +36,7 @@ function __autoload($class_name) {
       require_once W2P_BASE_DIR.'/classes/libmail.class.php';
       break;
     case 'dbquery':
+    case 'query':
       require_once W2P_BASE_DIR.'/classes/query.class.php';
       break;      
     default:
