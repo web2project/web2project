@@ -52,14 +52,16 @@ class CCompany extends CW2pObject {
 
 	// overload check
 	public function check() {
-    $errorArray = array();
-    $baseErrorMsg = get_class($this) . '::store-check failed - ';
+	  $errorArray = array();
+	  $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-		if ('' == mb_trim($this->company_name)) {
-      $errorArray['company_name'] = $baseErrorMsg . 'company name is not set';
-		}
-
-		return $errorArray;
+	  if ('' == trim($this->company_name)) {
+	    $errorArray['company_name'] = $baseErrorMsg . 'company name is not set';
+	  }
+	  if ((int) $this->company_owner == 0) {
+    	$errorArray['company_owner'] = $baseErrorMsg . 'company owner is not set';
+	  }
+	  return $errorArray;
 	}
 
 	// overload canDelete

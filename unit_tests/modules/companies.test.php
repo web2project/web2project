@@ -127,11 +127,45 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
     /**
      * Tests that the proper error message is returned when a company
-     * is attempted to be created without an id.
+     * is attempted to be created without an owner.
      */
-    public function testCreateCompanyNoID()
+    public function testCreateCompanyNoOwner()
     {
-			$this->markTestSkipped('This test has been deprecated by casting the company_id via intval().');
+      global $AppUI;
+
+      $company = new CCompany();
+
+      $post_array = array(
+        'dosql'                 => 'do_company_aed',
+        'company_id'            => 0,
+        'company_name'          => 'UnitTestCompany',
+        'company_email'         => 'web2project@example.org',
+        'company_phone1'        => '1.999.999.9999',
+        'company_phone2'        => '1.999.999.9998',
+        'company_fax'           => '1.999.999.9997',
+        'company_address1'      => 'Address 1',
+        'company_address2'      => 'Address 2',
+        'company_city'          => 'City',
+        'company_state'         => 'CA',
+        'company_zip'           => '90210',
+        'company_country'       => 'US',
+        'company_primary_url'   => 'web2project.org',
+        'company_owner'         => 0,
+        'company_type'          => 2,
+        'company_description'   => 'This is a company.'
+      );
+      $company->bind($post_array);
+      $errorArray = $company->store($AppUI);
+
+      /**
+       * Verify we got the proper error message
+       */
+      $this->assertArrayHasKey('company_owner', $errorArray);
+
+      /**
+       * Verify that company id was not set
+       */
+      $this->assertEquals(0, $company->company_id);
     }
 
 /**
@@ -140,41 +174,41 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateCompanyNoName()
     {
-        global $AppUI;
+      global $AppUI;
 
-        $company = new CCompany();
+      $company = new CCompany();
 
-        $post_array = array(
-            'dosql'                 => 'do_company_aed',
-            'company_id'            => 0,
-            'company_name'          => '',
-            'company_email'         => 'web2project@example.org',
-            'company_phone1'        => '1.999.999.9999',
-            'company_phone2'        => '1.999.999.9998',
-            'company_fax'           => '1.999.999.9997',
-            'company_address1'      => 'Address 1',
-            'company_address2'      => 'Address 2',
-            'company_city'          => 'City',
-            'company_state'         => 'CA',
-            'company_zip'           => '90210',
-            'company_country'       => 'US',
-            'company_primary_url'   => 'web2project.org',
-            'company_owner'         => 1,
-            'company_type'          => 2,
-            'company_description'   => 'This is a company.'
-        );
-        $company->bind($post_array);
-        $errorArray = $company->store($AppUI);
+      $post_array = array(
+          'dosql'                 => 'do_company_aed',
+          'company_id'            => 0,
+          'company_name'          => '',
+          'company_email'         => 'web2project@example.org',
+          'company_phone1'        => '1.999.999.9999',
+          'company_phone2'        => '1.999.999.9998',
+          'company_fax'           => '1.999.999.9997',
+          'company_address1'      => 'Address 1',
+          'company_address2'      => 'Address 2',
+          'company_city'          => 'City',
+          'company_state'         => 'CA',
+          'company_zip'           => '90210',
+          'company_country'       => 'US',
+          'company_primary_url'   => 'web2project.org',
+          'company_owner'         => 1,
+          'company_type'          => 2,
+          'company_description'   => 'This is a company.'
+      );
+      $company->bind($post_array);
+      $errorArray = $company->store($AppUI);
 
-        /**
-         * Verify we got the proper error message
-         */
-        $this->assertArrayHasKey('company_name', $errorArray);
+      /**
+       * Verify we got the proper error message
+       */
+      $this->assertArrayHasKey('company_name', $errorArray);
 
-        /**
-         * Verify that company id was not set
-         */
-        $this->assertEquals(0, $company->company_id);
+      /**
+       * Verify that company id was not set
+       */
+      $this->assertEquals(0, $company->company_id);
     }
 
     /**
