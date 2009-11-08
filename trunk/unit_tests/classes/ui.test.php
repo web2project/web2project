@@ -132,4 +132,39 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 		$AppUI->resetPlace();
 		$this->assertEquals('', $AppUI->getPlace());
 	}
+
+	public function testHoldRestoreObject()
+	{
+	  global $AppUI;
+	  
+	  $this->assertNull($AppUI->restoreObject());
+	  $myArray = array('one' => 'something', 2 => 'another');
+	  $AppUI->holdObject($myArray);
+
+	  $result = $AppUI->restoreObject();
+	  $this->AssertEquals(2, count($result));
+	  $this->assertArrayHasKey('one', $result);
+	  $this->assertArrayHasKey(2, $result);
+	  $this->assertNull($AppUI->restoreObject());
+	}
+
+	public function testSetMsg()
+	{
+	  global $AppUI;
+
+	  $msg = 'This is a test';
+	  $AppUI->setMsg($msg, 0, false);
+	  $this->AssertEquals($msg, $AppUI->msg);
+	  $AppUI->setMsg($msg, 0, true);
+	  $this->AssertEquals($msg.' '.$msg, $AppUI->msg);	  
+	  $AppUI->setMsg($msg, 0, false);
+	  $this->AssertEquals($msg, $AppUI->msg);
+
+	  $myArray = array('one' => 'First Message', 'two' => 'Second Message');
+	  $AppUI->setMsg($myArray, 0, false);
+	  $this->AssertEquals('First Message<br />Second Message', $AppUI->msg);
+
+	  $AppUI->setMsg($msg, 0, false);
+	  $this->AssertEquals($msg, $AppUI->msg);
+	}
 }
