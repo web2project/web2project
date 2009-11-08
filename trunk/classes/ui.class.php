@@ -571,9 +571,16 @@ class CAppUI {
 	 * the existing message is overwritten with $msg.
 	 */
 	public function setMsg($msg, $msgNo = 0, $append = false) {
-		$msg = $this->_($msg, UI_OUTPUT_RAW);
-		$this->msg = $append ? $this->msg . ' ' . $msg : $msg;
-		$this->msgNo = $msgNo;
+	  $this->msgNo = $msgNo;
+	  if (is_array($msg)) {
+        $append = true;
+        foreach ($msg as $key => $value) {
+          $this->msg .= '<br />' . $value;
+        }
+      } else {
+        $msg = $this->_($msg, UI_OUTPUT_RAW);
+        $this->msg = ($append) ? $this->msg . ' ' . $msg : $msg;
+      }
 	}
 	/**
 	 * Display the formatted message and icon
