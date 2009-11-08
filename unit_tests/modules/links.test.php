@@ -29,15 +29,16 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
  * LinksTest Class.
  *
  * Class to test the companies class
- * @author Trevor Morse<trevor.morse@gmail.com>
+ * @author D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
  * @package web2project
  * @subpackage unit_tests
  */
 class Links_Test extends PHPUnit_Extensions_Database_TestCase
 {
-
     protected $backupGlobals = FALSE;
-
+    protected $obj = null;
+    protected $post_data = array();
+    
     /**
      * Return database connection for tests
      */
@@ -55,37 +56,61 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
      */
     protected function getDataSet()
     {
-        return $this->createXMLDataSet($this->getDataSetPath().'linksSeed.xml');
+      return $this->createXMLDataSet($this->getDataSetPath().'linksSeed.xml');
     }
     protected function getDataSetPath()
     {
       return dirname(dirname(__FILE__)).'/db_files/';
     }
 
+    protected function setUp()
+    {
+      $this->obj = new CLink();
+
+      $this->post_data = array(
+          'dosql'             => 'do_link_aed',
+          'link_id'           => 0,
+          'link_name'         => 'web2project homepage',
+          'link_project'      => 0,
+          'link_task'         => 0,
+          'link_url'          => 'http://web2project.net',
+          'link_parent'       => '0',
+          'link_description'  => 'This is web2project',
+          'link_owner'        => 1,
+          'link_date'         => '2009-01-01',
+          'link_icon'         => '',
+          'link_category'     => 0
+      );
+    }
+
+    protected function tearDown()
+    {
+      $this->getDataSet();
+    }
     /**
      * Tests the Attributes of a new Links object.
      */
     public function testNewLinkAttributes()
     {
-        $link = new CLink();
+      $link = new CLink();
 
-        $this->assertType('CLink', $link);
-        $this->assertObjectHasAttribute('link_id',          $link);
-        $this->assertObjectHasAttribute('link_project',     $link);
-        $this->assertObjectHasAttribute('link_url',         $link);
-        $this->assertObjectHasAttribute('link_task',        $link);
-        $this->assertObjectHasAttribute('link_name',        $link);
-        $this->assertObjectHasAttribute('link_parent',      $link);
-        $this->assertObjectHasAttribute('link_description', $link);
-        $this->assertObjectHasAttribute('link_owner',       $link);
-        $this->assertObjectHasAttribute('link_date',        $link);
-        $this->assertObjectHasAttribute('link_icon',        $link);
-        $this->assertObjectHasAttribute('link_category',    $link);
-        $this->assertObjectHasAttribute('_tbl_prefix',      $link);
-        $this->assertObjectHasAttribute('_tbl',             $link);
-        $this->assertObjectHasAttribute('_tbl_key',         $link);
-        $this->assertObjectHasAttribute('_error',           $link);
-        $this->assertObjectHasAttribute('_query',           $link);
+      $this->assertType('CLink', $link);
+      $this->assertObjectHasAttribute('link_id',          $link);
+      $this->assertObjectHasAttribute('link_project',     $link);
+      $this->assertObjectHasAttribute('link_url',         $link);
+      $this->assertObjectHasAttribute('link_task',        $link);
+      $this->assertObjectHasAttribute('link_name',        $link);
+      $this->assertObjectHasAttribute('link_parent',      $link);
+      $this->assertObjectHasAttribute('link_description', $link);
+      $this->assertObjectHasAttribute('link_owner',       $link);
+      $this->assertObjectHasAttribute('link_date',        $link);
+      $this->assertObjectHasAttribute('link_icon',        $link);
+      $this->assertObjectHasAttribute('link_category',    $link);
+      $this->assertObjectHasAttribute('_tbl_prefix',      $link);
+      $this->assertObjectHasAttribute('_tbl',             $link);
+      $this->assertObjectHasAttribute('_tbl_key',         $link);
+      $this->assertObjectHasAttribute('_error',           $link);
+      $this->assertObjectHasAttribute('_query',           $link);
     }
 
     /**
@@ -119,36 +144,22 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateLinkNoName()
     {
-        global $AppUI;
+      global $AppUI;
 
-        $link = new CLink();
+      unset($this->post_data['link_name']);
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->store($AppUI);
 
-        $post_array = array(
-            'dosql'             => 'do_link_aed',
-            'link_id'           => 0,
-            'link_name'         => '',
-            'link_project'      => 0,
-            'link_task'         => 0,
-            'link_url'          => 'http://web2project.net',
-            'link_parent'       => '0',
-            'link_description'  => 'This is web2project',
-            'link_owner'        => 1,
-            'link_date'         => '2009-01-01',
-            'link_icon'         => '',
-            'link_category'     => 0
-        );
-        $link->bind($post_array);
-        $errorArray = $link->store($AppUI);
+      /**
+       * Verify we got the proper error message
+       */
+      $this->AssertEquals(1, count($errorArray));
+      $this->assertArrayHasKey('link_name', $errorArray);
 
-        /**
-         * Verify we got the proper error message
-         */
-        $this->assertArrayHasKey('link_name', $errorArray);
-
-        /**
-         * Verify that link id was not set
-         */
-        $this->assertEquals(0, $link->link_id);
+      /**
+       * Verify that link id was not set
+       */
+      $this->AssertEquals(0, $this->obj->link_id);
     }
 
     /**
@@ -157,36 +168,22 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateLinkNoUrl()
     {
-        global $AppUI;
+      global $AppUI;
 
-        $link = new CLink();
+      unset($this->post_data['link_url']);
+      $this->obj->bind($this->post_data);
+      $errorArray = $this->obj->store($AppUI);
 
-        $post_array = array(
-            'dosql'             => 'do_link_aed',
-            'link_id'           => 0,
-            'link_name'         => 'web2project homepage',
-            'link_project'      => 0,
-            'link_task'         => 0,
-            'link_url'          => '',
-            'link_parent'       => '0',
-            'link_description'  => 'This is web2project',
-            'link_owner'        => 1,
-            'link_date'         => '2009-01-01',
-            'link_icon'         => '',
-            'link_category'     => 0
-        );
-        $link->bind($post_array);
-        $errorArray = $link->store($AppUI);
+      /**
+       * Verify we got the proper error message
+       */
+      $this->AssertEquals(1, count($errorArray));
+      $this->assertArrayHasKey('link_url', $errorArray);
 
-        /**
-         * Verify we got the proper error message
-         */
-        $this->assertArrayHasKey('link_url', $errorArray);
-
-        /**
-         * Verify that link id was not set
-         */
-        $this->assertEquals(0, $link->link_id);
+      /**
+       * Verify that link id was not set
+       */
+      $this->AssertEquals(0, $this->obj->link_id);
     }
 
     /**
@@ -194,41 +191,23 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateLink()
     {
-        global $AppUI;
-        $link = new CLink();
+      global $AppUI;
 
-        $post_array = array(
-            'dosql'             => 'do_link_aed',
-            'link_id'           => 0,
-            'link_name'         => 'web2project homepage',
-            'link_project'      => 0,
-            'link_task'         => 0,
-            'link_url'          => 'http://web2project.net',
-            'link_parent'       => '0',
-            'link_description'  => 'This is web2project',
-            'link_owner'        => 1,
-            'link_date'         => '2009-01-01',
-            'link_icon'         => '',
-            'link_category'     => 0
-        );
-        $link->bind($post_array);
-        $result = $link->store($AppUI);
+      $this->obj->bind($this->post_data);
+      $result = $this->obj->store($AppUI);
 
-        $this->assertTrue($result);
-        $this->assertEquals('web2project homepage',   $link->link_name);
-        $this->assertEquals(0,                        $link->link_project);
-        $this->assertEquals(0,                        $link->link_task);
-        $this->assertEquals('http://web2project.net', $link->link_url);
-        $this->assertEquals(0,                        $link->link_parent);
-        $this->assertEquals('This is web2project',    $link->link_description);
-        $this->assertEquals(1,                        $link->link_owner);
-        $this->assertEquals('2009-01-01',             $link->link_date);
-        $this->assertEquals('',                       $link->link_icon);
-        $this->assertEquals(0,                        $link->link_category);
-        $this->assertNotEquals(0,                     $link->link_id);
-
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'linksTestCreate.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('links'), $this->getConnection()->createDataSet()->getTable('links'));
+      $this->assertTrue($result);
+      $this->assertEquals('web2project homepage',   $this->obj->link_name);
+      $this->assertEquals(0,                        $this->obj->link_project);
+      $this->assertEquals(0,                        $this->obj->link_task);
+      $this->assertEquals('http://web2project.net', $this->obj->link_url);
+      $this->assertEquals(0,                        $this->obj->link_parent);
+      $this->assertEquals('This is web2project',    $this->obj->link_description);
+      $this->assertEquals(1,                        $this->obj->link_owner);
+      $this->assertEquals('2009-01-01',             $this->obj->link_date);
+      $this->assertEquals('',                       $this->obj->link_icon);
+      $this->assertEquals(0,                        $this->obj->link_category);
+      $this->assertNotEquals(0,                     $this->obj->link_id);
     }
 
     /**
@@ -236,19 +215,26 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testLoad()
     {
-        $link = new CLink();
-        $link->load(1);
+      global $AppUI;
 
-        $this->assertEquals('web2project homepage',   $link->link_name);
-        $this->assertEquals(0,                        $link->link_project);
-        $this->assertEquals(0,                        $link->link_task);
-        $this->assertEquals('http://web2project.net', $link->link_url);
-        $this->assertEquals(0,                        $link->link_parent);
-        $this->assertEquals('This is web2project',    $link->link_description);
-        $this->assertEquals(1,                        $link->link_owner);
-        $this->assertEquals('2009-01-01 00:00:00',    $link->link_date);
-        $this->assertEquals('obj/',                   $link->link_icon);
-        $this->assertEquals(0,                        $link->link_category);
+      $this->obj->bind($this->post_data);
+      $result = $this->obj->store($AppUI);
+      $this->assertTrue($result);
+
+      $link = new CLink();
+      $link->load($this->obj->link_id);
+
+      $this->assertEquals($this->obj->link_name,              $link->link_name);
+      $this->assertEquals($this->obj->link_project,           $link->link_project);
+      $this->assertEquals($this->obj->link_task,              $link->link_task);
+      $this->assertEquals($this->obj->link_url,               $link->link_url);
+      $this->assertEquals($this->obj->link_parent,            $link->link_parent);
+      $this->assertEquals($this->obj->link_description,       $link->link_description);
+      $this->assertEquals($this->obj->link_owner,             $link->link_owner);
+      $this->assertEquals($this->obj->link_date. ' 00:00:00', $link->link_date);
+      $this->assertEquals('obj/',                             $link->link_icon);
+      $this->assertEquals($this->obj->link_category,          $link->link_category);
+      $this->assertEquals($this->obj->link_id,                $link->link_id);
     }
 
     /**
@@ -256,53 +242,43 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testUpdateLink()
     {
-        global $AppUI;
-        $link = new CLink();
-        $link->load(1);
+      global $AppUI;
 
-        $post_array = array(
-            'dosql'             => 'do_link_aed',
-            'link_id'           => 0,
-            'link_name'         => 'web2project Forums',
-            'link_project'      => 0,
-            'link_task'         => 0,
-            'link_url'          => 'http://forums.web2project.net',
-            'link_parent'       => '0',
-            'link_description'  => 'These are the web2project forums',
-            'link_owner'        => 1,
-            'link_date'         => '2009-01-01',
-            'link_icon'         => '',
-            'link_category'     => 0
-        );
-        $link->bind($post_array);
-        $result = $link->store($AppUI);
+      $this->obj->bind($this->post_data);
+      $result = $this->obj->store($AppUI);
+      $this->assertTrue($result);
+      $original_id = $this->obj->link_id;
 
-        $this->assertTrue($result);
-        $this->assertEquals('web2project Forums',             $link->link_name);
-        $this->assertEquals(0,                                $link->link_project);
-        $this->assertEquals(0,                                $link->link_task);
-        $this->assertEquals('http://forums.web2project.net',  $link->link_url);
-        $this->assertEquals(0,                                $link->link_parent);
-        $this->assertEquals('These are the web2project forums',$link->link_description);
-        $this->assertEquals(1,                                $link->link_owner);
-        $this->assertEquals('2009-01-01',                     $link->link_date);
-        $this->assertEquals('',                               $link->link_icon);
-        $this->assertEquals(0,                                $link->link_category);
+      $this->obj->link_name = 'web2project Forums';
+      $this->obj->link_url = 'http://forums.web2project.net';
+      $result = $this->obj->store($AppUI);
+      $this->assertTrue($result);
+      $new_id = $this->obj->link_id;
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'linksTestUpdate.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('links'), $this->getConnection()->createDataSet()->getTable('links'));
+      $this->assertEquals($original_id,                    $new_id);
+      $this->assertEquals('web2project Forums',            $this->obj->link_name);
+      $this->assertEquals('http://forums.web2project.net', $this->obj->link_url);
+      $this->assertEquals('This is web2project',           $this->obj->link_description);
     }
 
     /**
-     * Tests the delete of a company
+     * Tests the delete of a link
      */
     public function testDeleteLink()
     {
-        global $AppUI;
+      global $AppUI;
 
-        $link = new CLink();
-        $link->link_id = 1;
-        $result = $link->delete($AppUI);
-        $this->assertTrue($result);
+      $this->obj->bind($this->post_data);
+      $result = $this->obj->store($AppUI);
+      $this->assertTrue($result);
+      $original_id = $this->obj->link_id;
+
+      $result = $this->obj->delete($AppUI);
+      $this->assertTrue($result);
+
+      $link = new CLink();
+      $link->load($original_id);
+      $this->assertEquals('',              $link->link_name);
+      $this->assertEquals('',              $link->link_url);
     }
 }

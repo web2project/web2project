@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- linksSeed.xml - Seed data for companies test. -->
+<!-- linksSeed.xml - Seed data for links test. -->
 <dataset>
     <table name="links">
         <column>link_id</column>
