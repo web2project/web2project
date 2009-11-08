@@ -594,10 +594,7 @@ class CAppUI {
 	public function setMsg($msg, $msgNo = 0, $append = false) {
 	  $this->msgNo = $msgNo;
 	  if (is_array($msg)) {
-        $append = true;
-        foreach ($msg as $key => $value) {
-          $this->msg .= '<br />' . $this->_($value);
-        }
+        $this->msg = implode('<br />', $msg);
       } else {
         $msg = $this->_($msg, UI_OUTPUT_RAW);
         $this->msg = ($append) ? $this->msg . ' ' . $msg : $msg;
