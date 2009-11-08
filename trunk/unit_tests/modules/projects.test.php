@@ -532,6 +532,110 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
+     * Tests that the proper error message is returned when no owner is passed.
+     */
+    public function testCreateProjectNoOwner()
+    {
+        global $AppUI;
+
+        $project = new CProject();
+
+        $post_data = array(
+            'dosql' =>                      'do_project_aed',
+            'project_id' =>                 0,
+            'project_creator' =>            1,
+            'project_contacts' =>           '',
+            'project_name' =>               'New Project',
+            'project_parent' =>             '',
+            'project_owner' =>              0,
+            'project_company' =>            1,
+            'project_location' =>           '',
+            'project_start_date' =>         '20090628',
+            'project_end_date' =>           '20090728',
+            'project_target_budget' =>      5,
+            'project_actual_budget' =>      10,
+            'project_scheduled_hours' =>    0,
+            'project_worked_hours' =>       0,
+            'project_task_count' =>         0,
+            'project_url' =>                'project.example.org',
+            'project_demo_url' =>           'projectdemo.example.org',
+            'project_priority' =>           '-1',
+            'project_short_name' =>         'nproject',
+            'project_color_identifier' =>   'FFFFFF',
+            'project_type' =>               0,
+            'project_status' =>             0,
+            'project_description' =>        'This is a project.',
+            'email_project_owner' =>        1,
+            'email_project_contacts' =>     1
+        );
+
+        $project->bind($post_data);
+        $results = $project->store($AppUI);
+        
+        /**
+         * Verify we got the proper error message
+         */
+        $this->assertArrayHasKey('project_owner', $results);
+
+        /**
+         * Verify that project id was not set
+         */
+        $this->AssertEquals(0, $project->project_id);
+    }
+
+    /**
+     * Tests that the proper error message is returned when no creator is passed.
+     */
+    public function testCreateProjectNoCreator()
+    {
+        global $AppUI;
+
+        $project = new CProject();
+
+        $post_data = array(
+            'dosql' =>                      'do_project_aed',
+            'project_id' =>                 0,
+            'project_creator' =>            0,
+            'project_contacts' =>           '',
+            'project_name' =>               'New Project',
+            'project_parent' =>             '',
+            'project_owner' =>              1,
+            'project_company' =>            1,
+            'project_location' =>           '',
+            'project_start_date' =>         '20090628',
+            'project_end_date' =>           '20090728',
+            'project_target_budget' =>      5,
+            'project_actual_budget' =>      10,
+            'project_scheduled_hours' =>    0,
+            'project_worked_hours' =>       0,
+            'project_task_count' =>         0,
+            'project_url' =>                'project.example.org',
+            'project_demo_url' =>           'projectdemo.example.org',
+            'project_priority' =>           '-1',
+            'project_short_name' =>         'nproject',
+            'project_color_identifier' =>   'FFFFFF',
+            'project_type' =>               0,
+            'project_status' =>             0,
+            'project_description' =>        'This is a project.',
+            'email_project_owner' =>        1,
+            'email_project_contacts' =>     1
+        );
+
+        $project->bind($post_data);
+        $results = $project->store($AppUI);
+
+        /**
+         * Verify we got the proper error message
+         */
+        $this->assertArrayHasKey('project_creator', $results);
+
+        /**
+         * Verify that project id was not set
+         */
+        $this->AssertEquals(0, $project->project_id);
+    }
+
+    /**
      * Tests the proper creation of a project.
      */
     public function testCreateProject()
