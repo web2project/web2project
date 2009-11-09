@@ -27,6 +27,7 @@ function __autoload($class_name) {
     case 'ui':
       require_once W2P_BASE_DIR . '/classes/ui.class.php';
       break;
+    case 'cdate':
     case 'date':
       require_once W2P_BASE_DIR . '/classes/date.class.php';
       break;
