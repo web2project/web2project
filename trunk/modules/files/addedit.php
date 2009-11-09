@@ -30,11 +30,6 @@ $canAdmin = $perms->checkModule('system', 'edit');
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'];
 
-// load the companies class to retrieved denied companies
-require_once ($AppUI->getModuleClass('companies'));
-require_once ($AppUI->getModuleClass('projects'));
-require_once $AppUI->getModuleClass('tasks');
-
 $file_task = intval(w2PgetParam($_GET, 'file_task', 0));
 $file_parent = intval(w2PgetParam($_GET, 'file_parent', 0));
 $file_project = intval(w2PgetParam($_GET, 'project_id', 0));

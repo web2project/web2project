@@ -4,7 +4,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 global $AppUI, $company_id, $deny, $canRead, $canEdit, $w2Pconfig;
-require_once ($AppUI->getModuleClass('files'));
 
 $cfObj = new CFileFolder();
 global $allowed_folders_ary;

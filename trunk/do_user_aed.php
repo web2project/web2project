@@ -44,7 +44,6 @@ require_once W2P_BASE_DIR . '/classes/query.class.php';
 require_once W2P_BASE_DIR . '/classes/ui.class.php';
 $AppUI = new CAppUI();
 
-require_once $AppUI->getModuleClass('admin');
 // Create the roles class container
 require_once W2P_BASE_DIR . '/modules/system/roles/roles.class.php';
 if (w2PgetConfig('activate_external_user_creation') != 'true') {

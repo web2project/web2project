@@ -3,11 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $helpdesk_available;
-
-if ($helpdesk_available = $AppUI->isActiveModule('helpdesk')) {
-	require_once ($AppUI->getModuleClass('helpdesk'));
-}
 /**
  * File Class
  */

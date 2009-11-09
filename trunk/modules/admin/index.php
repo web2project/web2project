@@ -13,8 +13,6 @@ if (!$perms->checkModule('users', 'view')) {
 
 $AppUI->savePlace();
 
-require_once ($AppUI->getModuleClass('contacts'));
-
 $tab = $AppUI->processIntState('UserIdxTab', $_GET, 'tab', 0);
 
 if (isset($_GET['stub'])) {

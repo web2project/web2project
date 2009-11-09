@@ -7,7 +7,6 @@ if (!defined('W2P_BASE_DIR')) {
 // and if there is a clash between this and other tasks.
 global $AppUI, $task_id, $obj;
 
-require_once $AppUI->getModuleClass('resources');
 $resource = &new CResource;
 
 $q = &new DBQuery;

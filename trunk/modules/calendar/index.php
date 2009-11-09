@@ -15,9 +15,6 @@ $AppUI->savePlace();
 
 w2PsetMicroTime();
 
-require_once ($AppUI->getModuleClass('companies'));
-require_once ($AppUI->getModuleClass('tasks'));
-
 // retrieve any state parameters
 if (isset($_REQUEST['company_id'])) {
 	$AppUI->setState('CalIdxCompany', intval(w2PgetParam($_REQUEST, 'company_id', 0)));

@@ -9,8 +9,6 @@ if (!$canAccess) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-require_once $AppUI->getModuleClass('contacts');
-
 $perms = &$AppUI->acl();
 
 $countries = w2PgetSysVal('GlobalCountries');

@@ -161,7 +161,6 @@ if ($hasTasks) {
 <?php
 $priorities = w2Pgetsysval('TaskPriority');
 $types = w2Pgetsysval('TaskType');
-include_once ($AppUI->getModuleClass('tasks'));
 global $task_access;
 $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inactive Task');
 ?>

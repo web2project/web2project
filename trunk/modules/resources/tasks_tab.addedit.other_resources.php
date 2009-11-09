@@ -7,7 +7,6 @@ global $AppUI, $users, $task_id, $task_project, $obj;
 global $projTasksWithEndDates, $tab, $loadFromTab;
 
 // Need to get all of the resources that this user is allowed to view
-require_once $AppUI->getModuleClass('resources');
 $resource = &new CResource;
 
 $resource_types = &$resource->typeSelect();

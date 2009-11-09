@@ -14,8 +14,6 @@ if (!$canRead) {
 global $tab, $locale_char_set, $date;
 $AppUI->savePlace();
 
-require_once ($AppUI->getModuleClass('tasks'));
-
 $company_id = $AppUI->processIntState('CalIdxCompany', $_REQUEST, 'company_id', $AppUI->user_company);
 
 $event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');

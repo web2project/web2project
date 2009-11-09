@@ -18,8 +18,6 @@ if ($user_id) {
 
 	// has the change form been posted
 	if ($new_pwd1 && $new_pwd2 && $new_pwd1 == $new_pwd2) {
-		require_once ($AppUI->getModuleClass('admin'));
-
 		$user = new CUser();
 
 		if ($canAdminEdit || $user->validatePassword($user_id, $old_pwd)) {

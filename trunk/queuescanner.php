@@ -27,7 +27,6 @@
 	$moduleList = $AppUI->getLoadableModuleList();
 
 	foreach ($moduleList as $module) {
-		include_once ($AppUI->getModuleClass($module['mod_directory']));
 		$object = new $module['mod_main_class']();
 
 		if (is_callable($object, 'hook_cron')) {

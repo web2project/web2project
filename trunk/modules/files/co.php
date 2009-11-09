@@ -13,9 +13,6 @@ if (!$canEdit) {
 }
 $canAdmin = $perms->checkModule('system', 'edit');
 
-// load the companies class to retrieved denied companies
-require_once ($AppUI->getModuleClass('projects'));
-
 $file_parent = intval(w2PgetParam($_GET, 'file_parent', 0));
 
 // check if this record has dependencies to prevent deletion

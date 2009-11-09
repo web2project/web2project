@@ -14,8 +14,6 @@ if (!$canRead) {
 $AppUI->savePlace();
 global $locale_char_set;
 
-require_once ($AppUI->getModuleClass('tasks'));
-
 // retrieve any state parameters
 if (isset($_REQUEST['company_id'])) {
 	$AppUI->setState('CalIdxCompany', intval(w2PgetParam($_REQUEST, 'company_id', 0)));

@@ -21,9 +21,6 @@ if (!$canEdit && $forum_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// load the companies class to retrieved denied projects
-require_once ($AppUI->getModuleClass('projects'));
-
 $forum_id = intval(w2PgetParam($_GET, 'forum_id', 0));
 
 //Pull forum information

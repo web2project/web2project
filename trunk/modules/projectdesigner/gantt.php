@@ -18,7 +18,6 @@ $f = w2PgetParam($_REQUEST, 'f', 0);
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-require_once $AppUI->getModuleClass('projects');
 $project = &new CProject;
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 $criticalTasksInverted = ($project_id > 0) ? getCriticalTasksInverted($project_id) : null;

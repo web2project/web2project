@@ -101,8 +101,6 @@ $file_id = isset($_GET['file_id']) ? (int)w2PgetParam($_GET, 'file_id', 0)  : 0;
 
 if ($file_id) {
 	// projects tat are denied access
-	require_once ($AppUI->getModuleClass('projects'));
-	require_once ($AppUI->getModuleClass('files'));
 	$project = new CProject;
 	$allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id, project_name', '', null, null, 'projects');
 	$fileclass = new CFile;
