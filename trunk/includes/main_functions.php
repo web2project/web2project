@@ -47,6 +47,12 @@ function __autoload($class_name) {
     case 'eventqueue':
       require_once W2P_BASE_DIR.'/classes/event_queue.class.php';
       break;
+    case 'cevent':
+      require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
+      break;
+    case 'cuser':
+      require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
+      break;
     case 'dbquery':
     case 'query':
       require_once W2P_BASE_DIR.'/classes/query.class.php';
