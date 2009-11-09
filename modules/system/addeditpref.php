@@ -16,8 +16,6 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-require_once ($AppUI->getModuleClass('contacts'));
-
 // load the preferences
 $q = new DBQuery;
 $q->addTable('user_preferences');
@@ -198,7 +196,6 @@ echo arraySelect($taskAssMax, 'pref_name[TASKASSIGNMAX]', 'class=text size=1', $
 	<td align="right"><?php echo $AppUI->_('Default Event Filter'); ?>:</td>
 	<td>
 <?php
-require_once $AppUI->getModuleClass('calendar');
 echo arraySelect($event_filter_list, 'pref_name[EVENTFILTER]', 'class=text size=1', $prefs['EVENTFILTER'], true);
 ?>
 	</td>

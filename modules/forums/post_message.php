@@ -17,8 +17,6 @@ if (!$canEdit && !$canAdd) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-require_once ($AppUI->getModuleClass('contacts'));
-
 //Pull forum information
 $myForum = new CForum();
 $myForum->load($forum_id);

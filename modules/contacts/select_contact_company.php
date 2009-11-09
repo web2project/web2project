@@ -10,8 +10,6 @@ $select_list = array();
 
 switch ($table_name) {
 	case 'companies':
-		require_once ($AppUI->getModuleClass('companies'));
-
 		$id_field = 'company_id';
 		$name_field = 'company_name';
 		$selection_string = 'Company';
@@ -25,8 +23,6 @@ switch ($table_name) {
 		}
 		break;
 	case 'departments':
-		require_once ($AppUI->getModuleClass('departments'));
-		
 		$id_field = 'dept_id';
 		$name_field = 'dept_name';
 		$selection_string = 'Department';

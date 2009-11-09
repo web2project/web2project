@@ -5,8 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 $history_id = w2PgetParam($_GET, 'history_id', 0);
 
-require_once ($AppUI->getModuleClass('projects'));
-
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }

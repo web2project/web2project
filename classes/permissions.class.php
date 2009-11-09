@@ -1253,15 +1253,13 @@ class w2Pacl extends gacl_api {
 		}
 
 		/*print_r($mod_class);
-		print_r('user:'.$userid.'module:'.$module.'Item:'.$item);
-		print_r($AppUI->getModuleClass($mod_class['mod_directory']));*/
+		print_r('user:'.$userid.'module:'.$module.'Item:'.$item);*/
 
 		//If we don't know what is the module we are dealing with lets deny
 		if (!$mod_class['mod_directory']) {
 			dprint(__file__, __line__, 2, 'user:' . $userid . 'module:' . $module . 'Item:' . $item . $AppUI->getModuleClass($mod_class['mod_directory']));
 			return array();
 		}
-		require_once ($AppUI->getModuleClass($mod_class['mod_directory']));
 		$obj = new $mod_class['mod_main_class'];
 		$allowedRecords = array();
 		if ($module == 'projects') {

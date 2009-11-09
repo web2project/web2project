@@ -597,7 +597,6 @@ class CEvent extends CW2pObject {
 			$user_id = $AppUI->user_id;
 		}
 
-		require_once $AppUI->getModuleClass('projects');
 		$project = &new CProject;
 		if ($project_id) {
 			$p = &$AppUI->acl();
@@ -952,7 +951,6 @@ class CEvent extends CW2pObject {
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
-		require_once ($AppUI->getModuleClass('projects'));
 		$oPrj = new CProject();
 
 		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');

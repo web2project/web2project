@@ -19,11 +19,6 @@ if (!$project_id) {
 	$showProject = true;
 }
 
-// get company to filter files by
-//if (isset( $_POST['company_id'] )) {
-//	$AppUI->setState( 'FileIdxCompany', intval( $_POST['company_id'] ) );
-//}
-//$company_id = $AppUI->getState( 'FileIdxCompany' ) !== NULL ? $AppUI->getState( 'FileIdxCompany' ) : $AppUI->user_company;
 if (!isset($company_id)) {
 	$company_id = w2PgetParam($_REQUEST, 'company_id', 0);
 }
@@ -38,10 +33,6 @@ if (!isset($task_id)) {
 
 $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-
-// load the following classes to retrieved denied records
-include_once ($AppUI->getModuleClass('projects'));
-include_once ($AppUI->getModuleClass('tasks'));
 
 $project = new CProject();
 $deny1 = $project->getDeniedRecords($AppUI->user_id);

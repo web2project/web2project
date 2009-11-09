@@ -109,8 +109,6 @@ class PostNukeAuthenticator extends SQLAuthenticator {
 	public function createsqluser($username, $password, $email, $first, $last) {
 		global $db, $AppUI;
 
-		require_once ($AppUI->getModuleClass('contacts'));
-
 		$c = new CContact();
 		$c->contact_first_name = $first;
 		$c->contact_last_name = $last;
@@ -296,8 +294,6 @@ class LDAPAuthenticator extends SQLAuthenticator {
 	public function createsqluser($username, $password, $ldap_attribs = array()) {
 		global $db, $AppUI;
 		$hash_pass = MD5($password);
-
-		require_once ($AppUI->getModuleClass('contacts'));
 
 		if (!count($ldap_attribs) == 0) {
 			// Contact information based on the inetOrgPerson class schema

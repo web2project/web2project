@@ -22,8 +22,6 @@ if (isset($view_temp)) {
 }
 $folder = w2PgetParam($_GET, 'folder', 0); // to pass to "new file" button
 
-require_once ($AppUI->getModuleClass('projects'));
-
 // get the list of visible companies
 $extra = array('from' => 'files', 'where' => 'projects.project_id = file_project', 'join' => 'project_departments', 'on' => 'projects.project_id = project_departments.project_id');
 

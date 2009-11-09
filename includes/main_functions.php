@@ -252,16 +252,10 @@ function w2PgetConfig($key, $default = null) {
 }
 
 function w2PgetUsername($username) {
-	global $AppUI;
-	require_once ($AppUI->getModuleClass('contacts'));
-
 	return CContact::getContactByUsername($username);
 }
 
 function w2PgetUsernameFromID($userId) {
-	global $AppUI;
-	require_once ($AppUI->getModuleClass('contacts'));
-
 	return CContact::getContactByUserid($userId);
 }
 
@@ -274,7 +268,6 @@ function w2PgetUsers() {
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 	$q->addOrder('contact_first_name,contact_last_name');
 
-	require_once ($AppUI->getModuleClass('companies'));
 	$obj = new CCompany();
 	$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
 	$q->addJoin('companies', 'com', 'company_id = contact_company');
@@ -283,8 +276,6 @@ function w2PgetUsers() {
 	}
 	
 	if ($AppUI->isActiveModule('departments')) {
-		require_once ($AppUI->getModuleClass('departments'));
-
 		$dpt = new CDepartment();
 		$depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
 		$q->addJoin('departments', 'dep', 'dept_id = contact_department');
@@ -314,21 +305,18 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
 	$q->addOrder($orderby);
 
 	// get CCompany() to filter by company
-	require_once ($AppUI->getModuleClass('companies'));
 	$obj = new CCompany();
 	$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
 	$q->addJoin('companies', 'com', 'company_id = contact_company');
 	if ($companies) {
 		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 	}
-	require_once ($AppUI->getModuleClass('departments'));
 	$dpt = new CDepartment();
 	$depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
 	$q->addJoin('departments', 'dep', 'dept_id = contact_department');
 	if ($depts) {
 		$q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
 	}
-	//print_r($q->prepare());
 
 	return $q->loadList();
 }
@@ -351,21 +339,18 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 	$q->addOrder($orderby);
 
 	// get CCompany() to filter by company
-	require_once ($AppUI->getModuleClass('companies'));
 	$obj = new CCompany();
 	$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
 	$q->addJoin('companies', 'com', 'company_id = contact_company');
 	if ($companies) {
 		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 	}
-	require_once ($AppUI->getModuleClass('departments'));
 	$dpt = new CDepartment();
 	$depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
 	$q->addJoin('departments', 'dep', 'dept_id = contact_department');
 	if ($depts) {
 		$q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
 	}
-	//print_r($q->prepare());
 
 	return $q->loadHashList('user_id');
 }

@@ -6,7 +6,6 @@
 	require_once W2P_BASE_DIR . '/classes/ui.class.php';
 	
 	$AppUI = new CAppUI;
-	require_once $AppUI->getModuleClass('admin');
 
 	$token = w2PgetParam($_GET, 'token', '');
 	$format = w2PgetParam($_GET, 'format', 'ical');
@@ -38,7 +37,6 @@
 		$myTimezoneOffset = date('Z');
 
 		foreach ($moduleList as $module) {
-			include_once ($AppUI->getModuleClass($module['mod_directory']));
 			$object = new $module['mod_main_class']();
 			if (is_callable($object, 'hook_calendar')) {
 				$itemList = $object->hook_calendar($userId);

@@ -15,8 +15,6 @@ $AppUI->savePlace();
 
 w2PsetMicroTime();
 
-require_once ($AppUI->getModuleClass('companies'));
-require_once ($AppUI->getModuleClass('tasks'));
 require_once (w2PgetConfig('root_dir') . "/modules/calendar/links_tasks.php");
 require_once (w2PgetConfig('root_dir') . "/modules/calendar/links_events.php");
 

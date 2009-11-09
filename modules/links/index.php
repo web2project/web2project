@@ -15,8 +15,6 @@ $project_id = $AppUI->getState('LinkIdxProject') !== null ? $AppUI->getState('Li
 $tab = $AppUI->processIntState('LinkIdxTab', $_GET, 'tab', 0);
 $active = intval(!$AppUI->getState('LinkIdxTab'));
 
-require_once ($AppUI->getModuleClass('projects'));
-
 // get the list of visible companies
 $extra = array('from' => 'links', 'where' => 'projects.project_id = link_project');
 

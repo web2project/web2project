@@ -23,10 +23,6 @@ $ok = $callback & $table;
 
 $title = 'Generic Selector';
 
-$modclass = $AppUI->getModuleClass($table);
-if ($modclass && file_exists($modclass))
-	require_once $modclass;
-
 $q = &new DBQuery;
 $q->addTable($table);
 $query_result = false;
@@ -49,7 +45,6 @@ switch ($table) {
 		$q->addWhere('dept_company = company_id ');
 		$q->addTable('companies', 'b');
 
-		include_once $AppUI->getModuleClass('companies');
 		$company = new CCompany();
 		$allowed = $company->getAllowedRecords($AppUI->user_id, 'company_id, company_name');
 		if (count($allowed)) {
@@ -87,7 +82,6 @@ switch ($table) {
 		$project_company = w2PgetParam($_GET, 'project_company', 0);
 
 		if ($user_id > 0) {
-			require_once $AppUI->getModuleClass('contacts');
 			$projectList = CContact::getProjects($user_id);
 		} else {
 			$projectList = CCompany::getProjects($AppUI, $project_company);

@@ -3,8 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once ($AppUI->getModuleClass('companies'));
-
 $user_id = isset($_GET['user_id']) ? w2PgetParam($_GET, 'user_id', 0) : 0;
 $contact_id = isset($_GET['contact_id']) ? w2PgetParam($_GET, 'contact_id', 0) : 0;
 

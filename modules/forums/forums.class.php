@@ -107,7 +107,6 @@ class CForum extends CW2pObject {
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
-		require_once ($AppUI->getModuleClass('projects'));
 		$oPrj = new CProject();
 
 		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');

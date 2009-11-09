@@ -3,8 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not call this file directly.');
 }
 
-require_once ($AppUI->getModuleClass('calendar'));
-
 $callback = isset($_GET['callback']) ? w2PgetParam($_GET, 'callback', '') : 0;
 $date = w2PgetParam($_GET, 'date', null);
 $prev_date = w2PgetParam($_GET, 'uts', null);

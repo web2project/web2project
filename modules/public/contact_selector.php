@@ -67,7 +67,6 @@ if ($contacts_submited == 1) {
 $contacts_id = remove_invalid(explode(',', $selected_contacts_id));
 $selected_contacts_id = implode(',', $contacts_id);
 
-require_once ($AppUI->getModuleClass('companies'));
 $oCpy = new CCompany();
 $aCpies = $oCpy->getAllowedRecords($AppUI->user_id, 'company_id, company_name', 'company_name');
 $aCpies_esc = array();
@@ -75,7 +74,6 @@ foreach ($aCpies as $key => $company) {
 	$aCpies_esc[$key] = db_escape($company);
 }
 
-require_once ($AppUI->getModuleClass('departments'));
 $oDpt = new CDepartment();
 $aDpts = $oDpt->getAllowedRecords($AppUI->user_id, 'dept_id, dept_name', 'dept_name');
 
