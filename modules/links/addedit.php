@@ -93,6 +93,7 @@ function setTask( key, val ) {
     <input type="hidden" name="dosql" value="do_link_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
+    <input type="hidden" name="link_owner" value="<?php echo $AppUI->user_id; ?>" />
   
     <tr>
     	<td width="100%" valign="top" align="center">
