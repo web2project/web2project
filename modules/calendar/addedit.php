@@ -5,9 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 
-require_once ($AppUI->getModuleClass('projects'));
-require_once ($AppUI->getModuleClass('calendar'));
-
 $event_id = intval(w2PgetParam($_GET, 'event_id', 0));
 $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
 
@@ -323,13 +320,6 @@ echo arraySelect($projects, 'event_project', 'size="1" class="text"', ($obj->eve
 				<input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($obj->event_times_recuring)) ? ($obj->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
 			</td>
 		</tr>
-		<?php /* FUNCTIONALITY NOT YET ENABLED ?>
-<tr>
-<td align="right" nowrap="nowrap"><?php echo $AppUI->_( 'Remind Me' );?>:</td>
-<td><?php echo arraySelect( $remind, 'event_remind', 'size="1" class="text"', $obj['event_remind'] ); ?> <?php echo $AppUI->_( 'in advance' );?></td>
-</tr>
-<?php */ ?>
-		
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Resources'); ?>:</td>
 			<td></td>
@@ -362,11 +352,10 @@ echo arraySelect($projects, 'event_project', 'size="1" class="text"', ($obj->eve
 		<tr>
 			<td colspan="2" align="right">
 					<?php
-// $m does not equal 'calendar' here???
-require_once $AppUI->getSystemClass('CustomFields');
-$custom_fields = new CustomFields('calendar', 'addedit', $obj->event_id, 'edit');
-$custom_fields->printHTML();
-?>
+                      // $m does not equal 'calendar' here???
+                      $custom_fields = new CustomFields('calendar', 'addedit', $obj->event_id, 'edit');
+                      $custom_fields->printHTML();
+                      ?>
 			</td>
 		<tr>
 			<td colspan="2">

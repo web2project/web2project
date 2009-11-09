@@ -121,7 +121,6 @@ class CCompany extends CW2pObject {
       $stored = true;
     }
     if ($stored) {
-      //require_once ($AppUI->getSystemClass('CustomFields'));
       $custom_fields = new CustomFields('companies', 'addedit', $this->company_id, 'edit');
       $custom_fields->bind($_POST);
       $sql = $custom_fields->store($this->company_id); // Store Custom Fields

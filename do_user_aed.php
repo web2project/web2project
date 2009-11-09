@@ -44,8 +44,6 @@ require_once W2P_BASE_DIR . '/classes/query.class.php';
 require_once W2P_BASE_DIR . '/classes/ui.class.php';
 $AppUI = new CAppUI();
 
-require_once $AppUI->getSystemClass('w2p');
-require_once $AppUI->getSystemClass('date');
 require_once $AppUI->getModuleClass('admin');
 // Create the roles class container
 require_once W2P_BASE_DIR . '/modules/system/roles/roles.class.php';

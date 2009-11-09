@@ -3,9 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-require_once $AppUI->getModuleClass('companies');
-require_once $AppUI->getModuleClass('departments');
-
 $contact_id = intval(w2PgetParam($_GET, 'contact_id', 0));
 $company_id = intval(w2PgetParam($_GET, 'company_id', 0));
 $dept_id = intval(w2PgetParam($_GET, 'dept_id', 0));
@@ -398,7 +395,6 @@ function updateVerify() {
 		<tr>
 			<td align="right" colspan="3">
 			<?php
-require_once ($AppUI->getSystemClass('CustomFields'));
 $custom_fields = new CustomFields($m, $a, $row->contact_id, "edit");
 $custom_fields->printHTML();
 ?>

@@ -46,8 +46,6 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	$AppUI->setConfig($w2Pconfig);
 	$AppUI->checkStyle();
 
-	require_once ($AppUI->getSystemClass('w2p'));
-
 	if ($AppUI->doLogin())
 		$AppUI->loadPrefs(0);
 	// check if the user is trying to log in

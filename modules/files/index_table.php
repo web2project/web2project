@@ -26,10 +26,6 @@ $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
 // load the following classes to retrieved denied records
-include_once $AppUI->getModuleClass('projects');
-include_once $AppUI->getModuleClass('tasks');
-require_once $AppUI->getSystemClass('query');
-require_once $AppUI->getModuleClass('files');
 
 $project = new CProject();
 $task = new CTask();

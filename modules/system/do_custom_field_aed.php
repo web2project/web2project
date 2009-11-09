@@ -12,8 +12,6 @@ if (!$perms->checkModule('system', 'edit')) {
 *	do_custom_field_aed.php
 *
 */
-require_once ($AppUI->getSystemClass('CustomFields'));
-
 $edit_field_id = w2PgetParam($_POST, 'field_id', null);
 
 if ($edit_field_id != null) {

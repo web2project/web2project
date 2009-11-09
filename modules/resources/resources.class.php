@@ -6,9 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 // Copyright 2004, Adam Donnison <adam@saki.com.au>
 // Released under GNU General Public License version 2 or later
 
-require_once $AppUI->getSystemClass('w2p');
-require_once $AppUI->getSystemClass('query');
-
 class CResource extends CW2pObject {
 	public $resource_id = null;
 	public $resource_key = null;

@@ -84,14 +84,6 @@ $last_insert_id = $AppUI->last_insert_id;
 
 $AppUI->checkStyle();
 
-// load the commonly used classes
-require_once ($AppUI->getSystemClass('date'));
-require_once ($AppUI->getSystemClass('w2p'));
-require_once ($AppUI->getSystemClass('query'));
-
-//Now that we have $AppUI lets add our ajax functions in
-//require_once ($AppUI->getSystemClass('ajax'));
-
 //Function for update lost action in user_access_log
 $AppUI->updateLastAction($last_insert_id);
 // load default preferences if not logged in

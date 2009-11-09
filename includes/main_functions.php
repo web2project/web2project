@@ -20,12 +20,20 @@ function __autoload($class_name) {
   $name = strtolower($class_name);
 
   switch ($name) {
-  	case 'cappui':
+    case 'ical':
+      require_once W2P_BASE_DIR . '/classes/ical.class.php';
+      break;
+    case 'cappui':
+    case 'ui':
       require_once W2P_BASE_DIR . '/classes/ui.class.php';
-      break;      
+      break;
+    case 'date':
+      require_once W2P_BASE_DIR . '/classes/date.class.php';
+      break;
     case 'w2pacl':
       require_once W2P_BASE_DIR . '/classes/permissions.class.php';
       break;
+    case 'w2p':
     case 'cw2pobject':
       require_once W2P_BASE_DIR.'/classes/w2p.class.php';
       break;
@@ -34,6 +42,9 @@ function __autoload($class_name) {
       break;
     case 'mail':
       require_once W2P_BASE_DIR.'/classes/libmail.class.php';
+      break;
+    case 'eventqueue':
+      require_once W2P_BASE_DIR.'/classes/event_queue.class.php';
       break;
     case 'dbquery':
     case 'query':

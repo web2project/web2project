@@ -360,7 +360,6 @@ class Mail extends PHPMailer {
 	public function QueueMail() {
 		global $AppUI;
 
-		require_once $AppUI->getSystemClass('event_queue');
 		$ec = new EventQueue;
 		$vars = get_object_vars($this);
 		return $ec->add(array('Mail', 'SendQueuedMail'), $vars, 'libmail', true);

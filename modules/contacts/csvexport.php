@@ -45,7 +45,6 @@ $text .= sprintf("%s", "\"Private\",\"Profession\",\"Referred By\",\"Sensitivity
 // Fields 86 - 90
 $text .= sprintf("%s", "\"User 1\",\"User 2\",\"User 3\",\"User 4\",\"Web Page\",");
 
-require_once $AppUI->getSystemClass('CustomFields');
 $custom_fields = CustomFields::getCustomFieldList('contacts');
 
 foreach ($custom_fields as $f) {

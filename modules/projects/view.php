@@ -200,7 +200,6 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		<tr>
 			<td colspan="2">
 				<?php
-					require_once ($AppUI->getSystemClass('CustomFields'));
 					$custom_fields = new CustomFields($m, $a, $project->project_id, 'view');
 					$custom_fields->printHTML();
 				?>
