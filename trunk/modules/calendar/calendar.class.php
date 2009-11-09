@@ -8,7 +8,6 @@ if (!defined('W2P_BASE_DIR')) {
 ##
 
 require_once $AppUI->getLibraryClass('PEAR/Date');
-require_once $AppUI->getSystemClass('date');
 
 /**
  * Displays a configuration month calendar

@@ -150,7 +150,6 @@ function delIt() {
 				</tr>
 			</table>
 			<?php
-				require_once $AppUI->getSystemClass('CustomFields');
 				$custom_fields = new CustomFields($m, $a, $event->event_id, 'view');
 				$custom_fields->printHTML();
 			?>

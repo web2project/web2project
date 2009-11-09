@@ -32,7 +32,6 @@ if (!$obj->bind($_POST)) {
 	$AppUI->redirect();
 }
 
-require_once ($AppUI->getSystemClass('CustomFields'));
 $del = w2PgetParam($_POST, 'del', 0);
 
 // prepare (and translate) the module name ready for the suffix

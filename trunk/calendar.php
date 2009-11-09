@@ -6,8 +6,6 @@
 	require_once W2P_BASE_DIR . '/classes/ui.class.php';
 	
 	$AppUI = new CAppUI;
-	require_once $AppUI->getSystemClass('ical');
-	require_once $AppUI->getSystemClass('w2p');	
 	require_once $AppUI->getModuleClass('admin');
 
 	$token = w2PgetParam($_GET, 'token', '');

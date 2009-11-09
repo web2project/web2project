@@ -142,8 +142,6 @@ if ($sub_form) {
 		$obj->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 	}
 
-	require_once ($AppUI->getSystemClass('CustomFields'));
-
 	// prepare (and translate) the module name ready for the suffix
 	if ($del) {
 		if (($msg = $obj->delete())) {

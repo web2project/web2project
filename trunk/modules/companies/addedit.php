@@ -167,7 +167,6 @@ function testURL( x ) {
 			</td>
 			<td align='left'>
 				<?php
-					require_once ($AppUI->getSystemClass('CustomFields'));
 					$custom_fields = new CustomFields($m, $a, $company->company_id, "edit");
 					$custom_fields->printHTML();
 				?>

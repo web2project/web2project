@@ -91,7 +91,6 @@ $perms = &$AppUI->acl();
 		<textarea name="task_description" class="textarea" cols="60" rows="10"><?php echo $obj->task_description; ?></textarea>
 		</td></tr></table><br />
 		<?php
-require_once ($AppUI->getSystemClass('CustomFields'));
 global $m;
 $custom_fields = new CustomFields($m, 'addedit', $obj->task_id, 'edit');
 $custom_fields->printHTML();

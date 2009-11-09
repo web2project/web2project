@@ -222,7 +222,6 @@ function delIt(){
 		<td valign="top" width="50%">
 			<table border="0" cellpadding="1" cellspacing="1" class="details" width="100%">
 				<?php
-					require_once ($AppUI->getSystemClass('CustomFields'));
 					$custom_fields = new CustomFields($m, $a, $contact->contact_id, 'view');
 					if ($custom_fields->count()) { ?>
 							<th colspan="2">

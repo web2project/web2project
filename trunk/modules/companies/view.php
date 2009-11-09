@@ -144,7 +144,6 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>		
 			</table>
 			<?php
-				require_once ($AppUI->getSystemClass('CustomFields'));
 				$custom_fields = new CustomFields($m, $a, $company->company_id, 'view');
 				$custom_fields->printHTML();
 			?>

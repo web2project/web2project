@@ -15,8 +15,6 @@ if (!$perms->checkModule('system', 'edit')) {
 }
 
 $AppUI->savePlace();
-
-require_once ($AppUI->getSystemClass('CustomFields'));
 $yesno = w2PgetSysVal('GlobalYesNo');
 $html_types = array('textinput' => $AppUI->_('Text Input'), 'textarea' => $AppUI->_('Text Area'), 'checkbox' => $AppUI->_('Checkbox'), 'select' => $AppUI->_('Select List'), 'label' => $AppUI->_('Label'), 'separator' => $AppUI->_('Separator'), 'href' => $AppUI->_('Weblink'), );
 

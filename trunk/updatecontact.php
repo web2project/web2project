@@ -12,8 +12,6 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 require_once W2P_BASE_DIR . '/classes/query.class.php';
 require_once W2P_BASE_DIR . '/classes/ui.class.php';
 $AppUI = new CAppUI();
-require_once ($AppUI->getSystemClass('date'));
-require_once ($AppUI->getModuleClass('contacts'));
 
 $updatekey = w2PgetParam($_GET, 'updatekey', 0);
 $contact_id = CContact::getContactByUpdatekey($updatekey);
@@ -247,7 +245,6 @@ function orderByName( x ){
 					<tr>
 						<td align="right" colspan="3">
 							<?php
-								require_once W2P_BASE_DIR . '/classes/CustomFields.class.php';
 								$custom_fields = new CustomFields('contacts', 'addedit', $row->contact_id, "edit", 1);
 								$custom_fields->printHTML();
 							?>

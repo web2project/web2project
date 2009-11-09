@@ -14,8 +14,6 @@ if (!$perms->checkModule('system', 'edit')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-require_once ($AppUI->getSystemClass('CustomFields'));
-
 $titleBlock = new CTitleBlock('Custom Fields - Add/Edit', 'customfields.png', 'admin', 'admin.custom_field_addedit');
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&a=custom_field_editor', 'custom fields');

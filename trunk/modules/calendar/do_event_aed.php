@@ -53,7 +53,6 @@ if (!$obj->event_recurs) {
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Event');
 $do_redirect = true;
-require_once $AppUI->getSystemClass('CustomFields');
 
 if ($del) {
 	if (!$obj->canDelete($msg)) {
