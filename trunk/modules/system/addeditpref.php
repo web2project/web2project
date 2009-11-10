@@ -196,6 +196,7 @@ echo arraySelect($taskAssMax, 'pref_name[TASKASSIGNMAX]', 'class=text size=1', $
 	<td align="right"><?php echo $AppUI->_('Default Event Filter'); ?>:</td>
 	<td>
 <?php
+$event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
 echo arraySelect($event_filter_list, 'pref_name[EVENTFILTER]', 'class=text size=1', $prefs['EVENTFILTER'], true);
 ?>
 	</td>
