@@ -1715,10 +1715,31 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testMoveProjectNoTask()
     {
         $task = new CTask();
-        $task->load(1);
+        $task->load(2);
         $task->move(2);
 
-        $this->assertEquals(2, $task->task_project);
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testMoveProjectNoTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+         
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_id = 2');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
     }
 
     /**
@@ -1727,11 +1748,31 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testMoveProjectTask()
     {
         $task = new CTask();
-        $task->load(1);
+        $task->load(2);
         $task->move(2,2);
 
-        $this->assertEquals(2, $task->task_project);
-        $this->assertEquals(2, $task->task_parent);
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testMoveProjectTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+         
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_id = 2');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
     }
 
     /**
@@ -1744,6 +1785,80 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $task->move(0,0);
 
         $this->assertEquals(1, $task->task_parent);
+    }
+
+    /**
+     * Tests the deepMove function with no project or task passed
+     */
+    public function testDeepMoveNoProjectNoTask()
+    {
+        $this->markTestSkipped('This function doesn\'t really do anything with no arguments');
+    }
+
+    /**
+     * Tests the deepMove function with a project but no task passed
+     */
+    public function testDeepMoveProjectNoTask()
+    {
+        $task = new CTask();
+        $task->load(24);
+        $task->deepMove(2);
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testDeepMoveProjectNoTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_id IN(24,25,26)');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
+
+    /**
+     * Tests the deepMove function with both a project and task passed
+     */
+    public function testDeepMoveProjectTask()
+    {
+        $task = new CTask();
+        $task->load(24);
+        $task->deepMove(2, 2);
+        
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+        
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/testDeepMoveProjectTask.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_id IN(24,25,26)');
+        $results = $q->loadList();
+        
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
     }
 }
 ?>
