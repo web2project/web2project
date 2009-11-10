@@ -495,6 +495,7 @@ class CTask extends CW2pObject {
 		} elseif ($destTask_id > 0) {
 			$this->task_parent = $destTask_id;
 		}
+        $this->store();
 	}
 
 	public function deepMove($destProject_id = 0, $destTask_id = 0) {
