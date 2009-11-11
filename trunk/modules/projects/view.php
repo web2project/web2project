@@ -265,7 +265,8 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		    	<td colspan='3' class="hilite">
 		    		<?php
 							foreach ($depts as $dept_id => $dept_info) {
-								echo '<div>' . $dept_info['dept_name'];
+								echo '<div>';
+								echo '<a href="?m=departments&a=view&dept_id='.$dept_id.'">'.$dept_info['dept_name'].'</a>';
 								if ($dept_info['dept_phone'] != '') {
 									echo '( ' . $dept_info['dept_phone'] . ' )';
 								}
