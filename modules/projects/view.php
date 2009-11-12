@@ -46,7 +46,6 @@ if (!$project) {
 	$AppUI->savePlace();
 }
 
-$worked_hours = $project->getWorkedHours();
 $total_hours = $project->getTotalHours();
 $total_project_hours = $project->getTotalProjectHours();
 
@@ -244,7 +243,7 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $worked_hours ?></td>
+			<td class="hilite" width="100%"><?php echo $project->project_worked_hours; ?></td>
 		</tr>	
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
