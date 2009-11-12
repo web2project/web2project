@@ -50,40 +50,40 @@ $priority = array(
  * The Project Class
  */
 class CProject extends CW2pObject {
-	public $project_id = null;
-	public $project_company = null;
-	public $project_department = null;
-	public $project_name = null;
-	public $project_short_name = null;
-	public $project_owner = null;
-	public $project_url = null;
-	public $project_demo_url = null;
-	public $project_start_date = null;
-	public $project_end_date = null;
-	public $project_actual_end_date = null;
-	public $project_status = null;
-	public $project_percent_complete = null;
-	public $project_color_identifier = null;
-	public $project_description = null;
-	public $project_target_budget = null;
-	public $project_actual_budget = null;
+  public $project_id = null;
+  public $project_company = null;
+  public $project_department = null;
+  public $project_name = null;
+  public $project_short_name = null;
+  public $project_owner = null;
+  public $project_url = null;
+  public $project_demo_url = null;
+  public $project_start_date = null;
+  public $project_end_date = null;
+  public $project_actual_end_date = null;
+  public $project_status = null;
+  public $project_percent_complete = null;
+  public $project_color_identifier = null;
+  public $project_description = null;
+  public $project_target_budget = null;
+  public $project_actual_budget = null;
   public $project_scheduled_hours = null;
   public $project_worked_hours = null;
   public $project_task_count = null;
-	public $project_creator = null;
-	public $project_active = null;
-	public $project_private = null;
-	public $project_departments = null;
-	public $project_contacts = null;
-	public $project_priority = null;
-	public $project_type = null;
-	public $project_parent = null;
-	public $project_original_parent = null;
-	public $project_location = '';
+  public $project_creator = null;
+  public $project_active = null;
+  public $project_private = null;
+  public $project_departments = null;
+  public $project_contacts = null;
+  public $project_priority = null;
+  public $project_type = null;
+  public $project_parent = null;
+  public $project_original_parent = null;
+  public $project_location = '';
 
-	public function CProject() {
+  public function CProject() {
     parent::__construct('projects', 'project_id');
-	}
+  }
 
 	public function check() {
 	  $errorArray = array();
@@ -841,27 +841,30 @@ class CProject extends CW2pObject {
 	}
 
 	public static function hasTasks($projectId) {
-		// Note that this returns the *count* of tasks.  If this is zero, it is
-		//   evaluated as false, otherwise it is considered true.
-		$q = new DBQuery;
-		$q->addTable('tasks');
-		$q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
-		$q->addWhere('task_project = ' . (int) $projectId);
-
-		return $q->loadResult();
+      // Note that this returns the *count* of tasks.  If this is zero, it is
+      //   evaluated as false, otherwise it is considered true.
+      $q = new DBQuery;
+      $q->addTable('tasks');
+      $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
+      $q->addWhere('task_project = ' . (int) $projectId);
+      
+      return $q->loadResult();
 	}
-	public function getWorkedHours() {
-		// now milestones are summed up, too, for consistence with the tasks duration sum
-		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
-		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
-		$q = new DBQuery;
-		$q->addTable('task_log');
-		$q->addTable('tasks');
-		$q->addQuery('ROUND(SUM(task_log_hours),2)');
-		$q->addWhere('task_log_task = task_id AND task_project = ' . (int) $this->project_id);
-		$worked_hours = 0 + $q->loadResult();
-
-		return rtrim($worked_hours, '.');
+	public static function updateHoursWorked($project_id)
+	{
+      $q = new DBQuery;
+      $q->addTable('task_log');
+      $q->addTable('tasks');
+      $q->addQuery('ROUND(SUM(task_log_hours),2)');
+      $q->addWhere('task_log_task = task_id AND task_project = ' . (int) $project_id);
+      $worked_hours = 0 + $q->loadResult();
+      $worked_hours = rtrim($worked_hours, '.');
+      $q->clear();
+      
+      $q->addTable('projects');
+      $q->addUpdate('project_worked_hours', $worked_hours);
+      $q->addWhere('project_id  = ' . (int) $project_id);
+      $q->exec();
 	}
 	public function getTotalHours() {
 		global $w2Pconfig;

@@ -35,50 +35,50 @@ $tracking_dynamics = array('0' => '21', '1' => '31');
 * CTask Class
 */
 class CTask extends CW2pObject {
-	/**
-	 *  * @var int */
-	public $task_id = null;
-	/**
-	 *  * @var string */
-	public $task_name = null;
-	/**
-	 *  * @var int */
-	public $task_parent = null;
-	public $task_milestone = null;
-	public $task_project = null;
-	public $task_owner = null;
-	public $task_start_date = null;
-	public $task_duration = null;
-	public $task_duration_type = null;
-	/**
-	 *  * @deprecated */
-	public $task_hours_worked = null;
-	public $task_end_date = null;
-	public $task_status = null;
-	public $task_priority = null;
-	public $task_percent_complete = null;
-	public $task_description = null;
-	public $task_target_budget = null;
-	public $task_related_url = null;
-	public $task_creator = null;
+  /**
+   *  * @var int */
+  public $task_id = null;
+  /**
+   *  * @var string */
+  public $task_name = null;
+  /**
+   *  * @var int */
+  public $task_parent = null;
+  public $task_milestone = null;
+  public $task_project = null;
+  public $task_owner = null;
+  public $task_start_date = null;
+  public $task_duration = null;
+  public $task_duration_type = null;
+  /**
+   *  * @deprecated */
+  public $task_hours_worked = null;
+  public $task_end_date = null;
+  public $task_status = null;
+  public $task_priority = null;
+  public $task_percent_complete = null;
+  public $task_description = null;
+  public $task_target_budget = null;
+  public $task_related_url = null;
+  public $task_creator = null;
+  
+  public $task_order = null;
+  public $task_client_publish = null;
+  public $task_dynamic = null;
+  public $task_access = null;
+  public $task_notify = null;
+  public $task_departments = null;
+  public $task_contacts = null;
+  public $task_custom = null;
+  public $task_type = null;
+  public $task_created = null;
+  public $task_updated = null;
+  public $task_updator = null;
+  //public $task_dep_reset_dates = null;
 
-	public $task_order = null;
-	public $task_client_publish = null;
-	public $task_dynamic = null;
-	public $task_access = null;
-	public $task_notify = null;
-	public $task_departments = null;
-	public $task_contacts = null;
-	public $task_custom = null;
-	public $task_type = null;
-    public $task_created = null;
-    public $task_updated = null;
-    public $task_updator = null;
-    public $task_dep_reset_dates = null;
-
-	public function CTask() {
+  public function CTask() {
     parent::__construct('tasks', 'task_id');
-	}
+  }
 
 	public function __toString() {
 		return $this->link . '/' . $this->type . '/' . $this->length;
@@ -281,18 +281,19 @@ class CTask extends CW2pObject {
 		$this->loadFull($taskId);
 	}
 	public function loadFull($taskId) {
-		$q = new DBQuery;
-		$q->addTable('tasks');
-		$q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
-		$q->addJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'inner');
-		$q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
-		$q->addWhere('task_id = ' . (int)$taskId);
-		$q->addQuery('tasks.*');
-		$q->addQuery('project_name, project_color_identifier');
-		$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
-		$q->addGroup('task_id');
-
-		$q->loadObject($this, true, false);
+      $q = new DBQuery;
+      $q->addTable('tasks');
+      $q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
+      $q->addJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'inner');
+      $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
+      $q->addWhere('task_id = ' . (int)$taskId);
+      $q->addQuery('tasks.*');
+      $q->addQuery('project_name, project_color_identifier');
+      $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
+      $q->addGroup('task_id');
+      
+      $q->loadObject($this, true, false);
+      $this->task_hours_worked += 0;
 	}
 
 	/*
@@ -495,7 +496,6 @@ class CTask extends CW2pObject {
 		} elseif ($destTask_id > 0) {
 			$this->task_parent = $destTask_id;
 		}
-        $this->store();
 	}
 
 	public function deepMove($destProject_id = 0, $destTask_id = 0) {
@@ -2201,13 +2201,21 @@ class CTask extends CW2pObject {
 			return true;
 		}
 	}
-	public static function updateHoursWorked($taskId, $totalHours) {
-		$q = new DBQuery;
-		$q->addTable('tasks');
-		$q->addUpdate('task_hours_worked', $totalHours + 0);
-		$q->addWhere('task_id = ' . $taskId);
-		$q->exec();
-	}
+  public static function updateHoursWorked($taskId, $totalHours) {
+    $q = new DBQuery;
+    $q->addTable('tasks');
+    $q->addUpdate('task_hours_worked', $totalHours + 0);
+    $q->addWhere('task_id = ' . $taskId);
+    $q->exec();
+    $q->clear();
+
+    $q->addTable('tasks');
+    $q->addQuery('task_project');
+    $q->addWhere('task_id = ' . $taskId);
+    $project_id = $q->loadResult();
+
+    CProject::updateHoursWorked($project_id);
+  }
 }
 
 /**
@@ -2229,7 +2237,7 @@ class CTaskLog extends CW2pObject {
 	public $task_log_updated = null;
 
 	public function CTaskLog() {
-    parent::__construct('task_log', 'task_log_id');
+	  parent::__construct('task_log', 'task_log_id');
 
 		// ensure changes to checkboxes are honoured
 		$this->task_log_problem = intval($this->task_log_problem);
@@ -2252,7 +2260,7 @@ class CTaskLog extends CW2pObject {
 		$q = new DBQuery();
 		$q->addQuery('task_log_task');
 		$q->addTable('task_log');
-		$q->addWhere('task_log_id = ' . (int)$this->task_log_id);
+		$q->addWhere('task_log_id = ' . (int) $this->task_log_id);
 		$task_log_task = $q->loadResult();
 
 		parent::delete();
@@ -2262,7 +2270,7 @@ class CTaskLog extends CW2pObject {
 		$q = new DBQuery();
 		$q->addQuery('SUM(task_log_hours)');
 		$q->addTable('task_log');
-		$q->addWhere('task_log_task = ' . (int)$task_log_task);
+		$q->addWhere('task_log_task = ' . (int) $task_log_task);
 		$totalHours = $q->loadResult();
 
 		CTask::updateHoursWorked($task_log_task, $totalHours);
