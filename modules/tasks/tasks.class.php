@@ -74,7 +74,7 @@ class CTask extends CW2pObject {
   public $task_created = null;
   public $task_updated = null;
   public $task_updator = null;
-  //public $task_dep_reset_dates = null;
+  public $task_dep_reset_dates = null;
 
   public function CTask() {
     parent::__construct('tasks', 'task_id');
@@ -496,6 +496,7 @@ class CTask extends CW2pObject {
 		} elseif ($destTask_id > 0) {
 			$this->task_parent = $destTask_id;
 		}
+		$this->store();
 	}
 
 	public function deepMove($destProject_id = 0, $destTask_id = 0) {
