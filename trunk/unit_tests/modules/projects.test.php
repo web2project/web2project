@@ -1662,15 +1662,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetWorkedHours()
     {
-        $project = new CProject();
-
-        $project->load(1);
-        $total_hours_1 = $project->getWorkedHours();
-        $project->load(2);
-        $total_hours_2 = $project->getWorkedHours();
-
-        $this->assertEquals(18.25,  $total_hours_1);
-        $this->assertEquals(0,      $total_hours_2);
+        $this->markTestSkipped('This test has been deprecated by calculating the total hours at tasklog update.');
     }
 
     /**
