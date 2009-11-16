@@ -139,4 +139,19 @@ class CLink extends CW2pObject {
     }
     return $stored;
   }
+  
+  public function hook_search()
+  {
+    $search['table'] = 'links';
+    $search['table_alias'] = 'l';
+    $search['table_module'] = 'links';
+    $search['table_key'] = 'link_id'; // primary key in searched table
+    $search['table_link'] = 'index.php?m=links&a=view&link_id='; // first part of link
+    $search['table_title'] = 'Links';
+    $search['table_orderby'] = 'link_name';
+    $search['search_fields'] = array('l.link_name', 'l.link_url', 'l.link_description');
+    $search['display_fields'] = array('l.link_name', 'l.link_url', 'l.link_description');
+
+    return $search;
+  } 
 }
