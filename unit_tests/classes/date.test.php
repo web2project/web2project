@@ -6,7 +6,6 @@ global $AppUI;
 
 require_once '../base.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
-require_once W2P_BASE_DIR . '/classes/ui.class.php';
 
 // Need this to test actions that require permissions.
 $AppUI  = new CAppUI;
@@ -14,7 +13,6 @@ $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
 
-require_once W2P_BASE_DIR . '/classes/date.class.php';
 require_once 'PHPUnit/Framework.php';
 /**
  * DateTest Class.
