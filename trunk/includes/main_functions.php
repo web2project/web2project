@@ -20,21 +20,15 @@ function __autoload($class_name) {
   $name = strtolower($class_name);
 
   switch ($name) {
-    case 'ical':
-      require_once W2P_BASE_DIR . '/classes/ical.class.php';
-      break;
     case 'cappui':
-    case 'ui':
       require_once W2P_BASE_DIR . '/classes/ui.class.php';
       break;
     case 'cdate':
-    case 'date':
       require_once W2P_BASE_DIR . '/classes/date.class.php';
       break;
     case 'w2pacl':
       require_once W2P_BASE_DIR . '/classes/permissions.class.php';
       break;
-    case 'w2p':
     case 'cw2pobject':
       require_once W2P_BASE_DIR.'/classes/w2p.class.php';
       break;
@@ -54,7 +48,6 @@ function __autoload($class_name) {
       require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
       break;
     case 'dbquery':
-    case 'query':
       require_once W2P_BASE_DIR.'/classes/query.class.php';
       break;      
     default:
@@ -68,11 +61,6 @@ function __autoload($class_name) {
           $name = substr($name, 0, -1).'ies';
         } else {
           $name .= 's';
-        }
-    
-        if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-          require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-          return;
         }
       }
       if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
