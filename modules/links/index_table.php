@@ -28,9 +28,6 @@ if (!isset($showProject)) {
 	//$showProject = true;
 }
 
-$xpg_pagesize = w2PgetConfig('page_size', 50);
-$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
@@ -43,6 +40,8 @@ if ($canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+$xpg_pagesize = w2PgetConfig('page_size', 50);
+$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 // counts total recs from selection
 $xpg_totalrecs = count($links);
 echo buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);

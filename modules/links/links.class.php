@@ -103,6 +103,7 @@ class CLink extends CW2pObject {
       if ($msg = parent::delete()) {
         return $msg;
       }
+      addHistory('links', 0, 'delete', 'Deleted', 0);
       return true;
     }
     return false;
@@ -119,15 +120,21 @@ class CLink extends CW2pObject {
     }
 
     if ($this->link_id && $perms->checkModuleItem('links', 'edit', $this->link_id)) {
+      $q = new DBQuery;
+      $this->link_date = $q->dbfnNow();
       if (($msg = parent::store())) {
         return $msg;
       }
+      addHistory('links', $this->link_id, 'update', $this->link_name, $this->link_id);
       $stored = true;
     }
     if (0 == $this->link_id && $perms->checkModuleItem('links', 'add')) {
+      $q = new DBQuery;
+      $this->link_date = $q->dbfnNow();
       if (($msg = parent::store())) {
         return $msg;
       }
+      addHistory('links', $this->link_id, 'add', $this->link_name, $this->link_id);
       $stored = true;
     }
     return $stored;
