@@ -227,7 +227,6 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertEquals(0,                        $this->obj->link_parent);
       $this->assertEquals('This is web2project',    $this->obj->link_description);
       $this->assertEquals(1,                        $this->obj->link_owner);
-      $this->assertEquals('2009-01-01',             $this->obj->link_date);
       $this->assertEquals('',                       $this->obj->link_icon);
       $this->assertEquals(0,                        $this->obj->link_category);
       $this->assertNotEquals(0,                     $this->obj->link_id);
@@ -254,7 +253,6 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertEquals($this->obj->link_parent,            $link->link_parent);
       $this->assertEquals($this->obj->link_description,       $link->link_description);
       $this->assertEquals($this->obj->link_owner,             $link->link_owner);
-      $this->assertEquals($this->obj->link_date. ' 00:00:00', $link->link_date);
       $this->assertEquals('obj/',                             $link->link_icon);
       $this->assertEquals($this->obj->link_category,          $link->link_category);
       $this->assertEquals($this->obj->link_id,                $link->link_id);
