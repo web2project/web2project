@@ -486,33 +486,6 @@ class CTask extends CW2pObject {
 		return $newObj;
 	}
 
-	public function move($destProject_id = 0, $destTask_id = -1) {
-		if ($destProject_id != 0) {
-			$this->task_project = $destProject_id;
-		}
-
-		if ($destTask_id == 0) {
-			$this->task_parent = $this->task_id;
-		} elseif ($destTask_id > 0) {
-			$this->task_parent = $destTask_id;
-		}
-		$this->store();
-	}
-
-	public function deepMove($destProject_id = 0, $destTask_id = 0) {
-		$this->move($destProject_id, $destTask_id);
-		$children = $this->getDeepChildren();
-		if (!empty($children)) {
-			$tempChild = new CTask();
-			foreach ($children as $child) {
-				$tempChild->peek($child);
-				$tempChild->htmlDecode($child);
-				$tempChild->deepMove($destProject_id, $this->task_id);
-				$tempChild->store();
-			}
-		}
-	}
-
 	/**
 	 * @todo Parent store could be partially used
 	 */
