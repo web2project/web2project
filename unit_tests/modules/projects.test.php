@@ -703,7 +703,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(0,                          $project->project_original_parent);
         $this->assertEquals('',                         $project->project_location);
 
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'testCreateProject.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestCreateProject.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('projects' => array('project_created', 'project_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('projects' => array('project_created', 'project_updated')));
@@ -977,7 +977,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                                  $project->project_original_parent);
         $this->assertEquals('Somewhere Updated',                $project->project_location);
 
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateProject.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestUpdateProject.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('projects' => array('project_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('projects' => array('project_updated')));
@@ -1020,7 +1020,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $project->load(1);
         $project->delete($AppUI);
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testDeleteProject.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestDeleteProject.xml');
         $this->assertTablesEqual($xml_dataset->getTable('projects'),            $this->getConnection()->createDataSet()->getTable('projects'));
         $this->assertTablesEqual($xml_dataset->getTable('project_contacts'),    $this->getConnection()->createDataSet()->getTable('project_contacts'));
         $this->assertTablesEqual($xml_dataset->getTable('tasks'),               $this->getConnection()->createDataSet()->getTable('tasks'));
@@ -1039,7 +1039,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $project->load(2);
         $project->importTasks(1);
 
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'testImportTasks.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
@@ -1076,7 +1076,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($updated));
         }
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testImportTasks.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTasks.xml');
         $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
         $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
 
@@ -1385,7 +1385,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertTrue($results);
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testStore.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestStore.xml');
         $this->assertTablesEqual($xml_dataset->getTable('project_departments'), $this->getConnection()->createDataSet()->getTable('project_departments'));
         $this->assertTablesEqual($xml_dataset->getTable('project_contacts'), $this->getConnection()->createDataSet()->getTable('project_contacts'));
     }
@@ -1597,7 +1597,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         global $AppUI;
 
         CProject::updateStatus($AppUI, 1, 2);
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateStatus.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestUpdateStatus.xml');
         $this->assertTablesEqual($xml_dataset->getTable('projects'), $this->getConnection()->createDataSet()->getTable('projects'));
     }
 
