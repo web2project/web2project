@@ -258,7 +258,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(2,                          $company->company_type);
         $this->assertEquals('This is a company.' ,      $company->company_description);
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testCreateCompany.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestCreateCompany.xml');
         $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
     }
 
@@ -366,7 +366,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(2,                              $company->company_type);
         $this->assertEquals('This is an updated company.',  $company->company_description);
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testUpdateCompany.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestUpdateCompany.xml');
         $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
     }
 
@@ -389,7 +389,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $result = $company->load(3);
         $this->assertFalse($result);
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'testDeleteCompany.xml');
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestDeleteCompany.xml');
         $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
     }
 

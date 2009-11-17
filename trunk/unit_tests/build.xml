@@ -8,7 +8,7 @@
   </target>
 
   <target name="run-tests">
-    <phpunit codecoverage="true" haltonfailure="false" haltonerror="true">
+    <phpunit codecoverage="false" haltonfailure="false" haltonerror="true">
       <formatter type="plain" usefile="false"/>
         <batchtest>
           <fileset dir="modules">
