@@ -16,18 +16,17 @@ if (!$canRead) {
 
 $project_list = array('0' => $AppUI->_('All', UI_OUTPUT_RAW));
 
-$obj = new CProject();
-$ptrc = $obj->getAllowedProjectsInRows($AppUI->user_id);
+$projectObj = new CProject();
+$projectList = $projectObj->getAllowedProjects($AppUI->user_id, false);
 
-$nums = db_num_rows($ptrc);
+$company = new CCompany();
+$companyList = $company->getCompanies($AppUI);
 
-echo db_error();
-for ($x = 0; $x < $nums; $x++) {
-	$row = db_fetch_assoc($ptrc);
-	if ($row['project_id'] == $project_id) {
-		$display_project_name = '(' . $row['project_short_name'] . ') ' . $row['project_name'];
-	}
-	$project_list[$row['project_id']] = '(' . $row['project_short_name'] . ') ' . $row['project_name'];
+foreach ($projectList as $pr) {
+  if ($pr['project_id'] == $project_id) {
+    $display_project_name = '(' . $companyList[$pr['project_company']]['company_name'] . ') ' . $pr['project_name'];
+  }
+  $project_list[$pr['project_id']] = '(' . $companyList[$pr['project_company']]['company_name'] . ') ' . $pr['project_name'];
 }
 
 if (!$suppressHeaders) {

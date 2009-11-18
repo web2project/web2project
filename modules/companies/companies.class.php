@@ -154,33 +154,44 @@ class CCompany extends CW2pObject {
 
 		$q->loadObject($this, true, false);
 	}
-	public function getCompanyList($AppUI, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
-		$q = new DBQuery;
-		$q->addTable('companies', 'c');
-		$q->addQuery('c.company_id, c.company_name, c.company_type, c.company_description, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
-		$q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
-		$q->addJoin('users', 'u', 'c.company_owner = u.user_id');
-		$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-		$q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
 
-		$oCpy = new CCompany();
-		$where = $this->getAllowedSQL($AppUI->user_id, 'c.company_id');
-		$q->addWhere($where);
+  public function getCompanyList($AppUI, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
+  	$q = new DBQuery;
+  	$q->addTable('companies', 'c');
+  	$q->addQuery('c.company_id, c.company_name, c.company_type, c.company_description, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
+  	$q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
+  	$q->addJoin('users', 'u', 'c.company_owner = u.user_id');
+  	$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+  	$q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
+  
+  	$where = $this->getAllowedSQL($AppUI->user_id, 'c.company_id');
+  	$q->addWhere($where);
+  
+  	if ($companyType > -1) {
+  		$q->addWhere('c.company_type = ' . (int) $companyType);
+  	}
+  	if ($searchString != '') {
+  		$q->addWhere('c.company_name LIKE "%'.$searchString.'%"');
+  	}
+  	if ($ownerId > 0) {
+  		$q->addWhere('c.company_owner = '.$ownerId);
+  	}
+  	$q->addGroup('c.company_id');
+  	$q->addOrder($orderby . ' ' . $orderdir);
+  
+  	return $q->loadList();
+  }
 
-		if ($companyType > -1) {
-			$q->addWhere('c.company_type = ' . (int) $companyType);
-		}
-		if ($searchString != '') {
-			$q->addWhere('c.company_name LIKE "%'.$searchString.'%"');
-		}
-		if ($ownerId > 0) {
-			$q->addWhere('c.company_owner = '.$ownerId);
-		}
-		$q->addGroup('c.company_id');
-		$q->addOrder($orderby . ' ' . $orderdir);
+  public function getCompanies($AppUI) {
+  	$q = new DBQuery;
+  	$q->addTable('companies');
+  	$q->addQuery('company_id, company_name');
+  
+  	$where = $this->getAllowedSQL($AppUI->user_id, 'company_id');
+  	$q->addWhere($where);
 
-		return $q->loadList();
-	}
+  	return $q->loadHashList('company_id');
+  }
 
 	public static function getProjects($AppUI, $companyId, $active = 1, $sort = 'project_name') {
 		$fields = 'pr.project_id, project_name, project_start_date, ' .
