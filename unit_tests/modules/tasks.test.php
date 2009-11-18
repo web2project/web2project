@@ -105,7 +105,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('task_updator',             $task);
         $this->assertObjectHasAttribute('task_created',             $task);
         $this->assertObjectHasAttribute('task_updated',             $task);
-        $this->assertObjectHasAttribute('task_dep_reset_dates',     $task);
     }
 
     /**
@@ -151,7 +150,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($task->task_updator);
         $this->assertNull($task->task_created);
         $this->assertNull($task->task_updated);
-        $this->assertNull($task->task_dep_reset_dates);
     }
 
     /**
@@ -918,7 +916,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_updator);
         $this->assertEquals('2009-07-05 15:43:00',  $task->task_created);
         $this->assertEquals('2009-07-05 15:43:00',  $task->task_updated);
-        $this->assertEquals(0,                      $task->task_dep_reset_dates);
     }
 
     /**
@@ -960,7 +957,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
-        $this->assertEquals(0,                      $task->task_dep_reset_dates);
     }
 
     /*
@@ -1002,7 +998,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
-        $this->assertEquals(0,                      $task->task_dep_reset_dates);
     }
 
     /**
@@ -1053,7 +1048,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
-        $this->assertEquals(0,                      $task->task_dep_reset_dates);
         $this->assertEquals('Test Project',         $task->project_name);
         $this->assertEquals('FFFFFF',               $task->project_color_identifier);
         $this->assertEquals('Admin Person',         $task->username);
@@ -1100,7 +1094,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
-        $this->assertEquals(0,                      $task->task_dep_reset_dates);
     }
 
     /**
@@ -1143,7 +1136,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
-        $this->assertEquals(0,                      $task->task_dep_reset_dates);
     }
 
     /**
@@ -1191,7 +1183,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
         $this->assertGreaterThanOrEqual($min_time,  strtotime($task->task_updated));
         $this->assertLessThanOrEqual($now_secs,     strtotime($task->task_updated));
-        $this->assertEquals(0,                      $task->task_dep_reset_dates);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateDynamicsNotFromChildrenInDays.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
@@ -1254,7 +1245,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_updated);
-        $this->assertEquals(0,                      $task->task_dep_reset_dates);
     }
 
     /**
@@ -1300,7 +1290,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_type);
         $this->assertEquals(1,                      $task->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $task->task_created);
-        $this->assertEquals(0,                      $task->task_dep_reset_dates);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateDynamicsNotFromChildrenInHours.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
@@ -1363,7 +1352,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                     $new_task->task_custom);
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
-        $this->assertEquals(0,                      $new_task->task_dep_reset_dates);
         
         $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestCopyNoProjectNoTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -1428,7 +1416,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                     $new_task->task_custom);
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
-        $this->assertEquals(0,                      $new_task->task_dep_reset_dates);
         
         $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestCopyProjectNoTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -1493,7 +1480,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                     $new_task->task_custom);
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
-        $this->assertEquals(0,                      $new_task->task_dep_reset_dates);
         
         $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestCopyNoProjectTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -1558,7 +1544,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                     $new_task->task_custom);
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
-        $this->assertEquals(0,                      $new_task->task_dep_reset_dates);
         
         $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestCopyProjectTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));

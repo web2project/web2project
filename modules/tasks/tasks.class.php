@@ -74,7 +74,6 @@ class CTask extends CW2pObject {
   public $task_created = null;
   public $task_updated = null;
   public $task_updator = null;
-  public $task_dep_reset_dates = null;
 
   public function CTask() {
     parent::__construct('tasks', 'task_id');
