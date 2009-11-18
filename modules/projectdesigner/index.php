@@ -43,7 +43,7 @@ $q->addQuery('pdo.*');
 $q->addWhere('pdo.pd_option_user = ' . (int)$AppUI->user_id);
 $view_options = $q->loadList();
 
-$project_id = intval(w2PgetParam($_REQUEST, 'project_id', 0));
+$project_id = (int) w2PgetParam($_POST, 'project_id', 0);
 $extra = array('where' => 'project_active = 1');
 $project = new CProject();
 $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
@@ -142,40 +142,8 @@ if (!$project_id) {
 	$pstatus = w2PgetSysVal('ProjectStatus');
 	$ptype = w2PgetSysVal('ProjectType');
 
-	$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
-
-	$q = new DBQuery;
-	//check that project has tasks; otherwise run seperate query
-	$q->addTable('tasks');
-	$q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
-	$q->addWhere('task_project = ' . (int)$project_id);
-	$hasTasks = $q->loadResult();
-	$q->clear();
-
 	// load the record data
-	// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-	$obj = null;
-	if ($hasTasks) {
-		$q->addTable('projects');
-		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
-		$q->addJoin('companies', 'com', 'company_id = project_company');
-		$q->addJoin('users', 'u', 'user_id = project_owner');
-		$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-		$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-		$q->addWhere('project_id = ' . (int)$project_id . ' AND t1.task_id = t1.task_parent');
-		$q->addGroup('project_id');
-		$q->loadObject($obj);
-	} else {
-		$q->addTable('projects');
-		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, (0.0) AS project_percent_complete');
-		$q->addJoin('companies', 'com', 'company_id = project_company');
-		$q->addJoin('users', 'u', 'user_id = project_owner');
-		$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-		$q->addWhere('project_id = ' . (int)$project_id);
-		$q->addGroup('project_id');
-		$q->loadObject($obj);
-	}
-	$q->clear();
+	$obj->loadFull($project_id);
 
 	if (!$obj) {
 		$AppUI->setMsg('Project');
@@ -185,56 +153,9 @@ if (!$project_id) {
 		$AppUI->savePlace();
 	}
 
-	// worked hours
-	// now milestones are summed up, too, for consistence with the tasks duration sum
-	// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
-	// more info on http://www.mysql.com/doc/en/Problems_with_float.html
-	if ($hasTasks) {
-		$q->addTable('task_log');
-		$q->addTable('tasks');
-		$q->addQuery('ROUND(SUM(task_log_hours),2)');
-		$q->addWhere('task_log_task = task_id AND task_project = ' . (int)$project_id);
-		$worked_hours = $q->loadResult();
-		$q->clear();
-		$worked_hours = rtrim($worked_hours, '.');
-
-		// total hours
-		// same milestone comment as above, also applies to dynamic tasks
-		$q->addTable('tasks');
-		$q->addQuery('ROUND(SUM(task_duration),2)');
-		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 24 AND task_dynamic = 0');
-		$days = $q->loadResult();
-		$q->clear();
-
-		$q->addTable('tasks');
-		$q->addQuery('ROUND(SUM(task_duration),2)');
-		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 1 AND task_dynamic = 0');
-		$hours = $q->loadResult();
-		$q->clear();
-		$total_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
-
-		$total_project_hours = 0;
-
-		$q->addTable('tasks', 't');
-		$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
-		$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-		$q->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic = 0');
-		$total_project_days_sql = $q->prepare();
-
-		$q2 = new DBQuery;
-		$q2->addTable('tasks', 't');
-		$q2->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
-		$q2->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-		$q2->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic = 0');
-
-		$total_project_hours = $q->loadResult() * $w2Pconfig['daily_working_hours'] + $q2->loadResult();
-		$q->clear();
-		$q2->clear();
-		//due to the round above, we don't want to print decimals unless they really exist
-		//$total_project_hours = rtrim($total_project_hours, "0");
-	} else { //no tasks in project so "fake" project data
-		$worked_hours = $total_hours = $total_project_hours = 0.00;
-	}
+	$worked_hours = $obj->project_worked_hours;
+	$total_hours = $obj->getTotalHours();
+	$total_project_hours = $obj->getTotalProjectHours();
 
 	// create Date objects from the datetime fields
 	$start_date = intval($obj->project_start_date) ? new CDate($obj->project_start_date) : null;
