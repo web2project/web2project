@@ -9,15 +9,15 @@ function setItem($item_name, $defval = null) {
 	}
 	return $defval;
 }
-$adjustStartDate = setItem('set_task_start_date');
-$del = intval(w2PgetParam($_POST, 'del', 0));
-$task_id = setItem('task_id', 0);
-$hassign = setItem('hassign');
-$hperc_assign = setItem('hperc_assign');
-$hdependencies = setItem('hdependencies');
-$notify = setItem('task_notify', 0);
-$comment = setItem('email_comment', '');
-$sub_form = intval(w2PgetParam($_POST, 'sub_form', 0));
+$adjustStartDate = w2PgetParam($_POST, 'set_task_start_date');
+$del = (int) w2PgetParam($_POST, 'del', 0);
+$task_id = (int) w2PgetParam($_POST, 'task_id', 0);
+$hassign = w2PgetParam($_POST, 'hassign');
+$hperc_assign = w2PgetParam($_POST, 'hperc_assign');
+$hdependencies = w2PgetParam($_POST, 'hdependencies');
+$notify = (int) w2PgetParam($_POST, 'task_notify', 0);
+$comment = w2PgetParam($_POST, 'email_comment', '');
+$sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
 
 $isNotNew = $_POST['task_id'];
 $perms = &$AppUI->acl();
@@ -156,7 +156,15 @@ if ($sub_form) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 			$AppUI->redirect(); // Store failed don't continue?
 		} else {
-			$custom_fields = new CustomFields($m, 'addedit', $obj->task_id, 'edit');
+		  $task_parent = (int) w2PgetParam($_POST, 'task_parent', 0);
+		  $old_task_parent = (int) w2PgetParam($_POST, 'old_task_parent', 0);
+		  if ($task_parent != $old_task_parent) {
+		    $oldTask = new CTask();
+		    $oldTask->load($old_task_parent);
+		    $oldTask->updateDynamics(false);
+		  }
+
+		  $custom_fields = new CustomFields($m, 'addedit', $obj->task_id, 'edit');
 			$custom_fields->bind($_POST);
 			$sql = $custom_fields->store($obj->task_id); // Store Custom Fields
 
