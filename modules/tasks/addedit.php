@@ -218,6 +218,7 @@ var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours'))
 	<input name="dosql" type="hidden" value="do_task_aed" />
 	<input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 	<input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />
+	<input name="old_task_parent" type="hidden" value="<?php echo $obj->task_parent; ?>" />
 	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo $obj->task_contacts; ?>" />
 <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
