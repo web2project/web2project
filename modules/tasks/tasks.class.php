@@ -2143,6 +2143,27 @@ class CTask extends CW2pObject {
 
 		return $q->loadList();
 	}
+
+	public function getAllowedTaskList($AppUI, $task_project = 0) {
+		$q = new DBQuery();
+		$q->addQuery('task_id, task_name, task_parent, task_access, task_owner');
+		$q->addOrder('task_parent, task_parent = task_id desc');
+		$q->addTable('tasks', 't');
+		if ($task_project)
+		{
+			$q->addWhere('task_project = ' . (int)$task_project);
+		}
+		$task_list = $q->loadList();
+		
+		foreach($task_list as $task)
+		{
+		  if (canTaskAccess($task['task_id'], $task['task_access'], $task['task_owner'])) {
+		    $results[] = $task;
+		  }
+		}
+	
+		return $results;
+	}
 	public function getTaskCount($projectId) {
 		$q = new DBQuery();
 		$q->addTable('tasks');
@@ -2692,7 +2713,7 @@ function canTaskAccess($task_id, $task_access, $task_owner) {
 			$q->addWhere('user_id=' . (int)$user_id . ' AND task_id=' . (int)$task_id);
 			$count = $q->loadResult();
 			$q->clear();
-			$retval = (($company_match && $count > 0) || $task_owner == $user_id);
+			$retval = (($company_match && $count > 0) || ($count > 0) || $task_owner == $user_id);
 			break;
 		case 3:
 			// private

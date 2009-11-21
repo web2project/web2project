@@ -92,32 +92,28 @@ switch ($table) {
 		break;
 
 	case 'tasks':
-		$task_project = w2PgetParam($_GET, 'task_project', 0);
+	  $title = 'Task';
+	  $task_project = (int) w2PgetParam($_GET, 'task_project', 0);
 
-		$title = 'Task';
-		$q->addQuery('task_id, task_name, task_parent');
-		$q->addOrder('task_parent, task_parent = task_id desc');
-		if ($task_project)
-		{
-			$q->addWhere('task_project = ' . (int)$task_project);
-		}
-		$task_list = $q->loadList();
-		$level = 0;
-		$query_result = array();
-		$last_parent = 0;
-		foreach ($task_list as $task) {
-			if ($task['task_parent'] != $task['task_id']) {
-				if ($last_parent != $task['task_parent']) {
-					$last_parent = $task['task_parent'];
-					$level++;
-				}
-			} else {
-				$last_parent = 0;
-				$level = 0;
-			}
-			$query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
-		}
-		break;
+	  $myTask = new CTask();
+	  $task_list = $myTask->getAllowedTaskList($AppUI, $task_project);
+
+      $level = 0;
+      $query_result = array();
+      $last_parent = 0;
+      foreach ($task_list as $task) {
+        if ($task['task_parent'] != $task['task_id']) {
+      		if ($last_parent != $task['task_parent']) {
+      			$last_parent = $task['task_parent'];
+      			$level++;
+      		}
+      	} else {
+      		$last_parent = 0;
+      		$level = 0;
+      	}
+      	$query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
+      }
+      break;
 	case 'users':
 		$title = 'User';
 		$q->addQuery('user_id,CONCAT_WS(\' \',contact_first_name,contact_last_name)');
