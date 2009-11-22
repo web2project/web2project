@@ -37,7 +37,7 @@ $del = w2PgetParam($_POST, 'del', 0);
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Contact');
 if ($del) {
-	if (($msg = $obj->delete())) {
+	if (($msg = $obj->delete($AppUI))) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 		$AppUI->redirect();
 	} else {
@@ -45,8 +45,12 @@ if ($del) {
 		$AppUI->redirect('m=contacts');
 	}
 } else {
-	if (($msg = $obj->store())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
+	if (($result = $obj->store($AppUI))) {
+	  $AppUI->setMsg($result, UI_MSG_ERROR, true);
+	  if (is_array($result)) {
+        $AppUI->holdObject($obj);
+        $AppUI->redirect('m=contacts&a=addedit');
+      }
 	} else {
 		$custom_fields = new CustomFields($m, 'addedit', $obj->contact_id, 'edit');
 		$custom_fields->bind($_POST);
@@ -63,7 +67,7 @@ if ($del) {
 		} else {
 			$obj->contact_updatekey = '';
 		}
-		$obj->store();
+		$obj->store($AppUI);
 
 		$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);
 	}

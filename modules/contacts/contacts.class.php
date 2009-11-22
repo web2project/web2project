@@ -67,10 +67,10 @@ class CContact extends CW2pObject {
 	/*
 	 * DEPRECATED
 	 */
-	public function fullLoad($AppUI, $contactId) {
+	public function fullLoad(CAppUI $AppUI, $contactId) {
 		$this->loadFull($AppUI, $contactId);
 	}
-	public function loadFull($AppUI, $contactId) {
+	public function loadFull(CAppUI $AppUI, $contactId) {
 		$perms = $AppUI->acl();
 		$canRead = !$perms->checkModule('contacts', 'view', $contactId);
 
@@ -84,39 +84,52 @@ class CContact extends CW2pObject {
 		}
 	}
 
-	public function store() {
-		/*
-		 *  This  validates that any Contact saved will have a Display Name as
-		 * required by various dropdowns, etc throughout the system.  This is
-		 * mostly required when Contacts are generated via programatic methods and
-		 * not through the add/edit UI.
-		 */
-		if(mb_strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
-			//TODO: this should use the USERFORMAT to determine how display names are generated
-			if ($this->contact_first_name == null && $this->contact_last_name == null) {
-				$this->contact_order_by = $this->contact_email;
-			} else {
-				$this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
-			}
-		}
-		if($this->contact_first_name == null) {
-			$this->contact_first_name = '';
-		}
-		if($this->contact_last_name == null) {
-			$this->contact_last_name = '';
-		}
+	public function store(CAppUI $AppUI) {
+      $errorMsgArray = $this->check();
+      
+      if (count($errorMsgArray) > 0) {
+        return $errorMsgArray;
+      }
+	  /*
+       *  This  validates that any Contact saved will have a Display Name as
+       * required by various dropdowns, etc throughout the system.  This is
+       * mostly required when Contacts are generated via programatic methods and
+       * not through the add/edit UI.
+       */
+      if(mb_strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
+      	//TODO: this should use the USERFORMAT to determine how display names are generated
+      	if ($this->contact_first_name == null && $this->contact_last_name == null) {
+      		$this->contact_order_by = $this->contact_email;
+      	} else {
+      		$this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
+      	}
+      }
+      if($this->contact_first_name == null) {
+      	$this->contact_first_name = '';
+      }
+      if($this->contact_last_name == null) {
+      	$this->contact_last_name = '';
+      }
+      addHistory('contacts', $this->link_id, 'store', $this->link_name, $this->link_id);
+      
+      parent::store();
+	}
 
-		parent::store();
+	public function delete(CAppUI $AppUI) {
+	  if ($msg = parent::delete()) {
+        return $msg;
+      }
+      addHistory('contacts', 0, 'delete', 'Deleted', 0);
+      return true;
 	}
 
 	public function check() {
-		if ($this->contact_id === null) {
-			return 'contact id is NULL';
-		}
-		// ensure changes of state in checkboxes is captured
-		$this->contact_private = intval($this->contact_private);
-		$this->contact_owner = intval($this->contact_owner);
-		return null; // object is ok
+      // ensure the integrity of some variables
+      $errorArray = array();
+      $baseErrorMsg = get_class($this) . '::store-check failed - ';
+      //there aren't any checks yet
+
+	  return $errorArray;
 	}
 
 	public function canDelete(&$msg, $oid = null, $joins = null) {
