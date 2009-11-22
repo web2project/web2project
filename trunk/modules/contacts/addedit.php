@@ -29,16 +29,21 @@ if (!$canEdit && $contact_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// load the record data
-$msg = '';
-$row = new CContact();
-
-$canDelete = $row->canDelete($msg, $contact_id);
-$is_user = $row->isUser($contact_id);
-
 if ($msg == $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS)) {
 	$userDeleteProtect = true;
 }
+
+// load the record data
+$row = new CContact();
+$obj = $AppUI->restoreObject();
+if ($obj) {
+  $row = $obj;
+} else {
+  $row->loadFull($AppUI, $contact_id);
+}
+
+$canDelete = $row->canDelete($msg, $contact_id);
+$is_user = $row->isUser($contact_id);
 
 if (!$row->load($contact_id) && $contact_id > 0) {
 	$AppUI->setMsg('Contact');
