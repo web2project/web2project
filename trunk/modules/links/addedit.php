@@ -24,7 +24,7 @@ $obj = $AppUI->restoreObject();
 if ($obj) {
   $link = $obj;
 } else {
-  $link->loadFull($link_id);
+  $link->loadFull($AppUI, $link_id);
 }
 
 // load the record data
