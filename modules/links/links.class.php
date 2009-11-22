@@ -24,7 +24,7 @@ class CLink extends CW2pObject {
     parent::__construct('links', 'link_id');
   }
 
-  public function loadFull($link_id) {
+  public function loadFull(CAppUI $AppUI, $link_id) {
     $q = new DBQuery();
     $q->addQuery('links.*');
     $q->addQuery('user_username');
