@@ -143,7 +143,7 @@ class CProject extends CW2pObject {
 
     $this->loadFull($AppUI, $projectId);
 	}
-	public function loadFull($AppUI, $projectId) {
+	public function loadFull(CAppUI $AppUI, $projectId) {
 		global $w2Pconfig;
 
 		$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
@@ -214,7 +214,7 @@ class CProject extends CW2pObject {
   			$file = new CFile();
   			$file->file_id = $file_id;
   			$file->file_project = (int)$this->project_id;
-  			$file->delete();
+  			$file->delete($AppUI);
   		}
   		$q->setDelete('events');
   		$q->addWhere('event_project =' . (int)$this->project_id);
@@ -249,6 +249,7 @@ class CProject extends CW2pObject {
 	 *	@return	bool
 	 **/
 	public function importTasks($from_project_id) {
+    global $AppUI;
 
 		// Load the original
 		$origProject = new CProject();
@@ -317,7 +318,7 @@ class CProject extends CW2pObject {
 				$csList = implode(',', $newDeps);
 				$newTask->updateDependencies($csList);
 			} // end of update dependencies
-			$newTask->store();
+			$newTask->store($AppUI);
 		} // end Fix record integrity
 
 	} // end of importTasks

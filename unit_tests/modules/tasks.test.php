@@ -1014,9 +1014,11 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testLoadFull()
     {
-        $task = new CTask();
+      global $AppUI;
 
-        $task->loadFull(18);
+      $task = new CTask();
+
+        $task->loadFull($AppUI, 18);
 
         $this->assertEquals(18,                     $task->task_id);
         $this->assertEquals('Task 18',              $task->task_name);
@@ -1736,7 +1738,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         );
 
         $task->bind($post_data);
-        $errorMsg = $task->store();
+        $errorMsg = $task->store($AppUI);
 
 		$now_secs = time();
         $min_time = $now_secs - 10;
