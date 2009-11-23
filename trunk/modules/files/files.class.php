@@ -31,31 +31,33 @@ class CFile extends CW2pObject {
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
 	//public $file_helpdesk_item = NULL;
 
-	public function CFile() {
-      global $AppUI, $helpdesk_available;
-      if ($helpdesk_available) {
-      	$this->file_helpdesk_item = null;
-      }
-      parent::__construct('files', 'file_id');
+	public function __construct() {
+    global $AppUI, $helpdesk_available;
+    if ($helpdesk_available) {
+      $this->file_helpdesk_item = null;
+    }
+    parent::__construct('files', 'file_id');
 	}
 
 	public function store(CAppUI $AppUI) {
-      global $helpdesk_available;
-      
-      $perms = $AppUI->acl();
-      
-      $errorMsgArray = $this->check();
-      if (count($errorMsgArray) > 0) {
-        return $errorMsgArray;
-      }
-      
-      if ($helpdesk_available && $this->file_helpdesk_item != 0) {
-      	$this->addHelpDeskTaskLog();
-      }
-      if (($msg = parent::store())) {
-        return $msg;
-      }
-      return true;
+    global $helpdesk_available;
+
+    $perms = $AppUI->acl();
+
+    $errorMsgArray = $this->check();
+    if (count($errorMsgArray) > 0) {
+      return $errorMsgArray;
+    }
+
+    if ($helpdesk_available && $this->file_helpdesk_item != 0) {
+      $this->addHelpDeskTaskLog();
+    }
+    if (($msg = parent::store())) {
+      return false;
+    }
+    addHistory('files', $this->file_id, 'store', $this->file_name, $this->file_id);
+
+    return true;
 	}
 
 	public static function getFileList($AppUI, $company_id, $project_id, $task_id, $category_id) {
@@ -137,25 +139,25 @@ class CFile extends CW2pObject {
 	}
 
 	public function check() {
-      $errorArray = array();
-      $baseErrorMsg = get_class($this) . '::store-check failed - ';
-  
-      if ('' == $this->file_real_filename) {
-        $errorArray['file_real_filename'] = $baseErrorMsg . 'file real name is not set';
-      }
-      if ('' == $this->file_name) {
-        $errorArray['file_name'] = $baseErrorMsg . 'file name is not set';
-      }
-      if (!is_int($this->file_parent) && '' == $this->file_parent) {
-        $errorArray['file_parent'] = $baseErrorMsg . 'file parent id is not set';
-      }
-      if ('' == $this->file_type) {
-        $errorArray['file_type'] = $baseErrorMsg . 'file type is not set';
-      }
-      if (!is_int($this->file_size) && '' == $this->file_size) {
-        $errorArray['file_size'] = $baseErrorMsg . 'file size is not set';
-      }
-      return $errorArray;
+    $errorArray = array();
+    $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+    if ('' == $this->file_real_filename) {
+      $errorArray['file_real_filename'] = $baseErrorMsg . 'file real name is not set';
+    }
+    if ('' == $this->file_name) {
+      $errorArray['file_name'] = $baseErrorMsg . 'file name is not set';
+    }
+    if (!is_int($this->file_parent) && '' == $this->file_parent) {
+      $errorArray['file_parent'] = $baseErrorMsg . 'file parent id is not set';
+    }
+    if ('' == $this->file_type) {
+      $errorArray['file_type'] = $baseErrorMsg . 'file type is not set';
+    }
+    if (!is_int($this->file_size) && '' == $this->file_size) {
+      $errorArray['file_size'] = $baseErrorMsg . 'file size is not set';
+    }
+    return $errorArray;
 	}
 
 	public function checkout($userId, $fileId, $coReason) {
@@ -180,7 +182,7 @@ class CFile extends CW2pObject {
 
 	}
 
-	public function delete() {
+	public function delete(CAppUI $AppUI) {
 		global $helpdesk_available;
 		if (!$this->canDelete($msg))
 			return $msg;
