@@ -3,28 +3,39 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
+$status = w2PgetSysVal('TaskStatus');
+$priority = w2PgetSysVal('TaskPriority');
+// user based access
+$task_access = array('0' => 'Public', '1' => 'Protected', '2' => 'Participant', '3' => 'Private');
+
 /**
  * Tasks :: Add/Edit Form
  *
  */
 
-$task_id = intval(w2PgetParam($_GET, 'task_id', 0));
+$task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 $perms = &$AppUI->acl();
 
 // load the record data
-$obj = new CTask();
-
-// check if we are in a subform
-if ($task_id > 0 && !$obj->load($task_id)) {
+$task = new CTask();
+$obj = $AppUI->restoreObject();
+if ($obj) {
+  $task = $obj;
+  $task_id = $task->task_id;
+} else {
+  $task->loadFull($AppUI, $task_id);
+}
+if (!$task && $task_id > 0) {
 	$AppUI->setMsg('Task');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
 
-$task_parent = isset($_REQUEST['task_parent']) ? w2PgetParam($_REQUEST, 'task_parent', $obj->task_parent) : $obj->task_parent;
+$task_parent = isset($_REQUEST['task_parent']) ? w2PgetParam($_REQUEST, 'task_parent', $task->task_parent) : $task->task_parent;
 
 // check for a valid project parent
-$task_project = intval($obj->task_project);
+$task_project = intval($task->task_project);
 if (!$task_project) {
 	$task_project = w2PgetParam($_REQUEST, 'task_project', 0);
 	if (!$task_project) {
@@ -51,12 +62,12 @@ if (!$canEdit) {
 }
 
 //check permissions for the associated project
-$canReadProject = $perms->checkModuleItem('projects', 'view', $obj->task_project);
+$canReadProject = $perms->checkModuleItem('projects', 'view', $task->task_project);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 
 // check the document access (public, participant, private)
-if (!$obj->canAccess($AppUI->user_id)) {
+if (!$task->canAccess($AppUI->user_id)) {
 	$AppUI->redirect('m=public&a=access_denied&err=noaccess');
 }
 
@@ -136,7 +147,7 @@ $q->addWhere('task_id <> task_parent');
 $q->addOrder('task_start_date');
 
 $parents = array();
-$projTasksWithEndDates = array($obj->task_id => $AppUI->_('None')); //arrays contains task end date info for setting new task start date as maximum end date of dependenced tasks
+$projTasksWithEndDates = array($task->task_id => $AppUI->_('None')); //arrays contains task end date info for setting new task start date as maximum end date of dependenced tasks
 $all_tasks = array();
 $sub_tasks = $q->exec();
 if ($sub_tasks) {
@@ -165,7 +176,7 @@ if ($canReadProject) {
 	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $task_project, 'view this project');
 }
 if ($task_id > 0)
-	$titleBlock->addCrumb('?m=tasks&a=view&task_id=' . $obj->task_id, 'view this task');
+	$titleBlock->addCrumb('?m=tasks&a=view&task_id=' . $task->task_id, 'view this task');
 $titleBlock->show();
 
 $department_selection_list = array();
@@ -176,11 +187,11 @@ foreach($deptList as $dept) {
 $department_selection_list = arrayMerge(array('0' => ''), $department_selection_list);
 
 //Dynamic tasks are by default now off because of dangerous behavior if incorrectly used
-if (is_null($obj->task_dynamic)) {
-	$obj->task_dynamic = 0;
+if (is_null($task->task_dynamic)) {
+	$task->task_dynamic = 0;
 }
 
-$can_edit_time_information = $obj->canUserEditTimeInformation();
+$can_edit_time_information = $task->canUserEditTimeInformation();
 //get list of projects, for task move drop down list.
 $pq = new DBQuery;
 $pq->addQuery('pr.project_id, project_name');
@@ -191,8 +202,8 @@ $project->setAllowedSQL($AppUI->user_id, $pq, null, 'pr');
 $projects = $pq->loadHashList();
 ?>
 <script language="JavaScript">
-var selected_contacts_id = '<?php echo $obj->task_contacts; ?>';
-var task_id = '<?php echo $obj->task_id; ?>';
+var selected_contacts_id = '<?php echo $task->task_contacts; ?>';
+var task_id = '<?php echo $task->task_id; ?>';
 
 var check_task_dates = <?php
 if (isset($w2Pconfig['check_task_dates']) && $w2Pconfig['check_task_dates'])
@@ -218,8 +229,8 @@ var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours'))
 	<input name="dosql" type="hidden" value="do_task_aed" />
 	<input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 	<input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />
-	<input name="old_task_parent" type="hidden" value="<?php echo $obj->task_parent; ?>" />
-	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo $obj->task_contacts; ?>" />
+	<input name="old_task_parent" type="hidden" value="<?php echo $task->task_parent; ?>" />
+	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo $task->task_contacts; ?>" />
 <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
 	<td colspan="2" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>" >
@@ -232,30 +243,30 @@ var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours'))
 <tr valign="top">
 	<td>
 		<?php echo $AppUI->_('Task Name'); ?> *
-		<br /><input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($obj->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
+		<br /><input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($task->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
 	</td>
 	<td>
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?></td>
 			<td>
-				<?php echo arraySelect($status, 'task_status', 'size="1" class="text"', ($obj->task_status ? $obj->task_status : 0) , true); ?>
+				<?php echo arraySelect($status, 'task_status', 'size="1" class="text"', ($task->task_status ? $task->task_status : 0) , true); ?>
 			</td>
 
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?> *</td>
 			<td nowrap="nowrap">
-				<?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($obj->task_priority ? $obj->task_priority : 0) , true); ?>
+				<?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($task->task_priority ? $task->task_priority : 0) , true); ?>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?></td>
 			<td>
-				<?php echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $obj->task_percent_complete) . '%'; ?>
+				<?php echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $task->task_percent_complete) . '%'; ?>
 			</td>
 
 			<td align="right" nowrap="nowrap"><label for="task_milestone"><?php echo $AppUI->_('Milestone'); ?>?</label></td>
 			<td>
-				<input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($obj->task_milestone) { ?>checked="checked"<?php } ?> />
+				<input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> />
 			</td>
 		</tr>
 		</table>

@@ -75,7 +75,7 @@ class CTask extends CW2pObject {
   public $task_updated = null;
   public $task_updator = null;
 
-  public function CTask() {
+  public function __construct() {
     parent::__construct('tasks', 'task_id');
   }
 
@@ -277,22 +277,24 @@ class CTask extends CW2pObject {
 	* DEPRECATED
 	*/
 	public function fullLoad($taskId) {
-		$this->loadFull($taskId);
+		global $AppUI;
+
+    $this->loadFull($AppUI, $taskId);
 	}
-	public function loadFull($taskId) {
-      $q = new DBQuery;
-      $q->addTable('tasks');
-      $q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
-      $q->addJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'inner');
-      $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
-      $q->addWhere('task_id = ' . (int)$taskId);
-      $q->addQuery('tasks.*');
-      $q->addQuery('project_name, project_color_identifier');
-      $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
-      $q->addGroup('task_id');
-      
-      $q->loadObject($this, true, false);
-      $this->task_hours_worked += 0;
+	public function loadFull(CAppUI $AppUI, $taskId) {
+    $q = new DBQuery;
+    $q->addTable('tasks');
+    $q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
+    $q->addJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'inner');
+    $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
+    $q->addWhere('task_id = ' . (int)$taskId);
+    $q->addQuery('tasks.*');
+    $q->addQuery('project_name, project_color_identifier');
+    $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
+    $q->addGroup('task_id');
+
+    $q->loadObject($this, true, false);
+    $this->task_hours_worked += 0;
 	}
 
 	/*
@@ -488,23 +490,17 @@ class CTask extends CW2pObject {
 	/**
 	 * @todo Parent store could be partially used
 	 */
-	public function store() {
-		global $AppUI;
+	public function store(CAppUI $AppUI) {
 		$q = new DBQuery;
 
 		$this->w2PTrimAll();
 
 		$importing_tasks = false;
-		$msg = $this->check();
-		if ($msg) {
-			$return_msg = array(get_class($this) . '::store-check', 'failed', '-');
-			if (is_array($msg)) {
-				return array_merge($return_msg, $msg);
-			} else {
-				array_push($return_msg, $msg);
-				return $return_msg;
-			}
-		}
+    $errorMsgArray = $this->check();
+
+    if (count($errorMsgArray) > 0) {
+      return $errorMsgArray;
+    }
 		if ($this->task_id) {
 			addHistory('tasks', $this->task_id, 'update', $this->task_name, $this->task_project);
 
@@ -646,9 +642,9 @@ class CTask extends CW2pObject {
 		}
 
 		if (!$ret) {
-			return get_class($this) . '::store failed <br />' . db_error();
+			return false;
 		} else {
-			return null;
+			return true;
 		}
 	}
 
@@ -656,7 +652,7 @@ class CTask extends CW2pObject {
 	 * @todo Parent store could be partially used
 	 * @todo Can't delete a task with children
 	 */
-	public function delete() {
+	public function delete(CAppUI $AppUI) {
 		$q = new DBQuery;
 		$this->_action = 'deleted';
 		// delete linked user tasks

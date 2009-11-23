@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$task_id = intval(w2PgetParam($_GET, 'task_id', 0));
-$task_log_id = intval(w2PgetParam($_GET, 'task_log_id', 0));
-$reminded = intval(w2PgetParam($_GET, 'reminded', 0));
+$task_id = (int) w2PgetParam($_GET, 'task_id', 0);
+$task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
+$reminded = (int) w2PgetParam($_GET, 'reminded', 0);
 
 // check permissions for this record
 $canRead = !getDenyRead($m, $task_id);
@@ -20,7 +20,7 @@ $perms = &$AppUI->acl();
 // check if this record has dependencies to prevent deletion
 $msg = '';
 $obj = new CTask();
-$obj->loadFull($task_id);
+$obj->loadFull($AppUI, $task_id);
 
 $canDelete = $obj->canDelete($msg, $task_id);
 
