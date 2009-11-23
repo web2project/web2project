@@ -40,14 +40,12 @@ if ($obj) {
   $row = $obj;
   $contact_id = $row->contact_id;
 } else {
-  if (!$row->load($contact_id) && $contact_id > 0) {
-  	$AppUI->setMsg('Contact');
-  	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-  	$AppUI->redirect();
-  } elseif ($row->contact_private && $row->contact_owner != $AppUI->user_id && $row->contact_owner && $contact_id != 0) {
-  	// check only owner can edit
-  	$AppUI->redirect('m=public&a=access_denied');
-  }
+  $row->loadFull($AppUI, $contact_id);
+}
+if (!$row && $contact_id > 0) {
+  $AppUI->setMsg('Link');
+  $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+  $AppUI->redirect();
 }
 
 $canDelete = $row->canDelete($msg, $contact_id);
