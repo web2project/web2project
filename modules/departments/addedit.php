@@ -24,9 +24,20 @@ if (!$canEdit && $dept_id) {
 // load the department types
 $types = w2PgetSysVal('DepartmentType');
 
-// pull data for this department
+// load the record data
 $department = new CDepartment();
-$department->load($dept_id);
+$obj = $AppUI->restoreObject();
+if ($obj) {
+  $department = $obj;
+  $dept_id = $department->dept_id;
+} else {
+  $department->loadFull($AppUI, $dept_id);
+}
+if (!$department && $dept_id > 0) {
+  $AppUI->setMsg('Department');
+  $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+  $AppUI->redirect();
+}
 
 if (!$department && $dept_id > 0) {
 	$titleBlock = new CTitleBlock('Invalid Department ID', 'departments.png', $m, $m . '.' . $a);
