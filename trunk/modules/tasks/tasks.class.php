@@ -245,7 +245,8 @@ class CTask extends CW2pObject {
 	*/
 
 	public function load($oid = null, $strip = false, $skipUpdate = false) {
-		// use parent function to load the given object
+		global $AppUI;
+    // use parent function to load the given object
 		$loaded = parent::load($oid, $strip);
 
 		/*
@@ -265,7 +266,7 @@ class CTask extends CW2pObject {
 			** instead of store function of this object in order to
 			** prevent from infinite loops.
 			*/
-			parent::store();
+			parent::store($AppUI);
 			$loaded = parent::load($oid, $strip);
 		}
 
@@ -306,7 +307,9 @@ class CTask extends CW2pObject {
 	}
 
 	public function updateDynamics($fromChildren = false) {
-		//Has a parent or children, we will check if it is dynamic so that it's info is updated also
+		global $AppUI;
+
+    //Has a parent or children, we will check if it is dynamic so that it's info is updated also
 		$q = new DBQuery;
 		$modified_task = new CTask();
 
@@ -413,7 +416,7 @@ class CTask extends CW2pObject {
 			//If we are updating a dynamic task from its children we don't want to store() it
 			//when the method exists the next line in the store calling function will do that
 			if ($fromChildren == false) {
-				$modified_task->store();
+				$modified_task->store($AppUI);
 			}
 		}
 	}
@@ -426,7 +429,9 @@ class CTask extends CW2pObject {
 	* @return object The new record object or null if error
 	*/
 	public function copy($destProject_id = 0, $destTask_id = -1) {
-		$newObj = $this->duplicate();
+		global $AppUI;
+
+    $newObj = $this->duplicate();
 
 		// Copy this task to another project if it's specified
 		if ($destProject_id != 0) {
@@ -443,7 +448,7 @@ class CTask extends CW2pObject {
 		if ($newObj->task_parent == $this->task_id) {
 			$newObj->task_parent = '';
 		}
-		$newObj->store();
+		$newObj->store($AppUI);
 		$this->copyAssignedUsers($newObj->task_id);
 
 		return $newObj;
@@ -471,7 +476,9 @@ class CTask extends CW2pObject {
 	}
 
 	public function deepCopy($destProject_id = 0, $destTask_id = 0) {
-		$children = $this->getChildren();
+		global $AppUI;
+
+    $children = $this->getChildren();
 		$newObj = $this->copy($destProject_id, $destTask_id);
 		$new_id = $newObj->task_id;
 		if (!empty($children)) {
@@ -480,7 +487,7 @@ class CTask extends CW2pObject {
 				$tempTask->peek($child);
 				$tempTask->htmlDecode($child);
 				$newChild = $tempTask->deepCopy($destProject_id, $new_id);
-				$newChild->store();
+				$newChild->store($AppUI);
 			}
 		}
 
