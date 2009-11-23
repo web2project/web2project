@@ -24,7 +24,8 @@ $importTask_projectId = (int) w2PgetParam($_POST, 'import_tasks_from', '0');
 
 if (is_array($result)) {
   $AppUI->setMsg($result, UI_MSG_ERROR);
-  $AppUI->redirect();
+  $AppUI->holdObject($obj);
+  $AppUI->redirect('m=projects&a=addedit');
 }
 if ($result) {
   if ($importTask_projectId) {

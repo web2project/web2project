@@ -5,13 +5,15 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 
-$project_id = intval(w2PgetParam($_GET, 'project_id', 0));
-$company_id = intval(w2PgetParam($_GET, 'company_id', 0));
-$contact_id = intval(w2PgetParam($_GET, 'contact_id', 0));
+$project_id = (int) w2PgetParam($_GET, 'project_id', 0);
+$company_id = (int) w2PgetParam($_GET, 'company_id', 0);
+$contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
 $structprojs = getProjects();
 unset($structprojs[$project_id]);
 $structprojects = arrayMerge(array('0' => array(0 => 0, 1 => '(' . $AppUI->_('No Parent') . ')', 2 => '')), $structprojs);
+$pstatus = w2PgetSysVal('ProjectStatus');
+$ptype = w2PgetSysVal('ProjectType');
 
 $perms = &$AppUI->acl();
 // check permissions for this record
@@ -21,15 +23,21 @@ if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// load the record data
-$project = new CProject();
-
 // get a list of permitted companies
 $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => ''), $companies);
 
-if (!$project->load($project_id, false) && $project_id > 0) {
+// load the record data
+$project = new CProject();
+$obj = $AppUI->restoreObject();
+if ($obj) {
+  $project = $obj;
+  $project_id = $project->project_id;
+} else {
+  $project->loadFull($AppUI, $project_id);
+}
+if (!$project && $project_id > 0) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();

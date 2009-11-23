@@ -81,7 +81,7 @@ class CProject extends CW2pObject {
   public $project_original_parent = null;
   public $project_location = '';
 
-  public function CProject() {
+  public function __construct() {
     parent::__construct('projects', 'project_id');
   }
 
@@ -89,49 +89,35 @@ class CProject extends CW2pObject {
 	  $errorArray = array();
 	  $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-      if ('' == $this->project_name) {
-        $errorArray['project_name'] = $baseErrorMsg . 'project name is not set';
-      }
-      if ('' == $this->project_short_name) {
-        $errorArray['project_short_name'] = $baseErrorMsg . 'project short name is not set';
-      }
-      if (0 == (int) $this->project_company) {
-        $errorArray['project_company'] = $baseErrorMsg . 'project company is not set';
-      }
-      if (0 == (int) $this->project_owner) {
-        $errorArray['project_owner'] = $baseErrorMsg . 'project owner is not set';
-      }
-      if (0 == (int) $this->project_creator) {
-        $errorArray['project_creator'] = $baseErrorMsg . 'project creator is not set';
-      }
-      if (!is_int($this->project_priority) && '' == $this->project_priority) {
-        $errorArray['project_priority'] = $baseErrorMsg . 'project priority is not set';
-      }
-      if ('' == $this->project_color_identifier) {
-        $errorArray['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not set';
-      }
-      if (!is_int($this->project_type) && '' == $this->project_type) {
-        $errorArray['project_type'] = $baseErrorMsg . 'project type is not set';
-      }
-      if ('' == $this->project_status) {
-        $errorArray['project_status'] = $baseErrorMsg . 'project status is not set';
-      }
+    if ('' == $this->project_name) {
+      $errorArray['project_name'] = $baseErrorMsg . 'project name is not set';
+    }
+    if ('' == $this->project_short_name) {
+      $errorArray['project_short_name'] = $baseErrorMsg . 'project short name is not set';
+    }
+    if (0 == (int) $this->project_company) {
+      $errorArray['project_company'] = $baseErrorMsg . 'project company is not set';
+    }
+    if (0 == (int) $this->project_owner) {
+      $errorArray['project_owner'] = $baseErrorMsg . 'project owner is not set';
+    }
+    if (0 == (int) $this->project_creator) {
+      $errorArray['project_creator'] = $baseErrorMsg . 'project creator is not set';
+    }
+    if (!is_int($this->project_priority) && '' == $this->project_priority) {
+      $errorArray['project_priority'] = $baseErrorMsg . 'project priority is not set';
+    }
+    if ('' == $this->project_color_identifier) {
+      $errorArray['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not set';
+    }
+    if (!is_int($this->project_type) && '' == $this->project_type) {
+      $errorArray['project_type'] = $baseErrorMsg . 'project type is not set';
+    }
+    if ('' == $this->project_status) {
+      $errorArray['project_status'] = $baseErrorMsg . 'project status is not set';
+    }
 
-      // ensure changes of state in checkboxes is captured
-      $this->project_active = intval($this->project_active);
-      $this->project_private = intval($this->project_private);
-      
-      $this->project_target_budget = $this->project_target_budget ? $this->project_target_budget : 0.00;
-      $this->project_actual_budget = $this->project_actual_budget ? $this->project_actual_budget : 0.00;
-      
-      // Make sure project_short_name is the right size (issue for languages with encoded characters)
-      if (mb_strlen($this->project_short_name) > 10) {
-      	$this->project_short_name = mb_substr($this->project_short_name, 0, 10);
-      }
-      if (empty($this->project_end_date)) {
-      	$this->project_end_date = null;
-      }
-      return $errorArray;
+    return $errorArray;
 	}
 
 	public function load($oid = null, $strip = true) {
@@ -153,9 +139,11 @@ class CProject extends CW2pObject {
 	 * DEPRECATED
 	 */
 	public function fullLoad($projectId) {
-		$this->loadFull($projectId);
+		global $AppUI;
+
+    $this->loadFull($AppUI, $projectId);
 	}
-	public function loadFull($projectId) {
+	public function loadFull($AppUI, $projectId) {
 		global $w2Pconfig;
 
 		$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
@@ -486,17 +474,32 @@ class CProject extends CW2pObject {
 	}
 
 	public function store(CAppUI $AppUI) {
-      $perms = $AppUI->acl();
-      $stored = false;
-      
-      $this->w2PTrimAll();
-      
-      $this->project_target_budget = str_replace(',', '', $this->project_target_budget);
-      $errorMsgArray = $this->check();
-  
-      if (count($errorMsgArray) > 0) {
-        return $errorMsgArray;
-      }
+    $perms = $AppUI->acl();
+    $stored = false;
+
+    $this->w2PTrimAll();
+
+    $this->project_target_budget = str_replace(',', '', $this->project_target_budget);
+    // ensure changes of state in checkboxes is captured
+    $this->project_active = (int) $this->project_active;
+    $this->project_private = (int) $this->project_private;
+
+    $this->project_target_budget = $this->project_target_budget ? $this->project_target_budget : 0.00;
+    $this->project_actual_budget = $this->project_actual_budget ? $this->project_actual_budget : 0.00;
+
+    // Make sure project_short_name is the right size (issue for languages with encoded characters)
+    if (mb_strlen($this->project_short_name) > 10) {
+      $this->project_short_name = mb_substr($this->project_short_name, 0, 10);
+    }
+    if (empty($this->project_end_date)) {
+      $this->project_end_date = null;
+    }
+
+    $errorMsgArray = $this->check();
+
+    if (count($errorMsgArray) > 0) {
+      return $errorMsgArray;
+    }
 
     $this->project_id = (int) $this->project_id;
     // convert dates to SQL format first
