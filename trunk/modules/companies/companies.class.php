@@ -58,9 +58,6 @@ class CCompany extends CW2pObject {
 	  if ('' == trim($this->company_name)) {
 	    $errorArray['company_name'] = $baseErrorMsg . 'company name is not set';
 	  }
-	  if ('' == trim($this->company_email)) {
-	    $errorArray['company_email'] = $baseErrorMsg . 'company email is not set';
-	  }
 	  if ((int) $this->company_owner == 0) {
     	$errorArray['company_owner'] = $baseErrorMsg . 'company owner is not set';
 	  }
