@@ -33,7 +33,7 @@ c.  If you're converting from dotProject, the system handles the conversion.
 4.  After the script is complete, review the error messages.  You may have to 
 manually create your config.php file from the information displayed.
 
-5.  To have your system run maintenenace tasks - email notices, etc - set up 
+5.  To have your system run maintenance tasks - email notices, etc - set up 
 a "cronjob" along the lines of:
 
 	wget -O - -q http://{web2project installation}/queuescanner.php
