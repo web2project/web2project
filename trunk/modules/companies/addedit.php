@@ -25,7 +25,13 @@ $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('Global
 
 // load the record data
 $company = new CCompany();
-$company->loadFull($AppUI, $company_id);
+$obj = $AppUI->restoreObject();
+if ($obj) {
+  $company = $obj;
+  $company_id = $company->company_id;
+} else {
+  $company->loadFull($AppUI, $company_id);
+}
 
 if (!$company && $company_id > 0) {
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);

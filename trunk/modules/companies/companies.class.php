@@ -47,7 +47,7 @@ class CCompany extends CW2pObject {
 	public $company_custom = null;
 
 	public function __construct() {
-		parent::__construct('companies', 'company_id');
+	  parent::__construct('companies', 'company_id');
 	}
 
 	// overload check
@@ -57,6 +57,9 @@ class CCompany extends CW2pObject {
 
 	  if ('' == trim($this->company_name)) {
 	    $errorArray['company_name'] = $baseErrorMsg . 'company name is not set';
+	  }
+	  if ('' == trim($this->company_email)) {
+	    $errorArray['company_email'] = $baseErrorMsg . 'company email is not set';
 	  }
 	  if ((int) $this->company_owner == 0) {
     	$errorArray['company_owner'] = $baseErrorMsg . 'company owner is not set';
@@ -130,30 +133,30 @@ class CCompany extends CW2pObject {
 
   public function hook_search()
   {
-	$search['table'] = 'companies';
-	$search['table_module'] = $search['table'];
-	$search['table_key'] = 'company_id';
-	$search['table_link'] = 'index.php?m=companies&a=view&company_id=';
-	$search['table_title'] = 'Companies';
-	$search['table_orderby'] = 'company_name';
-	$search['search_fields'] = array('company_name', 'company_address1', 'company_address2', 'company_city', 'company_state', 'company_zip', 'company_primary_url', 'company_description', 'company_email');
-	$search['display_fields'] = $search['search_fields'];
+    $search['table'] = 'companies';
+    $search['table_module'] = $search['table'];
+    $search['table_key'] = 'company_id';
+    $search['table_link'] = 'index.php?m=companies&a=view&company_id=';
+    $search['table_title'] = 'Companies';
+    $search['table_orderby'] = 'company_name';
+    $search['search_fields'] = array('company_name', 'company_address1', 'company_address2', 'company_city', 'company_state', 'company_zip', 'company_primary_url', 'company_description', 'company_email');
+    $search['display_fields'] = $search['search_fields'];
 
-	return $search;
+    return $search;
   }
 
-	public function loadFull(CAppUI $AppUI, $companyId) {
-		$q = new DBQuery;
-		$q->addTable('companies');
-		$q->addQuery('companies.*');
-		$q->addQuery('con.contact_first_name');
-		$q->addQuery('con.contact_last_name');
-		$q->leftJoin('users', 'u', 'u.user_id = companies.company_owner');
-		$q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-		$q->addWhere('companies.company_id = ' . (int) $companyId);
+  public function loadFull(CAppUI $AppUI, $companyId) {
+    $q = new DBQuery;
+    $q->addTable('companies');
+    $q->addQuery('companies.*');
+    $q->addQuery('con.contact_first_name');
+    $q->addQuery('con.contact_last_name');
+    $q->leftJoin('users', 'u', 'u.user_id = companies.company_owner');
+    $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+    $q->addWhere('companies.company_id = ' . (int) $companyId);
 
-		$q->loadObject($this, true, false);
-	}
+    $q->loadObject($this, true, false);
+  }
 
   public function getCompanyList($AppUI, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
   	$q = new DBQuery;

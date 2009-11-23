@@ -15,8 +15,9 @@ $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
 
 if (is_array($result)) {
-  $AppUI->setMsg($result, UI_MSG_ERROR);
-  $AppUI->redirect();
+  $AppUI->setMsg($result, UI_MSG_ERROR, true);
+  $AppUI->holdObject($obj);
+  $AppUI->redirect('m=companies&a=addedit');
 }
 if ($result) {
   $AppUI->setMsg('Company '.$action, UI_MSG_OK, true);
