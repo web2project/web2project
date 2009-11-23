@@ -12,7 +12,7 @@ include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
 
 global $caller, $locale_char_set, $showLabels, $showWork, $showLabels, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
 
-$project_id = intval(w2PgetParam($_REQUEST, 'project_id', 0));
+$project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 $f = w2PgetParam($_REQUEST, 'f', 0);
 
 // get the prefered date format

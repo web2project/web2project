@@ -44,6 +44,8 @@ $q->addWhere('pdo.pd_option_user = ' . (int)$AppUI->user_id);
 $view_options = $q->loadList();
 
 $project_id = (int) w2PgetParam($_POST, 'project_id', 0);
+$project_id = (int) w2PgetParam($_GET, 'project_id', $project_id);
+
 $extra = array('where' => 'project_active = 1');
 $project = new CProject();
 $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
@@ -404,9 +406,9 @@ var task_end_msg = '<?php echo $AppUI->_('taskValidEndDate'); ?>';
 var workHours = <?php echo w2PgetConfig('daily_working_hours'); ?>;
 //working days array from config.php
 var working_days = new Array(<?php echo w2PgetConfig('cal_working_days'); ?>);
-var cal_day_start = <?php echo intval(w2PgetConfig('cal_day_start')); ?>;
-var cal_day_end = <?php echo intval(w2PgetConfig('cal_day_end')); ?>;
-var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours')); ?>;
+var cal_day_start = <?php echo (int) w2PgetConfig('cal_day_start'); ?>;
+var cal_day_end = <?php echo (int) w2PgetConfig('cal_day_end'); ?>;
+var daily_working_hours = <?php echo (int) w2PgetConfig('daily_working_hours'); ?>;
 var oldProj = '<?php echo $obj->project_name . ':'; ?>';
 
 function setDate( frm_name, f_date ) {
