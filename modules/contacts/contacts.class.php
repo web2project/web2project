@@ -60,7 +60,7 @@ class CContact extends CW2pObject {
 
 	public $contact_methods = array();
 
-	public function CContact() {
+	public function __construct() {
     parent::__construct('contacts', 'contact_id');
 	}
 

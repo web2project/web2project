@@ -46,11 +46,11 @@ if ($del) {
 	}
 } else {
 	if (($result = $obj->store($AppUI))) {
-	  $AppUI->setMsg($result, UI_MSG_ERROR, true);
 	  if (is_array($result)) {
-        $AppUI->holdObject($obj);
-        $AppUI->redirect('m=contacts&a=addedit');
-      }
+      $AppUI->setMsg($result, UI_MSG_ERROR, true);
+      $AppUI->holdObject($obj);
+      $AppUI->redirect('m=contacts&a=addedit');
+    }
 	} else {
 		$custom_fields = new CustomFields($m, 'addedit', $obj->contact_id, 'edit');
 		$custom_fields->bind($_POST);
