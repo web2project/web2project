@@ -52,7 +52,8 @@ $extraGet = '&user_id=' . $user_id;
  * May God have mercy on our souls for the atrocity we're about to commit.
  */ 
 $tmpDepartments = $department;
-$department = $dept_id; 
+$department = $dept_id;
+$project = new CProject();
 projects_list_data($user_id);
 $department = $tmpDepartments;
 
