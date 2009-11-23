@@ -143,7 +143,7 @@ if (!$project_id) {
 	$ptype = w2PgetSysVal('ProjectType');
 
 	// load the record data
-	$obj->loadFull($project_id);
+	$obj->loadFull($AppUI, $project_id);
 
 	if (!$obj) {
 		$AppUI->setMsg('Project');
