@@ -4,10 +4,10 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 //addfile sql
-$file_id = intval(w2PgetParam($_POST, 'file_id', 0));
-$del = intval(w2PgetParam($_POST, 'del', 0));
-$cancel = intval(w2PgetParam($_POST, 'cancel', 0));
-$duplicate = intval(w2PgetParam($_POST, 'duplicate', 0));
+$file_id = (int) w2PgetParam($_POST, 'file_id', 0);
+$del = (int) w2PgetParam($_POST, 'del', 0);
+$cancel = (int) w2PgetParam($_POST, 'cancel', 0);
+$duplicate = (int) w2PgetParam($_POST, 'duplicate', 0);
 $redirect = w2PgetParam($_POST, 'redirect', '');
 global $db;
 
@@ -45,7 +45,7 @@ if ($file_id) {
 } else {
 	$obj->_message = 'added';
 }
-$obj->file_category = intval(w2PgetParam($_POST, 'file_category', 0));
+$obj->file_category = (int) w2PgetParam($_POST, 'file_category', 0);
 $version = w2PgetParam($_POST, 'file_version', 0);
 $revision_type = w2PgetParam($_POST, 'revision_type', 0);
 
@@ -166,10 +166,13 @@ if (!$file_id) {
 	}
 }
 
-if (($msg = $obj->store($AppUI))) {
-	$AppUI->setMsg($msg, UI_MSG_ERROR);
-} else {
-
+$result = $obj->store($AppUI);
+if (is_array($result)) {
+  $AppUI->setMsg($result, UI_MSG_ERROR, true);
+  $AppUI->holdObject($obj);
+  $AppUI->redirect('m=files&a=addedit');
+}
+if ($result) {
 	// Notification
 	$obj->load($obj->file_id);
 	$obj->notify($notify);
@@ -188,5 +191,7 @@ if (($msg = $obj->store($AppUI))) {
 
   $indexed = $obj->indexStrings();
   $AppUI->setMsg('; ' . $indexed . ' unique words indexed', UI_MSG_OK, true);
+  $AppUI->redirect('m=files');
+} else {
+  $AppUI->redirect('m=public&a=access_denied');
 }
-$AppUI->redirect($redirect);

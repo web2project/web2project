@@ -3,8 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$folder = intval(w2PgetParam($_GET, 'folder', 0));
-$file_id = intval(w2PgetParam($_GET, 'file_id', 0));
+$folder = (int) w2PgetParam($_GET, 'folder', 0);
+$file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 $ci = w2PgetParam($_GET, 'ci', 0) == 1 ? true : false;
 $preserve = $w2Pconfig['files_ci_preserve_attr'];
 
@@ -30,46 +30,54 @@ $canAdmin = $perms->checkModule('system', 'edit');
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'];
 
-$file_task = intval(w2PgetParam($_GET, 'file_task', 0));
-$file_parent = intval(w2PgetParam($_GET, 'file_parent', 0));
-$file_project = intval(w2PgetParam($_GET, 'project_id', 0));
-$file_helpdesk_item = intval(w2PgetParam($_GET, 'file_helpdesk_item', 0));
+$file_task = (int) w2PgetParam($_GET, 'file_task', 0);
+$file_parent = (int) w2PgetParam($_GET, 'file_parent', 0);
+$file_project = (int) w2PgetParam($_GET, 'project_id', 0);
+$file_helpdesk_item = (int) w2PgetParam($_GET, 'file_helpdesk_item', 0);
 
 $q = &new DBQuery;
 
+$file = new CFile();
+$obj = $AppUI->restoreObject();
+if ($obj) {
+  $file = $obj;
+  $file_id = $file->file_id;
+} else {
+  $file->load($file_id);
+}
+
 // check if this record has dependencies to prevent deletion
 $msg = '';
-$obj = new CFile();
-$canDelete = $obj->canDelete($msg, $file_id);
+$canDelete = $file->canDelete($msg, $file_id);
 
 // load the record data
-if ($file_id > 0 && !$obj->load($file_id)) {
+if (!$file && $file_id > 0) {
 	$AppUI->setMsg('File');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
 if ($file_id > 0) {
 	// Check to see if the task or the project is also allowed.
-	if ($obj->file_task) {
-		if (!$perms->checkModuleItem('tasks', 'view', $obj->file_task)) {
+	if ($file->file_task) {
+		if (!$perms->checkModuleItem('tasks', 'view', $file->file_task)) {
 			$AppUI->redirect('m=public&a=access_denied');
 		}
 	}
-	if ($obj->file_project) {
-		if (!$perms->checkModuleItem('projects', 'view', $obj->file_project)) {
+	if ($file->file_project) {
+		if (!$perms->checkModuleItem('projects', 'view', $file->file_project)) {
 			$AppUI->redirect('m=public&a=access_denied');
 		}
 	}
 }
 
-if ($obj->file_checkout != $AppUI->user_id) {
+if ($file->file_checkout != $AppUI->user_id) {
 	$ci = false;
 }
 
 if (!$canAdmin)
-	$canAdmin = $obj->canAdmin();
+	$canAdmin = $file->canAdmin();
 
-if ($obj->file_checkout == 'final' && !$canAdmin) {
+if ($file->file_checkout == 'final' && !$canAdmin) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 // setup the title block
@@ -87,12 +95,12 @@ if ($ci) {
 	$file_id = 0;
 }
 
-if ($obj->file_project) {
-	$file_project = $obj->file_project;
+if ($file->file_project) {
+	$file_project = $file->file_project;
 }
-if ($obj->file_task) {
-	$file_task = $obj->file_task;
-	$task_name = $obj->getTaskName();
+if ($file->file_task) {
+	$file_task = $file->file_task;
+	$task_name = $file->getTaskName();
 } else {
 	if ($file_task) {
 		$task = new CTask();
@@ -102,8 +110,8 @@ if ($obj->file_task) {
 		$task_name = '';
 	}
 }
-if (isset($obj->file_helpdesk_item)) {
-	$file_helpdesk_item = $obj->file_helpdesk_item;
+if (isset($file->file_helpdesk_item)) {
+	$file_helpdesk_item = $file->file_helpdesk_item;
 }
 
 $folders = getFolderSelectList();
@@ -162,8 +170,9 @@ function setTask( key, val ) {
 	<input type="hidden" name="dosql" value="do_file_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="cancel" value="0" />
-	<input type="hidden" name="file_id" value="<?php echo $obj->file_id; ?>" />
-	<input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id; ?>" />
+	<input type="hidden" name="file_id" value="<?php echo $file->file_id; ?>" />
+  <input type="hidden" name="file_parent" value="<?php echo ($file->file_parent) ? $file->file_parent : $file_parent; ?>" />
+	<input type="hidden" name="file_version_id" value="<?php echo $file->file_version_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
 	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />
 	<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
@@ -176,43 +185,43 @@ function setTask( key, val ) {
 							<?php if ($file_id == 0 && !$ci) { ?>
 								<?php echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $folder)); ?>
 							<?php } else { ?>
-								<?php echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $obj->file_folder)); ?>
+								<?php echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $file->file_folder)); ?>
 							<?php } ?>
 						</td>
 					</tr>		
-					<?php if ($obj->file_id) { ?>
+					<?php if ($file->file_id) { ?>
 						<tr>
 							<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?>:</td>
-							<td align="left" class="hilite"><?php echo strlen($obj->file_name) == 0 ? 'n/a' : $obj->file_name; ?></td>
+							<td align="left" class="hilite"><?php echo strlen($file->file_name) == 0 ? 'n/a' : $file->file_name; ?></td>
 							<td>
-								<a href="./fileviewer.php?file_id=<?php echo $obj->file_id; ?>"><?php echo $AppUI->_('download'); ?></a>
+								<a href="./fileviewer.php?file_id=<?php echo $file->file_id; ?>"><?php echo $AppUI->_('download'); ?></a>
 							</td>
 						</tr>
 						<tr valign="top">
 							<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-							<td align="left" class="hilite"><?php echo $obj->file_type; ?></td>
+							<td align="left" class="hilite"><?php echo $file->file_type; ?></td>
 						</tr>
 						<tr>
 							<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Size'); ?>:</td>
-							<td align="left" class="hilite"><?php echo $obj->file_size; ?></td>
+							<td align="left" class="hilite"><?php echo $file->file_size; ?></td>
 						</tr>
 						<tr>
 							<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By'); ?>:</td>
-							<td align="left" class="hilite"><?php echo $obj->getOwner(); ?></td>
+							<td align="left" class="hilite"><?php echo $file->getOwner(); ?></td>
 						</tr>
 					<?php } ?>
 					<?php echo file_show_attr(); ?>
 					<tr>
 						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
 						<td align="left">
-							<textarea name="file_description" class="textarea" rows="4" style="width:270px"><?php echo $obj->file_description; ?></textarea>
+							<textarea name="file_description" class="textarea" rows="4" style="width:270px"><?php echo $file->file_description; ?></textarea>
 						</td>
 					</tr>
 					<tr>
 						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Upload File'); ?>:</td>
 						<td align="left"><input type="File" name="formfile" style="width:270px" /></td>
 					</tr>
-					<?php if ($ci || ($canAdmin && $obj->file_checkout == 'final')) { ?>
+					<?php if ($ci || ($canAdmin && $file->file_checkout == 'final')) { ?>
 						<tr>
 							<td align="right" nowrap="nowrap">&nbsp;</td>
 							<td align="left"><input type="checkbox" name="final_ci" id="final_ci" onclick="finalCI()" /><label for="final_ci"><?php echo $AppUI->_('Final Version'); ?></label></td>		
@@ -226,7 +235,7 @@ function setTask( key, val ) {
 			</td>
 			<td valign="top" align="right">
 				<?php
-				if ($obj->file_id && $obj->file_checkout <> '' && ((int) $obj->file_checkout == $AppUI->user_id || $canAdmin)) {
+				if ($file->file_id && $file->file_checkout <> '' && ((int) $file->file_checkout == $AppUI->user_id || $canAdmin)) {
 					?><input type="button" class="button" value="<?php echo $AppUI->_('cancel checkout'); ?>" onclick="cancelIt()" /><?php
 				}
 				?>
