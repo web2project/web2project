@@ -40,7 +40,7 @@ class CDepartment extends CW2pObject {
 
 		return $q->loadObject($this);
 	}
-	public function loadFull($deptId) {
+	public function loadFull(CAppUI $AppUI, $deptId) {
 
 		$q = new DBQuery;
 		$q->addTable('companies', 'com');
@@ -124,38 +124,41 @@ class CDepartment extends CW2pObject {
 	}
 
 	public function check() {
-		if ($this->dept_id === null) {
-			return 'department id is NULL';
-		}
-		// TODO MORE
-		if ($this->dept_id && $this->dept_id == $this->dept_parent) {
-			return 'cannot make myself my own parent (' . $this->dept_id . '=' . $this->dept_parent . ')';
-		}
-		return null; // object is ok
+    $errorArray = array();
+    $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+    if ($this->dept_id == $this->dept_parent) {
+      $errorArray['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
+    }
+
+		return $errorArray;
 	}
 
-	public function store() {
-		$msg = $this->check();
-		if ($msg) {
-			return get_class($this) . '::store-check failed - ' . $msg;
-		}
+	public function store(CAppUI $AppUI) {
+    $perms = $AppUI->acl();
+    $stored = false;
+
+    $errorMsgArray = $this->check();
+
+    if (count($errorMsgArray) > 0) {
+      return $errorMsgArray;
+    }
+
 		if ($this->dept_id) {
 			$q = new DBQuery;
 			$ret = $q->updateObject('departments', $this, 'dept_id', false);
-			$q->clear();
+      addHistory('departments', $this->dept_id, 'update', $this->dept_name, $this->dept_id);
+      $stored = true;
 		} else {
 			$q = new DBQuery;
 			$ret = $q->insertObject('departments', $this, 'dept_id');
-			$q->clear();
+      addHistory('departments', $this->dept_id, 'add', $this->dept_name, $this->dept_id);
+      $stored = true;
 		}
-		if (!$ret) {
-			return get_class($this) . '::store failed ' . db_error();
-		} else {
-			return null;
-		}
+    return $stored;
 	}
 
-	public function delete() {
+	public function delete(CAppUI $AppUI) {
 		$q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.dept_id');
