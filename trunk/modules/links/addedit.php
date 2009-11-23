@@ -19,19 +19,19 @@ if (!$canEdit && $link_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+// load the record data
 $link = new CLink();
 $obj = $AppUI->restoreObject();
 if ($obj) {
   $link = $obj;
+  $link_id = $link->link_id;
 } else {
   $link->loadFull($AppUI, $link_id);
 }
-
-// load the record data
 if (!$link && $link_id > 0) {
-	$AppUI->setMsg('Link');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
+  $AppUI->setMsg('Link');
+  $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+  $AppUI->redirect();
 }
 
 // setup the title block
