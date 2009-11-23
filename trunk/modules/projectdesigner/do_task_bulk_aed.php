@@ -29,7 +29,7 @@ if ($bulk_task_end_date) {
 	$end_date = new CDate($bulk_task_end_date);
 	$bulk_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 }
-$bulk_move_date = intval(w2PgetParam($_POST, 'bulk_move_date', ''));
+$bulk_move_date = (int) w2PgetParam($_POST, 'bulk_move_date', '0');
 $bulk_task_percent_complete = w2PgetParam($_POST, 'bulk_task_percent_complete', '');
 
 $perms = &$AppUI->acl();
@@ -65,7 +65,7 @@ if (is_array($selected) && count($selected)) {
 
 		//Action: Move Task Date
 		if (isset($_POST['bulk_move_date']) && $bulk_move_date != '' && $bulk_move_date) {
-			if ($upd_task->task_id && (intval($upd_task->task_dynamic) != 1 && !$upd_task->getDependencies($upd_task->task_id))) {
+			if ($upd_task->task_id && ((int) $upd_task->task_dynamic != 1 && !$upd_task->getDependencies($upd_task->task_id))) {
 				$offSet = $bulk_move_date;
 				$start_date = new CDate($upd_task->task_start_date);
 				$start_date->addDays($offSet);

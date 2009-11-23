@@ -11,7 +11,7 @@ $canAddProject = $perms->checkModuleItem('projects', 'view', $project_id);
 if (!$canView) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-$project_id = intval(w2PgetParam($_REQUEST, 'project_id', 0));
+$project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 $project = new CProject();
 $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $q = new DBQuery;
