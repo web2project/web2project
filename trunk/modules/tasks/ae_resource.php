@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 // $Id$
-global $AppUI, $users, $task_id, $task_project, $obj, $projTasksWithEndDates, $tab, $loadFromTab;
+global $AppUI, $users, $task_id, $task_project, $task, $projTasksWithEndDates, $tab, $loadFromTab;
 
 // Make sure that we can see users that are allocated to the task.
 
@@ -89,7 +89,7 @@ for ($i = 5; $i <= 100; $i += 5) {
 		<?php echo $AppUI->_('Additional Email Comments'); ?>:		
 		<br />
 		<textarea name="email_comment" class="textarea" cols="60" rows="10"></textarea><br />
-		<input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if ($obj->task_notify != '0') echo 'checked="checked"' ?> /> 
+		<input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if ($task->task_notify != '0') echo 'checked="checked"' ?> />
 		<label for="task_notify"><?php echo $AppUI->_('notifyChange'); ?></label>
 		</td></tr></table><br />		
 	</td>
