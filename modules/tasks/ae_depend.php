@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 // $Id$
 global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
-global $can_edit_time_information, $obj;
+global $can_edit_time_information, $task;
 global $durnTypes, $task_project, $task_id, $tab;
 
 //Time arrays for selects
@@ -71,28 +71,28 @@ if ($can_edit_time_information) {
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('On'); ?></td>
 				<td nowrap="nowrap">
-					<input type="radio" name="task_dynamic" value="31" <?php if ($obj->task_dynamic > '20')
+					<input type="radio" name="task_dynamic" value="31" <?php if ($task->task_dynamic > '20')
 		echo "checked" ?> />
 				</td>
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Off'); ?></td>
 				<td id="no_dyn" nowrap="nowrap">
-					<input type="radio" name="task_dynamic" value="0" <?php if ($obj->task_dynamic == '0' || $obj->task_dynamic == '11')
+					<input type="radio" name="task_dynamic" value="0" <?php if ($task->task_dynamic == '0' || $task->task_dynamic == '11')
 		echo "checked" ?> />
 				</td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><label for="task_dynamic"><?php echo $AppUI->_('Dynamic Task'); ?></label></td>
 	<td nowrap="nowrap">
-		<input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if ($obj->task_dynamic == "1")
+		<input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if ($task->task_dynamic == "1")
 		echo 'checked="checked"' ?> />
 	</td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap"><label for="task_dynamic_nodelay"><?php echo $AppUI->_('Do not track this task'); ?></label></td>
 	<td>
-		<input type="checkbox" name="task_dynamic_nodelay" id="task_dynamic_nodelay" value="1" <?php if (($obj->task_dynamic > '10') && ($obj->task_dynamic < 30))
+		<input type="checkbox" name="task_dynamic_nodelay" id="task_dynamic_nodelay" value="1" <?php if (($task->task_dynamic > '10') && ($task->task_dynamic < 30))
 		echo 'checked="checked"' ?> />
 	</td>
 			</tr>

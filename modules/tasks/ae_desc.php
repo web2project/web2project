@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 // $Id$
-global $AppUI, $task_id, $obj, $users, $task_access, $department_selection_list;
+global $AppUI, $task_id, $task, $users, $task_access, $department_selection_list;
 global $task_parent_options, $w2Pconfig, $projects, $task_project, $can_edit_time_information, $tab;
 
 $perms = &$AppUI->acl();
@@ -23,23 +23,23 @@ $perms = &$AppUI->acl();
               if ($can_edit_time_information) {
               ?>
                 <?php echo $AppUI->_('Task Owner'); ?><br />
-  							<?php echo arraySelect($users, 'task_owner', 'class="text"', !isset($obj->task_owner) ? $AppUI->user_id : $obj->task_owner); ?>
+  							<?php echo arraySelect($users, 'task_owner', 'class="text"', !isset($task->task_owner) ? $AppUI->user_id : $task->task_owner); ?>
   								<br />
   						<?php
               }
             ?>
 						<?php echo $AppUI->_('Access'); ?>
 						<br />
-						<?php echo arraySelect($task_access, 'task_access', 'class="text"', intval($obj->task_access), true); ?>
+						<?php echo arraySelect($task_access, 'task_access', 'class="text"', intval($task->task_access), true); ?>
 						<br /><?php echo $AppUI->_('Web Address'); ?>
-						<br /><input type="text" class="text" name="task_related_url" value="<?php echo $obj->task_related_url; ?>" size="40" maxlength="255" />
+						<br /><input type="text" class="text" name="task_related_url" value="<?php echo $task->task_related_url; ?>" size="40" maxlength="255" />
 					</td>
 					<td valign='top'>
 						<?php echo $AppUI->_('Task Type'); ?>
 						<br />
 						<?php
               $task_types = w2PgetSysVal('TaskType');
-              echo arraySelect($task_types, 'task_type', 'class="text"', $obj->task_type, false);
+              echo arraySelect($task_types, 'task_type', 'class="text"', $task->task_type, false);
             ?>
 						<br /><br />
   					<?php
@@ -51,7 +51,7 @@ $perms = &$AppUI->acl();
                 ?>
   								<br />
   								<?php echo $AppUI->_('Department'); ?><br />
-                  <?php echo arraySelect($department_selection_list, 'dept_ids[]', 'class="text" size="1"', $obj->task_departments); ?>
+                  <?php echo arraySelect($department_selection_list, 'dept_ids[]', 'class="text" size="1"', $task->task_departments); ?>
   							<?php
               }
             ?>
@@ -64,11 +64,11 @@ $perms = &$AppUI->acl();
 		<tr>
 			<td>
 				<select name='task_parent' class='text'>
-					<option value='<?php echo $obj->task_id; ?>'><?php echo $AppUI->_('None'); ?></option>
+					<option value='<?php echo $task->task_id; ?>'><?php echo $AppUI->_('None'); ?></option>
 					<?php echo $task_parent_options; ?>
 				</select>
 			</td>
-			<td><?php echo $w2Pconfig['currency_symbol'] ?><input type="text" class="text" name="task_target_budget" value="<?php echo $obj->task_target_budget; ?>" size="10" maxlength="10" /></td>
+			<td><?php echo $w2Pconfig['currency_symbol'] ?><input type="text" class="text" name="task_target_budget" value="<?php echo $task->task_target_budget; ?>" size="10" maxlength="10" /></td>
 		</tr>
 	<?php if ($task_id > 0) { ?>
 		<tr>
@@ -88,11 +88,11 @@ $perms = &$AppUI->acl();
 		<table><tr><td align="left">
 		<?php echo $AppUI->_('Description'); ?>:
 		<br />
-		<textarea name="task_description" class="textarea" cols="60" rows="10"><?php echo $obj->task_description; ?></textarea>
+		<textarea name="task_description" class="textarea" cols="60" rows="10"><?php echo $task->task_description; ?></textarea>
 		</td></tr></table><br />
 		<?php
 global $m;
-$custom_fields = new CustomFields($m, 'addedit', $obj->task_id, 'edit');
+$custom_fields = new CustomFields($m, 'addedit', $task->task_id, 'edit');
 $custom_fields->printHTML();
 ?>
 	</td>

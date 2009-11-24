@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // $Id$
 
 global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
-global $can_edit_time_information, $locale_char_set, $obj;
+global $can_edit_time_information, $locale_char_set, $task;
 global $durnTypes, $task_project, $task_id, $tab;
 global $cal_sdf;
 $AppUI->loadCalendarJS();
@@ -46,12 +46,12 @@ for ($current = 0 + $inc; $current < 60; $current += $inc) {
 
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
-if (intval($obj->task_start_date)) {
-	$start_date = new CDate($obj->task_start_date);
+if (intval($task->task_start_date)) {
+	$start_date = new CDate($task->task_start_date);
 } else {
 	$start_date = new CDate();
 }
-$end_date = intval($obj->task_end_date) ? new CDate($obj->task_end_date) : null;
+$end_date = !is_null($task->task_end_date) ? new CDate($task->task_end_date) : null;
 
 // convert the numeric calendar_working_days config array value to a human readable output format
 $cwd = explode(',', $w2Pconfig['cal_working_days']);
@@ -147,9 +147,9 @@ if ($can_edit_time_information) {
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Expected Duration'); ?>:</td>
 	<td nowrap="nowrap">
-		<input type="text" class="text" name="task_duration" maxlength="8" size="6" value="<?php echo isset($obj->task_duration) ? $obj->task_duration : 1; ?>" />
+		<input type="text" class="text" name="task_duration" maxlength="8" size="6" value="<?php echo isset($task->task_duration) ? $task->task_duration : 1; ?>" />
 	<?php
-	echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $obj->task_duration_type, true);
+	echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $task->task_duration_type, true);
 ?>
 	</td>
 	<td><?php echo $AppUI->_('Daily Working Hours') . ': ' . $w2Pconfig['daily_working_hours']; ?></td>
