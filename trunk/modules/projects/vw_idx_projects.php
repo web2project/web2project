@@ -183,13 +183,14 @@ if ($is_tabbed) {
 				foreach ($st_projects_arr as $st_project) {
 					$multiproject_id = 0;
 					$project = $st_project[0];
+          $project_id = $project['project_id'];
 					$level = $st_project[1];
 
-					if ($project['project_id']) {
+					if ($project_id) {
 						if ($is_tabbed) {
-							$row = $all_projects[getProjectIndex($all_projects, $project['project_id'])];
+							$row = $all_projects[getProjectIndex($all_projects, $project_id)];
 						} else {
-							$row = $projects[getProjectIndex($projects, $project['project_id'])];
+							$row = $projects[getProjectIndex($projects, $project_id)];
 						}
 					}
 					$none = false;
@@ -249,21 +250,13 @@ if ($is_tabbed) {
 		
 					if ($level) {
 						$s .= '</div>';
-						$s .= '</tr>';
-					} else {
-						$s .= '</tr>';
 					}
+          $s .= '</tr>';
 
-					/* 
-					 * This performs the check to see if the project is already displayed
-					 * (as a sub-project).  If so, it doesn't display the project again.
-					 */
-					if (!isset($projectArray[$project['project_id']])) {
-						echo $s;
-					}
-					if ($project['project_id']) {
-						$projectArray[$project['project_id']] = $project['project_id'];
-					}
+          if ($project_id > 0 && !isset($projectArray[$project_id])) {
+            echo $s;
+            $projectArray[$project_id] = $project_id;
+          }
 				}
 			}
 		}
