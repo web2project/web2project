@@ -78,7 +78,7 @@ $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_
 
 $q = new DBQuery;
 $q->addTable('projects', 'p');
-$q->addQuery('company_name, p.project_id, project_color_identifier, project_name, ' . ' SUM(t1.task_duration * t1.task_percent_complete' . ' * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type))' . ' / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete ');
+$q->addQuery('company_name, p.project_id, project_color_identifier, project_name, project_percent_complete');
 $q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
 $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project', 'inner');
 $q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
