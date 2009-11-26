@@ -121,18 +121,7 @@ class CProject extends CW2pObject {
 	}
 
 	public function load($oid = null, $strip = true) {
-		$result = parent::load($oid, $strip);
-		if ($result && $oid) {
-			$working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
-
-			$q = new DBQuery;
-			$q->addTable('projects');
-			$q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
-			$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
-			$q->addWhere('project_id = ' . $oid . ' AND t1.task_id = t1.task_parent');
-			$this->project_percent_complete = $q->loadResult();
-		}
-		return $result;
+		return parent::load($oid, $strip);
 	}
 
 	/*
@@ -152,8 +141,6 @@ class CProject extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('projects');
 		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
-		$q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
-		$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'left');
 		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
 		$q->leftJoin('users', 'u', 'user_id = project_owner');
 		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
@@ -854,8 +841,7 @@ class CProject extends CW2pObject {
       
       return $q->loadResult();
 	}
-	public static function updateHoursWorked($project_id)
-	{
+	public static function updateHoursWorked($project_id) {
       $q = new DBQuery;
       $q->addTable('task_log');
       $q->addTable('tasks');
@@ -869,7 +855,25 @@ class CProject extends CW2pObject {
       $q->addUpdate('project_worked_hours', $worked_hours);
       $q->addWhere('project_id  = ' . (int) $project_id);
       $q->exec();
+      CProject::updatePercentComplete($project_id);
 	}
+  
+  public static function updatePercentComplete($project_id) {
+    $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
+
+    $q = new DBQuery;
+    $q->addTable('projects');
+    $q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
+    $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
+    $q->addWhere('project_id = ' . $project_id . ' AND t1.task_id = t1.task_parent');
+    $project_percent_complete = $q->loadResult();
+    $q->clear();
+
+    $q->addTable('projects');
+    $q->addUpdate('project_percent_complete', $project_percent_complete);
+    $q->addWhere('project_id  = ' . (int) $project_id);
+    $q->exec();
+  }
 	public function getTotalHours() {
 		global $w2Pconfig;
 
@@ -1026,7 +1030,7 @@ function projects_list_data($user_id = false) {
 	$q->addInsertSelect('tasks_sum');
 	$q->addTable('tasks');
 	$q->addQuery('task_project, COUNT(distinct tasks.task_id) AS total_tasks');
-	$q->addQuery('SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) / SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete');
+	$q->addQuery('-1 AS project_percent_complete');
 	$q->addQuery('SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_duration');
 	if ($user_id) {
 		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
@@ -1142,7 +1146,7 @@ function projects_list_data($user_id = false) {
 	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type, project_name, project_description, project_duration, project_parent, project_original_parent,
 		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
 		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count, tsy.my_tasks,
-		ts.project_percent_complete, user_username, project_active');
+		pr.project_percent_complete, user_username, project_active');
 	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
 	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
