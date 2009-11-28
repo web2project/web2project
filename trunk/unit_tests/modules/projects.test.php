@@ -38,6 +38,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 {
 
     protected $backupGlobals = FALSE;
+	protected $obj = null;
+	protected $post_data = array();
 
     /**
      * Return database connection for tests
@@ -63,50 +65,90 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     	return dirname(dirname(__FILE__)).'/db_files/';
     }
 
+	protected function setUp ()
+	{
+		parent::setUp();
+
+		$this->obj = new CProject();
+
+		$this->post_data = array(
+			'dosql' =>                      'do_project_aed',
+            'project_id' =>                 0,
+            'project_creator' =>            1,
+            'project_contacts' =>           '',
+            'project_name' =>               'New Project',
+            'project_parent' =>             '',
+            'project_owner' =>              1,
+            'project_company' =>            1,
+            'project_location' =>           '',
+            'project_start_date' =>         '20090628',
+            'project_end_date' =>           '20090728',
+            'project_target_budget' =>      5,
+            'project_actual_budget' =>      10,
+            'project_scheduled_hours' =>    0,
+            'project_worked_hours' =>       0,
+            'project_task_count' =>         0,
+            'project_url' =>                'project.example.org',
+            'project_demo_url' =>           'projectdemo.example.org',
+            'project_priority' =>           '-1',
+            'project_short_name' =>         'nproject',
+            'project_color_identifier' =>   'FFFFFF',
+            'project_type' =>               0,
+            'project_status' =>             0,
+            'project_description' =>        'This is a project.',
+            'email_project_owner' =>        1,
+            'email_project_contacts' =>     1
+		);
+	}
+
+	public function tearDown()
+	{
+		parent::tearDown();
+
+		unset($this->obj, $this->post_data);
+	}
+
     /**
      * Tests the Attributes of a new Projec object.
      */
     public function testNewProjectAttributes()
     {
-
-    	$project = new CProject();
-
-    	$this->assertType('CProject', $project);
-    	$this->assertObjectHasAttribute('project_id',                  $project);
-    	$this->assertObjectHasAttribute('project_company',             $project);
-    	$this->assertObjectHasAttribute('project_department',          $project);
-    	$this->assertObjectHasAttribute('project_name',                $project);
-    	$this->assertObjectHasAttribute('project_short_name',          $project);
-    	$this->assertObjectHasAttribute('project_owner',               $project);
-    	$this->assertObjectHasAttribute('project_url',                 $project);
-    	$this->assertObjectHasAttribute('project_demo_url',            $project);
-    	$this->assertObjectHasAttribute('project_start_date',          $project);
-    	$this->assertObjectHasAttribute('project_end_date',            $project);
-    	$this->assertObjectHasAttribute('project_actual_end_date',     $project);
-    	$this->assertObjectHasAttribute('project_status',              $project);
-    	$this->assertObjectHasAttribute('project_percent_complete',    $project);
-    	$this->assertObjectHasAttribute('project_color_identifier',    $project);
-    	$this->assertObjectHasAttribute('project_description',         $project);
-    	$this->assertObjectHasAttribute('project_target_budget',       $project);
-    	$this->assertObjectHasAttribute('project_actual_budget',       $project);
-        $this->assertObjectHasAttribute('project_scheduled_hours',     $project);
-        $this->assertObjectHasAttribute('project_worked_hours',        $project);
-        $this->assertObjectHasAttribute('project_task_count',          $project);
-    	$this->assertObjectHasAttribute('project_creator',             $project);
-    	$this->assertObjectHasAttribute('project_active',              $project);
-    	$this->assertObjectHasAttribute('project_private',             $project);
-    	$this->assertObjectHasAttribute('project_departments',         $project);
-    	$this->assertObjectHasAttribute('project_contacts',            $project);
-    	$this->assertObjectHasAttribute('project_priority',            $project);
-    	$this->assertObjectHasAttribute('project_type',                $project);
-    	$this->assertObjectHasAttribute('project_parent',              $project);
-    	$this->assertObjectHasAttribute('project_original_parent',     $project);
-    	$this->assertObjectHasAttribute('project_location',            $project);
-    	$this->assertObjectHasAttribute('_tbl_prefix',                 $project);
-    	$this->assertObjectHasAttribute('_tbl',                        $project);
-    	$this->assertObjectHasAttribute('_tbl_key',                    $project);
-    	$this->assertObjectHasAttribute('_error',                      $project);
-    	$this->assertObjectHasAttribute('_query',                      $project);
+    	$this->assertType('CProject', $this->obj);
+    	$this->assertObjectHasAttribute('project_id',                  $this->obj);
+    	$this->assertObjectHasAttribute('project_company',             $this->obj);
+    	$this->assertObjectHasAttribute('project_department',          $this->obj);
+    	$this->assertObjectHasAttribute('project_name',                $this->obj);
+    	$this->assertObjectHasAttribute('project_short_name',          $this->obj);
+    	$this->assertObjectHasAttribute('project_owner',               $this->obj);
+    	$this->assertObjectHasAttribute('project_url',                 $this->obj);
+    	$this->assertObjectHasAttribute('project_demo_url',            $this->obj);
+    	$this->assertObjectHasAttribute('project_start_date',          $this->obj);
+    	$this->assertObjectHasAttribute('project_end_date',            $this->obj);
+    	$this->assertObjectHasAttribute('project_actual_end_date',     $this->obj);
+    	$this->assertObjectHasAttribute('project_status',              $this->obj);
+    	$this->assertObjectHasAttribute('project_percent_complete',    $this->obj);
+    	$this->assertObjectHasAttribute('project_color_identifier',    $this->obj);
+    	$this->assertObjectHasAttribute('project_description',         $this->obj);
+    	$this->assertObjectHasAttribute('project_target_budget',       $this->obj);
+    	$this->assertObjectHasAttribute('project_actual_budget',       $this->obj);
+        $this->assertObjectHasAttribute('project_scheduled_hours',     $this->obj);
+        $this->assertObjectHasAttribute('project_worked_hours',        $this->obj);
+        $this->assertObjectHasAttribute('project_task_count',          $this->obj);
+    	$this->assertObjectHasAttribute('project_creator',             $this->obj);
+    	$this->assertObjectHasAttribute('project_active',              $this->obj);
+    	$this->assertObjectHasAttribute('project_private',             $this->obj);
+    	$this->assertObjectHasAttribute('project_departments',         $this->obj);
+    	$this->assertObjectHasAttribute('project_contacts',            $this->obj);
+    	$this->assertObjectHasAttribute('project_priority',            $this->obj);
+    	$this->assertObjectHasAttribute('project_type',                $this->obj);
+    	$this->assertObjectHasAttribute('project_parent',              $this->obj);
+    	$this->assertObjectHasAttribute('project_original_parent',     $this->obj);
+    	$this->assertObjectHasAttribute('project_location',            $this->obj);
+    	$this->assertObjectHasAttribute('_tbl_prefix',                 $this->obj);
+    	$this->assertObjectHasAttribute('_tbl',                        $this->obj);
+    	$this->assertObjectHasAttribute('_tbl_key',                    $this->obj);
+    	$this->assertObjectHasAttribute('_error',                      $this->obj);
+    	$this->assertObjectHasAttribute('_query',                      $this->obj);
     }
 
     /**
@@ -114,44 +156,42 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewProjectAttributeValues()
     {
-        $project = new CProject();
-
-        $this->assertType('CProject', $project);
-        $this->assertNull($project->project_id);
-        $this->assertNull($project->project_company);
-        $this->assertNull($project->project_department);
-        $this->assertNull($project->project_name);
-        $this->assertNull($project->project_short_name);
-        $this->assertNull($project->project_owner);
-        $this->assertNull($project->project_url);
-        $this->assertNull($project->project_demo_url);
-        $this->assertNull($project->project_start_date);
-        $this->assertNull($project->project_end_date);
-        $this->assertNull($project->project_actual_end_date);
-        $this->assertNull($project->project_status);
-        $this->assertNull($project->project_percent_complete);
-        $this->assertNull($project->project_color_identifier);
-        $this->assertNull($project->project_description);
-        $this->assertNull($project->project_target_budget);
-        $this->assertNull($project->project_actual_buget);
-        $this->assertNull($project->project_scheduled_hours);
-        $this->assertNull($project->project_worked_hours);
-        $this->assertNull($project->project_task_count);
-        $this->assertNull($project->project_creator);
-        $this->assertNull($project->project_active);
-        $this->assertNull($project->project_private);
-        $this->assertNull($project->project_departments);
-        $this->assertNull($project->project_contacts);
-        $this->assertNull($project->project_priority);
-        $this->assertNull($project->project_type);
-        $this->assertNull($project->project_parent);
-        $this->assertNull($project->project_original_parent);
-        $this->assertEquals('',             $project->project_location);
-        $this->assertEquals('',             $project->_tbl_prefix);
-        $this->assertEquals('projects',     $project->_tbl);
-        $this->assertEquals('project_id',   $project->_tbl_key);
-        $this->assertEquals('',             $project->_error);
-        $this->assertType('DBQuery',        $project->_query);
+        $this->assertType('CProject', $this->obj);
+        $this->assertNull($this->obj->project_id);
+        $this->assertNull($this->obj->project_company);
+        $this->assertNull($this->obj->project_department);
+        $this->assertNull($this->obj->project_name);
+        $this->assertNull($this->obj->project_short_name);
+        $this->assertNull($this->obj->project_owner);
+        $this->assertNull($this->obj->project_url);
+        $this->assertNull($this->obj->project_demo_url);
+        $this->assertNull($this->obj->project_start_date);
+        $this->assertNull($this->obj->project_end_date);
+        $this->assertNull($this->obj->project_actual_end_date);
+        $this->assertNull($this->obj->project_status);
+        $this->assertNull($this->obj->project_percent_complete);
+        $this->assertNull($this->obj->project_color_identifier);
+        $this->assertNull($this->obj->project_description);
+        $this->assertNull($this->obj->project_target_budget);
+        $this->assertNull($this->obj->project_actual_buget);
+        $this->assertNull($this->obj->project_scheduled_hours);
+        $this->assertNull($this->obj->project_worked_hours);
+        $this->assertNull($this->obj->project_task_count);
+        $this->assertNull($this->obj->project_creator);
+        $this->assertNull($this->obj->project_active);
+        $this->assertNull($this->obj->project_private);
+        $this->assertNull($this->obj->project_departments);
+        $this->assertNull($this->obj->project_contacts);
+        $this->assertNull($this->obj->project_priority);
+        $this->assertNull($this->obj->project_type);
+        $this->assertNull($this->obj->project_parent);
+        $this->assertNull($this->obj->project_original_parent);
+        $this->assertEquals('',             $this->obj->project_location);
+        $this->assertEquals('',             $this->obj->_tbl_prefix);
+        $this->assertEquals('projects',     $this->obj->_tbl);
+        $this->assertEquals('project_id',   $this->obj->_tbl_key);
+        $this->assertEquals('',             $this->obj->_error);
+        $this->assertType('DBQuery',        $this->obj->_query);
     }
 
     /**
@@ -169,39 +209,9 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
-
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               '',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      '',
-            'project_actual_budget' =>      '',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                '',
-            'project_demo_url' =>           '',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               0,
-            'project_status' =>             0,
-            'project_description' =>        '',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $errorArray = $project->store($AppUI);
+		unset($this->post_data['project_name']);
+        $this->obj->bind($post_data);
+        $errorArray = $this->obj->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -211,7 +221,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0,$project->project_id);
+        $this->AssertNull($this->obj->project_id);
     }
 
     /**
@@ -221,39 +231,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
+		unset($this->post_data['project_company']);
 
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'New Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            '',
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      '',
-            'project_actual_budget' =>      '',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                '',
-            'project_demo_url' =>           '',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               0,
-            'project_status' =>             0,
-            'project_description' =>        '',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $errorArray = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -263,7 +244,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $project->project_id);
+        $this->AssertEquals(0, $this->obj->project_id);
     }
 
     /**
@@ -273,39 +254,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
+		unset($this->post_data['project_priority']);
 
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'New Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      '',
-            'project_actual_budget' =>      '',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                '',
-            'project_demo_url' =>           '',
-            'project_priority' =>           '',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               0,
-            'project_status' =>             0,
-            'project_description' =>        '',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $errorArray = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -315,7 +267,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $project->project_id);
+        $this->AssertEquals(0, $this->obj->project_id);
     }
 
     /**
@@ -325,39 +277,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
+		unset($this->post_data['project_short_name']);
 
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'New Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      '',
-            'project_actual_budget' =>      '',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                '',
-            'project_demo_url' =>           '',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         '',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               0,
-            'project_status' =>             0,
-            'project_description' =>        '',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $errorArray = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -367,7 +290,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $project->project_id);
+        $this->AssertEquals(0, $this->obj->project_id);
     }
 
     /**
@@ -379,37 +302,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         $project = new CProject();
 
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'New Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      '',
-            'project_actual_budget' =>      '',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                '',
-            'project_demo_url' =>           '',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   '',
-            'project_type' =>               0,
-            'project_status' =>             0,
-            'project_description' =>        '',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
+		unset($this->post_data['project_color_identifier']);
 
-        $project->bind($post_data);
-        $errorArray = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -419,7 +315,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $project->project_id);
+        $this->AssertEquals(0, $this->obj->project_id);
     }
 
     /**
@@ -429,39 +325,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
+		unset($this->post_data['project_type']);
 
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'New Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      '',
-            'project_actual_budget' =>      '',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                '',
-            'project_demo_url' =>           '',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               '',
-            'project_status' =>             0,
-            'project_description' =>        '',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $errorArray = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -471,7 +338,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $project->project_id);
+        $this->AssertEquals(0, $this->obj->project_id);
     }
 
     /**
@@ -481,39 +348,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
+		unset($this->post_data['project_status']);
 
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'New Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      '',
-            'project_actual_budget' =>      '',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                '',
-            'project_demo_url' =>           '',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               0,
-            'project_status' =>             '',
-            'project_description' =>        '',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $errorArray = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -523,7 +361,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $project->project_id);
+        $this->AssertEquals(0, $this->obj->project_id);
     }
 
     /**
@@ -533,40 +371,11 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
+		unset($this->post_data['project_owner']);
 
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'New Project',
-            'project_parent' =>             '',
-            'project_owner' =>              0,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      5,
-            'project_actual_budget' =>      10,
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                'project.example.org',
-            'project_demo_url' =>           'projectdemo.example.org',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               0,
-            'project_status' =>             0,
-            'project_description' =>        'This is a project.',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
+        $this->obj->bind($this->post_data);
+        $results = $this->obj->store($AppUI);
 
-        $project->bind($post_data);
-        $results = $project->store($AppUI);
-        
         /**
          * Verify we got the proper error message
          */
@@ -575,7 +384,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $project->project_id);
+        $this->AssertEquals(0, $this->obj->project_id);
     }
 
     /**
@@ -585,39 +394,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
+		unset($this->post_data['project_creator']);
 
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            0,
-            'project_contacts' =>           '',
-            'project_name' =>               'New Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      5,
-            'project_actual_budget' =>      10,
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                'project.example.org',
-            'project_demo_url' =>           'projectdemo.example.org',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               0,
-            'project_status' =>             0,
-            'project_description' =>        'This is a project.',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $results = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $results = $this->obj->store($AppUI);
 
         /**
          * Verify we got the proper error message
@@ -627,7 +407,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $project->project_id);
+        $this->AssertEquals(0, $this->obj->project_id);
     }
 
     /**
@@ -637,71 +417,40 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
-
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'New Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      5,
-            'project_actual_budget' =>      10,
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                'project.example.org',
-            'project_demo_url' =>           'projectdemo.example.org',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               0,
-            'project_status' =>             0,
-            'project_description' =>        'This is a project.',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $results = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $results = $this->obj->store($AppUI);
 
         $this->assertTrue($results);
-        $this->assertEquals(3,                          $project->project_id);
-        $this->assertEquals(1,                          $project->project_company);
-        $this->assertEquals('',                         $project->project_department);
-        $this->assertEquals('New Project',              $project->project_name);
-        $this->assertEquals('nproject',                 $project->project_short_name);
-        $this->assertEquals(1,                          $project->project_owner);
-        $this->assertEquals('project.example.org',      $project->project_url);
-        $this->assertEquals('projectdemo.example.org',  $project->project_demo_url);
-        $this->assertEquals('2009-06-28 00:00:00',      $project->project_start_date);
-        $this->assertEquals('2009-07-28 23:59:59',      $project->project_end_date);
-        $this->assertEquals('',                         $project->project_actual_end_date);
-        $this->assertEquals(0,                          $project->project_status);
-        $this->assertEquals('',                         $project->project_percent_complete);
-        $this->assertEquals('FFFFFF',                   $project->project_color_identifier);
-        $this->assertEquals('This is a project.',       $project->project_description);
-        $this->assertEquals(5,                          $project->project_target_budget);
-        $this->assertEquals(10,                         $project->project_actual_budget);
-        $this->assertEquals(0,                          $project->project_scheduled_hours);
-        $this->assertEquals(0,                          $project->project_worked_hours);
-        $this->assertEquals(0,                          $project->project_task_count);
-        $this->assertEquals(1,                          $project->project_creator);
-        $this->assertEquals(0,                          $project->project_active);
-        $this->assertEquals(0,                          $project->project_private);
-        $this->assertEquals('',                         $project->project_departments);
-        $this->assertEquals('',                         $project->project_contacts);
-        $this->assertEquals(-1,                         $project->project_priority);
-        $this->assertEquals(0,                          $project->project_type);
-        $this->assertEquals(0,                          $project->project_parent);
-        $this->assertEquals(0,                          $project->project_original_parent);
-        $this->assertEquals('',                         $project->project_location);
+        $this->assertEquals(3,                          $this->obj->project_id);
+        $this->assertEquals(1,                          $this->obj->project_company);
+        $this->assertEquals('',                         $this->obj->project_department);
+        $this->assertEquals('New Project',              $this->obj->project_name);
+        $this->assertEquals('nproject',                 $this->obj->project_short_name);
+        $this->assertEquals(1,                          $this->obj->project_owner);
+        $this->assertEquals('project.example.org',      $this->obj->project_url);
+        $this->assertEquals('projectdemo.example.org',  $this->obj->project_demo_url);
+        $this->assertEquals('2009-06-28 00:00:00',      $this->obj->project_start_date);
+        $this->assertEquals('2009-07-28 23:59:59',      $this->obj->project_end_date);
+        $this->assertEquals('',                         $this->obj->project_actual_end_date);
+        $this->assertEquals(0,                          $this->obj->project_status);
+        $this->assertEquals('',                         $this->obj->project_percent_complete);
+        $this->assertEquals('FFFFFF',                   $this->obj->project_color_identifier);
+        $this->assertEquals('This is a project.',       $this->obj->project_description);
+        $this->assertEquals(5,                          $this->obj->project_target_budget);
+        $this->assertEquals(10,                         $this->obj->project_actual_budget);
+        $this->assertEquals(0,                          $this->obj->project_scheduled_hours);
+        $this->assertEquals(0,                          $this->obj->project_worked_hours);
+        $this->assertEquals(0,                          $this->obj->project_task_count);
+        $this->assertEquals(1,                          $this->obj->project_creator);
+        $this->assertEquals(0,                          $this->obj->project_active);
+        $this->assertEquals(0,                          $this->obj->project_private);
+        $this->assertEquals('',                         $this->obj->project_departments);
+        $this->assertEquals('',                         $this->obj->project_contacts);
+        $this->assertEquals(-1,                         $this->obj->project_priority);
+        $this->assertEquals(0,                          $this->obj->project_type);
+        $this->assertEquals(0,                          $this->obj->project_parent);
+        $this->assertEquals(0,                          $this->obj->project_original_parent);
+        $this->assertEquals('',                         $this->obj->project_location);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestCreateProject.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('projects' => array('project_created', 'project_updated')));
@@ -716,7 +465,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('projects');
         $q->addQuery('project_created');
-        $q->addWhere('project_id = ' . $project->project_id);
+        $q->addWhere('project_id = ' . $this->obj->project_id);
         $project_created = $q->loadResult();
         $project_created = strtotime($project_created);
 
@@ -726,7 +475,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('projects');
         $q->addQuery('project_updated');
-        $q->addWhere('project_id = ' . $project->project_id);
+        $q->addWhere('project_id = ' . $this->obj->project_id);
         $project_updated = $q->loadResult();
         $project_updated =  strtotime($project_updated);
 
@@ -744,39 +493,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckNullName()
     {
-        $project = new CProject();
+		unset($this->post_data['project_name']);
 
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               '',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      '',
-            'project_actual_budget' =>      '',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                '',
-            'project_demo_url' =>           '',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   '',
-            'project_type' =>               0,
-            'project_status' =>             '',
-            'project_description' =>        '',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $errorArray = $project->check();
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->check();
         $this->assertArrayHasKey('project_name', $errorArray);
     }
 
@@ -785,39 +505,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheck()
     {
-        $project = new CProject();
-
-        $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 0,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'Test Name',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           '',
-            'project_start_date' =>         '20090628',
-            'project_end_date' =>           '20090728',
-            'project_target_budget' =>      '',
-            'project_actual_budget' =>      '',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                '',
-            'project_demo_url' =>           '',
-            'project_priority' =>           '-1',
-            'project_short_name' =>         'nproject',
-            'project_color_identifier' =>   'FFFFFF',
-            'project_type' =>               0,
-            'project_status' =>             1,
-            'project_description' =>        '',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     1
-        );
-
-        $project->bind($post_data);
-        $errorArray = $project->check();
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->check();
         $this->assertEquals(0, count($errorArray));
     }
 
@@ -826,39 +515,38 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testLoad()
     {
-    	$project = new CProject();
-    	$project->load(1);
+    	$this->obj->load(1);
 
-    	$this->assertEquals(1,                                  $project->project_id);
-    	$this->assertEquals(1,                                  $project->project_company);
-      $this->assertEquals(0,                                  $project->project_department);
-      $this->assertEquals('Test Project',                     $project->project_name);
-      $this->assertEquals('TP',                               $project->project_short_name);
-      $this->assertEquals(1,                                  $project->project_owner);
-      $this->assertEquals('http://project1.example.org',      $project->project_url);
-      $this->assertEquals('http://project1-demo.example.org', $project->project_demo_url);
-      $this->assertEquals('2009-07-05 00:00:00',              $project->project_start_date);
-      $this->assertEquals('2009-07-15 23:59:59',              $project->project_end_date);
-      $this->assertEquals('2009-08-15 00:00:00',              $project->project_actual_end_date);
-      $this->assertEquals(0,                                  $project->project_status);
-      $this->assertEquals('',                                 $project->project_percent_complete);
-      $this->assertEquals('FFFFFF',                           $project->project_color_identifier);
-      $this->assertEquals('This is a project',                $project->project_description);
-      $this->assertEquals('15.00',                            $project->project_target_budget);
-      $this->assertEquals('5.00',                             $project->project_actual_budget);
-      $this->assertEquals(0,                                  $project->project_scheduled_hours);
-      $this->assertEquals(0,                                  $project->project_worked_hours);
-      $this->assertEquals(0,                                  $project->project_task_count);
-      $this->assertEquals(1,                                  $project->project_creator);
-      $this->assertEquals(1,                                  $project->project_active);
-      $this->assertEquals(0,                                  $project->project_private);
-      $this->assertEquals('',                                 $project->project_departments);
-      $this->assertEquals('',                                 $project->project_contacts);
-      $this->assertEquals(-1,                                 $project->project_priority);
-      $this->assertEquals(0,                                  $project->project_type);
-      $this->assertEquals(1,                                  $project->project_parent);
-      $this->assertEquals(1,                                  $project->project_original_parent);
-      $this->assertEquals('Somewhere',                        $project->project_location);
+    	$this->assertEquals(1,                                  $this->obj->project_id);
+    	$this->assertEquals(1,                                  $this->obj->project_company);
+		$this->assertEquals(0,                                  $this->obj->project_department);
+      	$this->assertEquals('Test Project',                     $this->obj->project_name);
+      	$this->assertEquals('TP',                               $this->obj->project_short_name);
+      	$this->assertEquals(1,                                  $this->obj->project_owner);
+      	$this->assertEquals('http://project1.example.org',      $this->obj->project_url);
+      	$this->assertEquals('http://project1-demo.example.org', $this->obj->project_demo_url);
+      	$this->assertEquals('2009-07-05 00:00:00',              $this->obj->project_start_date);
+      	$this->assertEquals('2009-07-15 23:59:59',              $this->obj->project_end_date);
+      	$this->assertEquals('2009-08-15 00:00:00',              $this->obj->project_actual_end_date);
+      	$this->assertEquals(0,                                  $this->obj->project_status);
+      	$this->assertEquals(0,                                  $this->obj->project_percent_complete);
+      	$this->assertEquals('FFFFFF',                           $this->obj->project_color_identifier);
+      	$this->assertEquals('This is a project',                $this->obj->project_description);
+      	$this->assertEquals('15.00',                            $this->obj->project_target_budget);
+      	$this->assertEquals('5.00',                             $this->obj->project_actual_budget);
+      	$this->assertEquals(0,                                  $this->obj->project_scheduled_hours);
+      	$this->assertEquals(0,                                  $this->obj->project_worked_hours);
+      	$this->assertEquals(0,                                  $this->obj->project_task_count);
+      	$this->assertEquals(1,                                  $this->obj->project_creator);
+      	$this->assertEquals(1,                                  $this->obj->project_active);
+      	$this->assertEquals(0,                                  $this->obj->project_private);
+      	$this->assertEquals('',                                 $this->obj->project_departments);
+      	$this->assertEquals('',                                 $this->obj->project_contacts);
+      	$this->assertEquals(-1,                                 $this->obj->project_priority);
+      	$this->assertEquals(0,                                  $this->obj->project_type);
+      	$this->assertEquals(1,                                  $this->obj->project_parent);
+      	$this->assertEquals(1,                                  $this->obj->project_original_parent);
+      	$this->assertEquals('Somewhere',                        $this->obj->project_location);
     }
 
     /**
@@ -866,41 +554,40 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testFullLoad()
     {
-    	$project = new CProject();
-    	$project->fullLoad(1);
+    	$this->obj->fullLoad(1);
 
-    	$this->assertEquals(1,                                  $project->project_id);
-      $this->assertEquals(1,                                  $project->project_company);
-      $this->assertEquals(0,                                  $project->project_department);
-      $this->assertEquals('Test Project',                     $project->project_name);
-      $this->assertEquals('TP',                               $project->project_short_name);
-      $this->assertEquals(1,                                  $project->project_owner);
-      $this->assertEquals('http://project1.example.org',      $project->project_url);
-      $this->assertEquals('http://project1-demo.example.org', $project->project_demo_url);
-      $this->assertEquals('2009-07-05 00:00:00',              $project->project_start_date);
-      $this->assertEquals('2009-07-15 23:59:59',              $project->project_end_date);
-      $this->assertEquals('2009-08-15 00:00:00',              $project->project_actual_end_date);
-      $this->assertEquals(0,                                  $project->project_status);
-      $this->assertEquals(15.789473684211,                    $project->project_percent_complete, '', 0.000000000001);
-      $this->assertEquals('FFFFFF',                           $project->project_color_identifier);
-      $this->assertEquals('This is a project',                $project->project_description);
-      $this->assertEquals('15.00',                            $project->project_target_budget);
-      $this->assertEquals('5.00',                             $project->project_actual_budget);
-      $this->assertEquals(0,                                  $project->project_scheduled_hours);
-      $this->assertEquals(0,                                  $project->project_worked_hours);
-      $this->assertEquals(0,                                  $project->project_task_count);
-      $this->assertEquals(1,                                  $project->project_creator);
-      $this->assertEquals(1,                                  $project->project_active);
-      $this->assertEquals(0,                                  $project->project_private);
-      $this->assertEquals('',                                 $project->project_departments);
-      $this->assertEquals('',                                 $project->project_contacts);
-      $this->assertEquals(-1,                                 $project->project_priority);
-      $this->assertEquals(0,                                  $project->project_type);
-      $this->assertEquals(1,                                  $project->project_parent);
-      $this->assertEquals(1,                                  $project->project_original_parent);
-      $this->assertEquals('Somewhere',                        $project->project_location);
-      $this->assertEquals('UnitTestCompany',                  $project->company_name);
-      $this->assertEquals('Admin Person',                     $project->user_name);
+    	$this->assertEquals(1,                                  $this->obj->project_id);
+      	$this->assertEquals(1,                                  $this->obj->project_company);
+      	$this->assertEquals(0,                                  $this->obj->project_department);
+      	$this->assertEquals('Test Project',                     $this->obj->project_name);
+      	$this->assertEquals('TP',                               $this->obj->project_short_name);
+      	$this->assertEquals(1,                                  $this->obj->project_owner);
+      	$this->assertEquals('http://project1.example.org',      $this->obj->project_url);
+      	$this->assertEquals('http://project1-demo.example.org', $this->obj->project_demo_url);
+      	$this->assertEquals('2009-07-05 00:00:00',              $this->obj->project_start_date);
+      	$this->assertEquals('2009-07-15 23:59:59',              $this->obj->project_end_date);
+      	$this->assertEquals('2009-08-15 00:00:00',              $this->obj->project_actual_end_date);
+      	$this->assertEquals(0,                                  $this->obj->project_status);
+      	$this->assertEquals(0.00,                               $this->obj->project_percent_complete);
+      	$this->assertEquals('FFFFFF',                           $this->obj->project_color_identifier);
+      	$this->assertEquals('This is a project',                $this->obj->project_description);
+      	$this->assertEquals('15.00',                            $this->obj->project_target_budget);
+      	$this->assertEquals('5.00',                             $this->obj->project_actual_budget);
+      	$this->assertEquals(0,                                  $this->obj->project_scheduled_hours);
+      	$this->assertEquals(0,                                  $this->obj->project_worked_hours);
+      	$this->assertEquals(0,                                  $this->obj->project_task_count);
+      	$this->assertEquals(1,                                  $this->obj->project_creator);
+      	$this->assertEquals(1,                                  $this->obj->project_active);
+      	$this->assertEquals(0,                                  $this->obj->project_private);
+      	$this->assertEquals('',                                 $this->obj->project_departments);
+      	$this->assertEquals('',                                 $this->obj->project_contacts);
+      	$this->assertEquals(-1,                                 $this->obj->project_priority);
+      	$this->assertEquals(0,                                  $this->obj->project_type);
+      	$this->assertEquals(1,                                  $this->obj->project_parent);
+      	$this->assertEquals(1,                                  $this->obj->project_original_parent);
+      	$this->assertEquals('Somewhere',                        $this->obj->project_location);
+      	$this->assertEquals('UnitTestCompany',                  $this->obj->company_name);
+      	$this->assertEquals('Admin Person',                     $this->obj->user_name);
     }
 
     /**
@@ -908,74 +595,71 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testUpdateProject()
     {
-      global $AppUI;
+      	global $AppUI;
 
-    	$project = new CProject();
-    	$project->load(1);
+    	$this->obj->load(1);
 
-    	$post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 1,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'Updated Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           'Somewhere Updated',
-            'project_start_date' =>         '20090728',
-            'project_end_date' =>           '20090828',
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_target_budget' =>      15,
-            'project_actual_budget' =>      15,
-            'project_url' =>                'project-update.example.org',
-            'project_demo_url' =>           'project-updatedemo.example.org',
-            'project_priority' =>           '1',
-            'project_short_name' =>         'uproject',
-            'project_color_identifier' =>   'CCCEEE',
-            'project_type' =>               1,
-            'project_status' =>             1,
-            'project_description' =>        'This is an updated project.',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     0
-        );
+		$this->post_data['dosql'] 						= 'do_project_aed';
+		$this->post_data['project_id'] 					= 1;
+		$this->post_data['project_creator'] 			= 1;
+		$this->post_data['project_contacts'] 			= '';
+		$this->post_data['project_name'] 				= 'Updated Project';
+		$this->post_data['project_parent'] 				= '';
+		$this->post_data['project_owner'] 				= 1;
+		$this->post_data['project_company'] 			= 1;
+		$this->post_data['project_location'] 			= 'Somewhere Updated';
+		$this->post_data['project_start_date'] 			= '20090728';
+		$this->post_data['project_end_date'] 			= '20090828';
+		$this->post_data['project_scheduled_hours'] 	= 0;
+		$this->post_data['project_worked_hours'] 		= 0;
+		$this->post_data['project_task_count'] 			= 0;
+		$this->post_data['project_target_budget'] 		= 15;
+		$this->post_data['project_actual_budget'] 		= 15;
+		$this->post_data['project_url'] 				= 'project-update.example.org';
+		$this->post_data['project_demo_url'] 			= 'project-updatedemo.example.org';
+		$this->post_data['project_priority'] 			= '1';
+		$this->post_data['project_short_name'] 			= 'uproject';
+		$this->post_data['project_color_identifier']	= 'CCCEEE';
+		$this->post_data['project_type'] 				= 1;
+		$this->post_data['project_status'] 				= 1;
+		$this->post_data['project_description'] 		= 'This is an updated project.';
+		$this->post_data['email_project_owner'] 		= 1;
+		$this->post_data['email_project_contacts'] 		= 0;
 
-        $project->bind($post_data);
-        $results = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $results = $this->obj->store($AppUI);
 
         $this->assertTrue($results);
-        $this->assertEquals(1,                                  $project->project_id);
-        $this->assertEquals(1,                                  $project->project_company);
-        $this->assertEquals(0,                                  $project->project_department);
-        $this->assertEquals('Updated Project',                  $project->project_name);
-        $this->assertEquals('uproject',                         $project->project_short_name);
-        $this->assertEquals(1,                                  $project->project_owner);
-        $this->assertEquals('project-update.example.org',       $project->project_url);
-        $this->assertEquals('project-updatedemo.example.org',   $project->project_demo_url);
-        $this->assertEquals('2009-07-28 00:00:00',              $project->project_start_date);
-        $this->assertEquals('2009-08-28 23:59:59',              $project->project_end_date);
-        $this->assertEquals('2009-08-15 00:00:00',              $project->project_actual_end_date);
-        $this->assertEquals(1,                                  $project->project_status);
-        $this->assertEquals('',                                 $project->project_percent_complete);
-        $this->assertEquals('CCCEEE',                           $project->project_color_identifier);
-        $this->assertEquals('This is an updated project.',      $project->project_description);
-        $this->assertEquals(15,                                 $project->project_target_budget);
-        $this->assertEquals(15,                                 $project->project_actual_budget);
-        $this->assertEquals(0,                                  $project->project_scheduled_hours);
-        $this->assertEquals(0,                                  $project->project_worked_hours);
-        $this->assertEquals(0,                                  $project->project_task_count);
-        $this->assertEquals(1,                                  $project->project_creator);
-        $this->assertEquals(1,                                  $project->project_active);
-        $this->assertEquals(0,                                  $project->project_private);
-        $this->assertEquals('',                                 $project->project_departments);
-        $this->assertEquals('',                                 $project->project_contacts);
-        $this->assertEquals(1,                                  $project->project_priority);
-        $this->assertEquals(1,                                  $project->project_type);
-        $this->assertEquals(1,                                  $project->project_parent);
-        $this->assertEquals(1,                                  $project->project_original_parent);
-        $this->assertEquals('Somewhere Updated',                $project->project_location);
+        $this->assertEquals(1,                                  $this->obj->project_id);
+        $this->assertEquals(1,                                  $this->obj->project_company);
+        $this->assertEquals(0,                                  $this->obj->project_department);
+        $this->assertEquals('Updated Project',                  $this->obj->project_name);
+        $this->assertEquals('uproject',                         $this->obj->project_short_name);
+        $this->assertEquals(1,                                  $this->obj->project_owner);
+        $this->assertEquals('project-update.example.org',       $this->obj->project_url);
+        $this->assertEquals('project-updatedemo.example.org',   $this->obj->project_demo_url);
+        $this->assertEquals('2009-07-28 00:00:00',              $this->obj->project_start_date);
+        $this->assertEquals('2009-08-28 23:59:59',              $this->obj->project_end_date);
+        $this->assertEquals('2009-08-15 00:00:00',              $this->obj->project_actual_end_date);
+        $this->assertEquals(1,                                  $this->obj->project_status);
+        $this->assertEquals(0.00,                               $this->obj->project_percent_complete);
+        $this->assertEquals('CCCEEE',                           $this->obj->project_color_identifier);
+        $this->assertEquals('This is an updated project.',      $this->obj->project_description);
+        $this->assertEquals(15,                                 $this->obj->project_target_budget);
+        $this->assertEquals(15,                                 $this->obj->project_actual_budget);
+        $this->assertEquals(0,                                  $this->obj->project_scheduled_hours);
+        $this->assertEquals(0,                                  $this->obj->project_worked_hours);
+        $this->assertEquals(0,                                  $this->obj->project_task_count);
+        $this->assertEquals(1,                                  $this->obj->project_creator);
+        $this->assertEquals(1,                                  $this->obj->project_active);
+        $this->assertEquals(0,                                  $this->obj->project_private);
+        $this->assertEquals('',                                 $this->obj->project_departments);
+        $this->assertEquals('',                                 $this->obj->project_contacts);
+        $this->assertEquals(1,                                  $this->obj->project_priority);
+        $this->assertEquals(1,                                  $this->obj->project_type);
+        $this->assertEquals(1,                                  $this->obj->project_parent);
+        $this->assertEquals(1,                                  $this->obj->project_original_parent);
+        $this->assertEquals('Somewhere Updated',                $this->obj->project_location);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestUpdateProject.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('projects' => array('project_updated')));
@@ -990,7 +674,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('projects');
         $q->addQuery('project_updated');
-        $q->addWhere('project_id = ' . $project->project_id);
+        $q->addWhere('project_id = ' . $this->obj->project_id);
         $project_updated = $q->loadResult();
         $project_updated =  strtotime($project_updated);
 
@@ -1016,9 +700,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
-        $project->load(1);
-        $project->delete($AppUI);
+        $this->obj->load(1);
+        $this->obj->delete($AppUI);
 
         $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestDeleteProject.xml');
         $this->assertTablesEqual($xml_dataset->getTable('projects'),            $this->getConnection()->createDataSet()->getTable('projects'));
@@ -1035,9 +718,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testImportTasks()
     {
-        $project = new CProject();
-        $project->load(2);
-        $project->importTasks(1);
+        $this->obj->load(2);
+        $this->obj->importTasks(1);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
@@ -1087,9 +769,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordsNoPermissions()
     {
-        $project = new CProject();
-
-        $allowed_records = $project->getAllowedRecords(2);
+        $allowed_records = $this->obj->getAllowedRecords(2);
 
         $this->assertEquals(0, count($allowed_records));
     }
@@ -1099,10 +779,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordsWithWhere()
     {
-        $project = new CProject();
-
         $extra = array('where' => 'project_active = 1');
-        $allowed_records = $project->getAllowedRecords(1, 'projects.project_id,project_name', null, null, $extra);
+        $allowed_records = $this->obj->getAllowedRecords(1, 'projects.project_id,project_name', null, null, $extra);
 
         $this->assertEquals(1, count($allowed_records));
         $this->assertEquals('Test Project', $allowed_records[1]);
@@ -1123,7 +801,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testSetAllowedSQL()
     {
-    	$this->markTestSkipped('Not sure hot to thes this.');
+    	$this->markTestSkipped('Not sure hot to test this.');
     }
 
     /**
@@ -1140,8 +818,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedProjectsInRows()
     {
-    	$project = new CProject();
-    	$project_in_rows = $project->getAllowedProjectsInRows(1);
+    	$project_in_rows = $this->obj->getAllowedProjectsInRows(1);
 
     	$this->assertEquals(2, db_num_rows($project_in_rows));
 
@@ -1159,19 +836,19 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
     	$row = db_fetch_assoc($project_in_rows);
     	$this->assertEquals(2,                     $row[0]);
-      $this->assertEquals(2,                     $row['project_id']);
-      $this->assertEquals(1,                     $row[1]);
-      $this->assertEquals(1,                     $row['project_status']);
-      $this->assertEquals('Test Project 2',      $row[2]);
-      $this->assertEquals('Test Project 2',      $row['project_name']);
-      $this->assertEquals('This is a project 2', $row[3]);
-      $this->assertEquals('This is a project 2', $row['project_description']);
-      $this->assertEquals('TP2',                 $row[4]);
-      $this->assertEquals('TP2',                 $row['project_short_name']);
+      	$this->assertEquals(2,                     $row['project_id']);
+      	$this->assertEquals(1,                     $row[1]);
+      	$this->assertEquals(1,                     $row['project_status']);
+      	$this->assertEquals('Test Project 2',      $row[2]);
+      	$this->assertEquals('Test Project 2',      $row['project_name']);
+      	$this->assertEquals('This is a project 2', $row[3]);
+      	$this->assertEquals('This is a project 2', $row['project_description']);
+      	$this->assertEquals('TP2',                 $row[4]);
+      	$this->assertEquals('TP2',                 $row['project_short_name']);
 
-      $project_in_rows = $project->getAllowedProjectsInRows(2);
+      	$project_in_rows = $this->obj->getAllowedProjectsInRows(2);
 
-      $this->assertEquals(0, db_num_rows($project_in_rows));
+      	$this->assertEquals(0, db_num_rows($project_in_rows));
     }
 
     /**
@@ -1179,10 +856,9 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetCriticalTasksNoArgs()
     {
-        $project = new CProject();
-        $project->load(1);
+        $this->obj->load(1);
 
-        $critical_tasks = $project->getCriticalTasks();
+        $critical_tasks = $this->obj->getCriticalTasks();
 
         $this->assertEquals(1,                      count($critical_tasks));
         $this->assertEquals(1,                      $critical_tasks[0]['task_id']);
@@ -1224,9 +900,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetCriticalTasksProjectID()
     {
-        $project = new CProject();
-
-        $critical_tasks = $project->getCriticalTasks(1);
+        $critical_tasks = $this->obj->getCriticalTasks(1);
 
         $this->assertEquals(1,                      count($critical_tasks));
         $this->assertEquals(1,                      $critical_tasks[0]['task_id']);
@@ -1268,9 +942,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetCriticalTasksProjectIDAndLimit()
     {
-        $project = new CProject();
-
-        $critical_tasks = $project->getCriticalTasks(1,2);
+        $critical_tasks = $this->obj->getCriticalTasks(1,2);
 
         $this->assertEquals(2,                      count($critical_tasks));
         $this->assertEquals(1,                      $critical_tasks[0]['task_id']);
@@ -1344,44 +1016,41 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testStore()
     {
-      global $AppUI;
+		global $AppUI;
 
-       $project = new CProject();
-       $project->load(1);
+		$this->obj->load(1);
 
-       $post_data = array(
-            'dosql' =>                      'do_project_aed',
-            'project_id' =>                 1,
-            'project_creator' =>            1,
-            'project_contacts' =>           '',
-            'project_name' =>               'Updated Project',
-            'project_parent' =>             '',
-            'project_owner' =>              1,
-            'project_company' =>            1,
-            'project_location' =>           'Somewhere Updated',
-            'project_start_date' =>         '20090728',
-            'project_end_date' =>           '20090828',
-            'project_target_budget' =>      15,
-            'project_actual_budget' =>      15,
-            'project_scheduled_hours' =>    0,
-            'project_worked_hours' =>       0,
-            'project_task_count' =>         0,
-            'project_url' =>                'project-update.example.org',
-            'project_demo_url' =>           'project-updatedemo.example.org',
-            'project_priority' =>           '1',
-            'project_short_name' =>         'uproject',
-            'project_color_identifier' =>   'CCCEEE',
-            'project_type' =>               1,
-            'project_status' =>             1,
-            'project_description' =>        'This is an updated project.',
-            'email_project_owner' =>        1,
-            'email_project_contacts' =>     0,
-            'project_departments' =>        '1,2',
-            'project_contacts' =>           '3,4'
-        );
+		$this->post_data['dosql'] = 'do_project_aed';
+		$this->post_data['project_id'] = 1;
+		$this->post_data['project_creator'] = 1;
+		$this->post_data['project_contacts'] = '';
+		$this->post_data['project_name'] = 'Updated Project';
+		$this->post_data['project_parent'] = '';
+		$this->post_data['project_owner'] = 1;
+		$this->post_data['project_company'] = 1;
+		$this->post_data['project_location'] = 'Somewhere Updated';
+		$this->post_data['project_start_date'] = '20090728';
+		$this->post_data['project_end_data'] = '20090828';
+		$this->post_data['project_target_budget'] = 15;
+		$this->post_data['project_actual_budget'] = 15;
+		$this->post_data['project_scheduled_hours'] = 0;
+		$this->post_data['project_worked_hours'] = 0;
+		$this->post_data['project_task_count'] = 0;
+		$this->post_data['project_url'] = 'project-update.example.org';
+		$this->post_data['project_demo_url'] = 'project-updatedemo.example.org';
+		$this->post_data['project_priority'] = '1';
+		$this->post_data['project_short_name'] = 'uproject';
+		$this->post_data['project_color_identifier'] = 'CCCEEE';
+		$this->post_data['project_type'] = 1;
+		$this->post_data['project_status'] = 1;
+		$this->post_data['project_description'] = 'This is an updated project.';
+		$this->post_data['email_project_owner'] = 1;
+		$this->post_data['email_project_contacts'] = 0;
+		$this->post_data['project_departments'] = '1,2';
+		$this->post_data['project_contacts'] = '3,4';
 
-        $project->bind($post_data);
-        $results = $project->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $results = $this->obj->store($AppUI);
 
         $this->assertTrue($results);
 
@@ -1411,9 +1080,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedProjectsActiveOnly()
     {
-        $project = new CProject();
-
-        $allowed_projects = $project->getAllowedProjects(1);
+        $allowed_projects = $this->obj->getAllowedProjects(1);
 
         $this->assertEquals(1,                      count($allowed_projects));
         $this->assertEquals(1,                      $allowed_projects[1]['project_id']);
@@ -1433,9 +1100,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedProjectsAll()
     {
-        $project = new CProject();
-
-        $allowed_projects = $project->getAllowedProjects(1, false);
+        $allowed_projects = $this->obj->getAllowedProjects(1, false);
 
         $this->assertEquals(2,                      count($allowed_projects));
         $this->assertEquals(1,                      $allowed_projects[1]['project_id']);
@@ -1606,9 +1271,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testHasChildProjectsWithArg()
     {
-        $project = new CProject();
-
-        $has_children = $project->hasChildProjects(1);
+        $has_children = $this->obj->hasChildProjects(1);
 
         $this->assertEquals(1, $has_children);
     }
@@ -1618,10 +1281,9 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testHasChildProjects()
     {
-        $project = new CProject();
-        $project->load(1);
+        $this->obj->load(1);
 
-        $has_children = $project->hasChildProjects();
+        $has_children = $this->obj->hasChildProjects();
 
         $this->assertEquals(1, $has_children);
     }
@@ -1631,9 +1293,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testHasChildProjectNoProjectID()
     {
-        $project = new CProject();
-
-        $has_children = $project->hasChildProjects();
+        $has_children = $this->obj->hasChildProjects();
 
         $this->assertEquals(-1, $has_children);
     }
@@ -1643,10 +1303,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testHasTasks()
     {
-        $project = new CProject();
-
-        $has_tasks_1 = $project->hasTasks(1);
-        $has_tasks_2 = $project->hasTasks(2);
+        $has_tasks_1 = $this->obj->hasTasks(1);
+        $has_tasks_2 = $this->obj->hasTasks(2);
 
         $this->assertEquals(2, $has_tasks_1);
         $this->assertEquals(0, $has_tasks_2);
@@ -1667,12 +1325,11 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $w2Pconfig;
 
-        $project = new CProject();
+        $this->obj->load(1);
+        $total_hours_1 = $this->obj->getTotalHours();
 
-        $project->load(1);
-        $total_hours_1 = $project->getTotalHours();
-        $project->load(2);
-        $total_hours_2 = $project->getTotalHours();
+        $this->obj->load(2);
+        $total_hours_2 = $this->obj->getTotalHours();
 
         $this->assertEquals(2 * $w2Pconfig['daily_working_hours'] + 3, $total_hours_1);
         $this->assertEquals(0,  $total_hours_2);
@@ -1685,12 +1342,11 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $w2Pconfig;
 
-        $project = new CProject();
+        $this->obj->load(1);
+        $total_hours_1 = $this->obj->getTotalProjectHours();
 
-        $project->load(1);
-        $total_hours_1 = $project->getTotalProjectHours();
-        $project->load(2);
-        $total_hours_2 = $project->getTotalProjectHours();
+        $this->obj->load(2);
+        $total_hours_2 = $this->obj->getTotalProjectHours();
 
         $this->assertEquals(0.16,   $total_hours_1);
         $this->assertEquals(0,      $total_hours_2);
@@ -1703,9 +1359,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
-
-        $task_logs = $project->getTaskLogs($AppUI, 1);
+        $task_logs = $this->obj->getTaskLogs($AppUI, 1);
 
         $this->assertEquals(4,                  count($task_logs));
         $this->assertEquals(28,                 count($task_logs[0]));
@@ -1741,9 +1395,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
-
-        $task_logs = $project->getTaskLogs($AppUI, 1, 2);
+        $task_logs = $this->obj->getTaskLogs($AppUI, 1, 2);
 
         $this->assertEquals(1,                  count($task_logs));
         $this->assertEquals(28,                 count($task_logs[0]));
@@ -1761,9 +1413,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
-
-        $task_logs = $project->getTaskLogs($AppUI, 1, 0, true);
+        $task_logs = $this->obj->getTaskLogs($AppUI, 1, 0, true);
 
         $this->assertEquals(2,                  count($task_logs));
         $this->assertEquals(28,                 count($task_logs[0]));
@@ -1787,9 +1437,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
-
-        $task_logs = $project->getTaskLogs($AppUI, 1, 0, false, true);
+        $task_logs = $this->obj->getTaskLogs($AppUI, 1, 0, false, true);
 
         $this->assertEquals(2,                  count($task_logs));
         $this->assertEquals(28,                 count($task_logs[0]));
@@ -1813,9 +1461,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $project = new CProject();
-
-        $task_logs = $project->getTaskLogs($AppUI, 1, 0, false, false, 2);
+        $task_logs = $this->obj->getTaskLogs($AppUI, 1, 0, false, false, 2);
 
         $this->assertEquals(1,                  count($task_logs));
         $this->assertEquals(28,                 count($task_logs[0]));
