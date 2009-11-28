@@ -65,8 +65,9 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
 
     protected function setUp()
     {
-      $this->obj = new CLink();
+      parent::setUp();
 
+      $this->obj = new CLink();
       $this->post_data = array(
           'dosql'             => 'do_link_aed',
           'link_id'           => 0,

@@ -66,8 +66,9 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
 
     protected function setUp()
     {
-      $this->obj = new CFile();
+      parent::setUp();
 
+      $this->obj = new CFile();
       $this->post_data = array(
           'dosql' =>              'do_file_aed',
           'file_id' =>            0,
