@@ -282,7 +282,9 @@ class CTask extends CW2pObject {
 
     $this->loadFull($AppUI, $taskId);
 	}
-	public function loadFull(CAppUI $AppUI, $taskId) {
+	public function loadFull(CAppUI $AppUI = null, $taskId) {
+    global $AppUI;
+
     $q = new DBQuery;
     $q->addTable('tasks');
     $q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
@@ -497,8 +499,10 @@ class CTask extends CW2pObject {
 	/**
 	 * @todo Parent store could be partially used
 	 */
-	public function store(CAppUI $AppUI) {
-		$q = new DBQuery;
+	public function store(CAppUI $AppUI = null) {
+    global $AppUI;
+
+    $q = new DBQuery;
 
 		$this->w2PTrimAll();
 
@@ -659,8 +663,10 @@ class CTask extends CW2pObject {
 	 * @todo Parent store could be partially used
 	 * @todo Can't delete a task with children
 	 */
-	public function delete(CAppUI $AppUI) {
-		$q = new DBQuery;
+	public function delete(CAppUI $AppUI = null) {
+		global $AppUI;
+
+    $q = new DBQuery;
 		$this->_action = 'deleted';
 		// delete linked user tasks
 		$q->setDelete('user_tasks');
@@ -1583,8 +1589,10 @@ class CTask extends CW2pObject {
 
 		return $q->loadHashList();
 	}
-	public function getTaskDepartments($AppUI, $taskId) {
-		if ($AppUI->isActiveModule('departments')) {
+	public function getTaskDepartments(CAppUI $AppUI = null, $taskId) {
+		global $AppUI;
+
+    if ($AppUI->isActiveModule('departments')) {
 			$q = new DBQuery;
 			$q->addTable('departments', 'd');
 			$q->addTable('task_departments', 't');
@@ -1597,9 +1605,10 @@ class CTask extends CW2pObject {
 			return $q->loadHashList('dept_id');
 		}
 	}
-	public function getTaskContacts($AppUI, $taskId) {
-		$perms = $AppUI->acl();
+	public function getTaskContacts(CAppUI $AppUI = null, $taskId) {
+		global $AppUI;
 
+    $perms = $AppUI->acl();
 		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
 			$q = new DBQuery;
 			$q->addTable('contacts', 'c');
