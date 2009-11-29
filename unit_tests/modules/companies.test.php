@@ -37,6 +37,8 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 {
 
     protected $backupGlobals = FALSE;
+	protected $obj = null;
+	protected $post_data = array();
 
     /**
      * Return database connection for tests
@@ -62,36 +64,68 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     	return dirname(dirname(__FILE__)).'/db_files/';
     }
 
+	public function setUp()
+	{
+		parent::setUp();
+
+		$this->obj = new CCompany();
+		$this->post_data = array (
+			'dosql'                 => 'do_company_aed',
+			'company_id'            => 0,
+			'company_name'          => 'UnitTestCompany',
+			'company_email'         => 'web2project@example.org',
+			'company_phone1'        => '1.999.999.9999',
+			'company_phone2'        => '1.999.999.9998',
+			'company_fax'           => '1.999.999.9997',
+			'company_address1'      => 'Address 1',
+			'company_address2'      => 'Address 2',
+			'company_city'          => 'City',
+			'company_state'         => 'CA',
+			'company_zip'           => '90210',
+			'company_country'       => 'US',
+			'company_primary_url'   => 'web2project.net',
+			'company_owner'         => 1,
+			'company_type'          => 2,
+			'company_description'   => 'This is a company.'
+
+		);
+	}
+
+	public function tearDown()
+	{
+		parent::tearDown();
+
+		unset($this->obj, $this->post_data);
+	}
+
     /**
      * Tests the Attributes of a new Companies object.
      */
     public function testNewCompanyAttributes()
     {
-        $company = new CCompany();
-
-        $this->assertType('CCompany', $company);
-        $this->assertObjectHasAttribute('company_id',           $company);
-        $this->assertObjectHasAttribute('company_name',         $company);
-        $this->assertObjectHasAttribute('company_phone1',       $company);
-        $this->assertObjectHasAttribute('company_phone2',       $company);
-        $this->assertObjectHasAttribute('company_fax',          $company);
-        $this->assertObjectHasAttribute('company_address1',     $company);
-        $this->assertObjectHasAttribute('company_address2',     $company);
-        $this->assertObjectHasAttribute('company_city',         $company);
-        $this->assertObjectHasAttribute('company_state',        $company);
-        $this->assertObjectHasAttribute('company_zip',          $company);
-        $this->assertObjectHasAttribute('company_country',      $company);
-        $this->assertObjectHasAttribute('company_email',        $company);
-        $this->assertObjectHasAttribute('company_primary_url',  $company);
-        $this->assertObjectHasAttribute('company_owner',        $company);
-        $this->assertObjectHasAttribute('company_description',  $company);
-        $this->assertObjectHasAttribute('company_type',         $company);
-        $this->assertObjectHasAttribute('company_custom',       $company);
-        $this->assertObjectHasAttribute('_tbl_prefix',          $company);
-        $this->assertObjectHasAttribute('_tbl',                 $company);
-        $this->assertObjectHasAttribute('_tbl_key',             $company);
-        $this->assertObjectHasAttribute('_error',               $company);
-        $this->assertObjectHasAttribute('_query',               $company);
+        $this->assertType('CCompany', $this->obj);
+        $this->assertObjectHasAttribute('company_id',           $this->obj);
+        $this->assertObjectHasAttribute('company_name',         $this->obj);
+        $this->assertObjectHasAttribute('company_phone1',       $this->obj);
+        $this->assertObjectHasAttribute('company_phone2',       $this->obj);
+        $this->assertObjectHasAttribute('company_fax',          $this->obj);
+        $this->assertObjectHasAttribute('company_address1',     $this->obj);
+        $this->assertObjectHasAttribute('company_address2',     $this->obj);
+        $this->assertObjectHasAttribute('company_city',         $this->obj);
+        $this->assertObjectHasAttribute('company_state',        $this->obj);
+        $this->assertObjectHasAttribute('company_zip',          $this->obj);
+        $this->assertObjectHasAttribute('company_country',      $this->obj);
+        $this->assertObjectHasAttribute('company_email',        $this->obj);
+        $this->assertObjectHasAttribute('company_primary_url',  $this->obj);
+        $this->assertObjectHasAttribute('company_owner',        $this->obj);
+        $this->assertObjectHasAttribute('company_description',  $this->obj);
+        $this->assertObjectHasAttribute('company_type',         $this->obj);
+        $this->assertObjectHasAttribute('company_custom',       $this->obj);
+        $this->assertObjectHasAttribute('_tbl_prefix',          $this->obj);
+        $this->assertObjectHasAttribute('_tbl',                 $this->obj);
+        $this->assertObjectHasAttribute('_tbl_key',             $this->obj);
+        $this->assertObjectHasAttribute('_error',               $this->obj);
+        $this->assertObjectHasAttribute('_query',               $this->obj);
     }
 
     /**
@@ -99,30 +133,29 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewCompanyAttributeValues()
     {
-        $company = new CCompany();
-        $this->assertType('CCompany', $company);
-        $this->assertNull($company->company_id);
-        $this->assertNull($company->company_name);
-        $this->assertNull($company->company_phone1);
-        $this->assertNull($company->company_phone2);
-        $this->assertNull($company->company_fax);
-        $this->assertNull($company->company_address1);
-        $this->assertNull($company->company_address2);
-        $this->assertNull($company->company_city);
-        $this->assertNull($company->company_state);
-        $this->assertNull($company->company_zip);
-        $this->assertNull($company->company_country);
-        $this->assertNull($company->company_email);
-        $this->assertNull($company->company_primary_url);
-        $this->assertNull($company->company_owner);
-        $this->assertNull($company->company_description);
-        $this->assertNull($company->company_type);
-        $this->assertNull($company->company_custom);
-        $this->assertEquals('',             $company->_tbl_prefix);
-        $this->assertEquals('companies',    $company->_tbl);
-        $this->assertEquals('company_id',   $company->_tbl_key);
-        $this->assertEquals('',             $company->_error);
-        $this->assertType('DBQuery',        $company->_query);
+        $this->assertType('CCompany', $this->obj);
+        $this->assertNull($this->obj->company_id);
+        $this->assertNull($this->obj->company_name);
+        $this->assertNull($this->obj->company_phone1);
+        $this->assertNull($this->obj->company_phone2);
+        $this->assertNull($this->obj->company_fax);
+        $this->assertNull($this->obj->company_address1);
+        $this->assertNull($this->obj->company_address2);
+        $this->assertNull($this->obj->company_city);
+        $this->assertNull($this->obj->company_state);
+        $this->assertNull($this->obj->company_zip);
+        $this->assertNull($this->obj->company_country);
+        $this->assertNull($this->obj->company_email);
+        $this->assertNull($this->obj->company_primary_url);
+        $this->assertNull($this->obj->company_owner);
+        $this->assertNull($this->obj->company_description);
+        $this->assertNull($this->obj->company_type);
+        $this->assertNull($this->obj->company_custom);
+        $this->assertEquals('',             $this->obj->_tbl_prefix);
+        $this->assertEquals('companies',    $this->obj->_tbl);
+        $this->assertEquals('company_id',   $this->obj->_tbl_key);
+        $this->assertEquals('',             $this->obj->_error);
+        $this->assertType('DBQuery',        $this->obj->_query);
     }
 
     /**
@@ -131,84 +164,44 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateCompanyNoOwner()
     {
-      global $AppUI;
+		global $AppUI;
 
-      $company = new CCompany();
+		unset($this->post_data['company_owner']);
+		$this->obj->bind($this->post_data);
+		$errorArray = $this->obj->store($AppUI);
 
-      $post_array = array(
-        'dosql'                 => 'do_company_aed',
-        'company_id'            => 0,
-        'company_name'          => 'UnitTestCompany',
-        'company_email'         => 'web2project@example.org',
-        'company_phone1'        => '1.999.999.9999',
-        'company_phone2'        => '1.999.999.9998',
-        'company_fax'           => '1.999.999.9997',
-        'company_address1'      => 'Address 1',
-        'company_address2'      => 'Address 2',
-        'company_city'          => 'City',
-        'company_state'         => 'CA',
-        'company_zip'           => '90210',
-        'company_country'       => 'US',
-        'company_primary_url'   => 'web2project.org',
-        'company_owner'         => 0,
-        'company_type'          => 2,
-        'company_description'   => 'This is a company.'
-      );
-      $company->bind($post_array);
-      $errorArray = $company->store($AppUI);
+		/**
+		 * Verify we got the proper error message
+		 */
+		$this->assertArrayHasKey('company_owner', $errorArray);
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->assertArrayHasKey('company_owner', $errorArray);
-
-      /**
-       * Verify that company id was not set
-       */
-      $this->assertEquals(0, $company->company_id);
+		/**
+		 * Verify that company id was not set
+		 */
+		$this->assertEquals(0, $this->obj->company_id);
     }
 
-/**
+	/**
      * Tests that the proper error message is returned when a company
      * is attempted to be created without a name.
      */
     public function testCreateCompanyNoName()
     {
-      global $AppUI;
+		global $AppUI;
 
-      $company = new CCompany();
+		unset($this->post_data['company_name']);
+		$this->obj->bind($this->post_data);
+		$errorArray = $this->obj->store($AppUI);
 
-      $post_array = array(
-          'dosql'                 => 'do_company_aed',
-          'company_id'            => 0,
-          'company_name'          => '',
-          'company_email'         => 'web2project@example.org',
-          'company_phone1'        => '1.999.999.9999',
-          'company_phone2'        => '1.999.999.9998',
-          'company_fax'           => '1.999.999.9997',
-          'company_address1'      => 'Address 1',
-          'company_address2'      => 'Address 2',
-          'company_city'          => 'City',
-          'company_state'         => 'CA',
-          'company_zip'           => '90210',
-          'company_country'       => 'US',
-          'company_primary_url'   => 'web2project.org',
-          'company_owner'         => 1,
-          'company_type'          => 2,
-          'company_description'   => 'This is a company.'
-      );
-      $company->bind($post_array);
-      $errorArray = $company->store($AppUI);
+		/**
+		 * Verify we got the proper error message
+		 */
+		$this->assertArrayHasKey('company_name', $errorArray);
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->assertArrayHasKey('company_name', $errorArray);
-
-      /**
-       * Verify that company id was not set
-       */
-      $this->assertEquals(0, $company->company_id);
+		/**
+		 * Verify that company id was not set
+		 */
+		$this->assertEquals(0, $this->obj->company_id);
     }
 
     /**
@@ -217,46 +210,26 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateCompany()
     {
         global $AppUI;
-        $company = new CCompany();
 
-        $post_array = array(
-            'dosql'                 => 'do_company_aed',
-            'company_id'            => 0,
-            'company_name'          => 'UnitTestCompany',
-            'company_email'         => 'web2project@example.org',
-            'company_phone1'        => '1.999.999.9999',
-            'company_phone2'        => '1.999.999.9998',
-            'company_fax'           => '1.999.999.9997',
-            'company_address1'      => 'Address 1',
-            'company_address2'      => 'Address 2',
-            'company_city'          => 'City',
-            'company_state'         => 'CA',
-            'company_zip'           => '90210',
-            'company_country'       => 'US',
-            'company_primary_url'   => 'web2project.net',
-            'company_owner'         => 1,
-            'company_type'          => 2,
-            'company_description'   => 'This is a company.'
-        );
-        $company->bind($post_array);
-        $result = $company->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store($AppUI);
 
         $this->assertTrue($result);
-        $this->assertEquals('UnitTestCompany',          $company->company_name);
-        $this->assertEquals('web2project@example.org',  $company->company_email);
-        $this->assertEquals('1.999.999.9999',           $company->company_phone1);
-        $this->assertEquals('1.999.999.9998',           $company->company_phone2);
-        $this->assertEquals('1.999.999.9997',           $company->company_fax);
-        $this->assertEquals('Address 1',                $company->company_address1);
-        $this->assertEquals('Address 2',                $company->company_address2);
-        $this->assertEquals('City',                     $company->company_city);
-        $this->assertEquals('CA',                       $company->company_state);
-        $this->assertEquals('90210',                    $company->company_zip);
-        $this->assertEquals('US',                       $company->company_country);
-        $this->assertEquals('web2project.net',          $company->company_primary_url);
-        $this->assertEquals(1,                          $company->company_owner);
-        $this->assertEquals(2,                          $company->company_type);
-        $this->assertEquals('This is a company.' ,      $company->company_description);
+        $this->assertEquals('UnitTestCompany',          $this->obj->company_name);
+        $this->assertEquals('web2project@example.org',  $this->obj->company_email);
+        $this->assertEquals('1.999.999.9999',           $this->obj->company_phone1);
+        $this->assertEquals('1.999.999.9998',           $this->obj->company_phone2);
+        $this->assertEquals('1.999.999.9997',           $this->obj->company_fax);
+        $this->assertEquals('Address 1',                $this->obj->company_address1);
+        $this->assertEquals('Address 2',                $this->obj->company_address2);
+        $this->assertEquals('City',                     $this->obj->company_city);
+        $this->assertEquals('CA',                       $this->obj->company_state);
+        $this->assertEquals('90210',                    $this->obj->company_zip);
+        $this->assertEquals('US',                       $this->obj->company_country);
+        $this->assertEquals('web2project.net',          $this->obj->company_primary_url);
+        $this->assertEquals(1,                          $this->obj->company_owner);
+        $this->assertEquals(2,                          $this->obj->company_type);
+        $this->assertEquals('This is a company.' ,      $this->obj->company_description);
 
         $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestCreateCompany.xml');
         $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
@@ -267,24 +240,23 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testLoad()
     {
-        $company = new CCompany();
-        $company->load(1);
+        $this->obj->load(1);
 
-        $this->assertEquals('UnitTestCompany',          $company->company_name);
-        $this->assertEquals('web2project@example.org',  $company->company_email);
-        $this->assertEquals('1.999.999.9999',           $company->company_phone1);
-        $this->assertEquals('1.999.999.9998',           $company->company_phone2);
-        $this->assertEquals('1.999.999.9997',           $company->company_fax);
-        $this->assertEquals('Address 1',                $company->company_address1);
-        $this->assertEquals('Address 2',                $company->company_address2);
-        $this->assertEquals('City',                     $company->company_city);
-        $this->assertEquals('CA',                       $company->company_state);
-        $this->assertEquals('90210',                    $company->company_zip);
-        $this->assertEquals('US',                       $company->company_country);
-        $this->assertEquals('web2project.net',          $company->company_primary_url);
-        $this->assertEquals(1,                          $company->company_owner);
-        $this->assertEquals(2,                          $company->company_type);
-        $this->assertEquals('This is a company.' ,      $company->company_description);
+        $this->assertEquals('UnitTestCompany',          $this->obj->company_name);
+        $this->assertEquals('web2project@example.org',  $this->obj->company_email);
+        $this->assertEquals('1.999.999.9999',           $this->obj->company_phone1);
+        $this->assertEquals('1.999.999.9998',           $this->obj->company_phone2);
+        $this->assertEquals('1.999.999.9997',           $this->obj->company_fax);
+        $this->assertEquals('Address 1',                $this->obj->company_address1);
+        $this->assertEquals('Address 2',                $this->obj->company_address2);
+        $this->assertEquals('City',                     $this->obj->company_city);
+        $this->assertEquals('CA',                       $this->obj->company_state);
+        $this->assertEquals('90210',                    $this->obj->company_zip);
+        $this->assertEquals('US',                       $this->obj->company_country);
+        $this->assertEquals('web2project.net',          $this->obj->company_primary_url);
+        $this->assertEquals(1,                          $this->obj->company_owner);
+        $this->assertEquals(2,                          $this->obj->company_type);
+        $this->assertEquals('This is a company.' ,      $this->obj->company_description);
     }
 
     /**
@@ -293,29 +265,28 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     public function testLoadFull()
     {
         global $AppUI;
-        $company = new CCompany();
 
-        $company->loadFull($AppUI, 1);
+        $this->obj->loadFull($AppUI, 1);
 
-        $this->assertEquals('UnitTestCompany',          $company->company_name);
-        $this->assertEquals('web2project@example.org',  $company->company_email);
-        $this->assertEquals('1.999.999.9999',           $company->company_phone1);
-        $this->assertEquals('1.999.999.9998',           $company->company_phone2);
-        $this->assertEquals('1.999.999.9997',           $company->company_fax);
-        $this->assertEquals('Address 1',                $company->company_address1);
-        $this->assertEquals('Address 2',                $company->company_address2);
-        $this->assertEquals('City',                     $company->company_city);
-        $this->assertEquals('CA',                       $company->company_state);
-        $this->assertEquals('90210',                    $company->company_zip);
-        $this->assertEquals('US',                       $company->company_country);
-        $this->assertEquals('web2project.net',          $company->company_primary_url);
-        $this->assertEquals(1,                          $company->company_owner);
-        $this->assertEquals(2,                          $company->company_type);
-        $this->assertEquals('This is a company.' ,      $company->company_description);
-        $this->assertEquals(0,                          $company->company_module);
-        $this->assertEquals(0,                          $company->company_private);
-        $this->assertEquals('Admin',                    $company->contact_first_name);
-        $this->assertEquals('Person',                   $company->contact_last_name);
+        $this->assertEquals('UnitTestCompany',          $this->obj->company_name);
+        $this->assertEquals('web2project@example.org',  $this->obj->company_email);
+        $this->assertEquals('1.999.999.9999',           $this->obj->company_phone1);
+        $this->assertEquals('1.999.999.9998',           $this->obj->company_phone2);
+        $this->assertEquals('1.999.999.9997',           $this->obj->company_fax);
+        $this->assertEquals('Address 1',                $this->obj->company_address1);
+        $this->assertEquals('Address 2',                $this->obj->company_address2);
+        $this->assertEquals('City',                     $this->obj->company_city);
+        $this->assertEquals('CA',                       $this->obj->company_state);
+        $this->assertEquals('90210',                    $this->obj->company_zip);
+        $this->assertEquals('US',                       $this->obj->company_country);
+        $this->assertEquals('web2project.net',          $this->obj->company_primary_url);
+        $this->assertEquals(1,                          $this->obj->company_owner);
+        $this->assertEquals(2,                          $this->obj->company_type);
+        $this->assertEquals('This is a company.' ,      $this->obj->company_description);
+        $this->assertEquals(0,                          $this->obj->company_module);
+        $this->assertEquals(0,                          $this->obj->company_private);
+        $this->assertEquals('Admin',                    $this->obj->contact_first_name);
+        $this->assertEquals('Person',                   $this->obj->contact_last_name);
     }
 
     /**
@@ -324,47 +295,44 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     public function testUpdateCompany()
     {
         global $AppUI;
-        $company = new CCompany();
-        $company->load(1);
+        $this->obj->load(1);
 
-        $post_array = array(
-            'dosql'                 => 'do_company_aed',
-            'company_id'            => $company_id,
-            'company_name'          => 'UpdatedCompany',
-            'company_email'         => 'updated@example.org',
-            'company_phone1'        => '1.777.999.9999',
-            'company_phone2'        => '1.777.999.9998',
-            'company_fax'           => '1.777.999.9997',
-            'company_address1'      => 'Updated Address 1',
-            'company_address2'      => 'Updated Address 2',
-            'company_city'          => 'Updated City',
-            'company_state'         => 'NS',
-            'company_zip'           => 'A2A 2B2',
-            'company_country'       => 'CA',
-            'company_primary_url'   => 'ut.web2project.net',
-            'company_owner'         => 1,
-            'company_type'          => 2,
-            'company_description'   => 'This is an updated company.'
-        );
+        $this->post_data['dosql']               = 'do_company_aed';
+        $this->post_data['company_id']          = $this->obj->company_id;
+        $this->post_data['company_name']        = 'UpdatedCompany';
+        $this->post_data['company_email']       = 'updated@example.org';
+        $this->post_data['company_phone1']      = '1.777.999.9999';
+        $this->post_data['company_phone2']      = '1.777.999.9998';
+        $this->post_data['company_fax']         = '1.777.999.9997';
+        $this->post_data['company_address1']    = 'Updated Address 1';
+        $this->post_data['company_address2']    = 'Updated Address 2';
+        $this->post_data['company_city']        = 'Updated City';
+        $this->post_data['company_state']       = 'NS';
+        $this->post_data['company_zip']         = 'A2A 2B2';
+        $this->post_data['company_country']     = 'CA';
+        $this->post_data['company_primary_url']	= 'ut.web2project.net';
+        $this->post_data['company_owner']       = 1;
+        $this->post_data['company_type']        = 2;
+        $this->post_data['company_description'] = 'This is an updated company.';
 
-        $company->bind($post_array);
-        $company->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $this->obj->store($AppUI);
 
-        $this->assertEquals('UpdatedCompany',               $company->company_name);
-        $this->assertEquals('updated@example.org',          $company->company_email);
-        $this->assertEquals('1.777.999.9999',               $company->company_phone1);
-        $this->assertEquals('1.777.999.9998',               $company->company_phone2);
-        $this->assertEquals('1.777.999.9997',               $company->company_fax);
-        $this->assertEquals('Updated Address 1',            $company->company_address1);
-        $this->assertEquals('Updated Address 2',            $company->company_address2);
-        $this->assertEquals('Updated City',                 $company->company_city);
-        $this->assertEquals('NS',                           $company->company_state);
-        $this->assertEquals('A2A 2B2',                      $company->company_zip);
-        $this->assertEquals('CA',                           $company->company_country);
-        $this->assertEquals('ut.web2project.net',           $company->company_primary_url);
-        $this->assertEquals(1,                              $company->company_owner);
-        $this->assertEquals(2,                              $company->company_type);
-        $this->assertEquals('This is an updated company.',  $company->company_description);
+        $this->assertEquals('UpdatedCompany',               $this->obj->company_name);
+        $this->assertEquals('updated@example.org',          $this->obj->company_email);
+        $this->assertEquals('1.777.999.9999',               $this->obj->company_phone1);
+        $this->assertEquals('1.777.999.9998',               $this->obj->company_phone2);
+        $this->assertEquals('1.777.999.9997',               $this->obj->company_fax);
+        $this->assertEquals('Updated Address 1',            $this->obj->company_address1);
+        $this->assertEquals('Updated Address 2',            $this->obj->company_address2);
+        $this->assertEquals('Updated City',                 $this->obj->company_city);
+        $this->assertEquals('NS',                           $this->obj->company_state);
+        $this->assertEquals('A2A 2B2',                      $this->obj->company_zip);
+        $this->assertEquals('CA',                           $this->obj->company_country);
+        $this->assertEquals('ut.web2project.net',           $this->obj->company_primary_url);
+        $this->assertEquals(1,                              $this->obj->company_owner);
+        $this->assertEquals(2,                              $this->obj->company_type);
+        $this->assertEquals('This is an updated company.',  $this->obj->company_description);
 
         $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestUpdateCompany.xml');
         $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
@@ -377,16 +345,15 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $company = new CCompany();
-        $company->company_id = 1;
-        $msg = $company->delete($AppUI);
+        $this->obj->company_id = 1;
+        $msg = $this->obj->delete($AppUI);
         $this->assertEquals('noDeleteRecord: Projects, Departments', $msg);
 
-        $company->company_id = 3;
-        $result = $company->delete($AppUI);
+        $this->obj->company_id = 3;
+        $result = $this->obj->delete($AppUI);
         $this->assertTrue($result);
 
-        $result = $company->load(3);
+        $result = $this->obj->load(3);
         $this->assertFalse($result);
 
         $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestDeleteCompany.xml');
@@ -400,9 +367,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $company = new CCompany();
-
-        $companies = $company->getCompanyList($AppUI);
+        $companies = $this->obj->getCompanyList($AppUI);
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
         $this->assertEquals(4,                             count($companies));
@@ -447,9 +412,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $company = new CCompany();
-
-        $results = $company->getCompanyList($AppUI, 3);
+        $results = $this->obj->getCompanyList($AppUI, 3);
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
@@ -462,9 +425,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $company = new CCompany();
-
-        $companies = $company->getCompanyList($AppUI, 1);
+        $companies = $this->obj->getCompanyList($AppUI, 1);
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
         $this->assertEquals(1,                             count($companies));
@@ -485,9 +446,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $company = new CCompany();
-
-        $results = $company->getCompanyList($AppUI, -1, 'This is a company');
+        $results = $this->obj->getCompanyList($AppUI, -1, 'This is a company');
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
@@ -500,9 +459,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $company = new CCompany();
-
-        $results = $company->getCompanyList($AppUI, -1, '', 2);
+        $results = $this->obj->getCompanyList($AppUI, -1, '', 2);
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
@@ -515,9 +472,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $company = new CCompany();
-
-        $companies = $company->getCompanyList($AppUI, -1, '', 1);
+        $companies = $this->obj->getCompanyList($AppUI, -1, '', 1);
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
         $this->assertEquals(4,                             count($companies));
