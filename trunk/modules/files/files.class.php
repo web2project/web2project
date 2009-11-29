@@ -39,7 +39,8 @@ class CFile extends CW2pObject {
     parent::__construct('files', 'file_id');
 	}
 
-	public function store(CAppUI $AppUI) {
+	public function store(CAppUI $AppUI = null) {
+    global $AppUI;
     global $helpdesk_available;
 
     $perms = $AppUI->acl();
@@ -60,8 +61,10 @@ class CFile extends CW2pObject {
     return true;
 	}
 
-	public static function getFileList($AppUI, $company_id, $project_id, $task_id, $category_id) {
-		$q = new DBQuery;
+	public static function getFileList(CAppUI $AppUI = null, $company_id, $project_id, $task_id, $category_id) {
+		global $AppUI;
+
+    $q = new DBQuery;
 		$q->addQuery('f.*');
 		$q->addTable('files', 'f');
 		$q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -183,7 +186,9 @@ class CFile extends CW2pObject {
 	}
 
 	public function delete(CAppUI $AppUI) {
-		global $helpdesk_available;
+		global $AppUI;
+    global $helpdesk_available;
+
 		if (!$this->canDelete($msg))
 			return $msg;
 		$this->_message = 'deleted';
@@ -590,12 +595,14 @@ class CFileFolder extends CW2pObject {
  	@param string file_folder_description The folder's description **/
 	public $file_folder_description = null;
 
-	public function CFileFolder() {
-		$this->CW2pObject('file_folders', 'file_folder_id');
+	public function __construct() {
+    parent::__construct('file_folders', 'file_folder_id');
 	}
 
 	public function getAllowedRecords($uid) {
-		$q = new DBQuery();
+		global $AppUI;
+
+    $q = new DBQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('*');
 		$q->addOrder('file_folder_parent');
@@ -610,7 +617,9 @@ class CFileFolder extends CW2pObject {
 	}
 
 	public function delete($oid = null) {
-		$k = $this->_tbl_key;
+    global $AppUI;
+
+    $k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
 		}
@@ -633,6 +642,7 @@ class CFileFolder extends CW2pObject {
 
 	public function canDelete(&$msg, $oid) {
 		global $AppUI;
+
 		$q = new DBQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
