@@ -6,7 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 /**
  * Generates a report of the task logs for given dates
  */
-//error_reporting( E_ALL );
 global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 
@@ -349,10 +348,11 @@ if ($do_report) {
 
 		$pdf->ezTable($pdfdata, $pdfheaders, $title, $options);
 
-		if ($fp = fopen($temp_dir . '/temp' . $AppUI->user_id . '.pdf', 'wb')) {
+    $w2pReport = new CReport();
+    if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
 			fwrite($fp, $pdf->ezOutput());
 			fclose($fp);
-			echo "<a href=\"$base_url/files/temp/temp$AppUI->user_id.pdf\" target=\"pdf\">";
+      echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
 			echo $AppUI->_('View PDF File');
 			echo '</a>';
 		} else {
