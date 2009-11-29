@@ -132,13 +132,10 @@ class CProject extends CW2pObject {
 
     $this->loadFull($AppUI, $projectId);
 	}
-	public function loadFull(CAppUI $AppUI, $projectId) {
-		global $w2Pconfig;
+	public function loadFull(CAppUI $AppUI = null, $projectId) {
+		global $AppUI;
 
-		$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
-
-		// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-		$q = new DBQuery;
+    $q = new DBQuery;
 		$q->addTable('projects');
 		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
 		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
@@ -160,9 +157,10 @@ class CProject extends CW2pObject {
 		return true;
 	}
 
-	public function delete(CAppUI $AppUI) {
-    $perms = $AppUI->acl();
+	public function delete(CAppUI $AppUI = null) {
+    global $AppUI;
 
+    $perms = $AppUI->acl();
     /*
      * TODO: This should probably use the canDelete method from above too to
      *   not only check permissions but to check dependencies... luckily the
@@ -461,7 +459,9 @@ class CProject extends CW2pObject {
 		return $q->loadList();
 	}
 
-	public function store(CAppUI $AppUI) {
+	public function store(CAppUI $AppUI = null) {
+    global $AppUI;
+
     $perms = $AppUI->acl();
     $stored = false;
 
@@ -692,8 +692,10 @@ class CProject extends CW2pObject {
 
 		return $q->loadHashList('project_id');
 	}
-	public static function getContacts($AppUI, $projectId) {
-		$perms = $AppUI->acl();
+	public static function getContacts(CAppUI $AppUI = null, $projectId) {
+		global $AppUI;
+
+    $perms = $AppUI->acl();
 
 		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
 			$q = new DBQuery;
@@ -714,9 +716,10 @@ class CProject extends CW2pObject {
 			return $q->loadHashList('contact_id');
 		}
 	}
-	public static function getDepartments($AppUI, $projectId) {
-		$perms = $AppUI->acl();
+	public static function getDepartments(CAppUI $AppUI = null, $projectId) {
+		global $AppUI;
 
+    $perms = $AppUI->acl();
 		if ($AppUI->isActiveModule('departments') && $perms->checkModule('departments', 'view')) {
 			$q = new DBQuery;
 			$q->addTable('departments', 'a');
@@ -730,9 +733,10 @@ class CProject extends CW2pObject {
 			return $q->loadHashList('dept_id');
 		}
 	}
-	public static function getForums($AppUI, $projectId) {
-		$perms = $AppUI->acl();
+	public static function getForums(CAppUI $AppUI = null, $projectId) {
+		global $AppUI;
 
+    $perms = $AppUI->acl();
 		if ($AppUI->isActiveModule('forums') && $perms->checkModule('forums', 'view')) {
 			$q = new DBQuery;
 			$q->addTable('forums');
@@ -791,9 +795,10 @@ class CProject extends CW2pObject {
 
 		return $q->loadHashList();
 	}
-	public static function updateStatus($AppUI, $projectId, $statusId) {
-		$perms = $AppUI->acl();
+	public static function updateStatus(CAppUI $AppUI = null, $projectId, $statusId) {
+		global $AppUI;
 
+    $perms = $AppUI->acl();
 		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId > 0) {
 			$q = new DBQuery;
 			$q->addTable('projects');
@@ -923,7 +928,8 @@ class CProject extends CW2pObject {
 
 		return rtrim($total_project_hours, '.');
 	}
-	public function getTaskLogs($AppUI, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
+	public function getTaskLogs(CAppUI $AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
+    global $AppUI;
 
 		$q = new DBQuery;
 		$q->addTable('task_log');
