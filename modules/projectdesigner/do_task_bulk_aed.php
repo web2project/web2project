@@ -59,7 +59,7 @@ if (is_array($selected) && count($selected)) {
 		if ($bulk_task_percent_complete != '' && ((int) $_POST['bulk_task_percent_complete'] == (int) $bulk_task_percent_complete)) {
 			if ($upd_task->task_id) {
 				$upd_task->task_percent_complete = $bulk_task_percent_complete;
-				$upd_task->store();
+				$upd_task->store($AppUI);
 			}
 		}
 
@@ -73,7 +73,7 @@ if (is_array($selected) && count($selected)) {
 				$end_date = new CDate($upd_task->task_end_date);
 				$end_date->addDays($offSet);
 				$upd_task->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
-				$upd_task->store();
+				$upd_task->store($AppUI);
 				$upd_task->shiftDependentTasks();
 			}
 		}
@@ -82,7 +82,7 @@ if (is_array($selected) && count($selected)) {
 		if (isset($_POST['add_task_bulk_start_date']) && $bulk_task_start_date != '' && $bulk_start_date) {
 			if ($upd_task->task_id) {
 				$upd_task->task_start_date = $bulk_start_date;
-				$upd_task->store();
+				$upd_task->store($AppUI);
 			}
 		}
 
@@ -90,7 +90,7 @@ if (is_array($selected) && count($selected)) {
 		if (isset($_POST['add_task_bulk_end_date']) && $bulk_task_end_date != '' && $bulk_end_date) {
 			if ($upd_task->task_id) {
 				$upd_task->task_end_date = $bulk_end_date;
-				$upd_task->store();
+				$upd_task->store($AppUI);
 				$upd_task->pushDependencies($upd_task->task_id, $upd_task->task_end_date);
 			}
 		}
@@ -101,7 +101,7 @@ if (is_array($selected) && count($selected)) {
 				$upd_task->task_duration = $bulk_task_duration;
 				//set duration type to hours (1)
 				$upd_task->task_duration_type = $bulk_task_durntype ? $bulk_task_durntype : 1;
-				$upd_task->store();
+				$upd_task->store($AppUI);
 			}
 		}
 
@@ -109,7 +109,7 @@ if (is_array($selected) && count($selected)) {
 		if (isset($_POST['bulk_task_owner']) && $bulk_task_owner != '' && $bulk_task_owner) {
 			if ($upd_task->task_id) {
 				$upd_task->task_owner = $bulk_task_owner;
-				$upd_task->store();
+				$upd_task->store($AppUI);
 			}
 		}
 
@@ -119,7 +119,7 @@ if (is_array($selected) && count($selected)) {
 				$upd_task->task_project = $bulk_task_project;
 				//Set parent to self task
 				$upd_task->task_parent = $key;
-				$upd_task->store();
+				$upd_task->store($AppUI);
 			}
 		}
 
@@ -129,11 +129,11 @@ if (is_array($selected) && count($selected)) {
 				//If parent is self task
 				if ($bulk_task_parent == '0') {
 					$upd_task->task_parent = $key;
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					//if not, then the task will be child to the selected parent
 				} else {
 					$upd_task->task_parent = $bulk_task_parent;
-					$upd_task->store();
+					$upd_task->store($AppUI);
 				}
 			}
 		}
@@ -145,14 +145,14 @@ if (is_array($selected) && count($selected)) {
 				//print_r($bulk_task_dependency);die;
 				if ($bulk_task_dependency == '0') {
 					$upd_task->task_dynamic = 0;
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					$q = new DBQuery;
 					$q->setDelete('task_dependencies');
 					$q->addWhere('dependencies_task_id=' . $upd_task->task_id);
 					$q->exec();
 				} elseif (!($bulk_task_dependency == $upd_task->task_id)) {
 					$upd_task->task_dynamic = 31;
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					$q = new DBQuery;
 					$q->addTable('task_dependencies');
 					$q->addReplace('dependencies_task_id', $upd_task->task_id);
@@ -172,7 +172,7 @@ if (is_array($selected) && count($selected)) {
 		if (isset($_POST['bulk_task_priority']) && $bulk_task_priority != '') {
 			if ($upd_task->task_id) {
 				$upd_task->task_priority = $bulk_task_priority;
-				$upd_task->store();
+				$upd_task->store($AppUI);
 			}
 		}
 
@@ -180,7 +180,7 @@ if (is_array($selected) && count($selected)) {
 		if (isset($_POST['bulk_task_access']) && $bulk_task_access != '') {
 			if ($upd_task->task_id) {
 				$upd_task->task_access = $bulk_task_access;
-				$upd_task->store();
+				$upd_task->store($AppUI);
 			}
 		}
 
@@ -188,7 +188,7 @@ if (is_array($selected) && count($selected)) {
 		if (isset($_POST['bulk_task_type']) && $bulk_task_type != '') {
 			if ($upd_task->task_id) {
 				$upd_task->task_type = $bulk_task_type;
-				$upd_task->store();
+				$upd_task->store($AppUI);
 			}
 		}
 
@@ -240,23 +240,23 @@ if (is_array($selected) && count($selected)) {
 						$end_date = new CDate();
 						$upd_task->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 					}
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					//Option 2 - Mark as milestone
 				} elseif ($bulk_task_other == '2') {
 					$upd_task->task_milestone = 1;
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					//Option 3 - Mark as non milestone
 				} elseif ($bulk_task_other == '3') {
 					$upd_task->task_milestone = 0;
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					//Option 4 - Mark as dynamic
 				} elseif ($bulk_task_other == '4') {
 					$upd_task->task_dynamic = 1;
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					//Option 5 - Mark as non dynamic
 				} elseif ($bulk_task_other == '5') {
 					$upd_task->task_dynamic = 0;
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					//Option 6 - Add Task Reminder
 				} elseif ($bulk_task_other == '6') {
 					$upd_task->addReminder();
@@ -266,14 +266,14 @@ if (is_array($selected) && count($selected)) {
 					//Option 8 - Mark as active
 				} elseif ($bulk_task_other == '8') {
 					$upd_task->task_status = '0';
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					//Option 10 - Empty tasks description
 				} elseif ($bulk_task_other == '10') {
 					$upd_task->task_description = '';
-					$upd_task->store();
+					$upd_task->store($AppUI);
 					//Option 99 (always at the bottom) - Delete
 				} elseif ($bulk_task_other == '99') {
-					$upd_task->delete();
+					$upd_task->delete($AppUI);
 				}
 			}
 		}
