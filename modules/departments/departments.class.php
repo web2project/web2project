@@ -40,7 +40,8 @@ class CDepartment extends CW2pObject {
 
 		return $q->loadObject($this);
 	}
-	public function loadFull(CAppUI $AppUI, $deptId) {
+	public function loadFull(CAppUI $AppUI = null, $deptId) {
+    global $AppUI;
 
 		$q = new DBQuery;
 		$q->addTable('companies', 'com');
@@ -59,8 +60,10 @@ class CDepartment extends CW2pObject {
 
 		$q->loadObject($this);
 	}
-	public function loadOtherDepts($AppUI, $company_id, $removeDeptId = 0) {
-		$results = array();
+	public function loadOtherDepts(CAppUI $AppUI = null, $company_id, $removeDeptId = 0) {
+		global $AppUI;
+
+    $results = array();
     $q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dept_id, dept_name, dept_parent');
@@ -78,7 +81,8 @@ class CDepartment extends CW2pObject {
     return $results;
 	}
 
-	public function getFilteredDepartmentList($AppUI, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
+	public function getFilteredDepartmentList(CAppUI $AppUI = null, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
+    global $AppUI;
 
 	  $orderby = (in_array($orderby, array('dept_name', 'dept_type', 'countp', 'inactive'))) ? $orderby : 'dept_name';
 	  $q = new DBQuery;
@@ -134,7 +138,9 @@ class CDepartment extends CW2pObject {
 		return $errorArray;
 	}
 
-	public function store(CAppUI $AppUI) {
+	public function store(CAppUI $AppUI = null) {
+    global $AppUI;
+
     $perms = $AppUI->acl();
     $stored = false;
 
@@ -158,8 +164,10 @@ class CDepartment extends CW2pObject {
     return $stored;
 	}
 
-	public function delete(CAppUI $AppUI) {
-		$q = new DBQuery;
+	public function delete(CAppUI $AppUI = null) {
+		global $AppUI;
+
+    $q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.dept_id');
 		$q->addWhere('dep.dept_parent = ' . (int)$this->dept_id);
@@ -202,7 +210,9 @@ class CDepartment extends CW2pObject {
 	 */
 	// returns a list of records exposed to the user
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
-		$perms = &$GLOBALS['AppUI']->acl();
+		global $AppUI;
+
+    $perms = $AppUI->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
@@ -253,7 +263,9 @@ class CDepartment extends CW2pObject {
 	}
 
 	public function getAllowedSQL($uid, $index = null) {
-		$perms = &$GLOBALS['AppUI']->acl();
+		global $AppUI;
+
+    $perms = $AppUI->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
@@ -289,7 +301,9 @@ class CDepartment extends CW2pObject {
 	}
 
 	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
-		$perms = &$GLOBALS['AppUI']->acl();
+		global $AppUI;
+
+    $perms = $AppUI->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
@@ -328,8 +342,10 @@ class CDepartment extends CW2pObject {
 			$query->addWhere('((0=1) OR ' . ((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IS NULL)');
 		}
 	}
-	public static function getDepartmentList($AppUI, $companyId, $departmentId = 0) {
-		$q = new DBQuery;
+	public static function getDepartmentList(CAppUI $AppUI = null, $companyId, $departmentId = 0) {
+		global $AppUI;
+
+    $q = new DBQuery;
 		$q->addTable('departments');
 		$q->addQuery('dept_id, dept_name');
 		if (is_int($departmentId)) {
@@ -342,8 +358,10 @@ class CDepartment extends CW2pObject {
 
 		return $q->loadHashList('dept_id');
 	}
-	public static function getContactList($AppUI, $deptId) {
-		$q = new DBQuery;
+	public static function getContactList($AppUI = null, $deptId) {
+		global $AppUI;
+
+    $q = new DBQuery;
 		$q->addTable('contacts', 'con');
 		$q->addQuery('contact_id, con.contact_first_name');
 		$q->addQuery('con.contact_last_name, contact_email, contact_phone');
