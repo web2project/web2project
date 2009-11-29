@@ -8,7 +8,6 @@ $AppUI->loadCalendarJS();
 /**
  * Generates a report of the task logs for given dates
  */
-//error_reporting( E_ALL );
 $do_report = w2PgetParam($_POST, 'do_report', 0);
 $log_all = w2PgetParam($_POST, 'log_all', 0);
 $log_pdf = w2PgetParam($_POST, 'log_pdf', 0);
@@ -25,7 +24,7 @@ if ($period) {
 	$ts = $today->format(FMT_TIMESTAMP_DATE);
 	if (strtok($period, ' ') == $AppUI->_('Next')) {
 		$sign = + 1;
-	} else { //if(...)
+	} else {
 		$sign = -1;
 	}
 
@@ -104,12 +103,6 @@ if (function_exists('styleRenderBoxTop')) {
           <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Month'); ?>" />
           </td>
         <td colspan="3"><input class="text" type="field" size="2" name="pvalue" value="1" /> - value for the previous buttons</td>
-<!--
-        <td><input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('Previous Month'); ?>" onClick="set(-30)" /></td>
-        <td><input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('Previous Week'); ?>" onClick="set(-7)" /></td>
-        <td><input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('Next Week'); ?>" onClick="set(7)" /></td>
-        <td><input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('Next Month'); ?>" onClick="set(30)" /></td>
--->
 </tr>
 <tr>
 
@@ -275,7 +268,6 @@ if ($do_report) {
 		$pdf->selectFont($font_dir . '/Helvetica.afm');
 
 		$pdf->ezText(w2PgetConfig('company_name'), 12);
-		// $pdf->ezText( w2PgetConfig( 'company_name' ).' :: '.w2PgetConfig( 'page_title' ), 12 );
 
 		$date = new CDate();
 		$pdf->ezText("\n" . $date->format($df), 8);
@@ -296,16 +288,16 @@ if ($do_report) {
 		}
 		$pdf->ezText("\n");
 		$pdf->selectFont($font_dir . '/Helvetica.afm');
-		//$columns = null; This is already defined above... :)
 		$title = null;
 		$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 100), 1 => array('justification' => 'left', 'width' => 100), 2 => array('justification' => 'left', 'width' => 260), 3 => array('justification' => 'left', 'width' => 80), 4 => array('justification' => 'center', 'width' => 80), 5 => array('justification' => 'center', 'width' => 80), 6 => array('justification' => 'right', 'width' => 60)));
 
 		$pdf->ezTable($pdfdata, $columns, $title, $options);
 
-		if ($fp = fopen($temp_dir . '/temp' . $AppUI->user_id . '.pdf', 'wb')) {
+    $w2pReport = new CReport();
+    if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
 			fwrite($fp, $pdf->ezOutput());
 			fclose($fp);
-			echo '<a href="' . W2P_BASE_URL . '/files/temp/temp' . $AppUI->user_id . '.pdf" target="pdf">';
+      echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
 			echo $AppUI->_('View PDF File');
 			echo '</a>';
 		} else {
