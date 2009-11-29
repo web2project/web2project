@@ -543,6 +543,13 @@ class CProject extends CW2pObject {
       if (($msg = parent::store())) {
         return $msg;
       }
+      if (0 == $this->project_parent || 0 == $this->project_original_parent) {
+        $this->project_parent = $this->project_id;
+        $this->project_original_parent = $this->project_id;
+        if (($msg = parent::store())) {
+          return $msg;
+        }
+      }
       addHistory('projects', $this->project_id, 'add', $this->project_name, $this->project_id);
       $stored = true;
     }
