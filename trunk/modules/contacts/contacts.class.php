@@ -67,11 +67,15 @@ class CContact extends CW2pObject {
 	/*
 	 * DEPRECATED
 	 */
-	public function fullLoad(CAppUI $AppUI, $contactId) {
-		$this->loadFull($AppUI, $contactId);
+	public function fullLoad(CAppUI $AppUI = null, $contactId) {
+		global $AppUI;
+
+    $this->loadFull($AppUI, $contactId);
 	}
-	public function loadFull(CAppUI $AppUI, $contactId) {
-		$perms = $AppUI->acl();
+	public function loadFull(CAppUI $AppUI = null, $contactId) {
+		global $AppUI;
+
+    $perms = $AppUI->acl();
 		$canRead = !$perms->checkModule('contacts', 'view', $contactId);
 
 		if ($canRead) {
@@ -84,12 +88,13 @@ class CContact extends CW2pObject {
 		}
 	}
 
-	public function store(CAppUI $AppUI) {
-      $errorMsgArray = $this->check();
-      
-      if (count($errorMsgArray) > 0) {
-        return $errorMsgArray;
-      }
+	public function store(CAppUI $AppUI = null) {
+    global $AppUI;
+    $errorMsgArray = $this->check();
+
+    if (count($errorMsgArray) > 0) {
+      return $errorMsgArray;
+    }
 	  /*
        *  This  validates that any Contact saved will have a Display Name as
        * required by various dropdowns, etc throughout the system.  This is
@@ -115,8 +120,10 @@ class CContact extends CW2pObject {
       parent::store();
 	}
 
-	public function delete(CAppUI $AppUI) {
-	  if ($msg = parent::delete()) {
+	public function delete(CAppUI $AppUI = null) {
+    global $AppUI;
+
+    if ($msg = parent::delete()) {
         return $msg;
       }
       addHistory('contacts', 0, 'delete', 'Deleted', 0);
@@ -246,10 +253,12 @@ class CContact extends CW2pObject {
 		return $q->loadResult();
 	}
 	public function clearUpdateKey() {
-		$rnow = new CDate();
+		global $AppUI;
+
+    $rnow = new CDate();
 		$this->contact_updatekey = '';
 		$this->contact_lastupdate = $rnow->format(FMT_DATETIME_MYSQL);
-		$this->store();
+		$this->store($AppUI);
 	}
 
 	public function updateNotify() {
@@ -330,8 +339,10 @@ class CContact extends CW2pObject {
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
 
-	public static function searchContacts($AppUI, $where = '', $searchString = '') {
-		$showfields = array('contact_address1' => 'contact_address1',
+	public static function searchContacts(CAppUI $AppUI = null, $where = '', $searchString = '') {
+		global $AppUI;
+
+    $showfields = array('contact_address1' => 'contact_address1',
 			'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city',
 			'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip',
 			'contact_country' => 'contact_country', 'contact_company' => 'contact_company',
@@ -459,8 +470,10 @@ class CContact extends CW2pObject {
 		$q->exec();
 	}
 	public function hook_cron() {
-		$q = new DBQuery;
-		$q->addTable('contacts');
+		global $AppUI;
+
+    $q = new DBQuery;
+    $q->addTable('contacts');
 		$q->addQuery('contact_id');
 		$q->addWhere('contact_first_name IS NULL');
 		$contactIdList = $q->loadList();
@@ -468,7 +481,7 @@ class CContact extends CW2pObject {
 		foreach($contactIdList as $contactId) {
 			$myContact = new CContact();
 			$myContact = $myContact->load($contactId['contact_id']);
-			$myContact->store();
+			$myContact->store($AppUI);
 		}
 
 		//To Bruce: Clean updatekeys based on datediff to warn about long waiting.

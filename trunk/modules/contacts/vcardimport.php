@@ -59,7 +59,7 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 			}
 
 			// store vCard data for this object
-			if (($msg = $obj->store())) {
+			if (($msg = $obj->store($AppUI))) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}
