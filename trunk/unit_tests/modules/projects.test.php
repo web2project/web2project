@@ -448,8 +448,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                         $this->obj->project_contacts);
         $this->assertEquals(-1,                         $this->obj->project_priority);
         $this->assertEquals(0,                          $this->obj->project_type);
-        $this->assertEquals(0,                          $this->obj->project_parent);
-        $this->assertEquals(0,                          $this->obj->project_original_parent);
+        $this->assertEquals(3,                          $this->obj->project_parent);
+        $this->assertEquals(3,                          $this->obj->project_original_parent);
         $this->assertEquals('',                         $this->obj->project_location);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestCreateProject.xml');
