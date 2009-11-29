@@ -84,7 +84,7 @@ for ($i = 0; $i <= $sizeof; $i++) {
 		}
 
 		if ($store == 1) {
-			if (($msg = $obj->store())) {
+			if (($msg = $obj->store($AppUI))) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR, true);
 			} else {
 				$AppUI->setMsg('Task(s) updated', UI_MSG_OK, true);
