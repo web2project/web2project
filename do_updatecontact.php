@@ -44,7 +44,7 @@ $AppUI->setMsg('Contact');
 
 $isNotNew = $_POST['contact_id'];
 
-if (($msg = $contact->store())) {
+if (($msg = $contact->store($AppUI))) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
 	$msg = $AppUI->_('There was an error recording your contact data, please contact the system administrator. Thank you very much.');
 } else {
