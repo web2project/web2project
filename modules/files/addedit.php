@@ -247,7 +247,7 @@ function setTask( key, val ) {
 			</td>
 			<td align="right">
 				<?php
-				if (substr(sprintf('%o', fileperms(W2P_BASE_DIR.'/files')), -4) == '0777') {
+				if (is_writable(W2P_BASE_DIR.'/files')) {
 					?><input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /><?php
 				} else {
 					?><span class="error">File uploads not allowed. Please check permissions on the /files directory.</span><?php
