@@ -3,11 +3,6 @@
 		die('You should not access this file directly.');
 	}
 
-	/*
-	 * TODO: There needs to be a check in here to make sure the person attempting
-	 * the upgrade has system edit permissions.
-	 */
-
 	$failedImg = '<img src="../style/web2project/images/log-error.gif" width="16" height="16" align="middle" alt="Failed"/>';
 	$okImg = '<img src="../style/web2project/images/log-notice.gif" width="16" height="16" align="middle" alt="OK"/>';
 	$chmod = 0777;
@@ -58,8 +53,8 @@
 		<td class="item">File Uploads</td>
 		<td align="left">
 		<?php 
-			if (!ini_get('file_uploads')) {
-				echo '<b class="error">'.$failedImg.'</b> <span class="warning">Upload functionality will not be available.</span>';
+			if (!ini_get('file_uploads') && is_writable(W2P_BASE_DIR.'/files')) {
+				echo '<b class="error">'.$failedImg.'</b> <span class="warning">Upload functionality will not be available, please make the ./files directory writable.</span>';
 				$continue = false;
 			} else {
 				echo '<b class="ok">'.$okImg.'</b> <span class="item">(Max File Upload Size: '. $manager->getMaxFileUpload() .')</span>';

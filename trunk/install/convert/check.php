@@ -55,8 +55,8 @@
 		<td class="item">File Uploads</td>
 		<td align="left">
 		<?php 
-			if (!ini_get('file_uploads')) {
-				echo '<b class="error">'.$failedImg.'</b> <span class="warning">Upload functionality will not be available.</span>';
+			if (!ini_get('file_uploads') && is_writable(W2P_BASE_DIR.'/files')) {
+        echo '<b class="error">'.$failedImg.'</b> <span class="warning">Upload functionality will not be available, please make the ./files directory writable.</span>';
 				$continue = false;
 			} else {
 				echo '<b class="ok">'.$okImg.'</b> <span class="item">(Max File Upload Size: '. $manager->getMaxFileUpload() .')</span>';
