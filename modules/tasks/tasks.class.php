@@ -61,7 +61,7 @@ class CTask extends CW2pObject {
   public $task_target_budget = null;
   public $task_related_url = null;
   public $task_creator = null;
-  
+
   public $task_order = null;
   public $task_client_publish = null;
   public $task_dynamic = null;
@@ -1367,6 +1367,7 @@ class CTask extends CW2pObject {
 		$q->addTable('tasks');
 		$q->addUpdate('task_start_date', $new_start_date);
 		$q->addUpdate('task_end_date', $new_end_date);
+		$q->addUpdate('task_updated', $q->dbfnNow(), false, true);
 		$q->addWhere('task_dynamic <> 1 AND task_id = ' . (int)$task_id);
 		$q->exec();
 		$q->clear();
@@ -2166,14 +2167,14 @@ class CTask extends CW2pObject {
 			$q->addWhere('task_project = ' . (int)$task_project);
 		}
 		$task_list = $q->loadList();
-		
+
 		foreach($task_list as $task)
 		{
 		  if (canTaskAccess($task['task_id'], $task['task_access'], $task['task_owner'])) {
 		    $results[] = $task;
 		  }
 		}
-	
+
 		return $results;
 	}
 	public function getTaskCount($projectId) {
