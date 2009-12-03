@@ -8,6 +8,9 @@ if (!defined('W2P_BASE_DIR')) {
 
 define('SECONDS_PER_DAY', 60 * 60 * 24);
 
+require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
+require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
+
 /*
  * TODO: Personally, I'm already hating this autoloader... while it's great in
  * concept, we don't have anything that resembles a real class naming convention
