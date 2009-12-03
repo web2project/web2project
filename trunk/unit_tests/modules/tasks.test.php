@@ -7,6 +7,7 @@ global $ADODB_FETCH_MODE;
 global $w2p_performance_dbtime;
 global $w2p_performance_old_dbqueries;
 global $AppUI;
+global $tracking_dynamics;
 
 require_once '../base.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
@@ -20,6 +21,7 @@ $AppUI  = new CAppUI;
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
+$tracking_dynamics = array('0' => '21', '1' => '31');
 
 require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';
@@ -851,7 +853,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $this->assertEquals(27,                     $new_task->task_id);
+        $this->assertEquals(29,                     $new_task->task_id);
         $this->assertEquals('Task 26',              $new_task->task_name);
         $this->assertEquals(24,                     $new_task->task_parent);
         $this->assertEquals(0,                      $new_task->task_milestone);
@@ -892,7 +894,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id = 27');
+        $q->addWhere('task_id = 29');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -914,7 +916,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $this->assertEquals(27,                     $new_task->task_id);
+        $this->assertEquals(29,                     $new_task->task_id);
         $this->assertEquals('Task 26',              $new_task->task_name);
         $this->assertEquals(24,                     $new_task->task_parent);
         $this->assertEquals(0,                      $new_task->task_milestone);
@@ -955,7 +957,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id = 27');
+        $q->addWhere('task_id = 29');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -977,7 +979,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $this->assertEquals(27,                     $new_task->task_id);
+        $this->assertEquals(29,                     $new_task->task_id);
         $this->assertEquals('Task 26',              $new_task->task_name);
         $this->assertEquals(1,                      $new_task->task_parent);
         $this->assertEquals(0,                      $new_task->task_milestone);
@@ -1018,7 +1020,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id = 27');
+        $q->addWhere('task_id = 29');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1040,7 +1042,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $this->assertEquals(27,                     $new_task->task_id);
+        $this->assertEquals(29,                     $new_task->task_id);
         $this->assertEquals('Task 26',              $new_task->task_name);
         $this->assertEquals(1,                      $new_task->task_parent);
         $this->assertEquals(0,                      $new_task->task_milestone);
@@ -1081,7 +1083,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id = 27');
+        $q->addWhere('task_id = 29');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1127,7 +1129,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id IN(27,28,29)');
+        $q->addWhere('task_id IN(29,30,31)');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1161,7 +1163,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id IN(27,28,29)');
+        $q->addWhere('task_id IN(29,30,31)');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1195,7 +1197,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id IN(27,28,29)');
+        $q->addWhere('task_id IN(29,30,31)');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1243,6 +1245,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
 	}
 
+	/**
+	 * Tests the store function when there are sub tasks to be update as well
+	 */
 	public function testStoreSubTasks()
 	{
 		global $AppUI;
@@ -1272,6 +1277,87 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_id IN(' . $this->obj->task_id . ')');
+        $results = $q->loadList();
+
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+	}
+
+	/**
+	 * Tests the store function when updating dynamics is necessary
+	 */
+	public function testStoreUpdateDynamics()
+	{
+		global $AppUI;
+
+		$this->obj->load(24);
+		$this->obj->updateDynamics(true);
+
+        $this->assertEquals(24,                     $this->obj->task_id);
+        $this->assertEquals('Task 24',              $this->obj->task_name);
+        $this->assertEquals(24,                     $this->obj->task_parent);
+        $this->assertEquals(0,                      $this->obj->task_milestone);
+        $this->assertEquals(1,                      $this->obj->task_project);
+        $this->assertEquals(1,                      $this->obj->task_owner);
+        $this->assertEquals('2009-09-09 00:00:00',  $this->obj->task_start_date);
+        $this->assertEquals(64,                     $this->obj->task_duration);
+        $this->assertEquals(1,                      $this->obj->task_duration_type);
+        $this->assertEquals(37,                     $this->obj->task_hours_worked);
+        $this->assertEquals('2009-11-02 00:00:00',  $this->obj->task_end_date);
+        $this->assertEquals(0,                      $this->obj->task_status);
+        $this->assertEquals(0,                      $this->obj->task_priority);
+        $this->assertEquals(41,                     $this->obj->task_percent_complete);
+        $this->assertEquals('This is task 24',      $this->obj->task_description);
+        $this->assertEquals(0.00,                   $this->obj->task_target_budget);
+        $this->assertEquals('',                     $this->obj->task_related_url);
+        $this->assertEquals(1,                      $this->obj->task_creator);
+        $this->assertEquals(1,                      $this->obj->task_order);
+        $this->assertEquals(1,                      $this->obj->task_client_publish);
+        $this->assertEquals(1,                      $this->obj->task_dynamic);
+        $this->assertEquals(1,                      $this->obj->task_access);
+        $this->assertEquals(1,                      $this->obj->task_notify);
+        $this->assertEquals('',                     $this->obj->task_departments);
+        $this->assertEquals('',                     $this->obj->task_contacts);
+        $this->assertEquals('',                     $this->obj->task_custom);
+        $this->assertEquals(1,                      $this->obj->task_type);
+        $this->assertEquals(1,                      $this->obj->task_updator);
+        $this->assertEquals('2009-07-06 15:43:00',  $this->obj->task_created);
+        $this->assertEquals('2009-07-06 15:43:00',  $this->obj->task_updated);
+
+	}
+
+	/**
+	 * Tests store whilst shifting dependant tasks.
+	 */
+	public function testStoreShiftDependentTasks()
+	{
+		$this->obj->load(27);
+		$this->post_data['task_id'] 		= 27;
+		$this->post_data['task_end_date']	= '0912011700';
+		$this->post_data['milestone'] 		= 1;
+		$this->post_data['task_parent'] 	= 27;
+
+		$this->obj->bind($this->post_data);
+		$this->obj->store();
+
+		$now_secs = time();
+        $min_time = $now_secs - 10;
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestStoreShiftDependentTasks.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_id IN(27, 28)');
         $results = $q->loadList();
 
         foreach($results as $dates) {
