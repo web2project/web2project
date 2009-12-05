@@ -585,6 +585,7 @@ class CTask extends CW2pObject {
 			if (!$this->task_parent) {
 				$q->addTable('tasks');
 				$q->addUpdate('task_parent', $this->task_id);
+				$q->addUpdate('task_updated', $q->dbfnNow(), false, true);
 				$q->addWhere('task_id = ' . (int)$this->task_id);
 				$q->exec();
 				$q->clear();
