@@ -82,8 +82,10 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 } elseif (!$company_id && !$show_all) {
 	//  Contacts from all allowed companies
 	$where = '(contact_company IS NULL OR contact_company = 0)';
+	$company_name = $AppUI->_('No Company');
+} elseif ($show_all) {
 	$company_name = $AppUI->_('Allowed Companies');
-} elseif (!$show_all) {
+} else {
 	// Contacts for this company only
 	$q->addWhere('contact_company = ' . (int)$company_id);
 }
