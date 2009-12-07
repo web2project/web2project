@@ -409,7 +409,7 @@ var working_days = new Array(<?php echo w2PgetConfig('cal_working_days'); ?>);
 var cal_day_start = <?php echo (int) w2PgetConfig('cal_day_start'); ?>;
 var cal_day_end = <?php echo (int) w2PgetConfig('cal_day_end'); ?>;
 var daily_working_hours = <?php echo (int) w2PgetConfig('daily_working_hours'); ?>;
-var oldProj = '<?php echo $obj->project_name . ':'; ?>';
+var oldProj = '<?php echo htmlentities($obj->project_name, ENT_QUOTES) . ':'; ?>';
 
 function setDate( frm_name, f_date ) {
 	fld_date = eval( 'document.' + frm_name + '.' + f_date );
