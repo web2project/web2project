@@ -23,7 +23,7 @@
 */
 	require_once '../base.php';
 	require_once W2P_BASE_DIR . '/includes/main_functions.php';
-  if (version_compare(phpversion(), '5.0', '<')) {
+  if (version_compare(PHP_VERSION, '5.0', '<')) {
   	echo 'web2Project requires PHP 5.0+. Please upgrade!';
     die();
   }
@@ -91,7 +91,19 @@
 					}
 					break;
 				case 'upgrade':
-					?>
+$AppUI = $_SESSION['AppUI'];
+echo '<pre>';
+print_r($AppUI);
+print_r($_SESSION);
+//echo 'dead';
+unlink('x.x');
+die();
+
+          /*
+           * TODO: There needs to be a check in here to make sure the person attempting
+           * the upgrade has system edit permissions.
+           */
+          ?>
 					<tr>
 						<td colspan="2">This is where the upgrade script kicks in.  It's a 
 							two step process.  First we'll confirm that all the requirements 
