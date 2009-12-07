@@ -20,11 +20,11 @@ function setContactIDs(method, querystring) {
 	var field = document.getElementsByName('contact_id[]');
 	var selected_contacts_id = document.frmContactSelect.selected_contacts_id;
 	var tmp = new Array();
-    
+
 	if (method == 'GET' && querystring){
 		URL += '&' + querystring;
 	}
-	
+
 	var count = 0;
 	for (i = 0, i_cmp = field.length; i < i_cmp; i++) {
 		if (field[i].checked) {
@@ -32,7 +32,7 @@ function setContactIDs(method, querystring) {
 		}
 	}
 	selected_contacts_id.value = tmp.join(',');
-    
+
 	if (method == 'GET') {
 		URL +=  '&selected_contacts_id=' + selected_contacts_id.value;
 		return URL;
@@ -79,11 +79,11 @@ if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 		$where = '0' . $where;
 	}
 	$where = (($where) ? ('contact_company IN(' . $where . ')') : '');
-} elseif (!$company_id) {
+} elseif (!$company_id && !$show_all) {
 	//  Contacts from all allowed companies
 	$where = '(contact_company IS NULL OR contact_company = 0)';
 	$company_name = $AppUI->_('Allowed Companies');
-} else {
+} elseif (!$show_all) {
 	// Contacts for this company only
 	$q->addWhere('contact_company = ' . (int)$company_id);
 }
@@ -101,7 +101,6 @@ if ($where) { // Don't assume where is set. Change needed to fix Mantis Bug 0002
 if ($where_dept) { // Don't assume where is set. Change needed to fix Mantis Bug 0002056
 	$q->addWhere($where_dept);
 }
-
 $oCpy = new CCompany();
 $aCpies = $oCpy->getAllowedRecords($AppUI->user_id, 'company_id, company_name', 'company_name');
 $where = $oCpy->getAllowedSQL($AppUI->user_id, 'contact_company');
