@@ -73,7 +73,7 @@ if ($isNewUser) {
 	$contact->contact_owner = $AppUI->user_id;
 }
 
-if (($msg = $contact->store())) {
+if (($msg = $contact->store($AppUI))) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
 } else {
 	$obj->user_contact = $contact->contact_id;
