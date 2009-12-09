@@ -17,7 +17,7 @@
 
 			if ($this->action == '') {
 				$this->_prepareConfiguration();
-				if (!file_exists($this->configFile)) {
+				if (!file_exists($this->configFile) || filesize($this->configFile) == 0) {
 					$this->action = 'install';
 				} else {
 					require_once $this->configFile;
