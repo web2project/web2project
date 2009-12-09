@@ -91,14 +91,6 @@
 					}
 					break;
 				case 'upgrade':
-$AppUI = $_SESSION['AppUI'];
-echo '<pre>';
-print_r($AppUI);
-print_r($_SESSION);
-//echo 'dead';
-unlink('x.x');
-die();
-
           /*
            * TODO: There needs to be a check in here to make sure the person attempting
            * the upgrade has system edit permissions.
