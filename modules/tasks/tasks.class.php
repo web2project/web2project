@@ -2122,6 +2122,18 @@ class CTask extends CW2pObject {
 
 		return $taskArray;
 	}
+  public function hook_search() {
+    $search['table'] = 'tasks';
+    $search['table_module'] = 'tasks';
+    $search['table_key'] = 'task_id'; // primary key in searched table
+    $search['table_link'] = 'index.php?m=tasks&a=view&task_id='; // first part of link
+    $search['table_title'] = 'Tasks';
+    $search['table_orderby'] = 'task_name';
+    $search['search_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
+    $search['display_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
+
+    return $search;
+  }
 
 	public function getTaskList($userId, $days = 30) {
 		/*
