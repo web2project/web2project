@@ -371,6 +371,19 @@ class CDepartment extends CW2pObject {
 
 		return $q->loadHashList('contact_id');
 	}
+
+  public function hook_search() {
+    $search['table'] = 'departments';
+    $search['table_module'] = 'departments';
+    $search['table_key'] = 'dept_id'; // primary key in searched table
+    $search['table_link'] = 'index.php?m=departments&a=view&dept_id='; // first part of link
+    $search['table_title'] = 'Departments';
+    $search['table_orderby'] = 'dept_name';
+    $search['search_fields'] = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
+    $search['display_fields'] = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
+
+    return $search;
+  }
 }
 
 //writes out a single <option> element for display of departments
