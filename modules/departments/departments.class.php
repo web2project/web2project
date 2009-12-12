@@ -26,7 +26,7 @@ class CDepartment extends CW2pObject {
 	public $dept_email = null;
 	public $dept_type = null;
 
-	public function CDepartment() {
+	public function __construct() {
 	  parent::__construct('departments', 'dept_id');
 	}
 
@@ -131,7 +131,13 @@ class CDepartment extends CW2pObject {
     $errorArray = array();
     $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-    if ($this->dept_id == $this->dept_parent) {
+    if (0 == (int) $this->dept_company) {
+      $errorArray['dept_company'] = $baseErrorMsg . 'department company is not set';
+    }
+    if ('' == trim($this->dept_name)) {
+      $errorArray['dept_name'] = $baseErrorMsg . 'department name is not set';
+    }
+    if (0 != $this->dept_id && $this->dept_id == $this->dept_parent) {
       $errorArray['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
     }
 
