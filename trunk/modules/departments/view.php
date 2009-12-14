@@ -126,6 +126,10 @@ function delIt() {
 						<?php	echo $department->dept_address1 . (($department->dept_address2) ? '<br />' . $department->dept_address2 : '') . '<br />' . $department->dept_city . '&nbsp;&nbsp;' . $department->dept_state . '&nbsp;&nbsp;' . $department->dept_zip . (($department->dept_country) ? '<br />' . $countries[$department->dept_country] : '');?>
 					</td>
 				</tr>
+				<tr>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
+					<td class="hilite"><?php echo $department->url('dept_url'); ?></td>
+				</tr>
 			</table>
 		</td>
 		<td width="50%">
