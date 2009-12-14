@@ -467,15 +467,6 @@ class CW2pObject {
 			}
 			$query->leftJoin($this->_tbl, $key, $key . '.' . $this->_tbl_key . ' = ' . $index);
 		}
-		//		if (! $perms->checkModule($this->_tbl, 'view', $uid )) {
-		//		  if (! count($allow)) {
-		// We need to ensure that we don't just break complex SQLs, but
-		// instead limit to a nonsensical value.  This assumes that the
-		// key is auto-incremented.
-		//		    $query->addWhere($this->_tbl_key . ' = 0');
-		//		    return;
-		//			}
-		//		}
 
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
@@ -516,4 +507,14 @@ class CW2pObject {
 			$this->$k = htmlspecialchars_decode($v);
 		}
 	}
+
+  public function url($link, $text = '') {
+    $result = '';
+
+    if ($this->$link != '') {
+      $text = ('' != $text) ? $text : $this->$link;
+      $result = '<a href="'.$this->$link.'" target="_new">'.$text.'</a>';
+    }
+    return $result;
+  }
 }

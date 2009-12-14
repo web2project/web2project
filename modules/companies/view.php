@@ -124,9 +124,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-					<td class="hilite">
-						<a href="http://<?php echo $company->company_primary_url; ?>" target="Company"><?php echo $company->company_primary_url; ?></a>
-					</td>
+					<td class="hilite"><?php echo $company->url('company_primary_url'); ?></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
