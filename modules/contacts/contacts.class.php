@@ -72,7 +72,7 @@ class CContact extends CW2pObject {
 
     $this->loadFull($AppUI, $contactId);
 	}
-	public function loadFull($contactId, CAppUI $AppUI = null) {
+	public function loadFull(CAppUI $AppUI = null, $contactId) {
 		global $AppUI;
 
     $perms = $AppUI->acl();
@@ -115,7 +115,7 @@ class CContact extends CW2pObject {
     if($this->contact_last_name == null) {
       $this->contact_last_name = '';
     }
-    addHistory('contacts', $this->link_id, 'store', $this->link_name, $this->link_id);
+    addHistory('contacts', $this->contact_id, 'store', $this->contact_first_name.' '.$this->contact_last_name, $this->contact_id);
 
     parent::store();
 	}
