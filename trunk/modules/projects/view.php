@@ -190,11 +190,11 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-			<td class="hilite"><?php echo $project->url('project_url'); ?></td>
+      <td class="hilite"><?php echo w2p_url($project->project_url); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
-			<td class="hilite"><?php echo $project->url('project_demo_url'); ?></td>
+      <td class="hilite"><?php echo w2p_url($project->project_demo_url); ?></td>
 		</tr>
 		<tr>
 			<td colspan="2">

@@ -128,7 +128,7 @@ function delIt() {
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-					<td class="hilite"><?php echo $department->url('dept_url'); ?></td>
+          <td class="hilite"><?php echo w2p_url($department->dept_url); ?></td>
 				</tr>
 			</table>
 		</td>
