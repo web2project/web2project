@@ -44,11 +44,11 @@ if (!defined('W2P_BASE_DIR')) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-      <td class="hilite"><?php echo $obj->url('project_url'); ?></td>
+      <td class="hilite"><?php echo w2p_url($obj->project_url); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
-      <td class="hilite"><?php echo $obj->url('project_demo_url'); ?></td>
+      <td class="hilite"><?php echo w2p_url($obj->project_demo_url); ?></td>
 		</tr>
 		<tr>
 			<td colspan="2">

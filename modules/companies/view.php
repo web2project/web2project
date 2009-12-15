@@ -100,7 +100,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
 					<td class="hilite" width="100%">
-            <?php echo $company->email('company_email'); ?>
+            <?php echo w2p_email($company->company_email); ?>
           </td>
 				</tr>
 				<tr>
@@ -126,7 +126,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-					<td class="hilite"><?php echo $company->url('company_primary_url'); ?></td>
+					<td class="hilite"><?php echo w2p_url($company->company_primary_url); ?></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>

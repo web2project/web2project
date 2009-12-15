@@ -507,26 +507,4 @@ class CW2pObject {
 			$this->$k = htmlspecialchars_decode($v);
 		}
 	}
-
-  public function url($link, $text = '')
-  {
-    $result = '';
-
-    if ($this->$link != '') {
-      $text = ('' != $text) ? $text : $this->$link;
-      $result = '<a href="'.$this->$link.'" target="_new">'.$text.'</a>';
-    }
-    return $result;
-  }
-
-  public function email($email, $name = '')
-  {
-    $result = '';
-
-    if ($this->$email != '') {
-      $name = ('' != $name) ? $name : $this->$email;
-      $result = '<a href="mailto:'.$this->$email.'">'.$name.'</a>';
-    }
-    return $result;
-  }
 }
