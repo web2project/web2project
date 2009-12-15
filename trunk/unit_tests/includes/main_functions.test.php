@@ -109,4 +109,45 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
     $search = new smartsearch();
     $this->assertTrue(class_exists('smartsearch'));
   }
+
+
+  /**
+   * Tests the proper creation of a link
+   */
+  public function testURL()
+  {
+    global $AppUI;
+
+    $target = '<a href="http://web2project.net" target="_new">http://web2project.net</a>';
+    $linkText = w2p_url('http://web2project.net');
+    $this->assertEquals($target, $linkText);
+
+    $target = '';
+    $linkText = w2p_url('');
+    $this->assertEquals($target, $linkText);
+
+    $target = '<a href="http://web2project.net" target="_new">web2project</a>';
+    $linkText = w2p_url('http://web2project.net', 'web2project');
+    $this->assertEquals($target, $linkText);
+  }
+
+  /**
+   * Tests the proper creation of an email link
+   */
+  public function testEmail()
+  {
+    global $AppUI;
+
+    $target = '<a href="mailto:test@test.com">test@test.com</a>';
+    $linkText = w2p_email('test@test.com');
+    $this->assertEquals($target, $linkText);
+
+    $target = '';
+    $linkText = w2p_email('');
+    $this->assertEquals($target, $linkText);
+
+    $target = '<a href="mailto:test@test.com">web2project</a>';
+    $linkText = w2p_email('test@test.com', 'web2project');
+    $this->assertEquals($target, $linkText);
+  }
 }

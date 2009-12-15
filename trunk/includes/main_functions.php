@@ -1265,3 +1265,25 @@ function w2PwriteDebug($s, $t = '', $f = '?', $l = '?') {
 		fclose($fp);
 	}
 }
+
+function w2p_url($link, $text = '')
+{
+  $result = '';
+
+  if ($link != '') {
+    $text = ('' != $text) ? $text : $link;
+    $result = '<a href="'.$link.'" target="_new">'.$text.'</a>';
+  }
+  return $result;
+}
+
+function w2p_email($email, $name = '')
+{
+  $result = '';
+
+  if ($email != '') {
+    $name = ('' != $name) ? $name : $email;
+    $result = '<a href="mailto:'.$email.'">'.$name.'</a>';
+  }
+  return $result;
+}
