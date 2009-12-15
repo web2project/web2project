@@ -47,7 +47,7 @@ class CW2pObject {
 	 *	@param string $table name of the table in the db schema relating to child class
 	 *	@param string $key name of the primary key field in the table
 	 */
-	public function CW2pObject($table, $key) {
+	public function __construct($table, $key) {
 		$this->_tbl = $table;
 		$this->_tbl_key = $key;
 		$this->_tbl_prefix = w2PgetConfig('dbprefix', '');
