@@ -142,7 +142,9 @@ class CCompany extends CW2pObject {
     return $search;
   }
 
-  public function loadFull(CAppUI $AppUI, $companyId) {
+  public function loadFull(CAppUI $AppUI = null, $companyId) {
+    global $AppUI;
+
     $q = new DBQuery;
     $q->addTable('companies');
     $q->addQuery('companies.*');
