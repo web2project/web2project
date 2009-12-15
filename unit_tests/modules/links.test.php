@@ -303,4 +303,26 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertEquals('',              $link->link_name);
       $this->assertEquals('',              $link->link_url);
     }
+
+    /**
+     * Tests the proper creation of a link
+     */
+    public function testURL()
+    {
+      global $AppUI;
+
+      $this->obj->bind($this->post_data);
+
+      $target = '<a href="'.$this->obj->link_url.'" target="_new">'.$this->obj->link_url.'</a>';
+      $linkText = $this->obj->url('link_url');
+      $this->assertEquals($target,   $linkText);
+
+      $target = '';
+      $linkText = $this->obj->url('link_icon');
+      $this->assertEquals($target,   $linkText);
+
+      $target = '<a href="'.$this->obj->link_url.'" target="_new">'.$this->obj->link_name.'</a>';
+      $linkText = $this->obj->url('link_url', $this->obj->link_name);
+      $this->assertEquals($target,   $linkText);
+    }
 }
