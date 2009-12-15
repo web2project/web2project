@@ -14,7 +14,7 @@ class CPreferences {
 	public $pref_name = null;
 	public $pref_value = null;
 
-	public function CPreferences() {
+	public function __construct() {
 		// empty constructor
 	}
 
@@ -88,7 +88,7 @@ class CModule extends CW2pObject {
 	public $permissions_item_table = null;
 	public $mod_main_class = null;
 
-	public function CModule() {
+	public function __construct() {
     parent::__construct('modules', 'mod_id');
 	}
 
@@ -237,7 +237,7 @@ class CModule extends CW2pObject {
  */
 class CConfig extends CW2pObject {
 
-	public function CConfig() {
+	public function __construct() {
     parent::__construct('config', 'config_id');
 	}
 
@@ -262,8 +262,8 @@ class bcode extends CW2pObject {
 	public $billingcode_value;
 	public $billingcode_status;
 
-	public function bcode() {
-		$this->CW2pObject('billingcode', 'billingcode_id');
+	public function __construct() {
+		parent::__construct('billingcode', 'billingcode_id');
 	}
 
 	public function bind($hash) {

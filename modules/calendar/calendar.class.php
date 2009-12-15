@@ -450,7 +450,7 @@ class CEvent extends CW2pObject {
 	public $event_cwd = null;
 
 	public function CEvent() {
-		$this->CW2pObject('events', 'event_id');
+    parent::__construct('events', 'event_id');
 	}
 
 	public function loadFull($event_id) {
