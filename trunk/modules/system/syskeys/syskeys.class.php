@@ -16,7 +16,7 @@ class CSysKey extends CW2pObject {
 	public $syskey_sep2 = null;
 
 	public function CSysKey($name = null, $label = null, $type = '0', $sep1 = "\n", $sep2 = '|') {
-		$this->CW2pObject('syskeys', 'syskey_id');
+    parent::__construct('syskeys', 'syskey_id');
 		$this->syskey_name = $name;
 		$this->syskey_label = $label;
 		$this->syskey_type = $type;
@@ -47,8 +47,8 @@ class CSysVal extends CW2pObject {
 		return null;
 	}
 
-	public function CSysVal($key = null, $title = null, $value = null) {
-		$this->CW2pObject('sysvals', 'sysval_id');
+	public function __construct($key = null, $title = null, $value = null) {
+    parent::__construct('sysvals', 'sysval_id');
 		$this->sysval_key_id = $key;
 		$this->sysval_title = $title;
 		$this->sysval_value = $value;
