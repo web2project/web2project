@@ -99,7 +99,9 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $company->company_email; ?></td>
+					<td class="hilite" width="100%">
+            <?php echo $company->email('company_email'); ?>
+          </td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>

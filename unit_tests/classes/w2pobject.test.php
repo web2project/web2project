@@ -43,6 +43,7 @@ class CW2pObject_Test extends PHPUnit_Framework_TestCase
 
     $this->obj->name = 'web2project homepage';
     $this->obj->link = 'http://web2project.net';
+    $this->obj->email = 'test@test.com';
   }
 
   /**
@@ -63,5 +64,25 @@ class CW2pObject_Test extends PHPUnit_Framework_TestCase
     $target = '<a href="'.$this->obj->link.'" target="_new">'.$this->obj->name.'</a>';
     $linkText = $this->obj->url('link', $this->obj->name);
     $this->assertEquals($target, $linkText);
-  } 
+  }
+
+  /**
+   * Tests the proper creation of an email link
+   */
+  public function testEmail()
+  {
+    global $AppUI;
+
+    $target = '<a href="mailto:'.$this->obj->email.'">'.$this->obj->email.'</a>';
+    $linkText = $this->obj->email('email');
+    $this->assertEquals($target, $linkText);
+
+    $target = '';
+    $linkText = $this->obj->email('empty_param');
+    $this->assertEquals($target, $linkText);
+
+    $target = '<a href="mailto:'.$this->obj->email.'">'.$this->obj->name.'</a>';
+    $linkText = $this->obj->email('email', $this->obj->name);
+    $this->assertEquals($target, $linkText);
+  }
 }
