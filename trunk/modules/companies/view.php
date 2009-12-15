@@ -157,7 +157,9 @@ $moddir = W2P_BASE_DIR . '/modules/companies/';
 $tabBox = new CTabBox('?m=companies&a=view&company_id=' . $company_id, '', $tab);
 $tabBox->add($moddir . 'vw_active', 'Active Projects');
 $tabBox->add($moddir . 'vw_archived', 'Archived Projects');
-$tabBox->add($moddir . 'vw_depts', 'Departments');
+if ($AppUI->isActiveModule('departments') && $perms->checkModule('departments', 'view')) {
+  $tabBox->add($moddir . 'vw_depts', 'Departments');
+}
 $tabBox->add($moddir . 'vw_users', 'Users');
 $tabBox->add($moddir . 'vw_contacts', 'Contacts');
 $tabBox->show();
