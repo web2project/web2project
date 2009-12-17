@@ -108,7 +108,7 @@ function delIt() {
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $department->dept_email; ?></td>
+					<td class="hilite" width="100%"><?php echo w2p_email($department->dept_email); ?></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
@@ -136,7 +136,7 @@ function delIt() {
 			<strong><?php echo $AppUI->_('Description'); ?></strong>
 			<table cellspacing="1" cellpadding="2" border="0" width="100%">
 			<tr>
-				<td class="hilite" width="100%"><?php echo mb_str_replace(chr(10), '<br />', $department->dept_desc); ?>&nbsp;</td>
+				<td class="hilite" width="100%"><?php echo mb_str_replace(chr(10), '<br />', w2p_textarea($department->dept_desc)); ?>&nbsp;</td>
 			</tr>
 			</table>
 		</td>
