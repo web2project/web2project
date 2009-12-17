@@ -145,7 +145,7 @@ foreach ($forums as $row) {
 		<span style="font-size:10pt;font-weight:bold">
 			<a href="?m=forums&a=viewer&forum_id=<?php echo $row['forum_id']; ?>"><?php echo $row['forum_name']; ?></a>
 		</span>
-		<br /><?php echo $row['forum_description']; ?>
+		<br /><?php echo w2p_textarea($row['forum_description']); ?>
 		<br /><font color="#777777"><?php echo $AppUI->_('Owner') . ' ' . $row['owner_name']; ?>,
 		<?php echo $AppUI->_('Started') . ' ' . $create_date->format($df); ?>
 		</font>

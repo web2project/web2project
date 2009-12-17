@@ -273,7 +273,7 @@ function delIt() {
 		 </tr>
 		 <tr>
 		  <td class="hilite" colspan="3">
-				<?php echo mb_str_replace(chr(10), '<br />', $obj->task_description); ?>
+				<?php echo w2p_textarea($obj->task_description); ?>
 		  </td>
 		</tr>
 		<?php	$depts = $obj->getTaskDepartments($AppUI, $task_id); ?>

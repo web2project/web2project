@@ -428,7 +428,7 @@ function displayFiles($folder) {
 			<tr>
 				<td nowrap="8%">';
 		$file_icon = getIcon($row['file_type']);
-		$s .= '<a href="./fileviewer.php?file_id=' . $file['file_id'] . '" title="' . $file['file_description'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $row['file_name'] . '</a></td><td width="20%">' . $file['file_description'] . '</td><td width="5%" nowrap="nowrap" align="right">';
+		$s .= '<a href="./fileviewer.php?file_id=' . $file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $row['file_name'] . '</a></td><td width="20%">' . w2p_textarea($file['file_description']) . '</td><td width="5%" nowrap="nowrap" align="right">';
 		$hidden_table = '';
 		$s .= $row['file_lastversion'];
 		if ($row['file_versions'] > 1) {
@@ -608,7 +608,7 @@ echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "R
 <?php
 //	endif;
 if (isset($cfObj) && $cfObj->file_folder_description != ''): ?>
-		<p><?php echo $cfObj->file_folder_description; ?></p>
+		<p><?php echo w2p_textarea($cfObj->file_folder_description); ?></p>
 <?php
 endif;
 if (countFiles($folder) > 0) {

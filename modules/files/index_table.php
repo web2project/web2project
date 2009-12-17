@@ -222,12 +222,12 @@ foreach ($files as $file_row) {
 		$filename .= '[...].' . $ext;
 	}
 	$file_icon = getIcon($file_row['file_type']);
-	echo '<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] . '" title="' . $latest_file['file_description'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $filename . '</a>';
+	echo '<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $filename . '</a>';
 	//	{$latest_file['file_name']}
 
 ?>
 	</td>
-	<td width="20%"><?php echo $latest_file['file_description']; ?></td>
+	<td width="20%"><?php echo w2p_textarea($latest_file['file_description']); ?></td>
 	<td width="5%" nowrap="nowrap" align="right">
 		<?php
 	$hidden_table = '';

@@ -1301,6 +1301,8 @@ function w2p_textarea($content)
      */
     $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
     $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);
+    $result = mb_str_replace(chr(10).''.chr(10), '<br />', $result);
+    $result = mb_str_replace(chr(10), '<br />', $result);
   }
 
   return $result;

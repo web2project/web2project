@@ -139,7 +139,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 				<tr>
 					<td class="hilite">
-						<?php echo mb_str_replace(chr(10), '<br />', $company->company_description); ?>&nbsp;
+						<?php echo mb_str_replace(chr(10), '<br />', w2p_textarea($company->company_description)); ?>&nbsp;
 					</td>
 				</tr>		
 			</table>

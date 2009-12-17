@@ -210,7 +210,7 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 			<tr>
 				<td class="hilite">
-					<?php echo mb_str_replace(chr(10), '<br>', $project->project_description); ?>&nbsp;
+					<?php echo w2p_textarea($project->project_description); ?>&nbsp;
 				</td>
 			</tr>
 			</table>

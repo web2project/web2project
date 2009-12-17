@@ -91,7 +91,7 @@ if ($canDelete) {
 		<table cellspacing="0" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td class="hilite">
-				<?php echo mb_str_replace(chr(10), '<br />', $obj->resource_note); ?>&nbsp;
+				<?php echo w2p_textarea($obj->resource_note); ?>&nbsp;
 			</td>
 		</tr>
 		

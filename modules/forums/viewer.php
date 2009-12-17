@@ -60,8 +60,8 @@ $titleBlock->show();
 	<td align="left" nowrap="nowrap"><?php echo $AppUI->_('Related Project'); ?>:</td>
 	<td nowrap="nowrap"><strong><?php echo $forum['project_name']; ?></strong></td>
 	<td valign="top" width="50%" rowspan="99">
-		<strong><?php echo $AppUI->_('Description'); ?>:</strong>
-		<br /><?php echo mb_str_replace(chr(13), '&nbsp;<br />', $forum['forum_description']); ?>
+		<strong><?php echo $AppUI->_('Description'); ?>:</strong><br />
+    <?php echo w2p_textarea($forum['forum_description']); ?>
 	</td>
 </tr>
 <tr>
