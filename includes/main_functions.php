@@ -1287,3 +1287,21 @@ function w2p_email($email, $name = '')
   }
   return $result;
 }
+
+function w2p_textarea($content)
+{
+  $result = '';
+
+  if ($content != '') {
+    $result = $content;
+    /*
+     * Thanks to Alison Gianotto for two excellent lines of code to make our
+    *    links all linky.  This code is based on her work here:
+    *    http://www.snipe.net/2009/09/php-twitter-clickable-links
+     */
+    $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
+    $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);
+  }
+
+  return $result;
+}

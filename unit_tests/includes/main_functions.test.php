@@ -114,7 +114,7 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
   /**
    * Tests the proper creation of a link
    */
-  public function testURL()
+  public function test_w2p_url()
   {
     global $AppUI;
 
@@ -134,7 +134,7 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
   /**
    * Tests the proper creation of an email link
    */
-  public function testEmail()
+  public function test_w2p_email()
   {
     global $AppUI;
 
@@ -148,6 +148,34 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 
     $target = '<a href="mailto:test@test.com">web2project</a>';
     $linkText = w2p_email('test@test.com', 'web2project');
+    $this->assertEquals($target, $linkText);
+  }
+
+  /**
+   * Tests the proper creation of an email link
+   */
+  public function test_w2p_textarea()
+  {
+    global $AppUI;
+
+    $target = '';
+    $linkText = w2p_textarea('');
+    $this->assertEquals($target, $linkText);
+
+    $target = 'Have you seen this - <a href="http://web2project.net" target="_blank">http://web2project.net</a> ?';
+    $linkText = w2p_textarea('Have you seen this - http://web2project.net ?');
+    $this->assertEquals($target, $linkText);
+
+    $target = '<a href="http://web2project.net" target="_blank">http://web2project.net</a> is a fork of <a href="http://dotproject.net" target="_blank">http://dotproject.net</a>';
+    $linkText = w2p_textarea('http://web2project.net is a fork of http://dotproject.net');
+    $this->assertEquals($target, $linkText);
+
+    $target = '<a href="http://web2project.net" target="_blank">http://web2project.net</a> is a great site';
+    $linkText = w2p_textarea('http://web2project.net is a great site');
+    $this->assertEquals($target, $linkText);
+
+    $target = 'Please check out <a href="http://web2project.net" target="_blank">http://web2project.net</a>';
+    $linkText = w2p_textarea('Please check out http://web2project.net');
     $this->assertEquals($target, $linkText);
   }
 }
