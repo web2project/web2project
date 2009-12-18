@@ -86,7 +86,7 @@ if ($duplicate) {
 // delete the file
 if ($del) {
 	$obj->load($file_id);
-	if (($msg = $obj->delete())) {
+	if (($msg = $obj->delete($AppUI))) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 		$AppUI->redirect();
 	} else {
