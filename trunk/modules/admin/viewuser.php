@@ -190,7 +190,7 @@ if (!$user) {
 		</tr>
 		<tr>
 			<td class="hilite" width="100%" colspan="2">
-				<?php echo mb_str_replace(chr(10), '<br />', $user->user_signature); ?>&nbsp;
+				<?php echo w2p_textarea($user->user_signature); ?>&nbsp;
 			</td>
 		</tr>
 		</table>
