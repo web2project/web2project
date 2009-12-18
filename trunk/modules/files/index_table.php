@@ -221,6 +221,7 @@ foreach ($files as $file_row) {
 		$filename = substr($filename, 0, $fnamelen);
 		$filename .= '[...].' . $ext;
 	}
+  $myFile = new CFile();
 	$file_icon = getIcon($file_row['file_type']);
 	echo '<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $filename . '</a>';
 	//	{$latest_file['file_name']}
