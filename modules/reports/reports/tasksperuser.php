@@ -175,8 +175,8 @@ if ($do_report) {
 		$q->addWhere('task_project=' . $project_id);
 	}
 
-	$proj = &new CProject;
-	$obj = &new CTask;
+	$proj = new CProject();
+	$obj = new CTask();
 	$allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
 	$allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
 

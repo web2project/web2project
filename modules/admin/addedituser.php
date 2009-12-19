@@ -23,7 +23,7 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 // Create the roles class container
 require_once W2P_BASE_DIR . '/modules/system/roles/roles.class.php';
 $perms = &$AppUI->acl();
-$crole = &new CRole;
+$crole = new CRole;
 $roles = $crole->getRoles();
 // Format the roles for use in arraySelect
 $roles_arr = array();

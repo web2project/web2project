@@ -21,7 +21,7 @@ if ($del) {
 	}
 }
 
-$obj = &new CResource;
+$obj = new CResource();
 $msg = '';
 
 if (!$obj->bind($_POST)) {

@@ -24,7 +24,7 @@ if (!$canEdit && $forum_id) {
 $forum_id = intval(w2PgetParam($_GET, 'forum_id', 0));
 
 //Pull forum information
-$q = &new DBQuery;
+$q = new DBQuery;
 $q->addTable('forums');
 $q->addWhere('forums.forum_id = ' . (int)$forum_id);
 $res = $q->exec(ADODB_FETCH_ASSOC);
@@ -37,7 +37,7 @@ $status = isset($forum_info['forum_status']) ? $forum_info['forum_status'] : -1;
 $projObj = new CProject();
 
 //Pull project Information
-$q = &new DBQuery;
+$q = new DBQuery;
 $q->addTable('projects', 'pr');
 $q->addQuery('pr.project_id, project_name');
 $q->addWhere('project_active = 1');

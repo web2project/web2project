@@ -28,8 +28,8 @@ $tf = $AppUI->getPref('TIMEFORMAT');
 
 $f = w2PgetParam($_POST, 'f', 0);
 
-$forum = &new CForum;
-$project = &new CProject;
+$forum = new CForum();
+$project = new CProject();
 
 $max_msg_length = 30;
 

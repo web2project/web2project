@@ -11,7 +11,7 @@ $q->addJoin('tasks', '', 'task_project = project_id');
 if (!empty($project_id)) {
 	$q->addWhere('project_id = ' . (int)$project_id);
 }
-$obj = &new CTask;
+$obj = new CTask();
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
 if (count($allowedTasks)) {
 	$obj->getAllowedSQL($AppUI->user_id, $q);
@@ -19,7 +19,7 @@ if (count($allowedTasks)) {
 $all_tasks = $q->loadList();
 $q->clear();
 
-$q = new DBQuery;
+$q = new DBQuery();
 $q->addTable('projects');
 $q->addQuery('*, round(sum(task_log_hours),2) as work');
 $q->addJoin('tasks', '', 'task_project = project_id');
@@ -36,7 +36,7 @@ if (!empty($project_id)) {
 }
 $q->addGroup('tasks.task_id');
 $q->addGroup('users.user_id');
-$obj = &new CTask;
+$obj = new CTask();
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
 if (count($allowedTasks)) {
 	$obj->getAllowedSQL($AppUI->user_id, $q);

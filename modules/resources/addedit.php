@@ -11,14 +11,14 @@ if ((!$resource_id && !$perms->checkModule('resources', 'add')) || !$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$obj = &new CResource;
+$obj = new CResource();
 if ($resource_id && !$obj->load($resource_id)) {
 	$AppUI->setMsg('Resource');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
 
-$titleBlock = &new CTitleBlock(($resource_id ? 'Edit Resource' : 'Add Resource'), 'resources.png', $m, $m . '.' . $a);
+$titleBlock = new CTitleBlock(($resource_id ? 'Edit Resource' : 'Add Resource'), 'resources.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=resources', 'resource list');
 if ($resource_id) {
 	$titleBlock->addCrumb('?m=resources&a=view&resource_id=' . $resource_id, 'view this resource');

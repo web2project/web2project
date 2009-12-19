@@ -7,10 +7,10 @@ global $AppUI, $users, $task_id, $task_project, $obj;
 global $projTasksWithEndDates, $tab, $loadFromTab;
 
 // Need to get all of the resources that this user is allowed to view
-$resource = &new CResource;
+$resource = new CResource();
 
 $resource_types = &$resource->typeSelect();
-$q = &new DBQuery;
+$q = new DBQuery();
 
 $q->addTable('resources');
 $q->addOrder('resource_type', 'resource_name');
@@ -42,7 +42,7 @@ if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
 } else {
 	$initResAssignment = '';
 	// Pull resources on this task
-	$q = &new DBQuery;
+	$q = new DBQuery();
 	$q->addTable('resource_tasks');
 	$q->addQuery('resource_id, percent_allocated');
 	$q->addWhere('task_id = ' . (int)$task_id);

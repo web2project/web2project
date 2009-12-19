@@ -193,7 +193,7 @@ if ($do_report) {
 		$q->addWhere('task_log_creator = ' . (int)$log_userfilter);
 	}
 
-	$proj = &new CProject;
+	$proj = new CProject();
 	$allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
 	if (count($allowedProjects)) {
 		$q->addWhere(implode(' AND ', $allowedProjects));
@@ -312,7 +312,7 @@ if ($do_report) {
 		$base_url = w2PgetConfig('base_url');
 		require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
-		$pdf = &new Cezpdf();
+		$pdf = new Cezpdf();
 		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 		$pdf->selectFont($font_dir . '/Helvetica.afm');
 

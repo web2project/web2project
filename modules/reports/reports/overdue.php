@@ -23,7 +23,7 @@ $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 
 require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
-$pdf = &new Cezpdf($paper = 'A4', $orientation = 'landscape');
+$pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
 $pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 $pdf->selectFont($font_dir . '/Helvetica.afm');
 if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
@@ -64,7 +64,7 @@ if ($hasResources)
 $columns[] = '<b>' . $AppUI->_('Finish Date') . '</b>';
 
 // Grab the completed items in the last week
-$q = &new DBQuery;
+$q = new DBQuery();
 $q->addQuery('a.*');
 $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS user_username');
 $q->addTable('tasks', 'a');
@@ -81,10 +81,10 @@ if ($project_id != 0) {
 	$q->addWhere('task_project = ' . (int)$project_id);
 }
 $q->addWhere('task_end_date < \'' . $date->format(FMT_DATETIME_MYSQL) . '\'');
-$proj = &new CProject;
+$proj = new CProject();
 $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
-$obj = &new CTask;
+$obj = new CTask();
 $obj->setAllowedSQL($AppUI->user_id, $q);
 $tasks = $q->loadHashList('task_id');
 

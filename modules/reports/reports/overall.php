@@ -226,7 +226,7 @@ if ($do_report) {
 
 		require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
-		$pdf = &new Cezpdf();
+		$pdf = new Cezpdf();
 		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 		$pdf->selectFont($font_dir . '/Helvetica.afm');
 
