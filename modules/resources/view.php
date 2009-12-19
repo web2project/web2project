@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$obj = &new CResource;
+$obj = new CResource();
 $resource_id = w2PgetParam($_GET, 'resource_id', 0);
 $perms = &$AppUI->acl();
 
@@ -22,7 +22,7 @@ if (!$resource_id) {
 }
 // TODO: tab stuff
 
-$obj = &new CResource;
+$obj = new CResource();
 
 if (!$obj->load($resource_id)) {
 	$AppUI->setMsg('Resource');
@@ -32,7 +32,7 @@ if (!$obj->load($resource_id)) {
 	$AppUI->savePlace();
 }
 
-$titleBlock = &new CTitleBlock('View Resource', 'resources.png', $m, $m . '.' . $a);
+$titleBlock = new CTitleBlock('View Resource', 'resources.png', $m, $m . '.' . $a);
 if ($canAdd) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new resource') . '" />', '', '<form action="?m=resources&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
