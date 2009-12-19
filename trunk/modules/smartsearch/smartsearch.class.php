@@ -168,18 +168,18 @@ function highlight($text, $keyval) {
 			$key[0] = mb_str_replace($metacharacters, $metareplacement, $key[0]);
 			if (isset($ssearch['ignore_specchar']) && ($ssearch['ignore_specchar'] == 'on')) {
 				if ($ssearch['ignore_case'] == 'on') {
-					$txt = eregi_replace((recode2regexp_utf8($key[0])), '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+					$txt = preg_replace('/'.recode2regexp_utf8($key[0]).'/i', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
 				} else {
-					$txt = ereg_replace((recode2regexp_utf8($key[0])), '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+					$txt = preg_replace('/'.(recode2regexp_utf8($key[0])).'/', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
 				}
 			} elseif (!isset($ssearch['ignore_specchar']) || ($ssearch['ignore_specchar'] == '')) {
 				if ($ssearch['ignore_case'] == 'on') {
-					$txt = eregi_replace($key[0], '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+					$txt = preg_replace('/'.$key[0].'/i', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
 				} else {
-					$txt = ereg_replace($key[0], '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+					$txt = preg_replace('/'.$key[0].'/', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
 				}
 			} else {
-				$txt = eregi_replace((sql_regcase($key[0])), '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+				$txt = preg_replace('/'.sql_regcase($key[0]).'/i', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
 			}
 		}
 	}

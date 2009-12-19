@@ -19,7 +19,7 @@ $sowners = array('' => '(Task Owner)') + $perms->getPermittedUsers('tasks');
 $sassign = array('' => '(Assign User)') + $perms->getPermittedUsers('tasks');
 $sunassign = array('' => '(Unassign User)') + $users;
 
-$obj = &new CTask;
+$obj = new CTask;
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 
 $obj->load($task_id);

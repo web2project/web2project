@@ -714,7 +714,7 @@ function getIcon($file_type) {
 	if (is_file(W2P_BASE_DIR . '/styles/' . $uistyle . '/images/modules/files/icons/' . $icon . '.png')) {
 		$result = 'icons/' . $icon . '.png';
 	} else {
-		$mime = split('/', $file_type);
+    $mime = explode('/', $file_type);
 		switch ($mime[0]) {
 			case 'audio':
 				$result = 'icons/wav.png';
