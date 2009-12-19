@@ -45,7 +45,7 @@ if (isset($_REQUEST['clash_action'])) {
 </script>
 <?php
 
-	$titleBlock = &new CTitleBlock(($obj->event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, $m.'.'.$a);
+	$titleBlock = new CTitleBlock(($obj->event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, $m.'.'.$a);
 	$titleBlock->show();
 
 	$_SESSION['add_event_post'] = get_object_vars($obj);
@@ -88,17 +88,17 @@ function clash_cancel() {
 */
 function clash_suggest() {
 	global $AppUI, $m, $a;
-	$obj = &new CEvent;
+	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 
-	$start_date = &new CDate($obj->event_start_date);
-	$end_date = &new CDate($obj->event_end_date);
+	$start_date = new CDate($obj->event_start_date);
+	$end_date = new CDate($obj->event_end_date);
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$start_secs = $start_date->getTime();
 	$end_secs = $end_date->getTime();
 	$duration = (int)(($end_secs - $start_secs) / 60);
 
-	$titleBlock = &new CTitleBlock('Suggest Alternative Event Time', 'myevo-appointments.png', $m, $m . '.' . $a);
+	$titleBlock = new CTitleBlock('Suggest Alternative Event Time', 'myevo-appointments.png', $m, $m . '.' . $a);
 	$titleBlock->show();
 	$calurl = W2P_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
 	$times = array();
@@ -195,7 +195,7 @@ function set_clash_action(action) {
 function clash_process() {
 	global $AppUI, $do_include;
 
-	$obj = &new CEvent;
+	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 	$attendees = $_SESSION['add_event_attendees'];
 	$users = array();
@@ -212,13 +212,13 @@ function clash_process() {
 			unset($users[$key]);
 	}
 
-	$start_date = &new CDate($_POST['event_start_date'] . "000000");
-	$end_date = &new CDate($_POST['event_end_date'] . "235959");
+	$start_date = new CDate($_POST['event_start_date'] . "000000");
+	$end_date = new CDate($_POST['event_end_date'] . "235959");
 
 	// First find any events in the range requested.
 	$event_list = $obj->getEventsInWindow($start_date->format(FMT_DATETIME_MYSQL), $end_date->format(FMT_DATETIME_MYSQL), (int)($_POST['start_time'] / 100), (int)($_POST['end_time'] / 100), $users);
-	$event_start_date = &new CDate($_POST['event_start_date'] . $_POST['start_time']);
-	$event_end_date = &new CDate($_POST['event_end_date'] . $_POST['end_time']);
+	$event_start_date = new CDate($_POST['event_start_date'] . $_POST['start_time']);
+	$event_end_date = new CDate($_POST['event_end_date'] . $_POST['end_time']);
 
 	if (!$event_list || !count($event_list)) {
 		// First available date/time is OK, seed addEdit with the details.
@@ -249,7 +249,7 @@ function clash_process() {
 	$first_day = $start_date->format('%E');
 	$end_day = $end_date->format('%E');
 	$days_between = ($end_day + 1) - $first_day;
-	$oneday = &new Date_Span(array(1, 0, 0, 0));
+	$oneday = new Date_Span(array(1, 0, 0, 0));
 
 	$slots = array();
 	$slot_count = 0;
@@ -318,7 +318,7 @@ function clash_process() {
 */
 function clash_mail() {
 	global $AppUI;
-	$obj = &new CEvent;
+	$obj = new CEvent;
 	if (!$obj->bind($_SESSION['add_event_post'])) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	} else {
@@ -336,7 +336,7 @@ function clash_accept() {
 	global $AppUI, $do_redirect;
 
 	$AppUI->setMsg('Event');
-	$obj = &new CEvent;
+	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 	$GLOBALS['a'] = $_SESSION['add_event_caller'];
 	$is_new = ($obj->event_id == 0);

@@ -31,7 +31,7 @@ $showLabels = w2PgetParam($_REQUEST, 'showLabels', 1);
 $showInactive = w2PgetParam($_REQUEST, 'showInactive', 1);
 $original_project_id = w2PgetParam($_REQUEST, 'original_project_id', 1);
 
-$pjobj = &new CProject;
+$pjobj = new CProject();
 $working_hours = $w2Pconfig['daily_working_hours'];
 
 // pull valid projects and their percent complete information
@@ -219,7 +219,7 @@ if (is_array($projects)) {
 		$q->addWhere('project_original_parent = ' . (int)$original_project_id);
 
 		//$tasks = $q->loadList();
-		$task = &new CTask;
+		$task = new CTask();
 		$task->setAllowedSQL($AppUI->user_id, $q);
 
 		$proTasks = $q->loadHashList('task_id');

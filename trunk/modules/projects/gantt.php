@@ -26,7 +26,7 @@ $showInactive = w2PgetParam($_REQUEST, 'showInactive', 0);
 $sortTasksByName = w2PgetParam($_REQUEST, 'sortTasksByName', 0);
 $addPwOiD = w2PgetParam($_REQUEST, 'addPwOiD', 0);
 
-$pjobj = &new CProject;
+$pjobj = new CProject();
 $working_hours = $w2Pconfig['daily_working_hours'];
 
 /*

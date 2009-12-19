@@ -7,9 +7,9 @@ if (!defined('W2P_BASE_DIR')) {
 // and if there is a clash between this and other tasks.
 global $AppUI, $task_id, $obj;
 
-$resource = &new CResource;
+$resource = new CResource();
 
-$q = &new DBQuery;
+$q = new DBQuery();
 $q->addQuery('a.*');
 $q->addQuery('b.percent_allocated');
 $q->addQuery('c.resource_type_name');
