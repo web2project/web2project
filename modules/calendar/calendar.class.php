@@ -597,7 +597,7 @@ class CEvent extends CW2pObject {
 			$user_id = $AppUI->user_id;
 		}
 
-		$project = &new CProject;
+		$project = new CProject;
 		if ($project_id) {
 			$p = &$AppUI->acl();
 
@@ -795,10 +795,10 @@ class CEvent extends CW2pObject {
 		$time_format = $AppUI->getPref('TIMEFORMAT');
 		$fmt = $date_format . ' ' . $time_format;
 
-		$start_date = &new CDate($this->event_start_date);
-		$end_date = &new CDate($this->event_end_date);
+		$start_date = new CDate($this->event_start_date);
+		$end_date = new CDate($this->event_end_date);
 
-		$mail = &new Mail;
+		$mail = new Mail;
 		$type = $update ? $AppUI->_('Updated') : $AppUI->_('New');
 		if ($clash) {
 			$mail->Subject($AppUI->_('Requested Event') . ': ' . $this->event_title, $locale_char_set);
@@ -873,8 +873,8 @@ class CEvent extends CW2pObject {
 			return false;
 		}
 
-		$start_date = &new CDate($this->event_start_date);
-		$end_date = &new CDate($this->event_end_date);
+		$start_date = new CDate($this->event_start_date);
+		$end_date = new CDate($this->event_end_date);
 
 		// Now build a query to find matching events.
 		$q = new DBQuery;
