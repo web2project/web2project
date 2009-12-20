@@ -92,11 +92,14 @@ $end_date = w2PgetParam($_GET, 'end_date', 0);
 
 $showAllGantt = w2PgetParam($_REQUEST, 'showAllGantt', '0');
 
-$gantt = new GanttRenderer($width);
-$gantt->localize($AppUI);
+$gantt = new GanttRenderer($AppUI, $width);
+$gantt->localize();
 
 $tableTitle = ($proFilter == '-1') ? $AppUI->_('All Projects') : $projectStatus[$proFilter];
 $gantt->setTitle($tableTitle);
+$columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End');
+$columnSizes = array(160, 10, 70, 70);
+$gantt->setColumnHeaders($columnNames, $columnSizes);
 
 if (!$start_date || !$end_date) {
   // find out DateRange from $projects array

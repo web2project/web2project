@@ -9,9 +9,6 @@ global $showLowTasks, $user_id, $w2Pconfig;
 
 w2PsetExecutionConditions($w2Pconfig);
 
-include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
-
 $showLabels = w2PgetParam($_REQUEST, 'showLabels', false);
 $sortByName = w2PgetParam($_REQUEST, 'sortByName', false);
 $project_id = w2PgetParam($_REQUEST, 'project_id', 0);
@@ -213,54 +210,20 @@ $end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
 $count = 0;
 
-$graph = new GanttGraph($width);
-$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);
+$gantt = new GanttRenderer($AppUI, $width);
+$gantt->localize();
+$gantt->setTitle($projects[$project_id]['project_name'], '#'.$projects[$project_id]['project_color_identifier']);
 
-$graph->SetFrame(false);
-$graph->SetBox(true, array(0, 0, 0), 2);
-$graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
-
-$pLocale = setlocale(LC_TIME, 0); // get current locale for LC_TIME
-$res = setlocale(LC_TIME, $AppUI->user_lang[2]);
-if ($res) { // Setting locale doesn't fail
-	$graph->scale->SetDateLocale($AppUI->user_lang[2]);
-}
-setlocale(LC_TIME, $pLocale);
-
-if ($start_date && $end_date) {
-	$graph->SetDateRange($start_date, $end_date);
-}
-if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-	$graph->scale->actinfo->SetFont(FF_CUSTOM);
-}
-$graph->scale->actinfo->vgrid->SetColor('gray');
-$graph->scale->actinfo->SetColor('darkgray');
+$field = ($showWork == '1') ? 'Work' : 'Dur';
 
 if ($caller == 'todo') {
-	if ($showWork == '1') {
-		$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Project name', UI_OUTPUT_RAW), $AppUI->_('Work', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(180, 50, 60, 60, 60));
-	} else {
-		$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Project name', UI_OUTPUT_RAW), $AppUI->_('Dur.', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(180, 50, 60, 60, 60));
-	}
+  $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
+  $columnSizes = array(180, 50, 60, 60, 60);
 } else {
-	if ($showWork == '1') {
-		$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Work', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(230, 60, 60, 60));
-	} else {
-		$graph->scale->actinfo->SetColTitles(array($AppUI->_('Task name', UI_OUTPUT_RAW), $AppUI->_('Dur.', UI_OUTPUT_RAW), $AppUI->_('Start', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW)), array(230, 60, 60, 60));
-	}
-
+  $columnNames = array('Task name', $field, 'Start', 'Finish');
+  $columnSizes = array(230, 60, 60, 60);
 }
-$graph->scale->tableTitle->Set($projects[$project_id]['project_name']);
-
-// Use TTF font if it exists
-// try commenting out the following two lines if gantt charts do not display
-if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-	$graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
-}
-$graph->scale->SetTableTitleBackground('#' . $projects[$project_id]['project_color_identifier']);
-$font_color = bestColor('#' . $projects[$project_id]['project_color_identifier']);
-$graph->scale->tableTitle->SetColor($font_color);
-$graph->scale->tableTitle->Show(true);
+$gantt->setColumnHeaders($columnNames, $columnSizes);
 
 //-----------------------------------------
 // nice Gantt image
@@ -269,14 +232,12 @@ $graph->scale->tableTitle->Show(true);
 // if diff(end_date,start_date) > 240 days it shows only
 //month number
 //-----------------------------------------
-if ($start_date && $end_date) {
-	$min_d_start = new CDate($start_date);
-	$max_d_end = new CDate($end_date);
-} else {
+if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
 	$d_end = new CDate();
-	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
+  $taskArray = count($gantt_arr);
+	for ($i = 0, $i_cmp = $taskArray; $i < $i_cmp; $i++) {
 		$a = $gantt_arr[$i][0];
 		$start = substr($a['task_start_date'], 0, 10);
 		$end = substr($a['task_end_date'], 0, 10);
@@ -285,29 +246,27 @@ if ($start_date && $end_date) {
 		$d_end->Date($end);
 
 		if ($i == 0) {
-			$min_d_start = $d_start->duplicate();
-			$max_d_end = $d_end->duplicate();
+      $min_d_start = $d_start;
+      $max_d_end = $d_end;
+      $start_date = $start;
+      $end_date = $end;
 		} else {
 			if (Date::compare($min_d_start, $d_start) > 0) {
 				$min_d_start = $d_start->duplicate();
+        $start_date = $start;
 			}
 			if (Date::compare($max_d_end, $d_end) < 0) {
 				$max_d_end = $d_end->duplicate();
+        $end_date = $end;
 			}
 		}
 	}
 }
+$gantt->setDateRange($start_date, $end_date);
+$graph = $gantt->getGraph();
 
-// check day_diff and modify Headers
-$day_diff = $min_d_start->dateDiff($max_d_end);
-
-if ($day_diff > 240) {
-	//more than 240 days
-	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
-} elseif ($day_diff > 90) {
-	//more than 90 days and less of 241
-	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
-	$graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
+if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+	$graph->scale->actinfo->SetFont(FF_CUSTOM);
 }
 
 //This kludgy function echos children tasks as threads
@@ -505,6 +464,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$dur .= ' h';
 		$enddate = new CDate($end);
 		$startdate = new CDate($start);
+//$gantt->addBar($name, $start, $end, $actual_end, $caption, 0.6, $p['project_color_identifier'], $p['project_active'], $progress);
 		if ($caller == 'todo') {
 			$bar = new GanttBar($row++, array($name, $pname, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
 		} else {
