@@ -241,7 +241,7 @@ function delIt(){
 		</td>
 		<td valign="top" width="50%">
 			<strong><?php echo $AppUI->_('Contact Notes'); ?></strong><br />
-			<?php echo w2p_textarea(nl2br($contact->contact_notes)); ?>
+			<?php echo w2p_textarea($contact->contact_notes); ?>
 		</td>
 	</tr>
 	<tr>
