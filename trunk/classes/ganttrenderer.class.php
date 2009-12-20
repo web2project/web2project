@@ -7,9 +7,10 @@ class GanttRenderer {
   private $graph = null;
   private $rowCount = null;
   private $todayText = null;
+  private $AppUI = null;
   private $df = null;
   
-  public function __construct($width)
+  public function __construct(CAppUI $AppUI, $width)
   {
     $this->graph = new GanttGraph($width);
     $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);
@@ -17,10 +18,12 @@ class GanttRenderer {
     $this->graph->SetBox(true, array(0, 0, 0), 2);
     $this->graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
     $this->rowCount = 0;
+    $this->AppUI = $AppUI;
   }
 
-  public function localize(CAppUI $AppUI)
+  public function localize()
   {
+    $AppUI = $this->AppUI;
     $pLocale = setlocale(LC_TIME, 0); // get current locale for LC_TIME
     $res = setlocale(LC_TIME, $AppUI->user_lang[2]);
     if ($res) { // Setting locale doesn't fail
@@ -29,10 +32,6 @@ class GanttRenderer {
     setlocale(LC_TIME, $pLocale);
     $this->df = $AppUI->getPref('SHDATEFORMAT');
     $this->todayText = $AppUI->_('Today', UI_OUTPUT_RAW);
-
-    $this->graph->scale->actinfo->vgrid->SetColor('gray');
-    $this->graph->scale->actinfo->SetColor('darkgray');
-    $this->graph->scale->actinfo->SetColTitles(array($AppUI->_('Project name', UI_OUTPUT_RAW), $AppUI->_('Start Date', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW), $AppUI->_('Actual End', UI_OUTPUT_RAW)), array(160, 10, 70, 70));
   }
 
   public function setDateRange($start_date, $end_date)
@@ -64,7 +63,7 @@ class GanttRenderer {
     $this->graph->SetDateRange($start_date, $end_date);
   }
 
-  public function setTitle($tableTitle)
+  public function setTitle($tableTitle = '', $background = '#eeeeee')
   {
     $this->graph->scale->tableTitle->Set($tableTitle);
     // Use TTF font if it exists
@@ -72,8 +71,21 @@ class GanttRenderer {
     if (is_file(TTF_DIR . 'FreeSansBold.ttf')) {
     	$this->graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
     }
-    $this->graph->scale->SetTableTitleBackground('#eeeeee');
-    $this->graph->scale->tableTitle->Show(true);    
+    $this->graph->scale->SetTableTitleBackground($background);
+    $font_color = bestColor($background);
+    $this->graph->scale->tableTitle->SetColor($font_color);
+    $this->graph->scale->tableTitle->Show(true);
+  }
+
+  public function setColumnHeaders($columnNames, $columnSizes) {
+    $AppUI = $this->AppUI;
+    foreach ($columnNames as $column) {
+      $translatedColumns[] = $AppUI->_($column, UI_OUTPUT_RAW);
+    }
+
+    $this->graph->scale->actinfo->vgrid->SetColor('gray');
+    $this->graph->scale->actinfo->SetColor('darkgray');
+    $this->graph->scale->actinfo->SetColTitles($translatedColumns, $columnSizes);
   }
 
   public function addBar($label, $start, $end, $actual_end, $caption = '', 
@@ -88,24 +100,24 @@ class GanttRenderer {
     $bar->progress->Set(min(($progress / 100), 1));
 
     $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
-	$bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
-	$bar->SetFillColor('#' . $barcolor);
-	$bar->SetPattern(BAND_SOLID, '#' . $barcolor);
+    $bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
+    $bar->SetFillColor('#' . $barcolor);
+    $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
 
-	//adding captions
-	$bar->caption = new TextProperty($caption);
-	$bar->caption->Align('left', 'center');
+    //adding captions
+    $bar->caption = new TextProperty($caption);
+    $bar->caption->Align('left', 'center');
 
-	// gray out templates, completes, on ice, on hold
-	if (!$active) {
-		$bar->caption->SetColor('darkgray');
-		$bar->title->SetColor('darkgray');
-		$bar->SetColor('darkgray');
-		$bar->SetFillColor('gray');
-		$bar->progress->SetFillColor('darkgray');
-		$bar->progress->SetPattern(BAND_SOLID, 'darkgray', 98);
-	}
-    
+    // gray out templates, completes, on ice, on hold
+    if (!$active) {
+      $bar->caption->SetColor('darkgray');
+      $bar->title->SetColor('darkgray');
+      $bar->SetColor('darkgray');
+      $bar->SetFillColor('gray');
+      $bar->progress->SetFillColor('darkgray');
+      $bar->progress->SetPattern(BAND_SOLID, 'darkgray', 98);
+    }
+
     $this->graph->Add($bar);
   }
 
