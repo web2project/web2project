@@ -77,7 +77,8 @@ class GanttRenderer {
     $this->graph->scale->tableTitle->Show(true);
   }
 
-  public function setColumnHeaders($columnNames, $columnSizes) {
+  public function setColumnHeaders(array $columnNames, array $columnSizes)
+  {
     $AppUI = $this->AppUI;
     foreach ($columnNames as $column) {
       $translatedColumns[] = $AppUI->_($column, UI_OUTPUT_RAW);
@@ -88,15 +89,32 @@ class GanttRenderer {
     $this->graph->scale->actinfo->SetColTitles($translatedColumns, $columnSizes);
   }
 
-  public function addBar($label, $start, $end, $actual_end, $caption = '', 
+  public function addBar(array $columnValues, $caption = '',
     $height = '0.6', $barcolor = 'FFFFFF', $active = true, $progress = 0)
   {
-    $startDate = new CDate($start);
-    $endDate = new CDate($end);
-    $actual_endDate = new CDate($actual_end);
+    foreach($columnValues as $name => $value) {
+      switch ($name) {
+        case 'start_date':
+          $start = $value;
+          $startDate = new CDate($value);
+          $rowValues[] = $startDate->format($this->df);
+          break;
+        case 'end_date':
+          $endDate = new CDate($value);
+          $rowValues[] = $endDate->format($this->df);
+          break;
+        case 'actual_end':
+          $actual_end = $value;
+          $actual_endDate = new CDate($value);
+          $rowValues[] = $actual_endDate->format($this->df);
+          break;
+        case 'project_name':
+        default:
+          $rowValues[] = $value;
+      }
+    }
 
-    $bar = new GanttBar($this->rowCount++, array($label, $startDate->format($this->df), $endDate->format($this->df), $actual_endDate->format($this->df)), 
-                          $start, $actual_end, $caption, $height);
+    $bar = new GanttBar($this->rowCount++, $rowValues,$start, $actual_end, $caption, $height);
     $bar->progress->Set(min(($progress / 100), 1));
 
     $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
@@ -132,13 +150,13 @@ class GanttRenderer {
     $bar->progress->Set(min(($progress / 100), 1));
 
     $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
-	$bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
-	$bar->SetFillColor('#' . $barcolor);
-	$bar->SetPattern(BAND_SOLID, '#' . $barcolor);
+    $bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
+    $bar->SetFillColor('#' . $barcolor);
+    $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
 
-	//adding captions
-	$bar->caption = new TextProperty($caption);
-	$bar->caption->Align('left', 'center');
+    //adding captions
+    $bar->caption = new TextProperty($caption);
+    $bar->caption->Align('left', 'center');
     
     $this->graph->Add($bar);
   }
@@ -150,9 +168,9 @@ class GanttRenderer {
     $endDate = new CDate($end);
 
     $bar = new GanttBar($this->rowCount++, array($label, ' ', ' ', ' '), $startDate->format(FMT_DATETIME_MYSQL), $endDate->format(FMT_DATETIME_MYSQL), 0.6);
-	$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
-	$bar->SetFillColor('#' . $barcolor);
-	$this->graph->Add($bar);
+    $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
+    $bar->SetFillColor('#' . $barcolor);
+    $this->graph->Add($bar);
   }
 
   public function addMilestone($label, $start, $color = '#CC0000')
