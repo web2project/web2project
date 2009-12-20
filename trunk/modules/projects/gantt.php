@@ -184,7 +184,9 @@ if (!is_array($projects) || 0 == count($projects)) {
 		$startdate = new CDate($start);
 		$actual_end = intval($p['project_actual_end_date']) ? $p['project_actual_end_date'] : $end;
 
-		$gantt->addBar($name, $start, $end, $actual_end, $caption, 0.6, $p['project_color_identifier'], $p['project_active'], $progress);
+    $columnValues = array('project_name' => $name, 'start_date' => $start,
+                          'end_date' => $end, 'actual_end' => $actual_end);
+		$gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'], $p['project_active'], $progress);
 
 		// If showAllGant checkbox is checked
 		if ($showAllGantt) {
