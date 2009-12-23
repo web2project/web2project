@@ -106,7 +106,7 @@ foreach ($logs as $row) {
   $descrip = w2p_textarea($row['task_log_description']);
 	$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
 	if ($tranpos === false) {
-		$s .= $descrip.'asdf';
+		$s .= $descrip;
 	} else {
 		$descrip = mb_substr($descrip, 0, $tranpos);
 		$tranpos = mb_strpos($row['task_log_description'], $transbrk);
