@@ -90,7 +90,7 @@ function delIt() {
 						<?php if ($perms->checkModuleItem('companies', 'access', $department->dept_company)) { ?>
 							<?php echo '<a href="?m=companies&a=view&company_id=' . $department->dept_company . '">' . htmlspecialchars($department->company_name, ENT_QUOTES) . '</a>'; ?>
 						<?php } else { ?>
-							<?php echo htmlspecialchars($department->company_name, ENT_QUOTES); ?>asdf
+							<?php echo htmlspecialchars($department->company_name, ENT_QUOTES); ?>
 						<?php } ?>
 					</td>
 				</tr>
