@@ -251,7 +251,6 @@ if ($is_tabbed) {
 					if ($level) {
 						$s .= '</div>';
 					}
-          $s .= '<td>'.$project_id.'</td>';
           $s .= '</tr>';
 
           if ($project_id > 0 && !isset($projectArray[$project_id])) {

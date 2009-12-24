@@ -79,9 +79,6 @@ if (isset($_POST['project_owner'])) {
 }
 $owner = $AppUI->getState('ProjIdxowner') !== null ? $AppUI->getState('ProjIdxowner') : 0;
 
-$bufferUser = '<select name="show_owner" onchange="document.pickUser.submit()" class="text">';
-$bufferUser .= '<option value="0">' . $AppUI->_('All Users');
-
 $user_list = array(0 => '(all)') + CProject::getOwners();
 
 // collect the full projects list data via function in projects.class.php
