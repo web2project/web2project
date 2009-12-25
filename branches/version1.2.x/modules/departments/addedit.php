@@ -33,6 +33,7 @@ if ($obj) {
 } else {
   $department->loadFull($AppUI, $dept_id);
 }
+$companyName = $department->company_name;
 if (!$department && $dept_id > 0) {
   $AppUI->setMsg('Department');
   $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -57,11 +58,15 @@ if (!$department && $dept_id > 0) {
 	// collect all the departments in the company
 	if ($company_id) {
 		$depts = $department->loadOtherDepts($AppUI, $company_id, 0);
+    $company = new CCompany();
+    $company->loadFull($AppUI, $company_id);
+    $companyName = $company->company_name;
+    $depts = $department->loadOtherDepts($AppUI, $company_id, 0);
 		$depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Department') . ' -'), $depts);
 	}
 
 	// setup the title block
-	$ttl = $company_id > 0 ? 'Edit Department' : 'Add Department';
+	$ttl = $dept_id > 0 ? 'Edit Department' : 'Add Department';
 	$titleBlock = new CTitleBlock($ttl, 'departments.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=departments', 'department list');
 	$titleBlock->addCrumb('?m=companies', 'companies list');
@@ -96,7 +101,7 @@ function submitIt() {
 	<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department Company'); ?>:</td>
-			<td><strong><?php echo $department->company_name; ?></strong></td>
+			<td><strong><?php echo $companyName; ?></strong></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department Name'); ?>:</td>
