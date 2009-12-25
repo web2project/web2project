@@ -78,7 +78,7 @@ $form = '<form action="./index.php" method="get" accept-charset="utf-8">' . $App
            <input type="text" class="text" name="search_string" value="' . $default_search_string . '" />
 		   <input type="hidden" name="m" value="contacts" />
 		   <input type="submit" value=">" />
-		   <a href="./index.php?m=contacts&amp;search_string=">' . $AppUI->_('Reset search') . '</a>
+		   <a href="./index.php?m=contacts&amp;search_string=0">' . $AppUI->_('Reset search') . '</a>
 		 </form>';
 // En of contact search form
 
@@ -92,15 +92,10 @@ $letters = CContact::getFirstLetters($AppUI->user_id);
 
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = !(mb_strpos($letters, $cu) === false) ? '<a href="?m=contacts&where=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
+	$cell = !(mb_strpos($letters, $cu) === false) ? '<a href="?m=contacts&search_string=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
 	$a2z .= '<td>' . $cell . '</td>';
 }
 $a2z .= '</tr><tr><td colspan="28">' . $form . '</td></tr></table>';
-
-// setup the title block
-
-// what purpose is the next line for? Commented out by gregorerhardt, Bug #892912
-// $contact_id = $carr[$z][$x]["contact_id"];
 
 $titleBlock = new CTitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCell($a2z);
