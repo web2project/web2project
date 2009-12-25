@@ -185,7 +185,7 @@ class CFile extends CW2pObject {
 
 	}
 
-	public function delete(CAppUI $AppUI) {
+	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
     global $helpdesk_available;
 
