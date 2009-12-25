@@ -24,19 +24,22 @@ function __autoload($class_name) {
 
   switch ($name) {
     case 'cappui':
-      require_once W2P_BASE_DIR . '/classes/ui.class.php';
+      require_once W2P_BASE_DIR.'/classes/ui.class.php';
       break;
     case 'cdate':
-      require_once W2P_BASE_DIR . '/classes/date.class.php';
-      break;
-    case 'w2pacl':
-      require_once W2P_BASE_DIR . '/classes/permissions.class.php';
-      break;
-    case 'cw2pobject':
-      require_once W2P_BASE_DIR.'/classes/w2p.class.php';
+      require_once W2P_BASE_DIR.'/classes/date.class.php';
       break;
     case 'customfields':
       require_once W2P_BASE_DIR.'/classes/CustomFields.class.php';
+      break;
+    case 'dbquery':
+      require_once W2P_BASE_DIR.'/classes/query.class.php';
+      break;
+    case 'w2pacl':
+      require_once W2P_BASE_DIR.'/classes/permissions.class.php';
+      break;
+    case 'cw2pobject':
+      require_once W2P_BASE_DIR.'/classes/w2p.class.php';
       break;
     case 'mail':
       require_once W2P_BASE_DIR.'/classes/libmail.class.php';
@@ -50,9 +53,9 @@ function __autoload($class_name) {
     case 'cuser':
       require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
       break;
-    case 'dbquery':
-      require_once W2P_BASE_DIR.'/classes/query.class.php';
-      break;      
+    case 'cfilefolder':
+      require_once W2P_BASE_DIR.'/modules/files/files.class.php';
+      break;
     default:
       if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
         require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
