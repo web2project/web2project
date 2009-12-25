@@ -56,6 +56,9 @@ function __autoload($class_name) {
     case 'cfilefolder':
       require_once W2P_BASE_DIR.'/modules/files/files.class.php';
       break;
+    case 'ctasklog':
+      require_once W2P_BASE_DIR.'/modules/tasks/tasks.class.php';
+      break;
     default:
       if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
         require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
