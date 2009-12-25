@@ -129,7 +129,6 @@ if (isset($_FILES['formfile'])) {
 
 		$res = $obj->moveTemp($upload);
 		if (!$res) {
-			$AppUI->setMsg('File could not be written', UI_MSG_ERROR);
 			$AppUI->redirect($redirect);
 		}
 
