@@ -4,3 +4,6 @@
 	margin: 0px;
 	text-align: center;
 }
+.error,.warning {
+  color:red
+}
