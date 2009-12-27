@@ -27,7 +27,6 @@
   	echo 'web2Project requires PHP 5.0+. Please upgrade!';
     die();
   }
-
 	require_once W2P_BASE_DIR . '/install/manager.class.php';
 
 	$step = trim( w2PgetCleanParam( $_POST, 'step', '' ) );
@@ -91,29 +90,13 @@
 					}
 					break;
 				case 'upgrade':
-          /*
-           * TODO: There needs to be a check in here to make sure the person attempting
-           * the upgrade has system edit permissions.
-           */
           ?>
 					<tr>
-						<td colspan="2">This is where the upgrade script kicks in.  It's a 
-							two step process.  First we'll confirm that all the requirements 
-							are met, then we'll upgrade your system.<br />
-							You shouldn't have to do anything manually.</td>
+						<td colspan="2">The system upgrade is performed through the
+              <a href="../index.php?m=system">System Admin</a> and requires you 
+              to be logged in with Admin access.</td>
 					</tr>
-					<?php if ($step == '') { ?>
-						<tr>
-							<td colspan="2">
-								When you're ready to being, simply 
-							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form" accept-charset="utf-8">
-							  	<input type="hidden" name="step" value="check" />
-							  	<input class="button" type="submit" name="next" value="Start <?php echo ucwords($action); ?> &raquo;" />
-								</form>
-							</td>
-						</tr>
 					<?php
-					}
 					break;
 				default:
 					?>
@@ -129,8 +112,6 @@
 				case 'install/perform':
 				case 'conversion/check':
 				case 'conversion/perform':
-				case 'upgrade/check':
-				case 'upgrade/perform':
 					/*
 					 *  Doing  something like this is often a security risk.  It's not in
 					 * this case as we know *exactly* what both $action and $step will be

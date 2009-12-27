@@ -11,7 +11,7 @@
 		private $tempDir = '';
 		private $configOptions = array();
 		private $updatesApplied = array();
-		
+
 		public function getActionRequired() {
 			global $w2Pconfig;
 
@@ -21,15 +21,12 @@
 					$this->action = 'install';
 				} else {
 					require_once $this->configFile;
-	
-					//TODO: Add check to see if the user has access to system admin
 					if (isset($dPconfig)) {
 						$this->configOptions = $dPconfig;
 						$this->action = 'conversion';
 					} elseif (isset($w2Pconfig)) {
 						$this->configOptions = $w2Pconfig;
 						$this->action = 'upgrade';
-						
 					} else {
 						/*
 						 *  This  case should never be reached because if there is a config.
@@ -73,17 +70,8 @@
 			$dbConn = $this->_openDBConnection();
 
 			if ($dbConn) {
-				$sql = "SELECT max(db_version) FROM w2pversion";
-				$res = $dbConn->Execute($sql);
-
-				if ($res && $res->RecordCount() > 0) {
-					$currentVersion = $res->fields[0];
-				} else {
-					$currentVersion = 0;
-				}
-
-				$migrations = $this->_getMaxVersion();
-				$migration = 0;
+				$currentVersion = $this->_getDatabaseVersion($dbConn);
+				$migrations = $this->_getMigrations();
 
 				if ($currentVersion < count($migrations)) {
 					foreach ($migrations as $update) {
@@ -95,7 +83,6 @@
 							$sql = "INSERT INTO w2pversion (db_version, last_db_update) VALUES ($myIndex, now())";
 							$dbConn->Execute($sql);
 						}
-						$migration++;
 					}
 				}
 			} else {
@@ -193,6 +180,10 @@
 
 			return $result;
 		}
+    public function upgradeRequired() {
+      $dbConn = $this->_openDBConnection();
+      return (count($this->_getMigrations()) > $this->_getDatabaseVersion($dbConn));
+    }
 
 		private function _getIniSize($val) {
 		   $val = trim($val);
@@ -211,7 +202,7 @@
 		           return $val;
 		   }
 		}
-		private function _getMaxVersion() {
+		private function _getMigrations() {
 			$migrations = array();
 
 			$path = W2P_BASE_DIR.'/install/sql/'.$this->configOptions['dbtype'];
@@ -226,6 +217,19 @@
 			sort($migrations);
 			return $migrations;
 		}
+    private function _getDatabaseVersion($dbConn) {
+
+      $sql = "SELECT max(db_version) FROM w2pversion";
+      $res = $dbConn->Execute($sql);
+
+      if ($res && $res->RecordCount() > 0) {
+        $currentVersion = $res->fields[0];
+      } else {
+        $currentVersion = 0;
+      }
+
+      return $currentVersion;
+    }
 		private function _prepareConfiguration() {
 			$this->configDir = W2P_BASE_DIR.'/includes';
 			$this->configFile = W2P_BASE_DIR.'/includes/config.php';
@@ -332,4 +336,3 @@
 			return $recordsUpdated;
 		}
 	}
-?>
