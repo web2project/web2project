@@ -27,8 +27,8 @@ class CReport {
     if ($handle = opendir($this->tempDir)) {
       while (false !== ($file = readdir($handle))) {
         if ('.pdf' == substr($file, -4)) {
-          $fileAge = filemtime($this->tempDir.'/'.$file);
           $fullPath = $this->tempDir.'/'.$file;
+          $fileAge = filemtime($fullPath);
           if ((time() - $fileAge) >= $expires && is_writable($fullPath)) {
             unlink ($fullPath);
           }
