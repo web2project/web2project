@@ -28,8 +28,7 @@
 
 	foreach ($moduleList as $module) {
 		$object = new $module['mod_main_class']();
-
-		if (is_callable($object, 'hook_cron')) {
-			$object->hook_cron();
+		if (is_callable(array($object, 'hook_cron'))) {
+      $object->hook_cron();
 		}
 	}
