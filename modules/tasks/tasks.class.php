@@ -138,6 +138,9 @@ class CTask extends CW2pObject {
 		if (!$this->task_notify) {
 			$this->task_notify = 0;
 		}
+    if ('' != $this->task_related_url && !w2p_check_url($this->task_related_url)) {
+      $errorArray['task_related_url'] = $baseErrorMsg . 'task related url is not formatted properly';
+    }
 
 		/*
 		* Check for bad or circular task relationships (dep or child-parent).

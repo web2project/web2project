@@ -89,6 +89,9 @@ class CLink extends CW2pObject {
     if ('' == trim($this->link_url)) {
       $errorArray['link_url'] = $baseErrorMsg . 'link url is not set';
     }
+    if ('' != $this->link_url && !w2p_check_url($this->link_url)) {
+      $errorArray['link_url'] = $baseErrorMsg . 'link url is not formatted properly';
+    }
     if (0 == (int) $this->link_owner) {
       $errorArray['link_owner'] = $baseErrorMsg . 'link owner is not set';
     }

@@ -131,11 +131,18 @@ class CContact extends CW2pObject {
 	}
 
 	public function check() {
-    // ensure the integrity of some variables
     $errorArray = array();
     $baseErrorMsg = get_class($this) . '::store-check failed - ';
-    //there aren't any checks yet
 
+    if ('' != $this->contact_url && !w2p_check_url($this->contact_url)) {
+      $errorArray['contact_url'] = $baseErrorMsg . 'contact url is not formatted properly';
+    }
+    if ('' != $this->contact_email && !w2p_check_email($this->contact_email)) {
+      $errorArray['contact_email'] = $baseErrorMsg . 'contact email is not formatted properly';
+    }
+    if ('' != $this->contact_email2 && !w2p_check_email($this->contact_email2)) {
+      $errorArray['contact_email2'] = $baseErrorMsg . 'contact email2 is not formatted properly';
+    }
 	  return $errorArray;
 	}
 

@@ -116,6 +116,12 @@ class CProject extends CW2pObject {
     if ('' == $this->project_status) {
       $errorArray['project_status'] = $baseErrorMsg . 'project status is not set';
     }
+    if ('' != $this->project_url && !w2p_check_url($this->project_url)) {
+      $errorArray['project_url'] = $baseErrorMsg . 'project url is not formatted properly';
+    }
+    if ('' != $this->project_demo_url && !w2p_check_url($this->project_demo_url)) {
+      $errorArray['project_demo_url'] = $baseErrorMsg . 'project demo url is not formatted properly';
+    }
 
     return $errorArray;
 	}
