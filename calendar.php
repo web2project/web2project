@@ -38,7 +38,7 @@
 
 		foreach ($moduleList as $module) {
 			$object = new $module['mod_main_class']();
-			if (is_callable($object, 'hook_calendar')) {
+			if (is_callable(array($object, 'hook_calendar'))) {
 				$itemList = $object->hook_calendar($userId);
 				if (is_array($itemList)) {
 					foreach ($itemList as $calendarItem) {
