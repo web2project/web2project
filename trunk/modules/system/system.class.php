@@ -6,6 +6,31 @@ if (!defined('W2P_BASE_DIR')) {
 //fixed system SysVals to prevent their deletion
 $fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries', 'GlobalYesNo', 'ProjectPriority', 'ProjectStatus', 'ProjectType', 'TaskDurationType', 'TaskLogReference', 'TaskPriority', 'TaskStatus', 'TaskType', 'UserType');
 
+class CSystem {
+  private $upgrader = null;
+
+	public function __construct() {
+    $this->upgrader = new UpgradeManager();
+	}
+
+  public function upgradeRequired() {
+    $this->upgrader->getActionRequired();
+
+    return $this->upgrader->upgradeRequired();
+  }
+
+  public function upgradeSystem() {
+    $this->upgrader->getActionRequired();
+
+    return $this->upgrader->upgradeSystem();
+  }
+
+  public function getUpdatesApplied() {
+
+    return $this->upgrader->getUpdatesApplied();
+  }
+}
+
 /**
  * Preferences class
  */
