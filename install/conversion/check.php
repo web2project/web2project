@@ -5,7 +5,6 @@
 	
 	$failedImg = '<img src="../style/web2project/images/log-error.gif" width="16" height="16" align="middle" alt="Failed"/>';
 	$okImg = '<img src="../style/web2project/images/log-notice.gif" width="16" height="16" align="middle" alt="OK"/>';
-	$chmod = 0777;
 	
 	$continue = true;
 ?>

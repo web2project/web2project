@@ -46,6 +46,9 @@ function __autoload($class_name) {
     case 'eventqueue':
       require_once W2P_BASE_DIR.'/classes/event_queue.class.php';
       break;
+    case 'upgrademanager':
+      require_once W2P_BASE_DIR.'/install/manager.class.php';
+      break;
     case 'cevent':
       require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
       break;
@@ -380,7 +383,6 @@ function w2PshowModuleConfig($config) {
 function w2PfindImage($name, $module = null) {
 	// uistyle must be declared globally
 	global $uistyle;
-	//print_r($name.' '.$module.' '.w2PgetConfig('host_style'));
 	if ($module && file_exists(W2P_BASE_DIR . '/modules/' . $module . '/images/' . $name)) {
 		return './modules/' . $module . '/images/' . $name;
 	} elseif ($module && file_exists(W2P_BASE_DIR . '/style/' . $uistyle . '/images/modules/' . $module . '/' . $name)) {
@@ -415,11 +417,7 @@ function w2PfindImage($name, $module = null) {
  */
 function w2PshowImage($src, $wid = '', $hgt = '', $alt = '', $title = '', $module = null) {
 	global $AppUI, $m;
-	/*
-	if (strpos( $src, '.png' ) > 0 && strpos( $_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0' ) !== false) {
-	return "<div style=\"height:{$hgt}px; width:{$wid}px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='$src', sizingMethod='scale');\" ></div>";
-	} else {
-	*/
+
 	if ($src == '') {
 		return '';
 	} elseif ($module) {
@@ -749,7 +747,6 @@ function w2PuserHasRole($name) {
 function w2PformatDuration($x) {
 	global $AppUI;
 	$dur_day = floor($x / w2PgetConfig('daily_working_hours'));
-	//$dur_hour = fmod($x, w2PgetConfig('daily_working_hours'));
 	$dur_hour = $x - $dur_day * w2PgetConfig('daily_working_hours');
 	$str = '';
 	if ($dur_day > 1) {
