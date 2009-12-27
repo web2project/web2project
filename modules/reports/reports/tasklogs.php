@@ -302,8 +302,8 @@ if ($do_report) {
 			$uname = 'All Users';
 		}
 
-		$font_dir = w2PgetConfig('root_dir') . '/lib/ezpdf/fonts';
-		$temp_dir = w2PgetConfig('root_dir') . '/files/temp';
+		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+		$temp_dir = W2P_BASE_DIR . '/files/temp';
 		$base_url = w2PgetConfig('base_url');
 		require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
