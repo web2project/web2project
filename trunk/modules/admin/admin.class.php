@@ -29,6 +29,9 @@ class CUser extends CW2pObject {
 		if ($this->user_password !== null) {
 			$this->user_password = db_escape(trim($this->user_password));
 		}
+//    if ('' != $this->user_email && !w2p_check_email($this->user_email)) {
+//      $errorArray['user_email'] = $baseErrorMsg . 'user email is not formatted properly';
+//    }
 		// TODO MORE
 		return null; // object is ok
 	}

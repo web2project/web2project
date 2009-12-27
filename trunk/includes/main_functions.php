@@ -1278,6 +1278,10 @@ function w2p_url($link, $text = '')
   }
   return $result;
 }
+function w2p_check_url($link)
+{
+  return true;
+}
 
 function w2p_email($email, $name = '')
 {
@@ -1288,6 +1292,16 @@ function w2p_email($email, $name = '')
     $result = '<a href="mailto:'.$email.'">'.$name.'</a>';
   }
   return $result;
+}
+function w2p_check_email($email)
+{
+  /*
+  * This function can be expanded a great deal depending on how stringent we 
+  *   want to be. At present, we're quite permissive only requiring a '@' in
+  *   order to be considered a 'valid' email address.
+  */
+  $parts = explode('@', $email);
+  return ((2 == count($parts) && $parts[0] != '' && $parts[1] != ''));
 }
 
 function w2p_textarea($content)
