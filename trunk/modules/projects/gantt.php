@@ -239,7 +239,7 @@ if (!is_array($projects) || 0 == count($projects)) {
 				  $gantt->addSubBar(substr(' --' . $t['task_name'], 0, 20). '...', 
 				    $tStart, $tEnd, $caption, $t['task_dynamic'] == 1 ? 0.1 : 0.6, $p['project_color_identifier'], $progress);
 				} else {
-				  $gantt->addMilestone('-- ' . $t['task_name'], $t['task_start_date']);
+				  $gantt->addMilestone(array('-- ' . $t['task_name']), $t['task_start_date']);
 				}
 
 				// Insert workers for each task into Gantt Chart
@@ -254,7 +254,6 @@ if (!is_array($projects) || 0 == count($projects)) {
 				$q->clear();
 				foreach ($workers as $w) {
 				  $label = '   * ' . $w['contact_first_name'] . ' ' . $w['contact_last_name'];
-				  //$gantt->addSubSubBar($label, $t['task_start_date'], $t['task_end_date']);
 				}
 				// End of insert workers for each task into Gantt Chart
 			}

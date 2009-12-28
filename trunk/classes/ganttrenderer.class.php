@@ -87,6 +87,9 @@ class GanttRenderer {
     $this->graph->scale->actinfo->vgrid->SetColor('gray');
     $this->graph->scale->actinfo->SetColor('darkgray');
     $this->graph->scale->actinfo->SetColTitles($translatedColumns, $columnSizes);
+    if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+      $this->graph->scale->actinfo->SetFont(FF_CUSTOM);
+    }
   }
 
   public function addBar(array $columnValues, $caption = '',
@@ -109,12 +112,13 @@ class GanttRenderer {
           $rowValues[] = $actual_endDate->format($this->df);
           break;
         case 'project_name':
+        case 'task_name':
         default:
           $rowValues[] = $value;
       }
     }
 
-    $bar = new GanttBar($this->rowCount++, $rowValues,$start, $actual_end, $caption, $height);
+    $bar = new GanttBar($this->rowCount++, $rowValues, $start, $actual_end, $caption, $height);
     $bar->progress->Set(min(($progress / 100), 1));
 
     $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
@@ -122,9 +126,28 @@ class GanttRenderer {
     $bar->SetFillColor('#' . $barcolor);
     $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
 
+    if (0.1 == $height) {
+      $bar->rightMark->Show();
+      $bar->rightMark->SetType(MARK_RIGHTTRIANGLE);
+      $bar->rightMark->SetWidth(3);
+      $bar->rightMark->SetColor('black');
+      $bar->rightMark->SetFillColor('black');
+
+      $bar->leftMark->Show();
+      $bar->leftMark->SetType(MARK_LEFTTRIANGLE);
+      $bar->leftMark->SetWidth(3);
+      $bar->leftMark->SetColor('black');
+      $bar->leftMark->SetFillColor('black');
+
+      $bar->SetPattern(BAND_SOLID, 'black');
+    }
+
     //adding captions
     $bar->caption = new TextProperty($caption);
     $bar->caption->Align('left', 'center');
+    if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+      $bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+    }
 
     // gray out templates, completes, on ice, on hold
     if (!$active) {
@@ -173,11 +196,11 @@ class GanttRenderer {
     $this->graph->Add($bar);
   }
 
-  public function addMilestone($label, $start, $color = '#CC0000')
+  public function addMilestone(array $columnValues, $start, $color = '#CC0000')
   {
     $tStartObj = new CDate($start);
 
-    $bar = new MileStone($this->rowCount++, $label, $start, $tStartObj->format($this->df));
+    $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
     $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
     $bar->title->SetColor($color);
     $this->graph->Add($bar);
