@@ -76,7 +76,7 @@ class CContact extends CW2pObject {
 		global $AppUI;
 
     $perms = $AppUI->acl();
-		$canRead = !$perms->checkModule('contacts', 'view', $contactId);
+		$canRead = $perms->checkModule('contacts', 'view', $contactId);
 
 		if ($canRead) {
 			$q = new DBQuery;
