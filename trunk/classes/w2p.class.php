@@ -82,7 +82,7 @@ class CW2pObject {
 			*/
 			foreach ($hash as $k => $v) {
 				if (!(is_object($hash[$k]))) {
-					$filtered_hash[$k] = $v;
+					$filtered_hash[$k] = strip_tags($v);
 				}
 			}
 			$this->_query->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
