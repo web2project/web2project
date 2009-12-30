@@ -85,8 +85,7 @@ switch ($cmd) {
 		$AppUI->setMsg('Module removed', UI_MSG_ALERT, true);
 		break;
 	case 'upgrade':
-		if ($setup->upgrade($obj->mod_version)) // returns true if upgrade succeeded
-			{
+		if ($setup->upgrade($obj->mod_version)) { // returns true if upgrade succeeded
 			$obj->bind($config);
 			$obj->store();
 			$AppUI->setMsg('Module upgraded', UI_MSG_OK);
@@ -95,9 +94,7 @@ switch ($cmd) {
 		}
 		break;
 	case 'configure':
-		if ($setup->configure()) //returns true if configure succeeded
-			{
-		} else {
+		if (!$setup->configure()) { //returns true if configure succeeded
 			$AppUI->setMsg('Module configuration failed', UI_MSG_ERROR);
 		}
 		break;

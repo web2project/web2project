@@ -97,7 +97,7 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$file_id = isset($_GET['file_id']) ? (int)w2PgetParam($_GET, 'file_id', 0)  : 0;
+$file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 
 if ($file_id) {
 	// projects tat are denied access

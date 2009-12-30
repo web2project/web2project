@@ -9,11 +9,13 @@ if (!$perms->checkModule('system', 'edit')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+$del = (int) w2PgetParam($_POST, 'del', 0);
+
 $obj = new CSysVal();
 $post = array('sysval_title' => w2PgetParam($_POST, 'sysval_title'), 'sysval_key_id' => w2PgetParam($_POST, 'sysval_key_id'), 'sysval_value' => w2PgetParam($_POST, 'sysval_value'), );
 $svid = array('sysval_title' => w2PgetParam($_POST, 'sysval_id'));
 
-if (isset($_POST['del']) && $del = $_POST['del']) {
+if ($del) {
 	if (!$obj->bind($svid)) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 		$AppUI->redirect();

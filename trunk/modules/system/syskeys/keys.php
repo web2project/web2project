@@ -16,7 +16,7 @@ $q->addOrder('syskey_name');
 $keys = $q->loadList();
 $q->clear();
 
-$syskey_id = isset($_GET['syskey_id']) ? w2PgetParam($_GET, 'syskey_id', 0) : 0;
+$syskey_id = (int) w2PgetParam($_GET, 'syskey_id', 0);
 
 $titleBlock = new CTitleBlock('System Lookup Keys', 'myevo-weather.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'System Admin');

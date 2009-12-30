@@ -18,14 +18,11 @@ if ($canEdit) {
 }
 
 $tab = $AppUI->processIntState('LinkIdxTab', $_GET, 'tab', 0);
-$page = w2PgetParam($_GET, 'page', 1);
+$page = (int) w2PgetParam($_GET, 'page', 1);
 $search = w2PgetParam($_POST, 'search', '');
 
 if (!isset($project_id)) {
-	$project_id = w2PgetParam($_POST, 'project_id', 0);
-}
-if (!isset($showProject)) {
-	//$showProject = true;
+	$project_id = (int) w2PgetParam($_POST, 'project_id', 0);
 }
 
 $df = $AppUI->getPref('SHDATEFORMAT');
