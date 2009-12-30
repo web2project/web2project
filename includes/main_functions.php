@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-define('SECONDS_PER_DAY', 60 * 60 * 24);
+define('SECONDS_PER_DAY', 86400);
 
 require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
 require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
@@ -34,6 +34,7 @@ function __autoload($class_name) {
       break;
     case 'dbquery':
       require_once W2P_BASE_DIR.'/classes/query.class.php';
+      break;
     case 'w2pacl':
       require_once W2P_BASE_DIR.'/classes/permissions.class.php';
       break;
@@ -1314,10 +1315,12 @@ function w2p_textarea($content)
   if ($content != '') {
     $result = $content;
     /*
-     * Thanks to Alison Gianotto for two excellent lines of code to make our
+     * Thanks to Alison Gianotto for two regular expressions to make our
     *    links all linky.  This code is based on her work here:
     *    http://www.snipe.net/2009/09/php-twitter-clickable-links
      */
+    $result = htmlentities($result, ENT_QUOTES);
+
     $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
     $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);
     $result = nl2br($result);
@@ -1325,3 +1328,4 @@ function w2p_textarea($content)
 
   return $result;
 }
+

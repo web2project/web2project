@@ -105,21 +105,15 @@ if ($project_status_filter == -1) {
 		<?php echo $AppUI->_('Tasks'); ?>
 		(<?php echo $AppUI->_('My'); ?>)
 	</th>
-	<?php
-if ($project_status_filter < 0) {
-?>
-		<th nowrap="nowrap">
-			<?php echo $AppUI->_('Status'); ?>
-		</th>
-		<?php
-}
-?>
+	<?php if ($project_status_filter < 0) { ?>
+    <th nowrap="nowrap">
+      <?php echo $AppUI->_('Status'); ?>
+    </th>
+  <?php } ?>
 </tr>
 
 <?php
 $none = true;
-
-//print_r($currentTabId.'.'.$show_all_projects.'.'.count($project_statuses).'.'.$project_status_filter);
 
 foreach ($projects as $row) {
 	if (($show_all_projects || ($row['project_active'] && $row['project_status'] == $project_status_filter)) || //tabbed view
@@ -165,6 +159,4 @@ if ($none) {
 	echo '<tr><td colspan="10">' . $AppUI->_('No projects available') . '</td></tr>';
 }
 ?>
-	</td>
-</tr>
 </table>
