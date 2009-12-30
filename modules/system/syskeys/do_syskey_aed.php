@@ -9,7 +9,7 @@ if (!$perms->checkModule('system', 'edit')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$del = isset($_POST['del']) ? $_POST['del'] : 0;
+$del = (int) w2PgetParam($_POST, 'del', 0);
 
 $obj = new CSysKey();
 

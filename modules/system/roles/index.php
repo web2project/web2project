@@ -21,7 +21,7 @@ $canDelete = $perms->checkModule('roles', 'delete');
 $crole = new CRole;
 $roles = $crole->getRoles();
 
-$role_id = w2PgetParam($_GET, 'role_id', 0);
+$role_id = (int) w2PgetParam($_GET, 'role_id', 0);
 
 // setup the title block
 $titleBlock = new CTitleBlock('Roles', 'main-settings.png', $m, $m . '.' . $a);

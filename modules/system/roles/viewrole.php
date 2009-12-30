@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $AppUI->savePlace();
 $perms = &$AppUI->acl();
-$role_id = w2PgetParam($_GET, 'role_id', 0);
+$role_id = (int) w2PgetParam($_GET, 'role_id', 0);
 $role = $perms->getRole($role_id);
 
 $tab = $AppUI->processIntState('RoleVwTab', $_GET, 'tab', 0);

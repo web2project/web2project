@@ -20,7 +20,7 @@ if (isset($view_temp)) {
 		$view = 'folders';
 	}
 }
-$folder = w2PgetParam($_GET, 'folder', 0); // to pass to "new file" button
+$folder = (int) w2PgetParam($_GET, 'folder', 0); // to pass to "new file" button
 
 // get the list of visible companies
 $extra = array('from' => 'files', 'where' => 'projects.project_id = file_project', 'join' => 'project_departments', 'on' => 'projects.project_id = project_departments.project_id');
