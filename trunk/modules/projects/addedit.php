@@ -6,7 +6,7 @@ global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
-$company_id = (int) w2PgetParam($_GET, 'company_id', 0);
+$company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
 $structprojs = getProjects();
@@ -178,14 +178,10 @@ function setContacts(contact_id_string){
 	selected_contacts_id = contact_id_string;
 }
 
-var selected_departments_id = '<?php echo implode(',', $selected_departments); ?>';
-
 function popDepartment() {
         var f = document.editFrm;
 	var url = './index.php?m=public&a=selector&dialog=1&callback=setDepartment&table=departments&company_id='
-            + f.project_company.options[f.project_company.selectedIndex].value
-            + '&dept_id='
-            + selected_departments_id;
+            + f.project_company.options[f.project_company.selectedIndex].value;
         window.open(url,'dept','left=50,top=50,height=250,width=400,resizable');
 }
 
