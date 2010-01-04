@@ -33,7 +33,6 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 {
 	public function testW2PgetParam()
 	{
-		global $AppUI;
 		$params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>', 
 				'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
 
@@ -50,7 +49,6 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 	
 	public function testW2PgetCleanParam()
 	{
-		global $AppUI;
 		$params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>', 
 				'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
 
@@ -103,8 +101,6 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
   
   public function test__autoload()
   {
-  	global $AppUI;
-
     $this->assertTrue(class_exists('CProject'));
     $search = new smartsearch();
     $this->assertTrue(class_exists('smartsearch'));
@@ -116,8 +112,6 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
    */
   public function test_w2p_url()
   {
-    global $AppUI;
-
     $target = '<a href="http://web2project.net" target="_new">http://web2project.net</a>';
     $linkText = w2p_url('http://web2project.net');
     $this->assertEquals($target, $linkText);
@@ -130,14 +124,22 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
     $linkText = w2p_url('http://web2project.net', 'web2project');
     $this->assertEquals($target, $linkText);
   }
+  public function test_w2p_check_url()
+  {
+    $this->assertTrue(w2p_check_url('http://web2project.net'));
+    $this->assertTrue(w2p_check_url('http://bugs.web2project.net'));
+    $this->assertTrue(w2p_check_url('web2project.net'));
+
+    $this->assertFalse(w2p_check_url('httpweb2project.net'));
+    $this->assertFalse(w2p_check_url('http://web2project'));
+    $this->assertFalse(w2p_check_url('http://.net'));    
+  }
 
   /**
    * Tests the proper creation of an email link
    */
   public function test_w2p_email()
   {
-    global $AppUI;
-
     $target = '<a href="mailto:test@test.com">test@test.com</a>';
     $linkText = w2p_email('test@test.com');
     $this->assertEquals($target, $linkText);
@@ -150,14 +152,23 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
     $linkText = w2p_email('test@test.com', 'web2project');
     $this->assertEquals($target, $linkText);
   }
+  public function test_w2p_check_email()
+  {
+    $this->assertTrue(w2p_check_email('tests@web2project.net'));
+    $this->assertTrue(w2p_check_email('tests@bugs.web2project.net'));
+
+    $this->assertFalse(w2p_check_email('@web2project.net'));
+    $this->assertFalse(w2p_check_email('testsweb2project.net'));
+    $this->assertFalse(w2p_check_email('tests@web2project'));
+    $this->assertFalse(w2p_check_email('tests@'));
+    $this->assertFalse(w2p_check_email('tests@.net'));
+  }
 
   /**
    * Tests the proper creation of an email link
    */
   public function test_w2p_textarea()
   {
-    global $AppUI;
-
     $target = '';
     $linkText = w2p_textarea('');
     $this->assertEquals($target, $linkText);
