@@ -1282,9 +1282,21 @@ function w2p_url($link, $text = '')
   }
   return $result;
 }
+/*
+* This function is basically a verbatim copy of Example 4-12 (pg 160) from
+*   Nathan A Good's "Regular Expression Recipes" from Apress.
+*/
 function w2p_check_url($link)
 {
-  return true;
+  $result = false;
+
+  if (strpos($link, 'http') === false) {
+    $link = 'http://'.$link;
+  }  
+  if (preg_match("/^(?:(?:http|ftp)s?):\/\/(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $link)) {
+    $result = true;
+  }
+  return $result;
 }
 
 function w2p_email($email, $name = '')
@@ -1297,15 +1309,17 @@ function w2p_email($email, $name = '')
   }
   return $result;
 }
+/*
+* This function is basically a verbatim copy of Example 4-11 (pg 157) from
+*   Nathan A Good's "Regular Expression Recipes" from Apress.
+*/
 function w2p_check_email($email)
 {
-  /*
-  * This function can be expanded a great deal depending on how stringent we 
-  *   want to be. At present, we're quite permissive only requiring a '@' in
-  *   order to be considered a 'valid' email address.
-  */
-  $parts = explode('@', $email);
-  return ((2 == count($parts) && $parts[0] != '' && $parts[1] != ''));
+  $result = false;
+  if (preg_match("/^[-\w.]+@([a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $email)) {
+    $result = true;
+  }
+  return $result;
 }
 
 function w2p_textarea($content)
