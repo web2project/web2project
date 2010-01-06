@@ -262,9 +262,12 @@
              * 	with another way of solving it...
              */
             if (strpos($errorMessage, 'Duplicate column name') === false &&
-              strpos($errorMessage, 'column/key exists') === false) {
+              strpos($errorMessage, 'column/key exists') === false &&
+              strpos($errorMessage, 'Multiple primary key defined') &&
+              strpos($errorMessage, 'Duplicate key name') ) {
+
               $dbErr = true;
-              $errorMessages[] = $errorMessage;            	
+              $errorMessages[] = $errorMessage;
             }
 					}
 				}
