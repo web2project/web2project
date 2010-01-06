@@ -38,6 +38,9 @@ function __autoload($class_name) {
     case 'w2pacl':
       require_once W2P_BASE_DIR.'/classes/permissions.class.php';
       break;
+    case 'w2pical':
+      require_once W2P_BASE_DIR.'/classes/ical.class.php';
+      break;
     case 'cw2pobject':
       require_once W2P_BASE_DIR.'/classes/w2p.class.php';
       break;
