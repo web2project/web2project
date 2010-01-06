@@ -93,8 +93,8 @@ if ($canEditTask) {
 		$task->task_end_date = $obj->task_log_date;
 	}
 	
-	if (($msg = $task->store($AppUI))) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR, true);
+	if (is_array($task->store($AppUI))) {
+    $AppUI->setMsg($msg, UI_MSG_ERROR, true);
 	}
 	
 	$new_task_end = new CDate($task->task_end_date);
