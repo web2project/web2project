@@ -92,9 +92,10 @@ if ($canEditTask) {
 	if ($task->task_percent_complete >= 100 && (!$task->task_end_date || $task->task_end_date == '0000-00-00 00:00:00')) {
 		$task->task_end_date = $obj->task_log_date;
 	}
-	
-	if (($msg = $task->store($AppUI))) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR, true);
+
+  $msg = $task->store($AppUI);
+	if (is_array($task->store($AppUI))) {
+    $AppUI->setMsg($msg, UI_MSG_ERROR, true);
 	}
 	
 	$new_task_end = new CDate($task->task_end_date);
