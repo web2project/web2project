@@ -1365,5 +1365,90 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
         }
 	}
+
+	/**
+	 * Tests store when there is no task_parent set
+	 */
+	public function testStoreNoTaskParent()
+	{
+		$this->obj->load(27);
+		$this->post_data['task_id'] = 27;
+
+		unset($this->post_data['task_parent']);
+
+		$this->obj->bind($this->post_data);
+		$this->obj->store();
+
+		$now_secs = time();
+        $min_time = $now_secs - 10;
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestStoreNoTaskParent.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_id = 27');
+        $results = $q->loadList();
+
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+	}
+
+	/**
+	 * Tests store function when creating and task_parent
+	 */
+	public function testStoreCreateNoParent()
+	{
+		unset($this->post_data['task_parent'], $this->post_data['task_id']);
+		$this->post_data['task_departments'] = '1,2';
+		$this->post_data['task_contacts'] = '1,2';
+
+		$this->obj->bind($this->post_data);
+		$results = $this->obj->store();
+
+		$now_secs = time();
+        $min_time = $now_secs - 10;
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestStoreCreateNoParent.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created','task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created','task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_departments'), $xml_db_filtered_dataset->getTable('task_departments'));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_contacts'), $xml_db_filtered_dataset->getTable('task_contacts'));
+        
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_created,task_updated');
+        $q->addWhere('task_id = 29');
+        $results = $q->loadList();
+
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_created']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_created']));
+        }
+
+        /**
+         * Test to make sure project task count was updated
+         */
+        $project = new CProject();
+        $project->load(1);
+
+        $this->assertEquals(29, $project->project_task_count);
+	}
 }
 ?>

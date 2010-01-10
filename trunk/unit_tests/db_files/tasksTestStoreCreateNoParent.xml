@@ -52,7 +52,6 @@
         <column>project_priority</column>
         <column>project_type</column>
         <column>project_company</column>
-        <column>project_start_date</column>
         <row>
             <value>1</value>
             <value>Test Project</value>
@@ -64,7 +63,6 @@
             <value>-1</value>
             <value>0</value>
             <value>1</value>
-            <value>2009-10-10</value>
         </row>
     </table>
     <table name="departments">
@@ -1121,7 +1119,7 @@
           <value>67</value>   
           <value>This is task 28</value>  
           <value>0.00</value>    
-          <null />
+		  <null />
           <value>1</value>   
           <value>1</value>   
           <value>1</value>   
@@ -1133,6 +1131,39 @@
           <null />
           <value>1</value>   
           <value>1</value>   
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>     
+          <value>0</value>
+        </row>
+		<row>
+          <value>29</value>
+          <value>Test Task</value>    
+          <value>29</value>   
+          <value>0</value>   
+          <value>1</value>
+          <value>1</value>   
+          <value>0000-00-00 00:00:00</value>     
+          <value>3</value>   
+          <value>1</value>  
+          <value>0</value>   
+          <value>0000-00-00 00:00:00</value>     
+          <value>0</value>   
+          <value>0</value>   
+          <value>0</value>   
+          <value>this is a description for test task.</value>  
+          <value>1.00</value>    
+		  <value>http://www.example.org</value>
+          <value>1</value>   
+          <value>0</value>   
+          <value>0</value>   
+          <value>1</value>   
+          <value>0</value>   
+          <value>1</value>   
+          <value>1,2</value> 
+          <value>1,2</value>
+          <null />
+          <value>0</value>   
+          <value>0</value>   
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>     
           <value>0</value>
@@ -1306,6 +1337,30 @@
             <null/>
             <value>2009-10-19 00:00:00</value>
             <value>2009-10-19 00:00:00</value>
+        </row>
+    </table>
+    <table name="task_departments">
+        <column>task_id</column>
+        <column>department_id</column>
+        <row>
+            <value>29</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>29</value>
+            <value>2</value>
+        </row>
+    </table>
+    <table name="task_contacts">
+        <column>task_id</column>
+        <column>contact_id</column>
+        <row>
+            <value>29</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>29</value>
+            <value>2</value>
         </row>
     </table>
 </dataset>
