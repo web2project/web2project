@@ -1,0 +1,1270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- tasksTestDelete.xml - used to compare against in testDelete -->
+<dataset>
+    <table name="companies">
+        <column>company_id</column>
+        <column>company_module</column>
+        <column>company_name</column>
+        <column>company_phone1</column>
+        <column>company_phone2</column>
+        <column>company_fax</column>
+        <column>company_address1</column>
+        <column>company_address2</column>
+        <column>company_city</column>
+        <column>company_state</column>
+        <column>company_zip</column>
+        <column>company_country</column>
+        <column>company_primary_url</column>
+        <column>company_owner</column>
+        <column>company_description</column>
+        <column>company_type</column>
+        <column>company_email</column>
+        <column>company_private</column>
+        <row>
+            <value>1</value>
+            <value>0</value>
+            <value>UnitTestCompany</value>
+            <value>1.999.999.9999</value>
+            <value>1.999.999.9998</value>
+            <value>1.999.999.9997</value>
+            <value>Address 1</value>
+            <value>Address 2</value>
+            <value>City</value>
+            <value>CA</value>
+            <value>90210</value>
+            <value>US</value>
+            <value>web2project.net</value>
+            <value>1</value>
+            <value>This is a company.</value>
+            <value>2</value>
+            <value>web2project@example.org</value>
+            <value>0</value>
+        </row>
+    </table>
+    <table name="projects">
+        <column>project_id</column>
+        <column>project_name</column>
+        <column>project_short_name</column>
+        <column>project_owner</column>
+        <column>project_status</column>
+        <column>project_color_identifier</column>
+        <column>project_creator</column>
+        <column>project_priority</column>
+        <column>project_type</column>
+        <column>project_company</column>
+        <column>project_start_date</column>
+        <row>
+            <value>1</value>
+            <value>Test Project</value>
+            <value>TP</value>
+            <value>1</value>
+            <value>0</value>
+            <value>FFFFFF</value>
+            <value>1</value>
+            <value>-1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>2009-10-10</value>
+        </row>
+    </table>
+    <table name="departments">
+        <column>dept_name</column>
+        <column>dept_id</column>
+        <column>dept_company</column>
+        <row>
+            <value>Department 1</value>
+            <value>1</value>
+            <value>1</value>
+        </row>
+    </table>
+    <table name="contacts">
+        <column>contact_id</column>
+        <column>contact_first_name</column>
+        <column>contact_last_name</column>
+        <column>contact_company</column>
+        <column>contact_order_by</column>
+        <column>contact_title</column>
+        <column>contact_birthday</column>
+        <column>contact_job</column>
+        <column>contact_department</column>
+        <column>contact_type</column>
+        <column>contact_email</column>
+        <column>contact_email2</column>
+        <column>contact_url</column>
+        <column>contact_phone</column>
+        <column>contact_phone2</column>
+        <column>contact_fax</column>
+        <column>contact_mobile</column>
+        <column>contact_address1</column>
+        <column>contact_address2</column>
+        <column>contact_city</column>
+        <column>contact_state</column>
+        <column>contact_zip</column>
+        <column>contact_country</column>
+        <column>contact_jabber</column>
+        <column>contact_icq</column>
+        <column>contact_msn</column>
+        <column>contact_yahoo</column>
+        <column>contact_aol</column>
+        <column>contact_notes</column>
+        <column>contact_project</column>
+        <column>contact_icon</column>
+        <column>contact_owner</column>
+        <column>contact_private</column>
+        <column>contact_updatekey</column>
+        <column>contact_lastupdate</column>
+        <column>contact_updateasked</column>
+        <column>contact_skype</column>
+        <column>contact_google</column>
+        <row>
+            <value>1</value>
+            <value>Admin</value>
+            <value>Person</value>
+            <value>1</value>
+            <value></value>
+            <value>President</value>
+            <value>1983-07-22</value>
+            <value>President</value>
+            <value>Sales</value>
+            <value>person</value>
+            <value>contact1@example.org</value>
+            <value>contact1_2@example.org</value>
+            <value>1.example.org</value>
+            <value>1.999.999.9999</value>
+            <value>1.999.999.9998</value>
+            <value>1.999.999.9997</value>
+            <value>1.999.999.9996</value>
+            <value>c1 address 1</value>
+            <value>c1 address 2</value>
+            <value>c1 city</value>
+            <value>CA</value>
+            <value>90210</value>
+            <value>US</value>
+            <value>c1jabber</value>
+            <value>c1icq</value>
+            <value>c1msn</value>
+            <value>c1yahoo</value>
+            <value>c1aol</value>
+            <value>c1s notes.</value>
+            <value>0</value>
+            <value>obj/contact</value>
+            <value>0</value>
+            <value>0</value>
+            <value></value>
+            <value>2009-01-01 11:11:11</value>
+            <value>2008-12-12 11:11:11</value>
+            <value>c1skype</value>
+            <value>c1google</value>
+        </row>
+    </table>
+    <table name="users">
+    	<column>user_id</column>
+    	<column>user_contact</column>
+    	<column>user_username</column>
+    	<column>user_password</column>
+    	<column>user_parent</column>
+    	<column>user_type</column>
+    	<column>user_signature</column>
+    	<column>user_empireint_special</column>
+		<column>user_department</column>
+		<column>user_company</column>
+		<row>
+			<value>1</value>
+			<value>1</value>
+			<value>admin</value>
+			<value>76a2173be6393254e72ffa4d6df1030a</value>
+			<value>0</value>
+			<value>1</value>
+			<value>Admin User</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+		</row>
+    </table>
+    <table name="tasks">
+        <column>task_id</column>
+        <column>task_name</column>
+        <column>task_parent</column>
+        <column>task_milestone</column>
+        <column>task_project</column>
+        <column>task_owner</column>
+        <column>task_start_date</column>
+        <column>task_duration</column>
+        <column>task_duration_type</column>
+        <column>task_hours_worked</column>
+        <column>task_end_date</column>
+        <column>task_status</column>
+        <column>task_priority</column>
+        <column>task_percent_complete</column>
+        <column>task_description</column>
+        <column>task_target_budget</column>
+        <column>task_related_url</column>
+        <column>task_creator</column>
+        <column>task_order</column>
+        <column>task_client_publish</column>
+        <column>task_dynamic</column>
+        <column>task_access</column>
+        <column>task_notify</column>
+        <column>task_departments</column>
+        <column>task_contacts</column>
+        <column>task_custom</column>
+        <column>task_type</column>
+        <column>task_updator</column>
+        <column>task_created</column>
+        <column>task_updated</column>
+        <column>task_dep_reset_dates</column>
+        <row>
+          <value>1</value>
+          <value>Task 1</value>
+          <value>0</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-05 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-15 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 1</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-05 15:43:00</value>
+          <value>2009-07-05 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>2</value>
+          <value>Task 2</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 2</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>3</value>
+          <value>Task 3</value>
+          <value>0</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 3</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>4</value>
+          <value>Task 4</value>
+          <value>0</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 4</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>5</value>
+          <value>Task 5</value>
+          <value>0</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 5</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>6</value>
+          <value>Task 6</value>
+          <value>7</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 6</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>7</value>
+          <value>Task 7</value>
+          <value>6</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 7</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>8</value>
+          <value>Task 8</value>
+          <value>10</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 8</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>9</value>
+          <value>Task 9</value>
+          <value>8</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 9</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>10</value>
+          <value>Task 10</value>
+          <value>9</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 10</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>11</value>
+          <value>Task 11</value>
+          <value>10</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 11</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>12</value>
+          <value>Task 12</value>
+          <value>11</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>1</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 12</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>13</value>
+          <value>Task 13</value>
+          <value>12</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 13</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>14</value>
+          <value>Task 14</value>
+          <value>14</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 14</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>15</value>
+          <value>Task 15</value>
+          <value>15</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 15</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>16</value>
+          <value>Task 16</value>
+          <value>15</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 16</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>17</value>
+          <value>Task 17</value>
+          <value>16</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 17</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>18</value>
+          <value>Task 18</value>
+          <value>18</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 18</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>19</value>
+          <value>Task 19</value>
+          <value>18</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>1</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 19</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>20</value>
+          <value>Task 20</value>
+          <value>18</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>3</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 19</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>21</value>
+          <value>Task 21</value>
+          <value>21</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-10-10 00:00:00</value>
+          <value>3</value>
+          <value>24</value>
+          <value>17</value>
+          <value>2009-11-02 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>67</value>
+          <value>This is task 21</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>23</value>
+          <value>Task 23</value>
+          <value>21</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-10-10 00:00:00</value>
+          <value>3</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-11-02 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>67</value>
+          <value>This is task 23</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>24</value>
+          <value>Task 24</value>
+          <value>24</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 00:00:00</value>
+          <value>3</value>
+          <value>1</value>
+          <value>0</value>
+          <value>2009-07-16 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 24</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>25</value>
+          <value>Task 25</value>
+          <value>24</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-09-09 00:00:00</value>
+          <value>40</value>
+          <value>1</value>
+          <value>0</value>
+          <value>2009-11-01 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>25</value>
+          <value>This is task 25</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+        <row>
+          <value>26</value>
+          <value>Task 26</value>
+          <value>24</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-10-10 00:00:00</value>
+          <value>3</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-11-02 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>67</value>
+          <value>This is task 26</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+		<row>
+          <value>27</value>
+          <value>Task 27</value>
+          <value>27</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-10-10 00:00:00</value>
+          <value>3</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-11-02 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>67</value>
+          <value>This is task 27</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+		<row>
+          <value>28</value>
+          <value>Task 28</value>
+          <value>28</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-10-10 00:00:00</value>
+          <value>3</value>
+          <value>24</value>
+          <value>0</value>
+          <value>2009-11-02 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>67</value>
+          <value>This is task 28</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>21</value>
+          <value>1</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+          <value>0</value>
+        </row>
+    </table>
+    <table name="task_dependencies">
+        <column>dependencies_task_id</column>
+        <column>dependencies_req_task_id</column>
+        <row>
+            <value>3</value>
+            <value>4</value>
+        </row>
+        <row>
+            <value>4</value>
+            <value>3</value>
+        </row>
+        <row>
+            <value>5</value>
+            <value>6</value>
+        </row>
+        <row>
+            <value>11</value>
+            <value>9</value>
+        </row>
+        <row>
+            <value>12</value>
+            <value>13</value>
+        </row>
+        <row>
+            <value>13</value>
+            <value>11</value>
+        </row>
+        <row>
+            <value>14</value>
+            <value>12</value>
+        </row>
+        <row>
+            <value>17</value>
+            <value>15</value>
+        </row>
+		<row>
+			<value>28</value>
+			<value>27</value>
+		</row>
+    </table>
+    <table name="task_log">
+        <column>task_log_id</column>
+        <column>task_log_task</column>
+        <column>task_log_help_desk_id</column>
+        <column>task_log_name</column>
+        <column>task_log_description</column>
+        <column>task_log_creator</column>
+        <column>task_log_hours</column>
+        <column>task_log_date</column>
+        <column>task_log_costcode</column>
+        <column>task_log_problem</column>
+        <column>task_log_reference</column>
+        <column>task_log_related_url</column>
+        <column>task_log_project</column>
+        <column>task_log_company</column>
+        <column>task_log_changelog</column>
+        <column>task_log_changelog_servers</column>
+        <column>task_log_changelog_whom</column>
+        <column>task_log_changelog_datetime</column>
+        <column>task_log_changelog_duration</column>
+        <column>task_log_changelog_expected_downtime</column>
+        <column>task_log_changelog_description</column>
+        <column>task_log_changelog_backout_plan</column>
+        <column>task_log_created</column>
+        <column>task_log_updated</column>
+        <column>task_log_updator</column>
+        <row>
+            <value>2</value>
+            <value>23</value>
+            <value>1</value>
+            <value>Task Log 2</value>
+            <value>Did some working on task 23.</value>
+            <value>1</value>
+            <value>17</value>
+            <value>2009-10-19</value>
+            <value>1</value>
+            <null/>
+            <null/>
+            <value>http://www.example.org</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value>0</value>
+            <null/>
+            <value></value>
+            <value>0</value>
+            <null/>
+            <null/>
+            <value>2009-10-19 00:00:00</value>
+            <value>2009-10-19 00:00:00</value>
+            <null/>
+        </row>
+        <row>
+            <value>3</value>
+            <value>25</value>
+            <value>1</value>
+            <value>Task Log 3</value>
+            <value>Did some working on task 25.</value>
+            <value>1</value>
+            <value>20</value>
+            <value>2009-10-19</value>
+            <value>1</value>
+            <null/>
+            <null/>
+            <value>http://www.example.org</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value>0</value>
+            <null/>
+            <value></value>
+            <value>0</value>
+            <null/>
+            <null/>
+            <value>2009-10-19 00:00:00</value>
+            <value>2009-10-19 00:00:00</value>
+            <null/>
+        </row>
+        <row>
+            <value>4</value>
+            <value>26</value>
+            <value>1</value>
+            <value>Task Log 4</value>
+            <value>Did some working on task 26.</value>
+            <value>1</value>
+            <value>17</value>
+            <value>2009-10-19</value>
+            <value>1</value>
+            <null/>
+            <null/>
+            <value>http://www.example.org</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value>0</value>
+            <null/>
+            <value></value>
+            <value>0</value>
+            <null/>
+            <null/>
+            <value>2009-10-19 00:00:00</value>
+            <value>2009-10-19 00:00:00</value>
+            <null/>
+        </row>
+    </table>
+    <table name="user_tasks">
+        <column>user_id</column>
+        <column>user_type</column>
+        <column>task_id</column>
+        <column>perc_assignment</column>
+        <column>user_task_priority</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>99</value>
+            <value>50</value>
+            <value>0</value>
+        </row>
+    </table>
+</dataset>

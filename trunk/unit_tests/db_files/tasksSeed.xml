@@ -1308,4 +1308,22 @@
             <value>2009-10-19 00:00:00</value>
         </row>
     </table>
+    <table name="user_tasks">
+        <column>user_id</column>
+        <column>user_type</column>
+        <column>task_id</column>
+        <column>perc_assignment</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>99</value>
+            <value>50</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>22</value>
+            <value>50</value>
+        </row>
+    </table>
 </dataset>
