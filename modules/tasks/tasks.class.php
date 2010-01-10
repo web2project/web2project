@@ -671,16 +671,9 @@ class CTask extends CW2pObject {
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
 
-    $q = new DBQuery;
+        $q = new DBQuery;
 		$this->_action = 'deleted';
-		// delete linked user tasks
-		$q->setDelete('user_tasks');
-		$q->addWhere('task_id=' . (int)$this->task_id);
-		if (!($q->exec())) {
-			return db_error();
-		}
-		$q->clear();
-
+		
 		//load it before deleting it because we need info on it to update the parents later on
 		$this->load($this->task_id);
 		addHistory('tasks', $this->task_id, 'delete', $this->task_name, $this->task_project);
@@ -688,6 +681,19 @@ class CTask extends CW2pObject {
 		// delete the tasks...what about orphans?
 		// delete task with parent is this task
 		$childrenlist = $this->getDeepChildren();
+
+        // delete linked user tasks
+		$q->setDelete('user_tasks');
+        if (!empty($childrenlist)) {
+            $q->addWhere('task_id IN (' . implode(', ', $childrenlist) . ', ' . $this->task_id . ')');
+        } else {
+            $q->addWhere('task_id=' . (int)$this->task_id);
+        }
+
+		if (!($q->exec())) {
+			return db_error();
+		}
+		$q->clear();
 
 		$q->setDelete('tasks');
 		$q->addWhere('task_id=' . (int)$this->task_id);
