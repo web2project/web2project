@@ -52,7 +52,6 @@
         <column>project_priority</column>
         <column>project_type</column>
         <column>project_company</column>
-        <column>project_start_date</column>
         <row>
             <value>1</value>
             <value>Test Project</value>
@@ -64,7 +63,6 @@
             <value>-1</value>
             <value>0</value>
             <value>1</value>
-            <value>2009-10-10</value>
         </row>
     </table>
     <table name="departments">
@@ -1073,32 +1071,32 @@
         </row>
 		<row>
           <value>27</value>
-          <value>Task 27</value>    
+          <value>Test Task</value>    
           <value>27</value>   
           <value>0</value>   
           <value>1</value>
           <value>1</value>   
-          <value>2009-10-10 00:00:00</value>     
-          <value>3</value>   
-          <value>24</value>  
+          <value>0000-00-00 00:00:00</value>     
           <value>0</value>   
-          <value>2009-11-02 00:00:00</value>     
+          <value>1</value>  
+          <value>0</value>   
+          <value>0000-00-00 00:00:00</value>     
           <value>0</value>   
           <value>0</value>   
-          <value>67</value>   
-          <value>This is task 27</value>  
-          <value>0.00</value>    
-          <null />
+          <value>0</value>   
+          <value>this is a description for test task.</value>  
+          <value>1.00</value>    
+          <value>http://www.example.org</value> 
+          <value>1</value>   
           <value>1</value>   
           <value>1</value>   
           <value>1</value>   
           <value>0</value>   
           <value>1</value>   
-          <value>1</value>   
           <null />
           <null />
           <null />
-          <value>1</value>   
+          <value>0</value>   
           <value>1</value>   
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>     
@@ -1111,11 +1109,11 @@
           <value>0</value>   
           <value>1</value>
           <value>1</value>   
-          <value>2009-10-10 00:00:00</value>     
+          <value>2009-10-12 08:00:00</value>
           <value>3</value>   
           <value>24</value>  
           <value>0</value>   
-          <value>2009-11-02 00:00:00</value>     
+          <value>2009-11-02 17:00:00</value>
           <value>0</value>   
           <value>0</value>   
           <value>67</value>   
