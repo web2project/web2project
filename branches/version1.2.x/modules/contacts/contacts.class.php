@@ -75,17 +75,11 @@ class CContact extends CW2pObject {
 	public function loadFull(CAppUI $AppUI = null, $contactId) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
-		$canRead = $perms->checkModule('contacts', 'view', $contactId);
-
-		if ($canRead) {
-			$q = new DBQuery;
-			$q->addTable('contacts');
-			$q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
-			$q->addWhere('contact_id = ' . (int) $contactId);
-
-			$q->loadObject($this);
-		}
+		$q = new DBQuery;
+		$q->addTable('contacts');
+		$q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
+		$q->addWhere('contact_id = ' . (int) $contactId);
+		$q->loadObject($this);
 	}
 
 	public function store(CAppUI $AppUI = null) {

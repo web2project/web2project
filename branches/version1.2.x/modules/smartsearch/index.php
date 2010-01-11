@@ -241,7 +241,7 @@ if (isset($_POST['keyword'])) {
       $moduleList = $AppUI->getLoadableModuleList();
       foreach ($moduleList as $module) {
         $object = new $module['mod_main_class']();
-        if (is_callable(array($object, 'hook_calendar'))) {
+        if (is_callable(array($object, 'hook_search'))) {
         	$search = new smartsearch();
           $searchArray = $object->hook_search();
           foreach($searchArray as $key => $value) {
