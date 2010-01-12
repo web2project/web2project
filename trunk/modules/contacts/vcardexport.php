@@ -12,7 +12,7 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-if ($contact_id > 0) {
+if ($contact_id) {
 
 	$contact = new CContact();
 	$contact->loadFull($AppUI, $contact_id);

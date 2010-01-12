@@ -36,8 +36,9 @@ switch ($table_name) {
 }
 $select_list = array('0' => '') + $select_list;
 
-if (isset($_POST[$id_field])) {
-  $myId = w2PgetParam($_POST, $id_field, 0);
+$myId = (int) w2PgetParam($_POST, $id_field, 0);
+
+if ($myId) {
 	$q = new DBQuery;
 	$q->addTable($table_name);
 	$q->addQuery('*');

@@ -396,7 +396,6 @@ class CContact extends CW2pObject {
 			$q->addTable('contacts');
 			$q->addQuery('DISTINCT SUBSTRING(' . $search_name . ', 1, 1) as L');
 			if ($onlyUsers) {
-				//$q->addTable('users', 'u');
 				$q->addJoin('users', 'u', 'user_contact = contact_id', 'inner');
 			}
 			$q->addWhere('contact_private=0 OR (contact_private=1 AND contact_owner=' .(int) $userId. ') OR contact_owner IS NULL OR contact_owner = 0');
@@ -503,5 +502,9 @@ class CContact extends CW2pObject {
     $search['display_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_email', 'contact_email2', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
 
     return $search;
+  }
+
+  public function hook_calendar($userId) {
+    return $this->getUpcomingBirthdays($userId);
   }
 }

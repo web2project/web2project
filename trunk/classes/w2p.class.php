@@ -76,13 +76,13 @@ class CW2pObject {
 		} else {
 			/*
 			* We need to filter out any object values from the array/hash so the bindHashToObject()
-			* doesn't die. We also avoid issues such as passing objects to non-object functions 
-			* and copying object references instead of cloning objects. Object cloning (if needed) 
+			* doesn't die. We also avoid issues such as passing objects to non-object functions
+			* and copying object references instead of cloning objects. Object cloning (if needed)
 			* should be handled seperatly anyway.
 			*/
 			foreach ($hash as $k => $v) {
 				if (!(is_object($hash[$k]))) {
-					$filtered_hash[$k] = strip_tags($v);
+          $filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
 				}
 			}
 			$this->_query->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
