@@ -829,6 +829,7 @@ class CProject extends CW2pObject {
       $q->addUpdate('project_task_count', intval($taskCount));
       $q->addWhere('project_id   = ' . (int) $projectId);
       $q->exec();
+      self::updatePercentComplete($projectId);
   	}
   }
 
@@ -873,7 +874,7 @@ class CProject extends CW2pObject {
       $q->addUpdate('project_worked_hours', $worked_hours);
       $q->addWhere('project_id  = ' . (int) $project_id);
       $q->exec();
-      CProject::updatePercentComplete($project_id);
+      self::updatePercentComplete($project_id);
 	}
   
   public static function updatePercentComplete($project_id) {
