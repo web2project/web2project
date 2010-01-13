@@ -87,7 +87,8 @@ if ($sub_form) {
 
 	// Check to see if the task_project has changed
 	if (isset($_POST['new_task_project']) && $_POST['new_task_project'] && ($obj->task_project != $_POST['new_task_project'])) {
-		$obj->task_project = $_POST['new_task_project'];
+    $taskRecount = ($obj->task_project) ? $obj->task_project : 0;
+    $obj->task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
 		$obj->task_parent = $obj->task_id;
 	}
 
@@ -144,7 +145,8 @@ if ($sub_form) {
 
 	// prepare (and translate) the module name ready for the suffix
 	if ($del) {
-		if (($msg = $obj->delete())) {
+		$result = $obj->delete();
+    if (is_array($result)) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 			$AppUI->redirect();
 		} else {
@@ -154,6 +156,12 @@ if ($sub_form) {
 	}
 
   $result = $obj->store($AppUI);
+  if ($taskRecount) {
+    $myTask = new CTask();
+    CProject::updateTaskCount($taskRecount, $myTask->getTaskCount($taskRecount));
+  }
+  
+  //$obj->task_project
   if (is_array($result)) {
     $AppUI->setMsg($result, UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
