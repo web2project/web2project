@@ -72,34 +72,52 @@
 	  </else>
     </if>
 
-	<property name="svnUrl" value="https://web2project.svn.sourceforge.net/svnroot/web2project/${version}/" override="true"/>
-	<echo message="Working with ${svnUrl}..." />
+    <property name="svnUrl" value="https://web2project.svn.sourceforge.net/svnroot/web2project/${version}/" override="true"/>
+    <echo message="Working with ${svnUrl}..." />
 
-	<svncheckout
-		svnpath="/usr/bin/svn"
-		username="anony"
-		password="anony"
-		nocache="true"
-		repositoryurl="${svnUrl}"
-        todir="packaging/web2project-svn"/>
+    <svncheckout
+      svnpath="/usr/bin/svn"
+      username="anony"
+      password="anony"
+      nocache="true"
+      repositoryurl="${svnUrl}"
+          todir="packaging/web2project-svn"/>
     <svnexport
         svnpath="/usr/bin/svn"
         repositoryurl="${svnUrl}"
         todir="packaging/web2project"/>
 
-	<exec command="svn log -v packaging/web2project-svn > packaging/web2project/ChangeLog" dir="." passthru="true" />
+    <exec command="svn log -v packaging/web2project-svn > packaging/web2project/ChangeLog" dir="." passthru="true" />
   	<delete dir="packaging/web2project-svn/" />
 
-    <!--
-      TODO: This is duplicated from the lint target below and should be 
-      refactored to call that target with parameters.
-    -->
     <phplint haltonfailure="true">
       <fileset dir="packaging/web2project">
         <include name="**/*.php" />
         <exclude name="lib/" />
       </fileset>
     </phplint>
+
+    <copy todir="packaging/web2project-${releaseName}" overwrite="true">
+      <fileset dir="packaging/web2project">
+        <include name="**/*.css" />
+      </fileset>
+      <filterchain>
+        <tabtospaces tablength="2" />
+        <striplinebreaks />
+        <stripwhitespace />
+        <replaceregexp>
+          <regexp pattern=" " replace="" />
+        </replaceregexp>
+      </filterchain>
+      <fileset dir="packaging/web2project">
+        <include name="**/**" />
+        <exclude name="**/*.css" />
+      </fileset>
+      <filterchain>
+        <tabtospaces tablength="2" />
+      </filterchain>
+    </copy>
+    <delete dir="packaging/web2project" />
 
     <delete dir="packaging/web2project/unit_tests/" />
     <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
