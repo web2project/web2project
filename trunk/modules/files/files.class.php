@@ -640,7 +640,7 @@ class CFileFolder extends CW2pObject {
 		}
 	}
 
-	public function canDelete(&$msg, $oid) {
+	public function canDelete(&$msg, $oid = null, $joins = null) {
 		global $AppUI;
 
 		$q = new DBQuery();

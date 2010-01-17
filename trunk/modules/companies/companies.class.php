@@ -71,7 +71,7 @@ class CCompany extends CW2pObject {
 	}
 
 	// overload canDelete
-	public function canDelete(&$msg, $oid = null) {
+	public function canDelete(&$msg, $oid = null, $joins = null) {
 		$tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
 		$tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
 		$tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');
