@@ -154,14 +154,6 @@ class CProject extends CW2pObject {
 		$this->user_name = '';
 		$q->loadObject($this);
 	}
-	// overload canDelete
-	public function canDelete(&$msg, $oid = null) {
-    /*
-     * This validates data relationships *not* permissions.
-     */
-
-		return true;
-	}
 
 	public function delete(CAppUI $AppUI = null) {
     global $AppUI;
