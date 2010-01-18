@@ -853,7 +853,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $this->assertEquals(29,                     $new_task->task_id);
+        $this->assertEquals(31,                     $new_task->task_id);
         $this->assertEquals('Task 26',              $new_task->task_name);
         $this->assertEquals(24,                     $new_task->task_parent);
         $this->assertEquals(0,                      $new_task->task_milestone);
@@ -894,7 +894,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id = 29');
+        $q->addWhere('task_id = 31');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -916,7 +916,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $this->assertEquals(29,                     $new_task->task_id);
+        $this->assertEquals(31,                     $new_task->task_id);
         $this->assertEquals('Task 26',              $new_task->task_name);
         $this->assertEquals(24,                     $new_task->task_parent);
         $this->assertEquals(0,                      $new_task->task_milestone);
@@ -957,7 +957,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id = 29');
+        $q->addWhere('task_id = 31');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -979,7 +979,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $this->assertEquals(29,                     $new_task->task_id);
+        $this->assertEquals(31,                     $new_task->task_id);
         $this->assertEquals('Task 26',              $new_task->task_name);
         $this->assertEquals(1,                      $new_task->task_parent);
         $this->assertEquals(0,                      $new_task->task_milestone);
@@ -1020,7 +1020,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id = 29');
+        $q->addWhere('task_id = 31');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1042,7 +1042,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $this->assertEquals(29,                     $new_task->task_id);
+        $this->assertEquals(31,                     $new_task->task_id);
         $this->assertEquals('Task 26',              $new_task->task_name);
         $this->assertEquals(1,                      $new_task->task_parent);
         $this->assertEquals(0,                      $new_task->task_milestone);
@@ -1083,7 +1083,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id = 29');
+        $q->addWhere('task_id = 31');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1129,7 +1129,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id IN(29,30,31)');
+        $q->addWhere('task_id IN(31,32,33)');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1163,7 +1163,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id IN(29,30,31)');
+        $q->addWhere('task_id  IN(31,32,33)');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1197,7 +1197,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
-        $q->addWhere('task_id IN(29,30,31)');
+        $q->addWhere('task_id IN(31,32,33)');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1432,7 +1432,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_created,task_updated');
-        $q->addWhere('task_id = 29');
+        $q->addWhere('task_id = 31');
         $results = $q->loadList();
 
         foreach($results as $dates) {
@@ -1448,7 +1448,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $project = new CProject();
         $project->load(1);
 
-        $this->assertEquals(29, $project->project_task_count);
+        $this->assertEquals(31, $project->project_task_count);
 	}
 
     /**
@@ -1474,7 +1474,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $project = new CProject();
         $project->load(1);
 
-        $this->assertEquals(27, $project->project_task_count);
+        $this->assertEquals(29, $project->project_task_count);
     }
 
     /**
@@ -1500,7 +1500,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $project = new CProject();
         $project->load(1);
 
-        $this->assertEquals(25, $project->project_task_count);
+        $this->assertEquals(27, $project->project_task_count);
     }
 
     /**
@@ -1519,7 +1519,81 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('user_tasks'), $xml_db_filtered_dataset->getTable('user_tasks'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_dependencies'), $xml_db_filtered_dataset->getTable('task_dependencies'));
+    }
 
+    /**
+     * Tests updating dependencies for a task
+     */
+    public function testUpdateDependencies()
+    {
+        $this->obj->load(28);
+        $this->obj->updateDependencies('24,25,26');
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateDependencies.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array());
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array());
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_dependencies'), $xml_db_filtered_dataset->getTable('task_dependencies'));
+    }
+
+    /**
+     * Tests updating dependencies for a task with an empty string passed
+     */
+    public function testUpdateDependenciesEmptyString()
+    {
+        $this->obj->load(28);
+        $this->obj->updateDependencies('');
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateDependenciesEmptyString.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array());
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array());
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_dependencies'), $xml_db_filtered_dataset->getTable('task_dependencies'));
+    }
+
+    /**
+     * Tests updating dependencies for a task with invalid values passed
+     */
+    public function testUpdateDependenciesInvalidValues()
+    {
+        $this->obj->load(28);
+        $this->obj->updateDependencies('0, ');
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateDependenciesInvalidValues.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array());
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array());
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_dependencies'), $xml_db_filtered_dataset->getTable('task_dependencies'));
+    }
+
+    /**
+     * Tests pushing dependencies for a task
+     */
+    public function testPushDependencies() {
+        $this->obj->pushDependencies(28, '2009-09-10');
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestPushDependencies.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_id = 29');
+        $results = $q->loadList();
+
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
     }
 }
 ?>
