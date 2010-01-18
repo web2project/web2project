@@ -818,6 +818,7 @@ class CTask extends CW2pObject {
 			$q->addTable('tasks', 't');
 			$q->addUpdate('task_start_date', $task_start_date);
 			$q->addUpdate('task_end_date', $task_end_date);
+            $q->addUpdate('task_updated', $q->dbfnNow(), null, true);
 			$q->addWhere('task_id = ' . $nextTask['dependencies_task_id']);
 			$q->exec();
 			$q->clear();
