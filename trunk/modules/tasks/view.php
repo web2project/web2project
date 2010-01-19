@@ -10,6 +10,7 @@ $reminded = (int) w2PgetParam($_GET, 'reminded', 0);
 // check permissions for this record
 $canRead = !getDenyRead($m, $task_id);
 $canEdit = !getDenyEdit($m, $task_id);
+$canDelete = !getDenyDelete($m, $task_id);
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -21,8 +22,6 @@ $perms = &$AppUI->acl();
 $msg = '';
 $obj = new CTask();
 $obj->loadFull($AppUI, $task_id);
-
-$canDelete = $obj->canDelete($msg, $task_id);
 
 if (!$obj) {
 	$AppUI->setMsg('Task');
@@ -80,30 +79,32 @@ $titleBlock->show();
 $task_types = w2PgetSysVal('TaskType');
 
 ?>
-
 <script language="JavaScript">
-<?php
-// security improvement:
-// some javascript functions may not appear on client side in case of user not having write permissions
-// else users would be able to arbitrarily run 'bad' functions
-if ($canEdit) {
-?>
-
 function updateTask() {
 	var f = document.editFrm;
+    <?php
+    // security improvement:
+    // some javascript functions may not appear on client side in case of user not having write permissions
+    // else users would be able to arbitrarily run 'bad' functions
+    if ($canEdit) {
+    ?>
 	if (f.task_log_description.value.length < 1) {
-		alert( '<?php echo $AppUI->_('tasksComment', UI_OUTPUT_JS); ?>' );
-		f.task_log_description.focus();
+        alert( '<?php echo $AppUI->_('tasksComment', UI_OUTPUT_JS); ?>' );
+        f.task_log_description.focus();
+        return;
 	} else if (isNaN( parseInt( f.task_percent_complete.value+0 ) )) {
-		alert( '<?php echo $AppUI->_('tasksPercent', UI_OUTPUT_JS); ?>' );
-		f.task_percent_complete.focus();
+        alert( '<?php echo $AppUI->_('tasksPercent', UI_OUTPUT_JS); ?>' );
+        f.task_percent_complete.focus();
+        return;
 	} else if(f.task_percent_complete.value  < 0 || f.task_percent_complete.value > 100) {
-		alert( '<?php echo $AppUI->_('tasksPercentValue', UI_OUTPUT_JS); ?>' );
-		f.task_percent_complete.focus();
-	} else {
-		f.submit();
+        alert( '<?php echo $AppUI->_('tasksPercentValue', UI_OUTPUT_JS); ?>' );
+        f.task_percent_complete.focus();
+        return;
 	}
+    <?php } ?>
+	f.submit();
 }
+<?php if ($canDelete) { ?>
 function delIt() {
 	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Task', UI_OUTPUT_JS) . '?'; ?>' )) {
 		document.frmDelete.submit();
@@ -394,5 +395,6 @@ if (count($tabBox->tabs)) {
 	$tabBox_show = 1;
 }
 
-if ($tabBox_show == 1)
+if ($tabBox_show == 1) {
 	$tabBox->show();
+}
