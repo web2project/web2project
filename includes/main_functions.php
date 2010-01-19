@@ -80,7 +80,7 @@ function __autoload($class_name) {
       }
       if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
         require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-        return;   
+        return;
       }
       break;
   }
@@ -173,7 +173,7 @@ function tree_recurse($id, $indent, $list, $children) {
  **	@param 	string 	HTML select box name identifier
  **	@param	string	HTML attributes
  **	@param	int			Proejct ID for preselection
- **	@param 	int			Project ID which will be excluded from the list 
+ **	@param 	int			Project ID which will be excluded from the list
  **									(e.g. in the tasks import list exclude the project to import into)
  **	@return	string 	HTML selectbox
 
@@ -214,7 +214,7 @@ function arrayMerge($a1, $a2) {
   }
   if (is_array($a2) && !is_array($a1)) {
     return $a2;
-  }  
+  }
   foreach ($a2 as $k => $v) {
     $a1[$k] = $v;
   }
@@ -256,7 +256,7 @@ function w2PgetConfig($key, $default = null) {
 	if (isset($w2Pconfig[$key])) {
 		return $w2Pconfig[$key];
 	} else {
-		
+
 		return $default;
 	}
 }
@@ -284,7 +284,7 @@ function w2PgetUsers() {
 	if ($companies) {
 		$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 	}
-	
+
 	if ($AppUI->isActiveModule('departments')) {
 		$dpt = new CDepartment();
 		$depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
@@ -481,7 +481,7 @@ function w2PshowImage($src, $wid = '', $hgt = '', $alt = '', $title = '', $modul
 
 function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page) {
   $xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 0;
-  
+
   $xpg_break = false;
   $xpg_prev_page = $xpg_next_page = 0;
 
@@ -544,7 +544,7 @@ function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingT
 	$s = '';
   $nav = $AppUI->getMenuModules();
   $perms = $AppUI->acl();
-  
+
   $s .= ($rootTag != '') ? "<$rootTag id=\"headerNav\">" : '';
   $links = array();
   foreach ($nav as $module) {
@@ -557,7 +557,7 @@ function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingT
   }
   $s .= implode($dividingToken, $links);
   $s .= ($rootTag != '') ? "</$rootTag>" : '';
-  
+
   return $s;
 }
 
@@ -576,8 +576,8 @@ function defVal($var, $def) {
 function w2PgetParam(&$arr, $name, $def = null) {
 	global $AppUI;
 	if (isset($arr[$name])) {
-		if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false 
-			&& strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false 
+		if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false
+			&& strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false
 			&& strpos($arr[$name], ';') === false && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
 				return isset($arr[$name]) ? $arr[$name] : $def;
 			} else {
@@ -588,7 +588,7 @@ function w2PgetParam(&$arr, $name, $def = null) {
 				//Hack attempt detected
 				//return isset($arr[$name]) ? str_replace(' ','',$arr[$name]) : $def;
 				$AppUI->setMsg('Poisoning attempt to the URL detected. Issue logged.', UI_MSG_ALERT);
-				$AppUI->redirect('m=public&a=access_denied');				
+				$AppUI->redirect('m=public&a=access_denied');
 			}
 	} else {
 		return $def;
@@ -1124,9 +1124,9 @@ function w2PrequiredFields($requiredFields) {
 			$buffer .= 'msg += "\n' . $AppUI->_('required_field_' . $rf, UI_OUTPUT_JS) . '";';
 
 			/* MSIE cannot handle the focus command for some disabled or hidden fields like the start/end date fields
-			** Another workaround would be to check whether the field is disabled, 
+			** Another workaround would be to check whether the field is disabled,
 			** but then one would for instance need to use end_date instead of project_end_date in the projects addedit site.
-			** As this cannot be guaranteed since these fields are grabbed from a user-specifiable 
+			** As this cannot be guaranteed since these fields are grabbed from a user-specifiable
 			** System Value it's IMHO more safe to disable the focus for MSIE.
 			*/
 			$r = strstr($rf, '.');
@@ -1219,7 +1219,7 @@ function w2PHTMLDecode($txt) {
 	}
 	return $txt;
 }
-    
+
 function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '') {
 	global $AppUI;
 	if ($raw) {
@@ -1256,7 +1256,7 @@ function w2PcheckCharset($charset) {
  *    @param string $s the debug message
  *    @param string $t the header of the message
  *    @param string $f the script filename
- *    @param string $l the script line 
+ *    @param string $l the script line
  *    @access public
  */
 $debug_file = W2P_BASE_DIR . '/files/debug.log';
@@ -1292,7 +1292,7 @@ function w2p_check_url($link)
 
   if (strpos($link, 'http') === false) {
     $link = 'http://'.$link;
-  }  
+  }
   if (preg_match("/^(?:(?:http|ftp)s?):\/\/(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $link)) {
     $result = true;
   }

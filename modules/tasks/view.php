@@ -8,9 +8,9 @@ $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
 $reminded = (int) w2PgetParam($_GET, 'reminded', 0);
 
 // check permissions for this record
-$canRead = !getDenyRead($m, $task_id);
-$canEdit = !getDenyEdit($m, $task_id);
-$canDelete = !getDenyDelete($m, $task_id);
+$canRead = canView($m, $task_id);
+$canEdit = canEdit($m, $task_id);
+$canDelete = canDelete($m, $task_id);
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');

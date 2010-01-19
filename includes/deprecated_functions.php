@@ -17,3 +17,18 @@ if (!defined('W2P_BASE_DIR')) {
 *   In order to find those, you'll have to explore the individual classes.
 */
 
+
+/*
+*  Originally located in classes/permissions.class.php;
+*  To be removed in v2.0 because those names caused double negatives in coding:
+*    To see if something was readable for the user, you'd have to say !getDenyRead($module, $item_id0
+*/
+function getDenyRead($mod, $item_id = 0) {
+	return !getPermission($mod, 'view', $item_id);
+}
+function getDenyEdit($mod, $item_id = 0) {
+	return !getPermission($mod, 'edit', $item_id);
+}
+function getDenyAdd($mod, $item_id = 0) {
+	return !getPermission($mod, 'add', $item_id);
+}
