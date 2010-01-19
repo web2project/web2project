@@ -1383,20 +1383,28 @@ class w2Pacl extends gacl_api {
 		return $res;
 	}
   
-  /*
-   * This method is primarily for modules that don't have a set of permissions
-   * on their own.  For example, the SmartSearch module in core
-   * web2project respects the permissions of the individual items it is
-   * searching but it does not apply any permissions of its own.  
-   */
-  public function registerModule($module_name, $module_value, $section_value = 'app') {
-    $q = new DBQuery();
-    $q->addTable('gacl_axo');
-    $q->addInsert('name', $module_name);
-    $q->addInsert('value', $module_value);
-    $q->addInsert('section_value', $section_value);
-    $q->exec();
-  }
+    /*
+    * This method is primarily for modules that don't have a set of permissions
+    * on their own.  For example, the SmartSearch module in core
+    * web2project respects the permissions of the individual items it is
+    * searching but it does not apply any permissions of its own.
+    */
+    public function registerModule($module_name, $module_value, $section_value = 'app') {
+        $q = new DBQuery();
+        $q->addTable('gacl_axo');
+        $q->addInsert('name', $module_name);
+        $q->addInsert('value', $module_value);
+        $q->addInsert('section_value', $section_value);
+        $q->exec();
+    }
+    public function unregisterModule($module_value) {
+        if ($module_value != '') {
+            $q = new DBQuery();
+            $q->setDelete('gacl_axo');
+            $q->addWhere("value = '$module_value'");
+            $q->exec();
+        }
+    }
 }
 
 // The includes/permissions.php file has been ported here because it held a group of public functions for permission checking.
@@ -1501,14 +1509,16 @@ function getPermission($mod, $perm, $item_id = 0) {
 	return $result;
 }
 
-function getDenyRead($mod, $item_id = 0) {
-	return !getPermission($mod, 'view', $item_id);
+function canView($mod, $item_id = 0) {
+	return getPermission($mod, 'view', $item_id);
+}
+function canEdit($mod, $item_id = 0) {
+	return getPermission($mod, 'edit', $item_id);
 }
 
-function getDenyEdit($mod, $item_id = 0) {
-	return !getPermission($mod, 'edit', $item_id);
+function canAdd($mod, $item_id = 0) {
+	return getPermission($mod, 'add', $item_id);
 }
-
-function getDenyAdd($mod, $item_id = 0) {
-	return !getPermission($mod, 'add', $item_id);
+function canDelete($mod, $item_id = 0) {
+	return getPermission($mod, 'delete', $item_id);
 }
