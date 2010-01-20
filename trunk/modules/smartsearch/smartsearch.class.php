@@ -26,6 +26,8 @@ class smartsearch {
 
 	public function fetchResults(&$permissions, &$record_count) {
 		global $AppUI;
+        $outstring = '';
+
 		$q = $this->_buildQuery();
 		$results = null;
 		if ($q) {

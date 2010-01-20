@@ -238,20 +238,20 @@ if (isset($_POST['keyword'])) {
     		}
     	}
 
-      $moduleList = $AppUI->getLoadableModuleList();
-      foreach ($moduleList as $module) {
-        $object = new $module['mod_main_class']();
-        if (is_callable(array($object, 'hook_search'))) {
-        	$search = new smartsearch();
-          $searchArray = $object->hook_search();
-          foreach($searchArray as $key => $value) {
-            $search->{$key} = $value;
-          }
-          $search->setKeyword($search->keyword);
-          $search->setAdvanced($ssearch);
-          echo $search->fetchResults($perms, $reccount);
+        $moduleList = $AppUI->getLoadableModuleList();
+        foreach ($moduleList as $module) {
+            $object = new $module['mod_main_class']();
+            if (is_callable(array($object, 'hook_search'))) {
+                $search = new smartsearch();
+                $searchArray = $object->hook_search();
+                foreach($searchArray as $key => $value) {
+                    $search->{$key} = $value;
+                }
+                $search->setKeyword($search->keyword);
+                $search->setAdvanced($ssearch);
+                echo $search->fetchResults($perms, $reccount);
+            }
         }
-      }
     	echo '<tr><td><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>';
     ?>
   </table>
