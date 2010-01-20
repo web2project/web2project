@@ -61,7 +61,7 @@ class CContact extends CW2pObject {
 	public $contact_methods = array();
 
 	public function __construct() {
-    parent::__construct('contacts', 'contact_id');
+        parent::__construct('contacts', 'contact_id');
 	}
 
 	/*
@@ -69,17 +69,19 @@ class CContact extends CW2pObject {
 	 */
 	public function fullLoad($contactId, CAppUI $AppUI = null) {
 		global $AppUI;
+        trigger_error("CContact->fullLoad() has been deprecated in v1.2 and will be removed in v2.0", E_USER_WARNING );
 
-    $this->loadFull($AppUI, $contactId);
+        $this->loadFull($AppUI, $contactId);
 	}
+
 	public function loadFull(CAppUI $AppUI = null, $contactId) {
 		global $AppUI;
 
-    $q = new DBQuery;
-    $q->addTable('contacts');
-    $q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
-    $q->addWhere('contact_id = ' . (int) $contactId);
-    $q->loadObject($this, true, false);
+        $q = new DBQuery;
+        $q->addTable('contacts');
+        $q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
+        $q->addWhere('contact_id = ' . (int) $contactId);
+        $q->loadObject($this, true, false);
 	}
 
 	public function store(CAppUI $AppUI = null) {

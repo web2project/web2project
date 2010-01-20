@@ -282,25 +282,26 @@ class CTask extends CW2pObject {
 	*/
 	public function fullLoad($taskId) {
 		global $AppUI;
+        trigger_error("CTask->fullLoad() has been deprecated in v1.2 and will be removed in v2.0", E_USER_WARNING );
 
-    $this->loadFull($AppUI, $taskId);
+        $this->loadFull($AppUI, $taskId);
 	}
 	public function loadFull(CAppUI $AppUI = null, $taskId) {
-    global $AppUI;
+        global $AppUI;
 
-    $q = new DBQuery;
-    $q->addTable('tasks');
-    $q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
-    $q->addJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'inner');
-    $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
-    $q->addWhere('task_id = ' . (int)$taskId);
-    $q->addQuery('tasks.*');
-    $q->addQuery('project_name, project_color_identifier');
-    $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
-    $q->addGroup('task_id');
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
+        $q->addJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'inner');
+        $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
+        $q->addWhere('task_id = ' . (int)$taskId);
+        $q->addQuery('tasks.*');
+        $q->addQuery('project_name, project_color_identifier');
+        $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
+        $q->addGroup('task_id');
 
-    $q->loadObject($this, true, false);
-    $this->task_hours_worked += 0;
+        $q->loadObject($this, true, false);
+        $this->task_hours_worked += 0;
 	}
 
 	/*
