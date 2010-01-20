@@ -85,35 +85,35 @@ class CContact extends CW2pObject {
 	}
 
 	public function store(CAppUI $AppUI = null) {
-    global $AppUI;
-    $errorMsgArray = $this->check();
+        global $AppUI;
+        $errorMsgArray = $this->check();
 
-    if (count($errorMsgArray) > 0) {
-      return $errorMsgArray;
-    }
-	  /*
-     *  This  validates that any Contact saved will have a Display Name as
-     * required by various dropdowns, etc throughout the system.  This is
-     * mostly required when Contacts are generated via programatic methods and
-     * not through the add/edit UI.
-     */
-    if(mb_strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
-      //TODO: this should use the USERFORMAT to determine how display names are generated
-      if ($this->contact_first_name == null && $this->contact_last_name == null) {
-        $this->contact_order_by = $this->contact_email;
-      } else {
-        $this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
-      }
-    }
-    if($this->contact_first_name == null) {
-      $this->contact_first_name = '';
-    }
-    if($this->contact_last_name == null) {
-      $this->contact_last_name = '';
-    }
-    addHistory('contacts', $this->contact_id, 'store', $this->contact_first_name.' '.$this->contact_last_name, $this->contact_id);
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+        /*
+        *  This  validates that any Contact saved will have a Display Name as
+        * required by various dropdowns, etc throughout the system.  This is
+        * mostly required when Contacts are generated via programatic methods and
+        * not through the add/edit UI.
+        */
+        if(mb_strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
+            //TODO: this should use the USERFORMAT to determine how display names are generated
+            if ($this->contact_first_name == null && $this->contact_last_name == null) {
+                $this->contact_order_by = $this->contact_email;
+            } else {
+                $this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
+            }
+        }
+        if($this->contact_first_name == null) {
+            $this->contact_first_name = '';
+        }
+        if($this->contact_last_name == null) {
+            $this->contact_last_name = '';
+        }
+        addHistory('contacts', $this->contact_id, 'store', $this->contact_first_name.' '.$this->contact_last_name, $this->contact_id);
 
-    parent::store();
+        parent::store();
 	}
 
 	public function delete(CAppUI $AppUI = null) {
