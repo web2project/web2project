@@ -135,13 +135,14 @@ class CProject extends CW2pObject {
 	 */
 	public function fullLoad($projectId) {
 		global $AppUI;
+        trigger_error("CProject->fullLoad() has been deprecated in v1.2 and will be removed in v2.0", E_USER_WARNING );
 
-    $this->loadFull($AppUI, $projectId);
+        $this->loadFull($AppUI, $projectId);
 	}
 	public function loadFull(CAppUI $AppUI = null, $projectId) {
 		global $AppUI;
 
-    $q = new DBQuery;
+        $q = new DBQuery;
 		$q->addTable('projects');
 		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
 		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
