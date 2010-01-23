@@ -118,7 +118,7 @@ function showRow($id = '', $key = 0, $title = '', $value = '') {
     $s .= '<td valign="top"><a name="'.$title.'"> </a>' . arraySelect($keys, 'sysval_key_id', 'size="1" class="text"', $key) . '</td>';
     $s .= '<td valign="top"><input type="text" name="sysval_title" value="' . w2PformSafe($title) . '" class="text" /></td>';
     $s .= '<td valign="top"><textarea name="sysval_value" class="small" rows="5" cols="40">' . $value . '</textarea></td>';
-    $s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button" /></td><td>&nbsp;</td>';
+    $s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'save' : 'add') . '" class="button" /></td><td>&nbsp;</td>';
   } else {
     $s = '<tr><td width="12" valign="top">';
     if ($canEdit) {
