@@ -12,4 +12,3 @@
 $dir = basename(dirname(__file__));
 
 $LANGUAGES['po'] = array($dir, 'Polish (Pol)', 'Polski (PL)', 'po', 'utf-8');
-?>

@@ -12,4 +12,3 @@
 $dir = basename(dirname(__file__));
 
 $LANGUAGES['en'] = array($dir, 'English', 'English', 'enu', 'ISO8859-15');
-?>

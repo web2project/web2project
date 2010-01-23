@@ -139,7 +139,7 @@
 					$allErrors[] = "Unfortunately, we can't determine which version of dotProject you're using.  To be safe, we're not going to do anything.";
 					$allErrors[] = "If you are using dotProject 1.x, please use their methods to upgrade to dotProject v2.x before you go any further.";
 			}
-			
+
 			return $allErrors;
 		}
 		public function createConfigString($dbConfig) {
@@ -165,7 +165,7 @@
 			} else if ($maxfileuploadsize > 1024) {
 				$maxfileuploadsize = (int)($maxfileuploadsize / 1024) . 'K';
 			}
-			
+
 			return $maxfileuploadsize;
 		}
 		public function testDatabaseCredentials($w2Pconfig) {
@@ -297,7 +297,7 @@
 				  if ($dbConnection) {
 				    $existing_db = $db->SelectDB($this->configOptions['dbname']);
 				  }
-				} else { 
+				} else {
 					$dbConnection = false;
 				}
 			} catch (Exception $exc) {
@@ -318,11 +318,11 @@
 			if ($res->RecordCount() > 0) {
 				while (!$res->EOF) {
 					$fields = $res->fields;
-					
+
 					$sysvalId = $fields['sysval_id'];
 					$sysvalKeyId = $fields['sysval_key_id'];
 					$sysvalTitle = $fields['sysval_title'];
-					$values = explode("\n", $fields['sysval_value']); 
+					$values = explode("\n", $fields['sysval_value']);
 					foreach ($values as $syskey) {
 						$sysvalValId = substr($syskey, 0, strpos($syskey, '|'));
 						$sysvalValue = substr(trim(' '.$syskey.' '), strpos($syskey, '|') + 1);
