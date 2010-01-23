@@ -11,6 +11,7 @@ require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 /*
 Re-Generating variables for html form...
 */
+
 $rnd = strtoupper(rnd_string());
 $uid = urlencode(md5_encrypt($rnd));
 $cid = md5_encrypt($rnd);
@@ -64,75 +65,71 @@ function submitIt(){
 	</tr>
 </table>
 <form name="editFrm" action="./do_user_aed.php" method="post" accept-charset="utf-8">
-	<input type="hidden" name="user_id" value="<?php echo intval($user["user_id"]); ?>" />
-	<input type="hidden" name="contact_id" value="<?php echo intval($user["contact_id"]); ?>" />
+	<input type="hidden" name="user_id" value="0" />
+	<input type="hidden" name="contact_id" value="0" />
 	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />
 	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>)" />
 	<input type="hidden" name="cid" value="<?php echo $cid ?>" />
 
-	<table style="border-style:none;" align="center" border="0" width="700" cellpadding="0" cellspacing="0" class="std">	
+    <table style="border-style:none;" align="center" border="0" width="700" cellpadding="0" cellspacing="0" class="std">
 		<tr><td colspan="5"><?php echo styleRenderBoxTop(); ?></td></tr>
 		<tr>
-		  <td align="right" width="230">* <?php echo $AppUI->_('Login Name'); ?>:</td>
-		  <td colspan="2">
-				<?php
-					if ($user['user_username']) {
-						echo '<input type="hidden" class="text" name="user_username" value="' . $user['user_username'] . '" />';
-						echo '<strong>' . $user["user_username"] . '</strong>';
-					} else {
-						echo '<input type="text" class="text" name="user_username" value="' . $user['user_username'] . '" maxlength="255" size="40" />';
-					}
-				?>
-			</td>
-			<td class="right-brdr"><img src="./style/web2project/images/shim.gif" width="1" height="1" /></td>
+            <td align="right" width="230">* <?php echo $AppUI->_('Login Name'); ?>:</td>
+            <td colspan="2">
+                <input type="text" class="text" name="user_username" value="" maxlength="255" size="40" />
+            </td>
+            <td class="right-brdr"><img src="./style/web2project/images/shim.gif" width="1" height="1" /></td>
 		</tr>
 		<tr>
-		  <td align="right">* <?php echo $AppUI->_('Password'); ?>:</td>
-		  <td colspan="2"><input type="password" class="text" name="user_password" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" /> </td>
+            <td align="right">* <?php echo $AppUI->_('Password'); ?>:</td>
+            <td colspan="2"><input type="password" class="text" name="user_password" value="" maxlength="32" size="32" /> </td>
 		</tr>
 		<tr>
-		  <td align="right">* <?php echo $AppUI->_('Confirm Password'); ?>:</td>
-		  <td colspan="2"><input type="password" class="text" name="password_check" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" /> </td>
+            <td align="right">* <?php echo $AppUI->_('Confirm Password'); ?>:</td>
+            <td colspan="2"><input type="password" class="text" name="password_check" value="" maxlength="32" size="32" /> </td>
 		</tr>
-		<tr>
-		  <td align="right">* <?php echo $AppUI->_('Name'); ?>:</td>
-		  <td colspan="2"><input type="text" class="text" name="contact_first_name" value="<?php echo $user['contact_first_name']; ?>" maxlength="50" /> <input type="text" class="text" name="contact_last_name" value="<?php echo $user['contact_last_name']; ?>" maxlength="50" /></td>
-		</tr>
-		<tr>
-		  <td align="right">* <?php echo $AppUI->_('Email'); ?>:</td>
-		  <td colspan="2"><input type="text" class="text" name="contact_email" value="<?php echo $user['contact_email']; ?>" maxlength="255" size="40" /> </td>
-		</tr>
-		<tr>
-		  <td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
-		  <td colspan="2"><input type="text" class="text" name="contact_phone" value="<?php echo $user['contact_phone']; ?>" maxlength="50" size="40" /> </td>
-		</tr>
-		<tr>
-		  <td align="right"><?php echo $AppUI->_('Address'); ?>1:</td>
-		  <td colspan="2"><input type="text" class="text" name="contact_address1" value="<?php echo $user['contact_address1']; ?>" maxlength="50" size="40" /> </td>
-		</tr>
-		<tr>
-		  <td align="right"><?php echo $AppUI->_('Address'); ?>2:</td>
-		  <td colspan="2"><input type="text" class="text" name="contact_address2" value="<?php echo $user['contact_address2']; ?>" maxlength="50" size="40" /> </td>
-		</tr>
-		<tr>
-		  <td align="right"><?php echo $AppUI->_('City'); ?>:</td>
-		  <td colspan="2"><input type="text" class="text" name="contact_city" value="<?php echo $user['contact_city']; ?>" maxlength="50" size="40" /> </td>
-		</tr>
-		<tr>
-		  <td align="right"><?php echo $AppUI->_('State'); ?>:</td>
-		  <td colspan="2"><input type="text" class="text" name="contact_state" value="<?php echo $user['contact_state']; ?>" maxlength="50" size="40" /> </td>
-		</tr>
-		<tr>
-		  <td align="right"><?php echo $AppUI->_('Postcode') . ' / ' . $AppUI->_('Zip Code'); ?>:</td>
-		  <td colspan="2"><input type="text" class="text" name="contact_zip" value="<?php echo $user['contact_zip']; ?>" maxlength="50" size="40" /> </td>
-		</tr>
+        <tr>
+            <td align="right">* <?php echo $AppUI->_('Name'); ?>:</td>
+            <td colspan="2">
+                <input type="text" class="text" name="contact_first_name" value="" maxlength="25" />
+                <input type="text" class="text" name="contact_last_name" value="" maxlength="25" />
+            </td>
+        </tr>
+        <tr>
+            <td align="right">* <?php echo $AppUI->_('Email'); ?>:</td>
+            <td colspan="2"><input type="text" class="text" name="contact_email" value="" maxlength="255" size="40" /> </td>
+        </tr>
+        <tr>
+            <td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
+            <td colspan="2"><input type="text" class="text" name="contact_phone" value="" maxlength="50" size="40" /> </td>
+        </tr>
+        <tr>
+            <td align="right"><?php echo $AppUI->_('Address'); ?>1:</td>
+            <td colspan="2"><input type="text" class="text" name="contact_address1" value="" maxlength="50" size="40" /> </td>
+        </tr>
+        <tr>
+            <td align="right"><?php echo $AppUI->_('Address'); ?>2:</td>
+            <td colspan="2"><input type="text" class="text" name="contact_address2" value="" maxlength="50" size="40" /> </td>
+        </tr>
+        <tr>
+            <td align="right"><?php echo $AppUI->_('City'); ?>:</td>
+            <td colspan="2"><input type="text" class="text" name="contact_city" value="" maxlength="50" size="40" /> </td>
+        </tr>
+        <tr>
+            <td align="right"><?php echo $AppUI->_('State'); ?>:</td>
+            <td colspan="2"><input type="text" class="text" name="contact_state" value="" maxlength="50" size="40" /> </td>
+        </tr>
+        <tr>
+            <td align="right"><?php echo $AppUI->_('Postcode') . ' / ' . $AppUI->_('Zip Code'); ?>:</td>
+            <td colspan="2"><input type="text" class="text" name="contact_zip" value="" maxlength="50" size="40" /> </td>
+        </tr>
 		<tr>
 			<td align="right"><?php echo $AppUI->_('Country'); ?>:</td>
 			<td colspan="2">
-				<?php
-					$countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
-					echo arraySelect($countries, 'contact_country', 'size="1" class="text"', $user['contact_country']);
-				?>
+                <?php
+                    $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
+                    echo arraySelect($countries, 'contact_country', 'size="1" class="text"', 0);
+                ?>
 			</td>
 		</tr>
 		<tr>
@@ -141,8 +138,8 @@ function submitIt(){
 			<td valign="middle" align="left"><img src="<?php echo W2P_BASE_URL; ?>/lib/captcha/CaptchaImage.php?uid=54;<?php echo $uid; ?>" alt="" /></td>
 		</tr>
 		<tr>
-		  <td align="right">* <?php echo $AppUI->_('Required Fields'); ?></td>
-		  <td colspan="2"></td>
+            <td align="right">* <?php echo $AppUI->_('Required Fields'); ?></td>
+            <td colspan="2"></td>
 		</tr>
 		<tr>
 		  <td align="left">
