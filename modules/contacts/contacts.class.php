@@ -111,6 +111,8 @@ class CContact extends CW2pObject {
         if($this->contact_last_name == null) {
             $this->contact_last_name = '';
         }
+        $q = new DBQuery;
+        $this->contact_lastupdate = $q->dbfnNow();
         addHistory('contacts', $this->contact_id, 'store', $this->contact_first_name.' '.$this->contact_last_name, $this->contact_id);
 
         parent::store();
