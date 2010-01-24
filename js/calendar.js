@@ -30,7 +30,6 @@ function selected(cal, date) {
 // destroying it.
 function closeHandler(cal) {
   cal.hide();                        // hide the calendar
-//  cal.destroy();
   _dynarch_popupCalendar = null;
 }
 
