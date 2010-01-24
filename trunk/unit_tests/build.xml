@@ -90,36 +90,39 @@
     <exec command="svn log -v packaging/web2project-svn > packaging/web2project/ChangeLog" dir="." passthru="true" />
   	<delete dir="packaging/web2project-svn/" />
 
-    <phplint haltonfailure="true">
+    <copy todir="packaging/web2project-${releaseName}" overwrite="true">
       <fileset dir="packaging/web2project">
+        <include name="**/*.css" />
+        <include name="**/*.js" />
+      </fileset>
+      <filterchain>
+        <tabtospaces tablength="4" />
+        <stripwhitespace />
+        <replaceregexp>
+          <regexp pattern="  " replace="" />
+        </replaceregexp>
+      </filterchain>
+    </copy>
+    <copy todir="packaging/web2project-${releaseName}" overwrite="true">
+      <fileset dir="packaging/web2project">
+        <include name="**/**" />
+        <exclude name="**/*.css" />
+        <exclude name="**/*.js" />
+      </fileset>
+      <filterchain>
+        <tabtospaces tablength="4" />
+      </filterchain>
+    </copy>
+    <delete dir="packaging/web2project" />
+
+    <delete dir="packaging/web2project-${releaseName}/unit_tests/" />
+    <phplint haltonfailure="true">
+      <fileset dir="packaging/web2project-${releaseName}">
         <include name="**/*.php" />
         <exclude name="lib/" />
       </fileset>
     </phplint>
 
-    <copy todir="packaging/web2project-${releaseName}" overwrite="true">
-      <fileset dir="packaging/web2project">
-        <include name="**/*.css" />
-      </fileset>
-      <filterchain>
-        <tabtospaces tablength="2" />
-        <striplinebreaks />
-        <stripwhitespace />
-        <replaceregexp>
-          <regexp pattern=" " replace="" />
-        </replaceregexp>
-      </filterchain>
-      <fileset dir="packaging/web2project">
-        <include name="**/**" />
-        <exclude name="**/*.css" />
-      </fileset>
-      <filterchain>
-        <tabtospaces tablength="2" />
-      </filterchain>
-    </copy>
-    <delete dir="packaging/web2project" />
-
-    <delete dir="packaging/web2project/unit_tests/" />
     <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
       <fileset dir="packaging/">
         <include name="**/**" />
