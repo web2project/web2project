@@ -24,14 +24,14 @@ if (!defined('W2P_BASE_DIR')) {
 *    To see if something was readable for the user, you'd have to say !getDenyRead($module, $item_id0
 */
 function getDenyRead($mod, $item_id = 0) {
-	trigger_error("getDenyRead has been deprecated in v1.3 and will be removed in v2.0", E_USER_WARNING );
+	trigger_error("getDenyRead has been deprecated in v1.3 and will be removed in v2.0", E_USER_NOTICE );
     return !getPermission($mod, 'view', $item_id);
 }
 function getDenyEdit($mod, $item_id = 0) {
-	trigger_error("getDenyEdit has been deprecated in v1.3 and will be removed in v2.0", E_USER_WARNING );
+	trigger_error("getDenyEdit has been deprecated in v1.3 and will be removed in v2.0", E_USER_NOTICE );
     return !getPermission($mod, 'edit', $item_id);
 }
 function getDenyAdd($mod, $item_id = 0) {
-	trigger_error("getDenyAdd has been deprecated in v1.3 and will be removed in v2.0", E_USER_WARNING );
+	trigger_error("getDenyAdd has been deprecated in v1.3 and will be removed in v2.0", E_USER_NOTICE );
     return !getPermission($mod, 'add', $item_id);
 }
