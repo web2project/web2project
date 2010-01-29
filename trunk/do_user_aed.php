@@ -93,7 +93,7 @@ $isNewUser = !(w2PgetParam($_REQUEST, 'user_id', 0));
 
 if ($isNewUser) {
 	// check if a user with the param Username already exists
-	if( count($contactListByUsername) > 0) {
+	if( is_array($contactListByUsername)) {
 		$AppUI->setMsg('This username is not available, please try another.', UI_MSG_ERROR, true);
 		$AppUI->redirect();		
 	} else {
