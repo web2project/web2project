@@ -282,7 +282,7 @@ class CTask extends CW2pObject {
 	*/
 	public function fullLoad($taskId) {
 		global $AppUI;
-        trigger_error("CTask->fullLoad() has been deprecated in v1.2 and will be removed in v2.0", E_USER_WARNING );
+        trigger_error("CTask->fullLoad() has been deprecated in v1.2 and will be removed in v2.0", E_USER_NOTICE );
 
         $this->loadFull($AppUI, $taskId);
 	}
