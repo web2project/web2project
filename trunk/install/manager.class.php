@@ -296,6 +296,9 @@
 				  $dbConnection = $db->Connect($this->configOptions['dbhost'], $this->configOptions['dbuser'], $this->configOptions['dbpass']);
 				  if ($dbConnection) {
 				    $existing_db = $db->SelectDB($this->configOptions['dbname']);
+                    if (!$existing_db) {
+                      $db->_errorMsg = 'This database user does not have rights to the database.';
+                    }
 				  }
 				} else {
 					$dbConnection = false;
