@@ -552,15 +552,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Test loading the Project object.
      */
-    public function testFullLoad()
-    {
-        $this->setExpectedException('PHPUnit_Framework_Error');
-        $this->obj->fullLoad(1);
-    }
-
-    /**
-     * Test loading the Project object.
-     */
     public function testLoadFull()
     {
         global $AppUI;

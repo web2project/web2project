@@ -1459,14 +1459,12 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->load(22);
         $this->obj->delete();
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestDelete.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created','task_updated')));
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created','task_updated')));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('user_tasks'), $xml_db_filtered_dataset->getTable('user_tasks'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_dependencies'), $xml_db_filtered_dataset->getTable('task_dependencies'));
+        $this->assertFalse($this->obj->load(22));
+        $this->assertEquals(0, count($this->obj->getAssignedUsers(22)));
+        $this->assertEquals(0, count($this->obj->getTaskLogs(22)));
+        $this->assertEquals(0, count($this->obj->getAssignedUsers(22)));
+        $this->assertEquals(0, count($this->obj->getDependencyList(22)));
+        $this->assertEquals(0, count($this->obj->getDependentTaskList(22)));
 
         /**
          * Test to make sure project task count was updated
@@ -1478,21 +1476,44 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
+     * Tests to make sure all relevant children are found
+     */
+    public function testGetChildren()
+    {
+        $this->obj->load(21);
+        $children = $this->obj->getChildren();
+
+        $this->assertEquals(2, count($children));
+    }
+
+    /**
+     * Tests to make sure all relevant children and their descendants are found
+     */
+    public function testDeepChildren()
+    {
+        $this->obj->load(15);
+        $children = $this->obj->getDeepChildren();
+
+        $this->assertEquals(2, count($children));
+    }
+
+    /**
      * Tests deleting a task with children
      */
     public function testDeleteWithChildren()
     {
-        $this->obj->load(21);
+        $this->obj->load(15);
+        $children = $this->obj->getDeepChildren();
         $this->obj->delete();
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestDeleteWithChildren.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created','task_updated')));
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created','task_updated')));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('user_tasks'), $xml_db_filtered_dataset->getTable('user_tasks'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_dependencies'), $xml_db_filtered_dataset->getTable('task_dependencies'));
+        foreach($children as $child) {
+            $this->assertFalse($this->obj->load($child));
+            $this->assertEquals(0, count($this->obj->getAssignedUsers($child)));
+            $this->assertEquals(0, count($this->obj->getTaskLogs($child)));
+            $this->assertEquals(0, count($this->obj->getAssignedUsers($child)));
+            $this->assertEquals(0, count($this->obj->getDependencyList($child)));
+            $this->assertEquals(0, count($this->obj->getDependentTaskList($child)));
+        }
 
         /**
          * Test to make sure project task count was updated
@@ -1510,15 +1531,13 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $this->obj->load(28);
         $this->obj->delete();
-        
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestDeleteWithDeps.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created','task_updated')));
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created','task_updated')));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('user_tasks'), $xml_db_filtered_dataset->getTable('user_tasks'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_dependencies'), $xml_db_filtered_dataset->getTable('task_dependencies'));
+
+        $this->assertFalse($this->obj->load(28));
+        $this->assertEquals(0, count($this->obj->getAssignedUsers(28)));
+        $this->assertEquals(0, count($this->obj->getTaskLogs(28)));
+        $this->assertEquals(0, count($this->obj->getAssignedUsers(28)));
+        $this->assertEquals(0, count($this->obj->getDependencyList(28)));
+        $this->assertEquals(0, count($this->obj->getDependentTaskList(28)));
     }
 
     /**
@@ -1596,4 +1615,3 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         }
     }
 }
-?>

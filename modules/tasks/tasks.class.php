@@ -679,18 +679,20 @@ class CTask extends CW2pObject {
 		$this->load($this->task_id);
 		addHistory('tasks', $this->task_id, 'delete', $this->task_name, $this->task_project);
 
-		// delete the tasks...what about orphans?
-		// delete task with parent is this task
-		$childrenlist = $this->getDeepChildren();
+		// delete children
+		$childrenlist = $this->getChildren();
+        foreach($childrenlist as $child) {
+            $task = new CTask();
+            $task->task_id = $child;
+            $task->delete($AppUI);
+        }
+
+        $taskList = $childrenlist + array($this->task_id);
+        $implodedTaskList = implode(',', $taskList);
 
         // delete linked user tasks
 		$q->setDelete('user_tasks');
-        if (!empty($childrenlist)) {
-            $q->addWhere('task_id IN (' . implode(', ', $childrenlist) . ', ' . $this->task_id . ')');
-        } else {
-            $q->addWhere('task_id=' . (int)$this->task_id);
-        }
-
+        $q->addWhere('task_id IN (' . $implodedTaskList . ')');
 		if (!($q->exec())) {
 			return db_error();
 		}
@@ -707,27 +709,9 @@ class CTask extends CW2pObject {
 		}
 		$q->clear();
 
-		// delete children
-		if (!empty($childrenlist)) {
-			$q->setDelete('tasks');
-			$q->addWhere('task_parent IN (' . implode(', ', $childrenlist) . ', ' . $this->task_id . ')');
-			if (!($q->exec())) {
-				return db_error();
-			} else {
-				$this->updateDynamics(); // to update after children are deleted (see above)
-				$this->_action = 'deleted with children'; // always overriden?
-			}
-			$q->clear();
-		}
-
 		// delete affiliated task_logs
 		$q->setDelete('task_log');
-		if (!empty($childrenlist)) {
-			$q->addWhere('task_log_task IN (' . implode(', ', $childrenlist) . ', ' . $this->task_id . ')');
-		} else {
-			$q->addWhere('task_log_task=' . $this->task_id);
-		}
-
+        $q->addWhere('task_log_task IN (' . $implodedTaskList . ')');
 		if (!($q->exec())) {
 			return db_error();
 		}
@@ -735,12 +719,8 @@ class CTask extends CW2pObject {
 
 		// delete affiliated task_dependencies
 		$q->setDelete('task_dependencies');
-		if (!empty($childrenlist)) {
-			$q->addWhere('dependencies_task_id IN (' . implode(', ', $childrenlist) . ', ' . $this->task_id . ')');
-		} else {
-			$q->addWhere('dependencies_task_id=' . (int)$this->task_id);
-		}
-
+		$q->addWhere('dependencies_task_id IN (' . $implodedTaskList . ') OR
+            dependencies_req_task_id IN ('. $implodedTaskList .')');
 		if (!($q->exec())) {
 			return db_error();
 		} else {
@@ -2115,6 +2095,20 @@ class CTask extends CW2pObject {
 		$assigned = $q->loadHashList('user_id');
 		return $assigned;
 	}
+
+    public function getTaskLogs($taskId, $problem = false) {
+        $q = new DBQuery();
+        $q->addTable('task_log');
+        $q->addQuery('task_log.*, user_username, billingcode_name as task_log_costcode');
+        $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS real_name');
+        $q->addWhere('task_log_task = ' . (int) $taskId . ($problem ? ' AND task_log_problem > 0' : ''));
+        $q->addOrder('task_log_date');
+        $q->leftJoin('billingcode', '', 'task_log.task_log_costcode = billingcode_id');
+        $q->addJoin('users', '', 'task_log_creator = user_id', 'inner');
+        $q->addJoin('contacts', 'ct', 'contact_id = user_contact', 'inner');
+
+        return $q->loadList();
+    }
 
 	public function hook_calendar($userId) {
 		/*

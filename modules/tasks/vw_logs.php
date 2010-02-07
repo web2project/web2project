@@ -53,16 +53,8 @@ function delIt2(id) {
 </tr>
 <?php
 // Pull the task comments
-$q = new DBQuery();
-$q->addTable('task_log');
-$q->addQuery('task_log.*, user_username, billingcode_name as task_log_costcode');
-$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS real_name');
-$q->addWhere('task_log_task = ' . (int)$task_id . ($problem ? ' AND task_log_problem > 0' : ''));
-$q->addOrder('task_log_date');
-$q->leftJoin('billingcode', '', 'task_log.task_log_costcode = billingcode_id');
-$q->addJoin('users', '', 'task_log_creator = user_id', 'inner');
-$q->addJoin('contacts', 'ct', 'contact_id = user_contact', 'inner');
-$logs = $q->loadList();
+ $task= new CTask();
+$logs = $task->getTaskLogs($task_id, $problem);
 
 $s = '';
 $hrs = 0;
