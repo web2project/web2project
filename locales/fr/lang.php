@@ -11,4 +11,4 @@
 
 $dir = basename(dirname(__file__));
 
-$LANGUAGES['fr_FR'] = array($dir, 'French', 'Fran�ais', 'fra');
+$LANGUAGES['fr_FR'] = array($dir, 'French', 'Français', 'fra');
