@@ -2,7 +2,7 @@
 
 /*
 * Gantt.php - by J. Christopher Pereira
-* PROJECTDESIGNER $Id$
+* PROJECTDESIGNER $Rev$
 */
 
 ini_set('memory_limit', $w2Pconfig['reset_memory_limit']);
@@ -257,7 +257,7 @@ function findgchild(&$tarr, $parent, $level = 0) {
 }
 
 reset($projects);
-//$p = &$projects[$project_id];
+
 foreach ($projects as $p) {
 	$tnums = count($p['tasks']);
 
@@ -416,14 +416,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 			$work_hours += $wh2;
 			$q->clear();
 			//due to the round above, we don't want to print decimals unless they really exist
-			//$work_hours = rtrim($work_hours, '0');
 			$dur = $work_hours;
-
-			/*
-			$handle = fopen ( 'c:\a.txt', 'a+');
-			fwrite($handle, $_days_sql);
-			fclose($handle);
-			*/
 		}
 
 		$dur .= ' h';

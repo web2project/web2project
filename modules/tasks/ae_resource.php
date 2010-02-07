@@ -3,7 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-// $Id$
 global $AppUI, $users, $task_id, $task_project, $task, $projTasksWithEndDates, $tab, $loadFromTab;
 
 // Make sure that we can see users that are allocated to the task.

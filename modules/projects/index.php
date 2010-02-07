@@ -86,7 +86,6 @@ projects_list_data();
 
 $project_types = array(-1 => '(all)') + w2PgetSysVal('ProjectType');
 
-//$search_text = '';
 $bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>';
 
 // setup the title block
