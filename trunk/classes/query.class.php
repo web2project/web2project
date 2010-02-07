@@ -33,7 +33,7 @@ define('QUERY_STYLE_BOTH', ADODB_FETCH_BOTH);
  * Container for creating prefix-safe queries.  Allows build up of
  * a select statement by adding components one at a time.
  *
- * @version	$Id$
+ * @version	$Rev$
  * @package	web2Project
  * @access	public
  * @author	Adam Donnison <adam@saki.com.au>
