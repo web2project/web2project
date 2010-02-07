@@ -28,6 +28,7 @@ if(defined('E_DEPRECATED')){
 } else {
 	error_reporting(E_ALL & ~ E_NOTICE);
 }
+//error_reporting(-1);
 define('W2P_PERFORMANCE_DEBUG', false);
 
 //Performance Debug Initialization
