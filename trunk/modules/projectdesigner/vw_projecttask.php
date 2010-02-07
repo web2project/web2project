@@ -43,11 +43,7 @@ $style = (($obj->project_percent_complete < 99.99 && $today > $end_date) && !emp
 			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Progress'); ?>:&nbsp;</strong></td>
 			<td class="hilite" width="100%"><?php printf("%.1f%%", $obj->project_percent_complete); ?></td>
 		</tr>
-<!--		<tr>
-			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Active'); ?>:&nbsp;</strong></td>
-			<td class="hilite" width="100%"><?php echo $obj->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
-		</tr>-->
-	<?php /* TASKS $Id$ */
+<?php
 global $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;

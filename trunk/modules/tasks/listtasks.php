@@ -7,7 +7,7 @@ $perms = &$AppUI->acl();
 if (!$perms->checkModule('tasks', 'view')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-$proj = w2PgetParam($_GET, 'project', 0);
+$proj = (int) w2PgetParam($_GET, 'project', 0);
 $userFilter = w2PgetParam($_GET, 'userFilter', false);
 
 $q = new DBQuery();

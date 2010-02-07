@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 ##
-##	Companies: View Projects sub-table
+##	Companies: View Departments sub-table
 ##
 
 global $AppUI, $company_id, $canEdit;

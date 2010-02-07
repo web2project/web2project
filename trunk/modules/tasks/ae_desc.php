@@ -3,7 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-// $Id$
 global $AppUI, $task_id, $task, $users, $task_access, $department_selection_list;
 global $task_parent_options, $w2Pconfig, $projects, $task_project, $can_edit_time_information, $tab;
 
