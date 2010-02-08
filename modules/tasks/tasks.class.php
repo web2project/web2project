@@ -12,9 +12,6 @@ $status = w2PgetSysVal('TaskStatus');
 
 $priority = w2PgetSysVal('TaskPriority');
 
-// user based access
-$task_access = array('0' => 'Public', '1' => 'Protected', '2' => 'Participant', '3' => 'Private');
-
 /*
 * TASK DYNAMIC VALUE:
 * 0  = default(OFF), no dep tracking of others, others do track
@@ -74,6 +71,14 @@ class CTask extends CW2pObject {
   public $task_created = null;
   public $task_updated = null;
   public $task_updator = null;
+
+  /**
+   * Class constants for task access
+   */
+  const ACCESS_PUBLIC       = 0;
+  const ACCESS_PROTECTED    = 1;
+  const ACCESS_PARTICIPANT  = 2;
+  const ACCESS_PRIVATE      = 3;
 
   public function __construct() {
     parent::__construct('tasks', 'task_id');
@@ -1197,12 +1202,10 @@ class CTask extends CW2pObject {
 		}
 
 		switch ($this->task_access) {
-			case 0:
-				// public
+			case self::ACCESS_PUBLIC:
 				$retval = true;
 				break;
-			case 1:
-				// protected
+			case self::ACCESS_PROTECTED:
 				$q->addTable('users');
 				$q->addQuery('user_company');
 				$q->addWhere('user_id=' . (int)$user_id . ' OR user_id=' . (int)$this->task_owner);
@@ -1214,8 +1217,7 @@ class CTask extends CW2pObject {
 					$last_company = $current_company;
 				}
 
-			case 2:
-				// participant
+			case self::ACCESS_PARTICIPANT:
 				$company_match = ((isset($company_match)) ? $company_match : true);
 				$q->addTable('user_tasks');
 				$q->addQuery('COUNT(task_id)');
@@ -1224,8 +1226,7 @@ class CTask extends CW2pObject {
 				$q->clear();
 				$retval = (($company_match && $count > 0) || $this->task_owner == $user_id);
 				break;
-			case 3:
-				// private
+			case self::ACCESS_PRIVATE:
 				$retval = ($this->task_owner == $user_id);
 				break;
 			default:
@@ -2243,6 +2244,9 @@ class CTask extends CW2pObject {
     CProject::updateHoursWorked($project_id);
   }
 }
+
+// user based access
+$task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
 
 /**
  * CTaskLog Class
