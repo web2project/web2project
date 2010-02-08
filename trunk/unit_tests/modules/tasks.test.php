@@ -452,7 +452,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $this->obj->task_order);
         $this->assertEquals(1,                      $this->obj->task_client_publish);
         $this->assertEquals(0,                      $this->obj->task_dynamic);
-        $this->assertEquals(1,                      $this->obj->task_access);
+        $this->assertEquals(0,                      $this->obj->task_access);
         $this->assertEquals(1,                      $this->obj->task_notify);
         $this->assertEquals('',                     $this->obj->task_departments);
         $this->assertEquals('',                     $this->obj->task_contacts);
@@ -1588,7 +1588,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests pushing dependencies for a task
      */
-    public function testPushDependencies() {
+    public function testPushDependencies()
+    {
         $this->obj->pushDependencies(28, '2009-09-10');
 
         $now_secs = time();
@@ -1614,4 +1615,276 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
         }
     }
+    
+    /**
+     * Test getting dependencies
+     */
+    public function testGetDependencies()
+    {
+        $this->obj->load(28);
+        $result = $this->obj->getDependencies();
+        $this->assertEquals(27, $result);
+
+        $this->obj->load(1);
+        $result = $this->obj->getDependencies();
+        $this->assertEquals('', $result);
+    }
+
+    /**
+     * $test getting dependecies, by passing task id in
+     */
+    public function testStaticGetDependencies()
+    {
+        $result = $this->obj->staticGetDependencies(28);
+        $this->assertEquals(27, $result);
+
+        $result = $this->obj->staticGetDependencies(1);
+        $this->assertEquals('', $result);
+    }
+
+    /**
+     * Tests that owner is notified when task changes
+     */
+    public function testNotifyOwner()
+    {
+        $this->markTestSkipped('Not sure how to test emails being sent.');
+    }
+
+    /**
+     * Tests that owner is notified when task changes, with additional information
+     */
+    public function testNotify()
+    {
+        $this->markTestSkipped('Not sure how to test emails being sent.');
+    }
+
+    /**
+     * Test that the proper people are emailed the task log
+     */
+    public function testEmailLog()
+    {
+        $this->markTestSkipped('Not sure how to test emails being sent.');
+    }
+
+    /**
+     * Tests that the proper tasks are returned for Period with no company or
+     * user passed
+     */
+    public function testGetTasksForPeriodNoCompanyNoUser()
+    {
+        global $AppUI;
+        
+        $start_date = new CDate('2009-07-05');
+        $end_date   = new CDate('2009-07-16');
+
+        $results = $this->obj->getTasksForPeriod($start_date, $end_date);
+
+        $this->assertEquals(2,                      count($results));
+        $this->assertEquals(14,                     count($results[1]));
+        $this->assertEquals(14,                     count($results[2]));
+        $this->assertEquals(1,                      $results[1]['task_id']);
+        $this->assertEquals('Task 1',               $results[1]['task_name']);
+        $this->assertEquals('2009-07-05 00:00:00',  $results[1]['task_start_date']);
+        $this->assertEquals('2009-07-15 00:00:00',  $results[1]['task_end_date']);
+        $this->assertEquals(2,                      $results[1]['task_duration']);
+        $this->assertEquals(24,                     $results[1]['task_duration_type']);
+        $this->assertEquals('FFFFFF',               $results[1]['color']);
+        $this->assertEquals('Test Project',         $results[1]['project_name']);
+        $this->assertEquals(0,                      $results[1]['task_milestone']);
+        $this->assertEquals('This is task 1',       $results[1]['task_description']);
+        $this->assertEquals(1,                      $results[1]['task_type']);
+        $this->assertEquals('UnitTestCompany',      $results[1]['company_name']);
+        $this->assertEquals(0,                      $results[1]['task_access']);
+        $this->assertEquals(1,                      $results[1]['task_owner']);
+        $this->assertEquals(2,                      $results[2]['task_id']);
+        $this->assertEquals('Task 2',               $results[2]['task_name']);
+        $this->assertEquals('2009-07-06 00:00:00',  $results[2]['task_start_date']);
+        $this->assertEquals('2009-07-16 00:00:00',  $results[2]['task_end_date']);
+        $this->assertEquals(2,                      $results[2]['task_duration']);
+        $this->assertEquals(24,                     $results[2]['task_duration_type']);
+        $this->assertEquals('FFFFFF',               $results[2]['color']);
+        $this->assertEquals('Test Project',         $results[2]['project_name']);
+        $this->assertEquals(0,                      $results[2]['task_milestone']);
+        $this->assertEquals('This is task 2',       $results[2]['task_description']);
+        $this->assertEquals(1,                      $results[2]['task_type']);
+        $this->assertEquals('UnitTestCompany',      $results[2]['company_name']);
+        $this->assertEquals(1,                      $results[2]['task_access']);
+        $this->assertEquals(1,                      $results[2]['task_owner']);
+    }
+
+    /**
+     * Tests that the proper tasks are returned for Period with a company but no
+     * user passed
+     */
+    public function testGetTaskForPeriodCompanyNoUser()
+    {
+        global $AppUI;
+
+        $start_date = new CDate('2009-07-05');
+        $end_date   = new CDate('2009-07-16');
+
+        $results = $this->obj->getTasksForPeriod($start_date, $end_date, 1);
+
+        $this->assertEquals(2,                      count($results));
+        $this->assertEquals(14,                     count($results[1]));
+        $this->assertEquals(14,                     count($results[2]));
+        $this->assertEquals(1,                      $results[1]['task_id']);
+        $this->assertEquals('Task 1',               $results[1]['task_name']);
+        $this->assertEquals('2009-07-05 00:00:00',  $results[1]['task_start_date']);
+        $this->assertEquals('2009-07-15 00:00:00',  $results[1]['task_end_date']);
+        $this->assertEquals(2,                      $results[1]['task_duration']);
+        $this->assertEquals(24,                     $results[1]['task_duration_type']);
+        $this->assertEquals('FFFFFF',               $results[1]['color']);
+        $this->assertEquals('Test Project',         $results[1]['project_name']);
+        $this->assertEquals(0,                      $results[1]['task_milestone']);
+        $this->assertEquals('This is task 1',       $results[1]['task_description']);
+        $this->assertEquals(1,                      $results[1]['task_type']);
+        $this->assertEquals('UnitTestCompany',      $results[1]['company_name']);
+        $this->assertEquals(0,                      $results[1]['task_access']);
+        $this->assertEquals(1,                      $results[1]['task_owner']);
+        $this->assertEquals(2,                      $results[2]['task_id']);
+        $this->assertEquals('Task 2',               $results[2]['task_name']);
+        $this->assertEquals('2009-07-06 00:00:00',  $results[2]['task_start_date']);
+        $this->assertEquals('2009-07-16 00:00:00',  $results[2]['task_end_date']);
+        $this->assertEquals(2,                      $results[2]['task_duration']);
+        $this->assertEquals(24,                     $results[2]['task_duration_type']);
+        $this->assertEquals('FFFFFF',               $results[2]['color']);
+        $this->assertEquals('Test Project',         $results[2]['project_name']);
+        $this->assertEquals(0,                      $results[2]['task_milestone']);
+        $this->assertEquals('This is task 2',       $results[2]['task_description']);
+        $this->assertEquals(1,                      $results[2]['task_type']);
+        $this->assertEquals('UnitTestCompany',      $results[2]['company_name']);
+        $this->assertEquals(1,                      $results[2]['task_access']);
+        $this->assertEquals(1,                      $results[2]['task_owner']);
+
+        $results = $this->obj->getTasksForPeriod($start_date, $end_date, 2);
+
+        $this->assertEquals(array(), $results);
+    }
+
+    /**
+     * Tests that the proper tasks are returned for Period with a company and
+     * user passed
+     */
+    public function testGetTaskForPeriodCompanyUser()
+    {
+        global $AppUI;
+
+        $start_date = new CDate('2009-07-05');
+        $end_date   = new CDate('2009-07-16');
+
+        $results = $this->obj->getTasksForPeriod($start_date, $end_date, 1, 1);
+
+        $this->assertEquals(2,                      count($results));
+        $this->assertEquals(14,                     count($results[1]));
+        $this->assertEquals(14,                     count($results[2]));
+        $this->assertEquals(1,                      $results[1]['task_id']);
+        $this->assertEquals('Task 1',               $results[1]['task_name']);
+        $this->assertEquals('2009-07-05 00:00:00',  $results[1]['task_start_date']);
+        $this->assertEquals('2009-07-15 00:00:00',  $results[1]['task_end_date']);
+        $this->assertEquals(2,                      $results[1]['task_duration']);
+        $this->assertEquals(24,                     $results[1]['task_duration_type']);
+        $this->assertEquals('FFFFFF',               $results[1]['color']);
+        $this->assertEquals('Test Project',         $results[1]['project_name']);
+        $this->assertEquals(0,                      $results[1]['task_milestone']);
+        $this->assertEquals('This is task 1',       $results[1]['task_description']);
+        $this->assertEquals(1,                      $results[1]['task_type']);
+        $this->assertEquals('UnitTestCompany',      $results[1]['company_name']);
+        $this->assertEquals(0,                      $results[1]['task_access']);
+        $this->assertEquals(1,                      $results[1]['task_owner']);
+        $this->assertEquals(2,                      $results[2]['task_id']);
+        $this->assertEquals('Task 2',               $results[2]['task_name']);
+        $this->assertEquals('2009-07-06 00:00:00',  $results[2]['task_start_date']);
+        $this->assertEquals('2009-07-16 00:00:00',  $results[2]['task_end_date']);
+        $this->assertEquals(2,                      $results[2]['task_duration']);
+        $this->assertEquals(24,                     $results[2]['task_duration_type']);
+        $this->assertEquals('FFFFFF',               $results[2]['color']);
+        $this->assertEquals('Test Project',         $results[2]['project_name']);
+        $this->assertEquals(0,                      $results[2]['task_milestone']);
+        $this->assertEquals('This is task 2',       $results[2]['task_description']);
+        $this->assertEquals(1,                      $results[2]['task_type']);
+        $this->assertEquals('UnitTestCompany',      $results[2]['company_name']);
+        $this->assertEquals(1,                      $results[2]['task_access']);
+        $this->assertEquals(1,                      $results[2]['task_owner']);
+
+        $results = $this->obj->getTasksForPeriod($start_date, $end_date, 1, 3);
+
+        $this->assertEquals(array(), $results);
+
+        $results = $this->obj->getTasksForPeriod($start_date, $end_date, 3, 1);
+
+        $this->assertEquals(array(), $results);
+
+        $results = $this->obj->getTasksForPeriod($start_date, $end_date, 3, 2);
+
+        $this->assertEquals(array(), $results);
+    }
+
+    /**
+     * Tests that canAccess throws the appropriate warning.
+     */
+    public function testCanAccessThrowsEUSERNOTICE() {
+
+        global $AppUI;
+
+        $this->setExpectedException('PHPUnit_Framework_Error');
+        $result = $this->obj->canAccess(1);
+    }
+
+    /**
+     *
+     * @global <type> $AppUI Test canAccess functionality
+     */
+    public function testCanAccess() {
+
+        global $AppUI;
+
+        $this->obj->load(1);
+
+        // This @ stuff is kind of gross, but we need to do it until we get to
+        // 2.0 so the deprecated user warnigs go away
+        //
+        // admin user
+        $result = @$this->obj->canAccess(1);
+        $this->assertTrue($result);
+
+        // Login as another user for permission purposes
+        $old_AppUI = $AppUI;
+        $AppUI  = new CAppUI;
+        $_POST['login'] = 'login';
+        $_REQUEST['login'] = 'sql';
+        
+
+        // public access
+        $result = @$this->obj->canAccess(2);
+        $this->assertTrue($result);
+
+        // protected access
+        $this->obj->load(2);
+        $result = @$this->obj->canAccess(2);
+        $this->assertTrue($result);
+
+        $result = @$this->obj->canAccess(3);
+        $this->assertFalse($result);
+
+        // participant access
+        $this->obj->load(3);
+        $result = @$this->obj->canAccess(2);
+        $this->assertTrue($result);
+
+        $result = @$this->obj->canAccess(3);
+        $this->assertFalse($result);
+
+        // private
+        $this->obj->load(4);
+        $result = @$this->obj->canAccess(2);
+        $this->assertTrue($result);
+
+        $result = @$this->obj->canAccess(3);
+        $this->assertFalse($result);
+
+        // Restore AppUI for following tests since its global, yuck!
+        $AppUI = $old_AppUI;
+    }
 }
+?>

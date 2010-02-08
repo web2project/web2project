@@ -55,7 +55,7 @@
           <value>1</value>   
           <value>1</value>   
           <value>0</value>   
-          <value>1</value>   
+          <value>0</value>
           <value>1</value>   
           <null />
           <null />
@@ -121,7 +121,7 @@
           <value>1</value>   
           <value>1</value>   
           <value>0</value>   
-          <value>1</value>   
+          <value>2</value>
           <value>1</value>   
           <null />
           <null />
@@ -138,7 +138,7 @@
           <value>0</value>   
           <value>0</value>   
           <value>1</value>
-          <value>1</value>   
+          <value>2</value>
           <value>2009-07-06 00:00:00</value>     
           <value>2</value>   
           <value>24</value>  
@@ -154,7 +154,7 @@
           <value>1</value>   
           <value>1</value>   
           <value>0</value>   
-          <value>1</value>   
+          <value>3</value>
           <value>1</value>   
           <null />
           <null />
