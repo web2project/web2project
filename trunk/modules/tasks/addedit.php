@@ -7,7 +7,7 @@ $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '
 $status = w2PgetSysVal('TaskStatus');
 $priority = w2PgetSysVal('TaskPriority');
 // user based access
-$task_access = array('0' => 'Public', '1' => 'Protected', '2' => 'Participant', '3' => 'Private');
+$task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
 
 /**
  * Tasks :: Add/Edit Form
