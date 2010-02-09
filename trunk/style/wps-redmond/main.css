@@ -8,9 +8,9 @@ BODY {
 	font-family: Osaka,verdana,Sans-Serif;
 	font-size: 10pt;
 	color: #333;
-  background-color    : #f2f2f2;
-  background-position : bottom;
-  background-repeat   : repeat-x;
+    background-color    : #f2f2f2;
+    background-position : bottom;
+    background-repeat   : repeat-x;
 }
 
 ul {
@@ -83,7 +83,7 @@ h2, .subtitle {
 	color: #333;
 	margin-bottom: 0px;
 	margin-top: 15px;
-  text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 h3 {
@@ -93,7 +93,7 @@ h3 {
 	color: #333;
 	margin-bottom: 0px;
 	margin-top: 35px;
-  text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 bordertable {
@@ -117,14 +117,14 @@ bordertable {
 	border: 1px #999999 solid;
 	font-family: arial,Osaka,verdana,Sans-Serif;
 	font-size: 8pt;
-  margin-top  : 2px;
+    margin-top  : 2px;
 }
 
 TEXTAREA {
 	border: 1px #999999 solid;
 	font-family: arial,Osaka,verdana,helvetica,arial,sans-serif;
 	font-size: 8pt;
-  padding : 2px;
+    padding : 2px;
 }
 
 .textarea {
@@ -220,9 +220,9 @@ TH.banner {
 TD.nav {
 	border              : 1px solid #848284;
 	color               : #333;
-  background-color    : #D4D0C8;
-  background-image    : url("nav_bg.png");
-  background-image    : repeat-x;
+    background-color    : #D4D0C8;
+    background-image    : url("nav_bg.png");
+    background-image    : repeat-x;
 }
 
 /*
@@ -281,28 +281,32 @@ table.tbl TH {
 	list-style-position : inside;
 	border: outset #D1D1CD 0px;
 	font-weight         : normal;
-  background-color    : #D4D0C8;
-  background-image    : url("header_bg.png");
-  background-image    : repeat-x;
+    background-color    : #D4D0C8;
+    background-image    : url("header_bg.png");
+    background-image    : repeat-x;
 }
 
 table.tbl td {
 	background-color: #ffffff;
 }
 
+table.tbl td.hilite {
+  background-color: #ECEAE5;
+}
+
 /* a 'standard' table */
 table.std {
 	background : #D4D0C8;
-  -moz-border-radius : 4px;
-  -webkit-border-radius:4px;
+    -moz-border-radius : 4px;
+    -webkit-border-radius:4px;
 }
 table.std TH {
 	color            : #333;
 	list-style-type  : disc;
 	list-style-position: inside;
-  background-color    : #D4D0C8;
-  background-image    : url("header_bg.png");
-  background-image    : repeat-x;
+    background-color    : #D4D0C8;
+    background-image    : url("header_bg.png");
+    background-image    : repeat-x;
 }
 
 table.std td.hilite {
@@ -333,14 +337,14 @@ A.hdr:link, A.hdr:active, A.hdr:visited {
 td.tabon {
 	background: #D4D0C8;
     background-image: url('tabSelectedBg.png');
-  font-weight: bold;
+    font-weight: bold;
 }
 td.taboff {
 	background: #D4D0C8;
 	background-image: url('tabBg.png');
-  background-position : bottom;
-  background-repeat   : repeat-x;
-  font-weight: normal;
+    background-position : bottom;
+    background-repeat   : repeat-x;
+    font-weight: normal;
 }
 td.tabsp {
 	border-bottom: solid #808080 1px;
@@ -450,13 +454,13 @@ table.motitle td {
 	background-color: #D4D0C8;
 }
 table.motitle th {
-  font-family         : arial,Osaka,verdana,Sans-Serif;
-  font-size           : 14px;
-  color               : #333;
-  list-style-type     : disc;
-  list-style-position : inside;
-  font-weight         : bold;
-  background-color    : #D4D0C8; /* #95B3DE; */
+    font-family         : arial,Osaka,verdana,Sans-Serif;
+    font-size           : 14px;
+    color               : #333;
+    list-style-type     : disc;
+    list-style-position : inside;
+    font-weight         : bold;
+    background-color    : #D4D0C8;
 }
 
 table.mocal {
@@ -469,9 +473,9 @@ table.mocal th {
 	list-style-position : inside;
 	font-weight         : bold;
 	text-align          : center;
-  background-color    : #bccfeb; /* #95B3DE; */
-  background-image    : url("header_bg.png");
-  background-image    : repeat-x;
+    background-color    : #bccfeb;
+    background-image    : url("header_bg.png");
+    background-image    : repeat-x;
 }
 table.mocal td {
 }
@@ -551,31 +555,31 @@ table.minical td.weekend {
 table.minical .event {
 }
 table.minical td.event {
-  background-color: #ffffcc;
-  text-align: center;
+    background-color: #ffffcc;
+    text-align: center;
 }
 table.minical td.task {
-  background-color: #ccccff;
-  text-align: center;
+    background-color: #ccccff;
+    text-align: center;
 }
 table.minical td.eventtask {
-  background-color: #ffccff;
-  text-align: center;
+    background-color: #ffccff;
+    text-align: center;
 }
 table.minical td.eventtoday {
-  background-color: #ffffcc;
-  text-align: center;
-  border           : 1px dotted red;
+    background-color: #ffffcc;
+    text-align: center;
+    border           : 1px dotted red;
 }
 table.minical td.tasktoday {
-  background-color: #ccccff;
-  text-align: center;
-  border           : 1px dotted red;
+    background-color: #ccccff;
+    text-align: center;
+    border           : 1px dotted red;
 }
 table.minical td.eventtasktoday {
-  background-color: #ffccff;
-  text-align: center;
-  border           : 1px dotted red;
+    background-color: #ffccff;
+    text-align: center;
+    border           : 1px dotted red;
 }
 /* daily calendar */
 table.tbl td.event {
@@ -587,45 +591,45 @@ table.tbl td.event td {
 }
 
 .crumb ul {
-  list-style-type: none;
-  margin: 0px;
-  padding: 0px;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
 }
 .crumb ul li {
-  margin: 0px 0px 0px;
-  padding: 1px;
-  font-family: Verdana, Arial, Helvetica, sans-serif;
-  color: #000000;
-  text-decoration: none;
-  display: inline; /* Remove this line arrange the buttons vertically */
+    margin: 0px 0px 0px;
+    padding: 1px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #000000;
+    text-decoration: none;
+    display: inline; /* Remove this line arrange the buttons vertically */
 }
 .crumb ul li a {
-  /*background-color: #F0F0E3; /* Change the background color*/
-  background-color    : #D4D0C8;
-  padding: 2px 3px; /* Increase or decrease width and height */
-  margin: 0px;
-  display: inline;
-  font-family: Verdana, Arial, Helvetica, sans-serif; /* Change the Font of the button */
-  font-size: 10px; /* Change the button text size */
-  border: 1px solid #D4D0C8; /* Button Border */
-  color: #000000;
-  text-decoration: none;
-  -moz-border-radius:4px;
-  -webkit-border-radius:4px;
+    /*background-color: #F0F0E3; /* Change the background color*/
+    background-color    : #D4D0C8;
+    padding: 2px 3px; /* Increase or decrease width and height */
+    margin: 0px;
+    display: inline;
+    font-family: Verdana, Arial, Helvetica, sans-serif; /* Change the Font of the button */
+    font-size: 10px; /* Change the button text size */
+    border: 1px solid #D4D0C8; /* Button Border */
+    color: #000000;
+    text-decoration: none;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
 }
 .crumb ul li a:active {
-  color: #AD0000;
-  border-top: 1px solid #BBBB88; /* Button border on mouse over*/
-  border-right: 1px solid #DDDDB0; /* Button border on mouse over*/
-  border-bottom: 1px solid #DDDDB0; /* Button border on mouse over*/
-  border-left: 1px solid #BBBB88; /* Button border on mouse over*/
-  border-style: inset;
+    color: #AD0000;
+    border-top: 1px solid #BBBB88; /* Button border on mouse over*/
+    border-right: 1px solid #DDDDB0; /* Button border on mouse over*/
+    border-bottom: 1px solid #DDDDB0; /* Button border on mouse over*/
+    border-left: 1px solid #BBBB88; /* Button border on mouse over*/
+    border-style: inset;
 }
 .crumb ul li a:hover {
-  color: #FFFFFF;
-  border: 1px solid #000000; /* Button Border */
-  -moz-border-radius:4px;
-  -webkit-border-radius:4px;
+    color: #FFFFFF;
+    border: 1px solid #000000; /* Button Border */
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
 }
 
 /*tooltip*/

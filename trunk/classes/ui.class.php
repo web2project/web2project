@@ -388,7 +388,6 @@ class CAppUI {
 	 *
 	 */
 	public function loadLanguages() {
-
 		if (isset($_SESSION['LANGUAGES'])) {
 			$LANGUAGES = &$_SESSION['LANGUAGES'];
 		} else {
@@ -539,6 +538,7 @@ class CAppUI {
 	public function holdObject($obj) {
 	  $this->objStore = $obj;
 	}
+	
 	public function restoreObject() {
 	  $obj = $this->objStore;
 	  $this->objStore = null;
@@ -716,7 +716,7 @@ class CAppUI {
 	 * The check_legacy_password option is no longer valid
 	 *
 	 * Upon a successful username and password match, several fields from the user
-	 * table are loaded in this object for convenient reference.  The style, localces
+	 * table are loaded in this object for convenient reference.  The style, locales
 	 * and preferences are also loaded at this time.
 	 *
 	 * @param string The user login name
@@ -825,12 +825,14 @@ class CAppUI {
 	*/
 	public function logout() {
 	}
+	
 	/**
 	 * Checks whether there is any user logged in.
 	 */
 	public function doLogin() {
 		return ($this->user_id < 0) ? true : false;
 	}
+	
 	/**
 	 * Gets the value of the specified user preference
 	 * @param string Name of the preference
@@ -838,6 +840,7 @@ class CAppUI {
 	public function getPref($name) {
 		return isset($this->user_prefs[$name]) ? $this->user_prefs[$name] : '';
 	}
+	
 	/**
 	 * Sets the value of a user preference specified by name
 	 * @param string Name of the preference
@@ -846,6 +849,7 @@ class CAppUI {
 	public function setPref($name, $val) {
 		$this->user_prefs[$name] = $val;
 	}
+	
 	/**
 	 * Loads the stored user preferences from the database into the internal
 	 * preferences variable.
@@ -861,7 +865,6 @@ class CAppUI {
 	}
 
 	// --- Module connectors
-
 	/**
 	 * Gets a list of the installed modules
 	 * @return array Named array list in the form 'module directory'=>'module name'
@@ -885,6 +888,7 @@ class CAppUI {
 		$q->addOrder('mod_directory');
 		return $q->loadHashList();
 	}
+	
 	/**
 	 * Gets a list of the modules that should appear in the menu
 	 * @return array Named array list in the form
@@ -899,6 +903,7 @@ class CAppUI {
 		$q->addOrder('mod_ui_order');
 		return $q->loadList();
 	}
+	
 	/**
 	 * Gets a list of the active modules
 	 * @return array Named array list in the form 'module directory'=>'module name'
@@ -912,6 +917,7 @@ class CAppUI {
 		$q->addOrder('mod_ui_order');
 		return $q->loadList();
 	}
+	
 	public function getPermissionableModuleList() {
 		$q = new DBQuery;
 		$q->addTable('modules', 'm');
@@ -920,6 +926,7 @@ class CAppUI {
 		$q->addWhere("permissions_item_table <> ''");
 		return $q->loadHashList('mod_name');
 	}
+
 	public function isActiveModule($module) {
 		$q = new DBQuery;
 		$q->addTable('modules');
@@ -1229,7 +1236,7 @@ class CTabBox_core {
  * @package 
  * @author Pedro Azevedo
  * @copyright 2007
- * @version $Id$
+ * @version $Rev$
  * @access public
  */
 class CInfoTabBox extends CTabBox_core {

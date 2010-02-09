@@ -24,10 +24,10 @@ function __autoload($class_name) {
 
   switch ($name) {
     case 'cappui':
-      require_once W2P_BASE_DIR.'/classes/ui.class.php';
+      require_once W2P_BASE_DIR . '/classes/ui.class.php';
       break;
     case 'cdate':
-      require_once W2P_BASE_DIR.'/classes/date.class.php';
+      require_once W2P_BASE_DIR . '/classes/date.class.php';
       break;
     case 'customfields':
       require_once W2P_BASE_DIR.'/classes/CustomFields.class.php';
@@ -36,7 +36,7 @@ function __autoload($class_name) {
       require_once W2P_BASE_DIR.'/classes/query.class.php';
       break;
     case 'w2pacl':
-      require_once W2P_BASE_DIR.'/classes/permissions.class.php';
+      require_once W2P_BASE_DIR . '/classes/permissions.class.php';
       break;
     case 'w2pical':
       require_once W2P_BASE_DIR.'/classes/ical.class.php';
@@ -70,6 +70,7 @@ function __autoload($class_name) {
         require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
         return;
       }
+      
       if ($name[0] == 'c') {
         $name = substr($name, 1);
         if (substr($name, -1) == 'y') {
@@ -256,7 +257,6 @@ function w2PgetConfig($key, $default = null) {
 	if (isset($w2Pconfig[$key])) {
 		return $w2Pconfig[$key];
 	} else {
-
 		return $default;
 	}
 }
@@ -575,6 +575,7 @@ function defVal($var, $def) {
  */
 function w2PgetParam(&$arr, $name, $def = null) {
 	global $AppUI;
+	
 	if (isset($arr[$name])) {
 		if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false
 			&& strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false
@@ -662,7 +663,6 @@ function w2PgetCleanParam(&$arr, $name, $def = null) {
 #
 # add history entries for tracking changes
 #
-
 function addHistory($table, $id, $action = 'modify', $description = '', $project_id = 0) {
 	global $AppUI;
 	/*
@@ -750,6 +750,7 @@ function w2PuserHasRole($name) {
 
 function w2PformatDuration($x) {
 	global $AppUI;
+
 	$dur_day = floor($x / w2PgetConfig('daily_working_hours'));
 	$dur_hour = $x - $dur_day * w2PgetConfig('daily_working_hours');
 	$str = '';

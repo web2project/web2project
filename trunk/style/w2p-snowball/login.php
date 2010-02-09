@@ -19,7 +19,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 <body bgcolor="#f0f0f0" onload="document.loginform.username.focus();">
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-<tbody><tr>
+<tbody>
+<tr>
 	<td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/w2p_logo.jpg"/></a></td>
 	<td style="background:url(./style/<?php echo $uistyle; ?>/logo_bkgd.jpg)">&nbsp;</td>
 </tr>
@@ -89,7 +90,7 @@ echo styleRenderBoxBottom();
 echo '<span class="error">' . $AppUI->getMsg() . '</span>';
 
 $msg = '';
-$msg .= phpversion() < '4.1' ? '<br /><span class="warning">WARNING: web2Project is NOT SUPPORT for this PHP Version (' . phpversion() . ')</span>' : '';
+$msg .= phpversion() < '5.2' ? '<br /><span class="warning">WARNING: web2Project is NOT SUPPORTED for this PHP Version (' . phpversion() . ')</span>' : '';
 $msg .= function_exists('mysql_pconnect') ? '' : '<br /><span class="warning">WARNING: PHP may not be compiled with MySQL support.  This will prevent proper operation of web2Project.  Please check you system setup.</span>';
 echo $msg;
 ?>

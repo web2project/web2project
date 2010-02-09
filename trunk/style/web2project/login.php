@@ -89,7 +89,7 @@ echo styleRenderBoxBottom();
 echo '<span class="error">' . $AppUI->getMsg() . '</span>';
 
 $msg = '';
-$msg .= phpversion() < '4.1' ? '<br /><span class="warning">WARNING: web2Project is NOT SUPPORT for this PHP Version (' . phpversion() . ')</span>' : '';
+$msg .= phpversion() < '5.2' ? '<br /><span class="warning">WARNING: web2Project is NOT SUPPORTED for this PHP Version (' . phpversion() . ')</span>' : '';
 $msg .= function_exists('mysql_pconnect') ? '' : '<br /><span class="warning">WARNING: PHP may not be compiled with MySQL support.  This will prevent proper operation of web2Project.  Please check you system setup.</span>';
 echo $msg;
 ?>

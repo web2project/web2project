@@ -412,7 +412,6 @@ class Mail extends PHPMailer {
 	 *    @param    array $aad -
 	 *    @return if unvalid, output an error message and exit, this may -should- be customized
 	 */
-
 	public function CheckAdresses($aad) {
 		foreach ($aad as $ad) {
 			if (!$this->ValidEmail($ad)) {
@@ -422,6 +421,7 @@ class Mail extends PHPMailer {
 		}
 		return true;
 	}
+
 	/**
 	 * alias for the mispelled CheckAdresses
 	 */
