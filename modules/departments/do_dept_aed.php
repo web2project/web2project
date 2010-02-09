@@ -4,10 +4,12 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
+$sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
 
 $isNotNew = $_POST['dept_id'];
 $dept_id = (int) w2PgetParam($_POST, 'dept_id', 0);
 $perms = &$AppUI->acl();
+
 if ($del) {
 	if (!$perms->checkModuleItem('departments', 'delete', $dept_id)) {
 		$AppUI->redirect('m=public&a=access_denied');

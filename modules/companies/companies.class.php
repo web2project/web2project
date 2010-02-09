@@ -61,12 +61,12 @@ class CCompany extends CW2pObject {
 	  if ((int) $this->company_owner == 0) {
     	$errorArray['company_owner'] = $baseErrorMsg . 'company owner is not set';
 	  }
-    if ('' != $this->company_primary_url && !w2p_check_url($this->company_primary_url)) {
-      $errorArray['company_primary_url'] = $baseErrorMsg . 'company primary url is not formatted properly';
-    }
-    if ('' != $this->company_email && !w2p_check_email($this->company_email)) {
-      $errorArray['company_email'] = $baseErrorMsg . 'company email is not formatted properly';
-    }
+      if ('' != $this->company_primary_url && !w2p_check_url($this->company_primary_url)) {
+        $errorArray['company_primary_url'] = $baseErrorMsg . 'company primary url is not formatted properly';
+      }
+      if ('' != $this->company_email && !w2p_check_email($this->company_email)) {
+        $errorArray['company_email'] = $baseErrorMsg . 'company email is not formatted properly';
+      }
 	  return $errorArray;
 	}
 
@@ -226,6 +226,7 @@ class CCompany extends CW2pObject {
 
 		return $q->loadList();
 	}
+	
 	public static function getContacts($AppUI, $companyId) {
 		$results = array();
 		$perms = $AppUI->acl();
@@ -270,6 +271,7 @@ class CCompany extends CW2pObject {
 
 		return $q->loadHashList('user_id');
 	}
+	
 	public static function getDepartments($AppUI, $companyId) {
 		$perms = $AppUI->acl();
 

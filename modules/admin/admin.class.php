@@ -29,9 +29,6 @@ class CUser extends CW2pObject {
 		if ($this->user_password !== null) {
 			$this->user_password = db_escape(trim($this->user_password));
 		}
-//    if ('' != $this->user_email && !w2p_check_email($this->user_email)) {
-//      $errorArray['user_email'] = $baseErrorMsg . 'user email is not formatted properly';
-//    }
 		// TODO MORE
 		return null; // object is ok
 	}
@@ -268,7 +265,7 @@ class CUser extends CW2pObject {
 		$this->loadFull($userId);
 	}
 	public function loadFull($userId) {
-		$q = new DBQuery;
+		$q = new DBQuery();
 		$q->addTable('users', 'u');
 		$q->addQuery('u.*');
 		$q->addQuery('uf.feed_token');
@@ -281,17 +278,19 @@ class CUser extends CW2pObject {
 
 		$q->loadObject($this, true, false);
 	}
-  public function hook_cron() {
-    $q = new DBQuery;
-    $q->setDelete('sessions');
-    $q->addWhere("session_user ='' OR session_user IS NULL");
-    $q->exec();
-    $q->clear();
+	
+    public function hook_cron() {
+		$q = new DBQuery();
+        $q->setDelete('sessions');
+        $q->addWhere("session_user ='' OR session_user IS NULL");
+        $q->exec();
+        $q->clear();
 
-    return true;
-  }
+        return true;
+    }
+
 	public function validatePassword($userId, $password) {
-		$q = new DBQuery;
+		$q = new DBQuery();
 		$q->addTable('users');
 		$q->addQuery('user_id');
 		$q->addWhere('user_password = \'' . md5($password) . '\'');
@@ -301,7 +300,7 @@ class CUser extends CW2pObject {
 	}
 
 	public static function getUserIdByToken($token) {
-		$q = new DBQuery;
+		$q = new DBQuery();
 		$q->addQuery('feed_user');
 		$q->addTable('user_feeds');
 		$q->addWhere("feed_token = '$token'");
@@ -309,8 +308,9 @@ class CUser extends CW2pObject {
 
 		return $userId;
 	}
+	
 	public static function generateUserToken($userId, $token = '') {
-		$q = new DBQuery;
+		$q = new DBQuery();
 		$q->setDelete('user_feeds');
 		$q->addWhere('feed_user = ' . $userId);
 		$q->addWhere("feed_token = '$token'");
@@ -325,10 +325,11 @@ class CUser extends CW2pObject {
 
 		return true;
 	}
+	
 	public static function getFirstLetters() {
 		$letters = '';
 
-		$q = new DBQuery;
+		$q = new DBQuery();
 		$q->addTable('users', 'u');
 		$q->addQuery('DISTINCT SUBSTRING(user_username, 1, 1) as L');
 		$arr = $q->loadList();
@@ -338,8 +339,9 @@ class CUser extends CW2pObject {
 		}
 		return strtoupper($letters);
 	}
+	
 	public static function exists($username) {
-		$q = new DBQuery;
+		$q = new DBQuery();
 		$q->addTable('users', 'u');
 		$q->addQuery('user_username');
 		$q->addWhere("user_username = '$username'");
@@ -347,8 +349,21 @@ class CUser extends CW2pObject {
 
 		return (count($users) > 0) ? true : false;
 	}
-	public static function getLogs($userId, $startDate, $endDate) {
+
+	public static function getUserDeptId($user_id) {
 		$q = new DBQuery;
+		$q->addQuery('con.contact_department');
+		$q->addTable('users', 'u');
+		$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
+		$q->addWhere('u.user_id = ' . (int)$user_id);
+		$user_dept = $q->loadColumn();
+		$q->clear();		
+
+		return $user_dept;
+	}
+
+	public static function getLogs($userId, $startDate, $endDate) {
+		$q = new DBQuery();
 		$q->addTable('user_access_log', 'ual');
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'c');
@@ -364,6 +379,54 @@ class CUser extends CW2pObject {
 
 		return $q->loadList();
 	}
+	
+	public function getFullUserName() {
+		$q = new DBQuery;
+		$q->addTable('contacts', 'c');
+		$q->addQuery('c.*');
+		$q->addWhere('contact_id = ' . (int)$this->user_contact);
+		$res = $q->loadList();
+		
+		if (count($res) == 1) {
+			return $res[0]['contact_first_name'] . ' ' . $res[0]['contact_last_name']; 	
+		}
+		
+		return $this->user_username;
+	}
+	
+	public function isActive() {
+		global $AppUI;
+		$perms = &$AppUI->acl();
+		
+		return $perms->isUserPermitted($this->user_id);
+	}
+
+	public static function isUserActive($user_id) {
+		global $AppUI;
+		$perms = &$AppUI->acl();
+		
+		return $perms->isUserPermitted($user_id);
+	}
+	
+	public static function getUserList() {
+		global $AppUI;
+		
+		$q = new DBQuery;  		
+    $q->addQuery('users.user_contact,users.user_id,co.contact_first_name,co.contact_last_name,co.contact_id'); 
+    $q->addTable('users');
+    $q->addJoin('contacts','co','co.contact_id = users.user_contact','inner');    
+    $q->addWhere('users.user_contact = ' . $AppUI->user_id . ' or (' . getPermsWhereClause('companies', 'user_company') . ')' );
+    $q->addOrder('contact_first_name, contact_last_name');
+  	$result = $q->loadList();
+  	$retres = array();
+  	
+  	foreach ($result as $user) {
+    	if (self::isUserActive($user["user_id"])) {
+    		$retres[] = $user;
+    	}
+  	}
+		return $retres;  	
+  }
 }
 
 function notifyNewUser($address, $username) {
