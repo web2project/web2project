@@ -42,7 +42,6 @@ define('QUERY_STYLE_BOTH', ADODB_FETCH_BOTH);
  * @copyright	(c) 2003 Adam Donnison
  */
 class DBQuery {
-	public $query;
 	/**< Contains the query after it has been built. */
 	public $query;
 	/**< Array of tables to be queried */
@@ -73,8 +72,6 @@ class DBQuery {
 	public $create_definition;
 	/**< Boolean to count rows in query */
 	public $include_count = false;
-	/**< Boolean to count of rows in query */
-	public $_table_prefix;
 	/**< Internal string, table prefix, prepended to all queries */
 	public $_table_prefix;
 	/**< Handle to the query result */
