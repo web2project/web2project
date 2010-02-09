@@ -6,8 +6,11 @@ if (!defined('W2P_BASE_DIR')) {
 $obj = new CContact();
 $msg = '';
 
+$contact_id = (int) w2PgetParam($_POST, 'contact_id', 0);
 $isNotNew = $_POST['contact_id'];
+$del = (int) w2PgetParam($_POST, 'del', 0);
 $perms = &$AppUI->acl();
+
 if (isset($del) && $del) {
 	if (!$perms->checkModule('contacts', 'delete')) {
 		$AppUI->redirect('m=public&a=access_denied');
@@ -31,8 +34,6 @@ if (!$obj->bind($_POST)) {
 	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	$AppUI->redirect();
 }
-
-$del = w2PgetParam($_POST, 'del', 0);
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Contact');

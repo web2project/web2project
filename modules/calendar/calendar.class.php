@@ -597,7 +597,7 @@ class CEvent extends CW2pObject {
 			$user_id = $AppUI->user_id;
 		}
 
-		$project = new CProject;
+		$project = new CProject();
 		if ($project_id) {
 			$p = &$AppUI->acl();
 
@@ -614,7 +614,6 @@ class CEvent extends CW2pObject {
 		$queries = array('q' => 'q', 'r' => 'r');
 
 		foreach ($queries as $query_set) {
-
 			$$query_set = new DBQuery;
 			$$query_set->addTable('events', 'e');
 			$$query_set->addQuery('e.*');
@@ -670,13 +669,11 @@ class CEvent extends CW2pObject {
 		// If it should then a comment to that effect would be nice.
 		// for ($i=0; $i < sizeof($eventListRec)+1;  $i++) {
 		for ($i = 0, $i_cmp = sizeof($eventListRec); $i < $i_cmp; $i++) {
-
 			//note from merlinyoda: j=0 is the original event according to getRecurrentEventforPeriod
 			// So, since the event is *recurring* x times, the loop condition should be j <= x, not j < x.
 			// This way the original and all recurrances are covered.
 			//for ($j=0; $j < intval($eventListRec[$i]['event_times_recuring']); $j++) {
 			for ($j = 0, $j_cmp = intval($eventListRec[$i]['event_times_recuring']); $j <= $j_cmp; $j++) {
-
 				//Daily View
 				//show all
 				if ($periodLength == 1) {
@@ -693,6 +690,7 @@ class CEvent extends CW2pObject {
 				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] > 1) {
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
 				}
+				
 				//add values to the eventsArray if check for recurrent event was positive
 				if (sizeof($recEventDate) > 0) {
 					$eList[0] = $eventListRec[$i];
@@ -798,7 +796,7 @@ class CEvent extends CW2pObject {
 		$start_date = new CDate($this->event_start_date);
 		$end_date = new CDate($this->event_end_date);
 
-		$mail = new Mail;
+		$mail = new Mail();
 		$type = $update ? $AppUI->_('Updated') : $AppUI->_('New');
 		if ($clash) {
 			$mail->Subject($AppUI->_('Requested Event') . ': ' . $this->event_title, $locale_char_set);

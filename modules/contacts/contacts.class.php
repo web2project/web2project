@@ -73,7 +73,6 @@ class CContact extends CW2pObject {
 
         $this->loadFull($AppUI, $contactId);
 	}
-
 	public function loadFull(CAppUI $AppUI = null, $contactId) {
 		global $AppUI;
 
@@ -119,29 +118,29 @@ class CContact extends CW2pObject {
 	}
 
 	public function delete(CAppUI $AppUI = null) {
-    global $AppUI;
+        global $AppUI;
 
-    if ($msg = parent::delete()) {
-      return $msg;
-    }
-    addHistory('contacts', 0, 'delete', 'Deleted', 0);
-    return true;
+        if ($msg = parent::delete()) {
+            return $msg;
+        }
+        addHistory('contacts', 0, 'delete', 'Deleted', 0);
+        return true;
 	}
 
 	public function check() {
-    $errorArray = array();
-    $baseErrorMsg = get_class($this) . '::store-check failed - ';
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-    if ('' != $this->contact_url && !w2p_check_url($this->contact_url)) {
-      $errorArray['contact_url'] = $baseErrorMsg . 'contact url is not formatted properly';
-    }
-    if ('' != $this->contact_email && !w2p_check_email($this->contact_email)) {
-      $errorArray['contact_email'] = $baseErrorMsg . 'contact email is not formatted properly';
-    }
-    if ('' != $this->contact_email2 && !w2p_check_email($this->contact_email2)) {
-      $errorArray['contact_email2'] = $baseErrorMsg . 'contact email2 is not formatted properly';
-    }
-	  return $errorArray;
+        if ('' != $this->contact_url && !w2p_check_url($this->contact_url)) {
+            $errorArray['contact_url'] = $baseErrorMsg . 'contact url is not formatted properly';
+        }
+        if ('' != $this->contact_email && !w2p_check_email($this->contact_email)) {
+            $errorArray['contact_email'] = $baseErrorMsg . 'contact email is not formatted properly';
+        }
+        if ('' != $this->contact_email2 && !w2p_check_email($this->contact_email2)) {
+            $errorArray['contact_email2'] = $baseErrorMsg . 'contact email2 is not formatted properly';
+        }
+        return $errorArray;
 	}
 
 	public function canDelete(&$msg, $oid = null, $joins = null) {
@@ -257,6 +256,7 @@ class CContact extends CW2pObject {
 
 		return $q->loadResult();
 	}
+	
 	public function clearUpdateKey() {
 		global $AppUI;
 
@@ -391,6 +391,7 @@ class CContact extends CW2pObject {
 
 		return $q->loadList();
 	}
+	
 	public static function getFirstLetters($userId, $onlyUsers = false) {
 		$letters = '';
 
@@ -436,6 +437,7 @@ class CContact extends CW2pObject {
 
 		return $result;
 	}
+	
 	public static function getContactByEmail($email) {
 		$q = new DBQuery;
 		$q->addTable('users');
@@ -448,6 +450,7 @@ class CContact extends CW2pObject {
 
 		return $result;
 	}
+	
 	public static function getContactByUpdatekey($updateKey) {
 		$q = new DBQuery;
 		$q->addTable('contacts');
@@ -456,6 +459,7 @@ class CContact extends CW2pObject {
 
 		return $q->loadResult();
 	}
+	
 	public static function getProjects($contactId) {
 		$q = new DBQuery;
 		$q->addQuery('p.project_id, p.project_name');
@@ -473,6 +477,7 @@ class CContact extends CW2pObject {
 		$q->addWhere("(TO_DAYS(NOW()) - TO_DAYS(contact_updateasked) >= $days_for_update)");
 		$q->exec();
 	}
+	
 	public function hook_cron() {
 		global $AppUI;
 
