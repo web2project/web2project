@@ -27,6 +27,7 @@ require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 define('QUERY_STYLE_ASSOC', ADODB_FETCH_ASSOC);
 define('QUERY_STYLE_NUM', ADODB_FETCH_NUM);
 define('QUERY_STYLE_BOTH', ADODB_FETCH_BOTH);
+
 /**
  * Database query class
  *
@@ -43,42 +44,45 @@ define('QUERY_STYLE_BOTH', ADODB_FETCH_BOTH);
 class DBQuery {
 	public $query;
 	/**< Contains the query after it has been built. */
-	public $table_list;
+	public $query;
 	/**< Array of tables to be queried */
-	public $where;
+	public $table_list;
 	/**< WHERE component of the query */
-	public $order_by;
+	public $where;
 	/**< ORDER BY component of the query */
-	public $group_by;
+	public $order_by;
 	/**< GROUP BY component of the query */
-	public $having;
+	public $group_by;
 	/**< HAVING component of the query */
-	public $limit;
+	public $having;
 	/**< LIMIT component of the query */
-	public $offset;
+	public $limit;
 	/**< offset of the LIMIT component */
-	public $join;
+	public $offset;
 	/**< JOIN component of the query */
-	public $type;
+	public $join;
 	/**< Query type eg. 'select', 'update' */
-	public $update_list;
+	public $type;
 	/**< Array of fields->values to update */
-	public $value_list;
+	public $update_list;
 	/**< Array of values used in INSERT or REPLACE statements */
-	public $create_table;
+	public $value_list;
 	/**< Name of the table to create */
-	public $create_definition;
+	public $create_table;
 	/**< Array containing information about the table definition */
+	public $create_definition;
+	/**< Boolean to count rows in query */
 	public $include_count = false;
-	/**< Bollean to count of rows in query */
+	/**< Boolean to count of rows in query */
 	public $_table_prefix;
 	/**< Internal string, table prefix, prepended to all queries */
-	public $_query_id = null;
+	public $_table_prefix;
 	/**< Handle to the query result */
-	public $_old_style = null;
+	public $_query_id = null;
 	/**< Use the old style of fetch mode with ADODB */
-	public $_db = null;
+	public $_old_style = null;
 	/**< Handle to the database connection */
+	public $_db = null;
 
 	/**
 	 * Array of db function names
@@ -159,7 +163,7 @@ class DBQuery {
 	}
 
 	/** Add item to an internal associative array
-	 * 
+	 *
 	 * Used internally with DBQuery
 	 *
 	 * @param	$varname	Name of variable to add/create
@@ -463,7 +467,7 @@ class DBQuery {
 	}
 
 	/** Add a WHERE sub clause
-	 * 
+	 *
 	 * The where clause can be built up one
 	 * part at a time and the resultant query will put in the 'and'
 	 * between each component.
@@ -558,13 +562,13 @@ class DBQuery {
 	}
 
 	/** Add a HAVING sub clause
-	 * 
+	 *
 	 * The having clause can be built up one
 	 * part at a time and the resultant query will put in the 'and'
 	 * between each component.
 	 *
-	 * Remember: 
-	 * "the SQL standard requires that HAVING must reference only columns in the 
+	 * Remember:
+	 * "the SQL standard requires that HAVING must reference only columns in the
 	 * GROUP BY clause or columns used in aggregate functions"
 	 *
 	 * @param	$query	HAVING subclause to use, not including HAVING keyword
@@ -574,7 +578,7 @@ class DBQuery {
 	}
 
 	/** Generates the token representing the 'now' datetime
-	 * 
+	 *
 	 * The 'now' datetime is represented just a bit differently from database
 	 * engine to engine.  Therefore this method checks to see what database is
 	 * being used and returns the string to calculate the value.  It does *not*
@@ -587,17 +591,18 @@ class DBQuery {
 			case 'oci8':
 			case 'oracle':
 				return 'current_date';
-			default: //mysql
+            case 'mysql':
+			default:
 				return 'NOW()';
 		}
 	}
 
 	/** Add a date difference clause and name the result
-	 * 
+	 *
 	 * Each database engine represents date math just a little bit differently.
 	 * Therefore, this method checks to see what database is being used and adds a
 	 * date difference appropriately.
-	 * 
+	 *
 	 * @param	$date1			This is the starting date
 	 * @param	$date2			This is the ending date
 	 */
@@ -611,13 +616,14 @@ class DBQuery {
 			case 'oci8':
 			case 'oracle':
 				return $date1 . ' - ' . $date2;
-			default: //mysql
+            case 'mysql':
+			default:
 				return 'DATEDIFF(' . $date1 . ', ' . $date2 . ')';
 		}
 	}
 
 	/** Adds a given unit interval to a date
-	 * 
+	 *
 	 * @param	$date			This is the date we want to add to
 	 * @param	$interval		This is how much units we will be adding to the date
 	 * @param	$unit			This is the type of unit we are adding to the date
@@ -631,7 +637,8 @@ class DBQuery {
 			case 'oci8':
 			case 'oracle':
 				return '(' . $date . ' + interval \'' . $unit . '\' ' . $interval . ')';
-			default: //mysql
+            case 'mysql':
+			default:
 				return 'DATE_ADD(' . $date . ', INTERVAL ' . $interval . ' ' . $unit . ')';
 		}
 	}
@@ -703,8 +710,9 @@ class DBQuery {
 			case 'createTemporary': // Create a temporary table
 				$s = $this->prepareSelect();
 				$q = 'CREATE TEMPORARY TABLE ' . $this->_table_prefix . $this->create_table;
-				if (!empty($this->create_definition))
+				if (!empty($this->create_definition)) {
 					$q .= ' ' . $this->create_definition;
+                }
 				$q .= ' ' . $s;
 				break;
 			case 'alter':
@@ -797,8 +805,8 @@ class DBQuery {
 					if (is_array($this->table_list)) {
 						$intable = false;
 						/* added brackets for MySQL > 5.0.12 compatibility
-						** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
-						*/
+						 ** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
+						 */
 						$q .= '(';
 						foreach ($this->table_list as $table_id => $table) {
 							if ($intable) {
@@ -812,8 +820,8 @@ class DBQuery {
 							}
 						}
 						/* added brackets for MySQL > 5.0.12 compatibility
-						** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
-						*/
+						 ** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
+						 */
 						$q .= ')';
 					} else {
 						$q .= $this->_table_prefix . $this->table_list;
@@ -1147,10 +1155,6 @@ class DBQuery {
 		$this->clearQuery();
 
 		if ($q = $this->prepare()) {
-			/*echo('<pre>');
-			print_r('executing query(' . $q . ')');
-			print_r(debug_backtrace());
-			echo('</pre>');*/
 			if ($debug) {
 				// Before running the query, explain the query and return the details.
 				$qid = $this->_db->Execute('EXPLAIN ' . $q);
@@ -1231,12 +1235,12 @@ class DBQuery {
 	 * @return Associative array of rows, keyed with the field indicated by the $index parameter
 	 */
 	public function loadHashList($index = null) {
-
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
 			exit($this->_db->ErrorMsg());
 		}
 		$hashlist = array();
 		$keys = null;
+
 		while ($hash = $this->fetchRow()) {
 			if ($index) {
 				$hashlist[$hash[$index]] = $hash;
@@ -1273,13 +1277,12 @@ class DBQuery {
 	}
 
 	/** Load database results as an associative array
-	 * 
+	 *
 	 * @note To devs: is this functionally different to loadHashList() ?
 	 * @param $index Field index to use for naming the array keys.
 	 * @return Associative array containing result rows
 	 */
 	public function loadArrayList($index = 0) {
-
 		if (!$this->exec(ADODB_FETCH_NUM)) {
 			exit($this->_db->ErrorMsg());
 		}
@@ -1732,11 +1735,10 @@ class DBQuery {
 	 *	@return	object	The new record object or null if error
 	 **/
 	public function duplicate() {
-
 		// In php4 assignment does a shallow copy
 		// in php5 clone is required
 		if (version_compare(phpversion(), '5') >= 0) {
-			$newObj = clone ($this);
+			$newObj = clone($this);
 		} else {
 			$newObj = $this;
 		}

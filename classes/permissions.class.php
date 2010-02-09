@@ -239,7 +239,7 @@ class w2Pacl extends gacl_api {
 	}
 
 	/*
-	** Deleting all module-associyted entries from the phpgacl tables
+	** Deleting all module-associated entries from the phpgacl tables
 	** such as gacl_aco_maps, gacl_acl and gacl_aro_map
 	**
 	** @author 	gregorerhardt	
@@ -250,7 +250,6 @@ class w2Pacl extends gacl_api {
 	** @param	string	module (directory) name
 	** @return
 	*/
-
 	public function deleteModuleItems($mod) {
 		// Declaring the return string
 		$res = null;
@@ -1384,11 +1383,11 @@ class w2Pacl extends gacl_api {
 	}
   
     /*
-    * This method is primarily for modules that don't have a set of permissions
-    * on their own.  For example, the SmartSearch module in core
-    * web2project respects the permissions of the individual items it is
-    * searching but it does not apply any permissions of its own.
-    */
+     * This method is primarily for modules that don't have a set of permissions
+     * on their own.  For example, the SmartSearch module in core
+     * web2project respects the permissions of the individual items it is
+     * searching but it does not apply any permissions of its own.  
+     */
     public function registerModule($module_name, $module_value, $section_value = 'app') {
         $q = new DBQuery();
         $q->addTable('gacl_axo');

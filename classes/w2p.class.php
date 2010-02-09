@@ -53,6 +53,7 @@ class CW2pObject {
 		$this->_tbl_prefix = w2PgetConfig('dbprefix', '');
 		$this->_query = new DBQuery;
 	}
+	
 	/**
 	 *	@return string Returns the error message
 	 */
@@ -311,6 +312,7 @@ class CW2pObject {
 		$q->setDelete($this->_tbl);
 		$q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
 		$result = ((!$q->exec()) ? db_error() : null);
+		
 		if (!$result) {
 			// only record history if deletion actually occurred
 			addHistory($this->_tbl, $this->$k, 'delete');
