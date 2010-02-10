@@ -1888,5 +1888,38 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         // Restore AppUI for following tests since its global, yuck!
         $AppUI = $old_AppUI;
     }
+
+    /**
+     * Tests that dependent tasks are properly shifted
+     */
+    public function testShiftDependentTasks()
+    {
+        $this->obj->load(27);
+        $this->obj->shiftDependentTasks();
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestShiftDependentTasks.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_id IN(28,29,30)');
+
+        $results = $q->loadList();
+
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
 }
 ?>
