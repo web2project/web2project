@@ -1823,7 +1823,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests that canAccess throws the appropriate warning.
      */
-    public function testCanAccessThrowsEUSERNOTICE() {
+    public function testCanAccessThrowsEUSERNOTICE()
+    {
 
         global $AppUI;
 
@@ -1835,7 +1836,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      *
      * @global <type> $AppUI Test canAccess functionality
      */
-    public function testCanAccess() {
+    public function testCanAccess()
+    {
 
         global $AppUI;
 
