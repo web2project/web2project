@@ -3,7 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $sortTasksByName, $user_id, $w2Pconfig;
+global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, 
+    $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt,
+    $sortTasksByName, $user_id, $w2Pconfig;
 
 w2PsetExecutionConditions($w2Pconfig);
 
@@ -44,8 +46,45 @@ if ($addPwOiD && $department > 0) {
 	$q->clear();
 }
 
-$projects = $pjobj->getProjectsPercentComplete($w2Pconfig, $AppUI->user_id, $department, $addPwOiD, 
-													$proFilter, $user_id, $company_id, $showInactive);
+// pull valid projects and their percent complete information
+// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
+$working_hours = $w2Pconfig['daily_working_hours'];
+$q = new DBQuery;
+$q->addTable('projects', 'pr');
+$q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
+                max(t1.task_end_date) AS project_actual_end_date, SUM(task_duration * task_percent_complete *
+                IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type))/ SUM(task_duration *
+                IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete,
+                project_status, project_active');
+$q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
+$q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
+if ($department > 0 && !$addPwOiD) {
+	$q->addWhere('project_departments.department_id = ' . (int)$department);
+}
+if ($proFilter == '-3') {
+	$q->addWhere('pr.project_owner = ' . (int)$user_id);
+} elseif ($proFilter != '-1') {
+	$q->addWhere('pr.project_status = ' . (int)$proFilter);
+}
+if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
+	$q->addWhere('pr.project_company = ' . (int)$company_id);
+}
+// Show Projects where the Project Owner is in the given department
+if ($addPwOiD && !empty($owner_ids)) {
+	$q->addWhere('pr.project_owner IN (' . implode(',', $owner_ids) . ')');
+}
+
+if ($showInactive != '1') {
+	$q->addWhere('pr.project_active = 1');
+	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+		$q->addWhere('pr.project_status <> ' . $template_status);
+	}
+}
+$pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+$q->addGroup('pr.project_id');
+$q->addOrder('pr.project_name, task_end_date DESC');
+
+$projects = $q->loadList();
 
 // Don't push the width higher than about 1200 pixels, otherwise it may not display.
 $width = min(w2PgetParam($_GET, 'width', 600), 1400);
@@ -151,25 +190,19 @@ if (!is_array($projects) || 0 == count($projects)) {
 
         $columnValues = array('project_name' => $name, 'start_date' => $start,
                           'end_date' => $end, 'actual_end' => $actual_end);
-		$gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'], $p['project_active'], $progress);
+		$gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'], $p['project_active'], $progress, $p['project_id']);
 
 		// If showAllGant checkbox is checked
 		if ($showAllGantt) {
 			// insert tasks into Gantt Chart
 			// select for tasks for each project
 
-			$q = new DBQuery;
-			$q->addTable('tasks');
-			$q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_duration, tasks.task_duration_type, tasks.task_milestone, tasks.task_dynamic');
-			$q->addJoin('projects', 'p', 'p.project_id = tasks.task_project');
-			$q->addWhere('p.project_id = ' . (int)$p['project_id']);
-			if ($sortTasksByName) {
-				$q->addOrder('tasks.task_name');
-			} else {
-				$q->addOrder('tasks.task_end_date ASC');
-			}
-			$tasks = $q->loadList();
-			$q->clear();
+            $task = new CTask();
+            $orderBy = ($sortTasksByName) ? 'task_name' : 'task_end_date ASC';
+            $tasks = $task->getAllowedTaskList($AppUI, $p['project_id'], $orderBy);
+
+            $bestColor = bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000');
+            
 			foreach ($tasks as $t) {
 				//Check if start date exists, if not try giving it the end date.
 				//If the end date does not exist then set it for today.
@@ -201,29 +234,19 @@ if (!is_array($projects) || 0 == count($projects)) {
 				$tEndObj = new CDate($t['task_end_date']);
 
 				if ($t['task_milestone'] != 1) {
-				  $gantt->addSubBar(substr(' --' . $t['task_name'], 0, 20). '...', 
-				    $tStart, $tEnd, $caption, $t['task_dynamic'] == 1 ? 0.1 : 0.6, $p['project_color_identifier'], $progress);
+                    $gantt->addSubBar(substr(' --' . $t['task_name'], 0, 20). '...',
+                        $tStart, $tEnd, $caption, $t['task_dynamic'] == 1 ? 0.1 : 0.6,
+                        $p['project_color_identifier'], $progress);
 				} else {
 				  $gantt->addMilestone(array('-- ' . $t['task_name']), $t['task_start_date']);
 				}
 
-				// Insert workers for each task into Gantt Chart
-				$q = new DBQuery;
-				$q->addTable('user_tasks', 't');
-				$q->addQuery('DISTINCT contact_first_name, contact_last_name, t.task_id');
-				$q->addJoin('users', 'u', 'u.user_id = t.user_id', 'inner');
-				$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-				$q->addWhere('t.task_id = ' . (int)$t['task_id']);
-				$q->addOrder('user_username ASC');
-				$workers = $q->loadList();
-				$q->clear();
-
+                $task->task_id = $t['task_id'];
+				$workers = $task->getAssigned();
 				foreach ($workers as $w) {
-					$bar3 = new GanttBar($row++, array('   * ' . $w['contact_first_name'] . ' ' . $w['contact_last_name'], ' ', ' ', ' '), $tStartObj->format(FMT_DATETIME_MYSQL), $tEndObj->format(FMT_DATETIME_MYSQL), 0.6);
-					$bar3->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
-					$bar3->title->SetColor(bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000'));
-					$bar3->SetFillColor('#' . $p['project_color_identifier']);
-					$graph->Add($bar3);
+                    $gantt->addSubSubBar('   * ' . $w['user_name'],
+                        $tStartObj, $tEndObj, '', 0.6,
+                        $bestColor, '#' . $p['project_color_identifier']);
 				}
 				// End of insert workers for each task into Gantt Chart
 			}
