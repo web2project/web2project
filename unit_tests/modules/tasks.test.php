@@ -1821,7 +1821,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Tests that canAccess throws the appropriate warning.
+     * Tests that canAccess throws the appropriate warning
      */
     public function testCanAccessThrowsEUSERNOTICE()
     {
@@ -1833,8 +1833,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     *
-     * @global <type> $AppUI Test canAccess functionality
+     * Tests the canAccess function
      */
     public function testCanAccess()
     {
@@ -1887,6 +1886,55 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         // Restore AppUI for following tests since its global, yuck!
         $AppUI = $old_AppUI;
+    }
+        
+    /*
+     * Tests that dependentTasks returns nothing if no task id provided
+     */
+    public function testDependentTasksNoTaskID()
+    {
+        unset($this->obj);
+        $this->obj = new CTask();
+        $result = $this->obj->dependentTasks();
+        $this->assertEquals('', $result);
+    }
+
+    /**
+     * Tests that dependentTasks returns proper list if object id is set
+     */
+    public function testDependentTasksTaskFromObject()
+    {
+        $this->obj->load(28);
+        $result = $this->obj->dependentTasks();
+        $this->assertEquals('29,30', $result);
+    }
+
+    /**
+     * Tests that dependentTasks returns proper list is returned if task id is
+     * passed in as well as object id set
+     */
+    public function testDependentTasksTaskID()
+    {
+        $result = $this->obj->dependentTasks(28);
+        $this->assertEquals('29,30', $result);
+    }
+
+    /**
+     * Tests dependentTasks returns proper list with recursive dependencies
+     */
+    public function testDependentTasksTaskIDWithRecurseDeps()
+    {
+        $result = $this->obj->dependentTasks(27);
+        $this->assertEquals('29,30,28', $result);
+    }
+
+    /**
+     * Tests dependentTasks returns proper list when not recursing
+     */
+    public function testDependentTasksTaskIDNoRecurse()
+    {
+        $result = $this->obj->dependentTasks(27, false, false);
+        $this->assertEquals('28', $result);
     }
 
     /**
