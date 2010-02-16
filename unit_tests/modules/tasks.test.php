@@ -1969,5 +1969,34 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
         }
     }
+
+    public function testUpdateDepDate()
+    {
+        $this->obj->update_dep_dates(28);
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateDepDates.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('task_updated');
+        $q->addWhere('task_id IN(28)');
+
+        $results = $q->loadList();
+
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
+        }
+    }
 }
 ?>
