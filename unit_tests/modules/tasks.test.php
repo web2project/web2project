@@ -8,6 +8,7 @@ global $w2p_performance_dbtime;
 global $w2p_performance_old_dbqueries;
 global $AppUI;
 global $tracking_dynamics;
+global $tracked_dynamics;
 
 require_once '../base.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
@@ -22,6 +23,7 @@ $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
 $tracking_dynamics = array('0' => '21', '1' => '31');
+$tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
 
 require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';
@@ -1997,6 +1999,26 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
         }
+    }
+
+    public function testGetDepsMaxEndDate()
+    {
+        /**
+         * Tests when a dependency is tracked and has an end date
+         */
+        $task = new CTask();
+        $task->load(28);
+        $max_end_date = $this->obj->get_deps_max_end_date($task);
+        $this->assertEquals('2009-11-02 00:00:00', $max_end_date);
+
+        /**
+         * Tests when no dependency is tracked and/or has an end date
+         * so default to project start date
+         */
+        $task = new CTask();
+        $task->load(1);
+        $max_end_date = $this->obj->get_deps_max_end_date($task);
+        $this->assertEquals('2009-10-10 00:00:00', $max_end_date);
     }
 }
 ?>
