@@ -220,11 +220,23 @@ if ($is_tabbed) {
 					$count_projects = $tmpProject->hasChildProjects($row['project_id']);
 		
 					if ($level) {
-						$s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
+						$s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1));
+                        $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;';
+                        $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
+                        $s .= (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : w2PtoolTip($row['project_name'], $AppUI->_('No information available'), true));
+                        $s .= $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
 					} elseif ($count_projects > 0 && !$level) {
-						$s .= w2PtoolTip('multi-project parent', 'this project is a parent on a multi-project structure<br />click to show/hide its children.') . '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')"><img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0"><img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row['project_name'] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
+						$s .= w2PtoolTip($row["project_name"], nl2br($row['project_description']) .'<br />'.
+                                '<i>'.$AppUI->_('this project is a parent on a multi-project structure').'</i><br />'.
+                                '<i>'.$AppUI->_('click to show/hide its children').'</i>');
+                        $s .= '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')">';
+                        $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0">';
+                        $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;';
+                        $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row['project_name'] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
 					} else {
-						$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
+						$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
+                        $s .= (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : w2PtoolTip($row['project_name'], $AppUI->_('No information available'), true));
+                        $s .= $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
 					}
 					$s .= '</td><td width="30%"><a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a></td>';
 		
