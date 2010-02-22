@@ -97,7 +97,7 @@ class CTask extends CW2pObject {
 
 		$this->task_id = intval($this->task_id);
 
-		if (is_null($this->task_priority) || !is_numeric((int) $this->task_priority)) {
+        if (!is_int($this->task_priority) && '' == $this->task_priority) {
 			$errorArray['task_priority'] = $baseErrorMsg . 'task priority is NULL';
 		}
 		if ($this->task_name == '') {
