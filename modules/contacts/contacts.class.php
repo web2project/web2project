@@ -514,6 +514,7 @@ class CContact extends CW2pObject {
   }
 
   public function hook_calendar($userId) {
-    return $this->getUpcomingBirthdays($userId);
+//    return $this->getUpcomingBirthdays($userId);
+	return null;
   }
 }
