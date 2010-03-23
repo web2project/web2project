@@ -1707,8 +1707,8 @@ class CTask extends CW2pObject {
 		$q->addQuery('user_task_priority');
 		$q->addWhere('user_id = ' . (int)$user_id . ' AND task_id = ' . (int)$task_id);
 		$priority = $q->loadHash();
-		$q->clear();
-		return $prio ? $priority['user_task_priority'] : null;
+
+		return ($priority) ? $priority['user_task_priority'] : null;
 	}
 
 	public function updateUserSpecificTaskPriority($user_task_priority = 0, $user_id = 0, $task_id = null) {
