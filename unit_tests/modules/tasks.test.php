@@ -1427,7 +1427,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_departments'), $xml_db_filtered_dataset->getTable('task_departments'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_contacts'), $xml_db_filtered_dataset->getTable('task_contacts'));
-        
+
         /**
          * Get updated dates to test against
          */
@@ -1617,7 +1617,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
         }
     }
-    
+
     /**
      * Test getting dependencies
      */
@@ -1675,7 +1675,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testGetTasksForPeriodNoCompanyNoUser()
     {
         global $AppUI;
-        
+
         $start_date = new CDate('2009-07-05');
         $end_date   = new CDate('2009-07-16');
 
@@ -1856,7 +1856,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $AppUI  = new CAppUI;
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
-        
+
 
         // public access
         $result = @$this->obj->canAccess(2);
@@ -1889,7 +1889,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         // Restore AppUI for following tests since its global, yuck!
         $AppUI = $old_AppUI;
     }
-        
+
     /*
      * Tests that dependentTasks returns nothing if no task id provided
      */
@@ -1972,6 +1972,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         }
     }
 
+    /**
+     * Tests that dependent dates are updated properly for current task
+     */
     public function testUpdateDepDate()
     {
         $this->obj->update_dep_dates(28);
@@ -2001,6 +2004,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         }
     }
 
+    /**
+     * Tests that the max end date based on dependencies for a task is properly returned
+     */
     public function testGetDepsMaxEndDate()
     {
         /**
@@ -2019,6 +2025,16 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $task->load(1);
         $max_end_date = $this->obj->get_deps_max_end_date($task);
         $this->assertEquals('2009-10-10 00:00:00', $max_end_date);
+    }
+
+    /**
+     * Tests that the proper number of hours per day is returned
+     */
+    public function testGetTaskDurationPerDay()
+    {
+        $this->obj->load(1);
+        $this->assertEquals(2, $this->obj->getTaskDurationPerDay());
+        $this->assertEquals(4, $this->obj->getTaskDurationPerDay(true));
     }
 }
 ?>
