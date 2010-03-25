@@ -2028,13 +2028,36 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Tests that the proper number of hours per day is returned
+     * Tests that the proper number of hours per day this task occupies
      */
     public function testGetTaskDurationPerDay()
     {
         $this->obj->load(1);
         $this->assertEquals(2, $this->obj->getTaskDurationPerDay());
         $this->assertEquals(4, $this->obj->getTaskDurationPerDay(true));
+    }
+
+    /**
+     * Tests that the proper number of hours per week this task occupies
+     */
+    public function testGetTaskDurationPerWeek()
+    {
+        $this->obj->load(1);
+        $this->assertEquals(10, $this->obj->getTaskDurationPerWeek());
+        $this->assertEquals(20, $this->obj->getTaskDurationPerWeek(true));
+    }
+
+    /**
+     * Tests removing an assigned user from a task
+     */
+    public function testRemoveAssigned()
+    {
+        $this->obj->load(1);
+        $this->obj->removeAssigned(1);
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestRemoveAssigned.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
     }
 }
 ?>
