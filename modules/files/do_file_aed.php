@@ -17,7 +17,7 @@ $notify = ($notify != '0') ? '1' : '0';
 $notifyContacts = w2PgetParam($_POST, 'notify_contacts', '0');
 $notifyContacts = ($notifyContacts != '0') ? '1' : '0';
 
-$isNotNew = $_POST['file_id'];
+$isNotNew = (int) w2PgetParam($_POST, 'file_id', '0');
 $perms = &$AppUI->acl();
 if ($del) {
 	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
