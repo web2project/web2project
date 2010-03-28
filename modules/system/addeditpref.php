@@ -61,6 +61,14 @@ function submitIt() {
 		mask += 1;
 	}
 	expanded.value = mask;
+
+	defs.value = mask;
+	var daylight = document.getElementById('daylight_savings');
+	var mask = 0;
+	if (form.daylightsavings.checked) {
+		mask += 1;
+	}
+	daylight.value = mask;
 	form.submit();
 }
 </script>
@@ -112,11 +120,11 @@ echo $user_id ? $user : $AppUI->_('Default');
 	<td>
 		<input type="hidden" name="pref_name[DAYLIGHTSAVINGS]" id="daylight_savings" value="<?php echo $prefs['DAYLIGHTSAVINGS']; ?>" />
         <?php
-		echo '<input type="checkbox" name="expanded"';
-		if ($prefs['DAYLIGHTSAVINGS']) {
-			echo ' checked="checked"';
-		}
-		echo ' />';
+            echo '<input type="checkbox" name="daylightsavings"';
+            if ($prefs['DAYLIGHTSAVINGS']) {
+                echo ' checked="checked"';
+            }
+            echo ' />';
         ?>
 	</td>
 </tr>
