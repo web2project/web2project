@@ -8,6 +8,7 @@ $type = w2Pgetsysval('TaskType');
 $stype = array('' => '(Type)') + $type;
 $priority = w2Pgetsysval('TaskPriority');
 $spriority = array('' => '(Priority)') + $priority;
+$task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
 $stask_access = array('' => '(Access)') + $task_access;
 $durntype = w2PgetSysval('TaskDurationType');
 $sdurntype = array('' => '(Duration Type)') + $durntype;
