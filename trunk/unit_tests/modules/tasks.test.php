@@ -1937,4 +1937,3 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('28', $result);
     }
 }
-?>
