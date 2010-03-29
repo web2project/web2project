@@ -107,11 +107,11 @@ echo $user_id ? $user : $AppUI->_('Default');
 	<td>
         <?php
             $timezones = w2PgetSysVal('Timezones');
-            echo arraySelect($timezones, 'pref_name[TIMEZONE]', 'class=text size=1', $prefs['TIMEZONE'], true);
-            if (version_compare($AppUI->getVersion(), '2.0', '<' )) {
-                echo '&nbsp;&nbsp;';
-                echo $AppUI->_('As of web2project v1.3, timezones are available for the soe reason of preparing for w2p v2.0 only. No calculations or displayes are affected by setting a timezones.');
+            foreach ($timezones as $offset => $name) {
+                $sign = ($offset >= 0) ? '+' : '';
+                $timezones[$offset] = 'GMT'.$sign.($offset/3600).' '.$name;
             }
+            echo arraySelect($timezones, 'pref_name[TIMEZONE]', 'class=text size=1', $prefs['TIMEZONE'], true);
         ?>
 	</td>
 </tr>
@@ -127,6 +127,18 @@ echo $user_id ? $user : $AppUI->_('Default');
             echo ' />';
         ?>
 	</td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td colspan="2">
+        <?php
+            if (version_compare($AppUI->getVersion(), '2.0', '<' )) {
+                echo '&nbsp;&nbsp;';
+                echo $AppUI->_('As of web2project v1.3, timezones are included for information purposes only.');
+                echo $AppUI->_('No calculations or displayes are affected by setting a timezones.');
+            }
+        ?>
+    </td>
 </tr>
 
 <tr>
