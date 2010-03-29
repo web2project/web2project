@@ -80,16 +80,44 @@ echo $user_id ? $user : $AppUI->_('Default');
 <tr>
 	<td align="right"><?php echo $AppUI->_('Locale'); ?>:</td>
 	<td>
-<?php
-// read the installed languages
-$LANGUAGES = $AppUI->loadLanguages();
-$temp = $AppUI->setWarning(false);
-$langlist = array();
-foreach ($LANGUAGES as $lang => $langinfo)
-	$langlist[$lang] = $langinfo[1];
-echo arraySelect($langlist, 'pref_name[LOCALE]', 'class=text size=1', $prefs['LOCALE'], true);
-$AppUI->setWarning($temp);
-?>
+        <?php
+            // read the installed languages
+            $LANGUAGES = $AppUI->loadLanguages();
+            $temp = $AppUI->setWarning(false);
+            $langlist = array();
+            foreach ($LANGUAGES as $lang => $langinfo) {
+                $langlist[$lang] = $langinfo[1];
+            }
+            echo arraySelect($langlist, 'pref_name[LOCALE]', 'class=text size=1', $prefs['LOCALE'], true);
+            $AppUI->setWarning($temp);
+        ?>
+	</td>
+</tr>
+
+<tr>
+	<td align="right"><?php echo $AppUI->_('Timezone'); ?>:</td>
+	<td>
+        <?php
+            $timezones = w2PgetSysVal('Timezones');
+            echo arraySelect($timezones, 'pref_name[TIMEZONE]', 'class=text size=1', $prefs['TIMEZONE'], true);
+            if (version_compare($AppUI->getVersion(), '2.0', '<' )) {
+                echo '&nbsp;&nbsp;';
+                echo $AppUI->_('As of web2project v1.3, timezones are available for the soe reason of preparing for w2p v2.0 only. No calculations or displayes are affected by setting a timezones.');
+            }
+        ?>
+	</td>
+</tr>
+<tr>
+	<td align="right"><?php echo $AppUI->_('Daylight Savings?'); ?>:</td>
+	<td>
+		<input type="hidden" name="pref_name[DAYLIGHTSAVINGS]" id="daylight_savings" value="<?php echo $prefs['DAYLIGHTSAVINGS']; ?>" />
+        <?php
+		echo '<input type="checkbox" name="expanded"';
+		if ($prefs['DAYLIGHTSAVINGS']) {
+			echo ' checked="checked"';
+		}
+		echo ' />';
+        ?>
 	</td>
 </tr>
 
@@ -261,13 +289,13 @@ echo arraySelect($record_method, 'pref_name[TASKLOGNOTE]', 'class="text" size="1
 	<td align="right"><?php echo $AppUI->_('Show Parent Tasks Expanded by Default'); ?>:</td>
 	<td>
 		<input type="hidden" name="pref_name[TASKSEXPANDED]" id="tasks_expanded" value="<?php echo $prefs['TASKSEXPANDED']; ?>" />
-<?php
+        <?php
 		echo '<input type="checkbox" name="expanded"';
 		if ($prefs['TASKSEXPANDED']) {
 			echo ' checked="checked"';
 		}
 		echo ' />';
-?>
+        ?>
 	</td>
 </tr>
 <tr>
