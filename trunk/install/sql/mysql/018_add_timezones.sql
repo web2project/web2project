@@ -27,7 +27,6 @@ INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_
 	(1, 'Timezones', 'America/Mazatlan', -25200);
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES
 	(1, 'Timezones', 'America/Phoenix', -25200);
-
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES
 	(1, 'Timezones', 'America/Regina', -21600);
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES
