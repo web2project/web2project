@@ -86,6 +86,8 @@ class CContact extends CW2pObject {
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
         $errorMsgArray = $this->check();
+        $this->contact_company = (int) $this->contact_company;
+        $this->contact_department = (int) $this->contact_department;
 
         if (count($errorMsgArray) > 0) {
             return $errorMsgArray;
