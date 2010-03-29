@@ -1990,6 +1990,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
         }
+    }
 
     /*
      * Tests that dependentTasks returns nothing if no task id provided
