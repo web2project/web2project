@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = isset($_POST['del']) ? $_POST['del'] : 0;
-$pref_user = intval(w2PgetParam($_POST, 'pref_user', 0));
+$pref_user = (int) w2PgetParam($_POST, 'pref_user', 0);
 
 $perms = &$AppUI->acl();
 if (!$perms->checkModule('system', 'edit') && !$pref_user) {
@@ -16,7 +16,7 @@ if ((!($AppUI->user_id == $pref_user) && (!$perms->checkModule('admin', 'edit'))
 }
 
 $obj = new CPreferences();
-$obj->pref_user = isset($_POST['pref_user']) ? $_POST['pref_user'] : 0;
+$obj->pref_user = $pref_user;
 foreach ($_POST['pref_name'] as $name => $value) {
 	$obj->pref_name = $name;
 	$obj->pref_value = $value;
