@@ -43,7 +43,7 @@ if ($obj) {
   $file = $obj;
   $file_id = $file->file_id;
 } else {
-  $file->load($file_id);
+  $obj = $file->load($file_id);
 }
 
 // check if this record has dependencies to prevent deletion
