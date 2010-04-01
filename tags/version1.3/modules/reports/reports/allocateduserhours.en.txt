@@ -1,2 +1,0 @@
-Allocated user hours
-This report shows how many hours a user has allocated in the specified period of time.
