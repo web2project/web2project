@@ -93,8 +93,8 @@
           ?>
 					<tr>
 						<td colspan="2">The system upgrade is performed through the
-              <a href="../index.php?m=system">System Admin</a> and requires you 
-              to be logged in with Admin access.</td>
+                        <strong><a href="../index.php?m=system">System Admin</a></strong> and requires you
+                        to be logged in with Admin access. Please click <strong><a href="../index.php?m=system">System Admin</a></strong> to continue.</td>
 					</tr>
 					<?php
 					break;
