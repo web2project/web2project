@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<project name="web2project" basedir="." default="warning">
+  <target name="warning">
+    <echo message="Running Unit Tests is a destructive process and will drop/restore your database multiple times." />
+    <echo message="Please only run Unit Tests against your development or test databases." />
+    
+    <echo message="To run tests, use the command: phing run-tests" />
+  </target>
+
+  <target name="run-tests">
+    <phpunit codecoverage="false" haltonfailure="false" haltonerror="false">
+      <formatter type="plain" usefile="false"/>
+        <batchtest>
+          <fileset dir="modules">
+            <include name="**/*.test.php"/>
+          </fileset>
+
+          <fileset dir="classes">
+            <!--
+		      The UpgradeManager_Test (manager.test.php) should be 
+		      executed separately and before any/all of the other 
+              tests because it can build up a database for us.  Any 
+              ideas on how to do this successfully would be greatly 
+		      appreciated.  - caseydk 02 July 2009
+            -->
+            <include name="**/*.test.php"/>
+          </fileset>
+
+          <fileset dir="includes">
+            <include name="**/*.test.php"/>
+          </fileset>
+        </batchtest>
+      <formatter  type="xml" todir="reports" outfile="logfile.xml"/>
+    </phpunit>
+    <phpunitreport  infile="reports/logfile.xml"
+        styledir="/usr/share/php/data/phing/etc/"
+        todir="reports"
+        format="noframes" />
+    </target>
+
+  <target name="standards" depends="lint">
+    <!-- This is setup to run as separate tasks due to memory/performance reasons. -->
+
+    <phpcodesniffer standard="PEAR" format="summary"
+        file="../index.php" allowedFileExtensions="php" />
+    <phpcodesniffer standard="PEAR" format="summary"
+        file="../classes" allowedFileExtensions="php" />
+    <phpcodesniffer standard="PEAR" format="summary"
+        file="../includes" allowedFileExtensions="php" />
+    <phpcodesniffer standard="PEAR" format="summary"
+        file="../install" allowedFileExtensions="php" />
+    <phpcodesniffer standard="PEAR" format="summary"
+        file="../modules" allowedFileExtensions="php" />
+    <phpcodesniffer standard="PEAR" format="summary"
+        file="." allowedFileExtensions="php" />
+  </target>
+
+
+  <target name="package">
+    <property name="releaseName" value="trunk" override="true"/>
+    <input propertyname="releaseName">What version should be packaged?</input>
+
+    <if>
+      <equals arg1="${releaseName}" arg2="trunk" />
+      <then>
+      	<echo message="trunk!" />
+	  	<property name="version" value="${releaseName}" override="true"/>
+	  </then>
+	  <else>
+      	<echo message="version${releaseName}!" />
+        <property name="version" value="tags/version${releaseName}" override="true"/>
+	  </else>
+    </if>
+
+    <property name="svnUrl" value="https://web2project.svn.sourceforge.net/svnroot/web2project/${version}/" override="true"/>
+    <echo message="Working with ${svnUrl}..." />
+
+    <svncheckout
+      svnpath="/usr/bin/svn"
+      username="anony"
+      password="anony"
+      nocache="true"
+      repositoryurl="${svnUrl}"
+          todir="packaging/web2project-svn"/>
+    <svnexport
+        svnpath="/usr/bin/svn"
+        repositoryurl="${svnUrl}"
+        todir="packaging/web2project"/>
+
+    <exec command="svn log -v packaging/web2project-svn > packaging/web2project/ChangeLog" dir="." passthru="true" />
+  	<delete dir="packaging/web2project-svn/" />
+
+    <copy todir="packaging/web2project-${releaseName}" overwrite="true">
+      <fileset dir="packaging/web2project">
+        <include name="**/*.css" />
+        <include name="**/*.js" />
+      </fileset>
+      <filterchain>
+        <tabtospaces tablength="4" />
+        <stripwhitespace />
+        <replaceregexp>
+          <regexp pattern="  " replace="" />
+        </replaceregexp>
+      </filterchain>
+    </copy>
+    <copy todir="packaging/web2project-${releaseName}" overwrite="true">
+      <fileset dir="packaging/web2project">
+        <include name="**/**" />
+        <exclude name="**/*.css" />
+        <exclude name="**/*.js" />
+      </fileset>
+      <filterchain>
+        <tabtospaces tablength="4" />
+      </filterchain>
+    </copy>
+    <delete dir="packaging/web2project" />
+
+    <delete dir="packaging/web2project-${releaseName}/unit_tests/" />
+    <phplint haltonfailure="true">
+      <fileset dir="packaging/web2project-${releaseName}">
+        <include name="**/*.php" />
+        <exclude name="lib/" />
+      </fileset>
+    </phplint>
+
+    <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
+      <fileset dir="packaging/">
+        <include name="**/**" />
+      </fileset>
+    </tar>
+    <zip destfile="web2project-${releaseName}.zip">
+      <fileset dir="packaging/">
+        <include name="**/**" />
+      </fileset>
+    </zip>
+    <delete dir="packaging/" />
+  </target>
+
+  <target name="lint">
+    <phplint haltonfailure="true">
+      <fileset dir="..">
+        <include name="**/*.php" />
+        <exclude name="lib/" />
+      </fileset>
+    </phplint>
+    </target>
+</project>
