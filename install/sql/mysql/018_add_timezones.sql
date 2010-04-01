@@ -263,3 +263,6 @@ INSERT INTO user_preferences(pref_user, pref_name, pref_value)
     SELECT DISTINCT pref_user, 'TIMEZONE','America/New_York' FROM user_preferences;
 INSERT INTO user_preferences(pref_user, pref_name, pref_value)
     SELECT DISTINCT pref_user, 'DAYLIGHTSAVINGS', 1 FROM user_preferences;
+
+INSERT INTO `w2pversion` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`)
+	VALUES (989, '1.3.0', 18, now(), now());
