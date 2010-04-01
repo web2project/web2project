@@ -109,9 +109,6 @@
         <exclude name="**/*.css" />
         <exclude name="**/*.js" />
       </fileset>
-      <filterchain>
-        <tabtospaces tablength="4" />
-      </filterchain>
     </copy>
     <delete dir="packaging/web2project" />
 
