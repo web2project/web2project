@@ -1889,8 +1889,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         // Restore AppUI for following tests since its global, yuck!
         $AppUI = $old_AppUI;
     }
-
-    /**
+        
+    /*
      * Tests that dependentTasks returns nothing if no task id provided
      */
     public function testDependentTasksNoTaskID()
@@ -1939,7 +1939,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('28', $result);
     }
 
-    /*
+    /**
      * Tests that dependent tasks are properly shifted
      */
     public function testShiftDependentTasks()
