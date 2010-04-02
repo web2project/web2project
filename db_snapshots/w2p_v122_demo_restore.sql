@@ -1464,6 +1464,31 @@ INSERT INTO `gacl_phpgacl` (`name`, `value`) VALUES ('schema_version', '0.95');
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table `history`
+-- 
+
+CREATE TABLE `history` (
+  `history_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `history_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `history_user` int(10) NOT NULL DEFAULT '0',
+  `history_action` varchar(20) NOT NULL DEFAULT 'modify',
+  `history_item` int(10) NOT NULL,
+  `history_table` varchar(20) NOT NULL DEFAULT '',
+  `history_project` int(10) NOT NULL DEFAULT '0',
+  `history_name` varchar(255) DEFAULT NULL,
+  `history_changes` mediumtext,
+  `history_description` mediumtext,
+  PRIMARY KEY (`history_id`),
+  KEY `index_history_module` (`history_table`,`history_item`),
+  KEY `index_history_item` (`history_item`),
+  KEY `history_date` (`history_date`),
+  KEY `history_table` (`history_table`),
+  KEY `history_user` (`history_user`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table `links`
 -- 
 
