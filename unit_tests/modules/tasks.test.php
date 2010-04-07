@@ -9,6 +9,7 @@ global $w2p_performance_old_dbqueries;
 global $AppUI;
 global $tracking_dynamics;
 global $tracked_dynamics;
+global $w2Pconfig;
 
 require_once '../base.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
@@ -2058,6 +2059,28 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestRemoveAssigned.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+    }
+
+    /**
+     * Tests updating assigned users for task
+     */
+    public function testUpdateAssignedOverAssignment()
+    {
+        global $w2Pconfig;
+
+        // god this is ugly but needs to be done to test this funcationlity properly
+        $old_config = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = true;
+
+        $this->obj->load(1);
+        $over_assigned = $this->obj->updateAssigned(1, array('1' => '101'), false, false);
+        $this->assertEquals(' Admin Person [0%]', $over_assigned);
+
+        $this->obj->load(1);
+        $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), false, false);
+        $this->assertEquals('', $over_assigned);
+
+        $w2Pconfig['check_overallocation'] = $old_config;
     }
 }
 ?>
