@@ -2161,36 +2161,50 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1, count($assigned_users));
         $this->assertEquals(26, count($assigned_users[1]));
 
-        $this->assertEquals(1, $assigned_users[1]['user_id']);
-        $this->assertEquals(1, $assigned_users[1]['user_contact']);
-        $this->assertEquals('admin', $assigned_users[1]['user_username']);
+        $this->assertEquals(1,                                  $assigned_users[1]['user_id']);
+        $this->assertEquals(1,                                  $assigned_users[1]['user_contact']);
+        $this->assertEquals('admin',                            $assigned_users[1]['user_username']);
         $this->assertEquals('76a2173be6393254e72ffa4d6df1030a', $assigned_users[1]['user_password']);
-        $this->assertEquals(0, $assigned_users[1]['user_parent']);
-        $this->assertEquals(1, $assigned_users[1]['user_type']);
-        $this->assertEquals('Admin User', $assigned_users[1]['user_signature']);
-        $this->assertEquals(0, $assigned_users[1]['user_empireint_special']);
-        $this->assertEquals(0, $assigned_users[1]['user_department']);
-        $this->assertEquals(0, $assigned_users[1]['user_company']);
-        $this->assertEquals(50, $assigned_users[1]['perc_assignment']);
-        $this->assertEquals(0, $assigned_users[1]['user_task_priority']);
-        $this->assertEquals('Person', $assigned_users[1]['contact_last_name']);
-        $this->assertEquals(1, $assigned_users[1][0]);
-        $this->assertEquals(1, $assigned_users[1][1]);
-        $this->assertEquals('admin', $assigned_users[1][2]);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_parent']);
+        $this->assertEquals(1,                                  $assigned_users[1]['user_type']);
+        $this->assertEquals('Admin User',                       $assigned_users[1]['user_signature']);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_empireint_special']);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_department']);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_company']);
+        $this->assertEquals(50,                                 $assigned_users[1]['perc_assignment']);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_task_priority']);
+        $this->assertEquals('Person',                           $assigned_users[1]['contact_last_name']);
+        $this->assertEquals(1,                                  $assigned_users[1][0]);
+        $this->assertEquals(1,                                  $assigned_users[1][1]);
+        $this->assertEquals('admin',                            $assigned_users[1][2]);
         $this->assertEquals('76a2173be6393254e72ffa4d6df1030a', $assigned_users[1][3]);
-        $this->assertEquals(0, $assigned_users[1][4]);
-        $this->assertEquals(1, $assigned_users[1][5]);
-        $this->assertEquals('Admin User', $assigned_users[1][6]);
-        $this->assertEquals(0, $assigned_users[1][7]);
-        $this->assertEquals(0, $assigned_users[1][8]);
-        $this->assertEquals(0, $assigned_users[1][9]);
-        $this->assertEquals(50, $assigned_users[1][10]);
-        $this->assertEquals(0, $assigned_users[1][11]);
-        $this->assertEquals('Person', $assigned_users[1][12]);
+        $this->assertEquals(0,                                  $assigned_users[1][4]);
+        $this->assertEquals(1,                                  $assigned_users[1][5]);
+        $this->assertEquals('Admin User',                       $assigned_users[1][6]);
+        $this->assertEquals(0,                                  $assigned_users[1][7]);
+        $this->assertEquals(0,                                  $assigned_users[1][8]);
+        $this->assertEquals(0,                                  $assigned_users[1][9]);
+        $this->assertEquals(50,                                 $assigned_users[1][10]);
+        $this->assertEquals(0,                                  $assigned_users[1][11]);
+        $this->assertEquals('Person',                           $assigned_users[1][12]);
 
         $assigned_users = $this->obj->getAssignedUsers(200);
 
         $this->assertEquals(0, count($assigned_users));
+    }
+
+    /**
+     * Test getting a list of dependencies
+     */
+    public function testGetDependencyList()
+    {
+        $dependencies = $this->obj->getDependencyList(3);
+
+        $this->assertEquals(1, count($dependencies));
+        $this->assertEquals('Task 4', $dependencies[4]);
+
+        $dependencies = $this->obj->getDependencyList(28);
+        print_r($dependencies); exit();
     }
 }
 ?>
