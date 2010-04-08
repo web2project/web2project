@@ -19,7 +19,7 @@ class CUser extends CW2pObject {
 	public $user_signature = null;
 
 	public function CUser() {
-    parent::__construct('users', 'user_id');
+        parent::__construct('users', 'user_id');
 	}
 
 	public function check() {
@@ -76,6 +76,7 @@ class CUser extends CW2pObject {
 			$q->addWhere('upr.pref_user = ' . $this->user_id);
 			$uprefs = $q->loadList();
 			$q->clear();
+			
 			if (!count($uprefs) && $this->user_id > 0) {
 				//Lets get the default users preferences
 				$q->addTable('user_preferences', 'dup');
@@ -264,6 +265,7 @@ class CUser extends CW2pObject {
 	public function fullLoad($userId) {
 		$this->loadFull($userId);
 	}
+
 	public function loadFull($userId) {
 		$q = new DBQuery();
 		$q->addTable('users', 'u');
@@ -394,6 +396,10 @@ class CUser extends CW2pObject {
 		return $this->user_username;
 	}
 	
+	/**Function that checks if a user is active or not (i.e. are they able to login to the system)
+	 * @param int $user_id id of the use to check
+	 * @return boolean	true if active, false o/w
+	 */
 	public function isActive() {
 		global $AppUI;
 		$perms = &$AppUI->acl();
@@ -401,6 +407,10 @@ class CUser extends CW2pObject {
 		return $perms->isUserPermitted($this->user_id);
 	}
 
+	/**Function that checks if a user is active or not (i.e. are they able to login to the system)
+	 * @param int $user_id id of the use to check
+	 * @return boolean	true if active, false o/w
+	 */
 	public static function isUserActive($user_id) {
 		global $AppUI;
 		$perms = &$AppUI->acl();
