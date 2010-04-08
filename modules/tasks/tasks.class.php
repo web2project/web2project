@@ -509,18 +509,19 @@ class CTask extends CW2pObject {
 	 * @todo Parent store could be partially used
 	 */
 	public function store(CAppUI $AppUI = null) {
-    global $AppUI;
+        global $AppUI;
 
-    $q = new DBQuery;
+        $q = new DBQuery;
 
 		$this->w2PTrimAll();
 
 		$importing_tasks = false;
-    $errorMsgArray = $this->check();
+        $errorMsgArray = $this->check();
 
-    if (count($errorMsgArray) > 0) {
-      return $errorMsgArray;
-    }
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
 		if ($this->task_id) {
 			addHistory('tasks', $this->task_id, 'update', $this->task_name, $this->task_project);
 
