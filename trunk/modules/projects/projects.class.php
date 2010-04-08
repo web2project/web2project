@@ -459,99 +459,99 @@ class CProject extends CW2pObject {
 	}
 
 	public function store(CAppUI $AppUI = null) {
-    global $AppUI;
+        global $AppUI;
 
-    $perms = $AppUI->acl();
-    $stored = false;
+        $perms = $AppUI->acl();
+        $stored = false;
 
-    $this->w2PTrimAll();
+        $this->w2PTrimAll();
 
-    $this->project_target_budget = str_replace(',', '', $this->project_target_budget);
-    // ensure changes of state in checkboxes is captured
-    $this->project_active = (int) $this->project_active;
-    $this->project_private = (int) $this->project_private;
+        $this->project_target_budget = str_replace(',', '', $this->project_target_budget);
+        // ensure changes of state in checkboxes is captured
+        $this->project_active = (int) $this->project_active;
+        $this->project_private = (int) $this->project_private;
 
-    $this->project_target_budget = $this->project_target_budget ? $this->project_target_budget : 0.00;
-    $this->project_actual_budget = $this->project_actual_budget ? $this->project_actual_budget : 0.00;
+        $this->project_target_budget = $this->project_target_budget ? $this->project_target_budget : 0.00;
+        $this->project_actual_budget = $this->project_actual_budget ? $this->project_actual_budget : 0.00;
 
-    // Make sure project_short_name is the right size (issue for languages with encoded characters)
-    if (mb_strlen($this->project_short_name) > 10) {
-      $this->project_short_name = mb_substr($this->project_short_name, 0, 10);
-    }
-    if (empty($this->project_end_date)) {
-      $this->project_end_date = null;
-    }
-
-    $errorMsgArray = $this->check();
-
-    if (count($errorMsgArray) > 0) {
-      return $errorMsgArray;
-    }
-
-    $this->project_id = (int) $this->project_id;
-    // convert dates to SQL format first
-    if ($this->project_start_date) {
-      $date = new CDate($this->project_start_date);
-      $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
-    }
-    if ($this->project_end_date) {
-      $date = new CDate($this->project_end_date);
-      $date->setTime(23, 59, 59);
-      $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
-    }
-    if ($this->project_actual_end_date) {
-      $date = new CDate($this->project_actual_end_date);
-      $this->project_actual_end_date = $date->format(FMT_DATETIME_MYSQL);
-    }
-
-    // let's check if there are some assigned departments to project
-    if ('' != $this->project_actual_end_date) {
-      $obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
-    }
-
-    // check project parents and reset them to self if they do not exist
-    if (!$this->project_parent) {
-      $this->project_parent = $this->project_id;
-      $this->project_original_parent = $this->project_id;
-    } else {
-      $parent_project = new CProject();
-      $parent_project->load($this->project_parent);
-      $this->project_original_parent = $parent_project->project_original_parent;
-    }
-    if (!$this->project_original_parent) {
-      $this->project_original_parent = $this->project_id;
-    }
-
-    /*
-     * TODO: I don't like the duplication on each of these two branches, but I
-     *   don't have a good idea on how to fix it at the moment...
-     */
-    if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->company_id)) {
-      $q = new DBQuery;
-      $this->project_updated = $q->dbfnNow();
-      if (($msg = parent::store())) {
-        return $msg;
-      }
-      addHistory('projects', $this->project_id, 'update', $this->project_name, $this->project_id);
-      $stored = true;
-    }
-    if (0 == $this->project_id && $perms->checkModuleItem('projects', 'add')) {
-      $q = new DBQuery;
-      $this->project_updated = $q->dbfnNow();
-      $this->project_created = $q->dbfnNow();
-      if (($msg = parent::store())) {
-        return $msg;
-      }
-      if (0 == $this->project_parent || 0 == $this->project_original_parent) {
-        $this->project_parent = $this->project_id;
-        $this->project_original_parent = $this->project_id;
-        if (($msg = parent::store())) {
-          return $msg;
+        // Make sure project_short_name is the right size (issue for languages with encoded characters)
+        if (mb_strlen($this->project_short_name) > 10) {
+          $this->project_short_name = mb_substr($this->project_short_name, 0, 10);
         }
-      }
-      addHistory('projects', $this->project_id, 'add', $this->project_name, $this->project_id);
-      $stored = true;
-    }
+        if (empty($this->project_end_date)) {
+          $this->project_end_date = null;
+        }
+
+        $errorMsgArray = $this->check();
+
+        if (count($errorMsgArray) > 0) {
+          return $errorMsgArray;
+        }
+
+        $this->project_id = (int) $this->project_id;
+        // convert dates to SQL format first
+        if ($this->project_start_date) {
+          $date = new CDate($this->project_start_date);
+          $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
+        }
+        if ($this->project_end_date) {
+          $date = new CDate($this->project_end_date);
+          $date->setTime(23, 59, 59);
+          $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
+        }
+        if ($this->project_actual_end_date) {
+          $date = new CDate($this->project_actual_end_date);
+          $this->project_actual_end_date = $date->format(FMT_DATETIME_MYSQL);
+        }
+
+        // let's check if there are some assigned departments to project
+        if ('' != $this->project_actual_end_date) {
+          $obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
+        }
+
+        // check project parents and reset them to self if they do not exist
+        if (!$this->project_parent) {
+          $this->project_parent = $this->project_id;
+          $this->project_original_parent = $this->project_id;
+        } else {
+          $parent_project = new CProject();
+          $parent_project->load($this->project_parent);
+          $this->project_original_parent = $parent_project->project_original_parent;
+        }
+        if (!$this->project_original_parent) {
+          $this->project_original_parent = $this->project_id;
+        }
+
+        /*
+         * TODO: I don't like the duplication on each of these two branches, but I
+         *   don't have a good idea on how to fix it at the moment...
+         */
+        if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->company_id)) {
+          $q = new DBQuery;
+          $this->project_updated = $q->dbfnNow();
+          if (($msg = parent::store())) {
+            return $msg;
+          }
+          addHistory('projects', $this->project_id, 'update', $this->project_name, $this->project_id);
+          $stored = true;
+        }
+        if (0 == $this->project_id && $perms->checkModuleItem('projects', 'add')) {
+          $q = new DBQuery;
+          $this->project_updated = $q->dbfnNow();
+          $this->project_created = $q->dbfnNow();
+          if (($msg = parent::store())) {
+            return $msg;
+          }
+          if (0 == $this->project_parent || 0 == $this->project_original_parent) {
+            $this->project_parent = $this->project_id;
+            $this->project_original_parent = $this->project_id;
+            if (($msg = parent::store())) {
+              return $msg;
+            }
+          }
+          addHistory('projects', $this->project_id, 'add', $this->project_name, $this->project_id);
+          $stored = true;
+        }
 
 		//split out related departments and store them seperatly.
 		$q = new DBQuery;
@@ -588,11 +588,11 @@ class CProject extends CW2pObject {
 			}
 		}
 
-    if ($stored) {
-      $custom_fields = new CustomFields('projects', 'addedit', $this->project_id, 'edit');
-      $custom_fields->bind($_POST);
-      $sql = $custom_fields->store($this->project_id); // Store Custom Fields
-    }
+        if ($stored) {
+          $custom_fields = new CustomFields('projects', 'addedit', $this->project_id, 'edit');
+          $custom_fields->bind($_POST);
+          $sql = $custom_fields->store($this->project_id); // Store Custom Fields
+        }
 		return $stored;
 	}
 
