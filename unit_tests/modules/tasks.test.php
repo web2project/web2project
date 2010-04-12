@@ -9,6 +9,7 @@ global $w2p_performance_old_dbqueries;
 global $AppUI;
 global $tracking_dynamics;
 global $tracked_dynamics;
+global $w2Pconfig;
 
 require_once '../base.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
@@ -1427,7 +1428,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_departments'), $xml_db_filtered_dataset->getTable('task_departments'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_contacts'), $xml_db_filtered_dataset->getTable('task_contacts'));
-        
+
         /**
          * Get updated dates to test against
          */
@@ -1617,7 +1618,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
         }
     }
-    
+
     /**
      * Test getting dependencies
      */
@@ -1675,7 +1676,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testGetTasksForPeriodNoCompanyNoUser()
     {
         global $AppUI;
-        
+
         $start_date = new CDate('2009-07-05');
         $end_date   = new CDate('2009-07-16');
 
@@ -1856,7 +1857,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $AppUI  = new CAppUI;
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
-        
+
 
         // public access
         $result = @$this->obj->canAccess(2);
@@ -1889,7 +1890,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         // Restore AppUI for following tests since its global, yuck!
         $AppUI = $old_AppUI;
     }
-        
+
     /*
      * Tests that dependentTasks returns nothing if no task id provided
      */
@@ -1972,6 +1973,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         }
     }
 
+    /**
+     * Tests that dependent dates are updated properly for current task
+     */
     public function testUpdateDepDate()
     {
         $this->obj->update_dep_dates(28);
@@ -2001,6 +2005,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         }
     }
 
+    /**
+     * Tests that the max end date based on dependencies for a task is properly returned
+     */
     public function testGetDepsMaxEndDate()
     {
         /**
@@ -2019,5 +2026,184 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $task->load(1);
         $max_end_date = $this->obj->get_deps_max_end_date($task);
         $this->assertEquals('2009-10-10 00:00:00', $max_end_date);
+    }
+
+    /**
+     * Tests that the proper number of hours per day this task occupies
+     */
+    public function testGetTaskDurationPerDay()
+    {
+        $this->obj->load(1);
+        $this->assertEquals(2, $this->obj->getTaskDurationPerDay());
+        $this->assertEquals(4, $this->obj->getTaskDurationPerDay(true));
+    }
+
+    /**
+     * Tests that the proper number of hours per week this task occupies
+     */
+    public function testGetTaskDurationPerWeek()
+    {
+        $this->obj->load(1);
+        $this->assertEquals(10, $this->obj->getTaskDurationPerWeek());
+        $this->assertEquals(20, $this->obj->getTaskDurationPerWeek(true));
+    }
+
+    /**
+     * Tests removing an assigned user from a task
+     */
+    public function testRemoveAssigned()
+    {
+        $this->obj->load(1);
+        $this->obj->removeAssigned(1);
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestRemoveAssigned.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+    }
+
+
+    /**
+     * Tests updating assigned users for task
+     */
+     public function testUpdateAssigned()
+     {
+        global $w2Pconfig;
+
+        // god this is ugly but needs to be done to test this funcationlity properly
+        $old_config = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = true;
+
+        $this->obj->load(1);
+        $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), false, false);
+        $this->assertEquals('', $over_assigned);
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateAssigned.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+
+
+        $w2Pconfig['check_overallocation'] = $old_config;
+     }
+
+    /**
+     * Tests updating assigned users for task
+     */
+    public function testUpdateAssignedOverAssignment()
+    {
+        global $w2Pconfig;
+
+        // god this is ugly but needs to be done to test this funcationlity properly
+        $old_config = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = true;
+
+        $this->obj->load(1);
+        $over_assigned = $this->obj->updateAssigned(1, array('1' => '101'), false, false);
+        $this->assertEquals(' Admin Person [0%]', $over_assigned);
+
+        $this->obj->load(1);
+        $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), false, false);
+        $this->assertEquals('', $over_assigned);
+
+        $w2Pconfig['check_overallocation'] = $old_config;
+    }
+
+    /**
+     * Tests updating assigned users for task
+     */
+    public function testUpdateAssignedWithDelete()
+    {
+        global $w2Pconfig;
+
+        // god this is ugly but needs to be done to test this funcationlity properly
+        $old_config = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = true;
+
+        $this->obj->load(2);
+        $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), true, false);
+        $this->assertEquals('', $over_assigned);
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateAssignedWithDelete.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+
+        $w2Pconfig['check_overallocation'] = $old_config;
+    }
+
+    /**
+     * Tests updating assigned users for task
+     */
+    public function testUpdateAssignedWithDeleteAndRemoveUsers()
+    {
+        global $w2Pconfig;
+
+        // god this is ugly but needs to be done to test this funcationlity properly
+        $old_config = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = true;
+
+        $this->obj->load(2);
+        $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), true, true);
+        $this->assertEquals('', $over_assigned);
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateAssignedWithDeleteAndRemoveUsers.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+
+        $w2Pconfig['check_overallocation'] = $old_config;
+    }
+
+    /**
+     * Tests getting a list of assigned users for a particular task
+     */
+    public function testGetAssignedUsers()
+    {
+        $assigned_users = $this->obj->getAssignedUsers(1);
+
+        $this->assertEquals(1, count($assigned_users));
+        $this->assertEquals(26, count($assigned_users[1]));
+
+        $this->assertEquals(1,                                  $assigned_users[1]['user_id']);
+        $this->assertEquals(1,                                  $assigned_users[1]['user_contact']);
+        $this->assertEquals('admin',                            $assigned_users[1]['user_username']);
+        $this->assertEquals('76a2173be6393254e72ffa4d6df1030a', $assigned_users[1]['user_password']);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_parent']);
+        $this->assertEquals(1,                                  $assigned_users[1]['user_type']);
+        $this->assertEquals('Admin User',                       $assigned_users[1]['user_signature']);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_empireint_special']);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_department']);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_company']);
+        $this->assertEquals(50,                                 $assigned_users[1]['perc_assignment']);
+        $this->assertEquals(0,                                  $assigned_users[1]['user_task_priority']);
+        $this->assertEquals('Person',                           $assigned_users[1]['contact_last_name']);
+        $this->assertEquals(1,                                  $assigned_users[1][0]);
+        $this->assertEquals(1,                                  $assigned_users[1][1]);
+        $this->assertEquals('admin',                            $assigned_users[1][2]);
+        $this->assertEquals('76a2173be6393254e72ffa4d6df1030a', $assigned_users[1][3]);
+        $this->assertEquals(0,                                  $assigned_users[1][4]);
+        $this->assertEquals(1,                                  $assigned_users[1][5]);
+        $this->assertEquals('Admin User',                       $assigned_users[1][6]);
+        $this->assertEquals(0,                                  $assigned_users[1][7]);
+        $this->assertEquals(0,                                  $assigned_users[1][8]);
+        $this->assertEquals(0,                                  $assigned_users[1][9]);
+        $this->assertEquals(50,                                 $assigned_users[1][10]);
+        $this->assertEquals(0,                                  $assigned_users[1][11]);
+        $this->assertEquals('Person',                           $assigned_users[1][12]);
+
+        $assigned_users = $this->obj->getAssignedUsers(200);
+
+        $this->assertEquals(0, count($assigned_users));
+    }
+
+    /**
+     * Test getting a list of dependencies
+     */
+    public function testGetDependencyList()
+    {
+        $dependencies = $this->obj->getDependencyList(3);
+
+        $this->assertEquals(1, count($dependencies));
+        $this->assertEquals('Task 4', $dependencies[4]);
+
+        $dependencies = $this->obj->getDependencyList(28);
+        print_r($dependencies); exit();
     }
 }
