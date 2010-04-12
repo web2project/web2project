@@ -2206,5 +2206,21 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $dependencies = $this->obj->getDependencyList(200);
         $this->assertEquals(0, count($dependencies));
     }
+
+    /**
+     * Test getting a list of tasks dependent on this one
+     */
+    public function testGetDependentTaskList()
+    {
+        $dependent_tasks = $this->obj->getDependentTaskList(28);
+
+        $this->assertEquals(2,          count($dependent_tasks));
+        $this->assertEquals('Task 29',  $dependent_tasks[29]);
+        $this->assertEquals('Task 30',  $dependent_tasks[30]);
+
+        $dependent_tasks = $this->obj->getDependentTaskList(200);
+
+        $this->assertEquals(0, count($dependent_tasks));
+    }
 }
 ?>
