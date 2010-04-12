@@ -1395,6 +1395,8 @@ class w2Pacl extends gacl_api {
         $q->addInsert('value', $module_value);
         $q->addInsert('section_value', $section_value);
         $q->exec();
+
+        return true;
     }
     public function unregisterModule($module_value) {
         if ($module_value != '') {
@@ -1402,7 +1404,9 @@ class w2Pacl extends gacl_api {
             $q->setDelete('gacl_axo');
             $q->addWhere("value = '$module_value'");
             $q->exec();
+            return true;
         }
+        return false;
     }
 }
 

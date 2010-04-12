@@ -2223,4 +2223,3 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(0, count($dependent_tasks));
     }
 }
-?>

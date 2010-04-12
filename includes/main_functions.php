@@ -1289,15 +1289,18 @@ function w2p_url($link, $text = '')
 */
 function w2p_check_url($link)
 {
-  $result = false;
+    $result = false;
+    $link = strtolower($link);
+    if (strpos($link, 'http') === false) {
+        $link = 'http://'.$link;
+    }
 
-  if (strpos($link, 'http') === false) {
-    $link = 'http://'.$link;
-  }
-  if (preg_match("/^(?:(?:http|ftp)s?):\/\/(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $link)) {
-    $result = true;
-  }
-  return $result;
+
+    $urlPieces = parse_url($link);
+    if (preg_match("/^(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $urlPieces['host'])) {
+        $result = true;
+    }
+    return $result;
 }
 
 function w2p_email($email, $name = '')
@@ -1329,13 +1332,13 @@ function w2p_textarea($content)
 
   if ($content != '') {
     $result = $content;
+    $result = htmlentities($result, ENT_QUOTES, 'UTF-8');
+
     /*
      * Thanks to Alison Gianotto for two regular expressions to make our
     *    links all linky.  This code is based on her work here:
     *    http://www.snipe.net/2009/09/php-twitter-clickable-links
      */
-    $result = htmlentities($result, ENT_QUOTES);
-
     $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
     $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);
     $result = nl2br($result);
@@ -1343,4 +1346,3 @@ function w2p_textarea($content)
 
   return $result;
 }
-

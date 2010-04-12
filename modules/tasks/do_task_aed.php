@@ -146,7 +146,7 @@ if ($sub_form) {
 	// prepare (and translate) the module name ready for the suffix
 	if ($del) {
 		$result = $obj->delete();
-    if (is_array($result)) {
+        if (is_array($result)) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 			$AppUI->redirect();
 		} else {
