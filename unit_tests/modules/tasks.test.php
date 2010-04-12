@@ -2203,8 +2203,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1, count($dependencies));
         $this->assertEquals('Task 4', $dependencies[4]);
 
-        $dependencies = $this->obj->getDependencyList(28);
-        print_r($dependencies); exit();
+        $dependencies = $this->obj->getDependencyList(200);
+        $this->assertEquals(0, count($dependencies));
     }
 }
 ?>
