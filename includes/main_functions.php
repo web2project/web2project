@@ -1289,15 +1289,18 @@ function w2p_url($link, $text = '')
 */
 function w2p_check_url($link)
 {
-  $result = false;
+    $result = false;
+    $link = strtolower($link);
+    if (strpos($link, 'http') === false) {
+        $link = 'http://'.$link;
+    }
 
-  if (strpos($link, 'http') === false) {
-    $link = 'http://'.$link;
-  }
-  if (preg_match("/^(?:(?:http|ftp)s?):\/\/(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $link)) {
-    $result = true;
-  }
-  return $result;
+
+    $urlPieces = parse_url($link);
+    if (preg_match("/^(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $urlPieces['host'])) {
+        $result = true;
+    }
+    return $result;
 }
 
 function w2p_email($email, $name = '')
