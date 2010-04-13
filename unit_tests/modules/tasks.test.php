@@ -2222,4 +2222,41 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertEquals(0, count($dependent_tasks));
     }
+
+    /**
+     * Test getting a list of task contacts
+     */
+    public function testGetTaskContacts()
+    {
+        global $AppUI;
+
+        $task_contacts = $this->obj->getTaskContacts($AppUI, 1);
+
+        $this->assertEquals(1,                      count($task_contacts));
+        $this->assertEquals(1,                      $task_contacts[1]['contact_id']);
+        $this->assertEquals('Admin',                $task_contacts[1]['contact_first_name']);
+        $this->assertEquals('Person',               $task_contacts[1]['contact_last_name']);
+        $this->assertEquals('contact1@example.org', $task_contacts[1]['contact_email']);
+        $this->assertEquals('1.999.999.9999',       $task_contacts[1]['contact_phone']);
+        $this->assertEquals('',                     $task_contacts[1]['dept_name']);
+        $this->assertEquals(1,                      $task_contacts[1][0]);
+        $this->assertEquals('Admin',                $task_contacts[1][1]);
+        $this->assertEquals('Person',               $task_contacts[1][2]);
+        $this->assertEquals('contact1@example.org', $task_contacts[1][3]);
+        $this->assertEquals('1.999.999.9999',       $task_contacts[1][4]);
+        $this->assertEquals('',                     $task_contacts[1][5]);
+
+        // Login as another user for permission purposes
+        $old_AppUI = $AppUI;
+        $AppUI  = new CAppUI;
+        $_POST['login'] = 'login';
+        $_REQUEST['login'] = 'sql';
+
+        $task_contacts = $this->obj->getTaskContacts($AppUI, 2);
+
+        $this->assertNull($task_contacts);
+
+        // AppUI
+        $AppUI = $old_AppUI;
+    }
 }
