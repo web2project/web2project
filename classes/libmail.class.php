@@ -67,7 +67,7 @@ class Mail extends PHPMailer {
 	/**
 	 *    Mail constructor
 	 */
-	public function Mail() {
+	public function __construct() {
 		$this->autoCheck(true);
 		$this->defer = w2PgetConfig('mail_defer');
 		$this->canEncode = function_exists('imap_8bit') && 'us-ascii' != $this->charset;
@@ -270,6 +270,16 @@ class Mail extends PHPMailer {
 		}
 	}
 
+    /**
+    *  set the Organization header
+    */
+    public function Organization($org)
+    {
+        if ('' != trim($org)) {
+            $this->xheaders['Organization'] = $this->_wordEncode($org, mb_strlen('Organization: '));
+        }
+    }
+ 
 	/**
 	 *        set the mail priority
 	 *        $priority : integer taken between 1 (highest) and 5 ( lowest )
