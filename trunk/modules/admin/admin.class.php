@@ -395,17 +395,6 @@ class CUser extends CW2pObject {
 		
 		return $this->user_username;
 	}
-	
-	/**Function that checks if a user is active or not (i.e. are they able to login to the system)
-	 * @param int $user_id id of the use to check
-	 * @return boolean	true if active, false o/w
-	 */
-	public function isActive() {
-		global $AppUI;
-		$perms = &$AppUI->acl();
-		
-		return $perms->isUserPermitted($this->user_id);
-	}
 
 	/**Function that checks if a user is active or not (i.e. are they able to login to the system)
 	 * @param int $user_id id of the use to check
