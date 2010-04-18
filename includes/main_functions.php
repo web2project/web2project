@@ -1278,6 +1278,9 @@ function w2p_url($link, $text = '')
   $result = '';
 
   if ($link != '') {
+    if (strpos($link, 'http') === false) {
+        $link = 'http://'.$link;
+    }
     $text = ('' != $text) ? $text : $link;
     $result = '<a href="'.$link.'" target="_new">'.$text.'</a>';
   }
@@ -1294,7 +1297,6 @@ function w2p_check_url($link)
     if (strpos($link, 'http') === false) {
         $link = 'http://'.$link;
     }
-
 
     $urlPieces = parse_url($link);
     if (preg_match("/^(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $urlPieces['host'])) {
