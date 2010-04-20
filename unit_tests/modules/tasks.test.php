@@ -2259,4 +2259,25 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         // AppUI
         $AppUI = $old_AppUI;
     }
+
+    /**
+     * Test getting allocation of users
+     */
+    public function testGetAllocationNoGetUserListNoCheckOverallocation()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        // Ensure our global setting for check_overallocation is set properly for this
+        $old_check_overallocation = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = false;
+
+        $allocation = $this->obj->getAllocation(null, null, false);
+
+        $this->assertEquals(0, count($allocation));
+        $this->assertType('array', $allocation);
+
+        $w2Pconfig['check_overallocation'] = $old_check_overallocation;
+
+    }
 }
