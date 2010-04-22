@@ -1409,6 +1409,14 @@
         <column>task_id</column>
         <column>department_id</column>
         <row>
+            <value>29</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>29</value>
+            <value>2</value>
+        </row>
+        <row>
             <value>31</value>
             <value>1</value>
         </row>
@@ -1420,6 +1428,10 @@
     <table name="task_contacts">
         <column>task_id</column>
         <column>contact_id</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+        </row>
         <row>
             <value>31</value>
             <value>1</value>
