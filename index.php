@@ -393,7 +393,7 @@ if (!$suppressHeaders) {
 		print ('	<tr valign="top">');
 		print ('	<td width="100%">');
 		print ('		<p><b>web2Project ' . $AppUI->getVersion() . '</b></p>');
-		print ('		<p>PHP version nr: ' . phpversion() . '</p>');
+		print ('		<p>PHP version nr: ' . PHP_VERSION . '</p>');
 		print ('		<p>DB provider and version nr: ' . $db->dataProvider . ' ' . $db_info['version']. ' (' . $db_info['description'] . ')</p>');
 		print ('		<p>DB Table Prefix: "' . w2PgetConfig('dbprefix') . '"</p>');
 		print ('		<p>Web Server: ' . safe_get_env('SERVER_SOFTWARE') . '</p>');
