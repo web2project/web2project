@@ -25,14 +25,14 @@
 		<td class="title" colspan="2">Confirm Requirements</td>
 	</tr>
 	<tr>
-		<td class="item">PHP Version &gt;= 5.0</td>
+		<td class="item">PHP Version &gt;= <?= MIN_PHP_VERSION; ?></td>
 		<td align="left">
 			<?php
-			if (version_compare(phpversion(), '5.0', '<=')) {
-        echo '<b class="error">'.$failedImg.' ('.phpversion().'): web2Project requires PHP 5.0+. Please upgrade!</b>';
+			if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+                echo '<b class="error">'.$failedImg.' ('.PHP_VERSION.'): web2Project requires PHP '.MIN_PHP_VERSION.'+. Please upgrade!</b>';
 				$continue = false;
 			} else {
-				echo '<b class="ok">'.$okImg.'</b> <span class="item">('.phpversion().')</span>';
+				echo '<b class="ok">'.$okImg.'</b> <span class="item">('.PHP_VERSION.')</span>';
 			}
 			?>
 		</td>
