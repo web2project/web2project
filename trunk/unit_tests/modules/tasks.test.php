@@ -2203,7 +2203,150 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1, count($dependencies));
         $this->assertEquals('Task 4', $dependencies[4]);
 
-        $dependencies = $this->obj->getDependencyList(28);
-        print_r($dependencies); exit();
+        $dependencies = $this->obj->getDependencyList(200);
+        $this->assertEquals(0, count($dependencies));
+    }
+
+    /**
+     * Test getting a list of tasks dependent on this one
+     */
+    public function testGetDependentTaskList()
+    {
+        $dependent_tasks = $this->obj->getDependentTaskList(28);
+
+        $this->assertEquals(2,          count($dependent_tasks));
+        $this->assertEquals('Task 29',  $dependent_tasks[29]);
+        $this->assertEquals('Task 30',  $dependent_tasks[30]);
+
+        $dependent_tasks = $this->obj->getDependentTaskList(200);
+
+        $this->assertEquals(0, count($dependent_tasks));
+    }
+
+    /**
+     * Test getting a list of task contacts
+     */
+    public function testGetTaskContacts()
+    {
+        global $AppUI;
+
+        $task_contacts = $this->obj->getTaskContacts($AppUI, 1);
+
+        $this->assertEquals(1,                      count($task_contacts));
+        $this->assertEquals(1,                      $task_contacts[1]['contact_id']);
+        $this->assertEquals('Admin',                $task_contacts[1]['contact_first_name']);
+        $this->assertEquals('Person',               $task_contacts[1]['contact_last_name']);
+        $this->assertEquals('contact1@example.org', $task_contacts[1]['contact_email']);
+        $this->assertEquals('1.999.999.9999',       $task_contacts[1]['contact_phone']);
+        $this->assertEquals('',                     $task_contacts[1]['dept_name']);
+        $this->assertEquals(1,                      $task_contacts[1][0]);
+        $this->assertEquals('Admin',                $task_contacts[1][1]);
+        $this->assertEquals('Person',               $task_contacts[1][2]);
+        $this->assertEquals('contact1@example.org', $task_contacts[1][3]);
+        $this->assertEquals('1.999.999.9999',       $task_contacts[1][4]);
+        $this->assertEquals('',                     $task_contacts[1][5]);
+
+        // Login as another user for permission purposes
+        $old_AppUI = $AppUI;
+        $AppUI  = new CAppUI;
+        $_POST['login'] = 'login';
+        $_REQUEST['login'] = 'sql';
+
+        $task_contacts = $this->obj->getTaskContacts($AppUI, 2);
+
+        $this->assertNull($task_contacts);
+
+        // AppUI
+        $AppUI = $old_AppUI;
+    }
+
+    /**
+     * Test getting allocation of users, with no user list and not
+     * checking over allocation
+     */
+    public function testGetAllocationNoGetUserListNoCheckOverallocation()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        // Ensure our global setting for check_overallocation is set properly for this
+        $old_check_overallocation = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = false;
+
+        $allocation = $this->obj->getAllocation(null, null, false);
+
+        $this->assertEquals(0,      count($allocation));
+        $this->assertType('array',  $allocation);
+
+        $w2Pconfig['check_overallocation'] = $old_check_overallocation;
+
+    }
+
+    /**
+     * Test getting allocation of users with a user list but not
+     * checking over allocation
+     */
+    public function testGetAllocationGetUserListNoCheckallocation()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        // Ensure our global setting for check_overallocation is set properly for this
+        $old_check_overallocation = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = false;
+
+        $allocation = $this->obj->getAllocation(null, null, true);
+
+        $this->assertEquals(2,                      count($allocation));
+        $this->assertType('array',                  $allocation);
+        $this->assertEquals(1,                      $allocation[1]['user_id']);
+        $this->assertEquals('admin',                $allocation[1]['user_username']);
+        $this->assertEquals('Person',               $allocation[1]['contact_last_name']);
+        $this->assertEquals('Admin',                $allocation[1]['contact_first_name']);
+        $this->assertEquals('contact1@example.org', $allocation[1]['contact_email']);
+        $this->assertEquals('UnitTestCompany',      $allocation[1]['company_name']);
+        $this->assertEquals(1,                      $allocation[1]['contact_company']);
+        $this->assertEquals('',                     $allocation[1]['dept_id']);
+        $this->assertEquals('',                     $allocation[1]['dept_name']);
+        $this->assertEquals('Admin Person',         $allocation[1]['contact_name']);
+        $this->assertEquals(1,                      $allocation[1]['user_type']);
+        $this->assertEquals(1,                      $allocation[1][0]);
+        $this->assertEquals('admin',                $allocation[1][1]);
+        $this->assertEquals('Person',               $allocation[1][2]);
+        $this->assertEquals('Admin',                $allocation[1][3]);
+        $this->assertEquals('contact1@example.org', $allocation[1][4]);
+        $this->assertEquals('UnitTestCompany',      $allocation[1][5]);
+        $this->assertEquals(1,                      $allocation[1][6]);
+        $this->assertEquals('',                     $allocation[1][7]);
+        $this->assertEquals('',                     $allocation[1][8]);
+        $this->assertEquals('Admin Person',         $allocation[1][9]);
+        $this->assertEquals(1,                      $allocation[1][10]);
+        $this->assertEquals('Admin Person',         $allocation[1]['userFC']);
+
+        $this->assertEquals(2,                      $allocation[2]['user_id']);
+        $this->assertEquals('reg_user',             $allocation[2]['user_username']);
+        $this->assertEquals('User',                 $allocation[2]['contact_last_name']);
+        $this->assertEquals('Reg',                  $allocation[2]['contact_first_name']);
+        $this->assertEquals('reg_user@example.org', $allocation[2]['contact_email']);
+        $this->assertEquals('UnitTestCompany',      $allocation[2]['company_name']);
+        $this->assertEquals(1,                      $allocation[2]['contact_company']);
+        $this->assertEquals('',                     $allocation[2]['dept_id']);
+        $this->assertEquals('',                     $allocation[2]['dept_name']);
+        $this->assertEquals('Reg User',             $allocation[2]['contact_name']);
+        $this->assertEquals(1,                      $allocation[2]['user_type']);
+        $this->assertEquals(2,                      $allocation[2][0]);
+        $this->assertEquals('reg_user',             $allocation[2][1]);
+        $this->assertEquals('User',                 $allocation[2][2]);
+        $this->assertEquals('Reg',                  $allocation[2][3]);
+        $this->assertEquals('reg_user@example.org', $allocation[2][4]);
+        $this->assertEquals('UnitTestCompany',      $allocation[2][5]);
+        $this->assertEquals(1,                      $allocation[2][6]);
+        $this->assertEquals('',                     $allocation[2][7]);
+        $this->assertEquals('',                     $allocation[2][8]);
+        $this->assertEquals('Reg User',             $allocation[2][9]);
+        $this->assertEquals(1,                      $allocation[2][10]);
+        $this->assertEquals('Reg User',             $allocation[2]['userFC']);
+
+        $w2Pconfig['check_overallocation'] = $old_check_overallocation;
     }
 }
