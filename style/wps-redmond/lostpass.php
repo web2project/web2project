@@ -70,7 +70,7 @@ include ('overrides.php');
 echo '<span class="error">' . $AppUI->getMsg() . '</span>';
 
 $msg = '';
-$msg .= phpversion() < '4.1' ? '<br /><span class="warning">WARNING: web2project is NOT SUPPORT for this PHP Version (' . phpversion() . ')</span>' : '';
+$msg .= (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) ? '<br /><span class="warning">WARNING: web2project is NOT SUPPORT for this PHP Version (' . PHP_VERSION . ')</span>' : '';
 $msg .= function_exists('mysql_pconnect') ? '' : '<br /><span class="warning">WARNING: PHP may not be compiled with MySQL support.  This will prevent proper operation of web2Project.  Please check you system setup.</span>';
 echo $msg;
 ?>

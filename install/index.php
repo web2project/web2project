@@ -23,10 +23,10 @@
 */
 	require_once '../base.php';
 	require_once W2P_BASE_DIR . '/includes/main_functions.php';
-  if (version_compare(PHP_VERSION, '5.0', '<')) {
-  	echo 'web2Project requires PHP 5.0+. Please upgrade!';
-    die();
-  }
+    if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+        echo 'web2Project requires PHP '.MIN_PHP_VERSION.'+. Please upgrade!';
+        die();
+    }
 	require_once W2P_BASE_DIR . '/install/manager.class.php';
 
 	$step = trim( w2PgetCleanParam( $_POST, 'step', '' ) );

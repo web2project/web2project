@@ -15,7 +15,7 @@ $obj = new CConfig();
 $q = new DBQuery;
 $q->addTable('config');
 $q->addUpdate('config_value', 'false');
-$q->addWhere('config_type = \'checkbox\'');
+$q->addWhere("config_type = 'checkbox'");
 $rs = $q->loadResult();
 $q->clear();
 
@@ -29,7 +29,7 @@ foreach ($_POST['w2Pcfg'] as $name => $value) {
 
 	// prepare (and translate) the module name ready for the suffix
 	$AppUI->setMsg('System Configuration');
-	if (($msg = $obj->store())) {
+	if (($msg = $obj->store($AppUI))) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
 		$AppUI->setMsg('updated', UI_MSG_OK, true);

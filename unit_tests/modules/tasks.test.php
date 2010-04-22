@@ -2348,7 +2348,5 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Reg User',             $allocation[2]['userFC']);
 
         $w2Pconfig['check_overallocation'] = $old_check_overallocation;
-
-
     }
 }

@@ -189,10 +189,7 @@ function w2PsessionStart($start_vars = 'AppUI') {
 	}
 	if (w2PgetConfig('session_handling') == 'app') {
 		ini_set('session.save_handler', 'user');
-		// PHP 5.2 workaround
-		if (version_compare(phpversion(), '5.0.0', '>=')) {
-			register_shutdown_function('session_write_close');
-		}
+        register_shutdown_function('session_write_close');
 		session_set_save_handler('w2PsessionOpen', 'w2PsessionClose', 'w2PsessionRead', 'w2PsessionWrite', 'w2PsessionDestroy', 'w2PsessionGC');
 		$max_time = w2PsessionConvertTime('max_lifetime');
 	} else {

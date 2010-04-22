@@ -336,7 +336,7 @@ class CAppUI {
 		if (!isset($lcs))
 			$lcs = (isset($locale_char_set)) ? $locale_char_set : 'utf-8';
 
-		if (version_compare(phpversion(), '4.3.0', 'ge')) {
+		if (version_compare(PHP_VERSION, '4.3.0', 'ge')) {
 			$user_lang = array($loc . '.' . $lcs, $default_language, $loc, $base_locale);
 		} else {
 			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {

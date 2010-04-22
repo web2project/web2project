@@ -30,6 +30,7 @@ if(defined('E_DEPRECATED')){
 }
 //error_reporting(-1);
 define('W2P_PERFORMANCE_DEBUG', false);
+define('MIN_PHP_VERSION', '5.2.0');
 
 //Performance Debug Initialization
 if (W2P_PERFORMANCE_DEBUG) {
