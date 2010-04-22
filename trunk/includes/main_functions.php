@@ -967,7 +967,7 @@ function dprint($file, $line, $level, $msg) {
 		if ($display_debug) {
 			echo $file . '(' . $line . '): ' . $msg . ' <br />';
 		}
-		if ($level == 0 && $max_level > 0 && version_compare(phpversion(), '4.3.0') >= 0) {
+		if ($level == 0 && $max_level > 0) {
 			format_backtrace(debug_backtrace(), $file, $line, $msg);
 		}
 	}
