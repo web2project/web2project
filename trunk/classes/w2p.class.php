@@ -165,16 +165,15 @@ class CW2pObject {
 	 *	@return	object	The new record object or null if error
 	 **/
 	public function duplicate() {
-		$_key = $this->_tbl_key;
+        /*
+        *  PHP4 is no longer supported or allowed. The
+        *    installer/upgrader/converter simply stops executing.
+        *  This method also appears (modified) in the CDate and DBQuery class.
+        */
 
-		// In php4 assignment does a shallow copy
-		// in php5 clone is required
-		if (version_compare(phpversion(), '5') >= 0) {
-			$newObj = clone($this);
-		} else {
-			$newObj = $this;
-		}
-		// blanking the primary key to ensure that's a new record
+        $_key = $this->_tbl_key;
+
+		$newObj = clone($this);
 		$newObj->$_key = '';
 
 		return $newObj;

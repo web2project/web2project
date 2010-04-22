@@ -386,15 +386,12 @@ class CDate extends Date {
 	 **/
 	public function duplicate() {
 
-		// In php4 assignment does a shallow copy
-		// in php5 clone is required
-		if (version_compare(phpversion(), '5') >= 0) {
-			$newObj = clone ($this);
-		} else {
-			$newObj = $this;
-		}
-
-		return $newObj;
+        /*
+        *  PHP4 is no longer supported or allowed. The
+        *    installer/upgrader/converter simply stops executing.
+        *  This method also appears in the DBQuery and W2pObject (modified) class.
+        */
+		return clone ($this);
 	}
 
 	/* Calculating a future date considering a given duration
