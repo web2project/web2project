@@ -14,11 +14,6 @@ if (!defined('W2P_BASE_DIR')) {
 *   allow us to change minimum version for PHP compatibility.
 */
 
-if (!defined('PHP_VERSION')) {
-  define('PHP_VERSION', phpversion());
-}
-
-
 if (!function_exists('mb_strlen')) {
 	/**
 	 * mb_strlen()
