@@ -114,7 +114,7 @@ class CModule extends CW2pObject {
 	public $mod_main_class = null;
 
 	public function __construct() {
-    parent::__construct('modules', 'mod_id');
+        parent::__construct('modules', 'mod_id');
 	}
 
 	public function install() {
@@ -263,7 +263,7 @@ class CModule extends CW2pObject {
 class CConfig extends CW2pObject {
 
 	public function __construct() {
-    parent::__construct('config', 'config_id');
+        parent::__construct('config', 'config_id');
 	}
 
 	public function getChildren($id) {
@@ -275,7 +275,6 @@ class CConfig extends CW2pObject {
 		$this->_query->clear();
 		return $result;
 	}
-
 }
 
 class bcode extends CW2pObject {
