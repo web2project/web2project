@@ -2172,7 +2172,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(0,                                  $assigned_users[1]['user_department']);
         $this->assertEquals(0,                                  $assigned_users[1]['user_company']);
         $this->assertEquals(50,                                 $assigned_users[1]['perc_assignment']);
-        $this->assertEquals(0,                                  $assigned_users[1]['user_task_priority']);
+        $this->assertEquals(42,                                 $assigned_users[1]['user_task_priority']);
         $this->assertEquals('Person',                           $assigned_users[1]['contact_last_name']);
         $this->assertEquals(1,                                  $assigned_users[1][0]);
         $this->assertEquals(1,                                  $assigned_users[1][1]);
@@ -2185,7 +2185,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(0,                                  $assigned_users[1][8]);
         $this->assertEquals(0,                                  $assigned_users[1][9]);
         $this->assertEquals(50,                                 $assigned_users[1][10]);
-        $this->assertEquals(0,                                  $assigned_users[1][11]);
+        $this->assertEquals(42,                                 $assigned_users[1][11]);
         $this->assertEquals('Person',                           $assigned_users[1][12]);
 
         $assigned_users = $this->obj->getAssignedUsers(200);
@@ -2421,5 +2421,39 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $w2Pconfig['check_overallocation'] = $old_check_overallocation;
 
+    }
+
+    /**
+     * Test getting specific task priority with no user or task passed
+     */
+    public function testGetUserSpecificTaskPriorityNoUserIdNoTaskId()
+    {
+        $this->obj->load(1);
+
+        $this->assertNull($this->obj->getUserSpecificTaskPriority());
+    }
+
+    /**
+     * Test getting specific task priority with a user id passed
+     */
+    public function testGetUserSpecificTaskPriorityUserIdNoTaskId()
+    {
+        $this->obj->load(1);
+
+        $priority = $this->obj->getUserSpecificTaskPriority(1);
+
+        $this->assertEquals(42, $priority);
+    }
+
+    /**
+     * Test getting specific task priority with user id and task id passed
+     */
+    public function testGetUserSpecificTaskPriorityUserIdTaskId()
+    {
+        $this->obj->load(1);
+
+        $priority = $this->obj->getUserSpecificTaskPriority(1, 2);
+
+        $this->assertEquals(52, $priority);
     }
 }
