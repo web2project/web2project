@@ -1532,4 +1532,8 @@
             <value>1</value>
         </row>
     </table>
+    <table name="task_departments">
+        <column>task_id</column>
+        <column>department_id</column>
+    </table>
 </dataset>
