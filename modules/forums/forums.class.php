@@ -27,9 +27,9 @@ class CForum extends CW2pObject {
 	public $forum_description = null;
 	public $forum_moderated = null;
 
-	public function CForum() {
+	public function __construct() {
 		// empty constructor
-    parent::__construct('forums', 'forum_id');
+        parent::__construct('forums', 'forum_id');
 	}
 
 	public function bind($hash) {
@@ -142,7 +142,7 @@ class CForumMessage {
 	public $message_body = null;
 	public $message_published = null;
 
-	public function CForumMessage() {
+	public function __construct() {
 		// empty constructor
 	}
 

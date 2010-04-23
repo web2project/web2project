@@ -29,7 +29,7 @@ class CRole {
 	public $role_description = null;
 	public $perms = null;
 
-	public function CRole($name = '', $description = '') {
+	public function __construct($name = '', $description = '') {
 		$this->role_name = $name;
 		$this->role_description = $description;
 		$this->perms = &$GLOBALS['AppUI']->acl();
