@@ -2349,4 +2349,77 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $w2Pconfig['check_overallocation'] = $old_check_overallocation;
     }
+
+    /**
+     * Test getting allocation of users with checking over allocation
+     */
+    public function testGetAllocationCheckOverAllocation()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        // Ensure our global setting for check_overallocation is set properly for this
+        $old_check_overallocation = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = true;
+
+        $allocation = $this->obj->getAllocation();
+
+        $this->assertEquals('Admin Person [0%]', $allocation[1]);
+
+        $w2Pconfig['check_overallocation'] = $old_check_overallocation;
+    }
+
+    /**
+     * Tests getting allocation of users with hash passed for array key
+     */
+    public function testGetAllocationCheckOverAllocationHash()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        // Ensure our global setting for check_overallocation is set properly for this
+        $old_check_overallocation = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = true;
+
+        $allocation = $this->obj->getAllocation('user_username');
+
+        $this->assertEquals(1,                      $allocation['admin']['user_id']);
+        $this->assertEquals('Admin Person [0%]',    $allocation['admin']['userFC']);
+        $this->assertEquals(200,                    $allocation['admin']['charge']);
+        $this->assertEquals('admin',                $allocation['admin']['user_username']);
+        $this->assertEquals(100,                    $allocation['admin']['chargeMax']);
+        $this->assertEquals(100,                    $allocation['admin']['freeCapacity']);
+        $this->assertEquals(1,                      $allocation['admin'][0]);
+        $this->assertEquals('Admin Person [0%]',    $allocation['admin'][1]);
+        $this->assertEquals(200,                    $allocation['admin'][2]);
+        $this->assertEquals('admin',                $allocation['admin'][3]);
+        $this->assertEquals(100,                    $allocation['admin'][4]);
+        $this->assertEquals(100,                    $allocation['admin'][5]);
+
+        $w2Pconfig['check_overallocation'] = $old_check_overallocation;
+    }
+
+    /**
+     * Tests getting allocation of users with user id specified
+     */
+    public function testGetAllocationCheckOverAllocationUsers()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        // Ensure our global setting for check_overallocation is set properly for this
+        $old_check_overallocation = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = true;
+
+        $allocation = $this->obj->getAllocation(null, array(1));
+
+        $this->assertEquals('Admin Person [0%]', $allocation[1]);
+
+        $allocation = $this->obj->getAllocation(null, array(2));
+
+        $this->assertEquals(0, count($allocation));
+
+        $w2Pconfig['check_overallocation'] = $old_check_overallocation;
+
+    }
 }
