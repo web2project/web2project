@@ -19,7 +19,7 @@ class CustomFieldsParser {
 	 * @param char Field type: TaskCustomFields, CompanyCustomFields
 	 * @desc Constructor
 	 */
-	public function CustomFieldsParser($custom_record_type, $row_id = 0) {
+	public function __construct($custom_record_type, $row_id = 0) {
 		$this->custom_record_type = $custom_record_type;
 
 		$this->_fetchFields();

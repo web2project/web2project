@@ -18,7 +18,7 @@ class CUser extends CW2pObject {
 	public $user_contact = null;
 	public $user_signature = null;
 
-	public function CUser() {
+	public function __construct() {
         parent::__construct('users', 'user_id');
 	}
 
@@ -254,6 +254,20 @@ class CUser extends CW2pObject {
 		}
 		return $result;
 	}
+
+    public function hook_search()
+    {
+        $search['table'] = 'users';
+        $search['table_module'] = 'admin';
+        $search['table_key'] = 'user_id'; // primary key in searched table
+        $search['table_link'] = 'index.php?m=admin&a=viewuser&user_id='; // first part of link
+        $search['table_title'] = 'Users';
+        $search['table_orderby'] = 'user_username';
+        $search['search_fields'] = array('user_username', 'user_signature');
+        $search['display_fields'] = array('user_username', 'user_signature');
+
+        return $search;
+    }
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		return w2PgetUsers();
