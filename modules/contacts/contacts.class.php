@@ -118,11 +118,14 @@ class CContact extends CW2pObject {
 		}
 	}
 
-	public function getContactMethods() {
+	public function getContactMethods($methodsArray = null) {
 		$q = new DBQuery;
 		$q->addTable('contacts_methods');
 		$q->addQuery('method_name, method_value');
 		$q->addWhere('contact_id = ' . (int)$this->contact_id);
+        if (is_array($methodsArray)) {
+            $q->addWhere("method_name IN ('".implode("','", $methodsArray)."')");
+        }
 		$q->addOrder('method_name');
 		$result = $q->loadList();
 		return $result ? $result : array();
