@@ -381,6 +381,7 @@ if (file_exists($module_file)) {
 if (!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
 	echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
+    require W2P_BASE_DIR . '/style/' . $uistyle . '/footer.php';
 	if (W2P_PERFORMANCE_DEBUG) {
 		$db_info = $db->ServerInfo();
 		print ('<table width="100%" cellspacing="0" cellpadding="4" border="0"  class="system-info">');
@@ -459,6 +460,6 @@ if (!$suppressHeaders) {
 		</table>
 		</div>
 		<!--End AJAX loading messagebox -->';
-	require W2P_BASE_DIR . '/style/' . $uistyle . '/footer.php';
+	
 }
 ob_end_flush();
