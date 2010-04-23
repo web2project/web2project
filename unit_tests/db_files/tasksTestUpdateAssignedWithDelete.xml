@@ -12,7 +12,7 @@
             <value>1</value>
             <value>1</value>
             <value>50</value>
-            <value>0</value>
+            <value>42</value>
         </row>
         <row>
             <value>1</value>
@@ -26,21 +26,21 @@
             <value>1</value>
             <value>22</value>
             <value>50</value>
-            <value>0</value>
+            <value>32</value>
         </row>
         <row>
             <value>1</value>
             <value>1</value>
             <value>99</value>
             <value>50</value>
-            <value>0</value>
+            <value>22</value>
         </row>
         <row>
             <value>2</value>
             <value>1</value>
             <value>3</value>
             <value>100</value>
-            <value>0</value>
+            <value>72</value>
         </row>
     </table>
 </dataset>
