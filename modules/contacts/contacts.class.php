@@ -26,25 +26,11 @@ class CContact extends CW2pObject {
 	public $contact_company = null;
 	public $contact_department = null;
 	public $contact_type = null;
-	public $contact_email = null;
-	public $contact_email2 = null;
-	public $contact_phone = null;
-	public $contact_phone2 = null;
-	public $contact_fax = null;
-	public $contact_mobile = null;
 	public $contact_address1 = null;
 	public $contact_address2 = null;
 	public $contact_city = null;
 	public $contact_state = null;
 	public $contact_zip = null;
-	public $contact_url = null;
-	public $contact_icq = null;
-	public $contact_aol = null;
-	public $contact_yahoo = null;
-	public $contact_msn = null;
-	public $contact_jabber = null;
-	public $contact_skype = null;
-	public $contact_google = null;
 	public $contact_notes = null;
 	public $contact_project = null;
 	public $contact_country = null;
@@ -89,7 +75,7 @@ class CContact extends CW2pObject {
         if(mb_strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
             //TODO: this should use the USERFORMAT to determine how display names are generated
             if ($this->contact_first_name == null && $this->contact_last_name == null) {
-                $this->contact_order_by = $this->contact_email;
+               $this->contact_order_by = $this->contact_company;
             } else {
                 $this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
             }
@@ -108,6 +94,38 @@ class CContact extends CW2pObject {
         addHistory('contacts', $this->contact_id, 'store', $this->contact_first_name.' '.$this->contact_last_name, $this->contact_id);
 
         parent::store();
+	}
+
+	public function setContactMethods(array $methods) {
+		$q = new DBQuery;
+		$q->setDelete('contacts_methods');
+		$q->addWhere('contact_id=' . (int)$this->contact_id);
+		$q->exec();
+		$q->clear();
+
+		if (!empty($methods)) {
+			$q = new DBQuery;
+			$q->addTable('contacts_methods');
+			$q->addInsert('contact_id', (int)$this->contact_id);
+			foreach ($methods as $name => $value) {
+				if (!empty($value)) {
+					$q->addInsert('method_name', $name);
+					$q->addInsert('method_value', $value);
+					$q->exec();
+				}
+			}
+			$q->clear();
+		}
+	}
+
+	public function getContactMethods() {
+		$q = new DBQuery;
+		$q->addTable('contacts_methods');
+		$q->addQuery('method_name, method_value');
+		$q->addWhere('contact_id = ' . (int)$this->contact_id);
+		$q->addOrder('method_name');
+		$result = $q->loadList();
+		return $result ? $result : array();
 	}
 
 	public function delete(CAppUI $AppUI = null) {
@@ -133,7 +151,8 @@ class CContact extends CW2pObject {
         if ('' != $this->contact_email2 && !w2p_check_email($this->contact_email2)) {
             $errorArray['contact_email2'] = $baseErrorMsg . 'contact email2 is not formatted properly';
         }
-        return $errorArray;
+
+	    return $errorArray;
 	}
 
 	public function canDelete(&$msg, $oid = null, $joins = null) {
@@ -340,27 +359,25 @@ class CContact extends CW2pObject {
 	public static function searchContacts(CAppUI $AppUI = null, $where = '', $searchString = '') {
 		global $AppUI;
 
-    $showfields = array('contact_address1' => 'contact_address1',
+        $showfields = array('contact_address1' => 'contact_address1',
 			'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city',
 			'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip',
 			'contact_country' => 'contact_country', 'contact_company' => 'contact_company',
-			'company_name' => 'company_name', 'dept_name' => 'dept_name',
-			'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2',
-			'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax',
-			'contact_email' => 'contact_email', 'contact_job'=>'contact_job');
+			'company_name' => 'company_name', 'dept_name' => 'dept_name');
 		$additional_filter = '';
 
 		if ($searchString != '') {
-			$additional_filter = "OR contact_first_name like '%$searchString%' OR contact_last_name  like '%$searchString%'
+			$additional_filter = "OR contact_first_name like '%$searchString%'
+                                  OR contact_last_name  like '%$searchString%'
 			                      OR CONCAT(contact_first_name, ' ', contact_last_name)  like '%$searchString%'
-								  					OR company_name like '%$searchString%' OR contact_notes like '%$searchString%'
-								  					OR contact_email like '%$searchString%'";
+                                  OR company_name like '%$searchString%'
+                                  OR contact_notes like '%$searchString%'";
 		}
 		// assemble the sql statement
 		$q = new DBQuery;
 		$q->addQuery('contact_id, contact_order_by');
 		$q->addQuery($showfields);
-		$q->addQuery('contact_first_name, contact_last_name, contact_phone, contact_title');
+		$q->addQuery('contact_first_name, contact_last_name, contact_title');
 		$q->addQuery('contact_updatekey, contact_updateasked, contact_lastupdate');
 		$q->addQuery('user_id');
 		$q->addTable('contacts', 'a');
