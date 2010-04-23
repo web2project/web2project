@@ -699,11 +699,23 @@ class CProject extends CW2pObject {
 		if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
 			$q = new DBQuery;
 			$q->addTable('contacts', 'c');
+            $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
+
+            $q->leftJoin('departments', 'd', 'd.dept_id = c.contact_department');
+            $q->addQuery('dept_name');
+
 			$q->addJoin('project_contacts', 'pc', 'pc.contact_id = c.contact_id', 'inner');
-			$q->leftJoin('departments', 'd', 'd.dept_id = c.contact_department');
 			$q->addWhere('pc.project_id = ' . (int) $projectId);
-			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email, contact_order_by');
-			$q->addQuery('contact_phone, dept_name');
+			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_order_by');
+
+            $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+            $q->addWhere("cm.method_name = 'email_primary'");
+            $q->addQuery('cm.method_value AS contact_email');
+
+            $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = c.contact_id');
+            $q->addWhere("cm2.method_name = 'phone_primary'");
+            $q->addQuery('cm2.method_value AS contact_phone');
+
 			$q->addWhere('
 				(contact_private=0
 					OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
@@ -712,6 +724,7 @@ class CProject extends CW2pObject {
 
 			$department = new CDepartment;
 			$department->setAllowedSQL($AppUI->user_id, $q);
+
 			return $q->loadHashList('contact_id');
 		}
 	}
