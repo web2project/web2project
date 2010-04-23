@@ -449,8 +449,8 @@ class CEvent extends CW2pObject {
 	public $event_notify = null;
 	public $event_cwd = null;
 
-	public function CEvent() {
-    parent::__construct('events', 'event_id');
+	public function __construct() {
+        parent::__construct('events', 'event_id');
 	}
 
 	public function loadFull($event_id) {
@@ -491,7 +491,7 @@ class CEvent extends CW2pObject {
 	 *	@author gregorerhardt
 	 *	@return null|string null if successful otherwise returns and error message
 	 */
-	public function delete() {
+	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
 		// call default delete method first
 		$deleted = parent::delete($this->event_id);
@@ -508,6 +508,20 @@ class CEvent extends CW2pObject {
 
 		return $deleted;
 	}
+
+    public function hook_search() {
+        $search['table'] = 'events';
+        $search['table_alias'] = '';
+        $search['table_module'] = 'calendar';
+        $search['table_key'] = 'event_id'; // primary key in searched table
+        $search['table_link'] = 'index.php?m=calendar&a=view&event_id='; // first part of link
+        $search['table_title'] = 'Events';
+        $search['table_orderby'] = 'event_start_date';
+        $search['search_fields'] = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
+        $search['display_fields'] = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
+
+        return $search;
+    }
 
 	/**
 	 * Calculating if an recurrent date is in the given period
