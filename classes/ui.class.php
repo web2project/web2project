@@ -127,7 +127,7 @@ class CAppUI {
 
 	 * CAppUI Constructor
 	 */
-	public function CAppUI() {
+	public function __construct() {
 		$this->state = array();
 
 		$this->user_id = -1;
@@ -1057,7 +1057,7 @@ class CTabBox_core {
 	 * @param string Optional javascript method to be used to execute tabs.
 	 *	Must support 2 arguments, currently active tab, new tab to activate.
 	 */
-	public function CTabBox_core($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
+	public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
 		$this->tabs = array();
 		$this->active = $active;
 		$this->baseHRef = ($baseHRef ? $baseHRef . '&' : '?');
@@ -1357,7 +1357,7 @@ class CTitleBlock_core {
 	 * have permission to view the help module, then the context help icon is
 	 * not displayed.
 	 */
-	public function CTitleBlock_core($title, $icon = '', $module = '', $helpref = '') {
+	public function __construct($title, $icon = '', $module = '', $helpref = '') {
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->module = $module;

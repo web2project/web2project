@@ -2267,7 +2267,7 @@ class CTaskLog extends CW2pObject {
 	public $task_log_created = null;
 	public $task_log_updated = null;
 
-	public function CTaskLog() {
+	public function __construct() {
 	  parent::__construct('task_log', 'task_log_id');
 
 		// ensure changes to checkboxes are honoured

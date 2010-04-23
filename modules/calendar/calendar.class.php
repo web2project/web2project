@@ -76,7 +76,7 @@ class CMonthCalendar {
 	/**
 	 * @param Date $date
 	 */
-	public function CMonthCalendar($date = null) {
+	public function __construct($date = null) {
 		$this->setDate($date);
 
 		$this->classes = array();
