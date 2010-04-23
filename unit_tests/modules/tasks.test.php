@@ -885,7 +885,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestCopyNoProjectNoTask.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestCopyNoProjectNoTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -948,7 +948,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestCopyProjectNoTask.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestCopyProjectNoTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -1011,7 +1011,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestCopyNoProjectTask.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestCopyNoProjectTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -1074,7 +1074,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestCopyProjectTask.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestCopyProjectTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -1120,7 +1120,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestDeepCopyNoProjectNoTask.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestDeepCopyNoProjectNoTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -1154,7 +1154,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestDeepCopyNoProjectTask.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestDeepCopyNoProjectTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -1188,7 +1188,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestDeepCopyProjectTask.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestDeepCopyProjectTask.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated', 'task_created')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated', 'task_created')));
@@ -1224,7 +1224,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 		$now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestStore.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStore.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
@@ -1267,7 +1267,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 		$now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestStoreSubTasks.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreSubTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
@@ -1348,7 +1348,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 		$now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestStoreShiftDependentTasks.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreShiftDependentTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
@@ -1385,7 +1385,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 		$now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestStoreNoTaskParent.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreNoTaskParent.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
@@ -1421,7 +1421,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 		$now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestStoreCreateNoParent.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreCreateNoParent.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created','task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created','task_updated')));
@@ -1551,7 +1551,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->load(28);
         $this->obj->updateDependencies('24,25,26');
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateDependencies.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateDependencies.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array());
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array());
@@ -1566,7 +1566,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->load(28);
         $this->obj->updateDependencies('');
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateDependenciesEmptyString.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateDependenciesEmptyString.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array());
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array());
@@ -1581,7 +1581,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->load(28);
         $this->obj->updateDependencies('0, ');
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateDependenciesInvalidValues.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateDependenciesInvalidValues.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array());
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array());
@@ -1598,7 +1598,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestPushDependencies.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestPushDependencies.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
@@ -1951,7 +1951,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestShiftDependentTasks.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestShiftDependentTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
@@ -1980,7 +1980,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $this->obj->update_dep_dates(28);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateDepDates.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateDepDates.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
@@ -2056,7 +2056,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->load(1);
         $this->obj->removeAssigned(1);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestRemoveAssigned.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestRemoveAssigned.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
     }
@@ -2077,7 +2077,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), false, false);
         $this->assertEquals('', $over_assigned);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateAssigned.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateAssigned.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
 
@@ -2122,7 +2122,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), true, false);
         $this->assertEquals('', $over_assigned);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateAssignedWithDelete.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateAssignedWithDelete.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
 
@@ -2144,7 +2144,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), true, true);
         $this->assertEquals('', $over_assigned);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateAssignedWithDeleteAndRemoveUsers.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateAssignedWithDeleteAndRemoveUsers.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
 
