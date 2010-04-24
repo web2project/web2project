@@ -182,4 +182,3 @@ $AppUI->boxTopRendered = false;
 if ($m == 'help' && function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
-?>
