@@ -227,11 +227,11 @@ class CCompany extends CW2pObject {
 		return $q->loadList();
 	}
 	
-	public static function getContacts($AppUI, $companyId) {
+	public static function getContacts(CAppUI $AppUI, $companyId) {
 		$results = array();
 		$perms = $AppUI->acl();
 
-		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view') && (int) $companyId > 0) {
+		if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $companyId > 0) {
 			$q = new DBQuery;
 			$q->addQuery('a.*');
 			$q->addQuery('dept_name');

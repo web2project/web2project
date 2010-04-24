@@ -349,16 +349,7 @@ class CW2pObject {
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
-		/*print_r('Deny:');
-		print_r($deny);
-		print_r('Allow:');
-		print_r($allow);*/
-		//if (! $perms->checkModule($this->_tbl, 'view', $uid )) {
-		//  if (! count($allow))
-		//    return array();	// No access, and no allow overrides, so nothing to show.
-		//} else {
-		//  $allow = array();	// Full access, allow overrides don't mean anything.
-		//}
+
 		$this->_query->clear();
 		$this->_query->addQuery($fields);
 		$this->_query->addTable($this->_tbl);
@@ -412,18 +403,6 @@ class CW2pObject {
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
-		/*		print_r('allow:');
-		print_r($allow);
-		print_r('deny:');
-		print_r($deny);
-		print_r('deny:');
-		print_r($deny);
-		if (! $perms->checkModule($this->_tbl, 'view', $uid )) {
-		if (! count($allow))
-		return array('1=0');*/ // No access, and no allow overrides, so nothing to show.
-		//} else {
-		//  $allow = array();	// Full access, allow overrides don't mean anything.
-		//}
 
 		if (!isset($index)) {
 			$index = $this->_tbl_key;

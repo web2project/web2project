@@ -252,11 +252,11 @@ function setDepartment(department_id_string){
 			</td>
 			<td rowspan="6" valign="top">
 				<?php
-					if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+					if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
 						echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
 					}
 
-          if ($AppUI->isActiveModule('departments') && $perms->checkModule('departments', 'view')) {
+          if ($AppUI->isActiveModule('departments') && canEdit('departments')) {
             //Build display list for departments
             $company_id = $project->project_company;
             $selected_departments = array();
