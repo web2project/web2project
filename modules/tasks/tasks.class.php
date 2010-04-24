@@ -1860,7 +1860,7 @@ class CTask extends CW2pObject {
 			}
 
 			// Am I sys admin?
-			if (!getDenyEdit('admin')) {
+			if (canEdit('admin')) {
 				$can_edit_time_information = true;
 			}
 
