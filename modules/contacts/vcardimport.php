@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$canEdit = !getDenyEdit('contacts');
+$canEdit = canEdit('contacts');
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
