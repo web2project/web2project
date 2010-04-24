@@ -86,7 +86,7 @@ $forums = $q->loadList();
 $titleBlock = new CTitleBlock('Forums', 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true), '', '<form name="forum_filter" action="?m=forums" method="post" accept-charset="utf-8">', '</form>');
 
-$canAdd = $perms->checkModule($m, 'add');
+$canAdd = canAdd($m);
 if ($canAdd) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new forum') . '">', '', '<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }

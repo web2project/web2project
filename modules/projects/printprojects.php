@@ -2,7 +2,7 @@
 global $AppUI, $w2Pconfig;
 // check permissions for this module
 $perms = &$AppUI->acl();
-$canView = $perms->checkModule($m, 'view');
+$canView = canView('projects');
 
 if (!$canView) {
 	$AppUI->redirect('m=public&a=access_denied');
