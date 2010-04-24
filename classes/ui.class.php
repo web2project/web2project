@@ -772,7 +772,7 @@ class CAppUI {
 		$this->checkStyle();
 
 		// Let's see if this user has admin privileges
-		if (!getDenyRead('admin')) {
+		if (canView('admin')) {
 			$this->user_is_admin = 1;
 		}		
 		return true;
@@ -1365,7 +1365,7 @@ class CTitleBlock_core {
 		$this->cells1 = array();
 		$this->cells2 = array();
 		$this->crumbs = array();
-		$this->showhelp = !getDenyRead('help');
+		$this->showhelp = canView('help');
 	}
 	/**
 	 * Adds a table 'cell' beside the Title string

@@ -125,7 +125,7 @@ $q->addQuery('evtq.queue_id');
 
 $q->addTable('tasks');
 $mods = $AppUI->getActiveModules();
-if (!empty($mods['history']) && !getDenyRead('history')) {
+if (!empty($mods['history']) && canView('history')) {
 	$q->addQuery('MAX(history_date) as last_update');
 	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
 }

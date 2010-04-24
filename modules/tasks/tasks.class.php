@@ -1198,7 +1198,7 @@ class CTask extends CW2pObject {
 		$q = new DBQuery;
 
 		// Let's see if this user has admin privileges
-		if (!getDenyRead('admin')) {
+		if (canView('admin')) {
 			return true;
 		}
 

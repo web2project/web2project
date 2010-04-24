@@ -95,7 +95,7 @@ function get_actual_end_date_pd($task_id, $task) {
 	$q = new DBQuery;
 	$mods = $AppUI->getActiveModules();
 
-	if (!empty($mods['history']) && !getDenyRead('history')) {
+	if (!empty($mods['history']) && canView('history')) {
 		$q->addQuery('MAX(history_date) as actual_end_date');
 		$q->addTable('history');
 		$q->addWhere('history_table=\'tasks\' AND history_item=' . $task_id);

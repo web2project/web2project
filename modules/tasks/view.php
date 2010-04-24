@@ -51,7 +51,7 @@ $start_date = intval($obj->task_start_date) ? new CDate($obj->task_start_date) :
 $end_date = intval($obj->task_end_date) ? new CDate($obj->task_end_date) : null;
 
 //check permissions for the associated project
-$canReadProject = !getDenyRead('projects', $obj->task_project);
+$canReadProject = canView('projects', $obj->task_project);
 
 $users = $obj->getAssignedUsers($task_id);
 
