@@ -25,13 +25,13 @@ if (!defined('W2P_BASE_DIR')) {
 */
 function getDenyRead($mod, $item_id = 0) {
 	trigger_error("getDenyRead has been deprecated in v1.3 and will be removed in v2.0", E_USER_NOTICE );
-    return !getPermission($mod, 'view', $item_id);
+    return !canView($mod, $item_id);
 }
 function getDenyEdit($mod, $item_id = 0) {
 	trigger_error("getDenyEdit has been deprecated in v1.3 and will be removed in v2.0", E_USER_NOTICE );
-    return !getPermission($mod, 'edit', $item_id);
+    return !canEdit($mod, $item_id);
 }
 function getDenyAdd($mod, $item_id = 0) {
 	trigger_error("getDenyAdd has been deprecated in v1.3 and will be removed in v2.0", E_USER_NOTICE );
-    return !getPermission($mod, 'add', $item_id);
+    return !canAdd($mod, $item_id);
 }
