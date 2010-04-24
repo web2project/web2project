@@ -7,7 +7,7 @@ global $AppUI, $role_id, $canEdit, $canDelete, $tab;
 
 // Get the permissions for this module
 $perms = &$AppUI->acl();
-$canEdit = $perms->checkModule('roles', 'edit');
+$canEdit = canEdit('roles');
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }

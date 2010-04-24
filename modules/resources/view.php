@@ -10,7 +10,7 @@ $perms = &$AppUI->acl();
 $canView = $perms->checkModuleItem('resources', 'view', $resource_id);
 $canEdit = $perms->checkModuleItem('resources', 'edit', $resource_id);
 $canDelete = $perms->checkModuleItem('resources', 'delete', $resource_id);
-$canAdd = $perms->checkModule('resources', 'add');
+$canAdd = canAdd('resources');
 
 if (!$canView) {
 	$AppUI->redirect('m=public&a=access_denied');

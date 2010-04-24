@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$history_id = w2PgetParam($_GET, 'history_id', 0);
+$history_id = (int) w2PgetParam($_GET, 'history_id', 0);
 
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -13,13 +13,13 @@ $action = $_REQUEST['action'];
 $q = new DBQuery;
 if ($action) {
 	$history_description = w2PgetParam($_POST, 'history_description', '');
-	$history_project = w2PgetParam($_POST, 'history_project', '');
+	$history_project = (int) w2PgetParam($_POST, 'history_project', 0);
 	$userid = $AppUI->user_id;
 
 	$perms = &$AppUI->acl();
 
 	if ($action == 'add') {
-		if (!$perms->checkModule('history', 'add')) {
+		if (!canAdd('history')) {
 			$AppUI->redirect('m=public&a=access_denied');
 		}
 		$q->addTable('history');
@@ -31,7 +31,7 @@ if ($action) {
 		$q->addInsert('history_project', $history_project);
 		$okMsg = 'History added';
 	} elseif ($action == 'update') {
-		if (!$perms->checkModule('history', 'edit')) {
+		if (!canEdit('history')) {
 			$AppUI->redirect('m=public&a=access_denied');
 		}
 		$q->addTable('history');
@@ -40,7 +40,7 @@ if ($action) {
 		$q->addWhere('history_id =' . $history_id);
 		$okMsg = 'History updated';
 	} elseif ($action == 'del') {
-		if (!$perms->checkModule('history', 'delete')) {
+		if (!canDelete('history')) {
 			$AppUI->redirect('m=public&a=access_denied');
 		}
 		$q->setDelete('history');

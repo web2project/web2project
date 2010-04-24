@@ -33,7 +33,7 @@ $bulk_move_date = (int) w2PgetParam($_POST, 'bulk_move_date', '0');
 $bulk_task_percent_complete = w2PgetParam($_POST, 'bulk_task_percent_complete', '');
 
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('tasks', 'edit')) {
+if (!canEdit('tasks')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
