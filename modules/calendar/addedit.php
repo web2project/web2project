@@ -9,7 +9,7 @@ $event_id = intval(w2PgetParam($_GET, 'event_id', 0));
 $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
 
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule('calendar', 'add');
+$canAuthor = canAdd('calendar');
 $canEdit = $perms->checkModuleItem('calendar', 'edit', $event_id);
 
 // check permissions

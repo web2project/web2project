@@ -9,7 +9,7 @@ $msg = '';
 $del = w2PgetParam($_POST, 'del', 0);
 
 $isNotNew = $_POST['event_id'];
-$event_id = intval(w2PgetParam($_POST, 'event_id', 0));
+$event_id = (int) w2PgetParam($_POST, 'event_id', 0);
 $perms = &$AppUI->acl();
 if ($del) {
 	if (!$perms->checkModuleItem('calendar', 'delete', $event_id)) {
@@ -20,7 +20,7 @@ if ($del) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!$perms->checkModule('calendar', 'add')) {
+	if (!canAdd('calendar')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }
