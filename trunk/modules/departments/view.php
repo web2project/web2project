@@ -10,7 +10,7 @@ $msg = '';
 $department = new CDepartment();
 // check permissions
 $canRead = canView($m, $dept_id);
-$canEdit = !getDenyEdit($m, $dept_id);
+$canEdit = canEdit($m, $dept_id);
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');

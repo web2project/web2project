@@ -570,7 +570,7 @@ function displayFiles($folder) {
 }
 
 /**** Main Program ****/
-$canEdit = !getDenyEdit($m);
+$canEdit = canEdit($m);
 $canRead = canView($m);
 
 if ($folder > 0) {
