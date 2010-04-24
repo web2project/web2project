@@ -138,7 +138,7 @@ if ($dialog) {
 ?>
 		<td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch" method="POST" accept-charset="utf-8"><td>
              	     <?php 
-						if ($perms->checkModule('smartsearch', 'access')) {					  
+						if (canAccess('smartsearch')) {
 							echo w2PshowImage('search.png') ?>&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
              	     <?php
 					  	} else {
@@ -156,14 +156,14 @@ if ($dialog) {
 						<a class="button" href="./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
 					</td>
 		<?php
-		if ($perms->checkModule('tasks', 'access')) {
+		if (canAccess('tasks')) {
 ?>
 					<td nowrap="nowrap" align="right">
 						<a class="button" href="./index.php?m=tasks&a=todo"><span><b><?php echo $AppUI->_('Todo'); ?></b></span></a>
 					</td>
 		<?php
 		}
-		if ($perms->checkModule('calendar', 'access')) {
+		if (canAccess('calendar')) {
 			$now = new CDate();
 ?>
 					<td nowrap="nowrap" align="right">

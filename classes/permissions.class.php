@@ -1433,7 +1433,7 @@ function getReadableModule() {
 	$q->addOrder('mod_ui_order');
 	$modules = $q->loadColumn();
 	foreach ($modules as $mod) {
-		if ($perms->checkModule($mod, 'access')) {
+		if (canAccess($mod)) {
 			return $mod;
 		}
 	}
@@ -1518,10 +1518,12 @@ function canView($mod, $item_id = 0) {
 function canEdit($mod, $item_id = 0) {
 	return getPermission($mod, 'edit', $item_id);
 }
-
 function canAdd($mod, $item_id = 0) {
 	return getPermission($mod, 'add', $item_id);
 }
 function canDelete($mod, $item_id = 0) {
 	return getPermission($mod, 'delete', $item_id);
+}
+function canAccess($mod) {
+    return getPermission($mod, 'access');
 }

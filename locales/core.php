@@ -7,7 +7,7 @@ ob_start();
 
 if (isset($perms)) {
   foreach ($AppUI->getActiveModules() as $dir => $module) {
-    if (!$perms->checkModule($dir, 'access')) {
+    if (!canAccess($dir)) {
       continue;
     }
     $modules_tabs_crumbs = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_(tab|crumb).*\.php');
