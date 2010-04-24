@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 $del = isset($_POST['del']) ? $_POST['del'] : 0;
 
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('admin', 'edit')) {
+if (!canEdit('admin')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 if (!$perms->checkModule('users', 'edit')) {

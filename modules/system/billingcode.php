@@ -10,7 +10,7 @@ $company_id = 0;
 $company_id = isset($_REQUEST['company_id']) ? w2PgetParam($_REQUEST, 'company_id', 0) : 0;
 // Check permissions
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('system', 'edit')) {
+if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

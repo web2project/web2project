@@ -318,7 +318,7 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 </tr>
 <?php
 	//lets add the subprojects table
-	$canReadMultiProjects = $perms->checkModule('admin', 'view');
+	$canReadMultiProjects = canView('admin');
 	if ($project->hasChildProjects() && $canReadMultiProjects) { ?>
 		<tr>
 			<td colspan="2">

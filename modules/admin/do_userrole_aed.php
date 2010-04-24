@@ -7,7 +7,7 @@ $del = isset($_REQUEST['del']) ? w2PgetParam($_REQUEST, 'del', false) : false;
 $notify_new_user = isset($_POST['notify_new_user']) ? $_POST['notify_new_user'] : 0;
 
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('admin', 'edit')) {
+if (!canEdit('admin')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 if (!$perms->checkModule('users', 'edit')) {

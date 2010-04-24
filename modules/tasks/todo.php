@@ -24,7 +24,7 @@ $user_id = $AppUI->user_id;
 $no_modify = false;
 $other_users = false;
 
-if ($perms->checkModule('admin', 'view')) { // let's see if the user has sysadmin access
+if (canView('admin')) { // let's see if the user has sysadmin access
 	$other_users = true;
 	if (($show_uid = w2PgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { // lets see if the user wants to see anothers user mytodo
 		$user_id = $show_uid;
@@ -36,7 +36,7 @@ if ($perms->checkModule('admin', 'view')) { // let's see if the user has sysadmi
 }
 
 // check permissions
-$canEdit = $perms->checkModule($m, 'edit');
+$canEdit = canEdit($m);
 
 // retrieve any state parameters
 if (isset($_POST['show_form'])) {

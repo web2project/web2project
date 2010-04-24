@@ -30,7 +30,7 @@ if ($del) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!$perms->checkModule('tasks', 'add')) {
+	if (!canAdd('tasks')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }

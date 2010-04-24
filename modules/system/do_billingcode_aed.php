@@ -7,7 +7,7 @@ $del = isset($_POST['del']) ? $_POST['del'] : 0;
 $edit = isset($_POST['edit']) ? $_POST['edit'] : 0;
 
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('system', 'edit')) {
+if canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
