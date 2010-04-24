@@ -1,7 +1,7 @@
 <?php
 	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 
-	class UpgradeManager {
+	class w2p_Core_UpgradeManager {
 		private $action = '';
 
 		private $configDir = '';
