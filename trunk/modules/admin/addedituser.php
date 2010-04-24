@@ -68,7 +68,7 @@ if (!$user && $user_id > 0) {
 	// setup the title block
 	$ttl = $user_id > 0 ? 'Edit User' : 'Add User';
 	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, $m . '.' . $a);
-	if (canView('admin') && $perms->checkModule('users', 'view')) {
+	if (canView('admin') && canView('users')) {
 		$titleBlock->addCrumb('?m=admin', 'users list');
 	}
 	if ($user_id > 0) {

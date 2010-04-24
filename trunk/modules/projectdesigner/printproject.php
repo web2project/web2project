@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $w2Pconfig;
 // check permissions for this module
 $perms = &$AppUI->acl();
-$canView = $perms->checkModule($m, 'view');
+$canView = canView($m);
 $canAddProject = $perms->checkModuleItem('projects', 'view', $project_id);
 
 if (!$canView) {
@@ -32,10 +32,10 @@ $tasks = arrayMerge(array('0' => $AppUI->_('(None)', UI_OUTPUT_RAW)), $tasks);
 // check permissions for this record
 $canReadProject = $perms->checkModuleItem('projects', 'view', $project_id);
 $canEditProject = $perms->checkModuleItem('projects', 'edit', $project_id);
-$canViewTasks = $perms->checkModule('tasks', 'view');
-$canAddTasks = $perms->checkModule('tasks', 'add');
-$canEditTasks = $perms->checkModule('tasks', 'edit');
-$canDeleteTasks = $perms->checkModule('tasks', 'delete');
+$canViewTasks = canView('tasks');
+$canAddTasks = canAdd('tasks');
+$canEditTasks = canEdit('tasks');
+$canDeleteTasks = canDelete('tasks');
 
 if (!$canReadProject) {
 	$AppUI->redirect('m=public&a=access_denied');

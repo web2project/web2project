@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $m, $a;
 
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('system', 'view')) {
+if (!canView('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

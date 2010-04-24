@@ -9,7 +9,7 @@ $project_id = intval(w2PgetParam($_GET, 'project_id', 0));
 $perms = &$AppUI->acl();
 $canRead = $perms->checkModuleItem($m, 'view', $project_id);
 $canEdit = $perms->checkModuleItem($m, 'edit', $project_id);
-$canEditT = $perms->checkModule('tasks', 'add');
+$canEditT = canAdd('tasks');
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -345,15 +345,15 @@ $tabBox = new CTabBox('?m=projects&a=view&project_id=' . $project_id, '', $tab);
 $query_string = '?m=projects&a=view&project_id=' . $project_id;
 // tabbed information boxes
 // Note that we now control these based upon module requirements.
-$canViewTask = $perms->checkModule('tasks', 'view');
-$canViewTaskLog = $perms->checkModule('task_log', 'view');
+$canViewTask = canView('tasks');
+$canViewTaskLog = canView('task_log');
 
 if ($canViewTask) {
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks');
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks (Inactive)');
 }
 if ( $AppUI->isActiveModule('forums') ) { 
-	if ($perms->checkModule('forums', 'view')) {
+	if (canView('forums')) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_forums', 'Forums');
 	}
 }

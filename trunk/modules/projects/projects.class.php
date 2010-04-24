@@ -742,8 +742,7 @@ class CProject extends CW2pObject {
 	public static function getForums(CAppUI $AppUI = null, $projectId) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
-		if ($AppUI->isActiveModule('forums') && $perms->checkModule('forums', 'view')) {
+		if ($AppUI->isActiveModule('forums') && canView('forums')) {
 			$q = new DBQuery;
 			$q->addTable('forums');
 			$q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name, forum_message_count,

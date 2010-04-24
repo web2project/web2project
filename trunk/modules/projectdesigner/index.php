@@ -115,10 +115,10 @@ if (!$project_id) {
 	// check permissions for this record
 	$canReadProject = $perms->checkModuleItem('projects', 'view', $project_id);
 	$canEditProject = $perms->checkModuleItem('projects', 'edit', $project_id);
-	$canViewTasks = $perms->checkModule('tasks', 'view');
-	$canAddTasks = $perms->checkModule('tasks', 'add');
-	$canEditTasks = $perms->checkModule('tasks', 'edit');
-	$canDeleteTasks = $perms->checkModule('tasks', 'delete');
+	$canViewTasks = canView('tasks');
+	$canAddTasks = canAdd('tasks');
+	$canEditTasks = canEdit('tasks');
+	$canDeleteTasks = canDelete('tasks');
 
 	if (!$canReadProject) {
 		$AppUI->redirect('m=public&a=access_denied');

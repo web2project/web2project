@@ -5,11 +5,11 @@ if (!defined('W2P_BASE_DIR')) {
 
 // check permissions
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('roles', 'edit')) {
+if (!canEdit('roles')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$del = isset($_POST['del']) ? $_POST['del'] : 0;
+$del = (int) w2PgetParam($_POST, 'del', 0);
 $copy_role_id = w2PgetParam($_POST, 'copy_role_id', null);
 
 $role = new CRole();

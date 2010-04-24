@@ -16,7 +16,7 @@ if ($del) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!$perms->checkModule('resources', 'add')) {
+	if (!canAdd('resources')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }
