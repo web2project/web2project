@@ -11,8 +11,8 @@ $perms = &$AppUI->acl();
 // check permissions
 $canEditTask = $perms->checkModuleItem('tasks', 'edit', $task_id);
 $canViewTask = $perms->checkModuleItem('tasks', 'view', $task_id);
-$canEdit = $perms->checkModule('task_log', 'edit');
-$canAdd = $perms->checkModule('task_log', 'add');
+$canEdit = canEdit('task_log');
+$canAdd = canAdd('task_log');
 
 $task_log_id = intval(w2PgetParam($_GET, 'task_log_id', 0));
 $log = new CTaskLog();
@@ -314,7 +314,7 @@ $q->clear();
 		<input type="hidden" name="email_project_list" id="email_project_list" value="<?php echo implode(',', $cidpc); ?>" />
 		<input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',', $proj_email_title)); ?>';" onmouseout="window.status = '';" name="email_project_contacts" id="email_project_contacts" <?php echo ($tp ? 'checked="checked"' : ''); ?> /><label for="email_project_contacts"><?php echo $AppUI->_('Project Contacts'); ?></label>
 		<input type='hidden' name='email_others' id='email_others' value='' />
-		<?php if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) { ?>
+		<?php if ($AppUI->isActiveModule('contacts') && canView('contacts')) { ?>
 			<input type='button' class='button' value='<?php echo $AppUI->_('Other Contacts...'); ?>' onclick='javascript:popEmailContacts();' />
 		<?php } ?>
 	</td>
