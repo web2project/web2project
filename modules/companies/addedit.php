@@ -12,7 +12,7 @@ $perms = &$AppUI->acl();
 if ($company_id) {
 	$canEdit = $perms->checkModuleItem('companies', 'edit', $company_id);
 } else {
-	$canEdit = $perms->checkModule('companies', 'add');
+	$canEdit = canAdd('companies');
 }
 
 if (!$canEdit) {
