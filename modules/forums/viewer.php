@@ -16,7 +16,7 @@ $canAuthor = $perms->checkModule('forums', 'add');
 $canDelete = $perms->checkModule('forums', 'delete');
 $canRead = $perms->checkModuleItem('forums', 'view', $forum_id);
 $canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
-$canAdminEdit = $perms->checkModule('admin', 'edit');
+$canAdminEdit = canEdit('admin');
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');

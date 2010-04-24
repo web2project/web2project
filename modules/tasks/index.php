@@ -7,7 +7,7 @@ $AppUI->savePlace();
 $perms = &$AppUI->acl();
 // retrieve any state parameters
 $user_id = $AppUI->user_id;
-if ($perms->checkModule('admin', 'view')) { // Only sysadmins are able to change users
+if (canView('admin')) { // Only sysadmins are able to change users
 	if (w2PgetParam($_POST, 'user_id', 0) != 0) { // this means that
 		$user_id = w2PgetParam($_POST, 'user_id', 0);
 		$AppUI->setState('user_id', $_POST['user_id']);

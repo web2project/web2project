@@ -7,11 +7,11 @@ $del = isset($_POST['del']) ? $_POST['del'] : 0;
 $pref_user = (int) w2PgetParam($_POST, 'pref_user', 0);
 
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('system', 'edit') && !$pref_user) {
+if (!canEdit('system') && !$pref_user) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-if ((!($AppUI->user_id == $pref_user) && (!$perms->checkModule('admin', 'edit'))) && $pref_user) {
+if ((!($AppUI->user_id == $pref_user) && !canEdit('admin')) && $pref_user) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

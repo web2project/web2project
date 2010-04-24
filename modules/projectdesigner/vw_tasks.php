@@ -189,7 +189,7 @@ foreach ($tasks as $row) {
 	$projects[$row['task_project']]['tasks'][] = $row;
 }
 
-$showEditCheckbox = isset($canEditTasks) && $canEditTasks || $perms->checkModule('admin', 'view');
+$showEditCheckbox = isset($canEditTasks) && $canEditTasks || canView('admin');
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $tempoTask = new CTask();

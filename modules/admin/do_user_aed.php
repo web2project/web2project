@@ -10,14 +10,14 @@ $isNewUser = !(w2PgetParam($_REQUEST, 'user_id', 0));
 
 $perms = &$AppUI->acl();
 if ($del) {
-	if (!$perms->checkModule('admin', 'delete')) {
+	if (!canDelete('admin')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 	if (!$perms->checkModule('users', 'delete')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } elseif ($isNewUser) {
-	if (!$perms->checkModule('admin', 'add')) {
+	if (!canAdd('admin')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 	if (!$perms->checkModule('users', 'add')) {
@@ -25,7 +25,7 @@ if ($del) {
 	}
 } else {
 	if ($user_id != $AppUI->user_id) {
-		if (!$perms->checkModule('admin', 'edit')) {
+		if (!canEdit('admin')) {
 			$AppUI->redirect('m=public&a=access_denied');
 		}
 		if (!$perms->checkModule('users', 'edit')) {
