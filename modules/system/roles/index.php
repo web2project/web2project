@@ -9,7 +9,7 @@ $AppUI->savePlace();
 $perms = &$AppUI->acl();
 
 // Get the permissions for this module
-$canAccess = $perms->checkModule('roles', 'access');
+$canAccess = canAccess('roles');
 if (!$canAccess) {
 	$AppUI->redirect('m=public&a=access_denied');
 }

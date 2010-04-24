@@ -92,7 +92,7 @@ include_once W2P_BASE_DIR . '/locales/core.php';
 
 $perms = &$AppUI->acl();
 
-$canRead = $perms->checkModule('files', 'view');
+$canRead = canView('files');
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }

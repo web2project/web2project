@@ -2325,7 +2325,7 @@ class CTaskLog extends CW2pObject {
 
 		// First things first.	Are we allowed to delete?
 		$acl = &$AppUI->acl();
-		if (!$acl->checkModule('task_log', 'delete')) {
+		if (!canDelete('task_log')) {
 			$msg = $AppUI->_('noDeletePermission');
 			return false;
 		}
