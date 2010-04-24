@@ -543,7 +543,7 @@ class CustomFields {
 	}
 	public static function getCustomFieldByModule($AppUI, $module, $objectId) {
 		$perms = $AppUI->acl();
-		$canRead = !$perms->checkModule($module, 'view', $objectId);
+		$canRead = canView($module, $objectId);
 
 		if ($canRead) {
 			$q = new DBQuery;
