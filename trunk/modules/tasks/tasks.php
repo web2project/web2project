@@ -106,7 +106,7 @@ $q2->addGroup('project_id');
 
 $perms = &$AppUI->acl();
 $projects = array();
-$canViewTask = $perms->checkModule('tasks', 'view');
+$canViewTask = canView('tasks');;
 if ($canViewTask) {
 
 	$prc = $q->exec();

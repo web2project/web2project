@@ -53,7 +53,7 @@ if ($task_id) {
 	$canEdit = $perms->checkModuleItem('projects', 'view', $task_project);
 	// And do we have add permission to tasks?
 	if ($canEdit) {
-		$canEdit = $perms->checkModule('tasks', 'add');
+		$canEdit = canAdd('tasks');
 	}
 }
 

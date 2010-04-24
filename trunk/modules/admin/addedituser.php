@@ -3,8 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$user_id = isset($_GET['user_id']) ? w2PgetParam($_GET, 'user_id', 0) : 0;
-$contact_id = isset($_GET['contact_id']) ? w2PgetParam($_GET, 'contact_id', 0) : 0;
+$user_id = (int) w2PgetParam($_GET, 'user_id', 0);
+$contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
 if ($user_id == 0) {
 	$canEdit = $canAuthor;
@@ -68,7 +68,7 @@ if (!$user && $user_id > 0) {
 	// setup the title block
 	$ttl = $user_id > 0 ? 'Edit User' : 'Add User';
 	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, $m . '.' . $a);
-	if ($perms->checkModule('admin', 'view') && $perms->checkModule('users', 'view')) {
+	if (canView('admin') && $perms->checkModule('users', 'view')) {
 		$titleBlock->addCrumb('?m=admin', 'users list');
 	}
 	if ($user_id > 0) {

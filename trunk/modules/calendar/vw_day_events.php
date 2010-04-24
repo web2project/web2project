@@ -14,7 +14,7 @@ $user_id = $AppUI->user_id;
 $other_users = false;
 $no_modify = false;
 
-if ($perms->checkModule('admin', 'view')) {
+if (canView('admin')) {
 	$other_users = true;
 	if (($show_uid = w2PgetParam($_REQUEST, 'show_user_events', 0)) != 0) {
 		$user_id = $show_uid;
