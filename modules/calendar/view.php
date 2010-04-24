@@ -40,7 +40,7 @@ $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month'
 
 $assigned = $event->getAssigned();
 
-if (($event->event_owner != $AppUI->user_id) && !($perms->checkModule('admin', 'view'))) {
+if (($event->event_owner != $AppUI->user_id) && !canView('admin')) {
 	$canEdit = false;
 }
 

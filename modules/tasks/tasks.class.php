@@ -1604,8 +1604,8 @@ class CTask extends CW2pObject {
 	public function getTaskContacts(CAppUI $AppUI = null, $taskId) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
-		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+        $perms = $AppUI->acl();
+		if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
 			$q = new DBQuery;
 			$q->addTable('contacts', 'c');
 			$q->addJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id', 'inner');

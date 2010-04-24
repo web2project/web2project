@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 $perms = $AppUI->acl();
 
 // let's see if the user has sys access
-if (!$perms->checkModule('system', 'edit')) {
+if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
