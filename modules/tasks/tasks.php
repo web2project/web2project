@@ -155,7 +155,7 @@ $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
 
 $q->addTable('tasks');
 $mods = $AppUI->getActiveModules();
-if (!empty($mods['history']) && !getDenyRead('history')) {
+if (!empty($mods['history']) && canView('history')) {
 	$q->addQuery('MAX(history_date) as last_update');
 	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
 }
@@ -342,7 +342,7 @@ if (count($tasks) > 0) {
 
 $showEditCheckbox = ((isset($canEdit) && $canEdit && w2PgetConfig('direct_edit_assignment')) ? true : false);
 global $history_active;
-$history_active = !empty($mods['history']) && !getDenyRead('history');
+$history_active = !empty($mods['history']) && canView('history');
 ?>
 
 <script type="text/JavaScript">
@@ -469,7 +469,7 @@ if ($project_id) {
 		<th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC); ?>&nbsp;&nbsp;</th>
 		<th nowrap="nowrap"><?php sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC); ?></th>
 		<?php 
-			if (!empty($mods['history']) && !getDenyRead('history')) { 
+			if (!empty($mods['history']) && canView('history')) {
 				?><th nowrap="nowrap"><?php sort_by_item_title('Last Update', 'last_update', SORT_NUMERIC); ?></th><?php
 			} else {
 				$cols--;

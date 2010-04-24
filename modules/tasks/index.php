@@ -54,7 +54,7 @@ $titleBlock->addCell('<input type="text" class="text" size="20" name="searchtext
 		'', '<form action="?m=tasks" method="post" id="searchfilter" accept-charset="utf-8">', '</form>');
 
 // Let's see if this user has admin privileges
-if (!getDenyRead('admin')) {
+if (canView('admin')) {
 	$titleBlock->addCell();
 	$titleBlock->addCell($AppUI->_('User') . ':');
 
