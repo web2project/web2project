@@ -40,7 +40,6 @@ if ($search_string != '') {
 	$search_string = $AppUI->getState('search_string');
 }
 
-// $canEdit = !getDenyEdit( $m );
 // retrieve list of records
 $search_string = w2PformSafe($search_string, true);
 
