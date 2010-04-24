@@ -10,6 +10,7 @@ if(defined('E_DEPRECATED')){
 //error_reporting(-1);
 define('W2P_PERFORMANCE_DEBUG', false);
 define('MIN_PHP_VERSION', '5.2.0');
+//date_default_timezone_set('America/New_York');
 
 //Performance Debug Initialization
 if (W2P_PERFORMANCE_DEBUG) {
@@ -52,7 +53,6 @@ $baseUrl = preg_replace('#/$#D', '', $baseUrl);
 // Defines to deprecate the global baseUrl/baseDir
 define('W2P_BASE_DIR', $baseDir);
 define('W2P_BASE_URL', $baseUrl);
-
 
 // Include the PHPGACL library
 require_once W2P_BASE_DIR . '/lib/phpgacl/gacl.class.php';
