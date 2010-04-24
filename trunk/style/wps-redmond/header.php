@@ -73,22 +73,22 @@ if ($dialog) {
 <?php
 	echo '<td nowrap="nowrap" align="right">';
 	$newItem = array('' => '- New Item -');
-	if ($perms->checkModule('companies', 'add')) {
+	if (canAdd('companies')) {
 		$newItem['companies'] = 'Company';
 	}
-	if ($perms->checkModule('contacts', 'add')) {
+	if (canAdd('contacts')) {
 		$newItem['contacts'] = 'Contact';
 	}
-	if ($perms->checkModule('calendar', 'add')) {
+	if (canAdd('calendar')) {
 		$newItem['calendar'] = 'Event';
 	}
-	if ($perms->checkModule('files', 'add')) {
+    if (canAdd('files')) {
 		$newItem['files'] = 'File';
 	}
-	if ($perms->checkModule('projects', 'add')) {
+    if (canAdd('projects')) {
 		$newItem['projects'] = 'Project';
 	}
-	if ($perms->checkModule('admin', 'add')) {
+    if (canAdd('admin')) {
 		$newItem['admin'] = 'User';
 	}
 	echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
