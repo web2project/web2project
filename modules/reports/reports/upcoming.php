@@ -51,8 +51,9 @@ $options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap
 
 $hasResources = $AppUI->isActiveModule('resources');
 $perms = &$AppUI->acl();
-if ($hasResources)
-	$hasResources = $perms->checkModule('resources', 'view');
+if ($hasResources) {
+	$hasResources = canView('resources');
+}
 // Build the data to go into the table.
 $pdfdata = array();
 $columns = array();

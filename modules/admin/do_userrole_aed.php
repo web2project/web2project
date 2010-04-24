@@ -10,7 +10,7 @@ $perms = &$AppUI->acl();
 if (!canEdit('admin')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-if (!$perms->checkModule('users', 'edit')) {
+if (!canEdit('users')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

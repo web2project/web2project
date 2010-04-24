@@ -13,14 +13,14 @@ if ($del) {
 	if (!canDelete('admin')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
-	if (!$perms->checkModule('users', 'delete')) {
+	if (!canDelete('users')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } elseif ($isNewUser) {
 	if (!canAdd('admin')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
-	if (!$perms->checkModule('users', 'add')) {
+	if (!canAdd('users')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
@@ -28,7 +28,7 @@ if ($del) {
 		if (!canEdit('admin')) {
 			$AppUI->redirect('m=public&a=access_denied');
 		}
-		if (!$perms->checkModule('users', 'edit')) {
+		if (!canEdit('users')) {
 			$AppUI->redirect('m=public&a=access_denied');
 		}
 	}

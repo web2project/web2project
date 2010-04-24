@@ -7,7 +7,7 @@ $link_id = (int) w2PgetParam($_GET, 'link_id', 0);
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule('links', 'add');
+$canAuthor = canAdd('links');
 $canEdit = $perms->checkModuleItem('links', 'edit', $link_id);
 
 // check permissions
