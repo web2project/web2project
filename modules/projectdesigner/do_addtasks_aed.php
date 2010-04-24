@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI;
 
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('tasks', 'add')) {
+if (!canAdd('tasks')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('forums', 'view')) {
+if (!canView('forums')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
