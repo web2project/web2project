@@ -1,28 +1,7 @@
 <?php /* $Id$ $URL$ */
 
-/* 
-Copyright (c) 2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
-Copyright (c) 2003-2007 The dotProject Development Team <core-developers@dotproject.net>
-
-This file is part of web2Project.
-
-web2Project is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-web2Project is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with web2Project; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-ini_set('display_errors', 0);
-if(defined('E_DEPRECATED')){ 
+ini_set('display_errors', 1);
+if(defined('E_DEPRECATED')){
 	// since php 5.3
 	error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 } else {
@@ -31,6 +10,7 @@ if(defined('E_DEPRECATED')){
 //error_reporting(-1);
 define('W2P_PERFORMANCE_DEBUG', false);
 define('MIN_PHP_VERSION', '5.2.0');
+//date_default_timezone_set('America/New_York');
 
 //Performance Debug Initialization
 if (W2P_PERFORMANCE_DEBUG) {
@@ -74,12 +54,12 @@ $baseUrl = preg_replace('#/$#D', '', $baseUrl);
 define('W2P_BASE_DIR', $baseDir);
 define('W2P_BASE_URL', $baseUrl);
 
-/* 
+/*
  *  This  is set to get past the dotProject security sentinel.  It is only
- * required during the conversion process to load config.php.  Hopefully we 
+ * required during the conversion process to load config.php.  Hopefully we
  * will be able to kill this off down the road or someone can come up with a
  * better idea.
- */  
+ */
 define('DP_BASE_DIR', $baseDir);
 
 // required includes for start-up
