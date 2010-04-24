@@ -548,7 +548,7 @@ function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingT
   $s .= ($rootTag != '') ? "<$rootTag id=\"headerNav\">" : '';
   $links = array();
   foreach ($nav as $module) {
-  	if ($perms->checkModule($module['mod_directory'], 'access')) {
+  	if (canAccess($module['mod_directory'])) {
   		$link = ($innerTag != '') ? "<$innerTag>" : '';
       $link .= '<a href="?m=' . $module['mod_directory'] . '">' . $AppUI->_($module['mod_ui_name']) . '</a>';
       $link .= ($innerTag != '') ? "</$innerTag>" : '';
