@@ -10,7 +10,7 @@ $preserve = $w2Pconfig['files_ci_preserve_attr'];
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule('files', 'add');
+$canAuthor = canAdd('files');
 $canEdit = $perms->checkModuleItem('files', 'edit', $file_id);
 
 // check permissions

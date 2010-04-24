@@ -32,7 +32,7 @@ if ($del) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!$perms->checkModule('files', 'add')) {
+	if (!canAdd('files')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }

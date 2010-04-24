@@ -275,7 +275,7 @@ class CCompany extends CW2pObject {
 	public static function getDepartments($AppUI, $companyId) {
 		$perms = $AppUI->acl();
 
-		if ($AppUI->isActiveModule('departments') && $perms->checkModule('departments', 'view')) {
+		if ($AppUI->isActiveModule('departments') && canView('departments')) {
 			$q = new DBQuery;
 			$q->addTable('departments');
 			$q->addQuery('departments.*, COUNT(contact_department) dept_users');

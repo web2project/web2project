@@ -9,7 +9,7 @@ $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule('departments', 'add');
+$canAuthor = canAdd('departments');
 $canEdit = $perms->checkModuleItem('departments', 'edit', $dept_id);
 
 // check permissions

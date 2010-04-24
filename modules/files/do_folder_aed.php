@@ -10,15 +10,15 @@ $redirect = w2PgetParam($_POST, 'redirect', '');
 $isNotNew = $_POST['file_folder_id'];
 $perms = &$AppUI->acl();
 if ($del) {
-	if (!$perms->checkModule('files', 'delete')) {
+	if (!canDelete('files')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } elseif ($isNotNew) {
-	if (!$perms->checkModule('files', 'edit')) {
+	if (!canEdit('files')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!$perms->checkModule('files', 'add')) {
+	if (!canAdd('files')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }
