@@ -34,7 +34,7 @@ define('SEC_DAY', 86400);
  * This provides customised extensions to the Date class to leave the
  * Date package as 'pure' as possible
  */
-class CDate extends Date {
+class w2p_Utilities_Date extends Date {
 
 	public function __construct($datetime = null, $tz = '') {
 

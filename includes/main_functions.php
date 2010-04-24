@@ -32,9 +32,6 @@ function __autoload($class_name) {
         case 'cappui':
             require_once W2P_BASE_DIR . '/classes/ui.class.php';
             break;
-        case 'cdate':
-            require_once W2P_BASE_DIR . '/classes/date.class.php';
-            break;
         case 'customfields':
             require_once W2P_BASE_DIR.'/classes/CustomFields.class.php';
             break;
@@ -46,9 +43,6 @@ function __autoload($class_name) {
             break;
         case 'cw2pobject':
             require_once W2P_BASE_DIR.'/classes/w2p.class.php';
-            break;
-        case 'mail':
-            require_once W2P_BASE_DIR.'/classes/libmail.class.php';
             break;
         case 'eventqueue':
             require_once W2P_BASE_DIR.'/classes/event_queue.class.php';
