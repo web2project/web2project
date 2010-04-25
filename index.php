@@ -49,10 +49,11 @@ if (!isset($GLOBALS['OS_WIN'])) {
 // tweak for pathname consistence on windows machines
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-
-require_once W2P_BASE_DIR . '/classes/ui.class.php';
-require_once W2P_BASE_DIR . '/classes/permissions.class.php';
 require_once W2P_BASE_DIR . '/includes/session.php';
+
+$offset = w2PgetConfig('system_timezone');
+$timezones = w2PgetSysVal('Timezones');
+date_default_timezone_set($timezones[$offset]);
 
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.
 $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
