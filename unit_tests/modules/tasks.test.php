@@ -505,7 +505,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('2009-07-06 15:43:00',  $this->obj->task_updated);
     }
 
-    /*
+    /**
      * Tests loading a task that is dynamic not skipping update.
      */
     public function testLoadDynamic()
@@ -1891,7 +1891,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $AppUI = $old_AppUI;
     }
 
-    /*
+    /**
      * Tests that dependentTasks returns nothing if no task id provided
      */
     public function testDependentTasksNoTaskID()
@@ -2060,7 +2060,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
     }
-
 
     /**
      * Tests updating assigned users for task
@@ -2455,5 +2454,62 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $priority = $this->obj->getUserSpecificTaskPriority(1, 2);
 
         $this->assertEquals(52, $priority);
+    }
+
+    /**
+     * Test update specific task priority with no priority, user id or task id
+     */
+    public function testUpdateUserSpecificTaskPriorityNoPriorityNoUserIdNoTaskId()
+    {
+        $this->obj->load(1);
+
+        $this->obj->updateUserSpecificTaskPriority();
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateUserSpecificTaskPriorityNoPriorityNoUserIdNoTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+    }
+
+    /**
+     * Test update specific task priority with priority, no user id or task id
+     */
+    public function testUpdateUserSpecificTaskPriorityPriorityNoUserIdNoTaskId()
+    {
+        $this->obj->load(1);
+
+        $this->obj->updateUserSpecificTaskPriority(1);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateUserSpecificTaskPriorityPriorityNoUserIdNoTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+    }
+
+    /**
+     * Test update specific task priority with priority, user id but no task id
+     */
+    public function testUpdateUserSpecificTaskPriorityPriorityUserIdNoTaskId()
+    {
+        $this->obj->load(1);
+
+        $this->obj->updateUserSpecificTaskPriority(1, 1);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateUserSpecificTaskPriorityPriorityUserIdNoTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+    }
+
+    /**
+     * Test update specific task priority with priority, user id and task id
+     */
+    public function testUpdateUserSpecificTaskPriorityPriorityUserIdTaskId()
+    {
+        $this->obj->load(1);
+
+        $this->obj->updateUserSpecificTaskPriority(1, 1, 2);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateUserSpecificTaskPriorityPriorityUserIdTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+
     }
 }
