@@ -1486,7 +1486,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->load(21);
         $children = $this->obj->getChildren();
 
-        $this->assertEquals(2, count($children));
+        $this->assertEquals(2,  count($children));
+        $this->assertEquals(22, $children[0]);
+        $this->assertEquals(23, $children[1]);
     }
 
     /**
@@ -1497,7 +1499,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->load(15);
         $children = $this->obj->getDeepChildren();
 
-        $this->assertEquals(2, count($children));
+        $this->assertEquals(2,  count($children));
+        $this->assertEquals(16, $children[0]);
+        $this->assertEquals(17, $children[1]);
     }
 
     /**
@@ -2523,7 +2527,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $project = $this->obj->getProject();
 
         $this->assertEquals('Test Project', $project['project_name']);
-        $this->assertEquals('TP', $project['project_short_name']);
-        $this->assertEquals('FFFFFF', $project['project_color_identifier']);
+        $this->assertEquals('TP',           $project['project_short_name']);
+        $this->assertEquals('FFFFFF',       $project['project_color_identifier']);
     }
 }
