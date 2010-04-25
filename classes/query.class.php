@@ -920,7 +920,8 @@ class DBQuery {
 				}
 				$q .= $this->_table_prefix . $table;
 
-                $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
+                $fieldlist = implode(',', $quotedFieldnames);
                 $valuelist = implode(',', $this->value_list);
 
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
@@ -942,7 +943,8 @@ class DBQuery {
 				}
 				$q .= $this->quote_db($this->_table_prefix . $table);
 
-                $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
+                $fieldlist = implode(',', $quotedFieldnames);
                 $valuelist = implode(',', $this->value_list);
 
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
@@ -967,7 +969,8 @@ class DBQuery {
 		}
 		$q .= $this->quote_db($this->_table_prefix . $table);
 
-        $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+        $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
+        $fieldlist = implode(',', $quotedFieldnames);
         $valuelist = implode(',', $this->value_list);
 
 		$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
@@ -994,7 +997,8 @@ class DBQuery {
 				}
 				$q .= $this->_table_prefix . $table;
 
-                $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
+                $fieldlist = implode(',', $quotedFieldnames);
                 $valuelist = implode(',', $this->value_list);
 
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
@@ -1016,8 +1020,10 @@ class DBQuery {
 				}
 				$q .= $this->quote_db($this->_table_prefix . $table);
 
-                $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
+                $fieldlist = implode(',', $quotedFieldnames);
                 $valuelist = implode(',', $this->value_list);
+
 
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
