@@ -37,8 +37,6 @@ class CTabBox extends CTabBox_core {
 		} else {
 			if ($extra) {
 				echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr>' . '</table>';
-			} else {
-				# echo "<img src=\"".w2PfindImage('shim.gif')."\" height=\"10\" width=\"1\" alt=\"\" />";
 			}
 		}
 
@@ -65,7 +63,7 @@ class CTabBox extends CTabBox_core {
 			foreach ($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
 				$sel = ($k == $this->active) ? 'Selected' : '';
-				$s .= '<td valign="middle"><img src="./style/' . $uistyle . '/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" border="0" alt="" /></td>';
+				$s .= '<td valign="middle"><img src="./style/' . $uistyle . '/images/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" border="0" alt="" /></td>';
 				$s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap" class="' . $class . '">&nbsp;<a href="';
 				if ($this->javascript) {
 					$s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
@@ -75,7 +73,7 @@ class CTabBox extends CTabBox_core {
 					$s .= $this->baseHRef . 'tab=' . $k;
 				}
 				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a>&nbsp;</td>';
-				$s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>';
+				$s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/images/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>';
 				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '"/></td>';
 			}
 			$s .= '</table></td></tr>';
@@ -85,8 +83,8 @@ class CTabBox extends CTabBox_core {
 			$s .= '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
 			$s .= '<tbody>';
 			$s .= '<tr>';
-			$s .= '	<td valign="bottom" width="100%" background="./style/' . $uistyle . '/tabbox_top.jpg" align="left">';
-			$s .= '		<img src="./style/' . $uistyle . '/tabbox_top.jpg"/>';
+			$s .= '	<td valign="bottom" width="100%" background="./style/' . $uistyle . '/images/tabbox_top.jpg" align="left">';
+			$s .= '		<img src="./style/' . $uistyle . '/images/tabbox_top.jpg"/>';
 			$s .= '	</td>';
 			$s .= '</tr>';
 			$s .= '</tbody>';
@@ -134,14 +132,14 @@ function styleRenderBoxTop() {
 	$ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
 	$ret .= '<tbody>';
 	$ret .= '<tr>';
-	$ret .= '	<td valign="bottom" height="17" style="background:url(./style/' . $uistyle . '/box_left_corner.jpg);" align="left">';
-	$ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/box_left_corner.jpg"/>';
+	$ret .= '	<td valign="bottom" height="17" style="background:url(./style/' . $uistyle . '/images/box_left_corner.jpg);" align="left">';
+	$ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/images/box_left_corner.jpg"/>';
 	$ret .= '	</td>';
-	$ret .= '	<td valign="bottom" width="100%" style="background:url(./style/' . $uistyle . '/box_top.jpg);" align="left">';
-	$ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/box_top.jpg"/>';
+	$ret .= '	<td valign="bottom" width="100%" style="background:url(./style/' . $uistyle . '/images/box_top.jpg);" align="left">';
+	$ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/images/box_top.jpg"/>';
 	$ret .= '	</td>';
-	$ret .= '	<td valign="bottom" style="background:url(./style/' . $uistyle . '/box_right_corner.jpg);" align="right">';
-	$ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/box_right_corner.jpg"/>';
+	$ret .= '	<td valign="bottom" style="background:url(./style/' . $uistyle . '/images/box_right_corner.jpg);" align="right">';
+	$ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/images/box_right_corner.jpg"/>';
 	$ret .= '	</td>';
 	$ret .= '</tr>';
 	$ret .= '</tbody>';
@@ -158,14 +156,14 @@ function styleRenderBoxBottom() {
 	$ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
 	$ret .= '<tbody>';
 	$ret .= '<tr>';
-	$ret .= '	<td valign="top" height="35" style="background:url(./style/' . $uistyle . '/shadow_bttm_left_corner.jpg) no-repeat;" align="left">';
-	$ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/shadow_bttm_left_corner.jpg"/>';
+	$ret .= '	<td valign="top" height="35" style="background:url(./style/' . $uistyle . '/images/shadow_bttm_left_corner.jpg) no-repeat;" align="left">';
+	$ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bttm_left_corner.jpg"/>';
 	$ret .= '	</td>';
-	$ret .= '	<td valign="top" width="100%" style="background: repeat-x url(./style/' . $uistyle . '/shadow_bottom.jpg);" align="left">';
-	$ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/shadow_bottom.jpg"/>';
+	$ret .= '	<td valign="top" width="100%" style="background: repeat-x url(./style/' . $uistyle . '/images/shadow_bottom.jpg);" align="left">';
+	$ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bottom.jpg"/>';
 	$ret .= '	</td>';
-	$ret .= '	<td valign="top" style="background:url(./style/' . $uistyle . '/shadow_bttm_right_corner.jpg) no-repeat;" align="right">';
-	$ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/shadow_bttm_right_corner.jpg"/>';
+	$ret .= '	<td valign="top" style="background:url(./style/' . $uistyle . '/images/shadow_bttm_right_corner.jpg) no-repeat;" align="right">';
+	$ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bttm_right_corner.jpg"/>';
 	$ret .= '	</td>';
 	$ret .= '</tr>';
 	$ret .= '</tbody>';
