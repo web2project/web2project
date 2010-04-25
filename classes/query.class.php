@@ -920,18 +920,9 @@ class DBQuery {
 				}
 				$q .= $this->_table_prefix . $table;
 
-				$fieldlist = '';
-				$valuelist = '';
-				foreach ($this->value_list as $field => $value) {
-					if ($fieldlist) {
-						$fieldlist .= ',';
-					}
-					if ($valuelist) {
-						$valuelist .= ',';
-					}
-					$fieldlist .= trim($field);
-					$valuelist .= $value;
-				}
+                $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+                $valuelist = implode(',', $this->value_list);
+
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
 				break;
@@ -951,18 +942,9 @@ class DBQuery {
 				}
 				$q .= $this->quote_db($this->_table_prefix . $table);
 
-				$fieldlist = '';
-				$valuelist = '';
-				foreach ($this->value_list as $field => $value) {
-					if ($fieldlist) {
-						$fieldlist .= ',';
-					}
-					if ($valuelist) {
-						$valuelist .= ',';
-					}
-					$fieldlist .= $this->quote_db(trim($field));
-					$valuelist .= $value;
-				}
+                $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+                $valuelist = implode(',', $this->value_list);
+
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
 		}
@@ -985,18 +967,9 @@ class DBQuery {
 		}
 		$q .= $this->quote_db($this->_table_prefix . $table);
 
-		$fieldlist = '';
-		$valuelist = '';
-		foreach ($this->value_list as $field => $value) {
-			if ($fieldlist) {
-				$fieldlist .= ',';
-			}
-			if ($valuelist) {
-				$valuelist .= ',';
-			}
-			$fieldlist .= $this->quote_db(trim($field));
-			$valuelist .= $value;
-		}
+        $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+        $valuelist = implode(',', $this->value_list);
+
 		$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 		return $q;
 	}
@@ -1021,18 +994,9 @@ class DBQuery {
 				}
 				$q .= $this->_table_prefix . $table;
 
-				$fieldlist = '';
-				$valuelist = '';
-				foreach ($this->value_list as $field => $value) {
-					if ($fieldlist) {
-						$fieldlist .= ',';
-					}
-					if ($valuelist) {
-						$valuelist .= ',';
-					}
-					$fieldlist .= trim($field);
-					$valuelist .= $value;
-				}
+                $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+                $valuelist = implode(',', $this->value_list);
+
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
 				break;
@@ -1052,18 +1016,9 @@ class DBQuery {
 				}
 				$q .= $this->quote_db($this->_table_prefix . $table);
 
-				$fieldlist = '';
-				$valuelist = '';
-				foreach ($this->value_list as $field => $value) {
-					if ($fieldlist) {
-						$fieldlist .= ',';
-					}
-					if ($valuelist) {
-						$valuelist .= ',';
-					}
-					$fieldlist .= $this->quote_db(trim($field));
-					$valuelist .= $value;
-				}
+                $fieldlist = implode(',', array_map(array($this, 'quote_db'), array_keys($this->value_list)));
+                $valuelist = implode(',', $this->value_list);
+
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
 		}
