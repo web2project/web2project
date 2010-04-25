@@ -20,9 +20,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-require_once W2P_BASE_DIR . '/classes/query.class.php';
-require_once W2P_BASE_DIR . '/classes/ui.class.php';
-require_once W2P_BASE_DIR . '/classes/event_queue.class.php';
 
 function w2PsessionOpen($save_path, $session_name) {
 	return true;
@@ -145,8 +142,8 @@ function w2PsessionGC($maxlifetime) {
 		// And it isn't likely that it will be, we create it and run the
 		// queue scanner.
 		if (!isset($AppUI)) {
-			$AppUI = new CAppUI;
-			$queue = new EventQueue;
+			$AppUI = new CAppUI();
+			$queue = new w2p_Core_EventQueue();
 			$queue->scan();
 		}
 	}
