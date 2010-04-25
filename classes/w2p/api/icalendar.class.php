@@ -1,4 +1,11 @@
-<?php
+<?php /* $Id$ $URL$ */
+
+/**
+ *	@package web2project
+ *	@subpackage api
+ *	@version $Revision$
+ */
+
 /*
  *  A simple iCal creator for web2project.
  *

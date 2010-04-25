@@ -2,13 +2,9 @@
 
 /**
  *	@package web2project
- *	@subpackage modules
+ *	@subpackage core
  *	@version $Revision$
  */
-
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
 /**
  *	CW2pObject Abstract Class.
