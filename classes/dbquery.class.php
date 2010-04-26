@@ -1,6 +1,6 @@
 <?php
 
-class DBQuery extends w2p_Database_DBQuery
+class DBQuery extends w2p_Database_Query
 {
     public function __construct($prefix = null, $query_db = null)
     {
