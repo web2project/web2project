@@ -1,12 +1,9 @@
 <?php /* $Id$ $URL$ */
+
 /**
  *    @package web2project
  *    @subpackage utilities
  */
-
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
 /**
  *    This class encapsulates the PHP mail() function.
