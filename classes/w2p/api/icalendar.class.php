@@ -8,7 +8,7 @@
  *
  */
 
-class w2p_Output_iCalendar {
+class w2p_API_iCalendar {
 
     public static function formatCalendarItem($calendarItem, $myTimezoneOffset) {
         global $AppUI;
