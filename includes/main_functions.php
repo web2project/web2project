@@ -71,6 +71,29 @@ function __autoload($class_name) {
             break;
     }
 }
+
+/*
+*	Authenticator Factory
+*
+*/
+
+function &getAuth($auth_mode) {
+	switch ($auth_mode) {
+		case 'ldap':
+			$auth = new w2p_Authenticators_LDAP();
+			return $auth;
+			break;
+		case 'pn':
+			$auth = new w2p_Authenticators_PostNuke();
+			return $auth;
+			break;
+		default:
+			$auth = new w2p_Authenticators_SQL();
+			return $auth;
+			break;
+	}
+}
+
 ##
 ## Returns the best color based on a background color (x is cross-over)
 ##
