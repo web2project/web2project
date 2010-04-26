@@ -9,9 +9,8 @@ if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$AppUI->savePlace();
-
 $titleBlock = new CTitleBlock($AppUI->_('Upgrade System'), 'control-center.png', $m, $m . '.' . $a);
+$titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 
 $failedImg = w2PshowImage('log-error.gif', 16, 16, $AppUI->_('Failed'));
