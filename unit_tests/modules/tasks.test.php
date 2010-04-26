@@ -2553,8 +2553,37 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->updateSubTasksStatus(99, 11);
 
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateSubTasksStatusTaskId.xml');
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
+        $xml_file_dataset = $this->createxmldataset($this->getdatasetpath().'tasksTestUpdateSubTasksStatusTaskId.xml');
+        $xml_db_dataset = $this->getconnection()->createdataset();
+        $this->asserttablesequal($xml_file_dataset->gettable('tasks'), $xml_db_dataset->gettable('tasks'));
+    }
+
+    /**
+     * Test updating project of sub tasks with no task id passed
+     */
+    public function testUpdateSubTasksProjectNoTaskId()
+    {
+        $this->obj->load(11);
+
+        $this->obj->updateSubTasksProject(2);
+
+        $xml_file_dataset = $this->createxmldataset($this->getdatasetpath().'tasksTestUpdateSubTasksProjectNoTaskId.xml');
+        $xml_db_dataset = $this->getconnection()->createdataset();
+        $this->asserttablesequal($xml_file_dataset->gettable('tasks'), $xml_db_dataset->gettable('tasks'));
+    }
+
+    /**
+     * Tests updating project of sub tasks with task id passed
+     */
+    public function testUpdateSubTasksProjectTaskId()
+    {
+        $this->obj->load(1);
+
+        $this->obj->updateSubTasksProject(2, 11);
+
+        $xml_file_dataset = $this->createxmldataset($this->getdatasetpath().'tasksTestUpdateSubTasksProjectTaskId.xml');
+        $xml_db_dataset = $this->getconnection()->createdataset();
+        $this->asserttablesequal($xml_file_dataset->gettable('tasks'), $xml_db_dataset->gettable('tasks'));
+
     }
 }
