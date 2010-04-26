@@ -121,7 +121,13 @@ if ($dialog) {
 		<td width="75%">
 			<table cellspacing="0" cellpadding="3" border="0" width="100%">
 			<tr>
-				<td width="83%"><?php echo $AppUI->_('Welcome') . ' ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '. ' . $AppUI->_('Server time is') . ' ' . date($df); ?></td>
+				<td width="83%">
+                    <?php
+                        echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_first_name . ' ' . $AppUI->user_last_name : $outsider);
+                        echo '<br />';
+                        echo $AppUI->_('Server time is') . ' ' . date($df);
+                    ?>
+                </td>
 			</tr>
 			</table>
 		</td>
