@@ -41,17 +41,26 @@ foreach ($rs as $c) {
 	switch ($c['config_type']) {
 		case 'select':
 			// Build the select list.
-			$entry = '<select class="text" name="w2Pcfg[' . $c['config_name'] . ']">';
-			// Find the detail relating to this entry.
-			$children = $w2Pcfg->getChildren($c['config_id']);
-			foreach ($children as $child) {
-				$entry .= '<option value="' . $child['config_list_name'] . '"';
-				if ($child['config_list_name'] == $c['config_value']) {
-					$entry .= ' selected="selected"';
-				}
-				$entry .= '>' . $AppUI->_($child['config_list_name'] . '_item_title') . '</option>';
-			}
-			$entry .= '</select>';
+            if ($c['config_name'] == 'system_timezone') {
+                $timezones = w2PgetSysVal('Timezones');
+                foreach ($timezones as $offset => $name) {
+                    $sign = ($offset >= 0) ? '+' : '';
+                    $timezones[$offset] = 'GMT'.$sign.($offset/3600).' '.$name;
+                }
+                $entry = arraySelect($timezones, 'w2Pcfg[system_timezone]', 'class=text size=1', w2PgetConfig('system_timezone'), true);
+            } else {
+                $entry = '<select class="text" name="w2Pcfg[' . $c['config_name'] . ']">';
+                // Find the detail relating to this entry.
+                $children = $w2Pcfg->getChildren($c['config_id']);
+                foreach ($children as $child) {
+                    $entry .= '<option value="' . $child['config_list_name'] . '"';
+                    if ($child['config_list_name'] == $c['config_value']) {
+                        $entry .= ' selected="selected"';
+                    }
+                    $entry .= '>' . $AppUI->_($child['config_list_name'] . '_item_title') . '</option>';
+                }
+                $entry .= '</select>';
+            }
 			break;
 		case 'checkbox':
 			$extra = ($c['config_value'] == 'true') ? 'checked="checked"' : '';
