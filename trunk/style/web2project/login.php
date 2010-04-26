@@ -34,21 +34,6 @@ if (!defined('W2P_BASE_DIR')) {
 <br /><br /><br /><br />
 <?php
 include ('overrides.php');
-
-//echo '<pre>';
-//echo date('l jS \of F Y h:i:s A');
-//echo '--';
-//echo date('e');
-//print_r($AppUI);
-//
-//if (date_default_timezone_get()) {
-//    echo 'date_default_timezone_set: ' . date_default_timezone_get() . '<br />';
-//}
-//
-//if (ini_get('date.timezone')) {
-//    echo 'date.timezone: ' . ini_get('date.timezone');
-//}
-//echo'</pre>';
 ?>
 <!--please leave action argument empty -->
 <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
