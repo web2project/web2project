@@ -107,10 +107,6 @@ echo $user_id ? $user : $AppUI->_('Default');
 	<td>
         <?php
             $timezones = w2PgetSysVal('Timezones');
-            foreach ($timezones as $offset => $name) {
-                $sign = ($offset >= 0) ? '+' : '';
-                $timezones[$offset] = 'GMT'.$sign.($offset/3600).' '.$name;
-            }
             echo arraySelect($timezones, 'pref_name[TIMEZONE]', 'class=text size=1', $prefs['TIMEZONE'], true);
         ?>
 	</td>
