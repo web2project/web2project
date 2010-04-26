@@ -53,12 +53,12 @@ class CTabBox extends CTabBox_core {
 			foreach ($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
 				$sel = ($k == $this->active) ? 'Selected' : '';
-				$s .= '<td height="28" valign="middle" width="3"><img src="./style/' . $uistyle . '/tab' . $sel . 'Left.png" width="3" height="28" id="lefttab_' . $k . '"border="0" alt="" /></td>';
+				$s .= '<td height="28" valign="middle" width="3"><img src="./style/' . $uistyle . '/images/tab' . $sel . 'Left.png" width="3" height="28" id="lefttab_' . $k . '"border="0" alt="" /></td>';
 				$s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap"';
 				if ($js_tabs) {
 					$s .= ' class="' . $class . '"';
 				} else {
-					$s .= ' background="./style/' . $uistyle . '/tab' . $sel . 'Bg.png"';
+					$s .= ' background="./style/' . $uistyle . '/images/tab' . $sel . 'Bg.png"';
 				}
 				$s .= '>&nbsp;<a href="';
 				if ($this->javascript) {
@@ -69,7 +69,7 @@ class CTabBox extends CTabBox_core {
 					$s .= $this->baseHRef . 'tab=' . $k;
 				}
 				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a>&nbsp;</td>';
-				$s .= '<td valign="middle" width="3"><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/tab' . $sel . 'Right.png" width="3" height="28" border="0" alt="" /></td>';
+				$s .= '<td valign="middle" width="3"><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/images/tab' . $sel . 'Right.png" width="3" height="28" border="0" alt="" /></td>';
 				$s .= '<td width="3" class="tabsp"><img src="./style/'.$uistyle.'/images/shim.gif" height="1" width="3" /></td>';
 			}
 			$s .= '</table></td></tr>';
