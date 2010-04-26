@@ -19,24 +19,36 @@ if (!defined('W2P_BASE_DIR')) {
 
 <body bgcolor="#f0f0f0" onload="document.loginform.username.focus();">
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-<tr>
-	<td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg"/></a></td>
-	<td style="background:url(./style/<?php echo $uistyle; ?>/images/logo_bkgd.jpg)">&nbsp;</td>
-</tr>
-</tbody>
+    <tr>
+        <td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg"/></a></td>
+        <td style="background:url(./style/<?php echo $uistyle; ?>/images/logo_bkgd.jpg)">&nbsp;</td>
+    </tr>
 </table>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-<tbody>
 	<tr>
-	<td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg) repeat-x scroll 0%;">
-		<img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
-	</td>
-</tr>
-
+        <td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg) repeat-x scroll 0%;">
+            <img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
+        </td>
+    </tr>
 </table>
 <br /><br /><br /><br />
 <?php
 include ('overrides.php');
+
+//echo '<pre>';
+//echo date('l jS \of F Y h:i:s A');
+//echo '--';
+//echo date('e');
+//print_r($AppUI);
+//
+//if (date_default_timezone_get()) {
+//    echo 'date_default_timezone_set: ' . date_default_timezone_get() . '<br />';
+//}
+//
+//if (ini_get('date.timezone')) {
+//    echo 'date.timezone: ' . ini_get('date.timezone');
+//}
+//echo'</pre>';
 ?>
 <!--please leave action argument empty -->
 <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
