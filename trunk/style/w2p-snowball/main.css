@@ -108,7 +108,7 @@ input.button {
    	color:#333333;
    	width:151px;
    	height:21px;
-    background: transparent url('button.gif') no-repeat;
+    background: transparent url('images/button.gif') no-repeat;
    	border-style:none;
     line-height: 14px;
     padding: 2px 0 5px 0px;
@@ -208,13 +208,13 @@ TD.topBtnOff {
 
 td.label {
 	background-color:#FFFFFF;
-	background-image:url(label.gif);
+	background-image:url(images/label.gif);
 	height:22px;
 }
 
 td.item {
 	background-color:#FFFFFF;
-	background-image:url(label.gif);
+	background-image:url(images/label.gif);
 	height:22px;
 }
 
@@ -224,7 +224,7 @@ table.tbl {
 }
 
 table.tbl TH {
-  background: url("lines_title_bar.gif");
+  background: url("images/lines_title_bar.gif");
   height: 22px
   border-color: #a9d4ff;
   white-space: nowrap;
@@ -260,7 +260,7 @@ table.std {
 
 table.std TH {	
 	background-color:#FFFFFF;
-	background-image:url(label.gif);
+	background-image:url(images/label.gif);
 	font: bold 12px Arial, Helvetica, sans-serif; 
 	text-align: center; color: #000; 
 	margin-bottom: 0; 
@@ -299,11 +299,11 @@ A.hdr:hover {
 
 /* tabbed boxes */
 td.tabon {
-  background: #ffffff url('bar_top_Selectedmiddle.gif') repeat-x top;
+  background: #ffffff url('images/bar_top_Selectedmiddle.gif') repeat-x top;
   font-weight: bold;
 }
 td.taboff {
-  background: #ffffff url('bar_top_middle.gif') repeat-x top;
+  background: #ffffff url('images/bar_top_middle.gif') repeat-x top;
   font-weight: normal;
 }
 td.tabsp {
@@ -548,13 +548,13 @@ table.tbl td.event td {
 }
 
 TR.nav {
-  background: url("nav_bkgd.gif");
+  background: url("images/nav_bkgd.gif");
   color: #000;
 		height:24px;
 }
 
 tr.nav a:hover{
-	background:#2E91C6 url(nav_item_hover.gif) repeat-x scroll 0%;
+	background:#2E91C6 url(images/nav_item_hover.gif) repeat-x scroll 0%;
 	color:#FFFFFF;
 	text-decoration:none;
 }
@@ -583,7 +583,7 @@ tr.nav ul li a {
 }
 
 a.button {
-    background: transparent url('button_right.gif') no-repeat scroll top right;
+    background: transparent url('images/button_right.gif') no-repeat scroll top right;
     color: #444;
     display: block;
     float: left;
@@ -596,7 +596,7 @@ a.button {
 }
 
 a.button span {
-    background: transparent url('button_left.gif') no-repeat;
+    background: transparent url('images/button_left.gif') no-repeat;
     display: block;
     line-height: 14px;
     padding: 3px 0 5px 10px;
@@ -618,7 +618,7 @@ a.button:active span {
 }
 
 a.delete {
-    background: transparent url('delete_right.gif') no-repeat scroll top right;
+    background: transparent url('images/delete_right.gif') no-repeat scroll top right;
     color: #444;
     display: block;
     float: left;
@@ -631,7 +631,7 @@ a.delete {
 }
 
 a.delete span {
-    background: transparent url('delete_left.gif') no-repeat;
+    background: transparent url('images/delete_left.gif') no-repeat;
     display: block;
     line-height: 14px;
     padding: 3px 0 5px 10px;
@@ -663,14 +663,14 @@ padding: 0px;
 	color: #000000;
 	text-decoration: none;
 	display: inline; /* Remove this line arrange the buttons vertically */
-	background: transparent url('crumb_right.gif') no-repeat scroll top right;
+	background: transparent url('images/crumb_right.gif') no-repeat scroll top right;
 	float: left;
 	height: 22px;
 	padding-right: 10px; /* sliding doors padding */
 	border:0px;
 }
 .crumb ul li span {
-    background: transparent url('crumb_left.gif') no-repeat;
+    background: transparent url('images/crumb_left.gif') no-repeat;
     display: block;
     line-height: 14px;
     padding: 2px 0 5px 10px;
@@ -700,14 +700,14 @@ padding: 0px;
 	margin: 0;
 	color: #9FD4FF;
 	padding: 8px 8px 4px;
-	background: url(bubble.png) top left;
+	background: url(images/bubble.png) top left;
 }
  
 .tool-text {
 	color: white;
 	font-size: 11px;
 	padding: 4px 8px 8px;
-	background: url(bubble.png) bottom right;
+	background: url(images/bubble.png) bottom right;
 }
 
 .tool-text td {
