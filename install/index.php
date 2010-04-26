@@ -5,7 +5,6 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
     echo 'web2Project requires PHP '.MIN_PHP_VERSION.'+. Please upgrade!';
     die();
 }
-require_once W2P_BASE_DIR . '/install/manager.class.php';
 
 $step = trim( w2PgetCleanParam( $_POST, 'step', '' ) );
 $manager = new w2p_Core_UpgradeManager();
