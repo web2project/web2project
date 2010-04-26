@@ -170,7 +170,6 @@ if ($dialog) {
             <?php } // END showMenu ?>
         </table>
 
-
         <table width="100%" cellspacing="0" cellpadding="4" border="0">
             <tr>
                 <td valign="top" align="left" width="98%">
