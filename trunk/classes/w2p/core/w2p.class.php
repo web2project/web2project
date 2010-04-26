@@ -17,7 +17,7 @@ if (!defined('W2P_BASE_DIR')) {
  *	@author Andrew Eddie <eddieajau@users.sourceforge.net>
  *	@abstract
  */
-class CW2pObject {
+class w2p_Core_Object {
 	/**
 	 *	@var string Name of the table prefix in the db schema
 	 */

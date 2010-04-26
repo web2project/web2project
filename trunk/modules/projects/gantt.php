@@ -92,7 +92,7 @@ $end_date = w2PgetParam($_GET, 'end_date', 0);
 
 $showAllGantt = w2PgetParam($_REQUEST, 'showAllGantt', '0');
 
-$gantt = new GanttRenderer($AppUI, $width);
+$gantt = new w2p_Output_GanttRenderer($AppUI, $width);
 $gantt->localize();
 
 $tableTitle = ($proFilter == '-1') ? $AppUI->_('All Projects') : $projectStatus[$proFilter];

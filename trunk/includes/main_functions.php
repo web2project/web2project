@@ -35,14 +35,8 @@ function __autoload($class_name) {
         case 'customfields':
             require_once W2P_BASE_DIR.'/classes/CustomFields.class.php';
             break;
-        case 'dbquery':
-            require_once W2P_BASE_DIR.'/classes/query.class.php';
-            break;
         case 'w2pacl':
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
-            break;
-        case 'cw2pobject':
-            require_once W2P_BASE_DIR.'/classes/w2p.class.php';
             break;
         case 'eventqueue':
             require_once W2P_BASE_DIR.'/classes/event_queue.class.php';

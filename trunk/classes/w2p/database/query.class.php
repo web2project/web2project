@@ -41,7 +41,7 @@ define('QUERY_STYLE_BOTH', ADODB_FETCH_BOTH);
  * @license	GPL version 2 or later.
  * @copyright	(c) 2003 Adam Donnison
  */
-class DBQuery {
+class w2p_Database_DBQuery {
 	/**< Contains the query after it has been built. */
 	public $query;
 	/**< Array of tables to be queried */
@@ -93,7 +93,7 @@ class DBQuery {
 	 * @param $prefix Database table prefix - will be appended to all web2project table names
 	 * @param $query_db Database type
 	 */
-	public function DBQuery($prefix = null, $query_db = null) {
+	public function __construct($prefix = null, $query_db = null) {
 		global $db;
 
 		if (isset($prefix)) {
