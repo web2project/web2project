@@ -210,7 +210,7 @@ $end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
 $count = 0;
 
-$gantt = new GanttRenderer($AppUI, $width);
+$gantt = new w2p_Output_GanttRenderer($AppUI, $width);
 $gantt->localize();
 $gantt->setTitle($projects[$project_id]['project_name'], '#'.$projects[$project_id]['project_color_identifier']);
 
