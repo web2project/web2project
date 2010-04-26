@@ -32,13 +32,13 @@ if ($dialog) {
 	<td>
 		<table width="100%" cellpadding="0" cellspacing="0" border="0">
 		<tr>
-			<th style="background: url(style/<?php echo $uistyle; ?>/title_bkgd.jpg);" align="left">
+			<th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="left">
 				<!-- Product Version would go here-->
 				&nbsp;
 			</th>
-			<th style="background: url(style/<?php echo $uistyle; ?>/title_bkgd.jpg);" align="right" width="123"><a href='http://www.web2project.net/' <?php if ($dialog)
-			echo 'target="_blank"'; ?>><?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?><img src="style/<?php echo $uistyle; ?>/title.jpg" border="0" class="banner" align="left" /><?php echo w2PendTip();?></th>
-			<th style="background: url(style/<?php echo $uistyle; ?>/title_bkgd.jpg);" align="right" width="5">
+			<th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="right" width="123"><a href='http://www.web2project.net/' <?php if ($dialog)
+			echo 'target="_blank"'; ?>><?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?><img src="style/<?php echo $uistyle; ?>/images/title.jpg" border="0" class="banner" align="left" /><?php echo w2PendTip();?></th>
+			<th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="right" width="5">
 				<!--a little spacer-->
 				&nbsp;
 			</th>
@@ -113,8 +113,8 @@ if ($dialog) {
 	</tr>
 	</form>
 	<tr>
-		<td colspan="2" valign="top" style="background: url(style/<?php echo $uistyle; ?>/nav_shadow.jpg);" align="left">
-			<img width="1" height="13" src="style/<?php echo $uistyle; ?>/nav_shadow.jpg"/>
+		<td colspan="2" valign="top" style="background: url(style/<?php echo $uistyle; ?>/images/nav_shadow.jpg);" align="left">
+			<img width="1" height="13" src="style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
 		</td>
 	</tr>
 	</tbody>
