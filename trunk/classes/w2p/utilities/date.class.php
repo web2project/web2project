@@ -1,11 +1,9 @@
 <?php /* $Id$ $URL$ */
+
 /**
  * @package web2project
  * @subpackage utilites
  */
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
 require_once ($AppUI->getLibraryClass('PEAR/Date'));
 
