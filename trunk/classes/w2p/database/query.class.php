@@ -41,7 +41,7 @@ define('QUERY_STYLE_BOTH', ADODB_FETCH_BOTH);
  * @license	GPL version 2 or later.
  * @copyright	(c) 2003 Adam Donnison
  */
-class w2p_Database_DBQuery {
+class w2p_Database_Query {
 	/**< Contains the query after it has been built. */
 	public $query;
 	/**< Array of tables to be queried */
