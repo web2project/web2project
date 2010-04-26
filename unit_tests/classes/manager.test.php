@@ -12,24 +12,22 @@ require_once '../base.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-require_once W2P_BASE_DIR . '/install/manager.class.php';
 
 require_once 'PHPUnit/Framework.php';
 
 /**
- * UpgradeManagerTest Class.
+ * w2p_Core_UpgradeManagerTest Class.
  * 
  * Class to test the upgrade manager class
  * @author D. Keith Casey, Jr<caseydk@users.sourceforge.net>
  * @package web2project
  * @subpackage unit_tests
  */
-class UpgradeManager_Test extends PHPUnit_Framework_TestCase 
+class w2p_Core_UpgradeManager_Test extends PHPUnit_Framework_TestCase
 {
 	public function testManagerSetup()
 	{
-		$manager = new UpgradeManager();
+		$manager = new w2p_Core_UpgradeManager();
 		$manager->getActionRequired();
 
 		$this->assertEquals(W2P_BASE_DIR.'/includes', $manager->getConfigDir());
@@ -43,7 +41,7 @@ class UpgradeManager_Test extends PHPUnit_Framework_TestCase
 	{
 		global $w2Pconfig;
 
-		$manager = new UpgradeManager();
+		$manager = new w2p_Core_UpgradeManager();
 		$manager->getActionRequired();
 
 		$this->assertTrue($manager->testDatabaseCredentials($w2Pconfig));
@@ -54,7 +52,7 @@ class UpgradeManager_Test extends PHPUnit_Framework_TestCase
 	{
 		global $w2Pconfig;
 
-		$manager = new UpgradeManager();
+		$manager = new w2p_Core_UpgradeManager();
 		
 		$configString = $manager->createConfigString($w2Pconfig);
 		$this->assertRegExp('/dbtype/', $configString);
@@ -71,7 +69,7 @@ class UpgradeManager_Test extends PHPUnit_Framework_TestCase
 
 	public function testGetMaxFileUpload()
 	{
-		$manager = new UpgradeManager();
+		$manager = new w2p_Core_UpgradeManager();
 
         $upload_max_filesize = str_replace('M', '', ini_get('upload_max_filesize'));
         $post_max_size = str_replace('M', '', ini_get('post_max_size'));
@@ -88,7 +86,7 @@ class UpgradeManager_Test extends PHPUnit_Framework_TestCase
 	{
 		global $w2Pconfig;
 
-		$manager = new UpgradeManager();
+		$manager = new w2p_Core_UpgradeManager();
 
 		switch ($manager->getActionRequired()) {
 			case 'install':
@@ -112,7 +110,7 @@ class UpgradeManager_Test extends PHPUnit_Framework_TestCase
 				break;
 
 			default:
-				$this->fail('UpgradeManager action was not matched.');
+				$this->fail('w2p_Core_UpgradeManager action was not matched.');
 		}
 	}
 	public function testConvertDotProject()
