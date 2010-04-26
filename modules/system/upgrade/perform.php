@@ -9,11 +9,9 @@ if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$AppUI->savePlace();
-
 $titleBlock = new CTitleBlock($AppUI->_('Upgrade System'), 'control-center.png', $m, $m . '.' . $a);
+$titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
-
 ?>
 <table class="std" width="100%" border="0" cellpadding="0" cellspacing="5">
 	<tr>
