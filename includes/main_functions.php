@@ -18,73 +18,79 @@ require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
  * these things up for v2.0
  */
 function __autoload($class_name) {
-  global $AppUI;
+    global $AppUI;
+    $name = strtolower($class_name);
 
-  $name = strtolower($class_name);
+    if (strpos($name, '_') !== false) {
+        $name = str_replace('_', DIRECTORY_SEPARATOR, $name);
+        $classpath = W2P_BASE_DIR . '/classes/'.$name.'.php';
+        require_once $classpath;
+        return;
+    }
 
-  switch ($name) {
-    case 'cappui':
-      require_once W2P_BASE_DIR . '/classes/ui.class.php';
-      break;
-    case 'cdate':
-      require_once W2P_BASE_DIR . '/classes/date.class.php';
-      break;
-    case 'customfields':
-      require_once W2P_BASE_DIR.'/classes/CustomFields.class.php';
-      break;
-    case 'dbquery':
-      require_once W2P_BASE_DIR.'/classes/query.class.php';
-      break;
-    case 'w2pacl':
-      require_once W2P_BASE_DIR . '/classes/permissions.class.php';
-      break;
-    case 'w2pical':
-      require_once W2P_BASE_DIR.'/classes/ical.class.php';
-      break;
-    case 'cw2pobject':
-      require_once W2P_BASE_DIR.'/classes/w2p.class.php';
-      break;
-    case 'mail':
-      require_once W2P_BASE_DIR.'/classes/libmail.class.php';
-      break;
-    case 'eventqueue':
-      require_once W2P_BASE_DIR.'/classes/event_queue.class.php';
-      break;
-    case 'upgrademanager':
-      require_once W2P_BASE_DIR.'/install/manager.class.php';
-      break;
-    case 'cevent':
-      require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
-      break;
-    case 'cuser':
-      require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
-      break;
-    case 'cfilefolder':
-      require_once W2P_BASE_DIR.'/modules/files/files.class.php';
-      break;
-    case 'ctasklog':
-      require_once W2P_BASE_DIR.'/modules/tasks/tasks.class.php';
-      break;
-    default:
-      if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
-        require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
-        return;
-      }
-      
-      if ($name[0] == 'c') {
-        $name = substr($name, 1);
-        if (substr($name, -1) == 'y') {
-          $name = substr($name, 0, -1).'ies';
-        } else {
-          $name .= 's';
-        }
-      }
-      if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-        require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-        return;
-      }
-      break;
-  }
+    switch ($name) {
+        case 'cappui':
+            require_once W2P_BASE_DIR . '/classes/ui.class.php';
+            break;
+        case 'cdate':
+            require_once W2P_BASE_DIR . '/classes/date.class.php';
+            break;
+        case 'customfields':
+            require_once W2P_BASE_DIR.'/classes/CustomFields.class.php';
+            break;
+        case 'dbquery':
+            require_once W2P_BASE_DIR.'/classes/query.class.php';
+            break;
+        case 'w2pacl':
+            require_once W2P_BASE_DIR . '/classes/permissions.class.php';
+            break;
+        case 'w2pical':
+            require_once W2P_BASE_DIR.'/classes/ical.class.php';
+            break;
+        case 'cw2pobject':
+            require_once W2P_BASE_DIR.'/classes/w2p.class.php';
+            break;
+        case 'mail':
+            require_once W2P_BASE_DIR.'/classes/libmail.class.php';
+            break;
+        case 'eventqueue':
+            require_once W2P_BASE_DIR.'/classes/event_queue.class.php';
+            break;
+        case 'upgrademanager':
+            require_once W2P_BASE_DIR.'/install/manager.class.php';
+            break;
+        case 'cevent':
+            require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
+            break;
+        case 'cuser':
+            require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
+            break;
+        case 'cfilefolder':
+            require_once W2P_BASE_DIR.'/modules/files/files.class.php';
+            break;
+        case 'ctasklog':
+            require_once W2P_BASE_DIR.'/modules/tasks/tasks.class.php';
+            break;
+        default:
+            if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
+                require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
+                return;
+            }
+
+            if ($name[0] == 'c') {
+                $name = substr($name, 1);
+                if (substr($name, -1) == 'y') {
+                    $name = substr($name, 0, -1).'ies';
+                } else {
+                    $name .= 's';
+                }
+            }
+            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+                return;
+            }
+            break;
+    }
 }
 ##
 ## Returns the best color based on a background color (x is cross-over)
