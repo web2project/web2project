@@ -30,12 +30,12 @@ if ($dialog) {
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td>
-		<table class="banner" width='100%' cellpadding="3" cellspacing="0" border="0" background="style/<?php echo $uistyle; ?>/titlegrad.jpg">
+		<table class="banner" width='100%' cellpadding="3" cellspacing="0" border="0" background="style/<?php echo $uistyle; ?>/images/titlegrad.jpg">
 		<tr>
 			<th align="left"><strong><a href='http://www.w8.se/' <?php if ($dialog)
-			echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle; ?>/wp_icon.gif" border="0" /></a></strong></th>
+			echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle; ?>/images/wp_icon.gif" border="0" /></a></strong></th>
 			<th align="right" width='95'><?php
-			echo '<a href="http://www.web2project.net/">' . w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true) . '<img src="style/' . $uistyle . '/title.png" border="0" /></a>';?>
+			echo '<a href="http://www.web2project.net/">' . w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true) . '<img src="style/' . $uistyle . '/images/title.png" border="0" /></a>';?>
 			</th>
 		</tr>
 		</table>
