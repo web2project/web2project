@@ -1,7 +1,7 @@
 <?php /* $Id$ $URL$ */
 /**
  *    @package web2project
- *    @subpackage mail
+ *    @subpackage utilities
  */
 
 if (!defined('W2P_BASE_DIR')) {
@@ -37,7 +37,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 require_once($AppUI->getLibraryClass('PHPMailer/class.phpmailer'));
 
-class Mail extends PHPMailer {
+class w2p_Utilities_Mail extends PHPMailer {
 	/**
 	 *    list of To addresses
 	 *    @var    array
