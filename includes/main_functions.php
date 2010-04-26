@@ -21,9 +21,9 @@ function __autoload($class_name) {
     global $AppUI;
     $name = strtolower($class_name);
 
-    if (strpos($name, '_') !== false) {
+    if (false !== strpos($name, 'w2p_')) {
         $name = str_replace('_', DIRECTORY_SEPARATOR, $name);
-        $classpath = W2P_BASE_DIR . '/classes/'.$name.'.php';
+        $classpath = W2P_BASE_DIR . '/classes/'.$name.'.class.php';
         require_once $classpath;
         return;
     }
@@ -44,9 +44,6 @@ function __autoload($class_name) {
         case 'w2pacl':
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
-        case 'w2pical':
-            require_once W2P_BASE_DIR.'/classes/ical.class.php';
-            break;
         case 'cw2pobject':
             require_once W2P_BASE_DIR.'/classes/w2p.class.php';
             break;
@@ -55,9 +52,6 @@ function __autoload($class_name) {
             break;
         case 'eventqueue':
             require_once W2P_BASE_DIR.'/classes/event_queue.class.php';
-            break;
-        case 'upgrademanager':
-            require_once W2P_BASE_DIR.'/install/manager.class.php';
             break;
         case 'cevent':
             require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
