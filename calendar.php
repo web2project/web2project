@@ -42,7 +42,7 @@ if ($userId > 0) {
             $itemList = $object->hook_calendar($userId);
             if (is_array($itemList)) {
                 foreach ($itemList as $calendarItem) {
-                    $buffer .= w2p_Output_iCalendar::formatCalendarItem($calendarItem, $myTimezoneOffset);
+                    $buffer .= w2p_API_iCalendar::formatCalendarItem($calendarItem, $myTimezoneOffset);
                 }
             }
         }
