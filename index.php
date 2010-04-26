@@ -51,9 +51,8 @@ require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 require_once W2P_BASE_DIR . '/includes/session.php';
 
-$offset = w2PgetConfig('system_timezone', 0);
-$timezones = w2PgetSysVal('Timezones');
-date_default_timezone_set($timezones[$offset]);
+$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+date_default_timezone_set($defaultTZ);
 
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.
 $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
