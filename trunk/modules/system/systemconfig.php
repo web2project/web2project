@@ -43,10 +43,6 @@ foreach ($rs as $c) {
 			// Build the select list.
             if ($c['config_name'] == 'system_timezone') {
                 $timezones = w2PgetSysVal('Timezones');
-                foreach ($timezones as $offset => $name) {
-                    $sign = ($offset >= 0) ? '+' : '';
-                    $timezones[$offset] = 'GMT'.$sign.($offset/3600).' '.$name;
-                }
                 $entry = arraySelect($timezones, 'w2Pcfg[system_timezone]', 'class=text size=1', w2PgetConfig('system_timezone'), true);
             } else {
                 $entry = '<select class="text" name="w2Pcfg[' . $c['config_name'] . ']">';

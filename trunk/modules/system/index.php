@@ -36,8 +36,11 @@ $titleBlock->show();
             echo $AppUI->_('Your system is up to date, no upgrade required.');
         }
         echo '<br />';
-        $offset = w2PgetConfig('system_timezone');
-        if (ini_get('date.timezone') || strlen($offset)) {
+        $tzName = w2PgetConfig('system_timezone');
+        if (ini_get('date.timezone') || strlen($offset) > 0) {
+            $time = new DateTimeZone($tzName);
+            $x = new DateTime();
+            $offset = $time->getOffset($x);
             $offset = ($offset >= 0) ? '+'.$offset/3600 : $offset/3600;
             echo $AppUI->_('Your system has a default timezone set of GMT'.$offset.'.');
         } else {
