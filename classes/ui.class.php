@@ -127,7 +127,7 @@ class CAppUI {
 
 	 * CAppUI Constructor
 	 */
-	public function CAppUI() {
+	public function __construct() {
 		$this->state = array();
 
 		$this->user_id = -1;
@@ -724,8 +724,6 @@ class CAppUI {
 	 * @return boolean True if successful, false if not
 	 */
 	public function login($username, $password) {
-		require_once W2P_BASE_DIR . '/classes/authenticator.class.php';
-
 		$auth_method = w2PgetConfig('auth_method', 'sql');
 		if ($_POST['login'] != 'login' && $_POST['login'] != $this->_('login', UI_OUTPUT_RAW) && $_REQUEST['login'] != $auth_method) {
 			die('You have chosen to log in using an unsupported or disabled login method');
@@ -772,7 +770,7 @@ class CAppUI {
 		$this->checkStyle();
 
 		// Let's see if this user has admin privileges
-		if (!getDenyRead('admin')) {
+		if (canView('admin')) {
 			$this->user_is_admin = 1;
 		}		
 		return true;
@@ -1057,7 +1055,7 @@ class CTabBox_core {
 	 * @param string Optional javascript method to be used to execute tabs.
 	 *	Must support 2 arguments, currently active tab, new tab to activate.
 	 */
-	public function CTabBox_core($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
+	public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
 		$this->tabs = array();
 		$this->active = $active;
 		$this->baseHRef = ($baseHRef ? $baseHRef . '&' : '?');
@@ -1357,7 +1355,7 @@ class CTitleBlock_core {
 	 * have permission to view the help module, then the context help icon is
 	 * not displayed.
 	 */
-	public function CTitleBlock_core($title, $icon = '', $module = '', $helpref = '') {
+	public function __construct($title, $icon = '', $module = '', $helpref = '') {
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->module = $module;
@@ -1365,7 +1363,7 @@ class CTitleBlock_core {
 		$this->cells1 = array();
 		$this->cells2 = array();
 		$this->crumbs = array();
-		$this->showhelp = !getDenyRead('help');
+		$this->showhelp = canView('help');
 	}
 	/**
 	 * Adds a table 'cell' beside the Title string

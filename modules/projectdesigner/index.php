@@ -25,7 +25,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $w2Pconfig, $cal_df, $cf;
 // check permissions for this module
 $perms = &$AppUI->acl();
-$canView = $perms->checkModule($m, 'view');
+$canView = canView($m);
 $canAddProject = $perms->checkModuleItem('projects', 'view', $project_id);
 
 if (!$canView) {
@@ -115,10 +115,10 @@ if (!$project_id) {
 	// check permissions for this record
 	$canReadProject = $perms->checkModuleItem('projects', 'view', $project_id);
 	$canEditProject = $perms->checkModuleItem('projects', 'edit', $project_id);
-	$canViewTasks = $perms->checkModule('tasks', 'view');
-	$canAddTasks = $perms->checkModule('tasks', 'add');
-	$canEditTasks = $perms->checkModule('tasks', 'edit');
-	$canDeleteTasks = $perms->checkModule('tasks', 'delete');
+	$canViewTasks = canView('tasks');
+	$canAddTasks = canAdd('tasks');
+	$canEditTasks = canEdit('tasks');
+	$canDeleteTasks = canDelete('tasks');
 
 	if (!$canReadProject) {
 		$AppUI->redirect('m=public&a=access_denied');
@@ -758,7 +758,7 @@ function setDate( frm_name, f_date ) {
 	<td colspan="2" class="hilite">
 	<?php
 	//Permission check here
-	$canViewFiles = $perms->checkModule('files', 'view');
+	$canViewFiles = canView('files');
 	if ($canViewFiles) {
 		require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_files.php';
 	} else {

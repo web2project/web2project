@@ -8,15 +8,15 @@ $del = isset($_POST['del']) ? $_POST['del'] : 0;
 $isNotNew = $_POST['message_id'];
 $perms = &$AppUI->acl();
 if ($del) {
-	if (!($perms->checkModule('forums', 'delete')) && (!($AppUI->user_id == $_POST['message_author']) || !($perms->checkModule('admin', 'edit')))) {
+	if (!canDelete('forums') && (!($AppUI->user_id == $_POST['message_author']) || !canEdit('admin'))) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } elseif ($isNotNew) {
-	if (!($perms->checkModule('forums', 'edit')) && (!($AppUI->user_id == $_POST['message_author']) || !($perms->checkModule('admin', 'edit')))) {
+	if (!canEdit('forums') && (!($AppUI->user_id == $_POST['message_author']) || !canEdit('admin'))) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!($perms->checkModule('forums', 'add')) && (!($AppUI->user_id == $_POST['message_author']) || !($perms->checkModule('admin', 'edit')))) {
+	if (!canAdd('forums') && (!($AppUI->user_id == $_POST['message_author']) || !canEdit('admin'))) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }

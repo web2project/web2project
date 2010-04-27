@@ -86,7 +86,7 @@ $forums = $q->loadList();
 $titleBlock = new CTitleBlock('Forums', 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true), '', '<form name="forum_filter" action="?m=forums" method="post" accept-charset="utf-8">', '</form>');
 
-$canAdd = $perms->checkModule($m, 'add');
+$canAdd = canAdd($m);
 if ($canAdd) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new forum') . '">', '', '<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
@@ -126,7 +126,7 @@ foreach ($forums as $row) {
 	} ?>
 <tr>
 	<td nowrap="nowrap" align="center">
-	<?php if ($row["forum_owner"] == $AppUI->user_id || $perms->checkModule('forums', 'add')) { ?>
+	<?php if ($row["forum_owner"] == $AppUI->user_id || canAdd('forums')) { ?>
 		<a href="?m=forums&a=addedit&forum_id=<?php echo $row['forum_id']; ?>" title="<?php echo $AppUI->_('edit'); ?>">
 		<?php echo w2PshowImage('icons/stock_edit-16.png', 16, 16, ''); ?>
 		</a>

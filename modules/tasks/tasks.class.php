@@ -1198,7 +1198,7 @@ class CTask extends CW2pObject {
 		$q = new DBQuery;
 
 		// Let's see if this user has admin privileges
-		if (!getDenyRead('admin')) {
+		if (canView('admin')) {
 			return true;
 		}
 
@@ -1604,8 +1604,8 @@ class CTask extends CW2pObject {
 	public function getTaskContacts(CAppUI $AppUI = null, $taskId) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
-		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+        $perms = $AppUI->acl();
+		if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
 			$q = new DBQuery;
 			$q->addTable('contacts', 'c');
 			$q->addJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id', 'inner');
@@ -1860,7 +1860,7 @@ class CTask extends CW2pObject {
 			}
 
 			// Am I sys admin?
-			if (!getDenyEdit('admin')) {
+			if (canEdit('admin')) {
 				$can_edit_time_information = true;
 			}
 
@@ -1894,7 +1894,7 @@ class CTask extends CW2pObject {
 			return $this->clearReminder(true);
 		}
 
-		$eq = new EventQueue;
+		$eq = new w2p_Core_EventQueue();
 		$pre_charge = w2PgetConfig('task_reminder_days_before', 1);
 		$repeat = w2PgetConfig('task_reminder_repeat', 100);
 
@@ -2049,7 +2049,7 @@ class CTask extends CW2pObject {
 	 *
 	 */
 	public function clearReminder($dont_check = false) {
-		$ev = new EventQueue;
+		$ev = new w2p_Core_EventQueue();
 
 		$event_list = $ev->find('tasks', 'remind', $this->task_id);
 		if (count($event_list)) {
@@ -2267,7 +2267,7 @@ class CTaskLog extends CW2pObject {
 	public $task_log_created = null;
 	public $task_log_updated = null;
 
-	public function CTaskLog() {
+	public function __construct() {
 	  parent::__construct('task_log', 'task_log_id');
 
 		// ensure changes to checkboxes are honoured
@@ -2325,7 +2325,7 @@ class CTaskLog extends CW2pObject {
 
 		// First things first.	Are we allowed to delete?
 		$acl = &$AppUI->acl();
-		if (!$acl->checkModule('task_log', 'delete')) {
+		if (!canDelete('task_log')) {
 			$msg = $AppUI->_('noDeletePermission');
 			return false;
 		}

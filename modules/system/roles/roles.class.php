@@ -29,7 +29,7 @@ class CRole {
 	public $role_description = null;
 	public $perms = null;
 
-	public function CRole($name = '', $description = '') {
+	public function __construct($name = '', $description = '') {
 		$this->role_name = $name;
 		$this->role_description = $description;
 		$this->perms = &$GLOBALS['AppUI']->acl();
@@ -71,7 +71,7 @@ class CRole {
 	public function delete() {
 		// Delete a role requires deleting all of the ACLs associated
 		// with this role, and all of the group data for the role.
-		if ($this->perms->checkModule('roles', 'delete')) {
+		if (canDelete('roles')) {
 			// Delete all the children from this group
 			$this->perms->deleteRole($this->role_id);
 			return null;

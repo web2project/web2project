@@ -10,7 +10,7 @@ $preserve = $w2Pconfig['files_ci_preserve_attr'];
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule('files', 'add');
+$canAuthor = canAdd('files');
 $canEdit = $perms->checkModuleItem('files', 'edit', $file_id);
 
 // check permissions
@@ -25,7 +25,7 @@ if (!$canEdit && $file_id) {
 if (file_exists(W2P_BASE_DIR . '/modules/helpdesk/config.php')) {
 	include (W2P_BASE_DIR . '/modules/helpdesk/config.php');
 }
-$canAdmin = $perms->checkModule('system', 'edit');
+$canAdmin = canEdit('system');
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'];

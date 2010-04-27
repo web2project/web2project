@@ -5,11 +5,11 @@ if (!defined('W2P_BASE_DIR')) {
 
 // Add / Edit forum
 
-$forum_id = intval(w2PgetParam($_GET, 'forum_id', 0));
+$forum_id = (int) w2PgetParam($_GET, 'forum_id', 0);
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule('forums', 'add');
+$canAuthor = canAdd('forums');
 $canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
 
 // check permissions

@@ -9,14 +9,14 @@ $AppUI->savePlace();
 $perms = &$AppUI->acl();
 
 // Get the permissions for this module
-$canAccess = $perms->checkModule('roles', 'access');
+$canAccess = canAccess('roles');
 if (!$canAccess) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-$canRead = $perms->checkModule('roles', 'view');
-$canAdd = $perms->checkModule('roles', 'add');
-$canEdit = $perms->checkModule('roles', 'edit');
-$canDelete = $perms->checkModule('roles', 'delete');
+$canRead = canView('roles');
+$canAdd = canAdd('roles');
+$canEdit = canEdit('roles');
+$canDelete = canDelete('roles');
 
 $crole = new CRole;
 $roles = $crole->getRoles();

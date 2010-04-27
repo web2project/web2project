@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $m;
 
 // Deny all but system admins
-if (getDenyEdit('system')) {
+if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

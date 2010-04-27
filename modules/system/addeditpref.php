@@ -10,7 +10,7 @@ if (!defined('W2P_BASE_DIR')) {
 $user_id = w2PgetParam($_GET, 'user_id', '0');
 $perms = &$AppUI->acl();
 // check permissions for this record
-$canEdit = $perms->checkModule('system', 'edit');
+$canEdit = canEdit('system');
 // Check permissions
 if (!$canEdit && $user_id != $AppUI->user_id) {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -33,7 +33,7 @@ if ($user_id) {
 
 $titleBlock = new CTitleBlock('Edit User Preferences', 'myevo-weather.png', $m, $m . '.' . $a);
 $perms = &$AppUI->acl();
-if ($perms->checkModule('system', 'edit')) {
+if ($canEdit) {
 	$titleBlock->addCrumb('?m=system', 'system admin');
 	$titleBlock->addCrumb('?m=system&a=systemconfig', 'system configuration');
 }
@@ -107,10 +107,6 @@ echo $user_id ? $user : $AppUI->_('Default');
 	<td>
         <?php
             $timezones = w2PgetSysVal('Timezones');
-            foreach ($timezones as $offset => $name) {
-                $sign = ($offset >= 0) ? '+' : '';
-                $timezones[$offset] = 'GMT'.$sign.($offset/3600).' '.$name;
-            }
             echo arraySelect($timezones, 'pref_name[TIMEZONE]', 'class=text size=1', $prefs['TIMEZONE'], true);
         ?>
 	</td>

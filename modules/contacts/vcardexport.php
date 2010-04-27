@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // get GETPARAMETER for contact_id
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
-$canRead = $perms->checkModule('contacts', 'view');
+$canRead = canView('contacts');
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');

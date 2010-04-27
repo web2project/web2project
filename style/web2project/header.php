@@ -32,13 +32,13 @@ if ($dialog) {
 	<td>
 		<table width="100%" cellpadding="0" cellspacing="0" border="0">
 		<tr>
-			<th style="background: url(style/<?php echo $uistyle; ?>/title_bkgd.jpg);" align="left">
+			<th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="left">
 				<!-- Product Version would go here-->
 				&nbsp;
 			</th>
-			<th style="background: url(style/<?php echo $uistyle; ?>/title_bkgd.jpg);" align="right" width="123"><a href='http://www.web2project.net/' <?php if ($dialog)
-			echo 'target="_blank"'; ?>><?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?><img src="style/<?php echo $uistyle; ?>/title.jpg" border="0" class="banner" align="left" /><?php echo w2PendTip();?></th>
-			<th style="background: url(style/<?php echo $uistyle; ?>/title_bkgd.jpg);" align="right" width="5">
+			<th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="right" width="123"><a href='http://www.web2project.net/' <?php if ($dialog)
+			echo 'target="_blank"'; ?>><?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?><img src="style/<?php echo $uistyle; ?>/images/title.jpg" border="0" class="banner" align="left" /><?php echo w2PendTip();?></th>
+			<th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="right" width="5">
 				<!--a little spacer-->
 				&nbsp;
 			</th>
@@ -76,25 +76,25 @@ if ($dialog) {
 			if ($AppUI->user_id > 0) {
 				//Do this check in case we are not using any user id, for example for external uses
 				echo '<td nowrap="nowrap" align="right">';
-				$newItem = array('' => '- New Item -');
-				if ($perms->checkModule('companies', 'add')) {
-					$newItem['companies'] = 'Company';
-				}
-				if ($perms->checkModule('contacts', 'add')) {
-					$newItem['contacts'] = 'Contact';
-				}
-				if ($perms->checkModule('calendar', 'add')) {
-					$newItem['calendar'] = 'Event';
-				}
-				if ($perms->checkModule('files', 'add')) {
-					$newItem['files'] = 'File';
-				}
-				if ($perms->checkModule('projects', 'add')) {
-					$newItem['projects'] = 'Project';
-				}
-				if ($perms->checkModule('admin', 'add')) {
-					$newItem['admin'] = 'User';
-				}
+                $newItem = array('' => '- New Item -');
+                if (canAdd('companies')) {
+                    $newItem['companies'] = 'Company';
+                }
+                if (canAdd('contacts')) {
+                    $newItem['contacts'] = 'Contact';
+                }
+                if (canAdd('calendar')) {
+                    $newItem['calendar'] = 'Event';
+                }
+                if (canAdd('files')) {
+                    $newItem['files'] = 'File';
+                }
+                if (canAdd('projects')) {
+                    $newItem['projects'] = 'Project';
+                }
+                if (canAdd('admin')) {
+                    $newItem['admin'] = 'User';
+                }
 				echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
 				echo '</td>';
 			}
@@ -113,8 +113,8 @@ if ($dialog) {
 	</tr>
 	</form>
 	<tr>
-		<td colspan="2" valign="top" style="background: url(style/<?php echo $uistyle; ?>/nav_shadow.jpg);" align="left">
-			<img width="1" height="13" src="style/<?php echo $uistyle; ?>/nav_shadow.jpg"/>
+		<td colspan="2" valign="top" style="background: url(style/<?php echo $uistyle; ?>/images/nav_shadow.jpg);" align="left">
+			<img width="1" height="13" src="style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
 		</td>
 	</tr>
 	</tbody>
@@ -127,7 +127,13 @@ if ($dialog) {
 		<td width="75%">
 			<table cellspacing="0" cellpadding="3" border="0" width="100%">
 			<tr>
-				<td><?php echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? ($AppUI->user_first_name . ' ' . $AppUI->user_last_name . '. ' . $AppUI->_('Server time is') . ' ' . date($df)) : $outsider); ?></td>
+				<td>
+                    <?php
+                        echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_first_name . ' ' . $AppUI->user_last_name : $outsider);
+                        echo '<br />';
+                        echo $AppUI->_('Server time is') . ' ' . date($df);
+                    ?>
+                </td>
 			</tr>
 			</table>
 		</td>
@@ -137,7 +143,7 @@ if ($dialog) {
 		?>
 		<td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch"  method="POST" accept-charset="utf-8"><td>
              	     <?php 
-						if ($perms->checkModule('smartsearch', 'access')) {					  
+						if (canAccess('smartsearch')) {
 							echo w2PshowImage('search.png') ?>&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
              	     <?php
 					  	} else {
@@ -155,14 +161,14 @@ if ($dialog) {
 						<a class="button" href="./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
 					</td>
 		<?php
-		if ($perms->checkModule('tasks', 'access')) {
+		if (canAccess('tasks')) {
 ?>
 					<td nowrap="nowrap" align="right">
 						<a class="button" href="./index.php?m=tasks&a=todo"><span><b><?php echo $AppUI->_('Todo'); ?></b></span></a>
 					</td>
 		<?php
 		}
-		if ($perms->checkModule('calendar', 'access')) {
+		if (canAccess('calendar')) {
 			$now = new CDate();
 ?>
 					<td nowrap="nowrap" align="right">
@@ -193,4 +199,3 @@ $AppUI->boxTopRendered = false;
 if ($m == 'help' && function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
-?>

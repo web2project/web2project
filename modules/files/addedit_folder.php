@@ -12,8 +12,8 @@ $referrer = $referrerArray['query'] . $referrerArray['fragment'];
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule('files', 'add');
-$canEdit = $perms->checkModule('files', 'edit');
+$canAuthor = canAdd('files');
+$canEdit = canEdit('files');
 
 // check permissions
 if (!$canAuthor && !$folder) {

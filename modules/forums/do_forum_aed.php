@@ -8,15 +8,15 @@ $del = isset($_POST['del']) ? $_POST['del'] : 0;
 $isNotNew = $_POST['forum_id'];
 $perms = &$AppUI->acl();
 if ($del) {
-	if (!$perms->checkModule('forums', 'delete')) {
+	if (!canDelete('forums')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } elseif ($isNotNew) {
-	if (!$perms->checkModule('forums', 'edit')) {
+	if (!canEdit('forums')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!$perms->checkModule('forums', 'add')) {
+	if (!canAdd('forums')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }

@@ -1,9 +1,15 @@
-<?php 
+<?php /* $Id$ $URL$ */
+
+/**
+ *	@package web2project
+ *	@subpackage output
+ *	@version $Revision$
+ */
 
 include_once $AppUI->getLibraryClass('jpgraph/src/jpgraph');
 include_once $AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt');
 
-class GanttRenderer {
+class w2p_Output_GanttRenderer {
   private $graph = null;
   private $rowCount = null;
   private $todayText = null;

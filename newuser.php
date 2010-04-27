@@ -9,12 +9,8 @@ if (!isset($GLOBALS['OS_WIN'])) {
 // tweak for pathname consistence on windows machines
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-require_once W2P_BASE_DIR . '/classes/query.class.php';
-require_once W2P_BASE_DIR . '/classes/ui.class.php';
 
 $AppUI = new CAppUI();
-include_once W2P_BASE_DIR . '/classes/w2p.class.php';
-require_once W2P_BASE_DIR . '/classes/date.class.php';
 
 if (w2PgetConfig('activate_external_user_creation') != 'true') {
 	echo $AppUI->_('You should not access this file directly');

@@ -18,74 +18,82 @@ require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
  * these things up for v2.0
  */
 function __autoload($class_name) {
-  global $AppUI;
+    global $AppUI;
+    $name = strtolower($class_name);
 
-  $name = strtolower($class_name);
+    if (false !== strpos($name, 'w2p_')) {
+        $name = str_replace('_', DIRECTORY_SEPARATOR, $name);
+        $classpath = W2P_BASE_DIR . '/classes/'.$name.'.class.php';
+        require_once $classpath;
+        return;
+    }
 
-  switch ($name) {
-    case 'cappui':
-      require_once W2P_BASE_DIR . '/classes/ui.class.php';
-      break;
-    case 'cdate':
-      require_once W2P_BASE_DIR . '/classes/date.class.php';
-      break;
-    case 'customfields':
-      require_once W2P_BASE_DIR.'/classes/CustomFields.class.php';
-      break;
-    case 'dbquery':
-      require_once W2P_BASE_DIR.'/classes/query.class.php';
-      break;
-    case 'w2pacl':
-      require_once W2P_BASE_DIR . '/classes/permissions.class.php';
-      break;
-    case 'w2pical':
-      require_once W2P_BASE_DIR.'/classes/ical.class.php';
-      break;
-    case 'cw2pobject':
-      require_once W2P_BASE_DIR.'/classes/w2p.class.php';
-      break;
-    case 'mail':
-      require_once W2P_BASE_DIR.'/classes/libmail.class.php';
-      break;
-    case 'eventqueue':
-      require_once W2P_BASE_DIR.'/classes/event_queue.class.php';
-      break;
-    case 'upgrademanager':
-      require_once W2P_BASE_DIR.'/install/manager.class.php';
-      break;
-    case 'cevent':
-      require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
-      break;
-    case 'cuser':
-      require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
-      break;
-    case 'cfilefolder':
-      require_once W2P_BASE_DIR.'/modules/files/files.class.php';
-      break;
-    case 'ctasklog':
-      require_once W2P_BASE_DIR.'/modules/tasks/tasks.class.php';
-      break;
-    default:
-      if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
-        require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
-        return;
-      }
-      
-      if ($name[0] == 'c') {
-        $name = substr($name, 1);
-        if (substr($name, -1) == 'y') {
-          $name = substr($name, 0, -1).'ies';
-        } else {
-          $name .= 's';
-        }
-      }
-      if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-        require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-        return;
-      }
-      break;
-  }
+    switch ($name) {
+        case 'cappui':
+            require_once W2P_BASE_DIR . '/classes/ui.class.php';
+            break;
+        case 'customfields':
+            require_once W2P_BASE_DIR . '/classes/CustomFields.class.php';
+            break;
+        case 'w2pacl':
+            require_once W2P_BASE_DIR . '/classes/permissions.class.php';
+            break;
+        case 'cevent':
+            require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
+            break;
+        case 'cuser':
+            require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
+            break;
+        case 'cfilefolder':
+            require_once W2P_BASE_DIR.'/modules/files/files.class.php';
+            break;
+        case 'ctasklog':
+            require_once W2P_BASE_DIR.'/modules/tasks/tasks.class.php';
+            break;
+        default:
+            if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
+                require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
+                return;
+            }
+
+            if ($name[0] == 'c') {
+                $name = substr($name, 1);
+                if (substr($name, -1) == 'y') {
+                    $name = substr($name, 0, -1).'ies';
+                } else {
+                    $name .= 's';
+                }
+            }
+            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+                return;
+            }
+            break;
+    }
 }
+
+/*
+*	Authenticator Factory
+*
+*/
+
+function &getAuth($auth_mode) {
+	switch ($auth_mode) {
+		case 'ldap':
+			$auth = new w2p_Authenticators_LDAP();
+			return $auth;
+			break;
+		case 'pn':
+			$auth = new w2p_Authenticators_PostNuke();
+			return $auth;
+			break;
+		default:
+			$auth = new w2p_Authenticators_SQL();
+			return $auth;
+			break;
+	}
+}
+
 ##
 ## Returns the best color based on a background color (x is cross-over)
 ##
@@ -548,7 +556,7 @@ function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingT
   $s .= ($rootTag != '') ? "<$rootTag id=\"headerNav\">" : '';
   $links = array();
   foreach ($nav as $module) {
-  	if ($perms->checkModule($module['mod_directory'], 'access')) {
+  	if (canAccess($module['mod_directory'])) {
   		$link = ($innerTag != '') ? "<$innerTag>" : '';
       $link .= '<a href="?m=' . $module['mod_directory'] . '">' . $AppUI->_($module['mod_ui_name']) . '</a>';
       $link .= ($innerTag != '') ? "</$innerTag>" : '';
@@ -1347,4 +1355,24 @@ function w2p_textarea($content)
   }
 
   return $result;
+}
+
+function w2p_format_datetime($baseTZ, $userTZ, $format = '', $datetime = 0)
+{
+    date_default_timezone_set('America/New_York');
+
+    $rawDatetime = ($datetime) ? $datetime : time();
+    $baseTime = new DateTimeZone($baseTZ);
+    $userTime = new DateTimeZone($userTZ);
+    $x = new DateTime();
+
+    //convert to GMT
+    $baseOffset = $baseTime->getOffset($x);
+    $newDatetime = $rawDatetime - $baseOffset;
+
+    //convert to user TZ
+    $userOffset = $userTime->getOffset($x);
+    $newDatetime += $userOffset;
+
+    return date($format, $newDatetime);
 }

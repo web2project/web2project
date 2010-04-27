@@ -1,47 +1,26 @@
 <?php /* $Id$ $URL$ */
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly');
-}
 
-/* Copyright 2003,2004 Adam Donnison <adam@saki.com.au>
-
-This file is part of the collected works of Adam Donnison.
-
-This is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
-
-define('QUERY_STYLE_ASSOC', ADODB_FETCH_ASSOC);
-define('QUERY_STYLE_NUM', ADODB_FETCH_NUM);
-define('QUERY_STYLE_BOTH', ADODB_FETCH_BOTH);
+/**
+ *	@package web2project
+ *	@subpackage database
+ *	@version $Revision$
+ *  @copyright (c) 2003 Adam Donnison
+ *  @license	GPL version 2 or later.
+ *  @author	Adam Donnison <adam@saki.com.au>
+ */
 
 /**
  * Database query class
  *
  * Container for creating prefix-safe queries.  Allows build up of
  * a select statement by adding components one at a time.
- *
- * @version	$Rev$
- * @package	web2Project
- * @access	public
- * @author	Adam Donnison <adam@saki.com.au>
- * @license	GPL version 2 or later.
- * @copyright	(c) 2003 Adam Donnison
  */
-class DBQuery {
+
+require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
+
+define('QUERY_STYLE_NUM', ADODB_FETCH_NUM);
+
+class w2p_Database_Query {
 	/**< Contains the query after it has been built. */
 	public $query;
 	/**< Array of tables to be queried */
@@ -93,7 +72,7 @@ class DBQuery {
 	 * @param $prefix Database table prefix - will be appended to all web2project table names
 	 * @param $query_db Database type
 	 */
-	public function DBQuery($prefix = null, $query_db = null) {
+	public function __construct($prefix = null, $query_db = null) {
 		global $db;
 
 		if (isset($prefix)) {

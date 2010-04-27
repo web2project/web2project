@@ -11,7 +11,7 @@ $canEdit = $perms->checkModuleItem($m, 'edit', $file_id);
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-$canAdmin = $perms->checkModule('system', 'edit');
+$canAdmin = canEdit('system');
 
 $file_parent = intval(w2PgetParam($_GET, 'file_parent', 0));
 

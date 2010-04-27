@@ -19,7 +19,7 @@ if ($del) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!$perms->checkModule('departments', 'add')) {
+	if (!canAdd('departments')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }

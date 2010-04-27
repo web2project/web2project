@@ -26,7 +26,7 @@ class CustomField {
 	public $value_charvalue;
 	public $value_intvalue;
 
-	public function CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
+	public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
 		$this->field_id = $field_id;
 		$this->field_name = $field_name;
 		$this->field_order = $field_order;
@@ -157,7 +157,8 @@ class CustomField {
 
 // CustomFieldCheckBox - Produces an INPUT Element of the CheckBox type in edit mode, view mode indicates 'Yes' or 'No'
 class CustomFieldCheckBox extends CustomField {
-	public function CustomFieldCheckBox($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
+
+    public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'checkbox';
 	}
@@ -185,7 +186,8 @@ class CustomFieldCheckBox extends CustomField {
 
 // CustomFieldText - Produces an INPUT Element of the TEXT type in edit mode
 class CustomFieldText extends CustomField {
-	public function CustomFieldText($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
+
+    public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'textinput';
 	}
@@ -205,7 +207,8 @@ class CustomFieldText extends CustomField {
 
 // CustomFieldTextArea - Produces a TEXTAREA Element in edit mode
 class CustomFieldTextArea extends CustomField {
-	public function CustomFieldTextArea($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
+
+    public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'textarea';
 	}
@@ -225,7 +228,8 @@ class CustomFieldTextArea extends CustomField {
 
 // CustomFieldLabel - Produces just a non editable label
 class CustomFieldLabel extends CustomField {
-	public function CustomFieldLabel($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
+
+    public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'label';
 	}
@@ -238,7 +242,8 @@ class CustomFieldLabel extends CustomField {
 
 // CustomFieldSeparator - Produces just an horizontal line
 class CustomFieldSeparator extends CustomField {
-	public function CustomFieldSeparator($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
+
+    public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'separator';
 	}
@@ -253,7 +258,7 @@ class CustomFieldSeparator extends CustomField {
 class CustomFieldSelect extends CustomField {
 	public $options;
 
-	public function CustomFieldSelect($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
+	public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'select';
 		$this->options = new CustomOptionList($field_id);
@@ -288,7 +293,8 @@ class CustomFieldSelect extends CustomField {
 */
 
 class CustomFieldWeblink extends CustomField {
-	public function CustomFieldWeblink($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
+
+    public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
 		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'href';
 	}
@@ -319,7 +325,7 @@ class CustomFields {
 
 	public $fields;
 
-	public function CustomFields($m, $a, $obj_id = null, $mode = 'edit', $published = 0) {
+	public function __construct($m, $a, $obj_id = null, $mode = 'edit', $published = 0) {
 		$this->m = $m;
 		$this->a = 'addedit'; // only addedit pages can carry the custom field for now
 		$this->obj_id = $obj_id;
@@ -537,7 +543,7 @@ class CustomFields {
 	}
 	public static function getCustomFieldByModule($AppUI, $module, $objectId) {
 		$perms = $AppUI->acl();
-		$canRead = !$perms->checkModule($module, 'view', $objectId);
+		$canRead = canView($module, $objectId);
 
 		if ($canRead) {
 			$q = new DBQuery;
@@ -556,7 +562,7 @@ class CustomOptionList {
 	public $field_id;
 	public $options;
 
-	public function CustomOptionList($field_id) {
+	public function __construct($field_id) {
 		$this->field_id = $field_id;
 		$this->options = array();
 	}

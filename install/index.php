@@ -1,36 +1,13 @@
 <?php
-/*
-	Copyright (c) 2007-2009 The web2Project Development Team <w2p-developers@web2project.net>
-	Copyright (c) 2003-2005 The dotProject Development Team <core-developers@dotproject.net>
+require_once '../base.php';
+require_once W2P_BASE_DIR . '/includes/main_functions.php';
+if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+    echo 'web2Project requires PHP '.MIN_PHP_VERSION.'+. Please upgrade!';
+    die();
+}
 
-  This file is part of web2project.
-
-  web2project is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
-
-  dotProject is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with dotProject; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-	The full text of the GPL is in the COPYING file.
-*/
-	require_once '../base.php';
-	require_once W2P_BASE_DIR . '/includes/main_functions.php';
-    if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
-        echo 'web2Project requires PHP '.MIN_PHP_VERSION.'+. Please upgrade!';
-        die();
-    }
-	require_once W2P_BASE_DIR . '/install/manager.class.php';
-
-	$step = trim( w2PgetCleanParam( $_POST, 'step', '' ) );
-	$manager = new UpgradeManager();
+$step = trim( w2PgetCleanParam( $_POST, 'step', '' ) );
+$manager = new w2p_Core_UpgradeManager();
 ?>
 <html>
 	<head>

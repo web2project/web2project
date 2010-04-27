@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$canRead = !getDenyRead('contacts');
+$canRead = canView('contacts');
 if (!$canRead) {
 	$AppUI->redirect("m=public&a=access_denied");
 }

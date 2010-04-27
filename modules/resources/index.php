@@ -8,7 +8,7 @@ $AppUI->savePlace();
 $obj = new CResource();
 
 $perms = &$AppUI->acl();
-$canEdit = $perms->checkModule($m, 'edit');
+$canEdit = canEdit('resources');
 
 $titleBlock = new CTitleBlock('Resources', 'resources.png', $m, $m . '.' . $a);
 if ($canEdit) {

@@ -1,11 +1,9 @@
 <?php /* $Id$ $URL$ */
+
 /**
  * @package web2project
  * @subpackage utilites
  */
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
 require_once ($AppUI->getLibraryClass('PEAR/Date'));
 
@@ -34,7 +32,7 @@ define('SEC_DAY', 86400);
  * This provides customised extensions to the Date class to leave the
  * Date package as 'pure' as possible
  */
-class CDate extends Date {
+class w2p_Utilities_Date extends Date {
 
 	public function __construct($datetime = null, $tz = '') {
 

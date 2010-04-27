@@ -49,10 +49,10 @@ if (!isset($GLOBALS['OS_WIN'])) {
 // tweak for pathname consistence on windows machines
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-
-require_once W2P_BASE_DIR . '/classes/ui.class.php';
-require_once W2P_BASE_DIR . '/classes/permissions.class.php';
 require_once W2P_BASE_DIR . '/includes/session.php';
+
+$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+date_default_timezone_set($defaultTZ);
 
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.
 $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
@@ -209,14 +209,13 @@ setlocale(LC_TIME, $AppUI->user_lang);
 $m_config = w2PgetConfig($m);
 
 // TODO: canRead/Edit assignements should be moved into each file
-
 // check overall module permissions
 // these can be further modified by the included action files
-$canAccess = $perms->checkModule($m, 'access');
-$canRead = $perms->checkModule($m, 'view');
-$canEdit = $perms->checkModule($m, 'edit');
-$canAuthor = $perms->checkModule($m, 'add');
-$canDelete = $perms->checkModule($m, 'delete');
+$canAccess = canAccess($m);
+$canRead = canView($m);
+$canEdit = canEdit($m);
+$canAuthor = canAdd($m);
+$canDelete = canDelete($m);
 
 if (!$suppressHeaders) {
 	// output the character set header
@@ -282,7 +281,7 @@ if (!isset($_SESSION['all_tabs'][$m])) {
 	$_SESSION['all_tabs'][$m] = array();
 	$all_tabs = &$_SESSION['all_tabs'][$m];
 	foreach ($AppUI->getActiveModules() as $dir => $module) {
-		if (!$perms->checkModule($dir, 'access')) {
+		if (!canAccess($dir)) {
 			continue;
 		}
 		$modules_tabs = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_tab.*\.php');
@@ -328,7 +327,7 @@ if (!isset($_SESSION['all_crumbs'][$m])) {
 	$_SESSION['all_crumbs'][$m] = array();
 	$all_crumbs = &$_SESSION['all_crumbs'][$m];
 	foreach ($AppUI->getActiveModules() as $dir => $module) {
-		if (!$perms->checkModule($dir, 'access')) {
+		if (!canAccess($dir)) {
 			continue;
 		}
 		$modules_crumbs = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_crumb.*\.php');
@@ -381,6 +380,7 @@ if (file_exists($module_file)) {
 if (!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
 	echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
+    require W2P_BASE_DIR . '/style/' . $uistyle . '/footer.php';
 	if (W2P_PERFORMANCE_DEBUG) {
 		$db_info = $db->ServerInfo();
 		print ('<table width="100%" cellspacing="0" cellpadding="4" border="0"  class="system-info">');
@@ -459,6 +459,6 @@ if (!$suppressHeaders) {
 		</table>
 		</div>
 		<!--End AJAX loading messagebox -->';
-	require W2P_BASE_DIR . '/style/' . $uistyle . '/footer.php';
+	
 }
 ob_end_flush();

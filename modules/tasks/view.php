@@ -51,7 +51,7 @@ $start_date = intval($obj->task_start_date) ? new CDate($obj->task_start_date) :
 $end_date = intval($obj->task_end_date) ? new CDate($obj->task_end_date) : null;
 
 //check permissions for the associated project
-$canReadProject = !getDenyRead('projects', $obj->task_project);
+$canReadProject = canView('projects', $obj->task_project);
 
 $users = $obj->getAssignedUsers($task_id);
 
@@ -363,16 +363,16 @@ $tabBox_show = 0;
 if ($obj->task_dynamic != 1) {
 	// tabbed information boxes
 	$tabBox_show = 1;
-	if ($perms->checkModule('task_log', 'view')) {
+	if (canView('task_log')) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_logs', 'Task Logs');
 	}
 	if ($task_log_id == 0) {
-		if ($perms->checkModule('task_log', 'add')) {
+		if canAdd('task_log')) {
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 		}
-	} elseif ($perms->checkModule('task_log', 'edit')) {
+	} elseif (canEdit('task_log')) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Edit Log');
-	} elseif ($perms->checkModule('task_log', 'add')) {
+	} elseif (canAdd('task_log')) {
 		$tabBox_show = 1;
 		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 	}

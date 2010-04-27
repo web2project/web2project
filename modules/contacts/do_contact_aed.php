@@ -12,15 +12,15 @@ $del = (int) w2PgetParam($_POST, 'del', 0);
 $perms = &$AppUI->acl();
 
 if (isset($del) && $del) {
-	if (!$perms->checkModule('contacts', 'delete')) {
+	if (!canDelete('contacts')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } elseif ($isNotNew) {
-	if (!$perms->checkModule('contacts', 'edit')) {
+	if (!canEdit('contacts')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!$perms->checkModule('contacts', 'add')) {
+	if (!canAdd('contacts')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }

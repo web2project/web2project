@@ -19,20 +19,17 @@ if (!defined('W2P_BASE_DIR')) {
 
 <body bgcolor="#f0f0f0" onload="document.loginform.username.focus();">
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-<tr>
-	<td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/w2p_logo.jpg"/></a></td>
-	<td style="background:url(./style/<?php echo $uistyle; ?>/logo_bkgd.jpg)">&nbsp;</td>
-</tr>
-</tbody>
+    <tr>
+        <td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg"/></a></td>
+        <td style="background:url(./style/<?php echo $uistyle; ?>/images/logo_bkgd.jpg)">&nbsp;</td>
+    </tr>
 </table>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-<tbody>
 	<tr>
-	<td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/nav_shadow.jpg) repeat-x scroll 0%;">
-		<img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/nav_shadow.jpg"/>
-	</td>
-</tr>
-
+        <td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg) repeat-x scroll 0%;">
+            <img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
+        </td>
+    </tr>
 </table>
 <br /><br /><br /><br />
 <?php

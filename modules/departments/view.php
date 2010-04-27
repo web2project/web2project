@@ -9,8 +9,8 @@ $dept_id = isset($_GET['dept_id']) ? w2PgetParam($_GET, 'dept_id', 0) : (isset($
 $msg = '';
 $department = new CDepartment();
 // check permissions
-$canRead = !getDenyRead($m, $dept_id);
-$canEdit = !getDenyEdit($m, $dept_id);
+$canRead = canView($m, $dept_id);
+$canEdit = canEdit($m, $dept_id);
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');

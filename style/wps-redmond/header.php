@@ -30,12 +30,12 @@ if ($dialog) {
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td>
-		<table class="banner" width='100%' cellpadding="3" cellspacing="0" border="0" background="style/<?php echo $uistyle; ?>/titlegrad.jpg">
+		<table class="banner" width='100%' cellpadding="3" cellspacing="0" border="0" background="style/<?php echo $uistyle; ?>/images/titlegrad.jpg">
 		<tr>
 			<th align="left"><strong><a href='http://www.w8.se/' <?php if ($dialog)
-			echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle; ?>/wp_icon.gif" border="0" /></a></strong></th>
+			echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle; ?>/images/wp_icon.gif" border="0" /></a></strong></th>
 			<th align="right" width='95'><?php
-			echo '<a href="http://www.web2project.net/">' . w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true) . '<img src="style/' . $uistyle . '/title.png" border="0" /></a>';?>
+			echo '<a href="http://www.web2project.net/">' . w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true) . '<img src="style/' . $uistyle . '/images/title.png" border="0" /></a>';?>
 			</th>
 		</tr>
 		</table>
@@ -73,22 +73,22 @@ if ($dialog) {
 <?php
 	echo '<td nowrap="nowrap" align="right">';
 	$newItem = array('' => '- New Item -');
-	if ($perms->checkModule('companies', 'add')) {
+	if (canAdd('companies')) {
 		$newItem['companies'] = 'Company';
 	}
-	if ($perms->checkModule('contacts', 'add')) {
+	if (canAdd('contacts')) {
 		$newItem['contacts'] = 'Contact';
 	}
-	if ($perms->checkModule('calendar', 'add')) {
+	if (canAdd('calendar')) {
 		$newItem['calendar'] = 'Event';
 	}
-	if ($perms->checkModule('files', 'add')) {
+    if (canAdd('files')) {
 		$newItem['files'] = 'File';
 	}
-	if ($perms->checkModule('projects', 'add')) {
+    if (canAdd('projects')) {
 		$newItem['projects'] = 'Project';
 	}
-	if ($perms->checkModule('admin', 'add')) {
+    if (canAdd('admin')) {
 		$newItem['admin'] = 'User';
 	}
 	echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
@@ -121,13 +121,19 @@ if ($dialog) {
 		<td width="75%">
 			<table cellspacing="0" cellpadding="3" border="0" width="100%">
 			<tr>
-				<td width="83%"><?php echo $AppUI->_('Welcome') . ' ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . '. ' . $AppUI->_('Server time is') . ' ' . date($df); ?></td>
+				<td width="83%">
+                    <?php
+                        echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_first_name . ' ' . $AppUI->user_last_name : $outsider);
+                        echo '<br />';
+                        echo $AppUI->_('Server time is') . ' ' . date($df);
+                    ?>
+                </td>
 			</tr>
 			</table>
 		</td>
 		<td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch" method="POST" accept-charset="utf-8"><td>
              	     <?php 
-						if ($perms->checkModule('smartsearch', 'access')) {					  
+						if (canAccess('smartsearch')) {
 							echo w2PshowImage('search.png') ?>&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
              	     <?php
 					  	} else {
@@ -145,14 +151,14 @@ if ($dialog) {
 					<input type="button" class="button" value="<?php echo $AppUI->_('My Info'); ?>" onclick="javascript:window.location='./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id; ?>'" />
 				</td>
 	<?php
-	if ($perms->checkModule('tasks', 'access')) {
+	if (canAccess('tasks')) {
 ?>
 				<td nowrap="nowrap" align="right">
 					<input type="button" class="button" value="<?php echo $AppUI->_('Todo'); ?>" onclick="javascript:window.location='./index.php?m=tasks&a=todo'" />
 				</td>
 	<?php
 	}
-	if ($perms->checkModule('calendar', 'access')) {
+	if (canAccess('calendar')) {
 		$now = new CDate();
 ?>
 				<td nowrap="nowrap" align="right">
@@ -182,4 +188,3 @@ $AppUI->boxTopRendered = false;
 if ($m == 'help' && function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
-?>

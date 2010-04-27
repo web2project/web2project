@@ -14,8 +14,8 @@ class CResource extends CW2pObject {
 	public $resource_max_allocation = null;
 	public $resource_note = null;
 
-	public function CResource() {
-    parent::__construct('resources', 'resource_id');
+	public function __construct() {
+        parent::__construct('resources', 'resource_id');
 	}
 
 	public function &loadTypes() {

@@ -4,19 +4,19 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 //view posts
-$forum_id = isset($_GET['forum_id']) ? (int)w2PgetParam($_GET, 'forum_id', 0) : 0;
+$forum_id = (int) w2PgetParam($_GET, 'forum_id', 0);
 
-$message_id = isset($_GET['message_id']) ? (int)w2PgetParam($_GET, 'message_id', 0) : 0;
+$message_id = (int) w2PgetParam($_GET, 'message_id', 0);
 $post_message = isset($_GET['post_message']) ? w2PgetParam($_GET, 'post_message', 0) : 0;
 $f = w2PgetParam($_POST, 'f', 0);
 
 // check permissions
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule('forums', 'add');
-$canDelete = $perms->checkModule('forums', 'delete');
+$canAuthor = canAdd('forums');
+$canDelete = canDelete('forums');
 $canRead = $perms->checkModuleItem('forums', 'view', $forum_id);
 $canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
-$canAdminEdit = $perms->checkModule('admin', 'edit');
+$canAdminEdit = canEdit('admin');
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');

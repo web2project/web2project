@@ -5,8 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 $AppUI->savePlace();
 
-$canEdit = !getDenyEdit($m);
-$canRead = !getDenyRead($m);
+$canEdit = canEdit($m);
+$canRead = canView($m);
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }

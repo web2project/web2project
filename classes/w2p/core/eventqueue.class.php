@@ -1,6 +1,12 @@
 <?php /* $Id$ $URL$ */
 
 /**
+ *	@package web2project
+ *	@subpackage core
+ *	@version $Revision$
+ */
+
+/**
  * Event handling queue class.
  *
  * The event queue uses the table event_queue to manage
@@ -10,18 +16,14 @@
  * Copyright 2005, the web2Project team.
  */
 
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
-
-class EventQueue {
+class w2p_Core_EventQueue {
 
 	public $table = 'event_queue';
 	public $update_list = array();
 	public $delete_list = array();
 	public $event_count = 0;
 
-	public function EventQueue() {
+	public function __construct() {
 	}
 
 	/**

@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 $perms = &$AppUI->acl();
-if (!$perms->checkModule('system', 'view')) { // let's see if the user has sys access
+if (!canView('system')) { // let's see if the user has sys access
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
@@ -33,7 +33,21 @@ $titleBlock->show();
           <span class="error"><?php echo $AppUI->_('Your system needs to be upgraded.  Please upgrade at your earliest convenience.'); ?></span>
           <?php
         } else {
-          echo $AppUI->_('Your system is up to date, no upgrade required.');
+            echo $AppUI->_('Your system is up to date, no upgrade required.');
+        }
+        echo '<br />';
+        $tzName = w2PgetConfig('system_timezone');
+        if (ini_get('date.timezone') || strlen($tzName) > 0) {
+            $time = new DateTimeZone($tzName);
+            $x = new DateTime();
+            $offset = $time->getOffset($x);
+            $offset = ($offset >= 0) ? '+'.$offset/3600 : $offset/3600;
+            echo $AppUI->_('Your system has a default timezone set of GMT'.$offset.'.');
+        } else {
+          ?>
+          <a href="?m=system&a=systemconfig"><?php echo $AppUI->_('Select a Timezone'); ?></a> -
+          <span class="error"><?php echo $AppUI->_('You do not have a default server timezone selected. Please select one immediately.'); ?></span>
+          <?php
         }
       ?>
     </td>

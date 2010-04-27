@@ -699,11 +699,11 @@ class CProject extends CW2pObject {
 		return $q->loadHashList('project_id');
 	}
 	public static function getContacts(CAppUI $AppUI = null, $projectId) {
-		global $AppUI;
+        global $AppUI;
 
-    $perms = $AppUI->acl();
+        $perms = $AppUI->acl();
 
-		if ($AppUI->isActiveModule('contacts') && $perms->checkModule('contacts', 'view')) {
+		if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
 			$q = new DBQuery;
 			$q->addTable('contacts', 'c');
 			$q->addJoin('project_contacts', 'pc', 'pc.contact_id = c.contact_id', 'inner');
@@ -726,7 +726,7 @@ class CProject extends CW2pObject {
 		global $AppUI;
 
     $perms = $AppUI->acl();
-		if ($AppUI->isActiveModule('departments') && $perms->checkModule('departments', 'view')) {
+		if ($AppUI->isActiveModule('departments') && canView('departments')) {
 			$q = new DBQuery;
 			$q->addTable('departments', 'a');
 			$q->addTable('project_departments', 'b');
@@ -742,8 +742,7 @@ class CProject extends CW2pObject {
 	public static function getForums(CAppUI $AppUI = null, $projectId) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
-		if ($AppUI->isActiveModule('forums') && $perms->checkModule('forums', 'view')) {
+		if ($AppUI->isActiveModule('forums') && canView('forums')) {
 			$q = new DBQuery;
 			$q->addTable('forums');
 			$q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name, forum_message_count,

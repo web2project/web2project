@@ -570,8 +570,8 @@ function displayFiles($folder) {
 }
 
 /**** Main Program ****/
-$canEdit = !getDenyEdit($m);
-$canRead = !getDenyRead($m);
+$canEdit = canEdit($m);
+$canRead = canView($m);
 
 if ($folder > 0) {
 	$cfObj->load($folder);

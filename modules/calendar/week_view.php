@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canRead = $perms->checkModule($m, 'view');
+$canRead = canView($m);
 
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');

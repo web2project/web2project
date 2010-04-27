@@ -5,23 +5,21 @@ if (!defined('W2P_BASE_DIR')) {
 $perms = $AppUI->acl();
 
 // let's see if the user has sys access
-if (!$perms->checkModule('system', 'edit')) {
+if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$AppUI->savePlace();
-
 $titleBlock = new CTitleBlock($AppUI->_('Upgrade System'), 'control-center.png', $m, $m . '.' . $a);
+$titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
-
 ?>
 <table class="std" width="100%" border="0" cellpadding="0" cellspacing="5">
 	<tr>
 		<td class="title" colspan="2">Step 2: Update Database</td>
 	</tr>
 	<?php
-    $system = new CSystem();
-    $errorMessages = $system->upgradeSystem();
+        $system = new CSystem();
+        $errorMessages = $system->upgradeSystem();
 
 		$updatesApplied = $system->getUpdatesApplied();
 		if (count($updatesApplied) > 0) {

@@ -1,12 +1,9 @@
 <?php /* $Id$ $URL$ */
+
 /**
  *    @package web2project
- *    @subpackage mail
+ *    @subpackage utilities
  */
-
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
 /**
  *    This class encapsulates the PHP mail() function.
@@ -37,7 +34,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 require_once($AppUI->getLibraryClass('PHPMailer/class.phpmailer'));
 
-class Mail extends PHPMailer {
+class w2p_Utilities_Mail extends PHPMailer {
 	/**
 	 *    list of To addresses
 	 *    @var    array
@@ -301,7 +298,7 @@ class Mail extends PHPMailer {
 	 */
 	public function Send() {
 		if ($this->defer) {
-			return $this->QueueMail();
+			return $this->w2p_Core_EventQueue();
 		} else {
 			return PHPMailer::Send();
 		}
@@ -370,7 +367,7 @@ class Mail extends PHPMailer {
 	public function QueueMail() {
 		global $AppUI;
 
-		$ec = new EventQueue;
+		$ec = new w2p_Core_EventQueue();
 		$vars = get_object_vars($this);
 		return $ec->add(array('Mail', 'SendQueuedMail'), $vars, 'libmail', true);
 	}

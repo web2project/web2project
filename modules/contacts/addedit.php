@@ -17,7 +17,7 @@ $dept_name = $dept->dept_name;
 
 // check permissions for this record
 $perms = &$AppUI->acl();
-$canAuthor = $perms->checkModule('contacts', 'add');
+$canAuthor = canAdd('contacts');
 $canEdit = $perms->checkModuleItem('contacts', 'edit', $contact_id);
 
 // check permissions
