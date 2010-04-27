@@ -1543,4 +1543,30 @@
         <column>task_id</column>
         <column>department_id</column>
     </table>
+    <table name="event_queue">
+        <column>queue_id</column>
+        <column>queue_start</column>
+        <column>queue_type</column>
+        <column>queue_repeat_interval</column>
+        <column>queue_repeat_count</column>
+        <column>queue_data</column>
+        <column>queue_callback</column>
+        <column>queue_owner</column>
+        <column>queue_origin_id</column>
+        <column>queue_module</column>
+        <column>queue_module_type</column>
+        <row>
+            <value>1</value>
+            <value>1272397667</value>
+            <value>remind</value>
+            <value>86400</value>
+            <value>100</value>
+            <value>N;</value>
+            <value>CTask::remind</value>
+            <value>1</value>
+            <value>1</value>
+            <value>tasks</value>
+            <value>module</value>
+        </row>
+    </table>
 </dataset>

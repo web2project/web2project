@@ -2675,4 +2675,70 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
     }
+
+    /**
+     * Tests add reminder task_reminder_control is off
+     */
+    public function testaddReminderNoTaskReminderControl()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(1);
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_task_reminder_control = $w2Pconfig['task_reminder_control'];
+        $w2Pconfig['task_reminder_control'] = false;
+
+        $this->assertNull($this->obj->addReminder());
+
+        $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
+    }
+
+    /**
+     * Tests add reminder when there is no end date for task, so should remove from queue
+     */
+    public function testAddReminderNoTaskEndDate()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        unset($this->obj->task_end_date);
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_task_reminder_control = $w2Pconfig['task_reminder_control'];
+        $w2Pconfig['task_reminder_control'] = true;
+
+        $this->obj->addReminder();
+
+        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestAddReminderNoTaskEndDate.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+
+        $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
+    }
+
+    /**
+     * Tests add reminder when the task is complete, so should remove from queue
+     */
+    public function testAddReminderComplete()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->task_percent_complete = 100;
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_task_reminder_control = $w2Pconfig['task_reminder_control'];
+        $w2Pconfig['task_reminder_control'] = true;
+
+        $this->obj->addReminder();
+
+        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestAddReminderComplete.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+
+        $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
+
+    }
 }
