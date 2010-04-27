@@ -1828,17 +1828,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Tests that canAccess throws the appropriate warning
-     */
-    public function testCanAccessThrowsEUSERNOTICE()
-    {
-        global $AppUI;
-
-        $this->setExpectedException('PHPUnit_Framework_Error');
-        $result = $this->obj->canAccess(1);
-    }
-
-    /**
      * Tests the canAccess function
      */
     public function testCanAccess()
