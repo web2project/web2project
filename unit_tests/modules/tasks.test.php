@@ -2726,6 +2726,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         global $AppUI;
         global $w2Pconfig;
 
+        $this->obj->load(1);
         $this->obj->task_percent_complete = 100;
 
         // Ensure our global setting for task_reminder_control is set properly for this
@@ -2739,6 +2740,48 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
 
         $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
+    }
 
+    /**
+     * Tests adding a reminder to a task
+     */
+    public function testAddReminder()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(1);
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_task_reminder_control = $w2Pconfig['task_reminder_control'];
+        $w2Pconfig['task_reminder_control'] = true;
+
+        $this->obj->addReminder();
+        $this->obj->task_percent_complete = 50;
+
+        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestAddReminder.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('event_queue' => array('queue_start')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('event_queue' => array('queue_start')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('event_queue'), $xml_db_filtered_dataset->getTable('event_queue'));
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('event_queue');
+        $q->addQuery('queue_start');
+        $q->addWhere('queue_id = 2');
+        $results = $q->loadColumn();
+
+        foreach($results as $queue_start) {
+            $this->assertGreaterThanOrEqual($min_time, $queue_start);
+            $this->assertLessThanOrEqual($now_secs, $queue_start);
+        }
+
+        $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
     }
 }
