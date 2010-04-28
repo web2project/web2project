@@ -1,10 +1,13 @@
 <?php /* $Id$ $URL$ */
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
-// Copyright 2004, Adam Donnison <adam@saki.com.au>
-// Released under GNU General Public License version 2 or later
+/**
+ *	@package web2Project
+ *	@subpackage modules
+ *	@version $Revision$
+ *  // Copyright 2004, Adam Donnison <adam@saki.com.au>
+ *  // Released under GNU General Public License version 2 or later
+ *
+ */
 
 class CResource extends CW2pObject {
 	public $resource_id = null;
