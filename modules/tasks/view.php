@@ -363,16 +363,16 @@ $tabBox_show = 0;
 if ($obj->task_dynamic != 1) {
 	// tabbed information boxes
 	$tabBox_show = 1;
-	if (canView('task_logs')) {
+	if (canView('task_log')) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_logs', 'Task Logs');
 	}
 	if ($task_log_id == 0) {
-		if (canAdd('task_logs')) {
+		if (canAdd('task_log')) {
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 		}
-	} elseif (canEdit('task_logs')) {
+	} elseif (canEdit('task_log')) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Edit Log');
-	} elseif (canAdd('task_logs')) {
+	} elseif (canAdd('task_log')) {
 		$tabBox_show = 1;
 		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 	}
