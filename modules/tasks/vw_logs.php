@@ -20,7 +20,7 @@ $taskLogReferenceImage = w2PgetSysVal('TaskLogReferenceImage');
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-$canDelete = canDelete('task_logs');
+$canDelete = canDelete('task_log');
 if ($canDelete) {
 ?>
 function delIt2(id) {
@@ -58,7 +58,7 @@ $logs = $task->getTaskLogs($task_id, $problem);
 
 $s = '';
 $hrs = 0;
-$canEdit = canEdit('task_logs');
+$canEdit = canEdit('task_log');
 foreach ($logs as $row) {
 	$task_log_date = intval($row['task_log_date']) ? new CDate($row['task_log_date']) : null;
 	$style = $row['task_log_problem'] ? 'background-color:#cc6666;color:#ffffff' : '';
