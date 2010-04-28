@@ -88,7 +88,7 @@ function delIt2(id) {
 <?php
 // Winnow out the tasks we are not allowed to view.
 $perms = &$AppUI->acl();
-$canDelete = canDelete('task_log');
+$canDelete = canDelete('task_logs');
 
 // Pull the task comments
 $project = new CProject;
@@ -96,7 +96,7 @@ $logs = $project->getTaskLogs($AppUI, $project_id, $user_id, $hide_inactive, $hi
 
 $s = '';
 $hrs = 0;
-$canEdit = canEdit('task_log');
+$canEdit = canEdit('task_logs');
 foreach ($logs as $row) {
 	$task_log_date = intval($row['task_log_date']) ? new CDate($row['task_log_date']) : null;
 

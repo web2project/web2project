@@ -680,7 +680,7 @@ class CTask extends CW2pObject {
 
         $q = new DBQuery;
 		$this->_action = 'deleted';
-		
+
 		//load it before deleting it because we need info on it to update the parents later on
 		$this->load($this->task_id);
 		addHistory('tasks', $this->task_id, 'delete', $this->task_name, $this->task_project);
@@ -2325,7 +2325,7 @@ class CTaskLog extends CW2pObject {
 
 		// First things first.	Are we allowed to delete?
 		$acl = &$AppUI->acl();
-		if (!canDelete('task_log')) {
+		if (!canDelete('task_logs')) {
 			$msg = $AppUI->_('noDeletePermission');
 			return false;
 		}
