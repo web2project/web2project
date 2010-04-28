@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $task_id, $df, $canEdit, $m;
 
 $perms = &$AppUI->acl();
-if (canView('task_logs')) {
+if (!canView('task_log')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
