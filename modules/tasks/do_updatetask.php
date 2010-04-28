@@ -23,15 +23,15 @@ $del = w2PgetParam($_POST, 'del', 0);
 $isNotNew = $_POST['task_log_id'];
 $perms = &$AppUI->acl();
 if ($del) {
-	if (!canDelete('task_log')) {
+	if (!canDelete('task_logs')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } elseif ($isNotNew) {
-	if (!canEdit('task_log')) {
+	if (!canEdit('task_logs')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 } else {
-	if (!canAdd('task_log')) {
+	if (!canAdd('task_logs')) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 }

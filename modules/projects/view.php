@@ -346,7 +346,7 @@ $query_string = '?m=projects&a=view&project_id=' . $project_id;
 // tabbed information boxes
 // Note that we now control these based upon module requirements.
 $canViewTask = canView('tasks');
-$canViewTaskLog = canView('task_log');
+$canViewTaskLog = canView('task_logs');
 
 if ($canViewTask) {
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks');
