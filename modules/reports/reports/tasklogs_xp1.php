@@ -10,7 +10,7 @@ global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 
 $perms = &$AppUI->acl();
-if (!canView('task_log')) {
+if (!canView('task_logs')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 $do_report = w2PgetParam($_GET, 'do_report', 0);

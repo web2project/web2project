@@ -11,8 +11,8 @@ $perms = &$AppUI->acl();
 // check permissions
 $canEditTask = $perms->checkModuleItem('tasks', 'edit', $task_id);
 $canViewTask = $perms->checkModuleItem('tasks', 'view', $task_id);
-$canEdit = canEdit('task_log');
-$canAdd = canAdd('task_log');
+$canEdit = canEdit('task_logs');
+$canAdd = canAdd('task_logs');
 
 $task_log_id = intval(w2PgetParam($_GET, 'task_log_id', 0));
 $log = new CTaskLog();

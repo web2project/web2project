@@ -1910,7 +1910,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $AppUI = $old_AppUI;
     }
 
-    /*
+    /**
      * Tests that dependentTasks returns nothing if no task id provided
      */
     public function testDependentTasksNoTaskID()
