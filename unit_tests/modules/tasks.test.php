@@ -2784,4 +2784,67 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
     }
+
+    /**
+     * Tests the remind function when it is not a working day
+     */
+    public function testRemindNotWorkingDay()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(1);
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_cal_working_days = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days'] = array();
+
+        $nothing = array();
+
+        $this->assertTrue($this->obj->remind('not used', 'not used', 1, 1, $nothing));
+
+        $w2Pconfig['cal_working_days'] = $old_cal_working_days;
+    }
+
+    /**
+     * Tests the remind function when a task is complete
+     */
+    public function testRemindTaskComplete()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->post_data['task_percent_complete'] = '100';
+        $this->obj->bind($this->post_data);
+        $results = $this->obj->store();
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_cal_working_days = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days'] = '1,2,3,4,5,6,7';
+
+        $nothing = array();
+
+        $this->assertEquals(-1, $this->obj->remind('not used', 'not used', 31, 1, $nothing));
+        $w2Pconfig['cal_working_days'] = $old_cal_working_days;
+    }
+
+    /**
+     * Test the remind function
+     * @todo Not sure how we can test reliably that the email was actually
+     * generated and sent
+     */
+    public function testRemind()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_cal_working_days = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days'] = '1,2,3,4,5,6,7';
+
+        $nothing = array();
+
+        $this->assertTrue($this->obj->remind('not used', 'not used', 1, 1, $nothing));
+        $w2Pconfig['cal_working_days'] = $old_cal_working_days;
+    }
 }
