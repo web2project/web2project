@@ -2847,4 +2847,44 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTrue($this->obj->remind('not used', 'not used', 1, 1, $nothing));
         $w2Pconfig['cal_working_days'] = $old_cal_working_days;
     }
+
+    /**
+     * Tests clearing a reminder when we are checking that it is complete
+     */
+    public function testClearReminderDoCheck()
+    {
+        $this->obj->load(1);
+
+        $this->obj->clearReminder();
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestClearReminderDoCheck.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+    }
+
+    /**
+     * Tests clearing a reminder when we are checking it is complete and it is complete
+     */
+    public function testClearReminderDoCheckTaskComplete()
+    {
+        $this->obj->load(1);
+        $this->obj->task_percent_complete = 100;
+
+        $this->obj->clearReminder();
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestClearReminderDoCheckTaskComplete.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+    }
+
+    public function testClearReminderDontCheck()
+    {
+        $this->obj->load(1);
+
+        $this->obj->clearReminder(true);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestClearReminderDontCheck.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+    }
 }
