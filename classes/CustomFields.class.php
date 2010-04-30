@@ -159,7 +159,7 @@ class CustomField {
 class CustomFieldCheckBox extends CustomField {
 
     public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
+		parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'checkbox';
 	}
 
@@ -188,7 +188,7 @@ class CustomFieldCheckBox extends CustomField {
 class CustomFieldText extends CustomField {
 
     public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
+		parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'textinput';
 	}
 
@@ -209,7 +209,7 @@ class CustomFieldText extends CustomField {
 class CustomFieldTextArea extends CustomField {
 
     public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
+		parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'textarea';
 	}
 
@@ -230,7 +230,7 @@ class CustomFieldTextArea extends CustomField {
 class CustomFieldLabel extends CustomField {
 
     public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
+		parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'label';
 	}
 
@@ -244,7 +244,7 @@ class CustomFieldLabel extends CustomField {
 class CustomFieldSeparator extends CustomField {
 
     public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
+		parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'separator';
 	}
 
@@ -259,7 +259,7 @@ class CustomFieldSelect extends CustomField {
 	public $options;
 
 	public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
+		parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'select';
 		$this->options = new CustomOptionList($field_id);
 		$this->options->load();
@@ -295,7 +295,7 @@ class CustomFieldSelect extends CustomField {
 class CustomFieldWeblink extends CustomField {
 
     public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-		$this->CustomField($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
+		parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
 		$this->field_htmltype = 'href';
 	}
 
