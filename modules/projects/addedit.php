@@ -338,7 +338,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" colspan="3">
 			<?php
-				$custom_fields = new CustomFields($m, $a, $project->project_id, 'edit');
+				$custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'edit');
 				$custom_fields->printHTML();
 				?>
 			</td>

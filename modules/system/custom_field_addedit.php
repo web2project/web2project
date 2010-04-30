@@ -46,7 +46,7 @@ if ($select_delitem != null) {
 
 // Loading the page for the first time
 if (w2PgetParam($_GET, 'field_id', null) != null) {
-	$custom_fields = new CustomFields($module, 'addedit', null, 'edit');
+	$custom_fields = new w2p_Core_CustomFields($module, 'addedit', null, 'edit');
 
 	if ($delete_field) {
 		$custom_fields->deleteField($field_id);

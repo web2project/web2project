@@ -222,7 +222,7 @@ function delIt(){
 		<td valign="top" width="50%">
 			<table border="0" cellpadding="1" cellspacing="1" class="details" width="100%">
 				<?php
-					$custom_fields = new CustomFields($m, $a, $contact->contact_id, 'view');
+					$custom_fields = new w2p_Core_CustomFields($m, $a, $contact->contact_id, 'view');
 					if ($custom_fields->count()) { ?>
 							<th colspan="2">
 								<strong><?php echo $AppUI->_('Contacts Custom Fields'); ?></strong>

@@ -124,7 +124,7 @@ class CCompany extends CW2pObject {
       $stored = true;
     }
     if ($stored) {
-      $custom_fields = new CustomFields('companies', 'addedit', $this->company_id, 'edit');
+      $custom_fields = new w2p_Core_CustomFields('companies', 'addedit', $this->company_id, 'edit');
       $custom_fields->bind($_POST);
       $sql = $custom_fields->store($this->company_id); // Store Custom Fields
     }

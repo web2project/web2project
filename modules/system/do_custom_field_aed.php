@@ -26,7 +26,7 @@ if ($edit_field_id != null) {
 
 	$list_select_items = w2PgetParam($_POST, 'select_items', null);
 
-	$custom_fields = new CustomFields(strtolower($edit_module), 'addedit', null, null);
+	$custom_fields = new w2p_Core_CustomFields(strtolower($edit_module), 'addedit', null, null);
 
 	if ($edit_field_id == 0) {
 		$fid = $custom_fields->add($field_name, $field_description, $field_htmltype, $field_datatype, $field_extratags, $field_order, $field_published, $msg);
@@ -51,7 +51,7 @@ if ($edit_field_id != null) {
 			}
 
 			if ($o_msg) {
-				// Select List Failed - Delete CustomField also
+				// Select List Failed - Delete w2p_Core_CustomFields also
 			}
 
 		}
