@@ -1,14 +1,5 @@
 <?php /* $Id$ $URL$ */
 
-/**
- * Copyright 2005, the web2Project Team.
- *
- * This file is part of web2Project and is released under the same license.
- * Check the file index.php in the top level web2project directory for license
- * details.  If you cannot find this file, or a LICENSE or COPYING file,
- * please email the author for details.
- */
-
 /*
 * Permissions system extends the phpgacl class.  Very few changes have
 * been made, however the main one is to provide the database details from
@@ -18,16 +9,6 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('This file should not be called directly.');
 }
-
-// Set the ADODB directory
-if (!defined('ADODB_DIR')) {
-	define('ADODB_DIR', W2P_BASE_DIR . '/lib/adodb');
-}
-
-// Include the PHPGACL library
-require_once W2P_BASE_DIR . '/lib/phpgacl/gacl.class.php';
-require_once W2P_BASE_DIR . '/lib/phpgacl/gacl_api.class.php';
-// Include the db_connections
 
 // Now extend the class
 /**
