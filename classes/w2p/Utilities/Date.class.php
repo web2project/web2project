@@ -44,7 +44,7 @@ class w2p_Utilities_Date extends Date {
 		{
 			$this->setTZ($tz);
 		}
-	}
+	} 
 	/**
 	 * Overloaded compare method
 	 *
@@ -160,7 +160,7 @@ class w2p_Utilities_Date extends Date {
 	*/
 	public function next_working_day($preserveHours = false) {
 		global $AppUI;
-		$do = clone $this;
+		$do = $this;
 		$end = intval(w2PgetConfig('cal_day_end'));
 		$start = intval(w2PgetConfig('cal_day_start'));
 		while (!$this->isWorkingDay() || $this->getHour() > $end || ($preserveHours == false && $this->getHour() == $end && $this->getMinute() == '0')) {
@@ -180,7 +180,7 @@ class w2p_Utilities_Date extends Date {
 	*/
 	public function prev_working_day($preserveHours = false) {
 		global $AppUI;
-		$do = clone $this;
+		$do = $this;
 		$end = intval(w2PgetConfig('cal_day_end'));
 		$start = intval(w2PgetConfig('cal_day_start'));
 		while (!$this->isWorkingDay() || ($this->getHour() < $start) || ($this->getHour() == $start && $this->getMinute() == '0')) {
@@ -315,7 +315,7 @@ class w2p_Utilities_Date extends Date {
 			// calculated duration must be negative, set signum appropriately
 			$sgn = -1;
 
-			$dummy = clone $s;
+			$dummy = $s;
 			$s->copy($e);
 			$e = $dummy;
 		}
@@ -534,7 +534,7 @@ class w2p_Utilities_Date extends Date {
 	 *
 	 * Converts this date to a new time zone.
 	 * WARNING: This may not work correctly if your system does not allow
-	 * putenv() or if localtime() does not work in your environment.
+	 * putenv() or if localtime() does not work in your environment. 
 	 *
 	 * @access public
 	 * @param string $tz the time zone ID - index in $GLOBALS['_DATE_TIMEZONE_DATA']
@@ -550,15 +550,14 @@ class w2p_Utilities_Date extends Date {
 
 		// convert UTC to new timezone
 		$tzID = (is_object($tz)) ? $tz->id : $tz;
-
-        $offset = intval($GLOBALS['_DATE_TIMEZONE_DATA'][$tzID]['offset'] / 1000);
+    
+    $offset = intval($GLOBALS['_DATE_TIMEZONE_DATA'][$tzID]['offset'] / 1000);
 		if ($this->tz['hasdst']) {
 			$offset += 3600;
 		}
 		$this->addSeconds($offset);
-        $this->setTZ((is_object($tz)) ? $tz->id : $tz);
+    $this->setTZ((is_object($tz)) ? $tz->id : $tz);
 	}
-
 	public function setTZ($tz)
 	{
 		$tz_array = $GLOBALS['_DATE_TIMEZONE_DATA'][$tz];
