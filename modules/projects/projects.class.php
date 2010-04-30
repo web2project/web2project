@@ -589,7 +589,7 @@ class CProject extends CW2pObject {
 		}
 
         if ($stored) {
-          $custom_fields = new CustomFields('projects', 'addedit', $this->project_id, 'edit');
+          $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
           $custom_fields->bind($_POST);
           $sql = $custom_fields->store($this->project_id); // Store Custom Fields
         }

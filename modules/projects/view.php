@@ -199,7 +199,7 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		<tr>
 			<td colspan="2">
 				<?php
-					$custom_fields = new CustomFields($m, $a, $project->project_id, 'view');
+					$custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'view');
 					$custom_fields->printHTML();
 				?>
 			</td>
