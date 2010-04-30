@@ -70,6 +70,7 @@ function w2p_autoload($class_name) {
         case 'csyskey':
             require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
             break;
+
         default:
             if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
                 require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
