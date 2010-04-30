@@ -32,12 +32,10 @@ function __autoload($class_name) {
         case 'cappui':
             require_once W2P_BASE_DIR . '/classes/ui.class.php';
             break;
-        case 'customfields':
-            require_once W2P_BASE_DIR . '/classes/CustomFields.class.php';
-            break;
         case 'w2pacl':
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
+
         case 'cevent':
             require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
             break;
@@ -50,6 +48,7 @@ function __autoload($class_name) {
         case 'ctasklog':
             require_once W2P_BASE_DIR.'/modules/tasks/tasks.class.php';
             break;
+
         default:
             if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
                 require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
