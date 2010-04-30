@@ -1486,7 +1486,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->load(21);
         $children = $this->obj->getChildren();
 
-        $this->assertEquals(2, count($children));
+        $this->assertEquals(2,  count($children));
+        $this->assertEquals(22, $children[0]);
+        $this->assertEquals(23, $children[1]);
     }
 
     /**
@@ -1497,7 +1499,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->load(15);
         $children = $this->obj->getDeepChildren();
 
-        $this->assertEquals(2, count($children));
+        $this->assertEquals(2,  count($children));
+        $this->assertEquals(16, $children[0]);
+        $this->assertEquals(17, $children[1]);
     }
 
     /**
@@ -1821,18 +1825,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $this->obj->getTasksForPeriod($start_date, $end_date, 3, 2);
 
         $this->assertEquals(array(), $results);
-    }
-
-    /**
-     * Tests that canAccess throws the appropriate warning
-     */
-    public function testCanAccessThrowsEUSERNOTICE()
-    {
-
-        global $AppUI;
-
-        $this->setExpectedException('PHPUnit_Framework_Error');
-        $result = $this->obj->canAccess(1);
     }
 
     /**
@@ -2510,6 +2502,349 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateUserSpecificTaskPriorityPriorityUserIdTaskId.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+    }
 
+    /**
+     * Test getting the project of currently loaded task
+     */
+    public function testGetProject()
+    {
+        $this->obj->load(1);
+
+        $project = $this->obj->getProject();
+
+        $this->assertEquals('Test Project', $project['project_name']);
+        $this->assertEquals('TP',           $project['project_short_name']);
+        $this->assertEquals('FFFFFF',       $project['project_color_identifier']);
+    }
+
+    /**
+     * Tests updating subtasks status with no task id passed
+     */
+    public function testUpdateSubTasksStatusNoTaskId()
+    {
+        $this->obj->load(11);
+
+        $this->obj->updateSubTasksStatus(99);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateSubTasksStatusNoTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
+    }
+
+    /**
+     * Tests updating subtasks status with a task id passed
+     */
+    public function testUpdateSubTasksStatusTaskId()
+    {
+        $this->obj->load(1);
+
+        $this->obj->updateSubTasksStatus(99, 11);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateSubTasksStatusTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
+    }
+
+    /**
+     * Test updating project of sub tasks with no task id passed
+     */
+    public function testUpdateSubTasksProjectNoTaskId()
+    {
+        $this->obj->load(11);
+
+        $this->obj->updateSubTasksProject(2);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetpath().'tasksTestUpdateSubTasksProjectNoTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
+    }
+
+    /**
+     * Tests updating project of sub tasks with task id passed
+     */
+    public function testUpdateSubTasksProjectTaskId()
+    {
+        $this->obj->load(1);
+
+        $this->obj->updateSubTasksProject(2, 11);
+
+        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestUpdateSubTasksProjectTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
+    }
+
+    /**
+     * Tests checking time information priviliges when user is a task owner
+     */
+    public function testCanUserEditTimeInformationTaskOwner()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(1);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = true;
+
+        $this->assertTrue(@$this->obj->canUserEditTimeInformation());
+
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
+    }
+
+    /**
+     * Tests checking time information priviliges when user is project owner
+     */
+    public function testCanUserEditTimeInformationProjectOwner()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(4);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = true;
+
+        $this->assertTrue(@$this->obj->canUserEditTimeInformation());
+
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
+    }
+
+    /**
+     * Tests checking time information priviliges when user is admin
+     */
+    public function testCanUserEditTimeInformationAdmin()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(4);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = true;
+
+        $this->assertTrue(@$this->obj->canUserEditTimeInformation());
+
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
+    }
+
+    /**
+     * Tests checking time information priviliges without acess
+     */
+    public function testCanUserEditTimeInformationNoAccess()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(4);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = true;
+
+        // Login as another user for permission purposes
+        $old_AppUI = $AppUI;
+        $AppUI  = new CAppUI;
+        $_POST['login'] = 'login';
+        $_REQUEST['login'] = 'sql';
+
+        $this->assertFalse(@$this->obj->canUserEditTimeInformation());
+
+        $AppUI = $old_AppUI;
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
+    }
+
+    /**
+     * Tests checking time information privileges with no rescrtions
+     */
+    public function testCanUserEditTimeInformationNoRestriction()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(4);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = false;
+
+        $this->assertTrue(@$this->obj->canUserEditTimeInformation());
+
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
+    }
+
+    /**
+     * Tests add reminder task_reminder_control is off
+     */
+    public function testaddReminderNoTaskReminderControl()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(1);
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_task_reminder_control = $w2Pconfig['task_reminder_control'];
+        $w2Pconfig['task_reminder_control'] = false;
+
+        $this->assertNull($this->obj->addReminder());
+
+        $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
+    }
+
+    /**
+     * Tests add reminder when there is no end date for task, so should remove from queue
+     */
+    public function testAddReminderNoTaskEndDate()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        unset($this->obj->task_end_date);
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_task_reminder_control = $w2Pconfig['task_reminder_control'];
+        $w2Pconfig['task_reminder_control'] = true;
+
+        $this->obj->addReminder();
+
+        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestAddReminderNoTaskEndDate.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+
+        $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
+    }
+
+    /**
+     * Tests add reminder when the task is complete, so should remove from queue
+     */
+    public function testAddReminderComplete()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(1);
+        $this->obj->task_percent_complete = 100;
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_task_reminder_control = $w2Pconfig['task_reminder_control'];
+        $w2Pconfig['task_reminder_control'] = true;
+
+        $this->obj->addReminder();
+
+        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestAddReminderComplete.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+
+        $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
+    }
+
+    /**
+     * Tests adding a reminder to a task
+     */
+    public function testAddReminder()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(1);
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_task_reminder_control = $w2Pconfig['task_reminder_control'];
+        $w2Pconfig['task_reminder_control'] = true;
+
+        $this->obj->addReminder();
+        $this->obj->task_percent_complete = 50;
+
+        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestAddReminder.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('event_queue' => array('queue_start')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('event_queue' => array('queue_start')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('event_queue'), $xml_db_filtered_dataset->getTable('event_queue'));
+
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+
+        /**
+         * Get updated dates to test against
+         */
+        $q = new DBQuery;
+        $q->addTable('event_queue');
+        $q->addQuery('queue_start');
+        $q->addWhere('queue_id = 2');
+        $results = $q->loadColumn();
+
+        foreach($results as $queue_start) {
+            $this->assertGreaterThanOrEqual($min_time, $queue_start);
+            $this->assertLessThanOrEqual($now_secs, $queue_start);
+        }
+
+        $w2Pconfig['task_reminder_control'] = $old_task_reminder_control;
+    }
+
+    /**
+     * Tests the remind function when it is not a working day
+     */
+    public function testRemindNotWorkingDay()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(1);
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_cal_working_days = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days'] = array();
+
+        $nothing = array();
+
+        $this->assertTrue($this->obj->remind('not used', 'not used', 1, 1, $nothing));
+
+        $w2Pconfig['cal_working_days'] = $old_cal_working_days;
+    }
+
+    /**
+     * Tests the remind function when a task is complete
+     */
+    public function testRemindTaskComplete()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->post_data['task_percent_complete'] = '100';
+        $this->obj->bind($this->post_data);
+        $results = $this->obj->store();
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_cal_working_days = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days'] = '1,2,3,4,5,6,7';
+
+        $nothing = array();
+
+        $this->assertEquals(-1, $this->obj->remind('not used', 'not used', 31, 1, $nothing));
+        $w2Pconfig['cal_working_days'] = $old_cal_working_days;
+    }
+
+    /**
+     * Test the remind function
+     * @todo Not sure how we can test reliably that the email was actually
+     * generated and sent
+     */
+    public function testRemind()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        // Ensure our global setting for task_reminder_control is set properly for this
+        $old_cal_working_days = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days'] = '1,2,3,4,5,6,7';
+
+        $nothing = array();
+
+        $this->assertTrue($this->obj->remind('not used', 'not used', 1, 1, $nothing));
+        $w2Pconfig['cal_working_days'] = $old_cal_working_days;
     }
 }
