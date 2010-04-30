@@ -4,9 +4,7 @@
  *	@package web2project
  *	@subpackage core
  *	@version $Revision$
- */
-
-/**
+ *
  *	CustomFieldsParser
  *
  */
