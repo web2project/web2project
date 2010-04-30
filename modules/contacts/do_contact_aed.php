@@ -53,7 +53,7 @@ if ($del) {
       $AppUI->redirect('m=contacts&a=addedit');
     }
 	} else {
-		$custom_fields = new CustomFields($m, 'addedit', $obj->contact_id, 'edit');
+		$custom_fields = new w2p_Core_CustomFields($m, 'addedit', $obj->contact_id, 'edit');
 		$custom_fields->bind($_POST);
 		$sql = $custom_fields->store($obj->contact_id); // Store Custom Fields
 

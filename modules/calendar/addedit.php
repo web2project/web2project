@@ -353,7 +353,7 @@ echo arraySelect($projects, 'event_project', 'size="1" class="text"', ($obj->eve
 			<td colspan="2" align="right">
 					<?php
                       // $m does not equal 'calendar' here???
-                      $custom_fields = new CustomFields('calendar', 'addedit', $obj->event_id, 'edit');
+                      $custom_fields = new w2p_Core_CustomFields('calendar', 'addedit', $obj->event_id, 'edit');
                       $custom_fields->printHTML();
                       ?>
 			</td>

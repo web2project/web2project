@@ -45,7 +45,7 @@ $text .= sprintf("%s", "\"Private\",\"Profession\",\"Referred By\",\"Sensitivity
 // Fields 86 - 90
 $text .= sprintf("%s", "\"User 1\",\"User 2\",\"User 3\",\"User 4\",\"Web Page\",");
 
-$custom_fields = CustomFields::getCustomFieldList('contacts');
+$custom_fields = w2p_Core_CustomFields::getCustomFieldList('contacts');
 
 foreach ($custom_fields as $f) {
 	$text .= sprintf("%s", "\"$f[field_description]\",");
@@ -82,7 +82,7 @@ foreach ($contactList as $contact) {
 	// Fields 81- 90
 	$text .= sprintf("\"False\",,,\"Normal\",,,,,,,");
 
-	$custom_fields = CustomFields::getCustomFieldByModule($AppUI, 'contacts', $contact['contact_id']);
+	$custom_fields = w2p_Core_CustomFields::getCustomFieldByModule($AppUI, 'contacts', $contact['contact_id']);
 
 	if (count($custom_fields) > 0) {
 		foreach ($custom_fields as $f) {

@@ -78,7 +78,7 @@ if ($del) {
 		if (($msg = $obj->store())) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 		} else {
-			$custom_fields = new CustomFields('calendar', 'addedit', $obj->event_id, 'edit');
+			$custom_fields = new w2p_Core_CustomFields('calendar', 'addedit', $obj->event_id, 'edit');
 			$custom_fields->bind($_POST);
 			$sql = $custom_fields->store($obj->event_id); // Store Custom Fields
 

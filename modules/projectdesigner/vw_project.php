@@ -53,7 +53,7 @@ if (!defined('W2P_BASE_DIR')) {
 		<tr>
 			<td colspan="2">
         <?php
-          $custom_fields = new CustomFields('projects', $a, $obj->project_id, 'view');
+          $custom_fields = new w2p_Core_CustomFields('projects', $a, $obj->project_id, 'view');
           $custom_fields->printHTML();
         ?>
 			</td>
