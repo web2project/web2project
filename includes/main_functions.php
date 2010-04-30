@@ -19,6 +19,7 @@ require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
  */
 function __autoload($class_name) {
     global $AppUI;
+    $name = $class_name;
 
     if (false !== strpos($name, 'w2p_')) {
         $name = str_replace('_', DIRECTORY_SEPARATOR, $name);
