@@ -176,7 +176,7 @@ if ($sub_form) {
       $oldTask->updateDynamics(false);
     }
 
-    $custom_fields = new CustomFields($m, 'addedit', $obj->task_id, 'edit');
+    $custom_fields = new w2p_Core_CustomFields($m, 'addedit', $obj->task_id, 'edit');
     $custom_fields->bind($_POST);
     $sql = $custom_fields->store($obj->task_id); // Store Custom Fields
 

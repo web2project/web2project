@@ -144,7 +144,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>		
 			</table>
 			<?php
-				$custom_fields = new CustomFields($m, $a, $company->company_id, 'view');
+				$custom_fields = new w2p_Core_CustomFields($m, $a, $company->company_id, 'view');
 				$custom_fields->printHTML();
 			?>
 		</td>

@@ -150,7 +150,7 @@ function delIt() {
 				</tr>
 			</table>
 			<?php
-				$custom_fields = new CustomFields($m, $a, $event->event_id, 'view');
+				$custom_fields = new w2p_Core_CustomFields($m, $a, $event->event_id, 'view');
 				$custom_fields->printHTML();
 			?>
 		</td>

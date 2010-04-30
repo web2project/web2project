@@ -91,7 +91,7 @@ $perms = &$AppUI->acl();
 		</td></tr></table><br />
 		<?php
 global $m;
-$custom_fields = new CustomFields($m, 'addedit', $task->task_id, 'edit');
+$custom_fields = new w2p_Core_CustomFields($m, 'addedit', $task->task_id, 'edit');
 $custom_fields->printHTML();
 ?>
 	</td>
