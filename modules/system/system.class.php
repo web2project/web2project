@@ -26,6 +26,40 @@ class CSystem {
     public function getUpdatesApplied() {
         return $this->upgrader->getUpdatesApplied();
     }
+
+    public function hook_cron()
+    {
+        global $w2Pconfig;
+
+        echo date('w')."\n";
+        echo date('G')."\n";
+        if (date('w') == w2PgetConfig('system_update_day', 0) &&
+            date('G') == w2PgetConfig('system_update_hour', 3))
+        {
+            $AppUI = new CAppUI;
+            $configList = array();
+
+            $moduleList = $AppUI->getLoadableModuleList();
+            foreach($moduleList as $module) {
+                $configList[$module['mod_directory']] = $module['mod_version'];
+            }
+
+            $configList['w2p_ver'] = $AppUI->getVersion();
+            $configList['php_ver'] = PHP_VERSION;
+            $configList['database'] = $w2Pconfig['dbtype'];
+            $configList['server'] = $_SERVER['SERVER_SOFTWARE'];
+            $configList['connector'] = php_sapi_name();
+            $configList['database_ver'] = '';
+            $libraries = array('gd', 'tidy', 'curl', 'json', 'libxml', 'mysql');
+            foreach($libraries as $library) {
+                $configList[$library.'_ver'] = phpversion($library);
+            }
+
+            $request = new w2p_Utilities_HTTPRequest('http://google.com');
+            $request->addParameters($configList);
+            //$request->processRequest();
+        }
+    }
 }
 
 /**
