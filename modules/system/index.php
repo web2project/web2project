@@ -29,8 +29,8 @@ $titleBlock->show();
         $system = new CSystem();
         if ($system->upgradeRequired()) {
           ?>
-          <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Upgrade System'); ?></a> -
-          <span class="error"><?php echo $AppUI->_('Your system needs to be upgraded.  Please upgrade at your earliest convenience.'); ?></span>
+          <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -
+          <span class="error"><?php echo $AppUI->_('Your upgrade is not complete. Please apply the updates at your earliest convenience.'); ?></span>
           <?php
         } else {
             echo $AppUI->_('Your system is up to date, no upgrade required.');
@@ -48,6 +48,16 @@ $titleBlock->show();
           <a href="?m=system&a=systemconfig"><?php echo $AppUI->_('Select a Timezone'); ?></a> -
           <span class="error"><?php echo $AppUI->_('You do not have a default server timezone selected. Please select one immediately.'); ?></span>
           <?php
+        }
+        echo '<br />';
+        $availableVersion = w2PgetConfig('available_version', '');
+        if (version_compare($AppUI->getVersion(), $availableVersion, '<')) {
+            ?>
+            <a href="http://sourceforge.net/projects/web2project/" target="_new"><?php echo $AppUI->_('Upgrade Available!'); ?></a> -
+            <span class="error"><?php echo $AppUI->_('Your system needs to be upgraded.  Please upgrade at your earliest convenience.'); ?></span>
+            <?php
+        } else {
+            echo $AppUI->_('Your system is the latest available version.');
         }
       ?>
     </td>

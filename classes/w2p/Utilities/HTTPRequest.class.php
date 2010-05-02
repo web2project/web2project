@@ -26,14 +26,12 @@ class w2p_Utilities_HTTPRequest {
     {
         $params = http_build_query($this->urlParams);
         if (w2p_check_url($this->url)) {
-            echo $this->url."\n";
-            echo $params."\n";
-
             if (function_exists('curl_init')) {
                 $ch = curl_init($this->url);
                 curl_setopt ($ch, CURLOPT_POST, 1);
                 curl_setopt ($ch, CURLOPT_POSTFIELDS, $params);
-                curl_exec ($ch);
+                curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec( $ch );
                 curl_close ($ch);
             } else {
                 /*
@@ -50,8 +48,8 @@ class w2p_Utilities_HTTPRequest {
                 if ($response === false) {
                     throw new Exception("Problem reading data from $url, $php_errormsg");
                 }
-                return $response;
             }
+            return $response;
         } else {
             //throw an error?
         }
