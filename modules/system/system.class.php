@@ -31,8 +31,6 @@ class CSystem {
     {
         global $w2Pconfig;
 
-        echo date('w')."\n";
-        echo date('G')."\n";
         if (date('w') == w2PgetConfig('system_update_day', 0) &&
             date('G') == w2PgetConfig('system_update_hour', 3))
         {
@@ -52,12 +50,26 @@ class CSystem {
             $configList['database_ver'] = '';
             $libraries = array('gd', 'tidy', 'curl', 'json', 'libxml', 'mysql');
             foreach($libraries as $library) {
-                $configList[$library.'_ver'] = phpversion($library);
+                $configList[$library.'_extver'] = phpversion($library);
             }
 
-            $request = new w2p_Utilities_HTTPRequest('http://google.com');
+            $request = new w2p_Utilities_HTTPRequest('http://stats.web2project.net');
             $request->addParameters($configList);
-            //$request->processRequest();
+            $result = $request->processRequest();
+            $data = json_decode($result);
+
+            $q = new DBQuery();
+            $q->addTable('config');
+            if ('' == w2PgetConfig('available_version', '')) {
+                $q->addInsert('config_name', 'available_version');
+                $q->addInsert('config_value', $data->w2p_ver);
+                $q->addInsert('config_group', 'admin_system');
+                $q->addInsert('config_type', 'text');
+            } else {
+                $q->addUpdate('config_value', $data->w2p_ver);
+                $q->addWhere("config_name  = 'available_version'");
+            }
+            $q->exec();
         }
     }
 }
