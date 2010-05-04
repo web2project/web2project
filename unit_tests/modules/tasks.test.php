@@ -2847,4 +2847,242 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTrue($this->obj->remind('not used', 'not used', 1, 1, $nothing));
         $w2Pconfig['cal_working_days'] = $old_cal_working_days;
     }
+
+    /**
+     * Tests clearing a reminder when we are checking that it is complete
+     */
+    public function testClearReminderDoCheck()
+    {
+        $this->obj->load(1);
+
+        $this->obj->clearReminder();
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestClearReminderDoCheck.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+    }
+
+    /**
+     * Tests clearing a reminder when we are checking it is complete and it is complete
+     */
+    public function testClearReminderDoCheckTaskComplete()
+    {
+        $this->obj->load(1);
+        $this->obj->task_percent_complete = 100;
+
+        $this->obj->clearReminder();
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestClearReminderDoCheckTaskComplete.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+    }
+
+    /**
+     * Tests clearing a reminder when not checking that the task is complete
+     */
+    public function testClearReminderDontCheck()
+    {
+        $this->obj->load(1);
+
+        $this->obj->clearReminder(true);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestClearReminderDontCheck.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('event_queue'), $xml_db_dataset->getTable('event_queue'));
+    }
+
+    /**
+     * Test getting allowed records with a uid passed
+     */
+    public function testGetAllowedRecordUid()
+    {
+        global $AppUI;
+
+        $allowed_records = $this->obj->getAllowedRecords(1);
+
+        $this->assertEquals(30,        count($allowed_records));
+        $this->assertEquals('Task 1',  $allowed_records[1]);
+        $this->assertEquals('Task 2',  $allowed_records[2]);
+        $this->assertEquals('Task 3',  $allowed_records[3]);
+        $this->assertEquals('Task 4',  $allowed_records[4]);
+        $this->assertEquals('Task 5',  $allowed_records[5]);
+        $this->assertEquals('Task 6',  $allowed_records[6]);
+        $this->assertEquals('Task 7',  $allowed_records[7]);
+        $this->assertEquals('Task 8',  $allowed_records[8]);
+        $this->assertEquals('Task 9',  $allowed_records[9]);
+        $this->assertEquals('Task 10', $allowed_records[10]);
+        $this->assertEquals('Task 11', $allowed_records[11]);
+        $this->assertEquals('Task 12', $allowed_records[12]);
+        $this->assertEquals('Task 13', $allowed_records[13]);
+        $this->assertEquals('Task 14', $allowed_records[14]);
+        $this->assertEquals('Task 15', $allowed_records[15]);
+        $this->assertEquals('Task 16', $allowed_records[16]);
+        $this->assertEquals('Task 17', $allowed_records[17]);
+        $this->assertEquals('Task 18', $allowed_records[18]);
+        $this->assertEquals('Task 19', $allowed_records[19]);
+        $this->assertEquals('Task 20', $allowed_records[20]);
+        $this->assertEquals('Task 21', $allowed_records[21]);
+        $this->assertEquals('Task 22', $allowed_records[22]);
+        $this->assertEquals('Task 23', $allowed_records[23]);
+        $this->assertEquals('Task 24', $allowed_records[24]);
+        $this->assertEquals('Task 25', $allowed_records[25]);
+        $this->assertEquals('Task 26', $allowed_records[26]);
+        $this->assertEquals('Task 27', $allowed_records[27]);
+        $this->assertEquals('Task 28', $allowed_records[28]);
+        $this->assertEquals('Task 29', $allowed_records[29]);
+        $this->assertEquals('Task 30', $allowed_records[30]);
+    }
+
+    /**
+     * Test getting allowed records when passing a uid and fields
+     */
+    public function testGetAllowedRecordsFields()
+    {
+        $allowed_records = $this->obj->getAllowedRecords(1, 'tasks.task_id, tasks.task_start_date');
+
+        $this->assertEquals(30,                     count($allowed_records));
+        $this->assertEquals('2009-07-05 00:00:00',  $allowed_records[1]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[2]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[3]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[4]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[5]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[6]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[7]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[8]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[9]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[10]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[11]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[12]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[13]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[14]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[15]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[16]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[17]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[18]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[19]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[20]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[21]);
+        $this->assertEquals('2009-09-09 00:00:00',  $allowed_records[22]);
+        $this->assertEquals('2009-10-10 00:00:00',  $allowed_records[23]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[24]);
+        $this->assertEquals('2009-09-09 00:00:00',  $allowed_records[25]);
+        $this->assertEquals('2009-10-10 00:00:00',  $allowed_records[26]);
+        $this->assertEquals('2009-10-10 00:00:00',  $allowed_records[27]);
+        $this->assertEquals('2009-10-10 00:00:00',  $allowed_records[28]);
+        $this->assertEquals('2009-07-06 00:00:00',  $allowed_records[29]);
+        $this->assertEquals('2009-10-10 00:00:00',  $allowed_records[30]);
+    }
+
+    /**
+     * Tests getting allowed records with an order by
+     */
+    public function testGetAllowedRecordsOrderBy()
+    {
+        $allowed_records = $this->obj->getAllowedRecords(1, '*', 'tasks.task_start_date');
+
+        $this->assertEquals(30,        count($allowed_records));
+        $this->assertEquals('Task 1',  $allowed_records[1]);
+        $this->assertEquals('Task 2',  $allowed_records[2]);
+        $this->assertEquals('Task 3',  $allowed_records[3]);
+        $this->assertEquals('Task 4',  $allowed_records[4]);
+        $this->assertEquals('Task 5',  $allowed_records[5]);
+        $this->assertEquals('Task 6',  $allowed_records[6]);
+        $this->assertEquals('Task 7',  $allowed_records[7]);
+        $this->assertEquals('Task 8',  $allowed_records[8]);
+        $this->assertEquals('Task 9',  $allowed_records[9]);
+        $this->assertEquals('Task 10', $allowed_records[10]);
+        $this->assertEquals('Task 11', $allowed_records[11]);
+        $this->assertEquals('Task 12', $allowed_records[12]);
+        $this->assertEquals('Task 13', $allowed_records[13]);
+        $this->assertEquals('Task 14', $allowed_records[14]);
+        $this->assertEquals('Task 15', $allowed_records[15]);
+        $this->assertEquals('Task 16', $allowed_records[16]);
+        $this->assertEquals('Task 17', $allowed_records[17]);
+        $this->assertEquals('Task 18', $allowed_records[18]);
+        $this->assertEquals('Task 19', $allowed_records[19]);
+        $this->assertEquals('Task 20', $allowed_records[20]);
+        $this->assertEquals('Task 21', $allowed_records[21]);
+        $this->assertEquals('Task 22', $allowed_records[22]);
+        $this->assertEquals('Task 23', $allowed_records[23]);
+        $this->assertEquals('Task 24', $allowed_records[24]);
+        $this->assertEquals('Task 25', $allowed_records[25]);
+        $this->assertEquals('Task 26', $allowed_records[26]);
+        $this->assertEquals('Task 27', $allowed_records[27]);
+        $this->assertEquals('Task 28', $allowed_records[28]);
+        $this->assertEquals('Task 29', $allowed_records[29]);
+        $this->assertEquals('Task 30', $allowed_records[30]);
+    }
+
+    /**
+     * Test getting allowed records with an index specified
+     */
+    public function testGetAllowedRecordsIndex()
+    {
+        $allowed_records = $this->obj->getAllowedRecords(1, 'tasks.task_name', '', 'task_name');
+
+        $this->assertEquals(30,        count($allowed_records));
+        $this->assertEquals('Task 1',  $allowed_records['Task 1']['task_name']);
+        $this->assertEquals('Task 1',  $allowed_records['Task 1'][0]);
+        $this->assertEquals('Task 2',  $allowed_records['Task 2']['task_name']);
+        $this->assertEquals('Task 2',  $allowed_records['Task 2'][0]);
+        $this->assertEquals('Task 3',  $allowed_records['Task 3']['task_name']);
+        $this->assertEquals('Task 3',  $allowed_records['Task 3'][0]);
+        $this->assertEquals('Task 4',  $allowed_records['Task 4']['task_name']);
+        $this->assertEquals('Task 4',  $allowed_records['Task 4'][0]);
+        $this->assertEquals('Task 5',  $allowed_records['Task 5']['task_name']);
+        $this->assertEquals('Task 5',  $allowed_records['Task 5'][0]);
+        $this->assertEquals('Task 6',  $allowed_records['Task 6']['task_name']);
+        $this->assertEquals('Task 6',  $allowed_records['Task 6'][0]);
+        $this->assertEquals('Task 7',  $allowed_records['Task 7']['task_name']);
+        $this->assertEquals('Task 7',  $allowed_records['Task 7'][0]);
+        $this->assertEquals('Task 8',  $allowed_records['Task 8']['task_name']);
+        $this->assertEquals('Task 8',  $allowed_records['Task 8'][0]);
+        $this->assertEquals('Task 9',  $allowed_records['Task 9']['task_name']);
+        $this->assertEquals('Task 9',  $allowed_records['Task 9'][0]);
+        $this->assertEquals('Task 10', $allowed_records['Task 10']['task_name']);
+        $this->assertEquals('Task 10', $allowed_records['Task 10'][0]);
+        $this->assertEquals('Task 11', $allowed_records['Task 11']['task_name']);
+        $this->assertEquals('Task 11', $allowed_records['Task 11'][0]);
+        $this->assertEquals('Task 12', $allowed_records['Task 12']['task_name']);
+        $this->assertEquals('Task 12', $allowed_records['Task 12'][0]);
+        $this->assertEquals('Task 13', $allowed_records['Task 13']['task_name']);
+        $this->assertEquals('Task 13', $allowed_records['Task 13'][0]);
+        $this->assertEquals('Task 14', $allowed_records['Task 14']['task_name']);
+        $this->assertEquals('Task 14', $allowed_records['Task 14'][0]);
+        $this->assertEquals('Task 15', $allowed_records['Task 15']['task_name']);
+        $this->assertEquals('Task 15', $allowed_records['Task 15'][0]);
+        $this->assertEquals('Task 16', $allowed_records['Task 16']['task_name']);
+        $this->assertEquals('Task 16', $allowed_records['Task 16'][0]);
+        $this->assertEquals('Task 17', $allowed_records['Task 17']['task_name']);
+        $this->assertEquals('Task 17', $allowed_records['Task 17'][0]);
+        $this->assertEquals('Task 18', $allowed_records['Task 18']['task_name']);
+        $this->assertEquals('Task 18', $allowed_records['Task 18'][0]);
+        $this->assertEquals('Task 19', $allowed_records['Task 19']['task_name']);
+        $this->assertEquals('Task 19', $allowed_records['Task 19'][0]);
+        $this->assertEquals('Task 20', $allowed_records['Task 20']['task_name']);
+        $this->assertEquals('Task 20', $allowed_records['Task 20'][0]);
+        $this->assertEquals('Task 21', $allowed_records['Task 21']['task_name']);
+        $this->assertEquals('Task 21', $allowed_records['Task 21'][0]);
+        $this->assertEquals('Task 22', $allowed_records['Task 22']['task_name']);
+        $this->assertEquals('Task 22', $allowed_records['Task 22'][0]);
+        $this->assertEquals('Task 23', $allowed_records['Task 23']['task_name']);
+        $this->assertEquals('Task 23', $allowed_records['Task 23'][0]);
+        $this->assertEquals('Task 24', $allowed_records['Task 24']['task_name']);
+        $this->assertEquals('Task 24', $allowed_records['Task 24'][0]);
+        $this->assertEquals('Task 25', $allowed_records['Task 25']['task_name']);
+        $this->assertEquals('Task 25', $allowed_records['Task 25'][0]);
+        $this->assertEquals('Task 26', $allowed_records['Task 26']['task_name']);
+        $this->assertEquals('Task 26', $allowed_records['Task 26'][0]);
+        $this->assertEquals('Task 27', $allowed_records['Task 27']['task_name']);
+        $this->assertEquals('Task 27', $allowed_records['Task 27'][0]);
+        $this->assertEquals('Task 28', $allowed_records['Task 28']['task_name']);
+        $this->assertEquals('Task 28', $allowed_records['Task 28'][0]);
+        $this->assertEquals('Task 28', $allowed_records['Task 29']['task_name']);
+        $this->assertEquals('Task 29', $allowed_records['Task 29'][0]);
+        $this->assertEquals('Task 30', $allowed_records['Task 30']['task_name']);
+        $this->assertEquals('Task 30', $allowed_records['Task 30'][0]);
+
+        $this->assertTrue($this->obj->remind('not used', 'not used', 1, 1, $nothing));
+        $w2Pconfig['cal_working_days'] = $old_cal_working_days;
+    }
 }
