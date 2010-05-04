@@ -17,7 +17,7 @@ $projectStatuses = w2PgetSysVal('ProjectStatus');
 //Tabbed view
 if ($is_tabbed) {
 	$project_status_filter = $currentTabId;
-	
+
 	//Lets fix the status filter for Not defined, All, All Active and Archived
 	//All
 	if ($currentTabId == 0) {
@@ -40,7 +40,7 @@ if ($is_tabbed) {
 	}
 
 	$all_projects = $projects;
-	
+
 	//Lets remove the unnecessary projects:
 	if ($project_status_filter == -1) {
 	//All
@@ -80,21 +80,21 @@ if ($is_tabbed) {
 		$key = 0;
 		foreach ($projects as $project) {
 			if ($project['project_status'] != $project_status_filter || !$project['project_active']) {
-				unset($projects[$key]);      
+				unset($projects[$key]);
 			}
-			$key++;           
+			$key++;
 		}
-		$key = 0; 
+		$key = 0;
 		foreach ($projects as $project) {
 			$tmp_projects[$key] = $project;
-			$key++;           
+			$key++;
 		}
 		$projects = $tmp_projects;
 	}
 
 	$xpg_totalrecs = count($projects);
 	echo buildPaginationNav($AppUI, $m, $currentTabId, $xpg_totalrecs, $xpg_pagesize, $page);
-  
+
 } else {
 	//flat view
 	$project_status_filter = $currentTabId;
@@ -154,7 +154,7 @@ if ($is_tabbed) {
 				</th>
 			<?php } ?>
 		</tr>
-	
+
 		<?php
 		$none = true;
 		$projectArray = array();
@@ -166,7 +166,7 @@ if ($is_tabbed) {
 				(($row['project_active'] && $row['project_status'] == $project_status_filter) && !$is_tabbed) || //flat active projects
 				((!$row['project_active'] && $project_status_filter == -3) && !$is_tabbed) //flat archived projects
 				) {
-		
+
 				$st_projects_arr = array();
 				if ($row['project_id'] == $row['project_original_parent']) {
 					if ($project_status_filter == -2) {
@@ -177,7 +177,7 @@ if ($is_tabbed) {
 				} else {
 					$st_projects_arr[0][1] = 0;
 				}
-		
+
 				$tmpProject = new CProject();
 
 				foreach ($st_projects_arr as $st_project) {
@@ -198,7 +198,7 @@ if ($is_tabbed) {
 					$end_date = intval($row['project_end_date']) ? new CDate($row['project_end_date']) : null;
 					$actual_end_date = intval($row['project_actual_end_date']) ? new CDate($row['project_actual_end_date']) : null;
 					$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
-		
+
 					$s = '';
 					if ($level) {
 						$s .= '<tr style="display:none" id="multiproject_tr_' . $row['project_original_parent'] . '_' . $row['project_id'] . '_">';
@@ -208,7 +208,7 @@ if ($is_tabbed) {
 					}
 					$s .= '<td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
 					$s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td>';
-		
+
 					$s .= '<td align="center">';
 					if ($row['project_priority'] < 0) {
 						$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width=13 height=16>';
@@ -216,9 +216,9 @@ if ($is_tabbed) {
 						$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width=13 height=16>';
 					}
 					$s .= '</td><td width="40%">';
-		
+
 					$count_projects = $tmpProject->hasChildProjects($row['project_id']);
-		
+
 					if ($level) {
 						$s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1));
                         $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;';
@@ -239,7 +239,7 @@ if ($is_tabbed) {
                         $s .= $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
 					}
 					$s .= '</td><td width="30%"><a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a></td>';
-		
+
 					$s .= '<td nowrap="nowrap" align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
 					$s .= '<td nowrap="nowrap" align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
 					$s .= '<td nowrap="nowrap" align="center">';
@@ -253,19 +253,20 @@ if ($is_tabbed) {
 					$s .= '</td><td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
 					$s .= $row['project_task_count'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
 					$s .= '</td><td align="center"><input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" /></td>';
-		
+
 					if ($show_all_projects) {
 						$s .= '<td align="left" nowrap="nowrap">';
 						$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectStatuses[0] ? $AppUI->_($project_statuses[$row['project_status'] + 2]) : $AppUI->_($project_statuses[$row['project_status'] + 1]));
 						$s .= '</td>';
 					}
-		
+
 					if ($level) {
 						$s .= '</div>';
 					}
           $s .= '</tr>';
 
-          if ($project_id > 0 && !isset($projectArray[$project_id])) {
+          if (($project_id > 0 && !isset($projectArray[$project_id]))
+              || (!$project_id && !isset($projectArray[$row['project_id']]))) {
             echo $s;
           }
           $projectArray[$project_id] = $project_id;
