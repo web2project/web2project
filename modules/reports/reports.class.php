@@ -1,7 +1,11 @@
 <?php /* $Id$ $URL$ */
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
+
+/**
+ *	@package web2Project
+ *	@subpackage modules
+ *	@version $Revision$
+ */
+
 class CReport {
   private $reportFilename = '';
   private $tempDir = '';

@@ -345,7 +345,7 @@ function delIt() {
 		    <tr>
 		    	<td colspan="3">
 						<?php
-							$custom_fields = new CustomFields($m, $a, $obj->task_id, 'view');
+							$custom_fields = new w2p_Core_CustomFields($m, $a, $obj->task_id, 'view');
 							$custom_fields->printHTML();
 						?>
 		 			</td>
@@ -367,7 +367,7 @@ if ($obj->task_dynamic != 1) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_logs', 'Task Logs');
 	}
 	if ($task_log_id == 0) {
-		if canAdd('task_log')) {
+		if (canAdd('task_log')) {
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 		}
 	} elseif (canEdit('task_log')) {

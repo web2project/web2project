@@ -1,9 +1,14 @@
 <?php /* $Id$ $URL$ */
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
-class CustomFieldsParser {
+/**
+ *	@package web2project
+ *	@subpackage core
+ *	@version $Revision$
+ *
+ *	CustomFieldsParser
+ *
+ */
+class w2p_Core_CustomFieldsParser {
 	public $fields_array = array();
 	public $custom_record_type;
 	public $previous_data = array();
@@ -15,7 +20,7 @@ class CustomFieldsParser {
 	public $id_field_name = 'task_id';
 
 	/**
-	 * @return CustomFieldsParser
+	 * @return w2p_Core_CustomFieldsParser
 	 * @param char Field type: TaskCustomFields, CompanyCustomFields
 	 * @desc Constructor
 	 */

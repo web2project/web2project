@@ -899,10 +899,18 @@ class w2p_Database_Query {
 				}
 				$q .= $this->_table_prefix . $table;
 
-                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-                $fieldlist = implode(',', $quotedFieldnames);
-                $valuelist = implode(',', $this->value_list);
-
+				$fieldlist = '';
+				$valuelist = '';
+				foreach ($this->value_list as $field => $value) {
+					if ($fieldlist) {
+						$fieldlist .= ',';
+					}
+					if ($valuelist) {
+						$valuelist .= ',';
+					}
+					$fieldlist .= trim($field);
+					$valuelist .= $value;
+				}
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
 				break;
@@ -922,10 +930,18 @@ class w2p_Database_Query {
 				}
 				$q .= $this->quote_db($this->_table_prefix . $table);
 
-                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-                $fieldlist = implode(',', $quotedFieldnames);
-                $valuelist = implode(',', $this->value_list);
-
+				$fieldlist = '';
+				$valuelist = '';
+				foreach ($this->value_list as $field => $value) {
+					if ($fieldlist) {
+						$fieldlist .= ',';
+					}
+					if ($valuelist) {
+						$valuelist .= ',';
+					}
+					$fieldlist .= $this->quote_db(trim($field));
+					$valuelist .= $value;
+				}
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
 		}
@@ -948,10 +964,18 @@ class w2p_Database_Query {
 		}
 		$q .= $this->quote_db($this->_table_prefix . $table);
 
-        $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-        $fieldlist = implode(',', $quotedFieldnames);
-        $valuelist = implode(',', $this->value_list);
-
+		$fieldlist = '';
+		$valuelist = '';
+		foreach ($this->value_list as $field => $value) {
+			if ($fieldlist) {
+				$fieldlist .= ',';
+			}
+			if ($valuelist) {
+				$valuelist .= ',';
+			}
+			$fieldlist .= $this->quote_db(trim($field));
+			$valuelist .= $value;
+		}
 		$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 		return $q;
 	}
@@ -976,10 +1000,18 @@ class w2p_Database_Query {
 				}
 				$q .= $this->_table_prefix . $table;
 
-                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-                $fieldlist = implode(',', $quotedFieldnames);
-                $valuelist = implode(',', $this->value_list);
-
+				$fieldlist = '';
+				$valuelist = '';
+				foreach ($this->value_list as $field => $value) {
+					if ($fieldlist) {
+						$fieldlist .= ',';
+					}
+					if ($valuelist) {
+						$valuelist .= ',';
+					}
+					$fieldlist .= trim($field);
+					$valuelist .= $value;
+				}
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
 				break;
@@ -999,11 +1031,18 @@ class w2p_Database_Query {
 				}
 				$q .= $this->quote_db($this->_table_prefix . $table);
 
-                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-                $fieldlist = implode(',', $quotedFieldnames);
-                $valuelist = implode(',', $this->value_list);
-
-
+				$fieldlist = '';
+				$valuelist = '';
+				foreach ($this->value_list as $field => $value) {
+					if ($fieldlist) {
+						$fieldlist .= ',';
+					}
+					if ($valuelist) {
+						$valuelist .= ',';
+					}
+					$fieldlist .= $this->quote_db(trim($field));
+					$valuelist .= $value;
+				}
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
 		}

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ *	@package web2Project
+ *	@subpackage modules
+ *	@version $Revision$
+ */
+
 class CHistory extends CW2pObject {
   public $history_id = null;
   public $history_date = null;

@@ -1,11 +1,11 @@
 <?php /* $Id$ $URL$ */
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
 /**
- * Link Class
+ *	@package web2Project
+ *	@subpackage modules
+ *	@version $Revision$
  */
+
 class CLink extends CW2pObject {
 
     public $link_id = null;
