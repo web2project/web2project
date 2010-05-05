@@ -952,17 +952,7 @@ function format_backtrace($bt, $file, $line, $msg) {
 	echo 'ERROR: ' . $file . '(' . $line . ') : ' . $msg . "\n";
 	echo 'Backtrace:' . "\n";
 	foreach ($bt as $level => $frame) {
-		echo $level . ' ' . $frame['file'] . ':' . $frame['line'] . ' ' . $frame['function'] . '(';
-		$in = false;
-		foreach ($frame['args'] as $arg) {
-			if ($in) {
-				echo ',';
-			} else {
-				$in = true;
-			}
-			echo var_export($arg, true);
-		}
-		echo ")\n";
+		echo $level . ' ' . $frame['file'] . ':' . $frame['line'] . ' ' . $frame['function'] . "()\n";
 	}
 }
 
