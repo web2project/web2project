@@ -17,7 +17,6 @@ if (!defined('W2P_BASE_DIR')) {
 *   In order to find those, you'll have to explore the individual classes.
 */
 
-
 /*
 *  Originally located in classes/permissions.class.php;
 *  To be removed in v2.0 because those names caused double negatives in coding:
