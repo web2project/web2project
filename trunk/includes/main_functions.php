@@ -49,6 +49,9 @@ function __autoload($class_name) {
         case 'ctasklog':
             require_once W2P_BASE_DIR.'/modules/tasks/tasks.class.php';
             break;
+        case 'cprojectdesigneroptions':
+            require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
+            break;
 
         default:
             if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
@@ -60,6 +63,8 @@ function __autoload($class_name) {
                 $name = substr($name, 1);
                 if (substr($name, -1) == 'y') {
                     $name = substr($name, 0, -1).'ies';
+                } elseif (in_array($name, array('system'))) {
+                    //do nothing
                 } else {
                     $name .= 's';
                 }
@@ -1137,15 +1142,6 @@ function w2PrequiredFields($requiredFields) {
 	return $buffer;
 }
 
-/*
-* Make function htmlspecialchar_decode for older PHP versions
-*/
-if (!function_exists('htmlspecialchars_decode')) {
-	function htmlspecialchars_decode($str) {
-		return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
-	}
-}
-
 /**
  * Return the number of bytes represented by a PHP.INI value
  */
@@ -1336,8 +1332,8 @@ function w2p_textarea($content)
 
     /*
      * Thanks to Alison Gianotto for two regular expressions to make our
-    *    links all linky.  This code is based on her work here:
-    *    http://www.snipe.net/2009/09/php-twitter-clickable-links
+     *   links all linky.  This code is based on her work here:
+     *   http://www.snipe.net/2009/09/php-twitter-clickable-links
      */
     $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
     $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);

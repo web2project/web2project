@@ -151,3 +151,12 @@ if(!function_exists('mb_trim')) {
 		return preg_replace("/$pattern_middle/usSD", '', $string);
 	}
 }
+
+/*
+* Make function htmlspecialchar_decode for older PHP versions
+*/
+if (!function_exists('htmlspecialchars_decode')) {
+	function htmlspecialchars_decode($str) {
+		return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
+	}
+}
