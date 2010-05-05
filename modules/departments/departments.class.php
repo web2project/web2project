@@ -27,7 +27,7 @@ class CDepartment extends CW2pObject {
 	public $dept_type = null;
 
 	public function __construct() {
-	  parent::__construct('departments', 'dept_id');
+        parent::__construct('departments', 'dept_id');
 	}
 
 	public function load($deptId) {
@@ -41,7 +41,7 @@ class CDepartment extends CW2pObject {
 		return $q->loadObject($this);
 	}
 	public function loadFull(CAppUI $AppUI = null, $deptId) {
-    global $AppUI;
+        global $AppUI;
 
 		$q = new DBQuery;
 		$q->addTable('companies', 'com');
@@ -63,8 +63,8 @@ class CDepartment extends CW2pObject {
 	public function loadOtherDepts(CAppUI $AppUI = null, $company_id, $removeDeptId = 0) {
 		global $AppUI;
 
-    $results = array();
-    $q = new DBQuery;
+        $results = array();
+        $q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dept_id, dept_name, dept_parent');
 		$q->addWhere('dep.dept_company = ' . (int) $company_id);
@@ -72,48 +72,48 @@ class CDepartment extends CW2pObject {
 			$q->addWhere('dep.dept_id <> ' . $removeDeptId);
 		}
 		$this->setAllowedSQL($AppUI->user_id, $q);
-    $q->addOrder('dept_name');
-    $deptList = $q->loadList();
+        $q->addOrder('dept_name');
+        $deptList = $q->loadList();
 
-    foreach ($deptList as $dept) {
-    	$results[$dept['dept_id']] = $dept['dept_name'];
-    }
+        foreach ($deptList as $dept) {
+            $results[$dept['dept_id']] = $dept['dept_name'];
+        }
     return $results;
 	}
 
 	public function getFilteredDepartmentList(CAppUI $AppUI = null, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
-    global $AppUI;
+        global $AppUI;
 
-	  $orderby = (in_array($orderby, array('dept_name', 'dept_type', 'countp', 'inactive'))) ? $orderby : 'dept_name';
-	  $q = new DBQuery;
-	  $q->addTable('departments');
-      $q->addQuery('departments.*, COUNT(ct.contact_department) dept_users, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
-      $q->addJoin('project_departments', 'pd', 'pd.department_id = dept_id');
-      $q->addJoin('projects', 'p', 'pd.project_id = p.project_id AND p.project_active = 1');
-      $q->leftJoin('users', 'u', 'dept_owner = u.user_id');
-      $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-      $q->addJoin('projects', 'p2', 'pd.project_id = p2.project_id AND p2.project_active = 0');
-      $q->addJoin('contacts', 'ct', 'ct.contact_department = dept_id');
-      $q->addGroup('dept_id');
-      $q->addOrder('dept_parent, dept_name');
-      
-      $oCpy = new CCompany();
-      $where = $this->getAllowedSQL($AppUI->user_id, 'c.company_id');
-      $q->addWhere($where);
-      
-      if ($deptType > -1) {
-      	$q->addWhere('dept_type = ' . (int) $deptType);
-      }
-      if ($searchString != '') {
-      	$q->addWhere("dept_name LIKE '%$searchString%'");
-      }
-      if ($ownerId > 0) {
-      	$q->addWhere('dept_owner = '.$ownerId);
-      }
-      $q->addGroup('dept_id');
-      $q->addOrder($orderby . ' ' . $orderdir);
-      
-      return $q->loadList();
+        $orderby = (in_array($orderby, array('dept_name', 'dept_type', 'countp', 'inactive'))) ? $orderby : 'dept_name';
+        $q = new DBQuery;
+        $q->addTable('departments');
+        $q->addQuery('departments.*, COUNT(ct.contact_department) dept_users, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
+        $q->addJoin('project_departments', 'pd', 'pd.department_id = dept_id');
+        $q->addJoin('projects', 'p', 'pd.project_id = p.project_id AND p.project_active = 1');
+        $q->leftJoin('users', 'u', 'dept_owner = u.user_id');
+        $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+        $q->addJoin('projects', 'p2', 'pd.project_id = p2.project_id AND p2.project_active = 0');
+        $q->addJoin('contacts', 'ct', 'ct.contact_department = dept_id');
+        $q->addGroup('dept_id');
+        $q->addOrder('dept_parent, dept_name');
+
+        $oCpy = new CCompany();
+        $where = $this->getAllowedSQL($AppUI->user_id, 'c.company_id');
+        $q->addWhere($where);
+
+        if ($deptType > -1) {
+            $q->addWhere('dept_type = ' . (int) $deptType);
+        }
+        if ($searchString != '') {
+            $q->addWhere("dept_name LIKE '%$searchString%'");
+        }
+        if ($ownerId > 0) {
+            $q->addWhere('dept_owner = '.$ownerId);
+        }
+        $q->addGroup('dept_id');
+        $q->addOrder($orderby . ' ' . $orderdir);
+
+        return $q->loadList();
 	}
 
 	public function bind($hash) {
@@ -128,52 +128,55 @@ class CDepartment extends CW2pObject {
 	}
 
 	public function check() {
-    $errorArray = array();
-    $baseErrorMsg = get_class($this) . '::store-check failed - ';
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-    if (0 == (int) $this->dept_company) {
-      $errorArray['dept_company'] = $baseErrorMsg . 'department company is not set';
-    }
-    if ('' == trim($this->dept_name)) {
-      $errorArray['dept_name'] = $baseErrorMsg . 'department name is not set';
-    }
-    if (0 != $this->dept_id && $this->dept_id == $this->dept_parent) {
-      $errorArray['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
-    }
+        if (0 == (int) $this->dept_company) {
+            $errorArray['dept_company'] = $baseErrorMsg . 'department company is not set';
+        }
+        if ('' == trim($this->dept_name)) {
+            $errorArray['dept_name'] = $baseErrorMsg . 'department name is not set';
+        }
+        if (0 != $this->dept_id && $this->dept_id == $this->dept_parent) {
+            $errorArray['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
+        }
+        if (0 == (int) $this->dept_owner) {
+            $errorArray['dept_owner'] = $baseErrorMsg . 'department owner is not set';
+        }
 
 		return $errorArray;
 	}
 
 	public function store(CAppUI $AppUI = null) {
-    global $AppUI;
+        global $AppUI;
 
-    $perms = $AppUI->acl();
-    $stored = false;
+        $perms = $AppUI->acl();
+        $stored = false;
 
-    $errorMsgArray = $this->check();
+        $errorMsgArray = $this->check();
 
-    if (count($errorMsgArray) > 0) {
-      return $errorMsgArray;
-    }
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
 
 		if ($this->dept_id) {
-			$q = new DBQuery;
-			$ret = $q->updateObject('departments', $this, 'dept_id', false);
-      addHistory('departments', $this->dept_id, 'update', $this->dept_name, $this->dept_id);
-      $stored = true;
+            $q = new DBQuery;
+            $ret = $q->updateObject('departments', $this, 'dept_id', false);
+            addHistory('departments', $this->dept_id, 'update', $this->dept_name, $this->dept_id);
+            $stored = true;
 		} else {
-			$q = new DBQuery;
-			$ret = $q->insertObject('departments', $this, 'dept_id');
-      addHistory('departments', $this->dept_id, 'add', $this->dept_name, $this->dept_id);
-      $stored = true;
+            $q = new DBQuery;
+            $ret = $q->insertObject('departments', $this, 'dept_id');
+            addHistory('departments', $this->dept_id, 'add', $this->dept_name, $this->dept_id);
+            $stored = true;
 		}
-    return $stored;
+        return $stored;
 	}
 
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
 
-    $q = new DBQuery;
+        $q = new DBQuery;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.dept_id');
 		$q->addWhere('dep.dept_parent = ' . (int)$this->dept_id);
@@ -218,7 +221,7 @@ class CDepartment extends CW2pObject {
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
+        $perms = $AppUI->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
@@ -271,14 +274,15 @@ class CDepartment extends CW2pObject {
 	public function getAllowedSQL($uid, $index = null) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
+        $perms = $AppUI->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
 
-		if (!isset($index))
+		if (!isset($index)) {
 			$index = $this->_tbl_key;
+        }
 		$where = array();
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
@@ -309,7 +313,7 @@ class CDepartment extends CW2pObject {
 	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
+        $perms = $AppUI->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
@@ -351,7 +355,7 @@ class CDepartment extends CW2pObject {
 	public static function getDepartmentList(CAppUI $AppUI = null, $companyId, $departmentId = 0) {
 		global $AppUI;
 
-    $q = new DBQuery;
+        $q = new DBQuery;
 		$q->addTable('departments');
 		$q->addQuery('dept_id, dept_name');
 		if (is_int($departmentId)) {
@@ -367,7 +371,7 @@ class CDepartment extends CW2pObject {
 	public static function getContactList($AppUI = null, $deptId) {
 		global $AppUI;
 
-    $q = new DBQuery;
+        $q = new DBQuery;
 		$q->addTable('contacts', 'con');
 		$q->addQuery('contact_id, con.contact_first_name');
 		$q->addQuery('con.contact_last_name, contact_email, contact_phone');
@@ -378,18 +382,18 @@ class CDepartment extends CW2pObject {
 		return $q->loadHashList('contact_id');
 	}
 
-  public function hook_search() {
-    $search['table'] = 'departments';
-    $search['table_module'] = 'departments';
-    $search['table_key'] = 'dept_id'; // primary key in searched table
-    $search['table_link'] = 'index.php?m=departments&a=view&dept_id='; // first part of link
-    $search['table_title'] = 'Departments';
-    $search['table_orderby'] = 'dept_name';
-    $search['search_fields'] = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
-    $search['display_fields'] = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
+    public function hook_search() {
+        $search['table'] = 'departments';
+        $search['table_module'] = 'departments';
+        $search['table_key'] = 'dept_id'; // primary key in searched table
+        $search['table_link'] = 'index.php?m=departments&a=view&dept_id='; // first part of link
+        $search['table_title'] = 'Departments';
+        $search['table_orderby'] = 'dept_name';
+        $search['search_fields'] = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
+        $search['display_fields'] = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
 
-    return $search;
-  }
+        return $search;
+    }
 }
 
 //writes out a single <option> element for display of departments

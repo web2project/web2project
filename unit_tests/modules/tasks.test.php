@@ -3081,6 +3081,5 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Task 29', $allowed_records['Task 29'][0]);
         $this->assertEquals('Task 30', $allowed_records['Task 30']['task_name']);
         $this->assertEquals('Task 30', $allowed_records['Task 30'][0]);
-
     }
 }

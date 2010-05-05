@@ -186,7 +186,8 @@ function submitIt() {
 					// collect all active users for the department owner list
 					$users = $perms->getPermittedUsers('projects');
 					$owners =array('' => $AppUI->_('(Select a user)')) +  $users;
-					echo arraySelect($owners, 'dept_owner', 'size="1" class="text"', $department->dept_owner);
+                    $owner_id = ($department->dept_owner) ? $department->dept_owner : $AppUI->user_id;
+					echo arraySelect($owners, 'dept_owner', 'size="1" class="text"', $owner_id);
 				?>
 			</td>
 		</tr>
