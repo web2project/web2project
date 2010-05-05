@@ -909,7 +909,7 @@ class CAppUI {
 	public function getLoadableModuleList() {
 		$q = new DBQuery;
 		$q->addTable('modules', 'm');
-		$q->addQuery('mod_directory, mod_main_class');
+		$q->addQuery('mod_directory, mod_main_class, mod_version');
 		$q->addWhere('mod_active = 1');
 		$q->addWhere("mod_main_class <> ''");
 		$q->addOrder('mod_ui_order');
