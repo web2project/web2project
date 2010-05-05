@@ -26,23 +26,13 @@ $titleBlock->show();
     <td>&nbsp;</td>
     <td align="left">
       <?php
-        $system = new CSystem();
-        if ($system->upgradeRequired()) {
-          ?>
-          <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -
-          <span class="error"><?php echo $AppUI->_('Your upgrade is not complete. Please apply the updates at your earliest convenience.'); ?></span>
-          <?php
-        } else {
-            echo $AppUI->_('Your system is up to date, no upgrade required.');
-        }
-        echo '<br />';
         $tzName = w2PgetConfig('system_timezone');
         if (ini_get('date.timezone') || strlen($tzName) > 0) {
             $time = new DateTimeZone($tzName);
             $x = new DateTime();
             $offset = $time->getOffset($x);
             $offset = ($offset >= 0) ? '+'.$offset/3600 : $offset/3600;
-            echo $AppUI->_('Your system has a default timezone set of GMT'.$offset.'.');
+            echo $AppUI->_('Your system has a default timezone of GMT'.$offset.'.');
         } else {
           ?>
           <a href="?m=system&a=systemconfig"><?php echo $AppUI->_('Select a Timezone'); ?></a> -
@@ -54,10 +44,20 @@ $titleBlock->show();
         if (version_compare($AppUI->getVersion(), $availableVersion, '<')) {
             ?>
             <a href="http://sourceforge.net/projects/web2project/" target="_new"><?php echo $AppUI->_('Upgrade Available!'); ?></a> -
-            <span class="error"><?php echo $AppUI->_('Your system needs to be upgraded.  Please upgrade at your earliest convenience.'); ?></span>
+            <span class="error"><?php echo $AppUI->_('Your system should be upgraded to v'.$availableVersion.'.  Please upgrade at your earliest convenience.'); ?></span>
             <?php
         } else {
-            echo $AppUI->_('Your system is the latest available version.');
+            echo $AppUI->_('Your system is the latest version available.');
+        }
+        echo '<br />';
+        $system = new CSystem();
+        if ($system->upgradeRequired()) {
+          ?>
+          <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -
+          <span class="error"><?php echo $AppUI->_('Your upgrade is not complete. Please apply the updates at your earliest convenience.'); ?></span>
+          <?php
+        } else {
+            echo $AppUI->_('All installed update scripts have been executed.');
         }
       ?>
     </td>
