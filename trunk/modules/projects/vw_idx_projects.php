@@ -40,6 +40,7 @@ if ($is_tabbed) {
 	}
 
 	$all_projects = $projects;
+    $tmp_projects = array();
 
 	//Lets remove the unnecessary projects:
 	if ($project_status_filter == -1) {
@@ -182,8 +183,7 @@ if ($is_tabbed) {
 
 				foreach ($st_projects_arr as $st_project) {
 					$multiproject_id = 0;
-					$project = $st_project[0];
-          $project_id = $project['project_id'];
+                    $project_id = (isset($st_project[0])) ? $project['project_id'] : 0;
 					$level = $st_project[1];
 
 					if ($project_id) {
