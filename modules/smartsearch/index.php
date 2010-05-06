@@ -16,8 +16,9 @@ foreach ($files as $tmp) {
 	$temp = substr($tmp, 0, -8);
 	$ssearch['mod_' . $temp] = w2PgetParam($_POST, 'mod_' . $temp, '');
 }
-
 $ssearch['all_words'] = w2PgetParam($_POST, 'allwords', '');
+
+$keyword = (isset($_POST['keyword'])) ? strip_tags($_POST['keyword']) : '';
 
 if ($ssearch['advanced_search'] == 'on') {
 	$ssearch['ignore_case'] = w2PgetParam($_POST, 'ignorecase', '');
@@ -110,7 +111,7 @@ $titleBlock->show();
 				<tr>
 					<td align="left" valign="middle">
 					<div id="div_advancedsearch1" id="div_advancedsearch1"  style="<?php echo ($ssearch['advanced_search'] == "on" ? 'visibility:visible' : 'visibility:hidden'); ?> "> 1. </div></td>
-					<td align="left"><input class="text" size="18" type="text" id="keyword" name="keyword" value="<?php echo stripslashes($_POST['keyword']); ?>" /></td>
+					<td align="left"><input class="text" size="18" type="text" id="keyword" name="keyword" value="<?php echo $keyword; ?>" /></td>
 					<td align="left"><input class="button" type="submit" value="<?php echo $AppUI->_('Search'); ?>" /></td>
 					<td align="left"><input name="allwords" id="allwords" type="checkbox"  <?php echo ($ssearch['all_words'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="allwords"><?php echo $AppUI->_('All words'); ?></label></td>
 					<td align="left"><input name="modselection" id="modselection" type="checkbox"  <?php echo ($ssearch['mod_selection'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleModules(this)" /></td> <td align="left"><label for="modselection"><?php echo $AppUI->_('Modules selection'); ?></label></td>
