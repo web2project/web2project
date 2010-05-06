@@ -181,7 +181,7 @@ function highlight($text, $keyval) {
 					$txt = preg_replace('/'.$key[0].'/', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
 				}
 			} else {
-				$txt = preg_replace('/'.sql_regcase($key[0]).'/i', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+				$txt = preg_replace('/'.$key[0].'/i', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
 			}
 		}
 	}
