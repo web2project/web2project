@@ -3082,4 +3082,17 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Task 30', $allowed_records['Task 30']['task_name']);
         $this->assertEquals('Task 30', $allowed_records['Task 30'][0]);
     }
+
+    /**
+     * Test getting allowed records with extra data specified
+     */
+    public function testGetAllowedRecordsExtra()
+    {
+        $extra = array('from' => 'tasks', 'join' => 'projects', 'on' => 'project_id = task_project',
+                       'where' => 'project_id = 2');
+        $allowed_records = $this->obj->getAllowedRecords(1, '*', '', null, $extra);
+
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $allowed_records);
+        $this->assertEquals(0, count($allowed_records));
+    }
 }
