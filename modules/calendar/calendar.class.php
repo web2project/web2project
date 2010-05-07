@@ -108,7 +108,9 @@ class CMonthCalendar {
 	 * @param [type] $date
 	 */
 	public function setDate($date = null) {
-		$this->this_month = new CDate($date);
+		global $AppUI;
+
+        $this->this_month = new CDate($date);
 
 		$d = $this->this_month->getDay();
 		$m = $this->this_month->getMonth();

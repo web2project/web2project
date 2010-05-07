@@ -85,6 +85,7 @@ function setDate( frm_name, f_date ) {
 	if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
 		$start_date = date('Y-m-d', strtotime(w2PgetParam($_REQUEST, 'log_start_date', date('Y-m-d'))));
 		$end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d'))));
+        $userId = isset($userId) ? $userId : 0;
 		$logs = CUser::getLogs($userId, $start_date, $end_date);
 	?>
 	<table align="center" class="tbl" width="50%">
