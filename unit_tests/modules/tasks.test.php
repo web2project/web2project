@@ -3112,4 +3112,76 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Admin Person', $assigned[1][1]);
         $this->assertEquals(50,             $assigned[1][2]);
     }
+
+    /**
+     *  Test getting list of task logs with no problems
+     */
+    public function testGetTaskLogs() {
+        $task_logs = $this->obj->getTaskLogs(22);
+
+        $this->assertEquals(1,                              count($task_logs));
+        $this->assertEquals(1,                              $task_logs[0]['task_log_id']);
+        $this->assertEquals(22,                             $task_logs[0]['task_log_task']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_help_desk_id']);
+        $this->assertEquals('Task Log 1',                   $task_logs[0]['task_log_name']);
+        $this->assertEquals('Did some working on task 22.', $task_logs[0]['task_log_description']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_creator']);
+        $this->assertEquals(20,                             $task_logs[0]['task_log_hours']);
+        $this->assertEquals('2009-10-19',                   $task_logs[0]['task_log_date']);
+        $this->assertEquals('Cheap',                        $task_logs[0]['task_log_costcode']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_problem']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_references']);
+        $this->assertEquals('http://www.example.org',       $task_logs[0]['task_log_related_url']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_project']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_company']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_servers']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_whom']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_datetime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_duration']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_expected_downtime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_description']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_backout_plan']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_created']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_updated']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_updator']);
+        $this->assertEquals('admin',                        $task_logs[0]['user_username']);
+        $this->assertEquals('Admin Person',                 $task_logs[0]['real_name']);
+    }
+
+    /**
+     *  Test getting list of task logs with problems
+     */
+    public function testGetTaskLogsWithProblems() {
+        $task_logs = $this->obj->getTaskLogs(23);
+
+        $this->assertEquals(1,                              count($task_logs));
+        $this->assertEquals(2,                              $task_logs[0]['task_log_id']);
+        $this->assertEquals(23,                             $task_logs[0]['task_log_task']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_help_desk_id']);
+        $this->assertEquals('Task Log 2',                   $task_logs[0]['task_log_name']);
+        $this->assertEquals('Did some working on task 23.', $task_logs[0]['task_log_description']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_creator']);
+        $this->assertEquals(17,                             $task_logs[0]['task_log_hours']);
+        $this->assertEquals('2009-10-19',                   $task_logs[0]['task_log_date']);
+        $this->assertEquals('Cheap',                        $task_logs[0]['task_log_costcode']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_problem']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_references']);
+        $this->assertEquals('http://www.example.org',       $task_logs[0]['task_log_related_url']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_project']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_company']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_servers']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_whom']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_datetime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_duration']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_expected_downtime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_description']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_backout_plan']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_created']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_updated']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_updator']);
+        $this->assertEquals('admin',                        $task_logs[0]['user_username']);
+        $this->assertEquals('Admin Person',                 $task_logs[0]['real_name']);
+    }
 }
