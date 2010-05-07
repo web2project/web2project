@@ -3077,7 +3077,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Task 27', $allowed_records['Task 27'][0]);
         $this->assertEquals('Task 28', $allowed_records['Task 28']['task_name']);
         $this->assertEquals('Task 28', $allowed_records['Task 28'][0]);
-        $this->assertEquals('Task 28', $allowed_records['Task 29']['task_name']);
+        $this->assertEquals('Task 29', $allowed_records['Task 29']['task_name']);
         $this->assertEquals('Task 29', $allowed_records['Task 29'][0]);
         $this->assertEquals('Task 30', $allowed_records['Task 30']['task_name']);
         $this->assertEquals('Task 30', $allowed_records['Task 30'][0]);
@@ -3094,5 +3094,22 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $allowed_records);
         $this->assertEquals(0, count($allowed_records));
+    }
+
+    /**
+     * Test getting list of users assigned to a task
+     */
+    public function testGetAssigned()
+    {
+        $this->obj->load(1);
+        $assigned = $this->obj->getAssigned();
+
+        $this->assertEquals(1,              count($assigned));
+        $this->assertEquals(1,              $assigned[1]['user_id']);
+        $this->assertEquals('Admin Person', $assigned[1]['user_name']);
+        $this->assertEquals(50,             $assigned[1]['perc_assignment']);
+        $this->assertEquals(1,              $assigned[1][0]);
+        $this->assertEquals('Admin Person', $assigned[1][1]);
+        $this->assertEquals(50,             $assigned[1][2]);
     }
 }
