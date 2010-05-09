@@ -2820,7 +2820,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         // Ensure our global setting for task_reminder_control is set properly for this
         $old_cal_working_days = $w2Pconfig['cal_working_days'];
-        $w2Pconfig['cal_working_days'] = '1,2,3,4,5,6,7';
+        $w2Pconfig['cal_working_days'] = '0,1,2,3,4,5,6';
 
         $nothing = array();
 
@@ -3116,7 +3116,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      *  Test getting list of task logs with no problems
      */
-    public function testGetTaskLogs() {
+    public function testGetTaskLogs()
+    {
         $task_logs = $this->obj->getTaskLogs(22);
 
         $this->assertEquals(1,                              count($task_logs));
@@ -3152,7 +3153,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      *  Test getting list of task logs with problems
      */
-    public function testGetTaskLogsWithProblems() {
+    public function testGetTaskLogsWithProblems()
+    {
         $task_logs = $this->obj->getTaskLogs(23);
 
         $this->assertEquals(1,                              count($task_logs));
@@ -3183,5 +3185,69 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                             $task_logs[0]['task_log_updator']);
         $this->assertEquals('admin',                        $task_logs[0]['user_username']);
         $this->assertEquals('Admin Person',                 $task_logs[0]['real_name']);
+    }
+
+    /**
+    * Test getting list of tasks for user, including ical intregration
+    */
+    public function testHookCalendar()
+    {
+        $calendar_tasks = $this->obj->hook_calendar(1);
+
+        $this->assertEquals(6,                                                          count($calendar_tasks));
+        $this->assertEquals(1,                                                          $calendar_tasks[0]['id']);
+        $this->assertEquals('Start: Task 1',                                            $calendar_tasks[0]['name']);
+        $this->assertEquals('This is task 1',                                           $calendar_tasks[0]['description']);
+        $this->assertEquals('2009-07-05 00:00:00',                                      $calendar_tasks[0]['startDate']);
+        $this->assertEquals('2009-07-05 00:00:00',                                      $calendar_tasks[0]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[0]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=1',                     $calendar_tasks[0]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[0]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[0]['project_name']);
+        $this->assertEquals(1,                                                          $calendar_tasks[1]['id']);
+        $this->assertEquals('End: Task 1',                                              $calendar_tasks[1]['name']);
+        $this->assertEquals('This is task 1',                                           $calendar_tasks[1]['description']);
+        $this->assertEquals('2009-07-15 00:00:00',                                      $calendar_tasks[1]['startDate']);
+        $this->assertEquals('2009-07-15 00:00:00',                                      $calendar_tasks[1]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[1]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=1',                     $calendar_tasks[1]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[1]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[1]['project_name']);
+        $this->assertEquals(2,                                                          $calendar_tasks[2]['id']);
+        $this->assertEquals('Start: Task 2',                                            $calendar_tasks[2]['name']);
+        $this->assertEquals('This is task 2',                                           $calendar_tasks[2]['description']);
+        $this->assertEquals('2009-07-06 00:00:00',                                      $calendar_tasks[2]['startDate']);
+        $this->assertEquals('2009-07-06 00:00:00',                                      $calendar_tasks[2]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[2]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=2',                     $calendar_tasks[2]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[2]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[2]['project_name']);
+        $this->assertEquals(2,                                                          $calendar_tasks[3]['id']);
+        $this->assertEquals('End: Task 2',                                              $calendar_tasks[3]['name']);
+        $this->assertEquals('This is task 2',                                           $calendar_tasks[3]['description']);
+        $this->assertEquals('2009-07-16 00:00:00',                                      $calendar_tasks[3]['startDate']);
+        $this->assertEquals('2009-07-16 00:00:00',                                      $calendar_tasks[3]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[3]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=2',                     $calendar_tasks[3]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[3]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[3]['project_name']);
+        $this->assertEquals(22,                                                         $calendar_tasks[4]['id']);
+        $this->assertEquals('Start: Task 22',                                           $calendar_tasks[4]['name']);
+        $this->assertEquals('This is task 22',                                          $calendar_tasks[4]['description']);
+        $this->assertEquals('2009-09-09 00:00:00',                                      $calendar_tasks[4]['startDate']);
+        $this->assertEquals('2009-09-09 00:00:00',                                      $calendar_tasks[4]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[4]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=22',                    $calendar_tasks[4]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[4]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[4]['project_name']);
+        $this->assertEquals(22,                                                         $calendar_tasks[5]['id']);
+        $this->assertEquals('End: Task 22',                                             $calendar_tasks[5]['name']);
+        $this->assertEquals('This is task 22',                                          $calendar_tasks[5]['description']);
+        $this->assertEquals('2009-11-01 00:00:00',                                      $calendar_tasks[5]['startDate']);
+        $this->assertEquals('2009-11-01 00:00:00',                                      $calendar_tasks[5]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[5]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=22',                    $calendar_tasks[5]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[5]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[5]['project_name']);
     }
 }
