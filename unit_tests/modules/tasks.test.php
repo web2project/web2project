@@ -3250,4 +3250,34 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                                                          $calendar_tasks[5]['project_id']);
         $this->assertEquals('Test Project',                                             $calendar_tasks[5]['project_name']);
     }
+
+    /**
+     * Test returning proper data for search hook
+     */
+    public function testHookSearch()
+    {
+        $search_data = $this->obj->hook_search();
+
+        $this->assertEquals(8,                                      count($search_data));
+        $this->assertEquals('tasks',                                $search_data['table']);
+        $this->assertEquals('tasks',                                $search_data['table_module']);
+        $this->assertEquals('task_id',                              $search_data['table_key']);
+        $this->assertEquals('index.php?m=tasks&a=view&task_id=',    $search_data['table_link']);
+        $this->assertEquals('Tasks',                                $search_data['table_title']);
+        $this->assertEquals('task_name',                            $search_data['table_orderby']);
+        $this->assertEquals(6,                                      count($search_data['search_fields']));
+        $this->assertEquals('task_name',                            $search_data['search_fields'][0]);
+        $this->assertEquals('task_description',                     $search_data['search_fields'][1]);
+        $this->assertEquals('task_related_url',                     $search_data['search_fields'][2]);
+        $this->assertEquals('task_departments',                     $search_data['search_fields'][3]);
+        $this->assertEquals('task_contacts',                        $search_data['search_fields'][4]);
+        $this->assertEquals('task_custom',                          $search_data['search_fields'][5]);
+        $this->assertEquals(6,                                      count($search_data['display_fields']));
+        $this->assertEquals('task_name',                            $search_data['display_fields'][0]);
+        $this->assertEquals('task_description',                     $search_data['display_fields'][1]);
+        $this->assertEquals('task_related_url',                     $search_data['display_fields'][2]);
+        $this->assertEquals('task_departments',                     $search_data['display_fields'][3]);
+        $this->assertEquals('task_contacts',                        $search_data['display_fields'][4]);
+        $this->assertEquals('task_custom',                          $search_data['display_fields'][5]);
+    }
 }
