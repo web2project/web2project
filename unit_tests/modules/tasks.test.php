@@ -3280,4 +3280,52 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('task_contacts',                        $search_data['display_fields'][4]);
         $this->assertEquals('task_custom',                          $search_data['display_fields'][5]);
     }
+
+    /**
+     * Test getting task list with no days passed
+     */
+    public function testGetTaskListNoDays()
+    {
+        $task_list = $this->obj->getTaskList(1);
+
+        $this->assertEquals(3,                                                          count($task_list));
+        $this->assertEquals(1,                                                          $task_list[0]['id']);
+        $this->assertEquals('Task 1',                                                   $task_list[0]['name']);
+        $this->assertEquals('This is task 1',                                           $task_list[0]['description']);
+        $this->assertEquals('2009-07-05 00:00:00',                                      $task_list[0]['startDate']);
+        $this->assertEquals('2009-07-15 00:00:00',                                      $task_list[0]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $task_list[0]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=1',                     $task_list[0]['url']);
+        $this->assertEquals(1,                                                          $task_list[0]['project_id']);
+        $this->assertEquals('Test Project',                                             $task_list[0]['project_name']);
+        $this->assertEquals(2,                                                          $task_list[1]['id']);
+        $this->assertEquals('Task 2',                                                   $task_list[1]['name']);
+        $this->assertEquals('This is task 2',                                           $task_list[1]['description']);
+        $this->assertEquals('2009-07-06 00:00:00',                                      $task_list[1]['startDate']);
+        $this->assertEquals('2009-07-16 00:00:00',                                      $task_list[1]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $task_list[1]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=2',                     $task_list[1]['url']);
+        $this->assertEquals(1,                                                          $task_list[1]['project_id']);
+        $this->assertEquals('Test Project',                                             $task_list[1]['project_name']);
+        $this->assertEquals(22,                                                         $task_list[2]['id']);
+        $this->assertEquals('Task 22',                                                  $task_list[2]['name']);
+        $this->assertEquals('This is task 22',                                          $task_list[2]['description']);
+        $this->assertEquals('2009-09-09 00:00:00',                                      $task_list[2]['startDate']);
+        $this->assertEquals('2009-11-01 00:00:00',                                      $task_list[2]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $task_list[2]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=22',                    $task_list[2]['url']);
+        $this->assertEquals(1,                                                          $task_list[2]['project_id']);
+        $this->assertEquals('Test Project',                                             $task_list[2]['project_name']);
+    }
+
+    /**
+     * Test getting tasks with a number of days passed
+     */
+    public function testGetTaskListDays()
+    {
+        $task_list = $this->obj->getTaskList(1, -10000);
+
+        $this->assertType('array',  $task_list);
+        $this->assertEquals(0,      count($task_list));
+    }
 }
