@@ -3707,4 +3707,18 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         // Restore AppUI for following tests since its global, yuck!
         $AppUI = $old_AppUI;
     }
+
+    /**
+     * Test getting task count for a project
+     */
+    public function testGetTaskCount()
+    {
+        $task_count = $this->obj->getTaskCount(1);
+
+        $this->assertEquals(30, $task_count);
+
+        $task_count = $this->obj->getTaskCount(2);
+
+        $this->assertEquals(0, $task_count);
+    }
 }
