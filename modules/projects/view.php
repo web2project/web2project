@@ -277,42 +277,13 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 			<?php
 		}
 		$contacts = CProject::getContacts($AppUI, $project->project_id);
-		if (count($contacts) > 0) { ?>
-		  <tr>
-		  	<td><strong><?php echo $AppUI->_('Contacts'); ?></strong></td>
-		  </tr>
-		  <tr>
-		  	<td colspan='3' class="hilite">
-		  		<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">
-						<tr>
-							<th><?php echo $AppUI->_('Name'); ?></th>
-							<th><?php echo $AppUI->_('e-mail'); ?></th>
-							<th><?php echo $AppUI->_('Phone'); ?></th>
-							<th><?php echo $AppUI->_('Department'); ?></th>
-						</tr>
-			  		<?php
-							foreach ($contacts as $contact_id => $contact_data) {
-								echo '<tr>';
-								echo '<td class="hilite">';
-								$canEdit = $perms->checkModuleItem('contacts', 'edit', $contact_id);
-								if ($canEdit) {
-									echo '<a href="index.php?m=contacts&a=view&contact_id=' . $contact_id . '">';
-								}
-								echo $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'];
-								if ($canEdit) {
-									echo '</a>';
-								}
-								echo '</td>';
-								echo '<td class="hilite"><a href="mailto:' . $contact_data['contact_email'] . '">' . $contact_data['contact_email'] . '</a></td>';
-								echo '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
-								echo '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
-								echo '</tr>';
-							}
-						?>
-					</table>
-		  	</td>
-		  </tr>
-		<?php } ?>
+        if (count($contacts)) {
+            echo '<tr><td><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
+            echo '<tr><td colspan="3" class="hilite">';
+            echo w2p_Output_HTMLHelper::renderContactList($AppUI, $contacts);
+            echo '</td></tr>';
+        }
+        ?>
 		</table>
 	</td>
 </tr>
