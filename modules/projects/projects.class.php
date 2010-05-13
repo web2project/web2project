@@ -709,7 +709,7 @@ class CProject extends CW2pObject {
 			$q->addJoin('project_contacts', 'pc', 'pc.contact_id = c.contact_id', 'inner');
 			$q->leftJoin('departments', 'd', 'd.dept_id = c.contact_department');
 			$q->addWhere('pc.project_id = ' . (int) $projectId);
-			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email, contact_order_by');
 			$q->addQuery('contact_phone, dept_name');
 			$q->addWhere('
 				(contact_private=0
