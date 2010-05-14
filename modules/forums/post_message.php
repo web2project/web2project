@@ -19,7 +19,7 @@ if (!$canEdit && !$canAdd) {
 
 //Pull forum information
 $myForum = new CForum();
-$myForum->load($forum_id);
+$myForum->load($AppUI, $forum_id);
 
 // Build a back-url for when the back button is pressed
 $back_url_params = array();
