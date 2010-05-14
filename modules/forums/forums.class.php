@@ -32,51 +32,62 @@ class CForum extends CW2pObject {
         parent::__construct('forums', 'forum_id');
 	}
 
-	public function bind($hash) {
-		if (!is_array($hash)) {
-			return "CForum::bind failed";
-		} else {
-			$q = new DBQuery;
-			$q->bindHashToObject($hash, $this);
-			$q->clear();
-			return null;
-		}
-	}
+    public function check() {
+        // ensure the integrity of some variables
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-	public function check() {
-		if ($this->forum_id === null) {
-			return 'forum_id is NULL';
-		}
-		// TODO MORE
-		return null; // object is ok
-	}
+        if ('' == trim($this->forum_name)) {
+            $errorArray['forum_name'] = $baseErrorMsg . 'forum name is not set';
+        }
+        if (0 == (int) $this->forum_owner) {
+            $errorArray['forum_owner'] = $baseErrorMsg . 'forum owner is not set';
+        }
 
-	public function store() {
-		$msg = $this->check();
-		if ($msg) {
-			return 'CForum::store-check failed ' . $msg;
-		}
-		if ($this->forum_id) {
-			$q = new DBQuery;
-			$ret = $q->updateObject('forums', $this, 'forum_id', false); // ! Don't update null values
-			$q->clear();
-			if ($this->forum_name) {
-				// when adding messages, this functon is called without first setting 'forum_name'
-				addHistory('forums', $this->forum_id, 'update', $this->forum_name);
-			}
-		} else {
-			$date = new CDate();
-			$this->forum_create_date = $date->format(FMT_DATETIME_MYSQL);
-			$q = new DBQuery;
-			$ret = $q->insertObject('forums', $this, 'forum_id');
-			$q->clear();
-			addHistory('forums', $this->forum_id, 'add', $this->forum_name);
-		}
-		if (!$ret) {
-			return 'CForum::store failed ' . db_error();
-		} else {
-			return null;
-		}
+        return $errorArray;
+    }
+
+    public function load(CAppUI $AppUI, $forum_id) {
+        $q = new DBQuery();
+        $q->addQuery('*');
+        $q->addTable('forums');
+        $q->addWhere('forum_id = ' . (int) $forum_id);
+        $q->loadObject($this, true, false);
+    }
+
+    public function getAllowedForums()
+    {
+        
+    }
+
+	public function store(CAppUI $AppUI) {
+        $perms = $AppUI->acl();
+        $stored = false;
+
+        $errorMsgArray = $this->check();
+
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
+        if ($this->forum_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
+            $q = new DBQuery;
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            addHistory('forums', $this->forum_id, 'update', $this->forum_name, $this->forum_id);
+            $stored = true;
+        }
+        if (0 == $this->forum_id && $perms->checkModuleItem('forums', 'add')) {
+            $q = new DBQuery;
+            $this->forum_create_date = $q->dbfnNow();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            addHistory('forums', $this->forum_id, 'add', $this->forum_name, $this->forum_id);
+            $stored = true;
+        }
+        return $stored;
 	}
 
 	public function delete() {
