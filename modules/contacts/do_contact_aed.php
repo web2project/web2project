@@ -40,7 +40,7 @@ $AppUI->setMsg('Contact');
 if ($del) {
 	if (($msg = $obj->delete($AppUI))) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
-		$AppUI->redirect();
+		$AppUI->redirect('m=contacts');
 	} else {
 		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
 		$AppUI->redirect('m=contacts');
