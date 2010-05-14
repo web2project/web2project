@@ -37,7 +37,11 @@ if (!$forum && $forum_id > 0) {
 $status = isset($forum->forum_status) ? $forum->forum_status : -1;
 
 $prj = new CProject();
-$projects = $prj->getAllowedProjects($AppUI->user_id, false);
+if ($forum_id) {
+    $projects = $prj->getAllowedProjects($AppUI->user_id, false);
+} else {
+    $projects = $prj->getAllowedProjects($AppUI->user_id, true);
+}
 foreach ($projects as $project_id => $project_info) {
 	$projects[$project_id] = $project_info['project_name'];
 }
