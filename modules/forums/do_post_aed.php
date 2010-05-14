@@ -3,47 +3,28 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = isset($_POST['del']) ? $_POST['del'] : 0;
-
-$isNotNew = $_POST['message_id'];
-$perms = &$AppUI->acl();
-if ($del) {
-	if (!canDelete('forums') && (!($AppUI->user_id == $_POST['message_author']) || !canEdit('admin'))) {
-		$AppUI->redirect('m=public&a=access_denied');
-	}
-} elseif ($isNotNew) {
-	if (!canEdit('forums') && (!($AppUI->user_id == $_POST['message_author']) || !canEdit('admin'))) {
-		$AppUI->redirect('m=public&a=access_denied');
-	}
-} else {
-	if (!canAdd('forums') && (!($AppUI->user_id == $_POST['message_author']) || !canEdit('admin'))) {
-		$AppUI->redirect('m=public&a=access_denied');
-	}
-}
+$del = (int) w2PgetParam($_POST, 'del', 0);
+$isNotNew = (int) w2PgetParam($_POST, 'message_id', 0);
+$message_forum = (int) w2PgetParam($_POST, 'message_forum', 0);
+$message_parent = (int) w2PgetParam($_POST, 'message_parent', 0);
 
 $obj = new CForumMessage();
-
-if (($msg = $obj->bind($_POST))) {
-	$AppUI->setMsg($msg, UI_MSG_ERROR);
-	$AppUI->redirect();
+if (!$obj->bind($_POST)) {
+  $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+  $AppUI->redirect();
 }
 
-// prepare (and translate) the module name ready for the suffix
-$AppUI->setMsg('Message');
-if ($del) {
-	if (($msg = $obj->delete())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-		$AppUI->redirect();
-	} else {
-		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
-		$AppUI->redirect();
-	}
+$action = ($del) ? 'deleted' : 'stored';
+$result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
+
+if (is_array($result)) {
+  $AppUI->setMsg($result, UI_MSG_ERROR, true);
+  $AppUI->holdObject($obj);
+  $AppUI->redirect('m=forums&a=viewer&forum_id='.$message_forum.'&message_parent='.$message_parent.'&post_message=1');
+}
+if ($result) {
+  $AppUI->setMsg('Message '.$action, UI_MSG_OK, true);
+  $AppUI->redirect('m=forums&a=viewer&forum_id='.$message_forum.'&message_parent='.$message_parent);
 } else {
-	if (($msg = $obj->store())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	} else {
-		$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);
-	}
-	$parent = ($obj->message_parent == -1) ? $obj->message_id : $obj->message_parent;
-	$AppUI->redirect('m=forums&a=viewer&forum_id=' . $obj->message_forum . '&message_id=' . $parent);
+  $AppUI->redirect('m=public&a=access_denied');
 }
