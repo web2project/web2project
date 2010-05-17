@@ -1141,6 +1141,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $contacts[1]['contact_id']);
         $this->assertEquals('Admin',                $contacts[1]['contact_first_name']);
         $this->assertEquals('Person',               $contacts[1]['contact_last_name']);
+        $this->assertEquals('',                     $contacts[1]['contact_order_by']);
         $this->assertEquals('contact1@example.org', $contacts[1]['contact_email']);
         $this->assertEquals('1.999.999.9999',       $contacts[1]['contact_phone']);
         $this->assertEquals('',                     $contacts[1]['dept_name']);
@@ -1148,8 +1149,9 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Admin',                $contacts[1][1]);
         $this->assertEquals('Person',               $contacts[1][2]);
         $this->assertEquals('contact1@example.org', $contacts[1][3]);
-        $this->assertEquals('1.999.999.9999',       $contacts[1][4]);
-        $this->assertEquals('',                     $contacts[1][5]);
+        $this->assertEquals('',                     $contacts[1][4]);
+        $this->assertEquals('1.999.999.9999',       $contacts[1][5]);
+        $this->assertEquals('',                     $contacts[1][6]);
     }
 
     /**
