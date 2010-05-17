@@ -3729,11 +3729,25 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testPinUserTask()
     {
-        $return_val = $this->obj->pinUserTask(1,1);
+        $return_val = $this->obj->pinUserTask(1, 1);
 
         $this->assertTrue($return_val);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestPinUserTask.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_task_pin'), $xml_db_dataset->getTable('user_task_pin'));
+    }
+
+    /**
+     * Test unpinning task for user
+     */
+    public function testUnpinUserTask()
+    {
+        $return_val = $this->obj->unpinUserTask(1, 1);
+
+        $this->assertTrue($return_val);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUnpinUserTask.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_task_pin'), $xml_db_dataset->getTable('user_task_pin'));
     }
