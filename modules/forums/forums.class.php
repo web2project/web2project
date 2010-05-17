@@ -28,55 +28,113 @@ class CForum extends CW2pObject {
 	public $forum_moderated = null;
 
 	public function __construct() {
-		// empty constructor
         parent::__construct('forums', 'forum_id');
 	}
 
-	public function bind($hash) {
-		if (!is_array($hash)) {
-			return "CForum::bind failed";
-		} else {
-			$q = new DBQuery;
-			$q->bindHashToObject($hash, $this);
-			$q->clear();
-			return null;
-		}
-	}
+    public function check() {
+        // ensure the integrity of some variables
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-	public function check() {
-		if ($this->forum_id === null) {
-			return 'forum_id is NULL';
-		}
-		// TODO MORE
-		return null; // object is ok
-	}
+        if ('' == trim($this->forum_name)) {
+            $errorArray['forum_name'] = $baseErrorMsg . 'forum name is not set';
+        }
+        if (0 == (int) $this->forum_owner) {
+            $errorArray['forum_owner'] = $baseErrorMsg . 'forum owner is not set';
+        }
 
-	public function store() {
-		$msg = $this->check();
-		if ($msg) {
-			return 'CForum::store-check failed ' . $msg;
-		}
-		if ($this->forum_id) {
-			$q = new DBQuery;
-			$ret = $q->updateObject('forums', $this, 'forum_id', false); // ! Don't update null values
-			$q->clear();
-			if ($this->forum_name) {
-				// when adding messages, this functon is called without first setting 'forum_name'
-				addHistory('forums', $this->forum_id, 'update', $this->forum_name);
-			}
-		} else {
-			$date = new CDate();
-			$this->forum_create_date = $date->format(FMT_DATETIME_MYSQL);
-			$q = new DBQuery;
-			$ret = $q->insertObject('forums', $this, 'forum_id');
-			$q->clear();
-			addHistory('forums', $this->forum_id, 'add', $this->forum_name);
-		}
-		if (!$ret) {
-			return 'CForum::store failed ' . db_error();
-		} else {
-			return null;
-		}
+        return $errorArray;
+    }
+
+    public function load(CAppUI $AppUI, $forum_id) {
+        $q = new DBQuery();
+        $q->addQuery('*');
+        $q->addTable('forums');
+        $q->addWhere('forum_id = ' . (int) $forum_id);
+        $q->loadObject($this, true, false);
+    }
+
+    public function getAllowedForums($user_id, $company_id, $filter = -1, $orderby = 'forum_name', $orderdir = 'asc', $max_msg_length = 30)
+    {
+        $project = new CProject();
+
+        $q = new DBQuery;
+        $q->addTable('forums');
+        //$q->addTable('projects', 'pr');
+        
+        $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name');
+        $q->addQuery('forum_moderated, forum_create_date, forum_last_date');
+        $q->addQuery('sum(if(c.message_parent=-1,1,0)) as forum_topics, sum(if(c.message_parent>0,1,0)) as forum_replies');
+        $q->addQuery('user_username, project_name, project_color_identifier, CONCAT(contact_first_name,\' \',contact_last_name) owner_name');
+        $q->addQuery('SUBSTRING(l.message_body,1,' . $max_msg_length . ') message_body');
+        $q->addQuery('LENGTH(l.message_body) message_length, watch_user, l.message_parent, l.message_id');
+        $q->addQuery('count(distinct v.visit_message) as visit_count, count(distinct c.message_id) as message_count');
+
+        $q->addJoin('users', 'u', 'u.user_id = forum_owner');
+        $q->addJoin('projects', 'pr', 'pr.project_id = forum_project');
+        $q->addJoin('forum_messages', 'l', 'l.message_id = forum_last_id');
+        $q->addJoin('forum_messages', 'c', 'c.message_forum = forum_id');
+        $q->addJoin('forum_watch', 'w', 'watch_user = ' . $user_id . ' AND watch_forum = forum_id');
+        $q->addJoin('forum_visits', 'v', 'visit_user = ' . $user_id . ' AND visit_forum = forum_id and visit_message = c.message_id');
+        $q->addJoin('contacts', 'cts', 'contact_id = u.user_contact');
+
+        $project->setAllowedSQL($user_id, $q, null, 'pr');
+        $this->setAllowedSQL($user_id, $q);
+
+        switch ($filter) {
+            case 1:
+                $q->addWhere('(project_active = 1 OR forum_project = 0) AND forum_owner = ' . $user_id);
+                break;
+            case 2:
+                $q->addWhere('(project_active = 1 OR forum_project = 0) AND watch_user IS NOT NULL');
+                break;
+            case 3:
+                $q->addWhere('(project_active = 1 OR forum_project = 0) AND project_owner = ' . $user_id);
+                break;
+            case 4:
+                $q->addWhere('(project_active = 1 OR forum_project = 0) AND project_company = ' . $company_id);
+                break;
+            case 5:
+                $q->addWhere('(project_active = 0 OR forum_project = 0)');
+                break;
+            default:
+                $q->addWhere('(project_active = 1 OR forum_project = 0)');
+                break;
+        }
+
+        $q->addGroup('forum_id');
+        $q->addOrder($orderby . ' ' . $orderdir);
+
+        return $q->loadList();
+    }
+
+	public function store(CAppUI $AppUI) {
+        $perms = $AppUI->acl();
+        $stored = false;
+
+        $errorMsgArray = $this->check();
+
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
+        if ($this->forum_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            addHistory('forums', $this->forum_id, 'update', $this->forum_name, $this->forum_id);
+            $stored = true;
+        }
+        if (0 == $this->forum_id && $perms->checkModuleItem('forums', 'add')) {
+            $q = new DBQuery;
+            $this->forum_create_date = $q->dbfnNow();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            addHistory('forums', $this->forum_id, 'add', $this->forum_name, $this->forum_id);
+            $stored = true;
+        }
+        return $stored;
 	}
 
 	public function delete() {
@@ -131,7 +189,7 @@ class CForum extends CW2pObject {
 	}
 }
 
-class CForumMessage {
+class CForumMessage extends CW2pObject {
 	public $message_id = null;
 	public $message_forum = null;
 	public $message_parent = null;
@@ -143,77 +201,76 @@ class CForumMessage {
 	public $message_published = null;
 
 	public function __construct() {
-		// empty constructor
-	}
-
-	public function bind($hash) {
-		if (!is_array($hash)) {
-			return 'CForumMessage::bind failed';
-		} else {
-			$q = new DBQuery;
-			$q->bindHashToObject($hash, $this);
-			$q->clear();
-			return null;
-		}
+		parent::__construct('forum_messages', 'message_id');
 	}
 
 	public function check() {
-		if ($this->message_id === null) {
-			return 'message_id is NULL';
-		}
-		// TODO MORE
-		return null; // object is ok
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+        if (0 == (int) $this->message_forum) {
+            $errorArray['message_forum'] = $baseErrorMsg . 'forum is not set';
+        }
+        if (0 == (int) $this->message_author) {
+            $errorArray['message_author'] = $baseErrorMsg . 'message author is not set';
+        }
+        if ('' == trim($this->message_title)) {
+            $errorArray['message_title'] = $baseErrorMsg . 'message title is not set';
+        }
+        if ('' == trim($this->message_body)) {
+            $errorArray['message_body'] = $baseErrorMsg . 'message body is not set';
+        }
+
+        return $errorArray;
 	}
 
-	public function store() {
-		$msg = $this->check();
-		if ($msg) {
-			return 'CForumMessage::store-check failed ' . $msg;
-		}
-		$q = new DBQuery;
-		if ($this->message_id) {
-			// First we need to remove any forum visits for this message
-			// otherwise nobody will see that it has changed.
-			$q->setDelete('forum_visits');
-			$q->addWhere('visit_message = ' . (int)$this->message_id);
-			$q->exec(); // No error if this fails, it is not important.
-			$q->clear();
-			$ret = $q->updateObject('forum_messages', $this, 'message_id', false); // ! Don't update null values
-			$q->clear();
-		} else {
-			$date = new CDate();
-			$this->message_date = $date->format(FMT_DATETIME_MYSQL);
+	public function store(CAppUI $AppUI) {
+        $perms = $AppUI->acl();
+        $stored = false;
 
-			$new_id = $q->insertObject('forum_messages', $this, 'message_id'); ## TODO handle error now
-			echo db_error(); ## TODO handle error better
-			$q->clear();
+        $errorMsgArray = $this->check();
+
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
+        if ($this->message_id) {
+            $q = new DBQuery;
+            $q->setDelete('forum_visits');
+            $q->addWhere('visit_message = ' . (int)$this->message_id);
+			$q->exec();
+
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            addHistory('forum_messages', $this->message_id, 'update', $this->message_title, $this->message_id);
+            $stored = true;
+        }
+        if (0 == $this->message_id) {
+            $q = new DBQuery;
+            $this->message_date = $q->dbfnNow();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            addHistory('forum_messages', $this->message_id, 'add', $this->message_title, $this->message_id);
 
 			$q->addTable('forum_messages');
 			$q->addQuery('count(message_id), MAX(message_date)');
 			$q->addWhere('message_forum = ' . (int)$this->message_forum);
-
-			$res = $q->exec();
-			echo db_error(); ## TODO handle error better
-			$reply = $q->fetchRow();
-			$q->clear();
+            $reply = $q->fetchRow();
 
 			//update forum descriptor
 			$forum = new CForum();
-			$forum->forum_id = $this->message_forum;
+            $forum->load($AppUI, $this->message_forum);
 			$forum->forum_message_count = $reply[0];
 			$forum->forum_last_date = $reply[1];
 			$forum->forum_last_id = $this->message_id;
+			$forum->store($AppUI);
 
-			$forum->store(); ## TODO handle error now
-
-			return $this->sendWatchMail(false);
-		}
-
-		if (!$ret) {
-			return 'CForumMessage::store failed ' . db_error();
-		} else {
-			return null;
-		}
+			$this->sendWatchMail(false);
+            $stored = true;
+        }
+        return $stored;
 	}
 
 	public function delete() {
