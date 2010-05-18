@@ -3751,4 +3751,16 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_task_pin'), $xml_db_dataset->getTable('user_task_pin'));
     }
+
+    /**
+     * Test updating hours worked for a task
+     */
+    public function testUpdateHoursWorked()
+    {
+        CTask::updateHoursWorked(1, 25);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateHoursWorked.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
+    }
 }
