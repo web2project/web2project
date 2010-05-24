@@ -50,40 +50,40 @@ $priority = array(
  * The Project Class
  */
 class CProject extends CW2pObject {
-  public $project_id = null;
-  public $project_company = null;
-  public $project_department = null;
-  public $project_name = null;
-  public $project_short_name = null;
-  public $project_owner = null;
-  public $project_url = null;
-  public $project_demo_url = null;
-  public $project_start_date = null;
-  public $project_end_date = null;
-  public $project_actual_end_date = null;
-  public $project_status = null;
-  public $project_percent_complete = null;
-  public $project_color_identifier = null;
-  public $project_description = null;
-  public $project_target_budget = null;
-  public $project_actual_budget = null;
-  public $project_scheduled_hours = null;
-  public $project_worked_hours = null;
-  public $project_task_count = null;
-  public $project_creator = null;
-  public $project_active = null;
-  public $project_private = null;
-  public $project_departments = null;
-  public $project_contacts = null;
-  public $project_priority = null;
-  public $project_type = null;
-  public $project_parent = null;
-  public $project_original_parent = null;
-  public $project_location = '';
+    public $project_id = null;
+    public $project_company = null;
+    public $project_department = null;
+    public $project_name = null;
+    public $project_short_name = null;
+    public $project_owner = null;
+    public $project_url = null;
+    public $project_demo_url = null;
+    public $project_start_date = null;
+    public $project_end_date = null;
+    public $project_actual_end_date = null;
+    public $project_status = null;
+    public $project_percent_complete = null;
+    public $project_color_identifier = null;
+    public $project_description = null;
+    public $project_target_budget = null;
+    public $project_actual_budget = null;
+    public $project_scheduled_hours = null;
+    public $project_worked_hours = null;
+    public $project_task_count = null;
+    public $project_creator = null;
+    public $project_active = null;
+    public $project_private = null;
+    public $project_departments = null;
+    public $project_contacts = null;
+    public $project_priority = null;
+    public $project_type = null;
+    public $project_parent = null;
+    public $project_original_parent = null;
+    public $project_location = '';
 
-  public function __construct() {
-    parent::__construct('projects', 'project_id');
-  }
+    public function __construct() {
+        parent::__construct('projects', 'project_id');
+    }
 
 	public function check() {
         $errorArray = array();
@@ -843,49 +843,54 @@ class CProject extends CW2pObject {
 	}
 
 	public static function hasTasks($projectId) {
-      // Note that this returns the *count* of tasks.  If this is zero, it is
-      //   evaluated as false, otherwise it is considered true.
-      $q = new DBQuery;
-      $q->addTable('tasks');
-      $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
-      $q->addWhere('task_project = ' . (int) $projectId);
-      
-      return $q->loadResult();
+        // Note that this returns the *count* of tasks.  If this is zero, it is
+        //   evaluated as false, otherwise it is considered true.
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
+        $q->addWhere('task_project = ' . (int) $projectId);
+
+        return $q->loadResult();
 	}
 	public static function updateHoursWorked($project_id) {
-      $q = new DBQuery;
-      $q->addTable('task_log');
-      $q->addTable('tasks');
-      $q->addQuery('ROUND(SUM(task_log_hours),2)');
-      $q->addWhere('task_log_task = task_id AND task_project = ' . (int) $project_id);
-      $worked_hours = 0 + $q->loadResult();
-      $worked_hours = rtrim($worked_hours, '.');
-      $q->clear();
-      
-      $q->addTable('projects');
-      $q->addUpdate('project_worked_hours', $worked_hours);
-      $q->addWhere('project_id  = ' . (int) $project_id);
-      $q->exec();
-      self::updatePercentComplete($project_id);
+        $q = new DBQuery;
+        $q->addTable('task_log');
+        $q->addTable('tasks');
+        $q->addQuery('ROUND(SUM(task_log_hours),2)');
+        $q->addWhere('task_log_task = task_id AND task_project = ' . (int) $project_id);
+        $worked_hours = 0 + $q->loadResult();
+        $worked_hours = rtrim($worked_hours, '.');
+        $q->clear();
+
+        $q->addTable('projects');
+        $q->addUpdate('project_worked_hours', $worked_hours);
+        $q->addWhere('project_id  = ' . (int) $project_id);
+        $q->exec();
+        self::updatePercentComplete($project_id);
 	}
   
-  public static function updatePercentComplete($project_id) {
-    $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
+    public static function updatePercentComplete($project_id) {
+        $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
 
-    $q = new DBQuery;
-    $q->addTable('projects');
-    $q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
-    $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
-    $q->addWhere('project_id = ' . $project_id . ' AND t1.task_id = t1.task_parent');
-    $project_percent_complete = $q->loadResult();
-    $q->clear();
+        $q = new DBQuery;
+        $q->addTable('projects');
+        $q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
+        $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
+        $q->addWhere('project_id = ' . $project_id . ' AND t1.task_id = t1.task_parent');
+        $project_percent_complete = $q->loadResult();
+        $q->clear();
 
-    $q->addTable('projects');
-    $q->addUpdate('project_percent_complete', $project_percent_complete);
-    $q->addWhere('project_id  = ' . (int) $project_id);
-    $q->exec();
-  }
+        $q->addTable('projects');
+        $q->addUpdate('project_percent_complete', $project_percent_complete);
+        $q->addWhere('project_id  = ' . (int) $project_id);
+        $q->exec();
+    }
 	public function getTotalHours() {
+        trigger_error("CProject->getTotalHours() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE );
+
+		return $this->getTotalProjectHours();
+	}
+	public function getTotalProjectHours() {
 		global $w2Pconfig;
 
 		// now milestones are summed up, too, for consistence with the tasks duration sum
@@ -902,40 +907,13 @@ class CProject extends CW2pObject {
 		$q->addQuery('ROUND(SUM(task_duration),2)');
 		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 1 AND task_dynamic <> 1');
 		$hours = $q->loadResult();
-		return $days * $w2Pconfig['daily_working_hours'] + $hours;
-	}
-	public function getTotalProjectHours() {
-		global $w2Pconfig;
 
-		// now milestones are summed up, too, for consistence with the tasks duration sum
-		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
-		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
-
-		// I'm really not sure why this is calculated and treated differently
-		//   from the "total hours" calculation above.  I simply copied this from
-		//  the projects/view.php file to get data calls out of the view.  Any
-		//  further info or explanation would be appreciated. - caseydk
-		$total_project_hours = 0;
-
-		$q = new DBQuery;
-		$q->addTable('tasks', 't');
-		$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
-		$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-		$q->addWhere('t.task_project = ' . (int) $this->project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic <> 1');
-		$total_project_days = $q->loadResult();
-		$q->clear();
-
-		$q->addTable('tasks', 't');
-		$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
-		$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-		$q->addWhere('t.task_project = ' . (int) $this->project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic <> 1');
-		$total_project_hours = $q->loadResult();
-		$total_project_hours = $total_project_days * $w2Pconfig['daily_working_hours'] + $total_project_hours;
+		$total_project_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
 
 		return rtrim($total_project_hours, '.');
 	}
 	public function getTaskLogs(CAppUI $AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
-    global $AppUI;
+        global $AppUI;
 
 		$q = new DBQuery;
 		$q->addTable('task_log');
@@ -996,7 +974,10 @@ current viewing user $AppUI->user_id is used.
 */
 
 function projects_list_data($user_id = false) {
-	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix, $deny, $department, $dept_ids, $w2Pconfig, $orderby, $orderdir, $projects, $tasks_critical, $tasks_problems, $tasks_sum, $tasks_summy, $tasks_total, $owner, $projectTypeId, $search_text, $project_type;
+	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix,
+        $deny, $department, $dept_ids, $w2Pconfig, $orderby, $orderdir,
+        $projects, $tasks_critical, $tasks_problems, $owner, $projectTypeId,
+        $search_text, $project_type;
 
 	$addProjectsWithAssignedTasks = $AppUI->getState('addProjWithTasks') ? $AppUI->getState('addProjWithTasks') : 0;
 
@@ -1007,20 +988,6 @@ function projects_list_data($user_id = false) {
 	// Let's delete temproary tables
 	$q = new DBQuery;
 	// Let's delete support tables data
-	$q->setDelete('tasks_sum');
-	$q->exec();
-	$q->clear();
-
-  //BEGIN: Deprecated in v2.0
-	$q->setDelete('tasks_total');
-	$q->exec();
-	$q->clear();
-  //END: Deprecated in v2.0
-
-	$q->setDelete('tasks_summy');
-	$q->exec();
-	$q->clear();
-
 	$q->setDelete('tasks_critical');
 	$q->exec();
 	$q->clear();
@@ -1031,53 +998,6 @@ function projects_list_data($user_id = false) {
 
 	$q->setDelete('tasks_users');
 	$q->exec();
-	$q->clear();
-
-	// support task sum table
-	// by Pablo Roca (pabloroca@mvps.org)
-	// 16 August 2003
-	$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
-
-	// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-	$q->addInsertSelect('tasks_sum');
-	$q->addTable('tasks');
-	$q->addQuery('task_project, COUNT(distinct tasks.task_id) AS total_tasks');
-	$q->addQuery('-1 AS project_percent_complete');
-	$q->addQuery('SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_duration');
-	if ($user_id) {
-		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
-		$q->addWhere('ut.user_id = ' . (int)$user_id);
-	}
-	$q->addWhere('tasks.task_id = tasks.task_parent');
-	$q->addGroup('task_project');
-	$tasks_sum = $q->exec();
-	$q->clear();
-
-  //BEGIN: Deprecated in v2.0
-	// support task total table
-	$q->addInsertSelect('tasks_total');
-	$q->addTable('tasks');
-	$q->addQuery('task_project, COUNT(distinct tasks.task_id) AS total_tasks');
-	if ($user_id) {
-		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
-		$q->addWhere('ut.user_id = ' . (int)$user_id);
-	}
-	$q->addGroup('task_project');
-	$tasks_total = $q->exec();
-	$q->clear();
-  //END: Deprecated in v2.0
-
-	// support My Tasks
-	$q->addInsertSelect('tasks_summy');
-	$q->addTable('tasks');
-	$q->addQuery('task_project, COUNT(distinct task_id) AS my_tasks');
-	if ($user_id) {
-		$q->addWhere('task_owner = ' . (int)$user_id);
-	} else {
-		$q->addWhere('task_owner = ' . (int)$AppUI->user_id);
-	}
-	$q->addGroup('task_project');
-	$tasks_summy = $q->exec();
 	$q->clear();
 
 	// support critical tasks
@@ -1155,17 +1075,17 @@ function projects_list_data($user_id = false) {
 	}
 
 	$q->addTable('projects', 'pr');
-	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type, project_name, project_description, project_duration, project_parent, project_original_parent,
-		project_start_date, project_end_date, project_color_identifier, project_company, company_name, company_description, project_status,
-		project_priority, tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count, tsy.my_tasks,
+	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type,
+        project_name, project_description, project_scheduled_hours as project_duration, project_parent, project_original_parent,
+		project_start_date, project_end_date, project_color_identifier, project_company, 
+        company_name, company_description, project_status, project_priority,
+        tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count,
 		pr.project_percent_complete, user_username, project_active');
 	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
 	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
 	$q->addJoin('tasks_critical', 'tc', 'pr.project_id = tc.task_project');
 	$q->addJoin('tasks_problems', 'tp', 'pr.project_id = tp.task_project');
-	$q->addJoin('tasks_sum', 'ts', 'pr.project_id = ts.task_project');
-	$q->addJoin('tasks_summy', 'tsy', 'pr.project_id = tsy.task_project');
 	if ($addProjectsWithAssignedTasks) {
 		$q->addJoin('tasks_users', 'tu', 'pr.project_id = tu.task_project');
 	}
