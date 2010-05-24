@@ -83,7 +83,6 @@ projects_list_data($user_id);
 	</th>
 	<th nowrap="nowrap">
 		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=total_tasks" class="hdr"><?php echo $AppUI->_('Tasks'); ?></a>
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=my_tasks" class="hdr">(<?php echo $AppUI->_('My'); ?>)</a>
 	</th>
 	<th nowrap="nowrap">
 		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_status" class="hdr"><?php echo $AppUI->_('Status'); ?></a>
@@ -126,7 +125,7 @@ foreach ($projects as $row) {
 		$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
 		$s .= $row['task_log_problem'] ? '</a>' : '';
 		$s .= '</td><td align="center" nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
-		$s .= $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
+		$s .= $row['total_tasks'];
 		$s .= '</td><td align="left" nowrap="nowrap">' . $AppUI->_($pstatus[$row['project_status']]) . '</td></tr>';
 		echo $s;
 	}
