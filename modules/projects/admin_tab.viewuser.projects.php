@@ -125,7 +125,7 @@ foreach ($projects as $row) {
 		$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
 		$s .= $row['task_log_problem'] ? '</a>' : '';
 		$s .= '</td><td align="center" nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
-		$s .= $row['total_tasks'];
+		$s .= $row['project_task_count'];
 		$s .= '</td><td align="left" nowrap="nowrap">' . $AppUI->_($pstatus[$row['project_status']]) . '</td></tr>';
 		echo $s;
 	}
