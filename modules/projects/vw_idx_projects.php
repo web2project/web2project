@@ -183,7 +183,7 @@ if ($is_tabbed) {
 
 				foreach ($st_projects_arr as $st_project) {
 					$multiproject_id = 0;
-                    $project_id = (isset($st_project[0])) ? $project['project_id'] : 0;
+                    $project_id = (isset($st_project[0])) ? $st_project[0]['project_id'] : 0;
 					$level = $st_project[1];
 
 					if ($project_id) {
@@ -263,13 +263,13 @@ if ($is_tabbed) {
 					if ($level) {
 						$s .= '</div>';
 					}
-          $s .= '</tr>';
+                    $s .= '</tr>';
 
-          if (($project_id > 0 && !isset($projectArray[$project_id]))
-              || (!$project_id && !isset($projectArray[$row['project_id']]))) {
-            echo $s;
-          }
-          $projectArray[$project_id] = $project_id;
+                    if (($project_id > 0 && !isset($projectArray[$project_id]))
+                      || (!$project_id && !isset($projectArray[$row['project_id']]))) {
+                        echo $s;
+                    }
+                    $projectArray[$project_id] = $project_id;
 				}
 			}
 		}
