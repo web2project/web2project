@@ -17,20 +17,3 @@ if (!defined('W2P_BASE_DIR')) {
 *   In order to find those, you'll have to explore the individual classes.
 */
 
-/*
-*  Originally located in classes/permissions.class.php;
-*  To be removed in v2.0 because those names caused double negatives in coding:
-*    To see if something was readable for the user, you'd have to say !getDenyRead($module, $item_id0
-*/
-function getDenyRead($mod, $item_id = 0) {
-	trigger_error("getDenyRead has been deprecated in v1.3 and will be removed in v2.0", E_USER_NOTICE );
-    return !canView($mod, $item_id);
-}
-function getDenyEdit($mod, $item_id = 0) {
-	trigger_error("getDenyEdit has been deprecated in v1.3 and will be removed in v2.0", E_USER_NOTICE );
-    return !canEdit($mod, $item_id);
-}
-function getDenyAdd($mod, $item_id = 0) {
-	trigger_error("getDenyAdd has been deprecated in v1.3 and will be removed in v2.0", E_USER_NOTICE );
-    return !canAdd($mod, $item_id);
-}
