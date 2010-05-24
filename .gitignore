@@ -3,3 +3,4 @@
 /tmp.*
 /unit_tests/reports/
 /nbproject/
+/.idea/
