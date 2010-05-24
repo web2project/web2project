@@ -61,15 +61,6 @@ class CContact extends CW2pObject {
         parent::__construct('contacts', 'contact_id');
 	}
 
-	/*
-	 * DEPRECATED
-	 */
-	public function fullLoad($contactId, CAppUI $AppUI = null) {
-		global $AppUI;
-        trigger_error("CContact->fullLoad() has been deprecated in v1.2 and will be removed in v2.0", E_USER_NOTICE );
-
-        $this->loadFull($AppUI, $contactId);
-	}
 	public function loadFull(CAppUI $AppUI = null, $contactId) {
 		global $AppUI;
 

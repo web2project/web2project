@@ -130,15 +130,6 @@ class CProject extends CW2pObject {
 		return parent::load($oid, $strip);
 	}
 
-	/*
-	 * DEPRECATED
-	 */
-	public function fullLoad($projectId) {
-		global $AppUI;
-        trigger_error("CProject->fullLoad() has been deprecated in v1.2 and will be removed in v2.0", E_USER_NOTICE );
-
-        $this->loadFull($AppUI, $projectId);
-	}
 	public function loadFull(CAppUI $AppUI = null, $projectId) {
 		global $AppUI;
 
