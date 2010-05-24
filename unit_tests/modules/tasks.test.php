@@ -3235,9 +3235,23 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('http://www.example.org',       $task_logs[0]['task_log_related_url']);
         $this->assertEquals(1,                              $task_logs[0]['task_log_project']);
         $this->assertEquals(1,                              $task_logs[0]['task_log_company']);
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/modules/tasks.test.php
         //$this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_created']);
         $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_updated']);
         $this->assertEquals(0,                              $task_logs[0]['task_log_updator']);
+=======
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_servers']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_whom']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_datetime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_duration']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_expected_downtime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_description']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_backout_plan']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_created']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_updated']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_updator']);
+>>>>>>> HEAD~368:unit_tests/modules/tasks.test.php
         $this->assertEquals('admin',                        $task_logs[0]['user_username']);
         $this->assertEquals('Admin Person',                 $task_logs[0]['real_name']);
     }
@@ -3546,7 +3560,11 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,          $allowed_task_list[29]['task_owner']);
 
         foreach ($allowed_task_list as $task) {
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/modules/tasks.test.php
             $this->assertEquals(8, count($task));
+=======
+            $this->assertEquals(5, count($task));
+>>>>>>> HEAD~368:unit_tests/modules/tasks.test.php
         }
     }
 
@@ -3712,7 +3730,11 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,          $allowed_task_list[29]['task_owner']);
 
         foreach ($allowed_task_list as $task) {
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/modules/tasks.test.php
             $this->assertEquals(8, count($task));
+=======
+            $this->assertEquals(5, count($task));
+>>>>>>> HEAD~368:unit_tests/modules/tasks.test.php
         }
     }
 
@@ -3732,7 +3754,11 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $allowed_task_list = $this->obj->getAllowedTaskList($AppUI);
 
         $this->assertEquals(1,          count($allowed_task_list));
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/modules/tasks.test.php
         $this->assertEquals(8,          count($allowed_task_list[0]));
+=======
+        $this->assertEquals(5,          count($allowed_task_list[0]));
+>>>>>>> HEAD~368:unit_tests/modules/tasks.test.php
         $this->assertEquals(1,          $allowed_task_list[0]['task_id']);
         $this->assertEquals('Task 1',   $allowed_task_list[0]['task_name']);
         $this->assertEquals(0,          $allowed_task_list[0]['task_parent']);
@@ -3756,7 +3782,12 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $_REQUEST['login'] = 'sql';
 
         $allowed_task_list = $this->obj->getAllowedTaskList($AppUI, 2);
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/modules/tasks.test.php
         $this->assertEquals(0,          count($allowed_task_list));
+=======
+
+        $this->assertNull($allowed_task_list);
+>>>>>>> HEAD~368:unit_tests/modules/tasks.test.php
 
         // Restore AppUI for following tests since its global, yuck!
         $AppUI = $old_AppUI;
