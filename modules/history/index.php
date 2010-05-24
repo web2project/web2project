@@ -23,6 +23,8 @@ function show_history($history) {
 		$table_id = 'company_id';
 	} elseif ($module == 'modules') {
 		$table_id = 'mod_id';
+	} elseif ($module == 'departments') {
+		$table_id = 'dept_id';
 	} else {
 		$table_id = (substr($module, -1) == 's' ? substr($module, 0, -1) : $module) . '_id';
 	}
