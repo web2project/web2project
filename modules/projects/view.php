@@ -46,8 +46,7 @@ if (!$project) {
 	$AppUI->savePlace();
 }
 
-$total_hours = $project->getTotalHours();
-$total_project_hours = $project->getTotalProjectHours();
+$total_project_hours = $total_hours = $project->getTotalProjectHours();
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
