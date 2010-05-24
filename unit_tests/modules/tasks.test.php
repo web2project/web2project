@@ -2228,14 +2228,16 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Admin',                $task_contacts[1]['contact_first_name']);
         $this->assertEquals('Person',               $task_contacts[1]['contact_last_name']);
         $this->assertEquals('contact1@example.org', $task_contacts[1]['contact_email']);
+        $this->assertEquals('',                     $task_contacts[1]['contact_order_by']);
         $this->assertEquals('1.999.999.9999',       $task_contacts[1]['contact_phone']);
         $this->assertEquals('',                     $task_contacts[1]['dept_name']);
         $this->assertEquals(1,                      $task_contacts[1][0]);
         $this->assertEquals('Admin',                $task_contacts[1][1]);
         $this->assertEquals('Person',               $task_contacts[1][2]);
         $this->assertEquals('contact1@example.org', $task_contacts[1][3]);
-        $this->assertEquals('1.999.999.9999',       $task_contacts[1][4]);
-        $this->assertEquals('',                     $task_contacts[1][5]);
+        $this->assertEquals('',                     $task_contacts[1][4]);
+        $this->assertEquals('1.999.999.9999',       $task_contacts[1][5]);
+        $this->assertEquals('',                     $task_contacts[1][6]);
 
         // Login as another user for permission purposes
         $old_AppUI = $AppUI;
@@ -2820,7 +2822,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         // Ensure our global setting for task_reminder_control is set properly for this
         $old_cal_working_days = $w2Pconfig['cal_working_days'];
-        $w2Pconfig['cal_working_days'] = '1,2,3,4,5,6,7';
+        $w2Pconfig['cal_working_days'] = '0,1,2,3,4,5,6';
 
         $nothing = array();
 
@@ -3077,12 +3079,688 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Task 27', $allowed_records['Task 27'][0]);
         $this->assertEquals('Task 28', $allowed_records['Task 28']['task_name']);
         $this->assertEquals('Task 28', $allowed_records['Task 28'][0]);
-        $this->assertEquals('Task 28', $allowed_records['Task 29']['task_name']);
+        $this->assertEquals('Task 29', $allowed_records['Task 29']['task_name']);
         $this->assertEquals('Task 29', $allowed_records['Task 29'][0]);
         $this->assertEquals('Task 30', $allowed_records['Task 30']['task_name']);
         $this->assertEquals('Task 30', $allowed_records['Task 30'][0]);
+    }
 
-        $this->assertTrue($this->obj->remind('not used', 'not used', 1, 1, $nothing));
-        $w2Pconfig['cal_working_days'] = $old_cal_working_days;
+    /**
+     * Test getting allowed records with extra data specified
+     */
+    public function testGetAllowedRecordsExtra()
+    {
+        $extra = array('from' => 'tasks', 'join' => 'projects', 'on' => 'project_id = task_project',
+                       'where' => 'project_id = 2');
+        $allowed_records = $this->obj->getAllowedRecords(1, '*', '', null, $extra);
+
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $allowed_records);
+        $this->assertEquals(0, count($allowed_records));
+    }
+
+    /**
+     * Test getting list of users assigned to a task
+     */
+    public function testGetAssigned()
+    {
+        $this->obj->load(1);
+        $assigned = $this->obj->getAssigned();
+
+        $this->assertEquals(1,              count($assigned));
+        $this->assertEquals(1,              $assigned[1]['user_id']);
+        $this->assertEquals('Admin Person', $assigned[1]['user_name']);
+        $this->assertEquals(50,             $assigned[1]['perc_assignment']);
+        $this->assertEquals(1,              $assigned[1][0]);
+        $this->assertEquals('Admin Person', $assigned[1][1]);
+        $this->assertEquals(50,             $assigned[1][2]);
+    }
+
+    /**
+     *  Test getting list of task logs with no problems
+     */
+    public function testGetTaskLogs()
+    {
+        $task_logs = $this->obj->getTaskLogs(22);
+
+        $this->assertEquals(1,                              count($task_logs));
+        $this->assertEquals(1,                              $task_logs[0]['task_log_id']);
+        $this->assertEquals(22,                             $task_logs[0]['task_log_task']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_help_desk_id']);
+        $this->assertEquals('Task Log 1',                   $task_logs[0]['task_log_name']);
+        $this->assertEquals('Did some working on task 22.', $task_logs[0]['task_log_description']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_creator']);
+        $this->assertEquals(20,                             $task_logs[0]['task_log_hours']);
+        $this->assertEquals('2009-10-19',                   $task_logs[0]['task_log_date']);
+        $this->assertEquals('Cheap',                        $task_logs[0]['task_log_costcode']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_problem']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_references']);
+        $this->assertEquals('http://www.example.org',       $task_logs[0]['task_log_related_url']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_project']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_company']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_servers']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_whom']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_datetime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_duration']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_expected_downtime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_description']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_backout_plan']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_created']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_updated']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_updator']);
+        $this->assertEquals('admin',                        $task_logs[0]['user_username']);
+        $this->assertEquals('Admin Person',                 $task_logs[0]['real_name']);
+    }
+
+    /**
+     *  Test getting list of task logs with problems
+     */
+    public function testGetTaskLogsWithProblems()
+    {
+        $task_logs = $this->obj->getTaskLogs(23);
+
+        $this->assertEquals(1,                              count($task_logs));
+        $this->assertEquals(2,                              $task_logs[0]['task_log_id']);
+        $this->assertEquals(23,                             $task_logs[0]['task_log_task']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_help_desk_id']);
+        $this->assertEquals('Task Log 2',                   $task_logs[0]['task_log_name']);
+        $this->assertEquals('Did some working on task 23.', $task_logs[0]['task_log_description']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_creator']);
+        $this->assertEquals(17,                             $task_logs[0]['task_log_hours']);
+        $this->assertEquals('2009-10-19',                   $task_logs[0]['task_log_date']);
+        $this->assertEquals('Cheap',                        $task_logs[0]['task_log_costcode']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_problem']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_references']);
+        $this->assertEquals('http://www.example.org',       $task_logs[0]['task_log_related_url']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_project']);
+        $this->assertEquals(1,                              $task_logs[0]['task_log_company']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_servers']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_whom']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_datetime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_duration']);
+        $this->assertEquals(0,                              $task_logs[0]['task_log_changelog_expected_downtime']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_description']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_changelog_backout_plan']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_created']);
+        $this->assertEquals('2009-10-19 00:00:00',          $task_logs[0]['task_log_updated']);
+        $this->assertEquals('',                             $task_logs[0]['task_log_updator']);
+        $this->assertEquals('admin',                        $task_logs[0]['user_username']);
+        $this->assertEquals('Admin Person',                 $task_logs[0]['real_name']);
+    }
+
+    /**
+    * Test getting list of tasks for user, including ical intregration
+    */
+    public function testHookCalendar()
+    {
+        $calendar_tasks = $this->obj->hook_calendar(1);
+
+        $this->assertEquals(6,                                                          count($calendar_tasks));
+        $this->assertEquals(1,                                                          $calendar_tasks[0]['id']);
+        $this->assertEquals('Start: Task 1',                                            $calendar_tasks[0]['name']);
+        $this->assertEquals('This is task 1',                                           $calendar_tasks[0]['description']);
+        $this->assertEquals('2009-07-05 00:00:00',                                      $calendar_tasks[0]['startDate']);
+        $this->assertEquals('2009-07-05 00:00:00',                                      $calendar_tasks[0]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[0]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=1',                     $calendar_tasks[0]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[0]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[0]['project_name']);
+        $this->assertEquals(1,                                                          $calendar_tasks[1]['id']);
+        $this->assertEquals('End: Task 1',                                              $calendar_tasks[1]['name']);
+        $this->assertEquals('This is task 1',                                           $calendar_tasks[1]['description']);
+        $this->assertEquals('2009-07-15 00:00:00',                                      $calendar_tasks[1]['startDate']);
+        $this->assertEquals('2009-07-15 00:00:00',                                      $calendar_tasks[1]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[1]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=1',                     $calendar_tasks[1]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[1]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[1]['project_name']);
+        $this->assertEquals(2,                                                          $calendar_tasks[2]['id']);
+        $this->assertEquals('Start: Task 2',                                            $calendar_tasks[2]['name']);
+        $this->assertEquals('This is task 2',                                           $calendar_tasks[2]['description']);
+        $this->assertEquals('2009-07-06 00:00:00',                                      $calendar_tasks[2]['startDate']);
+        $this->assertEquals('2009-07-06 00:00:00',                                      $calendar_tasks[2]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[2]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=2',                     $calendar_tasks[2]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[2]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[2]['project_name']);
+        $this->assertEquals(2,                                                          $calendar_tasks[3]['id']);
+        $this->assertEquals('End: Task 2',                                              $calendar_tasks[3]['name']);
+        $this->assertEquals('This is task 2',                                           $calendar_tasks[3]['description']);
+        $this->assertEquals('2009-07-16 00:00:00',                                      $calendar_tasks[3]['startDate']);
+        $this->assertEquals('2009-07-16 00:00:00',                                      $calendar_tasks[3]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[3]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=2',                     $calendar_tasks[3]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[3]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[3]['project_name']);
+        $this->assertEquals(22,                                                         $calendar_tasks[4]['id']);
+        $this->assertEquals('Start: Task 22',                                           $calendar_tasks[4]['name']);
+        $this->assertEquals('This is task 22',                                          $calendar_tasks[4]['description']);
+        $this->assertEquals('2009-09-09 00:00:00',                                      $calendar_tasks[4]['startDate']);
+        $this->assertEquals('2009-09-09 00:00:00',                                      $calendar_tasks[4]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[4]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=22',                    $calendar_tasks[4]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[4]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[4]['project_name']);
+        $this->assertEquals(22,                                                         $calendar_tasks[5]['id']);
+        $this->assertEquals('End: Task 22',                                             $calendar_tasks[5]['name']);
+        $this->assertEquals('This is task 22',                                          $calendar_tasks[5]['description']);
+        $this->assertEquals('2009-11-01 00:00:00',                                      $calendar_tasks[5]['startDate']);
+        $this->assertEquals('2009-11-01 00:00:00',                                      $calendar_tasks[5]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $calendar_tasks[5]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=22',                    $calendar_tasks[5]['url']);
+        $this->assertEquals(1,                                                          $calendar_tasks[5]['project_id']);
+        $this->assertEquals('Test Project',                                             $calendar_tasks[5]['project_name']);
+    }
+
+    /**
+     * Test returning proper data for search hook
+     */
+    public function testHookSearch()
+    {
+        $search_data = $this->obj->hook_search();
+
+        $this->assertEquals(8,                                      count($search_data));
+        $this->assertEquals('tasks',                                $search_data['table']);
+        $this->assertEquals('tasks',                                $search_data['table_module']);
+        $this->assertEquals('task_id',                              $search_data['table_key']);
+        $this->assertEquals('index.php?m=tasks&a=view&task_id=',    $search_data['table_link']);
+        $this->assertEquals('Tasks',                                $search_data['table_title']);
+        $this->assertEquals('task_name',                            $search_data['table_orderby']);
+        $this->assertEquals(6,                                      count($search_data['search_fields']));
+        $this->assertEquals('task_name',                            $search_data['search_fields'][0]);
+        $this->assertEquals('task_description',                     $search_data['search_fields'][1]);
+        $this->assertEquals('task_related_url',                     $search_data['search_fields'][2]);
+        $this->assertEquals('task_departments',                     $search_data['search_fields'][3]);
+        $this->assertEquals('task_contacts',                        $search_data['search_fields'][4]);
+        $this->assertEquals('task_custom',                          $search_data['search_fields'][5]);
+        $this->assertEquals(6,                                      count($search_data['display_fields']));
+        $this->assertEquals('task_name',                            $search_data['display_fields'][0]);
+        $this->assertEquals('task_description',                     $search_data['display_fields'][1]);
+        $this->assertEquals('task_related_url',                     $search_data['display_fields'][2]);
+        $this->assertEquals('task_departments',                     $search_data['display_fields'][3]);
+        $this->assertEquals('task_contacts',                        $search_data['display_fields'][4]);
+        $this->assertEquals('task_custom',                          $search_data['display_fields'][5]);
+    }
+
+    /**
+     * Test getting task list with no days passed
+     */
+    public function testGetTaskListNoDays()
+    {
+        $task_list = $this->obj->getTaskList(1);
+
+        $this->assertEquals(3,                                                          count($task_list));
+        $this->assertEquals(1,                                                          $task_list[0]['id']);
+        $this->assertEquals('Task 1',                                                   $task_list[0]['name']);
+        $this->assertEquals('This is task 1',                                           $task_list[0]['description']);
+        $this->assertEquals('2009-07-05 00:00:00',                                      $task_list[0]['startDate']);
+        $this->assertEquals('2009-07-15 00:00:00',                                      $task_list[0]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $task_list[0]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=1',                     $task_list[0]['url']);
+        $this->assertEquals(1,                                                          $task_list[0]['project_id']);
+        $this->assertEquals('Test Project',                                             $task_list[0]['project_name']);
+        $this->assertEquals(2,                                                          $task_list[1]['id']);
+        $this->assertEquals('Task 2',                                                   $task_list[1]['name']);
+        $this->assertEquals('This is task 2',                                           $task_list[1]['description']);
+        $this->assertEquals('2009-07-06 00:00:00',                                      $task_list[1]['startDate']);
+        $this->assertEquals('2009-07-16 00:00:00',                                      $task_list[1]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $task_list[1]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=2',                     $task_list[1]['url']);
+        $this->assertEquals(1,                                                          $task_list[1]['project_id']);
+        $this->assertEquals('Test Project',                                             $task_list[1]['project_name']);
+        $this->assertEquals(22,                                                         $task_list[2]['id']);
+        $this->assertEquals('Task 22',                                                  $task_list[2]['name']);
+        $this->assertEquals('This is task 22',                                          $task_list[2]['description']);
+        $this->assertEquals('2009-09-09 00:00:00',                                      $task_list[2]['startDate']);
+        $this->assertEquals('2009-11-01 00:00:00',                                      $task_list[2]['endDate']);
+        $this->assertRegExp('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}^',  $task_list[2]['updatedDate']);
+        $this->assertContains('index.php?m=tasks&a=view&task_id=22',                    $task_list[2]['url']);
+        $this->assertEquals(1,                                                          $task_list[2]['project_id']);
+        $this->assertEquals('Test Project',                                             $task_list[2]['project_name']);
+    }
+
+    /**
+     * Test getting tasks with a number of days passed
+     */
+    public function testGetTaskListDays()
+    {
+        $task_list = $this->obj->getTaskList(1, -10000);
+
+        $this->assertType('array',  $task_list);
+        $this->assertEquals(0,      count($task_list));
+    }
+
+    /**
+     * Test getting allowed tasks with permissions and no project passed
+     */
+    public function testGetAllowedTaskListAllowedNoProject()
+    {
+        global $AppUI;
+
+        $allowed_task_list = $this->obj->getAllowedTaskList($AppUI);
+
+        $this->assertEquals(30,         count($allowed_task_list));
+        $this->assertEquals(1,          $allowed_task_list[0]['task_id']);
+        $this->assertEquals('Task 1',   $allowed_task_list[0]['task_name']);
+        $this->assertEquals(0,          $allowed_task_list[0]['task_parent']);
+        $this->assertEquals(0,          $allowed_task_list[0]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[0]['task_owner']);
+        $this->assertEquals(3,          $allowed_task_list[1]['task_id']);
+        $this->assertEquals('Task 3',   $allowed_task_list[1]['task_name']);
+        $this->assertEquals(0,          $allowed_task_list[1]['task_parent']);
+        $this->assertEquals(2,          $allowed_task_list[1]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[1]['task_owner']);
+        $this->assertEquals(4,          $allowed_task_list[2]['task_id']);
+        $this->assertEquals('Task 4',   $allowed_task_list[2]['task_name']);
+        $this->assertEquals(0,          $allowed_task_list[2]['task_parent']);
+        $this->assertEquals(3,          $allowed_task_list[2]['task_access']);
+        $this->assertEquals(2,          $allowed_task_list[2]['task_owner']);
+        $this->assertEquals(5,          $allowed_task_list[3]['task_id']);
+        $this->assertEquals('Task 5',   $allowed_task_list[3]['task_name']);
+        $this->assertEquals(0,          $allowed_task_list[3]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[3]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[3]['task_owner']);
+        $this->assertEquals(2,          $allowed_task_list[4]['task_id']);
+        $this->assertEquals('Task 2',   $allowed_task_list[4]['task_name']);
+        $this->assertEquals(1,          $allowed_task_list[4]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[4]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[4]['task_owner']);
+        $this->assertEquals(7,          $allowed_task_list[5]['task_id']);
+        $this->assertEquals('Task 7',   $allowed_task_list[5]['task_name']);
+        $this->assertEquals(6,          $allowed_task_list[5]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[5]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[5]['task_owner']);
+        $this->assertEquals(6,          $allowed_task_list[6]['task_id']);
+        $this->assertEquals('Task 6',   $allowed_task_list[6]['task_name']);
+        $this->assertEquals(7,          $allowed_task_list[6]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[6]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[6]['task_owner']);
+        $this->assertEquals(9,          $allowed_task_list[7]['task_id']);
+        $this->assertEquals('Task 9',   $allowed_task_list[7]['task_name']);
+        $this->assertEquals(8,          $allowed_task_list[7]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[7]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[7]['task_owner']);
+        $this->assertEquals(10,         $allowed_task_list[8]['task_id']);
+        $this->assertEquals('Task 10',  $allowed_task_list[8]['task_name']);
+        $this->assertEquals(9,          $allowed_task_list[8]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[8]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[8]['task_owner']);
+        $this->assertEquals(11,         $allowed_task_list[9]['task_id']);
+        $this->assertEquals('Task 11',  $allowed_task_list[9]['task_name']);
+        $this->assertEquals(10,         $allowed_task_list[9]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[9]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[9]['task_owner']);
+        $this->assertEquals(8,          $allowed_task_list[10]['task_id']);
+        $this->assertEquals('Task 8',   $allowed_task_list[10]['task_name']);
+        $this->assertEquals(10,         $allowed_task_list[10]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[10]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[10]['task_owner']);
+        $this->assertEquals(12,         $allowed_task_list[11]['task_id']);
+        $this->assertEquals('Task 12',  $allowed_task_list[11]['task_name']);
+        $this->assertEquals(11,         $allowed_task_list[11]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[11]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[11]['task_owner']);
+        $this->assertEquals(13,         $allowed_task_list[12]['task_id']);
+        $this->assertEquals('Task 13',  $allowed_task_list[12]['task_name']);
+        $this->assertEquals(12,         $allowed_task_list[12]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[12]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[12]['task_owner']);
+        $this->assertEquals(14,         $allowed_task_list[13]['task_id']);
+        $this->assertEquals('Task 14',  $allowed_task_list[13]['task_name']);
+        $this->assertEquals(14,         $allowed_task_list[13]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[13]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[13]['task_owner']);
+        $this->assertEquals(15,         $allowed_task_list[14]['task_id']);
+        $this->assertEquals('Task 15',  $allowed_task_list[14]['task_name']);
+        $this->assertEquals(15,         $allowed_task_list[14]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[14]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[14]['task_owner']);
+        $this->assertEquals(16,         $allowed_task_list[15]['task_id']);
+        $this->assertEquals('Task 16',  $allowed_task_list[15]['task_name']);
+        $this->assertEquals(15,         $allowed_task_list[15]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[15]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[15]['task_owner']);
+        $this->assertEquals(17,         $allowed_task_list[16]['task_id']);
+        $this->assertEquals('Task 17',  $allowed_task_list[16]['task_name']);
+        $this->assertEquals(16,         $allowed_task_list[16]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[16]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[16]['task_owner']);
+        $this->assertEquals(18,         $allowed_task_list[17]['task_id']);
+        $this->assertEquals('Task 18',  $allowed_task_list[17]['task_name']);
+        $this->assertEquals(18,         $allowed_task_list[17]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[17]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[17]['task_owner']);
+        $this->assertEquals(19,         $allowed_task_list[18]['task_id']);
+        $this->assertEquals('Task 19',  $allowed_task_list[18]['task_name']);
+        $this->assertEquals(18,         $allowed_task_list[18]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[18]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[18]['task_owner']);
+        $this->assertEquals(20,         $allowed_task_list[19]['task_id']);
+        $this->assertEquals('Task 20',  $allowed_task_list[19]['task_name']);
+        $this->assertEquals(18,         $allowed_task_list[19]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[19]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[19]['task_owner']);
+        $this->assertEquals(21,         $allowed_task_list[20]['task_id']);
+        $this->assertEquals('Task 21',  $allowed_task_list[20]['task_name']);
+        $this->assertEquals(21,         $allowed_task_list[20]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[20]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[20]['task_owner']);
+        $this->assertEquals(22,         $allowed_task_list[21]['task_id']);
+        $this->assertEquals('Task 22',  $allowed_task_list[21]['task_name']);
+        $this->assertEquals(21,         $allowed_task_list[21]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[21]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[21]['task_owner']);
+        $this->assertEquals(23,         $allowed_task_list[22]['task_id']);
+        $this->assertEquals('Task 23',  $allowed_task_list[22]['task_name']);
+        $this->assertEquals(21,         $allowed_task_list[22]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[22]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[22]['task_owner']);
+        $this->assertEquals(24,         $allowed_task_list[23]['task_id']);
+        $this->assertEquals('Task 24',  $allowed_task_list[23]['task_name']);
+        $this->assertEquals(24,         $allowed_task_list[23]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[23]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[23]['task_owner']);
+        $this->assertEquals(25,         $allowed_task_list[24]['task_id']);
+        $this->assertEquals('Task 25',  $allowed_task_list[24]['task_name']);
+        $this->assertEquals(24,         $allowed_task_list[24]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[24]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[24]['task_owner']);
+        $this->assertEquals(26,         $allowed_task_list[25]['task_id']);
+        $this->assertEquals('Task 26',  $allowed_task_list[25]['task_name']);
+        $this->assertEquals(24,         $allowed_task_list[25]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[25]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[25]['task_owner']);
+        $this->assertEquals(27,         $allowed_task_list[26]['task_id']);
+        $this->assertEquals('Task 27',  $allowed_task_list[26]['task_name']);
+        $this->assertEquals(27,         $allowed_task_list[26]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[26]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[26]['task_owner']);
+        $this->assertEquals(28,         $allowed_task_list[27]['task_id']);
+        $this->assertEquals('Task 28',  $allowed_task_list[27]['task_name']);
+        $this->assertEquals(28,         $allowed_task_list[27]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[27]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[27]['task_owner']);
+        $this->assertEquals(29,         $allowed_task_list[28]['task_id']);
+        $this->assertEquals('Task 29',  $allowed_task_list[28]['task_name']);
+        $this->assertEquals(29,         $allowed_task_list[28]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[28]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[28]['task_owner']);
+        $this->assertEquals(30,         $allowed_task_list[29]['task_id']);
+        $this->assertEquals('Task 30',  $allowed_task_list[29]['task_name']);
+        $this->assertEquals(30,         $allowed_task_list[29]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[29]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[29]['task_owner']);
+
+        foreach ($allowed_task_list as $task) {
+            $this->assertEquals(5, count($task));
+        }
+    }
+
+    /**
+     * Test getting allowed tasks with a project
+     */
+    public function testGetAllowedTaskListAllowedProject()
+    {
+        global $AppUI;
+
+        $allowed_task_list = $this->obj->getAllowedTaskList($AppUI, 1);
+
+        $this->assertEquals(30,         count($allowed_task_list));
+        $this->assertEquals(1,          $allowed_task_list[0]['task_id']);
+        $this->assertEquals('Task 1',   $allowed_task_list[0]['task_name']);
+        $this->assertEquals(0,          $allowed_task_list[0]['task_parent']);
+        $this->assertEquals(0,          $allowed_task_list[0]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[0]['task_owner']);
+        $this->assertEquals(3,          $allowed_task_list[1]['task_id']);
+        $this->assertEquals('Task 3',   $allowed_task_list[1]['task_name']);
+        $this->assertEquals(0,          $allowed_task_list[1]['task_parent']);
+        $this->assertEquals(2,          $allowed_task_list[1]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[1]['task_owner']);
+        $this->assertEquals(4,          $allowed_task_list[2]['task_id']);
+        $this->assertEquals('Task 4',   $allowed_task_list[2]['task_name']);
+        $this->assertEquals(0,          $allowed_task_list[2]['task_parent']);
+        $this->assertEquals(3,          $allowed_task_list[2]['task_access']);
+        $this->assertEquals(2,          $allowed_task_list[2]['task_owner']);
+        $this->assertEquals(5,          $allowed_task_list[3]['task_id']);
+        $this->assertEquals('Task 5',   $allowed_task_list[3]['task_name']);
+        $this->assertEquals(0,          $allowed_task_list[3]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[3]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[3]['task_owner']);
+        $this->assertEquals(2,          $allowed_task_list[4]['task_id']);
+        $this->assertEquals('Task 2',   $allowed_task_list[4]['task_name']);
+        $this->assertEquals(1,          $allowed_task_list[4]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[4]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[4]['task_owner']);
+        $this->assertEquals(7,          $allowed_task_list[5]['task_id']);
+        $this->assertEquals('Task 7',   $allowed_task_list[5]['task_name']);
+        $this->assertEquals(6,          $allowed_task_list[5]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[5]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[5]['task_owner']);
+        $this->assertEquals(6,          $allowed_task_list[6]['task_id']);
+        $this->assertEquals('Task 6',   $allowed_task_list[6]['task_name']);
+        $this->assertEquals(7,          $allowed_task_list[6]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[6]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[6]['task_owner']);
+        $this->assertEquals(9,          $allowed_task_list[7]['task_id']);
+        $this->assertEquals('Task 9',   $allowed_task_list[7]['task_name']);
+        $this->assertEquals(8,          $allowed_task_list[7]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[7]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[7]['task_owner']);
+        $this->assertEquals(10,         $allowed_task_list[8]['task_id']);
+        $this->assertEquals('Task 10',  $allowed_task_list[8]['task_name']);
+        $this->assertEquals(9,          $allowed_task_list[8]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[8]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[8]['task_owner']);
+        $this->assertEquals(11,         $allowed_task_list[9]['task_id']);
+        $this->assertEquals('Task 11',  $allowed_task_list[9]['task_name']);
+        $this->assertEquals(10,         $allowed_task_list[9]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[9]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[9]['task_owner']);
+        $this->assertEquals(8,          $allowed_task_list[10]['task_id']);
+        $this->assertEquals('Task 8',   $allowed_task_list[10]['task_name']);
+        $this->assertEquals(10,         $allowed_task_list[10]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[10]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[10]['task_owner']);
+        $this->assertEquals(12,         $allowed_task_list[11]['task_id']);
+        $this->assertEquals('Task 12',  $allowed_task_list[11]['task_name']);
+        $this->assertEquals(11,         $allowed_task_list[11]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[11]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[11]['task_owner']);
+        $this->assertEquals(13,         $allowed_task_list[12]['task_id']);
+        $this->assertEquals('Task 13',  $allowed_task_list[12]['task_name']);
+        $this->assertEquals(12,         $allowed_task_list[12]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[12]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[12]['task_owner']);
+        $this->assertEquals(14,         $allowed_task_list[13]['task_id']);
+        $this->assertEquals('Task 14',  $allowed_task_list[13]['task_name']);
+        $this->assertEquals(14,         $allowed_task_list[13]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[13]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[13]['task_owner']);
+        $this->assertEquals(15,         $allowed_task_list[14]['task_id']);
+        $this->assertEquals('Task 15',  $allowed_task_list[14]['task_name']);
+        $this->assertEquals(15,         $allowed_task_list[14]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[14]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[14]['task_owner']);
+        $this->assertEquals(16,         $allowed_task_list[15]['task_id']);
+        $this->assertEquals('Task 16',  $allowed_task_list[15]['task_name']);
+        $this->assertEquals(15,         $allowed_task_list[15]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[15]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[15]['task_owner']);
+        $this->assertEquals(17,         $allowed_task_list[16]['task_id']);
+        $this->assertEquals('Task 17',  $allowed_task_list[16]['task_name']);
+        $this->assertEquals(16,         $allowed_task_list[16]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[16]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[16]['task_owner']);
+        $this->assertEquals(18,         $allowed_task_list[17]['task_id']);
+        $this->assertEquals('Task 18',  $allowed_task_list[17]['task_name']);
+        $this->assertEquals(18,         $allowed_task_list[17]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[17]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[17]['task_owner']);
+        $this->assertEquals(19,         $allowed_task_list[18]['task_id']);
+        $this->assertEquals('Task 19',  $allowed_task_list[18]['task_name']);
+        $this->assertEquals(18,         $allowed_task_list[18]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[18]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[18]['task_owner']);
+        $this->assertEquals(20,         $allowed_task_list[19]['task_id']);
+        $this->assertEquals('Task 20',  $allowed_task_list[19]['task_name']);
+        $this->assertEquals(18,         $allowed_task_list[19]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[19]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[19]['task_owner']);
+        $this->assertEquals(21,         $allowed_task_list[20]['task_id']);
+        $this->assertEquals('Task 21',  $allowed_task_list[20]['task_name']);
+        $this->assertEquals(21,         $allowed_task_list[20]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[20]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[20]['task_owner']);
+        $this->assertEquals(22,         $allowed_task_list[21]['task_id']);
+        $this->assertEquals('Task 22',  $allowed_task_list[21]['task_name']);
+        $this->assertEquals(21,         $allowed_task_list[21]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[21]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[21]['task_owner']);
+        $this->assertEquals(23,         $allowed_task_list[22]['task_id']);
+        $this->assertEquals('Task 23',  $allowed_task_list[22]['task_name']);
+        $this->assertEquals(21,         $allowed_task_list[22]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[22]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[22]['task_owner']);
+        $this->assertEquals(24,         $allowed_task_list[23]['task_id']);
+        $this->assertEquals('Task 24',  $allowed_task_list[23]['task_name']);
+        $this->assertEquals(24,         $allowed_task_list[23]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[23]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[23]['task_owner']);
+        $this->assertEquals(25,         $allowed_task_list[24]['task_id']);
+        $this->assertEquals('Task 25',  $allowed_task_list[24]['task_name']);
+        $this->assertEquals(24,         $allowed_task_list[24]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[24]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[24]['task_owner']);
+        $this->assertEquals(26,         $allowed_task_list[25]['task_id']);
+        $this->assertEquals('Task 26',  $allowed_task_list[25]['task_name']);
+        $this->assertEquals(24,         $allowed_task_list[25]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[25]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[25]['task_owner']);
+        $this->assertEquals(27,         $allowed_task_list[26]['task_id']);
+        $this->assertEquals('Task 27',  $allowed_task_list[26]['task_name']);
+        $this->assertEquals(27,         $allowed_task_list[26]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[26]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[26]['task_owner']);
+        $this->assertEquals(28,         $allowed_task_list[27]['task_id']);
+        $this->assertEquals('Task 28',  $allowed_task_list[27]['task_name']);
+        $this->assertEquals(28,         $allowed_task_list[27]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[27]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[27]['task_owner']);
+        $this->assertEquals(29,         $allowed_task_list[28]['task_id']);
+        $this->assertEquals('Task 29',  $allowed_task_list[28]['task_name']);
+        $this->assertEquals(29,         $allowed_task_list[28]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[28]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[28]['task_owner']);
+        $this->assertEquals(30,         $allowed_task_list[29]['task_id']);
+        $this->assertEquals('Task 30',  $allowed_task_list[29]['task_name']);
+        $this->assertEquals(30,         $allowed_task_list[29]['task_parent']);
+        $this->assertEquals(1,          $allowed_task_list[29]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[29]['task_owner']);
+
+        foreach ($allowed_task_list as $task) {
+            $this->assertEquals(5, count($task));
+        }
+    }
+
+    /**
+     * Tests getting allowed task list with no permission and no project specified
+     */
+    public function testGetAllowedTaskListNotAllowedNoProject()
+    {
+        global $AppUI;
+
+        // Login as another user for permission purposes
+        $old_AppUI = $AppUI;
+        $AppUI  = new CAppUI;
+        $_POST['login'] = 'login';
+        $_REQUEST['login'] = 'sql';
+
+        $allowed_task_list = $this->obj->getAllowedTaskList($AppUI);
+
+        $this->assertEquals(1,          count($allowed_task_list));
+        $this->assertEquals(5,          count($allowed_task_list[0]));
+        $this->assertEquals(1,          $allowed_task_list[0]['task_id']);
+        $this->assertEquals('Task 1',   $allowed_task_list[0]['task_name']);
+        $this->assertEquals(0,          $allowed_task_list[0]['task_parent']);
+        $this->assertEquals(0,          $allowed_task_list[0]['task_access']);
+        $this->assertEquals(1,          $allowed_task_list[0]['task_owner']);
+        // Restore AppUI for following tests since its global, yuck!
+        $AppUI = $old_AppUI;
+    }
+
+    /**
+     * Tests getting allowed task list with no permission and a project specified
+     */
+    public function testGetAllowedTaskListNotAllowedProject()
+    {
+        global $AppUI;
+
+        // Login as another user for permission purposes
+        $old_AppUI = $AppUI;
+        $AppUI  = new CAppUI;
+        $_POST['login'] = 'login';
+        $_REQUEST['login'] = 'sql';
+
+        $allowed_task_list = $this->obj->getAllowedTaskList($AppUI, 2);
+
+        $this->assertNull($allowed_task_list);
+
+        // Restore AppUI for following tests since its global, yuck!
+        $AppUI = $old_AppUI;
+    }
+
+    /**
+     * Test getting task count for a project
+     */
+    public function testGetTaskCount()
+    {
+        $task_count = $this->obj->getTaskCount(1);
+
+        $this->assertEquals(30, $task_count);
+
+        $task_count = $this->obj->getTaskCount(2);
+
+        $this->assertEquals(0, $task_count);
+    }
+
+    /**
+     * Test pinning task for user
+     */
+    public function testPinUserTask()
+    {
+        $return_val = $this->obj->pinUserTask(1, 1);
+
+        $this->assertTrue($return_val);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestPinUserTask.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_task_pin'), $xml_db_dataset->getTable('user_task_pin'));
+    }
+
+    /**
+     * Test unpinning task for user
+     */
+    public function testUnpinUserTask()
+    {
+        $return_val = $this->obj->unpinUserTask(1, 1);
+
+        $this->assertTrue($return_val);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUnpinUserTask.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_task_pin'), $xml_db_dataset->getTable('user_task_pin'));
+    }
+
+    /**
+     * Test updating hours worked for a task
+     */
+    public function testUpdateHoursWorked()
+    {
+        CTask::updateHoursWorked(1, 25);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateHoursWorked.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
     }
 }

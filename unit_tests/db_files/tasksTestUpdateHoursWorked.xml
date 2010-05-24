@@ -1,240 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- tasksSeed.xml - Seed data for tasks test. -->
+<!-- tasksTestUpdateHoursWorked.xml - Dataset to test against after updating hours worked on a task. -->
 <dataset>
-    <table name="companies">
-        <column>company_id</column>
-        <column>company_module</column>
-        <column>company_name</column>
-        <column>company_phone1</column>
-        <column>company_phone2</column>
-        <column>company_fax</column>
-        <column>company_address1</column>
-        <column>company_address2</column>
-        <column>company_city</column>
-        <column>company_state</column>
-        <column>company_zip</column>
-        <column>company_country</column>
-        <column>company_primary_url</column>
-        <column>company_owner</column>
-        <column>company_description</column>
-        <column>company_type</column>
-        <column>company_email</column>
-        <column>company_private</column>
-        <row>
-            <value>1</value>
-            <value>0</value>
-            <value>UnitTestCompany</value>
-            <value>1.999.999.9999</value>
-            <value>1.999.999.9998</value>
-            <value>1.999.999.9997</value>
-            <value>Address 1</value>
-            <value>Address 2</value>
-            <value>City</value>
-            <value>CA</value>
-            <value>90210</value>
-            <value>US</value>
-            <value>web2project.net</value>
-            <value>1</value>
-            <value>This is a company.</value>
-            <value>2</value>
-            <value>web2project@example.org</value>
-            <value>0</value>
-        </row>
-    </table>
-    <table name="projects">
-        <column>project_id</column>
-        <column>project_name</column>
-        <column>project_short_name</column>
-        <column>project_owner</column>
-        <column>project_status</column>
-        <column>project_color_identifier</column>
-        <column>project_creator</column>
-        <column>project_priority</column>
-        <column>project_type</column>
-        <column>project_company</column>
-        <column>project_start_date</column>
-        <column>project_active</column>
-        <row>
-            <value>1</value>
-            <value>Test Project</value>
-            <value>TP</value>
-            <value>1</value>
-            <value>0</value>
-            <value>FFFFFF</value>
-            <value>1</value>
-            <value>-1</value>
-            <value>0</value>
-            <value>1</value>
-            <value>2009-10-10</value>
-            <value>1</value>
-        </row>
-    </table>
-    <table name="departments">
-        <column>dept_name</column>
-        <column>dept_id</column>
-        <column>dept_company</column>
-        <row>
-            <value>Department 1</value>
-            <value>1</value>
-            <value>1</value>
-        </row>
-    </table>
-    <table name="contacts">
-        <column>contact_id</column>
-        <column>contact_first_name</column>
-        <column>contact_last_name</column>
-        <column>contact_company</column>
-        <column>contact_order_by</column>
-        <column>contact_title</column>
-        <column>contact_birthday</column>
-        <column>contact_job</column>
-        <column>contact_department</column>
-        <column>contact_type</column>
-        <column>contact_email</column>
-        <column>contact_email2</column>
-        <column>contact_url</column>
-        <column>contact_phone</column>
-        <column>contact_phone2</column>
-        <column>contact_fax</column>
-        <column>contact_mobile</column>
-        <column>contact_address1</column>
-        <column>contact_address2</column>
-        <column>contact_city</column>
-        <column>contact_state</column>
-        <column>contact_zip</column>
-        <column>contact_country</column>
-        <column>contact_jabber</column>
-        <column>contact_icq</column>
-        <column>contact_msn</column>
-        <column>contact_yahoo</column>
-        <column>contact_aol</column>
-        <column>contact_notes</column>
-        <column>contact_project</column>
-        <column>contact_icon</column>
-        <column>contact_owner</column>
-        <column>contact_private</column>
-        <column>contact_updatekey</column>
-        <column>contact_lastupdate</column>
-        <column>contact_updateasked</column>
-        <column>contact_skype</column>
-        <column>contact_google</column>
-        <row>
-            <value>1</value>
-            <value>Admin</value>
-            <value>Person</value>
-            <value>1</value>
-            <value></value>
-            <value>President</value>
-            <value>1983-07-22</value>
-            <value>President</value>
-            <value>Sales</value>
-            <value>person</value>
-            <value>contact1@example.org</value>
-            <value>contact1_2@example.org</value>
-            <value>1.example.org</value>
-            <value>1.999.999.9999</value>
-            <value>1.999.999.9998</value>
-            <value>1.999.999.9997</value>
-            <value>1.999.999.9996</value>
-            <value>c1 address 1</value>
-            <value>c1 address 2</value>
-            <value>c1 city</value>
-            <value>CA</value>
-            <value>90210</value>
-            <value>US</value>
-            <value>c1jabber</value>
-            <value>c1icq</value>
-            <value>c1msn</value>
-            <value>c1yahoo</value>
-            <value>c1aol</value>
-            <value>c1s notes.</value>
-            <value>0</value>
-            <value>obj/contact</value>
-            <value>0</value>
-            <value>0</value>
-            <value></value>
-            <value>2009-01-01 11:11:11</value>
-            <value>2008-12-12 11:11:11</value>
-            <value>c1skype</value>
-            <value>c1google</value>
-        </row>
-        <row>
-            <value>2</value>
-            <value>Reg</value>
-            <value>User</value>
-            <value>1</value>
-            <value></value>
-            <value>Some Guy</value>
-            <value>1989-09-28</value>
-            <value>Some Guy</value>
-            <value>Sales</value>
-            <value>person</value>
-            <value>reg_user@example.org</value>
-            <value>reg_user_2@example.org</value>
-            <value>1.example.org</value>
-            <value>1.999.999.9999</value>
-            <value>1.999.999.9998</value>
-            <value>1.999.999.9997</value>
-            <value>1.999.999.9996</value>
-            <value>c1 address 1</value>
-            <value>c1 address 2</value>
-            <value>c1 city</value>
-            <value>CA</value>
-            <value>90210</value>
-            <value>US</value>
-            <value>c1jabber</value>
-            <value>c1icq</value>
-            <value>c1msn</value>
-            <value>c1yahoo</value>
-            <value>c1aol</value>
-            <value>c1s notes.</value>
-            <value>0</value>
-            <value>obj/contact</value>
-            <value>0</value>
-            <value>0</value>
-            <value></value>
-            <value>2009-01-01 11:11:11</value>
-            <value>2008-12-12 11:11:11</value>
-            <value>c1skype</value>
-            <value>c1google</value>
-        </row>
-    </table>
-    <table name="users">
-    	<column>user_id</column>
-    	<column>user_contact</column>
-    	<column>user_username</column>
-    	<column>user_password</column>
-    	<column>user_parent</column>
-    	<column>user_type</column>
-    	<column>user_signature</column>
-    	<column>user_empireint_special</column>
-		<column>user_department</column>
-		<column>user_company</column>
-		<row>
-			<value>1</value>
-			<value>1</value>
-			<value>admin</value>
-			<value>76a2173be6393254e72ffa4d6df1030a</value>
-			<value>0</value>
-			<value>1</value>
-			<value>Admin User</value>
-			<value>0</value>
-			<value>0</value>
-			<value>0</value>
-		</row>
-        <row>
-			<value>2</value>
-			<value>2</value>
-			<value>reg_user</value>
-			<value>76a2173be6393254e72ffa4d6df1030a</value>
-			<value>0</value>
-			<value>1</value>
-			<value>Reg User</value>
-			<value>0</value>
-			<value>0</value>
-			<value>0</value>
-		</row>
-    </table>
     <table name="tasks">
         <column>task_id</column>
         <column>task_name</column>
@@ -277,7 +43,7 @@
           <value>2009-07-05 00:00:00</value>
           <value>2</value>
           <value>24</value>
-          <value>0</value>
+          <value>25</value>
           <value>2009-07-15 00:00:00</value>
           <value>0</value>
           <value>0</value>
@@ -1258,320 +1024,88 @@
           <value>0</value>
         </row>
     </table>
-    <table name="task_dependencies">
-        <column>dependencies_task_id</column>
-        <column>dependencies_req_task_id</column>
-        <row>
-            <value>3</value>
-            <value>4</value>
-        </row>
-        <row>
-            <value>4</value>
-            <value>3</value>
-        </row>
-        <row>
-            <value>5</value>
-            <value>6</value>
-        </row>
-        <row>
-            <value>11</value>
-            <value>9</value>
-        </row>
-        <row>
-            <value>12</value>
-            <value>13</value>
-        </row>
-        <row>
-            <value>13</value>
-            <value>11</value>
-        </row>
-        <row>
-            <value>14</value>
-            <value>12</value>
-        </row>
-        <row>
-            <value>17</value>
-            <value>15</value>
-        </row>
-		<row>
-			<value>28</value>
-			<value>27</value>
-		</row>
-        <row>
-			<value>29</value>
-			<value>28</value>
-		</row>
-        <row>
-			<value>30</value>
-			<value>28</value>
-		</row>
-    </table>
-    <table name="task_log">
-        <column>task_log_id</column>
-        <column>task_log_task</column>
-        <column>task_log_help_desk_id</column>
-        <column>task_log_name</column>
-        <column>task_log_description</column>
-        <column>task_log_creator</column>
-        <column>task_log_hours</column>
-        <column>task_log_date</column>
-        <column>task_log_costcode</column>
-        <column>task_log_problem</column>
-        <column>task_log_reference</column>
-        <column>task_log_related_url</column>
-        <column>task_log_project</column>
-        <column>task_log_company</column>
-        <column>task_log_changelog</column>
-        <column>task_log_changelog_servers</column>
-        <column>task_log_changelog_whom</column>
-        <column>task_log_changelog_datetime</column>
-        <column>task_log_changelog_duration</column>
-        <column>task_log_changelog_expected_downtime</column>
-        <column>task_log_changelog_description</column>
-        <column>task_log_changelog_backout_plan</column>
-        <column>task_log_created</column>
-        <column>task_log_updated</column>
+        <column>project_id</column>
+        <column>project_company</column>
+        <column>project_department</column>
+        <column>project_name</column>
+        <column>project_short_name</column>
+        <column>project_owner</column>
+        <column>project_url</column>
+        <column>project_demo_url</column>
+        <column>project_start_date</column>
+        <column>project_end_date</column>
+        <column>project_actual_end_date</column>
+        <column>project_status</column>
+        <column>project_percent_complete</column>
+        <column>project_color_identifier</column>
+        <column>project_description</column>
+        <column>project_target_budget</column>
+        <column>project_actual_budget</column>
+        <column>project_scheduled_hours</column>
+        <column>project_worked_hours</column>
+        <column>project_task_count</column>
+        <column>project_creator</column>
+        <column>project_private</column>
+        <column>project_departments</column>
+        <column>project_contacts</column>
+        <column>project_priority</column>
+        <column>project_type</column>
+        <column>project_keydate</column>
+        <column>project_keydate_pos</column>
+        <column>project_keytask</column>
+        <column>project_active</column>
+        <column>project_original_parent</column>
+        <column>project_parent</column>
+        <column>project_empireint_special</column>
+        <column>project_updator</column>
+        <column>project_created</column>
+        <column>project_updated</column>
+        <column>project_status_comment</column>
+        <column>project_subpriority</column>
+        <column>project_end_date_adjusted</column>
+        <column>project_end_date_adjusted_user</column>
+        <column>project_location</column>
         <row>
             <value>1</value>
-            <value>22</value>
             <value>1</value>
-            <value>Task Log 1</value>
-            <value>Did some working on task 22.</value>
+            <value>0</value>
+            <value>Test Project</value>
+            <value>TP</value>
             <value>1</value>
-            <value>20</value>
-            <value>2009-10-19</value>
-            <value>1</value>
-            <null/>
-            <null/>
-            <value>http://www.example.org</value>
-            <value>1</value>
+            <value>http://project1.example.org</value>
+            <value>http://project1-demo.example.org</value>
+            <value>2009-07-05 00:00:00</value>
+            <value>2009-07-15 23:59:59</value>
+            <value>2009-08-15 00:00:00</value>
+            <value>0</value>
+            <value>0</value>
+            <value>FFFFFF</value>
+            <value>This is a project</value>
+            <value>15.00</value>
+            <value>5.00</value>
+	        <value>0</value>
+	        <value>0</value>
+	        <value>0</value>
             <value>1</value>
             <value>0</value>
             <value></value>
-            <value>0</value>
-            <null/>
             <value></value>
+            <value>-1</value>
             <value>0</value>
-            <null/>
-            <null/>
-            <value>2009-10-19 00:00:00</value>
-            <value>2009-10-19 00:00:00</value>
-        </row>
-        <row>
-            <value>2</value>
-            <value>23</value>
+            <value>0000-00-00 00:00:00</value>
+            <value>0</value>
+            <value>0</value>
             <value>1</value>
-            <value>Task Log 2</value>
-            <value>Did some working on task 23.</value>
-            <value>1</value>
-            <value>17</value>
-            <value>2009-10-19</value>
-            <value>1</value>
-            <value>1</value>
-            <null/>
-            <value>http://www.example.org</value>
             <value>1</value>
             <value>1</value>
             <value>0</value>
-            <value></value>
             <value>0</value>
-            <null/>
-            <value></value>
+            <value>Ignored in test</value>
+            <value>Ignored in test</value>
+            <value>Status Comment.</value>
             <value>0</value>
-            <null/>
-            <null/>
-            <value>2009-10-19 00:00:00</value>
-            <value>2009-10-19 00:00:00</value>
-        </row>
-        <row>
-            <value>3</value>
-            <value>25</value>
-            <value>1</value>
-            <value>Task Log 3</value>
-            <value>Did some working on task 25.</value>
-            <value>1</value>
-            <value>20</value>
-            <value>2009-10-19</value>
-            <value>1</value>
-            <null/>
-            <null/>
-            <value>http://www.example.org</value>
-            <value>1</value>
-            <value>1</value>
+            <value>2009-07-05 00:00:00</value>
             <value>0</value>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <null/>
-            <value>2009-10-19 00:00:00</value>
-            <value>2009-10-19 00:00:00</value>
+            <value>Somewhere</value>
         </row>
-        <row>
-            <value>4</value>
-            <value>26</value>
-            <value>1</value>
-            <value>Task Log 4</value>
-            <value>Did some working on task 26.</value>
-            <value>1</value>
-            <value>17</value>
-            <value>2009-10-19</value>
-            <value>1</value>
-            <null/>
-            <null/>
-            <value>http://www.example.org</value>
-            <value>1</value>
-            <value>1</value>
-            <value>0</value>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <null/>
-            <value>2009-10-19 00:00:00</value>
-            <value>2009-10-19 00:00:00</value>
-        </row>
-    </table>
-    <table name="user_tasks">
-        <column>user_id</column>
-        <column>user_type</column>
-        <column>task_id</column>
-        <column>perc_assignment</column>
-        <column>user_task_priority</column>
-        <row>
-            <value>1</value>
-            <value>1</value>
-            <value>99</value>
-            <value>50</value>
-            <value>22</value>
-        </row>
-        <row>
-            <value>1</value>
-            <value>1</value>
-            <value>22</value>
-            <value>50</value>
-            <value>32</value>
-        </row>
-        <row>
-            <value>1</value>
-            <value>1</value>
-            <value>1</value>
-            <value>50</value>
-            <value>42</value>
-        </row>
-        <row>
-            <value>1</value>
-            <value>1</value>
-            <value>2</value>
-            <value>50</value>
-            <value>52</value>
-        </row>
-        <row>
-            <value>2</value>
-            <value>1</value>
-            <value>2</value>
-            <value>100</value>
-            <value>62</value>
-        </row>
-        <row>
-            <value>2</value>
-            <value>1</value>
-            <value>3</value>
-            <value>100</value>
-            <value>72</value>
-        </row>
-    </table>
-    <table name="gacl_acl">
-        <column>id</column>
-        <column>section_value</column>
-        <column>allow</column>
-        <column>enabled</column>
-        <column>return_value</column>
-        <column>note</column>
-        <column>updated_date</column>
-        <row>
-            <value>10</value>
-            <value>user</value>
-            <value>1</value>
-            <value>1</value>
-            <null />
-            <null />
-            <value>1195510857</value>
-        </row>
-        <row>
-            <value>11</value>
-            <value>user</value>
-            <value>1</value>
-            <value>1</value>
-            <null />
-            <null />
-            <value>1195510857</value>
-        </row>
-        <row>
-            <value>30</value>
-            <value>user</value>
-            <value>1</value>
-            <value>1</value>
-            <null />
-            <null />
-            <value>1195510857</value>
-        </row>
-    </table>
-    <table name="gacl_aro_map">
-        <column>acl_id</column>
-        <column>section_value</column>
-        <column>value</column>
-        <row>
-            <value>30</value>
-            <value>user</value>
-            <value>2</value>
-        </row>
-    </table>
-    <table name="task_contacts">
-        <column>task_id</column>
-        <column>contact_id</column>
-        <row>
-            <value>1</value>
-            <value>1</value>
-        </row>
-    </table>
-    <table name="task_departments">
-        <column>task_id</column>
-        <column>department_id</column>
-    </table>
-    <table name="event_queue">
-        <column>queue_id</column>
-        <column>queue_start</column>
-        <column>queue_type</column>
-        <column>queue_repeat_interval</column>
-        <column>queue_repeat_count</column>
-        <column>queue_data</column>
-        <column>queue_callback</column>
-        <column>queue_owner</column>
-        <column>queue_origin_id</column>
-        <column>queue_module</column>
-        <column>queue_module_type</column>
-        <row>
-            <value>1</value>
-            <value>1272397667</value>
-            <value>remind</value>
-            <value>86400</value>
-            <value>100</value>
-            <value>N;</value>
-            <value>CTask::remind</value>
-            <value>1</value>
-            <value>1</value>
-            <value>tasks</value>
-            <value>module</value>
-        </row>
-    </table>
-    <table name="user_task_pin">
-        <column>user_id</column>
-        <column>task_id</column>
-        <column>task_pinned</column>
-    </table>
 </dataset>
