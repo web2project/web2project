@@ -26,7 +26,7 @@ global $AppUI, $w2Pconfig, $cal_df, $cf;
 // check permissions for this module
 $perms = &$AppUI->acl();
 $canView = canView($m);
-$canAddProject = $perms->checkModuleItem('projects', 'view', $project_id);
+$canAddProject = $perms->checkModuleItem('projects', 'add', $project_id);
 
 if (!$canView) {
 	$AppUI->redirect('m=public&a=access_denied');
@@ -156,8 +156,7 @@ if (!$project_id) {
 	}
 
 	$worked_hours = $obj->project_worked_hours;
-	$total_hours = $obj->getTotalHours();
-	$total_project_hours = $obj->getTotalProjectHours();
+	$total_project_hours = $total_hours = $obj->getTotalProjectHours();
 
 	// create Date objects from the datetime fields
 	$start_date = intval($obj->project_start_date) ? new CDate($obj->project_start_date) : null;
