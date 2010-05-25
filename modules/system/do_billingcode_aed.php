@@ -3,16 +3,16 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = isset($_POST['del']) ? $_POST['del'] : 0;
-$edit = isset($_POST['edit']) ? $_POST['edit'] : 0;
+$del = w2PgetParam($_POST, 'del', 0);
+$edit = w2PgetParam($_POST, 'edit', 0);
+$company_id = w2PgetParam($_POST, 'company_id', 0);
 
-$perms = &$AppUI->acl();
-if canEdit('system')) {
+if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
 $obj = new bcode();
-$obj->_billingcode_id = isset($_POST['billingcode_id']) ? $_POST['billingcode_id'] : 0;
+$obj->_billingcode_id = w2PgetParam($_POST, 'billingcode_id', 0);
 
 // prepare (and translate) the module name ready for the suffix
 $AppUI->setMsg('Billing Codes');
@@ -27,10 +27,10 @@ if ($del) {
 		$obj->_billingcode_id = $edit;
 	}
 
-	$obj->billingcode_value = $_REQUEST['billingcode_value'];
-	$obj->billingcode_name = $_REQUEST['billingcode_name'];
-	$obj->billingcode_desc = $_REQUEST['billingcode_desc'];
-	$obj->company_id = w2PgetParam($_REQUEST, 'company_id', null);
+	$obj->billingcode_value = w2PgetParam($_POST, 'billingcode_value', 0);
+	$obj->billingcode_name = w2PgetParam($_POST, 'billingcode_name', '');
+	$obj->billingcode_desc = w2PgetParam($_POST, 'billingcode_desc', '');
+	$obj->company_id = $company_id;
 
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
@@ -39,4 +39,4 @@ if ($del) {
 	}
 }
 
-$AppUI->redirect('m=system&a=billingcode&company_id=' . w2PgetParam($_REQUEST, 'company_id', null));
+$AppUI->redirect('m=system&a=billingcode&company_id=' . $company_id);
