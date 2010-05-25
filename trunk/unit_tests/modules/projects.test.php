@@ -1327,16 +1327,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetTotalHours()
     {
-        global $w2Pconfig;
-
-        $this->obj->load(1);
-        $total_hours_1 = $this->obj->getTotalHours();
-
-        $this->obj->load(2);
-        $total_hours_2 = $this->obj->getTotalHours();
-
-        $this->assertEquals(2 * $w2Pconfig['daily_working_hours'] + 3, $total_hours_1);
-        $this->assertEquals(0,  $total_hours_2);
+        $this->markTestSkipped('Being deprecated.');
     }
 
     /**
@@ -1345,14 +1336,14 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testGetTotalProjectHours()
     {
         global $w2Pconfig;
-
+        
         $this->obj->load(1);
         $total_hours_1 = $this->obj->getTotalProjectHours();
 
         $this->obj->load(2);
         $total_hours_2 = $this->obj->getTotalProjectHours();
 
-        $this->assertEquals(0.16,   $total_hours_1);
+        $this->assertEquals(19,     $total_hours_1);
         $this->assertEquals(0,      $total_hours_2);
     }
 
