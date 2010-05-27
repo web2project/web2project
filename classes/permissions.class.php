@@ -302,6 +302,8 @@ class w2Pacl extends gacl_api {
 		// Check to see if we are allowed to see other users.
 		// If not we can only see ourselves.
 		global $AppUI;
+        $userlist = array();
+
 		$rows = w2PgetUsersList();
 		foreach ($rows as $row) {
 			if (($this->isUserPermitted($row['user_id'], $module)) || $row['user_id'] == $AppUI->user_id) {
