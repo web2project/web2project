@@ -3,11 +3,11 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$file_folder_id = intval(w2PgetParam($_POST, 'file_folder_id', 0));
-$del = intval(w2PgetParam($_POST, 'del', 0));
+$del = (int) w2PgetParam($_POST, 'del', 0);
+$file_folder_id = (int) w2PgetParam($_POST, 'file_folder_id', 0);
+$isNotNew = $file_folder_id;
 $redirect = w2PgetParam($_POST, 'redirect', '');
 
-$isNotNew = $_POST['file_folder_id'];
 $perms = &$AppUI->acl();
 if ($del) {
 	if (!canDelete('files')) {

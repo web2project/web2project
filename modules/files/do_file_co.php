@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 //addfile sql
-$file_id = intval(w2PgetParam($_POST, 'file_id', 0));
+$file_id = (int) w2PgetParam($_POST, 'file_id', 0);
 $coReason = w2PgetParam($_POST, 'file_co_reason', '');
 
 $perms = &$AppUI->acl();

@@ -6,9 +6,10 @@ if (!defined('W2P_BASE_DIR')) {
 $obj = new CContact();
 $msg = '';
 
-$contact_id = (int) w2PgetParam($_POST, 'contact_id', 0);
-$isNotNew = $_POST['contact_id'];
 $del = (int) w2PgetParam($_POST, 'del', 0);
+$contact_id = (int) w2PgetParam($_POST, 'contact_id', 0);
+$isNotNew = $contact_id;
+
 $perms = &$AppUI->acl();
 
 if (isset($del) && $del) {

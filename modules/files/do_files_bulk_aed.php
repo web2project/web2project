@@ -3,13 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI;
-$selected = w2PgetParam($_POST, 'bulk_selected_file', 0);
+$selected = (int) w2PgetParam($_POST, 'bulk_selected_file', 0);
+$bulk_file_project = (int) w2PgetParam($_POST, 'bulk_file_project', 0);
+$bulk_file_folder = (int) w2PgetParam($_POST, 'bulk_file_folder', 0);
 $redirect = w2PgetParam($_POST, 'redirect', '');
-$bulk_file_project = w2PgetParam($_POST, 'bulk_file_project', 'O');
-$bulk_file_folder = w2PgetParam($_POST, 'bulk_file_folder', 'O');
-//print_r($_POST);die;
 
+global $AppUI;
 $perms = &$AppUI->acl();
 
 if (is_array($selected) && count($selected)) {
