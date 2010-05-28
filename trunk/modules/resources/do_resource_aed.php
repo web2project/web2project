@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = w2PgetParam($_POST, 'del', 0);
-$resource_id = intval(w2PgetParam($_POST, 'resource_id', 0));
-$isNotNew = $_POST['resource_id'];
+$resource_id = (int) w2PgetParam($_POST, 'resource_id', 0);
+$isNotNew = $resource_id;
+
 $perms = &$AppUI->acl();
 if ($del) {
 	if (!$perms->checkModuleItem('resources', 'delete', $resource_id)) {

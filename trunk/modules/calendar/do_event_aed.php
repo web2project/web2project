@@ -6,10 +6,10 @@ if (!defined('W2P_BASE_DIR')) {
 $obj = new CEvent();
 $msg = '';
 
-$del = w2PgetParam($_POST, 'del', 0);
-
-$isNotNew = $_POST['event_id'];
+$del = (int) w2PgetParam($_POST, 'del', 0);
+$isNotNew = (int) w2PgetParam($_POST, 'event_id', 0);
 $event_id = (int) w2PgetParam($_POST, 'event_id', 0);
+
 $perms = &$AppUI->acl();
 if ($del) {
 	if (!$perms->checkModuleItem('calendar', 'delete', $event_id)) {
