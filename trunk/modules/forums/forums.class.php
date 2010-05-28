@@ -137,29 +137,35 @@ class CForum extends CW2pObject {
         return $stored;
 	}
 
-	public function delete() {
-		$q = new DBQuery;
-		$q->setDelete('forum_visits');
-		$q->addWhere('visit_forum = ' . (int)$this->forum_id);
-		$q->exec(); // No error if this fails, it is not important.
-		$q->clear();
+	public function delete(CAppUI $AppUI = null) {
+        global $AppUI;
 
-		$q->setDelete('forums');
-		$q->addWhere('forum_id = ' . (int)$this->forum_id);
-		if (!$q->exec()) {
-			$q->clear();
-			return db_error();
-		}
-		$q->clear();
-		$q->setDelete('forum_messages');
-		$q->addWhere('message_forum = ' . (int)$this->forum_id);
-		if (!$q->exec()) {
-			$result = db_error();
-		} else {
-			addHistory('forums', $this->forum_id, 'delete', $this->forum_name);
-			$result = null;
-		}
-		$q->clear();
+        $perms = $AppUI->acl();
+        $result = false;
+
+        if ($perms->checkModuleItem('forums', 'delete', $this->project_id)) {
+            $q = new DBQuery;
+            $q->setDelete('forum_visits');
+            $q->addWhere('visit_forum = ' . (int)$this->forum_id);
+            $q->exec(); // No error if this fails, it is not important.
+            $q->clear();
+
+            $q->setDelete('forums');
+            $q->addWhere('forum_id = ' . (int)$this->forum_id);
+            if (!$q->exec()) {
+                $q->clear();
+                return db_error();
+            }
+            $q->clear();
+            $q->setDelete('forum_messages');
+            $q->addWhere('message_forum = ' . (int)$this->forum_id);
+            if (!$q->exec()) {
+                $result = db_error();
+            } else {
+                addHistory('forums', $this->forum_id, 'delete', $this->forum_name);
+                $result = null;
+            }
+        }
 		return $result;
 	}
 
@@ -225,6 +231,8 @@ class CForumMessage extends CW2pObject {
 	}
 
 	public function store(CAppUI $AppUI) {
+        global $AppUI;
+
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -234,7 +242,7 @@ class CForumMessage extends CW2pObject {
             return $errorMsgArray;
         }
 
-        if ($this->message_id) {
+        if ($this->message_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
             $q = new DBQuery;
             $q->setDelete('forum_visits');
             $q->addWhere('visit_message = ' . (int)$this->message_id);
@@ -246,7 +254,7 @@ class CForumMessage extends CW2pObject {
             addHistory('forum_messages', $this->message_id, 'update', $this->message_title, $this->message_id);
             $stored = true;
         }
-        if (0 == $this->message_id) {
+        if (0 == $this->message_id && $perms->checkModuleItem('forums', 'add')) {
             $q = new DBQuery;
             $this->message_date = $q->dbfnNow();
             if (($msg = parent::store())) {
@@ -273,40 +281,45 @@ class CForumMessage extends CW2pObject {
         return $stored;
 	}
 
-	public function delete() {
-		$q = new DBQuery;
-		$q->setDelete('forum_visits');
-		$q->addWhere('visit_message = ' . (int)$this->message_id);
-		$q->exec(); // No error if this fails, it is not important.
-		$q->clear();
+	public function delete(CAppUI $AppUI = null) {
+        global $AppUI;
 
-		$q->addTable('forum_messages');
-		$q->addQuery('message_forum');
-		$q->addWhere('message_id = ' . (int)$this->message_id);
-		$forumId = $q->loadResult();
-		$q->clear();
+        $perms = $AppUI->acl();
+        $result = false;
 
-		$q->setDelete('forum_messages');
-		$q->addWhere('message_id = ' . (int)$this->message_id);
-		if (!$q->exec()) {
-			$result = db_error();
-		} else {
-			$result = null;
-		}
-		$q->clear();
+        if ($perms->checkModuleItem('forums', 'delete', $this->project_id)) {
+            $q = new DBQuery;
+            $q->setDelete('forum_visits');
+            $q->addWhere('visit_message = ' . (int)$this->message_id);
+            $q->exec(); // No error if this fails, it is not important.
+            $q->clear();
 
-		$q->addTable('forum_messages');
-		$q->addQuery('COUNT(message_id)');
-		$q->addWhere('message_forum = ' . (int)$forumId);
-		$messageCount = $q->loadResult();
-		$q->clear();
+            $q->addTable('forum_messages');
+            $q->addQuery('message_forum');
+            $q->addWhere('message_id = ' . (int)$this->message_id);
+            $forumId = $q->loadResult();
+            $q->clear();
 
-		$q->addTable('forums');
-		$q->addUpdate('forum_message_count', $messageCount);
-		$q->addWhere('forum_id = ' . (int)$forumId);
-		$q->exec();
-		$q->clear();
+            $q->setDelete('forum_messages');
+            $q->addWhere('message_id = ' . (int)$this->message_id);
+            if (!$q->exec()) {
+                $result = db_error();
+            } else {
+                $result = null;
+            }
+            $q->clear();
 
+            $q->addTable('forum_messages');
+            $q->addQuery('COUNT(message_id)');
+            $q->addWhere('message_forum = ' . (int)$forumId);
+            $messageCount = $q->loadResult();
+            $q->clear();
+
+            $q->addTable('forums');
+            $q->addUpdate('forum_message_count', $messageCount);
+            $q->addWhere('forum_id = ' . (int)$forumId);
+            $q->exec();
+        }
 		return $result;
 	}
 
