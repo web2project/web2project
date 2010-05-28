@@ -61,7 +61,6 @@ foreach ($elements as $element => $on) {
 		if (($msg = $tline->store())) {
 			$nrerrors++;
 		}
-		//      print_r($msg);die;
 	}
 }
 $AppUI->redirect('m=projectdesigner&project_id=' . $project_id);

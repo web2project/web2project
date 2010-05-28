@@ -3,10 +3,10 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = isset($_REQUEST['del']) ? w2PgetParam($_REQUEST, 'del', false) : false;
-$contact_id = isset($_POST['contact_id']) ? w2PgetParam($_POST, 'contact_id', 0) : 0;
-$user_id = isset($_REQUEST['user_id']) ? w2PgetParam($_REQUEST, 'user_id', 0) : 0;
-$isNewUser = !(w2PgetParam($_REQUEST, 'user_id', 0));
+$del = (int) w2PgetParam($_POST, 'del', 0);
+$contact_id = (int) w2PgetParam($_POST, 'contact_id', 0);
+$user_id = (int) w2PgetParam($_POST, 'user_id', 0);
+$isNewUser = (int) w2PgetParam($_POST, 'user_id', 0);
 
 $perms = &$AppUI->acl();
 if ($del) {

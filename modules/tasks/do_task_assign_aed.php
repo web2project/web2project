@@ -3,15 +3,15 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = isset($_POST['del']) ? $_POST['del'] : 0;
-$rm = isset($_POST['rm']) ? $_POST['rm'] : 0;
+$del = (int) w2PgetParam($_POST, 'del', 0);
+$rm = (int) w2PgetParam($_POST, 'rm', 0);
+$store = (int) w2PgetParam($_POST, 'store', 0);
+$chUTP = (int) w2PgetParam($_POST, 'chUTP', 0);
+$percentage_assignment = (int) w2PgetParam($_POST, 'percentage_assignment', 0);
+$user_task_priority = (int) w2PgetParam($_POST, 'user_task_priority', 0);
+$user_id = (int) w2PgetParam($_POST, 'user_id', 0);
 $hassign = $_POST['hassign'];
 $htasks = $_POST['htasks'];
-$store = w2PgetParam($_POST, 'store', 0);
-$chUTP = w2PgetParam($_POST, 'chUTP', 0);
-$percentage_assignment = w2PgetParam($_POST, 'percentage_assignment');
-$user_task_priority = w2PgetParam($_POST, 'user_task_priority');
-$user_id = $_POST['user_id'];
 
 $perms = &$AppUI->acl();
 
