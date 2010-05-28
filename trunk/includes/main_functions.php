@@ -47,7 +47,7 @@ function __autoload($class_name) {
             require_once W2P_BASE_DIR.'/modules/files/files.class.php';
             break;
         case 'ctasklog':
-            require_once W2P_BASE_DIR.'/modules/tasks/tasks.class.php';
+            require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
             break;
         case 'cprojectdesigneroptions':
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
@@ -588,7 +588,7 @@ function defVal($var, $def) {
  */
 function w2PgetParam(&$arr, $name, $def = null) {
 	global $AppUI;
-	
+
 	if (isset($arr[$name])) {
 		if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false
 			&& strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false
