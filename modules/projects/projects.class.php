@@ -148,74 +148,74 @@ class CProject extends CW2pObject {
 	}
 
 	public function delete(CAppUI $AppUI = null) {
-    global $AppUI;
+        global $AppUI;
 
-    $perms = $AppUI->acl();
-    /*
-     * TODO: This should probably use the canDelete method from above too to
-     *   not only check permissions but to check dependencies... luckily the
-     *   previous version didn't check it either, so we're no worse off.
-     */
-    if ($perms->checkModuleItem('projects', 'delete', $this->project_id)) {
-  		$this->load($this->project_id);
-  		addHistory('projects', $this->project_id, 'delete', $this->project_name, $this->project_id);
-  		$q = new DBQuery;
-  		$q->addTable('tasks');
-  		$q->addQuery('task_id');
-  		$q->addWhere('task_project = ' . (int)$this->project_id);
-  		$tasks_to_delete = $q->loadColumn();
-  		$q->clear();
-  		foreach ($tasks_to_delete as $task_id) {
-  			$q->setDelete('user_tasks');
-  			$q->addWhere('task_id =' . $task_id);
-  			$q->exec();
-  			$q->clear();
-  			$q->setDelete('task_dependencies');
-  			$q->addWhere('dependencies_req_task_id =' . (int)$task_id);
-  			$q->exec();
-  			$q->clear();
-  		}
-  		$q->setDelete('tasks');
-  		$q->addWhere('task_project =' . (int)$this->project_id);
-  		$q->exec();
-  		$q->clear();
-  		$q = new DBQuery;
-  		$q->addTable('files');
-  		$q->addQuery('file_id');
-  		$q->addWhere('file_project = ' . (int)$this->project_id);
-  		$files_to_delete = $q->loadColumn();
-  		$q->clear();
-  		foreach ($files_to_delete as $file_id) {
-  			$file = new CFile();
-  			$file->file_id = $file_id;
-  			$file->file_project = (int)$this->project_id;
-  			$file->delete($AppUI);
-  		}
-  		$q->setDelete('events');
-  		$q->addWhere('event_project =' . (int)$this->project_id);
-  		$q->exec();
-  		$q->clear();
-  		// remove the project-contacts and project-departments map
-  		$q->setDelete('project_contacts');
-  		$q->addWhere('project_id =' . (int)$this->project_id);
-  		$q->exec();
-  		$q->clear();
-  		$q->setDelete('project_departments');
-  		$q->addWhere('project_id =' . (int)$this->project_id);
-  		$q->exec();
-  		$q->clear();
-  		$q->setDelete('projects');
-  		$q->addWhere('project_id =' . (int)$this->project_id);
+        $perms = $AppUI->acl();
+        $result = false;
 
-  		if (!$q->exec()) {
-  			$result = db_error();
-  		} else {
-  			$result = true;
-  		}
-  		$q->clear();
-      return $result;
-    }
-		return false;
+        /*
+         * TODO: This should probably use the canDelete method from above too to
+         *   not only check permissions but to check dependencies... luckily the
+         *   previous version didn't check it either, so we're no worse off.
+         */
+        if ($perms->checkModuleItem('projects', 'delete', $this->project_id)) {
+            $this->load($this->project_id);
+            addHistory('projects', $this->project_id, 'delete', $this->project_name, $this->project_id);
+            $q = new DBQuery;
+            $q->addTable('tasks');
+            $q->addQuery('task_id');
+            $q->addWhere('task_project = ' . (int)$this->project_id);
+            $tasks_to_delete = $q->loadColumn();
+            $q->clear();
+            foreach ($tasks_to_delete as $task_id) {
+                $q->setDelete('user_tasks');
+                $q->addWhere('task_id =' . $task_id);
+                $q->exec();
+                $q->clear();
+                $q->setDelete('task_dependencies');
+                $q->addWhere('dependencies_req_task_id =' . (int)$task_id);
+                $q->exec();
+                $q->clear();
+            }
+            $q->setDelete('tasks');
+            $q->addWhere('task_project =' . (int)$this->project_id);
+            $q->exec();
+            $q->clear();
+            $q = new DBQuery;
+            $q->addTable('files');
+            $q->addQuery('file_id');
+            $q->addWhere('file_project = ' . (int)$this->project_id);
+            $files_to_delete = $q->loadColumn();
+            $q->clear();
+            foreach ($files_to_delete as $file_id) {
+                $file = new CFile();
+                $file->file_id = $file_id;
+                $file->file_project = (int)$this->project_id;
+                $file->delete($AppUI);
+            }
+            $q->setDelete('events');
+            $q->addWhere('event_project =' . (int)$this->project_id);
+            $q->exec();
+            $q->clear();
+            // remove the project-contacts and project-departments map
+            $q->setDelete('project_contacts');
+            $q->addWhere('project_id =' . (int)$this->project_id);
+            $q->exec();
+            $q->clear();
+            $q->setDelete('project_departments');
+            $q->addWhere('project_id =' . (int)$this->project_id);
+            $q->exec();
+            $q->clear();
+            $q->setDelete('projects');
+            $q->addWhere('project_id =' . (int)$this->project_id);
+
+            if (!$q->exec()) {
+                $result = db_error();
+            } else {
+                $result = true;
+            }
+        }
+		return $result;
 	}
 
 	/**	Import tasks from another project
@@ -716,7 +716,7 @@ class CProject extends CW2pObject {
 	public static function getDepartments(CAppUI $AppUI = null, $projectId) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
+        $perms = $AppUI->acl();
 		if ($AppUI->isActiveModule('departments') && canView('departments')) {
 			$q = new DBQuery;
 			$q->addTable('departments', 'a');
