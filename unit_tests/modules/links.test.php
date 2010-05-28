@@ -1,4 +1,25 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+/**
+ * Class for testing links functionality
+ *
+ *
+ * PHP version 5
+ *
+ * LICENSE: This source file is subject to GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version. Please see the LICENSE file in root of site
+ * for further details
+ *
+ * @category    Links
+ * @package     web2project
+ * @subpackage  unit_tests
+ * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @link        http://www.web2project.net
+ */
+
 /**
  * Necessary global variables
  */
@@ -26,12 +47,14 @@ require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
 
 /**
- * LinksTest Class.
+ * This class tests functionality for Files
  *
- * Class to test the companies class
- * @author D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @package web2project
- * @subpackage unit_tests
+ * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category    Links
+ * @package     web2project
+ * @subpackage  unit_tests
+ * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @link        http://www.web2project.net
  */
 class Links_Test extends PHPUnit_Extensions_Database_TestCase
 {

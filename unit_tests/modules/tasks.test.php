@@ -1,4 +1,25 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+/**
+ * Class for testing tasks functionality
+ *
+ *
+ * PHP version 5
+ *
+ * LICENSE: This source file is subject to GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version. Please see the LICENSE file in root of site
+ * for further details
+ *
+ * @category    Tasks
+ * @package     web2project
+ * @subpackage  unit_tests
+ * @author      Trevor Morse <trevor.morse@gmail.com>
+ * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @link        http://www.web2project.net
+ */
+
 /**
  * Necessary global variables
  */
@@ -31,12 +52,14 @@ require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
 
 /**
- * TaskTest Class.
+ * This class tests functionality for Tasks
  *
- * Class to test the tasks class
- * @author Trevor Morse<trevor.morse@gmail.com>
- * @package web2project
- * @subpackage unit_tests
+ * @author      Trevor Morse <trevor.morse@gmail.com>
+ * @category    Tasks
+ * @package     web2project
+ * @subpackage  unit_tests
+ * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @link        http://www.web2project.net
  */
 class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 {
