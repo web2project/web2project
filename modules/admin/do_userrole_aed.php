@@ -3,8 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = isset($_REQUEST['del']) ? w2PgetParam($_REQUEST, 'del', false) : false;
-$notify_new_user = isset($_POST['notify_new_user']) ? $_POST['notify_new_user'] : 0;
+$del = (int) w2PgetParam($_POST, 'del', 0);
+$notify_new_user = (int) w2PgetParam($_POST, 'notify_new_user', 0);
 
 $perms = &$AppUI->acl();
 if (!canEdit('admin')) {

@@ -11,7 +11,7 @@ if (!canView('forums')) {
 ##
 ## Change forum watches
 ##
-$watch = isset($_POST['watch']) ? $_POST['watch'] : 0;
+$watch = (int) w2PgetParam($_POST, 'watch', 0);
 
 if ($watch) {
 	// clear existing watches

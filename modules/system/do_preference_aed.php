@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = isset($_POST['del']) ? $_POST['del'] : 0;
+$del = (int) w2PgetParam($_POST, 'del', 0);
 $pref_user = (int) w2PgetParam($_POST, 'pref_user', 0);
 
 $perms = &$AppUI->acl();
