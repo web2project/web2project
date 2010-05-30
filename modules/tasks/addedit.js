@@ -230,6 +230,21 @@ function isInArray(myArray, intValue) {
 }
 
 /**
+ * This function turns on/off the End Date field based on the milestone status.
+ *   This came about as a result of http://bugs.web2project.net/view.php?id=328
+ */
+function toggleMilestone() {
+    var milestone = document.getElementById('task_milestone').checked;
+    if (milestone) {
+        //set finish date
+        document.getElementById('end_date').value = document.getElementById('start_date').value;
+        document.getElementById('task_end_date').value = document.getElementById('task_start_date').value;
+        document.getElementById('end_date').disabled = true;
+    } else {
+        document.getElementById('end_date').disabled = false;
+    }
+}
+/**
 * @modify_reason calculating duration does not include time information and cal_working_days stored in config.php
 */
 function calcDuration(f) {
