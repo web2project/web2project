@@ -266,7 +266,7 @@ var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours'))
 
 			<td align="right" nowrap="nowrap"><label for="task_milestone"><?php echo $AppUI->_('Milestone'); ?>?</label></td>
 			<td>
-				<input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> />
+				<input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> onClick="toggleMilestone()" />
 			</td>
 		</tr>
 		</table>
