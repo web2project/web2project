@@ -315,7 +315,7 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
 	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
-		 contact_email, company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
+		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 	if ($stub) {
 		$q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
