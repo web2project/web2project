@@ -551,13 +551,14 @@ class w2p_Utilities_Date extends Date {
 		// convert UTC to new timezone
 		$tzID = (is_object($tz)) ? $tz->id : $tz;
     
-    $offset = intval($GLOBALS['_DATE_TIMEZONE_DATA'][$tzID]['offset'] / 1000);
+        $offset = intval($GLOBALS['_DATE_TIMEZONE_DATA'][$tzID]['offset'] / 1000);
 		if ($this->tz['hasdst']) {
 			$offset += 3600;
 		}
 		$this->addSeconds($offset);
-    $this->setTZ((is_object($tz)) ? $tz->id : $tz);
+        $this->setTZ((is_object($tz)) ? $tz->id : $tz);
 	}
+
 	public function setTZ($tz)
 	{
 		$tz_array = $GLOBALS['_DATE_TIMEZONE_DATA'][$tz];
