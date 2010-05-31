@@ -678,39 +678,42 @@ class CTask extends CW2pObject {
      *
      */
     public static function storeTokenTask(CAppUI $AppUI, $project_id) {
-
         $subProject = new CProject();
         $subProject->load($project_id);
 
-        $q = new DBQuery();
-        $q->addTable('tasks');
-        $q->addQuery('MIN(task_start_date) AS min_task_start_date');
-        $q->addQuery('MAX(task_end_date) AS max_task_end_date');
-        $q->addWhere('task_project = ' . $subProject->project_id);
-        $projectDates = $q->loadList();
+        if ($subProject->project_id != $subProject->project_parent) {
+            $q = new DBQuery();
+            $q->addTable('tasks');
+            $q->addQuery('MIN(task_start_date) AS min_task_start_date');
+            $q->addQuery('MAX(task_end_date) AS max_task_end_date');
+            $q->addWhere('task_project = ' . $subProject->project_id);
+            $projectDates = $q->loadList();
 
-        $q->clear();
-        $q->addTable('tasks');
-        $q->addQuery('task_id');
-        $q->addWhere('task_represents_project = ' . $subProject->project_id);
-        $task_id = $q->loadResult();
+            $q->clear();
+            $q->addTable('tasks');
+            $q->addQuery('task_id');
+            $q->addWhere('task_represents_project = ' . $subProject->project_id);
+            $task_id = $q->loadResult();
 
-        $task = new CTask();
-        if ($task_id) {
-            $task->load($task_id);
-        } else {
-            $task->task_name = $AppUI->_('Subproject') .': '. $subProject->project_name;
-            $task->task_description = $task->task_name;
-            $task->task_priority = $subProject->project_priority;
-            $task->task_project = $subProject->project_parent;
-            $task->task_represents_project = $subProject->project_id;
-            $task->task_owner = $AppUI->user_id;
+            $task = new CTask();
+            if ($task_id) {
+                $task->load($task_id);
+            } else {
+                $task->task_name = $AppUI->_('Subproject') .': '. $subProject->project_name;
+                $task->task_description = $task->task_name;
+                $task->task_priority = $subProject->project_priority;
+                $task->task_project = $subProject->project_parent;
+                $task->task_represents_project = $subProject->project_id;
+                $task->task_owner = $AppUI->user_id;
+            }
+            $task->task_duration_type = 1;
+            $task->task_duration = $subProject->getTotalProjectHours();
+            $task->task_start_date = $projectDates[0]['min_task_start_date'];
+            $task->task_end_date = $projectDates[0]['max_task_end_date'];
+            $task->task_percent_complete = $subProject->project_percent_complete;
+            $result = $task->store($AppUI);
+            //TODO: we should do something with this store result?
         }
-        $task->task_duration_type = 1;
-        $task->task_duration = $subProject->getTotalProjectHours();
-        $task->task_start_date = $projectDates[0]['min_task_start_date'];
-        $task->task_end_date = $projectDates[0]['max_task_end_date'];
-        $result = $task->store($AppUI);
     }
 
 	/**
@@ -2271,21 +2274,21 @@ class CTask extends CW2pObject {
 			return true;
 		}
 	}
-  public static function updateHoursWorked($taskId, $totalHours) {
-    $q = new DBQuery;
-    $q->addTable('tasks');
-    $q->addUpdate('task_hours_worked', $totalHours + 0);
-    $q->addWhere('task_id = ' . $taskId);
-    $q->exec();
-    $q->clear();
+    public static function updateHoursWorked($taskId, $totalHours) {
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addUpdate('task_hours_worked', $totalHours + 0);
+        $q->addWhere('task_id = ' . $taskId);
+        $q->exec();
+        $q->clear();
 
-    $q->addTable('tasks');
-    $q->addQuery('task_project');
-    $q->addWhere('task_id = ' . $taskId);
-    $project_id = $q->loadResult();
+        $q->addTable('tasks');
+        $q->addQuery('task_project');
+        $q->addWhere('task_id = ' . $taskId);
+        $project_id = $q->loadResult();
 
-    CProject::updateHoursWorked($project_id);
-  }
+        CProject::updateHoursWorked($project_id);
+    }
 }
 
 // user based access
