@@ -1205,8 +1205,8 @@ function w2PHTMLDecode($txt) {
 		}
 	} else {
 		if (is_array($txt)) {
-			foreach ($txt as $k => $v) {
-				$txt[$k] = html_entity_decode($v, ENT_COMPAT);
+            foreach ($txt as $k => $v) {
+                $txt[$k] = (is_array($v)) ? $v : html_entity_decode($v, ENT_COMPAT);
 			}
 		} else {
 			$txt = html_entity_decode($txt, ENT_COMPAT);
