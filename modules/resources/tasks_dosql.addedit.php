@@ -19,7 +19,7 @@ function resource_presave() {
 	global $other_resources;
 	// check to see if we are in the post save list or if we need to
 	// interrogate the session.
-	$other_resources = setItem('hresource_assign');
+	$other_resources = w2PgetParam($_POST, 'hresource_assign');
 	//dprint(__file__, __line__, 5, "setting other resources to $other_resources");
 }
 
