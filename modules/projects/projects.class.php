@@ -224,7 +224,7 @@ class CProject extends CW2pObject {
 	 *	@return	bool
 	 **/
 	public function importTasks($from_project_id) {
-    global $AppUI;
+        global $AppUI;
 
 		// Load the original
 		$origProject = new CProject();
@@ -518,30 +518,30 @@ class CProject extends CW2pObject {
          *   don't have a good idea on how to fix it at the moment...
          */
         if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->company_id)) {
-          $q = new DBQuery;
-          $this->project_updated = $q->dbfnNow();
-          if (($msg = parent::store())) {
-            return $msg;
-          }
-          addHistory('projects', $this->project_id, 'update', $this->project_name, $this->project_id);
-          $stored = true;
+            $q = new DBQuery;
+            $this->project_updated = $q->dbfnNow();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            addHistory('projects', $this->project_id, 'update', $this->project_name, $this->project_id);
+            $stored = true;
         }
         if (0 == $this->project_id && $perms->checkModuleItem('projects', 'add')) {
-          $q = new DBQuery;
-          $this->project_updated = $q->dbfnNow();
-          $this->project_created = $q->dbfnNow();
-          if (($msg = parent::store())) {
-            return $msg;
-          }
-          if (0 == $this->project_parent || 0 == $this->project_original_parent) {
-            $this->project_parent = $this->project_id;
-            $this->project_original_parent = $this->project_id;
+            $q = new DBQuery;
+            $this->project_updated = $q->dbfnNow();
+            $this->project_created = $q->dbfnNow();
             if (($msg = parent::store())) {
-              return $msg;
+                return $msg;
             }
-          }
-          addHistory('projects', $this->project_id, 'add', $this->project_name, $this->project_id);
-          $stored = true;
+            if (0 == $this->project_parent || 0 == $this->project_original_parent) {
+                $this->project_parent = $this->project_id;
+                $this->project_original_parent = $this->project_id;
+                if (($msg = parent::store())) {
+                    return $msg;
+                }
+            }
+            addHistory('projects', $this->project_id, 'add', $this->project_name, $this->project_id);
+            $stored = true;
         }
 
 		//split out related departments and store them seperatly.
@@ -583,6 +583,10 @@ class CProject extends CW2pObject {
           $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
           $custom_fields->bind($_POST);
           $sql = $custom_fields->store($this->project_id); // Store Custom Fields
+
+          if ($this->project_id != $this->project_parent) {
+              CTask::storeTokenTask($AppUI, $this->project_id);
+          }
         }
 		return $stored;
 	}
