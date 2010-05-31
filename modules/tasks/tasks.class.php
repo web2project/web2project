@@ -2078,9 +2078,12 @@ class CTask extends CW2pObject {
 		$q->addTable('user_tasks', 'ut');
 		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
 		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('c.contact_id, contact_first_name, contact_last_name');
 		$q->addWhere('ut.task_id = ' . (int)$id);
-		$contacts = $q->loadHashList('contact_id');
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+        $q->addWhere("cm.method_name = 'email_primary'");
+        $q->addQuery('cm.method_value AS contact_email');
+		$contacts = $q->loadHashList('c.contact_id');
 		$q->clear();
 
 		// Now we also check the owner of the task, as we will need
@@ -2088,8 +2091,11 @@ class CTask extends CW2pObject {
 		$owner_is_not_assignee = false;
 		$q->addTable('users', 'u');
 		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('c.contact_id, contact_first_name, contact_last_name');
 		$q->addWhere('u.user_id = ' . (int)$this->task_owner);
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+        $q->addWhere("cm.method_name = 'email_primary'");
+        $q->addQuery('cm.method_value AS contact_email');
 		if ($q->exec(ADODB_FETCH_NUM)) {
 			list($owner_contact, $owner_first_name, $owner_last_name, $owner_email) = $q->fetchRow();
 			if (!isset($contacts[$owner_contact])) {
