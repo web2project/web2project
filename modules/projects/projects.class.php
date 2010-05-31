@@ -584,9 +584,7 @@ class CProject extends CW2pObject {
           $custom_fields->bind($_POST);
           $sql = $custom_fields->store($this->project_id); // Store Custom Fields
 
-          if ($this->project_id != $this->project_parent) {
-              CTask::storeTokenTask($AppUI, $this->project_id);
-          }
+          CTask::storeTokenTask($AppUI, $this->project_id);
         }
 		return $stored;
 	}
@@ -879,6 +877,9 @@ class CProject extends CW2pObject {
         $q->addUpdate('project_percent_complete', $project_percent_complete);
         $q->addWhere('project_id  = ' . (int) $project_id);
         $q->exec();
+
+        global $AppUI;
+        CTask::storeTokenTask($AppUI, $project_id);
     }
 	public function getTotalHours() {
         trigger_error("CProject->getTotalHours() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE );
