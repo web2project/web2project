@@ -44,8 +44,8 @@ INSERT INTO syskeys (syskey_name, syskey_label, syskey_type, syskey_sep1, syskey
 SET @syskey_id = LAST_INSERT_ID();
 
 INSERT INTO sysvals (sysval_key_id, sysval_title, sysval_value, sysval_value_id) VALUES
-    (@syskey_id, 'ContactMethods', 'E-mail: Primary', 'email_primary'),
-    (@syskey_id, 'ContactMethods', 'E-mail: Alternate', 'email_alt'),
+    (@syskey_id, 'ContactMethods', 'Email: Primary', 'email_primary'),
+    (@syskey_id, 'ContactMethods', 'Email: Alternate', 'email_alt'),
     (@syskey_id, 'ContactMethods', 'Web Site', 'url'),
     (@syskey_id, 'ContactMethods', 'Phone: Primary', 'phone_primary'),
     (@syskey_id, 'ContactMethods', 'Phone: Alternate', 'phone_alt'),
