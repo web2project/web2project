@@ -3,12 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-function setItem($item_name, $defval = null) {
-	if (isset($_POST[$item_name])) {
-		return $_POST[$item_name];
-	}
-	return $defval;
-}
 $adjustStartDate = w2PgetParam($_POST, 'set_task_start_date');
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $task_id = (int) w2PgetParam($_POST, 'task_id', 0);
@@ -94,7 +88,7 @@ if ($sub_form) {
 
 	// Map task_dynamic checkboxes to task_dynamic values for task dependencies.
 	if ($obj->task_dynamic != 1) {
-		$task_dynamic_delay = setItem('task_dynamic_nodelay', '0');
+		$task_dynamic_delay = w2PgetParam($_POST, 'task_dynamic_nodelay', '0');
 		if (in_array($obj->task_dynamic, $tracking_dynamics)) {
 			$obj->task_dynamic = $task_dynamic_delay ? 21 : 31;
 		} else {
@@ -127,7 +121,7 @@ if ($sub_form) {
 	}
 
 	// let's check if there are some assigned departments to task
-	$obj->task_departments = implode(',', setItem('dept_ids', array()));
+	$obj->task_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
 
 	// convert dates to SQL format first
 	if ($obj->task_start_date) {
@@ -155,11 +149,11 @@ if ($sub_form) {
 		}
 	}
 
-  $result = $obj->store($AppUI);
-  if ($taskRecount) {
-    $myTask = new CTask();
-    CProject::updateTaskCount($taskRecount, $myTask->getTaskCount($taskRecount));
-  }
+    $result = $obj->store($AppUI);
+    if ($taskRecount) {
+        $myTask = new CTask();
+        CProject::updateTaskCount($taskRecount, $myTask->getTaskCount($taskRecount));
+    }
   
   //$obj->task_project
   if (is_array($result)) {
