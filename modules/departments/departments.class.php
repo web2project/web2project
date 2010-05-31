@@ -364,6 +364,7 @@ class CDepartment extends CW2pObject {
 	public static function getContactList(CAppUI $AppUI = null, $deptId) {
 		global $AppUI;
 
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:modules/departments/departments.class.php
         if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $deptId > 0) {
             $q = new DBQuery;
             $q->addTable('contacts', 'con');
@@ -377,6 +378,25 @@ class CDepartment extends CW2pObject {
 		}
 
 		return $results;
+=======
+        $q = new DBQuery;
+		$q->addTable('contacts', 'con');
+		$q->addQuery('con.contact_id, con.contact_first_name');
+		$q->addQuery('con.contact_last_name');//, contact_email, contact_phone');
+		$q->addWhere('contact_department = ' . (int) $deptId);
+		$q->addWhere('(contact_owner = ' . (int) $AppUI->user_id . ' OR contact_private = 0)');
+		$q->addOrder('contact_first_name');
+
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
+        $q->addWhere("cm.method_name = 'email_primary'");
+        $q->addQuery('cm.method_value AS contact_email');
+
+        $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = con.contact_id');
+        $q->addWhere("cm2.method_name = 'phone_primary'");
+        $q->addQuery('cm2.method_value AS contact_phone');
+
+		return $q->loadHashList('con.contact_id');
+>>>>>>> HEAD~337:modules/departments/departments.class.php
 	}
 
     public function hook_search() {
