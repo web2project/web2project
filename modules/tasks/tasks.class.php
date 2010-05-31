@@ -1701,16 +1701,14 @@ class CTask extends CW2pObject {
             $q->addQuery('dept_name');
 
 			$q->addJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id', 'inner');
-			$q->leftJoin('departments', 'd', 'dept_id = contact_department');
 			$q->addWhere('tc.task_id = ' . (int)$taskId);
-			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email, contact_order_by');
+			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_order_by');
 
             $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
             $q->addWhere("cm.method_name = 'email_primary'");
             $q->addQuery('cm.method_value AS contact_email');
 
             $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = c.contact_id');
-            $q->addWhere("cm2.method_name = 'phone_primary'");
             $q->addQuery('cm2.method_value AS contact_phone');
 
 			$q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
