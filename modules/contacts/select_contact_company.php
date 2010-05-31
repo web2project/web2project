@@ -53,11 +53,11 @@ if ($myId) {
 		if ($update_address) {
 			$update_fields = array('company_address1' => 'contact_address1', 'company_address2' => 'contact_address2', 'company_city' => 'contact_city', 'company_state' => 'contact_state', 'company_zip' => 'contact_zip', 'company_phone1' => 'contact_phone', 'company_phone2' => 'contact_phone2', 'company_fax' => 'contact_fax');
 		}
-    if ($myId > 0) {
-  		$data_update_script = "opener.setCompany($myId , '" . db_escape($r_data[$name_field]) ."');";
-    } else {
-    	$data_update_script = "opener.setCompany($myId, '');";
-    }
+        if ($myId > 0) {
+            $data_update_script = "opener.setCompany($myId , '" . db_escape($r_data[$name_field]) ."');";
+        } else {
+            $data_update_script = "opener.setCompany($myId, '');";
+        }
 	} else {
 		if ($table_name == 'departments') {
 			$update_fields = array('dept_id' => 'contact_department');

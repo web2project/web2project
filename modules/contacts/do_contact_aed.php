@@ -65,11 +65,18 @@ if ($del) {
 			$obj->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
 			$obj->contact_lastupdate = '';
 			$obj->updateNotify();
-		} elseif ($notifyasked && $updatekey) {
-		} else {
+		} elseif (!($notifyasked && $updatekey)) {
 			$obj->contact_updatekey = '';
 		}
 		$obj->store($AppUI);
+
+		$methods = array();
+		if (!empty($_POST['contact_methods'])) {
+			foreach ($_POST['contact_methods']['field'] as $key => $field) {
+				$methods[$field] = $_POST['contact_methods']['value'][$key];
+			}
+		}
+		$obj->setContactMethods($methods);
 
 		$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);
 	}
