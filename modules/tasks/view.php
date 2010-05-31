@@ -297,7 +297,7 @@ function delIt() {
                     </td>
                 </tr>
                 <?php }
-                $contacts = $obj->getTaskContacts($AppUI, $task_id);
+                $contacts = $obj->getContacts($AppUI, $task_id);
                 if (count($contacts)) {
                     echo '<tr><td><strong>' . $AppUI->_('Task Contacts') . '</strong></td></tr>';
                     echo '<tr><td colspan="3" class="hilite">';

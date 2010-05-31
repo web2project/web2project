@@ -2240,11 +2240,11 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Test getting a list of task contacts
      */
-    public function testGetTaskContacts()
+    public function testGetContacts()
     {
         global $AppUI;
 
-        $task_contacts = $this->obj->getTaskContacts($AppUI, 1);
+        $task_contacts = $this->obj->getContacts($AppUI, 1);
 
         $this->assertEquals(1,                      count($task_contacts));
         $this->assertEquals(1,                      $task_contacts[1]['contact_id']);
@@ -2268,7 +2268,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
 
-        $task_contacts = $this->obj->getTaskContacts($AppUI, 2);
+        $task_contacts = $this->obj->getContacts($AppUI, 2);
 
         $this->assertNull($task_contacts);
 

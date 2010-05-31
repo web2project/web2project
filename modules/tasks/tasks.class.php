@@ -1688,7 +1688,7 @@ class CTask extends CW2pObject {
 			return $q->loadHashList('dept_id');
 		}
 	}
-	public function getTaskContacts(CAppUI $AppUI = null, $taskId) {
+    public function getContacts(CAppUI $AppUI = null, $taskId) {
 		global $AppUI;
 
         $perms = $AppUI->acl();
@@ -1717,6 +1717,9 @@ class CTask extends CW2pObject {
 			$department->setAllowedSQL($AppUI->user_id, $q);
 			return $q->loadHashList('contact_id');
 		}
+    }
+	public function getTaskContacts(CAppUI $AppUI = null, $taskId) {
+        return $this->getContacts($AppUI, $taskId);
 	}
 
 	/**
