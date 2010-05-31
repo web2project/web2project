@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$contact_id = intval(w2PgetParam($_GET, 'contact_id', 0));
-$company_id = intval(w2PgetParam($_GET, 'company_id', 0));
-$dept_id = intval(w2PgetParam($_GET, 'dept_id', 0));
+$contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
+$company_id = (int) w2PgetParam($_GET, 'company_id', 0);
+$dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
 $company = new CCompany();
 $company->load($company_id);
@@ -85,9 +85,6 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 <?php
 echo 'window.company_id=' . ($company_detail['company_id'] ? $company_detail['company_id'] : 0) . ";\n";
 echo 'window.company_value=\'' . addslashes(($company_detail['company_name'] ? $company_detail['company_name'] : '')) . "';\n";
-
-$methods = $row->getContactMethods();
-$methodLabels = w2PgetSysVal('ContactMethods');
 ?>
 
 function submitIt() {
@@ -98,9 +95,6 @@ function submitIt() {
 	} else if (form.contact_order_by.value.length < 1) {
 		orderByName('name');
 		form.submit();
-	} else if (form.contact_email.value.length < 1 && form.contact_updateask.checked) {
-		alert( '<?php echo $AppUI->_('You must enter a valid email before using the contact update feature.', UI_OUTPUT_JS); ?>' );
-		form.contact_email.focus();
 	} else {
 		form.submit();
 	}
