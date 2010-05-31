@@ -208,6 +208,10 @@ class CProject extends CW2pObject {
             $q->clear();
             $q->setDelete('projects');
             $q->addWhere('project_id =' . (int)$this->project_id);
+            $q->exec();
+            $q->clear();
+            $q->setDelete('tasks');
+            $q->addWhere('task_represents_project =' . (int)$this->project_id);
 
             if (!$q->exec()) {
                 $result = db_error();
