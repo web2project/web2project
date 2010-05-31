@@ -738,6 +738,51 @@ class CTask extends CW2pObject {
         }
     }
 
+    /**
+     *
+     * @param CAppUI $AppUI
+     * @param CProject $projectId
+     *
+     * The point of this function is to create/update a task to represent a
+     *   subproject.
+     *
+     */
+    public static function storeTokenTask(CAppUI $AppUI, $project_id) {
+
+        $subProject = new CProject();
+        $subProject->load($project_id);
+
+        $q = new DBQuery();
+        $q->addTable('tasks');
+        $q->addQuery('MIN(task_start_date) AS min_task_start_date');
+        $q->addQuery('MAX(task_end_date) AS max_task_end_date');
+        $q->addWhere('task_project = ' . $subProject->project_id);
+        $projectDates = $q->loadList();
+
+        $q->clear();
+        $q->addTable('tasks');
+        $q->addQuery('task_id');
+        $q->addWhere('task_represents_project = ' . $subProject->project_id);
+        $task_id = $q->loadResult();
+
+        $task = new CTask();
+        if ($task_id) {
+            $task->load($task_id);
+        } else {
+            $task->task_name = $AppUI->_('Subproject') .': '. $subProject->project_name;
+            $task->task_description = $task->task_name;
+            $task->task_priority = $subProject->project_priority;
+            $task->task_project = $subProject->project_parent;
+            $task->task_represents_project = $subProject->project_id;
+            $task->task_owner = $AppUI->user_id;
+        }
+        $task->task_duration_type = 1;
+        $task->task_duration = $subProject->getTotalProjectHours();
+        $task->task_start_date = $projectDates[0]['min_task_start_date'];
+        $task->task_end_date = $projectDates[0]['max_task_end_date'];
+        $result = $task->store($AppUI);
+    }
+
 	/**
 	 * @todo Parent store could be partially used
 	 * @todo Can't delete a task with children
