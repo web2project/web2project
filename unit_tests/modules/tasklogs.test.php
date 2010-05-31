@@ -102,6 +102,31 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 		$this->obj = new CTaskLog();
 
 		$this->post_data = array(
+            'task_log_id'                           => 0,
+            'task_log_task'                         => 1,
+            'task_log_help_desk_id'                 => 1,
+            'task_log_name'                         => 'This is a task log name.',
+            'task_log_description'                  => 'This is a task log description.',
+            'task_log_creator'                      => 1,
+            'task_log_hours'                        => 2.75,
+            'task_log_date'                         => '2010-05-30 09:15:30',
+            'task_log_costcode'                     => 1,
+            'task_log_problem'                      => 1,
+            'task_log_reference'                    => 1,
+            'task_log_related_url'                  => 'http://www.example.com',
+            'task_log_project'                      => 1,
+            'task_log_company'                      => 1,
+            'task_log_changelog'                    => 1,
+            'task_log_changelog_servers'            => '10.10.10.101',
+            'task_log_changelog_whom'               => 1,
+            'task_log_changelog_datetime'           => '2010-05-31 10:15:25',
+            'task_log_changelog_duration'           => '35 minutes',
+            'task_log_changelog_expected_downtime'  => 1,
+            'task_log_changelog_description'        => 'This is a changelog description',
+            'task_log_changelog_backout_plan'       => 'There is no backout plan',
+            'task_log_created'                      => '2010-05-30 09:15:30',
+            'task_log_updated'                      => '2010-05-30 09:15:30',
+            'task_log_updator'                      => 1
 		);
 	}
 
@@ -155,16 +180,83 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->task_log_hours);
         $this->assertNull($this->obj->task_log_date);
         $this->assertNull($this->obj->task_log_costcode);
-        $this->assertNull($this->obj->task_log_problem);
         $this->assertNull($this->obj->task_log_reference);
         $this->assertNull($this->obj->task_log_related_url);
         $this->assertNull($this->obj->task_log_created);
         $this->assertNull($this->obj->task_log_updated);
-        $this->assertEquals('', $this->obj->_tbl_prefix);
-        $this->assertEquals('task_logs',    $this->obj->_tbl);
+        $this->assertEquals(0,              $this->obj->task_log_problem);
+        $this->assertEquals('',             $this->obj->_tbl_prefix);
+        $this->assertEquals('task_log',     $this->obj->_tbl);
         $this->assertEquals('task_log_id',  $this->obj->_tbl_key);
         $this->assertEquals('',             $this->obj->_error);
         $this->assertType('DBQuery',        $this->obj->_query);
     }
 
+    /**
+     * Tests storing task log in database
+     */
+    public function testStoreCreate()
+    {
+        $this->obj->bind($this->post_data, null, true, true);
+        $this->obj->store();
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestStoreCreate.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_created', 'task_log_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('task_log' => array('task_log_created', 'task_log_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
+
+        /**
+         * Get updated dates to test against
+         */
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+
+        $q = new DBQuery;
+        $q->addTable('task_log');
+        $q->addQuery('task_log_created, task_log_updated');
+        $q->addWhere('task_log_id = 2');
+        $results = $q->loadList();
+
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_log_created']));
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_log_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_log_created']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_log_updated']));
+        }
+    }
+
+    /**
+     * Tests storing task log in database
+     */
+    public function testStoreUpdate()
+    {
+        $this->obj->bind($this->post_data, null, true, true);
+        $this->obj->task_log_id = 1;
+        unset($this->obj->task_log_created);
+        $this->obj->store();
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestStoreUpdate.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('task_log' => array('task_log_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
+
+        /**
+         * Get updated dates to test against
+         */
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+
+        $q = new DBQuery;
+        $q->addTable('task_log');
+        $q->addQuery('task_log_updated');
+        $q->addWhere('task_log_id = 1');
+        $results = $q->loadList();
+
+        foreach($results as $dates) {
+            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_log_updated']));
+            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_log_updated']));
+        }
+    }
 }
