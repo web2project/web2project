@@ -324,7 +324,7 @@ if (count($tasks) > 0) {
 		//add information about assigned users into the page output
 		$q->clear();
 		$q->addQuery('ut.user_id,	u.user_username');
-		$q->addQuery('contact_email, ut.perc_assignment');
+		$q->addQuery('ut.perc_assignment');
 		$q->addQuery('CONCAT(contact_first_name, \' \',contact_last_name) AS assignee');
 		$q->addTable('user_tasks', 'ut');
 		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
