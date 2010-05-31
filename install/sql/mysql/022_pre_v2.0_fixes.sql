@@ -5,4 +5,3 @@
 
 ALTER TABLE `tasks` ADD `task_represents_project` INT( 10 ) NOT NULL ;
 ALTER TABLE `tasks` ADD INDEX ( `task_represents_project` ) ;
-

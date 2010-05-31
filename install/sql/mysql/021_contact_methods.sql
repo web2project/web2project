@@ -1,3 +1,8 @@
+
+-- This cleanup shifts all the contact methods (email, phone, IM, etc) from the
+--   contacts table into the more flexible contact_methods table. We'll be able
+--   to add more and even make them customizable by Admins at some point.
+
 CREATE TABLE `contacts_methods` (
   `method_id` int(10) NOT NULL auto_increment,
   `contact_id` int(10) NOT NULL,
