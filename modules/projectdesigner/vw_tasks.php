@@ -17,12 +17,12 @@ $cols = 13;
 /****
 // Let's figure out which tasks are selected
 */
-$task_id = intval(w2PgetParam($_GET, 'task_id', 0));
+$task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
 $q = new DBQuery;
-$pinned_only = intval(w2PgetParam($_GET, 'pinned', 0));
+$pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
 if (isset($_GET['pin'])) {
-	$pin = intval(w2PgetParam($_GET, 'pin', 0));
+	$pin = (int) w2PgetParam($_GET, 'pin', 0);
 	$msg = '';
 
 	// load the record data
@@ -162,7 +162,7 @@ foreach ($tasks as $row) {
 	//add information about assigned users into the page output
 	$q->clear();
 	$q->addQuery('ut.user_id,	u.user_username');
-	$q->addQuery('contact_email, ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
+	$q->addQuery('ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
 	$q->addQuery('contact_first_name, contact_last_name');
 	$q->addTable('user_tasks', 'ut');
 	$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
