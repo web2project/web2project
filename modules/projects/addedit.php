@@ -102,7 +102,6 @@ function setColor(color) {
 	if (color) {
 		f.project_color_identifier.value = color;
 	}
-	//test.style.background = f.project_color_identifier.value;
 	document.getElementById('test').style.background = '#' + f.project_color_identifier.value; 		//fix for mozilla: does this work with ie? opera ok.
 }
 
@@ -138,15 +137,6 @@ function setDate( frm_name, f_date ) {
 function submitIt() {
 	var f = document.editFrm;
 	var msg = '';
-
-	/*
-	if (f.project_end_date.value > 0 && f.project_end_date.value < f.project_start_date.value) {
-		msg += "\n<?php echo $AppUI->_('projectsBadEndDate1'); ?>";
-	}
-	if (f.project_actual_end_date.value > 0 && f.project_actual_end_date.value < f.project_start_date.value) {
-		msg += "\n<?php echo $AppUI->_('projectsBadEndDate2'); ?>";
-	}
-	*/
 
 	<?php
 /*
