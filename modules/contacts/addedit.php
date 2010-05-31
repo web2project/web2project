@@ -85,9 +85,6 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 <?php
 echo 'window.company_id=' . ($company_detail['company_id'] ? $company_detail['company_id'] : 0) . ";\n";
 echo 'window.company_value=\'' . addslashes(($company_detail['company_name'] ? $company_detail['company_name'] : '')) . "';\n";
-
-$methods = $row->getContactMethods();
-$methodLabels = w2PgetSysVal('ContactMethods');
 ?>
 
 function submitIt() {
