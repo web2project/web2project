@@ -590,9 +590,10 @@ function w2PgetParam(&$arr, $name, $def = null) {
 	global $AppUI;
 
 	if (isset($arr[$name])) {
-		if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false
-			&& strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false
-			&& strpos($arr[$name], ';') === false && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
+        if ((is_array($arr[$name])) || (strpos($arr[$name], ' ') === false 
+            && strpos($arr[$name], '<') === false && strpos($arr[$name], '"') === false
+            && strpos($arr[$name], '[') === false && strpos($arr[$name], ';') === false
+            && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
 				return isset($arr[$name]) ? $arr[$name] : $def;
 			} else {
 				/*echo('<pre>');
