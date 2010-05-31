@@ -17,10 +17,10 @@ function cleanText($text) {
 	return $text;
 }
 
-$notify_owner = isset($_POST['task_log_notify_owner']) ? $_POST['task_log_notify_owner'] : 0;
+$del = (int) w2PgetParam($_POST, 'del', 0);
+$notify_owner = (int) w2PgetParam($_POST, 'task_log_notify_owner', 0);
+$isNotNew = (int) w2PgetParam($_POST, 'task_log_id', 0);
 
-$del = w2PgetParam($_POST, 'del', 0);
-$isNotNew = $_POST['task_log_id'];
 $perms = &$AppUI->acl();
 if ($del) {
 	if (!canDelete('task_log')) {

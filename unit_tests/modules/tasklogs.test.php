@@ -211,7 +211,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
          */
         $now_secs = time();
         $min_time = $now_secs - 10;
-        
+
         $q = new DBQuery;
         $q->addTable('task_log');
         $q->addQuery('task_log_created, task_log_updated');
