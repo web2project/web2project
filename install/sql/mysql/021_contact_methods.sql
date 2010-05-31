@@ -63,3 +63,5 @@ INSERT INTO sysvals (sysval_key_id, sysval_title, sysval_value, sysval_value_id)
     (@syskey_id, 'ContactMethods', 'IM: AOL', 'im_aol'),
     (@syskey_id, 'ContactMethods', 'IM: Skype', 'im_skype'),
     (@syskey_id, 'ContactMethods', 'IM: Google', 'im_google');
+
+DELETE FROM `contacts_methods` WHERE `method_value` = '';
