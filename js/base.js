@@ -679,10 +679,10 @@ function expand_collapse(id, table_name, option, opt_level, root) {
         var img_expand = document.getElementById(tr_name+'_expand');
         var img_collapse = document.getElementById(tr_name+'_collapse');
         if (img_expand==null) {
-            var img_expand = document.getElementById(id+'_expand');
+            img_expand = document.getElementById(id+'_expand');
         }
         if (img_collapse==null) {
-            var img_collapse = document.getElementById(id+'_collapse');
+            img_collapse = document.getElementById(id+'_collapse');
         }
 
 //First lets handle non level situations
