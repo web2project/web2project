@@ -775,39 +775,25 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              tr.style.visibility = 'collapse';
 	                              tr.style.display = 'none';
 	                          }
-                              var img_expand = document.getElementById(tr_name+'_expand');
-                              var img_collapse = document.getElementById(tr_name+'_collapse');
-                              if (img_expand==null) {
-                              		var img_expand = document.getElementById(id+'_expand');
-                              }
-                              if (img_collapse==null) {
-                              		var img_collapse = document.getElementById(id+'_collapse');
-                              }
-							  if (!(img_collapse==null)) {
-                              		img_collapse.style.display = 'none';
-                              }
-							  if (!(img_expand==null)) {
-                              		img_expand.style.display = 'inline';
-                              }
                     	} else {
                         	  //if root mode is 1 hide, if not then don't do a thing
 							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
                               		tr.style.display = 'none';
                               }
-                              var img_expand = document.getElementById(tr_name+'_expand');
-                              var img_collapse = document.getElementById(tr_name+'_collapse');
-                              if (img_expand==null) {
-                              		var img_expand = document.getElementById(id+'_expand');
-                              }
-                              if (img_collapse==null) {
-                              		var img_collapse = document.getElementById(id+'_collapse');
-                              }
-							  if (!(img_collapse==null)) {
-                              		img_collapse.style.display = 'none';
-                              }
-							  if (!(img_expand==null)) {
-                              		img_expand.style.display = 'inline';
-                              }
+                        }
+                        var img_expand = document.getElementById(tr_name+'_expand');
+                        var img_collapse = document.getElementById(tr_name+'_collapse');
+                        if (img_expand==null) {
+                            var img_expand = document.getElementById(id+'_expand');
+                        }
+                        if (img_collapse==null) {
+                            var img_collapse = document.getElementById(id+'_collapse');
+                        }
+                        if (!(img_collapse==null)) {
+                            img_collapse.style.display = 'none';
+                        }
+                        if (!(img_expand==null)) {
+                            img_expand.style.display = 'inline';
                         }
                   } else {
 						if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
@@ -816,39 +802,25 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                              tr.style.visibility = 'visible';
 	                              tr.style.display = '';
 	                          }
-                              var img_expand = document.getElementById(tr_name+'_expand');
-                              var img_collapse = document.getElementById(tr_name+'_collapse');
-                              if (img_expand==null) {
-                              		var img_expand = document.getElementById(id+'_expand');
-                              }
-                              if (img_collapse==null) {
-                              		var img_collapse = document.getElementById(id+'_collapse');
-                              }
-							  if (!(img_collapse==null)) {
-                              		img_collapse.style.display = 'inline';
-                              }
-							  if (!(img_expand==null)) {
-                              		img_expand.style.display = 'none';
-                              }
                         } else {
                         	  //if root mode is 1 hide, if not then don't do a thing
 							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
                               		tr.style.display = '';
                               }
-                              var img_expand = document.getElementById(tr_name+'_expand');
-                              var img_collapse = document.getElementById(tr_name+'_collapse');
-                              if (img_expand==null) {
-                              		var img_expand = document.getElementById(id+'_expand');
-                              }
-                              if (img_collapse==null) {
-                              		var img_collapse = document.getElementById(id+'_collapse');
-                              }
-							  if (!(img_collapse==null)) {
-                              		img_collapse.style.display = 'inline';
-                              }
-							  if (!(img_expand==null)) {
-                              		img_expand.style.display = 'none';
-                              }
+                        }
+                        var img_expand = document.getElementById(tr_name+'_expand');
+                        var img_collapse = document.getElementById(tr_name+'_collapse');
+                        if (img_expand==null) {
+                            var img_expand = document.getElementById(id+'_expand');
+                        }
+                        if (img_collapse==null) {
+                            var img_collapse = document.getElementById(id+'_collapse');
+                        }
+                        if (!(img_collapse==null)) {
+                            img_collapse.style.display = 'inline';
+                        }
+                        if (!(img_expand==null)) {
+                            img_expand.style.display = 'none';
                         }
                   }
 //Now that we found the right root or we want to act on every row (collapse all/expand all) then
@@ -866,73 +838,41 @@ function expand_collapse(id, table_name, option, opt_level, root) {
 	                  if (collapse) {
 							if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
 	                              tr.style.visibility = 'collapse';
-	                              tr.style.display = 'none';
-	                              var img_expand = document.getElementById(tr_name+'_expand');
-	                              var img_collapse = document.getElementById(tr_name+'_collapse');
-	                              if (img_expand==null) {
-	                              		var img_expand = document.getElementById(id+'_expand');
-	                              }
-	                              if (img_collapse==null) {
-	                              		var img_collapse = document.getElementById(id+'_collapse');
-	                              }
-								  if (!(img_collapse==null)) {
-	                              		img_collapse.style.display = 'none';
-	                              }
-								  if (!(img_expand==null)) {
-	                              		img_expand.style.display = 'inline';
-	                              }
-	                        } else {
-	                              tr.style.display = 'none';
-	                              var img_expand = document.getElementById(tr_name+'_expand');
-	                              var img_collapse = document.getElementById(tr_name+'_collapse');
-	                              if (img_expand==null) {
-	                              		var img_expand = document.getElementById(id+'_expand');
-	                              }
-	                              if (img_collapse==null) {
-	                              		var img_collapse = document.getElementById(id+'_collapse');
-	                              }
-								  if (!(img_collapse==null)) {
-	                              		img_collapse.style.display = 'none';
-	                              }
-								  if (!(img_expand==null)) {
-	                              		img_expand.style.display = 'inline';
-	                              }
 	                        }
+                            tr.style.display = 'none';
+                            var img_expand = document.getElementById(tr_name+'_expand');
+                            var img_collapse = document.getElementById(tr_name+'_collapse');
+                            if (img_expand==null) {
+                                var img_expand = document.getElementById(id+'_expand');
+                            }
+                            if (img_collapse==null) {
+                                var img_collapse = document.getElementById(id+'_collapse');
+                            }
+                            if (!(img_collapse==null)) {
+                                img_collapse.style.display = 'none';
+                            }
+                            if (!(img_expand==null)) {
+                                img_expand.style.display = 'inline';
+                            }
 	                  } else {
 							if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
-	                              tr.style.visibility = 'visible';
-	                              tr.style.display = '';
-	                              var img_expand = document.getElementById(tr_name+'_expand');
-	                              var img_collapse = document.getElementById(tr_name+'_collapse');
-	                              if (img_expand==null) {
-	                              		var img_expand = document.getElementById(id+'_expand');
-	                              }
-	                              if (img_collapse==null) {
-	                              		var img_collapse = document.getElementById(id+'_collapse');
-	                              }
-								  if (!(img_collapse==null)) {
-	                              		img_collapse.style.display = 'inline';
-	                              }
-								  if (!(img_expand==null)) {
-	                              		img_expand.style.display = 'none';
-	                              }
-	                        } else {
-	                              tr.style.display = '';
-	                              var img_expand = document.getElementById(tr_name+'_expand');
-	                              var img_collapse = document.getElementById(tr_name+'_collapse');
-	                              if (img_expand==null) {
-	                              		var img_expand = document.getElementById(id+'_expand');
-	                              }
-	                              if (img_collapse==null) {
-	                              		var img_collapse = document.getElementById(id+'_collapse');
-	                              }
-								  if (!(img_collapse==null)) {
-	                              		img_collapse.style.display = 'inline';
-	                              }
-								  if (!(img_expand==null)) {
-	                              		img_expand.style.display = 'none';
-	                              }
+                                tr.style.visibility = 'visible';
 	                        }
+                            tr.style.display = '';
+                            var img_expand = document.getElementById(tr_name+'_expand');
+                            var img_collapse = document.getElementById(tr_name+'_collapse');
+                            if (img_expand==null) {
+                                var img_expand = document.getElementById(id+'_expand');
+                            }
+                            if (img_collapse==null) {
+                                var img_collapse = document.getElementById(id+'_collapse');
+                            }
+                            if (!(img_collapse==null)) {
+                                img_collapse.style.display = 'inline';
+                            }
+                            if (!(img_expand==null)) {
+                                img_expand.style.display = 'none';
+                            }
 	                  }
 	            }
 		  }		    
