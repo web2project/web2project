@@ -202,8 +202,13 @@ function delIt() {
                     <td class="hilite" width="300"><?php echo $obj->task_duration . ' ' . $AppUI->_($durnTypes[$obj->task_duration_type]); ?></td>
                 </tr>
                 <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?>:</td>
-                    <td class="hilite" width="300"><?php echo $obj->task_target_budget; ?></td>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
+                    <td class="hilite" width="300">
+                        <?php
+                            echo $w2Pconfig['currency_symbol'];
+                            echo formatCurrency($obj->task_target_budget, $AppUI->getPref('CURRENCYFORM'));
+                        ?>
+                    </td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Type'); ?> :</td>
