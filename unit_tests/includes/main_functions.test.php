@@ -85,6 +85,18 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 		$this->assertEquals(null, w2PgetConfig('NotGonnaBeThere'));
 		$this->assertEquals('Some Default', w2PgetConfig('NotGonnaBeThere', 'Some Default'));
 	}
+
+    public function testFilterCurrency()
+    {
+        $this->assertEquals('123456789', filterCurrency('123456789'));
+
+        $this->assertEquals('1234567.89', filterCurrency('1234567,89'));
+        $this->assertEquals('1234567.89', filterCurrency('1.234.567,89'));
+
+        $this->assertEquals('1234567.89', filterCurrency('1234567.89'));
+        $this->assertEquals('1234567.89', filterCurrency('1,234,567.89'));
+    }
+
 	public function testConvert2days()
 	{		
 		$hours = 1;		
