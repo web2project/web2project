@@ -19,7 +19,7 @@ $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);
 $log_all = (int) w2PgetParam($_POST, 'log_all', 1);
 $log_all_projects = (int) w2PgetParam($_POST, 'log_all_projects', 1);
 $use_period = (int) w2PgetParam($_POST, 'use_period', 0);
-$show_orphaned = (int) w2PgetParam($_POST, 'show_orphaned', 0);
+$show_orphaned = w2PgetParam($_POST, 'show_orphaned', 'off');
 $display_week_hours = (int) w2PgetParam($_POST, 'display_week_hours', 0);
 $max_levels = w2PgetParam($_POST, 'max_levels', 'max');
 $log_userfilter = (int) w2PgetParam($_POST, 'log_userfilter', -1);
@@ -36,7 +36,7 @@ $projFilter = arrayMerge(array('all' => $AppUI->_('All Projects')), $projects);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $taskPriority = w2PgetSysVal('TaskPriority');
-$taskPriority[-1]=$AppUI->_('Select User Priority');
+$taskPriority[999]=$AppUI->_('Select User Priority');
 
 $table_header = '';
 $table_rows = '';
@@ -227,9 +227,9 @@ function chPriority(user_id) {
 			<td nowrap="nowrap" colspan="1" align="left"><?php echo $AppUI->_('Projects'); ?>:
 				<?php echo arraySelect($projFilter, 'project_id', 'size=1 class=text', $project_id, false); ?>
 			</td>
-		  <td>
-				<input type="checkbox" name="show_orphaned" id="show_orphaned" <?php if ($show_orphaned) { echo 'checked="checked"'; } ?> />
-				<label for="show_orphaned"><?php echo $AppUI->_('Hide orphaned tasks'); ?></label>
+		    <td>
+				<input type="checkbox" name="show_orphaned" id="show_orphaned" <?php if ($show_orphaned == 'on') { echo 'checked="checked"'; } ?> />
+				<label for="show_orphaned"><?php echo $AppUI->_('Show orphaned tasks'); ?></label>
 			</td>
 			<td>
 				<?php echo $AppUI->_('Levels to display'); ?>
@@ -276,7 +276,7 @@ if ($do_report) {
 	}
 	$q->addWhere('(task_percent_complete < 100)');
 
-    $q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id', 'inner');
+    $q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
     if ($log_userfilter > -1) {
         $q->addWhere('ut.user_id = '.$log_userfilter);
     }
@@ -684,6 +684,10 @@ function hasChildren($list, $task) {
 	return false;
 }
 
+function getOrphanedTasks($tval) {
+    return (sizeof($tval->task_assigned_users) > 0) ? null : $tval;
+}
+
 ?>
 
 <center>
@@ -691,8 +695,8 @@ function hasChildren($list, $task) {
 		<?php echo $table_header . $table_rows; //show tasks with existing assignees
 
 // show orphaned tasks
-if (!$show_orphaned) {
-	$user_id = 0; //reset user id to zero (create new object - no user)
+if ($show_orphaned == 'on') {
+    $user_id = 0; //reset user id to zero (create new object - no user)
 	$tmpuser = '<form name="assFrm' . $user_id . '" action="index.php?m=tasks&a=tasksperuser" method="post" accept-charset="utf-8">
 				<input type="hidden" name="del" value="1" />
 				<input type="hidden" name="rm" value="0" />
@@ -721,10 +725,6 @@ if (!$show_orphaned) {
 	$tmpuser .= '</td></tr></table></td>';
 
 	$tmpuser .= '</tr>';
-
-	function getOrphanedTasks($tval) {
-		return (sizeof($tval->task_assigned_users) > 0) ? null : $tval;
-	}
 
 	$orphTasks = array_diff(array_map('getOrphanedTasks', $task_list), array(null));
 
