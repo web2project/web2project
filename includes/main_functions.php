@@ -869,6 +869,19 @@ function formatTime($uts) {
 	return $date->format($AppUI->getPref('SHDATEFORMAT'));
 }
 
+function filterCurrency($number) {
+
+    if (substr($number, -3, 1) == ',') {
+        // This is the European format, so convert it to the US decimal format.
+        $number = str_replace('.', '', $number);
+        $number = str_replace(',', '.', $number);
+    } else {
+        // This is the US format, so just make sure it's clean.
+        $number = str_replace(',', '', $number);
+    }
+
+    return $number;
+}
 /**
  * This function is necessary because Windows likes to
  * write their own standards.  Nothing that depends on locales
