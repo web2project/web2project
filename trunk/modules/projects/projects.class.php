@@ -461,13 +461,12 @@ class CProject extends CW2pObject {
 
         $this->w2PTrimAll();
 
-        $this->project_target_budget = str_replace(',', '', $this->project_target_budget);
         // ensure changes of state in checkboxes is captured
         $this->project_active = (int) $this->project_active;
         $this->project_private = (int) $this->project_private;
 
-        $this->project_target_budget = $this->project_target_budget ? $this->project_target_budget : 0.00;
-        $this->project_actual_budget = $this->project_actual_budget ? $this->project_actual_budget : 0.00;
+        $this->project_target_budget = filterCurrency($this->project_target_budget);
+        $this->project_actual_budget = filterCurrency($this->project_actual_budget);
 
         // Make sure project_short_name is the right size (issue for languages with encoded characters)
         if (mb_strlen($this->project_short_name) > 10) {

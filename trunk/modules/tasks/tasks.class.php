@@ -519,6 +519,7 @@ class CTask extends CW2pObject {
             return $errorMsgArray;
         }
 
+        $this->task_target_budget = filterCurrency($this->task_target_budget);
 		if ($this->task_id) {
 			addHistory('tasks', $this->task_id, 'update', $this->task_name, $this->task_project);
 
