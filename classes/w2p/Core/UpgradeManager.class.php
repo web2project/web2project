@@ -189,10 +189,10 @@ class w2p_Core_UpgradeManager {
 
         return $result;
     }
-public function upgradeRequired() {
-  $dbConn = $this->_openDBConnection();
-  return (count($this->_getMigrations()) > $this->_getDatabaseVersion($dbConn));
-}
+    public function upgradeRequired() {
+        $dbConn = $this->_openDBConnection();
+        return (count($this->_getMigrations()) > $this->_getDatabaseVersion($dbConn));
+    }
 
     private function _getIniSize($val) {
        $val = trim($val);
@@ -226,19 +226,19 @@ public function upgradeRequired() {
         sort($migrations);
         return $migrations;
     }
-private function _getDatabaseVersion($dbConn) {
+    private function _getDatabaseVersion($dbConn) {
 
-  $sql = "SELECT max(db_version) FROM w2pversion";
-  $res = $dbConn->Execute($sql);
+        $sql = "SELECT max(db_version) FROM w2pversion";
+        $res = $dbConn->Execute($sql);
 
-  if ($res && $res->RecordCount() > 0) {
-    $currentVersion = $res->fields[0];
-  } else {
-    $currentVersion = 0;
-  }
+        if ($res && $res->RecordCount() > 0) {
+            $currentVersion = $res->fields[0];
+        } else {
+            $currentVersion = 0;
+        }
 
-  return $currentVersion;
-}
+        return $currentVersion;
+    }
     private function _prepareConfiguration() {
         $this->configDir = W2P_BASE_DIR.'/includes';
         $this->configFile = W2P_BASE_DIR.'/includes/config.php';
