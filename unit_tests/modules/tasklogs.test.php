@@ -280,4 +280,49 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
     }
+
+    public function testW2PTrimAll()
+    {
+        $this->obj->bind($this->post_data, null, true, true);
+
+        /*
+         * Add all the trimmable characters to each variable in the object
+         * so we can trim them all back off
+         */
+        $vars = get_object_vars($this->obj);
+
+        foreach( $vars as $var_name => $var_value) {
+            if (!is_object($var_value)) {
+                $this->obj->$var_name = " \t\n" . $var_value . "\r\0\x0B";
+            }
+        }
+
+        $this->obj->w2PTrimAll();
+
+        $this->assertEquals(0,                                              $this->obj->task_log_id);
+        $this->assertEquals(1,                                              $this->obj->task_log_task);
+        $this->assertEquals(1,                                              $this->obj->task_log_help_desk_id);
+        $this->assertEquals('This is a task log name.',                     $this->obj->task_log_name);
+        $this->assertEquals(" \t\nThis is a task log description.\r\0\x0B", $this->obj->task_log_description);
+        $this->assertEquals(1,                                              $this->obj->task_log_creator);
+        $this->assertEquals(2.75,                                           $this->obj->task_log_hours);
+        $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_date);
+        $this->assertEquals(1,                                              $this->obj->task_log_costcode);
+        $this->assertEquals(1,                                              $this->obj->task_log_problem);
+        $this->assertEquals(1,                                              $this->obj->task_log_reference);
+        $this->assertEquals('http://www.example.com',                       $this->obj->task_log_related_url);
+        $this->assertEquals(1,                                              $this->obj->task_log_project);
+        $this->assertEquals(1,                                              $this->obj->task_log_company);
+        $this->assertEquals(1,                                              $this->obj->task_log_changelog);
+        $this->assertEquals('10.10.10.101',                                 $this->obj->task_log_changelog_servers);
+        $this->assertEquals(1,                                              $this->obj->task_log_changelog_whom);
+        $this->assertEquals('2010-05-31 10:15:25',                          $this->obj->task_log_changelog_datetime);
+        $this->assertEquals('35 minutes',                                   $this->obj->task_log_changelog_duration);
+        $this->assertEquals(1,                                              $this->obj->task_log_changelog_expected_downtime);
+        $this->assertEquals('This is a changelog description',              $this->obj->task_log_changelog_description);
+        $this->assertEquals('There is no backout plan',                     $this->obj->task_log_changelog_backout_plan);
+        $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_created);
+        $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_updated);
+        $this->assertEquals(1,                                              $this->obj->task_log_updator);
+    }
 }
