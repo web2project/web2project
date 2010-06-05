@@ -64,7 +64,7 @@ if (w2PgetParam($_GET, 'field_id', null) != null) {
 		$field_published = $cf->fieldPublished();
 
 		if ($field_htmltype == 'select') {
-			$select_options = new CustomOptionList($field_id);
+			$select_options = new w2p_Core_CustomOptionList($field_id);
 			$select_options->load();
 			$select_items = $select_options->getOptions();
 		}
