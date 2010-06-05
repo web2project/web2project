@@ -117,17 +117,6 @@ class CDepartment extends CW2pObject {
         return $q->loadList();
 	}
 
-	public function bind($hash) {
-		if (!is_array($hash)) {
-			return get_class($this) . "::bind failed";
-		} else {
-			$q = new DBQuery;
-			$q->bindHashToObject($hash, $this);
-
-			return null;
-		}
-	}
-
 	public function check() {
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
@@ -143,6 +132,9 @@ class CDepartment extends CW2pObject {
         }
         if (0 == (int) $this->dept_owner) {
             $errorArray['dept_owner'] = $baseErrorMsg . 'department owner is not set';
+        }
+        if ('' != $this->dept_url && !w2p_check_url($this->dept_url)) {
+            $errorArray['dept_url'] = $baseErrorMsg . 'department url is not formatted properly';
         }
 
 		return $errorArray;
@@ -160,15 +152,16 @@ class CDepartment extends CW2pObject {
             return $errorMsgArray;
         }
 
-		if ($this->dept_id) {
-            $q = new DBQuery;
-            $ret = $q->updateObject('departments', $this, 'dept_id', false);
-            addHistory('departments', $this->dept_id, 'update', $this->dept_name, $this->dept_id);
+        if ($this->dept_id && $perms->checkModuleItem('departments', 'edit', $this->dept_id)) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
             $stored = true;
-		} else {
-            $q = new DBQuery;
-            $ret = $q->insertObject('departments', $this, 'dept_id');
-            addHistory('departments', $this->dept_id, 'add', $this->dept_name, $this->dept_id);
+		}
+        if (0 == $this->dept_id && $perms->checkModuleItem('departments', 'add')) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
             $stored = true;
 		}
         return $stored;
@@ -176,38 +169,38 @@ class CDepartment extends CW2pObject {
 
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
+        $perms = $AppUI->acl();
 
-        $q = new DBQuery;
-		$q->addTable('departments', 'dep');
-		$q->addQuery('dep.dept_id');
-		$q->addWhere('dep.dept_parent = ' . (int)$this->dept_id);
-		$rows = $q->loadList();
-		$q->clear();
+        if ($perms->checkModuleItem('departments', 'delete', $this->dept_id)) {
+            $q = new DBQuery;
+            $q->addTable('departments', 'dep');
+            $q->addQuery('dep.dept_id');
+            $q->addWhere('dep.dept_parent = ' . (int)$this->dept_id);
+            $rows = $q->loadList();
+            $q->clear();
 
-		if (count($rows)) {
-			return 'deptWithSub';
-		}
+            if (count($rows)) {
+                //return 'deptWithSub';
+                return false;
+            }
 
-		$q->addTable('project_departments', 'pd');
-		$q->addQuery('pd.project_id');
-		$q->addWhere('pd.department_id = ' . (int)$this->dept_id);
-		$rows = $q->loadList();
-		$q->clear();
+            $q->addTable('project_departments', 'pd');
+            $q->addQuery('pd.project_id');
+            $q->addWhere('pd.department_id = ' . (int)$this->dept_id);
+            $rows = $q->loadList();
+            $q->clear();
 
-		if (count($rows)) {
-			return 'deptWithProject';
-		}
+            if (count($rows)) {
+                //return 'deptWithProject';
+                return false;
+            }
 
-		$q->addQuery('*');
-		$q->setDelete('departments');
-		$q->addWhere('dept_id = ' . (int)$this->dept_id);
-		if (!$q->exec()) {
-			$result = db_error();
-		} else {
-			$result = null;
-		}
-		$q->clear();
-		return $result;
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+            return true;
+        }
+        return false;
 	}
 	/**
 	 *	Returns a list of records exposed to the user
