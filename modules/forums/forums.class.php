@@ -230,7 +230,7 @@ class CForumMessage extends CW2pObject {
         return $errorArray;
 	}
 
-	public function store(CAppUI $AppUI) {
+	public function store(CAppUI $AppUI = null) {
         global $AppUI;
 
         $perms = $AppUI->acl();
