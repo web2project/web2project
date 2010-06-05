@@ -78,7 +78,7 @@ class CDepartment extends CW2pObject {
         foreach ($deptList as $dept) {
             $results[$dept['dept_id']] = $dept['dept_name'];
         }
-    return $results;
+        return $results;
 	}
 
 	public function getFilteredDepartmentList(CAppUI $AppUI = null, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
@@ -369,7 +369,7 @@ class CDepartment extends CW2pObject {
 
 		return $q->loadHashList('dept_id');
 	}
-	public static function getContactList($AppUI = null, $deptId) {
+	public static function getContactList(CAppUI $AppUI = null, $deptId) {
 		global $AppUI;
 
         $q = new DBQuery;

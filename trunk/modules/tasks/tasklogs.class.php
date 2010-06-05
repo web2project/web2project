@@ -161,7 +161,7 @@ class CTaskLog extends CW2pObject
      *
      * @access public
      */
-	public function store()
+	public function store(CAppUI $AppUI = null)
     {
 
 		$q = new DBQuery();
@@ -185,7 +185,7 @@ class CTaskLog extends CW2pObject
      *
      * @access public
      */
-	public function delete()
+	public function delete(CAppUI $AppUI = null)
     {
 		$q = new DBQuery();
 		$q->addQuery('task_log_task');

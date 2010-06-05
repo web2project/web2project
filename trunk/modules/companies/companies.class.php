@@ -187,7 +187,7 @@ class CCompany extends CW2pObject {
   	return $q->loadList();
   }
 
-  public function getCompanies($AppUI) {
+  public function getCompanies(CAppUI $AppUI) {
   	$q = new DBQuery;
   	$q->addTable('companies');
   	$q->addQuery('company_id, company_name');
@@ -198,7 +198,7 @@ class CCompany extends CW2pObject {
   	return $q->loadHashList('company_id');
   }
 
-	public static function getProjects($AppUI, $companyId, $active = 1, $sort = 'project_name') {
+	public static function getProjects(CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name') {
 		$fields = 'pr.project_id, project_name, project_start_date, ' .
 				'project_status, project_target_budget, project_start_date, ' .
 				'project_priority, contact_first_name, contact_last_name';
@@ -254,7 +254,7 @@ class CCompany extends CW2pObject {
 		return $results;
 	}
 
-	public static function getUsers($AppUI, $companyId) {
+	public static function getUsers(CAppUI $AppUI, $companyId) {
 		$q = new DBQuery;
 		$q->addTable('users');
 		$q->addQuery('user_id, user_username, contact_first_name, contact_last_name');
@@ -269,7 +269,7 @@ class CCompany extends CW2pObject {
 		return $q->loadHashList('user_id');
 	}
 	
-	public static function getDepartments($AppUI, $companyId) {
+	public static function getDepartments(CAppUI $AppUI, $companyId) {
 		$perms = $AppUI->acl();
 
 		if ($AppUI->isActiveModule('departments') && canView('departments')) {
