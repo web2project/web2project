@@ -23,7 +23,7 @@ class CUser extends CW2pObject {
 	}
 
 	public function check() {
-		if ($this->user_id === null) {
+        if ($this->user_id === null) {
 			return 'user id is NULL';
 		}
 		if ($this->user_password !== null) {
@@ -33,12 +33,15 @@ class CUser extends CW2pObject {
 		return null; // object is ok
 	}
 
-	public function store() {
-		$msg = $this->check();
+	public function store(CAppUI $AppUI = null) {
+		global $AppUI;
+
+        $msg = $this->check();
 		if ($msg) {
 			return get_class($this) . '::store-check failed';
 		}
 		$q = new DBQuery;
+        
 		if ($this->user_id) {
 			// save the old password
 			$perm_func = 'updateLogin';
@@ -99,6 +102,7 @@ class CUser extends CW2pObject {
 
 	public function delete($oid = null) {
 		global $AppUI;
+
 		$id = (int)$this->user_id;
 		//check if the user is related to anything and disallow deletion if he is.
 		//companies: is he a owner of any company?

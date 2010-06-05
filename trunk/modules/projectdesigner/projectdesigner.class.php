@@ -26,7 +26,7 @@ class CProjectDesignerOptions extends CW2pObject {
 	public function store(CAppUI $AppUI = null) {
 		global $AppUI;
 
-    $q = new DBQuery;
+        $q = new DBQuery;
 		$q->addTable('project_designer_options');
 		$q->addReplace('pd_option_user', $this->pd_option_user);
 		$q->addReplace('pd_option_view_project', $this->pd_option_view_project);
