@@ -36,7 +36,12 @@ if (!defined('W2P_BASE_DIR')) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-			<td class="hilite"><?php echo $w2Pconfig['currency_symbol'] ?><?php echo $obj->project_target_budget; ?></td>
+			<td class="hilite">
+                <?php
+                    echo $w2Pconfig['currency_symbol'];
+                    echo formatCurrency($obj->project_target_budget, $AppUI->getPref('CURRENCYFORM'));
+                ?>
+            </td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
