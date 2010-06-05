@@ -59,13 +59,11 @@ class CContact extends CW2pObject {
 
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
-        $errorMsgArray = $this->check();
+        $perms = $AppUI->acl();
+        
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
-        }
         /*
         *  This  validates that any Contact saved will have a Display Name as
         * required by various dropdowns, etc throughout the system.  This is
@@ -89,11 +87,47 @@ class CContact extends CW2pObject {
         if($this->contact_birthday == '') {
             $this->contact_birthday = null;
         }
+
+        $errorMsgArray = $this->check();
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
         $q = new DBQuery;
         $this->contact_lastupdate = $q->dbfnNow();
-        addHistory('contacts', $this->contact_id, 'store', $this->contact_first_name.' '.$this->contact_last_name, $this->contact_id);
+        /*
+         * TODO: I don't like the duplication on each of these two branches, but I
+         *   don't have a good idea on how to fix it at the moment...
+         */
+        if ($this->contact_id && $perms->checkModuleItem('contacts', 'edit', $this->contact_id)) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        if (0 == $this->contact_id && $perms->checkModuleItem('contacts', 'add')) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        if ($stored) {
+            $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
+            $custom_fields->bind($_POST);
+            $sql = $custom_fields->store($this->company_id); // Store Custom Fields
+        }
 
-        parent::store();
+        /*
+         *  TODO: I don't like using the $_POST in here..
+         */
+		$methods = array();
+		if (!empty($_POST['contact_methods'])) {
+			foreach ($_POST['contact_methods']['field'] as $key => $field) {
+				$methods[$field] = $_POST['contact_methods']['value'][$key];
+			}
+		}
+		$this->setContactMethods($methods);
+        return $stored;
 	}
 
 	public function setContactMethods(array $methods) {
@@ -137,7 +171,6 @@ class CContact extends CW2pObject {
         if ($msg = parent::delete()) {
             return $msg;
         }
-        addHistory('contacts', 0, 'delete', 'Deleted', 0);
         return true;
 	}
 
