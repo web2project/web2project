@@ -38,31 +38,22 @@ class CFileFolder extends CW2pObject {
 		return null;
 	}
 
-	public function delete($oid = null) {
-        global $AppUI;
+	public function delete(CAppUI $AppUI) {
+        $perms = $AppUI->acl();
 
-        $k = $this->_tbl_key;
-		if ($oid) {
-			$this->$k = intval($oid);
-		}
-		if (!$this->canDelete($msg, ($oid ? $oid : $this->file_folder_id))) {
+		if (!$this->canDelete($msg, (int) $this->file_folder_id)) {
 			return $msg;
 		}
-		$this->$k = $this->$k ? $this->$k : intval(($oid ? $oid : $this->file_folder_id));
-
-		$q = new DBQuery();
-		$q->setDelete($this->_tbl);
-		$q->addWhere($this->_tbl_key . ' = ' . $this->$k);
-		if (!$q->exec()) {
-			$q->clear();
-			return db_error();
-		} else {
-			$q->clear();
-			return null;
-		}
+        if ($perms->checkModuleItem('files', 'edit')) {
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+            return true;
+        }
+        return false;
 	}
 
-	public function canDelete(&$msg, $oid = null, $joins = null) {
+	public function canDelete(&$msg, $oid = 0, $joins = null) {
 		global $AppUI;
 
 		$q = new DBQuery();
@@ -78,13 +69,43 @@ class CFileFolder extends CW2pObject {
 		$q->addWhere('file_folder=' . $oid);
 		$res2 = $q->loadResult();
 		$q->clear();
-		if (($res1 > 0) || ($res2 > 0)) {
+		if ($res1 || $res2) {
 			$msg[] = 'File Folders';
 			$msg = $AppUI->_('Can\'t delete folder, it has files and/or subfolders.') . ': ' . implode(', ', $msg);
 			return false;
 		}
 		return true;
 	}
+
+
+    public function store(CAppUI $AppUI) {
+        $perms = $AppUI->acl();
+        $stored = false;
+
+        $errorMsgArray = $this->check();
+
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
+        /*
+         * TODO: I don't like the duplication on each of these two branches, but I
+         *   don't have a good idea on how to fix it at the moment...
+         */
+        if ($this->file_folder_id && $perms->checkModuleItem('files', 'edit')) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        if (0 == $this->file_folder_id && $perms->checkModuleItem('files', 'add')) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        return $stored;
+    }
 
 	/**
  	@return string Returns the name of the parent folder or null if no parent was found **/

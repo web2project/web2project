@@ -432,19 +432,32 @@ class CFile extends CW2pObject {
                     //preparing users array
                     $q = new DBQuery;
                     $q->addTable('tasks', 't');
-                    $q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as
+                    $q->addQuery('t.task_id, cc.contact_first_name as
                              creator_first_name, cc.contact_last_name as creator_last_name,
-                             oc.contact_email as owner_email, oc.contact_first_name as owner_first_name,
+                             oc.contact_first_name as owner_first_name,
                              oc.contact_last_name as owner_last_name, a.user_id as assignee_id,
-                             ac.contact_email as assignee_email, ac.contact_first_name as
-                             assignee_first_name, ac.contact_last_name as assignee_last_name');
+                             ac.contact_first_name as assignee_first_name,
+                             ac.contact_last_name as assignee_last_name');
                     $q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
+
                     $q->addJoin('users', 'o', 'o.user_id = t.task_owner');
                     $q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
+                    $q->leftJoin('contacts_methods', 'cm1', 'cm1.contact_id = oc.contact_id');
+                    $q->addWhere("cm1.method_name = 'email_primary'");
+                    $q->addQuery('cm1.method_value as owner_email');
+
                     $q->addJoin('users', 'c', 'c.user_id = t.task_creator');
                     $q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
+                    $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = cc.contact_id');
+                    $q->addWhere("cm2.method_name = 'email_primary'");
+                    $q->addQuery('cm2.method_value as creator_email');
+
                     $q->addJoin('users', 'a', 'a.user_id = u.user_id');
                     $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
+                    $q->leftJoin('contacts_methods', 'cm3', 'cm3.contact_id = ac.contact_id');
+                    $q->addWhere("cm3.method_name = 'email_primary'");
+                    $q->addQuery('cm3.method_value as assignee_email');
+
                     $q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
                     $this->_users = $q->loadList();
                 } else {
