@@ -163,18 +163,47 @@ class CTaskLog extends CW2pObject
      */
 	public function store(CAppUI $AppUI = null)
     {
+        global $AppUI;
+        $perms = $AppUI->acl();
 
-		$q = new DBQuery();
+        $errorMsgArray = $this->check();
 
-		if ($this->task_log_id) {
-			$this->task_log_updated = $q->dbfnNow();
-		} else {
-			$this->task_log_created = $q->dbfnNow();
-			$this->task_log_updated = $q->dbfnNow();
-		}
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
 
-		parent::store();
-		$this->updateHoursWorked($this->task_log_task);
+        $q = new DBQuery();
+        $this->task_log_updated = $q->dbfnNow();
+
+        if ($this->task_log_date) {
+            $date = new CDate($obj->task_log_date);
+            $this->task_log_date = $date->format(FMT_DATETIME_MYSQL);
+        }
+        $dot = strpos($this->task_log_hours, ':');
+        if ($dot > 0) {
+            $log_duration_minutes = sprintf('%.3f', substr($this->task_log_hours, $dot + 1) / 60.0);
+            $this->task_log_hours = floor($this->task_log_hours) + $log_duration_minutes;
+        }
+        $this->task_log_hours = round($this->task_log_hours, 3);
+        $this->task_log_costcode = cleanText($this->task_log_costcode);
+
+        if ($this->task_log_id && $perms->checkModuleItem('task_log', 'edit', $this->task_log_id)) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+            $this->updateHoursWorked($this->task_log_task);
+        }
+        if (0 == $this->task_log_id && $perms->checkModuleItem('task_log', 'add')) {
+            $this->task_log_created = $q->dbfnNow();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+            $this->updateHoursWorked($this->task_log_task);
+        }
+
+        return $stored;
 	}
 
     /**
@@ -187,14 +216,20 @@ class CTaskLog extends CW2pObject
      */
 	public function delete(CAppUI $AppUI = null)
     {
-		$q = new DBQuery();
-		$q->addQuery('task_log_task');
-		$q->addTable('task_log');
-		$q->addWhere('task_log_id = ' . (int) $this->task_log_id);
-		$task_log_task = $q->loadResult();
+        global $AppUI;
+        $perms = $AppUI->acl();
 
-		parent::delete();
-		$this->updateHoursWorked($task_log_task);
+        $this->load($this->task_log_id);
+        //$task_log_task = $this->task_log_task;
+
+        if ($perms->checkModuleItem('task_log', 'delete', $this->task_log_id)) {
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+            $this->updateHoursWorked($this->task_log_task);
+            return true;
+        }
+        return false;
 	}
 
     /**
@@ -238,7 +273,7 @@ class CTaskLog extends CW2pObject
      */
 	public function check()
     {
-		$this->task_log_hours = (float)$this->task_log_hours;
+		
 		return null;
 	}
 
