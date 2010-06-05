@@ -44,7 +44,7 @@ function __autoload($class_name) {
             require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
             break;
         case 'cfilefolder':
-            require_once W2P_BASE_DIR.'/modules/files/files.class.php';
+            require_once W2P_BASE_DIR.'/modules/files/filefolder.class.php';
             break;
         case 'ctasklog':
             require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
@@ -697,22 +697,11 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	* 2) project_id and module_id should be provided in order to filter history entries
 	*
 	*/
-	if (!w2PgetConfig('log_changes')) {
+	if (!w2PgetConfig('log_changes') || !$AppUI->isActiveModule('history')) {
 		return;
 	}
-	$description = str_replace("'", "\'", $description);
+
 	$q = new DBQuery;
-	$q->addTable('modules');
-	$q->addWhere('mod_name = \'History\' and mod_active = 1');
-	$qid = $q->exec();
-
-	if (!$qid || db_num_rows($qid) == 0) {
-		$AppUI->setMsg('History module is not loaded, but your config file has requested that changes be logged.  You must either change the config file or install and activate the history module to log changes.', UI_MSG_ALERT);
-		$q->clear();
-		return;
-	}
-
-	$q->clear();
 	$q->addTable('history');
 	$q->addInsert('history_action', $action);
 	$q->addInsert('history_item', $id);
@@ -722,8 +711,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	$q->addInsert('history_project', $project_id);
 	$q->addInsert('history_table', $table);
 	$q->exec();
-	echo db_error();
-	$q->clear();
+	//echo db_error();
 }
 
 ##
