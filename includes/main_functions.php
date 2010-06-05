@@ -46,6 +46,9 @@ function __autoload($class_name) {
         case 'cfilefolder':
             require_once W2P_BASE_DIR.'/modules/files/filefolder.class.php';
             break;
+        case 'cforummessage':
+            require_once W2P_BASE_DIR.'/modules/forums/forummessage.class.php';
+            break;
         case 'ctasklog':
             require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
             break;
