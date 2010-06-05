@@ -120,7 +120,10 @@ class CLink extends CW2pObject {
         if (count($errorMsgArray) > 0) {
             return $errorMsgArray;
         }
-
+        /*
+         * TODO: I don't like the duplication on each of these two branches, but I
+         *   don't have a good idea on how to fix it at the moment...
+         */
         if ($this->link_id && $perms->checkModuleItem('links', 'edit', $this->link_id)) {
             $q = new DBQuery;
             $this->link_date = $q->dbfnNow();
