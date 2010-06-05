@@ -507,8 +507,8 @@ class CTask extends CW2pObject {
 	 */
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
-
-        $q = new DBQuery;
+        $perms = $AppUI->acl();
+        $stored = false;
 
 		$this->w2PTrimAll();
 
@@ -520,45 +520,42 @@ class CTask extends CW2pObject {
         }
 
         $this->task_target_budget = filterCurrency($this->task_target_budget);
-		if ($this->task_id) {
-			addHistory('tasks', $this->task_id, 'update', $this->task_name, $this->task_project);
 
+        $q = new DBQuery;
+        $this->task_updated = $q->dbfnNow();
+
+        if ($this->task_id && $perms->checkModuleItem('tasks', 'edit', $this->task_id)) {
 			// Load and globalize the old, not yet updated task object
 			// e.g. we need some info later to calculate the shifting time for depending tasks
 			// see function update_dep_dates
 			global $oTsk;
 			$oTsk = new CTask();
 			$oTsk->peek($this->task_id);
-
-			$this->task_updated = $q->dbfnNow();
+			
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
 			}
 			if ($this->task_end_date == '') {
 				$this->task_end_date = '0000-00-00 00:00:00';
 			}
-			$ret = $q->updateObject('tasks', $this, 'task_id');
-			$q->clear();
-			$this->_action = 'updated';
+            if (($msg = parent::store())) {
+                return $msg;
+            }
 
 			// if task_status changed, then update subtasks
 			if ($this->task_status != $oTsk->task_status) {
 				$this->updateSubTasksStatus($this->task_status);
 			}
-
 			// Moving this task to another project?
 			if ($this->task_project != $oTsk->task_project) {
 				$this->updateSubTasksProject($this->task_project);
 			}
-
 			if ($this->task_dynamic == 1) {
 				$this->updateDynamics(true);
 			}
-
-			// shiftDependentTasks needs this done first
-			$this->check();
-			$ret = $q->updateObject('tasks', $this, 'task_id', false);
-			$q->clear();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
 
 			// Milestone or task end date, or dynamic status has changed,
 			// shift the dates of the tasks that depend on this task
@@ -574,9 +571,10 @@ class CTask extends CW2pObject {
 				$q->exec();
 				$q->clear();
 			}
-		} else {
-			$this->_action = 'added';
-			$this->task_updated = $q->dbfnNow();
+            $stored = true;
+		}
+
+        if (0 == $this->task_id && $perms->checkModuleItem('tasks', 'add')) {
 			$this->task_created = $q->dbfnNow();
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
@@ -584,12 +582,11 @@ class CTask extends CW2pObject {
 			if ($this->task_end_date == '') {
 				$this->task_end_date = '0000-00-00 00:00:00';
 			}
-			$ret = $q->insertObject('tasks', $this, 'task_id');
-			$this->task_id = db_insert_id();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
 
 			$q->clear();
-			addHistory('tasks', $this->task_id, 'add', $this->task_name, $this->task_project);
-
 			if (!$this->task_parent) {
 				$q->addTable('tasks');
 				$q->addUpdate('task_parent', $this->task_id);
@@ -601,7 +598,9 @@ class CTask extends CW2pObject {
 				// importing tasks do not update dynamics
 				$importing_tasks = true;
 			}
+            $stored = true;
 		}
+
 		CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
 		$this->pushDependencies($this->task_id, $this->task_end_date);
 
@@ -662,11 +661,7 @@ class CTask extends CW2pObject {
 			print_r($this);
 		}
 
-		if (!$ret) {
-			return false;
-		} else {
-			return true;
-		}
+        return $stored;
 	}
 
     /**
@@ -723,65 +718,61 @@ class CTask extends CW2pObject {
 	 */
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
+        $perms = $AppUI->acl();
 
-        $q = new DBQuery;
-		$this->_action = 'deleted';
+        if ($perms->checkModuleItem('tasks', 'delete', $this->task_id)) {
+            //load it before deleting it because we need info on it to update the parents later on
+            $this->load($this->task_id);
 
-		//load it before deleting it because we need info on it to update the parents later on
-		$this->load($this->task_id);
-		addHistory('tasks', $this->task_id, 'delete', $this->task_name, $this->task_project);
+            // delete children
+            $childrenlist = $this->getChildren();
+            foreach($childrenlist as $child) {
+                $task = new CTask();
+                $task->task_id = $child;
+                $task->delete($AppUI);
+            }
 
-		// delete children
-		$childrenlist = $this->getChildren();
-        foreach($childrenlist as $child) {
-            $task = new CTask();
-            $task->task_id = $child;
-            $task->delete($AppUI);
+            $taskList = $childrenlist + array($this->task_id);
+            $implodedTaskList = implode(',', $taskList);
+
+            $q = new DBQuery;
+            // delete affiliated task_logs
+            $q->setDelete('task_log');
+            $q->addWhere('task_log_task IN (' . $implodedTaskList . ')');
+            if (!($q->exec())) {
+                return db_error();
+            }
+            $q->clear();
+
+            // delete linked user tasks
+            $q->setDelete('user_tasks');
+            $q->addWhere('task_id IN (' . $implodedTaskList . ')');
+            if (!($q->exec())) {
+                return db_error();
+            }
+            $q->clear();
+
+            // delete affiliated task_dependencies
+            $q->setDelete('task_dependencies');
+            $q->addWhere('dependencies_task_id IN (' . $implodedTaskList . ') OR
+                dependencies_req_task_id IN ('. $implodedTaskList .')');
+            if (!($q->exec())) {
+                return db_error();
+            }
+
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+
+            if ($this->task_parent != $this->task_id) {
+                $this->updateDynamics();
+            }
+
+            CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
+            return true;
         }
 
-        $taskList = $childrenlist + array($this->task_id);
-        $implodedTaskList = implode(',', $taskList);
-
-        // delete linked user tasks
-		$q->setDelete('user_tasks');
-        $q->addWhere('task_id IN (' . $implodedTaskList . ')');
-		if (!($q->exec())) {
-			return db_error();
-		}
-		$q->clear();
-
-		$q->setDelete('tasks');
-		$q->addWhere('task_id=' . (int)$this->task_id);
-		if (!($q->exec())) {
-			return db_error();
-		} elseif ($this->task_parent != $this->task_id) {
-			// Has parent, run the update sequence, this child will no longer be in the
-			// database
-			$this->updateDynamics();
-		}
-		$q->clear();
-
-		// delete affiliated task_logs
-		$q->setDelete('task_log');
-        $q->addWhere('task_log_task IN (' . $implodedTaskList . ')');
-		if (!($q->exec())) {
-			return db_error();
-		}
-		$q->clear();
-
-		// delete affiliated task_dependencies
-		$q->setDelete('task_dependencies');
-		$q->addWhere('dependencies_task_id IN (' . $implodedTaskList . ') OR
-            dependencies_req_task_id IN ('. $implodedTaskList .')');
-		if (!($q->exec())) {
-			return db_error();
-		} else {
-			$this->_action = 'deleted';
-		}
-		$q->clear();
-		CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
-
-		return null;
+		return false;
 	}
 
 	public function updateDependencies($cslist) {
