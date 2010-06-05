@@ -159,8 +159,6 @@ class CProject extends CW2pObject {
          *   previous version didn't check it either, so we're no worse off.
          */
         if ($perms->checkModuleItem('projects', 'delete', $this->project_id)) {
-            $this->load($this->project_id);
-            addHistory('projects', $this->project_id, 'delete', $this->project_name, $this->project_id);
             $q = new DBQuery;
             $q->addTable('tasks');
             $q->addQuery('task_id');
@@ -206,18 +204,17 @@ class CProject extends CW2pObject {
             $q->addWhere('project_id =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+            $q->setDelete('tasks');
+            $q->addWhere('task_represents_project =' . (int)$this->project_id);
+            
+            $q->clear();
             $q->setDelete('projects');
             $q->addWhere('project_id =' . (int)$this->project_id);
             $q->exec();
-            $q->clear();
-            $q->setDelete('tasks');
-            $q->addWhere('task_represents_project =' . (int)$this->project_id);
-
-            if (!$q->exec()) {
-                $result = db_error();
-            } else {
-                $result = true;
+            if ($msg = parent::delete()) {
+                return $msg;
             }
+            return true;
         }
 		return $result;
 	}
@@ -469,51 +466,49 @@ class CProject extends CW2pObject {
         $this->project_actual_budget = filterCurrency($this->project_actual_budget);
 
         // Make sure project_short_name is the right size (issue for languages with encoded characters)
-        if (mb_strlen($this->project_short_name) > 10) {
-          $this->project_short_name = mb_substr($this->project_short_name, 0, 10);
-        }
+        $this->project_short_name = mb_substr($this->project_short_name, 0, 10);
         if (empty($this->project_end_date)) {
-          $this->project_end_date = null;
+            $this->project_end_date = null;
         }
 
         $errorMsgArray = $this->check();
 
         if (count($errorMsgArray) > 0) {
-          return $errorMsgArray;
+            return $errorMsgArray;
         }
 
         $this->project_id = (int) $this->project_id;
         // convert dates to SQL format first
         if ($this->project_start_date) {
-          $date = new CDate($this->project_start_date);
-          $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
+            $date = new CDate($this->project_start_date);
+            $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
         }
         if ($this->project_end_date) {
-          $date = new CDate($this->project_end_date);
-          $date->setTime(23, 59, 59);
-          $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
+            $date = new CDate($this->project_end_date);
+            $date->setTime(23, 59, 59);
+            $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
         if ($this->project_actual_end_date) {
-          $date = new CDate($this->project_actual_end_date);
-          $this->project_actual_end_date = $date->format(FMT_DATETIME_MYSQL);
+            $date = new CDate($this->project_actual_end_date);
+            $this->project_actual_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
 
         // let's check if there are some assigned departments to project
         if ('' != $this->project_actual_end_date) {
-          $obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
+            $obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
         }
 
         // check project parents and reset them to self if they do not exist
         if (!$this->project_parent) {
-          $this->project_parent = $this->project_id;
-          $this->project_original_parent = $this->project_id;
+            $this->project_parent = $this->project_id;
+            $this->project_original_parent = $this->project_id;
         } else {
-          $parent_project = new CProject();
-          $parent_project->load($this->project_parent);
-          $this->project_original_parent = $parent_project->project_original_parent;
+            $parent_project = new CProject();
+            $parent_project->load($this->project_parent);
+            $this->project_original_parent = $parent_project->project_original_parent;
         }
         if (!$this->project_original_parent) {
-          $this->project_original_parent = $this->project_id;
+            $this->project_original_parent = $this->project_id;
         }
 
         /*
@@ -526,7 +521,6 @@ class CProject extends CW2pObject {
             if (($msg = parent::store())) {
                 return $msg;
             }
-            addHistory('projects', $this->project_id, 'update', $this->project_name, $this->project_id);
             $stored = true;
         }
         if (0 == $this->project_id && $perms->checkModuleItem('projects', 'add')) {
@@ -543,7 +537,6 @@ class CProject extends CW2pObject {
                     return $msg;
                 }
             }
-            addHistory('projects', $this->project_id, 'add', $this->project_name, $this->project_id);
             $stored = true;
         }
 
@@ -583,11 +576,11 @@ class CProject extends CW2pObject {
 		}
 
         if ($stored) {
-          $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
-          $custom_fields->bind($_POST);
-          $sql = $custom_fields->store($this->project_id); // Store Custom Fields
+            $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
+            $custom_fields->bind($_POST);
+            $sql = $custom_fields->store($this->project_id); // Store Custom Fields
 
-          CTask::storeTokenTask($AppUI, $this->project_id);
+            CTask::storeTokenTask($AppUI, $this->project_id);
         }
 		return $stored;
 	}
