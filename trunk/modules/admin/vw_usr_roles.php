@@ -16,7 +16,13 @@ $roles = $crole->getRoles();
 // Format the roles for use in arraySelect
 $roles_arr = array();
 foreach ($roles as $role) {
-	$roles_arr[$role['id']] = $role['name'];
+	if ($role['name'] != 'Administrator') {
+        $roles_arr[$role['id']] = $role['name'];
+    } else {
+        if ($perms->checkModuleItem('system', 'edit')) {
+            $roles_arr[$role['id']] = $role['name'];
+        }
+    }
 }
 
 ?>
