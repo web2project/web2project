@@ -495,20 +495,22 @@ class CEvent extends CW2pObject {
 	 */
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
-		// call default delete method first
-		$deleted = parent::delete($this->event_id);
+        $perms = $AppUI->acl();
 
-		// if object deletion succeeded then iteratively delete relationships
-		if (empty($deleted)) {
-			// delete user_events relationship
+        if ($perms->checkModuleItem('events', 'delete', $this->event_id)) {
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+
 			$q = new DBQuery;
 			$q->setDelete('user_events');
-			$q->addWhere('event_id = ' . (int)$this->event_id);
-			$deleted = ((!$q->exec()) ? $AppUI->_('Could not delete Event-User relationship') . '. ' . db_error() : null);
-			$q->clear;
-		}
+			$q->addWhere('event_id = ' . (int) $this->event_id);
+            $q->exec();
 
-		return $deleted;
+            return true;
+        }
+
+        return false;
 	}
 
     public function hook_search() {
@@ -800,7 +802,10 @@ class CEvent extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('user_id, contact_first_name,contact_last_name, contact_email');
+		$q->addQuery('user_id, contact_first_name,contact_last_name');
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
+        $q->addWhere("cm.method_name = 'email_primary'");
+        $q->addQuery('cm.method_value');
 		$q->addWhere('u.user_contact = con.contact_id');
 		$q->addWhere('user_id in (' . implode(',', $assignee_list) . ')');
 		$users = $q->loadHashList('user_id');
