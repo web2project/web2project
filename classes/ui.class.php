@@ -763,21 +763,23 @@ class CAppUI {
          *   v1.x and they try to log in before applying the database, crash.
          *   Info: http://bugs.web2project.net/view.php?id=457
          */
-        global $AppUI;
-        $currentVersion = $AppUI->getVersion();
-        if (version_compare(substr($currentVersion, 0, 1), '2', '<')) {
-            $q->addQuery('contact_email');
-        } else {
+
+        $qTest = new DBQuery();
+        $qTest->addTable('w2pversion');
+        $qTest->addQuery('max(db_version)');
+        $dbVersion = $qTest->loadResult();
+        if ($dbVersion >= 21) {
             $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
             $q->addWhere("cm.method_name = 'email_primary'");
             $q->addQuery('cm.method_value AS user_email');
+        } else {
+            $q->addQuery('contact_email AS user_email');
         }
         /* End Hack */
 
 		$q->addWhere('user_id = ' . (int)$user_id . ' AND user_username = \'' . $username . '\'');
 		$sql = $q->prepare();
 		$q->loadObject($this);
-		$q->clear();
 		dprint(__file__, __line__, 7, 'Login SQL: ' . $sql);
 
 		if (!$this) {
