@@ -39,7 +39,7 @@ if ($edit_field_id != null) {
 		$AppUI->setMsg($AppUI->_('Error adding custom field:') . $msg, UI_MSG_ALERT, true);
 	} else {
 		if ($field_htmltype == 'select') {
-			$opts = new CustomOptionList($fid);
+			$opts = new w2p_Core_CustomOptionList($fid);
 			$opts->setOptions($list_select_items);
 
 			if ($edit_field_id == 0) {
