@@ -333,18 +333,8 @@ class bcode extends CW2pObject {
 		parent::__construct('billingcode', 'billingcode_id');
 	}
 
-	public function bind($hash) {
-		if (!is_array($hash)) {
-			return 'Billing Code::bind failed';
-		} else {
-			$q = new DBQuery;
-			$q->bindHashToObject($hash, $this);
-			$q->clear();
-			return null;
-		}
-	}
+	public function delete(CAppUI $AppUI = null) {
 
-	public function delete() {
 		$q = new DBQuery;
 		$q->addTable('billingcode');
 		$q->addUpdate('billingcode_status', '1');
@@ -354,12 +344,16 @@ class bcode extends CW2pObject {
 			return db_error();
 		} else {
 			$q->clear();
-			return null;
+			return true;
 		}
 	}
 
-	public function store() {
-		$q = new DBQuery;
+	public function store(CAppUI $AppUI = null) {
+        global $AppUI;
+        $perms = $AppUI->acl();
+        $stored = false;
+
+        $q = new DBQuery;
 		$q->addQuery('billingcode_id');
 		$q->addTable('billingcode');
 		$q->addWhere('billingcode_name = \'' . $this->billingcode_name . '\'');
@@ -369,20 +363,14 @@ class bcode extends CW2pObject {
 
 		if ($found_id && $found_id != $this->_billingcode_id) {
 			return 'Billing Code::code already exists';
-		} elseif ($this->_billingcode_id) {
-			$q->addTable('billingcode');
-			$q->addUpdate('billingcode_desc', $this->billingcode_desc);
-			$q->addUpdate('billingcode_name', $this->billingcode_name);
-			$q->addUpdate('billingcode_value', $this->billingcode_value);
-			$q->addUpdate('billingcode_status', $this->billingcode_status);
-			$q->addUpdate('company_id', $this->company_id);
-			$q->addWhere('billingcode_id = ' . (int)$this->_billingcode_id);
-			$q->exec();
-			$q->clear();
-		} elseif (!($ret = $q->insertObject('billingcode', $this, 'billingcode_id'))) {
-			return 'Billing Code::store failed <br />' . db_error();
 		} else {
-			return null;
-		}
+            if ($perms->checkModuleItem('system', 'edit')) {
+                if (($msg = parent::store())) {
+                    return $msg;
+                }
+                $stored = true;
+            }
+        }
+        return $stored;
 	}
 }
