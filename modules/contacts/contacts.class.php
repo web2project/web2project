@@ -494,8 +494,8 @@ class CContact extends CW2pObject {
 	public function hook_cron() {
 		global $AppUI;
 
-    $q = new DBQuery;
-    $q->addTable('contacts');
+        $q = new DBQuery;
+        $q->addTable('contacts');
 		$q->addQuery('contact_id');
 		$q->addWhere('contact_first_name IS NULL');
 		$contactIdList = $q->loadList();
@@ -512,22 +512,22 @@ class CContact extends CW2pObject {
 		$this->clearOldUpdatekeys($days_for_update);
 	}
 
-  public function hook_search() {
-    $search['table'] = 'contacts';
-    $search['table_alias'] = 'c';
-    $search['table_module'] = 'contacts';
-    $search['table_key'] = 'c.contact_id'; // primary key in searched table
-    $search['table_link'] = 'index.php?m=contacts&a=view&contact_id='; // first part of link
-    $search['table_title'] = 'Contacts';
-    $search['table_orderby'] = 'contact_last_name,contact_first_name';
-    $search['search_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_email', 'contact_email2', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
-    $search['display_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_email', 'contact_email2', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
+    public function hook_search() {
+        $search['table'] = 'contacts';
+        $search['table_alias'] = 'c';
+        $search['table_module'] = 'contacts';
+        $search['table_key'] = 'c.contact_id'; // primary key in searched table
+        $search['table_link'] = 'index.php?m=contacts&a=view&contact_id='; // first part of link
+        $search['table_title'] = 'Contacts';
+        $search['table_orderby'] = 'contact_last_name,contact_first_name';
+        $search['search_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_email', 'contact_email2', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
+        $search['display_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_email', 'contact_email2', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
 
-    return $search;
-  }
+        return $search;
+    }
 
-  public function hook_calendar($userId) {
+    public function hook_calendar($userId) {
 //    return $this->getUpcomingBirthdays($userId);
-	return null;
-  }
+        return null;
+    }
 }
