@@ -108,43 +108,27 @@ if ($is_tabbed) {
 	}
 	$xpg_totalrecs = count($projects);
 	$xpg_pagesize = count($projects);
-}
 ?>
 
 <form action="./index.php" method="get" accept-charset="utf-8">
 
 	<table id="tblProjects" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 		<tr>
-		    <th nowrap="nowrap">
-		    	<a href="?m=projects&orderby=project_color_identifier" class="hdr"><?php echo $AppUI->_('Color'); ?></a>
-			</th>
-		    <th nowrap="nowrap">
-				<a href="?m=projects&orderby=project_priority" class="hdr"><?php echo $AppUI->_('P'); ?></a>
-			</th>
-			<th nowrap="nowrap">
-				<a href="?m=projects&orderby=project_name" class="hdr"><?php echo $AppUI->_('Project Name'); ?></a>
-			</th>
-			<th nowrap="nowrap">
-				<a href="?m=projects&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
-			</th>
-		        <th nowrap="nowrap">
-				<a href="?m=projects&orderby=project_start_date" class="hdr"><?php echo $AppUI->_('Start'); ?></a>
-			</th>
-		        <th nowrap="nowrap">
-				<a href="?m=projects&orderby=project_end_date" class="hdr"><?php echo $AppUI->_('End'); ?></a>
-			</th>
-		        <th nowrap="nowrap">
-				<a href="?m=projects&orderby=project_actual_end_date" class="hdr"><?php echo $AppUI->_('Actual'); ?></a>
-			</th>
-		        <th nowrap="nowrap">
-				<a href="?m=projects&orderby=task_log_problem" class="hdr"><?php echo $AppUI->_('LP'); ?></a>
-			</th>
-			<th nowrap="nowrap">
-				<a href="?m=projects&orderby=user_username" class="hdr"><?php echo $AppUI->_('Owner'); ?></a>
-			</th>
-			<th nowrap="nowrap">
-				<a href="?m=projects&orderby=total_tasks" class="hdr"><?php echo $AppUI->_('Tasks'); ?></a>
-			</th>
+            <?php
+            $fieldList = array('project_color_identifier', 'project_priority', 
+                'project_name', 'company_name', 'project_start_date',
+                'project_end_date', 'project_actual_end_date', 'task_log_problem',
+                'user_username', 'total_tasks');
+            $fieldNames = array('Color', 'P', 'Project Name', 'Company', 
+                'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
+            foreach ($fieldNames as $index => $name) {
+                ?><th nowrap="nowrap">
+                    <a href="?m=projects&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                        <?php echo $AppUI->_($fieldNames[$index]); ?>
+                    </a>
+                </th><?php
+            }
+            ?>
 			<th nowrap="nowrap">
 				<?php echo $AppUI->_('Selection'); ?>
 			</th>

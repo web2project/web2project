@@ -26,32 +26,31 @@ $allowedCompanies = $company->getAllowedRecords($AppUI->user_id, 'company_id, co
 $companyList = $company->getCompanyList($AppUI, $company_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-<tr>
-	<th nowrap="nowrap">
-		<a href="?m=companies&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company Name'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=companies&orderby=countp" class="hdr"><?php echo $AppUI->_('Active Projects'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=companies&orderby=inactive" class="hdr"><?php echo $AppUI->_('Archived Projects'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=companies&orderby=company_type" class="hdr"><?php echo $AppUI->_('Type'); ?></a>
-	</th>
-</tr>
-<?php
-	if (count($companyList) > 0) {
-		foreach ($companyList as $company) {
-			echo '<tr>';
-			echo '<td>' . (mb_trim($company['company_description']) ? w2PtoolTip($company['company_name'], $company['company_description']) : '') . '<a href="./index.php?m=companies&a=view&company_id=' . $company['company_id'] . '" >' . $company['company_name'] . '</a>' . (mb_trim($company['company_description']) ? w2PendTip() : '') . '</td>';
-			echo '<td width="125" align="right" nowrap="nowrap">' . $company['countp'] . '</td>';
-			echo '<td width="125" align="right" nowrap="nowrap">' . $company['inactive'] . '</td>';
-			echo '<td align="left" nowrap="nowrap">' . $AppUI->_($types[$company['company_type']]) . '</td>';
-			echo '</tr>';
-		}
-	} else {
-		echo '<tr><td colspan="5">' . $AppUI->_('No companies available') . '</td></tr>';
-	}
-?>
+    <tr>
+        <?php
+        $fieldList = array('company_name', 'countp', 'inactive', 'company_type');
+        $fieldNames = array('Company Name', 'Active Projects', 'Archived Projects', 'Type');
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+                <a href="?m=companies&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+                </a>
+            </th><?php
+        }
+        ?>
+    </tr>
+    <?php
+        if (count($companyList) > 0) {
+            foreach ($companyList as $company) {
+                echo '<tr>';
+                echo '<td>' . (mb_trim($company['company_description']) ? w2PtoolTip($company['company_name'], $company['company_description']) : '') . '<a href="./index.php?m=companies&a=view&company_id=' . $company['company_id'] . '" >' . $company['company_name'] . '</a>' . (mb_trim($company['company_description']) ? w2PendTip() : '') . '</td>';
+                echo '<td width="125" align="right" nowrap="nowrap">' . $company['countp'] . '</td>';
+                echo '<td width="125" align="right" nowrap="nowrap">' . $company['inactive'] . '</td>';
+                echo '<td align="left" nowrap="nowrap">' . $AppUI->_($types[$company['company_type']]) . '</td>';
+                echo '</tr>';
+            }
+        } else {
+            echo '<tr><td colspan="5">' . $AppUI->_('No companies available') . '</td></tr>';
+        }
+    ?>
 </table>

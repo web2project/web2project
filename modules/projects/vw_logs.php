@@ -105,7 +105,6 @@ foreach ($logs as $row) {
 	if ($canEdit) {
 		$s .= '<a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=1&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
 	}
-	//$s .= '</td><td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : '-') . '</td>';
 	$s .= '</td>';
 	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : '-') . '<br /><br />';
     $task_log_updated = intval($row['task_log_updated']) ? new CDate($row['task_log_updated']) : null;
