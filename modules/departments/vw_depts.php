@@ -24,18 +24,17 @@ $deptList = $dept->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_
 
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 	<tr>
-		<th nowrap="nowrap">
-			<a href="?m=departments&orderby=dept_name" class="hdr"><?php echo $AppUI->_('Department Name'); ?></a>
-		</th>
-		<th nowrap="nowrap">
-			<a href="?m=departments&orderby=countp" class="hdr"><?php echo $AppUI->_('Active Projects'); ?></a>
-		</th>
-		<th nowrap="nowrap">
-			<a href="?m=departments&orderby=inactive" class="hdr"><?php echo $AppUI->_('Archived Projects'); ?></a>
-		</th>
-		<th nowrap="nowrap">
-			<a href="?m=departments&orderby=dept_type" class="hdr"><?php echo $AppUI->_('Type'); ?></a>
-		</th>
+        <?php
+        $fieldList = array('dept_name', 'countp', 'inactive', 'dept_type');
+        $fieldNames = array('Department Name', 'Active Projects', 'Archived Projects', 'Type');
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+                <a href="?m=departments&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+                </a>
+            </th><?php
+        }
+        ?>
 	</tr>
 <?php
 
