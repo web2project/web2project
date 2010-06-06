@@ -658,37 +658,37 @@ hide_tab_function = gt_hide_tabs;
 show_tab_function = gt_show_tab;
 
 function expand_collapse(id, table_name, option, opt_level, root) {      
-      var expand = (option == 'expand' ? 1 : 0);
-      var collapse = (option == 'collapse' ? 1 : 0);
-      var level = (opt_level == 0 ? 0 : (opt_level > 0 ? opt_level : -1));
-//root can be used in two ways:
-//1 = root (level 0) is to be shown/hidden just like an ordinary row
-//2 = root (level 0) is not to be hidden meaning the only thing that shifts is the state of the auxiliary images 
-      var include_root = (root ? root : 0);      
-//done controls if the sublevels have been treated already so that we do not treat another level again
-	  var done = false;
-//found controls if the root level has been found so that the following rows are treated
-	  var found = false;
+    var expand = (option == 'expand' ? 1 : 0);
+    var collapse = (option == 'collapse' ? 1 : 0);
+    var level = (opt_level == 0 ? 0 : (opt_level > 0 ? opt_level : -1));
+    //root can be used in two ways:
+    //1 = root (level 0) is to be shown/hidden just like an ordinary row
+    //2 = root (level 0) is not to be hidden meaning the only thing that shifts is the state of the auxiliary images
+    var include_root = (root ? root : 0);
+    //done controls if the sublevels have been treated already so that we do not treat another level again
+    var done = false;
+    //found controls if the root level has been found so that the following rows are treated
+    var found = false;
 
-//catch all the rows of the table
-      var trs = document.getElementsByTagName('tr');
+    //catch all the rows of the table
+    var trs = document.getElementsByTagName('tr');
 
     for (var i=0;i < trs.length;i++) {
         var tr_name = trs.item(i).id;
-        var tr = document.getElementById(tr_name);
-        var img_expand = document.getElementById(tr_name+'_expand');
-        var img_collapse = document.getElementById(tr_name+'_collapse');
-        if (img_expand==null) {
-            img_expand = document.getElementById(id+'_expand');
-        }
-        if (img_collapse==null) {
-            img_collapse = document.getElementById(id+'_collapse');
-        }
+        if ('' != tr_name) {
+            var tr = document.getElementById(tr_name);
+            var img_expand = document.getElementById(tr_name+'_expand');
+            var img_collapse = document.getElementById(tr_name+'_collapse');
+            if (img_expand==null) {
+                img_expand = document.getElementById(id+'_expand');
+            }
+            if (img_collapse==null) {
+                img_collapse = document.getElementById(id+'_collapse');
+            }
 
-//First lets handle non level situations
-
-	      if ((tr_name.indexOf(id) >= 0) && level<0) {
-	            if (collapse || expand) {
+            //First lets handle non level situations
+            if ((tr_name.indexOf(id) >= 0) && level<0) {
+                if (collapse || expand) {
                     if (collapse) {
                         if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
                             tr.style.visibility = 'collapse';
@@ -704,7 +704,7 @@ function expand_collapse(id, table_name, option, opt_level, root) {
                         img_collapse.style.display = 'inline';
                         img_expand.style.display = 'none';
                     }
-	            } else {
+                } else {
                     if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
                         tr.style.visibility = (tr.style.visibility == '' || tr.style.visibility == 'collapse') ? 'visible' : 'collapse';
                         tr.style.display = (tr.style.display == 'none') ? '' : 'none';
@@ -716,77 +716,76 @@ function expand_collapse(id, table_name, option, opt_level, root) {
                         img_collapse.style.display = (tr.style.display == '') ? 'inline' : 'none';
                         img_expand.style.display = (tr.style.display == 'none') ? 'inline' : 'none';
                     }
-	            }      
-//lets handle expand collapses of leveled rows (like tasks dynamics/parents) - THIS "ELSEIF" HANDLES THE PARENT TASK ROW ITSELF
-//Here we don't show/hide the row itself, we only handle the +/- image
-	      } else if((tr_name.indexOf(id) >= 0) && level>=0 && !done && !found && !include_root) {
-//So we found the root row lets record that:
-					found = true;
-					if (!(img_collapse==null)) {
-						img_collapse.style.display = (img_collapse.style.display == 'none') ? 'inline' : 'none';
-					}
-					if (!(img_expand==null)) {
-						img_expand.style.display = (img_expand.style.display == 'none') ? 'inline' : 'none';
-						//define what we will be doing with the rows below this one
-						opt = (img_expand.style.display == 'inline') ? 'collapse' : 'expand';
-      					collapse = (opt == 'collapse' ? 1 : 0);
-      					expand = (opt == 'expand' ? 1 : 0);
-					}
-//If we included the root for collapsing/expand lets do it:
-	      } else if((tr_name.indexOf(id) >= 0) && level>=0 && include_root) {
-					found = true;
-
-				    current_level = parseInt(tr_name.substr(tr_name.indexOf('>')+1,tr_name.indexOf('<')-tr_name.indexOf('>')-1));
-                    if (collapse) {
-						if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
-                        	  //if root mode is 1 hide, if not then don't do a thing
-							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
-	                              tr.style.visibility = 'collapse';
-	                              tr.style.display = 'none';
-	                          }
-                    	} else {
-                        	  //if root mode is 1 hide, if not then don't do a thing
-							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
-                              		tr.style.display = 'none';
-                              }
-                        }
-                        if (!(img_collapse==null)) {
-                            img_collapse.style.display = 'none';
-                        }
-                        if (!(img_expand==null)) {
-                            img_expand.style.display = 'inline';
+                }
+            //lets handle expand collapses of leveled rows (like tasks dynamics/parents) - THIS "ELSEIF" HANDLES THE PARENT TASK ROW ITSELF
+            //Here we don't show/hide the row itself, we only handle the +/- image
+            } else if((tr_name.indexOf(id) >= 0) && level>=0 && !done && !found && !include_root) {
+                //So we found the root row lets record that:
+                found = true;
+                if (!(img_collapse==null)) {
+                    img_collapse.style.display = (img_collapse.style.display == 'none') ? 'inline' : 'none';
+                }
+                if (!(img_expand==null)) {
+                    img_expand.style.display = (img_expand.style.display == 'none') ? 'inline' : 'none';
+                    //define what we will be doing with the rows below this one
+                    opt = (img_expand.style.display == 'inline') ? 'collapse' : 'expand';
+                    collapse = (opt == 'collapse' ? 1 : 0);
+                    expand = (opt == 'expand' ? 1 : 0);
+                }
+            //If we included the root for collapsing/expand lets do it:
+            } else if((tr_name.indexOf(id) >= 0) && level>=0 && include_root) {
+                found = true;
+                current_level = parseInt(tr_name.substr(tr_name.indexOf('>')+1,tr_name.indexOf('<')-tr_name.indexOf('>')-1));
+                if (collapse) {
+                    if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
+                        //if root mode is 1 hide, if not then don't do a thing
+                        if ((include_root == 1 && level == 0) || (current_level > 0)) {
+                            tr.style.visibility = 'collapse';
+                            tr.style.display = 'none';
                         }
                     } else {
-						if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
-                        	  //if root mode is 1 hide, if not then don't do a thing
-							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
-	                              tr.style.visibility = 'visible';
-	                              tr.style.display = '';
-	                          }
-                        } else {
-                        	  //if root mode is 1 hide, if not then don't do a thing
-							  if ((include_root == 1 && level == 0) || (current_level > 0)) {            
-                              		tr.style.display = '';
-                              }
-                        }
-                        if (!(img_collapse==null)) {
-                            img_collapse.style.display = 'inline';
-                        }
-                        if (!(img_expand==null)) {
-                            img_expand.style.display = 'none';
+                        //if root mode is 1 hide, if not then don't do a thing
+                        if ((include_root == 1 && level == 0) || (current_level > 0)) {
+                            tr.style.display = 'none';
                         }
                     }
-//Now that we found the right root or we want to act on every row (collapse all/expand all) then
-//lets handle expand collapses of leveled rows (like tasks dynamics) - THIS "ELSEIF" HANDLES THE ROWS THEMSELVES
-	      } else if(level>0 && !done && (found || level==0)) {
-	      		  //Lets catch the level
-				  current_level = parseInt(tr_name.substr(tr_name.indexOf('>')+1,tr_name.indexOf('<')-tr_name.indexOf('>')-1));
-				  //If the current_level is equal or lower then we are done and we are already on another tree.
-				  if (current_level < level) {
-				  		done = true;
-				  		//And don't waste more time on this function and get back to the application
-				  		return;
-				  }	else {
+                    if (!(img_collapse==null)) {
+                        img_collapse.style.display = 'none';
+                    }
+                    if (!(img_expand==null)) {
+                        img_expand.style.display = 'inline';
+                    }
+                } else {
+                    if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
+                        //if root mode is 1 hide, if not then don't do a thing
+                        if ((include_root == 1 && level == 0) || (current_level > 0)) {
+                            tr.style.visibility = 'visible';
+                            tr.style.display = '';
+                        }
+                    } else {
+                        //if root mode is 1 hide, if not then don't do a thing
+                        if ((include_root == 1 && level == 0) || (current_level > 0)) {
+                            tr.style.display = '';
+                        }
+                    }
+                    if (!(img_collapse==null)) {
+                        img_collapse.style.display = 'inline';
+                    }
+                    if (!(img_expand==null)) {
+                        img_expand.style.display = 'none';
+                    }
+                }
+            //Now that we found the right root or we want to act on every row (collapse all/expand all) then
+            //lets handle expand collapses of leveled rows (like tasks dynamics) - THIS "ELSEIF" HANDLES THE ROWS THEMSELVES
+            } else if(level>0 && !done && (found || level==0)) {
+                //Lets catch the level
+                current_level = parseInt(tr_name.substr(tr_name.indexOf('>')+1,tr_name.indexOf('<')-tr_name.indexOf('>')-1));
+                //If the current_level is equal or lower then we are done and we are already on another tree.
+                if (current_level < level) {
+                    done = true;
+                    //And don't waste more time on this function and get back to the application
+                    return;
+                } else {
                     if (collapse) {
                         if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
                             tr.style.visibility = 'collapse';
@@ -810,9 +809,10 @@ function expand_collapse(id, table_name, option, opt_level, root) {
                             img_expand.style.display = 'none';
                         }
                     }
-	            }
-		  }		    
-      }
+                }
+            }
+        }
+    }
 }
 
 function expandAll(id, table_name) {
