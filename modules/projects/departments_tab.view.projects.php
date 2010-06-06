@@ -127,7 +127,7 @@ foreach ($projects as $row) {
 		$s .= $row['task_log_problem'] ? '</a>' : '';
 		$s .= '</td><td align="center" nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td>';
 		$s .= '<td align="center" nowrap="nowrap">';
-		$s .= $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
+		$s .= $row['project_task_count'];
 		$s .= '</td><td align="left" nowrap="nowrap">' . $AppUI->_($pstatus[$row['project_status']]) . '</td></tr>';
 		echo $s;
 	}
