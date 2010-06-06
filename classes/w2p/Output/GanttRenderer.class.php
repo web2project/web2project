@@ -57,11 +57,9 @@ class w2p_Output_GanttRenderer {
     //month number
     //-----------------------------------------
     if ($day_diff > 240) {
-      //more than 240 days
-      $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
+      $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY);
     } else {
       if ($day_diff > 90) {
-        //more than 90 days and less of 241
         $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
         $this->graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
       }
