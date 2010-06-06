@@ -15,19 +15,31 @@ $pgo_list = $AppUI->getPermissionableModuleList();
 $modules = array();
 $offset = 0;
 foreach ($module_list as $module) {
-	$modules[$module['type'] . ',' . $module['id']] = $module['name'];
-	if ($module['type'] = 'mod' && isset($pgo_list[$module['name']])) {
-		$pgos[$offset] = $pgo_list[$module['name']]['permissions_item_table'];
-	}
+	$modName = $module['name'];
+    $addToList = false;
 
+    if (strpos($modName, 'Admin') === false && strpos($modName, 'All Modules') === false) {
+        //non-admin modules
+        $addToList = true;
+    } else {
+        //admin module
+        if ($perms->checkModuleItem('system', 'edit')) {
+            $addToList = true;
+        }
+    }
+    if ($addToList) {
+        $modules[$module['type'] . ',' . $module['id']] = $module['name'];
+        if ($module['type'] = 'mod' && isset($pgo_list[$module['name']])) {
+            $pgos[$offset] = $pgo_list[$module['name']]['permissions_item_table'];
+        }
+    }
 	$offset++;
 }
 $count = 0;
 
 //Pull User perms
 $user_acls = $perms->getUserACLs($user_id);
-if (!is_array($user_acls))
-	$user_acls = array(); // Stops foreach complaining.
+$user_acls = (is_array($user_acls)) ? $user_acls : array();
 $perm_list = $perms->getPermissionList();
 
 ?>
