@@ -616,7 +616,6 @@ echo getFolders($folder);
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%">
 <?php
-$junkFile = new CFile();    //This line is total junk.. it's just here so getFolderSelectList() can be included.
 //Lets add our bulk form
 $folders_avail = getFolderSelectList();
 //used O (uppercase 0)instead of 0 (zero) to keep things in place
