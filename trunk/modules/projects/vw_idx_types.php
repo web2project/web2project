@@ -42,39 +42,22 @@ function expand_multiproject(id, table_name) {
 	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by'); ?>:&nbsp;</td>
 </tr>
 <tr>
-    <th nowrap="nowrap">
-    	<a href="?m=projects&orderby=project_color_identifier" class="hdr"><?php echo $AppUI->_('Progress'); ?></a>
-    </th>
-	<th nowrap="nowrap">
-		<a href="?m=projects&orderby=project_name" class="hdr"><?php echo $AppUI->_('Project Name'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=projects&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
-	</th>
-        <th nowrap="nowrap">
-		<a href="?m=projects&orderby=project_start_date" class="hdr"><?php echo $AppUI->_('Start'); ?></a>
-	</th>
-        <th nowrap="nowrap">
-		<a href="?m=projects&orderby=project_end_date" class="hdr"><?php echo $AppUI->_('End'); ?></a>
-	</th>
-      <!-- <th nowrap="nowrap">
-		<a href="?m=projects&orderby=project_actual_end_date" class="hdr"><?php echo $AppUI->_('Actual'); ?></a>
-	</th>-->
-      <th nowrap="nowrap">
-		<a href="?m=projects&orderby=project_status" class="hdr"><?php echo $AppUI->_('Status'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=projects&orderby=user_username" class="hdr"><?php echo $AppUI->_('Owner'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=projects&orderby=total_tasks" class="hdr"><?php echo $AppUI->_('Tasks'); ?></a>
-		<a href="?m=projects&orderby=my_tasks" class="hdr">(<?php echo $AppUI->_('My'); ?>)</a>
-	</th>
+    <?php
+    $fieldList = array('project_color_identifier', 'task_log_problem', 
+        'project_name', 'company_name', 'project_start_date', 'project_end_date',
+        'project_status', 'user_username', 'total_tasks');
+    $fieldNames = array('Progress', 'P', 'Project Name', 'Company', 'Start',
+        'End', 'Status', 'Owner', 'Tasks');
+    foreach ($fieldNames as $index => $name) {
+        ?><th nowrap="nowrap">
+            <a href="?m=projects&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                <?php echo $AppUI->_($fieldNames[$index]); ?>
+            </a>
+        </th><?php
+    }
+    ?>
 	<th nowrap="nowrap">
 		<?php echo $AppUI->_('Type'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=projects&orderby=task_log_problem" class="hdr"><?php echo $AppUI->_('P'); ?></a>
 	</th>
 	<th nowrap="nowrap">
 		<?php echo $AppUI->_('Selection'); ?>
