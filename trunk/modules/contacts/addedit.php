@@ -276,8 +276,8 @@ function removeContactMethod(index) {
 }
 
 window.addEvent("domready", function() {
-<?php foreach ($methods as $method): ?>
-    addContactMethod("<?php echo $method['method_name']; ?>", "<?php echo $method['method_value']; ?>");
+<?php foreach ($methods as $method => $value): ?>
+    addContactMethod("<?php echo $method; ?>", "<?php echo $value; ?>");
 <?php endforeach; ?>
     addContactMethod();
 });

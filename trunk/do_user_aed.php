@@ -100,26 +100,32 @@ if ($isNewUser) {
 	}
 }
 
-if (($msg = $contact->store($AppUI))) {
-	$AppUI->setMsg($msg, UI_MSG_ERROR);
-} else {
+$result = $contact->store($AppUI);
+if ($result) {
+    $contactArray = array('email_primary' => $_POST['contact_email'],
+        'phone_primary' => $_POST['contact_phone']);
+    $contact->setContactMethods($contactArray);
 
 	$user->user_contact = $contact->contact_id;
 	if (($msg = $user->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		if ($isNewUser) {
-			notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password']);
+        $contactMethods = $contact->getContactMethods(array('email_primary'));
+        if ($isNewUser) {
+            notifyNewExternalUser($contactMethods['email_primary'], $contact->contact_first_name, $user->user_username, $_POST['user_password']);
 		}
-		notifyHR('hr@yourdomain.com', 'w2P System Human Resources', $contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password'], $user->user_id);
+		notifyHR('hr@yourdomain.com', 'w2P System Human Resources', $contactMethods['email_primary'], $contact->contact_first_name, $user->user_username, $_POST['user_password'], $user->user_id);
 
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
-		$q->addQuery('ct.contact_email');
-		$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact', 'inner');
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = u.user_contact');
+        $q->addWhere("cm.method_name = 'email_primary'");
+        $q->addQuery('cm.method_value AS contact_email');
 		$q->addWhere('u.user_username = \'admin\'');
 		$admin_user = $q->loadList();
 	}
+} else {
+    $AppUI->setMsg($msg, UI_MSG_ERROR);
 }
 
 echo "<script language='javascript'>

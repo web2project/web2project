@@ -99,13 +99,13 @@ class CContact extends CW2pObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        if ($this->contact_id && $perms->checkModuleItem('contacts', 'edit', $this->contact_id)) {
+        if ($this->contact_id) {// && $perms->checkModuleItem('contacts', 'edit', $this->contact_id)) {
             if (($msg = parent::store())) {
                 return $msg;
             }
             $stored = true;
         }
-        if (0 == $this->contact_id && $perms->checkModuleItem('contacts', 'add')) {
+        if (0 == $this->contact_id) {// && $perms->checkModuleItem('contacts', 'add')) {
             if (($msg = parent::store())) {
                 return $msg;
             }
@@ -120,13 +120,15 @@ class CContact extends CW2pObject {
         /*
          *  TODO: I don't like using the $_POST in here..
          */
-		$methods = array();
-		if (!empty($_POST['contact_methods'])) {
-			foreach ($_POST['contact_methods']['field'] as $key => $field) {
-				$methods[$field] = $_POST['contact_methods']['value'][$key];
-			}
-		}
-		$this->setContactMethods($methods);
+        if ($stored) {
+            $methods = array();
+            if (!empty($_POST['contact_methods'])) {
+                foreach ($_POST['contact_methods']['field'] as $key => $field) {
+                    $methods[$field] = $_POST['contact_methods']['value'][$key];
+                }
+            }
+            $this->setContactMethods($methods);
+        }
         return $stored;
 	}
 
@@ -161,8 +163,13 @@ class CContact extends CW2pObject {
             $q->addWhere("method_name IN ('".implode("','", $methodsArray)."')");
         }
 		$q->addOrder('method_name');
-		$result = $q->loadList();
-		return $result ? $result : array();
+		$contacts = $q->loadList();
+
+        foreach($contacts as $row => $data) {
+            $results[$data['method_name']] = $data['method_value'];
+        }
+
+		return $results ? $results : array();
 	}
 
 	public function delete(CAppUI $AppUI = null) {
@@ -177,16 +184,6 @@ class CContact extends CW2pObject {
 	public function check() {
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
-
-        if ('' != $this->contact_url && !w2p_check_url($this->contact_url)) {
-            $errorArray['contact_url'] = $baseErrorMsg . 'contact url is not formatted properly';
-        }
-        if ('' != $this->contact_email && !w2p_check_email($this->contact_email)) {
-            $errorArray['contact_email'] = $baseErrorMsg . 'contact email is not formatted properly';
-        }
-        if ('' != $this->contact_email2 && !w2p_check_email($this->contact_email2)) {
-            $errorArray['contact_email2'] = $baseErrorMsg . 'contact email2 is not formatted properly';
-        }
 
 	    return $errorArray;
 	}
@@ -321,9 +318,10 @@ class CContact extends CW2pObject {
 
 		$mail = new Mail;
 
+        $contactMethods = $this->getContactMethods();
 		$mail->Subject('Hello', $locale_char_set);
 
-		if ($this->contact_email) {
+		if ('' != $contactMethods['email_primary']) {
 			$q = new DBQuery;
 			$q->addTable('companies');
 			$q->addQuery('company_id, company_name');
@@ -343,8 +341,8 @@ class CContact extends CW2pObject {
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}
 
-		if ($mail->ValidEmail($this->contact_email)) {
-			$mail->To($this->contact_email, true);
+		if ($mail->ValidEmail($contactMethods['email_primary'])) {
+			$mail->To($contactMethods['email_primary'], true);
 			$mail->Send();
 		}
 		return '';
@@ -489,7 +487,10 @@ class CContact extends CW2pObject {
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-		$q->addWhere("contact_email = '$email'");
+
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = user_contact');
+        $q->addWhere("cm.method_value = '$email'");
+
 		$q->setLimit(1);
 		$r = $q->loadResult();
 		$result = (is_array($r)) ? $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'] : 'User Not Found';
