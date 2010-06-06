@@ -505,7 +505,7 @@ class CFile extends CW2pObject {
 	public function notifyContacts($notifyContacts) {
 		global $AppUI, $w2Pconfig, $locale_char_set;
 
-        if ($notifyContacts == '1') {
+        if ($notifyContacts) {
             //if no project specified than we will not do anything
             if ($this->file_project != 0) {
                 $this->_project = new CProject();
@@ -524,41 +524,52 @@ class CFile extends CW2pObject {
                 $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id;
 
                 if (intval($this->_task->task_id) != 0) {
-                  $body .= "\n\n" . $AppUI->_('Task') . ':    ' . $this->_task->task_name;
-                  $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id;
-                  $body .= "\n" . $AppUI->_('Description') . ":\n" . $this->_task->task_description;
+                    $body .= "\n\n" . $AppUI->_('Task') . ':    ' . $this->_task->task_name;
+                    $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id;
+                    $body .= "\n" . $AppUI->_('Description') . ":\n" . $this->_task->task_description;
 
-                  $q = new DBQuery;
-                  $q->addTable('project_contacts', 'pc');
-                  $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
-                  $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-                  $q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
-                  $sql = '(' . $q->prepare() . ')';
-                  $q->clear();
-                  $sql .= ' UNION ';
-                  $q->addTable('task_contacts', 'tc');
-                  $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
-                  $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-                  $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
-                  $sql .= '(' . $q->prepare() . ')';
-                  $q->clear();
-                  $this->_users = $q->loadList();
+                    $q = new DBQuery;
+                    $q->addTable('project_contacts', 'pc');
+                    $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+                    $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
+                    $q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
+                    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+                    $q->addWhere("cm.method_name = 'email_primary'");
+                    $q->addQuery('cm.method_value AS contact_email');
+
+                    $sql = '(' . $q->prepare() . ')';
+                    $q->clear();
+                    $sql .= ' UNION ';
+                    $q->addTable('task_contacts', 'tc');
+                    $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+                    $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
+                    $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
+                    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+                    $q->addWhere("cm.method_name = 'email_primary'");
+                    $q->addQuery('cm.method_value AS contact_email');
+
+                    $sql .= '(' . $q->prepare() . ')';
+                    $q->clear();
+                    $this->_users = $q->loadList();
                 } else {
-                  $q = new DBQuery;
-                  $q->addTable('project_contacts', 'pc');
-                  $q->addQuery('pc.project_id, pc.contact_id');
-                  $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
-                  $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-                  $q->addWhere('pc.project_id = ' . (int)$this->file_project);
+                    $q = new DBQuery;
+                    $q->addTable('project_contacts', 'pc');
+                    $q->addQuery('pc.project_id, pc.contact_id');
+                    $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+                    $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
+                    $q->addWhere('pc.project_id = ' . (int)$this->file_project);
+                    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+                    $q->addWhere("cm.method_name = 'email_primary'");
+                    $q->addQuery('cm.method_value AS contact_email');
 
-                  $this->_users = $q->loadList();
-                  $q->clear();
+                    $this->_users = $q->loadList();
+                    $q->clear();
                 }
 
                 $body .= "\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
                 if ($this->_message != 'deleted') {
-                  $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $this->file_id;
-                  $body .= "\n" . $AppUI->_('Description') . ":\n" . $this->file_description;
+                    $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $this->file_id;
+                    $body .= "\n" . $AppUI->_('Description') . ":\n" . $this->file_description;
                 }
 
                 //send mail
@@ -566,10 +577,10 @@ class CFile extends CW2pObject {
 
                 foreach ($this->_users as $row) {
 
-                  if ($mail->ValidEmail($row['contact_email'])) {
-                    $mail->To($row['contact_email'], true);
-                    $mail->Send();
-                  }
+                    if ($mail->ValidEmail($row['contact_email'])) {
+                        $mail->To($row['contact_email'], true);
+                        $mail->Send();
+                    }
                 }
                 return '';
             }

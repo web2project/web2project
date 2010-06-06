@@ -805,7 +805,7 @@ class CEvent extends CW2pObject {
 		$q->addQuery('user_id, contact_first_name,contact_last_name');
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
         $q->addWhere("cm.method_name = 'email_primary'");
-        $q->addQuery('cm.method_value');
+        $q->addQuery('cm.method_value as contact_email');
 		$q->addWhere('u.user_contact = con.contact_id');
 		$q->addWhere('user_id in (' . implode(',', $assignee_list) . ')');
 		$users = $q->loadHashList('user_id');
