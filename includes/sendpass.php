@@ -27,10 +27,31 @@ function sendNewPass() {
 
 	$q = new DBQuery;
 	$q->addTable('users');
-	$q->addJoin('contacts', '', 'user_contact = contact_id', 'inner');
+	$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
 	$q->addQuery('user_id');
 	$q->addWhere('user_username = \'' . $checkusername . '\'');
-	$q->addWhere('LOWER(contact_email) = \'' . $confirmEmail . '\'');
+
+    /* Begin Hack */
+    /*
+     * This is a particularly annoying hack but I don't know of a better
+     *   way to resolve #457. In v2.0, there was a refactoring to allow for
+     *   muliple contact methods which resulted in the contact_email being
+     *   removed from the contacts table. If the user is upgrading from
+     *   v1.x and they try to log in before applying the database, crash.
+     *   Info: http://bugs.web2project.net/view.php?id=457
+     */
+    $qTest = new DBQuery();
+    $qTest->addTable('w2pversion');
+    $qTest->addQuery('max(db_version)');
+    $dbVersion = $qTest->loadResult();
+    if ($dbVersion >= 21) {
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
+        $q->addWhere("cm.method_value = '$confirmEmail'");
+    } else {
+        $q->addWhere("LOWER(contact_email) = '$confirmEmail'");
+    }
+    /* End Hack */
+
 	if (!($user_id = $q->loadResult()) || !$checkusername || !$confirmEmail) {
 		$AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
 		$AppUI->redirect();
