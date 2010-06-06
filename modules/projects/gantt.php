@@ -139,8 +139,11 @@ $gantt->setDateRange($start_date, $end_date);
 $row = 0;
 
 if (!is_array($projects) || 0 == count($projects)) {
-  $d = new CDate();
-  $gantt->addBar($AppUI, ' ' . $AppUI->_('No projects found'), '', $d->getDate(), $d->getDate(), ' ', 0.6, 'red');
+    $d = new CDate();
+    $columnValues = array('project_name' => $AppUI->_('No projects found'), 
+                        'start_date' => $d->getDate(), 'end_date' => $d->getDate(),
+                        'actual_end' => $d->getDate());
+    $gantt->addBar($columnValues, ' ' , 0.6, 'red');
 } else {
 	foreach ($projects as $p) {
 
@@ -184,7 +187,7 @@ if (!is_array($projects) || 0 == count($projects)) {
 		$startdate = new CDate($start);
 		$actual_end = intval($p['project_actual_end_date']) ? $p['project_actual_end_date'] : $end;
 
-    $columnValues = array('project_name' => $name, 'start_date' => $start,
+        $columnValues = array('project_name' => $name, 'start_date' => $start,
                           'end_date' => $end, 'actual_end' => $actual_end);
 		$gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'], $p['project_active'], $progress);
 
