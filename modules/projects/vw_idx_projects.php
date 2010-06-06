@@ -108,7 +108,6 @@ if ($is_tabbed) {
 	}
 	$xpg_totalrecs = count($projects);
 	$xpg_pagesize = count($projects);
-}
 ?>
 
 <form action="./index.php" method="get" accept-charset="utf-8">
