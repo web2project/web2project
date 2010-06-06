@@ -205,8 +205,13 @@ class CContact extends CW2pObject {
             $q->addWhere("method_name IN ('".implode("','", $methodsArray)."')");
         }
 		$q->addOrder('method_name');
-		$result = $q->loadList();
-		return $result ? $result : array();
+		$contacts = $q->loadList();
+
+        foreach($contacts as $row => $data) {
+            $results[$data['method_name']] = $data['method_value'];
+        }
+
+		return $results ? $results : array();
 	}
 
 	public function delete(CAppUI $AppUI = null) {
