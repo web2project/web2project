@@ -13,22 +13,17 @@ $utypes = w2PgetSysVal('UserType');
 			<th width="125">
 				<?php echo $AppUI->_('Login History'); ?>
 			</th>
-		<?php } ?>
-		<th width="150">
-			<a href="?m=admin&a=index&orderby=user_username" class="hdr"><?php echo $AppUI->_('Login Name'); ?></a>
-		</th>
-		<th>
-			<a href="?m=admin&a=index&orderby=contact_last_name" class="hdr"><?php echo $AppUI->_('Real Name'); ?></a>
-		</th>
-		<th>
-			<a href="?m=admin&a=index&orderby=user_type" class="hdr"><?php echo $AppUI->_('Type'); ?></a>
-		</th>
-		<th>
-			<a href="?m=admin&a=index&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
-		</th>
-		<th>
-			<a href="?m=admin&a=index&orderby=dept_name" class="hdr"><?php echo $AppUI->_('Department'); ?></a>
-		</th>
+		<?php }
+        $fieldList = array('user_username', 'contact_last_name', 'user_type', 'company_name', 'dept_name');
+        $fieldNames = array('Login Name', 'Real Name', 'Type', 'Company', 'Department');
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+                <a href="?m=admin&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+                </a>
+            </th><?php
+        }
+        ?>
 	</tr>
 <?php
 
