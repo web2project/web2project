@@ -191,15 +191,6 @@ if (function_exists('styleRenderBoxTop')) {
 														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Job Title') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													} elseif ($val == 'dept_name') {
 														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Department') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-//$contactMethods = array('email_primary', 'phone_primary', 'phone_alt', 'phone_mobile', 'phone_fax');
-//													} elseif ($val == 'contact_phone') {
-//														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Work Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-//													} elseif ($val == 'contact_phone2') {
-//														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Home Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-//													} elseif ($val == 'contact_mobile') {
-//														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Mobile Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-//													} elseif ($val == 'contact_fax') {
-//														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Fax') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													} elseif ($val == 'contact_country' && $carr[$z][$x][$key]) {
 														$s .= '<tr><td class="hilite" colspan="2">' . ($countries[$carr[$z][$x][$key]] ? $countries[$carr[$z][$x][$key]] : $carr[$z][$x][$key]) . '<br /></td></tr>';
 													} elseif ($val != 'contact_country') {
@@ -211,9 +202,9 @@ if (function_exists('styleRenderBoxTop')) {
                                             $contact->contact_id = $contactid;
                                             $methods = $contact->getContactMethods($contactMethods);
                                             
-                                            foreach ($methods as $method) {
-                                                $s .= '<tr><td width="35%"><strong>' . $AppUI->_($methodLabels[$method['method_name']]) . ':</strong></td>';
-                                                $s .= '<td class="hilite" width="65%">' . $method['method_value'] . '</td></tr>';
+                                            foreach ($methods as $method => $value) {
+                                                $s .= '<tr><td width="35%"><strong>' . $AppUI->_($methodLabels[$method]) . ':</strong></td>';
+                                                $s .= '<td class="hilite" width="65%">' . $value . '</td></tr>';
                                             }
 
 											echo $s;

@@ -16,6 +16,7 @@ if ($contact_id) {
 
 	$contact = new CContact();
 	$contact->loadFull($AppUI, $contact_id);
+    $contactMethods = $contact->getContactMethods();
 	
 	// include PEAR vCard class
 	require_once ($AppUI->getLibraryClass('PEAR/Contact_Vcard_Build'));
@@ -47,31 +48,28 @@ if ($contact_id) {
 	$vcard->setUniqueID($contact->contact_company);
 
 	// add a phone number
-	$vcard->addTelephone($contact->contact_phone);
+	$vcard->addTelephone($contactMethods['phone_primary']);
 	$vcard->addParam('TYPE', 'PF');
 
 	// add a phone number
-	$vcard->addTelephone($contact->contact_phone2);
+	$vcard->addTelephone($contactMethods['phone_alt']);
 
 	// add a mobile phone number
-	$vcard->addTelephone($contact->contact_mobile);
+	$vcard->addTelephone($contactMethods['phone_mobile']);
 	$vcard->addParam('TYPE', 'car');
 
 	// add a work email.  note that we add the value
 	// first and the param after -- Contact_Vcard_Build
 	// is smart enough to add the param in the correct
 	// place.
-	$vcard->addEmail($contact->contact_email);
-	//$vcard->addParam('TYPE', 'WORK');
+	$vcard->addEmail($contactMethods['email_primary']);
 	$vcard->addParam('TYPE', 'PF');
 
 	// add a home/preferred email
-	$vcard->addEmail($contact->contact_email2);
-	//$vcard->addParam('TYPE', 'HOME');
+	$vcard->addEmail($contactMethods['email_alt']);
 
 	// add an address
 	$vcard->addAddress('', $contact->contact_address2, $contact->contact_address1, $contact->contact_city, $contact->contact_state, $contact->contact_zip, $contact->contact_country);
-	//$vcard->addParam('TYPE', 'WORK');
 
 	// get back the vCard
 	$text = $vcard->fetch();
