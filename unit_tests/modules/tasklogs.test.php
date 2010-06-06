@@ -281,6 +281,9 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
     }
 
+    /**
+     * Test trimming all trimmable characters from all object properties
+     */
     public function testW2PTrimAll()
     {
         $this->obj->bind($this->post_data, null, true, true);
@@ -324,5 +327,32 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_created);
         $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_updated);
         $this->assertEquals(1,                                              $this->obj->task_log_updator);
+    }
+
+    /**
+     * Test the check function with a proper float
+     */
+    public function testCheckFloat()
+    {
+        $this->obj->bind($this->post_data, null, true, true);
+
+        $this->obj->check();
+
+        $this->assertType('float', $this->obj->task_log_hours);
+        $this->assertSame(2.75, $this->obj->task_log_hours);
+    }
+
+    /**
+     * Test the check function with a string
+     */
+    public function testCheckString()
+    {
+        $this->obj->bind($this->post_data, null, true, true);
+        $this->obj->task_log_hours = 'abcd';
+
+        $this->obj->check();
+
+        $this->assertType('float', $this->obj->task_log_hours);
+        $this->assertSame((float)0, $this->obj->task_log_hours);
     }
 }
