@@ -51,27 +51,33 @@ if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
 ?>
-<table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl">
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
-<tr><td colspan="5">
-	<table width="100%" cellspacing="1" cellpadding="2" border="0">
-	<tr>
-		<td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
-		<td width="100%" align="right">
-		<?php if ($canAuthor) { ?>
-			<input type="button" class="button" style="width:120;" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
-		<?php } ?>
-		</td>
-	</tr>
-	</table>
-</td></tr>
-<tr>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&orderby=watch_user" class="hdr"><?php echo $AppUI->_('Watch'); ?></a></th>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&orderby=message_title" class="hdr"><?php echo $AppUI->_('Topics'); ?></a></th>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&orderby=user_username" class="hdr"><?php echo $AppUI->_('Author'); ?></a></th>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&orderby=replies" class="hdr"><?php echo $AppUI->_('Replies'); ?></a></th>
-	<th><a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&orderby=latest_reply" class="hdr"><?php echo $AppUI->_('Last Post'); ?></a></th>
-</tr>
+<table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl">
+    <tr><td colspan="5">
+        <table width="100%" cellspacing="1" cellpadding="2" border="0">
+        <tr>
+            <td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
+            <td width="100%" align="right">
+            <?php if ($canAuthor) { ?>
+                <input type="button" class="button" style="width:120;" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
+            <?php } ?>
+            </td>
+        </tr>
+        </table>
+    </td></tr>
+    <tr>
+        <?php
+        $fieldList = array('watch_user', 'message_title', 'user_username', 'replies', 'latest_reply');
+        $fieldNames = array('Watch', 'Topics', 'Author', 'Replies', 'Last Post');
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+                <a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+                </a>
+            </th><?php
+        }
+        ?>
+    </tr>
 <?php
 
 $now = new CDate();

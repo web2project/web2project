@@ -71,46 +71,24 @@ $department = $tmpDepartments;
 </tr>
 </table>
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
-<tr>
-	<th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_color_identifier" class="hdr"><?php echo $AppUI->_('Color'); ?></a>
-	</th>
-	</th>
-        <th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_priority" class="hdr"><?php echo $AppUI->_('P'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_name" class="hdr"><?php echo $AppUI->_('Project Name'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=company_name" class="hdr"><?php echo $AppUI->_('Company'); ?></a>
-	</th>
-          <th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_start_date" class="hdr"><?php echo $AppUI->_('Start'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_duration" class="hdr"><?php echo $AppUI->_('Duration'); ?></a>
-	</th>
-        <th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_end_date" class="hdr"><?php echo $AppUI->_('Due Date'); ?></a>
-	</th>
-        <th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_actual_end_date" class="hdr"><?php echo $AppUI->_('Actual'); ?></a>
-	</th>
-        <th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=task_log_problem" class="hdr"><?php echo $AppUI->_('LP'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=user_username" class="hdr"><?php echo $AppUI->_('Owner'); ?></a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=total_tasks" class="hdr"><?php echo $AppUI->_('Tasks'); ?></a>
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=my_tasks" class="hdr">(<?php echo $AppUI->_('My'); ?>)</a>
-	</th>
-	<th nowrap="nowrap">
-		<a href="?m=<?php echo $m; ?><?php echo (isset($a) ? '&a=' . $a : ''); ?><?php echo (isset($extraGet) ? $extraGet : ''); ?>&orderby=project_status" class="hdr"><?php echo $AppUI->_('Status'); ?></a>
-	</th>
-</tr>
+    <tr>
+        <?php
+        $fieldList = array('project_color_identifier', 'project_priority',
+            'project_name', 'company_name', 'project_start_date', 'project_duration',
+            'project_end_date', 'project_actual_end_date', 'task_log_problem',
+            'user_username', 'project_task_count', 'project_status');
+        $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
+            'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
+        $baseUrl = '?m='.$m.(isset($a) ? '&a=' . $a : '').(isset($extraGet) ? $extraGet : '');
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+                <a href="<?php echo $baseUrl; ?>&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+                </a>
+            </th><?php
+        }
+        ?>
+    </tr>
 
 <?php
 $none = true;
