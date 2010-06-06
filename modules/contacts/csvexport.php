@@ -55,25 +55,29 @@ $text .= sprintf("%s\r\n", "");
 $contactList = CContact::searchContacts($AppUI);
 	
 foreach ($contactList as $contact) {
-	// Fields 1- 10
+	$contact = new CContact();
+    $contact->contact_id = $contact['contact_id'];
+    $contactMethods = $contact->getContactMethods();
+    
+    // Fields 1- 10
 	$text .= sprintf("\"\",\"%s\",\"\",\"%s\",\"\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",", $contact['contact_first_name'], $contact['contact_last_name'], $contact['company_name'], $contact['dept_name'], $contact['contact_title'], $contact['contact_address1'], $contact['contact_address2']);
 	// Fields 11- 20
 	$text .= sprintf(",\"%s\",\"%s\",\"%s\",,,,,,,", $contact['contact_city'], $contact['contact_state'], $contact['contact_zip']);
 	// Fields 21- 30
 	$text .= sprintf(",,,,,,,,,,");
 	// Fields 31- 40
-	settype($contact['contact_phone'], 'string');
-	$text .= sprintf(",\"%s\",,,,,,,,,", $contact['contact_phone']);
+	settype($contactMethods['phone_primary'], 'string');
+	$text .= sprintf(",\"%s\",,,,,,,,,", $contactMethods['phone_primary']);
 	// Fields 41- 50
-	settype($contact['contact_mobile'], 'string');
-	$text .= sprintf("\"%s\",,,,,,,,\"\",\"0/0/00\",", '' . $contact['contact_mobile']);
+	settype($contactMethods['phone_mobile'], 'string');
+	$text .= sprintf("\"%s\",,,,,,,,\"\",\"0/0/00\",", '' . $contactMethods['phone_mobile']);
 	// Fields 51- 60
 	if ($contact['contact_type'] != '') {
 		$categories = "web2Project; " . $contact['contact_type'];
 	} else {
 		$categories = "web2Project;";
 	}
-	$text .= sprintf(",,\"%s\",\"%s\",,,\"%s\",\"%s\",\"%s\",,", $contact['contact_birthday'], $categories, $contact['contact_email'], "SMTP", $contact['contact_first_name'] . " " . $contact['contact_last_name']);
+	$text .= sprintf(",,\"%s\",\"%s\",,,\"%s\",\"%s\",\"%s\",,", $contact['contact_birthday'], $categories, $contactMethods['email_primary'], "SMTP", $contact['contact_first_name'] . " " . $contact['contact_last_name']);
 	// Fields 61- 70
 	$text .= sprintf(",,,,,\"Unspecified\",,,,,");
 	// Fields 71- 80

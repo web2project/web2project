@@ -76,12 +76,15 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_SQL {
 			$q->addTable('contacts');
 			$q->addUpdate('contact_first_name', $first_name);
 			$q->addUpdate('contact_last_name', $last_name);
-			$q->addUpdate('contact_email', $email);
 			$q->addWhere('contact_id = ' . $row['user_contact']);
 			if (!$q->exec()) {
 				die($AppUI->_('Could not update user details'));
 			}
 			$q->clear();
+            $c = new CContact();
+            $c->contact_id = $row['user_contact'];
+            $contactArray = array('email_primary' => $email);
+            $c->setContactMethods($contactArray);
 		}
 		return true;
 	}
@@ -92,16 +95,10 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_SQL {
 		$c = new CContact();
 		$c->contact_first_name = $first;
 		$c->contact_last_name = $last;
-		$c->contact_email = $email;
 		$c->contact_order_by = $first . ' ' . $last;
-
-		$q = new DBQuery;
-		$q->insertObject('contacts', $c, 'contact_id');
-		$q->clear();
-		$contact_id = ($c->contact_id == null) ? 'NULL' : $c->contact_id;
-		if (!$c->contact_id) {
-			die($AppUI->_('Failed to create user details'));
-		}
+        $c->store();
+        $contactArray = array('email_primary' => $email);
+        $c->setContactMethods($contactArray);
 
 		$q = new DBQuery;
 		$q->addTable('users');

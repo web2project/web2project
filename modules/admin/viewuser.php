@@ -40,6 +40,11 @@ $tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
 $user = new CUser();
 $user->loadFull($user_id);
 
+$contact = new CContact();
+$contact->contact_id = $user->user_contact;
+$methods = $contact->getContactMethods();
+$methodLabels = w2PgetSysVal('ContactMethods');
+
 if (!$user) {
 	$titleBlock = new CTitleBlock('Invalid User ID', 'helix-setup-user.png', $m, "$m.$a");
 	$titleBlock->addCrumb('?m=admin', 'users list');
@@ -116,9 +121,9 @@ if (!$user) {
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
 			<td class="hilite" width="100%">
 				<?php echo $user->contact_address1; ?><br />
-        <?php echo ($user->contact_address2 == '') ? '' : $user->contact_address2.'<br />'; ?>
-        <?php echo $user->contact_city . ', ' . $user->contact_state . ' ' . $user->contact_zip; ?><br />
-        <?php echo isset($countries[$user->contact_country]) ? $countries[$user->contact_country] : $user->contact_country; ?>
+                <?php echo ($user->contact_address2 == '') ? '' : $user->contact_address2.'<br />'; ?>
+                <?php echo $user->contact_city . ', ' . $user->contact_state . ' ' . $user->contact_zip; ?><br />
+                <?php echo isset($countries[$user->contact_country]) ? $countries[$user->contact_country] : $user->contact_country; ?>
 			</td>
 		</tr>
 		</table>
@@ -126,73 +131,47 @@ if (!$user) {
 	</td>
 	<td width="50%">
 		<table width="100%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Birthday'); ?>:</td>
-			<td class="hilite" width="100%">
-        <?php
-          $bday = new CDate($user->contact_birthday);
-          $df = $AppUI->getPref('SHDATEFORMAT'); 
-          echo $bday->format($df);
-        ?>
-      </td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap">Jabber:</td>
-			<td class="hilite" width="100%"><?php echo $user->contact_jabber; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap">ICQ:</td>
-			<td class="hilite" width="100%"><?php echo $user->contact_icq; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap">AOL Nick:</td>
-			<td class="hilite" width="100%"><a href="aim:<?php echo $user->contact_aol; ?>"><?php echo $user->contact_aol; ?></a></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap">MSN:</td>
-			<td class="hilite" width="100%"><?php echo $user->contact_msn; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap">Yahoo:</td>
-			<td class="hilite" width="100%"><a href="ymsgr:sendIM?<?php echo $user->contact_yahoo; ?>"><?php echo $user->contact_yahoo; ?></a></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap">Skype:</td>
-			<td class="hilite" width="100%"><a href="skype:<?php echo $user->contact_skype; ?>"><?php echo $user->contact_skype; ?></a></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap">Google:</td>
-			<td class="hilite" width="100%"><a href="google:<?php echo $user->contact_google; ?>"><?php echo $user->contact_google; ?></a></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo '<a href="mailto:' . $user->contact_email . '">' . $user->contact_email . '</a>'; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calendar Feed'); ?>:</td>
-			<td class="hilite" width="100%">
-				<?php if ($user->feed_token != '') { 
-					$calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token;
-					?>
-					<a href="<?php echo $calendarFeed; ?>">calendar feed</a>
-				<?php } ?>
-				&nbsp;&nbsp;&nbsp;
-				<form name="regenerateToken" action="./index.php?m=admin" method="post" accept-charset="utf-8">
-					<input type="hidden" name="user_id" value="<?php echo intval($user->user_id); ?>" />
-					<input type="hidden" name="dosql" value="do_user_token" />
-					<input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
-					<input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" />
-				</form>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2"><strong><?php echo $AppUI->_('Signature'); ?>:</strong></td>
-		</tr>
-		<tr>
-			<td class="hilite" width="100%" colspan="2">
-				<?php echo w2p_textarea($user->user_signature); ?>&nbsp;
-			</td>
-		</tr>
+            <tr>
+                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Birthday'); ?>:</td>
+                <td class="hilite" width="100%">
+                    <?php
+                    $bday = new CDate($user->contact_birthday);
+                    $df = $AppUI->getPref('SHDATEFORMAT');
+                    echo $bday->format($df);
+                    ?>
+                </td>
+            </tr>
+            <?php foreach ($methods as $method => $value): ?>
+                <tr>
+                    <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$method]); ?>:</td>
+                    <td class="hilite" width="100%"><?php echo $value; ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calendar Feed'); ?>:</td>
+                <td class="hilite" width="100%">
+                    <?php if ($user->feed_token != '') {
+                        $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token;
+                        ?>
+                        <a href="<?php echo $calendarFeed; ?>">calendar feed</a>
+                    <?php } ?>
+                    &nbsp;&nbsp;&nbsp;
+                    <form name="regenerateToken" action="./index.php?m=admin" method="post" accept-charset="utf-8">
+                        <input type="hidden" name="user_id" value="<?php echo intval($user->user_id); ?>" />
+                        <input type="hidden" name="dosql" value="do_user_token" />
+                        <input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
+                        <input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" />
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong><?php echo $AppUI->_('Signature'); ?>:</strong></td>
+            </tr>
+            <tr>
+                <td class="hilite" width="100%" colspan="2">
+                    <?php echo w2p_textarea($user->user_signature); ?>&nbsp;
+                </td>
+            </tr>
 		</table>
 	</td>
 </tr>

@@ -203,7 +203,7 @@ foreach ($tasks as $row) {
 	//add information about assigned users into the page output
 	$q->clear();
 	$q->addQuery('ut.user_id,	u.user_username');
-	$q->addQuery('contact_email, ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
+	$q->addQuery('ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
 	$q->addQuery('contact_first_name, contact_last_name');
 	$q->addTable('user_tasks', 'ut');
 	$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
@@ -211,6 +211,9 @@ foreach ($tasks as $row) {
 	$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
 	$q->addGroup('ut.user_id');
 	$q->addOrder('perc_assignment desc, user_username');
+    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+    $q->addWhere("cm.method_name = 'email_primary'");
+    $q->addQuery('cm.method_value AS contact_email');
 
 	$assigned_users = array();
 	$row['task_assigned_users'] = $q->loadList();
