@@ -338,8 +338,8 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->check();
 
-        $this->assertType('float', $this->obj->task_log_hours);
-        $this->assertSame(2.75, $this->obj->task_log_hours);
+        $this->assertType('float',  $this->obj->task_log_hours);
+        $this->assertSame(2.75,     $this->obj->task_log_hours);
     }
 
     /**
@@ -352,7 +352,134 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->check();
 
-        $this->assertType('float', $this->obj->task_log_hours);
+        $this->assertType('float',  $this->obj->task_log_hours);
         $this->assertSame((float)0, $this->obj->task_log_hours);
+    }
+
+    /**
+     * Test canDelete with proper permissions
+     */
+    public function testCanDelete()
+    {
+        global $AppUI;
+        $msg = '';
+
+        $return = $this->obj->canDelete($msg);
+
+        $this->assertTrue($return);
+        $this->assertEquals('', $msg);
+    }
+
+    /**
+     * Test canDelete without permissions
+     */
+    public function testCanDeleteNoPermissions()
+    {
+        global $AppUI;
+        $msg = '';
+
+         // Login as another user for permission purposes
+        $old_AppUI = $AppUI;
+        $AppUI  = new CAppUI;
+        $_POST['login'] = 'login';
+        $_REQUEST['login'] = 'sql';
+
+        $return = $this->obj->canDelete($msg);
+
+        // Restore AppUI for following tests since its global, yuck!
+        $AppUI = $old_AppUI;
+
+        $this->assertFalse($return);
+        $this->assertEquals('noDeletePermission', $msg);
+    }
+
+    /**
+     * Tests canDelete with passing an object id
+     */
+    public function testCanDeleteOid()
+    {
+        global $AppUI;
+        $msg = '';
+
+        $return = $this->obj->canDelete($msg, 2);
+
+        $this->assertTrue($return);
+        $this->assertEquals('', $msg);
+    }
+
+    /**
+     * Tests canDelete with passing an object id and a join array
+     */
+    public function testCanDeleteOidJoins()
+    {
+        $this->markTestSkipped('Nothing uses tasklog_id as a foreign key so joins won\'t work');
+    }
+
+    /**
+     * Test getting allowed records with a uid passed
+     */
+    public function testGetAllowedRecordUid()
+    {
+        global $AppUI;
+
+        $allowed_records = $this->obj->getAllowedRecords(1);
+
+        $this->assertEquals(1, count($allowed_records));
+        $this->assertEquals(1, $allowed_records[1]);
+    }
+
+    /**
+     * Test getting allowed records when passing a uid and fields
+     */
+    public function testGetAllowedRecordsFields()
+    {
+        global $AppUI;
+
+        $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_task, task_log.task_log_name');
+
+        $this->assertEquals(1,              count($allowed_records));
+        $this->assertEquals('Task Log 1',   $allowed_records[1]);
+    }
+
+
+    /**
+     * Tests getting allowed records with an order by
+     */
+    public function testGetAllowedRecordsOrderBy()
+    {
+        global $AppUI;
+
+        $allowed_records = $this->obj->getAllowedRecords(1, '*', 'task_log.task_log_hours');
+
+        $this->assertEquals(1, count($allowed_records));
+        $this->assertEquals(1, $allowed_records[1]);
+    }
+
+    /**
+     * Test getting allowed records with an index specified
+     */
+    public function testGetAllowedRecordsIndex()
+    {
+        global $AppUI;
+
+        $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_name', '', 'task_log_name');
+
+        $this->assertEquals(1,              count($allowed_records));
+        $this->assertEquals(2,              count($allowed_records['Task Log 1']));
+        $this->assertEquals('Task Log 1',   $allowed_records['Task Log 1']['task_log_name']);
+        $this->assertEquals('Task Log 1',   $allowed_records['Task Log 1'][0]);
+    }
+
+    /**
+     * Test getting allowed records with extra data specified
+     */
+    public function testGetAllowedRecordsExtra()
+    {
+        $extra = array('from' => 'task_log', 'join' => 'tasks', 'on' => 'task_id = task_log_task',
+                       'where' => 'task_id = 1');
+        $allowed_records = $this->obj->getAllowedRecords(1, '*', '', null, $extra);
+
+        $this->assertEquals(1, count($allowed_records));
+        $this->assertEquals(1, $allowed_records[1]);
     }
 }
