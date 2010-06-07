@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$contact_id = intval(w2PgetParam($_GET, 'contact_id', 0));
-$company_id = intval(w2PgetParam($_GET, 'company_id', 0));
-$dept_id = intval(w2PgetParam($_GET, 'dept_id', 0));
+$contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
+$company_id = (int) w2PgetParam($_GET, 'company_id', 0);
+$dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
 $company = new CCompany();
 $company->load($company_id);
@@ -76,6 +76,9 @@ if ($contact_id == 0 && $company_id > 0) {
 	$dept_detail['dept_name'] = $dept_name;
 }
 
+$methods = $row->getContactMethods();
+$methodLabels = w2PgetSysVal('ContactMethods');
+
 ?>
 
 <script language="javascript">
@@ -92,9 +95,6 @@ function submitIt() {
 	} else if (form.contact_order_by.value.length < 1) {
 		orderByName('name');
 		form.submit();
-	} else if (form.contact_email.value.length < 1 && form.contact_updateask.checked) {
-		alert( '<?php echo $AppUI->_('You must enter a valid email before using the contact update feature.', UI_OUTPUT_JS); ?>' );
-		form.contact_email.focus();
 	} else {
 		form.submit();
 	}
@@ -116,7 +116,6 @@ function setDepartment( key, val ){
 function popCompany() {
 	var f = document.changecontact;
 	window.open('./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=companies&company_id=<?php echo $company_detail['company_id']; ?>', 'company', 'left=50,top=50,height=320,width=400,resizable');
-	//window.open('./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=companies&company_id='+f.contact_company.value, 'company', 'left=50,top=50,height=320,width=400,resizable');
 }
 
 function setCompany( key, val ){
@@ -175,7 +174,113 @@ function updateVerify() {
 		form.contact_email.focus();
 	}
 }
+function addContactMethod(field, value) {
+    var selects, index, select, tr, td;
 
+    /* Determine how many contact method rows exist */
+    index = 0;
+    selects = document.getElementsByTagName("select");
+    for (i = 0; i < selects.length; i++) {
+        select = selects[i];
+        if (select.getAttribute("name").indexOf("contact_methods") == 0) {
+            index++;
+        }
+    }
+
+    /* Create select menu for contact method type */
+    function addOption(select, value, text, selected) {
+        option = new Element("option");
+        option.setAttribute("value", value);
+        option.innerHTML = text;
+        option.selected = (value == selected);
+        select.appendChild(option);
+    }
+
+    select = new Element('select', {
+        name: "contact_methods[field][" + index + "]",
+        size: "1",
+        class: "text"
+    });
+
+    addOption(select, "", "");
+    <?php foreach ($methodLabels as $value => $text): ?> 
+    addOption(select, "<?php echo $value; ?>", "<?php echo $text; ?>", field);
+    <?php endforeach; ?> 
+
+    /* Create a new table row */
+    tr = new Element('tr', { id: "contact_methods[" + index + "]" });
+
+    /* Add contact method type menu to the table row */
+    td = new Element('td', { align: "right" });
+    td.appendChild(select);
+    tr.appendChild(td);
+
+    /* Add text field for the contact method value to the table row */
+    td = new Element('td');
+    td.appendChild(new Element('input', {
+        type: "text",
+        class: "text",
+        name: "contact_methods[value][" + index + "]",
+        value: value ? value : "",
+        maxlength: "255",
+        size: "25"
+    }));
+    tr.appendChild(td);
+
+    /* Add a button to remove the table row */
+    a = new Element("a", {
+        id: "remove_contact_method",
+        href: "javascript:removeContactMethod('" + index + "');"
+    });
+
+    img = new Element("img", {
+        src: "<?php echo w2PfindImage('icons/remove.png'); ?>",
+        style: "border: 0;"
+    });
+
+    a.appendChild(img);
+    td.appendChild(a);
+
+    /* Add or relocate the button to add new row */
+    add = document.getElementById("add_contact_method");
+    if (!add) {
+        add = new Element("span", {
+            id: "add_contact_method" }
+        );
+
+        a = new Element("a", {
+            href: "javascript:addContactMethod();"
+        });
+
+        img = new Element("img", {
+            src: "<?php echo w2PfindImage('icons/edit_add.png'); ?>",
+            style: "border: 0;"
+        });
+
+        a.appendChild(img);
+
+        add.appendChild(a);
+    } else {
+        add.parentNode.removeChild(add);
+    }
+    td.appendChild(add);
+
+    /* Add the new table row to the table */
+    bottomRow = document.getElementById("custom_fields");
+    bottomRow.parentNode.insertBefore(tr, bottomRow);
+}
+
+function removeContactMethod(index) {
+    tr = document.getElementById("contact_methods[" + index + "]");
+    tr.parentNode.removeChild(tr);
+}
+
+window.addEvent("domready", function() {
+<?php foreach ($methods as $method => $value): ?>
+    addContactMethod("<?php echo $method; ?>", "<?php echo $value; ?>");
+<?php endforeach; ?>
+    addContactMethod();
+});
 </script>
 
 <form name="changecontact" action="?m=contacts" method="post" accept-charset="utf-8">
@@ -305,100 +410,16 @@ function updateVerify() {
                         </td>
                     </tr>
                     <tr>
-                        <td align="right"><?php echo $AppUI->_('Work Phone'); ?>:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_phone" value="<?php echo $row->contact_phone; ?>" maxlength="30" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><?php echo $AppUI->_('Home Phone'); ?>:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_phone2" value="<?php echo $row->contact_phone2; ?>" maxlength="30" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><?php echo $AppUI->_('Fax'); ?>:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_fax" value="<?php echo $row->contact_fax; ?>" maxlength="30" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><?php echo $AppUI->_('Mobile Phone'); ?>:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_mobile" value="<?php echo $row->contact_mobile; ?>" maxlength="30" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><?php echo $AppUI->_('Email'); ?>:</td>
-                        <td nowrap="nowrap">
-                            <input type="text" class="text" name="contact_email" value="<?php echo $row->contact_email; ?>" maxlength="255" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><?php echo $AppUI->_('Email'); ?>2:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_email2" value="<?php echo $row->contact_email2; ?>" maxlength="255" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><?php echo $AppUI->_('Homepage'); ?>:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_url" value="<?php echo $row->contact_url; ?>" maxlength="255" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right">Jabber:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_jabber" value="<?php echo $row->contact_jabber; ?>" maxlength="255" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right">ICQ:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_icq" value="<?php echo $row->contact_icq; ?>" maxlength="20" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right">AOL:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_aol" value="<?php echo $row->contact_aol; ?>" maxlength="20" size="25" />
-                        </td>
-                            </tr>
-                    <tr>
-                        <td align="right">MSN:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_msn" value="<?php echo $row->contact_msn; ?>" maxlength="255" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right">Yahoo:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_yahoo" value="<?php echo $row->contact_yahoo; ?>" maxlength="255" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right">Skype:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_skype" value="<?php echo $row->contact_skype; ?>" maxlength="100" size="25" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right">Google:</td>
-                        <td>
-                            <input type="text" class="text" name="contact_google" value="<?php echo $row->contact_google; ?>" maxlength="100" size="25" />
-                        </td>
-                    </tr>
-                    </tr>
-                    <tr>
                         <td align="right"><?php echo $AppUI->_('Birthday'); ?>:</td>
                         <td nowrap="nowrap">
                             <input type="text" class="text" name="contact_birthday" value="<?php echo @substr($row->contact_birthday, 0, 10); ?>" maxlength="10" size="25" />(<?php echo $AppUI->_('yyyy-mm-dd'); ?>)
                         </td>
                     </tr>
-
-                    <th colspan="2">
-                        <strong><?php echo $AppUI->_('Contacts Custom Fields'); ?></strong>
-                    </th>
+					<tr id="custom_fields">
+						<th colspan="2">
+							<strong><?php echo $AppUI->_('Contacts Custom Fields'); ?></strong>
+						</th>
+					</tr>
                     <tr>
                         <td align="right" colspan="3">
                         <?php

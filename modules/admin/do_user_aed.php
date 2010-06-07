@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $contact_id = (int) w2PgetParam($_POST, 'contact_id', 0);
 $user_id = (int) w2PgetParam($_POST, 'user_id', 0);
-$isNewUser = (int) w2PgetParam($_POST, 'user_id', 0);
+$isNewUser = !$user_id;
 
 $perms = &$AppUI->acl();
 if ($del) {
@@ -73,15 +73,19 @@ if ($isNewUser) {
 	$contact->contact_owner = $AppUI->user_id;
 }
 
-if (($msg = $contact->store($AppUI))) {
-	$AppUI->setMsg($msg, UI_MSG_ERROR);
-} else {
+$result = $contact->store($AppUI);
+if ($result) {
+    $contactArray = array('email_primary' => $_POST['contact_email'],
+        'phone_primary' => $_POST['contact_phone']);
+    $contact->setContactMethods($contactArray);
+
 	$obj->user_contact = $contact->contact_id;
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-		if ($isNewUser && w2PgetParam($_REQUEST, 'send_user_mail', 0)) {
-			notifyNewUserCredentials($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
+        if ($isNewUser && w2PgetParam($_POST, 'send_user_mail', 0)) {
+			$contactMethods = $contact->getContactMethods(array('email_primary'));
+            notifyNewUserCredentials($contactMethods['email_primary'], $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
 		}
 		if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
 			$perms = &$AppUI->acl();
@@ -94,4 +98,6 @@ if (($msg = $contact->store($AppUI))) {
 		$AppUI->setMsg($isNewUser ? 'added' : 'updated', UI_MSG_OK, true);
 	}
 	($isNewUser) ? $AppUI->redirect('m=admin&a=viewuser&user_id=' . $obj->user_id . '&tab=2') : $AppUI->redirect();
+} else {
+    $AppUI->setMsg($msg, UI_MSG_ERROR);
 }

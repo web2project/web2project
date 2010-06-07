@@ -80,6 +80,9 @@ class CTask extends CW2pObject {
   const ACCESS_PARTICIPANT  = 2;
   const ACCESS_PRIVATE      = 3;
 
+  const DURATION_TYPE_HOURS =  1;
+  const DURATION_TYPE_DAYS  = 24;
+
   public function __construct() {
     parent::__construct('tasks', 'task_id');
   }
@@ -102,6 +105,9 @@ class CTask extends CW2pObject {
 		}
 		if ($this->task_name == '') {
 			$errorArray['task_name'] = $baseErrorMsg . 'task name is NULL';
+		}
+		if (is_null($this->task_project) || 0 == (int) $this->task_project) {
+			$errorArray['task_project'] = $baseErrorMsg . 'task project is not set';
 		}
 		//Only check the task dates if the config option "check_task_dates" is on
 		if (w2PgetConfig('check_task_dates')) {
@@ -143,9 +149,9 @@ class CTask extends CW2pObject {
 		if (!$this->task_notify) {
 			$this->task_notify = 0;
 		}
-    if ('' != $this->task_related_url && !w2p_check_url($this->task_related_url)) {
-      $errorArray['task_related_url'] = $baseErrorMsg . 'task related url is not formatted properly';
-    }
+        if ('' != $this->task_related_url && !w2p_check_url($this->task_related_url)) {
+            $errorArray['task_related_url'] = $baseErrorMsg . 'task related url is not formatted properly';
+        }
 
 		/*
 		* Check for bad or circular task relationships (dep or child-parent).
@@ -433,7 +439,7 @@ class CTask extends CW2pObject {
 	public function copy($destProject_id = 0, $destTask_id = -1) {
 		global $AppUI;
 
-    $newObj = $this->duplicate();
+        $newObj = $this->duplicate();
 
 		// Copy this task to another project if it's specified
 		if ($destProject_id != 0) {
@@ -501,8 +507,8 @@ class CTask extends CW2pObject {
 	 */
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
-
-        $q = new DBQuery;
+        $perms = $AppUI->acl();
+        $stored = false;
 
 		$this->w2PTrimAll();
 
@@ -513,45 +519,43 @@ class CTask extends CW2pObject {
             return $errorMsgArray;
         }
 
-		if ($this->task_id) {
-			addHistory('tasks', $this->task_id, 'update', $this->task_name, $this->task_project);
+        $this->task_target_budget = filterCurrency($this->task_target_budget);
 
+        $q = new DBQuery;
+        $this->task_updated = $q->dbfnNow();
+
+        if ($this->task_id && $perms->checkModuleItem('tasks', 'edit', $this->task_id)) {
 			// Load and globalize the old, not yet updated task object
 			// e.g. we need some info later to calculate the shifting time for depending tasks
 			// see function update_dep_dates
 			global $oTsk;
 			$oTsk = new CTask();
 			$oTsk->peek($this->task_id);
-
-			$this->task_updated = $q->dbfnNow();
+			
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
 			}
 			if ($this->task_end_date == '') {
 				$this->task_end_date = '0000-00-00 00:00:00';
 			}
-			$ret = $q->updateObject('tasks', $this, 'task_id');
-			$q->clear();
-			$this->_action = 'updated';
+            if (($msg = parent::store())) {
+                return $msg;
+            }
 
 			// if task_status changed, then update subtasks
 			if ($this->task_status != $oTsk->task_status) {
 				$this->updateSubTasksStatus($this->task_status);
 			}
-
 			// Moving this task to another project?
 			if ($this->task_project != $oTsk->task_project) {
 				$this->updateSubTasksProject($this->task_project);
 			}
-
 			if ($this->task_dynamic == 1) {
 				$this->updateDynamics(true);
 			}
-
-			// shiftDependentTasks needs this done first
-			$this->check();
-			$ret = $q->updateObject('tasks', $this, 'task_id', false);
-			$q->clear();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
 
 			// Milestone or task end date, or dynamic status has changed,
 			// shift the dates of the tasks that depend on this task
@@ -567,9 +571,10 @@ class CTask extends CW2pObject {
 				$q->exec();
 				$q->clear();
 			}
-		} else {
-			$this->_action = 'added';
-			$this->task_updated = $q->dbfnNow();
+            $stored = true;
+		}
+
+        if (0 == $this->task_id && $perms->checkModuleItem('tasks', 'add')) {
 			$this->task_created = $q->dbfnNow();
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
@@ -577,12 +582,11 @@ class CTask extends CW2pObject {
 			if ($this->task_end_date == '') {
 				$this->task_end_date = '0000-00-00 00:00:00';
 			}
-			$ret = $q->insertObject('tasks', $this, 'task_id');
-			$this->task_id = db_insert_id();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
 
 			$q->clear();
-			addHistory('tasks', $this->task_id, 'add', $this->task_name, $this->task_project);
-
 			if (!$this->task_parent) {
 				$q->addTable('tasks');
 				$q->addUpdate('task_parent', $this->task_id);
@@ -594,7 +598,9 @@ class CTask extends CW2pObject {
 				// importing tasks do not update dynamics
 				$importing_tasks = true;
 			}
+            $stored = true;
 		}
+
 		CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
 		$this->pushDependencies($this->task_id, $this->task_end_date);
 
@@ -655,12 +661,56 @@ class CTask extends CW2pObject {
 			print_r($this);
 		}
 
-		if (!$ret) {
-			return false;
-		} else {
-			return true;
-		}
+        return $stored;
 	}
+
+    /**
+     *
+     * @param CAppUI $AppUI
+     * @param CProject $projectId
+     *
+     * The point of this function is to create/update a task to represent a
+     *   subproject.
+     *
+     */
+    public static function storeTokenTask(CAppUI $AppUI, $project_id) {
+        $subProject = new CProject();
+        $subProject->load($project_id);
+
+        if ($subProject->project_id != $subProject->project_parent) {
+            $q = new DBQuery();
+            $q->addTable('tasks');
+            $q->addQuery('MIN(task_start_date) AS min_task_start_date');
+            $q->addQuery('MAX(task_end_date) AS max_task_end_date');
+            $q->addWhere('task_project = ' . $subProject->project_id);
+            $projectDates = $q->loadList();
+
+            $q->clear();
+            $q->addTable('tasks');
+            $q->addQuery('task_id');
+            $q->addWhere('task_represents_project = ' . $subProject->project_id);
+            $task_id = $q->loadResult();
+
+            $task = new CTask();
+            if ($task_id) {
+                $task->load($task_id);
+            } else {
+                $task->task_name = $AppUI->_('Subproject') .': '. $subProject->project_name;
+                $task->task_description = $task->task_name;
+                $task->task_priority = $subProject->project_priority;
+                $task->task_project = $subProject->project_parent;
+                $task->task_represents_project = $subProject->project_id;
+                $task->task_owner = $AppUI->user_id;
+            }
+            $task->task_duration_type = 1;
+            $task->task_duration = $subProject->getTotalProjectHours();
+            $task->task_start_date = $projectDates[0]['min_task_start_date'];
+            $task->task_end_date = $projectDates[0]['max_task_end_date'];
+            $task->task_percent_complete = $subProject->project_percent_complete;
+            $result = $task->store($AppUI);
+            //TODO: we should do something with this store result?
+        }
+    }
 
 	/**
 	 * @todo Parent store could be partially used
@@ -668,65 +718,61 @@ class CTask extends CW2pObject {
 	 */
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
+        $perms = $AppUI->acl();
 
-        $q = new DBQuery;
-		$this->_action = 'deleted';
+        if ($perms->checkModuleItem('tasks', 'delete', $this->task_id)) {
+            //load it before deleting it because we need info on it to update the parents later on
+            $this->load($this->task_id);
 
-		//load it before deleting it because we need info on it to update the parents later on
-		$this->load($this->task_id);
-		addHistory('tasks', $this->task_id, 'delete', $this->task_name, $this->task_project);
+            // delete children
+            $childrenlist = $this->getChildren();
+            foreach($childrenlist as $child) {
+                $task = new CTask();
+                $task->task_id = $child;
+                $task->delete($AppUI);
+            }
 
-		// delete children
-		$childrenlist = $this->getChildren();
-        foreach($childrenlist as $child) {
-            $task = new CTask();
-            $task->task_id = $child;
-            $task->delete($AppUI);
+            $taskList = $childrenlist + array($this->task_id);
+            $implodedTaskList = implode(',', $taskList);
+
+            $q = new DBQuery;
+            // delete affiliated task_logs
+            $q->setDelete('task_log');
+            $q->addWhere('task_log_task IN (' . $implodedTaskList . ')');
+            if (!($q->exec())) {
+                return db_error();
+            }
+            $q->clear();
+
+            // delete linked user tasks
+            $q->setDelete('user_tasks');
+            $q->addWhere('task_id IN (' . $implodedTaskList . ')');
+            if (!($q->exec())) {
+                return db_error();
+            }
+            $q->clear();
+
+            // delete affiliated task_dependencies
+            $q->setDelete('task_dependencies');
+            $q->addWhere('dependencies_task_id IN (' . $implodedTaskList . ') OR
+                dependencies_req_task_id IN ('. $implodedTaskList .')');
+            if (!($q->exec())) {
+                return db_error();
+            }
+
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+
+            if ($this->task_parent != $this->task_id) {
+                $this->updateDynamics();
+            }
+
+            CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
+            return true;
         }
 
-        $taskList = $childrenlist + array($this->task_id);
-        $implodedTaskList = implode(',', $taskList);
-
-        // delete linked user tasks
-		$q->setDelete('user_tasks');
-        $q->addWhere('task_id IN (' . $implodedTaskList . ')');
-		if (!($q->exec())) {
-			return db_error();
-		}
-		$q->clear();
-
-		$q->setDelete('tasks');
-		$q->addWhere('task_id=' . (int)$this->task_id);
-		if (!($q->exec())) {
-			return db_error();
-		} elseif ($this->task_parent != $this->task_id) {
-			// Has parent, run the update sequence, this child will no longer be in the
-			// database
-			$this->updateDynamics();
-		}
-		$q->clear();
-
-		// delete affiliated task_logs
-		$q->setDelete('task_log');
-        $q->addWhere('task_log_task IN (' . $implodedTaskList . ')');
-		if (!($q->exec())) {
-			return db_error();
-		}
-		$q->clear();
-
-		// delete affiliated task_dependencies
-		$q->setDelete('task_dependencies');
-		$q->addWhere('dependencies_task_id IN (' . $implodedTaskList . ') OR
-            dependencies_req_task_id IN ('. $implodedTaskList .')');
-		if (!($q->exec())) {
-			return db_error();
-		} else {
-			$this->_action = 'deleted';
-		}
-		$q->clear();
-		CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
-
-		return null;
+		return false;
 	}
 
 	public function updateDependencies($cslist) {
@@ -858,13 +904,26 @@ class CTask extends CW2pObject {
 		// o = owner
 		$q->addTable('tasks', 't');
 		$q->leftJoin('user_tasks', 'u', 'u.task_id = t.task_id');
-		$q->leftJoin('users', 'o', 'o.user_id = t.task_owner');
-		$q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
-		$q->leftJoin('users', 'c', 'c.user_id = t.task_creator');
-		$q->leftJoin('contacts', 'cc', 'cc.contact_id = c.user_contact');
-		$q->leftJoin('users', 'a', 'a.user_id = u.user_id');
-		$q->leftJoin('contacts', 'ac', 'ac.contact_id = a.user_contact');
-		$q->addQuery('t.task_id, cc.contact_email as creator_email' . ', cc.contact_first_name as creator_first_name' . ', cc.contact_last_name as creator_last_name' . ', oc.contact_email as owner_email' . ', oc.contact_first_name as owner_first_name' . ', oc.contact_last_name as owner_last_name' . ', a.user_id as assignee_id, ac.contact_email as assignee_email' . ', ac.contact_first_name as assignee_first_name' . ', ac.contact_last_name as assignee_last_name');
+
+        $q->leftJoin('users', 'o', 'o.user_id = t.task_owner');
+        $q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
+        $q->leftJoin('contacts_methods', 'cm1', 'cm1.contact_id = oc.contact_id');
+        $q->addWhere("cm1.method_name = 'email_primary'");
+        $q->addQuery('cm1.method_value AS owner_email');
+
+        $q->leftJoin('users', 'c', 'c.user_id = t.task_creator');
+        $q->leftJoin('contacts', 'cc', 'cc.contact_id = c.user_contact');
+        $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = cc.contact_id');
+        $q->addWhere("cm2.method_name = 'email_primary'");
+        $q->addQuery('cm2.method_value AS creator_email');
+
+        $q->leftJoin('users', 'a', 'a.user_id = u.user_id');
+        $q->leftJoin('contacts', 'ac', 'ac.contact_id = a.user_contact');
+        $q->leftJoin('contacts_methods', 'cm3', 'cm3.contact_id = ac.contact_id');
+        $q->addWhere("cm3.method_name = 'email_primary'");
+        $q->addQuery('cm3.method_value AS assignee_email');
+
+		$q->addQuery('t.task_id, cc.contact_first_name as creator_first_name, cc.contact_last_name as creator_last_name, oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name, a.user_id as assignee_id, ac.contact_first_name as assignee_first_name, ac.contact_last_name as assignee_last_name');
 		$q->addWhere(' t.task_id = ' . (int)$this->task_id);
 		$users = $q->loadList();
 		$q->clear();
@@ -905,13 +964,26 @@ class CTask extends CW2pObject {
 		// o = owner
 		$q->addTable('tasks', 't');
 		$q->leftJoin('user_tasks', 'u', 'u.task_id = t.task_id');
-		$q->leftJoin('users', 'o', 'o.user_id = t.task_owner');
-		$q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
+
+        $q->leftJoin('users', 'o', 'o.user_id = t.task_owner');
+        $q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
+        $q->leftJoin('contacts_methods', 'cm1', 'cm1.contact_id = oc.contact_id');
+        $q->addWhere("cm1.method_name = 'email_primary'");
+        $q->addQuery('cm1.method_value AS owner_email');
+
 		$q->leftJoin('users', 'c', 'c.user_id = t.task_creator');
 		$q->leftJoin('contacts', 'cc', 'cc.contact_id = c.user_contact');
+        $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = cc.contact_id');
+        $q->addWhere("cm2.method_name = 'email_primary'");
+        $q->addQuery('cm2.method_value AS creator_email');
+
 		$q->leftJoin('users', 'a', 'a.user_id = u.user_id');
 		$q->leftJoin('contacts', 'ac', 'ac.contact_id = a.user_contact');
-		$q->addQuery('t.task_id, cc.contact_email as creator_email' . ', cc.contact_first_name as creator_first_name' . ', cc.contact_last_name as creator_last_name' . ', oc.contact_email as owner_email' . ', oc.contact_first_name as owner_first_name' . ', oc.contact_last_name as owner_last_name' . ', a.user_id as assignee_id, ac.contact_email as assignee_email' . ', ac.contact_first_name as assignee_first_name' . ', ac.contact_last_name as assignee_last_name');
+        $q->leftJoin('contacts_methods', 'cm3', 'cm3.contact_id = ac.contact_id');
+        $q->addWhere("cm3.method_name = 'email_primary'");
+        $q->addQuery('cm3.method_value AS assignee_email');
+
+		$q->addQuery('t.task_id, cc.contact_first_name as creator_first_name, cc.contact_last_name as creator_last_name, oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name, a.user_id as assignee_id, ac.contact_first_name as assignee_first_name, ac.contact_last_name as assignee_last_name');
 		$q->addWhere(' t.task_id = ' . (int)$this->task_id);
 		$users = $q->loadList();
 		$q->clear();
@@ -970,7 +1042,11 @@ class CTask extends CW2pObject {
 				$q->addTable('user_tasks', 'ut');
 				$q->leftJoin('users', 'ua', 'ua.user_id = ut.user_id');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = ua.user_contact');
-				$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
+				$q->addQuery('c.contact_first_name, c.contact_last_name');
+                $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+                $q->addWhere("cm.method_name = 'email_primary'");
+                $q->addQuery('cm.method_value AS contact_email');
+
 				$q->addWhere('ut.task_id = ' . $this->task_id);
 				if (!$AppUI->getPref('MAILALL')) {
 					$q->addWhere('ua.user_id <>' . (int)$AppUI->user_id);
@@ -985,7 +1061,11 @@ class CTask extends CW2pObject {
 			if (isset($task_contacts) && $task_contacts == 'on') {
 				$q->addTable('task_contacts', 'tc');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-				$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
+				$q->addQuery('c.contact_first_name, c.contact_last_name');
+                $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+                $q->addWhere("cm.method_name = 'email_primary'");
+                $q->addQuery('cm.method_value AS contact_email');
+
 				$q->addWhere('tc.task_id = ' . $this->task_id);
 				$contactList = $q->loadList();
 				$q->clear();
@@ -997,7 +1077,11 @@ class CTask extends CW2pObject {
 			if (isset($project_contacts) && $project_contacts == 'on') {
 				$q->addTable('project_contacts', 'pc');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
+				$q->addQuery('c.contact_first_name, c.contact_last_name');
+                $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+                $q->addWhere("cm.method_name = 'email_primary'");
+                $q->addQuery('cm.method_value AS contact_email');
+
 				$q->addWhere('pc.project_id = ' . $this->task_project);
 				$projectContactList = $q->loadList();
 				$q->clear();
@@ -1010,8 +1094,12 @@ class CTask extends CW2pObject {
 				$others = trim($others, " \r\n\t,"); // get rid of empty elements.
 				if (strlen($others) > 0) {
 					$q->addTable('contacts', 'c');
-					$q->addQuery('c.contact_email, c.contact_first_name, c.contact_last_name');
+					$q->addQuery('c.contact_first_name, c.contact_last_name');
 					$q->addWhere('c.contact_id IN (' . $others . ')');
+                    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+                    $q->addWhere("cm.method_name = 'email_primary'");
+                    $q->addQuery('cm.method_value AS contact_email');
+
 					$otherContacts = $q->loadList();
 					$q->clear();
 
@@ -1592,24 +1680,38 @@ class CTask extends CW2pObject {
 			return $q->loadHashList('dept_id');
 		}
 	}
-	public function getTaskContacts(CAppUI $AppUI = null, $taskId) {
+    public function getContacts(CAppUI $AppUI = null, $taskId) {
 		global $AppUI;
 
         $perms = $AppUI->acl();
-		if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
+		if (canView('contacts')) {
 			$q = new DBQuery;
 			$q->addTable('contacts', 'c');
+            $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
+
+            $q->leftJoin('departments', 'd', 'dept_id = contact_department');
+            $q->addQuery('dept_name');
+
 			$q->addJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id', 'inner');
-			$q->leftJoin('departments', 'd', 'dept_id = contact_department');
 			$q->addWhere('tc.task_id = ' . (int)$taskId);
-			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email, contact_order_by');
-			$q->addQuery('contact_phone, dept_name');
+			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_order_by');
+
+            $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+            $q->addWhere("cm.method_name = 'email_primary'");
+            $q->addQuery('cm.method_value AS contact_email');
+
+            $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = c.contact_id');
+            $q->addQuery('cm2.method_value AS contact_phone');
+
 			$q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
 
 			$department = new CDepartment;
 			$department->setAllowedSQL($AppUI->user_id, $q);
 			return $q->loadHashList('contact_id');
 		}
+    }
+	public function getTaskContacts(CAppUI $AppUI = null, $taskId) {
+        return $this->getContacts($AppUI, $taskId);
 	}
 
 	/**
@@ -1968,9 +2070,12 @@ class CTask extends CW2pObject {
 		$q->addTable('user_tasks', 'ut');
 		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
 		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('c.contact_id, contact_first_name, contact_last_name');
 		$q->addWhere('ut.task_id = ' . (int)$id);
-		$contacts = $q->loadHashList('contact_id');
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+        $q->addWhere("cm.method_name = 'email_primary'");
+        $q->addQuery('cm.method_value AS contact_email');
+		$contacts = $q->loadHashList('c.contact_id');
 		$q->clear();
 
 		// Now we also check the owner of the task, as we will need
@@ -1978,8 +2083,11 @@ class CTask extends CW2pObject {
 		$owner_is_not_assignee = false;
 		$q->addTable('users', 'u');
 		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('c.contact_id, contact_first_name, contact_last_name');
 		$q->addWhere('u.user_id = ' . (int)$this->task_owner);
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+        $q->addWhere("cm.method_name = 'email_primary'");
+        $q->addQuery('cm.method_value AS contact_email');
 		if ($q->exec(ADODB_FETCH_NUM)) {
 			list($owner_contact, $owner_first_name, $owner_last_name, $owner_email) = $q->fetchRow();
 			if (!isset($contacts[$owner_contact])) {
@@ -2220,21 +2328,21 @@ class CTask extends CW2pObject {
 			return true;
 		}
 	}
-  public static function updateHoursWorked($taskId, $totalHours) {
-    $q = new DBQuery;
-    $q->addTable('tasks');
-    $q->addUpdate('task_hours_worked', $totalHours + 0);
-    $q->addWhere('task_id = ' . $taskId);
-    $q->exec();
-    $q->clear();
+    public static function updateHoursWorked($taskId, $totalHours) {
+        $q = new DBQuery;
+        $q->addTable('tasks');
+        $q->addUpdate('task_hours_worked', $totalHours + 0);
+        $q->addWhere('task_id = ' . $taskId);
+        $q->exec();
+        $q->clear();
 
-    $q->addTable('tasks');
-    $q->addQuery('task_project');
-    $q->addWhere('task_id = ' . $taskId);
-    $project_id = $q->loadResult();
+        $q->addTable('tasks');
+        $q->addQuery('task_project');
+        $q->addWhere('task_id = ' . $taskId);
+        $project_id = $q->loadResult();
 
-    CProject::updateHoursWorked($project_id);
-  }
+        CProject::updateHoursWorked($project_id);
+    }
 }
 
 // user based access

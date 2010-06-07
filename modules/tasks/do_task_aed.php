@@ -3,12 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-function setItem($item_name, $defval = null) {
-	if (isset($_POST[$item_name])) {
-		return $_POST[$item_name];
-	}
-	return $defval;
-}
 $adjustStartDate = w2PgetParam($_POST, 'set_task_start_date');
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $task_id = (int) w2PgetParam($_POST, 'task_id', 0);
@@ -18,22 +12,9 @@ $hdependencies = w2PgetParam($_POST, 'hdependencies');
 $notify = (int) w2PgetParam($_POST, 'task_notify', 0);
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
+$isNotNew = $task_id;
 
-$isNotNew = $_POST['task_id'];
-$perms = &$AppUI->acl();
-if ($del) {
-	if (!$perms->checkModuleItem('tasks', 'delete', $task_id)) {
-		$AppUI->redirect('m=public&a=access_denied');
-	}
-} elseif ($isNotNew) {
-	if (!$perms->checkModuleItem('tasks', 'edit', $task_id)) {
-		$AppUI->redirect('m=public&a=access_denied');
-	}
-} else {
-	if (!canAdd('tasks')) {
-		$AppUI->redirect('m=public&a=access_denied');
-	}
-}
+$action = ($del) ? 'deleted' : 'stored';
 
 if ($sub_form) {
 	// in add-edit, so set it to what it should be
@@ -94,7 +75,7 @@ if ($sub_form) {
 
 	// Map task_dynamic checkboxes to task_dynamic values for task dependencies.
 	if ($obj->task_dynamic != 1) {
-		$task_dynamic_delay = setItem('task_dynamic_nodelay', '0');
+		$task_dynamic_delay = w2PgetParam($_POST, 'task_dynamic_nodelay', '0');
 		if (in_array($obj->task_dynamic, $tracking_dynamics)) {
 			$obj->task_dynamic = $task_dynamic_delay ? 21 : 31;
 		} else {
@@ -127,7 +108,7 @@ if ($sub_form) {
 	}
 
 	// let's check if there are some assigned departments to task
-	$obj->task_departments = implode(',', setItem('dept_ids', array()));
+	$obj->task_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
 
 	// convert dates to SQL format first
 	if ($obj->task_start_date) {
@@ -155,120 +136,116 @@ if ($sub_form) {
 		}
 	}
 
-  $result = $obj->store($AppUI);
-  if ($taskRecount) {
-    $myTask = new CTask();
-    CProject::updateTaskCount($taskRecount, $myTask->getTaskCount($taskRecount));
-  }
-  
-  //$obj->task_project
-  if (is_array($result)) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
-    $AppUI->holdObject($obj);
-    $AppUI->redirect('m=tasks&a=addedit');
-  }
-  if ($result) {
-    $task_parent = (int) w2PgetParam($_POST, 'task_parent', 0);
-    $old_task_parent = (int) w2PgetParam($_POST, 'old_task_parent', 0);
-    if ($task_parent != $old_task_parent) {
-      $oldTask = new CTask();
-      $oldTask->load($old_task_parent);
-      $oldTask->updateDynamics(false);
+    $result = $obj->store($AppUI);
+
+    if (is_array($result)) {
+        $AppUI->setMsg($result, UI_MSG_ERROR, true);
+        $AppUI->holdObject($obj);
+        $AppUI->redirect('m=tasks&a=addedit');
     }
 
-    $custom_fields = new w2p_Core_CustomFields($m, 'addedit', $obj->task_id, 'edit');
-    $custom_fields->bind($_POST);
-    $sql = $custom_fields->store($obj->task_id); // Store Custom Fields
-
-    // Now add any task reminders
-    // If there wasn't a task, but there is one now, and
-    // that task date is set, we need to set a reminder.
-    if (empty($task_end_date) || (!empty($end_date) && $task_end_date->dateDiff($end_date))) {
-      $obj->addReminder();
-    }
-    $AppUI->setMsg($task_id ? 'Task updated' : 'Task added', UI_MSG_OK);
-
-    if (isset($hassign)) {
-      $obj->updateAssigned($hassign, $hperc_assign_ar);
-    }
-
-    if (isset($hdependencies)) { // && !empty($hdependencies)) {
-      // there are dependencies set!
-
-      // backup initial start and end dates
-      $tsd = new CDate($obj->task_start_date);
-      $ted = new CDate($obj->task_end_date);
-
-      // updating the table recording the
-      // dependency relations with this task
-      $obj->updateDependencies($hdependencies);
-
-      // we will reset the task's start date based upon dependencies
-      // and shift the end date appropriately
-      if ($adjustStartDate && !is_null($hdependencies)) {
-
-        // load already stored task data for this task
-        $tempTask = new CTask();
-        $tempTask->load($obj->task_id);
-
-        // shift new start date to the last dependency end date
-        $nsd = new CDate($tempTask->get_deps_max_end_date($tempTask));
-
-        // prefer Wed 8:00 over Tue 16:00 as start date
-        $nsd = $nsd->next_working_day();
-
-        // prepare the creation of the end date
-        $ned = new CDate();
-        $ned->copy($nsd);
-
-        if (empty($obj->task_start_date)) {
-          // appropriately calculated end date via start+duration
-          $ned->addDuration($obj->task_duration, $obj->task_duration_type);
-
-        } else {
-          // calc task time span start - end
-          $d = $tsd->calcDuration($ted);
-
-          // Re-add (keep) task time span for end date.
-          // This is independent from $obj->task_duration.
-          // The value returned by Date::Duration() is always in hours ('1')
-          $ned->addDuration($d, '1');
-
+    if ($result) {
+        $task_parent = (int) w2PgetParam($_POST, 'task_parent', 0);
+        $old_task_parent = (int) w2PgetParam($_POST, 'old_task_parent', 0);
+        if ($task_parent != $old_task_parent) {
+            $oldTask = new CTask();
+            $oldTask->load($old_task_parent);
+            $oldTask->updateDynamics(false);
         }
 
-        // prefer tue 16:00 over wed 8:00 as an end date
-        $ned = $ned->prev_working_day();
+        $custom_fields = new w2p_Core_CustomFields($m, 'addedit', $obj->task_id, 'edit');
+        $custom_fields->bind($_POST);
+        $sql = $custom_fields->store($obj->task_id); // Store Custom Fields
 
-        $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-        $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+        // Now add any task reminders
+        // If there wasn't a task, but there is one now, and
+        // that task date is set, we need to set a reminder.
+        if (empty($task_end_date) || (!empty($end_date) && $task_end_date->dateDiff($end_date))) {
+            $obj->addReminder();
+        }
+        $AppUI->setMsg($task_id ? 'Task updated' : 'Task added', UI_MSG_OK);
 
-        $q = new DBQuery;
-        $q->addTable('tasks', 't');
-        $q->addUpdate('task_start_date', $obj->task_start_date);
-        $q->addUpdate('task_end_date', $obj->task_end_date);
-        $q->addWhere('task_id = ' . (int)$obj->task_id);
-        $q->addWhere('task_dynamic <> 1');
-        $q->exec();
-        $q->clear();
-      }
-      $obj->pushDependencies($obj->task_id, $obj->task_end_date);
+        if (isset($hassign)) {
+            $obj->updateAssigned($hassign, $hperc_assign_ar);
+        }
+
+        if (isset($hdependencies)) { // && !empty($hdependencies)) {
+          // there are dependencies set!
+
+          // backup initial start and end dates
+          $tsd = new CDate($obj->task_start_date);
+          $ted = new CDate($obj->task_end_date);
+
+          // updating the table recording the
+          // dependency relations with this task
+          $obj->updateDependencies($hdependencies);
+
+          // we will reset the task's start date based upon dependencies
+          // and shift the end date appropriately
+          if ($adjustStartDate && !is_null($hdependencies)) {
+
+            // load already stored task data for this task
+            $tempTask = new CTask();
+            $tempTask->load($obj->task_id);
+
+            // shift new start date to the last dependency end date
+            $nsd = new CDate($tempTask->get_deps_max_end_date($tempTask));
+
+            // prefer Wed 8:00 over Tue 16:00 as start date
+            $nsd = $nsd->next_working_day();
+
+            // prepare the creation of the end date
+            $ned = new CDate();
+            $ned->copy($nsd);
+
+            if (empty($obj->task_start_date)) {
+              // appropriately calculated end date via start+duration
+              $ned->addDuration($obj->task_duration, $obj->task_duration_type);
+
+            } else {
+              // calc task time span start - end
+              $d = $tsd->calcDuration($ted);
+
+              // Re-add (keep) task time span for end date.
+              // This is independent from $obj->task_duration.
+              // The value returned by Date::Duration() is always in hours ('1')
+              $ned->addDuration($d, '1');
+
+            }
+
+            // prefer tue 16:00 over wed 8:00 as an end date
+            $ned = $ned->prev_working_day();
+
+            $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+            $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+
+            $q = new DBQuery;
+            $q->addTable('tasks', 't');
+            $q->addUpdate('task_start_date', $obj->task_start_date);
+            $q->addUpdate('task_end_date', $obj->task_end_date);
+            $q->addWhere('task_id = ' . (int)$obj->task_id);
+            $q->addWhere('task_dynamic <> 1');
+            $q->exec();
+            $q->clear();
+          }
+          $obj->pushDependencies($obj->task_id, $obj->task_end_date);
+        }
+        // If there is a set of post_save functions, then we process them
+
+        if (isset($post_save)) {
+            foreach ($post_save as $post_save_function) {
+                $post_save_function();
+            }
+        }
+
+        if ($notify) {
+            if ($msg = $obj->notify($comment)) {
+                $AppUI->setMsg($msg, UI_MSG_ERROR);
+            }
+        }
+
+        $AppUI->redirect('m=projects&a=view&project_id='.$obj->task_project);
+    } else {
+        $AppUI->redirect('m=public&a=access_denied');
     }
-    // If there is a set of post_save functions, then we process them
-
-    if (isset($post_save)) {
-      foreach ($post_save as $post_save_function) {
-        $post_save_function();
-      }
-    }
-
-    if ($notify) {
-      if ($msg = $obj->notify($comment)) {
-        $AppUI->setMsg($msg, UI_MSG_ERROR);
-      }
-    }
-
-    $AppUI->redirect('m=projects&a=view&project_id='.$obj->task_project);
-  } else {
-    $AppUI->redirect('m=public&a=access_denied');
-  }
 } // end of if subform

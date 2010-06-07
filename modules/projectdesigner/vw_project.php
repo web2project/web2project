@@ -36,7 +36,12 @@ if (!defined('W2P_BASE_DIR')) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-			<td class="hilite"><?php echo $w2Pconfig['currency_symbol'] ?><?php echo $obj->project_target_budget; ?></td>
+			<td class="hilite">
+                <?php
+                    echo $w2Pconfig['currency_symbol'];
+                    echo formatCurrency($obj->project_target_budget, $AppUI->getPref('CURRENCYFORM'));
+                ?>
+            </td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
@@ -107,73 +112,36 @@ if (!defined('W2P_BASE_DIR')) {
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Hours'); ?>:</td>
 			<td class="hilite" width="100%"><?php echo $total_project_hours ?></td>
 		</tr>				
-		<?php
-      $q = new DBQuery;
-      $q->addTable('departments', 'a');
-      $q->addTable('project_departments', 'b');
-      $q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
-      $q->addWhere('a.dept_id = b.department_id and b.project_id = ' . (int)$project_id);
-      $department = new CDepartment;
-      $department->setAllowedSQL($AppUI->user_id, $q);
-      $depts = $q->loadHashList('dept_id');
-      if (count($depts) > 0) {
-      ?>
-		    <tr>
-		    	<td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
-		    </tr>
-		    <tr>
-		    	<td colspan='3' class="hilite">
-		    		<?php
-              foreach ($depts as $dept_id => $dept_info) {
-                echo '<div>' . $dept_info['dept_name'];
-                if ($dept_info['dept_phone'] != '') {
-                  echo '( ' . $dept_info['dept_phone'] . ' )';
-                }
-                echo '</div>';
-              }
-            ?>
-		    	</td>
-		    </tr>
-	 		<?php
-      }
+        <?php
+        $depts = CProject::getDepartments($AppUI, $obj->project_id);
 
-      $q = new DBQuery;
-      $q->addTable('contacts', 'a');
-      $q->addTable('project_contacts', 'b');
-      $q->addJoin('departments', 'c', 'a.contact_department = c.dept_id', 'left outer');
-      $q->addQuery('a.contact_id, a.contact_first_name, a.contact_last_name, a.contact_email, a.contact_phone, c.dept_name');
-      $q->addWhere('a.contact_id = b.contact_id AND b.project_id = ' . (int)$project_id . ' AND (contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
-      $department->setAllowedSQL($AppUI->user_id, $q);
-      $contacts = $q->loadHashList('contact_id');
-      if (count($contacts) > 0) {
+        if (count($depts) > 0) { ?>
+            <tr>
+                <td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
+            </tr>
+            <tr>
+                <td colspan='3' class="hilite">
+                    <?php
+                        foreach ($depts as $dept_id => $dept_info) {
+                            echo '<div>' . $dept_info['dept_name'];
+                            if ($dept_info['dept_phone'] != '') {
+                                echo '( ' . $dept_info['dept_phone'] . ' )';
+                            }
+                            echo '</div>';
+                        }
+                    ?>
+                </td>
+            </tr>
+        <?php
+        }
+
+        $contacts = CProject::getContacts($AppUI, $obj->project_id);
+        if (count($contacts)) {
+            echo '<tr><td><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
+            echo '<tr><td colspan="3" class="hilite">';
+            echo w2p_Output_HTMLHelper::renderContactList($AppUI, $contacts);
+            echo '</td></tr>';
+        }
         ?>
-			    <tr>
-			    	<td><strong><?php echo $AppUI->_('Contacts'); ?></strong></td>
-			    </tr>
-			    <tr>
-			    	<td colspan='3' class="hilite">
-			    		<?php
-          echo '<table cellspacing="1" cellpadding="2" border="0" width="100%" bgcolor="black">';
-          echo '<tr><th>' . $AppUI->_('Name') . '</th><th>' . $AppUI->_('Email') . '</th><th>' . $AppUI->_('Phone') . '</th><th>' . $AppUI->_('Department') . '</th></tr>';
-          foreach ($contacts as $contact_id => $contact_data) {
-            echo '<tr>';
-            echo '<td class="hilite">';
-            echo '<a href="index.php?m=contacts&a=view&contact_id=' . $contact_id . '">';
-            echo $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'];
-            echo '</a>';
-            echo '</td>';
-            echo '<td class="hilite"><a href="mailto: ' . $contact_data["contact_email"] . '">' . $contact_data['contact_email'] . '</a></td>';
-            echo '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
-            echo '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
-            echo '</tr>';
-          }
-          echo '</table>';
-        ?>
-			    	</td>
-			    </tr>
-			    <tr>
-			    	<td>
-		 <?php
-} ?>
-		</table>
-	</td>
+        </table>
+    </td>

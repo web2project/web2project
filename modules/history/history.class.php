@@ -31,14 +31,13 @@ class CHistory extends CW2pObject {
         return $errorArray;
     }
 
-    public function delete(CAppUI $AppUI = null) {
-        global $AppUI;
+    public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
         return true;
     }
 
-    public function store(CAppUI $AppUI = null) {
+    public function store(CAppUI $AppUI) {
         global $AppUI;
         $perms = $AppUI->acl();
 

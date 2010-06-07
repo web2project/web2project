@@ -1302,7 +1302,11 @@ class w2p_Database_Query {
 			} else {
 				foreach (get_object_vars($obj) as $k => $v) {
 					if (isset($hash[$k])) {
-						$obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes(w2PHTMLDecode($hash[$k])) : w2PHTMLDecode($hash[$k]);
+						if (is_array(w2PHTMLDecode($hash[$k]))) {
+                            $obj->$k = w2PHTMLDecode($hash[$k]);
+                        } else {
+                            $obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes(w2PHTMLDecode($hash[$k])) : w2PHTMLDecode($hash[$k]);
+                        }
 					}
 				}
 			}

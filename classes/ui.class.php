@@ -751,12 +751,35 @@ class CAppUI {
 
 		$q = new DBQuery;
 		$q->addTable('users');
-		$q->addQuery('user_id, contact_first_name as user_first_name, contact_last_name as user_last_name, contact_company as user_company, contact_department as user_department, contact_email as user_email, user_type');
+		$q->addQuery('user_id, contact_first_name as user_first_name, contact_last_name as user_last_name, contact_company as user_company, contact_department as user_department, user_type');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+
+        /* Begin Hack */
+        /*
+         * This is a particularly annoying hack but I don't know of a better
+         *   way to resolve #457. In v2.0, there was a refactoring to allow for
+         *   muliple contact methods which resulted in the contact_email being
+         *   removed from the contacts table. If the user is upgrading from
+         *   v1.x and they try to log in before applying the database, crash.
+         *   Info: http://bugs.web2project.net/view.php?id=457
+         */
+
+        $qTest = new DBQuery();
+        $qTest->addTable('w2pversion');
+        $qTest->addQuery('max(db_version)');
+        $dbVersion = $qTest->loadResult();
+        if ($dbVersion >= 21) {
+            $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
+            $q->addWhere("cm.method_name = 'email_primary'");
+            $q->addQuery('cm.method_value AS user_email');
+        } else {
+            $q->addQuery('contact_email AS user_email');
+        }
+        /* End Hack */
+
 		$q->addWhere('user_id = ' . (int)$user_id . ' AND user_username = \'' . $username . '\'');
 		$sql = $q->prepare();
 		$q->loadObject($this);
-		$q->clear();
 		dprint(__file__, __line__, 7, 'Login SQL: ' . $sql);
 
 		if (!$this) {

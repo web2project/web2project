@@ -159,8 +159,6 @@ class CProject extends CW2pObject {
          *   previous version didn't check it either, so we're no worse off.
          */
         if ($perms->checkModuleItem('projects', 'delete', $this->project_id)) {
-            $this->load($this->project_id);
-            addHistory('projects', $this->project_id, 'delete', $this->project_name, $this->project_id);
             $q = new DBQuery;
             $q->addTable('tasks');
             $q->addQuery('task_id');
@@ -206,14 +204,17 @@ class CProject extends CW2pObject {
             $q->addWhere('project_id =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+            $q->setDelete('tasks');
+            $q->addWhere('task_represents_project =' . (int)$this->project_id);
+            
+            $q->clear();
             $q->setDelete('projects');
             $q->addWhere('project_id =' . (int)$this->project_id);
-
-            if (!$q->exec()) {
-                $result = db_error();
-            } else {
-                $result = true;
+            $q->exec();
+            if ($msg = parent::delete()) {
+                return $msg;
             }
+            return true;
         }
 		return $result;
 	}
@@ -224,7 +225,7 @@ class CProject extends CW2pObject {
 	 *	@return	bool
 	 **/
 	public function importTasks($from_project_id) {
-    global $AppUI;
+        global $AppUI;
 
 		// Load the original
 		$origProject = new CProject();
@@ -457,60 +458,57 @@ class CProject extends CW2pObject {
 
         $this->w2PTrimAll();
 
-        $this->project_target_budget = str_replace(',', '', $this->project_target_budget);
         // ensure changes of state in checkboxes is captured
         $this->project_active = (int) $this->project_active;
         $this->project_private = (int) $this->project_private;
 
-        $this->project_target_budget = $this->project_target_budget ? $this->project_target_budget : 0.00;
-        $this->project_actual_budget = $this->project_actual_budget ? $this->project_actual_budget : 0.00;
+        $this->project_target_budget = filterCurrency($this->project_target_budget);
+        $this->project_actual_budget = filterCurrency($this->project_actual_budget);
 
         // Make sure project_short_name is the right size (issue for languages with encoded characters)
-        if (mb_strlen($this->project_short_name) > 10) {
-          $this->project_short_name = mb_substr($this->project_short_name, 0, 10);
-        }
+        $this->project_short_name = mb_substr($this->project_short_name, 0, 10);
         if (empty($this->project_end_date)) {
-          $this->project_end_date = null;
+            $this->project_end_date = null;
         }
 
         $errorMsgArray = $this->check();
 
         if (count($errorMsgArray) > 0) {
-          return $errorMsgArray;
+            return $errorMsgArray;
         }
 
         $this->project_id = (int) $this->project_id;
         // convert dates to SQL format first
         if ($this->project_start_date) {
-          $date = new CDate($this->project_start_date);
-          $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
+            $date = new CDate($this->project_start_date);
+            $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
         }
         if ($this->project_end_date) {
-          $date = new CDate($this->project_end_date);
-          $date->setTime(23, 59, 59);
-          $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
+            $date = new CDate($this->project_end_date);
+            $date->setTime(23, 59, 59);
+            $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
         if ($this->project_actual_end_date) {
-          $date = new CDate($this->project_actual_end_date);
-          $this->project_actual_end_date = $date->format(FMT_DATETIME_MYSQL);
+            $date = new CDate($this->project_actual_end_date);
+            $this->project_actual_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
 
         // let's check if there are some assigned departments to project
         if ('' != $this->project_actual_end_date) {
-          $obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
+            $obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
         }
 
         // check project parents and reset them to self if they do not exist
         if (!$this->project_parent) {
-          $this->project_parent = $this->project_id;
-          $this->project_original_parent = $this->project_id;
+            $this->project_parent = $this->project_id;
+            $this->project_original_parent = $this->project_id;
         } else {
-          $parent_project = new CProject();
-          $parent_project->load($this->project_parent);
-          $this->project_original_parent = $parent_project->project_original_parent;
+            $parent_project = new CProject();
+            $parent_project->load($this->project_parent);
+            $this->project_original_parent = $parent_project->project_original_parent;
         }
         if (!$this->project_original_parent) {
-          $this->project_original_parent = $this->project_id;
+            $this->project_original_parent = $this->project_id;
         }
 
         /*
@@ -518,30 +516,28 @@ class CProject extends CW2pObject {
          *   don't have a good idea on how to fix it at the moment...
          */
         if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->company_id)) {
-          $q = new DBQuery;
-          $this->project_updated = $q->dbfnNow();
-          if (($msg = parent::store())) {
-            return $msg;
-          }
-          addHistory('projects', $this->project_id, 'update', $this->project_name, $this->project_id);
-          $stored = true;
+            $q = new DBQuery;
+            $this->project_updated = $q->dbfnNow();
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
         }
         if (0 == $this->project_id && $perms->checkModuleItem('projects', 'add')) {
-          $q = new DBQuery;
-          $this->project_updated = $q->dbfnNow();
-          $this->project_created = $q->dbfnNow();
-          if (($msg = parent::store())) {
-            return $msg;
-          }
-          if (0 == $this->project_parent || 0 == $this->project_original_parent) {
-            $this->project_parent = $this->project_id;
-            $this->project_original_parent = $this->project_id;
+            $q = new DBQuery;
+            $this->project_updated = $q->dbfnNow();
+            $this->project_created = $q->dbfnNow();
             if (($msg = parent::store())) {
-              return $msg;
+                return $msg;
             }
-          }
-          addHistory('projects', $this->project_id, 'add', $this->project_name, $this->project_id);
-          $stored = true;
+            if (0 == $this->project_parent || 0 == $this->project_original_parent) {
+                $this->project_parent = $this->project_id;
+                $this->project_original_parent = $this->project_id;
+                if (($msg = parent::store())) {
+                    return $msg;
+                }
+            }
+            $stored = true;
         }
 
 		//split out related departments and store them seperatly.
@@ -580,9 +576,11 @@ class CProject extends CW2pObject {
 		}
 
         if ($stored) {
-          $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
-          $custom_fields->bind($_POST);
-          $sql = $custom_fields->store($this->project_id); // Store Custom Fields
+            $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
+            $custom_fields->bind($_POST);
+            $sql = $custom_fields->store($this->project_id); // Store Custom Fields
+
+            CTask::storeTokenTask($AppUI, $this->project_id);
         }
 		return $stored;
 	}
@@ -601,10 +599,13 @@ class CProject extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('projects', 'p');
 		$q->addQuery('p.project_id');
-		$q->addQuery('oc.contact_email as owner_email, oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name');
+		$q->addQuery('oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name');
 		$q->leftJoin('users', 'o', 'o.user_id = p.project_owner');
 		$q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
 		$q->addWhere('p.project_id = ' . (int)$this->project_id);
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = oc.contact_id');
+        $q->addWhere("cm.method_name = 'email_primary'");
+        $q->addQuery('cm.method_value AS owner_email');
 		$users = $q->loadList();
 		$q->clear();
 
@@ -697,11 +698,23 @@ class CProject extends CW2pObject {
 		if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
 			$q = new DBQuery;
 			$q->addTable('contacts', 'c');
+            $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
+
+            $q->leftJoin('departments', 'd', 'd.dept_id = c.contact_department');
+            $q->addQuery('dept_name');
+
 			$q->addJoin('project_contacts', 'pc', 'pc.contact_id = c.contact_id', 'inner');
-			$q->leftJoin('departments', 'd', 'd.dept_id = c.contact_department');
 			$q->addWhere('pc.project_id = ' . (int) $projectId);
-			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email, contact_order_by');
-			$q->addQuery('contact_phone, dept_name');
+			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_order_by');
+
+            $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+            $q->addWhere("cm.method_name = 'email_primary'");
+            $q->addQuery('cm.method_value AS contact_email');
+
+            $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = c.contact_id');
+            $q->addWhere("cm2.method_name = 'phone_primary'");
+            $q->addQuery('cm2.method_value AS contact_phone');
+
 			$q->addWhere('
 				(contact_private=0
 					OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
@@ -710,6 +723,7 @@ class CProject extends CW2pObject {
 
 			$department = new CDepartment;
 			$department->setAllowedSQL($AppUI->user_id, $q);
+
 			return $q->loadHashList('contact_id');
 		}
 	}
@@ -875,6 +889,9 @@ class CProject extends CW2pObject {
         $q->addUpdate('project_percent_complete', $project_percent_complete);
         $q->addWhere('project_id  = ' . (int) $project_id);
         $q->exec();
+
+        global $AppUI;
+        CTask::storeTokenTask($AppUI, $project_id);
     }
 	public function getTotalHours() {
         trigger_error("CProject->getTotalHours() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE );
@@ -943,8 +960,8 @@ class CProject extends CW2pObject {
     $search['table_link'] = 'index.php?m=projects&a=view&project_id='; // first part of link
     $search['table_title'] = 'Projects';
     $search['table_orderby'] = 'project_name';
-    $search['search_fields'] = array('p.project_id', 'p.project_name', 'p.project_short_name', 'p.project_location', 'p.project_description', 'p.project_url', 'p.project_demo_url', 'con.contact_last_name', 'con.contact_first_name', 'con.contact_email', 'con.contact_title', 'con.contact_email2', 'con.contact_phone', 'con.contact_phone2', 'con.contact_address1', 'con.contact_notes');
-    $search['display_fields'] = array('p.project_id', 'p.project_name', 'p.project_short_name', 'p.project_location', 'p.project_description', 'p.project_url', 'p.project_demo_url', 'con.contact_last_name', 'con.contact_first_name', 'con.contact_email', 'con.contact_title', 'con.contact_email2', 'con.contact_phone', 'con.contact_phone2', 'con.contact_address1', 'con.contact_notes');
+    $search['search_fields'] = array('p.project_id', 'p.project_name', 'p.project_short_name', 'p.project_location', 'p.project_description', 'p.project_url', 'p.project_demo_url', 'con.contact_last_name', 'con.contact_first_name', 'con.contact_title', 'con.contact_address1', 'con.contact_notes');
+    $search['display_fields'] = array('p.project_id', 'p.project_name', 'p.project_short_name', 'p.project_location', 'p.project_description', 'p.project_url', 'p.project_demo_url', 'con.contact_last_name', 'con.contact_first_name', 'con.contact_title', 'con.contact_address1', 'con.contact_notes');
     $search['table_joins'] = array(array('table' => 'project_contacts', 'alias' => 'pc', 'join' => 'p.project_id = pc.project_id'), array('table' => 'contacts', 'alias' => 'con', 'join' => 'pc.contact_id = con.contact_id'));
 
     return $search;

@@ -44,7 +44,10 @@ function __autoload($class_name) {
             require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
             break;
         case 'cfilefolder':
-            require_once W2P_BASE_DIR.'/modules/files/files.class.php';
+            require_once W2P_BASE_DIR.'/modules/files/filefolder.class.php';
+            break;
+        case 'cforummessage':
+            require_once W2P_BASE_DIR.'/modules/forums/forummessage.class.php';
             break;
         case 'ctasklog':
             require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
@@ -315,8 +318,11 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
 	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
-		 contact_email, company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
+		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
+    $q->addWhere("cm.method_name = 'email_primary'");
+    $q->addQuery('cm.method_value AS contact_email');
 	if ($stub) {
 		$q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
 	} elseif ($where) {
@@ -349,7 +355,7 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
-		 contact_email, company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
+		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 	if ($stub) {
 		$q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
@@ -357,6 +363,9 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 		$where = $q->quote('%' . $where . '%');
 		$q->addWhere('(UPPER(user_username) LIKE ' . $where . ' OR UPPER(contact_first_name) LIKE ' . $where . ' OR UPPER(contact_last_name) LIKE ' . $where . ')');
 	}
+    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
+    $q->addWhere("cm.method_name = 'email_primary'");
+    $q->addQuery('cm.method_value AS contact_email');
 
 	$q->addGroup('user_id');
 	$q->addOrder($orderby);
@@ -590,9 +599,10 @@ function w2PgetParam(&$arr, $name, $def = null) {
 	global $AppUI;
 
 	if (isset($arr[$name])) {
-		if ((strpos($arr[$name], ' ') === false && strpos($arr[$name], '<') === false
-			&& strpos($arr[$name], '"') === false && strpos($arr[$name], '[') === false
-			&& strpos($arr[$name], ';') === false && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
+        if ((is_array($arr[$name])) || (strpos($arr[$name], ' ') === false 
+            && strpos($arr[$name], '<') === false && strpos($arr[$name], '"') === false
+            && strpos($arr[$name], '[') === false && strpos($arr[$name], ';') === false
+            && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
 				return isset($arr[$name]) ? $arr[$name] : $def;
 			} else {
 				/*echo('<pre>');
@@ -693,22 +703,11 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	* 2) project_id and module_id should be provided in order to filter history entries
 	*
 	*/
-	if (!w2PgetConfig('log_changes')) {
+	if (!w2PgetConfig('log_changes') || !$AppUI->isActiveModule('history')) {
 		return;
 	}
-	$description = str_replace("'", "\'", $description);
+
 	$q = new DBQuery;
-	$q->addTable('modules');
-	$q->addWhere('mod_name = \'History\' and mod_active = 1');
-	$qid = $q->exec();
-
-	if (!$qid || db_num_rows($qid) == 0) {
-		$AppUI->setMsg('History module is not loaded, but your config file has requested that changes be logged.  You must either change the config file or install and activate the history module to log changes.', UI_MSG_ALERT);
-		$q->clear();
-		return;
-	}
-
-	$q->clear();
 	$q->addTable('history');
 	$q->addInsert('history_action', $action);
 	$q->addInsert('history_item', $id);
@@ -718,8 +717,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	$q->addInsert('history_project', $project_id);
 	$q->addInsert('history_table', $table);
 	$q->exec();
-	echo db_error();
-	$q->clear();
+	//echo db_error();
 }
 
 ##
@@ -865,6 +863,19 @@ function formatTime($uts) {
 	return $date->format($AppUI->getPref('SHDATEFORMAT'));
 }
 
+function filterCurrency($number) {
+
+    if (substr($number, -3, 1) == ',') {
+        // This is the European format, so convert it to the US decimal format.
+        $number = str_replace('.', '', $number);
+        $number = str_replace(',', '.', $number);
+    } else {
+        // This is the US format, so just make sure it's clean.
+        $number = str_replace(',', '', $number);
+    }
+
+    return $number;
+}
 /**
  * This function is necessary because Windows likes to
  * write their own standards.  Nothing that depends on locales
@@ -1205,8 +1216,8 @@ function w2PHTMLDecode($txt) {
 		}
 	} else {
 		if (is_array($txt)) {
-			foreach ($txt as $k => $v) {
-				$txt[$k] = html_entity_decode($v, ENT_COMPAT);
+            foreach ($txt as $k => $v) {
+                $txt[$k] = (is_array($v)) ? $v : html_entity_decode($v, ENT_COMPAT);
 			}
 		} else {
 			$txt = html_entity_decode($txt, ENT_COMPAT);

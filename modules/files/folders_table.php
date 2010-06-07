@@ -10,17 +10,17 @@ global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'];
 
-$page = w2PgetParam($_GET, 'page', 1);
+$page = (int) w2PgetParam($_GET, 'page', 1);
 
 if (!isset($project_id)) {
-	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
+	$project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 }
 if (!$project_id) {
 	$showProject = true;
 }
 
 if (!isset($company_id)) {
-	$company_id = w2PgetParam($_REQUEST, 'company_id', 0);
+	$company_id = (int) w2PgetParam($_REQUEST, 'company_id', 0);
 }
 
 $obj = new CCompany();
@@ -28,7 +28,7 @@ $allowed_companies_ary = $obj->getAllowedRecords($AppUI->user_id, 'company_id,co
 $allowed_companies = implode(',', array_keys($allowed_companies_ary));
 
 if (!isset($task_id)) {
-	$task_id = w2PgetParam($_REQUEST, 'task_id', 0);
+	$task_id = (int) w2PgetParam($_REQUEST, 'task_id', 0);
 }
 
 $xpg_pagesize = w2PgetConfig('page_size', 50);
@@ -79,7 +79,7 @@ $q->addGroup('file_name');
 // counts total recs from selection
 $xpg_totalrecs = count($q->loadList());
 $q->clear();
-
+$junkFile = new CFile();    //This line is total junk.. it's just here so getFolderSelectList() can be included.
 ?>
 <script type="text/JavaScript">
 function expand(id){

@@ -14,7 +14,7 @@ global $db;
 $notify = w2PgetParam($_POST, 'notify', '0');
 $notify = ($notify != '0') ? '1' : '0';
 
-$notifyContacts = w2PgetParam($_POST, 'notify_contacts', '0');
+$notifyContacts = w2PgetParam($_POST, 'notify_contacts', 'off');
 $notifyContacts = ($notifyContacts != '0') ? '1' : '0';
 
 $isNotNew = (int) w2PgetParam($_POST, 'file_id', '0');
@@ -91,7 +91,7 @@ if ($del) {
 		$AppUI->redirect();
 	} else {
 		$obj->notify($notify);
-    $obj->notifyContacts($notifyContacts);
+        $obj->notifyContacts($notifyContacts);
 
 		$AppUI->setMsg('deleted', UI_MSG_OK, true);
 		$AppUI->redirect($redirect);
@@ -167,15 +167,15 @@ if (!$file_id) {
 
 $result = $obj->store($AppUI);
 if (is_array($result)) {
-  $AppUI->setMsg($result, UI_MSG_ERROR, true);
-  $AppUI->holdObject($obj);
-  $AppUI->redirect('m=files&a=addedit');
+    $AppUI->setMsg($result, UI_MSG_ERROR, true);
+    $AppUI->holdObject($obj);
+    $AppUI->redirect('m=files&a=addedit');
 }
 if ($result) {
 	// Notification
 	$obj->load($obj->file_id);
 	$obj->notify($notify);
-  $obj->notifyContacts($notifyContacts);
+    $obj->notifyContacts($notifyContacts);
 
 	// Delete the existing (old) file in case of file replacement (through addedit not through c/o-versions)
 	if (($file_id) && ($upload['size'] > 0)) {
@@ -188,9 +188,9 @@ if ($result) {
 		$AppUI->setMsg($file_id ? 'updated' : 'added', UI_MSG_OK, true);
 	}
 
-  $indexed = $obj->indexStrings();
-  $AppUI->setMsg('; ' . $indexed . ' unique words indexed', UI_MSG_OK, true);
-  $AppUI->redirect('m=files');
+    $indexed = $obj->indexStrings();
+    $AppUI->setMsg('; ' . $indexed . ' unique words indexed', UI_MSG_OK, true);
+    $AppUI->redirect('m=files');
 } else {
-  $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect('m=public&a=access_denied');
 }

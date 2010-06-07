@@ -49,11 +49,17 @@ $titleBlock->show();
     <table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl">
         <tr>
             <th nowrap="nowrap">&nbsp;</th>
-            <th nowrap="nowrap" width="25"><a href="?m=forums&orderby=watch_user" class="hdr"><?php echo $AppUI->_('Watch'); ?></a></th>
-            <th nowrap="nowrap"><a href="?m=forums&orderby=forum_name" class="hdr"><?php echo $AppUI->_('Forum Name'); ?></a></th>
-            <th nowrap="nowrap" width="50" align="center"><a href="?m=forums&orderby=forum_topics" class="hdr"><?php echo $AppUI->_('Topics'); ?></a></th>
-            <th nowrap="nowrap" width="50" align="center"><a href="?m=forums&orderby=forum_replies" class="hdr"><?php echo $AppUI->_('Replies'); ?></a></th>
-            <th nowrap="nowrap" width="200"><a href="?m=forums&orderby=forum_last_date" class="hdr"><?php echo $AppUI->_('Last Post Info'); ?></a></th>
+            <?php
+            $fieldList = array('watch_user', 'forum_name', 'forum_topics', 'forum_replies', 'forum_last_date');
+            $fieldNames = array('Watch', 'Forum Name', 'Topics', 'Replies', 'Last Post Info');
+            foreach ($fieldNames as $index => $name) {
+                ?><th nowrap="nowrap">
+                    <a href="?m=forums&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                        <?php echo $AppUI->_($fieldNames[$index]); ?>
+                    </a>
+                </th><?php
+            }
+            ?>
         </tr>
         <?php
         $p = '';

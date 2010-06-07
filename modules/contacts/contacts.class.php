@@ -26,25 +26,11 @@ class CContact extends CW2pObject {
 	public $contact_company = null;
 	public $contact_department = null;
 	public $contact_type = null;
-	public $contact_email = null;
-	public $contact_email2 = null;
-	public $contact_phone = null;
-	public $contact_phone2 = null;
-	public $contact_fax = null;
-	public $contact_mobile = null;
 	public $contact_address1 = null;
 	public $contact_address2 = null;
 	public $contact_city = null;
 	public $contact_state = null;
 	public $contact_zip = null;
-	public $contact_url = null;
-	public $contact_icq = null;
-	public $contact_aol = null;
-	public $contact_yahoo = null;
-	public $contact_msn = null;
-	public $contact_jabber = null;
-	public $contact_skype = null;
-	public $contact_google = null;
 	public $contact_notes = null;
 	public $contact_project = null;
 	public $contact_country = null;
@@ -73,13 +59,11 @@ class CContact extends CW2pObject {
 
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
-        $errorMsgArray = $this->check();
+        $perms = $AppUI->acl();
+        
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
-        }
         /*
         *  This  validates that any Contact saved will have a Display Name as
         * required by various dropdowns, etc throughout the system.  This is
@@ -89,7 +73,7 @@ class CContact extends CW2pObject {
         if(mb_strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
             //TODO: this should use the USERFORMAT to determine how display names are generated
             if ($this->contact_first_name == null && $this->contact_last_name == null) {
-                $this->contact_order_by = $this->contact_email;
+               $this->contact_order_by = $this->contact_company;
             } else {
                 $this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
             }
@@ -103,11 +87,89 @@ class CContact extends CW2pObject {
         if($this->contact_birthday == '') {
             $this->contact_birthday = null;
         }
+
+        $errorMsgArray = $this->check();
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
         $q = new DBQuery;
         $this->contact_lastupdate = $q->dbfnNow();
-        addHistory('contacts', $this->contact_id, 'store', $this->contact_first_name.' '.$this->contact_last_name, $this->contact_id);
+        /*
+         * TODO: I don't like the duplication on each of these two branches, but I
+         *   don't have a good idea on how to fix it at the moment...
+         */
+        if ($this->contact_id) {// && $perms->checkModuleItem('contacts', 'edit', $this->contact_id)) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        if (0 == $this->contact_id) {// && $perms->checkModuleItem('contacts', 'add')) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        if ($stored) {
+            $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
+            $custom_fields->bind($_POST);
+            $sql = $custom_fields->store($this->company_id); // Store Custom Fields
+        }
 
-        parent::store();
+        /*
+         *  TODO: I don't like using the $_POST in here..
+         */
+        if ($stored) {
+            $methods = array();
+            if (!empty($_POST['contact_methods'])) {
+                foreach ($_POST['contact_methods']['field'] as $key => $field) {
+                    $methods[$field] = $_POST['contact_methods']['value'][$key];
+                }
+            }
+            $this->setContactMethods($methods);
+        }
+        return $stored;
+	}
+
+	public function setContactMethods(array $methods) {
+		$q = new DBQuery;
+		$q->setDelete('contacts_methods');
+		$q->addWhere('contact_id=' . (int)$this->contact_id);
+		$q->exec();
+		$q->clear();
+
+		if (!empty($methods)) {
+			$q = new DBQuery;
+			$q->addTable('contacts_methods');
+			$q->addInsert('contact_id', (int)$this->contact_id);
+			foreach ($methods as $name => $value) {
+				if (!empty($value)) {
+					$q->addInsert('method_name', $name);
+					$q->addInsert('method_value', $value);
+					$q->exec();
+				}
+			}
+			$q->clear();
+		}
+	}
+
+	public function getContactMethods($methodsArray = null) {
+		$q = new DBQuery;
+		$q->addTable('contacts_methods');
+		$q->addQuery('method_name, method_value');
+		$q->addWhere('contact_id = ' . (int)$this->contact_id);
+        if (is_array($methodsArray)) {
+            $q->addWhere("method_name IN ('".implode("','", $methodsArray)."')");
+        }
+		$q->addOrder('method_name');
+		$contacts = $q->loadList();
+
+        foreach($contacts as $row => $data) {
+            $results[$data['method_name']] = $data['method_value'];
+        }
+
+		return $results ? $results : array();
 	}
 
 	public function delete(CAppUI $AppUI = null) {
@@ -116,7 +178,6 @@ class CContact extends CW2pObject {
         if ($msg = parent::delete()) {
             return $msg;
         }
-        addHistory('contacts', 0, 'delete', 'Deleted', 0);
         return true;
 	}
 
@@ -124,16 +185,7 @@ class CContact extends CW2pObject {
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        if ('' != $this->contact_url && !w2p_check_url($this->contact_url)) {
-            $errorArray['contact_url'] = $baseErrorMsg . 'contact url is not formatted properly';
-        }
-        if ('' != $this->contact_email && !w2p_check_email($this->contact_email)) {
-            $errorArray['contact_email'] = $baseErrorMsg . 'contact email is not formatted properly';
-        }
-        if ('' != $this->contact_email2 && !w2p_check_email($this->contact_email2)) {
-            $errorArray['contact_email2'] = $baseErrorMsg . 'contact email2 is not formatted properly';
-        }
-        return $errorArray;
+	    return $errorArray;
 	}
 
 	public function canDelete(&$msg, $oid = null, $joins = null) {
@@ -266,9 +318,10 @@ class CContact extends CW2pObject {
 
 		$mail = new Mail;
 
+        $contactMethods = $this->getContactMethods();
 		$mail->Subject('Hello', $locale_char_set);
 
-		if ($this->contact_email) {
+		if ('' != $contactMethods['email_primary']) {
 			$q = new DBQuery;
 			$q->addTable('companies');
 			$q->addQuery('company_id, company_name');
@@ -288,8 +341,8 @@ class CContact extends CW2pObject {
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}
 
-		if ($mail->ValidEmail($this->contact_email)) {
-			$mail->To($this->contact_email, true);
+		if ($mail->ValidEmail($contactMethods['email_primary'])) {
+			$mail->To($contactMethods['email_primary'], true);
 			$mail->Send();
 		}
 		return '';
@@ -340,27 +393,25 @@ class CContact extends CW2pObject {
 	public static function searchContacts(CAppUI $AppUI = null, $where = '', $searchString = '') {
 		global $AppUI;
 
-    $showfields = array('contact_address1' => 'contact_address1',
+        $showfields = array('contact_address1' => 'contact_address1',
 			'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city',
 			'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip',
 			'contact_country' => 'contact_country', 'contact_company' => 'contact_company',
-			'company_name' => 'company_name', 'dept_name' => 'dept_name',
-			'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2',
-			'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax',
-			'contact_email' => 'contact_email', 'contact_job'=>'contact_job');
+			'company_name' => 'company_name', 'dept_name' => 'dept_name');
 		$additional_filter = '';
 
 		if ($searchString != '') {
-			$additional_filter = "OR contact_first_name like '%$searchString%' OR contact_last_name  like '%$searchString%'
+			$additional_filter = "OR contact_first_name like '%$searchString%'
+                                  OR contact_last_name  like '%$searchString%'
 			                      OR CONCAT(contact_first_name, ' ', contact_last_name)  like '%$searchString%'
-								  					OR company_name like '%$searchString%' OR contact_notes like '%$searchString%'
-								  					OR contact_email like '%$searchString%'";
+                                  OR company_name like '%$searchString%'
+                                  OR contact_notes like '%$searchString%'";
 		}
 		// assemble the sql statement
 		$q = new DBQuery;
 		$q->addQuery('contact_id, contact_order_by');
 		$q->addQuery($showfields);
-		$q->addQuery('contact_first_name, contact_last_name, contact_phone, contact_title');
+		$q->addQuery('contact_first_name, contact_last_name, contact_title');
 		$q->addQuery('contact_updatekey, contact_updateasked, contact_lastupdate');
 		$q->addQuery('user_id');
 		$q->addTable('contacts', 'a');
@@ -436,7 +487,10 @@ class CContact extends CW2pObject {
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-		$q->addWhere("contact_email = '$email'");
+
+        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = user_contact');
+        $q->addWhere("cm.method_value = '$email'");
+
 		$q->setLimit(1);
 		$r = $q->loadResult();
 		$result = (is_array($r)) ? $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'] : 'User Not Found';
@@ -474,8 +528,8 @@ class CContact extends CW2pObject {
 	public function hook_cron() {
 		global $AppUI;
 
-    $q = new DBQuery;
-    $q->addTable('contacts');
+        $q = new DBQuery;
+        $q->addTable('contacts');
 		$q->addQuery('contact_id');
 		$q->addWhere('contact_first_name IS NULL');
 		$contactIdList = $q->loadList();
@@ -492,22 +546,22 @@ class CContact extends CW2pObject {
 		$this->clearOldUpdatekeys($days_for_update);
 	}
 
-  public function hook_search() {
-    $search['table'] = 'contacts';
-    $search['table_alias'] = 'c';
-    $search['table_module'] = 'contacts';
-    $search['table_key'] = 'c.contact_id'; // primary key in searched table
-    $search['table_link'] = 'index.php?m=contacts&a=view&contact_id='; // first part of link
-    $search['table_title'] = 'Contacts';
-    $search['table_orderby'] = 'contact_last_name,contact_first_name';
-    $search['search_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_email', 'contact_email2', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
-    $search['display_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_email', 'contact_email2', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
+    public function hook_search() {
+        $search['table'] = 'contacts';
+        $search['table_alias'] = 'c';
+        $search['table_module'] = 'contacts';
+        $search['table_key'] = 'c.contact_id'; // primary key in searched table
+        $search['table_link'] = 'index.php?m=contacts&a=view&contact_id='; // first part of link
+        $search['table_title'] = 'Contacts';
+        $search['table_orderby'] = 'contact_last_name,contact_first_name';
+        $search['search_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
+        $search['display_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
 
-    return $search;
-  }
+        return $search;
+    }
 
-  public function hook_calendar($userId) {
+    public function hook_calendar($userId) {
 //    return $this->getUpcomingBirthdays($userId);
-	return null;
-  }
+        return null;
+    }
 }

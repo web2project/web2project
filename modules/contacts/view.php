@@ -42,6 +42,10 @@ $countries = w2PgetSysVal('GlobalCountries');
 $company_detail = $contact->getCompanyDetails();
 $dept_detail = $contact->getDepartmentDetails();
 
+// Get the Contact info (phone, emails, etc) for the contact
+$methods = $contact->getContactMethods();
+$methodLabels = w2PgetSysVal('ContactMethods');
+
 // setup the title block
 $ttl = 'View Contact';
 $titleBlock = new CTitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' . $a);
@@ -79,11 +83,11 @@ function delIt(){
 		<td valign="top">
 			<table border="0" cellpadding="1" cellspacing="1">
 				<tr>
-					<td align="right"><?php echo $AppUI->_('First Name'); ?>:</td>
+					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('First Name'); ?>:</td>
 					<td class="hilite" width="100%"><?php echo $contact->contact_first_name; ?></td>
 				</tr>
 				<tr>
-					<td align="right">&nbsp;&nbsp;<?php echo $AppUI->_('Last Name'); ?>:</td>
+					<td align="right" nowrap="nowrap">&nbsp;&nbsp;<?php echo $AppUI->_('Last Name'); ?>:</td>
 					<td class="hilite" width="100%"><?php echo $contact->contact_last_name; ?></td>
 				</tr>
 				<tr>
@@ -120,10 +124,10 @@ function delIt(){
 					<td align="right" valign="top" width="100"><?php echo $AppUI->_('Address'); ?>:</td>
 					<td class="hilite" width="100%">
 						<?php echo $contact->contact_address1; ?><br />
-		        <?php echo $contact->contact_address2; ?><br />
-		        <?php echo $contact->contact_city . ', ' . $contact->contact_state . ' ' . $contact->contact_zip; ?><br />
-		        <?php echo isset($countries[$contact->contact_country]) ? $countries[$contact->contact_country] : $contact->contact_country; ?>
-		     </td>
+                        <?php echo $contact->contact_address2; ?><br />
+                        <?php echo $contact->contact_city . ', ' . $contact->contact_state . ' ' . $contact->contact_zip; ?><br />
+                        <?php echo isset($countries[$contact->contact_country]) ? $countries[$contact->contact_country] : $contact->contact_country; ?>
+                     </td>
 				</tr>
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Map Address'); ?>:</td>
@@ -132,67 +136,17 @@ function delIt(){
 			</table>
 		</td>
 		<td>
-			<table border="0" cellpadding="1" cellspacing="1">
-				<tr>
-					<td align="right" width="100"><?php echo $AppUI->_('Work Phone'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_phone; ?></td>
-				</tr>
-				<tr>
-					<td align="right"><?php echo $AppUI->_('Home Phone'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_phone2; ?></td>
-				</tr>
-				<tr>
-					<td align="right"><?php echo $AppUI->_('Fax'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_fax; ?></td>
-				</tr>
-				<tr>
-					<td align="right"><?php echo $AppUI->_('Mobile Phone'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_mobile; ?></td>
-				</tr>
-				<tr>
-					<td align="right" width="100"><?php echo $AppUI->_('Email'); ?>:</td>
-					<td nowrap="nowrap" class="hilite" width="100%"><a href="mailto:<?php echo $contact->contact_email; ?>"><?php echo $contact->contact_email; ?></a></td>
-				</tr>
-				<tr>
-					<td align="right"><?php echo $AppUI->_('Email'); ?>2:</td>
-					<td nowrap="nowrap" class="hilite" width="100%"><a href="mailto:<?php echo $contact->contact_email2; ?>"><?php echo $contact->contact_email2; ?></a></td>
-				</tr>
-				<tr>
-					<td align="right"><?php echo $AppUI->_('Homepage'); ?>:</td>
-					<td nowrap="nowrap" class="hilite" width="100%"><a href="<?php echo $contact->contact_url; ?>"><?php echo $contact->contact_url; ?></a></td>
-				</tr>
-				<tr>
-					<td align="right">Jabber:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_jabber; ?></td>
-				</tr>
-				<tr>
-					<td align="right">ICQ:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_icq; ?></td>
-				</tr>
-				<tr>
-					<td align="right">AOL:</td>
-					<td class="hilite" width="100%"><a href="aim:<?php echo $contact->contact_aol; ?>"><?php echo $contact->contact_aol; ?></a></td>
-				</tr>
-				<tr>
-					<td align="right">MSN:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_msn; ?></td>
-				</tr>
-				<tr>
-					<td align="right">Yahoo:</td>
-					<td class="hilite" width="100%"><a href="ymsgr:sendIM?<?php echo $contact->contact_yahoo; ?>"><?php echo $contact->contact_yahoo; ?></a></td>
-				</tr>
-				<tr>
-					<td align="right">Skype:</td>
-					<td class="hilite" width="100%"><a href="skype:<?php echo $contact->contact_skype; ?>"><?php echo $contact->contact_skype; ?></a></td>
-				</tr>
-				<tr>
-					<td align="right">Google:</td>
-					<td class="hilite" width="100%"><a href="google:<?php echo $contact->contact_google; ?>"><?php echo $contact->contact_google; ?></a></td>
-				</tr>
+            <table border="0" cellpadding="1" cellspacing="1">
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Birthday'); ?>:</td>
 					<td nowrap="nowrap" class="hilite" width="100%"><?php echo substr($contact->contact_birthday, 0, 10); ?></td>
 				</tr>
+                <?php foreach ($methods as $method => $value): ?>
+                    <tr>
+                        <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$method]); ?>:</td>
+                        <td class="hilite" width="100%"><?php echo $value; ?></td>
+                    </tr>
+                <?php endforeach; ?>
 			</table>
 		</td>
 		<td valign="top" align="right">

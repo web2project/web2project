@@ -29,10 +29,9 @@ $showfields = array('contact_address1' => 'contact_address1',
 	'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city', 
 	'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip', 
 	'contact_country' => 'contact_country', 'contact_company' => 'contact_company', 
-	'company_name' => 'company_name', 'dept_name' => 'dept_name', 
-	'contact_phone' => 'contact_phone', 'contact_phone2' => 'contact_phone2', 
-	'contact_mobile' => 'contact_mobile', 'contact_fax' => 'contact_fax', 
-	'contact_email' => 'contact_email', 'contact_job'=>'contact_job');
+	'company_name' => 'company_name', 'dept_name' => 'dept_name', 'contact_job'=>'contact_job');
+$contactMethods = array('email_primary', 'phone_primary', 'phone_alt', 'phone_mobile', 'phone_fax');
+$methodLabels = w2PgetSysVal('ContactMethods');
 
 // assemble the sql statement
 $rows = CContact::searchContacts($AppUI, $where);
@@ -72,7 +71,7 @@ $tdw = floor(100 / $carrWidth);
  * Contact search form
  */
 // Let's remove the first '%' that we previously added to ContIdxWhere
-$default_search_string = w2PformSafe($AppUI->getState('ContIdxWhere'), true);
+$default_search_string = w2PformSafe(substr($AppUI->getState('ContIdxWhere'), 1, strlen($AppUI->getState('ContIdxWhere'))), true);
 
 $form = '<form action="./index.php" method="get" accept-charset="utf-8">' . $AppUI->_('Search for') . '
            <input type="text" class="text" name="search_string" value="' . $default_search_string . '" />
@@ -184,9 +183,7 @@ if (function_exists('styleRenderBoxTop')) {
 											$s = '';
 											while (list($key, $val) = each($showfields)) {
 												if (mb_strlen($carr[$z][$x][$key]) > 0) {
-													if ($val == 'contact_email') {
-														$s .= '<td class="hilite" colspan="2"><a href="mailto:' . $carr[$z][$x][$key] . '" class="mailto">' . $carr[$z][$x][$key] . '</a></td></tr>';
-													} elseif ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {
+													if ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {
 														//Don't do a thing
 													} elseif ($val == 'company_name') {
 														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Company') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
@@ -194,14 +191,6 @@ if (function_exists('styleRenderBoxTop')) {
 														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Job Title') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													} elseif ($val == 'dept_name') {
 														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Department') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-													} elseif ($val == 'contact_phone') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Work Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-													} elseif ($val == 'contact_phone2') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Home Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-													} elseif ($val == 'contact_mobile') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Mobile Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-													} elseif ($val == 'contact_fax') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Fax') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													} elseif ($val == 'contact_country' && $carr[$z][$x][$key]) {
 														$s .= '<tr><td class="hilite" colspan="2">' . ($countries[$carr[$z][$x][$key]] ? $countries[$carr[$z][$x][$key]] : $carr[$z][$x][$key]) . '<br /></td></tr>';
 													} elseif ($val != 'contact_country') {
@@ -209,6 +198,15 @@ if (function_exists('styleRenderBoxTop')) {
 													}
 												}
 											}
+                                            $contact = new CContact();
+                                            $contact->contact_id = $contactid;
+                                            $methods = $contact->getContactMethods($contactMethods);
+                                            
+                                            foreach ($methods as $method => $value) {
+                                                $s .= '<tr><td width="35%"><strong>' . $AppUI->_($methodLabels[$method]) . ':</strong></td>';
+                                                $s .= '<td class="hilite" width="65%">' . $value . '</td></tr>';
+                                            }
+
 											echo $s;
 										?>
 									</tr>
