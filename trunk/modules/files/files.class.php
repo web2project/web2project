@@ -627,16 +627,6 @@ class CFile extends CW2pObject {
 
 }
 
-function file_size($size) {
-	if ($size > 1024 * 1024 * 1024)
-		return round($size / 1024 / 1024 / 1024, 2) . ' Gb';
-	if ($size > 1024 * 1024)
-		return round($size / 1024 / 1024, 2) . ' Mb';
-	if ($size > 1024)
-		return round($size / 1024, 2) . ' Kb';
-	return $size . ' B';
-}
-
 function last_file($file_versions, $file_name, $file_project) {
 	$latest = null;
 	//global $file_versions;
