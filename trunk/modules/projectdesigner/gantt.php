@@ -7,9 +7,6 @@
 
 ini_set('memory_limit', $w2Pconfig['reset_memory_limit']);
 
-include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
-
 global $caller, $locale_char_set, $showLabels, $showWork, $showLabels, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
 
 $project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
