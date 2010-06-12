@@ -236,7 +236,7 @@ if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
 	$d_end = new CDate();
-  $taskArray = count($gantt_arr);
+    $taskArray = count($gantt_arr);
 	for ($i = 0, $i_cmp = $taskArray; $i < $i_cmp; $i++) {
 		$a = $gantt_arr[$i][0];
 		$start = substr($a['task_start_date'], 0, 10);
@@ -246,18 +246,18 @@ if (!$start_date || !$end_date) {
 		$d_end->Date($end);
 
 		if ($i == 0) {
-      $min_d_start = $d_start;
-      $max_d_end = $d_end;
-      $start_date = $start;
-      $end_date = $end;
+            $min_d_start = $d_start;
+            $max_d_end = $d_end;
+            $start_date = $start;
+            $end_date = $end;
 		} else {
 			if (Date::compare($min_d_start, $d_start) > 0) {
 				$min_d_start = $d_start->duplicate();
-        $start_date = $start;
+                $start_date = $start;
 			}
 			if (Date::compare($max_d_end, $d_end) < 0) {
 				$max_d_end = $d_end->duplicate();
-        $end_date = $end;
+                $end_date = $end;
 			}
 		}
 	}
@@ -265,12 +265,7 @@ if (!$start_date || !$end_date) {
 $gantt->setDateRange($start_date, $end_date);
 $graph = $gantt->getGraph();
 
-if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-	$graph->scale->actinfo->SetFont(FF_CUSTOM);
-}
-
 //This kludgy function echos children tasks as threads
-
 function showgtask(&$a, $level = 0) {
 	/* Add tasks to gantt chart */
 	global $gantt_arr;
