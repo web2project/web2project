@@ -48,7 +48,12 @@ if (count($projects) > 0) {
 			<td nowrap="nowrap"><?php echo $project['contact_first_name']; ?>&nbsp;<?php echo $project['contact_last_name']; ?></td>
 			<td nowrap="nowrap"><?php echo $start_date->format($df); ?></td>
 			<td nowrap="nowrap"><?php echo $AppUI->_($pstatus[$project['project_status']]); ?></td>
-			<td nowrap="nowrap"><?php echo $w2Pconfig['currency_symbol'] . $project['project_target_budget']; ?></td>
+			<td nowrap="nowrap">
+                <?php
+                    echo $w2Pconfig['currency_symbol'];
+                    echo formatCurrency($project['project_target_budget'], $AppUI->getPref('CURRENCYFORM'));
+                ?>
+            </td>
 		</tr>
 		<?php
 	}
