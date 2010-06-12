@@ -23,6 +23,8 @@ $pdo->store();
 //Lets store the task lines
 $elements = $_POST;
 $project_id = $elements['project'];
+$taskErrors = array();
+
 foreach ($elements as $element => $on) {
 	if ((substr($element, 0, 14) == 'add_task_line_') && ($on != '')) {
 
@@ -58,9 +60,13 @@ foreach ($elements as $element => $on) {
 			$tline->task_status = '-1';
 		}
 
-		if (($msg = $tline->store())) {
-			$nrerrors++;
-		}
+        $result = $tline->store();
+        if (is_array($result)) {
+            $taskErrors[] = $result;
+        }
 	}
+}
+if (count($taskErrors) > 0) {
+    $AppUI->setMsg($result, UI_MSG_ERROR);
 }
 $AppUI->redirect('m=projectdesigner&project_id=' . $project_id);

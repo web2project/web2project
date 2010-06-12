@@ -117,6 +117,14 @@ class CTask extends CW2pObject {
 			if ($this->task_end_date == '' || $this->task_end_date == '0000-00-00 00:00:00') {
 				$errorArray['task_end_date'] = $baseErrorMsg . 'task end date is NULL';
 			}
+            if (!isset($errorArray['task_start_date']) && !isset($errorArray['task_end_date'])) {
+                $startTimestamp = strtotime($this->task_start_date);
+                $endTimestamp = strtotime($this->task_end_date);
+
+                if ($startTimestamp > $endTimestamp) {
+                    $errorArray['bad_date_selection'] = $baseErrorMsg . 'task start date is after task end date';
+                }
+            }
 		}
 
 		// ensure changes to checkboxes are honoured
