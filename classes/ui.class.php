@@ -122,6 +122,8 @@ class CAppUI {
  	@var integer */
 	public $user_is_admin = null;
 
+    public $long_date_format = null;
+
 	private $objStore = null;
 	/**
 
@@ -220,19 +222,16 @@ class CAppUI {
     *
     */
     public function getTZAwareTime() {
-        $df = $this->getPref('SHDATEFORMAT');
-        $df .= ' ' . $this->getPref('TIMEFORMAT');
-        $cf = $df;
-        $cal_df = $cf;
-        $cal_df = str_replace('%S', '%s', $cal_df);
-        $cal_df = str_replace('%M', '%i', $cal_df);
-        $cal_df = str_replace('%p', '%a', $cal_df);
-        $cal_df = str_replace('%I', '%h', $cal_df);
-        $cal_df = str_replace('%b', '%M', $cal_df);
-        $cal_df = str_replace('%', '', $cal_df);
-        $df = $cal_df;
+        $df = $this->getPref('FULLDATEFORMAT');
 
-        return date($df);
+        $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+        $userTimezone = $this->getPref('TIMEZONE');
+        $tz2 = new DateTimeZone($userTimezone);
+
+        $ts = new DateTime();
+        $ts->setTimezone($tz2);
+
+        return $ts->format($df);
     }
 
 	/**
@@ -902,6 +901,19 @@ class CAppUI {
 		$q->addWhere('pref_user = ' . (int)$uid);
 		$prefs = $q->loadHashList();
 		$this->user_prefs = array_merge($this->user_prefs, $prefs);
+
+        $df = $this->getPref('SHDATEFORMAT');
+        $df .= ' ' . $this->getPref('TIMEFORMAT');
+        $cf = $df;
+        $cal_df = $cf;
+        $cal_df = str_replace('%S', '%s', $cal_df);
+        $cal_df = str_replace('%M', '%i', $cal_df);
+        $cal_df = str_replace('%p', '%a', $cal_df);
+        $cal_df = str_replace('%I', '%h', $cal_df);
+        $cal_df = str_replace('%b', '%M', $cal_df);
+        $cal_df = str_replace('%', '', $cal_df);
+        $df = $cal_df;
+        $this->user_prefs['FULLDATEFORMAT'] = $cal_df;
 	}
 
 	// --- Module connectors
