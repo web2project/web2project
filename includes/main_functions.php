@@ -17,7 +17,9 @@ require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
  * so this ends up being nasty and getting nastier.  Hopefully, we can clean
  * these things up for v2.0
  */
-function __autoload($class_name) {
+spl_autoload_register('w2p_autoload');
+
+function w2p_autoload($class_name) {
     global $AppUI;
     $name = $class_name;
 
@@ -55,6 +57,9 @@ function __autoload($class_name) {
         case 'cprojectdesigneroptions':
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
+        case 'csyskey':
+            require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
+            break;
 
         default:
             if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
@@ -72,6 +77,12 @@ function __autoload($class_name) {
                     $name .= 's';
                 }
             }
+            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+                return;
+            }
+
+            $name = substr($name, 0, -1);
             if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
                 require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
                 return;
@@ -1314,9 +1325,9 @@ function w2p_check_url($link)
     }
 
     $urlPieces = parse_url($link);
-    if (preg_match("/^(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $urlPieces['host'])) {
+    //if (preg_match("/^(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $urlPieces['host'])) {
         $result = true;
-    }
+    //}
     return $result;
 }
 
