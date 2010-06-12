@@ -1360,7 +1360,7 @@ function w2p_textarea($content)
 
   if ($content != '') {
     $result = $content;
-    $result = htmlentities($result, ENT_QUOTES, 'UTF-8');
+    //$result = htmlentities($result, ENT_QUOTES, 'UTF-8');
 
     /*
      * Thanks to Alison Gianotto for two regular expressions to make our
@@ -1370,6 +1370,7 @@ function w2p_textarea($content)
     $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
     $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);
     $result = nl2br($result);
+    //$result = html_entity_decode($result);
   }
 
   return $result;
