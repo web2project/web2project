@@ -183,11 +183,11 @@ class CAppUI {
 		}
 	}
 
-/**
-* Used to load a php class file from the module directory
-* @param string $name The class root file name (excluding .ajax.php)
-* @return string The path to the include file
- */
+    /**
+    * Used to load a php class file from the module directory
+    * @param string $name The class root file name (excluding .ajax.php)
+    * @return string The path to the include file
+    */
 	public function getModuleAjax( $name=null ) {
 		if ($name) {
 			return W2P_BASE_DIR . '/modules/' . $name . '/' . $name . '.ajax.php';
@@ -215,6 +215,25 @@ class CAppUI {
 		}
 		return $this->version_string;
 	}
+
+    /**
+    *
+    */
+    public function getTZAwareTime() {
+        $df = $this->getPref('SHDATEFORMAT');
+        $df .= ' ' . $this->getPref('TIMEFORMAT');
+        $cf = $df;
+        $cal_df = $cf;
+        $cal_df = str_replace('%S', '%s', $cal_df);
+        $cal_df = str_replace('%M', '%i', $cal_df);
+        $cal_df = str_replace('%p', '%a', $cal_df);
+        $cal_df = str_replace('%I', '%h', $cal_df);
+        $cal_df = str_replace('%b', '%M', $cal_df);
+        $cal_df = str_replace('%', '', $cal_df);
+        $df = $cal_df;
+
+        return date($df);
+    }
 
 	/**
 	 * Checks that the current user preferred style is valid/exists.
