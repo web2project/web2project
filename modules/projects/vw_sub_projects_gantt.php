@@ -5,9 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 w2PsetExecutionConditions($w2Pconfig);
 
-include ($AppUI->getLibraryClass('jpgraph/src/jpgraph'));
-include ($AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt'));
-
 global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $user_id, $project_id, $project_original_id;
 
 // get the prefered date format
