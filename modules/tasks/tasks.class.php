@@ -1700,13 +1700,11 @@ class CTask extends CW2pObject {
             $q->addWhere("cm.method_name = 'email_primary'");
             $q->addQuery('cm.method_value AS contact_email');
 
-            $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = c.contact_id');
-            $q->addQuery('cm2.method_value AS contact_phone');
-
 			$q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
 
 			$department = new CDepartment;
 			$department->setAllowedSQL($AppUI->user_id, $q);
+
 			return $q->loadHashList('contact_id');
 		}
     }
