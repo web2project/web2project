@@ -125,7 +125,7 @@ class CForum extends CW2pObject {
         }
         if (0 == $this->forum_id && $perms->checkModuleItem('forums', 'add')) {
             $q = new DBQuery;
-            $this->forum_create_date = $q->dbfnNow();
+            $this->forum_create_date = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 return $msg;
             }

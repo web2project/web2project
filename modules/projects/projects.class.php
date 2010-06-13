@@ -515,18 +515,16 @@ class CProject extends CW2pObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
+        $q = new DBQuery;
+        $this->project_updated = $q->dbfnNowWithTZ();
         if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->company_id)) {
-            $q = new DBQuery;
-            $this->project_updated = $q->dbfnNow();
             if (($msg = parent::store())) {
                 return $msg;
             }
             $stored = true;
         }
         if (0 == $this->project_id && $perms->checkModuleItem('projects', 'add')) {
-            $q = new DBQuery;
-            $this->project_updated = $q->dbfnNow();
-            $this->project_created = $q->dbfnNow();
+            $this->project_created = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 return $msg;
             }

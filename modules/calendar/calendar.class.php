@@ -1013,7 +1013,7 @@ class CEvent extends CW2pObject {
 		$q->addQuery('event_description as description');
 		$q->addQuery('event_start_date as startDate');
 		$q->addQuery('event_end_date as endDate');
-		$q->addQuery($q->dbfnNow() . ' as updatedDate');
+		$q->addQuery($q->dbfnNowWithTZ() . ' as updatedDate');
 		$q->addQuery('CONCAT(\''. W2P_BASE_URL . '/index.php?m=calendar&a=view&event_id=' . '\', e.event_id) as url');
 		$q->addQuery('projects.project_id, projects.project_name');
 		$q->addTable('events', 'e');
