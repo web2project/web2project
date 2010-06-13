@@ -224,12 +224,28 @@ class CAppUI {
     public function getTZAwareTime() {
         $df = $this->getPref('FULLDATEFORMAT');
 
-        $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
         $userTimezone = $this->getPref('TIMEZONE');
-        $tz2 = new DateTimeZone($userTimezone);
+        $userTZ = new DateTimeZone($userTimezone);
 
         $ts = new DateTime();
-        $ts->setTimezone($tz2);
+        $ts->setTimezone($userTZ);
+
+        return $ts->format($df);
+    }
+
+    /**
+    *
+    */
+    public function formatTZAwareTime($datetime = '', $format = '') {
+        $df = ($format) ? $format : $this->getPref('FULLDATEFORMAT');
+
+        $userTimezone = $this->getPref('TIMEZONE');
+        $userTZ = new DateTimeZone($userTimezone);
+
+        $systemTZ = new DateTimeZone('Europe/London');
+
+        $ts = new DateTime($datetime, $systemTZ);
+        $ts->setTimezone($userTZ);
 
         return $ts->format($df);
     }
@@ -824,7 +840,7 @@ class CAppUI {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addInsert('user_id', '' . $this->user_id);
-		$q->addInsert('date_time_in', $q->dbfnNow(), false, true);
+		$q->addInsert('date_time_in', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addInsert('user_ip', $_SERVER['REMOTE_ADDR']);
 		$q->exec();
 		$this->last_insert_id = db_insert_id();
@@ -837,7 +853,7 @@ class CAppUI {
 	public function registerLogout($user_id) {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_out', $q->dbfnNow(), false, true);
+		$q->addUpdate('date_time_out', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addWhere('user_id = ' . (int)$user_id . ' AND (date_time_out = \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
 		if ($user_id > 0) {
 			$q->exec();
@@ -851,7 +867,7 @@ class CAppUI {
 	public function updateLastAction($last_insert_id) {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_last_action', $q->dbfnNow(), false, true);
+		$q->addUpdate('date_time_last_action', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addWhere('user_access_log_id = ' . $last_insert_id);
 		if ($last_insert_id > 0) {
 			$q->exec();
