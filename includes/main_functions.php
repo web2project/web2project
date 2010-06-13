@@ -1375,23 +1375,3 @@ function w2p_textarea($content)
 
   return $result;
 }
-
-function w2p_format_datetime($baseTZ, $userTZ, $format = '', $datetime = 0)
-{
-    date_default_timezone_set('America/New_York');
-
-    $rawDatetime = ($datetime) ? $datetime : time();
-    $baseTime = new DateTimeZone($baseTZ);
-    $userTime = new DateTimeZone($userTZ);
-    $x = new DateTime();
-
-    //convert to GMT
-    $baseOffset = $baseTime->getOffset($x);
-    $newDatetime = $rawDatetime - $baseOffset;
-
-    //convert to user TZ
-    $userOffset = $userTime->getOffset($x);
-    $newDatetime += $userOffset;
-
-    return date($format, $newDatetime);
-}
