@@ -237,15 +237,18 @@ class CAppUI {
     *
     */
     public function formatTZAwareTime($datetime = '', $format = '') {
-        $df = ($format) ? $format : $this->getPref('FULLDATEFORMAT');
-
         $userTimezone = $this->getPref('TIMEZONE');
         $userTZ = new DateTimeZone($userTimezone);
-
         $systemTZ = new DateTimeZone('Europe/London');
-
         $ts = new DateTime($datetime, $systemTZ);
         $ts->setTimezone($userTZ);
+
+        if ('' == $format) {
+            $df = $this->getPref('FULLDATEFORMAT');
+        } else {
+            $df = $format;
+            $ts  = new CDate($ts->format('Y-m-d H:i:s'));
+        }
 
         return $ts->format($df);
     }

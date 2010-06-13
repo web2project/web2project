@@ -60,7 +60,6 @@ $fp = -1;
 $id = 0;
 for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
 	$row = $links[$i];
-	$link_date = new CDate($row['link_date']);
 
 	if ($fp != $row['link_project']) {
 		if (!$row['project_name']) {
@@ -96,7 +95,11 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
         <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']]; ?></td> 
 	<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['task_id']; ?>"><?php echo $row['task_name']; ?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $row['contact_first_name'] . ' ' . $row['contact_last_name']; ?></td>
-	<td width="15%" nowrap="nowrap" align="center"><?php echo $link_date->format($df . ' ' . $tf); ?></td>
+	<td width="15%" nowrap="nowrap" align="center">
+        <?php
+            echo $AppUI->formatTZAwareTime($row['link_date'], $df . ' ' . $tf);
+        ?>
+    </td>
 </tr>
 <?php } ?>
 </table>
