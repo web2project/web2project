@@ -314,7 +314,7 @@ if ($do_report) {
 
 		$pdf = new Cezpdf();
 		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
-		$pdf->selectFont($font_dir . '/Helvetica.afm');
+		$pdf->selectFont($font_dir . '/Helvetica.afm', 'none');
 
 		$pdf->ezText(w2PgetConfig('company_name'), 12);
 		// $pdf->ezText( w2PgetConfig( 'company_name' ).' :: '.w2PgetConfig( 'page_title' ), 12 );
@@ -348,21 +348,21 @@ if ($do_report) {
 
 		$pdf->ezTable($pdfdata, $pdfheaders, $title, $options);
 
-    $w2pReport = new CReport();
-    if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
-			fwrite($fp, $pdf->ezOutput());
-			fclose($fp);
-      echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
-			echo $AppUI->_('View PDF File');
-			echo '</a>';
-		} else {
-			echo 'Could not open file to save PDF.  ';
-			if (!is_writable($temp_dir)) {
-				'The files/temp directory is not writable.  Check your file system permissions.';
-			}
-		}
-	}
-	echo '</td>
+        $w2pReport = new CReport();
+        if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
+            fwrite($fp, $pdf->ezOutput());
+            fclose($fp);
+            echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
+            echo $AppUI->_('View PDF File');
+            echo '</a>';
+        } else {
+            echo 'Could not open file to save PDF.  ';
+            if (!is_writable($temp_dir)) {
+                echo 'The files/temp directory is not writable.  Check your file system permissions.';
+            }
+        }
+    }
+    echo '</td>
 </tr>
 </table>';
 }
