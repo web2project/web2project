@@ -52,6 +52,7 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 require_once W2P_BASE_DIR . '/includes/session.php';
 
 $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
 
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.
