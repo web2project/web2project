@@ -75,7 +75,7 @@ if ($del) {
 		$GLOBALS['a'] = "clash";
 		$do_redirect = false;
 	} else {
-		if (($msg = $obj->store())) {
+		if (($msg = $obj->store($AppUI))) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 		} else {
 			$custom_fields = new w2p_Core_CustomFields('calendar', 'addedit', $obj->event_id, 'edit');

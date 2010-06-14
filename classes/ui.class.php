@@ -236,6 +236,21 @@ class CAppUI {
     /**
     *
     */
+    public function convertToSystemTZ($datetime = '', $format = 'Y-m-d H:i:s') {
+        $userTZ = $this->getPref('TIMEZONE');
+        $userTimezone = new DateTimeZone($userTZ);
+
+        $systemTimezone = new DateTimeZone('Europe/London');
+
+        $ts = new DateTime($datetime, $userTimezone);
+        $ts->setTimezone($systemTimezone);
+
+        return $ts->format($format);
+    }
+
+    /**
+    *
+    */
     public function formatTZAwareTime($datetime = '', $format = '') {
         $userTimezone = $this->getPref('TIMEZONE');
         $userTZ = new DateTimeZone($userTimezone);
