@@ -442,21 +442,15 @@ class CFile extends CW2pObject {
 
                     $q->addJoin('users', 'o', 'o.user_id = t.task_owner');
                     $q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
-                    $q->leftJoin('contacts_methods', 'cm1', 'cm1.contact_id = oc.contact_id');
-                    $q->addWhere("cm1.method_name = 'email_primary'");
-                    $q->addQuery('cm1.method_value as owner_email');
+                    $q->addQuery('oc.contact_id as owner_contact_id');
 
                     $q->addJoin('users', 'c', 'c.user_id = t.task_creator');
                     $q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
-                    $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = cc.contact_id');
-                    $q->addWhere("cm2.method_name = 'email_primary'");
-                    $q->addQuery('cm2.method_value as creator_email');
+                    $q->addQuery('cc.contact_id as creator_contact_id');
 
                     $q->addJoin('users', 'a', 'a.user_id = u.user_id');
                     $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
-                    $q->leftJoin('contacts_methods', 'cm3', 'cm3.contact_id = ac.contact_id');
-                    $q->addWhere("cm3.method_name = 'email_primary'");
-                    $q->addQuery('cm3.method_value as assignee_email');
+                    $q->addQuery('ac.contact_id as assignee_contact_id');
 
                     $q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
                     $this->_users = $q->loadList();
@@ -474,6 +468,21 @@ class CFile extends CW2pObject {
                 if ($this->_message != 'deleted') {
                     $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $this->file_id;
                     $body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->file_description;
+                }
+
+                $contact = new CContact();
+                foreach ($this->_users as $index => $info) {
+                    $contact->contact_id = $info['owner_contact_id'];
+                    $email = $contact->getContactMethods(array('email_primary'));
+                    $this->_users[$index]['owner_email'] = $email['email_primary'];
+
+                    $contact->contact_id = $info['creator_contact_id'];
+                    $email = $contact->getContactMethods(array('email_primary'));
+                    $this->_users[$index]['creator_email'] = $email['email_primary'];
+
+                    $contact->contact_id = $info['assignee_contact_id'];
+                    $email = $contact->getContactMethods(array('email_primary'));
+                    $this->_users[$index]['assignee_email'] = $email['email_primary'];
                 }
 
                 //send mail
@@ -533,9 +542,6 @@ class CFile extends CW2pObject {
                     $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                     $q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
-                    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-                    $q->addWhere("cm.method_name = 'email_primary'");
-                    $q->addQuery('cm.method_value AS contact_email');
 
                     $sql = '(' . $q->prepare() . ')';
                     $q->clear();
@@ -544,9 +550,6 @@ class CFile extends CW2pObject {
                     $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
                     $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
-                    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-                    $q->addWhere("cm.method_name = 'email_primary'");
-                    $q->addQuery('cm.method_value AS contact_email');
 
                     $sql .= '(' . $q->prepare() . ')';
                     $q->clear();
@@ -558,9 +561,6 @@ class CFile extends CW2pObject {
                     $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                     $q->addWhere('pc.project_id = ' . (int)$this->file_project);
-                    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-                    $q->addWhere("cm.method_name = 'email_primary'");
-                    $q->addQuery('cm.method_value AS contact_email');
 
                     $this->_users = $q->loadList();
                     $q->clear();
@@ -570,6 +570,13 @@ class CFile extends CW2pObject {
                 if ($this->_message != 'deleted') {
                     $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $this->file_id;
                     $body .= "\n" . $AppUI->_('Description') . ":\n" . $this->file_description;
+                }
+
+                $contact = new CContact();
+                foreach ($this->_users as $index => $info) {
+                    $contact->contact_id = $info['contact_id'];
+                    $email = $contact->getContactMethods(array('email_primary'));
+                    $this->_users[$index]['contact_email'] = $email['email_primary'];
                 }
 
                 //send mail

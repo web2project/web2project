@@ -22,15 +22,19 @@ if (count($contacts) > 0) {
 		<th><?php echo $AppUI->_('Department'); ?></th>
 	</tr>
 	<?php
+    $contact = new CContact();
 	foreach ($contacts as $contact_id => $contact_data) {
-		echo '<tr><td class="hilite">';
+		$contact->contact_id = $contact_id;
+        $info = $contact->getContactMethods(array('email_primary', 'phone_primary'));
+
+        echo '<tr><td class="hilite">';
 		echo '<a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">'; 
 		echo $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'];
 		echo '</a>';
 		echo '</td>';
 		echo '<td class="hilite">' . $contact_data['contact_job'] . '</td>';
-		echo '<td class="hilite"><a href="mailto:' . $contact_data['contact_email'] . '">' . $contact_data['contact_email'] . '</a></td>';
-		echo '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
+		echo '<td class="hilite"><a href="mailto:' . $info['email_primary'] . '">' . $info['email_primary'] . '</a></td>';
+		echo '<td class="hilite">' . $info['phone_primary'] . '</td>';
 		echo '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
 		echo '</tr>';
 	}

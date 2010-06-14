@@ -18,7 +18,7 @@ function cleanText($text) {
 }
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
-$notify_owner = (int) w2PgetParam($_POST, 'task_log_notify_owner', 0);
+$notify_owner = w2PgetParam($_POST, 'task_log_notify_owner', 'off');
 $isNotNew = (int) w2PgetParam($_POST, 'task_log_id', 0);
 
 $obj = new CTaskLog();
