@@ -253,7 +253,6 @@ if ($is_tabbed) {
                       || (!$project_id && !isset($projectArray[$row['project_id']]))) {
                         echo $s;
                     }
-                    $projectArray[$project_id] = $project_id;
 				}
 			}
 		}
