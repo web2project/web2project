@@ -17,7 +17,9 @@ require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
  * so this ends up being nasty and getting nastier.  Hopefully, we can clean
  * these things up for v2.0
  */
-function __autoload($class_name) {
+spl_autoload_register('w2p_autoload');
+
+function w2p_autoload($class_name) {
     global $AppUI;
     $name = $class_name;
 
@@ -55,6 +57,9 @@ function __autoload($class_name) {
         case 'cprojectdesigneroptions':
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
+        case 'csyskey':
+            require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
+            break;
 
         default:
             if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
@@ -72,6 +77,12 @@ function __autoload($class_name) {
                     $name .= 's';
                 }
             }
+            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+                return;
+            }
+
+            $name = substr($name, 0, -1);
             if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
                 require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
                 return;
@@ -863,6 +874,16 @@ function formatTime($uts) {
 	return $date->format($AppUI->getPref('SHDATEFORMAT'));
 }
 
+function file_size($size) {
+	if ($size > 1024 * 1024 * 1024)
+		return round($size / 1024 / 1024 / 1024, 2) . ' Gb';
+	if ($size > 1024 * 1024)
+		return round($size / 1024 / 1024, 2) . ' Mb';
+	if ($size > 1024)
+		return round($size / 1024, 2) . ' Kb';
+	return $size . ' B';
+}
+
 function filterCurrency($number) {
 
     if (substr($number, -3, 1) == ',') {
@@ -1304,9 +1325,9 @@ function w2p_check_url($link)
     }
 
     $urlPieces = parse_url($link);
-    if (preg_match("/^(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $urlPieces['host'])) {
+    //if (preg_match("/^(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,4}$/i", $urlPieces['host'])) {
         $result = true;
-    }
+    //}
     return $result;
 }
 
@@ -1339,7 +1360,7 @@ function w2p_textarea($content)
 
   if ($content != '') {
     $result = $content;
-    $result = htmlentities($result, ENT_QUOTES, 'UTF-8');
+    //$result = htmlentities($result, ENT_QUOTES, 'UTF-8');
 
     /*
      * Thanks to Alison Gianotto for two regular expressions to make our
@@ -1349,6 +1370,7 @@ function w2p_textarea($content)
     $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
     $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);
     $result = nl2br($result);
+    //$result = html_entity_decode($result);
   }
 
   return $result;

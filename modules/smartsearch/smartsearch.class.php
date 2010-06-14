@@ -14,6 +14,7 @@ class smartsearch {
 	public $table_link2 = null; // second part of link
 	public $table_title = null;
 	public $table_orderby = null;
+    public $table_groupby = null;
 	public $table_extra = null;
 	public $search_fields = array();
 	public $display_fields = array();
@@ -102,6 +103,10 @@ class smartsearch {
 		}
 
 		$q->addOrder($this->table_orderby);
+
+        if ($this->table_groupby) {
+            $q->addGroup($this->table_groupby);
+        }
 
 		if ($this->table_extra) {
 			$q->addWhere($this->table_extra);
