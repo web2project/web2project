@@ -176,7 +176,7 @@ class CTaskLog extends CW2pObject
         $this->task_log_updated = $q->dbfnNow();
 
         if ($this->task_log_date) {
-            $date = new CDate($obj->task_log_date);
+            $date = new CDate($this->task_log_date);
             $this->task_log_date = $date->format(FMT_DATETIME_MYSQL);
         }
         $dot = strpos($this->task_log_hours, ':');

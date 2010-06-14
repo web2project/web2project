@@ -374,14 +374,6 @@ class CDepartment extends CW2pObject {
             $q->addWhere('(contact_owner = ' . (int) $AppUI->user_id . ' OR contact_private = 0)');
             $q->addOrder('contact_first_name');
 
-            $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-            $q->addWhere("cm.method_name = 'email_primary'");
-            $q->addQuery('cm.method_value AS contact_email');
-
-            $q->leftJoin('contacts_methods', 'cm2', 'cm2.contact_id = con.contact_id');
-            $q->addWhere("cm2.method_name = 'phone_primary'");
-            $q->addQuery('cm2.method_value AS contact_phone');
-
 			$results = $q->loadHashList('contact_id');
 		}
 
