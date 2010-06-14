@@ -238,10 +238,6 @@ class CCompany extends CW2pObject {
 					OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
 					OR contact_owner IS NULL OR contact_owner = 0
 				)');
-            $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = a.contact_id');
-            $q->addWhere("cm.method_name = 'email_primary'");
-            $q->addQuery('cm.method_value as contact_email');
-
 			$department = new CDepartment;
 			$department->setAllowedSQL($AppUI->user_id, $q);
 
