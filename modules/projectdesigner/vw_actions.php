@@ -5,20 +5,27 @@ if (!defined('W2P_BASE_DIR')) {
 global $task_access, $task_priority, $project_id;
 
 $type = w2Pgetsysval('TaskType');
-$stype = array('' => '(Type)') + $type;
+$stype = array('' => '('.$AppUI->_('Type').')') + $type;
 $priority = w2Pgetsysval('TaskPriority');
-$spriority = array('' => '(Priority)') + $priority;
-$task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
-$stask_access = array('' => '(Access)') + $task_access;
+$spriority = array('' => '('.$AppUI->_('Priority').')') + $priority;
+$task_access = array(CTask::ACCESS_PUBLIC => $AppUI->_('Public'),
+        CTask::ACCESS_PROTECTED => $AppUI->_('Protected'),
+        CTask::ACCESS_PARTICIPANT => $AppUI->_('Participant'), CTask::ACCESS_PRIVATE => $AppUI->_('Private'));
+$stask_access = array('' => '('.$AppUI->_('Access').')') + $task_access;
 $durntype = w2PgetSysval('TaskDurationType');
-$sdurntype = array('' => '(Duration Type)') + $durntype;
-$sother = array('' => '(Other Operations)', '1' => 'Mark Tasks as Finished', '8' => 'Mark Tasks as Active', '9' => 'Mark Tasks as Inactive', '2' => 'Mark Tasks as Milestones', '3' => 'Mark Tasks as Non Milestone', '4' => 'Mark Tasks as Dynamic', '5' => 'Mark Tasks as Non Dynamic', '6' => 'Add Task Reminder', '7' => 'Remove Task Reminder', '10' => 'Remove Tasks Description', '99' => 'Delete Tasks');
+$sdurntype = array('' => '('.$AppUI->_('Duration Type').')') + $durntype;
+$sother = array('' => '('.$AppUI->_('Other Operations').')', '1' => $AppUI->_('Mark Tasks as Finished'),
+        '8' => $AppUI->_('Mark Tasks as Active'), '9' => $AppUI->_('Mark Tasks as Inactive'),
+        '2' => $AppUI->_('Mark Tasks as Milestones'), '3' => $AppUI->_('Mark Tasks as Non Milestone'),
+        '4' => $AppUI->_('Mark Tasks as Dynamic'), '5' => $AppUI->_('Mark Tasks as Non Dynamic'),
+        '6' => $AppUI->_('Add Task Reminder'), '7' => $AppUI->_('Remove Task Reminder'),
+        '10' => $AppUI->_('Remove Tasks Description'), '99' => $AppUI->_('Delete Tasks'));
 
 //Pull all users
 $users = $perms->getPermittedUsers();
-$sowners = array('' => '(Task Owner)') + $perms->getPermittedUsers('tasks');
-$sassign = array('' => '(Assign User)') + $perms->getPermittedUsers('tasks');
-$sunassign = array('' => '(Unassign User)') + $users;
+$sowners = array('' => '('.$AppUI->_('Task Owner').')') + $perms->getPermittedUsers('tasks');
+$sassign = array('' => '('.$AppUI->_('Assign User').')') + $perms->getPermittedUsers('tasks');
+$sunassign = array('' => '('.$AppUI->_('Unassign User').')') + $users;
 
 $obj = new CTask;
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
@@ -85,7 +92,7 @@ $sprojects = arrayMerge(array('' => '(' . $AppUI->_('Move to Project', UI_OUTPUT
 
 //lets addthe reference to percent
 $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
-$spercent = arrayMerge(array('' => '(Progress)'), $percent);
+$spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
 ?>
             <form name="frm_bulk" method="POST" action="?m=projectdesigner&a=do_task_bulk_aed" accept-charset="utf-8">
 			<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
