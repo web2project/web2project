@@ -122,7 +122,11 @@ function delIt(){
                 <?php if ($forum_id) { ?>
                 <tr>
                     <td align="right"><?php echo $AppUI->_('Created On'); ?></td>
-                    <td bgcolor="#ffffff"><?php echo $forum->forum_create_date; ?></td>
+                    <td bgcolor="#ffffff">
+                        <?php
+                            echo $AppUI->formatTZAwareTime($forum->forum_create_date);
+                        ?>
+                    </td>
                 </tr>
                 <tr>
                     <td align="right"><?php echo $AppUI->_('Last Post'); ?>:</td>

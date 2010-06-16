@@ -477,7 +477,7 @@ function displayFiles($folder) {
 					                <td width="15%" nowrap="nowrap">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</td>
 					                <td width="5%" nowrap="nowrap" align="right">' . intval($file_row['file_size'] / 1024) . 'kb </td>
 					                <td width="15%" nowrap="nowrap">' . $file_row['file_type'] . '</td>
-					                <td width="15%" nowrap="nowrap" align="center">' . $file_date->format($df . ' ' . $tf) . '</td>
+					                <td width="15%" nowrap="nowrap" align="center">' . $AppUI->formatTZAwareTime($file_row['file_date'], $df . ' ' . $tf) . '</td>
 				        			<td width="10%">' . $row['file_co_reason'] . '</td>
 				        			<td nowrap="nowrap" align="center">';
 					if (empty($file_row['file_checkout'])) {
@@ -525,7 +525,7 @@ function displayFiles($folder) {
 				<td width="15%" nowrap="nowrap">' . $file['contact_first_name'] . ' ' . $file['contact_last_name'] . '</td>
 				<td width="5%" nowrap="nowrap" align="right">' . intval($file['file_size'] / 1024) . ' kb</td>
 				<td width="15%" nowrap="nowrap">' . $file['file_type'] . '</td>
-				<td width="15%" nowrap="nowrap" align="center">' . $file_date->format($df . ' ' . $tf) . '</td>
+				<td width="15%" nowrap="nowrap" align="center">' . $AppUI->formatTZAwareTime($file['file_date'], $df . ' ' . $tf) . '</td>
 				<td width="10%">' . $file['file_co_reason'] . '</td>
 				<td nowrap="nowrap" align="center">';
         if (empty($row['file_checkout'])) {

@@ -94,7 +94,7 @@ class CContact extends CW2pObject {
         }
 
         $q = new DBQuery;
-        $this->contact_lastupdate = $q->dbfnNow();
+        $this->contact_lastupdate = $q->dbfnNowWithTZ();
         /*
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
@@ -305,9 +305,9 @@ class CContact extends CW2pObject {
 	public function clearUpdateKey() {
 		global $AppUI;
 
-    $rnow = new CDate();
+        $q = new DBQuery();
 		$this->contact_updatekey = '';
-		$this->contact_lastupdate = $rnow->format(FMT_DATETIME_MYSQL);
+		$this->contact_lastupdate = $q->dbfnNowWithTZ();
 		$this->store($AppUI);
 	}
 

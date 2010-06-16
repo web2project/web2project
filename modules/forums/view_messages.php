@@ -193,7 +193,7 @@ foreach ($messages as $row) {
 		$s .= '</tr><tr>';
 
 		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-		$s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" border="0" width="14" height="11">' . $date->format($df . ' ' . $tf) . '</td>';
+		$s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" border="0" width="14" height="11">' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . '</td>';
 		$s .= '<td valign="top" align="right" style="' . $style . '">';
 
 		//the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
@@ -221,7 +221,7 @@ foreach ($messages as $row) {
 			$s .= '<td valign="top" style="' . $style . '" >';
 			$s .= '<a href="mailto:' . $row['contact_email'] . '">';
 			$s .= '<font size="2">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</font></a>';
-			$s .= ' (' . $date->format($df . ' ' . $tf) . ') ';
+			$s .= ' (' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ') ';
 			if (sizeof($editor) > 0) {
 				$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
 				$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
@@ -240,7 +240,7 @@ foreach ($messages as $row) {
 				$s .= '<tr>';
 
 				$s .= '<td valign="top" style="' . $style . '">';
-				$s .= $date->format($df . ' ' . $tf) . ' - ';
+				$s .= $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ' - ';
 				$s .= '<a href="mailto:' . $row['contact_email'] . '">';
 				$s .= '<font size="2">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</font></a>';
 				$s .= '<br />';

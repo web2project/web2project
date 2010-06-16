@@ -167,7 +167,11 @@ function delIt(){
 				<tr>
 				<tr>
 					<td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_('Last Updated'); ?>:</td>
-					<td align="center" nowrap="nowrap"><?php echo ($contact->contact_lastupdate && !($contact->contact_lastupdate == 0)) ? $lastupdated->format($df) : ''; ?></td>
+					<td align="center" nowrap="nowrap">
+                        <?php
+                            echo ($contact->contact_lastupdate && !($contact->contact_lastupdate == 0)) ? $AppUI->formatTZAwareTime($contact->contact_lastupdate) : '';
+                        ?>
+                    </td>
 				</tr>	
 			</table>
 		</td>
