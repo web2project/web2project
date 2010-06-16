@@ -93,7 +93,7 @@ foreach ($topics as $row) {
 	</td>
 	<td>
 		<?php
-		if ($row['visit_user'] != $AppUI->user_id || $row['reply_visits'] != $row['replies']) {
+		if ($row['visit_user'] != $AppUI->user_id || $row['reply_visits'] == $row['replies']) {
 			echo w2PshowImage('icons/stock_new_small.png', false, false, 'You have unread posts in this topic');
 		}
 ?>

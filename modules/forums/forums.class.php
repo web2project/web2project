@@ -60,7 +60,6 @@ class CForum extends CW2pObject {
 
         $q = new DBQuery;
         $q->addTable('forums');
-        //$q->addTable('projects', 'pr');
         
         $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name');
         $q->addQuery('forum_moderated, forum_create_date, forum_last_date');
