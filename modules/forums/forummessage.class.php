@@ -47,8 +47,9 @@ class CForumMessage extends CW2pObject {
             return $errorMsgArray;
         }
 
+        $q = new DBQuery;
+
         if ($this->message_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
-            $q = new DBQuery;
             $q->setDelete('forum_visits');
             $q->addWhere('visit_message = ' . (int)$this->message_id);
 			$q->exec();
@@ -59,8 +60,7 @@ class CForumMessage extends CW2pObject {
             $stored = true;
         }
         if (0 == $this->message_id && $perms->checkModuleItem('forums', 'add')) {
-            $q = new DBQuery;
-            $this->message_date = $q->dbfnNow();
+            $this->message_date = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 return $msg;
             }
@@ -74,7 +74,11 @@ class CForumMessage extends CW2pObject {
 			$forum = new CForum();
             $forum->load($AppUI, $this->message_forum);
 			$forum->forum_message_count = $reply[0];
-			$forum->forum_last_date = $reply[1];
+			/*
+             * Note: the message_date here has already been adjusted for the
+            *    timezone above, so don't do it again!
+             */
+            $forum->forum_last_date = $this->message_date;
 			$forum->forum_last_id = $this->message_id;
 			$forum->store($AppUI);
 

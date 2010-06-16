@@ -173,7 +173,7 @@ class CTaskLog extends CW2pObject
         }
 
         $q = new DBQuery();
-        $this->task_log_updated = $q->dbfnNow();
+        $this->task_log_updated = $q->dbfnNowWithTZ();
 
         if ($this->task_log_date) {
             $date = new CDate($this->task_log_date);
@@ -195,7 +195,7 @@ class CTaskLog extends CW2pObject
             $this->updateHoursWorked($this->task_log_task);
         }
         if (0 == $this->task_log_id && $perms->checkModuleItem('task_log', 'add')) {
-            $this->task_log_created = $q->dbfnNow();
+            $this->task_log_created = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 return $msg;
             }

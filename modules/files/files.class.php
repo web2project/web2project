@@ -53,6 +53,8 @@ class CFile extends CW2pObject {
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
             $this->addHelpDeskTaskLog();
         }
+        $this->file_date = $AppUI->convertToSystemTZ($this->file_date);
+
         if ($this->file_id && $perms->checkModuleItem('files', 'edit', $this->file_id)) {
             if (($msg = parent::store())) {
                 return $msg;

@@ -105,7 +105,7 @@ foreach ($topics as $row) {
 	<td align="center" width="10%"><?php echo $row['replies']; ?></td>
 	<td bgcolor="#dddddd" width="150" nowrap="nowrap">
 <?php if ($row['latest_reply']) {
-			echo $last->format($df . ' ' . $tf) . '<br /><font color="#999966">(';
+			echo $AppUI->formatTZAwareTime($row['latest_reply'], $df . ' ' . $tf)  . '<br /><font color="#999966">(';
 			$diff = $now->dateDiff($last);
 			echo (int)$diff . ' ' . $AppUI->_('days ago');
 			echo ')</font>';

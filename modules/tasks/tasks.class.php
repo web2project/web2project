@@ -530,7 +530,7 @@ class CTask extends CW2pObject {
         $this->task_target_budget = filterCurrency($this->task_target_budget);
 
         $q = new DBQuery;
-        $this->task_updated = $q->dbfnNow();
+        $this->task_updated = $q->dbfnNowWithTZ();
 
         if ($this->task_id && $perms->checkModuleItem('tasks', 'edit', $this->task_id)) {
 			// Load and globalize the old, not yet updated task object
@@ -574,7 +574,7 @@ class CTask extends CW2pObject {
 			if (!$this->task_parent) {
 				$q->addTable('tasks');
 				$q->addUpdate('task_parent', $this->task_id);
-				$q->addUpdate('task_updated', $q->dbfnNow(), false, true);
+				$q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
 				$q->addWhere('task_id = ' . (int)$this->task_id);
 				$q->exec();
 				$q->clear();
@@ -583,7 +583,7 @@ class CTask extends CW2pObject {
 		}
 
         if (0 == $this->task_id && $perms->checkModuleItem('tasks', 'add')) {
-			$this->task_created = $q->dbfnNow();
+			$this->task_created = $q->dbfnNowWithTZ();
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
 			}
@@ -598,7 +598,7 @@ class CTask extends CW2pObject {
 			if (!$this->task_parent) {
 				$q->addTable('tasks');
 				$q->addUpdate('task_parent', $this->task_id);
-				$q->addUpdate('task_updated', $q->dbfnNow(), false, true);
+				$q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
 				$q->addWhere('task_id = ' . (int)$this->task_id);
 				$q->exec();
 				$q->clear();
@@ -850,7 +850,7 @@ class CTask extends CW2pObject {
 			$q->addTable('tasks', 't');
 			$q->addUpdate('task_start_date', $task_start_date);
 			$q->addUpdate('task_end_date', $task_end_date);
-            $q->addUpdate('task_updated', $q->dbfnNow(), null, true);
+            $q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", null, true);
 			$q->addWhere('task_id = ' . $nextTask['dependencies_task_id']);
 			$q->exec();
 			$q->clear();
@@ -1468,7 +1468,7 @@ class CTask extends CW2pObject {
 		$q->addTable('tasks');
 		$q->addUpdate('task_start_date', $new_start_date);
 		$q->addUpdate('task_end_date', $new_end_date);
-		$q->addUpdate('task_updated', $q->dbfnNow(), false, true);
+		$q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addWhere('task_dynamic <> 1 AND task_id = ' . (int)$task_id);
 		$q->exec();
 		$q->clear();
@@ -2249,18 +2249,18 @@ class CTask extends CW2pObject {
 
 		return $taskArray;
 	}
-  public function hook_search() {
-    $search['table'] = 'tasks';
-    $search['table_module'] = 'tasks';
-    $search['table_key'] = 'task_id'; // primary key in searched table
-    $search['table_link'] = 'index.php?m=tasks&a=view&task_id='; // first part of link
-    $search['table_title'] = 'Tasks';
-    $search['table_orderby'] = 'task_name';
-    $search['search_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
-    $search['display_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
+    public function hook_search() {
+        $search['table'] = 'tasks';
+        $search['table_module'] = 'tasks';
+        $search['table_key'] = 'task_id'; // primary key in searched table
+        $search['table_link'] = 'index.php?m=tasks&a=view&task_id='; // first part of link
+        $search['table_title'] = 'Tasks';
+        $search['table_orderby'] = 'task_name';
+        $search['search_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
+        $search['display_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
 
-    return $search;
-  }
+        return $search;
+    }
 
 	public function getTaskList($userId, $days = 30) {
 		/*
@@ -2275,7 +2275,7 @@ class CTask extends CW2pObject {
 		$q->addQuery('task_description as description');
 		$q->addQuery('task_start_date as startDate');
 		$q->addQuery('task_end_date as endDate');
-		$q->addQuery($q->dbfnNow() . ' as updatedDate');
+		$q->addQuery("'".$q->dbfnNowWithTZ()."'" . ' as updatedDate');
 		$q->addQuery('CONCAT(\''. W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . '\', t.task_id) as url');
 		$q->addQuery('p.project_id, p.project_name');
 		$q->addTable('tasks', 't');

@@ -42,7 +42,7 @@ $forum_name = $forum['forum_name'];
 echo db_error();
 $q->clear();
 
-$start_date = intval($forum['forum_create_date']) ? new CDate($forum['forum_create_date']) : null;
+$start_date = $AppUI->formatTZAwareTime($forum['forum_create_date'], $df);
 
 // setup the title block
 $titleBlock = new CTitleBlock('Forum', 'support.png', $m, $m . '.' . $a);
@@ -75,7 +75,7 @@ $titleBlock->show();
     </tr>
     <tr>
         <td align="left"><?php echo $AppUI->_('Created On'); ?>:</td>
-        <td nowrap="nowrap"><?php echo $start_date ? $start_date->format($df) : '-'; ?></td>
+        <td nowrap="nowrap"><?php echo $start_date; ?></td>
     </tr>
 </table>
 <?php

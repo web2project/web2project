@@ -75,10 +75,9 @@ foreach ($logs as $row) {
 	}
 	$s .= '</td>';
 	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : '-') . '<br /><br />';
-    $task_log_updated = intval($row['task_log_updated']) ? new CDate($row['task_log_updated']) : null;
-    $s .= '(' . $AppUI->_('Logged').': ' . ($task_log_updated ? $task_log_updated->format($df) : '-') . ')';
+    $task_log_updated = intval($row['task_log_updated']) ? $row['task_log_updated'] : null;
+    $s .= '(' . $AppUI->_('Logged').': ' . ($task_log_updated ? $AppUI->formatTZAwareTime($task_log_updated, $df) : '-') . ')';
     $s .= '</td>';
-	//$s .= '<td align="center" valign="middle">'.($row['task_log_problem'] ?  w2PshowImage('icons/mark-as-important-16.png', 16, 16, 'Problem', 'Problem' ) : '').'</td>';
 	$reference_image = '-';
 	if ($row['task_log_reference'] > 0) {
 		if (isset($taskLogReferenceImage[$row['task_log_reference']])) {

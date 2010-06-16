@@ -553,6 +553,16 @@ class w2p_Database_Query {
 		$this->addClause('having', $query);
 	}
 
+    public function dbfnNowWithTZ() {
+        $df = 'Y-m-d H:i:s';
+        $defaultTZ = 'Europe/London';
+        $systemTZ = new DateTimeZone($defaultTZ);
+        $ts = new DateTime();
+        $ts->setTimezone($systemTZ);
+
+        return $ts->format($df);
+    }
+
 	/** Generates the token representing the 'now' datetime
 	 *
 	 * The 'now' datetime is represented just a bit differently from database

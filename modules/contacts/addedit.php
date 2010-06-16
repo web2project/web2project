@@ -342,7 +342,11 @@ window.addEvent("domready", function() {
                 <tr>
                     <?php $lastupdated = new CDate($row->contact_lastupdate); ?>
                     <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_('Last Updated'); ?>:</td>
-                    <td align="center" nowrap="nowrap"><?php echo ($row->contact_lastupdate && @!($row->contact_lastupdate == 0)) ? $lastupdated->format($df) : ''; ?></td>
+					<td align="center" nowrap="nowrap">
+                        <?php
+                            echo ($row->contact_lastupdate && !($row->contact_lastupdate == 0)) ? $AppUI->formatTZAwareTime($row->contact_lastupdate) : '';
+                        ?>
+                    </td>
                 </tr>
                 </table>
             </td>
