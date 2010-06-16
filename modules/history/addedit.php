@@ -25,7 +25,7 @@ if ($action) {
 		$q->addTable('history');
 		$q->addInsert('history_table', "history");
 		$q->addInsert('history_action', "add");
-		$q->addInsert('history_date', str_replace("'", '', $db->DBTimeStamp(time())));
+		$q->addInsert('history_date', "'".$q->dbfnNowWithTZ()."'");
 		$q->addInsert('history_description', $history_description);
 		$q->addInsert('history_user', $userid);
 		$q->addInsert('history_project', $history_project);

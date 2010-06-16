@@ -68,9 +68,7 @@ if ($is_clash) {
 		unset($_SESSION['event_is_clash']);
 	}
 }
-if ($_GET['event_project']) {
-	$obj->event_project = w2PgetParam($_GET, 'event_project', 0);
-}
+$obj->event_project = (int) w2PgetParam($_GET, 'event_project', 0);
 
 //check if the user has view permission over the project
 if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->event_project)) {
@@ -297,7 +295,9 @@ echo arraySelect($projects, 'event_project', 'size="1" class="text"', ($obj->eve
 				</a>
 			</td>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
-			<td><?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $start_date->format('%H%M%S')); ?></td>
+			<td>
+                <?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($obj->event_start_date, '%H%M%S')); ?>
+            </td>
 		</tr>
 		
 		<tr>
@@ -310,7 +310,7 @@ echo arraySelect($projects, 'event_project', 'size="1" class="text"', ($obj->eve
 				</a>
 			</td>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
-			<td><?php echo arraySelect($times, 'end_time', 'size="1" class="text"', $end_date->format('%H%M%S')); ?></td>
+			<td><?php echo arraySelect($times, 'end_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($obj->event_end_date, '%H%M%S')); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>

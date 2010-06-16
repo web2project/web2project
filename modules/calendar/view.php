@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$event_id = intval(w2PgetParam($_GET, 'event_id', 0));
+$event_id = (int) w2PgetParam($_GET, 'event_id', 0);
 
 // check permissions for this record
 $perms = &$AppUI->acl();
@@ -112,11 +112,11 @@ function delIt() {
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Starts'); ?>:</td>
-				<td class="hilite"><?php echo $start_date ? $start_date->format($df . ' ' . $tf) : '-'; ?></td>
+				<td class="hilite"><?php echo $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf); ?></td>
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Ends'); ?>:</td>
-				<td class="hilite"><?php echo $end_date ? $end_date->format($df . ' ' . $tf) : '-'; ?></td>
+				<td class="hilite"><?php echo $AppUI->formatTZAwareTime($event->event_end_date, $df . ' ' . $tf); ?></td>
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>

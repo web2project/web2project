@@ -94,11 +94,11 @@ function getEventTooltip($event_id) {
 	}
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Starts') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
+    $tt .= '			<td nowrap="nowrap">' . $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf) . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Ends') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
+    $tt .= '			<td nowrap="nowrap">' . $AppUI->formatTZAwareTime($event->event_end_date, $df . ' ' . $tf) . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Recurs') . '</td>';
