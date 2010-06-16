@@ -124,17 +124,16 @@ class CLink extends CW2pObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
+        $q = new DBQuery;
+        $this->link_date = $q->dbfnNowWithTZ();
         if ($this->link_id && $perms->checkModuleItem('links', 'edit', $this->link_id)) {
-            $q = new DBQuery;
-            $this->link_date = $q->dbfnNow();
+
             if (($msg = parent::store())) {
                 return $msg;
             }
             $stored = true;
         }
         if (0 == $this->link_id && $perms->checkModuleItem('links', 'add')) {
-            $q = new DBQuery;
-            $this->link_date = $q->dbfnNow();
             if (($msg = parent::store())) {
                 return $msg;
             }

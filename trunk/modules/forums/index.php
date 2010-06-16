@@ -68,7 +68,7 @@ $titleBlock->show();
             $message_date = intval($row['forum_last_date']) ? new CDate($row['forum_last_date']) : null;
 
             if ($p != $row['forum_project']) {
-                $create_date = intval($row['forum_create_date']) ? new CDate($row['forum_create_date']) : null;
+                $create_date = $AppUI->formatTZAwareTime($row['forum_create_date'], $df);
                 $forum_project_name = ($row['project_name']) ? $row['project_name'] : 'No associated project';
                 $forum_project_color = ($row['project_color_identifier']) ? bestColor($row['project_color_identifier']) : '';
                 ?>
@@ -107,7 +107,7 @@ $titleBlock->show();
                     </span>
                     <br /><?php echo w2p_textarea($row['forum_description']); ?>
                     <br /><font color="#777777"><?php echo $AppUI->_('Owner') . ' ' . $row['owner_name']; ?>,
-                    <?php echo $AppUI->_('Started') . ' ' . $create_date->format($df); ?>
+                    <?php echo $AppUI->_('Started') . ' ' . $create_date; ?>
                     </font>
                 </td>
                 <td nowrap="nowrap" align="center"><?php echo $row['forum_topics']; ?></td>
@@ -115,7 +115,7 @@ $titleBlock->show();
                 <td width="225">
                     <?php
                     if ($message_date !== null) {
-                        echo $message_date->format($df . ' ' . $tf);
+                        echo $AppUI->formatTZAwareTime($row['forum_last_date'], $df . ' ' . $tf);
                     } else {
                         echo $AppUI->_('No posts');
                     } ?>
