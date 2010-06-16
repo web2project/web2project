@@ -574,7 +574,7 @@ class CTask extends CW2pObject {
 			if (!$this->task_parent) {
 				$q->addTable('tasks');
 				$q->addUpdate('task_parent', $this->task_id);
-				$q->addUpdate('task_updated', $q->dbfnNowWithTZ(), false, true);
+				$q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
 				$q->addWhere('task_id = ' . (int)$this->task_id);
 				$q->exec();
 				$q->clear();
@@ -598,7 +598,7 @@ class CTask extends CW2pObject {
 			if (!$this->task_parent) {
 				$q->addTable('tasks');
 				$q->addUpdate('task_parent', $this->task_id);
-				$q->addUpdate('task_updated', $q->dbfnNowWithTZ(), false, true);
+				$q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
 				$q->addWhere('task_id = ' . (int)$this->task_id);
 				$q->exec();
 				$q->clear();
@@ -850,7 +850,7 @@ class CTask extends CW2pObject {
 			$q->addTable('tasks', 't');
 			$q->addUpdate('task_start_date', $task_start_date);
 			$q->addUpdate('task_end_date', $task_end_date);
-            $q->addUpdate('task_updated', $q->dbfnNowWithTZ(), null, true);
+            $q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", null, true);
 			$q->addWhere('task_id = ' . $nextTask['dependencies_task_id']);
 			$q->exec();
 			$q->clear();
@@ -1468,7 +1468,7 @@ class CTask extends CW2pObject {
 		$q->addTable('tasks');
 		$q->addUpdate('task_start_date', $new_start_date);
 		$q->addUpdate('task_end_date', $new_end_date);
-		$q->addUpdate('task_updated', $q->dbfnNowWithTZ(), false, true);
+		$q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addWhere('task_dynamic <> 1 AND task_id = ' . (int)$task_id);
 		$q->exec();
 		$q->clear();
@@ -2275,7 +2275,7 @@ class CTask extends CW2pObject {
 		$q->addQuery('task_description as description');
 		$q->addQuery('task_start_date as startDate');
 		$q->addQuery('task_end_date as endDate');
-		$q->addQuery($q->dbfnNowWithTZ() . ' as updatedDate');
+		$q->addQuery("'".$q->dbfnNowWithTZ()."'" . ' as updatedDate');
 		$q->addQuery('CONCAT(\''. W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . '\', t.task_id) as url');
 		$q->addQuery('p.project_id, p.project_name');
 		$q->addTable('tasks', 't');

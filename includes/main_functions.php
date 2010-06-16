@@ -724,7 +724,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	$q->addInsert('history_item', $id);
 	$q->addInsert('history_description', $description);
 	$q->addInsert('history_user', $AppUI->user_id);
-	$q->addInsert('history_date', $q->dbfnNowWithTZ(), false, true);
+	$q->addInsert('history_date', "'".$q->dbfnNowWithTZ()."'", false, true);
 	$q->addInsert('history_project', $project_id);
 	$q->addInsert('history_table', $table);
 	$q->exec();
