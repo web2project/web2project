@@ -205,36 +205,4 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
     $linkText = w2p_textarea('Please check out http://web2project.net');
     $this->assertEquals($target, $linkText);
   }
-
-    public function test_w2p_format_datetime()
-    {
-        date_default_timezone_set('America/New_York');
-        $df = 'Y/M/d H:i';
-
-        $start = strtotime("10 Sep 2000 10:00");
-        $result = w2p_format_datetime('America/New_York', 'America/Los_Angeles', $df, $start);
-        $this->assertEquals('2000/Sep/10 07:00', $result);
-        $result = w2p_format_datetime('America/New_York', 'Europe/London', $df, $start);
-        $this->assertEquals('2000/Sep/10 15:00', $result);
-
-        $start = strtotime("10 April 2010 23:59");
-        $result = w2p_format_datetime('America/Los_Angeles', 'Europe/London', $df, $start);
-        $this->assertEquals('2010/Apr/11 07:59', $result);
-
-        $start = strtotime("10 April 2010 00:00");
-        $result = w2p_format_datetime('Europe/London', 'Kwajalein', $df, $start);
-        $this->assertEquals('2010/Apr/10 11:00', $result);
-
-        $start = strtotime("28 February 2008 23:00");
-        $result = w2p_format_datetime('America/New_York', 'Europe/Warsaw', $df, $start);
-        $this->assertEquals('2008/Feb/29 05:00', $result);
-
-        $start = strtotime("1 March 2008 3:00");
-        $result = w2p_format_datetime('Europe/Warsaw', 'America/Los_Angeles', $df, $start);
-        $this->assertEquals('2008/Feb/29 18:00', $result);
-
-        $start = strtotime("1 January 2008 3:00");
-        $result = w2p_format_datetime('Europe/Warsaw', 'America/Los_Angeles', $df, $start);
-        $this->assertEquals('2007/Dec/31 18:00', $result);
-    }
 }
