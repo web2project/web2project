@@ -115,7 +115,7 @@ $titleBlock->show();
                 <td width="225">
                     <?php
                     if ($message_date !== null) {
-                        echo $message_date->format($df . ' ' . $tf);
+                        echo $AppUI->formatTZAwareTime($row['forum_last_date'], $df . ' ' . $tf);
                     } else {
                         echo $AppUI->_('No posts');
                     } ?>
