@@ -37,14 +37,19 @@
 		$dpConfig = $manager->getConfigOptions();
 		$config = $manager->createConfigString($dpConfig);
 
-		if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
-			fputs( $fp, $config, strlen( $config ) );
-			fclose( $fp );
-			$cFileMsg = 'Config file written successfully'."\n";
-		} else {
-			$cFileErr = true;
-			$cFileMsg = 'Config file could not be written'."\n";
-		}
+        if (!in_array('version_fail', $errorMessages)) {
+            if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
+                fputs( $fp, $config, strlen( $config ) );
+                fclose( $fp );
+                $cFileMsg = 'Config file written successfully'."\n";
+            } else {
+                $cFileErr = true;
+                $cFileMsg = 'Config file could not be written'."\n";
+            }
+        } else {
+            $cFileErr = true;
+            $cFileMsg = 'Config file could not be written'."\n";
+        }
 	?>
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
