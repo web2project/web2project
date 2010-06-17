@@ -146,7 +146,7 @@ class w2p_Core_UpgradeManager {
 
                 break;
             default:
-                $allErrors[] = "Unfortunately, we can't determine which version of dotProject you're using.  To be safe, we're not going to do anything.";
+                $allErrors['version_fail'] = "Unfortunately, we can't determine which version of dotProject you're using.  To be safe, we're not going to do anything.";
                 $allErrors[] = "If you are using dotProject 1.x, please use their methods to upgrade to dotProject v2.x before you go any further.";
         }
 
