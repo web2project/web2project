@@ -54,22 +54,20 @@ if ($sub_form) {
 		$task_end_date = new CDate($obj->task_end_date);
 	}
 
-	if (isset($_POST)) {
-		$obj->bind($_POST);
-	}
+    $bound = (isset($_POST)) ? $obj->bind($_POST) : false;
 
-	if (!$obj->task_owner)
+	if (!$obj->task_owner) {
 		$obj->task_owner = $AppUI->user_id;
-
-	if (!$obj->bind($_POST)) {
+    }
+	if (!$bound) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 		$AppUI->redirect();
 	}
 
 	// Check to see if the task_project has changed
 	if (isset($_POST['new_task_project']) && $_POST['new_task_project'] && ($obj->task_project != $_POST['new_task_project'])) {
-    $taskRecount = ($obj->task_project) ? $obj->task_project : 0;
-    $obj->task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
+        $taskRecount = ($obj->task_project) ? $obj->task_project : 0;
+        $obj->task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
 		$obj->task_parent = $obj->task_id;
 	}
 
