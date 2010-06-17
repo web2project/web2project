@@ -71,7 +71,7 @@ if ($result) {
         $task->pushDependencies($task->task_id, $task->task_end_date);
     }
 
-    if ($notify_owner) {
+    if ('on' == $notify_owner) {
         if ($msg = $task->notifyOwner()) {
             $AppUI->setMsg($msg, UI_MSG_ERROR);
         }

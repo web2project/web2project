@@ -17,8 +17,9 @@ if (!w2PgetParam($_POST, 'project_departments', 0)) {
 $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
 
-$notify_owner = ($_POST['email_project_owner_box']) ? 1 : 0;
-$notify_contacts = ($_POST['email_project_contacts_box']) ? 1 : 0;
+$notify_owner = w2PgetParam($_POST, 'email_project_owner_box', 'off');
+$notify_contacts = w2PgetParam($_POST, 'email_project_contacts_box', 'off');
+
 $notfiyTrigger = ($del) ? 1 : $obj->project_id;
 $importTask_projectId = (int) w2PgetParam($_POST, 'import_tasks_from', '0');
 
@@ -31,12 +32,12 @@ if ($result) {
   if ($importTask_projectId) {
     $obj->importTasks($importTask_projectId);
   }
-  if ($notify_owner) {
+  if ('on' == $notify_owner) {
     if ($msg = $obj->notifyOwner($notfiyTrigger)) {
       $AppUI->setMsg($msg, UI_MSG_ERROR);
     }
   }
-  if ($notify_contacts) {
+  if ('on' == $notify_contacts) {
     if ($msg = $obj->notifyContacts($notfiyTrigger)) {
       $AppUI->setMsg($msg, UI_MSG_ERROR);
     }
