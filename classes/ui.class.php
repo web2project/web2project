@@ -122,6 +122,8 @@ class CAppUI {
  	@var integer */
 	public $user_is_admin = null;
 
+    public $long_date_format = null;
+
 	private $objStore = null;
 	/**
 
@@ -183,11 +185,11 @@ class CAppUI {
 		}
 	}
 
-/**
-* Used to load a php class file from the module directory
-* @param string $name The class root file name (excluding .ajax.php)
-* @return string The path to the include file
- */
+    /**
+    * Used to load a php class file from the module directory
+    * @param string $name The class root file name (excluding .ajax.php)
+    * @return string The path to the include file
+    */
 	public function getModuleAjax( $name=null ) {
 		if ($name) {
 			return W2P_BASE_DIR . '/modules/' . $name . '/' . $name . '.ajax.php';
@@ -215,6 +217,56 @@ class CAppUI {
 		}
 		return $this->version_string;
 	}
+
+    /**
+    *
+    */
+    public function getTZAwareTime() {
+        $df = $this->getPref('FULLDATEFORMAT');
+
+        $userTimezone = $this->getPref('TIMEZONE');
+        $userTZ = new DateTimeZone($userTimezone);
+
+        $ts = new DateTime();
+        $ts->setTimezone($userTZ);
+
+        return $ts->format($df);
+    }
+
+    /**
+    *
+    */
+    public function convertToSystemTZ($datetime = '', $format = 'Y-m-d H:i:s') {
+        $userTZ = $this->getPref('TIMEZONE');
+        $userTimezone = new DateTimeZone($userTZ);
+
+        $systemTimezone = new DateTimeZone('Europe/London');
+
+        $ts = new DateTime($datetime, $userTimezone);
+        $ts->setTimezone($systemTimezone);
+
+        return $ts->format($format);
+    }
+
+    /**
+    *
+    */
+    public function formatTZAwareTime($datetime = '', $format = '') {
+        $userTimezone = $this->getPref('TIMEZONE');
+        $userTZ = new DateTimeZone($userTimezone);
+        $systemTZ = new DateTimeZone('Europe/London');
+        $ts = new DateTime($datetime, $systemTZ);
+        $ts->setTimezone($userTZ);
+
+        if ('' == $format) {
+            $df = $this->getPref('FULLDATEFORMAT');
+        } else {
+            $df = $format;
+            $ts  = new CDate($ts->format('Y-m-d H:i:s'));
+        }
+
+        return $ts->format($df);
+    }
 
 	/**
 	 * Checks that the current user preferred style is valid/exists.
@@ -806,7 +858,7 @@ class CAppUI {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
 		$q->addInsert('user_id', '' . $this->user_id);
-		$q->addInsert('date_time_in', $q->dbfnNow(), false, true);
+		$q->addInsert('date_time_in', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addInsert('user_ip', $_SERVER['REMOTE_ADDR']);
 		$q->exec();
 		$this->last_insert_id = db_insert_id();
@@ -819,7 +871,7 @@ class CAppUI {
 	public function registerLogout($user_id) {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_out', $q->dbfnNow(), false, true);
+		$q->addUpdate('date_time_out', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addWhere('user_id = ' . (int)$user_id . ' AND (date_time_out = \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
 		if ($user_id > 0) {
 			$q->exec();
@@ -833,7 +885,7 @@ class CAppUI {
 	public function updateLastAction($last_insert_id) {
 		$q = new DBQuery;
 		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_last_action', $q->dbfnNow(), false, true);
+		$q->addUpdate('date_time_last_action', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addWhere('user_access_log_id = ' . $last_insert_id);
 		if ($last_insert_id > 0) {
 			$q->exec();
@@ -883,6 +935,19 @@ class CAppUI {
 		$q->addWhere('pref_user = ' . (int)$uid);
 		$prefs = $q->loadHashList();
 		$this->user_prefs = array_merge($this->user_prefs, $prefs);
+
+        $df = $this->getPref('SHDATEFORMAT');
+        $df .= ' ' . $this->getPref('TIMEFORMAT');
+        $cf = $df;
+        $cal_df = $cf;
+        $cal_df = str_replace('%S', '%s', $cal_df);
+        $cal_df = str_replace('%M', '%i', $cal_df);
+        $cal_df = str_replace('%p', '%a', $cal_df);
+        $cal_df = str_replace('%I', '%h', $cal_df);
+        $cal_df = str_replace('%b', '%M', $cal_df);
+        $cal_df = str_replace('%', '', $cal_df);
+        $df = $cal_df;
+        $this->user_prefs['FULLDATEFORMAT'] = $cal_df;
 	}
 
 	// --- Module connectors

@@ -136,7 +136,7 @@ if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the
 ?>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Author') ?>:</td>
-	<td align="left"><?php echo CContact::getContactByUserid($message_info['message_author']); ?> (<?php echo $date->format($df . ' ' . $tf); ?>)</td>
+	<td align="left"><?php echo CContact::getContactByUserid($message_info['message_author']); ?> (<?php echo $AppUI->formatTZAwareTime($message_info['message_date'], $df . ' ' . $tf); ?>)</td>
 </tr>
 <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
 <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">

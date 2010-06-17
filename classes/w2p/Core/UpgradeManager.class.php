@@ -132,6 +132,7 @@ class w2p_Core_UpgradeManager {
             case '2.1.1':
             case '2.1.2':
             case '2.1.3':
+            case '2.1.4':
                 $errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
 
@@ -145,8 +146,9 @@ class w2p_Core_UpgradeManager {
 
                 break;
             default:
-                $allErrors[] = "Unfortunately, we can't determine which version of dotProject you're using.  To be safe, we're not going to do anything.";
+                $allErrors['version_fail'] = "Unfortunately, we can't determine which version of dotProject you're using.  To be safe, we're not going to do anything.";
                 $allErrors[] = "If you are using dotProject 1.x, please use their methods to upgrade to dotProject v2.x before you go any further.";
+                $allErrors[] = "If you really are using dotProject 2.x, please check to see that you are on an official release and/or contact the web2project forums.";
         }
 
         return $allErrors;

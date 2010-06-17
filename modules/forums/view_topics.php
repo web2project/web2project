@@ -93,7 +93,7 @@ foreach ($topics as $row) {
 	</td>
 	<td>
 		<?php
-		if ($row['visit_user'] != $AppUI->user_id || $row['reply_visits'] != $row['replies']) {
+		if ($row['visit_user'] != $AppUI->user_id || $row['reply_visits'] == $row['replies']) {
 			echo w2PshowImage('icons/stock_new_small.png', false, false, 'You have unread posts in this topic');
 		}
 ?>
@@ -105,7 +105,7 @@ foreach ($topics as $row) {
 	<td align="center" width="10%"><?php echo $row['replies']; ?></td>
 	<td bgcolor="#dddddd" width="150" nowrap="nowrap">
 <?php if ($row['latest_reply']) {
-			echo $last->format($df . ' ' . $tf) . '<br /><font color="#999966">(';
+			echo $AppUI->formatTZAwareTime($row['latest_reply'], $df . ' ' . $tf)  . '<br /><font color="#999966">(';
 			$diff = $now->dateDiff($last);
 			echo (int)$diff . ' ' . $AppUI->_('days ago');
 			echo ')</font>';

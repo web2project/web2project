@@ -724,7 +724,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	$q->addInsert('history_item', $id);
 	$q->addInsert('history_description', $description);
 	$q->addInsert('history_user', $AppUI->user_id);
-	$q->addInsert('history_date', $q->dbfnNow(), false, true);
+	$q->addInsert('history_date', "'".$q->dbfnNowWithTZ()."'", false, true);
 	$q->addInsert('history_project', $project_id);
 	$q->addInsert('history_table', $table);
 	$q->exec();
@@ -1374,24 +1374,4 @@ function w2p_textarea($content)
   }
 
   return $result;
-}
-
-function w2p_format_datetime($baseTZ, $userTZ, $format = '', $datetime = 0)
-{
-    date_default_timezone_set('America/New_York');
-
-    $rawDatetime = ($datetime) ? $datetime : time();
-    $baseTime = new DateTimeZone($baseTZ);
-    $userTime = new DateTimeZone($userTZ);
-    $x = new DateTime();
-
-    //convert to GMT
-    $baseOffset = $baseTime->getOffset($x);
-    $newDatetime = $rawDatetime - $baseOffset;
-
-    //convert to user TZ
-    $userOffset = $userTime->getOffset($x);
-    $newDatetime += $userOffset;
-
-    return date($format, $newDatetime);
 }

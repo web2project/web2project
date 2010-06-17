@@ -256,17 +256,17 @@ foreach ($files as $file_row) {
 				$file_icon = getIcon($file['file_type']);
 				$hdate = new Date($file['file_date']);
 				$hidden_table .= '<tr><td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" title="' . $file['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $file['file_name'] . '
-							  </a></td>
-							  <td width="20%">' . $file['file_description'] . '</td>
-							  <td width="5%" nowrap="nowrap" align="right">' . $file['file_version'] . '</td>
-							  <td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
-							  <td width="10%" nowrap="nowrap" align="left">' . (($file['file_folder_name'] != '') ? '<a href="' . W2P_BASE_URL . '/index.php?m=files&tab=' . (count($file_types) + 1) . '&folder=' . $file['file_folder_id'] . '">' . w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files') . $file['file_folder_name'] . '</a>' : 'Root') . '</td>
-							  <td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=' . $file['file_task'] . '">' . $file['task_name'] . '</a></td>
-							  <td width="15%" nowrap="nowrap">' . $file['contact_first_name'] . ' ' . $file['contact_last_name'] . '</td>
-							  <td width="5%" nowrap="nowrap" align="right">' . file_size(intval($file['file_size'])) . '</td>
-							  <td nowrap="nowrap">' . substr($file['file_type'], strpos($file['file_type'], '/') + 1) . '</td>
-							  <td width="15%" nowrap="nowrap" align="center">' . $hdate->format($df . ' ' . $tf) . '</td>
-							  <td nowrap="nowrap" width="20">';
+                  </a></td>
+                  <td width="20%">' . $file['file_description'] . '</td>
+                  <td width="5%" nowrap="nowrap" align="right">' . $file['file_version'] . '</td>
+                  <td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
+                  <td width="10%" nowrap="nowrap" align="left">' . (($file['file_folder_name'] != '') ? '<a href="' . W2P_BASE_URL . '/index.php?m=files&tab=' . (count($file_types) + 1) . '&folder=' . $file['file_folder_id'] . '">' . w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files') . $file['file_folder_name'] . '</a>' : 'Root') . '</td>
+                  <td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=' . $file['file_task'] . '">' . $file['task_name'] . '</a></td>
+                  <td width="15%" nowrap="nowrap">' . $file['contact_first_name'] . ' ' . $file['contact_last_name'] . '</td>
+                  <td width="5%" nowrap="nowrap" align="right">' . file_size(intval($file['file_size'])) . '</td>
+                  <td nowrap="nowrap">' . substr($file['file_type'], strpos($file['file_type'], '/') + 1) . '</td>
+                  <td width="15%" nowrap="nowrap" align="center">' . $AppUI->formatTZAwareTime($file['file_date'], $df . ' ' . $tf) . '</td>
+                  <td nowrap="nowrap" width="20">';
 				if ($canEdit && $w2Pconfig['files_show_versions_edit']) {
 					$hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
 				}
@@ -285,7 +285,7 @@ foreach ($files as $file_row) {
 	<td width="15%" nowrap="nowrap"><?php echo $latest_file['contact_first_name'] . ' ' . $latest_file['contact_last_name']; ?></td>
 	<td width="5%" nowrap="nowrap" align="right"><?php echo file_size(intval($latest_file["file_size"])); ?></td>
 	<td nowrap="nowrap"><?php echo $AppUI->_(substr($latest_file['file_type'], strpos($latest_file['file_type'], '/') + 1)); ?></td>
-	<td width="15%" nowrap="nowrap" align="center"><?php echo $file_date->format($df . ' ' . $tf); ?></td>
+	<td width="15%" nowrap="nowrap" align="center"><?php echo $AppUI->formatTZAwareTime($latest_file['file_date'], $df . ' ' . $tf); ?></td>
 	<td width="10%"><?php echo $latest_file['file_co_reason']; ?></td>
 	<td nowrap="nowrap">
 	<?php if ($canEdit && empty($latest_file['file_checkout'])) {

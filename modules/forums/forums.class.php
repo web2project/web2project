@@ -60,7 +60,6 @@ class CForum extends CW2pObject {
 
         $q = new DBQuery;
         $q->addTable('forums');
-        //$q->addTable('projects', 'pr');
         
         $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name');
         $q->addQuery('forum_moderated, forum_create_date, forum_last_date');
@@ -125,8 +124,7 @@ class CForum extends CW2pObject {
             $stored = true;
         }
         if (0 == $this->forum_id && $perms->checkModuleItem('forums', 'add')) {
-            $q = new DBQuery;
-            $this->forum_create_date = $q->dbfnNow();
+            $this->forum_create_date = $AppUI->convertToSystemTZ($this->forum_create_date);
             if (($msg = parent::store())) {
                 return $msg;
             }

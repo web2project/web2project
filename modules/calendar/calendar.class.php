@@ -996,10 +996,43 @@ class CEvent extends CW2pObject {
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 
 	}
-	
+
+    public function store(CAppUI $AppUI) {
+        $perms = $AppUI->acl();
+        $stored = false;
+
+        $errorMsgArray = $this->check();
+
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
+        $this->event_start_date = $AppUI->convertToSystemTZ($this->event_start_date);
+        $this->event_end_date = $AppUI->convertToSystemTZ($this->event_end_date);
+        /*
+         * TODO: I don't like the duplication on each of these two branches, but I
+         *   don't have a good idea on how to fix it at the moment...
+         */
+        if ($this->event_id && $perms->checkModuleItem('events', 'edit', $this->event_id)) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        if (0 == $this->event_id && $perms->checkModuleItem('events', 'add')) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+
+        return $stored;
+    }
+
 	public function hook_calendar($userId) {
 		return $this->getCalendarEvents($userId);
 	}
+
 	public function getCalendarEvents($userId, $days = 30) {
 		/*
 		 * This list of fields - id, name, description, startDate, endDate,
@@ -1013,7 +1046,7 @@ class CEvent extends CW2pObject {
 		$q->addQuery('event_description as description');
 		$q->addQuery('event_start_date as startDate');
 		$q->addQuery('event_end_date as endDate');
-		$q->addQuery($q->dbfnNow() . ' as updatedDate');
+		$q->addQuery($q->dbfnNowWithTZ() . ' as updatedDate');
 		$q->addQuery('CONCAT(\''. W2P_BASE_URL . '/index.php?m=calendar&a=view&event_id=' . '\', e.event_id) as url');
 		$q->addQuery('projects.project_id, projects.project_name');
 		$q->addTable('events', 'e');

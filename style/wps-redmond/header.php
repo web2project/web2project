@@ -94,18 +94,6 @@ if ($dialog) {
 	echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
 
 	echo "</td>\n";
-
-	$df = $AppUI->getPref('SHDATEFORMAT');
-	$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-	$cf = $df;
-	$cal_df = $cf;
-	$cal_df = str_replace('%S', '%s', $cal_df);
-	$cal_df = str_replace('%M', '%i', $cal_df);
-	$cal_df = str_replace('%p', '%a', $cal_df);
-	$cal_df = str_replace('%I', '%h', $cal_df);
-	$cal_df = str_replace('%b', '%M', $cal_df);
-	$cal_df = str_replace('%', '', $cal_df);
-	$df = $cal_df;
 ?>
 
 		</td>
@@ -125,7 +113,7 @@ if ($dialog) {
                     <?php
                         echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_first_name . ' ' . $AppUI->user_last_name : $outsider);
                         echo '<br />';
-                        echo $AppUI->_('Server time is') . ' ' . date($df);
+                        echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
                     ?>
                 </td>
 			</tr>
