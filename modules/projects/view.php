@@ -306,7 +306,7 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		<tr id="multiproject" style="visibility:collapse;display:none;">
 			<td colspan="2" class="hilite">
 				<?php
-					require (w2PgetConfig('root_dir') . '/modules/projects/vw_sub_projects.php');
+					require (W2P_BASE_DIR . '/modules/projects/vw_sub_projects.php');
 				?>
 			</td>
 		</tr>
