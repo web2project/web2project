@@ -300,9 +300,10 @@ if ($do_report) {
 	$task_assigned_users = array();
 	$user_assigned_tasks = array();
 	$i = 0;
+//echo '<pre>';print_r($task_list_hash);die();
 	foreach ($task_list_hash as $task_id => $task_data) {
 		$task = new CTask();
-		$task->bind($task_data);
+		$task->load($task_id);
 		$task_users = $task->getAssignedUsers($task_id);
 		foreach (array_keys($task_users) as $key => $uid) {
 			$user_assigned_tasks[$uid][] = $task_id;
@@ -515,11 +516,11 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$tmp .= $task->task_duration . '&nbsp;' . mb_substr($AppUI->_($durnTypes[$task->task_duration_type]),0,1);
 	$tmp .= '</td>';
 	$tmp .= '<td align="center" nowrap="nowrap">';
-	$dt = new CDate($task->task_start_date);
+	$dt = new CDate($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T'));
 	$tmp .= $dt->format($df);
 	$tmp .= '&#160&#160&#160</td>';
 	$tmp .= '<td align="right" nowrap="nowrap">';
-	$ed = new CDate($task->task_end_date);
+	$ed = new CDate($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T'));
 	$dt = $now->dateDiff($ed);
 	$sgn = $now->compare($ed, $now);
 	$tmp .= ($dt * $sgn);

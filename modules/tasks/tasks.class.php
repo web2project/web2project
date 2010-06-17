@@ -510,6 +510,16 @@ class CTask extends CW2pObject {
 		return $newObj;
 	}
 
+    public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
+        global $AppUI;
+
+        $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
+        $this->task_start_date = $AppUI->convertToSystemTZ($this->task_start_date);
+        $this->task_end_date = $AppUI->convertToSystemTZ($this->task_end_date);
+
+        return $result;
+    }
+
 	/**
 	 * @todo Parent store could be partially used
 	 */
@@ -2389,9 +2399,9 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	$fdf = $df . ' ' . $tf;
 	$show_all_assignees = w2PgetConfig('show_all_task_assignees', false);
 
-	$start_date = intval($arr['task_start_date']) ? new CDate($arr['task_start_date']) : null;
-	$end_date = intval($arr['task_end_date']) ? new CDate($arr['task_end_date']) : null;
-	$last_update = ((isset($arr['last_update']) && intval($arr['last_update'])) ? new CDate($arr['last_update']) : null);
+	$start_date = intval($arr['task_start_date']) ? new CDate($AppUI->formatTZAwareTime($arr['task_start_date'], '%Y-%m-%d %T')) : null;
+	$end_date = intval($arr['task_end_date']) ? new CDate($AppUI->formatTZAwareTime($arr['task_end_date'], '%Y-%m-%d %T')) : null;
+	$last_update = isset($arr['last_update']) && intval($arr['last_update']) ? new CDate( $AppUI->formatTZAwareTime($arr['last_update'], '%Y-%m-%d %T')) : null;
 
 	// prepare coloured highlight of task time information
 	$sign = 1;
@@ -2529,7 +2539,9 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$s .= '<td align="center">-</td>';
 	}
 	// duration or milestone
-	$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($fdf) : '-') . '</td>' . '<td align="right" nowrap="nowrap" style="' . $style . '">' . $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1) . '</td>' . '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($fdf) : '-') . '</td>');
+    $s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($fdf) : '-') . '</td>';
+    $s .= '<td align="right" nowrap="nowrap" style="' . $style . '">' . $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1) . '</td>';
+    $s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($fdf) : '-') . '</td>';
 	if ($today_view) {
 		$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">' . $arr['task_due_in'] . '</td>');
 	} elseif ($history_active) {
