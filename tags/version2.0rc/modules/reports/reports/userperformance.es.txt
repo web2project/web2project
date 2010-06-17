@@ -1,0 +1,2 @@
+Productividad
+Informe con los totales de horas trabajadas por usuario en las tareas a él asignadas.

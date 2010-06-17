@@ -1,0 +1,2 @@
+Horas Atribuídas a Usuários
+Este relatório mostra quantas horas foram atribuídas a cada usuário num determinado período
