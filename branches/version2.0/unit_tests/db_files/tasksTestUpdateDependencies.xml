@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- taskTestUpdateDependencies - Dataset to compare against after updating dependencies for a task. -->
+<dataset>
+    <table name="task_dependencies">
+        <column>dependencies_task_id</column>
+        <column>dependencies_req_task_id</column>
+        <row>
+            <value>3</value>
+            <value>4</value>
+        </row>
+        <row>
+            <value>4</value>
+            <value>3</value>
+        </row>
+        <row>
+            <value>5</value>
+            <value>6</value>
+        </row>
+        <row>
+            <value>11</value>
+            <value>9</value>
+        </row>
+        <row>
+            <value>12</value>
+            <value>13</value>
+        </row>
+        <row>
+            <value>13</value>
+            <value>11</value>
+        </row>
+        <row>
+            <value>14</value>
+            <value>12</value>
+        </row>
+        <row>
+            <value>17</value>
+            <value>15</value>
+        </row>
+        <row>
+			<value>28</value>
+			<value>24</value>
+		</row><row>
+			<value>28</value>
+			<value>25</value>
+		</row><row>
+			<value>28</value>
+			<value>26</value>
+		</row>
+        <row>
+			<value>29</value>
+			<value>28</value>
+		</row>
+        <row>
+			<value>30</value>
+			<value>28</value>
+		</row>
+    </table>
+</dataset>
