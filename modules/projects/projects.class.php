@@ -834,7 +834,7 @@ class CProject extends CW2pObject {
 
 		// I hate how this one works... since the default project parent is
 		//   itself, so this will always have at least one result.
-		return $q->loadResult()-1;
+		return ($q->loadResult()-1);
 	}
 
 	public static function hasTasks($projectId) {
