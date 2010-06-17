@@ -47,8 +47,8 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 //Also view the time
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
-$start_date = intval($obj->task_start_date) ? new CDate($obj->task_start_date) : null;
-$end_date = intval($obj->task_end_date) ? new CDate($obj->task_end_date) : null;
+$start_date = intval($obj->task_start_date) ? new CDate($AppUI->formatTZAwareTime($obj->task_start_date, '%Y-%m-%d %T')) : null;
+$end_date = intval($obj->task_end_date) ? new CDate($AppUI->formatTZAwareTime($obj->task_end_date, '%Y-%m-%d %T')) : null;
 
 //check permissions for the associated project
 $canReadProject = canView('projects', $obj->task_project);
