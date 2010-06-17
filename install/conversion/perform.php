@@ -37,7 +37,7 @@
 		$dpConfig = $manager->getConfigOptions();
 		$config = $manager->createConfigString($dpConfig);
 
-        if (!in_array('version_fail', $errorMessages)) {
+        if (!isset($errorMessages['version_fail'])) {
             if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
                 fputs( $fp, $config, strlen( $config ) );
                 fclose( $fp );
