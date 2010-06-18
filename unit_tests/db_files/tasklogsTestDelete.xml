@@ -8,6 +8,8 @@
         <column>task_log_name</column>
         <column>task_log_description</column>
         <column>task_log_creator</column>
+        <column>task_log_created</column>
+        <column>task_log_updator</column>
         <column>task_log_hours</column>
         <column>task_log_date</column>
         <column>task_log_costcode</column>
@@ -16,17 +18,6 @@
         <column>task_log_related_url</column>
         <column>task_log_project</column>
         <column>task_log_company</column>
-        <column>task_log_changelog</column>
-        <column>task_log_changelog_servers</column>
-        <column>task_log_changelog_whom</column>
-        <column>task_log_changelog_datetime</column>
-        <column>task_log_changelog_duration</column>
-        <column>task_log_changelog_expected_downtime</column>
-        <column>task_log_changelog_description</column>
-        <column>task_log_changelog_backout_plan</column>
-        <column>task_log_created</column>
-        <column>task_log_updated</column>
-        <column>task_log_updator</column>
     </table>
     <table name="tasks">
         <column>task_id</column>

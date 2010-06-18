@@ -16,14 +16,6 @@
         <column>task_log_related_url</column>
         <column>task_log_project</column>
         <column>task_log_company</column>
-        <column>task_log_changelog</column>
-        <column>task_log_changelog_servers</column>
-        <column>task_log_changelog_whom</column>
-        <column>task_log_changelog_datetime</column>
-        <column>task_log_changelog_duration</column>
-        <column>task_log_changelog_expected_downtime</column>
-        <column>task_log_changelog_description</column>
-        <column>task_log_changelog_backout_plan</column>
         <column>task_log_created</column>
         <column>task_log_updated</column>
         <column>task_log_updator</column>
@@ -42,14 +34,6 @@
             <value>http://www.example.com</value>
             <value>1</value>
             <value>1</value>
-            <value>1</value>
-            <value>10.10.10.101</value>
-            <value>1</value>
-            <value>2010-05-31 10:15:25</value>
-            <value>35 minutes</value>
-            <value>1</value>
-            <value>This is a changelog description</value>
-            <value>There is no backout plan</value>
             <value>2009-10-19 00:00:00</value>
             <value>Ignored</value>
             <value>1</value>

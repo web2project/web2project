@@ -116,14 +116,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
             'task_log_related_url'                  => 'http://www.example.com',
             'task_log_project'                      => 1,
             'task_log_company'                      => 1,
-            'task_log_changelog'                    => 1,
-            'task_log_changelog_servers'            => '10.10.10.101',
-            'task_log_changelog_whom'               => 1,
-            'task_log_changelog_datetime'           => '2010-05-31 10:15:25',
-            'task_log_changelog_duration'           => '35 minutes',
-            'task_log_changelog_expected_downtime'  => 1,
-            'task_log_changelog_description'        => 'This is a changelog description',
-            'task_log_changelog_backout_plan'       => 'There is no backout plan',
             'task_log_created'                      => '2010-05-30 09:15:30',
             'task_log_updated'                      => '2010-05-30 09:15:30',
             'task_log_updator'                      => 1
@@ -269,8 +261,10 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDelete()
     {
+        global $AppUI;
+
         $this->obj->load(1);
-        $this->obj->delete();
+        $msg = $this->obj->delete();
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestDelete.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_updated')));
@@ -316,14 +310,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('http://www.example.com',                       $this->obj->task_log_related_url);
         $this->assertEquals(1,                                              $this->obj->task_log_project);
         $this->assertEquals(1,                                              $this->obj->task_log_company);
-        $this->assertEquals(1,                                              $this->obj->task_log_changelog);
-        $this->assertEquals('10.10.10.101',                                 $this->obj->task_log_changelog_servers);
-        $this->assertEquals(1,                                              $this->obj->task_log_changelog_whom);
-        $this->assertEquals('2010-05-31 10:15:25',                          $this->obj->task_log_changelog_datetime);
-        $this->assertEquals('35 minutes',                                   $this->obj->task_log_changelog_duration);
-        $this->assertEquals(1,                                              $this->obj->task_log_changelog_expected_downtime);
-        $this->assertEquals('This is a changelog description',              $this->obj->task_log_changelog_description);
-        $this->assertEquals('There is no backout plan',                     $this->obj->task_log_changelog_backout_plan);
         $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_created);
         $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_updated);
         $this->assertEquals(1,                                              $this->obj->task_log_updator);
