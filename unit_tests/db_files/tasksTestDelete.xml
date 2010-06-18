@@ -1234,14 +1234,6 @@
         <column>task_log_related_url</column>
         <column>task_log_project</column>
         <column>task_log_company</column>
-        <column>task_log_changelog</column>
-        <column>task_log_changelog_servers</column>
-        <column>task_log_changelog_whom</column>
-        <column>task_log_changelog_datetime</column>
-        <column>task_log_changelog_duration</column>
-        <column>task_log_changelog_expected_downtime</column>
-        <column>task_log_changelog_description</column>
-        <column>task_log_changelog_backout_plan</column>
         <column>task_log_created</column>
         <column>task_log_updated</column>
         <column>task_log_updator</column>
@@ -1261,13 +1253,6 @@
             <value>1</value>
             <value>1</value>
             <value>0</value>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <null/>
             <value>2009-10-19 00:00:00</value>
             <value>2009-10-19 00:00:00</value>
             <null/>
@@ -1288,13 +1273,6 @@
             <value>1</value>
             <value>1</value>
             <value>0</value>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <null/>
             <value>2009-10-19 00:00:00</value>
             <value>2009-10-19 00:00:00</value>
             <null/>
@@ -1315,13 +1293,6 @@
             <value>1</value>
             <value>1</value>
             <value>0</value>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <value></value>
-            <value>0</value>
-            <null/>
-            <null/>
             <value>2009-10-19 00:00:00</value>
             <value>2009-10-19 00:00:00</value>
             <null/>
