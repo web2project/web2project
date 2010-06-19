@@ -552,10 +552,6 @@ class CFile extends CW2pObject {
                     $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
                     $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
-
-                    $sql .= '(' . $q->prepare() . ')';
-                    $q->clear();
-                    $this->_users = $q->loadList();
                 } else {
                     $q = new DBQuery;
                     $q->addTable('project_contacts', 'pc');
@@ -563,10 +559,8 @@ class CFile extends CW2pObject {
                     $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                     $q->addWhere('pc.project_id = ' . (int)$this->file_project);
-
-                    $this->_users = $q->loadList();
-                    $q->clear();
                 }
+                $this->_users = $q->loadList();
 
                 $body .= "\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
                 if ($this->_message != 'deleted') {
