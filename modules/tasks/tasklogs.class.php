@@ -273,7 +273,7 @@ class CTaskLog extends CW2pObject
      */
 	public function check()
     {
-		
+
 		return null;
 	}
 
@@ -349,7 +349,7 @@ class CTaskLog extends CW2pObject
      * @param string $orderby optional sort order for the query
      * @param int $index optional name of field to index the returned array
      * @param array $extra optional array of additional sql parameters (from and where supported)
-     * 
+     *
      * @return array
      */
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)

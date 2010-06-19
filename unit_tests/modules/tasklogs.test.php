@@ -116,14 +116,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
             'task_log_related_url'                  => 'http://www.example.com',
             'task_log_project'                      => 1,
             'task_log_company'                      => 1,
-            'task_log_changelog'                    => 1,
-            'task_log_changelog_servers'            => '10.10.10.101',
-            'task_log_changelog_whom'               => 1,
-            'task_log_changelog_datetime'           => '2010-05-31 10:15:25',
-            'task_log_changelog_duration'           => '35 minutes',
-            'task_log_changelog_expected_downtime'  => 1,
-            'task_log_changelog_description'        => 'This is a changelog description',
-            'task_log_changelog_backout_plan'       => 'There is no backout plan',
             'task_log_created'                      => '2010-05-30 09:15:30',
             'task_log_updated'                      => '2010-05-30 09:15:30',
             'task_log_updator'                      => 1
@@ -205,6 +197,8 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('task_log' => array('task_log_created', 'task_log_updated')));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
 
         /**
          * Get updated dates to test against
@@ -241,6 +235,8 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('task_log' => array('task_log_updated')));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
 
         /**
          * Get updated dates to test against
@@ -258,5 +254,218 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_log_updated']));
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_log_updated']));
         }
+    }
+
+    /**
+     * Test deleting a tasklog
+     */
+    public function testDelete()
+    {
+        global $AppUI;
+
+        $this->obj->load(1);
+        $msg = $this->obj->delete();
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestDelete.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('task_log' => array('task_log_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
+    }
+
+    /**
+     * Test trimming all trimmable characters from all object properties
+     */
+    public function testW2PTrimAll()
+    {
+        $this->obj->bind($this->post_data, null, true, true);
+
+        /*
+         * Add all the trimmable characters to each variable in the object
+         * so we can trim them all back off
+         */
+        $vars = get_object_vars($this->obj);
+
+        foreach( $vars as $var_name => $var_value) {
+            if (!is_object($var_value)) {
+                $this->obj->$var_name = " \t\n" . $var_value . "\r\0\x0B";
+            }
+        }
+
+        $this->obj->w2PTrimAll();
+
+        $this->assertEquals(0,                                              $this->obj->task_log_id);
+        $this->assertEquals(1,                                              $this->obj->task_log_task);
+        $this->assertEquals(1,                                              $this->obj->task_log_help_desk_id);
+        $this->assertEquals('This is a task log name.',                     $this->obj->task_log_name);
+        $this->assertEquals(" \t\nThis is a task log description.\r\0\x0B", $this->obj->task_log_description);
+        $this->assertEquals(1,                                              $this->obj->task_log_creator);
+        $this->assertEquals(2.75,                                           $this->obj->task_log_hours);
+        $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_date);
+        $this->assertEquals(1,                                              $this->obj->task_log_costcode);
+        $this->assertEquals(1,                                              $this->obj->task_log_problem);
+        $this->assertEquals(1,                                              $this->obj->task_log_reference);
+        $this->assertEquals('http://www.example.com',                       $this->obj->task_log_related_url);
+        $this->assertEquals(1,                                              $this->obj->task_log_project);
+        $this->assertEquals(1,                                              $this->obj->task_log_company);
+        $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_created);
+        $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_updated);
+        $this->assertEquals(1,                                              $this->obj->task_log_updator);
+    }
+
+    /**
+     * Test the check function with a proper float
+     */
+    public function testCheckFloat()
+    {
+        $this->obj->bind($this->post_data, null, true, true);
+
+        $this->obj->check();
+
+        $this->assertType('float',  $this->obj->task_log_hours);
+        $this->assertSame(2.75,     $this->obj->task_log_hours);
+    }
+
+    /**
+     * Test the check function with a string
+     */
+    public function testCheckString()
+    {
+        $this->obj->bind($this->post_data, null, true, true);
+        $this->obj->task_log_hours = 'abcd';
+
+        $this->obj->check();
+
+        $this->assertType('float',  $this->obj->task_log_hours);
+        $this->assertSame((float)0, $this->obj->task_log_hours);
+    }
+
+    /**
+     * Test canDelete with proper permissions
+     */
+    public function testCanDelete()
+    {
+        global $AppUI;
+        $msg = '';
+
+        $return = $this->obj->canDelete($msg);
+
+        $this->assertTrue($return);
+        $this->assertEquals('', $msg);
+    }
+
+    /**
+     * Test canDelete without permissions
+     */
+    public function testCanDeleteNoPermissions()
+    {
+        global $AppUI;
+        $msg = '';
+
+         // Login as another user for permission purposes
+        $old_AppUI = $AppUI;
+        $AppUI  = new CAppUI;
+        $_POST['login'] = 'login';
+        $_REQUEST['login'] = 'sql';
+
+        $return = $this->obj->canDelete($msg);
+
+        // Restore AppUI for following tests since its global, yuck!
+        $AppUI = $old_AppUI;
+
+        $this->assertFalse($return);
+        $this->assertEquals('noDeletePermission', $msg);
+    }
+
+    /**
+     * Tests canDelete with passing an object id
+     */
+    public function testCanDeleteOid()
+    {
+        global $AppUI;
+        $msg = '';
+
+        $return = $this->obj->canDelete($msg, 2);
+
+        $this->assertTrue($return);
+        $this->assertEquals('', $msg);
+    }
+
+    /**
+     * Tests canDelete with passing an object id and a join array
+     */
+    public function testCanDeleteOidJoins()
+    {
+        $this->markTestSkipped('Nothing uses tasklog_id as a foreign key so joins won\'t work');
+    }
+
+    /**
+     * Test getting allowed records with a uid passed
+     */
+    public function testGetAllowedRecordUid()
+    {
+        global $AppUI;
+
+        $allowed_records = $this->obj->getAllowedRecords(1);
+
+        $this->assertEquals(1, count($allowed_records));
+        $this->assertEquals(1, $allowed_records[1]);
+    }
+
+    /**
+     * Test getting allowed records when passing a uid and fields
+     */
+    public function testGetAllowedRecordsFields()
+    {
+        global $AppUI;
+
+        $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_task, task_log.task_log_name');
+
+        $this->assertEquals(1,              count($allowed_records));
+        $this->assertEquals('Task Log 1',   $allowed_records[1]);
+    }
+
+
+    /**
+     * Tests getting allowed records with an order by
+     */
+    public function testGetAllowedRecordsOrderBy()
+    {
+        global $AppUI;
+
+        $allowed_records = $this->obj->getAllowedRecords(1, '*', 'task_log.task_log_hours');
+
+        $this->assertEquals(1, count($allowed_records));
+        $this->assertEquals(1, $allowed_records[1]);
+    }
+
+    /**
+     * Test getting allowed records with an index specified
+     */
+    public function testGetAllowedRecordsIndex()
+    {
+        global $AppUI;
+
+        $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_name', '', 'task_log_name');
+
+        $this->assertEquals(1,              count($allowed_records));
+        $this->assertEquals(2,              count($allowed_records['Task Log 1']));
+        $this->assertEquals('Task Log 1',   $allowed_records['Task Log 1']['task_log_name']);
+        $this->assertEquals('Task Log 1',   $allowed_records['Task Log 1'][0]);
+    }
+
+    /**
+     * Test getting allowed records with extra data specified
+     */
+    public function testGetAllowedRecordsExtra()
+    {
+        $extra = array('from' => 'task_log', 'join' => 'tasks', 'on' => 'task_id = task_log_task',
+                       'where' => 'task_id = 1');
+        $allowed_records = $this->obj->getAllowedRecords(1, '*', '', null, $extra);
+
+        $this->assertEquals(1, count($allowed_records));
+        $this->assertEquals(1, $allowed_records[1]);
     }
 }

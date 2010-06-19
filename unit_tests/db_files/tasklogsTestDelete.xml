@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- tasklogsTestStoreCreate.xml - Data to test against after storing a task log -->
+<!-- tasklogsTestDelete.xml - Data to test against after deleting a task log -->
 <dataset>
     <table name="task_log">
         <column>task_log_id</column>
@@ -8,6 +8,8 @@
         <column>task_log_name</column>
         <column>task_log_description</column>
         <column>task_log_creator</column>
+        <column>task_log_created</column>
+        <column>task_log_updator</column>
         <column>task_log_hours</column>
         <column>task_log_date</column>
         <column>task_log_costcode</column>
@@ -16,48 +18,6 @@
         <column>task_log_related_url</column>
         <column>task_log_project</column>
         <column>task_log_company</column>
-        <column>task_log_created</column>
-        <column>task_log_updated</column>
-        <column>task_log_updator</column>
-        <row>
-            <value>1</value>
-            <value>1</value>
-            <value>1</value>
-            <value>Task Log 1</value>
-            <value>Did some working on task 22.</value>
-            <value>1</value>
-            <value>20</value>
-            <value>2009-10-19</value>
-            <value>1</value>
-            <null/>
-            <null/>
-            <value>http://www.example.org</value>
-            <value>1</value>
-            <value>1</value>
-            <value>0</value>
-            <value>2009-10-19 00:00:00</value>
-            <value>2009-10-19 00:00:00</value>
-            <value>1</value>
-        </row>
-        <row>
-            <value>2</value>
-            <value>1</value>
-            <value>1</value>
-            <value>This is a task log name.</value>
-            <value>This is a task log description.</value>
-            <value>1</value>
-            <value>2.75</value>
-            <value>2010-05-30</value>
-            <value>1</value>
-            <value>1</value>
-            <value>1</value>
-            <value>http://www.example.com</value>
-            <value>1</value>
-            <value>1</value>
-            <value>Ignored</value>
-            <value>Ignored</value>
-            <value>1</value>
-        </row>
     </table>
     <table name="tasks">
         <column>task_id</column>
@@ -101,7 +61,7 @@
           <value>2009-07-05 00:00:00</value>
           <value>2</value>
           <value>24</value>
-          <value>22.75</value>
+          <value>0</value>
           <value>2009-07-15 00:00:00</value>
           <value>0</value>
           <value>0</value>
@@ -186,7 +146,7 @@
             <value>0.00</value>
             <value>0.00</value>
 	        <value>0</value>
-	        <value>22.75</value>
+	        <value>0</value>
 	        <value>0</value>
             <value>1</value>
             <value>0</value>
