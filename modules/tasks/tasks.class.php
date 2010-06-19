@@ -2309,7 +2309,9 @@ class CTask extends CW2pObject {
 	}
 
 	public function getAllowedTaskList($AppUI, $task_project = 0) {
-		$q = new DBQuery();
+		$results = array();
+
+        $q = new DBQuery();
 		$q->addQuery('task_id, task_name, task_parent, task_access, task_owner');
 		$q->addOrder('task_parent, task_parent = task_id desc');
 		$q->addTable('tasks', 't');
