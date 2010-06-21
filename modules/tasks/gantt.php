@@ -350,11 +350,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	$end_date = $a['task_end_date'];
 
 	$end_date = new CDate($end_date);
-	//        $end->addDays(0);
 	$end = $end_date->getDate();
 
 	$start = new CDate($start);
-	//        $start->addDays(0);
 	$start = $start->getDate();
 
 	$progress = $a['task_percent_complete'] + 0;
@@ -459,7 +457,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$dur .= ' h';
 		$enddate = new CDate($end);
 		$startdate = new CDate($start);
-//$gantt->addBar($name, $start, $end, $actual_end, $caption, 0.6, $p['project_color_identifier'], $p['project_active'], $progress);
 		if ($caller == 'todo') {
 			$bar = new GanttBar($row++, array($name, $pname, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
 		} else {

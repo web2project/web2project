@@ -293,15 +293,6 @@ if (isset($test) || isset($import)) {
 				}
 			}
 			$s .= '</tr>';
-
-			/*
-			for ($ii=0, $ii_cmp=$info[$i]['count']; $ii<$ii_cmp; $ii++){
-			$data = $info[$i][$ii];
-			for ($iii=0, $iii_cmp=$info[$i][$data]['count']; $iii<$iii_cmp; $iii++) {
-			echo $data.':&nbsp;&nbsp;'.$info[$i][$data][$iii];
-			}
-			}
-			*/
 		}
 		$s .= '</table>';
 	}

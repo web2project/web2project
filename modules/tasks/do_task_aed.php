@@ -32,7 +32,6 @@ if ($sub_form) {
 	// Include any files for handling module-specific requirements
 	foreach (findTabModules('tasks', 'addedit') as $mod) {
 		$fname = W2P_BASE_DIR . '/modules/' . $mod . '/tasks_dosql.addedit.php';
-		//dprint(__file__, __line__, 3, 'checking for ' . $fname);
 		if (file_exists($fname)) {
 			require_once $fname;
 		}

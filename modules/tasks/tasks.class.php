@@ -627,7 +627,6 @@ class CTask extends CW2pObject {
 		$q->addWhere('task_id=' . (int)$this->task_id);
 		$q->exec();
 		$q->clear();
-		// print_r($this->task_departments);
 		if (!empty($this->task_departments)) {
 			$departments = explode(',', $this->task_departments);
 			foreach ($departments as $department) {
@@ -1030,7 +1029,6 @@ class CTask extends CW2pObject {
 
 			$body = ($AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ':	 ' . $this->task_name);
 			//Priority not working for some reason, will wait till later
-			//$body .= "\n".$AppUI->_('Priority'). ': ' . $this->task_priority;
 			$body .= ("\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $task_start_date->format($df) . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . ($this->task_end_date != '' ? $task_finish_date->format($df) : '') . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $this->task_description);
 			if ($users[0]['creator_email']) {
 				$body .= ("\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['creator_first_name'] . ' ' . $users[0]['creator_last_name'] . ', ' . $users[0]['creator_email']);
@@ -1293,7 +1291,6 @@ class CTask extends CW2pObject {
 		$q->addOrder('t.task_start_date');
 
 		// assemble query
-		//echo '<pre>' . $q->prepare() . '</pre>';
 		$tasks = $q->loadList(-1, 'task_id');
 		$q->clear();
 

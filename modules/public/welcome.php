@@ -86,10 +86,9 @@ $titleBlock->show();
 		</p>
 		<ul>
 		<li><a href="http://adodb.sourceforge.net/" target="_blank">ADOdb</a> is dual licensed using BSD and LGPL.</li>
-		<li><a href="http://gifs.hu" target="_blank">Captcha</a> by László Zsidi, no license information.</li>
+		<li><a href="http://gifs.hu" target="_blank">Captcha</a> by Lï¿½szlï¿½ Zsidi, no license information.</li>
 		<li><a href="http://www.dotproject.net" target="_blank">dotProject</a> licensed GPL 2.</li>
 		<li><a href="http://www.ros.co.nz/pdf/" target="_blank">(ezpdf) PHP Pdf creation</a> licensed Public Domain.</li>
-		<li><a href="http://www.fckeditor.net/" target="_blank">FCKEditor</a> licensed GPL, LGPL and MPL.</li>
 		<li><a href="http://www.urwpp.de" target="_blank">Free UCS scalable fonts project</a> licensed GPL.</li>
 		<li><a href="http://www.aditus.nu/jpgraph/" target="_blank">JPGraph</a> licensed Q PUBLIC LICENSE version 1.0.</li>
 		<li><a href="http://dynarch.com/mishoo/calendar.epl" target="_blank">JSCalendar</a> licensed GNU Lesser General Public License.</li>

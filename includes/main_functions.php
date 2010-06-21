@@ -616,10 +616,6 @@ function w2PgetParam(&$arr, $name, $def = null) {
             && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
 				return isset($arr[$name]) ? $arr[$name] : $def;
 			} else {
-				/*echo('<pre>');
-				print_r(debug_backtrace());
-				echo('</pre>');
-				print_r($arr[$name]);die;*/
 				//Hack attempt detected
 				//return isset($arr[$name]) ? str_replace(' ','',$arr[$name]) : $def;
 				$AppUI->setMsg('Poisoning attempt to the URL detected. Issue logged.', UI_MSG_ALERT);

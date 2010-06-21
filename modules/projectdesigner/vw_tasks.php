@@ -232,7 +232,6 @@ reset($projects);
 
 foreach ($projects as $k => $p) {
 	$tnums = count($p['tasks']);
-	//echo '<pre>'; print_r($p['tasks']); echo '</pre>';
 	if ($tnums > 0 || $project_id == $p['project_id']) {
 		if ($task_sort_item1 != '') {
 			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {

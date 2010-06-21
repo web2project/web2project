@@ -34,7 +34,6 @@ $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
-#echo '<pre>';print_r($events);echo '</pre>';
 // setup the title block
 $titleBlock = new CTitleBlock('Monthly Calendar', 'myevo-appointments.png', $m, $m . '.' . $a);
 $titleBlock->addCell($AppUI->_('Company') . ':');
