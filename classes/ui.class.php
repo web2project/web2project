@@ -224,8 +224,29 @@ class CAppUI {
     public function getTZAwareTime() {
         $df = $this->getPref('FULLDATEFORMAT');
 
-        $userTimezone = $this->getPref('TIMEZONE');
-        $userTZ = new DateTimeZone($userTimezone);
+        /*
+        * This try/catch is a nasty little hack to cover the issue where some
+        *   timezones were set up incorrectly in the v1.3 release (caseydk's
+        *   fault!). They've since been corrected for 2.0 but people upgrading
+        *   will have a problem here without this.
+        *                                            ~ caseydk June 2010
+        *
+        * TODO: This should be killed off in v2.2 or v2.3 or so..
+        */
+        try {
+            $userTimezone = $this->getPref('TIMEZONE');
+            $userTZ = new DateTimeZone($userTimezone);
+        } catch (Exception $e) {
+            $timezoneOffset = $this->getPref('TIMEZONE');
+
+            $q = new DBQuery();
+            $q->addTable('sysvals');
+            $q->addQuery('sysval_value');
+            $q->addWhere("sysval_value_id = $timezoneOffset");
+            $userTimezone = $q->loadResult();
+            $userTZ = new DateTimeZone($userTimezone);
+            echo '<span class="error"><strong>Your system must be upgraded immediately.</strong></span><br />';
+        }
 
         $ts = new DateTime();
         $ts->setTimezone($userTZ);
