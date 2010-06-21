@@ -66,6 +66,8 @@ $end_date = w2PgetParam($_GET, 'end_date', 0);
 
 $showAllGantt = w2PgetParam($_REQUEST, 'showAllGantt', '1');
 
+$gantt = new w2p_Output_GanttRenderer($AppUI, $width);
+
 $graph = new GanttGraph($width);
 $graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);
 
