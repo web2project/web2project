@@ -233,13 +233,6 @@ function getFolders($parent, $level = 0) {
 		// child's children
 		// getFolders *always* returns true, so there's no point in checking it
 		$s .= getFolders($row['file_folder_id'], $level + 1).'</li></ul>';
-/*
-		if (!getFolders($row['file_folder_id'], $level + 1)) {
-			$s .= '</li>';
-		} else {
-			$s .= '</li></ul>';
-		}
-*/
 	}
 	/*
 	 *  getFolders  would *alway* return true and would echo the results.  It
@@ -356,12 +349,11 @@ function displayFiles($folder) {
 
 	$files = array();
 	$file_versions = array();
-	//if ($canRead) {
-		$files = $q->loadList();
-		$file_versions = $qv->loadList();
-		$q->clear();
-		$qv->clear();
-	//}
+    $files = $q->loadList();
+    $file_versions = $qv->loadList();
+    $q->clear();
+    $qv->clear();
+
 	if ($files === array()) {
 		return 0;
 	}

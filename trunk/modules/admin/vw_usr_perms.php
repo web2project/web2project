@@ -59,7 +59,6 @@ function editPerm( id, gon, it, vl, nm ) {
 	vl =permission_value
 	nm = text representation of permission_value
 */
-//alert( 'id='+id+'\ngon='+gon+'\nit='+it+'\nvalue='+vl+'\nnm='+nm);
 	var f = document.frmPerms;
 
 	f.sqlaction2.value = "<?php echo $AppUI->_('edit'); ?>";

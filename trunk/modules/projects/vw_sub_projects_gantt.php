@@ -55,11 +55,8 @@ $q->addWhere('project_original_parent = ' . (int)$original_project_id);
 
 $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $q->addGroup('pr.project_id');
-//bl
 $q->addOrder('project_name, task_start_date DESC');
 
-//$projects = $q->loadList();
-//print_r($q->prepare());
 $projects = $q->loadHashList('project_id');
 $q->clear();
 
@@ -76,13 +73,7 @@ $graph->SetFrame(false);
 $graph->SetBox(true, array(0, 0, 0), 2);
 $graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
 
-/*$jpLocale = w2PgetConfig( 'jpLocale' );
-
-if ($jpLocale) {
-
-$graph->scale->SetDateLocale( $jpLocale );
-
-}
+/*
 
 ** the jpgraph date locale is now set
 
@@ -122,9 +113,6 @@ $graph->scale->actinfo->SetColor('darkgray');
 
 //bl
 
-//$graph->scale->actinfo->SetColTitles(array( $AppUI->_('Project name', UI_OUTPUT_RAW), $AppUI->_('Start Date', UI_OUTPUT_RAW), $AppUI->_('Proj. End', UI_OUTPUT_RAW), $AppUI->_('Actual End', UI_OUTPUT_RAW)),array(160,10, 70,70));
-
-//$graph->scale->actinfo->SetColTitles(array( $AppUI->_('Project Name', UI_OUTPUT_RAW), $AppUI->_('Start Date', UI_OUTPUT_RAW), ),array(180,10));
 $graph->scale->actinfo->SetColTitles(array($AppUI->_('Project name', UI_OUTPUT_RAW), $AppUI->_('Start Date', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW), $AppUI->_('Actual End', UI_OUTPUT_RAW)), array(160, 10, 70, 70));
 
 $original_project = new CProject();
@@ -182,8 +170,6 @@ if ($start_date && $end_date) {
 
 // check day_diff and modify Headers
 $day_diff = $min_d_start->dateDiff($max_d_end);
-//print_r($projects);
-//print_r($min_d_start);print_r($max_d_end);die;
 
 if ($day_diff > 120 || !$day_diff) {
 	//more than 120 days
@@ -248,10 +234,6 @@ if (is_array($projects)) {
 			$projects[$rec['task_project']]['tasks'][] = $rec;
 		}
 		$q->clear();
-		/* $handle = fopen ( 'gantt.txt', 'w');
-		$data = print_r($projects, true);
-		fwrite($handle, $data);
-		fclose($handle);*/
 		//This kludgy function echos children tasks as threads
 
 		function showgtask(&$a, $level = 0, $project_id) {
@@ -273,7 +255,6 @@ if (is_array($projects)) {
 		}
 
 		reset($projects);
-		//$p = &$projects[$project_id];
 		foreach ($projects as $p) {
 			$tnums = count($p['tasks']);
 			for ($i = 0; $i < $tnums; $i++) {
@@ -284,11 +265,6 @@ if (is_array($projects)) {
 				}
 			}
 		}
-
-		/* $handle = fopen ( 'gantt2.txt', 'w');
-		$data = print_r($gantt_arr, true);
-		fwrite($handle, $data);
-		fclose($handle);*/
 	}
 
 	foreach ($projects as $p) {
@@ -308,10 +284,8 @@ if (is_array($projects)) {
 		$start = ($p['project_start_date'] > '0000-00-00 00:00:00') ? $p['project_start_date'] : date('Y-m-d H:i:s');
 		$end_date = $p['project_end_date'];
 		$end_date = new CDate($end_date);
-		//	$end->addDays(0);
 		$end = $end_date->getDate();
 		$start = new CDate($start);
-		//	$start->addDays(0);
 		$start = $start->getDate();
 		$progress = $p['project_percent_complete'] + 0;
 		$caption = ' ';
@@ -360,7 +334,6 @@ if (is_array($projects)) {
 			$bar->title->SetColor('darkgray');
 			$bar->SetColor('darkgray');
 			$bar->SetFillColor('gray');
-			//$bar->SetPattern(BAND_SOLID,'gray');
 			$bar->progress->SetFillColor('darkgray');
 			$bar->progress->SetPattern(BAND_SOLID, 'darkgray', 98);
 		}
@@ -371,16 +344,9 @@ if (is_array($projects)) {
 		if ($showAllGantt) {
 			// insert tasks into Gantt Chart
 			// cycle for tasks for each project
-			//$row = 1;
 			for ($i = 0, $i_cmp = count($gantt_arr[$p['project_id']]); $i < $i_cmp; $i++) {
 				$t = $gantt_arr[$p['project_id']][$i][0];
-				/* $handle = fopen ( 'gantt3.txt', 'a+');
-				$data = print_r($t, true);
-				fwrite($handle, $data);
-				fclose($handle);*/
 				$level = $gantt_arr[$p['project_id']][$i][1];
-				// 		foreach($tasks as $t)
-				// 		{
 				if ($t['task_end_date'] == null) {
 					$t['task_end_date'] = $t['task_start_date'];
 				}
@@ -417,34 +383,12 @@ if (is_array($projects)) {
 					$graph->Add($bar2);
 				}
 
-				// Insert workers for each task into Gantt Chart - bl commented out
-				/*$q  = new DBQuery;
-				$q->addTable('user_tasks', 't');
-				$q->addQuery('DISTINCT user_username, t.task_id');
-				$q->addJoin('users', 'u', 'u.user_id = t.user_id', 'inner');
-				$q->addWhere('t.task_id = ' . (int)$t['task_id']);
-				$q->addOrder('user_username ASC');
-				$workers = $q->loadList();
-				$q->clear();
-				$workersName = '';
-				foreach($workers as $w) {	
-				$workersName .= ' '.$w['user_username'];
-
-				$bar3 = new GanttBar($row++, array('   * '.$w['user_username'], ' ', ' ',' '), '0', '0;', 0.6);							
-				$bar3->title->SetColor(bestColor( '#ffffff', '#'.$p['project_color_identifier'], '#000000' ));
-				$bar3->SetFillColor('#'.$p['project_color_identifier']);		
-				$graph->Add($bar3);
-				}*/
 				// End of insert workers for each task into Gantt Chart
 			}
 			// End of insert tasks into Gantt Chart
 		}
 		// End of if showAllGant checkbox is checked
 	}
-	/* $handle = fopen ( 'gantt4.txt', 'w');
-	$data = print_r($graph, true);
-	fwrite($handle, $data);
-	fclose($handle);*/
 } // End of check for valid projects array.
 
 $today = date('y-m-d');

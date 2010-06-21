@@ -150,7 +150,6 @@ if ($hasTasks) {
 	$q->clear();
 	$q2->clear();
 	//due to the round above, we don't want to print decimals unless they really exist
-	//$total_project_hours = rtrim($total_project_hours, "0");
 } else { //no tasks in project so "fake" project data
 	$worked_hours = $total_hours = $total_project_hours = 0.00;
 }
@@ -210,11 +209,6 @@ TABLE.prjprint TR {
 echo '<strong> Project Report <strong>';
 ?>
             	</td>
-        <!--	    <td width="22" align="right">
-				<a href="javascript: void(0);" onclick="var img=document.getElementById('imghd'); img.style.display='none'; window.print(); window.close();">
-      			<img id="imghd" src="./modules/projectdesigner/images/printer.png" border="0" width="22" heigth="22" alt="print project" title="print project"/>
-      			</a>
-      			</td>-->  
       	</tr>
       	</table>
 	</td>

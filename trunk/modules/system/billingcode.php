@@ -18,7 +18,6 @@ $q = new DBQuery;
 $q->addTable('billingcode', 'bc');
 $q->addQuery('billingcode_id, billingcode_name, billingcode_value, billingcode_desc, billingcode_status');
 $q->addOrder('billingcode_name ASC');
-//$q->addWhere('bc.billingcode_status = 0');
 $q->addWhere('company_id = ' . (int)$company_id);
 $billingcodes = $q->loadList();
 $q->clear();

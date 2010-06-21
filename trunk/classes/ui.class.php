@@ -1385,10 +1385,7 @@ class CInfoTabBox extends CTabBox_core {
 				$sel = ($k == $this->active) ? 'Selected' : '';
 				$s .= '<td valign="middle"><img src="./style/' . $uistyle . '/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" border="0" alt="" /></td>';
 				$s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap"';
-				// if ($js_tabs)
 				$s .= ' class="' . $class . '"';
-				// else
-				// $s .= ' background="./style/'.$uistyle.'/bar_top_'.$sel.'middle.gif"';
 				$s .= '>&nbsp;<a href="';
 				if ($this->javascript)
 					$s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
@@ -1537,15 +1534,11 @@ class CTitleBlock_core {
 			foreach ($this->crumbs as $k => $v) {
 				$t = $v[1] ? '<img src="' . w2PfindImage($v[1], $this->module) . '" border="" alt="" />&nbsp;' : '';
 				$t .= $AppUI->_($v[0]);
-				//				$crumbs[] = "<a href=\"$k\">$t</a>";
 				$crumbs[] = '<li><a href="'.$k.'"><span>'.$t.'</span></a></li>';
 			}
 			$s .= '<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>';
-			//			$s .= "\n\t<td nowrap=\"nowrap\">";
 			$s .= '<td height="20" nowrap="nowrap"><div class="'.$class.'"><ul>';
-			//			$s .= "\n\t\t" . implode( ' <strong>:</strong> ', $crumbs );
 			$s .= implode('', $crumbs);
-			//			$s .= "\n\t</td>";
 			$s .= '</ul></div></td>';
 
 			foreach ($this->cells2 as $c) {

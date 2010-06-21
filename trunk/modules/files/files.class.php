@@ -632,7 +632,7 @@ class CFile extends CW2pObject {
 
 function last_file($file_versions, $file_name, $file_project) {
 	$latest = null;
-	//global $file_versions;
+
 	if (isset($file_versions))
 		foreach ($file_versions as $file_version)
 			if ($file_version['file_name'] == $file_name && $file_version['file_project'] == $file_project)
