@@ -182,7 +182,6 @@ class w2p_Database_Query {
 	 * @param $check_array defaults to true, iterates through each element in $value and adds them seperately to the clause
 	 */
 	public function addClause($clause, $value, $check_array = true) {
-		//dprint(__file__, __line__, 8, "Adding '$value' to $clause clause");
 		if (!isset($this->$clause)) {
 			$this->$clause = array();
 		}
@@ -728,9 +727,6 @@ class w2p_Database_Query {
 			case 'oci8':
 			case 'oracle':
 				$q = 'SELECT ';
-				if ($this->include_count) {
-					//$q .= 'SQL_CALC_FOUND_ROWS ';
-				}
 				if (isset($this->query)) {
 					if (is_array($this->query)) {
 						$inselect = false;

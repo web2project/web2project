@@ -389,7 +389,6 @@ class w2p_Core_BaseObject {
 		if ($orderby) {
 			$this->_query->addOrder($orderby);
 		}
-		//print_r($this->_query->prepare());
 		return $this->_query->loadHashList($index);
 	}
 

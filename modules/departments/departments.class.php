@@ -316,7 +316,6 @@ class CDepartment extends CW2pObject {
 		if (isset($index)) {
 			if (!$key) {
 				$key = substr($this->_tbl, 0, 3);
-				//$key = $this->_tbl;
 			}
 			$query->leftJoin($this->_tbl, $key, $key . '.' . $this->_tbl_key . '=' . $index);
 		}

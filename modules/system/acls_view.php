@@ -11,9 +11,6 @@ if (!canView('system')) {
 
 $user_permissions = array();
 $users = w2PgetUsers();
-/*echo("<pre>");
-print_r($permissions);
-echo("</pre>");*/
 
 if (isset($_POST['user']) && $_POST['user'] != '') {
 	$q = new DBQuery;

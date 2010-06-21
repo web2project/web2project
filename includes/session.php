@@ -43,7 +43,6 @@ function w2PsessionRead($id) {
 	} else {
 		$max = w2PsessionConvertTime('max_lifetime');
 		$idle = w2PsessionConvertTime('idle_time');
-		// dprint(__file__, __line__, 11, "Found session $id, max=$max/" . $qid->fields['session_lifespan'] . ", idle=$idle/" . $qid->fields['session_idle']);
 		// If the idle time or the max lifetime is exceeded, trash the
 		// session.
 		if ($max < $qid->fields['session_lifespan'] || $idle < $qid->fields['session_idle']) {
@@ -67,14 +66,12 @@ function w2PsessionWrite($id, $data) {
 	$q->addWhere('session_id = \''.$id.'\'');
 
 	if ($qid = &$q->exec() && ($qid->fields['row_count'] > 0 || $qid->fields[0] > 0)) {
-		//dprint(__file__, __line__, 11, "Updating session $id");
 		$q->query = null;
 		$q->addUpdate('session_data', $data);
 		if (isset($AppUI)) {
 			$q->addUpdate('session_user', (int)$AppUI->last_insert_id);
 		}
 	} else {
-		//dprint(__file__, __line__, 11, "Creating new session $id");
 		$q->query = null;
 		$q->where = null;
 		$q->addInsert('session_id', $id);
@@ -90,8 +87,6 @@ function w2PsessionDestroy($id, $user_access_log_id = 0) {
 	global $AppUI;
 
 	$q = new DBQuery;
-
-	//dprint(__file__, __line__, 11, "Killing session $id");
 	$q->addTable('user_access_log');
 	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
 	$q2 = new DBQuery;
@@ -114,7 +109,6 @@ function w2PsessionDestroy($id, $user_access_log_id = 0) {
 function w2PsessionGC($maxlifetime) {
 	global $AppUI;
 
-	//dprint(__file__, __line__, 11, 'Session Garbage collection running');
 	$now = time();
 	$max = w2PsessionConvertTime('max_lifetime');
 	$idle = w2PsessionConvertTime('idle_time');

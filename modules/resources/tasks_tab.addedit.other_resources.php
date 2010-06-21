@@ -106,11 +106,6 @@ for ($i = 5; $i <= 100; $i += 5) {
 				</td>
 			</tr>
 			</tr>
-<!-- 			<tr>
-				<td colspan=3 align="center">
-					<input type="checkbox" name="task_notify" value="1" <?php //if($obj->task_notify!="0") echo "checked" ?> /> <?php //echo $AppUI->_( 'notifyChange' ); ?>
-				</td>
-			</tr> -->
 		</table>
 	</td>
 </tr>

@@ -115,7 +115,6 @@ function db_num_rows($qid) {
 		dprint(__file__, __line__, 0, 'Invalid object passed to db_num_rows.');
 	}
 	return $qid->RecordCount();
-	//return $db->Affected_Rows();
 }
 
 function db_fetch_row(&$qid) {

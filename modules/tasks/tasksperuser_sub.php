@@ -300,7 +300,7 @@ if ($do_report) {
 	$task_assigned_users = array();
 	$user_assigned_tasks = array();
 	$i = 0;
-//echo '<pre>';print_r($task_list_hash);die();
+
 	foreach ($task_list_hash as $task_id => $task_data) {
 		$task = new CTask();
 		$task->load($task_id);
@@ -584,7 +584,6 @@ function weekDates($display_allocated_hours, $fromPeriod, $toPeriod) {
 	$s = new CDate($fromPeriod);
 	$e = new CDate($toPeriod);
 	$sw = getBeginWeek($s);
-	//$ew=getEndWeek($e); //intval($e->Format('%U'));
 	$dw = ceil($e->dateDiff($s) / 7);
 	$ew = $sw + $dw;
 	$row = '';
@@ -636,8 +635,6 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 	$stw = getBeginWeek($st);
 	$dtw = ceil($et->dateDiff($st) / 7);
 	$etw = $stw + $dtw;
-
-	//print "week from: $stw, to: $etw<br>\n";
 
 	$row = '';
 	for ($i = $sw; $i <= $ew; $i++) {

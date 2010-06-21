@@ -10,16 +10,13 @@ function buildTaskName(id) {
 	var f = document.editFrm;
 	var taskNameObj = eval('f.add_task_name_'+id);
 	var taskName = eval('f.add_task_name_'+id+'.value');
-	//var oldProj = eval('oldProj');
 	var oldType = eval('oldType_'+id);
 	taskName = taskName.replace(oldProj, '');
 	taskName = taskName.replace(oldType, '');
-	//var projectName = f.project_name.value;
 	var taskType = eval('f.add_task_type_'+id+'.options[f.add_task_type_'+id+'.selectedIndex].text');
 	var newTaskName = oldProj+taskName+'-'+taskType;
 	taskNameObj.value = newTaskName;
 	oldTaskName = newTaskName;
-	//eval("oldProj = "+projectName+"+':'");
 	eval("oldType_"+id+" = '-'+'"+taskType+"'");
 }
 
@@ -52,7 +49,6 @@ function addTasks() {
 			var eDate = new Date(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
 			var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
 			var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
-			//alert(int_st_date);
 			if (s > e && int_st_date.length>0 && int_en_date.length>0){
 				st_date.style.backgroundColor = 'red';
 				en_date.style.backgroundColor = 'red';

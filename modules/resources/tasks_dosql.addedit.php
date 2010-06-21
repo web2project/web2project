@@ -20,7 +20,6 @@ function resource_presave() {
 	// check to see if we are in the post save list or if we need to
 	// interrogate the session.
 	$other_resources = w2PgetParam($_POST, 'hresource_assign');
-	//dprint(__file__, __line__, 5, "setting other resources to $other_resources");
 }
 
 /**
@@ -31,7 +30,6 @@ function resource_postsave() {
 	global $other_resources;
 	global $obj;
 	$task_id = $obj->task_id;
-	//dprint(__file__, __line__, 5, "saving resources, $other_resources");
 	if (isset($other_resources)) {
 		$value = array();
 		$reslist = explode(';', $other_resources);

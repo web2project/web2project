@@ -3,7 +3,6 @@ global $AppUI, $projects, $company_id, $pstatus, $project_statuses, $project_sta
 
 $perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
-//$df = '%m/%d/%y';
 // Let's check if the user submited the change status form
 
 $projectStatuses = w2PgetSysVal('ProjectStatus');
