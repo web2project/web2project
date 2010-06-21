@@ -321,7 +321,6 @@ class w2Pacl extends gacl_api {
 		// Grab a list of all acls that match the user/module, for which Deny permission is set.
 		//Pedro A.: "user" is not the only thing in place for item ACLs anymore, need to search the Role Item ACLs too
 		return $this->w2Psearch_acl('application', 'view', 'user', $uid, $module);
-		//    return $this->search_acl("application", "view", false, $uid, false, $module, false, false, false);
 	}
 
 	public function getUserACLs($uid = null) {
@@ -363,7 +362,6 @@ class w2Pacl extends gacl_api {
 		} else {
 			dprint(__file__, __line__, 2, "getDeniedItems($module, $uid) - no ACL's match");
 		}
-		//dprint(__file__, __line__, 2, "getDeniedItems($module, $uid) returning " . count($items) . " items");
 		return $items;
 	}
 
@@ -383,9 +381,6 @@ class w2Pacl extends gacl_api {
 		} else {
 			dprint(__file__, __line__, 2, "getAllowedItems($module, $uid) - no ACL's match");
 		}
-		//dprint(__file__, __line__, 2, 'getAllowedItems(' . $module . ',' . $uid . ') returning ' . count($items) . ' items');
-		//print_r('. '.$module.'->');
-		//print_r($items);
 		return $items;
 	}
 
@@ -393,7 +388,6 @@ class w2Pacl extends gacl_api {
 	// all of the fields, rather than just the group ids.  This makes it a bit
 	// more efficient as it doesn't need the get_group_data call for each row.
 	public function getChildren($group_id, $group_type = 'ARO', $recurse = 'NO_RECURSE') {
-		//$this->debug_text("get_group_children(): Group_ID: $group_id Group Type: $group_type Recurse: $recurse");
 
 		switch (strtolower(trim($group_type))) {
 			case 'axo':
@@ -603,7 +597,6 @@ class w2Pacl extends gacl_api {
 	}
 
 	public function get_group_map($id, $group_type = 'ARO') {
-		//$this->debug_text("get_group_map(): Assigned ID: $id Group Type: $group_type");
 
 		switch (strtolower(trim($group_type))) {
 			case 'axo':
@@ -746,15 +739,6 @@ class w2Pacl extends gacl_api {
 
 		$q->addOrder('order_value');
 
-		/*
-		$rs = $q->exec();
-
-		if (!is_object($rs)) {
-		$this->debug_db('get_objects');
-		return FALSE;
-		}
-		*/
-
 		$retarr = array();
 
 		$q->exec();
@@ -812,13 +796,6 @@ class w2Pacl extends gacl_api {
 
 		$rs = $q->exec();
 
-		/*
-		if (!is_object($rs)) {
-		$this->debug_db('get_object_sections');
-		return FALSE;
-		}
-		*/
-
 		$retarr = array();
 
 		while ($row = $q->fetchRow()) {
@@ -838,12 +815,6 @@ class w2Pacl extends gacl_api {
 			$this->debug_text('you must select at least one permission');
 			return false;
 		}
-		/*
-		echo "<pre>\n";
-		var_dump($_POST);
-		echo "</pre>\n";
-		return true;
-		*/
 
 		$mod_type = substr($_POST['permission_module'], 0, 4);
 		$mod_id = substr($_POST['permission_module'], 4);
@@ -1015,12 +986,6 @@ class w2Pacl extends gacl_api {
 	 * @return
 	 */
 	public function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $method = 1) {
-		/*echo '<pre>';
-		print_r(debug_backtrace());
-		echo '</pre>';die;*/
-
-		//@ini_set('max_execution_time', 180);
-		//@ini_set('memory_limit', '128M');
 
 		$q = new DBQuery;
 		$q->addTable($this->_db_acl_prefix . 'aco_sections', 'a');
@@ -1057,39 +1022,14 @@ class w2Pacl extends gacl_api {
 		}
 		//Make sure things without axos are not ported, this would make addon modules to carry wrong soft denials affecting visible addon modules
 		$q->addWhere('f.value IS NOT NULL');
-		//Is the order necessary?
-		//$q->addOrder('a.value, b.value, c.value, d.value, e.value, f.value');
-		//print_r('User ID:'.$user_id);
-		//print_r(' User ARO ID:'.$user_aro_id);
-		//print_r(' SQL: '.$q->prepare());die;
 		$rows = $q->loadList();
 		$q->clear();
 
-		/*	echo("<pre>");
-		print_r($rows);
-		echo("</pre>");*/
 		$total_rows = count($rows);
 
 		$acls = array();
 
 		while (list(, $row) = @each($rows)) {
-			/*	    list(
-			$aco_section_value,
-			$aco_section_name,
-			$aco_value,
-			$aco_name,
-			
-			$aro_section_value,
-			$aro_section_name,
-			$aro_value,
-			$aro_name,
-			
-			$axo_section_value,
-			$axo_section_name,
-			$axo_value,
-			$axo_name
-			) = $row;*/
-
 			$aco_section_value = $row['a_value'];
 			$aco_value = $row['b_value'];
 
@@ -1107,9 +1047,6 @@ class w2Pacl extends gacl_api {
 
 			$acls[] = array('aco_section_value' => $aco_section_value, 'aco_value' => $aco_value, 'aro_section_value' => $aro_section_value, 'aro_value' => $aro_value, 'aro_name' => $aro_name, 'axo_section_value' => $axo_section_value, 'axo_value' => $axo_value, 'acl_id' => $acl_id, 'access' => $access, );
 		}
-		/*echo("<pre>");
-		print_r($acls);
-		echo("</pre>");die;*/
 
 		$user_permissions = array();
 		foreach ($acls as $key => $acl) {
@@ -1153,9 +1090,6 @@ class w2Pacl extends gacl_api {
 		$q->exec();
 		$q->clear();
 
-		/*echo("<pre>");
-		print_r($user_permissions);
-		echo("</pre>");*/
 		$q = new DBQuery;
 		foreach ($user_permissions as $user => $permissions) {
 			foreach ($permissions as $permission) {
@@ -1221,10 +1155,6 @@ class w2Pacl extends gacl_api {
 			return array();
 		}
 
-		/*echo('<pre>');
-		print_r(debug_backtrace());
-		echo('</pre>');*/
-
 		if (!count($mod_class)) {
 			$q = new DBQuery;
 			$q->addTable('modules');
@@ -1233,9 +1163,6 @@ class w2Pacl extends gacl_api {
 			$q->addWhere('mod_active = 1');
 			$mod_class = $q->loadHash();
 		}
-
-		/*print_r($mod_class);
-		print_r('user:'.$userid.'module:'.$module.'Item:'.$item);*/
 
 		//If we don't know what is the module we are dealing with lets deny
 		if (!$mod_class['mod_directory']) {
@@ -1249,9 +1176,6 @@ class w2Pacl extends gacl_api {
 		} else {
 			$allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label']);
 		}
-		/*print_r($allowedRecords[(int)$item]);
-		print_r(intval(isset($allowedRecords[(int)$item])));
-		print_r('Result:'.$item.'>count='.count($allowedRecords));die;*/
 
 		if (count($allowedRecords)) {
 			if (isset($allowedRecords[(int)$item])) {
@@ -1297,8 +1221,6 @@ class w2Pacl extends gacl_api {
 		} elseif ($module == 'events') {
 			$mod_class = array('mod_main_class' => 'CEvent', 'permissions_item_table' => 'events', 'permissions_item_field' => 'event_id', 'permissions_item_label' => 'event_title', 'mod_directory' => 'calendar');
 		}
-		/*print_r($module);
-		print_r($op);*/
 		if ($op == 'view') {
 			//Because view is nuclear we can't just check the permission against the results table, so we need to check the allowed records on each class, so it handles the
 			//Cascading of permissions.
@@ -1332,10 +1254,8 @@ class w2Pacl extends gacl_api {
 				$q->addWhere('user_id = ' . (int)$userid);
 				$q->addWhere('(item_id = ' . (int)$item . ' OR item_id = 0)');
 				$q->addOrder('item_id DESC, acl_id DESC');
-				//print_r($q->prepare());
 				$result = array();
 				$result = $q->loadList();
-				//print_r($result);
 				if (W2P_PERFORMANCE_DEBUG) {
 					++$w2p_performance_aclchecks;
 					$w2p_performance_acltime += array_sum(explode(' ', microtime())) - $startTime;

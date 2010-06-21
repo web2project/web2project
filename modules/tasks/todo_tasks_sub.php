@@ -38,12 +38,6 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 	<td nowrap="nowrap">
 		<label for="show_arc_proj"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
 	</td>
-<!--	<td>
-		<input type="checkbox" name="show_hold_proj" id="show_hold_proj" onclick="document.form_buttons.submit()" <?php echo $showHoldProjs ? 'checked="checked"' : ''; ?> />
-	</td>
-    <td nowrap="nowrap">
-		<label for="show_hold_proj"><?php echo $AppUI->_('Projects on Hold'); ?></label>
-	</td>-->
 	<td>
 		<input type="checkbox" name="show_dyn_task" id="show_dyn_task" onclick="document.form_buttons.submit()" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
 	</td>

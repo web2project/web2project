@@ -50,9 +50,6 @@ function parseDate(val) {
 	generalFormats=new Array('yyyyMMddHHmm', '<?php echo $cal_df ?>','yyyyMMdd', '<?php echo $cal_sdf ?>');
 	monthFirst=new Array();
       dateFirst =new Array();
-//	generalFormats=new Array('yyyyMMddHHmm', 'NNN/dd/yyyy h:m a', 'NNN/dd/yyyy H:m', 'NNN/dd/yyyy hh:mm a', 'NNN/dd/yyyy HH:mm a', 'y-M-d','MMM d, y','MMM d,y','y-MMM-d','d-MMM-y','MMM d');
-//	monthFirst=new Array('M/d/y h:m','M-d-y h:m','M.d.y h:m','M/d/y hh:mm','M-d-y hh:mm','M.d.y hh:mm','M/d/y','M-d-y','M.d.y','MMM-d','M/d','M-d');
-//	dateFirst =new Array('d/M/y hh:mm','d-M-y hh:mm','d.M.y hh:mm','d/M/y h:m','d-M-y h:m','d.M.y h:m','d-MMM','d/M','d-M','d/M/y','d-M-y','d.M.y','d-MMM','d/M','d-M');
 	var checkList=new Array('generalFormats',preferEuro?'dateFirst':'monthFirst',preferEuro?'monthFirst':'dateFirst');
 	var d=null;
 	for (var i=0, i_cmp=checkList.length; i<i_cmp; i++) {

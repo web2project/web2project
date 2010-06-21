@@ -199,26 +199,25 @@ if ($pages > 1) {
 	<th nowrap="nowrap"><?php echo $AppUI->_('User'); ?>&nbsp;&nbsp;</th>
 </tr>
 <?php
+// Checking permissions.
+// TODO: Enable the lines below to activate new permissions.
+$perms = &$AppUI->acl();
+//The next line makes no sense and takes loads of time
+$df = $AppUI->getPref('SHDATEFORMAT');
+$tf = $AppUI->getPref('TIMEFORMAT');
+
 foreach ($history as $row) {
 	$module = $row['history_table'] == 'task_log' ? 'tasks' : $row['history_table'];
-	// Checking permissions.
-	// TODO: Enable the lines below to activate new permissions.
-	$perms = &$AppUI->acl();
-	//The next line makes no sense and takes loads of time
-	//if ($module == 'login' || $perms->checkModuleItem($module, "access", $row['history_item']))  {
-	$df = $AppUI->getPref('SHDATEFORMAT');
-	$tf = $AppUI->getPref('TIMEFORMAT');
 
 	$hd = new Date($row['history_date']);
-
-?>
-<tr>	
-	<td align="center"><a href='<?php echo '?m=history&a=addedit&history_id=' . $row['history_id'] ?>'><img src="<?php echo w2PfindImage('icons/pencil.gif'); ?>" alt="<?php echo $AppUI->_('Edit History') ?>" border="0" width="12" height="12" /></a></td>
-	<td align="center"><?php echo $hd->format($df) . ' ' . $hd->format($tf); ?></td>
-	<td><?php echo show_history($row) ?></td>	
-	<td align="left"><?php echo $row['history_user_name'] ?></td>
-</tr>	
-<?php
+    ?>
+    <tr>
+        <td align="center"><a href='<?php echo '?m=history&a=addedit&history_id=' . $row['history_id'] ?>'><img src="<?php echo w2PfindImage('icons/pencil.gif'); ?>" alt="<?php echo $AppUI->_('Edit History') ?>" border="0" width="12" height="12" /></a></td>
+        <td align="center"><?php echo $hd->format($df) . ' ' . $hd->format($tf); ?></td>
+        <td><?php echo show_history($row) ?></td>
+        <td align="left"><?php echo $row['history_user_name'] ?></td>
+    </tr>
+    <?php
 }
 ?>
 </table>

@@ -56,10 +56,6 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 
 		if (!$bindok = @ldap_bind($rs, $ldap_bind_dn, $this->ldap_search_pass)) {
 			// Uncomment for LDAP debugging
-			/*
-			$error_msg = ldap_error($rs);
-			die('Couldnt Bind Using '.$ldap_bind_dn.'@'.$this->ldap_host.':'.$this->ldap_port.' Because:'.$error_msg);
-			*/
 			return false;
 		} else {
 			$filter_r = html_entity_decode(str_replace('%USERNAME%', $username, $this->filter), ENT_COMPAT, 'UTF-8');
@@ -79,10 +75,6 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 			// Bind with the dn of the user that matched our filter (only one user should match sAMAccountName or uid etc..)
 
 			if (!$bind_user = @ldap_bind($rs, $ldap_user_dn, $password)) {
-				/*
-				$error_msg = ldap_error($rs);
-				die('Couldnt Bind Using '.$ldap_user_dn.'@'.$this->ldap_host.':'.$this->ldap_port.' Because:'.$error_msg);
-				*/
 				return false;
 			} else {
 				if ($this->userExists($username)) {
