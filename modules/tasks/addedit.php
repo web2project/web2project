@@ -32,13 +32,13 @@ if (!$task && $task_id > 0) {
 	$AppUI->redirect();
 }
 
-$task_parent = isset($_REQUEST['task_parent']) ? w2PgetParam($_REQUEST, 'task_parent', $task->task_parent) : $task->task_parent;
+$task_parent = (int) w2PgetParam($_GET, 'task_parent', $task->task_parent);
 
 // check for a valid project parent
-$task_project = intval($task->task_project);
+$task_project = (int) $task->task_project;
 if (!$task_project) {
-	$task_project = w2PgetParam($_REQUEST, 'task_project', 0);
-	if (!$task_project) {
+	$task_project = (int) w2PgetParam($_REQUEST, 'task_project', 0);
+    if (!$task_project) {
 		$AppUI->setMsg('badTaskProject', UI_MSG_ERROR);
 		$AppUI->redirect();
 	}
