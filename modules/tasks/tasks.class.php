@@ -529,6 +529,10 @@ class CTask extends CW2pObject {
         $stored = false;
 
 		$this->w2PTrimAll();
+        if (!$this->task_owner) {
+            $this->task_owner = $AppUI->user_id;
+        }
+
 
 		$importing_tasks = false;
         $errorMsgArray = $this->check();
