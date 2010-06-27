@@ -16,13 +16,17 @@ $AppUI->setUserLocale();
 @include_once (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
 include_once W2P_BASE_DIR . '/locales/core.php';
 
+$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+date_default_timezone_set($defaultTZ);
+
 switch ($format) {
     //TODO: We only output in vCal, are there others we need to consider?
     case 'vcal':
     default:
         $format = 'vcal';
-			header ( 'Content-Type: text/calendar' );
-			header ( 'Content-disposition: attachment; filename="calendar.ics"' );
+        header ( 'Content-Type: text/calendar' );
+        header ( 'Content-disposition: attachment; filename="calendar.ics"' );
         break;
 }
 
