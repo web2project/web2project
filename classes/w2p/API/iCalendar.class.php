@@ -25,19 +25,19 @@ class w2p_API_iCalendar {
         if ($calendarItem['project_id']) {
             $description .= $AppUI->_('Project') . ': ' . $calendarItem['project_name'];
         }
-        $description .= '\n--------------------------------------------------------------------------------------------------\n';
+        $description .= '\n----------------------------------------\n';
         $description .= $AppUI->_('Description');
-        $description .= '\n--------------------------------------------------------------------------------------------------\n';
+        $description .= '\n----------------------------------------\n';
         $description .= strtr($calendarItem['description'], array("\n" => '\n', "\r\n" =>'\n'));
-        $description .= '\n--------------------------------------------------------------------------------------------------\n';
+        $description .= '\n----------------------------------------\n';
         $description .= $AppUI->_('URL');
-        $description .= '\n--------------------------------------------------------------------------------------------------\n';
+        $description .= '\n----------------------------------------\n';
         if ($calendarItem['project_id']) {
             $description .= W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . '\n';
-            $attachments .= 'ATTACH:' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\n";
+            $attachments .= 'ATTACH;VALUE=URL:' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\n";
         }
         $description .= $calendarItem['url'];
-        $attachments .= 'ATTACH:' . $calendarItem['url'];
+        $attachments .= 'ATTACH;VALUE=URL:' . $calendarItem['url'];
         $startDate = self::formatDate($calendarItem['startDate']);
         $endDate = self::formatDate($calendarItem['endDate']);
         $updatedDate = self::formatDate($calendarItem['updatedDate']);
