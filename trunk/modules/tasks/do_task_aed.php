@@ -53,12 +53,7 @@ if ($sub_form) {
 		$task_end_date = new CDate($obj->task_end_date);
 	}
 
-    $bound = (isset($_POST)) ? $obj->bind($_POST) : false;
-
-	if (!$obj->task_owner) {
-		$obj->task_owner = $AppUI->user_id;
-    }
-	if (!$bound) {
+	if (!$obj->bind($_POST)) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 		$AppUI->redirect();
 	}
