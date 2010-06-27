@@ -32,13 +32,20 @@ function w2p_autoload($class_name) {
 
     $name = strtolower($class_name);
     switch ($name) {
-        case 'cappui':
-            require_once W2P_BASE_DIR . '/classes/ui.class.php';
+        case 'libmail':
+            require_once W2P_BASE_DIR . '/classes/mail.class.php';
             break;
         case 'w2pacl':
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
+        case 'cappui':
+            require_once W2P_BASE_DIR . '/classes/ui.class.php';
+            break;
 
+        /*
+         * The following are all wirings for module classes that don't follow
+         * our naming conventions.
+         */
         case 'cevent':
             require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
             break;
