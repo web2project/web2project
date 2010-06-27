@@ -298,7 +298,7 @@ class w2p_Utilities_Mail extends PHPMailer {
 	 */
 	public function Send() {
 		if ($this->defer) {
-			return $this->w2p_Core_EventQueue();
+			return $this->QueueMail();
 		} else {
 			return PHPMailer::Send();
 		}
@@ -369,7 +369,7 @@ class w2p_Utilities_Mail extends PHPMailer {
 
 		$ec = new w2p_Core_EventQueue();
 		$vars = get_object_vars($this);
-		return $ec->add(array('Mail', 'SendQueuedMail'), $vars, 'libmail', true);
+		return $ec->add(array('Mail', 'SendQueuedMail'), $vars, 'w2p_Utilities_Mail', true);
 	}
 
 	/**
