@@ -17,7 +17,7 @@
 
 class w2p_API_iCalendar {
 
-    public static function formatCalendarItem($calendarItem, $myTimezoneOffset) {
+    public static function formatCalendarItem($calendarItem) {
         global $AppUI;
         $name = $calendarItem['name'];
         $description = '';
@@ -38,29 +38,21 @@ class w2p_API_iCalendar {
         }
         $description .= $calendarItem['url'];
         $attachments .= 'ATTACH:' . $calendarItem['url'];
-        $startDate = self::formatDate($calendarItem['startDate'], $myTimezoneOffset);
-        $endDate = self::formatDate($calendarItem['endDate'], $myTimezoneOffset);
-        $updatedDate = self::formatDate($calendarItem['updatedDate'], $myTimezoneOffset);
+        $startDate = self::formatDate($calendarItem['startDate']);
+        $endDate = self::formatDate($calendarItem['endDate']);
+        $updatedDate = self::formatDate($calendarItem['updatedDate']);
 
         $eventItem = "BEGIN:VEVENT\nDTSTART;VALUE=DATE-TIME:{$startDate}\nDTEND;VALUE=DATE-TIME:{$endDate}\nSUMMARY:{$name}\nDESCRIPTION:{$description}\n{$attachments}\nDTSTAMP;VALUE=DATE:{$updatedDate}\nSEQUENCE:{$sequence}\nEND:VEVENT\n";
 
         return $eventItem;
     }
 
-    private function formatDate($mysqlDate, $myTimezoneOffset) {
-        $rawDate = strtotime($mysqlDate);
-        $secondsPerDay = 86400;
+    private function formatDate($mysqlDate) {
+        $myDate = new CDate($mysqlDate);
 
-        if (($rawDate % $secondsPerDay) == -$myTimezoneOffset) {
-            $myDatetime = date('Ymd', $rawDate);
-        } elseif (($rawDate - $myTimezoneOffset) % $secondsPerDay == 0 ) {
-            $myDatetime = date('Ymd', $rawDate);
-        } else {
-            $rawDate += -$myTimezoneOffset;
-            $rawDate += (date('I') == 0) ? -60*60 : 0;
-            $myDatetime = date('Ymd His', $rawDate);
-            $myDatetime = str_replace(' ', 'T', $myDatetime).'Z';
-        }
+        $myDatetime = $myDate->format('%Y%m%d %T');
+        $myDatetime = str_replace(':', '', $myDatetime);
+        $myDatetime = str_replace(' ', 'T', $myDatetime).'Z';
 
         return $myDatetime;
     }
