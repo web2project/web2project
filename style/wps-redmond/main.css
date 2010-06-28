@@ -1,109 +1,46 @@
 /* $Id$ $URL$ */
+/* theme: wps-redmond */
 /* WEB2PROJECT REQUIRED CLASSES */
 BODY {
-	margin-top: 0px;
-	margin-left: 0px;
-	margin-right: 0px;
-	margin-bottom: 10px;
-	font-family: Osaka,verdana,Sans-Serif;
-	font-size: 10pt;
-	color: #333;
     background-color    : #f2f2f2;
     background-position : bottom;
     background-repeat   : repeat-x;
-}
-
-ul {
-	margin-left: 25px;
-}
-
-dl {
-	margin-top: 0px; padding-left: 1px;
-}
-dt {
-	margin-top: 0.5em;
-	color: #000099;
-	font-weight: bold;
-}
-dd {
-	margin-bottom: 0px; margin-left: 1.5em;
+	font-family: Osaka,verdana,Sans-Serif;
 }
 
 em {
-	font-weight: bold;
-	text-decoration: none;
-	font-style: normal;
 	color: #333;
 }
 
-A:link {
-	color: #333333;
-	text-decoration: none;
-}
-
-A:visited {
-	color: #333333;
-	text-decoration: none;
-}
-
-A:active {
+A:link, A:visited, A:active {
 	color: 333333;
-	text-decoration: none;
 }
 
 A:hover {
 	color: #666666;
-	text-decoration: none;
 }
 
-TD {
+TD, TR {
 	font-family: Osaka,verdana,Sans-Serif;
-	font-size: 8pt
-}
-
-TR {
-	font-family: Osaka,verdana,Sans-Serif;
-	font-size: 8pt
 }
 
 h1, .title {
-	font-size: 15px;
-	font-weight: bold;
 	font-family: Trebuchet MS,Arial,Osaka,verdana,Sans-Serif;
-	color: #333;
-	margin-bottom: 0px;
-	margin-top: 5px;
+    font-size: 15px;
     text-transform: uppercase;
 }
 
 h2, .subtitle {
-	font-size: 12px;
-	font-weight: bold;
-	font-family: Trebuchet MS,arial,Osaka,verdana,Sans-Serif;
 	color: #333;
-	margin-bottom: 0px;
-	margin-top: 15px;
+    font-family: Trebuchet MS,arial,Osaka,verdana,Sans-Serif;
     text-transform: uppercase;
 }
 
 h3 {
-	font-size: 12px;
-	font-weight: bold;
-	font-family: Trebuchet MS,arial,Osaka,verdana,Sans-Serif;
 	color: #333;
-	margin-bottom: 0px;
-	margin-top: 35px;
+    font-family: Trebuchet MS,arial,Osaka,verdana,Sans-Serif;
     text-transform: uppercase;
 }
-
-bordertable {
-	border: 1px black solid;
-}
-
-.bordertable{
- border: 1px black solid;
-}
-
 
 .item {
 	color: #333;
@@ -115,9 +52,6 @@ bordertable {
 
 .text{
 	border: 1px #999999 solid;
-	font-family: arial,Osaka,verdana,Sans-Serif;
-	font-size: 8pt;
-    margin-top  : 2px;
 }
 
 TEXTAREA {
@@ -161,49 +95,49 @@ input:focus, textarea:focus {
 }
 
 .button{
-  font-family   : tahoma,verdana,arial,Sans-Serif;
-  color         : #666;
-  text-align    : center;
-  font-size     : 9px;
-  font-weight   : bold;
-  border-top    : 1px solid #C4CCCC;
-  border-left   : 1px solid #ACB5B5;
-  border-bottom : 1px solid #6F7777;
-  border-right  : 1px solid #ACB5B5;
-  width         : auto;
-  background    : url(images/button_bg.png) repeat-x;
-  background-color : white;
-  padding       : 2px 5px !important;
-  padding       : 0px 0px;
-  line-height   : 13px;
-  margin-left   : 2px;
-  cursor        : pointer !important;
-  cursor        : hand;
-  -moz-border-radius : 3.5px;
-  -webkit-border-radius:3.5px;
+    font-family   : tahoma,verdana,arial,Sans-Serif;
+    color         : #666;
+    text-align    : center;
+    font-size     : 9px;
+    font-weight   : bold;
+    border-top    : 1px solid #C4CCCC;
+    border-left   : 1px solid #ACB5B5;
+    border-bottom : 1px solid #6F7777;
+    border-right  : 1px solid #ACB5B5;
+    width         : auto;
+    background    : url(images/button_bg.png) repeat-x;
+    background-color : white;
+    padding       : 2px 5px !important;
+    padding       : 0px 0px;
+    line-height   : 13px;
+    margin-left   : 2px;
+    cursor        : pointer !important;
+    cursor        : hand;
+    -moz-border-radius : 3.5px;
+    -webkit-border-radius:3.5px;
 }
 
 /* Focus action  */
 .button:focus {
-  font-family   : tahoma,verdana,arial,Sans-Serif;
-  color         : #999;
-  text-align    : center;
-  font-size     : 9px;
-  font-weight   : bold;
-  border-top    : 1px solid #C4CCCC;
-  border-left   : 1px solid #ACB5B5;
-  border-bottom : 1px solid #6F7777;
-  border-right  : 1px solid #ACB5B5;
-  width         : auto;
-  background    : url(images/button_bg.png) repeat-x;
-  background-color : white;
-  padding       : 2px 5px !important;
-  padding       : 0px 0px;
-  line-height   : 13px;
-  margin-left   : 2px;
-  cursor        : pointer !important;
-  cursor        : hand;
-  -moz-border-radius : 0px;
+    font-family   : tahoma,verdana,arial,Sans-Serif;
+    color         : #999;
+    text-align    : center;
+    font-size     : 9px;
+    font-weight   : bold;
+    border-top    : 1px solid #C4CCCC;
+    border-left   : 1px solid #ACB5B5;
+    border-bottom : 1px solid #6F7777;
+    border-right  : 1px solid #ACB5B5;
+    width         : auto;
+    background    : url(images/button_bg.png) repeat-x;
+    background-color : white;
+    padding       : 2px 5px !important;
+    padding       : 0px 0px;
+    line-height   : 13px;
+    margin-left   : 2px;
+    cursor        : pointer !important;
+    cursor        : hand;
+    -moz-border-radius : 0px;
 }
 
 /* web2Project Top Banner and Top Nav Customization */
@@ -223,47 +157,6 @@ TD.nav {
     background-color    : #D4D0C8;
     background-image    : url("images/nav_bg.png");
     background-image    : repeat-x;
-}
-
-/*
-**********************************
-Begin IE TD buttonizing
-**********************************
-*/
-
-TD.clsBtnUp {
-	cursor: hand;
-	color: #FFFFFF;
-	padding: 0 3;
-	border: inset 2px;
-}
-
-TD.clsBtnDown {
-	cursor: hand;
-	color: #FFFFFF;
-	padding: 0 3;
-	border: inset 2px;
-}
-
-TD.clsBtnOn {
-	cursor: hand;
-	color: #FFFFFF;
-	padding: 0 3;
-	border: outset #eeeeee 2px;
-}
-
-TD.clsBtnOff {
-	color: #FFFFFF;
-	padding: 0 3;
-	tab-index: 0;
-	border: solid #559999 2px;
-}
-
-TD.topBtnOff {
-	color: #FFFFFF;
-	padding: 0 3;
-	tab-index: 0;
-	border: solid #cccccc 2px;
 }
 
 TD.nav {
@@ -291,7 +184,7 @@ table.tbl td {
 }
 
 table.tbl td.hilite {
-  background-color: #ECEAE5;
+    background-color: #ECEAE5;
 }
 
 /* a 'standard' table */
@@ -333,7 +226,6 @@ A.hdr:link, A.hdr:active, A.hdr:visited {
 }
 
 /* tabbed boxes */
-
 td.tabon {
 	background: #D4D0C8;
     background-image: url('images/tabSelectedBg.png');
@@ -357,93 +249,8 @@ td.tabox {
 }
 
 /* Message styles */
-.warning {
-	color: red
-}
-.error {
-	color: red
-}
 .message {
 	color: #333;
-}
-
-.no_ {
-	color: red
-}
-
-/* popup calendar */
-body.popcal {
-	background-color: #f0f0f0;
-}
-
-table.poptitle {
-	background-color: #ffffff;
-}
-table.poptitle td {
-	background-color: #ffffff;
-}
-table.poptitle th {
-	background-color: #ffffff;
-	color: #000000;
-	font-size: 10pt;
-	font-weight: bold;
-}
-
-table.popcal {
-	background-color: #cccccc;
-}
-
-table.popcal th {
-	background-color: #ffffff;
-	color: #000000;
-	font-family: Osaka,helvetica,arial,sans-serif;
-	font-size: 9pt;
-	font-weight: normal;
-}
-
-table.popcal td {
-	background-color: #ffffff;
-	font-family: Osaka,helvetica,arial,sans-serif;
-	font-size: 8pt;
-	text-align: center;
-}
-
-table.popcal td.empty {
-	background-color: #e0e0e0;
-}
-
-table.mocal td.day  {
-	background-color: #ffffff;
-	text-align: center;
-}
-
-table.popcal td.today {
-}
-
-table.popcal td.weekend {
-	background-color: #f0f0f0;
-}
-
-table.popcal a:link,
-table.popcal a:visited {
-	color: #0000ff;
-	text-decoration: none;
-}
-
-table.popcal a.today:link,
-table.popcal a.today:visited {
-	color: #ff0000;
-	font-weight: bold;
-}
-
-table.popcal a.weekend:link,
-table.popcal a.weekend:visited {
-	color: #0000aa;
-}
-
-table.popcal a.empty:link,
-table.popcal a.empty:visited {
-	color: #777777;
 }
 
 /* month calendar - title area */
@@ -477,8 +284,7 @@ table.mocal th {
     background-image    : url("images/header_bg.png");
     background-image    : repeat-x;
 }
-table.mocal td {
-}
+table.mocal td { }
 table.mocal td.week {
 	vertical-align: top;
 	background-color: #D4D0C8;
@@ -512,18 +318,9 @@ table.mocal td.weekend {
 	vertical-align: top;
 }
 
-table.mocal .event {
-}
+table.mocal .event { }
 
 /* mini calendar - title area */
-table.minititle {
-}
-table.minititle td {
-}
-table.minititle th {
-	font-weight: normal;
-}
-
 table.minical {
 	background-color: #f2f2f2;
 	border : 1px solid #cccccc;
@@ -531,94 +328,33 @@ table.minical {
 table.minical th {
 	background-color: #EEE;
 	font-weight: normal;
-
 }
 table.minical td {
 	background-color: WHITE;
-}
-table.minical td.week {
-}
-table.minical td.empty {
-	color: #aaaaaa;
-}
-table.minical td.day  {
-	text-align : center;
 }
 table.minical td.today {
 	text-align       : center;
 	border           : 2px dotted red;
 }
-table.minical td.weekend {
-    background-color: #f0f0f0;
-	text-align: center;
-}
-table.minical .event {
-}
-table.minical td.event {
-    background-color: #ffffcc;
-    text-align: center;
-}
-table.minical td.task {
-    background-color: #ccccff;
-    text-align: center;
-}
-table.minical td.eventtask {
-    background-color: #ffccff;
-    text-align: center;
-}
-table.minical td.eventtoday {
-    background-color: #ffffcc;
-    text-align: center;
-    border           : 1px dotted red;
-}
-table.minical td.tasktoday {
-    background-color: #ccccff;
-    text-align: center;
-    border           : 1px dotted red;
-}
-table.minical td.eventtasktoday {
-    background-color: #ffccff;
-    text-align: center;
-    border           : 1px dotted red;
-}
-/* daily calendar */
-table.tbl td.event {
-        background-color: #fff0b0;
-}
+table.minical .event { }
 
-table.tbl td.event td {
-	background-color: #fff0b0;
-}
-
-.crumb ul {
-    list-style-type: none;
-    margin: 0px;
-    padding: 0px;
-}
 .crumb ul li {
     margin: 0px 0px 0px;
     padding: 1px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    color: #000000;
-    text-decoration: none;
-    display: inline; /* Remove this line arrange the buttons vertically */
 }
 .crumb ul li a {
-    /*background-color: #F0F0E3; /* Change the background color*/
     background-color    : #D4D0C8;
     padding: 2px 3px; /* Increase or decrease width and height */
     margin: 0px;
-    display: inline;
     font-family: Verdana, Arial, Helvetica, sans-serif; /* Change the Font of the button */
     font-size: 10px; /* Change the button text size */
     border: 1px solid #D4D0C8; /* Button Border */
-    color: #000000;
     text-decoration: none;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
 }
 .crumb ul li a:active {
-    color: #AD0000;
     border-top: 1px solid #BBBB88; /* Button border on mouse over*/
     border-right: 1px solid #DDDDB0; /* Button border on mouse over*/
     border-bottom: 1px solid #DDDDB0; /* Button border on mouse over*/
@@ -626,60 +362,8 @@ table.tbl td.event td {
     border-style: inset;
 }
 .crumb ul li a:hover {
-    color: #FFFFFF;
     border: 1px solid #000000; /* Button Border */
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
 }
-
-/*tooltip*/
-
-.tool-tip {
-	color: #fff;
-	width: 462px;
-	z-index: 13000;
-}
- 
-.tool-title {
-	font-weight: bold;
-	font-size: 11px;
-	margin: 0;
-	color: #9FD4FF;
-	padding: 8px 8px 4px;
-	background: url(images/bubble.png) top left;
-}
- 
-.tool-text {
-	font-size: 11px;
-	padding: 4px 8px 8px;
-	background: url(images/bubble.png) bottom right;
-}
-
-.tool-text td {
-	color: white;
-	font-size: 11px;
-}
-
-form {
-	display: inline; 
-	margin: 0;
-}
-
-img {
-	vertical-align: top;
-}
-TD.weekDay  {
-	height:360px;
-	vertical-align: top;
-	padding: 0px 4px 1px 4px;
-	border: 1px solid #ccc;
-	text-align: left;
-}
-TD.weekendDay  {
-	height:360px;
-	vertical-align: top;
-	padding: 0px 4px 1px 4px;
-	border: 1px solid #ccc;
-	text-align: left;
-	background-color:#F0F0F0;
-}
+/* theme: wps-redmond */
