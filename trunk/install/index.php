@@ -13,6 +13,7 @@ $manager = new w2p_Core_UpgradeManager();
 	<head>
 		<title>web2Project Update Manager</title>
 		<meta name="Description" content="web2Project Update Manager">
+        <link rel="stylesheet" type="text/css" href="../style/common.css" media="all" charset="utf-8"/>
 	 	<link rel="stylesheet" type="text/css" href="../style/web2project/main.css" charset="utf-8"/>
 	</head>
 	<body>

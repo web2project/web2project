@@ -12,6 +12,7 @@ if (!defined('W2P_BASE_DIR')) {
  	<title><?php echo $w2Pconfig['company_name']; ?> :: web2Project Lost Password Recovery</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
+    <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
