@@ -47,12 +47,19 @@ class CSystem {
             $configList['database'] = $w2Pconfig['dbtype'];
             $configList['server'] = $_SERVER['SERVER_SOFTWARE'];
             $configList['connector'] = php_sapi_name();
-            $configList['database_ver'] = '';
-            $libraries = array('gd', 'tidy', 'curl', 'json', 'libxml', 'mysql');
+            $configList['database_ver'] = mysql_get_client_info();
+            $libraries = array('tidy', 'json', 'libxml', 'mysql');
             foreach($libraries as $library) {
                 $configList[$library.'_extver'] = phpversion($library);
             }
-
+            if (function_exists('gd_info')) {
+                $lib_version = gd_info();
+                $configList['gd_extver'] = $lib_version['GD Version'];
+            }
+            if (function_exists('curl_version')) {
+                $lib_version = curl_version();
+                $configList['curl_extver'] = $lib_version['version'];
+            }
             $request = new w2p_Utilities_HTTPRequest('http://stats.web2project.net');
             $request->addParameters($configList);
             $result = $request->processRequest();
