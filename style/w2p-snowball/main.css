@@ -1,5 +1,4 @@
 /* $Id$ $URL$ */
-/* theme: w2p-snowball */
 /* WEB2PROJECT REQUIRED CLASSES */
 BODY {
 	margin-top: 0px;
@@ -352,9 +351,11 @@ table.std td.hilite {
 table.contacts {
 	background-color: #808080;
 }
+
 table.contacts td {
     background-color : #D4D0C8;
 }
+
 table.contacts td.hilite {
 	background-color: #ffffff;
 	padding: 5px;
@@ -538,6 +539,7 @@ table.mocal td.today {
 	text-align       : left;
 	vertical-align   : top;
 }
+
 table.mocal td.weekend {
 	background-color: #f0f0f0;
 	text-align: left;
@@ -546,7 +548,6 @@ table.mocal td.weekend {
 
 table.mocal .event {
 }
-table.mocal .event { }
 
 /* mini calendar - title area */
 table.minititle {
