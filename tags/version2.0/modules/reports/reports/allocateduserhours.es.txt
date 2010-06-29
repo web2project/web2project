@@ -1,0 +1,2 @@
+Horas asignadas al usuario
+Este informe muestra cuantas horas tiene un usuario asignadas para un periodo de tiempo.
