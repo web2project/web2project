@@ -225,6 +225,41 @@ TD.nav {
     background-image    : repeat-x;
 }
 
+TR.nav {
+    background: url("images/nav_bkgd.gif");
+    color: #000;
+    height:24px;
+}
+
+tr.nav a:hover{
+	background:#2E91C6 url(images/nav_item_hover.gif) repeat-x scroll 0%;
+	color:#FFFFFF;
+	text-decoration:none;
+}
+
+tr.nav ul li {
+	float:left;
+	margin:0px 1px 0px 0px;
+	padding:0px;
+}
+
+tr.nav ul {
+    font: bold 8pt helvetica,arial,sans-serif;
+	line-height:100%;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:1px 0px 0px 0px;
+	padding:0px;
+}
+
+tr.nav ul li a {
+	color:#000000;
+	display:block;
+	padding:5px 7px 6px;
+	text-decoration:none;
+}
+
 /*
 **********************************
 Begin IE TD buttonizing
