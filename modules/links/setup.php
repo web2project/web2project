@@ -57,48 +57,38 @@ class CSetupLinks {
 		$q = new DBQuery();
 		$q->createTable('links');
 		$q->createDefinition('(
-link_id int( 11 ) NOT NULL AUTO_INCREMENT ,
-link_url varchar( 255 ) NOT NULL default "",
-link_project int( 11 ) NOT NULL default "0",
-link_task int( 11 ) NOT NULL default "0",
-link_name varchar( 255 ) NOT NULL default "",
-link_parent int( 11 ) default "0",
-link_description text,
-link_owner int( 11 ) default "0",
-link_date datetime default NULL ,
-link_icon varchar( 20 ) default "obj/",
-link_category int( 11 ) NOT NULL default "0",
-PRIMARY KEY ( link_id ) ,
-KEY idx_link_task ( link_task ) ,
-KEY idx_link_project ( link_project ) ,
-KEY idx_link_parent ( link_parent ) 
-) TYPE = MYISAM ');
+            link_id int( 11 ) NOT NULL AUTO_INCREMENT ,
+            link_url varchar( 255 ) NOT NULL default "",
+            link_project int( 11 ) NOT NULL default "0",
+            link_task int( 11 ) NOT NULL default "0",
+            link_name varchar( 255 ) NOT NULL default "",
+            link_parent int( 11 ) default "0",
+            link_description text,
+            link_owner int( 11 ) default "0",
+            link_date datetime default NULL ,
+            link_icon varchar( 20 ) default "obj/",
+            link_category int( 11 ) NOT NULL default "0",
+            PRIMARY KEY ( link_id ) ,
+            KEY idx_link_task ( link_task ) ,
+            KEY idx_link_project ( link_project ) ,
+            KEY idx_link_parent ( link_parent )
+            ) TYPE = MYISAM ');
 
 		$q->exec($sql);
 
-		$q->clear();
-		$q->addTable('sysvals');
-		$q->addInsert('sysval_key_id', 1);
-		$q->addInsert('sysval_title', 'LinkType');
-		$q->addInsert('sysval_value', 'Unknown');
-		$q->addInsert('sysval_value_id', '0');
-		$q->exec();
+        $i = 0;
+        $linkTypes = array('Unknown', 'Document', 'Application');
+        foreach ($linkType as $linkTypes) {
+            $q->clear();
+            $q->addTable('sysvals');
+            $q->addInsert('sysval_key_id', 1);
+            $q->addInsert('sysval_title', 'LinkType');
+            $q->addInsert('sysval_value', $linkType);
+            $q->addInsert('sysval_value_id', $i);
+            $q->exec();
+            $i++;
+        }
 
-		$q->clear();
-		$q->addTable('sysvals');
-		$q->addInsert('sysval_key_id', 1);
-		$q->addInsert('sysval_title', 'LinkType');
-		$q->addInsert('sysval_value', 'Document');
-		$q->addInsert('sysval_value_id', '1');
-		$q->exec();
-
-		$q->clear();
-		$q->addTable('sysvals');
-		$q->addInsert('sysval_key_id', 1);
-		$q->addInsert('sysval_title', 'LinkType');
-		$q->addInsert('sysval_value', 'Application');
-		$q->addInsert('sysval_value_id', '2');
-		$q->exec();
-		return null;
+		return true;
 	}
 }
