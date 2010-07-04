@@ -211,7 +211,7 @@ class CContact extends CW2pObject {
             $results[$data['method_name']] = $data['method_value'];
         }
 
-		return $results ? $results : array();
+		return $results;
 	}
 
 	public function delete(CAppUI $AppUI = null) {
