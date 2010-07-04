@@ -155,7 +155,9 @@ class CContact extends CW2pObject {
 	}
 
 	public function getContactMethods($methodsArray = null) {
-		$q = new DBQuery;
+		$results = array();
+
+        $q = new DBQuery;
 		$q->addTable('contacts_methods');
 		$q->addQuery('method_name, method_value');
 		$q->addWhere('contact_id = ' . (int)$this->contact_id);
@@ -169,7 +171,7 @@ class CContact extends CW2pObject {
             $results[$data['method_name']] = $data['method_value'];
         }
 
-		return $results ? $results : array();
+		return $results;
 	}
 
 	public function delete(CAppUI $AppUI = null) {
