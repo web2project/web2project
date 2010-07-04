@@ -38,7 +38,7 @@ class smartsearch {
 			$outstring = '';
 			$subrecord_count = 0;
 			foreach ($results as $records) {
-				if ($permissions->checkModuleItem($this->table_module, 'view', $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $this->table_key)])) {
+				if ($permissions->checkModuleItem($this->table_module, 'view', $records[$this->table_key])) {
 					//Don't count records for which the user does not have permission
 					$record_count += 1;
 					$subrecord_count += 1;
