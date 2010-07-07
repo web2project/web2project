@@ -17,7 +17,8 @@ $result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
 if (is_array($result)) {
     $AppUI->setMsg($result, UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
-    $AppUI->redirect('m=files&a=addedit_folder&folder='.$obj->file_folder_id);
+    //$AppUI->redirect('m=files&a=addedit_folder&folder='.$obj->file_folder_id);
+    $AppUI->redirect();
 }
 if ($result) {
     $AppUI->setMsg('File Folder '.$action, UI_MSG_OK, true);

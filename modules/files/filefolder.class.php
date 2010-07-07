@@ -41,9 +41,11 @@ class CFileFolder extends CW2pObject {
 	public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
-		if (!$this->canDelete($msg, (int) $this->file_folder_id)) {
-			return $msg;
-		}
+        $errorMsgArray = $this->canDelete(null, $this->file_folder_id);
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
         if ($perms->checkModuleItem('files', 'edit')) {
             if ($msg = parent::delete()) {
                 return $msg;
@@ -53,14 +55,17 @@ class CFileFolder extends CW2pObject {
         return false;
 	}
 
-	public function canDelete(&$msg, $oid = 0, $joins = null) {
-		global $AppUI;
+	public function canDelete($msg, $oid = 0, $joins = null) {
+        $msg = array();
 
 		$q = new DBQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
 		$q->addWhere('file_folder_parent=' . $oid);
 		$res1 = $q->loadResult();
+		if ($res1) {
+			$msg[] = "Can't delete folder, it has subfolders.";//') . ': ' . implode(', ', $msg);
+		}
 		$q->clear();
 
 		$q = new DBQuery();
@@ -68,13 +73,11 @@ class CFileFolder extends CW2pObject {
 		$q->addQuery('COUNT(DISTINCT file_id) AS num_of_files');
 		$q->addWhere('file_folder=' . $oid);
 		$res2 = $q->loadResult();
-		$q->clear();
-		if ($res1 || $res2) {
-			$msg[] = 'File Folders';
-			$msg = $AppUI->_('Can\'t delete folder, it has files and/or subfolders.') . ': ' . implode(', ', $msg);
-			return false;
+		if ($res2) {
+			$msg[] = "Can't delete folder, it has files within it.";//') . ': ' . implode(', ', $msg);
 		}
-		return true;
+
+		return $msg;
 	}
 
 
