@@ -237,6 +237,8 @@ class CAppUI {
             $userTimezone = $this->getPref('TIMEZONE');
             $userTZ = new DateTimeZone($userTimezone);
         } catch (Exception $e) {
+            global $AppUI;
+
             $timezoneOffset = $this->getPref('TIMEZONE');
 
             $q = new DBQuery();
@@ -247,7 +249,11 @@ class CAppUI {
             $userTimezone = (strlen($userTimezone) == 0) ? 'Europe/London' : $userTimezone;
 
             $userTZ = new DateTimeZone($userTimezone);
-            echo '<span class="error"><strong>Your system must be upgraded immediately.</strong></span><br />';
+            echo '<span class="error"><strong>';
+            echo '<a href="./index.php?m=system">'.$AppUI->_('Your system probably needs to be upgraded.').'</a>';
+            echo '<br />';
+            echo '<a href="./index.php?m=system&a=addeditpref&user_id='.$AppUI->user_id.'">'.$AppUI->_('Your user-defined timezone must be set immediately.').'</a>';
+            echo '</strong></span><br />';
         }
 
         $ts = new DateTime();
