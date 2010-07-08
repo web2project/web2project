@@ -244,6 +244,8 @@ class CAppUI {
             $q->addQuery('sysval_value');
             $q->addWhere("sysval_value_id = $timezoneOffset");
             $userTimezone = $q->loadResult();
+            $userTimezone = (strlen($userTimezone) == 0) ? 'Europe/London' : $userTimezone;
+
             $userTZ = new DateTimeZone($userTimezone);
             echo '<span class="error"><strong>Your system must be upgraded immediately.</strong></span><br />';
         }
