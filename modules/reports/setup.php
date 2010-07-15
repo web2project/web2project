@@ -14,7 +14,7 @@ $config['mod_ui_icon'] = 'printer.png';
 $config['mod_description'] = 'A module for reports';
 
 if ($a == 'setup') {
-	echo dPshowModuleConfig($config);
+	echo w2PshowModuleConfig($config);
 }
 
 class CSetupReports {

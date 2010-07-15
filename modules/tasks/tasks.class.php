@@ -301,9 +301,9 @@ class CTask extends CW2pObject {
 
         $q = new DBQuery;
         $q->addTable('tasks');
-        $q->addJoin('users', 'u1', 'u1.user_id = task_owner', 'inner');
-        $q->addJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'inner');
-        $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
+        $q->leftJoin('users', 'u1', 'u1.user_id = task_owner', 'outer');
+        $q->leftJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'outer');
+        $q->leftJoin('projects', 'p', 'p.project_id = task_project', 'outer');
         $q->addWhere('task_id = ' . (int)$taskId);
         $q->addQuery('tasks.*');
         $q->addQuery('project_name, project_color_identifier');
@@ -529,6 +529,10 @@ class CTask extends CW2pObject {
         $stored = false;
 
 		$this->w2PTrimAll();
+        if (!$this->task_owner) {
+            $this->task_owner = $AppUI->user_id;
+        }
+
 
 		$importing_tasks = false;
         $errorMsgArray = $this->check();
@@ -627,7 +631,6 @@ class CTask extends CW2pObject {
 		$q->addWhere('task_id=' . (int)$this->task_id);
 		$q->exec();
 		$q->clear();
-		// print_r($this->task_departments);
 		if (!empty($this->task_departments)) {
 			$departments = explode(',', $this->task_departments);
 			foreach ($departments as $department) {
@@ -1030,7 +1033,6 @@ class CTask extends CW2pObject {
 
 			$body = ($AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ':	 ' . $this->task_name);
 			//Priority not working for some reason, will wait till later
-			//$body .= "\n".$AppUI->_('Priority'). ': ' . $this->task_priority;
 			$body .= ("\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $task_start_date->format($df) . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . ($this->task_end_date != '' ? $task_finish_date->format($df) : '') . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $this->task_description);
 			if ($users[0]['creator_email']) {
 				$body .= ("\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['creator_first_name'] . ' ' . $users[0]['creator_last_name'] . ', ' . $users[0]['creator_email']);
@@ -1293,7 +1295,6 @@ class CTask extends CW2pObject {
 		$q->addOrder('t.task_start_date');
 
 		// assemble query
-		//echo '<pre>' . $q->prepare() . '</pre>';
 		$tasks = $q->loadList(-1, 'task_id');
 		$q->clear();
 
@@ -2309,7 +2310,9 @@ class CTask extends CW2pObject {
 	}
 
 	public function getAllowedTaskList($AppUI, $task_project = 0) {
-		$q = new DBQuery();
+		$results = array();
+
+        $q = new DBQuery();
 		$q->addQuery('task_id, task_name, task_parent, task_access, task_owner');
 		$q->addOrder('task_parent, task_parent = task_id desc');
 		$q->addTable('tasks', 't');

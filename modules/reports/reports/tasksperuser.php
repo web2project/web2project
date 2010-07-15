@@ -427,8 +427,8 @@ function weekCells($display_allocated_hours, $fromPeriod, $toPeriod) {
 
 	$s = new CDate($fromPeriod);
 	$e = new CDate($toPeriod);
-	$sw = getBeginWeek($s); //intval($s->Format('%U'));
-	$ew = getEndWeek($e); //intval($e->Format('%U'));
+	$sw = getBeginWeek($s);
+	$ew = getEndWeek($e);
 
 	return $ew - $sw + 1;
 }
@@ -444,15 +444,13 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 
 	$s = new CDate($fromPeriod);
 	$e = new CDate($toPeriod);
-	$sw = getBeginWeek($s); //intval($s->Format('%U'));
-	$ew = getEndWeek($e); //intval($e->Format('%U'));
+	$sw = getBeginWeek($s);
+	$ew = getEndWeek($e);
 
 	$st = new CDate($task->task_start_date);
 	$et = new CDate($task->task_end_date);
-	$stw = getBeginWeek($st); //intval($st->Format('%U'));
-	$etw = getEndWeek($et); //intval($et->Format('%U'));
-
-	//print "week from: $stw, to: $etw<br>\n";
+	$stw = getBeginWeek($st);
+	$etw = getEndWeek($et);
 
 	$row = '';
 	for ($i = $sw; $i <= $ew; $i++) {

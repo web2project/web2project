@@ -26,37 +26,38 @@ $structprojects = getStructuredProjects($original_project_id);
 <th><?php echo $AppUI->_('Status'); ?></th>
 </tr>
 <?php
-//while ($line = mysql_fetch_array($res, MYSQL_ASSOC)) {
 $s = '';
-foreach ($st_projects_arr as $project) {
-	$line = $project[0];
-	$level = $project[1];
-	if ($line['project_id']) {
-		$s_project = new CProject();
-		$s_project->load($line['project_id']);
-		$s_company = new CCompany();
-		$s_company->load($s_project->project_company);
-		$start_date = intval($s_project->project_start_date) ? new CDate($s_project->project_start_date) : null;
-		$end_date = intval($s_project->project_end_date) ? new CDate($s_project->project_end_date) : null;
-		$actual_end_date = intval($s_project->project_actual_end_date) ? new CDate($s_project->project_actual_end_date) : null;
-		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
-		$x++;
-		$row_class = ($x % 2) ? 'style="background:#fff;"' : 'style="background:#f0f0f0;"';
-		$row_classr = ($x % 2) ? 'style="background:#fff;text-align:right;"' : 'style="background:#f0f0f0;text-align:right;"';
-		$s .= '<tr><td ' . $row_class . ' align="center"><a href="./index.php?m=projects&a=addedit&project_id=' . $line['project_id'] . '"><img src="' . w2PfindImage('icons/' . ($project_id == $line['project_id'] ? 'pin' : 'pencil') . '.gif') . '" border=0 /></b></a></td>';
-		$s .= '<td ' . $row_classr . ' nowrap="nowrap">' . $line['project_id'] . '</td>';
-		if ($level) {
-			$sd = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . w2PshowImage('corner-dots.gif', 16, 12) . '&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $line['project_id'] . '">' . $line['project_name'] . '</a>';
-		} else {
-			$sd = '<a href="./index.php?m=projects&a=view&project_id=' . $line['project_id'] . '">' . $line['project_name'] . '</a>';
-		}
-		$s .= '<td ' . $row_class . '>' . $sd . '</td>';
-		$s .= '<td ' . $row_class . '><a href="./index.php?m=companies&a=view&company_id=' . $s_project->project_company . '">' . $s_company->company_name . '</a></td>';
-		$s .= '<td ' . $row_class . ' align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
-		$s .= '<td ' . $row_class . ' align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
-		$s .= '<td ' . $row_class . ' align="center">' . $projectPriority[$s_project->project_priority] . '</td>';
-		$s .= '<td ' . $row_class . ' align="center">' . $projectStatus[$s_project->project_status] . '</td></tr>';
-	}
+if (is_array($st_projects_arr)) {
+    foreach ($st_projects_arr as $project) {
+        $line = $project[0];
+        $level = $project[1];
+        if ($line['project_id']) {
+            $s_project = new CProject();
+            $s_project->load($line['project_id']);
+            $s_company = new CCompany();
+            $s_company->load($s_project->project_company);
+            $start_date = intval($s_project->project_start_date) ? new CDate($s_project->project_start_date) : null;
+            $end_date = intval($s_project->project_end_date) ? new CDate($s_project->project_end_date) : null;
+            $actual_end_date = intval($s_project->project_actual_end_date) ? new CDate($s_project->project_actual_end_date) : null;
+            $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
+            $x++;
+            $row_class = ($x % 2) ? 'style="background:#fff;"' : 'style="background:#f0f0f0;"';
+            $row_classr = ($x % 2) ? 'style="background:#fff;text-align:right;"' : 'style="background:#f0f0f0;text-align:right;"';
+            $s .= '<tr><td ' . $row_class . ' align="center"><a href="./index.php?m=projects&a=addedit&project_id=' . $line['project_id'] . '"><img src="' . w2PfindImage('icons/' . ($project_id == $line['project_id'] ? 'pin' : 'pencil') . '.gif') . '" border=0 /></b></a></td>';
+            $s .= '<td ' . $row_classr . ' nowrap="nowrap">' . $line['project_id'] . '</td>';
+            if ($level) {
+                $sd = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . w2PshowImage('corner-dots.gif', 16, 12) . '&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $line['project_id'] . '">' . $line['project_name'] . '</a>';
+            } else {
+                $sd = '<a href="./index.php?m=projects&a=view&project_id=' . $line['project_id'] . '">' . $line['project_name'] . '</a>';
+            }
+            $s .= '<td ' . $row_class . '>' . $sd . '</td>';
+            $s .= '<td ' . $row_class . '><a href="./index.php?m=companies&a=view&company_id=' . $s_project->project_company . '">' . $s_company->company_name . '</a></td>';
+            $s .= '<td ' . $row_class . ' align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
+            $s .= '<td ' . $row_class . ' align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
+            $s .= '<td ' . $row_class . ' align="center">' . $projectPriority[$s_project->project_priority] . '</td>';
+            $s .= '<td ' . $row_class . ' align="center">' . $projectStatus[$s_project->project_status] . '</td></tr>';
+        }
+    }
 }
 echo $s;
 ?>

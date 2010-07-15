@@ -26,6 +26,16 @@ $titleBlock->show();
     <td>&nbsp;</td>
     <td align="left">
       <?php
+        $system = new CSystem();
+        if ($system->upgradeRequired()) {
+          ?>
+          <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -
+          <span class="error"><?php echo $AppUI->_('Your upgrade is not complete. Please apply the updates immediately.'); ?></span>
+          <?php
+        } else {
+            echo $AppUI->_('All installed update scripts have been executed.');
+        }
+        echo '<br />';
         $tzName = w2PgetConfig('system_timezone');
         if (ini_get('date.timezone') || strlen($tzName) > 0) {
             $time = new DateTimeZone($tzName);
@@ -48,16 +58,6 @@ $titleBlock->show();
             <?php
         } else {
             echo $AppUI->_('Your system is the latest version available.');
-        }
-        echo '<br />';
-        $system = new CSystem();
-        if ($system->upgradeRequired()) {
-          ?>
-          <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -
-          <span class="error"><?php echo $AppUI->_('Your upgrade is not complete. Please apply the updates at your earliest convenience.'); ?></span>
-          <?php
-        } else {
-            echo $AppUI->_('All installed update scripts have been executed.');
         }
       ?>
     </td>

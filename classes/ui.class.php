@@ -224,8 +224,37 @@ class CAppUI {
     public function getTZAwareTime() {
         $df = $this->getPref('FULLDATEFORMAT');
 
-        $userTimezone = $this->getPref('TIMEZONE');
-        $userTZ = new DateTimeZone($userTimezone);
+        /*
+        * This try/catch is a nasty little hack to cover the issue where some
+        *   timezones were set up incorrectly in the v1.3 release (caseydk's
+        *   fault!). They've since been corrected for 2.0 but people upgrading
+        *   will have a problem here without this.
+        *                                            ~ caseydk June 2010
+        *
+        * TODO: This should be killed off in v2.2 or v2.3 or so..
+        */
+        try {
+            $userTimezone = $this->getPref('TIMEZONE');
+            $userTZ = new DateTimeZone($userTimezone);
+        } catch (Exception $e) {
+            global $AppUI;
+
+            $timezoneOffset = $this->getPref('TIMEZONE');
+
+            $q = new DBQuery();
+            $q->addTable('sysvals');
+            $q->addQuery('sysval_value');
+            $q->addWhere("sysval_value_id = $timezoneOffset");
+            $userTimezone = $q->loadResult();
+            $userTimezone = (strlen($userTimezone) == 0) ? 'Europe/London' : $userTimezone;
+
+            $userTZ = new DateTimeZone($userTimezone);
+            echo '<span class="error"><strong>';
+            echo '<a href="./index.php?m=system">'.$AppUI->_('Your system probably needs to be upgraded.').'</a>';
+            echo '<br />';
+            echo '<a href="./index.php?m=system&a=addeditpref&user_id='.$AppUI->user_id.'">'.$AppUI->_('Your user-defined timezone must be set immediately.').'</a>';
+            echo '</strong></span><br />';
+        }
 
         $ts = new DateTime();
         $ts->setTimezone($userTZ);
@@ -1364,10 +1393,7 @@ class CInfoTabBox extends CTabBox_core {
 				$sel = ($k == $this->active) ? 'Selected' : '';
 				$s .= '<td valign="middle"><img src="./style/' . $uistyle . '/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" border="0" alt="" /></td>';
 				$s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap"';
-				// if ($js_tabs)
 				$s .= ' class="' . $class . '"';
-				// else
-				// $s .= ' background="./style/'.$uistyle.'/bar_top_'.$sel.'middle.gif"';
 				$s .= '>&nbsp;<a href="';
 				if ($this->javascript)
 					$s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
@@ -1516,15 +1542,11 @@ class CTitleBlock_core {
 			foreach ($this->crumbs as $k => $v) {
 				$t = $v[1] ? '<img src="' . w2PfindImage($v[1], $this->module) . '" border="" alt="" />&nbsp;' : '';
 				$t .= $AppUI->_($v[0]);
-				//				$crumbs[] = "<a href=\"$k\">$t</a>";
 				$crumbs[] = '<li><a href="'.$k.'"><span>'.$t.'</span></a></li>';
 			}
 			$s .= '<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>';
-			//			$s .= "\n\t<td nowrap=\"nowrap\">";
 			$s .= '<td height="20" nowrap="nowrap"><div class="'.$class.'"><ul>';
-			//			$s .= "\n\t\t" . implode( ' <strong>:</strong> ', $crumbs );
 			$s .= implode('', $crumbs);
-			//			$s .= "\n\t</td>";
 			$s .= '</ul></div></td>';
 
 			foreach ($this->cells2 as $c) {

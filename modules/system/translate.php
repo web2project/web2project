@@ -40,8 +40,6 @@ foreach ($english as $k => $v) {
 	}
 }
 
-//echo "<pre>";print_r($trans);echo "</pre>";die;
-
 if ($lang != 'en') {
 	ob_start();
 	// read language files from module's locale directory preferrably

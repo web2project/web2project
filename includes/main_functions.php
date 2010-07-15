@@ -32,13 +32,20 @@ function w2p_autoload($class_name) {
 
     $name = strtolower($class_name);
     switch ($name) {
-        case 'cappui':
-            require_once W2P_BASE_DIR . '/classes/ui.class.php';
+        case 'libmail':
+            require_once W2P_BASE_DIR . '/classes/mail.class.php';
             break;
         case 'w2pacl':
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
+        case 'cappui':
+            require_once W2P_BASE_DIR . '/classes/ui.class.php';
+            break;
 
+        /*
+         * The following are all wirings for module classes that don't follow
+         * our naming conventions.
+         */
         case 'cevent':
             require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
             break;
@@ -616,10 +623,6 @@ function w2PgetParam(&$arr, $name, $def = null) {
             && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
 				return isset($arr[$name]) ? $arr[$name] : $def;
 			} else {
-				/*echo('<pre>');
-				print_r(debug_backtrace());
-				echo('</pre>');
-				print_r($arr[$name]);die;*/
 				//Hack attempt detected
 				//return isset($arr[$name]) ? str_replace(' ','',$arr[$name]) : $def;
 				$AppUI->setMsg('Poisoning attempt to the URL detected. Issue logged.', UI_MSG_ALERT);

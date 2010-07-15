@@ -67,7 +67,6 @@ $tasks = $task->getAllowedRecords($AppUI->user_id, 'task_id,task_name', 'task_na
 $tasks = arrayMerge(array('0' => $AppUI->_('(None)', UI_OUTPUT_RAW)), $tasks);
 
 if (!$project_id) {
-	//$AppUI->redirect('m=projects&pd=1');
 	// setup the title block
 	$ttl = 'ProjectDesigner';
 	$titleBlock = new CTitleBlock($ttl, 'projectdesigner.png', $m, $m . '.' . $a);
