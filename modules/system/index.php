@@ -37,7 +37,10 @@ $titleBlock->show();
         }
         echo '<br />';
         $tzName = w2PgetConfig('system_timezone');
-        if (ini_get('date.timezone') || strlen($tzName) > 0) {
+        if(strlen($tzName) == 0) {
+            $tzName = ini_get('date.timezone');
+        }
+        if (strlen($tzName) > 0) {
             $time = new DateTimeZone($tzName);
             $x = new DateTime();
             $offset = $time->getOffset($x);
