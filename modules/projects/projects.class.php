@@ -206,7 +206,7 @@ class CProject extends CW2pObject {
             $q->clear();
             $q->setDelete('tasks');
             $q->addWhere('task_represents_project =' . (int)$this->project_id);
-            
+
             $q->clear();
             $q->setDelete('projects');
             $q->addWhere('project_id =' . (int)$this->project_id);
@@ -517,7 +517,7 @@ class CProject extends CW2pObject {
          */
         $q = new DBQuery;
         $this->project_updated = $q->dbfnNowWithTZ();
-        if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->company_id)) {
+        if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->project_id)) {
             if (($msg = parent::store())) {
                 return $msg;
             }
@@ -863,7 +863,7 @@ class CProject extends CW2pObject {
         $q->exec();
         self::updatePercentComplete($project_id);
 	}
-  
+
     public static function updatePercentComplete($project_id) {
         $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
 
@@ -1075,7 +1075,7 @@ function projects_list_data($user_id = false) {
 	$q->addTable('projects', 'pr');
 	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type,
         project_name, project_description, project_scheduled_hours as project_duration, project_parent, project_original_parent,
-		project_start_date, project_end_date, project_color_identifier, project_company, 
+		project_start_date, project_end_date, project_color_identifier, project_company,
         company_name, company_description, project_status, project_priority,
         tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count,
 		pr.project_percent_complete, user_username, project_active');
