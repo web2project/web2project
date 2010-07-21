@@ -833,7 +833,7 @@ class CAppUI {
 		$q = new DBQuery;
 		$q->addTable('users');
 		$q->addQuery('user_id, contact_first_name as user_first_name, contact_last_name as user_last_name, contact_company as user_company, contact_department as user_department, user_type');
-		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+		$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
 
         /* Begin Hack */
         /*
