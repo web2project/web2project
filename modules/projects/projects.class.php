@@ -493,11 +493,6 @@ class CProject extends CW2pObject {
             $this->project_actual_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
 
-        // let's check if there are some assigned departments to project
-        if ('' != $this->project_actual_end_date) {
-            $obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
-        }
-
         // check project parents and reset them to self if they do not exist
         if (!$this->project_parent) {
             $this->project_parent = $this->project_id;
@@ -545,8 +540,7 @@ class CProject extends CW2pObject {
 		$q->exec();
 		$q->clear();
 		if ($this->project_departments) {
-			$departments = explode(',', $this->project_departments);
-			foreach ($departments as $department) {
+			foreach ($this->project_departments as $department) {
 				$q->addTable('project_departments');
 				$q->addInsert('project_id', $this->project_id);
 				$q->addInsert('department_id', $department);

@@ -258,7 +258,7 @@ function setDepartment(department_id_string){
             $departments_count = 0;
             $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
             if ($department_selection_list != '' || $project_id) {
-              $department_selection_list = ($AppUI->_('Departments') . '<br /><select name="dept_ids[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
+              $department_selection_list = ($AppUI->_('Departments') . '<br /><select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
             } else {
               $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
             }
