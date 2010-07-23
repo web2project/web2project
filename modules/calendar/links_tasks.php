@@ -98,7 +98,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false, $tasks_tips ) 
 	$task = new CTask();
 
 	// load the record data
-	$task->load($task_id);
+	$task->loadFull($AppUI, $task_id);
 
 	// load the event types
 	$types = w2PgetSysVal('TaskType');
