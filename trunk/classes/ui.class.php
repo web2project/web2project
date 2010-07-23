@@ -254,6 +254,7 @@ class CAppUI {
             echo '<br />';
             echo '<a href="./index.php?m=system&a=addeditpref&user_id='.$AppUI->user_id.'">'.$AppUI->_('Your user-defined timezone must be set immediately.').'</a>';
             echo '</strong></span><br />';
+            echo '<span class="error"><strong>Your system must be upgraded immediately.</strong></span><br />';
         }
 
         $ts = new DateTime();
