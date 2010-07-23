@@ -17,13 +17,16 @@
 
 class w2p_API_iCalendar {
 
-    public static function formatCalendarItem($calendarItem) {
+    public static function formatCalendarItem($calendarItem, $module_name) {
         global $AppUI;
         $name = $calendarItem['name'];
+        $uid = $module_name.'_'.$calendarItem['id'];
         $description = '';
         $attachments = '';
+
         if ($calendarItem['project_id']) {
             $description .= $AppUI->_('Project') . ': ' . $calendarItem['project_name'];
+            $attachments .= 'ATTACH;VALUE=URL:' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\r\n";
         }
         $description .= '\r\n----------------------------------------\r\n';
         $description .= $AppUI->_('Description');
@@ -32,10 +35,6 @@ class w2p_API_iCalendar {
         $description .= '\r\n----------------------------------------\r\n';
         $description .= $AppUI->_('URL');
         $description .= '\r\n----------------------------------------\r\n';
-        if ($calendarItem['project_id']) {
-            //$description .= W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\r\n";
-            $attachments .= 'ATTACH;VALUE=URL:' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\r\n";
-        }
         $description .= $calendarItem['url'];
         $attachments .= 'ATTACH;VALUE=URL:' . $calendarItem['url'];
         $startDate = self::formatDate($calendarItem['startDate']);
@@ -43,7 +42,7 @@ class w2p_API_iCalendar {
         $updatedDate = self::formatDate($calendarItem['updatedDate']);
         $sequence = 0;
 
-        $eventItem = "BEGIN:VEVENT\r\nDTSTART;VALUE=DATE-TIME:{$startDate}\r\nDTEND;VALUE=DATE-TIME:{$endDate}\r\nSUMMARY:{$name}\r\nDESCRIPTION:{$description}\r\n{$attachments}\r\nDTSTAMP:{$updatedDate}\r\nSEQUENCE:{$sequence}\r\nEND:VEVENT\r\n";
+        $eventItem = "BEGIN:VEVENT\r\nDTSTART;VALUE=DATE-TIME:{$startDate}\r\nDTEND;VALUE=DATE-TIME:{$endDate}\r\nUID:{$uid}\r\nSUMMARY:{$name}\r\nDESCRIPTION:{$description}\r\n{$attachments}\r\nDTSTAMP:{$updatedDate}\r\nSEQUENCE:{$sequence}\r\nEND:VEVENT\r\n";
 
         return $eventItem;
     }
