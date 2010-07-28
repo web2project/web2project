@@ -282,6 +282,9 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
+     * TODO: This should not be in the TaskLog object and should instead be on 
+     *   the main w2p object: w2p_Core_BaseObject
+     * 
      * Test trimming all trimmable characters from all object properties
      */
     public function testW2PTrimAll()
@@ -322,30 +325,26 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Test the check function with a proper float
-     */
-    public function testCheckFloat()
-    {
-        $this->obj->bind($this->post_data, null, true, true);
-
-        $this->obj->check();
-
-        $this->assertType('float',  $this->obj->task_log_hours);
-        $this->assertSame(2.75,     $this->obj->task_log_hours);
-    }
-
-    /**
      * Test the check function with a string
      */
-    public function testCheckString()
+    public function testCreateStringAsHours()
     {
+        global $AppUI;
+
         $this->obj->bind($this->post_data, null, true, true);
         $this->obj->task_log_hours = 'abcd';
+        $errorArray = $this->obj->store($AppUI);
 
-        $this->obj->check();
+        /**
+        * Verify we got the proper error message
+        */
+        $this->AssertEquals(1, count($errorArray));
+        $this->assertArrayHasKey('task_log_hours', $errorArray);
 
-        $this->assertType('float',  $this->obj->task_log_hours);
-        $this->assertSame((float)0, $this->obj->task_log_hours);
+        /**
+        * Verify that task_log_id was not set
+        */
+        $this->AssertEquals(0, $this->obj->task_log_id);
     }
 
     /**
