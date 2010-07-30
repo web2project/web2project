@@ -83,9 +83,9 @@ class CTask extends CW2pObject {
   const DURATION_TYPE_HOURS =  1;
   const DURATION_TYPE_DAYS  = 24;
 
-  public function __construct() {
-    parent::__construct('tasks', 'task_id');
-  }
+    public function __construct() {
+        parent::__construct('tasks', 'task_id');
+    }
 
 	public function __toString() {
 		return $this->link . '/' . $this->type . '/' . $this->length;
@@ -515,8 +515,12 @@ class CTask extends CW2pObject {
         global $AppUI;
 
         $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
-        $this->task_start_date = $AppUI->convertToSystemTZ($this->task_start_date);
-        $this->task_end_date = $AppUI->convertToSystemTZ($this->task_end_date);
+        if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
+            $this->task_start_date = $AppUI->convertToSystemTZ($this->task_start_date);
+        }
+        if ($this->task_end_date != '' && $this->task_end_date != '0000-00-00 00:00:00') {
+            $this->task_end_date = $AppUI->convertToSystemTZ($this->task_end_date);
+        }
 
         return $result;
     }
