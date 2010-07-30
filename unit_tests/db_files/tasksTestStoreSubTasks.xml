@@ -97,8 +97,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -107,8 +112,13 @@
           <value>Task 3</value>
           <value>0</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -131,8 +141,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -167,16 +182,25 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
+=======
+          <value>0</value>v
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
         </row>
         <row>
           <value>5</value>
           <value>Task 5</value>
           <value>0</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -199,8 +223,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -209,8 +238,13 @@
           <value>Task 6</value>
           <value>7</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -243,8 +277,13 @@
           <value>Task 7</value>
           <value>6</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -267,8 +306,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -277,8 +321,13 @@
           <value>Task 8</value>
           <value>10</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -301,8 +350,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -311,8 +365,13 @@
           <value>Task 9</value>
           <value>8</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -335,8 +394,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -345,8 +409,13 @@
           <value>Task 10</value>
           <value>9</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -369,8 +438,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -403,8 +477,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -437,8 +516,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -447,8 +531,13 @@
           <value>Task 13</value>
           <value>12</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -471,8 +560,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -481,8 +575,13 @@
           <value>Task 14</value>
           <value>14</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -505,8 +604,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -515,8 +619,13 @@
           <value>Task 15</value>
           <value>15</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -539,8 +648,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -549,8 +663,13 @@
           <value>Task 16</value>
           <value>15</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -573,8 +692,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -583,8 +707,13 @@
           <value>Task 17</value>
           <value>16</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -607,8 +736,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -617,8 +751,13 @@
           <value>Task 18</value>
           <value>18</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>2</value>
           <value>24</value>  
@@ -641,8 +780,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -675,8 +819,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -685,8 +834,13 @@
           <value>Task 20</value>
           <value>18</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>3</value>
           <value>24</value>  
@@ -709,8 +863,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -719,8 +878,13 @@
           <value>Task 21</value>
           <value>21</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 00:00:00</value>
           <value>3</value>
           <value>24</value>  
@@ -743,8 +907,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -753,8 +922,13 @@
           <value>Task 22</value>
           <value>21</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-09-09 00:00:00</value>
           <value>40</value>
           <value>1</value>  
@@ -777,8 +951,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -787,8 +966,13 @@
           <value>Task 23</value>
           <value>21</value>
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>1</value>
+          <value>1</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-10-10 00:00:00</value>
           <value>3</value>
           <value>24</value>  
@@ -811,8 +995,13 @@
           <null />
           <value>1</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>2009-07-06 15:43:00</value>
+          <value>2009-07-06 15:43:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>0</value>
           <value>0</value>
         </row>
@@ -835,8 +1024,13 @@
           <value>1.00</value>
           <value>http://www.example.org</value>
           <value>1</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>1</value>
+=======
+          <value>0</value>
+          <value>0</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>0</value>
           <value>1</value>
@@ -844,8 +1038,13 @@
           <null />
           <null />
           <value>0</value>
+<<<<<<< 891629cf94af6329604cfb85469e0a072b63904c:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
+=======
+          <value>0</value>
+          <value>0000-00-00 00:00:00</value>
+>>>>>>> HEAD~200:unit_tests/db_files/tasksTestStoreSubTasks.xml
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
