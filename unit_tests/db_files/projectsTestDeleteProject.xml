@@ -153,6 +153,28 @@
         <column>file_folder</column>
         <column>file_helpdesk_item</column>
         <column>file_indexed</column>
+        <row>
+            <value>1</value>
+            <value>picture.jpg</value>
+            <value>1</value>
+            <value>0</value>
+            <value>123.jpg</value>
+            <value>0</value>
+            <value>This is a pretty image.</value>
+            <value>image/jpeg</value>
+            <value>1</value>
+            <value>0000-00-00 00:00:00</value>
+            <value>1024</value>
+            <value>1</value>
+            <value>jpeg.jpg</value>
+            <value>1</value>
+            <value>checkout</value>
+            <value>Cause I wanted to.</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+        </row>
     </table>
     <table name="events">
         <column>event_id</column>
