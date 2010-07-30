@@ -186,7 +186,7 @@ class w2p_Core_BaseObject {
 		$trim_arr = get_object_vars($this);
 		foreach ($trim_arr as $trim_key => $trim_val) {
 			if (!(strcasecmp(gettype($trim_val), 'string'))) {
-				$this->{$trim_key} = trim($trim_val, "\t\r\n");
+				$this->{$trim_key} = trim($trim_val, " \t\r\n\0\x0B");
 			}
 		}
 	}
