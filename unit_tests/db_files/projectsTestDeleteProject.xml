@@ -119,6 +119,7 @@
         <column>task_created</column>
         <column>task_updated</column>
         <column>task_dep_reset_dates</column>
+        <column>task_represents_project</column>
     </table>
     <table name="user_tasks">
         <column>user_id</column>
