@@ -282,8 +282,42 @@
         </row> 
         <row>
             <value>4</value>
-            <value>Task 2</value>
+            <value>Subproject: Test Project 2</value>
             <value>4</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value>2009-07-05 00:00:00</value>
+            <value>19</value>
+            <value>1</value>
+            <value>0</value>
+            <value>2009-07-15 00:00:00</value>
+            <value>0</value>
+            <value>1</value>
+            <value>16</value>
+            <value>Subproject: Test Project 2</value>
+            <value>0</value>
+            <value></value>
+            <value>1</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value></value>
+            <value></value>
+            <value></value>
+            <value>0</value>
+            <value>0</value>
+            <value>Ignored in test</value>
+            <value>Ignored in test</value>
+            <value>0</value>
+            <value>2</value>
+        </row> 
+        <row>
+            <value>5</value>
+            <value>Task 2</value>
+            <value>5</value>
             <value>0</value>
             <value>2</value>
             <value>1</value>
