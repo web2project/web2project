@@ -273,8 +273,15 @@ class CTaskLog extends CW2pObject
      */
 	public function check()
     {
+        // ensure the integrity of some variables
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-		return null;
+        if (ctype_alnum($this->task_log_hours)) {
+            $errorArray['task_log_hours'] = $baseErrorMsg . 'task_log_hours is not a number';
+        }
+
+        return $errorArray;
 	}
 
     /**
