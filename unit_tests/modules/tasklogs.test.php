@@ -41,6 +41,12 @@ $AppUI  = new CAppUI;
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
+/*
+ * Need this to not get the annoying timezone warnings in tests.
+ */
+$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+date_default_timezone_set($defaultTZ);
 
 require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';
@@ -231,9 +237,9 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->store();
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestStoreUpdate.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_updated')));
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_created', 'task_log_updated')));
         $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('task_log' => array('task_log_updated')));
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('task_log' => array('task_log_created', 'task_log_updated')));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
@@ -276,6 +282,9 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
+     * TODO: This should not be in the TaskLog object and should instead be on 
+     *   the main w2p object: w2p_Core_BaseObject
+     * 
      * Test trimming all trimmable characters from all object properties
      */
     public function testW2PTrimAll()
@@ -316,30 +325,26 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Test the check function with a proper float
-     */
-    public function testCheckFloat()
-    {
-        $this->obj->bind($this->post_data, null, true, true);
-
-        $this->obj->check();
-
-        $this->assertType('float',  $this->obj->task_log_hours);
-        $this->assertSame(2.75,     $this->obj->task_log_hours);
-    }
-
-    /**
      * Test the check function with a string
      */
-    public function testCheckString()
+    public function testCreateStringAsHours()
     {
+        global $AppUI;
+
         $this->obj->bind($this->post_data, null, true, true);
         $this->obj->task_log_hours = 'abcd';
+        $errorArray = $this->obj->store($AppUI);
 
-        $this->obj->check();
+        /**
+        * Verify we got the proper error message
+        */
+        $this->AssertEquals(1, count($errorArray));
+        $this->assertArrayHasKey('task_log_hours', $errorArray);
 
-        $this->assertType('float',  $this->obj->task_log_hours);
-        $this->assertSame((float)0, $this->obj->task_log_hours);
+        /**
+        * Verify that task_log_id was not set
+        */
+        $this->AssertEquals(0, $this->obj->task_log_id);
     }
 
     /**

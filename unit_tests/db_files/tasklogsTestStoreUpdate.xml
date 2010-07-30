@@ -8,6 +8,9 @@
         <column>task_log_name</column>
         <column>task_log_description</column>
         <column>task_log_creator</column>
+        <column>task_log_created</column>
+        <column>task_log_updator</column>
+        <column>task_log_updated</column>
         <column>task_log_hours</column>
         <column>task_log_date</column>
         <column>task_log_costcode</column>
@@ -16,9 +19,6 @@
         <column>task_log_related_url</column>
         <column>task_log_project</column>
         <column>task_log_company</column>
-        <column>task_log_created</column>
-        <column>task_log_updated</column>
-        <column>task_log_updator</column>
         <row>
             <value>1</value>
             <value>1</value>
@@ -26,6 +26,9 @@
             <value>This is a task log name.</value>
             <value>This is a task log description.</value>
             <value>1</value>
+            <value>2009-10-19 00:00:00</value>
+            <value>1</value>
+            <value>Ignored</value>
             <value>2.75</value>
             <value>2010-05-30</value>
             <value>1</value>
@@ -33,9 +36,6 @@
             <value>1</value>
             <value>http://www.example.com</value>
             <value>1</value>
-            <value>1</value>
-            <value>2009-10-19 00:00:00</value>
-            <value>Ignored</value>
             <value>1</value>
         </row>
     </table>
@@ -71,6 +71,7 @@
         <column>task_created</column>
         <column>task_updated</column>
         <column>task_dep_reset_dates</column>
+        <column>task_represents_project</column>
         <row>
           <value>1</value>
           <value>Task 1</value>
@@ -102,6 +103,7 @@
           <value>1</value>
           <value>2009-07-05 15:43:00</value>
           <value>2009-07-05 15:43:00</value>
+          <value>0</value>
           <value>0</value>
         </row>
     </table>

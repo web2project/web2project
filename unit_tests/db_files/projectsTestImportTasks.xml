@@ -93,7 +93,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>0</value>
             <value>0</value>
             <value>2009-07-05 13:46:00</value>
@@ -133,7 +133,7 @@
             <value>0</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>2</value>
             <value>0</value>
             <value>0</value>
             <value>2009-07-08 13:46:00</value>
@@ -177,6 +177,7 @@
         <column>task_created</column>
         <column>task_updated</column>
         <column>task_dep_reset_dates</column>
+        <column>task_represents_project</column>
         <row>
             <value>1</value>
             <value>Task</value>
@@ -208,6 +209,7 @@
             <value>1</value>
             <value>2009-07-05 15:43:00</value>
             <value>2009-07-05 15:43:00</value>
+            <value>0</value>
             <value>0</value>
         </row>
         <row>
@@ -242,6 +244,7 @@
             <value>2009-07-08 15:43:00</value>
             <value>2009-07-08 15:43:00</value>
             <value>0</value>
+            <value>0</value>
         </row>
         <row>
             <value>3</value>
@@ -275,6 +278,7 @@
             <value>Ignored in test</value>
             <value>Ignored in test</value>
             <value>0</value>
+            <value>0</value>
         </row> 
         <row>
             <value>4</value>
@@ -307,6 +311,7 @@
             <value>1</value>
             <value>Ignored in test</value>
             <value>Ignored in test</value>
+            <value>0</value>
             <value>0</value>
         </row>
     </table>

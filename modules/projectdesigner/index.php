@@ -227,8 +227,9 @@ if (!$project_id) {
 	$priorities = w2Pgetsysval('TaskPriority');
 	$types = w2Pgetsysval('TaskType');
 	$durntype = w2PgetSysVal('TaskDurationType');
-	global $task_access;
-	$task_access = (is_array($task_access)) ? $task_access : array();
+    $task_access = array(CTask::ACCESS_PUBLIC => 'Public', 
+        CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant',
+        CTask::ACCESS_PRIVATE => 'Private');
 	$extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inactive Task');
 	$sel_priorities = arraySelect($priorities, 'add_task_priority0', 'style="width:80px" class="text"', '0');
 	$sel_types = arraySelect($types, 'add_task_type0', 'style="width:80px" class="text"', '');

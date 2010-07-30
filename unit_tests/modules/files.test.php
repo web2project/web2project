@@ -40,7 +40,12 @@ $AppUI  = new CAppUI;
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
-
+/*
+ * Need this to not get the annoying timezone warnings in tests.
+ */
+$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+date_default_timezone_set($defaultTZ);
 require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/Extensions/Database/TestCase.php';

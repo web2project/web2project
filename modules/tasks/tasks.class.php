@@ -83,9 +83,9 @@ class CTask extends CW2pObject {
   const DURATION_TYPE_HOURS =  1;
   const DURATION_TYPE_DAYS  = 24;
 
-  public function __construct() {
-    parent::__construct('tasks', 'task_id');
-  }
+    public function __construct() {
+        parent::__construct('tasks', 'task_id');
+    }
 
 	public function __toString() {
 		return $this->link . '/' . $this->type . '/' . $this->length;
@@ -303,10 +303,11 @@ class CTask extends CW2pObject {
         $q->addTable('tasks');
         $q->leftJoin('users', 'u1', 'u1.user_id = task_owner', 'outer');
         $q->leftJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'outer');
-        $q->leftJoin('projects', 'p', 'p.project_id = task_project', 'outer');
+        $q->innerJoin('projects', 'p', 'p.project_id = task_project');
+        $q->innerJoin('companies', 'co', 'co.company_id = project_company');
         $q->addWhere('task_id = ' . (int)$taskId);
         $q->addQuery('tasks.*');
-        $q->addQuery('project_name, project_color_identifier');
+        $q->addQuery('company_name, project_name, project_color_identifier');
         $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
         $q->addGroup('task_id');
 
@@ -514,8 +515,12 @@ class CTask extends CW2pObject {
         global $AppUI;
 
         $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
-        $this->task_start_date = $AppUI->convertToSystemTZ($this->task_start_date);
-        $this->task_end_date = $AppUI->convertToSystemTZ($this->task_end_date);
+        if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
+            $this->task_start_date = $AppUI->convertToSystemTZ($this->task_start_date);
+        }
+        if ($this->task_end_date != '' && $this->task_end_date != '0000-00-00 00:00:00') {
+            $this->task_end_date = $AppUI->convertToSystemTZ($this->task_end_date);
+        }
 
         return $result;
     }
@@ -2254,7 +2259,8 @@ class CTask extends CW2pObject {
 
 		//TODO: A user should be able to select if they get distinct start/end dates or two tasks for each task.
 		foreach ($taskList as $taskItem) {
-			$taskArray[] = array_merge($taskItem, array('endDate' => $taskItem['startDate'], 'name' => 'Start: ' . $taskItem['name']));
+			//$taskArray[] = $taskItem;
+            $taskArray[] = array_merge($taskItem, array('endDate' => $taskItem['startDate'], 'name' => 'Start: ' . $taskItem['name']));
 			$taskArray[] = array_merge($taskItem, array('startDate' => $taskItem['endDate'], 'name' => 'End: ' . $taskItem['name']));
 		}
 
