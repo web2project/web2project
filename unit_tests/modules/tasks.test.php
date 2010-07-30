@@ -44,6 +44,13 @@ $AppUI  = new CAppUI;
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
+/*
+ * Need this to not get the annoying timezone warnings in tests.
+ */
+$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+date_default_timezone_set($defaultTZ);
+
 $tracking_dynamics = array('0' => '21', '1' => '31');
 $tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
 
