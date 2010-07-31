@@ -154,8 +154,8 @@ echo w2PrequiredFields($requiredFields);
 }
 
 function popContacts() {
-	var selected_contacts_id = document.getElementById('project_contacts').value;
-  var project_company = document.getElementById('project_company').value;
+    var selected_contacts_id = document.getElementById('project_contacts').value;
+    var project_company = document.getElementById('project_company').value;
 	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id+'&company_id='+project_company, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
