@@ -1361,7 +1361,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testGetTotalProjectHours()
     {
         global $w2Pconfig;
-        
+
         $this->obj->load(1);
         $total_hours_1 = $this->obj->getTotalProjectHours();
 
