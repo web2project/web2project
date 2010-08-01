@@ -199,7 +199,7 @@ function addContactMethod(field, value) {
     select = new Element('select', {
         name: "contact_methods[field][" + index + "]",
         size: "1",
-        class: "text"
+        'class': "text"
     });
 
     addOption(select, "", "");
@@ -219,7 +219,7 @@ function addContactMethod(field, value) {
     td = new Element('td');
     td.appendChild(new Element('input', {
         type: "text",
-        class: "text",
+        'class': "text",
         name: "contact_methods[value][" + index + "]",
         value: value ? value : "",
         maxlength: "255",
