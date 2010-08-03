@@ -1368,7 +1368,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 	{
 		$this->obj->load(27);
 		$this->post_data['task_id'] 		= 27;
-		$this->post_data['task_end_date']	= '0912011700';
+		$this->post_data['task_end_date']	= '200912011700';
 		$this->post_data['milestone'] 		= 1;
 		$this->post_data['task_parent'] 	= 27;
 
@@ -1376,7 +1376,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 		$this->obj->store();
 
 		$now_secs = time();
-        $min_time = $now_secs - 10;
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreShiftDependentTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
@@ -1390,13 +1389,11 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
-        $q->addWhere('task_id IN(27, 28)');
+        $q->addWhere('task_id IN (27, 28)');
         $results = $q->loadList();
 
-        foreach($results as $dates) {
-            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
-            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
-        }
+        $this->assertGreaterThanOrEqual($now_secs, strtotime($results[0]['task_updated']));
+        $this->assertLessThanOrEqual($now_secs, strtotime($results[1]['task_updated']));
 	}
 
 	/**
