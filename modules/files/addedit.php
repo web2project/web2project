@@ -171,7 +171,7 @@ function setTask( key, val ) {
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="cancel" value="0" />
 	<input type="hidden" name="file_id" value="<?php echo $file->file_id; ?>" />
-  <input type="hidden" name="file_parent" value="<?php echo ($file->file_parent) ? $file->file_parent : $file_parent; ?>" />
+    <input type="hidden" name="file_parent" value="<?php echo ($file->file_parent) ? $file->file_parent : $file_parent; ?>" />
 	<input type="hidden" name="file_version_id" value="<?php echo $file->file_version_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
 	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />

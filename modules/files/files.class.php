@@ -56,6 +56,8 @@ class CFile extends CW2pObject {
         $this->file_date = $AppUI->convertToSystemTZ($this->file_date);
 
         if ($this->file_id && $perms->checkModuleItem('files', 'edit', $this->file_id)) {
+            $this->file_parent = $this->file_id;
+            $this->file_id = 0;
             if (($msg = parent::store())) {
                 return $msg;
             }
