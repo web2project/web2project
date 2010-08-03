@@ -164,8 +164,9 @@ if (!$file_id) {
 		$q->clear();
 	}
 }
-
+//echo '<pre>';print_r($obj);
 $result = $obj->store($AppUI);
+//print_r($obj);die();
 if (is_array($result)) {
     $AppUI->setMsg($result, UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
@@ -177,16 +178,7 @@ if ($result) {
 	$obj->notify($notify);
     $obj->notifyContacts($notifyContacts);
 
-	// Delete the existing (old) file in case of file replacement (through addedit not through c/o-versions)
-	if (($file_id) && ($upload['size'] > 0)) {
-		if (($oldObj->deleteFile())) {
-			$AppUI->setMsg('replaced', UI_MSG_OK, true);
-		} else {
-			$AppUI->setMsg($file_id ? 'updated' : 'added' . '; unable to delete existing file', UI_MSG_OK, true);
-		}
-	} else {
-		$AppUI->setMsg($file_id ? 'updated' : 'added', UI_MSG_OK, true);
-	}
+    $AppUI->setMsg($file_id ? 'updated' : 'added', UI_MSG_OK, true);
 
     $indexed = $obj->indexStrings();
     $AppUI->setMsg('; ' . $indexed . ' unique words indexed', UI_MSG_OK, true);
