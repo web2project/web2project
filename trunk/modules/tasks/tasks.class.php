@@ -1767,7 +1767,7 @@ class CTask extends CW2pObject {
 
 		global $AppUI;
 
-		if (!w2PgetConfig('check_overallocation')) {
+		if (!w2PgetConfig('check_overallocation', false)) {
 			if ($get_user_list) {
 				$users_list = w2PgetUsersHashList();
 				foreach ($users_list as $key => $user) {
