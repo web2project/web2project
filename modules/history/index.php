@@ -14,78 +14,6 @@ $AppUI->savePlace();
 $titleBlock = new CTitleBlock('History', 'stock_book_blue_48.png', 'history', 'history.' . $a);
 $titleBlock->show();
 
-function show_history($history) {
-	//        return $history;
-	global $AppUI;
-	$id = $history['history_item'];
-	$module = $history['history_table'];
-	if ($module == 'companies') {
-		$table_id = 'company_id';
-	} elseif ($module == 'modules') {
-		$table_id = 'mod_id';
-	} elseif ($module == 'departments') {
-		$table_id = 'dept_id';
-	} else {
-		$table_id = (substr($module, -1) == 's' ? substr($module, 0, -1) : $module) . '_id';
-	}
-
-	if ($module == 'login') {
-		return $AppUI->_('User') . ' "' . $history['history_description'] . '" ' . $AppUI->_($history['history_action']);
-	}
-
-	if ($history['history_action'] == 'add') {
-		$msg = $AppUI->_('Added new') . ' ';
-	} elseif ($history['history_action'] == 'update') {
-		$msg = $AppUI->_('Modified') . ' ';
-	} elseif ($history['history_action'] == 'delete') {
-		return $AppUI->_('Deleted') . ' "' . $history['history_description'] . '" ' . $AppUI->_('from') . ' ' . $AppUI->_($module) . ' ' . $AppUI->_('module');
-	}
-
-	$q = new DBQuery;
-	$q->addTable($module);
-	$q->addQuery($table_id);
-	$q->addWhere($table_id . ' =' . $id);
-	if ($q->loadResult()) {
-		switch ($module) {
-			case 'history':
-				$link = '&a=addedit&history_id=';
-				break;
-			case 'files':
-				$link = '&a=addedit&file_id=';
-				break;
-			case 'tasks':
-				$link = '&a=view&task_id=';
-				break;
-			case 'forums':
-				$link = '&a=viewer&forum_id=';
-				break;
-			case 'projects':
-				$link = '&a=view&project_id=';
-				break;
-			case 'companies':
-				$link = '&a=view&company_id=';
-				break;
-			case 'contacts':
-				$link = '&a=view&contact_id=';
-				break;
-			case 'task_log':
-				$module = 'Tasks';
-				$link = '&a=view&task_id=170&tab=1&task_log_id=';
-				break;
-		}
-	}
-	$q->clear();
-
-	if (!empty($link)) {
-		$link = '<a href="?m=' . $module . $link . $id . '">' . $history['history_description'] . '</a>';
-	} else {
-		$link = $history['history_description'];
-	}
-	$msg .= $AppUI->_('item') . " '$link' " . $AppUI->_('in') . ' ' . $AppUI->_(ucfirst($module)) . ' ' . $AppUI->_('module'); // . $history;
-
-	return $msg;
-}
-
 $filter_param = w2PgetParam($_REQUEST, 'filter', ''); 
 $filter = array();
 if ($filter_param) {
@@ -206,6 +134,8 @@ $perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
+$historyItem = new CHistory();
+
 foreach ($history as $row) {
 	$module = $row['history_table'] == 'task_log' ? 'tasks' : $row['history_table'];
 
@@ -214,7 +144,7 @@ foreach ($history as $row) {
     <tr>
         <td align="center"><a href='<?php echo '?m=history&a=addedit&history_id=' . $row['history_id'] ?>'><img src="<?php echo w2PfindImage('icons/pencil.gif'); ?>" alt="<?php echo $AppUI->_('Edit History') ?>" border="0" width="12" height="12" /></a></td>
         <td align="center"><?php echo $hd->format($df) . ' ' . $hd->format($tf); ?></td>
-        <td><?php echo show_history($row) ?></td>
+        <td><?php echo $historyItem->show_history($row) ?></td>
         <td align="left"><?php echo $row['history_user_name'] ?></td>
     </tr>
     <?php
