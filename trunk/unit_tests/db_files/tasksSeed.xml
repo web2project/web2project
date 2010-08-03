@@ -298,6 +298,12 @@
             <value>im_google</value>
             <value>c1google</value>
         </row>
+        <row>
+            <value>15</value>
+            <value>2</value>
+            <value>email_primary</value>
+            <value>reg_user@example.org</value>
+        </row>
     </table>
     <table name="users">
     	<column>user_id</column>
