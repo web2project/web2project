@@ -13,8 +13,9 @@ if ($dialog) {
 	<meta name="Description" content="web2Project WebbPlatsen Redmond Style" />
 	<meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
 	<meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 	<title><?php echo @w2PgetConfig('page_title'); ?></title>
-  <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
 	<style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
 	<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
