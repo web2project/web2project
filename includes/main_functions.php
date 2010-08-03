@@ -312,7 +312,7 @@ function w2PgetUsers() {
 	$q = new DBQuery;
 	$q->addTable('users');
 	$q->addQuery('user_id, concat_ws(\' \', contact_first_name, contact_last_name) as name');
-	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+	$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
 	$q->addOrder('contact_first_name,contact_last_name');
 
 	$obj = new CCompany();
@@ -340,7 +340,7 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
 		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
-	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+	$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
     $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
     $q->addWhere("cm.method_name = 'email_primary'");
     $q->addQuery('cm.method_value AS contact_email');
@@ -377,7 +377,7 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
 		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
-	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+	$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
 	if ($stub) {
 		$q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
 	} elseif ($where) {

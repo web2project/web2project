@@ -114,7 +114,7 @@ class CContact extends CW2pObject {
         if ($stored) {
             $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
             $custom_fields->bind($_POST);
-            $sql = $custom_fields->store($this->company_id); // Store Custom Fields
+            $sql = $custom_fields->store($this->contact_id); // Store Custom Fields
         }
 
         /*

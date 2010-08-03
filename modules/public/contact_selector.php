@@ -115,7 +115,6 @@ $q->addWhere($where);
 $q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
 $q->addOrder('company_name, contact_company, dept_name, contact_department, contact_last_name'); // May need to review this.
 
-//echo $q->prepare();
 $contacts = $q->loadHashList('contact_id');
 ?>
 

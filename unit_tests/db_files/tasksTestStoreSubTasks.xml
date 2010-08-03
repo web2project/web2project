@@ -835,8 +835,8 @@
           <value>1.00</value>
           <value>http://www.example.org</value>
           <value>1</value>
-          <value>0</value>
-          <value>0</value>
+          <value>1</value>
+          <value>1</value>
           <value>1</value>
           <value>0</value>
           <value>1</value>
@@ -844,8 +844,8 @@
           <null />
           <null />
           <value>0</value>
-          <value>0</value>
-          <value>0000-00-00 00:00:00</value>
+          <value>1</value>
+          <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
