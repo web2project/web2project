@@ -220,6 +220,64 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests compare function when days are lesser and don't convert timezone
+     */
+    public function testCompareDayLesserNoConvertTz()
+    {
+        $date1 = new CDate('2010-08-06 00:00:00');
+        $date2 = new CDate('2010-08-07 00:00:00');
+
+        $this->assertEquals(-1, $date1->compare($date1, $date2));
+    }
+
+    /**
+     * Tests compare function when days are the same, hours are lesser
+     * and don't convert timezone
+     */
+    public function testCompareHourLesserNoConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:00:00');
+        $date2 = new CDate('2010-08-07 02:00:00');
+
+        $this->assertEquals(-1, $date1->compare($date1, $date2));
+    }
+
+    /**
+     * Tests compare function when days and hours are the same, minutes are
+     * lesser and don't convert timezone
+     */
+    public function testCompareMinuteLesserNotConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:00:00');
+        $date2 = new CDate('2010-08-07 01:01:00');
+
+        $this->assertEquals(-1, $date1->compare($date1, $date2));
+    }
+
+    /**
+     * Tests compare function when days, hours and minutes are the same,
+     * seconds are lesser and don't convert timezone
+     */
+    public function testCompareSecondLesserNoConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:01:00');
+        $date2 = new CDate('2010-08-07 01:01:01');
+
+        $this->assertEquals(-1, $date1->compare($date1, $date2));
+    }
+
+    /**
+     * Tests compare function when both dates are equal, don't convert timezones
+     */
+    public function testCompareEqualNoConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 00:00:00');
+        $date2 = new CDate('2010-08-07 00:00:00');
+
+        $this->assertEquals(0, $date1->compare($date1, $date2));
+    }
+
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
