@@ -460,6 +460,72 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests addMonths function with a positive full month
+     */
+    public function testAddMonthsPositiveFullMonth()
+    {
+        $date = new CDate('2010-08-08 00:00:00');
+        $date->addMonths(2);
+
+        $this->assertEquals('2010-10-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addMonths function with a negative full month
+     */
+    public function testAddMonthsNegativeFullMonth()
+    {
+        $date = new CDate('2010-08-08 00:00:00');
+        $date->addMonths(-2);
+
+        $this->assertEquals('2010-06-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addMonths function with a positive partial month
+     */
+    public function testAddMonthsPositivePartialMonth()
+    {
+        $date = new CDate('2010-08-08 00:00:00');
+        $date->addMonths(2.5);
+
+        $this->assertEquals('2010-10-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addMonths function with a negative partial month
+     */
+    public function testAddMonthsNegativePartialMonth()
+    {
+        $date = new CDate('2010-08-08 00:00:00');
+        $date->addMonths(-2.5);
+
+        $this->assertEquals('2010-06-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addMonths when the number of months spans a year
+     */
+    public function testAddMonthsPositiveAcrossYear()
+    {
+        $date = new CDate('2010-12-01 00:00:00');
+        $date->addMonths(1);
+
+        $this->assertEquals('2011-01-01 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addMonths when the number of months spans a year
+     */
+    public function testAddMonthsNegativeAcrossYear()
+    {
+        $date = new CDate('2010-01-01 00:00:00');
+        $date->addMonths(-1);
+
+        $this->assertEquals('2009-12-01 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
