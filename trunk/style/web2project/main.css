@@ -171,36 +171,33 @@ Begin IE TD buttonizing
 */
 
 TD.clsBtnUp {
-  cursor: hand;
   color: #FFFFFF;
-  padding: 0 3;
+  padding: 0px 3px;
   border: inset 2px;
 }
 
 TD.clsBtnDown {
-  cursor: hand;
   color: #FFFFFF;
-  padding: 0 3;
+  padding: 0px 3px;
   border: inset 2px;
 }
 
 TD.clsBtnOn {
-  cursor: hand;
   color: #FFFFFF;
-  padding: 0 3;
+  padding: 0px 3px;
   border: outset #eeeeee 2px;
 }
 
 TD.clsBtnOff {
   color: #FFFFFF;
-  padding: 0 3;
+  padding: 0px 3px;
   tab-index: 0;
   border: solid #559999 2px;
 }
 
 TD.topBtnOff {
   color: #FFFFFF;
-  padding: 0 3;
+  padding: 0px 3px;
   tab-index: 0;
   border: solid #aeaeae 2px;
 }
@@ -224,7 +221,7 @@ table.tbl {
 
 table.tbl TH {
   background: url("images/lines_title_bar.gif");
-  height: 22px
+  height: 22px;
   border-color: #a9d4ff;
   white-space: nowrap;
   border-left-width: 0px;
