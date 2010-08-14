@@ -65,4 +65,16 @@ class CResource extends CW2pObject {
 		$this->_query->clear();
 		return $result;
 	}
+
+    public function delete(CAppUI $AppUI) {
+        $perms = $AppUI->acl();
+
+        if ($perms->checkModuleItem('resources', 'delete', $this->resource_id)) {
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+            return true;
+        }
+        return false;
+    }
 }
