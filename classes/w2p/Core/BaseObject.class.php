@@ -13,7 +13,8 @@
  *	@author Andrew Eddie <eddieajau@users.sourceforge.net>
  *	@abstract
  */
-class w2p_Core_BaseObject {
+class w2p_Core_BaseObject
+{
 	/**
 	 *	@var string Name of the table prefix in the db schema
 	 */
@@ -37,23 +38,38 @@ class w2p_Core_BaseObject {
 	public $_query;
 
 	/**
+	 * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table 
+	 */
+	public $_tbl_module;
+
+	/**
 	 *	Object constructor to set table and key field
 	 *
 	 *	Can be overloaded/supplemented by the child class
 	 *	@param string $table name of the table in the db schema relating to child class
 	 *	@param string $key name of the primary key field in the table
+	 *	@param (OPTIONAL) string $module name as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table.
+	 *          It is used for permission checking in situations where the table name is different from the module folder name.
+	 *          For compatibility sake this variable is set equal to the $table if not set as failsafe.
 	 */
-	public function __construct($table, $key) {
+	public function __construct($table, $key, $module = '')
+	{
 		$this->_tbl = $table;
 		$this->_tbl_key = $key;
+		if ($module) {
+			$this->_tbl_module = $module;
+		} else {
+			$this->_tbl_module = $table;
+		}
 		$this->_tbl_prefix = w2PgetConfig('dbprefix', '');
 		$this->_query = new DBQuery;
 	}
-	
+
 	/**
 	 *	@return string Returns the error message
 	 */
-	public function getError() {
+	public function getError()
+	{
 		return $this->_error;
 	}
 	/**
@@ -66,7 +82,8 @@ class w2p_Core_BaseObject {
 	 *  @param $bindAll Bind all values regardless of their existance as defined instance variables
 	 *	@return null|string	null is operation was satisfactory, otherwise returns an error
 	 */
-	public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
+	public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
+	{
 		if (!is_array($hash)) {
 			$this->_error = get_class($this) . '::bind failed.';
 			return false;
@@ -79,7 +96,7 @@ class w2p_Core_BaseObject {
 			*/
 			foreach ($hash as $k => $v) {
 				if (!(is_object($hash[$k]))) {
-          $filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
+					$filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
 				}
 			}
 			$this->_query->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
@@ -93,7 +110,8 @@ class w2p_Core_BaseObject {
 	 *	@param int $oid optional argument, if not specifed then the value of current key is used
 	 *	@return any result from the database operation
 	 */
-	public function load($oid = null, $strip = true) {
+	public function load($oid = null, $strip = true)
+	{
 		$k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
@@ -119,7 +137,8 @@ class w2p_Core_BaseObject {
 	 *	Returns an array, keyed by the key field, of all elements that meet
 	 *	the where clause provided. Ordered by $order key.
 	 */
-	public function loadAll($order = null, $where = null) {
+	public function loadAll($order = null, $where = null)
+	{
 		$this->_query->clear();
 		$this->_query->addTable($this->_tbl);
 		if ($order) {
@@ -138,7 +157,8 @@ class w2p_Core_BaseObject {
 	 *	@param string $alias optional alias for table queries.
 	 *	@return DBQuery object
 	 */
-	public function &getQuery($alias = null) {
+	public function &getQuery($alias = null)
+	{
 		$this->_query->clear();
 		$this->_query->addTable($this->_tbl, $alias);
 		return $this->_query;
@@ -150,7 +170,8 @@ class w2p_Core_BaseObject {
 	 *	Can be overloaded/supplemented by the child class
 	 *	@return null if the object is ok
 	 */
-	public function check() {
+	public function check()
+	{
 		return null;
 	}
 
@@ -160,16 +181,17 @@ class w2p_Core_BaseObject {
 	 *	@author	handco <handco@users.sourceforge.net>
 	 *	@return	object	The new record object or null if error
 	 **/
-	public function duplicate() {
-        /*
-        *  PHP4 is no longer supported or allowed. The
-        *    installer/upgrader/converter simply stops executing.
-        *  This method also appears (modified) in the CDate and DBQuery class.
-        */
+	public function duplicate()
+	{
+		/*
+		*  PHP4 is no longer supported or allowed. The
+		*    installer/upgrader/converter simply stops executing.
+		*  This method also appears (modified) in the CDate and DBQuery class.
+		*/
 
-        $_key = $this->_tbl_key;
+		$_key = $this->_tbl_key;
 
-		$newObj = clone($this);
+		$newObj = clone ($this);
 		$newObj->$_key = '';
 
 		return $newObj;
@@ -182,7 +204,8 @@ class w2p_Core_BaseObject {
 	 *	Can be overloaded/supplemented by the child class
 	 *	@return none
 	 */
-	public function w2PTrimAll() {
+	public function w2PTrimAll()
+	{
 		$trim_arr = get_object_vars($this);
 		foreach ($trim_arr as $trim_key => $trim_val) {
 			if (!(strcasecmp(gettype($trim_val), 'string'))) {
@@ -197,7 +220,8 @@ class w2p_Core_BaseObject {
 	 *	Can be overloaded/supplemented by the child class
 	 *	@return null|string null if successful otherwise returns and error message
 	 */
-	public function store($updateNulls = false) {
+	public function store($updateNulls = false)
+	{
 		global $AppUI;
 
 		$this->w2PTrimAll();
@@ -235,7 +259,8 @@ class w2p_Core_BaseObject {
 	 *	@param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
 	 *	@return true|false
 	 */
-	public function canDelete(&$msg, $oid = null, $joins = null) {
+	public function canDelete(&$msg, $oid = null, $joins = null)
+	{
 		global $AppUI;
 
 		// First things first.  Are we allowed to delete?
@@ -294,7 +319,8 @@ class w2p_Core_BaseObject {
 	 *	Can be overloaded/supplemented by the child class
 	 *	@return null|string null if successful otherwise returns and error message
 	 */
-	public function delete($oid = null) {
+	public function delete($oid = null)
+	{
 		$k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
@@ -307,7 +333,7 @@ class w2p_Core_BaseObject {
 		$q->setDelete($this->_tbl);
 		$q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
 		$result = ((!$q->exec()) ? db_error() : null);
-		
+
 		if (!$result) {
 			// only record history if deletion actually occurred
 			addHistory($this->_tbl, $this->$k, 'delete');
@@ -321,12 +347,13 @@ class w2p_Core_BaseObject {
 	 *	@param int User id number
 	 *	@return array
 	 */
-	public function getDeniedRecords($uid) {
+	public function getDeniedRecords($uid)
+	{
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getDeniedRecords failed, user id = 0');
 
 		$perms = &$GLOBALS['AppUI']->acl();
-		return $perms->getDeniedItems($this->_tbl, $uid);
+		return $perms->getDeniedItems($this->_tbl_module, $uid);
 	}
 
 	/**
@@ -339,12 +366,13 @@ class w2p_Core_BaseObject {
 	 *	@return array
 	 */
 	// returns a list of records exposed to the user
-	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
+	{
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
-		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
-		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
+		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
+		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
 
 		$this->_query->clear();
 		$this->_query->addQuery($fields);
@@ -392,12 +420,13 @@ class w2p_Core_BaseObject {
 		return $this->_query->loadHashList($index);
 	}
 
-	public function getAllowedSQL($uid, $index = null) {
+	public function getAllowedSQL($uid, $index = null)
+	{
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
-		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
-		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
+		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
+		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
 
 		if (!isset($index)) {
 			$index = $this->_tbl_key;
@@ -406,7 +435,7 @@ class w2p_Core_BaseObject {
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
 				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$where[] = $index  . ' IN (' . implode(',', $allow) . ')';
+				$where[] = $index . ' IN (' . implode(',', $allow) . ')';
 			} else {
 				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
 			}
@@ -429,12 +458,13 @@ class w2p_Core_BaseObject {
 		return $where;
 	}
 
-	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
+	public function setAllowedSQL($uid, &$query, $index = null, $key = null)
+	{
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
-		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
-		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
+		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
+		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
 		// Make sure that we add the table otherwise dependencies break
 		if (isset($index)) {
 			if (!$key) {
@@ -471,7 +501,8 @@ class w2p_Core_BaseObject {
 	/*
 	* Decode HTML entities in object vars
 	*/
-	public function htmlDecode() {
+	public function htmlDecode()
+	{
 		foreach (get_object_vars($this) as $k => $v) {
 			if (is_array($v) or is_object($v) or $v == null) {
 				continue;
