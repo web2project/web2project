@@ -1,4 +1,4 @@
-<?php /* $Id: BaseObject.class.php 1261 2010-07-30 05:41:59Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/classes/w2p/Core/BaseObject.class.php $ */
+<?php /* $Id$ $URL$ */
 /*
 * To change this template, choose Tools | Templates
 * and open the template in the editor.
