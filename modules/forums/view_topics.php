@@ -57,9 +57,9 @@ if (function_exists('styleRenderBoxTop')) {
         <table width="100%" cellspacing="1" cellpadding="2" border="0">
         <tr>
             <td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
-            <td width="100%" align="right">
+            <td width="25%" align="right">
             <?php if ($canAuthor) { ?>
-                <input type="button" class="button" style="width:120;" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
+                <input type="button" class="button" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
             <?php } ?>
             </td>
         </tr>

@@ -92,21 +92,21 @@ if (function_exists('styleRenderBoxTop')) {
 	<table width="100%" cellspacing="1" cellpadding="2" border="0" align="center">
 	<tr>
 		<td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
-	        <td nowrap="nowrap">
-	<form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8">
-	        <?php echo $AppUI->_('View') ?>: 
-	        <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
-	        <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
-	        <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
-	</form>
-	        </td>
-		<td width="100%" align="right">
+        <td nowrap="nowrap">
+            <form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8">
+                    <?php echo $AppUI->_('View') ?>:
+                    <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
+                    <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
+                    <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
+            </form>
+	    </td>
+		<td width="30%" align="right">
 	        <?php $sort = ($sort == 'asc') ? 'desc' : 'asc'; ?>
 			<input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
-		<?php if ($canAuthor) { ?>
-			<input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
-			<input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
-		<?php } ?>
+            <?php if ($canAuthor) { ?>
+                <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
+                <input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
+            <?php } ?>
 		</td>
 	</tr>
 	</table>
