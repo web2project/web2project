@@ -1070,8 +1070,8 @@ function projects_list_data($user_id = false) {
 	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type,
         project_name, project_description, project_scheduled_hours as project_duration, project_parent, project_original_parent,
 		project_start_date, project_end_date, project_color_identifier, project_company,
-        company_name, company_description, project_status, project_priority,
-        tc.critical_task, tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count,
+        company_name, project_status, project_priority, tc.critical_task,
+        tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count,
 		pr.project_percent_complete, user_username, project_active');
 	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
@@ -1190,8 +1190,6 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
 	$q = new DBQuery();
 	$q->addTable('projects');
 	$q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-	$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
-	$q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
 	$q->addQuery('projects.project_id, project_name, project_parent');
 	if ($original_project_id) {
 		$q->addWhere('project_original_parent = ' . (int)$original_project_id);
