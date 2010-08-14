@@ -196,7 +196,7 @@ class CCompany extends CW2pObject {
   }
 
 	public static function getProjects(CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name') {
-		$fields = 'pr.project_id, project_name, project_start_date, ' .
+		$fields = 'DISTINCT pr.project_id, project_name, project_start_date, ' .
 				'project_status, project_target_budget, project_start_date, ' .
 				'project_priority, contact_first_name, contact_last_name';
 
