@@ -47,7 +47,7 @@ A:visited {
 }
 
 A:active {
-	color: 333333;
+	color: #333333;
 	text-decoration: none;
 }
 
@@ -69,7 +69,7 @@ TR {
 h1, .title {
 	font-size: 15px;
 	font-weight: bold;
-	font-family: Trebuchet MS,Arial,Osaka,verdana,Sans-Serif;
+	font-family: 'Trebuchet MS',Arial,Osaka,verdana,Sans-Serif;
 	color: #333;
 	margin-bottom: 0px;
 	margin-top: 5px;
@@ -79,7 +79,7 @@ h1, .title {
 h2, .subtitle {
 	font-size: 12px;
 	font-weight: bold;
-	font-family: Trebuchet MS,arial,Osaka,verdana,Sans-Serif;
+	font-family: 'Trebuchet MS',Arial,Osaka,verdana,Sans-Serif;
 	color: #333;
 	margin-bottom: 0px;
 	margin-top: 15px;
@@ -89,7 +89,7 @@ h2, .subtitle {
 h3 {
 	font-size: 12px;
 	font-weight: bold;
-	font-family: Trebuchet MS,arial,Osaka,verdana,Sans-Serif;
+	font-family: 'Trebuchet MS',Arial,Osaka,verdana,Sans-Serif;
 	color: #333;
 	margin-bottom: 0px;
 	margin-top: 35px;
@@ -178,7 +178,6 @@ input:focus, textarea:focus {
   line-height   : 13px;
   margin-left   : 2px;
   cursor        : pointer !important;
-  cursor        : hand;
   -moz-border-radius : 3.5px;
   -webkit-border-radius:3.5px;
 }
@@ -202,7 +201,6 @@ input:focus, textarea:focus {
   line-height   : 13px;
   margin-left   : 2px;
   cursor        : pointer !important;
-  cursor        : hand;
   -moz-border-radius : 0px;
 }
 
@@ -232,36 +230,33 @@ Begin IE TD buttonizing
 */
 
 TD.clsBtnUp {
-	cursor: hand;
 	color: #FFFFFF;
-	padding: 0 3;
+	padding: 0px 3px;
 	border: inset 2px;
 }
 
 TD.clsBtnDown {
-	cursor: hand;
 	color: #FFFFFF;
-	padding: 0 3;
+	padding: 0px 3px;
 	border: inset 2px;
 }
 
 TD.clsBtnOn {
-	cursor: hand;
 	color: #FFFFFF;
-	padding: 0 3;
+	padding: 0px 3px;
 	border: outset #eeeeee 2px;
 }
 
 TD.clsBtnOff {
 	color: #FFFFFF;
-	padding: 0 3;
+	padding: 0px 3px;
 	tab-index: 0;
 	border: solid #559999 2px;
 }
 
 TD.topBtnOff {
 	color: #FFFFFF;
-	padding: 0 3;
+	padding: 0px 3px;
 	tab-index: 0;
 	border: solid #cccccc 2px;
 }
