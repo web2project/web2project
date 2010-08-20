@@ -730,6 +730,25 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getAMPM when it is AM
+     */
+    public function testGetAMPMAM()
+    {
+        $date = new CDate('2010-08-19 10:00:00');
+
+        $this->assertEquals('am', $date->getAMPM());
+    }
+
+    /**
+     * Tests getAMPM when it is PM
+     */
+    public function testGetAMPMPM()
+    {
+        $date = new CDate('2010-08-19 13:00:00');
+
+        $this->assertEquals('pm', $date->getAMPM());
+    }
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
