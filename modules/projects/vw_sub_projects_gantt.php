@@ -3,12 +3,13 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+global $AppUI, $company_id, $dept_ids, $department, $locale_char_set,
+    $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt,
+    $user_id, $w2Pconfig, $project_id, $project_original_id;
+
 w2PsetExecutionConditions($w2Pconfig);
 
-global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $user_id, $project_id, $project_original_id;
-
 // get the prefered date format
-
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $projectStatus = w2PgetSysVal('ProjectStatus');
@@ -164,25 +165,6 @@ if (is_array($projects)) {
 			$projects[$rec['task_project']]['tasks'][] = $rec;
 		}
 		$q->clear();
-		//This kludgy function echos children tasks as threads
-
-		function showgtask(&$a, $level = 0, $project_id) {
-			/* Add tasks to gantt chart */
-			global $gantt_arr;
-			$gantt_arr[$project_id][] = array($a, $level);
-		}
-
-		function findgchild(&$tarr, $parent, $level = 0) {
-			global $projects;
-			$level = $level + 1;
-			$n = count($tarr);
-			for ($x = 0; $x < $n; $x++) {
-				if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-					showgtask($tarr[$x], $level, $tarr[$x]['project_id']);
-					findgchild($tarr, $tarr[$x]['task_id'], $level, $tarr[$x]['project_id']);
-				}
-			}
-		}
 
 		reset($projects);
 		foreach ($projects as $p) {

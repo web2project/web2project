@@ -17,6 +17,9 @@ class w2p_Output_GanttRenderer {
     private $AppUI = null;
     private $df = null;
 
+    private $taskArray = array();
+    private $taskCount = 0;
+
     public function __construct(CAppUI $AppUI, $width)
     {
         $this->graph = new GanttGraph($width);
@@ -178,12 +181,11 @@ class w2p_Output_GanttRenderer {
             $bar->progress->SetFillColor('darkgray');
             $bar->progress->SetPattern(BAND_SOLID, 'darkgray', 98);
         }
-
-        $this->graph->Add($bar);
+        $this->graph->Add($this->addDependencies($bar, $identifier));
     }
 
     public function addSubBar($label, $start, $end, $caption = '',
-        $height = '0.6', $barcolor = 'FFFFFF', $progress = 0)
+        $height = '0.6', $barcolor = 'FFFFFF', $progress = 0, $identifier = 0)
     {
         $startDate = new CDate($start);
         $endDate = new CDate($end);
@@ -201,11 +203,11 @@ class w2p_Output_GanttRenderer {
         $bar->caption = new TextProperty($caption);
         $bar->caption->Align('left', 'center');
 
-        $this->graph->Add($bar);
+        $this->graph->Add($this->addDependencies($bar, $identifier));
     }
 
     public function addSubSubBar($label, $start, $end, $caption = '',
-        $height = '0.6', $barcolor = 'FFFFFF', $fillcolor = '')
+        $height = '0.6', $barcolor = 'FFFFFF', $fillcolor = '', $identifier = 0)
     {
         $startDate = new CDate($start);
         $endDate = new CDate($end);
@@ -217,31 +219,45 @@ class w2p_Output_GanttRenderer {
         if ($fillcolor != '') {
             $bar->SetFillColor('#' . $fillcolor);
         }
-        $this->graph->Add($bar);
+        $this->graph->Add($this->addDependencies($bar, $identifier));
     }
 
-    public function addMilestone(array $columnValues, $start, $color = '#CC0000')
+    public function addMilestone(array $columnValues, $start,
+        $color = '#CC0000', $identifier = 0)
     {
         $tStartObj = new CDate($start);
 
         $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
         $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
         $bar->title->SetColor($color);
-        /*
-        if ($caption != '') {
-          $bar->caption = new TextProperty($caption);
-          $bar->caption->Align('left', 'center');
-          if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-            $bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-          }
-        }
-        */
+
         $this->graph->Add($bar);
     }
 
-    private function _addDependencies(GanttBar $bar)
+    public function loadTaskArray($gantt_array)
     {
-        return $bar;
+        $this->taskArray = $gantt_array;
+        $this->taskCount = count($gantt_array);
+    }
+
+    private function addDependencies($ganttBar, $task_id)
+    {
+        $gantt_arr = $this->taskArray;
+
+        $q = new DBQuery;
+        $q->addTable('task_dependencies');
+        $q->addQuery('dependencies_task_id');
+        $q->addWhere('dependencies_req_task_id=' . (int) $task_id);
+        $query = $q->loadList();
+
+        foreach ($query as $dep) {
+            for ($d = 0; $d < $this->taskCount; $d++) {
+                if ($gantt_arr[$d][0]['task_id'] == $dep['dependencies_task_id']) {
+                    $ganttBar->SetConstrain($d, CONSTRAIN_ENDSTART);
+                }
+            }
+        }
+        return $ganttBar;
     }
 
     public function render($markToday = true)
