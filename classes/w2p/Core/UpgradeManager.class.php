@@ -325,6 +325,7 @@ class w2p_Core_UpgradeManager {
          * really not.  With all of the dependencies, it just gets to be a huge
          * pain and ends up loading all kinds of unnecessary stuff.
          */
+        rmdir(W2P_BASE_DIR.'/db/');
         $recordsUpdated = 0;
 
         $sql = "SELECT * FROM sysvals WHERE sysval_value like '%|%' ORDER BY sysval_id ASC";
