@@ -134,13 +134,6 @@ $columnNames = array('Task name', $field, 'Start', 'Finish');
 $columnSizes = array(200, 50, 75, 75);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 
-//-----------------------------------------
-// nice Gantt image
-// if diff(end_date,start_date) > 90 days it shows only
-//week number
-// if diff(end_date,start_date) > 240 days it shows only
-//month number
-//-----------------------------------------
 if ($start_date && $end_date) {
 	$min_d_start = new CDate($start_date);
 	$max_d_end = new CDate($end_date);
