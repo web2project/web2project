@@ -185,13 +185,13 @@ class w2p_Output_GanttRenderer {
     }
 
     public function addSubBar($label, $start, $end, $caption = '',
-        $height = '0.6', $barcolor = 'FFFFFF', $progress = 0, $identifier = 0)
+        $height = '0.6', $barcolor = 'FFFFFF', $progress = 0)
     {
         $startDate = new CDate($start);
         $endDate = new CDate($end);
 
-        $bar = new GanttBar($this->rowCount++, array($label, $startDate->format($this->df), $endDate->format($this->df), ' '),
-                    $start, $end, $caption, $height);
+        $bar = new GanttBar($this->rowCount++, array($label, $startDate->format($this->df),
+            $endDate->format($this->df), ' '), $start, $end, $caption, $height);
         $bar->progress->Set(min(($progress / 100), 1));
 
         $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
@@ -203,11 +203,11 @@ class w2p_Output_GanttRenderer {
         $bar->caption = new TextProperty($caption);
         $bar->caption->Align('left', 'center');
 
-        $this->graph->Add($this->addDependencies($bar, $identifier));
+        $this->graph->Add($bar);
     }
 
     public function addSubSubBar($label, $start, $end, $caption = '',
-        $height = '0.6', $barcolor = 'FFFFFF', $fillcolor = '', $identifier = 0)
+        $height = '0.6', $barcolor = 'FFFFFF', $fillcolor = '')
     {
         $startDate = new CDate($start);
         $endDate = new CDate($end);
@@ -219,7 +219,7 @@ class w2p_Output_GanttRenderer {
         if ($fillcolor != '') {
             $bar->SetFillColor('#' . $fillcolor);
         }
-        $this->graph->Add($this->addDependencies($bar, $identifier));
+        $this->graph->Add($bar);
     }
 
     public function addMilestone(array $columnValues, $start,
