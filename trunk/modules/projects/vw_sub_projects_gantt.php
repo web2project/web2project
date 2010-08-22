@@ -79,38 +79,43 @@ $columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End', 'Fini
 $columnSizes = array(160, 10, 70, 70);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 
-if ($start_date && $end_date) {
-	$min_d_start = new CDate($start_date);
-	$max_d_end = new CDate($end_date);
-} else {
-	// find out DateRange from gant_arr
-	$d_start = new CDate();
-	$d_end = new CDate();
+/*
+ *  TODO: Technically, doing the date math below using the strtotime is bad
+ *     form because it is suseptible to the 2038 date bug. Hopefully, we'll
+ *     either have this bug fixed and resolved by then and/or no one is
+ *     scheduling projects 28 years into the future. Regardless, it's much 
+ *     easier than actual date math.
+ *     ~ caseydk 22 Aug 2010
+ */
+if (!$start_date || !$end_date) {
 	$i = 0;
 	foreach ($projects as $project) {
 		$start = substr($project["project_start_date"], 0, 10);
-		$end = substr($project["project_actual_end_date"], 0, 10);
-		($start == '' || $start == null || $start == '0000-00-00') ? $d_start->Date() : $d_start->Date($start);
-		($end == '' || $end == null || $end == '0000-00-00') ? $d_end->Date() : $d_end->Date($end);
+        $lastTask = $pjobj->getCriticalTasks($project['project_id']);
+        $end = substr($lastTask[0]['task_end_date'], 0, 10);
+
+        $d_start = strtotime($start);
+        $d_end = strtotime($end);
 		if ($i == 0) {
 			$min_d_start = $d_start;
+            $start_date = $start;
 			$max_d_end = $d_end;
+            $end_date = $end;
 		} else {
-			if (Date::compare($min_d_start, $d_start) > 0) {
-				$min_d_start = $d_start;
+            if ($d_start < $min_d_start) {
+                $min_d_start = $d_start;
                 $start_date = $start;
-			}
-			if (Date::compare($max_d_end, $d_end) < 0) {
-				$max_d_end = $d_end;
+            }
+            if ($d_end > $max_d_end) {
+                $max_d_end = $d_end;
                 $end_date = $end;
-			}
+            }
 		}
 		$i++;
 	}
 }
-$graph->SetDateRange($start_date, $end_date);
+$gantt->SetDateRange($start_date, $end_date);
 $graph = $gantt->getGraph();
-
 $row = 0;
 if (!is_array($projects) || sizeof($projects) == 0) {
 	$d = new CDate();
@@ -118,7 +123,6 @@ if (!is_array($projects) || sizeof($projects) == 0) {
 	$bar->title->SetCOlor('red');
 	$graph->Add($bar);
 }
-
 if (is_array($projects)) {
 	//pull all tasks into an array keyed by the project id, and get the tasks in hierarchy
 	if ($showAllGantt) {
@@ -221,12 +225,11 @@ if (is_array($projects)) {
 		$actual_enddate = new CDate($actual_end);
 		$actual_enddate = $actual_enddate->after($startdate) ? $actual_enddate : $enddate;
 
-		$bar = new GanttBar($row++, array($name, $startdate->format($df), $enddate->format($df), $actual_enddate->format($df)), $start, $actual_end, $cap, 0.6);
+		$bar = new GanttBar($row++, array($name.'monkey', $startdate->format($df), $enddate->format($df), $actual_enddate->format($df)), $start, $actual_end, $cap, 0.6);
 		$bar->progress->Set(min(($progress / 100), 1));
 
 		// Pedro A.
 		// This one will affect the style for the project names, alternative example:
-		//      $bar->title->SetFont(FF_FONT1);
 		$bar->title->SetFont(FF_CUSTOM, FS_BOLD, 7);
 		$bar->SetFillColor('#' . $p['project_color_identifier']);
 		$bar->SetPattern(BAND_SOLID, '#' . $p['project_color_identifier']);
@@ -234,10 +237,9 @@ if (is_array($projects)) {
 		//adding captions
 		$bar->caption = new TextProperty($caption);
 		$bar->caption->Align('left', 'center');
-		
+
 		// Pedro A.
 		// This one will affect the style for the caption of the projects status that appear on the right of the bar if they are selected to show, alternative example:
-		//    $bar->title->SetFont(FF_FONT0);
 		$bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 
 		// gray out templates, completes, on ice, on hold
@@ -281,7 +283,6 @@ if (is_array($projects)) {
 
 					// Pedro A.
 					// This one will affect the style for the tasks names non milestones, alternative example:
-					//                      $bar2->title->SetFont(FF_FONT0);
 					$bar2->title->SetFont(FF_CUSTOM, FS_NORMAL, 7);
 					$bar2->SetFillColor('#' . $p['project_color_identifier']);
 					$graph->Add($bar2);
@@ -290,7 +291,6 @@ if (is_array($projects)) {
 					$bar2->title->SetColor('#CC0000');
 					// Pedro A.
 					// This one will affect the style for the milestones tasks names, alternative example:
-					//                      $bar2->title->SetFont(FF_FONT0);
 					$bar2->title->SetFont(FF_CUSTOM, FS_NORMAL, 7);
 					$graph->Add($bar2);
 				}
@@ -307,7 +307,6 @@ $today = date('y-m-d');
 $vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
 // Pedro A.
 // This one will affect the style for the "Today" expression on the graphs bottom, alternative example:
-// $vline->title->SetFont(FF_FONT0);
 $vline->title->SetFont(FF_CUSTOM, FS_BOLD, 9);
 $graph->Add($vline);
 $graph->Stroke();

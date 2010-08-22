@@ -63,12 +63,12 @@ echo $s;
 ?>
 </table>
 <table width="100%" border="0" cellpadding="5" cellspacing="1">
-<tr>
-    <td align="center" colspan="20">
+    <tr>
+        <td align="center" colspan="20">
 <?php
 $src = "?m=projects&a=vw_sub_projects_gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&original_project_id=$original_project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
 echo "<script>document.write('<img src=\"$src\">')</script>";
 ?>
-
-</td>
+        </td>
+    </tr>
 </table>
