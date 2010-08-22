@@ -134,13 +134,8 @@ $columnNames = array('Task name', $field, 'Start', 'Finish');
 $columnSizes = array(200, 50, 75, 75);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 
-if ($start_date && $end_date) {
-	$min_d_start = new CDate($start_date);
-	$max_d_end = new CDate($end_date);
-} else {
+if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
-	$min_d_start = new CDate();
-	$max_d_end = new CDate();
 	$d_start = new CDate();
 	$d_end = new CDate();
 	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
@@ -152,10 +147,10 @@ if ($start_date && $end_date) {
 		$d_end->Date($end);
 
 		if ($i == 0) {
-			$min_d_start = $d_start->duplicate();
-			$max_d_end = $d_end->duplicate();
+			$min_d_start = $d_start;
+			$max_d_end = $d_end;
 		} else {
-			if (Date::compare($min_d_start, $d_start) > 0) {
+            if (Date::compare($min_d_start, $d_start) > 0) {
 				$min_d_start = $d_start->duplicate();
                 $start_date = $start;
 			}

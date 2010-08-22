@@ -101,41 +101,41 @@ $gantt->localize();
 $tableTitle = ($proFilter == '-1') ? $AppUI->_('All Projects') : $projectStatus[$proFilter];
 $gantt->setTitle($tableTitle);
 $columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End');
-$columnSizes = array(160, 10, 70, 70);
+$columnSizes = array(160, 75, 75, 75);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 
 if (!$start_date || !$end_date) {
-  // find out DateRange from $projects array
-  $projectCount = count($projects);
-  for ($i = 0, $i_cmp = $projectCount; $i < $i_cmp; $i++) {
-  	$start = substr($projects[$i]['project_start_date'], 0, 10);
-  	$end = substr($projects[$i]['project_end_date'], 0, 10);
-  	if (0 == strlen($end)) {
-  	  $lastTask = $pjobj->getCriticalTasks($projects[$i]['project_id']);
-  	  $projects[$i]['project_actual_end_date'] = $lastTask[0]['task_end_date'];
-  	  $projects[$i]['project_end_date'] = $lastTask[0]['task_end_date'];
-  	  $end = substr($lastTask[0]['task_end_date'], 0, 10);
-  	}
+    // find out DateRange from $projects array
+    $projectCount = count($projects);
+    for ($i = 0, $i_cmp = $projectCount; $i < $i_cmp; $i++) {
+        $start = substr($projects[$i]['project_start_date'], 0, 10);
+        $end = substr($projects[$i]['project_end_date'], 0, 10);
+        if (0 == strlen($end)) {
+            $lastTask = $pjobj->getCriticalTasks($projects[$i]['project_id']);
+            $projects[$i]['project_actual_end_date'] = $lastTask[0]['task_end_date'];
+            $projects[$i]['project_end_date'] = $lastTask[0]['task_end_date'];
+            $end = substr($lastTask[0]['task_end_date'], 0, 10);
+        }
 
-  	$d_start = new CDate($start);
-  	$d_end = new CDate($end);
-  
-  	if ($i == 0) {
-      $min_d_start = $d_start;
-      $max_d_end = $d_end;
-      $start_date = $start;
-      $end_date = $end;
-  	} else {
-      if (Date::compare($min_d_start, $d_start) > 0) {
-      	$min_d_start = $d_start;
-      	$start_date = $start;
-      }
-      if (Date::compare($max_d_end, $d_end) < 0) {
-      	$max_d_end = $d_end;
-      	$end_date = $end;
-      }
-  	}
-  }
+        $d_start = new CDate($start);
+        $d_end = new CDate($end);
+
+        if ($i == 0) {
+            $min_d_start = $d_start;
+            $max_d_end = $d_end;
+            $start_date = $start;
+            $end_date = $end;
+        } else {
+            if (Date::compare($min_d_start, $d_start) > 0) {
+                $min_d_start = $d_start;
+                $start_date = $start;
+            }
+            if (Date::compare($max_d_end, $d_end) < 0) {
+                $max_d_end = $d_end;
+                $end_date = $end;
+            }
+        }
+    }
 }
 $gantt->setDateRange($start_date, $end_date);
 
