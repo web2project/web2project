@@ -2320,7 +2320,7 @@ class CTask extends CW2pObject {
 
         $q = new DBQuery();
 		$q->addQuery('task_id, task_name, task_parent, task_access, task_owner');
-        $q->addQuery('task_start_date, task_end_date');
+        $q->addQuery('task_start_date, task_end_date, task_percent_complete');
 		$q->addOrder('task_parent, task_parent = task_id desc');
 		$q->addTable('tasks', 't');
 		if ($task_project)
