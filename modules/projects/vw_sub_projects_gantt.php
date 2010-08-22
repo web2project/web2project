@@ -180,7 +180,7 @@ if (is_array($projects)) {
 	}
 
 	foreach ($projects as $p) {
-		if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
+		if ($locale_char_set == 'utf-8') {
 			// Pedro A.
 			// Depending on the font size you may increase or decrease the ammount of characters displayed from the project name by changing the:
 			// ...25...23... ratio
