@@ -131,7 +131,7 @@ $gantt->setTitle($projects[$project_id]['project_name'], '#'.$projects[$project_
 
 $field = ($showWork == '1') ? 'Work' : 'Dur';
 $columnNames = array('Task name', $field, 'Start', 'Finish');
-$columnSizes = array(230, 60, 60, 60);
+$columnSizes = array(200, 50, 75, 75);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 
 //-----------------------------------------
