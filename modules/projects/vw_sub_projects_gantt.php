@@ -75,8 +75,8 @@ $original_project->load($original_project_id);
 $tableTitle = $original_project->project_name . ': ' . $AppUI->_('Multi-Project Gantt');
 $gantt->setTitle($tableTitle, '#eeeeee');
 
-$columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End', 'Finish');
-$columnSizes = array(160, 10, 70, 70);
+$columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End');
+$columnSizes = array(200, 75, 75, 75);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 
 /*
@@ -121,11 +121,9 @@ if (!is_array($projects) || sizeof($projects) == 0) {
     $d = new CDate();
     $columnValues = array('project_name' => $AppUI->_('No projects found'),
                         'start_date' => $d->getDate(), 'end_date' => $d->getDate(),
-                        'actual_end' => $d->getDate());
+                        'actual_end' => '');
     $gantt->addBar($columnValues, ' ' , 0.6, 'red');
-    $graph = $gantt->getGraph();
 } else {
-    $graph = $gantt->getGraph();
     if (is_array($projects)) {
         //pull all tasks into an array keyed by the project id, and get the tasks in hierarchy
         if ($showAllGantt) {
@@ -195,12 +193,12 @@ if (!is_array($projects) || sizeof($projects) == 0) {
             }
             //using new jpGraph determines using Date object instead of string
             $start = ($p['project_start_date'] > '0000-00-00 00:00:00') ? $p['project_start_date'] : date('Y-m-d H:i:s');
+            $start = new CDate($start);
+            $start = $start->getDate();
             $end_date = $p['project_end_date'];
             $end_date = new CDate($end_date);
             $end = $end_date->getDate();
-            $start = new CDate($start);
-            $start = $start->getDate();
-            $progress = $p['project_percent_complete'] + 0;
+            $progress = (int) $p['project_percent_complete'];
             $caption = ' ';
             if (!$start || $start == '0000-00-00') {
                 $start = !$end ? date('Y-m-d') : $end;
@@ -227,36 +225,7 @@ if (!is_array($projects) || sizeof($projects) == 0) {
             $gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'],
                 $p['project_active'], $progress, $p['project_id']);
 
-//            $bar = new GanttBar($row++, array($name, $startdate->format($df), $enddate->format($df), $actual_enddate->format($df)), $start, $actual_end, $cap, 0.6);
-//            $bar->progress->Set(min(($progress / 100), 1));
-//
-//            // Pedro A.
-//            // This one will affect the style for the project names, alternative example:
-//            $bar->title->SetFont(FF_CUSTOM, FS_BOLD, 7);
-//            $bar->SetFillColor('#' . $p['project_color_identifier']);
-//            $bar->SetPattern(BAND_SOLID, '#' . $p['project_color_identifier']);
-//
-//            //adding captions
-//            $bar->caption = new TextProperty($caption);
-//            $bar->caption->Align('left', 'center');
-//
-//            // Pedro A.
-//            // This one will affect the style for the caption of the projects status that appear on the right of the bar if they are selected to show, alternative example:
-//            $bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-//
-//            // gray out templates, completes, on ice, on hold
-//            if ($p['project_active'] < 1 || $p['project_percentage_complete'] > 99.9) {
-//                $bar->caption->SetColor('darkgray');
-//                $bar->title->SetColor('darkgray');
-//                $bar->SetColor('darkgray');
-//                $bar->SetFillColor('gray');
-//                $bar->progress->SetFillColor('darkgray');
-//                $bar->progress->SetPattern(BAND_SOLID, 'darkgray', 98);
-//            }
-//
-//            $graph->Add($bar);
             // If showAllGant checkbox is checked
-/*
             if ($showAllGantt) {
                 // insert tasks into Gantt Chart
                 // cycle for tasks for each project
@@ -272,44 +241,28 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                     $tEndObj = new CDate($tEnd);
 
                     if ($t['task_milestone'] != 1) {
-                        $advance = str_repeat('  ', $level);
-                        // Pedro A.
-                        // Depending on the font size you may increase or decrease the ammount of characters displayed from the task name by changing the:
-                        // ...25...23... ratio
-                        // to
-                        // ...30...28...   //more or
-                        // ...20...18...   //less
+                        $advance = str_repeat('  ', $level+2);
+                        $name = mb_strlen($advance . $t['task_name']) > 35 ? mb_substr($advance . $t['task_name'], 0, 33) . '...' : $advance . $t['task_name'];
+                        $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
 
-                        $bar2 = new GanttBar($row++, array((mb_strlen($advance . $t['task_name']) > 35 ? mb_substr($advance . $t['task_name'], 0, 33) . '...' : $advance . $t['task_name']), $tStartObj->format($df), $tEndObj->format($df), ' '), $tStart, $tEnd, ' ', $t['task_dynamic'] == 1 ? 0.1 : 0.6);
-                        $bar2->title->SetColor(bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000'));
-
-                        // Pedro A.
-                        // This one will affect the style for the tasks names non milestones, alternative example:
-                        $bar2->title->SetFont(FF_CUSTOM, FS_NORMAL, 7);
-                        $bar2->SetFillColor('#' . $p['project_color_identifier']);
-                        $graph->Add($bar2);
+                        $columnValues = array('project_name' => $name, 'start_date' => $tStartObj->getDate(),
+                                          'end_date' => $tEndObj->getDate(), 'actual_end' => '');
+                        $gantt->addBar($columnValues, '', $height, $p['project_color_identifier'],
+                            $p['project_active'], $progress, $p['project_id']);
                     } else {
-                        $bar2 = new MileStone($row++, '* ' . $t['task_name'], $t['task_start_date'], $tStartObj->format($df));
-                        $bar2->title->SetColor('#CC0000');
-                        // Pedro A.
-                        // This one will affect the style for the milestones tasks names, alternative example:
-                        $bar2->title->SetFont(FF_CUSTOM, FS_NORMAL, 7);
-                        $graph->Add($bar2);
+                        $name = $advance.'* ' . $t['task_name'];
+                        $milestone = substr($t['task_start_date'], 0, 10);
+                        $milestoneDate = new CDate($milestone);
+                        $gantt->addMilestone(array($name, '', $milestoneDate->format($df)), $t['task_start_date']);
                     }
 
                     // End of insert workers for each task into Gantt Chart
                 }
                 // End of insert tasks into Gantt Chart
             }
-*/
             // End of if showAllGant checkbox is checked
         }
     } // End of check for valid projects array.
 }
-$today = date('y-m-d');
-$vline = new GanttVLine($today, $AppUI->_('Today', UI_OUTPUT_RAW));
-// Pedro A.
-// This one will affect the style for the "Today" expression on the graphs bottom, alternative example:
-$vline->title->SetFont(FF_CUSTOM, FS_BOLD, 9);
-$graph->Add($vline);
-$graph->Stroke();
+
+$gantt->render();
