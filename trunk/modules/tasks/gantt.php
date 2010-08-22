@@ -140,14 +140,6 @@ $start_min = date('Y-m-d H:i:s');
 //pull the tasks into an array
 if ($caller != 'todo') {
 	$criticalTasks = $project->getCriticalTasks($project_id);
-	$actual_end_date = new CDate($criticalTasks[0]['task_end_date']);
-} else {
-	$actual_end_date = new CDate(null);
-}
-if ($actual_end_date->after($project->project_end_date)) {
-	$p_end_date = $criticalTasks[0]['task_end_date'];
-} else {
-	$p_end_date = $project->project_end_date;
 }
 
 foreach ($proTasks as $row) {
@@ -194,16 +186,16 @@ foreach ($proTasks as $row) {
 	$projects[$row['task_project']]['tasks'][] = $row;
 }
 $q->clear();
-unset($proTasks);
+
+$width = min(w2PgetParam($_GET, 'width', 600), 1400);
+$start_date = w2PgetParam($_GET, 'start_date', $start_min);
+$end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
 	$start_min = $projects[$project_id]['project_start_date'];
 	$end_max = ($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date'];
 }
-$width = min(w2PgetParam($_GET, 'width', 600), 1400);
-$start_date = w2PgetParam($_GET, 'start_date', $start_min);
-$end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
 $count = 0;
 
@@ -295,7 +287,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	}
 
 	$name = $a['task_name'];
-	if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
+	if ($locale_char_set == 'utf-8') {
 		$name = utf8_decode($name);
 	}
 	$name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;

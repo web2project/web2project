@@ -58,7 +58,6 @@ switch ($f) {
 // get any specifically denied tasks
 $task = new CTask;
 $task->setAllowedSQL($AppUI->user_id, $q);
-
 $proTasks = $q->loadHashList('task_id');
 $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 
@@ -107,7 +106,11 @@ foreach ($proTasks as $row) {
 	$projects[$row['task_project']]['tasks'][] = $row;
 }
 $q->clear();
-$width = w2PgetParam($_GET, 'width', 600);
+
+$width = min(w2PgetParam($_GET, 'width', 600), 1400);
+$start_date = w2PgetParam($_GET, 'start_date', $start_min);
+$end_date = w2PgetParam($_GET, 'end_date', $end_max);
+
 //consider critical (concerning end date) tasks as well
 $start_min = substr($criticalTasksInverted[0]['task_start_date'], 0, 10);
 if ($start_min == '0000-00-00' || !$start_min) {
@@ -118,8 +121,6 @@ $end_max = substr($criticalTasks[0]['task_end_date'], 0, 10);
 if ($end_max == '0000-00-00' || !$end_max) {
 	$end_max = $projects[$project_id]['project_end_date'];
 }
-$start_date = w2PgetParam($_GET, 'start_date', $start_min);
-$end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
 $count = 0;
 
@@ -210,7 +211,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	}
 
 	$name = $a['task_name'];
-	if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
+	if ($locale_char_set == 'utf-8') {
 		$name = utf8_decode($name);
 	}
 	$name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;
