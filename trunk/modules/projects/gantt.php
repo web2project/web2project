@@ -238,8 +238,9 @@ if (!is_array($projects) || 0 == count($projects)) {
                     $columnValues = array('task_name' => substr(' -- ' . $t['task_name'], 0, 20). '...',
                         'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => $tEnd);
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
-                    $gantt->addBar($columnValues, $caption, $height, $p['project_color_identifier'],
-                        $p['project_active'], $t['task_percent_complete'], $t['task_id']);
+                    $gantt->addBar($columnValues, $t['task_percent_complete'].'% '.$AppUI->_('Complete'),
+                        $height, $p['project_color_identifier'], $p['project_active'],
+                        $t['task_percent_complete'], $t['task_id']);
 				} else {
 				  $gantt->addMilestone(array('-- ' . $t['task_name']), $t['task_start_date']);
 				}
@@ -250,7 +251,7 @@ if (!is_array($projects) || 0 == count($projects)) {
                     $columnValues = array('user_name' => '  *  '.$w['user_name'],
                         'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => $tEnd);
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
-                    $gantt->addBar($columnValues, '', 0.6, $p['project_color_identifier'],
+                    $gantt->addBar($columnValues, $w['user_name'], 0.6, $p['project_color_identifier'],
                         true, $t['task_percent_complete'], $t['task_id']);
 				}
 				// End of insert workers for each task into Gantt Chart
