@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $caller, $locale_char_set, $showWork, $sortByName, $showLabels;
-global $gantt_arr, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks;
-global $showLowTasks, $user_id, $w2Pconfig;
+global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, 
+    $gantt_arr, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks,
+    $showLowTasks, $user_id, $w2Pconfig;
 
 w2PsetExecutionConditions($w2Pconfig);
 
@@ -13,9 +13,6 @@ $showLabels = w2PgetParam($_REQUEST, 'showLabels', false);
 $sortByName = w2PgetParam($_REQUEST, 'sortByName', false);
 $project_id = w2PgetParam($_REQUEST, 'project_id', 0);
 $f = w2PgetParam($_REQUEST, 'f', 0);
-
-// get the prefered date format
-$df = $AppUI->getPref('SHDATEFORMAT');
 
 $project = new CProject;
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
@@ -256,29 +253,8 @@ if (!$start_date || !$end_date) {
 	}
 }
 $gantt->setDateRange($start_date, $end_date);
-$graph = $gantt->getGraph();
-
-//This kludgy function echos children tasks as threads
-function showgtask(&$a, $level = 0) {
-	/* Add tasks to gantt chart */
-	global $gantt_arr;
-	$gantt_arr[] = array($a, $level);
-}
-
-function findgchild(&$tarr, $parent, $level = 0) {
-	global $projects;
-	$level = $level + 1;
-	$n = count($tarr);
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			showgtask($tarr[$x], $level);
-			findgchild($tarr, $tarr[$x]['task_id'], $level);
-		}
-	}
-}
 
 reset($projects);
-
 foreach ($projects as $p) {
 	$parents = array();
 	$tnums = count($p['tasks']);
@@ -295,9 +271,7 @@ foreach ($projects as $p) {
 		}
 	}
 }
-
 $hide_task_groups = false;
-
 if ($hide_task_groups) {
 	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		// remove task groups
@@ -309,6 +283,7 @@ if ($hide_task_groups) {
 	}
 }
 
+$gantt->loadTaskArray($gantt_arr);
 $row = 0;
 for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
@@ -329,11 +304,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	if ($caller == 'todo') {
 		$pname = $a['project_name'];
 		if ($locale_char_set == 'utf-8') {
-			if (function_exists('mb_substr')) {
-				$pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
-			} elseif (function_exists('utf8_decode')) {
-				$pname = utf8_decode($pname);
-			}
+            $pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
 		} else {
 			$pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
 		}
@@ -406,10 +377,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		} else {
             $gantt->addMilestone(array($name, '', $s, $s), $a['task_start_date']);
 		}
-		//caption of milestone should be date
-		if ($showLabels == '1') {
-			$caption = $start->format($df);
-		}
 	} else {
 		$type = $a['task_duration_type'];
 		$dur = $a['task_duration'];
@@ -456,25 +423,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             $columnValues = array('task_name' => $name, 'duration' => $dur,
               'start_date' => $start, 'end_date' => $end, 'actual_end' => $end);
 		}
-        $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress);
+        $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
     }
-
-	$q = new DBQuery;
-	$q->addTable('task_dependencies');
-	$q->addQuery('dependencies_task_id');
-	$q->addWhere('dependencies_req_task_id=' . (int)$a['task_id']);
-	$query = $q->loadList();
-
-	foreach ($query as $dep) {
-		// find row num of dependencies
-		for ($d = 0, $d_cmp = count($gantt_arr); $d < $d_cmp; $d++) {
-			if ($gantt_arr[$d][0]['task_id'] == $dep['dependencies_task_id']) {
-//TODO: $bar->SetConstrain($d, CONSTRAIN_ENDSTART);
-			}
-		}
-	}
-	unset($query);
 	$q->clear();
 }
-unset($gantt_arr);
+
 $gantt->render();
