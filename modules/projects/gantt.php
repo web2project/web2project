@@ -144,7 +144,7 @@ if (!is_array($projects) || 0 == count($projects)) {
     $d = new CDate();
     $columnValues = array('project_name' => $AppUI->_('No projects found'), 
                         'start_date' => $d->getDate(), 'end_date' => $d->getDate(),
-                        'actual_end' => $d->getDate());
+                        'actual_end' => '');
     $gantt->addBar($columnValues, ' ' , 0.6, 'red');
 } else {
 	foreach ($projects as $p) {
@@ -235,8 +235,8 @@ if (!is_array($projects) || 0 == count($projects)) {
 				$tEndObj = new CDate($t['task_end_date']);
 
 				if ($t['task_milestone'] != 1) {
-                    $columnValues = array('task_name' => substr(' -- ' . $t['task_name'], 0, 20). '...',
-                        'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => $tEnd);
+                    $columnValues = array('task_name' => substr('  ' . $t['task_name'], 0, 20). '...',
+                        'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
                     $gantt->addBar($columnValues, $t['task_percent_complete'].'% '.$AppUI->_('Complete'),
                         $height, $p['project_color_identifier'], $p['project_active'],
@@ -248,8 +248,8 @@ if (!is_array($projects) || 0 == count($projects)) {
                 $task->task_id = $t['task_id'];
 				$workers = $task->getAssigned();
 				foreach ($workers as $w) {
-                    $columnValues = array('user_name' => '  *  '.$w['user_name'],
-                        'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => $tEnd);
+                    $columnValues = array('user_name' => '    * '.$w['user_name'],
+                        'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
                     $gantt->addBar($columnValues, $w['user_name'], 0.6, $p['project_color_identifier'],
                         true, $t['task_percent_complete'], $t['task_id']);

@@ -322,10 +322,10 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		if ($caller == 'todo') {
             $columnValues = array('task_name' => $name, 'project_name' => $pname,
               'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
-              'actual_end' => $end);
+              'actual_end' => '');
 		} else {
             $columnValues = array('task_name' => $name, 'duration' => $dur,
-              'start_date' => $start, 'end_date' => $end, 'actual_end' => $end);
+              'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
 		}
         $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
 	}
