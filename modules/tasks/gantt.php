@@ -234,11 +234,11 @@ if (!$start_date || !$end_date) {
             $end_date = $end;
 		} else {
 			if (Date::compare($min_d_start, $d_start) > 0) {
-				$min_d_start = $d_start->duplicate();
+				$min_d_start = $d_start;
                 $start_date = $start;
 			}
 			if (Date::compare($max_d_end, $d_end) < 0) {
-				$max_d_end = $d_end->duplicate();
+				$max_d_end = $d_end;
                 $end_date = $end;
 			}
 		}
