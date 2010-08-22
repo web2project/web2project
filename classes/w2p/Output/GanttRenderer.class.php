@@ -12,10 +12,11 @@ include_once $AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt');
 class w2p_Output_GanttRenderer {
   private $graph = null;
   private $rowCount = null;
+  private $rowMap = array();
   private $todayText = null;
   private $AppUI = null;
   private $df = null;
-  
+
   public function __construct(CAppUI $AppUI, $width)
   {
     $this->graph = new GanttGraph($width);
@@ -97,7 +98,7 @@ class w2p_Output_GanttRenderer {
   }
 
   public function addBar(array $columnValues, $caption = '',
-    $height = '0.6', $barcolor = 'FFFFFF', $active = true, $progress = 0)
+    $height = '0.6', $barcolor = 'FFFFFF', $active = true, $progress = 0, $identifier = 0)
   {
     foreach($columnValues as $name => $value) {
       switch ($name) {
@@ -123,6 +124,7 @@ class w2p_Output_GanttRenderer {
     }
 
     $bar = new GanttBar($this->rowCount++, $rowValues, $start, $actual_end, $caption, $height);
+    $this->rowMap[$identifier] = $this->rowCount;
     $bar->progress->Set(min(($progress / 100), 1));
 
     $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
@@ -166,39 +168,43 @@ class w2p_Output_GanttRenderer {
     $this->graph->Add($bar);
   }
 
-  public function addSubBar($label, $start, $end, $caption = '', 
-    $height = '0.6', $barcolor = 'FFFFFF', $progress = 0)
-  {
-    $startDate = new CDate($start);
-    $endDate = new CDate($end);
+    public function addSubBar($label, $start, $end, $caption = '',
+        $height = '0.6', $barcolor = 'FFFFFF', $progress = 0)
+    {
+        $startDate = new CDate($start);
+        $endDate = new CDate($end);
 
-    $bar = new GanttBar($this->rowCount++, array($label, $startDate->format($this->df), $endDate->format($this->df), ' '), 
-                          $start, $end, $caption, $height);
-    $bar->progress->Set(min(($progress / 100), 1));
+        $bar = new GanttBar($this->rowCount++, array($label, $startDate->format($this->df), $endDate->format($this->df), ' '),
+                    $start, $end, $caption, $height);
+        $bar->progress->Set(min(($progress / 100), 1));
 
-    $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
-    $bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
-    $bar->SetFillColor('#' . $barcolor);
-    $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
+        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
+        $bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
+        $bar->SetFillColor('#' . $barcolor);
+        $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
 
-    //adding captions
-    $bar->caption = new TextProperty($caption);
-    $bar->caption->Align('left', 'center');
-    
-    $this->graph->Add($bar);
-  }
+        //adding captions
+        $bar->caption = new TextProperty($caption);
+        $bar->caption->Align('left', 'center');
 
-  public function addSubSubBar($label, $start, $end, $caption = '', 
-    $height = '0.6', $barcolor = 'FFFFFF', $progress = 0)
-  {
-    $startDate = new CDate($start);
-    $endDate = new CDate($end);
+        $this->graph->Add($bar);
+    }
 
-    $bar = new GanttBar($this->rowCount++, array($label, ' ', ' ', ' '), $startDate->format(FMT_DATETIME_MYSQL), $endDate->format(FMT_DATETIME_MYSQL), 0.6);
-    $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
-    $bar->SetFillColor('#' . $barcolor);
-    $this->graph->Add($bar);
-  }
+    public function addSubSubBar($label, $start, $end, $caption = '',
+        $height = '0.6', $barcolor = 'FFFFFF', $fillcolor = '')
+    {
+        $startDate = new CDate($start);
+        $endDate = new CDate($end);
+
+        $bar = new GanttBar($this->rowCount++, array($label, ' ', ' ', ' '),
+                    $startDate->format(FMT_DATETIME_MYSQL), $endDate->format(FMT_DATETIME_MYSQL), $height);
+        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
+        $bar->SetFillColor('#' . $barcolor);
+        if ($fillcolor != '') {
+            $bar->SetFillColor('#' . $fillcolor);
+        }
+        $this->graph->Add($bar);
+    }
 
   public function addMilestone(array $columnValues, $start, $color = '#CC0000')
   {
