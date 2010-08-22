@@ -129,9 +129,14 @@ class w2p_Output_GanttRenderer {
                     $rowValues[] = $endDate->format($this->df);
                     break;
                 case 'actual_end':
-                    $actual_end = $value;
-                    $actual_endDate = new CDate($value);
-                    $rowValues[] = $actual_endDate->format($this->df);
+                    if ('' == $value) {
+                        $actual_end = $columnValues['end_date'];
+                        $rowValues[] = $value;
+                    } else {
+                        $actual_end = $value;
+                        $actual_endDate = new CDate($value);
+                        $rowValues[] = $actual_endDate->format($this->df);
+                    }
                     break;
                 case 'project_name':
                 case 'task_name':
