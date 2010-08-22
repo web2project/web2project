@@ -207,7 +207,22 @@ class w2p_Output_GanttRenderer {
     $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
     $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
     $bar->title->SetColor($color);
+/*
+    if ($caption != '') {
+      $bar->caption = new TextProperty($caption);
+      $bar->caption->Align('left', 'center');
+      if (is_file(TTF_DIR . 'FreeSans.ttf')) {
+        $bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+      }
+    }
+*/
     $this->graph->Add($bar);
+  }
+
+  private function _addDependencies(GanttBar $bar)
+  {
+    
+    return $bar;
   }
 
   public function render($markToday = true)
@@ -220,6 +235,7 @@ class w2p_Output_GanttRenderer {
     }
     $this->graph->Stroke();
   }
+
   public function getGraph()
   {
     return $this->graph;

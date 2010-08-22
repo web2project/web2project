@@ -27,7 +27,6 @@ $sortTasksByName = w2PgetParam($_REQUEST, 'sortTasksByName', 0);
 $addPwOiD = w2PgetParam($_REQUEST, 'addPwOiD', 0);
 
 $pjobj = new CProject();
-$working_hours = $w2Pconfig['daily_working_hours'];
 
 /*
 ** Load department info for the case where one
@@ -45,45 +44,8 @@ if ($addPwOiD && $department > 0) {
 	$q->clear();
 }
 
-// pull valid projects and their percent complete information
-// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-$q = new DBQuery;
-$q->addTable('projects', 'pr');
-$q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
-                max(t1.task_end_date) AS project_actual_end_date, SUM(task_duration * task_percent_complete *
-                IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type))/ SUM(task_duration *
-                IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete,
-                project_status, project_active');
-$q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
-$q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
-if ($department > 0 && !$addPwOiD) {
-	$q->addWhere('project_departments.department_id = ' . (int)$department);
-}
-if ($proFilter == '-3') {
-	$q->addWhere('pr.project_owner = ' . (int)$user_id);
-} elseif ($proFilter != '-1') {
-	$q->addWhere('pr.project_status = ' . (int)$proFilter);
-}
-if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
-	$q->addWhere('pr.project_company = ' . (int)$company_id);
-}
-// Show Projects where the Project Owner is in the given department
-if ($addPwOiD && !empty($owner_ids)) {
-	$q->addWhere('pr.project_owner IN (' . implode(',', $owner_ids) . ')');
-}
-
-if ($showInactive != '1') {
-	$q->addWhere('pr.project_active = 1');
-	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('pr.project_status <> ' . $template_status);
-	}
-}
-$pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-$q->addGroup('pr.project_id');
-$q->addOrder('pr.project_name, task_end_date DESC');
-
-$projects = $q->loadList();
-$q->clear();
+$projects = $pjobj->getProjectsPercentComplete($w2Pconfig, $AppUI->user_id, $department, $addPwOiD, 
+													$proFilter, $user_id, $company_id, $showInactive);
 
 // Don't push the width higher than about 1200 pixels, otherwise it may not display.
 $width = min(w2PgetParam($_GET, 'width', 600), 1400);
@@ -255,8 +217,13 @@ if (!is_array($projects) || 0 == count($projects)) {
 				$q->addOrder('user_username ASC');
 				$workers = $q->loadList();
 				$q->clear();
+
 				foreach ($workers as $w) {
-				  $label = '   * ' . $w['contact_first_name'] . ' ' . $w['contact_last_name'];
+					$bar3 = new GanttBar($row++, array('   * ' . $w['contact_first_name'] . ' ' . $w['contact_last_name'], ' ', ' ', ' '), $tStartObj->format(FMT_DATETIME_MYSQL), $tEndObj->format(FMT_DATETIME_MYSQL), 0.6);
+					$bar3->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
+					$bar3->title->SetColor(bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000'));
+					$bar3->SetFillColor('#' . $p['project_color_identifier']);
+					$graph->Add($bar3);
 				}
 				// End of insert workers for each task into Gantt Chart
 			}
