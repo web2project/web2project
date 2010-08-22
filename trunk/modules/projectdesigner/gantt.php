@@ -185,6 +185,21 @@ if ($start_date && $end_date) {
 $gantt->setDateRange($start_date, $end_date);
 $graph = $gantt->getGraph();
 $df = $AppUI->getPref('SHDATEFORMAT');
+if ($start_date && $end_date) {
+	$graph->SetDateRange($start_date, $end_date);
+}
+
+// check day_diff and modify Headers
+$day_diff = $min_d_start->dateDiff($max_d_end);
+
+if ($day_diff > 240) {
+	//more than 240 days
+	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
+} elseif ($day_diff > 90) {
+	//more than 90 days and less of 241
+	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
+	$graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
+}
 
 //This kludgy function echos children tasks as threads
 function showgtask(&$a, $level = 0) {

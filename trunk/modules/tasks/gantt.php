@@ -218,20 +218,13 @@ $field = ($showWork == '1') ? 'Work' : 'Dur';
 
 if ($caller == 'todo') {
   $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
-  $columnSizes = array(180, 50, 60, 60, 60);
+  $columnSizes = array(200, 50, 50, 75, 75);
 } else {
   $columnNames = array('Task name', $field, 'Start', 'Finish');
-  $columnSizes = array(230, 60, 60, 60);
+  $columnSizes = array(200, 50, 75, 75);
 }
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 
-//-----------------------------------------
-// nice Gantt image
-// if diff(end_date,start_date) > 90 days it shows only
-//week number
-// if diff(end_date,start_date) > 240 days it shows only
-//month number
-//-----------------------------------------
 if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
@@ -355,7 +348,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	$start = new CDate($start);
 	$start = $start->getDate();
 
-	$progress = $a['task_percent_complete'] + 0;
+	$progress = (int) $a['task_percent_complete'];
 
 	if ($progress > 100) {
 		$progress = 100;
@@ -409,17 +402,14 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$start->addDays(0);
 		$s = $start->format($df);
 		if ($caller == 'todo') {
-			$bar = new MileStone($row++, array($name, $pname, '', $s, $s), $a['task_start_date'], $s);
+            $gantt->addMilestone(array($name, $pname, '', $s, $s), $a['task_start_date']);
 		} else {
-			$bar = new MileStone($row++, array($name, '', $s, $s), $a['task_start_date'], $s);
+            $gantt->addMilestone(array($name, '', $s, $s), $a['task_start_date']);
 		}
-		$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
 		//caption of milestone should be date
 		if ($showLabels == '1') {
 			$caption = $start->format($df);
 		}
-		$bar->title->SetColor('#CC0000');
-		$graph->Add($bar);
 	} else {
 		$type = $a['task_duration_type'];
 		$dur = $a['task_duration'];
@@ -457,51 +447,18 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$dur .= ' h';
 		$enddate = new CDate($end);
 		$startdate = new CDate($start);
+        $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
 		if ($caller == 'todo') {
-			$bar = new GanttBar($row++, array($name, $pname, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
+            $columnValues = array('task_name' => $name, 'project_name' => $pname,
+              'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+              'actual_end' => $end);
 		} else {
-			$bar = new GanttBar($row++, array($name, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
+            $columnValues = array('task_name' => $name, 'duration' => $dur,
+              'start_date' => $start, 'end_date' => $end, 'actual_end' => $end);
 		}
-		$bar->progress->Set(min(($progress / 100), 1));
-		if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-			$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-		}
-		if ($a['task_dynamic'] == 1) {
-			if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-				$bar->title->SetFont(FF_CUSTOM, FS_BOLD, 8);
-			}
-			$bar->rightMark->Show();
-			$bar->rightMark->SetType(MARK_RIGHTTRIANGLE);
-			$bar->rightMark->SetWidth(3);
-			$bar->rightMark->SetColor('black');
-			$bar->rightMark->SetFillColor('black');
+        $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress);
+    }
 
-			$bar->leftMark->Show();
-			$bar->leftMark->SetType(MARK_LEFTTRIANGLE);
-			$bar->leftMark->SetWidth(3);
-			$bar->leftMark->SetColor('black');
-			$bar->leftMark->SetFillColor('black');
-
-			$bar->SetPattern(BAND_SOLID, 'black');
-		}
-	}
-	//adding captions
-	$bar->caption = new TextProperty($caption);
-	$bar->caption->Align('left', 'center');
-	if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-		$bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-	}
-
-	// show tasks which are both finished and past in (dark)gray
-	if ($progress >= 100 && $end_date->isPast() && get_class($bar) == 'ganttbar') {
-		$bar->caption->SetColor('darkgray');
-		$bar->title->SetColor('darkgray');
-		$bar->setColor('darkgray');
-		$bar->SetFillColor('darkgray');
-		$bar->SetPattern(BAND_SOLID, 'gray');
-		$bar->progress->SetFillColor('darkgray');
-		$bar->progress->SetPattern(BAND_SOLID, 'gray', 98);
-	}
 	$q = new DBQuery;
 	$q->addTable('task_dependencies');
 	$q->addQuery('dependencies_task_id');
@@ -512,19 +469,12 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		// find row num of dependencies
 		for ($d = 0, $d_cmp = count($gantt_arr); $d < $d_cmp; $d++) {
 			if ($gantt_arr[$d][0]['task_id'] == $dep['dependencies_task_id']) {
-				$bar->SetConstrain($d, CONSTRAIN_ENDSTART);
+//TODO: $bar->SetConstrain($d, CONSTRAIN_ENDSTART);
 			}
 		}
 	}
 	unset($query);
 	$q->clear();
-	$graph->Add($bar);
 }
 unset($gantt_arr);
-$today = new CDate();
-$vline = new GanttVLine($today->format(FMT_TIMESTAMP_DATE), $AppUI->_('Today', UI_OUTPUT_RAW));
-if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-	$vline->title->SetFont(FF_CUSTOM, FS_BOLD, 10);
-}
-$graph->Add($vline);
-$graph->Stroke();
+$gantt->render();
