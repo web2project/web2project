@@ -3497,7 +3497,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,          $allowed_task_list[29]['task_owner']);
 
         foreach ($allowed_task_list as $task) {
-            $this->assertEquals(5, count($task));
+            $this->assertEquals(8, count($task));
         }
     }
 
@@ -3663,7 +3663,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,          $allowed_task_list[29]['task_owner']);
 
         foreach ($allowed_task_list as $task) {
-            $this->assertEquals(5, count($task));
+            $this->assertEquals(8, count($task));
         }
     }
 
@@ -3683,7 +3683,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $allowed_task_list = $this->obj->getAllowedTaskList($AppUI);
 
         $this->assertEquals(1,          count($allowed_task_list));
-        $this->assertEquals(5,          count($allowed_task_list[0]));
+        $this->assertEquals(8,          count($allowed_task_list[0]));
         $this->assertEquals(1,          $allowed_task_list[0]['task_id']);
         $this->assertEquals('Task 1',   $allowed_task_list[0]['task_name']);
         $this->assertEquals(0,          $allowed_task_list[0]['task_parent']);
