@@ -41,32 +41,31 @@ class w2p_Output_GanttRenderer {
     $this->todayText = $AppUI->_('Today', UI_OUTPUT_RAW);
   }
 
-  public function setDateRange($start_date, $end_date)
-  {
-    
-    $min_d_start = new CDate($start_date);
-    $max_d_end = new CDate($end_date);
+    public function setDateRange($start_date, $end_date)
+    {
+        $min_d_start = new CDate($start_date);
+        $max_d_end = new CDate($end_date);
 
-    // check day_diff and modify Headers
-    $day_diff = $min_d_start->dateDiff($max_d_end);
-    
-    //-----------------------------------------
-    // nice Gantt image
-    // if diff(end_date,start_date) > 90 days it shows only
-    //week number
-    // if diff(end_date,start_date) > 240 days it shows only
-    //month number
-    //-----------------------------------------
-    if ($day_diff > 240) {
-      $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY);
-    } else {
-      if ($day_diff > 90) {
-        $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
-        $this->graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
-      }
+        // check day_diff and modify Headers
+        $day_diff = $min_d_start->dateDiff($max_d_end);
+
+        //-----------------------------------------
+        // nice Gantt image
+        // if diff(end_date,start_date) > 90 days it shows only
+        //week number
+        // if diff(end_date,start_date) > 240 days it shows only
+        //month number
+        //-----------------------------------------
+        if ($day_diff > 240) {
+            $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY);
+        } else {
+            if ($day_diff > 90) {
+                $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
+                $this->graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
+            }
+        }
+        $this->graph->SetDateRange($start_date, $end_date);
     }
-    $this->graph->SetDateRange($start_date, $end_date);
-  }
 
   public function setTitle($tableTitle = '', $background = '#eeeeee')
   {
@@ -88,7 +87,22 @@ class w2p_Output_GanttRenderer {
     foreach ($columnNames as $column) {
       $translatedColumns[] = $AppUI->_($column, UI_OUTPUT_RAW);
     }
-
+    // Pedro A.
+    //
+    // The SetFont method changes the related bars caption text style and it will have all bars from its calling through all below
+    // until a new SetFont call is executed again on the same object e subobjects.
+    //
+    // LOGIC: $graph->scale->actinfo->SetFont(font name, font style, font size);
+    // EXAMPLE: $graph->scale->actinfo->SetFont(FF_CUSTOM, FS_BOLD, 10);
+    //
+    // Here is a list of possibilities you can use for the first parameter of the SetFont method:
+    // TTF Font families (you must have them installed to use them):
+    // FF_COURIER, FF_VERDANA, FF_TIMES, FF_COMIC, FF_CUSTOM, FF_GEORGIA, FF_TREBUCHE
+    // Internal fonts:
+    // FF_FONT0, FF_FONT1, FF_FONT2
+    //
+    // For the second parameter you have the TTF font style that can be:
+    // FS_NORMAL, FS_BOLD, FS_ITALIC, FS_BOLDIT, FS_BOLDITALIC
     $this->graph->scale->actinfo->vgrid->SetColor('gray');
     $this->graph->scale->actinfo->SetColor('darkgray');
     $this->graph->scale->actinfo->SetColTitles($translatedColumns, $columnSizes);
