@@ -135,7 +135,7 @@ class w2p_Output_GanttRenderer {
                     break;
                 case 'project_name':
                 case 'task_name':
-                    default:
+                default:
                     $rowValues[] = $value;
             }
         }
@@ -182,44 +182,6 @@ class w2p_Output_GanttRenderer {
             $bar->progress->SetPattern(BAND_SOLID, 'darkgray', 98);
         }
         $this->graph->Add($this->addDependencies($bar, $identifier));
-    }
-
-    public function addSubBar($label, $start, $end, $caption = '',
-        $height = '0.6', $barcolor = 'FFFFFF', $progress = 0)
-    {
-        $startDate = new CDate($start);
-        $endDate = new CDate($end);
-
-        $bar = new GanttBar($this->rowCount++, array($label, $startDate->format($this->df),
-            $endDate->format($this->df), ' '), $start, $end, $caption, $height);
-        $bar->progress->Set(min(($progress / 100), 1));
-
-        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
-        $bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
-        $bar->SetFillColor('#' . $barcolor);
-        $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
-
-        //adding captions
-        $bar->caption = new TextProperty($caption);
-        $bar->caption->Align('left', 'center');
-
-        $this->graph->Add($bar);
-    }
-
-    public function addSubSubBar($label, $start, $end, $caption = '',
-        $height = '0.6', $barcolor = 'FFFFFF', $fillcolor = '')
-    {
-        $startDate = new CDate($start);
-        $endDate = new CDate($end);
-
-        $bar = new GanttBar($this->rowCount++, array($label, ' ', ' ', ' '),
-                    $startDate->format(FMT_DATETIME_MYSQL), $endDate->format(FMT_DATETIME_MYSQL), $height);
-        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
-        $bar->SetFillColor('#' . $barcolor);
-        if ($fillcolor != '') {
-            $bar->SetFillColor('#' . $fillcolor);
-        }
-        $this->graph->Add($bar);
     }
 
     public function addMilestone(array $columnValues, $start,
