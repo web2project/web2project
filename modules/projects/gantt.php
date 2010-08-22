@@ -149,7 +149,7 @@ if (!is_array($projects) || 0 == count($projects)) {
 } else {
 	foreach ($projects as $p) {
 
-		if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
+		if ($locale_char_set == 'utf-8') {
 			$name = strlen(utf8_decode($p['project_name'])) > 25 ? substr(utf8_decode($p['project_name']), 0, 22) . '...' : utf8_decode($p['project_name']);
 		} else {
 			//while using charset different than UTF-8 we need not to use utf8_decode
