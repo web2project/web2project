@@ -67,84 +67,20 @@ $end_date = w2PgetParam($_GET, 'end_date', 0);
 $showAllGantt = w2PgetParam($_REQUEST, 'showAllGantt', '1');
 
 $gantt = new w2p_Output_GanttRenderer($AppUI, $width);
-
-$graph = new GanttGraph($width);
-$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);
-
-$graph->SetFrame(false);
-$graph->SetBox(true, array(0, 0, 0), 2);
-$graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
-
-/*
-
-** the jpgraph date locale is now set
-
-** automatically by the user's locale settings
-
-*/
-
-//$graph->scale->SetDateLocale( $AppUI->user_lang[0] );
-
-if ($start_date && $end_date) {
-	$graph->SetDateRange($start_date, $end_date);
-}
-
-// Pedro A.
-//
-// The SetFont method changes the related bars caption text style and it will have all bars from its calling through all below
-// until a new SetFont call is executed again on the same object e subobjects.
-//
-// LOGIC: $graph->scale->actinfo->SetFont(font name, font style, font size);
-// EXAMPLE: $graph->scale->actinfo->SetFont(FF_CUSTOM, FS_BOLD, 10);
-//
-// Here is a list of possibilities you can use for the first parameter of the SetFont method:
-// TTF Font families (you must have them installed to use them):
-// FF_COURIER, FF_VERDANA, FF_TIMES, FF_COMIC, FF_CUSTOM, FF_GEORGIA, FF_TREBUCHE
-// Internal fonts:
-// FF_FONT0, FF_FONT1, FF_FONT2
-//
-// For the second parameter you have the TTF font style that can be:
-// FS_NORMAL, FS_BOLD, FS_ITALIC, FS_BOLDIT, FS_BOLDITALIC
-//
-
-// Pedro A.
-// This one will affect the captions of the columns on the left side, where you have the projects/tasks and dates
-$graph->scale->actinfo->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-$graph->scale->actinfo->vgrid->SetColor('gray');
-$graph->scale->actinfo->SetColor('darkgray');
-
-//bl
-
-$graph->scale->actinfo->SetColTitles(array($AppUI->_('Project name', UI_OUTPUT_RAW), $AppUI->_('Start Date', UI_OUTPUT_RAW), $AppUI->_('Finish', UI_OUTPUT_RAW), $AppUI->_('Actual End', UI_OUTPUT_RAW)), array(160, 10, 70, 70));
+$gantt->localize();
 
 $original_project = new CProject();
 $original_project->load($original_project_id);
 $tableTitle = $original_project->project_name . ': ' . $AppUI->_('Multi-Project Gantt');
-$graph->scale->tableTitle->Set($tableTitle);
+$gantt->setTitle($tableTitle, '#eeeeee');
 
-// Use TTF font if it exists
-// try commenting out the following two lines if gantt charts do not display
-if (is_file(TTF_DIR . "FreeSans.ttf")) { // Pedro A.
-	// This one will affect the title of the graph if you'd want to change its font you'd do something like:
-	//    $graph->scale->tableTitle->SetFont(FF_FONT2);
-	$graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 10);
-}
-
-$graph->scale->SetTableTitleBackground('#eeeeee');
-$graph->scale->tableTitle->Show(true);
-
-//-----------------------------------------
-// nice Gantt image
-// if diff(end_date,start_date) > 90 days it shows only
-//week number
-// if diff(end_date,start_date) > 240 days it shows only
-//month number
-//-----------------------------------------
+$columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End', 'Finish');
+$columnSizes = array(160, 10, 70, 70);
+$gantt->setColumnHeaders($columnNames, $columnSizes);
 
 if ($start_date && $end_date) {
 	$min_d_start = new CDate($start_date);
 	$max_d_end = new CDate($end_date);
-	$graph->SetDateRange($start_date, $end_date);
 } else {
 	// find out DateRange from gant_arr
 	$d_start = new CDate();
@@ -161,26 +97,18 @@ if ($start_date && $end_date) {
 		} else {
 			if (Date::compare($min_d_start, $d_start) > 0) {
 				$min_d_start = $d_start;
+                $start_date = $start;
 			}
 			if (Date::compare($max_d_end, $d_end) < 0) {
 				$max_d_end = $d_end;
+                $end_date = $end;
 			}
 		}
 		$i++;
 	}
 }
-
-// check day_diff and modify Headers
-$day_diff = $min_d_start->dateDiff($max_d_end);
-
-if ($day_diff > 120 || !$day_diff) {
-	//more than 120 days
-	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
-} elseif ($day_diff > 60) {
-	//more than 60 days and less of 120
-	$graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
-	$graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
-}
+$graph->SetDateRange($start_date, $end_date);
+$graph = $gantt->getGraph();
 
 $row = 0;
 if (!is_array($projects) || sizeof($projects) == 0) {
