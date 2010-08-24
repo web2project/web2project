@@ -26,7 +26,7 @@ require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 $pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
 $pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 $pdf->selectFont($font_dir . '/Helvetica.afm');
-if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
+if ($locale_char_set == 'utf-8') {
 	$pdf->ezText(utf8_decode(w2PgetConfig('company_name')), 12);
 } else {
 	$pdf->ezText(w2PgetConfig('company_name'), 12);
@@ -38,7 +38,7 @@ $next_week->addSpan(new Date_Span(array(7, 0, 0, 0)));
 
 $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
 $pdf->ezText("\n" . $AppUI->_('Project Upcoming Task Report'), 12);
-if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
+if ($locale_char_set == 'utf-8') {
 	$pdf->ezText(utf8_decode($pname), 15);
 } else {
 	$pdf->ezText($pname, 15);

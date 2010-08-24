@@ -119,7 +119,7 @@ foreach ($modFiles as $v) {
 	if ($v && !in_array($v, $hidden_modules)) {
 		$s = '';
 		$s .= '<td></td>';
-		$s .= '<td>' . $v . '</td>';
+		$s .= '<td>' . $AppUI->_($v) . '</td>';
 		$s .= '<td>';
 		$s .= '<img src="' . w2PfindImage('obj/dotgrey.gif') . '" />&nbsp;';
 		if ($canEdit) {

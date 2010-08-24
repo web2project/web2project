@@ -2221,7 +2221,7 @@ class CTask extends CW2pObject {
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
 
-	public function &getAssigned() {
+	public function getAssigned() {
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('user_tasks', 'ut');
@@ -2320,12 +2320,18 @@ class CTask extends CW2pObject {
 
         $q = new DBQuery();
 		$q->addQuery('task_id, task_name, task_parent, task_access, task_owner');
+        $q->addQuery('task_start_date, task_end_date, task_percent_complete');
 		$q->addOrder('task_parent, task_parent = task_id desc');
 		$q->addTable('tasks', 't');
 		if ($task_project)
 		{
 			$q->addWhere('task_project = ' . (int)$task_project);
 		}
+        if ($orderby == '') {
+            $q->addOrder('task_parent, task_parent = task_id desc');
+        } else {
+            $q->addOrder($orderby);
+        }
 		$task_list = $q->loadList();
 
 		foreach($task_list as $task)

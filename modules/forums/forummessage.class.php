@@ -175,7 +175,7 @@ class CForumMessage extends CW2pObject {
 		$q->clear();
 		$q->addTable('users');
 		$q->addQuery('DISTINCT user_id, contact_first_name, contact_last_name');
-		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
+		$q->leftJoin('contacts', 'con', 'con.contact_id = user_contact');
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
         $q->addWhere("cm.method_name = 'email_primary'");
         $q->addQuery('cm.method_value as contact_email');
