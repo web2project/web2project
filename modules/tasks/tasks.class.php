@@ -1033,17 +1033,19 @@ class CTask extends CW2pObject {
         }
 
 		if (count($users)) {
-			$task_start_date = new CDate($this->task_start_date);
-			$task_finish_date = new CDate($this->task_end_date);
+            $task_start_date = intval($this->task_start_date) ? new CDate($AppUI->formatTZAwareTime($this->task_start_date, '%Y-%m-%d %T')) : null;
+            $task_finish_date = intval($this->task_end_date) ? new CDate($AppUI->formatTZAwareTime($this->task_end_date, '%Y-%m-%d %T')) : null;
 
 			$body = ($AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ':	 ' . $this->task_name);
 			//Priority not working for some reason, will wait till later
-			$body .= ("\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $task_start_date->format($df) . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . ($this->task_end_date != '' ? $task_finish_date->format($df) : '') . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $this->task_description);
+			$body .= "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $task_start_date->format($df) . "\n";
+            $body .= $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . $task_finish_date->format($df) . "\n";
+            $body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n";
+            $body .= $AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $this->task_description;
 			if ($users[0]['creator_email']) {
 				$body .= ("\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['creator_first_name'] . ' ' . $users[0]['creator_last_name'] . ', ' . $users[0]['creator_email']);
 			}
 			$body .= ("\n\n" . $AppUI->_('Owner', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['owner_first_name'] . ' ' . $users[0]['owner_last_name'] . ', ' . $users[0]['owner_email']);
-
 			if ($comment != '') {
 				$body .= "\n\n" . $comment;
 			}
