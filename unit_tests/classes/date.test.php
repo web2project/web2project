@@ -173,11 +173,57 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests compare function when days are greater and don't convert timezone
+     */
+    public function testCompareDayGreaterNoConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 00:00:00');
+        $date2 = new CDate('2010-08-06 00:00:00');
+
+        $this->assertEquals(1, $date1->compare($date1, $date2));
+    }
+
+    /**
+     * Tests compare function when days are the same, hours are greater
+     * and don't convert timezone
+     */
+    public function testCompareHourGreaterNoConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 02:00:00');
+        $date2 = new CDate('2010-08-07 01:00:00');
+
+        $this->assertEquals(1, $date1->compare($date1, $date2));
+    }
+
+    /**
+     * Tests compare function when days and hours are the same, minutes are
+     * greater and don't convert timezone
+     */
+    public function testCompareMinuteGreaterNotConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:01:00');
+        $date2 = new CDate('2010-08-07 01:00:00');
+
+        $this->assertEquals(1, $date1->compare($date1, $date2));
+    }
+
+    /**
+     * Tests compare function when days, hours and minutes are the same,
+     * seconds are greater and don't convert timezone
+     */
+    public function testCompareSecondGreaterNoConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:01:01');
+        $date2 = new CDate('2010-08-07 01:01:00');
+
+        $this->assertEquals(1, $date1->compare($date1, $date2));
+    }
+
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
 	{
-
 		$myDate1 = new CDate('', 'US/Eastern');
 		$this->assertEquals($myDate1, new CDate('', 'US/Eastern'));
 
