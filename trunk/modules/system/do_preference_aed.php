@@ -14,6 +14,10 @@ if (!canEdit('system') && !$pref_user) {
 if ((!($AppUI->user_id == $pref_user) && !canEdit('admin')) && $pref_user) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
+$emails = (isset($_POST['tl_assign'])) ? 1 : 0;
+$emails += (isset($_POST['tl_task'])) ? 2 : 0;
+$emails += (isset($_POST['tl_proj'])) ? 4 : 0;
+$_POST['pref_name']['TASKLOGEMAIL'] = $emails;
 
 $obj = new CPreferences();
 $obj->pref_user = $pref_user;
@@ -44,4 +48,4 @@ foreach ($_POST['pref_name'] as $name => $value) {
 		}
 	}
 }
-$AppUI->redirect();
+$AppUI->redirect('m=system');
