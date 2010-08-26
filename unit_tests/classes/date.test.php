@@ -52,6 +52,71 @@ class Date_Test extends PHPUnit_Framework_TestCase
 {
 
     /**
+     * Stores old working days value while tests being run
+     *
+     * @param string
+     * @access private
+     */
+    private $old_working_days;
+
+    /**
+     * Stores old day start value while tests being run
+     *
+     * @param int
+     * @access private
+     */
+    private $old_cal_day_start;
+
+    /**
+     * Stores old say end value while test being run
+     *
+     * @param int
+     * @access private
+     */
+    private $old_cal_day_end;
+
+    /**
+     * Date object to be shared with tests
+     *
+     * @param CDate
+     * @access private
+     */
+    private $date;
+
+    /**
+     * Save our global settings before running tests
+     */
+    protected function setUp()
+    {
+        global $w2Pconfig;
+
+        parent::setUp();
+
+        // Save old working days, day start and end
+        $this->old_working_days         = $w2Pconfig['cal_working_days'];
+        $this->old_cal_day_start        = $w2Pconfig['cal_day_start'];
+        $this->old_cal_day_end          = $w2Pconfig['cal_day_end'];
+        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
+        $w2Pconfig['cal_day_start']     = 9;
+        $w2Pconfig['cal_day_end']       = 17;
+    }
+
+    /**
+     * Restore our global settings after running tests
+     */
+    protected function tearDown()
+    {
+        global $w2Pconfig;
+
+        parent::tearDown();
+
+        // Restore old working days, day start and end
+        $w2Pconfig['cal_working_days']  = $this->old_working_days;
+        $w2Pconfig['cal_day_start']     = $this->old_cal_day_start;
+        $w2Pconfig['cal_day_end']       = $this->old_cal_day_end;
+    }
+
+    /**
      * Tests constructor without arguments
      */
     public function testConstructorNoDateTimeNoTz()
@@ -655,18 +720,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testIsWorkingDayYes()
     {
-        global $w2Pconfig;
-
-        // Save old working days, and set our own for testing
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-
         $date = new CDate('2010-08-11 00:00:00');
 
         $this->assertTrue($date->isWorkingDay());
-
-        // Restore old working days
-        $w2Pconfig['cal_working_days'] = $old_working_days;
     }
 
     /**
@@ -674,18 +730,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testIsWorkingDayNo()
     {
-        global $w2Pconfig;
-
-        // Save old working day, and set our own for testing
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-
         $date = new CDate('2010-08-08 00:00:00');
 
         $this->assertFalse($date->isWorkingDay());
-
-        // Restore old working days
-        $w2Pconfig['cal_working_days'] = $old_working_days;
     }
 
     /**
@@ -696,16 +743,11 @@ class Date_Test extends PHPUnit_Framework_TestCase
     {
         global $w2Pconfig;
 
-        // Save old working day, and set our won for testing
-        $old_working_days               = $w2Pconfig['cal_working_days'];
         $w2Pconfig['cal_working_days']  = null;
 
         $date = new CDate('2010-08-10 00:00:00');
 
         $this->assertTrue($date->isWorkingDay());
-
-        // Restore old working days
-        $w2Pconfig['cal_working_days'] = $old_working_days;
     }
 
     /**
@@ -716,17 +758,11 @@ class Date_Test extends PHPUnit_Framework_TestCase
     {
         global $w2Pconfig;
 
-        // Save old working day, and set our won for testing
-        $old_working_days               = $w2Pconfig['cal_working_days'];
         $w2Pconfig['cal_working_days']  = null;
 
         $date = new CDate('2010-08-07 00:00:00');
 
         $this->assertFalse($date->isWorkingDay());
-
-        // Restore old working days
-        $w2Pconfig['cal_working_days'] = $old_working_days;
-
     }
 
     /**
@@ -755,25 +791,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayNotWorkingDayNoPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-07 00:00:00');
         $date->next_working_day();
 
         $this->assertEquals('2010-08-09 09:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -781,25 +802,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayNotWorkingDayPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-07 10:00:00');
         $date->next_working_day(true);
 
         $this->assertEquals('2010-08-09 10:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -808,25 +814,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayPastEndOfDayNoPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-24 18:00:00');
         $date->next_working_day();
 
         $this->assertEquals('2010-08-25 09:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -835,25 +826,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayPastEndOfDayPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-24 18:00:00');
         $date->next_working_day(true);
 
         $this->assertEquals('2010-08-25 18:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -862,25 +838,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayEndOfDayNoPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-24 17:00:00');
         $date->next_working_day();
 
         $this->assertEquals('2010-08-25 09:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -888,25 +849,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayIsWorkingDay()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-24 13:00:00');
         $date->next_working_day();
 
         $this->assertEquals('2010-08-24 13:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -914,25 +860,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayNotWorkingDayNoPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-07 00:00:00');
         $date->prev_working_day();
 
         $this->assertEquals('2010-08-06 17:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -940,25 +871,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayNotWorkingDayPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-07 00:00:00');
         $date->prev_working_day(true);
 
         $this->assertEquals('2010-08-06 00:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -966,25 +882,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayBeforeStartOfDayNoPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-07 00:00:00');
         $date->prev_working_day();
 
         $this->assertEquals('2010-08-06 17:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -992,25 +893,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayBeforeStartOfDayPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-07 00:00:00');
         $date->prev_working_day(true);
 
         $this->assertEquals('2010-08-06 00:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -1018,25 +904,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayStartOfDayNoPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-07 09:00:00');
         $date->prev_working_day();
 
         $this->assertEquals('2010-08-06 17:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -1044,25 +915,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayStartOfDayPreserveHours()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-07 09:00:00');
         $date->prev_working_day(true);
 
         $this->assertEquals('2010-08-06 09:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
@@ -1070,25 +926,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayIsWorkingDay()
     {
-        global $w2Pconfig;
-
-        // Save old working days, day start and end
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
-        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-        $w2Pconfig['cal_day_start']     = 9;
-        $w2Pconfig['cal_day_end']       = 17;
-
         $date = new CDate('2010-08-24 13:00:00');
         $date->prev_working_day();
 
         $this->assertEquals('2010-08-24 13:00:00', $date->getDate(DATE_FORMAT_ISO));
-
-        // Restore old working days, day start and end
-        $w2Pconfig['cal_working_days']  = $old_working_days;
-        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
-        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
     }
 
     /**
