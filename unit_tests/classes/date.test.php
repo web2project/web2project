@@ -857,6 +857,59 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests next_working_day when its exactly the end of working day and not
+     * preserving hours
+     */
+    public function testNextWorkingDayEndOfDayNoPreserveHours()
+    {
+        global $w2Pconfig;
+
+        // Save old working days, day start and end
+        $old_working_days               = $w2Pconfig['cal_working_days'];
+        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
+        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
+        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
+        $w2Pconfig['cal_day_start']     = 9;
+        $w2Pconfig['cal_day_end']       = 17;
+
+        $date = new CDate('2010-08-24 17:00:00');
+        $date->next_working_day();
+
+        $this->assertEquals('2010-08-25 09:00:00', $date->getDate(DATE_FORMAT_ISO));
+
+        // Restore old working days, day start and end
+        $w2Pconfig['cal_working_days']  = $old_working_days;
+        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
+        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
+    }
+
+    /**
+     * Tests next_working_day when it is a working day
+     */
+    public function testNextWorkingDayIsWorkingDay()
+    {
+        global $w2Pconfig;
+
+        // Save old working days, day start and end
+        $old_working_days               = $w2Pconfig['cal_working_days'];
+        $old_cal_day_start              = $w2Pconfig['cal_day_start'];
+        $old_cal_day_end                = $w2Pconfig['cal_day_end'];
+        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
+        $w2Pconfig['cal_day_start']     = 9;
+        $w2Pconfig['cal_day_end']       = 17;
+
+        $date = new CDate('2010-08-24 13:00:00');
+        $date->next_working_day();
+
+        $this->assertEquals('2010-08-24 13:00:00', $date->getDate(DATE_FORMAT_ISO));
+
+        // Restore old working days, day start and end
+        $w2Pconfig['cal_working_days']  = $old_working_days;
+        $w2Pconfig['cal_day_start']     = $old_cal_day_start;
+        $w2Pconfig['cal_day_end']       = $old_cal_day_end;
+    }
+
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
