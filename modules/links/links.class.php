@@ -114,6 +114,9 @@ class CLink extends CW2pObject {
     public function store(CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $stored = false;
+        if (strpos($this->link_url, ':') === false && strpos($this->link_url, "//") === false) {
+            $this->link_url = 'http://'.$this->link_url;
+        }
 
         $errorMsgArray = $this->check();
 
