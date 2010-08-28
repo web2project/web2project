@@ -180,7 +180,7 @@ class w2p_Utilities_Date extends Date {
 	*/
 	public function prev_working_day($preserveHours = false) {
 		global $AppUI;
-		$do = $this;
+		$do = clone $this;
 		$end = intval(w2PgetConfig('cal_day_end'));
 		$start = intval(w2PgetConfig('cal_day_start'));
 		while (!$this->isWorkingDay() || ($this->getHour() < $start) || ($this->getHour() == $start && $this->getMinute() == '0')) {
