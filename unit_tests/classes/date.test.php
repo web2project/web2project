@@ -925,6 +925,49 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests addDuration with positive full days
+     */
+    public function testAddDurationPositiveDurationFullDayDuration()
+    {
+        $date = new CDate('2010-08-30 10:00:00');
+        $date->addDuration(1, 24);
+
+        $this->assertEquals('2010-08-31 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with positive full days across a month
+     */
+    public function testAddDurationPositiverDurationFullDayDurationAcrossMonth()
+    {
+        $date = new CDate('2010-08-31 10:00:00');
+        $date->addDuration(1, 24);
+
+        $this->assertEquals('2010-09-01 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with negative full days
+     */
+    public function testAddDurationNegativeDurationFullDayDuration()
+    {
+        $date = new CDate('2010-08-31 10:00:00');
+        $date->addDuration(-1, 24);
+
+        $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with negative full days across a month
+     */
+    public function testAddDurationNegativeDurationFullDayDurationAcrossMonth()
+    {
+        $date = new CDate('2010-09-01 10:00:00');
+        $date->addDuration(-1, 24);
+
+        $this->assertEquals('2010-08-31 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
