@@ -315,7 +315,7 @@ class w2p_Utilities_Date extends Date {
 			// calculated duration must be negative, set signum appropriately
 			$sgn = -1;
 
-			$dummy = $s;
+			$dummy = clone $s;
 			$s->copy($e);
 			$e = $dummy;
 		}
