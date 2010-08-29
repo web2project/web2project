@@ -1015,13 +1015,11 @@ class CEvent extends CW2pObject {
             if (($msg = parent::store())) {
                 return $msg;
             }
-            $stored = true;
         }
         if (0 == $this->event_id && $perms->checkModuleItem('events', 'add')) {
             if (($msg = parent::store())) {
                 return $msg;
             }
-            $stored = true;
         }
 
         return $stored;
