@@ -37,6 +37,10 @@ $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 // setup the title block
 $titleBlock = new CTitleBlock('Yearly Calendar', 'myevo-appointments.png', $m, "$m.$a");
+$titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $date, 'year view');
+$titleBlock->addCrumb('?m=calendar&date=' . $date, 'month view');
+$titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $date, 'week view');
+$titleBlock->addCrumb('?m=calendar&a=day_view&date=' . $date, 'day view');
 $titleBlock->addCell($AppUI->_('Company') . ':');
 $titleBlock->addCell(arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id), '', '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany" accept-charset="utf-8">', '</form>');
 $titleBlock->addCell($AppUI->_('Event Filter') . ':');
