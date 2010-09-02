@@ -52,6 +52,66 @@ class Date_Test extends PHPUnit_Framework_TestCase
 {
 
     /**
+     * Stores old working days value while tests being run
+     *
+     * @param string
+     * @access private
+     */
+    private $old_working_days;
+
+    /**
+     * Stores old day start value while tests being run
+     *
+     * @param int
+     * @access private
+     */
+    private $old_cal_day_start;
+
+    /**
+     * Stores old say end value while test being run
+     *
+     * @param int
+     * @access private
+     */
+    private $old_cal_day_end;
+
+    /**
+     * Save our global settings before running tests
+     */
+    protected function setUp()
+    {
+        global $w2Pconfig;
+
+        parent::setUp();
+
+        // Save old working days, day start and end
+        $this->old_working_days             = $w2Pconfig['cal_working_days'];
+        $this->old_cal_day_start            = $w2Pconfig['cal_day_start'];
+        $this->old_cal_day_end              = $w2Pconfig['cal_day_end'];
+        $this->old_dwh                      = $w2Pconfig['daily_working_hours'];
+        $w2Pconfig['cal_working_days']      = '1,2,3,4,5';
+        $w2Pconfig['cal_day_start']         = 9;
+        $w2Pconfig['cal_day_end']           = 17;
+        $w2Pconfig['daily_working_hours']   = 8;
+    }
+
+    /**
+     * Restore our global settings after running tests
+     */
+    protected function tearDown()
+    {
+        global $w2Pconfig;
+
+        parent::tearDown();
+
+        // Restore old working days, day start and end
+        $w2Pconfig['cal_working_days']      = $this->old_working_days;
+        $w2Pconfig['cal_day_start']         = $this->old_cal_day_start;
+        $w2Pconfig['cal_day_end']           = $this->old_cal_day_end;
+        $w2Pconfig['daily_working_hours']   = $this->old_dwh;
+    }
+
+    /**
      * Tests constructor without arguments
      */
     public function testConstructorNoDateTimeNoTz()
@@ -655,18 +715,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testIsWorkingDayYes()
     {
-        global $w2Pconfig;
-
-        // Save old working days, and set our own for testing
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-
         $date = new CDate('2010-08-11 00:00:00');
 
         $this->assertTrue($date->isWorkingDay());
-
-        // Restore old working days
-        $w2Pconfig['cal_working_days'] = $old_working_days;
     }
 
     /**
@@ -674,18 +725,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testIsWorkingDayNo()
     {
-        global $w2Pconfig;
-
-        // Save old working day, and set our own for testing
-        $old_working_days               = $w2Pconfig['cal_working_days'];
-        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
-
         $date = new CDate('2010-08-08 00:00:00');
 
         $this->assertFalse($date->isWorkingDay());
-
-        // Restore old working days
-        $w2Pconfig['cal_working_days'] = $old_working_days;
     }
 
     /**
@@ -696,16 +738,11 @@ class Date_Test extends PHPUnit_Framework_TestCase
     {
         global $w2Pconfig;
 
-        // Save old working day, and set our won for testing
-        $old_working_days               = $w2Pconfig['cal_working_days'];
         $w2Pconfig['cal_working_days']  = null;
 
         $date = new CDate('2010-08-10 00:00:00');
 
         $this->assertTrue($date->isWorkingDay());
-
-        // Restore old working days
-        $w2Pconfig['cal_working_days'] = $old_working_days;
     }
 
     /**
@@ -716,8 +753,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
     {
         global $w2Pconfig;
 
-        // Save old working day, and set our won for testing
-        $old_working_days               = $w2Pconfig['cal_working_days'];
         $w2Pconfig['cal_working_days']  = null;
 
         $date = new CDate('2010-08-07 00:00:00');
@@ -726,6 +761,341 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
         // Restore old working days
         $w2Pconfig['cal_working_days'] = $old_working_days;
+    }
+
+    /**
+     * Tests getAMPM when it is AM
+     */
+    public function testGetAMPMAM()
+    {
+        $date = new CDate('2010-08-19 10:00:00');
+
+        $this->assertEquals('am', $date->getAMPM());
+    }
+
+    /**
+     * Tests getAMPM when it is PM
+     */
+    public function testGetAMPMPM()
+    {
+        $date = new CDate('2010-08-19 13:00:00');
+
+        $this->assertEquals('pm', $date->getAMPM());
+    }
+
+    /**
+     * Tests next_working_day when not a working day, and not preserving
+     * hours
+     */
+    public function testNextWorkingDayNotWorkingDayNoPreserveHours()
+    {
+        $date = new CDate('2010-08-07 00:00:00');
+        $date->next_working_day();
+
+        $this->assertEquals('2010-08-09 09:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests next_working_day when not a working day and preserving hours
+     */
+    public function testNextWorkingDayNotWorkingDayPreserveHours()
+    {
+        $date = new CDate('2010-08-07 10:00:00');
+        $date->next_working_day(true);
+
+        $this->assertEquals('2010-08-09 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests next_working_day when its past end of working day and not
+     * preserving hours
+     */
+    public function testNextWorkingDayPastEndOfDayNoPreserveHours()
+    {
+        $date = new CDate('2010-08-24 18:00:00');
+        $date->next_working_day();
+
+        $this->assertEquals('2010-08-25 09:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests next_working_day when its past end of working day and preserving
+     * hours
+     */
+    public function testNextWorkingDayPastEndOfDayPreserveHours()
+    {
+        $date = new CDate('2010-08-24 18:00:00');
+        $date->next_working_day(true);
+
+        $this->assertEquals('2010-08-25 18:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests next_working_day when its exactly the end of working day and not
+     * preserving hours
+     */
+    public function testNextWorkingDayEndOfDayNoPreserveHours()
+    {
+        $date = new CDate('2010-08-24 17:00:00');
+        $date->next_working_day();
+
+        $this->assertEquals('2010-08-25 09:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests next_working_day when it is a working day
+     */
+    public function testNextWorkingDayIsWorkingDay()
+    {
+        $date = new CDate('2010-08-24 13:00:00');
+        $date->next_working_day();
+
+        $this->assertEquals('2010-08-24 13:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests prev_working_day when not a working day and not preserving hours
+     */
+    public function testPrevWorkingDayNotWorkingDayNoPreserveHours()
+    {
+        $date = new CDate('2010-08-07 00:00:00');
+        $date->prev_working_day();
+
+        $this->assertEquals('2010-08-06 17:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests prev_working_day when not a working day and preserving hours
+     */
+    public function testPrevWorkingDayNotWorkingDayPreserveHours()
+    {
+        $date = new CDate('2010-08-07 00:00:00');
+        $date->prev_working_day(true);
+
+        $this->assertEquals('2010-08-06 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests prev_working_day when before start of day and not preserving hours
+     */
+    public function testPrevWorkingDayBeforeStartOfDayNoPreserveHours()
+    {
+        $date = new CDate('2010-08-07 00:00:00');
+        $date->prev_working_day();
+
+        $this->assertEquals('2010-08-06 17:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests prev_working_day when before start of day and preserving hours
+     */
+    public function testPrevWorkingDayBeforeStartOfDayPreserveHours()
+    {
+        $date = new CDate('2010-08-07 00:00:00');
+        $date->prev_working_day(true);
+
+        $this->assertEquals('2010-08-06 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests prev_working_day when it is the start of day and not preserving hours
+     */
+    public function testPrevWorkingDayStartOfDayNoPreserveHours()
+    {
+        $date = new CDate('2010-08-07 09:00:00');
+        $date->prev_working_day();
+
+        $this->assertEquals('2010-08-06 17:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests prev_working_day when it is the start of day and preserving hours
+     */
+    public function testPrevWorkingDayStartOfDayPreserveHours()
+    {
+        $date = new CDate('2010-08-07 09:00:00');
+        $date->prev_working_day(true);
+
+        $this->assertEquals('2010-08-06 09:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests prev_working_day when it is a working day
+     */
+    public function testPrevWorkingDayIsWorkingDay()
+    {
+        $date = new CDate('2010-08-24 13:00:00');
+        $date->prev_working_day();
+
+        $this->assertEquals('2010-08-24 13:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with positive full days
+     */
+    public function testAddDurationPositiveDurationFullDayDuration()
+    {
+        $date = new CDate('2010-08-30 10:00:00');
+        $date->addDuration(1, 24);
+
+        $this->assertEquals('2010-08-31 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with positive full days across a month
+     */
+    public function testAddDurationPositiverDurationFullDayDurationAcrossMonth()
+    {
+        $date = new CDate('2010-08-31 10:00:00');
+        $date->addDuration(1, 24);
+
+        $this->assertEquals('2010-09-01 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with negative full days
+     */
+    public function testAddDurationNegativeDurationFullDayDuration()
+    {
+        $date = new CDate('2010-08-31 10:00:00');
+        $date->addDuration(-1, 24);
+
+        $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with negative full days across a month
+     */
+    public function testAddDurationNegativeDurationFullDayDurationAcrossMonth()
+    {
+        $date = new CDate('2010-09-01 10:00:00');
+        $date->addDuration(-1, 24);
+
+        $this->assertEquals('2010-08-31 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with positive hour
+     */
+    public function testAddDurationPositiveHourDuration()
+    {
+        $date = new CDate('2010-08-30 10:00:00');
+        $date->addDuration(1);
+
+        $this->assertEquals('2010-08-30 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with positive hour across a day
+     */
+    public function testAddDurationPositiveHourDurationAcrossDay()
+    {
+        $date = new CDate('2010-08-30 16:00:00');
+        $date->addDuration(2);
+
+        $this->assertEquals('2010-08-31 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with positive hour on non working day
+     */
+    public function testAddDurationPositiveHourDurationNonWorkingDay()
+    {
+        $date = new CDate('2010-08-28 10:00:00');
+        $date->addDuration(1);
+
+        $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with positive hour when adding mulitple days
+     */
+    public function testAddDurationPositiveHourDurationMultipleDays()
+    {
+        $date = new CDate('2010-08-30 10:00:00');
+        $date->addDuration(17);
+
+        $this->assertEquals('2010-09-01 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests add duration with positive hour when it's friday afternoon(next
+     * day is not a working day)
+     */
+    public function testAddDurationPositiveHourDurationFridayAfternoon()
+    {
+        $date = new CDate('2010-08-27 16:00:00');
+        $date->addDuration(2);
+
+        $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with negative hour
+     */
+    public function testAddDurationNegativeHourDuration()
+    {
+        $date = new CDate('2010-08-30 10:00:00');
+        $date->addDuration(-1);
+
+        $this->assertEquals('2010-08-30 09:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with negative hour across a day
+     */
+    public function testAddDurationNegativeHourDurationAcrossDay()
+    {
+        $date = new CDate('2010-08-31 10:00:00');
+        $date->addDuration(-2);
+
+        $this->assertEquals('2010-08-30 16:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with negative hour on non working day
+     */
+    public function testAddDurationNegativeHourDurationNonWorkingDay()
+    {
+        $date = new CDate('2010-08-28 10:00:00');
+        $date->addDuration(-1);
+
+        $this->assertEquals('2010-08-27 16:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with negative hour spanning multiple days
+     */
+    public function testAddDurationNegativeHourDurationMultipleDays()
+    {
+        $date = new CDate('2010-09-01 11:00:00');
+        $date->addDuration(-17);
+
+        $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with negative hour when it's Monday morning (prev day
+     * is not a working day)
+     */
+    public function testAddDurationNegativeHourDurationMondayMorning()
+    {
+        $date = new CDate('2010-08-30 10:00:00');
+        $date->addDuration(-2);
+
+        $this->assertEquals('2010-08-27 16:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDuration with an invalid duration type (valid are 1(hours), or
+     * 24(days))
+     */
+    public function testAddDurationInvalidDurationType()
+    {
+        $date = new CDate('2010-08-30 10:00:00');
+        $date->addDuration(1, 17);
+
+        $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
     }
 
     /**
