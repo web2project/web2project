@@ -30,3 +30,26 @@ function cleanText($text) {
 
 	return $text;
 }
+
+//This kludgy function echos children tasks as threads
+function showgtask(&$a, $level = 0, $project_id = 0) {
+    /* Add tasks to gantt chart */
+    global $gantt_arr;
+    if ($project_id) {
+        $gantt_arr[$project_id][] = array($a, $level);
+    } else {
+        $gantt_arr[] = array($a, $level);
+    }
+}
+
+function findgchild(&$tarr, $parent, $level = 0) {
+    global $projects;
+    $level = $level + 1;
+    $n = count($tarr);
+    for ($x = 0; $x < $n; $x++) {
+        if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
+            showgtask($tarr[$x], $level, $tarr[$x]['project_id']);
+            findgchild($tarr, $tarr[$x]['task_id'], $level, $tarr[$x]['project_id']);
+        }
+    }
+}

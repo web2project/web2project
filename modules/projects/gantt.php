@@ -3,7 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt, $sortTasksByName, $user_id, $w2Pconfig;
+global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, 
+    $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt,
+    $user_id, $w2Pconfig, $sortTasksByName;
 
 w2PsetExecutionConditions($w2Pconfig);
 
@@ -13,11 +15,13 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 $projectStatus = w2PgetSysVal('ProjectStatus');
 $projectStatus = arrayMerge(array('-2' => $AppUI->_('All w/o in progress')), $projectStatus);
 $user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
+
 if ($AppUI->user_id == $user_id) {
 	$projectStatus = arrayMerge(array('-3' => $AppUI->_('My projects')), $projectStatus);
 } else {
 	$projectStatus = arrayMerge(array('-3' => $AppUI->_('User\'s projects')), $projectStatus);
 }
+
 $proFilter = w2PgetParam($_REQUEST, 'proFilter', '-1');
 $company_id = w2PgetParam($_REQUEST, 'company_id', 0);
 $department = w2PgetParam($_REQUEST, 'department', 0);
@@ -27,7 +31,6 @@ $sortTasksByName = w2PgetParam($_REQUEST, 'sortTasksByName', 0);
 $addPwOiD = w2PgetParam($_REQUEST, 'addPwOiD', 0);
 
 $pjobj = new CProject();
-$working_hours = $w2Pconfig['daily_working_hours'];
 
 /*
 ** Load department info for the case where one
@@ -47,6 +50,7 @@ if ($addPwOiD && $department > 0) {
 
 // pull valid projects and their percent complete information
 // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
+$working_hours = $w2Pconfig['daily_working_hours'];
 $q = new DBQuery;
 $q->addTable('projects', 'pr');
 $q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
@@ -83,7 +87,6 @@ $q->addGroup('pr.project_id');
 $q->addOrder('pr.project_name, task_end_date DESC');
 
 $projects = $q->loadList();
-$q->clear();
 
 // Don't push the width higher than about 1200 pixels, otherwise it may not display.
 $width = min(w2PgetParam($_GET, 'width', 600), 1400);
@@ -98,56 +101,55 @@ $gantt->localize();
 $tableTitle = ($proFilter == '-1') ? $AppUI->_('All Projects') : $projectStatus[$proFilter];
 $gantt->setTitle($tableTitle);
 $columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End');
-$columnSizes = array(160, 10, 70, 70);
+$columnSizes = array(160, 75, 75, 75);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 
 if (!$start_date || !$end_date) {
-  // find out DateRange from $projects array
-  $projectCount = count($projects);
-  for ($i = 0, $i_cmp = $projectCount; $i < $i_cmp; $i++) {
-  	$start = substr($projects[$i]['project_start_date'], 0, 10);
-  	$end = substr($projects[$i]['project_end_date'], 0, 10);
-  	if (0 == strlen($end)) {
-  	  $lastTask = $pjobj->getCriticalTasks($projects[$i]['project_id']);
-  	  $projects[$i]['project_actual_end_date'] = $lastTask[0]['task_end_date'];
-  	  $projects[$i]['project_end_date'] = $lastTask[0]['task_end_date'];
-  	  $end = substr($lastTask[0]['task_end_date'], 0, 10);
-  	}
+    // find out DateRange from $projects array
+    $projectCount = count($projects);
+    for ($i = 0, $i_cmp = $projectCount; $i < $i_cmp; $i++) {
+        $start = substr($projects[$i]['project_start_date'], 0, 10);
+        $end = substr($projects[$i]['project_end_date'], 0, 10);
+        if (0 == strlen($end)) {
+            $lastTask = $pjobj->getCriticalTasks($projects[$i]['project_id']);
+            $projects[$i]['project_actual_end_date'] = $lastTask[0]['task_end_date'];
+            $projects[$i]['project_end_date'] = $lastTask[0]['task_end_date'];
+            $end = substr($lastTask[0]['task_end_date'], 0, 10);
+        }
 
-  	$d_start = new CDate($start);
-  	$d_end = new CDate($end);
-  
-  	if ($i == 0) {
-      $min_d_start = $d_start;
-      $max_d_end = $d_end;
-      $start_date = $start;
-      $end_date = $end;
-  	} else {
-      if (Date::compare($min_d_start, $d_start) > 0) {
-      	$min_d_start = $d_start;
-      	$start_date = $start;
-      }
-      if (Date::compare($max_d_end, $d_end) < 0) {
-      	$max_d_end = $d_end;
-      	$end_date = $end;
-      }
-  	}
-  }
+        $d_start = new CDate($start);
+        $d_end = new CDate($end);
+
+        if ($i == 0) {
+            $min_d_start = $d_start;
+            $max_d_end = $d_end;
+            $start_date = $start;
+            $end_date = $end;
+        } else {
+            if (Date::compare($min_d_start, $d_start) > 0) {
+                $min_d_start = $d_start;
+                $start_date = $start;
+            }
+            if (Date::compare($max_d_end, $d_end) < 0) {
+                $max_d_end = $d_end;
+                $end_date = $end;
+            }
+        }
+    }
 }
 $gantt->setDateRange($start_date, $end_date);
 
 $row = 0;
-
 if (!is_array($projects) || 0 == count($projects)) {
     $d = new CDate();
     $columnValues = array('project_name' => $AppUI->_('No projects found'), 
                         'start_date' => $d->getDate(), 'end_date' => $d->getDate(),
-                        'actual_end' => $d->getDate());
+                        'actual_end' => '');
     $gantt->addBar($columnValues, ' ' , 0.6, 'red');
 } else {
 	foreach ($projects as $p) {
 
-		if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
+		if ($locale_char_set == 'utf-8') {
 			$name = strlen(utf8_decode($p['project_name'])) > 25 ? substr(utf8_decode($p['project_name']), 0, 22) . '...' : utf8_decode($p['project_name']);
 		} else {
 			//while using charset different than UTF-8 we need not to use utf8_decode
@@ -189,25 +191,19 @@ if (!is_array($projects) || 0 == count($projects)) {
 
         $columnValues = array('project_name' => $name, 'start_date' => $start,
                           'end_date' => $end, 'actual_end' => $actual_end);
-		$gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'], $p['project_active'], $progress);
+		$gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'],
+            $p['project_active'], $progress, $p['project_id']);
 
 		// If showAllGant checkbox is checked
 		if ($showAllGantt) {
 			// insert tasks into Gantt Chart
 			// select for tasks for each project
 
-			$q = new DBQuery;
-			$q->addTable('tasks');
-			$q->addQuery('DISTINCT tasks.task_id, tasks.task_name, tasks.task_start_date, tasks.task_end_date, tasks.task_duration, tasks.task_duration_type, tasks.task_milestone, tasks.task_dynamic');
-			$q->addJoin('projects', 'p', 'p.project_id = tasks.task_project');
-			$q->addWhere('p.project_id = ' . (int)$p['project_id']);
-			if ($sortTasksByName) {
-				$q->addOrder('tasks.task_name');
-			} else {
-				$q->addOrder('tasks.task_end_date ASC');
-			}
-			$tasks = $q->loadList();
-			$q->clear();
+            $task = new CTask();
+            $orderBy = ($sortTasksByName) ? 'task_name' : 'task_end_date ASC';
+            $tasks = $task->getAllowedTaskList($AppUI, $p['project_id'], $orderBy);
+            $bestColor = bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000');
+            
 			foreach ($tasks as $t) {
 				//Check if start date exists, if not try giving it the end date.
 				//If the end date does not exist then set it for today.
@@ -239,24 +235,24 @@ if (!is_array($projects) || 0 == count($projects)) {
 				$tEndObj = new CDate($t['task_end_date']);
 
 				if ($t['task_milestone'] != 1) {
-				  $gantt->addSubBar(substr(' --' . $t['task_name'], 0, 20). '...', 
-				    $tStart, $tEnd, $caption, $t['task_dynamic'] == 1 ? 0.1 : 0.6, $p['project_color_identifier'], $progress);
+                    $columnValues = array('task_name' => substr('  ' . $t['task_name'], 0, 20). '...',
+                        'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
+                    $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
+                    $gantt->addBar($columnValues, $t['task_percent_complete'].'% '.$AppUI->_('Complete'),
+                        $height, $p['project_color_identifier'], $p['project_active'],
+                        $t['task_percent_complete'], $t['task_id']);
 				} else {
 				  $gantt->addMilestone(array('-- ' . $t['task_name']), $t['task_start_date']);
 				}
 
-				// Insert workers for each task into Gantt Chart
-				$q = new DBQuery;
-				$q->addTable('user_tasks', 't');
-				$q->addQuery('DISTINCT contact_first_name, contact_last_name, t.task_id');
-				$q->addJoin('users', 'u', 'u.user_id = t.user_id', 'inner');
-				$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-				$q->addWhere('t.task_id = ' . (int)$t['task_id']);
-				$q->addOrder('user_username ASC');
-				$workers = $q->loadList();
-				$q->clear();
+                $task->task_id = $t['task_id'];
+				$workers = $task->getAssigned();
 				foreach ($workers as $w) {
-				  $label = '   * ' . $w['contact_first_name'] . ' ' . $w['contact_last_name'];
+                    $columnValues = array('user_name' => '    * '.$w['user_name'],
+                        'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
+                    $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
+                    $gantt->addBar($columnValues, $w['user_name'], 0.6, $p['project_color_identifier'],
+                        true, $t['task_percent_complete'], $t['task_id']);
 				}
 				// End of insert workers for each task into Gantt Chart
 			}

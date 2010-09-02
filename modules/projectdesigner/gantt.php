@@ -1,13 +1,13 @@
 <?php /* $Id$ $URL$ */
+if (!defined('W2P_BASE_DIR')) {
+	die('You should not access this file directly.');
+}
 
-/*
-* Gantt.php - by J. Christopher Pereira
-* PROJECTDESIGNER $Rev$
-*/
+global $caller, $locale_char_set, $showWork,              $showLabels,
+                $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, 
+    $showLowTasks, $user_id;
 
-ini_set('memory_limit', $w2Pconfig['reset_memory_limit']);
-
-global $caller, $locale_char_set, $showLabels, $showWork, $showLabels, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
+w2PsetExecutionConditions($w2Pconfig);
 
 $project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 $f = w2PgetParam($_REQUEST, 'f', 0);
@@ -17,19 +17,7 @@ $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : n
 $criticalTasksInverted = ($project_id > 0) ? getCriticalTasksInverted($project_id) : null;
 
 // pull valid projects and their percent complete information
-
-$q = new DBQuery;
-$q->addTable('projects', 'pr');
-$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date');
-$q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
-if ($project_id) {
-	$q->addWhere('pr.project_id = ' . (int)$project_id);
-}
-$q->addGroup('pr.project_id');
-$q->addOrder('project_name');
-$project->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-$projects = $q->loadHashList('project_id');
-$q->clear();
+$projects = $project->getAllowedProjects($AppUI->user_id, false);
 
 // pull tasks
 $q = new DBQuery;
@@ -70,7 +58,6 @@ switch ($f) {
 // get any specifically denied tasks
 $task = new CTask;
 $task->setAllowedSQL($AppUI->user_id, $q);
-
 $proTasks = $q->loadHashList('task_id');
 $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 
@@ -119,7 +106,11 @@ foreach ($proTasks as $row) {
 	$projects[$row['task_project']]['tasks'][] = $row;
 }
 $q->clear();
-$width = w2PgetParam($_GET, 'width', 600);
+
+$width = min(w2PgetParam($_GET, 'width', 600), 1400);
+$start_date = w2PgetParam($_GET, 'start_date', $start_min);
+$end_date = w2PgetParam($_GET, 'end_date', $end_max);
+
 //consider critical (concerning end date) tasks as well
 $start_min = substr($criticalTasksInverted[0]['task_start_date'], 0, 10);
 if ($start_min == '0000-00-00' || !$start_min) {
@@ -130,8 +121,6 @@ $end_max = substr($criticalTasks[0]['task_end_date'], 0, 10);
 if ($end_max == '0000-00-00' || !$end_max) {
 	$end_max = $projects[$project_id]['project_end_date'];
 }
-$start_date = w2PgetParam($_GET, 'start_date', $start_min);
-$end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
 $count = 0;
 
@@ -142,23 +131,11 @@ $gantt->setTitle($projects[$project_id]['project_name'], '#'.$projects[$project_
 
 $field = ($showWork == '1') ? 'Work' : 'Dur';
 $columnNames = array('Task name', $field, 'Start', 'Finish');
-$columnSizes = array(230, 60, 60, 60);
+$columnSizes = array(200, 50, 75, 75);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 
-//-----------------------------------------
-// nice Gantt image
-// if diff(end_date,start_date) > 90 days it shows only
-//week number
-// if diff(end_date,start_date) > 240 days it shows only
-//month number
-//-----------------------------------------
-if ($start_date && $end_date) {
-	$min_d_start = new CDate($start_date);
-	$max_d_end = new CDate($end_date);
-} else {
+if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
-	$min_d_start = new CDate();
-	$max_d_end = new CDate();
 	$d_start = new CDate();
 	$d_end = new CDate();
 	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
@@ -170,46 +147,23 @@ if ($start_date && $end_date) {
 		$d_end->Date($end);
 
 		if ($i == 0) {
-			$min_d_start = $d_start->duplicate();
-			$max_d_end = $d_end->duplicate();
+			$min_d_start = $d_start;
+			$max_d_end = $d_end;
 		} else {
-			if (Date::compare($min_d_start, $d_start) > 0) {
-				$min_d_start = $d_start->duplicate();
+            if (Date::compare($min_d_start, $d_start) > 0) {
+				$min_d_start = $d_start;
+                $start_date = $start;
 			}
 			if (Date::compare($max_d_end, $d_end) < 0) {
-				$max_d_end = $d_end->duplicate();
+				$max_d_end = $d_end;
+                $end_date = $end;
 			}
 		}
 	}
 }
 $gantt->setDateRange($start_date, $end_date);
-$graph = $gantt->getGraph();
-$df = $AppUI->getPref('SHDATEFORMAT');
-
-//This kludgy function echos children tasks as threads
-function showgtask(&$a, $level = 0) {
-	/* Add tasks to gantt chart */
-
-	global $gantt_arr;
-
-	$gantt_arr[] = array($a, $level);
-
-}
-
-function findgchild(&$tarr, $parent, $level = 0) {
-	global $projects;
-	$level = $level + 1;
-	$n = count($tarr);
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			showgtask($tarr[$x], $level);
-			findgchild($tarr, $tarr[$x]['task_id'], $level);
-		}
-	}
-}
 
 reset($projects);
-
 foreach ($projects as $p) {
 	$tnums = count($p['tasks']);
 
@@ -221,9 +175,7 @@ foreach ($projects as $p) {
 		}
 	}
 }
-
 $hide_task_groups = false;
-
 if ($hide_task_groups) {
 	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		// remove task groups
@@ -235,6 +187,7 @@ if ($hide_task_groups) {
 	}
 }
 
+$gantt->loadTaskArray($gantt_arr);
 $row = 0;
 for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
@@ -246,7 +199,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	}
 
 	$name = $a['task_name'];
-	if ($locale_char_set == 'utf-8' && function_exists('utf8_decode')) {
+	if ($locale_char_set == 'utf-8') {
 		$name = utf8_decode($name);
 	}
 	$name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;
@@ -265,14 +218,12 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	$end_date = $a['task_end_date'];
 
 	$end_date = new CDate($end_date);
-	//        $end->addDays(0);
 	$end = $end_date->getDate();
 
 	$start = new CDate($start);
-	//        $start->addDays(0);
 	$start = $start->getDate();
 
-	$progress = $a['task_percent_complete'] + 0;
+	$progress = (int) $a['task_percent_complete'];
 
 	if ($progress > 100) {
 		$progress = 100;
@@ -326,17 +277,10 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$start->addDays(0);
 		$s = $start->format($df);
 		if ($caller == 'todo') {
-			$bar = new MileStone($row++, array($name, $pname, '', $s, $s), $a['task_start_date'], $s);
+            $gantt->addMilestone(array($name, $pname, '', $s, $s), $a['task_start_date']);
 		} else {
-			$bar = new MileStone($row++, array($name, '', $s, $s), $a['task_start_date'], $s);
+            $gantt->addMilestone(array($name, '', $s, $s), $a['task_start_date']);
 		}
-		$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-		//caption of milestone should be date
-		if ($showLabels == '1') {
-			$caption = $start->format($df);
-		}
-		$bar->title->SetColor('#CC0000');
-		$graph->Add($bar);
 	} else {
 		$type = $a['task_duration_type'];
 		$dur = $a['task_duration'];
@@ -374,72 +318,18 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$dur .= ' h';
 		$enddate = new CDate($end);
 		$startdate = new CDate($start);
+        $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
 		if ($caller == 'todo') {
-			$bar = new GanttBar($row++, array($name, $pname, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
+            $columnValues = array('task_name' => $name, 'project_name' => $pname,
+              'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+              'actual_end' => '');
 		} else {
-			$bar = new GanttBar($row++, array($name, $dur, $startdate->format($df), $enddate->format($df)), substr($start, 2, 8), substr($end, 2, 8), $cap, $a['task_dynamic'] == 1 ? 0.1 : 0.6);
+            $columnValues = array('task_name' => $name, 'duration' => $dur,
+              'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
 		}
-		$bar->progress->Set(min(($progress / 100), 1));
-		if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-			$bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-		}
-		if ($a['task_dynamic'] == 1) {
-			if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-				$bar->title->SetFont(FF_CUSTOM, FS_BOLD, 8);
-			}
-			$bar->rightMark->Show();
-			$bar->rightMark->SetType(MARK_RIGHTTRIANGLE);
-			$bar->rightMark->SetWidth(3);
-			$bar->rightMark->SetColor('black');
-			$bar->rightMark->SetFillColor('black');
-
-			$bar->leftMark->Show();
-			$bar->leftMark->SetType(MARK_LEFTTRIANGLE);
-			$bar->leftMark->SetWidth(3);
-			$bar->leftMark->SetColor('black');
-			$bar->leftMark->SetFillColor('black');
-
-			$bar->SetPattern(BAND_SOLID, 'black');
-		}
-	}
-	//adding captions
-	$bar->caption = new TextProperty($caption);
-	$bar->caption->Align('left', 'center');
-	if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-		$bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
-	}
-
-	// show tasks which are both finished and past in (dark)gray
-	if ($progress >= 100 && $end_date->isPast() && get_class($bar) == 'ganttbar') {
-		$bar->caption->SetColor('darkgray');
-		$bar->title->SetColor('darkgray');
-		$bar->setColor('darkgray');
-		$bar->SetFillColor('darkgray');
-		$bar->SetPattern(BAND_SOLID, 'gray');
-		$bar->progress->SetFillColor('darkgray');
-		$bar->progress->SetPattern(BAND_SOLID, 'gray', 98);
-	}
-	$q = new DBQuery;
-	$q->addTable('task_dependencies');
-	$q->addQuery('dependencies_task_id');
-	$q->addWhere('dependencies_req_task_id=' . $a['task_id']);
-	$query = $q->loadList();
-
-	foreach ($query as $dep) {
-		// find row num of dependencies
-		for ($d = 0, $d_cmp = count($gantt_arr); $d < $d_cmp; $d++) {
-			if ($gantt_arr[$d][0]['task_id'] == $dep['dependencies_task_id']) {
-				$bar->SetConstrain($d, CONSTRAIN_ENDSTART);
-			}
-		}
+        $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
 	}
 	$q->clear();
-	$graph->Add($bar);
 }
-$today = new CDate();
-$vline = new GanttVLine($today->format(FMT_TIMESTAMP_DATE), $AppUI->_('Today', UI_OUTPUT_RAW));
-if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-	$vline->title->SetFont(FF_CUSTOM, FS_BOLD, 10);
-}
-$graph->Add($vline);
-$graph->Stroke();
+
+$gantt->render();

@@ -275,7 +275,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $date1 = new CDate('2010-08-07 00:00:00');
         $date2 = new CDate('2010-08-07 00:00:00');
 
-       $this->assertEquals(0, $date1->compare($date1, $date2));
+        $this->assertEquals(0, $date1->compare($date1, $date2));
     }
 
     /**
@@ -726,7 +726,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
         // Restore old working days
         $w2Pconfig['cal_working_days'] = $old_working_days;
-
     }
 
     /**
