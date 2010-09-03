@@ -233,7 +233,6 @@ function orderByName( x ){
 							<input type="text" class="text" name="contact_yahoo" value="<?php echo $row->contact_yahoo; ?>" maxlength="255" size="25" />
 						</td>
 					</tr>
-					</tr>
 					<tr>
 						<td align="right"><?php echo $AppUI->_('Birthday'); ?>:</td>
 						<td nowrap="nowrap">
@@ -252,7 +251,7 @@ function orderByName( x ){
 			</td>
 			<td valign="top" width="50%">
 				<strong><?php echo $AppUI->_('Contact Notes'); ?></strong><br />
-				<textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php echo $row->contact_notes; ?></textarea></td>
+				<textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php echo $row->contact_notes; ?></textarea>
 			</td>
 		</tr>
 		<tr>
