@@ -65,11 +65,11 @@ if (!defined('W2P_BASE_DIR')) {
                     <td colspan="2"><?php echo styleRenderBoxBottom(); ?></td>
                 </tr>
             </table>
-        <?php if ($AppUI->getVersion()) { ?>
-        <div align="center">
-            <span style="font-size:7pt">Version <?php echo $AppUI->getVersion(); ?></span>
-        </div>
-        <?php } ?>
+            <?php if ($AppUI->getVersion()) { ?>
+            <div align="center">
+                <span style="font-size:7pt">Version <?php echo $AppUI->getVersion(); ?></span>
+            </div>
+            <?php } ?>
         </form>
         <div align="center">
             <?php
