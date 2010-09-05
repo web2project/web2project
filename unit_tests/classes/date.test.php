@@ -781,6 +781,26 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests calcDuration with positive change across multiple days
+     */
+    public function testCalcDurationAcrossMultipleDaysPositive()
+    {
+       $date = new CDate('2010-09-01 15:00:00');
+
+       $this->assertEquals(11, $date->calcDuration(new CDate('2010-09-03 10:00:00')));
+    }
+
+    /**
+     * Tests calcDuration with positive change across non-working days
+     */
+    public function testCalcDurationAcrossNonWorkingDaysPositive()
+    {
+        $date = new CDate('2010-09-03 15:00:00');
+
+        $this->assertEquals(3, $date->calcDuration(new CDate('2010-09-06 10:00:00')));
+    }
+
+    /**
      * Tests calcDuration with negative change on same day
      */
     public function testCalcDurationIntraDayNegative()
@@ -1134,6 +1154,27 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
     }
+
+    /**
+     * Tests calcDuration with negative change across multiple days
+     */
+    public function testCalcDurationAcrossMultipleDaysNegative()
+    {
+        $date = new CDate('2010-09-03 10:00:00');
+
+        $this->assertEquals(-11, $date->calcDuration(new CDate('2010-09-01 15:00:00')));
+    }
+
+    /**
+     * Tests calcDuration with negative change across non-working days
+     */
+    public function testCalcDurationAcrossNonWorkingDaysNegative()
+    {
+        $date = new CDate('2010-09-06 10:00:00');
+
+        $this->assertEquals(-3, $date->calcDuration(new CDate('2010-09-03 15:00:00')));
+    }
+
 
     /**
      * Tests converting between timezones
