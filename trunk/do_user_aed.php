@@ -132,37 +132,3 @@ echo "<script language='javascript'>
 	      alert('The User Administrator has been notified to grant you access to the system and an email message was sent to you with your login info. Thank you very much.');
 	      history.go(-2);
       </script>";
-
-function notifyNewExternalUser($address, $username, $logname, $logpwd) {
-	global $AppUI;
-	$mail = new Mail;
-	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
-			$email = $AppUI->user_email;
-		} else {
-			$email = 'web2project@web2project.net';
-		}
-
-		$mail->To($address);
-		$mail->Subject('New Account Created');
-		$mail->Body('You have signed up for a new account on ' . w2PgetConfig('company_name') . ".\n\n" . "Once the administrator approves your request, you will receive an email with confirmation.\n" . "Your login information are below for your own record:\n\n" . 'Username:	' . $logname . "\n" . 'Password:	' . $logpwd . "\n\n" . "You may login at the following URL: " . W2P_BASE_URL . "\n\n" . "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name') . " Support Staff.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****');
-		$mail->Send();
-	}
-}
-
-function notifyHR($address, $username, $uaddress, $uusername, $logname, $logpwd, $userid) {
-	global $AppUI;
-	$mail = new Mail;
-	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
-			$email = $AppUI->user_email;
-		} else {
-			$email = 'web2project@web2project.net';
-		}
-
-		$mail->To($address);
-		$mail->Subject('New External User Created');
-		$mail->Body('A new user has signed up on ' . w2PgetConfig('company_name') . ". Please go through the user details below:\n" . 'Name:	' . $uusername . "\n" . 'Username:	' . $logname . "\n" . 'Email:	' . $uaddress . "\n\n" . 'You may check this account at the following URL: ' . W2P_BASE_URL . '/index.php?m=admin&a=viewuser&user_id=' . $userid . "\n\n" . "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name') . " Taskforce.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****');
-		$mail->Send();
-	}
-}
