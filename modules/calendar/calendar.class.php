@@ -831,10 +831,8 @@ class CEvent extends CW2pObject {
 
 		$body = '';
 		if ($clash) {
-			$body .= "You have been invited to an event by $AppUI->user_first_name $AppUI->user_last_name\n";
-			$body .= "However, either you or another intended invitee has a competing event\n";
-			$body .= "$AppUI->user_first_name $AppUI->user_last_name has requested that you reply to this message\n";
-			$body .= "and confirm if you can or can not make the requested time.\n\n";
+			$emailManager = new w2p_Output_EmailManager();
+            $body .= $emailManager->getCalendarConflictEmail($AppUI);
 		}
 		$body .= $AppUI->_('Event') . ":\t" . $this->event_title . "\n";
 		if (!$clash) {

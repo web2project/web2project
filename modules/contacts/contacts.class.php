@@ -324,22 +324,9 @@ class CContact extends CW2pObject {
 		$mail->Subject('Hello', $locale_char_set);
 
 		if ('' != $contactMethods['email_primary']) {
-			$q = new DBQuery;
-			$q->addTable('companies');
-			$q->addQuery('company_id, company_name');
-			$q->addWhere('company_id = ' . (int)$this->contact_company);
-			$contact_company = $q->loadHashList();
-			$q->clear();
+            $emailManager = new w2p_Output_EmailManager();
+            $body = $emailManager->getContactUpdateNotify($AppUI, $this);
 
-			$body = "Dear: $this->contact_title $this->contact_first_name $this->contact_last_name,";
-			$body .= "\n\nIt was very nice to visit you and " . $contact_company[$this->contact_company] . ". Thank you for all the time that you spent with me.";
-			$body .= "\n\nI have entered the data from your business card into my contact data base so that we may keep in touch.";
-			$body .= "\n\nWe have implemented a system which allows you to view the information that I've recorded and give you the opportunity to correct it or add information as you see fit. Please click on this link to view what I've recorded...";
-			$body .= "\n\n" . $AppUI->_('URL') . ":     " . W2P_BASE_URL . "/updatecontact.php?updatekey=$this->contact_updatekey";
-			$body .= "\n\nI assure you that the information will be held in strict confidence and will not be available to anyone other than me. I realize that you may not feel comfortable filling out the entire form so please supply only what you're comfortable with.";
-			$body .= "\n\nThank you. I look forward to seeing you again, soon.";
-			$body .= "\n\nBest Regards,";
-			$body .= "\n\n$AppUI->user_first_name $AppUI->user_last_name";
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}
 
