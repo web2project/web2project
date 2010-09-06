@@ -277,7 +277,7 @@ class CTaskLog extends CW2pObject
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        if (ctype_alnum($this->task_log_hours)) {
+        if (!((float) $this->task_log_hours)) {
             $errorArray['task_log_hours'] = $baseErrorMsg . 'task_log_hours is not a number';
         }
 
