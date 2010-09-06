@@ -429,54 +429,19 @@ class CUser extends CW2pObject {
 		global $AppUI;
 		
 		$q = new DBQuery;  		
-    $q->addQuery('users.user_contact,users.user_id,co.contact_first_name,co.contact_last_name,co.contact_id'); 
-    $q->addTable('users');
-    $q->addJoin('contacts','co','co.contact_id = users.user_contact','inner');    
-    $q->addWhere('users.user_contact = ' . $AppUI->user_id . ' or (' . getPermsWhereClause('companies', 'user_company') . ')' );
-    $q->addOrder('contact_first_name, contact_last_name');
-  	$result = $q->loadList();
-  	$retres = array();
-  	
-  	foreach ($result as $user) {
-    	if (self::isUserActive($user["user_id"])) {
-    		$retres[] = $user;
-    	}
-  	}
+        $q->addQuery('users.user_contact,users.user_id,co.contact_first_name,co.contact_last_name,co.contact_id');
+        $q->addTable('users');
+        $q->addJoin('contacts','co','co.contact_id = users.user_contact','inner');
+        $q->addWhere('users.user_contact = ' . $AppUI->user_id . ' or (' . getPermsWhereClause('companies', 'user_company') . ')' );
+        $q->addOrder('contact_first_name, contact_last_name');
+        $result = $q->loadList();
+        $retres = array();
+
+        foreach ($result as $user) {
+            if (self::isUserActive($user["user_id"])) {
+                $retres[] = $user;
+            }
+        }
 		return $retres;  	
   }
-}
-
-function notifyNewUser($address, $username) {
-	global $AppUI;
-	$mail = new Mail;
-	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
-			$email = $AppUI->user_email;
-		} else {
-			return false;
-		}
-
-		$mail->To($address);
-		$mail->Subject('New Account Created');
-		$mail->Body("Dear $username,\n\n" . "Congratulations! Your account has been activated by the administrator.\n" . "Please use the login information provided earlier.\n\n" . "You may login at the following URL: " . W2P_BASE_URL . "\n\n" . "If you have any difficulties or questions, please ask the administrator for help.\n" . "Assuring you the best of our attention at all time.\n\n" . "Our Warmest Regards,\n\n" . "The Support Staff.\n\n" . "****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****");
-		$mail->Send();
-	}
-}
-
-function notifyNewUserCredentials($address, $username, $logname, $logpwd) {
-	global $AppUI, $w2Pconfig;
-	$mail = new Mail;
-	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
-			$email = $AppUI->user_email;
-		} else {
-			$email = "web2project@" . $AppUI->cfg['site_domain'];
-		}
-
-		$mail->To($address);
-		$mail->Subject('New Account Created - web2Project Project Management System');
-		$mail->Body($username . ",\n\n" . "An access account has been created for you in our web2Project project management system.\n\n" . "You can access it here at " . w2PgetConfig('base_url') . "\n\n" . "Your username is: " . $logname . "\n" . "Your password is: " . $logpwd . "\n\n" .
-			"This account will allow you to see and interact with projects. If you have any questions please contact us.");
-		$mail->Send();
-	}
 }
