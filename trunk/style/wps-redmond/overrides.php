@@ -101,3 +101,7 @@ class CTabBox extends CTabBox_core {
 		}
 	}
 }
+
+function styleRenderBoxTop() { }
+
+function styleRenderBoxBottom() { }
