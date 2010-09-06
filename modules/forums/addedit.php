@@ -63,7 +63,7 @@ function submitIt(){
 	if(form.forum_name.value.search(/^\s*$/) >= 0 ) {
 		alert("<?php echo $AppUI->_('forumName', UI_OUTPUT_JS); ?>");
 		form.forum_name.focus();
-	} else if(form.forum_owner.selectedIndex < 1) {
+	} else if(form.forum_owner.value < 1) {
 		alert("<?php echo $AppUI->_('forumSelectOwner', UI_OUTPUT_JS); ?>");
 		form.forum_owner.focus();
 	} else {
