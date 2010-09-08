@@ -38,16 +38,18 @@ if (!$link && $link_id > 0) {
     $AppUI->setMsg('Link');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect();
-} elseif (0 == $link_id && $project_id && $task_id) {
+} elseif (0 == $link_id && ($project_id || $task_id)) {
 
     // We are creating a link, so if we have them lets figure out the project
     // and task id
     $link->link_project = $project_id;
     $link->link_task    = $task_id;
 
-    $link_task = new CTask;
-    $link_task->load($task_id);
-    $link->task_name = $link_task->task_name;
+    if ($task_id) {
+        $link_task = new CTask;
+        $link_task->load($task_id);
+        $link->task_name = $link_task->task_name;
+    }
 }
 
 // setup the title block
