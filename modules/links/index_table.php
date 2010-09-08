@@ -2,7 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-global $AppUI, $deny1, $canRead, $canEdit, $project_id, $task_id, $showProject;
+global $AppUI, $deny1, $canRead, $canEdit, $project_id, $task_id, $showProject, $obj;
 
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
@@ -12,7 +12,7 @@ if ($canEdit) {
     $titleBlock = new CTitleBlock( '', '', $m, "$m.$a" );
     $titleBlock->addCell(
         '<input type="submit" class="button" value="'.$AppUI->_('new link').'">', '',
-        '<form action="?m=links&a=addedit&project_id='.$project_id.'&task_id='.$task_id.'" method="post" accept-charset="utf-8">', '</form>'
+        '<form action="?m=links&a=addedit&project_id='.$obj->task_project.'&task_id='.$task_id.'" method="post" accept-charset="utf-8">', '</form>'
     );
     $titleBlock->show();
 }
@@ -92,7 +92,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 		<?php echo '<a href="' . $row['link_url'] . '" target="_blank">' . $row['link_name'] . '</a>'; ?>
 	</td>
 	<td width="20%"><?php echo $row['link_description']; ?></td>
-        <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']]; ?></td> 
+        <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']]; ?></td>
 	<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['task_id']; ?>"><?php echo $row['task_name']; ?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $row['contact_first_name'] . ' ' . $row['contact_last_name']; ?></td>
 	<td width="15%" nowrap="nowrap" align="center">
