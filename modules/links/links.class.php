@@ -48,7 +48,7 @@ class CLink extends CW2pObject {
 
         // SETUP FOR LINK LIST
         $q = new DBQuery();
-        $q->addQuery('links.*');
+        $q->addQuery('DISTINCT links.*');
         $q->addQuery('contact_first_name, contact_last_name');
         $q->addQuery('project_name, project_color_identifier, project_status');
         $q->addQuery('task_name, task_id');
