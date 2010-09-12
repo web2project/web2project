@@ -2635,6 +2635,10 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
     }
+=======
+        $this->assertEquals(0,                                  $assigned_users[1][11]);
+        $this->assertEquals('Person',                           $assigned_users[1][12]);
+>>>>>>> Adding test for CTask->getDependencyList:unit_tests/modules/tasks.test.php
 
     /**
      * Test updating project of sub tasks with no task id passed
@@ -3835,7 +3839,3 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
     }
 }
-=======
-}
-?>
->>>>>>> Adding test for CTask->getAssignedUsers:unit_tests/modules/tasks.test.php
