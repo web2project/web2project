@@ -1134,6 +1134,111 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
     }
+///////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Tests compare function when days are greater and convert timezone
+     */
+    public function testCompareDayGreaterConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 00:00:00', 'America/Halifax');
+        $date2 = new CDate('2010-08-06 00:00:00', 'America/Chicago');
+
+        $this->assertEquals(1, $date1->compare($date1, $date2, true));
+    }
+
+    /**
+     * Tests compare function when days are the same, hours are greater
+     * and convert timezone
+     */
+    public function testCompareHourGreaterConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 00:00:00', 'America/Halifax');
+        $date2 = new CDate('2010-08-06 21:00:00', 'America/Chicago');
+
+        $this->assertEquals(1, $date1->compare($date1, $date2, true));
+    }
+
+    /**
+     * Tests compare function when days and hours are the same, minutes are
+     * greater and convert timezone
+     */
+    public function testCompareMinuteGreaterConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:01:00', 'America/Halifax');
+        $date2 = new CDate('2010-08-06 23:00:00', 'America/Chicago');
+
+        $this->assertEquals(1, $date1->compare($date1, $date2, true));
+    }
+
+    /**
+     * Tests compare function when days, hours and minutes are the same,
+     * seconds are greater and convert timezone
+     */
+    public function testCompareSecondGreaterConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:01:01');
+        $date2 = new CDate('2010-08-06 23:01:00');
+
+        $this->assertEquals(1, $date1->compare($date1, $date2, true));
+    }
+
+    /**
+     * Tests compare function when days are lesser and convert timezone
+     */
+    public function testCompareDayLesserConvertTz()
+    {
+        $date1 = new CDate('2010-08-06 00:00:00', 'America/Halifax');
+        $date2 = new CDate('2010-08-07 00:00:00', 'America/Chicago');
+
+        $this->assertEquals(-1, $date1->compare($date1, $date2, true));
+    }
+
+    /**
+     * Tests compare function when days are the same, hours are lesser
+     * and convert timezone
+     */
+    public function testCompareHourLesserConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:00:00', 'America/Halifax');
+        $date2 = new CDate('2010-08-07 02:00:00', 'America/Chicago');
+
+        $this->assertEquals(-1, $date1->compare($date1, $date2, true));
+    }
+
+    /**
+     * Tests compare function when days and hours are the same, minutes are
+     * lesser and convert timezone
+     */
+    public function testCompareMinuteLesserConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:00:00', 'America/Halifax');
+        $date2 = new CDate('2010-08-06 23:01:00', 'America/Chicago');
+
+        $this->assertEquals(-1, $date1->compare($date1, $date2, true));
+    }
+
+    /**
+     * Tests compare function when days, hours and minutes are the same,
+     * seconds are lesser and convert timezone
+     */
+    public function testCompareSecondLesserConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 01:01:00', 'America/Halifax');
+        $date2 = new CDate('2010-08-06 23:01:01', 'America/Chicago');
+
+        $this->assertEquals(-1, $date1->compare($date1, $date2, true));
+    }
+
+    /**
+     * Tests compare function when both dates are equal, convert timezones
+     */
+    public function testCompareEqualConvertTz()
+    {
+        $date1 = new CDate('2010-08-07 00:00:00', 'America/Halifax');
+        $date2 = new CDate('2010-08-06 22:00:00', 'America/Chicago');
+
+        $this->assertEquals(0, $date1->compare($date1, $date2, true));
+    }
 
     /**
      * Tests converting between timezones
