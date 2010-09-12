@@ -1134,7 +1134,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
     }
-///////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Tests compare function when days are greater and convert timezone
      */
@@ -1238,6 +1238,83 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $date2 = new CDate('2010-08-06 22:00:00', 'America/Chicago');
 
         $this->assertEquals(0, $date1->compare($date1, $date2, true));
+    }
+
+    /**
+     * Tests addDays function with a full positive day
+     */
+    public function testAddDaysPositiveFullDay()
+    {
+        $date = new CDate('2010-08-08 00:00:00');
+        $date->addDays(3);
+
+        $this->assertEquals('2010-08-11 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDays function with a full negative day
+     */
+    public function testAddDaysNegativeFullDay()
+    {
+        $date = new CDate('2010-08-08 00:00:00');
+        $date->addDays(-3);
+
+        $this->assertEquals('2010-08-05 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDays function with partial positive day
+     */
+    public function testAddDaysPositivePartialDay()
+    {
+        $date = new CDate('2010-08-08 00:00:00');
+        $date->addDays(2.5);
+
+        $this->assertEquals('2010-08-10 12:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Test addDays function with partial negative day
+     */
+    public function testAddDaysNegativePartialDay()
+    {
+        $date = new CDate('2010-08-08 00:00:00');
+        $date->addDays(-2.5);
+
+        $this->assertEquals('2010-08-05 12:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDays function with partial positive day spanning over midnight
+     */
+    public function testAddDaysPostivePartialDayAcrossDay()
+    {
+        $date = new CDate('2010-08-08 14:00:00');
+        $date->addDays(2.5);
+
+        $this->assertEquals('2010-08-11 02:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDays function when the days being added spans the end of a month
+     */
+    public function testAddDaysAcrossMonth()
+    {
+        $date = new CDate('2010-08-31 00:00:00');
+        $date->addDays(2);
+
+        $this->assertEquals('2010-09-02 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addDays function when the days being added spans the end of a year
+     */
+    public function testAddDaysAcrossYear()
+    {
+        $date = new CDate('2010-12-31 00:00:00');
+        $date->addDays(2);
+
+        $this->assertEquals('2011-01-02 00:00:00', $date->getDate(DATE_FORMAT_ISO));
     }
 
     /**
