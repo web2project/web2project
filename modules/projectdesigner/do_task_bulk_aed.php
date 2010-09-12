@@ -321,6 +321,13 @@ if (is_array($selected) && count($selected)) {
                     if (is_array($result)) {
                         break;
                     }
+                    // Option 9 - Mark as inactive
+                } elseif ($bulk_task_other == '9') {
+                    $upd_task->task_status = '-1';
+                    $result = $upd_task->store($AppUI);
+                    if (is_array($result)) {
+                        break;
+                    }
 					//Option 10 - Empty tasks description
 				} elseif ($bulk_task_other == '10') {
 					$upd_task->task_description = '';
