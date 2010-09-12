@@ -2145,7 +2145,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), false, false);
         $this->assertEquals('', $over_assigned);
 
-        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateAssigned.xml');
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateAssigned.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
 
