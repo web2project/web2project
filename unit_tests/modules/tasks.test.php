@@ -2080,6 +2080,30 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
     }
 
+
+    /**
+     * Tests updating assigned users for task
+     */
+     public function testUpdateAssigned()
+     {
+        global $w2Pconfig;
+
+        // god this is ugly but needs to be done to test this funcationlity properly
+        $old_config = $w2Pconfig['check_overallocation'];
+        $w2Pconfig['check_overallocation'] = true;
+
+        $this->obj->load(1);
+        $over_assigned = $this->obj->updateAssigned(1, array('1' => '99'), false, false);
+        $this->assertEquals('', $over_assigned);
+
+        $xml_file_dataset = $this->createXMLDataSet(dirname(__FILE__).'/../db_files/tasksTestUpdateAssigned.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
+
+
+        $w2Pconfig['check_overallocation'] = $old_config;
+     }
+
     /**
      * Tests updating assigned users for task
      */
