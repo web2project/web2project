@@ -59,7 +59,7 @@ function setTasksStartDate(form, datesForm) {
       	var threadst = window.frames['thread2']; //document.getElementById('thread2');
       	threadst.location = urlst;
 		setAMPM(datesForm.start_hour);
-            calcFinish(datesForm);
+        calcFinish(datesForm);
 	}
 }
 
@@ -411,81 +411,124 @@ function calcFinish(f) {
 			e.setDate(e.getDate() + 1);
 		}
 	}
-		
-	if ( durnType==24 ) {
-		if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
-                  fullWorkingDays = Math.ceil(inc);            
-      		e.setMinutes( 0 );
-		} else {
-		fullWorkingDays = Math.ceil(inc)+1;
-        }            
 
-		// Include start day as a working day (if it is one)
-		if ( isInArray(working_days, e.getDay()) ) fullWorkingDays--;
+    switch(durnType) {
+        case 1:         //this handles hours as duration
+            hoursToAddToFirstDay = inc;
+            if ( e.getHours() + inc > (cal_day_end-workGap) ) {
+                hoursToAddToFirstDay = (cal_day_end-workGap) - e.getHours();
+            }
+            if ( hoursToAddToFirstDay > workHours ) {
+                hoursToAddToFirstDay = workHours;
+            }
+            inc -= hoursToAddToFirstDay;
+            hoursToAddToLastDay = inc % workHours;
+            fullWorkingDays = Math.floor((inc - hoursToAddToLastDay) / workHours);
 
-	 	for (var i = 0; i < fullWorkingDays; i++)
-		{
-			e.setDate(e.getDate() + 1);
-			if ( !isInArray(working_days, e.getDay()) ) i--;			
-		}
-		
-		if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
-                 e.setHours(cal_day_end);
-		     f.end_hour.value = cal_day_end;
-		     f.end_minute.value = '00';
-		} else {
-		f.end_hour.value = f.start_hour.value;
-		     f.end_minute.value = f.start_minute.value;
-	     }
-	} else {
-		
-		hoursToAddToFirstDay = inc;
-		if ( e.getHours() + inc > (cal_day_end-workGap) ) {
-			hoursToAddToFirstDay = (cal_day_end-workGap) - e.getHours();
-		}
-		if ( hoursToAddToFirstDay > workHours ) {
-			hoursToAddToFirstDay = workHours;
-		}
-		inc -= hoursToAddToFirstDay;
-		hoursToAddToLastDay = inc % workHours;
-		fullWorkingDays = Math.floor((inc - hoursToAddToLastDay) / workHours);
+            if (hoursToAddToLastDay <= 0 && !(hoursToAddToFirstDay==workHours)) {
+                e.setHours(e.getHours()+hoursToAddToFirstDay);
+            } else if (hoursToAddToLastDay == 0) {
+                e.setHours(e.getHours()+hoursToAddToFirstDay+workGap);
+            } else {
+                e.setHours(cal_day_start+hoursToAddToLastDay);
+                e.setDate(e.getDate() + 1);
+            }
 
-		if (hoursToAddToLastDay <= 0 && !(hoursToAddToFirstDay==workHours)) {
-			e.setHours(e.getHours()+hoursToAddToFirstDay);
-		} else if (hoursToAddToLastDay == 0) {
-			e.setHours(e.getHours()+hoursToAddToFirstDay+workGap);
-		} else {
-			e.setHours(cal_day_start+hoursToAddToLastDay);
-			e.setDate(e.getDate() + 1);
-		}
 
-			
-		if ((e.getHours() == cal_day_end || (e.getHours() - int_st_hour) == (workHours+workGap)) && mins > 0) {
-			e.setDate(e.getDate() + 1);
-			e.setHours(cal_day_start);
-		}
-			
-		f.end_minute.value = (e.getMinutes() < 10 ? '0'+e.getMinutes() : e.getMinutes());
-		
-		// boolean for setting later if we just found a non-working day
-		// and therefore do not have to add a day in the next loop
-		// (which would have caused to not respecting multiple non-working days after each other)
-		var g = false;
-	 	for (var i = 0, i_cmp = Math.ceil(fullWorkingDays); i < i_cmp; i++){
-			if (!g) {
-				e.setDate(e.getDate() + 1);
-			}
-			g = false;
-			// calculate overriden non-working days
-			if ( !isInArray(working_days, e.getDay()) ) {
-				e.setDate(e.getDate() + 1);
-				i--;
-				g = true;
-			}
-		}
-		f.end_hour.value = (e.getHours() < 10 ? '0'+e.getHours() : e.getHours());
-	}
-	
+            if ((e.getHours() == cal_day_end || (e.getHours() - int_st_hour) == (workHours+workGap)) && mins > 0) {
+                e.setDate(e.getDate() + 1);
+                e.setHours(cal_day_start);
+            }
+
+            f.end_minute.value = (e.getMinutes() < 10 ? '0'+e.getMinutes() : e.getMinutes());
+
+            // boolean for setting later if we just found a non-working day
+            // and therefore do not have to add a day in the next loop
+            // (which would have caused to not respecting multiple non-working days after each other)
+            var g = false;
+            for (var i = 0, i_cmp = Math.ceil(fullWorkingDays); i < i_cmp; i++){
+                if (!g) {
+                    e.setDate(e.getDate() + 1);
+                }
+                g = false;
+                // calculate overriden non-working days
+                if ( !isInArray(working_days, e.getDay()) ) {
+                    e.setDate(e.getDate() + 1);
+                    i--;
+                    g = true;
+                }
+            }
+            f.end_hour.value = (e.getHours() < 10 ? '0'+e.getHours() : e.getHours());
+            break;
+        case 24:
+            if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
+                fullWorkingDays = Math.ceil(inc);
+                e.setMinutes( 0 );
+            } else {
+                fullWorkingDays = Math.ceil(inc)+1;
+            }
+            // Include start day as a working day (if it is one)
+            if ( isInArray(working_days, e.getDay()) ) fullWorkingDays--;
+
+            for (var i = 0; i < fullWorkingDays; i++)
+            {
+                e.setDate(e.getDate() + 1);
+                if ( !isInArray(working_days, e.getDay()) ) i--;
+            }
+
+            if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
+                e.setHours(cal_day_end);
+                f.end_hour.value = cal_day_end;
+                f.end_minute.value = '00';
+            } else {
+                f.end_hour.value = f.start_hour.value;
+                f.end_minute.value = f.start_minute.value;
+            }
+            break;
+        case 168:
+            if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
+                fullWorkingDays = Math.ceil(inc);
+                e.setMinutes( 0 );
+            } else {
+                fullWorkingDays = Math.ceil(inc)+1;
+            }
+            fullWorkingDays = fullWorkingDays * working_days.length;
+            // Include start day as a working day (if it is one)
+            if ( isInArray(working_days, e.getDay()) ) fullWorkingDays--;
+
+            for (var i = 0; i < fullWorkingDays; i++)
+            {
+                e.setDate(e.getDate() + 1);
+                if ( !isInArray(working_days, e.getDay()) ) i--;
+            }
+
+            if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
+                e.setHours(cal_day_end);
+                f.end_hour.value = cal_day_end;
+                f.end_minute.value = '00';
+            } else {
+                f.end_hour.value = f.start_hour.value;
+                f.end_minute.value = f.start_minute.value;
+            }
+            break;
+        case 730:
+            var fullWorkingMonths = Math.ceil(inc);
+            e.setMinutes( 0 );
+            e.setMonth(e.getMonth() + fullWorkingMonths);
+
+            if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
+                e.setHours(cal_day_end);
+                f.end_hour.value = cal_day_end;
+                f.end_minute.value = '00';
+            } else {
+                f.end_hour.value = f.start_hour.value;
+                f.end_minute.value = f.start_minute.value;
+            }
+            break;
+        default:
+            alert('This duration type is not recognized.');
+    }
+
 	var tz1 = '';
 	var tz2 = '';
 
