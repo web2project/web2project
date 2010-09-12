@@ -409,6 +409,7 @@ class CUser extends CW2pObject {
 		
 		if (count($res) == 1) {
 			return $res[0]['contact_first_name'] . ' ' . $res[0]['contact_last_name']; 	
+
 		}
 		
 		return $this->user_username;
