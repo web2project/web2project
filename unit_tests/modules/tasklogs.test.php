@@ -325,29 +325,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Test the check function with a string
-     */
-    public function testCreateStringAsHours()
-    {
-        global $AppUI;
-
-        $this->obj->bind($this->post_data, null, true, true);
-        $this->obj->task_log_hours = 'abcd';
-        $errorArray = $this->obj->store($AppUI);
-
-        /**
-        * Verify we got the proper error message
-        */
-        $this->AssertEquals(1, count($errorArray));
-        $this->assertArrayHasKey('task_log_hours', $errorArray);
-
-        /**
-        * Verify that task_log_id was not set
-        */
-        $this->AssertEquals(0, $this->obj->task_log_id);
-    }
-
-    /**
      * Test canDelete with proper permissions
      */
     public function testCanDelete()

@@ -200,7 +200,7 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
     {
       global $AppUI;
 
-      unset($this->post_data['link_url']);
+      $this->post_data['link_url'] = '';
       $this->obj->bind($this->post_data);
       $errorArray = $this->obj->store($AppUI);
 
