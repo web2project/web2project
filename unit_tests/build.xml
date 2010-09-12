@@ -8,6 +8,7 @@
   </target>
 
   <target name="run-tests">
+    <mkdir dir="reports" />
     <phpunit codecoverage="false" haltonfailure="false" haltonerror="false">
       <formatter type="plain" usefile="false"/>
         <batchtest>
