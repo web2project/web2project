@@ -3967,7 +3967,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $project = $this->obj->getProject();
 
         $this->assertEquals('Test Project', $project['project_name']);
-        $this->assertEquals('TP', $project['project_short_name']);
-        $this->assertEquals('FFFFFF', $project['project_color_identifier']);
+        $this->assertEquals('TP',           $project['project_short_name']);
+        $this->assertEquals('FFFFFF',       $project['project_color_identifier']);
     }
 }
