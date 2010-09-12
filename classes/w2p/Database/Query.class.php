@@ -1009,6 +1009,7 @@ class w2p_Database_Query {
                 $fieldlist = implode(',', $quotedFieldnames);
                 $valuelist = implode(',', $this->value_list);
 
+
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
 		}
