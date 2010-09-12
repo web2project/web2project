@@ -2129,7 +2129,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
     }
 
-
     /**
      * Tests updating assigned users for task
      */
