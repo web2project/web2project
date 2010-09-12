@@ -460,6 +460,12 @@ function calcFinish(f) {
             }
             f.end_hour.value = (e.getHours() < 10 ? '0'+e.getHours() : e.getHours());
             break;
+        case 168:
+            inc = inc * working_days.length;
+            /*
+             * This falls through on purpose because it's all the same logic
+             *   after the weeks->days conversion immediately above.
+             */
         case 24:
             if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
                 fullWorkingDays = Math.ceil(inc);
@@ -467,32 +473,6 @@ function calcFinish(f) {
             } else {
                 fullWorkingDays = Math.ceil(inc)+1;
             }
-            // Include start day as a working day (if it is one)
-            if ( isInArray(working_days, e.getDay()) ) fullWorkingDays--;
-
-            for (var i = 0; i < fullWorkingDays; i++)
-            {
-                e.setDate(e.getDate() + 1);
-                if ( !isInArray(working_days, e.getDay()) ) i--;
-            }
-
-            if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
-                e.setHours(cal_day_end);
-                f.end_hour.value = cal_day_end;
-                f.end_minute.value = '00';
-            } else {
-                f.end_hour.value = f.start_hour.value;
-                f.end_minute.value = f.start_minute.value;
-            }
-            break;
-        case 168:
-            if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
-                fullWorkingDays = Math.ceil(inc);
-                e.setMinutes( 0 );
-            } else {
-                fullWorkingDays = Math.ceil(inc)+1;
-            }
-            fullWorkingDays = fullWorkingDays * working_days.length;
             // Include start day as a working day (if it is one)
             if ( isInArray(working_days, e.getDay()) ) fullWorkingDays--;
 
