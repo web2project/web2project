@@ -1366,7 +1366,11 @@ function w2p_textarea($content)
 
   if ($content != '') {
     $result = $content;
+<<<<<<< HEAD:includes/main_functions.php
     //$result = htmlentities($result, ENT_QUOTES, 'UTF-8');
+=======
+    $result = htmlentities($result, ENT_QUOTES, 'UTF-8');
+>>>>>>> tweaked the character encoding to close http://bugs.web2project.net/view.php?id=397 and http://bugs.web2project.net/view.php?id=381:includes/main_functions.php
 
     /*
      * Thanks to Alison Gianotto for two regular expressions to make our
