@@ -3847,4 +3847,32 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('TP',           $project['project_short_name']);
         $this->assertEquals('FFFFFF',       $project['project_color_identifier']);
     }
+
+    /**
+     * Tests updating subtasks status with no task id passed
+     */
+    public function testUpdateSubTasksStatusNoTaskId()
+    {
+        $this->obj->load(11);
+
+        $this->obj->updateSubTasksStatus(99);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateSubTasksStatusNoTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
+    }
+
+    /**
+     * Tests updating subtasks status with a task id passed
+     */
+    public function testUpdateSubTasksStatusTaskId()
+    {
+        $this->obj->load(1);
+
+        $this->obj->updateSubTasksStatus(99, 11);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateSubTasksStatusTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
+    }
 }
