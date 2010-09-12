@@ -25,6 +25,7 @@
  */
 global $AppUI;
 global $_DATE_TIMEZONE_DATA;
+global $w2Pconfig;
 
 require_once '../base.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
@@ -647,6 +648,85 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $date->setTime(12, 12, 61);
 
         $this->assertEquals('2010-08-11 12:12:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests isWorkingDay with a proper working day
+     */
+    public function testIsWorkingDayYes()
+    {
+        global $w2Pconfig;
+
+        // Save old working days, and set our own for testing
+        $old_working_days               = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
+
+        $date = new CDate('2010-08-11 00:00:00');
+
+        $this->assertTrue($date->isWorkingDay());
+
+        // Restore old working days
+        $w2Pconfig['cal_working_days'] = $old_working_days;
+    }
+
+    /**
+     * Tests isWorkingDay with a non working day
+     */
+    public function testIsWorkingDayNo()
+    {
+        global $w2Pconfig;
+
+        // Save old working day, and set our own for testing
+        $old_working_days               = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days']  = '1,2,3,4,5';
+
+        $date = new CDate('2010-08-08 00:00:00');
+
+        $this->assertFalse($date->isWorkingDay());
+
+        // Restore old working days
+        $w2Pconfig['cal_working_days'] = $old_working_days;
+    }
+
+    /**
+     * Tests isWorkingDay with a proper working day, and cal_working_days
+     * is null
+     */
+    public function testIsWorkingDayNullWorkingDaysYes()
+    {
+        global $w2Pconfig;
+
+        // Save old working day, and set our won for testing
+        $old_working_days               = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days']  = null;
+
+        $date = new CDate('2010-08-10 00:00:00');
+
+        $this->assertTrue($date->isWorkingDay());
+
+        // Restore old working days
+        $w2Pconfig['cal_working_days'] = $old_working_days;
+    }
+
+    /**
+     * Tests isWorkingDay with a non working day, and call_working_days
+     * is null
+     */
+    public function testIsWorkingDayNullWorkingDaysNo()
+    {
+        global $w2Pconfig;
+
+        // Save old working day, and set our won for testing
+        $old_working_days               = $w2Pconfig['cal_working_days'];
+        $w2Pconfig['cal_working_days']  = null;
+
+        $date = new CDate('2010-08-07 00:00:00');
+
+        $this->assertFalse($date->isWorkingDay());
+
+        // Restore old working days
+        $w2Pconfig['cal_working_days'] = $old_working_days;
+
     }
 
     /**
