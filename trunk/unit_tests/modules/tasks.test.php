@@ -2229,7 +2229,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(50,                                 $assigned_users[1][10]);
         $this->assertEquals(42,                                 $assigned_users[1][11]);
         $this->assertEquals('Person',                           $assigned_users[1][12]);
-
+    }
     /**
      * Test getting a list of dependencies
      */
