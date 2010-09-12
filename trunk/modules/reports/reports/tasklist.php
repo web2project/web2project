@@ -168,7 +168,7 @@ if ($do_report) {
 	if (count($allowedTasks)) {
 		$obj->getAllowedSQL($AppUI->user_id, $q);
 	}
-	$q->addOrder('task_start_date');
+	$q->addOrder('task_project', 'task_parent', 'task_start_date');
 	$Task_List = $q->exec();
 
 	if (function_exists('styleRenderBoxBottom')) {
@@ -211,7 +211,6 @@ if ($do_report) {
 
 		$users = null;
 		while ($Task_User = db_fetch_assoc($sql_user)) {
-			//$current_user = $Task_User['user_id'];
 			if ($users != null) {
 				$users .= ', ';
 			}
@@ -233,7 +232,9 @@ if ($do_report) {
 		if ($project_id == 0) {
 			$str .= '<td>' . $Tasks['project_name'] . '</td>';
 		}
-		$str .= '<td><a href="?m=tasks&a=view&task_id=' . $Tasks['task_id'] . '">' . $Tasks['task_name'] . '</a></td>';
+		$str .= '<td>';
+        $str .= ($Tasks['task_id'] == $Tasks['task_parent']) ? '' : '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" />';
+        $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $Tasks['task_id'] . '">' . $Tasks['task_name'] . '</a></td>';
 		$str .= '<td>' . nl2br($Tasks['task_description']) . '</td>';
 		$str .= '<td>' . $users . '</td>';
 		$str .= '<td align="center">';
@@ -293,19 +294,19 @@ if ($do_report) {
 
 		$pdf->ezTable($pdfdata, $columns, $title, $options);
 
-    $w2pReport = new CReport();
-    if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
-			fwrite($fp, $pdf->ezOutput());
-			fclose($fp);
-      echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
-			echo $AppUI->_('View PDF File');
-			echo '</a>';
-		} else {
-			echo 'Could not open file to save PDF.  ';
-			if (!is_writable($temp_dir)) {
-				'The files/temp directory is not writable.  Check your file system permissions.';
-			}
-		}
+        $w2pReport = new CReport();
+        if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
+            fwrite($fp, $pdf->ezOutput());
+            fclose($fp);
+            echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
+            echo $AppUI->_('View PDF File');
+            echo '</a>';
+        } else {
+            echo 'Could not open file to save PDF.  ';
+            if (!is_writable($temp_dir)) {
+                'The files/temp directory is not writable.  Check your file system permissions.';
+            }
+        }
 	}
 	echo '</td>
 </tr>

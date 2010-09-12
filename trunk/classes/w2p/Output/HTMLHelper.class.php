@@ -8,7 +8,7 @@
 
 class w2p_Output_HTMLHelper {
 
-    public static function renderContactList(CAppUI $AppUI, $contactList) {
+    public static function renderContactList(CAppUI $AppUI, array $contactList) {
 
         $output  = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
         $output .= '<tr><th>'.$AppUI->_('Name').'</th><th>'.$AppUI->_('Email').'</th>';
