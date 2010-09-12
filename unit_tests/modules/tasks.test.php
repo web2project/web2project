@@ -2279,11 +2279,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(42,                                 $assigned_users[1][11]);
         $this->assertEquals('Person',                           $assigned_users[1][12]);
 
-        $assigned_users = $this->obj->getAssignedUsers(200);
-
-        $this->assertEquals(0, count($assigned_users));
-    }
-
     /**
      * Test getting a list of dependencies
      */
@@ -3840,3 +3835,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
     }
 }
+=======
+}
+?>
+>>>>>>> Adding test for CTask->getAssignedUsers:unit_tests/modules/tasks.test.php
