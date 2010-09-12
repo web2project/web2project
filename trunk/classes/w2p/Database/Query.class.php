@@ -1559,7 +1559,7 @@ class w2p_Database_Query {
 			return false;
 		}
 		$id = db_insert_id();
-		return true;
+		return $id;
 	}
 
 	/**
