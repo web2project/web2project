@@ -5,6 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $obj = new CContact();
+
 if (!$obj->bind($_POST)) {
     $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
     $AppUI->redirect();
