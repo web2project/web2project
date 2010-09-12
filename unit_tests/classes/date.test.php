@@ -1318,6 +1318,46 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests calcDuration with positive change on same day
+     */
+    public function testCalcDurationIntraDayPositive()
+    {
+        $date = new CDate('2010-09-03 11:00:00');
+
+        $this->assertEquals(1, $date->calcDuration(new CDate('2010-09-03 12:00:00')));
+    }
+
+    /**
+     * Tests calcDuration with positive change across a day
+     */
+    public function testCalcDurationAcrossDayPostive()
+    {
+        $date = new CDate('2010-09-02 16:00:00');
+
+        $this->assertEquals(2, $date->calcDuration(new CDate('2010-09-03 10:00:00')));
+    }
+
+    /**
+     * Tests calcDuration with negative change on same day
+     */
+    public function testCalcDurationIntraDayNegative()
+    {
+        $date = new CDate('2010-09-03 12:00:00');
+
+        $this->assertEquals(-1, $date->calcDuration(new CDate('2010-09-03 11:00:00')));
+    }
+
+    /**
+     * Tests calcDuration with negative change across a day
+     */
+    public function testCalcDurationAcrossDayNegative()
+    {
+        $date = new CDate('2010-09-03 10:00:00');
+
+        $this->assertEquals(-2, $date->calcDuration(new CDate('2010-09-02 16:00:00')));
+    }
+
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
