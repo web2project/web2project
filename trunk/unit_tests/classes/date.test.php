@@ -526,6 +526,64 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests dateDiff when not passing an object
+     */
+    public function testDateDiffNotObject()
+    {
+        $date = new CDate('2010-08-11 00:00:00');
+
+        $this->assertFalse($date->dateDiff(1));
+    }
+
+    /**
+     * Tests dateDiff when the date being compared against is in the future and
+     * is a full day
+     */
+    public function testDateDiffFutureFullDay()
+    {
+       $date        = new CDate('2010-08-11 00:00:00');
+       $date_diff   = $date->dateDiff(new CDate('2010-08-13 00:00:00'));
+
+       $this->assertEquals(2, $date_diff);
+    }
+
+    /**
+     * Tests dateDiff when the date being compared against is in the past and
+     * is a full day
+     */
+    public function testDateDiffPastFullDay()
+    {
+        $date       = new CDate('2010-08-11 00:00:00');
+        $date_diff  = $date->dateDiff(new CDate('2010-08-07 00:00:00'));
+
+        $this->assertEquals(4, $date_diff);
+    }
+
+    /**
+     * Tests dateDiff when teh date being compared against is in the future and
+     * is a partial day
+     */
+    public function testDateDiffFuturePartialDay()
+    {
+        $date       = new CDate('2010-08-11 00:00:00');
+        $date_diff  = $date->dateDiff(new CDate('2010-08-13 12:00:00'));
+
+        $this->assertEquals(2, $date_diff);
+    }
+
+    /**
+     * Tests dateDiff when the date being compared against is in the past and is
+     * a partial day
+     */
+    public function testDateDiffPastPartialDay()
+    {
+        $date       = new CDate('2010-08-11 00:00:00');
+        $date_diff  = $date->dateDiff(new CDate('2010-08-07 06:00:00'));
+
+        $this->assertEquals(4, $date_diff);
+    }
+
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
