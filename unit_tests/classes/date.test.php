@@ -584,6 +584,72 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests setTime when hour is set and minute and second are not
+     */
+    public function testSetTimeHourNoMinuteNoSecond()
+    {
+        $date = new CDate('2010-08-11 00:00:00');
+        $date->setTime(12);
+
+        $this->assertEquals('2010-08-11 12:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setTime when hour and minute is set and second is not
+     */
+    public function testSetTimeHourMinuteNoSecond()
+    {
+        $date = new CDate('2010-08-11 00:00:00');
+        $date->setTime(12, 12);
+
+        $this->assertEquals('2010-08-11 12:12:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setTime when hour, minute and second are set
+     */
+    public function testSetTimeHourMinuteSecond()
+    {
+        $date = new CDate('2010-08-11 00:00:00');
+        $date->setTime(12, 12, 12);
+
+        $this->assertEquals('2010-08-11 12:12:12', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setTime with invalid hour
+     */
+    public function testSetTimeInvalidHour()
+    {
+        $date = new CDate('2010-08-11 00:00:00');
+        $date->setTime(25);
+
+        $this->assertEquals('2010-08-11 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setTime with invalid minute
+     */
+    public function testSetTimeInvalidMinute()
+    {
+        $date = new CDate('2010-08-11 00:00:00');
+        $date->setTime(12, 61);
+
+        $this->assertEquals('2010-08-11 12:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setTime with invalid second
+     */
+    public function testSetTimeInvalidSecond()
+    {
+        $date = new CDate('2010-08-11 00:00:00');
+        $date->setTime(12, 12, 61);
+
+        $this->assertEquals('2010-08-11 12:12:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
