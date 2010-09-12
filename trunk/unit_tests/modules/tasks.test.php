@@ -2581,9 +2581,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->updateSubTasksStatus(99, 11);
 
-        $xml_file_dataset = $this->createxmldataset($this->getdatasetpath().'tasksTestUpdateSubTasksStatusTaskId.xml');
-        $xml_db_dataset = $this->getconnection()->createdataset();
-        $this->asserttablesequal($xml_file_dataset->gettable('tasks'), $xml_db_dataset->gettable('tasks'));
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateSubTasksStatusTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
     }
 
     /**
@@ -2595,9 +2595,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->updateSubTasksProject(2);
 
-        $xml_file_dataset = $this->createxmldataset($this->getdatasetpath().'tasksTestUpdateSubTasksProjectNoTaskId.xml');
-        $xml_db_dataset = $this->getconnection()->createdataset();
-        $this->asserttablesequal($xml_file_dataset->gettable('tasks'), $xml_db_dataset->gettable('tasks'));
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetpath().'tasksTestUpdateSubTasksProjectNoTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
     }
 
     /**
@@ -2609,10 +2609,111 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->updateSubTasksProject(2, 11);
 
-        $xml_file_dataset = $this->createxmldataset($this->getdatasetpath().'tasksTestUpdateSubTasksProjectTaskId.xml');
-        $xml_db_dataset = $this->getconnection()->createdataset();
-        $this->asserttablesequal($xml_file_dataset->gettable('tasks'), $xml_db_dataset->gettable('tasks'));
+        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestUpdateSubTasksProjectTaskId.xml');
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
+    }
 
+    /**
+     * Tests checking time information priviliges when user is a task owner
+     */
+    public function testCanUserEditTimeInformationTaskOwner()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(1);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = true;
+
+        $this->assertTrue(@$this->obj->canUserEditTimeInformation());
+
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
+    }
+
+    /**
+     * Tests checking time information priviliges when user is project owner
+     */
+    public function testCanUserEditTimeInformationProjectOwner()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(4);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = true;
+
+        $this->assertTrue(@$this->obj->canUserEditTimeInformation());
+
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
+    }
+
+    /**
+     * Tests checking time information priviliges when user is admin
+     */
+    public function testCanUserEditTimeInformationAdmin()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(4);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = true;
+
+        $this->assertTrue(@$this->obj->canUserEditTimeInformation());
+
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
+    }
+
+    /**
+     * Tests checking time information priviliges without acess
+     */
+    public function testCanUserEditTimeInformationNoAccess()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(4);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = true;
+
+        // Login as another user for permission purposes
+        $old_AppUI = $AppUI;
+        $AppUI  = new CAppUI;
+        $_POST['login'] = 'login';
+        $_REQUEST['login'] = 'sql';
+
+        $this->assertFalse(@$this->obj->canUserEditTimeInformation());
+
+        $AppUI = $old_AppUI;
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
+    }
+
+    /**
+     * Tests checking time information privileges with no rescrtions
+     */
+    public function testCanUserEditTimeInformationNoRestriction()
+    {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->obj->load(4);
+
+        // Ensure our global setting for restrict_task_time_editing is set properly for this
+        $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
+        $w2Pconfig['restrict_task_time_editing'] = false;
+
+        $this->assertTrue(@$this->obj->canUserEditTimeInformation());
+
+        $w2Pconfig['restrict_task_time_editing'] = $old_restrict_task_time_editing;
     }
 
     /**
