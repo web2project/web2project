@@ -30,10 +30,7 @@ global $w2p_performance_old_dbqueries;
 global $AppUI;
 global $tracking_dynamics;
 global $tracked_dynamics;
-<<<<<<< HEAD:unit_tests/modules/tasks.test.php
 global $w2Pconfig;
-=======
->>>>>>> Adding test for CTask->get_deps_max_end_date. Updating db files due to changes in behaviour when properly adding $tracked_dynamics to the global scope of the tests.:unit_tests/modules/tasks.test.php
 
 require_once '../base.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
