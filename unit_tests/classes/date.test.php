@@ -76,14 +76,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
     private $old_cal_day_end;
 
     /**
-     * Date object to be shared with tests
-     *
-     * @param CDate
-     * @access private
-     */
-    private $date;
-
-    /**
      * Save our global settings before running tests
      */
     protected function setUp()
