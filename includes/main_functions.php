@@ -85,6 +85,9 @@ function w2p_autoload($class_name) {
         case 'cprojectdesigneroptions':
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
+        case 'cprojectdesigneroptions':
+            require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
+            break;
 
         default:
             if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
