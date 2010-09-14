@@ -792,8 +792,8 @@ class CProject extends CW2pObject {
 	public static function updateStatus(CAppUI $AppUI = null, $projectId, $statusId) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
-		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId > 0) {
+        $perms = $AppUI->acl();
+		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
 			$q = new DBQuery;
 			$q->addTable('projects');
 			$q->addUpdate('project_status', $statusId);
