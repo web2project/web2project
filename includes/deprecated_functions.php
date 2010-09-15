@@ -124,3 +124,8 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd) {
 		$mail->Send();
 	}
 }
+
+function clean_value($str) {
+    $bad_values = array("'");
+    return str_replace($bad_values, '', $str);
+}
