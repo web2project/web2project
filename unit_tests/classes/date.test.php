@@ -1175,6 +1175,56 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(-3, $date->calcDuration(new CDate('2010-09-03 15:00:00')));
     }
 
+    /**
+     * Tests workingDaysInSpan on same day
+     */
+    public function testWorkingDaysInSpanSameDay()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+
+        $this->assertEquals(1, $date->workingDaysInSpan(new CDate('2010-09-14 12:00:00')));
+    }
+
+    /**
+     * Tests workingDaysInSpan with multiple positive days
+     */
+    public function testWorkingDaysInSpanMultiDaysPositive()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+
+        $this->assertEquals(3, $date->workingDaysInSpan(new CDate('2010-09-16 12:00:00')));
+    }
+
+    /**
+     * Tests workingDaysInSpan with multiple negative days
+     */
+    public function testWorkingDaysInSpanMultiDaysNegative()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+
+        $this->assertEquals(2, $date->workingDaysInSpan(new CDate('2010-09-12 10:00:00')));
+    }
+
+    /**
+     * Test workingDaysInSpan with multiple positive days including non
+     * working days
+     */
+    public function testWorkingDaysInSpanMultiDaysPositiveWithNonWorking()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+
+        $this->assertEquals(5, $date->workingDaysInSpan(new CDate('2010-09-20 10:00:00')));
+    }
+
+    /**
+     * Test workingDaysInSpan with multiple negative days including non
+     * working days
+     */
+    public function testWorkingDaysInSpanMultiDaysNegativeWithNonWorking()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+        $this->assertEquals(3, $date->workingDaysInSpan(new CDate('2010-09-10 10:00:00')));
+    }
 
     /**
      * Tests converting between timezones
