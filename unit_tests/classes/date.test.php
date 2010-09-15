@@ -1227,6 +1227,30 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests Duplicate
+     */
+    public function testDuplicate()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+        $date2 = $date->duplicate();
+
+        $this->assertEquals($date, $date2);
+    }
+
+    /**
+     * Test Duplicate after changing one of the properties
+     */
+    public function testDuplicateDifferent()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+        $date2 = $date->duplicate();
+
+        $date->minute = 15;
+
+        $this->assertNotEquals($date, $date2);
+    }
+
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
