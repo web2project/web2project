@@ -55,9 +55,9 @@ $text .= sprintf("%s\r\n", "");
 $contactList = CContact::searchContacts($AppUI);
 	
 foreach ($contactList as $contact) {
-	$contact = new CContact();
-    $contact->contact_id = $contact['contact_id'];
-    $contactMethods = $contact->getContactMethods();
+	$myContact = new CContact();
+    $myContact->contact_id = $contact['contact_id'];
+    $contactMethods = $myContact->getContactMethods();
     
     // Fields 1- 10
 	$text .= sprintf("\"\",\"%s\",\"\",\"%s\",\"\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",", $contact['contact_first_name'], $contact['contact_last_name'], $contact['company_name'], $contact['dept_name'], $contact['contact_title'], $contact['contact_address1'], $contact['contact_address2']);
