@@ -489,7 +489,7 @@ class w2p_Utilities_Date extends Date {
 				$f->setHour($f->getHour() + $hoursToAddToFirstDay);
 			} elseif ($hoursToAddToLastDay == 0) {
 				$f->setHour($f->getHour() + $hoursToAddToFirstDay + $workGap);
-			} else {
+            } else {
 				$f->setHour($cal_day_start + $hoursToAddToLastDay);
 				$f->addDays(1);
 			}
