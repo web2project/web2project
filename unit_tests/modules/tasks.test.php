@@ -3761,18 +3761,4 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
     }
-
-    /**
-     * Test getting the project of currently loaded task
-     */
-    public function testGetProject()
-    {
-        $this->obj->load(1);
-
-        $project = $this->obj->getProject();
-
-        $this->assertEquals('Test Project', $project['project_name']);
-        $this->assertEquals('TP', $project['project_short_name']);
-        $this->assertEquals('FFFFFF', $project['project_color_identifier']);
-    }
 }
