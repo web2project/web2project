@@ -1922,16 +1922,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Tests that dependentTasks returns proper list if object id is set
-     */
-    public function testDependentTasksTaskFromObject()
-    {
-        $this->obj->load(28);
-        $result = $this->obj->dependentTasks();
-        $this->assertEquals('29,30', $result);
-    }
-
-    /**
      * Tests that dependentTasks returns proper list is returned if task id is
      * passed in as well as object id set
      */
@@ -1990,6 +1980,16 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
             $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_updated']));
             $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_updated']));
         }
+    }
+
+    /**
+     * Tests that dependentTasks returns proper list if object id is set
+     */
+    public function testDependentTasksTaskFromObject()
+    {
+        $this->obj->load(28);
+        $result = $this->obj->dependentTasks();
+        $this->assertEquals('29,30', $result);
     }
 
     /**
