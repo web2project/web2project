@@ -174,46 +174,6 @@ class CContact extends CW2pObject {
 		return $results;
 	}
 
-	public function setContactMethods(array $methods) {
-		$q = new DBQuery;
-		$q->setDelete('contacts_methods');
-		$q->addWhere('contact_id=' . (int)$this->contact_id);
-		$q->exec();
-		$q->clear();
-
-		if (!empty($methods)) {
-			$q = new DBQuery;
-			$q->addTable('contacts_methods');
-			$q->addInsert('contact_id', (int)$this->contact_id);
-			foreach ($methods as $name => $value) {
-				if (!empty($value)) {
-					$q->addInsert('method_name', $name);
-					$q->addInsert('method_value', $value);
-					$q->exec();
-				}
-			}
-			$q->clear();
-		}
-	}
-
-	public function getContactMethods($methodsArray = null) {
-		$q = new DBQuery;
-		$q->addTable('contacts_methods');
-		$q->addQuery('method_name, method_value');
-		$q->addWhere('contact_id = ' . (int)$this->contact_id);
-        if (is_array($methodsArray)) {
-            $q->addWhere("method_name IN ('".implode("','", $methodsArray)."')");
-        }
-		$q->addOrder('method_name');
-		$contacts = $q->loadList();
-
-        foreach($contacts as $row => $data) {
-            $results[$data['method_name']] = $data['method_value'];
-        }
-
-		return $results;
-	}
-
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
 
