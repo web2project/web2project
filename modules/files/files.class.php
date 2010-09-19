@@ -42,12 +42,13 @@ class CFile extends CW2pObject {
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
         global $helpdesk_available;
-
         $perms = $AppUI->acl();
+        $stored = false;
 
-        $errorMsg = $this->check();
-        if ($errorMsg) {
-            return $errorMsg;
+        $errorMsgArray = $this->check();
+
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
         }
 
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
@@ -191,7 +192,8 @@ class CFile extends CW2pObject {
         if ($this->file_id == 0 && '' == $this->file_type) {
             $errorArray['file_type'] = $baseErrorMsg . 'file type is not set';
         }
-        return implode('; ', $errorArray);
+
+        return $errorArray;
 	}
 
 	public function checkout($userId, $fileId, $coReason) {
