@@ -838,8 +838,8 @@ class CEvent extends CW2pObject {
 		if (!$clash) {
 			$body .= $AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=calendar&a=view&event_id=" . $this->event_id . "\n";
 		}
-		$body .= $AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . "\n";
-		$body .= $AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . "\n";
+		$body .= $AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
+		$body .= $AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
 
 		// Find the project name.
 		if ($this->event_project) {
@@ -867,7 +867,6 @@ class CEvent extends CW2pObject {
 		$body .= $body_attend . "\n\n" . $this->event_description . "\n";
 
 		$mail->Body($body, $locale_char_set);
-
 		foreach ($users as $user) {
 			if (!$mail_owner && $user['user_id'] == $this->event_owner) {
 				continue;
@@ -1015,13 +1014,11 @@ class CEvent extends CW2pObject {
             if (($msg = parent::store())) {
                 return $msg;
             }
-            $stored = true;
         }
         if (0 == $this->event_id && $perms->checkModuleItem('events', 'add')) {
             if (($msg = parent::store())) {
                 return $msg;
             }
-            $stored = true;
         }
 
         return $stored;

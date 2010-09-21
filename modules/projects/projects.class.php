@@ -792,8 +792,8 @@ class CProject extends CW2pObject {
 	public static function updateStatus(CAppUI $AppUI = null, $projectId, $statusId) {
 		global $AppUI;
 
-    $perms = $AppUI->acl();
-		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId > 0) {
+        $perms = $AppUI->acl();
+		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
 			$q = new DBQuery;
 			$q->addTable('projects');
 			$q->addUpdate('project_status', $statusId);
@@ -994,14 +994,24 @@ function projects_list_data($user_id = false) {
 
 	// support critical tasks
 	$q->addInsertSelect('tasks_critical');
-	$q->addTable('tasks', 't');
-	$q->addQuery('task_project, task_id AS critical_task, task_end_date AS project_actual_end_date');
-	$sq = new DBQuery;
-	$sq->addTable('tasks', 'st');
-	$sq->addQuery('MAX(task_end_date)');
-	$sq->addWhere('st.task_project = t.task_project');
-	$q->addWhere('task_end_date = (' . $sq->prepare() . ')');
-	$q->addGroup('task_project');
+	$q->addTable('projects', 'p');
+	$q->addQuery('p.project_id');
+	$sq1 = new DBQuery;
+	$sq1->addTable('tasks', 'st');
+	$sq1->addQuery('MAX(st.task_id)');
+	$sq1->addWhere('st.task_project = p.project_id');
+	$ssq1 = new DBQuery;
+	$ssq1->addTable('tasks', 'sst');
+	$ssq1->addQuery('MAX(sst.task_end_date)');
+	$ssq1->addWhere('sst.task_project = p.project_id');
+	$ssq1->addWhere('sst.task_dynamic <> 1');
+	$sq1->addWhere('st.task_end_date = (' . $ssq1->prepare() . ')');
+	$q->addQuery('(' . $sq1->prepare() . ') AS critical_task');
+	$sq2 = new DBQuery;
+	$sq2->addTable('tasks', 't');
+	$sq2->addQuery('MAX(t.task_end_date)');
+	$sq2->addWhere('t.task_project = p.project_id');
+	$q->addQuery('(' . $sq2->prepare() . ') AS project_actual_end_date');
 	$tasks_critical = $q->exec();
 	$q->clear();
 

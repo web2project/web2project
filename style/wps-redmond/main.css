@@ -179,7 +179,7 @@ input:focus, textarea:focus {
   margin-left   : 2px;
   cursor        : pointer !important;
   -moz-border-radius : 3.5px;
-  -webkit-border-radius:3.5px;
+  -webkit-border-radius:3.5px;s
 }
 
 /* Focus action  */

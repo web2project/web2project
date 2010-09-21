@@ -42,10 +42,11 @@ class CFile extends CW2pObject {
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
         global $helpdesk_available;
-
         $perms = $AppUI->acl();
+        $stored = false;
 
         $errorMsgArray = $this->check();
+
         if (count($errorMsgArray) > 0) {
             return $errorMsgArray;
         }
@@ -56,8 +57,13 @@ class CFile extends CW2pObject {
         $this->file_date = $AppUI->convertToSystemTZ($this->file_date);
 
         if ($this->file_id && $perms->checkModuleItem('files', 'edit', $this->file_id)) {
+            // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user. 
+            // If not then we are just editing the file information alone. So we should leave the file_id as it is.
             $this->file_parent = $this->file_id;
-            $this->file_id = 0;
+            if ((int)$this->file_size > 0) {
+                $this->file_id = 0;
+                $this->file_owner = $AppUI->user_id;
+            }
             if (($msg = parent::store())) {
                 return $msg;
             }
@@ -186,6 +192,7 @@ class CFile extends CW2pObject {
         if ($this->file_id == 0 && '' == $this->file_type) {
             $errorArray['file_type'] = $baseErrorMsg . 'file type is not set';
         }
+
         return $errorArray;
 	}
 
@@ -330,7 +337,7 @@ class CFile extends CW2pObject {
         ** Negative value :<=> no filesize limit
         */
         $index_max_file_size = w2PgetConfig('index_max_file_size', 0);
-        if ($index_max_file_size < 0 || $obj->file_size <= $index_max_file_size * 1024) {
+        if ($this->file_size > 0 && ($index_max_file_size < 0 || (int) $this->file_size <= $index_max_file_size * 1024)) {
             // get the parser application
             $parser = $w2Pconfig['parser_' . $this->file_type];
             if (!$parser) {
@@ -436,22 +443,10 @@ class CFile extends CW2pObject {
                     //preparing users array
                     $q = new DBQuery;
                     $q->addTable('tasks', 't');
-                    $q->addQuery('t.task_id, cc.contact_first_name as
-                             creator_first_name, cc.contact_last_name as creator_last_name,
-                             oc.contact_first_name as owner_first_name,
-                             oc.contact_last_name as owner_last_name, a.user_id as assignee_id,
+                    $q->addQuery('t.task_id, a.user_id as assignee_id,
                              ac.contact_first_name as assignee_first_name,
                              ac.contact_last_name as assignee_last_name');
                     $q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
-
-                    $q->addJoin('users', 'o', 'o.user_id = t.task_owner');
-                    $q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
-                    $q->addQuery('oc.contact_id as owner_contact_id');
-
-                    $q->addJoin('users', 'c', 'c.user_id = t.task_creator');
-                    $q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
-                    $q->addQuery('cc.contact_id as creator_contact_id');
-
                     $q->addJoin('users', 'a', 'a.user_id = u.user_id');
                     $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
                     $q->addQuery('ac.contact_id as assignee_contact_id');
@@ -463,7 +458,7 @@ class CFile extends CW2pObject {
                     $q = new DBQuery;
                     $q->addTable('users', 'u');
                     $q->addTable('projects', 'p');
-                    $q->addQuery('u.*');
+                    $q->addQuery('u.user_id, u.user_contact AS owner_contact_id');
                     $q->addWhere('p.project_owner = u.user_id');
                     $q->addWhere('p.project_id = ' . (int)$this->file_project);
                     $this->_users = $q->loadList();
@@ -479,10 +474,6 @@ class CFile extends CW2pObject {
                     $contact->contact_id = $info['owner_contact_id'];
                     $email = $contact->getContactMethods(array('email_primary'));
                     $this->_users[$index]['owner_email'] = $email['email_primary'];
-
-                    $contact->contact_id = $info['creator_contact_id'];
-                    $email = $contact->getContactMethods(array('email_primary'));
-                    $this->_users[$index]['creator_email'] = $email['email_primary'];
 
                     $contact->contact_id = $info['assignee_contact_id'];
                     $email = $contact->getContactMethods(array('email_primary'));
@@ -504,8 +495,8 @@ class CFile extends CW2pObject {
                 } else { //sending mail to project owner
                     foreach ($this->_users as $row) { //there should be only one row
                         if ($row['user_id'] != $AppUI->user_id) {
-                            if ($mail->ValidEmail($row['user_email'])) {
-                                $mail->To($row['user_email'], true);
+                            if ($mail->ValidEmail($row['owner_email'])) {
+                                $mail->To($row['owner_email'], true);
                                 $mail->Send();
                             }
                         }
