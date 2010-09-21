@@ -65,29 +65,29 @@ $log_date = new CDate($log->task_log_date);
 	// please keep these lines on when you copy the source
 	// made by: Nicolas - http://www.javascript-page.com
 	// adapted by: Juan Carlos Gonzalez jcgonz@users.sourceforge.net
-	
+
 	var timerID       = 0;
 	var tStart        = null;
     var total_minutes = -1;
-	
+
 	function UpdateTimer() {
 	   if(timerID) {
 	      clearTimeout(timerID);
 	      clockID  = 0;
 	   }
-	
+
        // One minute has passed
        total_minutes = total_minutes+1;
-	   
+
 	   document.getElementById('timerStatus').innerHTML = '( '+total_minutes+' <?php echo $AppUI->_('minutes elapsed'); ?> )';
 
 	   // Lets round hours to two decimals
 	   var total_hours   = Math.round( (total_minutes / 60) * 100) / 100;
 	   document.editFrm.task_log_hours.value = total_hours;
-	   
+
 	   timerID = setTimeout('UpdateTimer()', 60000);
 	}
-	
+
 	function timerStart() {
 		if(!timerID){ // this means that it needs to be started
 			timerSet();
@@ -103,7 +103,7 @@ $log_date = new CDate($log->task_log_date);
 			timerStop();
 		}
 	}
-	
+
 	function timerStop() {
 	   if(timerID) {
 	      clearTimeout(timerID);
@@ -111,7 +111,7 @@ $log_date = new CDate($log->task_log_date);
           total_minutes = total_minutes-1;
 	   }
 	}
-	
+
 	function timerReset() {
 		document.editFrm.task_log_hours.value = '0.00';
         total_minutes = -1;
@@ -137,7 +137,7 @@ function setDate( frm_name, f_date ) {
 	} else {
       	fld_real_date.value = '';
 	}
-}	
+}
 </script>
 <!-- END OF TIMER RELATED SCRIPTS -->
 
@@ -148,8 +148,8 @@ function setDate( frm_name, f_date ) {
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="task_log_id" value="<?php echo $log->task_log_id; ?>" />
 	<input type="hidden" name="task_log_task" value="<?php echo $log->task_log_task; ?>" />
-	<input type="hidden" name="task_log_creator" value="<?php echo ($log->task_log_creator == 0 ? $AppUI->user_id : $log->task_log_creator); ?>" />
 	<input type="hidden" name="task_log_name" value="Update :<?php echo $log->task_log_name; ?>" />
+    <input type="hidden" name="task_log_record_creator" value="<?php echo (0 == $task_log_id ? $AppUI->user_id : $log->task_log_record_creator); ?>" />
 <table cellspacing="1" cellpadding="2" border="0" width="100%">
 <tr>
     <td width='40%' valign='top'>
@@ -181,18 +181,51 @@ echo ($canEditTask ? arraySelect($percent, 'task_percent_complete', 'size="1" cl
 if ($obj->task_owner != $AppUI->user_id) {
 	echo '<input type="checkbox" name="task_log_notify_owner" id="task_log_notify_owner" /></td><td valign="middle"><label for="task_log_notify_owner">' . $AppUI->_('Notify creator') . '</label>';
 }
-?>		 	
+?>
 		     </td>
 		   </tr>
 		</table>
 	</td>
 </tr>
 <tr>
+<?php
+    // If users are not allowed to add task logs for others
+    if (!$task->task_allow_other_user_tasklogs) {
+?>
+        <td><input type="hidden" name="task_log_creator" value="<?php echo ($log->task_log_creator == 0 ? $AppUI->user_id : $log->task_log_creator); ?>" /></td>
+<?php
+    // Users can add task logs for others
+    } else {
+
+        // If editing a task log use it's user id, otherwise default to current user(a little more user friendly)
+        ($obj->task_log_creator == 0) ? $user_id = $AppUI->user_id : $user_id = $obj->task_log_creator;
+?>
+    <td align="right">
+        <?php echo $AppUI->_('User'); ?>:
+    </td>
+    <td>
+        <select name="task_log_creator">
+            <option value=""></option>
+<?php
+        foreach ($task->getAssignedUsers($task->task_id) as $task_user) {
+            $task_user['user_id'] == $user_id ? $selected = 'selected="selected"' : $selected = '';
+?>
+            <option <?php echo $selected; ?> value="<?php echo $task_user['user_id']; ?>"><?php echo $task_user['contact_first_name'] . ' ' . $task_user['contact_last_name']; ?></option>
+<?php
+        }
+?>
+        </select>
+    </td>
+<?php
+    }
+?>
+</tr>
+<tr>
 	<td align="right">
 		<?php echo $AppUI->_('Hours Worked'); ?>
 	</td>
 	<td nowrap="nowrap">
-		<input type="text" style="text-align:right;" class="text" name="task_log_hours" value="<?php echo $log->task_log_hours; ?>" maxlength="8" size="4" /> 
+		<input type="text" style="text-align:right;" class="text" name="task_log_hours" value="<?php echo $log->task_log_hours; ?>" maxlength="8" size="4" />
 		<a class="button" href="javascript:;" onclick="javascript:timerStart()"><span id="timerStartStopButton"><?php echo $AppUI->_('Start'); ?></span></a>
 		<a class="button" href="javascript:;" onclick="javascript:timerReset()"><span id="timerResetButton"><?php echo $AppUI->_('Reset'); ?></span></a>
 		<span id='timerStatus'></span>

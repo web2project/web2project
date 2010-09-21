@@ -178,6 +178,7 @@
         <column>task_updated</column>
         <column>task_dep_reset_dates</column>
         <column>task_represents_project</column>
+        <column>task_allow_other_user_tasklogs</column>
         <row>
             <value>1</value>
             <value>Task</value>
@@ -209,6 +210,7 @@
             <value>1</value>
             <value>2009-07-05 15:43:00</value>
             <value>2009-07-05 15:43:00</value>
+            <value>0</value>
             <value>0</value>
             <value>0</value>
         </row>
@@ -245,6 +247,7 @@
             <value>2009-07-08 15:43:00</value>
             <value>0</value>
             <value>0</value>
+            <value>0</value>
         </row>
         <row>
             <value>3</value>
@@ -277,6 +280,7 @@
             <value>1</value>
             <value>Ignored in test</value>
             <value>Ignored in test</value>
+            <value>0</value>
             <value>0</value>
             <value>0</value>
         </row> 
@@ -313,6 +317,7 @@
             <value>Ignored in test</value>
             <value>0</value>
             <value>2</value>
+            <value>0</value>
         </row> 
         <row>
             <value>5</value>
@@ -345,6 +350,7 @@
             <value>1</value>
             <value>Ignored in test</value>
             <value>Ignored in test</value>
+            <value>0</value>
             <value>0</value>
             <value>0</value>
         </row>
