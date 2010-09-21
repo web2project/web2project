@@ -212,6 +212,7 @@
         <column>task_updated</column>
         <column>task_dep_reset_dates</column>
         <column>task_represents_project</column>
+        <column>task_allow_other_user_tasklogs</column>
         <row>
           <value>1</value>
           <value>Task 1</value>
@@ -243,6 +244,7 @@
           <value>1</value>
           <value>2009-07-05 15:43:00</value>
           <value>2009-07-05 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -279,6 +281,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>3</value>
@@ -311,6 +314,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -347,6 +351,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>5</value>
@@ -379,6 +384,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -415,6 +421,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>7</value>
@@ -447,6 +454,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -483,6 +491,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>9</value>
@@ -515,6 +524,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -551,6 +561,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>11</value>
@@ -583,6 +594,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -619,6 +631,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>13</value>
@@ -651,6 +664,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -687,6 +701,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>15</value>
@@ -719,6 +734,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -755,6 +771,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>17</value>
@@ -787,6 +804,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -823,6 +841,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>19</value>
@@ -855,6 +874,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -891,6 +911,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>21</value>
@@ -923,6 +944,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -959,6 +981,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>23</value>
@@ -991,6 +1014,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -1027,6 +1051,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>25</value>
@@ -1059,6 +1084,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -1095,6 +1121,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
 		<row>
           <value>27</value>
@@ -1127,6 +1154,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -1163,6 +1191,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>29</value>
@@ -1197,6 +1226,7 @@
           <value>2009-07-06 15:43:00</value>
           <value>0</value>
           <value>0</value>
+          <value>0</value>
         </row>
         <row>
           <value>30</value>
@@ -1229,6 +1259,7 @@
           <value>1</value>
           <value>2009-07-06 15:43:00</value>
           <value>2009-07-06 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
