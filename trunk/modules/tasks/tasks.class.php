@@ -32,56 +32,65 @@ $tracking_dynamics = array('0' => '21', '1' => '31');
 * CTask Class
 */
 class CTask extends CW2pObject {
-  /**
-   *  * @var int */
-  public $task_id = null;
-  /**
-   *  * @var string */
-  public $task_name = null;
-  /**
-   *  * @var int */
-  public $task_parent = null;
-  public $task_milestone = null;
-  public $task_project = null;
-  public $task_owner = null;
-  public $task_start_date = null;
-  public $task_duration = null;
-  public $task_duration_type = null;
-  /**
-   *  * @deprecated */
-  public $task_hours_worked = null;
-  public $task_end_date = null;
-  public $task_status = null;
-  public $task_priority = null;
-  public $task_percent_complete = null;
-  public $task_description = null;
-  public $task_target_budget = null;
-  public $task_related_url = null;
-  public $task_creator = null;
 
-  public $task_order = null;
-  public $task_client_publish = null;
-  public $task_dynamic = null;
-  public $task_access = null;
-  public $task_notify = null;
-  public $task_departments = null;
-  public $task_contacts = null;
-  public $task_custom = null;
-  public $task_type = null;
-  public $task_created = null;
-  public $task_updated = null;
-  public $task_updator = null;
+    /**
+     * @var int
+     */
+    public $task_id = null;
 
-  /**
-   * Class constants for task access
-   */
-  const ACCESS_PUBLIC       = 0;
-  const ACCESS_PROTECTED    = 1;
-  const ACCESS_PARTICIPANT  = 2;
-  const ACCESS_PRIVATE      = 3;
+    /**
+     * @var string
+     */
+    public $task_name = null;
 
-  const DURATION_TYPE_HOURS =  1;
-  const DURATION_TYPE_DAYS  = 24;
+    /**
+     * @var int
+     */
+    public $task_parent = null;
+    public $task_milestone = null;
+    public $task_project = null;
+    public $task_owner = null;
+    public $task_start_date = null;
+    public $task_duration = null;
+    public $task_duration_type = null;
+
+    /**
+     * @deprecated
+     */
+    public $task_hours_worked = null;
+    public $task_end_date = null;
+    public $task_status = null;
+    public $task_priority = null;
+    public $task_percent_complete = null;
+    public $task_description = null;
+    public $task_target_budget = null;
+    public $task_related_url = null;
+    public $task_creator = null;
+
+    public $task_order = null;
+    public $task_client_publish = null;
+    public $task_dynamic = null;
+    public $task_access = null;
+    public $task_notify = null;
+    public $task_departments = null;
+    public $task_contacts = null;
+    public $task_custom = null;
+    public $task_type = null;
+    public $task_created = null;
+    public $task_updated = null;
+    public $task_updator = null;
+    public $task_allow_other_user_tasklogs;
+
+    /**
+     * Class constants for task access
+     */
+    const ACCESS_PUBLIC       = 0;
+    const ACCESS_PROTECTED    = 1;
+    const ACCESS_PARTICIPANT  = 2;
+    const ACCESS_PRIVATE      = 3;
+
+    const DURATION_TYPE_HOURS =  1;
+    const DURATION_TYPE_DAYS  = 24;
 
     public function __construct() {
         parent::__construct('tasks', 'task_id');
@@ -558,7 +567,7 @@ class CTask extends CW2pObject {
 			global $oTsk;
 			$oTsk = new CTask();
 			$oTsk->peek($this->task_id);
-			
+
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
 			}
@@ -1683,7 +1692,7 @@ class CTask extends CW2pObject {
 		$q->addTable('users', 'u');
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
-		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name');
+		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name, co.contact_first_name');
 		$q->addWhere('ut.task_id = ' . (int)$taskId);
 
 		return $q->loadHashList('user_id');

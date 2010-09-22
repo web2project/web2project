@@ -198,7 +198,7 @@ class w2p_Output_GanttRenderer {
         $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
         $bar->title->SetColor($color);
 
-        $this->graph->Add($bar);
+        $this->graph->Add($this->addDependencies($bar, $identifier));
     }
 
     public function loadTaskArray($gantt_array)

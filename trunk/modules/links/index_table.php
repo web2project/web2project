@@ -4,6 +4,11 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $deny1, $canRead, $canEdit, $project_id, $task_id, $showProject;
 
+if ($task_id && !$project_id) {
+    $task = new CTask;
+    $task->load($task_id);
+    $project_id = $task->task_project;
+}
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
 $m = 'links';
