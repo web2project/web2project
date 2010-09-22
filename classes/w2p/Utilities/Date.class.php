@@ -505,7 +505,7 @@ class w2p_Utilities_Date extends Date {
 			$g = false;
 			for ($i = 0, $i_cmp = ceil($fullWorkingDays); $i < $i_cmp; $i++) {
 				if (!$g) {
-					$f->addHours(1);
+					$f->addDays(1);
 				}
 				$g = false;
 				// calculate overriden non-working days
