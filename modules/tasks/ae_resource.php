@@ -74,8 +74,8 @@ for ($i = 5; $i <= 100; $i += 5) {
 }
 ?>
 							</select>
-						</td>				
-						<td align="left"><input type="button" class="button" value="&lt;" onclick="removeUser(document.resourceFrm)" /></td>					
+						</td>
+						<td align="left"><input type="button" class="button" value="&lt;" onclick="removeUser(document.resourceFrm)" /></td>
 					</tr>
 					</table>
 				</td>
@@ -84,13 +84,24 @@ for ($i = 5; $i <= 100; $i += 5) {
 		</table>
 	</td>
 	<td valign="top" align="center">
-		<table><tr><td align="left">
-		<?php echo $AppUI->_('Additional Email Comments'); ?>:		
-		<br />
-		<textarea name="email_comment" class="textarea" cols="60" rows="10"></textarea><br />
-		<input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if ($task->task_notify != '0') echo 'checked="checked"' ?> />
-		<label for="task_notify"><?php echo $AppUI->_('notifyChange'); ?></label>
-		</td></tr></table><br />		
+		<table>
+            <tr>
+                <td align="left">
+		            <?php echo $AppUI->_('Additional Email Comments'); ?>:
+		            <br />
+		            <textarea name="email_comment" class="textarea" cols="60" rows="10"></textarea><br />
+		            <input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if ($task->task_notify != '0') echo 'checked="checked"' ?> />
+		            <label for="task_notify"><?php echo $AppUI->_('notifyChange'); ?></label>
+		        </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <input type="checkbox" value="1" name="task_allow_other_user_tasklogs" <?php echo $task->task_allow_other_user_tasklogs ? 'checked="checked"' : ''; ?> />
+                    <label for="task_allow_other_user_tasklogs"><?php echo $AppUI->_('Allow users to add task logs for others'); ?></label>
+                </td>
+            </tr>
+        </table>
+        <br />
 	</td>
 </tr>
 </table>

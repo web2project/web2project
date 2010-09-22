@@ -189,7 +189,6 @@ $proto = $AppUI->getState('LDAPProto', '3');
                             for ($i = 0, $i_cmp = $info['count']; $i < $i_cmp; $i++) {
                                 $pairs = array();
                                 $s .= '<tr>';
-//echo '<pre>';print_r($info);die();
                                 foreach ($sql_ldap_mapping as $ldap_name => $sql_name) {
                                     unset($val);
                                     if (isset($info[$i][$ldap_name][0])) {

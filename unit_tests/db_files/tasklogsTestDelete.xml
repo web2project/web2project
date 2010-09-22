@@ -18,6 +18,7 @@
         <column>task_log_related_url</column>
         <column>task_log_project</column>
         <column>task_log_company</column>
+        <column>task_log_record_creator</column>
     </table>
     <table name="tasks">
         <column>task_id</column>
@@ -52,6 +53,7 @@
         <column>task_updated</column>
         <column>task_dep_reset_dates</column>
         <column>task_represents_project</column>
+        <column>task_allow_other_user_tasklogs</column>
         <row>
           <value>1</value>
           <value>Task 1</value>
@@ -83,6 +85,7 @@
           <value>1</value>
           <value>2009-07-05 15:43:00</value>
           <value>2009-07-05 15:43:00</value>
+          <value>0</value>
           <value>0</value>
           <value>0</value>
         </row>
@@ -171,6 +174,7 @@
             <value>0000-00-00 00:00:00</value>
             <value>0</value>
             <value></value>
+            <value>0</value>
         </row>
     </table>
 </dataset>

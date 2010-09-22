@@ -138,13 +138,22 @@ class CTaskLog extends CW2pObject
 	 */
 	public $task_log_updated = null;
 
-	/**
-	 * Constructor for class
-	 *
-	 * @return void
-	 *
-	 * @access public
-	 */
+    /**
+     * Id of user that created the record for this task log.
+     * For task logs when user is creating it for another user
+     *
+     * @var int
+     * @access public
+     */
+    public $task_log_record_creator;
+
+    /**
+     * Constructor for class
+     *
+     * @return void
+     *
+     * @access public
+     */
 	public function __construct()
 	{
 		parent::__construct('task_log', 'task_log_id');

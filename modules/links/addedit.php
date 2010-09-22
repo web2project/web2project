@@ -3,7 +3,13 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$link_id = (int) w2PgetParam($_GET, 'link_id', 0);
+$link_id    = (int) w2PgetParam($_GET, 'link_id', 0);
+
+// We are adding, so load task and project if available
+if (0 == $link_id) {
+    $task_id    = (int) w2PgetParam($_GET, 'task_id', 0);
+    $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
+}
 
 // check permissions for this record
 $perms = &$AppUI->acl();
@@ -29,9 +35,21 @@ if ($obj) {
   $link->loadFull($AppUI, $link_id);
 }
 if (!$link && $link_id > 0) {
-  $AppUI->setMsg('Link');
-  $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-  $AppUI->redirect();
+    $AppUI->setMsg('Link');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
+} elseif (0 == $link_id && ($project_id || $task_id)) {
+
+    // We are creating a link, so if we have them lets figure out the project
+    // and task id
+    $link->link_project = $project_id;
+    $link->link_task    = $task_id;
+
+    if ($task_id) {
+        $link_task = new CTask;
+        $link_task->load($task_id);
+        $link->task_name = $link_task->task_name;
+    }
 }
 
 // setup the title block
@@ -94,7 +112,7 @@ function setTask( key, val ) {
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
     <input type="hidden" name="link_owner" value="<?php echo $AppUI->user_id; ?>" />
-  
+
     <tr>
     	<td width="100%" valign="top" align="center">
           <table cellspacing="1" cellpadding="2" width="60%">

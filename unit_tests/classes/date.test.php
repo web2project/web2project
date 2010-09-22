@@ -781,6 +781,26 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests calcDuration with positive change across multiple days
+     */
+    public function testCalcDurationAcrossMultipleDaysPositive()
+    {
+       $date = new CDate('2010-09-01 15:00:00');
+
+       $this->assertEquals(11, $date->calcDuration(new CDate('2010-09-03 10:00:00')));
+    }
+
+    /**
+     * Tests calcDuration with positive change across non-working days
+     */
+    public function testCalcDurationAcrossNonWorkingDaysPositive()
+    {
+        $date = new CDate('2010-09-03 15:00:00');
+
+        $this->assertEquals(3, $date->calcDuration(new CDate('2010-09-06 10:00:00')));
+    }
+
+    /**
      * Tests calcDuration with negative change on same day
      */
     public function testCalcDurationIntraDayNegative()
@@ -1136,6 +1156,224 @@ class Date_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests calcDuration with negative change across multiple days
+     */
+    public function testCalcDurationAcrossMultipleDaysNegative()
+    {
+        $date = new CDate('2010-09-03 10:00:00');
+
+        $this->assertEquals(-11, $date->calcDuration(new CDate('2010-09-01 15:00:00')));
+    }
+
+    /**
+     * Tests calcDuration with negative change across non-working days
+     */
+    public function testCalcDurationAcrossNonWorkingDaysNegative()
+    {
+        $date = new CDate('2010-09-06 10:00:00');
+
+        $this->assertEquals(-3, $date->calcDuration(new CDate('2010-09-03 15:00:00')));
+    }
+
+    /**
+     * Tests workingDaysInSpan on same day
+     */
+    public function testWorkingDaysInSpanSameDay()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+
+        $this->assertEquals(1, $date->workingDaysInSpan(new CDate('2010-09-14 12:00:00')));
+    }
+
+    /**
+     * Tests workingDaysInSpan with multiple positive days
+     */
+    public function testWorkingDaysInSpanMultiDaysPositive()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+
+        $this->assertEquals(3, $date->workingDaysInSpan(new CDate('2010-09-16 12:00:00')));
+    }
+
+    /**
+     * Tests workingDaysInSpan with multiple negative days
+     */
+    public function testWorkingDaysInSpanMultiDaysNegative()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+
+        $this->assertEquals(2, $date->workingDaysInSpan(new CDate('2010-09-12 10:00:00')));
+    }
+
+    /**
+     * Test workingDaysInSpan with multiple positive days including non
+     * working days
+     */
+    public function testWorkingDaysInSpanMultiDaysPositiveWithNonWorking()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+
+        $this->assertEquals(5, $date->workingDaysInSpan(new CDate('2010-09-20 10:00:00')));
+    }
+
+    /**
+     * Test workingDaysInSpan with multiple negative days including non
+     * working days
+     */
+    public function testWorkingDaysInSpanMultiDaysNegativeWithNonWorking()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+        $this->assertEquals(3, $date->workingDaysInSpan(new CDate('2010-09-10 10:00:00')));
+    }
+
+    /**
+     * Tests Duplicate
+     */
+    public function testDuplicate()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+        $date2 = $date->duplicate();
+
+        $this->assertEquals($date, $date2);
+    }
+
+    /**
+     * Test Duplicate after changing one of the properties
+     */
+    public function testDuplicateDifferent()
+    {
+        $date = new CDate('2010-09-14 10:00:00');
+        $date2 = $date->duplicate();
+
+        $date->minute = 15;
+
+        $this->assertNotEquals($date, $date2);
+    }
+
+    /**
+     * Tests calcFinish when adding an hour on same day
+     */
+    public function testCalcFinishSameDayHours()
+    {
+        $date   = new CDate('2010-09-15 10:00:00');
+        $finish = $date->calcFinish(2, 1);
+
+        $this->assertEquals('2010-09-15 12:00:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests calcFinish when the minute is > 38 so should be rounded to 45
+     */
+    public function testCalcFinish45()
+    {
+        $date   = new CDate('2010-09-15 10:39:00');
+        $finish = $date->calcFinish(1, 1);
+
+        $this->assertEquals('2010-09-15 11:45:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests calcFinish when the minute is > 23 so should be rounded to 30
+     */
+    public function testCalcFinish30()
+    {
+        $date   = new CDate('2010-09-15 10:24:00');
+        $finish = $date->calcFinish(1, 1);
+
+        $this->assertEquals('2010-09-15 11:30:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests calcFinish when the minute is > 8 so should be rounded to 15
+     */
+    public function testCalcFinish15()
+    {
+        $date   = new CDate('2010-09-15 10:09:00');
+        $finish = $date->calcFinish(1, 1);
+
+        $this->assertEquals('2010-09-15 11:15:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests calcFinish when the minute is < 9 so should be rounded to 0
+     */
+    public function testCalcFinish00()
+    {
+        $date   = new CDate('2010-09-15 10:08:00');
+        $finish = $date->calcFinish(1, 1);
+
+        $this->assertEquals('2010-09-15 11:00:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests calcFinish on a non working day
+     */
+    public function testCalcFinishNonWorkingDay()
+    {
+        $date   = new CDate('2010-09-18 10:00:00');
+        $finish = $date->calcFinish(1, 1);
+
+        $this->assertEquals('2010-09-20 11:00:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests calcFinish across a Day
+     */
+    public function testCalcFinishAcrossDayHoursOnLastDay()
+    {
+        $date   = new CDate('2010-09-20 16:00:00');
+        $finish = $date->calcFinish(2, 1);
+
+        $this->assertEquals('2010-09-21 10:00:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Test calcFinish Across multiple days when it ends at end of day
+     * (no hours to add to last day)
+     */
+    public function testCalcFinishAcrossMultipleDaysNoHoursLastDay()
+    {
+        $date   = new CDate('2010-09-20 16:00:00');
+        $finish = $date->calcFinish(16, 1);
+
+        $this->assertEquals('2010-09-22 16:00:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests adding a single day, with day duration, when the time is equal to
+     * day start
+     */
+    public function testCalcFinishAddDayStartDayDuration()
+    {
+        $date   = new CDate('2010-09-20 09:00:00');
+        $finish = $date->calcFinish(1, 24);
+
+        $this->assertEquals('2010-09-20 17:00:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests calcFinish, with day duration
+     */
+    public function testCalcFinishAddDaysDayDuration()
+    {
+        $date   = new CDate('2010-09-20 10:00:00');
+        $finish = $date->calcFinish(2, 24);
+
+        $this->assertEquals('2010-09-22 10:00:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Test calcFinish with day duration across non working days
+     */
+    public function testCalcFinishAddDaysDayDurationAcrossNonWorkingDays()
+    {
+        $date   = new CDate('2010-09-17 10:00:00');
+        $finish = $date->calcFinish(2, 24);
+
+        $this->assertEquals('2010-09-21 10:00:00', $finish->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
      * Tests converting between timezones
      */
 	public function testConvertTZ()
@@ -1154,5 +1392,61 @@ class Date_Test extends PHPUnit_Framework_TestCase
 		$myDate2->convertTZ('PST');
 		$tmpHour = ($myDate1->hour-2 < 0) ? $myDate1->hour-2+24 : $myDate1->hour-2;
 		$this->assertEquals($tmpHour, $myDate2->hour);
-	}
+    }
+
+    /**
+     * Tests setting the timezone of a date object
+     */
+    public function testSetTZ()
+    {
+        $date = new CDate('', 'US/Atlantic');
+        $this->assertEquals(new CDate('', 'US/Atlantic'), $date);
+
+        $date->setTZ('US/Eastern');
+        $this->assertEquals(new CDate('', 'US/Eastern'), $date);
+    }
+
+    /**
+     * Tests adding seconds
+     */
+    public function testAddSeconds()
+    {
+        $date = new CDate('2010-09-21 09:00:00');
+        $date->addSeconds(59);
+
+        $this->assertEquals('2010-09-21 09:00:59', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Test adding seconds across a minute
+     */
+    public function testAddSecondsAcrossMinute()
+    {
+        $date = new CDate('2010-09-21 09:00:00');
+        $date->addSeconds(65);
+
+        $this->assertEquals('2010-09-21 09:01:05', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests adding seconds across an hour
+     */
+    public function testAddSecondsAcrossHour()
+    {
+        $date = new CDate('2010-09-21 09:59:00');
+        $date->addSeconds(65);
+
+        $this->assertEquals('2010-09-21 10:00:05', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests adding seconds across a day
+     */
+    public function testAddSecondsAcrossDay()
+    {
+        $date = new CDate('2010-09-21 23:59:00');
+        $date->addSeconds(65);
+
+        $this->assertEquals('2010-09-22 00:00:05', $date->getDate(DATE_FORMAT_ISO));
+    }
 }
