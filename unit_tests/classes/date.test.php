@@ -1392,5 +1392,72 @@ class Date_Test extends PHPUnit_Framework_TestCase
 		$myDate2->convertTZ('PST');
 		$tmpHour = ($myDate1->hour-2 < 0) ? $myDate1->hour-2+24 : $myDate1->hour-2;
 		$this->assertEquals($tmpHour, $myDate2->hour);
-	}
+    }
+
+    /**
+     * Tests setting the timezone of a date object
+     */
+    public function testSetTZ()
+    {
+        $date = new CDate('', 'US/Atlantic');
+        $this->assertEquals(new CDate('', 'US/Atlantic'), $date);
+
+        $date->setTZ('US/Eastern');
+        $this->assertEquals(new CDate('', 'US/Eastern'), $date);
+    }
+
+    /**
+     * Tests adding seconds
+     */
+    public function testAddSeconds()
+    {
+        $date = new CDate('2010-09-21 09:00:00');
+        $date->addSeconds(59);
+
+        $this->assertEquals('2010-09-21 09:00:59', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Test adding seconds across a minute
+     */
+    public function testAddSecondsAcrossMinute()
+    {
+        $date = new CDate('2010-09-21 09:00:00');
+        $date->addSeconds(65);
+
+        $this->assertEquals('2010-09-21 09:01:05', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests adding seconds across an hour
+     */
+    public function testAddSecondsAcrossHour()
+    {
+        $date = new CDate('2010-09-21 09:59:00');
+        $date->addSeconds(65);
+
+        $this->assertEquals('2010-09-21 10:00:05', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests adding seconds across a day
+     */
+    public function testAddSecondsAcrossDay()
+    {
+        $date = new CDate('2010-09-21 23:59:00');
+        $date->addSeconds(65);
+
+        $this->assertEquals('2010-09-22 00:00:05', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests adding seconds across a year
+     */
+    public function testAddSecondsAcrossYear()
+    {
+        $date = new CDate('2010-12-31 23:59:00');
+        $date->addSeconds(65);
+
+        $this->assertEquals('2011-01-01 00:00:05', $date->getDate(DATE_FORMAT_ISO));
+    }
 }
