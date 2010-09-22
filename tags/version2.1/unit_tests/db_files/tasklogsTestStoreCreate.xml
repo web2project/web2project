@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- tasklogsTestStoreCreate.xml - Data to test against after storing a task log -->
+<dataset>
+    <table name="task_log">
+        <column>task_log_id</column>
+        <column>task_log_task</column>
+        <column>task_log_help_desk_id</column>
+        <column>task_log_name</column>
+        <column>task_log_description</column>
+        <column>task_log_creator</column>
+        <column>task_log_created</column>
+        <column>task_log_updator</column>
+        <column>task_log_updated</column>
+        <column>task_log_hours</column>
+        <column>task_log_date</column>
+        <column>task_log_costcode</column>
+        <column>task_log_problem</column>
+        <column>task_log_reference</column>
+        <column>task_log_related_url</column>
+        <column>task_log_project</column>
+        <column>task_log_company</column>
+        <column>task_log_record_creator</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>Task Log 1</value>
+            <value>Did some working on task 22.</value>
+            <value>1</value>
+            <value>Ignored</value>
+            <value>1</value>
+            <value>Ignored</value>
+            <value>20</value>
+            <value>2009-10-19</value>
+            <value>1</value>
+            <null/>
+            <null/>
+            <value>http://www.example.org</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>1</value>
+            <value>1</value>
+            <value>This is a task log name.</value>
+            <value>This is a task log description.</value>
+            <value>1</value>
+            <value>Ignored</value>
+            <value>1</value>
+            <value>Ignored</value>
+            <value>2.75</value>
+            <value>2010-05-30</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>http://www.example.com</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+        </row>
+    </table>
+    <table name="tasks">
+        <column>task_id</column>
+        <column>task_name</column>
+        <column>task_parent</column>
+        <column>task_milestone</column>
+        <column>task_project</column>
+        <column>task_owner</column>
+        <column>task_start_date</column>
+        <column>task_duration</column>
+        <column>task_duration_type</column>
+        <column>task_hours_worked</column>
+        <column>task_end_date</column>
+        <column>task_status</column>
+        <column>task_priority</column>
+        <column>task_percent_complete</column>
+        <column>task_description</column>
+        <column>task_target_budget</column>
+        <column>task_related_url</column>
+        <column>task_creator</column>
+        <column>task_order</column>
+        <column>task_client_publish</column>
+        <column>task_dynamic</column>
+        <column>task_access</column>
+        <column>task_notify</column>
+        <column>task_departments</column>
+        <column>task_contacts</column>
+        <column>task_custom</column>
+        <column>task_type</column>
+        <column>task_updator</column>
+        <column>task_created</column>
+        <column>task_updated</column>
+        <column>task_dep_reset_dates</column>
+        <column>task_represents_project</column>
+        <column>task_allow_other_user_tasklogs</column>
+        <row>
+          <value>1</value>
+          <value>Task 1</value>
+          <value>0</value>
+          <value>0</value>
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-05 00:00:00</value>
+          <value>2</value>
+          <value>24</value>
+          <value>22.75</value>
+          <value>2009-07-15 00:00:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+          <value>This is task 1</value>
+          <value>0.00</value>
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>1</value>
+          <value>0</value>
+          <value>0</value>
+          <value>1</value>
+          <null />
+          <null />
+          <null />
+          <value>1</value>
+          <value>1</value>
+          <value>2009-07-05 15:43:00</value>
+          <value>2009-07-05 15:43:00</value>
+          <value>0</value>
+          <value>0</value>
+          <value>0</value>
+        </row>
+    </table>
+    <table name="projects">
+        <column>project_id</column>
+        <column>project_company</column>
+        <column>project_department</column>
+        <column>project_name</column>
+        <column>project_short_name</column>
+        <column>project_owner</column>
+        <column>project_url</column>
+        <column>project_demo_url</column>
+        <column>project_start_date</column>
+        <column>project_end_date</column>
+        <column>project_actual_end_date</column>
+        <column>project_status</column>
+        <column>project_percent_complete</column>
+        <column>project_color_identifier</column>
+        <column>project_description</column>
+        <column>project_target_budget</column>
+        <column>project_actual_budget</column>
+        <column>project_scheduled_hours</column>
+        <column>project_worked_hours</column>
+        <column>project_task_count</column>
+        <column>project_creator</column>
+        <column>project_private</column>
+        <column>project_departments</column>
+        <column>project_contacts</column>
+        <column>project_priority</column>
+        <column>project_type</column>
+        <column>project_keydate</column>
+        <column>project_keydate_pos</column>
+        <column>project_keytask</column>
+        <column>project_active</column>
+        <column>project_original_parent</column>
+        <column>project_parent</column>
+        <column>project_empireint_special</column>
+        <column>project_updator</column>
+        <column>project_created</column>
+        <column>project_updated</column>
+        <column>project_status_comment</column>
+        <column>project_subpriority</column>
+        <column>project_end_date_adjusted</column>
+        <column>project_end_date_adjusted_user</column>
+        <column>project_location</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>Test Project</value>
+            <value>TP</value>
+            <value>1</value>
+            <value></value>
+            <value></value>
+            <value>2009-10-10 00:00:00</value>
+            <value></value>
+            <value></value>
+            <value>0</value>
+            <value></value>
+            <value>FFFFFF</value>
+            <value></value>
+            <value>0.00</value>
+            <value>0.00</value>
+	        <value>0</value>
+	        <value>22.75</value>
+	        <value>0</value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value></value>
+            <value>-1</value>
+            <value>0</value>
+            <value></value>
+            <value>0</value>
+            <value>0</value>
+            <value>1</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0000-00-00 00:00:00</value>
+            <value>0000-00-00 00:00:00</value>
+            <value></value>
+            <value>0</value>
+            <value>0000-00-00 00:00:00</value>
+            <value>0</value>
+            <value></value>
+        </row>
+    </table>
+</dataset>
