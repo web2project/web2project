@@ -100,9 +100,9 @@ function notifyNewUser($address, $username) {
 
 		$mail->To($address);
         $emailManager = new w2p_Output_EmailManager();
-        $emailManager->getNotifyNewUser($username);
+        $body = $emailManager->getNotifyNewUser($username);
         $mail->Subject('New Account Created');
-		$mail->Body();
+		$mail->Body($body);
 		$mail->Send();
 	}
 }
