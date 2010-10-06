@@ -3,23 +3,25 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 global $AppUI;
-$project_id = w2PgetParam($_POST, 'project_id', 0);
-$selected = w2PgetParam($_POST, 'bulk_selected_task', 0);
-$bulk_task_project = w2PgetParam($_POST, 'bulk_task_project', '');
-$bulk_task_parent = w2PgetParam($_POST, 'bulk_task_parent', '');
-$bulk_task_dependency = w2PgetParam($_POST, 'bulk_task_dependency', '');
-$bulk_task_priority = w2PgetParam($_POST, 'bulk_task_priority', '');
-$bulk_task_access = w2PgetParam($_POST, 'bulk_task_access', '');
-$bulk_task_assign = w2PgetParam($_POST, 'bulk_task_assign', '');
-$bulk_task_hperc_assign = w2PgetParam($_POST, 'bulk_task_hperc_assign', '');
-$bulk_task_assign_perc = w2PgetParam( $_POST, 'bulk_task_assign_perc', '' );
-$bulk_task_unassign = w2PgetParam($_POST, 'bulk_task_unassign', '');
-$bulk_task_other = w2PgetParam($_POST, 'bulk_task_other', '');
-$bulk_task_owner = w2PgetParam($_POST, 'bulk_task_owner', '');
-$bulk_task_type = w2PgetParam($_POST, 'bulk_task_type', '');
-$bulk_task_duration = w2PgetParam($_POST, 'bulk_task_duration', '');
-$bulk_task_durntype = w2PgetParam($_POST, 'bulk_task_durntype', '');
-$bulk_task_start_date = w2PgetParam($_POST, 'add_task_bulk_start_date', '');
+$project_id                          = w2PgetParam($_POST, 'project_id', 0);
+$selected                            = w2PgetParam($_POST, 'bulk_selected_task', 0);
+$bulk_task_project                   = w2PgetParam($_POST, 'bulk_task_project', '');
+$bulk_task_parent                    = w2PgetParam($_POST, 'bulk_task_parent', '');
+$bulk_task_dependency                = w2PgetParam($_POST, 'bulk_task_dependency', '');
+$bulk_task_priority                  = w2PgetParam($_POST, 'bulk_task_priority', '');
+$bulk_task_access                    = w2PgetParam($_POST, 'bulk_task_access', '');
+$bulk_task_assign                    = w2PgetParam($_POST, 'bulk_task_assign', '');
+$bulk_task_hperc_assign              = w2PgetParam($_POST, 'bulk_task_hperc_assign', '');
+$bulk_task_assign_perc               = w2PgetParam($_POST, 'bulk_task_assign_perc', '' );
+$bulk_task_unassign                  = w2PgetParam($_POST, 'bulk_task_unassign', '');
+$bulk_task_other                     = w2PgetParam($_POST, 'bulk_task_other', '');
+$bulk_task_owner                     = w2PgetParam($_POST, 'bulk_task_owner', '');
+$bulk_task_type                      = w2PgetParam($_POST, 'bulk_task_type', '');
+$bulk_task_duration                  = w2PgetParam($_POST, 'bulk_task_duration', '');
+$bulk_task_durntype                  = w2PgetParam($_POST, 'bulk_task_durntype', '');
+$bulk_task_start_date                = w2PgetParam($_POST, 'add_task_bulk_start_date', '');
+$bulk_task_allow_other_user_tasklogs = w2PgetParam($_POST, 'bulk_task_allow_other_user_tasklogs', '');
+
 if ($bulk_task_start_date) {
 	$start_date = new CDate($bulk_task_start_date);
 	$bulk_start_date = $start_date->format(FMT_DATETIME_MYSQL);
@@ -262,7 +264,20 @@ if (is_array($selected) && count($selected)) {
 			if ($upd_task->task_id) {
 				$upd_task->removeAssigned($bulk_task_unassign);
 			}
-		}
+        }
+
+        // Action: Allow user to add task logs for others
+        if (isset($_POST['bulk_task_allow_other_user_tasklogs']) && $bulk_task_allow_other_user_tasklogs != '') {
+            $upd_task = new CTask();
+            $upd_task->load($key);
+            if ($upd_task->task_id) {
+                $upd_task->task_allow_other_user_tasklogs = $bulk_task_allow_other_user_tasklogs;
+                $result = $upd_task->store($AppUI);
+                if (is_array($result)) {
+                    break;
+                }
+            }
+        }
 
 		//Action: Other Actions
 		if (isset($_POST['bulk_task_other']) && $bulk_task_other != '') {
