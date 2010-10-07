@@ -1200,7 +1200,7 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
 	$q = new DBQuery();
 	$q->addTable('projects');
 	$q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-	$q->addQuery('projects.project_id, project_name, project_parent');
+	$q->addQuery('DISTINCT(projects.project_id), project_name, project_parent');
 	if ($original_project_id) {
 		$q->addWhere('project_original_parent = ' . (int)$original_project_id);
 	}
@@ -1216,6 +1216,8 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
 	$obj->setAllowedSQL($AppUI->user_id, $q);
 	$dpt = new CDepartment();
 	$dpt->setAllowedSQL($AppUI->user_id, $q);
+    $q->leftJoin('project_departments', 'pd', 'pd.project_id = projects.project_id' );
+    $q->leftJoin('departments', 'd', 'd.dept_id = pd.department_id' );
 
 	$st_projects = $q->loadList();
 	$tnums = count($st_projects);
