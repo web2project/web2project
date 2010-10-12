@@ -628,32 +628,15 @@ table.tbl td.event td {
 }
 
 /*tooltip*/
-
-.tool-tip {
-	color: #fff;
-	width: 462px;
-	z-index: 13000;
-}
  
-.tool-title {
+h4 {
 	font-weight: bold;
-	font-size: 11px;
+	font-size: 14px;
 	margin: 0;
 	color: #9FD4FF;
-	padding: 8px 8px 4px;
-	background: url(images/bubble.png) top left;
 }
  
-.tool-text {
-	font-size: 11px;
-	padding: 4px 8px 8px;
-	background: url(images/bubble.png) bottom right;
-}
-
-.tool-text td {
-	color: white;
-	font-size: 11px;
-}
+/*end_tooltip*/
 
 form {
 	display: inline; 
