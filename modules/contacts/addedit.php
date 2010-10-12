@@ -189,93 +189,36 @@ function addContactMethod(field, value) {
 
     /* Create select menu for contact method type */
     function addOption(select, value, text, selected) {
-        option = new Element("option");
+	//$(select).append('<option value="' + value + '" ' + (selected == value ? 'selected="selected"' : '') + ' ">' + text + '</option>');
+	var option = document.createElement('option'); 
         option.setAttribute("value", value);
         option.innerHTML = text;
         option.selected = (value == selected);
-        select.appendChild(option);
+	$(select).append(option); 
     }
-
-    select = new Element('select', {
-        name: "contact_methods[field][" + index + "]",
-        size: "1",
-        'class': "text"
-    });
-
-    addOption(select, "", "");
-    <?php foreach ($methodLabels as $value => $text): ?> 
-    addOption(select, "<?php echo $value; ?>", "<?php echo $text; ?>", field);
-    <?php endforeach; ?> 
 
     /* Create a new table row */
-    tr = new Element('tr', { id: "contact_methods[" + index + "]" });
+    $('<tr id="contact_methods_' + index + '_" />').insertBefore('#custom_fields');
 
     /* Add contact method type menu to the table row */
-    td = new Element('td', { align: "right" });
-    td.appendChild(select);
-    tr.appendChild(td);
-
+    $('#contact_methods_' + index + '_').append('<td align="right"><select id="method_select_' + index + '" name="contact_methods[field][' + index + ']" size="1" class="text" /></td>');
     /* Add text field for the contact method value to the table row */
-    td = new Element('td');
-    td.appendChild(new Element('input', {
-        type: "text",
-        'class': "text",
-        name: "contact_methods[value][" + index + "]",
-        value: value ? value : "",
-        maxlength: "255",
-        size: "25"
-    }));
-    tr.appendChild(td);
-
-    /* Add a button to remove the table row */
-    a = new Element("a", {
-        id: "remove_contact_method",
-        href: "javascript:removeContactMethod('" + index + "');"
-    });
-
-    img = new Element("img", {
-        src: "<?php echo w2PfindImage('icons/remove.png'); ?>",
-        style: "border: 0;"
-    });
-
-    a.appendChild(img);
-    td.appendChild(a);
-
-    /* Add or relocate the button to add new row */
-    add = document.getElementById("add_contact_method");
-    if (!add) {
-        add = new Element("span", {
-            id: "add_contact_method" }
-        );
-
-        a = new Element("a", {
-            href: "javascript:addContactMethod();"
-        });
-
-        img = new Element("img", {
-            src: "<?php echo w2PfindImage('icons/edit_add.png'); ?>",
-            style: "border: 0;"
-        });
-
-        a.appendChild(img);
-
-        add.appendChild(a);
-    } else {
-        add.parentNode.removeChild(add);
-    }
-    td.appendChild(add);
-
-    /* Add the new table row to the table */
-    bottomRow = document.getElementById("custom_fields");
-    bottomRow.parentNode.insertBefore(tr, bottomRow);
+    $('#contact_methods_' + index + '_').append('<td><input type="text" name="contact_methods[value][' + index + ']" size="25" maxlength="255" class="text" value="' + (value ? value : "") + '" /><?php echo w2PtoolTip('Contact Method', 'Remove') ?><a id="remove_contact_method" href="javascript:removeContactMethod(\'' + index + '\')"><img src="<?php echo w2PfindImage('icons/remove.png'); ?>" style="border: 0;" /></a><?php echo w2PendTip() ?></td>');
+    addOption('#method_select_' + index, "", "");
+    <?php foreach ($methodLabels as $value => $text): ?> 
+    addOption('#method_select_' + index, "<?php echo $value; ?>", "<?php echo $text; ?>", field);
+    <?php endforeach; ?>
+    /* Make sure the newly added remove span has its tooltip working*/ 
+    $("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});
 }
 
 function removeContactMethod(index) {
-    tr = document.getElementById("contact_methods[" + index + "]");
+    tr = document.getElementById("contact_methods_" + index + "_");
     tr.parentNode.removeChild(tr);
 }
 
-window.addEvent("domready", function() {
+//window.addEvent("domready", function() {
+$(document).ready(function() {
 <?php foreach ($methods as $method => $value): ?>
     addContactMethod("<?php echo $method; ?>", "<?php echo $value; ?>");
 <?php endforeach; ?>
@@ -418,6 +361,9 @@ window.addEvent("domready", function() {
                         <td nowrap="nowrap">
                             <input type="text" class="text" name="contact_birthday" value="<?php echo @substr($row->contact_birthday, 0, 10); ?>" maxlength="10" size="25" />(<?php echo $AppUI->_('yyyy-mm-dd'); ?>)
                         </td>
+                    </tr>
+                    <tr>
+                        <td align="left"><?php echo w2PtoolTip('Contact Method', 'add new', false, 'add_contact_method') ?><a href="javascript:addContactMethod();"><img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" style="border: 0;" /></a><?php echo w2PendTip() ?></td>
                     </tr>
 					<tr id="custom_fields">
 						<th colspan="2">

@@ -1088,8 +1088,10 @@ class CAppUI {
 		// Load the basic javascript used by all modules.
 		echo '<script type="text/javascript" src="'.$base.'js/base.js"></script>';
 
-		// additionally load mootools
-		echo '<script type="text/javascript" src="'.$base.'lib/mootools/mootools.js"></script>';
+		// additionally load jquery
+		echo '<script type="text/javascript" src="'.$base.'lib/jquery/jquery.js"></script>';
+		echo '<script type="text/javascript" src="'.$base.'lib/jquery/jquery.tipTip.js"></script>';
+		echo '<style type="text/css">@import url('.w2PgetConfig('base_url').'/lib/jquery/tipTip.css);</style>';
 
 		$this->getModuleJS($m, $a, true);
 	}
@@ -1115,13 +1117,8 @@ class CAppUI {
 
 	public function loadFooterJS() {
 		$s = '<script type="text/javascript">';
-		$s .= 'window.addEvent(\'domready\', function(){';
-		$s .= '		var as = [];';
-		$s .= '		$$(\'span\').each(function(span){';
-		$s .= '			if (span.getAttribute(\'title\')) as.push(span);';
-		$s .= '		});';
-		$s .= '		new Tips(as), {';
-		$s .= '		}';
+		$s .= '$(document).ready(function() {';
+		$s .= '	$("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});';
 		$s .= '});';
 		$s .= '</script>';
 		echo $s;

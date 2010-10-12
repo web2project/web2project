@@ -1262,9 +1262,9 @@ function w2PHTMLDecode($txt) {
 function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '') {
 	global $AppUI;
 	if ($raw) {
-		$starttip = '<span id="' . $id . '" title="' . nl2br($AppUI->_($header)) . '::' . nl2br($AppUI->_($tip)) . '">';
+		$starttip = '<span id="' . $id . '" title="<h4>' . nl2br($AppUI->_($header)) . '</h4> ' . nl2br($AppUI->_($tip)) . '">';
 	} else {
-		$starttip = '<span id="' . $id . '" title="' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '::' . nl2br(strtolower($AppUI->_($tip))) . '">';
+		$starttip = '<span id="' . $id . '" title="<h4>' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '</h4> ' . nl2br(strtolower($AppUI->_($tip))) . '">';
 	}
 	return $starttip;
 }
