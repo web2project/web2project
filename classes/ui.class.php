@@ -1091,7 +1091,6 @@ class CAppUI {
 		// additionally load jquery
 		echo '<script type="text/javascript" src="'.$base.'lib/jquery/jquery.js"></script>';
 		echo '<script type="text/javascript" src="'.$base.'lib/jquery/jquery.tipTip.js"></script>';
-		echo '<style type="text/css">@import url('.w2PgetConfig('base_url').'/lib/jquery/tipTip.css);</style>';
 
 		$this->getModuleJS($m, $a, true);
 	}
