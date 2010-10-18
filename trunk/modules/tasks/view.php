@@ -43,7 +43,7 @@ if ($reminded) {
 $tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);
 
 // get the prefered date format
-$df = $AppUI->getPref('SHDATEFORMAT');
+$sf = $df = $AppUI->getPref('SHDATEFORMAT');
 //Also view the time
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
