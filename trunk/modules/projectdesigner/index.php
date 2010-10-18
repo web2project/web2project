@@ -369,11 +369,7 @@ function addComponent() {
 	calcDuration(document.editFrm, start_date, end_date, duration_fld, durntype_fld);
 
 //activate new tooltips on the fly
-	var as = [];
-	$$('span').each(function(span){
-		if (span.getAttribute('title')) as.push(span);
-	});
-	new Tips(as), {}
+    $("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});
 }
 
 function removeComponent(tr_id) {
