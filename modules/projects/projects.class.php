@@ -931,6 +931,7 @@ class CProject extends CW2pObject {
 			$q->addWhere("billingcode_id = $cost_code");
 		}
 		$q->addOrder('task_log_date');
+		$q->addOrder('task_log_created');
 		$this->setAllowedSQL($AppUI->user_id, $q, 'task_project');
 
 		return $q->loadList();

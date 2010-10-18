@@ -2252,6 +2252,7 @@ class CTask extends CW2pObject {
         $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS real_name');
         $q->addWhere('task_log_task = ' . (int) $taskId . ($problem ? ' AND task_log_problem > 0' : ''));
         $q->addOrder('task_log_date');
+        $q->addOrder('task_log_created');
         $q->leftJoin('billingcode', '', 'task_log.task_log_costcode = billingcode_id');
         $q->addJoin('users', '', 'task_log_creator = user_id', 'inner');
         $q->addJoin('contacts', 'ct', 'contact_id = user_contact', 'inner');
