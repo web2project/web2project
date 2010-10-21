@@ -30,7 +30,7 @@ if (!defined('W2P_BASE_DIR')) {
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tbody>
                 <tr>
-                    <td width="100%" valign="top" align="left" style="background: transparent url(./style/w2p-snowball/images/nav_shadow.jpg) repeat-x scroll 0%;">
+                    <td width="100%" valign="top" align="left" style="background: transparent url(./style/web2project/images/nav_shadow.jpg) repeat-x scroll 0%;">
                         <img width="1" height="13" border="0" src="./style/w2p-snowball/images/nav_shadow.jpg"/>
                     </td>
                 </tr>
