@@ -35,9 +35,9 @@ class w2p_Output_GanttRenderer {
     {
         $AppUI = $this->AppUI;
         $pLocale = setlocale(LC_TIME, 0); // get current locale for LC_TIME
-        $res = setlocale(LC_TIME, $AppUI->user_lang[2]);
+        $res = setlocale(LC_TIME, $AppUI->user_lang[0]);
         if ($res) { // Setting locale doesn't fail
-            $this->graph->scale->SetDateLocale($AppUI->user_lang[2]);
+            $this->graph->scale->SetDateLocale($AppUI->user_lang[0]);
         }
         setlocale(LC_TIME, $pLocale);
         $this->df = $AppUI->getPref('SHDATEFORMAT');
@@ -68,6 +68,8 @@ class w2p_Output_GanttRenderer {
             }
         }
         $this->graph->SetDateRange($start_date, $end_date);
+        $this->graph->scale->month->SetFont(FF_CUSTOM, FS_NORMAL, 9);
+        $this->graph->scale->day->SetFont(FF_CUSTOM, FS_NORMAL, 9);
     }
 
     public function setTitle($tableTitle = '', $background = '#eeeeee')
@@ -196,6 +198,7 @@ class w2p_Output_GanttRenderer {
 
         $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
         $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
+        $bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 9);
         $bar->title->SetColor($color);
 
         $this->graph->Add($this->addDependencies($bar, $identifier));
@@ -233,6 +236,7 @@ class w2p_Output_GanttRenderer {
         {
             $today = date('y-m-d');
             $vline = new GanttVLine($today, $this->todayText);
+            $vline->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
             $this->graph->Add($vline);
         }
         $this->graph->Stroke();

@@ -2362,7 +2362,7 @@ class GanttScale {
 					default:
 						// "M"
 						$txt = strftime('%A', $datestamp);
-						$txt = strtoupper($txt[0]);
+						$txt = mb_substr($txt,0,1);
 						break;
 				}
 
