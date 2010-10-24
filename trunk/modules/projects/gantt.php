@@ -149,8 +149,8 @@ if (!is_array($projects) || 0 == count($projects)) {
 } else {
 	foreach ($projects as $p) {
 
-		if ($locale_char_set == 'utf-8') {
-			$name = strlen(utf8_decode($p['project_name'])) > 25 ? substr(utf8_decode($p['project_name']), 0, 22) . '...' : utf8_decode($p['project_name']);
+		if ($locale_char_set == 'utf-8' && function_exists('mb_substr')) {
+			$name = mb_strlen($p['project_name']) > 25 ? mb_substr($p['project_name'], 0, 22) . '...' : $p['project_name'];
 		} else {
 			//while using charset different than UTF-8 we need not to use utf8_decode
 			$name = strlen($p['project_name']) > 25 ? substr($p['project_name'], 0, 22) . '...' : $p['project_name'];
@@ -235,8 +235,13 @@ if (!is_array($projects) || 0 == count($projects)) {
 				$tEndObj = new CDate($t['task_end_date']);
 
 				if ($t['task_milestone'] != 1) {
-                    $columnValues = array('task_name' => substr('  ' . $t['task_name'], 0, 20). '...',
-                        'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
+                    if ($locale_char_set == 'utf-8' && function_exists('mb_substr')) {
+                        $columnValues = array('task_name' => mb_substr('  ' . $t['task_name'], 0, 20). '...',
+                            'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
+                    } else { 
+                        $columnValues = array('task_name' => substr('  ' . $t['task_name'], 0, 20). '...',
+                            'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
+                    }
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
                     $gantt->addBar($columnValues, $t['task_percent_complete'].'% '.$AppUI->_('Complete'),
                         $height, $p['project_color_identifier'], $p['project_active'],

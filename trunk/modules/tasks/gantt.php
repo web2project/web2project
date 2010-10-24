@@ -287,10 +287,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	}
 
 	$name = $a['task_name'];
-	if ($locale_char_set == 'utf-8') {
-		$name = utf8_decode($name);
+	if ($locale_char_set == 'utf-8' && function_exists('mb_substr')) {
+        $name = mb_strlen($name) > 34 ? mb_substr($name, 0, 33) . '.' : $name;
 	}
-	$name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;
 	$name = str_repeat(' ', $level) . $name;
 
 	if ($caller == 'todo') {
