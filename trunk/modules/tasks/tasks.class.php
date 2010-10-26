@@ -1047,8 +1047,8 @@ class CTask extends CW2pObject {
 
 			$body = ($AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ':	 ' . $this->task_name);
 			//Priority not working for some reason, will wait till later
-			$body .= "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $task_start_date->format($df) . "\n";
-            $body .= $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . $task_finish_date->format($df) . "\n";
+			$body .= "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . (intval($this->task_start_date)) ? $task_start_date->format($df) : '' . "\n";
+            $body .= $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . (intval($this->task_end_date)) ? $task_finish_date->format($df) : '' . "\n";
             $body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n";
             $body .= $AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $this->task_description;
 			if ($users[0]['creator_email']) {
