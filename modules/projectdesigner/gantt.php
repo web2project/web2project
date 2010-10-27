@@ -161,12 +161,9 @@ if (!$start_date || !$end_date) {
 		}
 	}
 }
-if (intval($start_date) && !intval($end_date)) {
-    $end_date = $start_date;
-} elseif (intval($end_date) && !intval($start_date)) {
-    $start_date = $end_date;
+if (intval($start_date) && intval($end_date)) {
+    $gantt->setDateRange($start_date, $end_date);
 }
-$gantt->setDateRange($start_date, $end_date);
 
 reset($projects);
 foreach ($projects as $p) {
