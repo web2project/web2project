@@ -265,7 +265,7 @@ class w2p_Core_BaseObject
 
 		// First things first.  Are we allowed to delete?
 		$acl = &$AppUI->acl();
-		if (!$acl->checkModuleItem($this->_tbl, 'delete', $oid)) {
+		if (!$acl->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
 			$msg = $AppUI->_('noDeletePermission');
 			return false;
 		}
