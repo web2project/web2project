@@ -1648,7 +1648,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
     public function testGetMinute()
     {
         $date = new CDate('2010-11-06 11:21:00');
-
         $this->assertEquals(21, $date->getMinute());
     }
 
@@ -1700,5 +1699,169 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $date = new CDate('2010-14-11 11:00:00');
 
         $this->assertEquals(2, $date->getWeekOfYear());
+    }
+
+    /**
+     * Tests getYear
+     */
+    public function testGetYear()
+    {
+        $date = new CDate('2010-11-06 11:00:00');
+
+        $this->assertEquals(2010, $date->getYear());
+    }
+
+    /**
+     * Tests getYear with a year before the epoch
+     */
+    public function testGetYearBeforeEpoch()
+    {
+        $date = new CDate('1950-11-06 11:00:00');
+
+        $this->assertEquals(1950, $date->getYear());
+    }
+
+    /**
+     * Tests SetDay
+     */
+    public function testSetDay()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->setDay(12);
+
+        $this->assertEquals('2010-11-12 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setDay with a 0 day
+     */
+    public function testSetDayZero()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->setDay(0);
+
+        $this->assertEquals('2010-11-01 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setDay with a negative day
+     */
+    public function testSetDayNegative()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->setDay(-1);
+
+        $this->assertEquals('2010-11-01 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setDay with a day that is too high
+     */
+    public function testSetDayHigh()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->setDay(32);
+
+        $this->assertEquals('2010-11-01 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Test setMonth
+     */
+    public function testSetMonth()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->setMonth(9);
+
+        $this->assertEquals('2010-09-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setMonth with a zero month
+     */
+    public function testSetMonthZero()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->setMonth(0);
+
+        $this->assertEquals('2010-01-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setMonth with a negative month
+     */
+    public function testSetMonthNegative()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->setMonth(-2);
+
+        $this->assertEquals('2010-01-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests setMonth with month that is above 12
+     */
+    public function testSetMonthHigh()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->setMonth(14);
+
+        $this->assertEquals('2010-01-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests subtractSeconds
+     */
+    public function testSubtractSeconds()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->subtractSeconds(45);
+
+        $this->assertEquals('2010-11-07 10:59:15', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests subtractSeconds with a negative number, this appears to NOT work
+     * as expected
+     */
+    public function testSubtractSecondsNegative()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->subtractSeconds(-45);
+
+        $this->assertEquals('2010-11-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests subtractSeconds when crossing over a minute
+     */
+    public function testSubtractSecondsOverAMinute()
+    {
+        $date = new CDate('2010-11-07 11:00:00');
+        $date->subtractSeconds(75);
+
+        $this->assertEquals('2010-11-07 10:58:45', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests subtractSeconds when crossing over a day
+     */
+    public function testSubtractSecondsAcrossDay()
+    {
+        $date = new CDate('2010-11-07 00:00:10');
+        $date->subtractSeconds(11);
+
+        $this->assertEquals('2010-11-06 23:59:59', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests subtractSeconds when crossing over a year
+     */
+    public function testSubtractSecondsAcrossYear()
+    {
+        $date = new CDate('2011-01-01 00:00:10');
+        $date->subtractSeconds(11);
+
+        $this->assertEquals('2010-12-31 23:59:59', $date->getDate(DATE_FORMAT_ISO));
     }
 }
