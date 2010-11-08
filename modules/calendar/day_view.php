@@ -18,7 +18,7 @@ $company_id = $AppUI->processIntState('CalIdxCompany', $_REQUEST, 'company_id', 
 
 $event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');
 
-$tab = $AppUI->processIntState('CalDayViewTab', $_GET, 'tab', 0);
+$tab = $AppUI->processIntState('CalDayViewTab', $_GET, 'tab', (isset($tab) ? $tab : 0));
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
