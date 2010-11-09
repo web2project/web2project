@@ -12,7 +12,7 @@
 'History added'=>'Historique ajouté',
 'History deleted'=>'Historique supprimé',
 'History updated'=>'Historique mis-à-jour',
-'Login/Logouts'=>'Connexion/Déconnexions',
+'Login/Logouts'=>'Connexions/Déconnexions',
 'Modified'=>'Modifié',
 'New history'=>'Nouvel historique',
 'Projects'=>'Projets',
