@@ -1117,7 +1117,14 @@ class CAppUI {
 	public function loadFooterJS() {
 		$s = '<script type="text/javascript">';
 		$s .= '$(document).ready(function() {';
+        // Attach tooltips to "span" elements
 		$s .= '	$("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});';
+        // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox 
+        if (canAccess('smartsearch')) {
+            $s .= '	$("input[type=\'text\']:eq(1)").focus();';
+        } else {
+            $s .= '	$("input[type=\'text\']:eq(0)").focus();';            
+        }
 		$s .= '});';
 		$s .= '</script>';
 		echo $s;
