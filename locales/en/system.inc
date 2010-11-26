@@ -401,7 +401,7 @@
 'cas_group_title'=>'Central Authentication Server (CAS) Settings',
 'cas_host_title'=>'CAS Host',
 'cas_host_tooltip'=>'The URL (including the leading https:// or http://) of the CAS host to authenticate against, when using CAS Authentication.',
-'CAS_item_title'=>'Central Authentication Server (CAS)',
+'cas_item_title'=>'Central Authentication Server (CAS)',
 'cas_port_title'=>'CAS Port',
 'cas_port_tooltip'=>'Port Number to use to connect to CAS authentication host. Usually 443 for https, or 80 for http.',
 'cas_version_title'=>'CAS Version',
