@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- testStore.xml - Dataset to compare against once store is called. -->
+<dataset>
+    <table name="project_departments">
+        <column>project_id</column>
+        <column>department_id</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>2</value>
+        </row>
+    </table>
+    <table name="project_contacts">
+        <column>project_id</column>
+        <column>contact_id</column>
+        <row>
+            <value>1</value>
+            <value>3</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>4</value>
+        </row>
+    </table>
+</dataset>

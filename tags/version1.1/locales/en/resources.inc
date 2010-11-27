@@ -1,0 +1,22 @@
+##
+## DO NOT MODIFY THIS FILE BY HAND!
+##
+'Add Resource',
+'All Resources',
+'back',
+'Details',
+'doDelete',
+'Equipment',
+'ID',
+'Max Alloc %',
+'Max Allocation %',
+'Maximum Allocation Percentage',
+'new resource',
+'Notes',
+'Resource ID',
+'resource list','Description',
+'Resource Name',
+'submit',
+'Tool',
+'Type',
+'Venue',

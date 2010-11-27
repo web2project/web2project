@@ -1,0 +1,2 @@
+Heures affectées à l'utilisateur
+Ce rapport montre le nombre d'heures qu'un utilisateur a été affecté pendant la période de temps spécifiée.

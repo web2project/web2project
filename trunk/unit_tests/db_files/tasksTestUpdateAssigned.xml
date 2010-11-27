@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- tasksSeed.xml - Seed data for tasks test. -->
+<dataset>  
+    <table name="user_tasks">
+        <column>user_id</column>
+        <column>user_type</column>
+        <column>task_id</column>
+        <column>perc_assignment</column>
+        <column>user_task_priority</column>
+        <row>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>99</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>2</value>
+            <value>50</value>
+            <value>52</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>22</value>
+            <value>50</value>
+            <value>32</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>99</value>
+            <value>50</value>
+            <value>22</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>1</value>
+            <value>2</value>
+            <value>100</value>
+            <value>62</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>1</value>
+            <value>3</value>
+            <value>100</value>
+            <value>72</value>
+        </row>
+    </table>
+</dataset>

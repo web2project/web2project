@@ -1,0 +1,2 @@
+Performance dos Usuários
+Relatório que mostra a quantidade de horas trabalhadas por um usuário nas tarefas atribuídas

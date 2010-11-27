@@ -1,0 +1,22 @@
+##
+## DO NOT MODIFY THIS FILE BY HAND!
+##
+'Access Denied',
+'accessDeniedMsg'=>'You have attempted to access an item in web2Project without the sufficient permissions to do so. Please contact the web2Project System Administrator.',
+'Allowed Companies',
+'chgpwLogin'=>'User does not exist',
+'chgpwUpdated'=>'Your password has been updated',
+'chgpwWrongPW'=>'You have entered the wrong old password',
+'colorLegend'=>'Choose a color to uniquely identify your selection and close the Color Selector.',
+'Color Selector',
+'Contacts for',
+'Continue',
+'Current Password',
+'New Password',
+'nodepartments, companies, permissions',
+'[none]','Access Denied',
+'notasks'=>'No Tasks available',
+'Preset',
+'Repeat New Password',
+'submit',
+'View all allowed companies',
