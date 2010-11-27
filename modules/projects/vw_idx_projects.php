@@ -119,7 +119,7 @@ if ($is_tabbed) {
             $fieldList = array('project_color_identifier', 'project_priority', 
                 'project_name', 'company_name', 'project_start_date',
                 'project_end_date', 'project_actual_end_date', 'task_log_problem',
-                'user_username', 'total_tasks');
+                'user_username', 'project_task_count');
             $fieldNames = array('Color', 'P', 'Project Name', 'Company', 
                 'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
             foreach ($fieldNames as $index => $name) {
