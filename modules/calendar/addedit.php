@@ -68,9 +68,8 @@ if ($is_clash) {
 		unset($_SESSION['event_is_clash']);
 	}
 }
-if ($event_project = (int) w2PgetParam($_GET, 'event_project', 0)) {
-    $obj->event_project = $event_project;
-}
+
+$obj->event_project = (int) w2PgetParam($_GET, 'event_project', 0);
 
 //check if the user has view permission over the project
 if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->event_project)) {
