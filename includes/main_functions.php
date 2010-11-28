@@ -64,6 +64,18 @@ function w2p_autoload($class_name) {
         case 'ctasklog':
             require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
             break;
+        case 'cforummessage':
+            require_once W2P_BASE_DIR.'/modules/forums/forummessage.class.php';
+            break;
+        case 'ctasklog':
+            require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
+            break;
+        case 'cprojectdesigneroptions':
+            require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
+            break;
+        case 'csyskey':
+            require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
+            break;
         case 'cprojectdesigneroptions':
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
@@ -1147,14 +1159,6 @@ function formatHours($hours) {
  */
 function w2Psgn($x) {
 	return $x ? ($x > 0 ? 1 : -1) : 0;
-}
-
-/**
- * This function is now deprecated and will be removed.
- * In the interim it now does nothing.
- */
-function dpRealPath($file) {
-	return $file;
 }
 
 /*

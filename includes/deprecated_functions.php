@@ -129,3 +129,12 @@ function clean_value($str) {
     $bad_values = array("'");
     return str_replace($bad_values, '', $str);
 }
+
+/**
+ * This function is now deprecated and will be removed.
+ * In the interim it now does nothing.
+ * TODO:  Remove for v3.0 - dkc 27 Nov 2010
+ */
+function dpRealPath($file) {
+	return $file;
+}
