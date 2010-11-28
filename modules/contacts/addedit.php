@@ -51,8 +51,6 @@ if (!$row && $contact_id > 0) {
 $canDelete = $row->canDelete($msg, $contact_id);
 $is_user = $row->isUser($contact_id);
 
-
-
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
 
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -133,21 +131,15 @@ function setCompany( key, val ){
 }
 
 function delIt(){
-<?php
-if ($userDeleteProtect) {
-?>
+    <?php if ($userDeleteProtect) { ?>
 	alert('<?php echo $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS); ?>');
-<?php
-} else {
-?>
+    <?php } else { ?>
 	var form = document.changecontact;
 	if(confirm('<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>')) {
 		form.del.value = '<?php echo $contact_id; ?>';
 		form.submit();
 	}
-<?php
-}
-?>
+    <?php } ?>
 }
 
 function orderByName( x ){
@@ -174,6 +166,7 @@ function updateVerify() {
 		form.contact_email.focus();
 	}
 }
+
 function addContactMethod(field, value) {
     var selects, index, select, tr, td;
 
@@ -189,12 +182,11 @@ function addContactMethod(field, value) {
 
     /* Create select menu for contact method type */
     function addOption(select, value, text, selected) {
-	//$(select).append('<option value="' + value + '" ' + (selected == value ? 'selected="selected"' : '') + ' ">' + text + '</option>');
-	var option = document.createElement('option'); 
+        var option = document.createElement('option'); 
         option.setAttribute("value", value);
         option.innerHTML = text;
         option.selected = (value == selected);
-	$(select).append(option); 
+        $(select).append(option);
     }
 
     /* Create a new table row */
@@ -217,7 +209,6 @@ function removeContactMethod(index) {
     tr.parentNode.removeChild(tr);
 }
 
-//window.addEvent("domready", function() {
 $(document).ready(function() {
 <?php foreach ($methods as $method => $value): ?>
     addContactMethod("<?php echo $method; ?>", "<?php echo $value; ?>");
