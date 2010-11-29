@@ -1,2 +1,0 @@
-Tasks end date
-View the task's end date (real and theoretical)

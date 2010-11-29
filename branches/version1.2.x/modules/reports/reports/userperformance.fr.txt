@@ -1,2 +1,0 @@
-Performance utilisateur
-Rapport qui montre le nombre d'heures travaillés par un utilisateur au regard de celui alloué dans les tâches

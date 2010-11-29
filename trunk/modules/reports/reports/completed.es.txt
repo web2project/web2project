@@ -1,3 +1,0 @@
-Completadas
-Tareas completadas en la última semana.
-suppressHeaders=1
