@@ -1,2 +1,0 @@
-Aufgabenliste
-Zeige eine vollständige Aufgabenliste für das Projekt an

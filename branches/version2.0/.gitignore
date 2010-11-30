@@ -1,7 +1,0 @@
-/includes/config.php
-/reporting.tmp
-/tmp.*
-/unit_tests/reports/
-/nbproject/
-/.idea/
-/files/*

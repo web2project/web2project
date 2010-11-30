@@ -1,2 +1,0 @@
-Estadísticas de Proyectos
-Estadísticas de Proyectos, mostrando el estado de las tareas.

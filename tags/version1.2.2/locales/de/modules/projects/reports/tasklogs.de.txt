@@ -1,2 +1,0 @@
-Aufgaben-Protokollierung
-Zeige die Aufgabenprotokolle für das Projekt an

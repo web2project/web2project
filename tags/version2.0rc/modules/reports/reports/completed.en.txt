@@ -1,3 +1,0 @@
-Completed
-Tasks completed in the last week
-suppressHeaders=1

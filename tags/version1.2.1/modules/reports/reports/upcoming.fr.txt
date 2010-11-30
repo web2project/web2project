@@ -1,3 +1,0 @@
-A venir
-Tâches à terminer la semaine prochaine
-suppressHeaders=1
