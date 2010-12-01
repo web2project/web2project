@@ -162,9 +162,11 @@ class CModule extends CW2pObject {
 	public $permissions_item_field = null;
 	public $permissions_item_table = null;
 	public $mod_main_class = null;
+    protected $modules;
 
 	public function __construct() {
         parent::__construct('modules', 'mod_id');
+        $this->modules  = W2P_BASE_DIR.'/modules/';
 	}
 
 	public function install() {
@@ -179,7 +181,7 @@ class CModule extends CW2pObject {
 		}
 		// This arbitrarily places it at the end of the list.
 		$this->mod_ui_order = 100;
-		$this->store();
+        $this->store();
 
 		$this->_compactModuleUIOrder();
 
@@ -199,7 +201,8 @@ class CModule extends CW2pObject {
 		}
 		return true;
 	}
-	private function _compactModuleUIOrder() {
+
+    protected function _compactModuleUIOrder() {
 		$q = new DBQuery;
 		$q->addTable('modules');
 		$q->addQuery('mod_id');
@@ -227,8 +230,9 @@ class CModule extends CW2pObject {
 			return db_error();
 		} else {
 			$perms = &$GLOBALS['AppUI']->acl();
-			if (!isset($this->mod_admin))
+			if (!isset($this->mod_admin)) {
 				$this->mod_admin = 0;
+            }
 			if ($this->mod_admin) {
 				$perms->deleteGroupItem($this->mod_directory, 'admin');
 			} else {
@@ -295,7 +299,97 @@ class CModule extends CW2pObject {
 			}
 		}
 	}
-	// overridable functions
+
+    public function check() {
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::deploy-check failed - ';
+
+        return $errorArray;
+    }
+
+    public function validate() {
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::deploy-validate failed - ';
+
+        if (!is_writable($this->modules)) {
+            $errorArray['mod_write'] = $baseErrorMsg . 'the modules directory is not writeable';
+        }
+        if ($this->filetype != 'application/zip') {
+            $errorArray['bad_type'] = $baseErrorMsg . 'this module format is not currently supported';
+        }
+        if ($this->filesize > 250000) {
+            $errorArray['big_file'] = $baseErrorMsg . 'this module is bigger than allowed for this installer';
+        }
+
+        return $errorArray;
+    }
+
+    public function deploy(array $fileinfo) {
+        $this->filename = $fileinfo['tmp_name'];
+        $this->filetype = $fileinfo['type'];
+        $this->filesize = $fileinfo['size'];
+
+        $errorMsgArray = $this->validate();
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+
+        if (function_exists('zip_open')) {
+            $zip = new ZipArchive;
+            $zip->open($this->filename);
+            $numFiles = $zip->numFiles;
+
+            if ($numFiles > 0) {
+                $moduleDir = $zip->getNameIndex(0);
+                $moduleName = substr($moduleDir, 0, -1);
+
+                //TODO: move module validation to check()
+                if ($zip->locateName($moduleDir.'setup.php') === false) {
+                    $errorMsgArray['missing_setup'] = 'This module is not well-formed, missing: '.$moduleDir.'setup.php';
+                }
+                if ($zip->locateName($moduleDir.'index.php') === false) {
+                    $errorMsgArray['missing_index'] = 'This module is not well-formed, missing: '.$moduleDir.'index.php';
+                }
+                if ($zip->locateName($moduleDir.$moduleName.'.class.php') === false) {
+                    $errorMsgArray['missing_class'] = 'This module is not well-formed, missing: '.$moduleDir.$moduleName.'.class.php';
+                }
+                if (count($errorMsgArray) > 0) {
+                    return $errorMsgArray;
+                }
+                $zip->extractTo($this->modules);
+                for ($i = 1; $i < $numFiles; $i++) {
+                    $filename = $zip->getNameIndex($i);
+                    $compFileSize = strlen($zip->getFromIndex($i));
+                    $fullFileSize = filesize($this->modules.$filename);
+                    if ($compFileSize > 0 && $compFileSize != $fullFileSize) {
+                        $this->cleanUp($moduleDir);
+                        $errorMsgArray['bad_size'] = 'This module failed filesize validation';
+                        break;
+                    }
+                }
+                if (count($errorMsgArray) > 0) {
+                    return $errorMsgArray;
+                }
+            }
+            $zip->close($this->filename);
+            unlink($this->filename);
+        }
+        return true;
+    }
+
+    protected function cleanUp($moduleName) {
+        $modulePath = $this->modules.$moduleName;
+
+        $dir = new DirectoryIterator($modulePath);
+        foreach ($dir as $file) {
+            if (!$file->isDot()) {
+                unlink($modulePath.'/'.$file);
+            }
+        }
+        rmdir($modulePath);
+    }
+
+    // overridable functions
 	public function moduleInstall() {
 		return null;
 	}
