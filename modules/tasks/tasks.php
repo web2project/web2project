@@ -309,9 +309,9 @@ if (!$min_view && $f2 != 'all') {
 
 $q->addGroup('tasks.task_id');
 if (!$project_id && !$task_id) {
-	$q->addOrder('p.project_id, task_start_date');
+	$q->addOrder('p.project_id, task_start_date, task_end_date');
 } else {
-	$q->addOrder('task_start_date');
+	$q->addOrder('task_start_date, task_end_date');
 }
 //print_r($q->prepare());
 if ($canViewTask) {
