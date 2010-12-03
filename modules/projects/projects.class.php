@@ -541,11 +541,13 @@ class CProject extends CW2pObject {
 		$q->clear();
 		if ($this->project_departments) {
 			foreach ($this->project_departments as $department) {
-				$q->addTable('project_departments');
-				$q->addInsert('project_id', $this->project_id);
-				$q->addInsert('department_id', $department);
-				$q->exec();
-				$q->clear();
+				if ($department) {
+                    $q->addTable('project_departments');
+                    $q->addInsert('project_id', $this->project_id);
+                    $q->addInsert('department_id', $department);
+                    $q->exec();
+                    $q->clear();
+                }
 			}
 		}
 
