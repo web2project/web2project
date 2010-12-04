@@ -97,9 +97,6 @@ $tabBox->show();
 <?php if ($w2Pconfig['cal_day_view_show_minical']) { ?>
         <td valign="top" width="175">
 <?php
-	require_once (W2P_BASE_DIR . '/modules/calendar/links_tasks.php');
-	require_once (W2P_BASE_DIR . '/modules/calendar/links_events.php');
-
 	$minical = new CMonthCalendar($this_day);
 	$minical->setStyles('minititle', 'minical');
 	$minical->showArrows = false;
@@ -113,8 +110,12 @@ $tabBox->show();
 	$last_time = new CDate($minical->prev_month);
 	$last_time->setDay($minical->prev_month->getDaysInMonth());
 	$last_time->setTime(23, 59, 59);
+
 	$links = array();
+    require_once (W2P_BASE_DIR . '/modules/calendar/links_tasks.php');
 	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
+
+    require_once (W2P_BASE_DIR . '/modules/calendar/links_events.php');
 	getEventLinks($first_time, $last_time, $links, 20, true);
 	$minical->setEvents($links);
 
