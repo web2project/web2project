@@ -2304,7 +2304,7 @@ class CTask extends CW2pObject {
 		$q->addQuery('task_description as description');
 		$q->addQuery('task_start_date as startDate');
 		$q->addQuery('task_end_date as endDate');
-		$q->addQuery("'".$q->dbfnNowWithTZ()."'" . ' as updatedDate');
+        $q->addQuery('task_updated as updatedDate');
 		$q->addQuery('CONCAT(\''. W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . '\', t.task_id) as url');
 		$q->addQuery('p.project_id, p.project_name');
 		$q->addTable('tasks', 't');
