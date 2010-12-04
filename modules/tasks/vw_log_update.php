@@ -345,7 +345,8 @@ $q->clear();
 		<input type="hidden" name="email_task_list" id="email_task_list" value="<?php echo implode(',', $cidtc);?>" />
 		<input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',', $task_email_title)); ?>';" onmouseout="window.status = '';" name="email_task_contacts" id="email_task_contacts" <?php echo ($tt ? 'checked="checked"' : ''); ?> /><label for="email_task_contacts"><?php echo $AppUI->_('Task Contacts'); ?></label>
 		<input type="hidden" name="email_project_list" id="email_project_list" value="<?php echo implode(',', $cidpc); ?>" />
-		<input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',', $proj_email_title)); ?>';" onmouseout="window.status = '';" name="email_project_contacts" id="email_project_contacts" <?php echo ($tp ? 'checked="checked"' : ''); ?> /><label for="email_project_contacts"><?php echo $AppUI->_('Project Contacts'); ?></label>
+        <input type="checkbox" onmouseover="window.status = '<?php echo addslashes(implode(',', $proj_email_title)); ?>';" onmouseout="window.status = '';" name="email_project_contacts" id="email_project_contacts" <?php echo ($tp ? 'checked="checked"' : ''); ?> /><label for="email_project_contacts"><?php echo $AppUI->_('Project Contacts'); ?></label>
+        <input type="checkbox" name="email_log_user" id="email_log_user" /><label for="email_log_user"><?php echo $AppUI->_('User Assigned to Log'); ?></label>
 		<input type='hidden' name='email_others' id='email_others' value='' />
 		<?php if ($AppUI->isActiveModule('contacts') && canView('contacts')) { ?>
 			<input type='button' class='button' value='<?php echo $AppUI->_('Other Contacts...'); ?>' onclick='javascript:popEmailContacts();' />

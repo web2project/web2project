@@ -64,13 +64,22 @@ if ($result) {
     }
 
     // Check if we need to email the task log to anyone.
-    $email_assignees = w2PgetParam($_POST, 'email_assignees', null);
-    $email_task_contacts = w2PgetParam($_POST, 'email_task_contacts', null);
+    $email_assignees        = w2PgetParam($_POST, 'email_assignees', null);
+    $email_task_contacts    = w2PgetParam($_POST, 'email_task_contacts', null);
     $email_project_contacts = w2PgetParam($_POST, 'email_project_contacts', null);
-    $email_others = w2PgetParam($_POST, 'email_others', '');
-    $email_extras = w2PgetParam($_POST, 'email_extras', null);
+    $email_others           = w2PgetParam($_POST, 'email_others', '');
+    $email_log_user         = w2PgetParam($_POST, 'email_log_user', '');
+    $task_log_creator       = (int) w2PgetParam($_POST, 'task_log_creator', 0);
+    $email_extras           = w2PgetParam($_POST, 'email_extras', null);
 
-    if ($task->email_log($obj, $email_assignees, $email_task_contacts, $email_project_contacts, $email_others, $email_extras)) {
+    // Email the user this task log is being created for, might not be the person
+    // creating the logf
+    $user_to_email = 0;
+    if (isset($email_log_user) && 'on' == $email_log_user && $task_log_creator) {
+        $user_to_email = $task_log_creator;
+    }
+
+    if ($task->email_log($obj, $email_assignees, $email_task_contacts, $email_project_contacts, $email_others, $email_extras, $user_to_email)) {
         $obj->store(); // Save the updated message. It is not an error if this fails.
     }
 
