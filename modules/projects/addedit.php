@@ -246,28 +246,28 @@ function setDepartment(department_id_string){
 						echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
 					}
 
-          if ($AppUI->isActiveModule('departments') && canEdit('departments')) {
-            //Build display list for departments
-            $company_id = $project->project_company;
-            $selected_departments = array();
-            if ($project_id) {
-              $myDepartments = CProject::getDepartments($AppUI, $project_id);
-              $selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
-            }
+                    if ($AppUI->isActiveModule('departments') && canAccess('departments')) {
+                        //Build display list for departments
+                        $company_id = $project->project_company;
+                        $selected_departments = array();
+                        if ($project_id) {
+                            $myDepartments = CProject::getDepartments($AppUI, $project_id);
+                            $selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
+                        }
 
-            $departments_count = 0;
-            $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-            if ($department_selection_list != '' || $project_id) {
-              $department_selection_list = ($AppUI->_('Departments') . '<br /><select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
-            } else {
-              $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
-            }
+                        $departments_count = 0;
+                        $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
+                        if ($department_selection_list != '' || $project_id) {
+                            $department_selection_list = ($AppUI->_('Departments') . '<br /><select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
+                        } else {
+                            $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
+                        }
 
-            // Let's check if the actual company has departments registered
-            if ($department_selection_list != '') {
-              echo '<br />' . $department_selection_list;
-            }
-          }
+                        // Let's check if the actual company has departments registered
+                        if ($department_selection_list != '') {
+                            echo '<br />' . $department_selection_list;
+                        }
+                    }
 				?>
 			</td>
 		</tr>
