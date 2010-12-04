@@ -20,7 +20,7 @@ class w2p_API_iCalendar {
     public static function formatCalendarItem($calendarItem, $module_name) {
         global $AppUI;
         $name = $calendarItem['name'];
-        $uid = $module_name.'_'.$calendarItem['id'];
+        $uid = (isset( $calendarItem['UID'])) ? $calendarItem['UID'] : $module_name.'_'.$calendarItem['id'];
         $description = '';
         $attachments = '';
 
