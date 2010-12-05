@@ -11,13 +11,10 @@ $hideEmail = w2PgetConfig('hide_email_addresses', false);
 $q = new DBQuery;
 $q->addTable('forums');
 $q->addTable('forum_messages');
-$q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, user_username, forum_moderated, visit_user');
+$q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email, user_username, forum_moderated, visit_user');
 $q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = ' . (int)$forum_id . ' AND visit_message = forum_messages.message_id');
 $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-$q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-$q->addWhere("cm.method_name = 'email_primary'");
-$q->addQuery('cm.method_value as contact_email');
 $q->addWhere('forum_id = message_forum AND (message_id = ' . (int)$message_id . ' OR message_parent = ' . (int)$message_id . ')');
 $q->addOrder('message_date ' . $sort);
 
@@ -141,11 +138,8 @@ foreach ($messages as $row) {
 	$q = new DBQuery;
 	$q->addTable('forum_messages');
 	$q->addTable('users');
-	$q->addQuery('DISTINCT contact_first_name, contact_last_name, user_username');
+	$q->addQuery('DISTINCT contact_first_name, contact_last_name, user_username, contact_email');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-    $q->addWhere("cm.method_name = 'email_primary'");
-    $q->addQuery('cm.method_value as contact_email');
 	$q->addWhere('users.user_id = ' . (int)$row['message_editor']);
 	$editor = $q->loadList();
 

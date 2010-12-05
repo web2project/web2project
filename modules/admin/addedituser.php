@@ -56,10 +56,6 @@ if ($contact_id) {
 	$q->addWhere('u.user_id = ' . (int)$user_id);
 }
 $user = $q->loadHash();
-$q->clear();
-$contact = new CContact();
-$contact->contact_id = ($contact_id) ? $contact_id : $user['user_contact'];
-$contactMethods = $contact->getContactMethods(array('email_primary'));
 
 if (!$user && $user_id > 0) {
 	$titleBlock = new CTitleBlock('Invalid User ID', 'helix-setup-user.png', $m, $m . '.' . $a);
@@ -244,7 +240,7 @@ function setDept( key, val ) {
 </tr>
 <tr>
     <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Email'); ?>:</td>
-    <td><input type="text" class="text" name="contact_email" value="<?php echo $contactMethods['email_primary']; ?>" maxlength="255" size="40" /> </td>
+    <td><input type="text" class="text" name="contact_email" value="<?php echo $user['contact_email']; ?>" maxlength="255" size="40" /> </td>
 </tr>
 <tr>
     <td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Email') . ' ' . $AppUI->_('Signature'); ?>:</td>

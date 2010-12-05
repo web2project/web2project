@@ -952,7 +952,7 @@ class CTask extends CW2pObject {
         $q->leftJoin('contacts', 'ac', 'ac.contact_id = a.user_contact');
         $q->addQuery('ac.contact_id as assignee_contact_id');
 
-		$q->addQuery('t.task_id, cc.contact_first_name as creator_first_name, cc.contact_last_name as creator_last_name, oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name, a.user_id as assignee_id, ac.contact_first_name as assignee_first_name, ac.contact_last_name as assignee_last_name');
+		$q->addQuery('t.task_id, cc.contact_email as creator_email' . ', cc.contact_first_name as creator_first_name' . ', cc.contact_last_name as creator_last_name' . ', oc.contact_email as owner_email' . ', oc.contact_first_name as owner_first_name' . ', oc.contact_last_name as owner_last_name' . ', a.user_id as assignee_id, ac.contact_email as assignee_email' . ', ac.contact_first_name as assignee_first_name' . ', ac.contact_last_name as assignee_last_name');
 		$q->addWhere(' t.task_id = ' . (int)$this->task_id);
 		$users = $q->loadList();
 		$q->clear();
@@ -962,21 +962,6 @@ class CTask extends CW2pObject {
 
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}
-
-        $contact = new CContact();
-        foreach ($users as $index => $info) {
-            $contact->contact_id = $info['owner_contact_id'];
-            $email = $contact->getContactMethods(array('email_primary'));
-            $users[$index]['owner_email'] = $email['email_primary'];
-
-            $contact->contact_id = $info['creator_contact_id'];
-            $email = $contact->getContactMethods(array('email_primary'));
-            $users[$index]['creator_email'] = $email['email_primary'];
-
-            $contact->contact_id = $info['assignee_contact_id'];
-            $email = $contact->getContactMethods(array('email_primary'));
-            $users[$index]['assignee_email'] = $email['email_primary'];
-        }
 
 		if ($mail->ValidEmail($users[0]['owner_email'])) {
 			$mail->To($users[0]['owner_email'], true);
@@ -1021,25 +1006,10 @@ class CTask extends CW2pObject {
 		$q->leftJoin('contacts', 'ac', 'ac.contact_id = a.user_contact');
         $q->addQuery('ac.contact_id as assignee_contact_id');
 
-		$q->addQuery('t.task_id, cc.contact_first_name as creator_first_name, cc.contact_last_name as creator_last_name, oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name, a.user_id as assignee_id, ac.contact_first_name as assignee_first_name, ac.contact_last_name as assignee_last_name');
+		$q->addQuery('t.task_id, cc.contact_email as creator_email' . ', cc.contact_first_name as creator_first_name' . ', cc.contact_last_name as creator_last_name' . ', oc.contact_email as owner_email' . ', oc.contact_first_name as owner_first_name' . ', oc.contact_last_name as owner_last_name' . ', a.user_id as assignee_id, ac.contact_email as assignee_email' . ', ac.contact_first_name as assignee_first_name' . ', ac.contact_last_name as assignee_last_name');
 		$q->addWhere(' t.task_id = ' . (int)$this->task_id);
 		$users = $q->loadList();
 		$q->clear();
-
-        $contact = new CContact();
-        foreach ($users as $index => $info) {
-            $contact->contact_id = $info['owner_contact_id'];
-            $email = $contact->getContactMethods(array('email_primary'));
-            $users[$index]['owner_email'] = $email['email_primary'];
-
-            $contact->contact_id = $info['creator_contact_id'];
-            $email = $contact->getContactMethods(array('email_primary'));
-            $users[$index]['creator_email'] = $email['email_primary'];
-
-            $contact->contact_id = $info['assignee_contact_id'];
-            $email = $contact->getContactMethods(array('email_primary'));
-            $users[$index]['assignee_email'] = $email['email_primary'];
-        }
 
 		if (count($users)) {
             $task_start_date = intval($this->task_start_date) ? new CDate($AppUI->formatTZAwareTime($this->task_start_date, '%Y-%m-%d %T')) : null;
@@ -1097,11 +1067,7 @@ class CTask extends CW2pObject {
 				$q->addTable('user_tasks', 'ut');
 				$q->leftJoin('users', 'ua', 'ua.user_id = ut.user_id');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = ua.user_contact');
-				$q->addQuery('c.contact_first_name, c.contact_last_name');
-                $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-                $q->addWhere("cm.method_name = 'email_primary'");
-                $q->addQuery('cm.method_value AS contact_email');
-
+				$q->addQuery('c.contact_first_name, c.contact_last_name, c.contact_email');
 				$q->addWhere('ut.task_id = ' . $this->task_id);
 				if (!$AppUI->getPref('MAILALL')) {
 					$q->addWhere('ua.user_id <>' . (int)$AppUI->user_id);
@@ -1116,11 +1082,7 @@ class CTask extends CW2pObject {
 			if (isset($task_contacts) && $task_contacts == 'on') {
 				$q->addTable('task_contacts', 'tc');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-				$q->addQuery('c.contact_first_name, c.contact_last_name');
-                $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-                $q->addWhere("cm.method_name = 'email_primary'");
-                $q->addQuery('cm.method_value AS contact_email');
-
+				$q->addQuery('c.contact_first_name, c.contact_last_name, c.contact_email');
 				$q->addWhere('tc.task_id = ' . $this->task_id);
 				$contactList = $q->loadList();
 				$q->clear();
@@ -1132,11 +1094,7 @@ class CTask extends CW2pObject {
 			if (isset($project_contacts) && $project_contacts == 'on') {
 				$q->addTable('project_contacts', 'pc');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addQuery('c.contact_first_name, c.contact_last_name');
-                $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-                $q->addWhere("cm.method_name = 'email_primary'");
-                $q->addQuery('cm.method_value AS contact_email');
-
+				$q->addQuery('c.contact_first_name, c.contact_last_name, c.contact_email');
 				$q->addWhere('pc.project_id = ' . $this->task_project);
 				$projectContactList = $q->loadList();
 				$q->clear();
@@ -1149,12 +1107,8 @@ class CTask extends CW2pObject {
 				$others = trim($others, " \r\n\t,"); // get rid of empty elements.
 				if (strlen($others) > 0) {
 					$q->addTable('contacts', 'c');
-					$q->addQuery('c.contact_first_name, c.contact_last_name');
+					$q->addQuery('c.contact_first_name, c.contact_last_name, c.contact_email');
 					$q->addWhere('c.contact_id IN (' . $others . ')');
-                    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-                    $q->addWhere("cm.method_name = 'email_primary'");
-                    $q->addQuery('cm.method_value AS contact_email');
-
 					$otherContacts = $q->loadList();
 					$q->clear();
 
@@ -1734,7 +1688,7 @@ class CTask extends CW2pObject {
 			return $q->loadHashList('dept_id');
 		}
 	}
-    public function getContacts(CAppUI $AppUI = null, $taskId) {
+    public function getContacts(CAppUI $AppUI = null, $task_id) {
 		global $AppUI;
 
         $perms = $AppUI->acl();
@@ -1747,8 +1701,8 @@ class CTask extends CW2pObject {
             $q->addQuery('dept_name');
 
 			$q->addJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id', 'inner');
-			$q->addWhere('tc.task_id = ' . (int)$taskId);
-			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_order_by');
+			$q->addWhere('tc.task_id = ' . (int) $task_id);
+			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_order_by, contact_email');
 
 			$q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
 
@@ -1758,8 +1712,8 @@ class CTask extends CW2pObject {
 			return $q->loadHashList('contact_id');
 		}
     }
-	public function getTaskContacts(CAppUI $AppUI = null, $taskId) {
-        return $this->getContacts($AppUI, $taskId);
+	public function getTaskContacts(CAppUI $AppUI = null, $task_id) {
+        return $this->getContacts($AppUI, $task_id);
 	}
 
 	/**
@@ -2118,11 +2072,8 @@ class CTask extends CW2pObject {
 		$q->addTable('user_tasks', 'ut');
 		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
 		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->addQuery('c.contact_id, contact_first_name, contact_last_name');
+		 $q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
 		$q->addWhere('ut.task_id = ' . (int)$id);
-        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-        $q->addWhere("cm.method_name = 'email_primary'");
-        $q->addQuery('cm.method_value AS contact_email');
 		$contacts = $q->loadHashList('c.contact_id');
 		$q->clear();
 
@@ -2131,11 +2082,8 @@ class CTask extends CW2pObject {
 		$owner_is_not_assignee = false;
 		$q->addTable('users', 'u');
 		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->addQuery('c.contact_id, contact_first_name, contact_last_name');
+		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
 		$q->addWhere('u.user_id = ' . (int)$this->task_owner);
-        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-        $q->addWhere("cm.method_name = 'email_primary'");
-        $q->addQuery('cm.method_value AS contact_email');
 		if ($q->exec(ADODB_FETCH_NUM)) {
 			list($owner_contact, $owner_first_name, $owner_last_name, $owner_email) = $q->fetchRow();
 			if (!isset($contacts[$owner_contact])) {

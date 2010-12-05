@@ -325,16 +325,12 @@ if (count($tasks) > 0) {
 		$q->clear();
 		$q->addQuery('ut.user_id,	u.user_username');
 		$q->addQuery('ut.perc_assignment');
-		$q->addQuery('CONCAT(contact_first_name, \' \',contact_last_name) AS assignee');
+		$q->addQuery('CONCAT(contact_first_name, \' \',contact_last_name) AS assignee, contact_email');
 		$q->addTable('user_tasks', 'ut');
 		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
 		$q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id', 'inner');
 		$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
 		$q->addOrder('perc_assignment desc, contact_first_name, contact_last_name');
-
-        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-        $q->addWhere("cm.method_name = 'email_primary'");
-        $q->addQuery('cm.method_value AS contact_email');
 
 		$assigned_users = array();
 		$row['task_assigned_users'] = $q->loadList();

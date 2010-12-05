@@ -80,8 +80,7 @@ if ($result) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
         if ($isNewUser && w2PgetParam($_POST, 'send_user_mail', 0)) {
-			$contactMethods = $contact->getContactMethods(array('email_primary'));
-            notifyNewUserCredentials($contactMethods['email_primary'], $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
+            notifyNewUserCredentials($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
 		}
 		if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
 			$perms = &$AppUI->acl();
