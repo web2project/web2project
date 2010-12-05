@@ -24,13 +24,15 @@ $orderby = 'contact_first_name';
 
 $search_map = array($orderby, 'contact_first_name', 'contact_last_name');
 
-// optional fields shown in the list (could be modified to allow breif and verbose, etc)
+// optional fields shown in the list (could be modified to allow brief and verbose, etc)
 $showfields = array('contact_address1' => 'contact_address1', 
 	'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city', 
 	'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip', 
 	'contact_country' => 'contact_country', 'contact_company' => 'contact_company', 
-	'company_name' => 'company_name', 'dept_name' => 'dept_name', 'contact_job'=>'contact_job');
-$contactMethods = array('email_primary', 'phone_primary', 'phone_alt', 'phone_mobile', 'phone_fax');
+	'company_name' => 'company_name', 'dept_name' => 'dept_name',
+    'contact_phone' => 'contact_phone', 'contact_email' => 'contact_email',
+    'contact_job'=>'contact_job');
+$contactMethods = array('phone_alt', 'phone_mobile', 'phone_fax');
 $methodLabels = w2PgetSysVal('ContactMethods');
 
 // assemble the sql statement
@@ -183,7 +185,9 @@ if (function_exists('styleRenderBoxTop')) {
 											$s = '';
 											while (list($key, $val) = each($showfields)) {
 												if (mb_strlen($carr[$z][$x][$key]) > 0) {
-													if ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {
+													if ($val == 'contact_email') {
+                                                        $s .= '<td class="hilite" colspan="2">' . w2p_email($carr[$z][$x][$key]) . '</td></tr>';
+                                                    } elseif ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {
 														//Don't do a thing
 													} elseif ($val == 'company_name') {
 														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Company') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
@@ -195,6 +199,8 @@ if (function_exists('styleRenderBoxTop')) {
 														$s .= '<tr><td class="hilite" colspan="2">' . ($countries[$carr[$z][$x][$key]] ? $countries[$carr[$z][$x][$key]] : $carr[$z][$x][$key]) . '<br /></td></tr>';
 													} elseif ($val != 'contact_country') {
 														$s .= '<tr><td class="hilite" colspan="2">' . $carr[$z][$x][$key] . '<br /></td></tr>';
+                                                    } elseif ($val == 'contact_phone') {
+                                                        $s .= '<tr><td width="35%"><strong>' . $AppUI->_('Work Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													}
 												}
 											}

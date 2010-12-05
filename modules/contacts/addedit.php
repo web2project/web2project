@@ -354,6 +354,14 @@ $(document).ready(function() {
                         </td>
                     </tr>
                     <tr>
+                        <td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
+                        <td><input type="text" class="text" name="contact_phone" value="<?php echo $row->contact_phone; ?>" maxlength="50" size="25" /></td>
+                    </tr>
+                    <tr>
+                        <td align="right"><?php echo $AppUI->_('Email'); ?>1:</td>
+                        <td><input type="text" class="text" name="contact_email" value="<?php echo $row->contact_email; ?>" maxlength="60" size="25" /></td>
+                    </tr>
+                    <tr>
                         <td align="left"><?php echo w2PtoolTip('Contact Method', 'add new', false, 'add_contact_method') ?><a href="javascript:addContactMethod();"><img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" style="border: 0;" /></a><?php echo w2PendTip() ?></td>
                     </tr>
 					<tr id="custom_fields">

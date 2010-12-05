@@ -126,10 +126,10 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 			$c->contact_state = $ldap_attribs['st'][0];
 			$c->contact_zip = $ldap_attribs['postalcode'][0];
 			$c->contact_job = $ldap_attribs['title'][0];
+            $c->contact_email = $ldap_attribs['mail'][0];
+            $c->contact_phone = $ldap_attribs['telephonenumber'][0];
             $c->store();
-            $contactArray = array('email_primary' => $ldap_attribs['mail'][0],
-                'phone_primary' => $ldap_attribs['telephonenumber'][0],
-                'phone_mobile' => $ldap_attribs['mobile'][0]);
+            $contactArray = array('phone_mobile' => $ldap_attribs['mobile'][0]);
             $c->setContactMethods($contactArray);
 		}
 		$contact_id = ($c->contact_id == null) ? 'NULL' : $c->contact_id;

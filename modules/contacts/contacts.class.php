@@ -26,6 +26,8 @@ class CContact extends CW2pObject {
 	public $contact_company = null;
 	public $contact_department = null;
 	public $contact_type = null;
+    public $contact_email = null;
+    public $contact_phone = null;
 	public $contact_address1 = null;
 	public $contact_address2 = null;
 	public $contact_city = null;
@@ -319,19 +321,17 @@ class CContact extends CW2pObject {
 		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 		$mail = new Mail;
-
-        $contactMethods = $this->getContactMethods();
 		$mail->Subject('Hello', $locale_char_set);
 
-		if ('' != $contactMethods['email_primary']) {
+		if ($this->contact_email) {
             $emailManager = new w2p_Output_EmailManager();
             $body = $emailManager->getContactUpdateNotify($AppUI, $this);
 
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}
 
-		if ($mail->ValidEmail($contactMethods['email_primary'])) {
-			$mail->To($contactMethods['email_primary'], true);
+		if ($mail->ValidEmail($this->contact_email)) {
+			$mail->To($this->contact_email, true);
 			$mail->Send();
 		}
 		return '';
@@ -402,6 +402,7 @@ class CContact extends CW2pObject {
 		$q->addQuery($showfields);
 		$q->addQuery('contact_first_name, contact_last_name, contact_title');
 		$q->addQuery('contact_updatekey, contact_updateasked, contact_lastupdate');
+        $q->addQuery('contact_email, contact_phone');
 		$q->addQuery('user_id');
 		$q->addTable('contacts', 'a');
 		$q->leftJoin('companies', 'b', 'a.contact_company = b.company_id');
@@ -479,7 +480,7 @@ class CContact extends CW2pObject {
 
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = user_contact');
         $q->addWhere("cm.method_value = '$email'");
-
+//TODO: add primary email
 		$q->setLimit(1);
 		$r = $q->loadResult();
 		$result = (is_array($r)) ? $r[0]['contact_first_name'] . ' ' . $r[0]['contact_last_name'] : 'User Not Found';
@@ -547,7 +548,7 @@ class CContact extends CW2pObject {
         $search['search_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
         $search['display_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
         $search['table_joins'] = array(array('table' => 'contacts_methods', 'alias' => 'cm', 'join' => 'c.contact_id = cm.contact_id'));
-
+//TODO: add primary email
         return $search;
     }
 

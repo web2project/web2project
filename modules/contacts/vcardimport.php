@@ -37,6 +37,8 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 			$contactValues['contact_birthday'] = $ci['BDAY'][0]['value'][0][0];
 			$contactValues['contact_company'] = $ci['UID'][0]['value'][0][0];
 			$contactValues['contact_type'] = $ci['N'][0]['value'][2][0];
+            $contactValues['contact_email'] = $ci['EMAIL'][0]['value'][0][0];
+            $contactValues['contact_phone'] = $ci['TEL'][0]['value'][0][0];
 			$contactValues['contact_address1'] = $ci['ADR'][0]['value'][2][0];
 			$contactValues['contact_address2'] = $ci['ADR'][0]['value'][1][0] . ', ' . $ci['ORG'][0]['value'][0][0];
 			$contactValues['contact_city'] = $ci['ADR'][0]['value'][3][0];
@@ -57,9 +59,7 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 			if (($msg = $obj->store($AppUI))) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
-            $contactArray = array('email_primary' => $ci['EMAIL'][0]['value'][0][0],
-                'email_alt' => $ci['EMAIL'][1]['value'][0][0],
-                'phone_primary' => $ci['TEL'][0]['value'][0][0],
+            $contactArray = array('email_alt' => $ci['EMAIL'][1]['value'][0][0],
                 'phone_alt' => $ci['TEL'][1]['value'][0][0],
                 'phone_mobile' => $ci['TEL'][2]['value'][0][0]);
             $obj->setContactMethods($contactArray);

@@ -66,8 +66,7 @@ foreach ($contactList as $contact) {
 	// Fields 21- 30
 	$text .= sprintf(",,,,,,,,,,");
 	// Fields 31- 40
-	settype($contactMethods['phone_primary'], 'string');
-	$text .= sprintf(",\"%s\",,,,,,,,,", $contactMethods['phone_primary']);
+	$text .= sprintf(",\"%s\",,,,,,,,,", $contact['contact_phone']);
 	// Fields 41- 50
 	settype($contactMethods['phone_mobile'], 'string');
 	$text .= sprintf("\"%s\",,,,,,,,\"\",\"0/0/00\",", '' . $contactMethods['phone_mobile']);
@@ -77,7 +76,7 @@ foreach ($contactList as $contact) {
 	} else {
 		$categories = "web2Project;";
 	}
-	$text .= sprintf(",,\"%s\",\"%s\",,,\"%s\",\"%s\",\"%s\",,", $contact['contact_birthday'], $categories, $contactMethods['email_primary'], "SMTP", $contact['contact_first_name'] . " " . $contact['contact_last_name']);
+	$text .= sprintf(",,\"%s\",\"%s\",,,\"%s\",\"%s\",\"%s\",,", $contact['contact_birthday'], $categories, $contact['contact_email'], "SMTP", $contact['contact_first_name'] . " " . $contact['contact_last_name']);
 	// Fields 61- 70
 	$text .= sprintf(",,,,,\"Unspecified\",,,,,");
 	// Fields 71- 80

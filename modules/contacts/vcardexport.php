@@ -48,7 +48,7 @@ if ($contact_id) {
 	$vcard->setUniqueID($contact->contact_company);
 
 	// add a phone number
-	$vcard->addTelephone($contactMethods['phone_primary']);
+	$vcard->addTelephone($contact->contact_phone);
 	$vcard->addParam('TYPE', 'PF');
 
 	// add a phone number
@@ -62,7 +62,7 @@ if ($contact_id) {
 	// first and the param after -- Contact_Vcard_Build
 	// is smart enough to add the param in the correct
 	// place.
-	$vcard->addEmail($contactMethods['email_primary']);
+	$vcard->addEmail($contact->contact_email);
 	$vcard->addParam('TYPE', 'PF');
 
 	// add a home/preferred email

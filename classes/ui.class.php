@@ -844,13 +844,14 @@ class CAppUI {
          *   removed from the contacts table. If the user is upgrading from
          *   v1.x and they try to log in before applying the database, crash.
          *   Info: http://bugs.web2project.net/view.php?id=457
+         * This hack was deprecated in dbVersion 26 for v2.2 in December 2010.
          */
 
         $qTest = new DBQuery();
         $qTest->addTable('w2pversion');
         $qTest->addQuery('max(db_version)');
         $dbVersion = $qTest->loadResult();
-        if ($dbVersion >= 21) {
+        if ($dbVersion >= 21 && $dbVersion < 26) {
             $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
             $q->addWhere("cm.method_name = 'email_primary'");
             $q->addQuery('cm.method_value AS user_email');
@@ -861,6 +862,7 @@ class CAppUI {
 
 		$q->addWhere('user_id = ' . (int)$user_id . ' AND user_username = \'' . $username . '\'');
 		$sql = $q->prepare();
+
 		$q->loadObject($this);
 		dprint(__file__, __line__, 7, 'Login SQL: ' . $sql);
 

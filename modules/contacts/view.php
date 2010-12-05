@@ -141,6 +141,14 @@ function delIt(){
 					<td align="right"><?php echo $AppUI->_('Birthday'); ?>:</td>
 					<td nowrap="nowrap" class="hilite" width="100%"><?php echo substr($contact->contact_birthday, 0, 10); ?></td>
 				</tr>
+				<tr>
+					<td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
+					<td nowrap="nowrap" class="hilite" width="100%"><?php echo $contact->contact_phone; ?></td>
+				</tr>
+				<tr>
+					<td align="right"><?php echo $AppUI->_('Email'); ?>:</td>
+					<td nowrap="nowrap" class="hilite" width="100%"><?php echo w2p_email($contact->contact_email); ?></td>
+				</tr>
                 <?php foreach ($methods as $method => $value): ?>
                     <tr>
                         <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$method]); ?>:</td>
