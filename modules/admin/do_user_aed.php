@@ -72,13 +72,9 @@ if ($isNewUser) {
 	}
 	$contact->contact_owner = $AppUI->user_id;
 }
-
 $result = $contact->store($AppUI);
-if ($result) {
-    $contactArray = array('email_primary' => $_POST['contact_email'],
-        'phone_primary' => $_POST['contact_phone']);
-    $contact->setContactMethods($contactArray);
 
+if ($result) {
 	$obj->user_contact = $contact->contact_id;
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);

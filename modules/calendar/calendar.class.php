@@ -802,17 +802,10 @@ class CEvent extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('user_id, contact_first_name, contact_last_name, con.contact_id');
+		$q->addQuery('user_id, contact_first_name, contact_last_name, con.contact_id, contact_email');
 		$q->addWhere('u.user_contact = con.contact_id');
 		$q->addWhere('user_id in (' . implode(',', $assignee_list) . ')');
 		$users = $q->loadHashList('user_id');
-
-        foreach ($users as $user_id => $info) {
-            $contact = new CContact();
-            $contact->contact_id = $info['contact_id'];
-            $emails = $contact->getContactMethods(array('email_primary'));
-            $users[$user_id]['contact_email'] = $emails['email_primary'];
-        }
 
 		$date_format = $AppUI->getPref('SHDATEFORMAT');
 		$time_format = $AppUI->getPref('TIMEFORMAT');

@@ -15,11 +15,10 @@ $contacts = CDepartment::getContactList($AppUI, $dept_id);
 $contact = new CContact();
 foreach ($contacts as $contact_id => $contact_data) {
 	$contact->contact_id = $contact_id;
-    $info = $contact->getContactMethods(array('email_primary', 'phone_primary'));
 
     echo '<tr><td><a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</a></td>';
-    echo '<td><a href="mailto:' . $info['email_primary'] . '">' . $info['email_primary'] . '</a></td>';
-	echo '<td>' . $info['phone_primary'] . '</td></tr>';
+    echo '<td>' . w2p_email($contact_data['contact_email']) . '</td>';
+	echo '<td>' . $contact_data['contact_phone'] . '</td></tr>';
 }
 ?>
 	<tr>
