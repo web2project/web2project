@@ -691,9 +691,7 @@ class CTask extends CW2pObject {
 
 		// update dependencies
 		if (!empty($this->task_id)) {
-			$this->updateDependencies($this->getDependencies());
-		} else {
-			print_r($this);
+			$this->updateDependencies($this->getDependencies(), $this->task_parent);
 		}
 
         return $stored;
@@ -810,7 +808,7 @@ class CTask extends CW2pObject {
 		return false;
 	}
 
-	public function updateDependencies($cslist) {
+	public function updateDependencies($cslist, $parent_id = 0) {
 		$q = new DBQuery;
 		// delete all current entries
 		$q->setDelete('task_dependencies');
@@ -820,7 +818,10 @@ class CTask extends CW2pObject {
 
 		// process dependencies
 		$tarr = explode(',', $cslist);
-		foreach ($tarr as $task_id) {
+        $tarr = array_flip($tarr);
+        unset($tarr[$parent_id]);
+
+		foreach ($tarr as $task_id => $value) {
 			if (intval($task_id) > 0) {
 				$q->addTable('task_dependencies');
 				$q->addReplace('dependencies_task_id', $this->task_id);

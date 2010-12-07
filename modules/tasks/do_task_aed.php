@@ -170,7 +170,7 @@ if ($sub_form) {
 
           // updating the table recording the
           // dependency relations with this task
-          $obj->updateDependencies($hdependencies);
+          $obj->updateDependencies($hdependencies, $task_parent);
 
           // we will reset the task's start date based upon dependencies
           // and shift the end date appropriately
