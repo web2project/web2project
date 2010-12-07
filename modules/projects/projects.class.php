@@ -671,7 +671,7 @@ class CProject extends CW2pObject {
 	public function getAllowedProjects($userId, $activeOnly = true) {
 		$q = new DBQuery;
 		$q->addTable('projects', 'pr');
-		$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date, project_company');
+		$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date, project_company, project_parent');
 		if ($activeOnly) {
 			$q->addWhere('project_active = 1');
 		}
