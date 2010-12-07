@@ -243,3 +243,29 @@ function smart_slice( $arr, $showNoMilestones, $printpdfhr, $day_diff ) {
 * 	END OF GANTT PDF UTILITY FUNCTIONS
 *
 */
+
+/*
+*  This is a kludgy mess because of how the arraySelectTree function is used..
+*    it expects - nay, demands! - that the first element of the subarray is the
+*    id and the third is the parent id. In most cases, that is fine.. in this
+*    one we're using the existing ACL-respecting functions and it has additional
+*    fields in "improper" places.
+*/
+function temp_filterArrayForSelectTree($projectData) {
+
+    unset($projectData['project_id']);
+    unset($projectData['project_color_identifier']);
+    unset($projectData['project_name']);
+    unset($projectData['project_start_date']);
+    unset($projectData['project_end_date']);
+    unset($projectData['project_company']);
+    unset($projectData['project_parent']);
+
+    unset($projectData[1]);
+    unset($projectData[3]);
+    unset($projectData[4]);
+    unset($projectData[5]);
+    $projectData[6] = ($projectData[0] == $projectData[6]) ? '' : $projectData[6];
+
+    return array_values($projectData);
+}
