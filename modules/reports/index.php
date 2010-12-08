@@ -6,11 +6,9 @@ if (!defined('W2P_BASE_DIR')) {
 $project_id = intval(w2PgetParam($_REQUEST, 'project_id', 0));
 $report_type = w2PgetParam($_REQUEST, 'report_type', '');
 
-// check permissions for this record
-$perms = &$AppUI->acl();
-
-$canRead = $perms->checkModuleItem('projects', 'view', $project_id);
-if (!$canRead) {
+$canReport = canView('reports');
+$canRead = canView('projects', $project_id);
+if (!$canReport || !$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
@@ -23,10 +21,10 @@ $company = new CCompany();
 $companyList = $company->getCompanies($AppUI);
 
 foreach ($projectList as $pr) {
-  if ($pr['project_id'] == $project_id) {
-    $display_project_name = '(' . $companyList[$pr['project_company']]['company_name'] . ') ' . $pr['project_name'];
-  }
-  $project_list[$pr['project_id']] = '(' . $companyList[$pr['project_company']]['company_name'] . ') ' . $pr['project_name'];
+    if ($pr['project_id'] == $project_id) {
+        $display_project_name = '(' . $companyList[$pr['project_company']]['company_name'] . ') ' . $pr['project_name'];
+    }
+    $project_list[$pr['project_id']] = '(' . $companyList[$pr['project_company']]['company_name'] . ') ' . $pr['project_name'];
 }
 
 if (!$suppressHeaders) {
