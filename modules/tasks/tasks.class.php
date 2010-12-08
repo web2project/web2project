@@ -191,8 +191,8 @@ class CTask extends CW2pObject {
 			if ($hdependencies) {
 				$this_dependencies = explode(',', $hdependencies);
 			}
-		} else {
-			$this_dependencies = explode(',', $this->getDependencies());
+        } else {
+            $this_dependencies = explode(',', $this->getDependencies());
 		}
 		// Set to false for recursive updateDynamic calls etc.
 		$addedit = false;
@@ -224,13 +224,13 @@ class CTask extends CW2pObject {
 		}
 
 		// Has a parent
-		if ($this->task_id && $this->task_id != $this->task_parent) {
+		if ($this->task_id && $this->task_parent && $this->task_id != $this->task_parent) {
 			$this_children = $this->getChildren();
 			$this_parent = new CTask();
 			$this_parent->load($this->task_parent);
 			$parents_dependents = explode(',', $this_parent->dependentTasks());
 
-			if (in_array($this_parent->task_id, $this_dependencies)) {
+            if (in_array($this_parent->task_id, $this_dependencies)) {
 				return 'BadDep_CannotDependOnParent';
 			}
 			// Task parent cannot be child of this task
