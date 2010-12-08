@@ -199,8 +199,8 @@ class CTask extends CW2pObject {
 
 		// Have deps
 		if (array_sum($this_dependencies)) {
-			if ($this->task_dynamic == 1) {
-				return 'BadDep_DynNoDep';
+            if ($this->task_dynamic == 1) {
+				return array('BadDep_DynNoDep');
 			}
 
 			$this_dependents = $this->task_id ? explode(',', $this->dependentTasks()) : array();
@@ -231,11 +231,11 @@ class CTask extends CW2pObject {
 			$parents_dependents = explode(',', $this_parent->dependentTasks());
 
             if (in_array($this_parent->task_id, $this_dependencies)) {
-				return 'BadDep_CannotDependOnParent';
+				return array('BadDep_CannotDependOnParent');
 			}
 			// Task parent cannot be child of this task
 			if (in_array($this_parent->task_id, $this_children)) {
-				return 'BadParent_CircularParent';
+				return array('BadParent_CircularParent');
 			}
 
 			if ($this_parent->task_parent != $this_parent->task_id) {
@@ -260,7 +260,7 @@ class CTask extends CW2pObject {
 				// then task's children can not be dependent on parent
 				$intersect = array_intersect($this_children, $parents_dependents);
 				if (array_sum($intersect)) {
-					return 'BadParent_ChildDepOnParent';
+					return array('BadParent_ChildDepOnParent');
 				}
 			}
 		} // parent
