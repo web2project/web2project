@@ -302,7 +302,7 @@ if (count($allowedTasks)) {
 }
 
 // Filter by company
-if (!$min_view && $f2 != 'all') {
+if (!$min_view && $f2 != 'allcompanies') {
 	$q->addJoin('companies', 'c', 'c.company_id = p.project_company', 'inner');
 	$q->addWhere('company_id = ' . intval($f2));
 }

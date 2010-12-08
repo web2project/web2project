@@ -21,12 +21,14 @@ if (canView('admin')) { // Only sysadmins are able to change users
 if (isset($_POST['f'])) {
 	$AppUI->setState('TaskIdxFilter', $_POST['f']);
 }
-$f = $AppUI->getState('TaskIdxFilter') ? $AppUI->getState('TaskIdxFilter') : 'myunfinished';
+$f = $AppUI->getState('TaskIdxFilter') ? $AppUI->getState('TaskIdxFilter') :
+        w2PgetConfig('task_filter_default', 'myunfinished');
 
 if (isset($_POST['f2'])) {
 	$AppUI->setState('CompanyIdxFilter', $_POST['f2']);
 }
-$f2 = $AppUI->getState('CompanyIdxFilter') ? $AppUI->getState('CompanyIdxFilter') : 'all';
+$f2 = $AppUI->getState('CompanyIdxFilter') ? $AppUI->getState('CompanyIdxFilter') :
+        (w2PgetConfig('company_filter_default', 'user') == 'user') ? $AppUI->user_company : 'allcompanies';
 
 if (isset($_GET['project_id'])) {
 	$AppUI->setState('TaskIdxProject', w2PgetParam($_GET, 'project_id', null));
