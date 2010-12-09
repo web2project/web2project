@@ -91,8 +91,8 @@ if ($caller == 'todo') {
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
 		' task_duration, task_duration_type, task_priority, task_percent_complete,'.
-		' task_order, task_project, task_milestone, project_name, project_color_identifier,'.
-		' task_dynamic');
+		' task_order, task_project, task_milestone, task_access, task_owner, '.
+        ' project_name, project_color_identifier, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
 
     // don't add milestones if box is checked//////////////////////////////////////////////////////////
@@ -285,163 +285,166 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $a = $gantt_arr[$i][0];
     $level = $gantt_arr[$i][1];
 
-    $name = $a['task_name'];
-    if ($locale_char_set == 'utf-8') {
-        $name = utf8_decode($name);
-    }
-    $name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;
-    $name = str_repeat(' ', $level) . $name;
+    $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
+    if ($canAccess) {
+        $name = $a['task_name'];
+        if ($locale_char_set == 'utf-8') {
+            $name = utf8_decode($name);
+        }
+        $name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;
+        $name = str_repeat(' ', $level) . $name;
 
-    if ($caller == 'todo') {
-        $pname = $a['project_name'];
-        $pname = utf8_decode($pname);
-        $pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
-    }
+        if ($caller == 'todo') {
+            $pname = $a['project_name'];
+            $pname = utf8_decode($pname);
+            $pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
+        }
 
-    //using new jpGraph determines using Date object instead of string
-    $start_date = new CDate($a['task_start_date']);
-    $end_date = new CDate($a['task_end_date']);
-    $start = $start_date->getDate();
-	  $end = $end_date->getDate();
+        //using new jpGraph determines using Date object instead of string
+        $start_date = new CDate($a['task_start_date']);
+        $end_date = new CDate($a['task_end_date']);
+        $start = $start_date->getDate();
+          $end = $end_date->getDate();
 
-    $progress = (int) $a['task_percent_complete'];
+        $progress = (int) $a['task_percent_complete'];
 
-    if ($progress > 100) {
-        $progress = 100;
-    } elseif ($progress < 0) {
-        $progress = 0;
-    }
+        if ($progress > 100) {
+            $progress = 100;
+        } elseif ($progress < 0) {
+            $progress = 0;
+        }
 
-    $flags = ($a['task_milestone'] ? 'm' : '');
+        $flags = ($a['task_milestone'] ? 'm' : '');
 
-    $cap = '';
-    if (!$start || $start == '0000-00-00') {
-        $start = !$end ? date('Y-m-d') : $end;
-        $cap .= '(no start date)';
-    }
-
-    if (!$end) {
-        $end = $start;
-        $cap .= ' (no end date)';
-    } else {
         $cap = '';
-    }
+        if (!$start || $start == '0000-00-00') {
+            $start = !$end ? date('Y-m-d') : $end;
+            $cap .= '(no start date)';
+        }
 
-    if ($showLabels == '1') {
-        $q = new DBQuery;
-        $q->addTable('user_tasks', 'ut');
-        $q->innerJoin('users', 'u', 'u.user_id = ut.user_id');
-        $q->innerJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-        $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
-        $q->addQuery('c.contact_first_name, c.contact_last_name');
-        $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
-        $res = $q->loadList();
-        foreach ($res as $rw) {
-        switch ($rw['perc_assignment']) {
-            case 100:
-                $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
-                break;
-            default:
-                $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
-                break;
+        if (!$end) {
+            $end = $start;
+            $cap .= ' (no end date)';
+        } else {
+            $cap = '';
+        }
+
+        if ($showLabels == '1') {
+            $q = new DBQuery;
+            $q->addTable('user_tasks', 'ut');
+            $q->innerJoin('users', 'u', 'u.user_id = ut.user_id');
+            $q->innerJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+            $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
+            $q->addQuery('c.contact_first_name, c.contact_last_name');
+            $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
+            $res = $q->loadList();
+            foreach ($res as $rw) {
+            switch ($rw['perc_assignment']) {
+                case 100:
+                    $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
+                    break;
+                default:
+                    $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
+                    break;
+                }
             }
+            $q->clear();
+            $caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
+        }
+
+        if ($flags == 'm') {
+            if ($showNoMilestones != '1') {
+                $start = new CDate($start_date);
+                $start->addDays(0);
+                $start_mile = $start->getDate();
+                $s = $start_date->format("%m/%d/%Y");
+                $today_date = date('m/d/Y');
+                $today_date_stamp = strtotime($today_date);
+                $mile_date = $start_date->format("%m/%d/%Y");
+                $mile_date_stamp = strtotime($mile_date);
+                if ($showTaskNameOnly == '1') {
+                    $fieldArray = array($name);
+                } else {
+                    if ($caller == 'todo') {
+                        $fieldArray = array($name, $pname, '', $s, $s);
+                    } else {
+                        $fieldArray = array($name, '', $s, $s);
+                    }
+                }
+                //set color for milestone according to progress
+                //red for 'not started' #990000
+                //yellow for 'in progress' #FF9900
+                //green for 'achieved' #006600
+                // blue for 'planned' #0000FF
+                if ($a['task_percent_complete'] == 100)  {
+                    $color = '#006600';
+                } else {
+                    if (strtotime($mile_date) < strtotime($today_date)) {
+                        $color = '#990000';
+                    } else{
+                        if ($a['task_percent_complete'] == 0)  {
+                            $color = '#0000FF';
+                        } else {
+                            $color = '#FF9900';
+                        }
+                    }
+                }
+                $gantt->addMilestone($fieldArray, $a['task_start_date'], $color);
+            }	//this closes the code that is not processed if hide milestones is checked ///////////////
+        } else {
+            $type = $a['task_duration_type'];
+            $dur = $a['task_duration'];
+            if ($type == 24) {
+                $dur *= $w2Pconfig['daily_working_hours'];
+            }
+
+            if ($showWork == '1') {
+                $work_hours = 0;
+                $q = new DBQuery;
+                $q->addTable('tasks', 't');
+                $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
+                $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
+                $q->addWhere('t.task_duration_type = 24');
+                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
+
+                $wh = $q->loadResult();
+                $work_hours = $wh * $w2Pconfig['daily_working_hours'];
+                $q->clear();
+
+                $q->addTable('tasks', 't');
+                $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
+                $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
+                $q->addWhere('t.task_duration_type = 1');
+                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
+
+                $wh2 = $q->loadResult();
+                $work_hours += $wh2;
+                $q->clear();
+                //due to the round above, we don't want to print decimals unless they really exist
+                $dur = $work_hours;
+            }
+
+            $dur .= ' h';
+            $enddate = new CDate($end);
+            $startdate = new CDate($start);
+            $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
+            if ($showTaskNameOnly == '1') {
+                $columnValues = array('task_name' => $name);
+            } else {
+                if ($caller == 'todo') {
+                    $columnValues = array('task_name' => $name, 'project_name' => $pname,
+                      'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+                      'actual_end' => '');
+                } else {
+                    $columnValues = array('task_name' => $name, 'duration' => $dur,
+                      'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
+                }
+            }
+
+            $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
         }
         $q->clear();
-        $caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
     }
-
-	if ($flags == 'm') {
-		if ($showNoMilestones != '1') {
-			$start = new CDate($start_date);
-			$start->addDays(0);
-			$start_mile = $start->getDate();
-			$s = $start_date->format("%m/%d/%Y");
-			$today_date = date('m/d/Y');
-			$today_date_stamp = strtotime($today_date);
-			$mile_date = $start_date->format("%m/%d/%Y");
-			$mile_date_stamp = strtotime($mile_date);
-			if ($showTaskNameOnly == '1') {
-                $fieldArray = array($name);
-            } else {
-				if ($caller == 'todo') {
-				    $fieldArray = array($name, $pname, '', $s, $s);
-				} else {
-				    $fieldArray = array($name, '', $s, $s);
-				}
-            }
-			//set color for milestone according to progress 
-			//red for 'not started' #990000
-			//yellow for 'in progress' #FF9900
-			//green for 'achieved' #006600
-			// blue for 'planned' #0000FF
-			if ($a['task_percent_complete'] == 100)  {
-                $color = '#006600';
-			} else {
-				if (strtotime($mile_date) < strtotime($today_date)) {
-                    $color = '#990000';
-				} else{
-					if ($a['task_percent_complete'] == 0)  {
-                        $color = '#0000FF';
-					} else {
-                        $color = '#FF9900';
-					}
-				}
-			}
-            $gantt->addMilestone($fieldArray, $a['task_start_date'], $color);
-		}	//this closes the code that is not processed if hide milestones is checked ///////////////
-	} else {
-		$type = $a['task_duration_type'];
-		$dur = $a['task_duration'];
-		if ($type == 24) {
-			$dur *= $w2Pconfig['daily_working_hours'];
-		}
-
-		if ($showWork == '1') {
-			$work_hours = 0;
-			$q = new DBQuery;
-			$q->addTable('tasks', 't');
-			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-			$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-			$q->addWhere('t.task_duration_type = 24');
-			$q->addWhere('t.task_id = ' . (int)$a['task_id']);
-
-			$wh = $q->loadResult();
-			$work_hours = $wh * $w2Pconfig['daily_working_hours'];
-			$q->clear();
-
-			$q->addTable('tasks', 't');
-			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-			$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-			$q->addWhere('t.task_duration_type = 1');
-			$q->addWhere('t.task_id = ' . (int)$a['task_id']);
-
-			$wh2 = $q->loadResult();
-			$work_hours += $wh2;
-			$q->clear();
-			//due to the round above, we don't want to print decimals unless they really exist
-			$dur = $work_hours;
-		}
-
-		$dur .= ' h';
-		$enddate = new CDate($end);
-		$startdate = new CDate($start);
-        $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
-        if ($showTaskNameOnly == '1') {
-            $columnValues = array('task_name' => $name);
-        } else {
-            if ($caller == 'todo') {
-                $columnValues = array('task_name' => $name, 'project_name' => $pname,
-                  'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
-                  'actual_end' => '');
-            } else {
-                $columnValues = array('task_name' => $name, 'duration' => $dur,
-                  'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
-            }
-        }
-
-        $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
-    }
-	$q->clear();
 }
 
 $gantt->render();

@@ -22,7 +22,9 @@ $projects = $project->getAllowedProjects($AppUI->user_id, false);
 // pull tasks
 $q = new DBQuery;
 $q->addTable('tasks', 't');
-$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_name, task_dynamic');
+$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, 
+    task_duration, task_duration_type, task_priority, task_percent_complete,
+    task_order, task_project, task_milestone, task_access, task_owner, project_name, task_dynamic');
 $q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
 $q->addOrder('project_id, task_start_date');
 if ($project_id) {
@@ -190,146 +192,148 @@ if ($hide_task_groups) {
 $gantt->loadTaskArray($gantt_arr);
 $row = 0;
 for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
-
 	$a = $gantt_arr[$i][0];
 	$level = $gantt_arr[$i][1];
 
-	if ($hide_task_groups) {
-		$level = 0;
-	}
+    $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
+    if ($canAccess) {
+        if ($hide_task_groups) {
+            $level = 0;
+        }
 
-	$name = $a['task_name'];
-	if ($locale_char_set == 'utf-8') {
-		$name = utf8_decode($name);
-	}
-	$name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;
-	$name = str_repeat(' ', $level) . $name;
+        $name = $a['task_name'];
+        if ($locale_char_set == 'utf-8') {
+            $name = utf8_decode($name);
+        }
+        $name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;
+        $name = str_repeat(' ', $level) . $name;
 
-	if ($caller == 'todo') {
-		$pname = $a['project_name'];
-		if ($locale_char_set == 'utf-8') {
-			$pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
-		} else {
-			$pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
-		}
-	}
-	//using new jpGraph determines using Date object instead of string
-	$start = $a['task_start_date'];
-	$end_date = $a['task_end_date'];
+        if ($caller == 'todo') {
+            $pname = $a['project_name'];
+            if ($locale_char_set == 'utf-8') {
+                $pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
+            } else {
+                $pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
+            }
+        }
+        //using new jpGraph determines using Date object instead of string
+        $start = $a['task_start_date'];
+        $end_date = $a['task_end_date'];
 
-	$end_date = new CDate($end_date);
-	$end = $end_date->getDate();
+        $end_date = new CDate($end_date);
+        $end = $end_date->getDate();
 
-	$start = new CDate($start);
-	$start = $start->getDate();
+        $start = new CDate($start);
+        $start = $start->getDate();
 
-	$progress = (int) $a['task_percent_complete'];
+        $progress = (int) $a['task_percent_complete'];
 
-	if ($progress > 100) {
-		$progress = 100;
-	} elseif ($progress < 0) {
-		$progress = 0;
-	}
+        if ($progress > 100) {
+            $progress = 100;
+        } elseif ($progress < 0) {
+            $progress = 0;
+        }
 
-	$flags = ($a['task_milestone'] ? 'm' : '');
+        $flags = ($a['task_milestone'] ? 'm' : '');
 
-	$cap = '';
-	if (!$start || $start == '0000-00-00') {
-		$start = !$end ? date('Y-m-d') : $end;
-		$cap .= '(no start date)';
-	}
+        $cap = '';
+        if (!$start || $start == '0000-00-00') {
+            $start = !$end ? date('Y-m-d') : $end;
+            $cap .= '(no start date)';
+        }
 
-	if (!$end) {
-		$end = $start;
-		$cap .= ' (no end date)';
-	} else {
-		$cap = '';
-	}
+        if (!$end) {
+            $end = $start;
+            $cap .= ' (no end date)';
+        } else {
+            $cap = '';
+        }
 
-	$caption = '';
-	if ($showLabels == '1') {
-		$q = new DBQuery;
-		$q->addTable('user_tasks', 'ut');
-		$q->addTable('users', 'u');
-		$q->addTable('contacts', 'c');
-		$q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
-		$q->addQuery('c.contact_first_name, c.contact_last_name');
-		$q->addWhere('u.user_id = ut.user_id');
-		$q->addWhere('u.user_contact = c.contact_id');
-		$q->addWhere('ut.task_id = ' . (int)$a['task_id']);
-		$res = $q->loadList();
-		foreach ($res as $rw) {
-			switch ($rw['perc_assignment']) {
-				case 100:
-					$caption = $caption . '' . $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
-					break;
-				default:
-					$caption = $caption . '' . $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
-					break;
-			}
-		}
-		$q->clear();
-		$caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
-	}
+        $caption = '';
+        if ($showLabels == '1') {
+            $q = new DBQuery;
+            $q->addTable('user_tasks', 'ut');
+            $q->addTable('users', 'u');
+            $q->addTable('contacts', 'c');
+            $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
+            $q->addQuery('c.contact_first_name, c.contact_last_name');
+            $q->addWhere('u.user_id = ut.user_id');
+            $q->addWhere('u.user_contact = c.contact_id');
+            $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
+            $res = $q->loadList();
+            foreach ($res as $rw) {
+                switch ($rw['perc_assignment']) {
+                    case 100:
+                        $caption = $caption . '' . $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
+                        break;
+                    default:
+                        $caption = $caption . '' . $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
+                        break;
+                }
+            }
+            $q->clear();
+            $caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
+        }
 
-	if ($flags == 'm') {
-		$start = new CDate($start);
-		$start->addDays(0);
-		$s = $start->format($df);
-		if ($caller == 'todo') {
-            $gantt->addMilestone(array($name, $pname, '', $s, $s), $a['task_start_date']);
-		} else {
-            $gantt->addMilestone(array($name, '', $s, $s), $a['task_start_date']);
-		}
-	} else {
-		$type = $a['task_duration_type'];
-		$dur = $a['task_duration'];
-		if ($type == 24) {
-			$dur *= $w2Pconfig['daily_working_hours'];
-		}
+        if ($flags == 'm') {
+            $start = new CDate($start);
+            $start->addDays(0);
+            $s = $start->format($df);
+            if ($caller == 'todo') {
+                $gantt->addMilestone(array($name, $pname, '', $s, $s), $a['task_start_date']);
+            } else {
+                $gantt->addMilestone(array($name, '', $s, $s), $a['task_start_date']);
+            }
+        } else {
+            $type = $a['task_duration_type'];
+            $dur = $a['task_duration'];
+            if ($type == 24) {
+                $dur *= $w2Pconfig['daily_working_hours'];
+            }
 
-		if ($showWork == '1') {
-			$work_hours = 0;
-			$q = new DBQuery;
-			$q->addTable('tasks', 't');
-			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-			$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-			$q->addWhere('t.task_duration_type = 24');
-			$q->addWhere('t.task_id = ' . (int)$a['task_id']);
+            if ($showWork == '1') {
+                $work_hours = 0;
+                $q = new DBQuery;
+                $q->addTable('tasks', 't');
+                $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
+                $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
+                $q->addWhere('t.task_duration_type = 24');
+                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
 
-			$wh = $q->loadResult();
-			$work_hours = $wh * $w2Pconfig['daily_working_hours'];
-			$q->clear();
+                $wh = $q->loadResult();
+                $work_hours = $wh * $w2Pconfig['daily_working_hours'];
+                $q->clear();
 
-			$q = new DBQuery;
-			$q->addTable('tasks', 't');
-			$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-			$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-			$q->addWhere('t.task_duration_type = 1');
-			$q->addWhere('t.task_id = ' . (int)$a['task_id']);
+                $q = new DBQuery;
+                $q->addTable('tasks', 't');
+                $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
+                $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
+                $q->addWhere('t.task_duration_type = 1');
+                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
 
-			$wh2 = $q->loadResult();
-			$work_hours += $wh2;
-			$q->clear();
-			//due to the round above, we don't want to print decimals unless they really exist
-			$dur = $work_hours;
-		}
+                $wh2 = $q->loadResult();
+                $work_hours += $wh2;
+                $q->clear();
+                //due to the round above, we don't want to print decimals unless they really exist
+                $dur = $work_hours;
+            }
 
-		$dur .= ' h';
-		$enddate = new CDate($end);
-		$startdate = new CDate($start);
-        $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
-		if ($caller == 'todo') {
-            $columnValues = array('task_name' => $name, 'project_name' => $pname,
-              'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
-              'actual_end' => '');
-		} else {
-            $columnValues = array('task_name' => $name, 'duration' => $dur,
-              'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
-		}
-        $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
-	}
-	$q->clear();
+            $dur .= ' h';
+            $enddate = new CDate($end);
+            $startdate = new CDate($start);
+            $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
+            if ($caller == 'todo') {
+                $columnValues = array('task_name' => $name, 'project_name' => $pname,
+                  'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+                  'actual_end' => '');
+            } else {
+                $columnValues = array('task_name' => $name, 'duration' => $dur,
+                  'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
+            }
+            $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
+        }
+        $q->clear();
+    }
 }
 
 $gantt->render();
