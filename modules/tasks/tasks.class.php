@@ -2417,10 +2417,10 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	}
 	// edit icon
 	$s .= '<td align="center">';
-	$canEdit = true;
+	$canEdit = ($arr['task_represents_project']) ? false : true;
 	$canViewLog = true;
 	if ($canEdit) {
-		$s .= w2PtoolTip('edit task', 'click to edit this task') . '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PshowImage('icons/pencil.gif', 12, 12) . '</a>' . w2PendTip();
+        $s .= w2PtoolTip('edit task', 'click to edit this task') . '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PshowImage('icons/pencil.gif', 12, 12) . '</a>' . w2PendTip();
 	}
 	$s .= '</td>';
 	// pinned
@@ -2429,7 +2429,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	// New Log
 	if ($arr['task_log_problem'] > 0) {
 		$s .= ('<td align="center" valign="middle"><a href="?m=tasks&a=view&task_id=' . $arr['task_id'] . '&tab=0&problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
-	} elseif ($canViewLog && $arr['task_dynamic'] != 1) {
+	} elseif ($canViewLog && $arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
 		$s .= ('<td align="center"><a href="?m=tasks&a=view&task_id=' . $arr['task_id'] . '&tab=1">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a></td>');
 	} else {
 		$s .= '<td align="center">' . $AppUI->_('-') . '</td>';

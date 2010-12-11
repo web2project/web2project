@@ -111,7 +111,7 @@ $q->addQuery('count(tasks.task_parent) as children');
 $q->addQuery('task_pinned, pin.user_id as pin_user');
 $q->addQuery('task_priority, task_percent_complete');
 $q->addQuery('task_duration, task_duration_type');
-$q->addQuery('task_project');
+$q->addQuery('task_project, task_represents_project');
 $q->addQuery('task_access, task_type');
 $q->addQuery('task_description, task_owner, task_status');
 $q->addQuery('usernames.user_username, usernames.user_id');
