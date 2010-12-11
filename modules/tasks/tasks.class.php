@@ -728,13 +728,13 @@ class CTask extends CW2pObject {
             if ($task_id) {
                 $task->load($task_id);
             } else {
-                $task->task_name = $AppUI->_('Subproject') .': '. $subProject->project_name;
                 $task->task_description = $task->task_name;
                 $task->task_priority = $subProject->project_priority;
                 $task->task_project = $subProject->project_parent;
                 $task->task_represents_project = $subProject->project_id;
                 $task->task_owner = $AppUI->user_id;
             }
+            $task->task_name = $AppUI->_('Subproject') .': '. $subProject->project_name;
             $task->task_duration_type = 1;
             $task->task_duration = $subProject->getTotalProjectHours();
             $task->task_start_date = $projectDates[0]['min_task_start_date'];
