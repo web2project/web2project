@@ -227,6 +227,8 @@ class CProject extends CW2pObject {
 	public function importTasks($from_project_id) {
         global $AppUI;
 
+        $errors = array();
+
 		// Load the original
 		$origProject = new CProject();
 		$origProject->load($from_project_id);
@@ -294,10 +296,22 @@ class CProject extends CW2pObject {
 				$csList = implode(',', $newDeps);
 				$newTask->updateDependencies($csList);
 			} // end of update dependencies
-			$newTask->store($AppUI);
-		} // end Fix record integrity
+            $result = $newTask->store($AppUI);
 
-	} // end of importTasks
+            if (is_array($result) && count($result)) {
+                foreach ($result as $key => $error_msg) {
+                    $errors[] = $newTask->task_name . ': ' . $error_msg;
+                }
+            }
+        } // end Fix record integrity
+
+        // We have errors, so rollback everything we've done so far
+        if (count($errors)) {
+            $this->delete($AppUI);
+        }
+
+        return $errors;
+    } // end of importTasks
 
 	/**
 	 **	Overload of the w2PObject::getAllowedRecords

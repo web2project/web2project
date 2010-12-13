@@ -205,6 +205,92 @@
             <value>0</value>
             <value>Somewhere around</value>
         </row>
+        <row>
+            <value>3</value>
+            <value>1</value>
+            <value>0</value>
+            <value>Test Project 3</value>
+            <value>TP3</value>
+            <value>1</value>
+            <value>http://project3.example.org</value>
+            <value>http://project3-demo.example.org</value>
+            <value>2009-07-08 00:00:00</value>
+            <value>2009-07-18 23:59:59</value>
+            <value>2009-08-18 00:00:00</value>
+            <value>1</value>
+            <value>50</value>
+            <value>EEEEEE</value>
+            <value>This is a project 3</value>
+            <value>20.00</value>
+            <value>10.00</value>
+	        <value>0</value>
+	        <value>0</value>
+	        <value>0</value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value></value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>0</value>
+            <value>2009-07-08 13:46:00</value>
+            <value>2009-07-08 13:46:00</value>
+            <value>Status Comment for Project 3.</value>
+            <value>0</value>
+            <value>2009-07-08 00:00:00</value>
+            <value>0</value>
+            <value>Somewhere around</value>
+        </row>
+        <row>
+            <value>4</value>
+            <value>1</value>
+            <value>0</value>
+            <value>Test Project 4</value>
+            <value>TP4</value>
+            <value>1</value>
+            <value>http://project4.example.org</value>
+            <value>http://project4-demo.example.org</value>
+            <value>2009-07-08 00:00:00</value>
+            <value>2009-07-18 23:59:59</value>
+            <value>2009-08-18 00:00:00</value>
+            <value>1</value>
+            <value>50</value>
+            <value>EEEEEE</value>
+            <value>This is a project 4</value>
+            <value>20.00</value>
+            <value>10.00</value>
+	        <value>0</value>
+	        <value>0</value>
+	        <value>0</value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value></value>
+            <value>1</value>
+            <value>0</value>
+            <value></value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>0</value>
+            <value>2009-07-08 13:46:00</value>
+            <value>2009-07-08 13:46:00</value>
+            <value>Status Comment for Project 4.</value>
+            <value>0</value>
+            <value>2009-07-08 00:00:00</value>
+            <value>0</value>
+            <value>Somewhere around</value>
+        </row>
     </table>
     <table name="tasks">
         <column>task_id</column>
@@ -271,6 +357,52 @@
             <value>2009-07-08 15:43:00</value>
             <value>2009-07-08 15:43:00</value>
             <value>This is task 2</value>
+            <value>-1</value>
+            <value>100</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>Task 3</value>
+            <value>3</value>
+            <value>1</value>
+            <value>2009-07-05 00:00:00</value>
+            <value>2</value>
+            <value>24</value>
+            <value>2009-07-15 00:00:00</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>2009-07-05 15:43:00</value>
+            <value>2009-07-05 15:43:00</value>
+            <value>This is task 3</value>
+            <value>0</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>4</value>
+            <value>Task 4</value>
+            <value>3</value>
+            <value>1</value>
+            <value>2009-07-06 00:00:00</value>
+            <value>3</value>
+            <value>1</value>
+            <value>2009-07-15 00:00:00</value>
+            <value>1</value>
+            <value>2</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>2009-07-08 15:43:00</value>
+            <value>2009-07-08 15:43:00</value>
+            <value>This is task 4</value>
             <value>-1</value>
             <value>100</value>
         </row>
