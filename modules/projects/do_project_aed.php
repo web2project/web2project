@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
-  
+
 $obj = new CProject();
 if (!$obj->bind($_POST)) {
   $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
@@ -30,7 +30,13 @@ if (is_array($result)) {
 }
 if ($result) {
   if ($importTask_projectId) {
-    $obj->importTasks($importTask_projectId);
+      $import_result = $obj->importTasks($importTask_projectId);
+
+      if (is_array($import_result) && count($import_result)) {
+        $AppUI->setMsg($import_result, UI_MSG_ERROR, true);
+        $AppUI->holdObject($obj);
+        $AppUI->redirect('m=projects&a=addedit');
+      }
   }
   if ('on' == $notify_owner) {
     if ($msg = $obj->notifyOwner($notfiyTrigger)) {

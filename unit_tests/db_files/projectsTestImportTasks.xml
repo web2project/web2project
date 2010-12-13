@@ -251,10 +251,10 @@
         </row>
         <row>
             <value>3</value>
-            <value>Task</value>
-            <value>3</value>
+            <value>Task 3</value>
             <value>0</value>
-            <value>2</value>
+            <value>0</value>
+            <value>3</value>
             <value>1</value>
             <value>2009-07-05 00:00:00</value>
             <value>2</value>
@@ -264,7 +264,7 @@
             <value>0</value>
             <value>0</value>
             <value>0</value>
-            <value>This is task 1</value>
+            <value>This is task 3</value>
             <value>0</value>
             <value></value>
             <value>1</value>
@@ -278,16 +278,86 @@
             <value></value>
             <value>1</value>
             <value>1</value>
-            <value>Ignored in test</value>
-            <value>Ignored in test</value>
+            <value>2009-07-05 15:43:00</value>
+            <value>2009-07-05 15:43:00</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
-        </row> 
+        </row>
         <row>
             <value>4</value>
-            <value>Subproject: Test Project 2</value>
+            <value>Task 4</value>
+            <value>0</value>
+            <value>0</value>
+            <value>3</value>
+            <value>1</value>
+            <value>2009-07-06 00:00:00</value>
+            <value>3</value>
+            <value>1</value>
+            <value>0</value>
+            <value>2009-07-15 00:00:00</value>
+            <value>-1</value>
+            <value>0</value>
+            <value>100</value>
+            <value>This is task 4</value>
+            <value>0</value>
+            <value></value>
+            <value>1</value>
+            <value>2</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value></value>
+            <value></value>
+            <value></value>  
+            <value>1</value>    
+            <value>1</value>
+            <value>2009-07-08 15:43:00</value>
+            <value>2009-07-08 15:43:00</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>5</value>
+            <value>Task 3</value>
+            <value>5</value>
+            <value>0</value>
             <value>4</value>
+            <value>1</value>
+            <value>2009-07-05 00:00:00</value>
+            <value>2</value>
+            <value>24</value>
+            <value>0</value>
+            <value>2009-07-15 00:00:00</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>This is task 3</value>
+            <value>0</value>
+            <value></value>
+            <value>1</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>1</value>
+            <value>1</value>
+            <value></value>
+            <value></value>
+            <value></value>
+            <value>1</value>
+            <value>1</value>
+            <value>2009-07-05 15:43:00</value>
+            <value>2009-07-05 15:43:00</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>6</value>
+            <value>Subproject: Test Project 4</value>
+            <value>6</value>
             <value>0</value>
             <value>1</value>
             <value>1</value>
@@ -295,11 +365,11 @@
             <value>19</value>
             <value>1</value>
             <value>0</value>
-            <value>2009-07-18 00:00:00</value>
+            <value>2009-07-15 00:00:00</value>
             <value>0</value>
             <value>1</value>
             <value>16</value>
-            <value>Subproject: Test Project 2</value>
+            <value>Subproject: Test Project 4</value>
             <value>0</value>
             <value></value>
             <value>1</value>
@@ -316,25 +386,25 @@
             <value>Ignored in test</value>
             <value>Ignored in test</value>
             <value>0</value>
-            <value>2</value>
+            <value>4</value>
             <value>0</value>
-        </row> 
+        </row>
         <row>
-            <value>5</value>
-            <value>Task 2</value>
-            <value>5</value>
+            <value>7</value>
+            <value>Task 4</value>
+            <value>7</value>
             <value>0</value>
-            <value>2</value>
+            <value>4</value>
             <value>1</value>
-            <value>2009-07-09 00:00:00</value>
+            <value>2009-07-06 00:00:00</value>
             <value>3</value>
             <value>1</value>
             <value>0</value>
-            <value>2009-07-18 00:00:00</value>
+            <value>2009-07-15 00:00:00</value>
             <value>-1</value>
             <value>0</value>
             <value>100</value>
-            <value>This is task 2</value>
+            <value>This is task 4</value>
             <value>0</value>
             <value></value>
             <value>1</value>
@@ -345,11 +415,11 @@
             <value>1</value>
             <value></value>
             <value></value>
-            <value></value>
+            <value></value>  
+            <value>1</value>    
             <value>1</value>
-            <value>1</value>
-            <value>Ignored in test</value>
-            <value>Ignored in test</value>
+            <value>2009-07-08 15:43:00</value>
+            <value>2009-07-08 15:43:00</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
@@ -368,13 +438,6 @@
             <value>1</value>
             <value>1</value>
         </row>
-        <row>
-            <value>1</value>
-            <value>1</value>
-            <value>3</value>
-            <value>1</value>
-            <value>1</value>
-        </row>
     </table>
     <table name="task_dependencies">
         <column>dependencies_task_id</column>
@@ -382,10 +445,6 @@
         <row>
             <value>1</value>
             <value>1</value>
-        </row>
-        <row>
-            <value>3</value>
-            <value>3</value>
         </row>
     </table>
     <table name="files">
