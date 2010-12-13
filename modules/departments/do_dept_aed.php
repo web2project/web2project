@@ -26,7 +26,7 @@ if (is_array($result)) {
 }
 if ($result) {
     $AppUI->setMsg('Department '.$action, UI_MSG_OK, true);
-    $AppUI->redirect('m=departments');
+    $AppUI->redirect('m=companies&a=view&company_id='.$obj->dept_company);
 } else {
     $AppUI->redirect('m=public&a=access_denied');
 }

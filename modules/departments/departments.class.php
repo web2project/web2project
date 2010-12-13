@@ -118,26 +118,26 @@ class CDepartment extends CW2pObject {
 	}
 
 	public function check() {
-        $errorArray = array();
-        $baseErrorMsg = get_class($this) . '::store-check failed - ';
+            $errorArray = array();
+            $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        if (0 == (int) $this->dept_company) {
-            $errorArray['dept_company'] = $baseErrorMsg . 'department company is not set';
-        }
-        if ('' == trim($this->dept_name)) {
-            $errorArray['dept_name'] = $baseErrorMsg . 'department name is not set';
-        }
-        if (0 != $this->dept_id && $this->dept_id == $this->dept_parent) {
-            $errorArray['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
-        }
-        if (0 == (int) $this->dept_owner) {
-            $errorArray['dept_owner'] = $baseErrorMsg . 'department owner is not set';
-        }
-        if ('' != $this->dept_url && !w2p_check_url($this->dept_url)) {
-            $errorArray['dept_url'] = $baseErrorMsg . 'department url is not formatted properly';
-        }
+            if (0 == (int) $this->dept_company) {
+                $errorArray['dept_company'] = $baseErrorMsg . 'department company is not set';
+            }
+            if ('' == trim($this->dept_name)) {
+                $errorArray['dept_name'] = $baseErrorMsg . 'department name is not set';
+            }
+            if (0 != $this->dept_id && $this->dept_id == $this->dept_parent) {
+                $errorArray['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
+            }
+            if (0 == (int) $this->dept_owner) {
+                $errorArray['dept_owner'] = $baseErrorMsg . 'department owner is not set';
+            }
+            if ('' != $this->dept_url && !w2p_check_url($this->dept_url)) {
+                $errorArray['dept_url'] = $baseErrorMsg . 'department url is not formatted properly';
+            }
 
-		return $errorArray;
+            return $errorArray;
 	}
 
 	public function store(CAppUI $AppUI = null) {
