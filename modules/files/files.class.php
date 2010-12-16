@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: files.class.php 1517 2010-12-05 08:07:54Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/files/files.class.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -443,14 +443,19 @@ class CFile extends CW2pObject {
                     //preparing users array
                     $q = new DBQuery;
                     $q->addTable('tasks', 't');
-                    $q->addQuery('t.task_id, a.user_id as assignee_id,
-                             ac.contact_first_name as assignee_first_name,
-                             ac.contact_last_name as assignee_last_name');
+                    $q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as 
+                            creator_first_name, cc.contact_last_name as creator_last_name,
+                            oc.contact_email as owner_email, oc.contact_first_name as owner_first_name,
+                            oc.contact_last_name as owner_last_name, a.user_id as assignee_id,
+                            ac.contact_email as assignee_email, ac.contact_first_name as
+                            assignee_first_name, ac.contact_last_name as assignee_last_name'); 
                     $q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
-                    $q->addJoin('users', 'a', 'a.user_id = u.user_id');
+                    $q->addJoin('users', 'o', 'o.user_id = t.task_owner');
+                    $q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
+                    $q->addJoin('users', 'c', 'c.user_id = t.task_creator');
+                    $q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
+                    $q->addJoin('users', 'a', 'a.user_id = u.user_id'); 
                     $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
-                    $q->addQuery('ac.contact_id as assignee_contact_id');
-
                     $q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
                     $this->_users = $q->loadList();
                 } else {
@@ -467,17 +472,6 @@ class CFile extends CW2pObject {
                 if ($this->_message != 'deleted') {
                     $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $this->file_id;
                     $body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->file_description;
-                }
-
-                $contact = new CContact();
-                foreach ($this->_users as $index => $info) {
-                    $contact->contact_id = $info['owner_contact_id'];
-                    $email = $contact->getContactMethods(array('email_primary'));
-                    $this->_users[$index]['owner_email'] = $email['email_primary'];
-
-                    $contact->contact_id = $info['assignee_contact_id'];
-                    $email = $contact->getContactMethods(array('email_primary'));
-                    $this->_users[$index]['assignee_email'] = $email['email_primary'];
                 }
 
                 //send mail
@@ -534,22 +528,21 @@ class CFile extends CW2pObject {
 
                     $q = new DBQuery;
                     $q->addTable('project_contacts', 'pc');
-                    $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name'); 
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                     $q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
-
                     $sql = '(' . $q->prepare() . ')';
                     $q->clear();
                     $sql .= ' UNION ';
                     $q->addTable('task_contacts', 'tc');
-                    $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name'); 
                     $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
                     $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
                 } else {
                     $q = new DBQuery;
                     $q->addTable('project_contacts', 'pc');
                     $q->addQuery('pc.project_id, pc.contact_id');
-                    $q->addQuery('c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
+                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                     $q->addWhere('pc.project_id = ' . (int)$this->file_project);
                 }
@@ -561,18 +554,10 @@ class CFile extends CW2pObject {
                     $body .= "\n" . $AppUI->_('Description') . ":\n" . $this->file_description;
                 }
 
-                $contact = new CContact();
-                foreach ($this->_users as $index => $info) {
-                    $contact->contact_id = $info['contact_id'];
-                    $email = $contact->getContactMethods(array('email_primary'));
-                    $this->_users[$index]['contact_email'] = $email['email_primary'];
-                }
-
                 //send mail
                 $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
                 foreach ($this->_users as $row) {
-
                     if ($mail->ValidEmail($row['contact_email'])) {
                         $mail->To($row['contact_email'], true);
                         $mail->Send();

@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: tasklogs_xp1.php 1489 2010-11-12 10:37:23Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/reports/reports/tasklogs_xp1.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -236,7 +236,7 @@ if ($do_report) {
 		<td><?php echo $log['creator']; ?></td>
 		<td><?php echo $log['company_name']; ?></td>
 		<td><?php echo $log['project_name']; ?></td>
-		<td><?php echo $log['task_name']; ?></td>
+		<td><a href="?m=tasks&a=view&task_id=<?php echo $log['task_log_task']; ?>"><?php echo $log['task_name']; ?></a></td>
 		<td><?php echo $date->format($df); ?></td>
 		<td><?php
 		// dylan_cuthbert: auto-transation system in-progress, leave these lines for time-being
@@ -244,13 +244,13 @@ if ($do_report) {
 		$descrip = mb_str_replace("\n", '<br />', $log['task_log_description']);
 		$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
 		if ($tranpos === false)
-			echo $descrip;
+			echo '<a href="?m=tasks&a=view&task_id=' . $log['task_log_task'] . '&tab=1&task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a>';
 		else {
 			$descrip = mb_substr($descrip, 0, $tranpos);
 			$tranpos = mb_strpos($log['task_log_description'], $transbrk);
 			$transla = mb_substr($log['task_log_description'], $tranpos + mb_strlen($transbrk));
 			$transla = mb_trim(mb_str_replace("'", '"', $transla));
-			echo $descrip . '<div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
+			echo '<a href="?m=tasks&a=view&task_id=' . $log['task_log_task'] . '&tab=1&task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a><div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
 		}
 		// dylan_cuthbert; auto-translation end
 

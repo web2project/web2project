@@ -1,8 +1,11 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: forums.class.php 1483 2010-10-26 17:11:59Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/forums/forums.class.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+if (!isset($AppUI)) {
+    $AppUI = new CAppUI;
+}
 require_once ($AppUI->getLibraryClass('PEAR/BBCodeParser'));
 $bbparser = new HTML_BBCodeParser();
 
@@ -137,7 +140,7 @@ class CForum extends CW2pObject {
         global $AppUI;
         $perms = $AppUI->acl();
 
-        if ($perms->checkModuleItem('forums', 'delete', $this->project_id)) {
+        if ($perms->checkModuleItem('forums', 'delete', $this->forum_id)) {
             $q = new DBQuery;
             $q->setDelete('forum_visits');
             $q->addWhere('visit_forum = ' . (int)$this->forum_id);

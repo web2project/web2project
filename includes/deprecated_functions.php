@@ -100,9 +100,9 @@ function notifyNewUser($address, $username) {
 
 		$mail->To($address);
         $emailManager = new w2p_Output_EmailManager();
-        $emailManager->getNotifyNewUser($username);
+        $body = $emailManager->getNotifyNewUser($username);
         $mail->Subject('New Account Created');
-		$mail->Body();
+		$mail->Body($body);
 		$mail->Send();
 	}
 }
@@ -128,4 +128,144 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd) {
 function clean_value($str) {
     $bad_values = array("'");
     return str_replace($bad_values, '', $str);
+}
+
+/**
+ * This function is now deprecated and will be removed.
+ * In the interim it now does nothing.
+ * TODO:  Remove for v3.0 - dkc 27 Nov 2010
+ */
+function dpRealPath($file) {
+	return $file;
+}
+
+function strUTF8Decode($text) {
+	global $locale_char_set;
+	if (extension_loaded('mbstring')) {
+		$encoding = mb_detect_encoding($text.' ');
+	}
+	if (function_exists('iconv')){
+		$text = mb_convert_encoding($text, 'UTF-8', $encoding);
+		//iconv($encoding, 'UTF-8', $text);
+	} elseif (function_exists('utf8_decode')) {
+		$text = utf8_decode($text);
+	}
+	// mb functions don't seam to work well here for some reason as the output gets corrupted.
+	// iconv is doing the job just fine though
+	return $text;
+}
+
+/**
+* utility functions for the preparation of task data for GANTT PDF
+*
+* @todo some of these functions are not needed, need to trim this down
+*
+*/
+/*
+* 	Convert string char (ref : Vbulletin #3987)
+*/
+function strJpGraph($text) {
+    global $locale_char_set;
+    if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) {
+        return utf8_decode($text);
+    } else {
+        return $text;
+    }
+}
+// PYS : utf_8 decoding as suggested in Vbulletin #3987
+function strEzPdf($text) {
+    global $locale_char_set;
+    if (function_exists('iconv') && function_exists('mb_detect_encoding')) {
+        $text = iconv(mb_detect_encoding($text." "), 'UTF-8', $text);
+        return $text;
+    } else {
+        return $text;
+    }
+}
+
+/*
+* 	smart_slice : recursive function used to slice the task array whlie
+* 	minimizing the potential number of task dependencies between two sub_arrays
+* 	Each sub_array is LENGTH elements long maximum
+* 	It is shorter if
+* 		- either a dynamic task is between indices LENGTH-3 and LENGTH-1 : in this
+* 		  case, the milestone is EXCLUDED from the lower sub_array
+* 		- or a milestone a MILESTONE is between indices LENGTH-2 and LENGTH-1 : in
+* 		  this case the milestone is INCLUDED in the lower sub_array
+*/
+function smart_slice( $arr, $showNoMilestones, $printpdfhr, $day_diff ) {
+    global $gtask_sliced;
+
+    $length = ($showNoMilestones) ? 26 : 25;
+    if ($day_diff < 90) {
+        $length = $length - 2;
+    } else if ($day_diff >=90 && $day_diff < 1096) {
+        $length = $length;
+    } else {
+        $length++;
+    }
+
+    if ( count($arr) > $length ) {
+        $found = 0 ;
+        for ( $i = $length-3 ; $i<$length ; $i++ ) {
+            if ( $arr[$i][0]['task_dynamic'] != 0 ) {
+                $found = $i ;
+            }
+        }
+        if ( !$found ) {
+            for ( $i = $length-1 ; $i > $length-3 ; $i-- ) {
+                if ( $arr[$i][0]['task_milestone'] != 0 ) {
+                    $found = $i ;
+                }
+            }
+            if ( !$found ) {
+                if ( $arr[$length][0]['task_milestone'] == 0 ) {
+                    $cut = $length ;						// No specific task => standard cut
+                } else {
+                    $cut = $length - 1 ;					// No orphan milestone
+                }
+            } else {
+                $cut = $found + 1 ;						// include found milestone in lower level array
+            }
+        } else {
+            $cut = $found ;									//include found dynamic task in higher level array
+        }
+        $gtask_sliced[] = array_slice( $arr, 0, $cut );
+        $task_sliced[] = smart_slice( array_slice( $arr, $cut ), $showNoMilestones, $printpdfhr, $day_diff );
+    } else {
+        $gtask_sliced[] = $arr ;
+    }
+    return $gtask_sliced ;
+}
+
+/**
+*
+* 	END OF GANTT PDF UTILITY FUNCTIONS
+*
+*/
+
+/*
+*  This is a kludgy mess because of how the arraySelectTree function is used..
+*    it expects - nay, demands! - that the first element of the subarray is the
+*    id and the third is the parent id. In most cases, that is fine.. in this
+*    one we're using the existing ACL-respecting functions and it has additional
+*    fields in "improper" places.
+*/
+function temp_filterArrayForSelectTree($projectData) {
+
+    unset($projectData['project_id']);
+    unset($projectData['project_color_identifier']);
+    unset($projectData['project_name']);
+    unset($projectData['project_start_date']);
+    unset($projectData['project_end_date']);
+    unset($projectData['project_company']);
+    unset($projectData['project_parent']);
+
+    unset($projectData[1]);
+    unset($projectData[3]);
+    unset($projectData[4]);
+    unset($projectData[5]);
+    $projectData[6] = ($projectData[0] == $projectData[6]) ? '' : $projectData[6];
+
+    return array_values($projectData);
 }

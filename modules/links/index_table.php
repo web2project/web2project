@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: index_table.php 1466 2010-09-22 05:14:41Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/links/index_table.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -97,7 +97,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 		<?php echo '<a href="' . $row['link_url'] . '" target="_blank">' . $row['link_name'] . '</a>'; ?>
 	</td>
 	<td width="20%"><?php echo $row['link_description']; ?></td>
-        <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']]; ?></td>
+        <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']]; ?></td> 
 	<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['task_id']; ?>"><?php echo $row['task_name']; ?></a></td>
 	<td width="15%" nowrap="nowrap"><?php echo $row['contact_first_name'] . ' ' . $row['contact_last_name']; ?></td>
 	<td width="15%" nowrap="nowrap" align="center">

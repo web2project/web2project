@@ -4,7 +4,14 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
+require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
+require_once W2P_BASE_DIR . '/includes/main_functions.php';
+
+$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+date_default_timezone_set($defaultTZ);
+
 /*
 CAPTCHA control condition...
 */
@@ -30,8 +37,6 @@ if (strlen($_POST['spam_check']) > 0) {
          ";
 	exit;
 }
-
-require_once W2P_BASE_DIR . '/includes/config.php';
 
 if (!isset($GLOBALS['OS_WIN'])) {
 	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, 'WIN') !== false);
@@ -102,25 +107,19 @@ if ($isNewUser) {
 
 $result = $contact->store($AppUI);
 if ($result) {
-    $contactArray = array('email_primary' => $_POST['contact_email'],
-        'phone_primary' => $_POST['contact_phone']);
-    $contact->setContactMethods($contactArray);
-
 	$user->user_contact = $contact->contact_id;
 	if (($msg = $user->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
-        $contactMethods = $contact->getContactMethods(array('email_primary'));
         if ($isNewUser) {
-            notifyNewExternalUser($contactMethods['email_primary'], $contact->contact_first_name, $user->user_username, $_POST['user_password']);
+            notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password']);
 		}
-		notifyHR('hr@yourdomain.com', 'w2P System Human Resources', $contactMethods['email_primary'], $contact->contact_first_name, $user->user_username, $_POST['user_password'], $user->user_id);
+		notifyHR('hr@yourdomain.com', 'w2P System Human Resources', $contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password'], $user->user_id);
 
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
-        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = u.user_contact');
-        $q->addWhere("cm.method_name = 'email_primary'");
-        $q->addQuery('cm.method_value AS contact_email');
+        $q->addQuery('contact_email');
+        $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 		$q->addWhere('u.user_username = \'admin\'');
 		$admin_user = $q->loadList();
 	}

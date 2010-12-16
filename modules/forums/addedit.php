@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: addedit.php 1483 2010-10-26 17:11:59Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/forums/addedit.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -52,7 +52,7 @@ $users = $perms->getPermittedUsers('forums');
 $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
 $titleBlock = new CTitleBlock($ttl, 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
-if ($canDelete) {
+if ($canDelete && ($forum_id > 0)) {
 	$titleBlock->addCrumbRight('<table cellspacing="0" cellpadding="0" border="0"?<tr><td><a class="delete" href="javascript:delIt()"><span>' . $AppUI->_('delete forum') . '</span></a></td></tr></table>');
 }
 $titleBlock->show();
@@ -70,7 +70,9 @@ function submitIt(){
 		form.submit();
 	}
 }
-
+<?php
+if ($canDelete && ($forum_id > 0)) {
+?>
 function delIt(){
 	var form = document.changeforum;
 	if (confirm( "<?php echo $AppUI->_('forumDeleteForum', UI_OUTPUT_JS); ?>" )) {
@@ -78,6 +80,9 @@ function delIt(){
 		form.submit();
 	}
 }
+<?php
+}
+?>
 </script>
 
 <form name="changeforum" action="?m=forums" method="post" accept-charset="utf-8">

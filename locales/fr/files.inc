@@ -2,6 +2,7 @@
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
 'Add File'=>'Ajouter un fichier',
+'Add File Folder'=>'Ajouter un dossier de fichiers',
 'All Files'=>'Tous les fichiers',
 'All Projects'=>'Tous les projets',
 'Application'=>'Application',
@@ -22,6 +23,7 @@
 'File(s)'=>'Fichier(s)',
 'Filter'=>'Filtre',
 'Final Version'=>'Version finale',
+'Folder'=>'Dossier',
 'Folder Explorer'=>'Explorateur de dossier',
 'Folder Name'=>'Nom dossier',
 'Go'=>'Allez!',
@@ -55,7 +57,7 @@
 'delete file'=>'Supprimer le fichier',
 'download'=>'Télécharger',
 'files list'=>'Liste des fichiers',
-'filesDelete'=>'Etes-vous certain de vouloir effacer ce fichier?',
+'filesDelete'=>'Êtes-vous certain de vouloir effacer ce fichier?',
 'new file'=>'Nouveau fichier',
 'new folder'=>'Nouveau dossier',
 'select task'=>'sélectionner une tâche',

@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: view_pdf.php 1517 2010-12-05 08:07:54Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/forums/view_pdf.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not call this file directly.');
 }
@@ -23,13 +23,10 @@ if (!$perms->checkModuleItem('forums', 'view', $message_id)) {
 $q = new DBQuery;
 $q->addTable('forums');
 $q->addTable('forum_messages');
-$q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, user_username, forum_moderated, visit_user');
+$q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email, user_username, forum_moderated, visit_user');
 $q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = ' . (int)$forum_id . ' AND visit_message = forum_messages.message_id');
 $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
 $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-$q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-$q->addWhere("cm.method_name = 'email_primary'");
-$q->addQuery('cm.method_value AS contact_email');
 $q->addWhere('forum_id = message_forum AND (message_id = ' . (int)$message_id . ' OR message_parent = ' . (int)$message_id . ')');
 if (w2PgetConfig('forum_descendent_order') || w2PgetParam($_REQUEST, 'sort', 0)) {
 	$q->addOrder('message_date ' . $sort);
@@ -53,11 +50,8 @@ foreach ($messages as $row) {
 	$q = new DBQuery;
 	$q->addTable('forum_messages');
 	$q->addTable('users');
-	$q->addQuery('contact_first_name, contact_last_name, user_username');
+	$q->addQuery('contact_first_name, contact_last_name, contact_email, user_username');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-    $q->addWhere("cm.method_name = 'email_primary'");
-    $q->addQuery('cm.method_value AS contact_email');
 	$q->addWhere('users.user_id = ' . (int)$row['message_editor']);
 	$editor = $q->loadList();
 

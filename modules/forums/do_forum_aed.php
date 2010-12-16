@@ -1,10 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: do_forum_aed.php 1483 2010-10-26 17:11:59Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/forums/do_forum_aed.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-
-$del = (int) w2PgetParam($_POST, 'del', 0);
 $isNotNew = (int) w2PgetParam($_POST, 'forum_id', 0);
+$del = (int)w2PgetParam($_POST, 'del', 0) && $isNotNew;
 
 $obj = new CForum();
 if (!$obj->bind($_POST)) {

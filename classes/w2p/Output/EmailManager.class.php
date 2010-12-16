@@ -61,7 +61,7 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function loadNotifyNewUser($username) {
+    public function getNotifyNewUser($username) {
         $body = "Dear $username,\n\n" .
         $body .= "Congratulations! Your account has been activated by the administrator.\n";
         $body .= "Please use the login information provided earlier.\n\n";

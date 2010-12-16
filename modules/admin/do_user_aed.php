@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: do_user_aed.php 1517 2010-12-05 08:07:54Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/admin/do_user_aed.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -72,20 +72,15 @@ if ($isNewUser) {
 	}
 	$contact->contact_owner = $AppUI->user_id;
 }
-
 $result = $contact->store($AppUI);
-if ($result) {
-    $contactArray = array('email_primary' => $_POST['contact_email'],
-        'phone_primary' => $_POST['contact_phone']);
-    $contact->setContactMethods($contactArray);
 
+if ($result) {
 	$obj->user_contact = $contact->contact_id;
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
         if ($isNewUser && w2PgetParam($_POST, 'send_user_mail', 0)) {
-			$contactMethods = $contact->getContactMethods(array('email_primary'));
-            notifyNewUserCredentials($contactMethods['email_primary'], $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
+            notifyNewUserCredentials($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
 		}
 		if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
 			$perms = &$AppUI->acl();

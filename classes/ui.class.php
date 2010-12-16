@@ -844,13 +844,14 @@ class CAppUI {
          *   removed from the contacts table. If the user is upgrading from
          *   v1.x and they try to log in before applying the database, crash.
          *   Info: http://bugs.web2project.net/view.php?id=457
+         * This hack was deprecated in dbVersion 26 for v2.2 in December 2010.
          */
 
         $qTest = new DBQuery();
         $qTest->addTable('w2pversion');
         $qTest->addQuery('max(db_version)');
         $dbVersion = $qTest->loadResult();
-        if ($dbVersion >= 21) {
+        if ($dbVersion >= 21 && $dbVersion < 26) {
             $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
             $q->addWhere("cm.method_name = 'email_primary'");
             $q->addQuery('cm.method_value AS user_email');
@@ -861,6 +862,7 @@ class CAppUI {
 
 		$q->addWhere('user_id = ' . (int)$user_id . ' AND user_username = \'' . $username . '\'');
 		$sql = $q->prepare();
+
 		$q->loadObject($this);
 		dprint(__file__, __line__, 7, 'Login SQL: ' . $sql);
 
@@ -1088,8 +1090,9 @@ class CAppUI {
 		// Load the basic javascript used by all modules.
 		echo '<script type="text/javascript" src="'.$base.'js/base.js"></script>';
 
-		// additionally load mootools
-		echo '<script type="text/javascript" src="'.$base.'lib/mootools/mootools.js"></script>';
+		// additionally load jquery
+		echo '<script type="text/javascript" src="'.$base.'lib/jquery/jquery.js"></script>';
+		echo '<script type="text/javascript" src="'.$base.'lib/jquery/jquery.tipTip.js"></script>';
 
 		$this->getModuleJS($m, $a, true);
 	}
@@ -1115,13 +1118,15 @@ class CAppUI {
 
 	public function loadFooterJS() {
 		$s = '<script type="text/javascript">';
-		$s .= 'window.addEvent(\'domready\', function(){';
-		$s .= '		var as = [];';
-		$s .= '		$$(\'span\').each(function(span){';
-		$s .= '			if (span.getAttribute(\'title\')) as.push(span);';
-		$s .= '		});';
-		$s .= '		new Tips(as), {';
-		$s .= '		}';
+		$s .= '$(document).ready(function() {';
+        // Attach tooltips to "span" elements
+		$s .= '	$("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});';
+        // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox 
+        if (canAccess('smartsearch')) {
+            $s .= '	$("input[type=\'text\']:eq(1)").focus();';
+        } else {
+            $s .= '	$("input[type=\'text\']:eq(0)").focus();';            
+        }
 		$s .= '});';
 		$s .= '</script>';
 		echo $s;

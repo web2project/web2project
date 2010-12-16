@@ -59,29 +59,52 @@ class w2p_Output_GanttRenderer {
         // if diff(end_date,start_date) > 240 days it shows only
         //month number
         //-----------------------------------------
-        if ($day_diff > 240) {
-            $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY);
+        if ($day_diff > 1096) {
+            //more than 3 years, show only the year scale
+            $this->graph->ShowHeaders(GANTT_HYEAR);
+            $this->graph->scale->year->grid->Show ();
+            $this->graph->scale->year->grid->SetStyle (longdashed);
+            $this->graph->scale->year->grid->SetColor ('lightgray');
+            $this->graph->scale->year->SetFont(FF_CUSTOM, FS_NORMAL,  12);
+        } else if ($day_diff > 480) {
+            //more than 480 days show only the firstletter of the month
+            $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
+            $this->graph->scale->month->SetStyle(MONTHSTYLE_SHORTNAME);
+            $this->graph->scale->month->grid->Show ();
+            $this->graph->scale->month->grid->SetStyle (longdashed);
+            $this->graph->scale->month->grid->SetColor ('lightgray');
+            $this->graph->scale->month->SetFont(FF_CUSTOM, FS_NORMAL, 10);
+        } else if($day_diff > 240) {
+            //more than 240 days and less than 481 show the month short name eg: Jan
+            $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
+            $this->graph->scale->month->SetStyle(MONTHSTYLE_SHORTNAME);
+            $this->graph->scale->month->grid->Show ();
+            $this->graph->scale->month->grid->SetStyle (longdashed);
+            $this->graph->scale->month->grid->SetColor ('lightgray');
+            $this->graph->scale->month->SetFont(FF_CUSTOM, FS_NORMAL, 10);
+        } else if ($day_diff > 90) {
+            //more than 90 days and less of 241
+            $this->graph->ShowHeaders(GANTT_HMONTH | GANTT_HWEEK);
+            $this->graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
+            $this->graph->scale->week->SetFont(FF_CUSTOM, FS_NORMAL,  7);
         } else {
-            if ($day_diff > 90) {
-                $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HWEEK);
-                $this->graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
-            }
+            //more than 90 days and less of 241
+            $this->graph->ShowHeaders(GANTT_HMONTH | GANTT_HDAY);
+            $this->graph->scale->day->SetStyle(DAYSTYLE_SHORTDATE4);
+            $this->graph->scale->day->SetFont(FF_CUSTOM, FS_NORMAL,  7);
         }
+
         $this->graph->SetDateRange($start_date, $end_date);
     }
 
     public function setTitle($tableTitle = '', $background = '#eeeeee')
     {
-        $this->graph->scale->tableTitle->Set($tableTitle);
+        $this->graph->title->Set($tableTitle);
         // Use TTF font if it exists
         // try commenting out the following two lines if gantt charts do not display
         if (is_file(TTF_DIR . 'FreeSansBold.ttf')) {
-            $this->graph->scale->tableTitle->SetFont(FF_CUSTOM, FS_BOLD, 12);
+            $this->graph->title->SetFont(FF_CUSTOM, FS_BOLD, 14);
         }
-        $this->graph->scale->SetTableTitleBackground($background);
-        $font_color = bestColor($background);
-        $this->graph->scale->tableTitle->SetColor($font_color);
-        $this->graph->scale->tableTitle->Show(true);
     }
 
     public function setColumnHeaders(array $columnNames, array $columnSizes)
@@ -197,6 +220,10 @@ class w2p_Output_GanttRenderer {
         $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
         $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
         $bar->title->SetColor($color);
+        $bar->mark->SetType(MARK_DIAMOND);
+        $bar->mark->SetWidth(10);
+        $bar->mark->SetColor($color);
+        $bar->mark->SetFillColor($color);
 
         $this->graph->Add($this->addDependencies($bar, $identifier));
     }
@@ -227,7 +254,7 @@ class w2p_Output_GanttRenderer {
         return $ganttBar;
     }
 
-    public function render($markToday = true)
+    public function render($markToday = true, $filename = '')
     {
         if ($markToday)
         {
@@ -235,11 +262,27 @@ class w2p_Output_GanttRenderer {
             $vline = new GanttVLine($today, $this->todayText);
             $this->graph->Add($vline);
         }
-        $this->graph->Stroke();
+        ($filename == '') ? $this->graph->Stroke() : $this->graph->Stroke($filename);
     }
 
     public function getGraph()
     {
         return $this->graph;
+    }
+
+    public function setProperties(array $params)
+    {
+        foreach ($params as $key => $value) {
+            if ($value) {
+                switch ($key) {
+                    case 'showhgrid':
+                        $this->graph->hgrid->Show ();
+                        $this->graph->hgrid->SetRowFillColor ('darkblue@0.95');
+                        break;
+                    default:
+                        //do nothing
+                }
+            }
+        }
     }
 }

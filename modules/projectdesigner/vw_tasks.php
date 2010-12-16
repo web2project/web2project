@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: vw_tasks.php 1525 2010-12-11 08:46:05Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/vw_tasks.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -111,7 +111,7 @@ $q->addQuery('count(tasks.task_parent) as children');
 $q->addQuery('task_pinned, pin.user_id as pin_user');
 $q->addQuery('task_priority, task_percent_complete');
 $q->addQuery('task_duration, task_duration_type');
-$q->addQuery('task_project');
+$q->addQuery('task_project, task_represents_project');
 $q->addQuery('task_access, task_type');
 $q->addQuery('task_description, task_owner, task_status');
 $q->addQuery('usernames.user_username, usernames.user_id');

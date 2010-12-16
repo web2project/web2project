@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: gantt.php 1524 2010-12-09 08:15:59Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/gantt.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -203,58 +203,58 @@ if (!is_array($projects) || 0 == count($projects)) {
             $orderBy = ($sortTasksByName) ? 'task_name' : 'task_end_date ASC';
             $tasks = $task->getAllowedTaskList($AppUI, $p['project_id'], $orderBy);
             $bestColor = bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000');
-            
+
 			foreach ($tasks as $t) {
-				//Check if start date exists, if not try giving it the end date.
-				//If the end date does not exist then set it for today.
-				//This avoids jpgraphs internal errors that render the gantt completely useless
-				if ($t['task_start_date'] == '0000-00-00 00:00:00') {
-					if ($t['task_end_date'] == '0000-00-00 00:00:00') {
-						$todaydate = new CDate();
-						$t['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
-					} else {
-						$t['task_start_date'] = $t['task_end_date'];
-					}
-				}
-						
-				//Check if end date exists, if not try giving it the start date.
-				//If the start date does not exist then set it for today.
-				//This avoids jpgraphs internal errors that render the gantt completely useless
-				if ($t['task_end_date'] == '0000-00-00 00:00:00') {
-					if ($t['task_duration']) {
-						$t['task_end_date'] = db_unix2dateTime(db_dateTime2unix($t['task_start_date']) + SECONDS_PER_DAY * convert2days($t['task_duration'], $t['task_duration_type']));
-					} else {
-						$todaydate = new CDate();
-						$t['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
-					}
-				}
+                //Check if start date exists, if not try giving it the end date.
+                //If the end date does not exist then set it for today.
+                //This avoids jpgraphs internal errors that render the gantt completely useless
+                if ($t['task_start_date'] == '0000-00-00 00:00:00') {
+                    if ($t['task_end_date'] == '0000-00-00 00:00:00') {
+                        $todaydate = new CDate();
+                        $t['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+                    } else {
+                        $t['task_start_date'] = $t['task_end_date'];
+                    }
+                }
 
-				$tStart = intval($t['task_start_date']) ? $t['task_start_date'] : $start;
-				$tEnd = intval($t['task_end_date']) ? $t['task_end_date'] : $end;
-				$tStartObj = new CDate($t['task_start_date']);
-				$tEndObj = new CDate($t['task_end_date']);
+                //Check if end date exists, if not try giving it the start date.
+                //If the start date does not exist then set it for today.
+                //This avoids jpgraphs internal errors that render the gantt completely useless
+                if ($t['task_end_date'] == '0000-00-00 00:00:00') {
+                    if ($t['task_duration']) {
+                        $t['task_end_date'] = db_unix2dateTime(db_dateTime2unix($t['task_start_date']) + SECONDS_PER_DAY * convert2days($t['task_duration'], $t['task_duration_type']));
+                    } else {
+                        $todaydate = new CDate();
+                        $t['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+                    }
+                }
 
-				if ($t['task_milestone'] != 1) {
+                $tStart = intval($t['task_start_date']) ? $t['task_start_date'] : $start;
+                $tEnd = intval($t['task_end_date']) ? $t['task_end_date'] : $end;
+                $tStartObj = new CDate($t['task_start_date']);
+                $tEndObj = new CDate($t['task_end_date']);
+
+                if ($t['task_milestone'] != 1) {
                     $columnValues = array('task_name' => substr('  ' . $t['task_name'], 0, 20). '...',
                         'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
                     $gantt->addBar($columnValues, $t['task_percent_complete'].'% '.$AppUI->_('Complete'),
                         $height, $p['project_color_identifier'], $p['project_active'],
                         $t['task_percent_complete'], $t['task_id']);
-				} else {
-				  $gantt->addMilestone(array('-- ' . $t['task_name']), $t['task_start_date']);
-				}
+                } else {
+                    $gantt->addMilestone(array('-- ' . $t['task_name']), $t['task_start_date']);
+                }
 
                 $task->task_id = $t['task_id'];
-				$workers = $task->getAssigned();
-				foreach ($workers as $w) {
+                $workers = $task->getAssigned();
+                foreach ($workers as $w) {
                     $columnValues = array('user_name' => '    * '.$w['user_name'],
                         'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
                     $gantt->addBar($columnValues, $w['user_name'], 0.6, $p['project_color_identifier'],
                         true, $t['task_percent_complete'], $t['task_id']);
-				}
-				// End of insert workers for each task into Gantt Chart
+                }
+                // End of insert workers for each task into Gantt Chart
 			}
 			unset($tasks);
 			// End of insert tasks into Gantt Chart

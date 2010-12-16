@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: index.php 1497 2010-11-27 22:08:59Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/index.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -78,6 +78,21 @@ getTaskLinks($first_time, $last_time, $links, 20, $company_id);
 // assemble the links for the events
 require_once (W2P_BASE_DIR . '/modules/calendar/links_events.php');
 getEventLinks($first_time, $last_time, $links, 20);
+
+$moduleList = $AppUI->getLoadableModuleList();
+foreach ($moduleList as $module) {
+    $object = new $module['mod_main_class']();
+    if (is_callable(array($object, 'hook_calendar')) &&
+        is_callable(array($object, 'getCalendarLink'))) {
+        $itemList = $object->hook_calendar($AppUI->user_id);
+        if (is_array($itemList)) {
+            foreach ($itemList as $item) {
+                $dateIndex = str_replace('/', '', $item['startDate']);
+                $links[$dateIndex][] = $object->getCalendarLink($AppUI, $item);
+            }
+        }
+    }
+}
 
 // create the main calendar
 $cal = new CMonthCalendar($date);
