@@ -9,9 +9,9 @@ $fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries',
 class CSystem {
     private $upgrader = null;
 
-	public function __construct() {
+    public function __construct() {
         $this->upgrader = new w2p_Core_UpgradeManager();
-	}
+    }
 
     public function upgradeRequired() {
         $this->upgrader->getActionRequired();
