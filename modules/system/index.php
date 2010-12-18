@@ -27,6 +27,13 @@ $titleBlock->show();
     <td align="left">
       <?php
         $system = new CSystem();
+        if ('admin@web2project.net' == w2PgetConfig('admin_email', 'admin@web2project.net')) {
+            ?>
+            <a href="?m=system&a=systemconfig#admin_email"><?php echo $AppUI->_('Set the Admin Email Address'); ?></a> -
+            <span class="error"><?php echo $AppUI->_('Please set an email address for your Web2project Administrator.'); ?></span>
+            <?php
+        }
+        echo '<br />';
         if ($system->upgradeRequired()) {
           ?>
           <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -
@@ -48,7 +55,7 @@ $titleBlock->show();
             echo $AppUI->_('Your system has a default timezone of GMT'.$offset.'.');
         } else {
           ?>
-          <a href="?m=system&a=systemconfig"><?php echo $AppUI->_('Select a Timezone'); ?></a> -
+          <a href="?m=system&a=systemconfig#system_timezone"><?php echo $AppUI->_('Select a Timezone'); ?></a> -
           <span class="error"><?php echo $AppUI->_('You do not have a default server timezone selected. Please select one immediately.'); ?></span>
           <?php
         }
