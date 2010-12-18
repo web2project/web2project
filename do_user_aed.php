@@ -107,22 +107,24 @@ if ($isNewUser) {
 
 $result = $contact->store($AppUI);
 if ($result) {
-	$user->user_contact = $contact->contact_id;
-	if (($msg = $user->store())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	} else {
+    $user->user_contact = $contact->contact_id;
+    if (($msg = $user->store())) {
+        $AppUI->setMsg($msg, UI_MSG_ERROR);
+    } else {
         if ($isNewUser) {
             notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password']);
-		}
-		notifyHR('hr@yourdomain.com', 'w2P System Human Resources', $contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password'], $user->user_id);
+        }
+        notifyHR(w2PgetConfig('admin_email', 'admin@web2project.net'), 'w2P System Human Resources', 
+            $contact->contact_email, $contact->contact_first_name, $user->user_username,
+            $_POST['user_password'], $user->user_id);
 
-		$q = new DBQuery;
-		$q->addTable('users', 'u');
+        $q = new DBQuery;
+        $q->addTable('users', 'u');
         $q->addQuery('contact_email');
         $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-		$q->addWhere('u.user_username = \'admin\'');
-		$admin_user = $q->loadList();
-	}
+        $q->addWhere('u.user_username = \'admin\'');
+        $admin_user = $q->loadList();
+    }
 } else {
     $AppUI->setMsg($msg, UI_MSG_ERROR);
 }

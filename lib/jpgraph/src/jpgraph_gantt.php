@@ -460,7 +460,7 @@ class GanttGraph extends Graph {
 			// Setup caption
 			$a->caption->Set($data[$i][$csimpos - 1]);
 
-			// Check if this activity should have a CSIM target ?
+			// Check if this activity should have a CSIM targetï¿½?
 			if (!empty($data[$i][$csimpos])) {
 				$a->SetCSIMTarget($data[$i][$csimpos]);
 				$a->SetCSIMAlt($data[$i][$csimpos + 1]);
@@ -1311,7 +1311,7 @@ class TextProperty {
 	var $iFFamily = FF_FONT1, $iFStyle = FS_NORMAL, $iFSize = 10;
 	var $iColor = "black";
 	var $iShow = true;
-	var $iText = "";
+	var $iText = " ";
 	var $iHAlign = "left", $iVAlign = "bottom";
 	var $csimtarget = '', $csimalt = '';
 
@@ -1494,7 +1494,8 @@ class TextProperty {
 					} elseif ($ay) {
 						$aX = array_fill(0, $n, $aX);
 					} else {
-						$aX = array_fill(0, $n, $aX);
+                        $n = ($n) ? $n : 1;             // Patched by DKC 02 Dec 2010
+                        $aX = array_fill(0, $n, $aX);
 						$aY = array_fill(0, $n, $aY);
 					}
 					$n = min($n, count($aX));
@@ -2362,7 +2363,7 @@ class GanttScale {
 					default:
 						// "M"
 						$txt = strftime('%A', $datestamp);
-						$txt = strtoupper($txt[0]);
+						$txt = mb_substr($txt,0,1);
 						break;
 				}
 
