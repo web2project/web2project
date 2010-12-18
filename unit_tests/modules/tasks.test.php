@@ -317,7 +317,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
 
-        $this->assertEquals('BadDep_DynNoDep', $errorMsg);
+        $this->assertEquals(array('BadDep_DynNoDep'), $errorMsg);
     }
 
     /**
@@ -351,7 +351,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
 
-        $this->assertEquals('BadDep_CannotDependOnParent', $errorMsg);
+        $this->assertEquals(array('BadDep_CannotDependOnParent'), $errorMsg);
     }
 
     /**
@@ -368,7 +368,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
 
-        $this->assertEquals('BadParent_CircularParent', $errorMsg);
+        $this->assertEquals(array('BadParent_CircularParent'), $errorMsg);
     }
 
     /**
@@ -438,7 +438,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
 
-        $this->assertEquals('BadParent_ChildDepOnParent', $errorMsg);
+        $this->assertEquals(array('BadParent_ChildDepOnParent'), $errorMsg);
     }
 
     /**
