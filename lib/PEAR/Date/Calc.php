@@ -1489,7 +1489,7 @@ class Date_Calc
 
         if(empty($month))
             $month = Date_Calc::dateNow("%m");
-        return mb_substr(Date_Calc::getMonthFullname($month), 0, $length);
+        return substr(Date_Calc::getMonthFullname($month), 0, $length);
     } // end func getMonthAbbrname
 
     /**

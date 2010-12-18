@@ -1,9 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: contacts.class.php 1515 2010-12-05 07:13:50Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/contacts/contacts.class.php $ */
 
 /**
  *	@package web2Project
  *	@subpackage modules
- *	@version $Revision$
+ *	@version $Revision: 1515 $
  */
 
 /**

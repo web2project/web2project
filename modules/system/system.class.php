@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: system.class.php 1527 2010-12-13 07:56:13Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/system/system.class.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -9,9 +9,9 @@ $fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries',
 class CSystem {
     private $upgrader = null;
 
-    public function __construct() {
+	public function __construct() {
         $this->upgrader = new w2p_Core_UpgradeManager();
-    }
+	}
 
     public function upgradeRequired() {
         $this->upgrader->getActionRequired();

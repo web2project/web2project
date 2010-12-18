@@ -1,4 +1,4 @@
-<?php /* PROJECTS $Id$ $URL$ */
+<?php /* PROJECTS $Id: vw_idx_projects.php 1500 2010-11-27 22:45:35Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/vw_idx_projects.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }

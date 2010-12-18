@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: index.php 1475 2010-10-18 03:28:23Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/index.php $ */
 /*  Copyright (c) 2007 Pedro A. (web2Project Development Team Member)
 THIS MODULE WAS SPONSORED BY DUSTIN OF PURYEAR-IT.COM
 

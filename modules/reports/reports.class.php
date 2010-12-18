@@ -1,9 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: reports.class.php 1522 2010-12-08 05:08:07Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/reports/reports.class.php $ */
 
 /**
  *	@package web2Project
  *	@subpackage modules
- *	@version $Revision$
+ *	@version $Revision: 1522 $
  */
 
 class CReport {

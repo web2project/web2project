@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: tasks.class.php 1526 2010-12-11 08:52:38Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/tasks.class.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -191,16 +191,16 @@ class CTask extends CW2pObject {
 			if ($hdependencies) {
 				$this_dependencies = explode(',', $hdependencies);
 			}
-		} else {
-			$this_dependencies = explode(',', $this->getDependencies());
+        } else {
+            $this_dependencies = explode(',', $this->getDependencies());
 		}
 		// Set to false for recursive updateDynamic calls etc.
 		$addedit = false;
 
 		// Have deps
 		if (array_sum($this_dependencies)) {
-			if ($this->task_dynamic == 1) {
-				return 'BadDep_DynNoDep';
+            if ($this->task_dynamic == 1) {
+				return array('BadDep_DynNoDep');
 			}
 
 			$this_dependents = $this->task_id ? explode(',', $this->dependentTasks()) : array();
@@ -224,18 +224,18 @@ class CTask extends CW2pObject {
 		}
 
 		// Has a parent
-		if ($this->task_id && $this->task_id != $this->task_parent) {
+		if ($this->task_id && $this->task_parent && $this->task_id != $this->task_parent) {
 			$this_children = $this->getChildren();
 			$this_parent = new CTask();
 			$this_parent->load($this->task_parent);
 			$parents_dependents = explode(',', $this_parent->dependentTasks());
 
-			if (in_array($this_parent->task_id, $this_dependencies)) {
-				return 'BadDep_CannotDependOnParent';
+            if (in_array($this_parent->task_id, $this_dependencies)) {
+				return array('BadDep_CannotDependOnParent');
 			}
 			// Task parent cannot be child of this task
 			if (in_array($this_parent->task_id, $this_children)) {
-				return 'BadParent_CircularParent';
+				return array('BadParent_CircularParent');
 			}
 
 			if ($this_parent->task_parent != $this_parent->task_id) {
@@ -260,7 +260,7 @@ class CTask extends CW2pObject {
 				// then task's children can not be dependent on parent
 				$intersect = array_intersect($this_children, $parents_dependents);
 				if (array_sum($intersect)) {
-					return 'BadParent_ChildDepOnParent';
+					return array('BadParent_ChildDepOnParent');
 				}
 			}
 		} // parent

@@ -5,3 +5,4 @@ $locale_char_set = 'utf-8'; // must be lower-case! because dP doesn't check case
 define('LOCALE_FIRST_DAY', 1);
 define('LOCALE_TIME_FORMAT', '%H:%M');
 define('LOCALE_DATE_FORMAT', '%d.%m.%y');
+?>

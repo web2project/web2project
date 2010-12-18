@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: lang.php 1487 2010-11-09 11:09:33Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/locales/fr/lang.php $ */
 // Entries in the LANGUAGES array are elements that describe the
 // countries and language variants supported by this locale pack.
 // Elements are keyed by the ISO 2 character language code in lowercase
@@ -11,4 +11,5 @@
 
 $dir = basename(dirname(__file__));
 
-$LANGUAGES['fr_FR'] = array($dir, 'French', 'Franï¿½ais', 'fra');
+$LANGUAGES['fr_FR'] = array($dir, 'French', 'Français', 'fra');
+?>
