@@ -450,7 +450,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $this->obj->store($AppUI);
 
         $this->assertTrue($results);
-        $this->assertEquals(3,                          $this->obj->project_id);
+        $this->assertEquals(5,                          $this->obj->project_id);
         $this->assertEquals(1,                          $this->obj->project_company);
         $this->assertEquals('',                         $this->obj->project_department);
         $this->assertEquals('New Project',              $this->obj->project_name);
@@ -477,8 +477,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                         $this->obj->project_contacts);
         $this->assertEquals(-1,                         $this->obj->project_priority);
         $this->assertEquals(0,                          $this->obj->project_type);
-        $this->assertEquals(3,                          $this->obj->project_parent);
-        $this->assertEquals(3,                          $this->obj->project_original_parent);
+        $this->assertEquals(5,                          $this->obj->project_parent);
+        $this->assertEquals(5,                          $this->obj->project_original_parent);
         $this->assertEquals('',                         $this->obj->project_location);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestCreateProject.xml');
@@ -745,12 +745,39 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
+     * Tests importing tasks from one project to another, when tasks are
+     * invalid and causes failure. So the project should be removed and
+     * tasks cleaned up.
+     */
+    public function testImportTasksFail()
+    {
+        $this->obj->load(2);
+        $response = $this->obj->importTasks(1);
+
+        $this->assertEquals(2, count($response));
+        $this->assertEquals('Task: BadDep_CircularDep', $response[0]);
+        $this->assertEquals('Task: (5)', $response[1]);
+
+        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
+        $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
+        $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
+    }
+
+    /**
      * Tests importing tasks from one project to another
      */
     public function testImportTasks()
     {
-        $this->obj->load(2);
-        $this->obj->importTasks(1);
+        $this->obj->load(4);
+        $response = $this->obj->importTasks(3);
+
+        $this->assertEquals(array(), $response);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
@@ -767,7 +794,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_created');
-        $q->addWhere('task_project = 2');
+        $q->addWhere('task_project = 4');
         $results = $q->loadColumn();
 
         foreach($results as $created) {
@@ -781,7 +808,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $q = new DBQuery;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
-        $q->addWhere('task_project = 2');
+        $q->addWhere('task_project = 4');
         $results = $q->loadColumn();
 
         foreach($results as $updated) {
@@ -794,7 +821,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
 
     }
-
     /**
      * Tests checking allowed records with no permissions
      */
@@ -851,7 +877,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
     	$project_in_rows = $this->obj->getAllowedProjectsInRows(1);
 
-    	$this->assertEquals(2, db_num_rows($project_in_rows));
+    	$this->assertEquals(4, db_num_rows($project_in_rows));
 
     	$row = db_fetch_assoc($project_in_rows);
     	$this->assertEquals(1,                     $row[0]);
@@ -1133,7 +1159,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $allowed_projects = $this->obj->getAllowedProjects(1, false);
 
-        $this->assertEquals(2,                      count($allowed_projects));
+        $this->assertEquals(4,                      count($allowed_projects));
         $this->assertEquals(1,                      $allowed_projects[1]['project_id']);
         $this->assertEquals('FFFFFF',               $allowed_projects[1]['project_color_identifier']);
         $this->assertEquals('Test Project',         $allowed_projects[1]['project_name']);
@@ -1144,7 +1170,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Test Project',         $allowed_projects[1][2]);
         $this->assertEquals('2009-07-05 00:00:00',  $allowed_projects[1][3]);
         $this->assertEquals('2009-07-15 23:59:59',  $allowed_projects[1][4]);
-
         $this->assertEquals(2,                      $allowed_projects[2]['project_id']);
         $this->assertEquals('EEEEEE',               $allowed_projects[2]['project_color_identifier']);
         $this->assertEquals('Test Project 2',       $allowed_projects[2]['project_name']);
@@ -1155,6 +1180,26 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Test Project 2',       $allowed_projects[2][2]);
         $this->assertEquals('2009-07-08 00:00:00',  $allowed_projects[2][3]);
         $this->assertEquals('2009-07-18 23:59:59',  $allowed_projects[2][4]);
+        $this->assertEquals(3,                      $allowed_projects[3]['project_id']);
+        $this->assertEquals('EEEEEE',               $allowed_projects[3]['project_color_identifier']);
+        $this->assertEquals('Test Project 3',       $allowed_projects[3]['project_name']);
+        $this->assertEquals('2009-07-08 00:00:00',  $allowed_projects[3]['project_start_date']);
+        $this->assertEquals('2009-07-18 23:59:59',  $allowed_projects[3]['project_end_date']);
+        $this->assertEquals(3,                      $allowed_projects[3][0]);
+        $this->assertEquals('EEEEEE',               $allowed_projects[3][1]);
+        $this->assertEquals('Test Project 3',       $allowed_projects[3][2]);
+        $this->assertEquals('2009-07-08 00:00:00',  $allowed_projects[3][3]);
+        $this->assertEquals('2009-07-18 23:59:59',  $allowed_projects[3][4]);
+        $this->assertEquals(4,                      $allowed_projects[4]['project_id']);
+        $this->assertEquals('EEEEEE',               $allowed_projects[4]['project_color_identifier']);
+        $this->assertEquals('Test Project 4',       $allowed_projects[4]['project_name']);
+        $this->assertEquals('2009-07-08 00:00:00',  $allowed_projects[4]['project_start_date']);
+        $this->assertEquals('2009-07-18 23:59:59',  $allowed_projects[4]['project_end_date']);
+        $this->assertEquals(4,                      $allowed_projects[4][0]);
+        $this->assertEquals('EEEEEE',               $allowed_projects[4][1]);
+        $this->assertEquals('Test Project 4',       $allowed_projects[4][2]);
+        $this->assertEquals('2009-07-08 00:00:00',  $allowed_projects[4][3]);
+        $this->assertEquals('2009-07-18 23:59:59',  $allowed_projects[4][4]);
     }
 
     /**
@@ -1302,7 +1347,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $has_children = $this->obj->hasChildProjects(1);
 
-        $this->assertEquals(1, $has_children);
+        $this->assertEquals(3, $has_children);
     }
 
     /**
@@ -1314,7 +1359,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         $has_children = $this->obj->hasChildProjects();
 
-        $this->assertEquals(1, $has_children);
+        $this->assertEquals(3, $has_children);
     }
 
     /**
@@ -1361,7 +1406,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testGetTotalProjectHours()
     {
         global $w2Pconfig;
-        
+
         $this->obj->load(1);
         $total_hours_1 = $this->obj->getTotalProjectHours();
 
@@ -1515,7 +1560,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $projects = getProjects();
 
-        $this->assertEquals(2,                  count($projects));
+        $this->assertEquals(4,                  count($projects));
         $this->assertEquals(1,                  $projects[1]['project_id']);
         $this->assertEquals('Test Project',     $projects[1]['project_name']);
         $this->assertEquals(1,                  $projects[1]['project_parent']);
@@ -1528,6 +1573,18 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(2,                  $projects[2][0]);
         $this->assertEquals('Test Project 2',   $projects[2][1]);
         $this->assertEquals(1,                  $projects[2][2]);
+        $this->assertEquals(3,                  $projects[3]['project_id']);
+        $this->assertEquals('Test Project 3',   $projects[3]['project_name']);
+        $this->assertEquals(1,                  $projects[3]['project_parent']);
+        $this->assertEquals(3,                  $projects[3][0]);
+        $this->assertEquals('Test Project 3',   $projects[3][1]);
+        $this->assertEquals(1,                  $projects[3][2]);
+        $this->assertEquals(4,                  $projects[4]['project_id']);
+        $this->assertEquals('Test Project 4',   $projects[4]['project_name']);
+        $this->assertEquals(1,                  $projects[4]['project_parent']);
+        $this->assertEquals(4,                  $projects[4][0]);
+        $this->assertEquals('Test Project 4',   $projects[4][1]);
+        $this->assertEquals(1,                  $projects[4][2]);
     }
 
     /**
@@ -1544,7 +1601,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 	    $st_projects = $q->loadHashList('project_id');
 	    reset_project_parents($st_projects);
 
-	    $this->assertEquals(2,                  count($st_projects));
+	    $this->assertEquals(4,                  count($st_projects));
         $this->assertEquals(1,                  $st_projects[1]['project_id']);
         $this->assertEquals('Test Project',     $st_projects[1]['project_name']);
         $this->assertEquals(1,                  $st_projects[1]['project_parent']);
@@ -1557,6 +1614,18 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(2,                  $st_projects[2][0]);
         $this->assertEquals('Test Project 2',   $st_projects[2][1]);
         $this->assertEquals(1,                  $st_projects[2][2]);
+        $this->assertEquals(3,                  $st_projects[3]['project_id']);
+        $this->assertEquals('Test Project 3',   $st_projects[3]['project_name']);
+        $this->assertEquals(1,                  $st_projects[3]['project_parent']);
+        $this->assertEquals(3,                  $st_projects[3][0]);
+        $this->assertEquals('Test Project 3',   $st_projects[3][1]);
+        $this->assertEquals(1,                  $st_projects[3][2]);
+        $this->assertEquals(4,                  $st_projects[4]['project_id']);
+        $this->assertEquals('Test Project 4',   $st_projects[4]['project_name']);
+        $this->assertEquals(1,                  $st_projects[4]['project_parent']);
+        $this->assertEquals(4,                  $st_projects[4][0]);
+        $this->assertEquals('Test Project 4',   $st_projects[4][1]);
+        $this->assertEquals(1,                  $st_projects[4][2]);
     }
 
     /**
@@ -1606,10 +1675,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
 		find_proj_child($st_projects, 1);
 
-		$this->assertEquals(3,                  count($st_projects));
+		$this->assertEquals(5,                  count($st_projects));
 		$this->assertEquals(3,                  count($st_projects[0]));
 		$this->assertEquals(3,                  count($st_projects[1]));
-		$this->assertEquals(3,                  count($st_projects[2]));
+        $this->assertEquals(3,                  count($st_projects[2]));
+        $this->assertEquals(3,                  count($st_projects[3]));
+        $this->assertEquals(3,                  count($st_projects[4]));
 		$this->assertEquals(1,                  $st_projects[0]['project_id']);
 		$this->assertEquals('Test Project',     $st_projects[0]['project_name']);
 		$this->assertEquals(1,                  $st_projects[0]['project_parent']);
@@ -1618,7 +1689,13 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 		$this->assertEquals(1,                  $st_projects[1]['project_parent']);
 		$this->assertEquals(2,                  $st_projects[2]['project_id']);
 		$this->assertEquals('Test Project 2',   $st_projects[2]['project_name']);
-		$this->assertEquals(1,                  $st_projects[2]['project_parent']);
+        $this->assertEquals(1,                  $st_projects[2]['project_parent']);
+        $this->assertEquals(3,                  $st_projects[3]['project_id']);
+		$this->assertEquals('Test Project 3',   $st_projects[3]['project_name']);
+        $this->assertEquals(1,                  $st_projects[3]['project_parent']);
+        $this->assertEquals(4,                  $st_projects[4]['project_id']);
+		$this->assertEquals('Test Project 4',   $st_projects[4]['project_name']);
+		$this->assertEquals(1,                  $st_projects[4]['project_parent']);
     }
 
     /**
@@ -1640,10 +1717,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
 		find_proj_child($st_projects, 1, 2);
 
-        $this->assertEquals(3,                  count($st_projects));
+        $this->assertEquals(5,                  count($st_projects));
 		$this->assertEquals(3,                  count($st_projects[0]));
 		$this->assertEquals(3,                  count($st_projects[1]));
-		$this->assertEquals(3,                  count($st_projects[2]));
+        $this->assertEquals(3,                  count($st_projects[2]));
+        $this->assertEquals(3,                  count($st_projects[3]));
+        $this->assertEquals(3,                  count($st_projects[4]));
 		$this->assertEquals(1,                  $st_projects[0]['project_id']);
 		$this->assertEquals('Test Project',     $st_projects[0]['project_name']);
 		$this->assertEquals(1,                  $st_projects[0]['project_parent']);
@@ -1652,7 +1731,13 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 		$this->assertEquals(1,                  $st_projects[1]['project_parent']);
 		$this->assertEquals(2,                  $st_projects[2]['project_id']);
 		$this->assertEquals('Test Project 2',   $st_projects[2]['project_name']);
-		$this->assertEquals(1,                  $st_projects[2]['project_parent']);
+        $this->assertEquals(1,                  $st_projects[2]['project_parent']);
+        $this->assertEquals(3,                  $st_projects[3]['project_id']);
+		$this->assertEquals('Test Project 3',   $st_projects[3]['project_name']);
+        $this->assertEquals(1,                  $st_projects[3]['project_parent']);
+        $this->assertEquals(4,                  $st_projects[4]['project_id']);
+		$this->assertEquals('Test Project 4',   $st_projects[4]['project_name']);
+		$this->assertEquals(1,                  $st_projects[4]['project_parent']);
     }
 
     /**
@@ -1665,9 +1750,10 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         getStructuredProjects();
 
-        $this->assertEquals(2,                  count($st_projects_arr));
+        $this->assertEquals(4,                  count($st_projects_arr));
         $this->assertEquals(3,                  count($st_projects_arr[0][0]));
         $this->assertEquals(3,                  count($st_projects_arr[1][0]));
+        $this->assertEquals(3,                  count($st_projects_arr[2][0]));
         $this->assertEquals(1,                  $st_projects_arr[0][0]['project_id']);
         $this->assertEquals('Test Project',     $st_projects_arr[0][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[0][0]['project_parent']);
@@ -1676,6 +1762,13 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Test Project 2',   $st_projects_arr[1][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[1][0]['project_parent']);
         $this->assertEquals(1,                  $st_projects_arr[1][1]);
+        $this->assertEquals(3,                  $st_projects_arr[2][0]['project_id']);
+        $this->assertEquals('Test Project 3',   $st_projects_arr[2][0]['project_name']);
+        $this->assertEquals(1,                  $st_projects_arr[2][0]['project_parent']);
+        $this->assertEquals(1,                  $st_projects_arr[2][1]);
+        $this->assertEquals('Test Project 4',   $st_projects_arr[3][0]['project_name']);
+        $this->assertEquals(1,                  $st_projects_arr[3][0]['project_parent']);
+        $this->assertEquals(1,                  $st_projects_arr[3][1]);
     }
 
     /**
@@ -1688,9 +1781,11 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         getStructuredProjects(1);
 
-        $this->assertEquals(2,                  count($st_projects_arr));
+        $this->assertEquals(4,                  count($st_projects_arr));
         $this->assertEquals(3,                  count($st_projects_arr[0][0]));
         $this->assertEquals(3,                  count($st_projects_arr[1][0]));
+        $this->assertEquals(3,                  count($st_projects_arr[2][0]));
+        $this->assertEquals(3,                  count($st_projects_arr[3][0]));
         $this->assertEquals(1,                  $st_projects_arr[0][0]['project_id']);
         $this->assertEquals('Test Project',     $st_projects_arr[0][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[0][0]['project_parent']);
@@ -1699,6 +1794,14 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Test Project 2',   $st_projects_arr[1][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[1][0]['project_parent']);
         $this->assertEquals(1,                  $st_projects_arr[1][1]);
+        $this->assertEquals(3,                  $st_projects_arr[2][0]['project_id']);
+        $this->assertEquals('Test Project 3',   $st_projects_arr[2][0]['project_name']);
+        $this->assertEquals(1,                  $st_projects_arr[2][0]['project_parent']);
+        $this->assertEquals(1,                  $st_projects_arr[2][1]);
+        $this->assertEquals(4,                  $st_projects_arr[3][0]['project_id']);
+        $this->assertEquals('Test Project 4',   $st_projects_arr[3][0]['project_name']);
+        $this->assertEquals(1,                  $st_projects_arr[3][0]['project_parent']);
+        $this->assertEquals(1,                  $st_projects_arr[3][1]);
     }
 
     /**
