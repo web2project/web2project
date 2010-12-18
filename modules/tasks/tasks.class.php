@@ -1050,7 +1050,7 @@ class CTask extends CW2pObject {
 	 * Email the task log to assignees, task contacts, project contacts, and others
 	 * based upon the information supplied by the user.
 	 */
-	public function email_log(&$log, $assignees, $task_contacts, $project_contacts, $others, $extras) {
+	public function email_log(&$log, $assignees, $task_contacts, $project_contacts, $others, $extras, $specific_user=0) {
 		global $AppUI, $locale_char_set, $w2Pconfig;
 
 		$mail_recipients = array();
@@ -1127,7 +1127,25 @@ class CTask extends CW2pObject {
 					}
 				}
 			}
-			$q->clear(); // Reset to the default state.
+            $q->clear(); // Reset to the default state.
+
+            // If this should be sent to a specific user, add their contact details here
+            if (isset($specific_user) && $specific_user) {
+                $q->addTable('users', 'u');
+                $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+				$q->addQuery('c.contact_first_name, c.contact_last_name');
+                $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
+                $q->addWhere("cm.method_name = 'email_primary'");
+                $q->addQuery('cm.method_value AS contact_email');
+                $q->addWhere('u.user_id = ' . $specific_user);
+
+                $su_list = $q->loadList();
+
+                foreach ($su_list as $su_contact) {
+                    $mail_recipients[$su_contact['contact_email']] = mb_trim($su_contact['contact_first_name'] . ' ' . $su_contact['contact_last_name']);
+                }
+            }
+
 			if (count($mail_recipients) == 0) {
 				return false;
 			}
