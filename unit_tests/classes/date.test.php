@@ -1611,4 +1611,94 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(31, $date->getDaysInMonth());
     }
+
+    /**
+     * Tests getHour
+     */
+    public function testGetHour()
+    {
+        $date = new CDate('2010-11-06 11:00:00');
+
+        $this->assertEquals(11, $date->getHour());
+    }
+
+    /**
+     * Test getHour when the hour is greater then 12
+     */
+    public function testGetHourGreaterThenTwelve()
+    {
+        $date = new CDate('2010-11-06 15:00:00');
+
+        $this->assertEquals(15, $date->getHour());
+    }
+
+    /**
+     * Tests getHour with an invalid Hour, this should break...
+     */
+    public function testGetHourInvalidHour()
+    {
+        $date = new CDate('2010-11-06 25:00:00');
+
+        $this->assertEquals(25, $date->getHour());
+    }
+
+    /**
+     * Tests getMinute
+     */
+    public function testGetMinute()
+    {
+        $date = new CDate('2010-11-06 11:21:00');
+
+        $this->assertEquals(21, $date->getMinute());
+    }
+
+    /**
+     * Tests getMinute with Invalid minutes, this should break...
+     */
+    public function testGetMinuteInvalidMinute()
+    {
+        $date = new CDate('2010-11-06 11:65:00');
+
+        $this->assertEquals(65, $date->getMinute());
+    }
+
+    /**
+     * Tests getMonth
+     */
+    public function testGetMonth()
+    {
+        $date = new CDate('2010-11-06 11:00:00');
+
+        $this->assertEquals(11, $date->getMonth());
+    }
+
+    /**
+     * Tests getMonth with an invalid month
+     */
+    public function testGetMonthInvalidMonth()
+    {
+        $date = new CDate('2010-14-06 11:00:00');
+
+        $this->assertEquals(14, $date->getMonth());
+    }
+
+    /**
+     * Tests getWeekOfYear
+     */
+    public function testGetWeekOfYear()
+    {
+        $date = new CDate('2010-11-06 11:00:00');
+
+        $this->assertEquals(45, $date->getWeekOfYear());
+    }
+
+    /**
+     * Tests getWeekOfYear with invalid date, this should break...
+     */
+    public function testGetWeekOfYearInvalidDate()
+    {
+        $date = new CDate('2010-14-11 11:00:00');
+
+        $this->assertEquals(2, $date->getWeekOfYear());
+    }
 }
