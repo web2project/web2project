@@ -56,22 +56,26 @@ class w2p_Utilities_Date extends Date {
 			$d1->convertTZ(new Date_TimeZone('UTC'));
 			$d2->convertTZ(new Date_TimeZone('UTC'));
 		}
+
 		$days1 = Date_Calc::dateToDays($d1->day, $d1->month, $d1->year);
 		$days2 = Date_Calc::dateToDays($d2->day, $d2->month, $d2->year);
 
-		$comp_value = 0;
+        $comp_value = 0;
 		if ($days1 - $days2) {
 			$comp_value = $days1 - $days2;
-		} else
+		} else {
 			if ($d1->hour - $d2->hour) {
 				$comp_value = w2Psgn($d1->hour - $d2->hour);
-			} else
+			} else {
 				if ($d1->minute - $d2->minute) {
 					$comp_value = w2Psgn($d1->minute - $d2->minute);
-				} else
+				} else {
 					if ($d1->second - $d2->second) {
 						$comp_value = w2Psgn($d1->second - $d2->second);
 					}
+                }
+            }
+        }
 		return w2Psgn($comp_value);
 	}
 
