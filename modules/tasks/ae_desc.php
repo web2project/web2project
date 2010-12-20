@@ -18,44 +18,35 @@ $perms = &$AppUI->acl();
 	    <table border="0">
 	    	<tr>
 	    		<td>
-				    <?php
-              if ($can_edit_time_information) {
-              ?>
-                <?php echo $AppUI->_('Task Owner'); ?><br />
-  							<?php echo arraySelect($users, 'task_owner', 'class="text"', !isset($task->task_owner) ? $AppUI->user_id : $task->task_owner); ?>
-  								<br />
-  						<?php
-              }
-            ?>
-						<?php echo $AppUI->_('Access'); ?>
-						<br />
-						<?php echo arraySelect($task_access, 'task_access', 'class="text"', intval($task->task_access), true); ?>
-						<br /><?php echo $AppUI->_('Web Address'); ?>
-						<br /><input type="text" class="text" name="task_related_url" value="<?php echo $task->task_related_url; ?>" size="40" maxlength="255" />
-					</td>
-					<td valign='top'>
-						<?php echo $AppUI->_('Task Type'); ?>
-						<br />
-						<?php
-              $task_types = w2PgetSysVal('TaskType');
-              echo arraySelect($task_types, 'task_type', 'class="text"', $task->task_type, false);
-            ?>
-						<br /><br />
-  					<?php
-              if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
-              	echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
-              }
-              // Let's check if the actual company has departments registered
-              if (count($department_selection_list) > 1) {
-                ?>
-  								<br />
-  								<?php echo $AppUI->_('Department'); ?><br />
-                  <?php echo arraySelect($department_selection_list, 'dept_ids[]', 'class="text" size="1"', $task->task_departments); ?>
-  							<?php
-              }
-            ?>
-				  </td>
-        </tr>
+                    <?php if ($can_edit_time_information) { ?>
+                        <?php echo $AppUI->_('Task Owner'); ?><br />
+                        <?php echo arraySelect($users, 'task_owner', 'class="text"', !isset($task->task_owner) ? $AppUI->user_id : $task->task_owner); ?>
+                        <br />
+                    <?php } ?>
+                    <?php echo $AppUI->_('Access'); ?>
+                    <br />
+                    <?php echo arraySelect($task_access, 'task_access', 'class="text"', intval($task->task_access), true); ?>
+                    <br /><?php echo $AppUI->_('Web Address'); ?>
+                    <br /><input type="text" class="text" name="task_related_url" value="<?php echo $task->task_related_url; ?>" size="40" maxlength="255" />
+                </td>
+                <td valign='top'>
+                    <?php echo $AppUI->_('Task Type'); ?><br />
+                    <?php
+                        $task_types = w2PgetSysVal('TaskType');
+                        echo arraySelect($task_types, 'task_type', 'class="text"', $task->task_type, false);
+                    ?>
+                    <br /><br />
+                    <?php
+                    if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
+                        echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
+                    }
+                    // Let's check if the actual company has departments registered
+                    if (count($department_selection_list) > 1) { ?><br />
+                        <?php echo $AppUI->_('Department'); ?><br />
+                        <?php echo arraySelect($department_selection_list, 'dept_ids[]', 'class="text" size="1"', $task->task_departments); ?>
+                    <?php } ?>
+                </td>
+            </tr>
     		<tr>
     			<td><?php echo $AppUI->_('Task Parent'); ?>:</td>
     			<td><?php echo $AppUI->_('Target Budget'); ?>:</td>
