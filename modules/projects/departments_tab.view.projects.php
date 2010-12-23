@@ -54,7 +54,7 @@ $extraGet = '&user_id=' . $user_id;
 $tmpDepartments = $department;
 $department = $dept_id;
 $project = new CProject();
-projects_list_data($user_id);
+$projects = projects_list_data($user_id);
 $department = $tmpDepartments;
 
 ?>

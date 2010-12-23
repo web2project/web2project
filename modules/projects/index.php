@@ -85,7 +85,7 @@ $owner = $AppUI->getState('ProjIdxowner') !== null ? $AppUI->getState('ProjIdxow
 $user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
 // collect the full projects list data via function in projects.class.php
-projects_list_data();
+$projects = projects_list_data();
 
 $project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('ProjectType');
 
