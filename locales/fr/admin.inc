@@ -111,6 +111,7 @@
 'Type'=>'Type',
 'User'=>'Utilisateur',
 'User Administration'=>'Administration des utilisateurs',
+'User Assigned to Log'=>'Utilisateur affecté au journal des connexions',
 'User Log'=>'Journal des connexions',
 'User Management'=>'Gestion des utilisateurs',
 'User Role'=>'Rôle utilisateur',
