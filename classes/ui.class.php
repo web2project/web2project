@@ -609,18 +609,18 @@ class CAppUI {
 
 	/**
 	 * Provides a way to temporary store an object from call to call.
-	 *   
-	 * Primarily useful for holding an object after a failed validation check 
+	 *
+	 * Primarily useful for holding an object after a failed validation check
 	 * without it actually being saved.
-	 * 
+	 *
 	 * @param object The item to be temporarily stored
-	 * 
+	 *
 	 *
 	 */
 	public function holdObject($obj) {
 	  $this->objStore = $obj;
 	}
-	
+
 	public function restoreObject() {
 	  $obj = $this->objStore;
 	  $this->objStore = null;
@@ -674,13 +674,17 @@ class CAppUI {
 	 * the existing message is overwritten with $msg.
 	 */
 	public function setMsg($msg, $msgNo = 0, $append = false) {
-	  $this->msgNo = $msgNo;
-	  if (is_array($msg)) {
-        $this->msg = implode('<br />', $msg);
-      } else {
-        $msg = $this->_($msg, UI_OUTPUT_RAW);
-        $this->msg = ($append) ? $this->msg . ' ' . $msg : $msg;
-      }
+        $this->msgNo = $msgNo;
+
+        if (is_array($msg)) {
+            foreach ($msg as $value) {
+                $this->msg .= $this->_($value, UI_OUTPUT_RAW) . '<br />';
+            }
+            $this->msg = trim($this->msg, '<br />');
+        } else {
+            $msg = $this->_($msg, UI_OUTPUT_RAW);
+            $this->msg = ($append) ? $this->msg . ' ' . $msg : $msg;
+        }
 	}
 	/**
 	 * Display the formatted message and icon
@@ -748,7 +752,7 @@ class CAppUI {
 			}
     }
 	}
-  
+
   public function processIntState($label, $valueArray = array(), $name = '', $default_value = 0) {
     if(isset($valueArray)) {
     	if (isset($valueArray[$name])) {
@@ -879,7 +883,7 @@ class CAppUI {
 		// Let's see if this user has admin privileges
 		if (canView('admin')) {
 			$this->user_is_admin = 1;
-		}		
+		}
 		return true;
 	}
 	/************************************************************************************************************************
@@ -930,14 +934,14 @@ class CAppUI {
 	*/
 	public function logout() {
 	}
-	
+
 	/**
 	 * Checks whether there is any user logged in.
 	 */
 	public function doLogin() {
 		return ($this->user_id < 0) ? true : false;
 	}
-	
+
 	/**
 	 * Gets the value of the specified user preference
 	 * @param string Name of the preference
@@ -945,7 +949,7 @@ class CAppUI {
 	public function getPref($name) {
 		return isset($this->user_prefs[$name]) ? $this->user_prefs[$name] : '';
 	}
-	
+
 	/**
 	 * Sets the value of a user preference specified by name
 	 * @param string Name of the preference
@@ -954,7 +958,7 @@ class CAppUI {
 	public function setPref($name, $val) {
 		$this->user_prefs[$name] = $val;
 	}
-	
+
 	/**
 	 * Loads the stored user preferences from the database into the internal
 	 * preferences variable.
@@ -1006,7 +1010,7 @@ class CAppUI {
 		$q->addOrder('mod_directory');
 		return $q->loadHashList();
 	}
-	
+
 	/**
 	 * Gets a list of the modules that should appear in the menu
 	 * @return array Named array list in the form
@@ -1021,7 +1025,7 @@ class CAppUI {
 		$q->addOrder('mod_ui_order');
 		return $q->loadList();
 	}
-	
+
 	/**
 	 * Gets a list of the active modules
 	 * @return array Named array list in the form 'module directory'=>'module name'
@@ -1035,7 +1039,7 @@ class CAppUI {
 		$q->addOrder('mod_ui_order');
 		return $q->loadList();
 	}
-	
+
 	public function getPermissionableModuleList() {
 		$q = new DBQuery;
 		$q->addTable('modules', 'm');
@@ -1121,11 +1125,11 @@ class CAppUI {
 		$s .= '$(document).ready(function() {';
         // Attach tooltips to "span" elements
 		$s .= '	$("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});';
-        // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox 
+        // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox
         if (canAccess('smartsearch')) {
             $s .= '	$("input[type=\'text\']:eq(1)").focus();';
         } else {
-            $s .= '	$("input[type=\'text\']:eq(0)").focus();';            
+            $s .= '	$("input[type=\'text\']:eq(0)").focus();';
         }
 		$s .= '});';
 		$s .= '</script>';
@@ -1354,7 +1358,7 @@ class CTabBox_core {
 /**
  * CInfoTabBox
  * This class is used to do second level tabs or subtabs aligned to the right by default
- * @package 
+ * @package
  * @author Pedro Azevedo
  * @copyright 2007
  * @version $Rev$
