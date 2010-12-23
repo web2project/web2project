@@ -170,4 +170,3 @@ function styleRenderBoxBottom() {
 	$ret .= '</table>';
 	return $ret;
 }
-?>

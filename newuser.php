@@ -32,7 +32,7 @@ $uistyle = 'web2project';
 		<link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" charset="utf-8"/>
 	</head>
 
-	<body bgcolor="#f0f0f0" onload="//document.loginform.username.focus();">
+	<body bgcolor="#f0f0f0" onload="document.editFrm.user_username.focus();">
 		<?php include 'createuser.php'; ?>
 
 		<?php if ($AppUI->getVersion()) { ?>

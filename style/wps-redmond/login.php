@@ -27,6 +27,15 @@ if (!defined('W2P_BASE_DIR')) {
                 </tr>
             </tbody>
         </table>
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+                <tr>
+                    <td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg) repeat-x scroll 0%;">
+                        <img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <br /><br /><br /><br />
         <?php include ('overrides.php'); ?>
         <!--please leave action argument empty -->
