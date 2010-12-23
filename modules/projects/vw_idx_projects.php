@@ -116,12 +116,11 @@ if ($is_tabbed) {
 	<table id="tblProjects" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 		<tr>
             <?php
-            $fieldList = array('project_color_identifier', 'project_priority',
-                'project_name', 'company_name', 'project_start_date',
-                'project_end_date', 'project_actual_end_date', 'task_log_problem',
-                'owner_name', 'project_task_count');
-            $fieldNames = array('Progress', 'P', 'Project Name', 'Company',
-                'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
+            $fields = w2p_Core_Module::getSettings('projects', 'index_list');
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
                     <a href="?m=projects&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
