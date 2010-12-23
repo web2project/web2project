@@ -47,14 +47,14 @@ function submitIt(){
 </script>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<tr>
-		<td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/w2p_logo.jpg"/></a></td>
-		<td style="background: url(./style/<?php echo $uistyle; ?>/logo_bkgd.jpg)">&nbsp;</td>
+		<td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg"/></a></td>
+		<td style="background: url(./style/<?php echo $uistyle; ?>/images/logo_bkgd.jpg)">&nbsp;</td>
 	</tr>
 </table>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<tr>
-		<td valign="top" style="background: url(./style/<?php echo $uistyle; ?>/nav_shadow.jpg)" align="left">
-			<img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/nav_shadow.jpg"/>
+		<td valign="top" style="background: url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg)" align="left">
+			<img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
 		</td>
 	</tr>
 </table>
@@ -78,7 +78,7 @@ function submitIt(){
             <td colspan="2">
                 <input type="text" class="text" name="user_username" value="" maxlength="255" size="40" />
             </td>
-            <td class="right-brdr"><img src="./style/web2project/images/shim.gif" width="1" height="1" /></td>
+            <td class="right-brdr"><img src="./style/<?php echo $uistyle; ?>/images/shim.gif" width="1" height="1" /></td>
 		</tr>
 		<tr>
             <td align="right">* <?php echo $AppUI->_('Password'); ?>:</td>
