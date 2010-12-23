@@ -982,8 +982,7 @@ current viewing user $AppUI->user_id is used.
 function projects_list_data($user_id = false) {
 	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix,
         $deny, $department, $dept_ids, $w2Pconfig, $orderby, $orderdir,
-        $projects, $tasks_critical, $tasks_problems, $owner, $projectTypeId,
-        $search_text, $project_type;
+        $tasks_critical, $tasks_problems, $owner, $projectTypeId, $search_text, $project_type;
 
 	$addProjectsWithAssignedTasks = $AppUI->getState('addProjWithTasks') ? $AppUI->getState('addProjWithTasks') : 0;
 
@@ -1170,6 +1169,7 @@ function projects_list_data($user_id = false) {
 	}
 	$buffer .= '</select>';
 
+    return $projects;
 }
 
 function getProjects() {
