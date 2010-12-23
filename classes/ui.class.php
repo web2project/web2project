@@ -674,17 +674,13 @@ class CAppUI {
 	 * the existing message is overwritten with $msg.
 	 */
 	public function setMsg($msg, $msgNo = 0, $append = false) {
-        $this->msgNo = $msgNo;
-
-        if (is_array($msg)) {
-            foreach ($msg as $value) {
-                $this->msg .= $this->_($value, UI_OUTPUT_RAW) . '<br />';
-            }
-            $this->msg = trim($this->msg, '<br />');
-        } else {
-            $msg = $this->_($msg, UI_OUTPUT_RAW);
-            $this->msg = ($append) ? $this->msg . ' ' . $msg : $msg;
-        }
+      $this->msgNo = $msgNo;
+      if (is_array($msg)) {
+        $this->msg = implode('<br />', $msg);
+      } else {
+        $msg = $this->_($msg, UI_OUTPUT_RAW);
+        $this->msg = ($append) ? $this->msg . ' ' . $msg : $msg;
+      }
 	}
 	/**
 	 * Display the formatted message and icon
