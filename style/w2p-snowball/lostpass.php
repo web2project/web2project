@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: lostpass.php 1335 2010-09-06 03:14:57Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/style/w2p-snowball/lostpass.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }

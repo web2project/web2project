@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: vw_projecttask.php 1516 2010-12-05 07:18:58Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/vw_projecttask.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -104,7 +104,6 @@ if (isset($_POST['show_task_options'])) {
 $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
 $project = new CProject();
-// $allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'project_id, project_name');
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id);
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
@@ -204,16 +203,13 @@ foreach ($tasks as $row) {
 	$q->clear();
 	$q->addQuery('ut.user_id,	u.user_username');
 	$q->addQuery('ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
-	$q->addQuery('contact_first_name, contact_last_name');
+	$q->addQuery('contact_first_name, contact_last_name, contact_email');
 	$q->addTable('user_tasks', 'ut');
 	$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
 	$q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
 	$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
 	$q->addGroup('ut.user_id');
 	$q->addOrder('perc_assignment desc, user_username');
-    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-    $q->addWhere("cm.method_name = 'email_primary'");
-    $q->addQuery('cm.method_value AS contact_email');
 
 	$assigned_users = array();
 	$row['task_assigned_users'] = $q->loadList();

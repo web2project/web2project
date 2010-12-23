@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+'(Select a Country)'=>'(Sélectionnez un pays)',
 'Active Projects'=>'Projets actifs',
 'Add Company'=>'Ajouter une société',
 'Address'=>'Adresse',
@@ -17,6 +18,7 @@
 'Details'=>'Détails',
 'Edit Company'=>'Editer société',
 'Email'=>'Courriel',
+'Events'=>'Evénements',
 'Fax'=>'Télécopie',
 'Invalid Company ID'=>'ID société non valide',
 'No companies available'=>'Aucune société disponible',
@@ -34,14 +36,14 @@
 'Task Name'=>'Nom tâche',
 'Type'=>'Type',
 'URL'=>'URL',
-'View Company'=>'Visualiser société',
+'View Company'=>'Voir société',
 'Zip'=>'Code postal',
 'back'=>'Retour',
 'cdepartment::store-check failed'=>'cdepartment::contrôle d\'intégrité non valide',
 'co'=>'co',
 'companies list'=>'Liste des sociétés',
 'company list'=>'Liste des sociétés',
-'companyDelete'=>'Etes-vous sûre de vouloir effacer cette société?',
+'companyDelete'=>'Êtes-vous sûre de vouloir effacer cette société?',
 'companyValidName'=>'Veuillez saisir un nom de société valide',
 'delete company'=>'effacer cette société',
 'doDelete'=>'Effacer',

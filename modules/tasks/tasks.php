@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: tasks.php 1525 2010-12-11 08:46:05Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/tasks.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -131,7 +131,7 @@ $q->addQuery('task_start_date, task_end_date, task_dynamic');
 $q->addQuery('task_pinned, pin.user_id as pin_user');
 $q->addQuery('task_priority, task_percent_complete');
 $q->addQuery('task_duration, task_duration_type');
-$q->addQuery('task_project');
+$q->addQuery('task_project, task_represents_project');
 $q->addQuery('task_description, task_owner, task_status');
 $q->addQuery('usernames.user_username, usernames.user_id');
 $q->addQuery('assignees.user_username as assignee_username');
@@ -302,16 +302,16 @@ if (count($allowedTasks)) {
 }
 
 // Filter by company
-if (!$min_view && $f2 != 'all') {
+if (!$min_view && $f2 != 'allcompanies') {
 	$q->addJoin('companies', 'c', 'c.company_id = p.project_company', 'inner');
 	$q->addWhere('company_id = ' . intval($f2));
 }
 
 $q->addGroup('tasks.task_id');
 if (!$project_id && !$task_id) {
-	$q->addOrder('p.project_id, task_start_date');
+	$q->addOrder('p.project_id, task_start_date, task_end_date');
 } else {
-	$q->addOrder('task_start_date');
+	$q->addOrder('task_start_date, task_end_date');
 }
 //print_r($q->prepare());
 if ($canViewTask) {
@@ -325,16 +325,12 @@ if (count($tasks) > 0) {
 		$q->clear();
 		$q->addQuery('ut.user_id,	u.user_username');
 		$q->addQuery('ut.perc_assignment');
-		$q->addQuery('CONCAT(contact_first_name, \' \',contact_last_name) AS assignee');
+		$q->addQuery('CONCAT(contact_first_name, \' \',contact_last_name) AS assignee, contact_email');
 		$q->addTable('user_tasks', 'ut');
 		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
 		$q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id', 'inner');
 		$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
 		$q->addOrder('perc_assignment desc, contact_first_name, contact_last_name');
-
-        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-        $q->addWhere("cm.method_name = 'email_primary'");
-        $q->addQuery('cm.method_value AS contact_email');
 
 		$assigned_users = array();
 		$row['task_assigned_users'] = $q->loadList();

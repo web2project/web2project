@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: index.php 1475 2010-10-18 03:28:23Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/index.php $ */
 /*  Copyright (c) 2007 Pedro A. (web2Project Development Team Member)
 THIS MODULE WAS SPONSORED BY DUSTIN OF PURYEAR-IT.COM
 
@@ -369,11 +369,7 @@ function addComponent() {
 	calcDuration(document.editFrm, start_date, end_date, duration_fld, durntype_fld);
 
 //activate new tooltips on the fly
-	var as = [];
-	$$('span').each(function(span){
-		if (span.getAttribute('title')) as.push(span);
-	});
-	new Tips(as), {}
+    $("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});
 }
 
 function removeComponent(tr_id) {

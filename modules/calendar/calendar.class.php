@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: calendar.class.php 1516 2010-12-05 07:18:58Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/calendar.class.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -802,17 +802,10 @@ class CEvent extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('user_id, contact_first_name, contact_last_name, con.contact_id');
+		$q->addQuery('user_id, contact_first_name, contact_last_name, con.contact_id, contact_email');
 		$q->addWhere('u.user_contact = con.contact_id');
 		$q->addWhere('user_id in (' . implode(',', $assignee_list) . ')');
 		$users = $q->loadHashList('user_id');
-
-        foreach ($users as $user_id => $info) {
-            $contact = new CContact();
-            $contact->contact_id = $info['contact_id'];
-            $emails = $contact->getContactMethods(array('email_primary'));
-            $users[$user_id]['contact_email'] = $emails['email_primary'];
-        }
 
 		$date_format = $AppUI->getPref('SHDATEFORMAT');
 		$time_format = $AppUI->getPref('TIMEFORMAT');
@@ -1014,11 +1007,13 @@ class CEvent extends CW2pObject {
             if (($msg = parent::store())) {
                 return $msg;
             }
+            $stored = true;
         }
         if (0 == $this->event_id && $perms->checkModuleItem('events', 'add')) {
             if (($msg = parent::store())) {
                 return $msg;
             }
+            $stored = true;
         }
 
         return $stored;

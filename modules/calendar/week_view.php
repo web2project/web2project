@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: week_view.php 1514 2010-12-04 23:49:08Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/week_view.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -50,6 +50,21 @@ getTaskLinks($first_time, $last_time, $links, 50, $company_id);
 require_once (W2P_BASE_DIR . '/modules/calendar/links_events.php');
 getEventLinks($first_time, $last_time, $links, 50);
 
+$moduleList = $AppUI->getLoadableModuleList();
+foreach ($moduleList as $module) {
+    $object = new $module['mod_main_class']();
+    if (is_callable(array($object, 'hook_calendar')) &&
+        is_callable(array($object, 'getCalendarLink'))) {
+        $itemList = $object->hook_calendar($AppUI->user_id);
+        if (is_array($itemList)) {
+            foreach ($itemList as $item) {
+                $dateIndex = str_replace('/', '', $item['startDate']);
+                $links[$dateIndex][] = $object->getCalendarLink($AppUI, $item);
+            }
+        }
+    }
+}
+
 // get the list of visible companies
 $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
@@ -70,13 +85,13 @@ $titleBlock->show();
 <table border="0" cellspacing="0" cellpadding="2" width="100%" class="motitle">
 <tr>
 	<td>
-		<a href="<?php echo '?m=calendar&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></A>
+		<a href="<?php echo '?m=calendar&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
 	</td>
 	<th width="100%">
 		<span style="font-size:12pt"><?php echo $AppUI->_('Week') . ' ' . $first_time->format('%U - %Y') . ' - ' . $AppUI->_($first_time->format('%B')); ?></span>
 	</th>
 	<td>
-		<a href="<?php echo '?m=calendar&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></A>
+		<a href="<?php echo '?m=calendar&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
 	</td>
 </tr>
 </table>

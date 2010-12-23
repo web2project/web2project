@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: projects.class.php 1521 2010-12-07 08:18:17Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/projects.class.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 /**
  *	@package web2Project
  *	@subpackage modules
- *	@version $Revision$
+ *	@version $Revision: 1521 $
  */
 
 // project statii
@@ -555,11 +555,13 @@ class CProject extends CW2pObject {
 		$q->clear();
 		if ($this->project_departments) {
 			foreach ($this->project_departments as $department) {
-				$q->addTable('project_departments');
-				$q->addInsert('project_id', $this->project_id);
-				$q->addInsert('department_id', $department);
-				$q->exec();
-				$q->clear();
+				if ($department) {
+                    $q->addTable('project_departments');
+                    $q->addInsert('project_id', $this->project_id);
+                    $q->addInsert('department_id', $department);
+                    $q->exec();
+                    $q->clear();
+                }
 			}
 		}
 
@@ -605,13 +607,10 @@ class CProject extends CW2pObject {
 		$q = new DBQuery;
 		$q->addTable('projects', 'p');
 		$q->addQuery('p.project_id');
-		$q->addQuery('oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name');
+		$q->addQuery('oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name, oc.contact_email as owner_email');
 		$q->leftJoin('users', 'o', 'o.user_id = p.project_owner');
 		$q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
 		$q->addWhere('p.project_id = ' . (int)$this->project_id);
-        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = oc.contact_id');
-        $q->addWhere("cm.method_name = 'email_primary'");
-        $q->addQuery('cm.method_value AS owner_email');
 		$users = $q->loadList();
 		$q->clear();
 
@@ -686,7 +685,7 @@ class CProject extends CW2pObject {
 	public function getAllowedProjects($userId, $activeOnly = true) {
 		$q = new DBQuery;
 		$q->addTable('projects', 'pr');
-		$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date, project_company');
+		$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date, project_company, project_parent');
 		if ($activeOnly) {
 			$q->addWhere('project_active = 1');
 		}
@@ -945,6 +944,7 @@ class CProject extends CW2pObject {
 			$q->addWhere("billingcode_id = $cost_code");
 		}
 		$q->addOrder('task_log_date');
+		$q->addOrder('task_log_created');
 		$this->setAllowedSQL($AppUI->user_id, $q, 'task_project');
 
 		return $q->loadList();

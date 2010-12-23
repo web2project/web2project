@@ -139,11 +139,8 @@ class CForumMessage extends CW2pObject {
 		// Get the message from details.
 		$q = new DBQuery;
 		$q->addTable('users', 'u');
-		$q->addQuery('contact_first_name, contact_last_name');
+		$q->addQuery('contact_first_name, contact_last_name, contact_email');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-        $q->addWhere("cm.method_name = 'email_primary'");
-        $q->addQuery('cm.method_value as contact_email');
 		$q->addWhere('user_id = ' . (int)$this->message_author);
 		$res = $q->exec();
 		if ($row = $q->fetchRow()) {
@@ -174,11 +171,8 @@ class CForumMessage extends CW2pObject {
 
 		$q->clear();
 		$q->addTable('users');
-		$q->addQuery('DISTINCT user_id, contact_first_name, contact_last_name');
+		$q->addQuery('DISTINCT user_id, contact_first_name, contact_last_name, contact_email');
 		$q->leftJoin('contacts', 'con', 'con.contact_id = user_contact');
-        $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-        $q->addWhere("cm.method_name = 'email_primary'");
-        $q->addQuery('cm.method_value as contact_email');
 
 		if ($AllCount < 1) {
 		//message is only delivered to users that checked the forum watch

@@ -118,6 +118,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
     {
         $date       = new CDate();
         $datetime   = new DateTime();
+print_r($datetime); //TODO: not sure why this is necessary.. but the next line doesn't work without it..
+        $timezone   = new DateTimeZone($datetime->timezone);
 
         $this->assertType('CDate',                  $date);
         $this->assertEquals($datetime->format('Y'), $date->year);
@@ -126,13 +128,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($datetime->format('H'), $date->hour);
         $this->assertEquals($datetime->format('i'), $date->minute);
         $this->assertEquals($datetime->format('s'), $date->second);
-        $this->assertEquals(0,                      $date->tz['offset']);
-        $this->assertEquals('Greenwich Mean Time',  $date->tz['longname']);
-        $this->assertEquals('GMT',                  $date->tz['shortname']);
-        $this->assertEquals('British Summer Time',  $date->tz['dstlongname']);
-        $this->assertEquals('BST',                  $date->tz['dstshortname']);
-        $this->assertEquals('Europe/London',        $date->tz['id']);
-        $this->assertTrue($date->tz['hasdst']);
+
+        $this->assertEquals($datetime->getOffset(), $date->tz['offset']/1000);
+        $this->assertEquals($timezone->getName(),   $date->tz['id']);
     }
 
     /**
@@ -142,6 +140,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
     {
         $date       = new CDate('2010-08-07 11:00:00');
         $datetime   = new DateTime('2010-08-07 11:00:00');
+print_r($datetime); //TODO: not sure why this is necessary.. but the next line doesn't work without it..
+        $timezone   = new DateTimeZone($datetime->timezone);
 
         $this->assertType('CDate',                  $date);
         $this->assertEquals($datetime->format('Y'), $date->year);
@@ -150,13 +150,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($datetime->format('H'), $date->hour);
         $this->assertEquals($datetime->format('i'), $date->minute);
         $this->assertEquals($datetime->format('s'), $date->second);
-        $this->assertEquals(0,                      $date->tz['offset']);
-        $this->assertEquals('Greenwich Mean Time',  $date->tz['longname']);
-        $this->assertEquals('GMT',                  $date->tz['shortname']);
-        $this->assertEquals('British Summer Time',  $date->tz['dstlongname']);
-        $this->assertEquals('BST',                  $date->tz['dstshortname']);
-        $this->assertEquals('Europe/London',        $date->tz['id']);
-        $this->assertTrue($date->tz['hasdst']);
+
+        $this->assertEquals($timezone->getName(),   $date->tz['id']);
     }
 
     /**
@@ -166,6 +161,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
     {
         $date       = new CDate('2010-08-07 11:00:00', 'America/Halifax');
         $datetime   = new DateTime('2010-08-07 11:00:00', new DateTimeZone('America/Halifax'));
+print_r($datetime); //TODO: not sure why this is necessary.. but the next line doesn't work without it..
+        $timezone   = new DateTimeZone($datetime->timezone);
 
         $this->assertType('CDate',                      $date);
         $this->assertEquals($datetime->format('Y'),     $date->year);
@@ -174,13 +171,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($datetime->format('H'),     $date->hour);
         $this->assertEquals($datetime->format('i'),     $date->minute);
         $this->assertEquals($datetime->format('s'),     $date->second);
-        $this->assertEquals(-14400000,                  $date->tz['offset']);
-        $this->assertEquals('Atlantic Standard Time',   $date->tz['longname']);
-        $this->assertEquals('AST',                      $date->tz['shortname']);
-        $this->assertEquals('Atlantic Daylight Time',   $date->tz['dstlongname']);
-        $this->assertEquals('ADT',                      $date->tz['dstshortname']);
-        $this->assertEquals('America/Halifax',          $date->tz['id']);
-        $this->assertTrue($date->tz['hasdst']);
+
+        $this->assertEquals($timezone->getName(),   $date->tz['id']);
     }
 
     /**
@@ -189,6 +181,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
     public function testConstructorInvalidDateTime()
     {
         $date = new CDate('2010-35-35 28:65:85');
+        $datetime   = new DateTime();
+print_r($datetime); //TODO: not sure why this is necessary.. but the next line doesn't work without it..
+        $timezone   = new DateTimeZone($datetime->timezone);
 
         $this->assertType('CDate',                  $date);
         $this->assertEquals(2010,                   $date->year);
@@ -197,14 +192,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(28,                     $date->hour);
         $this->assertEquals(65,                     $date->minute);
         $this->assertEquals(85,                     $date->second);
-        $this->assertEquals(0,                      $date->tz['offset']);
-        $this->assertEquals('Greenwich Mean Time',  $date->tz['longname']);
-        $this->assertEquals('GMT',                  $date->tz['shortname']);
-        $this->assertEquals('British Summer Time',  $date->tz['dstlongname']);
-        $this->assertEquals('BST',                  $date->tz['dstshortname']);
-        $this->assertEquals('Europe/London',        $date->tz['id']);
-        $this->assertEquals('2010-35-35 28:65:85',  $date->getDate()); // WTF?
-        $this->assertTrue($date->tz['hasdst']);
+
+        $this->assertEquals($timezone->getName(),   $date->tz['id']);
     }
 
     /**
@@ -1379,8 +1368,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
 	public function testConvertTZ()
 	{
 		$myDate1 = new CDate('', 'US/Eastern');
-		$this->assertEquals($myDate1, new CDate('', 'US/Eastern'));
-
 		$myDate2 = new CDate('', 'CST');
 		$myDate2->convertTZ('EST');
 

@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: do_dept_aed.php 1528 2010-12-13 08:03:04Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/departments/do_dept_aed.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -26,7 +26,7 @@ if (is_array($result)) {
 }
 if ($result) {
     $AppUI->setMsg('Department '.$action, UI_MSG_OK, true);
-    $AppUI->redirect('m=departments');
+    $AppUI->redirect('m=companies&a=view&company_id='.$obj->dept_company);
 } else {
     $AppUI->redirect('m=public&a=access_denied');
 }

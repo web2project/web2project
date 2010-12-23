@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: index.php 1523 2010-12-08 07:05:28Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/index.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -21,12 +21,14 @@ if (canView('admin')) { // Only sysadmins are able to change users
 if (isset($_POST['f'])) {
 	$AppUI->setState('TaskIdxFilter', $_POST['f']);
 }
-$f = $AppUI->getState('TaskIdxFilter') ? $AppUI->getState('TaskIdxFilter') : 'myunfinished';
+$f = $AppUI->getState('TaskIdxFilter') ? $AppUI->getState('TaskIdxFilter') :
+        w2PgetConfig('task_filter_default', 'myunfinished');
 
 if (isset($_POST['f2'])) {
 	$AppUI->setState('CompanyIdxFilter', $_POST['f2']);
 }
-$f2 = $AppUI->getState('CompanyIdxFilter') ? $AppUI->getState('CompanyIdxFilter') : 'all';
+$f2 = $AppUI->getState('CompanyIdxFilter') ? $AppUI->getState('CompanyIdxFilter') :
+        (w2PgetConfig('company_filter_default', 'user') == 'user') ? $AppUI->user_company : 'allcompanies';
 
 if (isset($_GET['project_id'])) {
 	$AppUI->setState('TaskIdxProject', w2PgetParam($_GET, 'project_id', null));

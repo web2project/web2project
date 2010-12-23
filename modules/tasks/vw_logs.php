@@ -1,9 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: vw_logs.php 1474 2010-10-18 01:00:44Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/vw_logs.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $task_id, $df, $canEdit, $m;
+global $AppUI, $task_id, $sf, $df, $canEdit, $m;
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {
@@ -74,7 +74,7 @@ foreach ($logs as $row) {
 		$s .= '&task_log_id=' . $row['task_log_id'] . '#log">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a>';
 	}
 	$s .= '</td>';
-	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : '-') . '<br /><br />';
+	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($sf) : '-') . '<br /><br />';
     $task_log_updated = intval($row['task_log_updated']) ? $row['task_log_updated'] : null;
     $s .= '(' . $AppUI->_('Logged').': ' . ($task_log_updated ? $AppUI->formatTZAwareTime($task_log_updated, $df) : '-') . ')';
     $s .= '</td>';

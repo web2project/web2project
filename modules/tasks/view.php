@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: view.php 1525 2010-12-11 08:46:05Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/view.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -43,7 +43,7 @@ if ($reminded) {
 $tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);
 
 // get the prefered date format
-$df = $AppUI->getPref('SHDATEFORMAT');
+$sf = $df = $AppUI->getPref('SHDATEFORMAT');
 //Also view the time
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
@@ -68,8 +68,12 @@ $titleBlock->addCrumb('?m=tasks', 'tasks list');
 if ($canReadProject) {
 	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $obj->task_project, 'view this project');
 }
-if ($canEdit) {
+if ($canEdit && 0 == $obj->task_represents_project) {
 	$titleBlock->addCrumb('?m=tasks&a=addedit&task_id=' . $task_id, 'edit this task');
+}
+//$obj->task_represents_project
+if ($obj->task_represents_project) {
+    $titleBlock->addCrumb('?m=projects&a=view&project_id=' . $obj->task_represents_project, 'view subproject');
 }
 if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete task', $canDelete, $msg);
@@ -336,7 +340,7 @@ $query_string = '?m=tasks&a=view&task_id=' . $task_id;
 $tabBox = new CTabBox('?m=tasks&a=view&task_id=' . $task_id, '', $tab);
 
 $tabBox_show = 0;
-if ($obj->task_dynamic != 1) {
+if ($obj->task_dynamic != 1 && 0 == $obj->task_represents_project) {
 	// tabbed information boxes
 	$tabBox_show = 1;
 	if (canView('task_log')) {

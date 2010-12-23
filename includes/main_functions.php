@@ -308,11 +308,17 @@ function w2PcontextHelp($title, $link = '') {
  * @return The value of the setting, or the default value if not found.
  */
 function w2PgetConfig($key, $default = null) {
-	global $w2Pconfig;
+	global $w2Pconfig, $AppUI;
 	if (isset($w2Pconfig[$key])) {
-		return $w2Pconfig[$key];
+            return $w2Pconfig[$key];
 	} else {
-		return $default;
+            if (!is_null($default)) {
+                $obj = new w2p_Core_Config();
+                $obj->config_name = $key;
+                $obj->config_value = $default;
+                $obj->store($AppUI);
+            }
+            return $default;
 	}
 }
 
@@ -359,9 +365,7 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
 		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
 	$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
-    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-    $q->addWhere("cm.method_name = 'email_primary'");
-    $q->addQuery('cm.method_value AS contact_email');
+    $q->addQuery('contact_email');
 	if ($stub) {
 		$q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
 	} elseif ($where) {
@@ -402,10 +406,7 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 		$where = $q->quote('%' . $where . '%');
 		$q->addWhere('(UPPER(user_username) LIKE ' . $where . ' OR UPPER(contact_first_name) LIKE ' . $where . ' OR UPPER(contact_last_name) LIKE ' . $where . ')');
 	}
-    $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-    $q->addWhere("cm.method_name = 'email_primary'");
-    $q->addQuery('cm.method_value AS contact_email');
-
+    $q->addQuery('contact_email');
 	$q->addGroup('user_id');
 	$q->addOrder($orderby);
 
@@ -1161,14 +1162,6 @@ function w2Psgn($x) {
 	return $x ? ($x > 0 ? 1 : -1) : 0;
 }
 
-/**
- * This function is now deprecated and will be removed.
- * In the interim it now does nothing.
- */
-function dpRealPath($file) {
-	return $file;
-}
-
 /*
 ** Create the Required Fields (From Sysvals) JavaScript Code
 ** For instance implemented in projects and tasks addedit.php
@@ -1274,9 +1267,9 @@ function w2PHTMLDecode($txt) {
 function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '') {
 	global $AppUI;
 	if ($raw) {
-		$starttip = '<span id="' . $id . '" title="' . nl2br($AppUI->_($header)) . '::' . nl2br($AppUI->_($tip)) . '">';
+		$starttip = '<span id="' . $id . '" title="<h4>' . nl2br($AppUI->_($header)) . '</h4> ' . nl2br($AppUI->_($tip)) . '">';
 	} else {
-		$starttip = '<span id="' . $id . '" title="' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '::' . nl2br(strtolower($AppUI->_($tip))) . '">';
+		$starttip = '<span id="' . $id . '" title="<h4>' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '</h4> ' . nl2br(strtolower($AppUI->_($tip))) . '">';
 	}
 	return $starttip;
 }

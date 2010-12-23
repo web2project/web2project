@@ -81,8 +81,8 @@ foreach ($rs as $c) {
 		$output .= '<tr><td colspan="2"><b>' . $AppUI->_($c['config_group'] . '_group_title') . '</b></td></tr>';
 		$last_group = $c['config_group'];
 	}
-	$output .= '<tr><td class="item" width="20%">' . $AppUI->_($c['config_name'] . '_title') .
-			'</td><td align="left">' . $entry . w2PtoolTip($AppUI->_($c['config_name'] . '_title'), $tooltip, true) . w2PshowImage('log-info.gif') . w2PendTip() . '
+	$output .= '<tr><td class="item" width="20%"><a name="'.$c['config_name'].'"> </a>' . $AppUI->_($c['config_name'] . '_title') . '</td>' .
+            '<td align="left">' . $entry . w2PtoolTip($AppUI->_($c['config_name'] . '_title'), $tooltip, true) . w2PshowImage('log-info.gif') . w2PendTip() . '
 				<input class="button" type="hidden"  name="w2PcfgId[' . $c['config_name'] . ']" value="' . $c['config_id'] . '" />
 			</td>
         </tr>';

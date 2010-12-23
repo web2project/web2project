@@ -227,7 +227,7 @@ class w2p_Core_BaseObject
 		$this->w2PTrimAll();
 
 		$msg = $this->check();
-		if ($msg) {
+		if ((is_array($msg) && count($msg)) || (!is_array($msg) && strlen($msg))) {
 			return get_class($this) . '::store-check failed ' . $msg;
 		}
 		$k = $this->_tbl_key;
@@ -265,7 +265,7 @@ class w2p_Core_BaseObject
 
 		// First things first.  Are we allowed to delete?
 		$acl = &$AppUI->acl();
-		if (!$acl->checkModuleItem($this->_tbl, 'delete', $oid)) {
+		if (!$acl->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
 			$msg = $AppUI->_('noDeletePermission');
 			return false;
 		}

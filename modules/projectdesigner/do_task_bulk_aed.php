@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: do_task_bulk_aed.php 1473 2010-10-15 15:47:07Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/do_task_bulk_aed.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -86,17 +86,6 @@ if (is_array($selected) && count($selected)) {
 			}
 		}
 
-		//Action: Modify Start Date
-		if (isset($_POST['add_task_bulk_start_date']) && $bulk_task_start_date != '' && $bulk_start_date) {
-			if ($upd_task->task_id) {
-				$upd_task->task_start_date = $bulk_start_date;
-				$result = $upd_task->store($AppUI);
-                if (is_array($result)) {
-                    break;
-                }
-			}
-		}
-
 		//Action: Modify End Date
 		if (isset($_POST['add_task_bulk_end_date']) && $bulk_task_end_date != '' && $bulk_end_date) {
 			if ($upd_task->task_id) {
@@ -106,6 +95,17 @@ if (is_array($selected) && count($selected)) {
                     break;
                 }
 				$upd_task->pushDependencies($upd_task->task_id, $upd_task->task_end_date);
+			}
+		}
+
+		//Action: Modify Start Date
+		if (isset($_POST['add_task_bulk_start_date']) && $bulk_task_start_date != '' && $bulk_start_date) {
+			if ($upd_task->task_id) {
+				$upd_task->task_start_date = $bulk_start_date;
+				$result = $upd_task->store($AppUI);
+                if (is_array($result)) {
+                    break;
+                }
 			}
 		}
 

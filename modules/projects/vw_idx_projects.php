@@ -1,4 +1,4 @@
-<?php /* PROJECTS $Id$ $URL$ */
+<?php /* PROJECTS $Id: vw_idx_projects.php 1500 2010-11-27 22:45:35Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/vw_idx_projects.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -119,7 +119,7 @@ if ($is_tabbed) {
             $fieldList = array('project_color_identifier', 'project_priority', 
                 'project_name', 'company_name', 'project_start_date',
                 'project_end_date', 'project_actual_end_date', 'task_log_problem',
-                'user_username', 'total_tasks');
+                'user_username', 'project_task_count');
             $fieldNames = array('Color', 'P', 'Project Name', 'Company', 
                 'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
             foreach ($fieldNames as $index => $name) {

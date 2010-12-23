@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: addedit.php 1520 2010-12-07 08:17:08Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/addedit.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -9,12 +9,6 @@ $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
-$structprojs = getProjects();
-unset($structprojs[$project_id]);
-$structprojects = arrayMerge(array('0' => array(0 => 0, 1 => '(' . $AppUI->_('No Parent') . ')', 2 => '')), $structprojs);
-$pstatus = w2PgetSysVal('ProjectStatus');
-$ptype = w2PgetSysVal('ProjectType');
-
 $perms = &$AppUI->acl();
 // check permissions for this record
 $canEdit = $perms->checkModuleItem('projects', 'edit', $project_id);
@@ -23,13 +17,22 @@ if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+$pstatus = w2PgetSysVal('ProjectStatus');
+$ptype = w2PgetSysVal('ProjectType');
+
+$project = new CProject();
+$structprojs = getProjects();
+$structprojs = $project->getAllowedProjects($AppUI->user_id, false);
+unset($structprojs[$project_id]);
+$structprojs = array_map('temp_filterArrayForSelectTree', $structprojs);
+$structprojects = arrayMerge(array('0' => array(0 => 0, 1 => '(' . $AppUI->_('No Parent') . ')', 2 => '')), $structprojs);
+
 // get a list of permitted companies
 $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => ''), $companies);
 
 // load the record data
-$project = new CProject();
 $obj = $AppUI->restoreObject();
 if ($obj) {
   $project = $obj;
@@ -45,7 +48,6 @@ if (!$project && $project_id > 0) {
 	$AppUI->setMsg('noCompanies', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
-
 if ($project_id == 0 && $company_id > 0) {
 	$project->project_company = $company_id;
 }
@@ -97,6 +99,7 @@ $tt = $tl & 2;
 $tp = $tl & 4;
 ?>
 <script language="javascript">
+
 function setColor(color) {
 	var f = document.editFrm;
 	if (color) {
@@ -200,7 +203,7 @@ function setDepartment(department_id_string){
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name'); ?></td>
 			<td width="100%" colspan="2">
-				<input type="text" name="project_name" value="<?php echo htmlspecialchars($project->project_name, ENT_QUOTES); ?>" size="25" maxlength="255" onblur="setShort();" class="text" /> *
+				<input type="text" name="project_name" id="project_name" value="<?php echo htmlspecialchars($project->project_name, ENT_QUOTES); ?>" size="25" maxlength="255" onblur="setShort();" class="text" /> *
 			</td>
 		</tr>
 		<tr>
@@ -246,28 +249,28 @@ function setDepartment(department_id_string){
 						echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
 					}
 
-          if ($AppUI->isActiveModule('departments') && canEdit('departments')) {
-            //Build display list for departments
-            $company_id = $project->project_company;
-            $selected_departments = array();
-            if ($project_id) {
-              $myDepartments = CProject::getDepartments($AppUI, $project_id);
-              $selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
-            }
+                    if ($AppUI->isActiveModule('departments') && canAccess('departments')) {
+                        //Build display list for departments
+                        $company_id = $project->project_company;
+                        $selected_departments = array();
+                        if ($project_id) {
+                            $myDepartments = CProject::getDepartments($AppUI, $project_id);
+                            $selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
+                        }
 
-            $departments_count = 0;
-            $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-            if ($department_selection_list != '' || $project_id) {
-              $department_selection_list = ($AppUI->_('Departments') . '<br /><select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
-            } else {
-              $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
-            }
+                        $departments_count = 0;
+                        $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
+                        if ($department_selection_list != '' || $project_id) {
+                            $department_selection_list = ($AppUI->_('Departments') . '<br /><select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
+                        } else {
+                            $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
+                        }
 
-            // Let's check if the actual company has departments registered
-            if ($department_selection_list != '') {
-              echo '<br />' . $department_selection_list;
-            }
-          }
+                        // Let's check if the actual company has departments registered
+                        if ($department_selection_list != '') {
+                            echo '<br />' . $department_selection_list;
+                        }
+                    }
 				?>
 			</td>
 		</tr>

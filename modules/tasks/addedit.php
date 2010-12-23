@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: addedit.php 1525 2010-12-11 08:46:05Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/addedit.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -59,6 +59,10 @@ if ($task_id) {
 
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied&err=noedit');
+}
+if ($task->task_represents_project) {
+    $AppUI->setMsg('The selected task represents a subproject. Please view/edit this project instead.', UI_MSG_ERROR);
+    $AppUI->redirect('m=projects&a=view&project_id='.$task->task_represents_project);
 }
 
 //check permissions for the associated project

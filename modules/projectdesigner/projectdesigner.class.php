@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: projectdesigner.class.php 1525 2010-12-11 08:46:05Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/projectdesigner.class.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -168,7 +168,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 		$s = '<tr id="task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\',\'frm_tasks\')" ' . ($level ? 'style="display:none"' : '') . '>'; // edit icon
 	}
 	$s .= '<td>';
-	$canEdit = true;
+	$canEdit = ($a['task_represents_project']) ? false : true;
 	$canViewLog = true;
 	if ($canEdit) {
 		$s .= w2PtoolTip('edit tasks panel', 'click to edit this task') . '<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('icons/pencil.gif') . '" border="0" width="12" height="12" /></a>' . w2PendTip();
@@ -203,7 +203,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	$s .= '</td>';
 	// add log
 	$s .= '<td align="center" nowrap="nowrap">';
-	if ($a['task_dynamic'] != 1) {
+	if ($a['task_dynamic'] != 1 && 0 == $a['task_represents_project']) {
 		$s .= w2PtoolTip('tasks', 'add work log to this task') . '<a href="?m=tasks&a=view&tab=1&project_id=' . $a['task_project'] . '&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('add.png', $m) . '" border="0" width="16" height="16" /></a>' . w2PendTip();
 	}
 	$s .= '</td>';
@@ -297,7 +297,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	}
 
 	// Assignment checkbox
-	if ($showEditCheckbox) {
+	if ($showEditCheckbox && 0 == $a['task_represents_project']) {
 		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'selected_task\', ' . $a['task_id'] . ',\'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $a['task_id'] . '" name="selected_task[' . $a['task_id'] . ']" value="' . $a['task_id'] . '"/></td>';
 	}
 	$s .= '</tr>';

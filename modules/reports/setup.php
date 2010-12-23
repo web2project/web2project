@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: setup.php 1522 2010-12-08 05:08:07Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/reports/setup.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
@@ -20,14 +20,14 @@ if ($a == 'setup') {
 class CSetupReports {
 
 	public function install() {
-		return null;
+		return true;
 	}
 
 	public function remove() {
-		return null;
+		return true;
 	}
 
 	public function upgrade() {
-		return null;
+		return true;
 	}
 }

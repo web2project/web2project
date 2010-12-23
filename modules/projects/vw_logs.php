@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: vw_logs.php 1474 2010-10-18 01:00:44Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/vw_logs.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -97,6 +97,7 @@ $logs = $project->getTaskLogs($AppUI, $project_id, $user_id, $hide_inactive, $hi
 $s = '';
 $hrs = 0;
 $canEdit = canEdit('task_log');
+$sf = $df;
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 foreach ($logs as $row) {
 	$task_log_date = intval($row['task_log_date']) ? new CDate($row['task_log_date']) : null;
@@ -106,7 +107,7 @@ foreach ($logs as $row) {
 		$s .= '<a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=1&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
 	}
 	$s .= '</td>';
-	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($df) : '-') . '<br /><br />';
+	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($sf) : '-') . '<br /><br />';
     $task_log_updated = intval($row['task_log_updated']) ? new CDate($row['task_log_updated']) : null;
     $s .= '(' . $AppUI->_('Logged').': ' . ($task_log_updated ? $task_log_updated->format($df) : '-') . ')';
     $s .= '</td>';

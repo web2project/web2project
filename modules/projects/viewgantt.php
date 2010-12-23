@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: viewgantt.php 1506 2010-12-03 05:06:28Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/viewgantt.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -137,80 +137,79 @@ function showFullProject() {
 }
 
 </script>
-<table class="tbl" width="100%" border="0" cellpadding="4" cellspacing="0">
-<tr>
-        <td>
+<form name="editFrm" method="post" action="?<?php echo 'm=' . $m . '&a=' . $a . (isset($user_id) ? '&user_id=' . $user_id : '') . '&tab=' . $tab; ?>" accept-charset="utf-8">
+    <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
+    <table class="tbl" width="100%" border="0" cellpadding="4" cellspacing="0">
+        <tr>
+            <td>
                 <table border="0" cellpadding="4" cellspacing="0" class="tbl">
-                <form name="editFrm" method="post" action="?<?php echo 'm=' . $m . '&a=' . $a . (isset($user_id) ? '&user_id=' . $user_id : '') . '&tab=' . $tab; ?>" accept-charset="utf-8">
-                <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
-
-                <tr>
+                    <tr>
                         <td align="left" valign="top" width="20">
-                <?php if ($display_option != "all") { ?>
-                                <a href="javascript:scrollPrev()">
-                                        <img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('previous'); ?>" border="0">
-                                </a>
-                <?php } ?>
+                        <?php if ($display_option != "all") { ?>
+                            <a href="javascript:scrollPrev()">
+                                <img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('previous'); ?>" border="0">
+                            </a>
+                        <?php } ?>
                         </td>
 
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('From'); ?>:</td>
                         <td align="left" nowrap="nowrap">
-							<input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-							<input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-							<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
-							<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
+                            <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                            <input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
+                            <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
                         </td>
 
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('To'); ?>:</td>
                         <td align="left" nowrap="nowrap">
-							<input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-							<input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-							<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
-							<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
+                            <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                            <input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
+                            <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
                         <td>
-                                <?php echo arraySelect($projFilter, 'proFilter', 'size="1" class="text"', $proFilter, true); ?>
+                            <?php echo arraySelect($projFilter, 'proFilter', 'size="1" class="text"', $proFilter, true); ?>
                         </td>
                         <td>
-                                <input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label></td>
+                            <input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
                         </td>
                         <td>
-                                <input type="checkbox" value="1" name="showInactive" id="showInactive" <?php echo (($showInactive == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showInactive"><?php echo $AppUI->_('Show Archived/Templates'); ?></label></td>
+                            <input type="checkbox" value="1" name="showInactive" id="showInactive" <?php echo (($showInactive == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showInactive"><?php echo $AppUI->_('Show Archived/Templates'); ?></label>
                         </td>
                         <td>
-                                <input type="checkbox" value="1" name="showAllGantt" id="showAllGantt" <?php echo (($showAllGantt == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showAllGantt"><?php echo $AppUI->_('Show Tasks'); ?></label></td>
+                            <input type="checkbox" value="1" name="showAllGantt" id="showAllGantt" <?php echo (($showAllGantt == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showAllGantt"><?php echo $AppUI->_('Show Tasks'); ?></label>
                         </td>
-												<td valign="top">
-                                <input type="checkbox" value="1" name="sortTasksByName" id="sortTasksByName" <?php echo (($sortTasksByName == 1) ? 'checked="checked"' : ""); ?> /><td><label for="sortTasksByName"><?php echo $AppUI->_('Sort Tasks By Name'); ?></label></td>
+                        <td valign="top">
+                            <input type="checkbox" value="1" name="sortTasksByName" id="sortTasksByName" <?php echo (($sortTasksByName == 1) ? 'checked="checked"' : ""); ?> /><td><label for="sortTasksByName"><?php echo $AppUI->_('Sort Tasks By Name'); ?></label>
                         </td>
                         <td align="left">
-                                <input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submit();' />
+                            <input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submit();' />
                         </td>
 
                         <td align="right" valign="top" width="20">
-                <?php if ($display_option != 'all') { ?>
-                        <a href="javascript:scrollNext()">
+                        <?php if ($display_option != 'all') { ?>
+                            <a href="javascript:scrollNext()">
                                 <img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('next'); ?>" border="0" />
-                        </a>
-                <?php } ?>
+                            </a>
+                        <?php } ?>
                         </td>
-                </tr>
-                </form>
-                <tr>
+                    </tr>
+                    <tr>
                         <td align="center" valign="bottom" colspan="16">
                                 <?php echo "<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') . "</a> : <a href='javascript:showFullProject()'>" . $AppUI->_('show all') . "</a><br>"; ?>
                         </td>
-                </tr>
+                    </tr>
                 </table>
                 <table cellspacing="0" cellpadding="0" border="1" align="center" class="tbl">
-                <tr>
+                    <tr>
                         <td>
-                <?php
-$src = '?m=projects&a=gantt&suppressHeaders=1' . ($display_option == 'all' ? '' : '&start_date=' . $start_date->format('%Y-%m-%d') . '&end_date=' . $end_date->format('%Y-%m-%d')) . "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=$showLabels&sortTasksByName=$sortTasksByName&proFilter=$proFilter&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids&showAllGantt=$showAllGantt&user_id=$user_id&addPwOiD=$addPwOiD";
-echo "<script>document.write('<img src=\"$src\">')</script>";
-?>
+                            <?php
+                            $src = '?m=projects&a=gantt&suppressHeaders=1' . ($display_option == 'all' ? '' : '&start_date=' . $start_date->format('%Y-%m-%d') . '&end_date=' . $end_date->format('%Y-%m-%d')) . "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=$showLabels&sortTasksByName=$sortTasksByName&proFilter=$proFilter&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids&showAllGantt=$showAllGantt&user_id=$user_id&addPwOiD=$addPwOiD";
+                            echo "<script>document.write('<img src=\"$src\">')</script>";
+                            ?>
                         </td>
-                </tr>
+                    </tr>
                 </table>
-        </td>
-</tr>
-</table>
+            </td>
+        </tr>
+    </table>
+</form>

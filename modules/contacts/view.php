@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: view.php 1515 2010-12-05 07:13:50Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/contacts/view.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -140,6 +140,14 @@ function delIt(){
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Birthday'); ?>:</td>
 					<td nowrap="nowrap" class="hilite" width="100%"><?php echo substr($contact->contact_birthday, 0, 10); ?></td>
+				</tr>
+				<tr>
+					<td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
+					<td nowrap="nowrap" class="hilite" width="100%"><?php echo $contact->contact_phone; ?></td>
+				</tr>
+				<tr>
+					<td align="right"><?php echo $AppUI->_('Email'); ?>:</td>
+					<td nowrap="nowrap" class="hilite" width="100%"><?php echo w2p_email($contact->contact_email); ?></td>
 				</tr>
                 <?php foreach ($methods as $method => $value): ?>
                     <tr>

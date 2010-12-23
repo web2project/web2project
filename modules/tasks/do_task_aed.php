@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: do_task_aed.php 1519 2010-12-07 07:36:11Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/do_task_aed.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -170,7 +170,7 @@ if ($sub_form) {
 
           // updating the table recording the
           // dependency relations with this task
-          $obj->updateDependencies($hdependencies);
+          $obj->updateDependencies($hdependencies, $task_parent);
 
           // we will reset the task's start date based upon dependencies
           // and shift the end date appropriately
