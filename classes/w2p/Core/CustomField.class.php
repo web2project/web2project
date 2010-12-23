@@ -79,17 +79,9 @@ class w2p_Core_CustomField {
 			} else {
 				$q = new DBQuery;
 				$q->addTable('custom_fields_values');
-				$q->addQuery('MAX(value_id)');
-				$max_id = $q->loadResult();
-				$new_value_id = $max_id ? $max_id + 1 : 1;
-
-				$q = new DBQuery;
-				$q->addTable('custom_fields_values');
-				$q->addInsert('value_id', $new_value_id);
 				$q->addInsert('value_module', '');
 				$q->addInsert('value_field_id', $this->field_id);
 				$q->addInsert('value_object_id', $object_id);
-
 				$q->addInsert('value_charvalue', $ins_charvalue);
 				$q->addInsert('value_intvalue', $ins_intvalue);
 			}

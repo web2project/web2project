@@ -27,8 +27,9 @@ $f = $AppUI->getState('TaskIdxFilter') ? $AppUI->getState('TaskIdxFilter') :
 if (isset($_POST['f2'])) {
 	$AppUI->setState('CompanyIdxFilter', $_POST['f2']);
 }
-$f2 = $AppUI->getState('CompanyIdxFilter') ? $AppUI->getState('CompanyIdxFilter') :
-        (w2PgetConfig('company_filter_default', 'user') == 'user') ? $AppUI->user_company : 'allcompanies';
+
+$f2 = ($AppUI->getState('CompanyIdxFilter')) ? $AppUI->getState('CompanyIdxFilter') :
+        ((w2PgetConfig('company_filter_default', 'user') == 'user') ? $AppUI->user_company : 'allcompanies');
 
 if (isset($_GET['project_id'])) {
 	$AppUI->setState('TaskIdxProject', w2PgetParam($_GET, 'project_id', null));
@@ -38,7 +39,7 @@ $project_id = $AppUI->getState('TaskIdxProject') ? $AppUI->getState('TaskIdxProj
 // get CCompany() to filter tasks by company
 $obj = new CCompany();
 $companies = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
-$filters2 = arrayMerge(array('all' => $AppUI->_('All Companies', UI_OUTPUT_RAW)), $companies);
+$filters2 = arrayMerge(array('allcompanies' => $AppUI->_('All Companies', UI_OUTPUT_RAW)), $companies);
 
 // setup the title block
 $titleBlock = new CTitleBlock('Tasks', 'applet-48.png', $m, $m . '.' . $a);
