@@ -682,8 +682,15 @@ padding: 0px;
 	color: #FFFFFF;
 }
 
+/* Solves a Webkit issue with screwy overlapping spans - #299 */
+span > img {
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+
 /*tooltip*/
- 
+
 h4 {
 	font-weight: bold;
 	font-size: 14px;
