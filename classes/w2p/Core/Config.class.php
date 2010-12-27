@@ -2,7 +2,7 @@
 /**
  * Configuration class
  */
-class w2p_Core_Config extends CW2pObject {
+class w2p_Core_Config extends w2p_Core_BaseObject {
 
 	public function __construct() {
         parent::__construct('config', 'config_id');
