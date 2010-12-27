@@ -109,7 +109,7 @@
 'login',
 'Login Failed',
 'Logout',
-'Mai',
+'May',
 'March',
 'Meeting',
 'Message',
