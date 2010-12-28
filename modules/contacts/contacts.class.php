@@ -9,7 +9,7 @@
 /**
  * Contacts class
  */
-class CContact extends CW2pObject {
+class CContact extends w2p_Core_BaseObject {
 	/**
  	@public int */
 	public $contact_id = null;

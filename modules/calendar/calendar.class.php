@@ -427,7 +427,7 @@ class CMonthCalendar {
  * { Description }
  *
  */
-class CEvent extends CW2pObject {
+class CEvent extends w2p_Core_BaseObject {
 	/**
  	@var int */
 	public $event_id = null;

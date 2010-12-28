@@ -9,7 +9,7 @@
  *
  */
 
-class CResource extends CW2pObject {
+class CResource extends w2p_Core_BaseObject {
 	public $resource_id = null;
 	public $resource_key = null;
 	public $resource_name = null;

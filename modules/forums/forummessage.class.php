@@ -1,6 +1,6 @@
 <?php
 
-class CForumMessage extends CW2pObject {
+class CForumMessage extends w2p_Core_BaseObject {
 	public $message_id = null;
 	public $message_forum = null;
 	public $message_parent = null;

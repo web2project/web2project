@@ -9,7 +9,7 @@ include_once (W2P_BASE_DIR. '/modules/projectdesigner/config.php');
 /**
  * CProjectDesignerOptions Class
  */
-class CProjectDesignerOptions extends CW2pObject {
+class CProjectDesignerOptions extends w2p_Core_BaseObject {
 	public $pd_option_id = null;
 	public $pd_option_user = null;
 	public $pd_option_view_project = null;

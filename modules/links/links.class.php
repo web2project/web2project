@@ -6,7 +6,7 @@
  *	@version $Revision$
  */
 
-class CLink extends CW2pObject {
+class CLink extends w2p_Core_BaseObject {
 
     public $link_id = null;
     public $link_project = null;

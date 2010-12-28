@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 ## CDepartment Class
 ##
 
-class CDepartment extends CW2pObject {
+class CDepartment extends w2p_Core_BaseObject {
 	public $dept_id = null;
 	public $dept_parent = null;
 	public $dept_company = null;

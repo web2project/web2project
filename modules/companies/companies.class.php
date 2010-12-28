@@ -10,7 +10,7 @@
  *	Companies Class
  *	@todo Move the 'address' fields to a generic table
  */
-class CCompany extends CW2pObject {
+class CCompany extends w2p_Core_BaseObject {
 	/**
  	@var int Primary Key */
 	public $company_id = null;

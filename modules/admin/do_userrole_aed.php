@@ -4,6 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
+
 $notify_new_user = w2PgetParam($_POST, 'notify_new_user', 'off');
 $user_id = (int) w2PgetParam($_POST, 'user_id', 0);
 

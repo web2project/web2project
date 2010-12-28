@@ -6,7 +6,7 @@
  *	@version $Revision$
  */
 
-class CHistory extends CW2pObject {
+class CHistory extends w2p_Core_BaseObject {
     public $history_id = null;
     public $history_date = null;
     public $history_user = null;

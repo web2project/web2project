@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 /**
  * File Class
  */
-class CFile extends CW2pObject {
+class CFile extends w2p_Core_BaseObject {
 
 	public $file_id = null;
 	public $file_version_id = null;

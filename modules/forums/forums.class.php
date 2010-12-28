@@ -17,7 +17,7 @@ if ($a == 'viewer') {
 	array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
 }
 
-class CForum extends CW2pObject {
+class CForum extends w2p_Core_BaseObject {
 	public $forum_id = null;
 	public $forum_project = null;
 	public $forum_status = null;

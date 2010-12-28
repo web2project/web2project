@@ -145,7 +145,7 @@ class CPreferences {
 /**
  * Module class
  */
-class CModule extends CW2pObject {
+class CModule extends w2p_Core_BaseObject {
 	public $mod_id = null;
 	public $mod_name = null;
 	public $mod_directory = null;
@@ -406,7 +406,7 @@ class CModule extends CW2pObject {
  */
 class CConfig extends w2p_Core_Config { }
 
-class bcode extends CW2pObject {
+class bcode extends w2p_Core_BaseObject {
 	public $_billingcode_id = null;
 	public $company_id;
 	public $billingcode_id = null;
