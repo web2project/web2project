@@ -144,7 +144,7 @@ if (function_exists('styleRenderBoxTop')) {
 if ($do_report) {
 
 	if ($project_id == 0) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('tasks', 'a');
 		$q->addTable('projects', 'b');
 		$q->addQuery('a.*, b.project_name');
@@ -154,7 +154,7 @@ if ($do_report) {
 			$q->addWhere('b.project_status <> ' . (int)$template_status);
 		}
 	} else {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('tasks', 'a');
 		$q->addWhere('task_project =' . $project_id);
 	}
@@ -204,7 +204,7 @@ if ($do_report) {
 		$end_date = intval($Tasks['task_end_date']) ? new w2p_Utilities_Date($Tasks['task_end_date']) : ' ';
 		$task_id = $Tasks['task_id'];
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('user_tasks');
 		$q->addWhere('task_id = ' . (int)$task_id);
 		$sql_user = $q->exec();
@@ -216,7 +216,7 @@ if ($do_report) {
 			}
 
 			$q->clear();
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('users', 'u');
 			$q->addTable('contacts', 'c');
 			$q->addQuery('contact_first_name, contact_last_name');
@@ -253,7 +253,7 @@ if ($do_report) {
 	echo '</table>';
 	if ($log_pdf) {
 		// make the PDF file
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('projects');
 		$q->addQuery('project_name');
 		$q->addWhere('project_id=' . (int)$project_id);

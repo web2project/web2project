@@ -60,7 +60,7 @@ class w2p_Core_EventQueue {
 			$caller = $callback;
 		}
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($this->table);
 		$q->addInsert('queue_owner', $user_id);
 		$q->addInsert('queue_start', $date);
@@ -90,7 +90,7 @@ class w2p_Core_EventQueue {
 	 * 
 	 */
 	public function remove($id) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete($this->table);
 		$q->addWhere('queue_id = \'' . $id . '\'');
 		$q->exec();
@@ -102,7 +102,7 @@ class w2p_Core_EventQueue {
 	 * 
 	 */
 	public function find($module, $type, $id = null) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($this->table);
 		$q->addWhere('queue_module = \'' . $module . '\'');
 		$q->addWhere('queue_type = \'' . $type . '\'');
@@ -154,7 +154,7 @@ class w2p_Core_EventQueue {
 	 * start time and the repeat count (if set) is decremented.
 	 */
 	public function scan() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($this->table);
 		$now = time();
 		$q->addWhere('queue_start < ' . $now);
@@ -183,7 +183,7 @@ class w2p_Core_EventQueue {
 	}
 
 	public function commit_updates() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		if (count($this->delete_list)) {
 			$q->setDelete($this->table);
 			$q->addWhere('queue_id IN (' . implode(',', $this->delete_list) . ')');

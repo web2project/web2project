@@ -9,7 +9,7 @@ $forum_id = w2PgetParam($_REQUEST, 'forum_id', 0);
 $message_id = w2PgetParam($_REQUEST, 'message_id', 0);
 $perms = &$AppUI->acl();
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addQuery('f.forum_name, p.project_name');
 $q->addTable('forums', 'f');
 $q->addJoin('projects', 'p', 'p.project_id = f.forum_project', 'inner');
@@ -20,7 +20,7 @@ if (!$perms->checkModuleItem('forums', 'view', $message_id)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('forums');
 $q->addTable('forum_messages');
 $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email, user_username, forum_moderated, visit_user');
@@ -47,7 +47,7 @@ foreach ($messages as $row) {
 	if ($row['message_id'] == $message_id)
 		$topic = $row['message_title'];
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('forum_messages');
 	$q->addTable('users');
 	$q->addQuery('contact_first_name, contact_last_name, contact_email, user_username');

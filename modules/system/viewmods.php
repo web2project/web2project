@@ -14,7 +14,7 @@ if (!$canRead) {
 $AppUI->savePlace();
 
 $hidden_modules = array('public', 'install', );
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addQuery('*');
 $q->addTable('modules');
 foreach ($hidden_modules as $no_show) {

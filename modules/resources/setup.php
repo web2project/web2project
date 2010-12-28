@@ -12,7 +12,7 @@ if ($a == 'setup') {
 class SResource {
 	public function install() {
 		$ok = true;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$sql = '(
 			resource_id integer not null auto_increment,
 			resource_name varchar(255) not null default "",
@@ -63,7 +63,7 @@ class SResource {
 	}
 
 	public function remove() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->dropTable('resources');
 		$q->exec();
 		$q->clear();
@@ -79,7 +79,7 @@ class SResource {
 	public function upgrade($old_version) {
 		switch ($old_version) {
 			case '1.0':
-				$q = new DBQuery;
+				$q = new w2p_Database_Query;
 				$q->addTable('resources');
 				$q->addField('resource_key', 'varchar(64) not null default ""');
 				$q->exec();

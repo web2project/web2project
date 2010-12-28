@@ -59,7 +59,7 @@ $cols = 13;
 /****
 // Let's figure out which tasks are selected
 */
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $pinned_only = intval(w2PgetParam($_GET, 'pinned', 0));
 if (isset($_GET['pin'])) {
 	$pin = intval(w2PgetParam($_GET, 'pin', 0));
@@ -122,7 +122,7 @@ if (count($allowedProjects)) {
 }
 $q->addGroup('projects.project_id');
 
-$q2 = new DBQuery;
+$q2 = new w2p_Database_Query;
 $q2 = $q;
 $q2->addQuery('projects.project_id, COUNT(t1.task_id) as total_tasks');
 

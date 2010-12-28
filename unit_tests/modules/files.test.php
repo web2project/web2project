@@ -183,7 +183,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertEquals('files',    $file->_tbl);
       $this->assertEquals('file_id',  $file->_tbl_key);
       $this->assertEquals('',         $file->_errors);
-      $this->assertType('DBQuery',    $file->_query);
+      $this->assertType('w2p_Database_Query',    $file->_query);
     }
 
     /**

@@ -118,7 +118,7 @@ if ($result) {
             $contact->contact_email, $contact->contact_first_name, $user->user_username,
             $_POST['user_password'], $user->user_id);
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('users', 'u');
         $q->addQuery('contact_email');
         $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');

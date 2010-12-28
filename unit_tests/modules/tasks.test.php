@@ -233,7 +233,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('tasks',    $this->obj->_tbl);
         $this->assertEquals('task_id',  $this->obj->_tbl_key);
         $this->assertEquals('',         $this->obj->_errors);
-        $this->assertType('DBQuery',    $this->obj->_query);
+        $this->assertType('w2p_Database_Query',    $this->obj->_query);
         $this->assertNull($this->obj->task_updator);
         $this->assertNull($this->obj->task_created);
         $this->assertNull($this->obj->task_updated);
@@ -760,7 +760,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_id = 21');
@@ -863,7 +863,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_id = 24');
@@ -924,7 +924,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
         $q->addWhere('task_id = 31');
@@ -987,7 +987,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
         $q->addWhere('task_id = 31');
@@ -1050,7 +1050,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
         $q->addWhere('task_id = 31');
@@ -1113,7 +1113,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
         $q->addWhere('task_id = 31');
@@ -1159,7 +1159,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
         $q->addWhere('task_id IN(31,32,33)');
@@ -1193,7 +1193,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
         $q->addWhere('task_id  IN(31,32,33)');
@@ -1227,7 +1227,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated, task_created');
         $q->addWhere('task_id IN(31,32,33)');
@@ -1263,7 +1263,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_created, task_updated');
         $q->addWhere('task_id IN(' . $this->obj->task_id . ')');
@@ -1306,7 +1306,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_id IN(' . $this->obj->task_id . ')');
@@ -1386,7 +1386,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_id IN (27, 28)');
@@ -1421,7 +1421,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_id = 27');
@@ -1459,7 +1459,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_created,task_updated');
         $q->addWhere('task_id = 31');
@@ -1638,7 +1638,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_id = 29');
@@ -1969,7 +1969,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_id IN(28,29,30)');
@@ -2011,7 +2011,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_id IN(28)');
@@ -2790,7 +2790,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('event_queue');
         $q->addQuery('queue_start');
         $q->addWhere('queue_id = 2');

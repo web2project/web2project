@@ -30,7 +30,7 @@ function w2PsessionClose() {
 }
 
 function w2PsessionRead($id) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('sessions');
 	$q->addQuery('session_data');
 	$q->addQuery('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) as session_lifespan');
@@ -60,7 +60,7 @@ function w2PsessionRead($id) {
 function w2PsessionWrite($id, $data) {
 	global $AppUI;
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addQuery('count(session_id) as row_count');
 	$q->addTable('sessions');
 	$q->addWhere('session_id = \''.$id.'\'');
@@ -86,10 +86,10 @@ function w2PsessionWrite($id, $data) {
 function w2PsessionDestroy($id, $user_access_log_id = 0) {
 	global $AppUI;
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('user_access_log');
 	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
-	$q2 = new DBQuery;
+	$q2 = new w2p_Database_Query;
 	$q2->addTable('sessions');
 	$q2->addQuery('session_user');
 	$q2->addWhere('session_id = \'' . $id . '\'');
@@ -114,10 +114,10 @@ function w2PsessionGC($maxlifetime) {
 	$idle = w2PsessionConvertTime('idle_time');
 	// First pass is to kill any users that are logged in at the time of the session.
 	$where = 'UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > ' . $idle . ' OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > ' . $max;
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('user_access_log');
 	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
-	$q2 = new DBQuery;
+	$q2 = new w2p_Database_Query;
 	$q2->addTable('sessions');
 	$q2->addQuery('session_user');
 	$q2->addWhere($where);

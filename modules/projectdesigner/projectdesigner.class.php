@@ -26,7 +26,7 @@ class CProjectDesignerOptions extends w2p_Core_BaseObject {
 	public function store(CAppUI $AppUI = null) {
 		global $AppUI;
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
 		$q->addTable('project_designer_options');
 		$q->addReplace('pd_option_user', $this->pd_option_user);
 		$q->addReplace('pd_option_view_project', $this->pd_option_view_project);
@@ -54,7 +54,7 @@ function getCriticalTasksInverted($project_id = null, $limit = 1) {
 		$result[0]['task_end_date'] = '0000-00-00 00:00:00';
 		return $result;
 	} else {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('tasks');
 		$q->addWhere('task_project = ' . (int)$project_id  . ' AND NOT ISNULL( task_end_date ) AND task_end_date <>  \'0000-00-00 00:00:00\'');
 		$q->addOrder('task_start_date ASC');
@@ -94,7 +94,7 @@ function taskstyle_pd($task) {
 
 function get_actual_end_date_pd($task_id, $task) {
 	global $AppUI;
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$mods = $AppUI->getActiveModules();
 
 	if (!empty($mods['history']) && canView('history')) {
@@ -321,7 +321,7 @@ function findchild_pd(&$tarr, $parent, $level = 0) {
 
 function get_dependencies_pd($task_id) {
 	// Pull tasks dependencies
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('tasks', 't');
 	$q->addTable('task_dependencies', 'td');
 	$q->addQuery('t.task_id, t.task_name');

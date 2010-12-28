@@ -147,7 +147,7 @@ if ($file_id && ($obj->file_project != $oldObj->file_project)) {
 if (!$file_id) {
 	$obj->file_owner = $AppUI->user_id;
 	if (!$obj->file_version_id) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('files');
 		$q->addQuery('file_version_id');
 		$q->addOrder('file_version_id DESC');
@@ -156,7 +156,7 @@ if (!$file_id) {
 		$q->clear();
 		$obj->file_version_id = $latest_file_version + 1;
 	} else {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', '');
 		$q->addWhere('file_version_id = ' . (int)$obj->file_version_id);

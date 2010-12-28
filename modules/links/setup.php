@@ -39,7 +39,7 @@ class CSetupLinks {
 	}
 
 	public function remove() {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->dropTable('links');
 		$q->exec();
 
@@ -54,7 +54,7 @@ class CSetupLinks {
 	}
 
 	public function install() {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->createTable('links');
 		$q->createDefinition('(
             link_id int( 11 ) NOT NULL AUTO_INCREMENT ,

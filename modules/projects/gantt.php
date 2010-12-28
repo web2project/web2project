@@ -39,7 +39,7 @@ $pjobj = new CProject();
 */
 if ($addPwOiD && $department > 0) {
 	$owner_ids = array();
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('users');
 	$q->addQuery('user_id');
 	$q->addJoin('contacts', 'c', 'c.contact_id = user_contact', 'inner');
@@ -51,7 +51,7 @@ if ($addPwOiD && $department > 0) {
 // pull valid projects and their percent complete information
 // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 $working_hours = $w2Pconfig['daily_working_hours'];
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('projects', 'pr');
 $q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
                 max(t1.task_end_date) AS project_actual_end_date, SUM(task_duration * task_percent_complete *

@@ -26,7 +26,7 @@ if ($filter_param) {
 if (!empty($_REQUEST['project_id'])) {
 	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('tasks');
 	$q->addQuery('task_id');
 	$q->addWhere('task_project = ' . (int)$project_id);
@@ -50,7 +50,7 @@ $page = isset($_REQUEST['pg']) ? (int)$_REQUEST['pg'] : 1;
 $limit = isset($_REQUEST['limit']) ? (int)$_REQUEST['limit'] : 100;
 $offset = ($page - 1) * $limit;
 if ($filter_param != '' || $page) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addQuery('COUNT(history_id) AS hits');
 	$q->addTable('history', 'h');
 	$q->addTable('users');
@@ -60,7 +60,7 @@ if ($filter_param != '' || $page) {
 	$q->addWhere($filter);
 	$count = intval($q->loadResult());
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addQuery('history_date, history_id, history_item, history_table, history_description, history_action');
 	$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS history_user_name');
 	$q->addTable('history', 'h');

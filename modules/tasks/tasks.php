@@ -34,7 +34,7 @@ $cols = 13;
 */
 $task_id = intval(w2PgetParam($_GET, 'task_id', 0));
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $pinned_only = intval(w2PgetParam($_GET, 'pinned', 0));
 if (isset($_GET['pin'])) {
 	$pin = intval(w2PgetParam($_GET, 'pin', 0));
@@ -76,7 +76,7 @@ $where_list = (count($allowedProjects)) ? implode(' AND ', $allowedProjects) : '
 
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('projects', 'p');
 $q->addQuery('company_name, p.project_id, project_color_identifier, project_name, project_percent_complete');
 $q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
@@ -92,7 +92,7 @@ if ($project_id > 0) {
 	$q->addWhere('p.project_id = '.$project_id);
 }
 
-$q2 = new DBQuery;
+$q2 = new w2p_Database_Query;
 $q2->addTable('projects');
 $q2->addQuery('project_id, COUNT(t1.task_id) AS total_tasks');
 $q2->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
@@ -144,7 +144,7 @@ $q->addQuery('tlog.task_log_problem');
 $q->addQuery('task_access');
 
 //subquery the parent state
-$sq = new DBQuery;
+$sq = new w2p_Database_Query;
 $sq->addTable('tasks', 'stasks');
 $sq->addQuery('COUNT(stasks.task_id)');
 $sq->addWhere('stasks.task_id <> tasks.task_id AND stasks.task_parent = tasks.task_id');

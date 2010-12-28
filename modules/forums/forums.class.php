@@ -50,7 +50,7 @@ class CForum extends w2p_Core_BaseObject {
     }
 
     public function load(CAppUI $AppUI, $forum_id) {
-        $q = new DBQuery();
+        $q = new w2p_Database_Query();
         $q->addQuery('*');
         $q->addTable('forums');
         $q->addWhere('forum_id = ' . (int) $forum_id);
@@ -61,7 +61,7 @@ class CForum extends w2p_Core_BaseObject {
     {
         $project = new CProject();
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('forums');
         
         $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name');
@@ -141,7 +141,7 @@ class CForum extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem('forums', 'delete', $this->forum_id)) {
-            $q = new DBQuery;
+            $q = new w2p_Database_Query;
             $q->setDelete('forum_visits');
             $q->addWhere('visit_forum = ' . (int)$this->forum_id);
             $q->exec(); // No error if this fails, it is not important.

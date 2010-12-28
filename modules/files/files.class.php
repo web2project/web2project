@@ -96,7 +96,7 @@ class CFile extends w2p_Core_BaseObject {
 	public static function getFileList(CAppUI $AppUI = null, $company_id, $project_id, $task_id, $category_id) {
 		global $AppUI;
 
-        $q = new DBQuery();
+        $q = new w2p_Database_Query();
 		$q->addQuery('f.*');
 		$q->addTable('files', 'f');
 		$q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -197,7 +197,7 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	public function checkout($userId, $fileId, $coReason) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', $userId);
 		$q->addUpdate('file_co_reason', $coReason);
@@ -208,7 +208,7 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	public function cancelCheckout($fileId) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', '');
 		$q->addWhere('file_id = ' . (int)$fileId);
@@ -234,7 +234,7 @@ class CFile extends w2p_Core_BaseObject {
             }
 
             // delete any index entries
-            $q = new DBQuery;
+            $q = new w2p_Database_Query;
             $q->setDelete('files_index');
             $q->addQuery('*');
             $q->addWhere('file_id = ' . (int)$this->file_id);
@@ -389,7 +389,7 @@ class CFile extends w2p_Core_BaseObject {
             $nwords_indexed = count($wordarr);
             // insert the strings into the table
             while (list($key, $val) = each($wordarr)) {
-                $q = new DBQuery;
+                $q = new w2p_Database_Query;
                 $q->addTable('files_index');
                 $q->addReplace('file_id', $this->file_id);
                 $q->addReplace('word', $key);
@@ -441,7 +441,7 @@ class CFile extends w2p_Core_BaseObject {
                     $body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->_task->task_description;
 
                     //preparing users array
-                    $q = new DBQuery;
+                    $q = new w2p_Database_Query;
                     $q->addTable('tasks', 't');
                     $q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as 
                             creator_first_name, cc.contact_last_name as creator_last_name,
@@ -460,7 +460,7 @@ class CFile extends w2p_Core_BaseObject {
                     $this->_users = $q->loadList();
                 } else {
                     //find project owner and notify him about new or modified file
-                    $q = new DBQuery;
+                    $q = new w2p_Database_Query;
                     $q->addTable('users', 'u');
                     $q->addTable('projects', 'p');
                     $q->addQuery('u.user_id, u.user_contact AS owner_contact_id');
@@ -526,7 +526,7 @@ class CFile extends w2p_Core_BaseObject {
                     $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id;
                     $body .= "\n" . $AppUI->_('Description') . ":\n" . $this->_task->task_description;
 
-                    $q = new DBQuery;
+                    $q = new w2p_Database_Query;
                     $q->addTable('project_contacts', 'pc');
                     $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name'); 
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
@@ -539,7 +539,7 @@ class CFile extends w2p_Core_BaseObject {
                     $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
                     $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
                 } else {
-                    $q = new DBQuery;
+                    $q = new w2p_Database_Query;
                     $q->addTable('project_contacts', 'pc');
                     $q->addQuery('pc.project_id, pc.contact_id');
                     $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
@@ -672,7 +672,7 @@ function getIcon($file_type) {
 function getFolderSelectList() {
 	global $AppUI;
 	$folders = array(0 => '');
-	$q = new DBQuery();
+	$q = new w2p_Database_Query();
 	$q->addTable('file_folders');
 	$q->addQuery('file_folder_id, file_folder_name, file_folder_parent');
 	$q->addOrder('file_folder_name');
@@ -681,7 +681,7 @@ function getFolderSelectList() {
 }
 
 function getHelpdeskFolder() {
-	$q = new DBQuery();
+	$q = new w2p_Database_Query();
 	$q->addTable('file_folders', 'ff');
 	$q->addQuery('file_folder_id');
 	$q->addWhere('ff.file_folder_name = \'Helpdesk\'');

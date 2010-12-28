@@ -31,7 +31,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function load($deptId) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.*, company_name');
 		$q->addJoin('companies', 'com', 'com.company_id = dep.dept_company', 'inner');
@@ -43,7 +43,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	public function loadFull(CAppUI $AppUI = null, $deptId) {
         global $AppUI;
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('companies', 'com');
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.*, company_name');
@@ -64,7 +64,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		global $AppUI;
 
         $results = array();
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dept_id, dept_name, dept_parent');
 		$q->addWhere('dep.dept_company = ' . (int) $company_id);
@@ -85,7 +85,7 @@ class CDepartment extends w2p_Core_BaseObject {
         global $AppUI;
 
         $orderby = (in_array($orderby, array('dept_name', 'dept_type', 'countp', 'inactive'))) ? $orderby : 'dept_name';
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('departments');
         $q->addQuery('departments.*, COUNT(ct.contact_department) dept_users, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
         $q->addJoin('companies', 'c', 'c.company_id = departments.dept_company');
@@ -172,7 +172,7 @@ class CDepartment extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem('departments', 'delete', $this->dept_id)) {
-            $q = new DBQuery;
+            $q = new w2p_Database_Query;
             $q->addTable('departments', 'dep');
             $q->addQuery('dep.dept_id');
             $q->addWhere('dep.dept_parent = ' . (int)$this->dept_id);
@@ -348,7 +348,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	public static function getDepartmentList(CAppUI $AppUI = null, $companyId, $departmentId = 0) {
 		global $AppUI;
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
 		$q->addTable('departments');
 		$q->addQuery('dept_id, dept_name');
 		if (is_int($departmentId)) {
@@ -365,7 +365,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		global $AppUI;
 
         if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $deptId > 0) {
-            $q = new DBQuery;
+            $q = new w2p_Database_Query;
             $q->addTable('contacts', 'con');
             $q->addQuery('con.contact_id, con.contact_first_name');
             $q->addQuery('con.contact_last_name');

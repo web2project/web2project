@@ -174,7 +174,7 @@ $proto = $AppUI->getState('LDAPProto', '3');
                                     $s .= '<th>' . $sql . '</th>';
                                 }
                             } else {
-                                $q = new DBQuery;
+                                $q = new w2p_Database_Query;
                                 $q->addTable($sql_table);
                                 $q->addQuery('contact_id, contact_first_name, contact_last_name');
                                 $contacts = $q->loadList();
@@ -244,7 +244,7 @@ $proto = $AppUI->getState('LDAPProto', '3');
                                         $pairs['contact_id'] = $contact_list[$pairs['contact_first_name'] . ' ' . $pairs['contact_last_name']];
 
                                         //Try to find a matching company name in the system, if not them set contact_company to 0
-                                        $q = new DBQuery;
+                                        $q = new w2p_Database_Query;
                                         $q->addQuery('company_id');
                                         $q->addTable('companies');
                                         $q->addWhere('company_name LIKE \'' . mb_trim($pairs['contact_company']) . '\'');
@@ -271,7 +271,7 @@ $proto = $AppUI->getState('LDAPProto', '3');
                                         $s .= '<td>Adding ' . $pairs['contact_first_name'] . ' ' . $pairs['contact_last_name'] . '.</td>';
 
                                         //Try to find a matching company name in the system, if not them set contact_company to 0
-                                        $q = new DBQuery;
+                                        $q = new w2p_Database_Query;
                                         $q->addQuery('company_id');
                                         $q->addTable('companies');
                                         $q->addWhere('company_name LIKE \'' . mb_trim($pairs['contact_company']) . '\'');

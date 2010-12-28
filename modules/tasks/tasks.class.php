@@ -308,7 +308,7 @@ class CTask extends w2p_Core_BaseObject {
 	public function loadFull(CAppUI $AppUI = null, $taskId) {
         global $AppUI;
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->leftJoin('users', 'u1', 'u1.user_id = task_owner', 'outer');
         $q->leftJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'outer');
@@ -336,7 +336,7 @@ class CTask extends w2p_Core_BaseObject {
 		global $AppUI;
 
     //Has a parent or children, we will check if it is dynamic so that it's info is updated also
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$modified_task = new CTask();
 
 		if ($fromChildren) {
@@ -481,14 +481,14 @@ class CTask extends w2p_Core_BaseObject {
 	} // end of copy()
 
 	public function copyAssignedUsers($destTask_id) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('user_id, user_type, task_id, perc_assignment, user_task_priority');
 		$q->addTable('user_tasks', 'ut');
 		$q->addWhere('ut.task_id = ' . $this->task_id);
 		$user_tasks = $q->loadList();
 		$q->clear();
 		foreach ($user_tasks as $user_task) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addReplace('user_id', $user_task['user_id']);
 			$q->addReplace('user_type', $user_task['user_type']);
 			$q->addReplace('task_id', $destTask_id);
@@ -557,7 +557,7 @@ class CTask extends w2p_Core_BaseObject {
 
         $this->task_target_budget = filterCurrency($this->task_target_budget);
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $this->task_updated = $q->dbfnNowWithTZ();
 
         if ($this->task_id && $perms->checkModuleItem('tasks', 'edit', $this->task_id)) {
@@ -712,7 +712,7 @@ class CTask extends w2p_Core_BaseObject {
         $subProject->load($project_id);
 
         if ($subProject->project_id != $subProject->project_parent) {
-            $q = new DBQuery();
+            $q = new w2p_Database_Query();
             $q->addTable('tasks');
             $q->addQuery('MIN(task_start_date) AS min_task_start_date');
             $q->addQuery('MAX(task_end_date) AS max_task_end_date');
@@ -769,7 +769,7 @@ class CTask extends w2p_Core_BaseObject {
             $taskList = $childrenlist + array($this->task_id);
             $implodedTaskList = implode(',', $taskList);
 
-            $q = new DBQuery;
+            $q = new w2p_Database_Query;
             // delete affiliated task_logs
             $q->setDelete('task_log');
             $q->addWhere('task_log_task IN (' . $implodedTaskList . ')');
@@ -810,7 +810,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function updateDependencies($cslist, $parent_id = 0) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		// delete all current entries
 		$q->setDelete('task_dependencies');
 		$q->addWhere('dependencies_task_id=' . (int)$this->task_id);
@@ -834,7 +834,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function pushDependencies($taskId, $lastEndDate) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('td.dependencies_task_id, t.task_start_date');
 		$q->addQuery('t.task_end_date, t.task_duration, t.task_duration_type, t.task_parent');
 		$q->addTable('task_dependencies', 'td');
@@ -875,7 +875,7 @@ class CTask extends w2p_Core_BaseObject {
 			$task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
 			$task_end_date = $ned->format(FMT_DATETIME_MYSQL);
 
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('tasks', 't');
 			$q->addUpdate('task_start_date', $task_start_date);
 			$q->addUpdate('task_end_date', $task_end_date);
@@ -909,7 +909,7 @@ class CTask extends w2p_Core_BaseObject {
 	 *		  @return		 string		   comma delimited list of tasks id's
 	 **/
 	public function staticGetDependencies($taskId) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		if (empty($taskId)) {
 			return '';
 		}
@@ -924,7 +924,7 @@ class CTask extends w2p_Core_BaseObject {
 	} // end of staticGetDependencies ()
 
 	public function notifyOwner() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		global $AppUI, $locale_char_set;
 
 		$q->addTable('projects');
@@ -975,7 +975,7 @@ class CTask extends w2p_Core_BaseObject {
 
 	//additional comment will be included in email body
 	public function notify($comment = '') {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		global $AppUI, $locale_char_set;
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
@@ -1055,7 +1055,7 @@ class CTask extends w2p_Core_BaseObject {
 		global $AppUI, $locale_char_set, $w2Pconfig;
 
 		$mail_recipients = array();
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		if ((int)$this->task_id > 0 && (int)$this->task_project > 0) {
 			$q->addTable('users', 'u');
 			$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
@@ -1230,7 +1230,7 @@ class CTask extends w2p_Core_BaseObject {
 	 */
 	public function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null) {
 		global $AppUI;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		// convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
@@ -1302,7 +1302,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function canAccess($user_id) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		// Let's see if this user has admin privileges
 		if (canView('admin')) {
@@ -1352,7 +1352,7 @@ class CTask extends w2p_Core_BaseObject {
 	 *		 @param	 boolean		 false for no recursion (needed for calc_end_date)
 	 **/
 	public function dependentTasks($taskId = false, $isDep = false, $recurse = true) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		static $aDeps = false;
 		// Initialize the dependencies array
 		if (($taskId == false) && ($isDep == false)) {
@@ -1430,7 +1430,7 @@ class CTask extends w2p_Core_BaseObject {
 	*/
 	public function update_dep_dates($task_id) {
 		global $tracking_dynamics;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		$newTask = new CTask();
 		$newTask->load($task_id);
@@ -1507,7 +1507,7 @@ class CTask extends w2p_Core_BaseObject {
 
 	public function get_deps_max_end_date($taskObj) {
 		global $tracked_dynamics;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		$deps = $taskObj->getDependencies();
 		$obj = new CTask();
@@ -1607,7 +1607,7 @@ class CTask extends w2p_Core_BaseObject {
 
 	// unassign a user from task
 	public function removeAssigned($user_id) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		// delete all current entries
 		$q->setDelete('user_tasks');
 		$q->addWhere('task_id = ' . (int)$this->task_id . ' AND user_id = ' . (int)$user_id);
@@ -1618,7 +1618,7 @@ class CTask extends w2p_Core_BaseObject {
 	//using user allocation percentage ($perc_assign)
 	// @return returns the Names of the over-assigned users (if any), otherwise false
 	public function updateAssigned($cslist, $perc_assign, $del = true, $rmUsers = false) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		// process assignees
 		$tarr = explode(',', $cslist);
@@ -1662,7 +1662,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function getAssignedUsers($taskId) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('users', 'u');
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
@@ -1673,7 +1673,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function getDependencyList($taskId) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('td.dependencies_req_task_id, t.task_name');
 		$q->addTable('tasks', 't');
 		$q->addTable('task_dependencies', 'td');
@@ -1683,7 +1683,7 @@ class CTask extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 	public function getDependentTaskList($taskId) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('td.dependencies_task_id, t.task_name');
 		$q->addTable('tasks', 't');
 		$q->addTable('task_dependencies', 'td');
@@ -1696,7 +1696,7 @@ class CTask extends w2p_Core_BaseObject {
 		global $AppUI;
 
     if ($AppUI->isActiveModule('departments')) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('departments', 'd');
 			$q->addTable('task_departments', 't');
 			$q->addWhere('t.department_id = d.dept_id');
@@ -1713,7 +1713,7 @@ class CTask extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
 		if (canView('contacts')) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('contacts', 'c');
             $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
 
@@ -1763,7 +1763,7 @@ class CTask extends w2p_Core_BaseObject {
 				$hash = array();
 			}
 		} else {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			// retrieve the systemwide default preference for the assignment maximum
 			$q->addTable('user_preferences');
 			$q->addQuery('pref_value');
@@ -1815,7 +1815,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function getUserSpecificTaskPriority($user_id = 0, $task_id = null) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		// use task_id of given object if the optional parameter task_id is empty
 		$task_id = empty($task_id) ? $this->task_id : $task_id;
 
@@ -1828,7 +1828,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function updateUserSpecificTaskPriority($user_task_priority = 0, $user_id = 0, $task_id = null) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		// use task_id of given object if the optional parameter task_id is empty
 		$task_id = empty($task_id) ? $this->task_id : $task_id;
 
@@ -1841,7 +1841,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function getProject() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		$q->addTable('projects');
 		$q->addQuery('project_name, project_short_name, project_color_identifier');
@@ -1853,7 +1853,7 @@ class CTask extends w2p_Core_BaseObject {
 
 	//Returns task children IDs
 	public function getChildren() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
@@ -1886,7 +1886,7 @@ class CTask extends w2p_Core_BaseObject {
 	 * to the one passed as parameter
 	 */
 	public function updateSubTasksStatus($new_status, $task_id = null) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		if (is_null($task_id)) {
 			$task_id = $this->task_id;
@@ -1922,7 +1922,7 @@ class CTask extends w2p_Core_BaseObject {
 	 * to the one passed as parameter
 	 */
 	public function updateSubTasksProject($new_project, $task_id = null) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		if (is_null($task_id)) {
 			$task_id = $this->task_id;
@@ -2058,7 +2058,7 @@ class CTask extends w2p_Core_BaseObject {
 	 */
 	public function remind($module, $type, $id, $owner, &$args) {
 		global $locale_char_set, $AppUI;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$tf = $AppUI->getPref('TIMEFORMAT');
@@ -2201,7 +2201,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function getAssigned() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('users', 'u');
 		$q->addTable('user_tasks', 'ut');
 		$q->addTable('contacts', 'con');
@@ -2214,7 +2214,7 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
     public function getTaskLogs($taskId, $problem = false) {
-        $q = new DBQuery();
+        $q = new w2p_Database_Query();
         $q->addTable('task_log');
         $q->addQuery('task_log.*, user_username, billingcode_name as task_log_costcode');
         $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS real_name');
@@ -2266,7 +2266,7 @@ class CTask extends w2p_Core_BaseObject {
 		* If you change them, it's probably going to break.  So don't do that.
 		*/
 
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addQuery('t.task_id as id');
 		$q->addQuery('task_name as name');
 		$q->addQuery('task_description as description');
@@ -2298,7 +2298,7 @@ class CTask extends w2p_Core_BaseObject {
 	public function getAllowedTaskList($AppUI, $task_project = 0) {
 		$results = array();
 
-        $q = new DBQuery();
+        $q = new w2p_Database_Query();
 		$q->addQuery('task_id, task_name, task_parent, task_access, task_owner');
         $q->addQuery('task_start_date, task_end_date, task_percent_complete');
 		$q->addOrder('task_parent, task_parent = task_id desc');
@@ -2324,14 +2324,14 @@ class CTask extends w2p_Core_BaseObject {
 		return $results;
 	}
 	public function getTaskCount($projectId) {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable('tasks');
 		$q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
 		$q->addWhere('task_project = ' . (int)$projectId);
 		return $q->loadResult();
 	}
 	public static function pinUserTask($userId, $taskId) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('user_task_pin');
 		$q->addInsert('user_id', (int)$userId);
 		$q->addInsert('task_id', (int)$taskId);
@@ -2343,7 +2343,7 @@ class CTask extends w2p_Core_BaseObject {
 		}
 	}
 	public static function unpinUserTask($userId, $taskId) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete('user_task_pin');
 		$q->addWhere('user_id = ' . (int)$userId);
 		$q->addWhere('task_id = ' . (int)$taskId);
@@ -2355,7 +2355,7 @@ class CTask extends w2p_Core_BaseObject {
 		}
 	}
     public static function updateHoursWorked($taskId, $totalHours) {
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addUpdate('task_hours_worked', $totalHours + 0);
         $q->addWhere('task_id = ' . $taskId);
@@ -2688,7 +2688,7 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
  */
 function canTaskAccess($task_id, $task_access, $task_owner) {
 	global $AppUI;
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 
 	if (!$task_id || !isset($task_access)) {
 		return false;

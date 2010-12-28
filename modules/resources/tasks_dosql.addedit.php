@@ -41,7 +41,7 @@ function resource_postsave() {
 		}
 		// first delete any elements already there, then replace with this
 		// list.
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete('resource_tasks');
 		$q->addWhere('task_id = ' . (int)$obj->task_id);
 		$q->exec();

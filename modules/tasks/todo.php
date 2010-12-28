@@ -75,20 +75,20 @@ if (is_array($selected) && count($selected)) {
 	foreach ($selected as $key => $val) {
 		if ($task_priority == 'c') {
 			// mark task as completed
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('tasks');
 			$q->addUpdate('task_percent_complete', '100');
 			$q->addWhere('task_id=' . (int)$val);
 		} else
 			if ($task_priority == 'd') {
 				// delete task
-				$q = new DBQuery;
+				$q = new w2p_Database_Query;
 				$q->setDelete('tasks');
 				$q->addWhere('task_id=' . (int)$val);
 			} else
 				if ($task_priority > -2 && $task_priority < 2) {
 					// set priority
-					$q = new DBQuery;
+					$q = new w2p_Database_Query;
 					$q->addTable('tasks');
 					$q->addUpdate('task_priority', $task_priority);
 					$q->addWhere('task_id=' . (int)$val);
@@ -109,7 +109,7 @@ $allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');
 
 // query my sub-tasks (ignoring task parents)
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addQuery('ta.*');
 $q->addQuery('project_name, pr.project_id, project_color_identifier');
 $q->addQuery('tp.task_pinned');

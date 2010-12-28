@@ -20,7 +20,7 @@ $criticalTasksInverted = ($project_id > 0) ? getCriticalTasksInverted($project_i
 $projects = $project->getAllowedProjects($AppUI->user_id, false);
 
 // pull tasks
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('tasks', 't');
 $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, 
     task_duration, task_duration_type, task_priority, task_percent_complete,
@@ -251,7 +251,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
         $caption = '';
         if ($showLabels == '1') {
-            $q = new DBQuery;
+            $q = new w2p_Database_Query;
             $q->addTable('user_tasks', 'ut');
             $q->addTable('users', 'u');
             $q->addTable('contacts', 'c');
@@ -293,7 +293,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
             if ($showWork == '1') {
                 $work_hours = 0;
-                $q = new DBQuery;
+                $q = new w2p_Database_Query;
                 $q->addTable('tasks', 't');
                 $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
                 $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
@@ -304,7 +304,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $work_hours = $wh * $w2Pconfig['daily_working_hours'];
                 $q->clear();
 
-                $q = new DBQuery;
+                $q = new w2p_Database_Query;
                 $q->addTable('tasks', 't');
                 $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
                 $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');

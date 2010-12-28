@@ -62,7 +62,7 @@ class w2p_Core_BaseObject
 			$this->_tbl_module = $table;
 		}
 		$this->_tbl_prefix = w2PgetConfig('dbprefix', '');
-		$this->_query = new DBQuery;
+		$this->_query = new w2p_Database_Query;
 	}
 
 	/**
@@ -153,9 +153,9 @@ class w2p_Core_BaseObject
 	}
 
 	/**
-	 *	Return a DBQuery object seeded with the table name.
+	 *	Return a w2p_Database_Query object seeded with the table name.
 	 *	@param string $alias optional alias for table queries.
-	 *	@return DBQuery object
+	 *	@return w2p_Database_Query object
 	 */
 	public function &getQuery($alias = null)
 	{
@@ -186,7 +186,7 @@ class w2p_Core_BaseObject
 		/*
 		*  PHP4 is no longer supported or allowed. The
 		*    installer/upgrader/converter simply stops executing.
-		*  This method also appears (modified) in the w2p_Utilities_Date and DBQuery class.
+		*  This method also appears (modified) in the w2p_Utilities_Date and w2p_Database_Query class.
 		*/
 
 		$_key = $this->_tbl_key;
@@ -233,12 +233,12 @@ class w2p_Core_BaseObject
 		$k = $this->_tbl_key;
 		if ($this->$k) {
 			$store_type = 'update';
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$ret = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
 			$q->clear();
 		} else {
 			$store_type = 'add';
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$ret = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
 			$q->clear();
 		}
@@ -278,7 +278,7 @@ class w2p_Core_BaseObject
 			$select = $k;
 			$join = '';
 
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable($this->_tbl);
 			$q->addWhere($k . ' = \'' . $this->$k . '\'');
 			$q->addGroup($k);
@@ -329,7 +329,7 @@ class w2p_Core_BaseObject
 			return $msg;
 		}
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete($this->_tbl);
 		$q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
 		$result = ((!$q->exec()) ? db_error() : null);

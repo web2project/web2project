@@ -12,7 +12,7 @@ $obj = new CConfig();
 
 // set all checkboxes to false
 // overwrite the true/enabled/checked checkboxes later
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('config');
 $q->addUpdate('config_value', 'false');
 $q->addWhere("config_type = 'checkbox'");

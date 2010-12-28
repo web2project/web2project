@@ -89,7 +89,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 
 	public function userExists($username) {
 		global $db;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$result = false;
 		$q->addTable('users');
 		$q->addWhere('user_username = \'' . $username . '\'');
@@ -103,7 +103,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 
 	public function userId($username) {
 		global $db;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addWhere('user_username = \'' . $username . '\'');
 		$rs = $q->exec();
@@ -134,7 +134,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 		}
 		$contact_id = ($c->contact_id == null) ? 'NULL' : $c->contact_id;
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addInsert('user_username', $username);
 		$q->addInsert('user_password', $hash_pass);

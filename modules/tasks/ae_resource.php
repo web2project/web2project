@@ -12,7 +12,7 @@ if ($task_id == 0) {
 	$assigned_perc = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));
 } else {
 	// Pull users on this task
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('user_tasks');
 	$q->addQuery('user_tasks.user_id, perc_assignment, concat_ws(\' \', contact_first_name, contact_last_name) as contact_name');
 	$q->addWhere('task_id = ' . (int)$task_id);

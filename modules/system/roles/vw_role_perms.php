@@ -135,7 +135,7 @@ foreach ($role_acls as $acl) {
 					$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
 					if (is_numeric($mod_data['name'])) {
 						$module = $pgo_list[ucfirst($key)];
-						$q = new DBQuery();
+						$q = new w2p_Database_Query();
 						$q->addTable($module['permissions_item_table']);
 						$q->addQuery($module['permissions_item_label']);
 						$q->addWhere($module['permissions_item_field'] . '=' . $mod_data['name']);

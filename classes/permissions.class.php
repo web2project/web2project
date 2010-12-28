@@ -236,7 +236,7 @@ class w2Pacl extends gacl_api {
 		$res = null;
 
 		// Fetching module-associated ACL ID's
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('gacl_axo_map');
 		$q->addQuery('acl_id');
 		$q->addWhere('value = \'' . $mod . '\'');
@@ -245,7 +245,7 @@ class w2Pacl extends gacl_api {
 
 		foreach ($acls as $acl => $k) {
 			// Deleting gacl_aco_map entries
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->setDelete('gacl_aco_map');
 			$q->addWhere('acl_id = ' . $acl);
 			if (!$q->exec()) {
@@ -254,7 +254,7 @@ class w2Pacl extends gacl_api {
 			$q->clear();
 
 			// Deleting gacl_aro_map entries
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->setDelete('gacl_aro_map');
 			$q->addWhere('acl_id = ' . $acl);
 			if (!$q->exec()) {
@@ -263,7 +263,7 @@ class w2Pacl extends gacl_api {
 			$q->clear();
 
 			// Deleting gacl_aco_map entries
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->setDelete('gacl_acl');
 			$q->addWhere('id = ' . $acl);
 			if (!$q->exec()) {
@@ -404,7 +404,7 @@ class w2Pacl extends gacl_api {
 			return false;
 		}
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($table, 'g1');
 		$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
 		$q->addOrder('g1.value');
@@ -460,7 +460,7 @@ class w2Pacl extends gacl_api {
 		// Check to see if the user ACL exists first.
 		$id = $this->get_object_id('user', $user, 'aro');
 		if (!$id) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('users');
 			$q->addQuery('user_username');
 			$q->addWhere('user_id = ' . $user);
@@ -511,7 +511,7 @@ class w2Pacl extends gacl_api {
 			return false;
 		}
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($this->_db_acl_prefix . 'aro', 'a');
 		$q->addTable($this->_db_acl_prefix . 'aro_groups', 'g1');
 		$q->addTable($this->_db_acl_prefix . 'groups_aro_map', 'g2');
@@ -537,7 +537,7 @@ class w2Pacl extends gacl_api {
 	// Returns the group of users that have a role (and therefore can login)
 	// Not provided in original phpGacl, but useful.
 	public function getUsersWithRole() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($this->_db_acl_prefix . 'groups_aro_map', 'g');
 		$q->addQuery('DISTINCT(g.aro_id)');
 
@@ -617,7 +617,7 @@ class w2Pacl extends gacl_api {
 			return false;
 		}
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($table, 'g1');
 		$q->addTable($map_table, 'g2');
 		$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
@@ -663,7 +663,7 @@ class w2Pacl extends gacl_api {
 
 		$this->debug_text("get_object(): Section Value: $section_value Object Type: $object_type");
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($table);
 		$q->addQuery('id, section_value, name, value, order_value, hidden');
 
@@ -721,7 +721,7 @@ class w2Pacl extends gacl_api {
 
 		$this->debug_text("get_objects(): Section Value: $section_value Object Type: $object_type");
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($table);
 		$q->addQuery('id, section_value, name, value, order_value, hidden');
 
@@ -773,7 +773,7 @@ class w2Pacl extends gacl_api {
 		$this->debug_text("get_objects(): Section Value: $section_value Object Type: $object_type");
 
 		// $query = 'SELECT id, value, name, order_value, hidden FROM '. $table;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($table);
 		$q->addQuery('id, value, name, order_value, hidden');
 
@@ -932,7 +932,7 @@ class w2Pacl extends gacl_api {
 		if (!$acl_id) {
 			return 'Can not remove acl permissions: no acl id given.';
 		}
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
 		$q->addWhere('acl_id = \'' . $acl_id . '\'');
 		$result = $q->exec();
@@ -950,7 +950,7 @@ class w2Pacl extends gacl_api {
 		if (!$module) {
 			return 'Can not remove modules permissions: no module name given.';
 		}
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
 		$q->addWhere('module = \'' . $module . '\'');
 		$result = $q->exec();
@@ -968,7 +968,7 @@ class w2Pacl extends gacl_api {
 		if (!$user_id) {
 			return 'Can not remove users permissions: no user given.';
 		}
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
 		$q->addWhere('user_id = \'' . $user_id . '\'');
 		$result = $q->exec();
@@ -987,7 +987,7 @@ class w2Pacl extends gacl_api {
 	 */
 	public function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $method = 1) {
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($this->_db_acl_prefix . 'aco_sections', 'a');
 		$q->addQuery('a.value AS a_value, a.name AS a_name,
 					b.value AS b_value, b.name AS b_name,
@@ -1060,13 +1060,13 @@ class w2Pacl extends gacl_api {
 		}
 
 		// Now that we have the users permissions lets delete the existing ones and insert the new ones
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
 		if ($user_id) {
 			$q->addWhere('user_id = \'' . $user_id . '\'');
 		}
 		if ($user_aro_id) {
-			$qui = new DBQuery;
+			$qui = new w2p_Database_Query;
 			$qui->addTable($this->_db_acl_prefix . 'aro');
 			$qui->addQuery('value');
 			$qui->addWhere('id = \'' . $user_aro_id . '\'');
@@ -1090,7 +1090,7 @@ class w2Pacl extends gacl_api {
 		$q->exec();
 		$q->clear();
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		foreach ($user_permissions as $user => $permissions) {
 			foreach ($permissions as $permission) {
 				//Only show permissions with acl_id and item_id when item permissions are to show
@@ -1128,7 +1128,7 @@ class w2Pacl extends gacl_api {
 	 */
 	public function w2Pacl_check($application = 'application', $op, $user = 'user', $userid, $app = 'app', $module) {
 		global $w2p_performance_acltime, $w2p_performance_aclchecks;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($this->_db_acl_prefix . 'permissions');
 		$q->addQuery('access');
 		$q->addWhere('module = \'' . $module . '\'');
@@ -1156,7 +1156,7 @@ class w2Pacl extends gacl_api {
 		}
 
 		if (!count($mod_class)) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('modules');
 			$q->addQuery('mod_main_class, permissions_item_table, permissions_item_field, permissions_item_label, mod_directory');
 			$q->addWhere('mod_directory = \'' . $module . '\'');
@@ -1246,7 +1246,7 @@ class w2Pacl extends gacl_api {
 				}
 				return array();
 			} else {
-				$q = new DBQuery;
+				$q = new w2p_Database_Query;
 				$q->addTable($this->_db_acl_prefix . 'permissions');
 				$q->addQuery('access, acl_id');
 				$q->addWhere('module = \'' . $module . '\'');
@@ -1267,7 +1267,7 @@ class w2Pacl extends gacl_api {
 
 	public function w2Psearch_acl($application = 'application', $op, $user = 'user', $userid, $module) {
 		global $w2p_performance_acltime, $w2p_performance_aclchecks;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($this->_db_acl_prefix . 'permissions');
 		$q->addQuery('acl_id, access, item_id');
 		$q->addWhere('module = \'' . $module . '\'');
@@ -1292,7 +1292,7 @@ class w2Pacl extends gacl_api {
      * searching but it does not apply any permissions of its own.  
      */
     public function registerModule($module_name, $module_value, $section_value = 'app') {
-        $q = new DBQuery();
+        $q = new w2p_Database_Query();
         $q->addTable('gacl_axo');
         $q->addInsert('name', $module_name);
         $q->addInsert('value', $module_value);
@@ -1303,7 +1303,7 @@ class w2Pacl extends gacl_api {
     }
     public function unregisterModule($module_value) {
         if ($module_value != '') {
-            $q = new DBQuery();
+            $q = new w2p_Database_Query();
             $q->setDelete('gacl_axo');
             $q->addWhere("value = '$module_value'");
             $q->exec();
@@ -1329,7 +1329,7 @@ function getReadableModule() {
 	global $AppUI;
 	$perms = &$AppUI->acl();
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('modules');
 	$q->addQuery('mod_directory');
 	$q->addWhere('mod_active = 1');
@@ -1405,7 +1405,7 @@ function getPermission($mod, $perm, $item_id = 0) {
 	// If denied we need to check if we are allowed the task.  This can be done
 	// a lot better in PHPGACL, but is here for compatibility.
 	if ($mod == 'tasks' && !$result && $item_id > 0) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('tasks');
 		$q->addQuery('task_project');
 		$q->addWhere('task_id = ' . (int)$item_id);

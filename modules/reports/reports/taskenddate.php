@@ -83,7 +83,7 @@ echo arraySelect($users, 'user_id', 'class="text"', $user_id);
 <?php
 if ($do_report) {
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('tasks', 't');
 	$q->addTable('users', 'u');
 	$q->addTable('projects', 'p');

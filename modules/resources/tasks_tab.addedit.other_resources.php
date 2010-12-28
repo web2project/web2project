@@ -10,7 +10,7 @@ global $projTasksWithEndDates, $tab, $loadFromTab;
 $resource = new CResource();
 
 $resource_types = &$resource->typeSelect();
-$q = new DBQuery();
+$q = new w2p_Database_Query();
 
 $q->addTable('resources');
 $q->addOrder('resource_type', 'resource_name');
@@ -42,7 +42,7 @@ if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
 } else {
 	$initResAssignment = '';
 	// Pull resources on this task
-	$q = new DBQuery();
+	$q = new w2p_Database_Query();
 	$q->addTable('resource_tasks');
 	$q->addQuery('resource_id, percent_allocated');
 	$q->addWhere('task_id = ' . (int)$task_id);

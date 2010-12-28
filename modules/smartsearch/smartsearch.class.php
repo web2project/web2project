@@ -82,7 +82,7 @@ class smartsearch {
 	}
 
 	public function _buildQuery() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		if ($this->table_alias) {
 			$q->addTable($this->table, $this->table_alias);

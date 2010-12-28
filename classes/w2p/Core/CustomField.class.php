@@ -43,7 +43,7 @@ class w2p_Core_CustomField {
 	public function load($object_id) {
 		// Override Load Method for List type Classes
 		global $db;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_values');
 		$q->addWhere('value_field_id = ' . $this->field_id);
 		$q->addWhere('value_object_id = ' . $object_id);
@@ -71,13 +71,13 @@ class w2p_Core_CustomField {
 			$ins_charvalue = $this->value_charvalue == null ? '' : stripslashes($this->value_charvalue);
 
 			if ($this->value_id > 0) {
-				$q = new DBQuery;
+				$q = new w2p_Database_Query;
 				$q->addTable('custom_fields_values');
 				$q->addUpdate('value_charvalue', $ins_charvalue);
 				$q->addUpdate('value_intvalue', $ins_intvalue);
 				$q->addWhere('value_id = ' . $this->value_id);
 			} else {
-				$q = new DBQuery;
+				$q = new w2p_Database_Query;
 				$q->addTable('custom_fields_values');
 				$q->addInsert('value_module', '');
 				$q->addInsert('value_field_id', $this->field_id);

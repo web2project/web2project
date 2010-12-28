@@ -220,7 +220,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('projects',     $this->obj->_tbl);
         $this->assertEquals('project_id',   $this->obj->_tbl_key);
         $this->assertEquals('',             $this->obj->_error);
-        $this->assertType('DBQuery',        $this->obj->_query);
+        $this->assertType('w2p_Database_Query',        $this->obj->_query);
     }
 
     /**
@@ -491,7 +491,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get created date to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('projects');
         $q->addQuery('project_created');
         $q->addWhere('project_id = ' . $this->obj->project_id);
@@ -501,7 +501,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated date to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('projects');
         $q->addQuery('project_updated');
         $q->addWhere('project_id = ' . $this->obj->project_id);
@@ -702,7 +702,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated date to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('projects');
         $q->addQuery('project_updated');
         $q->addWhere('project_id = ' . $this->obj->project_id);
@@ -791,7 +791,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get created dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_created');
         $q->addWhere('task_project = 4');
@@ -805,7 +805,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         /**
          * Get updated dates to test against
          */
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addQuery('task_updated');
         $q->addWhere('task_project = 4');
@@ -1594,7 +1594,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 	    $st_projects = array(0 => '');
-	    $q = new DBQuery();
+	    $q = new w2p_Database_Query();
 	    $q->addTable('projects');
 	    $q->addQuery('project_id, project_name, project_parent');
 	    $q->addOrder('project_name');
@@ -1637,7 +1637,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $st_projects_arr = array();
 
         $st_projects = array(0 => '');
-	    $q = new DBQuery();
+	    $q = new w2p_Database_Query();
 	    $q->addTable('projects');
 	    $q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
 	    $q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
@@ -1665,7 +1665,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $st_projects_arr = array();
 
         $st_projects = array(0 => '');
-	    $q = new DBQuery();
+	    $q = new w2p_Database_Query();
 	    $q->addTable('projects');
 	    $q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
 	    $q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
@@ -1707,7 +1707,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $st_projects_arr = array();
 
         $st_projects = array(0 => '');
-	    $q = new DBQuery();
+	    $q = new w2p_Database_Query();
 	    $q->addTable('projects');
 	    $q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
 	    $q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');

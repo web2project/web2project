@@ -54,7 +54,7 @@ if ($caller == 'todo') {
 	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . CContact::getContactByUserid($user_id);
 	$projects[$project_id]['project_color_identifier'] = 'ff6000';
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addQuery('t.*');
 	$q->addQuery('project_name, project_id, project_color_identifier');
 	$q->addQuery('tp.task_pinned');
@@ -87,7 +87,7 @@ if ($caller == 'todo') {
     $q->addOrder('t.task_end_date, t.task_priority DESC');
 } else {
 	// pull tasks
-	$q = new DBQuery();
+	$q = new w2p_Database_Query();
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
 		' task_duration, task_duration_type, task_priority, task_percent_complete,'.
@@ -330,7 +330,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         if ($showLabels == '1') {
-            $q = new DBQuery;
+            $q = new w2p_Database_Query;
             $q->addTable('user_tasks', 'ut');
             $q->innerJoin('users', 'u', 'u.user_id = ut.user_id');
             $q->innerJoin('contacts', 'c', 'c.contact_id = u.user_contact');
@@ -400,7 +400,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
             if ($showWork == '1') {
                 $work_hours = 0;
-                $q = new DBQuery;
+                $q = new w2p_Database_Query;
                 $q->addTable('tasks', 't');
                 $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
                 $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');

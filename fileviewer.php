@@ -111,7 +111,7 @@ if ($file_id) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('files');
 	if ($fileclass->file_project) {
 		$project->setAllowedSQL($AppUI->user_id, $q, 'file_project');

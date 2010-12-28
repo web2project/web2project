@@ -25,7 +25,7 @@ if (!$canRead) {
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('forums');
 $q->addTable('users', 'u');
 $q->addQuery('forum_id, forum_project,	forum_description, forum_owner, forum_name,

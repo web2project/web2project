@@ -49,7 +49,7 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_SQL {
 		$passwd = trim($user_data['passwd']);
 		$email = trim($user_data['email']);
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addQuery('user_id, user_password, user_contact');
 		$q->addWhere('user_username = \'' . $username . '\'');
@@ -95,7 +95,7 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_SQL {
         $c->contact_email = $email;
         $c->store();
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addInsert('user_username', $username);
 		$q->addInsert('user_password', $password);

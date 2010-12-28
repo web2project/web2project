@@ -39,7 +39,7 @@ class CRole {
 		if (!is_array($hash)) {
 			return get_class($this) . "::bind failed";
 		} else {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->bindHashToObject($hash, $this);
 			$q->clear();
 			return null;

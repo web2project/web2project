@@ -238,7 +238,7 @@ class w2p_Output_GanttRenderer {
     {
         $gantt_arr = $this->taskArray;
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('task_dependencies');
         $q->addQuery('dependencies_task_id');
         $q->addWhere('dependencies_req_task_id=' . (int) $task_id);

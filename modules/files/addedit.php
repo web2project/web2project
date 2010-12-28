@@ -35,7 +35,7 @@ $file_parent = (int) w2PgetParam($_GET, 'file_parent', 0);
 $file_project = (int) w2PgetParam($_GET, 'project_id', 0);
 $file_helpdesk_item = (int) w2PgetParam($_GET, 'file_helpdesk_item', 0);
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 
 $file = new CFile();
 $obj = $AppUI->restoreObject();

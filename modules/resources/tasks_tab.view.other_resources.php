@@ -9,7 +9,7 @@ global $AppUI, $task_id, $obj;
 
 $resource = new CResource();
 
-$q = new DBQuery();
+$q = new w2p_Database_Query();
 $q->addQuery('a.*');
 $q->addQuery('b.percent_allocated');
 $q->addQuery('c.resource_type_name');

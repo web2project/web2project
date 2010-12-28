@@ -94,7 +94,7 @@ if (function_exists('styleRenderBoxTop')) {
 $allpdfdata = array();
 function showcompany($company, $restricted = false) {
 	global $AppUI, $allpdfdata, $log_start_date, $log_end_date, $log_all;
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('projects');
 	$q->addQuery('project_id, project_name');
 	$q->addWhere('project_company = ' . (int)$company);
@@ -189,7 +189,7 @@ if ($do_report) {
 
 	$total = 0;
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	if ($fullaccess) {
 		$q->addTable('companies');
 		$q->addQuery('company_id');

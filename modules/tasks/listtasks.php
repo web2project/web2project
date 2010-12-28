@@ -10,7 +10,7 @@ if (!canView('tasks')) {
 $proj = (int) w2PgetParam($_GET, 'project', 0);
 $userFilter = w2PgetParam($_GET, 'userFilter', false);
 
-$q = new DBQuery();
+$q = new w2p_Database_Query();
 $q->addQuery('t.task_id, t.task_name');
 $q->addTable('tasks', 't');
 

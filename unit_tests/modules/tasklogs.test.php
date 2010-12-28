@@ -187,7 +187,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('task_log',     $this->obj->_tbl);
         $this->assertEquals('task_log_id',  $this->obj->_tbl_key);
         $this->assertEquals('',             $this->obj->_error);
-        $this->assertType('DBQuery',        $this->obj->_query);
+        $this->assertType('w2p_Database_Query',        $this->obj->_query);
     }
 
     /**
@@ -212,7 +212,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('task_log');
         $q->addQuery('task_log_created, task_log_updated');
         $q->addWhere('task_log_id = 2');
@@ -250,7 +250,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('task_log');
         $q->addQuery('task_log_updated');
         $q->addWhere('task_log_id = 1');

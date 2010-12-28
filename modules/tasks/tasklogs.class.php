@@ -181,7 +181,7 @@ class CTaskLog extends w2p_Core_BaseObject
 			return $errorMsgArray;
 		}
 
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$this->task_log_updated = $q->dbfnNowWithTZ();
 
 		if ($this->task_log_date) {
@@ -252,7 +252,7 @@ class CTaskLog extends w2p_Core_BaseObject
 	 */
 	private function updateHoursWorked($task_log_task)
 	{
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addQuery('SUM(task_log_hours)');
 		$q->addTable('task_log');
 		$q->addWhere('task_log_task = ' . (int)$task_log_task);
@@ -315,7 +315,7 @@ class CTaskLog extends w2p_Core_BaseObject
 	public function canDelete(&$msg, $oid = null, $joins = null)
 	{
 		global $AppUI;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 
 		// First things first.	Are we allowed to delete?
 		$acl = &$AppUI->acl();

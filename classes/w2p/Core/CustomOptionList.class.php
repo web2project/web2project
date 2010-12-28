@@ -21,7 +21,7 @@ class w2p_Core_CustomOptionList {
 	public function load() {
 		global $db;
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_lists');
 		$q->addWhere('field_id = ' . $this->field_id);
 		$q->addOrder('list_value');
@@ -46,7 +46,7 @@ class w2p_Core_CustomOptionList {
 		}
 
 		//load the dbs options and compare them with the options
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_lists');
 		$q->addWhere('field_id = ' . $this->field_id);
 		$q->addOrder('list_value');
@@ -67,13 +67,13 @@ class w2p_Core_CustomOptionList {
 		$deleteoptions = array_diff($dboptions, $this->options);
 		//insert the new options
 		foreach ($newoptions as $opt) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('custom_fields_lists');
 			$q->addQuery('MAX(list_option_id)');
 			$max_id = $q->loadResult();
 			$optid = $max_id ? $max_id + 1 : 1;
 
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('custom_fields_lists');
 			$q->addInsert('field_id', $this->field_id);
 			$q->addInsert('list_option_id', $optid);
@@ -86,7 +86,7 @@ class w2p_Core_CustomOptionList {
 		}
 		//delete the deleted options
 		foreach ($deleteoptions as $opt => $value) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->setDelete('custom_fields_lists');
 			$q->addWhere('list_option_id =' . $opt);
 
@@ -100,7 +100,7 @@ class w2p_Core_CustomOptionList {
 	}
 
 	public function delete() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete('custom_fields_lists');
 		$q->addWhere('field_id = ' . $this->field_id);
 		$q->exec();

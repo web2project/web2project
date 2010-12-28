@@ -13,7 +13,7 @@ $user_permissions = array();
 $users = w2PgetUsers();
 
 if (isset($_POST['user']) && $_POST['user'] != '') {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
 	$q->addQuery('gp.*');
 	$q->addWhere('user_id IN (' . implode(',', array_keys($users)) . ')');
@@ -51,13 +51,13 @@ $table .= '<tr><th>UserID</th><th>User</th><th>User Name</th><th>Module</th><th>
 foreach ($permissions as $permission) {
 	$item = '';
 	if ($permission['item_id']) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules');
 		$q->addQuery('permissions_item_field,permissions_item_label');
 		$q->addWhere('mod_directory = \'' . $permission['module'] . '\'');
 		$field = $q->loadHash();
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($permission['module']);
 		$q->addQuery($field['permissions_item_label']);
 		$q->addWhere($field['permissions_item_field'] . ' = \'' . $permission['item_id'] . '\'');

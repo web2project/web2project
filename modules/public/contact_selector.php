@@ -67,7 +67,7 @@ if ($contacts_submited == 1) {
 $contacts_id = remove_invalid(explode(',', $selected_contacts_id));
 $selected_contacts_id = implode(',', $contacts_id);
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 
 if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
 	$q->addTable('contacts');

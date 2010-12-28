@@ -38,7 +38,7 @@ if (!$task->canAccess($AppUI->user_id)) {
 
 $proj = new CProject();
 $proj->load($obj->task_project);
-$q = new DBQuery();
+$q = new w2p_Database_Query();
 $q->addTable('billingcode');
 $q->addQuery('billingcode_id, billingcode_name');
 $q->addWhere('billingcode_status=0');
@@ -311,7 +311,7 @@ $tt = $tl & 2;
 $tp = $tl & 4;
 
 $task_email_title = array();
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('task_contacts', 'tc');
 $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id', 'inner');
 $q->addWhere('tc.task_id = ' . (int)$task_id);

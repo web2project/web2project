@@ -40,7 +40,7 @@ class CUser extends w2p_Core_BaseObject {
 		if ($msg) {
 			return get_class($this) . '::store-check failed';
 		}
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
         
 		if ($this->user_id) {
 			// save the old password
@@ -106,7 +106,7 @@ class CUser extends w2p_Core_BaseObject {
 		$id = (int)$this->user_id;
 		//check if the user is related to anything and disallow deletion if he is.
 		//companies: is he a owner of any company?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(company_id)');
 		$q->addTable('companies');
 		$q->addWhere('company_owner = ' . $id);
@@ -116,7 +116,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Companies') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//departments: is he a owner of any department?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(dept_id)');
 		$q->addTable('departments');
 		$q->addWhere('dept_owner = ' . $id);
@@ -126,7 +126,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Departments') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//events: is he a owner of any event?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(event_id)');
 		$q->addTable('events');
 		$q->addWhere('event_owner = ' . $id);
@@ -136,7 +136,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Events') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//files: is he a owner of any file?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(file_id)');
 		$q->addTable('files');
 		$q->addWhere('file_owner = ' . $id);
@@ -146,7 +146,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Files') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//forums: is he a owner of any forum?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(forum_id)');
 		$q->addTable('forums');
 		$q->addWhere('forum_owner = ' . $id);
@@ -156,7 +156,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forums') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//forums: is he a moderator of any forum?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(forum_id)');
 		$q->addTable('forums');
 		$q->addWhere('forum_moderated = ' . $id);
@@ -166,7 +166,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forums') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Forum Moderator') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//forums: is he a message creator on any forum?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(message_id)');
 		$q->addTable('forum_messages');
 		$q->addWhere('message_author = ' . $id);
@@ -176,7 +176,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forum Messages') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Author') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//forums: is he a message creator on any forum?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(message_id)');
 		$q->addTable('forum_messages');
 		$q->addWhere('message_editor = ' . $id);
@@ -186,7 +186,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forum Messages') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Editor') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//links: is he a owner of any link?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(link_id)');
 		$q->addTable('links');
 		$q->addWhere('link_owner = ' . $id);
@@ -196,7 +196,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Links') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//projects: is he related to any project?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(project_id)');
 		$q->addTable('projects');
 		$q->addWhere('(project_owner = ' . $id . ' OR project_creator = ' . $id . ' OR project_updator = ' . $id . ')');
@@ -206,7 +206,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Projects') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner, Creator or Updator') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//tasks: is he related to any task?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(task_id)');
 		$q->addTable('tasks');
 		$q->addWhere('(task_owner = ' . $id . ' OR task_creator = ' . $id . ' OR task_updator = ' . $id . ')');
@@ -216,7 +216,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Tasks') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner, Creator or Updator') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//events: is he related to any event?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(event_id)');
 		$q->addTable('user_events');
 		$q->addWhere('user_id = ' . $id);
@@ -226,7 +226,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Events') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Attendee') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//tasks: is he related to any event?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(task_id)');
 		$q->addTable('user_tasks');
 		$q->addWhere('user_id = ' . $id);
@@ -236,7 +236,7 @@ class CUser extends w2p_Core_BaseObject {
 			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Tasks') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Assignee') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
 		}
 		//tasks: is he related to any pins?
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('count(task_id)');
 		$q->addTable('user_task_pin');
 		$q->addWhere('user_id = ' . $id);
@@ -250,7 +250,7 @@ class CUser extends w2p_Core_BaseObject {
 		if (!$result) {
 			$acl = &$GLOBALS['AppUI']->acl();
 			$acl->deleteLogin($id);
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->setDelete('user_preferences');
 			$q->addWhere('pref_user = ' . $id);
 			$q->exec();
@@ -285,7 +285,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public function loadFull($userId) {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable('users', 'u');
 		$q->addQuery('u.*');
 		$q->addQuery('uf.feed_token');
@@ -300,7 +300,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
     public function hook_cron() {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
         $q->setDelete('sessions');
         $q->addWhere("session_user ='' OR session_user IS NULL");
         $q->exec();
@@ -310,7 +310,7 @@ class CUser extends w2p_Core_BaseObject {
     }
 
 	public function validatePassword($userId, $password) {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable('users');
 		$q->addQuery('user_id');
 		$q->addWhere('user_password = \'' . md5($password) . '\'');
@@ -320,7 +320,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getUserIdByToken($token) {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addQuery('feed_user');
 		$q->addTable('user_feeds');
 		$q->addWhere("feed_token = '$token'");
@@ -330,7 +330,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
 	public static function generateUserToken($userId, $token = '') {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->setDelete('user_feeds');
 		$q->addWhere('feed_user = ' . $userId);
 		$q->addWhere("feed_token = '$token'");
@@ -349,7 +349,7 @@ class CUser extends w2p_Core_BaseObject {
 	public static function getFirstLetters() {
 		$letters = '';
 
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable('users', 'u');
 		$q->addQuery('DISTINCT SUBSTRING(user_username, 1, 1) as L');
 		$arr = $q->loadList();
@@ -361,7 +361,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
 	public static function exists($username) {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable('users', 'u');
 		$q->addQuery('user_username');
 		$q->addWhere("user_username = '$username'");
@@ -371,7 +371,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getUserDeptId($user_id) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addQuery('con.contact_department');
 		$q->addTable('users', 'u');
 		$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
@@ -383,7 +383,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getLogs($userId, $startDate, $endDate) {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable('user_access_log', 'ual');
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'c');
@@ -401,7 +401,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
 	public function getFullUserName() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('contacts', 'c');
 		$q->addQuery('c.*');
 		$q->addWhere('contact_id = ' . (int)$this->user_contact);
@@ -429,7 +429,7 @@ class CUser extends w2p_Core_BaseObject {
 	public static function getUserList() {
 		global $AppUI;
 		
-		$q = new DBQuery;  		
+		$q = new w2p_Database_Query;  		
         $q->addQuery('users.user_contact,users.user_id,co.contact_first_name,co.contact_last_name,co.contact_id');
         $q->addTable('users');
         $q->addJoin('contacts','co','co.contact_id = users.user_contact','inner');

@@ -25,7 +25,7 @@ $edit_field_id = w2PGetParam($_POST, 'field_id', null);
 
 $titleBlock->show();
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('modules');
 $q->addOrder('mod_ui_order');
 $q->addWhere('mod_name IN (\'Companies\', \'Projects\', \'Tasks\', \'Calendar\', \'Contacts\')');
@@ -40,7 +40,7 @@ foreach ($modules as $module) {
 	$s .= $AppUI->_($module['mod_name']) . '</h3>';
 	$s .= '</td></tr>';
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('custom_fields_struct');
 	$q->addWhere('field_module = \'' . strtolower($module['mod_name']) . '\'');
 	$q->addOrder('field_order ASC');

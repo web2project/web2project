@@ -241,7 +241,7 @@ class CAppUI {
 
             $timezoneOffset = $this->getPref('TIMEZONE');
 
-            $q = new DBQuery();
+            $q = new w2p_Database_Query();
             $q->addTable('sysvals');
             $q->addQuery('sysval_value');
             $q->addWhere("sysval_value_id = $timezoneOffset");
@@ -830,7 +830,7 @@ class CAppUI {
 			return false;
 		}
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addQuery('user_id, contact_first_name as user_first_name, contact_last_name as user_last_name, contact_company as user_company, contact_department as user_department, user_type');
 		$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
@@ -846,7 +846,7 @@ class CAppUI {
          * This hack was deprecated in dbVersion 26 for v2.2 in December 2010.
          */
 
-        $qTest = new DBQuery();
+        $qTest = new w2p_Database_Query();
         $qTest->addTable('w2pversion');
         $qTest->addQuery('max(db_version)');
         $dbVersion = $qTest->loadResult();
@@ -886,7 +886,7 @@ class CAppUI {
 	*@Function for regiser log in dotprojet table "user_access_log"
 	*/
 	public function registerLogin() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('user_access_log');
 		$q->addInsert('user_id', '' . $this->user_id);
 		$q->addInsert('date_time_in', "'".$q->dbfnNowWithTZ()."'", false, true);
@@ -900,7 +900,7 @@ class CAppUI {
 	 *@Function for register log out in web2project table "user_acces_log"
 	 */
 	public function registerLogout($user_id) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_out', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addWhere('user_id = ' . (int)$user_id . ' AND (date_time_out = \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
@@ -914,7 +914,7 @@ class CAppUI {
 	 *@Function for update table user_acces_log in field date_time_lost_action
 	 */
 	public function updateLastAction($last_insert_id) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('user_access_log');
 		$q->addUpdate('date_time_last_action', "'".$q->dbfnNowWithTZ()."'", false, true);
 		$q->addWhere('user_access_log_id = ' . $last_insert_id);
@@ -960,7 +960,7 @@ class CAppUI {
 	 * @param int User id number
 	 */
 	public function loadPrefs($uid = 0) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('user_preferences');
 		$q->addQuery('pref_name, pref_value');
 		$q->addWhere('pref_user = ' . (int)$uid);
@@ -987,7 +987,7 @@ class CAppUI {
 	 * @return array Named array list in the form 'module directory'=>'module name'
 	 */
 	public function getInstalledModules() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name');
 		$q->addOrder('mod_directory');
@@ -998,7 +998,7 @@ class CAppUI {
 	 * @return array Named array list in the form 'module directory'=>'module name'
 	 */
 	public function getActiveModules() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name');
 		$q->addWhere('mod_active = 1');
@@ -1012,7 +1012,7 @@ class CAppUI {
 	 * ['module directory', 'module name', 'module_icon']
 	 */
 	public function getMenuModules() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory, mod_ui_name, mod_ui_icon');
 		$q->addWhere("mod_active > 0 AND mod_ui_active > 0 AND mod_directory <> 'public'");
@@ -1026,7 +1026,7 @@ class CAppUI {
 	 * @return array Named array list in the form 'module directory'=>'module name'
 	 */
 	public function getLoadableModuleList() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules', 'm');
 		$q->addQuery('mod_directory, mod_main_class, mod_version');
 		$q->addWhere('mod_active = 1');
@@ -1036,7 +1036,7 @@ class CAppUI {
 	}
 
 	public function getPermissionableModuleList() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules', 'm');
 		$q->addQuery('mod_id, mod_name, permissions_item_table, permissions_item_field, permissions_item_label');
 		$q->addWhere('permissions_item_table is not null');
@@ -1045,7 +1045,7 @@ class CAppUI {
 	}
 
 	public function isActiveModule($module) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules');
 		$q->addQuery('mod_active');
 		$q->addWhere("mod_directory = '$module'");

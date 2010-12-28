@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // Output the PDF
 // make the PDF file
 if ($project_id != 0) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('projects');
 	$q->addQuery('project_name');
 	$q->addWhere('project_id=' . (int)$project_id);
@@ -66,7 +66,7 @@ if ($hasResources) {
 $columns[] = '<b>' . $AppUI->_('Finish Date') . '</b>';
 
 // Grab the completed items in the last week
-$q = new DBQuery();
+$q = new w2p_Database_Query();
 $q->addQuery('a.*');
 $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS user_username');
 $q->addTable('tasks', 'a');

@@ -15,7 +15,7 @@ $orderby = $AppUI->getState('ForumVwOrderBy') ? $AppUI->getState('ForumVwOrderBy
 $orderdir = $AppUI->getState('ForumVwOrderDir') ? $AppUI->getState('ForumVwOrderDir') : 'desc';
 
 //Pull All Messages
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('forum_messages', 'fm1');
 $q->addQuery('fm1.*');
 $q->addQuery('COUNT(distinct fm2.message_id) AS replies');

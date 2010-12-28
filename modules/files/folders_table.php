@@ -46,7 +46,7 @@ $file_types = w2PgetSysVal('FileType');
 $folder = $folder ? $folder : 0;
 
 // SQL text for count the total recs from the selected option
-$q = new DBQuery();
+$q = new w2p_Database_Query();
 $q->addTable('files');
 $q->addQuery('count(files.file_id)');
 $q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -183,7 +183,7 @@ function getFolders($parent, $level = 0) {
 	$folder_where = 'file_folder_parent = \'' . $parent . '\'';
 	//   $folder_where .= (count($denied_folders_ary) > 0) ? "\nAND file_folder_id NOT IN (" . implode(',', $denied_folders_ary) . ")" : "";
 
-	$q = new DBQuery();
+	$q = new w2p_Database_Query();
 	$q->addTable('file_folders');
 	$q->addQuery('*');
 	$q->addWhere($folder_where);
@@ -247,7 +247,7 @@ function countFiles($folder) {
 	global $AppUI, $company_id, $allowed_companies, $tab;
 	global $deny1, $deny2, $project_id, $task_id, $showProject, $file_types;
 
-	$q = new DBQuery();
+	$q = new w2p_Database_Query();
 	$q->addTable('files');
 	$q->addQuery('count(files.file_id)', 'file_in_folder');
 	$q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -289,7 +289,7 @@ function displayFiles($folder) {
 	$tf = $AppUI->getPref('TIMEFORMAT');
 
 	// SETUP FOR FILE LIST
-	$q = new DBQuery();
+	$q = new w2p_Database_Query();
 	$q->addTable('files');
 	$q->addQuery('files.*,count(file_version) as file_versions,round(max(file_version), 2) as file_lastversion,file_folder_id, file_folder_name,project_name, project_color_identifier,contact_first_name, contact_last_name,task_name,task_id');
 	$q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -326,7 +326,7 @@ function displayFiles($folder) {
 
 	$q->setLimit($xpg_pagesize, $xpg_min);
 
-	$qv = new DBQuery();
+	$qv = new w2p_Database_Query();
 	$qv->addTable('files');
 	$qv->addQuery('files.file_id, file_version, file_project, file_name, file_task, file_description, user_username as file_owner, file_size, file_category, file_type, file_date, file_folder_name, file_co_reason, contact_first_name, contact_last_name');
 	$qv->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -481,7 +481,7 @@ function displayFiles($folder) {
 							if ($file_row['file_checkout'] == 'final') {
 								$hidden_table .= 'final';
 							} else {
-								$q4 = new DBQuery;
+								$q4 = new w2p_Database_Query;
 								$q4->addQuery('file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name');
 								$q4->addTable('files');
 								$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
@@ -528,7 +528,7 @@ function displayFiles($folder) {
 			if ($file['file_checkout'] == 'final') {
 				$s .= 'final';
 			} else {
-				$q4 = new DBQuery;
+				$q4 = new w2p_Database_Query;
 				$q4->addQuery('file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name');
 				$q4->addTable('files');
 				$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');

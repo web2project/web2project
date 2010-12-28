@@ -103,7 +103,7 @@ if ($do_report) {
 	// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
 	$working_hours = $w2Pconfig['daily_working_hours'];
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('tasks', 't');
 	$q->addTable('user_tasks', 'ut');
 	$q->addJoin('projects', '', 'project_id = task_project', 'inner');
