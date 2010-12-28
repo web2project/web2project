@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- contacts.xml - Seed data for contacts test. -->
+<dataset>
+    <table name="contacts">
+        <column>contact_id</column>
+        <column>contact_first_name</column>
+        <column>contact_last_name</column>
+        <column>contact_display_name</column>
+        <column>contact_order_by</column>
+        <column>contact_title</column>
+        <column>contact_birthday</column>
+        <column>contact_company</column>
+        <column>contact_department</column>
+        <column>contact_type</column>
+        <column>contact_email</column>
+        <column>contact_phone</column>
+        <column>contact_address1</column>
+        <column>contact_address2</column>
+        <column>contact_city</column>
+        <column>contact_state</column>
+        <column>contact_zip</column>
+        <column>contact_country</column>
+        <column>contact_notes</column>
+        <column>contact_project</column>
+        <column>contact_icon</column>
+        <column>contact_owner</column>
+        <column>contact_private</column>
+        <column>contact_job</column>
+        <column>contact_updatekey</column>
+        <column>contact_lastupdate</column>
+        <column>contact_updateasked</column>
+        <row>
+            <value>1</value>
+            <value>Firstname1</value>
+            <value>Lastname1</value>
+            <value>Firstname1 Lastname1</value>
+            <value>deprecated</value>
+            <value>Your Highness</value>
+            <value>2001-01-01</value>
+            <value>0</value>
+            <value>0</value>
+            <value>1</value>
+            <value>firstname1@example.org</value>
+            <value>703-555-1212</value>
+            <value>123 Fake Street</value>
+            <value>Apartment #2</value>
+            <value>Arlington</value>
+            <value>Virginia</value>
+            <value>22204</value>
+            <value>United States</value>
+            <value>no interesting notes</value>
+            <value>0</value>
+            <value>obj/contact</value>
+            <value>1</value>
+            <value>0</value>
+            <value>King</value>
+            <value>ASDFASDFASDF</value>
+            <value>2010-01-01</value>
+            <value>2010-10-01</value>
+        </row>
+    </table>
+    <table name="contacts_methods">
+        <column>method_id</column>
+        <column>contact_id</column>
+        <column>method_name</column>
+        <column>method_value</column>
+    </table>
+</dataset>
