@@ -1,5 +1,6 @@
--- This sets a few default values for pagination and admin email. These
---   resolve a pair of requests/issues for v2.2
+-- This prepares the system for better update checking, etc with the main
+--   web2project.net site. The previous checker made multiple requests in the
+--   same hour each week instead of a unique request each week.
 
 DELETE FROM `config` WHERE `config_name` LIKE 'system_update%';
 
@@ -10,3 +11,8 @@ INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_typ
 
 DELETE FROM `config` WHERE `config_name` IN ('calendar', 'jpLocale',
     'projects', 'system', 'tasks');
+
+ALTER TABLE `contacts` ADD `contact_display_name` VARCHAR( 100 )
+    NOT NULL AFTER `contact_last_name`;
+
+UPDATE contacts SET contact_display_name = contact_order_by;
