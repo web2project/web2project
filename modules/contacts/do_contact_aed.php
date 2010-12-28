@@ -4,13 +4,12 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
-$obj = new CContact();
 
+$obj = new CContact();
 if (!$obj->bind($_POST)) {
     $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
     $AppUI->redirect();
 }
-$perms = &$AppUI->acl();
 
 $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
@@ -31,9 +30,7 @@ if ($result) {
 			$obj->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
 			$obj->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
 			$obj->contact_lastupdate = '';
-			$obj->updateNotify();
-		} elseif (!($notifyasked && $updatekey)) {
-			$obj->contact_updatekey = '';
+			$obj->notify();
 		}
     }
 

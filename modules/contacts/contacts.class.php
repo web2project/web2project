@@ -320,8 +320,8 @@ class CContact extends w2p_Core_BaseObject {
 		$this->store($AppUI);
 	}
 
-	public function updateNotify() {
-		global $AppUI, $w2Pconfig, $locale_char_set;
+    public function notify() {
+        global $AppUI, $w2Pconfig, $locale_char_set;
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
@@ -340,6 +340,11 @@ class CContact extends w2p_Core_BaseObject {
 			$mail->Send();
 		}
 		return '';
+    }
+
+	public function updateNotify() {
+        //trigger_error("updateNotify has been deprecated and will be removed in v4.0. Please use notify() instead.", E_USER_NOTICE );
+        return $this->notify();
 	}
 
 	/**
