@@ -23,12 +23,12 @@ $bulk_task_start_date                = w2PgetParam($_POST, 'add_task_bulk_start_
 $bulk_task_allow_other_user_tasklogs = w2PgetParam($_POST, 'bulk_task_allow_other_user_tasklogs', '');
 
 if ($bulk_task_start_date) {
-	$start_date = new CDate($bulk_task_start_date);
+	$start_date = new w2p_Utilities_Date($bulk_task_start_date);
 	$bulk_start_date = $start_date->format(FMT_DATETIME_MYSQL);
 }
 $bulk_task_end_date = w2PgetParam($_POST, 'add_task_bulk_end_date', '');
 if ($bulk_task_end_date) {
-	$end_date = new CDate($bulk_task_end_date);
+	$end_date = new w2p_Utilities_Date($bulk_task_end_date);
 	$bulk_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 }
 $bulk_move_date = (int) w2PgetParam($_POST, 'bulk_move_date', '0');
@@ -72,10 +72,10 @@ if (is_array($selected) && count($selected)) {
 		if (isset($_POST['bulk_move_date']) && $bulk_move_date != '' && $bulk_move_date) {
 			if ($upd_task->task_id && ((int) $upd_task->task_dynamic != 1 && !$upd_task->getDependencies($upd_task->task_id))) {
 				$offSet = $bulk_move_date;
-				$start_date = new CDate($upd_task->task_start_date);
+				$start_date = new w2p_Utilities_Date($upd_task->task_start_date);
 				$start_date->addDays($offSet);
 				$upd_task->task_start_date = $start_date->format(FMT_DATETIME_MYSQL);
-				$end_date = new CDate($upd_task->task_end_date);
+				$end_date = new w2p_Utilities_Date($upd_task->task_end_date);
 				$end_date->addDays($offSet);
 				$upd_task->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 				$result = $upd_task->store($AppUI);
@@ -288,7 +288,7 @@ if (is_array($selected) && count($selected)) {
 					$upd_task->task_percent_complete = 100;
 					if (!$upd_task->task_end_date || $upd_task->task_end_date == '0000-00-00 00:00:00') {
 						$end_date = null;
-						$end_date = new CDate();
+						$end_date = new w2p_Utilities_Date();
 						$upd_task->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 					}
 					$result = $upd_task->store($AppUI);

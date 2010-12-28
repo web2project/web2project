@@ -396,6 +396,7 @@ if (!$suppressHeaders) {
 		print ('		<p>Server Protocol | Gateway Interface: ' . safe_get_env('SERVER_PROTOCOL') . ' | ' . safe_get_env('GATEWAY_INTERFACE') . '</p>');
 		print ('		<p>Client Browser: ' . safe_get_env('HTTP_USER_AGENT') . '</p>');
 		print ('		<p>URL Query: ' . safe_get_env('QUERY_STRING') . '</p>');
+<<<<<<< HEAD
         if (file_exists($module_file)) {
             $script_handle = fopen($module_file, "r");
             if ($script_handle) {
@@ -406,6 +407,18 @@ if (!$suppressHeaders) {
             print ('		<p>File Version ' . $script_first_line . '</p>');
         }
 		$right_now_is = new CDate();
+=======
+    if (file_exists($module_file)) {
+  		$script_handle = fopen($module_file, "r");
+  		if ($script_handle) {
+  			$script_first_line = fgets($script_handle, 4096);
+  			fclose($script_handle);
+  		}
+  		$script_first_line = substr(trim($script_first_line), 10, -4);
+  		print ('		<p>File Version ' . $script_first_line . '</p>');
+    }
+		$right_now_is = new w2p_Utilities_Date();
+>>>>>>> removed all references to the old cdate in favor of w2p_Utilities_Date
 		print ('		<p>Server Time | Timezone: ' . $right_now_is->format(FMT_DATERFC822) . ' | ' . date('T') . '</p>');
 		print ('		<p>PHP Max. Execution Time: ' . ini_get('max_execution_time') . ' seconds</p>');
 		print ('		<p>Memory Limit: ' . (ini_get('memory_limit') ? str_replace('M', ' Mb', ini_get('memory_limit')) : 'Not Defined') . '</p>');

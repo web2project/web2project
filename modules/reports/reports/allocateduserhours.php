@@ -14,8 +14,8 @@ $use_assigned_percentage = w2PgetParam($_POST, 'use_assigned_percentage', 0);
 $user_id = w2PgetParam($_POST, 'user_id', $AppUI->user_id);
 
 // create Date objects from the datetime fields
-$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate(date('Y-m-01'));
-$end_date = intval($log_end_date) ? new CDate($log_end_date) : new CDate();
+$start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date(date('Y-m-01'));
+$end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 $end_date->setTime(23, 59, 59);
 ?>
@@ -193,8 +193,8 @@ if ($do_report) {
 		echo '<p>' . $AppUI->_('No data available') . '</p>';
 	} else {
 		foreach ($task_list as $task) {
-			$task_start_date = new CDate($task->task_start_date);
-			$task_end_date = new CDate($task->task_end_date);
+			$task_start_date = new w2p_Utilities_Date($task->task_start_date);
+			$task_end_date = new w2p_Utilities_Date($task->task_end_date);
 
 			$day_difference = $task_end_date->dateDiff($task_start_date);
 			$actual_date = $task_start_date;
@@ -267,10 +267,10 @@ function userUsageWeeks() {
 	global $task_start_date, $task_end_date, $day_difference, $hours_added, $actual_date, $users, $user_data, $user_usage, $use_assigned_percentage, $user_tasks_counted_in, $task, $start_date, $end_date;
 
 	$task_duration_per_week = $task->getTaskDurationPerWeek($use_assigned_percentage);
-	$ted = new CDate(Date_Calc::endOfWeek($task_end_date->day, $task_end_date->month, $task_end_date->year));
-	$tsd = new CDate(Date_Calc::beginOfWeek($task_start_date->day, $task_start_date->month, $task_start_date->year));
-	$ed = new CDate(Date_Calc::endOfWeek($end_date->day, $end_date->month, $end_date->year));
-	$sd = new CDate(Date_Calc::beginOfWeek($start_date->day, $start_date->month, $start_date->year));
+	$ted = new w2p_Utilities_Date(Date_Calc::endOfWeek($task_end_date->day, $task_end_date->month, $task_end_date->year));
+	$tsd = new w2p_Utilities_Date(Date_Calc::beginOfWeek($task_start_date->day, $task_start_date->month, $task_start_date->year));
+	$ed = new w2p_Utilities_Date(Date_Calc::endOfWeek($end_date->day, $end_date->month, $end_date->year));
+	$sd = new w2p_Utilities_Date(Date_Calc::beginOfWeek($start_date->day, $start_date->month, $start_date->year));
 
 	$week_difference = $end_date->workingDaysInSpan($start_date) / count(explode(',', w2PgetConfig('cal_working_days')));
 
@@ -319,8 +319,8 @@ function showWeeks() {
 	$working_days_count = 0;
 	$allocated_hours_sum = 0;
 
-	$ed = new CDate(Date_Calc::endOfWeek($end_date->day, $end_date->month, $end_date->year));
-	$sd = new CDate(Date_Calc::beginOfWeek($start_date->day, $start_date->month, $start_date->year));
+	$ed = new w2p_Utilities_Date(Date_Calc::endOfWeek($end_date->day, $end_date->month, $end_date->year));
+	$sd = new w2p_Utilities_Date(Date_Calc::beginOfWeek($start_date->day, $start_date->month, $start_date->year));
 
 	$week_difference = ceil($ed->workingDaysInSpan($sd) / count(explode(',', w2PgetConfig('cal_working_days'))));
 

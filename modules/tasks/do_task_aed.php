@@ -50,7 +50,7 @@ if ($sub_form) {
 	$task_end_date = null;
 	if ($task_id) {
 		$obj->load($task_id);
-		$task_end_date = new CDate($obj->task_end_date);
+		$task_end_date = new w2p_Utilities_Date($obj->task_end_date);
 	}
 
 	if (!$obj->bind($_POST)) {
@@ -104,7 +104,7 @@ if ($sub_form) {
 
 	// convert dates to SQL format first
 	if ($obj->task_start_date) {
-		$date = new CDate($obj->task_start_date);
+		$date = new w2p_Utilities_Date($obj->task_start_date);
 		$obj->task_start_date = $date->format(FMT_DATETIME_MYSQL);
 	}
 	$end_date = null;
@@ -112,7 +112,7 @@ if ($sub_form) {
 		if (strpos($obj->task_end_date, '2400') !== false) {
 			$obj->task_end_date = str_replace('2400', '2359', $obj->task_end_date);
 		}
-		$end_date = new CDate($obj->task_end_date);
+		$end_date = new w2p_Utilities_Date($obj->task_end_date);
 		$obj->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 	}
 
@@ -165,8 +165,8 @@ if ($sub_form) {
           // there are dependencies set!
 
           // backup initial start and end dates
-          $tsd = new CDate($obj->task_start_date);
-          $ted = new CDate($obj->task_end_date);
+          $tsd = new w2p_Utilities_Date($obj->task_start_date);
+          $ted = new w2p_Utilities_Date($obj->task_end_date);
 
           // updating the table recording the
           // dependency relations with this task
@@ -181,13 +181,13 @@ if ($sub_form) {
             $tempTask->load($obj->task_id);
 
             // shift new start date to the last dependency end date
-            $nsd = new CDate($tempTask->get_deps_max_end_date($tempTask));
+            $nsd = new w2p_Utilities_Date($tempTask->get_deps_max_end_date($tempTask));
 
             // prefer Wed 8:00 over Tue 16:00 as start date
             $nsd = $nsd->next_working_day();
 
             // prepare the creation of the end date
-            $ned = new CDate();
+            $ned = new w2p_Utilities_Date();
             $ned->copy($nsd);
 
             if (empty($obj->task_start_date)) {

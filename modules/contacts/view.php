@@ -58,8 +58,8 @@ if ($canDelete && $contact_id) {
 }
 $titleBlock->show();
 
-$last_ask = new CDate($contact->contact_updateasked);
-$lastupdated = new CDate($contact->contact_lastupdate);
+$last_ask = new w2p_Utilities_Date($contact->contact_updateasked);
+$lastupdated = new w2p_Utilities_Date($contact->contact_lastupdate);
 
 ?>
 <form name="changecontact" action="?m=contacts" method="post" accept-charset="utf-8">

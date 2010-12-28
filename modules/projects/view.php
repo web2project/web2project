@@ -52,9 +52,9 @@ $total_project_hours = $total_hours = $project->getTotalProjectHours();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 // create Date objects from the datetime fields
-$start_date = intval($project->project_start_date) ? new CDate($project->project_start_date) : null;
-$end_date = intval($project->project_end_date) ? new CDate($project->project_end_date) : null;
-$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new CDate($criticalTasks[0]['task_end_date']) : null;
+$start_date = intval($project->project_start_date) ? new w2p_Utilities_Date($project->project_start_date) : null;
+$end_date = intval($project->project_end_date) ? new w2p_Utilities_Date($project->project_end_date) : null;
+$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block

@@ -139,7 +139,7 @@ class CFile extends w2p_Core_BaseObject {
 			}
 			$task_log->task_log_description = $this->file_description;
 			$task_log->task_log_creator = $AppUI->user_id;
-			$date = new CDate();
+			$date = new w2p_Utilities_Date();
 			$task_log->task_log_date = $date->format(FMT_DATETIME_MYSQL);
 			if ($msg = $task_log->store()) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR);

@@ -25,7 +25,7 @@ $company_id = $AppUI->getState('CalIdxCompany', 0);
 $event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');
 
 // get the passed timestamp (today if none)
-$ctoday = new CDate();
+$ctoday = new w2p_Utilities_Date();
 $today = $ctoday->format(FMT_TIMESTAMP_DATE);
 $date = w2PgetParam($_GET, 'date', $today);
 
@@ -59,12 +59,12 @@ function clickWeek( uts, fdate ) {
 <table cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td>
 <?php
 // establish the focus 'date'
-$date = new CDate($date);
+$date = new w2p_Utilities_Date($date);
 
 // prepare time period for 'events'
 // "go back" to the first day shown on the calendar
 // and "go forward" to the last day shown on the calendar
-$first_time = new CDate($date);
+$first_time = new w2p_Utilities_Date($date);
 $first_time->setDay(1);
 $first_time->setTime(0, 0, 0);
 
@@ -83,7 +83,7 @@ if($first_time->getDayOfWeek() != 0) {
     $first_time->setYear($last_day_of_previous_month->getYear());
 }
 
-$last_time = new CDate($date);
+$last_time = new w2p_Utilities_Date($date);
 $last_time->setDay($date->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
 
@@ -143,10 +143,10 @@ $minical->showWeek = false;
 $minical->clickMonth = true;
 $minical->setLinkFunctions('clickDay');
 
-$first_time = new CDate($cal->prev_month);
+$first_time = new w2p_Utilities_Date($cal->prev_month);
 $first_time->setDay(1);
 $first_time->setTime(0, 0, 0);
-$last_time = new CDate($cal->prev_month);
+$last_time = new w2p_Utilities_Date($cal->prev_month);
 $last_time->setDay($cal->prev_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
 $links = array();
@@ -159,10 +159,10 @@ echo '<td valign="top" align="center" width="220">' . $minical->show() . '</td>'
 echo '<td valign="top" align="center" width="75%">&nbsp;</td>';
 
 $minical->setDate($cal->next_month);
-$first_time = new CDate($cal->next_month);
+$first_time = new w2p_Utilities_Date($cal->next_month);
 $first_time->setDay(1);
 $first_time->setTime(0, 0, 0);
-$last_time = new CDate($cal->next_month);
+$last_time = new w2p_Utilities_Date($cal->next_month);
 $last_time->setDay($cal->next_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
 $links = array();

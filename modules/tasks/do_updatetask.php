@@ -31,11 +31,11 @@ if ($result) {
     if ($canEditTask) {
         $task->htmlDecode();
         $task->check();
-        $task_end_date = new CDate($task->task_end_date);
+        $task_end_date = new w2p_Utilities_Date($task->task_end_date);
         $task->task_percent_complete = w2PgetParam($_POST, 'task_percent_complete', null);
 
         if (w2PgetParam($_POST, 'task_end_date', '') != '') {
-            $new_date = new CDate($_POST['task_end_date']);
+            $new_date = new w2p_Utilities_Date($_POST['task_end_date']);
             $new_date->setTime($task_end_date->hour, $task_end_date->minute, $task_end_date->second);
             $task->task_end_date = $new_date->format(FMT_DATETIME_MYSQL);
         }
@@ -49,7 +49,7 @@ if ($result) {
             $AppUI->setMsg($msg, UI_MSG_ERROR, true);
         }
 
-        $new_task_end = new CDate($task->task_end_date);
+        $new_task_end = new w2p_Utilities_Date($task->task_end_date);
         if ($new_task_end->dateDiff($task_end_date)) {
             $task->addReminder();
         }

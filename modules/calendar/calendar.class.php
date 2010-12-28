@@ -110,28 +110,28 @@ class CMonthCalendar {
 	public function setDate($date = null) {
 		global $AppUI;
 
-        $this->this_month = new CDate($date);
+        $this->this_month = new w2p_Utilities_Date($date);
 
 		$d = $this->this_month->getDay();
 		$m = $this->this_month->getMonth();
 		$y = $this->this_month->getYear();
 
-		$this->prev_year = new CDate($date);
+		$this->prev_year = new w2p_Utilities_Date($date);
 		$this->prev_year->setYear($this->prev_year->getYear() - 1);
 
-		$this->next_year = new CDate($date);
+		$this->next_year = new w2p_Utilities_Date($date);
 		$this->next_year->setYear($this->next_year->getYear() + 1);
 
 		setlocale(LC_TIME, 'en');
 		$date = Date_Calc::beginOfPrevMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
 		setlocale(LC_ALL, $AppUI->user_lang);
 
-		$this->prev_month = new CDate($date);
+		$this->prev_month = new w2p_Utilities_Date($date);
 
 		setlocale(LC_TIME, 'en');
 		$date = Date_Calc::beginOfNextMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
 		setlocale(LC_ALL, $AppUI->user_lang);
-		$this->next_month = new CDate($date);
+		$this->next_month = new w2p_Utilities_Date($date);
 
 	}
 
@@ -289,7 +289,7 @@ class CMonthCalendar {
 	 */
 	private function _drawMain() {
 		global $AppUI;
-		$today = new CDate();
+		$today = new w2p_Utilities_Date();
 		$today = $today->format('%Y%m%d%w');
 
 		$date = $this->this_month;
@@ -314,7 +314,7 @@ class CMonthCalendar {
 			}
 
 			foreach ($week as $day) {
-				$this_day = new CDate($day);
+				$this_day = new w2p_Utilities_Date($day);
 				$y = intval(substr($day, 0, 4));
 				$m = intval(substr($day, 4, 2));
 				$d = intval(substr($day, 6, 2));
@@ -475,8 +475,8 @@ class CEvent extends w2p_Core_BaseObject {
 		//so that the event starts recurring from the start day onwards n times after the start date for the period given
 		//Meaning: The event end date day is useless as far as recurring events are concerned.
 		if ($this->event_recurs) {
-			$start_date = new CDate($this->event_start_date);
-			$end_date = new CDate($this->event_end_date);
+			$start_date = new w2p_Utilities_Date($this->event_start_date);
+			$end_date = new w2p_Utilities_Date($this->event_end_date);
 			$hour = $end_date->getHour();
 			$minute = $end_date->getMinute();
 			$end_date->setDate($start_date->getDate());
@@ -544,8 +544,8 @@ class CEvent extends w2p_Core_BaseObject {
 		$transferredEvent = array();
 
 		//create Date Objects for Event Start and Event End
-		$eventStart = new CDate($event_start_date);
-		$eventEnd = new CDate($event_end_date);
+		$eventStart = new w2p_Utilities_Date($event_start_date);
+		$eventEnd = new w2p_Utilities_Date($event_end_date);
 
 		//Time of Recurence = 0 (first occurence of event) has to be checked, too.
 		if ($j > 0) {
@@ -811,8 +811,8 @@ class CEvent extends w2p_Core_BaseObject {
 		$time_format = $AppUI->getPref('TIMEFORMAT');
 		$fmt = $date_format . ' ' . $time_format;
 
-		$start_date = new CDate($this->event_start_date);
-		$end_date = new CDate($this->event_end_date);
+		$start_date = new w2p_Utilities_Date($this->event_start_date);
+		$end_date = new w2p_Utilities_Date($this->event_end_date);
 
 		$mail = new Mail();
 		$type = $update ? $AppUI->_('Updated') : $AppUI->_('New');
@@ -886,8 +886,8 @@ class CEvent extends w2p_Core_BaseObject {
 			return false;
 		}
 
-		$start_date = new CDate($this->event_start_date);
-		$end_date = new CDate($this->event_end_date);
+		$start_date = new w2p_Utilities_Date($this->event_start_date);
+		$end_date = new w2p_Utilities_Date($this->event_end_date);
 
 		// Now build a query to find matching events.
 		$q = new DBQuery;

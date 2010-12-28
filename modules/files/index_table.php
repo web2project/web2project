@@ -187,12 +187,12 @@ function expand(id){
 </tr>
 <?php
 $fp = -1;
-$file_date = new CDate();
+$file_date = new w2p_Utilities_Date();
 
 $id = 0;
 foreach ($files as $file_row) {
 	$latest_file = $file_versions[$file_row['latest_id']];
-	$file_date = new CDate($latest_file['file_date']);
+	$file_date = new w2p_Utilities_Date($latest_file['file_date']);
 
 	if ($fp != $latest_file['file_project']) {
 		if (!$latest_file['file_project']) {

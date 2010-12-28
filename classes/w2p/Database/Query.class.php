@@ -1686,7 +1686,7 @@ class w2p_Database_Query {
         /*
         *  PHP4 is no longer supported or allowed. The
         *    installer/upgrader/converter simply stops executing.
-        *  This method also appears in the CDate and w2p_Core_BaseObject (modified) class.
+        *  This method also appears in the w2p_Utilities_Date and w2p_Core_BaseObject (modified) class.
         */
 		return clone ($this);
 	}

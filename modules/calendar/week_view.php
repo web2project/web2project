@@ -26,19 +26,19 @@ $event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'e
 $date = w2PgetParam($_GET, 'date', null);
 
 // establish the focus 'date'
-$this_week = new CDate($date);
+$this_week = new w2p_Utilities_Date($date);
 $dd = $this_week->getDay();
 $mm = $this_week->getMonth();
 $yy = $this_week->getYear();
 
 // prepare time period for 'events'
-$first_time = new CDate(Date_calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$first_time = new w2p_Utilities_Date(Date_calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $first_time->setTime(0, 0, 0);
-$last_time = new CDate(Date_calc::endOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$last_time = new w2p_Utilities_Date(Date_calc::endOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $last_time->setTime(23, 59, 59);
 
-$prev_week = new CDate(Date_calc::beginOfPrevWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
-$next_week = new CDate(Date_calc::beginOfNextWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$prev_week = new w2p_Utilities_Date(Date_calc::beginOfPrevWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$next_week = new w2p_Utilities_Date(Date_calc::beginOfNextWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 
 $links = array();
 
@@ -101,7 +101,7 @@ $titleBlock->show();
 $column = 0;
 $show_day = $this_week;
 
-$today = new CDate();
+$today = new w2p_Utilities_Date();
 $today = $today->format(FMT_TIMESTAMP_DATE);
 
 $s = '';

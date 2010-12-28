@@ -135,7 +135,7 @@ if (!$user) {
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Birthday'); ?>:</td>
                 <td class="hilite" width="100%">
                     <?php
-                    $bday = new CDate($user->contact_birthday);
+                    $bday = new w2p_Utilities_Date($user->contact_birthday);
                     $df = $AppUI->getPref('SHDATEFORMAT');
                     echo $bday->format($df);
                     ?>

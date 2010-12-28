@@ -158,17 +158,17 @@ if (function_exists('styleRenderBoxTop')) {
 															echo '<a href="" onclick="	window.open(\'./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=' . $carr[$z][$x]['contact_id'] . '\', \'selector\', \'left=50,top=50,height=250,width=400,resizable\');return false;">' . w2PshowImage('projects.png', '', '', $m, 'click to view projects associated with this contact') . '</a>';
 														}
 														if ($carr[$z][$x]['contact_updateasked'] && (!$carr[$z][$x]['contact_lastupdate'] || $carr[$z][$x]['contact_lastupdate'] == 0) && $carr[$z][$x]['contact_updatekey']) {
-															$last_ask = new CDate($carr[$z][$x]['contact_updateasked']);
+															$last_ask = new w2p_Utilities_Date($carr[$z][$x]['contact_updateasked']);
 															$df = $AppUI->getPref('SHDATEFORMAT');
 															$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 															echo w2PshowImage('log-info.gif', null, null, 'info', 'Waiting for Contact Update Information. (Asked on: ' . $last_ask->format($df) . ')');
 														} elseif ($carr[$z][$x]['contact_updateasked'] && (!$carr[$z][$x]['contact_lastupdate'] || $carr[$z][$x]['contact_lastupdate'] == 0) && !$carr[$z][$x]['contact_updatekey']) {
-															$last_ask = new CDate($carr[$z][$x]['contact_updateasked']);
+															$last_ask = new w2p_Utilities_Date($carr[$z][$x]['contact_updateasked']);
 															$df = $AppUI->getPref('SHDATEFORMAT');
 															$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 															echo w2PshowImage('log-error.gif', null, null, 'info', 'Waiting for too long! (Asked on ' . $last_ask->format($df) . ')');
 														} elseif ($carr[$z][$x]['contact_lastupdate'] && !$carr[$z][$x]['contact_updatekey']) {
-															$last_ask = new CDate($carr[$z][$x]['contact_lastupdate']);
+															$last_ask = new w2p_Utilities_Date($carr[$z][$x]['contact_lastupdate']);
 															$df = $AppUI->getPref('SHDATEFORMAT');
 															$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 															echo w2PshowImage('log-notice.gif', null, null, 'info', 'Update sucessfully done on: ' . $last_ask->format($df) . '');

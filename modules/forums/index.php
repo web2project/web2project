@@ -63,9 +63,9 @@ $titleBlock->show();
         </tr>
         <?php
         $p = '';
-        $now = new CDate();
+        $now = new w2p_Utilities_Date();
         foreach ($forums as $row) {
-            $message_date = intval($row['forum_last_date']) ? new CDate($row['forum_last_date']) : null;
+            $message_date = intval($row['forum_last_date']) ? new w2p_Utilities_Date($row['forum_last_date']) : null;
 
             if ($p != $row['forum_project']) {
                 $create_date = $AppUI->formatTZAwareTime($row['forum_create_date'], $df);

@@ -377,11 +377,11 @@ function displayFiles($folder) {
 		</tr>';
 
 	$fp = -1;
-	$file_date = new CDate();
+	$file_date = new w2p_Utilities_Date();
 
 	$id = 0;
 	foreach ($files as $row) {
-		$file_date = new CDate($row['file_date']);
+		$file_date = new w2p_Utilities_Date($row['file_date']);
 
 		if ($fp != $row['file_project']) {
 			if (!$row['project_name']) {
@@ -445,7 +445,7 @@ function displayFiles($folder) {
 			foreach ($file_versions as $file_row) {
 				if ($file_row['file_name'] == $row['file_name'] && $file_row['file_project'] == $row['file_project']) {
 					$file_icon = getIcon($file_row['file_type']);
-					$file_date = new CDate($file_row['file_date']);
+					$file_date = new w2p_Utilities_Date($file_row['file_date']);
 					$hidden_table .= '<form name="frm_delete_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
 									<input type="hidden" name="dosql" value="do_file_aed" />
 									<input type="hidden" name="del" value="1" />

@@ -30,7 +30,7 @@ if (count($projects) > 0) {
 	</tr>
 	<?php
 	foreach ($projects as $project) {
-		$start_date = new CDate($project['project_start_date']);
+		$start_date = new w2p_Utilities_Date($project['project_start_date']);
 		?>
 		<tr>
 			<td>

@@ -24,11 +24,11 @@ $tab = $AppUI->processIntState('CalDayViewTab', $_GET, 'tab', (isset($tab) ? $ta
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 // get the passed timestamp (today if none)
-$ctoday = new CDate();
+$ctoday = new w2p_Utilities_Date();
 $today = $ctoday->format(FMT_TIMESTAMP_DATE);
 $date = w2PgetParam($_GET, 'date', $today);
 // establish the focus 'date'
-$this_day = new CDate($date);
+$this_day = new w2p_Utilities_Date($date);
 $dd = $this_day->getDay();
 $mm = $this_day->getMonth();
 $yy = $this_day->getYear();
@@ -43,8 +43,8 @@ $first_time->setTime(0, 0, 0);
 $last_time = clone $this_day;
 $last_time->setTime(23, 59, 59);
 
-$prev_day = new CDate(Date_calc::prevDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
-$next_day = new CDate(Date_calc::nextDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
+$prev_day = new w2p_Utilities_Date(Date_calc::prevDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
+$next_day = new w2p_Utilities_Date(Date_calc::nextDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
 
 // get the list of visible companies
 $company = new CCompany();
@@ -104,10 +104,10 @@ $tabBox->show();
 	$minical->clickMonth = true;
 	$minical->setLinkFunctions('clickDay');
 
-	$first_time = new CDate($minical->prev_month);
+	$first_time = new w2p_Utilities_Date($minical->prev_month);
 	$first_time->setDay(1);
 	$first_time->setTime(0, 0, 0);
-	$last_time = new CDate($minical->prev_month);
+	$last_time = new w2p_Utilities_Date($minical->prev_month);
 	$last_time->setDay($minical->prev_month->getDaysInMonth());
 	$last_time->setTime(23, 59, 59);
 
@@ -125,10 +125,10 @@ $tabBox->show();
 	echo '<td align="center" >' . $minical->show() . '</td>';
 	echo '</tr></table><hr noshade size="1">';
 
-	$first_time = new CDate($minical->next_month);
+	$first_time = new w2p_Utilities_Date($minical->next_month);
 	$first_time->setDay(1);
 	$first_time->setTime(0, 0, 0);
-	$last_time = new CDate($minical->next_month);
+	$last_time = new w2p_Utilities_Date($minical->next_month);
 	$last_time->setDay($minical->next_month->getDaysInMonth());
 	$last_time->setTime(23, 59, 59);
 	$links = array();
@@ -142,10 +142,10 @@ $tabBox->show();
 	echo '<td align="center" >' . $minical->show() . '</td>';
 	echo '</tr></table><hr noshade size="1">';
 
-	$first_time = new CDate($minical->next_month);
+	$first_time = new w2p_Utilities_Date($minical->next_month);
 	$first_time->setDay(1);
 	$first_time->setTime(0, 0, 0);
-	$last_time = new CDate($minical->next_month);
+	$last_time = new w2p_Utilities_Date($minical->next_month);
 	$last_time->setDay($minical->next_month->getDaysInMonth());
 	$last_time->setTime(23, 59, 59);
 	$links = array();

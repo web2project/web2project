@@ -157,13 +157,13 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 if ($display_option == 'custom') {
 	// custom dates
-	$start_date = intval($sdate) ? new CDate($sdate) : new CDate();
-	$end_date = intval($edate) ? new CDate($edate) : new CDate();
+	$start_date = intval($sdate) ? new w2p_Utilities_Date($sdate) : new w2p_Utilities_Date();
+	$end_date = intval($edate) ? new w2p_Utilities_Date($edate) : new w2p_Utilities_Date();
 } else {
 	// month
-	$start_date = new CDate();
+	$start_date = new w2p_Utilities_Date();
 	$start_date->day = 1;
-	$end_date = new CDate($start_date);
+	$end_date = new w2p_Utilities_Date($start_date);
 	$end_date->addMonths($scroll_date);
 }
 
@@ -217,9 +217,9 @@ if (!$min_view) {
     function scrollPrev() {
         f = document.editFrm;
         <?php
-        $new_start = new CDate($start_date);
+        $new_start = new w2p_Utilities_Date($start_date);
         $new_start->day = 1;
-        $new_end = new CDate($end_date);
+        $new_end = new w2p_Utilities_Date($end_date);
         $new_start->addMonths(-$scroll_date);
         $new_end->addMonths(-$scroll_date);
         echo "f.project_start_date.value='" . $new_start->format(FMT_TIMESTAMP_DATE) . "';";
@@ -232,9 +232,9 @@ if (!$min_view) {
     function scrollNext() {
         f = document.editFrm;
         <?php
-        $new_start = new CDate($start_date);
+        $new_start = new w2p_Utilities_Date($start_date);
         $new_start->day = 1;
-        $new_end = new CDate($end_date);
+        $new_end = new w2p_Utilities_Date($end_date);
         $new_start->addMonths($scroll_date);
         $new_end->addMonths($scroll_date);
         echo "f.project_start_date.value='" . $new_start->format(FMT_TIMESTAMP_DATE) . "';";

@@ -100,7 +100,7 @@ $canEdit = canEdit('task_log');
 $sf = $df;
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 foreach ($logs as $row) {
-	$task_log_date = intval($row['task_log_date']) ? new CDate($row['task_log_date']) : null;
+	$task_log_date = intval($row['task_log_date']) ? new w2p_Utilities_Date($row['task_log_date']) : null;
 
 	$s .= '<tr bgcolor="white" valign="top"><td>';
 	if ($canEdit) {
@@ -108,7 +108,7 @@ foreach ($logs as $row) {
 	}
 	$s .= '</td>';
 	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($sf) : '-') . '<br /><br />';
-    $task_log_updated = intval($row['task_log_updated']) ? new CDate($row['task_log_updated']) : null;
+    $task_log_updated = intval($row['task_log_updated']) ? new w2p_Utilities_Date($row['task_log_updated']) : null;
     $s .= '(' . $AppUI->_('Logged').': ' . ($task_log_updated ? $task_log_updated->format($df) : '-') . ')';
     $s .= '</td>';
 	$s .= '<td width="30%"><a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=0">' . $row['task_log_name'] . '</a></td>';

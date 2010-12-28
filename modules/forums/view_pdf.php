@@ -36,7 +36,7 @@ $messages = $q->loadList();
 
 $x = false;
 
-$date = new CDate();
+$date = new w2p_Utilities_Date();
 $pdfdata = array();
 $pdfhead = array('Date', 'User', 'Message');
 
@@ -55,7 +55,7 @@ foreach ($messages as $row) {
 	$q->addWhere('users.user_id = ' . (int)$row['message_editor']);
 	$editor = $q->loadList();
 
-	$date = intval($row['message_date']) ? new CDate($row['message_date']) : null;
+	$date = intval($row['message_date']) ? new w2p_Utilities_Date($row['message_date']) : null;
 
 	$pdfdata[] = array($row['message_date'], $row['contact_first_name'] . ' ' . $row['contact_last_name'], '<b>' . $row['message_title'] . '</b>' . $row['message_body']);
 }

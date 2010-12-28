@@ -20,7 +20,7 @@ $list_end_date = w2PgetParam($_POST, 'list_end_date', 0);
 $period = w2PgetParam($_POST, 'period', 0);
 $period_value = w2PgetParam($_POST, 'pvalue', 1);
 if ($period) {
-	$today = new CDate();
+	$today = new w2p_Utilities_Date();
 	$ts = $today->format(FMT_TIMESTAMP_DATE);
 	if (strtok($period, ' ') == $AppUI->_('Next')) {
 		$sign = + 1;
@@ -37,8 +37,8 @@ if ($period) {
 		$days = 30 * $period_value;
 	}
 
-	$start_date = new CDate($ts);
-	$end_date = new CDate($ts);
+	$start_date = new w2p_Utilities_Date($ts);
+	$end_date = new w2p_Utilities_Date($ts);
 
 	if ($sign > 0) {
 		$end_date->addSpan(new Date_Span("$days,0,0,0"));
@@ -50,8 +50,8 @@ if ($period) {
 
 } else {
 	// create Date objects from the datetime fields
-	$start_date = intval($list_start_date) ? new CDate($list_start_date) : new CDate();
-	$end_date = intval($list_end_date) ? new CDate($list_end_date) : new CDate();
+	$start_date = intval($list_start_date) ? new w2p_Utilities_Date($list_start_date) : new w2p_Utilities_Date();
+	$end_date = intval($list_end_date) ? new w2p_Utilities_Date($list_end_date) : new w2p_Utilities_Date();
 }
 
 if (!$list_start_date) {
@@ -200,8 +200,8 @@ if ($do_report) {
 		array_unshift($columns, '<b>' . $AppUI->_('Project Name') . '</b>');
 	}
 	while ($Tasks = db_fetch_assoc($Task_List)) {
-		$start_date = intval($Tasks['task_start_date']) ? new CDate($Tasks['task_start_date']) : ' ';
-		$end_date = intval($Tasks['task_end_date']) ? new CDate($Tasks['task_end_date']) : ' ';
+		$start_date = intval($Tasks['task_start_date']) ? new w2p_Utilities_Date($Tasks['task_start_date']) : ' ';
+		$end_date = intval($Tasks['task_end_date']) ? new w2p_Utilities_Date($Tasks['task_end_date']) : ' ';
 		$task_id = $Tasks['task_id'];
 
 		$q = new DBQuery;
@@ -270,7 +270,7 @@ if ($do_report) {
 
 		$pdf->ezText(w2PgetConfig('company_name'), 12);
 
-		$date = new CDate();
+		$date = new w2p_Utilities_Date();
 		$pdf->ezText("\n" . $date->format($df), 8);
 
 		$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');

@@ -178,9 +178,9 @@ if ($is_tabbed) {
 						}
 					}
 					$none = false;
-					$start_date = intval($row['project_start_date']) ? new CDate($row['project_start_date']) : null;
-					$end_date = intval($row['project_end_date']) ? new CDate($row['project_end_date']) : null;
-					$actual_end_date = intval($row['project_actual_end_date']) ? new CDate($row['project_actual_end_date']) : null;
+					$start_date = intval($row['project_start_date']) ? new w2p_Utilities_Date($row['project_start_date']) : null;
+					$end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
+					$actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
 					$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 					$s = '';

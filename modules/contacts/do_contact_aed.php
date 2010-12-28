@@ -27,7 +27,7 @@ if ($result) {
         $updatekey = $obj->getUpdateKey();
         $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
 		if ($notifyasked && !$updatekey) {
-			$rnow = new CDate();
+			$rnow = new w2p_Utilities_Date();
 			$obj->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
 			$obj->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
 			$obj->contact_lastupdate = '';

@@ -65,9 +65,9 @@ function getCriticalTasksInverted($project_id = null, $limit = 1) {
 }
 
 function taskstyle_pd($task) {
-	$now = new CDate();
-	$start_date = intval($task['task_start_date']) ? new CDate($task['task_start_date']) : null;
-	$end_date = intval($task['task_end_date']) ? new CDate($task['task_end_date']) : null;
+	$now = new w2p_Utilities_Date();
+	$start_date = intval($task['task_start_date']) ? new w2p_Utilities_Date($task['task_start_date']) : null;
+	$end_date = intval($task['task_end_date']) ? new w2p_Utilities_Date($task['task_end_date']) : null;
 
 	if ($start_date && !$end_date) {
 		$end_date = $start_date;
@@ -84,7 +84,7 @@ function taskstyle_pd($task) {
 		if ($task['task_percent_complete'] == 100) {
 			$t = new CTask();
 			$t->load($task['task_id']);
-			$actual_end_date = new CDate(get_actual_end_date_pd($t->task_id, $t));
+			$actual_end_date = new w2p_Utilities_Date(get_actual_end_date_pd($t->task_id, $t));
 			$style .= (($actual_end_date->after($end_date)) ? '"task_late"' : '"task_done"');
 		} else {
 			$style .= (($now->after($end_date)) ? '"task_overdue"' : '"task_started"');
@@ -124,7 +124,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 
 	$types = w2Pgetsysval('TaskType');
 
-	$now = new CDate();
+	$now = new w2p_Utilities_Date();
 	$tf = $AppUI->getPref('TIMEFORMAT');
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$fdf = $df . ' ' . $tf;
@@ -133,16 +133,16 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 
 	$done[] = $a['task_id'];
 
-	$start_date = intval($a['task_start_date']) ? new CDate($AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T')) : null;
-	$end_date = intval($a['task_end_date']) ? new CDate($AppUI->formatTZAwareTime($a['task_end_date'], '%Y-%m-%d %T')) : null;
-	$last_update = isset($a['last_update']) && intval($a['last_update']) ? new CDate( $AppUI->formatTZAwareTime($a['last_update'], '%Y-%m-%d %T')) : null;
+	$start_date = intval($a['task_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T')) : null;
+	$end_date = intval($a['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($a['task_end_date'], '%Y-%m-%d %T')) : null;
+	$last_update = isset($a['last_update']) && intval($a['last_update']) ? new w2p_Utilities_Date( $AppUI->formatTZAwareTime($a['last_update'], '%Y-%m-%d %T')) : null;
 
 	// prepare coloured highlight of task time information
 	$sign = 1;
 	$style = '';
 	if ($start_date) {
 		if (!$end_date) {
-			$end_date = new CDate('0000-00-00 00:00:00');
+			$end_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
 		}
 
 		if ($now->after($start_date) && $a['task_percent_complete'] == 0) {
@@ -336,7 +336,7 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 
 	$types = w2Pgetsysval('TaskType');
 
-	$now = new CDate();
+	$now = new w2p_Utilities_Date();
 	$tf = $AppUI->getPref('TIMEFORMAT');
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$fdf = $df . ' ' . $tf;
@@ -345,16 +345,16 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 
 	$done[] = $a['task_id'];
 
-	$start_date = intval($a['task_start_date']) ? new CDate($a['task_start_date']) : null;
-	$end_date = intval($a['task_end_date']) ? new CDate($a['task_end_date']) : null;
-	$last_update = isset($a['last_update']) && intval($a['last_update']) ? new CDate($a['last_update']) : null;
+	$start_date = intval($a['task_start_date']) ? new w2p_Utilities_Date($a['task_start_date']) : null;
+	$end_date = intval($a['task_end_date']) ? new w2p_Utilities_Date($a['task_end_date']) : null;
+	$last_update = isset($a['last_update']) && intval($a['last_update']) ? new w2p_Utilities_Date($a['last_update']) : null;
 
 	// prepare coloured highlight of task time information
 	$sign = 1;
 	$style = '';
 	if ($start_date) {
 		if (!$end_date) {
-			$end_date = new CDate('0000-00-00 00:00:00');
+			$end_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
 		}
 
 		$days = $now->dateDiff($end_date) * $sign;

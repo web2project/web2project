@@ -42,9 +42,9 @@ $table_header = '';
 $table_rows = '';
 
 // create Date objects from the datetime fields
-$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
-$end_date = intval($log_end_date) ? new CDate($log_end_date) : new CDate();
-$now = new CDate();
+$start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();
+$end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
+$now = new w2p_Utilities_Date();
 
 if (!$log_start_date) {
 	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
@@ -516,11 +516,11 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$tmp .= $task->task_duration . '&nbsp;' . mb_substr($AppUI->_($durnTypes[$task->task_duration_type]),0,1);
 	$tmp .= '</td>';
 	$tmp .= '<td align="center" nowrap="nowrap">';
-	$dt = new CDate($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T'));
+	$dt = new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T'));
 	$tmp .= $dt->format($df);
 	$tmp .= '&#160&#160&#160</td>';
 	$tmp .= '<td align="right" nowrap="nowrap">';
-	$ed = new CDate($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T'));
+	$ed = new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T'));
 	$dt = $now->dateDiff($ed);
 	$sgn = $now->compare($ed, $now);
 	$tmp .= ($dt * $sgn);
@@ -581,8 +581,8 @@ function weekDates($display_allocated_hours, $fromPeriod, $toPeriod) {
 		return '';
 	}
 
-	$s = new CDate($fromPeriod);
-	$e = new CDate($toPeriod);
+	$s = new w2p_Utilities_Date($fromPeriod);
+	$e = new w2p_Utilities_Date($toPeriod);
 	$sw = getBeginWeek($s);
 	$dw = ceil($e->dateDiff($s) / 7);
 	$ew = $sw + $dw;
@@ -606,8 +606,8 @@ function weekCells($display_allocated_hours, $fromPeriod, $toPeriod) {
 		return 0;
 	}
 
-	$s = new CDate($fromPeriod);
-	$e = new CDate($toPeriod);
+	$s = new w2p_Utilities_Date($fromPeriod);
+	$e = new w2p_Utilities_Date($toPeriod);
 	$sw = getBeginWeek($s);
 	$dw = ceil($e->dateDiff($s) / 7);
 	$ew = $sw + $dw;
@@ -624,14 +624,14 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 		return '';
 	}
 
-	$s = new CDate($fromPeriod);
-	$e = new CDate($toPeriod);
+	$s = new w2p_Utilities_Date($fromPeriod);
+	$e = new w2p_Utilities_Date($toPeriod);
 	$sw = getBeginWeek($s);
 	$dw = ceil($e->dateDiff($s) / 7);
 	$ew = $sw + $dw;
 
-	$st = new CDate($task->task_start_date);
-	$et = new CDate($task->task_end_date);
+	$st = new w2p_Utilities_Date($task->task_start_date);
+	$et = new w2p_Utilities_Date($task->task_end_date);
 	$stw = getBeginWeek($st);
 	$dtw = ceil($et->dateDiff($st) / 7);
 	$etw = $stw + $dtw;
@@ -657,7 +657,7 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 
 function getBeginWeek($d) {
 	$dn = intval($d->Format('%w'));
-	$dd = new CDate($d);
+	$dd = new w2p_Utilities_Date($d);
 	$dd->subtractSeconds($dn * 24 * 3600);
 	return intval($dd->Format('%U'));
 }
@@ -668,7 +668,7 @@ function getEndWeek($d) {
 	if ($dn > 0) {
 		$dn = 7 - $dn;
 	}
-	$dd = new CDate($d);
+	$dd = new w2p_Utilities_Date($d);
 	$dd->addSeconds($dn * 24 * 3600);
 	return intval($dd->Format('%U'));
 }

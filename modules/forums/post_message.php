@@ -132,7 +132,7 @@ echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message');
 </tr>
 <?php
 if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
-	$date = intval($message_info['message_date']) ? new CDate($message_info['message_date']) : new CDate();
+	$date = intval($message_info['message_date']) ? new w2p_Utilities_Date($message_info['message_date']) : new w2p_Utilities_Date();
 ?>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Author') ?>:</td>

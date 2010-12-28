@@ -1708,8 +1708,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $start_date = new CDate('2009-07-05');
-        $end_date   = new CDate('2009-07-16');
+        $start_date = new w2p_Utilities_Date('2009-07-05');
+        $end_date   = new w2p_Utilities_Date('2009-07-16');
 
         $results = $this->obj->getTasksForPeriod($start_date, $end_date);
 
@@ -1754,8 +1754,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $start_date = new CDate('2009-07-05');
-        $end_date   = new CDate('2009-07-16');
+        $start_date = new w2p_Utilities_Date('2009-07-05');
+        $end_date   = new w2p_Utilities_Date('2009-07-16');
 
         $results = $this->obj->getTasksForPeriod($start_date, $end_date, 1);
 
@@ -1804,8 +1804,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $start_date = new CDate('2009-07-05');
-        $end_date   = new CDate('2009-07-16');
+        $start_date = new w2p_Utilities_Date('2009-07-05');
+        $end_date   = new w2p_Utilities_Date('2009-07-16');
 
         $results = $this->obj->getTasksForPeriod($start_date, $end_date, 1, 1);
 

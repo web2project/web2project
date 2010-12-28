@@ -76,9 +76,9 @@ foreach ($projects as $row) {
 	// have been created (for new projects)
 	if ($proFilter == -1 || $row['project_status'] == $proFilter || ($proFilter == -2 && $row['project_status'] != 3) || ($proFilter == -3 && $row['project_active'] != 0)) {
 		$none = false;
-		$start_date = intval($row['project_start_date']) ? new CDate($row['project_start_date']) : null;
-		$end_date = intval($row['project_end_date']) ? new CDate($row['project_end_date']) : null;
-		$actual_end_date = intval($row['project_actual_end_date']) ? new CDate($row['project_actual_end_date']) : null;
+		$start_date = intval($row['project_start_date']) ? new w2p_Utilities_Date($row['project_start_date']) : null;
+		$end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
+		$actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
 		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 		$s = '<tr><td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';

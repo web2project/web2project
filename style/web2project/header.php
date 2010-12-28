@@ -149,7 +149,7 @@ if ($dialog) {
                                                     </td><?php
                                                 }
                                                 if (canAccess('calendar')) {
-                                                    $now = new CDate(); ?>
+                                                    $now = new w2p_Utilities_Date(); ?>
                                                     <td nowrap="nowrap" align="right">
                                                         <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
                                                     </td><?php

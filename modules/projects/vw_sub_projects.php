@@ -36,9 +36,9 @@ if (is_array($st_projects_arr)) {
             $s_project->load($line['project_id']);
             $s_company = new CCompany();
             $s_company->load($s_project->project_company);
-            $start_date = intval($s_project->project_start_date) ? new CDate($s_project->project_start_date) : null;
-            $end_date = intval($s_project->project_end_date) ? new CDate($s_project->project_end_date) : null;
-            $actual_end_date = intval($s_project->project_actual_end_date) ? new CDate($s_project->project_actual_end_date) : null;
+            $start_date = intval($s_project->project_start_date) ? new w2p_Utilities_Date($s_project->project_start_date) : null;
+            $end_date = intval($s_project->project_end_date) ? new w2p_Utilities_Date($s_project->project_end_date) : null;
+            $actual_end_date = intval($s_project->project_actual_end_date) ? new w2p_Utilities_Date($s_project->project_actual_end_date) : null;
             $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
             $x++;
             $row_class = ($x % 2) ? 'style="background:#fff;"' : 'style="background:#f0f0f0;"';

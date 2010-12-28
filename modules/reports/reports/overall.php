@@ -16,8 +16,8 @@ $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);
 $log_all = w2PgetParam($_POST, 'log_all', 0);
 
 // create Date objects from the datetime fields
-$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
-$end_date = intval($log_end_date) ? new CDate($log_end_date) : new CDate();
+$start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();
+$end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
 	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
@@ -233,11 +233,11 @@ if ($do_report) {
 		$pdf->ezText(w2PgetConfig('company_name'), 12);
 
 		if ($log_all) {
-			$date = new CDate();
+			$date = new w2p_Utilities_Date();
 			$pdf->ezText("\nAll hours as of " . $date->format($df), 8);
 		} else {
-			$sdate = new CDate($log_start_date);
-			$edate = new CDate($log_end_date);
+			$sdate = new w2p_Utilities_Date($log_start_date);
+			$edate = new w2p_Utilities_Date($log_end_date);
 			$pdf->ezText("\nHours from " . $sdate->format($df) . ' to ' . $edate->format($df), 8);
 		}
 

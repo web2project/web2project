@@ -118,7 +118,7 @@ $gantt->SetDateRange($start_date, $end_date);
 
 $row = 0;
 if (!is_array($projects) || sizeof($projects) == 0) {
-    $d = new CDate();
+    $d = new w2p_Utilities_Date();
     $columnValues = array('project_name' => $AppUI->_('No projects found'),
                         'start_date' => $d->getDate(), 'end_date' => $d->getDate(),
                         'actual_end' => '');
@@ -151,8 +151,8 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                 if ($rec['task_start_date'] == '0000-00-00 00:00:00') {
                     $rec['task_start_date'] = date('Y-m-d H:i:s');
                 }
-                $tsd = new CDate($rec['task_start_date']);
-                if ($tsd->before(new CDate($start_min))) {
+                $tsd = new w2p_Utilities_Date($rec['task_start_date']);
+                if ($tsd->before(new w2p_Utilities_Date($start_min))) {
                     $start_min = $rec['task_start_date'];
                 }
                 // calculate or set blank task_end_date if unset
@@ -163,8 +163,8 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                         $rec['task_end_date'] = '';
                     }
                 }
-                $ted = new CDate($rec['task_end_date']);
-                if ($ted->after(new CDate($end_max))) {
+                $ted = new w2p_Utilities_Date($rec['task_end_date']);
+                if ($ted->after(new w2p_Utilities_Date($end_max))) {
                     $end_max = $rec['task_end_date'];
                 }
                 $projects[$rec['task_project']]['tasks'][] = $rec;
@@ -193,10 +193,10 @@ if (!is_array($projects) || sizeof($projects) == 0) {
             }
             //using new jpGraph determines using Date object instead of string
             $start = ($p['project_start_date'] > '0000-00-00 00:00:00') ? $p['project_start_date'] : date('Y-m-d H:i:s');
-            $start = new CDate($start);
+            $start = new w2p_Utilities_Date($start);
             $start = $start->getDate();
             $end_date = $p['project_end_date'];
-            $end_date = new CDate($end_date);
+            $end_date = new w2p_Utilities_Date($end_date);
             $end = $end_date->getDate();
             $progress = (int) $p['project_percent_complete'];
             $caption = ' ';
@@ -214,10 +214,10 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                 $caption .= $AppUI->_($projectStatus[$p['project_status']]) . ', ';
                 $caption .= $p['project_active'] > 0 ? $AppUI->_('active') : $AppUI->_('archived');
             }
-            $enddate = new CDate($end);
-            $startdate = new CDate($start);
+            $enddate = new w2p_Utilities_Date($end);
+            $startdate = new w2p_Utilities_Date($start);
             $actual_end = $p['project_actual_end_date'] ? $p['project_actual_end_date'] : $end;
-            $actual_enddate = new CDate($actual_end);
+            $actual_enddate = new w2p_Utilities_Date($actual_end);
             $actual_enddate = $actual_enddate->after($startdate) ? $actual_enddate : $enddate;
 
             $columnValues = array('project_name' => $name, 'start_date' => $start,
@@ -237,8 +237,8 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                     }
                     $tStart = ($t['task_start_date'] > '0000-00-00 00:00:00') ? $t['task_start_date'] : date('Y-m-d H:i:s');
                     $tEnd = ($t['task_end_date'] > '0000-00-00 00:00:00') ? $t['task_end_date'] : date('Y-m-d H:i:s');
-                    $tStartObj = new CDate($tStart);
-                    $tEndObj = new CDate($tEnd);
+                    $tStartObj = new w2p_Utilities_Date($tStart);
+                    $tEndObj = new w2p_Utilities_Date($tEnd);
 
                     if ($t['task_milestone'] != 1) {
                         $advance = str_repeat('  ', $level+2);
@@ -252,7 +252,7 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                     } else {
                         $name = $advance.'* ' . $t['task_name'];
                         $milestone = substr($t['task_start_date'], 0, 10);
-                        $milestoneDate = new CDate($milestone);
+                        $milestoneDate = new w2p_Utilities_Date($milestone);
                         $gantt->addMilestone(array($name, '', $milestoneDate->format($df)), $t['task_start_date']);
                     }
 

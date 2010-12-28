@@ -152,7 +152,7 @@ echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class=text size=1', $prefs['TA
 	<td>
 <?php
 // exmample date
-$ex = new CDate();
+$ex = new w2p_Utilities_Date();
 
 $dates = array();
 $f = '%d/%m/%Y';

@@ -269,12 +269,12 @@ $(document).ready(function() {
                     </td>
                 </tr>
                 <tr>
-                    <?php $last_ask = new CDate($row->contact_updateasked); ?>
+                    <?php $last_ask = new w2p_Utilities_Date($row->contact_updateasked); ?>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Last Update Requested'); ?>:</td>
                     <td align="center" nowrap="nowrap"><?php echo $row->contact_updateasked ? $last_ask->format($df) : ''; ?></td>
                 </tr>
                 <tr>
-                    <?php $lastupdated = new CDate($row->contact_lastupdate); ?>
+                    <?php $lastupdated = new w2p_Utilities_Date($row->contact_lastupdate); ?>
                     <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_('Last Updated'); ?>:</td>
 					<td align="center" nowrap="nowrap">
                         <?php

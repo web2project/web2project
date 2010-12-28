@@ -39,8 +39,8 @@ for ($current = 0 + $inc; $current < 60; $current += $inc) {
 
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
-$start_date = intval($task->task_start_date) ? new CDate($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) : new CDate();
-$end_date = intval($task->task_end_date) ? new CDate($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) : new CDate();
+$start_date = intval($task->task_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
+$end_date = intval($task->task_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
 
 // convert the numeric calendar_working_days config array value to a human readable output format
 $cwd = explode(',', $w2Pconfig['cal_working_days']);

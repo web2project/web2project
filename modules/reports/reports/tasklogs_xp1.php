@@ -23,8 +23,8 @@ $log_start_date = w2PgetParam($_GET, 'log_start_date', 0);
 $log_end_date = w2PgetParam($_GET, 'log_end_date', 0);
 
 // create Date objects from the datetime fields
-$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
-$end_date = intval($log_end_date) ? new CDate($log_end_date) : new CDate();
+$start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();
+$end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
 	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
@@ -226,7 +226,7 @@ if ($do_report) {
 	$pdfdata = array();
 
 	foreach ($logs as $log) {
-		$date = new CDate($log['task_log_date']);
+		$date = new w2p_Utilities_Date($log['task_log_date']);
 		$hours += $log['task_log_hours'];
 		$tamount += $log['amount'];
 
@@ -319,7 +319,7 @@ if ($do_report) {
 		$pdf->ezText(w2PgetConfig('company_name'), 12);
 		// $pdf->ezText( w2PgetConfig( 'company_name' ).' :: '.w2PgetConfig( 'page_title' ), 12 );
 
-		$date = new CDate();
+		$date = new w2p_Utilities_Date();
 		$pdf->ezText("\n" . $date->format($df), 8);
 
 		$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');

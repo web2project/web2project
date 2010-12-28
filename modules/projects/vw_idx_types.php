@@ -103,8 +103,8 @@ foreach ($projects as $row_proj) {
 			}
 			$row = $projects[$project['project_id']];
 			$none = false;
-			$start_date = intval($row['project_start_date']) ? new CDate($row['project_start_date']) : null;
-			$end_date = intval($row['project_end_date']) ? new CDate($row['project_end_date']) : null;
+			$start_date = intval($row['project_start_date']) ? new w2p_Utilities_Date($row['project_start_date']) : null;
+			$end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
 
 			if ($level) { 
 				$s = '<tr id="multiproject_' . $row['project_original_parent'] . '_' . $row['project_id'] . '" style="visibility:collapse">';

@@ -57,7 +57,7 @@ $taskLogReference = w2PgetSysVal('TaskLogReference');
 
 // Task Update Form
 $df = $AppUI->getPref('SHDATEFORMAT');
-$log_date = new CDate($log->task_log_date);
+$log_date = new w2p_Utilities_Date($log->task_log_date);
 ?>
 
 <!-- TIMER RELATED SCRIPTS -->
@@ -245,7 +245,7 @@ if ($obj->task_owner != $AppUI->user_id) {
 
 <?php
 if ($obj->canUserEditTimeInformation() && $canEditTask) {
-	$end_date = intval($obj->task_end_date) ? new CDate($obj->task_end_date) : null;
+	$end_date = intval($obj->task_end_date) ? new w2p_Utilities_Date($obj->task_end_date) : null;
 ?>
 	<tr>
 		<td align='right'>
