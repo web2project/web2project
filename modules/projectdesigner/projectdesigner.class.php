@@ -171,7 +171,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	$canEdit = ($a['task_represents_project']) ? false : true;
 	$canViewLog = true;
 	if ($canEdit) {
-		$s .= w2PtoolTip('edit tasks panel', 'click to edit this task') . '<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('icons/pencil.gif') . '" border="0" width="12" height="12" alt="" /></a>' . w2PendTip();
+		$s .= '<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '">' . w2PtoolTip('edit tasks panel', 'click to edit this task') . w2PshowImage('icons/pencil.gif', 12, 12) . w2PendTip() . '</a>';
 	}
 	$s .= '</td>';
 	// percent complete
@@ -204,7 +204,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	// add log
 	$s .= '<td align="center" nowrap="nowrap">';
 	if ($a['task_dynamic'] != 1 && 0 == $a['task_represents_project']) {
-		$s .= w2PtoolTip('tasks', 'add work log to this task') . '<a href="?m=tasks&a=view&tab=1&project_id=' . $a['task_project'] . '&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('add.png', $m) . '" border="0" width="16" height="16" alt="" /></a>' . w2PendTip();
+		$s .= '<a href="?m=tasks&a=view&tab=1&project_id=' . $a['task_project'] . '&task_id=' . $a['task_id'] . '">' . w2PtoolTip('tasks', 'add work log to this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
 	}
 	$s .= '</td>';
 	// dots
