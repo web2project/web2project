@@ -12,7 +12,6 @@ $successPath = ($delete) ? 'm=forums' : 'm=forums&a=viewer&forum_id='.
 $errorPath = 'm=forums&a=viewer&forum_id='.$message_forum.'&message_parent='.
         $message_parent.'&post_message=1';
 
-
 $controller = new w2p_Controllers_Base(
                     new CForumMessage(), $delete, 'Message', $successPath, $errorPath
                   );

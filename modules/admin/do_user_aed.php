@@ -4,6 +4,21 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
+
+$obj = new CUser();
+if (!$obj->bind($_POST)) {
+	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+	$AppUI->redirect();
+}
+$contact = new CContact();
+if (!$contact->bind($_POST)) {
+	$AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
+	$AppUI->redirect();
+}
+
+$action = ($del) ? 'deleted' : 'stored';
+
+
 $contact_id = (int) w2PgetParam($_POST, 'contact_id', 0);
 $user_id = (int) w2PgetParam($_POST, 'user_id', 0);
 $isNewUser = !$user_id;
@@ -34,20 +49,10 @@ if ($del) {
 	}
 }
 
-$obj = new CUser();
-$contact = new CContact();
 if ($contact_id) {
 	$contact->load($contact_id);
 }
 
-if (!$obj->bind($_POST)) {
-	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-	$AppUI->redirect();
-}
-if (!$contact->bind($_POST)) {
-	$AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
-	$AppUI->redirect();
-}
 $obj->user_username = strtolower($obj->user_username);
 
 // prepare (and translate) the module name ready for the suffix
