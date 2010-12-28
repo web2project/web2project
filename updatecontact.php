@@ -242,7 +242,7 @@ function orderByName( x ){
 					<tr>
 						<td align="right" colspan="3">
 							<?php
-								$custom_fields = new CustomFields('contacts', 'addedit', $row->contact_id, "edit", 1);
+								$custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $row->contact_id, "edit", 1);
 								$custom_fields->printHTML();
 							?>
 						</td>
