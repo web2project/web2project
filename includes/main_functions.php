@@ -61,32 +61,17 @@ function w2p_autoload($class_name) {
         case 'cforummessage':
             require_once W2P_BASE_DIR.'/modules/forums/forummessage.class.php';
             break;
-        case 'ctasklog':
-            require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
-            break;
-        case 'cforummessage':
-            require_once W2P_BASE_DIR.'/modules/forums/forummessage.class.php';
-            break;
-        case 'ctasklog':
-            require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
-            break;
         case 'cprojectdesigneroptions':
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
         case 'csyskey':
             require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
             break;
-        case 'cprojectdesigneroptions':
-            require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
-            break;
         case 'csyskey':
             require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
             break;
-        case 'cprojectdesigneroptions':
-            require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
-            break;
-        case 'cprojectdesigneroptions':
-            require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
+        case 'bcode':
+            require_once W2P_BASE_DIR.'/modules/system/system.class.php';
             break;
 
         default:
