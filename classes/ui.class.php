@@ -401,9 +401,9 @@ class CAppUI {
 			$loc = $this->user_prefs['LOCALE'] ? $this->user_prefs['LOCALE'] : w2PgetConfig('host_locale');
 		}
 
-		if (isset($LANGUAGES[$loc]))
+		if (isset($LANGUAGES[$loc])) {
 			$lang = $LANGUAGES[$loc];
-		else {
+        } else {
 			// Need to try and find the language the user is using, find the first one
 			// that has this as the language part
 			if (strlen($loc) > 2) {
@@ -415,18 +415,11 @@ class CAppUI {
 			$lang = $LANGUAGES[$loc];
 		}
 		list($base_locale, $english_string, $native_string, $default_language, $lcs) = $lang;
-		if (!isset($lcs))
+		if (!isset($lcs)) {
 			$lcs = (isset($locale_char_set)) ? $locale_char_set : 'utf-8';
+        }
+		$user_lang = array($loc . '.' . $lcs, $default_language, $loc, $base_locale);
 
-		if (version_compare(PHP_VERSION, '4.3.0', 'ge')) {
-			$user_lang = array($loc . '.' . $lcs, $default_language, $loc, $base_locale);
-		} else {
-			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-				$user_lang = $default_language;
-			} else {
-				$user_lang = $loc . '.' . $lcs;
-			}
-		}
 		if ($set) {
 			$this->user_locale = $base_locale;
 			$this->user_lang = $user_lang;
