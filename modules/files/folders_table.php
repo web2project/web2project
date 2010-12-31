@@ -631,7 +631,7 @@ $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')
 ?>
 	<tr>
 	    <td colspan="50" align="right">
-	          <form name="frm_bulk" method="POST" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
+	          <form name="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
 			  <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
 	          <table id="tbl_bulk">
 	          <tr>

@@ -94,7 +94,7 @@ $sprojects = arrayMerge(array('' => '(' . $AppUI->_('Move to Project', UI_OUTPUT
 $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
 $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
 ?>
-<form name="frm_bulk" method="POST" action="?m=projectdesigner&a=do_task_bulk_aed" accept-charset="utf-8">
+<form name="frm_bulk" method="post" action="?m=projectdesigner&a=do_task_bulk_aed" accept-charset="utf-8">
     <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
     <input type="hidden" name="opt_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
     <input type="hidden" name="opt_view_gantt" value="<?php echo (isset($view_options[0]['pd_option_view_gantt']) ? $view_options[0]['pd_option_view_gantt'] : 1); ?>" />

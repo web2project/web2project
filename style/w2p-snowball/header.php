@@ -52,11 +52,10 @@ if ($dialog) {
                 <tr>
                     <td align="left">
                         <form name="frm_new" method="GET" action="./index.php" accept-charset="utf-8">
+                            <input type="hidden" name="a" value="addedit" />
                             <table width="100%" cellpadding="0" cellspacing="0" width="100%">
                                 <tbody>
                                     <?php
-                                        echo '<input type="hidden" name="a" value="addedit" />';
-
                                         //build URI string
                                         if (isset($company_id)) {
                                             echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';
@@ -128,7 +127,7 @@ if ($dialog) {
                                     </table>
                                 </td>
                                 <?php if ($AppUI->user_id > 0) { ?>
-                                    <td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch" method="POST" accept-charset="utf-8"><td>
+                                    <td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8"><td>
                                         <?php
                                         if (canAccess('smartsearch')) {
                                             echo w2PshowImage('search.png') ?>&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
