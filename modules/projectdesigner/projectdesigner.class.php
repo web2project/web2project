@@ -224,7 +224,8 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	if ($a['task_description']) {
 		$s .= w2PtoolTip('Task Description', $a['task_description'], true);
 	}
-	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '__collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '__expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
+    $jsTaskId = 'task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_';
+	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
 	$taskObj = new CTask;
 	$taskObj->load($a['task_id']);
 	if (count($taskObj->getChildren())) {
