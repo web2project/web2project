@@ -1234,7 +1234,7 @@ class CTabBox_core {
 			if ($extra) {
 				echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
 			} else {
-				echo '<img src="' . w2PfindImage('shim.gif') . '" height="10" width="1" />';
+				echo '<img src="' . w2PfindImage('shim.gif') . '" height="10" width="1" alt="" />';
 			}
 		}
 
@@ -1414,7 +1414,7 @@ class CInfoTabBox extends CTabBox_core {
 					}
 					$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a>&nbsp;</td>';
 				$s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>';
-				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '"/></td>';
+				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '" alt=""/></td>';
 			}
 			$s .= '</table></td></tr>';
 			$s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 4 + 1) . '" class="tabox">';

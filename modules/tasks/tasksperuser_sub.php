@@ -482,9 +482,9 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$tmp .= '</td>';
 	$tmp .= '<td align="center" nowrap="nowrap">';
 	if ($task->userPriority < 0) {
-		$tmp .= '<img src="' . w2PfindImage('icons/priority-' . -$task->userPriority . '.gif') . '" width="13" height="16">';
+		$tmp .= '<img src="' . w2PfindImage('icons/priority-' . -$task->userPriority . '.gif') . '" width="13" height="16" alt="">';
 	} elseif ($task->userPriority > 0) {
-		$tmp .= '<img src="' . w2PfindImage('icons/priority+' . $task->userPriority . '.gif') . '" width="13" height="16">';
+		$tmp .= '<img src="' . w2PfindImage('icons/priority+' . $task->userPriority . '.gif') . '" width="13" height="16" alt="">';
 	}
 	$tmp .= '</td>';
 	$tmp .= '<td>';
@@ -504,9 +504,9 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 		$tmp .= '</b>';
 	}
 	if ($task->task_priority < 0) {
-		$tmp .= '&nbsp;(<img src="' . w2PfindImage('icons/priority-' . -$task->task_priority . '.gif') . '" width="13" height="16" />)';
+		$tmp .= '&nbsp;(<img src="' . w2PfindImage('icons/priority-' . -$task->task_priority . '.gif') . '" width="13" height="16" alt="" />)';
 	} elseif ($task->task_priority > 0) {
-		$tmp .= '&nbsp;(<img src="' . w2PfindImage('icons/priority+' . $task->task_priority . '.gif') . '" width="13" height="16" />)';
+		$tmp .= '&nbsp;(<img src="' . w2PfindImage('icons/priority+' . $task->task_priority . '.gif') . '" width="13" height="16" alt="" />)';
 	}
 	$tmp .= '</td>';
 	$tmp .= '<td align="left">';

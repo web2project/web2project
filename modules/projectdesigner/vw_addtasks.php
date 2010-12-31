@@ -119,7 +119,7 @@ function addTasks() {
 <tr>
 	<td align="left" width="20">
  		<?php echo w2PtoolTip('add tasks', 'click here to add a new task to this project'); ?><a href="javascript: void(0);" onclick="addComponent()">
-			<img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" border="0" />
+			<img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" border="0" alt="" />
 		</a><?php echo w2PendTip(); ?>
 	</td>
 </tr>

@@ -132,7 +132,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
             <th width="15%"><?php echo $AppUI->_('Owner'); ?>&nbsp;</th>
             <td width="130"><?php echo arraySelect($sowners, 'bulk_task_owner', 'style="width:130px" class="text"', ''); ?></td>
             <th width="15%"><?php echo $AppUI->_('Assign') . '&nbsp;</th>'; ?>
-            <td width="198" nowrap="nowrap"><a href="javascript: void(0);" style="display: block;" onclick="expand_selector('assign', 'frm_bulk')"><img id="assign_expand" src="<?php echo w2PfindImage('icons/expand.gif'); ?>" width="12" height="12" border="0">&nbsp;<img id="assign_collapse" src="<?php echo w2PfindImage('icons/collapse.gif'); ?>" width="12" height="12" border="0" style="display:none">&nbsp;</a>
+            <td width="198" nowrap="nowrap"><a href="javascript: void(0);" style="display: block;" onclick="expand_selector('assign', 'frm_bulk')"><img id="assign_expand" src="<?php echo w2PfindImage('icons/expand.gif'); ?>" width="12" height="12" border="0" alt="">&nbsp;<img id="assign_collapse" src="<?php echo w2PfindImage('icons/collapse.gif'); ?>" width="12" height="12" border="0" style="display:none">&nbsp;</a>
                 <div>
                     <table>
                         <tr id="assign" style="visibility:collapse;display:none">

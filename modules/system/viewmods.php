@@ -52,16 +52,16 @@ $titleBlock->show();
         $s = '';
         $s .= '<td width="64" align="center">';
         if ($canEdit) {
-            $s .= w2PtoolTip('Modules', 'Move to First') . '<a href="' . $query_string . '&cmd=movefirst"><img src="' . w2PfindImage('icons/2uparrow.png') . '" border="0"/></a>' . w2PendTip();
-            $s .= w2PtoolTip('Modules', 'Move Up') . '<a href="' . $query_string . '&cmd=moveup"><img src="' . w2PfindImage('icons/1uparrow.png') . '" border="0"/></a>' . w2PendTip();
-            $s .= w2PtoolTip('Modules', 'Move Down') . '<a href="' . $query_string . '&cmd=movedn"><img src="' . w2PfindImage('icons/1downarrow.png') . '" border="0"/></a>' . w2PendTip();
-            $s .= w2PtoolTip('Modules', 'Move to Last') . '<a href="' . $query_string . '&cmd=movelast"><img src="' . w2PfindImage('icons/2downarrow.png') . '" border="0"/></a>' . w2PendTip();
+            $s .= w2PtoolTip('Modules', 'Move to First') . '<a href="' . $query_string . '&cmd=movefirst"><img src="' . w2PfindImage('icons/2uparrow.png') . '" border="0" alt=""/></a>' . w2PendTip();
+            $s .= w2PtoolTip('Modules', 'Move Up') . '<a href="' . $query_string . '&cmd=moveup"><img src="' . w2PfindImage('icons/1uparrow.png') . '" border="0" alt=""/></a>' . w2PendTip();
+            $s .= w2PtoolTip('Modules', 'Move Down') . '<a href="' . $query_string . '&cmd=movedn"><img src="' . w2PfindImage('icons/1downarrow.png') . '" border="0" alt=""/></a>' . w2PendTip();
+            $s .= w2PtoolTip('Modules', 'Move to Last') . '<a href="' . $query_string . '&cmd=movelast"><img src="' . w2PfindImage('icons/2downarrow.png') . '" border="0" alt=""/></a>' . w2PendTip();
         }
         $s .= '</td>';
 
         $s .= '<td width="1%" nowrap="nowrap">' . $AppUI->_($row['mod_name']) . '</td>';
         $s .= '<td>';
-        $s .= '<img src="' . w2PfindImage('obj/dot' . ($row['mod_active'] ? 'green' : 'yellowanim') . '.gif') . '" />&nbsp;';
+        $s .= '<img src="' . w2PfindImage('obj/dot' . ($row['mod_active'] ? 'green' : 'yellowanim') . '.gif') . '" alt="" />&nbsp;';
         if ($canEdit) {
             $s .= '<a href="' . $query_string . '&cmd=toggle&">';
         }
@@ -98,7 +98,7 @@ $titleBlock->show();
         $s .= '<td>' . $row['mod_ui_icon'] . '</td>';
 
         $s .= '<td>';
-        $s .= '<img src="' . w2PfindImage('/obj/' . ($row['mod_ui_active'] ? 'dotgreen.gif' : 'dotredanim.gif')) . '" />&nbsp;';
+        $s .= '<img src="' . w2PfindImage('/obj/' . ($row['mod_ui_active'] ? 'dotgreen.gif' : 'dotredanim.gif')) . '" alt="" />&nbsp;';
         if ($canEdit) {
             $s .= '<a href="' . $query_string . '&cmd=toggleMenu">';
         }
@@ -120,7 +120,7 @@ $titleBlock->show();
             $s .= '<td></td>';
             $s .= '<td>' . $AppUI->_($v) . '</td>';
             $s .= '<td>';
-            $s .= '<img src="' . w2PfindImage('obj/dotgrey.gif') . '" />&nbsp;';
+            $s .= '<img src="' . w2PfindImage('obj/dotgrey.gif') . '" alt="" />&nbsp;';
             if ($canEdit) {
                 $s .= '<a href="?m=' . $m . '&a=domodsql&cmd=install&mod_directory=' . $v . '">';
             }

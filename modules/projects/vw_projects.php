@@ -128,10 +128,10 @@ foreach ($projects as $row) {
 
 		$s = '<tr><td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf("%.1f%%", $row['project_percent_complete']) . '</font></td><td align="center">';
 		if ($row['project_priority'] < 0) {
-			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width=13 height=16>';
+			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width="13" height="16" alt="">';
 		} else
 			if ($row['project_priority'] > 0) {
-				$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width=13 height=16>';
+				$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width="13" height="16" alt="">';
 			}
 		$s .= '</td><td nowrap="nowrap">' . $row['project_id'] . '</td><td width="40%">' . htmlspecialchars($row['project_name']) . '</td>';
 		$s .= '<td width="30%">' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</td>';
@@ -151,7 +151,7 @@ foreach ($projects as $row) {
 		$s .= '</tr>';
 		echo $s;
 
-		echo '<tr><td height="1" colspan="12" style="border-bottom: 1px solid;padding:0px;" bgcolor="#FFFFFF"><img src="' . w2PfindImage('shim.gif') . '"></td></tr>';
+		echo '<tr><td height="1" colspan="12" style="border-bottom: 1px solid;padding:0px;" bgcolor="#FFFFFF"><img src="' . w2PfindImage('shim.gif') . '" alt=""></td></tr>';
 	}
 }
 if ($none) {

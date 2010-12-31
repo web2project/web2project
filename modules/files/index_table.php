@@ -223,7 +223,7 @@ foreach ($files as $file_row) {
 	}
   $myFile = new CFile();
 	$file_icon = getIcon($file_row['file_type']);
-	echo '<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $filename . '</a>';
+	echo '<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $filename . '</a>';
 	//	{$latest_file['file_name']}
 
 ?>
@@ -255,7 +255,7 @@ foreach ($files as $file_row) {
 			if ($file['file_version_id'] == $latest_file['file_version_id']) {
 				$file_icon = getIcon($file['file_type']);
 				$hdate = new Date($file['file_date']);
-				$hidden_table .= '<tr><td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" title="' . $file['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" />&nbsp;' . $file['file_name'] . '
+				$hidden_table .= '<tr><td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" title="' . $file['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $file['file_name'] . '
                   </a></td>
                   <td width="20%">' . $file['file_description'] . '</td>
                   <td width="5%" nowrap="nowrap" align="right">' . $file['file_version'] . '</td>

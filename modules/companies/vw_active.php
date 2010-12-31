@@ -36,9 +36,9 @@ if (count($projects) > 0) {
 			<td>
 				<?php
 					if ($project['project_priority'] < 0) {
-						echo '<img src="' . w2PfindImage('icons/priority-' . -$project['project_priority'] . '.gif') . '" width=13 height=16>';
+						echo '<img src="' . w2PfindImage('icons/priority-' . -$project['project_priority'] . '.gif') . '" width="13" height="16" alt="">';
 					} elseif ($project["project_priority"] > 0) {
-						echo '<img src="' . w2PfindImage('icons/priority+' . $project['project_priority'] . '.gif') . '" width=13 height=16>';
+						echo '<img src="' . w2PfindImage('icons/priority+' . $project['project_priority'] . '.gif') . '" width="13" height="16" alt="">';
 					} 
 				?>
 			</td>

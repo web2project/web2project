@@ -466,7 +466,7 @@ function w2PfindImage($name, $module = null) {
  *	@param string The image height
  *	@param string The alt text for the image
  */
-function w2PshowImage($src, $wid = '', $hgt = '', $alt = '', $title = '', $module = null) {
+function w2PshowImage($src, $wid = '', $hgt = '', $alt = '.', $title = '', $module = null) {
 	global $AppUI, $m;
 
 	if ($src == '') {
@@ -486,7 +486,7 @@ function w2PshowImage($src, $wid = '', $hgt = '', $alt = '', $title = '', $modul
 	} elseif (!$alt && $title) {
 		$result = w2PtoolTip($m, $title);
 	}
-	$result .= '<img src="' . $src . '" alt="" ';
+	$result .= '<img src="' . $src . '" alt="' . $alt . '" ';
 	if ($wid) {
 		$result .= ' width="' . $wid . '"';
 	}
@@ -1251,10 +1251,12 @@ function w2PHTMLDecode($txt) {
 
 function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '') {
 	global $AppUI;
+
+    $id = ('' == $id) ? '' : 'id="' . $id . '"';
 	if ($raw) {
-		$starttip = '<span id="' . $id . '" title="<h4>' . nl2br($AppUI->_($header)) . '</h4> ' . nl2br($AppUI->_($tip)) . '">';
+		$starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br($AppUI->_($header)) . '&lt;/h4&gt; ' . nl2br($AppUI->_($tip)) . '">';
 	} else {
-		$starttip = '<span id="' . $id . '" title="<h4>' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '</h4> ' . nl2br(strtolower($AppUI->_($tip))) . '">';
+		$starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '&lt;/h4&gt; ' . nl2br(strtolower($AppUI->_($tip))) . '">';
 	}
 	return $starttip;
 }

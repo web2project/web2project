@@ -101,7 +101,7 @@ if ($dialog) {
                                     </tr>
                                     <tr>
                                         <td colspan="2" valign="top" style="background: url(style/<?php echo $uistyle; ?>/images/nav_shadow.jpg);" align="left">
-                                            <img width="1" height="13" src="style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
+                                            <img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg" alt=""/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -129,7 +129,7 @@ if ($dialog) {
                                 <?php if ($AppUI->user_id > 0) { ?>
                                     <td width="170" valign="middle" nowrap="nowrap"><table><tr><td><form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
                                         <?php if (canAccess('smartsearch')) { ?>
-                                            <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
+                                            <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
                                         <?php } else {
                                         echo '&nbsp;';
                                         } ?></form></td></tr></table>

@@ -43,7 +43,7 @@ if (is_array($st_projects_arr)) {
             $x++;
             $row_class = ($x % 2) ? 'style="background:#fff;"' : 'style="background:#f0f0f0;"';
             $row_classr = ($x % 2) ? 'style="background:#fff;text-align:right;"' : 'style="background:#f0f0f0;text-align:right;"';
-            $s .= '<tr><td ' . $row_class . ' align="center"><a href="./index.php?m=projects&a=addedit&project_id=' . $line['project_id'] . '"><img src="' . w2PfindImage('icons/' . ($project_id == $line['project_id'] ? 'pin' : 'pencil') . '.gif') . '" border=0 /></b></a></td>';
+            $s .= '<tr><td ' . $row_class . ' align="center"><a href="./index.php?m=projects&a=addedit&project_id=' . $line['project_id'] . '"><img src="' . w2PfindImage('icons/' . ($project_id == $line['project_id'] ? 'pin' : 'pencil') . '.gif') . '" border="0" alt="" /></b></a></td>';
             $s .= '<td ' . $row_classr . ' nowrap="nowrap">' . $line['project_id'] . '</td>';
             if ($level) {
                 $sd = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . w2PshowImage('corner-dots.gif', 16, 12) . '&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $line['project_id'] . '">' . $line['project_name'] . '</a>';
