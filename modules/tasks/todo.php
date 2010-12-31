@@ -211,7 +211,7 @@ if ($m == 'tasks' && $a == 'todo') {
 	<td width="80%" valign="top">
   <?php
 	// Tabbed information boxes
-    $tabBox = new CTabBox('?m=tasks&a=todo','', $tab);
+    $tabBox = new CTabBox('?m=tasks&amp;a=todo','', $tab);
     $tabBox->add(W2P_BASE_DIR . '/modules/tasks/todo_tasks_sub', 'My Tasks');
     $tabBox->add(W2P_BASE_DIR . '/modules/tasks/todo_gantt_sub', 'My Gantt');
 	$tabBox->show();

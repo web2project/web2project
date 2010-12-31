@@ -71,7 +71,7 @@ $titleBlock->addCell(arraySelect($filters2, 'f2', 'size=1 class=text onChange="d
 
 $titleBlock->addCell();
 if ($canEdit && $project_id) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&amp;a=addedit&amp;task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 
 $titleBlock->show();
@@ -88,14 +88,14 @@ $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Task Filter')
 $titleBlock->addCell(arraySelect($filters, 'f', 'size=1 class=text onChange="document.taskFilter.submit();"', $f, true), '', '<form action="?m=tasks" method="post" name="taskFilter" accept-charset="utf-8">', '</form>');
 $titleBlock->addCell();
 
-$titleBlock->addCrumb('?m=tasks&a=todo&user_id=' . $user_id, 'my todo');
+$titleBlock->addCrumb('?m=tasks&amp;a=todo&amp;user_id=' . $user_id, 'my todo');
 if (w2PgetParam($_GET, 'pinned') == 1) {
 	$titleBlock->addCrumb('?m=tasks', 'all tasks');
 } else {
-	$titleBlock->addCrumb('?m=tasks&pinned=1', 'my pinned tasks');
+	$titleBlock->addCrumb('?m=tasks&amp;pinned=1', 'my pinned tasks');
 }
-$titleBlock->addCrumb('?m=tasks&inactive=toggle', 'show ' . $in . 'active tasks');
-$titleBlock->addCrumb('?m=tasks&a=tasksperuser', 'tasks per user');
+$titleBlock->addCrumb('?m=tasks&amp;inactive=toggle', 'show ' . $in . 'active tasks');
+$titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
 
 $titleBlock->show();
 

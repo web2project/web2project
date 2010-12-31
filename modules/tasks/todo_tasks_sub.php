@@ -11,7 +11,7 @@ $perms = &$AppUI->acl();
 $canDelete = $perms->checkModuleItem($m, 'delete');
 ?>
 <table width="100%" border="0" cellpadding="1" cellspacing="0">
-<form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&a=' . $a . '&date=' . $date; ?>" accept-charset="utf-8">
+<form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&amp;a=' . $a . '&amp;date=' . $date; ?>" accept-charset="utf-8">
 <input type="hidden" name="show_form" value="1" />
 
 <tr>
@@ -68,17 +68,17 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 </form>
 </table>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-<form name="form" method="post" action="index.php?<?php echo "m=$m&a=$a&date=$date"; ?>" accept-charset="utf-8">
+<form name="form" method="post" action="index.php?<?php echo "m=$m&amp;a=$a&amp;date=$date"; ?>" accept-charset="utf-8">
 <tr>
 	<th width="10">&nbsp;</th>
 	<th width="10"><?php echo $AppUI->_('Pin'); ?></th>
 	<th width="20" colspan="2"><?php echo $AppUI->_('Progress'); ?></th>
-	<th width="15" align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC, '&a=todo'); ?></th>
-	<th colspan="2"><?php sort_by_item_title('Task / Project', 'task_name', SORT_STRING, '&a=todo'); ?></th>
-	<th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC, '&a=todo'); ?></th>
-	<th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC, '&a=todo'); ?></th>
-	<th nowrap="nowrap"><?php sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC, '&a=todo'); ?></th>
-	<th nowrap="nowrap"><?php sort_by_item_title('Due In', 'task_due_in', SORT_NUMERIC, '&a=todo'); ?></th>
+	<th width="15" align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+	<th colspan="2"><?php sort_by_item_title('Task / Project', 'task_name', SORT_STRING, '&amp;a=todo'); ?></th>
+	<th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+	<th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+	<th nowrap="nowrap"><?php sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+	<th nowrap="nowrap"><?php sort_by_item_title('Due In', 'task_due_in', SORT_NUMERIC, '&amp;a=todo'); ?></th>
 	<?php if (w2PgetConfig('direct_edit_assignment')) { ?><th width="0">&nbsp;</th><?php } ?>
 </tr>
 <?php
