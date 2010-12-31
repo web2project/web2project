@@ -62,7 +62,7 @@ $titleBlock->show();
 // else users would be able to arbitrarily run 'bad' functions
 if ($canDelete && $deletable) {
 ?>
-  <script language="javascript">
+  <script language="javascript" type="text/javascript">
     function delIt() {
     	if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Company') . '?'; ?>' )) {
     		document.frmDelete.submit();

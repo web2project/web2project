@@ -25,7 +25,7 @@ $tasks = $q->loadList();
 $q->clear();
 ?>
 
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 function loadTasks() {
 	var tasks = new Array();
 	var sel = parent.document.forms['form'].new_task;

@@ -58,7 +58,7 @@ $titleBlock->addCrumb('?m=system&a=viewmods', 'modules list');
 $titleBlock->show();
 ?>
 
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitFrm( frmName ) {
 
 	eval('document.'+frmName+'.submit();');

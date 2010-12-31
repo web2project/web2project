@@ -1,4 +1,4 @@
-<?php /* $Id: vw_logs.php 1474 2010-10-18 01:00:44Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/vw_logs.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -34,7 +34,7 @@ if (isset($_GET['hide_complete'])) {
 $hide_complete = $AppUI->getState('ProjectsTaskLogsHideComplete');
 
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions

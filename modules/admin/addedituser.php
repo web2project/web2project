@@ -1,4 +1,4 @@
-<?php /* $Id: addedituser.php 1517 2010-12-05 08:07:54Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/admin/addedituser.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -87,7 +87,7 @@ if (!$user && $user_id > 0) {
 	}
 	$titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt(){
     var form = document.editFrm;
    if (form.user_username.value.length < <?php echo w2PgetConfig('username_min_len'); ?> && form.user_username.value != '<?php echo w2PgetConfig('admin_username'); ?>') {

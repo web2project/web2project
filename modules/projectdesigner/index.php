@@ -1,4 +1,4 @@
-<?php /* $Id: index.php 1475 2010-10-18 03:28:23Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/index.php $ */
+<?php /* $Id$ $URL$ */
 /*  Copyright (c) 2007 Pedro A. (web2Project Development Team Member)
 THIS MODULE WAS SPONSORED BY DUSTIN OF PURYEAR-IT.COM
 
@@ -77,7 +77,7 @@ if (!$project_id) {
 	}
 	$titleBlock->show();
 ?>
-	<script language="javascript">
+	<script language="javascript" type="text/javascript">
 	function submitIt() {
 		var f = document.prjFrm;
 		var msg ='';
@@ -237,7 +237,7 @@ if (!$project_id) {
 	$sel_extra = arraySelect($extra, 'add_task_extra0', 'style="width:80px" class="text"', '');
 	$sel_durntype = arraySelect($durntype, 'add_task_durntype0', 'style="width:80px" class="text"', '', true);
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
@@ -768,7 +768,7 @@ function setDate( frm_name, f_date ) {
 <tr><td id="td_sample">&nbsp;</td></tr>
 </table>
 </div>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 var original_bgc = getStyle('td_sample', 'background-color', 'backgroundColor');
 </script>
 <?php

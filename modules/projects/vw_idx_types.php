@@ -14,7 +14,7 @@ $project_status = dPgetSysVal('ProjectStatus');
 $project_types = dPgetSysVal('ProjectType');
 
 ?>
-<script type="text/JavaScript">
+<script language="javascript" type="text/javascript">
 
 function expand_multiproject(id, table_name) {
       var trs = document.getElementsByTagName('tr');

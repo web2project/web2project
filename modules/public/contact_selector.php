@@ -13,7 +13,7 @@ if (w2PgetParam($_POST, 'selected_contacts_id')) {
 	$selected_contacts_id = w2PgetParam($_POST, 'selected_contacts_id');
 }
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 // ECMA Script section Carsten Menke <menke@smp-synergie.de>
 function setContactIDs(method, querystring) {
 	var URL = 'index.php?m=public&a=contact_selector';
@@ -56,7 +56,7 @@ function remove_invalid($arr) {
 if ($contacts_submited == 1) {
 	$call_back_string = !is_null($call_back) ? "window.opener.$call_back('$selected_contacts_id');" : '';
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	<?php echo $call_back_string ?>
 	self.close();
 </script>

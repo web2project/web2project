@@ -345,7 +345,7 @@ global $history_active;
 $history_active = !empty($mods['history']) && canView('history');
 ?>
 
-<script type="text/JavaScript">
+<script language="javascript" type="text/javascript">
 function toggle_users(id){
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == "none") ? "inline" : "none";

@@ -90,7 +90,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function expand_multiproject(id, table_name) {
       var trs = document.getElementsByTagName('tr');
 

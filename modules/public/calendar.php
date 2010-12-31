@@ -30,7 +30,7 @@ if (isset($prev_date)) {
 
 echo $cal->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 /**
  *	@param string Input date in the format YYYYMMDD
  *	@param string Formatted date

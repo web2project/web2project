@@ -81,7 +81,7 @@ $xpg_totalrecs = count($q->loadList());
 $q->clear();
 $junkFile = new CFile();    //This line is total junk.. it's just here so getFolderSelectList() can be included.
 ?>
-<script type="text/JavaScript">
+<script language="javascript" type="text/javascript">
 function expand(id){
 	var element = document.getElementById(id);
 	element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';

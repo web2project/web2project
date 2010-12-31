@@ -64,7 +64,7 @@ if ($canEdit && $folder > 0) {
 $titleBlock->show();
 
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt() {
 	var f = document.folderFrm;
 	var msg = '';

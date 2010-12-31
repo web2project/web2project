@@ -48,7 +48,7 @@ if ($company_id != 0) {
 $titleBlock->show();
 ?>
 
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt() {
 	var form = document.changeclient;
 	if (form.company_name.value.length < 3) {

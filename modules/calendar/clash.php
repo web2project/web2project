@@ -35,7 +35,7 @@ if (isset($_REQUEST['clash_action'])) {
 } else {
 
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
   function set_clash_action(action) {
     var f = document.clash_form;
     f.clash_action.value = action;
@@ -112,7 +112,7 @@ function clash_suggest() {
 	}
 
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function setDate( frm_name, f_date ) {
 	fld_date = eval( 'document.' + frm_name + '.' + f_date );
 	fld_real_date = eval( 'document.' + frm_name + '.' + 'event_' + f_date );

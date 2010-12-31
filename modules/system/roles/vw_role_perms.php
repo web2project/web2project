@@ -37,7 +37,7 @@ $perm_list = $perms->getPermissionList();
 
 ?>
 
-<script type="text/javascript" language="javascript">
+<script language="javascript" type="text/javascript">
 <!--
 <?php
 // security improvement:

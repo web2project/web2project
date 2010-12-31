@@ -1,4 +1,4 @@
-<?php /* $Id: addedit.php 1520 2010-12-07 08:17:08Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/addedit.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -98,7 +98,7 @@ $ta = $tl & 1;
 $tt = $tl & 2;
 $tp = $tl & 4;
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 
 function setColor(color) {
 	var f = document.editFrm;

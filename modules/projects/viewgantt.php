@@ -1,4 +1,4 @@
-<?php /* $Id: viewgantt.php 1506 2010-12-03 05:06:28Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/viewgantt.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -76,7 +76,7 @@ if (!$min_view) {
 
 ?>
 
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function setDate( frm_name, f_date ) {
 	fld_date = eval( 'document.' + frm_name + '.' + f_date );
 	fld_real_date = eval( 'document.' + frm_name + '.' + 'project_' + f_date );

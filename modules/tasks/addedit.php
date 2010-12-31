@@ -1,4 +1,4 @@
-<?php /* $Id: addedit.php 1525 2010-12-11 08:46:05Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/addedit.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -205,7 +205,7 @@ $pq->addOrder('project_name');
 $project->setAllowedSQL($AppUI->user_id, $pq, null, 'pr');
 $projects = $pq->loadHashList();
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 var selected_contacts_id = '<?php echo $task->task_contacts; ?>';
 var task_id = '<?php echo $task->task_id; ?>';
 

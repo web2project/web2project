@@ -48,7 +48,7 @@ $titleBlock->show();
 
 if ($canDelete) {
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
   can_delete = true;
   delete_msg = '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Resource') . '?'; ?>';
 </script>

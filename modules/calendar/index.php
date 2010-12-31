@@ -1,4 +1,4 @@
-<?php /* $Id: index.php 1497 2010-11-27 22:08:59Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/index.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -47,7 +47,7 @@ $titleBlock->addCell(arraySelect($event_filter_list, 'event_filter', 'onChange="
 $titleBlock->show();
 ?>
 
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function clickDay( uts, fdate ) {
 	window.location = './index.php?m=calendar&a=day_view&date='+uts+'&tab=0';
 }

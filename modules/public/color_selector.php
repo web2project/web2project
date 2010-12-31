@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $callback = isset($_GET['callback']) ? w2PgetParam($_GET, 'callback', '') : 0;
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	function setClose(color){
 		window.opener.<?php echo $callback; ?>(color);
 		window.close();

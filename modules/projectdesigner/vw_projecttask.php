@@ -1,4 +1,4 @@
-<?php /* $Id: vw_projecttask.php 1516 2010-12-05 07:18:58Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/vw_projecttask.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -286,7 +286,7 @@ $projectStatus = w2PgetSysVal('ProjectStatus');
     <td align="center" colspan="20">
 <?php
 $src = "?m=projectdesigner&a=gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&project_id=$project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
-echo "<script>document.write('<img src=\"$src\">')</script>";
+echo "<script language=\"javascript\" type=\"text/javascript\">document.write('<img src=\"$src\">')</script>";
 ?>
 </td>
 </table>

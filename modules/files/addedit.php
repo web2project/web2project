@@ -116,7 +116,7 @@ if (isset($file->file_helpdesk_item)) {
 
 $folders = getFolderSelectList();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt() {
 	var f = document.uploadFrm;
 	f.submit();

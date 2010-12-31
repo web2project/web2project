@@ -18,7 +18,7 @@ if ($a = w2PgetParam($_REQUEST, 'a', '') == '') {
 
 $AppUI->loadCalendarJS();
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 function checkDate(){
            if (document.frmDate.log_start_date.value == '' || document.frmDate.log_end_date.value== ''){
                 alert('<?php echo $AppUI->_('You must fill fields', UI_OUTPUT_JS) ?>');

@@ -1,4 +1,4 @@
-<?php /* $Id: ae_depend.php 1518 2010-12-07 07:09:52Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/ae_depend.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -122,6 +122,6 @@ $q->clear();
         </tr>
     </table>
 </form>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	subForm.push( new FormDefinition(<?php echo $tab; ?>, document.dependFrm, checkDepend, saveDepend));
 </script>

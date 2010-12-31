@@ -73,7 +73,7 @@ if ($myId) {
 		$data_update_script .= 'opener.document.changecontact.' . $contact_field . '.value = \'' . $r_data[$record_field] . "';\n";
 	}
 	?>
-		<script language='javascript'>
+		<script language="javascript" type="text/javascript">
 			<?php echo $data_update_script; ?>
 			self.close();
 		</script>

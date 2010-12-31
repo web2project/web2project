@@ -73,7 +73,7 @@ if (!$department && $dept_id > 0) {
 	$titleBlock->addCrumb('?m=departments&a=view&dept_id=' . $dept_id, 'view this department');
 	$titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function testURL( x ) {
 	var test = 'document.editFrm.dept_url.value';
 	test = eval(test);

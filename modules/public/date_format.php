@@ -8,7 +8,7 @@ $field = w2PgetParam($_GET, 'field', '');
 $this_day = new CDate($date);
 $formatted_date = $this_day->format($df);
 ?>
-<script language="JavaScript" type="text/javascript">
+<script language="javascript" type="text/javascript">
 <!--
 	window.parent.document.<?php echo $field; ?>.value = '<?php echo $formatted_date; ?>';
 //-->

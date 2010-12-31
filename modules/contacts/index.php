@@ -1,4 +1,4 @@
-<?php /* $Id: index.php 1515 2010-12-05 07:13:50Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/contacts/index.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -110,7 +110,7 @@ $titleBlock->show();
 
 // TODO: Check to see that the Edit function is separated.
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	// Callback function for the generic selector
 	function goProject( key, val ) {
 		var f = document.modProjects;

@@ -1,4 +1,4 @@
-<?php /* $Id: addedit.php 1483 2010-10-26 17:11:59Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/forums/addedit.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -57,7 +57,7 @@ if ($canDelete && ($forum_id > 0)) {
 }
 $titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt(){
 	var form = document.changeforum;
 	if(form.forum_name.value.search(/^\s*$/) >= 0 ) {

@@ -1,4 +1,4 @@
-<?php /* $Id: addedit.php 1499 2010-11-27 22:45:12Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/addedit.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -149,7 +149,7 @@ for ($minutes = 0; $minutes < ((24 * 60) / $inc); $minutes++) {
 	$t->addSeconds($inc * 60);
 }
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt(){
 	var form = document.editFrm;
 	if (form.event_title.value.length < 1) {
