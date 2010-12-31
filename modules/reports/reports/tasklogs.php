@@ -68,7 +68,7 @@ function setDate( frm_name, f_date ) {
 }
 </script>
 
-<form name="editFrm" action="" method="GET" accept-charset="utf-8">
+<form name="editFrm" action="" method="get" accept-charset="utf-8">
 <input type="hidden" name="m" value="reports" />
 <input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />

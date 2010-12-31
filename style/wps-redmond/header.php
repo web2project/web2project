@@ -46,7 +46,7 @@ if ($dialog) {
                 $perms = &$AppUI->acl(); ?>
                 <tr>
                     <td align="left">
-                        <form name="frm_new" method="GET" action="./index.php" accept-charset="utf-8">
+                        <form name="frm_new" method="get" action="./index.php" accept-charset="utf-8">
                             <input type="hidden" name="a" value="addedit" />
                             <table width="100%" cellpadding="0" cellspacing="0" width="100%">
                                 <tbody>
