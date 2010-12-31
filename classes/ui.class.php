@@ -1178,7 +1178,7 @@ class CTabBox_core {
 	public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
 		$this->tabs = array();
 		$this->active = $active;
-		$this->baseHRef = ($baseHRef ? $baseHRef . '&' : '?');
+		$this->baseHRef = ($baseHRef ? $baseHRef . '&amp;' : '?');
 		$this->javascript = $javascript;
 		$this->baseInc = $baseInc;
 	}

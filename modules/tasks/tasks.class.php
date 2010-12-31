@@ -2443,10 +2443,10 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	$s .= '</td>';
 	// pinned
 	$pin_prefix = $arr['task_pinned'] ? '' : 'un';
-	$s .= ('<td align="center"><a href="?m=tasks&amp;pin=' . ($arr['task_pinned'] ? 0 : 1) . '&amp;task_id=' . $arr['task_id'] . '">' . w2PtoolTip('Pin', 'pin/unpin task') . '<img src="' . w2PfindImage('icons/' . $pin_prefix . 'pin.gif') . '" border="0" />' . w2PendTip() . '</a></td>');
+	$s .= ('<td><a href="?m=tasks&amp;pin=' . ($arr['task_pinned'] ? 0 : 1) . '&amp;task_id=' . $arr['task_id'] . '">' . w2PtoolTip('Pin', 'pin/unpin task') . '<img src="' . w2PfindImage('icons/' . $pin_prefix . 'pin.gif') . '" border="0" />' . w2PendTip() . '</a></td>');
 	// New Log
 	if ($arr['task_log_problem'] > 0) {
-		$s .= ('<td align="center" valign="middle"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
+		$s .= ('<td valign="middle"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
 	} elseif ($canViewLog && $arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
 		$s .= ('<td align="center"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a></td>');
 	} else {
@@ -2490,9 +2490,9 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 			$s .= $open_link;
 		}
 		if ($arr['task_dynamic'] == '1') {
-			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b><i>' . $arr['task_name'] . '</i></b></a></td>';
+			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b><i>' . $arr['task_name'] . '</i></b></a>' . w2PendTip() . '</td>';
 		} else {
-			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a></td>';
+			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a>' . w2PendTip() . '</td>';
 		}
 	} else {
 		$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a></td>';
@@ -2546,7 +2546,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	if ($showEditCheckbox) {
 		$s .= ('<td align="center">' . '<input type="checkbox" name="selected_task[' . $arr['task_id'] . ']" value="' . $arr['task_id'] . '"/></td>');
 	}
-	$s .= '</tr>';
+	$s .= '</tr>'."\n";
 	echo $s;
 }
 
@@ -2670,9 +2670,9 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	}
 	$s .= '" class="hdr">' . $AppUI->_($title);
 	if ($show_icon) {
-		$s .= '&nbsp;<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" border="0" /></a>';
+		$s .= '&nbsp;<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" border="0" />';
 	}
-	echo $s;
+	echo $s.'</a>';
 }
 
 /**

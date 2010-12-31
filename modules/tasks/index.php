@@ -67,7 +67,7 @@ if (canView('admin')) {
 
 $titleBlock->addCell();
 $titleBlock->addCell($AppUI->_('Company') . ':');
-$titleBlock->addCell(arraySelect($filters2, 'f2', 'size=1 class=text onChange="document.companyFilter.submit();"', $f2, false), '', '<form action="?m=tasks" method="post" name="companyFilter" accept-charset="utf-8">', '</form>');
+$titleBlock->addCell(arraySelect($filters2, 'f2', 'size="1" class="text" onChange="document.companyFilter.submit();"', $f2, false), '', '<form action="?m=tasks" method="post" name="companyFilter" accept-charset="utf-8">', '</form>');
 
 $titleBlock->addCell();
 if ($canEdit && $project_id) {
@@ -85,7 +85,7 @@ $in = $AppUI->getState('inactive') == -1 ? '' : 'in';
 $titleBlock = new CTitleBlock('', 'shim.gif');
 $titleBlock->showhelp = false;
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Task Filter') . ':');
-$titleBlock->addCell(arraySelect($filters, 'f', 'size=1 class=text onChange="document.taskFilter.submit();"', $f, true), '', '<form action="?m=tasks" method="post" name="taskFilter" accept-charset="utf-8">', '</form>');
+$titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onChange="document.taskFilter.submit();"', $f, true), '', '<form action="?m=tasks" method="post" name="taskFilter" accept-charset="utf-8">', '</form>');
 $titleBlock->addCell();
 
 $titleBlock->addCrumb('?m=tasks&amp;a=todo&amp;user_id=' . $user_id, 'my todo');

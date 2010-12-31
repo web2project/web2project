@@ -500,7 +500,7 @@ if ($project_id) {
 					?>
 					<tr>
 					  <td>
-							<form name="assFrm<?php echo ($p['project_id']) ?>" action="index.php?m=<?php echo ($m); ?>&a=<?php echo ($a); ?>" method="post" accept-charset="utf-8">
+							<form name="assFrm<?php echo ($p['project_id']) ?>" action="index.php?m=<?php echo ($m); ?>&amp;=<?php echo ($a); ?>" method="post" accept-charset="utf-8">
 							<input type="hidden" name="del" value="1" />
 							<input type="hidden" name="rm" value="0" />
 							<input type="hidden" name="store" value="0" />
@@ -519,7 +519,7 @@ if ($project_id) {
 							  <tr>
 									<!-- patch 2.12.04 display company name next to project name -->
 									<td nowrap="nowrap" style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>">
-										<a href="./index.php?m=projects&a=view&project_id=<?php echo $k; ?>">
+										<a href="./index.php?m=projects&amp;a=view&amp;project_id=<?php echo $k; ?>">
 											<span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
 											<strong><?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?></strong></span>
 										</a>
@@ -636,9 +636,9 @@ if ($project_id) {
 					<tr>
 					  <td colspan="<?php echo $cols; ?>" align="right">
 					  <input type="button" class="button" value="<?php echo $AppUI->_('Reports'); ?>" 
-					   onclick="javascript:window.location='index.php?m=reports&project_id=<?php echo $k; ?>';" />
+					   onclick="javascript:window.location='index.php?m=reports&amp;project_id=<?php echo $k; ?>';" />
 					  <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart'); ?>" 
-					   onclick="javascript:window.location='index.php?m=tasks&a=viewgantt&project_id=<?php echo $k; ?>';" />
+					   onclick="javascript:window.location='index.php?m=tasks&amp;a=viewgantt&amp;project_id=<?php echo $k; ?>';" />
 					  </td>
 					</tr>
 					</form>
