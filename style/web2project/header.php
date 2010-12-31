@@ -52,11 +52,10 @@ if ($dialog) {
                 <tr>
                     <td align="left">
                         <form name="frm_new" method="GET" action="./index.php" accept-charset="utf-8">
+                            <input type="hidden" name="a" value="addedit" />
                             <table width="100%" cellpadding="0" cellspacing="0" width="100%">
                                 <tbody>
                                     <?php
-                                        echo '<input type="hidden" name="a" value="addedit" />';
-
                                         //build URI string
                                         if (isset($company_id)) {
                                             echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';

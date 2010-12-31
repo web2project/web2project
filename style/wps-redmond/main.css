@@ -670,7 +670,6 @@ h4 {
 	border: 1px solid rgba(255,255,255,0.25);
 	background-color: rgb(25,25,25);
 	background-color: rgba(25,25,25,0.92);
-	#background-color:black;
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(transparent), to(#000));
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
