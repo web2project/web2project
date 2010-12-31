@@ -36,7 +36,7 @@ if ($dialog) {
                         <th align="left"><strong><a href='http://www.w8.se/' <?php if ($dialog)
                         echo "target='_blank'"; ?>><img src="style/<?php echo $uistyle; ?>/images/wp_icon.gif" border="0" /></a></strong></th>
                         <th align="right" width='95'><?php
-                        echo '<a href="http://www.web2project.net/">' . w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true) . '<img src="style/' . $uistyle . '/images/title.png" border="0" /></a>';?>
+                        echo '<a href="http://www.web2project.net/">' . w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true) . '<img src="style/' . $uistyle . '/images/title.png" border="0" alt="click to visit web2Project site"  /></a>';?>
                         </th>
                     </tr>
                     </table>
@@ -48,20 +48,20 @@ if ($dialog) {
                     <td align="left">
                         <form name="frm_new" method="get" action="./index.php" accept-charset="utf-8">
                             <input type="hidden" name="a" value="addedit" />
-                            <table width="100%" cellpadding="0" cellspacing="0" width="100%">
+                            <?php
+                                //build URI string
+                                if (isset($company_id)) {
+                                    echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';
+                                }
+                                if (isset($task_id)) {
+                                    echo '<input type="hidden" name="task_parent" value="' . $task_id . '" />';
+                                }
+                                if (isset($file_id)) {
+                                    echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
+                                }
+                            ?>
+                            <table width="100%" cellpadding="0" cellspacing="0">
                                 <tbody>
-                                    <?php
-                                        //build URI string
-                                        if (isset($company_id)) {
-                                            echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';
-                                        }
-                                        if (isset($task_id)) {
-                                            echo '<input type="hidden" name="task_parent" value="' . $task_id . '" />';
-                                        }
-                                        if (isset($file_id)) {
-                                            echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
-                                        }
-                                    ?>
                                     <tr class="nav">
                                         <td>
                                             <?php echo buildHeaderNavigation($AppUI, '', '', ' | '); ?>
@@ -117,28 +117,27 @@ if ($dialog) {
                                     </table>
                                 </td>
                                 <?php if ($AppUI->user_id > 0) { ?>
-                                    <td width="170" valign="middle" nowrap="nowrap"><table><tr><form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8"><td>
-                                        <?php
-                                        if (canAccess('smartsearch')) {
-                                            echo w2PshowImage('search.png') ?>&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
+                                    <td width="170" valign="middle" nowrap="nowrap"><table><tr><td><form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
+                                        <?php if (canAccess('smartsearch')) { ?>
+                                            <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
                                         <?php } else {
                                         echo '&nbsp;';
-                                        } ?></td></form></tr></table>
+                                        } ?></form></td></tr></table>
                                     </td>
                                     <td width="275" nowrap="nowrap">
                                         <table cellspacing="0" cellpadding="3" border="0" width="100%">
                                             <tr>
                                                 <td nowrap="nowrap" align="right">
-                                                    <input type="button" class="button" value="<?php echo $AppUI->_('Help'); ?>" onclick="javascript:window.open('?m=help&dialog=1&hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')" />
+                                                    <input type="button" class="button" value="<?php echo $AppUI->_('Help'); ?>" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')" />
                                                 </td>
                                                 <td nowrap="nowrap" align="right">
-                                                    <input type="button" class="button" value="<?php echo $AppUI->_('My Info'); ?>" onclick="javascript:window.location='./index.php?m=admin&a=viewuser&user_id=<?php echo $AppUI->user_id; ?>'" />
+                                                    <input type="button" class="button" value="<?php echo $AppUI->_('My Info'); ?>" onclick="javascript:window.location='./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id; ?>'" />
                                                 </td>
                                                 <?php
                                                 if (canAccess('tasks')) {
                                                     ?>
                                                     <td nowrap="nowrap" align="right">
-                                                        <input type="button" class="button" value="<?php echo $AppUI->_('Todo'); ?>" onclick="javascript:window.location='./index.php?m=tasks&a=todo'" />
+                                                        <input type="button" class="button" value="<?php echo $AppUI->_('Todo'); ?>" onclick="javascript:window.location='./index.php?m=tasks&amp;a=todo'" />
                                                     </td>
                                                     <?php
                                                 }
@@ -146,7 +145,7 @@ if ($dialog) {
                                                     $now = new CDate();
                                                     ?>
                                                     <td nowrap="nowrap" align="right">
-                                                        <input type="button" class="button" value="<?php echo $AppUI->_('Today'); ?>" onclick="javascript:window.location='./index.php?m=calendar&a=day_view&date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>'" />
+                                                        <input type="button" class="button" value="<?php echo $AppUI->_('Today'); ?>" onclick="javascript:window.location='./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>'" />
                                                     </td><?php
                                                 } ?>
                                                 <td nowrap="nowrap" align="right">

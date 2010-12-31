@@ -18,7 +18,7 @@ class w2p_Output_HTMLHelper {
             $contact->contact_id = $contact_id;
 
             $output .= '<tr>';
-            $output .= '<td class="hilite"><a href="index.php?m=contacts&a=addedit&contact_id=' . $contact_id . '">' . $contact_data['contact_order_by'] . '</a></td>';
+            $output .= '<td class="hilite"><a href="index.php?m=contacts&amp;a=addedit&amp;contact_id=' . $contact_id . '">' . $contact_data['contact_order_by'] . '</a></td>';
             $output .= '<td class="hilite">' . w2p_email($contact_data['contact_email']) . '</td>';
             $output .= '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
             $output .= '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
