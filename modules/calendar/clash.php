@@ -64,7 +64,7 @@ if (isset($_REQUEST['clash_action'])) {
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'cancel\');">' . $AppUI->_('Cancel') . '</a> : ';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'mail\');">' . $AppUI->_('Mail Request') . '</a> : ';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'accept\');">' . $AppUI->_('Book Event Despite Conflict') . '</a>';
-	$s .= '<form name="clash_form" method="POST" action="' . $calurl . '" accept-charset="utf-8">';
+	$s .= '<form name="clash_form" method="post" action="' . $calurl . '" accept-charset="utf-8">';
 	$s .= '<input type="hidden" name="clash_action" value="cancel">';
 	$s .= '</form>';
 	echo $s;
@@ -137,7 +137,7 @@ function set_clash_action(action) {
 }
 
 </script>
-<form name="editFrm" method="POST" action="<?php echo $calurl.'&clash_action=process'; ?>" accept-charset="utf-8">
+<form name="editFrm" method="post" action="<?php echo $calurl.'&clash_action=process'; ?>" accept-charset="utf-8">
 <table width='100%' class='std'>
 <tr>
   <td width='50%' align='right'><?php echo $AppUI->_('Earliest Date'); ?>:</td>

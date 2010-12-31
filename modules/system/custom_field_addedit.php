@@ -142,13 +142,13 @@ foreach ($html_types as $k => $ht) {
 		frm.submit();
 	}
 </script>
-<form method="POST" action="?m=system&a=custom_field_editor" id="custform" accept-charset="utf-8">
+<form method="post" action="?m=system&a=custom_field_editor" id="custform" accept-charset="utf-8">
+    <input type="hidden" name="field_id" value="<?php echo $field_id; ?>" />
+    <input type="hidden" name="module" value="<?php echo $module ?>" />
+    <input type="hidden" name="dontdosql" id="dosql" value="do_custom_field_aed" />
 <table class="std" width="100%">
 	<th colspan="2">
 		<?php echo $edit_title ?> <?php echo $AppUI->_($module) ?> <?php echo $AppUI->_('Module') ?>
-		<input type="hidden" name="field_id" value="<?php echo $field_id; ?>" />
-		<input type="hidden" name="module" value="<?php echo $module ?>" /> 
-		<input type="hidden" name="dontdosql" id="dosql" value="do_custom_field_aed" />
 	</td></tr>
 	<tr><td>
 		<?php echo $AppUI->_('Field Name/Identifier') ?>:
