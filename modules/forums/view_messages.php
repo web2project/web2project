@@ -25,7 +25,7 @@ $crumbs['?m=forums'] = 'forums list';
 $crumbs['?m=forums&a=viewer&forum_id=' . $forum_id] = 'topics for this forum';
 $crumbs['?m=forums&a=view_pdf&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort . '&suppressHeaders=1'] = 'view PDF file';
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 <?php
 if ($viewtype != 'normal') {
 ?>

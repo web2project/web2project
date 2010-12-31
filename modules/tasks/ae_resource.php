@@ -31,7 +31,7 @@ foreach ($assigned_perc as $user_id => $data) {
 }
 
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 <?php
 echo "var projTasksWithEndDates=new Array();\n";
 $keys = array_keys($projTasksWithEndDates);
@@ -107,6 +107,6 @@ for ($i = 5; $i <= 100; $i += 5) {
 </table>
 <input type="hidden" name="hassign" />
 </form>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	subForm.push(new FormDefinition(<?php echo $tab; ?>, document.resourceFrm, checkResource, saveResource));
 </script>

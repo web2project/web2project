@@ -70,7 +70,7 @@ foreach ($projects as $project_id => $project_info) {
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt() {
 	var f = document.uploadFrm;
 	f.submit();

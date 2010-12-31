@@ -162,7 +162,7 @@ $xpg_totalrecs = count($q->loadList());
 echo buildPaginationNav($AppUI, $m, ++$tab, $xpg_totalrecs, $xpg_pagesize, $page);
 
 ?>
-<script type="text/JavaScript">
+<script language="javascript" type="text/javascript">
 function expand(id){
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';

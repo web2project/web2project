@@ -61,7 +61,7 @@ $log_date = new CDate($log->task_log_date);
 ?>
 
 <!-- TIMER RELATED SCRIPTS -->
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 	// please keep these lines on when you copy the source
 	// made by: Nicolas - http://www.javascript-page.com
 	// adapted by: Juan Carlos Gonzalez jcgonz@users.sourceforge.net

@@ -110,7 +110,7 @@ $titleBlock->show();
 
 // TODO: Check to see that the Edit function is separated.
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	// Callback function for the generic selector
 	function goProject( key, val ) {
 		var f = document.modProjects;

@@ -89,6 +89,6 @@ $custom_fields->printHTML();
 </tr>
 </table>
 </form>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	subForm.push(new FormDefinition(<?php echo $tab; ?>, document.detailFrm, checkDetail, saveDetail));
 </script>

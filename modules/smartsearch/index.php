@@ -33,7 +33,7 @@ if ($ssearch['advanced_search'] == 'on') {
 }
 
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 
 	function focusOnSearchBox() {
 		document.forms.frmSearch.keyword.focus();

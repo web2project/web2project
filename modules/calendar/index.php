@@ -47,7 +47,7 @@ $titleBlock->addCell(arraySelect($event_filter_list, 'event_filter', 'onChange="
 $titleBlock->show();
 ?>
 
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function clickDay( uts, fdate ) {
 	window.location = './index.php?m=calendar&a=day_view&date='+uts+'&tab=0';
 }

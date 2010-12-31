@@ -149,7 +149,7 @@ for ($minutes = 0; $minutes < ((24 * 60) / $inc); $minutes++) {
 	$t->addSeconds($inc * 60);
 }
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt(){
 	var form = document.editFrm;
 	if (form.event_title.value.length < 1) {

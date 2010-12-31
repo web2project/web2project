@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $uistyle;
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function gt_hide_tabs() {
 	var tabs = document.getElementsByTagName('td');
 	var i;

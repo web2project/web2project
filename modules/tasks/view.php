@@ -83,7 +83,7 @@ $titleBlock->show();
 $task_types = w2PgetSysVal('TaskType');
 
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 function updateTask() {
 	var f = document.editFrm;
     <?php

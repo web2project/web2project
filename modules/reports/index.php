@@ -29,7 +29,7 @@ foreach ($projectList as $pr) {
 
 if (!$suppressHeaders) {
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
                                                                                 
 function changeIt() {
         var f=document.changeMe;

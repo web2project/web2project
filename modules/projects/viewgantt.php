@@ -76,7 +76,7 @@ if (!$min_view) {
 
 ?>
 
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function setDate( frm_name, f_date ) {
 	fld_date = eval( 'document.' + frm_name + '.' + f_date );
 	fld_real_date = eval( 'document.' + frm_name + '.' + 'project_' + f_date );

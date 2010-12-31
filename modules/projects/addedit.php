@@ -98,7 +98,7 @@ $ta = $tl & 1;
 $tt = $tl & 2;
 $tp = $tl & 4;
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 
 function setColor(color) {
 	var f = document.editFrm;

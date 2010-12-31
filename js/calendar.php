@@ -30,7 +30,7 @@ $cal_sdf = str_replace('%d', '%dd', $cal_sdf);
 $cal_sdf = str_replace('%b', '%NNN', $cal_sdf);
 $cal_sdf = str_replace('%', '', $cal_sdf);
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 //w2P Related
 // ------------------------------------------------------------------
 // parseDate( date_string [, prefer_euro_format] )

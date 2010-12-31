@@ -87,7 +87,7 @@ if (!$user && $user_id > 0) {
 	}
 	$titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt(){
     var form = document.editFrm;
    if (form.user_username.value.length < <?php echo w2PgetConfig('username_min_len'); ?> && form.user_username.value != '<?php echo w2PgetConfig('admin_username'); ?>') {

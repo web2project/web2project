@@ -39,7 +39,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 function submitIt() {
 	var form = document.changeuser;
 	// Collate the checked states of the task log stuff

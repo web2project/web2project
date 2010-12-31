@@ -122,6 +122,6 @@ $q->clear();
         </tr>
     </table>
 </form>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	subForm.push( new FormDefinition(<?php echo $tab; ?>, document.dependFrm, checkDepend, saveDepend));
 </script>

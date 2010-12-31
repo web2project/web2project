@@ -15,7 +15,7 @@ $problem = intval(w2PgetParam($_GET, 'problem', null));
 $taskLogReference = w2PgetSysVal('TaskLogReference');
 $taskLogReferenceImage = w2PgetSysVal('TaskLogReferenceImage');
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions

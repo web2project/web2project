@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $w2Pconfig, $projects, $project_id;
 ?>
 
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 function buildTaskName(id) {
 	var f = document.editFrm;
 	var taskNameObj = eval('f.add_task_name_'+id);

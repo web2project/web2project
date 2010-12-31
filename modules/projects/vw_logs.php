@@ -34,7 +34,7 @@ if (isset($_GET['hide_complete'])) {
 $hide_complete = $AppUI->getState('ProjectsTaskLogsHideComplete');
 
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions

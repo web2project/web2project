@@ -205,7 +205,7 @@ $pq->addOrder('project_name');
 $project->setAllowedSQL($AppUI->user_id, $pq, null, 'pr');
 $projects = $pq->loadHashList();
 ?>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 var selected_contacts_id = '<?php echo $task->task_contacts; ?>';
 var task_id = '<?php echo $task->task_id; ?>';
 

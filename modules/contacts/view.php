@@ -68,7 +68,7 @@ $lastupdated = new CDate($contact->contact_lastupdate);
         <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
         <input type="hidden" name="contact_owner" value="<?php echo $contact->contact_owner ? $contact->contact_owner : $AppUI->user_id; ?>" />
 </form>
-<script language="JavaScript">
+<script language="javascript" type="text/javascript">
 function delIt(){
         var form = document.changecontact;
         if(confirm( '<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>' )) {

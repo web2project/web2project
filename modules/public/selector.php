@@ -144,7 +144,7 @@ if (!$ok) {
 	$list = arrayMerge(array(0 => $AppUI->_('[none]')), $query_result ? $query_result : $resultList);
 	echo db_error();
 ?>
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 	function setClose(key, val){
 		window.opener.<?php echo $callback; ?>(key,val);
 		window.close();

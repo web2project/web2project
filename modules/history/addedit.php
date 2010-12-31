@@ -77,7 +77,7 @@ if ($canDelete) {
 $titleBlock->show();
 ?>
 
-<script>
+<script language="javascript" type="text/javascript">
 	function delIt() {
 		document.AddEdit.action.value = 'del';
 		document.AddEdit.submit();

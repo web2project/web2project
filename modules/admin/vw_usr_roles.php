@@ -27,7 +27,7 @@ foreach ($roles as $role) {
 
 ?>
 
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 <?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions

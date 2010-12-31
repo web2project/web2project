@@ -98,7 +98,7 @@ foreach ($html_types as $k => $ht) {
 	}
 }
 ?>
-<script>
+<script language="javascript" type="text/javascript">
 	function hideAll() {
 		var selobj = document.getElementById('htmltype');
 		for (i = 0, i_cmp = selobj.options.length; i < i_cmp; i++) {
