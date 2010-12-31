@@ -1,4 +1,4 @@
-<?php /* $Id: tasks.class.php 1526 2010-12-11 08:52:38Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/tasks.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -2427,11 +2427,11 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$days = $now->dateDiff($end_date) * $sign;
 	}
 
-	//     $s = "\n<tr id=\"project_".$arr['task_project'].'_level>'.$level.'<task_'.$arr['task_id']."_\" ".((($level>0 && !($m=='tasks' && $a=='view')) || ($m=='tasks' && ($a=='' || $a=='index'))) ? 'style="display:none"' : '').'>';
+    $jsTaskId = 'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_';
 	if ($expanded) {
-		$s = '<tr id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_" >';
+		$s = '<tr id="' . $jsTaskId . '" >';
 	} else {
-		$s = '<tr id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
+		$s = '<tr id="' . $jsTaskId . '" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
 	}
 	// edit icon
 	$s .= '<td align="center">';
@@ -2468,15 +2468,16 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	}
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">';
+			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">';
 		} else {
-			$s .= '<img src="' . w2PfindImage('shim.gif') . '" width="16" height="12"  border="0">';
+			$s .= '';
 		}
 	}
 	if ($arr['task_description']) {
 		$s .= w2PtoolTip('Task Description', $arr['task_description'], true);
 	}
-	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '_\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="project_' . $arr['task_project'] . '_level>' . $level . '<task_' . $arr['task_id'] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
+
+	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif') . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
 	if ($arr['task_nr_of_children']) {
 		$is_parent = true;
 	} else {

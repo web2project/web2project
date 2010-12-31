@@ -735,7 +735,7 @@ function expand_collapse(id, table_name, option, opt_level, root) {
             //If we included the root for collapsing/expand lets do it:
             } else if((tr_name.indexOf(id) >= 0) && level>=0 && include_root) {
                 found = true;
-                current_level = parseInt(tr_name.substr(tr_name.indexOf('>')+1,tr_name.indexOf('<')-tr_name.indexOf('>')-1));
+                current_level = parseInt(tr_name.substr(tr_name.indexOf('-')+1,tr_name.indexOf('-')-tr_name.indexOf('>')-1));
                 if (collapse) {
                     if (navigator.family == 'gecko' || navigator.family == 'opera' || navigator.family == 'ie8'){
                         //if root mode is 1 hide, if not then don't do a thing
@@ -779,7 +779,7 @@ function expand_collapse(id, table_name, option, opt_level, root) {
             //lets handle expand collapses of leveled rows (like tasks dynamics) - THIS "ELSEIF" HANDLES THE ROWS THEMSELVES
             } else if(level>0 && !done && (found || level==0)) {
                 //Lets catch the level
-                current_level = parseInt(tr_name.substr(tr_name.indexOf('>')+1,tr_name.indexOf('<')-tr_name.indexOf('>')-1));
+                current_level = parseInt(tr_name.substr(tr_name.indexOf('-')+1,tr_name.indexOf('-')-tr_name.indexOf('>')-1));
                 //If the current_level is equal or lower then we are done and we are already on another tree.
                 if (current_level < level) {
                     done = true;
