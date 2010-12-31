@@ -1,4 +1,4 @@
-<?php /* PROJECTS $Id: vw_idx_projects.php 1500 2010-11-27 22:45:35Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/vw_idx_projects.php $ */
+<?php /* PROJECTS $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -195,9 +195,9 @@ if ($is_tabbed) {
 
 					$s .= '<td align="center">';
 					if ($row['project_priority'] < 0) {
-						$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width=13 height=16>';
+						$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width="13" height="16" alt="">';
 					} elseif ($row['project_priority'] > 0) {
-						$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width=13 height=16>';
+						$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width="13" height="16" alt="">';
 					}
 					$s .= '</td><td width="40%">';
 
@@ -205,7 +205,7 @@ if ($is_tabbed) {
 
 					if ($level) {
 						$s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1));
-                        $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;';
+                        $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">&nbsp;';
                         $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
                         $s .= (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : w2PtoolTip($row['project_name'], $AppUI->_('No information available'), true));
                         $s .= $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
@@ -214,8 +214,8 @@ if ($is_tabbed) {
                                 '<i>'.$AppUI->_('this project is a parent on a multi-project structure').'</i><br />'.
                                 '<i>'.$AppUI->_('click to show/hide its children').'</i>');
                         $s .= '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')">';
-                        $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0">';
-                        $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;';
+                        $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0" alt="">';
+                        $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none" alt=""></a>&nbsp;';
                         $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row['project_name'] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
 					} else {
 						$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';

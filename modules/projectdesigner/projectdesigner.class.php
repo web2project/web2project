@@ -171,7 +171,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	$canEdit = ($a['task_represents_project']) ? false : true;
 	$canViewLog = true;
 	if ($canEdit) {
-		$s .= w2PtoolTip('edit tasks panel', 'click to edit this task') . '<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('icons/pencil.gif') . '" border="0" width="12" height="12" /></a>' . w2PendTip();
+		$s .= w2PtoolTip('edit tasks panel', 'click to edit this task') . '<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('icons/pencil.gif') . '" border="0" width="12" height="12" alt="" /></a>' . w2PendTip();
 	}
 	$s .= '</td>';
 	// percent complete
@@ -179,9 +179,9 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	// priority
 	$s .= '<td align="center" nowrap="nowrap">';
 	if ($a['task_priority'] < 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$a['task_priority'] . '.gif') . '" width="13" height="16" />';
+		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$a['task_priority'] . '.gif') . '" width="13" height="16" alt="" />';
 	} elseif ($a['task_priority'] > 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['task_priority'] . '.gif') . '" width="13" height="16" />';
+		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['task_priority'] . '.gif') . '" width="13" height="16" alt="" />';
 	}
 	$s .= $a['file_count'] > 0 ? '<img src="' . w2PfindImage('clip.png') . '" alt="' . $AppUI->_('Files') . '" />' : '';
 	$s .= '</td>';
@@ -204,7 +204,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	// add log
 	$s .= '<td align="center" nowrap="nowrap">';
 	if ($a['task_dynamic'] != 1 && 0 == $a['task_represents_project']) {
-		$s .= w2PtoolTip('tasks', 'add work log to this task') . '<a href="?m=tasks&a=view&tab=1&project_id=' . $a['task_project'] . '&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('add.png', $m) . '" border="0" width="16" height="16" /></a>' . w2PendTip();
+		$s .= w2PtoolTip('tasks', 'add work log to this task') . '<a href="?m=tasks&a=view&tab=1&project_id=' . $a['task_project'] . '&task_id=' . $a['task_id'] . '"><img src="' . w2PfindImage('add.png', $m) . '" border="0" width="16" height="16" alt="" /></a>' . w2PendTip();
 	}
 	$s .= '</td>';
 	// dots
@@ -215,9 +215,9 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	}
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif', $m) . '" width="16" height="12" border="0" />';
+			$s .= '<img src="' . w2PfindImage('corner-dots.gif', $m) . '" width="16" height="12" border="0" alt="" />';
 		} else {
-			$s .= '<img src="' . w2PfindImage('shim.gif', $m) . '" width="16" height="12"  border="0" />';
+			$s .= '<img src="' . w2PfindImage('shim.gif', $m) . '" width="16" height="12"  border="0" alt="" />';
 		}
 	}
 	// name link
@@ -225,7 +225,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 		$s .= w2PtoolTip('Task Description', $a['task_description'], true);
 	}
     $jsTaskId = 'task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_';
-	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
+	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' alt="" /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' alt="" /></a>';
 	$taskObj = new CTask;
 	$taskObj->load($a['task_id']);
 	if (count($taskObj->getChildren())) {
@@ -234,7 +234,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 		$is_parent = false;
 	}
 	if ($a['task_milestone'] > 0) {
-		$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ><b>' . $a['task_name'] . '</b></a> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" /></td>';
+		$s .= '&nbsp;<a href="./index.php?m=tasks&a=view&task_id=' . $a['task_id'] . '" ><b>' . $a['task_name'] . '</b></a> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" alt="" /></td>';
 	} elseif ($a['task_dynamic'] == '1' || $is_parent) {
 		$s .= $open_link;
 		if ($a['task_dynamic'] == '1') {
@@ -366,9 +366,9 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 	$s .= '<td nowrap width="20%">';
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif', $m) . '" width="16" height="12" border="0" />';
+			$s .= '<img src="' . w2PfindImage('corner-dots.gif', $m) . '" width="16" height="12" border="0" alt="" />';
 		} else {
-			$s .= '<img src="' . w2PfindImage('shim.gif', $m) . '" width="16" height="12"  border="0" />';
+			$s .= '<img src="' . w2PfindImage('shim.gif', $m) . '" width="16" height="12"  border="0" alt="" />';
 		}
 	}
 	// name link
@@ -380,7 +380,7 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 
 	$open_link = w2PshowImage('collapse.gif');
 	if ($a['task_milestone'] > 0) {
-		$s .= '&nbsp;<!--<a href="./index.php?m=tasks&a=view&task_id=' . $a["task_id"] . '" title="' . $alt . '">--><b>' . $a["task_name"] . '</b><!--</a>--> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" /></td>';
+		$s .= '&nbsp;<b>' . $a["task_name"] . '</b><!--</a>--> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" alt="" /></td>';
 	} elseif ($a['task_dynamic'] == '1') {
 		$s .= $open_link;
 		$s .= '<strong>' . $a['task_name'] . '</strong>';

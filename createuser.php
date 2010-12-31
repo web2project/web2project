@@ -54,7 +54,7 @@ function submitIt(){
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<tr>
 		<td valign="top" style="background: url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg)" align="left">
-			<img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
+			<img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg" alt=""/>
 		</td>
 	</tr>
 </table>

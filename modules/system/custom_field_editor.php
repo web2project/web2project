@@ -36,7 +36,7 @@ $s = '<table width="100%" class="std" cellpadding="2">';
 
 foreach ($modules as $module) {
 	$s .= '<tr valign="bottom"><td colspan="4">';
-	$s .= '<h3><span title="' . $AppUI->_('Add Custom Field') . '::' . $AppUI->_('Click this icon to Add a new Custom Field to this Module.') . '"><a href="?m=system&a=custom_field_addedit&module=' . $module['mod_name'] . '"><img src="' . w2PfindImage('icons/edit_add.png') . '" align="center" width="16" height="16" border="0"></a></span>';
+	$s .= '<h3><span title="' . $AppUI->_('Add Custom Field') . '::' . $AppUI->_('Click this icon to Add a new Custom Field to this Module.') . '"><a href="?m=system&a=custom_field_addedit&module=' . $module['mod_name'] . '"><img src="' . w2PfindImage('icons/edit_add.png') . '" align="center" width="16" height="16" border="0" alt=""></a></span>';
 	$s .= $AppUI->_($module['mod_name']) . '</h3>';
 	$s .= '</td></tr>';
 
@@ -59,9 +59,9 @@ foreach ($modules as $module) {
 
 	foreach ($custom_fields as $f) {
 		$s .= '<tr><td class="hilite" width="10">';
-		$s .= '<span title="' . $AppUI->_('Edit Custom Field') . '::' . $AppUI->_('Click this icon to Edit this Custom Field.') . '"><a href="?m=system&a=custom_field_addedit&module=' . $module['mod_name'] . '&field_id=' . $f['field_id'] . '"><img src="' . w2PfindImage('icons/stock_edit-16.png') . '" align="center" width="16" height="16" border="0"></a></span>';
+		$s .= '<span title="' . $AppUI->_('Edit Custom Field') . '::' . $AppUI->_('Click this icon to Edit this Custom Field.') . '"><a href="?m=system&a=custom_field_addedit&module=' . $module['mod_name'] . '&field_id=' . $f['field_id'] . '"><img src="' . w2PfindImage('icons/stock_edit-16.png') . '" align="center" width="16" height="16" border="0" alt=""></a></span>';
 		$s .= '</td><td class="hilite" width="10">';
-		$s .= '<span title="' . $AppUI->_('Delete Custom Field') . '::' . $AppUI->_('Click this icon to Delete this Custom Field.') . '"><a href="?m=system&a=custom_field_addedit&field_id=' . $f['field_id'] . '&delete=1"><img src="' . w2PfindImage('icons/stock_delete-16.png') . '" align="center" width="16" height="16" border="0"></a> ';
+		$s .= '<span title="' . $AppUI->_('Delete Custom Field') . '::' . $AppUI->_('Click this icon to Delete this Custom Field.') . '"><a href="?m=system&a=custom_field_addedit&field_id=' . $f['field_id'] . '&delete=1"><img src="' . w2PfindImage('icons/stock_delete-16.png') . '" align="center" width="16" height="16" border="0" alt=""></a> ';
 		$s .= '<td class="hilite">';
 		$s .= stripslashes($f['field_name']);
 		$s .= '</td><td class="hilite">';

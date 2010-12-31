@@ -23,9 +23,9 @@ function showchilddept_comp(&$a, $level = 0) {
 
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">';
+			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">';
 		} else {
-			$s .= '<img src="' . w2PfindImage('shim.gif') . '" width="16" height="12" border="0">';
+			$s .= '<img src="' . w2PfindImage('shim.gif') . '" width="16" height="12" border="0" alt="">';
 		}
 	}
 

@@ -233,7 +233,7 @@ if ($do_report) {
 			$str .= '<td>' . $Tasks['project_name'] . '</td>';
 		}
 		$str .= '<td>';
-        $str .= ($Tasks['task_id'] == $Tasks['task_parent']) ? '' : '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" />';
+        $str .= ($Tasks['task_id'] == $Tasks['task_parent']) ? '' : '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="" />';
         $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $Tasks['task_id'] . '">' . $Tasks['task_name'] . '</a></td>';
 		$str .= '<td>' . nl2br($Tasks['task_description']) . '</td>';
 		$str .= '<td>' . $users . '</td>';

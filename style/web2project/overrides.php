@@ -54,7 +54,7 @@ class CTabBox extends CTabBox_core {
 		} else {
 			// tabbed view
 			$s = '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
-			$s .= '<tr><td><table align="' . $alignment . '" border="0" cellpadding="0" cellspacing="0">';
+			$s .= '<tr><td><table align="' . $alignment . '" border="0" cellpadding="0" cellspacing="0"><tr>';
 
 			if (count($this->tabs) - 1 < $this->active) {
 				//Last selected tab is not available in this view. eg. Child tasks
@@ -74,9 +74,9 @@ class CTabBox extends CTabBox_core {
 				}
 				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a>&nbsp;</td>';
 				$s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/images/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>';
-				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '"/></td>';
+				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '" alt=""/></td>';
 			}
-			$s .= '</table></td></tr>';
+			$s .= '</tr></table></td></tr>';
 
 			//round the right top of the tab box
 			$s .= '<tr><td>';
@@ -84,7 +84,7 @@ class CTabBox extends CTabBox_core {
 			$s .= '<tbody>';
 			$s .= '<tr>';
 			$s .= '	<td valign="bottom" width="100%" background="./style/' . $uistyle . '/images/tabbox_top.jpg" align="left">';
-			$s .= '		<img src="./style/' . $uistyle . '/images/tabbox_top.jpg"/>';
+			$s .= '		<img src="./style/' . $uistyle . '/images/tabbox_top.jpg" alt=""/>';
 			$s .= '	</td>';
 			$s .= '</tr>';
 			$s .= '</tbody>';

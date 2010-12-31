@@ -108,7 +108,7 @@ function testURL( x ) {
 					</tr>
 					<tr>
 						<td colspan="2" align="center">
-							<img src="<?php echo w2PfindImage('shim.gif'); ?>" width="50" height="1" /><?php echo $AppUI->_('Address'); ?><br />
+							<img src="<?php echo w2PfindImage('shim.gif'); ?>" width="50" height="1" alt="" /><?php echo $AppUI->_('Address'); ?><br />
 							<hr width="500" align="center" size="1" />
 						</td>
 					</tr>

@@ -1,4 +1,4 @@
-<?php /* $Id: login.php 1331 2010-09-06 03:14:09Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/style/w2p-snowball/login.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
@@ -31,7 +31,7 @@ if (!defined('W2P_BASE_DIR')) {
             <tbody>
                 <tr>
                     <td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg) repeat-x scroll 0%;">
-                        <img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg"/>
+                        <img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg" alt=""/>
                     </td>
                 </tr>
             </tbody>

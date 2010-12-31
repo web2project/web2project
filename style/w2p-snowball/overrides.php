@@ -37,8 +37,6 @@ class CTabBox extends CTabBox_core {
 		} else {
 			if ($extra) {
 				echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr>' . '</table>';
-			} else {
-				# echo "<img src=\"".w2PfindImage('shim.gif')."\" height=\"10\" width=\"1\" alt=\"\" />";
 			}
 		}
 
@@ -76,7 +74,7 @@ class CTabBox extends CTabBox_core {
 				}
 				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a>&nbsp;</td>';
 				$s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/images/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>';
-				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '"/></td>';
+				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '" alt=""/></td>';
 			}
 			$s .= '</table></td></tr>';
 
@@ -86,7 +84,7 @@ class CTabBox extends CTabBox_core {
 			$s .= '<tbody>';
 			$s .= '<tr>';
 			$s .= '	<td valign="bottom" width="100%" background="./style/' . $uistyle . '/images/tabbox_top.jpg" align="left">';
-			$s .= '		<img src="./style/' . $uistyle . '/images/tabbox_top.jpg"/>';
+			$s .= '		<img src="./style/' . $uistyle . '/images/tabbox_top.jpg" alt=""/>';
 			$s .= '	</td>';
 			$s .= '</tr>';
 			$s .= '</tbody>';

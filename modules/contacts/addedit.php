@@ -195,7 +195,7 @@ function addContactMethod(field, value) {
     /* Add contact method type menu to the table row */
     $('#contact_methods_' + index + '_').append('<td align="right"><select id="method_select_' + index + '" name="contact_methods[field][' + index + ']" size="1" class="text" /></td>');
     /* Add text field for the contact method value to the table row */
-    $('#contact_methods_' + index + '_').append('<td><input type="text" name="contact_methods[value][' + index + ']" size="25" maxlength="255" class="text" value="' + (value ? value : "") + '" /><?php echo w2PtoolTip('Contact Method', 'Remove') ?><a id="remove_contact_method" href="javascript:removeContactMethod(\'' + index + '\')"><img src="<?php echo w2PfindImage('icons/remove.png'); ?>" style="border: 0;" /></a><?php echo w2PendTip() ?></td>');
+    $('#contact_methods_' + index + '_').append('<td><input type="text" name="contact_methods[value][' + index + ']" size="25" maxlength="255" class="text" value="' + (value ? value : "") + '" /><?php echo w2PtoolTip('Contact Method', 'Remove') ?><a id="remove_contact_method" href="javascript:removeContactMethod(\'' + index + '\')"><img src="<?php echo w2PfindImage('icons/remove.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?></td>');
     addOption('#method_select_' + index, "", "");
     <?php foreach ($methodLabels as $value => $text): ?> 
     addOption('#method_select_' + index, "<?php echo $value; ?>", "<?php echo $text; ?>", field);
@@ -362,7 +362,7 @@ $(document).ready(function() {
                         <td><input type="text" class="text" name="contact_email" value="<?php echo $row->contact_email; ?>" maxlength="60" size="25" /></td>
                     </tr>
                     <tr>
-                        <td align="left"><?php echo w2PtoolTip('Contact Method', 'add new', false, 'add_contact_method') ?><a href="javascript:addContactMethod();"><img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" style="border: 0;" /></a><?php echo w2PendTip() ?></td>
+                        <td align="left"><?php echo w2PtoolTip('Contact Method', 'add new', false, 'add_contact_method') ?><a href="javascript:addContactMethod();"><img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?></td>
                     </tr>
 					<tr id="custom_fields">
 						<th colspan="2">
