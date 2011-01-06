@@ -138,8 +138,14 @@ $titleBlock->show();
             <?php echo $AppUI->_('Select a module to upload'); ?>:
             <form action="./index.php?m=system" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="dosql" value="do_module_upload" />
-                <input type="file" name="module_upload" size="50" maxlength="250000" />
-                <input type="submit" value="<?php echo $AppUI->_('Upload'); ?>" />
+                <input type="file" name="module_upload" size="50" maxlength="1000000" class="text" />
+                <?php if (is_writable(W2P_BASE_DIR.'/files')) { ?>
+                <input type="submit" value="<?php echo $AppUI->_('Upload'); ?>" class="text" />
+                <?php } else { ?>
+                    <span class="error">
+                        <?php echo $AppUI->_('Module uploads are not allowed. Please check permissions on the /modules directory.'); ?>
+                    </span>
+                <?php } ?>
             </form>
         </td>
     </tr>
