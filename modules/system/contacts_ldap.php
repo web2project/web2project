@@ -310,6 +310,8 @@ $proto = $AppUI->getState('LDAPProto', '3');
                 }
                 echo $s;
             ?>
+            </pre>
 		</td>
 	</tr>
 </table>
+</form>
