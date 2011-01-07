@@ -1,6 +1,6 @@
 <?php
 /**
- * Necessary global variables 
+ * Necessary global variables
  */
 global $db;
 global $ADODB_FETCH_MODE;
@@ -23,13 +23,13 @@ require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';
 /**
  * DateTest Class.
- * 
+ *
  * Class to test the date include
  * @author D. Keith Casey, Jr.
  * @package web2project
  * @subpackage unit_tests
  */
-class CAppUI_Test extends PHPUnit_Framework_TestCase 
+class CAppUI_Test extends PHPUnit_Framework_TestCase
 {
 	public function test__()
 	{
@@ -78,7 +78,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
   public function testSetState()
   {
   	global $AppUI;
-    
+
     $AppUI->setState('testSetState', 'someValue');
     $this->assertEquals('someValue', $AppUI->getState('testSetState'));
     $AppUI->setState('testSetState', 'anotherValue');
@@ -87,7 +87,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
   public function testProcessTabState()
   {
-    global $AppUI;   
+    global $AppUI;
     $myArray = array('existingKey' => 13, 'existingKey2' => 42);
 
     $AppUI->processIntState('testProcessState', null,     'existingKey', 9);
@@ -129,7 +129,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 	public function testHoldRestoreObject()
 	{
 	  global $AppUI;
-	  
+
 	  $this->assertNull($AppUI->restoreObject());
 	  $myArray = array('one' => 'something', 2 => 'another');
 	  $AppUI->holdObject($myArray);
@@ -149,12 +149,12 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 	  $AppUI->setMsg($msg, 0, false);
 	  $this->AssertEquals($msg, $AppUI->msg);
 	  $AppUI->setMsg($msg, 0, true);
-	  $this->AssertEquals($msg.' '.$msg, $AppUI->msg);	  
+	  $this->AssertEquals($msg.' '.$msg, $AppUI->msg);
 	  $AppUI->setMsg($msg, 0, false);
 	  $this->AssertEquals($msg, $AppUI->msg);
 
 	  $myArray = array('one' => 'First Message', 'two' => 'Second Message');
-	  $AppUI->setMsg($myArray, 0, false);
+      $AppUI->setMsg($myArray, 0, false);
 	  $this->AssertEquals('First Message<br />Second Message', $AppUI->msg);
 
 	  $AppUI->setMsg($msg, 0, false);
