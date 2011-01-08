@@ -28,7 +28,7 @@ $sql_table = 'contacts';
 // or
 //	"telephonenumber2" => "contact_phone2",
 
-$sql_ldap_mapping = array('givenname' => 'first_name', 'sn' => 'last_name', 'title' => 'job', 'telephonenumber' => 'phone', 'mail' => 'contact_email', 'o' => 'company', 'ou' => 'department', 'personaltitle' => 'title', 'employeetype' => 'type', 'postaladdress' => 'address1', 'l' => 'city', 'st' => 'state', 'postalcode' => 'zip', 'c' => 'country', 'comment' => 'notes');
+$sql_ldap_mapping = array('givenname' => 'first_name', 'sn' => 'last_name', 'title' => 'job', 'telephonenumber' => 'phone', 'mail' => 'email', 'o' => 'company', 'ou' => 'department', 'personaltitle' => 'title', 'employeetype' => 'type', 'postaladdress' => 'address1', 'l' => 'city', 'st' => 'state', 'postalcode' => 'zip', 'c' => 'country', 'comment' => 'notes');
 $contact_methods_ldap_mapping = array('homephone' => 'phone_alt', 'fax' => 'phone_fax', 'mobile' => 'phone_mobile');
 
 if (isset($_POST['server'])) {
@@ -310,6 +310,8 @@ $proto = $AppUI->getState('LDAPProto', '3');
                 }
                 echo $s;
             ?>
+            </pre>
 		</td>
 	</tr>
 </table>
+</form>
