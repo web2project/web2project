@@ -82,15 +82,19 @@ class CFile extends w2p_Core_BaseObject {
     public function hook_search()
     {
         $search['table'] = 'files';
+        $search['table_alias'] = 'f';
         $search['table_module'] = 'files';
-        $search['table_key'] = 'file_id'; // primary key in searched table
+        $search['table_key'] = 'f.file_id'; // primary key in searched table
         $search['table_link'] = 'index.php?m=files&a=addedit&file_id='; // first part of link
         $search['table_title'] = 'Files';
-        $search['table_orderby'] = 'file_name';
-        $search['search_fields'] = array('file_name', 'file_description', 'file_type', 'file_version', 'file_co_reason');
-        $search['display_fields'] = array('file_name', 'file_description', 'file_type', 'file_version', 'file_co_reason');
+        $search['table_orderby'] = 'file_name, word_placement';
+        $search['search_fields'] = array('file_name', 'file_description',
+            'file_type', 'file_version', 'file_co_reason', 'word');
+        $search['display_fields'] = $search['search_fields'];
+        $search['table_joins'] = array(array('table' => 'files_index',
+            'alias' => 'fi', 'join' => 'f.file_id = fi.file_id'));
 
-        return $search;        
+        return $search;
     }
 
 	public static function getFileList(CAppUI $AppUI = null, $company_id, $project_id, $task_id, $category_id) {
