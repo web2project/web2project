@@ -340,10 +340,10 @@ class CModule extends CW2pObject {
             $numFiles = $zip->numFiles;
 
             if ($numFiles > 0) {
-                $moduleDir = $zip->getNameIndex(0);
+                $moduleDir = $zip->getNameIndex($numFiles-1);
                 $moduleName = substr($moduleDir, 0, -1);
 
-                //TODO: move module validation to check()
+//TODO: move module validation to check()
                 if ($zip->locateName($moduleDir.'setup.php') === false) {
                     $errorMsgArray['missing_setup'] = 'This module is not well-formed, missing: '.$moduleDir.'setup.php';
                 }
