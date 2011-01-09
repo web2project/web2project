@@ -54,10 +54,10 @@ if (!$link && $link_id > 0) {
 
 // setup the title block
 $ttl = $link_id ? 'Edit Link' : 'Add Link';
-$titleBlock = new CTitleBlock($ttl, 'folder5.png', $m, $m . '.' . $a);
+$titleBlock = new CTitleBlock($AppUI->_($ttl), 'folder5.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, 'links list');
 $canDelete = $perms->checkModuleItem($m, 'delete', $link_id);
-if ($canDelete && $link_id > 0) {
+if ($canDelete && $link_id) {
 	$titleBlock->addCrumbDelete('delete link', $canDelete, $msg);
 }
 $titleBlock->show();
