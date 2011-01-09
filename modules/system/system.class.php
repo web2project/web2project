@@ -1,4 +1,4 @@
-<?php /* $Id: system.class.php 1527 2010-12-13 07:56:13Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/system/system.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -340,10 +340,10 @@ class CModule extends CW2pObject {
             $numFiles = $zip->numFiles;
 
             if ($numFiles > 0) {
-                $moduleDir = $zip->getNameIndex(0);
+                $moduleDir = $zip->getNameIndex($numFiles-1);
                 $moduleName = substr($moduleDir, 0, -1);
 
-                //TODO: move module validation to check()
+//TODO: move module validation to check()
                 if ($zip->locateName($moduleDir.'setup.php') === false) {
                     $errorMsgArray['missing_setup'] = 'This module is not well-formed, missing: '.$moduleDir.'setup.php';
                 }
