@@ -702,6 +702,8 @@ class CProject extends CW2pObject {
 
 		if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
 			$q = new DBQuery;
+            $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
+            $q->addQuery('contact_order_by, contact_email, contact_phone');
 			$q->addTable('contacts', 'c');
             $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
 
@@ -710,7 +712,6 @@ class CProject extends CW2pObject {
 
 			$q->addJoin('project_contacts', 'pc', 'pc.contact_id = c.contact_id', 'inner');
 			$q->addWhere('pc.project_id = ' . (int) $projectId);
-			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_order_by');
 
 			$q->addWhere('
 				(contact_private=0
