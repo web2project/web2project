@@ -3,26 +3,11 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = (int) w2PgetParam($_POST, 'del', 0);
+$delete = (int) w2PgetParam($_POST, 'del', 0);
 
-$obj = new CFileFolder();
-if (!$obj->bind($_POST)) {
-    $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-    $AppUI->redirect();
-}
+$controller = new w2p_Controllers_Base(
+                    new CFileFolder(), $delete, 'File Folder', 'm=files', 'm=files&a=addedit_folder'
+                  );
 
-$action = ($del) ? 'deleted' : 'stored';
-$result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
-
-if (is_array($result)) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
-    $AppUI->holdObject($obj);
-    //$AppUI->redirect('m=files&a=addedit_folder&folder='.$obj->file_folder_id);
-    $AppUI->redirect();
-}
-if ($result) {
-    $AppUI->setMsg('File Folder '.$action, UI_MSG_OK, true);
-    $AppUI->redirect('m=files');
-} else {
-    $AppUI->redirect('m=public&a=access_denied');
-}
+$AppUI = $controller->process($AppUI, $_POST);
+$AppUI->redirect($controller->resultPath);
