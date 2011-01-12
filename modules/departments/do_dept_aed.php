@@ -1,32 +1,15 @@
-<?php /* $Id: do_dept_aed.php 1528 2010-12-13 08:03:04Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/departments/do_dept_aed.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = (int) w2PgetParam($_POST, 'del', 0);
-$sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
-$dept_id = (int) w2PgetParam($_POST, 'dept_id', 0);
-$isNotNew = $dept_id;
+$delete = (int) w2PgetParam($_POST, 'del', 0);
+$company_id = (int) w2PgetParam($_POST, 'dept_company', 0);
+$successPath = 'm=companies&a=view&company_id='.$company_id;
 
-$perms = &$AppUI->acl();
+$controller = new w2p_Controllers_Base(
+                    new CDepartment(), $delete, 'Department', $successPath, 'm=departments&a=addedit'
+                  );
 
-$obj = new CDepartment();
-if (!$obj->bind($_POST)) {
-    $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-    $AppUI->redirect();
-}
-
-$action = ($del) ? 'deleted' : 'stored';
-$result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
-
-if (is_array($result)) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
-    $AppUI->holdObject($obj);
-    $AppUI->redirect('m=departments&a=addedit');
-}
-if ($result) {
-    $AppUI->setMsg('Department '.$action, UI_MSG_OK, true);
-    $AppUI->redirect('m=companies&a=view&company_id='.$obj->dept_company);
-} else {
-    $AppUI->redirect('m=public&a=access_denied');
-}
+$AppUI = $controller->process($AppUI, $_POST);
+$AppUI->redirect($controller->resultPath);
