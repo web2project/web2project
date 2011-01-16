@@ -493,6 +493,7 @@ table.minical td.week {
 }
 table.minical td.empty {
   color: #aaaaaa;
+  background-color: #E0E0E0;
 }
 table.minical td.day  {
   text-align: center;

@@ -361,18 +361,18 @@ class CMonthCalendar {
 					$html .= ' style="border: 1px solid ' . $this->highlightedDays[$day] . '"';
 				}
 				$html .= ' onclick="' . $this->dayFunc . '(\'' . $day . '\',\'' . $this_day->format($df) . '\')' . '">';
-				if ($m == $this_month) {
-					if ($this->dayFunc) {
-						$html .= "<a href=\"javascript:$this->dayFunc('$day','" . $this_day->format($df) . "')\" class=\"$class\">";
-						$html .= $d;
-						$html .= '</a>';
-					} else {
-						$html .= $d;
-					}
-					if ($this->showEvents) {
-						$html .= $this->_drawEvents(substr($day, 0, 8));
-					}
-				}
+
+                                if ($this->dayFunc) {
+                                        $html .= "<a href=\"javascript:$this->dayFunc('$day','" . $this_day->format($df) . "')\" class=\"$class\">";
+                                        $html .= $d;
+                                        $html .= '</a>';
+                                } else {
+                                        $html .= $d;
+                                }
+                                if ($this->showEvents) {
+                                        $html .= $this->_drawEvents(substr($day, 0, 8));
+                                }
+                                
 				$html .= '</td>';
 			}
 			$html .= '</tr>';
