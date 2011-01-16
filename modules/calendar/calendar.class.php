@@ -1,4 +1,4 @@
-<?php /* $Id: calendar.class.php 1516 2010-12-05 07:18:58Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/calendar.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -769,7 +769,7 @@ class CEvent extends CW2pObject {
 				if ($uid) {
 					$q->addTable('user_events', 'ue');
 					$q->addInsert('event_id', $this->event_id);
-					$q->addInsert('user_id', $uid);
+					$q->addInsert('user_id', (int) $uid);
 					$q->exec();
 					$q->clear();
 				}
@@ -989,6 +989,7 @@ class CEvent extends CW2pObject {
 
     public function store(CAppUI $AppUI) {
         $perms = $AppUI->acl();
+        $this->event_owner = $AppUI->user_id;
         $stored = false;
 
         $errorMsgArray = $this->check();
@@ -1015,7 +1016,10 @@ class CEvent extends CW2pObject {
             }
             $stored = true;
         }
-
+        if ($stored) {
+            // TODO:  I *really* don't like using the POST inside here..
+            $this->updateAssigned(explode(',', $_POST['event_assigned']));
+        }
         return $stored;
     }
 

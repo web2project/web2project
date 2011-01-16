@@ -66,9 +66,6 @@ if ($del) {
 	}
 	$AppUI->redirect('m=calendar');
 } else {
-	if (!$isNotNew) {
-		$obj->event_owner = $AppUI->user_id;
-	}
 	// Check for existence of clashes.
 	if ($_POST['event_assigned'] > '' && ($clash = $obj->checkClash($_POST['event_assigned']))) {
 		$last_a = $a;
