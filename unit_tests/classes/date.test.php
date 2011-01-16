@@ -118,8 +118,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
     {
         $date       = new CDate();
         $datetime   = new DateTime();
-print_r($datetime); //TODO: not sure why this is necessary.. but the next line doesn't work without it..
-        $timezone   = new DateTimeZone($datetime->timezone);
+        $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
         $this->assertType('CDate',                  $date);
         $this->assertEquals($datetime->format('Y'), $date->year);
@@ -140,8 +139,7 @@ print_r($datetime); //TODO: not sure why this is necessary.. but the next line d
     {
         $date       = new CDate('2010-08-07 11:00:00');
         $datetime   = new DateTime('2010-08-07 11:00:00');
-print_r($datetime); //TODO: not sure why this is necessary.. but the next line doesn't work without it..
-        $timezone   = new DateTimeZone($datetime->timezone);
+        $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
         $this->assertType('CDate',                  $date);
         $this->assertEquals($datetime->format('Y'), $date->year);
@@ -161,8 +159,7 @@ print_r($datetime); //TODO: not sure why this is necessary.. but the next line d
     {
         $date       = new CDate('2010-08-07 11:00:00', 'America/Halifax');
         $datetime   = new DateTime('2010-08-07 11:00:00', new DateTimeZone('America/Halifax'));
-print_r($datetime); //TODO: not sure why this is necessary.. but the next line doesn't work without it..
-        $timezone   = new DateTimeZone($datetime->timezone);
+        $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
         $this->assertType('CDate',                      $date);
         $this->assertEquals($datetime->format('Y'),     $date->year);
@@ -180,10 +177,9 @@ print_r($datetime); //TODO: not sure why this is necessary.. but the next line d
      */
     public function testConstructorInvalidDateTime()
     {
-        $date = new CDate('2010-35-35 28:65:85');
+        $date       = new CDate('2010-35-35 28:65:85');
         $datetime   = new DateTime();
-print_r($datetime); //TODO: not sure why this is necessary.. but the next line doesn't work without it..
-        $timezone   = new DateTimeZone($datetime->timezone);
+        $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
         $this->assertType('CDate',                  $date);
         $this->assertEquals(2010,                   $date->year);
