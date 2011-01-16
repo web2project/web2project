@@ -670,10 +670,12 @@ class CAppUI {
         $this->msgNo = $msgNo;
 
         if (is_array($msg)) {
+            $tmp_msg = '';
             foreach ($msg as $value) {
-                $this->msg .= $this->_($value, UI_OUTPUT_RAW) . '<br />';
+                $tmp_msg .= $this->_($value, UI_OUTPUT_RAW) . '<br />';
             }
-            $this->msg = trim($this->msg, '<br />');
+            $tmp_msg = trim($tmp_msg, '<br />');
+            $this->msg = ($append) ? $this->msg . ' ' . $tmp_msg : $tmp_msg;
         } else {
             $msg = $this->_($msg, UI_OUTPUT_RAW);
             $this->msg = ($append) ? $this->msg . ' ' . $msg : $msg;

@@ -1,6 +1,27 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
 /**
- * Necessary global variables 
+ * Class for testing AppUI functionality
+ *
+ *
+ * PHP version 5
+ *
+ * LICENSE: This source file is subject to GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version. Please see the LICENSE file in root of site
+ * for further details
+ *
+ * @category    Date
+ * @package     web2project
+ * @subpackage  unit_tests
+ * @author      D. Keith Casey, Jr.
+ * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @link        http://www.web2project.net
+ */
+
+/**
+ * Necessary global variables
  */
 global $db;
 global $ADODB_FETCH_MODE;
@@ -29,7 +50,7 @@ require_once 'PHPUnit/Framework.php';
  * @package web2project
  * @subpackage unit_tests
  */
-class CAppUI_Test extends PHPUnit_Framework_TestCase 
+class CAppUI_Test extends PHPUnit_Framework_TestCase
 {
 	public function test__()
 	{
@@ -129,7 +150,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 	public function testHoldRestoreObject()
 	{
 	  global $AppUI;
-	  
+
 	  $this->assertNull($AppUI->restoreObject());
 	  $myArray = array('one' => 'something', 2 => 'another');
 	  $AppUI->holdObject($myArray);
@@ -149,12 +170,12 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 	  $AppUI->setMsg($msg, 0, false);
 	  $this->AssertEquals($msg, $AppUI->msg);
 	  $AppUI->setMsg($msg, 0, true);
-	  $this->AssertEquals($msg.' '.$msg, $AppUI->msg);	  
+	  $this->AssertEquals($msg.' '.$msg, $AppUI->msg);
 	  $AppUI->setMsg($msg, 0, false);
 	  $this->AssertEquals($msg, $AppUI->msg);
 
 	  $myArray = array('one' => 'First Message', 'two' => 'Second Message');
-	  $AppUI->setMsg($myArray, 0, false);
+      $AppUI->setMsg($myArray, 0, false);
 	  $this->AssertEquals('First Message<br />Second Message', $AppUI->msg);
 
 	  $AppUI->setMsg($msg, 0, false);
