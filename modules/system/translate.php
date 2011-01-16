@@ -69,11 +69,14 @@ if ($lang != 'en') {
 ksort($trans);
 
 $titleBlock = new CTitleBlock('Translation Management', 'rdf2.png', $m, $m . '.' . $a);
-
+/*
+ * TODO: While this implementation is close, I'd rather use the normal setMsg
+ *   functionality as it handles marking the message as an error and inserting
+ *   linebreaks, etc.
+ */
 if(file_exists($localeFile) && !is_writable($localeFile)) {
-    $titleBlock->addCell('', '', '<span class="error">' . $AppUI->_("Locales file ($localeFile) is not writable.") . '</span>', '');
+    $titleBlock->addCell('', '', '<span class="error">' . $AppUI->_("Locales file ($localeFile) is not writable.") . '</span><br />', '');
 }
-
 $localeFolder = pathinfo($localeFile, PATHINFO_DIRNAME);
 if(!is_writable($localeFolder)) {
     $titleBlock->addCell('', '', '<span class="warning">' . $AppUI->_("Locales folder ($localeFolder) is not writable.") . '</span>', '');
@@ -157,5 +160,5 @@ echo $s;
 		<input type="submit" value="<?php echo $AppUI->_('submit'); ?>" class="button" />
 	</td>
 </tr>
-</form>
 </table>
+</form>
