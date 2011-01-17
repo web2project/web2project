@@ -62,12 +62,44 @@ function clickWeek( uts, fdate ) {
 $date = new CDate($date);
 
 // prepare time period for 'events'
+// "go back" to the first day shown on the calendar
+// and "go forward" to the last day shown on the calendar
 $first_time = new CDate($date);
 $first_time->setDay(1);
 $first_time->setTime(0, 0, 0);
+
+// if Sunday is the 1st, we don't need to go back
+// as that's the first day shown on the calendar
+if($first_time->getDayOfWeek() != 0) {
+    $last_day_of_previous_month = $first_time->getPrevDay();
+    $day_of_previous_month = $last_day_of_previous_month->getDayOfWeek();
+    $seconds_to_sub_in_previous_month = 86400 * $day_of_previous_month;
+    // need to cast it to int because Pear::Date_Span::set down the line
+    // fails to set the seconds correctly
+    $last_day_of_previous_month->subtractSeconds((int)$seconds_to_sub_in_previous_month);
+
+    $first_time->setDay($last_day_of_previous_month->getDay());
+    $first_time->setMonth($last_day_of_previous_month->getMonth());
+    $first_time->setYear($last_day_of_previous_month->getYear());
+}
+
 $last_time = new CDate($date);
 $last_time->setDay($date->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
+
+// if Saturday is the last day of month, we don't need to go forward
+// as that's the last day shown on the calendar
+if($last_time->getDayOfWeek() != 6) {
+    $first_day_of_next_month = $last_time->getNextDay();
+    $day_of_next_month = $first_day_of_next_month->getDayOfWeek();
+    $seconds_to_add_in_next_month = 86400 * $day_of_next_month;
+    // need to cast it to int because Pear::Date_Span::set down the line
+    // fails to set the seconds correctly
+    $first_day_of_next_month->addSeconds((int)$seconds_to_add_in_next_month);
+    $last_time->setDay($first_day_of_next_month->getDay());
+    $last_time->setMonth($first_day_of_next_month->getMonth());
+    $last_time->setYear($first_day_of_next_month->getYear());
+}
 
 $links = array();
 
