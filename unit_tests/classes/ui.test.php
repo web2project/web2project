@@ -62,7 +62,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
      */
     public function testNewAppUIAttributes()
     {
-        global $w2pconfig;
+        global $w2Pconfig;
 
         $AppUI = new CAppUI;
 
@@ -95,6 +95,56 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('objStore',         $AppUI);
         $this->assertObjectHasAttribute('project_id',       $AppUI);
     }
+
+    /**
+     * Tests the value of the attributes of a new AppUI object
+     */
+    public function testNewAppUIAttributeValues()
+    {
+        global $w2Pconfig;
+
+        $AppUI = new CAppUI;
+
+        $user_lang = array (
+            0 => 'en.ISO8859-15',
+            1 => 'enu',
+            2 => 'en',
+            3 => 'en',
+        );
+
+        $cfg = array(
+            'locale_warn' => '',
+        );
+
+        $this->assertEquals(array(),    $AppUI->state);
+        $this->assertEquals(-1,         $AppUI->user_id);
+        $this->assertEquals('',         $AppUI->user_first_name);
+        $this->assertEquals('',         $AppUI->user_last_name);
+        $this->assertEquals(0,          $AppUI->user_company);
+        $this->assertEquals(0,          $AppUI->user_department);
+        $this->assertEquals('',         $AppUI->user_email);
+        $this->assertEquals(0,          $AppUI->user_type);
+        $this->assertEquals(array(),    $AppUI->user_prefs);
+        $this->assertEquals('',         $AppUI->day_selected);
+        $this->assertEquals('en',       $AppUI->user_locale);
+        $this->assertEquals($user_lang, $AppUI->user_lang);
+        $this->assertEquals('en',       $AppUI->base_locale);
+        $this->assertEquals('',         $AppUI->msg);
+        $this->assertEquals('',         $AppUI->msgNo);
+        $this->assertEquals('',         $AppUI->defaultRedirect);
+        $this->assertEquals($cfg,       $AppUI->cfg);
+        $this->assertEquals('',         $AppUI->version_major);
+        $this->assertEquals('',         $AppUI->version_minor);
+        $this->assertEquals('',         $AppUI->version_patch);
+        $this->assertEquals('',         $AppUI->version_string);
+        $this->assertEquals('',         $AppUI->last_insert_id);
+        $this->assertEquals('',         $AppUI->user_style);
+        $this->assertEquals(0,          $AppUI->user_is_admin);
+        $this->assertEquals('',         $AppUI->long_date_format);
+        $this->assertEquals('',         $this->readAttribute($AppUI, 'objStore'));
+        $this->assertEquals(0,          $AppUI->project_id);
+    }
+
 
     /**
      * Test the translation function
@@ -251,5 +301,30 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
 	  $AppUI->setMsg($msg, 0, false);
 	  $this->AssertEquals($msg, $AppUI->msg);
-	}
+    }
+
+    /**
+     * Tests getting a system class
+     */
+    public function testGetSystemClassValid()
+    {
+        global $AppUI;
+
+        $class_path = $AppUI->getSystemClass('cdate');
+
+        $this->assertEquals(W2P_BASE_DIR . '/classes/cdate.class.php', $class_path);
+    }
+
+    /**
+     * Tests getting a system class when no class name is passed
+     */
+    public function testGetSystemClassNoNcame()
+    {
+        global $AppUI;
+
+        $class_path = $AppUI->getSystemClass();
+
+        $this->assertNull($class_path);
+    }
+
 }
