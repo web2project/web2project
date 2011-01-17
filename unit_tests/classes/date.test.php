@@ -170,7 +170,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($datetime->format('s'),     $date->second);
 
         $this->assertEquals($timezone->getName(),   $date->tz['id']);
-        }
+    }
 
     /**
      * Tests constructor with an invalid datetime
