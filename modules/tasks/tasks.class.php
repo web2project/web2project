@@ -473,7 +473,7 @@ class CTask extends CW2pObject {
 
 		if ($newObj->task_parent == $this->task_id) {
 			$newObj->task_parent = '';
-		}
+        }
 		$newObj->store($AppUI);
 		$this->copyAssignedUsers($newObj->task_id);
 
@@ -673,7 +673,8 @@ class CTask extends CW2pObject {
 		}
 
 		// if is child update parent task
-		if ($this->task_parent != $this->task_id) {
+        if ($this->task_parent && $this->task_parent != $this->task_id) {
+
 			if (!$importing_tasks) {
 				$this->updateDynamics(true);
 			}

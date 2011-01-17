@@ -254,8 +254,8 @@ class CProject extends CW2pObject {
 		// Copy each task into this project and get their deps
 		foreach ($tasks as $orig => $void) {
 			$objTask = new CTask();
-			$objTask->load($orig);
-			$destTask = $objTask->copy($this->project_id);
+            $objTask->load($orig);
+            $destTask = $objTask->copy($this->project_id);
 			$tasks[$orig] = $destTask;
 			$deps[$orig] = $objTask->getDependencies();
 		}
