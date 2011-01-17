@@ -44,7 +44,7 @@ if (($msg = $contact->store($AppUI))) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
 	$msg = $AppUI->_('There was an error recording your contact data, please contact the system administrator. Thank you very much.');
 } else {
-	$custom_fields = new CustomFields('contacts', 'addedit', $contact->contact_id, 'edit', 1);
+	$custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $contact->contact_id, 'edit', 1);
 	$custom_fields->bind($_POST);
 	$custom_fields->store($contact->contact_id);
 	
