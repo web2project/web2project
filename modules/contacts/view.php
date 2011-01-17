@@ -92,7 +92,7 @@ function delIt(){
 				</tr>
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Display Name'); ?>: </td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_order_by; ?></td>
+					<td class="hilite" width="100%"><?php echo $contact->contact_display_name; ?></td>
 				</tr>
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Job Title'); ?>:</td>

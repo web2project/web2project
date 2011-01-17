@@ -90,7 +90,7 @@ function submitIt() {
 	if (form.contact_last_name.value.length < 1) {
 		alert( '<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>' );
 		form.contact_last_name.focus();
-	} else if (form.contact_order_by.value.length < 1) {
+	} else if (form.contact_display_name.value.length < 1) {
 		orderByName('name');
 		form.submit();
 	} else {
@@ -145,9 +145,9 @@ function delIt(){
 function orderByName( x ){
 	var form = document.changecontact;
 	if (x == 'name') {
-		form.contact_order_by.value = form.contact_first_name.value + ' ' + form.contact_last_name.value;
+		form.contact_display_name.value = form.contact_first_name.value + ' ' + form.contact_last_name.value;
 	} else {
-		form.contact_order_by.value = form.contact_company_name.value;
+		form.contact_display_name.value = form.contact_company_name.value;
 	}
 }
 
@@ -246,7 +246,7 @@ $(document).ready(function() {
                 <tr>
                     <td align="right"><?php echo $AppUI->_('Display Name'); ?>: </td>
                     <td>
-                        <input type="text" class="text" size="25" name="contact_order_by" value="<?php echo $row->contact_order_by; ?>" maxlength="50" />
+                        <input type="text" class="text" size="25" name="contact_display_name" value="<?php echo $row->contact_display_name; ?>" maxlength="50" />
                     </td>
                 </tr>
                 <tr>

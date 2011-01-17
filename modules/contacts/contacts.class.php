@@ -19,7 +19,7 @@ class CContact extends w2p_Core_BaseObject {
 	/**
  	@public string */
 	public $contact_last_name = '';
-	public $contact_order_by = '';
+	public $contact_display_name = '';
 	public $contact_title = null;
 	public $contact_job = null;
 	public $contact_birthday = null;

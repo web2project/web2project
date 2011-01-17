@@ -141,7 +141,7 @@ if (function_exists('styleRenderBoxTop')) {
 								<table width="100%" cellspacing="0" cellpadding="1" class="std">
 									<tr>
 										<td width="100%" colspan="2">
-											<table width="100%" cellspacing="0" cellpadding="1" class="">
+											<table width="100%" cellspacing="0" cellpadding="1">
 												<?php $contactid = $carr[$z][$x]['contact_id']; ?>
 												<th style="text-align:left" width="70%">
 													<a href="./index.php?m=contacts&a=view&contact_id=<?php echo $contactid; ?>"><strong><?php echo ($carr[$z][$x]['contact_title'] ? $carr[$z][$x]['contact_title'] . ' ' : '') . $carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name']; ?></strong></a>
