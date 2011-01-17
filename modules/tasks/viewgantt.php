@@ -70,7 +70,7 @@ if ($a == 'todo') {
   * 
   */ 
 $filter_task_list = array();
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('projects');
 $q->addQuery('project_id, project_color_identifier, project_name' 
              . ', project_start_date, project_end_date');
@@ -437,7 +437,7 @@ if (!$min_view) {
         <td valign="top" align="center">
             <?php
             if ($a != 'todo') {
-                $q = new DBQuery;
+                $q = new w2p_Database_Query;
                 $q->addTable('tasks');
                 $q->addQuery('COUNT(task_id) AS N');
                 $q->addWhere('task_project=' . (int)$project_id);

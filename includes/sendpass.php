@@ -25,7 +25,7 @@ function sendNewPass() {
 	$confirmEmail = trim(w2PgetParam($_POST, 'checkemail', ''));
 	$confirmEmail = strtolower(db_escape($confirmEmail));
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('users');
 	$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
 	$q->addQuery('user_id');
@@ -40,7 +40,7 @@ function sendNewPass() {
      *   v1.x and they try to log in before applying the database, crash.
      *   Info: http://bugs.web2project.net/view.php?id=457
      */
-    $qTest = new DBQuery();
+    $qTest = new w2p_Database_Query();
     $qTest->addTable('w2pversion');
     $qTest->addQuery('max(db_version)');
     $dbVersion = $qTest->loadResult();

@@ -55,7 +55,7 @@ $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
 
 // SQL text for count the total recs from the selected option
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addQuery('count(file_id)');
 $q->addTable('files', 'f');
 $q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -83,7 +83,7 @@ if ($task_id) {
 $q->addGroup('file_version_id');
 
 // SETUP FOR FILE LIST
-$q2 = new DBQuery;
+$q2 = new w2p_Database_Query;
 $q2->addQuery('f.*' . ', max(f.file_id) as latest_id' . ', count(f.file_version) as file_versions, round(max(f.file_version),2) as file_lastversion');
 $q2->addQuery('ff.*');
 $q2->addTable('files', 'f');
@@ -117,7 +117,7 @@ $q2->setLimit($xpg_pagesize, $xpg_min);
 $q2->addGroup('p.project_id');
 $q2->addGroup('file_version_id DESC');
 
-$q3 = new DBQuery;
+$q3 = new w2p_Database_Query;
 $q3->addQuery('file_id, file_version, file_version_id, file_project, file_name, file_task, task_name, file_description, file_checkout, file_co_reason, u.user_username as file_owner, file_size, file_category, file_type, file_date, cu.user_username as co_user, project_name, project_color_identifier, project_owner, con.contact_first_name, con.contact_last_name, co.contact_first_name as co_contact_first_name, co.contact_last_name as co_contact_last_name ');
 $q3->addQuery('ff.*');
 $q3->addTable('files');

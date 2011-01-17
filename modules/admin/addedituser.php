@@ -39,14 +39,14 @@ foreach ($roles as $role) {
 $roles_arr = arrayMerge(array(0 => ''), $roles_arr);
 
 if ($contact_id) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('contacts', 'con');
 	$q->addQuery('con.*, company_id, company_name, dept_name');
 	$q->addJoin('companies', 'com', 'contact_company = company_id');
 	$q->addJoin('departments', 'dep', 'dept_id = contact_department');
 	$q->addWhere('con.contact_id = ' . (int)$contact_id);
 } else {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('users', 'u');
 	$q->addQuery('u.*');
 	$q->addQuery('con.*, company_id, company_name, dept_name');

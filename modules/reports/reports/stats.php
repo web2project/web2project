@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('projects');
 $q->addQuery('*');
 $q->addJoin('tasks', '', 'task_project = project_id');
@@ -19,7 +19,7 @@ if (count($allowedTasks)) {
 $all_tasks = $q->loadList();
 $q->clear();
 
-$q = new DBQuery();
+$q = new w2p_Database_Query();
 $q->addTable('projects');
 $q->addQuery('*, round(sum(task_log_hours),2) as work');
 $q->addJoin('tasks', '', 'task_project = project_id');
@@ -115,7 +115,7 @@ foreach ($all_tasks as $task) {
     }
 }
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('files');
 $q->addQuery('sum(file_size)');
 if ($project_id) {

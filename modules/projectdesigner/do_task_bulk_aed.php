@@ -175,14 +175,14 @@ if (is_array($selected) && count($selected)) {
 				if ($bulk_task_dependency == '0') {
 					$upd_task->task_dynamic = 0;
 					$upd_task->store($AppUI);
-					$q = new DBQuery;
+					$q = new w2p_Database_Query;
 					$q->setDelete('task_dependencies');
 					$q->addWhere('dependencies_task_id=' . $upd_task->task_id);
 					$q->exec();
 				} elseif (!($bulk_task_dependency == $upd_task->task_id)) {
 					$upd_task->task_dynamic = 31;
 					$upd_task->store($AppUI);
-					$q = new DBQuery;
+					$q = new w2p_Database_Query;
 					$q->addTable('task_dependencies');
 					$q->addReplace('dependencies_task_id', $upd_task->task_id);
 					$q->addReplace('dependencies_req_task_id', $bulk_task_dependency);

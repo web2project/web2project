@@ -19,7 +19,7 @@ $updatekey = w2PgetParam($_POST, 'updatekey', 0);
 $contactkey = CContact::getContactByUpdatekey($updatekey);
 
 $contact = new CContact();
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 
 $contact_id = $contactkey ? $contactkey : 0;
 

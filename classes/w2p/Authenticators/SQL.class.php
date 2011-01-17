@@ -14,7 +14,7 @@ class w2p_Authenticators_SQL {
 
 		$this->username = $username;
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addQuery('user_id, user_password');
 		$q->addWhere('user_username = \'' . $username . '\'');

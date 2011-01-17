@@ -32,7 +32,7 @@ if (!$log_start_date) {
 $end_date->setTime(23, 59, 59);
 
 // Lets check cost codes
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('billingcode');
 $q->addQuery('billingcode_id, billingcode_name');
 
@@ -159,7 +159,7 @@ if ($do_report) {
 	<tr>
 		<td>';
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('task_log', 't');
 	$q->addQuery('t.*, CONCAT_WS(\' \',contact_first_name,contact_last_name) AS creator, billingcode_value, ROUND((billingcode_value * t.task_log_hours), 2) AS amount, c.company_name, project_name, ts.task_name');
 
@@ -275,7 +275,7 @@ if ($do_report) {
 	if ($log_pdf) {
 		// make the PDF file
 		if ($project_id) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('projects');
 			$q->addQuery('project_name');
 			$q->addWhere('project_id=' . (int)$project_id);
@@ -286,7 +286,7 @@ if ($do_report) {
 		echo db_error();
 
 		if ($company_id) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('companies');
 			$q->addQuery('company_name');
 			$q->addWhere('company_id=' . (int)$company_id);
@@ -297,7 +297,7 @@ if ($do_report) {
 		echo db_error();
 
 		if ($log_userfilter) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('contacts');
 			$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name)');
 			$q->addJoin('users', '', 'user_contact = contact_id', 'inner');

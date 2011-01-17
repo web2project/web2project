@@ -222,7 +222,7 @@ function tree_recurse($id, $indent, $list, $children) {
 
 function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $selected, $excludeProjWithId = null) {
 	global $AppUI;
-	$q = new DBQuery();
+	$q = new w2p_Database_Query();
 	$q->addTable('projects', 'pr');
 	$q->addQuery('pr.project_id, co.company_name, project_name');
 	if (!empty($excludeProjWithId)) {
@@ -318,7 +318,7 @@ function w2PgetUsernameFromID($userId) {
 function w2PgetUsers() {
 	global $AppUI;
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('users');
 	$q->addQuery('user_id, concat_ws(\' \', contact_first_name, contact_last_name) as name');
 	$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
@@ -345,7 +345,7 @@ function w2PgetUsers() {
 
 function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_name, contact_last_name') {
 	global $AppUI;
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
 		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
@@ -380,7 +380,7 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
 
 function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_first_name, contact_last_name') {
 	global $AppUI;
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
 		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
@@ -728,7 +728,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 		return;
 	}
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('history');
 	$q->addInsert('history_action', $action);
 	$q->addInsert('history_item', $id);
@@ -745,7 +745,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 ## Looks up a value from the SYSVALS table
 ##
 function w2PgetSysVal($title) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('sysvals');
 	$q->addQuery('sysval_value_id, sysval_value');
 	$q->addWhere('sysval_title = \'' . $title . '\'');
@@ -772,7 +772,7 @@ function w2PgetSysVal($title) {
 function w2PuserHasRole($name) {
 	global $AppUI;
 	$uid = $AppUI->user_id;
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('roles', 'r');
 	$q->addTable('user_roles', 'ur');
 	$q->addQuery('r.role_id');

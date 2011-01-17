@@ -39,7 +39,7 @@ $select_list = array('0' => '') + $select_list;
 $myId = (int) w2PgetParam($_POST, $id_field, 0);
 
 if ($myId) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable($table_name);
 	$q->addQuery('*');
 	$q->addWhere($id_field . '=' . $myId);

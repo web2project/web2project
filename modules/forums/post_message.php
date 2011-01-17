@@ -31,7 +31,7 @@ foreach ($_GET as $k => $v) {
 $back_url = implode('&', $back_url_params);
 
 //pull message information
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('forum_messages');
 $q->addQuery('forum_messages.*');
 $q->addWhere('message_id = ' . (int)($message_id ? $message_id : $message_parent));

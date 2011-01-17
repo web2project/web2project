@@ -184,7 +184,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('companies',    $this->obj->_tbl);
         $this->assertEquals('company_id',   $this->obj->_tbl_key);
         $this->assertEquals('',             $this->obj->_error);
-        $this->assertType('DBQuery',        $this->obj->_query);
+        $this->assertType('w2p_Database_Query',        $this->obj->_query);
     }
 
     /**

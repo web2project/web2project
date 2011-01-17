@@ -33,7 +33,7 @@ $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 $obj->load($task_id);
 $task_project = $project_id ? $project_id : ($obj->task_project ? $obj->task_project : 0);
 // let's get root tasks
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
 $q->addTable('tasks');
 $q->addWhere('task_project = ' . (int)$task_project);
@@ -46,7 +46,7 @@ global $task_parent_options;
 $task_parent_options = '';
 
 // Now lets get non-root tasks, grouped by the task parent
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
 $q->addTable('tasks');
 $q->addWhere('task_project = ' . (int)$task_project);
@@ -78,7 +78,7 @@ foreach ($root_tasks as $root_task) {
 
 $project = new CProject();
 $sprojects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('projects');
 $q->addQuery('projects.project_id, company_name');
 $q->addJoin('companies', 'co', 'co.company_id = project_company');

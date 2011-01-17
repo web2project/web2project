@@ -34,7 +34,7 @@ class w2p_Output_EmailManager {
     }
 
     public function getContactUpdateNotify(CAppUI $AppUI, CContact $contact) {
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
         $q->addTable('companies');
         $q->addQuery('company_id, company_name');
         $q->addWhere('company_id = ' . (int)$contact->contact_company);

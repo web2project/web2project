@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $tabbed, $currentTabName, $currentTabId, $AppUI;
 $obj = new CResource();
 
-$query = new DBQuery();
+$query = new w2p_Database_Query();
 $obj->setAllowedSQL($AppUI->user_id, $query);
 $query->addTable($obj->_tbl);
 if (!$tabbed) {

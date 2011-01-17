@@ -211,7 +211,7 @@ if ($sub_form) {
             $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
             $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
 
-            $q = new DBQuery;
+            $q = new w2p_Database_Query;
             $q->addTable('tasks', 't');
             $q->addUpdate('task_start_date', $obj->task_start_date);
             $q->addUpdate('task_end_date', $obj->task_end_date);

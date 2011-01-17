@@ -32,7 +32,7 @@ class w2p_Core_CustomFields {
 		$this->published = $published;
 
 		// Get Custom Fields for this Module
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_struct');
 		$q->addWhere('field_module = \'' . $this->m . '\' AND field_page = \'' . $this->a . '\'');
 		if ($published) {
@@ -82,7 +82,7 @@ class w2p_Core_CustomFields {
 	public function add($field_name, $field_description, $field_htmltype, $field_datatype, $field_extratags, $field_order, $field_published, &$error_msg) {
 		global $db;
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_struct');
 		$q->addQuery('MAX(field_id)');
 		$max_id = $q->loadResult();
@@ -95,7 +95,7 @@ class w2p_Core_CustomFields {
 
 		// TODO - module pages other than addedit
 		// TODO - validation that field_name doesnt already exist
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_struct');
 		$q->addInsert('field_id', $next_id);
 		$q->addInsert('field_module', $this->m);
@@ -122,7 +122,7 @@ class w2p_Core_CustomFields {
 	public function update($field_id, $field_name, $field_description, $field_htmltype, $field_datatype, $field_extratags, $field_order, $field_published, &$error_msg) {
 		global $db;
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_struct');
 		$q->addUpdate('field_name', $field_name);
 		$q->addUpdate('field_description', $field_description);
@@ -180,7 +180,7 @@ class w2p_Core_CustomFields {
 
 	public function deleteField($field_id) {
 		global $db;
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete('custom_fields_struct');
 		$q->addWhere('field_id = ' . $field_id);
 		if (!$q->exec()) {
@@ -221,7 +221,7 @@ class w2p_Core_CustomFields {
 	}
 
 	public function search($moduleTable, $moduleTableId, $moduleTableName, $keyword) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_values', 'cfv');
 		$q->addQuery('m.' . $moduleTableId);
 		$q->addQuery('m.' . $moduleTableName);
@@ -233,7 +233,7 @@ class w2p_Core_CustomFields {
 		return $q->loadList();
 	}
 	public static function getCustomFieldList($module) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_struct', 'cfs');
 		$q->addWhere("cfs.field_module = '$module'");
 		$q->addOrder('cfs.field_order');
@@ -245,7 +245,7 @@ class w2p_Core_CustomFields {
 		$canRead = canView($module, $objectId);
 
 		if ($canRead) {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('custom_fields_struct', 'cfs');
 			$q->addQuery('cfv.value_charvalue, cfl.list_value');
 			$q->leftJoin('custom_fields_values', 'cfv', 'cfv.value_field_id = cfs.field_id');

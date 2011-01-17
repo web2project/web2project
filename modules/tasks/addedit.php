@@ -130,7 +130,7 @@ function build_date_list(&$date_array, $row) {
 }
 
 // let's get root tasks
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('tasks');
 $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
 $q->addWhere('task_project = ' . (int)$task_project);
@@ -143,7 +143,7 @@ $projTasks = array();
 $task_parent_options = '';
 
 // Now lets get non-root tasks, grouped by the task parent
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('tasks');
 $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
 $q->addWhere('task_project = ' . (int)$task_project);
@@ -197,7 +197,7 @@ if (is_null($task->task_dynamic)) {
 
 $can_edit_time_information = $task->canUserEditTimeInformation();
 //get list of projects, for task move drop down list.
-$pq = new DBQuery;
+$pq = new w2p_Database_Query;
 $pq->addQuery('pr.project_id, project_name');
 $pq->addTable('projects', 'pr');
 $pq->addWhere('( project_active = 1 or pr.project_id = ' . (int)$task_project . ')');

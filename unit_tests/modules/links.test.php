@@ -165,7 +165,7 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('links',  $link->_tbl);
         $this->assertEquals('link_id',$link->_tbl_key);
         $this->assertEquals('',       $link->_error);
-        $this->assertType('DBQuery',  $link->_query);
+        $this->assertType('w2p_Database_Query',  $link->_query);
     }
 
     /**

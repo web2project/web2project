@@ -13,14 +13,14 @@ global $fixedSysVals;
 $AppUI->savePlace();
 
 // pull all the key types
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('syskeys');
 $q->addQuery('syskey_id,syskey_name');
 $q->addOrder('syskey_name');
 $keys = arrayMerge(array(0 => '- Select Type -'), $q->loadHashList());
 $q->clear();
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('syskeys');
 $q->addTable('sysvals');
 $q->addQuery('DISTINCT sysval_title, sysval_key_id, syskeys.*');
@@ -30,7 +30,7 @@ $q->addOrder('sysval_id');
 $values = $q->loadList();
 $q->clear();
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('sysvals');
 $q->addTable('syskeys');
 $q->addQuery('sysval_title, sysval_value_id, sysval_value, syskey_sep1, syskey_sep2');

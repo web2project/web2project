@@ -69,7 +69,7 @@ class w2p_Core_CustomFieldsParser {
 	}
 
 	public function _fetchPreviousData() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable($this->table_name);
 		$q->addQuery($this->field_name);
 		$q->addWhere($this->id_field_name . ' = ' . $this->row_id);

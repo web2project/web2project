@@ -15,7 +15,7 @@ $watch = w2PgetParam($_POST, 'watch', '');
 
 if ($watch) {
 	// clear existing watches
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->setDelete('forum_watch');
 	$q->addWhere('watch_user = ' . (int)$AppUI->user_id);
 	$q->addWhere('watch_' . $watch . ' IS NOT NULL');

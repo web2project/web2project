@@ -28,7 +28,7 @@ if (!$ok) {
 	if ($obj->mod_type != 'core') {
 		$AppUI->setMsg('Module setup file could not be found', UI_MSG_ERROR);
 		if ($cmd == 'remove') {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->setDelete('modules');
 			$q->addWhere('mod_id = ' . (int)$mod_id);
 			$q->exec();

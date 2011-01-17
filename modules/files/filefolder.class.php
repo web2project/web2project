@@ -24,7 +24,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function getAllowedRecords($uid) {
 		global $AppUI;
 
-        $q = new DBQuery();
+        $q = new w2p_Database_Query();
 		$q->addTable('file_folders');
 		$q->addQuery('*');
 		$q->addOrder('file_folder_parent');
@@ -58,7 +58,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function canDelete($msg, $oid = 0, $joins = null) {
         $msg = array();
 
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable('file_folders');
 		$q->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
 		$q->addWhere('file_folder_parent=' . $oid);
@@ -68,7 +68,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 		}
 		$q->clear();
 
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable('files');
 		$q->addQuery('COUNT(DISTINCT file_id) AS num_of_files');
 		$q->addWhere('file_folder=' . $oid);
@@ -113,7 +113,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	/**
  	@return string Returns the name of the parent folder or null if no parent was found **/
 	public function getParentFolderName() {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable('file_folders');
 		$q->addQuery('file_folder_name');
 		$q->addWhere('file_folder_id=' . $this->file_folder_parent);
@@ -121,7 +121,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	}
 
 	public function countFolders() {
-		$q = new DBQuery();
+		$q = new w2p_Database_Query();
 		$q->addTable($this->_tbl);
 		$q->addQuery('COUNT(' . $this->_tbl_key. ' )');
 		$result = $q->loadResult();

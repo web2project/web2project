@@ -38,7 +38,7 @@ if ($obj->file_task) {
 	$file_task = $obj->file_task;
 	$task_name = $obj->getTaskName();
 } elseif ($file_task) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('tasks');
 	$q->addQuery('task_name');
 	$q->addWhere('task_id=' . (int)$file_task);

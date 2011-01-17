@@ -24,7 +24,7 @@ if ($_GET['out_user_id'] && $_GET['out_name'] && $canEdit && $canDelete) {
 	} else
 		if ($canEdit && $canDelete && $logoutUserFlag) {
 			// query for all sessions open for a given user
-			$r = new DBQuery;
+			$r = new w2p_Database_Query;
 			$r->addTable('sessions', 's');
 			$r->addQuery('DISTINCT(session_id), user_access_log_id');
 			$r->addJoin('user_access_log', 'ual', 'session_user = user_access_log_id');
@@ -66,7 +66,7 @@ if ($_GET['out_user_id'] && $_GET['out_name'] && $canEdit && $canDelete) {
 	$AppUI->redirect('m=admin&tab=3');
 }
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('sessions', 's');
 $q->addQuery('DISTINCT(session_id), user_access_log_id, u.user_id as u_user_id, user_username, contact_last_name, contact_first_name, company_name, contact_company, date_time_in, user_ip');
 

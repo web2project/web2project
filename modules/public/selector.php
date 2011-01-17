@@ -23,7 +23,7 @@ $ok = $callback & $table;
 
 $title = 'Generic Selector';
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable($table);
 $query_result = false;
 

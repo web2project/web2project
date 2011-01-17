@@ -14,7 +14,7 @@ if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('billingcode', 'bc');
 $q->addQuery('billingcode_id, billingcode_name, billingcode_value, billingcode_desc, billingcode_status');
 $q->addOrder('billingcode_name ASC');
@@ -22,7 +22,7 @@ $q->addWhere('company_id = ' . (int)$company_id);
 $billingcodes = $q->loadList();
 $q->clear();
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('companies', 'c');
 $q->addQuery('company_id, company_name');
 $q->addOrder('company_name ASC');

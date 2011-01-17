@@ -391,7 +391,7 @@ class w2p_Utilities_Date extends Date {
         /*
         *  PHP4 is no longer supported or allowed. The
         *    installer/upgrader/converter simply stops executing.
-        *  This method also appears in the DBQuery and w2p_Core_BaseObject (modified) class.
+        *  This method also appears in the w2p_Database_Query and w2p_Core_BaseObject (modified) class.
         */
 		return clone ($this);
 	}

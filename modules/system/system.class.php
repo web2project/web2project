@@ -65,7 +65,7 @@ class CSystem {
             $result = $request->processRequest();
             $data = json_decode($result);
 
-            $q = new DBQuery();
+            $q = new w2p_Database_Query();
             $q->addTable('config');
             if ('' == w2PgetConfig('available_version', '')) {
                 $q->addInsert('config_name', 'available_version');
@@ -97,7 +97,7 @@ class CPreferences {
 		if (!is_array($hash)) {
 			return 'CPreferences::bind failed';
 		} else {
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->bindHashToObject($hash, $this);
 			$q->clear();
 			return null;
@@ -117,7 +117,7 @@ class CPreferences {
 		if (($msg = $this->delete())) {
 			return 'CPreference::store-delete failed ' . $msg;
 		}
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		if (!($ret = $q->insertObject('user_preferences', $this))) {
 			$q->clear();
 			return 'CPreference::store failed ' . db_error();
@@ -128,7 +128,7 @@ class CPreferences {
 	}
 
 	public function delete() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete('user_preferences');
 		$q->addWhere('pref_user = ' . (int)$this->pref_user);
 		$q->addWhere('pref_name = \'' . $this->pref_name . '\'');
@@ -170,7 +170,7 @@ class CModule extends w2p_Core_BaseObject {
 	}
 
 	public function install() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules');
 		$q->addQuery('mod_directory');
 		$q->addWhere('mod_directory = \'' . $this->mod_directory . '\'');
@@ -203,7 +203,7 @@ class CModule extends w2p_Core_BaseObject {
 	}
 
     protected function _compactModuleUIOrder() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules');
 		$q->addQuery('mod_id');
 		$q->addOrder('mod_ui_order ASC');
@@ -222,7 +222,7 @@ class CModule extends w2p_Core_BaseObject {
 	}
 
 	public function remove() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->setDelete('modules');
 		$q->addWhere('mod_id = ' . (int)$this->mod_id);
 		if (!$q->exec()) {
@@ -251,7 +251,7 @@ class CModule extends w2p_Core_BaseObject {
 	public function move($dirn) {
 		$new_ui_order = $this->mod_ui_order;
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('modules');
 		$q->addWhere('mod_id <> ' . (int)$this->mod_id);
 		$q->addOrder('mod_ui_order');
@@ -273,7 +273,7 @@ class CModule extends w2p_Core_BaseObject {
 		}
 
 		if ($new_ui_order && ($new_ui_order <= count($modules) + 1)) { //make sure we aren't going "up" to 0
-			$q = new DBQuery;
+			$q = new w2p_Database_Query;
 			$q->addTable('modules');
 			$q->addUpdate('mod_ui_order', $new_ui_order);
 			$q->addWhere('mod_id = ' . (int)$this->mod_id);
@@ -421,7 +421,7 @@ class bcode extends w2p_Core_BaseObject {
 
 	public function delete(CAppUI $AppUI = null) {
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->addTable('billingcode');
 		$q->addUpdate('billingcode_status', '1');
 		$q->addWhere('billingcode_id = ' . (int)$this->_billingcode_id);
@@ -439,7 +439,7 @@ class bcode extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $q = new DBQuery;
+        $q = new w2p_Database_Query;
 		$q->addQuery('billingcode_id');
 		$q->addTable('billingcode');
 		$q->addWhere('billingcode_name = \'' . $this->billingcode_name . '\'');

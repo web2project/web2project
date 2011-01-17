@@ -8,7 +8,7 @@ $sort = w2PgetParam($_REQUEST, 'sort', 'asc');
 $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
 $hideEmail = w2PgetConfig('hide_email_addresses', false);
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('forums');
 $q->addTable('forum_messages');
 $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email, user_username, forum_moderated, visit_user');
@@ -135,7 +135,7 @@ foreach ($messages as $row) {
 	if ($row['message_id'] == $message_id)
 		$topic = $row['message_title'];
 
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('forum_messages');
 	$q->addTable('users');
 	$q->addQuery('DISTINCT contact_first_name, contact_last_name, user_username, contact_email');
@@ -288,7 +288,7 @@ if ($viewtype == 'single') {
 <?php
 // Now we need to update the forum visits with the new messages so they don't show again.
 foreach ($new_messages as $msg_id) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('forum_visits');
 	$q->addInsert('visit_user', $AppUI->user_id);
 	$q->addInsert('visit_forum', $forum_id);

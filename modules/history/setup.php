@@ -45,7 +45,7 @@ class CSetupHistory {
 			INDEX index_history_module (history_table, history_item),
 		  	INDEX index_history_item (history_item) 
 			) TYPE=MyISAM';
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->createTable('history', $sql);
 		$q->exec();
 		$q->clear();
@@ -53,7 +53,7 @@ class CSetupHistory {
 	}
 
 	public function remove() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		$q->dropTable('history');
 		$q->exec();
 		$q->clear();
@@ -61,7 +61,7 @@ class CSetupHistory {
 	}
 
 	public function upgrade($old_version) {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		switch ($old_version) {
 			case '0.3':
 				$q->alterTable('history');

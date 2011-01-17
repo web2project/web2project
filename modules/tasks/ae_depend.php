@@ -40,12 +40,12 @@ for ($current = $start; $current < $end + 1; $current++) {
 // Pull tasks dependencies
 $deps = false;
 if ($deps) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('tasks');
 	$q->addQuery('task_id, task_name');
 	$q->addWhere('task_id IN (' . $deps . ')');
 } else {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('tasks', 't');
 	$q->addTable('task_dependencies', 'td');
 	$q->addQuery('t.task_id, t.task_name');

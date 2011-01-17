@@ -9,7 +9,7 @@ if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('syskeys');
 $q->addQuery('*');
 $q->addOrder('syskey_name');

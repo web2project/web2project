@@ -37,7 +37,7 @@ $AppUI->loadCalendarJS();
 $today = new w2p_Utilities_Date();
 
 //Lets load the users panel viewing options
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('project_designer_options', 'pdo');
 $q->addQuery('pdo.*');
 $q->addWhere('pdo.pd_option_user = ' . (int)$AppUI->user_id);
@@ -49,7 +49,7 @@ $project_id = (int) w2PgetParam($_GET, 'project_id', $project_id);
 $extra = array('where' => 'project_active = 1');
 $project = new CProject();
 $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 $q->addTable('projects');
 $q->addQuery('projects.project_id, company_name');
 $q->addJoin('companies', 'co', 'co.company_id = project_company');

@@ -67,7 +67,7 @@ class w2p_Database_Query {
 	 */
 	private $_db_funcs;
 
-	/** DBQuery constructor
+	/** w2p_Database_Query constructor
 	 *
 	 * @param $prefix Database table prefix - will be appended to all web2project table names
 	 * @param $query_db Database type
@@ -140,7 +140,7 @@ class w2p_Database_Query {
 
 	/** Add item to an internal associative array
 	 *
-	 * Used internally with DBQuery
+	 * Used internally with w2p_Database_Query
 	 *
 	 * @param	$varname	Name of variable to add/create
 	 * @param	$name	Data to add

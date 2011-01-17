@@ -10,7 +10,7 @@ if (!$canEdit) {
 }
 
 $action = $_REQUEST['action'];
-$q = new DBQuery;
+$q = new w2p_Database_Query;
 if ($action) {
 	$history_description = w2PgetParam($_POST, 'history_description', '');
 	$history_project = (int) w2PgetParam($_POST, 'history_project', 0);

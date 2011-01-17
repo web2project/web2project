@@ -62,7 +62,7 @@ class CSysVal extends w2p_Core_BaseObject {
 		}
 		$values = parseFormatSysval($this->sysval_value, $this->sysval_key_id);
 		//lets delete the old values
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		if ($this->sysval_key_id && $this->sysval_title) {
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_key_id = ' . (int)$this->sysval_key_id);
@@ -88,7 +88,7 @@ class CSysVal extends w2p_Core_BaseObject {
 	}
 
 	public function delete() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query;
 		if ($this->sysval_title) {
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
@@ -103,7 +103,7 @@ class CSysVal extends w2p_Core_BaseObject {
 }
 
 function parseFormatSysval($text, $syskey) {
-	$q = new DBQuery;
+	$q = new w2p_Database_Query;
 	$q->addTable('syskeys');
 	$q->addQuery('syskey_type, syskey_sep1, syskey_sep2');
 	$q->addWhere('syskey_id = ' . (int)$syskey);
