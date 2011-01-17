@@ -408,3 +408,7 @@
 'cas_version_tooltip'=>'CAS Version that the CAS host understands. If unsure, leave at the default of 2.',
 'cas_uri_title'=>'CAS service URI',
 'cas_uri_tooltip'=>'URI used by the CAS to provide login and verification services. Usually "cas" is the service URI to follow.',
+'system_update_check_title'=>'Check for Official Updates?',
+'admin_email_title'=>'System Administrator Email Address',
+'company_filter_default_title'=>'Default Company Filter',
+'task_filter_default_title'=>'Default Task Filter',
