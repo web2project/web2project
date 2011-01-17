@@ -186,7 +186,7 @@ class w2p_Core_BaseObject
 		/*
 		*  PHP4 is no longer supported or allowed. The
 		*    installer/upgrader/converter simply stops executing.
-		*  This method also appears (modified) in the CDate and DBQuery class.
+		*  This method also appears (modified) in the w2p_Utilities_Date and DBQuery class.
 		*/
 
 		$_key = $this->_tbl_key;

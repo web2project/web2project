@@ -1,4 +1,4 @@
-<?php /* $Id: gantt.php 1524 2010-12-09 08:15:59Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/gantt.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -155,15 +155,15 @@ foreach ($proTasks as $row) {
 	//This avoids jpgraphs internal errors that render the gantt completely useless
 	if ($row['task_start_date'] == '0000-00-00 00:00:00') {
 		if ($row['task_end_date'] == '0000-00-00 00:00:00') {
-			$todaydate = new CDate();
+			$todaydate = new w2p_Utilities_Date();
 			$row['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
 		} else {
 			$row['task_start_date'] = $row['task_end_date'];
 		}
 	}
 
-	$tsd = new CDate($row['task_start_date']);
-	if ($tsd->before(new CDate($start_min))) {
+	$tsd = new w2p_Utilities_Date($row['task_start_date']);
+	if ($tsd->before(new w2p_Utilities_Date($start_min))) {
 		$start_min = $row['task_start_date'];
 	}
 
@@ -174,16 +174,16 @@ foreach ($proTasks as $row) {
 		if ($row['task_duration']) {
 			$row['task_end_date'] = db_unix2dateTime(db_dateTime2unix($row['task_start_date']) + SECONDS_PER_DAY * convert2days($row['task_duration'], $row['task_duration_type']));
 		} else {
-			$todaydate = new CDate();
+			$todaydate = new w2p_Utilities_Date();
 			$row['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
 		}
 	}
 
-	$ted = new CDate($row['task_end_date']);
-	if ($ted->after(new CDate($end_max))) {
+	$ted = new w2p_Utilities_Date($row['task_end_date']);
+	if ($ted->after(new w2p_Utilities_Date($end_max))) {
 		$end_max = $row['task_end_date'];
 	}
-	if ($ted->after(new CDate($projects[$row['task_project']]['project_end_date']))
+	if ($ted->after(new w2p_Utilities_Date($projects[$row['task_project']]['project_end_date']))
         || $projects[$row['task_project']]['project_end_date'] == '') {
 		$projects[$row['task_project']]['project_end_date'] = $row['task_end_date'];
 	}
@@ -231,8 +231,8 @@ $gantt->setProperties(array('showhgrid' => true));
 
 if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
-	$d_start = new CDate();
-	$d_end = new CDate();
+	$d_start = new w2p_Utilities_Date();
+	$d_end = new w2p_Utilities_Date();
     $taskArray = count($gantt_arr);
 	for ($i = 0, $i_cmp = $taskArray; $i < $i_cmp; $i++) {
 		$a = $gantt_arr[$i][0];
@@ -301,8 +301,8 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         //using new jpGraph determines using Date object instead of string
-        $start_date = new CDate($a['task_start_date']);
-        $end_date = new CDate($a['task_end_date']);
+        $start_date = new w2p_Utilities_Date($a['task_start_date']);
+        $end_date = new w2p_Utilities_Date($a['task_end_date']);
         $start = $start_date->getDate();
           $end = $end_date->getDate();
 
@@ -354,7 +354,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
         if ($flags == 'm') {
             if ($showNoMilestones != '1') {
-                $start = new CDate($start_date);
+                $start = new w2p_Utilities_Date($start_date);
                 $start->addDays(0);
                 $start_mile = $start->getDate();
                 $s = $start_date->format("%m/%d/%Y");
@@ -425,8 +425,8 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             }
 
             $dur .= ' h';
-            $enddate = new CDate($end);
-            $startdate = new CDate($start);
+            $enddate = new w2p_Utilities_Date($end);
+            $startdate = new w2p_Utilities_Date($start);
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
             if ($showTaskNameOnly == '1') {
                 $columnValues = array('task_name' => $name);

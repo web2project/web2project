@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 $df = $AppUI->getPref('SHDATEFORMAT');
 $date = w2PgetParam($_GET, 'date', '');
 $field = w2PgetParam($_GET, 'field', '');
-$this_day = new CDate($date);
+$this_day = new w2p_Utilities_Date($date);
 $formatted_date = $this_day->format($df);
 ?>
 <script language="javascript" type="text/javascript">

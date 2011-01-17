@@ -35,13 +35,13 @@ foreach ($elements as $element => $on) {
 		$tline->task_project = $project_id;
 		$start_date = '';
 		if ($elements['add_task_start_date_' . $on]) {
-			$date = new CDate($elements['add_task_start_date_' . $on]);
+			$date = new w2p_Utilities_Date($elements['add_task_start_date_' . $on]);
 			$start_date = $date->format(FMT_DATETIME_MYSQL);
 		}
 		$tline->task_start_date = $start_date;
 		$end_date = '';
 		if ($elements['add_task_end_date_' . $on]) {
-			$date = new CDate($elements['add_task_end_date_' . $on]);
+			$date = new w2p_Utilities_Date($elements['add_task_end_date_' . $on]);
 			$end_date = $date->format(FMT_DATETIME_MYSQL);
 		}
 		$tline->task_end_date = $end_date;

@@ -98,19 +98,19 @@ foreach ($projects as $project_id => $project_info) {
 $projects = arrayMerge(array(0 => $all_projects), $projects);
 
 if ($event_id || $is_clash) {
-	$start_date = intval($obj->event_start_date) ? new CDate($obj->event_start_date) : null;
-	$end_date = intval($obj->event_end_date) ? new CDate($obj->event_end_date) : $start_date;
+	$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($obj->event_start_date) : null;
+	$end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($obj->event_end_date) : $start_date;
 } else {
-	$start_date = new CDate($date);
+	$start_date = new w2p_Utilities_Date($date);
 	$start_date->setTime(8, 0, 0);
-	$end_date = new CDate($date);
+	$end_date = new w2p_Utilities_Date($date);
 	$end_date->setTime(17, 0, 0);
 }
 
 $inc = intval(w2PgetConfig('cal_day_increment')) ? intval(w2PgetConfig('cal_day_increment')) : 30;
 if (!$event_id && !$is_clash) {
 
-	$seldate = new CDate($date);
+	$seldate = new w2p_Utilities_Date($date);
 	// If date is today, set start time to now + inc
 	if ($date == date('Ymd')) {
 		$h = date('H');
@@ -141,7 +141,7 @@ $remind = array('900' => '15 mins', '1800' => '30 mins', '3600' => '1 hour', '72
 
 // build array of times in 30 minute increments
 $times = array();
-$t = new CDate();
+$t = new w2p_Utilities_Date();
 $t->setTime(0, 0, 0);
 //$m clashes with global $m (module)
 for ($minutes = 0; $minutes < ((24 * 60) / $inc); $minutes++) {

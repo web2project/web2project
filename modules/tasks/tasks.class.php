@@ -849,12 +849,12 @@ class CTask extends w2p_Core_BaseObject {
 
 		foreach ($cascadingTasks as $nextTask) {
 			/** BEGIN: nasty task update code - very similar to lines 192 in do_task_aed.php **/
-			$tsd = new CDate($nextTask['task_start_date']);
-			$ted = new CDate($nextTask['task_end_date']);
+			$tsd = new w2p_Utilities_Date($nextTask['task_start_date']);
+			$ted = new w2p_Utilities_Date($nextTask['task_end_date']);
 
-			$nsd = new CDate($lastEndDate);
+			$nsd = new w2p_Utilities_Date($lastEndDate);
 			$nsd = $nsd->next_working_day();
-			$ned = new CDate();
+			$ned = new w2p_Utilities_Date();
 			$ned->copy($nsd);
 
 			if (empty($tsd)) {
@@ -1014,8 +1014,8 @@ class CTask extends w2p_Core_BaseObject {
 		$q->clear();
 
 		if (count($users)) {
-            $task_start_date = intval($this->task_start_date) ? new CDate($AppUI->formatTZAwareTime($this->task_start_date, '%Y-%m-%d %T')) : null;
-            $task_finish_date = intval($this->task_end_date) ? new CDate($AppUI->formatTZAwareTime($this->task_end_date, '%Y-%m-%d %T')) : null;
+            $task_start_date = intval($this->task_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($this->task_start_date, '%Y-%m-%d %T')) : null;
+            $task_finish_date = intval($this->task_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($this->task_end_date, '%Y-%m-%d %T')) : null;
 
 			$body = ($AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ':	 ' . $this->task_name);
 			//Priority not working for some reason, will wait till later
@@ -1441,19 +1441,19 @@ class CTask extends w2p_Core_BaseObject {
 		}
 
 		// load original task dates and calculate task time span
-		$tsd = new CDate($newTask->task_start_date);
-		$ted = new CDate($newTask->task_end_date);
+		$tsd = new w2p_Utilities_Date($newTask->task_start_date);
+		$ted = new w2p_Utilities_Date($newTask->task_end_date);
 		$duration = $tsd->calcDuration($ted);
 
 		// reset start date
-		$nsd = new CDate($newTask->get_deps_max_end_date($newTask));
+		$nsd = new w2p_Utilities_Date($newTask->get_deps_max_end_date($newTask));
 
 		// prefer Wed 8:00 over Tue 16:00 as start date
 		$nsd = $nsd->next_working_day();
 		$new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
 
 		// Add task time span to End Date again
-		$ned = new CDate();
+		$ned = new w2p_Utilities_Date();
 		$ned->copy($nsd);
 		$ned->addDuration($duration, '1');
 
@@ -1542,8 +1542,8 @@ class CTask extends w2p_Core_BaseObject {
 	 */
 	public function getTaskDurationPerDay($use_percent_assigned = false) {
 		$duration = $this->task_duration * ($this->task_duration_type == 24 ? w2PgetConfig('daily_working_hours') : $this->task_duration_type);
-		$task_start_date = new CDate($this->task_start_date);
-		$task_finish_date = new CDate($this->task_end_date);
+		$task_start_date = new w2p_Utilities_Date($this->task_start_date);
+		$task_finish_date = new w2p_Utilities_Date($this->task_end_date);
 		$assigned_users = $this->getAssignedUsers($this->task_id);
 		if ($use_percent_assigned) {
 			$number_assigned_users = 0;
@@ -1580,8 +1580,8 @@ class CTask extends w2p_Core_BaseObject {
 	 */
 	public function getTaskDurationPerWeek($use_percent_assigned = false) {
 		$duration = $this->task_duration * ($this->task_duration_type == 24 ? w2PgetConfig('daily_working_hours') : $this->task_duration_type);
-		$task_start_date = new CDate($this->task_start_date);
-		$task_finish_date = new CDate($this->task_end_date);
+		$task_start_date = new w2p_Utilities_Date($this->task_start_date);
+		$task_finish_date = new w2p_Utilities_Date($this->task_end_date);
 		$assigned_users = $this->getAssignedUsers($this->task_id);
 		if ($use_percent_assigned) {
 			$number_assigned_users = 0;
@@ -2032,9 +2032,9 @@ class CTask extends w2p_Core_BaseObject {
 		}
 
 		// Find the end date of this task, then subtract the required number of days.
-		$date = new CDate($this->task_end_date);
-		$today = new CDate(date('Y-m-d'));
-		if (CDate::compare($date, $today) < 0) {
+		$date = new w2p_Utilities_Date($this->task_end_date);
+		$today = new w2p_Utilities_Date(date('Y-m-d'));
+		if (w2p_Utilities_Date::compare($date, $today) < 0) {
 			$start_day = time();
 		} else {
 			$start_day = $date->getDate(DATE_FORMAT_UNIXTIME);
@@ -2078,7 +2078,7 @@ class CTask extends w2p_Core_BaseObject {
 		$this->htmlDecode();
 
 		// Only remind on working days.
-		$today = new CDate();
+		$today = new w2p_Utilities_Date();
 		if (!$today->isWorkingDay()) {
 			return true;
 		}
@@ -2115,11 +2115,11 @@ class CTask extends w2p_Core_BaseObject {
 
 		// build the subject line, based on how soon the
 		// task will be overdue.
-		$starts = new CDate($this->task_start_date);
-		$expires = new CDate($this->task_end_date);
-		$now = new CDate();
+		$starts = new w2p_Utilities_Date($this->task_start_date);
+		$expires = new w2p_Utilities_Date($this->task_end_date);
+		$now = new w2p_Utilities_Date();
 		$diff = $expires->dateDiff($now);
-		$diff *= CDate::compare($expires, $now);
+		$diff *= w2p_Utilities_Date::compare($expires, $now);
 		$prefix = $AppUI->_('Task Due', UI_OUTPUT_RAW);
 		if ($diff == 0) {
 			$msg = $AppUI->_('TODAY', UI_OUTPUT_RAW);
@@ -2386,16 +2386,16 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		return (false);
 	}
 
-	$now = new CDate();
+	$now = new w2p_Utilities_Date();
 	$tf = $AppUI->getPref('TIMEFORMAT');
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$perms = &$AppUI->acl();
 	$fdf = $df . ' ' . $tf;
 	$show_all_assignees = w2PgetConfig('show_all_task_assignees', false);
 
-	$start_date = intval($arr['task_start_date']) ? new CDate($AppUI->formatTZAwareTime($arr['task_start_date'], '%Y-%m-%d %T')) : null;
-	$end_date = intval($arr['task_end_date']) ? new CDate($AppUI->formatTZAwareTime($arr['task_end_date'], '%Y-%m-%d %T')) : null;
-	$last_update = isset($arr['last_update']) && intval($arr['last_update']) ? new CDate( $AppUI->formatTZAwareTime($arr['last_update'], '%Y-%m-%d %T')) : null;
+	$start_date = intval($arr['task_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($arr['task_start_date'], '%Y-%m-%d %T')) : null;
+	$end_date = intval($arr['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($arr['task_end_date'], '%Y-%m-%d %T')) : null;
+	$last_update = isset($arr['last_update']) && intval($arr['last_update']) ? new w2p_Utilities_Date( $AppUI->formatTZAwareTime($arr['last_update'], '%Y-%m-%d %T')) : null;
 
 	// prepare coloured highlight of task time information
 	$sign = 1;
@@ -2408,7 +2408,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 			** perhaps this fallback if-clause could be deleted in the future,
 			** didn't want to remove it shortly before the 2.0.2
 			*/
-			$end_date = new CDate('0000-00-00 00:00:00');
+			$end_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
 		}
 
 		if ($now->after($start_date) && $arr['task_percent_complete'] == 0) {
@@ -2622,7 +2622,7 @@ function array_csort() { //coded by Ichier2003
 */
 
 function calcEndByStartAndDuration($task) {
-	$end_date = new CDate($task['task_start_date']);
+	$end_date = new w2p_Utilities_Date($task['task_start_date']);
 	$end_date->addSeconds($task['task_duration'] * $task['task_duration_type'] * SEC_HOUR);
 	return $end_date->format(FMT_DATETIME_MYSQL);
 }

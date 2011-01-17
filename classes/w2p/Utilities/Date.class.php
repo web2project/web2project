@@ -303,7 +303,7 @@ class w2p_Utilities_Date extends Date {
 	public function calcDuration($e) {
 
 		// since one will alter the date ($this) one better copies it to a new instance
-		$s = new CDate();
+		$s = new w2p_Utilities_Date();
 		$s->copy($this);
 
 		// get w2P time constants
@@ -382,7 +382,7 @@ class w2p_Utilities_Date extends Date {
 	}
 
 	/**
-	 *	Clone the current CDate object
+	 *	Clone the current w2p_Utilities_Date object
 	 *
 	 *	@return	object	The new record object or null if error
 	 **/
@@ -403,12 +403,12 @@ class w2p_Utilities_Date extends Date {
 	**
 	** @param	durn		Duration to be added to the date
 	** @param	durnType	Duration Type: 1=hours, 24=days
-	** @return	cdate		The CDate object of the finish date
+	** @return	w2p_Utilities_Date		The w2p_Utilities_Date object of the finish date
 	*/
 	public function calcFinish($durn, $durnType) {
 
 		// since one will alter the date ($this) one better copies it to a new instance
-		$f = new CDate();
+		$f = new w2p_Utilities_Date();
 		$f->copy($this);
 
 		// get w2P time constants

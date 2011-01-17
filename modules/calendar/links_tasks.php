@@ -42,8 +42,8 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 		}
 
 		// determine which day(s) to display the task
-		$start = new CDate($AppUI->formatTZAwareTime($row['task_start_date'], '%Y-%m-%d %T'));
-		$end = $row['task_end_date'] ? new CDate($AppUI->formatTZAwareTime($row['task_end_date'], '%Y-%m-%d %T')) : null;
+		$start = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['task_start_date'], '%Y-%m-%d %T'));
+		$end = $row['task_end_date'] ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['task_end_date'], '%Y-%m-%d %T')) : null;
 
 		// First we test if the Tasks Starts and Ends are on the same day, if so we don't need to go any further.
 		if (($start->after($startPeriod)) && ($end && $end->after($startPeriod) && $end->before($endPeriod) && !($start->dateDiff($end)))) {
@@ -105,8 +105,8 @@ function getTaskTooltip($task_id, $starts = false, $ends = false, $tasks_tips ) 
 
 	$assigned = $task->getAssigned();
 
-	$start_date = (int)$task->task_start_date ? new CDate($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) : null;
-	$end_date = (int)$task->task_end_date ? new CDate($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) : null;
+	$start_date = (int)$task->task_start_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) : null;
+	$end_date = (int)$task->task_end_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) : null;
 
 	// load the record data
 	$task_project = $task->project_name;

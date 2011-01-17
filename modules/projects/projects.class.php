@@ -239,9 +239,9 @@ class CProject extends w2p_Core_BaseObject {
 		$tasks = array_flip($q->loadColumn());
 		$q->clear();
 
-		$origDate = new CDate($origProject->project_start_date);
+		$origDate = new w2p_Utilities_Date($origProject->project_start_date);
 
-		$destDate = new CDate($this->project_start_date);
+		$destDate = new w2p_Utilities_Date($this->project_start_date);
 
 		$timeOffset = $origDate->dateDiff($destDate);
 		if ($origDate->compare($origDate, $destDate) > 0) {
@@ -494,16 +494,16 @@ class CProject extends w2p_Core_BaseObject {
         $this->project_id = (int) $this->project_id;
         // convert dates to SQL format first
         if ($this->project_start_date) {
-            $date = new CDate($this->project_start_date);
+            $date = new w2p_Utilities_Date($this->project_start_date);
             $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
         }
         if ($this->project_end_date) {
-            $date = new CDate($this->project_end_date);
+            $date = new w2p_Utilities_Date($this->project_end_date);
             $date->setTime(23, 59, 59);
             $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
         if ($this->project_actual_end_date) {
-            $date = new CDate($this->project_actual_end_date);
+            $date = new w2p_Utilities_Date($this->project_actual_end_date);
             $this->project_actual_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
 

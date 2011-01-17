@@ -1,4 +1,4 @@
-<?php /* $Id: gantt.php 1524 2010-12-09 08:15:59Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/gantt.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -117,8 +117,8 @@ if (!$start_date || !$end_date) {
             $end = substr($lastTask[0]['task_end_date'], 0, 10);
         }
 
-        $d_start = new CDate($start);
-        $d_end = new CDate($end);
+        $d_start = new w2p_Utilities_Date($start);
+        $d_end = new w2p_Utilities_Date($end);
 
         if ($i == 0) {
             $min_d_start = $d_start;
@@ -141,7 +141,7 @@ $gantt->setDateRange($start_date, $end_date);
 
 $row = 0;
 if (!is_array($projects) || 0 == count($projects)) {
-    $d = new CDate();
+    $d = new w2p_Utilities_Date();
     $columnValues = array('project_name' => $AppUI->_('No projects found'), 
                         'start_date' => $d->getDate(), 'end_date' => $d->getDate(),
                         'actual_end' => '');
@@ -160,10 +160,10 @@ if (!is_array($projects) || 0 == count($projects)) {
 		$start = ($p['project_start_date'] > '1969-12-31 19:00:00') ? $p['project_start_date'] : '';
 		$end_date = ($p['project_end_date'] > '1969-12-31 19:00:00') ? $p['project_end_date'] : $p['project_actual_end_date'];
 
-		$end_date = new CDate($end_date);
+		$end_date = new w2p_Utilities_Date($end_date);
 		$end = $end_date->getDate();
 
-		$start = new CDate($start);
+		$start = new w2p_Utilities_Date($start);
 		$start = $start->getDate();
 
 		$progress = (int) $p['project_percent_complete'];
@@ -185,8 +185,8 @@ if (!is_array($projects) || 0 == count($projects)) {
 			$caption .= $AppUI->_($projectStatus[$p['project_status']]) . ', ';
 			$caption .= $p['project_active'] != 0 ? $AppUI->_('active') : $AppUI->_('archived');
 		}
-		$enddate = new CDate($end);
-		$startdate = new CDate($start);
+		$enddate = new w2p_Utilities_Date($end);
+		$startdate = new w2p_Utilities_Date($start);
 		$actual_end = intval($p['project_actual_end_date']) ? $p['project_actual_end_date'] : $end;
 
         $columnValues = array('project_name' => $name, 'start_date' => $start,
@@ -210,7 +210,7 @@ if (!is_array($projects) || 0 == count($projects)) {
                 //This avoids jpgraphs internal errors that render the gantt completely useless
                 if ($t['task_start_date'] == '0000-00-00 00:00:00') {
                     if ($t['task_end_date'] == '0000-00-00 00:00:00') {
-                        $todaydate = new CDate();
+                        $todaydate = new w2p_Utilities_Date();
                         $t['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
                     } else {
                         $t['task_start_date'] = $t['task_end_date'];
@@ -224,15 +224,15 @@ if (!is_array($projects) || 0 == count($projects)) {
                     if ($t['task_duration']) {
                         $t['task_end_date'] = db_unix2dateTime(db_dateTime2unix($t['task_start_date']) + SECONDS_PER_DAY * convert2days($t['task_duration'], $t['task_duration_type']));
                     } else {
-                        $todaydate = new CDate();
+                        $todaydate = new w2p_Utilities_Date();
                         $t['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
                     }
                 }
 
                 $tStart = intval($t['task_start_date']) ? $t['task_start_date'] : $start;
                 $tEnd = intval($t['task_end_date']) ? $t['task_end_date'] : $end;
-                $tStartObj = new CDate($t['task_start_date']);
-                $tEndObj = new CDate($t['task_end_date']);
+                $tStartObj = new w2p_Utilities_Date($t['task_start_date']);
+                $tEndObj = new w2p_Utilities_Date($t['task_end_date']);
 
                 if ($t['task_milestone'] != 1) {
                     $columnValues = array('task_name' => substr('  ' . $t['task_name'], 0, 20). '...',

@@ -60,9 +60,9 @@ function clickWeek( uts, fdate ) {
 <?php
 // establish the focus 'date'
 if (!$date) {
-	$date = new CDate();
+	$date = new w2p_Utilities_Date();
 } else {
-	$date = new CDate($date);
+	$date = new w2p_Utilities_Date($date);
 }
 $date->setDay(1);
 $date->setMonth(1);
@@ -108,10 +108,10 @@ $next_year = (int)($next_year + 10000);
 					$s .= '<td valign="top" align="center" width="20%">&nbsp;</td>';
 					for ($i = 0; $i <= 3; $i++) {
 						// prepare time period for minical'events'
-						$first_time = new CDate($date);
+						$first_time = new w2p_Utilities_Date($date);
 						$first_time->setDay(1);
 						$first_time->setTime(0, 0, 0);
-						$last_time = new CDate($date);
+						$last_time = new w2p_Utilities_Date($date);
 						$last_time->setDay($date->getDaysInMonth());
 						$last_time->setTime(23, 59, 59);
 						$links = array();

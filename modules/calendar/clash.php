@@ -91,8 +91,8 @@ function clash_suggest() {
 	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 
-	$start_date = new CDate($obj->event_start_date);
-	$end_date = new CDate($obj->event_end_date);
+	$start_date = new w2p_Utilities_Date($obj->event_start_date);
+	$end_date = new w2p_Utilities_Date($obj->event_end_date);
 	$df = $AppUI->getPref('SHDATEFORMAT');
 	$start_secs = $start_date->getTime();
 	$end_secs = $end_date->getTime();
@@ -102,7 +102,7 @@ function clash_suggest() {
 	$titleBlock->show();
 	$calurl = W2P_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
 	$times = array();
-	$t = new CDate();
+	$t = new w2p_Utilities_Date();
 	$t->setTime(0, 0, 0);
 	if (!defined('LOCALE_TIME_FORMAT'))
 		define('LOCALE_TIME_FORMAT', '%I:%M %p');
@@ -212,13 +212,13 @@ function clash_process() {
 			unset($users[$key]);
 	}
 
-	$start_date = new CDate($_POST['event_start_date'] . "000000");
-	$end_date = new CDate($_POST['event_end_date'] . "235959");
+	$start_date = new w2p_Utilities_Date($_POST['event_start_date'] . "000000");
+	$end_date = new w2p_Utilities_Date($_POST['event_end_date'] . "235959");
 
 	// First find any events in the range requested.
 	$event_list = $obj->getEventsInWindow($start_date->format(FMT_DATETIME_MYSQL), $end_date->format(FMT_DATETIME_MYSQL), (int)($_POST['start_time'] / 100), (int)($_POST['end_time'] / 100), $users);
-	$event_start_date = new CDate($_POST['event_start_date'] . $_POST['start_time']);
-	$event_end_date = new CDate($_POST['event_end_date'] . $_POST['end_time']);
+	$event_start_date = new w2p_Utilities_Date($_POST['event_start_date'] . $_POST['start_time']);
+	$event_end_date = new w2p_Utilities_Date($_POST['event_end_date'] . $_POST['end_time']);
 
 	if (!$event_list || !count($event_list)) {
 		// First available date/time is OK, seed addEdit with the details.
@@ -253,7 +253,7 @@ function clash_process() {
 
 	$slots = array();
 	$slot_count = 0;
-	$first_date = new CDate($start_date);
+	$first_date = new w2p_Utilities_Date($start_date);
 	for ($i = 0; $i < $days_between; $i++) {
 		if ($first_date->isWorkingDay()) {
 			$slots[$i] = array();
@@ -267,8 +267,8 @@ function clash_process() {
 
 	// Now process the events list
 	foreach ($event_list as $event) {
-		$sdate = new CDate($event['event_start_date']);
-		$edate = new CDate($event['event_end_date']);
+		$sdate = new w2p_Utilities_Date($event['event_start_date']);
+		$edate = new w2p_Utilities_Date($event['event_end_date']);
 		$sday = $sdate->format('%E');
 		$day_offset = $sday - $first_day;
 

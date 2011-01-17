@@ -116,11 +116,11 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testConstructorNoDateTimeNoTz()
     {
-        $date       = new CDate();
+        $date       = new w2p_Utilities_Date();
         $datetime   = new DateTime();
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertType('CDate',                  $date);
+        $this->assertType('w2p_Utilities_Date',     $date);
         $this->assertEquals($datetime->format('Y'), $date->year);
         $this->assertEquals($datetime->format('m'), $date->month);
         $this->assertEquals($datetime->format('d'), $date->day);
@@ -137,11 +137,11 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testConstructorDateTimeNoTz()
     {
-        $date       = new CDate('2010-08-07 11:00:00');
+        $date       = new w2p_Utilities_Date('2010-08-07 11:00:00');
         $datetime   = new DateTime('2010-08-07 11:00:00');
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertType('CDate',                  $date);
+        $this->assertType('w2p_Utilities_Date',     $date);
         $this->assertEquals($datetime->format('Y'), $date->year);
         $this->assertEquals($datetime->format('m'), $date->month);
         $this->assertEquals($datetime->format('d'), $date->day);
@@ -157,11 +157,11 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testConstructorDateTimeTz()
     {
-        $date       = new CDate('2010-08-07 11:00:00', 'America/Halifax');
+        $date       = new w2p_Utilities_Date('2010-08-07 11:00:00', 'America/Halifax');
         $datetime   = new DateTime('2010-08-07 11:00:00', new DateTimeZone('America/Halifax'));
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertType('CDate',                      $date);
+        $this->assertType('w2p_Utilities_Date',         $date);
         $this->assertEquals($datetime->format('Y'),     $date->year);
         $this->assertEquals($datetime->format('m'),     $date->month);
         $this->assertEquals($datetime->format('d'),     $date->day);
@@ -177,11 +177,11 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testConstructorInvalidDateTime()
     {
-        $date       = new CDate('2010-35-35 28:65:85');
+        $date       = new w2p_Utilities_Date('2010-35-35 28:65:85');
         $datetime   = new DateTime();
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertType('CDate',                  $date);
+        $this->assertType('w2p_Utilities_Date',     $date);
         $this->assertEquals(2010,                   $date->year);
         $this->assertEquals(35,                     $date->month);
         $this->assertEquals(35,                     $date->day);
@@ -199,10 +199,10 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testConstructorInvalidTimezone()
     {
-        $date = new CDate('2010-08-07 22:10:27', 'Halifax');
+        $date = new w2p_Utilities_Date('2010-08-07 22:10:27', 'Halifax');
         $datetime = new DateTime('2010-08-07 22:10:27');
 
-        $this->assertType('CDate',                  $date);
+        $this->assertType('w2p_Utilities_Date',     $date);
         $this->assertEquals($datetime->format('Y'), $date->year);
         $this->assertEquals($datetime->format('m'), $date->month);
         $this->assertEquals($datetime->format('d'), $date->day);
@@ -223,8 +223,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareDayGreaterNoConvertTz()
     {
-        $date1 = new CDate('2010-08-07 00:00:00');
-        $date2 = new CDate('2010-08-06 00:00:00');
+        $date1 = new w2p_Utilities_Date('2010-08-07 00:00:00');
+        $date2 = new w2p_Utilities_Date('2010-08-06 00:00:00');
 
         $this->assertEquals(1, $date1->compare($date1, $date2));
     }
@@ -235,8 +235,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareHourGreaterNoConvertTz()
     {
-        $date1 = new CDate('2010-08-07 02:00:00');
-        $date2 = new CDate('2010-08-07 01:00:00');
+        $date1 = new w2p_Utilities_Date('2010-08-07 02:00:00');
+        $date2 = new w2p_Utilities_Date('2010-08-07 01:00:00');
 
         $this->assertEquals(1, $date1->compare($date1, $date2));
     }
@@ -247,8 +247,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareMinuteGreaterNotConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:01:00');
-        $date2 = new CDate('2010-08-07 01:00:00');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:01:00');
+        $date2 = new w2p_Utilities_Date('2010-08-07 01:00:00');
 
         $this->assertEquals(1, $date1->compare($date1, $date2));
     }
@@ -259,8 +259,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareSecondGreaterNoConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:01:01');
-        $date2 = new CDate('2010-08-07 01:01:00');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:01:01');
+        $date2 = new w2p_Utilities_Date('2010-08-07 01:01:00');
 
         $this->assertEquals(1, $date1->compare($date1, $date2));
     }
@@ -270,8 +270,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareDayLesserNoConvertTz()
     {
-        $date1 = new CDate('2010-08-06 00:00:00');
-        $date2 = new CDate('2010-08-07 00:00:00');
+        $date1 = new w2p_Utilities_Date('2010-08-06 00:00:00');
+        $date2 = new w2p_Utilities_Date('2010-08-07 00:00:00');
 
         $this->assertEquals(-1, $date1->compare($date1, $date2));
     }
@@ -282,8 +282,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareHourLesserNoConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:00:00');
-        $date2 = new CDate('2010-08-07 02:00:00');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:00:00');
+        $date2 = new w2p_Utilities_Date('2010-08-07 02:00:00');
 
         $this->assertEquals(-1, $date1->compare($date1, $date2));
     }
@@ -294,8 +294,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareMinuteLesserNotConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:00:00');
-        $date2 = new CDate('2010-08-07 01:01:00');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:00:00');
+        $date2 = new w2p_Utilities_Date('2010-08-07 01:01:00');
 
         $this->assertEquals(-1, $date1->compare($date1, $date2));
     }
@@ -306,8 +306,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareSecondLesserNoConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:01:00');
-        $date2 = new CDate('2010-08-07 01:01:01');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:01:00');
+        $date2 = new w2p_Utilities_Date('2010-08-07 01:01:01');
 
         $this->assertEquals(-1, $date1->compare($date1, $date2));
     }
@@ -317,8 +317,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareEqualNoConvertTz()
     {
-        $date1 = new CDate('2010-08-07 00:00:00');
-        $date2 = new CDate('2010-08-07 00:00:00');
+        $date1 = new w2p_Utilities_Date('2010-08-07 00:00:00');
+        $date2 = new w2p_Utilities_Date('2010-08-07 00:00:00');
 
        $this->assertEquals(0, $date1->compare($date1, $date2));
     }
@@ -328,8 +328,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareDayGreaterConvertTz()
     {
-        $date1 = new CDate('2010-08-07 00:00:00', 'America/Halifax');
-        $date2 = new CDate('2010-08-06 00:00:00', 'America/Chicago');
+        $date1 = new w2p_Utilities_Date('2010-08-07 00:00:00', 'America/Halifax');
+        $date2 = new w2p_Utilities_Date('2010-08-06 00:00:00', 'America/Chicago');
 
         $this->assertEquals(1, $date1->compare($date1, $date2, true));
     }
@@ -340,8 +340,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareHourGreaterConvertTz()
     {
-        $date1 = new CDate('2010-08-07 00:00:00', 'America/Halifax');
-        $date2 = new CDate('2010-08-06 21:00:00', 'America/Chicago');
+        $date1 = new w2p_Utilities_Date('2010-08-07 00:00:00', 'America/Halifax');
+        $date2 = new w2p_Utilities_Date('2010-08-06 21:00:00', 'America/Chicago');
 
         $this->assertEquals(1, $date1->compare($date1, $date2, true));
     }
@@ -352,8 +352,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareMinuteGreaterConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:01:00', 'America/Halifax');
-        $date2 = new CDate('2010-08-06 23:00:00', 'America/Chicago');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:01:00', 'America/Halifax');
+        $date2 = new w2p_Utilities_Date('2010-08-06 23:00:00', 'America/Chicago');
 
         $this->assertEquals(1, $date1->compare($date1, $date2, true));
     }
@@ -364,8 +364,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareSecondGreaterConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:01:01');
-        $date2 = new CDate('2010-08-06 23:01:00');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:01:01');
+        $date2 = new w2p_Utilities_Date('2010-08-06 23:01:00');
 
         $this->assertEquals(1, $date1->compare($date1, $date2, true));
     }
@@ -375,8 +375,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareDayLesserConvertTz()
     {
-        $date1 = new CDate('2010-08-06 00:00:00', 'America/Halifax');
-        $date2 = new CDate('2010-08-07 00:00:00', 'America/Chicago');
+        $date1 = new w2p_Utilities_Date('2010-08-06 00:00:00', 'America/Halifax');
+        $date2 = new w2p_Utilities_Date('2010-08-07 00:00:00', 'America/Chicago');
 
         $this->assertEquals(-1, $date1->compare($date1, $date2, true));
     }
@@ -387,8 +387,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareHourLesserConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:00:00', 'America/Halifax');
-        $date2 = new CDate('2010-08-07 02:00:00', 'America/Chicago');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:00:00', 'America/Halifax');
+        $date2 = new w2p_Utilities_Date('2010-08-07 02:00:00', 'America/Chicago');
 
         $this->assertEquals(-1, $date1->compare($date1, $date2, true));
     }
@@ -399,8 +399,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareMinuteLesserConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:00:00', 'America/Halifax');
-        $date2 = new CDate('2010-08-06 23:01:00', 'America/Chicago');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:00:00', 'America/Halifax');
+        $date2 = new w2p_Utilities_Date('2010-08-06 23:01:00', 'America/Chicago');
 
         $this->assertEquals(-1, $date1->compare($date1, $date2, true));
     }
@@ -411,8 +411,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareSecondLesserConvertTz()
     {
-        $date1 = new CDate('2010-08-07 01:01:00', 'America/Halifax');
-        $date2 = new CDate('2010-08-06 23:01:01', 'America/Chicago');
+        $date1 = new w2p_Utilities_Date('2010-08-07 01:01:00', 'America/Halifax');
+        $date2 = new w2p_Utilities_Date('2010-08-06 23:01:01', 'America/Chicago');
 
         $this->assertEquals(-1, $date1->compare($date1, $date2, true));
     }
@@ -422,8 +422,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCompareEqualConvertTz()
     {
-        $date1 = new CDate('2010-08-07 00:00:00', 'America/Halifax');
-        $date2 = new CDate('2010-08-06 22:00:00', 'America/Chicago');
+        $date1 = new w2p_Utilities_Date('2010-08-07 00:00:00', 'America/Halifax');
+        $date2 = new w2p_Utilities_Date('2010-08-06 22:00:00', 'America/Chicago');
 
         $this->assertEquals(0, $date1->compare($date1, $date2, true));
     }
@@ -433,7 +433,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDaysPositiveFullDay()
     {
-        $date = new CDate('2010-08-08 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
         $date->addDays(3);
 
         $this->assertEquals('2010-08-11 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -444,7 +444,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDaysNegativeFullDay()
     {
-        $date = new CDate('2010-08-08 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
         $date->addDays(-3);
 
         $this->assertEquals('2010-08-05 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -455,7 +455,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDaysPositivePartialDay()
     {
-        $date = new CDate('2010-08-08 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
         $date->addDays(2.5);
 
         $this->assertEquals('2010-08-10 12:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -466,7 +466,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDaysNegativePartialDay()
     {
-        $date = new CDate('2010-08-08 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
         $date->addDays(-2.5);
 
         $this->assertEquals('2010-08-05 12:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -477,7 +477,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDaysPostivePartialDayAcrossDay()
     {
-        $date = new CDate('2010-08-08 14:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 14:00:00');
         $date->addDays(2.5);
 
         $this->assertEquals('2010-08-11 02:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -488,7 +488,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDaysAcrossMonth()
     {
-        $date = new CDate('2010-08-31 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-31 00:00:00');
         $date->addDays(2);
 
         $this->assertEquals('2010-09-02 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -499,7 +499,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDaysAcrossYear()
     {
-        $date = new CDate('2010-12-31 00:00:00');
+        $date = new w2p_Utilities_Date('2010-12-31 00:00:00');
         $date->addDays(2);
 
         $this->assertEquals('2011-01-02 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -510,7 +510,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddMonthsPositiveFullMonth()
     {
-        $date = new CDate('2010-08-08 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
         $date->addMonths(2);
 
         $this->assertEquals('2010-10-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -521,7 +521,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddMonthsNegativeFullMonth()
     {
-        $date = new CDate('2010-08-08 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
         $date->addMonths(-2);
 
         $this->assertEquals('2010-06-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -532,7 +532,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddMonthsPositivePartialMonth()
     {
-        $date = new CDate('2010-08-08 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
         $date->addMonths(2.5);
 
         $this->assertEquals('2010-10-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -543,7 +543,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddMonthsNegativePartialMonth()
     {
-        $date = new CDate('2010-08-08 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
         $date->addMonths(-2.5);
 
         $this->assertEquals('2010-06-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -554,7 +554,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddMonthsPositiveAcrossYear()
     {
-        $date = new CDate('2010-12-01 00:00:00');
+        $date = new w2p_Utilities_Date('2010-12-01 00:00:00');
         $date->addMonths(1);
 
         $this->assertEquals('2011-01-01 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -565,7 +565,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddMonthsNegativeAcrossYear()
     {
-        $date = new CDate('2010-01-01 00:00:00');
+        $date = new w2p_Utilities_Date('2010-01-01 00:00:00');
         $date->addMonths(-1);
 
         $this->assertEquals('2009-12-01 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -576,7 +576,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testDateDiffNotObject()
     {
-        $date = new CDate('2010-08-11 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-11 00:00:00');
 
         $this->assertFalse($date->dateDiff(1));
     }
@@ -587,8 +587,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testDateDiffFutureFullDay()
     {
-       $date        = new CDate('2010-08-11 00:00:00');
-       $date_diff   = $date->dateDiff(new CDate('2010-08-13 00:00:00'));
+       $date        = new w2p_Utilities_Date('2010-08-11 00:00:00');
+       $date_diff   = $date->dateDiff(new w2p_Utilities_Date('2010-08-13 00:00:00'));
 
        $this->assertEquals(2, $date_diff);
     }
@@ -599,8 +599,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testDateDiffPastFullDay()
     {
-        $date       = new CDate('2010-08-11 00:00:00');
-        $date_diff  = $date->dateDiff(new CDate('2010-08-07 00:00:00'));
+        $date       = new w2p_Utilities_Date('2010-08-11 00:00:00');
+        $date_diff  = $date->dateDiff(new w2p_Utilities_Date('2010-08-07 00:00:00'));
 
         $this->assertEquals(4, $date_diff);
     }
@@ -611,8 +611,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testDateDiffFuturePartialDay()
     {
-        $date       = new CDate('2010-08-11 00:00:00');
-        $date_diff  = $date->dateDiff(new CDate('2010-08-13 12:00:00'));
+        $date       = new w2p_Utilities_Date('2010-08-11 00:00:00');
+        $date_diff  = $date->dateDiff(new w2p_Utilities_Date('2010-08-13 12:00:00'));
 
         $this->assertEquals(2, $date_diff);
     }
@@ -623,8 +623,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testDateDiffPastPartialDay()
     {
-        $date       = new CDate('2010-08-11 00:00:00');
-        $date_diff  = $date->dateDiff(new CDate('2010-08-07 06:00:00'));
+        $date       = new w2p_Utilities_Date('2010-08-11 00:00:00');
+        $date_diff  = $date->dateDiff(new w2p_Utilities_Date('2010-08-07 06:00:00'));
 
         $this->assertEquals(4, $date_diff);
     }
@@ -634,7 +634,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetTimeHourNoMinuteNoSecond()
     {
-        $date = new CDate('2010-08-11 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-11 00:00:00');
         $date->setTime(12);
 
         $this->assertEquals('2010-08-11 12:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -645,7 +645,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetTimeHourMinuteNoSecond()
     {
-        $date = new CDate('2010-08-11 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-11 00:00:00');
         $date->setTime(12, 12);
 
         $this->assertEquals('2010-08-11 12:12:00', $date->getDate(DATE_FORMAT_ISO));
@@ -656,7 +656,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetTimeHourMinuteSecond()
     {
-        $date = new CDate('2010-08-11 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-11 00:00:00');
         $date->setTime(12, 12, 12);
 
         $this->assertEquals('2010-08-11 12:12:12', $date->getDate(DATE_FORMAT_ISO));
@@ -667,7 +667,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetTimeInvalidHour()
     {
-        $date = new CDate('2010-08-11 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-11 00:00:00');
         $date->setTime(25);
 
         $this->assertEquals('2010-08-11 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -678,7 +678,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetTimeInvalidMinute()
     {
-        $date = new CDate('2010-08-11 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-11 00:00:00');
         $date->setTime(12, 61);
 
         $this->assertEquals('2010-08-11 12:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -689,7 +689,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetTimeInvalidSecond()
     {
-        $date = new CDate('2010-08-11 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-11 00:00:00');
         $date->setTime(12, 12, 61);
 
         $this->assertEquals('2010-08-11 12:12:00', $date->getDate(DATE_FORMAT_ISO));
@@ -700,7 +700,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testIsWorkingDayYes()
     {
-        $date = new CDate('2010-08-11 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-11 00:00:00');
 
         $this->assertTrue($date->isWorkingDay());
     }
@@ -710,7 +710,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testIsWorkingDayNo()
     {
-        $date = new CDate('2010-08-08 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
 
         $this->assertFalse($date->isWorkingDay());
     }
@@ -725,7 +725,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
         $w2Pconfig['cal_working_days']  = null;
 
-        $date = new CDate('2010-08-10 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-10 00:00:00');
 
         $this->assertTrue($date->isWorkingDay());
     }
@@ -740,7 +740,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
         $w2Pconfig['cal_working_days']  = null;
 
-        $date = new CDate('2010-08-07 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-07 00:00:00');
 
         $this->assertFalse($date->isWorkingDay());
     }
@@ -750,9 +750,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcDurationIntraDayPositive()
     {
-        $date = new CDate('2010-09-03 11:00:00');
+        $date = new w2p_Utilities_Date('2010-09-03 11:00:00');
 
-        $this->assertEquals(1, $date->calcDuration(new CDate('2010-09-03 12:00:00')));
+        $this->assertEquals(1, $date->calcDuration(new w2p_Utilities_Date('2010-09-03 12:00:00')));
     }
 
     /**
@@ -760,9 +760,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcDurationAcrossDayPostive()
     {
-        $date = new CDate('2010-09-02 16:00:00');
+        $date = new w2p_Utilities_Date('2010-09-02 16:00:00');
 
-        $this->assertEquals(2, $date->calcDuration(new CDate('2010-09-03 10:00:00')));
+        $this->assertEquals(2, $date->calcDuration(new w2p_Utilities_Date('2010-09-03 10:00:00')));
     }
 
     /**
@@ -770,9 +770,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcDurationAcrossMultipleDaysPositive()
     {
-       $date = new CDate('2010-09-01 15:00:00');
+       $date = new w2p_Utilities_Date('2010-09-01 15:00:00');
 
-       $this->assertEquals(11, $date->calcDuration(new CDate('2010-09-03 10:00:00')));
+       $this->assertEquals(11, $date->calcDuration(new w2p_Utilities_Date('2010-09-03 10:00:00')));
     }
 
     /**
@@ -780,9 +780,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcDurationAcrossNonWorkingDaysPositive()
     {
-        $date = new CDate('2010-09-03 15:00:00');
+        $date = new w2p_Utilities_Date('2010-09-03 15:00:00');
 
-        $this->assertEquals(3, $date->calcDuration(new CDate('2010-09-06 10:00:00')));
+        $this->assertEquals(3, $date->calcDuration(new w2p_Utilities_Date('2010-09-06 10:00:00')));
     }
 
     /**
@@ -790,9 +790,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcDurationIntraDayNegative()
     {
-        $date = new CDate('2010-09-03 12:00:00');
+        $date = new w2p_Utilities_Date('2010-09-03 12:00:00');
 
-        $this->assertEquals(-1, $date->calcDuration(new CDate('2010-09-03 11:00:00')));
+        $this->assertEquals(-1, $date->calcDuration(new w2p_Utilities_Date('2010-09-03 11:00:00')));
     }
 
     /**
@@ -800,9 +800,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcDurationAcrossDayNegative()
     {
-        $date = new CDate('2010-09-03 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-03 10:00:00');
 
-        $this->assertEquals(-2, $date->calcDuration(new CDate('2010-09-02 16:00:00')));
+        $this->assertEquals(-2, $date->calcDuration(new w2p_Utilities_Date('2010-09-02 16:00:00')));
     }
 
     /**
@@ -810,7 +810,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetAMPMAM()
     {
-        $date = new CDate('2010-08-19 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-19 10:00:00');
 
         $this->assertEquals('am', $date->getAMPM());
     }
@@ -820,7 +820,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetAMPMPM()
     {
-        $date = new CDate('2010-08-19 13:00:00');
+        $date = new w2p_Utilities_Date('2010-08-19 13:00:00');
 
         $this->assertEquals('pm', $date->getAMPM());
     }
@@ -831,7 +831,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayNotWorkingDayNoPreserveHours()
     {
-        $date = new CDate('2010-08-07 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-07 00:00:00');
         $date->next_working_day();
 
         $this->assertEquals('2010-08-09 09:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -842,7 +842,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayNotWorkingDayPreserveHours()
     {
-        $date = new CDate('2010-08-07 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-07 10:00:00');
         $date->next_working_day(true);
 
         $this->assertEquals('2010-08-09 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -854,7 +854,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayPastEndOfDayNoPreserveHours()
     {
-        $date = new CDate('2010-08-24 18:00:00');
+        $date = new w2p_Utilities_Date('2010-08-24 18:00:00');
         $date->next_working_day();
 
         $this->assertEquals('2010-08-25 09:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -866,7 +866,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayPastEndOfDayPreserveHours()
     {
-        $date = new CDate('2010-08-24 18:00:00');
+        $date = new w2p_Utilities_Date('2010-08-24 18:00:00');
         $date->next_working_day(true);
 
         $this->assertEquals('2010-08-25 18:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -878,7 +878,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayEndOfDayNoPreserveHours()
     {
-        $date = new CDate('2010-08-24 17:00:00');
+        $date = new w2p_Utilities_Date('2010-08-24 17:00:00');
         $date->next_working_day();
 
         $this->assertEquals('2010-08-25 09:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -889,7 +889,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testNextWorkingDayIsWorkingDay()
     {
-        $date = new CDate('2010-08-24 13:00:00');
+        $date = new w2p_Utilities_Date('2010-08-24 13:00:00');
         $date->next_working_day();
 
         $this->assertEquals('2010-08-24 13:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -900,7 +900,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayNotWorkingDayNoPreserveHours()
     {
-        $date = new CDate('2010-08-07 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-07 00:00:00');
         $date->prev_working_day();
 
         $this->assertEquals('2010-08-06 17:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -911,7 +911,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayNotWorkingDayPreserveHours()
     {
-        $date = new CDate('2010-08-07 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-07 00:00:00');
         $date->prev_working_day(true);
 
         $this->assertEquals('2010-08-06 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -922,7 +922,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayBeforeStartOfDayNoPreserveHours()
     {
-        $date = new CDate('2010-08-07 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-07 00:00:00');
         $date->prev_working_day();
 
         $this->assertEquals('2010-08-06 17:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -933,7 +933,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayBeforeStartOfDayPreserveHours()
     {
-        $date = new CDate('2010-08-07 00:00:00');
+        $date = new w2p_Utilities_Date('2010-08-07 00:00:00');
         $date->prev_working_day(true);
 
         $this->assertEquals('2010-08-06 00:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -944,7 +944,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayStartOfDayNoPreserveHours()
     {
-        $date = new CDate('2010-08-07 09:00:00');
+        $date = new w2p_Utilities_Date('2010-08-07 09:00:00');
         $date->prev_working_day();
 
         $this->assertEquals('2010-08-06 17:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -955,7 +955,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayStartOfDayPreserveHours()
     {
-        $date = new CDate('2010-08-07 09:00:00');
+        $date = new w2p_Utilities_Date('2010-08-07 09:00:00');
         $date->prev_working_day(true);
 
         $this->assertEquals('2010-08-06 09:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -966,7 +966,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testPrevWorkingDayIsWorkingDay()
     {
-        $date = new CDate('2010-08-24 13:00:00');
+        $date = new w2p_Utilities_Date('2010-08-24 13:00:00');
         $date->prev_working_day();
 
         $this->assertEquals('2010-08-24 13:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -977,7 +977,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationPositiveDurationFullDayDuration()
     {
-        $date = new CDate('2010-08-30 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-30 10:00:00');
         $date->addDuration(1, 24);
 
         $this->assertEquals('2010-08-31 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -988,7 +988,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationPositiverDurationFullDayDurationAcrossMonth()
     {
-        $date = new CDate('2010-08-31 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-31 10:00:00');
         $date->addDuration(1, 24);
 
         $this->assertEquals('2010-09-01 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -999,7 +999,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationNegativeDurationFullDayDuration()
     {
-        $date = new CDate('2010-08-31 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-31 10:00:00');
         $date->addDuration(-1, 24);
 
         $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1010,7 +1010,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationNegativeDurationFullDayDurationAcrossMonth()
     {
-        $date = new CDate('2010-09-01 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-01 10:00:00');
         $date->addDuration(-1, 24);
 
         $this->assertEquals('2010-08-31 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1021,7 +1021,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationPositiveHourDuration()
     {
-        $date = new CDate('2010-08-30 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-30 10:00:00');
         $date->addDuration(1);
 
         $this->assertEquals('2010-08-30 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1032,7 +1032,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationPositiveHourDurationAcrossDay()
     {
-        $date = new CDate('2010-08-30 16:00:00');
+        $date = new w2p_Utilities_Date('2010-08-30 16:00:00');
         $date->addDuration(2);
 
         $this->assertEquals('2010-08-31 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1043,7 +1043,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationPositiveHourDurationNonWorkingDay()
     {
-        $date = new CDate('2010-08-28 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-28 10:00:00');
         $date->addDuration(1);
 
         $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1054,7 +1054,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationPositiveHourDurationMultipleDays()
     {
-        $date = new CDate('2010-08-30 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-30 10:00:00');
         $date->addDuration(17);
 
         $this->assertEquals('2010-09-01 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1066,7 +1066,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationPositiveHourDurationFridayAfternoon()
     {
-        $date = new CDate('2010-08-27 16:00:00');
+        $date = new w2p_Utilities_Date('2010-08-27 16:00:00');
         $date->addDuration(2);
 
         $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1077,7 +1077,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationNegativeHourDuration()
     {
-        $date = new CDate('2010-08-30 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-30 10:00:00');
         $date->addDuration(-1);
 
         $this->assertEquals('2010-08-30 09:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1088,7 +1088,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationNegativeHourDurationAcrossDay()
     {
-        $date = new CDate('2010-08-31 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-31 10:00:00');
         $date->addDuration(-2);
 
         $this->assertEquals('2010-08-30 16:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1099,7 +1099,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationNegativeHourDurationNonWorkingDay()
     {
-        $date = new CDate('2010-08-28 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-28 10:00:00');
         $date->addDuration(-1);
 
         $this->assertEquals('2010-08-27 16:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1110,7 +1110,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationNegativeHourDurationMultipleDays()
     {
-        $date = new CDate('2010-09-01 11:00:00');
+        $date = new w2p_Utilities_Date('2010-09-01 11:00:00');
         $date->addDuration(-17);
 
         $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1122,7 +1122,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationNegativeHourDurationMondayMorning()
     {
-        $date = new CDate('2010-08-30 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-30 10:00:00');
         $date->addDuration(-2);
 
         $this->assertEquals('2010-08-27 16:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1134,7 +1134,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddDurationInvalidDurationType()
     {
-        $date = new CDate('2010-08-30 10:00:00');
+        $date = new w2p_Utilities_Date('2010-08-30 10:00:00');
         $date->addDuration(1, 17);
 
         $this->assertEquals('2010-08-30 10:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1145,9 +1145,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcDurationAcrossMultipleDaysNegative()
     {
-        $date = new CDate('2010-09-03 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-03 10:00:00');
 
-        $this->assertEquals(-11, $date->calcDuration(new CDate('2010-09-01 15:00:00')));
+        $this->assertEquals(-11, $date->calcDuration(new w2p_Utilities_Date('2010-09-01 15:00:00')));
     }
 
     /**
@@ -1155,9 +1155,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcDurationAcrossNonWorkingDaysNegative()
     {
-        $date = new CDate('2010-09-06 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-06 10:00:00');
 
-        $this->assertEquals(-3, $date->calcDuration(new CDate('2010-09-03 15:00:00')));
+        $this->assertEquals(-3, $date->calcDuration(new w2p_Utilities_Date('2010-09-03 15:00:00')));
     }
 
     /**
@@ -1165,9 +1165,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testWorkingDaysInSpanSameDay()
     {
-        $date = new CDate('2010-09-14 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-14 10:00:00');
 
-        $this->assertEquals(1, $date->workingDaysInSpan(new CDate('2010-09-14 12:00:00')));
+        $this->assertEquals(1, $date->workingDaysInSpan(new w2p_Utilities_Date('2010-09-14 12:00:00')));
     }
 
     /**
@@ -1175,9 +1175,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testWorkingDaysInSpanMultiDaysPositive()
     {
-        $date = new CDate('2010-09-14 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-14 10:00:00');
 
-        $this->assertEquals(3, $date->workingDaysInSpan(new CDate('2010-09-16 12:00:00')));
+        $this->assertEquals(3, $date->workingDaysInSpan(new w2p_Utilities_Date('2010-09-16 12:00:00')));
     }
 
     /**
@@ -1185,9 +1185,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testWorkingDaysInSpanMultiDaysNegative()
     {
-        $date = new CDate('2010-09-14 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-14 10:00:00');
 
-        $this->assertEquals(2, $date->workingDaysInSpan(new CDate('2010-09-12 10:00:00')));
+        $this->assertEquals(2, $date->workingDaysInSpan(new w2p_Utilities_Date('2010-09-12 10:00:00')));
     }
 
     /**
@@ -1196,9 +1196,9 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testWorkingDaysInSpanMultiDaysPositiveWithNonWorking()
     {
-        $date = new CDate('2010-09-14 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-14 10:00:00');
 
-        $this->assertEquals(5, $date->workingDaysInSpan(new CDate('2010-09-20 10:00:00')));
+        $this->assertEquals(5, $date->workingDaysInSpan(new w2p_Utilities_Date('2010-09-20 10:00:00')));
     }
 
     /**
@@ -1207,8 +1207,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testWorkingDaysInSpanMultiDaysNegativeWithNonWorking()
     {
-        $date = new CDate('2010-09-14 10:00:00');
-        $this->assertEquals(3, $date->workingDaysInSpan(new CDate('2010-09-10 10:00:00')));
+        $date = new w2p_Utilities_Date('2010-09-14 10:00:00');
+        $this->assertEquals(3, $date->workingDaysInSpan(new w2p_Utilities_Date('2010-09-10 10:00:00')));
     }
 
     /**
@@ -1216,7 +1216,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testDuplicate()
     {
-        $date = new CDate('2010-09-14 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-14 10:00:00');
         $date2 = $date->duplicate();
 
         $this->assertEquals($date, $date2);
@@ -1227,7 +1227,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testDuplicateDifferent()
     {
-        $date = new CDate('2010-09-14 10:00:00');
+        $date = new w2p_Utilities_Date('2010-09-14 10:00:00');
         $date2 = $date->duplicate();
 
         $date->minute = 15;
@@ -1240,7 +1240,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinishSameDayHours()
     {
-        $date   = new CDate('2010-09-15 10:00:00');
+        $date   = new w2p_Utilities_Date('2010-09-15 10:00:00');
         $finish = $date->calcFinish(2, 1);
 
         $this->assertEquals('2010-09-15 12:00:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1251,7 +1251,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinish45()
     {
-        $date   = new CDate('2010-09-15 10:39:00');
+        $date   = new w2p_Utilities_Date('2010-09-15 10:39:00');
         $finish = $date->calcFinish(1, 1);
 
         $this->assertEquals('2010-09-15 11:45:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1262,7 +1262,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinish30()
     {
-        $date   = new CDate('2010-09-15 10:24:00');
+        $date   = new w2p_Utilities_Date('2010-09-15 10:24:00');
         $finish = $date->calcFinish(1, 1);
 
         $this->assertEquals('2010-09-15 11:30:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1273,7 +1273,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinish15()
     {
-        $date   = new CDate('2010-09-15 10:09:00');
+        $date   = new w2p_Utilities_Date('2010-09-15 10:09:00');
         $finish = $date->calcFinish(1, 1);
 
         $this->assertEquals('2010-09-15 11:15:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1284,7 +1284,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinish00()
     {
-        $date   = new CDate('2010-09-15 10:08:00');
+        $date   = new w2p_Utilities_Date('2010-09-15 10:08:00');
         $finish = $date->calcFinish(1, 1);
 
         $this->assertEquals('2010-09-15 11:00:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1295,7 +1295,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinishNonWorkingDay()
     {
-        $date   = new CDate('2010-09-18 10:00:00');
+        $date   = new w2p_Utilities_Date('2010-09-18 10:00:00');
         $finish = $date->calcFinish(1, 1);
 
         $this->assertEquals('2010-09-20 11:00:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1306,7 +1306,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinishAcrossDayHoursOnLastDay()
     {
-        $date   = new CDate('2010-09-20 16:00:00');
+        $date   = new w2p_Utilities_Date('2010-09-20 16:00:00');
         $finish = $date->calcFinish(2, 1);
 
         $this->assertEquals('2010-09-21 10:00:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1318,7 +1318,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinishAcrossMultipleDaysNoHoursLastDay()
     {
-        $date   = new CDate('2010-09-20 16:00:00');
+        $date   = new w2p_Utilities_Date('2010-09-20 16:00:00');
         $finish = $date->calcFinish(16, 1);
 
         $this->assertEquals('2010-09-22 16:00:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1330,7 +1330,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinishAddDayStartDayDuration()
     {
-        $date   = new CDate('2010-09-20 09:00:00');
+        $date   = new w2p_Utilities_Date('2010-09-20 09:00:00');
         $finish = $date->calcFinish(1, 24);
 
         $this->assertEquals('2010-09-20 17:00:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1341,7 +1341,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinishAddDaysDayDuration()
     {
-        $date   = new CDate('2010-09-20 10:00:00');
+        $date   = new w2p_Utilities_Date('2010-09-20 10:00:00');
         $finish = $date->calcFinish(2, 24);
 
         $this->assertEquals('2010-09-22 10:00:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1352,7 +1352,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testCalcFinishAddDaysDayDurationAcrossNonWorkingDays()
     {
-        $date   = new CDate('2010-09-17 10:00:00');
+        $date   = new w2p_Utilities_Date('2010-09-17 10:00:00');
         $finish = $date->calcFinish(2, 24);
 
         $this->assertEquals('2010-09-21 10:00:00', $finish->getDate(DATE_FORMAT_ISO));
@@ -1363,8 +1363,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
 	public function testConvertTZ()
 	{
-		$myDate1 = new CDate('', 'US/Eastern');
-		$myDate2 = new CDate('', 'CST');
+		$myDate1 = new w2p_Utilities_Date('', 'US/Eastern');
+		$myDate2 = new w2p_Utilities_Date('', 'CST');
 		$myDate2->convertTZ('EST');
 
 		//This tweaks the test data in case the +1 is across the day change.
@@ -1382,11 +1382,11 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetTZ()
     {
-        $date = new CDate('', 'US/Atlantic');
-        $this->assertEquals(new CDate('', 'US/Atlantic'), $date);
+        $date = new w2p_Utilities_Date('', 'US/Atlantic');
+        $this->assertEquals(new w2p_Utilities_Date('', 'US/Atlantic'), $date);
 
         $date->setTZ('US/Eastern');
-        $this->assertEquals(new CDate('', 'US/Eastern'), $date);
+        $this->assertEquals(new w2p_Utilities_Date('', 'US/Eastern'), $date);
     }
 
     /**
@@ -1394,7 +1394,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddSecondsPositive()
     {
-        $date = new CDate('2010-09-21 09:00:00');
+        $date = new w2p_Utilities_Date('2010-09-21 09:00:00');
         $date->addSeconds(59);
 
         $this->assertEquals('2010-09-21 09:00:59', $date->getDate(DATE_FORMAT_ISO));
@@ -1405,7 +1405,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddSecondsNegative()
     {
-        $date = new CDate('2010-09-21 09:00:00');
+        $date = new w2p_Utilities_Date('2010-09-21 09:00:00');
         $date->addSeconds(-59);
 
         $this->assertEquals('2010-09-21 08:59:01', $date->getDate(DATE_FORMAT_ISO));
@@ -1416,7 +1416,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddSecondsAcrossMinute()
     {
-        $date = new CDate('2010-09-21 09:00:00');
+        $date = new w2p_Utilities_Date('2010-09-21 09:00:00');
         $date->addSeconds(65);
 
         $this->assertEquals('2010-09-21 09:01:05', $date->getDate(DATE_FORMAT_ISO));
@@ -1427,7 +1427,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddSecondsAcrossHour()
     {
-        $date = new CDate('2010-09-21 09:59:00');
+        $date = new w2p_Utilities_Date('2010-09-21 09:59:00');
         $date->addSeconds(65);
 
         $this->assertEquals('2010-09-21 10:00:05', $date->getDate(DATE_FORMAT_ISO));
@@ -1438,7 +1438,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddSecondsAcrossDay()
     {
-        $date = new CDate('2010-09-21 23:59:00');
+        $date = new w2p_Utilities_Date('2010-09-21 23:59:00');
         $date->addSeconds(65);
 
         $this->assertEquals('2010-09-22 00:00:05', $date->getDate(DATE_FORMAT_ISO));
@@ -1449,7 +1449,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAddSecondsAcrossYear()
     {
-        $date = new CDate('2010-12-31 23:59:00');
+        $date = new w2p_Utilities_Date('2010-12-31 23:59:00');
         $date->addSeconds(65);
 
         $this->assertEquals('2011-01-01 00:00:05', $date->getDate(DATE_FORMAT_ISO));
@@ -1460,8 +1460,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAfterIsAfter()
     {
-        $date1 = new CDate('2010-11-04 11:00:00');
-        $date2 = new CDate('2010-11-04 10:00:00');
+        $date1 = new w2p_Utilities_Date('2010-11-04 11:00:00');
+        $date2 = new w2p_Utilities_Date('2010-11-04 10:00:00');
 
         $this->assertTrue($date1->after($date2));
     }
@@ -1471,8 +1471,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAfterIsBefore()
     {
-        $date1 = new CDate('2010-11-04 11:00:00');
-        $date2 = new CDate('2010-11-04 12:00:00');
+        $date1 = new w2p_Utilities_Date('2010-11-04 11:00:00');
+        $date2 = new w2p_Utilities_Date('2010-11-04 12:00:00');
 
         $this->assertFalse($date1->after($date2));
     }
@@ -1482,8 +1482,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testAfterIsSame()
     {
-        $date1 = new CDate('2010-11-04 11:00:00');
-        $date2 = new CDate('2010-11-04 11:00:00');
+        $date1 = new w2p_Utilities_Date('2010-11-04 11:00:00');
+        $date2 = new w2p_Utilities_Date('2010-11-04 11:00:00');
 
         $this->assertFalse($date1->after($date2));
     }
@@ -1493,8 +1493,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testBeforeIsBefore()
     {
-        $date1 = new CDate('2010-11-04 10:00:00');
-        $date2 = new CDate('2010-11-04 11:00:00');
+        $date1 = new w2p_Utilities_Date('2010-11-04 10:00:00');
+        $date2 = new w2p_Utilities_Date('2010-11-04 11:00:00');
 
         $this->assertTrue($date1->before($date2));
     }
@@ -1504,8 +1504,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testBeforeIsAfter()
     {
-        $date1 = new CDate('2010-11-04 11:00:00');
-        $date2 = new CDate('2010-11-04 10:00:00');
+        $date1 = new w2p_Utilities_Date('2010-11-04 11:00:00');
+        $date2 = new w2p_Utilities_Date('2010-11-04 10:00:00');
 
         $this->assertFalse($date1->before($date2));
     }
@@ -1515,8 +1515,8 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testBeforeIsSame()
     {
-        $date1 = new CDate('2010-11-04 11:00:00');
-        $date2 = new CDate('2010-11-04 11:00:00');
+        $date1 = new w2p_Utilities_Date('2010-11-04 11:00:00');
+        $date2 = new w2p_Utilities_Date('2010-11-04 11:00:00');
 
         $this->assertFalse($date1->before($date2));
     }
@@ -1526,7 +1526,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetDateIso()
     {
-        $date = new CDate('2010-11-05 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
 
         $this->assertEquals('2010-11-05 11:00:00', $date->getDate(DATE_FORMAT_ISO));
     }
@@ -1536,7 +1536,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetDateTimestamp()
     {
-        $date = new CDate('2010-11-05 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
 
         $this->assertEquals('20101105110000', $date->getDate(DATE_FORMAT_TIMESTAMP));
     }
@@ -1546,7 +1546,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetDateUnixtime()
     {
-        $date = new CDate('2010-11-05 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
 
         $this->assertEquals(1288954800, $date->getDate(DATE_FORMAT_UNIXTIME));
     }
@@ -1556,7 +1556,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetDateInvalidFormat()
     {
-        $date = new CDate('2010-11-05 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
 
         $this->assertNull($date->getDate(DATE_FORMAT_INVALID));
     }
@@ -1566,7 +1566,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetDay()
     {
-        $date = new CDate('2010-11-05 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
 
         $this->assertEquals(5, $date->getDay());
     }
@@ -1576,7 +1576,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetDayInvalidDay()
     {
-        $date = new CDate('2010-11-34 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-34 11:00:00');
 
         $this->assertEquals(34, $date->getDay());
     }
@@ -1586,7 +1586,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetDaysInMonth()
     {
-        $date = new CDate('2010-11-05 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
 
         $this->assertEquals(30, $date->getDaysInMonth());
 
@@ -1600,7 +1600,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetHour()
     {
-        $date = new CDate('2010-11-06 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-06 11:00:00');
 
         $this->assertEquals(11, $date->getHour());
     }
@@ -1610,7 +1610,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetHourGreaterThenTwelve()
     {
-        $date = new CDate('2010-11-06 15:00:00');
+        $date = new w2p_Utilities_Date('2010-11-06 15:00:00');
 
         $this->assertEquals(15, $date->getHour());
     }
@@ -1620,7 +1620,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetHourInvalidHour()
     {
-        $date = new CDate('2010-11-06 25:00:00');
+        $date = new w2p_Utilities_Date('2010-11-06 25:00:00');
 
         $this->assertEquals(25, $date->getHour());
     }
@@ -1630,7 +1630,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetMinute()
     {
-        $date = new CDate('2010-11-06 11:21:00');
+        $date = new w2p_Utilities_Date('2010-11-06 11:21:00');
         $this->assertEquals(21, $date->getMinute());
     }
 
@@ -1639,7 +1639,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetMinuteInvalidMinute()
     {
-        $date = new CDate('2010-11-06 11:65:00');
+        $date = new w2p_Utilities_Date('2010-11-06 11:65:00');
 
         $this->assertEquals(65, $date->getMinute());
     }
@@ -1649,7 +1649,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetMonth()
     {
-        $date = new CDate('2010-11-06 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-06 11:00:00');
 
         $this->assertEquals(11, $date->getMonth());
     }
@@ -1659,7 +1659,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetMonthInvalidMonth()
     {
-        $date = new CDate('2010-14-06 11:00:00');
+        $date = new w2p_Utilities_Date('2010-14-06 11:00:00');
 
         $this->assertEquals(14, $date->getMonth());
     }
@@ -1669,7 +1669,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetWeekOfYear()
     {
-        $date = new CDate('2010-11-06 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-06 11:00:00');
 
         $this->assertEquals(45, $date->getWeekOfYear());
     }
@@ -1679,7 +1679,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetWeekOfYearInvalidDate()
     {
-        $date = new CDate('2010-14-11 11:00:00');
+        $date = new w2p_Utilities_Date('2010-14-11 11:00:00');
 
         $this->assertEquals(2, $date->getWeekOfYear());
     }
@@ -1689,7 +1689,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetYear()
     {
-        $date = new CDate('2010-11-06 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-06 11:00:00');
 
         $this->assertEquals(2010, $date->getYear());
     }
@@ -1699,7 +1699,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testGetYearBeforeEpoch()
     {
-        $date = new CDate('1950-11-06 11:00:00');
+        $date = new w2p_Utilities_Date('1950-11-06 11:00:00');
 
         $this->assertEquals(1950, $date->getYear());
     }
@@ -1709,7 +1709,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetDay()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->setDay(12);
 
         $this->assertEquals('2010-11-12 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1720,7 +1720,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetDayZero()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->setDay(0);
 
         $this->assertEquals('2010-11-01 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1731,7 +1731,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetDayNegative()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->setDay(-1);
 
         $this->assertEquals('2010-11-01 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1742,7 +1742,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetDayHigh()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->setDay(32);
 
         $this->assertEquals('2010-11-01 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1753,7 +1753,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetMonth()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->setMonth(9);
 
         $this->assertEquals('2010-09-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1764,7 +1764,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetMonthZero()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->setMonth(0);
 
         $this->assertEquals('2010-01-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1775,7 +1775,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetMonthNegative()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->setMonth(-2);
 
         $this->assertEquals('2010-01-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1786,7 +1786,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSetMonthHigh()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->setMonth(14);
 
         $this->assertEquals('2010-01-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1797,7 +1797,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSubtractSeconds()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->subtractSeconds(45);
 
         $this->assertEquals('2010-11-07 10:59:15', $date->getDate(DATE_FORMAT_ISO));
@@ -1809,7 +1809,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSubtractSecondsNegative()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->subtractSeconds(-45);
 
         $this->assertEquals('2010-11-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
@@ -1820,7 +1820,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSubtractSecondsOverAMinute()
     {
-        $date = new CDate('2010-11-07 11:00:00');
+        $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->subtractSeconds(75);
 
         $this->assertEquals('2010-11-07 10:58:45', $date->getDate(DATE_FORMAT_ISO));
@@ -1831,7 +1831,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSubtractSecondsAcrossDay()
     {
-        $date = new CDate('2010-11-07 00:00:10');
+        $date = new w2p_Utilities_Date('2010-11-07 00:00:10');
         $date->subtractSeconds(11);
 
         $this->assertEquals('2010-11-06 23:59:59', $date->getDate(DATE_FORMAT_ISO));
@@ -1842,7 +1842,7 @@ class Date_Test extends PHPUnit_Framework_TestCase
      */
     public function testSubtractSecondsAcrossYear()
     {
-        $date = new CDate('2011-01-01 00:00:10');
+        $date = new w2p_Utilities_Date('2011-01-01 00:00:10');
         $date->subtractSeconds(11);
 
         $this->assertEquals('2010-12-31 23:59:59', $date->getDate(DATE_FORMAT_ISO));

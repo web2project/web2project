@@ -80,10 +80,10 @@ if (function_exists('styleRenderBoxTop')) {
     </tr>
 <?php
 
-$now = new CDate();
+$now = new w2p_Utilities_Date();
 
 foreach ($topics as $row) {
-	$last = intval($row['latest_reply']) ? new CDate($row['latest_reply']) : null;
+	$last = intval($row['latest_reply']) ? new w2p_Utilities_Date($row['latest_reply']) : null;
 
 	//JBF limit displayed messages to first-in-thread
 	if ($row["message_parent"] < 0) { ?>

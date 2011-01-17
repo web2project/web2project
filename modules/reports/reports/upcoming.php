@@ -31,9 +31,9 @@ if ($locale_char_set == 'utf-8') {
 } else {
 	$pdf->ezText(w2PgetConfig('company_name'), 12);
 }
-$date = new CDate();
+$date = new w2p_Utilities_Date();
 $pdf->ezText("\n" . $date->format($df), 8);
-$next_week = new CDate($date);
+$next_week = new w2p_Utilities_Date($date);
 $next_week->addSpan(new Date_Span(array(7, 0, 0, 0)));
 
 $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
@@ -151,7 +151,7 @@ foreach ($tasks as $task_id => $detail) {
 	$row[] = implode("\n", $assigned_users[$task_id]);
 	if ($hasResources)
 		$row[] = implode("\n", $resources[$task_id]);
-	$end_date = new CDate($detail['task_end_date']);
+	$end_date = new w2p_Utilities_Date($detail['task_end_date']);
 	$row[] = $end_date->format($df);
 }
 

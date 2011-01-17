@@ -10,8 +10,8 @@ $user_id = $AppUI->user_id;
 $other_users = false;
 $no_modify = false;
 
-$start_date = new CDate('0000-00-00 00:00:00');
-$end_date = new CDate('9999-12-31 23:59:59');
+$start_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
+$end_date = new w2p_Utilities_Date('9999-12-31 23:59:59');
 
 // assemble the links for the events
 $events = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, 0, $company_id);
@@ -27,8 +27,8 @@ $html = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="t
 $html .= '<tr><th>' . $AppUI->_('Date') . '</th><th>' . $AppUI->_('Type') . '</th><th>' . $AppUI->_('Event') . '</th></tr>';
 foreach ($events as $row) {
 	$html .= '<tr>';
-	$start = new CDate($row['event_start_date']);
-	$end = new CDate($row['event_end_date']);
+	$start = new w2p_Utilities_Date($row['event_start_date']);
+	$end = new w2p_Utilities_Date($row['event_end_date']);
 	$html .= '<td width="25%" nowrap="nowrap">' . $start->format($df . ' ' . $tf) . '&nbsp;-&nbsp;';
 	$html .= $end->format($df . ' ' . $tf) . '</td>';
 

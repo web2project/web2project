@@ -121,7 +121,7 @@ echo '<th width="' . (($viewtype == 'single') ? '60' : '100') . '%">' . $AppUI->
 <?php
 $x = false;
 
-$date = new CDate();
+$date = new w2p_Utilities_Date();
 
 if ($viewtype == 'single') {
 	$s = '';
@@ -143,7 +143,7 @@ foreach ($messages as $row) {
 	$q->addWhere('users.user_id = ' . (int)$row['message_editor']);
 	$editor = $q->loadList();
 
-	$date = intval($row['message_date']) ? new CDate($row['message_date']) : null;
+	$date = intval($row['message_date']) ? new w2p_Utilities_Date($row['message_date']) : null;
 	if ($viewtype != 'single') {
 		$s = '';
 	}

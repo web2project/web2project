@@ -32,11 +32,11 @@ if (!$obj->bind($_POST)) {
 }
 // configure the date and times to insert into the db table
 if ($obj->event_start_date) {
-	$start_date = new CDate($obj->event_start_date . $_POST['start_time']);
+	$start_date = new w2p_Utilities_Date($obj->event_start_date . $_POST['start_time']);
 	$obj->event_start_date = $start_date->format(FMT_DATETIME_MYSQL);
 }
 if ($obj->event_end_date) {
-	$end_date = new CDate($obj->event_end_date . $_POST['end_time']);
+	$end_date = new w2p_Utilities_Date($obj->event_end_date . $_POST['end_time']);
 	$obj->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 }
 

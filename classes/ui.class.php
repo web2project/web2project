@@ -292,7 +292,7 @@ class CAppUI {
             $df = $this->getPref('FULLDATEFORMAT');
         } else {
             $df = $format;
-            $ts  = new CDate($ts->format('Y-m-d H:i:s'));
+            $ts  = new w2p_Utilities_Date($ts->format('Y-m-d H:i:s'));
         }
 
         return $ts->format($df);

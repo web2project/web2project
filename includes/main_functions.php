@@ -879,7 +879,7 @@ function convert2days($durn, $units) {
 
 function formatTime($uts) {
 	global $AppUI;
-	$date = new CDate();
+	$date = new w2p_Utilities_Date();
 	$date->setDate($uts, DATE_FORMAT_UNIXTIME);
 	return $date->format($AppUI->getPref('SHDATEFORMAT'));
 }

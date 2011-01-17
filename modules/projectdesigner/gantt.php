@@ -1,4 +1,4 @@
-<?php /* $Id: gantt.php 1524 2010-12-09 08:15:59Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/gantt.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -74,16 +74,16 @@ foreach ($proTasks as $row) {
 	//This avoids jpgraphs internal errors that render the gantt completely useless
 	if ($row['task_start_date'] == '0000-00-00 00:00:00') {
 		if ($row['task_end_date'] == '0000-00-00 00:00:00') {
-			$todaydate = new CDate();
+			$todaydate = new w2p_Utilities_Date();
 			$row['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
 		} else {
 			$row['task_start_date'] = $row['task_end_date'];
 		}
 	}
 
-	$tsd = new CDate($row['task_start_date']);
+	$tsd = new w2p_Utilities_Date($row['task_start_date']);
 
-	if ($tsd->before(new CDate($start_min))) {
+	if ($tsd->before(new w2p_Utilities_Date($start_min))) {
 		$start_min = $row['task_start_date'];
 	}
 
@@ -94,14 +94,14 @@ foreach ($proTasks as $row) {
 		if ($row['task_duration']) {
 			$row['task_end_date'] = db_unix2dateTime(db_dateTime2unix($row['task_start_date']) + SECONDS_PER_DAY * convert2days($row['task_duration'], $row['task_duration_type']));
 		} else {
-			$todaydate = new CDate();
+			$todaydate = new w2p_Utilities_Date();
 			$row['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
 		}
 	}
 
-	$ted = new CDate($row['task_end_date']);
+	$ted = new w2p_Utilities_Date($row['task_end_date']);
 
-	if ($ted->after(new CDate($end_max))) {
+	if ($ted->after(new w2p_Utilities_Date($end_max))) {
 		$end_max = $row['task_end_date'];
 	}
 
@@ -138,8 +138,8 @@ $gantt->setColumnHeaders($columnNames, $columnSizes);
 
 if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
-	$d_start = new CDate();
-	$d_end = new CDate();
+	$d_start = new w2p_Utilities_Date();
+	$d_end = new w2p_Utilities_Date();
 	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 		$a = $gantt_arr[$i][0];
 		$start = substr($a['task_start_date'], 0, 10);
@@ -220,10 +220,10 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         $start = $a['task_start_date'];
         $end_date = $a['task_end_date'];
 
-        $end_date = new CDate($end_date);
+        $end_date = new w2p_Utilities_Date($end_date);
         $end = $end_date->getDate();
 
-        $start = new CDate($start);
+        $start = new w2p_Utilities_Date($start);
         $start = $start->getDate();
 
         $progress = (int) $a['task_percent_complete'];
@@ -276,7 +276,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         if ($flags == 'm') {
-            $start = new CDate($start);
+            $start = new w2p_Utilities_Date($start);
             $start->addDays(0);
             $s = $start->format($df);
             if ($caller == 'todo') {
@@ -319,8 +319,8 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             }
 
             $dur .= ' h';
-            $enddate = new CDate($end);
-            $startdate = new CDate($start);
+            $enddate = new w2p_Utilities_Date($end);
+            $startdate = new w2p_Utilities_Date($start);
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
             if ($caller == 'todo') {
                 $columnValues = array('task_name' => $name, 'project_name' => $pname,

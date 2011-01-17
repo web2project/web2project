@@ -30,8 +30,8 @@ $events2 = array();
 $start_hour = w2PgetConfig('cal_day_start');
 $end_hour = w2PgetConfig('cal_day_end');
 foreach ($events as $row) {
-    $start = new CDate($AppUI->formatTZAwareTime($row['event_start_date'], '%Y-%m-%d %H:%M:%S'));
-	$end = new CDate($AppUI->formatTZAwareTime($row['event_end_date'], '%Y-%m-%d %H:%M:%S'));
+    $start = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['event_start_date'], '%Y-%m-%d %H:%M:%S'));
+	$end = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['event_end_date'], '%Y-%m-%d %H:%M:%S'));
 	$events2[$start->format('%H%M%S')][] = $row;
 
 	if ($start_hour > $start->format('%H')) {
@@ -93,7 +93,7 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 		for ($j = 0; $j < $count; $j++) {
 			$row = $events2[$timeStamp][$j];
 
-			$et = new CDate($AppUI->formatTZAwareTime($row['event_end_date'], '%Y-%m-%d %H:%M:%S'));
+			$et = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['event_end_date'], '%Y-%m-%d %H:%M:%S'));
 			$rows = (($et->getHour() * 60 + $et->getMinute()) - ($this_day->getHour() * 60 + $this_day->getMinute())) / $inc;
 
 			$href = '?m=calendar&a=view&event_id=' . $row['event_id'];

@@ -405,7 +405,7 @@ if (!$suppressHeaders) {
             $script_first_line = substr(trim($script_first_line), 10, -4);
             print ('		<p>File Version ' . $script_first_line . '</p>');
         }
-		$right_now_is = new CDate();
+		$right_now_is = new w2p_Utilities_Date();
 		print ('		<p>Server Time | Timezone: ' . $right_now_is->format(FMT_DATERFC822) . ' | ' . date('T') . '</p>');
 		print ('		<p>PHP Max. Execution Time: ' . ini_get('max_execution_time') . ' seconds</p>');
 		print ('		<p>Memory Limit: ' . (ini_get('memory_limit') ? str_replace('M', ' Mb', ini_get('memory_limit')) : 'Not Defined') . '</p>');

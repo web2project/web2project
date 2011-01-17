@@ -10,7 +10,7 @@ $prev_date = w2PgetParam($_GET, 'uts', null);
 // if $date is empty, set to null
 $date = $date !== '' ? $date : null;
 
-$this_month = new CDate($date);
+$this_month = new w2p_Utilities_Date($date);
 
 $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 ?>

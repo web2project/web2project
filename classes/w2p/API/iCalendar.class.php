@@ -48,7 +48,7 @@ class w2p_API_iCalendar {
     }
 
     private function formatDate($mysqlDate) {
-        $myDate = new CDate($mysqlDate);
+        $myDate = new w2p_Utilities_Date($mysqlDate);
 
         $myDatetime = $myDate->format('%Y%m%d %T');
         $myDatetime = str_replace(':', '', $myDatetime);

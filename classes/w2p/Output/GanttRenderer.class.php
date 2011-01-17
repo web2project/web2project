@@ -46,8 +46,8 @@ class w2p_Output_GanttRenderer {
 
     public function setDateRange($start_date, $end_date)
     {
-        $min_d_start = new CDate($start_date);
-        $max_d_end = new CDate($end_date);
+        $min_d_start = new w2p_Utilities_Date($start_date);
+        $max_d_end = new w2p_Utilities_Date($end_date);
 
         // check day_diff and modify Headers
         $day_diff = $min_d_start->dateDiff($max_d_end);
@@ -144,11 +144,11 @@ class w2p_Output_GanttRenderer {
             switch ($name) {
                 case 'start_date':
                     $start = $value;
-                    $startDate = new CDate($value);
+                    $startDate = new w2p_Utilities_Date($value);
                     $rowValues[] = $startDate->format($this->df);
                     break;
                 case 'end_date':
-                    $endDate = new CDate($value);
+                    $endDate = new w2p_Utilities_Date($value);
                     $rowValues[] = $endDate->format($this->df);
                     break;
                 case 'actual_end':
@@ -157,7 +157,7 @@ class w2p_Output_GanttRenderer {
                         $rowValues[] = $value;
                     } else {
                         $actual_end = $value;
-                        $actual_endDate = new CDate($value);
+                        $actual_endDate = new w2p_Utilities_Date($value);
                         $rowValues[] = $actual_endDate->format($this->df);
                     }
                     break;
@@ -215,7 +215,7 @@ class w2p_Output_GanttRenderer {
     public function addMilestone(array $columnValues, $start,
         $color = '#CC0000', $identifier = 0)
     {
-        $tStartObj = new CDate($start);
+        $tStartObj = new w2p_Utilities_Date($start);
 
         $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
         $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);

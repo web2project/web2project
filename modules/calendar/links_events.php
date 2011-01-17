@@ -18,8 +18,8 @@ function getEventLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $minical =
 
 	// assemble the links for the events
 	foreach ($events as $row) {
-		$start = new CDate($row['event_start_date']);
-		$end = new CDate($row['event_end_date']);
+		$start = new w2p_Utilities_Date($row['event_start_date']);
+		$end = new w2p_Utilities_Date($row['event_end_date']);
 		$date = $start;
 
 		for ($i = 0, $i_cmp = $start->dateDiff($end); $i <= $i_cmp; $i++) {
@@ -66,8 +66,8 @@ function getEventTooltip($event_id) {
 	$obj->event_id = $event_id;
 	$assigned = $obj->getAssigned();
 
-	$start_date = $event->event_start_date ? new CDate($event->event_start_date) : null;
-	$end_date = $event->event_end_date ? new CDate($event->event_end_date) : null;
+	$start_date = $event->event_start_date ? new w2p_Utilities_Date($event->event_start_date) : null;
+	$end_date = $event->event_end_date ? new w2p_Utilities_Date($event->event_end_date) : null;
 	if ($event->event_project) {
 		$event_project = $event->project_name;
 		$event_company = $event->company_name;
