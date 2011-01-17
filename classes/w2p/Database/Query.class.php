@@ -1253,7 +1253,7 @@ class w2p_Database_Query {
 		return $result;
 	}
 
-	/** Load database results into a CW2pObject based object
+	/** Load database results into a w2p_Core_BaseObject based object
 	 * @param &$object Reference to the object to propagate with database results
 	 * @param $bindAll Defaults to false, Bind every field returned to the referenced object
 	 * @param $strip Defaults to true
@@ -1686,7 +1686,7 @@ class w2p_Database_Query {
         /*
         *  PHP4 is no longer supported or allowed. The
         *    installer/upgrader/converter simply stops executing.
-        *  This method also appears in the CDate and W2pObject (modified) class.
+        *  This method also appears in the CDate and w2p_Core_BaseObject (modified) class.
         */
 		return clone ($this);
 	}

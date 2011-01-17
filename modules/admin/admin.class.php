@@ -9,7 +9,7 @@ $utypes = w2PgetSysVal('UserType');
 /**
  * User Class
  */
-class CUser extends CW2pObject {
+class CUser extends w2p_Core_BaseObject {
 	public $user_id = null;
 	public $user_username = null;
 	public $user_password = null;

@@ -1,4 +1,4 @@
-<?php /* $Id: departments.class.php 1528 2010-12-13 08:03:04Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/departments/departments.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 ## CDepartment Class
 ##
 
-class CDepartment extends CW2pObject {
+class CDepartment extends w2p_Core_BaseObject {
 	public $dept_id = null;
 	public $dept_parent = null;
 	public $dept_company = null;

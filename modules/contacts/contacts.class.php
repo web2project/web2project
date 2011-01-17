@@ -1,15 +1,15 @@
-<?php /* $Id: contacts.class.php 1515 2010-12-05 07:13:50Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/contacts/contacts.class.php $ */
+<?php /* $Id$ $URL$ */
 
 /**
  *	@package web2Project
  *	@subpackage modules
- *	@version $Revision: 1515 $
+ *	@version $Revision$
  */
 
 /**
  * Contacts class
  */
-class CContact extends CW2pObject {
+class CContact extends w2p_Core_BaseObject {
 	/**
  	@public int */
 	public $contact_id = null;

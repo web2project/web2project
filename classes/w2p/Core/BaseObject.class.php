@@ -7,7 +7,7 @@
  */
 
 /**
- *	CW2pObject Abstract Class.
+ *	w2p_Core_BaseObject Abstract Class.
  *
  *	Parent class to all database table derived objects
  *	@author Andrew Eddie <eddieajau@users.sourceforge.net>

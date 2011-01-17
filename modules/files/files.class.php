@@ -1,4 +1,4 @@
-<?php /* $Id: files.class.php 1517 2010-12-05 08:07:54Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/files/files.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 /**
  * File Class
  */
-class CFile extends CW2pObject {
+class CFile extends w2p_Core_BaseObject {
 
 	public $file_id = null;
 	public $file_version_id = null;

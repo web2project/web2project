@@ -26,7 +26,7 @@
  * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class CTaskLog extends CW2pObject
+class CTaskLog extends w2p_Core_BaseObject
 {
 
 	/**

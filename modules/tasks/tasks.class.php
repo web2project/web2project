@@ -31,7 +31,7 @@ $tracking_dynamics = array('0' => '21', '1' => '31');
 /*
 * CTask Class
 */
-class CTask extends CW2pObject {
+class CTask extends w2p_Core_BaseObject {
 
     /**
      * @var int

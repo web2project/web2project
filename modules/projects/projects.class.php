@@ -49,7 +49,7 @@ $priority = array(
 /**
  * The Project Class
  */
-class CProject extends CW2pObject {
+class CProject extends w2p_Core_BaseObject {
     public $project_id = null;
     public $project_company = null;
     public $project_department = null;

@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 ## CSysKey Class
 ##
 
-class CSysKey extends CW2pObject {
+class CSysKey extends w2p_Core_BaseObject {
 	public $syskey_id = null;
 	public $syskey_name = null;
 	public $syskey_label = null;
@@ -29,7 +29,7 @@ class CSysKey extends CW2pObject {
 ## CSysVal Class
 ##
 
-class CSysVal extends CW2pObject {
+class CSysVal extends w2p_Core_BaseObject {
 	public $sysval_id = null;
 	public $sysval_key_id = null;
 	public $sysval_title = null;
@@ -37,7 +37,6 @@ class CSysVal extends CW2pObject {
 	public $sysval_value = null;
 
 	public function check() {
-		//print_r($this);die;
 		if ($this->sysval_key_id == 0) {
 			return 'Key Type cannot be empty';
 		}

@@ -1,4 +1,4 @@
-<?php /* $Id: forums.class.php 1483 2010-10-26 17:11:59Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/forums/forums.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -17,7 +17,7 @@ if ($a == 'viewer') {
 	array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
 }
 
-class CForum extends CW2pObject {
+class CForum extends w2p_Core_BaseObject {
 	public $forum_id = null;
 	public $forum_project = null;
 	public $forum_status = null;

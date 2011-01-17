@@ -3,7 +3,7 @@
 /**
  * File Folder Class
  */
-class CFileFolder extends CW2pObject {
+class CFileFolder extends w2p_Core_BaseObject {
 	/**
  	@param int file_folder_id **/
 	public $file_folder_id = null;
