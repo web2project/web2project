@@ -2851,6 +2851,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      * Test the remind function
      * @todo Not sure how we can test reliably that the email was actually
      * generated and sent
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testRemind()
     {
