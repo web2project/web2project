@@ -47,7 +47,7 @@ require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';
 
 /**
- * DateTest Class.
+ * CAppUI_Test Class.
  *
  * Class to test the date include
  * @author D. Keith Casey, Jr.
@@ -305,26 +305,85 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
     /**
      * Tests getting a system class
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetSystemClassValid()
     {
         global $AppUI;
 
-        $class_path = $AppUI->getSystemClass('cdate');
-
-        $this->assertEquals(W2P_BASE_DIR . '/classes/cdate.class.php', $class_path);
+        $this->assertEquals(W2P_BASE_DIR . '/classes/cdate.class.php', $AppUI->getSystemClass('cdate'));
     }
 
     /**
      * Tests getting a system class when no class name is passed
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
-    public function testGetSystemClassNoNcame()
+    public function testGetSystemClassNoName()
     {
         global $AppUI;
 
-        $class_path = $AppUI->getSystemClass();
-
-        $this->assertNull($class_path);
+        $this->assertNull($AppUI->getSystemClass());
     }
 
+    /**
+     * Test getting a library class
+     */
+    public function testGetLibraryClassValid()
+    {
+        global $AppUI;
+
+        $this->assertEquals(W2P_BASE_DIR . '/lib/PEAR/Date.php', $AppUI->getLibraryClass('PEAR/Date'));
+    }
+
+    /**
+     * Tests getting a library class when no library name is passed
+     */
+    public function testGetLibraryClassNoName()
+    {
+        global $AppUI;
+
+        $this->assertNull($AppUI->getLibraryClass());
+    }
+
+    /**
+     * Tests getting a module class
+     */
+    public function testGetModuleClassValid()
+    {
+        global $AppUI;
+
+        $this->assertEquals(W2P_BASE_DIR . '/modules/tasks/tasks.class.php', $AppUI->getModuleClass('tasks'));
+    }
+
+    /**
+     * Tests getting a module class when no name is passed
+     */
+    public function testGetModuleClassNoName()
+    {
+        global $AppUI;
+
+        $this->assertNull($AppUI->getModuleClass());
+    }
+
+    /**
+     * Tests getting an ajax module file for a module
+     */
+    public function testGetModuleAjaxValid()
+    {
+        global $AppUI;
+
+        $this->assertEquals(W2P_BASE_DIR . '/modules/tasks/tasks.ajax.php', $AppUI->getModuleAjax('tasks'));
+    }
+
+    /**
+     * Tests getting an ajax class for a module when no name is passed
+     */
+    public function testGetModuleAjaxNoName()
+    {
+        global $AppUI;
+
+        $this->assertNull($AppUI->getModuleAjax());
+    }
 }
