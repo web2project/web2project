@@ -305,6 +305,8 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
     /**
      * Tests getting a system class
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetSystemClassValid()
     {
@@ -315,6 +317,8 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
     /**
      * Tests getting a system class when no class name is passed
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetSystemClassNoName()
     {

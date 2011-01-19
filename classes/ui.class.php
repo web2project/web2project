@@ -156,7 +156,9 @@ class CAppUI {
 	 * @param string $name The class root file name (excluding .class.php)
 	 * @return string The path to the include file
 	 */
-	public function getSystemClass($name = null) {
+    public function getSystemClass($name = null) {
+        trigger_error("CAppUI->getSystemClass() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE );
+
 		if ($name) {
 			return W2P_BASE_DIR . '/classes/' . $name . '.class.php';
 		}
