@@ -898,7 +898,6 @@ class CEvent extends w2p_Core_BaseObject {
 		$q->addWhere('event_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
 		$q->addWhere('(e.event_owner IN (' . implode(',', $users) . ') OR ue.user_id IN (' . implode(',', $users) . ') )');
 		$q->addWhere('e.event_id <>' . $this->event_id);
-
 		$result = $q->exec();
 		if (!$result) {
 			return false;
@@ -991,15 +990,10 @@ class CEvent extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        // configure the date and times to insert into the db table
-        if ($this->event_start_date) {
-            $start_date = new w2p_Utilities_Date($this->event_start_date . $_POST['start_time']);
-            $this->event_start_date = $start_date->format(FMT_DATETIME_MYSQL);
+        if (!$this->event_recurs) {
+            $this->event_times_recuring = 0;
         }
-        if ($this->event_end_date) {
-            $end_date = new w2p_Utilities_Date($this->event_end_date . $_POST['end_time']);
-            $this->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
-        }
+
 		// ensure changes to check boxes and select lists are honoured
 		$this->event_private = (int) $this->event_private;
 		$this->event_type = (int) $this->event_type;
@@ -1013,10 +1007,10 @@ class CEvent extends w2p_Core_BaseObject {
 
         $this->event_start_date = $AppUI->convertToSystemTZ($this->event_start_date);
         $this->event_end_date = $AppUI->convertToSystemTZ($this->event_end_date);
-        /*
-         * TODO: I don't like the duplication on each of these two branches, but I
-         *   don't have a good idea on how to fix it at the moment...
-         */
+/*
+ * TODO: I don't like the duplication on each of these two branches, but I
+ *   don't have a good idea on how to fix it at the moment...
+ */
         if ($this->event_id && $perms->checkModuleItem('events', 'edit', $this->event_id)) {
             if (($msg = parent::store())) {
                 return $msg;
@@ -1030,7 +1024,7 @@ class CEvent extends w2p_Core_BaseObject {
             $stored = true;
         }
         if ($stored) {
-            // TODO:  I *really* don't like using the POST inside here..
+// TODO:  I *really* don't like using the POST inside here..
             $this->updateAssigned(explode(',', $_POST['event_assigned']));
         }
 

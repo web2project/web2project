@@ -2,7 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-//echo '<pre>'; print_r($_POST); die();
+
 $del = (int) w2PgetParam($_POST, 'del', 0);
 
 $obj = new CEvent();
@@ -11,19 +11,25 @@ if (!$obj->bind($_POST)) {
 	$AppUI->redirect();
 }
 
-if (!$obj->event_recurs) {
-	$obj->event_times_recuring = 0;
+if ($obj->event_start_date) {
+    $start_date = new w2p_Utilities_Date($obj->event_start_date . $_POST['start_time']);
+    $obj->event_start_date = $start_date->format(FMT_DATETIME_MYSQL);
+}
+if ($obj->event_end_date) {
+    $end_date = new w2p_Utilities_Date($obj->event_end_date . $_POST['end_time']);
+    $obj->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 }
 
 $action = ($del) ? 'deleted' : 'stored';
+$clash = false;
 
 if ($del) {
     $result = $obj->delete($AppUI);
 } else {
-	if ($_POST['event_assigned'] > '' && ($clash = $obj->checkClash($_POST['event_assigned']))) {
+    if ($_POST['event_assigned'] > '' && ($clash = $obj->checkClash($_POST['event_assigned']))) {
 		$last_a = $a;
 		$GLOBALS['a'] = "clash";
-		$do_redirect = false;
+        $clash = true;
 	} else {
         $result = $obj->store($AppUI);
         if (isset($_POST['event_assigned'])) {
@@ -35,15 +41,18 @@ if ($del) {
     }
 }
 
-if (is_array($result)) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
-    $AppUI->holdObject($obj);
-    $AppUI->redirect('m=calendar&a=addedit');
-}
+//TODO: I hate this clash param.. there should be a better way.
+if (!$clash) {
+    if (is_array($result)) {
+        $AppUI->setMsg($result, UI_MSG_ERROR, true);
+        $AppUI->holdObject($obj);
+        $AppUI->redirect('m=calendar&a=addedit');
+    }
 
-if ($result) {
-    $AppUI->setMsg('Event '.$action, UI_MSG_OK, true);
-    $AppUI->redirect('m=calendar');
-} else {
-    $AppUI->redirect('m=public&a=access_denied');
+    if ($result) {
+        $AppUI->setMsg('Event '.$action, UI_MSG_OK, true);
+        $AppUI->redirect('m=calendar');
+    } else {
+        $AppUI->redirect('m=public&a=access_denied');
+    }
 }
