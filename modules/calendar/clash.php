@@ -58,12 +58,15 @@ if (isset($_REQUEST['clash_action'])) {
 	foreach ($clash as $user) {
 		$s .= '<tr><td>' . $user . '</td></tr>';
 	}
-	$s .= '</table>';
+	
 	$calurl = W2P_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
+    $s .= '<tr><td>';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'suggest\');">' . $AppUI->_('Suggest Alternative') . '</a> : ';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'cancel\');">' . $AppUI->_('Cancel') . '</a> : ';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'mail\');">' . $AppUI->_('Mail Request') . '</a> : ';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'accept\');">' . $AppUI->_('Book Event Despite Conflict') . '</a>';
+    $s .= '</td></tr>';
+    $s .= '</table>';
 	$s .= '<form name="clash_form" method="post" action="' . $calurl . '" accept-charset="utf-8">';
 	$s .= '<input type="hidden" name="clash_action" value="cancel">';
 	$s .= '</form>';
@@ -340,7 +343,7 @@ function clash_accept() {
 	$obj->bind($_SESSION['add_event_post']);
 	$GLOBALS['a'] = $_SESSION['add_event_caller'];
 	$is_new = ($obj->event_id == 0);
-	if (($msg = $obj->store())) {
+	if (($msg = $obj->store($AppUI))) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
 	} else {
 		if (isset($_SESSION['add_event_attendees']) && $_SESSION['add_event_attendees'])
