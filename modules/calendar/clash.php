@@ -9,19 +9,19 @@ if (isset($_REQUEST['clash_action'])) {
 	$do_include = false;
 	switch ($_REQUEST['clash_action']) {
 		case 'suggest':
-			clash_suggest();
+			clash_suggest($AppUI);
 			break;
 		case 'process':
-			clash_process();
+			clash_process($AppUI);
 			break;
 		case 'cancel':
-			clash_cancel();
+			clash_cancel($AppUI);
 			break;
 		case 'mail':
-			clash_mail();
+			clash_mail($AppUI);
 			break;
 		case 'accept':
-			clash_accept();
+			clash_accept($AppUI);
 			break;
 		default:
 			$AppUI->setMsg('Invalid action, event cancelled', UI_MSG_ALERT);
@@ -58,12 +58,15 @@ if (isset($_REQUEST['clash_action'])) {
 	foreach ($clash as $user) {
 		$s .= '<tr><td>' . $user . '</td></tr>';
 	}
-	$s .= '</table>';
+	
 	$calurl = W2P_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
+    $s .= '<tr><td>';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'suggest\');">' . $AppUI->_('Suggest Alternative') . '</a> : ';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'cancel\');">' . $AppUI->_('Cancel') . '</a> : ';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'mail\');">' . $AppUI->_('Mail Request') . '</a> : ';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'accept\');">' . $AppUI->_('Book Event Despite Conflict') . '</a>';
+    $s .= '</td></tr>';
+    $s .= '</table>';
 	$s .= '<form name="clash_form" method="post" action="' . $calurl . '" accept-charset="utf-8">';
 	$s .= '<input type="hidden" name="clash_action" value="cancel">';
 	$s .= '</form>';
@@ -75,19 +78,19 @@ if (isset($_REQUEST['clash_action'])) {
 * Cancel the event, simply clear the event details and return to the previous
 * page.
 */
-function clash_cancel() {
-	global $AppUI, $a;
+function clash_cancel(CAppUI $AppUI) {
+	global $a;
 	$a = $_SESSION['add_event_caller'];
 	clear_clash();
-	$AppUI->setMsg('Event Cancelled', UI_MSG_ALERT);
+	$AppUI->setMsg($AppUI->_('Event Cancelled'), UI_MSG_ALERT);
 	$AppUI->redirect();
 }
 
 /*
 * display a form
 */
-function clash_suggest() {
-	global $AppUI, $m, $a;
+function clash_suggest(CAppUI $AppUI) {
+	global $m, $a;
 	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 
@@ -192,8 +195,8 @@ function set_clash_action(action) {
 * Build an SQL to determine an appropriate time slot that will meet
 * The requirements for all participants, including the requestor.
 */
-function clash_process() {
-	global $AppUI, $do_include;
+function clash_process(CAppUI $AppUI) {
+	global $do_include;
 
 	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
@@ -316,8 +319,7 @@ function clash_process() {
 * they might like to contact author regarding the date.
 *
 */
-function clash_mail() {
-	global $AppUI;
+function clash_mail(CAppUI $AppUI) {
 	$obj = new CEvent;
 	if (!$obj->bind($_SESSION['add_event_post'])) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
@@ -332,23 +334,27 @@ function clash_mail() {
 /*
 * Even though we end up with a clash, accept the detail.
 */
-function clash_accept() {
-	global $AppUI, $do_redirect;
+function clash_accept(CAppUI $AppUI) {
+	global $do_redirect;
 
 	$AppUI->setMsg('Event');
 	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 	$GLOBALS['a'] = $_SESSION['add_event_caller'];
 	$is_new = ($obj->event_id == 0);
-	if (($msg = $obj->store())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	} else {
-		if (isset($_SESSION['add_event_attendees']) && $_SESSION['add_event_attendees'])
+    $result = $obj->store($AppUI);
+
+    if ($result) {
+		if (isset($_SESSION['add_event_attendees']) && $_SESSION['add_event_attendees']){
 			$obj->updateAssigned(explode(',', $_SESSION['add_event_attendees']));
-		if (isset($_SESSION['add_event_mail']) && $_SESSION['add_event_mail'] == 'on')
+        }
+		if (isset($_SESSION['add_event_mail']) && $_SESSION['add_event_mail'] == 'on') {
 			$obj->notify($_SESSION['add_event_attendees'], !$is_new);
-		$AppUI->setMsg($is_new ? 'added' : 'updated', UI_MSG_OK, true);
-	}
+        }
+        $AppUI->setMsg('Event Stored', UI_MSG_OK, true);
+    } else {
+        $AppUI->setMsg($msg, UI_MSG_ERROR);
+    }
 	clear_clash();
 	$AppUI->redirect();
 }

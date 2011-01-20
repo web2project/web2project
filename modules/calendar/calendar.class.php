@@ -7,6 +7,8 @@ if (!defined('W2P_BASE_DIR')) {
 ## Calendar classes
 ##
 
+$event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
+
 require_once $AppUI->getLibraryClass('PEAR/Date');
 
 /**
@@ -467,10 +469,13 @@ class CEvent extends w2p_Core_BaseObject {
 
 	// overload check operation
 	public function check() {
-		// ensure changes to check boxes and select lists are honoured
-		$this->event_private = intval($this->event_private);
-		$this->event_type = intval($this->event_type);
-		$this->event_cwd = intval($this->event_cwd);
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+        if ($this->event_start_date > $this->event_end_date) {
+            $errorArray['start_after_end'] = $baseErrorMsg . 'start date is after end date';
+        }
+
 		//If the event recurs then set the end date day to be equal to the start date day and keep the hour:minute of the end date
 		//so that the event starts recurring from the start day onwards n times after the start date for the period given
 		//Meaning: The event end date day is useless as far as recurring events are concerned.
@@ -484,20 +489,21 @@ class CEvent extends w2p_Core_BaseObject {
 			$end_date->setMinute($minute);
 			$this->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 		}
-		return null;
+
+		return $errorArray;
 	}
 
 	/**
 	 *	Overloaded delete method
 	 *
-	 *	@author gregorerhardt
-	 *	@return null|string null if successful otherwise returns and error message
+	 *	@author caseydk
+	 *	@return true if it worked, false if it didn't
 	 */
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
 
-        if ($perms->checkModuleItem('events', 'delete', $this->event_id)) {
+        if ($this->canDelete($msg) && $perms->checkModuleItem('events', 'delete', $this->event_id)) {
             if ($msg = parent::delete()) {
                 return $msg;
             }
@@ -735,8 +741,8 @@ class CEvent extends w2p_Core_BaseObject {
 		$q->addWhere('ue.event_id = ' . (int)$this->event_id);
 		$q->addWhere('user_contact = contact_id');
 		$q->addWhere('ue.user_id = u.user_id');
-		$assigned = $q->loadHashList();
-		return $assigned;
+
+		return $q->loadHashList();
 	}
 
 	/*
@@ -751,7 +757,8 @@ class CEvent extends w2p_Core_BaseObject {
 		$q->addQuery('user_id, CONCAT_WS(\' \' , contact_first_name, contact_last_name)');
 		$q->addWhere('user_id IN ('.$assignee_list.')');
 		$q->addWhere('user_contact = contact_id');
-		$assigned = $q->loadHashList();
+
+		return $q->loadHashList();
 	}
 
 	public function updateAssigned($assigned) {
@@ -836,15 +843,9 @@ class CEvent extends w2p_Core_BaseObject {
 
 		// Find the project name.
 		if ($this->event_project) {
-			$prj = array();
-			$q = new w2p_Database_Query;
-			$q->addTable('projects', 'p');
-			$q->addQuery('project_name');
-			$q->addWhere('p.project_id =' . $this->event_project);
-			if ($prj = $q->loadHash()) {
-				$body .= $AppUI->_('Project') . ":\t" . $prj['project_name'] . "\n";
-			}
-			$q->clear();
+			$project = new CProject();
+            $project->load($this->event_project);
+            $body .= $AppUI->_('Project') . ":\t" . $project->project_name . "\n";
 		}
 
 		$types = w2PgetSysVal('EventType');
@@ -989,21 +990,29 @@ class CEvent extends w2p_Core_BaseObject {
 
     public function store(CAppUI $AppUI) {
         $perms = $AppUI->acl();
-        $this->event_owner = $AppUI->user_id;
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        if (!$this->event_recurs) {
+            $this->event_times_recuring = 0;
+        }
 
+		// ensure changes to check boxes and select lists are honoured
+		$this->event_private = (int) $this->event_private;
+		$this->event_type = (int) $this->event_type;
+		$this->event_cwd = (int) $this->event_cwd;
+        $this->event_owner = $AppUI->user_id;
+
+        $errorMsgArray = $this->check();
         if (count($errorMsgArray) > 0) {
             return $errorMsgArray;
         }
 
         $this->event_start_date = $AppUI->convertToSystemTZ($this->event_start_date);
         $this->event_end_date = $AppUI->convertToSystemTZ($this->event_end_date);
-        /*
-         * TODO: I don't like the duplication on each of these two branches, but I
-         *   don't have a good idea on how to fix it at the moment...
-         */
+/*
+ * TODO: I don't like the duplication on each of these two branches, but I
+ *   don't have a good idea on how to fix it at the moment...
+ */
         if ($this->event_id && $perms->checkModuleItem('events', 'edit', $this->event_id)) {
             if (($msg = parent::store())) {
                 return $msg;
@@ -1017,9 +1026,16 @@ class CEvent extends w2p_Core_BaseObject {
             $stored = true;
         }
         if ($stored) {
-            // TODO:  I *really* don't like using the POST inside here..
+// TODO:  I *really* don't like using the POST inside here..
             $this->updateAssigned(explode(',', $_POST['event_assigned']));
         }
+
+        if ($stored) {
+			$custom_fields = new w2p_Core_CustomFields('calendar', 'addedit', $this->event_id, 'edit');
+			$custom_fields->bind($_POST);
+			$sql = $custom_fields->store($this->event_id); // Store Custom Fields
+        }
+
         return $stored;
     }
 
@@ -1055,5 +1071,3 @@ class CEvent extends w2p_Core_BaseObject {
 		return $q->loadList();
 	}
 }
-
-$event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
