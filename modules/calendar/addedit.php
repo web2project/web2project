@@ -48,14 +48,8 @@ $assigned = array();
 if ($is_clash) {
 	$assignee_list = $_SESSION['add_event_attendees'];
 	if (isset($assignee_list) && $assignee_list) {
-		$event = new Event();
+		$event = new CEvent();
 		$assigned = $event->getAssigneeList($assignee_list);
-	}
-} else {
-	if ($event_id == 0) {
-		$assigned[$AppUI->user_id] = $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
-	} else {
-		$assigned = $obj->getAssigned();
 	}
 	// Now that we have loaded the possible replacement event,  remove the stored
 	// details, NOTE: This could cause using a back button to make things break,
@@ -66,6 +60,12 @@ if ($is_clash) {
 		unset($_SESSION['add_event_mail']);
 		unset($_SESSION['add_event_clash']);
 		unset($_SESSION['event_is_clash']);
+	}
+} else {
+	if ($event_id == 0) {
+		$assigned[$AppUI->user_id] = $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
+	} else {
+		$assigned = $obj->getAssigned();
 	}
 }
 
@@ -297,6 +297,7 @@ function removeUser() {
                         <?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($obj->event_start_date, '%H%M%S')); ?>
                     </td>
                 </tr>
+
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>:</td>
                     <td nowrap="nowrap">

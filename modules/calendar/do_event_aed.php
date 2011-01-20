@@ -21,7 +21,7 @@ if ($obj->event_end_date) {
 }
 
 $action = ($del) ? 'deleted' : 'stored';
-$clash = false;
+$clashRedirect = false;
 
 if ($del) {
     $result = $obj->delete($AppUI);
@@ -29,7 +29,7 @@ if ($del) {
     if ($_POST['event_assigned'] > '' && ($clash = $obj->checkClash($_POST['event_assigned']))) {
 		$last_a = $a;
 		$GLOBALS['a'] = "clash";
-        $clash = true;
+        $clashRedirect = true;
 	} else {
         $result = $obj->store($AppUI);
         if (isset($_POST['event_assigned'])) {
@@ -42,7 +42,7 @@ if ($del) {
 }
 
 //TODO: I hate this clash param.. there should be a better way.
-if (!$clash) {
+if (!$clashRedirect) {
     if (is_array($result)) {
         $AppUI->setMsg($result, UI_MSG_ERROR, true);
         $AppUI->holdObject($obj);
