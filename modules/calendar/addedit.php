@@ -54,13 +54,11 @@ if ($is_clash) {
 	// Now that we have loaded the possible replacement event,  remove the stored
 	// details, NOTE: This could cause using a back button to make things break,
 	// but that is the least of our problems.
-	if ($is_clash) {
-		unset($_SESSION['add_event_post']);
-		unset($_SESSION['add_event_attendees']);
-		unset($_SESSION['add_event_mail']);
-		unset($_SESSION['add_event_clash']);
-		unset($_SESSION['event_is_clash']);
-	}
+    unset($_SESSION['add_event_post']);
+    unset($_SESSION['add_event_attendees']);
+    unset($_SESSION['add_event_mail']);
+    unset($_SESSION['add_event_clash']);
+    unset($_SESSION['event_is_clash']);
 } else {
 	if ($event_id == 0) {
 		$assigned[$AppUI->user_id] = $AppUI->user_first_name . ' ' . $AppUI->user_last_name;

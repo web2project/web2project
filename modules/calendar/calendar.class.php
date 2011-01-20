@@ -741,8 +741,8 @@ class CEvent extends w2p_Core_BaseObject {
 		$q->addWhere('ue.event_id = ' . (int)$this->event_id);
 		$q->addWhere('user_contact = contact_id');
 		$q->addWhere('ue.user_id = u.user_id');
-		$assigned = $q->loadHashList();
-		return $assigned;
+
+		return $q->loadHashList();
 	}
 
 	/*
@@ -757,7 +757,8 @@ class CEvent extends w2p_Core_BaseObject {
 		$q->addQuery('user_id, CONCAT_WS(\' \' , contact_first_name, contact_last_name)');
 		$q->addWhere('user_id IN ('.$assignee_list.')');
 		$q->addWhere('user_contact = contact_id');
-		$assigned = $q->loadHashList();
+
+		return $q->loadHashList();
 	}
 
 	public function updateAssigned($assigned) {
@@ -898,6 +899,7 @@ class CEvent extends w2p_Core_BaseObject {
 		$q->addWhere('event_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
 		$q->addWhere('(e.event_owner IN (' . implode(',', $users) . ') OR ue.user_id IN (' . implode(',', $users) . ') )');
 		$q->addWhere('e.event_id <>' . $this->event_id);
+
 		$result = $q->exec();
 		if (!$result) {
 			return false;
