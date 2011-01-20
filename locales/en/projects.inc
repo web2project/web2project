@@ -278,3 +278,7 @@
 'translation',
 'users',
 'view this project',
+'all',
+'Print projects list',
+'Sort Tasks By Name',
+'Show Archived/Templates',

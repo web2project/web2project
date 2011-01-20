@@ -79,12 +79,12 @@ if (isset($_POST['project_owner'])) {
 }
 $owner = $AppUI->getState('ProjIdxowner') !== null ? $AppUI->getState('ProjIdxowner') : 0;
 
-$user_list = array(0 => '(all)') + CProject::getOwners();
+$user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
 // collect the full projects list data via function in projects.class.php
 projects_list_data();
 
-$project_types = array(-1 => '(all)') + w2PgetSysVal('ProjectType');
+$project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('ProjectType');
 
 $bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>';
 
