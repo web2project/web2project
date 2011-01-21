@@ -136,7 +136,8 @@ function clean_value($str) {
  * TODO:  Remove for v3.0 - dkc 27 Nov 2010
  */
 function dpRealPath($file) {
-	return $file;
+	trigger_error("The dpRealPath function has been deprecated and will be removed in v3.0.", E_USER_NOTICE );
+    return $file;
 }
 
 function strUTF8Decode($text) {
@@ -166,6 +167,7 @@ function strUTF8Decode($text) {
 */
 function strJpGraph($text) {
     global $locale_char_set;
+    trigger_error("The strJpGraph function has been deprecated and will be removed in v3.0.", E_USER_NOTICE );
     if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) {
         return utf8_decode($text);
     } else {

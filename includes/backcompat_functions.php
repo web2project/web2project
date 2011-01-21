@@ -156,7 +156,8 @@ if(!function_exists('mb_trim')) {
 * Make function htmlspecialchar_decode for older PHP versions
 */
 if (!function_exists('htmlspecialchars_decode')) {
-	function htmlspecialchars_decode($str) {
+	trigger_error("The htmlspecialchars_decode function is in PHP core as of 5.1.0 so this will be removed in v3.0.", E_USER_NOTICE );
+    function htmlspecialchars_decode($str) {
 		return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
 	}
 }
