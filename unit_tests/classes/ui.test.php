@@ -386,4 +386,24 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
         $this->assertNull($AppUI->getModuleAjax());
     }
+
+    /**
+     * Tests that the proper version number is reported
+     */
+    public function testGetVersion()
+    {
+        global $AppUI;
+
+        include W2P_BASE_DIR . '/includes/version.php';
+
+        $version = $w2p_version_major . '.' . $w2p_version_minor;
+        if (isset($w2p_version_patch)) {
+            $version .= '.' . $w2p_version_patch;
+        }
+        if (isset($w2p_version_prepatch)) {
+            $version .= '-' . $w2p_version_prepatch;
+        }
+
+        $this->assertEquals($version, $AppUI->getVersion());
+    }
 }
