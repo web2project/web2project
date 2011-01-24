@@ -28,7 +28,7 @@
 'Owner'=>'Dono',
 'Owner filter'=>'Coordenador',
 'P'=>'P',
-'Phone'=>'Telephone',
+'Phone'=>'Telefone',
 'Reset search'=>'Reiniciar procura',
 'Search'=>'Procurar',
 'Started'=>'Iniciado',
