@@ -87,14 +87,6 @@ function w2p_autoload($class_name) {
                 } else {
                     $name = w2p_pluralize($name);
                 }
-
-//                if (substr($name, -1) == 'y') {
-//                    $name = substr($name, 0, -1).'ies';
-//                } elseif (in_array($name, array('system'))) {
-//                    //do nothing
-//                } else {
-//                    $name = w2p_pluralize($name);
-//                }
             }
             if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
                 require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
@@ -224,7 +216,7 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 	global $AppUI;
 	$q = new w2p_Database_Query();
 	$q->addTable('projects', 'pr');
-	$q->addQuery('pr.project_id, co.company_name, project_name');
+	$q->addQuery('DISTINCT pr.project_id, co.company_name, project_name');
 	if (!empty($excludeProjWithId)) {
 		$q->addWhere('pr.project_id <> ' . $excludeProjWithId);
 	}
@@ -250,16 +242,16 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 ## Merges arrays maintaining/overwriting shared numeric indicees
 ##
 function arrayMerge($a1, $a2) {
-  if (is_array($a1) && !is_array($a2)) {
+    if (is_array($a1) && !is_array($a2)) {
+        return $a1;
+    }
+    if (is_array($a2) && !is_array($a1)) {
+        return $a2;
+    }
+    foreach ($a2 as $k => $v) {
+        $a1[$k] = $v;
+    }
     return $a1;
-  }
-  if (is_array($a2) && !is_array($a1)) {
-    return $a2;
-  }
-  foreach ($a2 as $k => $v) {
-    $a1[$k] = $v;
-  }
-  return $a1;
 }
 
 ##
