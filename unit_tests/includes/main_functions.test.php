@@ -205,4 +205,12 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
     $linkText = w2p_textarea('Please check out http://web2project.net');
     $this->assertEquals($target, $linkText);
   }
+
+    public function test_w2p_pluralize() {
+        $this->assertEquals('projects', w2p_pluralize('project'));
+        $this->assertEquals('links', w2p_pluralize('link'));
+        $this->assertEquals('companies', w2p_pluralize('company'));
+        $this->assertEquals('holidays', w2p_pluralize('holiday'));
+        $this->assertEquals('todos', w2p_pluralize('todo'));
+    }
 }
