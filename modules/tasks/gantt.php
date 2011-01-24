@@ -34,6 +34,7 @@ $addLinksToGantt = (int) w2PgetParam($_REQUEST, 'addLinksToGantt', 0);
 $monospacefont = (int) w2PgetParam($_REQUEST, 'monospacefont', 0);
 // Get the state of formatting variables here /////////////////////////////////////////////////////
 
+$df = $AppUI->getPref('SHDATEFORMAT');
 $project = new CProject();
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 
@@ -357,10 +358,10 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $start = new w2p_Utilities_Date($start_date);
                 $start->addDays(0);
                 $start_mile = $start->getDate();
-                $s = $start_date->format("%m/%d/%Y");
+                $s = $start_date->format($df);
                 $today_date = date('m/d/Y');
                 $today_date_stamp = strtotime($today_date);
-                $mile_date = $start_date->format("%m/%d/%Y");
+                $mile_date = $start_date->format($df);
                 $mile_date_stamp = strtotime($mile_date);
                 if ($showTaskNameOnly == '1') {
                     $fieldArray = array($name);

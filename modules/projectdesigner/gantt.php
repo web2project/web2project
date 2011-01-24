@@ -12,6 +12,7 @@ w2PsetExecutionConditions($w2Pconfig);
 $project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 $f = w2PgetParam($_REQUEST, 'f', 0);
 
+$df = $AppUI->getPref('SHDATEFORMAT');
 $project = new CProject;
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 $criticalTasksInverted = ($project_id > 0) ? getCriticalTasksInverted($project_id) : null;
