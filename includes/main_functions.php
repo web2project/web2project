@@ -82,20 +82,20 @@ function w2p_autoload($class_name) {
 
             if ($name[0] == 'c') {
                 $name = substr($name, 1);
-                if (substr($name, -1) == 'y') {
-                    $name = substr($name, 0, -1).'ies';
-                } elseif (in_array($name, array('system'))) {
+                if (in_array($name, array('system'))) {
                     //do nothing
                 } else {
-                    $name .= 's';
+                    $name = w2p_pluralize($name);
                 }
-            }
-            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-                return;
-            }
 
-            $name = substr($name, 0, -1);
+//                if (substr($name, -1) == 'y') {
+//                    $name = substr($name, 0, -1).'ies';
+//                } elseif (in_array($name, array('system'))) {
+//                    //do nothing
+//                } else {
+//                    $name = w2p_pluralize($name);
+//                }
+            }
             if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
                 require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
                 return;
@@ -611,7 +611,7 @@ function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingT
 /**
  * function to return a default value if a variable is not set
  */
-function defVal($var, $def) {
+    function defVal($var, $def) {
 	return isset($var) ? $var : $def;
 }
 
@@ -1378,4 +1378,48 @@ function w2p_textarea($content)
   }
 
   return $result;
+}
+
+function w2p_pluralize($word) {
+    $rules= array(
+        '/(matr|vert|ind)(ix|ex)$/i' => '\1ices', # matrix, vertex, index
+        '/(ss|sh|ch|x|z)$/i' => '\1es', # sibilant rule (no ending e)
+        '/([^aeiou])o$/i' => '\1oes', # -oes rule
+        '/([^aeiou]|qu)y$/i' => '\1ies', # -ies rule
+        '/sis$/i' => 'ses', # synopsis, diagnosis
+        '/(m|l)ouse$/i' => '\1ice', # mouse, louse
+        '/(t|i)um$/i' => '\1a', # datum, medium
+        '/([li])fe?$/i' => '\1ves', # knife, life, shelf
+        '/(octop|vir|syllab)us$/i' => '\1i', # octopus, virus, syllabus
+        '/(ax|test)is$/i' => '\1es', # axis, testis
+        '/([a-rt-z])$/i' => '\1s' # not ending in s
+    );
+    $irregulars = array(
+        'bus' => 'busses',
+        'child' => 'children',
+        'equipment' => 'equipment',
+        'fish' => 'fish',
+        'information' => 'information',
+        'man' => 'men',
+        'money' => 'money',
+        'moose' => 'moose',
+        'news' => 'news',
+        'person' => 'people',
+        'quiz' => 'quizzes',
+        'rice' => 'rice',
+        'series' => 'series',
+        'sheep' => 'sheep',
+        'species' => 'species',
+        'todo' => 'todos'
+    );
+    if (isset($irregulars[$word])) {
+        return $irregulars[$word];
+    }
+    foreach ($rules as $regex => $replace) {
+        $word = preg_replace($regex, $replace, $word, 1, $count);
+        if ($count) {
+            return $word;
+        }
+    }
+    return $word;
 }
