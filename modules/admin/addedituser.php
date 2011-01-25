@@ -87,6 +87,9 @@ if (!$user && $user_id > 0) {
 	}
 	$titleBlock->show();
 ?>
+<?php
+$AppUI->addFooterJavascriptFile('js/passwordstrength.js');
+?>
 <script language="javascript" type="text/javascript">
 function submitIt(){
     var form = document.editFrm;
@@ -208,11 +211,20 @@ function setDept( key, val ) {
 ?>
 <tr>
     <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Password'); ?>:</td>
-    <td><input type="password" class="text" name="user_password" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" /> </td>
+    <td><input type="password" class="text" name="user_password" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" onKeyUp="checkPassword(this.value);" /> </td>
 </tr>
 <tr>
     <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Confirm Password'); ?>:</td>
     <td><input type="password" class="text" name="password_check" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" /> </td>
+</tr>
+<tr>
+    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Password Strength'); ?></td>
+    <td>
+        <div class="text" style="width: 135px;">
+            <div id="progressBar" style="font-size: 1px; height: 15px; width: 0px;">
+            </div>
+        </div>
+    </td>
 </tr>
 <?php }
 ?>
