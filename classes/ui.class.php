@@ -125,6 +125,14 @@ class CAppUI {
     public $long_date_format = null;
 
 	private $objStore = null;
+
+        /**
+         * Holds an array of additional javascript files to be loaded
+         * in the footer of the page
+         *
+         * @var array
+         */
+        private $footerJavascriptFiles = array();
 	/**
 
 	 * CAppUI Constructor
@@ -1115,6 +1123,19 @@ class CAppUI {
 		}
 	}
 
+        public function addFooterJavascriptFile($pathTo) {
+            if(!in_array($pathTo, $this->footerJavascriptFiles)) {
+                $base = W2P_BASE_URL;
+		if (substr($base, -1) != '/') {
+			$base .= '/';
+		}
+                if(strpos($pathTo, $base) === false) {
+                    $pathTo = $base . $pathTo;
+                }
+                $this->footerJavascriptFiles[] = $pathTo;
+            }
+        }
+
 	public function loadFooterJS() {
 		$s = '<script type="text/javascript">';
 		$s .= '$(document).ready(function() {';
@@ -1128,6 +1149,18 @@ class CAppUI {
         }
 		$s .= '});';
 		$s .= '</script>';
+
+                if(is_array($this->footerJavascriptFiles) and !empty($this->footerJavascriptFiles)) {
+                    foreach($this->footerJavascriptFiles as $jsFile) {
+                        $s .= "<script type='text/javascript' src='" . $jsFile . "'></script>";
+                    }
+                    // as the AppUI is saved in the session, we must empty this array
+                    // as we want these javascript files only on one page to be loaded
+                    // otherwise they get appended to the page over and over again.
+                    // I know, it's hacky. Sorry :(
+                    $this->footerJavascriptFiles = array();
+                }
+
 		echo $s;
 	}
 
