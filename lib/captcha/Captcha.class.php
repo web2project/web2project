@@ -2,7 +2,7 @@
 /*
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-::	Captcha Version 2.0 by László Zsidi, http://gifs.hu
+::	Captcha Version 2.0 by Lï¿½szlï¿½ Zsidi, http://gifs.hu
 ::
 ::	This class is a rewritten 'Captcha.class.php' version.
 ::
@@ -15,8 +15,8 @@
 ::
 */
 
-define ( ANIM_FRAMES,  5 );
-define ( ANIM_DELAYS, 10 );
+define ( "ANIM_FRAMES",  5 );
+define ( "ANIM_DELAYS", 10 );
 
 Class Captcha {
 	var $image;
@@ -95,7 +95,7 @@ Class Captcha {
 /*
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-::	GIFEncoder Version 2.0 by László Zsidi, http://gifs.hu
+::	GIFEncoder Version 2.0 by Lï¿½szlï¿½ Zsidi, http://gifs.hu
 ::
 ::	This class is a rewritten 'GifMerge.class.php' version.
 ::
@@ -114,10 +114,10 @@ Class GIFEncoder extends Captcha {
 	var $VER = 'GIFEncoder V2.0';   /* Encoder version		*/
 
 	var $ERR = Array (
-		ERR00=>"Does not supported function for only one image!",
-		ERR01=>"Source is not a GIF image!",
-        ERR02=>"Unintelligible flag ",
-        ERR03=>"Missing image descriptor block!<br>First byte of this block "
+		"ERR00"=>"Does not supported function for only one image!",
+		"ERR01"=>"Source is not a GIF image!",
+        "ERR02"=>"Unintelligible flag ",
+        "ERR03"=>"Missing image descriptor block!<br>First byte of this block "
 	);
 
 	function GIFEncoder (
