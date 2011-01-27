@@ -15,3 +15,4 @@
 'Show empty',
 'Task Log',
 'Total records found',
+'Advanced search',

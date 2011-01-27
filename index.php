@@ -58,11 +58,13 @@ $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
 w2PsessionStart(array('AppUI'));
 
 // write the HTML headers
-header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-header('Cache-Control: no-cache, must-revalidate, no-store, post-check=0, pre-check=0'); // HTTP/1.1
-header('Pragma: no-cache'); // HTTP/1.0
-header("Content-type: text/html; charset=UTF-8");
+if (!$suppressHeaders) {
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+    header('Cache-Control: no-cache, must-revalidate, no-store, post-check=0, pre-check=0'); // HTTP/1.1
+    header('Pragma: no-cache'); // HTTP/1.0
+    header("Content-type: text/html; charset=UTF-8");
+}
 // Force POSIX locale (to prevent functions such as strtolower() from messing up UTF-8 strings)
 setlocale(LC_CTYPE, 'C');
 

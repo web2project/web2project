@@ -2,7 +2,7 @@
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
 'Add Inventory Item'=>'Adicionar item de Inventário',
-'All Companies'=>'Todas as Empresas',
+'All Companies'=>'Todas Empresas',
 'Arrived'=>'Deu entrada',
 'Asset No'=>'Bem nro',
 'Assign From'=>'Atribuído de ',
@@ -67,11 +67,11 @@
 'Yearly'=>'Anualmente',
 'add remembered'=>'adicionar aos lembrados',
 'click for details'=>'clique para detalhes',
-'delete item'=>'eliminar item',
-'delete sub-items also'=>'eliminar sub-items tambem',
+'delete item'=>'excluir item',
+'delete sub-items also'=>'excluir sub-items tambem',
 'department'=>'departamento',
 'edit parent'=>'alterar item superior',
-'edit this item'=>'alterar este item',
+'edit this item'=>'editar item',
 'filtered by'=>'filtrar por',
 'inventory list'=>'lista do inventário',
 'items remembered'=>'items lembrados',

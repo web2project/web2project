@@ -250,3 +250,5 @@
 'risks'=>'Risks',
 'timecard'=>'Timecard',
 'todos'=>'Todos',
+'Reports',
+'Global Search',
