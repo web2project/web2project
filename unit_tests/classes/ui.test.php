@@ -406,4 +406,190 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($version, $AppUI->getVersion());
     }
+
+    /**
+     * Tests getting the time, taking into account the timezone
+     */
+    public function testGetTZAwareTime()
+    {
+        global $AppUI;
+
+        $timezone     = $AppUI->getPref('TIMEZONE');
+        $datetimezone = new DateTimeZone($timezone);
+        $datetime     = new DateTime('now', $datetimezone);
+
+        $this->assertEquals($datetime->format('d/M/Y h:i a'), $AppUI->getTZAwareTime());
+    }
+
+    /**
+     * Tests converting to system timezone(GMT) with no parameters
+     */
+    public function testConvertToSystemTZNoParams()
+    {
+        global $AppUI;
+
+        $timezone     = $AppUI->getPref('TIMEZONE');
+        $datetimezone = new DateTimeZone($timezone);
+        $datetime     = new DateTime('now', $datetimezone);
+        $datetime->setTimezone(new DateTimeZone('Europe/London'));
+
+        $this->assertEquals($datetime->format('Y-m-d H:i:s'), $AppUI->convertToSystemTZ());
+    }
+
+    /**
+     * Tests converting to system timezone(GMT) with a date passed
+     */
+    public function testConvertToSystemTZWithDateTime()
+    {
+        global $AppUI;
+
+        $timezone     = $AppUI->getPref('TIMEZONE');
+        $datetimezone = new DateTimeZone($timezone);
+        $datetime     = new DateTime('2011-01-01 10:00:00', $datetimezone);
+        $datetime->setTimezone(new DateTimeZone('Europe/London'));
+
+        $this->assertEquals($datetime->format('Y-m-d H:i:s'), $AppUI->convertToSystemTZ('2011-01-01 10:00:00'));
+    }
+
+    /**
+     * Tests converting to system timezone(GMT) with a format passed
+     */
+    public function testConvertToSystemTZWithFormat()
+    {
+        global $AppUI;
+
+        $timezone     = $AppUI->getPref('TIMEZONE');
+        $datetimezone = new DateTimeZone($timezone);
+        $datetime     = new DateTime('now', $datetimezone);
+        $datetime->setTimeZone(new DateTimeZone('Europe/London'));
+
+        $this->assertEquals($datetime->format('d/m/Y h:i:s a'), $AppUI->convertToSystemTZ('', 'd/m/Y h:i:s a'));
+    }
+
+    /**
+     * Tests converting to system timezone(GMT) with a date and format passed
+     */
+    public function testConvertToSystemTZWithDateTimeAndFormat()
+    {
+        global $AppUI;
+
+        $timezone     = $AppUI->getPref('TIMEZONE');
+        $datetimezone = new DateTimeZone($timezone);
+        $datetime     = new DateTime('2011-01-1 10:00:00', $datetimezone);
+        $datetime->setTimezone(new DateTimeZone('Europe/London'));
+
+        $this->assertEquals($datetime->format('d/m/Y h:i:s a'), $AppUI->convertToSystemTZ('2011-01-01 10:00:00', 'd/m/Y h:i:s a'));
+    }
+
+    /**
+     * Tests formatting timezone aware with no params
+     */
+    public function testFormatTZAwareTimeNoParams()
+    {
+        global $AppUI;
+
+        $timezone     = $AppUI->getPref('TIMEZONE');
+        $datetimezone = new DateTimeZone($timezone);
+        $datetime     = new DateTime('now', $datetimezone);
+
+        $this->assertEquals($datetime->format($AppUI->getPref('FULLDATEFORMAT')), $AppUI->formatTZAwareTime());
+    }
+
+    /**
+     * Tests formatting timezone aware with a date
+     */
+    public function testFormatTZAwareTimeWithDateTime()
+    {
+        global $AppUI;
+
+        $timezone     = new DateTimezone($AppUI->getPref('TIMEZONE'));
+        $datetimezone = new DateTimeZone('Europe/London');
+        $datetime     = new DateTime('2011-01-01 10:00:00', $datetimezone);
+        $datetime->setTimeZone($timezone);
+
+        $this->assertEquals($datetime->format($AppUI->getPref('FULLDATEFORMAT')), $AppUI->formatTZAwareTime('2011-01-01 10:00:00'));
+    }
+
+    /**
+     * Tests formatting timezone aware with a format
+     */
+    public function testFormatTZAwareTimeWithFormat()
+    {
+        global $AppUI;
+
+        $timezone     = $AppUI->getPref('TIMEZONE');
+        $datetimezone = new DateTimeZone($timezone);
+        $datetime     = new DateTime('now', $datetimezone);
+
+        $this->assertEquals($datetime->format('d/m/Y h:i:s a'), $AppUI->formatTZAwareTime('', '%d/%m/%Y %I:%M:%S %p'));
+    }
+
+    /**
+     * Tests formatting timezone aware with a date and format
+     */
+    public function testFormatTZAwareTimeWithDateTimeAndFormat()
+    {
+        global $AppUI;
+
+        $timezone     = new DateTimeZone($AppUI->getPref('TIMEZONE'));
+        $datetimezone = new DateTimeZone('Europe/London');
+        $datetime     = new DateTime('2011-01-1 10:00:00', $datetimezone);
+        $datetime->setTimeZone($timezone);
+
+        $this->assertEquals($datetime->format('d/m/Y h:i:s a'), $AppUI->formatTZAwareTime('2011-01-01 10:00:00', '%d/%m/%Y %I:%M:%S %p'));
+    }
+
+    /**
+     * Tests checking a users style selection when it is valid
+     */
+    public function testCheckStyleValidStyle()
+    {
+        global $AppUI;
+
+        $AppUI->setPref('UISTYLE', 'wps-redmond');
+        $AppUI->checkStyle();
+
+        $this->assertEquals('wps-redmond', $AppUI->getPref('UISTYLE'));
+    }
+
+    /**
+     * Tests checking a users style selection when it is invalid
+     */
+    public function testCheckStyleInvalidStyle()
+    {
+        global $AppUI;
+
+        $AppUI->setPref('UISTYLE', 'trevors-style');
+        $AppUI->checkStyle();
+
+        $this->assertEquals('web2project', $AppUI->getPref('UISTYLE'));
+    }
+
+    /**
+     * Tests reading directories from a path
+     */
+    public function testReadDirs()
+    {
+        global $AppUI;
+
+        $locales = $AppUI->readDirs('locales');
+
+        $this->assertType('array', $locales);
+
+        foreach ($locales as $locale) {
+            $this->assertType('string', $locale);
+        }
+    }
+
+    /**
+     * Test reding directories from an invalid path
+     *
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testReadDirsInvalidPath()
+    {
+        global $AppUI;
+
+        $dirs = $AppUI->readDirs('blah');
+    }
 }
