@@ -210,7 +210,7 @@ foreach ($select_items as $itm) {
 echo $s;
 ?>
 			<tr><td>
-			<li><input type="text" name="select_newitem" /></td><td><input type="button" value="<?php echo $AppUI->_('Add') ?>" onclick="javascript:addSelectItem()" /></li>
+			<li><input type="text" name="select_newitem" /></td><td><input type="button" value="<?php echo $AppUI->_('Add') ?>" onclick="javascript:addSelectItem()" class="text" /></li>
 			</td></tr>
 			</table>
 		</td></tr>
@@ -239,8 +239,8 @@ echo $s;
 	</div>
 	</td></tr>
 	<tr><td colspan="2" align="right">
-		<input type="button" value="Cancel" onclick="location = '?m=system&a=custom_field_editor';" />
-		<input type="button" value="Save" onclick="javascript:postCustomField()" />
+		<input type="button" value="Cancel" onclick="location = '?m=system&a=custom_field_editor';" class="text" />
+		<input type="button" value="Save" onclick="javascript:postCustomField()" class="text" />
 	</td></tr>
 	</form>
 </table>
