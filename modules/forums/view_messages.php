@@ -181,6 +181,7 @@ foreach ($messages as $row) {
 		$s .= '<td valign="top" style="' . $style . '">';
 		$s .= '<font size="2"><strong>' . $row['message_title'] . '</strong><hr size=1>';
 		$row['message_body'] = $bbparser->qparse($row['message_body']);
+        $row['message_body'] = nl2br($row['message_body']);
 		$s .= $row['message_body'];
 		$s .= '</font></td>';
 
