@@ -2279,7 +2279,7 @@ class CTask extends w2p_Core_BaseObject {
 
 		$q->addWhere('(task_start_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ' OR task_end_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ')');
 		$q->addWhere('task_percent_complete < 100');
-		$q->addWhere('task_dynamic = 0');
+		$q->addWhere('task_dynamic <> 1');
 
 		$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 		$q->addWhere('ut.user_id = ' . $userId);
