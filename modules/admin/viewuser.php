@@ -151,7 +151,7 @@ if (!$user) {
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calendar Feed'); ?>:</td>
                 <td class="hilite" width="100%">
                     <?php if ($user->feed_token != '') {
-                        $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token;
+                        $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token.'&amp;ext=.ics';
                         ?>
                         <a href="<?php echo $calendarFeed; ?>">calendar feed</a>
                     <?php } ?>
