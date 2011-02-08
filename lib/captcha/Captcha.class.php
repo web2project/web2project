@@ -15,8 +15,8 @@
 ::
 */
 
-define ( ANIM_FRAMES,  5 );
-define ( ANIM_DELAYS, 10 );
+define ( "ANIM_FRAMES",  5 );
+define ( "ANIM_DELAYS", 10 );
 
 Class Captcha {
 	var $image;
@@ -114,10 +114,10 @@ Class GIFEncoder extends Captcha {
 	var $VER = 'GIFEncoder V2.0';   /* Encoder version		*/
 
 	var $ERR = Array (
-		ERR00=>"Does not supported function for only one image!",
-		ERR01=>"Source is not a GIF image!",
-        ERR02=>"Unintelligible flag ",
-        ERR03=>"Missing image descriptor block!<br>First byte of this block "
+		"ERR00"=>"Does not supported function for only one image!",
+		"ERR01"=>"Source is not a GIF image!",
+        "ERR02"=>"Unintelligible flag ",
+        "ERR03"=>"Missing image descriptor block!<br>First byte of this block "
 	);
 
 	function GIFEncoder (

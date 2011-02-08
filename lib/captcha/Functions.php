@@ -19,8 +19,8 @@
 ::
 */
 
-define ( PASSWORD, "captcha" );
-define ( CHARSLEN, 5 );
+define ( "PASSWORD", "captcha" );
+define ( "CHARSLEN", 5 );
 
 /*
 :::::::::::::::::::::::::::::::::::::::::::::::::::
