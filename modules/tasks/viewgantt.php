@@ -319,6 +319,9 @@ if (!$min_view) {
                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
                 <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
             </td>
+			<td>
+				<input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
+			</td>
             <td align="left">
                 <input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submitIt();' style="float: left;" />
                 <input type="button" class="button" value="<?php echo $AppUI->_('Print to PDF');?>" onclick='javascript:printPDFHR()' style="float: right;" />
