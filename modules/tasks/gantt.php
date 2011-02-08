@@ -285,6 +285,7 @@ $row = 0;
 for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $a = $gantt_arr[$i][0];
     $level = $gantt_arr[$i][1];
+	$caption = '';
 
     $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
     if ($canAccess) {
@@ -339,14 +340,15 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
             $res = $q->loadList();
             foreach ($res as $rw) {
-			switch ($rw['perc_assignment']) {
-				case 100:
-					$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
-					break;
-				default:
-					$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
-					break;
-                }
+				$caption = '';
+				switch ($rw['perc_assignment']) {
+					case 100:
+						$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
+						break;
+					default:
+						$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
+						break;
+				}
             }
             $q->clear();
             $caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
