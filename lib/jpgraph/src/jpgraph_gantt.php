@@ -1033,7 +1033,7 @@ class GanttGraph extends Graph {
 						}
 					}
 					if ($targetobj == -1) {
-						JpGraphError::RaiseL(6008, $this->iObj[$i]->iVPos, $vpos);
+						//JpGraphError::RaiseL(6008, $this->iObj[$i]->iVPos, $vpos);
 						//('You have specifed a constrain from row='.$this->iObj[$i]->iVPos.' to row='.$vpos.' which does not have any activity.');
 					}
 					$c2 = $this->iObj[$targetobj]->iConstrainPos;
