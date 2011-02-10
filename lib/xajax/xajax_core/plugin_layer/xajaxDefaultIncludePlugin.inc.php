@@ -13,7 +13,8 @@
 /*
 	@package xajax
 	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
 
@@ -25,25 +26,27 @@
 
 	This is called when the page is first loaded.
 */
-class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
+final class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 {
-	var $sJsURI;
-	var $aJsFiles;
-	var $sDefer;
-	var $sRequestURI;
-	var $sStatusMessages;
-	var $sWaitCursor;
-	var $sVersion;
-	var $sDefaultMode;
-	var $sDefaultMethod;
-	var $bDebug;
-	var $bVerboseDebug;
-	var $nScriptLoadTimeout;
-	var $bUseUncompressedScripts;
-	var $bDeferScriptGeneration;
-	var $sLanguage;
+	private $sJsURI;
+	private $aJsFiles;
+	private $sDefer;
+	private $sRequestURI;
+	private $sStatusMessages;
+	private $sWaitCursor;
+	private $sVersion;
+	private $sDefaultMode;
+	private $sDefaultMethod;
+	private $bDebug;
+	private $bVerboseDebug;
+	private $nScriptLoadTimeout;
+	private $bUseUncompressedScripts;
+	private $bDeferScriptGeneration;
+	private $sLanguage;
+	private $nResponseQueueSize;
+	private $sDebugOutputID;
 
-	function xajaxIncludeClientScriptPlugin()
+	public function xajaxIncludeClientScriptPlugin()
 	{
 		$this->sJsURI = '';
 		$this->aJsFiles = array();
@@ -60,12 +63,14 @@ class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 		$this->bUseUncompressedScripts = false;
 		$this->bDeferScriptGeneration = false;
 		$this->sLanguage = null;
+		$this->nResponseQueueSize = null;
+		$this->sDebugOutputID = null;
 	}
 
 	/*
 		Function: configure
 	*/
-	function configure($sName, $mValue)
+	public function configure($sName, $mValue)
 	{
 		if ('javascript URI' == $sName) {
 			$this->sJsURI = $mValue;
@@ -108,13 +113,17 @@ class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 				$this->bDeferScriptGeneration = $mValue;
 		} else if ('language' == $sName) {
 			$this->sLanguage = $mValue;
+		} else if ('responseQueueSize' == $sName) {
+			$this->nResponseQueueSize = $mValue;
+		} else if ('debugOutputID' == $sName) {
+			$this->sDebugOutputID = $mValue;
 		}
 	}
 
 	/*
 		Function: generateClientScript
 	*/
-	function generateClientScript()
+	public function generateClientScript()
 	{
 		if (false === $this->bDeferScriptGeneration)
 		{
@@ -142,7 +151,7 @@ class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 		string - The javascript code necessary to configure the settings on
 			the browser.
 	*/
-	function getJavascriptConfig()
+	public function getJavascriptConfig()
 	{
 		ob_start();
 		$this->printJavascriptConfig();
@@ -154,52 +163,82 @@ class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 		
 		See <xajaxIncludeClientScriptPlugin::getJavascriptConfig>
 	*/
-	function printJavascriptConfig()
+	public function printJavascriptConfig()
 	{
 		$sCrLf = "\n";
+		
+		$sJsURI = $this->sJsURI;
 
-		print $sCrLf;
-		print '<';
-		print 'script type="text/javascript" ';
-		print $this->sDefer;
-		print 'charset="UTF-8">';
-		print $sCrLf;
-		print '/* <';
-		print '![CDATA[ */';
-		print $sCrLf;
-		print 'try { if (undefined == xajax.config) xajax.config = {}; } catch (e) { xajax = {}; xajax.config = {}; };';
-		print $sCrLf;
-		print 'xajax.config.requestURI = "';
-		print $this->sRequestURI;
-		print '";';
-		print $sCrLf;
-		print 'xajax.config.statusMessages = ';
-		print $this->sStatusMessages;
-		print ';';
-		print $sCrLf;
-		print 'xajax.config.waitCursor = ';
-		print $this->sWaitCursor;
-		print ';';
-		print $sCrLf;
-		print 'xajax.config.version = "';
-		print $this->sVersion;
-		print '";';
-		print $sCrLf;
-		print 'xajax.config.legacy = false;';
-		print $sCrLf;
-		print 'xajax.config.defaultMode = "';
-		print $this->sDefaultMode;
-		print '";';
-		print $sCrLf;
-		print 'xajax.config.defaultMethod = "';
-		print $this->sDefaultMethod;
-		print '";';
-		print $sCrLf;
-		print '/* ]]> */';
-		print $sCrLf;
-		print '<';
-		print '/script>';
-		print $sCrLf;
+		if ($sJsURI != '' && substr($sJsURI, -1) != '/') 
+			$sJsURI .= '/';
+
+		echo $sCrLf;
+		echo '<';
+		echo 'script type="text/javascript" ';
+		echo $this->sDefer;
+		echo 'charset="UTF-8">';
+		echo $sCrLf;
+		echo '/* <';
+		echo '![CDATA[ */';
+		echo $sCrLf;
+		echo 'try { if (undefined == xajax.config) xajax.config = {}; } catch (e) { xajax = {}; xajax.config = {}; };';
+		echo $sCrLf;
+		echo 'xajax.config.requestURI = "';
+		echo $this->sRequestURI;
+		echo '";';
+		echo $sCrLf;
+		echo 'xajax.config.statusMessages = ';
+		echo $this->sStatusMessages;
+		echo ';';
+		echo $sCrLf;
+		echo 'xajax.config.waitCursor = ';
+		echo $this->sWaitCursor;
+		echo ';';
+		echo $sCrLf;
+		echo 'xajax.config.version = "';
+		echo $this->sVersion;
+		echo '";';
+		echo $sCrLf;
+		echo 'xajax.config.defaultMode = "';
+		echo $this->sDefaultMode;
+		echo '";';
+		echo $sCrLf;
+		echo 'xajax.config.defaultMethod = "';
+		echo $this->sDefaultMethod;
+		echo '";';
+		echo $sCrLf;
+		echo 'xajax.config.JavaScriptURI = "';
+		echo $this->sJsURI;
+		echo '";';
+
+		
+		if (false === (null === $this->nResponseQueueSize))
+		{
+			echo $sCrLf;
+			echo 'xajax.config.responseQueueSize = ';
+			echo $this->nResponseQueueSize;
+			echo ';';
+		}
+		
+		if (true === $this->bDebug)
+		{
+			if (false === (null === $this->sDebugOutputID))
+			{
+				echo $sCrLf;
+				echo 'xajax.debug = {};';
+				echo $sCrLf;
+				echo 'xajax.debug.outputID = "';
+				echo $this->sDebugOutputID;
+				echo '";';
+			}
+		}
+		
+		echo $sCrLf;
+		echo '/* ]]> */';
+		echo $sCrLf;
+		echo '<';
+		echo '/script>';
+		echo $sCrLf;
 	}
 
 	/*
@@ -217,7 +256,7 @@ class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 		string - The SCRIPT tags that will cause the browser to load the
 			specified files.
 	*/
-	function getJavascriptInclude()
+	public function getJavascriptInclude()
 	{
 		ob_start();
 		$this->printJavascriptInclude();
@@ -229,7 +268,7 @@ class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 		
 		See <xajaxIncludeClientScriptPlugin::getJavascriptInclude>
 	*/
-	function printJavascriptInclude()
+	public function printJavascriptInclude()
 	{
 		$aJsFiles = $this->aJsFiles;
 		$sJsURI = $this->sJsURI;
@@ -253,59 +292,59 @@ class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 		$sCrLf = "\n";
 		
 		foreach ($aJsFiles as $aJsFile) {
-			print '<';
-			print 'script type="text/javascript" src="';
-			print $sJsURI;
-			print $aJsFile[0];
-			print '" ';
-			print $this->sDefer;
-			print 'charset="UTF-8"><';
-			print '/script>';
-			print $sCrLf;
+			echo '<';
+			echo 'script type="text/javascript" src="';
+			echo $sJsURI;
+			echo $aJsFile[0];
+			echo '" ';
+			echo $this->sDefer;
+			echo 'charset="UTF-8"><';
+			echo '/script>';
+			echo $sCrLf;
 		}
 			
 		if (0 < $this->nScriptLoadTimeout) {
 			foreach ($aJsFiles as $aJsFile) {
-				print '<';
-				print 'script type="text/javascript" ';
-				print $this->sDefer;
-				print 'charset="UTF-8">';
-				print $sCrLf;
-				print '/* <';
-				print '![CDATA[ */';
-				print $sCrLf;
-				print 'window.setTimeout(';
-				print $sCrLf;
-				print ' function() {';
-				print $sCrLf;
-				print '  var scriptExists = false;';
-				print $sCrLf;
-				print '  try { if (';
-				print $aJsFile[1];
-				print '.isLoaded) scriptExists = true; }';
-				print $sCrLf;
-				print '  catch (e) {}';
-				print $sCrLf;
-				print '  if (!scriptExists) {';
-				print $sCrLf;
-				print '   alert("Error: the ';
-				print $aJsFile[1];
-				print ' Javascript component could not be included. Perhaps the URL is incorrect?\nURL: ';
-				print $sJsURI;
-				print $aJsFile[0];
-				print '");';
-				print $sCrLf;
-				print '  }';
-				print $sCrLf;
-				print ' }, ';
-				print $this->nScriptLoadTimeout;
-				print ');';
-				print $sCrLf;
-				print '/* ]]> */';
-				print $sCrLf;
-				print '<';
-				print '/script>';
-				print $sCrLf;
+				echo '<';
+				echo 'script type="text/javascript" ';
+				echo $this->sDefer;
+				echo 'charset="UTF-8">';
+				echo $sCrLf;
+				echo '/* <';
+				echo '![CDATA[ */';
+				echo $sCrLf;
+				echo 'window.setTimeout(';
+				echo $sCrLf;
+				echo ' function() {';
+				echo $sCrLf;
+				echo '  var scriptExists = false;';
+				echo $sCrLf;
+				echo '  try { if (';
+				echo $aJsFile[1];
+				echo '.isLoaded) scriptExists = true; }';
+				echo $sCrLf;
+				echo '  catch (e) {}';
+				echo $sCrLf;
+				echo '  if (!scriptExists) {';
+				echo $sCrLf;
+				echo '   alert("Error: the ';
+				echo $aJsFile[1];
+				echo ' Javascript component could not be included. Perhaps the URL is incorrect?\nURL: ';
+				echo $sJsURI;
+				echo $aJsFile[0];
+				echo '");';
+				echo $sCrLf;
+				echo '  }';
+				echo $sCrLf;
+				echo ' }, ';
+				echo $this->nScriptLoadTimeout;
+				echo ');';
+				echo $sCrLf;
+				echo '/* ]]> */';
+				echo $sCrLf;
+				echo '<';
+				echo '/script>';
+				echo $sCrLf;
 			}
 		}
 	}
@@ -322,7 +361,7 @@ class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 		string - The filename as it should be specified in the script tags
 		on the browser.
 	*/
-	function _getScriptFilename($sFilename)
+	private function _getScriptFilename($sFilename)
 	{
 		if ($this->bUseUncompressedScripts) {
 			return str_replace('.js', '_uncompressed.js', $sFilename);  
@@ -334,5 +373,5 @@ class xajaxIncludeClientScriptPlugin extends xajaxRequestPlugin
 /*
 	Register the xajaxIncludeClientScriptPlugin object with the xajaxPluginManager.
 */
-$objPluginManager =& xajaxPluginManager::getInstance();
+$objPluginManager = xajaxPluginManager::getInstance();
 $objPluginManager->registerPlugin(new xajaxIncludeClientScriptPlugin(), 99);

@@ -13,7 +13,8 @@
 /*
 	@package xajax
 	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
 
@@ -128,17 +129,24 @@ class xajaxFunctionPlugin extends xajaxRequestPlugin
 
 			if (XAJAX_FUNCTION == $sType)
 			{
-				$xuf =& $aArgs[1];
+				$xuf = $aArgs[1];
 
-				if (false === is_a($xuf, 'xajaxUserFunction'))
-					$xuf =& new xajaxUserFunction($xuf);
+				if (false === ($xuf instanceof xajaxUserFunction))
+					$xuf = new xajaxUserFunction($xuf);
 
 				if (2 < count($aArgs))
+				{
 					if (is_array($aArgs[2]))
+					{
 						foreach ($aArgs[2] as $sName => $sValue)
+						{
 							$xuf->configure($sName, $sValue);
-
-				$this->aFunctions[] =& $xuf;
+						}
+					} else {
+						$xuf->configure('include', $aArgs[2]);
+					}
+				}
+				$this->aFunctions[] = $xuf;
 
 				return $xuf->generateRequest($this->sXajaxPrefix);
 			}
@@ -208,12 +216,12 @@ class xajaxFunctionPlugin extends xajaxRequestPlugin
 		if (NULL == $this->sRequestedFunction)
 			return false;
 
-		$objArgumentManager =& xajaxArgumentManager::getInstance();
+		$objArgumentManager = xajaxArgumentManager::getInstance();
 		$aArgs = $objArgumentManager->process();
 
 		foreach (array_keys($this->aFunctions) as $sKey)
 		{
-			$xuf =& $this->aFunctions[$sKey];
+			$xuf = $this->aFunctions[$sKey];
 
 			if ($xuf->getName() == $this->sRequestedFunction)
 			{
@@ -226,5 +234,5 @@ class xajaxFunctionPlugin extends xajaxRequestPlugin
 	}
 }
 
-$objPluginManager =& xajaxPluginManager::getInstance();
+$objPluginManager = xajaxPluginManager::getInstance();
 $objPluginManager->registerPlugin(new xajaxFunctionPlugin(), 100);

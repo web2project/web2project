@@ -1,6 +1,6 @@
-﻿<?php
+<?php
 /*
-	File: xajax_lang_de.inc.php
+	File: xajax_lang_nl.inc.php
 
 	Contains the debug and error messages output by xajax translated to Dutch.
 
@@ -13,17 +13,10 @@
 	- Jeffrey <walkingsoul@gmail.com>
 */
 
-/*
-	@package xajax
-	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
-	@license http://www.xajaxproject.org/bsd_license.txt BSD License
-*/
-
 //SkipAIO
 
-$objLanguageManager =& xajaxLanguageManager::getInstance();
-$objLanguageManager->register('de', array(
+$objLanguageManager = xajaxLanguageManager::getInstance();
+$objLanguageManager->register('nl', array(
 	'LOGHDR:01' => '** xajax Foutmelding logboek - ',
 	'LOGHDR:02' => " **\n",
 	'LOGHDR:03' => "\n\n\n",
