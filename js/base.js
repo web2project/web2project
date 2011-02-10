@@ -833,20 +833,10 @@ if (typeof(xajax) != 'undefined') {
 	xajax.callback.global.onRequest = 
 	    function(){
            xajax.$('loadingMessage').style.display='block';
-           if (navigator.userAgent.indexOf('MSIE') != -1) {
-               document.body.style['filter'] = 'alpha(opacity=80)';
-           } else {
-               document.body.style.opacity=.8;
-           }
 	    };
 	    
 	function hideLoadingMessage() {
 	    xajax.$('loadingMessage').style.display = 'none';
-	    if (navigator.userAgent.indexOf('MSIE') != -1) {
-	       document.body.style['filter'] = 'alpha(opacity=100)';
-	    } else {
-	       document.body.style.opacity=1;        
-	    }
 	}
 	xajax.callback.global.onComplete = hideLoadingMessage;
 }
