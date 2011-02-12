@@ -41,6 +41,12 @@ function w2p_autoload($class_name) {
         case 'cappui':
             require_once W2P_BASE_DIR . '/classes/ui.class.php';
             break;
+        case 'xajax':
+            require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
+            break;
+        case 'w2pajaxresponse':
+            require_once W2P_BASE_DIR . '/classes/ajax.class.php';
+            break;
 
         /*
          * The following are all wirings for module classes that don't follow
@@ -1246,9 +1252,9 @@ function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '') {
 
     $id = ('' == $id) ? '' : 'id="' . $id . '"';
 	if ($raw) {
-		$starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br($AppUI->_($header)) . '&lt;/h4&gt; ' . nl2br($AppUI->_($tip)) . '">';
+		$starttip = '<span ' . $id . ' style="display:inline-block" title="&lt;h4&gt;' . nl2br($AppUI->_($header)) . '&lt;/h4&gt; ' . nl2br($AppUI->_($tip)) . '">';
 	} else {
-		$starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '&lt;/h4&gt; ' . nl2br(strtolower($AppUI->_($tip))) . '">';
+		$starttip = '<span ' . $id . ' style="display:inline-block" title="&lt;h4&gt;' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '&lt;/h4&gt; ' . nl2br(strtolower($AppUI->_($tip))) . '">';
 	}
 	return $starttip;
 }
