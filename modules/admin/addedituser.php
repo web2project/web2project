@@ -162,27 +162,26 @@ function setDept( key, val ) {
 }
 </script>
 
-<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
 <form name="editFrm" action="./index.php?m=admin" method="post" accept-charset="utf-8">
 	<input type="hidden" name="user_id" value="<?php echo intval($user['user_id']); ?>" />
 	<input type="hidden" name="contact_id" value="<?php echo intval($user['contact_id']); ?>" />
 	<input type="hidden" name="dosql" value="do_user_aed" />
 	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />
 	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>)" />
-	
-
-<tr>
-    <td align="right" width="35%" nowrap="nowrap">* <?php echo $AppUI->_('Login Name'); ?>:</td>
-    <td>
-<?php
-	if ($user["user_username"]) {
-		echo '<input type="hidden" class="text" name="user_username" value="' . $user['user_username'] . '" />';
-		echo '<strong>' . $user["user_username"] . '</strong>';
-	} else {
-		echo '<input type="text" class="text" name="user_username" value="' . $user['user_username'] . '" maxlength="255" size="40" />';
-	}
-?>
-	</td></tr>
+<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
+	<tr>
+		<td align="right" width="35%" nowrap="nowrap">* <?php echo $AppUI->_('Login Name'); ?>:</td>
+		<td>
+		<?php
+			if ($user["user_username"]) {
+				echo '<input type="hidden" class="text" name="user_username" value="' . $user['user_username'] . '" />';
+				echo '<strong>' . $user["user_username"] . '</strong>';
+			} else {
+				echo '<input type="text" class="text" name="user_username" value="' . $user['user_username'] . '" maxlength="255" size="40" />';
+			}
+		?>
+		</td>
+	</tr>
 <?php if ($canEdit) { // prevent users without read-write permissions from seeing and editing user type
 
 ?>
@@ -274,5 +273,6 @@ function setDept( key, val ) {
 		<input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" />
     </td>
 </tr>
-</table>
 <?php } ?>
+</table>
+</form>
