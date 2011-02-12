@@ -1,4 +1,4 @@
-/* $Id$ $URL$ */
+/* $Id: base.js 1619 2011-02-10 17:30:04Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/js/base.js $ */
 /* Copyright 2003,2004 Adam Donnison <adam@saki.com.au>
 
     This file is part of the collected works of Adam Donnison.
@@ -833,20 +833,10 @@ if (typeof(xajax) != 'undefined') {
 	xajax.callback.global.onRequest = 
 	    function(){
            xajax.$('loadingMessage').style.display='block';
-           if (navigator.userAgent.indexOf('MSIE') != -1) {
-               document.body.style['filter'] = 'alpha(opacity=80)';
-           } else {
-               document.body.style.opacity=.8;
-           }
 	    };
 	    
 	function hideLoadingMessage() {
 	    xajax.$('loadingMessage').style.display = 'none';
-	    if (navigator.userAgent.indexOf('MSIE') != -1) {
-	       document.body.style['filter'] = 'alpha(opacity=100)';
-	    } else {
-	       document.body.style.opacity=1;        
-	    }
 	}
 	xajax.callback.global.onComplete = hideLoadingMessage;
 }
