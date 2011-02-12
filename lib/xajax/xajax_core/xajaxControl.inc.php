@@ -12,10 +12,13 @@
 
 /*
 	@package xajax
-	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@version $Id: xajaxControl.inc.php 1620 2011-02-10 17:46:07Z pedroix $
+	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
+
+require_once('xajaxRequest.inc.php');
 
 /*
 	Constant: XAJAX_HTML_CONTROL_DOCTYPE_FORMAT
@@ -39,6 +42,10 @@ if (false == defined('XAJAX_HTML_CONTROL_DOCTYPE_VERSION')) define('XAJAX_HTML_C
 */
 if (false == defined('XAJAX_HTML_CONTROL_DOCTYPE_VALIDATION')) define('XAJAX_HTML_CONTROL_DOCTYPE_VALIDATION', 'TRANSITIONAL');
 
+
+define('XAJAX_DOMRESPONSE_APPENDCHILD', 100);
+define('XAJAX_DOMRESPONSE_INSERTBEFORE', 101);
+define('XAJAX_DOMRESPONSE_INSERTAFTER', 102);
 /*
 	Class: xajaxControl
 
@@ -51,7 +58,7 @@ class xajaxControl
 	/*
 		String: sTag
 	*/
-	var $sTag;
+	protected $sTag;
 	
 	/*
 		Boolean: sEndTag
@@ -60,7 +67,7 @@ class xajaxControl
 		'optional' - The control may have an abbr. begin tag or a full end tag
 		'forbidden' - The control must have an abbr. begin tag and no end tag
 	*/
-	var $sEndTag;
+	protected $sEndTag;
 	
 	/*
 		Array: aAttributes
@@ -68,7 +75,7 @@ class xajaxControl
 		An associative array of attributes that will be used in the generation
 		of the HMTL code for this control.
 	*/
-	var $aAttributes;
+	protected $aAttributes;
 	
 	/*
 		Array: aEvents
@@ -78,7 +85,7 @@ class xajaxControl
 		script will be extracted using <xajaxRequest->printScript> or 
 		<xajaxRequest->getScript>.
 	*/
-	var $aEvents;
+	protected $aEvents;
 	
 	/*
 		String: sClass
@@ -86,14 +93,17 @@ class xajaxControl
 		Contains a declaration of the class of this control.  %inline controls do not 
 		need to be indented, %block controls should be indented.
 	*/
-	var $sClass;
+	protected $sClass;
 
 	/*
 		Function: xajaxControl
 		
+		Parameters:
+		
 		$aConfiguration - (array):  An associative array that contains a variety
 			of configuration options for this <xajaxControl> object.
-			
+		
+		Note:
 		This array may contain the following entries:
 		
 		'attributes' - (array):  An associative array containing attributes
@@ -102,7 +112,7 @@ class xajaxControl
 		'children' - (array):  An array of <xajaxControl> derived objects that
 			will be the children of this control.
 	*/
-	function xajaxControl($sTag, $aConfiguration=array())
+	protected function __construct($sTag, $aConfiguration=array())
 	{
 		$this->sTag = $sTag;
 
@@ -116,12 +126,18 @@ class xajaxControl
 		$this->clearEvents();
 		
 		if (isset($aConfiguration['event']))
-			call_user_func_array(array(&$this, 'setEvent'), $aConfiguration['event']);
+			call_user_func_array(
+				array($this, 'setEvent'), 
+				$aConfiguration['event']
+				);
 		
 		else if (isset($aConfiguration['events']))
 			if (is_array($aConfiguration['events']))
 				foreach ($aConfiguration['events'] as $aEvent)
-					call_user_func_array(array(&$this, 'setEvent'), $aEvent);
+					call_user_func_array(
+						array($this, 'setEvent'), 
+						$aEvent
+						);
 		
 		$this->sClass = '%block';
 		$this->sEndTag = 'forbidden';
@@ -132,7 +148,7 @@ class xajaxControl
 		
 		Returns the *adjusted* class of the element
 	*/
-	function getClass()
+	public function getClass()
 	{
 		return $this->sClass;
 	}
@@ -142,7 +158,7 @@ class xajaxControl
 		
 		Removes all attributes assigned to this control.
 	*/
-	function clearAttributes()
+	public function clearAttributes()
 	{
 		$this->aAttributes = array();
 	}
@@ -153,15 +169,19 @@ class xajaxControl
 		Call to set various control specific attributes to be included in the HTML
 		script that is returned when <xajaxControl->printHTML> or <xajaxControl->getHTML>
 		is called.
+		
+		Parameters:
+			$sName - (string): The attribute name to set the value.
+			$sValue - (string): The value to be set.
 	*/
-	function setAttribute($sName, $sValue)
+	public function setAttribute($sName, $sValue)
 	{
 //SkipDebug
 		if (class_exists('clsValidator'))
 		{
-			$objValidator =& clsValidator::getInstance();
+			$objValidator = clsValidator::getInstance();
 			if (false == $objValidator->attributeValid($this->sTag, $sName)) {
-				$objLanguageManager =& xajaxLanguageManager::getInstance();
+				$objLanguageManager = xajaxLanguageManager::getInstance();
 				trigger_error(
 					$objLanguageManager->getText('XJXCTL:IAERR:01') 
 					. $sName 
@@ -183,13 +203,15 @@ class xajaxControl
 		Call to obtain the value currently associated with the specified attribute
 		if set.
 		
+		Parameters:
+		
 		sName - (string): The name of the attribute to be returned.
 		
 		Returns:
 		
-		mixed - The value associated with the attribute, or null.
+		mixed : The value associated with the attribute, or null.
 	*/
-	function getAttribute($sName)
+	public function getAttribute($sName)
 	{
 		if (false == isset($this->aAttributes[$sName]))
 			return null;
@@ -202,7 +224,7 @@ class xajaxControl
 		
 		Clear the events that have been associated with this object.
 	*/
-	function clearEvents()
+	public function clearEvents()
 	{
 		$this->aEvents = array();
 	}
@@ -213,6 +235,8 @@ class xajaxControl
 		Call this function to assign a <xajaxRequest> object as the handler for
 		the specific DOM event.  The <xajaxRequest->printScript> function will 
 		be called to generate the javascript for this request.
+		
+		Parameters:
 		
 		sEvent - (string):  A string containing the name of the event to be assigned.
 		objRequest - (xajaxRequest object):  The <xajaxRequest> object to be associated
@@ -225,11 +249,11 @@ class xajaxControl
 		sAfterRequest - (string, optional):  a string containing a snippet of javascript code
 			to execute after calling the xajaxRequest function
 	*/
-	function setEvent($sEvent, &$objRequest, $aParameters=array(), $sBeforeRequest='', $sAfterRequest='; return false;')
+	public function setEvent($sEvent, $objRequest, $aParameters=array(), $sBeforeRequest='', $sAfterRequest='; return false;')
 	{
 //SkipDebug
-		if (false == is_a($objRequest, 'xajaxRequest')) {
-			$objLanguageManager =& xajaxLanguageManager::getInstance();
+		if (false == ($objRequest instanceof xajaxRequest)) {
+			$objLanguageManager = xajaxLanguageManager::getInstance();
 			trigger_error(
 				$objLanguageManager->getText('XJXCTL:IRERR:01')
 				. $this->backtrace()
@@ -238,9 +262,9 @@ class xajaxControl
 		}
 
 		if (class_exists('clsValidator')) {
-			$objValidator =& clsValidator::getInstance();
+			$objValidator = clsValidator::getInstance();
 			if (false == $objValidator->attributeValid($this->sTag, $sEvent)) {
-				$objLanguageManager =& xajaxLanguageManager::getInstance();
+				$objLanguageManager = xajaxLanguageManager::getInstance();
 				trigger_error(
 					$objLanguageManager->getText('XJXCTL:IEERR:01') 
 					. $sEvent 
@@ -253,10 +277,12 @@ class xajaxControl
 		}
 //EndSkipDebug
 
+		$objRequest = clone($objRequest);
+
 		$this->aEvents[$sEvent] = array(
-			&$objRequest, 
-			$aParameters, 
-			$sBeforeRequest, 
+			$objRequest,
+			$aParameters,
+			$sBeforeRequest,
 			$sAfterRequest
 			);
 	}
@@ -269,9 +295,9 @@ class xajaxControl
 		
 		Returns:
 		
-		string - The HTML representation of this control.
+		string : The HTML representation of this control.
 	*/
-	function getHTML($bFormat=false)
+	public function getHTML($bFormat=false)
 	{
 		ob_start();
 		if ($bFormat)
@@ -289,17 +315,17 @@ class xajaxControl
 		
 		Returns:
 		
-		string - The HTML representation of this control.
+		string : The HTML representation of this control.
 	*/
-	function printHTML($sIndent='')
+	public function printHTML($sIndent='')
 	{
 //SkipDebug
 		if (class_exists('clsValidator'))
 		{
-			$objValidator =& clsValidator::getInstance();
+			$objValidator = clsValidator::getInstance();
 			$sMissing = '';
 			if (false == $objValidator->checkRequiredAttributes($this->sTag, $this->aAttributes, $sMissing)) {
-				$objLanguageManager =& xajaxLanguageManager::getInstance();
+				$objLanguageManager = xajaxLanguageManager::getInstance();
 				trigger_error(
 					$objLanguageManager->getText('XJXCTL:MAERR:01') 
 					. $sMissing
@@ -353,7 +379,7 @@ class xajaxControl
 //SkipDebug
 		else
 		{
-			$objLanguageManager =& xajaxLanguageManager::getInstance();
+			$objLanguageManager = xajaxLanguageManager::getInstance();
 			trigger_error(
 				$objLanguageManager->getText('XJXCTL:IETERR:01')
 				. $this->backtrace()
@@ -363,7 +389,82 @@ class xajaxControl
 //EndSkipDebug
 	}
 
-	function _printAttributes()
+	public function getResponse($count, $parent, $flag=XAJAX_DOMRESPONSE_APPENDCHILD)
+	{
+		$variable = "xjxElm[{$count}]";
+
+		$response = $this->beginGetResponse($variable, $count);
+		$this->getResponseAttributes($response, $variable);
+		$this->getResponseEvents($response, $variable);
+		$this->endGetResponse($response, $variable, $count, $parent, $flag);
+
+		return $response;
+	}
+
+	protected function beginGetResponse($variable, $count)
+	{
+		$response = new xajaxResponse();
+
+		if ($count == 0)
+			$response->domStartResponse();
+
+		$response->domCreateElement($variable, $this->sTag);
+
+		return $response;
+	}
+
+	protected function getResponseAttributes($response, $variable)
+	{
+		foreach ($this->aAttributes as $sKey => $sValue)
+			if ('disabled' != $sKey || 'false' != $sValue)
+				$response->domSetAttribute($variable, $sKey, $sValue);
+	}
+
+	protected function endGetResponse($response, $variable, $count, $parent, $flag)
+	{
+		if ($flag == XAJAX_DOMRESPONSE_APPENDCHILD)
+			$response->domAppendChild($parent, $variable);
+		else if ($flag == XAJAX_DOMRESPONSE_INSERTBEFORE)
+			$response->domInsertBefore($parent, $variable);
+		else if ($flag == XAJAX_DOMRESPONSE_INSERTAFTER)
+			$response->domInsertAfter($parent, $variable);
+
+		if ($count == 0)
+			$response->domEndResponse();
+	}
+
+	protected function getResponseEvents($response, $variable)
+	{
+		foreach (array_keys($this->aEvents) as $sKey)
+		{
+			$aEvent = $this->aEvents[$sKey];
+			$objRequest = $aEvent[0];
+			$aParameters = $aEvent[1];
+			$sBeforeRequest = $aEvent[2];
+			$sAfterRequest = $aEvent[3];
+
+			foreach ($aParameters as $aParameter)
+			{
+				$nParameter = $aParameter[0];
+				$sType = $aParameter[1];
+				$sValue = $aParameter[2];
+				$objRequest->setParameter($nParameter, $sType, $sValue);
+			}
+
+			$objRequest->useDoubleQuote();
+
+			$response->script(
+				"{$variable}.{$sKey} = function(evt) { " .
+				"if (!evt) var evt = window.event; " .
+				$sBeforeRequest .
+				$objRequest->getScript() .
+				$sAfterRequest .
+				" } "
+				);
+		}
+	}
+
+	protected function _printAttributes()
 	{
 		// NOTE: Special case here: disabled='false' does not work in HTML; does work in javascript
 		foreach ($this->aAttributes as $sKey => $sValue)
@@ -371,12 +472,12 @@ class xajaxControl
 				echo "{$sKey}='{$sValue}' ";
 	}
 
-	function _printEvents()
+	protected function _printEvents()
 	{
 		foreach (array_keys($this->aEvents) as $sKey)
 		{
-			$aEvent =& $this->aEvents[$sKey];
-			$objRequest =& $aEvent[0];
+			$aEvent = $this->aEvents[$sKey];
+			$objRequest = $aEvent[0];
 			$aParameters = $aEvent[1];
 			$sBeforeRequest = $aEvent[2];
 			$sAfterRequest = $aEvent[3];
@@ -399,7 +500,7 @@ class xajaxControl
 		}
 	}
 
-	function backtrace()
+	public function backtrace()
 	{
 		// debug_backtrace was added to php in version 4.3.0
 		// version_compare was added to php in version 4.0.7
@@ -424,7 +525,7 @@ class xajaxControlContainer extends xajaxControl
 		
 		An array of child controls.
 	*/
-	var $aChildren;
+	protected $aChildren;
 
 	/*
 		Boolean: sChildClass
@@ -432,19 +533,21 @@ class xajaxControlContainer extends xajaxControl
 		Will contain '%inline' if all children are class = '%inline', '%block' if all children are '%block' or
 		'%flow' if both '%inline' and '%block' elements are detected.
 	*/
-	var $sChildClass;
+	protected $sChildClass;
 
 	/*
 		Function: xajaxControlContainer
 		
 		Called to construct and configure this control.
 		
+		Parameters:
+		
 		aConfiguration - (array):  See <xajaxControl->xajaxControl> for more
 			information.
 	*/
-	function xajaxControlContainer($sTag, $aConfiguration=array())
+	protected function __construct($sTag, $aConfiguration=array())
 	{
-		xajaxControl::xajaxControl($sTag, $aConfiguration);
+		parent::__construct($sTag, $aConfiguration);
 
 		$this->clearChildren();
 		
@@ -462,7 +565,7 @@ class xajaxControlContainer extends xajaxControl
 		
 		Returns the *adjusted* class of the element
 	*/
-	function getClass()
+	public function getClass()
 	{
 		$sClass = xajaxControl::getClass();
 		
@@ -471,7 +574,7 @@ class xajaxControlContainer extends xajaxControl
 		else if (0 == count($this->aChildren) || '%inline' == $sClass || '%block' == $sClass)
 			return $sClass;
 		
-		$objLanguageManager =& xajaxLanguageManager::getInstance();
+		$objLanguageManager = xajaxLanguageManager::getInstance();
 		trigger_error(
 			$objLanguageManager->getText('XJXCTL:ICERR:01')
 			. $this->backtrace()
@@ -484,7 +587,7 @@ class xajaxControlContainer extends xajaxControl
 		
 		Returns the *adjusted* class of the content (children) of this element
 	*/
-	function getContentClass()
+	public function getContentClass()
 	{
 		$sClass = '';
 		
@@ -507,7 +610,7 @@ class xajaxControlContainer extends xajaxControl
 		
 		Clears the list of child controls associated with this control.
 	*/
-	function clearChildren()
+	public function clearChildren()
 	{
 		$this->sChildClass = '%inline';
 		$this->aChildren = array();
@@ -519,11 +622,11 @@ class xajaxControlContainer extends xajaxControl
 		Adds a control to the array of child controls.  Child controls
 		must be derived from <xajaxControl>.
 	*/
-	function addChild(&$objControl)
+	public function addChild($objControl)
 	{
 //SkipDebug
-		if (false == is_a($objControl, 'xajaxControl')) {
-			$objLanguageManager =& xajaxLanguageManager::getInstance();
+		if (false == ($objControl instanceof xajaxControl )) {
+			$objLanguageManager = xajaxLanguageManager::getInstance();
 			trigger_error(
 				$objLanguageManager->getText('XJXCTL:ICLERR:01')
 				. $this->backtrace()
@@ -533,9 +636,9 @@ class xajaxControlContainer extends xajaxControl
 
 		if (class_exists('clsValidator'))
 		{
-			$objValidator =& clsValidator::getInstance();
+			$objValidator = clsValidator::getInstance();
 			if (false == $objValidator->childValid($this->sTag, $objControl->sTag)) {
-				$objLanguageManager =& xajaxLanguageManager::getInstance();
+				$objLanguageManager = xajaxLanguageManager::getInstance();
 				trigger_error(
 					$objLanguageManager->getText('XJXCTL:ICLERR:02') 
 					. $objControl->sTag
@@ -549,14 +652,14 @@ class xajaxControlContainer extends xajaxControl
 		}
 //EndSkipDebug
 
-		$this->aChildren[] =& $objControl;
+		$this->aChildren[] = $objControl;
 	}
 	
-	function addChildren(&$aChildren)
+	public function addChildren($aChildren)
 	{
 //SkipDebug
 		if (false == is_array($aChildren)) {
-			$objLanguageManager =& xajaxLanguageManager::getInstance();
+			$objLanguageManager = xajaxLanguageManager::getInstance();
 			trigger_error(
 				$objLanguageManager->getText('XJXCTL:ICHERR:01')
 				. $this->backtrace()
@@ -569,15 +672,15 @@ class xajaxControlContainer extends xajaxControl
 			$this->addChild($aChildren[$sKey]);
 	}
 
-	function printHTML($sIndent='')
+	public function printHTML($sIndent='')
 	{
 //SkipDebug
 		if (class_exists('clsValidator'))
 		{
-			$objValidator =& clsValidator::getInstance();
+			$objValidator = clsValidator::getInstance();
 			$sMissing = '';
 			if (false == $objValidator->checkRequiredAttributes($this->sTag, $this->aAttributes, $sMissing)) {
-				$objLanguageManager =& xajaxLanguageManager::getInstance();
+				$objLanguageManager = xajaxLanguageManager::getInstance();
 				trigger_error(
 					$objLanguageManager->getText('XJXCTL:MRAERR:01') 
 					. $sMissing
@@ -651,9 +754,9 @@ class xajaxControlContainer extends xajaxControl
 				echo "\n";
 	}
 
-	function _printChildren($sIndent='')
+	protected function _printChildren($sIndent='')
 	{
-		if (false == is_a($this, 'clsDocument'))
+		if (false == ($this instanceof clsDocument ))
 			// this odd syntax is necessary to detect request for no formatting
 			if (false === (false === $sIndent))
 				$sIndent .= "\t";
@@ -661,8 +764,32 @@ class xajaxControlContainer extends xajaxControl
 		// children
 		foreach (array_keys($this->aChildren) as $sKey)
 		{
-			$objChild =& $this->aChildren[$sKey];
+			$objChild = $this->aChildren[$sKey];
 			$objChild->printHTML($sIndent);
+		}
+	}
+
+	public function getResponse($count, $parent, $flag=XAJAX_DOMRESPONSE_APPENDCHILD)
+	{
+		$variable = "xjxElm[{$count}]";
+
+		$response = $this->beginGetResponse($variable, $count);
+		$this->getResponseAttributes($response, $variable);
+		$this->getResponseEvents($response, $variable);
+		$this->getResponseChildren($response, $variable, $count);
+		$this->endGetResponse($response, $variable, $count, $parent, $flag);
+
+		return $response;
+	}
+
+	protected function getResponseChildren($response, $variable, $count)
+	{
+		foreach (array_keys($this->aChildren) as $sKey)
+		{
+			$objChild = $this->aChildren[$sKey];
+			$response->appendResponse(
+				$objChild->getResponse($count+1, $variable)
+				);
 		}
 	}
 }

@@ -6,6 +6,8 @@
 	<xajax> will call this function internally to compress the javascript code for 
 	more efficient delivery.
 	
+	Parameters:
+	
 	$sFile - (stirng):  The file to be compressed.
 */
 function xajaxCompressFile($sFile)

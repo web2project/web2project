@@ -12,8 +12,9 @@
 
 /*
 	@package xajax
-	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@version $Id: xajaxScriptPlugin.inc.php 1620 2011-02-10 17:46:07Z pedroix $
+	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
 
@@ -174,9 +175,9 @@ class xajaxScriptPlugin extends xajaxRequestPlugin
 		return ('' != $this->sRequest);
 	}
 	
-	function &_getSections($sType)
+	function _getSections($sType)
 	{
-		$objPluginManager =& xajaxPluginManager::getInstance();
+		$objPluginManager = xajaxPluginManager::getInstance();
 		
 		$objPluginManager->configure('deferScriptGeneration', 'deferred');
 		
@@ -227,7 +228,7 @@ class xajaxScriptPlugin extends xajaxRequestPlugin
 	{
 		if ($this->canProcessRequest())
 		{
-			$aSections =& $this->_getSections($this->sRequest);
+			$aSections = $this->_getSections($this->sRequest);
 			
 //			echo "<!--" . print_r($aSections, true) . "-->";
 			
@@ -239,12 +240,12 @@ class xajaxScriptPlugin extends xajaxRequestPlugin
 				if ('style' == $this->sRequest)
 					$sType = 'text/css';
 					
-				$objResponse =& new xajaxCustomResponse($sType);
+				$objResponse = new xajaxCustomResponse($sType);
 				
 				foreach ($aSections as $sSection)
 					$objResponse->append($sSection . "\n");
 				
-				$objResponseManager =& xajaxResponseManager::getInstance();
+				$objResponseManager = xajaxResponseManager::getInstance();
 				$objResponseManager->append($objResponse);
 				
 				header ('Expires: ' . gmdate('D, d M Y H:i:s', time() + (60*60*24)) . ' GMT');
@@ -261,5 +262,5 @@ class xajaxScriptPlugin extends xajaxRequestPlugin
 /*
 	Register the plugin with the xajax plugin manager.
 */
-$objPluginManager =& xajaxPluginManager::getInstance();
+$objPluginManager = xajaxPluginManager::getInstance();
 $objPluginManager->registerPlugin(new xajaxScriptPlugin(), 9999);

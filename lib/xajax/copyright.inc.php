@@ -12,14 +12,14 @@
 /*
 	Section: Current Version
 	
-	xajax version 0.5 (beta 4)
+	xajax version 0.6
 */
 
 /*
 	Section: Copyright
 	
 	- copyright (c) 2005-2007 by Jared White & J. Max Wilson
-	- portions copyright (c) 2006-2007 by Joseph Woolley
+	- copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White & J. Max Wilson
 */
 
 /*
@@ -40,8 +40,9 @@
 
 /*
 	@package xajax
-	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@version $Id: copyright.inc.php 1620 2011-02-10 17:46:07Z pedroix $
+	@copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
 
@@ -49,6 +50,5 @@
 	Section: Online documentation
 	
 	Online documentation for this class is available on the xajax wiki at:
-	http://wiki.xajaxproject.org/Documentation:xajax.inc.php
+	http://xajaxproject.org/en/docs-tutorials/
 */
-	
