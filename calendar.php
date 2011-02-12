@@ -38,7 +38,10 @@ if ($userId > 0) {
     $calendarFooter = "END:VCALENDAR";
 
     foreach ($moduleList as $module) {
-        $object = new $module['mod_main_class']();
+		if (!in_array($module['mod_main_class'], get_declared_classes())) {
+			require_once ($AppUI->getModuleClass($module['mod_directory']));
+		}
+		$object = new $module['mod_main_class']();
         if (is_callable(array($object, 'hook_calendar'))) {
             $itemList = $object->hook_calendar($userId);
             if (is_array($itemList)) {

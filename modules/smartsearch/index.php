@@ -241,12 +241,10 @@ if (isset($_POST['keyword'])) {
 
         $moduleList = $AppUI->getLoadableModuleList();
         foreach ($moduleList as $module) {
-            if (in_array($module['mod_main_class'], get_declared_classes())) {
-                $object = new $module['mod_main_class']();
-            } else {
+            if (!in_array($module['mod_main_class'], get_declared_classes())) {
                 require_once ($AppUI->getModuleClass($module['mod_directory']));
-                $object = new $module['mod_main_class']();
             }
+			$object = new $module['mod_main_class']();
             if (is_callable(array($object, 'hook_search'))) {
                 $search = new smartsearch();
                 $searchArray = $object->hook_search();
