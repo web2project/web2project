@@ -42,24 +42,24 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 			if (parent::authenticate($username, $password))
 				return true;
 		}
-		// Fallback SQL authentication fails, proceed with LDAP
 
-		if (!$rs = @ldap_connect($this->ldap_host, $this->ldap_port)) {
+		// Fallback SQL authentication fails, proceed with LDAP
+		if (!$rs = ldap_connect($this->ldap_host, $this->ldap_port)) {
 			return false;
 		}
-		@ldap_set_option($rs, LDAP_OPT_PROTOCOL_VERSION, $this->ldap_version);
-		@ldap_set_option($rs, LDAP_OPT_REFERRALS, 0);
+		ldap_set_option($rs, LDAP_OPT_PROTOCOL_VERSION, $this->ldap_version);
+		ldap_set_option($rs, LDAP_OPT_REFERRALS, 0);
 
-		//$ldap_bind_dn = 'cn='.$this->ldap_search_user.','.$this->base_dn;
-		$ldap_bind_dn = empty($this->ldap_search_user) ? null : $this->ldap_search_user;
+		$ldap_bind_dn = 'CN='.$this->ldap_search_user.',OU=users,'.$this->base_dn;
 		$ldap_bind_pw = empty($this->ldap_search_pass) ? null : $this->ldap_search_pass;
 
-		if (!$bindok = @ldap_bind($rs, $ldap_bind_dn, $this->ldap_search_pass)) {
+		if (!$bindok = ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw)) {
 			// Uncomment for LDAP debugging
 			return false;
 		} else {
 			$filter_r = html_entity_decode(str_replace('%USERNAME%', $username, $this->filter), ENT_COMPAT, 'UTF-8');
-			$result = @ldap_search($rs, $this->base_dn, $filter_r);
+			$result = ldap_search($rs, $this->base_dn, $filter_r);
+
 			if (!$result) {
 				return false; // ldap search returned nothing or error
 			}
@@ -73,8 +73,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 			$ldap_user_dn = $first_user['dn'];
 
 			// Bind with the dn of the user that matched our filter (only one user should match sAMAccountName or uid etc..)
-
-			if (!$bind_user = @ldap_bind($rs, $ldap_user_dn, $password)) {
+			if (!$bind_user = ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw)) {
 				return false;
 			} else {
 				if ($this->userExists($username)) {
@@ -97,7 +96,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 		if ($rs->RecordCount() > 0) {
 			$result = true;
 		}
-		$q->clear();
+
 		return $result;
 	}
 
