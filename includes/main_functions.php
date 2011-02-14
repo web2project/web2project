@@ -1421,3 +1421,37 @@ function w2p_pluralize($word) {
     }
     return $word;
 }
+
+
+function seconds2HM($sec, $padHours = true) {
+    $HM = "";
+    // there are 3600 seconds in an hour, so if we
+    // divide total seconds by 3600 and throw away
+    // the remainder, we've got the number of hours
+    $hours = intval(intval($sec) / 3600);
+    // add to $hms, with a leading 0 if asked for
+    $HM .= ($padHours) ? str_pad($hours, 2, "0", STR_PAD_LEFT). ':' : $hours. ':';
+
+    // dividing the total seconds by 60 will give us
+    // the number of minutes, but we're interested in
+    // minutes past the hour: to get that, we need to
+    // divide by 60 again and keep the remainder
+    $minutes = intval(($sec / 60) % 60);
+    $HM .= str_pad($minutes, 2, "0", STR_PAD_LEFT);
+    //$seconds = intval($sec % 60);
+
+    // add to $hms, again with a leading 0 if needed
+    //$hms .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
+    return $HM;
+}
+
+function HM2seconds ($HM) {
+    list($h, $m) = explode (":", $HM);
+    if (intval($h) > 23 && intval($h) < 0) $h = 0;
+    if (intval($m) > 59 && intval($m) < 0) $m = 0;
+    $seconds = 0;
+    $seconds += (intval($h) * 3600);
+    $seconds += (intval($m) * 60);
+    //$seconds += (intval($s));
+    return $seconds;
+}
