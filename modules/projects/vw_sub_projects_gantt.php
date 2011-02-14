@@ -38,10 +38,7 @@ $working_hours = $w2Pconfig['daily_working_hours'];
 $q = new w2p_Database_Query;
 $q->addTable('projects', 'pr');
 $q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
-                max(t1.task_end_date) AS project_actual_end_date, SUM(task_duration * task_percent_complete *
-                IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type))/ SUM(task_duration *
-                IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete,
-                project_status, project_active');
+                max(t1.task_end_date) AS project_actual_end_date, project_percent_complete, project_status, project_active');
 $q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
 $q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
 if ($department > 0) {
@@ -56,7 +53,7 @@ $q->addWhere('project_original_parent = ' . (int)$original_project_id);
 
 $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $q->addGroup('pr.project_id');
-$q->addOrder('project_name, task_start_date DESC');
+$q->addOrder('project_start_date, project_end_date, project_name');
 
 $projects = $q->loadHashList('project_id');
 $q->clear();
