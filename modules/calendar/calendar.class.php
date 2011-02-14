@@ -671,7 +671,7 @@ class CEvent extends w2p_Core_BaseObject {
 					$$query_set->addWhere('(event_private = 0 OR event_owner=' . (int)$user_id . ')');
 					break;
 			}
-			
+
 			if ($query_set == 'q') { // assemble query for non-recursive events
 				$$query_set->addWhere('(event_recurs <= 0)');
 				// following line is only good for *non-recursive* events
@@ -690,16 +690,14 @@ class CEvent extends w2p_Core_BaseObject {
 
 		// AJD: Should this be going off the end of the array?  I don't think so.
 		// If it should then a comment to that effect would be nice.
-		// for ($i=0; $i < sizeof($eventListRec)+1;  $i++) {
 		for ($i = 0, $i_cmp = sizeof($eventListRec); $i < $i_cmp; $i++) {
 			//note from merlinyoda: j=0 is the original event according to getRecurrentEventforPeriod
 			// So, since the event is *recurring* x times, the loop condition should be j <= x, not j < x.
 			// This way the original and all recurrances are covered.
-			//for ($j=0; $j < intval($eventListRec[$i]['event_times_recuring']); $j++) {
 			for ($j = 0, $j_cmp = intval($eventListRec[$i]['event_times_recuring']); $j <= $j_cmp; $j++) {
 				//Daily View
 				//show all
-				if ($periodLength == 1) {
+				if ($periodLength <= 1) {
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
 				}
 				//Weekly or Monthly View and Hourly Recurrent Events
@@ -733,7 +731,7 @@ class CEvent extends w2p_Core_BaseObject {
 			$eventList[$i]['event_end_date'] = $AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
 			$i++;
 		}
-
+//echo '<pre>'; print_r($eventList); echo '</pre>';
 		//return a list of non-recurrent and recurrent events
 		return $eventList;
 	}
