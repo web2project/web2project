@@ -1214,7 +1214,7 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
 	if ($active_only) {
 		$q->addWhere('project_active = 1');
 	}
-	$q->addOrder('project_name');
+	$q->addOrder('project_start_date, project_end_date');
 
 	$obj = new CCompany();
 	$obj->setAllowedSQL($AppUI->user_id, $q);
