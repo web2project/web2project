@@ -72,7 +72,7 @@ foreach ($rs as $c) {
                 $entry = '<input class="text" type="password" name="w2Pcfg[' . $c['config_name'] . ']" value="' . $value . '" ' . $extra . ' onClick="document.getElementById(\''.$c['config_name'].'_mod\').value=\'1\';" />';
                 $entry .= '<input type="hidden" name="'.$c['config_name'].'_mod" id="'.$c['config_name'].'_mod" value="" />';
             } else {
-                $entry = '<input class="text" type="' . $c['config_type'] . '" name="w2Pcfg[' . $c['config_name'] . ']" value="' . $value . '" ' . $extra . '/>';
+                $entry = '<input class="text" type="' . $c['config_type'] . '" name="w2Pcfg[' . $c['config_name'] . ']" id="w2Pcfg[' . $c['config_name'] . ']" value="' . $value . '" ' . $extra . '/>';
             }
 			break;
 	}
@@ -99,3 +99,7 @@ foreach ($rs as $c) {
 		</tr>
 	</table>
 </form>
+<script language="javascript" type="text/javascript">
+	document.getElementById('w2Pcfg[system_timezone]').style.border = 'solid 3px #ff0000';
+	document.getElementById('w2Pcfg[admin_email]').style.border = 'solid 3px #ff0000';
+</script>
