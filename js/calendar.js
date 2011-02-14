@@ -1,5 +1,7 @@
 /* $Id$ $URL$ */
 var hourMSecs = 3600*1000;
+var secondsPerMinute = 60;
+var minutesPerHour = 60;
 
 /**
 * no comment needed
@@ -324,4 +326,44 @@ function getDateFromFormat(val,format) {
 	else if (hh>11 && ampm=="am") { hh-=12; }
 	var newdate=new Date(year,month-1,date,hh,mm,ss);
 	return newdate.getTime();
+}
+
+function convertHours(intSeconds) {
+    var minutes = convertMinutes(intSeconds);
+    var hours = Math.floor(minutes/minutesPerHour);
+    return hours;
+}
+
+function convertMinutes(intSeconds) {
+    return Math.floor(intSeconds/secondsPerMinute);
+}
+
+function getRemainingSeconds(intTotalSeconds) {
+    return (intTotalSeconds%secondsPerMinute);
+}
+
+function getRemainingMinutes(intSeconds) {
+    var intTotalMinutes = convertMinutes(intSeconds);
+    return (intTotalMinutes%minutesPerHour);
+}
+
+function HM2Seconds(HM) { // h:m
+    var A = HM.split(/\D+/);
+    var H = A[0]; 
+    var M = A[1]; 
+
+    if (parseInt(H, 10) > 23 && parseInt(H, 10) < 0) H = 0;
+    if (parseInt(M, 10) > 59 && parseInt(M, 10) < 0) M = 0;
+
+    return (H*60 + +M)*60; 
+}
+
+function seconds2HM(intSecondsToConvert) {
+    var hours = convertHours(intSecondsToConvert);
+    if (parseInt(hours,10) < 10) hours = '0' + hours;    
+    var minutes = getRemainingMinutes(intSecondsToConvert);
+    minutes = (minutes == 60) ? '0' : minutes;
+    if (parseInt(minutes,10) < 10) minutes = '0' + minutes;    
+    var seconds = getRemainingSeconds(intSecondsToConvert);
+    return hours+":"+minutes;
 }
