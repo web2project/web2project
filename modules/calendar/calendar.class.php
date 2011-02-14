@@ -612,11 +612,12 @@ class CEvent extends w2p_Core_BaseObject {
 	public function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0) {
 		global $AppUI;
 
-		// the event times are stored as unix time stamps, just to be different
-
 		// convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
+		$db_start = $AppUI->convertToSystemTZ($db_start);
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
+		$db_end = $AppUI->convertToSystemTZ($db_end);
+
 		if (!isset($user_id)) {
 			$user_id = $AppUI->user_id;
 		}
@@ -675,11 +676,9 @@ class CEvent extends w2p_Core_BaseObject {
 				$$query_set->addWhere('(event_recurs <= 0)');
 				// following line is only good for *non-recursive* events
 				$$query_set->addWhere('(event_start_date <= \'' . $db_end . '\' AND event_end_date >= \'' . $db_start . '\' OR event_start_date BETWEEN \'' . $db_start . '\' AND \'' . $db_end . '\')');
-				//print_r($q->prepare());
 				$eventList = $$query_set->loadList();
 			} elseif ($query_set == 'r') { // assemble query for recursive events
 				$$query_set->addWhere('(event_recurs > 0)');
-				//print_r($r->prepare());
 				$eventListRec = $$query_set->loadList();
 			}
 		}
@@ -726,6 +725,13 @@ class CEvent extends w2p_Core_BaseObject {
 				$recEventDate = array();
 			}
 
+		}
+
+		$i = 0;
+		foreach($eventList as $event) {
+			$eventList[$i]['event_start_date'] = $AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
+			$eventList[$i]['event_end_date'] = $AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
+			$i++;
 		}
 
 		//return a list of non-recurrent and recurrent events

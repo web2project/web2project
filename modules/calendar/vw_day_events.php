@@ -22,7 +22,6 @@ if (canView('admin')) {
 		$AppUI->setState('event_user_id', $user_id);
 	}
 }
-
 // assemble the links for the events
 $events = CEvent::getEventsForPeriod($first_time, $last_time, $event_filter, $user_id);
 $events2 = array();
@@ -30,8 +29,8 @@ $events2 = array();
 $start_hour = w2PgetConfig('cal_day_start');
 $end_hour = w2PgetConfig('cal_day_end');
 foreach ($events as $row) {
-    $start = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['event_start_date'], '%Y-%m-%d %H:%M:%S'));
-	$end = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['event_end_date'], '%Y-%m-%d %H:%M:%S'));
+    $start = new w2p_Utilities_Date($row['event_start_date']);
+	$end = new w2p_Utilities_Date($row['event_end_date']);
 	$events2[$start->format('%H%M%S')][] = $row;
 
 	if ($start_hour > $start->format('%H')) {
@@ -93,7 +92,7 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 		for ($j = 0; $j < $count; $j++) {
 			$row = $events2[$timeStamp][$j];
 
-			$et = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['event_end_date'], '%Y-%m-%d %H:%M:%S'));
+			$et = new w2p_Utilities_Date($row['event_end_date']);
 			$rows = (($et->getHour() * 60 + $et->getMinute()) - ($this_day->getHour() * 60 + $this_day->getMinute())) / $inc;
 
 			$href = '?m=calendar&a=view&event_id=' . $row['event_id'];
