@@ -21,6 +21,17 @@ if ($AppUI->user_id == $user_id) {
 } else {
 	$projectStatus = arrayMerge(array('-3' => $AppUI->_('User\'s projects')), $projectStatus);
 }
+// prepare the type filter
+if (isset($_POST['project_type'])) {
+	$AppUI->setState('ProjIdxType', intval($_POST['project_type']));
+}
+$project_type = $AppUI->getState('ProjIdxType') !== null ? $AppUI->getState('ProjIdxType') : -1;
+
+// prepare the users filter
+if (isset($_POST['project_owner'])) {
+	$AppUI->setState('ProjIdxowner', intval($_POST['project_owner']));
+}
+$owner = $AppUI->getState('ProjIdxowner') !== null ? $AppUI->getState('ProjIdxowner') : 0;
 
 $proFilter = w2PgetParam($_REQUEST, 'proFilter', '-1');
 $company_id = w2PgetParam($_REQUEST, 'company_id', 0);
@@ -49,19 +60,21 @@ if ($addPwOiD && $department > 0) {
 }
 
 // pull valid projects and their percent complete information
-// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-$working_hours = $w2Pconfig['daily_working_hours'];
 $q = new w2p_Database_Query;
 $q->addTable('projects', 'pr');
 $q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
-                max(t1.task_end_date) AS project_actual_end_date, SUM(task_duration * task_percent_complete *
-                IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type))/ SUM(task_duration *
-                IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete,
+                max(t1.task_end_date) AS project_actual_end_date, project_percent_complete,
                 project_status, project_active');
 $q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
 $q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
 if ($department > 0 && !$addPwOiD) {
 	$q->addWhere('project_departments.department_id = ' . (int)$department);
+}
+if ($project_type > -1) {
+	$q->addWhere('pr.project_type = ' . (int)$project_type);
+}
+if ($owner > 0) {
+	$q->addWhere('pr.project_owner = ' . (int)$owner);
 }
 if ($proFilter == '-3') {
 	$q->addWhere('pr.project_owner = ' . (int)$user_id);
