@@ -802,9 +802,10 @@ class CProject extends w2p_Core_BaseObject {
 
 		return $q->loadHashList();
 	}
+
 	public static function updateStatus(CAppUI $AppUI = null, $projectId, $statusId) {
 		global $AppUI;
-
+		trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE );
         $perms = $AppUI->acl();
 		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
 			$q = new w2p_Database_Query;
