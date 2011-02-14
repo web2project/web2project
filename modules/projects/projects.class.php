@@ -604,17 +604,10 @@ class CProject extends w2p_Core_BaseObject {
 			$mail->Subject("Project Submitted: $this->project_name ", $locale_char_set);
 		}
 
-		$q = new w2p_Database_Query;
-		$q->addTable('projects', 'p');
-		$q->addQuery('p.project_id');
-		$q->addQuery('oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name, oc.contact_email as owner_email');
-		$q->leftJoin('users', 'o', 'o.user_id = p.project_owner');
-		$q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
-		$q->addWhere('p.project_id = ' . (int)$this->project_id);
-		$users = $q->loadList();
-		$q->clear();
+		$user = new CUser();
+		$user->loadFull($this->project_owner);
 
-		if (count($users)) {
+		if ($user) {
 			if (intval($isNotNew)) {
 				$body = $AppUI->_('Project') . ": $this->project_name Has Been Updated Via Project Manager. You can view the Project by clicking: ";
 			} else {
@@ -634,13 +627,9 @@ class CProject extends w2p_Core_BaseObject {
 			}
 
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-		}
-		if ($mail->ValidEmail($users[0]['owner_email'])) {
-			$mail->To($users[0]['owner_email'], true);
+			$mail->To($user->user_email, true);
 			$mail->Send();
 		}
-
-		return '';
 	}
 
 	public function notifyContacts($isNotNew) {
