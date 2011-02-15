@@ -86,17 +86,18 @@ $task_types = w2PgetSysVal('TaskType');
 <script language="javascript" type="text/javascript">
 function updateTask() {
 	var f = document.editFrm;
+	if (f.task_log_description.value.length < 1) {
+        alert( '<?php echo $AppUI->_('tasksComment', UI_OUTPUT_JS); ?>' );
+        f.task_log_description.focus();
+        return;
+    }
     <?php
     // security improvement:
     // some javascript functions may not appear on client side in case of user not having write permissions
     // else users would be able to arbitrarily run 'bad' functions
     if ($canEdit) {
     ?>
-	if (f.task_log_description.value.length < 1) {
-        alert( '<?php echo $AppUI->_('tasksComment', UI_OUTPUT_JS); ?>' );
-        f.task_log_description.focus();
-        return;
-	} else if (isNaN( parseInt( f.task_percent_complete.value+0 ) )) {
+    if (isNaN( parseInt( f.task_percent_complete.value+0 ) )) {
         alert( '<?php echo $AppUI->_('tasksPercent', UI_OUTPUT_JS); ?>' );
         f.task_percent_complete.focus();
         return;
