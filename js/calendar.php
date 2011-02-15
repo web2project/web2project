@@ -13,6 +13,7 @@ $cal_sdf = $df;
 //Javascript Long Date Format
 $cal_df = str_replace('p', 'a', $cal_df);
 $cal_df = str_replace('%I', '%hh', $cal_df);
+$cal_df = str_replace('%H', '%HH', $cal_df);
 $cal_df = str_replace('%M', '%mm', $cal_df);
 $cal_df = str_replace('%m', '%MM', $cal_df);
 $cal_df = str_replace('%MMm', '%mm', $cal_df);
@@ -23,6 +24,7 @@ $cal_df = str_replace('%', '', $cal_df);
 //Javascript Small Date Format
 $cal_sdf = str_replace('p', 'a', $cal_sdf);
 $cal_sdf = str_replace('%I', '%hh', $cal_sdf);
+$cal_sdf = str_replace('%H', '%HH', $cal_sdf);
 $cal_sdf = str_replace('%M', '%mm', $cal_sdf);
 $cal_sdf = str_replace('%m', '%MM', $cal_sdf);
 $cal_sdf = str_replace('%MMm', '%mm', $cal_sdf);
