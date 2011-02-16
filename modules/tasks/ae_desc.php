@@ -10,7 +10,6 @@ $perms = &$AppUI->acl();
 ?>
 <form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" name="detailFrm" accept-charset="utf-8">
 <input type="hidden" name="dosql" value="do_task_aed" />
-<input type="hidden" name="sub_form" value="1" />
 <input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
 <table class="std" width="100%" border="1" cellpadding="4" cellspacing="0">
 <tr>

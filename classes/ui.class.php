@@ -158,7 +158,6 @@ class CAppUI {
 	 */
     public function getSystemClass($name = null) {
         trigger_error("CAppUI->getSystemClass() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE );
-
 		if ($name) {
 			return W2P_BASE_DIR . '/classes/' . $name . '.class.php';
 		}
@@ -205,7 +204,7 @@ class CAppUI {
 	public function getVersion() {
 		global $w2Pconfig;
 		if (!isset($this->version_major)) {
-			include_once W2P_BASE_DIR . '/includes/version.php';
+			include W2P_BASE_DIR . '/includes/version.php';
 			$this->version_major = $w2p_version_major;
 			$this->version_minor = $w2p_version_minor;
 			$this->version_patch = $w2p_version_patch;
