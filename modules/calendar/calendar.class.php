@@ -1004,7 +1004,6 @@ class CEvent extends w2p_Core_BaseObject {
 		$this->event_private = (int) $this->event_private;
 		$this->event_type = (int) $this->event_type;
 		$this->event_cwd = (int) $this->event_cwd;
-        $this->event_owner = $AppUI->user_id;
 
         $errorMsgArray = $this->check();
         if (count($errorMsgArray) > 0) {
