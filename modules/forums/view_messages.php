@@ -174,7 +174,7 @@ foreach ($messages as $row) {
 			}
 		}
 		if ($row['visit_user'] != $AppUI->user_id) {
-			$s .= '<br />&nbsp;' . w2PshowImage('images/icons/stock_new_small.png');
+			$s .= '<br />&nbsp;' . w2PshowImage('icons/stock_new_small.png');
 			$new_messages[] = $row['message_id'];
 		}
 		$s .= '</td>';
