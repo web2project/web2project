@@ -1,0 +1,2 @@
+Date fine Attivita
+Mostra la data di fine attivita' (reale e teorica)

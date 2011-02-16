@@ -1,0 +1,2 @@
+Log Attivita' valorizzati
+Mostra i log delle attivita' con informazioni sui codici di costo e la fatturazione
