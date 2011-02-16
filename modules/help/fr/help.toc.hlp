@@ -1,0 +1,24 @@
+<!-- -->
+<table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%">
+<tr>
+	<td width="100%" valign="top">
+		<p>
+			<strong>Assistance en ligne web2Project</strong>
+			<br />
+			<br />Nous mettons à votre disposition 3 plateformes pour vous assister. Merci de vous rappeler que les aides ne sont pas à sens unique: vous pouvez aussi aider les autres en contribuant.
+			<br />
+			<br />La <a href="http://wiki.web2project.net/" target="_blank">Documentation en ligne de web2Project</a>
+			est destinée à vous fournir des informations sur l'utilisation de web2Project (par exemple: explication des modules, les fonctions, la formation ...).
+			<br />
+			<br />Une aide supplémentaire peut être trouvée dans les 
+			<a href="http://forums.web2project.net/" target="_blank">Forums de support web2Project</a>.
+			<br />
+			<br />Des informations sur les problèmes connus et des améliorations suggérées peuvent être lues et soumises sur le site
+			<a href="http://bugs.web2project.net/" target="_blank"Bugs &amp; Suggestions >web2Project</a>.
+			<br />
+			<br />Si vous êtes à la recherche d'un support professionnel concernant web2Project, contactez directement  les développeurs sur les forums.
+			<br />
+		</p>
+	</td>
+</tr>
+</table>
