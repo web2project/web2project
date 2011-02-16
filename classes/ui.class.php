@@ -1151,14 +1151,9 @@ class CAppUI {
 		$s .= '</script>';
 
                 if(is_array($this->footerJavascriptFiles) and !empty($this->footerJavascriptFiles)) {
-                    foreach($this->footerJavascriptFiles as $jsFile) {
+                    while($jsFile = array_pop($this->footerJavascriptFiles)) {
                         $s .= "<script type='text/javascript' src='" . $jsFile . "'></script>";
                     }
-                    // as the AppUI is saved in the session, we must empty this array
-                    // as we want these javascript files only on one page to be loaded
-                    // otherwise they get appended to the page over and over again.
-                    // I know, it's hacky. Sorry :(
-                    $this->footerJavascriptFiles = array();
                 }
 
 		echo $s;
