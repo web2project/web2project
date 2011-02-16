@@ -297,6 +297,7 @@ class CProject extends w2p_Core_BaseObject {
 				$newTask->updateDependencies($csList);
 			} // end of update dependencies
             $result = $newTask->store($AppUI);
+			$newTask->addReminder();
 
             if (is_array($result) && count($result)) {
                 foreach ($result as $key => $error_msg) {
