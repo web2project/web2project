@@ -1674,13 +1674,13 @@ class GanttScale {
 
 		$this->week = new HeaderProperty();
 		$this->week->SetLabelFormatString("w%d");
-		$this->week->SetFont(FF_FONT1);
+		$this->week->SetFont(FF_CUSTOM);
 
 		$this->month = new HeaderProperty();
-		$this->month->SetFont(FF_FONT1, FS_BOLD);
+		$this->month->SetFont(FF_CUSTOM, FS_BOLD, 9);
 
 		$this->year = new HeaderProperty();
-		$this->year->SetFont(FF_FONT1, FS_BOLD);
+		$this->year->SetFont(FF_CUSTOM, FS_BOLD, 9);
 
 		$this->divider = new LineProperty();
 		$this->dividerh = new LineProperty();
