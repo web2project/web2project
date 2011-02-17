@@ -296,16 +296,12 @@ foreach ( $gtask_sliced as $gts ) {
         $a = $gts[$i][0];
         $level = $gts[$i][1];
         $name = $a['task_name'];
-        if ($locale_char_set == 'utf-8') {
-            $name = utf8_decode($name);
-        }
-        $name = ((strlen($name) > 34) ? (substr($name, 0, 30) . '...') : $name);
+        $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
         $name = (str_repeat('  ', $level) . $name);
 
         if ($caller == 'todo') {
             $pname = $a['project_name'];
-            $pname = utf8_decode($pname);
-            $pname = ((strlen($pname) > 20) ? (substr($pname, 0, 14) . '...' . substr($pname, -5, 5)) : $pname);
+            $pname = ((mb_strlen($pname) > 20) ? (mb_substr($pname, 0, 14) . '...' . mb_substr($pname, -5, 5)) : $pname);
         }
 
         //using new jpGraph determines using Date object instead of string

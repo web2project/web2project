@@ -162,12 +162,7 @@ if (!is_array($projects) || 0 == count($projects)) {
 } else {
 	foreach ($projects as $p) {
 
-		if ($locale_char_set == 'utf-8') {
-			$name = strlen(utf8_decode($p['project_name'])) > 25 ? substr(utf8_decode($p['project_name']), 0, 22) . '...' : utf8_decode($p['project_name']);
-		} else {
-			//while using charset different than UTF-8 we need not to use utf8_decode
-			$name = strlen($p['project_name']) > 25 ? substr($p['project_name'], 0, 22) . '...' : $p['project_name'];
-		}
+                $name = mb_strlen($p['project_name']) > 25 ? mb_substr($p['project_name'], 0, 25) . '...' : $p['project_name'];
 
 		//using new jpGraph determines using Date object instead of string
 		$start = ($p['project_start_date'] > '1969-12-31 19:00:00') ? $p['project_start_date'] : '';
