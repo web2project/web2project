@@ -16,7 +16,10 @@ $rnd = strtoupper(rnd_string());
 $uid = urlencode(md5_encrypt($rnd));
 $cid = md5_encrypt($rnd);
 
+// Can not load the passwordstrength.js file via AppUI->addJavascriptFile()
+// because AppUI->loadFooterJS() is never called...
 ?>
+<script type="text/javascript" src="<?php echo W2P_BASE_URL; ?>/js/passwordstrength.js"></script>
 <script language="javascript">
 function submitIt(){
     var form = document.editFrm;
@@ -82,12 +85,21 @@ function submitIt(){
 		</tr>
 		<tr>
             <td align="right">* <?php echo $AppUI->_('Password'); ?>:</td>
-            <td colspan="2"><input type="password" class="text" name="user_password" value="" maxlength="32" size="32" /> </td>
+            <td colspan="2"><input type="password" class="text" name="user_password" value="" maxlength="32" size="32" onKeyUp="checkPassword(this.value);" /> </td>
 		</tr>
 		<tr>
             <td align="right">* <?php echo $AppUI->_('Confirm Password'); ?>:</td>
             <td colspan="2"><input type="password" class="text" name="password_check" value="" maxlength="32" size="32" /> </td>
 		</tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Password Strength'); ?></td>
+                    <td>
+                        <div class="text" style="width: 135px;">
+                            <div id="progressBar" style="font-size: 1px; height: 15px; width: 0px;">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
         <tr>
             <td align="right">* <?php echo $AppUI->_('Name'); ?>:</td>
             <td colspan="2">
