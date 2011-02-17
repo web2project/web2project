@@ -1429,14 +1429,19 @@ function seconds2HM($sec, $padHours = true) {
     // divide total seconds by 3600 and throw away
     // the remainder, we've got the number of hours
     $hours = intval(intval($sec) / 3600);
-    // add to $hms, with a leading 0 if asked for
-    $HM .= ($padHours) ? str_pad($hours, 2, "0", STR_PAD_LEFT). ':' : $hours. ':';
+    // with the remainding seconds divide them by 60
+    // and then round the floating number to get the precise minute
+    $minutes = intval(round(($sec - ($hours * 3600)) / 60) ,0);
 
-    // dividing the total seconds by 60 will give us
-    // the number of minutes, but we're interested in
-    // minutes past the hour: to get that, we need to
-    // divide by 60 again and keep the remainder
-    $minutes = intval(($sec / 60) % 60);
+    if (intval($hours) == 0 && intval($minutes) < 0) {
+        $HM .= '-0:';
+    } else {
+        // add to $hms, with a leading 0 if asked for
+        $HM .= ($padHours) ? str_pad($hours, 2, "0", STR_PAD_LEFT). ':' : $hours. ':';
+    }
+    if (intval($hours) < 0 || intval($minutes) < 0) {
+        $minutes = $minutes * (-1);
+    }
     $HM .= str_pad($minutes, 2, "0", STR_PAD_LEFT);
     //$seconds = intval($sec % 60);
 
