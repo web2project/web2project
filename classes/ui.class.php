@@ -125,6 +125,14 @@ class CAppUI {
     public $long_date_format = null;
 
 	private $objStore = null;
+
+        /**
+         * Holds an array of additional javascript files to be loaded
+         * in the footer of the page
+         *
+         * @var array
+         */
+        private $footerJavascriptFiles = array();
 	/**
 
 	 * CAppUI Constructor
@@ -1116,6 +1124,19 @@ class CAppUI {
 		}
 	}
 
+        public function addFooterJavascriptFile($pathTo) {
+            if(!in_array($pathTo, $this->footerJavascriptFiles)) {
+                $base = W2P_BASE_URL;
+		if (substr($base, -1) != '/') {
+			$base .= '/';
+		}
+                if(strpos($pathTo, $base) === false) {
+                    $pathTo = $base . $pathTo;
+                }
+                $this->footerJavascriptFiles[] = $pathTo;
+            }
+        }
+
 	public function loadFooterJS() {
 		$s = '<script type="text/javascript">';
 		$s .= '$(document).ready(function() {';
@@ -1129,6 +1150,13 @@ class CAppUI {
         }
 		$s .= '});';
 		$s .= '</script>';
+
+                if(is_array($this->footerJavascriptFiles) and !empty($this->footerJavascriptFiles)) {
+                    while($jsFile = array_pop($this->footerJavascriptFiles)) {
+                        $s .= "<script type='text/javascript' src='" . $jsFile . "'></script>";
+                    }
+                }
+
 		echo $s;
 	}
 
