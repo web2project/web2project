@@ -205,7 +205,7 @@ class CAppUI {
 	public function getVersion() {
 		global $w2Pconfig;
 		if (!isset($this->version_major)) {
-			include_once W2P_BASE_DIR . '/includes/version.php';
+			include W2P_BASE_DIR . '/includes/version.php';
 			$this->version_major = $w2p_version_major;
 			$this->version_minor = $w2p_version_minor;
 			$this->version_patch = $w2p_version_patch;
