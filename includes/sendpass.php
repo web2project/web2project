@@ -65,7 +65,7 @@ function sendNewPass() {
 	$m->To($confirmEmail);
 	$m->Subject($subject);
 	$m->Body($message, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
-    $m->Send(); // send the mail
+	$m->Send(); // send the mail
 
 	$newpass = md5($newpass);
 	$q->addTable('users');
