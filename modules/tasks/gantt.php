@@ -290,16 +290,12 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
     if ($canAccess) {
         $name = $a['task_name'];
-        if ($locale_char_set == 'utf-8') {
-            $name = utf8_decode($name);
-        }
-        $name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;
+        $name = mb_strlen($name) > 34 ? mb_substr($name, 0, 33) . '.' : $name;
         $name = str_repeat(' ', $level) . $name;
 
         if ($caller == 'todo') {
             $pname = $a['project_name'];
-            $pname = utf8_decode($pname);
-            $pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
+            $pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
         }
 
         //using new jpGraph determines using Date object instead of string
