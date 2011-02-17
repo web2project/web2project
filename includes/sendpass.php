@@ -44,7 +44,7 @@ function sendNewPass() {
     $qTest->addTable('w2pversion');
     $qTest->addQuery('max(db_version)');
     $dbVersion = $qTest->loadResult();
-    if ($dbVersion >= 21) {
+    if ($dbVersion >= 21 && $dbVersion < 26) {
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
         $q->addWhere("cm.method_value = '$confirmEmail'");
     } else {
@@ -61,11 +61,11 @@ function sendNewPass() {
 	$message = $AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' ' . $checkusername . ' ' . $AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' ' . $_live_site . ' ' . $AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' ' . $newpass . ' ' . $AppUI->_('sendpass3', UI_OUTPUT_RAW);
 	$subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
 
-	$m = new Mail; // create the mail
+	$m = new w2p_Utilities_Mail; // create the mail
 	$m->To($confirmEmail);
 	$m->Subject($subject);
 	$m->Body($message, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
-	$m->Send(); // send the mail
+    $m->Send(); // send the mail
 
 	$newpass = md5($newpass);
 	$q->addTable('users');
