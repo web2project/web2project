@@ -1429,7 +1429,7 @@ function seconds2HM($sec, $padHours = true) {
     // divide total seconds by 3600 and throw away
     // the remainder, we've got the number of hours
     $hours = intval(intval($sec) / 3600);
-    // with the remainding seconds divide them by 60
+    // with the remaining seconds divide them by 60
     // and then round the floating number to get the precise minute
     $minutes = intval(round(($sec - ($hours * 3600)) / 60) ,0);
 
