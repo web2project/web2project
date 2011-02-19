@@ -551,10 +551,10 @@ class CContact extends w2p_Core_BaseObject {
         $search['table_title'] = 'Contacts';
         $search['table_orderby'] = 'contact_last_name,contact_first_name';
         $search['table_groupby'] = 'c.contact_id';
-        $search['search_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
-        $search['display_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
+        $search['search_fields'] = array('contact_first_name', 'contact_last_name', 'contact_phone', 'contact_email', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
+        $search['display_fields'] = array('contact_first_name', 'contact_last_name', 'contact_phone', 'contact_email', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
         $search['table_joins'] = array(array('table' => 'contacts_methods', 'alias' => 'cm', 'join' => 'c.contact_id = cm.contact_id'));
-//TODO: add primary email
+
         return $search;
     }
 
