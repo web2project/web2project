@@ -65,6 +65,13 @@ class CContact extends w2p_Core_BaseObject {
         
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
+        $this->contact_owner = (int) $this->contact_owner;
+        $this->contact_private = (int) $this->contact_private;
+
+        $this->contact_first_name = ($this->contact_first_name == null) ? '' : $this->contact_first_name;
+        $this->contact_last_name = ($this->contact_last_name == null) ? '' : $this->contact_last_name;
+        $this->contact_order_by = ($this->contact_order_by == null) ? '' : $this->contact_order_by;
+        $this->contact_display_name = ($this->contact_display_name == null) ? '' : $this->contact_display_name;
 
         /*
         *  This  validates that any Contact saved will have a Display Name as
@@ -72,22 +79,11 @@ class CContact extends w2p_Core_BaseObject {
         * mostly required when Contacts are generated via programatic methods and
         * not through the add/edit UI.
         */
-        if(mb_strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
-            //TODO: this should use the USERFORMAT to determine how display names are generated
-            if ($this->contact_first_name == null && $this->contact_last_name == null) {
-               $this->contact_order_by = $this->contact_company;
-            } else {
-                $this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
-            }
+        if(mb_strlen($this->contact_order_by) <= 1) {
+            $this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
         }
-        if($this->contact_first_name == null) {
-            $this->contact_first_name = '';
-        }
-        if($this->contact_last_name == null) {
-            $this->contact_last_name = '';
-        }
-        if($this->contact_birthday == '') {
-            $this->contact_birthday = null;
+        if(mb_strlen($this->contact_display_name) <= 1) {
+            $this->contact_display_name = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
         }
 
         $errorMsgArray = $this->check();
@@ -188,6 +184,13 @@ class CContact extends w2p_Core_BaseObject {
 	public function check() {
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+        if(mb_strlen($this->contact_display_name) <= 1) {
+            $errorArray['contact_display_name'] = $baseErrorMsg . 'contact display name is not set';
+        }
+        if (0 == (int) $this->contact_owner) {
+            $errorArray['contact_owner'] = $baseErrorMsg . 'contact owner is not set';
+        }
 
 	    return $errorArray;
 	}
