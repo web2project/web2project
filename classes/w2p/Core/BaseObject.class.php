@@ -168,11 +168,11 @@ class w2p_Core_BaseObject
 	 *	Generic check method
 	 *
 	 *	Can be overloaded/supplemented by the child class
-	 *	@return null if the object is ok
+	 *	@return array() if the object is ok
 	 */
 	public function check()
 	{
-		return null;
+		return array();
 	}
 
 	/**
