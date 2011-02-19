@@ -145,7 +145,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     	$this->assertType('CProject', $this->obj);
     	$this->assertObjectHasAttribute('project_id',                  $this->obj);
     	$this->assertObjectHasAttribute('project_company',             $this->obj);
-    	$this->assertObjectHasAttribute('project_department',          $this->obj);
     	$this->assertObjectHasAttribute('project_name',                $this->obj);
     	$this->assertObjectHasAttribute('project_short_name',          $this->obj);
     	$this->assertObjectHasAttribute('project_owner',               $this->obj);
@@ -474,7 +473,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(0,                          $this->obj->project_active);
         $this->assertEquals(0,                          $this->obj->project_private);
         $this->assertEquals('',                         $this->obj->project_departments);
-        $this->assertEquals('',                         $this->obj->project_contacts);
+        $this->assertEquals(array(0 => ''),             $this->obj->project_contacts);
         $this->assertEquals(-1,                         $this->obj->project_priority);
         $this->assertEquals(0,                          $this->obj->project_type);
         $this->assertEquals(5,                          $this->obj->project_parent);
@@ -548,7 +547,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
     	$this->assertEquals(1,                                  $this->obj->project_id);
     	$this->assertEquals(1,                                  $this->obj->project_company);
-		$this->assertEquals(0,                                  $this->obj->project_department);
       	$this->assertEquals('Test Project',                     $this->obj->project_name);
       	$this->assertEquals('TP',                               $this->obj->project_short_name);
       	$this->assertEquals(1,                                  $this->obj->project_owner);
@@ -589,7 +587,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
     	$this->assertEquals(1,                                  $this->obj->project_id);
       	$this->assertEquals(1,                                  $this->obj->project_company);
-      	$this->assertEquals(0,                                  $this->obj->project_department);
       	$this->assertEquals('Test Project',                     $this->obj->project_name);
       	$this->assertEquals('TP',                               $this->obj->project_short_name);
       	$this->assertEquals(1,                                  $this->obj->project_owner);
@@ -663,7 +660,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTrue($results);
         $this->assertEquals(1,                                  $this->obj->project_id);
         $this->assertEquals(1,                                  $this->obj->project_company);
-        $this->assertEquals(0,                                  $this->obj->project_department);
         $this->assertEquals('Updated Project',                  $this->obj->project_name);
         $this->assertEquals('uproject',                         $this->obj->project_short_name);
         $this->assertEquals(1,                                  $this->obj->project_owner);
@@ -685,7 +681,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                                  $this->obj->project_active);
         $this->assertEquals(0,                                  $this->obj->project_private);
         $this->assertEquals('',                                 $this->obj->project_departments);
-        $this->assertEquals('',                                 $this->obj->project_contacts);
+        $this->assertEquals(array(0 => ''),                     $this->obj->project_contacts);
         $this->assertEquals(1,                                  $this->obj->project_priority);
         $this->assertEquals(1,                                  $this->obj->project_type);
         $this->assertEquals(1,                                  $this->obj->project_parent);
