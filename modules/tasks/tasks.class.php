@@ -2439,7 +2439,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	$canEdit = ($arr['task_represents_project']) ? false : true;
 	$canViewLog = true;
 	if ($canEdit) {
-        $s .= w2PtoolTip('edit task', 'click to edit this task') . '<a href="?m=tasks&amp;a=addedit&amp;task_id=' . $arr['task_id'] . '">' . w2PshowImage('icons/pencil.gif', 12, 12) . '</a>' . w2PendTip();
+        $s .= '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PtoolTip('edit task', 'click to edit this task') . w2PshowImage('icons/pencil.gif', 12, 12) . w2PendTip() . '</a>' ;
 	}
 	$s .= '</td>';
 	// pinned
