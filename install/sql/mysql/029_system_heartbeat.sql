@@ -16,12 +16,3 @@ ALTER TABLE `contacts` ADD `contact_display_name` VARCHAR( 100 )
     NOT NULL AFTER `contact_last_name`;
 
 UPDATE contacts SET contact_display_name = contact_order_by;
-
-ALTER TABLE `contacts` CHANGE `contact_order_by` `contact_order_by` VARCHAR( 30 )
-    CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'deprecated';
-
-ALTER TABLE `projects` CHANGE `project_contacts` `project_contacts` VARCHAR( 100 )
-    CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'deprecated';
-
-ALTER TABLE `projects` CHANGE `project_departments` `project_departments` VARCHAR( 100 )
-	CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'deprecated';
