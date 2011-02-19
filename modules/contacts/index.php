@@ -213,15 +213,6 @@ if (function_exists('styleRenderBoxTop')) {
 													}
 												}
 											}
-                                            $contact = new CContact();
-                                            $contact->contact_id = $contactid;
-                                            $methods = $contact->getContactMethods($contactMethods);
-                                            
-                                            foreach ($methods as $method => $value) {
-                                                $s .= '<tr><td width="35%"><strong>' . $AppUI->_($methodLabels[$method]) . ':</strong></td>';
-                                                $s .= '<td class="hilite" width="65%">' . $value . '</td></tr>';
-                                            }
-
 											echo $s;
 										?>
 									</tr>
