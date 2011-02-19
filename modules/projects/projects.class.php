@@ -87,6 +87,11 @@ class CProject extends w2p_Core_BaseObject {
         parent::__construct('projects', 'project_id');
     }
 
+    public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
+        parent::bind($hash, $prefix, $checkSlashes, $bindAll);
+		$this->project_contacts = explode(',', $this->project_contacts);
+    }
+
 	public function check() {
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
