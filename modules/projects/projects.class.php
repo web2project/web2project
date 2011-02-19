@@ -52,7 +52,6 @@ $priority = array(
 class CProject extends w2p_Core_BaseObject {
     public $project_id = null;
     public $project_company = null;
-    public $project_department = null;
     public $project_name = null;
     public $project_short_name = null;
     public $project_owner = null;
@@ -73,13 +72,16 @@ class CProject extends w2p_Core_BaseObject {
     public $project_creator = null;
     public $project_active = null;
     public $project_private = null;
-    public $project_departments = null;
-    public $project_contacts = null;
     public $project_priority = null;
     public $project_type = null;
     public $project_parent = null;
     public $project_original_parent = null;
     public $project_location = '';
+	/*
+	 * @deprecated fields, kept to make sure the bind() works properly
+	 */
+    public $project_departments = null;
+    public $project_contacts = null;
 
     public function __construct() {
         parent::__construct('projects', 'project_id');
@@ -572,8 +574,7 @@ class CProject extends w2p_Core_BaseObject {
 		$q->exec();
 		$q->clear();
 		if ($this->project_contacts) {
-			$contacts = explode(',', $this->project_contacts);
-			foreach ($contacts as $contact) {
+			foreach ($this->project_contacts as $contact) {
 				if ($contact) {
 					$q->addTable('project_contacts');
 					$q->addInsert('project_id', $this->project_id);

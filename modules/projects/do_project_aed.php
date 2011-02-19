@@ -7,12 +7,13 @@ $del = (int) w2PgetParam($_POST, 'del', 0);
 
 $obj = new CProject();
 if (!$obj->bind($_POST)) {
-  $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-  $AppUI->redirect();
+	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+	$AppUI->redirect();
 }
 if (!w2PgetParam($_POST, 'project_departments', 0)) {
-  $obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
+	$obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
 }
+$obj->project_contacts = explode(',', w2PgetParam($_POST, 'project_contacts', array()));
 
 $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
