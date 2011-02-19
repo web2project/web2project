@@ -195,7 +195,7 @@ class CContact extends w2p_Core_BaseObject {
 	    return $errorArray;
 	}
 
-	public function canDelete(&$msg, $oid = null, $joins = null) {
+	public function canDelete($msg, $oid = null, $joins = null) {
 		global $AppUI;
 		if ($oid) {
 			// Check to see if there is a user
@@ -236,24 +236,25 @@ class CContact extends w2p_Core_BaseObject {
 		}
 	}
 
+    /*
+     * This function is only used to detect fields that might be text instead
+     *   of integer. It's unnecessary
+     *
+     * @deprecated
+     */
 	public function is_alpha($val) {
-		// If the field consists solely of numerics, then we return it as an integer
-		// otherwise we return it as an alpha
-
-		$numval = strtr($val, '012345678', '999999999');
-		if (count_chars($numval, 3) == '9') {
-			return false;
-		}
-		return true;
+        trigger_error("is_alpha() has been deprecated in v2.3 and will be removed by v4.0. Please cast values with (int) instead.", E_USER_NOTICE );
+        return (is_int($val) || ctype_digit($val));
 	}
 
+    /*
+     * This function makes so sense.. it just queries the company table to get
+     *   the company_id.. but it uses the company_id to do it. Wha?
+     *
+     * @deprecated
+     */
 	public function getCompanyID() {
-		$q = new w2p_Database_Query;
-		$q->addTable('companies');
-		$q->addQuery('company_id');
-		$q->addWhere('company_name = ' . (int)$this->contact_company);
-
-		return $q->loadResult();
+		return (int)$this->contact_company;
 	}
 
 	public function getCompanyName() {
@@ -274,10 +275,10 @@ class CContact extends w2p_Core_BaseObject {
 		$q = new w2p_Database_Query;
 		$q->addTable('companies');
 		$q->addQuery('company_id, company_name');
-		if ($this->is_alpha($this->contact_company)) {
-			$q->addWhere('company_name = ' . $q->quote($this->contact_company));
+		if ((int) $this->contact_company) {
+			$q->addWhere('company_id = ' . (int) $this->contact_company);
 		} else {
-			$q->addWhere('company_id = ' . (int)$this->contact_company);
+            $q->addWhere('company_name = ' . $q->quote($this->contact_company));
 		}
 
 		return $q->loadHash();
@@ -288,13 +289,14 @@ class CContact extends w2p_Core_BaseObject {
 		if (!$this->contact_department) {
 			return $result;
 		}
+
 		$q = new w2p_Database_Query;
 		$q->addTable('departments');
 		$q->addQuery('dept_id, dept_name');
-		if ($this->is_alpha($this->contact_department)) {
-			$q->addWhere('dept_name = ' . $q->quote($this->contact_department));
+		if ((int) $this->contact_department) {
+			$q->addWhere('dept_id = ' . (int) $this->contact_department);
 		} else {
-			$q->addWhere('dept_id = ' . (int)$this->contact_department);
+            $q->addWhere('dept_name = ' . $q->quote($this->contact_department));
 		}
 
 		return $q->loadHash();
@@ -462,7 +464,8 @@ class CContact extends w2p_Core_BaseObject {
 
 		return $result;
 	}
-	public static function getContactByUserid($userId) {
+
+    public static function getContactByUserid($userId) {
 		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
