@@ -295,12 +295,12 @@ function w2PgetConfig($key, $default = null) {
 	if (isset($w2Pconfig[$key])) {
             return $w2Pconfig[$key];
 	} else {
-            if (!is_null($default)) {
-                $obj = new w2p_Core_Config();
-                $obj->config_name = $key;
-                $obj->config_value = $default;
-                $obj->store($AppUI);
-            }
+//            if (!is_null($default)) {
+//                $obj = new w2p_Core_Config();
+//                $obj->config_name = $key;
+//                $obj->config_value = $default;
+//                $obj->store($AppUI);
+//            }
             return $default;
 	}
 }
