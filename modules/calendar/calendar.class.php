@@ -527,8 +527,9 @@ class CEvent extends w2p_Core_BaseObject {
         $search['table_link'] = 'index.php?m=calendar&a=view&event_id='; // first part of link
         $search['table_title'] = 'Events';
         $search['table_orderby'] = 'event_start_date';
-        $search['search_fields'] = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
-        $search['display_fields'] = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
+        $search['search_fields'] = array('event_title', 'event_description',
+            'event_start_date', 'event_end_date');
+        $search['display_fields'] = $search['search_fields'];
 
         return $search;
     }

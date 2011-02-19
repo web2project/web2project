@@ -190,6 +190,18 @@ class CForum extends w2p_Core_BaseObject {
 			}
 		}
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
-
 	}
+
+    public function hook_search() {
+        $search['table'] = 'forums';
+        $search['table_module'] = 'forums';
+        $search['table_key'] = 'forum_id';
+        $search['table_link'] = 'index.php?m=forums&a=viewer&forum_id='; // first part of link
+        $search['table_title'] = 'Forums';
+        $search['table_orderby'] = 'forum_name';
+        $search['search_fields'] = array('forum_name', 'forum_description');
+        $search['display_fields'] = $search['search_fields'];
+
+        return $search;
+    }
 }

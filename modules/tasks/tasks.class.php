@@ -2253,8 +2253,8 @@ class CTask extends w2p_Core_BaseObject {
         $search['table_link'] = 'index.php?m=tasks&a=view&task_id='; // first part of link
         $search['table_title'] = 'Tasks';
         $search['table_orderby'] = 'task_name';
-        $search['search_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
-        $search['display_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
+        $search['search_fields'] = array('task_name', 'task_description', 'task_related_url');
+        $search['display_fields'] = $search['search_fields'];
 
         return $search;
     }

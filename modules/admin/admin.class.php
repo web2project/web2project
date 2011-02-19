@@ -268,7 +268,7 @@ class CUser extends w2p_Core_BaseObject {
         $search['table_title'] = 'Users';
         $search['table_orderby'] = 'user_username';
         $search['search_fields'] = array('user_username', 'user_signature');
-        $search['display_fields'] = array('user_username', 'user_signature');
+        $search['display_fields'] = $search['search_fields'];
 
         return $search;
     }

@@ -155,7 +155,7 @@ class CLink extends w2p_Core_BaseObject {
         $search['table_title'] = 'Links';
         $search['table_orderby'] = 'link_name';
         $search['search_fields'] = array('l.link_name', 'l.link_url', 'l.link_description');
-        $search['display_fields'] = array('l.link_name', 'l.link_url', 'l.link_description');
+        $search['display_fields'] = $search['search_fields'];
 
         return $search;
     }

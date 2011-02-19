@@ -386,8 +386,9 @@ class CDepartment extends w2p_Core_BaseObject {
         $search['table_link'] = 'index.php?m=departments&a=view&dept_id='; // first part of link
         $search['table_title'] = 'Departments';
         $search['table_orderby'] = 'dept_name';
-        $search['search_fields'] = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
-        $search['display_fields'] = array('dept_name', 'dept_address1', 'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
+        $search['search_fields'] = array('dept_name', 'dept_address1',
+            'dept_address2', 'dept_city', 'dept_state', 'dept_zip', 'dept_url', 'dept_desc');
+        $search['display_fields'] = $search['search_fields'];
 
         return $search;
     }
