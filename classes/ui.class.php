@@ -331,12 +331,14 @@ class CAppUI {
 	public function readDirs($path) {
 		$dirs = array();
 		$d = dir(W2P_BASE_DIR . '/' . $path);
-		while (false !== ($name = $d->read())) {
-			if (is_dir(W2P_BASE_DIR . '/' . $path . '/' . $name) && $name != '.' && $name != '..' && $name != 'CVS' && $name != '.svn') {
-				$dirs[$name] = $name;
+		if (is_dir($d)) {
+			while (false !== ($name = $d->read())) {
+				if (is_dir(W2P_BASE_DIR . '/' . $path . '/' . $name) && $name != '.' && $name != '..' && $name != 'CVS' && $name != '.svn') {
+					$dirs[$name] = $name;
+				}
 			}
+			$d->close();
 		}
-		$d->close();
 		return $dirs;
 	}
 
