@@ -3,9 +3,17 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-//addfile sql
-$file_id = (int) w2PgetParam($_POST, 'file_id', 0);
 $del = (int) w2PgetParam($_POST, 'del', 0);
+
+$obj = new CFile();
+if (!$obj->bind($_POST)) {
+	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+	$AppUI->redirect();
+}
+
+$action = ($del) ? 'deleted' : 'stored';
+$file_id = (int) w2PgetParam($_POST, 'file_id', 0);
+$isNotNew = (int) w2PgetParam($_POST, 'file_id', '0');
 $cancel = (int) w2PgetParam($_POST, 'cancel', 0);
 $duplicate = (int) w2PgetParam($_POST, 'duplicate', 0);
 $redirect = w2PgetParam($_POST, 'redirect', '');
@@ -17,7 +25,6 @@ $notify = ($notify != '0') ? '1' : '0';
 $notifyContacts = w2PgetParam($_POST, 'notify_contacts', 'off');
 $notifyContacts = ($notifyContacts != '0') ? '1' : '0';
 
-$isNotNew = (int) w2PgetParam($_POST, 'file_id', '0');
 $perms = &$AppUI->acl();
 if ($del) {
 	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
@@ -37,7 +44,6 @@ if ($del) {
 	}
 }
 
-$obj = new CFile();
 if ($file_id) {
 	$obj->_message = 'updated';
 	$oldObj = new CFile();
@@ -52,11 +58,6 @@ $revision_type = w2PgetParam($_POST, 'revision_type', 0);
 if (strcasecmp('major', $revision_type) == 0) {
 	$major_num = strtok($version, '.') + 1;
 	$_POST['file_version'] = $major_num;
-}
-
-if (!$obj->bind($_POST)) {
-	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-	$AppUI->redirect($redirect);
 }
 
 // prepare (and translate) the module name ready for the suffix
@@ -93,7 +94,7 @@ if ($del) {
 		$obj->notify($notify);
         $obj->notifyContacts($notifyContacts);
 
-		$AppUI->setMsg('deleted', UI_MSG_OK, true);
+		$AppUI->setMsg($action, UI_MSG_OK, true);
 		$AppUI->redirect($redirect);
 	}
 }
@@ -164,9 +165,9 @@ if (!$file_id) {
 		$q->clear();
 	}
 }
-//echo '<pre>';print_r($obj);
+
 $result = $obj->store($AppUI);
-//print_r($obj);die();
+
 if (is_array($result)) {
     $AppUI->setMsg($result, UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
