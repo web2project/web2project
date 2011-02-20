@@ -77,12 +77,12 @@ class CProject extends w2p_Core_BaseObject {
     public $project_parent = null;
     public $project_location = '';
 
-	protected $project_original_parent = null;
+	public $project_original_parent = null;
 	/*
 	 * @deprecated fields, kept to make sure the bind() works properly
 	 */
-    protected $project_departments = null;
-    protected $project_contacts = null;
+    public $project_departments = null;
+    public $project_contacts = null;
 
     public function __construct() {
         parent::__construct('projects', 'project_id');
