@@ -530,8 +530,9 @@ class CTask extends w2p_Core_BaseObject {
         if ($this->task_end_date != '' && $this->task_end_date != '0000-00-00 00:00:00') {
             $this->task_end_date = $AppUI->convertToSystemTZ($this->task_end_date);
         }
+		$this->task_contacts = explode(',', $this->task_contacts);
 
-        return $result;
+		return true;
     }
 
 	/**
@@ -546,7 +547,6 @@ class CTask extends w2p_Core_BaseObject {
         if (!$this->task_owner) {
             $this->task_owner = $AppUI->user_id;
         }
-
 
 		$importing_tasks = false;
         $errorMsgArray = $this->check();
@@ -659,16 +659,18 @@ class CTask extends w2p_Core_BaseObject {
 		//split out related contacts and store them seperatly.
 		$q->setDelete('task_contacts');
 		$q->addWhere('task_id=' . (int)$this->task_id);
+
 		$q->exec();
 		$q->clear();
-		if (!empty($this->task_contacts)) {
-			$contacts = explode(',', $this->task_contacts);
-			foreach ($contacts as $contact) {
-				$q->addTable('task_contacts');
-				$q->addInsert('task_id', $this->task_id);
-				$q->addInsert('contact_id', $contact);
-				$q->exec();
-				$q->clear();
+		if ($this->task_contacts) {
+			foreach ($this->task_contacts as $contact) {
+				if ($contact) {
+					$q->addTable('task_contacts');
+					$q->addInsert('task_id', $this->task_id);
+					$q->addInsert('contact_id', $contact);
+					$q->exec();
+					$q->clear();
+				}
 			}
 		}
 
