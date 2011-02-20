@@ -35,7 +35,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 	}
 
 	public function install() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query();
 		$q->addTable('modules');
 		$q->addQuery('mod_directory');
 		$q->addWhere('mod_directory = \'' . $this->mod_directory . '\'');
@@ -68,7 +68,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 	}
 
     protected function _compactModuleUIOrder() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query();
 		$q->addTable('modules');
 		$q->addQuery('mod_id');
 		$q->addOrder('mod_ui_order ASC');
@@ -87,7 +87,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 	}
 
 	public function remove() {
-		$q = new DBQuery;
+		$q = new w2p_Database_Query();
 		$q->setDelete('modules');
 		$q->addWhere('mod_id = ' . (int)$this->mod_id);
 		if (!$q->exec()) {
@@ -116,7 +116,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 	public function move($dirn) {
 		$new_ui_order = $this->mod_ui_order;
 
-		$q = new DBQuery;
+		$q = new w2p_Database_Query();
 		$q->addTable('modules');
 		$q->addWhere('mod_id <> ' . (int)$this->mod_id);
 		$q->addOrder('mod_ui_order');
@@ -265,15 +265,45 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 		return null;
 	}
 
-    public static function getSettings($module, $settingName = '') {
-		$q = new DBQuery;
+    public static function getSettings($module, $configName = '') {
+		$q = new w2p_Database_Query();
 		$q->addTable('module_config');
 		$q->addQuery('module_config_value, module_config_text');
 		$q->addWhere("module_name = '$module'");
-        if ('' != $settingName) {
-            $q->addWhere("module_config_name = '$settingName'");
+        if ('' != $configName) {
+            $q->addWhere("module_config_name = '$configName'");
         }
 		$q->addOrder('module_config_order ASC');
 		return $q->loadHashList();
+    }
+
+    public static function saveSettings($moduleName, $configName, $display,
+			$configValue, $configText) {
+
+		if ('' == $moduleName || '' == $configName) {
+			return false;
+		}
+
+		$q = new w2p_Database_Query;
+		$q->setDelete('module_config');
+		$q->addWhere("module_name = '$moduleName'");
+		$q->addWhere("module_config_name = '$configName'");
+		$q->exec();
+		$q->clear();
+
+		$i = 0;
+		foreach ($configValue as $index => $field) {
+			if (isset($display[$field])) {
+				$q->addTable('module_config');
+				$q->addInsert('module_name',		$moduleName);
+				$q->addInsert('module_config_name',		$configName);
+				$q->addInsert('module_config_value',	$field);
+				$q->addInsert('module_config_text', $configText[$index]);
+				$q->addInsert('module_config_order', $i);
+				$q->exec();
+				$q->clear();
+				$i++;
+			}
+		}
     }
 }
