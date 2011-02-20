@@ -26,7 +26,7 @@ class CFile extends w2p_Core_BaseObject {
 	public $file_folder = null;
 	public $file_checkout = null;
 	public $file_co_reason = null;
-	public $file_indexed = null;
+	public $file_indexed = 0;
 
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
 	//public $file_helpdesk_item = NULL;
@@ -77,6 +77,22 @@ class CFile extends w2p_Core_BaseObject {
         }
 
         return true;
+	}
+
+	public function hook_cron()
+	{
+		global $AppUI;
+
+		$q = new w2p_Database_Query();
+		$q->addQuery('file_id, file_name');
+		$q->addTable('files');
+		$q->addWhere('file_indexed = 0');
+		$unindexedFiles = $q->loadList(5, 'file_id');
+
+		foreach($unindexedFiles as $file_id => $metadata) {
+			$this->load($file_id);
+			$this->indexStrings($AppUI);
+		}
 	}
 
     public function hook_search()
@@ -330,8 +346,8 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	// parse file for indexing
-	public function indexStrings() {
-		global $AppUI, $w2Pconfig;
+	public function indexStrings(CAppUI $AppUI) {
+		global $w2Pconfig;
         $nwords_indexed = 0;
 
         /* Workaround for indexing large files:
@@ -402,6 +418,12 @@ class CFile extends w2p_Core_BaseObject {
                 $q->clear();
             }
         }
+		$q = new w2p_Database_Query;
+		$q->addTable('files');
+		$q->addUpdate('file_indexed', 1);
+		$q->addWhere('file_id = '. $this->file_id);
+		$q->exec();
+
 		return $nwords_indexed;
 	}
 
