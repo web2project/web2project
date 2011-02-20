@@ -3,8 +3,16 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$filter = array('project_id', 'project_status', 'project_active', 
+	'project_parent', 'project_percent_complete', 'project_company',
+	'project_original_parent', 'project_departments', 'project_contacts',
+	'project_private', 'project_type');
+
 $project = new CProject();
 $properties = get_class_vars(get_class($project));
+foreach ($filter as $field => $value) {
+	unset($properties[$value]);
+}
 
 // setup the title block
 $titleBlock = new CTitleBlock('Configure Projects Module', 'support.png', $m, $m . '.' . $a);
@@ -13,6 +21,7 @@ $titleBlock->addCrumb('?m=system&a=viewmods', 'modules list');
 $titleBlock->show();
 
 $fields = w2p_Core_Module::getSettings($m, 'index_list');
+$fields = array_diff($fields, $filter);
 foreach ($fields as $field => $text) {
     $fieldList[] = $field;
     $fieldNames[] = $text;
