@@ -216,25 +216,6 @@ if ($is_tabbed) {
                                 }
                                 $s .= '</td>';
                                 break;
-							case 'project_creator':
-							case 'project_owner':
-								$s .= '<td width="30%">';
-								$s .= w2PgetUsernameFromID($row[$field]);
-								$s .= '</td>';
-								break;
-							case 'project_url':
-							case 'project_demo_url':
-								$s .= '<td width="30%">';
-								$s .= w2p_url($row[$field]);
-								$s .= '</td>';
-								break;
-							case 'project_target_budget':
-							case 'project_actual_budget':
-								$s .= '<td width="30%">';
-								$s .= $w2Pconfig['currency_symbol'];
-								$s .= formatCurrency($row[$field], $AppUI->getPref('CURRENCYFORM'));
-								$s .= '</td>';
-								break;
                             case 'company_name':
                                 $s .= '<td width="30%">';
                                 $s .= '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" >';
@@ -242,19 +223,14 @@ if ($is_tabbed) {
                                 $s .= '</a>';
                                 $s .= '</td>';
                                 break;
-                            case 'project_color_identifier':
-                                $s .= '<td class="center" width="1" style="border: outset #eeeeee 1px;background-color:#' . $row[$field] . '">';
-                                $s .= '<font color="' . bestColor($row[$field]) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
+							case 'project_percent_complete':
+                                $s .= '<td class="center" width="1" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
+                                $s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
                                 $s .= '</td>';
                                 break;
-                            case 'project_start_date':
-                            case 'project_end_date':
-                                $myDate = intval($row[$field]) ? new CDate($row[$field]) : null;
-                                $s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($df) : '-') . '</td>';
-                                break;
                             case 'project_actual_end_date':
-                                $myDate = intval($row[$field]) ? new CDate($row[$field]) : null;
-                                $s .= '<td nowrap="nowrap" class="center">';
+                                $myDate = intval($row[$field]) ? new w2p_Utilities_Date($row[$field]) : null;
+                                $s .= '<td class="center">';
                                 $s .= '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">';
                                 $s .= ($myDate ? $myDate->format($df) : '-');
                                 $s .= '</a>';
@@ -278,7 +254,7 @@ if ($is_tabbed) {
                                 $s .= '</td>';
                                 break;
                             default:
-                                $s .= '<td nowrap="nowrap" class="center">'.htmlspecialchars($row[$field], ENT_QUOTES).'</td>';
+                                $s .= w2p_Output_HTMLHelper::renderColumn($AppUI, $field, $row);
                         }
                     }
 

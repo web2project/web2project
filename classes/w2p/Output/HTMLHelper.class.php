@@ -28,4 +28,41 @@ class w2p_Output_HTMLHelper {
 
         return $output;
     }
+
+	public static function renderColumn(CAppUI $AppUI, $fieldName, $row) {
+
+		switch ($fieldName) {
+			case 'project_creator':
+			case 'project_owner':
+				$s .= '<td nowrap="nowrap">';
+				$s .= w2PgetUsernameFromID($row[$fieldName]);
+				$s .= '</td>';
+				break;
+			case 'project_target_budget':
+			case 'project_actual_budget':
+				$s .= '<td>';
+				$s .= $w2Pconfig['currency_symbol'];
+				$s .= formatCurrency($row[$fieldName], $AppUI->getPref('CURRENCYFORM'));
+				$s .= '</td>';
+				break;
+			case 'project_url':
+			case 'project_demo_url':
+				$s .= '<td>';
+				$s .= w2p_url($row[$fieldName]);
+				$s .= '</td>';
+				break;
+			case 'project_start_date':
+			case 'project_end_date':
+				$df = $AppUI->getPref('SHDATEFORMAT');
+				$myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
+				$s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($df) : '-') . '</td>';
+				break;
+			default:
+				$s .= '<td nowrap="nowrap" class="center">';
+				$s .= htmlspecialchars($row[$fieldName], ENT_QUOTES);
+				$s .= '</td>';
+		}
+
+		return $s;
+	}
 }
