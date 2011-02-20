@@ -63,17 +63,11 @@ function setTasksStartDate(form, datesForm) {
 	}
 }
 
-function popContacts() {
-	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id, 'contacts','height=600,width=400,resizable,scrollbars=yes');
-}
-
 function setContacts(contact_id_string) {
 	if(!contact_id_string) {
 		contact_id_string = '';
 	}
-	task_contacts = document.getElementById('task_contacts');
-	task_contacts.value = contact_id_string;
-	selected_contacts_id = contact_id_string;
+	document.getElementById('task_contacts').value = contact_id_string;
 }
 
 function submitIt(form){
