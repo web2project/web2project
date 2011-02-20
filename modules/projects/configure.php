@@ -3,8 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$filter = array('project_id', 'project_status', 'project_active', 
-	'project_parent', 'project_percent_complete', 'project_company',
+$filter = array('project_id', 'project_status', 'project_active',
+	'project_parent', 'project_color_identifier', 'project_company',
 	'project_original_parent', 'project_departments', 'project_contacts',
 	'project_private', 'project_type');
 
