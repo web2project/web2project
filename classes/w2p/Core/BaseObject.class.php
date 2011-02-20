@@ -18,29 +18,29 @@ class w2p_Core_BaseObject
 	/**
 	 *	@var string Name of the table prefix in the db schema
 	 */
-	public $_tbl_prefix = '';
+	protected $_tbl_prefix = '';
 	/**
 	 *	@var string Name of the table in the db schema relating to child class
 	 */
-	public $_tbl = '';
+	protected $_tbl = '';
 	/**
 	 *	@var string Name of the primary key field in the table
 	 */
-	public $_tbl_key = '';
+	protected $_tbl_key = '';
 	/**
 	 *	@var string Error message
 	 */
-	public $_error = '';
+	protected $_error = '';
 
 	/**
 	 * @var object Query Handler
 	 */
-	public $_query;
+	protected $_query;
 
 	/**
 	 * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table 
 	 */
-	public $_tbl_module;
+	protected $_tbl_module;
 
 	/**
 	 *	Object constructor to set table and key field
