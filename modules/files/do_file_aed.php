@@ -181,8 +181,6 @@ if ($result) {
 
     $AppUI->setMsg($file_id ? 'updated' : 'added', UI_MSG_OK, true);
 
-    $indexed = $obj->indexStrings();
-    $AppUI->setMsg('; ' . $indexed . ' unique words indexed', UI_MSG_OK, true);
     $AppUI->redirect('m=files');
 } else {
     $AppUI->redirect('m=public&a=access_denied');
