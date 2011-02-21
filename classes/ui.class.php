@@ -330,7 +330,7 @@ class CAppUI {
 	 */
 	public function readDirs($path) {
 		$dirs = array();
-		
+
 		if (is_dir(W2P_BASE_DIR . '/' . $path)) {
 			$d = dir(W2P_BASE_DIR . '/' . $path);
 			while (false !== ($name = $d->read())) {
