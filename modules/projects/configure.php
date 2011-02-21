@@ -26,7 +26,7 @@ foreach ($fields as $field => $text) {
     $fieldList[] = $field;
     $fieldNames[] = $text;
 }
-
+$orderMax = count($properties) + count($fields);
 ?>
 <form name="frmConfig" id="frmConfig" action="./index.php?m=system" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_module_config" />
@@ -47,8 +47,7 @@ foreach ($fields as $field => $text) {
 					<input type="checkbox" name="display[<?php echo $field; ?>]" checked="checked" />
 				</td>
 				<td>
-					<input type="hidden" name="order[<?php echo $field; ?>]" value="<?php echo $order ?>" />
-					(add buttons)
+					<?php echo arraySelect(range(0, $orderMax), "order[$field]", 'class="text" size="1"', $order); ?>
 				</td>
 				<td class="center">
 					<input type="hidden" name="displayFields[]" value="<?php echo $field; ?>" />

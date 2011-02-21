@@ -277,8 +277,8 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 		return $q->loadHashList();
     }
 
-    public static function saveSettings($moduleName, $configName, $display,
-			$configValue, $configText) {
+    public static function saveSettings($moduleName, $configName,
+			$displayColumns, $displayOrder, $configValue, $configText) {
 
 		if ('' == $moduleName || '' == $configName) {
 			return false;
@@ -293,13 +293,13 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 
 		$i = 0;
 		foreach ($configValue as $index => $field) {
-			if (isset($display[$field])) {
+			if (isset($displayColumns[$field])) {
 				$q->addTable('module_config');
-				$q->addInsert('module_name',		$moduleName);
+				$q->addInsert('module_name',			$moduleName);
 				$q->addInsert('module_config_name',		$configName);
 				$q->addInsert('module_config_value',	$field);
-				$q->addInsert('module_config_text', $configText[$index]);
-				$q->addInsert('module_config_order', $i);
+				$q->addInsert('module_config_text',		$configText[$index]);
+				$q->addInsert('module_config_order',	(int) $displayOrder[$field]);
 				$q->exec();
 				$q->clear();
 				$i++;
