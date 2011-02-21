@@ -15,7 +15,7 @@ foreach ($filter as $field => $value) {
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock('Configure Projects Module', 'support.png', $m, $m . '.' . $a);
+$titleBlock = new CTitleBlock('Configure Projects Module', 'modules/system/control-center.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&a=viewmods', 'modules list');
 $titleBlock->show();
