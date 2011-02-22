@@ -288,6 +288,7 @@ class CUser extends w2p_Core_BaseObject {
 		$q = new w2p_Database_Query();
 		$q->addTable('users', 'u');
 		$q->addQuery('u.*');
+		$q->addQuery('con.contact_email AS user_email');
 		$q->addQuery('uf.feed_token');
 		$q->addQuery('con.*, company_id, company_name, dept_name, dept_id');
 		$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
