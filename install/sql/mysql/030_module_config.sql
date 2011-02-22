@@ -35,7 +35,7 @@ INSERT INTO `module_config` (`module_name`, `module_config_name`, `module_config
 	('projects', 'index_list', 'task_log_problem', 'LP', 8);
 INSERT INTO `module_config` (`module_name`, `module_config_name`, `module_config_value`,
 	`module_config_text`, `module_config_order`) VALUES
-	('projects', 'index_list', 'owner_name', 'Owner', 9);
+	('projects', 'index_list', 'project_owner', 'Owner', 9);
 INSERT INTO `module_config` (`module_name`, `module_config_name`, `module_config_value`,
 	`module_config_text`, `module_config_order`) VALUES
 	('projects', 'index_list', 'project_task_count', 'Tasks', 10);
