@@ -637,7 +637,12 @@ class CTask extends w2p_Core_BaseObject {
             $stored = true;
 		}
 
-		CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
+		$last_task_data = $this->getLastTaskData($this->task_project);
+		CProject::updateTaskCache(
+					$this->task_project,
+					$last_task_data['task_id'],
+					$last_task_data['last_date'],
+					$this->getTaskCount($this->task_project));
 		$this->pushDependencies($this->task_id, $this->task_end_date);
 
 		//split out related departments and store them seperatly.
@@ -804,11 +809,32 @@ class CTask extends w2p_Core_BaseObject {
                 $this->updateDynamics();
             }
 
-            CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
+			$last_task_data = $this->getLastTaskData($this->task_project);
+			CProject::updateTaskCache(
+						$this->task_project,
+						$last_task_data['task_id'],
+						$last_task_data['last_date'],
+						$this->getTaskCount($this->task_project));
+
             return true;
         }
 
 		return false;
+	}
+
+	/** Retrieve tasks with latest task_end_dates within given project
+	 * @param int Project_id
+	 * @param int SQL-limit to limit the number of returned tasks
+	 * @return array List of criticalTasks
+	 */
+	public function getLastTaskData($project_id) {
+		$q = new w2p_Database_Query;
+		$q->addQuery('task_id, MAX(task_end_date) as last_date');
+		$q->addTable('tasks');
+		$q->addWhere('task_project = ' . (int)$project_id);
+		$q->addGroup('task_project');
+
+		return $q->loadHash();
 	}
 
 	public function updateDependencies($cslist, $parent_id = 0) {

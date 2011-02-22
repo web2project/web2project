@@ -813,17 +813,34 @@ class CProject extends w2p_Core_BaseObject {
 		}
 	}
 
-  public static function updateTaskCount($projectId, $taskCount) {
+	public static function updateTaskCache($project_id, $task_id,
+			$project_actual_end_date, $project_task_count) {
 
-  	if (intval($projectId) > 0 && intval($taskCount)) {
-      $q = new w2p_Database_Query;
-      $q->addTable('projects');
-      $q->addUpdate('project_task_count', intval($taskCount));
-      $q->addWhere('project_id   = ' . (int) $projectId);
-      $q->exec();
-      self::updatePercentComplete($projectId);
-  	}
-  }
+		if ($project_id && $task_id) {
+			$q = new w2p_Database_Query;
+			$q->addTable('projects');
+			$q->addUpdate('project_last_task',			$task_id);
+			$q->addUpdate('project_actual_end_date',	$project_actual_end_date);
+			$q->addUpdate('project_task_count',			$project_task_count);
+			$q->addWhere('project_id   = ' . (int) $project_id);
+			$q->exec();
+			self::updatePercentComplete($project_id);
+		}
+	}
+
+	public static function updateTaskCount($projectId, $taskCount) {
+
+		trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE );
+
+		if (intval($projectId) > 0 && intval($taskCount)) {
+			$q = new w2p_Database_Query;
+			$q->addTable('projects');
+			$q->addUpdate('project_task_count', intval($taskCount));
+			$q->addWhere('project_id   = ' . (int) $projectId);
+			$q->exec();
+			self::updatePercentComplete($projectId);
+		}
+	}
 
 	public function hasChildProjects($projectId = 0) {
 		// Note that this returns the *count* of projects.  If this is zero, it
@@ -1095,8 +1112,8 @@ function projects_list_data($user_id = false) {
 		project_type, project_name, project_description, project_scheduled_hours as project_duration,
 		project_parent, project_original_parent,
 		project_start_date, project_end_date, project_color_identifier, project_company,
-        company_name, project_status, tc.critical_task,
-        tc.project_actual_end_date, tp.task_log_problem,
+        company_name, project_status, project_last_task as critical_task,
+        project_actual_end_date, tp.task_log_problem,
 		pr.project_percent_complete, user_username, project_active');
 	$fields = w2p_Core_Module::getSettings('projects', 'index_list');
 	foreach ($fields as $field => $text) {
@@ -1105,7 +1122,7 @@ function projects_list_data($user_id = false) {
 	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
 	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
-	$q->addJoin('tasks_critical', 'tc', 'pr.project_id = tc.task_project');
+	//$q->addJoin('tasks_critical', 'tc', 'pr.project_id = tc.task_project');
 	$q->addJoin('tasks_problems', 'tp', 'pr.project_id = tp.task_project');
 	if ($addProjectsWithAssignedTasks) {
 		$q->addJoin('tasks_users', 'tu', 'pr.project_id = tu.task_project');
