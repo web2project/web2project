@@ -831,6 +831,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q = new w2p_Database_Query;
 		$q->addQuery('task_id, MAX(task_end_date) as last_date');
 		$q->addTable('tasks');
+		$q->addWhere('task_dynamic <> 1');
 		$q->addWhere('task_project = ' . (int)$project_id);
 		$q->addGroup('task_project');
 
