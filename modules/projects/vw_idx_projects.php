@@ -223,7 +223,7 @@ if ($is_tabbed) {
                                 $s .= '</a>';
                                 $s .= '</td>';
                                 break;
-							case 'project_percent_complete':
+							case 'project_color_identifier':
                                 $s .= '<td class="center" width="1" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
                                 $s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
                                 $s .= '</td>';
