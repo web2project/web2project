@@ -467,55 +467,44 @@ $show_gantt = 1;
 $show_gantt_taskdetails = ($showTaskNameOnly == '1') ? 0 : 1;
 $ganttfile = $outpfiles;
 
-// Initialize PDF document 
-$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 $temp_dir = W2P_BASE_DIR . '/files/temp';
-$base_url = w2PgetConfig('base_url');
-require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
-$pdf = new Cezpdf($paper='A4',$orientation='landscape');
-$pdf->ezSetCmMargins( 2, 1.5, 1.4, 1.4 ); //(top, bottom, left, right)
-/*
-* 		Define page header to be displayed on top of each page
-*/
-$pdf->saveState();
-if ( $skip_page ) $pdf->ezNewPage();
-$skip_page++;
-$page_header = $pdf->openObject();
-$pdf->selectFont( "$font_dir/Helvetica-Bold.afm" );
-$ypos= $pdf->ez['pageHeight'] - ( 30 + $pdf->getFontHeight(12) );
-$doc_title = strEzPdf( $projects[$project_id]['project_name'], UI_OUTPUT_RAW);
-$pwidth=$pdf->ez['pageWidth'];
-$xpos= round( ($pwidth - $pdf->getTextWidth( 12, $doc_title ))/2, 2 );
-$pdf->addText( $xpos, $ypos, 12, $doc_title) ;
-$pdf->selectFont( "$font_dir/Helvetica.afm" );
-$date = new w2p_Utilities_Date();
-$xpos = round( $pwidth - $pdf->getTextWidth( 10, $date->format($df)) - $pdf->ez['rightMargin'] , 2);
-$doc_date = strEzPdf($date->format( $df ));
-$pdf->addText( $xpos, $ypos, 10, $doc_date );
-$pdf->closeObject($page_header);
-$pdf->addObject($page_header, 'all');
+
 $gpdfkey = W2P_BASE_DIR. '/modules/tasks/images/ganttpdf_key.png';
 $gpdfkeyNM = W2P_BASE_DIR. '/modules/tasks/images/ganttpdf_keyNM.png';
 
-$pdf->ezStartPageNumbers( 802 , 30 , 10 ,'left','Page {PAGENUM} of {TOTALPAGENUM}') ;
+$pdf = new w2p_Output_PDF_Gantt('L', 'mm', 'A4', true, 'UTF-8', false);
+$pdf->SetMargins(14, 20, 14, true); // left, top, right
+$pdf->setHeaderMargin(10);
+$pdf->setFooterMargin(20);
+
+$pdf->header_project_name = $projects[$project_id]['project_name'];
+$date = new w2p_Utilities_Date();
+$pdf->header_date = $date->format($df);
+
+$pdf->SetFont('freeserif', '', 12);
+
+$pdf->AddPage();
+
+$next_image_y = 30;
+
 for ($i=0; $i < count($ganttfile); $i++) {
-    $gf = $ganttfile[$i];
-    $pdf->ezColumnsStart(array('num' =>1, 'gap' =>0));
-    $pdf->ezImage( $gf, 0, 765, 'width', 'left'); // No pad, width = 800px, resize = 'none' (will go to next page if image height > remaining page space)
+    $gf = $ganttfile[0];
+    $pdf->Image($gf, '', $next_image_y, 0, 0, '', '', ' ', true, 300, '', false, false, 0, false, false, true);
+    
+    $next_image_y = $pdf->getImageRBY();
+
     if ($showNoMilestones == '1') {
-        $pdf->ezImage( $gpdfkeyNM, 0, 765, 'width', 'left');
+        $pdf->Image($gpdfkeyNM, '', $next_image_y, 0, 0, '', '', '', true, 300, '', false, false, 0, false, false, true);
     } else {
-        $pdf->ezImage( $gpdfkey, 0, 765, 'width', 'left');
+        $pdf->Image($gpdfkey, '', $next_image_y, 0, 0, '', '', '', true, 300, '', false, false, 0, false, false, true);
     }
-    $pdf->ezColumnsStop();
+    $next_image_y = $pdf->getImageRBY();
 }
-// End of project display
-// Create document body and pdf temp file
-$pdf->stopObject($page_header);
+
 $gpdffile = $temp_dir . '/GanttChart_'.md5(time()).'.pdf';
-if ($fp = fopen( $gpdffile, 'wb' )) {
-    fwrite( $fp, $pdf->ezOutput() );
-    fclose( $fp );
+if ($fp = fopen($gpdffile, 'wb')) {
+    fwrite($fp, $pdf->Output('ganttchart.pdf', 'S'));
+    fclose($fp);
 } else {
     //TODO: create error handler for permission problems
     echo "Could not open file to save PDF.  ";
@@ -545,3 +534,5 @@ if (file_exists($gpdffile) && is_readable($gpdffile)) {
     readfile($gpdffile);
     exit;
 }
+
+?>
