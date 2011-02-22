@@ -216,7 +216,7 @@ if ($is_tabbed) {
                                 }
                                 $s .= '</td>';
                                 break;
-                            case 'company_name':
+                            case 'project_company':
                                 $s .= '<td width="30%">';
                                 $s .= '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" >';
                                 $s .= htmlspecialchars($row['company_name'], ENT_QUOTES);

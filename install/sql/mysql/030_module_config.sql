@@ -20,7 +20,7 @@ INSERT INTO `module_config` (`module_name`, `module_config_name`, `module_config
 	('projects', 'index_list', 'project_name', 'Project Name', 3);
 INSERT INTO `module_config` (`module_name`, `module_config_name`, `module_config_value`,
 	`module_config_text`, `module_config_order`) VALUES
-	('projects', 'index_list', 'company_name', 'Company', 4);
+	('projects', 'index_list', 'project_company', 'Company', 4);
 INSERT INTO `module_config` (`module_name`, `module_config_name`, `module_config_value`,
 	`module_config_text`, `module_config_order`) VALUES
 	('projects', 'index_list', 'project_start_date', 'Start', 5);
