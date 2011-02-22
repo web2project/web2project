@@ -9,7 +9,7 @@ $perms = &$AppUI->acl();
 if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-$reset = intval(w2PgetParam($_GET, 'reset', 0));
+$reset = (int) w2PgetParam($_GET, 'reset', 0);
 if ($reset == 1) {
 	$obj = &$AppUI->acl();
 	$obj->recalcPermissions();

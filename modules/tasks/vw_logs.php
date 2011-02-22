@@ -10,7 +10,7 @@ if (!canView('task_log')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$problem = intval(w2PgetParam($_GET, 'problem', null));
+$problem = (int) w2PgetParam($_GET, 'problem', null);
 // get sysvals
 $taskLogReference = w2PgetSysVal('TaskLogReference');
 $taskLogReferenceImage = w2PgetSysVal('TaskLogReferenceImage');

@@ -32,12 +32,12 @@ $cols = 13;
 /*
 * Let's figure out which tasks are selected
 */
-$task_id = intval(w2PgetParam($_GET, 'task_id', 0));
+$task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
 $q = new w2p_Database_Query;
-$pinned_only = intval(w2PgetParam($_GET, 'pinned', 0));
+$pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
 if (isset($_GET['pin'])) {
-	$pin = intval(w2PgetParam($_GET, 'pin', 0));
+	$pin = (int) w2PgetParam($_GET, 'pin', 0);
 	$msg = '';
 
 	// load the record data
@@ -56,14 +56,14 @@ if (isset($_GET['pin'])) {
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $taskPriority = w2PgetSysVal('TaskPriority');
 
-$task_project = intval(w2PgetParam($_GET, 'task_project', null));
+$task_project = (int) w2PgetParam($_GET, 'task_project', null);
 
 $task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', '');
 $task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
 $task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', '');
 $task_sort_type2 = w2PgetParam($_GET, 'task_sort_type2', '');
-$task_sort_order1 = intval(w2PgetParam($_GET, 'task_sort_order1', 0));
-$task_sort_order2 = intval(w2PgetParam($_GET, 'task_sort_order2', 0));
+$task_sort_order1 = (int) w2PgetParam($_GET, 'task_sort_order1', 0);
+$task_sort_order2 = (int) w2PgetParam($_GET, 'task_sort_order2', 0);
 if (isset($_POST['show_task_options'])) {
 	$AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
 }
@@ -259,12 +259,12 @@ if (($project_id || $task_id) && $showIncomplete) {
 
 $task_status = 0;
 if ($min_view && isset($_GET['task_status'])) {
-	$task_status = intval(w2PgetParam($_GET, 'task_status', null));
+	$task_status = (int) w2PgetParam($_GET, 'task_status', null);
 } elseif ($currentTabId == 1 && $project_id) {
 	$task_status = -1;
 } elseif (!$currentTabName) {
 	// If we aren't tabbed we are in the tasks list.
-	$task_status = intval($AppUI->getState('inactive'));
+	$task_status = (int) $AppUI->getState('inactive');
 }
 
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
@@ -304,7 +304,7 @@ if (count($allowedTasks)) {
 // Filter by company
 if (!$min_view && $f2 != 'allcompanies') {
 	$q->addJoin('companies', 'c', 'c.company_id = p.project_company', 'inner');
-	$q->addWhere('company_id = ' . intval($f2));
+	$q->addWhere('company_id = ' . (int) $f2);
 }
 
 $q->addGroup('tasks.task_id');
@@ -524,8 +524,8 @@ if ($project_id) {
 											<strong><?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?></strong></span>
 										</a>
 									</td>
-									<td width="<?php echo (101 - intval($p['project_percent_complete'])); ?>%">
-										<?php echo (intval($p['project_percent_complete'])); ?>%
+									<td width="<?php echo (101 - (int) $p['project_percent_complete']); ?>%">
+										<?php echo (int) $p['project_percent_complete']; ?>%
 									</td>
 							  </tr>
 						  </table>
