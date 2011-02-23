@@ -603,7 +603,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function notifyOwner($isNotNew) {
 		global $AppUI, $w2Pconfig, $locale_char_set;
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail;
 
 		if (intval($isNotNew)) {
 			$mail->Subject("Project Updated: $this->project_name ", $locale_char_set);
@@ -614,7 +614,7 @@ class CProject extends w2p_Core_BaseObject {
 		$user = new CUser();
 		$user->loadFull($this->project_owner);
 
-		if ($user) {
+		if ($user && $mail->ValidEmail($user->user_email)) {
 			if (intval($isNotNew)) {
 				$body = $AppUI->_('Project') . ": $this->project_name Has Been Updated Via Project Manager. You can view the Project by clicking: ";
 			} else {
@@ -666,7 +666,7 @@ class CProject extends w2p_Core_BaseObject {
 			}
 
 			foreach ($users as $row) {
-				$mail = new Mail;
+				$mail = new w2p_Utilities_Mail;
 				$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 				$mail->Subject($subject, $locale_char_set);
 
