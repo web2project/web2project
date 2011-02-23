@@ -175,7 +175,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	}
 	$s .= '</td>';
 	// percent complete
-	$s .= '<td align="right">' . intval($a['task_percent_complete']) . '%</td>';
+	$s .= '<td align="right">' . (int) $a['task_percent_complete'] . '%</td>';
 	// priority
 	$s .= '<td align="center" nowrap="nowrap">';
 	if ($a['task_priority'] < 0) {
@@ -388,7 +388,7 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 		$s .= $a['task_name'];
 	}
 	// percent complete
-	$s .= '<td align="right">' . intval($a['task_percent_complete']) . '%</td>';
+	$s .= '<td align="right">' . (int) $a['task_percent_complete'] . '%</td>';
 	$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
 	$s .= '</td>';
 	$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';

@@ -2,7 +2,7 @@
 /*
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-::	Captcha Version 2.0 by László Zsidi, http://gifs.hu
+::	Captcha Version 2.0 by LÃ¡szlÃ³ Zsidi, http://gifs.hu
 ::
 ::	This class is a rewritten 'Captcha.class.php' version.
 ::
@@ -95,7 +95,7 @@ Class Captcha {
 /*
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
-::	GIFEncoder Version 2.0 by László Zsidi, http://gifs.hu
+::	GIFEncoder Version 2.0 by LÃ¡szlÃ³ Zsidi, http://gifs.hu
 ::
 ::	This class is a rewritten 'GifMerge.class.php' version.
 ::

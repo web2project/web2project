@@ -16,9 +16,9 @@ if (isset($_POST['task_type'])) {
 global $task_type;
 $task_type = $AppUI->getState('ToDoTaskType') !== null ? $AppUI->getState('ToDoTaskType') : '';
 
-$project_id = intval(w2PgetParam($_GET, 'project_id', 0));
+$project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 $this_day = new w2p_Utilities_Date();
-$date = (intval(w2PgetParam($_GET, 'date', '')) > 0) ? $this_day->format(FMT_TIMESTAMP_DATE) : '';
+$date = ((int) w2PgetParam($_GET, 'date', '')) ? $this_day->format(FMT_TIMESTAMP_DATE) : '';
 
 $user_id = $AppUI->user_id;
 $no_modify = false;
@@ -64,8 +64,8 @@ $task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', '');
 $task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
 $task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', '');
 $task_sort_type2 = w2PgetParam($_GET, 'task_sort_type2', '');
-$task_sort_order1 = intval(w2PgetParam($_GET, 'task_sort_order1', 0));
-$task_sort_order2 = intval(w2PgetParam($_GET, 'task_sort_order2', 0));
+$task_sort_order1 = (int) w2PgetParam($_GET, 'task_sort_order1', 0);
+$task_sort_order2 = (int) w2PgetParam($_GET, 'task_sort_order2', 0);
 
 // if task priority set and items selected, do some work
 $task_priority = w2PgetParam($_POST, 'task_priority', 99);

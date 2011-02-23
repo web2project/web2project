@@ -8,9 +8,9 @@ global $can_edit_time_information, $task;
 global $durnTypes, $task_project, $task_id, $tab;
 
 //Time arrays for selects
-$start = intval(w2PgetConfig('cal_day_start'));
-$end = intval(w2PgetConfig('cal_day_end'));
-$inc = intval(w2PgetConfig('cal_day_increment'));
+$start = (int) w2PgetConfig('cal_day_start');
+$end = (int) w2PgetConfig('cal_day_end');
+$inc = (int) w2PgetConfig('cal_day_increment');
 if ($start === null) {
 	$start = 8;
 }

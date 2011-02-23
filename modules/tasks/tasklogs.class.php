@@ -159,7 +159,7 @@ class CTaskLog extends w2p_Core_BaseObject
 		parent::__construct('task_log', 'task_log_id');
 
 		// ensure changes to checkboxes are honoured
-		$this->task_log_problem = intval($this->task_log_problem);
+		$this->task_log_problem = (int) $this->task_log_problem;
 	}
 
 	/**
@@ -326,7 +326,7 @@ class CTaskLog extends w2p_Core_BaseObject
 
 		$k = $this->_tbl_key;
 		if ($oid) {
-			$this->$k = intval($oid);
+			$this->$k = (int) $oid;
 		}
 		if (is_array($joins)) {
 			$q->addTable($this->_tbl, 'k');

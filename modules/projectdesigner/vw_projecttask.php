@@ -60,9 +60,9 @@ $cols = 13;
 // Let's figure out which tasks are selected
 */
 $q = new w2p_Database_Query;
-$pinned_only = intval(w2PgetParam($_GET, 'pinned', 0));
+$pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
 if (isset($_GET['pin'])) {
-	$pin = intval(w2PgetParam($_GET, 'pin', 0));
+	$pin = (int) w2PgetParam($_GET, 'pin', 0);
 	$msg = '';
 
 	// load the record data
@@ -96,8 +96,8 @@ $task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', '');
 $task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
 $task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', '');
 $task_sort_type2 = w2PgetParam($_GET, 'task_sort_type2', '');
-$task_sort_order1 = intval(w2PgetParam($_GET, 'task_sort_order1', 0));
-$task_sort_order2 = intval(w2PgetParam($_GET, 'task_sort_order2', 0));
+$task_sort_order1 = (int) w2PgetParam($_GET, 'task_sort_order1', 0);
+$task_sort_order2 = (int) w2PgetParam($_GET, 'task_sort_order2', 0);
 if (isset($_POST['show_task_options'])) {
 	$AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
 }

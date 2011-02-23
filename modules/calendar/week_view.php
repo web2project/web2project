@@ -16,7 +16,7 @@ global $locale_char_set;
 
 // retrieve any state parameters
 if (isset($_REQUEST['company_id'])) {
-	$AppUI->setState('CalIdxCompany', intval(w2PgetParam($_REQUEST, 'company_id', 0)));
+	$AppUI->setState('CalIdxCompany', (int) w2PgetParam($_REQUEST, 'company_id', 0));
 }
 $company_id = $AppUI->getState('CalIdxCompany') !== null ? $AppUI->getState('CalIdxCompany') : $AppUI->user_company;
 
@@ -112,7 +112,7 @@ for ($i = 0; $i < 7; $i++) {
 	$day = $show_day->getDay();
 	$href = '?m=calendar&a=day_view&date='.$dayStamp.'&tab=0';
 
-	$dow = intval($show_day->format('%w'));
+	$dow = (int) $show_day->format('%w');
 	if ($dow == 0 || $dow == 6) {
 		$s .= '<td class="weekendDay" style="width:14.29%;">';
 	} else {

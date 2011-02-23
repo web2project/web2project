@@ -28,4 +28,4 @@ $titleBlock->show();
 
 // include the re-usable sub view
 $min_view = false;
-include (W2P_BASE_DIR . '/modules/tasks/tasksperuser_sub.php');
+include W2P_BASE_DIR . '/modules/tasks/tasksperuser_sub.php';

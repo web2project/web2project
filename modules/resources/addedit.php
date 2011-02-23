@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 // Copyright 2004 Adam Donnison <adam@saki.com.au>
-$resource_id = intval(w2PgetParam($_GET, 'resource_id', null));
+$resource_id = (int) w2PgetParam($_GET, 'resource_id', null);
 $perms = &$AppUI->acl();
 $canDelete = $perms->checkModuleItem('resources', 'delete', $resource_id);
 if ((!$resource_id && !canAdd('resources')) || !$canEdit) {

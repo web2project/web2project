@@ -107,7 +107,7 @@ class CTask extends w2p_Core_BaseObject {
 		$errorArray = array();
 		$baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-		$this->task_id = intval($this->task_id);
+		$this->task_id = (int) $this->task_id;
 
 		if (is_null($this->task_priority) || !is_numeric((int) $this->task_priority)) {
 			$errorArray['task_priority'] = $baseErrorMsg . 'task priority is NULL';
@@ -137,10 +137,10 @@ class CTask extends w2p_Core_BaseObject {
 		}
 
 		// ensure changes to checkboxes are honoured
-		$this->task_milestone = intval($this->task_milestone);
-		$this->task_dynamic = intval($this->task_dynamic);
+		$this->task_milestone = (int) $this->task_milestone;
+		$this->task_dynamic = (int) $this->task_dynamic;
 
-		$this->task_percent_complete = intval($this->task_percent_complete);
+		$this->task_percent_complete = (int) $this->task_percent_complete;
 
 		$this->task_target_budget = $this->task_target_budget ? $this->task_target_budget : 0.00;
 
@@ -825,7 +825,7 @@ class CTask extends w2p_Core_BaseObject {
         unset($tarr[$parent_id]);
 
 		foreach ($tarr as $task_id => $value) {
-			if (intval($task_id) > 0) {
+			if ((int) $task_id) {
 				$q->addTable('task_dependencies');
 				$q->addReplace('dependencies_task_id', $this->task_id);
 				$q->addReplace('dependencies_req_task_id', $task_id);
@@ -1645,7 +1645,7 @@ class CTask extends w2p_Core_BaseObject {
 		$alloc = $this->getAllocation('user_id');
 		$overAssignment = false;
 		foreach ($tarr as $user_id) {
-			if (intval($user_id) > 0) {
+			if ((int) $user_id) {
 				$perc = $perc_assign[$user_id];
 				if (w2PgetConfig('check_overallocation') && $perc > $alloc[$user_id]['freeCapacity']) {
 					// add Username of the overAssigned User
@@ -2457,7 +2457,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$s .= '<td align="center">' . $AppUI->_('-') . '</td>';
 	}
 	// percent complete and priority
-	$s .= ('<td align="right">' . intval($arr['task_percent_complete']) . '%</td><td align="center" nowrap="nowrap">');
+	$s .= ('<td align="right">' . (int) $arr['task_percent_complete'] . '%</td><td align="center" nowrap="nowrap">');
 	if ($arr['task_priority'] < 0) {
 		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['task_priority'] . '.gif') . '" alt="" />';
 	} elseif ($arr['task_priority'] > 0) {

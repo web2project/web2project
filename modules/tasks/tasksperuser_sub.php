@@ -656,21 +656,21 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 }
 
 function getBeginWeek($d) {
-	$dn = intval($d->Format('%w'));
+	$dn = (int) $d->Format('%w');
 	$dd = new w2p_Utilities_Date($d);
 	$dd->subtractSeconds($dn * 24 * 3600);
-	return intval($dd->Format('%U'));
+	return (int) $dd->Format('%U');
 }
 
 function getEndWeek($d) {
 
-	$dn = intval($d->Format('%w'));
+	$dn = (int) $d->Format('%w');
 	if ($dn > 0) {
 		$dn = 7 - $dn;
 	}
 	$dd = new w2p_Utilities_Date($d);
 	$dd->addSeconds($dn * 24 * 3600);
-	return intval($dd->Format('%U'));
+	return (int) $dd->Format('%U');
 }
 
 function hasChildren($list, $task) {

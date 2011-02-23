@@ -216,7 +216,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		global $AppUI;
 
         $perms = $AppUI->acl();
-		$uid = intval($uid);
+		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
@@ -269,7 +269,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		global $AppUI;
 
         $perms = $AppUI->acl();
-		$uid = intval($uid);
+		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
@@ -308,7 +308,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		global $AppUI;
 
         $perms = $AppUI->acl();
-		$uid = intval($uid);
+		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);

@@ -234,9 +234,9 @@ var task_end_msg = '<?php echo $AppUI->_('taskValidEndDate'); ?>';
 var workHours = <?php echo w2PgetConfig('daily_working_hours'); ?>;
 //working days array from config.php
 var working_days = new Array(<?php echo w2PgetConfig('cal_working_days'); ?>);
-var cal_day_start = <?php echo intval(w2PgetConfig('cal_day_start')); ?>;
-var cal_day_end = <?php echo intval(w2PgetConfig('cal_day_end')); ?>;
-var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours')); ?>;
+var cal_day_start = <?php echo (int) w2PgetConfig('cal_day_start'); ?>;
+var cal_day_end = <?php echo (int) w2PgetConfig('cal_day_end'); ?>;
+var daily_working_hours = <?php echo (int) w2PgetConfig('daily_working_hours'); ?>;
 
 function popContacts() {
     var selected_contacts_id = document.getElementById('task_contacts').value;
