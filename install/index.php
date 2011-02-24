@@ -36,7 +36,7 @@ $manager = new w2p_Core_UpgradeManager();
 					<?php if ($step == '') { ?>
 						<tr>
 							<td colspan="2">
-								When you're ready to being, simply 
+								When you're ready to begin, simply
 							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form" accept-charset="utf-8">
 							  	<input type="hidden" name="step" value="check" />
 							  	<input class="button" type="submit" name="next" value="Start <?php echo ucwords($action); ?> &raquo;" />
@@ -57,7 +57,7 @@ $manager = new w2p_Core_UpgradeManager();
 					<?php if ($step == '') { ?>
 						<tr>
 							<td colspan="2">
-								When you're ready to being, simply 
+								When you're ready to begin, simply
 							  <form action="<?php $baseUrl; ?>" method="post" name="form" id="form" accept-charset="utf-8">
 							  	<input type="hidden" name="step" value="check" />
 							  	<input class="button" type="submit" name="next" value="Start <?php echo ucwords($action); ?> &raquo;" />
