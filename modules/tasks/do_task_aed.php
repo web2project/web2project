@@ -108,10 +108,10 @@ if ($del) {
     $result = $obj->delete();
     if (is_array($result)) {
         $AppUI->setMsg($msg, UI_MSG_ERROR);
-        $AppUI->redirect();
+        $AppUI->redirect('m=tasks&a=view&task_id='.$task_id);
     } else {
         $AppUI->setMsg('Task deleted');
-        $AppUI->redirect('', -1);
+        $AppUI->redirect('m=projects&a=view&project_id='.$obj->task_project);
     }
 }
 
