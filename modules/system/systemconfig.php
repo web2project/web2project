@@ -81,21 +81,27 @@ foreach ($rs as $c) {
 		$output .= '<tr><td colspan="2"><b>' . $AppUI->_($c['config_group'] . '_group_title') . '</b></td></tr>';
 		$last_group = $c['config_group'];
 	}
-	$output .= '<tr><td class="item" width="20%"><a name="'.$c['config_name'].'"> </a>' . $AppUI->_($c['config_name'] . '_title') . '</td>' .
-            '<td align="left">' . $entry . w2PtoolTip($AppUI->_($c['config_name'] . '_title'), $tooltip, true) . w2PshowImage('log-info.gif') . w2PendTip() . '
-				<input class="button" type="hidden"  name="w2PcfgId[' . $c['config_name'] . ']" value="' . $c['config_id'] . '" />
-			</td>
-        </tr>';
+	$output .= '<tr>
+                    <td class="item" width="20%"><a name="'.$c['config_name'].'"> </a>' . $AppUI->_($c['config_name'] . '_title') . '</td>' .
+                    '<td align="left" width="5%">' .                
+                        $entry . 
+                        '<input class="button" type="hidden"  name="w2PcfgId[' . $c['config_name'] . ']" value="' . $c['config_id'] . '" />' .
+			        '</td>' .
+                    '<td align="left" width="16">' .                 
+                         w2PtoolTip($AppUI->_($c['config_name'] . '_title'), $tooltip, true) . w2PshowImage('log-info.gif') . w2PendTip() .
+ 			        '</td>
+                    <td align="left" width="100%">&nbsp;</td>
+                </tr>';
 
 }
 ?>
 <form name="cfgFrm" action="index.php?m=system&a=systemconfig" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_systemconfig_aed" />
 	<table cellspacing="0" cellpadding="3" border="0" class="std" width="100%" align="center">
-		<tr><td colspan="2"><?php echo $AppUI->_('syscfg_intro'); ?></td></tr>
+		<tr><td colspan="4"><?php echo $AppUI->_('syscfg_intro'); ?></td></tr>
 		<?php echo $output; ?>
 		<tr>
-	 		<td align="right" colspan="2"><input class="button" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('Save'); ?>" /></td>
+	 		<td align="right" colspan="4"><input class="button" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('Save'); ?>" /></td>
 		</tr>
 	</table>
 </form>
