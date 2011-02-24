@@ -240,47 +240,53 @@ function highlight_tds(row, high, id) {
 //high = 2 => select
 //high = 3 => deselect
       if (document.getElementsByTagName) {
-            var tcs = row.getElementsByTagName('td');
-            var cell_name = '';
-            if (!id) {
-                  check = false;
-            } else {
-                  var f = eval('document.frm_tasks');
-                  var check = eval('f.selected_task_'+id+'.checked');
-            }
-            for (var j = 0, j_cmp=tcs.length; j < j_cmp; j+=1) {
-                  cell_name = eval('tcs['+j+'].id');
-                  if(!(cell_name.indexOf('ignore_td_') >= 0)) {
-                        if (high == 3) {
-                              tcs[j].style.background = '#FFFFCC';
-                        } else if (high == 2 || check) {
-                              tcs[j].style.background = '#FFCCCC';
-                        } else if (high == 1) {
-                              tcs[j].style.background = '#FFFFCC';
-                        } else {
-                              tcs[j].style.background = original_bgc;
-                        }
-                  }
-            }
+            if (row) {
+				var tcs = row.getElementsByTagName('td');
+				var cell_name = '';
+				if (!id) {
+					  check = false;
+				} else {
+					  var f = eval('document.frm_tasks');
+					  if (eval('f.selected_task_'+id)) {
+						var check = eval('f.selected_task_'+id+'.checked');
+					  }
+				}
+				for (var j = 0, j_cmp=tcs.length; j < j_cmp; j+=1) {
+					  cell_name = eval('tcs['+j+'].id');
+					  if(!(cell_name.indexOf('ignore_td_') >= 0)) {
+							if (high == 3) {
+								  tcs[j].style.background = '#FFFFCC';
+							} else if (high == 2 || check) {
+								  tcs[j].style.background = '#FFCCCC';
+							} else if (high == 1) {
+								  tcs[j].style.background = '#FFFFCC';
+							} else {
+								  tcs[j].style.background = original_bgc;
+							}
+					  }
+				}
+			}
       }
 }
 
 var is_check;
 function select_box(box, id, row_id, form_name){
 	var f = eval('document.'+form_name);
-	var check = eval('f.'+box+'_'+id+'.checked');
-      boxObj = eval('f.elements["'+box+'_'+id+'"]');
-      if ((is_check && boxObj.checked && !boxObj.disabled) || (!is_check && !boxObj.checked && !boxObj.disabled)) {
-            row = document.getElementById(row_id);
-            boxObj.checked = true;
-            highlight_tds(row, 2, id);
-            addBulkComponent(id);
-      } else if ((is_check && !boxObj.checked && !boxObj.disabled) || (!is_check && boxObj.checked && !boxObj.disabled)) {
-            row = document.getElementById(row_id);
-            highlight_tds(row, 3, id);
-            boxObj.checked = false;      
-            removeBulkComponent(id);
-      }
+	if (eval('f.selected_task_'+id)) {
+		var check = eval('f.'+box+'_'+id+'.checked');
+		boxObj = eval('f.elements["'+box+'_'+id+'"]');
+		if ((is_check && boxObj.checked && !boxObj.disabled) || (!is_check && !boxObj.checked && !boxObj.disabled)) {
+			row = document.getElementById(row_id);
+			boxObj.checked = true;
+			highlight_tds(row, 2, id);
+			addBulkComponent(id);
+		} else if ((is_check && !boxObj.checked && !boxObj.disabled) || (!is_check && boxObj.checked && !boxObj.disabled)) {
+			row = document.getElementById(row_id);
+			highlight_tds(row, 3, id);
+			boxObj.checked = false;
+			removeBulkComponent(id);
+		}
+	}
 }
 
 function toggle_users(id){
