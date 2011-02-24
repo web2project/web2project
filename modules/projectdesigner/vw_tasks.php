@@ -109,6 +109,7 @@ $q->addQuery('tasks.task_id, task_parent, task_name');
 $q->addQuery('task_start_date, task_end_date, task_dynamic');
 $q->addQuery('count(tasks.task_parent) as children');
 $q->addQuery('task_pinned, pin.user_id as pin_user');
+$q->addQuery('ut.user_task_priority');
 $q->addQuery('task_priority, task_percent_complete');
 $q->addQuery('task_duration, task_duration_type');
 $q->addQuery('task_project, task_represents_project');
@@ -209,6 +210,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
         <th width="10">&nbsp;</th>
         <th width="20"><?php echo $AppUI->_('Work'); ?></th>
         <th align="center"><?php echo $AppUI->_('P'); ?></th>
+		<th align="center"><?php echo $AppUI->_('U'); ?></th>
         <th align="center"><?php echo $AppUI->_('A'); ?></th>
         <th align="center"><?php echo $AppUI->_('T'); ?></th>
         <th align="center"><?php echo $AppUI->_('R'); ?></th>
@@ -257,7 +259,9 @@ foreach ($projects as $k => $p) {
 <tr>
         <td><?php echo $AppUI->_('Key'); ?>:</td>
         <th>&nbsp;P&nbsp;</th>
-        <td>=<?php echo $AppUI->_('Priority'); ?></td>
+        <td>=<?php echo $AppUI->_('Overall Priority'); ?></td>
+        <th>&nbsp;U&nbsp;</th>
+        <td>=<?php echo $AppUI->_('User Priority'); ?></td>
         <th>&nbsp;A&nbsp;</th>
         <td>=<?php echo $AppUI->_('Access'); ?></td>
         <th>&nbsp;T&nbsp;</th>

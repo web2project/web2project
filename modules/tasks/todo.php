@@ -113,6 +113,7 @@ $q = new w2p_Database_Query;
 $q->addQuery('ta.*');
 $q->addQuery('project_name, pr.project_id, project_color_identifier');
 $q->addQuery('tp.task_pinned');
+$q->addQuery('ut.user_task_priority');
 $dateDiffString = $q->dbfnDateDiff('ta.task_end_date', $q->dbfnNow()) . ' AS task_due_in';
 $q->addQuery($dateDiffString);
 

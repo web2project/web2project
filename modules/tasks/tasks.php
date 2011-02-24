@@ -27,7 +27,7 @@ if (empty($query_string)) {
 }
 
 // Number of columns (used to calculate how many columns to span things through)
-$cols = 13;
+$cols = 20;
 
 /*
 * Let's figure out which tasks are selected
@@ -129,6 +129,7 @@ $q2->clear();
 $q->addQuery('tasks.task_id, task_parent, task_name');
 $q->addQuery('task_start_date, task_end_date, task_dynamic');
 $q->addQuery('task_pinned, pin.user_id as pin_user');
+$q->addQuery('ut.user_task_priority');
 $q->addQuery('task_priority, task_percent_complete');
 $q->addQuery('task_duration, task_duration_type');
 $q->addQuery('task_project, task_represents_project');
@@ -162,7 +163,6 @@ if (!empty($mods['history']) && canView('history')) {
 
 $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
 $q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');
-
 $q->leftJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 $q->leftJoin('users', 'assignees', 'assignees.user_id = ut.user_id');
 $q->leftJoin('contacts', 'co', 'co.contact_id = usernames.user_contact');
@@ -462,6 +462,7 @@ if ($project_id) {
 		<th width="10"><?php echo $AppUI->_('Log'); ?></th>
 		<th width="20"><?php echo $AppUI->_('Work'); ?></th>
 		<th align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
+		<th align="center"><?php sort_by_item_title('U', 'user_task_priority', SORT_NUMERIC); ?></th>
 		<th width="200"><?php sort_by_item_title('Task Name', 'task_name', SORT_STRING); ?></th>
 		<th nowrap="nowrap"><?php sort_by_item_title('Task Owner', 'user_username', SORT_STRING); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users') ?></th>

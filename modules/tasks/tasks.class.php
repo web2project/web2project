@@ -2463,7 +2463,14 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	} elseif ($arr['task_priority'] > 0) {
 		$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['task_priority'] . '.gif') . '" alt="" />';
 	}
-	$s .= (($arr['file_count'] > 0) ? '<img src="' . w2PfindImage('clip.png') . '" alt="F" />' : '') . '</td>';
+	$s .= '</td><td align="center" nowrap="nowrap">';
+	if ($arr['user_task_priority'] < 0) {
+		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['user_task_priority'] . '.gif') . '" alt="" />';
+	} elseif ($arr['task_priority'] > 0) {
+		$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['user_task_priority'] . '.gif') . '" alt="" />';
+	}
+	$s .= '</td>';
+
 	// dots
 	$s .= '<td width="' . (($today_view) ? '50%' : '90%') . '">';
 	//level

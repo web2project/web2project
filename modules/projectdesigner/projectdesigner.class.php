@@ -183,8 +183,14 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	} elseif ($a['task_priority'] > 0) {
 		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['task_priority'] . '.gif') . '" width="13" height="16" alt="" />';
 	}
-	$s .= $a['file_count'] > 0 ? '<img src="' . w2PfindImage('clip.png') . '" alt="' . $AppUI->_('Files') . '" />' : '';
+	$s .= '</td><td align="center" nowrap="nowrap">';
+	if ($a['user_task_priority'] < 0) {
+		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$a['user_task_priority'] . '.gif') . '" alt="" />';
+	} elseif ($a['task_priority'] > 0) {
+		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['user_task_priority'] . '.gif') . '" alt="" />';
+	}
 	$s .= '</td>';
+
 	// access
 	$s .= '<td nowrap="nowrap">';
 	$s .= mb_substr($task_access[$a['task_access']], 0, 3);
