@@ -39,7 +39,7 @@ if ($folder > 0) {
 	$canDelete = $obj->canDelete($msg, $folder);
 }
 
-$q = new DBQuery();
+$q = new w2p_Database_Query();
 $q->addTable('file_folders');
 $q->addQuery('file_folders.*');
 $q->addWhere('file_folder_id=' . $folder);
