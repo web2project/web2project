@@ -162,10 +162,11 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 		$days = $now->dateDiff($end_date) * $sign;
 	}
 
+	$jsTaskId = 'task_proj_' . $a['task_project'] . '_level-' . $level . '-task_' . $a['task_id'] . '_';
 	if ($expanded) {
-		$s = '<tr id="task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\',\'frm_tasks\')">'; // edit icon
+		$s = '<tr id="' . $jsTaskId . '" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'' . $jsTaskId . '\',\'frm_tasks\')">'; // edit icon
 	} else {
-		$s = '<tr id="task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\',\'frm_tasks\')" ' . ($level ? 'style="display:none"' : '') . '>'; // edit icon
+		$s = '<tr id="' . $jsTaskId . '" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'' . $jsTaskId . '\',\'frm_tasks\')" ' . ($level ? 'style="display:none"' : '') . '>'; // edit icon
 	}
 	$s .= '<td>';
 	$canEdit = ($a['task_represents_project']) ? false : true;
@@ -183,8 +184,14 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	} elseif ($a['task_priority'] > 0) {
 		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['task_priority'] . '.gif') . '" width="13" height="16" alt="" />';
 	}
-	$s .= $a['file_count'] > 0 ? '<img src="' . w2PfindImage('clip.png') . '" alt="' . $AppUI->_('Files') . '" />' : '';
+	$s .= '</td><td align="center" nowrap="nowrap">';
+	if ($a['user_task_priority'] < 0) {
+		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$a['user_task_priority'] . '.gif') . '" alt="" />';
+	} elseif ($a['task_priority'] > 0) {
+		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['user_task_priority'] . '.gif') . '" alt="" />';
+	}
 	$s .= '</td>';
+
 	// access
 	$s .= '<td nowrap="nowrap">';
 	$s .= mb_substr($task_access[$a['task_access']], 0, 3);
@@ -224,7 +231,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	if ($a['task_description']) {
 		$s .= w2PtoolTip('Task Description', $a['task_description'], true);
 	}
-    $jsTaskId = 'task_proj_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_';
+    $jsTaskId = 'task_proj_' . $a['task_project'] . '_level-' . $level . '-task_' . $a['task_id'] . '_';
 	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' alt="" /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' alt="" /></a>';
 	$taskObj = new CTask;
 	$taskObj->load($a['task_id']);
@@ -299,7 +306,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 
 	// Assignment checkbox
 	if ($showEditCheckbox && 0 == $a['task_represents_project']) {
-		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'selected_task\', ' . $a['task_id'] . ',\'project_' . $a['task_project'] . '_level>' . $level . '<task_' . $a['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $a['task_id'] . '" name="selected_task[' . $a['task_id'] . ']" value="' . $a['task_id'] . '"/></td>';
+		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'selected_task\', ' . $a['task_id'] . ',\'project_' . $a['task_project'] . '_level-' . $level . '-task_' . $a['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $a['task_id'] . '" name="selected_task[' . $a['task_id'] . ']" value="' . $a['task_id'] . '"/></td>';
 	}
 	$s .= '</tr>';
 	echo $s;
