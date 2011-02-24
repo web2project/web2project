@@ -1,5 +1,5 @@
 <?php /* $Id$ $URL$ */
-//test commit
+
 // If you experience a 'white screen of death' or other problems,
 // change the following line of code to this:
 //ini_set('display_errors', 1);
