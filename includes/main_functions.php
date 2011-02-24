@@ -465,7 +465,7 @@ function w2PfindImage($name, $module = null) {
  *	@param string The image height
  *	@param string The alt text for the image
  */
-function w2PshowImage($src, $wid = '', $hgt = '', $alt = '.', $title = '', $module = null) {
+function w2PshowImage($src, $wid = '', $hgt = '', $alt = '', $title = '', $module = null) {
 	global $AppUI, $m;
 
 	if ($src == '') {
