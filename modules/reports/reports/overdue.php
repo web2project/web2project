@@ -106,7 +106,7 @@ if (count($tasks)) {
 		$AppUI->redirect();
 	}
 	while ($row = db_fetch_assoc($res)) {
-		$assigned_users[$row['task_id']][$row['user_id']] = $row[contact_first_name] . ' ' . $row[contact_last_name] . ' [' . $row[perc_assignment] . '%]';
+		$assigned_users[$row['task_id']][$row['user_id']] = $row['contact_first_name'] . ' ' . $row['contact_last_name'] . ' [' . $row['perc_assignment'] . '%]';
 	}
 	$q->clear();
 }
@@ -138,9 +138,9 @@ foreach ($tasks as $task_id => $detail) {
 	$row = &$pdfdata[];
 	$row[] = $detail['task_name'];
 	$row[] = $detail['user_username'];
-	$row[] = implode("\n", $assigned_users[$task_id]);
+	$row[] = implode("<br>", $assigned_users[$task_id]);
 	if ($hasResources)
-		$row[] = implode("\n", $resources[$task_id]);
+		$row[] = implode("<br>", $resources[$task_id]);
 	$end_date = new w2p_Utilities_Date($detail['task_end_date']);
 	$row[] = $end_date->format($df);
 }
