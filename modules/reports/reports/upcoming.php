@@ -19,35 +19,30 @@ if ($err = db_error()) {
 	$AppUI->redirect();
 }
 
-$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+$pdf = new w2p_Output_PDF_Reports('L', 'mm', 'A4', true, 'UTF-8');
+$pdf->SetMargins(15, 25, 15, true); // left, top, right
+$pdf->setHeaderMargin(10);
+$pdf->setFooterMargin(20);
 
-require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
-
-$pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
-$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
-$pdf->selectFont($font_dir . '/Helvetica.afm');
-if ($locale_char_set == 'utf-8') {
-	$pdf->ezText(utf8_decode(w2PgetConfig('company_name')), 12);
-} else {
-	$pdf->ezText(w2PgetConfig('company_name'), 12);
-}
+$pdf->header_company_name = w2PgetConfig('company_name');
 $date = new w2p_Utilities_Date();
-$pdf->ezText("\n" . $date->format($df), 8);
+$pdf->header_date = $date->format($df);
+
+$pdf->SetFont('freeserif', '', 12);
+
+$pdf->AddPage();
+
+$pdf->Cell(0, 0, $AppUI->_('Project Upcoming Task Report'), 0, 1);
+
+$pdf->SetFont('freeserif', 'B', 15);
+
+$pdf->Cell(0, 0, $pname, 0, 1);
+
+$pdf->SetFont('freeserif', '', 10);
+
 $next_week = new w2p_Utilities_Date($date);
 $next_week->addSpan(new Date_Span(array(7, 0, 0, 0)));
-
-$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-$pdf->ezText("\n" . $AppUI->_('Project Upcoming Task Report'), 12);
-if ($locale_char_set == 'utf-8') {
-	$pdf->ezText(utf8_decode($pname), 15);
-} else {
-	$pdf->ezText($pname, 15);
-}
-$pdf->ezText($AppUI->_('Tasks Due to be Completed By') . ' ' . $next_week->format($df), 10);
-$pdf->ezText("\n");
-$pdf->selectFont($font_dir . '/Helvetica.afm');
-$title = null;
-$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'left', 'width' => 120), 2 => array('justification' => 'center', 'width' => 120), 3 => array('justification' => 'center', 'width' => 75), 4 => array('justification' => 'center', 'width' => 75)));
+$pdf->Cell(0, 0, $AppUI->_('Tasks Due to be Completed By') . ' ' . $next_week->format($df), 0, 1);
 
 $hasResources = $AppUI->isActiveModule('resources');
 $perms = &$AppUI->acl();
@@ -116,7 +111,7 @@ if (count($tasks)) {
 		$AppUI->redirect();
 	}
 	while ($row = db_fetch_assoc($res)) {
-		$assigned_users[$row['task_id']][$row['user_id']] = $row[contact_first_name] . ' ' . $row[contact_last_name] . ' [' . $row[perc_assignment] . '%]';
+		$assigned_users[$row['task_id']][$row['user_id']] = $row['contact_first_name'] . ' ' . $row['contact_last_name'] . ' [' . $row['perc_assignment'] . '%]';
 	}
 	$q->clear();
 }
@@ -148,13 +143,35 @@ foreach ($tasks as $task_id => $detail) {
 	$row = &$pdfdata[];
 	$row[] = $detail['task_name'];
 	$row[] = $detail['user_username'];
-	$row[] = implode("\n", $assigned_users[$task_id]);
+	$row[] = implode("<br>", $assigned_users[$task_id]);
 	if ($hasResources)
-		$row[] = implode("\n", $resources[$task_id]);
+		$row[] = implode("<br>", $resources[$task_id]);
 	$end_date = new w2p_Utilities_Date($detail['task_end_date']);
 	$row[] = $end_date->format($df);
 }
 
-$pdf->ezTable($pdfdata, $columns, $title, $options);
+$table = '
+<style>
+table { border: 1px solid #00000; }
+td { padding: 4px; border: 1px solid #00000; }
+</style>
+<table border="0"><tr>';
+foreach($columns as $column) {
+    $table .= '<td align="center">' . $column . '</td>';
+}
+$table .= '</tr>';
 
-$pdf->ezStream();
+foreach($pdfdata as $row) {
+    $table .= '<tr>';
+    foreach($row as $col) {
+        $table .= '<td>' . $col . '</td>';
+    }
+    $table .= '</tr>';
+}
+
+$table .= '</table>';
+
+$pdf->Ln();
+$pdf->writeHTML($table, true, false, false, false, '');
+
+$pdf->Output('file.pdf', 'D');
