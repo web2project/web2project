@@ -1,0 +1,2 @@
+Logi zadan z kodami kosztow
+Pokazuje logi zadan wraz z informacja o kosztach

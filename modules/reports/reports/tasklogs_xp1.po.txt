@@ -1,0 +1,2 @@
+Logi zadan wraz z wycena
+ Pokazuje logi zadan wraz kodami kosztu i informacja bilingowa.
