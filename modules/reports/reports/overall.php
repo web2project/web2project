@@ -221,39 +221,58 @@ if ($do_report) {
 	if ($log_pdf) {
 		// make the PDF file
 
-		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+                $pdf = new w2p_Output_PDF_Reports('P', 'mm', 'A4', true, 'UTF-8');
+                $pdf->SetMargins(15, 25, 15, true); // left, top, right
+                $pdf->setHeaderMargin(10);
+                $pdf->setFooterMargin(20);
+
+                $pdf->header_company_name = w2PgetConfig('company_name');
+                $date = new w2p_Utilities_Date();
+                $pdf->header_date = $date->format($df);
+
+                $pdf->SetFont('freeserif', '', 10);
+
+                $pdf->AddPage();
+
+                if ($log_all) {
+                    $pdf->Cell(0, 0, "All hours as of " . $date->format($df), 0, 1);
+		} else {
+                    $sdate = new w2p_Utilities_Date($log_start_date);
+                    $edate = new w2p_Utilities_Date($log_end_date);
+                    $pdf->Cell(0, 0, "Hours from " . $sdate->format($df) . ' to ' . $edate->format($df), 0, 1);
+		}
+
+                $pdf->SetFont('freeserif', 'B', 12);
+                $pdf->Cell(0, 0, $AppUI->_('Overall Report'), 0, 1);
+
+                foreach ($allpdfdata as $company => $data) {
+                    $pdf->SetFont('freeserif', 'B', 12);
+                    $pdf->Cell(0, 0, $company, 0, 1, 'C');
+
+                    $pdf->SetFont('freeserif', '', 10);
+                    $table = '
+                    <style>
+                    table { border: 1px solid #00000; }
+                    td { padding: 4px; border: 1px solid #00000; }
+                    </style>
+                    <table border="0">';
+                    foreach($data as $row) {
+                        $table .= '<tr>';
+                        foreach($row as $col) {
+                            $table .= '<td>' . $col . '</td>';
+                        }
+                        $table .= '</tr>';
+                    }
+
+                    $table .= '</table>';
+                    $pdf->writeHTML($table, true, false, false, false, '');
+		}
+
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
 
-		require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
-
-		$pdf = new Cezpdf();
-		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
-		$pdf->selectFont($font_dir . '/Helvetica.afm');
-
-		$pdf->ezText(w2PgetConfig('company_name'), 12);
-
-		if ($log_all) {
-			$date = new w2p_Utilities_Date();
-			$pdf->ezText("\nAll hours as of " . $date->format($df), 8);
-		} else {
-			$sdate = new w2p_Utilities_Date($log_start_date);
-			$edate = new w2p_Utilities_Date($log_end_date);
-			$pdf->ezText("\nHours from " . $sdate->format($df) . ' to ' . $edate->format($df), 8);
-		}
-
-		$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-		$pdf->ezText("\n" . $AppUI->_('Overall Report'), 12);
-
-		foreach ($allpdfdata as $company => $data) {
-			$title = $company;
-			$options = array('showLines' => 1, 'showHeadings' => 0, 'fontSize' => 8, 'rowGap' => 2, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'right', 'width' => 120)));
-
-			$pdf->ezTable($data, null, $title, $options);
-		}
-
-    $w2pReport = new CReport();
+                $w2pReport = new CReport();
 		if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
-			fwrite($fp, $pdf->ezOutput());
+			fwrite($fp, $pdf->Output('overall.pdf', 'S'));
 			fclose($fp);
 			echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
 			echo $AppUI->_('View PDF File');
