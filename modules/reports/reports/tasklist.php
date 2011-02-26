@@ -259,44 +259,66 @@ if ($do_report) {
 		$q->addWhere('project_id=' . (int)$project_id);
 		$pname = $q->loadResult();
 
-		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+                $pdf = new w2p_Output_PDF_Reports('L', 'mm', 'A4', true, 'UTF-8');
+                $pdf->SetMargins(15, 25, 15, true); // left, top, right
+                $pdf->setHeaderMargin(10);
+                $pdf->setFooterMargin(20);
+
+                $pdf->header_company_name = w2PgetConfig('company_name');
+                $date = new w2p_Utilities_Date();
+                $pdf->header_date = $date->format($df);
+
+                $pdf->SetFont('freeserif', 'B', 12);
+
+                $pdf->AddPage();
+
+                $pdf->Cell(0, 0, $AppUI->_('Project Task Report'), 0, 1);
+
+                if ($project_id != 0) {
+                    $pdf->SetFont('freeserif', 'B', 15);
+                    $pdf->Cell(0, 0, $pname, 0, 1);
+		}
+
+                $pdf->SetFont('freeserif', 'B', 10);
+                if ($log_all) {
+                    $pdf->Cell(0, 0, 'All task entries', 0, 1);
+		} else {
+                    if ($end_date != ' ') {
+                        $pdf->Cell(0, 0, 'Task entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df), 0, 1);
+                    } else {
+                        $pdf->Cell(0, 0, 'Task entries from ' . $start_date->format($df), 0, 1);
+                    }
+		}
+
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
 
-		require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
+                $table = '
+                <style>
+                table { border: 1px solid #00000; }
+                td { padding: 4px; border: 1px solid #00000; }
+                </style>
+                <table border="0"><tr>';
+                foreach($columns as $column) {
+                    $table .= '<td align="center">' . $column . '</td>';
+                }
+                $table .= '</tr>';
 
-		$pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
-		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
-		$pdf->selectFont($font_dir . '/Helvetica.afm');
+                foreach($pdfdata as $row) {
+                    $table .= '<tr>';
+                    foreach($row as $col) {
+                        $table .= '<td>' . $col . '</td>';
+                    }
+                    $table .= '</tr>';
+                }
 
-		$pdf->ezText(w2PgetConfig('company_name'), 12);
+                $table .= '</table>';
 
-		$date = new w2p_Utilities_Date();
-		$pdf->ezText("\n" . $date->format($df), 8);
-
-		$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-		$pdf->ezText("\n" . $AppUI->_('Project Task Report'), 12);
-		if ($project_id != 0) {
-			$pdf->ezText($pname, 15);
-		}
-		if ($log_all) {
-			$pdf->ezText('All task entries', 9);
-		} else {
-			if ($end_date != ' ') {
-				$pdf->ezText('Task entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df), 9);
-			} else {
-				$pdf->ezText('Task entries from ' . $start_date->format($df), 9);
-			}
-		}
-		$pdf->ezText("\n");
-		$pdf->selectFont($font_dir . '/Helvetica.afm');
-		$title = null;
-		$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 100), 1 => array('justification' => 'left', 'width' => 100), 2 => array('justification' => 'left', 'width' => 260), 3 => array('justification' => 'left', 'width' => 80), 4 => array('justification' => 'center', 'width' => 80), 5 => array('justification' => 'center', 'width' => 80), 6 => array('justification' => 'right', 'width' => 60)));
-
-		$pdf->ezTable($pdfdata, $columns, $title, $options);
+                $pdf->Ln();
+                $pdf->writeHTML($table, true, false, false, false, '');
 
         $w2pReport = new CReport();
         if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
-            fwrite($fp, $pdf->ezOutput());
+            fwrite($fp, $pdf->Output('tasklist.pdf', 'S'));
             fclose($fp);
             echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
             echo $AppUI->_('View PDF File');
