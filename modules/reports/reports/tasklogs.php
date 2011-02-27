@@ -345,29 +345,8 @@ if ($do_report) {
 
 		$pdfheaders = array($AppUI->_('Creator', UI_OUTPUT_JS), $AppUI->_('Company', UI_OUTPUT_JS), $AppUI->_('Project', UI_OUTPUT_JS), $AppUI->_('Task', UI_OUTPUT_JS), $AppUI->_('Date', UI_OUTPUT_JS), $AppUI->_('Description', UI_OUTPUT_JS), $AppUI->_('CCode', UI_OUTPUT_JS), $AppUI->_('Hours', UI_OUTPUT_JS), );
 
-                $table = '
-                <style>
-                table { border: 1px solid #00000; }
-                td { padding: 4px; border: 1px solid #00000; }
-                </style>
-                <table border="0"><tr>';
-                foreach($pdfheaders as $column) {
-                    $table .= '<td align="center">' . $column . '</td>';
-                }
-                $table .= '</tr>';
-
-                foreach($pdfdata as $row) {
-                    $table .= '<tr>';
-                    foreach($row as $col) {
-                        $table .= '<td>' . $col . '</td>';
-                    }
-                    $table .= '</tr>';
-                }
-
-                $table .= '</table>';
-
-                $pdf->writeHTML($table, true, false, false, false, '');
-
+                $pdf->addHtmlTable($pdfdata, $pdfheaders);
+                
     $w2pReport = new CReport();
     if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
 			fwrite($fp, $pdf->Output('tasklogs.pdf', 'S'));

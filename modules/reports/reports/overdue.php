@@ -145,28 +145,6 @@ foreach ($tasks as $task_id => $detail) {
 	$row[] = $end_date->format($df);
 }
 
-$table = '
-<style>
-table { border: 1px solid #00000; }
-td { padding: 4px; border: 1px solid #00000; }
-</style>
-<table border="0"><tr>';
-foreach($columns as $column) {
-    $table .= '<td align="center">' . $column . '</td>';
-}
-$table .= '</tr>';
-
-foreach($pdfdata as $row) {
-    $table .= '<tr>';
-    foreach($row as $col) {
-        $table .= '<td>' . $col . '</td>';
-    }
-    $table .= '</tr>';
-}
-
-$table .= '</table>';
-
-$pdf->Ln();
-$pdf->writeHTML($table, true, false, false, false, '');
+$pdf->addHtmlTable($pdfdata, $columns);
 
 $pdf->Output('file.pdf', 'D');
