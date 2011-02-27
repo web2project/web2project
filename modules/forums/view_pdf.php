@@ -12,8 +12,9 @@ $perms = &$AppUI->acl();
 $q = new w2p_Database_Query;
 $q->addQuery('f.forum_name, p.project_name');
 $q->addTable('forums', 'f');
-$q->addJoin('projects', 'p', 'p.project_id = f.forum_project', 'inner');
+$q->addJoin('projects', 'p', 'p.project_id = f.forum_project', 'left');
 $q->addWhere('f.forum_id = ' . (int) $forum_id);
+
 $forum = $q->loadHash();
 
 if (!$perms->checkModuleItem('forums', 'view', $message_id)) {
@@ -69,7 +70,9 @@ $pdf->SetFont('freeserif', '', 12);
 
 $pdf->AddPage();
 
-$pdf->Cell(0, 0, 'Project: ' . $forum['project_name'], 0, 1);
+if($forum['project_name'] !== null) {
+    $pdf->Cell(0, 0, 'Project: ' . $forum['project_name'], 0, 1);
+}
 $pdf->Cell(0, 0, 'Forum: ' . $forum['forum_name'], 0, 1);
 $pdf->Cell(0, 0, 'Topic: ' . $topic, 0, 1);
 
