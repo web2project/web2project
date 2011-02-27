@@ -250,22 +250,7 @@ if ($do_report) {
                     $pdf->Cell(0, 0, $company, 0, 1, 'C');
 
                     $pdf->SetFont('freeserif', '', 10);
-                    $table = '
-                    <style>
-                    table { border: 1px solid #00000; }
-                    td { padding: 4px; border: 1px solid #00000; }
-                    </style>
-                    <table border="0">';
-                    foreach($data as $row) {
-                        $table .= '<tr>';
-                        foreach($row as $col) {
-                            $table .= '<td>' . $col . '</td>';
-                        }
-                        $table .= '</tr>';
-                    }
-
-                    $table .= '</table>';
-                    $pdf->writeHTML($table, true, false, false, false, '');
+                    $pdf->addHtmlTable($data);
 		}
 
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
