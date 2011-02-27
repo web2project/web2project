@@ -1,7 +1,7 @@
 <?php /* $Id$ $URL$ */
 
 /*
-Copyright (c) 2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+Copyright (c) 2007-2011 The web2Project Development Team <w2p-developers@web2project.net>
 Copyright (c) 2003-2007 The dotProject Development Team <core-developers@dotproject.net>
 
 This file is part of web2Project.
