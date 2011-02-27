@@ -57,22 +57,46 @@ foreach ($messages as $row) {
 
 	$date = intval($row['message_date']) ? new w2p_Utilities_Date($row['message_date']) : null;
 
-	$pdfdata[] = array($row['message_date'], $row['contact_first_name'] . ' ' . $row['contact_last_name'], '<b>' . $row['message_title'] . '</b>' . $row['message_body']);
+	$pdfdata[] = array($row['message_date'], $row['contact_first_name'] . ' ' . $row['contact_last_name'], '<b>' . $row['message_title'] . '</b><br>' . $row['message_body']);
 }
 
-$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
-$temp_dir = W2P_BASE_DIR . '/files/temp';
-require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
+$pdf = new w2p_Output_PDF_Reports('P', 'mm', 'A4', true, 'UTF-8');
+$pdf->SetMargins(15, 20, 15, true); // left, top, right
+$pdf->setHeaderMargin(0);
+$pdf->setFooterMargin(20);
 
-$pdf = new Cezpdf($paper = 'A4', $orientation = 'portrait');
-$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
-$pdf->selectFont($font_dir . '/Helvetica.afm');
-$pdf->ezText('Project: ' . $forum['project_name']);
-$pdf->ezText('Forum: ' . $forum['forum_name']);
-$pdf->ezText('Topic: ' . $topic);
-$pdf->ezText('');
-$options = array('showLines' => 1, 'showHeadings' => 1, 'fontSize' => 8, 'rowGap' => 2, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500');
+$pdf->SetFont('freeserif', '', 12);
 
-$pdf->ezTable($pdfdata, $pdfhead, null, $options);
+$pdf->AddPage();
 
-$pdf->ezStream();
+$pdf->Cell(0, 0, 'Project: ' . $forum['project_name'], 0, 1);
+$pdf->Cell(0, 0, 'Forum: ' . $forum['forum_name'], 0, 1);
+$pdf->Cell(0, 0, 'Topic: ' . $topic, 0, 1);
+
+$pdf->SetFont('freeserif', '', 10);
+
+$table = '
+<style>
+table { border: 1px solid #00000; }
+td { padding: 4px; border: 1px solid #00000; }
+</style>
+<table border="0"><tr>';
+foreach($pdfhead as $column) {
+    $table .= '<td align="center">' . $column . '</td>';
+}
+$table .= '</tr>';
+
+foreach($pdfdata as $row) {
+    $table .= '<tr>';
+    foreach($row as $col) {
+        $table .= '<td>' . $col . '</td>';
+    }
+    $table .= '</tr>';
+}
+
+$table .= '</table>';
+
+$pdf->Ln();
+$pdf->writeHTML($table, true, false, false, false, '');
+
+$pdf->Output('file.pdf', 'D');
