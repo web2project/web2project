@@ -2,6 +2,23 @@
 	if (!defined('W2P_BASE_DIR')) {
 		die('You should not access this file directly.');
 	}
+
+	if (!$manager->testDatabaseCredentials($manager->getConfigOptions())) {
+		?>
+		<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
+			<tr>
+			  <td colspan="2" align="center">
+			  	<b class="error">Your database credentials in ./includes/config.php are incorrect.  System conversion has stopped.  Please correct them and try again.</b><br /><br />
+				  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
+			  		<input type="hidden" name="step" value="check" />
+			  		<input class="button" type="submit" name="next" value="&laquo; Return to System Checks" />
+					</form>
+				</td>
+			</tr>
+		</table>
+		<?php
+		die();
+	}
 ?>
 <table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
 	<tr>

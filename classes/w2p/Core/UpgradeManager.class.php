@@ -9,15 +9,15 @@
 require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 
 class w2p_Core_UpgradeManager {
-    private $action = '';
+    protected $action = '';
 
-    private $configDir = '';
-    private $configFile = '';
-    private $uploadDir = '';
-    private $languageDir = '';
-    private $tempDir = '';
-    private $configOptions = array();
-    private $updatesApplied = array();
+    protected $configDir = '';
+    protected $configFile = '';
+    protected $uploadDir = '';
+    protected $languageDir = '';
+    protected $tempDir = '';
+    protected $configOptions = array();
+    protected $updatesApplied = array();
 
     public function getActionRequired() {
         global $w2Pconfig;
@@ -49,27 +49,35 @@ class w2p_Core_UpgradeManager {
         }
         return $this->action;
     }
+
     public function getConfigDir() {
         return $this->configDir;
     }
+
     public function getConfigFile() {
         return $this->configFile;
     }
+
     public function getUploadDir() {
         return $this->uploadDir;
     }
+
     public function getLanguageDir() {
         return $this->languageDir;
     }
+
     public function getTempDir() {
         return $this->tempDir;
     }
+
     public function getConfigOptions() {
         return $this->configOptions;
     }
-    private function _setConfigOptions($dbConfig) {
+
+    protected function _setConfigOptions($dbConfig) {
         $this->configOptions = $dbConfig;
     }
+
     public function upgradeSystem() {
         $allErrors = array();
         set_time_limit(0);
@@ -99,9 +107,11 @@ class w2p_Core_UpgradeManager {
 
         return $allErrors;
     }
+
     public function getUpdatesApplied() {
         return $this->updatesApplied;
     }
+
     public function convertDotProject() {
         $dpVersion = '';
         set_time_limit(0);
@@ -154,6 +164,7 @@ class w2p_Core_UpgradeManager {
 
         return $allErrors;
     }
+
     public function createConfigString($dbConfig) {
         $configFile = file_get_contents('../includes/config-dist.php');
         $configFile = str_replace('[DBTYPE]', $dbConfig['dbtype'], $configFile);
@@ -167,6 +178,7 @@ class w2p_Core_UpgradeManager {
 
         return $configFile;
     }
+
     public function getMaxFileUpload() {
         $maxfileuploadsize = min($this->_getIniSize(ini_get('upload_max_filesize')), $this->_getIniSize(ini_get('post_max_size')));
         $memory_limit = $this->_getIniSize(ini_get('memory_limit'));
@@ -180,6 +192,7 @@ class w2p_Core_UpgradeManager {
 
         return $maxfileuploadsize;
     }
+
     public function testDatabaseCredentials($w2Pconfig) {
         $result = false;
 
@@ -192,12 +205,13 @@ class w2p_Core_UpgradeManager {
 
         return $result;
     }
+
     public function upgradeRequired() {
         $dbConn = $this->_openDBConnection();
         return (count($this->_getMigrations()) > $this->_getDatabaseVersion($dbConn));
     }
 
-    private function _getIniSize($val) {
+    protected function _getIniSize($val) {
        $val = trim($val);
        if (strlen($val <= 1)) return $val;
        $last = $val{strlen($val)-1};
@@ -214,7 +228,8 @@ class w2p_Core_UpgradeManager {
                return $val;
        }
     }
-    private function _getMigrations() {
+
+    protected function _getMigrations() {
         $migrations = array();
 
         $path = W2P_BASE_DIR.'/install/sql/'.$this->configOptions['dbtype'];
@@ -229,7 +244,8 @@ class w2p_Core_UpgradeManager {
         sort($migrations);
         return $migrations;
     }
-    private function _getDatabaseVersion($dbConn) {
+
+    protected function _getDatabaseVersion($dbConn) {
 
         $sql = "SELECT max(db_version) FROM w2pversion";
         $res = $dbConn->Execute($sql);
@@ -242,14 +258,16 @@ class w2p_Core_UpgradeManager {
 
         return $currentVersion;
     }
-    private function _prepareConfiguration() {
+
+    protected function _prepareConfiguration() {
         $this->configDir = W2P_BASE_DIR.'/includes';
         $this->configFile = W2P_BASE_DIR.'/includes/config.php';
         $this->uploadDir = W2P_BASE_DIR.'/files';
         $this->languageDir = W2P_BASE_DIR.'/locales/en';
         $this->tempDir = W2P_BASE_DIR.'/files/temp';
     }
-    private function _applySQLUpdates($sqlfile, $dbConn) {
+
+    protected function _applySQLUpdates($sqlfile, $dbConn) {
         $sqlfile = W2P_BASE_DIR.'/install/sql/'.$this->configOptions['dbtype'].'/'.$sqlfile;
         if (!file_exists($sqlfile) || filesize($sqlfile) == 0) {
             return array();
@@ -291,10 +309,12 @@ class w2p_Core_UpgradeManager {
 
         return $errorMessages;
     }
-    private function _splitSQLUpdates($sql) {
+
+    protected function _splitSQLUpdates($sql) {
         return explode(';', $sql);
     }
-    private function _openDBConnection() {
+
+    protected function _openDBConnection() {
         /*
          * While this seems like a good place to use the core classes, it's
          * really not.  With all of the dependencies, it just gets to be a huge
@@ -320,7 +340,8 @@ class w2p_Core_UpgradeManager {
         }
         return $db;
     }
-    private function _scrubDotProjectData($dbConn) {
+
+    protected function _scrubDotProjectData($dbConn) {
         /*
          * While this seems like a good place to use the core classes, it's
          * really not.  With all of the dependencies, it just gets to be a huge
