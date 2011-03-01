@@ -113,7 +113,10 @@ getEventLinks($first_time, $last_time, $links, 20);
 
 $moduleList = $AppUI->getLoadableModuleList();
 foreach ($moduleList as $module) {
-    $object = new $module['mod_main_class']();
+	if (!in_array($module['mod_main_class'], get_declared_classes())) {
+		require_once ($AppUI->getModuleClass($module['mod_directory']));
+	}
+	$object = new $module['mod_main_class']();
     if (is_callable(array($object, 'hook_calendar')) &&
         is_callable(array($object, 'getCalendarLink'))) {
         $itemList = $object->hook_calendar($AppUI->user_id);
