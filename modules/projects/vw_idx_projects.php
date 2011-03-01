@@ -117,9 +117,18 @@ if ($is_tabbed) {
 		<tr>
             <?php
             $fields = w2p_Core_Module::getSettings('projects', 'index_list');
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
+            if (count($fields) > 0) {
+                foreach ($fields as $field => $text) {
+                    $fieldList[] = $field;
+                    $fieldNames[] = $text;
+                }
+            } else {
+                $fieldList = array('project_color_identifier', 'project_priority', 
+                    'project_name', 'company_name', 'project_start_date',
+                    'project_end_date', 'project_actual_end_date', 'task_log_problem',
+                    'user_username', 'project_task_count');
+                $fieldNames = array('Color', 'P', 'Project Name', 'Company',
+                    'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
             }
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
