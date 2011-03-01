@@ -123,7 +123,9 @@ if ($is_tabbed) {
                     $fieldNames[] = $text;
                 }
             } else {
-                $fieldList = array('project_color_identifier', 'project_priority', 
+                // TODO: This is only in place to provide a fail safe state pre-upgrade
+                //   from earlier versions to v2.3+  In v4.0+, we should deprecate this.
+                $fieldList = array('project_color_identifier', 'project_priority',
                     'project_name', 'company_name', 'project_start_date',
                     'project_end_date', 'project_actual_end_date', 'task_log_problem',
                     'user_username', 'project_task_count');
