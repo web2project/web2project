@@ -1,4 +1,4 @@
-/includes/config.php
+/includes/*config.php
 /reporting.tmp
 /tmp.*
 /unit_tests/reports/
