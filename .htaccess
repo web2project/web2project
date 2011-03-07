@@ -35,7 +35,7 @@
 #   close out previous issues.  In order to install some modules - such as the Task Tracker for the Yahoo Widget Engine- 
 #   have to be manually added to the second FileMatch block in order to allow for external access.
 
-<FilesMatch "(\.(classes|db|files|functions|includes|lib|locales|misc|modules|theme|CVS|.svn)|Entries.*|Repository|Root|(php)|(sql))$"> 
+<FilesMatch "(\.(classes|files|includes|install|lib|locales|modules|CVS|.svn|.git)|Entries.*|Repository|Root|(php)|(sql))$"> 
 	Order deny,allow
 	Deny from all
 </FilesMatch>

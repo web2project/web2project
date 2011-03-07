@@ -260,6 +260,7 @@ class w2p_Output_GanttRenderer {
         {
             $today = date('y-m-d');
             $vline = new GanttVLine($today, $this->todayText);
+            $vline->title->setFont(FF_CUSTOM, FS_NORMAL, 8);
             $this->graph->Add($vline);
         }
         ($filename == '') ? $this->graph->Stroke() : $this->graph->Stroke($filename);

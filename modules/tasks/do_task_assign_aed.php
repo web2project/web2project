@@ -20,7 +20,7 @@ $hperc_assign_ar = array();
 if (isset($hassign)) {
 	$tarr = explode(',', $hassign);
 	foreach ($tarr as $uid) {
-		if (intval($uid) > 0) {
+		if ((int) $uid) {
 			$hperc_assign_ar[$uid] = $percentage_assignment;
 		}
 	}
@@ -31,7 +31,7 @@ $htasks_ar = array();
 if (isset($htasks)) {
 	$tarr = explode(',', $htasks);
 	foreach ($tarr as $tid) {
-		if (intval($tid) > 0) {
+		if ((int) $tid) {
 			$htasks_ar[] = $tid;
 		}
 	}

@@ -58,7 +58,7 @@ if ($filter_param != '' || $page) {
 	$q->addTable('contacts');
 	$q->addWhere('contact_id = user_contact');
 	$q->addWhere($filter);
-	$count = intval($q->loadResult());
+	$count = (int) $q->loadResult();
 
 	$q = new w2p_Database_Query;
 	$q->addQuery('history_date, history_id, history_item, history_table, history_description, history_action');

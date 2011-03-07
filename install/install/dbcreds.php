@@ -29,20 +29,20 @@
 		<tr>
 			<td class="item">Database Host Name</td>
 			<td align="left">
-				<input class="button" type="text" name="dbhost" value="" title="The name of the host the database server is installed on" />
+				<input class="text" type="text" name="dbhost" value="" title="The name of the host the database server is installed on" />
 			</td>
 		</tr>
 		<tr>
 			<td class="item">Database Name</td>
-			<td align="left"><input class="button" type="text" name="dbname" value="" title="The name of the database web2project will use and/or install" /></td>
+			<td align="left"><input class="text" type="text" name="dbname" value="" title="The name of the database web2project will use and/or install" /></td>
 		</tr>
 		<tr>
 			<td class="item">Database User Name</td>
-			<td align="left"><input class="button" type="text" name="dbuser" value="" title="The database user that web2project uses for database connection" /></td>
+			<td align="left"><input class="text" type="text" name="dbuser" value="" title="The database user that web2project uses for database connection" /></td>
 		</tr>
 		<tr>
 			<td class="item">Database User Password</td>
-			<td align="left"><input class="button" type="password" name="dbpass" value="" title="The password for the above user." /></td>
+			<td align="left"><input class="text" type="password" name="dbpass" value="" title="The password for the above user." /></td>
 		</tr>
 		<tr>
 			<td class="item">Use Persistent Connection?</td>
@@ -53,7 +53,7 @@
 			<span style="font-style: italic; ">After installation is complete, you will log in using the username "admin" (no quotes) and this password.  If you do not provide one, "passwd" (no quotes) will be used.</span>
 			</td>
 			<td align="left">
-				<input class="button" type="password" name="adminpass" value="" title="The password for the admin user." />
+				<input class="text" type="password" name="adminpass" value="" title="The password for the admin user." />
 			</td>
 		</tr>
 		<tr>

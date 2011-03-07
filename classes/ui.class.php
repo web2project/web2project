@@ -125,6 +125,14 @@ class CAppUI {
     public $long_date_format = null;
 
 	private $objStore = null;
+
+        /**
+         * Holds an array of additional javascript files to be loaded
+         * in the footer of the page
+         *
+         * @var array
+         */
+        private $footerJavascriptFiles = array();
 	/**
 
 	 * CAppUI Constructor
@@ -158,6 +166,7 @@ class CAppUI {
 	 */
     public function getSystemClass($name = null) {
         trigger_error("CAppUI->getSystemClass() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE );
+
 		if ($name) {
 			return W2P_BASE_DIR . '/classes/' . $name . '.class.php';
 		}
@@ -321,13 +330,16 @@ class CAppUI {
 	 */
 	public function readDirs($path) {
 		$dirs = array();
-		$d = dir(W2P_BASE_DIR . '/' . $path);
-		while (false !== ($name = $d->read())) {
-			if (is_dir(W2P_BASE_DIR . '/' . $path . '/' . $name) && $name != '.' && $name != '..' && $name != 'CVS' && $name != '.svn') {
-				$dirs[$name] = $name;
+
+		if (is_dir(W2P_BASE_DIR . '/' . $path)) {
+			$d = dir(W2P_BASE_DIR . '/' . $path);
+			while (false !== ($name = $d->read())) {
+				if (is_dir(W2P_BASE_DIR . '/' . $path . '/' . $name) && $name != '.' && $name != '..' && $name != 'CVS' && $name != '.svn') {
+					$dirs[$name] = $name;
+				}
 			}
+			$d->close();
 		}
-		$d->close();
 		return $dirs;
 	}
 
@@ -1116,6 +1128,19 @@ class CAppUI {
 		}
 	}
 
+	public function addFooterJavascriptFile($pathTo) {
+		if(!in_array($pathTo, $this->footerJavascriptFiles)) {
+			$base = W2P_BASE_URL;
+			if (substr($base, -1) != '/') {
+				$base .= '/';
+			}
+			if(strpos($pathTo, $base) === false) {
+				$pathTo = $base . $pathTo;
+			}
+			$this->footerJavascriptFiles[] = $pathTo;
+		}
+	}
+
 	public function loadFooterJS() {
 		$s = '<script type="text/javascript">';
 		$s .= '$(document).ready(function() {';
@@ -1129,6 +1154,13 @@ class CAppUI {
         }
 		$s .= '});';
 		$s .= '</script>';
+
+		if(is_array($this->footerJavascriptFiles) and !empty($this->footerJavascriptFiles)) {
+			while($jsFile = array_pop($this->footerJavascriptFiles)) {
+				$s .= "<script type='text/javascript' src='" . $jsFile . "'></script>";
+			}
+		}
+
 		echo $s;
 	}
 

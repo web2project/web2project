@@ -1,0 +1,2 @@
+Report Completo
+Genera uno snapshot completo per tutti i progetti

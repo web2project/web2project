@@ -12,36 +12,42 @@
 
 /*
 	@package xajax
-	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@version $Id: xajaxRequest.inc.php 1620 2011-02-10 17:46:07Z pedroix $
+	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
 
 /*
 	Constant: XAJAX_FORM_VALUES
 		Specifies that the parameter will consist of an array of form values.
-		
+*/
+if (!defined ('XAJAX_FORM_VALUES')) define ('XAJAX_FORM_VALUES', 'get form values');
+/*		
 	Constant: XAJAX_INPUT_VALUE
 		Specifies that the parameter will contain the value of an input control.
-		
+*/
+if (!defined ('XAJAX_INPUT_VALUE')) define ('XAJAX_INPUT_VALUE', 'get input value');
+/*		
 	Constant: XAJAX_CHECKED_VALUE
 		Specifies that the parameter will consist of a boolean value of a checkbox.
-		
+*/
+if (!defined ('XAJAX_CHECKED_VALUE')) define ('XAJAX_CHECKED_VALUE', 'get checked value');
+/*		
 	Constant: XAJAX_ELEMENT_INNERHTML
 		Specifies that the parameter value will be the innerHTML value of the element.
-		
+*/
+if (!defined ('XAJAX_ELEMENT_INNERHTML')) define ('XAJAX_ELEMENT_INNERHTML', 'get element innerHTML');
+/*		
 	Constant: XAJAX_QUOTED_VALUE
 		Specifies that the parameter will be a quoted value (string).
-		
+*/
+if (!defined ('XAJAX_QUOTED_VALUE')) define ('XAJAX_QUOTED_VALUE', 'quoted value');
+/*		
 	Constant: XAJAX_JS_VALUE
 		Specifies that the parameter will be a non-quoted value (evaluated by the 
 		browsers javascript engine at run time.
 */
-if (!defined ('XAJAX_FORM_VALUES')) define ('XAJAX_FORM_VALUES', 'get form values');
-if (!defined ('XAJAX_INPUT_VALUE')) define ('XAJAX_INPUT_VALUE', 'get input value');
-if (!defined ('XAJAX_CHECKED_VALUE')) define ('XAJAX_CHECKED_VALUE', 'get checked value');
-if (!defined ('XAJAX_ELEMENT_INNERHTML')) define ('XAJAX_ELEMENT_INNERHTML', 'get element innerHTML');
-if (!defined ('XAJAX_QUOTED_VALUE')) define ('XAJAX_QUOTED_VALUE', 'quoted value');
 if (!defined ('XAJAX_JS_VALUE')) define ('XAJAX_JS_VALUE', 'unquoted value');
 
 /*
@@ -62,7 +68,7 @@ class xajaxRequest
 		
 		The name of the function.
 	*/
-	var $sName;
+	private $sName;
 	
 	/*
 		String: sQuoteCharacter
@@ -71,7 +77,7 @@ class xajaxRequest
 		that will be used during the generation of the javascript for
 		this function.  This can be set prior to calling <xajaxRequest->printScript>
 	*/
-	var $sQuoteCharacter;
+	private $sQuoteCharacter;
 	
 	/*
 		Array: aParameters
@@ -79,7 +85,7 @@ class xajaxRequest
 		An array of parameters that will be used to populate the argument list
 		for this function when the javascript is output in <xajaxRequest->printScript>	
 	*/
-	var $aParameters;
+	private $aParameters;
 	
 	/*
 		Function: xajaxRequest
@@ -88,7 +94,7 @@ class xajaxRequest
 		
 		sName - (string):  The name of this request.
 	*/
-	function xajaxRequest($sName)
+	public function __construct($sName)
 	{
 		$this->aParameters = array();
 		$this->sQuoteCharacter = '"';
@@ -101,7 +107,7 @@ class xajaxRequest
 		Call this to instruct the request to use single quotes when generating
 		the javascript.
 	*/
-	function useSingleQuote()
+	public function useSingleQuote()
 	{
 		$this->sQuoteCharacter = "'";
 	}
@@ -112,7 +118,7 @@ class xajaxRequest
 		Call this to instruct the request to use double quotes while generating
 		the javascript.
 	*/
-	function useDoubleQuote()
+	public function useDoubleQuote()
 	{
 		$this->sQuoteCharacter = '"';
 	}
@@ -122,7 +128,7 @@ class xajaxRequest
 		
 		Clears the parameter list associated with this request.
 	*/
-	function clearParameters()
+	public function clearParameters()
 	{
 		$this->aParameters = array();
 	}
@@ -135,9 +141,10 @@ class xajaxRequest
 		sType - (string): The type of the value to be used.
 		sValue - (string: The value to be used.
 		
+		See Also:
 		See <xajaxRequest->setParameter> for details.
 	*/
-	function addParameter()
+	public function addParameter()
 	{
 		$aArgs = func_get_args();
 		
@@ -153,9 +160,13 @@ class xajaxRequest
 		
 		Sets a specific parameter value.
 		
+		Parameters:
+		
 		nParameter - (number): The index of the parameter to set
 		sType - (string): The type of value
 		sValue - (string): The value as it relates to the specified type
+		
+		Note:
 		
 		Types should be one of the following <XAJAX_FORM_VALUES>, <XAJAX_QUOTED_VALUE>,
 		<XAJAX_JS_VALUE>, <XAJAX_INPUT_VALUE>, <XAJAX_CHECKED_VALUE>.  
@@ -166,9 +177,8 @@ class xajaxRequest
 				variable name that will be in scope at the time of the call or a 
 				javascript function call whose return value will become the parameter.
 				
-		TODO: finish documenting the options.
 	*/
-	function setParameter()
+	public function setParameter()
 	{
 		$aArgs = func_get_args();
 		
@@ -239,7 +249,7 @@ class xajaxRequest
 		Returns a string representation of the script output (javascript) from 
 		this request object.  See also:  <xajaxRequest::printScript>
 	*/
-	function getScript()
+	public function getScript()
 	{
 		ob_start();
 		$this->printScript();
@@ -252,23 +262,21 @@ class xajaxRequest
 		Generates a block of javascript code that can be used to invoke
 		the specified xajax request.
 	*/
-	function printScript()
+	public function printScript()
 	{
-		$sOutput = $this->sName;
-		$sOutput .= "(";
+		echo $this->sName;
+		echo '(';
 		
-		$sSeparator = "";
+		$sSeparator = '';
 		
 		foreach ($this->aParameters as $sParameter)
 		{
-			$sOutput .= $sSeparator;
-			$sOutput .= $sParameter;
-			$sSeparator = ", ";
+			echo $sSeparator;
+			echo $sParameter;
+			$sSeparator = ', ';
 		}
 		
-		$sOutput .= ")";
-		
-		print $sOutput;
+		echo ')';
 	}
 }
 
@@ -296,6 +304,8 @@ class xajaxCustomRequest extends xajaxRequest
 		Function: xajaxCustomRequest
 		
 		Constructs and initializes an instance of the object.
+		
+		Parameters:
 		
 		sScript - (string):  The javascript (template) that will be printed
 			upon request.
@@ -325,6 +335,11 @@ class xajaxCustomRequest extends xajaxRequest
 		Sets a value that will be used to modify the script before it is sent to
 		the browser.  The <xajaxCustomRequest> object will perform a string 
 		replace operation on each of the values set with this function.
+		
+		Parameters:
+			$sName - (string): Variable name
+			$sValue - (string): Value
+		
 	*/
 	function setVariable($sName, $sValue)
 	{

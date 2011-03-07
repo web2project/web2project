@@ -27,17 +27,17 @@ if (empty($query_string)) {
 }
 
 // Number of columns (used to calculate how many columns to span things through)
-$cols = 13;
+$cols = 20;
 
 /*
 * Let's figure out which tasks are selected
 */
-$task_id = intval(w2PgetParam($_GET, 'task_id', 0));
+$task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
 $q = new w2p_Database_Query;
-$pinned_only = intval(w2PgetParam($_GET, 'pinned', 0));
+$pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
 if (isset($_GET['pin'])) {
-	$pin = intval(w2PgetParam($_GET, 'pin', 0));
+	$pin = (int) w2PgetParam($_GET, 'pin', 0);
 	$msg = '';
 
 	// load the record data
@@ -56,14 +56,14 @@ if (isset($_GET['pin'])) {
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $taskPriority = w2PgetSysVal('TaskPriority');
 
-$task_project = intval(w2PgetParam($_GET, 'task_project', null));
+$task_project = (int) w2PgetParam($_GET, 'task_project', null);
 
 $task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', '');
 $task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
 $task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', '');
 $task_sort_type2 = w2PgetParam($_GET, 'task_sort_type2', '');
-$task_sort_order1 = intval(w2PgetParam($_GET, 'task_sort_order1', 0));
-$task_sort_order2 = intval(w2PgetParam($_GET, 'task_sort_order2', 0));
+$task_sort_order1 = (int) w2PgetParam($_GET, 'task_sort_order1', 0);
+$task_sort_order2 = (int) w2PgetParam($_GET, 'task_sort_order2', 0);
 if (isset($_POST['show_task_options'])) {
 	$AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
 }
@@ -129,6 +129,7 @@ $q2->clear();
 $q->addQuery('tasks.task_id, task_parent, task_name');
 $q->addQuery('task_start_date, task_end_date, task_dynamic');
 $q->addQuery('task_pinned, pin.user_id as pin_user');
+$q->addQuery('ut.user_task_priority');
 $q->addQuery('task_priority, task_percent_complete');
 $q->addQuery('task_duration, task_duration_type');
 $q->addQuery('task_project, task_represents_project');
@@ -162,7 +163,6 @@ if (!empty($mods['history']) && canView('history')) {
 
 $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
 $q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');
-
 $q->leftJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
 $q->leftJoin('users', 'assignees', 'assignees.user_id = ut.user_id');
 $q->leftJoin('contacts', 'co', 'co.contact_id = usernames.user_contact');
@@ -259,12 +259,12 @@ if (($project_id || $task_id) && $showIncomplete) {
 
 $task_status = 0;
 if ($min_view && isset($_GET['task_status'])) {
-	$task_status = intval(w2PgetParam($_GET, 'task_status', null));
+	$task_status = (int) w2PgetParam($_GET, 'task_status', null);
 } elseif ($currentTabId == 1 && $project_id) {
 	$task_status = -1;
 } elseif (!$currentTabName) {
 	// If we aren't tabbed we are in the tasks list.
-	$task_status = intval($AppUI->getState('inactive'));
+	$task_status = (int) $AppUI->getState('inactive');
 }
 
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
@@ -304,7 +304,7 @@ if (count($allowedTasks)) {
 // Filter by company
 if (!$min_view && $f2 != 'allcompanies') {
 	$q->addJoin('companies', 'c', 'c.company_id = p.project_company', 'inner');
-	$q->addWhere('company_id = ' . intval($f2));
+	$q->addWhere('company_id = ' . (int) $f2);
 }
 
 $q->addGroup('tasks.task_id');
@@ -462,6 +462,7 @@ if ($project_id) {
 		<th width="10"><?php echo $AppUI->_('Log'); ?></th>
 		<th width="20"><?php echo $AppUI->_('Work'); ?></th>
 		<th align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
+		<th align="center"><?php sort_by_item_title('U', 'user_task_priority', SORT_NUMERIC); ?></th>
 		<th width="200"><?php sort_by_item_title('Task Name', 'task_name', SORT_STRING); ?></th>
 		<th nowrap="nowrap"><?php sort_by_item_title('Task Owner', 'user_username', SORT_STRING); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users') ?></th>
@@ -524,8 +525,8 @@ if ($project_id) {
 											<strong><?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?></strong></span>
 										</a>
 									</td>
-									<td width="<?php echo (101 - intval($p['project_percent_complete'])); ?>%">
-										<?php echo (intval($p['project_percent_complete'])); ?>%
+									<td width="<?php echo (101 - (int) $p['project_percent_complete']); ?>%">
+										<?php echo (int) $p['project_percent_complete']; ?>%
 									</td>
 							  </tr>
 						  </table>

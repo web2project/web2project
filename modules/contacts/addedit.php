@@ -51,8 +51,6 @@ if (!$row && $contact_id > 0) {
 $canDelete = $row->canDelete($msg, $contact_id);
 $is_user = $row->isUser($contact_id);
 
-$countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
-
 $df = $AppUI->getPref('SHDATEFORMAT');
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
@@ -76,6 +74,8 @@ if ($contact_id == 0 && $company_id > 0) {
 
 $methods = $row->getContactMethods();
 $methodLabels = w2PgetSysVal('ContactMethods');
+$countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
+		array('-' => '----') + w2PgetSysVal('GlobalCountries');
 
 ?>
 

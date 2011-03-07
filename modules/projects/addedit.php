@@ -163,12 +163,10 @@ function popContacts() {
 }
 
 function setContacts(contact_id_string){
-	var selected_contacts_id = document.getElementById('project_contacts').value;
 	if(!contact_id_string){
 		contact_id_string = '';
 	}
 	document.editFrm.project_contacts.value = contact_id_string;
-	selected_contacts_id = contact_id_string;
 }
 
 function popDepartment() {

@@ -11,9 +11,12 @@ $structprojs = getProjects();
 if (isset($_GET['update_project_status']) && isset($_GET['project_status']) && isset($_GET['project_id'])) {
 	$projects_id = w2PgetParam($_GET, 'project_id', array()); // This must be an array
 	$statusId = w2PgetParam($_GET, 'project_status', 0);
+	$project = new CProject();
 
 	foreach ($projects_id as $project_id) {
-		CProject::updateStatus($AppUI, $project_id, $statusId);
+		$project->load($project_id);
+		$project->project_status = $statusId;
+		$project->store($AppUI);
 	}
 }
 

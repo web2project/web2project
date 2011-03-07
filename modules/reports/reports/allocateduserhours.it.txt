@@ -1,0 +1,2 @@
+Ore utente assegnate
+Questo report mostra quante ore sono assegnate a un utente nel periodo di tempo specificato.

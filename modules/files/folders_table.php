@@ -290,14 +290,14 @@ function displayFiles($folder) {
 
 	// SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
-	$q->addTable('files');
-	$q->addQuery('files.*,count(file_version) as file_versions,round(max(file_version), 2) as file_lastversion,file_folder_id, file_folder_name,project_name, project_color_identifier,contact_first_name, contact_last_name,task_name,task_id');
-	$q->addJoin('projects', 'p', 'p.project_id = file_project');
-	$q->addJoin('users', 'u', 'u.user_id = file_owner');
-	$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-	$q->addJoin('tasks', 't', 't.task_id = file_task');
+	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(file_version), 2) as file_lastversion');
+	$q->addQuery('ff.*');
+	$q->addTable('files', 'f');
 	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-	$q->addWhere('file_folder = ' . (int)$folder);
+	$q->addJoin('projects', 'p', 'p.project_id = file_project');
+	$q->addJoin('tasks', 't', 't.task_id = file_task');
+	$q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
+	$q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 	if (count($deny1) > 0) {
 		$q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
 	}
@@ -311,30 +311,26 @@ function displayFiles($folder) {
 		$q->addWhere('file_task = ' . (int)$task_id);
 	}
 	if ($company_id) {
-		$q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
-		$q->addWhere('company_id = ' . (int)$company_id);
-		$q->addWhere('company_id IN (' . $allowed_companies . ')');
+		$q->addWhere('project_company = ' . (int)$company_id);
 	}
-
-	$q->addGroup('file_folder');
-	$q->addGroup('project_name');
-	$q->addGroup('file_version_id');
-
-	$q->addOrder('file_folder');
-	$q->addOrder('project_name');
-	$q->addOrder('file_name');
-
 	$q->setLimit($xpg_pagesize, $xpg_min);
+	$q->addWhere('file_folder = ' . (int)$folder);
+	$q->addGroup('file_version_id DESC');
 
 	$qv = new w2p_Database_Query();
 	$qv->addTable('files');
-	$qv->addQuery('files.file_id, file_version, file_project, file_name, file_task, file_description, user_username as file_owner, file_size, file_category, file_type, file_date, file_folder_name, file_co_reason, contact_first_name, contact_last_name');
+	$qv->addQuery('file_id, file_version, file_project, file_name, file_task,
+		file_description, u.user_username as file_owner, file_size, file_category,
+		task_name, file_version_id,  file_checkout, file_co_reason, file_type,
+		file_date, cu.user_username as co_user, project_name,
+		project_color_identifier, project_owner, con.contact_first_name,
+		con.contact_last_name, co.contact_first_name as co_contact_first_name,
+		co.contact_last_name as co_contact_last_name ');
 	$qv->addJoin('projects', 'p', 'p.project_id = file_project');
 	$qv->addJoin('users', 'u', 'u.user_id = file_owner');
-	$qv->addJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+	$qv->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
 	$qv->addJoin('tasks', 't', 't.task_id = file_task');
 	$qv->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-	$qv->addWhere('file_folder = ' . (int)$folder);
 	if ($project_id) {
 		$qv->addWhere('file_project = ' . (int)$project_id);
 	}
@@ -342,22 +338,23 @@ function displayFiles($folder) {
 		$qv->addWhere('file_task = ' . (int)$task_id);
 	}
 	if ($company_id) {
-		$qv->innerJoin('companies', 'co', 'co.company_id = p.project_company');
-		$qv->addWhere('company_id = ' . (int)$company_id);
-		$qv->addWhere('company_id IN (' . $allowed_companies . ')');
+		$qv->addWhere('project_company = ' . (int)$company_id);
 	}
+	$qv->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
+	$qv->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
+	$qv->addWhere('file_folder = ' . (int)$folder);
 
 	$files = array();
 	$file_versions = array();
     $files = $q->loadList();
-    $file_versions = $qv->loadList();
+    $file_versions = $qv->loadHashList('file_id');
     $q->clear();
     $qv->clear();
 
 	if ($files === array()) {
 		return 0;
 	}
-	
+
 	$s = '
 		<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 		<tr>
@@ -365,6 +362,7 @@ function displayFiles($folder) {
 			<th>' . $AppUI->_('Description') . '</th>
 			<th>' . $AppUI->_('Versions') . '</th>
 		    <th>' . $AppUI->_('Category') . '</th>
+			<th>' . $AppUI->_('Folder') . '</th>
 			<th nowrap="nowrap">' . $AppUI->_('Task Name') . '</th>
 			<th>' . $AppUI->_('Owner') . '</th>
 			<th>' . $AppUI->_('Size') . '</th>
@@ -381,29 +379,31 @@ function displayFiles($folder) {
 
 	$id = 0;
 	foreach ($files as $row) {
-		$file_date = new w2p_Utilities_Date($row['file_date']);
+		$latest_file = $file_versions[$row['latest_id']];
+		$file_date = new w2p_Utilities_Date($latest_file['file_date']);
 
-		if ($fp != $row['file_project']) {
-			if (!$row['project_name']) {
-				$row['project_name'] = $AppUI->_('All Projects');
-				$row['project_color_identifier'] = 'f4efe3';
+		if ($fp != $latest_file['file_project']) {
+			if (!$latest_file['file_project']) {
+				$latest_file['project_name'] = $AppUI->_('Not associated to a project');
+				$latest_file['project_color_identifier'] = 'f4efe3';
 			}
 			if ($showProject) {
-				$s .= '<tr><td colspan="20" style="background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">';
-				if ($row['file_project'] > 0) {
-					$href = './index.php?m=projects&a=view&project_id=' . $row['file_project'];
+				$style = 'background-color:#' . $latest_file['project_color_identifier'] . ';color:' . bestColor($latest_file['project_color_identifier']);
+				$s = '<tr>';
+				$s .= '<td colspan="20" style="border: outset 2px #eeeeee;' . $style . '">';
+				if ($latest_file['file_project'] > 0) {
+					$href = './index.php?m=projects&a=view&project_id=' . $latest_file['file_project'];
 				} else {
 					$href = './index.php?m=projects';
 				}
-				$s .= '<a href="' . $href . '">' . $row['project_name'] . '</a></font></td></tr>';
+				$s .= '<a href="' . $href . '">';
+				$s .= '<span style="' . $style . '">' . $latest_file['project_name'] . '</span></a>';
+				$s .= '</td></tr>';
+				echo $s;
 			}
 		}
-		$fp = $row['file_project'];
-		if ($row['file_versions'] > 1) {
-			$file = last_file($file_versions, $row['file_name'], $row['file_project']);
-		} else {
-			$file = $row;
-		}
+		$fp = $latest_file['file_project'];
+
 		$s .= '
 			<form name="frm_remove_file_' . $file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
 			<input type="hidden" name="dosql" value="do_file_aed" />
@@ -420,137 +420,81 @@ function displayFiles($folder) {
 			<tr>
 				<td nowrap="8%">';
 		$file_icon = getIcon($row['file_type']);
-		$s .= '<a href="./fileviewer.php?file_id=' . $file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $row['file_name'] . '</a></td><td width="20%">' . w2p_textarea($file['file_description']) . '</td><td width="5%" nowrap="nowrap" align="right">';
+		$s .= '<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $latest_file['file_name'] . '</a></td>';
+		$s .= '<td width="20%">' . w2p_textarea($latest_file['file_description']) . '</td><td width="5%" nowrap="nowrap" align="right">';
 		$hidden_table = '';
 		$s .= $row['file_lastversion'];
 		if ($row['file_versions'] > 1) {
-			$s .= ' <a href="javascript: void(0);" onClick="expand(\'versions_' . $file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
+			$s .= ' <a href="javascript: void(0);" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
 			$hidden_table = '<tr><td colspan="20">
-							<table style="display: none" id="versions_' . $file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+							<table style="display: none" id="versions_' . $latest_file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 							<tr>
 							        <th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
 							        <th>' . $AppUI->_('Description') . '</th>
 							        <th>' . $AppUI->_('Versions') . '</th>
 							        <th>' . $AppUI->_('Category') . '</th>
+									<th>' . $AppUI->_('Folder') . '</th>
 							        <th nowrap="nowrap">' . $AppUI->_('Task Name') . '</th>
 							        <th>' . $AppUI->_('Owner') . '</th>
 							        <th>' . $AppUI->_('Size') . '</th>
 							        <th>' . $AppUI->_('Type') . '</a></th>
 							        <th>' . $AppUI->_('Date') . '</th>
-						    		<th nowrap="nowrap">' . $AppUI->_('co Reason') . '</th>
-						    		<th>' . $AppUI->_('co') . '</th>
-							        <th nowrap width="1"></th>
-							        <th nowrap width="1"></th>
+						    		<th nowrap="nowrap">&nbsp;</th>
 							</tr>';
-			foreach ($file_versions as $file_row) {
-				if ($file_row['file_name'] == $row['file_name'] && $file_row['file_project'] == $row['file_project']) {
-					$file_icon = getIcon($file_row['file_type']);
-					$file_date = new w2p_Utilities_Date($file_row['file_date']);
-					$hidden_table .= '<form name="frm_delete_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-									<input type="hidden" name="dosql" value="do_file_aed" />
-									<input type="hidden" name="del" value="1" />
-									<input type="hidden" name="file_id" value="' . $file_row['file_id'] . '" />
-									<input type="hidden" name="redirect" value="' . $current_uri . '" />
-									</form>';
-					$hidden_table .= '<form name="frm_duplicate_sub_file_' . $file_row['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-									<input type="hidden" name="dosql" value="do_file_aed" />
-									<input type="hidden" name="duplicate" value="1" />
-									<input type="hidden" name="file_id" value="' . $file_row['file_id'] . '" />
-									<input type="hidden" name="redirect" value="' . $current_uri . '" />
-									</form>';
-					$hidden_table .= '<tr>
-					                <td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file_row['file_id'] . '" 
-					                        title="' . $file_row['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $file_row['file_name'] . '
-					                </a></td>
-					                <td width="20%">' . $file_row['file_description'] . '</td>
-					                <td width="5%" nowrap="nowrap" align="right">' . $file_row['file_version'] . '</td>
-					                <td width="10%" nowrap="nowrap" align="left"><a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . ($file_row['file_category'] + 1) . '">' . $file_types[$file_row['file_category'] + 1] . '</a></td>
-					                <td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=' . $file_row['file_task'] . '">' . $row['task_name'] . '</a></td>
-					                <td width="15%" nowrap="nowrap">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</td>
-					                <td width="5%" nowrap="nowrap" align="right">' . intval($file_row['file_size'] / 1024) . 'kb </td>
-					                <td width="15%" nowrap="nowrap">' . $file_row['file_type'] . '</td>
-					                <td width="15%" nowrap="nowrap" align="center">' . $AppUI->formatTZAwareTime($file_row['file_date'], $df . ' ' . $tf) . '</td>
-				        			<td width="10%">' . $row['file_co_reason'] . '</td>
-				        			<td nowrap="nowrap" align="center">';
-					if (empty($file_row['file_checkout'])) {
-						$hidden_table .= '<a href="?m=files&a=co&file_id=' . $file_row['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
-					} else {
-						if ($row['file_checkout'] == $AppUI->user_id) {
-							$hidden_table .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $file_row['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
-						} else {
-							if ($file_row['file_checkout'] == 'final') {
-								$hidden_table .= 'final';
-							} else {
-								$q4 = new w2p_Database_Query;
-								$q4->addQuery('file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name');
-								$q4->addTable('files');
-								$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-								$q4->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
-								$q4->addWhere('file_id = ' . (int)$file_row['file_id']);
-								$co_user = array();
-								$co_user = $q4->loadList();
-								$co_user = $co_user[0];
-								$q4->clear();
-								$hidden_table .= $co_user['contact_first_name'] . ' ' . $co_user['contact_last_name'] . '<br>(' . $co_user['co_user'] . ')';
-							}
-						}
+			foreach ($file_versions as $file) {
+				if ($file['file_version_id'] == $latest_file['file_version_id']) {
+					$file_icon = getIcon($file['file_type']);
+					$hdate = new w2p_Utilities_Date($file['file_date']);
+					$hidden_table .= '<tr><td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" title="' . $file['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $file['file_name'] . '
+					  </a></td>
+					  <td width="20%">' . $file['file_description'] . '</td>
+					  <td width="5%" nowrap="nowrap" align="right">' . $file['file_version'] . '</td>
+					  <td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
+					  <td width="10%" nowrap="nowrap" align="left">' . (($file['file_folder_name'] != '') ? '<a href="' . W2P_BASE_URL . '/index.php?m=files&tab=' . (count($file_types) + 1) . '&folder=' . $file['file_folder_id'] . '">' . w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files') . $file['file_folder_name'] . '</a>' : 'Root') . '</td>
+					  <td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=' . $file['file_task'] . '">' . $file['task_name'] . '</a></td>
+					  <td width="15%" nowrap="nowrap">' . $file['contact_first_name'] . ' ' . $file['contact_last_name'] . '</td>
+					  <td width="5%" nowrap="nowrap" align="right">' . file_size(intval($file['file_size'])) . '</td>
+					  <td nowrap="nowrap">' . $file['file_type'] . '</td>
+					  <td width="15%" nowrap="nowrap" align="center">' . $AppUI->formatTZAwareTime($file['file_date'], $df . ' ' . $tf) . '</td>
+					  <td nowrap="nowrap" width="20">';
+					if ($canEdit && $w2Pconfig['files_show_versions_edit']) {
+						$hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
 					}
-					$hidden_table .= '</td><td nowrap="nowrap" align="right" width="52">';
-					if ($canEdit && (empty($file_row['file_checkout']) || ($file_row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id)))) {
-						$hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file_row['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>" . '<a href="javascript: void(0);" onclick="document.frm_duplicate_sub_file_' . $file_row['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . "</a>" . '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_delete_sub_file_' . $file_row['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . "</a>";
-					}
-					$hidden_table .= '</td>';
-					$hidden_table .= '<td nowrap="nowrap" align="right" width="1">';
-					if ($canEdit && (empty($row['file_checkout']) || ($row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id)))) {
-						$bulk_op = 'onchange="(this.checked) ? addBulkComponent(' . $file_row['file_id'] . ') : removeBulkComponent(' . $file_row['file_id'] . ')"';
-						$hidden_table .= '<input type="checkbox" ' . $bulk_op . ' name="chk_sub_sel_file_' . $file_row['file_id'] . '" />';
-					}
-					$hidden_table .= '</td>';
-					$hidden_table .= '</tr>';
+					$hidden_table .= '</td><tr>';
 				}
 			}
 			$hidden_table .= '</table>';
 		}
 		$s .= '</td>
-				<td width="10%" nowrap="nowrap" align="left"><a href="./index.php?m=' . $m . '&a=' . $a . '&view=categories&tab=' . ($file['file_category']) . '">' . $file_types[$file['file_category']] . '</a></td> 
-				<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=' . $file['task_id'] . '">' . $file['task_name'] . '</a></td>
-				<td width="15%" nowrap="nowrap">' . $file['contact_first_name'] . ' ' . $file['contact_last_name'] . '</td>
-				<td width="5%" nowrap="nowrap" align="right">' . intval($file['file_size'] / 1024) . ' kb</td>
-				<td width="15%" nowrap="nowrap">' . $file['file_type'] . '</td>
-				<td width="15%" nowrap="nowrap" align="center">' . $AppUI->formatTZAwareTime($file['file_date'], $df . ' ' . $tf) . '</td>
-				<td width="10%">' . $file['file_co_reason'] . '</td>
+				<td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
+				<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=' . $latest_file['task_id'] . '">' . $latest_file['task_name'] . '</a></td>
+				<td width="15%" nowrap="nowrap">' . $latest_file['contact_first_name'] . ' ' . $latest_file['contact_last_name'] . '</td>
+				<td width="5%" nowrap="nowrap" align="right">' . intval($latest_file['file_size'] / 1024) . ' kb</td>
+				<td width="15%" nowrap="nowrap">' . $latest_file['file_type'] . '</td>
+				<td width="15%" nowrap="nowrap" align="center">' . $AppUI->formatTZAwareTime($latest_file['file_date'], $df . ' ' . $tf) . '</td>
+				<td width="10%">' . $latest_file['file_co_reason'] . '</td>
 				<td nowrap="nowrap" align="center">';
         if (empty($row['file_checkout'])) {
-        	$s .= '<a href="?m=files&a=co&file_id=' . $file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
+        	$s .= '<a href="?m=files&a=co&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
         } elseif ($row['file_checkout'] == $AppUI->user_id) {
-            $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
+            $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
         } else {
-			if ($file['file_checkout'] == 'final') {
+			if ($latest_file['file_checkout'] == 'final') {
 				$s .= 'final';
 			} else {
-				$q4 = new w2p_Database_Query;
-				$q4->addQuery('file_id, file_checkout, user_username as co_user, contact_first_name, contact_last_name');
-				$q4->addTable('files');
-				$q4->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-				$q4->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
-				$q4->addWhere('file_id = ' . (int)$file['file_id']);
-				$co_user = array();
-				$co_user = $q4->loadList();
-				$co_user = $co_user[0];
-				$q4->clear();
-				$s .= $co_user['contact_first_name'] . ' ' . $co_user['contact_last_name'] . '<br>(' . $co_user['co_user'] . ')';
+				$s .= $latest_file['co_contact_first_name'] . ' ' . $latest_file['co_contact_last_name'] . '<br>(' . $latest_file['co_user'] . ')';
 			}
 		}
 		$s .= '</td><td nowrap="nowrap" align="center" width="52">';
-		if ($canEdit && (empty($file['file_checkout']) || ($file['file_checkout'] == 'final' && ($canEdit || $file['project_owner'] == $AppUI->user_id)))) {
-			$s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
-			$s .= '<a href="javascript: void(0);" onclick="document.frm_duplicate_file_' . $file['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . '</a>';
-			$s .= '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_' . $file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
+		if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
+			$s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
+			$s .= '<a href="javascript: void(0);" onclick="document.frm_duplicate_file_' . $latest_file['file_id'] . '.submit()">' . w2PshowImage('duplicate.png', '16', '16', 'duplicate file', 'duplicate file', 'files') . '</a>';
+			$s .= '<a href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this file?\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
 		}
 		$s .= '<td nowrap="nowrap" align="center" width="1">';
-		if ($canEdit && (empty($file['file_checkout']) || ($file['file_checkout'] == 'final' && ($canEdit || $file['project_owner'] == $AppUI->user_id)))) {
-			$bulk_op = 'onchange="(this.checked) ? addBulkComponent(' . $file['file_id'] . ') : removeBulkComponent(' . $file['file_id'] . ')"';
-			$s .= '<input type="checkbox" ' . $bulk_op . ' name="chk_sel_file_' . $file['file_id'] . '" />';
+		if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
+			$bulk_op = 'onchange="(this.checked) ? addBulkComponent(' . $latest_file['file_id'] . ') : removeBulkComponent(' . $latest_file['file_id'] . ')"';
+			$s .= '<input type="checkbox" ' . $bulk_op . ' name="chk_sel_file_' . $latest_file['file_id'] . '" />';
 		}
 		$s .= '</td></tr>';
 		$s .= $hidden_table;

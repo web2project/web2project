@@ -584,12 +584,13 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
     /**
      * Test reding directories from an invalid path
      *
-     * @expectedException PHPUnit_Framework_Error
      */
     public function testReadDirsInvalidPath()
     {
         global $AppUI;
 
         $dirs = $AppUI->readDirs('blah');
+
+		$this->assertEquals(0,				count($dirs));
     }
 }

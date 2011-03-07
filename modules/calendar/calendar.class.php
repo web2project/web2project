@@ -527,8 +527,9 @@ class CEvent extends w2p_Core_BaseObject {
         $search['table_link'] = 'index.php?m=calendar&a=view&event_id='; // first part of link
         $search['table_title'] = 'Events';
         $search['table_orderby'] = 'event_start_date';
-        $search['search_fields'] = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
-        $search['display_fields'] = array('event_title', 'event_description', 'event_start_date', 'event_end_date');
+        $search['search_fields'] = array('event_title', 'event_description',
+            'event_start_date', 'event_end_date');
+        $search['display_fields'] = $search['search_fields'];
 
         return $search;
     }
@@ -612,11 +613,12 @@ class CEvent extends w2p_Core_BaseObject {
 	public function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0) {
 		global $AppUI;
 
-		// the event times are stored as unix time stamps, just to be different
-
 		// convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
+		$db_start = $AppUI->convertToSystemTZ($db_start);
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
+		$db_end = $AppUI->convertToSystemTZ($db_end);
+
 		if (!isset($user_id)) {
 			$user_id = $AppUI->user_id;
 		}
@@ -670,16 +672,14 @@ class CEvent extends w2p_Core_BaseObject {
 					$$query_set->addWhere('(event_private = 0 OR event_owner=' . (int)$user_id . ')');
 					break;
 			}
-			
+
 			if ($query_set == 'q') { // assemble query for non-recursive events
 				$$query_set->addWhere('(event_recurs <= 0)');
 				// following line is only good for *non-recursive* events
 				$$query_set->addWhere('(event_start_date <= \'' . $db_end . '\' AND event_end_date >= \'' . $db_start . '\' OR event_start_date BETWEEN \'' . $db_start . '\' AND \'' . $db_end . '\')');
-				//print_r($q->prepare());
 				$eventList = $$query_set->loadList();
 			} elseif ($query_set == 'r') { // assemble query for recursive events
 				$$query_set->addWhere('(event_recurs > 0)');
-				//print_r($r->prepare());
 				$eventListRec = $$query_set->loadList();
 			}
 		}
@@ -691,16 +691,14 @@ class CEvent extends w2p_Core_BaseObject {
 
 		// AJD: Should this be going off the end of the array?  I don't think so.
 		// If it should then a comment to that effect would be nice.
-		// for ($i=0; $i < sizeof($eventListRec)+1;  $i++) {
 		for ($i = 0, $i_cmp = sizeof($eventListRec); $i < $i_cmp; $i++) {
 			//note from merlinyoda: j=0 is the original event according to getRecurrentEventforPeriod
 			// So, since the event is *recurring* x times, the loop condition should be j <= x, not j < x.
 			// This way the original and all recurrances are covered.
-			//for ($j=0; $j < intval($eventListRec[$i]['event_times_recuring']); $j++) {
 			for ($j = 0, $j_cmp = intval($eventListRec[$i]['event_times_recuring']); $j <= $j_cmp; $j++) {
 				//Daily View
 				//show all
-				if ($periodLength == 1) {
+				if ($periodLength <= 1) {
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
 				}
 				//Weekly or Monthly View and Hourly Recurrent Events
@@ -728,6 +726,13 @@ class CEvent extends w2p_Core_BaseObject {
 
 		}
 
+		$i = 0;
+		foreach($eventList as $event) {
+			$eventList[$i]['event_start_date'] = $AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
+			$eventList[$i]['event_end_date'] = $AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
+			$i++;
+		}
+//echo '<pre>'; print_r($eventList); echo '</pre>';
 		//return a list of non-recurrent and recurrent events
 		return $eventList;
 	}
@@ -1000,7 +1005,6 @@ class CEvent extends w2p_Core_BaseObject {
 		$this->event_private = (int) $this->event_private;
 		$this->event_type = (int) $this->event_type;
 		$this->event_cwd = (int) $this->event_cwd;
-        $this->event_owner = $AppUI->user_id;
 
         $errorMsgArray = $this->check();
         if (count($errorMsgArray) > 0) {

@@ -21,7 +21,8 @@ if (!$canEdit) {
 
 // load the company types
 $types = w2PgetSysVal('CompanyType');
-$countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
+$countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
+		array('-' => '----') + w2PgetSysVal('GlobalCountries');
 
 // load the record data
 $company = new CCompany();

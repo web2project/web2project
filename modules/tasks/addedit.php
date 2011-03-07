@@ -183,6 +183,17 @@ if ($task_id > 0)
 	$titleBlock->addCrumb('?m=tasks&a=view&task_id=' . $task->task_id, 'view this task');
 $titleBlock->show();
 
+// Get contacts list
+$selected_contacts = array();
+
+if ($task_id) {
+	$myContacts = $task->getContacts($AppUI, $task_id);
+	$selected_contacts = array_keys($myContacts);
+}
+if ($task_id == 0 && $contact_id > 0) {
+	$selected_contacts[] = '' . $contact_id;
+}
+
 $department_selection_list = array();
 $deptList = CDepartment::getDepartmentList($AppUI, $project->project_company, null);
 foreach($deptList as $dept) {
@@ -206,7 +217,6 @@ $project->setAllowedSQL($AppUI->user_id, $pq, null, 'pr');
 $projects = $pq->loadHashList();
 ?>
 <script language="javascript" type="text/javascript">
-var selected_contacts_id = '<?php echo $task->task_contacts; ?>';
 var task_id = '<?php echo $task->task_id; ?>';
 
 var check_task_dates = <?php
@@ -224,9 +234,15 @@ var task_end_msg = '<?php echo $AppUI->_('taskValidEndDate'); ?>';
 var workHours = <?php echo w2PgetConfig('daily_working_hours'); ?>;
 //working days array from config.php
 var working_days = new Array(<?php echo w2PgetConfig('cal_working_days'); ?>);
-var cal_day_start = <?php echo intval(w2PgetConfig('cal_day_start')); ?>;
-var cal_day_end = <?php echo intval(w2PgetConfig('cal_day_end')); ?>;
-var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours')); ?>;
+var cal_day_start = <?php echo (int) w2PgetConfig('cal_day_start'); ?>;
+var cal_day_end = <?php echo (int) w2PgetConfig('cal_day_end'); ?>;
+var daily_working_hours = <?php echo (int) w2PgetConfig('daily_working_hours'); ?>;
+
+function popContacts() {
+    var selected_contacts_id = document.getElementById('task_contacts').value;
+    var project_company = <?php echo $project->project_company; ?>;
+	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id+'&company_id='+project_company, 'contacts','height=600,width=400,resizable,scrollbars=yes');
+}
 </script>
 
 <form name="editFrm" action="?m=tasks&project_id=<?php echo $task_project; ?>" method="post" onSubmit="return submitIt(document.editFrm);" accept-charset="utf-8">
@@ -234,7 +250,7 @@ var daily_working_hours = <?php echo intval(w2PgetConfig('daily_working_hours'))
 	<input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 	<input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />
 	<input name="old_task_parent" type="hidden" value="<?php echo $task->task_parent; ?>" />
-	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo $task->task_contacts; ?>" />
+	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
 <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
 	<td colspan="2" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>" >

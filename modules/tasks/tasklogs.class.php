@@ -159,7 +159,7 @@ class CTaskLog extends w2p_Core_BaseObject
 		parent::__construct('task_log', 'task_log_id');
 
 		// ensure changes to checkboxes are honoured
-		$this->task_log_problem = intval($this->task_log_problem);
+		$this->task_log_problem = (int) $this->task_log_problem;
 	}
 
 	/**
@@ -193,7 +193,7 @@ class CTaskLog extends w2p_Core_BaseObject
 			$log_duration_minutes = sprintf('%.3f', substr($this->task_log_hours, $dot + 1) / 60.0);
 			$this->task_log_hours = floor($this->task_log_hours) + $log_duration_minutes;
 		}
-		$this->task_log_hours = round($this->task_log_hours, 3);
+		$this->task_log_hours = $this->task_log_hours;
 		$this->task_log_costcode = cleanText($this->task_log_costcode);
 
 		if ($this->task_log_id && $perms->checkModuleItem('task_log', 'edit', $this->task_log_id)) {
@@ -326,7 +326,7 @@ class CTaskLog extends w2p_Core_BaseObject
 
 		$k = $this->_tbl_key;
 		if ($oid) {
-			$this->$k = intval($oid);
+			$this->$k = (int) $oid;
 		}
 		if (is_array($joins)) {
 			$q->addTable($this->_tbl, 'k');

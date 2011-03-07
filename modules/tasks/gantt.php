@@ -213,22 +213,22 @@ if ($addLinksToGantt == '1') {
 $gantt = new w2p_Output_GanttRenderer($AppUI, $width);
 $gantt->localize();
 $gantt->setTitle($projects[$project_id]['project_name'], '#'.$projects[$project_id]['project_color_identifier']);
-$field = ($showWork == '1') ? 'Work' : 'Dur';
+	$field = ($showWork == '1') ? 'Work' : 'Dur';
 
-if ($showTaskNameOnly == '1'){ 
-    $columnNames = array('Task name');
-    $columnSizes = array(300);
-} else {
-    if ($caller == 'todo') {
-        $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
-        $columnSizes = array(200, 50, 50, 75, 75);
-    } else {
-        $columnNames = array('Task name', $field, 'Start', 'Finish');
-        $columnSizes = array(200, 50, 75, 75);
+	if ($showTaskNameOnly == '1') {
+	    $columnNames = array('Task name');
+	    $columnSizes = array(300);
+	} else {
+		if ($caller == 'todo') {
+			$columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
+			$columnSizes = array(180, 135, 40, 75, 75);
+		} else {
+			$columnNames = array('Task name', $field, 'Start', 'Finish');
+			$columnSizes = array(250, 60, 80, 80);
+		}
 	}
-}
-$gantt->setColumnHeaders($columnNames, $columnSizes);
-$gantt->setProperties(array('showhgrid' => true));
+	$gantt->setColumnHeaders($columnNames, $columnSizes);
+	$gantt->setProperties(array('showhgrid' => true));
 
 if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
@@ -285,27 +285,24 @@ $row = 0;
 for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $a = $gantt_arr[$i][0];
     $level = $gantt_arr[$i][1];
+	$caption = '';
 
     $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
     if ($canAccess) {
         $name = $a['task_name'];
-        if ($locale_char_set == 'utf-8') {
-            $name = utf8_decode($name);
-        }
-        $name = strlen($name) > 34 ? substr($name, 0, 33) . '.' : $name;
+        $name = mb_strlen($name) > 34 ? mb_substr($name, 0, 33) . '.' : $name;
         $name = str_repeat(' ', $level) . $name;
 
         if ($caller == 'todo') {
             $pname = $a['project_name'];
-            $pname = utf8_decode($pname);
-            $pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
+            $pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
         }
 
         //using new jpGraph determines using Date object instead of string
         $start_date = new w2p_Utilities_Date($a['task_start_date']);
         $end_date = new w2p_Utilities_Date($a['task_end_date']);
         $start = $start_date->getDate();
-          $end = $end_date->getDate();
+		$end = $end_date->getDate();
 
         $progress = (int) $a['task_percent_complete'];
 
@@ -322,7 +319,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             $start = !$end ? date('Y-m-d') : $end;
             $cap .= '(no start date)';
         }
-
         if (!$end) {
             $end = $start;
             $cap .= ' (no end date)';
@@ -340,20 +336,22 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
             $res = $q->loadList();
             foreach ($res as $rw) {
-            switch ($rw['perc_assignment']) {
-                case 100:
-                    $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
-                    break;
-                default:
-                    $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
-                    break;
-                }
+				$caption = '';
+				switch ($rw['perc_assignment']) {
+					case 100:
+						$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
+						break;
+					default:
+						$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
+						break;
+				}
             }
             $q->clear();
             $caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
         }
 
         if ($flags == 'm') {
+            // if hide milestones is ticked this bit is not processed//////////////////////////////////////////
             if ($showNoMilestones != '1') {
                 $start = new w2p_Utilities_Date($start_date);
                 $start->addDays(0);
@@ -363,6 +361,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $today_date_stamp = strtotime($today_date);
                 $mile_date = $start_date->format($df);
                 $mile_date_stamp = strtotime($mile_date);
+                // honour the choice to show task names only///////////////////////////////////////////////////
                 if ($showTaskNameOnly == '1') {
                     $fieldArray = array($name);
                 } else {
@@ -372,6 +371,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                         $fieldArray = array($name, '', $s, $s);
                     }
                 }
+                ///////////////////////////////////////////////////////////////////////////////////////
                 //set color for milestone according to progress
                 //red for 'not started' #990000
                 //yellow for 'in progress' #FF9900
@@ -382,7 +382,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 } else {
                     if (strtotime($mile_date) < strtotime($today_date)) {
                         $color = '#990000';
-                    } else{
+                    } else {
                         if ($a['task_percent_complete'] == 0)  {
                             $color = '#0000FF';
                         } else {
@@ -424,7 +424,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 //due to the round above, we don't want to print decimals unless they really exist
                 $dur = $work_hours;
             }
-
             $dur .= ' h';
             $enddate = new w2p_Utilities_Date($end);
             $startdate = new w2p_Utilities_Date($start);
@@ -434,14 +433,13 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             } else {
                 if ($caller == 'todo') {
                     $columnValues = array('task_name' => $name, 'project_name' => $pname,
-                      'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
-                      'actual_end' => '');
+						'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+						'actual_end' => '');
                 } else {
                     $columnValues = array('task_name' => $name, 'duration' => $dur,
-                      'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
+						'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
                 }
             }
-
             $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
         }
         $q->clear();

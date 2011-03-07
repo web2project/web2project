@@ -73,6 +73,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
             <th width="10"><?php echo $AppUI->_('Pin'); ?></th>
             <th width="20" colspan="2"><?php echo $AppUI->_('Progress'); ?></th>
             <th width="15" align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+			<th width="15" align="center"><?php sort_by_item_title('U', 'user_task_priority', SORT_NUMERIC, '&amp;a=todo'); ?></th>
             <th colspan="2"><?php sort_by_item_title('Task / Project', 'task_name', SORT_STRING, '&amp;a=todo'); ?></th>
             <th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
             <th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC, '&amp;a=todo'); ?></th>

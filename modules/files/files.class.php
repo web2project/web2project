@@ -26,7 +26,7 @@ class CFile extends w2p_Core_BaseObject {
 	public $file_folder = null;
 	public $file_checkout = null;
 	public $file_co_reason = null;
-	public $file_indexed = null;
+	public $file_indexed = 0;
 
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
 	//public $file_helpdesk_item = NULL;
@@ -79,18 +79,38 @@ class CFile extends w2p_Core_BaseObject {
         return true;
 	}
 
+	public function hook_cron()
+	{
+		global $AppUI;
+
+		$q = new w2p_Database_Query();
+		$q->addQuery('file_id, file_name');
+		$q->addTable('files');
+		$q->addWhere('file_indexed = 0');
+		$unindexedFiles = $q->loadList(5, 'file_id');
+
+		foreach($unindexedFiles as $file_id => $metadata) {
+			$this->load($file_id);
+			$this->indexStrings($AppUI);
+		}
+	}
+
     public function hook_search()
     {
         $search['table'] = 'files';
+        $search['table_alias'] = 'f';
         $search['table_module'] = 'files';
-        $search['table_key'] = 'file_id'; // primary key in searched table
+        $search['table_key'] = 'f.file_id'; // primary key in searched table
         $search['table_link'] = 'index.php?m=files&a=addedit&file_id='; // first part of link
         $search['table_title'] = 'Files';
-        $search['table_orderby'] = 'file_name';
-        $search['search_fields'] = array('file_name', 'file_description', 'file_type', 'file_version', 'file_co_reason');
-        $search['display_fields'] = array('file_name', 'file_description', 'file_type', 'file_version', 'file_co_reason');
+        $search['table_orderby'] = 'file_name, word_placement';
+        $search['search_fields'] = array('file_name', 'file_description',
+            'file_type', 'file_version', 'file_co_reason', 'word');
+        $search['display_fields'] = $search['search_fields'];
+        $search['table_joins'] = array(array('table' => 'files_index',
+            'alias' => 'fi', 'join' => 'f.file_id = fi.file_id'));
 
-        return $search;        
+        return $search;
     }
 
 	public static function getFileList(CAppUI $AppUI = null, $company_id, $project_id, $task_id, $category_id) {
@@ -326,8 +346,8 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	// parse file for indexing
-	public function indexStrings() {
-		global $AppUI, $w2Pconfig;
+	public function indexStrings(CAppUI $AppUI) {
+		global $w2Pconfig;
         $nwords_indexed = 0;
 
         /* Workaround for indexing large files:
@@ -398,6 +418,12 @@ class CFile extends w2p_Core_BaseObject {
                 $q->clear();
             }
         }
+		$q = new w2p_Database_Query;
+		$q->addTable('files');
+		$q->addUpdate('file_indexed', 1);
+		$q->addWhere('file_id = '. $this->file_id);
+		$q->exec();
+
 		return $nwords_indexed;
 	}
 

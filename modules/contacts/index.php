@@ -147,34 +147,43 @@ if (function_exists('styleRenderBoxTop')) {
 													<a href="./index.php?m=contacts&a=view&contact_id=<?php echo $contactid; ?>"><strong><?php echo ($carr[$z][$x]['contact_title'] ? $carr[$z][$x]['contact_title'] . ' ' : '') . $carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name']; ?></strong></a>
 												</th>
 												<th style="text-align:right" nowrap="nowrap" width="30%">
-													<?php if ($carr[$z][$x]['user_id']) {
-														echo '<a href="./index.php?m=admin&a=viewuser&user_id=' . $carr[$z][$x]['user_id'] . '">' . w2PshowImage('icons/users.gif', '', '', $m, 'This Contact is also a User, click to view its details.') . '</a>';
-													} ?>
-													<a href="?m=contacts&a=vcardexport&suppressHeaders=true&contact_id=<?php echo $contactid; ?>" ><?php echo w2PshowImage('vcard.png', '', '', $m, 'export vCard of this contact'); ?></a>
-													<a href="?m=contacts&a=addedit&contact_id=<?php echo $contactid; ?>"><?php echo w2PshowImage('icons/pencil.gif', '', '', $m, 'edit this contact'); ?></a>
+                                                    <span>
+                                                    <?php
+                                                    if ($carr[$z][$x]['user_id']) {
+														echo '<a href="./index.php?m=admin&a=viewuser&user_id=' . $carr[$z][$x]['user_id'] . '" style="float: right;">';
+                                                        echo w2PtoolTip($m, 'This Contact is also a User, click to view its details.') . w2PshowImage('icons/users.gif') . w2PendTip();
+                                                        echo '</a>';
+													}
+                                                    ?><a href="?m=contacts&a=vcardexport&suppressHeaders=true&contact_id=<?php echo $contactid; ?>" style="float: right;"><?php
+                                                        echo w2PtoolTip($m, 'export vCard of this contact') . w2PshowImage('vcard.png') . w2PendTip();
+                                                    ?></a>
+                                                    <a href="?m=contacts&a=addedit&contact_id=<?php echo $contactid; ?>" style="float: right;"><?php
+                                                        echo w2PtoolTip($m, 'edit this contact') . w2PshowImage('icons/pencil.gif') . w2PendTip();
+                                                    ?></a>
 													<?php
 														$projectList = CContact::getProjects($contactid);
+
+                                                        $df = $AppUI->getPref('SHDATEFORMAT');
+                                                        $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
+                                                        $contact_updatekey   = $carr[$z][$x]['contact_updatekey'];
+                                                        $contact_lastupdate  = $carr[$z][$x]['contact_lastupdate'];
+                                                        $contact_updateasked = $carr[$z][$x]['contact_updateasked'];
+                                                        $last_ask = new w2p_Utilities_Date($contact_updateasked);
+                                                        $lastAskFormatted = $last_ask->format($df);
 														if (count($projectList) > 0) {
 															echo '<a href="" onclick="	window.open(\'./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=' . $carr[$z][$x]['contact_id'] . '\', \'selector\', \'left=50,top=50,height=250,width=400,resizable\');return false;">' . w2PshowImage('projects.png', '', '', $m, 'click to view projects associated with this contact') . '</a>';
 														}
-														if ($carr[$z][$x]['contact_updateasked'] && (!$carr[$z][$x]['contact_lastupdate'] || $carr[$z][$x]['contact_lastupdate'] == 0) && $carr[$z][$x]['contact_updatekey']) {
-															$last_ask = new w2p_Utilities_Date($carr[$z][$x]['contact_updateasked']);
-															$df = $AppUI->getPref('SHDATEFORMAT');
-															$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-															echo w2PshowImage('log-info.gif', null, null, 'info', 'Waiting for Contact Update Information. (Asked on: ' . $last_ask->format($df) . ')');
-														} elseif ($carr[$z][$x]['contact_updateasked'] && (!$carr[$z][$x]['contact_lastupdate'] || $carr[$z][$x]['contact_lastupdate'] == 0) && !$carr[$z][$x]['contact_updatekey']) {
-															$last_ask = new w2p_Utilities_Date($carr[$z][$x]['contact_updateasked']);
-															$df = $AppUI->getPref('SHDATEFORMAT');
-															$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-															echo w2PshowImage('log-error.gif', null, null, 'info', 'Waiting for too long! (Asked on ' . $last_ask->format($df) . ')');
-														} elseif ($carr[$z][$x]['contact_lastupdate'] && !$carr[$z][$x]['contact_updatekey']) {
-															$last_ask = new w2p_Utilities_Date($carr[$z][$x]['contact_lastupdate']);
-															$df = $AppUI->getPref('SHDATEFORMAT');
-															$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-															echo w2PshowImage('log-notice.gif', null, null, 'info', 'Update sucessfully done on: ' . $last_ask->format($df) . '');
-														} else {
+														if ($contact_updateasked && (!$contact_lastupdate || $contact_lastupdate == 0) && $contact_updatekey) {
+                                                            echo w2PtoolTip('info', 'Waiting for Contact Update Information. (Asked on: ' . $lastAskFormatted . ')') . '<img src="' . w2PfindImage('log-info.gif') . '" style="float: right;">' . w2PendTip();
+														} elseif ($contact_updateasked && (!$contact_lastupdate || $contact_lastupdate== 0) && !$contact_updatekey) {
+                                                            echo w2PtoolTip('info', 'Waiting for too long! (Asked on ' . $lastAskFormatted . ')') . '<img src="' . w2PfindImage('log-error.gif') . '" style="float: right;">' . w2PendTip();
+														} elseif ($contact_updateasked && !$contact_updatekey) {
+															$last_ask = new w2p_Utilities_Date($contact_lastupdate);
+                                                            echo w2PtoolTip('info', 'Update sucessfully done on: ' . $last_ask->format($df) . '') . '<img src="' . w2PfindImage('log-notice.gif') . '" style="float: right;">' . w2PendTip();
 														}
 													?>
+                                                    </span>
 												</th>
 											</table>
 										</td>
@@ -204,15 +213,6 @@ if (function_exists('styleRenderBoxTop')) {
 													}
 												}
 											}
-                                            $contact = new CContact();
-                                            $contact->contact_id = $contactid;
-                                            $methods = $contact->getContactMethods($contactMethods);
-                                            
-                                            foreach ($methods as $method => $value) {
-                                                $s .= '<tr><td width="35%"><strong>' . $AppUI->_($methodLabels[$method]) . ':</strong></td>';
-                                                $s .= '<td class="hilite" width="65%">' . $value . '</td></tr>';
-                                            }
-
 											echo $s;
 										?>
 									</tr>

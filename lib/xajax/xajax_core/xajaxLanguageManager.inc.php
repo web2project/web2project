@@ -14,8 +14,9 @@
 
 /*
 	@package xajax
-	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@version $Id: xajaxLanguageManager.inc.php 1620 2011-02-10 17:46:07Z pedroix $
+	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
 
@@ -26,28 +27,28 @@
 	debug and error messages upon request; as well as the code used to load alternate
 	language text as requested via the <xajax::configure> function.
 */
-class xajaxLanguageManager
+final class xajaxLanguageManager
 {
 	/*
 		Array: aMessages
 		
 		An array of the currently registered languages.
 	*/
-	var $aMessages;
+	private $aMessages;
 	
 	/*
 		String: sLanguage
 		
 		The currently configured language.
 	*/
-	var $sLanguage;
+	private $sLanguage;
 	
 	/*
 		Function: xajaxLanguageManager
 		
 		Construct and initialize the one and only xajax language manager object.
 	*/
-	function xajaxLanguageManager()
+	private function __construct()
 	{
 		$this->aMessages = array();
 		
@@ -120,7 +121,7 @@ class xajaxLanguageManager
 		Implements the singleton pattern: provides a single instance of the xajax 
 		language manager object to all object which request it.
 	*/
-	function &getInstance()
+	public static function &getInstance()
 	{
 		static $obj;
 		if (!$obj) {
@@ -134,16 +135,18 @@ class xajaxLanguageManager
 		
 		Called by the main xajax object as configuration options are set.  See also:
 		<xajax::configure>.  The <xajaxLanguageManager> tracks the following configuration
-		options:
+		options.
+		Parameters:
 		
 		- language (string, default 'en'): The currently selected language.
 	*/
-	function configure($sName, $mValue)
+	public function configure($sName, $mValue)
 	{
 		if ('language' == $sName) {
 			if ($mValue !== $this->sLanguage) {
 				$sFolder = dirname(__FILE__);
-				require $sFolder . '/xajax_lang_' . $mValue . '.inc.php';
+				@include $sFolder . '/xajax_lang_' . $mValue . '.inc.php';
+				// require $sFolder . '/xajax_lang_' . $mValue . '.inc.php';
 				$this->sLanguage = $mValue;
 			}
 		}
@@ -154,10 +157,12 @@ class xajaxLanguageManager
 		
 		Called to register an array of alternate language messages.
 		
-		sLanguage - (string) the character code which represents the language being registered.
-		aMessages - (array) the array of translated debug and error messages
+		Parameters:
+		
+		sLanguage - (string): the character code which represents the language being registered.
+		aMessages - (array): the array of translated debug and error messages
 	*/
-	function register($sLanguage, $aMessages) {
+	public function register($sLanguage, $aMessages) {
 		$this->aMessages[$sLanguage] = $aMessages;
 	}
 	
@@ -169,7 +174,7 @@ class xajaxLanguageManager
 		
 		sMessage - (string):  A code indicating the message text being requested.
 	*/
-	function getText($sMessage)
+	public function getText($sMessage)
 	{
 		if (isset($this->aMessages[$this->sLanguage]))
 			 if (isset($this->aMessages[$this->sLanguage][$sMessage]))

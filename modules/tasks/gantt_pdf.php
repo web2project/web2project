@@ -1,6 +1,6 @@
 <?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
-    die('You should not access this file directly.');
+	die('You should not access this file directly.');
 }
 
 global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, 
@@ -225,20 +225,20 @@ foreach ( $gtask_sliced as $gts ) {
 
 	$field = ($showWork == '1') ? 'Work' : 'Dur';
 
-    if ($showTaskNameOnly == '1') {
-        $columnNames = array('Task name');
-        $columnSizes = array(600);
-    } else {
-        if ($caller == 'todo') {
-            $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
-            $columnSizes = array(180, 135, 40, 75, 75);
-        } else {
-            $columnNames = array('Task name', $field, 'Start', 'Finish');
-            $columnSizes = array(250, 60, 80, 80);
-        }
-    }
-    $gantt->setColumnHeaders($columnNames, $columnSizes);
-    $gantt->setProperties(array('showhgrid' => true));
+	if ($showTaskNameOnly == '1') {
+	    $columnNames = array('Task name');
+	    $columnSizes = array(600);
+	} else {
+		if ($caller == 'todo') {
+			$columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
+			$columnSizes = array(180, 135, 40, 75, 75);
+		} else {
+			$columnNames = array('Task name', $field, 'Start', 'Finish');
+			$columnSizes = array(250, 60, 80, 80);
+		}
+	}
+	$gantt->setColumnHeaders($columnNames, $columnSizes);
+	$gantt->setProperties(array('showhgrid' => true));
 
     if (!$start_date || !$end_date) {
         // find out DateRange from gant_arr
@@ -296,58 +296,59 @@ foreach ( $gtask_sliced as $gts ) {
         $a = $gts[$i][0];
         $level = $gts[$i][1];
         $name = $a['task_name'];
-        if ($locale_char_set == 'utf-8') {
-            $name = utf8_decode($name);
-        }
-        $name = ((strlen($name) > 34) ? (substr($name, 0, 30) . '...') : $name);
+        $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
         $name = (str_repeat('  ', $level) . $name);
 
         if ($caller == 'todo') {
             $pname = $a['project_name'];
-            $pname = utf8_decode($pname);
-            $pname = ((strlen($pname) > 20) ? (substr($pname, 0, 14) . '...' . substr($pname, -5, 5)) : $pname);
+            $pname = ((mb_strlen($pname) > 20) ? (mb_substr($pname, 0, 14) . '...' . mb_substr($pname, -5, 5)) : $pname);
         }
 
         //using new jpGraph determines using Date object instead of string
         $start_date = new w2p_Utilities_Date($a['task_start_date']);
         $end_date = new w2p_Utilities_Date($a['task_end_date']);
         $start = $start_date->getDate();
-        $end = $end_date->getDate();
+		$end = $end_date->getDate();
 
         $progress = (int) $a['task_percent_complete'];
 
         if ($progress > 100) {
             $progress = 100;
-        } else if ($progress < 0) {
+        } elseif ($progress < 0) {
             $progress = 0;
         }
 
-        $flags	= (($a['task_milestone']) ? 'm' : '');
+        $flags = ($a['task_milestone'] ? 'm' : '');
 
         $cap = '';
-        if (!$start || $start == '0000-00-00'){
-            $start = ((!$end) ? date('Y-m-d') : $end);
+        if (!$start || $start == '0000-00-00') {
+            $start = !$end ? date('Y-m-d') : $end;
             $cap .= '(no start date)';
         }
         if (!$end) {
             $end = $start;
             $cap .= ' (no end date)';
+        } else {
+            $cap = '';
         }
 
         if ($showLabels == '1') {
+            $q = new w2p_Database_Query;
             $q->addTable('user_tasks', 'ut');
             $q->innerJoin('users', 'u', 'u.user_id = ut.user_id');
+            $q->innerJoin('contacts', 'c', 'c.contact_id = u.user_contact');
             $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
-            $q->addWhere('ut.task_id = ' . $a['task_id']);
+            $q->addQuery('c.contact_first_name, c.contact_last_name');
+            $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
             $res = $q->loadList();
             foreach ($res as $rw) {
-                switch ($rw['perc_assignment']) {
-                    case 100:
-                        $caption .= ($rw['user_username'] . ';');
-                        break;
-                    default:
-                        $caption .= ($rw['user_username'] . '[' . $rw['perc_assignment'] . '%];');
-                        break;
+			switch ($rw['perc_assignment']) {
+				case 100:
+					$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
+					break;
+				default:
+					$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
+					break;
                 }
             }
             $q->clear();
@@ -360,10 +361,10 @@ foreach ( $gtask_sliced as $gts ) {
                 $start = new w2p_Utilities_Date($start_date);
                 $start->addDays(0);
                 $start_mile = $start->getDate();
-                $s = $start_date->format("%m/%d/%Y");
+                $s = $start_date->format($df);
                 $today_date = date('m/d/Y');
                 $today_date_stamp = strtotime($today_date);
-                $mile_date = $start_date->format("%m/%d/%Y");
+                $mile_date = $start_date->format($df);
                 $mile_date_stamp = strtotime($mile_date);
                 // honour the choice to show task names only///////////////////////////////////////////////////
                 if ($showTaskNameOnly == '1') {
@@ -402,13 +403,15 @@ foreach ( $gtask_sliced as $gts ) {
             if ($type == 24) {
                 $dur *= $w2Pconfig['daily_working_hours'];
             }
-            if ($showWork=='1') {
+
+            if ($showWork == '1') {
                 $work_hours = 0;
+                $q = new w2p_Database_Query;
                 $q->addTable('tasks', 't');
                 $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
                 $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
                 $q->addWhere('t.task_duration_type = 24');
-                $q->addWhere('t.task_id = '.$a['task_id']);
+                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
 
                 $wh = $q->loadResult();
                 $work_hours = $wh * $w2Pconfig['daily_working_hours'];
@@ -418,7 +421,7 @@ foreach ( $gtask_sliced as $gts ) {
                 $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
                 $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
                 $q->addWhere('t.task_duration_type = 1');
-                $q->addWhere('t.task_id = '.$a['task_id']);
+                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
 
                 $wh2 = $q->loadResult();
                 $work_hours += $wh2;
@@ -435,11 +438,11 @@ foreach ( $gtask_sliced as $gts ) {
             } else {
                 if ($caller == 'todo') {
                     $columnValues = array('task_name' => $name, 'project_name' => $pname,
-                        'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
-                        'actual_end' => '');
+						'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+						'actual_end' => '');
                 } else {
                     $columnValues = array('task_name' => $name, 'duration' => $dur,
-                        'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
+						'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
                 }
             }
             $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);

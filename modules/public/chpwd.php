@@ -41,7 +41,11 @@ if ($user_id) {
 			echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwWrongPW') . '</td></tr></table>';
 		}
 	} else {
+
+            $AppUI->addFooterJavascriptFile('js/passwordstrength.js');
+            
 		?>
+
 		<script language="javascript" type="text/javascript">
 		function submitIt() {
 			var f = document.frmEdit;
@@ -79,18 +83,27 @@ if ($user_id) {
 				<?php } ?>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('New Password'); ?></td>
-					<td><input type="password" name="new_pwd1" class="text" /></td>
+					<td><input type="password" name="new_pwd1" class="text" onKeyUp="checkPassword(this.value);" /></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Repeat New Password'); ?></td>
 					<td><input type="password" name="new_pwd2" class="text" /></td>
 				</tr>
+                                <tr>
+                                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Password Strength'); ?></td>
+					<td>
+                                            <div class="text" style="width: 135px;">
+                                                <div id="progressBar" style="font-size: 1px; height: 15px; width: 0px;">
+                                                </div>
+                                            </div>
+                                        </td>
+                                </tr>
 				<tr>
 					<td>&nbsp;</td>
 					<td align="right" nowrap="nowrap"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" /></td>
 				</tr>
 			</table>
-		<form accept-charset="utf-8">
+		</form>
 		<?php
 	}
 } else {

@@ -65,6 +65,13 @@ class CContact extends w2p_Core_BaseObject {
         
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
+        $this->contact_owner = (int) $this->contact_owner;
+        $this->contact_private = (int) $this->contact_private;
+
+        $this->contact_first_name = ($this->contact_first_name == null) ? '' : $this->contact_first_name;
+        $this->contact_last_name = ($this->contact_last_name == null) ? '' : $this->contact_last_name;
+        $this->contact_order_by = ($this->contact_order_by == null) ? '' : $this->contact_order_by;
+        $this->contact_display_name = ($this->contact_display_name == null) ? '' : $this->contact_display_name;
 
         /*
         *  This  validates that any Contact saved will have a Display Name as
@@ -72,22 +79,11 @@ class CContact extends w2p_Core_BaseObject {
         * mostly required when Contacts are generated via programatic methods and
         * not through the add/edit UI.
         */
-        if(mb_strlen($this->contact_order_by) <= 1 || $this->contact_order_by == null) {
-            //TODO: this should use the USERFORMAT to determine how display names are generated
-            if ($this->contact_first_name == null && $this->contact_last_name == null) {
-               $this->contact_order_by = $this->contact_company;
-            } else {
-                $this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
-            }
+        if(mb_strlen($this->contact_order_by) <= 1) {
+            $this->contact_order_by = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
         }
-        if($this->contact_first_name == null) {
-            $this->contact_first_name = '';
-        }
-        if($this->contact_last_name == null) {
-            $this->contact_last_name = '';
-        }
-        if($this->contact_birthday == '') {
-            $this->contact_birthday = null;
+        if(mb_strlen($this->contact_display_name) <= 1) {
+            $this->contact_display_name = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
         }
 
         $errorMsgArray = $this->check();
@@ -189,10 +185,17 @@ class CContact extends w2p_Core_BaseObject {
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
+        if(mb_strlen($this->contact_display_name) <= 1) {
+            $errorArray['contact_display_name'] = $baseErrorMsg . 'contact display name is not set';
+        }
+        if (0 == (int) $this->contact_owner) {
+            $errorArray['contact_owner'] = $baseErrorMsg . 'contact owner is not set';
+        }
+
 	    return $errorArray;
 	}
 
-	public function canDelete(&$msg, $oid = null, $joins = null) {
+	public function canDelete($msg, $oid = null, $joins = null) {
 		global $AppUI;
 		if ($oid) {
 			// Check to see if there is a user
@@ -233,24 +236,25 @@ class CContact extends w2p_Core_BaseObject {
 		}
 	}
 
+    /*
+     * This function is only used to detect fields that might be text instead
+     *   of integer. It's unnecessary
+     *
+     * @deprecated
+     */
 	public function is_alpha($val) {
-		// If the field consists solely of numerics, then we return it as an integer
-		// otherwise we return it as an alpha
-
-		$numval = strtr($val, '012345678', '999999999');
-		if (count_chars($numval, 3) == '9') {
-			return false;
-		}
-		return true;
+        trigger_error("is_alpha() has been deprecated in v2.3 and will be removed by v4.0. Please cast values with (int) instead.", E_USER_NOTICE );
+        return (is_int($val) || ctype_digit($val));
 	}
 
+    /*
+     * This function makes so sense.. it just queries the company table to get
+     *   the company_id.. but it uses the company_id to do it. Wha?
+     *
+     * @deprecated
+     */
 	public function getCompanyID() {
-		$q = new w2p_Database_Query;
-		$q->addTable('companies');
-		$q->addQuery('company_id');
-		$q->addWhere('company_name = ' . (int)$this->contact_company);
-
-		return $q->loadResult();
+		return (int)$this->contact_company;
 	}
 
 	public function getCompanyName() {
@@ -271,10 +275,10 @@ class CContact extends w2p_Core_BaseObject {
 		$q = new w2p_Database_Query;
 		$q->addTable('companies');
 		$q->addQuery('company_id, company_name');
-		if ($this->is_alpha($this->contact_company)) {
-			$q->addWhere('company_name = ' . $q->quote($this->contact_company));
+		if ((int) $this->contact_company) {
+			$q->addWhere('company_id = ' . (int) $this->contact_company);
 		} else {
-			$q->addWhere('company_id = ' . (int)$this->contact_company);
+            $q->addWhere('company_name = ' . $q->quote($this->contact_company));
 		}
 
 		return $q->loadHash();
@@ -285,13 +289,14 @@ class CContact extends w2p_Core_BaseObject {
 		if (!$this->contact_department) {
 			return $result;
 		}
+
 		$q = new w2p_Database_Query;
 		$q->addTable('departments');
 		$q->addQuery('dept_id, dept_name');
-		if ($this->is_alpha($this->contact_department)) {
-			$q->addWhere('dept_name = ' . $q->quote($this->contact_department));
+		if ((int) $this->contact_department) {
+			$q->addWhere('dept_id = ' . (int) $this->contact_department);
 		} else {
-			$q->addWhere('dept_id = ' . (int)$this->contact_department);
+            $q->addWhere('dept_name = ' . $q->quote($this->contact_department));
 		}
 
 		return $q->loadHash();
@@ -315,8 +320,8 @@ class CContact extends w2p_Core_BaseObject {
 		$this->store($AppUI);
 	}
 
-	public function updateNotify() {
-		global $AppUI, $w2Pconfig, $locale_char_set;
+    public function notify() {
+        global $AppUI, $w2Pconfig, $locale_char_set;
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
@@ -335,6 +340,11 @@ class CContact extends w2p_Core_BaseObject {
 			$mail->Send();
 		}
 		return '';
+    }
+
+	public function updateNotify() {
+        //trigger_error("updateNotify has been deprecated and will be removed in v4.0. Please use notify() instead.", E_USER_NOTICE );
+        return $this->notify();
 	}
 
 	/**
@@ -459,7 +469,8 @@ class CContact extends w2p_Core_BaseObject {
 
 		return $result;
 	}
-	public static function getContactByUserid($userId) {
+
+    public static function getContactByUserid($userId) {
 		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
@@ -545,10 +556,14 @@ class CContact extends w2p_Core_BaseObject {
         $search['table_title'] = 'Contacts';
         $search['table_orderby'] = 'contact_last_name,contact_first_name';
         $search['table_groupby'] = 'c.contact_id';
-        $search['search_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
-        $search['display_fields'] = array('contact_first_name', 'contact_last_name', 'contact_title', 'contact_company', 'contact_type', 'contact_address1', 'contact_address2', 'contact_city', 'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
-        $search['table_joins'] = array(array('table' => 'contacts_methods', 'alias' => 'cm', 'join' => 'c.contact_id = cm.contact_id'));
-//TODO: add primary email
+        $search['search_fields'] = array('contact_first_name', 'contact_last_name',
+            'contact_phone', 'contact_email', 'contact_title', 'contact_company',
+            'contact_type', 'contact_address1', 'contact_address2', 'contact_city',
+            'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
+        $search['display_fields'] = $search['search_fields'];
+        $search['table_joins'] = array(array('table' => 'contacts_methods',
+            'alias' => 'cm', 'join' => 'c.contact_id = cm.contact_id'));
+
         return $search;
     }
 

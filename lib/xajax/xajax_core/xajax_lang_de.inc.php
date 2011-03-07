@@ -16,14 +16,15 @@
 
 /*
 	@package xajax
-	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@version $Id: xajax_lang_de.inc.php 1620 2011-02-10 17:46:07Z pedroix $
+	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
 
 //SkipAIO
 
-$objLanguageManager =& xajaxLanguageManager::getInstance();
+$objLanguageManager = xajaxLanguageManager::getInstance();
 $objLanguageManager->register('de', array(
 	'LOGHDR:01' => '** xajax Fehler Protokoll - ',
 	'LOGHDR:02' => " **\n",

@@ -14,7 +14,7 @@ $canViewTask = $perms->checkModuleItem('tasks', 'view', $task_id);
 $canEdit = canEdit('task_log');
 $canAdd = canAdd('task_log');
 
-$task_log_id = intval(w2PgetParam($_GET, 'task_log_id', 0));
+$task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
 $log = new CTaskLog();
 if ($task_log_id) {
 	if (!$canEdit || !$canViewTask) {

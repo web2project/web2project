@@ -52,7 +52,6 @@ $priority = array(
 class CProject extends w2p_Core_BaseObject {
     public $project_id = null;
     public $project_company = null;
-    public $project_department = null;
     public $project_name = null;
     public $project_short_name = null;
     public $project_owner = null;
@@ -73,16 +72,24 @@ class CProject extends w2p_Core_BaseObject {
     public $project_creator = null;
     public $project_active = null;
     public $project_private = null;
-    public $project_departments = null;
-    public $project_contacts = null;
     public $project_priority = null;
     public $project_type = null;
     public $project_parent = null;
     public $project_original_parent = null;
     public $project_location = '';
+	/*
+	 * @deprecated fields, kept to make sure the bind() works properly
+	 */
+    public $project_departments = null;
+    public $project_contacts = null;
 
     public function __construct() {
         parent::__construct('projects', 'project_id');
+    }
+
+    public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
+		$this->project_contacts = explode(',', $this->project_contacts);
+        return parent::bind($hash, $prefix, $checkSlashes, $bindAll);
     }
 
 	public function check() {
@@ -297,6 +304,7 @@ class CProject extends w2p_Core_BaseObject {
 				$newTask->updateDependencies($csList);
 			} // end of update dependencies
             $result = $newTask->store($AppUI);
+			$newTask->addReminder();
 
             if (is_array($result) && count($result)) {
                 foreach ($result as $key => $error_msg) {
@@ -571,8 +579,7 @@ class CProject extends w2p_Core_BaseObject {
 		$q->exec();
 		$q->clear();
 		if ($this->project_contacts) {
-			$contacts = explode(',', $this->project_contacts);
-			foreach ($contacts as $contact) {
+			foreach ($this->project_contacts as $contact) {
 				if ($contact) {
 					$q->addTable('project_contacts');
 					$q->addInsert('project_id', $this->project_id);
@@ -596,7 +603,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function notifyOwner($isNotNew) {
 		global $AppUI, $w2Pconfig, $locale_char_set;
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail;
 
 		if (intval($isNotNew)) {
 			$mail->Subject("Project Updated: $this->project_name ", $locale_char_set);
@@ -604,17 +611,10 @@ class CProject extends w2p_Core_BaseObject {
 			$mail->Subject("Project Submitted: $this->project_name ", $locale_char_set);
 		}
 
-		$q = new w2p_Database_Query;
-		$q->addTable('projects', 'p');
-		$q->addQuery('p.project_id');
-		$q->addQuery('oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name, oc.contact_email as owner_email');
-		$q->leftJoin('users', 'o', 'o.user_id = p.project_owner');
-		$q->leftJoin('contacts', 'oc', 'oc.contact_id = o.user_contact');
-		$q->addWhere('p.project_id = ' . (int)$this->project_id);
-		$users = $q->loadList();
-		$q->clear();
+		$user = new CUser();
+		$user->loadFull($this->project_owner);
 
-		if (count($users)) {
+		if ($user && $mail->ValidEmail($user->user_email)) {
 			if (intval($isNotNew)) {
 				$body = $AppUI->_('Project') . ": $this->project_name Has Been Updated Via Project Manager. You can view the Project by clicking: ";
 			} else {
@@ -634,13 +634,9 @@ class CProject extends w2p_Core_BaseObject {
 			}
 
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-		}
-		if ($mail->ValidEmail($users[0]['owner_email'])) {
-			$mail->To($users[0]['owner_email'], true);
+			$mail->To($user->user_email, true);
 			$mail->Send();
 		}
-
-		return '';
 	}
 
 	public function notifyContacts($isNotNew) {
@@ -670,7 +666,7 @@ class CProject extends w2p_Core_BaseObject {
 			}
 
 			foreach ($users as $row) {
-				$mail = new Mail;
+				$mail = new w2p_Utilities_Mail;
 				$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 				$mail->Subject($subject, $locale_char_set);
 
@@ -802,9 +798,10 @@ class CProject extends w2p_Core_BaseObject {
 
 		return $q->loadHashList();
 	}
+
 	public static function updateStatus(CAppUI $AppUI = null, $projectId, $statusId) {
 		global $AppUI;
-
+		trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE );
         $perms = $AppUI->acl();
 		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
 			$q = new w2p_Database_Query;
@@ -958,9 +955,12 @@ class CProject extends w2p_Core_BaseObject {
         $search['table_link'] = 'index.php?m=projects&a=view&project_id='; // first part of link
         $search['table_title'] = 'Projects';
         $search['table_orderby'] = 'project_name';
-        $search['search_fields'] = array('p.project_id', 'p.project_name', 'p.project_short_name', 'p.project_location', 'p.project_description', 'p.project_url', 'p.project_demo_url', 'con.contact_last_name', 'con.contact_first_name', 'con.contact_title', 'con.contact_address1', 'con.contact_notes');
-        $search['display_fields'] = array('p.project_id', 'p.project_name', 'p.project_short_name', 'p.project_location', 'p.project_description', 'p.project_url', 'p.project_demo_url', 'con.contact_last_name', 'con.contact_first_name', 'con.contact_title', 'con.contact_address1', 'con.contact_notes');
-        $search['table_joins'] = array(array('table' => 'project_contacts', 'alias' => 'pc', 'join' => 'p.project_id = pc.project_id'), array('table' => 'contacts', 'alias' => 'con', 'join' => 'pc.contact_id = con.contact_id'));
+        $search['search_fields'] = array('p.project_id', 'p.project_name',
+            'p.project_short_name', 'p.project_location', 'p.project_description',
+            'p.project_url', 'p.project_demo_url');
+        $search['display_fields'] = $search['search_fields'];
+        $search['table_joins'] = array(array('table' => 'project_contacts',
+            'alias' => 'pc', 'join' => 'p.project_id = pc.project_id'));
 
         return $search;
     }
@@ -1224,7 +1224,7 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
 	if ($active_only) {
 		$q->addWhere('project_active = 1');
 	}
-	$q->addOrder('project_name');
+	$q->addOrder('project_start_date, project_end_date');
 
 	$obj = new CCompany();
 	$obj->setAllowedSQL($AppUI->user_id, $q);

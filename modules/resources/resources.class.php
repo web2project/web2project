@@ -77,4 +77,17 @@ class CResource extends w2p_Core_BaseObject {
         }
         return false;
     }
+
+    public function hook_search() {
+        $search['table'] = 'resources';
+        $search['table_module'] = 'resources';
+        $search['table_key'] = 'resource_id';
+        $search['table_link'] = 'index.php?m=resources&a=view&resource_id='; // first part of link
+        $search['table_title'] = 'Resources';
+        $search['table_orderby'] = 'resource_name';
+        $search['search_fields'] = array('resource_name', 'resource_key','resource_note');
+        $search['display_fields'] = $search['search_fields'];
+
+        return $search;
+    }
 }

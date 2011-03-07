@@ -12,7 +12,7 @@ if (!canEdit('system')) {
 ## Activate or move a module entry
 ##
 $cmd = w2PgetParam($_GET, 'cmd', '0');
-$mod_id = intval(w2PgetParam($_GET, 'mod_id', '0'));
+$mod_id = (int) w2PgetParam($_GET, 'mod_id', '0');
 $mod_directory = w2PgetParam($_GET, 'mod_directory', '0');
 
 $obj = new CModule();

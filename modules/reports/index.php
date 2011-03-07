@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$project_id = intval(w2PgetParam($_REQUEST, 'project_id', 0));
+$project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 $report_type = w2PgetParam($_REQUEST, 'report_type', '');
 
 $canReport = canView('reports');

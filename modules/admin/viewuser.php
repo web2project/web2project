@@ -151,13 +151,13 @@ if (!$user) {
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calendar Feed'); ?>:</td>
                 <td class="hilite" width="100%">
                     <?php if ($user->feed_token != '') {
-                        $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token;
+                        $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token.'&amp;ext=.ics';
                         ?>
                         <a href="<?php echo $calendarFeed; ?>">calendar feed</a>
                     <?php } ?>
                     &nbsp;&nbsp;&nbsp;
                     <form name="regenerateToken" action="./index.php?m=admin" method="post" accept-charset="utf-8">
-                        <input type="hidden" name="user_id" value="<?php echo intval($user->user_id); ?>" />
+                        <input type="hidden" name="user_id" value="<?php echo (int) $user->user_id; ?>" />
                         <input type="hidden" name="dosql" value="do_user_token" />
                         <input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
                         <input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" />

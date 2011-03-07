@@ -1,7 +1,7 @@
 <?php /* $Id$ $URL$ */
 
 /*
-Copyright (c) 2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+Copyright (c) 2007-2011 The web2Project Development Team <w2p-developers@web2project.net>
 Copyright (c) 2003-2007 The dotProject Development Team <core-developers@dotproject.net>
 
 This file is part of web2Project.
@@ -379,6 +379,8 @@ if (file_exists($module_file)) {
 if (!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
 	echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
+ 	//Theme footer goes before the performance box
+	require W2P_BASE_DIR . '/style/' . $uistyle . '/footer.php';
 	if (W2P_PERFORMANCE_DEBUG) {
 		$db_info = $db->ServerInfo();
 		print ('<table width="100%" cellspacing="0" cellpadding="4" border="0"  class="system-info">');
@@ -443,20 +445,22 @@ if (!$suppressHeaders) {
 	}
 	echo '
 		<!--AJAX loading messagebox -->
-		<div id="loadingMessage" style="alpha(opacity=100);opacity:1;position: fixed; left: 50%; top: 0;display: none;">
-		<table width="80" cellpadding="3" cellspacing="3" border="0">
+		<div id="loadingMessage" style="alpha(opacity=100);opacity:1;position: fixed; left: 0px; top: 1px;display: none;">
+		<table width="80" cellpadding="1" cellspacing="1" border="0">
 		<tr>
+			<td>';
+	echo w2PshowImage('ajax-loader.gif', '', '', 'web2Project', 'Server Connection Running, Please wait...');
+	echo '
+			</td>
 			<td>
 				<b>' . $AppUI->_('Loading') . '</b>
-			</td>
-			<td>';
-	echo w2PshowImage('progress.gif', '10', '10', 'spinner', 'Loading...');
-	echo '
 			</td>
 		</tr>
 		</table>
 		</div>
 		<!--End AJAX loading messagebox -->';
-	require W2P_BASE_DIR . '/style/' . $uistyle . '/footer.php';
+	//close the body and html here, instead of on the theme footer.
+	echo '</body>
+          </html>';
 }
 ob_end_flush();

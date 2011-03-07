@@ -38,7 +38,7 @@ class smartsearch {
 			$outstring = '';
 			$subrecord_count = 0;
 			foreach ($results as $records) {
-				if ($permissions->checkModuleItem($this->table_module, 'view', $records[$this->table_key])) {
+                if ($permissions->checkModuleItem($this->table_module, 'view', $records[$this->table_key])) {
 					//Don't count records for which the user does not have permission
 					$record_count += 1;
 					$subrecord_count += 1;
@@ -89,7 +89,7 @@ class smartsearch {
 		} else {
 			$q->addTable($this->table);
 		}
-		$q->addQuery($this->table_key);
+		$q->addQuery('DISTINCT('.$this->table_key.')');
 		if (isset($this->table_key2)) {
 			$q->addQuery($this->table_key2);
 		}
@@ -112,8 +112,12 @@ class smartsearch {
 			$q->addWhere($this->table_extra);
 		}
 
+        $ignore = w2PgetSysVal('FileIndexIgnoreWords');
+        $ignore = explode(',', $ignore['FileIndexIgnoreWords']);
+        $this->keywords = array_diff(array_keys($this->keywords), $ignore);
+
 		$sql = '';
-		foreach (array_keys($this->keywords) as $keyword) {
+		foreach ($this->keywords as $keyword) {
 			$sql .= '(';
 
 			foreach ($this->search_fields as $field) {
@@ -162,10 +166,7 @@ function highlight($text, $keyval) {
 	$txt = $text;
 	$hicolor = array('#FFFF66', '#ADD8E6', '#90EE8A', '#FF99FF');
 	$keys = array();
-	if (!is_array($keyval))
-		$keys = array($keyval);
-	else
-		$keys = $keyval;
+	$keys = (!is_array($keyval)) ? array($keyval) : $keyval;
 
 	foreach ($keys as $key) {
 		if (mb_strlen($key[0]) > 0) {

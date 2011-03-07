@@ -12,8 +12,9 @@
 
 /*
 	@package xajax
-	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@version $Id: xajaxPlugin.inc.php 1620 2011-02-10 17:46:07Z pedroix $
+	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
 
@@ -94,6 +95,9 @@ class xajaxRequestPlugin extends xajaxPlugin
 		Called by the <xajaxPluginManager> when a request is being processed.  This 
 		will only occur when <xajax> has determined that the current request is a valid
 		(registered) xajax enabled function via <xajax->canProcessRequest>.
+		
+		Returns:
+			false
 	*/
 	function processRequest()
 	{
@@ -127,11 +131,13 @@ class xajaxResponsePlugin extends xajaxPlugin
 		Called by the <xajaxResponse> object that is currently being used
 		to build the response that will be sent to the client browser.
 		
+		Parameters:
+		
 		objResponse - (object):  A reference to the <xajaxResponse> object
 	*/
-	function setResponse(&$objResponse)
+	function setResponse($objResponse)
 	{
-		$this->objResponse =& $objResponse;
+		$this->objResponse = $objResponse;
 	}
 	
 	/*
@@ -156,7 +162,7 @@ class xajaxResponsePlugin extends xajaxPlugin
 	function getName()
 	{
 //SkipDebug
-		$objLanguageManager =& xajaxLanguageManager::getInstance();
+		$objLanguageManager = xajaxLanguageManager::getInstance();
 		trigger_error(
 			$objLanguageManager->getText('XJXPLG:GNERR:01')
 			, E_USER_ERROR
@@ -175,7 +181,7 @@ class xajaxResponsePlugin extends xajaxPlugin
 	function process()
 	{
 //SkipDebug
-		$objLanguageManager =& xajaxLanguageManager::getInstance();
+		$objLanguageManager = xajaxLanguageManager::getInstance();
 		trigger_error(
 			$objLanguageManager->getText('XJXPLG:PERR:01')
 			, E_USER_ERROR

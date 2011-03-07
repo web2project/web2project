@@ -12,8 +12,9 @@
 
 /*
 	@package xajax
-	@version $Id$
-	@copyright Copyright (c) 2005-2006 by Jared White & J. Max Wilson
+	@version $Id: xajaxEventPlugin.inc.php 1620 2011-02-10 17:46:07Z pedroix $
+	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
+	@copyright Copyright (c) 2008-2009 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License
 */
 
@@ -126,7 +127,7 @@ class xajaxEventPlugin extends xajaxRequestPlugin
 
 				if (false === isset($this->aEvents[$sEvent]))
 				{
-					$xe =& new xajaxEvent($sEvent);
+					$xe = new xajaxEvent($sEvent);
 
 					if (2 < count($aArgs))
 						if (is_array($aArgs[2]))
@@ -149,8 +150,8 @@ class xajaxEventPlugin extends xajaxRequestPlugin
 					{
 						$xuf =& $aArgs[2];
 
-						if (false === is_a($xuf, 'xajaxUserFunction'))
-							$xuf =& new xajaxUserFunction($xuf);
+						if (false === ($xuf instanceof xajaxUserFunction))
+							$xuf = new xajaxUserFunction($xuf);
 
 						$objEvent =& $this->aEvents[$sEvent];
 						$objEvent->addHandler($xuf);
@@ -208,6 +209,8 @@ class xajaxEventPlugin extends xajaxRequestPlugin
 
 		$objArgumentManager =& xajaxArgumentManager::getInstance();
 		$aArgs = $objArgumentManager->process();
+		
+
 
 		foreach (array_keys($this->aEvents) as $sKey)
 		{

@@ -1,0 +1,22 @@
+##
+## DO NOT MODIFY THIS FILE BY HAND!
+##
+'Access Denied'=>'Accesso Negato',
+'Allowed Companies'=>'Società Consentite',
+'Color Selector'=>'Selettore Colore',
+'Contacts for'=>'Contatti di',
+'Continue'=>'Continuare',
+'Current Password'=>'Password attuale',
+'New Password'=>'Nuova Password',
+'Preset'=>'Predefinito',
+'Repeat New Password'=>'Ripeti Nuova Password',
+'View all allowed companies'=>'Vedi tutte le società abilitate',
+'[none]'=>'[nessuno]',
+'accessDeniedMsg'=>'Hai cercato di accedere a un elemento di web2project senza avere i sufficienti permessi.Contattare l\'Amministratore di Sistema.',
+'chgpwLogin'=>'L\'Utente non esiste',
+'chgpwUpdated'=>'La password è stata aggiornata',
+'chgpwWrongPW'=>'Hai immesso una password sbagliata',
+'colorLegend'=>'Scegliere un colore per identificare la selezione e chiudere il Selettore Colore.',
+'nodepartments, companies, permissions'=>'No reparti, società, permessi',
+'notasks'=>'Nessuna Attività disponibile',
+'submit'=>'invia',

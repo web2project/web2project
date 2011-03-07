@@ -3,6 +3,18 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 global $AppUI, $w2Pconfig;
+//Though we are in suppressHeaders mode, we should properly set the HTML Headers
+//For this report.
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta name="Description" content="web2Project Default Style" />
+        <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
+        <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
+        <title><?php echo @w2PgetConfig('page_title'); ?></title>
+<?php
 // check permissions for this module
 $perms = &$AppUI->acl();
 $canView = canView($m);
@@ -163,7 +175,6 @@ $types = w2Pgetsysval('TaskType');
 global $task_access;
 $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inactive Task');
 ?>
-
 <style type="text/css">
 /* Standard table 'spreadsheet' style */
 TABLE.prjprint {
@@ -187,9 +198,10 @@ TABLE.prjprint TD {
 
 TABLE.prjprint TR {
 	padding:5px;
-}
-	
+}	
 </style>
+</head>
+<body>
 <table width="100%" class="prjprint">
 <form name="frmDelete" action="./index.php?m=projects" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_project_aed" />
@@ -221,3 +233,5 @@ if ($canReadProject) {
 }
 ?>
 </table>
+</body>
+</html>

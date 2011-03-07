@@ -75,7 +75,7 @@ class CSystem {
                 $result = $request->processRequest();
                 $data = json_decode($result);
 
-                $q = new DBQuery();
+                $q = new w2p_Database_Query();
                 $q->addTable('config');
                 if ('' == w2PgetConfig('available_version', '')) {
                     $q->addInsert('config_name', 'available_version');

@@ -24,7 +24,7 @@ $perms = &$AppUI->acl();
                     <?php } ?>
                     <?php echo $AppUI->_('Access'); ?>
                     <br />
-                    <?php echo arraySelect($task_access, 'task_access', 'class="text"', intval($task->task_access), true); ?>
+                    <?php echo arraySelect($task_access, 'task_access', 'class="text"', (int) $task->task_access, true); ?>
                     <br /><?php echo $AppUI->_('Web Address'); ?>
                     <br /><input type="text" class="text" name="task_related_url" value="<?php echo $task->task_related_url; ?>" size="40" maxlength="255" />
                 </td>

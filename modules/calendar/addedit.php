@@ -96,8 +96,8 @@ foreach ($projects as $project_id => $project_info) {
 $projects = arrayMerge(array(0 => $all_projects), $projects);
 
 if ($event_id || $is_clash) {
-	$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($obj->event_start_date) : null;
-	$end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($obj->event_end_date) : $start_date;
+	$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_start_date, '%Y-%m-%d %T')) : null;
+	$end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_end_date, '%Y-%m-%d %T')) : $start_date;
 } else {
 	$start_date = new w2p_Utilities_Date($date);
 	$start_date->setTime(8, 0, 0);
@@ -272,6 +272,14 @@ function removeUser() {
                     <td>
                         <?php
                         echo arraySelect($projects, 'event_project', 'size="1" class="text"', ($obj->event_project ? $obj->event_project : 0));
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><label for="event_owner"><?php echo $AppUI->_('Event Owner'); ?>:</label></td>
+                    <td>
+                        <?php
+                        echo arraySelect($users, 'event_owner', 'size="1" class="text"', ($obj->event_owner ? $obj->event_owner : $AppUI->user_id));
                         ?>
                     </td>
                 </tr>

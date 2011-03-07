@@ -107,7 +107,7 @@ class CTask extends w2p_Core_BaseObject {
 		$errorArray = array();
 		$baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-		$this->task_id = intval($this->task_id);
+		$this->task_id = (int) $this->task_id;
 
 		if (is_null($this->task_priority) || !is_numeric((int) $this->task_priority)) {
 			$errorArray['task_priority'] = $baseErrorMsg . 'task priority is NULL';
@@ -137,10 +137,10 @@ class CTask extends w2p_Core_BaseObject {
 		}
 
 		// ensure changes to checkboxes are honoured
-		$this->task_milestone = intval($this->task_milestone);
-		$this->task_dynamic = intval($this->task_dynamic);
+		$this->task_milestone = (int) $this->task_milestone;
+		$this->task_dynamic = (int) $this->task_dynamic;
 
-		$this->task_percent_complete = intval($this->task_percent_complete);
+		$this->task_percent_complete = (int) $this->task_percent_complete;
 
 		$this->task_target_budget = $this->task_target_budget ? $this->task_target_budget : 0.00;
 
@@ -530,8 +530,9 @@ class CTask extends w2p_Core_BaseObject {
         if ($this->task_end_date != '' && $this->task_end_date != '0000-00-00 00:00:00') {
             $this->task_end_date = $AppUI->convertToSystemTZ($this->task_end_date);
         }
+		$this->task_contacts = explode(',', $this->task_contacts);
 
-        return $result;
+		return true;
     }
 
 	/**
@@ -546,7 +547,6 @@ class CTask extends w2p_Core_BaseObject {
         if (!$this->task_owner) {
             $this->task_owner = $AppUI->user_id;
         }
-
 
 		$importing_tasks = false;
         $errorMsgArray = $this->check();
@@ -659,16 +659,18 @@ class CTask extends w2p_Core_BaseObject {
 		//split out related contacts and store them seperatly.
 		$q->setDelete('task_contacts');
 		$q->addWhere('task_id=' . (int)$this->task_id);
+
 		$q->exec();
 		$q->clear();
-		if (!empty($this->task_contacts)) {
-			$contacts = explode(',', $this->task_contacts);
-			foreach ($contacts as $contact) {
-				$q->addTable('task_contacts');
-				$q->addInsert('task_id', $this->task_id);
-				$q->addInsert('contact_id', $contact);
-				$q->exec();
-				$q->clear();
+		if ($this->task_contacts) {
+			foreach ($this->task_contacts as $contact) {
+				if ($contact) {
+					$q->addTable('task_contacts');
+					$q->addInsert('task_id', $this->task_id);
+					$q->addInsert('contact_id', $contact);
+					$q->exec();
+					$q->clear();
+				}
 			}
 		}
 
@@ -823,7 +825,7 @@ class CTask extends w2p_Core_BaseObject {
         unset($tarr[$parent_id]);
 
 		foreach ($tarr as $task_id => $value) {
-			if (intval($task_id) > 0) {
+			if ((int) $task_id) {
 				$q->addTable('task_dependencies');
 				$q->addReplace('dependencies_task_id', $this->task_id);
 				$q->addReplace('dependencies_req_task_id', $task_id);
@@ -1643,7 +1645,7 @@ class CTask extends w2p_Core_BaseObject {
 		$alloc = $this->getAllocation('user_id');
 		$overAssignment = false;
 		foreach ($tarr as $user_id) {
-			if (intval($user_id) > 0) {
+			if ((int) $user_id) {
 				$perc = $perc_assign[$user_id];
 				if (w2PgetConfig('check_overallocation') && $perc > $alloc[$user_id]['freeCapacity']) {
 					// add Username of the overAssigned User
@@ -1667,6 +1669,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
 		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name, co.contact_first_name');
+		$q->addQuery('co.contact_email AS user_email');
 		$q->addWhere('ut.task_id = ' . (int)$taskId);
 
 		return $q->loadHashList('user_id');
@@ -2253,8 +2256,8 @@ class CTask extends w2p_Core_BaseObject {
         $search['table_link'] = 'index.php?m=tasks&a=view&task_id='; // first part of link
         $search['table_title'] = 'Tasks';
         $search['table_orderby'] = 'task_name';
-        $search['search_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
-        $search['display_fields'] = array('task_name', 'task_description', 'task_related_url', 'task_departments', 'task_contacts', 'task_custom');
+        $search['search_fields'] = array('task_name', 'task_description', 'task_related_url');
+        $search['display_fields'] = $search['search_fields'];
 
         return $search;
     }
@@ -2279,7 +2282,7 @@ class CTask extends w2p_Core_BaseObject {
 
 		$q->addWhere('(task_start_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ' OR task_end_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ')');
 		$q->addWhere('task_percent_complete < 100');
-		$q->addWhere('task_dynamic = 0');
+		$q->addWhere('task_dynamic <> 1');
 
 		$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 		$q->addWhere('ut.user_id = ' . $userId);
@@ -2439,7 +2442,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	$canEdit = ($arr['task_represents_project']) ? false : true;
 	$canViewLog = true;
 	if ($canEdit) {
-        $s .= w2PtoolTip('edit task', 'click to edit this task') . '<a href="?m=tasks&amp;a=addedit&amp;task_id=' . $arr['task_id'] . '">' . w2PshowImage('icons/pencil.gif', 12, 12) . '</a>' . w2PendTip();
+        $s .= '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PtoolTip('edit task', 'click to edit this task') . w2PshowImage('icons/pencil.gif', 12, 12) . w2PendTip() . '</a>' ;
 	}
 	$s .= '</td>';
 	// pinned
@@ -2454,13 +2457,20 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$s .= '<td align="center">' . $AppUI->_('-') . '</td>';
 	}
 	// percent complete and priority
-	$s .= ('<td align="right">' . intval($arr['task_percent_complete']) . '%</td><td align="center" nowrap="nowrap">');
+	$s .= ('<td align="right">' . (int) $arr['task_percent_complete'] . '%</td><td align="center" nowrap="nowrap">');
 	if ($arr['task_priority'] < 0) {
 		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['task_priority'] . '.gif') . '" alt="" />';
 	} elseif ($arr['task_priority'] > 0) {
 		$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['task_priority'] . '.gif') . '" alt="" />';
 	}
-	$s .= (($arr['file_count'] > 0) ? '<img src="' . w2PfindImage('clip.png') . '" alt="F" />' : '') . '</td>';
+	$s .= '</td><td align="center" nowrap="nowrap">';
+	if ($arr['user_task_priority'] < 0) {
+		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['user_task_priority'] . '.gif') . '" alt="" />';
+	} elseif ($arr['task_priority'] > 0) {
+		$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['user_task_priority'] . '.gif') . '" alt="" />';
+	}
+	$s .= '</td>';
+
 	// dots
 	$s .= '<td width="' . (($today_view) ? '50%' : '90%') . '">';
 	//level

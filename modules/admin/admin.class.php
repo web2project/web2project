@@ -268,7 +268,7 @@ class CUser extends w2p_Core_BaseObject {
         $search['table_title'] = 'Users';
         $search['table_orderby'] = 'user_username';
         $search['search_fields'] = array('user_username', 'user_signature');
-        $search['display_fields'] = array('user_username', 'user_signature');
+        $search['display_fields'] = $search['search_fields'];
 
         return $search;
     }
@@ -288,6 +288,7 @@ class CUser extends w2p_Core_BaseObject {
 		$q = new w2p_Database_Query();
 		$q->addTable('users', 'u');
 		$q->addQuery('u.*');
+		$q->addQuery('con.contact_email AS user_email');
 		$q->addQuery('uf.feed_token');
 		$q->addQuery('con.*, company_id, company_name, dept_name, dept_id');
 		$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');

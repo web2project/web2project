@@ -23,6 +23,8 @@ if (!$canEdit && $dept_id) {
 
 // load the department types
 $types = w2PgetSysVal('DepartmentType');
+$countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
+		array('-' => '----') + w2PgetSysVal('GlobalCountries');
 
 // load the record data
 $department = new CDepartment();
@@ -151,7 +153,6 @@ function submitIt() {
 			<td align="right"><?php echo $AppUI->_('Country'); ?>:</td>
 			<td>
 				<?php
-					$countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
 					echo arraySelect($countries, 'dept_country', 'size="1" class="text"', $department->dept_country ? $department->dept_country : 0);
 				?>
 			</td>

@@ -41,6 +41,12 @@ function w2p_autoload($class_name) {
         case 'cappui':
             require_once W2P_BASE_DIR . '/classes/ui.class.php';
             break;
+        case 'xajax':
+            require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
+            break;
+        case 'w2pajaxresponse':
+            require_once W2P_BASE_DIR . '/classes/ajax.class.php';
+            break;
 
         /*
          * The following are all wirings for module classes that don't follow
@@ -286,16 +292,17 @@ function w2PcontextHelp($title, $link = '') {
  */
 function w2PgetConfig($key, $default = null) {
 	global $w2Pconfig, $AppUI;
+
 	if (isset($w2Pconfig[$key])) {
-            return $w2Pconfig[$key];
+		return $w2Pconfig[$key];
 	} else {
-            if (!is_null($default)) {
-                $obj = new w2p_Core_Config();
-                $obj->config_name = $key;
-                $obj->config_value = $default;
-                $obj->store($AppUI);
-            }
-            return $default;
+		if (!is_null($default)) {
+			$obj = new w2p_Core_Config();
+			$obj->config_name = $key;
+			$obj->config_value = $default;
+			$obj->store($AppUI);
+		}
+		return $default;
 	}
 }
 
@@ -458,7 +465,7 @@ function w2PfindImage($name, $module = null) {
  *	@param string The image height
  *	@param string The alt text for the image
  */
-function w2PshowImage($src, $wid = '', $hgt = '', $alt = '.', $title = '', $module = null) {
+function w2PshowImage($src, $wid = '', $hgt = '', $alt = '', $title = '', $module = null) {
 	global $AppUI, $m;
 
 	if ($src == '') {
@@ -1414,4 +1421,43 @@ function w2p_pluralize($word) {
         }
     }
     return $word;
+}
+
+
+function seconds2HM($sec, $padHours = true) {
+    $HM = "";
+    // there are 3600 seconds in an hour, so if we
+    // divide total seconds by 3600 and throw away
+    // the remainder, we've got the number of hours
+    $hours = intval(intval($sec) / 3600);
+    // with the remaining seconds divide them by 60
+    // and then round the floating number to get the precise minute
+    $minutes = intval(round(($sec - ($hours * 3600)) / 60) ,0);
+
+    if (intval($hours) == 0 && intval($minutes) < 0) {
+        $HM .= '-0:';
+    } else {
+        // add to $hms, with a leading 0 if asked for
+        $HM .= ($padHours) ? str_pad($hours, 2, "0", STR_PAD_LEFT). ':' : $hours. ':';
+    }
+    if (intval($hours) < 0 || intval($minutes) < 0) {
+        $minutes = $minutes * (-1);
+    }
+    $HM .= str_pad($minutes, 2, "0", STR_PAD_LEFT);
+    //$seconds = intval($sec % 60);
+
+    // add to $hms, again with a leading 0 if needed
+    //$hms .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
+    return $HM;
+}
+
+function HM2seconds ($HM) {
+    list($h, $m) = explode (":", $HM);
+    if (intval($h) > 23 && intval($h) < 0) $h = 0;
+    if (intval($m) > 59 && intval($m) < 0) $m = 0;
+    $seconds = 0;
+    $seconds += (intval($h) * 3600);
+    $seconds += (intval($m) * 60);
+    //$seconds += (intval($s));
+    return $seconds;
 }
