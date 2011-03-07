@@ -203,17 +203,12 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         $name = $a['task_name'];
-        $name = mb_strlen($name) > 34 ? mb_substr($name, 0, 33) . '.' : $name;
+        $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
         $name = str_repeat(' ', $level) . $name;
 
-        if ($caller == 'todo') {
-            $pname = $a['project_name'];
-            if ($locale_char_set == 'utf-8') {
-                $pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
-            } else {
-                $pname = strlen($pname) > 14 ? substr($pname, 0, 5) . '...' . substr($pname, -5, 5) : $pname;
-            }
-        }
+        $pname = $a['project_name'];
+        $pname = (mb_strlen($pname) > 25) ? (mb_substr($pname, 0, 20) . '...') : $pname;
+
         //using new jpGraph determines using Date object instead of string
         $start = $a['task_start_date'];
         $end_date = $a['task_end_date'];

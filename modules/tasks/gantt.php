@@ -290,13 +290,11 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
     if ($canAccess) {
         $name = $a['task_name'];
-        $name = mb_strlen($name) > 34 ? mb_substr($name, 0, 33) . '.' : $name;
+        $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
         $name = str_repeat(' ', $level) . $name;
 
-        if ($caller == 'todo') {
-            $pname = $a['project_name'];
-            $pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
-        }
+        $pname = $a['project_name'];
+        $pname = (mb_strlen($pname) > 25) ? (mb_substr($pname, 0, 20) . '...') : $pname;
 
         //using new jpGraph determines using Date object instead of string
         $start_date = new w2p_Utilities_Date($a['task_start_date']);
