@@ -163,7 +163,7 @@ if (!is_array($projects) || 0 == count($projects)) {
 	foreach ($projects as $p) {
 
         $pname = $p['project_name'];
-        $pname = (mb_strlen($pname) > 25) ? (mb_substr($pname, 0, 20) . '...') : $pname;
+        $pname = (mb_strlen($pname) > 30) ? (mb_substr($pname, 0, 25) . '...') : $pname;
 
 		//using new jpGraph determines using Date object instead of string
 		$start = ($p['project_start_date'] > '1969-12-31 19:00:00') ? $p['project_start_date'] : '';
@@ -214,7 +214,9 @@ if (!is_array($projects) || 0 == count($projects)) {
             $bestColor = bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000');
 
 			foreach ($tasks as $t) {
-                $name = mb_strlen($t['task_name']) > 20 ? mb_substr($t['task_name'], 0, 20) . '...' : $t['task_name'];
+                $name = $t['task_name'];
+                $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
+
                 //Check if start date exists, if not try giving it the end date.
                 //If the end date does not exist then set it for today.
                 //This avoids jpgraphs internal errors that render the gantt completely useless
