@@ -37,7 +37,7 @@ $link_types = w2PgetSysVal('LinkType');
 
 if ($canRead) {
 	$link = new CLink();
-	$links = $link->getProjectTaskLinksByCategory($AppUI, $project_id, $task_id, --$tab, $search);
+	$links = $link->getProjectTaskLinksByCategory($AppUI, $project_id, $task_id, $tab-1, $search);
 } else {
 	$AppUI->redirect('m=public&a=access_denied');
 }
