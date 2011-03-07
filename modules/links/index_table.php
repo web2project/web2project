@@ -1,4 +1,4 @@
-<?php /* $Id: index_table.php 1466 2010-09-22 05:14:41Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/links/index_table.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -37,7 +37,7 @@ $link_types = w2PgetSysVal('LinkType');
 
 if ($canRead) {
 	$link = new CLink();
-	$links = $link->getProjectTaskLinksByCategory($AppUI, $project_id, $task_id, --$tab, $search);
+	$links = $link->getProjectTaskLinksByCategory($AppUI, $project_id, $task_id, $tab-1, $search);
 } else {
 	$AppUI->redirect('m=public&a=access_denied');
 }
