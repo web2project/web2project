@@ -16,10 +16,11 @@ $canEdit = $perms->checkModuleItem($m, 'edit', $event_id);
 // check if this record has dependencies to prevent deletion
 $msg = '';
 $event = new CEvent();
-$canDelete = $event->canDelete($msg, $event_id);
+$event->loadFull($event_id);
+$canDelete = canDelete($m, $event_id);
 
 // load the record data
-if (!$event->load($event_id)) {
+if (!$event) {
 	$AppUI->setMsg('Event');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
@@ -105,10 +106,14 @@ function delIt() {
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
 				<td class="hilite" width="100%"><?php echo $AppUI->_($types[$event->event_type]); ?></td>
-			</tr>	
+			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
-				<td class="hilite" width="100%"><a href='?m=projects&a=view&project_id=<?php echo $event->event_project ?>'><?php echo $event_project; ?></a></td>
+                <td style="background-color:#<?php echo $event->project_color_identifier; ?>">
+                        <font color="<?php echo bestColor($event->project_color_identifier); ?>">
+                        <a href='?m=projects&a=view&project_id=<?php echo $event->event_project ?>'><?php echo $event_project; ?></a>
+                    </font>
+                </td>
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Starts'); ?>:</td>

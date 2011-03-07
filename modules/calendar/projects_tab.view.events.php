@@ -5,13 +5,16 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $project_id, $deny, $canRead, $canEdit, $w2Pconfig, $start_date, $end_date, $this_day, $event_filter, $event_filter_list;
 
+//TODO: This is a hack until we can refactor getEventTooltip() somewhere else..
+include 'links_events.php';
+
 $perms = &$AppUI->acl();
 $user_id = $AppUI->user_id;
 $other_users = false;
 $no_modify = false;
 
-$start_date =  new w2p_Utilities_Date('0000-00-00 00:00:00');
-$end_date =  new w2p_Utilities_Date('9999-12-31 23:59:59');
+$start_date =  new w2p_Utilities_Date('2001-01-01 00:00:00');
+$end_date =  new w2p_Utilities_Date('2100-12-31 23:59:59');
 
 // assemble the links for the events
 $events = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, $project_id);
@@ -38,9 +41,13 @@ foreach ($events as $row) {
 	$html .= '<td width="10%" nowrap="nowrap">';
 	$html .= w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar');
 	$html .= '&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b><td>';
-	$html .= $href ? '<a href="' . $href . '" class="event" title="' . $alt . '">' : '';
+
+    $html .= w2PtoolTip($row['event_title'], getEventTooltip($row['event_id']), true);
+	$html .= '<a href="' . $href . '" class="event">';
 	$html .= $row['event_title'];
-	$html .= $href ? '</a>' : '';
+	$html .= '</a>';
+    $html .= w2PendTip();
+
 	$html .= '</td></tr>';
 }
 $html .= '</table>';
