@@ -129,7 +129,8 @@ $count = 0;
 
 $gantt = new w2p_Output_GanttRenderer($AppUI, $width);
 $gantt->localize();
-$gantt->setTitle($projects[$project_id]['project_name'], '#'.$projects[$project_id]['project_color_identifier']);
+$pname = $projects[$project_id]['project_name'];
+$gantt->setTitle($pname, '#'.$projects[$project_id]['project_color_identifier']);
 // get the prefered date format
 
 $field = ($showWork == '1') ? 'Work' : 'Dur';
@@ -203,7 +204,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         $name = $a['task_name'];
-        $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
+        $name = ((mb_strlen($name) > 35) ? (mb_substr($name, 0, 30) . '...') : $name);
         $name = str_repeat(' ', $level) . $name;
 
         $pname = $a['project_name'];

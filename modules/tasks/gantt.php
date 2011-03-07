@@ -221,7 +221,7 @@ if ($showTaskNameOnly == '1') {
 } else {
     if ($caller == 'todo') {
         $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
-        $columnSizes = array(180, 135, 40, 75, 75);
+        $columnSizes = array(200, 160, 40, 75, 75);
     } else {
         $columnNames = array('Task name', $field, 'Start', 'Finish');
         $columnSizes = array(250, 60, 80, 80);
@@ -290,7 +290,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
     if ($canAccess) {
         $name = $a['task_name'];
-        $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
+        $name = ((mb_strlen($name) > 35) ? (mb_substr($name, 0, 30) . '...') : $name);
         $name = str_repeat(' ', $level) . $name;
 
         $pname = $a['project_name'];
