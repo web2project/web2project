@@ -1,6 +1,6 @@
 <?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, 
@@ -37,77 +37,77 @@ $projects = $project->getAllowedProjects($AppUI->user_id, false);
 $caller = w2PgetParam($_REQUEST, 'caller', null);
 
 if ($caller == 'todo') {
-	$user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
+    $user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
 
-	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . CContact::getContactByUserid($user_id);
-	$projects[$project_id]['project_color_identifier'] = 'ff6000';
+    $projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . CContact::getContactByUserid($user_id);
+    $projects[$project_id]['project_color_identifier'] = 'ff6000';
 
-	$q = new w2p_Database_Query;
-	$q->addQuery('t.*');
-	$q->addQuery('project_name, project_id, project_color_identifier');
-	$q->addQuery('tp.task_pinned');
-	$q->addTable('tasks', 't');
+    $q = new w2p_Database_Query;
+    $q->addQuery('t.*');
+    $q->addQuery('project_name, project_id, project_color_identifier');
+    $q->addQuery('tp.task_pinned');
+    $q->addTable('tasks', 't');
     $q->innerJoin('projects', 'pr', 'pr.project_id = t.task_project');
- 	$q->leftJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . (int) $user_id);
-	$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = t.task_id and tp.user_id = ' . (int)$user_id);
-	$q->addWhere('(t.task_percent_complete < 100 OR t.task_percent_complete IS NULL)');
-	$q->addWhere('t.task_status = 0');
-	if (!$showArcProjs) {
-		$q->addWhere('pr.project_active = 1');
-		if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-			$q->addWhere('pr.project_status <> ' . (int)$template_status);
-		}
-	}
-	if (!$showLowTasks) {
-		$q->addWhere('task_priority >= 0');
-	}
-	if (!$showHoldProjs) {
-		$q->addWhere('project_active = 1');
-	}
-	if (!$showDynTasks) {
-		$q->addWhere('task_dynamic <> 1');
-	}
-	if ($showPinned) {
-		$q->addWhere('task_pinned = 1');
-	}
+    $q->leftJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . (int) $user_id);
+    $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = t.task_id and tp.user_id = ' . (int) $user_id);
+    $q->addWhere('(t.task_percent_complete < 100 OR t.task_percent_complete IS NULL)');
+    $q->addWhere('t.task_status = 0');
+    if (!$showArcProjs) {
+        $q->addWhere('pr.project_active = 1');
+        if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+            $q->addWhere('pr.project_status <> ' . (int) $template_status);
+        }
+    }
+    if (!$showLowTasks) {
+        $q->addWhere('task_priority >= 0');
+    }
+    if (!$showHoldProjs) {
+        $q->addWhere('project_active = 1');
+    }
+    if (!$showDynTasks) {
+        $q->addWhere('task_dynamic <> 1');
+    }
+    if ($showPinned) {
+        $q->addWhere('task_pinned = 1');
+    }
 
     $q->addGroup('t.task_id');
     $q->addOrder('t.task_end_date, t.task_priority DESC');
 } else {
-	// pull tasks
-	$q = new w2p_Database_Query();
-	$q->addTable('tasks', 't');
-	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
-		' task_duration, task_duration_type, task_priority, task_percent_complete,'.
-		' task_order, task_project, task_milestone, project_name, project_color_identifier,'.
-		' task_dynamic');
-	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
+    // pull tasks
+    $q = new w2p_Database_Query();
+    $q->addTable('tasks', 't');
+    $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,' .
+            ' task_duration, task_duration_type, task_priority, task_percent_complete,' .
+            ' task_order, task_project, task_milestone, project_name, project_color_identifier,' .
+            ' task_dynamic');
+    $q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
 
-	if ($project_id) {
-		$q->addWhere('task_project = ' . (int)$project_id);
-	}
+    if ($project_id) {
+        $q->addWhere('task_project = ' . (int) $project_id);
+    }
 
-	switch ($f) {
-		case 'all':
-			$q->addWhere('task_status > -1');
-			break;
-		case 'myproj':
-			$q->addWhere('task_status > -1');
-			$q->addWhere('project_owner = ' . (int)$AppUI->user_id);
-			break;
-		case 'mycomp':
-			$q->addWhere('task_status > -1');
-			$q->addWhere('project_company = ' . (int)$AppUI->user_company);
-			break;
-		case 'myinact':
-			$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-			$q->addWhere('ut.user_id = '.$AppUI->user_id);
-			break;
-		default:
-			$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-			$q->addWhere('ut.user_id = '.$AppUI->user_id);
-			break;
-	}
+    switch ($f) {
+        case 'all':
+            $q->addWhere('task_status > -1');
+            break;
+        case 'myproj':
+            $q->addWhere('task_status > -1');
+            $q->addWhere('project_owner = ' . (int) $AppUI->user_id);
+            break;
+        case 'mycomp':
+            $q->addWhere('task_status > -1');
+            $q->addWhere('project_company = ' . (int) $AppUI->user_company);
+            break;
+        case 'myinact':
+            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+            $q->addWhere('ut.user_id = ' . $AppUI->user_id);
+            break;
+        default:
+            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+            $q->addWhere('ut.user_id = ' . $AppUI->user_id);
+            break;
+    }
 
     $q->addOrder('p.project_id, t.task_end_date');
 }
@@ -124,49 +124,49 @@ $start_min = date('Y-m-d H:i:s');
 
 //pull the tasks into an array
 if ($caller != 'todo') {
-	$criticalTasks = $project->getCriticalTasks($project_id);
+    $criticalTasks = $project->getCriticalTasks($project_id);
 }
 
 foreach ($proTasks as $row) {
-	//Check if start date exists, if not try giving it the end date.
-	//If the end date does not exist then set it for today.
-	//This avoids jpgraphs internal errors that render the gantt completely useless
-	if ($row['task_start_date'] == '0000-00-00 00:00:00') {
-		if ($row['task_end_date'] == '0000-00-00 00:00:00') {
-			$todaydate = new w2p_Utilities_Date();
-			$row['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
-		} else {
-			$row['task_start_date'] = $row['task_end_date'];
-		}
-	}
+    //Check if start date exists, if not try giving it the end date.
+    //If the end date does not exist then set it for today.
+    //This avoids jpgraphs internal errors that render the gantt completely useless
+    if ($row['task_start_date'] == '0000-00-00 00:00:00') {
+        if ($row['task_end_date'] == '0000-00-00 00:00:00') {
+            $todaydate = new w2p_Utilities_Date();
+            $row['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+        } else {
+            $row['task_start_date'] = $row['task_end_date'];
+        }
+    }
 
-	$tsd = new w2p_Utilities_Date($row['task_start_date']);
-	if ($tsd->before(new w2p_Utilities_Date($start_min))) {
-		$start_min = $row['task_start_date'];
-	}
+    $tsd = new w2p_Utilities_Date($row['task_start_date']);
+    if ($tsd->before(new w2p_Utilities_Date($start_min))) {
+        $start_min = $row['task_start_date'];
+    }
 
-	//Check if end date exists, if not try giving it the start date.
-	//If the start date does not exist then set it for today.
-	//This avoids jpgraphs internal errors that render the gantt completely useless
-	if ($row['task_end_date'] == '0000-00-00 00:00:00') {
-		if ($row['task_duration']) {
-			$row['task_end_date'] = db_unix2dateTime(db_dateTime2unix($row['task_start_date']) + SECONDS_PER_DAY * convert2days($row['task_duration'], $row['task_duration_type']));
-		} else {
-			$todaydate = new w2p_Utilities_Date();
-			$row['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
-		}
-	}
+    //Check if end date exists, if not try giving it the start date.
+    //If the start date does not exist then set it for today.
+    //This avoids jpgraphs internal errors that render the gantt completely useless
+    if ($row['task_end_date'] == '0000-00-00 00:00:00') {
+        if ($row['task_duration']) {
+            $row['task_end_date'] = db_unix2dateTime(db_dateTime2unix($row['task_start_date']) + SECONDS_PER_DAY * convert2days($row['task_duration'], $row['task_duration_type']));
+        } else {
+            $todaydate = new w2p_Utilities_Date();
+            $row['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+        }
+    }
 
-	$ted = new w2p_Utilities_Date($row['task_end_date']);
-	if ($ted->after(new w2p_Utilities_Date($end_max))) {
-		$end_max = $row['task_end_date'];
-	}
-	if ($ted->after(new w2p_Utilities_Date($projects[$row['task_project']]['project_end_date']))
-        || $projects[$row['task_project']]['project_end_date'] == '') {
-		$projects[$row['task_project']]['project_end_date'] = $row['task_end_date'];
-	}
+    $ted = new w2p_Utilities_Date($row['task_end_date']);
+    if ($ted->after(new w2p_Utilities_Date($end_max))) {
+        $end_max = $row['task_end_date'];
+    }
+    if ($ted->after(new w2p_Utilities_Date($projects[$row['task_project']]['project_end_date']))
+            || $projects[$row['task_project']]['project_end_date'] == '') {
+        $projects[$row['task_project']]['project_end_date'] = $row['task_end_date'];
+    }
 
-	$projects[$row['task_project']]['tasks'][] = $row;
+    $projects[$row['task_project']]['tasks'][] = $row;
 }
 
 unset($proTasks);
@@ -175,7 +175,7 @@ foreach ($projects as $p) {
     $parents = array();
     $tnums = count($p['tasks']);
 
-    for ($i=0; $i < $tnums; $i++) {
+    for ($i = 0; $i < $tnums; $i++) {
         $t = $p['tasks'][$i];
         if (!(isset($parents[$t['task_parent']]))) {
             $parents[$t['task_parent']] = false;
@@ -195,9 +195,9 @@ $e1 = ($end_date) ? new w2p_Utilities_Date($end_date) : new w2p_Utilities_Date()
 
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
-	$start_min = $projects[$project_id]['project_start_date'];
-	$end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) 
-				? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
+    $start_min = $projects[$project_id]['project_start_date'];
+    $end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date'])
+                            ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
 }
 
 $count = 0;
@@ -211,34 +211,34 @@ $page = 0 ;					// Numbering of output files
 $outpfiles = array();		// array of output files to be returned to caller
 $taskcount = 0 ;
 // Create task_index array
-$ctflag = false ;
-if ( count( $gtask_sliced ) > 1 ) {
-    for ( $i = 0; $i < count($gantt_arr); $i++ ) {
-        $task_index[$gantt_arr[$i][0]['task_id']] = $i+1 ;
+$ctflag = false;
+if (count($gtask_sliced) > 1) {
+    for ($i = 0; $i < count($gantt_arr); $i++) {
+        $task_index[$gantt_arr[$i][0]['task_id']] = $i + 1;
     }
-    $ctflag = true ;
+    $ctflag = true;
 }
 
-foreach ( $gtask_sliced as $gts ) {
-	$gantt = new w2p_Output_GanttRenderer($AppUI, $width);
-	$gantt->localize();
+foreach ($gtask_sliced as $gts) {
+    $gantt = new w2p_Output_GanttRenderer($AppUI, $width);
+    $gantt->localize();
 
-	$field = ($showWork == '1') ? 'Work' : 'Dur';
+    $field = ($showWork == '1') ? 'Work' : 'Dur';
 
-	if ($showTaskNameOnly == '1') {
-	    $columnNames = array('Task name');
-	    $columnSizes = array(600);
-	} else {
-		if ($caller == 'todo') {
-			$columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
-			$columnSizes = array(180, 135, 40, 75, 75);
-		} else {
-			$columnNames = array('Task name', $field, 'Start', 'Finish');
-			$columnSizes = array(250, 60, 80, 80);
-		}
-	}
-	$gantt->setColumnHeaders($columnNames, $columnSizes);
-	$gantt->setProperties(array('showhgrid' => true));
+    if ($showTaskNameOnly == '1') {
+        $columnNames = array('Task name');
+        $columnSizes = array(600);
+    } else {
+        if ($caller == 'todo') {
+            $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
+            $columnSizes = array(180, 135, 40, 75, 75);
+        } else {
+            $columnNames = array('Task name', $field, 'Start', 'Finish');
+            $columnSizes = array(250, 60, 80, 80);
+        }
+    }
+    $gantt->setColumnHeaders($columnNames, $columnSizes);
+    $gantt->setProperties(array('showhgrid' => true));
 
     if (!$start_date || !$end_date) {
         // find out DateRange from gant_arr
@@ -292,7 +292,7 @@ foreach ( $gtask_sliced as $gts ) {
     $gantt->loadTaskArray($gantt_arr);
 
     $row = 0;
-    for($i = 0; $i < count($gts); $i ++) {
+    for ($i = 0; $i < count($gts); $i++) {
         $a = $gts[$i][0];
         $level = $gts[$i][1];
         $name = $a['task_name'];
@@ -308,7 +308,7 @@ foreach ( $gtask_sliced as $gts ) {
         $start_date = new w2p_Utilities_Date($a['task_start_date']);
         $end_date = new w2p_Utilities_Date($a['task_end_date']);
         $start = $start_date->getDate();
-		$end = $end_date->getDate();
+        $end = $end_date->getDate();
 
         $progress = (int) $a['task_percent_complete'];
 
@@ -339,16 +339,16 @@ foreach ( $gtask_sliced as $gts ) {
             $q->innerJoin('contacts', 'c', 'c.contact_id = u.user_contact');
             $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
             $q->addQuery('c.contact_first_name, c.contact_last_name');
-            $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
+            $q->addWhere('ut.task_id = ' . (int) $a['task_id']);
             $res = $q->loadList();
             foreach ($res as $rw) {
-			switch ($rw['perc_assignment']) {
-				case 100:
-					$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
-					break;
-				default:
-					$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
-					break;
+                switch ($rw['perc_assignment']) {
+                    case 100:
+                        $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
+                        break;
+                    default:
+                        $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
+                        break;
                 }
             }
             $q->clear();
@@ -382,13 +382,13 @@ foreach ( $gtask_sliced as $gts ) {
                 //yellow for 'in progress' #FF9900
                 //green for 'achieved' #006600
                 // blue for 'planned' #0000FF
-                if ($a['task_percent_complete'] == 100)  {
+                if ($a['task_percent_complete'] == 100) {
                     $color = '#006600';
                 } else {
                     if (strtotime($mile_date) < strtotime($today_date)) {
                         $color = '#990000';
                     } else {
-                        if ($a['task_percent_complete'] == 0)  {
+                        if ($a['task_percent_complete'] == 0) {
                             $color = '#0000FF';
                         } else {
                             $color = '#FF9900';
@@ -396,7 +396,7 @@ foreach ( $gtask_sliced as $gts ) {
                     }
                 }
                 $gantt->addMilestone($fieldArray, $a['task_start_date'], $color);
-            }	//this closes the code that is not processed if hide milestones is checked ///////////////
+            } //this closes the code that is not processed if hide milestones is checked ///////////////
         } else {
             $type = $a['task_duration_type'];
             $dur = $a['task_duration'];
@@ -411,7 +411,7 @@ foreach ( $gtask_sliced as $gts ) {
                 $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
                 $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
                 $q->addWhere('t.task_duration_type = 24');
-                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
+                $q->addWhere('t.task_id = ' . (int) $a['task_id']);
 
                 $wh = $q->loadResult();
                 $work_hours = $wh * $w2Pconfig['daily_working_hours'];
@@ -421,7 +421,7 @@ foreach ( $gtask_sliced as $gts ) {
                 $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
                 $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
                 $q->addWhere('t.task_duration_type = 1');
-                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
+                $q->addWhere('t.task_id = ' . (int) $a['task_id']);
 
                 $wh2 = $q->loadResult();
                 $work_hours += $wh2;
@@ -438,11 +438,11 @@ foreach ( $gtask_sliced as $gts ) {
             } else {
                 if ($caller == 'todo') {
                     $columnValues = array('task_name' => $name, 'project_name' => $pname,
-						'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
-						'actual_end' => '');
+                        'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+                        'actual_end' => '');
                 } else {
                     $columnValues = array('task_name' => $name, 'duration' => $dur,
-						'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
+                        'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
                 }
             }
             $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
@@ -451,11 +451,11 @@ foreach ( $gtask_sliced as $gts ) {
     }
     unset($gts);
 
-    $filename = W2P_BASE_DIR."/files/temp/GanttPDF".md5(time()).".png" ;
+    $filename = W2P_BASE_DIR . "/files/temp/GanttPDF" . md5(time()) . ".png";
     // Prepare Gantt image and store in $filename
     $gantt->render(true, $filename);
-    $outpfiles[] = $filename ;
-    $page++ ;
+    $outpfiles[] = $filename;
+    $page++;
 }
 
 //Override of some variables, not very tidy but necessary when importing code from other sources...
@@ -467,55 +467,44 @@ $show_gantt = 1;
 $show_gantt_taskdetails = ($showTaskNameOnly == '1') ? 0 : 1;
 $ganttfile = $outpfiles;
 
-// Initialize PDF document 
-$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 $temp_dir = W2P_BASE_DIR . '/files/temp';
-$base_url = w2PgetConfig('base_url');
-require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
-$pdf = new Cezpdf($paper='A4',$orientation='landscape');
-$pdf->ezSetCmMargins( 2, 1.5, 1.4, 1.4 ); //(top, bottom, left, right)
-/*
-* 		Define page header to be displayed on top of each page
-*/
-$pdf->saveState();
-if ( $skip_page ) $pdf->ezNewPage();
-$skip_page++;
-$page_header = $pdf->openObject();
-$pdf->selectFont( "$font_dir/Helvetica-Bold.afm" );
-$ypos= $pdf->ez['pageHeight'] - ( 30 + $pdf->getFontHeight(12) );
-$doc_title = strEzPdf( $projects[$project_id]['project_name'], UI_OUTPUT_RAW);
-$pwidth=$pdf->ez['pageWidth'];
-$xpos= round( ($pwidth - $pdf->getTextWidth( 12, $doc_title ))/2, 2 );
-$pdf->addText( $xpos, $ypos, 12, $doc_title) ;
-$pdf->selectFont( "$font_dir/Helvetica.afm" );
-$date = new w2p_Utilities_Date();
-$xpos = round( $pwidth - $pdf->getTextWidth( 10, $date->format($df)) - $pdf->ez['rightMargin'] , 2);
-$doc_date = strEzPdf($date->format( $df ));
-$pdf->addText( $xpos, $ypos, 10, $doc_date );
-$pdf->closeObject($page_header);
-$pdf->addObject($page_header, 'all');
+
 $gpdfkey = W2P_BASE_DIR. '/modules/tasks/images/ganttpdf_key.png';
 $gpdfkeyNM = W2P_BASE_DIR. '/modules/tasks/images/ganttpdf_keyNM.png';
 
-$pdf->ezStartPageNumbers( 802 , 30 , 10 ,'left','Page {PAGENUM} of {TOTALPAGENUM}') ;
+$pdf = new w2p_Output_PDF_Gantt('L', 'mm', 'A4', true, 'UTF-8', false);
+$pdf->SetMargins(14, 20, 14, true); // left, top, right
+$pdf->setHeaderMargin(10);
+$pdf->setFooterMargin(20);
+
+$pdf->header_project_name = $projects[$project_id]['project_name'];
+$date = new w2p_Utilities_Date();
+$pdf->header_date = $date->format($df);
+
+$pdf->SetFont('freeserif', '', 12);
+
+$pdf->AddPage();
+
+$next_image_y = 30;
+
 for ($i=0; $i < count($ganttfile); $i++) {
-    $gf = $ganttfile[$i];
-    $pdf->ezColumnsStart(array('num' =>1, 'gap' =>0));
-    $pdf->ezImage( $gf, 0, 765, 'width', 'left'); // No pad, width = 800px, resize = 'none' (will go to next page if image height > remaining page space)
+    $gf = $ganttfile[0];
+    $pdf->Image($gf, '', $next_image_y, 0, 0, '', '', ' ', true, 300, '', false, false, 0, false, false, true);
+    
+    $next_image_y = $pdf->getImageRBY();
+
     if ($showNoMilestones == '1') {
-        $pdf->ezImage( $gpdfkeyNM, 0, 765, 'width', 'left');
+        $pdf->Image($gpdfkeyNM, '', $next_image_y, 0, 0, '', '', '', true, 300, '', false, false, 0, false, false, true);
     } else {
-        $pdf->ezImage( $gpdfkey, 0, 765, 'width', 'left');
+        $pdf->Image($gpdfkey, '', $next_image_y, 0, 0, '', '', '', true, 300, '', false, false, 0, false, false, true);
     }
-    $pdf->ezColumnsStop();
+    $next_image_y = $pdf->getImageRBY();
 }
-// End of project display
-// Create document body and pdf temp file
-$pdf->stopObject($page_header);
+
 $gpdffile = $temp_dir . '/GanttChart_'.md5(time()).'.pdf';
-if ($fp = fopen( $gpdffile, 'wb' )) {
-    fwrite( $fp, $pdf->ezOutput() );
-    fclose( $fp );
+if ($fp = fopen($gpdffile, 'wb')) {
+    fwrite($fp, $pdf->Output('ganttchart.pdf', 'S'));
+    fclose($fp);
 } else {
     //TODO: create error handler for permission problems
     echo "Could not open file to save PDF.  ";
@@ -545,3 +534,5 @@ if (file_exists($gpdffile) && is_readable($gpdffile)) {
     readfile($gpdffile);
     exit;
 }
+
+?>
