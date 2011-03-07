@@ -476,7 +476,7 @@ $pdf->SetMargins(14, 20, 14, true); // left, top, right
 $pdf->setHeaderMargin(10);
 $pdf->setFooterMargin(20);
 
-$pdf->header_project_name = mb_strlen($projects[$project_id]['project_name']);
+$pdf->header_project_name = $projects[$project_id]['project_name'];
 $date = new w2p_Utilities_Date();
 $pdf->header_date = $date->format($df);
 
