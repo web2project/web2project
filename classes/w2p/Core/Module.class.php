@@ -273,7 +273,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
         if ('' != $configName) {
             $q->addWhere("module_config_name = '$configName'");
         }
-		$q->addOrder('module_config_order ASC');
+		$q->addOrder('module_config_order, module_config_value ASC');
 		return $q->loadHashList();
     }
 
