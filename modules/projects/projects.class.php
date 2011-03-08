@@ -75,8 +75,9 @@ class CProject extends w2p_Core_BaseObject {
     public $project_priority = null;
     public $project_type = null;
     public $project_parent = null;
-    public $project_original_parent = null;
     public $project_location = '';
+
+	public $project_original_parent = null;
 	/*
 	 * @deprecated fields, kept to make sure the bind() works properly
 	 */
