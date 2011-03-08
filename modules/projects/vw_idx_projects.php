@@ -216,6 +216,25 @@ if ($is_tabbed) {
                                 }
                                 $s .= '</td>';
                                 break;
+							case 'project_creator':
+							case 'project_owner':
+								$s .= '<td width="30%">';
+								$s .= w2PgetUsernameFromID($row[$field]);
+								$s .= '</td>';
+								break;
+							case 'project_url':
+							case 'project_demo_url':
+								$s .= '<td width="30%">';
+								$s .= w2p_url($row[$field]);
+								$s .= '</td>';
+								break;
+							case 'project_target_budget':
+							case 'project_actual_budget':
+								$s .= '<td width="30%">';
+								$s .= $w2Pconfig['currency_symbol'];
+								$s .= formatCurrency($row[$field], $AppUI->getPref('CURRENCYFORM'));
+								$s .= '</td>';
+								break;
                             case 'company_name':
                                 $s .= '<td width="30%">';
                                 $s .= '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" >';
@@ -250,6 +269,7 @@ if ($is_tabbed) {
                                 }
                                 $s .= '</td>';
                                 break;
+
                             case 'task_log_problem':
                                 $s .= '<td class="center">';
                                 $s .= $row[$field] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
