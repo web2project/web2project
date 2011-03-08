@@ -811,6 +811,22 @@ class CTask extends w2p_Core_BaseObject {
 		return false;
 	}
 
+	/** Retrieve tasks with latest task_end_dates within given project
+	 * @param int Project_id
+	 * @param int SQL-limit to limit the number of returned tasks
+	 * @return array List of criticalTasks
+	 */
+	public function getLastTaskData($project_id) {
+		$q = new w2p_Database_Query;
+		$q->addQuery('task_id, MAX(task_end_date) as last_date');
+		$q->addTable('tasks');
+		$q->addWhere('task_dynamic <> 1');
+		$q->addWhere('task_project = ' . (int)$project_id);
+		$q->addGroup('task_project');
+
+		return $q->loadHash();
+	}
+
 	public function updateDependencies($cslist, $parent_id = 0) {
 		$q = new w2p_Database_Query;
 		// delete all current entries
