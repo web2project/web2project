@@ -22,7 +22,9 @@ UPDATE projects SET project_task_count = (
 );
 
 UPDATE projects SET project_last_task = (
-	SELECT task_id FROM tasks WHERE task_project = project_id ORDER BY task_end_date DESC LIMIT 1
+	SELECT task_id FROM tasks WHERE task_project = project_id
+		AND task_dynamic <> 1
+		ORDER BY task_end_date DESC LIMIT 1
 );
 
 UPDATE projects SET project_actual_end_date = (
