@@ -282,11 +282,11 @@ if ($is_tabbed) {
 			}
 		}
 		if ($none) {
-			echo '<tr><td colspan="12">' . $AppUI->_('No projects available') . '</td></tr>';
+			echo '<tr><td colspan="25">' . $AppUI->_('No projects available') . '</td></tr>';
 		} else {
 			?>
 				<tr>
-					<td colspan="12" align="right">
+					<td colspan="25" align="right">
 						<?php
 						$s = '<input type="submit" class="button" value="' . $AppUI->_('Update projects status') . '" />';
 						$s .= '<input type="hidden" name="update_project_status" value="1" />';

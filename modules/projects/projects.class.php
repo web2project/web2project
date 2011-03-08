@@ -1096,6 +1096,11 @@ function projects_list_data($user_id = false) {
         company_name, project_status, project_priority, tc.critical_task,
         tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count,
 		pr.project_percent_complete, user_username, project_active');
+	$fields = w2p_Core_Module::getSettings('projects', 'index_list');
+	unset($fields['project_id']);
+	foreach ($fields as $field => $text) {
+		$q->addQuery($field);
+	}
 	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
 	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
