@@ -166,7 +166,7 @@ if ($is_tabbed) {
 				$tmpProject = new CProject();
 
 				foreach ($st_projects_arr as $st_project) {
-					$multiproject_id = 0;
+                    $multiproject_id = 0;
                     $project_id = (isset($st_project[0])) ? $st_project[0]['project_id'] : 0;
 					$level = $st_project[1];
 
