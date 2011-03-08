@@ -28,9 +28,6 @@ if (in_array($project_id, $denied)) {
 
 $canDelete = $project->canDelete($msg, $project_id);
 
-// get critical tasks (criteria: task_end_date)
-$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
-
 // get ProjectPriority from sysvals
 $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
@@ -169,8 +166,8 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual End Date'); ?>:</td>
 			<td class="hilite">
 				<?php
-					if ($project_id > 0) {
-						echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
+					if ($project_id > 0 && $project->project_last_task > 0) {
+						echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id='. $project->project_last_task . '">' : '';
 						echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
 						echo $actual_end_date ? '</a>' : '';
 					} else {
