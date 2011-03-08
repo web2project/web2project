@@ -637,7 +637,12 @@ class CTask extends w2p_Core_BaseObject {
             $stored = true;
 		}
 
-		CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
+		$last_task_data = $this->getLastTaskData($this->task_project);
+		CProject::updateTaskCache(
+					$this->task_project,
+					$last_task_data['task_id'],
+					$last_task_data['last_date'],
+					$this->getTaskCount($this->task_project));
 		$this->pushDependencies($this->task_id, $this->task_end_date);
 
 		//split out related departments and store them seperatly.
@@ -804,7 +809,13 @@ class CTask extends w2p_Core_BaseObject {
                 $this->updateDynamics();
             }
 
-            CProject::updateTaskCount($this->task_project, $this->getTaskCount($this->task_project));
+			$last_task_data = $this->getLastTaskData($this->task_project);
+			CProject::updateTaskCache(
+						$this->task_project,
+						$last_task_data['task_id'],
+						$last_task_data['last_date'],
+						$this->getTaskCount($this->task_project));
+
             return true;
         }
 
