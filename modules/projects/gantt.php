@@ -162,7 +162,8 @@ if (!is_array($projects) || 0 == count($projects)) {
 } else {
 	foreach ($projects as $p) {
 
-                $name = mb_strlen($p['project_name']) > 25 ? mb_substr($p['project_name'], 0, 25) . '...' : $p['project_name'];
+        $pname = $p['project_name'];
+        $pname = (mb_strlen($pname) > 30) ? (mb_substr($pname, 0, 25) . '...') : $pname;
 
 		//using new jpGraph determines using Date object instead of string
 		$start = ($p['project_start_date'] > '1969-12-31 19:00:00') ? $p['project_start_date'] : '';
@@ -197,7 +198,7 @@ if (!is_array($projects) || 0 == count($projects)) {
 		$startdate = new w2p_Utilities_Date($start);
 		$actual_end = intval($p['project_actual_end_date']) ? $p['project_actual_end_date'] : $end;
 
-        $columnValues = array('project_name' => $name, 'start_date' => $start,
+        $columnValues = array('project_name' => $pname, 'start_date' => $start,
                           'end_date' => $end, 'actual_end' => $actual_end);
 		$gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'],
             $p['project_active'], $progress, $p['project_id']);
@@ -213,6 +214,9 @@ if (!is_array($projects) || 0 == count($projects)) {
             $bestColor = bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000');
 
 			foreach ($tasks as $t) {
+                $name = $t['task_name'];
+                $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
+
                 //Check if start date exists, if not try giving it the end date.
                 //If the end date does not exist then set it for today.
                 //This avoids jpgraphs internal errors that render the gantt completely useless
@@ -243,14 +247,14 @@ if (!is_array($projects) || 0 == count($projects)) {
                 $tEndObj = new w2p_Utilities_Date($t['task_end_date']);
 
                 if ($t['task_milestone'] != 1) {
-                    $columnValues = array('task_name' => substr('  ' . $t['task_name'], 0, 20). '...',
+                    $columnValues = array('task_name' => $name,
                         'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
                     $gantt->addBar($columnValues, $t['task_percent_complete'].'% '.$AppUI->_('Complete'),
                         $height, $p['project_color_identifier'], $p['project_active'],
                         $t['task_percent_complete'], $t['task_id']);
                 } else {
-                    $gantt->addMilestone(array('-- ' . $t['task_name']), $t['task_start_date']);
+                    $gantt->addMilestone(array('-- ' . $name), $t['task_start_date']);
                 }
 
                 $task->task_id = $t['task_id'];

@@ -15,7 +15,7 @@ $cmd = w2PgetParam($_GET, 'cmd', '0');
 $mod_id = (int) w2PgetParam($_GET, 'mod_id', '0');
 $mod_directory = w2PgetParam($_GET, 'mod_directory', '0');
 
-$obj = new CModule();
+$obj = new w2p_Core_Module();
 if ($mod_id) {
 	$obj->load($mod_id);
 } else {

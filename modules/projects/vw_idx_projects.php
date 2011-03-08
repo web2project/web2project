@@ -116,12 +116,22 @@ if ($is_tabbed) {
 	<table id="tblProjects" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 		<tr>
             <?php
-            $fieldList = array('project_color_identifier', 'project_priority', 
-                'project_name', 'company_name', 'project_start_date',
-                'project_end_date', 'project_actual_end_date', 'task_log_problem',
-                'user_username', 'project_task_count');
-            $fieldNames = array('Color', 'P', 'Project Name', 'Company', 
-                'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
+            $fields = w2p_Core_Module::getSettings('projects', 'index_list');
+            if (count($fields) > 0) {
+                foreach ($fields as $field => $text) {
+                    $fieldList[] = $field;
+                    $fieldNames[] = $text;
+                }
+            } else {
+                // TODO: This is only in place to provide a fail safe state pre-upgrade
+                //   from earlier versions to v2.3+  In v4.0+, we should deprecate this.
+                $fieldList = array('project_color_identifier', 'project_priority',
+                    'project_name', 'company_name', 'project_start_date',
+                    'project_end_date', 'project_actual_end_date', 'task_log_problem',
+                    'user_username', 'project_task_count');
+                $fieldNames = array('Color', 'P', 'Project Name', 'Company',
+                    'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
+            }
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
                     <a href="?m=projects&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
@@ -166,7 +176,7 @@ if ($is_tabbed) {
 				$tmpProject = new CProject();
 
 				foreach ($st_projects_arr as $st_project) {
-					$multiproject_id = 0;
+                    $multiproject_id = 0;
                     $project_id = (isset($st_project[0])) ? $st_project[0]['project_id'] : 0;
 					$level = $st_project[1];
 
@@ -190,56 +200,78 @@ if ($is_tabbed) {
 					} else {
 						$s .= '<tr>';
 					}
-					$s .= '<td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
-					$s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td>';
+                    foreach ($fieldList as $field) {
+                        $count_projects = $tmpProject->hasChildProjects($row['project_id']);
 
-					$s .= '<td align="center">';
-					if ($row['project_priority'] < 0) {
-						$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width="13" height="16" alt="">';
-					} elseif ($row['project_priority'] > 0) {
-						$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width="13" height="16" alt="">';
-					}
-					$s .= '</td><td width="40%">';
+                        switch ($field) {
+                            case 'project_name':
+                                $s .= '<td width="40%">';
+                                if ($level) {
+                                    $s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1));
+                                    $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;';
+                                    $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
+                                    $s .= (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true));
+                                    $s .= $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
+                                } elseif ($count_projects > 0 && !$level) {
+                                    $s .= w2PtoolTip($row[$field], nl2br($row['project_description']) .'<br />'.
+                                            '<i>'.$AppUI->_('this project is a parent on a multi-project structure').'</i><br />'.
+                                            '<i>'.$AppUI->_('click to show/hide its children').'</i>');
+                                    $s .= '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')">';
+                                    $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0">';
+                                    $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;';
+                                    $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : '') . $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
+                                } else {
+                                    $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
+                                    $s .= (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true));
+                                    $s .= $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
+                                }
+                                $s .= '</td>';
+                                break;
+                            case 'project_company':
+                                $s .= '<td width="30%">';
+                                $s .= '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" >';
+                                $s .= htmlspecialchars($row['company_name'], ENT_QUOTES);
+                                $s .= '</a>';
+                                $s .= '</td>';
+                                break;
+							case 'project_color_identifier':
+                                $s .= '<td class="center" width="1" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
+                                $s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
+                                $s .= '</td>';
+                                break;
+                            case 'project_actual_end_date':
+                                $myDate = intval($row[$field]) ? new w2p_Utilities_Date($row[$field]) : null;
+                                $s .= '<td class="center">';
+                                $s .= '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">';
+                                $s .= ($myDate ? $myDate->format($df) : '-');
+                                $s .= '</a>';
+                                $s .= '</td>';
+                                break;
+                            case 'project_priority':
+                                $s .= '<td class="center">';
+                                if ($row[$field] < 0) {
+                                    $s .= '<img src="' . w2PfindImage('icons/priority-' . -$row[$field] . '.gif') . '" width=13 height=16>';
+                                } elseif ($row['project_priority'] > 0) {
+                                    $s .= '<img src="' . w2PfindImage('icons/priority+' . $row[$field] . '.gif') . '"  width=13 height=16>';
+                                }
+                                $s .= '</td>';
+                                break;
 
-					$count_projects = $tmpProject->hasChildProjects($row['project_id']);
+                            case 'task_log_problem':
+                                $s .= '<td class="center">';
+                                $s .= $row[$field] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
+                                $s .= $row[$field] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
+                                $s .= $row[$field] ? '</a>' : '';
+                                $s .= '</td>';
+                                break;
+                            default:
+                                $s .= w2p_Output_HTMLHelper::renderColumn($AppUI, $field, $row);
+                        }
+                    }
 
-					if ($level) {
-						$s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1));
-                        $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">&nbsp;';
-                        $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
-                        $s .= (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : w2PtoolTip($row['project_name'], $AppUI->_('No information available'), true));
-                        $s .= $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
-					} elseif ($count_projects > 0 && !$level) {
-						$s .= w2PtoolTip($row["project_name"], nl2br($row['project_description']) .'<br />'.
-                                '<i>'.$AppUI->_('this project is a parent on a multi-project structure').'</i><br />'.
-                                '<i>'.$AppUI->_('click to show/hide its children').'</i>');
-                        $s .= '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')">';
-                        $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0" alt="">';
-                        $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none" alt=""></a>&nbsp;';
-                        $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : '') . $row['project_name'] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
-					} else {
-						$s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
-                        $s .= (nl2br($row['project_description']) ? w2PtoolTip($row['project_name'], nl2br($row['project_description']), true) : w2PtoolTip($row['project_name'], $AppUI->_('No information available'), true));
-                        $s .= $row["project_name"] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
-					}
-					$s .= '</td><td width="30%"><a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a></td>';
-
-					$s .= '<td nowrap="nowrap" align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
-					$s .= '<td nowrap="nowrap" align="center">' . ($end_date ? $end_date->format($df) : '-') . '</td>';
-					$s .= '<td nowrap="nowrap" align="center">';
-					$s .= $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">' : '';
-					$s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
-					$s .= $actual_end_date ? '</a>' : '';
-					$s .= '</td><td align="center">';
-					$s .= $row['task_log_problem'] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
-					$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
-					$s .= $row['task_log_problem'] ? '</a>' : '';
-					$s .= '</td><td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
-					$s .= $row['project_task_count'];
-					$s .= '</td><td align="center"><input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" /></td>';
-
+                    $s .= '<td class="center"><input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" /></td>';
 					if ($show_all_projects) {
-						$s .= '<td align="left" nowrap="nowrap">';
+						$s .= '<td class="left" nowrap="nowrap">';
 						$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectStatuses[0] ? $AppUI->_($project_statuses[$row['project_status'] + 2]) : $AppUI->_($project_statuses[$row['project_status'] + 1]));
 						$s .= '</td>';
 					}
@@ -257,11 +289,11 @@ if ($is_tabbed) {
 			}
 		}
 		if ($none) {
-			echo '<tr><td colspan="12">' . $AppUI->_('No projects available') . '</td></tr>';
+			echo '<tr><td colspan="25">' . $AppUI->_('No projects available') . '</td></tr>';
 		} else {
 			?>
 				<tr>
-					<td colspan="12" align="right">
+					<td colspan="25" align="right">
 						<?php
 						$s = '<input type="submit" class="button" value="' . $AppUI->_('Update projects status') . '" />';
 						$s .= '<input type="hidden" name="update_project_status" value="1" />';
