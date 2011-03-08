@@ -1066,11 +1066,11 @@ function projects_list_data($user_id = false) {
 	$q->addTable('projects', 'pr');
 	$q->addQuery('pr.project_id, project_status, project_color_identifier,
 		project_type, project_name, project_description, project_scheduled_hours as project_duration,
-		project_parent, project_original_parent,
-		project_start_date, project_end_date, project_color_identifier, project_company,
-        company_name, project_status, tc.critical_task,
-        tc.project_actual_end_date, tp.task_log_problem,
-		pr.project_percent_complete, user_username, project_active');
+		project_parent, project_original_parent, project_percent_complete,
+		project_color_identifier, project_company,
+        company_name, project_status, project_last_task as critical_task,
+        tp.task_log_problem, user_username, project_active');
+
 	$fields = w2p_Core_Module::getSettings('projects', 'index_list');
 	foreach ($fields as $field => $text) {
 		$q->addQuery($field);
