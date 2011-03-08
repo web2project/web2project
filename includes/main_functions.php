@@ -103,69 +103,81 @@ function w2p_autoload($class_name) {
 }
 
 /*
-*	Authenticator Factory
-*
-*/
+ *	Authenticator Factory
+ *
+ */
 
 function &getAuth($auth_mode) {
-	switch ($auth_mode) {
-		case 'ldap':
-			$auth = new w2p_Authenticators_LDAP();
-			return $auth;
-			break;
-		case 'pn':
-			$auth = new w2p_Authenticators_PostNuke();
-			return $auth;
-			break;
-		default:
-			$auth = new w2p_Authenticators_SQL();
-			return $auth;
-			break;
-	}
+    switch ($auth_mode) {
+        case 'ldap':
+            $auth = new w2p_Authenticators_LDAP();
+            return $auth;
+            break;
+        case 'pn':
+            $auth = new w2p_Authenticators_PostNuke();
+            return $auth;
+            break;
+        default:
+            $auth = new w2p_Authenticators_SQL();
+            return $auth;
+            break;
+    }
 }
 
 ##
 ## Returns the best color based on a background color (x is cross-over)
 ##
 function bestColor($bg, $lt = '#ffffff', $dk = '#000000') {
-	// cross-over color = x
-	$x = 128;
-	$r = hexdec(substr($bg, 0, 2));
-	$g = hexdec(substr($bg, 2, 2));
-	$b = hexdec(substr($bg, 4, 2));
+    // cross-over color = x
+    $x = 128;
+    $r = hexdec(substr($bg, 0, 2));
+    $g = hexdec(substr($bg, 2, 2));
+    $b = hexdec(substr($bg, 4, 2));
 
-	if ($r < $x && $g < $x || $r < $x && $b < $x || $b < $x && $g < $x) {
-		return $lt;
-	} else {
-		return $dk;
-	}
+    if ($r < $x && $g < $x || $r < $x && $b < $x || $b < $x && $g < $x) {
+        return $lt;
+    } else {
+        return $dk;
+    }
 }
 
 ##
 ## returns a select box based on an key,value array where selected is based on key
 ##
 function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate = false) {
-	global $AppUI;
-	if (!is_array($arr)) {
-		dprint(__file__, __line__, 0, 'arraySelect called with no array');
-		return '';
+    global $AppUI;
+    if (!is_array($arr)) {
+        dprint(__file__, __line__, 0, 'arraySelect called with no array');
+        return '';
+    }
+    reset($arr);
+    $s = '<select id="' . $select_name . '" name="' . $select_name . '" ' . $select_attribs . '>';
+	// if we are dealing with multiple selected itens for multiple kind of listboxes
+	// we need to count them so that only those get selected.
+	if (is_array($selected)) {
+		$multiple = count($selected);
 	}
-	reset($arr);
-	$s = '<select id="' . $select_name . '" name="' . $select_name . '" ' . $select_attribs . '>';
 	$did_selected = 0;
 	foreach ($arr as $k => $v) {
 		if ($translate) {
 			$v = $AppUI->_($v);
-			// This is supplied to allow some Hungarian characters to
-			// be translated correctly. There are probably others.
-			// As such a more general approach probably based upon an
-			// array lookup for replacements would be a better approach. AJD.
-			$v = str_replace('&#369;', 'ï¿½', $v);
-			$v = str_replace('&#337;', 'ï¿½', $v);
 		}
-		$s .= '<option value="' . $k . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . '>' . $v . '</option>';
-		if (($k == $selected && strcmp($k, $selected) == 0)) {
-			$did_selected = 1;
+		if (is_array($selected)) {
+			$s .= '<option value="' . $k . '"' . ((in_array($k, $selected) && !$did_selected) ? ' selected="selected"' : '') . '>' . $v . '</option>';
+			if (in_array($k, $selected)) {
+				// We found a match. Lets decrease the $multiples yet to be found
+				$multiple--;
+			}
+			if (!$multiple) {
+				// As soon as we found $multiple nr of matches we make sure no other gets selected by computer mistake by using the $did_selected lock
+				$did_selected = 1;
+			}
+		} else {
+			$s .= '<option value="' . $k . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . '>' . $v . '</option>';
+			if (($k == $selected && strcmp($k, $selected) == 0)) {
+				// As soon as we find a match we make sure no other gets selected by computer mistake by using the $did_selected lock
+				$did_selected = 1;
+			}
 		}
 	}
 	$s .= '</select>';

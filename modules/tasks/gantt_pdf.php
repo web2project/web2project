@@ -297,12 +297,10 @@ foreach ($gtask_sliced as $gts) {
         $level = $gts[$i][1];
         $name = $a['task_name'];
         $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
-        $name = (str_repeat('  ', $level) . $name);
+        $name = str_repeat(' ', $level) . $name;
 
-        if ($caller == 'todo') {
-            $pname = $a['project_name'];
-            $pname = ((mb_strlen($pname) > 20) ? (mb_substr($pname, 0, 14) . '...' . mb_substr($pname, -5, 5)) : $pname);
-        }
+        $pname = $a['project_name'];
+        $pname = (mb_strlen($pname) > 25) ? (mb_substr($pname, 0, 20) . '...') : $pname;
 
         //using new jpGraph determines using Date object instead of string
         $start_date = new w2p_Utilities_Date($a['task_start_date']);
@@ -433,6 +431,7 @@ foreach ($gtask_sliced as $gts) {
             $enddate = new w2p_Utilities_Date($end);
             $startdate = new w2p_Utilities_Date($start);
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
+
             if ($showTaskNameOnly == '1') {
                 $columnValues = array('task_name' => $name);
             } else {
@@ -534,5 +533,3 @@ if (file_exists($gpdffile) && is_readable($gpdffile)) {
     readfile($gpdffile);
     exit;
 }
-
-?>

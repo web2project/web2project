@@ -52,7 +52,7 @@ $project_type = $AppUI->getState('ProjIdxType') !== null ? $AppUI->getState('Pro
 $project_types = array(-1 => '(all)') + w2PgetSysVal('ProjectType');
 
 // collect the full projects list data via function in projects.class.php
-projects_list_data();
+$projects = projects_list_data();
 
 
 ?>

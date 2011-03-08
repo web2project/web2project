@@ -37,7 +37,7 @@ $extraGet = '&user_id=' . $user_id;
 
 // collect the full projects list data via function in projects.class.php
 $project = new CProject();
-projects_list_data($user_id);
+$projects = projects_list_data($user_id);
 ?>
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">

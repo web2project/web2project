@@ -213,22 +213,22 @@ if ($addLinksToGantt == '1') {
 $gantt = new w2p_Output_GanttRenderer($AppUI, $width);
 $gantt->localize();
 $gantt->setTitle($projects[$project_id]['project_name'], '#'.$projects[$project_id]['project_color_identifier']);
-	$field = ($showWork == '1') ? 'Work' : 'Dur';
+$field = ($showWork == '1') ? 'Work' : 'Dur';
 
-	if ($showTaskNameOnly == '1') {
-	    $columnNames = array('Task name');
-	    $columnSizes = array(300);
-	} else {
-		if ($caller == 'todo') {
-			$columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
-			$columnSizes = array(180, 135, 40, 75, 75);
-		} else {
-			$columnNames = array('Task name', $field, 'Start', 'Finish');
-			$columnSizes = array(250, 60, 80, 80);
-		}
-	}
-	$gantt->setColumnHeaders($columnNames, $columnSizes);
-	$gantt->setProperties(array('showhgrid' => true));
+if ($showTaskNameOnly == '1') {
+    $columnNames = array('Task name');
+    $columnSizes = array(300);
+} else {
+    if ($caller == 'todo') {
+        $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
+        $columnSizes = array(200, 160, 40, 75, 75);
+    } else {
+        $columnNames = array('Task name', $field, 'Start', 'Finish');
+        $columnSizes = array(250, 60, 80, 80);
+    }
+}
+$gantt->setColumnHeaders($columnNames, $columnSizes);
+$gantt->setProperties(array('showhgrid' => true));
 
 if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
@@ -290,13 +290,11 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
     if ($canAccess) {
         $name = $a['task_name'];
-        $name = mb_strlen($name) > 34 ? mb_substr($name, 0, 33) . '.' : $name;
+        $name = ((mb_strlen($name) > 35) ? (mb_substr($name, 0, 30) . '...') : $name);
         $name = str_repeat(' ', $level) . $name;
 
-        if ($caller == 'todo') {
-            $pname = $a['project_name'];
-            $pname = mb_strlen($pname) > 14 ? mb_substr($pname, 0, 5) . '...' . mb_substr($pname, -5, 5) : $pname;
-        }
+        $pname = $a['project_name'];
+        $pname = (mb_strlen($pname) > 25) ? (mb_substr($pname, 0, 20) . '...') : $pname;
 
         //using new jpGraph determines using Date object instead of string
         $start_date = new w2p_Utilities_Date($a['task_start_date']);

@@ -460,7 +460,7 @@ class CEvent extends w2p_Core_BaseObject {
 	public function loadFull($event_id) {
 		$q = new w2p_Database_Query;
 		$q->addTable('events', 'e');
-		$q->addQuery('e.*, project_name, company_name');
+		$q->addQuery('e.*, project_name, project_color_identifier, company_name');
 		$q->leftJoin('projects', 'p', 'event_project = project_id');
 		$q->leftJoin('companies', 'c', 'project_company = company_id');
 		$q->addWhere('event_id = ' . (int) $event_id);

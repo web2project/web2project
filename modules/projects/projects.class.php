@@ -75,8 +75,10 @@ class CProject extends w2p_Core_BaseObject {
     public $project_priority = null;
     public $project_type = null;
     public $project_parent = null;
-    public $project_original_parent = null;
     public $project_location = '';
+	public $project_last_task = 0;
+
+	public $project_original_parent = null;
 	/*
 	 * @deprecated fields, kept to make sure the bind() works properly
 	 */
@@ -812,17 +814,34 @@ class CProject extends w2p_Core_BaseObject {
 		}
 	}
 
-  public static function updateTaskCount($projectId, $taskCount) {
+	public static function updateTaskCache($project_id, $task_id,
+			$project_actual_end_date, $project_task_count) {
 
-  	if (intval($projectId) > 0 && intval($taskCount)) {
-      $q = new w2p_Database_Query;
-      $q->addTable('projects');
-      $q->addUpdate('project_task_count', intval($taskCount));
-      $q->addWhere('project_id   = ' . (int) $projectId);
-      $q->exec();
-      self::updatePercentComplete($projectId);
-  	}
-  }
+		if ($project_id && $task_id) {
+			$q = new w2p_Database_Query;
+			$q->addTable('projects');
+			$q->addUpdate('project_last_task',			$task_id);
+			$q->addUpdate('project_actual_end_date',	$project_actual_end_date);
+			$q->addUpdate('project_task_count',			$project_task_count);
+			$q->addWhere('project_id   = ' . (int) $project_id);
+			$q->exec();
+			self::updatePercentComplete($project_id);
+		}
+	}
+
+	public static function updateTaskCount($projectId, $taskCount) {
+
+		trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE );
+
+		if (intval($projectId) > 0 && intval($taskCount)) {
+			$q = new w2p_Database_Query;
+			$q->addTable('projects');
+			$q->addUpdate('project_task_count', intval($taskCount));
+			$q->addWhere('project_id   = ' . (int) $projectId);
+			$q->exec();
+			self::updatePercentComplete($projectId);
+		}
+	}
 
 	public function hasChildProjects($projectId = 0) {
 		// Note that this returns the *count* of projects.  If this is zero, it
@@ -982,8 +1001,7 @@ current viewing user $AppUI->user_id is used.
 function projects_list_data($user_id = false) {
 	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix,
         $deny, $department, $dept_ids, $w2Pconfig, $orderby, $orderdir,
-        $projects, $tasks_critical, $tasks_problems, $owner, $projectTypeId,
-        $search_text, $project_type;
+        $tasks_problems, $owner, $projectTypeId, $search_text, $project_type;
 
 	$addProjectsWithAssignedTasks = $AppUI->getState('addProjWithTasks') ? $AppUI->getState('addProjWithTasks') : 0;
 
@@ -993,40 +1011,12 @@ function projects_list_data($user_id = false) {
 
 	// Let's delete temproary tables
 	$q = new w2p_Database_Query;
-	// Let's delete support tables data
-	$q->setDelete('tasks_critical');
-	$q->exec();
-	$q->clear();
-
 	$q->setDelete('tasks_problems');
 	$q->exec();
 	$q->clear();
 
 	$q->setDelete('tasks_users');
 	$q->exec();
-	$q->clear();
-
-	// support critical tasks
-	$q->addInsertSelect('tasks_critical');
-	$q->addTable('projects', 'p');
-	$q->addQuery('p.project_id');
-	$sq1 = new w2p_Database_Query;
-	$sq1->addTable('tasks', 'st');
-	$sq1->addQuery('MAX(st.task_id)');
-	$sq1->addWhere('st.task_project = p.project_id');
-	$ssq1 = new w2p_Database_Query;
-	$ssq1->addTable('tasks', 'sst');
-	$ssq1->addQuery('MAX(sst.task_end_date)');
-	$ssq1->addWhere('sst.task_project = p.project_id');
-	$ssq1->addWhere('sst.task_dynamic <> 1');
-	$sq1->addWhere('st.task_end_date = (' . $ssq1->prepare() . ')');
-	$q->addQuery('(' . $sq1->prepare() . ') AS critical_task');
-	$sq2 = new w2p_Database_Query;
-	$sq2->addTable('tasks', 't');
-	$sq2->addQuery('MAX(t.task_end_date)');
-	$sq2->addWhere('t.task_project = p.project_id');
-	$q->addQuery('(' . $sq2->prepare() . ') AS project_actual_end_date');
-	$tasks_critical = $q->exec();
 	$q->clear();
 
 	// support task problem logs
@@ -1091,16 +1081,20 @@ function projects_list_data($user_id = false) {
 	}
 
 	$q->addTable('projects', 'pr');
-	$q->addQuery('pr.project_id, project_status, project_color_identifier, project_type,
-        project_name, project_description, project_scheduled_hours as project_duration, project_parent, project_original_parent,
-		project_start_date, project_end_date, project_color_identifier, project_company,
-        company_name, project_status, project_priority, tc.critical_task,
-        tc.project_actual_end_date, tp.task_log_problem, pr.project_task_count,
-		pr.project_percent_complete, user_username, project_active');
+	$q->addQuery('pr.project_id, project_status, project_color_identifier,
+		project_type, project_name, project_description, project_scheduled_hours as project_duration,
+		project_parent, project_original_parent, project_percent_complete,
+		project_color_identifier, project_company,
+        company_name, project_status, project_last_task as critical_task,
+        tp.task_log_problem, user_username, project_active');
+
+	$fields = w2p_Core_Module::getSettings('projects', 'index_list');
+	foreach ($fields as $field => $text) {
+		$q->addQuery($field);
+	}
 	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
 	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
-	$q->addJoin('tasks_critical', 'tc', 'pr.project_id = tc.task_project');
 	$q->addJoin('tasks_problems', 'tp', 'pr.project_id = tp.task_project');
 	if ($addProjectsWithAssignedTasks) {
 		$q->addJoin('tasks_users', 'tu', 'pr.project_id = tu.task_project');
@@ -1170,6 +1164,7 @@ function projects_list_data($user_id = false) {
 	}
 	$buffer .= '</select>';
 
+    return $projects;
 }
 
 function getProjects() {

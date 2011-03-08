@@ -11,7 +11,7 @@ if (!canEdit('system')) {
 if (isset($_FILES['module_upload'])) {
     $upload = $_FILES['module_upload'];
 
-    $module = new CModule();
+    $module = new w2p_Core_Module();
 
     $result = $module->deploy($upload);
     if (is_array($result)) {
