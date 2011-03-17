@@ -1145,7 +1145,7 @@ class CAppUI {
 		$s = '<script type="text/javascript">';
 		$s .= '$(document).ready(function() {';
         // Attach tooltips to "span" elements
-		$s .= '	$("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});';
+		$s .= '	$("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
         // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox
         if (canAccess('smartsearch')) {
             $s .= '	$("input[type=\'text\']:eq(1)").focus();';
