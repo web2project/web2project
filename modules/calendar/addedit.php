@@ -67,8 +67,6 @@ if ($is_clash) {
 	}
 }
 
-$obj->event_project = (int) w2PgetParam($_GET, 'event_project', 0);
-
 //check if the user has view permission over the project
 if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->event_project)) {
 	$AppUI->redirect('m=public&a=access_denied');
