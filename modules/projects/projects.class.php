@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: projects.class.php 1521 2010-12-07 08:18:17Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/projects.class.php $ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 /**
  *	@package web2Project
  *	@subpackage modules
- *	@version $Revision$
+ *	@version $Revision: 1521 $
  */
 
 // project statii

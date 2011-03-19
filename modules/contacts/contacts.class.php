@@ -3,7 +3,7 @@
 /**
  *	@package web2Project
  *	@subpackage modules
- *	@version $Revision$
+ *	@version $Revision: 1515 $
  */
 
 /**

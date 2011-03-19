@@ -4,7 +4,7 @@
 // Description:	JpGraph Gantt plot extension
 // Created: 	2001-11-12
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id$
+// Ver:		$Id: jpgraph_gantt.php 1543 2010-12-18 21:43:51Z caseydk $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
