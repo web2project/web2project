@@ -1,4 +1,4 @@
-/* $Id$ $URL$ */
+/* $Id: base.js 1619 2011-02-10 17:30:04Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/js/base.js $ */
 /* Copyright 2003,2004 Adam Donnison <adam@saki.com.au>
 
     This file is part of the collected works of Adam Donnison.
