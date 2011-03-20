@@ -388,10 +388,6 @@ function isChildTask($task) {
 	return $task->task_id != $task->task_parent;
 }
 
-function atoi($a) {
-	return $a + 0;
-}
-
 function weekDates($display_allocated_hours, $fromPeriod, $toPeriod) {
   global $AppUI;
 
