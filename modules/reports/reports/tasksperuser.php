@@ -272,7 +272,7 @@ if ($do_report) {
 			foreach ($task_list as $task) {
 				if (!isChildTask($task)) {
 					if (isMemberOfTask($task_list, $task_assigned_users, $Ntasks, $user_id, $task)) {
-						$tmptasks .= displayTask($task_list, $task, 0, $display_week_hours, $sss, $sse, !$project_id);
+						$tmptasks .= displayTask($task_list, $task, 0, $display_week_hours, $sss, $sse, !$project_id, $user_id);
 						// Get children
 						$tmptasks .= doChildren($task_list, $task_assigned_users, $Ntasks, $task->task_id, $user_id, 1, $max_levels, $display_week_hours, $sss, $sse, !$project_id);
 					}
@@ -302,7 +302,7 @@ function doChildren($list, $Lusers, $N, $id, $uid, $level, $maxlevels, $display_
 			if (($task->task_parent == $id) and isChildTask($task)) {
 				// we have a child, do we have the user as a member?
 				if (isMemberOfTask($list, $Lusers, $N, $uid, $task)) {
-					$tmp .= displayTask($list, $task, $level, $display_week_hours, $ss, $se, $log_all_projects);
+					$tmp .= displayTask($list, $task, $level, $display_week_hours, $ss, $se, $log_all_projects, $uid);
 					$tmp .= doChildren($list, $Lusers, $N, $task->task_id, $uid, $level + 1, $maxlevels, $display_week_hours, $ss, $se, $log_all_projects);
 				}
 			}
@@ -337,10 +337,10 @@ function isMemberOfTask($list, $Lusers, $N, $user_id, $task) {
 	return false;
 }
 
-function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $log_all_projects = false) {
+function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $log_all_projects = false, $user_id = 0) {
 	global $AppUI;
 
-  $tmp = '';
+	$tmp = '';
 	$tmp .= '<tr><td align="left" nowrap="nowrap">&#160&#160&#160';
 	for ($i = 0; $i < $level; $i++) {
 		$tmp .= '&#160&#160&#160';
@@ -367,7 +367,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 		}
 		$tmp .= '</td>';
 	}
-  $df = $AppUI->getPref('SHDATEFORMAT');
+	$df = $AppUI->getPref('SHDATEFORMAT');
 
 	$tmp .= '<td nowrap="nowrap">';
 	$dt = new w2p_Utilities_Date($task->task_start_date);
@@ -378,7 +378,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$tmp .= $dt->format($df);
 	$tmp .= '</td>';
 	if ($display_week_hours) {
-		$tmp .= displayWeeks($list, $task, $level, $fromPeriod, $toPeriod);
+		$tmp .= displayWeeks($list, $task, $level, $fromPeriod, $toPeriod, $user_id);
 	}
 	$tmp .= "</tr>\n";
 	return $tmp;
@@ -409,8 +409,8 @@ function weekDates($display_allocated_hours, $fromPeriod, $toPeriod) {
 
 	$row = '';
 	for ($i = $sw; $i <= $ew; $i++) {
-    $sdf = substr($AppUI->getPref('SHDATEFORMAT'), 3);
-  	$row .= '<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $s->format($sdf) . '</b></font></td>';
+		$sdf = substr($AppUI->getPref('SHDATEFORMAT'), 3);
+		$row .= '<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $s->format($sdf) . '</b></font></td>';
 		$s->addSeconds(168 * 3600); // + one week
 	}
 	return $row;
@@ -436,12 +436,11 @@ function weekCells($display_allocated_hours, $fromPeriod, $toPeriod) {
 // Look for a user when he/she has been allocated
 // to this task and when. Report this in weeks
 // This function is called within 'displayTask()'
-function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
+function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod, $user_id = 0) {
 
 	if ($fromPeriod == -1) {
 		return '';
 	}
-
 	$s = new w2p_Utilities_Date($fromPeriod);
 	$e = new w2p_Utilities_Date($toPeriod);
 	$sw = getBeginWeek($s);
@@ -454,19 +453,30 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 
 	$row = '';
 	for ($i = $sw; $i <= $ew; $i++) {
+		$assignment = '';
+
 		if ($i >= $stw and $i < $etw) {
-			$color = 'blue';
+			$color = '#0000FF';
 			if ($level == 0 and hasChildren($list, $task)) {
 				$color = '#C0C0FF';
-			} else
+			} else {
 				if ($level == 1 and hasChildren($list, $task)) {
 					$color = '#9090FF';
 				}
-			$row .= '<td nowrap="nowrap" bgcolor="' . $color . '">';
+			}
+
+			if ($user_id) {
+				$users = $task->getAssignedUsers($task->task_id);
+				$assignment = ($users[$user_id]['perc_assignment']) ? $users[$user_id]['perc_assignment'].'%' : '';
+			}
 		} else {
-			$row .= '<td nowrap="nowrap">';
+			$color = '#FFFFFF';
 		}
-		$row .= '&#160&#160</td>';
+		$row .= '<td bgcolor="' . $color . '" class="center">';
+		$row .= '<font color="'.bestColor($color).'">';
+		$row .= $assignment;
+		$row .= '</font>';
+		$row .= '</td>';
 	}
 
 	return $row;
