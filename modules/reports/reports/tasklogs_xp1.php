@@ -1,6 +1,6 @@
 <?php /* $Id: tasklogs_xp1.php 1489 2010-11-12 10:37:23Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/reports/reports/tasklogs_xp1.php $ */
 if (!defined('W2P_BASE_DIR')) {
-    die('You should not access this file directly.');
+	die('You should not access this file directly.');
 }
 
 /**
@@ -11,7 +11,7 @@ $AppUI->loadCalendarJS();
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {
-    $AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect('m=public&a=access_denied');
 }
 $do_report = w2PgetParam($_GET, 'do_report', 0);
 $log_all = w2PgetParam($_GET, 'log_all', 0);
@@ -27,7 +27,7 @@ $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) 
 $end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
-    $start_date->subtractSpan(new Date_Span('14,0,0,0'));
+	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
 
@@ -41,31 +41,31 @@ $rows = $q->loadList();
 echo db_error();
 $nums = 0;
 if ($rows) {
-    $nums = count($rows);
+	$nums = count($rows);
 }
 foreach ($rows as $row) {
-    $task_log_costcodes[$row['billingcode_id']] = $row['billingcode_name'];
+	$task_log_costcodes[$row['billingcode_id']] = $row['billingcode_name'];
 }
 
 ?>
 <script language="javascript">
-    function setDate( frm_name, f_date ) {
+function setDate( frm_name, f_date ) {
 	fld_date = eval( 'document.' + frm_name + '.' + f_date );
 	fld_real_date = eval( 'document.' + frm_name + '.' + 'log_' + f_date );
 	if (fld_date.value.length>0) {
-            if ((parseDate(fld_date.value))==null) {
-                alert('The Date/Time you typed does not match your prefered format, please retype.');
-                fld_real_date.value = '';
-                fld_date.style.backgroundColor = 'red';
-            } else {
+      if ((parseDate(fld_date.value))==null) {
+            alert('The Date/Time you typed does not match your prefered format, please retype.');
+            fld_real_date.value = '';
+            fld_date.style.backgroundColor = 'red';
+        } else {
         	fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
         	fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
-                fld_date.style.backgroundColor = '';
-            }
+            fld_date.style.backgroundColor = '';
+  		}
 	} else {
-            fld_real_date.value = '';
+		fld_real_date.value = '';
 	}
-    }
+}
 </script>
 
 <form name="editFrm" action="" method="get" accept-charset="utf-8">
@@ -75,7 +75,7 @@ foreach ($rows as $row) {
 <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
 <?php
 if (function_exists('styleRenderBoxTop')) {
-    echo styleRenderBoxTop();
+	echo styleRenderBoxTop();
 }
 ?>
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
@@ -98,30 +98,27 @@ if (function_exists('styleRenderBoxTop')) {
 	</td>
 
 	<td nowrap="nowrap">
-            <?php echo $AppUI->_('User'); ?>:
-            <select name="log_userfilter" class="text" style="width: 200px">
+		<?php echo $AppUI->_('User'); ?>:
+        <select name="log_userfilter" class="text" style="width: 200px">
 
-            <?php
-            if ($log_userfilter == 0) {
-                echo '<option value="0" selected="selected">' . $AppUI->_('All users') . '</option>';
-            }
-            else {
-                echo '<option value="0">' . $AppUI->_('All users') . '</option>';
-            }
+		<?php
+			if ($log_userfilter == 0) {
+				echo '<option value="0" selected="selected">' . $AppUI->_('All users') . '</option>';
+			} else {
+				echo '<option value="0">' . $AppUI->_('All users') . '</option>';
+			}
+			if (($log_userfilter_users = w2PgetUsersList())) {
+				foreach ($log_userfilter_users as $row) {
+					$selected = '';
+					if ($log_userfilter == $row['user_id']) {
+						$selected = ' selected="selected"';
+					}
+					echo '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
+				}
+			}
+		?>
 
-            if (($log_userfilter_users = w2PgetUsersList())) {
-                foreach ($log_userfilter_users as $row) {
-                    $selected = '';
-                    if ($log_userfilter == $row['user_id']) {
-                        $selected = ' selected="selected"';
-                    }
-                    echo '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</option>';
-                }
-            }
-
-            ?>
-
-            </select>
+		</select>
 	</td>
 
 	<td nowrap="nowrap">
@@ -150,64 +147,64 @@ if (function_exists('styleRenderBoxTop')) {
 <?php
 if ($do_report) {
 
-    if (function_exists('styleRenderBoxBottom')) {
-        echo styleRenderBoxBottom();
-    }
-    echo '<br />';
-    if (function_exists('styleRenderBoxTop')) {
-        echo styleRenderBoxTop();
-    }
-    echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+	if (function_exists('styleRenderBoxBottom')) {
+		echo styleRenderBoxBottom();
+	}
+	echo '<br />';
+	if (function_exists('styleRenderBoxTop')) {
+		echo styleRenderBoxTop();
+	}
+	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 	<tr>
 		<td>';
 
-    $q = new w2p_Database_Query;
-    $q->addTable('task_log', 't');
-    $q->addQuery('t.*, CONCAT_WS(\' \',contact_first_name,contact_last_name) AS creator, billingcode_value, ROUND((billingcode_value * t.task_log_hours), 2) AS amount, c.company_name, project_name, ts.task_name');
+	$q = new w2p_Database_Query;
+	$q->addTable('task_log', 't');
+	$q->addQuery('t.*, CONCAT_WS(\' \',contact_first_name,contact_last_name) AS creator, billingcode_value, ROUND((billingcode_value * t.task_log_hours), 2) AS amount, c.company_name, project_name, ts.task_name');
 
-    $q->addJoin('tasks', 'ts', 'ts.task_id = t.task_log_task');
-    $q->addJoin('projects', '', 'projects.project_id = ts.task_project');
-    $q->addJoin('users', 'u', 'user_id = task_log_creator');
-    $q->addJoin('contacts', '', 'user_contact = contact_id');
-    $q->addJoin('companies', 'c', 'c.company_id = projects.project_company');
-    $q->addJoin('billingcode', '', 'billingcode_id = task_log_costcode');
+	$q->addJoin('tasks', 'ts', 'ts.task_id = t.task_log_task');
+	$q->addJoin('projects', '', 'projects.project_id = ts.task_project');
+	$q->addJoin('users', 'u', 'user_id = task_log_creator');
+	$q->addJoin('contacts', '', 'user_contact = contact_id');
+	$q->addJoin('companies', 'c', 'c.company_id = projects.project_company');
+	$q->addJoin('billingcode', '', 'billingcode_id = task_log_costcode');
 
-    $q->addJoin('project_departments', '', 'project_departments.project_id = projects.project_id');
-    $q->addJoin('departments', '', 'department_id = dept_id');
+	$q->addJoin('project_departments', '', 'project_departments.project_id = projects.project_id');
+	$q->addJoin('departments', '', 'department_id = dept_id');
 
-    $q->addWhere('task_log_task > 0');
+	$q->addWhere('task_log_task > 0');
 
-    if ($project_id) {
-        $q->addWhere('projects.project_id = ' . (int)$project_id);
-    }
-    if ($company_id) {
-        $q->addWhere('c.company_id = ' . (int)$company_id);
-    }
+	if ($project_id) {
+		$q->addWhere('projects.project_id = ' . (int)$project_id);
+	}
+	if ($company_id) {
+		$q->addWhere('c.company_id = ' . (int)$company_id);
+	}
 
-    if (!$log_all) {
-        $q->addWhere('task_log_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
-        $q->addWhere('task_log_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
-    }
-    if ($log_ignore) {
-        $q->addWhere('task_log_hours > 0');
-    }
-    if ($log_userfilter) {
-        $q->addWhere('task_log_creator = ' . (int)$log_userfilter);
-    }
+	if (!$log_all) {
+		$q->addWhere('task_log_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
+		$q->addWhere('task_log_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
+	}
+	if ($log_ignore) {
+		$q->addWhere('task_log_hours > 0');
+	}
+	if ($log_userfilter) {
+		$q->addWhere('task_log_creator = ' . (int)$log_userfilter);
+	}
 
-    $proj = new CProject();
-    $allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
-    if (count($allowedProjects)) {
-        $q->addWhere(implode(' AND ', $allowedProjects));
-    }
+	$proj = new CProject();
+	$allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
+	if (count($allowedProjects)) {
+		$q->addWhere(implode(' AND ', $allowedProjects));
+	}
 
-    $q->addOrder('creator');
-    $q->addOrder('company_name');
-    $q->addOrder('project_name');
-    $q->addOrder('task_log_date');
+	$q->addOrder('creator');
+	$q->addOrder('company_name');
+	$q->addOrder('project_name');
+	$q->addOrder('task_log_date');
 
-    $logs = $q->loadList();
-    echo db_error();
+	$logs = $q->loadList();
+	echo db_error();
 ?>
 	<table cellspacing="1" cellpadding="4" border="0" class="tbl">
 	<tr>
@@ -223,16 +220,16 @@ if ($do_report) {
 		<th><?php echo $AppUI->_('Amount'); ?></th>
 	</tr>
 <?php
-    $hours = 0.00;
-    $tamount = 0.00;
-    $pdfdata = array();
+	$hours = 0.00;
+	$tamount = 0.00;
+	$pdfdata = array();
 
-    foreach ($logs as $log) {
-        $date = new w2p_Utilities_Date($log['task_log_date']);
-        $hours += $log['task_log_hours'];
-        $tamount += $log['amount'];
+	foreach ($logs as $log) {
+		$date = new w2p_Utilities_Date($log['task_log_date']);
+		$hours += $log['task_log_hours'];
+		$tamount += $log['amount'];
 
-        $pdfdata[] = array($log['creator'], $log['company_name'], $log['project_name'], $log['task_name'], $date->format($df), $log['task_log_description'], $task_log_costcodes[$log['task_log_costcode']], sprintf("%.2f", $log['task_log_hours']), sprintf("%.2f", $log['billingcode_value']), sprintf("%.2f", $log['amount']), );
+		$pdfdata[] = array($log['creator'], $log['company_name'], $log['project_name'], $log['task_name'], $date->format($df), $log['task_log_description'], $task_log_costcodes[$log['task_log_costcode']], sprintf("%.2f", $log['task_log_hours']), sprintf("%.2f", $log['billingcode_value']), sprintf("%.2f", $log['amount']), );
 ?>
 	<tr>
 		<td><?php echo $log['creator']; ?></td>
@@ -246,14 +243,13 @@ if ($do_report) {
 		$descrip = mb_str_replace("\n", '<br />', $log['task_log_description']);
 		$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
 		if ($tranpos === false) {
-                    echo '<a href="?m=tasks&a=view&task_id=' . $log['task_log_task'] . '&tab=1&task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a>';
-                }
-		else {
-                    $descrip = mb_substr($descrip, 0, $tranpos);
-                    $tranpos = mb_strpos($log['task_log_description'], $transbrk);
-                    $transla = mb_substr($log['task_log_description'], $tranpos + mb_strlen($transbrk));
-                    $transla = mb_trim(mb_str_replace("'", '"', $transla));
-                    echo '<a href="?m=tasks&a=view&task_id=' . $log['task_log_task'] . '&tab=1&task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a><div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
+			echo '<a href="?m=tasks&a=view&task_id=' . $log['task_log_task'] . '&tab=1&task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a>';
+		} else {
+			$descrip = mb_substr($descrip, 0, $tranpos);
+			$tranpos = mb_strpos($log['task_log_description'], $transbrk);
+			$transla = mb_substr($log['task_log_description'], $tranpos + mb_strlen($transbrk));
+			$transla = mb_trim(mb_str_replace("'", '"', $transla));
+			echo '<a href="?m=tasks&a=view&task_id=' . $log['task_log_task'] . '&tab=1&task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a><div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
 		}
 		// dylan_cuthbert; auto-translation end
 
@@ -264,8 +260,8 @@ if ($do_report) {
 		<td align="right"><?php printf('%.2f', $log['amount']); ?></td>
 	</tr>
 <?php
-    }
-    $pdfdata[] = array('', '', '', '', '', '', $AppUI->_('Totals') . ':', sprintf('%.2f', $hours), '', sprintf('%.2f', $tamount), );
+	}
+	$pdfdata[] = array('', '', '', '', '', '', $AppUI->_('Totals') . ':', sprintf('%.2f', $hours), '', sprintf('%.2f', $tamount), );
 ?>
 	<tr>
 		<td align="right" colspan="7"><?php echo $AppUI->_('Report Totals'); ?>:</td>
@@ -275,90 +271,85 @@ if ($do_report) {
 	</tr>
 	</table>
 <?php
-    if ($log_pdf) {
-        // make the PDF file
-        if ($project_id) {
-            $q = new w2p_Database_Query;
-            $q->addTable('projects');
-            $q->addQuery('project_name');
-            $q->addWhere('project_id=' . (int)$project_id);
-            $pname = 'Project: ' . $q->loadResult();
-        } else {
-            $pname = 'All Companies and All Projects';
-        }
-        echo db_error();
+	if ($log_pdf) {
+		// make the PDF file
+		if ($project_id) {
+			$q = new w2p_Database_Query;
+			$q->addTable('projects');
+			$q->addQuery('project_name');
+			$q->addWhere('project_id=' . (int)$project_id);
+			$pname = 'Project: ' . $q->loadResult();
+		} else {
+			$pname = 'All Companies and All Projects';
+		}
+		echo db_error();
 
-        if ($company_id) {
-            $q = new w2p_Database_Query;
-            $q->addTable('companies');
-            $q->addQuery('company_name');
-            $q->addWhere('company_id=' . (int)$company_id);
-            $cname = 'Company: ' . $q->loadResult();
-        } else {
-            $cname = 'All Companies and All Projects';
-        }
-        echo db_error();
+		if ($company_id) {
+			$q = new w2p_Database_Query;
+			$q->addTable('companies');
+			$q->addQuery('company_name');
+			$q->addWhere('company_id=' . (int)$company_id);
+			$cname = 'Company: ' . $q->loadResult();
+		} else {
+			$cname = 'All Companies and All Projects';
+		}
+		echo db_error();
 
-        if ($log_userfilter) {
-            $q = new w2p_Database_Query;
-            $q->addTable('contacts');
-            $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name)');
-            $q->addJoin('users', '', 'user_contact = contact_id', 'inner');
-            $q->addWhere('user_id =' . (int)$log_userfilter);
-            $uname = 'User: ' . $q->loadResult();
-        } else {
-            $uname = 'All Users';
-        }
+		if ($log_userfilter) {
+			$q = new w2p_Database_Query;
+			$q->addTable('contacts');
+			$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name)');
+			$q->addJoin('users', '', 'user_contact = contact_id', 'inner');
+			$q->addWhere('user_id =' . (int)$log_userfilter);
+			$uname = 'User: ' . $q->loadResult();
+		} else {
+			$uname = 'All Users';
+		}
 
-        $pdf = new w2p_Output_PDF_Reports('L', 'mm', 'A4', true, 'UTF-8');
-        $pdf->SetMargins(15, 25, 15, true); // left, top, right
-        $pdf->setHeaderMargin(10);
-        $pdf->setFooterMargin(20);
+		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+		$temp_dir = W2P_BASE_DIR . '/files/temp';
+		$base_url = w2PgetConfig('base_url');
+		require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
-        $pdf->header_company_name = w2PgetConfig('company_name');
-        $date = new w2p_Utilities_Date();
-        $pdf->header_date = $date->format($df);
+		$pdf = new Cezpdf();
+		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
+		$pdf->selectFont($font_dir . '/Helvetica.afm', 'none');
 
-        $pdf->SetFont('freeserif', 'B', 12);
+		$pdf->ezText(w2PgetConfig('company_name'), 12);
+		// $pdf->ezText( w2PgetConfig( 'company_name' ).' :: '.w2PgetConfig( 'page_title' ), 12 );
 
-        $pdf->AddPage();
+		$date = new w2p_Utilities_Date();
+		$pdf->ezText("\n" . $date->format($df), 8);
 
-        $pdf->Cell(0, 0, $AppUI->_('Task Log Report'), 0, 1);
+		$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
+		$pdf->ezText("\n" . $AppUI->_('Task Log Report'), 12);
 
-        $pdf->SetFont('freeserif', 'B', 10);
+		if ($company_id) {
+			$pdf->ezText($cname, 10);
+		} else {
+			$pdf->ezText($pname, 10);
+		}
 
-        if ($company_id) {
-            $pdf->Cell(0, 0, $cname, 0, 1);
-        } else {
-            $pdf->Cell(0, 0, $pname, 0, 1);
-        }
+		$pdf->ezText($uname, 10);
 
-        $pdf->Cell(0, 0, $uname, 0, 1);
+		if ($log_all) {
+			$pdf->ezText('All Task Log entries', 9);
+		} else {
+			$pdf->ezText('Task Log entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df), 9);
+		}
+		$pdf->ezText("\n\n");
 
-        if ($log_all) {
-            $pdf->Cell(0, 0, 'All Task Log entries', 0, 1);
-        } else {
-            $pdf->Cell(0, 0, 'Task Log entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df), 0, 1);
-        }
+		$title = 'Task Logs';
 
-        $pdf->Ln();
-        $pdf->Ln();
+		$pdfheaders = array($AppUI->_('Creator', UI_OUTPUT_JS), $AppUI->_('Company', UI_OUTPUT_JS), $AppUI->_('Project', UI_OUTPUT_JS), $AppUI->_('Task', UI_OUTPUT_JS), $AppUI->_('Date', UI_OUTPUT_JS), $AppUI->_('Description', UI_OUTPUT_JS), $AppUI->_('CCode', UI_OUTPUT_JS), $AppUI->_('Hours', UI_OUTPUT_JS), $AppUI->_('Cost', UI_OUTPUT_JS), $AppUI->_('Amount', UI_OUTPUT_JS));
 
-        $pdf->SetFont('freeserif', 'B', 12);
-        $pdf->Cell(0, 0, 'Task Logs', 0, 1, 'C');
+		$options = array('showLines' => 1, 'fontSize' => 7, 'rowGap' => 1, 'colGap' => 1, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 50), 1 => array('justification' => 'left', 'width' => 60), 2 => array('justification' => 'left', 'width' => 60), 3 => array('justification' => 'left', 'width' => 60), 4 => array('justification' => 'center', 'width' => 40), 5 => array('justification' => 'left', 'width' => 110), 6 => array('justification' => 'left', 'width' => 30), 7 => array('justification' => 'right', 'width' => 30), 8 => array('justification' => 'right', 'width' => 30), 9 => array('justification' => 'right', 'width' => 40), ));
 
-        $pdf->SetFont('freeserif', '', 8);
+		$pdf->ezTable($pdfdata, $pdfheaders, $title, $options);
 
-        $temp_dir = W2P_BASE_DIR . '/files/temp';
-        $base_url = w2PgetConfig('base_url');
-
-        $pdfheaders = array($AppUI->_('Creator', UI_OUTPUT_JS), $AppUI->_('Company', UI_OUTPUT_JS), $AppUI->_('Project', UI_OUTPUT_JS), $AppUI->_('Task', UI_OUTPUT_JS), $AppUI->_('Date', UI_OUTPUT_JS), $AppUI->_('Description', UI_OUTPUT_JS), $AppUI->_('CCode', UI_OUTPUT_JS), $AppUI->_('Hours', UI_OUTPUT_JS), $AppUI->_('Cost', UI_OUTPUT_JS), $AppUI->_('Amount', UI_OUTPUT_JS));
-
-        $pdf->addHtmlTable($pdfdata, $pdfheaders);
-                
         $w2pReport = new CReport();
         if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
-            fwrite($fp, $pdf->Output('tasklogs_xp1.pdf', 'S'));
+            fwrite($fp, $pdf->ezOutput());
             fclose($fp);
             echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
             echo $AppUI->_('View PDF File');
