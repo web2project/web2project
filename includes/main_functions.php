@@ -73,9 +73,6 @@ function w2p_autoload($class_name) {
         case 'csyskey':
             require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
             break;
-        case 'csyskey':
-            require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
-            break;
         case 'bcode':
             require_once W2P_BASE_DIR.'/modules/system/system.class.php';
             break;
