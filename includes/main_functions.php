@@ -79,6 +79,9 @@ function w2p_autoload($class_name) {
         case 'bcode':
             require_once W2P_BASE_DIR.'/modules/system/system.class.php';
             break;
+        case 'chistory':
+            require_once W2P_BASE_DIR.'/modules/history/history.class.php';
+            break;
 
         default:
             if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
