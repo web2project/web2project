@@ -20,10 +20,10 @@ if (($msg = $role->bind($_POST))) {
 }
 
 if ($del) {
-	if (($msg = $role->delete())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	} else {
+	if ($role->delete()) {
 		$AppUI->setMsg('Role deleted', UI_MSG_ALERT);
+	} else {
+		$AppUI->setMsg('This Role could not be deleted', UI_MSG_ERROR);
 	}
 } else {
 	//Reformulated the store method to return the id of the role if sucessful, because the ids are managed by phpGALC

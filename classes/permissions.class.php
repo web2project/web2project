@@ -443,15 +443,20 @@ class w2Pacl extends gacl_api {
 	}
 
 	public function deleteRole($id) {
-		// Delete all of the group assignments before deleting group.
-		$objs = $this->get_group_objects($id);
-		foreach ($objs as $section => $value) {
-			$this->del_group_object($id, $section, $value);
-		}
-		$res = $this->del_group($id, false);
-		$recalc = $this->recalcPermissions(null, null, $id);
-		if (!$recalc) {
-			dprint(__file__, __line__, 0, 'Failed to recalc Permissions');
+		$res = false;
+
+		$data = $this->getRole($id);
+		if (strpos($data['name'], 'admin') === false) {
+			// Delete all of the group assignments before deleting group.
+			$objs = $this->get_group_objects($id);
+			foreach ($objs as $section => $value) {
+				$this->del_group_object($id, $section, $value);
+			}
+			$res = $this->del_group($id, false);
+			$recalc = $this->recalcPermissions(null, null, $id);
+			if (!$recalc) {
+				dprint(__file__, __line__, 0, 'Failed to recalc Permissions');
+			}
 		}
 		return $res;
 	}
