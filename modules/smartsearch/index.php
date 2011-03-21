@@ -16,6 +16,20 @@ foreach ($files as $tmp) {
 	$temp = substr($tmp, 0, -8);
 	$ssearch['mod_' . $temp] = w2PgetParam($_POST, 'mod_' . $temp, '');
 }
+$hook_modules = array();
+$moduleList = $AppUI->getLoadableModuleList();
+asort($moduleList);
+foreach ($moduleList as $module) {
+	if (!in_array($module['mod_main_class'], get_declared_classes())) {
+		require_once ($AppUI->getModuleClass($module['mod_directory']));
+	}
+	$object = new $module['mod_main_class']();
+	if (is_callable(array($object, 'hook_search'))) {
+		$ssearch['mod_' . $module['mod_directory']] = w2PgetParam($_POST, 'mod_' . $module['mod_directory'], '');
+		$hook_modules[] = $module['mod_directory'];
+	}
+}
+
 $ssearch['all_words'] = w2PgetParam($_POST, 'allwords', '');
 
 $keyword = (isset($_POST['keyword'])) ? strip_tags($_POST['keyword']) : '';
@@ -79,6 +93,12 @@ foreach ($files as $tmp) {
 		document.frmSearch.mod_<?php echo $temp ?>.checked=true;
 			<?php
 }
+foreach ($hook_modules as $tmp) {
+	$temp = $temp;
+?>
+		document.frmSearch.mod_<?php echo $tmp ?>.checked=true;
+			<?php
+}
 ?>
 	}		
 
@@ -89,6 +109,12 @@ foreach ($files as $tmp) {
 	$temp = substr($tmp, 0, -8);
 ?>							
 		document.frmSearch.mod_<?php echo $temp ?>.checked=false;
+			<?php
+}
+foreach ($hook_modules as $tmp) {
+	$temp = $tmp;
+?>
+		document.frmSearch.mod_<?php echo $tmp ?>.checked=false;
 			<?php
 }
 ?>
@@ -135,9 +161,20 @@ $titleBlock->show();
 			<div id="div_selmodules" style="<?php echo ($ssearch['mod_selection'] == "on" ? 'display:block' : 'display:none'); ?> ">
 				<table cellspacing="0" cellpadding="0" border="0">
   				<tr>
-            <td nowrap="nowrap" colspan="2"><a href="javascript: void(0);" onclick="selModAll(this)"><?php echo $AppUI->_('Select all'); ?></a> | <a href="javascript: void(0);" onclick="deselModAll(this)"><?php echo $AppUI->_('Deselect all'); ?></a></td>
+            <td nowrap="nowrap" colspan="2"><a class="button" href="javascript: void(0);" onclick="selModAll(this)"><span><?php echo $AppUI->_('Select all'); ?></span></a><a class="button" href="javascript: void(0);" onclick="deselModAll(this)"><span><?php echo $AppUI->_('Deselect all'); ?></span></a></td>
           </tr>
           <?php
+          foreach ($hook_modules as $tmp) {
+          ?>
+    		<tr>
+              <td width="10" align="left"><input name="mod_<?php echo $tmp; ?>" id="mod_<?php echo $tmp; ?>" type="checkbox"
+      				  <?php
+                  echo ($ssearch['mod_' . $tmp] == 'on') ? 'checked="checked"' : '';
+    	             echo ' /></td><td align="left"><label for="mod_' . $tmp . '">' . $AppUI->_(ucfirst($tmp)) . '</label>';
+                ?>
+    				  </td>
+            </tr>
+		  <?php }
           $objarray = array();
           foreach ($files as $tmp) {
           	require_once ('./modules/' . $m . '/searchobjects/' . $tmp);
@@ -147,7 +184,7 @@ $titleBlock->show();
           	$temp_title = $class_obj->table_title;
           	$objarray[$temp] = $temp_title;
             ?>
-    				<tr>
+    		<tr>
               <td width="10" align="left"><input name="mod_<?php echo $temp; ?>" id="mod_<?php echo $temp; ?>" type="checkbox" 
       				  <?php
                   echo ($ssearch['mod_' . $temp] == 'on') ? 'checked="checked"' : '';
@@ -155,7 +192,9 @@ $titleBlock->show();
                 ?> 
     				  </td>
             </tr>
-  				<?php } ?>
+  		  <?php
+		  }
+		  ?>
 				</table>
 			</div>
 	</td></tr>
@@ -239,22 +278,21 @@ if (isset($_POST['keyword'])) {
     		}
     	}
 
-        $moduleList = $AppUI->getLoadableModuleList();
+		reset($moduleList);
         foreach ($moduleList as $module) {
-            if (!in_array($module['mod_main_class'], get_declared_classes())) {
-                require_once ($AppUI->getModuleClass($module['mod_directory']));
-            }
-			$object = new $module['mod_main_class']();
-            if (is_callable(array($object, 'hook_search'))) {
-                $search = new smartsearch();
-                $searchArray = $object->hook_search();
-                foreach($searchArray as $key => $value) {
-                    $search->{$key} = $value;
-                }
-                $search->setKeyword($search->keyword);
-                $search->setAdvanced($ssearch);
-                echo $search->fetchResults($perms, $reccount);
-            }
+    		if ($ssearch['mod_selection'] == '' || $ssearch['mod_' . $module['mod_directory']] == 'on') {
+				$object = new $module['mod_main_class']();
+				if (is_callable(array($object, 'hook_search'))) {
+					$search = new smartsearch();
+					$searchArray = $object->hook_search();
+					foreach($searchArray as $key => $value) {
+						$search->{$key} = $value;
+					}
+					$search->setKeyword($search->keyword);
+					$search->setAdvanced($ssearch);
+					echo $search->fetchResults($perms, $reccount);
+				}
+			}
         }
     	echo '<tr><td><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>';
     ?>
