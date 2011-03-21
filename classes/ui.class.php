@@ -563,9 +563,10 @@ class CAppUI {
 		switch ($flags & UI_OUTPUT_MASK) {
 			case UI_OUTPUT_HTML:
 				$str = htmlspecialchars(stripslashes($str), ENT_COMPAT, $locale_char_set);
+				$str = nl2br($str);
 				break;
 			case UI_OUTPUT_JS:
-				$str = addslashes(stripslashes($str)); //, ENT_COMPAT, $locale_char_set);
+				$str = json_encode($str); //, ENT_COMPAT, $locale_char_set);
 				break;
 			case UI_OUTPUT_RAW:
 				$str = stripslashes($str);
