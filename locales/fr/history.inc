@@ -1,8 +1,10 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+'(Select Filter)'=>'(Sélectionnez un filtre)',
 'Add history'=>'Ajouter historique',
 'Added new'=>'Ajouté',
+'Changes to'=>'Changer en',
 'Date'=>'Date',
 'Deleted'=>'Effacé',
 'Description'=>'Description',
