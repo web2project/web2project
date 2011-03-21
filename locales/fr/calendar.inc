@@ -103,7 +103,7 @@
 'Weekly'=>'Hebdomadaire',
 'Yearly Calendar'=>'Calendrier annuel',
 'cancel'=>'Annuler',
-'clashEvent'=>'Les utilisateurs suivants ont des événements en conflit avec l\'heure de l\'événement proposé',
+'clashEvent'=>'Les utilisateurs suivants ont des évènements en conflit avec l\'heure de l\'événement proposé',
 'day view'=>'Vue quotidienne',
 'delete event'=>'Effacer l\'évènement',
 'deleteEvent'=>'Êtes-vous sûr de vouloir effacer cet évènement',

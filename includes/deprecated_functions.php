@@ -271,3 +271,7 @@ function temp_filterArrayForSelectTree($projectData) {
 
     return array_values($projectData);
 }
+
+function atoi($a) {
+	return $a + 0;
+}

@@ -200,8 +200,8 @@ function chPriority(user_id) {
 			</td>
 			<td nowrap="nowrap">
 				<?php
-                    $system_users = $perms->getPermittedUsers('tasks');
-                    $system_users = arrayMerge(array('-1' => $AppUI->_('All Users')), $system_users);
+                    $active_users = $perms->getPermittedUsers('tasks');
+                    $system_users = arrayMerge(array('-1' => $AppUI->_('All Users')), $active_users);
                     echo arraySelect($system_users, 'log_userfilter', 'class="text" style="width: 200px"', $log_userfilter);
                 ?>
 			</td>
@@ -254,7 +254,7 @@ function chPriority(user_id) {
 
 if ($do_report) {
 	// Let's figure out which users we have
-	$user_list = $perms->getPermittedUsers('tasks');
+	$user_list = $active_users;
 
 	$ss = '\'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'';
 	$se = '\'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'';
@@ -295,6 +295,7 @@ if ($do_report) {
 	$proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
 	$task_list_hash = $q->loadHashList('task_id');
+
 	$q->clear();
 	$task_list = array();
 	$task_assigned_users = array();
@@ -394,7 +395,9 @@ if ($do_report) {
 
                 $tmpuser .= '<td bgcolor="#D0D0D0"><table width="100%"><tr>';
                 $tmpuser .= '<td align="left">
-                <a href="javascript:chAssignment(' . $user_id . ', 0, 1);">' . w2PshowImage('remove.png', 16, 16, 'Unassign User', 'Unassign User from Task', 'tasks') . '</a>&nbsp;' . '<a href="javascript:chAssignment(' . $user_id . ', 1, 0);">' . w2PshowImage('exchange.png', 24, 16, 'Hand Over', 'Unassign User from Task and handing-over to selected Users', 'tasks') . '</a>&nbsp;' . '<a href="javascript:chAssignment(' . $user_id . ', 0, 0);">' . w2PshowImage('add.png', 16, 16, 'Assign Users', 'Assign selected Users to selected Tasks', 'tasks') . '</a></td>';
+					 <a href="javascript:chAssignment(' . $user_id . ', 0, 1);"><img src="' . w2PfindImage('remove.png', 'tasks')   . '" border="0" alt="' . $AppUI->_('Unassign User') . '" title="' . $AppUI->_('Unassign User from Task') . '" /></a>&nbsp;' .
+					'<a href="javascript:chAssignment(' . $user_id . ', 1, 0);"><img src="' . w2PfindImage('exchange.png', 'tasks') . '" border="0" alt="' . $AppUI->_('Hand Over') . '" title="' . $AppUI->_('Unassign User from Task and assign to selected Users') . '" /></a>&nbsp;' .
+					'<a href="javascript:chAssignment(' . $user_id . ', 0, 0);"><img src="' . w2PfindImage('add.png', 'tasks')      . '" border="0" alt="' . $AppUI->_('Assign Users') . '" title="' . $AppUI->_('Assign selected Users to selected Tasks') . '" /></a></td>';
                 $tmpuser .= '<td align="center"><select class="text" name="percentage_assignment" title="' . $AppUI->_('Assign with Percentage') . '">';
                 for ($i = 0; $i <= 100; $i += 5) {
                     $tmpuser .= '<option ' . (($i == 30) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
@@ -466,7 +469,8 @@ function isMemberOfTask($list, $N, $user_id, $task) {
 
 function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $user_id) {
 
-	global $AppUI, $df, $durnTypes, $log_userfilter_users, $now, $priority, $system_users, $z, $zi, $x, $userAlloc, $projects;
+	global $AppUI, $df, $durnTypes, $log_userfilter_users, $now, $priority,
+			$active_users, $z, $zi, $x, $userAlloc, $projects;
 	//if the user has no permission to the project don't show the tasks
 	if (!(key_exists($task->task_project, $projects))) {
 		return;
@@ -510,7 +514,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	}
 	$tmp .= '</td>';
 	$tmp .= '<td align="left">';
-	$tmp .= '<a href="?m=projects&a=view&project_id=' . $task->task_project . '" style="background-color:#' . $project['project_color_identifier'] . '; color:' . bestColor($project['project_color_identifier']) . '">' . $project['project_short_name'] . '</a>';
+	$tmp .= '<a href="?m=projects&a=view&project_id=' . $task->task_project . '" style="background-color:#' . $project['project_color_identifier'] . '; color:' . bestColor($project['project_color_identifier']) . '">' . $project['project_name'] . '</a>';
 	$tmp .= '</td>';
 	$tmp .= '<td align="right" nowrap="nowrap">';
 	$tmp .= $task->task_duration . '&nbsp;' . mb_substr($AppUI->_($durnTypes[$task->task_duration_type]),0,1);
@@ -538,28 +542,16 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	}
 	$tmp .= $us;
 	$tmp .= '</td>';
+
 	// create the list of possible assignees
-	if ($zi == 1) {
-		//  selectbox may not have a size smaller than 2, use 5 here as minimum
-		$zz = ($z < 5) ? 5 : ($z * 1.5);
-		if (sizeof($users) >= 7) {
-			$zz = $zz * 2;
-		}
-		$zm1 = $z - 2;
-		if ($zm1 == 0)
-			$zm1 = 1;
-		$assUser = $userAlloc[$user_id]['userFC'];
-		if ($user_id == 0) { // need to handle orphaned tasks different from tasks with existing assignees
-			$zm1++;
-		}
-		$tmp .= '<td valign="top" align="center" nowrap="nowrap">';
-		$tmp .= '<select name="add_users" style="width:200px" size="10" class="text" multiple="multiple" ondblclick="javascript:chAssignment(' . $user_id . ', 0, false)">';
-		foreach ($userAlloc as $v => $u) {
-			$tmp .= '<option value="' . $u['user_id'] . '">' . w2PformSafe($u['userFC']) . '</option>';
-		}
-		$tmp .= '</select>';
-		$tmp .= '</td>';
+	$size = (count($active_users) > 5) ? 5 : 3;
+	$tmp .= '<td valign="top" align="center" nowrap="nowrap">';
+	$tmp .= '<select name="add_users" style="width:200px" size="'.$size.'" class="text" multiple="multiple" ondblclick="javascript:chAssignment(' . $user_id . ', 0, false)">';
+	foreach ($active_users as $id => $name) {
+		$tmp .= '<option value="' . $id . '">' . $name . '</option>';
 	}
+	$tmp .= '</select>';
+	$tmp .= '</td>';
 
 	$tmp .= '</tr>';
 	return $tmp;
@@ -567,10 +559,6 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 
 function isChildTask($task) {
 	return $task->task_id != $task->task_parent;
-}
-
-function atoi($a) {
-	return $a + 0;
 }
 
 function weekDates($display_allocated_hours, $fromPeriod, $toPeriod) {

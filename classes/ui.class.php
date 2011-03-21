@@ -563,9 +563,10 @@ class CAppUI {
 		switch ($flags & UI_OUTPUT_MASK) {
 			case UI_OUTPUT_HTML:
 				$str = htmlspecialchars(stripslashes($str), ENT_COMPAT, $locale_char_set);
+				$str = nl2br($str);
 				break;
 			case UI_OUTPUT_JS:
-				$str = addslashes(stripslashes($str)); //, ENT_COMPAT, $locale_char_set);
+				$str = json_encode($str); //, ENT_COMPAT, $locale_char_set);
 				break;
 			case UI_OUTPUT_RAW:
 				$str = stripslashes($str);
@@ -1145,7 +1146,7 @@ class CAppUI {
 		$s = '<script type="text/javascript">';
 		$s .= '$(document).ready(function() {';
         // Attach tooltips to "span" elements
-		$s .= '	$("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});';
+		$s .= '	$("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
         // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox
         if (canAccess('smartsearch')) {
             $s .= '	$("input[type=\'text\']:eq(1)").focus();';

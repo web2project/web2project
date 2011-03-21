@@ -98,7 +98,7 @@
 'Total Hours'=>'Total heures',
 'Total Tasks'=>'Total tâches',
 'Total assigned'=>'Total assigné',
-'Total capacity'=>'',
+'Total capacity'=>'Capacité totale',
 'Total capacity for all users'=>'Capacité totale pour tous les utilisateurs',
 'Total capacity for shown users'=>'Capacité totale pour tous les utilisateurs affichés',
 'Totals'=>'Totaux',

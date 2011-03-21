@@ -17,6 +17,6 @@
 'chgpwUpdated'=>'Twoje hasło zostało zaktualizowane',
 'chgpwWrongPW'=>'Stare hasło jest niepoprawne',
 'colorLegend'=>'Wybierz kolor, by wyróżnić twoje zaznaczenie i zamknij okno.',
-'nodepartments, companies, permissions'=>'\"nodepartments\", firmy, zezwolenia',
+'nodepartments, companies, permissions'=>'"nodepartments", firmy, zezwolenia',
 'notasks'=>'Zadania niedostępne',
 'submit'=>'wyślij',

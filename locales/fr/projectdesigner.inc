@@ -2,6 +2,7 @@
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
 '% of work done (based on duration)'=>'% de travail fait (basé sur la durée)',
+'(None)'=>'(Aucun)',
 '(no end date)'=>'(Sans date de fin)',
 '(no start date)'=>'(Sans date de début)',
 'A'=>'A',

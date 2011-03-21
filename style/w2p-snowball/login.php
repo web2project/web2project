@@ -1,4 +1,4 @@
-<?php /* $Id: login.php 1331 2010-09-06 03:14:09Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/style/w2p-snowball/login.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }

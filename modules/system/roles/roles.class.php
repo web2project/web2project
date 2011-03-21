@@ -73,10 +73,9 @@ class CRole {
 		// with this role, and all of the group data for the role.
 		if (canDelete('roles')) {
 			// Delete all the children from this group
-			$this->perms->deleteRole($this->role_id);
-			return null;
+			return $this->perms->deleteRole($this->role_id);
 		} else {
-			return get_class($this) . '::delete failed - You do not have permission to delete this role';
+			return false; //get_class($this) . '::delete failed - You do not have permission to delete this role';
 		}
 	}
 
@@ -257,7 +256,7 @@ function showRoleRow($role = null) {
 		if ($canEdit) {
 			$s .= '<a href="?m=system&u=roles&role_id=' . $id . '">' . w2PshowImage('icons/stock_edit-16.png') . '</a><a href="?m=system&u=roles&a=viewrole&role_id=' . $id . '" title="">' . w2PshowImage('obj/lock.gif') . '</a>';
 		}
-		if ($canDelete) {
+		if ($canDelete && strpos($name, 'admin') === false) {
 			$s .= '<a href=\'javascript:delIt(' . $id . ')\'>' . w2PshowImage('icons/stock_delete-16.png') . '</a>';
 		}
 		$s .= '</td><td valign="top">' . $name . '</td><td valign="top">' . $AppUI->_($description) . '</td><td valign="top" width="16">&nbsp;</td>';
