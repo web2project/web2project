@@ -566,7 +566,7 @@ class CAppUI {
 				$str = nl2br($str);
 				break;
 			case UI_OUTPUT_JS:
-				$str = json_encode($str); //, ENT_COMPAT, $locale_char_set);
+				$str = addslashes(stripslashes($str)); //, ENT_COMPAT, $locale_char_set);
 				break;
 			case UI_OUTPUT_RAW:
 				$str = stripslashes($str);
