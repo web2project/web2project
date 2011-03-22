@@ -227,7 +227,7 @@
 	  <td align="left">
 		  <?php
 		  $webserver = strtolower($_SERVER['SERVER_SOFTWARE']);
-		  if (strpos($webserver, 'apache') != false || strpos($webserver, 'iis') != false) {
+		  if (strpos($webserver, 'apache') !== false || strpos($webserver, 'iis') !== false) {
 			echo '<b class="ok">'.$okImg.'</b><span class="item"> ('.$webserver.')</span>';
 		  } else {
 			echo '<b class="error">'.$failedImg.'</b><span class="warning">';
