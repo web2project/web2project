@@ -40,7 +40,7 @@ if (($company_id || $project_id || $task_id) && !($m == 'files')) {
 	if ($tab <= 0) {
 		$catsql = false;
 	} else {
-		$catsql = 'file_category = ' . --$tab;
+		$catsql = 'file_category = ' . ($tab-1);
 	}
 } else {
 	if ($tab < 0) {
@@ -164,7 +164,7 @@ if ($canRead) {
 // counts total recs from selection
 $xpg_totalrecs = count($q->loadList());
 //TODO: I don't like the ++$tab construct here... seems kludgy.
-echo buildPaginationNav($AppUI, $m, ++$tab, $xpg_totalrecs, $xpg_pagesize, $page);
+echo buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
 ?>
 <script language="javascript" type="text/javascript">
 function expand(id){
