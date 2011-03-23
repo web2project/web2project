@@ -2173,7 +2173,6 @@ class CTask extends w2p_Core_BaseObject {
 
 		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $starts->format($df) . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . $expires->format($df) . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
 		foreach ($contacts as $contact) {
-			if ($owner_is_not_assignee || $contact['contact_id'] != $owner_contact) {
 			if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
 				$body .= ($contact['contact_first_name'] . ' ' . $contact['contact_last_name'] . ' <' . $contact['contact_email'] . ">\n");
 			}
