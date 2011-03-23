@@ -412,3 +412,4 @@
 'admin_email_title'=>'System Administrator Email Address',
 'company_filter_default_title'=>'Default Company Filter',
 'task_filter_default_title'=>'Default Task Filter',
+'system_update_last_check_title'=>'Last Check for System Updates',
