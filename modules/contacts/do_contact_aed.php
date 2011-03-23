@@ -13,6 +13,7 @@ if (!$obj->bind($_POST)) {
 
 $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
+$redirect = ($del) ? 'm=contacts' : 'm=contacts&a=view&contact_id='.$obj->contact_id;
 
 if (is_array($result)) {
     $AppUI->setMsg($result, UI_MSG_ERROR, true);
@@ -34,7 +35,7 @@ if ($result) {
 		}
     }
 
-    $AppUI->redirect('m=contacts');
+    $AppUI->redirect($redirect);
 } else {
     $AppUI->redirect('m=public&a=access_denied');
 }
