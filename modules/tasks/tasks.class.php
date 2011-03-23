@@ -1208,6 +1208,7 @@ class CTask extends w2p_Core_BaseObject {
 			$task_types = w2PgetSysVal('TaskType');
 			$body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
 			$body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n";
+			$body .= "------------------------\n\n";
 			$body .= $AppUI->_('User', UI_OUTPUT_RAW) . ': ' . $creatorname . "\n";
 			$body .= $AppUI->_('Hours', UI_OUTPUT_RAW) . ': ' . $log->task_log_hours . "\n";
 			$body .= $AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . $log->task_log_name . "\n\n";
