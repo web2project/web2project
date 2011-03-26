@@ -181,7 +181,14 @@ if ($result) {
 
     $AppUI->setMsg($file_id ? 'updated' : 'added', UI_MSG_OK, true);
 
-    $AppUI->redirect('m=files');
+	if ($obj->file_task) {
+		$redirect = 'm=tasks&a=view&task_id='.$obj->file_task;
+	} elseif ($obj->file_project) {
+		$redirect = 'm=projects&a=view&project_id='.$obj->file_project;
+	} else {
+		$redirect = 'm=files';
+	}
+    $AppUI->redirect($redirect);
 } else {
     $AppUI->redirect('m=public&a=access_denied');
 }
