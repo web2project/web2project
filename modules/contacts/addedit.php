@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
-$company_id = (int) w2PgetParam($_GET, 'company_id', 0);
+$company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
 $company = new CCompany();
