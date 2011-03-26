@@ -107,14 +107,16 @@ function delIt() {
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
 				<td class="hilite" width="100%"><?php echo $AppUI->_($types[$event->event_type]); ?></td>
 			</tr>
+			<?php if($event->event_project) { ?>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
-                <td style="background-color:#<?php echo $event->project_color_identifier; ?>">
-                        <font color="<?php echo bestColor($event->project_color_identifier); ?>">
-                        <a href='?m=projects&a=view&project_id=<?php echo $event->event_project ?>'><?php echo $event_project; ?></a>
-                    </font>
+                <td class="hilite" style="background-color:#<?php echo $event->project_color_identifier; ?>">
+					<font color="<?php echo bestColor($event->project_color_identifier); ?>">
+						<a href='?m=projects&a=view&project_id=<?php echo $event->event_project ?>'><?php echo $event_project; ?></a>
+					</font>
                 </td>
 			</tr>
+			<?php } ?>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Starts'); ?>:</td>
 				<td class="hilite"><?php echo $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf); ?></td>
