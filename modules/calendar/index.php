@@ -22,7 +22,7 @@ if (isset($_REQUEST['company_id'])) {
 $company_id = $AppUI->getState('CalIdxCompany', 0);
 
 // Using simplified set/get semantics. Doesn't need as much code in the module.
-$event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');
+$event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', 'my'), 'EVENTFILTER', 'my');
 
 // get the passed timestamp (today if none)
 $ctoday = new w2p_Utilities_Date();
