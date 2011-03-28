@@ -173,6 +173,7 @@
         <column>project_end_date_adjusted</column>
         <column>project_end_date_adjusted_user</column>
         <column>project_location</column>
+		<column>project_last_task</column>
         <row>
             <value>1</value>
             <value>1</value>
@@ -215,6 +216,7 @@
             <value>0000-00-00 00:00:00</value>
             <value>0</value>
             <value></value>
+			<value>0</value>
         </row>
     </table>
 </dataset>
