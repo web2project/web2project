@@ -2167,7 +2167,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $assigned_users = $this->obj->getAssignedUsers(1);
 
         $this->assertEquals(1, count($assigned_users));
-        $this->assertEquals(28, count($assigned_users[1]));
+        $this->assertEquals(30, count($assigned_users[1]));
 
         $this->assertEquals(1,                                  $assigned_users[1]['user_id']);
         $this->assertEquals(1,                                  $assigned_users[1]['user_contact']);
@@ -2182,6 +2182,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(50,                                 $assigned_users[1]['perc_assignment']);
         $this->assertEquals(42,                                 $assigned_users[1]['user_task_priority']);
         $this->assertEquals('Person',                           $assigned_users[1]['contact_last_name']);
+		$this->assertEquals('Admin',							$assigned_users[1]['contact_first_name']);
+		$this->assertEquals('',									$assigned_users[1]['user_email']);
         $this->assertEquals(1,                                  $assigned_users[1][0]);
         $this->assertEquals(1,                                  $assigned_users[1][1]);
         $this->assertEquals('admin',                            $assigned_users[1][2]);
@@ -2195,6 +2197,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(50,                                 $assigned_users[1][10]);
         $this->assertEquals(42,                                 $assigned_users[1][11]);
         $this->assertEquals('Person',                           $assigned_users[1][12]);
+		$this->assertEquals('Admin',							$assigned_users[1][13]);
+		$this->assertEquals('',									$assigned_users[1][14]);
     }
     /**
      * Test getting a list of dependencies
@@ -2841,7 +2845,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      * Test the remind function
      * @todo Not sure how we can test reliably that the email was actually
      * generated and sent
-     * @expectedException PHPUnit_Framework_Error
      */
     public function testRemind()
     {
