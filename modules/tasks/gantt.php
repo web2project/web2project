@@ -139,6 +139,17 @@ if ($caller == 'todo') {
 $task = new CTask();
 $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
+
+if ($caller == 'todo') {
+	$gantt_arr = array();
+	$displayed = array();
+	foreach($proTasks as $tmpTask) {
+		if(!isset($displayed[$tmpTask['task_id']])) {
+			$gantt_arr[][] = $tmpTask;
+			$displayed[$tmpTask['task_id']] = $tmpTask['task_id'];
+		}
+	}
+}
 $q->clear();
 
 $orrarr[] = array('task_id'=>0, 'order_up'=>0, 'order'=>'');
