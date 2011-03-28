@@ -13,22 +13,6 @@ $status = w2PgetSysVal('TaskStatus');
 $priority = w2PgetSysVal('TaskPriority');
 
 /*
-* TASK DYNAMIC VALUE:
-* 0  = default(OFF), no dep tracking of others, others do track
-* 1  = dynamic, umbrella task, no dep tracking, others do track
-* 11 = OFF, no dep tracking, others do not track
-* 21 = FEATURE, dep tracking, others do not track
-* 31 = ON, dep tracking, others do track
-*/
-
-// When calculating a task's start date only consider
-// end dates of tasks with these dynamic values.
-$tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
-// Tasks with these dynamics have their dates updated when
-// one of their dependencies changes. (They track dependencies)
-$tracking_dynamics = array('0' => '21', '1' => '31');
-
-/*
 * CTask Class
 */
 class CTask extends w2p_Core_BaseObject {
@@ -80,6 +64,33 @@ class CTask extends w2p_Core_BaseObject {
     public $task_updated = null;
     public $task_updator = null;
     public $task_allow_other_user_tasklogs;
+
+    /*
+     * TASK DYNAMIC VALUE:
+     * 0  = default(OFF), no dep tracking of others, others do track
+     * 1  = dynamic, umbrella task, no dep tracking, others do track
+     * 11 = OFF, no dep tracking, others do not track
+     * 21 = FEATURE, dep tracking, others do not track
+     * 31 = ON, dep tracking, others do track
+     */
+
+    /**
+     * When calculating a task's start date only consider
+     * end dates of tasks with these dynamic values.
+     *
+     * @access public
+     * @static
+     */
+    public static $tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
+
+    /**
+     * Tasks with these dynamics have their dates updated when
+     * one of their dependencies changes. (They track dependencies)
+     *
+     * @access public
+     * @static
+     */
+    public static $tracking_dynamics = array('0' => '21', '1' => '31');
 
     /**
      * Class constants for task access
@@ -1459,14 +1470,13 @@ class CTask extends w2p_Core_BaseObject {
 	*		  @param				integer task_id of task to update
 	*/
 	public function update_dep_dates($task_id) {
-		global $tracking_dynamics;
 		$q = new w2p_Database_Query;
 
 		$newTask = new CTask();
 		$newTask->load($task_id);
 
 		// Do not update tasks that are not tracking dependencies
-		if (!in_array($newTask->task_dynamic, $tracking_dynamics)) {
+		if (!in_array($newTask->task_dynamic, self::$tracking_dynamics)) {
 			return;
 		}
 
@@ -1536,7 +1546,6 @@ class CTask extends w2p_Core_BaseObject {
 	*/
 
 	public function get_deps_max_end_date($taskObj) {
-		global $tracked_dynamics;
 		$q = new w2p_Database_Query;
 
 		$deps = $taskObj->getDependencies();
@@ -1544,8 +1553,8 @@ class CTask extends w2p_Core_BaseObject {
 
 		$last_end_date = false;
 		// Don't respect end dates of excluded tasks
-		if ($tracked_dynamics && !empty($deps)) {
-			$track_these = implode(',', $tracked_dynamics);
+		if (self::$tracked_dynamics && !empty($deps)) {
+			$track_these = implode(',', self::$tracked_dynamics);
 			$q->addTable('tasks');
 			$q->addQuery('MAX(task_end_date)');
 			$q->addWhere('task_id IN (' . $deps . ') AND task_dynamic IN (' . $track_these . ')');

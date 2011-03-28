@@ -28,8 +28,6 @@ global $ADODB_FETCH_MODE;
 global $w2p_performance_dbtime;
 global $w2p_performance_old_dbqueries;
 global $AppUI;
-global $tracking_dynamics;
-global $tracked_dynamics;
 global $w2Pconfig;
 
 require_once '../base.php';
@@ -50,9 +48,6 @@ $AppUI->login('admin', 'passwd');
 $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
 $defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
-
-$tracking_dynamics = array('0' => '21', '1' => '31');
-$tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
 
 require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';

@@ -80,9 +80,9 @@ $project = new CProject();
 $project->load($task_project);
 
 //Pull all users
-// TODO: There's an issue that can arise if a user is assigned full access to 
-//   a company which is not their own.  They will be allowed to create 
-//   projects but not create tasks since the task_owner dropdown does not get 
+// TODO: There's an issue that can arise if a user is assigned full access to
+//   a company which is not their own.  They will be allowed to create
+//   projects but not create tasks since the task_owner dropdown does not get
 //   populated by the "getPermittedUsers" function.
 $users = $perms->getPermittedUsers('tasks');
 
@@ -113,9 +113,9 @@ function constructTaskTree($task_data, $depth = 0) {
 }
 
 function build_date_list(&$date_array, $row) {
-	global $tracked_dynamics, $project;
+	global $project;
 	// if this task_dynamic is not tracked, set end date to proj start date
-	if (!in_array($row['task_dynamic'], $tracked_dynamics)) {
+	if (!in_array($row['task_dynamic'], CTask::$tracked_dynamics)) {
 		$date = new w2p_Utilities_Date($project->project_start_date);
 	} elseif ($row['task_milestone'] == 0) {
 		$date = new w2p_Utilities_Date($row['task_end_date']);
@@ -315,7 +315,7 @@ function popContacts() {
 		</tr>
 		</table>
 	</td>
-</tr>	
+</tr>
 </form>
 </table>
 
