@@ -157,11 +157,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('task_log_related_url', $this->obj);
         $this->assertObjectHasAttribute('task_log_created',     $this->obj);
         $this->assertObjectHasAttribute('task_log_updated',     $this->obj);
-        $this->assertObjectHasAttribute('_tbl_prefix',          $this->obj);
-        $this->assertObjectHasAttribute('_tbl',                 $this->obj);
-        $this->assertObjectHasAttribute('_tbl_key',             $this->obj);
-        $this->assertObjectHasAttribute('_error',               $this->obj);
-        $this->assertObjectHasAttribute('_query',               $this->obj);
     }
 
     /**
@@ -183,11 +178,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->task_log_created);
         $this->assertNull($this->obj->task_log_updated);
         $this->assertEquals(0,              $this->obj->task_log_problem);
-        $this->assertEquals('',             $this->obj->_tbl_prefix);
-        $this->assertEquals('task_log',     $this->obj->_tbl);
-        $this->assertEquals('task_log_id',  $this->obj->_tbl_key);
-        $this->assertEquals('',             $this->obj->_error);
-        $this->assertType('w2p_Database_Query',        $this->obj->_query);
     }
 
     /**

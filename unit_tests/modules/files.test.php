@@ -146,11 +146,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertObjectHasAttribute('file_co_reason',           $file);
       $this->assertObjectHasAttribute('file_folder',              $file);
       $this->assertObjectHasAttribute('file_indexed',             $file);
-      $this->assertObjectHasAttribute('_tbl_prefix',              $file);
-      $this->assertObjectHasAttribute('_tbl',                     $file);
-      $this->assertObjectHasAttribute('_tbl_key',                 $file);
-      $this->assertObjectHasAttribute('_error',                   $file);
-      $this->assertObjectHasAttribute('_query',                   $file);
     }
 
     /**
@@ -179,11 +174,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertNull($file->file_co_reason);
       $this->assertNull($file->file_folder);
       $this->assertNull($file->file_indexed);
-      $this->assertEquals('',         $file->_tbl_prefix);
-      $this->assertEquals('files',    $file->_tbl);
-      $this->assertEquals('file_id',  $file->_tbl_key);
-      $this->assertEquals('',         $file->_errors);
-      $this->assertType('w2p_Database_Query',    $file->_query);
     }
 
     /**

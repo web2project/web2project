@@ -186,11 +186,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('task_contacts',            $this->obj);
         $this->assertObjectHasAttribute('task_custom',              $this->obj);
         $this->assertObjectHasAttribute('task_type',                $this->obj);
-        $this->assertObjectHasAttribute('_tbl_prefix',              $this->obj);
-        $this->assertObjectHasAttribute('_tbl',                     $this->obj);
-        $this->assertObjectHasAttribute('_tbl_key',                 $this->obj);
-        $this->assertObjectHasAttribute('_error',                   $this->obj);
-        $this->assertObjectHasAttribute('_query',                   $this->obj);
         $this->assertObjectHasAttribute('task_updator',             $this->obj);
         $this->assertObjectHasAttribute('task_created',             $this->obj);
         $this->assertObjectHasAttribute('task_updated',             $this->obj);
@@ -229,11 +224,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->task_contancts);
         $this->assertNull($this->obj->task_custom);
         $this->assertNull($this->obj->task_type);
-        $this->assertEquals('',         $this->obj->_tbl_prefix);
-        $this->assertEquals('tasks',    $this->obj->_tbl);
-        $this->assertEquals('task_id',  $this->obj->_tbl_key);
-        $this->assertEquals('',         $this->obj->_errors);
-        $this->assertType('w2p_Database_Query',    $this->obj->_query);
         $this->assertNull($this->obj->task_updator);
         $this->assertNull($this->obj->task_created);
         $this->assertNull($this->obj->task_updated);

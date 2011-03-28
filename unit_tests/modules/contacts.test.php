@@ -143,18 +143,6 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('contact_display_name',     $contact);
     }
 
-    public function testNewContactAttributeValues()
-    {
-        $contact = new CContact();
-
-        $this->assertType('CContact',           $contact);
-        $this->assertEquals('',                 $contact->_tbl_prefix);
-        $this->assertEquals('contacts',         $contact->_tbl);
-        $this->assertEquals('contact_id',       $contact->_tbl_key);
-        $this->assertEquals('',                 $contact->_error);
-        $this->assertType('w2p_Database_Query', $contact->_query);
-    }
-
     public function testStoreNoOwner()
     {
         global $AppUI;

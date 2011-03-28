@@ -172,11 +172,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     	$this->assertObjectHasAttribute('project_parent',              $this->obj);
     	$this->assertObjectHasAttribute('project_original_parent',     $this->obj);
     	$this->assertObjectHasAttribute('project_location',            $this->obj);
-    	$this->assertObjectHasAttribute('_tbl_prefix',                 $this->obj);
-    	$this->assertObjectHasAttribute('_tbl',                        $this->obj);
-    	$this->assertObjectHasAttribute('_tbl_key',                    $this->obj);
-    	$this->assertObjectHasAttribute('_error',                      $this->obj);
-    	$this->assertObjectHasAttribute('_query',                      $this->obj);
     }
 
     /**
@@ -214,12 +209,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->project_type);
         $this->assertNull($this->obj->project_parent);
         $this->assertNull($this->obj->project_original_parent);
-        $this->assertEquals('',             $this->obj->project_location);
-        $this->assertEquals('',             $this->obj->_tbl_prefix);
-        $this->assertEquals('projects',     $this->obj->_tbl);
-        $this->assertEquals('project_id',   $this->obj->_tbl_key);
-        $this->assertEquals('',             $this->obj->_error);
-        $this->assertType('w2p_Database_Query',        $this->obj->_query);
     }
 
     /**
