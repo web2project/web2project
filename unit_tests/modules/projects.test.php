@@ -462,7 +462,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(0,                          $this->obj->project_active);
         $this->assertEquals(0,                          $this->obj->project_private);
         $this->assertEquals('',                         $this->obj->project_departments);
-        $this->assertEquals(array(0 => ''),             $this->obj->project_contacts);
+        $this->assertEquals('',							$this->obj->project_contacts);
         $this->assertEquals(-1,                         $this->obj->project_priority);
         $this->assertEquals(0,                          $this->obj->project_type);
         $this->assertEquals(5,                          $this->obj->project_parent);
@@ -670,7 +670,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                                  $this->obj->project_active);
         $this->assertEquals(0,                                  $this->obj->project_private);
         $this->assertEquals('',                                 $this->obj->project_departments);
-        $this->assertEquals(array(0 => ''),                     $this->obj->project_contacts);
+        $this->assertEquals('',									$this->obj->project_contacts);
         $this->assertEquals(1,                                  $this->obj->project_priority);
         $this->assertEquals(1,                                  $this->obj->project_type);
         $this->assertEquals(1,                                  $this->obj->project_parent);
@@ -1089,7 +1089,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 		$this->post_data['email_project_owner'] = 1;
 		$this->post_data['email_project_contacts'] = 0;
 		$this->post_data['project_departments'] = array(1,2);
-		$this->post_data['project_contacts'] = '3,4';
+		$this->post_data['project_contacts'] = array(3,4);
 
         $this->obj->bind($this->post_data);
         $results = $this->obj->store($AppUI);
