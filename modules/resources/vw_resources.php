@@ -8,7 +8,7 @@ $obj = new CResource();
 
 $query = new w2p_Database_Query();
 $obj->setAllowedSQL($AppUI->user_id, $query);
-$query->addTable($obj->_tbl);
+$query->addTable('resources');
 if (!$tabbed) {
 	$currentTabId++;
 }
