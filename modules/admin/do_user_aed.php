@@ -77,9 +77,11 @@ if ($isNewUser) {
 }
 $contact->contact_owner = ($contact->contact_owner) ? $contact->contact_owner : $AppUI->user_id;
 
+$contactArray = $contact->getContactMethods();
 $result = $contact->store($AppUI);
 
 if ($result) {
+	$contact->setContactMethods($contactArray);
 	$obj->user_contact = $contact->contact_id;
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
