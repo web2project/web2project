@@ -1,4 +1,4 @@
-<?php /* $Id: tasks.class.php 1526 2010-12-11 08:52:38Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/tasks.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -788,14 +788,6 @@ class CTask extends w2p_Core_BaseObject {
             $implodedTaskList = implode(',', $taskList);
 
             $q = new w2p_Database_Query;
-            // delete affiliated task_logs
-            $q->setDelete('task_log');
-            $q->addWhere('task_log_task IN (' . $implodedTaskList . ')');
-            if (!($q->exec())) {
-                return db_error();
-            }
-            $q->clear();
-
             // delete linked user tasks
             $q->setDelete('user_tasks');
             $q->addWhere('task_id IN (' . $implodedTaskList . ')');
