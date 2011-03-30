@@ -37,12 +37,14 @@ foreach ($elements as $element => $on) {
 		if ($elements['add_task_start_date_' . $on]) {
 			$date = new w2p_Utilities_Date($elements['add_task_start_date_' . $on]);
 			$start_date = $date->format(FMT_DATETIME_MYSQL);
+			$start_date = $AppUI->convertToSystemTZ($start_date);
 		}
 		$tline->task_start_date = $start_date;
 		$end_date = '';
 		if ($elements['add_task_end_date_' . $on]) {
 			$date = new w2p_Utilities_Date($elements['add_task_end_date_' . $on]);
 			$end_date = $date->format(FMT_DATETIME_MYSQL);
+			$end_date = $AppUI->convertToSystemTZ($end_date);
 		}
 		$tline->task_end_date = $end_date;
 		$tline->task_duration = $elements['add_task_duration_' . $on];
