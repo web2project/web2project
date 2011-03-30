@@ -250,11 +250,12 @@ class CAppUI {
             global $AppUI;
 
             $timezoneOffset = $this->getPref('TIMEZONE');
+			$timezoneOffset = ('' == $timezoneOffset) ? 'America/New_York' : $timezoneOffset;
 
             $q = new w2p_Database_Query();
             $q->addTable('sysvals');
             $q->addQuery('sysval_value');
-            $q->addWhere("sysval_value_id = $timezoneOffset");
+            $q->addWhere("sysval_value_id = '$timezoneOffset'");
             $userTimezone = $q->loadResult();
             $userTimezone = (strlen($userTimezone) == 0) ? 'Europe/London' : $userTimezone;
 
