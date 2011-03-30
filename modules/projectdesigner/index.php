@@ -35,6 +35,7 @@ if (!$canView) {
 $AppUI->loadCalendarJS();
 
 $today = new w2p_Utilities_Date();
+$today->convertTZ($AppUI->getPref('TIMEZONE'));
 
 //Lets load the users panel viewing options
 $q = new w2p_Database_Query;
@@ -161,7 +162,6 @@ if (!$project_id) {
 	$start_date = intval($obj->project_start_date) ? new w2p_Utilities_Date($obj->project_start_date) : null;
 	$end_date = intval($obj->project_end_date) ? new w2p_Utilities_Date($obj->project_end_date) : null;
 	$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
-	$today = new w2p_Utilities_Date();
 	$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 	$style = (($obj->project_percent_complete < 99.99 && $today > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : $style;
 
