@@ -413,3 +413,5 @@
 'company_filter_default_title'=>'Default Company Filter',
 'task_filter_default_title'=>'Default Task Filter',
 'system_update_last_check_title'=>'Last Check for System Updates',
+'hide_email_addresses_title'=>'Hide Email Addresses',
+'hide_email_addresses_tooltip'=>'Select this option to hide email addresses within the forums',
