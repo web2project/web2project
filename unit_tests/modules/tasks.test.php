@@ -1476,7 +1476,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertFalse($this->obj->load(22));
         $this->assertEquals(0, count($this->obj->getAssignedUsers(22)));
-        $this->assertEquals(0, count($this->obj->getTaskLogs(22)));
+        $this->assertEquals(1, count($this->obj->getTaskLogs(22)));
         $this->assertEquals(0, count($this->obj->getAssignedUsers(22)));
         $this->assertEquals(0, count($this->obj->getDependencyList(22)));
         $this->assertEquals(0, count($this->obj->getDependentTaskList(22)));
