@@ -250,11 +250,12 @@ class CAppUI {
             global $AppUI;
 
             $timezoneOffset = $this->getPref('TIMEZONE');
+			$timezoneOffset = ('' == $timezoneOffset) ? 'America/New_York' : $timezoneOffset;
 
             $q = new w2p_Database_Query();
             $q->addTable('sysvals');
             $q->addQuery('sysval_value');
-            $q->addWhere("sysval_value_id = $timezoneOffset");
+            $q->addWhere("sysval_value_id = '$timezoneOffset'");
             $userTimezone = $q->loadResult();
             $userTimezone = (strlen($userTimezone) == 0) ? 'Europe/London' : $userTimezone;
 
@@ -563,6 +564,7 @@ class CAppUI {
 		switch ($flags & UI_OUTPUT_MASK) {
 			case UI_OUTPUT_HTML:
 				$str = htmlspecialchars(stripslashes($str), ENT_COMPAT, $locale_char_set);
+				$str = nl2br($str);
 				break;
 			case UI_OUTPUT_JS:
 				$str = addslashes(stripslashes($str)); //, ENT_COMPAT, $locale_char_set);
@@ -1145,7 +1147,7 @@ class CAppUI {
 		$s = '<script type="text/javascript">';
 		$s .= '$(document).ready(function() {';
         // Attach tooltips to "span" elements
-		$s .= '	$("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});';
+		$s .= '	$("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
         // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox
         if (canAccess('smartsearch')) {
             $s .= '	$("input[type=\'text\']:eq(1)").focus();';

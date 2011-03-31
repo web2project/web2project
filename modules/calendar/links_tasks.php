@@ -114,7 +114,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false, $tasks_tips ) 
 
 	$tt = '<table border="0" cellpadding="0" cellspacing="0" width="96%">';
 	$tt .= '<tr>';
-	$tt .= '	<td valign="top" width="50%">';
+	$tt .= '	<td valign="top" width="40%">';
 	$tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
 	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
 	$tt .= '		<tr>';
@@ -158,7 +158,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false, $tasks_tips ) 
 	$tt .= '		</tr>';
 	$tt .= '		</table>';
 	$tt .= '	</td>';
-	$tt .= '	<td width="50%" valign="top">';
+	$tt .= '	<td width="60%" valign="top">';
 	$tt .= '		<strong>' . $AppUI->_('Description') . '</strong>';
 	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$tt .= '		<tr>';

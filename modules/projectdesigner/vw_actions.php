@@ -241,10 +241,10 @@ function constructTaskTree($task_data, $parents, $all_tasks, $depth = 0) {
 }
 
 function build_date_list(&$date_array, $row) {
-	global $tracked_dynamics, $project;
+    global $project;
+
 	// if this task_dynamic is not tracked, set end date to proj start date
-	$tracked_dynamics = (is_array($tracked_dynamics)) ? $tracked_dynamics : array();
-	if (!in_array($row['task_dynamic'], $tracked_dynamics)) {
+	if (!in_array($row['task_dynamic'], CTask::$tracked_dynamics)) {
 		$date = new w2p_Utilities_Date($project->project_start_date);
 	} elseif ($row['task_milestone'] == 0) {
 		$date = new w2p_Utilities_Date($row['task_end_date']);

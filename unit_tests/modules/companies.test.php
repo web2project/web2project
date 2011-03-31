@@ -150,11 +150,6 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('company_description',  $this->obj);
         $this->assertObjectHasAttribute('company_type',         $this->obj);
         $this->assertObjectHasAttribute('company_custom',       $this->obj);
-        $this->assertObjectHasAttribute('_tbl_prefix',          $this->obj);
-        $this->assertObjectHasAttribute('_tbl',                 $this->obj);
-        $this->assertObjectHasAttribute('_tbl_key',             $this->obj);
-        $this->assertObjectHasAttribute('_error',               $this->obj);
-        $this->assertObjectHasAttribute('_query',               $this->obj);
     }
 
     /**
@@ -180,11 +175,6 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->company_description);
         $this->assertNull($this->obj->company_type);
         $this->assertNull($this->obj->company_custom);
-        $this->assertEquals('',             $this->obj->_tbl_prefix);
-        $this->assertEquals('companies',    $this->obj->_tbl);
-        $this->assertEquals('company_id',   $this->obj->_tbl_key);
-        $this->assertEquals('',             $this->obj->_error);
-        $this->assertType('w2p_Database_Query',        $this->obj->_query);
     }
 
     /**

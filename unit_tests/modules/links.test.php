@@ -136,11 +136,6 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertObjectHasAttribute('link_date',        $link);
       $this->assertObjectHasAttribute('link_icon',        $link);
       $this->assertObjectHasAttribute('link_category',    $link);
-      $this->assertObjectHasAttribute('_tbl_prefix',      $link);
-      $this->assertObjectHasAttribute('_tbl',             $link);
-      $this->assertObjectHasAttribute('_tbl_key',         $link);
-      $this->assertObjectHasAttribute('_error',           $link);
-      $this->assertObjectHasAttribute('_query',           $link);
     }
 
     /**
@@ -161,11 +156,6 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($link->link_date);
         $this->assertNull($link->link_icon);
         $this->assertNull($link->link_category);
-        $this->assertEquals('',       $link->_tbl_prefix);
-        $this->assertEquals('links',  $link->_tbl);
-        $this->assertEquals('link_id',$link->_tbl_key);
-        $this->assertEquals('',       $link->_error);
-        $this->assertType('w2p_Database_Query',  $link->_query);
     }
 
     /**

@@ -224,15 +224,25 @@
 	</tr>
 	<tr>
 	  <td class="item">Supported Web Server?</td>
-	  <td align="left"><?php echo (stristr($_SERVER['SERVER_SOFTWARE'], 'apache') != false) ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.$_SERVER['SERVER_SOFTWARE'].')</span>' : '<b class="error">'.$failedImg.'</b><span class="warning">
-	  It seems you are using an unsupported web server.  Only Apache Web server is fully supported by web2Project, and using other web servers may result in unexpected problems.
-	  </span>';?></td>
+	  <td align="left">
+		  <?php
+		  $webserver = strtolower($_SERVER['SERVER_SOFTWARE']);
+		  if (strpos($webserver, 'apache') !== false || strpos($webserver, 'iis') !== false) {
+			echo '<b class="ok">'.$okImg.'</b><span class="item"> ('.$webserver.')</span>';
+		  } else {
+			echo '<b class="error">'.$failedImg.'</b><span class="warning">';
+			echo 'It seems you are using an unsupported web server.  Only Apache and IIS are fully supported by web2Project and using other web servers may result in unexpected problems.';
+			echo '</span>';
+		  }
+		  ?>
+	  </td>
 	</tr>
 	<tr>
 	  <td class="item">Standards Compliant Browser?</td>
-	  <td align="left"><?php echo (stristr($_SERVER['HTTP_USER_AGENT'], 'msie') == false) ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.$_SERVER['HTTP_USER_AGENT'].')</span>' : '<b class="error">'.$failedImg.'</b><span class="warning">
-	  It seems you are using Internet Explorer.  While the web2Project team works to maintain compatibility with all of the major browsers, some minor differences in CSS/layout rendering or even functionality might affect you.  Please consider using Firefox or Opera as an alternative.
-	  </span>';?></td>
+	  <td align="left">
+			<?php echo (stristr($_SERVER['HTTP_USER_AGENT'], 'msie') == false) ? '<b class="ok">'.$okImg.'</b><span class="item"> ('.$_SERVER['HTTP_USER_AGENT'].')</span>' : '<b class="error">'.$failedImg.'</b><span class="warning">
+			It seems you are using Internet Explorer.  While the web2Project team works to maintain compatibility with all of the major browsers, some minor differences in CSS/layout rendering or even functionality might affect you.  Please consider using Internet Explorer 8+, Firefox, Chrome, Safari, or Opera as an alternative.
+			</span>';?></td>
 	</tr>
 	<tr>
 		<td colspan="2">&nbsp;</td>

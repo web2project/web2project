@@ -1,4 +1,4 @@
-<?php /* $Id: tasks.class.php 1526 2010-12-11 08:52:38Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/tasks.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -11,22 +11,6 @@ $filters = array('my' => 'My Tasks', 'myunfinished' => 'My Unfinished Tasks', 'a
 $status = w2PgetSysVal('TaskStatus');
 
 $priority = w2PgetSysVal('TaskPriority');
-
-/*
-* TASK DYNAMIC VALUE:
-* 0  = default(OFF), no dep tracking of others, others do track
-* 1  = dynamic, umbrella task, no dep tracking, others do track
-* 11 = OFF, no dep tracking, others do not track
-* 21 = FEATURE, dep tracking, others do not track
-* 31 = ON, dep tracking, others do track
-*/
-
-// When calculating a task's start date only consider
-// end dates of tasks with these dynamic values.
-$tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
-// Tasks with these dynamics have their dates updated when
-// one of their dependencies changes. (They track dependencies)
-$tracking_dynamics = array('0' => '21', '1' => '31');
 
 /*
 * CTask Class
@@ -80,6 +64,33 @@ class CTask extends w2p_Core_BaseObject {
     public $task_updated = null;
     public $task_updator = null;
     public $task_allow_other_user_tasklogs;
+
+    /*
+     * TASK DYNAMIC VALUE:
+     * 0  = default(OFF), no dep tracking of others, others do track
+     * 1  = dynamic, umbrella task, no dep tracking, others do track
+     * 11 = OFF, no dep tracking, others do not track
+     * 21 = FEATURE, dep tracking, others do not track
+     * 31 = ON, dep tracking, others do track
+     */
+
+    /**
+     * When calculating a task's start date only consider
+     * end dates of tasks with these dynamic values.
+     *
+     * @access public
+     * @static
+     */
+    public static $tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
+
+    /**
+     * Tasks with these dynamics have their dates updated when
+     * one of their dependencies changes. (They track dependencies)
+     *
+     * @access public
+     * @static
+     */
+    public static $tracking_dynamics = array('0' => '21', '1' => '31');
 
     /**
      * Class constants for task access
@@ -777,14 +788,6 @@ class CTask extends w2p_Core_BaseObject {
             $implodedTaskList = implode(',', $taskList);
 
             $q = new w2p_Database_Query;
-            // delete affiliated task_logs
-            $q->setDelete('task_log');
-            $q->addWhere('task_log_task IN (' . $implodedTaskList . ')');
-            if (!($q->exec())) {
-                return db_error();
-            }
-            $q->clear();
-
             // delete linked user tasks
             $q->setDelete('user_tasks');
             $q->addWhere('task_id IN (' . $implodedTaskList . ')');
@@ -1208,6 +1211,7 @@ class CTask extends w2p_Core_BaseObject {
 			$task_types = w2PgetSysVal('TaskType');
 			$body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
 			$body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n";
+			$body .= "------------------------\n\n";
 			$body .= $AppUI->_('User', UI_OUTPUT_RAW) . ': ' . $creatorname . "\n";
 			$body .= $AppUI->_('Hours', UI_OUTPUT_RAW) . ': ' . $log->task_log_hours . "\n";
 			$body .= $AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . $log->task_log_name . "\n\n";
@@ -1458,14 +1462,13 @@ class CTask extends w2p_Core_BaseObject {
 	*		  @param				integer task_id of task to update
 	*/
 	public function update_dep_dates($task_id) {
-		global $tracking_dynamics;
 		$q = new w2p_Database_Query;
 
 		$newTask = new CTask();
 		$newTask->load($task_id);
 
 		// Do not update tasks that are not tracking dependencies
-		if (!in_array($newTask->task_dynamic, $tracking_dynamics)) {
+		if (!in_array($newTask->task_dynamic, self::$tracking_dynamics)) {
 			return;
 		}
 
@@ -1535,7 +1538,6 @@ class CTask extends w2p_Core_BaseObject {
 	*/
 
 	public function get_deps_max_end_date($taskObj) {
-		global $tracked_dynamics;
 		$q = new w2p_Database_Query;
 
 		$deps = $taskObj->getDependencies();
@@ -1543,8 +1545,8 @@ class CTask extends w2p_Core_BaseObject {
 
 		$last_end_date = false;
 		// Don't respect end dates of excluded tasks
-		if ($tracked_dynamics && !empty($deps)) {
-			$track_these = implode(',', $tracked_dynamics);
+		if (self::$tracked_dynamics && !empty($deps)) {
+			$track_these = implode(',', self::$tracked_dynamics);
 			$q->addTable('tasks');
 			$q->addQuery('MAX(task_end_date)');
 			$q->addWhere('task_id IN (' . $deps . ') AND task_dynamic IN (' . $track_these . ')');
@@ -2122,9 +2124,9 @@ class CTask extends w2p_Core_BaseObject {
 		$q->addTable('user_tasks', 'ut');
 		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
 		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		 $q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
 		$q->addWhere('ut.task_id = ' . (int)$id);
-		$contacts = $q->loadHashList('c.contact_id');
+		$contacts = $q->loadHashList('contact_id');
 		$q->clear();
 
 		// Now we also check the owner of the task, as we will need
@@ -2172,7 +2174,7 @@ class CTask extends w2p_Core_BaseObject {
 
 		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $starts->format($df) . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . $expires->format($df) . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
 		foreach ($contacts as $contact) {
-			if ($owner_is_not_assignee || $contact['contact_id'] != $owner_contact) {
+			if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
 				$body .= ($contact['contact_first_name'] . ' ' . $contact['contact_last_name'] . ' <' . $contact['contact_email'] . ">\n");
 			}
 		}

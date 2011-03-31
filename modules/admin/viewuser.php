@@ -141,6 +141,12 @@ if (!$user) {
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
+                <td class="hilite" width="100%">
+                    <?php echo w2p_email($user->contact_email); ?>
+                </td>
+            </tr>
             <?php foreach ($methods as $method => $value): ?>
                 <tr>
                     <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$method]); ?>:</td>

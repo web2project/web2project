@@ -671,6 +671,8 @@ class CEvent extends w2p_Core_BaseObject {
 				case 'all':
 					$$query_set->addWhere('(event_private = 0 OR event_owner=' . (int)$user_id . ')');
 					break;
+				default:
+					$$query_set->addWhere('(event_private = 0 OR event_owner=' . (int)$user_id . ')');
 			}
 
 			if ($query_set == 'q') { // assemble query for non-recursive events

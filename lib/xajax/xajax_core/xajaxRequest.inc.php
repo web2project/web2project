@@ -12,7 +12,7 @@
 
 /*
 	@package xajax
-	@version $Id: xajaxRequest.inc.php 1620 2011-02-10 17:46:07Z pedroix $
+	@version $Id$
 	@copyright Copyright (c) 2005-2007 by Jared White & J. Max Wilson
 	@copyright Copyright (c) 2008-2010 by Joseph Woolley, Steffen Konerow, Jared White  & J. Max Wilson
 	@license http://www.xajaxproject.org/bsd_license.txt BSD License

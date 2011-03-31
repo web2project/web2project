@@ -55,7 +55,7 @@ if (isset($_POST['new_task_project']) && $_POST['new_task_project'] && ($obj->ta
 // Map task_dynamic checkboxes to task_dynamic values for task dependencies.
 if ($obj->task_dynamic != 1) {
     $task_dynamic_delay = w2PgetParam($_POST, 'task_dynamic_nodelay', '0');
-    if (in_array($obj->task_dynamic, $tracking_dynamics)) {
+    if (in_array($obj->task_dynamic, CTask::$tracking_dynamics)) {
         $obj->task_dynamic = $task_dynamic_delay ? 21 : 31;
     } else {
         $obj->task_dynamic = $task_dynamic_delay ? 11 : 0;

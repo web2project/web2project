@@ -18,7 +18,6 @@ if (!$contact->bind($_POST)) {
 
 $action = ($del) ? 'deleted' : 'stored';
 
-
 $contact_id = (int) w2PgetParam($_POST, 'contact_id', 0);
 $user_id = (int) w2PgetParam($_POST, 'user_id', 0);
 $isNewUser = !$user_id;
@@ -49,9 +48,9 @@ if ($del) {
 	}
 }
 
-if ($contact_id) {
-	$contact->load($contact_id);
-}
+//if ($contact_id) {
+//	$contact->load($contact_id);
+//}
 
 $obj->user_username = strtolower($obj->user_username);
 
@@ -75,11 +74,14 @@ if ($isNewUser) {
 		$AppUI->setMsg('already exists. Try another username.', UI_MSG_ERROR, true);
 		$AppUI->redirect();
 	}
-	$contact->contact_owner = $AppUI->user_id;
 }
+$contact->contact_owner = ($contact->contact_owner) ? $contact->contact_owner : $AppUI->user_id;
+
+$contactArray = $contact->getContactMethods();
 $result = $contact->store($AppUI);
 
 if ($result) {
+	$contact->setContactMethods($contactArray);
 	$obj->user_contact = $contact->contact_id;
 	if (($msg = $obj->store())) {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);

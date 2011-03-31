@@ -10,3 +10,9 @@
 .center {
     text-align: center;
 }
+
+td.day span img, td.weekend span img,
+td.today span img, td.empty span img
+{
+	display: inline;
+}

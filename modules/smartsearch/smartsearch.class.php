@@ -164,30 +164,30 @@ function highlight($text, $keyval) {
 	global $ssearch;
 
 	$txt = $text;
-	$hicolor = array('#FFFF66', '#ADD8E6', '#90EE8A', '#FF99FF');
+	$hicolor = array('#FFFF66', '#ADD8E6', '#90EE8A', '#FF99FF', '#FFA500', '#ADFF2F', '#00FFFF', '#FF69B4');
 	$keys = array();
 	$keys = (!is_array($keyval)) ? array($keyval) : $keyval;
 
-	foreach ($keys as $key) {
-		if (mb_strlen($key[0]) > 0) {
-			$key[0] = stripslashes($key[0]);
+	foreach ($keys as $key_idx => $key) {
+		if (mb_strlen($key) > 0) {
+			$key = stripslashes($key);
 			$metacharacters = array('\\', '(', ')', '$', '[', '*', '+', '|', '.', '^', '?');
 			$metareplacement = array('\\\\', '\(', '\)', '\$', '\[', '\*', '\+', '\|', '\.', '\^', '\?');
-			$key[0] = mb_str_replace($metacharacters, $metareplacement, $key[0]);
+			$key = mb_str_replace($metacharacters, $metareplacement, $key);
 			if (isset($ssearch['ignore_specchar']) && ($ssearch['ignore_specchar'] == 'on')) {
 				if ($ssearch['ignore_case'] == 'on') {
-					$txt = preg_replace('/'.recode2regexp_utf8($key[0]).'/i', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+					$txt = preg_replace('/'.recode2regexp_utf8($key).'/i', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
 				} else {
-					$txt = preg_replace('/'.(recode2regexp_utf8($key[0])).'/', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+					$txt = preg_replace('/'.(recode2regexp_utf8($key)).'/', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
 				}
 			} elseif (!isset($ssearch['ignore_specchar']) || ($ssearch['ignore_specchar'] == '')) {
 				if ($ssearch['ignore_case'] == 'on') {
-					$txt = preg_replace('/'.$key[0].'/i', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+					$txt = preg_replace('/'.$key.'/i', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
 				} else {
-					$txt = preg_replace('/'.$key[0].'/', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+					$txt = preg_replace('/'.$key.'/', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
 				}
 			} else {
-				$txt = preg_replace('/'.$key[0].'/i', '<span style="background:' . $hicolor[$key[1]] . '" >\\0</span>', $txt);
+				$txt = preg_replace('/'.$key.'/i', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
 			}
 		}
 	}

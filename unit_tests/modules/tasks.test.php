@@ -28,8 +28,6 @@ global $ADODB_FETCH_MODE;
 global $w2p_performance_dbtime;
 global $w2p_performance_old_dbqueries;
 global $AppUI;
-global $tracking_dynamics;
-global $tracked_dynamics;
 global $w2Pconfig;
 
 require_once '../base.php';
@@ -50,9 +48,6 @@ $AppUI->login('admin', 'passwd');
 $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
 $defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
-
-$tracking_dynamics = array('0' => '21', '1' => '31');
-$tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
 
 require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';
@@ -186,11 +181,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('task_contacts',            $this->obj);
         $this->assertObjectHasAttribute('task_custom',              $this->obj);
         $this->assertObjectHasAttribute('task_type',                $this->obj);
-        $this->assertObjectHasAttribute('_tbl_prefix',              $this->obj);
-        $this->assertObjectHasAttribute('_tbl',                     $this->obj);
-        $this->assertObjectHasAttribute('_tbl_key',                 $this->obj);
-        $this->assertObjectHasAttribute('_error',                   $this->obj);
-        $this->assertObjectHasAttribute('_query',                   $this->obj);
         $this->assertObjectHasAttribute('task_updator',             $this->obj);
         $this->assertObjectHasAttribute('task_created',             $this->obj);
         $this->assertObjectHasAttribute('task_updated',             $this->obj);
@@ -229,11 +219,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->task_contancts);
         $this->assertNull($this->obj->task_custom);
         $this->assertNull($this->obj->task_type);
-        $this->assertEquals('',         $this->obj->_tbl_prefix);
-        $this->assertEquals('tasks',    $this->obj->_tbl);
-        $this->assertEquals('task_id',  $this->obj->_tbl_key);
-        $this->assertEquals('',         $this->obj->_errors);
-        $this->assertType('w2p_Database_Query',    $this->obj->_query);
         $this->assertNull($this->obj->task_updator);
         $this->assertNull($this->obj->task_created);
         $this->assertNull($this->obj->task_updated);
@@ -1491,7 +1476,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertFalse($this->obj->load(22));
         $this->assertEquals(0, count($this->obj->getAssignedUsers(22)));
-        $this->assertEquals(0, count($this->obj->getTaskLogs(22)));
+        $this->assertEquals(1, count($this->obj->getTaskLogs(22)));
         $this->assertEquals(0, count($this->obj->getAssignedUsers(22)));
         $this->assertEquals(0, count($this->obj->getDependencyList(22)));
         $this->assertEquals(0, count($this->obj->getDependentTaskList(22)));
@@ -2177,7 +2162,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $assigned_users = $this->obj->getAssignedUsers(1);
 
         $this->assertEquals(1, count($assigned_users));
-        $this->assertEquals(28, count($assigned_users[1]));
+        $this->assertEquals(30, count($assigned_users[1]));
 
         $this->assertEquals(1,                                  $assigned_users[1]['user_id']);
         $this->assertEquals(1,                                  $assigned_users[1]['user_contact']);
@@ -2192,6 +2177,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(50,                                 $assigned_users[1]['perc_assignment']);
         $this->assertEquals(42,                                 $assigned_users[1]['user_task_priority']);
         $this->assertEquals('Person',                           $assigned_users[1]['contact_last_name']);
+		$this->assertEquals('Admin',							$assigned_users[1]['contact_first_name']);
+		$this->assertEquals('',									$assigned_users[1]['user_email']);
         $this->assertEquals(1,                                  $assigned_users[1][0]);
         $this->assertEquals(1,                                  $assigned_users[1][1]);
         $this->assertEquals('admin',                            $assigned_users[1][2]);
@@ -2205,6 +2192,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(50,                                 $assigned_users[1][10]);
         $this->assertEquals(42,                                 $assigned_users[1][11]);
         $this->assertEquals('Person',                           $assigned_users[1][12]);
+		$this->assertEquals('Admin',							$assigned_users[1][13]);
+		$this->assertEquals('',									$assigned_users[1][14]);
     }
     /**
      * Test getting a list of dependencies
@@ -2851,7 +2840,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      * Test the remind function
      * @todo Not sure how we can test reliably that the email was actually
      * generated and sent
-     * @expectedException PHPUnit_Framework_Error
      */
     public function testRemind()
     {

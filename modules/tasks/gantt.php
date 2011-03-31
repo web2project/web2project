@@ -61,7 +61,7 @@ if ($caller == 'todo') {
 	$q->addQuery('tp.task_pinned');
 	$q->addTable('tasks', 't');
     $q->innerJoin('projects', 'pr', 'pr.project_id = t.task_project');
- 	$q->leftJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . (int) $user_id);
+ 	$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . (int) $user_id);
 	$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = t.task_id and tp.user_id = ' . (int)$user_id);
 	$q->addWhere('(t.task_percent_complete < 100 OR t.task_percent_complete IS NULL)');
 	$q->addWhere('t.task_status = 0');
@@ -139,6 +139,17 @@ if ($caller == 'todo') {
 $task = new CTask();
 $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
+
+if ($caller == 'todo') {
+	$gantt_arr = array();
+	$displayed = array();
+	foreach($proTasks as $tmpTask) {
+		if(!isset($displayed[$tmpTask['task_id']])) {
+			$gantt_arr[][] = $tmpTask;
+			$displayed[$tmpTask['task_id']] = $tmpTask['task_id'];
+		}
+	}
+}
 $q->clear();
 
 $orrarr[] = array('task_id'=>0, 'order_up'=>0, 'order'=>'');

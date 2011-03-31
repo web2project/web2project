@@ -42,6 +42,7 @@
         <column>project_end_date_adjusted</column>
         <column>project_end_date_adjusted_user</column>
         <column>project_location</column>
+		<column>project_last_task</column>
         <row>
             <value>1</value>
             <value>1</value>
@@ -84,6 +85,7 @@
             <value>2009-07-05 00:00:00</value>
             <value>0</value>
             <value>Somewhere Updated</value>
+			<value>0</value>
         </row>
         <row>
             <value>2</value>
@@ -127,6 +129,7 @@
             <value>2009-07-08 00:00:00</value>
             <value>0</value>
             <value>Somewhere around</value>
+			<value>0</value>
         </row>
         <row>
             <value>3</value>
@@ -170,6 +173,7 @@
             <value>2009-07-08 00:00:00</value>
             <value>0</value>
             <value>Somewhere around</value>
+			<value>0</value>
         </row>
         <row>
             <value>4</value>
@@ -213,6 +217,7 @@
             <value>2009-07-08 00:00:00</value>
             <value>0</value>
             <value>Somewhere around</value>
+			<value>0</value>
         </row>
     </table>
  </dataset>

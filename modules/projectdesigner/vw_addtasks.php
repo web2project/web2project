@@ -85,8 +85,10 @@ function addTasks() {
       <table width="100%">
       <tbody valign="top" id="tcomponents">
 <tr>
-      <th>
-          &nbsp;
+      <th width="5">
+ 		<?php echo w2PtoolTip('add tasks', 'click here to add a new task to this project'); ?><a href="javascript: void(0);" onclick="addComponent()">
+			<img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" border="0" alt="" />
+		</a><?php echo w2PendTip(); ?>
       </th>
       <th>
           <b><?php echo $AppUI->_('Task Name'); ?></b>
@@ -118,9 +120,7 @@ function addTasks() {
 <table width="100%">
 <tr>
 	<td align="left" width="20">
- 		<?php echo w2PtoolTip('add tasks', 'click here to add a new task to this project'); ?><a href="javascript: void(0);" onclick="addComponent()">
-			<img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" border="0" alt="" />
-		</a><?php echo w2PendTip(); ?>
+
 	</td>
 </tr>
 <tr>

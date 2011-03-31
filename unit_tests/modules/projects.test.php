@@ -172,11 +172,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     	$this->assertObjectHasAttribute('project_parent',              $this->obj);
     	$this->assertObjectHasAttribute('project_original_parent',     $this->obj);
     	$this->assertObjectHasAttribute('project_location',            $this->obj);
-    	$this->assertObjectHasAttribute('_tbl_prefix',                 $this->obj);
-    	$this->assertObjectHasAttribute('_tbl',                        $this->obj);
-    	$this->assertObjectHasAttribute('_tbl_key',                    $this->obj);
-    	$this->assertObjectHasAttribute('_error',                      $this->obj);
-    	$this->assertObjectHasAttribute('_query',                      $this->obj);
     }
 
     /**
@@ -214,12 +209,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->project_type);
         $this->assertNull($this->obj->project_parent);
         $this->assertNull($this->obj->project_original_parent);
-        $this->assertEquals('',             $this->obj->project_location);
-        $this->assertEquals('',             $this->obj->_tbl_prefix);
-        $this->assertEquals('projects',     $this->obj->_tbl);
-        $this->assertEquals('project_id',   $this->obj->_tbl_key);
-        $this->assertEquals('',             $this->obj->_error);
-        $this->assertType('w2p_Database_Query',        $this->obj->_query);
     }
 
     /**
@@ -473,7 +462,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(0,                          $this->obj->project_active);
         $this->assertEquals(0,                          $this->obj->project_private);
         $this->assertEquals('',                         $this->obj->project_departments);
-        $this->assertEquals(array(0 => ''),             $this->obj->project_contacts);
+        $this->assertEquals('',							$this->obj->project_contacts);
         $this->assertEquals(-1,                         $this->obj->project_priority);
         $this->assertEquals(0,                          $this->obj->project_type);
         $this->assertEquals(5,                          $this->obj->project_parent);
@@ -681,7 +670,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                                  $this->obj->project_active);
         $this->assertEquals(0,                                  $this->obj->project_private);
         $this->assertEquals('',                                 $this->obj->project_departments);
-        $this->assertEquals(array(0 => ''),                     $this->obj->project_contacts);
+        $this->assertEquals('',									$this->obj->project_contacts);
         $this->assertEquals(1,                                  $this->obj->project_priority);
         $this->assertEquals(1,                                  $this->obj->project_type);
         $this->assertEquals(1,                                  $this->obj->project_parent);
@@ -1100,7 +1089,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 		$this->post_data['email_project_owner'] = 1;
 		$this->post_data['email_project_contacts'] = 0;
 		$this->post_data['project_departments'] = array(1,2);
-		$this->post_data['project_contacts'] = '3,4';
+		$this->post_data['project_contacts'] = array(3,4);
 
         $this->obj->bind($this->post_data);
         $results = $this->obj->store($AppUI);

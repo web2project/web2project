@@ -25,11 +25,13 @@ $bulk_task_allow_other_user_tasklogs = w2PgetParam($_POST, 'bulk_task_allow_othe
 if ($bulk_task_start_date) {
 	$start_date = new w2p_Utilities_Date($bulk_task_start_date);
 	$bulk_start_date = $start_date->format(FMT_DATETIME_MYSQL);
+	$bulk_start_date = $AppUI->convertToSystemTZ($bulk_start_date);
 }
 $bulk_task_end_date = w2PgetParam($_POST, 'add_task_bulk_end_date', '');
 if ($bulk_task_end_date) {
 	$end_date = new w2p_Utilities_Date($bulk_task_end_date);
 	$bulk_end_date = $end_date->format(FMT_DATETIME_MYSQL);
+	$bulk_end_date = $AppUI->convertToSystemTZ($bulk_end_date);
 }
 $bulk_move_date = (int) w2PgetParam($_POST, 'bulk_move_date', '0');
 $bulk_task_percent_complete = w2PgetParam($_POST, 'bulk_task_percent_complete', '');

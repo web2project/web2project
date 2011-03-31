@@ -42,7 +42,7 @@
 'Email'=>'Courriel',
 'Employee'=>'Employé',
 'End User Session'=>'Fin session utilisateur',
-'Events'=>'Evénements',
+'Events'=>'Evènements',
 'Filter'=>'Filtre',
 'From'=>'De',
 'Global Search'=>'Recherche globale',
