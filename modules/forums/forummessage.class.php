@@ -188,7 +188,7 @@ class CForumMessage extends w2p_Core_BaseObject {
 			return;
 		}
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 		$mail->Subject($subj_prefix . ' ' . $this->message_title, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
 		$body = $body_msg;

@@ -964,7 +964,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q->addWhere('project_id=' . (int)$this->task_project);
 		$projname = htmlspecialchars_decode($q->loadResult());
 		$q->clear();
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 
 		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
@@ -1018,7 +1018,7 @@ class CTask extends w2p_Core_BaseObject {
 		$projname = htmlspecialchars_decode($q->loadResult());
 		$q->clear();
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 
 		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
@@ -1185,7 +1185,7 @@ class CTask extends w2p_Core_BaseObject {
 
 			// Build the email and send it out.
 			$char_set = isset($locale_char_set) ? $locale_char_set : '';
-			$mail = new Mail;
+			$mail = new w2p_Utilities_Mail();
 			// Grab the subject from user preferences
 			$prefix = $AppUI->getPref('TASKLOGSUBJ');
 			$mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
@@ -2180,7 +2180,7 @@ class CTask extends w2p_Core_BaseObject {
 		}
 		$body .= ("\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $this->task_description . "\n");
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 		$mail->Subject($subject, $locale_char_set);
 		$mail->Body($body, $locale_char_set);
 		foreach ($contacts as $contact) {

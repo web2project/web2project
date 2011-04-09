@@ -828,7 +828,7 @@ class CEvent extends w2p_Core_BaseObject {
 		$start_date = new w2p_Utilities_Date($this->event_start_date);
 		$end_date = new w2p_Utilities_Date($this->event_end_date);
 
-		$mail = new Mail();
+		$mail = new w2p_Utilities_Mail();
 		$type = $update ? $AppUI->_('Updated') : $AppUI->_('New');
 		if ($clash) {
 			$mail->Subject($AppUI->_('Requested Event') . ': ' . $this->event_title, $locale_char_set);

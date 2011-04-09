@@ -13,7 +13,7 @@
  *    <code>
  *    include "libmail.php";
  *
- *    $m = new Mail; // create the mail
+ *    $m = new w2p_Utilities_Mail(); // create the mail
  *    $m->From( "leo@isp.com" );
  *    $m->To( "destination@somewhere.fr" );
  *    $m->Subject( "the subject of the mail" );

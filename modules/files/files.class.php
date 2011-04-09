@@ -448,7 +448,7 @@ class CFile extends w2p_Core_BaseObject {
             if ($this->file_project != 0) {
                 $this->_project = new CProject();
                 $this->_project->load($this->file_project);
-                $mail = new Mail;
+                $mail = new w2p_Utilities_Mail();
 
                 if ($this->file_task == 0) { //notify all developers
                     $mail->Subject($this->_project->project_name . '::' . $this->file_name, $locale_char_set);
@@ -534,7 +534,7 @@ class CFile extends w2p_Core_BaseObject {
             if ($this->file_project != 0) {
                 $this->_project = new CProject();
                 $this->_project->load($this->file_project);
-                $mail = new Mail;
+                $mail = new w2p_Utilities_Mail();
 
                 if ($this->file_task == 0) { //notify all developers
                   $mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name, $locale_char_set);

@@ -56,7 +56,7 @@ function findgchild(&$tarr, $parent, $level = 0) {
 
 function notifyNewExternalUser($address, $username, $logname, $logpwd) {
 	global $AppUI;
-	$mail = new Mail;
+	$mail = new w2p_Utilities_Mail();
 	if ($mail->ValidEmail($address)) {
 		if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
@@ -73,7 +73,7 @@ function notifyNewExternalUser($address, $username, $logname, $logpwd) {
 
 function notifyHR($address, $username, $uaddress, $uusername, $logname, $logpwd, $userid) {
 	global $AppUI;
-	$mail = new Mail;
+	$mail = new w2p_Utilities_Mail();
 	if ($mail->ValidEmail($address)) {
 		if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
@@ -90,7 +90,7 @@ function notifyHR($address, $username, $uaddress, $uusername, $logname, $logpwd,
 
 function notifyNewUser($address, $username) {
 	global $AppUI;
-	$mail = new Mail;
+	$mail = new w2p_Utilities_Mail();
 	if ($mail->ValidEmail($address)) {
 		if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
@@ -109,7 +109,7 @@ function notifyNewUser($address, $username) {
 
 function notifyNewUserCredentials($address, $username, $logname, $logpwd) {
 	global $AppUI, $w2Pconfig;
-	$mail = new Mail;
+	$mail = new w2p_Utilities_Mail();
 	if ($mail->ValidEmail($address)) {
 		if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
