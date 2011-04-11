@@ -9,24 +9,16 @@ global $AppUI, $users, $task_id, $task_project, $task, $projTasksWithEndDates, $
 
 if ($task_id == 0) {
 	// Add task creator to assigned users by default
-	$assigned_perc = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));
+	$assignedUsers = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));
 } else {
 	// Pull users on this task
-	$q = new w2p_Database_Query;
-	$q->addTable('user_tasks');
-	$q->addQuery('user_tasks.user_id, perc_assignment, concat_ws(\' \', contact_first_name, contact_last_name) as contact_name');
-	$q->addWhere('task_id = ' . (int)$task_id);
-	$q->addWhere('task_id <> 0');
-	$q->addJoin('users', '', 'users.user_id = user_tasks.user_id', 'inner');
-	$q->addJoin('contacts', '', 'contacts.contact_id = users.user_contact', 'inner');
-	$assigned_perc = $q->loadHashList('user_id');
-	$q->clear();
+	$assignedUsers = $task->getAssignedUsers($task_id);
 }
 
 $initPercAsignment = '';
 $assigned = array();
-foreach ($assigned_perc as $user_id => $data) {
-	$assigned[$user_id] = $data['contact_name'] . ' [' . $data['perc_assignment'] . '%]';
+foreach ($assignedUsers as $user_id => $data) {
+	$assigned[$user_id] = $data['contact_display_name'] . ' [' . $data['perc_assignment'] . '%]';
 	$initPercAsignment .= "$user_id={$data['perc_assignment']};";
 }
 
