@@ -316,9 +316,8 @@ function popContacts() {
 		</table>
 	</td>
 </tr>
-</form>
 </table>
-
+</form>
 <?php
 $tab = $AppUI->processIntState('TaskAeTabIdx', $_GET, 'tab', 0);
 
