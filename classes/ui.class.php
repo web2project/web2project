@@ -30,7 +30,7 @@ define('UI_OUTPUT_RAW', 0x20);
 
 // W2P_BASE_DIR is set in base.php and fileviewer.php and is the base directory
 // of the web2project installation.
-require_once W2P_BASE_DIR . '/classes/permissions.class.php';
+
 /**
  * The Application User Interface Class.
  *

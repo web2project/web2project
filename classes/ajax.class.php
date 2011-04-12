@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 
 class w2PajaxResponse extends w2p_Extensions_AjaxResponse
 {

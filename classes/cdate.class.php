@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 
 class CDate extends w2p_Utilities_Date
 {

@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 
 class Mail extends w2p_Utilities_Mail
 {
