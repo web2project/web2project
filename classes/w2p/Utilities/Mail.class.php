@@ -11,7 +11,6 @@
  *    @version    1.0
  *    Example
  *    <code>
- *    include "libmail.php";
  *
  *    $m = new w2p_Utilities_Mail(); // create the mail
  *    $m->From( "leo@isp.com" );
