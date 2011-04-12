@@ -838,7 +838,7 @@ class CAppUI {
 		// Now that the password has been checked, see if they are allowed to
 		// access the system
 		if (!isset($GLOBALS['acl'])) {
-			$GLOBALS['acl'] = new w2Pacl;
+			$GLOBALS['acl'] = new w2p_Extensions_Permissions();
 		}
 		if (!$GLOBALS['acl']->checkLogin($user_id)) {
 			dprint(__file__, __line__, 1, 'Permission check failed');
@@ -1069,11 +1069,11 @@ class CAppUI {
 
 	/**
 	 * Returns the global dpACL class or creates it as neccessary.
-	 * @return object w2Pacl
+	 * @return object w2p_Extensions_Permissions
 	 */
 	public function &acl() {
 		if (!isset($GLOBALS['acl'])) {
-			$GLOBALS['acl'] = new w2Pacl;
+			$GLOBALS['acl'] = new w2p_Extensions_Permissions();
 		}
 		return $GLOBALS['acl'];
 	}
