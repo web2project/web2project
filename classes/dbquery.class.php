@@ -1,4 +1,4 @@
-<?php
+<?php /* $Id$ $URL$ */
 
 class DBQuery extends w2p_Database_Query
 {

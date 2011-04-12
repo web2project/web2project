@@ -10,6 +10,7 @@ define('SECONDS_PER_DAY', 86400);
 
 require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
 require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
+require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
 
 /*
  * TODO: Personally, I'm already hating this autoloader... while it's great in
@@ -33,9 +34,12 @@ function w2p_autoload($class_name) {
     $name = strtolower($class_name);
     switch ($name) {
         case 'libmail':
+			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/mail.class.php';
             break;
         case 'w2pacl':
+			// Deprecated as of v3.0
+			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
         case 'cappui':
@@ -45,7 +49,9 @@ function w2p_autoload($class_name) {
             require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
             break;
         case 'w2pajaxresponse':
-            require_once W2P_BASE_DIR . '/classes/ajax.class.php';
+            // Deprecated as of v3.0
+			//TODO: remove this in v4.0
+			require_once W2P_BASE_DIR . '/classes/ajax.class.php';
             break;
 
         /*

@@ -964,7 +964,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q->addWhere('project_id=' . (int)$this->task_project);
 		$projname = htmlspecialchars_decode($q->loadResult());
 		$q->clear();
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 
 		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
@@ -1018,7 +1018,7 @@ class CTask extends w2p_Core_BaseObject {
 		$projname = htmlspecialchars_decode($q->loadResult());
 		$q->clear();
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 
 		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
@@ -1185,7 +1185,7 @@ class CTask extends w2p_Core_BaseObject {
 
 			// Build the email and send it out.
 			$char_set = isset($locale_char_set) ? $locale_char_set : '';
-			$mail = new Mail;
+			$mail = new w2p_Utilities_Mail();
 			// Grab the subject from user preferences
 			$prefix = $AppUI->getPref('TASKLOGSUBJ');
 			$mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
@@ -1697,7 +1697,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q->addTable('users', 'u');
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
-		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name, co.contact_first_name');
+		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name, co.contact_first_name, contact_display_name');
 		$q->addQuery('co.contact_email AS user_email');
 		$q->addWhere('ut.task_id = ' . (int)$taskId);
 
@@ -1706,23 +1706,23 @@ class CTask extends w2p_Core_BaseObject {
 
 	public function getDependencyList($taskId) {
 		$q = new w2p_Database_Query;
-		$q->addQuery('td.dependencies_req_task_id, t.task_name');
+		$q->addQuery('td.dependencies_req_task_id, t.task_name, t.task_percent_complete');
 		$q->addTable('tasks', 't');
 		$q->addTable('task_dependencies', 'td');
 		$q->addWhere('td.dependencies_req_task_id = t.task_id');
 		$q->addWhere('td.dependencies_task_id = ' . (int)$taskId);
 
-		return $q->loadHashList();
+		return $q->loadHashList('dependencies_req_task_id');
 	}
 	public function getDependentTaskList($taskId) {
 		$q = new w2p_Database_Query;
-		$q->addQuery('td.dependencies_task_id, t.task_name');
+		$q->addQuery('td.dependencies_task_id, t.task_name, t.task_percent_complete');
 		$q->addTable('tasks', 't');
 		$q->addTable('task_dependencies', 'td');
 		$q->addWhere('td.dependencies_task_id = t.task_id');
 		$q->addWhere('td.dependencies_req_task_id = ' . $taskId);
 
-		return $q->loadHashList();
+		return $q->loadHashList('dependencies_task_id');
 	}
 	public function getTaskDepartments(CAppUI $AppUI = null, $taskId) {
 		global $AppUI;
@@ -2180,7 +2180,7 @@ class CTask extends w2p_Core_BaseObject {
 		}
 		$body .= ("\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $this->task_description . "\n");
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 		$mail->Subject($subject, $locale_char_set);
 		$mail->Body($body, $locale_char_set);
 		foreach ($contacts as $contact) {

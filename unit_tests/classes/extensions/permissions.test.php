@@ -21,7 +21,6 @@ $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
 
-require_once W2P_BASE_DIR . '/classes/permissions.class.php';
 require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
@@ -34,15 +33,15 @@ require_once 'PHPUnit/Extensions/Database/DataSet/DataSetFilter.php';
  * @package web2project
  * @subpackage unit_tests
  */
-class w2Pacl_Test extends PHPUnit_Framework_TestCase 
+class w2p_Extensions_Permissions_Test extends PHPUnit_Framework_TestCase
 {
 	public function testDebugText()
 	{
-		$perms = new w2Pacl();
+		$perms = new w2p_Extensions_Permissions();
     
-    $this->assertType('w2Pacl', $perms);
-    $perms->debug_text('test message');
+		$this->assertType('w2p_Extensions_Permissions', $perms);
+		$perms->debug_text('test message');
     
-    $this->assertEquals('test message', $perms->msg());
+		$this->assertEquals('test message', $perms->msg());
 	}
 }

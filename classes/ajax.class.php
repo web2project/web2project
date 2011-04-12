@@ -1,14 +1,10 @@
-<?php /* $Id: ajax.class.php 38 2008-02-11 11:38:51Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/classes/ajax.class.php $ */
-include_once $AppUI->getLibraryClass('xajax/xajax_core/xajax.inc');
+<?php /* $Id$ $URL$ */
 
-class w2PajaxResponse extends xajaxResponse {
-
-	public function addCreateOptions($sSelectId, $options) {
-		if (sizeof($options) > 0) {
-			foreach ($options as $key => $option) {
-				$this->script("addOption('" . $sSelectId . "','" . $key . "','" . $option . "');");
-			}
-		}
-	}
-
+class w2PajaxResponse extends w2p_Extensions_AjaxResponse
+{
+    public function addCreateOptions($sSelectId, $options)
+    {
+        parent::addCreateOptions($sSelectId, $options);
+        trigger_error("w2PajaxResponse has been deprecated in v2.3 and will be removed by v4.0. Please use w2p_Extensions_AjaxResponse instead.", E_USER_NOTICE );
+    }
 }
