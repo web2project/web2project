@@ -1706,23 +1706,23 @@ class CTask extends w2p_Core_BaseObject {
 
 	public function getDependencyList($taskId) {
 		$q = new w2p_Database_Query;
-		$q->addQuery('td.dependencies_req_task_id, t.task_name');
+		$q->addQuery('td.dependencies_req_task_id, t.task_name, t.task_percent_complete');
 		$q->addTable('tasks', 't');
 		$q->addTable('task_dependencies', 'td');
 		$q->addWhere('td.dependencies_req_task_id = t.task_id');
 		$q->addWhere('td.dependencies_task_id = ' . (int)$taskId);
 
-		return $q->loadHashList();
+		return $q->loadHashList('dependencies_req_task_id');
 	}
 	public function getDependentTaskList($taskId) {
 		$q = new w2p_Database_Query;
-		$q->addQuery('td.dependencies_task_id, t.task_name');
+		$q->addQuery('td.dependencies_task_id, t.task_name, t.task_percent_complete');
 		$q->addTable('tasks', 't');
 		$q->addTable('task_dependencies', 'td');
 		$q->addWhere('td.dependencies_task_id = t.task_id');
 		$q->addWhere('td.dependencies_req_task_id = ' . $taskId);
 
-		return $q->loadHashList();
+		return $q->loadHashList('dependencies_task_id');
 	}
 	public function getTaskDepartments(CAppUI $AppUI = null, $taskId) {
 		global $AppUI;
