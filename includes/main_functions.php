@@ -34,10 +34,12 @@ function w2p_autoload($class_name) {
     $name = strtolower($class_name);
     switch ($name) {
         case 'libmail':
-			//TODO: deprecate this in v4.0
+			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/mail.class.php';
             break;
         case 'w2pacl':
+			// Deprecated as of v3.0
+			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
         case 'cappui':
@@ -47,7 +49,8 @@ function w2p_autoload($class_name) {
             require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
             break;
         case 'w2pajaxresponse':
-            //TODO: deprecate this in v4.0
+            // Deprecated as of v3.0
+			//TODO: remove this in v4.0
 			require_once W2P_BASE_DIR . '/classes/ajax.class.php';
             break;
 
