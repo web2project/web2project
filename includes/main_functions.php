@@ -79,6 +79,9 @@ function w2p_autoload($class_name) {
         case 'cprojectdesigneroptions':
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
+		case 'crole':
+			require_once W2P_BASE_DIR .'/modules/system/roles/roles.class.php';
+			break;
         case 'csyskey':
             require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
             break;

@@ -19,9 +19,6 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-//$roles
-// Create the roles class container
-require_once W2P_BASE_DIR . '/modules/system/roles/roles.class.php';
 $perms = &$AppUI->acl();
 $crole = new CRole;
 $roles = $crole->getRoles();
