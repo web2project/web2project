@@ -5,7 +5,7 @@
  * @subpackage utilites
  */
 
-require_once ($AppUI->getLibraryClass('PEAR/Date'));
+require_once $AppUI->getLibraryClass('PEAR/Date');
 
 define('FMT_DATEISO', '%Y%m%dT%H%M%S');
 define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');

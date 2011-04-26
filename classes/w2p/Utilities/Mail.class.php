@@ -1,5 +1,7 @@
 <?php /* $Id$ $URL$ */
 
+require_once $AppUI->getLibraryClass('PHPMailer/class.phpmailer');
+
 /**
  *    @package web2project
  *    @subpackage utilities
@@ -30,8 +32,6 @@
  *    @author    Emiliano Gabrielli - emiliano.gabrielli@dearchitettura.com
  *    @author    Pedro Azevedo - pedroa@web2project.net
  */
-
-require_once($AppUI->getLibraryClass('PHPMailer/class.phpmailer'));
 
 class w2p_Utilities_Mail extends PHPMailer {
 	/**
