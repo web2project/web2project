@@ -2493,10 +2493,12 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['task_priority'] . '.gif') . '" alt="" />';
 	}
 	$s .= '</td><td align="center" nowrap="nowrap">';
-	if ($arr['user_task_priority'] < 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['user_task_priority'] . '.gif') . '" alt="" />';
-	} elseif ($arr['task_priority'] > 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['user_task_priority'] . '.gif') . '" alt="" />';
+	if (isset($arr['user_task_priority'])) {
+		if ($arr['user_task_priority'] < 0) {
+			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['user_task_priority'] . '.gif') . '" alt="" />';
+		} elseif ($arr['task_priority'] > 0) {
+			$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['user_task_priority'] . '.gif') . '" alt="" />';
+		}
 	}
 	$s .= '</td>';
 
