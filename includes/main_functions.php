@@ -34,6 +34,7 @@ function w2p_autoload($class_name) {
     $name = strtolower($class_name);
     switch ($name) {
         case 'libmail':
+			// Deprecated as of v2.3
 			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/mail.class.php';
             break;
@@ -43,6 +44,8 @@ function w2p_autoload($class_name) {
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
         case 'cappui':
+			// Deprecated as of v3.0
+			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/ui.class.php';
             break;
         case 'xajax':
