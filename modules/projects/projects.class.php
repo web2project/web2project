@@ -135,13 +135,7 @@ class CProject extends w2p_Core_BaseObject {
         return $errorArray;
 	}
 
-	public function load($oid = null, $strip = true) {
-		return parent::load($oid, $strip);
-	}
-
-	public function loadFull(CAppUI $AppUI = null, $projectId) {
-		global $AppUI;
-
+	public function loadFull(CAppUI $AppUI, $projectId) {
         $q = new w2p_Database_Query;
 		$q->addTable('projects');
 		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');

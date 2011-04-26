@@ -40,7 +40,7 @@ class CLink extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
     }
 
-    public function getProjectTaskLinksByCategory($AppUI, $project_id = 0, $task_id = 0, $category_id = 0, $search = '') {
+    public function getProjectTaskLinksByCategory(CAppUI $AppUI, $project_id = 0, $task_id = 0, $category_id = 0, $search = '') {
         // load the following classes to retrieved denied records
 
         $project = new CProject();
