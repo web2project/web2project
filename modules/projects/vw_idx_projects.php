@@ -116,6 +116,8 @@ if ($is_tabbed) {
 	<table id="tblProjects" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 		<tr>
             <?php
+            $fieldList = array();
+            $fieldNames = array();
             $fields = w2p_Core_Module::getSettings('projects', 'index_list');
             if (count($fields) > 0) {
                 foreach ($fields as $field => $text) {
@@ -149,7 +151,6 @@ if ($is_tabbed) {
 				</th>
 			<?php } ?>
 		</tr>
-
 		<?php
 		$none = true;
 		$projectArray = array();
@@ -294,14 +295,10 @@ if ($is_tabbed) {
 			?>
 				<tr>
 					<td colspan="25" align="right">
-						<?php
-						$s = '<input type="submit" class="button" value="' . $AppUI->_('Update projects status') . '" />';
-						$s .= '<input type="hidden" name="update_project_status" value="1" />';
-						$s .= '<input type="hidden" name="m" value="projects" />';
-						$s .= arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter + 1, true);
-						echo $s;
-						// 2 will be the next step
-						?>
+                        <input type="submit" class="button" value="<?php echo $AppUI->_('Update projects status'); ?>" />
+                        <input type="hidden" name="update_project_status" value="1" />
+                        <input type="hidden" name="m" value="projects" />
+                        <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter + 1, true); ?>
 					</td>
 				</tr>
 			<?php
