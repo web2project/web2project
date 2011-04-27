@@ -336,14 +336,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         if ($showLabels == '1') {
-            $q = new w2p_Database_Query;
-            $q->addTable('user_tasks', 'ut');
-            $q->innerJoin('users', 'u', 'u.user_id = ut.user_id');
-            $q->innerJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-            $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
-            $q->addQuery('c.contact_display_name');
-            $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
-            $res = $q->loadList();
+            $res = $task->getAssignedUsers($task_id);
             foreach ($res as $rw) {
 				$caption = '';
 				switch ($rw['perc_assignment']) {
