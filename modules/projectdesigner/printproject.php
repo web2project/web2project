@@ -2,7 +2,6 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-global $AppUI, $w2Pconfig;
 
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
@@ -28,11 +27,13 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
+$priorities = w2Pgetsysval('TaskPriority');
+$types = w2Pgetsysval('TaskType');
 
 $project = new CProject();
 // load the record data
 $project->loadFull($AppUI, $project_id);
-
+$obj = $project;
 if (!$project) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -41,101 +42,21 @@ if (!$project) {
 	$AppUI->savePlace();
 }
 
+global $w2Pconfig;
+
 $task = new CTask();
 
-$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
-
 $q = new w2p_Database_Query;
-
-// get critical tasks (criteria: task_end_date)
-$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
+$q->clear();
 $hasTasks = $project->project_task_count;
 
-// load the record data
-// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-$obj = null;
 if ($hasTasks) {
-	$q->addTable('projects');
-	$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
-	$q->addJoin('companies', 'com', 'company_id = project_company');
-	$q->addJoin('users', 'u', 'user_id = project_owner');
-	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-	$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-	$q->addWhere('projects.project_id = ' . (int)$project_id . ' AND t1.task_id = t1.task_parent');
-	$q->addGroup('projects.project_id');
-	$q->loadObject($obj);
-} else {
-	$q->addTable('projects');
-	$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*, (0.0) AS project_percent_complete');
-	$q->addJoin('companies', 'com', 'company_id = project_company');
-	$q->addJoin('users', 'u', 'user_id = project_owner');
-	$q->addJoin('contacts', 'con', 'contact_id = user_contact');
-	$q->addWhere('projects.project_id = ' . (int)$project_id);
-	$q->addGroup('projects.project_id');
-	$q->loadObject($obj);
-}
-$q->clear();
-
-if (!$obj) {
-	$AppUI->setMsg('Project');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
-}
-
-// worked hours
-// now milestones are summed up, too, for consistence with the tasks duration sum
-// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
-// more info on http://www.mysql.com/doc/en/Problems_with_float.html
-if ($hasTasks) {
-	$q->addTable('task_log');
-	$q->addTable('tasks');
-	$q->addQuery('ROUND(SUM(task_log_hours),2)');
-	$q->addWhere('task_log_task = task_id AND task_project = ' . (int)$project_id);
-	$worked_hours = $q->loadResult();
-	$q->clear();
-	$worked_hours = rtrim($worked_hours, '.');
-
-	// total hours
-	// same milestone comment as above, also applies to dynamic tasks
-	$q->addTable('tasks');
-	$q->addQuery('ROUND(SUM(task_duration),2)');
-	$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
-	$days = $q->loadResult();
-	$q->clear();
-
-	$q->addTable('tasks');
-	$q->addQuery('ROUND(SUM(task_duration),2)');
-	$q->addWhere('task_project = ' . (int)$project_id . ' AND task_duration_type = 1 AND task_dynamic <> 1');
-	$hours = $q->loadResult();
-	$q->clear();
-	$total_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
-
-	$total_project_hours = 0;
-
-	$q->addTable('tasks', 't');
-	$q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
-	$q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-	$q->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 24 AND t.task_dynamic <> 1');
-	$total_project_days_sql = $q->prepare();
-
-	$q2 = new w2p_Database_Query;
-	$q2->addTable('tasks', 't');
-	$q2->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2)');
-	$q2->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-	$q2->addWhere('t.task_project = ' . (int)$project_id . ' AND t.task_duration_type = 1 AND t.task_dynamic <> 1');
-
-	$total_project_hours = $q->loadResult() * $w2Pconfig['daily_working_hours'] + $q2->loadResult();
-	$q->clear();
-	$q2->clear();
-	//due to the round above, we don't want to print decimals unless they really exist
+	$worked_hours = $project->project_worked_hours;
+    $total_project_hours = $project->getTotalProjectHours();
 } else { //no tasks in project so "fake" project data
 	$worked_hours = $total_hours = $total_project_hours = 0.00;
 }
 
-$priorities = w2Pgetsysval('TaskPriority');
-$types = w2Pgetsysval('TaskType');
 global $task_access;
 $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inactive Task');
 
@@ -150,32 +71,32 @@ $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inact
         <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
         <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
         <title><?php echo @w2PgetConfig('page_title'); ?></title>
-<style type="text/css">
-/* Standard table 'spreadsheet' style */
-TABLE.prjprint {
-	background: #ffffff;
-}
+        <style type="text/css">
+        /* Standard table 'spreadsheet' style */
+        TABLE.prjprint {
+            background: #ffffff;
+        }
 
-TABLE.prjprint TH {
-	background-color: #ffffff;
-	color: black;
-	list-style-type: disc;
-	list-style-position: inside;
-	border:solid 1px;
-	font-weight: normal;
-	font-size:15px;
-}
+        TABLE.prjprint TH {
+            background-color: #ffffff;
+            color: black;
+            list-style-type: disc;
+            list-style-position: inside;
+            border:solid 1px;
+            font-weight: normal;
+            font-size:15px;
+        }
 
-TABLE.prjprint TD {
-	background-color: #ffffff;
-	font-size:14px;
-}
+        TABLE.prjprint TD {
+            background-color: #ffffff;
+            font-size:14px;
+        }
 
-TABLE.prjprint TR {
-	padding:5px;
-}	
-</style>
-</head>
+        TABLE.prjprint TR {
+            padding:5px;
+        }
+        </style>
+    </head>
 <body>
 <table width="100%" class="prjprint">
 <tr>
