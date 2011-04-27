@@ -381,7 +381,7 @@ $(document).ready(function() {
             </td>
             <td valign="top" width="50%">
                 <strong><?php echo $AppUI->_('Contact Notes'); ?></strong><br />
-                <textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php echo $row->contact_notes; ?></textarea></td>
+                <textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php echo $row->contact_notes; ?></textarea>
             </td>
         </tr>
         <tr>

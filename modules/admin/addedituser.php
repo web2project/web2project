@@ -168,120 +168,120 @@ function setDept( key, val ) {
 	<input type="hidden" name="dosql" value="do_user_aed" />
 	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />
 	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>)" />
-<table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
-	<tr>
-		<td align="right" width="35%" nowrap="nowrap">* <?php echo $AppUI->_('Login Name'); ?>:</td>
-		<td>
-		<?php
-			if ($user["user_username"]) {
-				echo '<input type="hidden" class="text" name="user_username" value="' . $user['user_username'] . '" />';
-				echo '<strong>' . $user["user_username"] . '</strong>';
-			} else {
-				echo '<input type="text" class="text" name="user_username" value="' . $user['user_username'] . '" maxlength="255" size="40" />';
-			}
-		?>
-		</td>
-	</tr>
-<?php if ($canEdit) { // prevent users without read-write permissions from seeing and editing user type
+    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
+        <tr>
+            <td align="right" width="35%" nowrap="nowrap">* <?php echo $AppUI->_('Login Name'); ?>:</td>
+            <td>
+            <?php
+                if ($user["user_username"]) {
+                    echo '<input type="hidden" class="text" name="user_username" value="' . $user['user_username'] . '" />';
+                    echo '<strong>' . $user["user_username"] . '</strong>';
+                } else {
+                    echo '<input type="text" class="text" name="user_username" value="' . $user['user_username'] . '" maxlength="255" size="40" />';
+                }
+            ?>
+            </td>
+        </tr>
+        <?php if ($canEdit) { // prevent users without read-write permissions from seeing and editing user type
 
-?>
-<tr>
-    <td align="right" nowrap="nowrap"> <?php echo $AppUI->_('User Type'); ?>:</td>
-    <td>
-<?php
-		echo arraySelect($utypes, 'user_type', 'class=text size=1', $user['user_type'], true);
-?>
-    </td>
-</tr>
-<?php } // End of security
+        ?>
+        <tr>
+            <td align="right" nowrap="nowrap"> <?php echo $AppUI->_('User Type'); ?>:</td>
+            <td>
+        <?php
+                echo arraySelect($utypes, 'user_type', 'class=text size=1', $user['user_type'], true);
+        ?>
+            </td>
+        </tr>
+        <?php } // End of security
 
-?>
-<?php if ($canEdit && !$user_id) { ?>
-<tr>
-    <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('User Role'); ?>:</td>
-    <td><?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', '', true); ?></td>
-</tr>
-<?php }
+        ?>
+        <?php if ($canEdit && !$user_id) { ?>
+        <tr>
+            <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('User Role'); ?>:</td>
+            <td><?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', '', true); ?></td>
+        </tr>
+        <?php }
 
-	if (!$user["user_id"]) {
-?>
-<tr>
-    <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Password'); ?>:</td>
-    <td><input type="password" class="text" name="user_password" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" onKeyUp="checkPassword(this.value);" /> </td>
-</tr>
-<tr>
-    <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Confirm Password'); ?>:</td>
-    <td><input type="password" class="text" name="password_check" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" /> </td>
-</tr>
-<tr>
-    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Password Strength'); ?></td>
-    <td>
-        <div class="text" style="width: 135px;">
-            <div id="progressBar" style="font-size: 1px; height: 15px; width: 0px;">
-            </div>
-        </div>
-    </td>
-</tr>
-<?php }
-?>
-<tr>
-    <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Name'); ?>:</td>
-    <td><input type="text" class="text" name="contact_first_name" value="<?php echo $user['contact_first_name']; ?>" maxlength="50" /> <input type="text" class="text" name="contact_last_name" value="<?php echo $user['contact_last_name']; ?>" maxlength="50" /></td>
-</tr>
-<?php if ($canEdit) { ?>
-<tr>
-    <td align="right" nowrap="nowrap"> <?php echo $AppUI->_('Company'); ?>:</td>
-    <td>
-<?php
-		echo arraySelect($companies, 'contact_company', 'class=text size=1', $user['contact_company']);
-?>
-    </td>
-</tr>
-<?php } ?>
-<tr>
-    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
-    <td>
-        <input type="hidden" name="contact_department" value="<?php echo $user['contact_department']; ?>" />
-        <input type="text" class="text" name="dept_name" value="<?php echo $user['dept_name']; ?>" size="40" disabled="disabled" />
-        <input type="button" class="button" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
-    </td>
-</tr>
-<tr>
-    <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Email'); ?>:</td>
-    <td><input type="text" class="text" name="contact_email" value="<?php echo $user['contact_email']; ?>" maxlength="255" size="40" /> </td>
-</tr>
-<tr>
-    <td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Email') . ' ' . $AppUI->_('Signature'); ?>:</td>
-    <td><textarea class="text" cols="50" name="user_signature" style="height: 50px"><?php echo $user["user_signature"]; ?></textarea></td>
-</tr>
-<?php if ($user_id) { ?>
-	<tr>
-		<td align="right" nowrap="nowrap"><a href="?m=contacts&a=addedit&contact_id=<?php echo $user['contact_id']; ?>"><?php echo $AppUI->_(array('edit', 'contact info')); ?></a></td>
-		<td>&nbsp;</td>
-	</tr>
-<?php } ?>
-<tr>
-    <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Required Fields'); ?></td>
-    <td></td>
-<tr>
-    <td align="left">
-        <input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="button" />
-    </td>
-    <?php if ($canEdit && !$user_id) { ?>
-    	<td width="100%">
-			&nbsp;
-    	</td>
-    	<td nowrap="nowrap" align="right">
-			<label for="send_user_mail"><?php echo $AppUI->_('Inform new user of their account details?'); ?></label>
-    	</td>
-	<?php } ?>
-    <td nowrap="nowrap" align="right">
-    	<?php if ($canEdit && !$user_id) { ?>
-			<input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />&nbsp;&nbsp;&nbsp;
-		<?php } ?>
-		<input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" />
-    </td>
-</tr>
-<?php } ?>
-</table>
+            if (!$user["user_id"]) {
+        ?>
+        <tr>
+            <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Password'); ?>:</td>
+            <td><input type="password" class="text" name="user_password" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" onKeyUp="checkPassword(this.value);" /> </td>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Confirm Password'); ?>:</td>
+            <td><input type="password" class="text" name="password_check" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" /> </td>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Password Strength'); ?></td>
+            <td>
+                <div class="text" style="width: 135px;">
+                    <div id="progressBar" style="font-size: 1px; height: 15px; width: 0px;">
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <?php }
+        ?>
+        <tr>
+            <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Name'); ?>:</td>
+            <td><input type="text" class="text" name="contact_first_name" value="<?php echo $user['contact_first_name']; ?>" maxlength="50" /> <input type="text" class="text" name="contact_last_name" value="<?php echo $user['contact_last_name']; ?>" maxlength="50" /></td>
+        </tr>
+        <?php if ($canEdit) { ?>
+        <tr>
+            <td align="right" nowrap="nowrap"> <?php echo $AppUI->_('Company'); ?>:</td>
+            <td>
+        <?php
+                echo arraySelect($companies, 'contact_company', 'class=text size=1', $user['contact_company']);
+        ?>
+            </td>
+        </tr>
+        <?php } ?>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
+            <td>
+                <input type="hidden" name="contact_department" value="<?php echo $user['contact_department']; ?>" />
+                <input type="text" class="text" name="dept_name" value="<?php echo $user['dept_name']; ?>" size="40" disabled="disabled" />
+                <input type="button" class="button" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
+            </td>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Email'); ?>:</td>
+            <td><input type="text" class="text" name="contact_email" value="<?php echo $user['contact_email']; ?>" maxlength="255" size="40" /> </td>
+        </tr>
+        <tr>
+            <td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Email') . ' ' . $AppUI->_('Signature'); ?>:</td>
+            <td><textarea class="text" cols="50" name="user_signature" style="height: 50px"><?php echo $user["user_signature"]; ?></textarea></td>
+        </tr>
+        <?php if ($user_id) { ?>
+            <tr>
+                <td align="right" nowrap="nowrap"><a href="?m=contacts&a=addedit&contact_id=<?php echo $user['contact_id']; ?>"><?php echo $AppUI->_(array('edit', 'contact info')); ?></a></td>
+                <td>&nbsp;</td>
+            </tr>
+        <?php } ?>
+        <tr>
+            <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('Required Fields'); ?></td>
+            <td></td>
+        <tr>
+            <td align="left">
+                <input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="button" />
+            </td>
+            <?php if ($canEdit && !$user_id) { ?>
+                <td width="100%">
+                    &nbsp;
+                </td>
+                <td nowrap="nowrap" align="right">
+                    <label for="send_user_mail"><?php echo $AppUI->_('Inform new user of their account details?'); ?></label>
+                </td>
+            <?php } ?>
+            <td nowrap="nowrap" align="right">
+                <?php if ($canEdit && !$user_id) { ?>
+                    <input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />&nbsp;&nbsp;&nbsp;
+                <?php } ?>
+                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" />
+            </td>
+        </tr>
+        <?php } ?>
+    </table>
 </form>

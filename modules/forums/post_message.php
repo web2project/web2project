@@ -116,81 +116,81 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="message_author" value="<?php echo (isset($message_info['message_author']) && ($message_id || $message_parent < 0)) ? $message_info['message_author'] : $AppUI->user_id; ?>" />
 	<input type="hidden" name="message_editor" value="<?php echo (isset($message_info['message_author']) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0'; ?>" />
 	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />
-<table cellspacing="0" cellpadding="3" border="0" width="100%" class="std">
-<tr><td>
-	<table cellspacing="1" cellpadding="2" border="0" width="100%">
-	<tr>
-		<td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
-		<td width="100%" align="right"></td>
-	</tr>
-	</table>
-</td></tr>
-<tr>
-	<th valign="top" colspan="2"><strong><?php
-echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message');
-?></strong></th>
-</tr>
-<?php
-if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
-	$date = intval($message_info['message_date']) ? new w2p_Utilities_Date($message_info['message_date']) : new w2p_Utilities_Date();
-?>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Author') ?>:</td>
-	<td align="left"><?php echo CContact::getContactByUserid($message_info['message_author']); ?> (<?php echo $AppUI->formatTZAwareTime($message_info['message_date'], $df . ' ' . $tf); ?>)</td>
-</tr>
-<tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
-<tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
-<?php 
-	$message = $bbparser->qparse($message_info['message_body']);
-	$message = nl2br($message);
-	echo $message; 
-?></td></tr>
-<tr><td colspan="2" align="left"><hr /></td></tr>
-<?php
-} //end of if-condition
+    <table cellspacing="0" cellpadding="3" border="0" width="100%" class="std">
+        <tr><td>
+            <table cellspacing="1" cellpadding="2" border="0" width="100%">
+            <tr>
+                <td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
+                <td width="100%" align="right"></td>
+            </tr>
+            </table>
+        </td></tr>
+        <tr>
+            <th valign="top" colspan="2"><strong><?php
+        echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message');
+        ?></strong></th>
+        </tr>
+        <?php
+        if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
+            $date = intval($message_info['message_date']) ? new w2p_Utilities_Date($message_info['message_date']) : new w2p_Utilities_Date();
+        ?>
+        <tr>
+            <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
+            <td align="left"><?php echo CContact::getContactByUserid($message_info['message_author']); ?> (<?php echo $AppUI->formatTZAwareTime($message_info['message_date'], $df . ' ' . $tf); ?>)</td>
+        </tr>
+        <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
+        <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
+        <?php
+            $message = $bbparser->qparse($message_info['message_body']);
+            $message = nl2br($message);
+            echo $message;
+        ?></td></tr>
+        <tr><td colspan="2" align="left"><hr /></td></tr>
+        <?php
+        } //end of if-condition
 
-?>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
-	<td>
-		<input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message_info['message_title']; ?>" size="50" maxlength="250" />
-	</td>
-</tr>
-<tr>
-	<td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
-	<td align="left" valign="top">
-       <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message_info['message_body'] . "\n" : $message_info['message_body']; ?></textarea>
-	</td>
-</tr>
-<tr>
-	<td>
-	</td>
-	<td align="left">
-		<small><b><?php echo $AppUI->_('BBCode Ready');?>!</b></small>
-		<?php echo w2PshowImage('log-info.gif','','','BBCode Tags Accepted','
-		[b][/b] Bold. Example: [b]<b>This text will be bold</b>[/b]<br />
-		[i][/i] Italic. Example: [i]<i>This text will be in italic</i>[/i]<br />
-		[u][/u] Underlined. Example: [u]<u>This text will be underlined</u>[/u]<br />
-		[s][/s] Scratched. Example: [s]<del>This text will be scratched</del>[/s]<br />
-		[sub][/sub] Subscript. Example: [sub]<sub>This text will be subscript</sub>[/sub]<br />
-		[sup][/sup] Superscript. Example: [sup]<sup>This text will be superscript</sup>[/sup]<br />
-		[email][/email] Email Address. Example: [email]my@mail.net[/email]<br />
-		[color=color_name][/color] Colorized Text. Example: [color=blue]I am Blue[/color]<br />
-		[size=size_value][/size], [font=font_name][/font] and [align=left|center|right][align] Format Text. Example: [align=right]I am on the Right[/align]<br />
-		[url=url_address][/url] Link. Example: [url=http://web2project.net]web2Project[/url]<br />
-		[list][/list],[ulist][/ulist] and [li][/li] Lists.<br />
-		[quote][/quote] Quoted Text. Example: [quote]<q>This text will be superscript</q>[/quote]<br />
-		[code][/code] Text in code format. Example: [code]//This is a code comment;[/code]<br />
-		'); ?>
-	</td>
-</tr>
-<tr>
-	<td>
-		<input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';" />
-	</td>
-	<td align="right"><?php
-	echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()">';
-?></td>
-</tr>
+        ?>
+        <tr>
+            <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
+            <td>
+                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message_info['message_title']; ?>" size="50" maxlength="250" />
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
+            <td align="left" valign="top">
+               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message_info['message_body'] . "\n" : $message_info['message_body']; ?></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td align="left">
+                <small><b><?php echo $AppUI->_('BBCode Ready');?>!</b></small>
+                <?php echo w2PshowImage('log-info.gif','','','BBCode Tags Accepted','
+                [b][/b] Bold. Example: [b]<b>This text will be bold</b>[/b]<br />
+                [i][/i] Italic. Example: [i]<i>This text will be in italic</i>[/i]<br />
+                [u][/u] Underlined. Example: [u]<u>This text will be underlined</u>[/u]<br />
+                [s][/s] Scratched. Example: [s]<del>This text will be scratched</del>[/s]<br />
+                [sub][/sub] Subscript. Example: [sub]<sub>This text will be subscript</sub>[/sub]<br />
+                [sup][/sup] Superscript. Example: [sup]<sup>This text will be superscript</sup>[/sup]<br />
+                [email][/email] Email Address. Example: [email]my@mail.net[/email]<br />
+                [color=color_name][/color] Colorized Text. Example: [color=blue]I am Blue[/color]<br />
+                [size=size_value][/size], [font=font_name][/font] and [align=left|center|right][align] Format Text. Example: [align=right]I am on the Right[/align]<br />
+                [url=url_address][/url] Link. Example: [url=http://web2project.net]web2Project[/url]<br />
+                [list][/list],[ulist][/ulist] and [li][/li] Lists.<br />
+                [quote][/quote] Quoted Text. Example: [quote]<q>This text will be superscript</q>[/quote]<br />
+                [code][/code] Text in code format. Example: [code]//This is a code comment;[/code]<br />
+                '); ?>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';" />
+            </td>
+            <td align="right"><?php
+            echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()">';
+        ?></td>
+        </tr>
+    </table>
 </form>
-</table>
