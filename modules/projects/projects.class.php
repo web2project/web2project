@@ -301,6 +301,7 @@ class CProject extends w2p_Core_BaseObject {
 			} // end of update dependencies
             $result = $newTask->store($AppUI);
 			$newTask->addReminder();
+            $importedTasks[] = $newTask->task_id;
 
             if (is_array($result) && count($result)) {
                 foreach ($result as $key => $error_msg) {
@@ -311,9 +312,12 @@ class CProject extends w2p_Core_BaseObject {
 
         // We have errors, so rollback everything we've done so far
         if (count($errors)) {
-            $this->delete($AppUI);
+            foreach($importedTasks as $badTask) {
+                $delTask = new CTask();
+                $delTask->task_id = $badTask;
+                $delTask->delete($AppUI);
+            }
         }
-
         return $errors;
     } // end of importTasks
 
