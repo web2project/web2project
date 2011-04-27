@@ -3,6 +3,8 @@
 		die('You should not access this file directly.');
 	}
 	
+$timezones = w2PgetTimezonesForInstall();
+        
 ?>
 <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 	<input type="hidden" name="step" value="perform" />
@@ -56,6 +58,18 @@
 				<input class="text" type="password" name="adminpass" value="" title="The password for the admin user." />
 			</td>
 		</tr>
+                <tr>
+                    <td class="item">Specify a default server timezone</td>
+                    <td align="left">
+                        <?php echo arraySelect($timezones, 'system_timezone', 'class="text" onChange="selectTimezone(this);"'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="item">Specify a default timezone for users</td>
+                    <td align="left">
+                        <?php echo arraySelect($timezones, 'user_timezone', 'class="text" onChange="selectTimezone(this);"'); ?>
+                    </td>
+                </tr>
 		<tr>
 			<td colspan="2">&nbsp;</td>
 		</tr>
@@ -80,3 +94,19 @@
 		</tr>
 	</table>
 </form>
+
+<script type="text/javascript">
+    // Make it easier for the user, if the other TZ select element doesn't have a
+    // value, preselect it with value of the currently selected element.
+    function selectTimezone(elem) {
+        var otherElem = null;
+        if(elem.id == 'system_timezone') {
+            otherElem = document.getElementById('user_timezone');
+        } else {
+            otherElem = document.getElementById('system_timezone');
+        }
+        if(otherElem !== null && otherElem.value == '') {
+            otherElem.value = elem.value;
+        }
+    }
+</script>
