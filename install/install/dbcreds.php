@@ -61,13 +61,13 @@ $timezones = w2PgetTimezonesForInstall();
                 <tr>
                     <td class="item">Specify a default server timezone</td>
                     <td align="left">
-                        <?php echo arraySelect($timezones, 'system_timezone', 'class="text" onChange="selectTimezone(this);"'); ?>
+                        <?php echo arraySelect($timezones, 'system_timezone', 'class="text"', 'America/New_York'); ?>
                     </td>
                 </tr>
                 <tr>
                     <td class="item">Specify a default timezone for users</td>
                     <td align="left">
-                        <?php echo arraySelect($timezones, 'user_timezone', 'class="text" onChange="selectTimezone(this);"'); ?>
+                        <?php echo arraySelect($timezones, 'user_timezone', 'class="text"', 'America/New_York'); ?>
                     </td>
                 </tr>
 		<tr>
@@ -94,19 +94,3 @@ $timezones = w2PgetTimezonesForInstall();
 		</tr>
 	</table>
 </form>
-
-<script type="text/javascript">
-    // Make it easier for the user, if the other TZ select element doesn't have a
-    // value, preselect it with value of the currently selected element.
-    function selectTimezone(elem) {
-        var otherElem = null;
-        if(elem.id == 'system_timezone') {
-            otherElem = document.getElementById('user_timezone');
-        } else {
-            otherElem = document.getElementById('system_timezone');
-        }
-        if(otherElem !== null && otherElem.value == '') {
-            otherElem.value = elem.value;
-        }
-    }
-</script>
