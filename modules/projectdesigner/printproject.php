@@ -3,18 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 global $AppUI, $w2Pconfig;
-//Though we are in suppressHeaders mode, we should properly set the HTML Headers
-//For this report.
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <meta name="Description" content="web2Project Default Style" />
-        <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
-        <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
-        <title><?php echo @w2PgetConfig('page_title'); ?></title>
-<?php
+
+$project_id = (int) w2PgetParam($_GET, 'project_id', 0);
+
 // check permissions for this module
 $perms = &$AppUI->acl();
 $canView = canView($m);
@@ -73,15 +64,24 @@ $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
 
+$project = new CProject();
+// load the record data
+$project->loadFull($AppUI, $project_id);
+
+if (!$project) {
+	$AppUI->setMsg('Project');
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+	$AppUI->redirect();
+} else {
+	$AppUI->savePlace();
+}
+
+$task = new CTask();
+
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
 $q = new w2p_Database_Query;
-//check that project has tasks; otherwise run seperate query
-$q->addTable('tasks');
-$q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
-$q->addWhere('task_project = ' . (int)$project_id);
-$hasTasks = $q->loadResult();
-$q->clear();
+$hasTasks = $project->project_task_count;
 
 // load the record data
 // GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
@@ -166,15 +166,22 @@ if ($hasTasks) {
 	$worked_hours = $total_hours = $total_project_hours = 0.00;
 }
 
-
-?>
-
-<?php
 $priorities = w2Pgetsysval('TaskPriority');
 $types = w2Pgetsysval('TaskType');
 global $task_access;
 $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inactive Task');
+
+//Though we are in suppressHeaders mode, we should properly set the HTML Headers
+//For this report.
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta name="Description" content="web2Project Default Style" />
+        <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
+        <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
+        <title><?php echo @w2PgetConfig('page_title'); ?></title>
 <style type="text/css">
 /* Standard table 'spreadsheet' style */
 TABLE.prjprint {
@@ -203,12 +210,6 @@ TABLE.prjprint TR {
 </head>
 <body>
 <table width="100%" class="prjprint">
-<form name="frmDelete" action="./index.php?m=projects" method="post" accept-charset="utf-8">
-	<input type="hidden" name="dosql" value="do_project_aed" />
-	<input type="hidden" name="del" value="1" />
-	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
-</form>
-
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="3">  
 		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">	
