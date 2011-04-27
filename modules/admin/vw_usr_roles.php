@@ -5,10 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-//$roles
-// Create the roles class container
-require_once W2P_BASE_DIR . "/modules/system/roles/roles.class.php";
-
 $perms = &$AppUI->acl();
 $user_roles = $perms->getUserRoles($user_id);
 $crole = new CRole;

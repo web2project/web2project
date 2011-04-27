@@ -54,5 +54,4 @@ class w2p_Utilities_HTTPRequest {
             //throw an error?
         }
     }
-    
 }

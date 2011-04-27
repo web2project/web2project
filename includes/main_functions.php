@@ -34,6 +34,7 @@ function w2p_autoload($class_name) {
     $name = strtolower($class_name);
     switch ($name) {
         case 'libmail':
+			// Deprecated as of v2.3
 			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/mail.class.php';
             break;
@@ -43,6 +44,8 @@ function w2p_autoload($class_name) {
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
         case 'cappui':
+			// Deprecated as of v3.0
+			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/ui.class.php';
             break;
         case 'xajax':
@@ -76,6 +79,9 @@ function w2p_autoload($class_name) {
         case 'cprojectdesigneroptions':
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
+		case 'crole':
+			require_once W2P_BASE_DIR .'/modules/system/roles/roles.class.php';
+			break;
         case 'csyskey':
             require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
             break;
@@ -100,6 +106,12 @@ function w2p_autoload($class_name) {
                     $name = w2p_pluralize($name);
                 }
             }
+            /* TODO: I really hate the duplication here.. */
+            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+                return;
+            }
+            $name = substr($name, 0, -1);
             if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
                 require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
                 return;

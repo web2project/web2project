@@ -404,21 +404,21 @@ function displayFiles($folder) {
 		}
 		$fp = $latest_file['file_project'];
 
-		$s .= '
-			<form name="frm_remove_file_' . $file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-			<input type="hidden" name="dosql" value="do_file_aed" />
-			<input type="hidden" name="del" value="1" />
-			<input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
-			<input type="hidden" name="redirect" value="' . $current_uri . '" />
-			</form>		
-			<form name="frm_duplicate_file_' . $file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-			<input type="hidden" name="dosql" value="do_file_aed" />
-			<input type="hidden" name="duplicate" value="1" />
-			<input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
-			<input type="hidden" name="redirect" value="' . $current_uri . '" />
-			</form>		
-			<tr>
-				<td nowrap="8%">';
+		$s .= '<tr>
+				<td nowrap="8%">
+                    <form name="frm_remove_file_' . $file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
+                        <input type="hidden" name="dosql" value="do_file_aed" />
+                        <input type="hidden" name="del" value="1" />
+                        <input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
+                        <input type="hidden" name="redirect" value="' . $current_uri . '" />
+                    </form>
+                    <form name="frm_duplicate_file_' . $file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
+                        <input type="hidden" name="dosql" value="do_file_aed" />
+                        <input type="hidden" name="duplicate" value="1" />
+                        <input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
+                        <input type="hidden" name="redirect" value="' . $current_uri . '" />
+                    </form>
+                ';
 		$file_icon = getIcon($row['file_type']);
 		$s .= '<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $latest_file['file_name'] . '</a></td>';
 		$s .= '<td width="20%">' . w2p_textarea($latest_file['file_description']) . '</td><td width="5%" nowrap="nowrap" align="right">';
@@ -533,7 +533,7 @@ if ($folder) { ?>
 }
 
 ?>
-   
+
 <div id="folder-list" style="background-color:white;layer-background-color:white;">
 	<span class="folder-name-current">
 <?php

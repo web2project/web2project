@@ -152,4 +152,3 @@ if ($file_id) {
 	$AppUI->setMsg('fileIdError', UI_MSG_ERROR);
 	$AppUI->redirect();
 }
-?>

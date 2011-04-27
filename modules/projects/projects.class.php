@@ -135,13 +135,7 @@ class CProject extends w2p_Core_BaseObject {
         return $errorArray;
 	}
 
-	public function load($oid = null, $strip = true) {
-		return parent::load($oid, $strip);
-	}
-
-	public function loadFull(CAppUI $AppUI = null, $projectId) {
-		global $AppUI;
-
+	public function loadFull(CAppUI $AppUI, $projectId) {
         $q = new w2p_Database_Query;
 		$q->addTable('projects');
 		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
@@ -307,6 +301,7 @@ class CProject extends w2p_Core_BaseObject {
 			} // end of update dependencies
             $result = $newTask->store($AppUI);
 			$newTask->addReminder();
+            $importedTasks[] = $newTask->task_id;
 
             if (is_array($result) && count($result)) {
                 foreach ($result as $key => $error_msg) {
@@ -317,9 +312,12 @@ class CProject extends w2p_Core_BaseObject {
 
         // We have errors, so rollback everything we've done so far
         if (count($errors)) {
-            $this->delete($AppUI);
+            foreach($importedTasks as $badTask) {
+                $delTask = new CTask();
+                $delTask->task_id = $badTask;
+                $delTask->delete($AppUI);
+            }
         }
-
         return $errors;
     } // end of importTasks
 

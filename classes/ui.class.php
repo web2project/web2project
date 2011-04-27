@@ -4,7 +4,7 @@ class CAppUI extends w2p_Core_CAppUI {
     public function __construct()
     {
         parent::__construct();
-        trigger_error("CAppUI has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_CAppUI instead.", E_USER_NOTICE );
+        //trigger_error("CAppUI has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_CAppUI instead.", E_USER_NOTICE );
     }
 }
 

@@ -1,9 +1,11 @@
-<?php
+<?php /* $Id$ $URL$ */
 /*
 * Permissions system extends the phpgacl class.  Very few changes have
 * been made, however the main one is to provide the database details from
 * the main w2P environment.
 */
+include_once $AppUI->getLibraryClass('phpgacl/gacl.class');
+include_once $AppUI->getLibraryClass('phpgacl/gacl_api.class');
 
 // Now extend the class
 /**

@@ -113,7 +113,7 @@ class CFile extends w2p_Core_BaseObject {
         return $search;
     }
 
-	public static function getFileList(CAppUI $AppUI = null, $company_id, $project_id, $task_id, $category_id) {
+	public static function getFileList(CAppUI $AppUI = null, $company_id = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
 		global $AppUI;
 
         $q = new w2p_Database_Query();

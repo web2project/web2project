@@ -13,7 +13,7 @@
  *	@author Andrew Eddie <eddieajau@users.sourceforge.net>
  *	@abstract
  */
-class w2p_Core_BaseObject
+abstract class w2p_Core_BaseObject
 {
 	/**
 	 *	@var string Name of the table prefix in the db schema

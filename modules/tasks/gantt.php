@@ -6,12 +6,11 @@ if (!defined('W2P_BASE_DIR')) {
 global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, 
     $gantt_arr, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks,
     $showLowTasks, $user_id, $w2Pconfig;
-global $gantt_map, $currentGanttImgSource, $currentImageMap;
 
 w2PsetExecutionConditions($w2Pconfig);
 
-$f = w2PgetParam($_REQUEST, 'f', 0);
 $project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
+$f = w2PgetParam($_REQUEST, 'f', 0);
 
 $showLabels = (int) w2PgetParam($_REQUEST, 'showLabels', 0);
 $sortByName = (int) w2PgetParam($_REQUEST, 'sortByName', 0);
@@ -336,14 +335,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         if ($showLabels == '1') {
-            $q = new w2p_Database_Query;
-            $q->addTable('user_tasks', 'ut');
-            $q->innerJoin('users', 'u', 'u.user_id = ut.user_id');
-            $q->innerJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-            $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
-            $q->addQuery('c.contact_display_name');
-            $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
-            $res = $q->loadList();
+            $res = $task->getAssignedUsers($task_id);
             foreach ($res as $rw) {
 				$caption = '';
 				switch ($rw['perc_assignment']) {
@@ -433,6 +425,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 //due to the round above, we don't want to print decimals unless they really exist
                 $dur = $work_hours;
             }
+
             $dur .= ' h';
             $enddate = new w2p_Utilities_Date($end);
             $startdate = new w2p_Utilities_Date($start);

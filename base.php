@@ -59,10 +59,6 @@ $baseUrl = preg_replace('#/$#D', '', $baseUrl);
 define('W2P_BASE_DIR', $baseDir);
 define('W2P_BASE_URL', $baseUrl);
 
-// Include the PHPGACL library
-require_once W2P_BASE_DIR . '/lib/phpgacl/gacl.class.php';
-require_once W2P_BASE_DIR . '/lib/phpgacl/gacl_api.class.php';
-
 // Set the ADODB directory
 if (!defined('ADODB_DIR')) {
 	define('ADODB_DIR', W2P_BASE_DIR . '/lib/adodb');

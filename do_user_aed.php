@@ -5,8 +5,9 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 require_once W2P_BASE_DIR . '/includes/config.php';
-require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
+require_once W2P_BASE_DIR . '/includes/db_adodb.php';
+require_once $AppUI->getLibraryClass('captcha/Functions');
 
 $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
 $defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
@@ -42,14 +43,9 @@ if (!isset($GLOBALS['OS_WIN'])) {
 	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, 'WIN') !== false);
 }
 
-// tweak for pathname consistence on windows machines
-require_once W2P_BASE_DIR . '/includes/main_functions.php';
-require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 
 $AppUI = new CAppUI();
 
-// Create the roles class container
-require_once W2P_BASE_DIR . '/modules/system/roles/roles.class.php';
 if (w2PgetConfig('activate_external_user_creation') != 'true') {
 	die('You should not access this file directly');
 }

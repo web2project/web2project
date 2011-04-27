@@ -99,52 +99,52 @@ $titleBlock->show();
 ?>
 
 <form method="post" accept-charset="utf-8">
-<table class="std">
-<?php
-foreach ($config_options as $key => $value) {
-?>
-	<tr>
-		<?php
-	// the key starts with hr, then just display the value
-	if (substr($key, 0, 7) == 'heading') { ?>
-		  <th align="center" colspan="2"><?php echo $value?></th>
-		<?php } else { ?>
-		<td align="right"><?php echo $value['description']?></td>
-		<td><?php
-		switch ($value['type']) {
-			case 'checkbox': ?>
-          <input type="checkbox" name="<?=$key?>" <?php echo $value['value']?"checked=\"checked\"":""?> />
-          <?php
-				break;
-			case 'text': ?>
-          <input type="text" name="<?=$key?>" style="<?php echo $value['style']?>" value="<?php echo $value['value']?>" />
-          <?php
-				break;
-			case 'longtext': ?>
-          <input type="text" size="70" name="<?=$key?>" style="<?php echo $value['style']?>" value="<?php echo $value['value']?>" />
-          <?php
-				break;
-			case 'select':
-				print arraySelect($value["list"], $key, 'class="text" size="1" id="' . $key . '" ' . $value["events"], $value["value"]);
-				break;
-			case 'radio':
-				foreach ($value['buttons'] as $v => $n) { ?>
-            <label><input type="radio" name="<?php echo $key; ?>" id="<?php echo $key; ?>" value="<?php echo $v; ?>" <?php echo (($value['value'] == $v) ? 'checked="checked"' : ''); ?> <?php echo $value['events']; ?> /> <?php echo $n; ?></label>
-          <?php }
-				break;
-			default:
-				break;
-		}
-?></td>
-		<?php
-	}
-?>
-	</tr>
-<?php
-}
-?>
-	<tr>
-		<td colspan="2" align="right"><input type="Submit" name="Cancel" value="<?php echo $AppUI->_('back')?>" /><input type="Submit" name="Save" value="<?php echo $AppUI->_('save')?>" /></td>
-	</tr>
-</table>
+    <table class="std">
+    <?php
+    foreach ($config_options as $key => $value) {
+    ?>
+        <tr>
+            <?php
+        // the key starts with hr, then just display the value
+        if (substr($key, 0, 7) == 'heading') { ?>
+              <th align="center" colspan="2"><?php echo $value?></th>
+            <?php } else { ?>
+            <td align="right"><?php echo $value['description']?></td>
+            <td><?php
+            switch ($value['type']) {
+                case 'checkbox': ?>
+              <input type="checkbox" name="<?=$key?>" <?php echo $value['value']?"checked=\"checked\"":""?> />
+              <?php
+                    break;
+                case 'text': ?>
+              <input type="text" name="<?=$key?>" style="<?php echo $value['style']?>" value="<?php echo $value['value']?>" />
+              <?php
+                    break;
+                case 'longtext': ?>
+              <input type="text" size="70" name="<?=$key?>" style="<?php echo $value['style']?>" value="<?php echo $value['value']?>" />
+              <?php
+                    break;
+                case 'select':
+                    print arraySelect($value["list"], $key, 'class="text" size="1" id="' . $key . '" ' . $value["events"], $value["value"]);
+                    break;
+                case 'radio':
+                    foreach ($value['buttons'] as $v => $n) { ?>
+                <label><input type="radio" name="<?php echo $key; ?>" id="<?php echo $key; ?>" value="<?php echo $v; ?>" <?php echo (($value['value'] == $v) ? 'checked="checked"' : ''); ?> <?php echo $value['events']; ?> /> <?php echo $n; ?></label>
+              <?php }
+                    break;
+                default:
+                    break;
+            }
+    ?></td>
+            <?php
+        }
+    ?>
+        </tr>
+    <?php
+    }
+    ?>
+        <tr>
+            <td colspan="2" align="right"><input type="Submit" name="Cancel" value="<?php echo $AppUI->_('back')?>" /><input type="Submit" name="Save" value="<?php echo $AppUI->_('save')?>" /></td>
+        </tr>
+    </table>
 </form>
