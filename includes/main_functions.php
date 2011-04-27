@@ -1499,13 +1499,15 @@ function HM2seconds ($HM) {
 function w2PgetTimezonesForInstall() {
     $file = W2P_BASE_DIR . '/install/sql/mysql/018_add_timezones.sql';
     
-    $timezones = array('' => 'Select timezone');
+    $timezones = array('' => 'Select a timezone');
     
     if(is_file($file) and is_readable($file)) {
         $sql = file_get_contents($file);
         // get it from this kind of a string:
         // (1, 'Timezones', 'Pacific/Auckland', 43200);
         preg_match_all("#\(.*Timezones',\s*'(.*)',.*\);#", $sql, $matchedTimezones);
+        
+        sort($matchedTimezones[1]);
         
         foreach($matchedTimezones[1] as $timezone) {
             $timezones[$timezone] = $timezone;
