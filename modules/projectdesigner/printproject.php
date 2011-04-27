@@ -8,55 +8,20 @@ $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
 // check permissions for this module
 $perms = &$AppUI->acl();
-$canView = canView($m);
-$canAddProject = $perms->checkModuleItem('projects', 'view', $project_id);
+$canRead = $perms->checkModuleItem('projects', 'view', $project_id);
+$canAddProject = $canRead;
 
-if (!$canView) {
+if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-$project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
-$project = new CProject();
-$projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
-$q = new w2p_Database_Query;
-$q->addTable('projects');
-$q->addQuery('projects.project_id, company_name');
-$q->addJoin('companies', 'co', 'co.company_id = project_company');
-$idx_companies = $q->loadHashList();
-$q->clear();
-foreach ($projects as $prj_id => $prj_name) {
-	$projects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
-}
-asort($projects);
-$projects = arrayMerge(array('0' => $AppUI->_('(None)', UI_OUTPUT_RAW)), $projects);
 
 $task = new CTask();
 $tasks = $task->getAllowedRecords($AppUI->user_id, 'task_id,task_name', 'task_name', null, $extra);
 $tasks = arrayMerge(array('0' => $AppUI->_('(None)', UI_OUTPUT_RAW)), $tasks);
-// check permissions for this record
-$canReadProject = $perms->checkModuleItem('projects', 'view', $project_id);
-$canEditProject = $perms->checkModuleItem('projects', 'edit', $project_id);
 $canViewTasks = canView('tasks');
 $canAddTasks = canAdd('tasks');
 $canEditTasks = canEdit('tasks');
 $canDeleteTasks = canDelete('tasks');
-
-if (!$canReadProject) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
-
-// check if this record has dependencies to prevent deletion
-$msg = '';
-$obj = new CProject();
-// Now check if the project is editable/viewable.
-$denied = $obj->getDeniedRecords($AppUI->user_id);
-if (in_array($project_id, $denied)) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
-
-$canDeleteProject = $obj->canDelete($msg, $project_id);
-
-// get critical tasks (criteria: task_end_date)
-$criticalTasks = ($project_id > 0) ? $obj->getCriticalTasks($project_id) : null;
 
 // get ProjectPriority from sysvals
 $projectPriority = w2PgetSysVal('ProjectPriority');
@@ -81,6 +46,9 @@ $task = new CTask();
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
 $q = new w2p_Database_Query;
+
+// get critical tasks (criteria: task_end_date)
+$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 $hasTasks = $project->project_task_count;
 
 // load the record data
@@ -218,21 +186,16 @@ TABLE.prjprint TR {
             	&nbsp;
             	</td>
             	<td align="center"  colspan="2">
-            	<?php
-echo '<strong> Project Report <strong>';
-?>
+                    <strong><?php echo $AppUI->_('Project Report'); ?></strong>
             	</td>
-      	</tr>
+            </tr>
       	</table>
 	</td>
 </tr>
 	<?php
-if ($canReadProject) {
+	// Removed the additional permissions check here.. you can't get here without successfully passing the one above
 	require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_projecttask.php');
-} else {
-	echo $AppUI->_('You do not have permission to view tasks');
-}
-?>
+	?>
 </table>
 </body>
 </html>
