@@ -25,12 +25,8 @@ $edit_field_id = w2PGetParam($_POST, 'field_id', null);
 
 $titleBlock->show();
 
-$q = new w2p_Database_Query;
-$q->addTable('modules');
-$q->addOrder('mod_ui_order');
-$q->addWhere('mod_name IN (\'Companies\', \'Projects\', \'Tasks\', \'Calendar\', \'Contacts\')');
-$modules = $q->loadList();
-$q->clear();
+$manager = new w2p_Core_CustomFieldManager();
+$modules = $manager->getModuleList();
 
 $s = '<table width="100%" class="std" cellpadding="2">';
 
@@ -40,12 +36,7 @@ foreach ($modules as $module) {
 	$s .= $AppUI->_($module['mod_name']) . '</h3>';
 	$s .= '</td></tr>';
 
-	$q = new w2p_Database_Query;
-	$q->addTable('custom_fields_struct');
-	$q->addWhere('field_module = \'' . strtolower($module['mod_name']) . '\'');
-	$q->addOrder('field_order ASC');
-	$custom_fields = $q->loadList();
-	$q->clear();
+    $custom_fields = $manager->getStructure($module['mod_name']);
 
 	if (count($custom_fields)) {
 		$s .= '<th width="10"></th>';
