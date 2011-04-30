@@ -81,8 +81,8 @@ $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('Global
 
 <script language="javascript" type="text/javascript">
 <?php
-echo 'window.company_id=' . ($company_detail['company_id'] ? $company_detail['company_id'] : 0) . ";\n";
-echo 'window.company_value=\'' . addslashes(($company_detail['company_name'] ? $company_detail['company_name'] : '')) . "';\n";
+echo 'window.company_id=' . ((int) $company_detail['company_id']) . ";\n";
+echo 'window.company_value="' . $AppUI->__($company_detail['company_name'], UI_OUTPUT_JS) . '";';
 ?>
 
 function submitIt() {
