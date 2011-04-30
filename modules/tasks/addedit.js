@@ -2,13 +2,6 @@
 var calendarField = '';
 var calWin = null;
 
-function setMilestoneEndDate(checked){
-    if(checked){
-        document.datesFrm.end_date.value      = document.datesFrm.start_date.value;
-        document.datesFrm.task_end_date.value = document.datesFrm.task_start_date.value;
-    } 
-}
-
 /**
 setTasksStartDate sets new task's start date value which is maximum end date of all dependend tasks
 to do: date format should be taken from config
