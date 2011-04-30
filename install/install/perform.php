@@ -15,6 +15,9 @@
 	$adminpass = trim( w2PgetCleanParam( $_POST, 'adminpass', 'passwd' ) );
 	$adminpass = ($adminpass == '') ? 'passwd' : $adminpass;
 	$dbpersist = w2PgetCleanParam( $_POST, 'dbpersist', false );
+        
+        $system_timezone = trim( w2PgetCleanParam( $_POST, 'system_timezone', '' ) );
+        $user_timezone = trim( w2PgetCleanParam( $_POST, 'user_timezone', '' ) );
 
 	$do_db = isset($_POST['do_db']);
 	$do_db_cfg = isset($_POST['do_db_cfg']);
@@ -30,7 +33,9 @@
 	 'dbpersist' => $dbpersist,
 	 'root_dir' => $baseDir,
 	 'base_url' => $baseUrl,
-	 'adminpass' => $adminpass
+	 'adminpass' => $adminpass,
+         'system_timezone' => $system_timezone,
+         'user_timezone' => $user_timezone
 	);
 	if (!$manager->testDatabaseCredentials($w2Pconfig)) {
 		?>

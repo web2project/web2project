@@ -289,20 +289,26 @@ class w2p_Core_UpgradeManager {
                 if (strpos($pieces[$i], '[ADMINPASS]') !== false) {
                     $pieces[$i] = str_replace('[ADMINPASS]', $this->configOptions['adminpass'], $pieces[$i]);
                 }
+                if (strpos($pieces[$i], '[SYSTEM_TIMEZONE]') !== false) {
+                    $pieces[$i] = str_replace('[SYSTEM_TIMEZONE]', $this->configOptions['system_timezone'], $pieces[$i]);
+                }
+                if (strpos($pieces[$i], '[USER_TIMEZONE]') !== false) {
+                    $pieces[$i] = str_replace('[USER_TIMEZONE]', $this->configOptions['user_timezone'], $pieces[$i]);
+                }
                 if (!$result = $dbConn->Execute($pieces[$i])) {
-        $errorMessage = $dbConn->ErrorMsg();
-        /*
-         * TODO: I'm not happy with this solution but have yet to come up
-         * 	with another way of solving it...
-         */
-        if (strpos($errorMessage, 'Duplicate column name') === false &&
-          strpos($errorMessage, 'column/key exists') === false &&
-          strpos($errorMessage, 'Multiple primary key defined') &&
-          strpos($errorMessage, 'Duplicate key name') ) {
+                    $errorMessage = $dbConn->ErrorMsg();
+                    /*
+                     * TODO: I'm not happy with this solution but have yet to come up
+                     * 	with another way of solving it...
+                     */
+                    if (strpos($errorMessage, 'Duplicate column name') === false &&
+                      strpos($errorMessage, 'column/key exists') === false &&
+                      strpos($errorMessage, 'Multiple primary key defined') &&
+                      strpos($errorMessage, 'Duplicate key name') ) {
 
-          $dbErr = true;
-          $errorMessages[] = $errorMessage;
-        }
+                      $dbErr = true;
+                      $errorMessages[] = $errorMessage;
+                    }
                 }
             }
         }
