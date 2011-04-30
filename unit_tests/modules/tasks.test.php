@@ -2162,7 +2162,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $assigned_users = $this->obj->getAssignedUsers(1);
 
         $this->assertEquals(1, count($assigned_users));
-        $this->assertEquals(30, count($assigned_users[1]));
+        $this->assertEquals(32, count($assigned_users[1]));
 
         $this->assertEquals(1,                                  $assigned_users[1]['user_id']);
         $this->assertEquals(1,                                  $assigned_users[1]['user_contact']);
@@ -2178,6 +2178,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(42,                                 $assigned_users[1]['user_task_priority']);
         $this->assertEquals('Person',                           $assigned_users[1]['contact_last_name']);
 		$this->assertEquals('Admin',							$assigned_users[1]['contact_first_name']);
+        $this->assertEquals('Admin Person',                     $assigned_users[1]['contact_display_name']);
 		$this->assertEquals('',									$assigned_users[1]['user_email']);
         $this->assertEquals(1,                                  $assigned_users[1][0]);
         $this->assertEquals(1,                                  $assigned_users[1][1]);
@@ -2193,7 +2194,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(42,                                 $assigned_users[1][11]);
         $this->assertEquals('Person',                           $assigned_users[1][12]);
 		$this->assertEquals('Admin',							$assigned_users[1][13]);
-		$this->assertEquals('',									$assigned_users[1][14]);
+        $this->assertEquals('Admin Person',                     $assigned_users[1][14]);
+		$this->assertEquals('',									$assigned_users[1][15]);
     }
     /**
      * Test getting a list of dependencies
