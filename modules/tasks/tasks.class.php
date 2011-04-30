@@ -280,40 +280,15 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	/*
-	* overload the load function
-	* We need to update dynamic tasks of type '1' on each load process!
-	* @param int $oid optional argument, if not specifed then the value of current key is used
-	* @return any result from the database operation
+	* This should be deprecated in favor of load() on the parent
+    *   w2p_Core_BaseObject once we're sure no one is using the $skipUpdate
+    *   parameter any more.
+    *
+    * @deprecated
 	*/
 
 	public function load($oid = null, $strip = false, $skipUpdate = false) {
-		global $AppUI;
-    // use parent function to load the given object
-		$loaded = parent::load($oid, $strip);
-
-		/*
-		** Update the values of a dynamic task from
-		** the children's properties each time the
-		** dynamic task is loaded.
-		** Additionally store the values in the db.
-		** Only treat umbrella tasks of dynamics '1'.
-		*/
-		if ($this->task_dynamic == 1 && !($skipUpdate)) {
-			// update task from children
-			//$this->htmlDecode();
-			//$this->updateDynamics(true);
-
-			/*
-			** Use parent function to store the updated values in the db
-			** instead of store function of this object in order to
-			** prevent from infinite loops.
-			*/
-			//$this->store($AppUI);
-			//$loaded = parent::load($oid, $strip);
-		}
-
-		// return whether the object load process has been successful or not
-		return $loaded;
+		return parent::load($oid, $strip);
 	}
 
 	public function loadFull(CAppUI $AppUI = null, $taskId) {
@@ -336,17 +311,18 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	/*
-	* call the load function but don't update dynamics
+	* This used to feed different parameters into load() but now we just do it.
+    *
+    * @deprecated
 	*/
 	public function peek($oid = null, $strip = false) {
-		$loadme = $this->load($oid, $strip, true);
-		return $loadme;
+		return $this->load($oid, $strip);
 	}
 
 	public function updateDynamics($fromChildren = false) {
 		global $AppUI;
 
-    //Has a parent or children, we will check if it is dynamic so that it's info is updated also
+        //Has a parent or children, we will check if it is dynamic so that it's info is updated also
 		$q = new w2p_Database_Query;
 		$modified_task = new CTask();
 
