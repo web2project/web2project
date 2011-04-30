@@ -26,7 +26,7 @@ function delIt(field_id) {
 }
 </script>
 <form name="frmDelete" action="./index.php?m=system&u=customfields" method="post" accept-charset="utf-8">
-	<input type="hidden" name="dosql" value="do_customfields_aed" />
+	<input type="hidden" name="dosql" value="do_customfield_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="field_id" value="<?php echo $project_id; ?>" />
 </form>
