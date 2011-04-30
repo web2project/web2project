@@ -89,7 +89,7 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
     }
     protected function getDataSetPath()
     {
-      return dirname(dirname(__FILE__)).'/db_files/';
+      return dirname(dirname(__FILE__)).'/db_files/links/';
     }
 
     protected function setUp()
