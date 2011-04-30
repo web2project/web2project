@@ -237,9 +237,6 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
     /*
-     * This function is only used to detect fields that might be text instead
-     *   of integer. It's unnecessary
-     *
      * @deprecated
      */
 	public function is_alpha($val) {
@@ -248,9 +245,6 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
     /*
-     * This function makes so sense.. it just queries the company table to get
-     *   the company_id.. but it uses the company_id to do it. Wha?
-     *
      * @deprecated
      */
 	public function getCompanyID() {

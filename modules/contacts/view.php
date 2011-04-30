@@ -4,7 +4,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
-$AppUI->savePlace();
 
 //check permissions for this record
 $perms = &$AppUI->acl();
