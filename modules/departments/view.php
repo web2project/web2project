@@ -4,10 +4,11 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 global $department, $min_view;
-$dept_id = isset($_GET['dept_id']) ? w2PgetParam($_GET, 'dept_id', 0) : (isset($department) ? $department : 0);
 
-$msg = '';
-$department = new CDepartment();
+$dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
+
+$tab = $AppUI->processIntState('DeptVwTab', $_GET, 'tab', 0);
+
 // check permissions
 $canRead = canView($m, $dept_id);
 $canEdit = canEdit($m, $dept_id);
@@ -15,48 +16,36 @@ $canEdit = canEdit($m, $dept_id);
 if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-$AppUI->savePlace();
 
-if (isset($dept_id) && $dept_id > 0) {
-	$AppUI->setState('DeptIdxDepartment', $dept_id);
+$department = new CDepartment();
+$department->loadFull($AppUI, $dept_id);
+if (!$department) {
+	$AppUI->setMsg('Department');
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+	$AppUI->redirect();
+} else {
+	$AppUI->savePlace();
 }
-$dept_id = $AppUI->getState('DeptIdxDepartment') !== null ? $AppUI->getState('DeptIdxDepartment') : ($AppUI->user_department > 0 ? $AppUI->user_department : $company_prefix . $AppUI->user_company);
-
-$tab = $AppUI->processIntState('DeptVwTab', $_GET, 'tab', 0);
 
 $countries = w2PgetSysVal('GlobalCountries');
-// load the department types
 $types = w2PgetSysVal('DepartmentType');
 
-$department->loadFull($AppUI, $dept_id);
+$titleBlock = new CTitleBlock('View Department', 'departments.png', $m, $m . '.' . $a);
+if ($canEdit) {
+    $titleBlock->addCell();
+    $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '">', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '&dept_parent=' . $dept_id . '" method="post" accept-charset="utf-8">', '</form>');
+}
+$titleBlock->addCrumb('?m=departments', 'department list');
+$titleBlock->addCrumb('?m=companies', 'company list');
+$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
+if ($canEdit) {
+    $titleBlock->addCrumb('?m=departments&a=addedit&dept_id=' . $dept_id, 'edit this department');
 
-if (!$department) {
-	$titleBlock = new CTitleBlock('Invalid Department ID', 'departments.png', $m, $m . '.' . $a);
-	$titleBlock->addCrumb('?m=companies', 'companies list');
-	$titleBlock->show();
-} elseif ($dept_id <= 0) {
-	echo $AppUI->_('Please choose a Department first!');
-} else {
-	$company_id = $department->dept_company;
-	if (!$min_view) {
-		// setup the title block
-		$titleBlock = new CTitleBlock('View Department', 'departments.png', $m, $m . '.' . $a);
-		if ($canEdit) {
-			$titleBlock->addCell();
-			$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '">', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '&dept_parent=' . $dept_id . '" method="post" accept-charset="utf-8">', '</form>');
-		}
-		$titleBlock->addCrumb('?m=departments', 'department list');
-		$titleBlock->addCrumb('?m=companies', 'company list');
-		$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
-		if ($canEdit) {
-			$titleBlock->addCrumb('?m=departments&a=addedit&dept_id=' . $dept_id, 'edit this department');
-
-			if ($canDelete) {
-				$titleBlock->addCrumbDelete('delete department', $canDelete, $msg);
-			}
-		}
-		$titleBlock->show();
-	}
+    if ($canDelete) {
+        $titleBlock->addCrumbDelete('delete department', $canDelete, $msg);
+    }
+}
+$titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
 <?php
@@ -143,9 +132,8 @@ function delIt() {
 	</tr>
 </table>
 <?php
-	// tabbed information boxes
-	$tabBox = new CTabBox('?m=departments&a=' . $a . '&dept_id=' . $dept_id, '', $tab);
-	$tabBox->add(W2P_BASE_DIR . '/modules/departments/vw_contacts', 'Contacts');
-	// include auto-tabs with 'view' explicitly instead of $a, because this view is also included in the main index site
-	$tabBox->show();
-}
+// tabbed information boxes
+$tabBox = new CTabBox('?m=departments&a=' . $a . '&dept_id=' . $dept_id, '', $tab);
+$tabBox->add(W2P_BASE_DIR . '/modules/departments/vw_contacts', 'Contacts');
+// include auto-tabs with 'view' explicitly instead of $a, because this view is also included in the main index site
+$tabBox->show();
