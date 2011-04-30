@@ -27,6 +27,10 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
         return $this->html_types[$name];
     }
 
+    public function getTypes() {
+        return $this->html_types;
+    }
+
     public function getModuleList() {
         $q = new w2p_Database_Query;
         $q->addTable('modules');
@@ -52,12 +56,40 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
-        if ($perms->checkModuleItem('system', 'edit')) {
+        if (canEdit('system')) {
             if ($msg = parent::delete()) {
                 return $msg;
             }
             return true;
         }
         return false;
+    }
+
+    public function store(CAppUI $AppUI) {
+        $perms = $AppUI->acl();
+        $stored = false;
+
+        $errorMsgArray = $this->check();
+        if (count($errorMsgArray) > 0) {
+            return $errorMsgArray;
+        }
+        /*
+         * TODO: I don't like the duplication on each of these two branches, but I
+         *   don't have a good idea on how to fix it at the moment...
+         */
+        if ($this->field_id && canEdit('system')) {
+
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        if (0 == $this->field_id && canEdit('system')) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        return $stored;
     }
 }
