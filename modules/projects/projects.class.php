@@ -792,7 +792,7 @@ class CProject extends w2p_Core_BaseObject {
 	public static function getOwners() {
 		$q = new w2p_Database_Query();
 		$q->addTable('projects', 'p');
-		$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
+		$q->addQuery('user_id, contact_display_name');
 		$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
 		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 		$q->addOrder('contact_first_name, contact_last_name');

@@ -283,12 +283,13 @@ class CTask extends w2p_Core_BaseObject {
 	* This should be deprecated in favor of load() on the parent
     *   w2p_Core_BaseObject once we're sure no one is using the $skipUpdate
     *   parameter any more.
-    *
-    * @deprecated
 	*/
 
 	public function load($oid = null, $strip = false, $skipUpdate = false) {
-		return parent::load($oid, $strip);
+        if ($skipUpdate) {
+            trigger_error("The 'skipUpdate' parameter of load() has been deprecated in v3.0 and will be removed by v4.0. Please use load() without it instead.", E_USER_NOTICE );
+        }
+        return parent::load($oid, $strip);
 	}
 
 	public function loadFull(CAppUI $AppUI = null, $taskId) {
@@ -316,7 +317,8 @@ class CTask extends w2p_Core_BaseObject {
     * @deprecated
 	*/
 	public function peek($oid = null, $strip = false) {
-		return $this->load($oid, $strip);
+		trigger_error("peek() has been deprecated in v3.0 and will be removed by v4.0. Please use load() instead.", E_USER_NOTICE );
+        return $this->load($oid, $strip);
 	}
 
 	public function updateDynamics($fromChildren = false) {

@@ -626,6 +626,7 @@
         <column>contact_first_name</column>
         <column>contact_last_name</column>
         <column>contact_company</column>
+        <column>contact_display_name</column>
         <column>contact_order_by</column>
         <column>contact_title</column>
         <column>contact_birthday</column>
@@ -651,6 +652,7 @@
             <value>Admin</value>
             <value>Person</value>
             <value>1</value>
+            <value>Admin Person</value>
             <value></value>
             <value>President</value>
             <value>1983-07-22</value>
@@ -677,6 +679,7 @@
             <value>Contact</value>
             <value>Number 1</value>
             <value>1</value>
+            <value>Contact Number 1</value>
             <value></value>
             <value>Vice President</value>
             <value>1973-07-22</value>
@@ -703,6 +706,7 @@
             <value>Contact</value>
             <value>Number 2</value>
             <value>2</value>
+            <value>Contact Number 2</value>
             <value></value>
             <value>CEO</value>
             <value>1963-07-22</value>
@@ -729,6 +733,7 @@
             <value>Contact</value>
             <value>Number 3</value>
             <value>2</value>
+            <value>Contact Number 3</value>
             <value></value>
             <value>COO</value>
             <value>1953-07-22</value>

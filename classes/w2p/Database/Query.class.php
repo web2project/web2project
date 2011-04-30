@@ -120,11 +120,15 @@ class w2p_Database_Query {
 		$this->_query_id = null;
 	}
 
-	/** Get database specific SQL used to concatenate strings.
-	 * @return String containing SQL to concatenate supplied strings
+	/**
+     * Instead of concatenating here, retrieve the relevant fields and do
+     *   it in PHP. It won't necessarily be faster but should be more
+     *   supportable cross-databasewise.
+	 * @deprecated
 	 */
 	public function concat() {
-		$arr = func_get_args();
+		trigger_error("concat() has been deprecated in v3.0 and will be removed by v4.0. Please concatenate in PHP instead.", E_USER_NOTICE );
+        $arr = func_get_args();
 		$conc_str = call_user_func_array(array(&$this->_db, 'Concat'), $arr);
 		return $conc_str;
 	}
@@ -135,7 +139,8 @@ class w2p_Database_Query {
 	 * @return String containing SQL to check for null field value
 	 */
 	public function ifNull($field, $nullReplacementValue) {
-		return $this->_db->IfNull($field, $nullReplacementValue);
+        trigger_error("ifNull() has been deprecated in v3.0 and will be removed by v4.0. There is no replacement.", E_USER_NOTICE );
+        return $this->_db->IfNull($field, $nullReplacementValue);
 	}
 
 	/** Add item to an internal associative array
