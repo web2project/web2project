@@ -29,8 +29,12 @@ if ($a == 'setup') {
 
 class CSetupHistory {
 
-	public function install() {
-		$sql = ' ( 
+	public function install(CAppUI $AppUI = null) {
+        global $AppUI;
+
+		$q = new w2p_Database_Query;
+		$q->createTable('history');
+        $sql = ' (
 			history_id int(10) unsigned NOT NULL auto_increment,
 			history_date datetime NOT NULL default \'0000-00-00 00:00:00\',		  
 			history_user int(10) NOT NULL default \'0\',
@@ -45,42 +49,26 @@ class CSetupHistory {
 			INDEX index_history_module (history_table, history_item),
 		  	INDEX index_history_item (history_item) 
 			) TYPE=MyISAM';
-		$q = new w2p_Database_Query;
-		$q->createTable('history', $sql);
+		$q->createDefinition($sql);
 		$q->exec();
-		$q->clear();
-		return (db_error() ? false : true);
+
+        $perms = $AppUI->acl();
+        return $perms->registerModule('History', 'history');
 	}
 
-	public function remove() {
-		$q = new w2p_Database_Query;
+	public function remove(CAppUI $AppUI = null) {
+		global $AppUI;
+
+        $q = new w2p_Database_Query;
 		$q->dropTable('history');
 		$q->exec();
-		$q->clear();
-		return (db_error() ? false : true);
+
+        $perms = $AppUI->acl();
+        return $perms->unregisterModule('history');
 	}
 
 	public function upgrade($old_version) {
-		$q = new w2p_Database_Query;
-		switch ($old_version) {
-			case '0.3':
-				$q->alterTable('history');
-				$q->addIndex('index_history_item', '(history_item)');
-				$q->exec();
-				$q->clear();
-				$q->alterTable('history');
-				$q->addIndex('index_history_module', '(history_table, history_item)');
-				$q->exec();
-				$q->clear();
-			case '0.31':
-				$q->alterTable('history');
-				$q->alterField('history_table', 'varchar(20) NOT NULL default ""');
-				$q->alterField('history_action', 'varchar(20) NOT NULL default "modify"');
-				$q->exec();
-				$q->clear();
-			case '0.32':
-				break;
-		}
-		return (db_error() ? false : true);
+
+        return true;
 	}
 }
