@@ -495,7 +495,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $this->obj->task_project);
         $this->assertEquals(1,                      $this->obj->task_owner);
         $this->assertEquals('2009-07-06 00:00:00',  $this->obj->task_start_date);
-        $this->assertEquals(2,                      $this->obj->task_duration);
+        $this->assertEquals(4,                      $this->obj->task_duration);
         $this->assertEquals(24,                     $this->obj->task_duration_type);
         $this->assertEquals(0,                      $this->obj->task_hours_worked);
         $this->assertEquals('2009-07-16 00:00:00',  $this->obj->task_end_date);
@@ -584,7 +584,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $this->obj->task_project);
         $this->assertEquals(1,                      $this->obj->task_owner);
         $this->assertEquals('2009-07-06 00:00:00',  $this->obj->task_start_date);
-        $this->assertEquals(2,                      $this->obj->task_duration);
+        $this->assertEquals(4,                      $this->obj->task_duration);
         $this->assertEquals(24,                     $this->obj->task_duration_type);
         $this->assertEquals(0,                      $this->obj->task_hours_worked);
         $this->assertEquals('2009-07-16 00:00:00',  $this->obj->task_end_date);
@@ -627,7 +627,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_project);
         $this->assertEquals(1,                      $task->task_owner);
         $this->assertEquals('2009-07-06 00:00:00',  $task->task_start_date);
-        $this->assertEquals(2,                      $task->task_duration);
+        $this->assertEquals(4,                      $task->task_duration);
         $this->assertEquals(24,                     $task->task_duration_type);
         $this->assertEquals(0,                      $task->task_hours_worked);
         $this->assertEquals('2009-07-16 00:00:00',  $task->task_end_date);
