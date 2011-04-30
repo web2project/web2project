@@ -208,13 +208,7 @@ if (is_null($task->task_dynamic)) {
 
 $can_edit_time_information = $task->canUserEditTimeInformation();
 //get list of projects, for task move drop down list.
-$pq = new w2p_Database_Query;
-$pq->addQuery('pr.project_id, project_name');
-$pq->addTable('projects', 'pr');
-$pq->addWhere('( project_active = 1 or pr.project_id = ' . (int)$task_project . ')');
-$pq->addOrder('project_name');
-$project->setAllowedSQL($AppUI->user_id, $pq, null, 'pr');
-$projects = $pq->loadHashList();
+$projects = $project->getAllowedProjects($AppUI->user_id);
 ?>
 <script language="javascript" type="text/javascript">
 var task_id = '<?php echo $task->task_id; ?>';
