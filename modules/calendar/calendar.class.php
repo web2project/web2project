@@ -9,6 +9,9 @@ if (!defined('W2P_BASE_DIR')) {
 
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
 
+if (!isset($AppUI)) {
+    $AppUI = new CAppUI;
+}
 require_once $AppUI->getLibraryClass('PEAR/Date');
 
 /**
