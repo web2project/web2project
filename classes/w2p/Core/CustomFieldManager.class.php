@@ -1,17 +1,26 @@
 <?php
 
-class w2p_Core_CustomFieldManager {
+class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
+
+    public $field_id = 0;
+    public $field_module = '';
+    public $field_page = '';
+    public $field_htmltype = '';
+    public $field_datatype = '';
+    public $field_order = 0;
+    public $field_name = '';
+    public $field_extratags = '';
+    public $field_description = '';
+    public $field_published = 1;
 
     protected $html_types = array();
 
-    public function __construct(w2p_Core_CAppUI $AppUI) {
-        $this->html_types = array('textinput' => $AppUI->_('Text Input'),
-                    'textarea' => $AppUI->_('Text Area'),
-                    'checkbox' => $AppUI->_('Checkbox'),
-                    'select' => $AppUI->_('Select List'),
-                    'label' => $AppUI->_('Label'),
-                    'separator' => $AppUI->_('Separator'),
-                    'href' => $AppUI->_('Weblink'));
+    public function __construct() {
+        parent::__construct('custom_fields_struct', 'field_id');
+
+        $this->html_types = array('textinput' => 'Text Input', 'textarea' => 'Text Area',
+                    'checkbox' => 'Checkbox', 'select' => 'Select List', 'label' => 'Label',
+                    'separator' => 'Separator', 'href' => 'Weblink');
     }
 
     public function getType($name) {
@@ -34,5 +43,21 @@ class w2p_Core_CustomFieldManager {
         $q->addOrder('field_order ASC');
 
         return $q->loadList();
+    }
+
+    public function canDelete() {
+        return true;
+    }
+
+    public function delete(CAppUI $AppUI) {
+        $perms = $AppUI->acl();
+
+        if ($perms->checkModuleItem('system', 'edit')) {
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+            return true;
+        }
+        return false;
     }
 }
