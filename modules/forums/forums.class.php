@@ -152,14 +152,7 @@ class CForum extends w2p_Core_BaseObject {
             if (!$q->exec()) {
                 return db_error();
             }
-            $q->clear();
 
-            $q->setDelete('forums');
-            $q->addWhere('forum_id = ' . (int)$this->forum_id);
-            if (!$q->exec()) {
-                $q->clear();
-                return db_error();
-            }
             if ($msg = parent::delete()) {
                 return $msg;
             }

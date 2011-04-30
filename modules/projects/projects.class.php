@@ -168,11 +168,13 @@ class CProject extends w2p_Core_BaseObject {
             $q->addWhere('task_project = ' . (int)$this->project_id);
             $tasks_to_delete = $q->loadColumn();
             $q->clear();
+
             foreach ($tasks_to_delete as $task_id) {
                 $q->setDelete('user_tasks');
                 $q->addWhere('task_id =' . $task_id);
                 $q->exec();
                 $q->clear();
+
                 $q->setDelete('task_dependencies');
                 $q->addWhere('dependencies_req_task_id =' . (int)$task_id);
                 $q->exec();
@@ -182,12 +184,13 @@ class CProject extends w2p_Core_BaseObject {
             $q->addWhere('task_project =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
-            $q = new w2p_Database_Query;
+
             $q->addTable('files');
             $q->addQuery('file_id');
             $q->addWhere('file_project = ' . (int)$this->project_id);
             $files_to_delete = $q->loadColumn();
             $q->clear();
+
             foreach ($files_to_delete as $file_id) {
                 $file = new CFile();
                 $file->file_id = $file_id;
@@ -198,22 +201,22 @@ class CProject extends w2p_Core_BaseObject {
             $q->addWhere('event_project =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+
             // remove the project-contacts and project-departments map
             $q->setDelete('project_contacts');
             $q->addWhere('project_id =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+
             $q->setDelete('project_departments');
             $q->addWhere('project_id =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+
             $q->setDelete('tasks');
             $q->addWhere('task_represents_project =' . (int)$this->project_id);
-
             $q->clear();
-            $q->setDelete('projects');
-            $q->addWhere('project_id =' . (int)$this->project_id);
-            $q->exec();
+
             if ($msg = parent::delete()) {
                 return $msg;
             }
