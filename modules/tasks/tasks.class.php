@@ -300,16 +300,16 @@ class CTask extends w2p_Core_BaseObject {
 		*/
 		if ($this->task_dynamic == 1 && !($skipUpdate)) {
 			// update task from children
-			$this->htmlDecode();
-			$this->updateDynamics(true);
+			//$this->htmlDecode();
+			//$this->updateDynamics(true);
 
 			/*
 			** Use parent function to store the updated values in the db
 			** instead of store function of this object in order to
 			** prevent from infinite loops.
 			*/
-			parent::store($AppUI);
-			$loaded = parent::load($oid, $strip);
+			//$this->store($AppUI);
+			//$loaded = parent::load($oid, $strip);
 		}
 
 		// return whether the object load process has been successful or not
@@ -515,7 +515,7 @@ class CTask extends w2p_Core_BaseObject {
 	public function deepCopy($destProject_id = 0, $destTask_id = 0) {
 		global $AppUI;
 
-    $children = $this->getChildren();
+        $children = $this->getChildren();
 		$newObj = $this->copy($destProject_id, $destTask_id);
 		$new_id = $newObj->task_id;
 		if (!empty($children)) {

@@ -148,6 +148,26 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 		unset($this->obj, $this->post_data);
 	}
 
+    /*
+     * This was written because the old CTask->load() actually performed updates
+     *   instead of just loading which is just screwy. The standard
+     *   CTask->store() method performs the updateDynamics that we're looking
+     *   for but the data loader for the Unit Tests bypasses that to hit the
+     *   database directly. So we have to do it manually post-dataload but
+     *   pre-testing.
+     */
+    protected function _preCalcData() {
+        global $AppUI;
+        $taskList = $this->obj->getAllowedTaskList($AppUI, 1);
+        foreach ($taskList as $item) {
+            $tmpTask = new CTask();
+            $tmpTask->load($item['task_id']);
+            if($tmpTask->task_dynamic == 1) {
+                $tmpTask->updateDynamics(true);
+                $tmpTask->store();
+            }
+        }
+    }
     /**
      * Tests the Attributes of a new Tasks object.
      */
@@ -1129,6 +1149,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeepCopyNoProjectNoTask()
     {
+        $this->_preCalcData();
+
         $this->obj->load(24);
         $this->obj->deepCopy();
 
@@ -1163,6 +1185,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeepCopyNoProjectTask()
     {
+        $this->_preCalcData();
+
         $this->obj->load(24);
         $this->obj->deepCopy(0, 1);
 
@@ -1197,6 +1221,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeepCopyProjectTask()
     {
+        $this->_preCalcData();
+
         $this->obj->load(24);
         $this->obj->deepCopy(2, 1);
 
