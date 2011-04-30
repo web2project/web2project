@@ -1491,3 +1491,28 @@ function HM2seconds ($HM) {
     //$seconds += (intval($s));
     return $seconds;
 }
+
+/**
+ * Parse the SQL file and get out the timezones from it to use it on the install
+ * screen. The SQL file used is: install/sql/mysql/018_add_timezones.sql
+ */
+function w2PgetTimezonesForInstall() {
+    $file = W2P_BASE_DIR . '/install/sql/mysql/018_add_timezones.sql';
+    
+    $timezones = array();
+    
+    if(is_file($file) and is_readable($file)) {
+        $sql = file_get_contents($file);
+        // get it from this kind of a string:
+        // (1, 'Timezones', 'Pacific/Auckland', 43200);
+        preg_match_all("#\(.*Timezones',\s*'(.*)',.*\);#", $sql, $matchedTimezones);
+        
+        sort($matchedTimezones[1]);
+        
+        foreach($matchedTimezones[1] as $timezone) {
+            $timezones[$timezone] = $timezone;
+        }
+    }
+    
+    return $timezones;
+}
