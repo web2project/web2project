@@ -1,6 +1,4 @@
 <?php /* $Id$ $URL$ */
-global $showEditCheckbox, $this_day, $other_users, $w2Pconfig, $user_id;
-
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -79,7 +77,7 @@ if (is_array($selected) && count($selected)) {
 			$q->addTable('tasks');
 			$q->addUpdate('task_percent_complete', '100');
 			$q->addWhere('task_id=' . (int)$val);
-		} else
+		} else {
 			if ($task_priority == 'd') {
 				// delete task
 				$q = new w2p_Database_Query;
@@ -93,6 +91,7 @@ if (is_array($selected) && count($selected)) {
 					$q->addUpdate('task_priority', $task_priority);
 					$q->addWhere('task_id=' . (int)$val);
 				}
+        }
 		$q->exec();
 		echo db_error();
 		$q->clear();
