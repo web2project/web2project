@@ -304,6 +304,7 @@ abstract class w2p_Core_BaseObject
 
 			if (count($msg)) {
 				$msg = $AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
+                $this->_error = $msg;
 				return false;
 			} else {
 				return true;

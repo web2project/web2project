@@ -100,163 +100,50 @@ class CUser extends w2p_Core_BaseObject {
 		}
 	}
 
-	public function delete($oid = null) {
+    public function canDelete() {
+        $tables[] = array('label' => 'Companies', 'name' => 'companies', 'idfield' => 'company_id', 'joinfield' => 'company_owner');
+        $tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_owner');
+        $tables[] = array('label' => 'Project Owner', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_owner');
+        //$tables[] = array('label' => 'Project Creator', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_creator');
+        //$tables[] = array('label' => 'Project Updator', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_updator');
+        $tables[] = array('label' => 'Task Owner', 'name' => 'tasks', 'idfield' => 'task_id', 'joinfield' => 'task_owner');
+        //$tables[] = array('label' => 'Task Creator', 'name' => 'tasks', 'idfield' => 'task_id', 'joinfield' => 'task_creator');
+        //$tables[] = array('label' => 'Task Updator', 'name' => 'tasks', 'idfield' => 'task_id', 'joinfield' => 'task_updator');
+        //$tables[] = array('label' => 'Task Assignee', 'name' => 'user_tasks', 'idfield' => 'task_id', 'joinfield' => 'user_id');
+        $tables[] = array('label' => 'Events', 'name' => 'events', 'idfield' => 'event_id', 'joinfield' => 'event_owner');
+        //$tables[] = array('label' => 'Event Attendees', 'name' => 'user_events', 'idfield' => 'event_id', 'joinfield' => 'user_id');
+        $tables[] = array('label' => 'Files', 'name' => 'files', 'idfield' => 'file_id', 'joinfield' => 'file_owner');
+        $tables[] = array('label' => 'Forum Owner', 'name' => 'forums', 'idfield' => 'forum_id', 'joinfield' => 'forum_owner');
+        //$tables[] = array('label' => 'Forum Moderator', 'name' => 'forums', 'idfield' => 'forum_id', 'joinfield' => 'forum_moderated');
+        $tables[] = array('label' => 'Forum Messages', 'name' => 'forum_messages', 'idfield' => 'message_id', 'joinfield' => 'message_author');
+        //$tables[] = array('label' => 'Forum Message Editor', 'name' => 'forum_messages', 'idfield' => 'message_id', 'joinfield' => 'message_editor');
+        $tables[] = array('label' => 'Links', 'name' => 'links', 'idfield' => 'link_id', 'joinfield' => 'link_owner');
+
+		return parent::canDelete($msg, $this->user_id, $tables);
+    }
+
+	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
+        $perms = $AppUI->acl();
+        $canDelete = (int) $this->canDelete();
 
-		$id = (int)$this->user_id;
-		//check if the user is related to anything and disallow deletion if he is.
-		//companies: is he a owner of any company?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(company_id)');
-		$q->addTable('companies');
-		$q->addWhere('company_owner = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Companies') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//departments: is he a owner of any department?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(dept_id)');
-		$q->addTable('departments');
-		$q->addWhere('dept_owner = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Departments') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//events: is he a owner of any event?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(event_id)');
-		$q->addTable('events');
-		$q->addWhere('event_owner = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Events') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//files: is he a owner of any file?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(file_id)');
-		$q->addTable('files');
-		$q->addWhere('file_owner = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Files') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//forums: is he a owner of any forum?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(forum_id)');
-		$q->addTable('forums');
-		$q->addWhere('forum_owner = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forums') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//forums: is he a moderator of any forum?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(forum_id)');
-		$q->addTable('forums');
-		$q->addWhere('forum_moderated = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forums') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Forum Moderator') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//forums: is he a message creator on any forum?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(message_id)');
-		$q->addTable('forum_messages');
-		$q->addWhere('message_author = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forum Messages') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Author') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//forums: is he a message creator on any forum?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(message_id)');
-		$q->addTable('forum_messages');
-		$q->addWhere('message_editor = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Forum Messages') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Editor') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//links: is he a owner of any link?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(link_id)');
-		$q->addTable('links');
-		$q->addWhere('link_owner = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Links') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//projects: is he related to any project?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(project_id)');
-		$q->addTable('projects');
-		$q->addWhere('(project_owner = ' . $id . ' OR project_creator = ' . $id . ' OR project_updator = ' . $id . ')');
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Projects') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner, Creator or Updator') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//tasks: is he related to any task?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(task_id)');
-		$q->addTable('tasks');
-		$q->addWhere('(task_owner = ' . $id . ' OR task_creator = ' . $id . ' OR task_updator = ' . $id . ')');
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Tasks') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Owner, Creator or Updator') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//events: is he related to any event?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(event_id)');
-		$q->addTable('user_events');
-		$q->addWhere('user_id = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Events') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Attendee') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//tasks: is he related to any event?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(task_id)');
-		$q->addTable('user_tasks');
-		$q->addWhere('user_id = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Tasks') . ' ' . $AppUI->_('where he is') . ' ' .$AppUI->_('Assignee') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
-		//tasks: is he related to any pins?
-		$q = new w2p_Database_Query;
-		$q->addQuery('count(task_id)');
-		$q->addTable('user_task_pin');
-		$q->addWhere('user_id = ' . $id);
-		$result = $q->loadResult();
-		$q->clear();
-		if ($result) {
-			return $AppUI->_('Can not Delete Because This User has') . ' ' . $result . ' ' . $AppUI->_('Tasks') . ' ' . $AppUI->_('pinned') . '. ' . $AppUI->_('If you just want this user not to log in consider removing all his Roles. That would make the user Inactive.');
-		}
+        if ($perms->checkModuleItem('users', 'delete', $this->user_id) &&
+                $perms->checkModuleItem('admin', 'delete', $this->user_id) &&
+                        $canDelete) {
 
-		$result = parent::delete($oid);
-		if (!$result) {
-			$acl = &$GLOBALS['AppUI']->acl();
-			$acl->deleteLogin($id);
+            $perms->deleteLogin($this->user_id);
 			$q = new w2p_Database_Query;
 			$q->setDelete('user_preferences');
-			$q->addWhere('pref_user = ' . $id);
+			$q->addWhere('pref_user = ' . $this->user_id);
 			$q->exec();
-			$q->clear();
-		}
-		return $result;
+
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+            return true;
+        }
+
+        return false;
 	}
 
     public function hook_search()
