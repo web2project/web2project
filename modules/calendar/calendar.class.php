@@ -499,8 +499,7 @@ class CEvent extends w2p_Core_BaseObject {
 	 *	@author caseydk
 	 *	@return true if it worked, false if it didn't
 	 */
-	public function delete(CAppUI $AppUI = null) {
-		global $AppUI;
+	public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
         if ($this->canDelete($msg) && $perms->checkModuleItem('events', 'delete', $this->event_id)) {
@@ -508,7 +507,7 @@ class CEvent extends w2p_Core_BaseObject {
                 return $msg;
             }
 
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->setDelete('user_events');
 			$q->addWhere('event_id = ' . (int) $this->event_id);
             $q->exec();

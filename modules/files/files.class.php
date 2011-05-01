@@ -245,7 +245,7 @@ class CFile extends w2p_Core_BaseObject {
 
         if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
             // remove the file from the file system
-            if (!$this->deleteFile()) {
+            if (!$this->deleteFile($AppUI)) {
                 return false;
             }
 
@@ -272,8 +272,8 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	// delete File from File System
-	public function deleteFile() {
-		global $AppUI, $w2Pconfig;
+	public function deleteFile(CAppUI $AppUI = null) {
+		global $AppUI;
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
