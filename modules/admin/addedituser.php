@@ -35,6 +35,7 @@ foreach ($roles as $role) {
 }
 $roles_arr = arrayMerge(array(0 => ''), $roles_arr);
 
+//TODO: These queries should be replaced with the standard load methods.
 if ($contact_id) {
 	$q = new w2p_Database_Query;
 	$q->addTable('contacts', 'con');
