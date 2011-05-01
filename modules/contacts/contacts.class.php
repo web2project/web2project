@@ -196,20 +196,9 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function canDelete($msg, $oid = null, $joins = null) {
-		global $AppUI;
-		if ($oid) {
-			// Check to see if there is a user
-			$q = new w2p_Database_Query;
-			$q->addTable('users');
-			$q->addQuery('count(user_id) as user_count');
-			$q->addWhere('user_contact = ' . (int)$oid);
-			$user_count = $q->loadResult();
-			if ($user_count > 0) {
-				$msg = $AppUI->_('contactsDeleteUserError');
-				return false;
-			}
-		}
-		return parent::canDelete($msg, $oid, $joins);
+        $tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_contact');
+
+		return parent::canDelete($msg, $this->user_id, $tables);
 	}
 
 	public function isUser($oid = null) {
