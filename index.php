@@ -295,20 +295,13 @@ if (!isset($_SESSION['all_tabs'][$m])) {
 				if (!isset($all_tabs[$file])) {
 					$all_tabs[$file] = array();
 				}
-				$arr = &$all_tabs[$file];
+				$tabArray = &$all_tabs[$file];
 				$name = $nameparts[2];
 			} else {
-				$arr = &$all_tabs;
+				$tabArray = &$all_tabs;
 				$name = $nameparts[1];
 			}
-			$arr[] = array('name' => ucfirst(str_replace('_', ' ', $name)), 'file' => W2P_BASE_DIR . '/modules/' . $dir . '/' . $filename, 'module' => $dir);
-
-			/*
-			** Don't forget to unset $arr again! $arr is likely to be used in the sequel declaring
-			** any temporary array. This may lead to strange bugs with disappearing tabs (cf. #1767).
-			** @author: gregorerhardt 	@date: 20070203
-			*/
-			unset($arr);
+			$tabArray[] = array('name' => ucfirst(str_replace('_', ' ', $name)), 'file' => W2P_BASE_DIR . '/modules/' . $dir . '/' . $filename, 'module' => $dir);
 		}
 	}
 } else {
@@ -341,15 +334,13 @@ if (!isset($_SESSION['all_crumbs'][$m])) {
 				if (!isset($all_crumbs[$file])) {
 					$all_crumbs[$file] = array();
 				}
-				$arr = &$all_crumbs[$file];
+				$tabArray = &$all_crumbs[$file];
 				$name = $nameparts[2];
 			} else {
-				$arr = &$all_crumbs;
+				$tabArray = &$all_crumbs;
 				$name = $nameparts[1];
 			}
-			$arr[] = array('name' => ucfirst(str_replace('_', ' ', $name)), 'file' => W2P_BASE_DIR . '/modules/' . $dir . '/' . $filename, 'module' => $dir);
-
-			unset($arr);
+			$tabArray[] = array('name' => ucfirst(str_replace('_', ' ', $name)), 'file' => W2P_BASE_DIR . '/modules/' . $dir . '/' . $filename, 'module' => $dir);
 		}
 	}
 } else {
