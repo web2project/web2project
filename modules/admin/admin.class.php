@@ -23,63 +23,72 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public function check() {
-        if ($this->user_id === null) {
-			return 'user id is NULL';
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+		if (!$this->user_id && '' == trim($this->user_password)) {
+            $errorArray['user_password'] = $baseErrorMsg . 'user password is not set';
 		}
-		if ($this->user_password !== null) {
-			$this->user_password = db_escape(trim($this->user_password));
-		}
-		// TODO MORE
-		return null; // object is ok
+        if (!$this->user_id && CUser::exists($this->user_username)) {
+            $errorArray['user_exists'] = $baseErrorMsg . 'this user already exists';
+        }
+
+		return $errorArray;
 	}
 
 	public function store(CAppUI $AppUI = null) {
 		global $AppUI;
+        $perms = $AppUI->acl();
+        $stored = false;
 
-        $msg = $this->check();
-		if ($msg) {
-			return get_class($this) . '::store-check failed';
-		}
-		$q = new w2p_Database_Query;
-        
-		if ($this->user_id) {
-			// save the old password
-			$perm_func = 'updateLogin';
-			$q->addTable('users');
-			$q->addQuery('user_password');
-			$q->addWhere('user_id = ' . $this->user_id);
-			$pwd = $q->loadResult();
-			if (!$this->user_password) {
-				//if the user didn't provide a password keep the old one
-				$this->user_password = $pwd;
-			} elseif ($pwd != $this->user_password) {
-				$this->user_password = md5($this->user_password);
-			} else {
-				//if something is not right keep the old one
-				$this->user_password = $pwd;
-			}
-			$q->clear();
+        $errorMsgArray = $this->check();
+        if (count($errorMsgArray) > 0) {
+            $this->_error = $errorMsgArray;
+            return false;
+        }
 
-			$ret = $q->updateObject('users', $this, 'user_id', false);
-			$q->clear();
-		} else {
-			$perm_func = 'addLogin';
-			$this->user_password = md5($this->user_password);
-			$ret = $q->insertObject('users', $this, 'user_id');
-			$q->clear();
-		}
-		if (!$ret) {
-			return get_class($this) . '::store failed' . db_error();
-		} else {
-			$acl = &$GLOBALS['AppUI']->acl();
-			$acl->$perm_func($this->user_id, $this->user_username);
-			//Insert Default Preferences
+        if ($this->user_id && $perms->checkModuleItem('users', 'edit', $this->user_id)) {
+            $perm_func = 'updateLogin';
+            $tmpUser = new CUser();
+            $tmpUser->load($this->user_id);
+
+            if ('' == trim($this->user_password)) {
+                $this->user_password = $tmpUser->user_password;
+            } elseif ($tmpUser->user_password != md5($this->user_password)) {
+                $this->user_password = md5($this->user_password);
+            } else {
+                $this->user_password = $tmpUser->user_password;
+            }
+
+            if (($msg = parent::store())) {
+                $this->_error = $msg;
+                return false;
+            }
+            $stored = true;
+        }
+
+        if (0 == $this->user_id && $perms->checkModuleItem('users', 'add')) {
+            $perm_func = 'addLogin';
+            $this->user_password = md5($this->user_password);
+
+            if (($msg = parent::store())) {
+                $this->_error = $msg;
+                return false;
+            }
+
+            $stored = true;
+        }
+
+        if ($stored) {
+            $perms->$perm_func($this->user_id, $this->user_username);
+
+            $q = new w2p_Database_Query;
 			//Lets check if the user has allready default users preferences set, if not insert the default ones
 			$q->addTable('user_preferences', 'upr');
 			$q->addWhere('upr.pref_user = ' . $this->user_id);
 			$uprefs = $q->loadList();
 			$q->clear();
-			
+
 			if (!count($uprefs) && $this->user_id > 0) {
 				//Lets get the default users preferences
 				$q->addTable('user_preferences', 'dup');
@@ -96,8 +105,11 @@ class CUser extends w2p_Core_BaseObject {
 					$q->clear();
 				}
 			}
-			return null;
-		}
+
+            return $stored;
+        }
+
+        return $stored;
 	}
 
     public function canDelete() {
@@ -127,11 +139,10 @@ class CUser extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $canDelete = (int) $this->canDelete();
 
-        if ($perms->checkModuleItem('users', 'delete', $this->user_id) &&
-                $perms->checkModuleItem('admin', 'delete', $this->user_id) &&
-                        $canDelete) {
+        if ($perms->checkModuleItem('users', 'delete', $this->user_id) && $canDelete) {
 
             $perms->deleteLogin($this->user_id);
+
 			$q = new w2p_Database_Query;
 			$q->setDelete('user_preferences');
 			$q->addWhere('pref_user = ' . $this->user_id);
