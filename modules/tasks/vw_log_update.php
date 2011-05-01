@@ -3,14 +3,14 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $task_id, $obj, $percent, $can_edit_time_information, $cal_sdf;
+global $AppUI, $obj, $percent, $can_edit_time_information, $cal_sdf;
 $AppUI->loadCalendarJS();
 
 $perms = &$AppUI->acl();
 
 // check permissions
-$canEditTask = $perms->checkModuleItem('tasks', 'edit', $task_id);
-$canViewTask = $perms->checkModuleItem('tasks', 'view', $task_id);
+$canEditTask = $perms->checkModuleItem('tasks', 'edit', $obj->task_id);
+$canViewTask = $perms->checkModuleItem('tasks', 'view', $obj->task_id);
 $canEdit = canEdit('task_log');
 $canAdd = canAdd('task_log');
 
@@ -25,15 +25,8 @@ if ($task_log_id) {
 	if (!$canAdd || !$canViewTask) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
-	$log->task_log_task = $task_id;
+	$log->task_log_task = $obj->task_id;
 	$log->task_log_name = $obj->task_name;
-}
-
-// Check that the user is at least assigned to a task
-$task = new CTask;
-$task->load($task_id);
-if (!$task->canAccess($AppUI->user_id)) {
-	$AppUI->redirect('m=public&a=access_denied');
 }
 
 $proj = new CProject();
@@ -142,7 +135,7 @@ function setDate( frm_name, f_date ) {
 <!-- END OF TIMER RELATED SCRIPTS -->
 
 <a name="log"></a>
-<form name="editFrm" action="?m=tasks&a=view&task_id=<?php echo $task_id; ?>" method="post"
+<form name="editFrm" action="?m=tasks&a=view&task_id=<?php echo $obj->task_id; ?>" method="post"
   onsubmit="updateEmailContacts();" accept-charset="utf-8">
 	<input type="hidden" name="uniqueid" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="dosql" value="do_updatetask" />
@@ -190,7 +183,7 @@ if ($obj->task_owner != $AppUI->user_id) {
 <tr>
 <?php
     // If users are not allowed to add task logs for others
-    if (!$task->task_allow_other_user_tasklogs) {
+    if (!$obj->task_allow_other_user_tasklogs) {
 ?>
         <td><input type="hidden" name="task_log_creator" value="<?php echo ($log->task_log_creator == 0 ? $AppUI->user_id : $log->task_log_creator); ?>" /></td>
 <?php
@@ -207,7 +200,7 @@ if ($obj->task_owner != $AppUI->user_id) {
         <select name="task_log_creator">
             <option value=""></option>
 <?php
-        foreach ($task->getAssignedUsers($task->task_id) as $task_user) {
+        foreach ($obj->getAssignedUsers($obj->task_id) as $task_user) {
             $task_user['user_id'] == $user_id ? $selected = 'selected="selected"' : $selected = '';
 ?>
             <option <?php echo $selected; ?> value="<?php echo $task_user['user_id']; ?>"><?php echo $task_user['contact_first_name'] . ' ' . $task_user['contact_last_name']; ?></option>
@@ -314,7 +307,7 @@ $task_email_title = array();
 $q = new w2p_Database_Query;
 $q->addTable('task_contacts', 'tc');
 $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id', 'inner');
-$q->addWhere('tc.task_id = ' . (int)$task_id);
+$q->addWhere('tc.task_id = ' . (int) $obj->task_id);
 $q->addQuery('tc.contact_id');
 $q->addQuery('c.contact_first_name, c.contact_last_name');
 $req = &$q->exec();
