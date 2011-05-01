@@ -4,9 +4,9 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 // Add / Edit forum
-$message_id = w2PgetParam($_GET, 'message_id', 0);
-$message_parent = w2PgetParam($_GET, 'message_parent', -1);
-$forum_id = w2PgetParam($_REQUEST, 'forum_id', 0);
+$message_parent = (int) w2PgetParam($_GET, 'message_parent', -1);
+$message_id = (int) w2PgetParam($_GET, 'message_id', $message_parent);
+$forum_id = (int) w2PgetParam($_REQUEST, 'forum_id', 0);
 
 $perms = &$AppUI->acl();
 $canAdd = $perms->checkModuleItem('forums', 'add');
@@ -34,7 +34,7 @@ $back_url = implode('&', $back_url_params);
 $q = new w2p_Database_Query;
 $q->addTable('forum_messages');
 $q->addQuery('forum_messages.*');
-$q->addWhere('message_id = ' . (int)($message_id ? $message_id : $message_parent));
+$q->addWhere('message_id = ' . $message_id);
 $res = $q->exec();
 $message_info = $q->fetchRow();
 $q->clear();
@@ -42,7 +42,7 @@ $q->clear();
 //pull message information from last response
 if ($message_parent != -1) {
 	$q->addTable('forum_messages');
-	$q->addWhere('message_parent = ' . (int)($message_id ? $message_id : $message_parent));
+	$q->addWhere('message_parent = ' . $message_id);
 	$q->addOrder('message_id DESC'); // fetch last message first
 	$q->setLimit(1);
 	$res = $q->exec();
@@ -133,20 +133,20 @@ if (function_exists('styleRenderBoxTop')) {
         <?php
         if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
             $date = intval($message_info['message_date']) ? new w2p_Utilities_Date($message_info['message_date']) : new w2p_Utilities_Date();
-        ?>
-        <tr>
-            <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
-            <td align="left"><?php echo CContact::getContactByUserid($message_info['message_author']); ?> (<?php echo $AppUI->formatTZAwareTime($message_info['message_date'], $df . ' ' . $tf); ?>)</td>
-        </tr>
-        <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
-        <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
-        <?php
-            $message = $bbparser->qparse($message_info['message_body']);
-            $message = nl2br($message);
-            echo $message;
-        ?></td></tr>
-        <tr><td colspan="2" align="left"><hr /></td></tr>
-        <?php
+            ?>
+            <tr>
+                <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
+                <td align="left"><?php echo CContact::getContactByUserid($message_info['message_author']); ?> (<?php echo $AppUI->formatTZAwareTime($message_info['message_date'], $df . ' ' . $tf); ?>)</td>
+            </tr>
+            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
+            <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
+            <?php
+                $message = $bbparser->qparse($message_info['message_body']);
+                $message = nl2br($message);
+                echo $message;
+            ?></td></tr>
+            <tr><td colspan="2" align="left"><hr /></td></tr>
+            <?php
         } //end of if-condition
 
         ?>
