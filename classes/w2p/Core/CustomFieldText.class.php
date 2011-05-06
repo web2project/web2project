@@ -21,7 +21,7 @@ class w2p_Core_CustomFieldText extends w2p_Core_CustomField {
 	public function getHTML($mode) {
 		switch ($mode) {
 			case 'edit':
-				$html = $this->field_description . ': </td><td><input type="text" class="text" name="' . $this->field_name . '" value="' . $this->charValue() . '" ' . $this->field_extratags . ' />';
+				$html = $this->field_description . ': </td><td><input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
 				break;
 			case 'view':
 				$html = $this->field_description . ': </td><td class="hilite" width="100%">' . $this->charValue();

@@ -42,14 +42,13 @@ class w2p_Core_CustomField {
 
 	public function load($object_id) {
 		// Override Load Method for List type Classes
-		global $db;
+
 		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_values');
 		$q->addWhere('value_field_id = ' . $this->field_id);
 		$q->addWhere('value_object_id = ' . (int) $object_id);
 		$rs = $q->exec();
 		$row = $q->fetchRow();
-		$q->clear();
 
 		$value_id = $row['value_id'];
 		$value_charvalue = $row['value_charvalue'];
@@ -141,7 +140,7 @@ class w2p_Core_CustomField {
 	}
 
 	public function fieldExtraTags() {
-		return $this->field_extratags;
+		return $this->field_extratags . $this->showId();
 	}
 
 	public function fieldOrder() {
@@ -152,4 +151,18 @@ class w2p_Core_CustomField {
 		return $this->field_published;
 	}
 
+    /*
+     * By default, the html elements for the Custom Fields don't have an id.
+     *   This adds one automagically using the field name and id. Of course,
+     *   using the fieldExtraTags, it's possible that someone already included
+     *   one.. so we check for that before adding our own.
+     *
+     */
+    protected function showId() {
+        if (false === strpos($this->field_extratags, 'id=')) {
+            return ' id="'.$this->field_name.'_'.$this->field_id.'" ';
+        } else {
+            return 'asdf';
+        }
+    }
 }

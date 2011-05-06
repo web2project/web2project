@@ -36,12 +36,9 @@ class w2p_Core_CustomOptionList {
 		while ($opt_row = $q->fetchRow()) {
 			$this->options[$opt_row['list_option_id']] = $opt_row['list_value'];
 		}
-		$q->clear();
 	}
 
 	public function store() {
-		global $db;
-
 		if (!is_array($this->options)) {
 			$this->options = array();
 		}

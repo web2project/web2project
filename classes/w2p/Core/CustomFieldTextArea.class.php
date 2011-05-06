@@ -22,7 +22,7 @@ class w2p_Core_CustomFieldTextArea extends w2p_Core_CustomField {
 	public function getHTML($mode) {
 		switch ($mode) {
 			case 'edit':
-				$html = $this->field_description . ': </td><td><textarea name="' . $this->field_name . '" ' . $this->field_extratags . '>' . $this->charValue() . '</textarea>';
+				$html = $this->field_description . ': </td><td><textarea name="' . $this->fieldName() . '" ' . $this->fieldExtraTags() . '>' . $this->charValue() . '</textarea>';
 				break;
 			case 'view':
 				$html = $this->field_description . ': </td><td class="hilite" width="100%">' . nl2br($this->charValue());

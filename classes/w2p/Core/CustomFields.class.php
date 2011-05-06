@@ -153,10 +153,7 @@ class w2p_Core_CustomFields {
 	public function bind(&$formvars) {
 		if (!count($this->fields) == 0) {
 			foreach ($this->fields as $k => $v) {
-				//					if ($formvars[$k] != NULL)
-				//					{
 				$this->fields[$k]->setValue(@$formvars[$k]);
-				//					}
 			}
 		}
 	}
