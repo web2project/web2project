@@ -174,7 +174,7 @@ function addTaskDependency(form, datesForm) {
 	}
 	
 	checkForTaskDependencyNone(form.task_dependencies);
-	setTasksStartDate(form, datesForm);
+	//setTasksStartDate(form, datesForm);
 }
 
 function removeTaskDependency(form, datesForm) {
@@ -186,7 +186,7 @@ function removeTaskDependency(form, datesForm) {
 		}
 	}
 	
-	setTasksStartDate(form, datesForm);
+	//setTasksStartDate(form, datesForm);
 }
 
 function setAMPM( field) {
