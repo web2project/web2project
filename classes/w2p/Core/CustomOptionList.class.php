@@ -12,6 +12,7 @@
 class w2p_Core_CustomOptionList {
 	public $field_id;
 	public $options;
+    public $list_option_id;
 
 	public function __construct($field_id) {
 		$this->field_id = $field_id;
@@ -45,27 +46,9 @@ class w2p_Core_CustomOptionList {
 			$this->options = array();
 		}
 
-		//load the dbs options and compare them with the options
-		$q = new w2p_Database_Query;
-		$q->addTable('custom_fields_lists');
-		$q->addWhere('field_id = ' . $this->field_id);
-		$q->addOrder('list_value');
-		if (!$rs = $q->exec()) {
-			$q->clear();
-			return $db->ErrorMsg();
-		}
+		$newoptions = $this->options;
 
-		$dboptions = array();
-
-		while ($opt_row = $q->fetchRow()) {
-			$dboptions[$opt_row['list_option_id']] = $opt_row['list_value'];
-		}
-		$q->clear();
-
-		$newoptions = array();
-		$newoptions = array_diff($this->options, $dboptions);
-		$deleteoptions = array_diff($dboptions, $this->options);
-		//insert the new options
+		//insert the new option
 		foreach ($newoptions as $opt) {
 			$q = new w2p_Database_Query;
 			$q->addTable('custom_fields_lists');
@@ -77,34 +60,18 @@ class w2p_Core_CustomOptionList {
 			$q->addTable('custom_fields_lists');
 			$q->addInsert('field_id', $this->field_id);
 			$q->addInsert('list_option_id', $optid);
-			$q->addInsert('list_value', db_escape(strip_tags($opt)));
-
-			if (!$q->exec()) {
-				$insert_error = $db->ErrorMsg();
-			}
-			$q->clear();
+			$q->addInsert('list_value', $opt);
+            $q->exec();
 		}
-		//delete the deleted options
-		foreach ($deleteoptions as $opt => $value) {
-			$q = new w2p_Database_Query;
-			$q->setDelete('custom_fields_lists');
-			$q->addWhere('list_option_id =' . $opt);
-
-			if (!$q->exec()) {
-				$delete_error = $db->ErrorMsg();
-			}
-			$q->clear();
-		}
-
-		return $insert_error . ' ' . $delete_error;
 	}
 
 	public function delete() {
 		$q = new w2p_Database_Query;
 		$q->setDelete('custom_fields_lists');
-		$q->addWhere('field_id = ' . $this->field_id);
-		$q->exec();
-		$q->clear();
+		$q->addWhere('field_id = ' . (int) $this->field_id);
+        $q->addWhere('list_option_id = ' . (int) $this->list_option_id);
+
+		return $q->exec();
 	}
 
 	public function setOptions($option_array) {

@@ -31,6 +31,8 @@ $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&u=customfields', 'custom fields');
 $titleBlock->show();
 
+$html_types = $field->getTypes();
+
 $custom_fields = new w2p_Core_CustomFields($module->mod_name, 'addedit', null, 'edit');
 
 if ($field_id) {
@@ -51,20 +53,20 @@ if ($field_id) {
 		}
 	} else {
 		//No such field exists with this ID
-		$AppUI->setMsg('Couldnt load the Custom Field, It might have been deleted somehow.');
+		$AppUI->setMsg('Couldnt load the Custom Field, It might have been deleted somehow.', UI_MSG_ERROR);
 		$AppUI->redirect();
 	}
 }
 
-$visible_state = array();
-$html_types = $field->getTypes();
-foreach ($html_types as $k => $ht) {
-	if ($k == $field_htmltype) {
-		$visible_state['div_' . $k] = 'display : block';
-	} else {
-		$visible_state['div_' . $k] = 'display : none';
-	}
-}
+//$visible_state = array();
+
+//foreach ($html_types as $k => $ht) {
+//	if ($k == $field_htmltype) {
+//		$visible_state['div_' . $k] = 'display : block';
+//	} else {
+//		$visible_state['div_' . $k] = 'display : none';
+//	}
+//}
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
@@ -74,6 +76,42 @@ function submitIt() {
 function filterFieldName(field) {
     field.value=field.value.replace(/[^a-z|^A-Z|^0-9]*/gi,"");
 }
+
+function showAttribs() {
+    var selobj = document.getElementById('field_htmltype').value;
+
+    if (selobj == 'select') {
+        document.getElementById('datarow').style.display = '';
+    } else {
+        document.getElementById('datarow').style.display = 'none';
+    }
+}
+
+function addItem() {
+    var itemList = $('#optionlist');
+    var value = document.getElementById('select_newitem').value;
+    value = value.replace(/<\/?[^>]+>/gi, '');
+
+    document.getElementById('select_newitem').value = '';
+    $.post('?m=system&u=customfields',
+        {field_id: "<?php echo $field_id; ?>", field_value: value, dosql: "do_customselect_aed"},
+        function(data) {
+            itemList.append('<li>' + value + '</li>');
+        }
+    );
+}
+
+function deleteItem(id) {
+    $.post('?m=system&u=customfields',
+        {field_id: "<?php echo $field_id; ?>", list_option_id: id, 
+            dosql: "do_customselect_aed", del: 1
+        },
+        function() {
+            $('#listitem_' + id).remove();
+        }
+    );
+}
+
 </script>
 <form method="post" action="?m=system&u=customfields" id="addEditForm" name="addEditForm" accept-charset="utf-8">
     <input type="hidden" name="field_id" value="<?php echo $field_id; ?>" />
@@ -119,10 +157,29 @@ function filterFieldName(field) {
                 <input type="text" class="text" name="field_extratags" size="80" value="<?php echo $field_extratags ?>" />
             </td>
         </tr>
+        <tr id="datarow">
+            <td><?php echo $AppUI->_('List of Options'); ?></td>
+            <td>
+            <?php
+                if ($field_htmltype == 'select') {
+                    echo '<ul id="optionlist">';
+                    $select_options = new w2p_Core_CustomOptionList($field_id);
+                    $select_options->load();
+                    $select_items = $select_options->getOptions();
 
-
-
-
+                    foreach ($select_items as $id => $item) {
+                        echo '<li id="listitem_'.$id.'">';
+                        echo '<a href="javascript:deleteItem(' . $id . ')">';
+                        echo '<img src="' . w2PfindImage('remove.png') . '" border="0" /></a>&nbsp;';
+                        echo $item.'</li>';
+                    }
+                    echo '<li><input type="text" name="select_newitem" id="select_newitem" class="text" />&nbsp;
+                            <input type="button" value="'.$AppUI->_('Add').'" onclick="javascript:addItem()" class="text" /></li>';
+                    echo '</ul>';
+                }
+            ?>
+            </td>
+        </tr>
         <tr>
             <td>
                 <input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=system&u=customfields';}" />
