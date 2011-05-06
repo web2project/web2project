@@ -46,7 +46,7 @@ class w2p_Core_CustomField {
 		$q = new w2p_Database_Query;
 		$q->addTable('custom_fields_values');
 		$q->addWhere('value_field_id = ' . $this->field_id);
-		$q->addWhere('value_object_id = ' . $object_id);
+		$q->addWhere('value_object_id = ' . (int) $object_id);
 		$rs = $q->exec();
 		$row = $q->fetchRow();
 		$q->clear();
@@ -64,26 +64,26 @@ class w2p_Core_CustomField {
 
 	public function store($object_id) {
 		global $db;
-		if ($object_id == null) {
-			return 'Error: Cannot store field (' . $this->field_name . '), associated id not supplied.';
-		} else {
-			$ins_intvalue = $this->value_intvalue == null ? '0' : $this->value_intvalue;
+
+        $object_id = (int) $object_id;
+
+		if ($object_id) {
+			$this->value_intvalue = (int) $this->value_intvalue;
 			$ins_charvalue = $this->value_charvalue == null ? '' : stripslashes($this->value_charvalue);
 
-			if ($this->value_id > 0) {
-				$q = new w2p_Database_Query;
-				$q->addTable('custom_fields_values');
+            $q = new w2p_Database_Query;
+            $q->addTable('custom_fields_values');
+
+			if ($this->value_id) {
 				$q->addUpdate('value_charvalue', $ins_charvalue);
-				$q->addUpdate('value_intvalue', $ins_intvalue);
+				$q->addUpdate('value_intvalue', $this->value_intvalue);
 				$q->addWhere('value_id = ' . $this->value_id);
 			} else {
-				$q = new w2p_Database_Query;
-				$q->addTable('custom_fields_values');
 				$q->addInsert('value_module', '');
 				$q->addInsert('value_field_id', $this->field_id);
 				$q->addInsert('value_object_id', $object_id);
 				$q->addInsert('value_charvalue', $ins_charvalue);
-				$q->addInsert('value_intvalue', $ins_intvalue);
+				$q->addInsert('value_intvalue', $this->value_intvalue);
 			}
 			$rs = $q->exec();
 
@@ -91,6 +91,8 @@ class w2p_Core_CustomField {
 			if (!$rs) {
 				return $db->ErrorMsg() . ' | SQL: ';
 			}
+		} else {
+            return 'Error: Cannot store field (' . $this->field_name . '), associated id not supplied.';
 		}
 	}
 
