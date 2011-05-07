@@ -6,7 +6,15 @@ global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary,
     $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id,
     $allowed_companies, $showProject;
 
+$canEdit = canEdit($m);
+$canRead = canView($m);
+
 $folder_id = (int) $folder;
+if ($folder_id) {
+    $cfObj->load($folder);
+    $msg = '';
+    $canDelete = $cfObj->canDelete($msg, $folder);
+}
 // Files modules: index page re-usable sub-table
 
 // add to allow for returning to other modules besides Files
@@ -40,7 +48,6 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 $file_types = w2PgetSysVal('FileType');
 
 $myFolder = new CFileFolder();
-//TODO: is $xpg_totalrecs even used?
 $xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $project_id, $company_id);
 ?>
 <script language="javascript" type="text/javascript">
@@ -135,17 +142,8 @@ function removeBulkComponent(li) {
 </style>
 <table id="tblFolders" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 <?php
-/**** Main Program ****/
-$canEdit = canEdit($m);
-$canRead = canView($m);
-
-if ($folder > 0) {
-	$cfObj->load($folder);
-	$msg = '';
-	$canDelete = $cfObj->canDelete($msg, $folder);
-}
-
-if ($folder) { ?>
+    /**** Main Program ****/
+    if ($folder_id) { ?>
 	<tr>
 		<td nowrap="nowrap">
 			<a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'folder icon', 'back to root folder', 'files'); ?></a>
@@ -155,52 +153,40 @@ if ($folder) { ?>
 			<a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a>
 		</td>
 	</tr>
-<?php
-}
-
-?>
+    <?php } ?>
     <tr>
         <td colspan="20">
             <span class="folder-name-current">
                 <img src="<?php echo w2PfindImage('modules/files/folder5_small.png'); ?>" width="16" height="16" />
                 <?php echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root"; ?>
             </span>
+            <?php if (isset($cfObj) && $cfObj->file_folder_description != '') { ?>
+                <p><?php echo w2p_textarea($cfObj->file_folder_description); ?></p>
+            <?php } ?>
         </td>
     </tr>
-    <tr>
-        <td colspan="20">
-            <div id="folder-list" style="background-color:white;layer-background-color:white;">
-            <?php
-            //	endif;
-            if (isset($cfObj) && $cfObj->file_folder_description != ''): ?>
-                    <p><?php echo w2p_textarea($cfObj->file_folder_description); ?></p>
-            <?php
-            endif;
-            if (countFiles($folder) > 0) {
-                echo displayfiles($folder);
-            } elseif (!$limited or $folder != 0) {
-                echo $AppUI->_('no files');
-            }
-            echo getFolders($folder);
-            ?>
-            </div>
-        </td>
-    </tr>
+    <?php
+    if (countFiles($folder) > 0) {
+        echo displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id);
+    } elseif (!$limited or $folder_id != 0) {
+        echo '<tr><td colspan="20">' . $AppUI->_('no files') . '</td></tr>';
+    }
+    ?>
+    <?php echo getFolders($folder_id); ?>
+    <?php
+        //Lets add our bulk form
+        $folders_avail = getFolderSelectList();
+        //used O (uppercase 0)instead of 0 (zero) to keep things in place
+        $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
 
-<?php
-//Lets add our bulk form
-$folders_avail = getFolderSelectList();
-//used O (uppercase 0)instead of 0 (zero) to keep things in place
-$folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
-
-$project = new CProject();
-$sprojects = $project->getAllowedProjects($AppUI, false);
-foreach ($sprojects as $prj_id => $proj_info) {
-	$sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
-}
-asort($sprojects);
-$sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
-?>
+        $project = new CProject();
+        $sprojects = $project->getAllowedProjects($AppUI, false);
+        foreach ($sprojects as $prj_id => $proj_info) {
+            $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
+        }
+        asort($sprojects);
+        $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
+    ?>
 	<tr>
 	    <td colspan="50" align="right">
             <form name="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
