@@ -695,17 +695,6 @@ function getIcon($file_type) {
 	return $result;
 }
 
-function getFolderSelectList() {
-	global $AppUI;
-	$folders = array(0 => '');
-	$q = new w2p_Database_Query();
-	$q->addTable('file_folders');
-	$q->addQuery('file_folder_id, file_folder_name, file_folder_parent');
-	$q->addOrder('file_folder_name');
-	$folders = arrayMerge(array('0' => array(0, $AppUI->_('Root'), -1)), $q->loadHashList('file_folder_id'));
-	return $folders;
-}
-
 function getHelpdeskFolder() {
 	$q = new w2p_Database_Query();
 	$q->addTable('file_folders', 'ff');
