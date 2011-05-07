@@ -180,16 +180,8 @@ function getFolders($parent, $level = 0) {
 	global $AppUI, $allowed_folders_ary, $denied_folders_ary, $tab, $m, $a, $company_id, $allowed_companies, $project_id, $task_id, $current_uri, $file_types;
 	// retrieve all children of $parent
 
-	$folder_where = 'file_folder_parent = \'' . $parent . '\'';
-	//   $folder_where .= (count($denied_folders_ary) > 0) ? "\nAND file_folder_id NOT IN (" . implode(',', $denied_folders_ary) . ")" : "";
-
-	$q = new w2p_Database_Query();
-	$q->addTable('file_folders');
-	$q->addQuery('*');
-	$q->addWhere($folder_where);
-	$q->addOrder('file_folder_name');
-	$folders = $q->loadList();
-	$q->clear();
+    $file_folder = new CFileFolder();
+    $folders = $file_folder->getFoldersByParent($parent);
 
 	$s = '';
 	// display each child
@@ -384,7 +376,7 @@ function displayFiles($folder) {
 
 		if ($fp != $latest_file['file_project']) {
 			if (!$latest_file['file_project']) {
-				$latest_file['project_name'] = $AppUI->_('Not associated to a project');
+				$latest_file['project_name'] = $AppUI->_('Not attached to a project');
 				$latest_file['project_color_identifier'] = 'f4efe3';
 			}
 			if ($showProject) {
@@ -516,7 +508,7 @@ if ($folder > 0) {
 }
 
 if ($folder) { ?>
-	<table border="0" cellpadding="4" cellspacing="0" width="100%">
+	<table border="0" cellpadding="4" cellspacing="0" width="100%" class="tbl">
 	<tr>
 		<td nowrap="nowrap">
 			<a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'folder icon', 'back to root folder', 'files'); ?></a>
@@ -558,7 +550,7 @@ echo getFolders($folder);
 
 <hr />
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="tbl">
 <?php
 //Lets add our bulk form
 $folders_avail = getFolderSelectList();

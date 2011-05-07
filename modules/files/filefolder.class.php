@@ -117,14 +117,25 @@ class CFileFolder extends w2p_Core_BaseObject {
 		$q->addTable('file_folders');
 		$q->addQuery('file_folder_name');
 		$q->addWhere('file_folder_id=' . $this->file_folder_parent);
+
 		return $q->loadResult();
 	}
 
 	public function countFolders() {
 		$q = new w2p_Database_Query();
-		$q->addTable($this->_tbl);
-		$q->addQuery('COUNT(' . $this->_tbl_key. ' )');
-		$result = $q->loadResult();
-		return $result;
+		$q->addTable('file_folders');
+		$q->addQuery('COUNT(file_folder_id)');
+
+		return (int) $q->loadResult();
 	}
+
+    public function getFoldersByParent($parent = 0) {
+        $q = new w2p_Database_Query();
+        $q->addTable('file_folders');
+        $q->addQuery('*');
+        $q->addWhere('file_folder_parent = '. (int) $parent);
+        $q->addOrder('file_folder_name');
+
+        return $q->loadList();
+    }
 }

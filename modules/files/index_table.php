@@ -200,7 +200,7 @@ function expand(id){
 
 		if ($fp != $latest_file['file_project']) {
 			if (!$latest_file['file_project']) {
-				$latest_file['project_name'] = $AppUI->_('Not associated to a project');
+				$latest_file['project_name'] = $AppUI->_('Not attached to a project');
 				$latest_file['project_color_identifier'] = 'f4efe3';
 			}
 			if ($showProject) {
