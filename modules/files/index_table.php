@@ -291,7 +291,7 @@ function expand(id){
 		<td width="15%" nowrap="nowrap"><?php echo $latest_file['contact_first_name'] . ' ' . $latest_file['contact_last_name']; ?></td>
 		<td width="5%" nowrap="nowrap" align="right"><?php echo file_size(intval($latest_file["file_size"])); ?></td>
 		<td nowrap="nowrap"><?php echo $file['file_type']; ?></td>
-		<td width="15%" nowrap="nowrap" align="center"><?php echo $AppUI->formatTZAwareTime($latest_file['file_date'], $df . ' ' . $tf); ?></td>
+		<td nowrap="nowrap" align="center"><?php echo $AppUI->formatTZAwareTime($latest_file['file_date'], $df . ' ' . $tf); ?></td>
 		<td width="10%"><?php echo $latest_file['file_co_reason']; ?></td>
 		<td nowrap="nowrap">
 		<?php if ($canEdit && empty($latest_file['file_checkout'])) {

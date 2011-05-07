@@ -156,10 +156,8 @@ function removeBulkComponent(li) {
     <?php } ?>
     <tr>
         <td colspan="20">
-            <span class="folder-name-current">
-                <img src="<?php echo w2PfindImage('modules/files/folder5_small.png'); ?>" width="16" height="16" />
-                <?php echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root"; ?>
-            </span>
+            <img src="<?php echo w2PfindImage('folder5_small.png', 'files'); ?>" width="16" height="16" style="float: left;" />
+            <span class="folder-name-current" style="float: left;"><?php echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root"; ?></span>
             <?php if (isset($cfObj) && $cfObj->file_folder_description != '') { ?>
                 <p><?php echo w2p_textarea($cfObj->file_folder_description); ?></p>
             <?php } ?>
@@ -171,21 +169,21 @@ function removeBulkComponent(li) {
     } elseif (!$limited or $folder_id != 0) {
         echo '<tr><td colspan="20">' . $AppUI->_('no files') . '</td></tr>';
     }
-    ?>
-    <?php echo getFolders($folder_id); ?>
-    <?php
-        //Lets add our bulk form
-        $folders_avail = getFolderSelectList();
-        //used O (uppercase 0)instead of 0 (zero) to keep things in place
-        $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
 
-        $project = new CProject();
-        $sprojects = $project->getAllowedProjects($AppUI, false);
-        foreach ($sprojects as $prj_id => $proj_info) {
-            $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
-        }
-        asort($sprojects);
-        $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
+    echo getFolders($folder_id);
+
+    //Lets add our bulk form
+    $folders_avail = getFolderSelectList();
+    //used O (uppercase 0)instead of 0 (zero) to keep things in place
+    $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
+
+    $project = new CProject();
+    $sprojects = $project->getAllowedProjects($AppUI, false);
+    foreach ($sprojects as $prj_id => $proj_info) {
+        $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
+    }
+    asort($sprojects);
+    $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
     ?>
 	<tr>
 	    <td colspan="50" align="right">

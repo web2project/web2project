@@ -113,7 +113,7 @@ if ($file->file_task) {
 if (isset($file->file_helpdesk_item)) {
 	$file_helpdesk_item = $file->file_helpdesk_item;
 }
-
+$myFolder = new CFileFolder();
 $folders = getFolderSelectList();
 ?>
 <script language="javascript" type="text/javascript">
