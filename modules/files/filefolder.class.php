@@ -129,6 +129,49 @@ class CFileFolder extends w2p_Core_BaseObject {
 		return (int) $q->loadResult();
 	}
 
+    public function getFileCountByFolder(CAppUI $AppUI, $folder_id, $task_id, $project_id, $company_id) {
+
+        // SQL text for count the total recs from the selected option
+        $q = new w2p_Database_Query();
+        $q->addTable('files');
+        $q->addQuery('count(files.file_id)');
+        $q->addJoin('projects', 'p', 'p.project_id = file_project');
+        $q->addJoin('users', 'u', 'u.user_id = file_owner');
+        $q->addJoin('tasks', 't', 't.task_id = file_task');
+        $q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
+        $q->addWhere('file_folder = ' . (int)$folder_id);
+
+        //TODO: apply permissions properly
+        $project = new CProject();
+        $deny1 = $project->getDeniedRecords($AppUI->user_id);
+        if (count($deny1) > 0) {
+            $q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
+        }
+        $task = new CTask();
+        $deny2 = $task->getDeniedRecords($AppUI->user_id);
+        if (count($deny2) > 0) {
+            $q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
+        }
+        if ($project_id) {
+            $q->addWhere('file_project = ' . (int)$project_id);
+        }
+        if ($task_id) {
+            $q->addWhere('file_task = ' . (int)$task_id);
+        }
+        if ($company_id) {
+            $q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
+            $q->addWhere('company_id = ' . (int)$company_id);
+            $q->addWhere('company_id IN (' . $allowed_companies . ')');
+        }
+
+        $q->addGroup('file_folder_name');
+        $q->addGroup('project_name');
+        $q->addGroup('file_name');
+
+        // counts total recs from selection
+        return count($q->loadList());
+    }
+
     public function getFoldersByParent($parent = 0) {
         $q = new w2p_Database_Query();
         $q->addTable('file_folders');
@@ -472,7 +515,5 @@ function displayFiles($folder) {
 		$s .= $hidden_table;
 		$hidden_table = '';
 	}
-	$s .= '</table>';
-	$s .= '<br />';
 	return $s;
 }

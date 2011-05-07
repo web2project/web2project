@@ -2,8 +2,11 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary, $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id, $allowed_companies, $showProject;
+global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary,
+    $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id,
+    $allowed_companies, $showProject;
 
+$folder_id = (int) $folder;
 // Files modules: index page re-usable sub-table
 
 // add to allow for returning to other modules besides Files
@@ -34,52 +37,11 @@ if (!isset($task_id)) {
 $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
-$project = new CProject();
-$deny1 = $project->getDeniedRecords($AppUI->user_id);
-
-$task = new CTask();
-$deny2 = $task->getDeniedRecords($AppUI->user_id);
-
-global $file_types;
 $file_types = w2PgetSysVal('FileType');
 
-$folder = $folder ? $folder : 0;
-
-// SQL text for count the total recs from the selected option
-$q = new w2p_Database_Query();
-$q->addTable('files');
-$q->addQuery('count(files.file_id)');
-$q->addJoin('projects', 'p', 'p.project_id = file_project');
-$q->addJoin('users', 'u', 'u.user_id = file_owner');
-$q->addJoin('tasks', 't', 't.task_id = file_task');
-$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-$q->addWhere('file_folder = ' . (int)$folder);
-if (count($deny1) > 0) {
-	$q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
-}
-if (count($deny2) > 0) {
-	$q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
-}
-if ($project_id) {
-	$q->addWhere('file_project = ' . (int)$project_id);
-}
-if ($task_id) {
-	$q->addWhere('file_task = ' . (int)$task_id);
-}
-if ($company_id) {
-	$q->innerJoin('companies', 'co', 'co.company_id = p.project_company');
-	$q->addWhere('company_id = ' . (int)$company_id);
-	$q->addWhere('company_id IN (' . $allowed_companies . ')');
-}
-
-$q->addGroup('file_folder_name');
-$q->addGroup('project_name');
-$q->addGroup('file_name');
-
-// counts total recs from selection
-$xpg_totalrecs = count($q->loadList());
-$q->clear();
-$junkFile = new CFileFolder();    //This line is total junk.. it's just here so getFolderSelectList() can be included.
+$myFolder = new CFileFolder();
+//TODO: is $xpg_totalrecs even used?
+$xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $project_id, $company_id);
 ?>
 <script language="javascript" type="text/javascript">
 function expand(id){
@@ -241,16 +203,12 @@ $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')
 ?>
 	<tr>
 	    <td colspan="50" align="right">
-	          <form name="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
-                  <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
-                  <table id="tbl_bulk">
-                      <tr>
-                            <td><?php echo arraySelect($sprojects, 'bulk_file_project', 'style="width:180px" class="text"', 'O'); ?></td>
-                            <td><?php echo arraySelectTree($folders, 'bulk_file_folder', 'style="width:180px;" class="text"', 'O'); ?></td>
-                            <td align="right"><input type="button" class="button" value="<?php echo $AppUI->_('Go'); ?>" onclick="if (confirm('Are you sure you wish to apply the options on the selected files?')) document.frm_bulk.submit();" /></td>
-                      </tr>
-                  </table>
-	          </form>
+            <form name="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
+                <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
+                <?php echo arraySelect($sprojects, 'bulk_file_project', 'style="width:180px" class="text"', 'O'); ?>
+                <?php echo arraySelectTree($folders, 'bulk_file_folder', 'style="width:180px;" class="text"', 'O'); ?>
+                <input type="button" class="button" value="<?php echo $AppUI->_('Go'); ?>" onclick="if (confirm('Are you sure you wish to apply the options on the selected files?')) document.frm_bulk.submit();" />
+            </form>
 	    </td>
 	</tr>
 </table>
