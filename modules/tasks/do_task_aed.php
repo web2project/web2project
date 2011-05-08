@@ -12,6 +12,7 @@ $hdependencies = w2PgetParam($_POST, 'hdependencies');
 $notify = (int) w2PgetParam($_POST, 'task_notify', 0);
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
+$new_task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
 $isNotNew = $task_id;
 
 $action = ($del) ? 'deleted' : 'stored';
@@ -46,9 +47,9 @@ if (!$obj->bind($_POST)) {
 }
 
 // Check to see if the task_project has changed
-if (isset($_POST['new_task_project']) && $_POST['new_task_project'] && ($obj->task_project != $_POST['new_task_project'])) {
+if ($obj->task_project != $new_task_project) {
     $taskRecount = ($obj->task_project) ? $obj->task_project : 0;
-    $obj->task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
+    $obj->task_project = $new_task_project;
     $obj->task_parent = $obj->task_id;
 }
 
