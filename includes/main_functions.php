@@ -1230,21 +1230,6 @@ function w2PendTip() {
 }
 
 /**
- *    Corrects the charset name if needed be
- *
- *    @param string $charset the charset string to be checked
- *    @access public
- */
-function w2PcheckCharset($charset) {
-	if (!(strpos($charset, 'iso') === false)) {
-		if (strpos($charset, 'iso-') === false) {
-			return str_replace('iso', 'iso-', $charset);
-		}
-	}
-	return $charset;
-}
-
-/**
  *    Write debugging to debug.log file
  *
  *    @param string $s the debug message

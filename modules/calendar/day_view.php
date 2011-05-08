@@ -70,29 +70,29 @@ function clickDay( idate, fdate ) {
 </script>
 
 <table class="std" width="100%" cellspacing="0" cellpadding="4">
-<tr>
+    <tr>
         <td valign="top">
-                <table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
+            <table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
                 <tr>
-                        <td>
-                                <a href="<?php echo '?m=calendar&a=day_view&date=' . $prev_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
-                        </td>
-                        <th width="100%">
-                                <?php echo $AppUI->_(htmlspecialchars($this_day->format('%A'), ENT_COMPAT, $locale_char_set)) . ', ' . $this_day->format($df); ?>
-                        </th>
-                        <td>
-                                <a href="<?php echo '?m=calendar&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
-                        </td>
+                    <td>
+                        <a href="<?php echo '?m=calendar&a=day_view&date=' . $prev_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
+                    </td>
+                    <th width="100%">
+                        <?php echo $AppUI->_(htmlspecialchars($this_day->format('%A'), ENT_COMPAT, $locale_char_set)) . ', ' . $this_day->format($df); ?>
+                    </th>
+                    <td>
+                        <a href="<?php echo '?m=calendar&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
+                    </td>
                 </tr>
-                </table>
+            </table>
 
-<?php
-// tabbed information boxes
-$tabBox = new CTabBox('?m=calendar&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), W2P_BASE_DIR . '/modules/calendar/', $tab);
-$tabBox->add('vw_day_events', 'Events');
-$tabBox->add('vw_day_tasks', 'Tasks');
-$tabBox->show();
-?>
+            <?php
+                // tabbed information boxes
+                $tabBox = new CTabBox('?m=calendar&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), W2P_BASE_DIR . '/modules/calendar/', $tab);
+                $tabBox->add('vw_day_events', 'Events');
+                $tabBox->add('vw_day_tasks', 'Tasks');
+                $tabBox->show();
+            ?>
         </td>
 <?php if ($w2Pconfig['cal_day_view_show_minical']) { ?>
         <td valign="top" width="175">

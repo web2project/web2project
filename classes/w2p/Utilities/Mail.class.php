@@ -79,7 +79,7 @@ class w2p_Utilities_Mail extends PHPMailer {
 		$this->Username = w2PgetConfig('mail_user');
 		$this->Password = w2PgetConfig('mail_pass');
 		$this->Timeout = w2PgetConfig('mail_timeout', 0);
-		$this->CharSet = isset($GLOBALS['locale_char_set']) ? w2PcheckCharset(strtolower($GLOBALS['locale_char_set'])) : 'us-ascii';
+		$this->CharSet = 'utf-8';
 		$this->Encoding = $this->Charset != 'us-ascii' ? '8bit' : '7bit';
 		//The from clause is fixed for all emails so that the users do not reply to one another
 		$this->From(w2PgetConfig('admin_email', 'admin@web2project.net'), w2PgetConfig('company_name'));
