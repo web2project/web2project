@@ -243,7 +243,6 @@ class w2p_Extensions_Permissions extends gacl_api {
 
 		foreach ($acls as $acl => $k) {
 			// Deleting gacl_aco_map entries
-			$q = new w2p_Database_Query;
 			$q->setDelete('gacl_aco_map');
 			$q->addWhere('acl_id = ' . $acl);
 			if (!$q->exec()) {
@@ -252,7 +251,6 @@ class w2p_Extensions_Permissions extends gacl_api {
 			$q->clear();
 
 			// Deleting gacl_aro_map entries
-			$q = new w2p_Database_Query;
 			$q->setDelete('gacl_aro_map');
 			$q->addWhere('acl_id = ' . $acl);
 			if (!$q->exec()) {
@@ -261,7 +259,6 @@ class w2p_Extensions_Permissions extends gacl_api {
 			$q->clear();
 
 			// Deleting gacl_aco_map entries
-			$q = new w2p_Database_Query;
 			$q->setDelete('gacl_acl');
 			$q->addWhere('id = ' . $acl);
 			if (!$q->exec()) {
