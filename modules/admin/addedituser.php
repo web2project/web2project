@@ -60,7 +60,7 @@ if (!$user && $user_id > 0) {
 	$titleBlock->addCrumb('?m=admin', 'users list');
 	$titleBlock->show();
 } else {
-	if ($user_id == 0 && !$contact_id) {
+	if (!$user_id && !$contact_id) {
 		$user['contact_id'] = 0;
 	}
 	// pull companies
@@ -69,12 +69,12 @@ if (!$user && $user_id > 0) {
 	$companies = arrayMerge(array('0' => ''), $companies);
 
 	// setup the title block
-	$ttl = $user_id > 0 ? 'Edit User' : 'Add User';
+	$ttl = $user_id ? 'Edit User' : 'Add User';
 	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, $m . '.' . $a);
 	if (canView('admin') && canView('users')) {
 		$titleBlock->addCrumb('?m=admin', 'users list');
 	}
-	if ($user_id > 0) {
+	if ($user_id) {
 		$titleBlock->addCrumb('?m=admin&a=viewuser&user_id=' . $user_id, 'view this user');
 		if ($user['contact_id'] > 0) {
 			$titleBlock->addCrumb('?m=contacts&a=view&contact_id='.$user['contact_id'], 'view this contact');
@@ -84,9 +84,8 @@ if (!$user && $user_id > 0) {
 		}
 	}
 	$titleBlock->show();
-?>
-<?php
-$AppUI->addFooterJavascriptFile('js/passwordstrength.js');
+
+    $AppUI->addFooterJavascriptFile('js/passwordstrength.js');
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt(){
@@ -183,20 +182,16 @@ function setDept( key, val ) {
             ?>
             </td>
         </tr>
-        <?php if ($canEdit) { // prevent users without read-write permissions from seeing and editing user type
-
-        ?>
+        <?php if ($canEdit) { // prevent users without read-write permissions from seeing and editing user type ?>
         <tr>
             <td align="right" nowrap="nowrap"> <?php echo $AppUI->_('User Type'); ?>:</td>
             <td>
-        <?php
+                <?php
                 echo arraySelect($utypes, 'user_type', 'class=text size=1', $user['user_type'], true);
-        ?>
+                ?>
             </td>
         </tr>
-        <?php } // End of security
-
-        ?>
+        <?php } // End of security ?>
         <?php if ($canEdit && !$user_id) { ?>
         <tr>
             <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('User Role'); ?>:</td>
@@ -233,9 +228,9 @@ function setDept( key, val ) {
         <tr>
             <td align="right" nowrap="nowrap"> <?php echo $AppUI->_('Company'); ?>:</td>
             <td>
-        <?php
+                <?php
                 echo arraySelect($companies, 'contact_company', 'class=text size=1', $user['contact_company']);
-        ?>
+                ?>
             </td>
         </tr>
         <?php } ?>
