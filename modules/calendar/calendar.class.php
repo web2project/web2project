@@ -227,7 +227,7 @@ class CMonthCalendar {
 	 *
 	 */
 	private function _drawTitle() {
-		global $AppUI, $m, $a, $locale_char_set;
+		global $AppUI, $m, $a;
 		$url = 'index.php?m=' . $m;
 		$url .= $a ? '&amp;a=' . $a : '';
 		$url .= isset($_GET['dialog']) ? '&amp;dialog=1' : '';
@@ -240,7 +240,6 @@ class CMonthCalendar {
 			$s .= '<td align="left">';
 			$s .= '<a href="' . $href . '">' . w2PshowImage('prev.gif', 16, 16, $AppUI->_('previous month')) . '</a>';
 			$s .= '</td>';
-
 		}
 
 		$s .= '<th width="99%" align="center">';
@@ -272,7 +271,7 @@ class CMonthCalendar {
 	 * @return string Returns table a row with the day names
 	 */
 	private function _drawDays() {
-		global $AppUI, $locale_char_set;
+		global $AppUI;
 
 		setlocale(LC_TIME, 'en');
 		$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
