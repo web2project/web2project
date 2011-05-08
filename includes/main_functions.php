@@ -777,10 +777,9 @@ function w2PgetSysVal($title) {
 	$q = new w2p_Database_Query;
 	$q->addTable('sysvals');
 	$q->addQuery('sysval_value_id, sysval_value');
-	$q->addWhere('sysval_title = \'' . $title . '\'');
+	$q->addWhere("sysval_title = '$title'");
 	$q->addOrder('sysval_value_id ASC');
 	$rows = $q->loadList();
-	$q->clear();
 
 	$arr = array();
 	// We use trim() to make sure a numeric that has spaces
