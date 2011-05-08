@@ -2399,7 +2399,6 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	$now = new w2p_Utilities_Date();
 	$tf = $AppUI->getPref('TIMEFORMAT');
 	$df = $AppUI->getPref('SHDATEFORMAT');
-	$perms = &$AppUI->acl();
 	$fdf = $df . ' ' . $tf;
 	$show_all_assignees = w2PgetConfig('show_all_task_assignees', false);
 
@@ -2522,13 +2521,13 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	}
 	if ($today_view) { // Show the project name
 		$s .= ('<td width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<span style="padding:2px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</span>' . '</a></td>');
-	}
-	// task owner
-	if (!$today_view) {
+	} else {
 		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $arr['user_id'] . '">' . $arr['owner'] . '</a>' . '</td>');
 	}
-	if (isset($arr['task_assigned_users']) && ($assigned_users = $arr['task_assigned_users'])) {
-		$a_u_tmp_array = array();
+
+	if (count($arr['task_assigned_users'])) {
+        $assigned_users = $arr['task_assigned_users'];
+        $a_u_tmp_array = array();
 		if ($show_all_assignees) {
 			$s .= '<td align="center">';
 			foreach ($assigned_users as $val) {
