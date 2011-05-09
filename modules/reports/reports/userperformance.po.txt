@@ -1,2 +1,0 @@
-Wydajnosc pracownika
- Raport pokazuje ilosc godzin spedzonych przez pracownika nad przydzielonymi mu zadaniami 
