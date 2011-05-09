@@ -1,2 +1,0 @@
-Performance Utente
-Report che mostra il totale delle ore lavorate da un utente rispetto a quelle assegnate alle attivita'

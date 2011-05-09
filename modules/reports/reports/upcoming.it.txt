@@ -1,3 +1,0 @@
-Prossime
-Attivita' da completare la prossima settimana
-suppressHeaders=1
