@@ -86,31 +86,23 @@ if ($report_type) {
 	$s .= '<table width="100%" class="std">';
 	$s .= '<tr><td><h2>' . $AppUI->_('Reports Available') . '</h2></td></tr>';
 
-	$tmp_reports = array();
-	foreach ($reports as $v) {
-		$type = str_replace('.php', '', $v);
-		$desc_file = str_replace('.php', '.' . $AppUI->user_locale . '.txt', $v);
-		$desc = @file(W2P_BASE_DIR . '/modules/reports/reports/' . $desc_file);
-
-		$description = $desc[0] ? $desc[0] : $v;
-
-		$tmp_reports[$description]['file'] = $v;
-		$tmp_reports[$description]['name'] = $description;
-	}
-	unset($reports);
-	$reports = $tmp_reports;
-	ksort($reports);
-
 	foreach ($reports as $key => $v) {
-		$type = str_replace('.php', '', $v['file']);
-		$desc_file = str_replace('.php', '.' . $AppUI->user_locale . '.txt', $v['file']);
-		$desc = @file(W2P_BASE_DIR . '/modules/reports/reports/' . $desc_file);
+		$type = str_replace('.php', '', $v);
+        $link = 'index.php?m=reports&project_id=' . $project_id . '&report_type=' . $type;
 
-		$s .= '<tr><td><a href="index.php?m=reports&project_id=' . $project_id . '&report_type=' . $type;
-		if (isset($desc[2])) {
-			$s .= '&' . $desc[2];
-		}
-		$s .= '">' . $v['name'] . '</a></td><td>' . ($desc[1] ? "- $desc[1]" : '') . '</td></tr>';
+        /*
+         * TODO: There needs to be a better approach to adding the suppressHeaders
+         *   part but I can't come up with anything better at the moment..
+         *
+         *   ~ caseydk, 08 May 2011
+         */
+        $suppressHeaderReports = array('completed', 'upcoming', 'overdue');
+        if (in_array($type, $suppressHeaderReports)) {
+            $link .= '&suppressHeaders=1';
+        }
+
+		$s .= '<tr><td><a href="'.$link.'">'.$AppUI->_($type.'_name') . '</a></td>';
+		$s .= '<td>' . $AppUI->_($type.'_desc') . '</td></tr>';
 	}
 	$s .= '</table>';
 	echo $s;
