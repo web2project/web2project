@@ -198,10 +198,6 @@ echo arraySelect($times, 'pref_name[TIMEFORMAT]', 'class=text size=1', $prefs['T
 $currencies = array();
 $currEx = 1234567.89;
 
-if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')
-	$is_win = true;
-else
-	$is_win = false;
 foreach (array_keys($LANGUAGES) as $lang) {
 	$currencies[$lang] = formatCurrency($currEx, $AppUI->setUserLocale($lang, false));
 }
