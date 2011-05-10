@@ -11,12 +11,11 @@
 
 class w2p_Core_CustomOptionList {
 	public $field_id;
-	public $options;
+	public $options = array();
     public $list_option_id;
 
 	public function __construct($field_id) {
 		$this->field_id = $field_id;
-		$this->options = array();
 	}
 
 	public function load() {
@@ -30,8 +29,6 @@ class w2p_Core_CustomOptionList {
 			$q->clear();
 			return $db->ErrorMsg();
 		}
-
-		$this->options = array();
 
 		while ($opt_row = $q->fetchRow()) {
 			$this->options[$opt_row['list_option_id']] = $opt_row['list_value'];
