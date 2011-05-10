@@ -1215,7 +1215,7 @@ class CTask extends w2p_Core_BaseObject {
 					$toList[$email] = $email;
 					$recipient_list .= $email . ' (' . $name . ")\n";
 				} else {
-					$recipient_list .= 'Invalid email address \'' . $email . '\' for ' . $name . ', not sent' . "\n";
+					$recipient_list .= "Invalid email address '$email' for '$name' not sent \n";
 				}
 			}
 
