@@ -148,7 +148,7 @@ function w2PsessionConvertTime($key) {
 	$key = 'session_' . $key;
 
 	// If the value isn't set, then default to 1 day.
-	if (w2PgetConfig($key) == null || w2PgetConfig($key) == null) {
+	if (!w2PgetConfig($key, 0)) {
 		return 86400;
 	}
 
