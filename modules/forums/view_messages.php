@@ -8,27 +8,15 @@ $sort = w2PgetParam($_REQUEST, 'sort', 'asc');
 $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
 $hideEmail = w2PgetConfig('hide_email_addresses', false);
 
-$q = new w2p_Database_Query;
-$q->addTable('forums');
-$q->addTable('forum_messages');
-$q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email, user_username, forum_moderated, visit_user');
-$q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = ' . (int)$forum_id . ' AND visit_message = forum_messages.message_id');
-$q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
-$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-$q->addWhere('forum_id = message_forum AND (message_id = ' . (int)$message_id . ' OR message_parent = ' . (int)$message_id . ')');
-$q->addOrder('message_date ' . $sort);
-
-$messages = $q->loadList();
-
+$forum = new CForum();
+$messages = $forum->getMessages($AppUI, $forum_id, $message_id, $sort);
 ?>
 <script language="javascript" type="text/javascript">
 <?php
 if ($viewtype != 'normal') {
 ?>
 	function toggle(id) {
-<?php
-	if ($viewtype == 'single') {
-?>
+        <?php if ($viewtype == 'single') { ?>
 		var elems = document.getElementsByTagName('div');
 		for (var i=0, i_cmp=elems.length; i<i_cmp; i++)
 			if (elems[i].className == 'message') {
@@ -36,15 +24,10 @@ if ($viewtype != 'normal') {
 			}
 			document.getElementById(id).style.display = 'block';
 
-<?php
-	} else
-		if ($viewtype == 'short') {
-?>
+        <?php } elseif ($viewtype == 'short') { ?>
 			vista = (document.getElementById(id).style.display == 'none') ? 'block' : 'none';
 			document.getElementById(id).style.display = vista;
-<?php
-		}
-?>
+        <?php } ?>
 	}
 <?php
 }

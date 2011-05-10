@@ -49,6 +49,21 @@ class CForum extends w2p_Core_BaseObject {
         return $errorArray;
     }
 
+    public function getMessages(CAppUI $AppUI, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
+        $q = new w2p_Database_Query;
+        $q->addTable('forums');
+        $q->addTable('forum_messages');
+        $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email,
+            contact_display_name, user_username, forum_moderated, visit_user');
+        $q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = ' . (int) $forum_id . ' AND visit_message = forum_messages.message_id');
+        $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
+        $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+        $q->addWhere('forum_id = message_forum AND (message_id = ' . (int)$message_id . ' OR message_parent = ' . (int)$message_id . ')');
+        $q->addOrder('message_date ' . $sortDir);
+
+        return $q->loadList();
+    }
+
     public function load(CAppUI $AppUI, $forum_id) {
         $q = new w2p_Database_Query();
         $q->addQuery('*');
@@ -66,11 +81,12 @@ class CForum extends w2p_Core_BaseObject {
             user_username, contact_first_name, contact_last_name, contact_display_name,
             project_name, project_color_identifier');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-        $q->addJoin('projects', 'p', 'p.project_id = forum_project');
+        $q->addJoin('projects', 'p', 'p.project_id = forum_project', 'left');
         $q->addWhere('user_id = forum_owner');
         $q->addWhere('forum_id = ' . (int)$forum_id);
 
         $this->project_name = '';
+        $this->project_color_identifier = '';
         $this->contact_first_name = '';
         $this->contact_last_name = '';
         $this->contact_display_name = '';

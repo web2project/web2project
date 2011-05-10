@@ -23,7 +23,6 @@ if (!$canRead) {
 }
 
 $forum = new CForum();
-// load the record data
 $forum->loadFull($AppUI, $forum_id);
 
 if (!$forum) {
