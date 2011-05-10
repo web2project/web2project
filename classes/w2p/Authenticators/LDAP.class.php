@@ -112,7 +112,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 	}
 
 	public function createsqluser($username, $password, $ldap_attribs = array()) {
-		global $db, $AppUI;
+		global $AppUI;
 		$hash_pass = MD5($password);
 
 		if (!count($ldap_attribs) == 0) {
@@ -127,25 +127,24 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 			$c->contact_job = $ldap_attribs['title'][0];
             $c->contact_email = $ldap_attribs['mail'][0];
             $c->contact_phone = $ldap_attribs['telephonenumber'][0];
-            $c->store();
+            $c->store($AppUI);
             $contactArray = array('phone_mobile' => $ldap_attribs['mobile'][0]);
             $c->setContactMethods($contactArray);
 		}
 		$contact_id = ($c->contact_id == null) ? 'NULL' : $c->contact_id;
 
-		$q = new w2p_Database_Query;
-		$q->addTable('users');
-		$q->addInsert('user_username', $username);
-		$q->addInsert('user_password', $hash_pass);
-		$q->addInsert('user_type', '1');
-		$q->addInsert('user_contact', $c->contact_id);
-		$q->exec();
-		$user_id = $db->Insert_ID();
+        $u = new CUser();
+        $u->user_username = $username;
+        $u->user_password = $hash_pass;
+        $u->user_type = 1;
+        $u->user_contact = (int) $contact_id;
+        $u->store($AppUI);
+        $user_id = $u->user_id;
 		$this->user_id = $user_id;
-		$q->clear();
 
 		if ($this->user_id > 0) {
 			//Lets get the default users preferences
+            $q = new w2p_Database_Query;
 			$q->addTable('user_preferences', 'dup');
 			$q->addWhere('dup.pref_user = 0');
 			$w2prefs = $q->loadList();
