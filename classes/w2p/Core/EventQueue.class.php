@@ -92,22 +92,22 @@ class w2p_Core_EventQueue {
 	public function remove($id) {
 		$q = new w2p_Database_Query;
 		$q->setDelete($this->table);
-		$q->addWhere('queue_id = \'' . $id . '\'');
+		$q->addWhere("queue_id = $id");
 		$q->exec();
 		$q->clear();
 	}
 
 	/**
 	 * Find a queue record (or records) based upon the
-	 * 
+	 *
 	 */
-	public function find($module, $type, $id = null) {
+	public function find($module, $type, $id = 0) {
 		$q = new w2p_Database_Query;
 		$q->addTable($this->table);
-		$q->addWhere('queue_module = \'' . $module . '\'');
-		$q->addWhere('queue_type = \'' . $type . '\'');
-		if (isset($id)) {
-			$q->addWhere('queue_origin_id = \'' . $id . '\'');
+		$q->addWhere("queue_module = '$module'");
+		$q->addWhere("queue_type = '$type'");
+		if ($id) {
+			$q->addWhere("queue_origin_id = $id");
 		}
 		return $q->loadHashList('queue_id');
 	}
