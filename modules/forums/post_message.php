@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 // Add / Edit forum
 $message_parent = (int) w2PgetParam($_GET, 'message_parent', -1);
-$message_id = (int) w2PgetParam($_GET, 'message_id', $message_parent);
+$message_id = (int) w2PgetParam($_GET, 'message_id', 0);
 $forum_id = (int) w2PgetParam($_REQUEST, 'forum_id', 0);
 
 $perms = &$AppUI->acl();
