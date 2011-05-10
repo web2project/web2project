@@ -237,52 +237,33 @@ class CContact extends w2p_Core_BaseObject {
      * @deprecated
      */
 	public function getCompanyID() {
-		return (int)$this->contact_company;
+		trigger_error("getCompanyID() has been deprecated in v3.0 and will be removed by v4.0. Please just use the object property itself.", E_USER_NOTICE );
+        return (int)$this->contact_company;
 	}
 
 	public function getCompanyName() {
-		$q = new w2p_Database_Query;
-		$q->addTable('companies');
-		$q->addQuery('company_name');
-		$q->addWhere('company_id = ' . (int)$this->contact_company);
+        trigger_error("getCompanyName has been deprecated and will be removed in v4.0. Please use getCompanyDetails() instead.", E_USER_NOTICE );
 
-		return $q->loadResult();
+        $company = new CCompany();
+        $company->load((int) $this->contact_company);
+
+		return $company->company_name;
 	}
 
 	public function getCompanyDetails() {
-		$result = array('company_id' => 0, 'company_name' => '');
-		if (!$this->contact_company) {
-			return $result;
-		}
 
-		$q = new w2p_Database_Query;
-		$q->addTable('companies');
-		$q->addQuery('company_id, company_name');
-		if ((int) $this->contact_company) {
-			$q->addWhere('company_id = ' . (int) $this->contact_company);
-		} else {
-            $q->addWhere('company_name = ' . $q->quote($this->contact_company));
-		}
+        $company = new CCompany();
+        $company->load((int) $this->contact_company);
 
-		return $q->loadHash();
+        return array('company_id' => $company->company_id, 'company_name' => $company->company_name);
 	}
 
 	public function getDepartmentDetails() {
-		$result = array('dept_id' => 0, 'dept_name' => '');
-		if (!$this->contact_department) {
-			return $result;
-		}
 
-		$q = new w2p_Database_Query;
-		$q->addTable('departments');
-		$q->addQuery('dept_id, dept_name');
-		if ((int) $this->contact_department) {
-			$q->addWhere('dept_id = ' . (int) $this->contact_department);
-		} else {
-            $q->addWhere('dept_name = ' . $q->quote($this->contact_department));
-		}
+        $dept = new CDepartment();
+        $dept->load((int) $this->contact_department);
 
-		return $q->loadHash();
+        return array('dept_id' => $dept->dept_id, 'dept_name' => $dept->dept_name);
 	}
 
 	public function getUpdateKey() {

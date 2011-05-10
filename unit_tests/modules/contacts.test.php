@@ -315,6 +315,9 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertFalse($contact->is_alpha(3.14159));
     }
 
+    /*
+     * @expectedExcpetion PHPUnit_Framework_Error
+     */
     public function testGetCompanyName()
     {
         $contact = new CContact();
