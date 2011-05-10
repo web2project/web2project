@@ -33,11 +33,11 @@ $types = w2PgetSysVal('DepartmentType');
 $titleBlock = new CTitleBlock('View Department', 'departments.png', $m, $m . '.' . $a);
 if ($canEdit) {
     $titleBlock->addCell();
-    $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '">', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '&dept_parent=' . $dept_id . '" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '">', '', '<form action="?m=departments&a=addedit&company_id=' . $department->dept_company . '&dept_parent=' . $dept_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->addCrumb('?m=departments', 'department list');
 $titleBlock->addCrumb('?m=companies', 'company list');
-$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
+$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $department->dept_company, 'view this company');
 if ($canEdit) {
     $titleBlock->addCrumb('?m=departments&a=addedit&dept_id=' . $dept_id, 'edit this department');
 
