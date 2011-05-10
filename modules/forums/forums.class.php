@@ -57,6 +57,26 @@ class CForum extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
     }
 
+    public function loadFull(CAppUI $AppUI, $forum_id) {
+        $q = new w2p_Database_Query;
+        $q->addTable('forums');
+        $q->addTable('users', 'u');
+        $q->addQuery('forum_id, forum_project,	forum_description, forum_owner, forum_name,
+            forum_create_date, forum_last_date, forum_message_count, forum_moderated,
+            user_username, contact_first_name, contact_last_name, contact_display_name,
+            project_name, project_color_identifier');
+        $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+        $q->addJoin('projects', 'p', 'p.project_id = forum_project');
+        $q->addWhere('user_id = forum_owner');
+        $q->addWhere('forum_id = ' . (int)$forum_id);
+
+        $this->project_name = '';
+        $this->contact_first_name = '';
+        $this->contact_last_name = '';
+        $this->contact_display_name = '';
+        $q->loadObject($this);
+    }
+
     public function getAllowedForums($user_id, $company_id, $filter = -1, $orderby = 'forum_name', $orderdir = 'asc', $max_msg_length = 30)
     {
         $project = new CProject();
