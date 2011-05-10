@@ -13,7 +13,7 @@
 class CCompany extends w2p_Core_BaseObject {
 	/**
  	@var int Primary Key */
-	public $company_id = null;
+	public $company_id = 0;
 	/**
  	@var string */
 	public $company_name = null;

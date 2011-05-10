@@ -158,7 +158,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     public function testNewCompanyAttributeValues()
     {
         $this->assertType('CCompany', $this->obj);
-        $this->assertNull($this->obj->company_id);
+        $this->assertEquals(0, $this->obj->company_id);
         $this->assertNull($this->obj->company_name);
         $this->assertNull($this->obj->company_phone1);
         $this->assertNull($this->obj->company_phone2);
