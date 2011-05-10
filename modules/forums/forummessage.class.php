@@ -131,6 +131,15 @@ class CForumMessage extends w2p_Core_BaseObject {
 		return $result;
 	}
 
+    public function loadByParent($parent_id = 0) {
+        $q = new w2p_Database_Query();
+        $q->addTable('forum_messages');
+        $q->addWhere('message_parent = ' . $parent_id);
+        $q->addOrder('message_id DESC'); // fetch last message first
+
+        $q->loadObject($this, true, false);
+    }
+
 	public function sendWatchMail($debug = false) {
 		global $AppUI, $debug, $w2Pconfig;
 		$subj_prefix = $AppUI->_('forumEmailSubj', UI_OUTPUT_RAW);

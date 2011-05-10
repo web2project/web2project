@@ -20,6 +20,13 @@ if (!$canEdit && !$canAdd) {
 //Pull forum information
 $myForum = new CForum();
 $myForum->load($AppUI, $forum_id);
+if (!$myForum) {
+	$AppUI->setMsg('Forum');
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+	$AppUI->redirect('m=forums');
+} else {
+	$AppUI->savePlace();
+}
 
 // Build a back-url for when the back button is pressed
 $back_url_params = array();
@@ -31,29 +38,19 @@ foreach ($_GET as $k => $v) {
 $back_url = implode('&', $back_url_params);
 
 //pull message information
-$q = new w2p_Database_Query;
-$q->addTable('forum_messages');
-$q->addQuery('forum_messages.*');
-$q->addWhere('message_id = ' . $message_id);
-$res = $q->exec();
-$message_info = $q->fetchRow();
-$q->clear();
+$message = new CForumMessage();
+$message->load($message_id);
 
 //pull message information from last response
 if ($message_parent != -1) {
-	$q->addTable('forum_messages');
-	$q->addWhere('message_parent = ' . $message_id);
-	$q->addOrder('message_id DESC'); // fetch last message first
-	$q->setLimit(1);
-	$res = $q->exec();
-	$last_message_info = $q->fetchRow();
-	if (!$last_message_info) { // if it's first response, use original message
-		$last_message_info = &$message_info;
-		$last_message_info['message_body'] = wordwrap($last_message_info['message_body'], 50, "\n> ");
-	} else {
-		$last_message_info['message_body'] = mb_str_replace("\n", "\n> ", $last_message_info['message_body']);
-	}
-	$q->clear();
+    $last_message = new CForumMessage();
+    $last_message->load($message_parent);
+    if (!$last_message->message_id) { // if it's first response, use original message
+        $last_message = clone $message;
+        $last_message->message_body = wordwrap($last_message->message_body, 50, "\n> ");
+    } else {
+        $last_message->message_body = mb_str_replace("\n", "\n> ", $last_message->message_body);
+    }
 }
 
 $crumbs = array();
@@ -113,8 +110,8 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="message_forum" value="<?php echo $forum_id; ?>" />
 	<input type="hidden" name="message_parent" value="<?php echo $message_parent; ?>" />
 	<input type="hidden" name="message_published" value="<?php echo $myForum->forum_moderated ? '1' : '0'; ?>" />
-	<input type="hidden" name="message_author" value="<?php echo (isset($message_info['message_author']) && ($message_id || $message_parent < 0)) ? $message_info['message_author'] : $AppUI->user_id; ?>" />
-	<input type="hidden" name="message_editor" value="<?php echo (isset($message_info['message_author']) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0'; ?>" />
+	<input type="hidden" name="message_author" value="<?php echo (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $message->message_author : $AppUI->user_id; ?>" />
+	<input type="hidden" name="message_editor" value="<?php echo (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0'; ?>" />
 	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />
     <table cellspacing="0" cellpadding="3" border="0" width="100%" class="std">
         <tr><td>
@@ -132,18 +129,18 @@ if (function_exists('styleRenderBoxTop')) {
         </tr>
         <?php
         if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
-            $date = intval($message_info['message_date']) ? new w2p_Utilities_Date($message_info['message_date']) : new w2p_Utilities_Date();
+            $date = intval($message->message_date) ? new w2p_Utilities_Date($message->message_date) : new w2p_Utilities_Date();
             ?>
             <tr>
                 <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
-                <td align="left"><?php echo CContact::getContactByUserid($message_info['message_author']); ?> (<?php echo $AppUI->formatTZAwareTime($message_info['message_date'], $df . ' ' . $tf); ?>)</td>
+                <td align="left"><?php echo CContact::getContactByUserid($message->message_author); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td>
             </tr>
-            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message_info['message_title'] ?></td></tr>
+            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message->message_title ?></td></tr>
             <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
             <?php
-                $message = $bbparser->qparse($message_info['message_body']);
-                $message = nl2br($message);
-                echo $message;
+                $messageBody = $bbparser->qparse($last_message->message_body);
+                $messageBody = nl2br($messageBody);
+                echo $messageBody;
             ?></td></tr>
             <tr><td colspan="2" align="left"><hr /></td></tr>
             <?php
@@ -153,13 +150,13 @@ if (function_exists('styleRenderBoxTop')) {
         <tr>
             <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
             <td>
-                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message_info['message_title']; ?>" size="50" maxlength="250" />
+                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message->message_title; ?>" size="50" maxlength="250" />
             </td>
         </tr>
         <tr>
             <td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
             <td align="left" valign="top">
-               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message_info['message_body'] . "\n" : $message_info['message_body']; ?></textarea>
+               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
             </td>
         </tr>
         <tr>
