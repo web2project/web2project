@@ -954,7 +954,8 @@ function formatCurrency($number, $format) {
 		}
 	}
 
-    return money_format('%i', $number);
+    // Even money_format can't be trusted in Windows. It simply does not work on systems that don't have strfmon capabilities. Use number_format as fallback.
+    return function_exists('money_format') ? money_format('%i', $number) : number_format($number, 2);
 }
 
 function format_backtrace($bt, $file, $line, $msg) {
