@@ -423,16 +423,16 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 
 		$s .= '<tr>
 				<td nowrap="8%">
-                    <form name="frm_remove_file_' . $file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
+                    <form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
                         <input type="hidden" name="dosql" value="do_file_aed" />
                         <input type="hidden" name="del" value="1" />
-                        <input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
+                        <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
                         <input type="hidden" name="redirect" value="' . $current_uri . '" />
                     </form>
-                    <form name="frm_duplicate_file_' . $file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
+                    <form name="frm_duplicate_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
                         <input type="hidden" name="dosql" value="do_file_aed" />
                         <input type="hidden" name="duplicate" value="1" />
-                        <input type="hidden" name="file_id" value="' . $file['file_id'] . '" />
+                        <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
                         <input type="hidden" name="redirect" value="' . $current_uri . '" />
                     </form>
                 ';
