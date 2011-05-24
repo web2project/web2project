@@ -774,3 +774,9 @@ TD.weekendDay  {
 	text-align: left;
 	background-color:#F0F0F0;
 }
+
+.selectborder {
+    border: 3px solid #FF0000;
+    padding: 1px 0 2px;
+    display: inline;
+}
