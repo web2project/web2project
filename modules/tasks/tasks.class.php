@@ -499,7 +499,7 @@ class CTask extends w2p_Core_BaseObject {
 		if (!empty($children)) {
 			$tempTask = new CTask();
 			foreach ($children as $child) {
-				$tempTask->peek($child);
+				$tempTask->load($child);
 				$tempTask->htmlDecode($child);
 				$newChild = $tempTask->deepCopy($destProject_id, $new_id);
 				$newChild->store($AppUI);
@@ -555,7 +555,7 @@ class CTask extends w2p_Core_BaseObject {
 			// see function update_dep_dates
 			global $oTsk;
 			$oTsk = new CTask();
-			$oTsk->peek($this->task_id);
+			$oTsk->load($this->task_id);
 
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
@@ -1882,7 +1882,7 @@ class CTask extends w2p_Core_BaseObject {
 			$deep_children = array();
 			$tempTask = new CTask();
 			foreach ($children as $child) {
-				$tempTask->peek($child);
+				$tempTask->load($child);
 				$deep_children = array_merge($deep_children, $tempTask->getDeepChildren());
 			}
 
