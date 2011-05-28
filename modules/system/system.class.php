@@ -39,7 +39,7 @@ class CSystem {
                 $checkForUpdates = true;
             } else {
                 $systemDate = new DateTime($lastCheck);
-                $difference = $nowDate->diff($systemDate)->format('%d');
+                $difference = 0;//$nowDate->diff($systemDate)->format('%d');
                 $checkForUpdates = ($difference >= 7) ? true : false;
             }
 
