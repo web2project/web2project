@@ -142,7 +142,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewProjectAttributes()
     {
-    	$this->assertType('CProject', $this->obj);
+    	$this->assertInstanceOf('CProject', $this->obj);
     	$this->assertObjectHasAttribute('project_id',                  $this->obj);
     	$this->assertObjectHasAttribute('project_company',             $this->obj);
     	$this->assertObjectHasAttribute('project_name',                $this->obj);
@@ -179,7 +179,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewProjectAttributeValues()
     {
-        $this->assertType('CProject', $this->obj);
+        $this->assertInstanceOf('CProject', $this->obj);
         $this->assertNull($this->obj->project_id);
         $this->assertNull($this->obj->project_company);
         $this->assertNull($this->obj->project_department);
@@ -1218,19 +1218,13 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         $departments = CProject::getDepartments($AppUI, 1);
 
-        $this->assertEquals(2,              count($departments));
+        $this->assertEquals(1,              count($departments));
         $this->assertEquals(1,              $departments[1]['dept_id']);
         $this->assertEquals('Department 1', $departments[1]['dept_name']);
         $this->assertEquals('',             $departments[1]['dept_phone']);
         $this->assertEquals(1,              $departments[1][0]);
         $this->assertEquals('Department 1', $departments[1][1]);
         $this->assertEquals('',             $departments[1][2]);
-        $this->assertEquals(2,              $departments[2]['dept_id']);
-        $this->assertEquals('Department 1', $departments[2]['dept_name']);
-        $this->assertEquals('',             $departments[2]['dept_phone']);
-        $this->assertEquals(2,              $departments[2][0]);
-        $this->assertEquals('Department 1', $departments[2][1]);
-        $this->assertEquals('',             $departments[2][2]);
     }
 
     /**
@@ -1315,6 +1309,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
     /**
      * Tests updating a projects status
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testUpdateStatus()
     {

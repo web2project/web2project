@@ -120,16 +120,16 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $datetime   = new DateTime();
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertType('w2p_Utilities_Date',     $date);
-        $this->assertEquals($datetime->format('Y'), $date->year);
-        $this->assertEquals($datetime->format('m'), $date->month);
-        $this->assertEquals($datetime->format('d'), $date->day);
-        $this->assertEquals($datetime->format('H'), $date->hour);
-        $this->assertEquals($datetime->format('i'), $date->minute);
-        $this->assertEquals($datetime->format('s'), $date->second);
+        $this->assertInstanceOf('w2p_Utilities_Date', $date);
+        $this->assertEquals($datetime->format('Y'),   $date->year);
+        $this->assertEquals($datetime->format('m'),   $date->month);
+        $this->assertEquals($datetime->format('d'),   $date->day);
+        $this->assertEquals($datetime->format('H'),   $date->hour);
+        $this->assertEquals($datetime->format('i'),   $date->minute);
+        $this->assertEquals($datetime->format('s'),   $date->second);
 
-        $this->assertEquals($datetime->getOffset(), $date->tz['offset']/1000);
-        $this->assertEquals($timezone->getName(),   $date->tz['id']);
+        $this->assertEquals($datetime->getOffset(),   $date->tz['offset']/1000);
+        $this->assertEquals($timezone->getName(),     $date->tz['id']);
     }
 
     /**
@@ -141,15 +141,15 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $datetime   = new DateTime('2010-08-07 11:00:00');
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertType('w2p_Utilities_Date',     $date);
-        $this->assertEquals($datetime->format('Y'), $date->year);
-        $this->assertEquals($datetime->format('m'), $date->month);
-        $this->assertEquals($datetime->format('d'), $date->day);
-        $this->assertEquals($datetime->format('H'), $date->hour);
-        $this->assertEquals($datetime->format('i'), $date->minute);
-        $this->assertEquals($datetime->format('s'), $date->second);
+        $this->assertInstanceOf('w2p_Utilities_Date',     $date);
+        $this->assertEquals($datetime->format('Y'),       $date->year);
+        $this->assertEquals($datetime->format('m'),       $date->month);
+        $this->assertEquals($datetime->format('d'),       $date->day);
+        $this->assertEquals($datetime->format('H'),       $date->hour);
+        $this->assertEquals($datetime->format('i'),       $date->minute);
+        $this->assertEquals($datetime->format('s'),       $date->second);
 
-        $this->assertEquals($timezone->getName(),   $date->tz['id']);
+        $this->assertEquals($timezone->getName(),         $date->tz['id']);
     }
 
     /**
@@ -161,15 +161,15 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $datetime   = new DateTime('2010-08-07 11:00:00', new DateTimeZone('America/Halifax'));
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertType('w2p_Utilities_Date',         $date);
-        $this->assertEquals($datetime->format('Y'),     $date->year);
-        $this->assertEquals($datetime->format('m'),     $date->month);
-        $this->assertEquals($datetime->format('d'),     $date->day);
-        $this->assertEquals($datetime->format('H'),     $date->hour);
-        $this->assertEquals($datetime->format('i'),     $date->minute);
-        $this->assertEquals($datetime->format('s'),     $date->second);
+        $this->assertInstanceOf('w2p_Utilities_Date', $date);
+        $this->assertEquals($datetime->format('Y'),   $date->year);
+        $this->assertEquals($datetime->format('m'),   $date->month);
+        $this->assertEquals($datetime->format('d'),   $date->day);
+        $this->assertEquals($datetime->format('H'),   $date->hour);
+        $this->assertEquals($datetime->format('i'),   $date->minute);
+        $this->assertEquals($datetime->format('s'),   $date->second);
 
-        $this->assertEquals($timezone->getName(),   $date->tz['id']);
+        $this->assertEquals($timezone->getName(),     $date->tz['id']);
     }
 
     /**
@@ -181,15 +181,15 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $datetime   = new DateTime();
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertType('w2p_Utilities_Date',     $date);
-        $this->assertEquals(2010,                   $date->year);
-        $this->assertEquals(35,                     $date->month);
-        $this->assertEquals(35,                     $date->day);
-        $this->assertEquals(28,                     $date->hour);
-        $this->assertEquals(65,                     $date->minute);
-        $this->assertEquals(85,                     $date->second);
+        $this->assertInstanceOf('w2p_Utilities_Date', $date);
+        $this->assertEquals(2010,                     $date->year);
+        $this->assertEquals(35,                       $date->month);
+        $this->assertEquals(35,                       $date->day);
+        $this->assertEquals(28,                       $date->hour);
+        $this->assertEquals(65,                       $date->minute);
+        $this->assertEquals(85,                       $date->second);
 
-        $this->assertEquals($timezone->getName(),   $date->tz['id']);
+        $this->assertEquals($timezone->getName(),     $date->tz['id']);
     }
 
     /**
@@ -202,14 +202,14 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $date = new w2p_Utilities_Date('2010-08-07 22:10:27', 'Halifax');
         $datetime = new DateTime('2010-08-07 22:10:27');
 
-        $this->assertType('w2p_Utilities_Date',     $date);
-        $this->assertEquals($datetime->format('Y'), $date->year);
-        $this->assertEquals($datetime->format('m'), $date->month);
-        $this->assertEquals($datetime->format('d'), $date->day);
-        $this->assertEquals($datetime->format('H'), $date->hour);
-        $this->assertEquals($datetime->format('i'), $date->minute);
-        $this->assertEquals($datetime->format('s'), $date->second);
-        $this->assertEquals('Halifax',              $date->tz['id']);
+        $this->assertInstanceOf('w2p_Utilities_Date', $date);
+        $this->assertEquals($datetime->format('Y'),   $date->year);
+        $this->assertEquals($datetime->format('m'),   $date->month);
+        $this->assertEquals($datetime->format('d'),   $date->day);
+        $this->assertEquals($datetime->format('H'),   $date->hour);
+        $this->assertEquals($datetime->format('i'),   $date->minute);
+        $this->assertEquals($datetime->format('s'),   $date->second);
+        $this->assertEquals('Halifax',                $date->tz['id']);
         $this->assertFalse(isset($data->tz['offset']));
         $this->assertFalse(isset($data->tz['longname']));
         $this->assertFalse(isset($data->tz['shortname']));
