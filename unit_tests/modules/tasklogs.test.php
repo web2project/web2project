@@ -143,7 +143,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributes()
     {
-        $this->assertType('CTaskLog',                           $this->obj);
+        $this->assertInstanceOf('CTaskLog',                      $this->obj);
         $this->assertObjectHasAttribute('task_log_id',          $this->obj);
         $this->assertObjectHasAttribute('task_log_task',        $this->obj);
         $this->assertObjectHasAttribute('task_log_name',        $this->obj);
@@ -164,7 +164,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributeValues()
     {
-        $this->assertType('CTaskLog', $this->obj);
+        $this->assertInstanceOf('CTaskLog', $this->obj);
         $this->assertNull($this->obj->task_log_id);
         $this->assertNull($this->obj->task_log_task);
         $this->assertNull($this->obj->task_log_name);
@@ -272,9 +272,9 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * TODO: This should not be in the TaskLog object and should instead be on 
+     * TODO: This should not be in the TaskLog object and should instead be on
      *   the main w2p object: w2p_Core_BaseObject
-     * 
+     *
      * Test trimming all trimmable characters from all object properties
      */
     public function testW2PTrimAll()
