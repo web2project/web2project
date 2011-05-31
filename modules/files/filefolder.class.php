@@ -436,6 +436,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
                         <input type="hidden" name="redirect" value="' . $current_uri . '" />
                     </form>
                 ';
+        $junkFile = new CFile(); // TODO: This is just to get getIcon included..
 		$file_icon = getIcon($row['file_type']);
 		$s .= '<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $latest_file['file_name'] . '</a></td>';
 		$s .= '<td width="20%">' . w2p_textarea($latest_file['file_description']) . '</td><td width="5%" nowrap="nowrap" align="right">';

@@ -725,7 +725,7 @@ function file_show_attr() {
 		$str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
 	} else {
 		$the_value = (strlen($obj->file_version) > 0 ? $obj->file_version : '1');
-		$str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" />';
+		$str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" class="text" />';
 	}
 
 	$str_out .= '</td>';
@@ -742,7 +742,7 @@ function file_show_attr() {
 
 	// Category
 	$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Category') . ':</td>';
-	$str_out .= '<td align="left">' . arraySelect(w2PgetSysVal('FileType'), 'file_category', '' . $select_disabled, $obj->file_category, true) . '<td>';
+	$str_out .= '<td align="left">' . arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $obj->file_category, true) . '<td>';
 
 	// ---------------------------------------------------------------------------------
 
