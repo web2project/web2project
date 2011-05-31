@@ -1126,7 +1126,7 @@ function projects_list_data($user_id = false) {
 	if ($addPwOiD && !empty($owner_ids)) {
 		$q->addWhere('pr.project_owner IN (' . implode(',', $owner_ids) . ')');
 	}
-
+    $orderby = ('project_company' == $orderby) ? 'company_name' : $orderby;
 	$q->addGroup('pr.project_id');
 	$q->addOrder($orderby . ' ' .$orderdir);
 	$prj = new CProject();
