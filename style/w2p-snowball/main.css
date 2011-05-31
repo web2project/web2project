@@ -160,7 +160,7 @@ input:focus, textarea:focus {
     background-color : #FFFFCC;
 }
 
-.button{
+.button, .crumb ul li a{
   font-family   : tahoma,verdana,arial,Sans-Serif;
   color         : #666;
   text-align    : center;
