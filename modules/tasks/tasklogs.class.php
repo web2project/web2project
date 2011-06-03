@@ -298,6 +298,7 @@ class CTaskLog extends w2p_Core_BaseObject
 			}
 		}
 
+        $this->_error = $errorArray;
 		return $errorArray;
 	}
 

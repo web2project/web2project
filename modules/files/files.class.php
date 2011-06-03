@@ -213,6 +213,7 @@ class CFile extends w2p_Core_BaseObject {
             $errorArray['file_type'] = $baseErrorMsg . 'file type is not set';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
 	}
 

@@ -46,6 +46,7 @@ class CForum extends w2p_Core_BaseObject {
             $errorArray['forum_owner'] = $baseErrorMsg . 'forum owner is not set';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
     }
 

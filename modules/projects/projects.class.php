@@ -132,6 +132,7 @@ class CProject extends w2p_Core_BaseObject {
             $errorArray['project_demo_url'] = $baseErrorMsg . 'project demo url is not formatted properly';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
 	}
 

@@ -32,6 +32,7 @@ class CForumMessage extends w2p_Core_BaseObject {
             $errorArray['message_body'] = $baseErrorMsg . 'message body is not set';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
 	}
 

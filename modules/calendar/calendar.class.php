@@ -492,6 +492,7 @@ class CEvent extends w2p_Core_BaseObject {
 			$this->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 		}
 
+        $this->_error = $errorArray;
 		return $errorArray;
 	}
 
