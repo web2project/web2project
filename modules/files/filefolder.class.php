@@ -32,12 +32,6 @@ class CFileFolder extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 
-	public function check() {
-		$this->file_folder_id = intval($this->file_folder_id);
-		$this->file_folder_parent = intval($this->file_folder_parent);
-		return null;
-	}
-
 	public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
@@ -84,6 +78,8 @@ class CFileFolder extends w2p_Core_BaseObject {
     public function store(CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $stored = false;
+        $this->file_folder_id = (int) $this->file_folder_id;
+		$this->file_folder_parent = (int) $this->file_folder_parent;
 
         $errorMsgArray = $this->check();
 
