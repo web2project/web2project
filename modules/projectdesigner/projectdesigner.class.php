@@ -187,7 +187,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	$s .= '</td><td align="center" nowrap="nowrap">';
 	if ($a['user_task_priority'] < 0) {
 		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$a['user_task_priority'] . '.gif') . '" alt="" />';
-	} elseif ($a['task_priority'] > 0) {
+	} elseif ($a['user_task_priority'] > 0) {
 		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['user_task_priority'] . '.gif') . '" alt="" />';
 	}
 	$s .= '</td>';
