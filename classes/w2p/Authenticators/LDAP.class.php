@@ -139,6 +139,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 			$c->contact_job = $ldap_attribs['title'][0];
             $c->contact_email = $ldap_attribs['mail'][0];
             $c->contact_phone = $ldap_attribs['telephonenumber'][0];
+            $c->contact_owner = $AppUI->user_id;
             $c->store($AppUI);
             $contactArray = array('phone_mobile' => $ldap_attribs['mobile'][0]);
             $c->setContactMethods($contactArray);
