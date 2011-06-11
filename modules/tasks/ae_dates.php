@@ -48,17 +48,6 @@ $cwd = explode(',', $w2Pconfig['cal_working_days']);
 $cwd_conv = array_map('cal_work_day_conv', $cwd);
 $cwd_hr = implode(', ', $cwd_conv);
 
-function cal_work_day_conv($val) {
-	global $locale_char_set, $AppUI;
-	setlocale(LC_TIME, 'en');
-	$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
-	setlocale(LC_ALL, $AppUI->user_lang);
-
-	$day_name = $AppUI->_($wk[($val - LOCALE_FIRST_DAY) % 7]);
-	$day_name = utf8_encode($day_name);
-
-	return htmlspecialchars($day_name, ENT_COMPAT, $locale_char_set);
-}
 ?>
 
 <script language="javascript" type="text/javascript">
