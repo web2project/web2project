@@ -478,20 +478,6 @@ class CEvent extends w2p_Core_BaseObject {
             $errorArray['start_after_end'] = $baseErrorMsg . 'start date is after end date';
         }
 
-		//If the event recurs then set the end date day to be equal to the start date day and keep the hour:minute of the end date
-		//so that the event starts recurring from the start day onwards n times after the start date for the period given
-		//Meaning: The event end date day is useless as far as recurring events are concerned.
-		if ($this->event_recurs) {
-			$start_date = new w2p_Utilities_Date($this->event_start_date);
-			$end_date = new w2p_Utilities_Date($this->event_end_date);
-			$hour = $end_date->getHour();
-			$minute = $end_date->getMinute();
-			$end_date->setDate($start_date->getDate());
-			$end_date->setHour($hour);
-			$end_date->setMinute($minute);
-			$this->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
-		}
-
         $this->_error = $errorArray;
 		return $errorArray;
 	}
@@ -1003,6 +989,19 @@ class CEvent extends w2p_Core_BaseObject {
 
         if (!$this->event_recurs) {
             $this->event_times_recuring = 0;
+        } else {
+            //If the event recurs then set the end date day to be equal to the start date day and keep the hour:minute of the end date
+            //so that the event starts recurring from the start day onwards n times after the start date for the period given
+            //Meaning: The event end date day is useless as far as recurring events are concerned.
+
+            $start_date = new w2p_Utilities_Date($this->event_start_date);
+			$end_date = new w2p_Utilities_Date($this->event_end_date);
+			$hour = $end_date->getHour();
+			$minute = $end_date->getMinute();
+			$end_date->setDate($start_date->getDate());
+			$end_date->setHour($hour);
+			$end_date->setMinute($minute);
+			$this->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
         }
 
 		// ensure changes to check boxes and select lists are honoured
@@ -1036,9 +1035,7 @@ class CEvent extends w2p_Core_BaseObject {
         if ($stored) {
 // TODO:  I *really* don't like using the POST inside here..
             $this->updateAssigned(explode(',', $_POST['event_assigned']));
-        }
 
-        if ($stored) {
 			$custom_fields = new w2p_Core_CustomFields('calendar', 'addedit', $this->event_id, 'edit');
 			$custom_fields->bind($_POST);
 			$sql = $custom_fields->store($this->event_id); // Store Custom Fields
