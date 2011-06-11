@@ -822,3 +822,311 @@ function canTaskAccess($task_id, $task_access, $task_owner) {
 
 	return $retval;
 }
+
+// from modules/tasks/tasksperuser_sub.php
+function doChildren($list, $N, $id, $uid, $level, $maxlevels, $display_week_hours, $ss, $se) {
+	$tmp = '';
+	if ($maxlevels == -1 || $level < $maxlevels) {
+		for ($c = 0; $c < $N; $c++) {
+			$task = $list[$c];
+			if (($task->task_parent == $id) and isChildTask($task)) {
+				// we have a child, do we have the user as a member?
+				if (isMemberOfTask($list, $N, $uid, $task)) {
+					$tmp .= displayTask($list, $task, $level, $display_week_hours, $ss, $se, $uid);
+					$tmp .= doChildren($list, $N, $task->task_id, $uid, $level + 1, $maxlevels, $display_week_hours, $ss, $se);
+				}
+			}
+		}
+	}
+	return $tmp;
+}
+
+// from modules/tasks/tasksperuser_sub.php
+function isMemberOfTask($list, $N, $user_id, $task) {
+
+	global $user_assigned_tasks;
+
+	if (isset($user_assigned_tasks[$user_id])) {
+		if (in_array($task->task_id, $user_assigned_tasks[$user_id])) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// from modules/tasks/tasksperuser_sub.php
+function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $user_id) {
+
+	global $AppUI, $df, $durnTypes, $log_userfilter_users, $now, $priority,
+			$active_users, $z, $zi, $x, $userAlloc, $projects;
+	//if the user has no permission to the project don't show the tasks
+	if (!(key_exists($task->task_project, $projects))) {
+		return;
+	}
+
+	$zi++;
+	$users = $task->task_assigned_users;
+	$task->userPriority = $task->getUserSpecificTaskPriority($user_id);
+	$project = $task->getProject();
+	$tmp = '<tr>';
+	$tmp .= '<td align="center" nowrap="nowrap">';
+	$tmp .= '<input type="checkbox" name="selected_task[' . $task->task_id . ']" value="' . $task->task_id . '" />';
+	$tmp .= '</td>';
+	$tmp .= '<td align="center" nowrap="nowrap">';
+	if ($task->userPriority < 0) {
+		$tmp .= '<img src="' . w2PfindImage('icons/priority-' . -$task->userPriority . '.gif') . '" width="13" height="16" alt="">';
+	} elseif ($task->userPriority > 0) {
+		$tmp .= '<img src="' . w2PfindImage('icons/priority+' . $task->userPriority . '.gif') . '" width="13" height="16" alt="">';
+	}
+	$tmp .= '</td>';
+	$tmp .= '<td>';
+
+	for ($i = 0; $i < $level; $i++) {
+		$tmp .= '&#160';
+	}
+
+	if ($task->task_milestone == true) {
+		$tmp .= '<b>';
+	}
+	if ($level >= 1) {
+		$tmp .= w2PshowImage('corner-dots.gif', 16, 12, 'Subtask', '', 'tasks') . '&nbsp;';
+	}
+	$tmp .= '<a href="?m=tasks&a=view&task_id=' . $task->task_id . '">' . $task->task_name . '</a>';
+	if ($task->task_milestone == true) {
+		$tmp .= '</b>';
+	}
+	if ($task->task_priority < 0) {
+		$tmp .= '&nbsp;(<img src="' . w2PfindImage('icons/priority-' . -$task->task_priority . '.gif') . '" width="13" height="16" alt="" />)';
+	} elseif ($task->task_priority > 0) {
+		$tmp .= '&nbsp;(<img src="' . w2PfindImage('icons/priority+' . $task->task_priority . '.gif') . '" width="13" height="16" alt="" />)';
+	}
+	$tmp .= '</td>';
+	$tmp .= '<td align="left">';
+	$tmp .= '<a href="?m=projects&a=view&project_id=' . $task->task_project . '" style="background-color:#' . $project['project_color_identifier'] . '; color:' . bestColor($project['project_color_identifier']) . '">' . $project['project_name'] . '</a>';
+	$tmp .= '</td>';
+	$tmp .= '<td align="right" nowrap="nowrap">';
+	$tmp .= $task->task_duration . '&nbsp;' . mb_substr($AppUI->_($durnTypes[$task->task_duration_type]),0,1);
+	$tmp .= '</td>';
+	$tmp .= '<td align="center" nowrap="nowrap">';
+	$dt = new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T'));
+	$tmp .= $dt->format($df);
+	$tmp .= '&#160&#160&#160</td>';
+	$tmp .= '<td align="right" nowrap="nowrap">';
+	$ed = new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T'));
+	$dt = $now->dateDiff($ed);
+	$sgn = $now->compare($ed, $now);
+	$tmp .= ($dt * $sgn);
+	$tmp .= '</td>';
+	if ($display_week_hours) {
+		$tmp .= displayWeeks($list, $task, $level, $fromPeriod, $toPeriod);
+	}
+	$tmp .= '<td>';
+	$sep = $us = '';
+	foreach ($users as $key => $row) {
+		if ($row['user_id']) {
+			$us .= '<a href="?m=admin&a=viewuser&user_id=' . $row[0] . '">' . $sep . $row['contact_first_name'] . '&nbsp;' . $row['contact_last_name'] . '&nbsp;(' . $row['perc_assignment'] . '%)</a>';
+			$sep = ', ';
+		}
+	}
+	$tmp .= $us;
+	$tmp .= '</td>';
+
+	// create the list of possible assignees
+	$size = (count($active_users) > 5) ? 5 : 3;
+	$tmp .= '<td valign="top" align="center" nowrap="nowrap">';
+	$tmp .= '<select name="add_users" style="width:200px" size="'.$size.'" class="text" multiple="multiple" ondblclick="javascript:chAssignment(' . $user_id . ', 0, false)">';
+	foreach ($active_users as $id => $name) {
+		$tmp .= '<option value="' . $id . '">' . $name . '</option>';
+	}
+	$tmp .= '</select>';
+	$tmp .= '</td>';
+
+	$tmp .= '</tr>';
+	return $tmp;
+}
+
+// from modules/tasks/tasksperuser_sub.php
+function isChildTask($task) {
+	return $task->task_id != $task->task_parent;
+}
+
+// from modules/tasks/tasksperuser_sub.php
+function weekDates($display_allocated_hours, $fromPeriod, $toPeriod) {
+	if ($fromPeriod == -1) {
+		return '';
+	}
+	if (!$display_allocated_hours) {
+		return '';
+	}
+
+	$s = new w2p_Utilities_Date($fromPeriod);
+	$e = new w2p_Utilities_Date($toPeriod);
+	$sw = getBeginWeek($s);
+	$dw = ceil($e->dateDiff($s) / 7);
+	$ew = $sw + $dw;
+	$row = '';
+	for ($i = $sw; $i <= $ew; $i++) {
+		$wn = $s->getWeekofYear() % 52;
+		$wn = ($wn != 0) ? $wn : 52;
+
+		$row .= '<th title="' . $s->getYear() . '" nowrap="nowrap">' . $wn . '</th>';
+		$s->addSeconds(168 * 3600); // + one week
+	}
+	return $row;
+}
+
+// from modules/tasks/tasksperuser_sub.php
+function weekCells($display_allocated_hours, $fromPeriod, $toPeriod) {
+
+	if ($fromPeriod == -1) {
+		return 0;
+	}
+	if (!$display_allocated_hours) {
+		return 0;
+	}
+
+	$s = new w2p_Utilities_Date($fromPeriod);
+	$e = new w2p_Utilities_Date($toPeriod);
+	$sw = getBeginWeek($s);
+	$dw = ceil($e->dateDiff($s) / 7);
+	$ew = $sw + $dw;
+
+	return $ew - $sw + 1;
+}
+
+// from modules/tasks/tasksperuser_sub.php
+// Look for a user when he/she has been allocated
+// to this task and when. Report this in weeks
+// This function is called within 'displayTask()'
+function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
+
+	if ($fromPeriod == -1) {
+		return '';
+	}
+
+	$s = new w2p_Utilities_Date($fromPeriod);
+	$e = new w2p_Utilities_Date($toPeriod);
+	$sw = getBeginWeek($s);
+	$dw = ceil($e->dateDiff($s) / 7);
+	$ew = $sw + $dw;
+
+	$st = new w2p_Utilities_Date($task->task_start_date);
+	$et = new w2p_Utilities_Date($task->task_end_date);
+	$stw = getBeginWeek($st);
+	$dtw = ceil($et->dateDiff($st) / 7);
+	$etw = $stw + $dtw;
+
+	$row = '';
+	for ($i = $sw; $i <= $ew; $i++) {
+		if ($i >= $stw and $i < $etw) {
+			$color = 'blue';
+			if ($level == 0 and hasChildren($list, $task)) {
+				$color = '#C0C0FF';
+			} elseif ($level == 1 and hasChildren($list, $task)) {
+				$color = '#9090FF';
+			}
+			$row .= '<td  nowrap="nowrap" bgcolor="' . $color . '">';
+		} else {
+			$row .= '<td nowrap="nowrap">';
+		}
+		$row .= '&#160&#160</td>';
+	}
+
+	return $row;
+}
+
+// from modules/tasks/tasksperuser_sub.php
+function getBeginWeek($d) {
+	$dn = (int) $d->Format('%w');
+	$dd = new w2p_Utilities_Date($d);
+	$dd->subtractSeconds($dn * 24 * 3600);
+	return (int) $dd->Format('%U');
+}
+
+// from modules/tasks/tasksperuser_sub.php
+function getEndWeek($d) {
+
+	$dn = (int) $d->Format('%w');
+	if ($dn > 0) {
+		$dn = 7 - $dn;
+	}
+	$dd = new w2p_Utilities_Date($d);
+	$dd->addSeconds($dn * 24 * 3600);
+	return (int) $dd->Format('%U');
+}
+
+// from modules/tasks/tasksperuser_sub.php
+function hasChildren($list, $task) {
+	foreach ($list as $t) {
+		if ($t->task_parent == $task->task_id) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// from modules/tasks/tasksperuser_sub.php
+function getOrphanedTasks($tval) {
+    return (sizeof($tval->task_assigned_users) > 0) ? null : $tval;
+}
+
+// from modules/tasks/viewgantt.php
+function showfiltertask(&$a, $level=0) {
+     /* Add tasks to the filter task aray */
+     global $filter_task_list, $parents;
+     $filter_task_list[] = array($a, $level);
+     $parents[$a['task_parent']] = true;
+}
+// from modules/tasks/viewgantt.php
+function findfiltertaskchild(&$tarr, $parent, $level=0) {
+     GLOBAL $projects, $filter_task_list;
+     $level = $level + 1;
+     $n = count($tarr);
+     for ($x=0; $x < $n; $x++) {
+          if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']){
+               showfiltertask($tarr[$x], $level);
+               findfiltertaskchild($tarr, $tarr[$x]['task_id'], $level);
+          }
+     }
+}
+
+// from modules/system/roles/roles.class.php
+function showRoleRow($role = null) {
+	global $canEdit, $canDelete, $role_id, $AppUI, $roles;
+
+	$id = $role['id'];
+	$name = $role['value'];
+	$description = $role['name'];
+	
+	if (!$id) {
+		$roles_arr = array(0 => '(' . $AppUI->_('Copy Role') . '...)');
+		foreach ($roles as $role) {
+			$roles_arr[$role['id']] = $role['name']; 
+		}
+	}
+
+	$s = '';
+	if (($role_id == $id || $id == 0) && $canEdit) {
+		// edit form
+		$s .= '<form name="roleFrm" method="post" action="?m=system&u=roles" accept-charset="utf-8">';
+		$s .= '<input type="hidden" name="dosql" value="do_role_aed" />';
+		$s .= '<input type="hidden" name="del" value="0" />';
+		$s .= '<input type="hidden" name="role_id" value="' . $id . '" />';
+		$s .= '<tr><td>&nbsp;</td>';
+		$s .= '<td valign="top"><input type="text" size="20" name="role_name" value="' . $name . '" class="text" /></td>';
+		$s .= '<td valign="top"><input type="text" size="50" name="role_description" class="text" value="' . $description . '">' . ($id ? '' : '&nbsp;&nbsp;&nbsp;&nbsp;' . arraySelect($roles_arr, 'copy_role_id', 'class="text"', 0, true)) . '</td>';
+		$s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button" /></td>';
+	} else {
+		$s .= '<tr><td width="50" valign="top">';
+		if ($canEdit) {
+			$s .= '<a href="?m=system&u=roles&role_id=' . $id . '">' . w2PshowImage('icons/stock_edit-16.png') . '</a><a href="?m=system&u=roles&a=viewrole&role_id=' . $id . '" title="">' . w2PshowImage('obj/lock.gif') . '</a>';
+		}
+		if ($canDelete && strpos($name, 'admin') === false) {
+			$s .= '<a href=\'javascript:delIt(' . $id . ')\'>' . w2PshowImage('icons/stock_delete-16.png') . '</a>';
+		}
+		$s .= '</td><td valign="top">' . $name . '</td><td valign="top">' . $AppUI->_($description) . '</td><td valign="top" width="16">&nbsp;</td>';
+	}
+	$s .= '</tr>';
+	return $s;
+}
+
