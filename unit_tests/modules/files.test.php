@@ -127,7 +127,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
     {
       $file = new CFile();
 
-      $this->assertInstanceOf('CFile',                            $file);
       $this->assertObjectHasAttribute('file_id',                  $file);
       $this->assertObjectHasAttribute('file_real_filename',       $file);
       $this->assertObjectHasAttribute('file_project',             $file);
@@ -155,7 +154,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
     {
       $file = new CFile();
 
-      $this->assertInstanceOf('CFile', $file);
       $this->assertNull($file->file_id);
       $this->assertNull($file->file_real_filename);
       $this->assertNull($file->file_project);

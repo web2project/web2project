@@ -139,7 +139,6 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $contact = new CContact();
 
-        $this->assertInstanceOf('CContact', $contact);
         $this->assertObjectHasAttribute('contact_display_name',     $contact);
     }
 

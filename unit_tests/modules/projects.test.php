@@ -142,7 +142,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewProjectAttributes()
     {
-    	$this->assertInstanceOf('CProject', $this->obj);
     	$this->assertObjectHasAttribute('project_id',                  $this->obj);
     	$this->assertObjectHasAttribute('project_company',             $this->obj);
     	$this->assertObjectHasAttribute('project_name',                $this->obj);
@@ -179,7 +178,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewProjectAttributeValues()
     {
-        $this->assertInstanceOf('CProject', $this->obj);
         $this->assertNull($this->obj->project_id);
         $this->assertNull($this->obj->project_company);
         $this->assertNull($this->obj->project_department);

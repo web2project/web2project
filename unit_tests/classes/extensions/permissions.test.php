@@ -39,7 +39,6 @@ class w2p_Extensions_Permissions_Test extends PHPUnit_Framework_TestCase
 	{
 		$perms = new w2p_Extensions_Permissions();
 
-		$this->assertInstanceOf('w2p_Extensions_Permissions', $perms);
 		$perms->debug_text('test message');
 
 		$this->assertEquals('test message', $perms->msg());

@@ -120,7 +120,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $datetime   = new DateTime();
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertInstanceOf('w2p_Utilities_Date', $date);
         $this->assertEquals($datetime->format('Y'),   $date->year);
         $this->assertEquals($datetime->format('m'),   $date->month);
         $this->assertEquals($datetime->format('d'),   $date->day);
@@ -141,7 +140,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $datetime   = new DateTime('2010-08-07 11:00:00');
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertInstanceOf('w2p_Utilities_Date',     $date);
         $this->assertEquals($datetime->format('Y'),       $date->year);
         $this->assertEquals($datetime->format('m'),       $date->month);
         $this->assertEquals($datetime->format('d'),       $date->day);
@@ -161,7 +159,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $datetime   = new DateTime('2010-08-07 11:00:00', new DateTimeZone('America/Halifax'));
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertInstanceOf('w2p_Utilities_Date', $date);
         $this->assertEquals($datetime->format('Y'),   $date->year);
         $this->assertEquals($datetime->format('m'),   $date->month);
         $this->assertEquals($datetime->format('d'),   $date->day);
@@ -181,7 +178,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $datetime   = new DateTime();
         $timezone   = new DateTimeZone($datetime->getTimezone()->getName());
 
-        $this->assertInstanceOf('w2p_Utilities_Date', $date);
         $this->assertEquals(2010,                     $date->year);
         $this->assertEquals(35,                       $date->month);
         $this->assertEquals(35,                       $date->day);
@@ -202,7 +198,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $date = new w2p_Utilities_Date('2010-08-07 22:10:27', 'Halifax');
         $datetime = new DateTime('2010-08-07 22:10:27');
 
-        $this->assertInstanceOf('w2p_Utilities_Date', $date);
         $this->assertEquals($datetime->format('Y'),   $date->year);
         $this->assertEquals($datetime->format('m'),   $date->month);
         $this->assertEquals($datetime->format('d'),   $date->day);

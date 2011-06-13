@@ -63,7 +63,6 @@ class Base_Test extends PHPUnit_Framework_TestCase
     {
         $base_controller = new w2p_Controllers_Base(new CLink(), false, 'prefix', '/success', '/failure');
 
-        $this->assertInstanceOf('w2p_Controllers_Base',     $base_controller);
         $this->assertObjectHasAttribute('delete',           $base_controller);
         $this->assertObjectHasAttribute('successPath',      $base_controller);
         $this->assertObjectHasAttribute('errorPath',        $base_controller);
@@ -72,6 +71,5 @@ class Base_Test extends PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('success',          $base_controller);
         $this->assertObjectHasAttribute('resultPath',       $base_controller);
         $this->assertObjectHasAttribute('resultMessage',    $base_controller);
-        $this->assertInstanceOf('CLink',                    $base_controller->object);
     }
 }
