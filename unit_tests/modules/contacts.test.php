@@ -304,7 +304,7 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * expectedException PHPUnit_Framework_Error
      */
     public function testIs_Alpha()
     {
@@ -318,7 +318,7 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * expectedException PHPUnit_Framework_Error
      */
     public function testGetCompanyName()
     {

@@ -502,7 +502,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests loading a task that is dynamic skipping update.
      *
-     * @expectedException PHPUnit_Framework_Error
+     * expectedException PHPUnit_Framework_Error
      */
     public function testLoadDynamicSkipUpdate()
     {
@@ -636,7 +636,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      * Tests that the peek function returns a task object that has
      * not had it's data updated if it is dynamic.
      *
-     * @expectedException PHPUnit_Framework_Error
+     * expectedException PHPUnit_Framework_Error
      */
     public function testPeek()
     {
