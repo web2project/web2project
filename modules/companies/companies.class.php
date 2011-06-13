@@ -79,6 +79,7 @@ class CCompany extends w2p_Core_BaseObject {
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
+        $this->_error = array();
         /*
          * TODO: This should probably use the canDelete method from above too to
          *   not only check permissions but to check dependencies... luckily the
@@ -97,10 +98,10 @@ class CCompany extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $this->company_id = (int) $this->company_id;

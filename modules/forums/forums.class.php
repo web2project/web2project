@@ -150,10 +150,10 @@ class CForum extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         if ($this->forum_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
@@ -175,6 +175,7 @@ class CForum extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('forums', 'delete', $this->forum_id)) {
             $q = new w2p_Database_Query;

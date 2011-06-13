@@ -45,10 +45,10 @@ class CFile extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
@@ -242,6 +242,7 @@ class CFile extends w2p_Core_BaseObject {
 		global $AppUI;
         global $helpdesk_available;
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
             // remove the file from the file system

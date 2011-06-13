@@ -68,6 +68,7 @@ class CResource extends w2p_Core_BaseObject {
 
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('resources', 'delete', $this->resource_id)) {
             if ($msg = parent::delete()) {

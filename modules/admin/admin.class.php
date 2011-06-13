@@ -41,9 +41,8 @@ class CUser extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
-        if (count($errorMsgArray) > 0) {
-            $this->_error = $errorMsgArray;
+        $this->_error = $this->check();
+        if (count($this->_error)) {
             return false;
         }
 
@@ -138,6 +137,7 @@ class CUser extends w2p_Core_BaseObject {
 		global $AppUI;
         $perms = $AppUI->acl();
         $canDelete = (int) $this->canDelete();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('users', 'delete', $this->user_id) && $canDelete) {
 

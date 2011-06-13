@@ -41,10 +41,10 @@ class CForumMessage extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $q = new w2p_Database_Query;
@@ -93,6 +93,7 @@ class CForumMessage extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
         $result = false;
+        $this->_error = array();
 
         if ($perms->checkModuleItem('forums', 'delete', $this->project_id)) {
             $q = new w2p_Database_Query;

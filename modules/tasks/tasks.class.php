@@ -538,10 +538,10 @@ class CTask extends w2p_Core_BaseObject {
         }
 
 		$importing_tasks = false;
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $this->task_target_budget = filterCurrency($this->task_target_budget);
@@ -749,6 +749,7 @@ class CTask extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('tasks', 'delete', $this->task_id)) {
             //load it before deleting it because we need info on it to update the parents later on

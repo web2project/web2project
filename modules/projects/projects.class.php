@@ -157,6 +157,7 @@ class CProject extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
         $result = false;
+        $this->_error = array();
 
         /*
          * TODO: This should probably use the canDelete method from above too to
@@ -498,10 +499,10 @@ class CProject extends w2p_Core_BaseObject {
             $this->project_end_date = null;
         }
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $this->project_id = (int) $this->project_id;

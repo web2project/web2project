@@ -101,6 +101,7 @@ class CLink extends w2p_Core_BaseObject {
 
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('links', 'delete', $this->link_id)) {
             if ($msg = parent::delete()) {
@@ -118,10 +119,10 @@ class CLink extends w2p_Core_BaseObject {
             $this->link_url = 'http://'.$this->link_url;
         }
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
         /*
          * TODO: I don't like the duplication on each of these two branches, but I

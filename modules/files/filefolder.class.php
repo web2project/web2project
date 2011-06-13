@@ -41,9 +41,9 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
-        $errorMsgArray = $this->canDelete(null, $this->file_folder_id);
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        $this->_error = $this->canDelete(null, $this->file_folder_id);
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         if ($perms->checkModuleItem('files', 'edit')) {
@@ -85,10 +85,10 @@ class CFileFolder extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         /*
