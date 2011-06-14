@@ -86,9 +86,9 @@ class CContact extends w2p_Core_BaseObject {
             $this->contact_display_name = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
         }
 
-        $errorMsgArray = $this->check();
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        $this->_error = $this->check();
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $q = new w2p_Database_Query;
@@ -174,6 +174,7 @@ class CContact extends w2p_Core_BaseObject {
 
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
+        $this->_error = array();
 
         if ($msg = parent::delete()) {
             return $msg;

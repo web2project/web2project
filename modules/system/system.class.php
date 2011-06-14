@@ -179,6 +179,7 @@ class bcode extends w2p_Core_BaseObject {
 
 	public function delete(CAppUI $AppUI = null) {
 
+        $this->_error = array();
 		$q = new w2p_Database_Query;
 		$q->addTable('billingcode');
 		$q->addUpdate('billingcode_status', '1');
@@ -196,6 +197,7 @@ class bcode extends w2p_Core_BaseObject {
         global $AppUI;
         $perms = $AppUI->acl();
         $stored = false;
+        $this->_error = array();
 
         $q = new w2p_Database_Query;
 		$q->addQuery('billingcode_id');

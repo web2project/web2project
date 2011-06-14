@@ -90,8 +90,10 @@ class CProject extends w2p_Core_BaseObject {
     }
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
-		$this->project_contacts = explode(',', $this->project_contacts);
-        return parent::bind($hash, $prefix, $checkSlashes, $bindAll);
+        $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
+        $this->project_contacts = explode(',', $this->project_contacts);
+
+        return $result;
     }
 
 	public function check() {
@@ -156,6 +158,7 @@ class CProject extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
         $result = false;
+        $this->_error = array();
 
         /*
          * TODO: This should probably use the canDelete method from above too to
@@ -497,10 +500,10 @@ class CProject extends w2p_Core_BaseObject {
             $this->project_end_date = null;
         }
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $this->project_id = (int) $this->project_id;
@@ -1125,7 +1128,7 @@ function projects_list_data($user_id = false) {
 	if ($addPwOiD && !empty($owner_ids)) {
 		$q->addWhere('pr.project_owner IN (' . implode(',', $owner_ids) . ')');
 	}
-
+    $orderby = ('project_company' == $orderby) ? 'company_name' : $orderby;
 	$q->addGroup('pr.project_id');
 	$q->addOrder($orderby . ' ' .$orderdir);
 	$prj = new CProject();

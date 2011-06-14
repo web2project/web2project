@@ -45,10 +45,10 @@ class CFile extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
@@ -243,6 +243,7 @@ class CFile extends w2p_Core_BaseObject {
 		global $AppUI;
         global $helpdesk_available;
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
             // remove the file from the file system
@@ -726,7 +727,7 @@ function file_show_attr() {
 		$str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
 	} else {
 		$the_value = (strlen($obj->file_version) > 0 ? $obj->file_version : '1');
-		$str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" />';
+		$str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" class="text" />';
 	}
 
 	$str_out .= '</td>';
@@ -743,7 +744,7 @@ function file_show_attr() {
 
 	// Category
 	$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Category') . ':</td>';
-	$str_out .= '<td align="left">' . arraySelect(w2PgetSysVal('FileType'), 'file_category', '' . $select_disabled, $obj->file_category, true) . '<td>';
+	$str_out .= '<td align="left">' . arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $obj->file_category, true) . '<td>';
 
 	// ---------------------------------------------------------------------------------
 

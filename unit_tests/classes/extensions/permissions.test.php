@@ -1,6 +1,6 @@
 <?php
 /**
- * Necessary global variables 
+ * Necessary global variables
  */
 global $db;
 global $ADODB_FETCH_MODE;
@@ -27,7 +27,7 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once 'PHPUnit/Extensions/Database/DataSet/DataSetFilter.php';
 /**
  * PermissionsTest Class.
- * 
+ *
  * Class to test the permissions class
  * @author D. Keith Casey, Jr.
  * @package web2project
@@ -38,10 +38,9 @@ class w2p_Extensions_Permissions_Test extends PHPUnit_Framework_TestCase
 	public function testDebugText()
 	{
 		$perms = new w2p_Extensions_Permissions();
-    
-		$this->assertType('w2p_Extensions_Permissions', $perms);
+
 		$perms->debug_text('test message');
-    
+
 		$this->assertEquals('test message', $perms->msg());
 	}
 }

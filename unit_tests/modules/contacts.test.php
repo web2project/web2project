@@ -67,7 +67,7 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     protected $backupGlobals = FALSE;
     protected $obj = null;
     protected $post_data = array();
-    
+
     /**
      * Return database connection for tests
      */
@@ -139,7 +139,6 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $contact = new CContact();
 
-        $this->assertType('CContact', $contact);
         $this->assertObjectHasAttribute('contact_display_name',     $contact);
     }
 
@@ -304,6 +303,9 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertFalse($contact->isUser());
     }
 
+    /**
+     * expectedException PHPUnit_Framework_Error
+     */
     public function testIs_Alpha()
     {
         $contact = new CContact();
@@ -315,8 +317,8 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertFalse($contact->is_alpha(3.14159));
     }
 
-    /*
-     * @expectedExcpetion PHPUnit_Framework_Error
+    /**
+     * expectedException PHPUnit_Framework_Error
      */
     public function testGetCompanyName()
     {

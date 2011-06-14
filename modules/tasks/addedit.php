@@ -166,7 +166,11 @@ if (is_null($task->task_dynamic)) {
 
 $can_edit_time_information = $task->canUserEditTimeInformation();
 //get list of projects, for task move drop down list.
-$projects = $project->getAllowedProjects($AppUI->user_id);
+$tmpprojects = $project->getAllowedProjects($AppUI->user_id);
+$projects = array();
+foreach($tmpprojects as $proj) {
+    $projects[$proj['project_id']] = $proj['project_name'];
+}
 ?>
 <script language="javascript" type="text/javascript">
 var task_id = '<?php echo $task->task_id; ?>';

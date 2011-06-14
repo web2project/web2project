@@ -82,6 +82,7 @@ class CEvent extends w2p_Core_BaseObject {
 	 */
 	public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($this->canDelete($msg) && $perms->checkModuleItem('events', 'delete', $this->event_id)) {
             if ($msg = parent::delete()) {
@@ -601,9 +602,9 @@ class CEvent extends w2p_Core_BaseObject {
 		$this->event_type = (int) $this->event_type;
 		$this->event_cwd = (int) $this->event_cwd;
 
-        $errorMsgArray = $this->check();
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        $this->_error = $this->check();
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $this->event_start_date = $AppUI->convertToSystemTZ($this->event_start_date);

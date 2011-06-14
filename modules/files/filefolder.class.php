@@ -35,9 +35,9 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
-        $errorMsgArray = $this->canDelete(null, $this->file_folder_id);
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        $this->_error = $this->canDelete(null, $this->file_folder_id);
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         if ($perms->checkModuleItem('files', 'edit')) {
@@ -81,10 +81,10 @@ class CFileFolder extends w2p_Core_BaseObject {
         $this->file_folder_id = (int) $this->file_folder_id;
 		$this->file_folder_parent = (int) $this->file_folder_parent;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         /*
@@ -432,6 +432,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
                         <input type="hidden" name="redirect" value="' . $current_uri . '" />
                     </form>
                 ';
+        $junkFile = new CFile(); // TODO: This is just to get getIcon included..
 		$file_icon = getIcon($row['file_type']);
 		$s .= '<a href="./fileviewer.php?file_id=' . $latest_file['file_id'] . '"><img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $latest_file['file_name'] . '</a></td>';
 		$s .= '<td width="20%">' . w2p_textarea($latest_file['file_description']) . '</td><td width="5%" nowrap="nowrap" align="right">';
