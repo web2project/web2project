@@ -1130,3 +1130,243 @@ function showRoleRow($role = null) {
 	return $s;
 }
 
+// from modules/system/syskeys/syskeys.class.php
+function parseFormatSysval($text, $syskey) {
+	$q = new w2p_Database_Query;
+	$q->addTable('syskeys');
+	$q->addQuery('syskey_type, syskey_sep1, syskey_sep2');
+	$q->addWhere('syskey_id = ' . (int)$syskey);
+	$q->exec();
+	$row = $q->fetchRow();
+	$q->clear();
+	// type 0 = list
+	$sep1 = $row['syskey_sep1']; // item separator
+	$sep2 = $row['syskey_sep2']; // alias separator
+
+	// A bit of magic to handle newlines and returns as separators
+	// Missing sep1 is treated as a newline.
+	if (!isset($sep1) || empty($sep1)) {
+		$sep1 = "\n";
+	}
+	if ($sep1 == "\\n") {
+		$sep1 = "\n";
+	}
+	if ($sep1 == "\\r") {
+		$sep1 = "\r";
+	}
+
+	$temp = explode($sep1, $text);
+	$arr = array();
+	// We use trim() to make sure a numeric that has spaces
+	// is properly treated as a numeric
+	foreach ($temp as $item) {
+		if ($item) {
+			$sep2 = empty($sep2) ? "\n" : $sep2;
+			$temp2 = explode($sep2, $item);
+			if (isset($temp2[1])) {
+				$arr[mb_trim($temp2[0])] = mb_trim($temp2[1]);
+			} else {
+				$arr[mb_trim($temp2[0])] = mb_trim($temp2[0]);
+			}
+		}
+	}
+	return $arr;
+}
+
+// from modules/system/billingcode.php
+function showcodes(&$a) {
+	global $AppUI, $company_id;
+
+	$alt = htmlspecialchars($a['billingcode_desc']);
+	$s = '
+<tr>
+	<td width=40>
+		<a href="?m=system&amp;a=billingcode&amp;company_id=' . $company_id . '&amp;billingcode_id=' . $a['billingcode_id'] . '" title="' . $AppUI->_('edit') . '">
+			<img src="' . w2PfindImage('icons/stock_edit-16.png') . '" border="0" alt="Edit" /></a>';
+
+	if ($a['billingcode_status'] == 0)
+		$s .= '<a href="javascript:delIt2(' . $a['billingcode_id'] . ');" title="' . $AppUI->_('delete') . '">
+			<img src="' . w2PfindImage('icons/stock_delete-16.png') . '" border="0" alt="Delete" /></a>';
+
+	$s .= '
+	</td>
+	<td align="left">&nbsp;' . $a['billingcode_name'] . ($a['billingcode_status'] == 1 ? ' (deleted)' : '') . '</td>
+	<td nowrap="nowrap" align="center">' . $a['billingcode_value'] . '</td>
+	<td nowrap="nowrap">' . $a['billingcode_desc'] . '</td>
+</tr>';
+	echo $s;
+}
+
+// from modules/smartsearch/smartsearch.class.php
+function highlight($text, $keyval) {
+	global $ssearch;
+
+	$txt = $text;
+	$hicolor = array('#FFFF66', '#ADD8E6', '#90EE8A', '#FF99FF', '#FFA500', '#ADFF2F', '#00FFFF', '#FF69B4');
+	$keys = array();
+	$keys = (!is_array($keyval)) ? array($keyval) : $keyval;
+
+	foreach ($keys as $key_idx => $key) {
+		if (mb_strlen($key) > 0) {
+			$key = stripslashes($key);
+			$metacharacters = array('\\', '(', ')', '$', '[', '*', '+', '|', '.', '^', '?');
+			$metareplacement = array('\\\\', '\(', '\)', '\$', '\[', '\*', '\+', '\|', '\.', '\^', '\?');
+			$key = mb_str_replace($metacharacters, $metareplacement, $key);
+			if (isset($ssearch['ignore_specchar']) && ($ssearch['ignore_specchar'] == 'on')) {
+				if ($ssearch['ignore_case'] == 'on') {
+					$txt = preg_replace('/'.recode2regexp_utf8($key).'/i', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
+				} else {
+					$txt = preg_replace('/'.(recode2regexp_utf8($key)).'/', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
+				}
+			} elseif (!isset($ssearch['ignore_specchar']) || ($ssearch['ignore_specchar'] == '')) {
+				if ($ssearch['ignore_case'] == 'on') {
+					$txt = preg_replace('/'.$key.'/i', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
+				} else {
+					$txt = preg_replace('/'.$key.'/', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
+				}
+			} else {
+				$txt = preg_replace('/'.$key.'/i', '<span style="background:' . $hicolor[$key_idx] . '" >\\0</span>', $txt);
+			}
+		}
+	}
+	return $txt;
+}
+
+// from modules/smartsearch/smartsearch.class.php
+function recode2regexp_utf8($input) {
+	$result = '';
+	for ($i = 0, $i_cmp = mb_strlen($input); $i < $i_cmp; ++$i)
+		switch ($input[$i]) {
+			case 'A':
+			case 'a':
+				$result .= '(a|A!|A�|A?|A�)';
+				break;
+			case 'C':
+			case 'c':
+				$result .= '(c|�?|�O)';
+				break;
+			case 'D':
+			case 'd':
+				$result .= '(d|�?|Ď)';
+				break;
+			case 'E':
+			case 'e':
+				$result .= '(e|A�|ě|A�|Ě)';
+				break;
+			case 'I':
+			case 'i':
+				$result .= '(i|A�|A?)';
+				break;
+			case 'L':
+			case 'l':
+				$result .= '(l|�o|�3|�1|�1)';
+				break;
+			case 'N':
+			case 'n':
+				$result .= '(n|A^|A�)';
+				break;
+			case 'O':
+			case 'o':
+				$result .= '(o|A3|A�|A�|A�)';
+				break;
+			case 'R':
+			case 'r':
+				$result .= '(r|A�|A�|A�|A~)';
+				break;
+			case 'S':
+			case 's':
+				$result .= '(s|A!|A�)';
+				break;
+			case 'T':
+			case 't':
+				$result .= '(t|AY|A�)';
+				break;
+			case 'U':
+			case 'u':
+				$result .= '(u|Ao|A�|A�|A�)';
+				break;
+			case 'Y':
+			case 'y':
+				$result .= '(y|A1|A?)';
+				break;
+			case 'Z':
+			case 'z':
+				$result .= '(z|A3|A1)';
+				break;
+			default:
+				$result .= $input[$i];
+		}
+	return $result;
+}
+
+// from modules/resources/tasks_dosql.addedit.php
+/**
+ * presave functions are called before the session storage of tab data
+ * is destroyed.  It can be used to save this data to be used later in
+ * the postsave function.
+ */
+function resource_presave() {
+	global $other_resources;
+	// check to see if we are in the post save list or if we need to
+	// interrogate the session.
+	$other_resources = w2PgetParam($_POST, 'hresource_assign');
+}
+
+// from modules/resources/tasks_dosql.addedit.php
+/**
+ * postsave functions are only called after a succesful save.  They are
+ * used to perform database operations after the event.
+ */
+function resource_postsave() {
+	global $other_resources;
+	global $obj;
+	$task_id = $obj->task_id;
+	if (isset($other_resources)) {
+		$value = array();
+		$reslist = explode(';', $other_resources);
+		foreach ($reslist as $res) {
+			if ($res) {
+				list($resource, $perc) = explode('=', $res);
+				$value[] = array($task_id, $resource, $perc);
+			}
+		}
+		// first delete any elements already there, then replace with this
+		// list.
+		$q = new w2p_Database_Query;
+		$q->setDelete('resource_tasks');
+		$q->addWhere('task_id = ' . (int)$obj->task_id);
+		$q->exec();
+		$q->clear();
+		if (count($value)) {
+			foreach ($value as $v) {
+				$q->addTable('resource_tasks');
+				$q->addInsert('task_id,resource_id,percent_allocated', $v, true);
+				$q->exec();
+				$q->clear();
+			}
+		}
+	}
+}
+
+// from modules/public/contact_selector.php
+function remove_invalid($arr) {
+	$result = array();
+	foreach ($arr as $val) {
+		if (!empty($val) && mb_trim($val) !== '') {
+			$result[] = $val;
+		}
+	}
+	return $result;
+}
+
+// from modules/public/selector.php
+function selPermWhere($obj, $idfld, $namefield, $prefix = '') {
+	global $AppUI;
+
+	$allowed = $obj->getAllowedRecords($AppUI->user_id, $idfld . ', ' . $namefield, '', '', '', $prefix);
+	if (count($allowed)) {
+		return ' ' . $idfld . ' IN (' . implode(',', array_keys($allowed)) . ') ';
+	} else {
+		return null;
+	}
+}
