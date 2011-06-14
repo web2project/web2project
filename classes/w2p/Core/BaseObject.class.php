@@ -66,7 +66,7 @@ abstract class w2p_Core_BaseObject
 	}
 
 	/**
-	 *	@return string Returns the error message
+	 *	@return string or array Returns the error message
 	 */
 	public function getError()
 	{
@@ -168,11 +168,13 @@ abstract class w2p_Core_BaseObject
 	 *	Generic check method
 	 *
 	 *	Can be overloaded/supplemented by the child class
-	 *	@return array() if the object is ok
+	 *	@return array() of size zero if the object is ok
 	 */
 	public function check()
 	{
-		return array();
+		$this->_errror = array();
+
+        return $this->_errror;
 	}
 
 	/**

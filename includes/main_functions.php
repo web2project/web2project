@@ -98,6 +98,12 @@ function w2p_autoload($class_name) {
                 return;
             }
 
+
+            /* TODO: I really hate the duplication here.. */
+            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+                return;
+            }
             if ($name[0] == 'c') {
                 $name = substr($name, 1);
                 if (in_array($name, array('system'))) {
@@ -106,12 +112,6 @@ function w2p_autoload($class_name) {
                     $name = w2p_pluralize($name);
                 }
             }
-            /* TODO: I really hate the duplication here.. */
-            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-                return;
-            }
-            $name = substr($name, 0, -1);
             if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
                 require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
                 return;

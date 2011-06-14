@@ -64,6 +64,8 @@ class CCompany extends w2p_Core_BaseObject {
       if ('' != $this->company_email && !w2p_check_email($this->company_email)) {
         $errorArray['company_email'] = $baseErrorMsg . 'company email is not formatted properly';
       }
+
+      $this->_error = $errorArray;
 	  return $errorArray;
 	}
 

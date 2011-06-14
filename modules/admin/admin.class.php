@@ -33,6 +33,7 @@ class CUser extends w2p_Core_BaseObject {
             $errorArray['user_exists'] = $baseErrorMsg . 'this user already exists';
         }
 
+        $this->_error = $errorArray;
 		return $errorArray;
 	}
 
