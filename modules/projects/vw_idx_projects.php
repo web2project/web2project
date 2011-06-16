@@ -265,6 +265,15 @@ if ($is_tabbed) {
                                 $s .= $row[$field] ? '</a>' : '';
                                 $s .= '</td>';
                                 break;
+                            case 'department_list':
+                                $dept_array = explode(',',$row[$field]);
+                                $s .= '<td>';
+                                foreach ($dept_array as $dept) {
+                                    $s .= $dept;
+                                    $s .= '<br />';
+                                }
+                                $s .= '</td>';
+                                break;
                             default:
                                 $s .= w2p_Output_HTMLHelper::renderColumn($AppUI, $field, $row);
                         }
