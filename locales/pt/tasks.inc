@@ -1,6 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+'(Task Type Filter)'=>'(Filtro do Tipo de Tarefa)',
 '-'=>'-',
 'Access'=>'Acesso',
 'Action'=>'Acção',
@@ -20,6 +21,7 @@
 'All Users'=>'Todos os Utilizadores',
 'Allow two concurrent tasks when there are no vital users'=>'Permitir duas tarefas concorrentes quando não existam utilizadores vitais',
 'Archived Projects'=>'Projectos Arquivados',
+'Archived/Template Projects'=>'Projectos Arquivados/Modelos',
 'Are you sure you want to unassign the User from Task(s)?'=>'Tem a certeza que deseja remover o Utilizador da Tarefa(s)?',
 'Assign selected Users to selected Tasks'=>'Atribuir as Tarefas seleccionadas aos Utilizadores seleccionados',
 'Assign with Percentage'=>'Atribuir uma percentagem',
@@ -109,6 +111,7 @@
 'Move'=>'Mover',
 'Move this task (and its children), to project'=>'Mover esta tarefa (e subtarefas), para o projecto',
 'Must in general be entered with protocol name, e.g. http://...'=>'Deve, em geral, ser introduzido com o protocolo, i.e. http://...',
+'My Gantt'=>'Meu Gantt',
 'My Projects'=>'Meus Projectos',
 'My Tasks'=>'Minhas Tarefas',
 'My Tasks (show in-active)'=>'Minhas Tarefas (mostra no activo)',
@@ -167,6 +170,7 @@
 'Show captions'=>'Mostrar textos',
 'Show debug info'=>'Mostra informação de depuração',
 'Show work instead of duration'=>'Mostrar trabalho invés da duração',
+'Sort by Task Name'=>'Ordenar pelo Nome das Tarefas',
 'Start'=>'Início',
 'Start Date'=>'Dia de Inicio',
 'Start Time'=>'Hora inicial',
