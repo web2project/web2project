@@ -12,8 +12,7 @@ $status = w2PgetSysVal('TaskStatus');
 
 $priority = w2PgetSysVal('TaskPriority');
 
-// user based access
-$task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
+
 
 /*
 * CTask Class
@@ -29,6 +28,10 @@ class CTask extends w2p_Core_BaseObject {
      * @var string
      */
     public $task_name = null;
+
+    // user based access
+    // Needs to be inside the class, otherwise it doesn't find 'CTask'
+    public $task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
 
     /**
      * @var int
@@ -57,7 +60,6 @@ class CTask extends w2p_Core_BaseObject {
     public $task_order = null;
     public $task_client_publish = null;
     public $task_dynamic = null;
-    public $task_access = null;
     public $task_notify = null;
     public $task_departments = null;
     public $task_contacts = null;

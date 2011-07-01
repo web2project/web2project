@@ -5,7 +5,13 @@ if ($dialog) {
 } else {
 	$page_title = ($w2Pconfig['page_title'] == 'web2Project') ? $w2Pconfig['page_title'] . '&nbsp;' . $AppUI->getVersion() : $w2Pconfig['page_title'];
 }
+
+## santosdiez
+## Include the file first of all, so that the AJAX methods are printed through xajax below
+require W2P_BASE_DIR . '/includes/ajax_functions.php';
+## /santosdiez
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
