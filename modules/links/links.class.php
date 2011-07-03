@@ -96,6 +96,7 @@ class CLink extends w2p_Core_BaseObject {
             $errorArray['link_owner'] = $baseErrorMsg . 'link owner is not set';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
     }
 

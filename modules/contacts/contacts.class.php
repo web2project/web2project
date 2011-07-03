@@ -193,6 +193,7 @@ class CContact extends w2p_Core_BaseObject {
             $errorArray['contact_owner'] = $baseErrorMsg . 'contact owner is not set';
         }
 
+        $this->_error = $errorArray;
 	    return $errorArray;
 	}
 

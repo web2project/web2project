@@ -137,6 +137,7 @@ class CDepartment extends w2p_Core_BaseObject {
                 $errorArray['dept_url'] = $baseErrorMsg . 'department url is not formatted properly';
             }
 
+            $this->_error = $errorArray;
             return $errorArray;
 	}
 
