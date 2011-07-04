@@ -152,6 +152,7 @@ input, textarea {
     margin-top  : 2px;
     -moz-border-radius : 4px;
     -webkit-border-radius:4px;
+    border-radius:4px;
 }
 
 /* Focus action  */
@@ -180,6 +181,7 @@ input:focus, textarea:focus {
   cursor        : pointer !important;
   -moz-border-radius : 3.5px;
   -webkit-border-radius:3.5px;
+  border-radius:3.5px;
 }
 
 /* Focus action  */
@@ -202,6 +204,8 @@ input:focus, textarea:focus {
   margin-left   : 2px;
   cursor        : pointer !important;
   -moz-border-radius : 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
 }
 
 /* web2Project Top Banner and Top Nav Customization */
@@ -292,6 +296,7 @@ table.std {
 	background : #D4D0C8;
     -moz-border-radius : 4px;
     -webkit-border-radius:4px;
+    border-radius: 4px;
 }
 table.std TH {
 	color            : #333;
@@ -610,6 +615,7 @@ table.tbl td.event td {
     text-decoration: none;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+    border-radius: 4px;
 }
 .crumb ul li a:active {
     color: #AD0000;
@@ -624,6 +630,7 @@ table.tbl td.event td {
     border: 1px solid #000000; /* Button Border */
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+    border-radius:4px;
 }
 
 /*tooltip*/
@@ -670,12 +677,12 @@ h4 {
 	background: rgb(25,25,25);
 	background: rgba(25,25,25,0.92);
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(transparent), to(#000));
-	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	box-shadow: 0 0 3px #555;
+	border-radius: 5px;
 	-webkit-box-shadow: 0 0 3px #555;
 	-moz-box-shadow: 0 0 3px #555;
+	box-shadow: 0 0 3px #555;
 }
 
 #tiptip_arrow, #tiptip_arrow_inner {
