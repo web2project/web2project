@@ -2128,6 +2128,11 @@ class CTask extends w2p_Core_BaseObject {
         $project = new CProject();
         $project_name = $project->load($this->task_project)->project_name;
 
+        // Check to see that the project is both active and not a template
+        if (!$project->project_active || $project->project_status == w2PgetConfig('template_projects_status_id', 0)) {
+            return -1;
+        }
+
 		$subject = $prefix . ' ' . $msg . ' ' . $this->task_name . '::' . $project_name;
 
 		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': START-TIME' . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': END-TIME' . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
