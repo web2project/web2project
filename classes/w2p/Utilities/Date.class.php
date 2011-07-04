@@ -561,6 +561,8 @@ class w2p_Utilities_Date extends Date {
 		}
 		$this->addSeconds($offset);
         $this->setTZ((is_object($tz)) ? $tz->id : $tz);
+
+        return $this;
 	}
 
 	public function setTZ($tz)
