@@ -1099,12 +1099,9 @@ function projects_list_data($user_id = false) {
 		$q->addQuery($field);
 	}
 	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
-	$q->addQuery('GROUP_CONCAT(DISTINCT(depts.dept_name)) AS department_list');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
 	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
 	$q->addJoin('tasks_problems', 'tp', 'pr.project_id = tp.task_project');
-	$q->addJoin('project_departments', 'prdepts', 'pr.project_id = prdepts.project_id');
-	$q->addJoin('departments', 'depts', 'depts.dept_id = prdepts.department_id');
 	if ($addProjectsWithAssignedTasks) {
 		$q->addJoin('tasks_users', 'tu', 'pr.project_id = tu.task_project');
 	}
