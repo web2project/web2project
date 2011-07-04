@@ -13,6 +13,10 @@ global $currentTabId;
 global $currentTabName;
 global $tabbed, $m;
 
+// add to allow for returning to other modules besides Files
+$current_uriArray = parse_url($_SERVER['REQUEST_URI']);
+$current_uri = $current_uriArray['query'];
+
 $tab = ((!$company_id && !$project_id && !$task_id) || $m == 'files') ? $currentTabId : 0;
 $page = w2PgetParam($_GET, 'page', 1);
 if (!isset($project_id)) {
@@ -187,7 +191,7 @@ function expand(id){
 	<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('Checkout Reason') ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('co') ?></th>
-	<th nowrap="nowrap">&nbsp;</th>
+	<th nowrap="nowrap" colspan="2">&nbsp;</th>
 </tr>
 <?php
 	$fp = -1;
@@ -313,6 +317,18 @@ function expand(id){
 		<td nowrap="nowrap" width="20">
 		<?php if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
 			echo '<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
+                ?>
+		</td>
+                
+		<td nowrap="nowrap" width="20">
+                <?php
+                    echo '<form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
+                        <input type="hidden" name="dosql" value="do_file_aed" />
+                        <input type="hidden" name="del" value="1" />
+                        <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
+                        <input type="hidden" name="redirect" value="' . $current_uri . '" />
+                    </form>';
+                    echo '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
 		}
 	?>
 		</td>
