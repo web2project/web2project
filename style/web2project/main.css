@@ -89,12 +89,6 @@ h3 {
   margin-top: 35px;
 }
 
-bordertable {
-  border: 1px black solid;
-  -moz-border-radius:3px;
-  -webkit-border-radius:3px;
-}
-
 .bordertable{
  border: 1px black solid;
  -moz-border-radius:3px;
