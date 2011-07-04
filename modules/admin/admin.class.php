@@ -228,6 +228,16 @@ class CUser extends w2p_Core_BaseObject {
 
 		return $userId;
 	}
+
+	public static function getUserIdByContactID($contactId) {
+		$q = new w2p_Database_Query();
+		$q->addQuery('user_id');
+		$q->addTable('users');
+		$q->addWhere('user_contact = '.(int) $contactId);
+		$userId = $q->loadResult();
+
+		return $userId;
+	}
 	
 	public static function generateUserToken($userId, $token = '') {
 		$q = new w2p_Database_Query();
