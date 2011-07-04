@@ -532,7 +532,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	if (isset($arr['user_task_priority'])) {
 		if ($arr['user_task_priority'] < 0) {
 			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['user_task_priority'] . '.gif') . '" alt="" />';
-		} elseif ($arr['task_priority'] > 0) {
+		} elseif ($arr['user_task_priority'] > 0) {
 			$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['user_task_priority'] . '.gif') . '" alt="" />';
 		}
 	}
