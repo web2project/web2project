@@ -13,6 +13,7 @@ $properties = get_class_vars(get_class($project));
 foreach ($filter as $field => $value) {
 	unset($properties[$value]);
 }
+$properties['department_list'] = '';
 
 // setup the title block
 $titleBlock = new CTitleBlock('Configure Projects Module', 'modules/system/control-center.png', $m, $m . '.' . $a);
