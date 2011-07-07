@@ -4,7 +4,6 @@
  * @package web2project
  * @subpackage authenticators
  */
-define(LDAP_OPT_DIAGNOSTIC_MESSAGE, 0x0032);
 
 class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 	public $ldap_host;
@@ -46,7 +45,8 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 		    ldap_set_option($rs, LDAP_OPT_PROTOCOL_VERSION, $this->ldap_version);
     		ldap_set_option($rs, LDAP_OPT_REFERRALS, 0);
 
-	    	$ldap_bind_dn = $this->ldap_search_user.','.$this->base_dn; //'CN='.$this->ldap_search_user.',OU=users,'.$this->base_dn;
+            // Now ldap_search_user should be the full DN (well, without the base DN)
+	    	$ldap_bind_dn = $this->ldap_search_user.','.$this->base_dn;
 	    	$ldap_bind_pw = empty($this->ldap_search_pass) ? null : $this->ldap_search_pass;
 
 		    if (!$bindok = ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw)) {
