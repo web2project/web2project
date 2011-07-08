@@ -373,12 +373,12 @@ A.hdr:link, A.hdr:active, A.hdr:visited {
 
 td.tabon {
 	background: #D4D0C8;
-    background-image: url('images/tabSelectedBg.png');
+    background-image: url('images/bar_top_Selectedmiddle.gif');
     font-weight: bold;
 }
 td.taboff {
 	background: #D4D0C8;
-	background-image: url('images/tabBg.png');
+	background-image: url('images/bar_top_middle.gif');
     background-position : bottom;
     background-repeat   : repeat-x;
     font-weight: normal;
