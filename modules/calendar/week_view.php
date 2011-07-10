@@ -3,10 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-if ($AppUI->isActiveModule('holiday')) {
-    require_once W2P_BASE_DIR . "/modules/holiday/holiday.class.php";
-}
-
 // check permissions for this record
 $perms = &$AppUI->acl();
 $canRead = canView($m);
