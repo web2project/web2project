@@ -149,36 +149,11 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
         $u = new CUser();
         $u->user_username = $username;
         $u->user_password = $hash_pass;
-		# santosdiez
-        // Changed from 1 (administrator) to 0 (Default user)
-        $u->user_type = 0;
-		# /santosdiez
+        $u->user_type = 0;              // Changed from 1 (administrator) to 0 (Default user)
         $u->user_contact = (int) $contact_id;
         $u->store($AppUI);
         $user_id = $u->user_id;
 		$this->user_id = $user_id;
-
-		# santosdiez
-        /* Duplicated. It's already done in modules/admin/admin.class.php
-		if ($this->user_id > 0) {
-			//Lets get the default users preferences
-            $q = new w2p_Database_Query;
-			$q->addTable('user_preferences', 'dup');
-			$q->addWhere('dup.pref_user = 0');
-			$w2prefs = $q->loadList();
-			$q->clear();
-
-			foreach ($w2prefs as $w2prefskey => $w2prefsvalue) {
-				$q->addTable('user_preferences', 'up');
-				$q->addInsert('pref_user', $this->user_id);
-				$q->addInsert('pref_name', $w2prefsvalue['pref_name']);
-				$q->addInsert('pref_value', $w2prefsvalue['pref_value']);
-				$q->exec();
-				$q->clear();
-			}
-		}
-		*/
-		# /santosdiez
         
 		$acl = &$AppUI->acl();
 		$acl->insertUserRole($acl->get_group_id('anon'), $this->user_id);
