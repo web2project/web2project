@@ -67,11 +67,7 @@ class CUser extends w2p_Core_BaseObject {
             $stored = true;
         }
 
-		# santosdiez
-		# There's no way of checking permissions if we are adding a user! Just need to allow it
-        // if (0 == $this->user_id && $perms->checkModuleItem('users', 'add')) {
-		if (0 == $this->user_id) {
-		# /santosdiez
+        if (0 == $this->user_id && $perms->checkModuleItem('users', 'add')) {
             $perm_func = 'addLogin';
             $this->user_password = md5($this->user_password);
 
