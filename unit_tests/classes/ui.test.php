@@ -66,7 +66,6 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
         $AppUI = new CAppUI;
 
-        $this->assertType('CAppUI',                         $AppUI);
         $this->assertObjectHasAttribute('state',            $AppUI);
         $this->assertObjectHasAttribute('user_id',          $AppUI);
         $this->assertObjectHasAttribute('user_first_name',  $AppUI);
@@ -306,7 +305,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
     /**
      * Tests getting a system class
      *
-     * @expectedException PHPUnit_Framework_Error
+     * expectedException PHPUnit_Framework_Error
      */
     public function testGetSystemClassValid()
     {
@@ -318,7 +317,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
     /**
      * Tests getting a system class when no class name is passed
      *
-     * @expectedException PHPUnit_Framework_Error
+     * expectedException PHPUnit_Framework_Error
      */
     public function testGetSystemClassNoName()
     {
@@ -574,10 +573,8 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
         $locales = $AppUI->readDirs('locales');
 
-        $this->assertType('array', $locales);
-
         foreach ($locales as $locale) {
-            $this->assertType('string', $locale);
+            // TODO: implement validation here..
         }
     }
 

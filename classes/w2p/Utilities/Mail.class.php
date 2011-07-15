@@ -1,5 +1,7 @@
 <?php /* $Id$ $URL$ */
 
+require_once $AppUI->getLibraryClass('PHPMailer/class.phpmailer');
+
 /**
  *    @package web2project
  *    @subpackage utilities
@@ -11,9 +13,8 @@
  *    @version    1.0
  *    Example
  *    <code>
- *    include "libmail.php";
  *
- *    $m = new Mail; // create the mail
+ *    $m = new w2p_Utilities_Mail(); // create the mail
  *    $m->From( "leo@isp.com" );
  *    $m->To( "destination@somewhere.fr" );
  *    $m->Subject( "the subject of the mail" );
@@ -31,8 +32,6 @@
  *    @author    Emiliano Gabrielli - emiliano.gabrielli@dearchitettura.com
  *    @author    Pedro Azevedo - pedroa@web2project.net
  */
-
-require_once($AppUI->getLibraryClass('PHPMailer/class.phpmailer'));
 
 class w2p_Utilities_Mail extends PHPMailer {
 	/**
@@ -80,7 +79,7 @@ class w2p_Utilities_Mail extends PHPMailer {
 		$this->Username = w2PgetConfig('mail_user');
 		$this->Password = w2PgetConfig('mail_pass');
 		$this->Timeout = w2PgetConfig('mail_timeout', 0);
-		$this->CharSet = isset($GLOBALS['locale_char_set']) ? w2PcheckCharset(strtolower($GLOBALS['locale_char_set'])) : 'us-ascii';
+		$this->CharSet = 'utf-8';
 		$this->Encoding = $this->Charset != 'us-ascii' ? '8bit' : '7bit';
 		//The from clause is fixed for all emails so that the users do not reply to one another
 		$this->From(w2PgetConfig('admin_email', 'admin@web2project.net'), w2PgetConfig('company_name'));
@@ -369,7 +368,7 @@ class w2p_Utilities_Mail extends PHPMailer {
 
 		$ec = new w2p_Core_EventQueue();
 		$vars = get_object_vars($this);
-		return $ec->add(array('Mail', 'SendQueuedMail'), $vars, 'w2p_Utilities_Mail', true);
+		return $ec->add(array('w2p_Utilities_Mail', 'SendQueuedMail'), $vars, 'w2p_Utilities_Mail', true);
 	}
 
 	/**
@@ -378,7 +377,10 @@ class w2p_Utilities_Mail extends PHPMailer {
 	 * @access private
 	 */
 	public function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
-		extract($args);
+
+        foreach($args as $key=>$value) {
+            $this->$key = $value;
+        }
 		if ($this->transport == 'smtp') {
 			$this->IsSMTP();
 			return $this->Send();

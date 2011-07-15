@@ -1,4 +1,4 @@
-<?php /* $Id: tasks.class.php 1526 2010-12-11 08:52:38Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/tasks.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -11,22 +11,6 @@ $filters = array('my' => 'My Tasks', 'myunfinished' => 'My Unfinished Tasks', 'a
 $status = w2PgetSysVal('TaskStatus');
 
 $priority = w2PgetSysVal('TaskPriority');
-
-/*
-* TASK DYNAMIC VALUE:
-* 0  = default(OFF), no dep tracking of others, others do track
-* 1  = dynamic, umbrella task, no dep tracking, others do track
-* 11 = OFF, no dep tracking, others do not track
-* 21 = FEATURE, dep tracking, others do not track
-* 31 = ON, dep tracking, others do track
-*/
-
-// When calculating a task's start date only consider
-// end dates of tasks with these dynamic values.
-$tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
-// Tasks with these dynamics have their dates updated when
-// one of their dependencies changes. (They track dependencies)
-$tracking_dynamics = array('0' => '21', '1' => '31');
 
 /*
 * CTask Class
@@ -80,6 +64,33 @@ class CTask extends w2p_Core_BaseObject {
     public $task_updated = null;
     public $task_updator = null;
     public $task_allow_other_user_tasklogs;
+
+    /*
+     * TASK DYNAMIC VALUE:
+     * 0  = default(OFF), no dep tracking of others, others do track
+     * 1  = dynamic, umbrella task, no dep tracking, others do track
+     * 11 = OFF, no dep tracking, others do not track
+     * 21 = FEATURE, dep tracking, others do not track
+     * 31 = ON, dep tracking, others do track
+     */
+
+    /**
+     * When calculating a task's start date only consider
+     * end dates of tasks with these dynamic values.
+     *
+     * @access public
+     * @static
+     */
+    public static $tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
+
+    /**
+     * Tasks with these dynamics have their dates updated when
+     * one of their dependencies changes. (They track dependencies)
+     *
+     * @access public
+     * @static
+     */
+    public static $tracking_dynamics = array('0' => '21', '1' => '31');
 
     /**
      * Class constants for task access
@@ -269,40 +280,16 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	/*
-	* overload the load function
-	* We need to update dynamic tasks of type '1' on each load process!
-	* @param int $oid optional argument, if not specifed then the value of current key is used
-	* @return any result from the database operation
+	* This should be deprecated in favor of load() on the parent
+    *   w2p_Core_BaseObject once we're sure no one is using the $skipUpdate
+    *   parameter any more.
 	*/
 
 	public function load($oid = null, $strip = false, $skipUpdate = false) {
-		global $AppUI;
-    // use parent function to load the given object
-		$loaded = parent::load($oid, $strip);
-
-		/*
-		** Update the values of a dynamic task from
-		** the children's properties each time the
-		** dynamic task is loaded.
-		** Additionally store the values in the db.
-		** Only treat umbrella tasks of dynamics '1'.
-		*/
-		if ($this->task_dynamic == 1 && !($skipUpdate)) {
-			// update task from children
-			$this->htmlDecode();
-			$this->updateDynamics(true);
-
-			/*
-			** Use parent function to store the updated values in the db
-			** instead of store function of this object in order to
-			** prevent from infinite loops.
-			*/
-			parent::store($AppUI);
-			$loaded = parent::load($oid, $strip);
-		}
-
-		// return whether the object load process has been successful or not
-		return $loaded;
+        if ($skipUpdate) {
+            trigger_error("The 'skipUpdate' parameter of load() has been deprecated in v3.0 and will be removed by v4.0. Please use load() without it instead.", E_USER_NOTICE );
+        }
+        return parent::load($oid, $strip);
 	}
 
 	public function loadFull(CAppUI $AppUI = null, $taskId) {
@@ -325,17 +312,19 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	/*
-	* call the load function but don't update dynamics
+	* This used to feed different parameters into load() but now we just do it.
+    *
+    * @deprecated
 	*/
 	public function peek($oid = null, $strip = false) {
-		$loadme = $this->load($oid, $strip, true);
-		return $loadme;
+		trigger_error("peek() has been deprecated in v3.0 and will be removed by v4.0. Please use load() instead.", E_USER_NOTICE );
+        return $this->load($oid, $strip);
 	}
 
 	public function updateDynamics($fromChildren = false) {
 		global $AppUI;
 
-    //Has a parent or children, we will check if it is dynamic so that it's info is updated also
+        //Has a parent or children, we will check if it is dynamic so that it's info is updated also
 		$q = new w2p_Database_Query;
 		$modified_task = new CTask();
 
@@ -504,13 +493,13 @@ class CTask extends w2p_Core_BaseObject {
 	public function deepCopy($destProject_id = 0, $destTask_id = 0) {
 		global $AppUI;
 
-    $children = $this->getChildren();
+        $children = $this->getChildren();
 		$newObj = $this->copy($destProject_id, $destTask_id);
 		$new_id = $newObj->task_id;
 		if (!empty($children)) {
 			$tempTask = new CTask();
 			foreach ($children as $child) {
-				$tempTask->peek($child);
+				$tempTask->load($child);
 				$tempTask->htmlDecode($child);
 				$newChild = $tempTask->deepCopy($destProject_id, $new_id);
 				$newChild->store($AppUI);
@@ -549,10 +538,10 @@ class CTask extends w2p_Core_BaseObject {
         }
 
 		$importing_tasks = false;
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $this->task_target_budget = filterCurrency($this->task_target_budget);
@@ -566,7 +555,7 @@ class CTask extends w2p_Core_BaseObject {
 			// see function update_dep_dates
 			global $oTsk;
 			$oTsk = new CTask();
-			$oTsk->peek($this->task_id);
+			$oTsk->load($this->task_id);
 
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
@@ -760,6 +749,7 @@ class CTask extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('tasks', 'delete', $this->task_id)) {
             //load it before deleting it because we need info on it to update the parents later on
@@ -777,14 +767,6 @@ class CTask extends w2p_Core_BaseObject {
             $implodedTaskList = implode(',', $taskList);
 
             $q = new w2p_Database_Query;
-            // delete affiliated task_logs
-            $q->setDelete('task_log');
-            $q->addWhere('task_log_task IN (' . $implodedTaskList . ')');
-            if (!($q->exec())) {
-                return db_error();
-            }
-            $q->clear();
-
             // delete linked user tasks
             $q->setDelete('user_tasks');
             $q->addWhere('task_id IN (' . $implodedTaskList . ')');
@@ -961,7 +943,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q->addWhere('project_id=' . (int)$this->task_project);
 		$projname = htmlspecialchars_decode($q->loadResult());
 		$q->clear();
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 
 		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
@@ -1015,7 +997,7 @@ class CTask extends w2p_Core_BaseObject {
 		$projname = htmlspecialchars_decode($q->loadResult());
 		$q->clear();
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 
 		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
@@ -1182,7 +1164,7 @@ class CTask extends w2p_Core_BaseObject {
 
 			// Build the email and send it out.
 			$char_set = isset($locale_char_set) ? $locale_char_set : '';
-			$mail = new Mail;
+			$mail = new w2p_Utilities_Mail();
 			// Grab the subject from user preferences
 			$prefix = $AppUI->getPref('TASKLOGSUBJ');
 			$mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
@@ -1234,7 +1216,7 @@ class CTask extends w2p_Core_BaseObject {
 					$toList[$email] = $email;
 					$recipient_list .= $email . ' (' . $name . ")\n";
 				} else {
-					$recipient_list .= 'Invalid email address \'' . $email . '\' for ' . $name . ', not sent' . "\n";
+					$recipient_list .= "Invalid email address '$email' for '$name' not sent \n";
 				}
 			}
 
@@ -1459,14 +1441,13 @@ class CTask extends w2p_Core_BaseObject {
 	*		  @param				integer task_id of task to update
 	*/
 	public function update_dep_dates($task_id) {
-		global $tracking_dynamics;
 		$q = new w2p_Database_Query;
 
 		$newTask = new CTask();
 		$newTask->load($task_id);
 
 		// Do not update tasks that are not tracking dependencies
-		if (!in_array($newTask->task_dynamic, $tracking_dynamics)) {
+		if (!in_array($newTask->task_dynamic, self::$tracking_dynamics)) {
 			return;
 		}
 
@@ -1536,7 +1517,6 @@ class CTask extends w2p_Core_BaseObject {
 	*/
 
 	public function get_deps_max_end_date($taskObj) {
-		global $tracked_dynamics;
 		$q = new w2p_Database_Query;
 
 		$deps = $taskObj->getDependencies();
@@ -1544,8 +1524,8 @@ class CTask extends w2p_Core_BaseObject {
 
 		$last_end_date = false;
 		// Don't respect end dates of excluded tasks
-		if ($tracked_dynamics && !empty($deps)) {
-			$track_these = implode(',', $tracked_dynamics);
+		if (self::$tracked_dynamics && !empty($deps)) {
+			$track_these = implode(',', self::$tracked_dynamics);
 			$q->addTable('tasks');
 			$q->addQuery('MAX(task_end_date)');
 			$q->addWhere('task_id IN (' . $deps . ') AND task_dynamic IN (' . $track_these . ')');
@@ -1696,8 +1676,8 @@ class CTask extends w2p_Core_BaseObject {
 		$q->addTable('users', 'u');
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
-		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name, co.contact_first_name');
-		$q->addQuery('co.contact_email AS user_email');
+		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, co.contact_last_name, co.contact_first_name, contact_display_name');
+		$q->addQuery('co.contact_email AS user_email, co.contact_phone AS user_phone');
 		$q->addWhere('ut.task_id = ' . (int)$taskId);
 
 		return $q->loadHashList('user_id');
@@ -1705,23 +1685,23 @@ class CTask extends w2p_Core_BaseObject {
 
 	public function getDependencyList($taskId) {
 		$q = new w2p_Database_Query;
-		$q->addQuery('td.dependencies_req_task_id, t.task_name');
+		$q->addQuery('td.dependencies_req_task_id, t.task_name, t.task_percent_complete');
 		$q->addTable('tasks', 't');
 		$q->addTable('task_dependencies', 'td');
 		$q->addWhere('td.dependencies_req_task_id = t.task_id');
 		$q->addWhere('td.dependencies_task_id = ' . (int)$taskId);
 
-		return $q->loadHashList();
+		return $q->loadHashList('dependencies_req_task_id');
 	}
 	public function getDependentTaskList($taskId) {
 		$q = new w2p_Database_Query;
-		$q->addQuery('td.dependencies_task_id, t.task_name');
+		$q->addQuery('td.dependencies_task_id, t.task_name, t.task_percent_complete');
 		$q->addTable('tasks', 't');
 		$q->addTable('task_dependencies', 'td');
 		$q->addWhere('td.dependencies_task_id = t.task_id');
 		$q->addWhere('td.dependencies_req_task_id = ' . $taskId);
 
-		return $q->loadHashList();
+		return $q->loadHashList('dependencies_task_id');
 	}
 	public function getTaskDepartments(CAppUI $AppUI = null, $taskId) {
 		global $AppUI;
@@ -1903,7 +1883,7 @@ class CTask extends w2p_Core_BaseObject {
 			$deep_children = array();
 			$tempTask = new CTask();
 			foreach ($children as $child) {
-				$tempTask->peek($child);
+				$tempTask->load($child);
 				$deep_children = array_merge($deep_children, $tempTask->getDeepChildren());
 			}
 
@@ -2091,42 +2071,24 @@ class CTask extends w2p_Core_BaseObject {
 		global $locale_char_set, $AppUI;
 		$q = new w2p_Database_Query;
 
-		$df = $AppUI->getPref('SHDATEFORMAT');
-		$tf = $AppUI->getPref('TIMEFORMAT');
-		// If we don't have preferences set for these, use ISO defaults.
-		if (!$df) {
-			$df = '%Y-%m-%d';
-		}
-		if (!$tf) {
-			$tf = '%H:%m';
-		}
-		$df .= ' ' . $tf;
-
 		// At this stage we won't have an object yet
 		if (!$this->load($id)) {
-			return - 1; // No point it trying again later.
+            return - 1; // No point it trying again later.
 		}
 		$this->htmlDecode();
 
 		// Only remind on working days.
 		$today = new w2p_Utilities_Date();
 		if (!$today->isWorkingDay()) {
-			return true;
+            return true;
 		}
 
 		// Check if the task is completed
 		if ($this->task_percent_complete == 100) {
-			return - 1;
+            return - 1;
 		}
 
-		// Grab the assignee list
-		$q->addTable('user_tasks', 'ut');
-		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
-		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
-		$q->addWhere('ut.task_id = ' . (int)$id);
-		$contacts = $q->loadHashList('contact_id');
-		$q->clear();
+		$contacts = $this->getAssigned();
 
 		// Now we also check the owner of the task, as we will need
 		// to notify them as well.
@@ -2146,8 +2108,8 @@ class CTask extends w2p_Core_BaseObject {
 
 		// build the subject line, based on how soon the
 		// task will be overdue.
-		$starts = new w2p_Utilities_Date($this->task_start_date);
-		$expires = new w2p_Utilities_Date($this->task_end_date);
+        $starts = new w2p_Utilities_Date($this->task_start_date);
+        $expires = new w2p_Utilities_Date($this->task_end_date);
 		$now = new w2p_Utilities_Date();
 		$diff = $expires->dateDiff($now);
 		$diff *= w2p_Utilities_Date::compare($expires, $now);
@@ -2163,15 +2125,17 @@ class CTask extends w2p_Core_BaseObject {
 			$msg = $AppUI->_(array($diff, 'DAYS'));
 		}
 
-		$q->addTable('projects');
-		$q->addQuery('project_name');
-		$q->addWhere('project_id = ' . (int)$this->task_project);
-		$project_name = htmlspecialchars_decode($q->loadResult());
-		$q->clear();
+        $project = new CProject();
+        $project_name = $project->load($this->task_project)->project_name;
+
+        // Check to see that the project is both active and not a template
+        if (!$project->project_active || $project->project_status == w2PgetConfig('template_projects_status_id', 0)) {
+            return -1;
+        }
 
 		$subject = $prefix . ' ' . $msg . ' ' . $this->task_name . '::' . $project_name;
 
-		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $starts->format($df) . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . $expires->format($df) . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
+		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': START-TIME' . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': END-TIME' . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
 		foreach ($contacts as $contact) {
 			if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
 				$body .= ($contact['contact_first_name'] . ' ' . $contact['contact_last_name'] . ' <' . $contact['contact_email'] . ">\n");
@@ -2179,10 +2143,20 @@ class CTask extends w2p_Core_BaseObject {
 		}
 		$body .= ("\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $this->task_description . "\n");
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 		$mail->Subject($subject, $locale_char_set);
-		$mail->Body($body, $locale_char_set);
+
 		foreach ($contacts as $contact) {
+            $user_id = CUser::getUserIdByContactID($contact['contact_id']);
+            $AppUI->loadPrefs($user_id);
+
+            $df = $AppUI->getPref('DISPLAYFORMAT');
+            $tz = $AppUI->getPref('TIMEZONE');
+
+            $body = str_replace('START-TIME', $starts->convertTZ($tz)->format($df) , $body);
+            $body = str_replace('END-TIME'  , $expires->convertTZ($tz)->format($df), $body);
+            $mail->Body($body, $locale_char_set);
+
 			if ($mail->ValidEmail($contact['contact_email'])) {
 				$mail->To($contact['contact_email'], true);
 				$mail->Send();
@@ -2404,381 +2378,3 @@ class CTask extends w2p_Core_BaseObject {
 
 // user based access
 $task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
-
-//This kludgy function echos children tasks as threads
-
-function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hideOpenCloseLink = false, $allowRepeat = false) {
-	global $AppUI, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
-	global $m, $a, $history_active, $expanded;
-
-	//Check for Tasks Access
-	$canAccess = canTaskAccess($arr['task_id'], $arr['task_access'], $arr['task_owner']);
-	if (!$canAccess) {
-		return (false);
-	}
-
-	$now = new w2p_Utilities_Date();
-	$tf = $AppUI->getPref('TIMEFORMAT');
-	$df = $AppUI->getPref('SHDATEFORMAT');
-	$perms = &$AppUI->acl();
-	$fdf = $df . ' ' . $tf;
-	$show_all_assignees = w2PgetConfig('show_all_task_assignees', false);
-
-	$start_date = intval($arr['task_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($arr['task_start_date'], '%Y-%m-%d %T')) : null;
-	$end_date = intval($arr['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($arr['task_end_date'], '%Y-%m-%d %T')) : null;
-	$last_update = isset($arr['last_update']) && intval($arr['last_update']) ? new w2p_Utilities_Date( $AppUI->formatTZAwareTime($arr['last_update'], '%Y-%m-%d %T')) : null;
-
-	// prepare coloured highlight of task time information
-	$sign = 1;
-	$style = '';
-	if ($start_date) {
-		if (!$end_date) {
-			/*
-			** end date calc has been moved to calcEndByStartAndDuration()-function
-			** called from array_csort and tasks.php
-			** perhaps this fallback if-clause could be deleted in the future,
-			** didn't want to remove it shortly before the 2.0.2
-			*/
-			$end_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
-		}
-
-		if ($now->after($start_date) && $arr['task_percent_complete'] == 0) {
-			$style = 'background-color:#ffeebb';
-		} elseif ($now->after($start_date) && $arr['task_percent_complete'] < 100) {
-			$style = 'background-color:#e6eedd';
-		}
-
-		if ($now->after($end_date)) {
-			$sign = -1;
-			$style = 'background-color:#cc6666;color:#ffffff';
-		}
-		if ($arr['task_percent_complete'] == 100) {
-			$style = 'background-color:#aaddaa; color:#00000';
-		}
-
-		$days = $now->dateDiff($end_date) * $sign;
-	}
-
-    $jsTaskId = 'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_';
-	if ($expanded) {
-		$s = '<tr id="' . $jsTaskId . '" >';
-	} else {
-		$s = '<tr id="' . $jsTaskId . '" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
-	}
-	// edit icon
-	$s .= '<td align="center">';
-	$canEdit = ($arr['task_represents_project']) ? false : true;
-	$canViewLog = true;
-	if ($canEdit) {
-        $s .= '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PtoolTip('edit task', 'click to edit this task') . w2PshowImage('icons/pencil.gif', 12, 12) . w2PendTip() . '</a>' ;
-	}
-	$s .= '</td>';
-	// pinned
-	$pin_prefix = $arr['task_pinned'] ? '' : 'un';
-	$s .= ('<td><a href="?m=tasks&amp;pin=' . ($arr['task_pinned'] ? 0 : 1) . '&amp;task_id=' . $arr['task_id'] . '">' . w2PtoolTip('Pin', 'pin/unpin task') . '<img src="' . w2PfindImage('icons/' . $pin_prefix . 'pin.gif') . '" border="0" alt="" />' . w2PendTip() . '</a></td>');
-	// New Log
-	if ($arr['task_log_problem'] > 0) {
-		$s .= ('<td valign="middle"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
-	} elseif ($canViewLog && $arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
-		$s .= ('<td align="center"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a></td>');
-	} else {
-		$s .= '<td align="center">' . $AppUI->_('-') . '</td>';
-	}
-	// percent complete and priority
-	$s .= ('<td align="right">' . (int) $arr['task_percent_complete'] . '%</td><td align="center" nowrap="nowrap">');
-	if ($arr['task_priority'] < 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['task_priority'] . '.gif') . '" alt="" />';
-	} elseif ($arr['task_priority'] > 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['task_priority'] . '.gif') . '" alt="" />';
-	}
-	$s .= '</td><td align="center" nowrap="nowrap">';
-	if ($arr['user_task_priority'] < 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['user_task_priority'] . '.gif') . '" alt="" />';
-	} elseif ($arr['task_priority'] > 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['user_task_priority'] . '.gif') . '" alt="" />';
-	}
-	$s .= '</td>';
-
-	// dots
-	$s .= '<td width="' . (($today_view) ? '50%' : '90%') . '">';
-	//level
-	if ($level == -1) {
-		$s .= '...';
-	}
-	for ($y = 0; $y < $level; $y++) {
-		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">';
-		} else {
-			$s .= '';
-		}
-	}
-	if ($arr['task_description']) {
-		$s .= w2PtoolTip('Task Description', $arr['task_description'], true);
-	}
-
-	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' alt="" /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif') . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' alt="" /></a>';
-	if ($arr['task_nr_of_children']) {
-		$is_parent = true;
-	} else {
-		$is_parent = false;
-	}
-	if ($arr['task_milestone'] > 0) {
-		$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b>' . $arr['task_name'] . '</b></a> <img src="' . w2PfindImage('icons/milestone.gif') . '" border="0" alt="" /></td>';
-	} elseif ($arr['task_dynamic'] == '1' || $is_parent) {
-		if (!$today_view) {
-			$s .= $open_link;
-		}
-		if ($arr['task_dynamic'] == '1') {
-			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b><i>' . $arr['task_name'] . '</i></b></a>' . w2PendTip() . '</td>';
-		} else {
-			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a>' . w2PendTip() . '</td>';
-		}
-	} else {
-		$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a></td>';
-	}
-	if ($arr['task_description']) {
-		$s .= w2PendTip();
-	}
-	if ($today_view) { // Show the project name
-		$s .= ('<td width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<span style="padding:2px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</span>' . '</a></td>');
-	}
-	// task owner
-	if (!$today_view) {
-		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $arr['user_id'] . '">' . $arr['owner'] . '</a>' . '</td>');
-	}
-	if (isset($arr['task_assigned_users']) && ($assigned_users = $arr['task_assigned_users'])) {
-		$a_u_tmp_array = array();
-		if ($show_all_assignees) {
-			$s .= '<td align="center">';
-			foreach ($assigned_users as $val) {
-				$a_u_tmp_array[] = ('<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
-			}
-			$s .= join(', ', $a_u_tmp_array) . '</td>';
-		} else {
-			$s .= ('<td align="center" nowrap="nowrap">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['assignee'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
-			if ($arr['assignee_count'] > 1) {
-				$s .= (' <a href="javascript: void(0);" onclick="toggle_users(' . "'users_" . $arr['task_id'] . "'" . ');" title="' . join(', ', $a_u_tmp_array) . '">(+' . ($arr['assignee_count'] - 1) . ')</a>' . '<span style="display: none" id="users_' . $arr['task_id'] . '">');
-				$a_u_tmp_array[] = $assigned_users[0]['assignee'];
-				for ($i = 1, $i_cmp = count($assigned_users); $i < $i_cmp; $i++) {
-					$a_u_tmp_array[] = $assigned_users[$i]['assignee'];
-					$s .= ('<br /><a href="?m=admin&amp;a=viewuser&amp;user_id=' . $assigned_users[$i]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[$i]['assignee'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>');
-				}
-				$s .= '</span>';
-			}
-			$s .= '</td>';
-		}
-	} elseif (!$today_view) {
-		// No users asigned to task
-		$s .= '<td align="center">-</td>';
-	}
-	// duration or milestone
-    $s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($fdf) : '-') . '</td>';
-    $s .= '<td align="right" nowrap="nowrap" style="' . $style . '">' . $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1) . '</td>';
-    $s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($fdf) : '-') . '</td>';
-	if ($today_view) {
-		$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">' . $arr['task_due_in'] . '</td>');
-	} elseif ($history_active) {
-		$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">' . ($last_update ? $last_update->format($fdf) : '-') . '</td>');
-	}
-
-	// Assignment checkbox
-	if ($showEditCheckbox) {
-		$s .= ('<td align="center">' . '<input type="checkbox" name="selected_task[' . $arr['task_id'] . ']" value="' . $arr['task_id'] . '"/></td>');
-	}
-	$s .= '</tr>'."\n";
-	echo $s;
-}
-
-function findchild(&$tarr, $parent, $level = 0) {
-	global $shown_tasks;
-
-	$level = $level + 1;
-	$n = count($tarr);
-
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			showtask($tarr[$x], $level, true);
-			$shown_tasks[$tarr[$x]['task_id']] = $tarr[$x]['task_id'];
-			findchild($tarr, $tarr[$x]['task_id'], $level);
-		}
-	}
-}
-
-/* please throw this in an include file somewhere, its very useful */
-
-function array_csort() { //coded by Ichier2003
-
-	$args = func_get_args();
-	$marray = array_shift($args);
-
-	if (empty($marray)) {
-		return array();
-	}
-
-	$i = 0;
-	$msortline = 'return(array_multisort(';
-	$sortarr = array();
-	foreach ($args as $arg) {
-		$i++;
-		if (is_string($arg)) {
-			for ($j = 0, $j_cmp = count($marray); $j < $j_cmp; $j++) {
-
-				/* we have to calculate the end_date via start_date+duration for
-				** end='0000-00-00 00:00:00' before sorting, see mantis #1509:
-
-				** Task definition writes the following to the DB:
-				** A without start date: start = end = NULL
-				** B with start date and empty end date: start = startdate,
-				end = '0000-00-00 00:00:00'
-				** C start + end date: start= startdate, end = end date
-
-				** A the end_date for the middle task (B) is ('dynamically') calculated on display
-				** via start_date+duration, it may be that the order gets wrong due to the fact
-				** that sorting has taken place _before_.
-				*/
-				if ($marray[$j]['task_end_date'] == '0000-00-00 00:00:00') {
-					$marray[$j]['task_end_date'] = calcEndByStartAndDuration($marray[$j]);
-				}
-				$sortarr[$i][] = $marray[$j][$arg];
-			}
-		} else {
-			$sortarr[$i] = $arg;
-		}
-		$msortline .= '$sortarr[' . $i . '],';
-	}
-	$msortline .= '$marray));';
-
-	eval($msortline);
-
-	return $marray;
-}
-
-/*
-** Calc End Date via Startdate + Duration
-** @param array task	A DB row from the earlier fetched tasklist
-** @return string	Return calculated end date in MySQL-TIMESTAMP format
-*/
-
-function calcEndByStartAndDuration($task) {
-	$end_date = new w2p_Utilities_Date($task['task_start_date']);
-	$end_date->addSeconds($task['task_duration'] * $task['task_duration_type'] * SEC_HOUR);
-	return $end_date->format(FMT_DATETIME_MYSQL);
-}
-
-function sort_by_item_title($title, $item_name, $item_type, $a = '') {
-	global $AppUI, $project_id, $task_id, $min_view, $m;
-	global $task_sort_item1, $task_sort_type1, $task_sort_order1;
-	global $task_sort_item2, $task_sort_type2, $task_sort_order2;
-
-	if ($task_sort_item2 == $item_name) {
-		$item_order = $task_sort_order2;
-	}
-	if ($task_sort_item1 == $item_name) {
-		$item_order = $task_sort_order1;
-	}
-
-	$s = '';
-
-	if (isset($item_order)) {
-		$show_icon = true;
-	} else {
-		$show_icon = false;
-		$item_order = SORT_DESC;
-	}
-
-	/* flip the sort order for the link */
-	$item_order = ($item_order == SORT_ASC) ? SORT_DESC : SORT_ASC;
-	if ($m == 'tasks') {
-		$s .= '<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&amp;a=view&amp;task_id=' . $task_id) : $a);
-	} elseif ($m == 'calendar') {
-		$s .= '<a href="./index.php?m=calendar&amp;a=day_view';
-	} else {
-		$s .= '<a href="./index.php?m=projects&amp;bypass=1' . (($project_id > 0) ? ('&amp;a=view&amp;project_id=' . $project_id) : '');
-	}
-	$s .= '&amp;task_sort_item1=' . $item_name;
-	$s .= '&amp;task_sort_type1=' . $item_type;
-	$s .= '&amp;task_sort_order1=' . $item_order;
-	if ($task_sort_item1 == $item_name) {
-		$s .= '&amp;task_sort_item2=' . $task_sort_item2;
-		$s .= '&amp;task_sort_type2=' . $task_sort_type2;
-		$s .= '&amp;task_sort_order2=' . $task_sort_order2;
-	} else {
-		$s .= '&amp;task_sort_item2=' . $task_sort_item1;
-		$s .= '&amp;task_sort_type2=' . $task_sort_type1;
-		$s .= '&amp;task_sort_order2=' . $task_sort_order1;
-	}
-	$s .= '" class="hdr">' . $AppUI->_($title);
-	if ($show_icon) {
-		$s .= '&nbsp;<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" border="0" alt="" />';
-	}
-	echo $s.'</a>';
-}
-
-/**
- * canTaskAccess()
- * Used to check if a user has task_access to see the task in task list context
- * (This function was optimized to try to use the DB the least possible)
- *
- * @param mixed $task_id
- * @param mixed $task_access
- * @param mixed $task_owner
- * @return true if user has task access to it, or false if he doesn't
- */
-function canTaskAccess($task_id, $task_access, $task_owner) {
-	global $AppUI;
-	$q = new w2p_Database_Query;
-
-	if (!$task_id || !isset($task_access)) {
-		return false;
-	}
-
-	//if for some weird reason we have tasks without an owner, lets make them visible at least for admins, or else we take the risk of having phantom tasks.
-	if (!$task_owner) {
-		$task_owner = $AppUI->user_id;
-	}
-
-	$user_id = $AppUI->user_id;
-	// Let's see if this user has admin privileges, if so return true
-	if ($AppUI->user_is_admin) {
-		return true;
-	}
-
-	switch ($task_access) {
-		case 0:
-			// public
-			$retval = true;
-			break;
-		case 1:
-			// protected
-			$q->addTable('users');
-			$q->addQuery('user_company');
-			$q->addWhere('user_id=' . (int)$user_id . ' OR user_id=' . (int)$task_owner);
-			$user_owner_companies = $q->loadColumn();
-			$q->clear();
-			$company_match = true;
-			foreach ($user_owner_companies as $current_company) {
-				$company_match = $company_match && ((!(isset($last_company))) || $last_company == $current_company);
-				$last_company = $current_company;
-			}
-
-		case 2:
-			// participant
-			$company_match = ((isset($company_match)) ? $company_match : true);
-			$q->addTable('user_tasks');
-			$q->addQuery('COUNT(task_id)');
-			$q->addWhere('user_id=' . (int)$user_id . ' AND task_id=' . (int)$task_id);
-			$count = $q->loadResult();
-			$q->clear();
-			$retval = (($company_match && $count > 0) || ($count > 0) || $task_owner == $user_id);
-			break;
-		case 3:
-			// private
-			$retval = ($task_owner == $user_id);
-			break;
-		default:
-			$retval = false;
-			break;
-	}
-
-	return $retval;
-}

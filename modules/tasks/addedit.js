@@ -2,13 +2,6 @@
 var calendarField = '';
 var calWin = null;
 
-function setMilestoneEndDate(checked){
-    if(checked){
-        document.datesFrm.end_date.value      = document.datesFrm.start_date.value;
-        document.datesFrm.task_end_date.value = document.datesFrm.task_start_date.value;
-    } 
-}
-
 /**
 setTasksStartDate sets new task's start date value which is maximum end date of all dependend tasks
 to do: date format should be taken from config
@@ -76,7 +69,7 @@ function submitIt(form){
 			form.task_name.focus();
 			return false;
 	}
-
+        
 	// Check the sub forms
 	for (var i = 0, i_cmp = subForm.length; i < i_cmp; i++) {
 		if (!subForm[i].check())
@@ -85,7 +78,6 @@ function submitIt(form){
 		// with data
 		subForm[i].save();
 	}
-
 	form.submit();
 }
 
@@ -181,7 +173,7 @@ function addTaskDependency(form, datesForm) {
 	}
 	
 	checkForTaskDependencyNone(form.task_dependencies);
-	setTasksStartDate(form, datesForm);
+	//setTasksStartDate(form, datesForm);
 }
 
 function removeTaskDependency(form, datesForm) {
@@ -193,7 +185,7 @@ function removeTaskDependency(form, datesForm) {
 		}
 	}
 	
-	setTasksStartDate(form, datesForm);
+	//setTasksStartDate(form, datesForm);
 }
 
 function setAMPM( field) {
@@ -634,10 +626,14 @@ function copyForm(form, to, extras) {
 		// Determine the node type, and determine the current value
 		switch (elem.type) {
 			case 'text':
-			case 'textarea':
 			case 'hidden':
-				to.appendChild(h.addHidden(elem.name, elem.value));
+				to.appendChild(h.addHidden(elem.name, elem.value, elem.type));
 				break;
+                        case 'textarea':
+                                to.appendChild(h.addHidden(elem.name, elem.value, elem.type));
+                                var newHidden = document.getElementById(elem.name);
+                                newHidden.value = elem.value;
+                                break;
 			case 'select-one':
 				if (elem.options.length > 0) {
 					to.appendChild(h.addHidden(elem.name, elem.options[elem.selectedIndex].value));

@@ -81,10 +81,16 @@ $titleBlock->show();
 	function delIt() {
 		document.AddEdit.action.value = 'del';
 		document.AddEdit.submit();
-	}	
+	}
+
+    function cancel() {
+        if (confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')) {
+            location.href = '?<?php echo $AppUI->getPlace(); ?>';
+        }
+    }
 </script>
 
-<form name="AddEdit" method="post" accept-charset="utf-8">				
+<form name="frmEdit" method="post" accept-charset="utf-8">
 	<input name="action" type="hidden" value="<?php echo $history_id ? 'update' : 'add' ?>" />
 	<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 		<tr>
@@ -120,7 +126,7 @@ $titleBlock->show();
 							<table>
 							<tr>
 								<td>
-									<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" />
+									<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="cancel();" />
 								</td>
 								<td>
 									<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submit()" />

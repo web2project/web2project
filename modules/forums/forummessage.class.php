@@ -32,6 +32,7 @@ class CForumMessage extends w2p_Core_BaseObject {
             $errorArray['message_body'] = $baseErrorMsg . 'message body is not set';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
 	}
 
@@ -41,10 +42,10 @@ class CForumMessage extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $q = new w2p_Database_Query;
@@ -93,6 +94,7 @@ class CForumMessage extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
         $result = false;
+        $this->_error = array();
 
         if ($perms->checkModuleItem('forums', 'delete', $this->project_id)) {
             $q = new w2p_Database_Query;
@@ -130,6 +132,15 @@ class CForumMessage extends w2p_Core_BaseObject {
         }
 		return $result;
 	}
+
+    public function loadByParent($parent_id = 0) {
+        $q = new w2p_Database_Query();
+        $q->addTable('forum_messages');
+        $q->addWhere('message_parent = ' . $parent_id);
+        $q->addOrder('message_id DESC'); // fetch last message first
+
+        $q->loadObject($this, true, false);
+    }
 
 	public function sendWatchMail($debug = false) {
 		global $AppUI, $debug, $w2Pconfig;
@@ -188,7 +199,7 @@ class CForumMessage extends w2p_Core_BaseObject {
 			return;
 		}
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 		$mail->Subject($subj_prefix . ' ' . $this->message_title, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
 		$body = $body_msg;

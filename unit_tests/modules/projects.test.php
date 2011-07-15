@@ -91,7 +91,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     }
     protected function getDataSetPath()
     {
-    	return dirname(dirname(__FILE__)).'/db_files/';
+    	return dirname(dirname(__FILE__)).'/db_files/projects/';
     }
 
 	protected function setUp ()
@@ -142,7 +142,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewProjectAttributes()
     {
-    	$this->assertType('CProject', $this->obj);
     	$this->assertObjectHasAttribute('project_id',                  $this->obj);
     	$this->assertObjectHasAttribute('project_company',             $this->obj);
     	$this->assertObjectHasAttribute('project_name',                $this->obj);
@@ -172,11 +171,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     	$this->assertObjectHasAttribute('project_parent',              $this->obj);
     	$this->assertObjectHasAttribute('project_original_parent',     $this->obj);
     	$this->assertObjectHasAttribute('project_location',            $this->obj);
-    	$this->assertObjectHasAttribute('_tbl_prefix',                 $this->obj);
-    	$this->assertObjectHasAttribute('_tbl',                        $this->obj);
-    	$this->assertObjectHasAttribute('_tbl_key',                    $this->obj);
-    	$this->assertObjectHasAttribute('_error',                      $this->obj);
-    	$this->assertObjectHasAttribute('_query',                      $this->obj);
     }
 
     /**
@@ -184,7 +178,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewProjectAttributeValues()
     {
-        $this->assertType('CProject', $this->obj);
         $this->assertNull($this->obj->project_id);
         $this->assertNull($this->obj->project_company);
         $this->assertNull($this->obj->project_department);
@@ -214,12 +207,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->project_type);
         $this->assertNull($this->obj->project_parent);
         $this->assertNull($this->obj->project_original_parent);
-        $this->assertEquals('',             $this->obj->project_location);
-        $this->assertEquals('',             $this->obj->_tbl_prefix);
-        $this->assertEquals('projects',     $this->obj->_tbl);
-        $this->assertEquals('project_id',   $this->obj->_tbl_key);
-        $this->assertEquals('',             $this->obj->_error);
-        $this->assertType('w2p_Database_Query',        $this->obj->_query);
     }
 
     /**
@@ -473,7 +460,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(0,                          $this->obj->project_active);
         $this->assertEquals(0,                          $this->obj->project_private);
         $this->assertEquals('',                         $this->obj->project_departments);
-        $this->assertEquals(array(0 => ''),             $this->obj->project_contacts);
+        $this->assertEquals(1,							count($this->obj->project_contacts));
         $this->assertEquals(-1,                         $this->obj->project_priority);
         $this->assertEquals(0,                          $this->obj->project_type);
         $this->assertEquals(5,                          $this->obj->project_parent);
@@ -681,7 +668,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                                  $this->obj->project_active);
         $this->assertEquals(0,                                  $this->obj->project_private);
         $this->assertEquals('',                                 $this->obj->project_departments);
-        $this->assertEquals(array(0 => ''),                     $this->obj->project_contacts);
+        $this->assertEquals(1,                          		count($this->obj->project_contacts));
         $this->assertEquals(1,                                  $this->obj->project_priority);
         $this->assertEquals(1,                                  $this->obj->project_type);
         $this->assertEquals(1,                                  $this->obj->project_parent);
@@ -1100,7 +1087,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 		$this->post_data['email_project_owner'] = 1;
 		$this->post_data['email_project_contacts'] = 0;
 		$this->post_data['project_departments'] = array(1,2);
-		$this->post_data['project_contacts'] = '3,4';
+		$this->post_data['project_contacts'] = array(3,4);
 
         $this->obj->bind($this->post_data);
         $results = $this->obj->store($AppUI);
@@ -1229,19 +1216,13 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         $departments = CProject::getDepartments($AppUI, 1);
 
-        $this->assertEquals(2,              count($departments));
+        $this->assertEquals(1,              count($departments));
         $this->assertEquals(1,              $departments[1]['dept_id']);
         $this->assertEquals('Department 1', $departments[1]['dept_name']);
         $this->assertEquals('',             $departments[1]['dept_phone']);
         $this->assertEquals(1,              $departments[1][0]);
         $this->assertEquals('Department 1', $departments[1][1]);
         $this->assertEquals('',             $departments[1][2]);
-        $this->assertEquals(2,              $departments[2]['dept_id']);
-        $this->assertEquals('Department 1', $departments[2]['dept_name']);
-        $this->assertEquals('',             $departments[2]['dept_phone']);
-        $this->assertEquals(2,              $departments[2][0]);
-        $this->assertEquals('Department 1', $departments[2][1]);
-        $this->assertEquals('',             $departments[2][2]);
     }
 
     /**
@@ -1326,6 +1307,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
     /**
      * Tests updating a projects status
+     *
+     * expectedException PHPUnit_Framework_Error
      */
     public function testUpdateStatus()
     {

@@ -234,8 +234,8 @@ function delIt() {
                             $s = count($users) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
                             foreach ($users as $row) {
                                 $s .= '<tr>';
-                                $s .= '<td class="hilite"><a href="mailto:' . $row['user_email'] . '">' . CContact::getContactByUserid($row['user_id']) . '</a></td>';
-                                $s .= '<td class="hilite" align="right">' . $row['perc_assignment'] . '%</td>';
+                                $s .= '<td class="hilite"><a href="mailto:' . $row['user_email'] . '">' . $row['contact_display_name'] . '</a></td>';
+                                $s .= '<td class="hilite center" align="right" width="20%">' . $row['perc_assignment'] . '%</td>';
                                 $s .= '</tr>';
                             }
                             echo '<table width="100%" cellspacing="1" bgcolor="black">' . $s . '</table>';
@@ -251,10 +251,12 @@ function delIt() {
                     <td colspan="3">
                     <?php
                         $s = count($taskDep) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
-                        foreach ($taskDep as $key => $value) {
+                        foreach ($taskDep as $key => $array) {
                             $s .= '<tr><td class="hilite">';
-                            $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $value . '</a>';
-                            $s .= '</td></tr>';
+                            $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
+							$s .= '</td><td class="hilite center" width="20%">';
+							$s .= $array['task_percent_complete'];
+                            $s .= '%</td></tr>';
                         }
                         echo '<table width="100%" cellspacing="1" bgcolor="black">' . $s . '</table>';
                     ?>
@@ -268,10 +270,12 @@ function delIt() {
                     <td colspan="3">
                     <?php
                         $s = count($dependingTasks) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
-                        foreach ($dependingTasks as $key => $value) {
+                        foreach ($dependingTasks as $key => $array) {
                             $s .= '<tr><td class="hilite">';
-                            $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $value . '</a>';
-                            $s .= '</td></tr>';
+                            $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
+							$s .= '</td><td class="hilite center" width="20%">';
+							$s .= $array['task_percent_complete'];
+                            $s .= '%</td></tr>';
                         }
                         echo '<table width="100%" cellspacing="1" bgcolor="black">' . $s . '</table>';
                     ?>

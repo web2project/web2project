@@ -1,3 +1,0 @@
-Nadchodzace
-Zadania, ktore maja zostac ukonczone w nastepnym tygodniuk
-suppressHeaders=1

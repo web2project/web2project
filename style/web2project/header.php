@@ -71,10 +71,10 @@ if ($dialog) {
                                         <td>
                                             <?php echo buildHeaderNavigation($AppUI, 'ul', 'li'); ?>
                                         </td>
+                                        <td nowrap="nowrap" align="right">
                                         <?php
                                             if ($AppUI->user_id > 0) {
                                                 //Do this check in case we are not using any user id, for example for external uses
-                                                echo '<td nowrap="nowrap" align="right">';
                                                 $newItem = array('' => '- New Item -');
                                                 if (canAdd('companies')) {
                                                     $newItem['companies'] = 'Company';
@@ -95,9 +95,9 @@ if ($dialog) {
                                                     $newItem['admin'] = 'User';
                                                 }
                                                 echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
-                                                echo '</td>';
                                             }
                                         ?>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="2" valign="top" style="background: url(style/<?php echo $uistyle; ?>/images/nav_shadow.jpg);" align="left">
@@ -120,7 +120,9 @@ if ($dialog) {
                                             <?php
                                                 echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_first_name . ' ' . $AppUI->user_last_name : $outsider);
                                                 echo '<br />';
-                                                echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
+                                                if ($AppUI->user_id > 0) {
+                                                    echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
+                                                }
                                             ?>
                                         </td>
                                     </tr>

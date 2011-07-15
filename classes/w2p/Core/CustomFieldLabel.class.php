@@ -20,6 +20,6 @@ class w2p_Core_CustomFieldLabel extends w2p_Core_CustomField {
 
 	public function getHTML($mode) {
 		// We don't really care about its mode
-		return '<span ' . $this->field_extratags . '>' . $this->field_description . '</span>';
+		return '<span ' . $this->fieldExtraTags() . '>' . $this->field_description . '</span>';
 	}
 }

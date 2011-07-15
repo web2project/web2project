@@ -80,54 +80,12 @@ $project = new CProject();
 $project->load($task_project);
 
 //Pull all users
-// TODO: There's an issue that can arise if a user is assigned full access to 
-//   a company which is not their own.  They will be allowed to create 
-//   projects but not create tasks since the task_owner dropdown does not get 
+// TODO: There's an issue that can arise if a user is assigned full access to
+//   a company which is not their own.  They will be allowed to create
+//   projects but not create tasks since the task_owner dropdown does not get
 //   populated by the "getPermittedUsers" function.
 $users = $perms->getPermittedUsers('tasks');
 
-function getSpaces($amount) {
-	if ($amount == 0) {
-		return '';
-	}
-	return str_repeat('&nbsp;', $amount);
-}
-
-function constructTaskTree($task_data, $depth = 0) {
-	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
-
-	$projTasks[$task_data['task_id']] = $task_data['task_name'];
-
-	$selected = $task_data['task_id'] == $task_parent ? 'selected="selected"' : '';
-	$task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . '...' : $task_data['task_name'];
-
-	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
-
-	if (isset($parents[$task_data['task_id']])) {
-		foreach ($parents[$task_data['task_id']] as $child_task) {
-			if ($child_task != $task_id) {
-				constructTaskTree($all_tasks[$child_task], ($depth + 1));
-			}
-		}
-	}
-}
-
-function build_date_list(&$date_array, $row) {
-	global $tracked_dynamics, $project;
-	// if this task_dynamic is not tracked, set end date to proj start date
-	if (!in_array($row['task_dynamic'], $tracked_dynamics)) {
-		$date = new w2p_Utilities_Date($project->project_start_date);
-	} elseif ($row['task_milestone'] == 0) {
-		$date = new w2p_Utilities_Date($row['task_end_date']);
-	} else {
-		$date = new w2p_Utilities_Date($row['task_start_date']);
-	}
-	$sdate = $date->format('%d/%m/%Y');
-	$shour = $date->format('%H');
-	$smin = $date->format('%M');
-
-	$date_array[$row['task_id']] = array($row['task_name'], $sdate, $shour, $smin);
-}
 
 // let's get root tasks
 $q = new w2p_Database_Query;
@@ -208,13 +166,11 @@ if (is_null($task->task_dynamic)) {
 
 $can_edit_time_information = $task->canUserEditTimeInformation();
 //get list of projects, for task move drop down list.
-$pq = new w2p_Database_Query;
-$pq->addQuery('pr.project_id, project_name');
-$pq->addTable('projects', 'pr');
-$pq->addWhere('( project_active = 1 or pr.project_id = ' . (int)$task_project . ')');
-$pq->addOrder('project_name');
-$project->setAllowedSQL($AppUI->user_id, $pq, null, 'pr');
-$projects = $pq->loadHashList();
+$tmpprojects = $project->getAllowedProjects($AppUI->user_id);
+$projects = array();
+foreach($tmpprojects as $proj) {
+    $projects[$proj['project_id']] = $proj['project_name'];
+}
 ?>
 <script language="javascript" type="text/javascript">
 var task_id = '<?php echo $task->task_id; ?>';
@@ -251,74 +207,73 @@ function popContacts() {
 	<input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />
 	<input name="old_task_parent" type="hidden" value="<?php echo $task->task_parent; ?>" />
 	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
-<table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
-<tr>
-	<td colspan="2" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>" >
-		<font color="<?php echo bestColor($project->project_color_identifier); ?>">
-			<strong><?php echo $AppUI->_('Project'); ?>: <?php echo $project->project_name; ?></strong>
-		</font>
-	</td>
-</tr>
+    <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
+        <tr>
+            <td colspan="2" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>" >
+                <font color="<?php echo bestColor($project->project_color_identifier); ?>">
+                    <strong><?php echo $AppUI->_('Project'); ?>: <?php echo $project->project_name; ?></strong>
+                </font>
+            </td>
+        </tr>
 
-<tr valign="top">
-	<td>
-		<?php echo $AppUI->_('Task Name'); ?> *
-		<br /><input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($task->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
-	</td>
-	<td>
-		<table cellspacing="0" cellpadding="2" border="0" width="100%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?></td>
-			<td>
-				<?php echo arraySelect($status, 'task_status', 'size="1" class="text"', ($task->task_status ? $task->task_status : 0) , true); ?>
-			</td>
+        <tr valign="top">
+            <td>
+                <?php echo $AppUI->_('Task Name'); ?> *
+                <br /><input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($task->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
+            </td>
+            <td>
+                <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?></td>
+                    <td>
+                        <?php echo arraySelect($status, 'task_status', 'size="1" class="text"', ($task->task_status ? $task->task_status : 0) , true); ?>
+                    </td>
 
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?> *</td>
-			<td nowrap="nowrap">
-				<?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($task->task_priority ? $task->task_priority : 0) , true); ?>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?></td>
-			<td>
-				<?php echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $task->task_percent_complete) . '%'; ?>
-			</td>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?> *</td>
+                    <td nowrap="nowrap">
+                        <?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($task->task_priority ? $task->task_priority : 0) , true); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?></td>
+                    <td>
+                        <?php echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $task->task_percent_complete) . '%'; ?>
+                    </td>
 
-			<td align="right" nowrap="nowrap"><label for="task_milestone"><?php echo $AppUI->_('Milestone'); ?>?</label></td>
-			<td>
-				<input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> onClick="toggleMilestone()" />
-			</td>
-		</tr>
-		</table>
-	</td>
-</tr>
-<tr>
-	<td colspan="2">
-		<table border="0" cellspacing="0" cellpadding="3" width="100%">
-		<tr>
-			<td height="40" width="35%">
-				* <?php echo $AppUI->_('requiredField'); ?>
-			</td>
-			<td height="40" width="30%">&nbsp;</td>
-			<td  height="40" width="35%" align="right">
-				<table>
-				<tr>
-					<td>
-						<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" />
-					</td>
-					<td>
-						<input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" />
-					</td>
-				</tr>
-				</table>
-			</td>
-		</tr>
-		</table>
-	</td>
-</tr>	
+                    <td align="right" nowrap="nowrap"><label for="task_milestone"><?php echo $AppUI->_('Milestone'); ?>?</label></td>
+                    <td>
+                        <input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> onClick="toggleMilestone()" />
+                    </td>
+                </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table border="0" cellspacing="0" cellpadding="3" width="100%">
+                <tr>
+                    <td height="40" width="35%">
+                        * <?php echo $AppUI->_('requiredField'); ?>
+                    </td>
+                    <td height="40" width="30%">&nbsp;</td>
+                    <td  height="40" width="35%" align="right">
+                        <table>
+                        <tr>
+                            <td>
+                                <input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" />
+                            </td>
+                            <td>
+                                <input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" />
+                            </td>
+                        </tr>
+                        </table>
+                    </td>
+                </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </form>
-</table>
-
 <?php
 $tab = $AppUI->processIntState('TaskAeTabIdx', $_GET, 'tab', 0);
 

@@ -1,2 +1,0 @@
-Przydzielone godziny uzytkownika
-Ten  raport pokazuje ile godzin uzytkownik przeznaczyl na swoja prace w okreslonym przedziale czasu.

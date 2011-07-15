@@ -8,7 +8,9 @@ require_once W2P_BASE_DIR . '/classes/ui.class.php';
 $AppUI = new CAppUI;
 
 $token = w2PgetParam($_GET, 'token', '');
+$token = preg_replace("/[^A-Za-z0-9]/", "", $token );
 $format = w2PgetParam($_GET, 'format', 'ical');
+
 $userId = CUser::getUserIdByToken($token);
 $AppUI->loadPrefs($userId);
 $AppUI->user_id = $userId;

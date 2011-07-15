@@ -175,11 +175,16 @@
 'active'=>'attivo',
 'add'=>'aggiungi',
 'added'=>'aggiunto',
+'admin_email_title'=>'',
 'admin_system_group_title'=>'Sistema',
 'admin_username_title'=>'Nome Utente Admin',
 'admin_username_tooltip'=>'Suggerisci il nome di login dell\'Utente Amministrativo.',
 'admin_users_group_title'=>'Utenti',
+'all_item_title'=>'Tutte le Attività',
+'allcompanies_item_title'=>'Tutte le Società',
+'allfinished7days_item_title'=>'Tutte le Attività completate negli ultimi 7 Giorni',
 'allow'=>'permetti',
+'allunfinished_item_title'=>'Tutte le Attività Incomplete',
 'app_item_title'=>'Sessioni Estese di web2Project',
 'auth_group_title'=>'Impostazioni Autenticazione Utente',
 'auth_method_title'=>'Metodo Autenticazione Utente',
@@ -221,6 +226,7 @@
 'check_tasks_dates_tooltip'=>'',
 'clear'=>'cancella',
 'cn'=>'Cinese',
+'company_filter_default_title'=>'Filtro Società di Default',
 'company_name_title'=>'Nome Società',
 'company_name_tooltip'=>'L\'impostazione Nome Società è usata per stabilire cosa apparirà nel nome principale del box di login sul sito.',
 'configure'=>'configura',
@@ -265,6 +271,8 @@
 'fr'=>'Francese',
 'hidden'=>'nascosto',
 'hide'=>'nascondi',
+'hide_email_addresses_title'=>'Nascondi Indirizzi Email',
+'hide_email_addresses_tooltip'=>'Selezionare questa opzione per nascondere gli indirizzi email all\'interno dei forum',
 'host_locale_title'=>'Lingua Host',
 'host_locale_tooltip'=>'Opzione che indica l\'impostazione internazionale o la lingua per il sito.',
 'host_style_title'=>'Stile Interfaccia Utente Predefinita',
@@ -324,6 +332,11 @@
 'mail_transport_tooltip'=>'Selezionare PHP per il supporto PHP mail standard o SMTP per il supporto diretto SMTP',
 'mail_user_title'=>'Nome Utente SMTP',
 'mail_user_tooltip'=>'Il nome Utente da usare per l\'autenticazione al server SMTP',
+'my_item_title'=>'Mie Attività',
+'mycomp_item_title'=>'Tutte la Attività della mia Società',
+'myfinished7days_item_title'=>'Mie Attività completate negli ultimi 7 Giorni',
+'myproj_item_title'=>'Miei Progetti',
+'myunfinished_item_title'=>'Mie Attività Incomplete',
 'no'=>'Norvegese',
 'page_size_title'=>'Dimensioni Pagina',
 'page_size_tooltip'=>'Numero di Record per pagina',
@@ -381,143 +394,274 @@
 'startup_group_title'=>'Inizio',
 'submit'=>'invia',
 'sv'=>'Svedese',
-'syscfg_intro'=>'La seguente configurazione delle variabili ha un impatto diretto sulle funzioni del sistema. La regolazione non corretta di una di queste opzioni può avere impatti sulle operazioni di installazione e il ripristino delle impostazioni può richiedere azioni esterne. Se alcuni di questi elementi non sono compresi in modo chiaro, raccomandiamo vivamente di lasciarli impostati come si trovano o di verificare le implicazioni nel codice prima di procedere. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+'syscfg_intro'=>'La seguente configurazione delle variabili ha un impatto diretto sulle funzioni del sistema. La regolazione non corretta di una di queste opzioni può avere impatti sulle operazioni di installazione e il ripristino delle impostazioni può richiedere azioni esterne. Se alcuni di questi elementi non sono compresi in modo chiaro, raccomandiamo vivamente di lasciarli impostati come si trovano o di verificare le implicazioni nel codice prima di procedere. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Sono disponibili informazioni al passaggio del mouse e (?)-popup di informazione per ciascuno dei campi, che comprendono tutte le informazioni che siamo in grado di fornire.',
 'system admin'=>'amministratore di sistema',
 'system configuration'=>'configurazione di sistema',
 'system_timezone_title'=>'Sistema Fuso Orario',
 'system_timezone_tooltip'=>'Questo è il fuso orario del server stesso. E\' utilizzato per i calcoli sul fuso orario per accertarsi che \"adesso\" sia adeguato. ',
+'system_update_check_title'=>'Verificare Aggiornamenti Ufficiali?',
 'system_update_day_title'=>'Verifica Aggiornamenti (Giorno)',
 'system_update_day_tooltip'=>'Questo è il giorno della settimana in cui il sistema verifica gli aggiornamenti: 0 = Domenica, 1 = Lunedì, ecc',
 'system_update_hour_title'=>'Verifica Aggiornamenti (Ora)',
 'system_update_hour_tooltip'=>'Questa è l\'ora del giorno in cui il sistema verifica gli aggiornamenti, basata su formato 24h.',
+'system_update_last_check_title'=>'Ultima verifica aggiornamenti di sistema',
+'task_filter_default_title'=>'Filtro Attività di default',
 'task_reminder_control_title'=>'Invia Promemoria Attività',
 'task_reminder_control_tooltip'=>'Se attivato, verrà inviata un\'email all\'assegnatario quando un\'attività è scaduta e per ogni giornata di ritardo fino al completamento.',
 'task_reminder_days_before_title'=>'Numero di giorni di avviso per attività scadute',
@@ -525,14 +669,18 @@ Sono disponibili informazioni al passaggio del mouse e (?)-popup di informazione
 'task_reminder_group_title'=>'Promemoria Attività',
 'task_reminder_repeat_title'=>'Numero massimo di promemoria da mandare',
 'task_reminder_repeat_tooltip'=>'Se un\'attività è in ritardo per molti giorni, si potrebbe non desiderare di inviare ulteriori promemoria. Questo valore determina il numero totale di promemoria da inviare, inclusi gli avvisi prima e dopo la scadenza.',
+'taskcreated_item_title'=>'Tutte le Attività che ho creato',
+'taskowned_item_title'=>'Tutte le Attività di cui sono proprietario',
 'tasks_ajax_list_title'=>'Usa AJAX per attività dinamiche',
 'tasks_ajax_list_tooltip'=>'Se il proprio browser non supporta AJAX, disattivare questa opzione. Caricamento dinamico delle attività la prima volta che vengono richieste.',
 'tasks_group_title'=>'Attività',
 'template_projects_status_id_title'=>'ID Stato Progetti Template',
 'template_projects_status_id_tooltip'=>'Digitare in questa casella l\'ID di Stato per i Progetti Template, così come è mostrato nel System Lookup Values per la Key ProjectStatus.',
 'tls_item_title'=>'TLS',
+'unassigned_item_title'=>'Tutte le Attività (non assegnate)',
 'updated'=>'aggiornato',
 'upgrade'=>'aggiornamento versione',
+'user_item_title'=>'Società utente Attivo',
 'username_min_len_title'=>'Minima Lunghezza Nome Utente',
 'username_min_len_tooltip'=>'Stabilisce la lunghezza minima di tutti i nomi utente per web2Project. NON può essere più lunga della rispettiva colonna nel DB',
 'visible'=>'visibile',

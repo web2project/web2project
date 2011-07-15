@@ -5,7 +5,7 @@
  * @subpackage authenticators
  */
 
-class w2p_Authenticators_SQL {
+class w2p_Authenticators_SQL extends w2p_Authenticators_Base {
 	public $user_id;
 	public $username;
 

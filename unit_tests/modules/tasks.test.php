@@ -28,8 +28,6 @@ global $ADODB_FETCH_MODE;
 global $w2p_performance_dbtime;
 global $w2p_performance_old_dbqueries;
 global $AppUI;
-global $tracking_dynamics;
-global $tracked_dynamics;
 global $w2Pconfig;
 
 require_once '../base.php';
@@ -50,9 +48,6 @@ $AppUI->login('admin', 'passwd');
 $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
 $defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
-
-$tracking_dynamics = array('0' => '21', '1' => '31');
-$tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
 
 require_once W2P_BASE_DIR . '/includes/session.php';
 require_once 'PHPUnit/Framework.php';
@@ -96,7 +91,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
     protected function getDataSetPath()
     {
-    	return dirname(dirname(__FILE__)).'/db_files/';
+    	return dirname(dirname(__FILE__)).'/db_files/tasks/';
     }
 
 	public function setUp()
@@ -153,12 +148,31 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 		unset($this->obj, $this->post_data);
 	}
 
+    /*
+     * This was written because the old CTask->load() actually performed updates
+     *   instead of just loading which is just screwy. The standard
+     *   CTask->store() method performs the updateDynamics that we're looking
+     *   for but the data loader for the Unit Tests bypasses that to hit the
+     *   database directly. So we have to do it manually post-dataload but
+     *   pre-testing.
+     */
+    protected function _preCalcData() {
+        global $AppUI;
+        $taskList = $this->obj->getAllowedTaskList($AppUI, 1);
+        foreach ($taskList as $item) {
+            $tmpTask = new CTask();
+            $tmpTask->load($item['task_id']);
+            if($tmpTask->task_dynamic == 1) {
+                $tmpTask->updateDynamics(true);
+                $tmpTask->store();
+            }
+        }
+    }
     /**
      * Tests the Attributes of a new Tasks object.
      */
     public function testNewTasksAttributes()
     {
-        $this->assertType('CTask',                                  $this->obj);
         $this->assertObjectHasAttribute('task_id',                  $this->obj);
         $this->assertObjectHasAttribute('task_name',                $this->obj);
         $this->assertObjectHasAttribute('task_parent',              $this->obj);
@@ -186,11 +200,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('task_contacts',            $this->obj);
         $this->assertObjectHasAttribute('task_custom',              $this->obj);
         $this->assertObjectHasAttribute('task_type',                $this->obj);
-        $this->assertObjectHasAttribute('_tbl_prefix',              $this->obj);
-        $this->assertObjectHasAttribute('_tbl',                     $this->obj);
-        $this->assertObjectHasAttribute('_tbl_key',                 $this->obj);
-        $this->assertObjectHasAttribute('_error',                   $this->obj);
-        $this->assertObjectHasAttribute('_query',                   $this->obj);
         $this->assertObjectHasAttribute('task_updator',             $this->obj);
         $this->assertObjectHasAttribute('task_created',             $this->obj);
         $this->assertObjectHasAttribute('task_updated',             $this->obj);
@@ -201,7 +210,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTasktAttributeValues()
     {
-        $this->assertType('CTask', $this->obj);
         $this->assertNull($this->obj->task_id);
         $this->assertNull($this->obj->task_name);
         $this->assertNull($this->obj->task_parent);
@@ -229,11 +237,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->task_contancts);
         $this->assertNull($this->obj->task_custom);
         $this->assertNull($this->obj->task_type);
-        $this->assertEquals('',         $this->obj->_tbl_prefix);
-        $this->assertEquals('tasks',    $this->obj->_tbl);
-        $this->assertEquals('task_id',  $this->obj->_tbl_key);
-        $this->assertEquals('',         $this->obj->_errors);
-        $this->assertType('w2p_Database_Query',    $this->obj->_query);
         $this->assertNull($this->obj->task_updator);
         $this->assertNull($this->obj->task_created);
         $this->assertNull($this->obj->task_updated);
@@ -498,6 +501,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
     /**
      * Tests loading a task that is dynamic skipping update.
+     *
+     * expectedException PHPUnit_Framework_Error
      */
     public function testLoadDynamicSkipUpdate()
     {
@@ -510,7 +515,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $this->obj->task_project);
         $this->assertEquals(1,                      $this->obj->task_owner);
         $this->assertEquals('2009-07-06 00:00:00',  $this->obj->task_start_date);
-        $this->assertEquals(2,                      $this->obj->task_duration);
+        $this->assertEquals(4,                      $this->obj->task_duration);
         $this->assertEquals(24,                     $this->obj->task_duration_type);
         $this->assertEquals(0,                      $this->obj->task_hours_worked);
         $this->assertEquals('2009-07-16 00:00:00',  $this->obj->task_end_date);
@@ -599,7 +604,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $this->obj->task_project);
         $this->assertEquals(1,                      $this->obj->task_owner);
         $this->assertEquals('2009-07-06 00:00:00',  $this->obj->task_start_date);
-        $this->assertEquals(2,                      $this->obj->task_duration);
+        $this->assertEquals(4,                      $this->obj->task_duration);
         $this->assertEquals(24,                     $this->obj->task_duration_type);
         $this->assertEquals(0,                      $this->obj->task_hours_worked);
         $this->assertEquals('2009-07-16 00:00:00',  $this->obj->task_end_date);
@@ -630,6 +635,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests that the peek function returns a task object that has
      * not had it's data updated if it is dynamic.
+     *
+     * expectedException PHPUnit_Framework_Error
      */
     public function testPeek()
     {
@@ -642,7 +649,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $task->task_project);
         $this->assertEquals(1,                      $task->task_owner);
         $this->assertEquals('2009-07-06 00:00:00',  $task->task_start_date);
-        $this->assertEquals(2,                      $task->task_duration);
+        $this->assertEquals(4,                      $task->task_duration);
         $this->assertEquals(24,                     $task->task_duration_type);
         $this->assertEquals(0,                      $task->task_hours_worked);
         $this->assertEquals('2009-07-16 00:00:00',  $task->task_end_date);
@@ -1144,6 +1151,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeepCopyNoProjectNoTask()
     {
+        $this->_preCalcData();
+
         $this->obj->load(24);
         $this->obj->deepCopy();
 
@@ -1178,6 +1187,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeepCopyNoProjectTask()
     {
+        $this->_preCalcData();
+
         $this->obj->load(24);
         $this->obj->deepCopy(0, 1);
 
@@ -1212,6 +1223,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeepCopyProjectTask()
     {
+        $this->_preCalcData();
+
         $this->obj->load(24);
         $this->obj->deepCopy(2, 1);
 
@@ -1491,7 +1504,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertFalse($this->obj->load(22));
         $this->assertEquals(0, count($this->obj->getAssignedUsers(22)));
-        $this->assertEquals(0, count($this->obj->getTaskLogs(22)));
+        $this->assertEquals(1, count($this->obj->getTaskLogs(22)));
         $this->assertEquals(0, count($this->obj->getAssignedUsers(22)));
         $this->assertEquals(0, count($this->obj->getDependencyList(22)));
         $this->assertEquals(0, count($this->obj->getDependentTaskList(22)));
@@ -2177,7 +2190,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $assigned_users = $this->obj->getAssignedUsers(1);
 
         $this->assertEquals(1, count($assigned_users));
-        $this->assertEquals(28, count($assigned_users[1]));
+        $this->assertEquals(32, count($assigned_users[1]));
 
         $this->assertEquals(1,                                  $assigned_users[1]['user_id']);
         $this->assertEquals(1,                                  $assigned_users[1]['user_contact']);
@@ -2192,6 +2205,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(50,                                 $assigned_users[1]['perc_assignment']);
         $this->assertEquals(42,                                 $assigned_users[1]['user_task_priority']);
         $this->assertEquals('Person',                           $assigned_users[1]['contact_last_name']);
+		$this->assertEquals('Admin',							$assigned_users[1]['contact_first_name']);
+        $this->assertEquals('Admin Person',                     $assigned_users[1]['contact_display_name']);
+		$this->assertEquals('',									$assigned_users[1]['user_email']);
         $this->assertEquals(1,                                  $assigned_users[1][0]);
         $this->assertEquals(1,                                  $assigned_users[1][1]);
         $this->assertEquals('admin',                            $assigned_users[1][2]);
@@ -2205,6 +2221,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(50,                                 $assigned_users[1][10]);
         $this->assertEquals(42,                                 $assigned_users[1][11]);
         $this->assertEquals('Person',                           $assigned_users[1][12]);
+		$this->assertEquals('Admin',							$assigned_users[1][13]);
+        $this->assertEquals('Admin Person',                     $assigned_users[1][14]);
+		$this->assertEquals('',									$assigned_users[1][15]);
     }
     /**
      * Test getting a list of dependencies
@@ -2214,7 +2233,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $dependencies = $this->obj->getDependencyList(3);
 
         $this->assertEquals(1, count($dependencies));
-        $this->assertEquals('Task 4', $dependencies[4]);
+        $this->assertEquals('Task 4', $dependencies[4]['task_name']);
 
         $dependencies = $this->obj->getDependencyList(200);
         $this->assertEquals(0, count($dependencies));
@@ -2228,8 +2247,8 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $dependent_tasks = $this->obj->getDependentTaskList(28);
 
         $this->assertEquals(2,          count($dependent_tasks));
-        $this->assertEquals('Task 29',  $dependent_tasks[29]);
-        $this->assertEquals('Task 30',  $dependent_tasks[30]);
+        $this->assertEquals('Task 29',  $dependent_tasks[29]['task_name']);
+        $this->assertEquals('Task 30',  $dependent_tasks[30]['task_name']);
 
         $dependent_tasks = $this->obj->getDependentTaskList(200);
 
@@ -2286,8 +2305,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $allocation = $this->obj->getAllocation(null, null, false);
 
-        $this->assertEquals(0,      count($allocation));
-        $this->assertType('array',  $allocation);
+        $this->assertEquals(0,              count($allocation));
 
         $w2Pconfig['check_overallocation'] = $old_check_overallocation;
 
@@ -2308,7 +2326,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $allocation = $this->obj->getAllocation(null, null, true);
 
         $this->assertEquals(2,                      count($allocation));
-        $this->assertType('array',                  $allocation);
         $this->assertEquals(1,                      $allocation[1]['user_id']);
         $this->assertEquals('admin',                $allocation[1]['user_username']);
         $this->assertEquals('Person',               $allocation[1]['contact_last_name']);
@@ -2851,7 +2868,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      * Test the remind function
      * @todo Not sure how we can test reliably that the email was actually
      * generated and sent
-     * @expectedException PHPUnit_Framework_Error
      */
     public function testRemind()
     {
@@ -3112,7 +3128,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
                        'where' => 'project_id = 2');
         $allowed_records = $this->obj->getAllowedRecords(1, '*', '', null, $extra);
 
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $allowed_records);
         $this->assertEquals(0, count($allowed_records));
     }
 
@@ -3323,8 +3338,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $task_list = $this->obj->getTaskList(1, -10000);
 
-        $this->assertType('array',  $task_list);
-        $this->assertEquals(0,      count($task_list));
+        $this->assertEquals(0,            count($task_list));
     }
 
     /**

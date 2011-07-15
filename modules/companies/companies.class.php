@@ -13,7 +13,7 @@
 class CCompany extends w2p_Core_BaseObject {
 	/**
  	@var int Primary Key */
-	public $company_id = null;
+	public $company_id = 0;
 	/**
  	@var string */
 	public $company_name = null;
@@ -64,6 +64,8 @@ class CCompany extends w2p_Core_BaseObject {
       if ('' != $this->company_email && !w2p_check_email($this->company_email)) {
         $errorArray['company_email'] = $baseErrorMsg . 'company email is not formatted properly';
       }
+
+      $this->_error = $errorArray;
 	  return $errorArray;
 	}
 
@@ -79,6 +81,7 @@ class CCompany extends w2p_Core_BaseObject {
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
+        $this->_error = array();
         /*
          * TODO: This should probably use the canDelete method from above too to
          *   not only check permissions but to check dependencies... luckily the
@@ -97,10 +100,10 @@ class CCompany extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $this->company_id = (int) $this->company_id;

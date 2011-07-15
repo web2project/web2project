@@ -8,7 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
 ##
 
 class CDepartment extends w2p_Core_BaseObject {
-	public $dept_id = null;
+	public $dept_id = 0;
 	public $dept_parent = null;
 	public $dept_company = null;
 	public $dept_name = null;
@@ -137,6 +137,7 @@ class CDepartment extends w2p_Core_BaseObject {
                 $errorArray['dept_url'] = $baseErrorMsg . 'department url is not formatted properly';
             }
 
+            $this->_error = $errorArray;
             return $errorArray;
 	}
 
@@ -146,10 +147,10 @@ class CDepartment extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         if ($this->dept_id && $perms->checkModuleItem('departments', 'edit', $this->dept_id)) {
@@ -170,6 +171,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('departments', 'delete', $this->dept_id)) {
             $q = new w2p_Database_Query;

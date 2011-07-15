@@ -91,38 +91,41 @@ function delIt() {
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_folder_id" value="<?php echo $folder; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
-<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
-<tr>
-	<td width="100%" valign="top" align="center">
-		<table cellspacing="1" cellpadding="2" width="60%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Subfolder of'); ?>:</td>
-			<td align="left">
-			<?php
-$parent_folder = ($folder > 0) ? $obj->file_folder_parent : $file_folder_parent;
-echo arraySelectTree($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder); ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder Name'); ?>:</td>
-			<td align="left"><input type="text" class="text" id="ffn" name="file_folder_name"
-                              value="<?php echo $obj->file_folder_name; ?>" maxlength="64" /></td>
-		</tr>
-		<tr>
-			<td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
-			<td align="left">
-				<textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $obj->file_folder_description; ?></textarea>
-			</td>
-		</tr>
-		</table>
-	</td>
-</tr>
-<tr>
-	<td>
-		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')){location.href = '?<?php echo $referrer; ?>';}" />
-	</td>
-	<td align="right">
-		<input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
-	</td>
-</tr>
+    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
+        <tr>
+            <td width="100%" valign="top" align="center">
+                <table cellspacing="1" cellpadding="2" width="60%">
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Subfolder of'); ?>:</td>
+                        <td align="left">
+                        <?php
+                            $parent_folder = ($folder > 0) ? $obj->file_folder_parent : $file_folder_parent;
+                            echo arraySelectTree($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder);
+                        ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder Name'); ?>:</td>
+                        <td align="left">
+                            <input type="text" class="text" id="ffn" name="file_folder_name" value="<?php echo $obj->file_folder_name; ?>" maxlength="64" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
+                        <td align="left">
+                            <textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $obj->file_folder_description; ?></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')){location.href = '?<?php echo $referrer; ?>';}" />
+            </td>
+            <td align="right">
+                <input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+            </td>
+        </tr>
+    </table>
 </form>
-</table>

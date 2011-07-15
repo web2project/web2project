@@ -47,21 +47,12 @@ function safe_get_env($name) {
 // automatically define the base url
 $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
 $baseUrl .= safe_get_env('HTTP_HOST');
-$pathInfo = safe_get_env('PATH_INFO');
-if ($pathInfo) {
-	$baseUrl .= str_replace('\\', '/', dirname($pathInfo));
-} else {
-	$baseUrl .= str_replace('\\', '/', dirname(safe_get_env('SCRIPT_NAME')));
-}
-
+$baseUrl .= dirname(safe_get_env('SCRIPT_NAME'));
 $baseUrl = preg_replace('#/$#D', '', $baseUrl);
+
 // Defines to deprecate the global baseUrl/baseDir
 define('W2P_BASE_DIR', $baseDir);
 define('W2P_BASE_URL', $baseUrl);
-
-// Include the PHPGACL library
-require_once W2P_BASE_DIR . '/lib/phpgacl/gacl.class.php';
-require_once W2P_BASE_DIR . '/lib/phpgacl/gacl_api.class.php';
 
 // Set the ADODB directory
 if (!defined('ADODB_DIR')) {

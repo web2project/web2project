@@ -1,3 +1,0 @@
-Zalegle
-Zadania, ktore maja przekroczony czas realizacji
-suppressHeaders=1

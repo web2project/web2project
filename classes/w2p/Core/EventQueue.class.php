@@ -92,22 +92,22 @@ class w2p_Core_EventQueue {
 	public function remove($id) {
 		$q = new w2p_Database_Query;
 		$q->setDelete($this->table);
-		$q->addWhere('queue_id = \'' . $id . '\'');
+		$q->addWhere("queue_id = $id");
 		$q->exec();
 		$q->clear();
 	}
 
 	/**
 	 * Find a queue record (or records) based upon the
-	 * 
+	 *
 	 */
-	public function find($module, $type, $id = null) {
+	public function find($module, $type, $id = 0) {
 		$q = new w2p_Database_Query;
 		$q->addTable($this->table);
-		$q->addWhere('queue_module = \'' . $module . '\'');
-		$q->addWhere('queue_type = \'' . $type . '\'');
-		if (isset($id)) {
-			$q->addWhere('queue_origin_id = \'' . $id . '\'');
+		$q->addWhere("queue_module = '$module'");
+		$q->addWhere("queue_type = '$type'");
+		if ($id) {
+			$q->addWhere("queue_origin_id = $id");
 		}
 		return $q->loadHashList('queue_id');
 	}
@@ -118,10 +118,6 @@ class w2p_Core_EventQueue {
 	 */
 	public function execute(&$fields) {
 		global $AppUI;
-
-        if ($fields['queue_module'] == 'libmail') {
-            include_once W2P_BASE_DIR . '/classes/mail.class.php';
-        }
 
 		$args = unserialize($fields['queue_data']);
 		if (strpos($fields['queue_callback'], '::') !== false) {
@@ -173,7 +169,7 @@ class w2p_Core_EventQueue {
 	}
 
 	public function update_event(&$fields) {
-		if ($fields['queue_repeat_interval'] > 0 && $fields['queue_repeat_count'] > 0) {
+		if ($fields['queue_repeat_interval'] && $fields['queue_repeat_count']) {
 			$fields['queue_start'] += $fields['queue_repeat_interval'];
 			$fields['queue_repeat_count']--;
 			$this->update_list[] = $fields;

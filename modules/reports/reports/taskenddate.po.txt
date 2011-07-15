@@ -1,2 +1,0 @@
-Data koncowa zadan
-Pokazuje koncowa date zadania (rzeczywista i teoretyczna)

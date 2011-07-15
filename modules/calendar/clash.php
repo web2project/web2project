@@ -9,7 +9,7 @@ if (isset($_REQUEST['clash_action'])) {
 	$do_include = false;
 	switch ($_REQUEST['clash_action']) {
 		case 'suggest':
-			clash_suggest($AppUI);
+			clash_suggest($AppUI, $cal_sdf);
 			break;
 		case 'process':
 			clash_process($AppUI);
@@ -89,7 +89,7 @@ function clash_cancel(CAppUI $AppUI) {
 /*
 * display a form
 */
-function clash_suggest(CAppUI $AppUI) {
+function clash_suggest(CAppUI $AppUI, $cal_sdf) {
 	global $m, $a;
 	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);

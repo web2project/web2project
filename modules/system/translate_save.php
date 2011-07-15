@@ -9,17 +9,14 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not call this file directly.');
 }
 
+$module = w2PgetParam($_POST, 'module', 0);
+$lang = w2PgetParam($_POST, 'lang', $AppUI->user_locale);
+$trans = w2PgetParam($_POST, 'trans', array());
+
 // check permissions
-$perms = &$AppUI->acl();
 if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-
-$module = w2PgetParam($_POST, 'module', 0);
-$lang = w2PgetParam($_POST, 'lang', $AppUI->user_locale);
-
-$trans = w2PgetParam($_POST, 'trans', 0);
-//echo '<pre>';print_r( $trans );echo '</pre>';die;
 
 // save to core locales if a translation exists there, otherwise save
 // into the module's local locale area if it exists.  If not then
@@ -30,15 +27,16 @@ if (file_exists($core_filename)) {
 } else {
 	$mod_locale = W2P_BASE_DIR . '/modules/' . $module . '/locales';
 	if (is_dir($mod_locale)) {
-		if (is_dir($mod_locale . '/' . $lang)) {
-			$filename = W2P_BASE_DIR . '/modules/' . $module . '/locales/' . $lang . '/' . $module . '.inc';
+		$mod_locale .= '/' . $lang;
+        if (is_dir($mod_locale)) {
+			$filename = $mod_locale . '/' . $module . '.inc';
 		} else {
-			$res = mkdir($mod_locale . '/' . $lang, 0777);
+			$res = mkdir($mod_locale, 0777);
 			if (!$res) {
-				$AppUI->setMsg("Could not create folder ($mod_locale " . '/' . "$lang) to save locale file.", UI_MSG_ERROR);
+				$AppUI->setMsg("Could not create folder ($mod_locale) to save locale file.", UI_MSG_ERROR);
 				$AppUI->redirect('m=system');
 			} else {
-				$filename = W2P_BASE_DIR . '/modules/' . $module . '/locales/' . $lang . '/' . $module . '.inc';
+				$filename = $mod_locale . '/' . $module . '.inc';
 			}
 		}
 	} else {
@@ -81,4 +79,4 @@ fwrite($fp, $txt);
 fclose($fp);
 
 $AppUI->setMsg('Locales file saved', UI_MSG_OK);
-$AppUI->redirect($AppUI->getPlace());
+$AppUI->redirect('m=system&a=translate');

@@ -79,59 +79,57 @@ function addTasks() {
 	<input type="hidden" name="opt_view_actions" value="<?php echo (isset($view_options[0]['pd_option_view_actions']) ? $view_options[0]['pd_option_view_actions'] : 1); ?>" />
 	<input type="hidden" name="opt_view_addtsks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
 	<input type="hidden" name="opt_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
-<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl" >
-<tr>
-    <td width="40%" valign="top" align="">
-      <table width="100%">
-      <tbody valign="top" id="tcomponents">
-<tr>
-      <th>
-          &nbsp;
-      </th>
-      <th>
-          <b><?php echo $AppUI->_('Task Name'); ?></b>
-      </th>
-      <th>
-          <b><?php echo $AppUI->_('Start'); ?></b>
-      </th>
-      <th>
-          <b><?php echo $AppUI->_('End'); ?></b>
-      </th>
-      <th>
-          <b><?php echo $AppUI->_('Duration'); ?></b>
-      </th>
-      <th>
-          <b><?php echo $AppUI->_('Priority'); ?></b>
-      </th>
-      <th>
-          <b><?php echo $AppUI->_('Type'); ?></b>
-      </th>
-      <th>
-          <b><?php echo $AppUI->_('Access'); ?></b>
-      </th>
-      <th>
-          <b><?php echo $AppUI->_('Extra'); ?></b>
-      </th>
-</tr>
-</tbody>
-</table>
-<table width="100%">
-<tr>
-	<td align="left" width="20">
- 		<?php echo w2PtoolTip('add tasks', 'click here to add a new task to this project'); ?><a href="javascript: void(0);" onclick="addComponent()">
-			<img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" border="0" alt="" />
-		</a><?php echo w2PendTip(); ?>
-	</td>
-</tr>
-<tr>
-	<td colspan="5" valign="bottom" align="right">
-		<input type="button" class="button" value="<?php echo $AppUI->_('add'); ?>" onclick="addTasks()" />
-	</td>
-</tr>
-</table>
-</td>
-</td>
-</tr>
-</tbody>
-</table>
+    <table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl" >
+        <tr>
+            <td width="40%" valign="top" align="">
+                <table width="100%">
+                    <tbody valign="top" id="tcomponents">
+                        <tr>
+                            <th width="5">
+                                <?php echo w2PtoolTip('add tasks', 'click here to add a new task to this project'); ?><a href="javascript: void(0);" onclick="addComponent()">
+                                <img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" border="0" alt="" />
+                                </a><?php echo w2PendTip(); ?>
+                            </th>
+                            <th>
+                                <b><?php echo $AppUI->_('Task Name'); ?></b>
+                            </th>
+                            <th>
+                                <b><?php echo $AppUI->_('Start'); ?></b>
+                            </th>
+                            <th>
+                                <b><?php echo $AppUI->_('End'); ?></b>
+                            </th>
+                            <th>
+                                <b><?php echo $AppUI->_('Duration'); ?></b>
+                            </th>
+                            <th>
+                                <b><?php echo $AppUI->_('Priority'); ?></b>
+                            </th>
+                            <th>
+                                <b><?php echo $AppUI->_('Type'); ?></b>
+                            </th>
+                            <th>
+                                <b><?php echo $AppUI->_('Access'); ?></b>
+                            </th>
+                            <th>
+                                <b><?php echo $AppUI->_('Extra'); ?></b>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+                <table width="100%">
+                    <tr>
+                        <td align="left" width="20">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" valign="bottom" align="right">
+                            <input type="button" class="button" value="<?php echo $AppUI->_('add'); ?>" onclick="addTasks()" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </form>

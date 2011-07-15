@@ -1,8 +1,7 @@
-<?php
+<?php /* $Id$ $URL$ */
 
 class CustomFields extends w2p_Core_CustomFields
 {
-
     public function __construct($m, $a, $obj_id = null, $mode = 'edit', $published = 0)
     {
         parent::__construct($m, $a, $obj_id, $mode, $published);

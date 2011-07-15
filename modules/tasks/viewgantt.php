@@ -67,25 +67,17 @@ if ($a == 'todo') {
 /**
   * prepare the array with the tasks to display in the task filter
   * (for the most part this is code harvested from gantt.php)
-  * 
-  */ 
+  *
+  */
 $filter_task_list = array();
-$q = new w2p_Database_Query;
-$q->addTable('projects');
-$q->addQuery('project_id, project_color_identifier, project_name' 
-             . ', project_start_date, project_end_date');
-$q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project');
-$q->addWhere('project_status != 7');
-$q->addGroup('project_id');
-$q->addOrder('project_name');
-//$projects->setAllowedSQL($AppUI->user_id, $q);
-$projects = $q->loadHashList('project_id');
-$q->clear();
+$projectObject = new CProject();
+$projects = $projectObject->getAllowedProjects($AppUI->user_id);
 
+$q = new w2p_Database_Query;
 $q->addTable('tasks', 't');
 $q->addJoin('projects', 'p', 'p.project_id = t.task_project');
-$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date' 
-             . ', task_duration, task_duration_type, task_priority, task_percent_complete' 
+$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date'
+             . ', task_duration, task_duration_type, task_priority, task_percent_complete'
              . ', task_order, task_project, task_milestone, project_name, task_dynamic');
 
 $q->addWhere('project_status != 7 AND task_dynamic = 1');
@@ -103,23 +95,7 @@ foreach ($proTasks as $row) {
 }
 unset($proTasks);
 $parents = array();
-function showfiltertask(&$a, $level=0) {
-     /* Add tasks to the filter task aray */
-     global $filter_task_list, $parents;
-     $filter_task_list[] = array($a, $level);
-     $parents[$a['task_parent']] = true;
-}
-function findfiltertaskchild(&$tarr, $parent, $level=0) {
-     GLOBAL $projects, $filter_task_list;
-     $level = $level + 1;
-     $n = count($tarr);
-     for ($x=0; $x < $n; $x++) {
-          if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']){
-               showfiltertask($tarr[$x], $level);
-               findfiltertaskchild($tarr, $tarr[$x]['task_id'], $level);
-          }
-     }
-}
+
 foreach ($projects as $p) {
      global $parents, $task_id;
      $parents = array();

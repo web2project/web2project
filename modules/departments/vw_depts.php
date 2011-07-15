@@ -3,14 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $search_string;
-global $owner_filter_id;
-global $currentTabId;
-global $currentTabName;
-global $tabbed;
-global $type_filter;
-global $orderby;
-global $orderdir;
+global $search_string, $owner_filter_id, $currentTabId, $orderby, $orderdir;
 
 $types = w2PgetSysVal('DepartmentType');
 $dept_type_filter = $currentTabId-1;
@@ -18,7 +11,6 @@ $dept_type_filter = $currentTabId-1;
 // get any records denied from viewing
 
 $dept = new CDepartment();
-$allowedDepts = $dept->getAllowedRecords($AppUI->user_id, 'dept_id, dept_name');
 $deptList = $dept->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
 
@@ -50,6 +42,7 @@ if (count($deptList) > 0) {
 		echo '<td align="left" nowrap="nowrap">' . $AppUI->_($types[$dept['dept_type']]) . '</td></tr>';
 	}
 } else {
-	echo '<td colspan="4">' . $AppUI->_('No data available') . '</td>';
+	echo '<tr><td colspan="4">' . $AppUI->_('No data available') . '</td></tr>';
 }
-echo '</tr></td></tr></table>';
+?>
+</table>

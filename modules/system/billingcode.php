@@ -32,29 +32,6 @@ $q->clear();
 
 $company_name = $company_list[$company_id];
 
-function showcodes(&$a) {
-	global $AppUI, $company_id;
-
-	$alt = htmlspecialchars($a['billingcode_desc']);
-	$s = '
-<tr>
-	<td width=40>
-		<a href="?m=system&amp;a=billingcode&amp;company_id=' . $company_id . '&amp;billingcode_id=' . $a['billingcode_id'] . '" title="' . $AppUI->_('edit') . '">
-			<img src="' . w2PfindImage('icons/stock_edit-16.png') . '" border="0" alt="Edit" /></a>';
-
-	if ($a['billingcode_status'] == 0)
-		$s .= '<a href="javascript:delIt2(' . $a['billingcode_id'] . ');" title="' . $AppUI->_('delete') . '">
-			<img src="' . w2PfindImage('icons/stock_delete-16.png') . '" border="0" alt="Delete" /></a>';
-
-	$s .= '
-	</td>
-	<td align="left">&nbsp;' . $a['billingcode_name'] . ($a['billingcode_status'] == 1 ? ' (deleted)' : '') . '</td>
-	<td nowrap="nowrap" align="center">' . $a['billingcode_value'] . '</td>
-	<td nowrap="nowrap">' . $a['billingcode_desc'] . '</td>
-</tr>';
-	echo $s;
-}
-
 $titleBlock = new CTitleBlock('Edit Billing Codes', 'myevo-weather.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();

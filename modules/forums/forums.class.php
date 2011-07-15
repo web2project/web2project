@@ -46,7 +46,23 @@ class CForum extends w2p_Core_BaseObject {
             $errorArray['forum_owner'] = $baseErrorMsg . 'forum owner is not set';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
+    }
+
+    public function getMessages(CAppUI $AppUI, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
+        $q = new w2p_Database_Query;
+        $q->addTable('forums');
+        $q->addTable('forum_messages');
+        $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email,
+            contact_display_name, user_username, forum_moderated, visit_user');
+        $q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = ' . (int) $forum_id . ' AND visit_message = forum_messages.message_id');
+        $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
+        $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+        $q->addWhere('forum_id = message_forum AND (message_id = ' . (int)$message_id . ' OR message_parent = ' . (int)$message_id . ')');
+        $q->addOrder('message_date ' . $sortDir);
+
+        return $q->loadList();
     }
 
     public function load(CAppUI $AppUI, $forum_id) {
@@ -55,6 +71,27 @@ class CForum extends w2p_Core_BaseObject {
         $q->addTable('forums');
         $q->addWhere('forum_id = ' . (int) $forum_id);
         $q->loadObject($this, true, false);
+    }
+
+    public function loadFull(CAppUI $AppUI, $forum_id) {
+        $q = new w2p_Database_Query;
+        $q->addTable('forums');
+        $q->addTable('users', 'u');
+        $q->addQuery('forum_id, forum_project,	forum_description, forum_owner, forum_name,
+            forum_create_date, forum_last_date, forum_message_count, forum_moderated,
+            user_username, contact_first_name, contact_last_name, contact_display_name,
+            project_name, project_color_identifier');
+        $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+        $q->addJoin('projects', 'p', 'p.project_id = forum_project', 'left');
+        $q->addWhere('user_id = forum_owner');
+        $q->addWhere('forum_id = ' . (int)$forum_id);
+
+        $this->project_name = '';
+        $this->project_color_identifier = '';
+        $this->contact_first_name = '';
+        $this->contact_last_name = '';
+        $this->contact_display_name = '';
+        $q->loadObject($this);
     }
 
     public function getAllowedForums($user_id, $company_id, $filter = -1, $orderby = 'forum_name', $orderdir = 'asc', $max_msg_length = 30)
@@ -114,10 +151,10 @@ class CForum extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         if ($this->forum_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
@@ -139,6 +176,7 @@ class CForum extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('forums', 'delete', $this->forum_id)) {
             $q = new w2p_Database_Query;
@@ -152,14 +190,7 @@ class CForum extends w2p_Core_BaseObject {
             if (!$q->exec()) {
                 return db_error();
             }
-            $q->clear();
 
-            $q->setDelete('forums');
-            $q->addWhere('forum_id = ' . (int)$this->forum_id);
-            if (!$q->exec()) {
-                $q->clear();
-                return db_error();
-            }
             if ($msg = parent::delete()) {
                 return $msg;
             }

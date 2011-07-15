@@ -26,6 +26,13 @@ if ($user_id) {
 
 			if (($msg = $user->store())) {
 				$AppUI->setMsg($msg, UI_MSG_ERROR);
+                ?>
+                <script language="javascript" type="text/javascript">
+                    window.onload = function() {
+                        window.close();
+		            }
+                </script>
+                <?php
 			} else {
 				echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
 				if (function_exists('styleRenderBoxTop')) {

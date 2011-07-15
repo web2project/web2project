@@ -3,6 +3,8 @@
 		die('You should not access this file directly.');
 	}
 	
+$timezones = w2PgetTimezonesForInstall();
+        
 ?>
 <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 	<input type="hidden" name="step" value="perform" />
@@ -56,6 +58,18 @@
 				<input class="text" type="password" name="adminpass" value="" title="The password for the admin user." />
 			</td>
 		</tr>
+                <tr>
+                    <td class="item">Specify a default server timezone</td>
+                    <td align="left">
+                        <?php echo arraySelect($timezones, 'system_timezone', 'class="text"', 'America/New_York'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="item">Specify a default timezone for users</td>
+                    <td align="left">
+                        <?php echo arraySelect($timezones, 'user_timezone', 'class="text"', 'America/New_York'); ?>
+                    </td>
+                </tr>
 		<tr>
 			<td colspan="2">&nbsp;</td>
 		</tr>

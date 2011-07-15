@@ -198,10 +198,6 @@ echo arraySelect($times, 'pref_name[TIMEFORMAT]', 'class=text size=1', $prefs['T
 $currencies = array();
 $currEx = 1234567.89;
 
-if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')
-	$is_win = true;
-else
-	$is_win = false;
 foreach (array_keys($LANGUAGES) as $lang) {
 	$currencies[$lang] = formatCurrency($currEx, $AppUI->setUserLocale($lang, false));
 }
@@ -294,11 +290,11 @@ echo ' />';
 <tr>
 	<td align="right"><?php echo $AppUI->_('Task Log Email Recording Method'); ?>:</td>
 	<td>
-	<?php
-$record_method['0'] = $AppUI->_('None');
-$record_method['1'] = $AppUI->_('Append to Log');
-echo arraySelect($record_method, 'pref_name[TASKLOGNOTE]', 'class="text" size="1"', $prefs['TASKLOGNOTE'], false);
-?>
+        <?php
+            $record_method['0'] = $AppUI->_('None');
+            $record_method['1'] = $AppUI->_('Append to Log');
+            echo arraySelect($record_method, 'pref_name[TASKLOGNOTE]', 'class="text" size="1"', $prefs['TASKLOGNOTE'], false);
+        ?>
 	</td>
 </tr>
 <tr>

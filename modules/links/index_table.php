@@ -22,7 +22,6 @@ if ($canEdit) {
     $titleBlock->show();
 }
 
-$tab = $AppUI->processIntState('LinkIdxTab', $_GET, 'tab', 0);
 $page = (int) w2PgetParam($_GET, 'page', 1);
 $search = w2PgetParam($_POST, 'search', '');
 
@@ -68,7 +67,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 
 	if ($fp != $row['link_project']) {
 		if (!$row['project_name']) {
-			$row['project_name'] = $AppUI->_('All Projects');
+			$row['project_name'] = $AppUI->_('No Project Specified');
 			$row['project_color_identifier'] = 'f4efe3';
 		}
 		if ($showProject) {

@@ -1,2 +1,0 @@
-Attivita' ordinate per Utente
-Questo report mostra le attivita' assegnate ad ogni utente.

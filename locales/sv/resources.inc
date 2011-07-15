@@ -1,0 +1,23 @@
+##
+## DO NOT MODIFY THIS FILE BY HAND!
+##
+'Add Resource'=>'Lägg till resurs',
+'All Resources'=>'Alla resurser',
+'Description'=>'Beskrivning',
+'Details'=>'Detaljer',
+'Equipment'=>'Utrustning',
+'ID'=>'ID',
+'Max Alloc %'=>'Max tilld. %',
+'Max Allocation %'=>'Max tilldelade %',
+'Maximum Allocation Percentage'=>'Maximalt tilldelad procentsats',
+'Notes'=>'Användarkrav/begränsningar',
+'Resource ID'=>'Resursnamn',
+'Resource Name'=>'Hemmahörande på/hos',
+'Tool'=>'Verktyg',
+'Type'=>'Typ',
+'Venue'=>'Kunskap',
+'back'=>'tillbaka',
+'doDelete'=>'',
+'new resource'=>'ny resurs',
+'resource list'=>'resurslista',
+'submit'=>'skicka',

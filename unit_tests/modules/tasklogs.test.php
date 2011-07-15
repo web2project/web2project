@@ -95,7 +95,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     protected function getDataSetPath()
     {
-    	return dirname(dirname(__FILE__)).'/db_files/';
+    	return dirname(dirname(__FILE__)).'/db_files/tasks/';
     }
 
     /**
@@ -143,7 +143,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributes()
     {
-        $this->assertType('CTaskLog',                           $this->obj);
         $this->assertObjectHasAttribute('task_log_id',          $this->obj);
         $this->assertObjectHasAttribute('task_log_task',        $this->obj);
         $this->assertObjectHasAttribute('task_log_name',        $this->obj);
@@ -157,11 +156,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertObjectHasAttribute('task_log_related_url', $this->obj);
         $this->assertObjectHasAttribute('task_log_created',     $this->obj);
         $this->assertObjectHasAttribute('task_log_updated',     $this->obj);
-        $this->assertObjectHasAttribute('_tbl_prefix',          $this->obj);
-        $this->assertObjectHasAttribute('_tbl',                 $this->obj);
-        $this->assertObjectHasAttribute('_tbl_key',             $this->obj);
-        $this->assertObjectHasAttribute('_error',               $this->obj);
-        $this->assertObjectHasAttribute('_query',               $this->obj);
     }
 
     /**
@@ -169,7 +163,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributeValues()
     {
-        $this->assertType('CTaskLog', $this->obj);
         $this->assertNull($this->obj->task_log_id);
         $this->assertNull($this->obj->task_log_task);
         $this->assertNull($this->obj->task_log_name);
@@ -183,11 +176,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->task_log_created);
         $this->assertNull($this->obj->task_log_updated);
         $this->assertEquals(0,              $this->obj->task_log_problem);
-        $this->assertEquals('',             $this->obj->_tbl_prefix);
-        $this->assertEquals('task_log',     $this->obj->_tbl);
-        $this->assertEquals('task_log_id',  $this->obj->_tbl_key);
-        $this->assertEquals('',             $this->obj->_error);
-        $this->assertType('w2p_Database_Query',        $this->obj->_query);
     }
 
     /**
@@ -282,9 +270,9 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * TODO: This should not be in the TaskLog object and should instead be on 
+     * TODO: This should not be in the TaskLog object and should instead be on
      *   the main w2p object: w2p_Core_BaseObject
-     * 
+     *
      * Test trimming all trimmable characters from all object properties
      */
     public function testW2PTrimAll()

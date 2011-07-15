@@ -183,7 +183,7 @@
 				} else if (is_dir($sspath) && is_writable($sspath)) {
 					echo "<b class='ok'>$okImg</b> <span class='item'>($sspath)</span>";
 				} else {
-					echo '<b class="error">'.$failedImg.'</b> <span class="warning">'.$sspath.'</span><b class="error"> not existing or not writable</b>';
+					echo '<b class="error">'.$failedImg.'</b> <span class="warning">'.$sspath.'</span><b class="error"> does not exist or is not writable</b>';
 				}
 			?>
 		</td>

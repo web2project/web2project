@@ -44,17 +44,15 @@ switch ($f) {
 		$q->addWhere('project_company = ' . (int)$AppUI->user_company);
 		break;
 	case 'myinact':
-		$q->addTable('user_tasks', 'ut');
+		$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 		$q->addWhere('task_project = p.project_id');
 		$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
-		$q->addWhere('ut.task_id = t.task_id');
 		break;
 	default:
-		$q->addTable('user_tasks', 'ut');
+		$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 		$q->addWhere('task_status > -1');
 		$q->addWhere('task_project = p.project_id');
 		$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
-		$q->addWhere('ut.task_id = t.task_id');
 		break;
 }
 
@@ -245,25 +243,17 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
         $caption = '';
         if ($showLabels == '1') {
-            $q = new w2p_Database_Query;
-            $q->addTable('user_tasks', 'ut');
-            $q->addTable('users', 'u');
-            $q->addTable('contacts', 'c');
-            $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
-            $q->addQuery('c.contact_first_name, c.contact_last_name');
-            $q->addWhere('u.user_id = ut.user_id');
-            $q->addWhere('u.user_contact = c.contact_id');
-            $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
-            $res = $q->loadList();
+            $res = $task->getAssignedUsers($task_id);
             foreach ($res as $rw) {
-                switch ($rw['perc_assignment']) {
-                    case 100:
-                        $caption = $caption . '' . $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
-                        break;
-                    default:
-                        $caption = $caption . '' . $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
-                        break;
-                }
+				$caption = '';
+				switch ($rw['perc_assignment']) {
+					case 100:
+						$caption .= $rw['contact_display_name'] . ';';
+						break;
+					default:
+						$caption .= $rw['contact_display_name'] . ' [' . $rw['perc_assignment'] . '%];';
+						break;
+				}
             }
             $q->clear();
             $caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
@@ -298,7 +288,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $work_hours = $wh * $w2Pconfig['daily_working_hours'];
                 $q->clear();
 
-                $q = new w2p_Database_Query;
                 $q->addTable('tasks', 't');
                 $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
                 $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');

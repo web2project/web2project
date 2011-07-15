@@ -88,7 +88,7 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
     }
     protected function getDataSetPath()
     {
-      return dirname(dirname(__FILE__)).'/db_files/';
+      return dirname(dirname(__FILE__)).'/db_files/files/';
     }
 
     protected function setUp()
@@ -127,7 +127,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
     {
       $file = new CFile();
 
-      $this->assertType('CFile',                                  $file);
       $this->assertObjectHasAttribute('file_id',                  $file);
       $this->assertObjectHasAttribute('file_real_filename',       $file);
       $this->assertObjectHasAttribute('file_project',             $file);
@@ -146,11 +145,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertObjectHasAttribute('file_co_reason',           $file);
       $this->assertObjectHasAttribute('file_folder',              $file);
       $this->assertObjectHasAttribute('file_indexed',             $file);
-      $this->assertObjectHasAttribute('_tbl_prefix',              $file);
-      $this->assertObjectHasAttribute('_tbl',                     $file);
-      $this->assertObjectHasAttribute('_tbl_key',                 $file);
-      $this->assertObjectHasAttribute('_error',                   $file);
-      $this->assertObjectHasAttribute('_query',                   $file);
     }
 
     /**
@@ -160,7 +154,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
     {
       $file = new CFile();
 
-      $this->assertType('CFile', $file);
       $this->assertNull($file->file_id);
       $this->assertNull($file->file_real_filename);
       $this->assertNull($file->file_project);
@@ -179,11 +172,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertNull($file->file_co_reason);
       $this->assertNull($file->file_folder);
       $this->assertNull($file->file_indexed);
-      $this->assertEquals('',         $file->_tbl_prefix);
-      $this->assertEquals('files',    $file->_tbl);
-      $this->assertEquals('file_id',  $file->_tbl_key);
-      $this->assertEquals('',         $file->_errors);
-      $this->assertType('w2p_Database_Query',    $file->_query);
     }
 
     /**

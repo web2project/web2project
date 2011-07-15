@@ -269,100 +269,20 @@ if (W2P_PERFORMANCE_DEBUG) {
 	$w2p_performance_setuptime = (array_sum(explode(' ', microtime())) - $w2p_performance_time);
 }
 
+
+$pageHandler = new w2p_Output_PageHandler();
 //Set up extra tabs
-if (!isset($_SESSION['all_tabs'][$m])) {
-	// For some reason on some systems if you don't set this up
-	// first you get recursive pointers to the all_tabs array, creating
-	// phantom tabs.
-	if (!isset($_SESSION['all_tabs'])) {
-		$_SESSION['all_tabs'] = array();
-	}
-	$_SESSION['all_tabs'][$m] = array();
-	$all_tabs = &$_SESSION['all_tabs'][$m];
-	foreach ($AppUI->getActiveModules() as $dir => $module) {
-		if (!canAccess($dir)) {
-			continue;
-		}
-		$modules_tabs = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_tab.*\.php');
-		foreach ($modules_tabs as $tab) {
-			// Get the name as the subextension
-			// cut the module_tab. and the .php parts of the filename
-			// (begining and end)
-			$nameparts = explode('.', $tab);
-			$filename = substr($tab, 0, -4);
-			if (count($nameparts) > 3) {
-				$file = $nameparts[1];
-				if (!isset($all_tabs[$file])) {
-					$all_tabs[$file] = array();
-				}
-				$arr = &$all_tabs[$file];
-				$name = $nameparts[2];
-			} else {
-				$arr = &$all_tabs;
-				$name = $nameparts[1];
-			}
-			$arr[] = array('name' => ucfirst(str_replace('_', ' ', $name)), 'file' => W2P_BASE_DIR . '/modules/' . $dir . '/' . $filename, 'module' => $dir);
-
-			/*
-			** Don't forget to unset $arr again! $arr is likely to be used in the sequel declaring
-			** any temporary array. This may lead to strange bugs with disappearing tabs (cf. #1767).
-			** @author: gregorerhardt 	@date: 20070203
-			*/
-			unset($arr);
-		}
-	}
-} else {
-	$all_tabs = &$_SESSION['all_tabs'][$m];
-}
-
+$all_tabs = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'tabs');
 //Set up extra crumbs
-if (!isset($_SESSION['all_crumbs'][$m])) {
-	// For some reason on some systems if you don't set this up
-	// first you get recursive pointers to the all_crumbs array, creating
-	// phantom crumbs.
-	if (!isset($_SESSION['all_crumbs'])) {
-		$_SESSION['all_crumbs'] = array();
-	}
-	$_SESSION['all_crumbs'][$m] = array();
-	$all_crumbs = &$_SESSION['all_crumbs'][$m];
-	foreach ($AppUI->getActiveModules() as $dir => $module) {
-		if (!canAccess($dir)) {
-			continue;
-		}
-		$modules_crumbs = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_crumb.*\.php');
-		foreach ($modules_crumbs as $tab) {
-			// Get the name as the subextension
-			// cut the module_tab. and the .php parts of the filename
-			// (begining and end)
-			$nameparts = explode('.', $tab);
-			$filename = substr($tab, 0, -4);
-			if (count($nameparts) > 3) {
-				$file = $nameparts[1];
-				if (!isset($all_crumbs[$file])) {
-					$all_crumbs[$file] = array();
-				}
-				$arr = &$all_crumbs[$file];
-				$name = $nameparts[2];
-			} else {
-				$arr = &$all_crumbs;
-				$name = $nameparts[1];
-			}
-			$arr[] = array('name' => ucfirst(str_replace('_', ' ', $name)), 'file' => W2P_BASE_DIR . '/modules/' . $dir . '/' . $filename, 'module' => $dir);
+$all_crumbs = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'crumbs');
 
-			unset($arr);
-		}
-	}
-} else {
-	$all_crumbs = &$_SESSION['all_crumbs'][$m];
-}
 
 $module_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $a . '.php';
 if (file_exists($module_file)) {
 	require $module_file;
 } else {
 	// TODO: make this part of the public module?
-	// TODO: internationalise the string.
-	$titleBlock = new CTitleBlock('Warning', 'log-error.gif');
+	$titleBlock = new CTitleBlock($AppUI->_('Warning'), 'log-error.gif');
 	$titleBlock->show();
 
 	if (is_callable('styleRenderBoxTop')) {

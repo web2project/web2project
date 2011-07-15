@@ -6,15 +6,13 @@ if (!defined('W2P_BASE_DIR')) {
 $date_reg = date('Y-m-d');
 $start_date = intval($date_reg) ? new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_start_date', date('Y-m-d'))) : null;
 $end_date = intval($date_reg) ? new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d'))) : null;
+$user_id = (int) w2PgetParam($_REQUEST, 'user_id', 0);
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 global $currentTabId, $cal_sdf;
-if ($a = w2PgetParam($_REQUEST, 'a', '') == '') {
-	$a = '&tab=' . $currentTabId . '&showdetails=1';
-} else {
-	$user_id = w2PgetParam($_REQUEST, 'user_id', 0);
-	$a = '&a=viewuser&user_id=' . $user_id . '&tab=' . $currentTabId . '&showdetails=1';
-}
+
+$a = ($user_id) ? '&a=viewuser&user_id=' . $user_id : '';
+$a .= '&tab=' . $currentTabId . '&showdetails=1';
 
 $AppUI->loadCalendarJS();
 ?>
@@ -54,40 +52,43 @@ function setDate( frm_name, f_date ) {
 </table>
 
 <form action="index.php?m=admin<?php echo $a; ?>" method="post" name="frmDate" accept-charset="utf-8">
-<table align="center" width="100%">
-	<tr align="center">
-		<td align="right" width="45%" ><?php echo $AppUI->_('Start Date'); ?></td>
-			<td width="55%" align="left">
-				<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-				<input type="text" name="start_date" id="start_date" onchange="setDate('frmDate', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-				<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'frmDate', null, true)">
-				<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" /></a>
-			</td>
-	</tr>
-	<tr align="center">
-		<td align="right" width="45%"><?php echo $AppUI->_('End Date'); ?></td>
-			<td width="55%" align="left">
-				<input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-				<input type="text" name="end_date" id="end_date" onchange="setDate('frmDate', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-				<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'frmDate', null, true)">
-				<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" /></a>
-		</td>
-	</tr>
-</table>
-<table align="center">
-	<tr align="center">
-		<td><input type="submit" class="button" value="<?php echo $AppUI->_('Submit'); ?>" onclick="return checkDate('start','end')" /></td>
-	</tr>
-</table>
+    <input type="hidden" name="user_id" id="user_id" value="<?php $user_id; ?>" />
+    <table align="center" width="100%">
+        <tr align="center">
+            <td align="right" width="45%" ><?php echo $AppUI->_('Start Date'); ?></td>
+            <td width="55%" align="left">
+                <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                <input type="text" name="start_date" id="start_date" onchange="setDate('frmDate', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'frmDate', null, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" /></a>
+            </td>
+        </tr>
+        <tr align="center">
+            <td align="right" width="45%"><?php echo $AppUI->_('End Date'); ?></td>
+            <td width="55%" align="left">
+                <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                <input type="text" name="end_date" id="end_date" onchange="setDate('frmDate', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'frmDate', null, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" /></a>
+            </td>
+        </tr>
+    </table>
+    <table align="center">
+        <tr align="center">
+            <td><input type="submit" class="button" value="<?php echo $AppUI->_('Submit'); ?>" onclick="return checkDate('start','end')" /></td>
+        </tr>
+    </table>
 </form>
 
-	<?php
-	if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
-		$start_date = date('Y-m-d', strtotime(w2PgetParam($_REQUEST, 'log_start_date', date('Y-m-d'))));
-		$end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d'))));
-        $userId = isset($userId) ? $userId : 0;
-		$logs = CUser::getLogs($userId, $start_date, $end_date);
-	?>
+<?php
+if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
+    $start_date = date('Y-m-d', strtotime(w2PgetParam($_POST, 'log_start_date', date('Y-m-d'))));
+    $start_date = $AppUI->convertToSystemTZ($start_date);
+    $end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_POST, 'log_end_date', date('Y-m-d'))));
+    $end_date = $AppUI->convertToSystemTZ($end_date);
+    $userId = isset($userId) ? $userId : 0;
+    $logs = CUser::getLogs($userId, $start_date, $end_date);
+    ?>
 	<table align="center" class="tbl" width="50%">
 		<tr>
 			<th nowrap="nowrap" ><?php echo $AppUI->_('Name(s)'); ?></th>
@@ -106,4 +107,5 @@ function setDate( frm_name, f_date ) {
 			</tr>
 		<?php } ?>
 	</table>
-<?php } ?>
+    <?php
+}

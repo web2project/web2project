@@ -90,8 +90,10 @@ class CProject extends w2p_Core_BaseObject {
     }
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
-		$this->project_contacts = explode(',', $this->project_contacts);
-        return parent::bind($hash, $prefix, $checkSlashes, $bindAll);
+        $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
+        $this->project_contacts = explode(',', $this->project_contacts);
+
+        return $result;
     }
 
 	public function check() {
@@ -132,16 +134,11 @@ class CProject extends w2p_Core_BaseObject {
             $errorArray['project_demo_url'] = $baseErrorMsg . 'project demo url is not formatted properly';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
 	}
 
-	public function load($oid = null, $strip = true) {
-		return parent::load($oid, $strip);
-	}
-
-	public function loadFull(CAppUI $AppUI = null, $projectId) {
-		global $AppUI;
-
+	public function loadFull(CAppUI $AppUI, $projectId) {
         $q = new w2p_Database_Query;
 		$q->addTable('projects');
 		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
@@ -161,6 +158,7 @@ class CProject extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
         $result = false;
+        $this->_error = array();
 
         /*
          * TODO: This should probably use the canDelete method from above too to
@@ -174,11 +172,13 @@ class CProject extends w2p_Core_BaseObject {
             $q->addWhere('task_project = ' . (int)$this->project_id);
             $tasks_to_delete = $q->loadColumn();
             $q->clear();
+
             foreach ($tasks_to_delete as $task_id) {
                 $q->setDelete('user_tasks');
                 $q->addWhere('task_id =' . $task_id);
                 $q->exec();
                 $q->clear();
+
                 $q->setDelete('task_dependencies');
                 $q->addWhere('dependencies_req_task_id =' . (int)$task_id);
                 $q->exec();
@@ -188,12 +188,13 @@ class CProject extends w2p_Core_BaseObject {
             $q->addWhere('task_project =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
-            $q = new w2p_Database_Query;
+
             $q->addTable('files');
             $q->addQuery('file_id');
             $q->addWhere('file_project = ' . (int)$this->project_id);
             $files_to_delete = $q->loadColumn();
             $q->clear();
+
             foreach ($files_to_delete as $file_id) {
                 $file = new CFile();
                 $file->file_id = $file_id;
@@ -204,22 +205,22 @@ class CProject extends w2p_Core_BaseObject {
             $q->addWhere('event_project =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+
             // remove the project-contacts and project-departments map
             $q->setDelete('project_contacts');
             $q->addWhere('project_id =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+
             $q->setDelete('project_departments');
             $q->addWhere('project_id =' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+
             $q->setDelete('tasks');
             $q->addWhere('task_represents_project =' . (int)$this->project_id);
-
             $q->clear();
-            $q->setDelete('projects');
-            $q->addWhere('project_id =' . (int)$this->project_id);
-            $q->exec();
+
             if ($msg = parent::delete()) {
                 return $msg;
             }
@@ -307,6 +308,7 @@ class CProject extends w2p_Core_BaseObject {
 			} // end of update dependencies
             $result = $newTask->store($AppUI);
 			$newTask->addReminder();
+            $importedTasks[] = $newTask->task_id;
 
             if (is_array($result) && count($result)) {
                 foreach ($result as $key => $error_msg) {
@@ -317,9 +319,12 @@ class CProject extends w2p_Core_BaseObject {
 
         // We have errors, so rollback everything we've done so far
         if (count($errors)) {
-            $this->delete($AppUI);
+            foreach($importedTasks as $badTask) {
+                $delTask = new CTask();
+                $delTask->task_id = $badTask;
+                $delTask->delete($AppUI);
+            }
         }
-
         return $errors;
     } // end of importTasks
 
@@ -495,10 +500,10 @@ class CProject extends w2p_Core_BaseObject {
             $this->project_end_date = null;
         }
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $this->project_id = (int) $this->project_id;
@@ -791,7 +796,7 @@ class CProject extends w2p_Core_BaseObject {
 	public static function getOwners() {
 		$q = new w2p_Database_Query();
 		$q->addTable('projects', 'p');
-		$q->addQuery('user_id, concat(contact_first_name, \' \', contact_last_name)');
+		$q->addQuery('user_id, contact_display_name');
 		$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
 		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
 		$q->addOrder('contact_first_name, contact_last_name');
@@ -1089,6 +1094,7 @@ function projects_list_data($user_id = false) {
         tp.task_log_problem, user_username, project_active');
 
 	$fields = w2p_Core_Module::getSettings('projects', 'index_list');
+	unset($fields['department_list']);  // added as an alias below
 	foreach ($fields as $field => $text) {
 		$q->addQuery($field);
 	}
@@ -1123,7 +1129,7 @@ function projects_list_data($user_id = false) {
 	if ($addPwOiD && !empty($owner_ids)) {
 		$q->addWhere('pr.project_owner IN (' . implode(',', $owner_ids) . ')');
 	}
-
+    $orderby = ('project_company' == $orderby) ? 'company_name' : $orderby;
 	$q->addGroup('pr.project_id');
 	$q->addOrder($orderby . ' ' .$orderdir);
 	$prj = new CProject();

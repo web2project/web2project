@@ -120,11 +120,15 @@ class w2p_Database_Query {
 		$this->_query_id = null;
 	}
 
-	/** Get database specific SQL used to concatenate strings.
-	 * @return String containing SQL to concatenate supplied strings
+	/**
+     * Instead of concatenating here, retrieve the relevant fields and do
+     *   it in PHP. It won't necessarily be faster but should be more
+     *   supportable cross-databasewise.
+	 * @deprecated
 	 */
 	public function concat() {
-		$arr = func_get_args();
+		trigger_error("concat() has been deprecated in v3.0 and will be removed by v4.0. Please concatenate in PHP instead.", E_USER_NOTICE );
+        $arr = func_get_args();
 		$conc_str = call_user_func_array(array(&$this->_db, 'Concat'), $arr);
 		return $conc_str;
 	}
@@ -135,7 +139,8 @@ class w2p_Database_Query {
 	 * @return String containing SQL to check for null field value
 	 */
 	public function ifNull($field, $nullReplacementValue) {
-		return $this->_db->IfNull($field, $nullReplacementValue);
+        trigger_error("ifNull() has been deprecated in v3.0 and will be removed by v4.0. There is no replacement.", E_USER_NOTICE );
+        return $this->_db->IfNull($field, $nullReplacementValue);
 	}
 
 	/** Add item to an internal associative array
@@ -1219,23 +1224,12 @@ class w2p_Database_Query {
 		return $hash;
 	}
 
-	/** Load database results as an associative array
+	/**
 	 *
-	 * @note To devs: is this functionally different to loadHashList() ?
-	 * @param $index Field index to use for naming the array keys.
-	 * @return Associative array containing result rows
+	 * @deprecated
 	 */
 	public function loadArrayList($index = 0) {
-		if (!$this->exec(ADODB_FETCH_NUM)) {
-			exit($this->_db->ErrorMsg());
-		}
-		$hashlist = array();
-		$keys = null;
-		while ($hash = $this->fetchRow()) {
-			$hashlist[$hash[$index]] = $hash;
-		}
-		$this->clear();
-		return $hashlist;
+        trigger_error("loadArrayList has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
 
 	/** Load an indexed array containing the first column of results only
@@ -1320,31 +1314,11 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Build or update a table using an XML string
-	 *
-	 * @param $xml XML string describing table structure
-	 * @param $mode Defaults to 'REPLACE'
-	 * @return True on success, false if there was an error.
+	/**
+	 * @deprecated
 	 */
 	public function execXML($xml, $mode = 'REPLACE') {
-		global $AppUI;
-
-		include_once W2P_BASE_DIR . '/lib/adodb/adodb-xmlschema.inc.php';
-		$schema = new adoSchema($this->_db);
-		$schema->setUpgradeMode($mode);
-		if (isset($this->_table_prefix) && $this->_table_prefix) {
-			$schema->setPrefix($this->_table_prefix, false);
-		}
-		$schema->ContinueOnError(true);
-		if (($sql = $scheme->ParseSchemaString($xml)) == false) {
-			$AppUI->setMsg(array('Error in XML Schema', 'Error', $this->_db->ErrorMsg()), UI_MSG_ERR);
-			return false;
-		}
-		if ($schema->ExecuteSchema($sql, true)) {
-			return true;
-		} else {
-			return false;
-		}
+		trigger_error("execXML has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
 
 	/** Load a single column result from a single row

@@ -10,6 +10,7 @@ define('SECONDS_PER_DAY', 86400);
 
 require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
 require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
+require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
 
 /*
  * TODO: Personally, I'm already hating this autoloader... while it's great in
@@ -33,19 +34,27 @@ function w2p_autoload($class_name) {
     $name = strtolower($class_name);
     switch ($name) {
         case 'libmail':
+			// Deprecated as of v2.3
+			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/mail.class.php';
             break;
         case 'w2pacl':
+			// Deprecated as of v3.0
+			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
         case 'cappui':
+			// Deprecated as of v3.0
+			//TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/ui.class.php';
             break;
         case 'xajax':
             require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
             break;
         case 'w2pajaxresponse':
-            require_once W2P_BASE_DIR . '/classes/ajax.class.php';
+            // Deprecated as of v3.0
+			//TODO: remove this in v4.0
+			require_once W2P_BASE_DIR . '/classes/ajax.class.php';
             break;
 
         /*
@@ -70,6 +79,9 @@ function w2p_autoload($class_name) {
         case 'cprojectdesigneroptions':
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
+		case 'crole':
+			require_once W2P_BASE_DIR .'/modules/system/roles/roles.class.php';
+			break;
         case 'csyskey':
             require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
             break;
@@ -81,24 +93,26 @@ function w2p_autoload($class_name) {
             break;
 
         default:
-            if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
-                require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
-                return;
-            }
+			if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
+				require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
+			    return;
+			}
 
-            if ($name[0] == 'c') {
-                $name = substr($name, 1);
-                if (in_array($name, array('system'))) {
-                    //do nothing
-                } else {
-                    $name = w2p_pluralize($name);
-                }
-            }
-            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-                return;
-            }
-            break;
+			if ($name[0] == 'c') {
+				$name = substr($name, 1);
+			}
+			if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+			    require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+			    return;
+			}
+			if (!in_array($name, array('system'))) {
+			    $name = w2p_pluralize($name);
+			}
+			if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+			    require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+			    return;
+			}
+			break;
     }
 }
 
@@ -359,7 +373,7 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
 	$q = new w2p_Database_Query;
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
-		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
+		 company_name, contact_company, dept_id, dept_name, contact_display_name as contact_name, user_type');
 	$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
     $q->addQuery('contact_email');
 	if ($stub) {
@@ -759,10 +773,9 @@ function w2PgetSysVal($title) {
 	$q = new w2p_Database_Query;
 	$q->addTable('sysvals');
 	$q->addQuery('sysval_value_id, sysval_value');
-	$q->addWhere('sysval_title = \'' . $title . '\'');
+	$q->addWhere("sysval_title = '$title'");
 	$q->addOrder('sysval_value_id ASC');
 	$rows = $q->loadList();
-	$q->clear();
 
 	$arr = array();
 	// We use trim() to make sure a numeric that has spaces
@@ -937,72 +950,8 @@ function formatCurrency($number, $format) {
 		}
 	}
 
-	// Technically this should be acheivable with the following, however
-	// it seems that some versions of PHP will set this incorrectly
-	// and you end up with everything using locale C.
-	// setlocale(LC_MONETARY, $format . '.UTF8', $format, '');
-
-	if (function_exists('money_format')) {
-		return money_format('%i', $number);
-	}
-
-	// NOTE: This is called if money format doesn't exist.
-	// Money_format only exists on non-windows 4.3.x sites.
-	// This uses localeconv to get the information required
-	// to format the money.  It tries to set reasonable defaults.
-	$mondat = localeconv();
-	if (!isset($mondat['int_frac_digits']) || $mondat['int_frac_digits'] > 100) {
-		$mondat['int_frac_digits'] = 2;
-	}
-	if (!isset($mondat['int_curr_symbol'])) {
-		$mondat['int_curr_symbol'] = '';
-	}
-	if (!isset($mondat['mon_decimal_point'])) {
-		$mondat['mon_decimal_point'] = '.';
-	}
-	if (!isset($mondat['mon_thousands_sep'])) {
-		$mondat['mon_thousands_sep'] = ',';
-	}
-	$numeric_portion = number_format(abs($number), $mondat['int_frac_digits'], $mondat['mon_decimal_point'], $mondat['mon_thousands_sep']);
-	// Not sure, but most countries don't put the sign in if it is positive.
-	$letter = 'p';
-	$currency_prefix = '';
-	$currency_suffix = '';
-	$prefix = '';
-	$suffix = '';
-	if ($number < 0) {
-		$sign = $mondat['negative_sign'];
-		$letter = 'n';
-		switch ($mondat['n_sign_posn']) {
-			case 0:
-				$prefix = '(';
-				$suffix = ')';
-				break;
-			case 1:
-				$prefix = $sign;
-				break;
-			case 2:
-				$suffix = $sign;
-				break;
-			case 3:
-				$currency_prefix = $sign;
-				break;
-			case 4:
-				$currency_suffix = $sign;
-				break;
-		}
-	}
-	$currency .= $currency_prefix . $mondat['int_curr_symbol'] . $currency_suffix;
-	$space = '';
-	if ($mondat[$letter . '_sep_by_space']) {
-		$space = ' ';
-	}
-	if ($mondat[$letter . '_cs_precedes']) {
-		$result = $currency . $space . $numeric_portion;
-	} else {
-		$result = $numeric_portion . $space . $currency;
-	}
-	return $result;
+    // Even money_format can't be trusted in Windows. It simply does not work on systems that don't have strfmon capabilities. Use number_format as fallback.
+    return function_exists('money_format') ? money_format('%i', $number) : number_format($number, 2);
 }
 
 function format_backtrace($bt, $file, $line, $msg) {
@@ -1278,21 +1227,6 @@ function w2PendTip() {
 }
 
 /**
- *    Corrects the charset name if needed be
- *
- *    @param string $charset the charset string to be checked
- *    @access public
- */
-function w2PcheckCharset($charset) {
-	if (!(strpos($charset, 'iso') === false)) {
-		if (strpos($charset, 'iso-') === false) {
-			return str_replace('iso', 'iso-', $charset);
-		}
-	}
-	return $charset;
-}
-
-/**
  *    Write debugging to debug.log file
  *
  *    @param string $s the debug message
@@ -1472,4 +1406,29 @@ function HM2seconds ($HM) {
     $seconds += (intval($m) * 60);
     //$seconds += (intval($s));
     return $seconds;
+}
+
+/**
+ * Parse the SQL file and get out the timezones from it to use it on the install
+ * screen. The SQL file used is: install/sql/mysql/018_add_timezones.sql
+ */
+function w2PgetTimezonesForInstall() {
+    $file = W2P_BASE_DIR . '/install/sql/mysql/018_add_timezones.sql';
+    
+    $timezones = array();
+    
+    if(is_file($file) and is_readable($file)) {
+        $sql = file_get_contents($file);
+        // get it from this kind of a string:
+        // (1, 'Timezones', 'Pacific/Auckland', 43200);
+        preg_match_all("#\(.*Timezones',\s*'(.*)',.*\);#", $sql, $matchedTimezones);
+        
+        sort($matchedTimezones[1]);
+        
+        foreach($matchedTimezones[1] as $timezone) {
+            $timezones[$timezone] = $timezone;
+        }
+    }
+    
+    return $timezones;
 }

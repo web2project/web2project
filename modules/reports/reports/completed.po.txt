@@ -1,3 +1,0 @@
-Zakonczone
-Zadania ukonczone w poprzednim tygodniu
-suppressHeaders=1

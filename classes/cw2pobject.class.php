@@ -1,8 +1,4 @@
 <?php /* $Id$ $URL$ */
-/*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
-*/
 
 class CW2pObject extends w2p_Core_BaseObject
 {

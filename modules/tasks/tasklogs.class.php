@@ -175,10 +175,10 @@ class CTaskLog extends w2p_Core_BaseObject
 		global $AppUI;
 		$perms = $AppUI->acl();
 
-		$errorMsgArray = $this->check();
+		$this->_error = $this->check();
 
-		if (count($errorMsgArray) > 0) {
-			return $errorMsgArray;
+		if (count($this->_error)) {
+			return $this->_error;
 		}
 
 		$q = new w2p_Database_Query();
@@ -227,6 +227,7 @@ class CTaskLog extends w2p_Core_BaseObject
 	{
 		global $AppUI;
 		$perms = $AppUI->acl();
+        $this->_error = array();
 
 		$this->load($this->task_log_id);
 		//$task_log_task = $this->task_log_task;
@@ -298,6 +299,7 @@ class CTaskLog extends w2p_Core_BaseObject
 			}
 		}
 
+        $this->_error = $errorArray;
 		return $errorArray;
 	}
 

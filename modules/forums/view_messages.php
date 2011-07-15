@@ -8,31 +8,15 @@ $sort = w2PgetParam($_REQUEST, 'sort', 'asc');
 $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
 $hideEmail = w2PgetConfig('hide_email_addresses', false);
 
-$q = new w2p_Database_Query;
-$q->addTable('forums');
-$q->addTable('forum_messages');
-$q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email, user_username, forum_moderated, visit_user');
-$q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = ' . (int)$forum_id . ' AND visit_message = forum_messages.message_id');
-$q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
-$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-$q->addWhere('forum_id = message_forum AND (message_id = ' . (int)$message_id . ' OR message_parent = ' . (int)$message_id . ')');
-$q->addOrder('message_date ' . $sort);
-
-$messages = $q->loadList();
-
-$crumbs = array();
-$crumbs['?m=forums'] = 'forums list';
-$crumbs['?m=forums&a=viewer&forum_id=' . $forum_id] = 'topics for this forum';
-$crumbs['?m=forums&a=view_pdf&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort . '&suppressHeaders=1'] = 'view PDF file';
+$forum = new CForum();
+$messages = $forum->getMessages($AppUI, $forum_id, $message_id, $sort);
 ?>
 <script language="javascript" type="text/javascript">
 <?php
 if ($viewtype != 'normal') {
 ?>
 	function toggle(id) {
-<?php
-	if ($viewtype == 'single') {
-?>
+        <?php if ($viewtype == 'single') { ?>
 		var elems = document.getElementsByTagName('div');
 		for (var i=0, i_cmp=elems.length; i<i_cmp; i++)
 			if (elems[i].className == 'message') {
@@ -40,15 +24,10 @@ if ($viewtype != 'normal') {
 			}
 			document.getElementById(id).style.display = 'block';
 
-<?php
-	} else
-		if ($viewtype == 'short') {
-?>
+        <?php } elseif ($viewtype == 'short') { ?>
 			vista = (document.getElementById(id).style.display == 'none') ? 'block' : 'none';
 			document.getElementById(id).style.display = vista;
-<?php
-		}
-?>
+        <?php } ?>
 	}
 <?php
 }
@@ -69,7 +48,6 @@ function delIt(id) {
 </script>
 <?php
 $thispage = '?m=' . $m . '&a=viewer&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort;
-// $thispage = $_PHP['self'];
 
 ?>
 <br />
@@ -87,25 +65,33 @@ if (function_exists('styleRenderBoxTop')) {
 
 <tr><td colspan="2">
 	<table width="100%" cellspacing="1" cellpadding="2" border="0" align="center">
-	<tr>
-		<td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
-        <td nowrap="nowrap">
-            <form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8">
-                    <?php echo $AppUI->_('View') ?>:
-                    <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
-                    <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
-                    <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
-            </form>
-	    </td>
-		<td width="30%" align="right">
-	        <?php $sort = ($sort == 'asc') ? 'desc' : 'asc'; ?>
-			<input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
-            <?php if ($canAuthor) { ?>
-                <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
-                <input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
-            <?php } ?>
-		</td>
-	</tr>
+        <tr>
+            <td align="left" nowrap="nowrap">
+                <?php
+                    $titleBlock = new CTitleBlock('', '', $m, "$m.$a");
+                    $titleBlock->addCrumb('?m=forums', 'forums list');
+                    $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'topics for this forum');
+                    $titleBlock->addCrumb('?m=forums&a=view_pdf&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort . '&suppressHeaders=1', 'view PDF file');
+                    $titleBlock->show();
+                ?>
+            </td>
+            <td nowrap="nowrap">
+                <form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8">
+                        <?php echo $AppUI->_('View') ?>:
+                        <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
+                        <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
+                        <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
+                </form>
+            </td>
+            <td width="30%" align="right">
+                <?php $sort = ($sort == 'asc') ? 'desc' : 'asc'; ?>
+                <input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
+                <?php if ($canAuthor) { ?>
+                    <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
+                    <input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
+                <?php } ?>
+            </td>
+        </tr>
 	</table>
 </td></tr>
 
@@ -191,22 +177,38 @@ foreach ($messages as $row) {
 		$s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" border="0" width="14" height="11">' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . '</td>';
 		$s .= '<td valign="top" align="right" style="' . $style . '">';
 
+                // in some weird permission cases
+                // it can happen that the table gets opened but never closed,
+                // or the other way around, thus breaking the layout
+                // introducing these variables to help us out with proper
+                // table tag opening and closing.
+                $tableOpened = false;
+                $tableClosed = false;
 		//the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
 		if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-			$s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-			// edit message
-			$s .= '<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
-			$s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
-			$s .= '</td><td>';
+                    $tableOpened = true;
+                    $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+                    // edit message
+                    $s .= '<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
+                    $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
+                    $s .= '</td>';
 		}
 		if ($canDelete || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-			// delete message
-			$s .= '<a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
-			$s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
-			$s .= '</a>';
-			$s .= '</td></tr></table>';
-
+                    $tableClosed = true;
+                    if(!$tableOpened) {
+                        $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+                    }
+                    // delete message
+                    $s .= '<td><a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
+                    $s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
+                    $s .= '</a>';
+                    $s .= '</td></tr></table>';
 		}
+                
+                if($tableOpened and !$tableClosed) {
+                    $s .= '</tr></table>';
+                }
+                
 		$s .= '</td>';
 		$s .= '</tr>';
 	} else

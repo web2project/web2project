@@ -5,7 +5,7 @@
  * @subpackage utilites
  */
 
-require_once ($AppUI->getLibraryClass('PEAR/Date'));
+require_once $AppUI->getLibraryClass('PEAR/Date');
 
 define('FMT_DATEISO', '%Y%m%dT%H%M%S');
 define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');
@@ -561,6 +561,8 @@ class w2p_Utilities_Date extends Date {
 		}
 		$this->addSeconds($offset);
         $this->setTZ((is_object($tz)) ? $tz->id : $tz);
+
+        return $this;
 	}
 
 	public function setTZ($tz)

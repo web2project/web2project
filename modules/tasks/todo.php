@@ -1,12 +1,9 @@
 <?php /* $Id$ $URL$ */
-global $showEditCheckbox, $this_day, $other_users, $w2Pconfig, $user_id;
-
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
 $showEditCheckbox = w2PgetConfig('direct_edit_assignment');
-$perms = &$AppUI->acl();
 
 $tab = $AppUI->processIntState('ToDoTab', $_GET, 'tab', 0);
 
@@ -46,11 +43,9 @@ if (isset($_POST['show_form'])) {
 	$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'show_dyn_task', 0));
 	$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'show_pinned', 0));
 	$AppUI->setState('TaskDayShowEmptyDate', w2PgetParam($_POST, 'show_empty_date', 0));
-
 }
-// Required for today view.
-global $showArcProjs, $showLowTasks, $showHoldProjs, $showDynTasks, $showPinned, $showEmptyDate;
 
+// Required for today view.
 $showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
 $showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
 $showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
@@ -58,8 +53,6 @@ $showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
 $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 
-global $task_sort_item1, $task_sort_type1, $task_sort_order1;
-global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 $task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', '');
 $task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
 $task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', '');
@@ -79,7 +72,7 @@ if (is_array($selected) && count($selected)) {
 			$q->addTable('tasks');
 			$q->addUpdate('task_percent_complete', '100');
 			$q->addWhere('task_id=' . (int)$val);
-		} else
+		} else {
 			if ($task_priority == 'd') {
 				// delete task
 				$q = new w2p_Database_Query;
@@ -93,6 +86,7 @@ if (is_array($selected) && count($selected)) {
 					$q->addUpdate('task_priority', $task_priority);
 					$q->addWhere('task_id=' . (int)$val);
 				}
+        }
 		$q->exec();
 		echo db_error();
 		$q->clear();
@@ -168,8 +162,6 @@ if (count($allowedProjects)) {
 $q->addGroup('ta.task_id');
 $q->addOrder('ta.task_end_date');
 $q->addOrder('task_priority DESC');
-
-global $tasks;
 $tasks = $q->loadList();
 $q->clear();
 
@@ -188,10 +180,7 @@ for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
 	}
 }
 
-global $priorities;
 $priorities = array('1' => 'high', '0' => 'normal', '-1' => 'low');
-
-global $durnTypes;
 $durnTypes = w2PgetSysVal('TaskDurationType');
 
 if (!$min_view) {
@@ -204,23 +193,21 @@ if (!$min_view) {
 // double rows of tabs that would not work correctly, and since we
 // are called from the day view of calendar, we need to prevent this
 if ($m == 'tasks' && $a == 'todo') {
-?>
-
-
-<table cellspacing="0" cellpadding="2" border="0" width="100%" class="std">
-<tr>
-	<td width="80%" valign="top">
-  <?php
-	// Tabbed information boxes
-    $tabBox = new CTabBox('?m=tasks&amp;a=todo','', $tab);
-    $tabBox->add(W2P_BASE_DIR . '/modules/tasks/todo_tasks_sub', 'My Tasks');
-    $tabBox->add(W2P_BASE_DIR . '/modules/tasks/todo_gantt_sub', 'My Gantt');
-	$tabBox->show();
-?>
-	</td>
-</tr>
-</table>
-<?php
+    ?>
+    <table cellspacing="0" cellpadding="2" border="0" width="100%" class="std">
+        <tr>
+            <td width="80%" valign="top">
+                <?php
+                    // Tabbed information boxes
+                    $tabBox = new CTabBox('?m=tasks&amp;a=todo','', $tab);
+                    $tabBox->add(W2P_BASE_DIR . '/modules/tasks/todo_tasks_sub', 'My Tasks');
+                    $tabBox->add(W2P_BASE_DIR . '/modules/tasks/todo_gantt_sub', 'My Gantt');
+                    $tabBox->show();
+                ?>
+            </td>
+        </tr>
+    </table>
+    <?php
 } else {
 	include W2P_BASE_DIR . '/modules/tasks/todo_tasks_sub.php';
 }

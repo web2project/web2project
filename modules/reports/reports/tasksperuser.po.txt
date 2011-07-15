@@ -1,2 +1,0 @@
-Zadania na uzytkownika
-Ten raport pokazuje zadania przydzielone kazdemu uzytkownikowi.

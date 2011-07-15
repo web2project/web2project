@@ -12,6 +12,7 @@ $hdependencies = w2PgetParam($_POST, 'hdependencies');
 $notify = (int) w2PgetParam($_POST, 'task_notify', 0);
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
+$new_task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
 $isNotNew = $task_id;
 
 $action = ($del) ? 'deleted' : 'stored';
@@ -46,16 +47,16 @@ if (!$obj->bind($_POST)) {
 }
 
 // Check to see if the task_project has changed
-if (isset($_POST['new_task_project']) && $_POST['new_task_project'] && ($obj->task_project != $_POST['new_task_project'])) {
+if ($new_task_project != 0 and $obj->task_project != $new_task_project) {
     $taskRecount = ($obj->task_project) ? $obj->task_project : 0;
-    $obj->task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
+    $obj->task_project = $new_task_project;
     $obj->task_parent = $obj->task_id;
 }
 
 // Map task_dynamic checkboxes to task_dynamic values for task dependencies.
 if ($obj->task_dynamic != 1) {
     $task_dynamic_delay = w2PgetParam($_POST, 'task_dynamic_nodelay', '0');
-    if (in_array($obj->task_dynamic, $tracking_dynamics)) {
+    if (in_array($obj->task_dynamic, CTask::$tracking_dynamics)) {
         $obj->task_dynamic = $task_dynamic_delay ? 21 : 31;
     } else {
         $obj->task_dynamic = $task_dynamic_delay ? 11 : 0;
@@ -148,7 +149,7 @@ if ($result) {
         $obj->updateAssigned($hassign, $hperc_assign_ar);
     }
 
-    if (isset($hdependencies)) { // && !empty($hdependencies)) {
+    if (isset($hdependencies)) {
         // there are dependencies set!
 
         // backup initial start and end dates

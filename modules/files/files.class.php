@@ -26,7 +26,7 @@ class CFile extends w2p_Core_BaseObject {
 	public $file_folder = null;
 	public $file_checkout = null;
 	public $file_co_reason = null;
-	public $file_indexed = 0;
+	public $file_indexed = null;
 
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
 	//public $file_helpdesk_item = NULL;
@@ -45,10 +45,10 @@ class CFile extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
@@ -113,7 +113,7 @@ class CFile extends w2p_Core_BaseObject {
         return $search;
     }
 
-	public static function getFileList(CAppUI $AppUI = null, $company_id, $project_id, $task_id, $category_id) {
+	public static function getFileList(CAppUI $AppUI = null, $company_id = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
 		global $AppUI;
 
         $q = new w2p_Database_Query();
@@ -213,6 +213,7 @@ class CFile extends w2p_Core_BaseObject {
             $errorArray['file_type'] = $baseErrorMsg . 'file type is not set';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
 	}
 
@@ -242,10 +243,11 @@ class CFile extends w2p_Core_BaseObject {
 		global $AppUI;
         global $helpdesk_available;
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
             // remove the file from the file system
-            if (!$this->deleteFile()) {
+            if (!$this->deleteFile($AppUI)) {
                 return false;
             }
 
@@ -272,8 +274,8 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	// delete File from File System
-	public function deleteFile() {
-		global $AppUI, $w2Pconfig;
+	public function deleteFile(CAppUI $AppUI = null) {
+		global $AppUI;
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
@@ -448,7 +450,7 @@ class CFile extends w2p_Core_BaseObject {
             if ($this->file_project != 0) {
                 $this->_project = new CProject();
                 $this->_project->load($this->file_project);
-                $mail = new Mail;
+                $mail = new w2p_Utilities_Mail();
 
                 if ($this->file_task == 0) { //notify all developers
                     $mail->Subject($this->_project->project_name . '::' . $this->file_name, $locale_char_set);
@@ -534,7 +536,7 @@ class CFile extends w2p_Core_BaseObject {
             if ($this->file_project != 0) {
                 $this->_project = new CProject();
                 $this->_project->load($this->file_project);
-                $mail = new Mail;
+                $mail = new w2p_Utilities_Mail();
 
                 if ($this->file_task == 0) { //notify all developers
                   $mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name, $locale_char_set);
@@ -695,17 +697,6 @@ function getIcon($file_type) {
 	return $result;
 }
 
-function getFolderSelectList() {
-	global $AppUI;
-	$folders = array(0 => '');
-	$q = new w2p_Database_Query();
-	$q->addTable('file_folders');
-	$q->addQuery('file_folder_id, file_folder_name, file_folder_parent');
-	$q->addOrder('file_folder_name');
-	$folders = arrayMerge(array('0' => array(0, $AppUI->_('Root'), -1)), $q->loadHashList('file_folder_id'));
-	return $folders;
-}
-
 function getHelpdeskFolder() {
 	$q = new w2p_Database_Query();
 	$q->addTable('file_folders', 'ff');
@@ -736,7 +727,7 @@ function file_show_attr() {
 		$str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
 	} else {
 		$the_value = (strlen($obj->file_version) > 0 ? $obj->file_version : '1');
-		$str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" />';
+		$str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" class="text" />';
 	}
 
 	$str_out .= '</td>';
@@ -753,7 +744,7 @@ function file_show_attr() {
 
 	// Category
 	$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Category') . ':</td>';
-	$str_out .= '<td align="left">' . arraySelect(w2PgetSysVal('FileType'), 'file_category', '' . $select_disabled, $obj->file_category, true) . '<td>';
+	$str_out .= '<td align="left">' . arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $obj->file_category, true) . '<td>';
 
 	// ---------------------------------------------------------------------------------
 

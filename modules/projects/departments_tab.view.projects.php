@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $a, $addPwOiD, $addPwT, $AppUI, $buffer, $dept_id, $department, $min_view, 
+global $a, $addPwOiD, $buffer, $dept_id, $department, $min_view,
 	$m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
 
 $perms = &$AppUI->acl();
@@ -35,7 +35,6 @@ $orderby = $AppUI->getState('DeptProjIdxOrderBy') ? $AppUI->getState('DeptProjId
 $orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? $AppUI->getState('DeptProjIdxOrderDir') : 'asc';
 
 if (isset($_POST['show_form'])) {
-	$AppUI->setState('addProjWithTasks', w2PgetParam($_POST, 'add_pwt', 0));
 	$AppUI->setState('addProjWithOwnerInDep', w2PgetParam($_POST, 'add_pwoid', 0));
 }
 $addPwT = $AppUI->getState('addProjWithTasks', 0);
@@ -61,13 +60,19 @@ $department = $tmpDepartments;
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
 <tr>
-	<form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="form_cb" accept-charset="utf-8">
-	<input type="hidden" name="show_form" value="1" />
 	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by'); ?>:&nbsp;</td>
-	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td><td align="right" nowrap="nowrap"><input type="checkbox" name="add_pwoid" id="add_pwoid" onclick="document.form_cb.submit()" <?php echo $addPwOiD ? 'checked="checked"' : ''; ?> /><label for="add_pwoid"><?php echo $AppUI->_('Show Projects whose Owner is Member of the Dep.'); ?>?</label></td>
-	<td align="right" nowrap="nowrap"><form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="checkPwT" accept-charset="utf-8"><input type="checkbox" name="add_pwt" id="add_pwt" onclick="document.form_cb.submit()" <?php echo $addPwT ? 'checked="checked"' : ''; ?> /><label for="add_pwt"><?php echo $AppUI->_('Show Projects with assigned Tasks'); ?>?</label></td>
-	</form>
-	<td align="right" nowrap="nowrap"><form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject" accept-charset="utf-8"><?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?></form></td>
+	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td>
+    <td align="right" nowrap="nowrap">
+        <form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="form_cb" accept-charset="utf-8">
+            <input type="hidden" name="show_form" value="1" />
+            <input type="checkbox" name="add_pwoid" id="add_pwoid" onclick="document.form_cb.submit()" <?php echo $addPwOiD ? 'checked="checked"' : ''; ?> /><label for="add_pwoid"><?php echo $AppUI->_('Show Projects whose Owner is Member of the Dep.'); ?>?</label>
+        </form>
+    </td>
+	<td align="right" nowrap="nowrap">
+        <form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject" accept-charset="utf-8">
+            <?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?>
+        </form>
+    </td>
 </tr>
 </table>
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
@@ -97,7 +102,8 @@ foreach ($projects as $row) {
 	// were being categorized as completed because not all the tasks
 	// have been created (for new projects)
 	if ($proFilter == -1 || $row['project_status'] == $proFilter || ($proFilter == -2 && $row['project_status'] != 3) || ($proFilter == -3 && $row['project_active'] != 0)) {
-		$none = false;
+		$project->project_id = $row['project_id'];
+        $none = false;
 		$start_date = intval($row['project_start_date']) ? new w2p_Utilities_Date($row['project_start_date']) : null;
 		$end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
 		$actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
@@ -114,7 +120,7 @@ foreach ($projects as $row) {
 		$s .= '</td><td width="40%"><a href="?m=projects&a=view&project_id=' . $row['project_id'] . '" ><span title="' . (nl2br(htmlspecialchars($row['project_description'])) ? htmlspecialchars($row['project_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['project_description'])) : '') . '" >' . htmlspecialchars($row['project_name'], ENT_QUOTES) . '</span></a></td>';
 		$s .= '<td width="30%"><a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a></td>';
 		$s .= '<td nowrap="nowrap" align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
-		$s .= '<td nowrap="nowrap" align="right">' . ($row['project_duration'] > 0 ? round($row['project_duration'], 0) . $AppUI->_('h') : '-') . '</td>';
+		$s .= '<td nowrap="nowrap" align="right">' . $project->getTotalProjectHours() . $AppUI->_('h') . '</td>';
 		$s .= '<td nowrap="nowrap" align="center" nowrap="nowrap" style="background-color:' . $priority[$row['project_priority']]['color'] . '">';
 		$s .= ($end_date ? $end_date->format($df) : '-');
 		$s .= '</td><td nowrap="nowrap" align="center">';

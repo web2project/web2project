@@ -86,9 +86,9 @@ class CContact extends w2p_Core_BaseObject {
             $this->contact_display_name = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
         }
 
-        $errorMsgArray = $this->check();
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        $this->_error = $this->check();
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $q = new w2p_Database_Query;
@@ -174,6 +174,7 @@ class CContact extends w2p_Core_BaseObject {
 
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
+        $this->_error = array();
 
         if ($msg = parent::delete()) {
             return $msg;
@@ -192,24 +193,14 @@ class CContact extends w2p_Core_BaseObject {
             $errorArray['contact_owner'] = $baseErrorMsg . 'contact owner is not set';
         }
 
+        $this->_error = $errorArray;
 	    return $errorArray;
 	}
 
 	public function canDelete($msg, $oid = null, $joins = null) {
-		global $AppUI;
-		if ($oid) {
-			// Check to see if there is a user
-			$q = new w2p_Database_Query;
-			$q->addTable('users');
-			$q->addQuery('count(user_id) as user_count');
-			$q->addWhere('user_contact = ' . (int)$oid);
-			$user_count = $q->loadResult();
-			if ($user_count > 0) {
-				$msg = $AppUI->_('contactsDeleteUserError');
-				return false;
-			}
-		}
-		return parent::canDelete($msg, $oid, $joins);
+        $tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_contact');
+
+		return parent::canDelete($msg, $this->user_id, $tables);
 	}
 
 	public function isUser($oid = null) {
@@ -237,9 +228,6 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
     /*
-     * This function is only used to detect fields that might be text instead
-     *   of integer. It's unnecessary
-     *
      * @deprecated
      */
 	public function is_alpha($val) {
@@ -248,58 +236,36 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
     /*
-     * This function makes so sense.. it just queries the company table to get
-     *   the company_id.. but it uses the company_id to do it. Wha?
-     *
      * @deprecated
      */
 	public function getCompanyID() {
-		return (int)$this->contact_company;
+		trigger_error("getCompanyID() has been deprecated in v3.0 and will be removed by v4.0. Please just use the object property itself.", E_USER_NOTICE );
+        return (int)$this->contact_company;
 	}
 
 	public function getCompanyName() {
-		$q = new w2p_Database_Query;
-		$q->addTable('companies');
-		$q->addQuery('company_name');
-		$q->addWhere('company_id = ' . (int)$this->contact_company);
+        trigger_error("getCompanyName has been deprecated and will be removed in v4.0. Please use getCompanyDetails() instead.", E_USER_NOTICE );
 
-		return $q->loadResult();
+        $company = new CCompany();
+        $company->load((int) $this->contact_company);
+
+		return $company->company_name;
 	}
 
 	public function getCompanyDetails() {
-		$result = array('company_id' => 0, 'company_name' => '');
-		if (!$this->contact_company) {
-			return $result;
-		}
 
-		$q = new w2p_Database_Query;
-		$q->addTable('companies');
-		$q->addQuery('company_id, company_name');
-		if ((int) $this->contact_company) {
-			$q->addWhere('company_id = ' . (int) $this->contact_company);
-		} else {
-            $q->addWhere('company_name = ' . $q->quote($this->contact_company));
-		}
+        $company = new CCompany();
+        $company->load((int) $this->contact_company);
 
-		return $q->loadHash();
+        return array('company_id' => $company->company_id, 'company_name' => $company->company_name);
 	}
 
 	public function getDepartmentDetails() {
-		$result = array('dept_id' => 0, 'dept_name' => '');
-		if (!$this->contact_department) {
-			return $result;
-		}
 
-		$q = new w2p_Database_Query;
-		$q->addTable('departments');
-		$q->addQuery('dept_id, dept_name');
-		if ((int) $this->contact_department) {
-			$q->addWhere('dept_id = ' . (int) $this->contact_department);
-		} else {
-            $q->addWhere('dept_name = ' . $q->quote($this->contact_department));
-		}
+        $dept = new CDepartment();
+        $dept->load((int) $this->contact_department);
 
-		return $q->loadHash();
+        return array('dept_id' => $dept->dept_id, 'dept_name' => $dept->dept_name);
 	}
 
 	public function getUpdateKey() {
@@ -325,7 +291,7 @@ class CContact extends w2p_Core_BaseObject {
 		$df = $AppUI->getPref('SHDATEFORMAT');
 		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
-		$mail = new Mail;
+		$mail = new w2p_Utilities_Mail();
 		$mail->Subject('Hello', $locale_char_set);
 
 		if ($this->contact_email) {

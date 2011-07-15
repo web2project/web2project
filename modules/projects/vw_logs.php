@@ -5,7 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $project_id, $df, $canEdit, $m, $tab;
 
-// Lets check which cost codes have been used before
 $company_id = CProject::getCompany($project_id);
 
 $task_log_costcodes =  array(0 => '(all)') + CProject::getBillingCodes($company_id, true);
