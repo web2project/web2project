@@ -93,30 +93,26 @@ function w2p_autoload($class_name) {
             break;
 
         default:
-            if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
-                require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
-                return;
-            }
+			if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
+				require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
+			    return;
+			}
 
-
-            /* TODO: I really hate the duplication here.. */
-            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-                return;
-            }
-            if ($name[0] == 'c') {
-                $name = substr($name, 1);
-                if (in_array($name, array('system'))) {
-                    //do nothing
-                } else {
-                    $name = w2p_pluralize($name);
-                }
-            }
-            if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-                require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
-                return;
-            }
-            break;
+			if ($name[0] == 'c') {
+				$name = substr($name, 1);
+			}
+			if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+			    require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+			    return;
+			}
+			if (!in_array($name, array('system'))) {
+			    $name = w2p_pluralize($name);
+			}
+			if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
+			    require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+			    return;
+			}
+			break;
     }
 }
 
