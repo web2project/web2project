@@ -339,10 +339,10 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             foreach ($res as $rw) {
 				switch ($rw['perc_assignment']) {
 					case 100:
-						$caption .= $rw['user_username'] . ';';
+						$caption .= $rw['contact_display_name'] . ';';
 						break;
 					default:
-						$caption .= $rw['user_username'] . ' [' . $rw['perc_assignment'] . '%];';
+						$caption .= $rw['contact_display_name'] . ' [' . $rw['perc_assignment'] . '%];';
 						break;
 				}
             }
