@@ -334,8 +334,8 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             $cap = '';
         }
 
-        if ($showLabels == '1') {	
-            $res = $task->getAssignedUsers($a['task_id']);        
+        if ($showLabels == '1') {
+            $res = $task->getAssignedUsers($a['task_id']);
             foreach ($res as $rw) {
 				switch ($rw['perc_assignment']) {
 					case 100:
