@@ -31,11 +31,10 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 		$this->filter = $w2Pconfig['ldap_user_filter'];
 	}
 
-    # santosdiez
 	public function authenticate($username, $password) {
 		global $w2Pconfig;
 		$this->username = $username;
-		
+
 		if (strlen($password) == 0) {
 			return false; // LDAP will succeed binding with no password on AD (defaults to anon bind)
 		}
@@ -96,7 +95,6 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 
 		return false;
 	}
-	# /santosdiez
 
 	public function userExists($username) {
 		global $db;
