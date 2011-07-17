@@ -334,16 +334,15 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             $cap = '';
         }
 
-        if ($showLabels == '1') {
-            $res = $task->getAssignedUsers($task_id);
+        if ($showLabels == '1') {	
+            $res = $task->getAssignedUsers($a['task_id']);        
             foreach ($res as $rw) {
-				$caption = '';
 				switch ($rw['perc_assignment']) {
 					case 100:
-						$caption .= $rw['contact_display_name'] . ';';
+						$caption .= $rw['user_username'] . ';';
 						break;
 					default:
-						$caption .= $rw['contact_display_name'] . ' [' . $rw['perc_assignment'] . '%];';
+						$caption .= $rw['user_username'] . ' [' . $rw['perc_assignment'] . '%];';
 						break;
 				}
             }
