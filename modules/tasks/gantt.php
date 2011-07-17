@@ -1,4 +1,4 @@
-<?php /* $Id: gantt.php 1524 2010-12-09 08:15:59Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/gantt.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -335,9 +335,8 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         if ($showLabels == '1') {
-            $res = $task->getAssignedUsers($task_id);
+            $res = $task->getAssignedUsers($a['task_id']);
             foreach ($res as $rw) {
-				$caption = '';
 				switch ($rw['perc_assignment']) {
 					case 100:
 						$caption .= $rw['contact_display_name'] . ';';
