@@ -782,6 +782,14 @@ class CTask extends w2p_Core_BaseObject {
             if (!($q->exec())) {
                 return db_error();
             }
+            $q->clear();
+
+            // delete affiliated task_dependencies
+            $q->setDelete('task_contacts');
+            $q->addWhere('task_id = '.$this->task_id);
+            if (!($q->exec())) {
+                return db_error();
+            }
 
             if ($msg = parent::delete()) {
                 return $msg;
