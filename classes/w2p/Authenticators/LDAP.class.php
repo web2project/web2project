@@ -38,7 +38,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 		if (strlen($password) == 0) {
 			return false; // LDAP will succeed binding with no password on AD (defaults to anon bind)
 		}
-		
+
 		// Start with LDAP Authentication
 		if ($rs = ldap_connect($this->ldap_host, $this->ldap_port)) {
 		    ldap_set_option($rs, LDAP_OPT_PROTOCOL_VERSION, $this->ldap_version);
@@ -80,7 +80,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 				}
 		    }
 		}
-		
+
 	    if ($this->fallback == true) {
 		    return (parent::authenticate($username, $password));
 	    }
@@ -144,7 +144,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
         $u->store($AppUI);
         $user_id = $u->user_id;
 		$this->user_id = $user_id;
-        
+
 		$acl = &$AppUI->acl();
 		$acl->insertUserRole($acl->get_group_id('anon'), $this->user_id);
 	}
