@@ -1,4 +1,4 @@
-<?php /* $Id: projects.class.php 1521 2010-12-07 08:18:17Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/projects.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 /**
  *	@package web2Project
  *	@subpackage modules
- *	@version $Revision: 1521 $
+ *	@version $Revision$
  */
 
 // project statii
@@ -91,7 +91,7 @@ class CProject extends w2p_Core_BaseObject {
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
         $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
-        $this->project_contacts = explode(',', $this->project_contacts);
+        $this->project_contacts = is_array($this->project_contacts) ? $this->project_contacts : explode(',', $this->project_contacts);
 
         return $result;
     }
