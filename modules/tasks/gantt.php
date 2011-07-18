@@ -139,17 +139,6 @@ $task = new CTask();
 $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
 
-if ($caller == 'todo') {
-	$gantt_arr = array();
-	$displayed = array();
-	foreach($proTasks as $tmpTask) {
-		if(!isset($displayed[$tmpTask['task_id']])) {
-			$gantt_arr[][] = $tmpTask;
-			$displayed[$tmpTask['task_id']] = $tmpTask['task_id'];
-		}
-	}
-}
-$q->clear();
 
 $orrarr[] = array('task_id'=>0, 'order_up'=>0, 'order'=>'');
 $end_max = '0000-00-00 00:00:00';
@@ -272,21 +261,31 @@ if (!$start_date || !$end_date) {
 }
 $gantt->setDateRange($start_date, $end_date);
 
+$gantt_arr = array();
 reset($projects);
-foreach ($projects as $p) {
-	$parents = array();
+$displayed = array();
+foreach ($projects as $p) {	
     $tnums = count($p['tasks']);
 
 	for ($i = 0; $i < $tnums; $i++) {
-		$t = $p['tasks'][$i];
-        if (!isset($parents[$t['task_parent']])) {
-			$parents[$t['task_parent']] = false;
+		//	web2project_gii
+		$t = $p['tasks'][$i]; 
+		if ($caller == 'todo') {
+			if ($showDynTasks) {  		    
+				if ($t['task_parent'] == $t['task_id']) {
+					showgtask($t);										
+					findgchild($p['tasks'], $t['task_id']);
+				}
+			} else {
+				showgtask($t);	
+			}
+		} else {
+			if ($t['task_parent'] == $t['task_id']) {
+					showgtask($t);										
+					findgchild($p['tasks'], $t['task_id']);
+			}
 		}
-		if ($t['task_parent'] == $t['task_id']) {
-			$parents[$t['task_parent']] = true;
-			showgtask($t);
-			findgchild($p['tasks'], $t['task_id']);
-		}
+		//	/web2project_gii
 	}
 }
 $gantt->loadTaskArray($gantt_arr);
