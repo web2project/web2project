@@ -91,7 +91,7 @@ class CProject extends w2p_Core_BaseObject {
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
         $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
-        $this->project_contacts = explode(',', $this->project_contacts);
+        $this->project_contacts = is_array($this->project_contacts) ? $this->project_contacts : explode(',', $this->project_contacts);
 
         return $result;
     }
