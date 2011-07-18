@@ -27,10 +27,6 @@ class CTask extends w2p_Core_BaseObject {
      */
     public $task_name = null;
 
-    // user based access
-    // Needs to be inside the class, otherwise it doesn't find 'CTask'
-    public $task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
-
     /**
      * @var int
      */

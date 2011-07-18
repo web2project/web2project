@@ -120,10 +120,7 @@ function setDate( frm_name, f_date ) {
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Expected Duration'); ?>:</td>
                 <td nowrap="nowrap">
-					<!-- santosdiez -->
-					<!-- Added id to this field so that it can be modified through AJAX -->
 					<input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo isset($task->task_duration) ? $task->task_duration : 1; ?>" />
-					<!-- /santosdiez -->
                     <?php
                         echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $task->task_duration_type, true);
                     ?>
@@ -133,13 +130,8 @@ function setDate( frm_name, f_date ) {
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calculate'); ?>:</td>
                 <td nowrap="nowrap">
-                    <!--<input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="calcDuration(document.datesFrm)" class="button" />
-                    <input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="calcFinish(document.datesFrm)" class="button" />-->
-                    <!-- santosdiez -->
-                    <!-- Replaced the onclick event so that it now uses the new AJAX functions -->
                     <input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="xajax_calcDuration(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_end_date.value,document.datesFrm.end_hour.value,document.datesFrm.end_minute.value,document.datesFrm.task_duration_type.value);" class="button" />
-					<input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="xajax_calcFinish(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_duration_type.value,document.datesFrm.task_duration.value)" class="button" />
-                    <!-- /santosdiez -->
+                    <input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="xajax_calcFinish(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_duration_type.value,document.datesFrm.task_duration.value)" class="button" />
                 </td>
                 <td><?php echo $AppUI->_('Working Days') . ': ' . $cwd_hr; ?></td>
             </tr>

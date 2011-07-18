@@ -85,21 +85,7 @@ class w2p_Utilities_Date extends Date {
 	 * @author J. Christopher Pereira <kripper@users.sf.net>
 	 */
 	public function addDays($n) {
-		
-		## santosdiez
-		## Just simplify the calc. If we want to add 'n' days, we just have to add n times the seconds of a day
 		$this->addSeconds($n*24*60*60);
-		## /santosdiez
-		
-		/*
-		$timeStamp = $this->getTime();
-		$oldHour = $this->getHour();
-		$this->setDate($timeStamp + SEC_DAY * ceil($n), DATE_FORMAT_UNIXTIME);
-
-		if (($oldHour - $this->getHour()) || !is_int($n)) {
-			$timeStamp += ($oldHour - $this->getHour()) * SEC_HOUR;
-			$this->setDate($timeStamp + SEC_DAY * $n, DATE_FORMAT_UNIXTIME);
-		}*/
 	}
 
 	/**
@@ -157,8 +143,6 @@ class w2p_Utilities_Date extends Date {
 	public function isWorkingDay() {
 		global $AppUI;
 
-		## santosdiez
-		## Prepare the code for using the 'Holiday' module
 		if ($AppUI->isActiveModule('holiday')) {
 		    // Holiday module, check the holiday database
 		    require_once W2P_BASE_DIR."/modules/holiday/holiday_functions.class.php";
@@ -166,7 +150,6 @@ class w2p_Utilities_Date extends Date {
 		        return false;
 		    }
 		}
-		## /santosdiez
 
 		$working_days = w2PgetConfig('cal_working_days');
 		$working_days = ((is_null($working_days)) ? array('1', '2', '3', '4', '5') : explode(',', $working_days));
@@ -177,9 +160,6 @@ class w2p_Utilities_Date extends Date {
 		return (($this->getHour() > 11) ? 'pm' : 'am');
 	}
 
-	## santosdiez
-	## A pair of new functions to make it easier
-	
 	/* Check if two dates belong to the same day */
 	public function isSameDay($otherDay) {
 		return ($this->getDay() == $otherDay->getDay() &&
@@ -191,9 +171,6 @@ class w2p_Utilities_Date extends Date {
 	public function diff($otherDate) {
 		return abs($otherDate->getTime() - $this->getTime())/60.0;
 	}
-	
-	## /santosdiez
-
 
 	/* Return date obj for the end of the next working day
 	** @param	bool	Determine whether to set time to start of day or preserve the time of the given object
@@ -327,14 +304,11 @@ class w2p_Utilities_Date extends Date {
 		return $this->next_working_day();
 	}
 
-	## santosdiez
-    ## Reimplementation of the calcDuration function. Clearer variable names and some other enhancements.
-	
 	/* Calculating _robustly_ the working duration between two dates
 	**
 	** Works in both directions: forwards/prospective and backwards/retrospective
 	** Respects non-working days
-	**
+	** SantosDiez - Credit for better variable names
 	**
 	** @param	obj	DateObject	may be viewed as end date
 	** @return	float				working duration in hours
@@ -403,10 +377,7 @@ class w2p_Utilities_Date extends Date {
 		}
 
 		return $sign * $duration / 60.0;
-
 	}
-
-	## /santosdiez
 
 	public function workingDaysInSpan($e) {
 		global $AppUI;
@@ -449,13 +420,10 @@ class w2p_Utilities_Date extends Date {
 		return clone ($this);
 	}
 
-	## santosdiez
-	## Reimplementation of the function calcFinish.
-
 	/* Calculating a future date considering a given duration
 	**
 	** Respects non-working days and the working hours and the begining and end of days
-	**
+	** SantosDiez - Credit for better variable names
 	**
 	** @param	duration		Duration to be added to the date
 	** @param	durationType	Duration Type: 1=hours, 24=days
@@ -505,8 +473,6 @@ class w2p_Utilities_Date extends Date {
 		return $finishDate;
 				
 	}
-
-	## /santosdiez
 
 	/**
 	 * Converts this date to a new time zone
