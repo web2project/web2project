@@ -32,8 +32,10 @@ foreach ($module_list as $module) {
         if ($module['type'] = 'mod' && isset($pgo_list[$module['name']])) {
             $pgos[$offset] = $pgo_list[$module['name']]['permissions_item_table'];
         }
-    }
-	$offset++;
+    //	web2project_gii
+    $offset++;
+    //	/web2project_gii
+    }	
 }
 $count = 0;
 
