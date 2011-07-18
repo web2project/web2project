@@ -29,15 +29,35 @@ function cleanText($text) {
 	return $text;
 }
 
-//This kludgy function echos children tasks as threads
+//
+/*
+ * 	gantt_arr [ project_id ] [ 0 ]  is a task "object" : 	task['task_id'], task['task_access'], task['task_owner'], task['task_name'], task['project_name']
+ * 															task['task_start_date'], task['task_end_date'], task['task_percent_complete'], ['task_milestone']
+ * 	gantt_arr [ project_id ] [ 1 ] 	is the level
+ * 
+ * 	project_id is "optional": a 0 value means we re not handling projects
+ *  
+ *	 adds a bidimensional array:
+ * 		-1st level: composed of integer project_id
+ * 		-2nd level: composed of an array of two items: task "object", integer level 						
+ */
 function showgtask(&$a, $level = 0, $project_id = 0) {
     /* Add tasks to gantt chart */
     global $gantt_arr;
-    if ($project_id) {
-        $gantt_arr[$project_id][] = array($a, $level);
-    } else {
+    if (!is_task_in_gantt_arr($a)) {
         $gantt_arr[] = array($a, $level);
     }
+}
+
+function is_task_in_gantt_arr($task) {
+    global $gantt_arr;
+    $n = count($gantt_arr);
+    for ($x = 0; $x < $n; $x++) {
+        if ($gantt_arr[$x][0]['task_id'] == $task['task_id']) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function findgchild(&$tarr, $parent, $level = 0) {
@@ -47,7 +67,7 @@ function findgchild(&$tarr, $parent, $level = 0) {
     for ($x = 0; $x < $n; $x++) {
         if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
             showgtask($tarr[$x], $level, $tarr[$x]['project_id']);
-            findgchild($tarr, $tarr[$x]['task_id'], $level, $tarr[$x]['project_id']);
+            findgchild($tarr, $tarr[$x]['task_id'], $tarr[$x]['project_id'], $level);
         }
     }
 }
