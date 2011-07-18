@@ -48,4 +48,5 @@ foreach ($_POST['pref_name'] as $name => $value) {
 		}
 	}
 }
-$AppUI->redirect('m=system');
+$returnPath = ($pref_user) ? 'm=admin&a=viewuser&user_id='.$pref_user : 'm=system';
+$AppUI->redirect($returnPath);
