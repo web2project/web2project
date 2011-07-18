@@ -317,19 +317,6 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertFalse($contact->is_alpha(3.14159));
     }
 
-    /**
-     * expectedException PHPUnit_Framework_Error
-     */
-    public function testGetCompanyName()
-    {
-        $contact = new CContact();
-        $contact->contact_company = 1;
-        $this->assertEquals('UnitTestCompany',  $contact->getCompanyName());
-
-        $contact->contact_company = 2;
-        $this->assertEquals('CreatedCompany',  $contact->getCompanyName());
-    }
-
     public function testGetCompanyDetails()
     {
         $contact = new CContact();
