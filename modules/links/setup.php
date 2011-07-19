@@ -78,7 +78,7 @@ class CSetupLinks {
 
         $i = 0;
         $linkTypes = array('Unknown', 'Document', 'Application');
-        foreach ($linkType as $linkTypes) {
+        foreach ($linkTypes as $linkType) {
             $q->clear();
             $q->addTable('sysvals');
             $q->addInsert('sysval_key_id', 1);
