@@ -16,9 +16,6 @@ $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 $sdate = w2PgetParam($_POST, 'project_start_date', 0);
 $edate = w2PgetParam($_POST, 'project_end_date', 0);
 
-//if set GantChart includes user labels as captions of every GantBar
-$showLabels = w2PgetParam($_POST, 'showLabels', '0');
-$showLabels = (($showLabels != '0') ? '1' : $showLabels);
 
 $showWork = w2PgetParam($_POST, 'showWork', '0');
 $showWork = (($showWork != '0') ? '1' : $showWork);
@@ -31,36 +28,41 @@ $printpdf = (($printpdf != '0') ? '1' : $printpdf);
 
 $printpdfhr = w2PgetParam($_POST, 'printpdfhr', '0');
 $printpdfhr = (($printpdfhr != '0') ? '1' : $printpdfhr);
+		
+	
+$showPinned = w2PgetParam($_POST, 'showPinned', '0');
+if ($showPinned != '0') {
+	$showPinned = '1';
+}
 
-if ($a == 'todo') {
-	if (isset($_POST['show_form'])) {
-		$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'showArcProjs', 0));
-		$AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'showLowTasks', 0));
-		$AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'showHoldProjs', 0));
-		$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'showDynTasks', 0));
-		$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'showPinned', 0));
-	}
 
-	$showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
-	$showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
-	$showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
-	$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
-	$showPinned = $AppUI->getState('TaskDayShowPin', 0);
+
+$showArcProjs = w2PgetParam($_POST, 'showArcProjs', '0');
+if ($showArcProjs != '0') {
+	$showArcProjs = '1';
+}
+
+$showHoldProjs = w2PgetParam($_POST, 'showHoldProjs', '0');
+if ($showHoldProjs != '0') {
+	$showHoldProjs = '1';
+}
+
+$showLowTasks = w2PgetParam($_POST, 'showLowTasks', '0');
+if ($showLowTasks != '0') {
+	$showLowTasks = '1';
+}
+
+if (!isset($_POST['show_form'])) {
+	$showDynTasks = '1';
+	$showLabels = '1';
 } else {
-	$showPinned = w2PgetParam($_POST, 'showPinned', '0');
-	$showPinned = (($showPinned != '0') ? '1' : $showPinned);
-
-	$showArcProjs = w2PgetParam($_POST, 'showArcProjs', '0');
-	$showArcProjs = (($showArcProjs != '0') ? '1' : $showArcProjs);
-
-	$showHoldProjs = w2PgetParam($_POST, 'showHoldProjs', '0');
-	$showHoldProjs = (($showHoldProjs != '0') ? '1' : $showHoldProjs);
-
 	$showDynTasks = w2PgetParam($_POST, 'showDynTasks', '0');
-	$showDynTasks = (($showDynTasks != '0') ? '1' : $showDynTasks);
-
-	$showLowTasks = w2PgetParam($_POST, 'showLowTasks', '0');
-	$showLowTasks = (($showLowTasks != '0') ? '1' : $showLowTasks);
+	if ($showDynTasks != '0') {
+		$showDynTasks = '1';
+	}	
+	//if set GantChart includes user labels as captions of every GantBar
+	$showLabels = w2PgetParam($_POST, 'showLabels', '0');
+	$showLabels = (($showLabels != '0') ? '1' : $showLabels);
 }
 
 
@@ -265,121 +267,96 @@ if (!$min_view) {
 </script>
 
 <div id="displayOptions"> <!-- start of div used to show/hide formatting options -->
-<br />
+
 <form name="editFrm" method="post" action="?<?php echo "m=$m&a=$a&tab=$tab&project_id=$project_id"; ?>" accept-charset="utf-8">
     <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
 	<input type="hidden" name="printpdf" value="<?php echo $printpdf; ?>" />
 	<input type="hidden" name="printpdfhr" value="<?php echo $printpdfhr; ?>" />
 	<input type="hidden" name="caller" value="<?php echo $a; ?>" />
-    <table border="0" cellpadding="4" cellspacing="0" class="std" width="100%">
+    <table border="0" cellpadding="4" cellspacing="0" class="std" width="100%">                        
         <tr>
-            <td align="left" valign="top" width="20">
-                <?php if ($display_option != "all") { ?>
+			<input type="hidden" name="show_form" value="1" />
+            <td align="left" valign="bottom" nowrap="nowrap" >                
+                <table width="100%" border="0" cellpadding="1" cellspacing="1">
+                    <tr>
+						<td align="center" valign="center" nowrap="nowrap">
+                            <input type="checkbox" name="showDynTasks" id="showDynTasks"  value="1" <?php echo $showDynTasks == 1? 'checked="checked"' : ''; ?> />
+                            <label for="showDynTasks" ><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
+                        </td>
+                        <td align="center" valign="center" nowrap="nowrap">
+							<input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> />
+							<label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
+						</td>
+                        <td align="center" valign="center" nowrap="nowrap">
+                            <input type="checkbox" name="showPinned" id="showPinned" value="1" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
+                            <label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
+                        </td>
+                        <td align="center" valign="center" nowrap="nowrap">
+                            <input type="checkbox" name="showArcProjs" id="showArcProjs"  value="1" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
+                            <label for="showArcProjs"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
+                        </td>                        
+                        <td align="center" valign="center" nowrap="nowrap">
+                            <input type="checkbox" name="showLowTasks" id="showLowTasks" value="1" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
+                            <label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
+                        </td>                        						
+                        <td align="center">
+							<?php
+								if ($other_users) {
+									?>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>  <?php echo $AppUI->_('User')?>  </label>
+									<?php
+									$selectedUser = w2PgetParam($_POST, 'show_user_todo', $AppUI->user_id);
+									$users = $perms->getPermittedUsers('tasks');
+									echo arraySelect($users, 'show_user_todo', 'class="text"', $selectedUser);
+								}
+							?>
+						</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>                
+               
+        <tr>	
+			<td align="center" valign="bottom">                
+                <table width="100%" border="0" cellpadding="1" cellspacing="1">
+                    <tr>
+						
+			<td align="left" valign="center" width="25%">	
+				<input type="button" class="button" value="<?php echo ($a == 'todo' ? $AppUI->_('show all') : $AppUI->_('show full project'));?>" onclick='javascript:showFullProject()'  />
+				<input type="button" class="button" value="<?php echo $AppUI->_('show this month');?>" onclick='javascript:showThisMonth()'  />				     												           	
+			</td> 	
+			<td align="center" valign="center" width="50%">                                           
                 <a href="javascript:scrollPrev()">
                     <img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('previous'); ?>" border="0">
                 </a>
-                <?php } ?>
-            </td>
-            <td align="right"><em>Date Filter:</em></td>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('From'); ?>:</td>
-            <td align="left" nowrap="nowrap">
+                
+				<label><?php echo $AppUI->_('From'); ?>:</label>
                 <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
                 <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
-            </td>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('To'); ?>:</td>
-            <td align="left" nowrap="nowrap">
+				<label><?php echo $AppUI->_('To'); ?>:</label>
                 <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
                 <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
-            </td>
-			<td>
-				<input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
-			</td>
-            <td align="left">
-                <input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submitIt();' style="float: left;" />
-                <input type="button" class="button" value="<?php echo $AppUI->_('Print to PDF');?>" onclick='javascript:printPDFHR()' style="float: right;" />
-            </td>
-            <td align="right" valign="top" width="20">
-                <?php if ($display_option != 'all') { ?>
+                                           
                 <a href="javascript:scrollNext()">
                     <img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('next'); ?>" border="0" />
                 </a>
-                <?php } ?>
-            </td>
-        </tr>
-        <?php if ($a == 'todo') { ?>
-        <tr>
-            <td align="center" valign="bottom" nowrap="nowrap" colspan="7">
-                <input type="hidden" name="show_form" value="1" />
-                <table width="100%" border="0" cellpadding="1" cellspacing="0">
-                    <tr>
-                        <td align="center" valign="bottom" nowrap="nowrap">
-                            <input type="checkbox" name="showPinned" id="showPinned" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
-                            <label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
-                        </td>
-                        <td align="center" valign="bottom" nowrap="nowrap">
-                            <input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-                            <label for="showArcProjs"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
-                        </td>
-                        <td align="center" valign="bottom" nowrap="nowrap">
-                            <input type="checkbox" name="showDynTasks" id="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
-                            <label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-                        </td>
-                        <td align="center" valign="bottom" nowrap="nowrap">
-                            <input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-                            <label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-                        </td>
-                    </tr>
+                     
+                <input type="button" class="button" value="<?php echo $AppUI->_('show'); ?>" onclick='document.editFrm.display_option.value="custom";submitIt();'  />           
+            </td>                  									          
+            	
+            
+            <td align="right" valign="center" width="25%">
+				<input type="button" class="button" value="<?php echo $AppUI->_('Print to PDF');?>" onclick='javascript:printPDFHR()'  />
+            </td>  
+            </tr>
                 </table>
-            </td>
+            </td>         
         </tr>
-        <tr align="left">
-            <td colspan="11">
-                <table border="0" id="ganttoptions" style="display:none" width="100%" align="center"><tr><td width="100%">
-                    <tr>
-                        <td>
-                            
-                            <input type="hidden" name="show_form" value="1" />
-                            <table  border="0" cellpadding="2" cellspacing="0" width="100%" align="center">
-                                <tr>
-                                    <td>&nbsp;To Do Options:&nbsp;</td>
-                                    <td  valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showPinned" id="showPinned" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
-                                        <label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
-                                    </td>
-                                    <td valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-                                        <label for="showArcProjs"><?php echo $AppUI->_('Archived Projects'); ?></label>
-                                    </td>
-                                    <td  valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showHoldProjs" id="showHoldProjs" <?php echo $showHoldProjs ? 'checked="checked"' : ''; ?> />
-                                        <label for="showHoldProjs"><?php echo $AppUI->_('Projects on Hold'); ?></label>
-                                    </td>
-                                    <td valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showDynTasks" id="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
-                                        <label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-                                    </td>
-                                    <td valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-                                        <label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <?php } ?>
-        <tr>
-            <td align="center" valign="bottom" colspan="11">
-                <?php echo "<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') . "</a> : <a href='javascript:showFullProject()'>" . ($a == 'todo' ? $AppUI->_('show all') : $AppUI->_('show full project')) . "</a><br>"; ?>
-            </td>
-        </tr>
-    </table>
+    </table>   
 </form>
 </div> <!-- end of div used to show/hide formatting options -->
 
