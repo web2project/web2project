@@ -246,7 +246,7 @@ class w2p_Output_MonthCalendar {
 		if ($this->clickMonth) {
 			$s .= '<a href="index.php?m=' . $m . '&amp;date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
 		}
-		setlocale(LC_TIME, 'en');
+		setlocale(LC_TIME, 'C');
 		$s .= $AppUI->_($this->this_month->format('%B')) . ' ' . $this->this_month->format('%Y') . (($this->clickMonth) ? '</a>' : '');
 		setlocale(LC_ALL, $AppUI->user_lang);
 		$s .= '</th>';
