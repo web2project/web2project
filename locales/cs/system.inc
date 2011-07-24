@@ -172,6 +172,8 @@
 'ldap_allow_login_tooltip'=>'Uživatelům v databázi web2Project bude umožněno i standardní přihlášení',
 'ldap_base_dn_title'=>'LDAP Base DN',
 'ldap_base_dn_tooltip'=>'Base Distinguished Name (DN) pro použití v LDAP dotazech.',
+'ldap_complete_string_title'=>'Full LDAP Connect String',
+'ldap_complete_string_tooltip'=>'If used, this setting overrides most other LDAP settings above.',
 'ldap_group_title'=>'Nastavení LDAP',
 'ldap_host_title'=>'LDAP server',
 'ldap_host_tooltip'=>'Jméno nebo IP adresa počítače s LDAP serverem, který bude použit k LDAP ověřování uživatelů.',
