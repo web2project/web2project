@@ -1,4 +1,4 @@
-<?php /* $Id: files.class.php 1517 2010-12-05 08:07:54Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/files/files.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -376,10 +376,17 @@ class CFile extends w2p_Core_BaseObject {
             // parse it
             $parser = $parser . ' ' . $this->_filepath;
             $pos = strpos($parser, '/pdf');
+
+            /*
+             * TODO: I *really* hate using error surpression here and I would
+             *   normally just detect if safe_mode is on and if it was, skip
+             *   this call. Unfortunately, safe_mode has been deprecated in
+             *   5.3 and will be removed in 5.4
+             */
             if (false !== $pos) {
-                $x = `$parser -`;
+                $x = @shell_exec(`$parser -`);
             } else {
-                $x = `$parser`;
+                $x = @shell_exec(`$parser`);
             }
             // if nothing, return
             if (strlen($x) < 1) {
