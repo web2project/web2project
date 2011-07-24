@@ -266,6 +266,8 @@
 'ldap_allow_login_tooltip'=>'se permitirá a los usuarios basados en la base de datos de web2Project también abrirse una sesión',
 'ldap_base_dn_title'=>'Base DN para LDAP',
 'ldap_base_dn_tooltip'=>'El nombre distinguido bajo (DN) a utilizar para las conexiones de LDAP.',
+'ldap_complete_string_title'=>'Full LDAP Connect String',
+'ldap_complete_string_tooltip'=>'If used, this setting overrides most other LDAP settings above.',
 'ldap_group_title'=>'Parámetros LDAP',
 'ldap_host_title'=>'Servidor LDAP',
 'ldap_host_tooltip'=>'El nombre o el IP del servidor de LDAP a authenticar, al usar la autentificación de LDAP.',

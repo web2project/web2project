@@ -29,6 +29,8 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 		$this->ldap_search_user = $w2Pconfig['ldap_search_user'];
 		$this->ldap_search_pass = $w2Pconfig['ldap_search_pass'];
 		$this->filter = $w2Pconfig['ldap_user_filter'];
+
+        $this->ldap_complete_string = $w2Pconfig['ldap_complete_string'];
 	}
 
     public function authenticate($username, $password) {
@@ -39,13 +41,23 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 			return false; // LDAP will succeed binding with no password on AD (defaults to anon bind)
 		}
 
-		// Start with LDAP Authentication
 		if ($rs = ldap_connect($this->ldap_host, $this->ldap_port)) {
 		    ldap_set_option($rs, LDAP_OPT_PROTOCOL_VERSION, $this->ldap_version);
     		ldap_set_option($rs, LDAP_OPT_REFERRALS, 0);
 
-            // Now ldap_search_user should be the full DN (well, without the base DN)
-	    	$ldap_bind_dn = $this->ldap_search_user.','.$this->base_dn;
+            if ('' == $this->ldap_complete_string) {
+                /*
+                 * This should be compliant with the old/previous LDAP settings
+                 *   that we've used all along.
+                 */
+                $ldap_bind_dn = 'CN='.$this->ldap_search_user.',OU=Users,'.$this->base_dn;
+            } else {
+                /*
+                 * In case the LDAP configuration is different than expected,
+                 *   we can configure a completely custom one.
+                 */
+                $ldap_bind_dn = $this->ldap_complete_string;
+            }
 	    	$ldap_bind_pw = empty($this->ldap_search_pass) ? null : $this->ldap_search_pass;
 
 		    if ($bindok = ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw)) {

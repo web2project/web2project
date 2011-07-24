@@ -300,6 +300,8 @@
 'ldap_allow_login_tooltip'=>'SQL-baserade användare ska också tillåtas logga in',
 'ldap_base_dn_title'=>'LDAP Base DN',
 'ldap_base_dn_tooltip'=>'Det bas-DN (Distinguished Name) som ska användas vid LDAP-förfrågningar',
+'ldap_complete_string_title'=>'Full LDAP Connect String',
+'ldap_complete_string_tooltip'=>'If used, this setting overrides most other LDAP settings above.',
 'ldap_group_title'=>'LDAP-inställningar',
 'ldap_host_title'=>'LDAP-värd',
 'ldap_host_tooltip'=>'Namn eller IP-adress till den LDAP-värd som användare ska verifieras mot, när LDAP-verifiering används.',
