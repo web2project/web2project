@@ -27,21 +27,6 @@ foreach ($projectList as $pr) {
     $project_list[$pr['project_id']] = '(' . $companyList[$pr['project_company']]['company_name'] . ') ' . $pr['project_name'];
 }
 
-if (!$suppressHeaders) {
-?>
-<script language="javascript" type="text/javascript">
-
-var format_error_msg = '<?php echo $AppUI->_('The Date/Time you typed does not match your prefered format, please retype.', UI_OUTPUT_JS); ?>';
-var cal_sdf = '<?php echo $cal_sdf ?>';
-
-function changeIt() {
-    var f=document.changeMe;
-    f.submit();
-}
-</script>
-
-<?php
-}
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
@@ -111,4 +96,18 @@ if ($report_type) {
 	echo $s;
 }
 
-$AppUI->getModuleJS('reports', 'index');
+if (!$suppressHeaders) {
+    ?>
+    <script language="javascript" type="text/javascript">
+
+    var format_error_msg = '<?php echo $AppUI->_('The Date/Time you typed does not match your prefered format, please retype.', UI_OUTPUT_JS); ?>';
+    var cal_sdf = '<?php echo $cal_sdf ?>';
+
+    function changeIt() {
+        var f=document.changeMe;
+        f.submit();
+    }
+    </script>
+    <?php
+    $AppUI->getModuleJS('reports', 'index');
+}
