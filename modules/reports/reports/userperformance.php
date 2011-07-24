@@ -41,15 +41,14 @@ function setDate( frm_name, f_date ) {
 }
 </script>
 
-<form name="editFrm" action="index.php?m=reports" method="post" accept-charset="utf-8">
-<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
-<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
-
 <?php
 if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
 ?>
+<form name="editFrm" action="index.php?m=reports" method="post" accept-charset="utf-8">
+<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
+<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
