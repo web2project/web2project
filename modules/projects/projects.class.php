@@ -64,8 +64,8 @@ class CProject extends w2p_Core_BaseObject {
     public $project_percent_complete = null;
     public $project_color_identifier = null;
     public $project_description = null;
-    public $project_target_budget = null;
-    public $project_actual_budget = null;
+    public $project_target_budget = 0;
+    public $project_actual_budget = 0;
     public $project_scheduled_hours = null;
     public $project_worked_hours = null;
     public $project_task_count = null;
