@@ -129,7 +129,8 @@ $q->addGroup('file_version_id');
 		file_date, cu.user_username as co_user, project_name,
 		project_color_identifier, project_owner, con.contact_first_name,
 		con.contact_last_name, co.contact_first_name as co_contact_first_name,
-		co.contact_last_name as co_contact_last_name ');
+		co.contact_last_name as co_contact_last_name');
+    $q3->addQuery('file_folder_id, file_folder_name');
 	$q3->addJoin('projects', 'p', 'p.project_id = file_project');
 	$q3->addJoin('users', 'u', 'u.user_id = file_owner');
 	$q3->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
@@ -288,8 +289,10 @@ function expand(id){
 	?>
 		</td>
 		<td width="10%" nowrap="nowrap" align="left"><?php echo $file_types[$latest_file['file_category']]; ?></td>
-		<td width="10%" nowrap="nowrap" align="left"><?php
-		echo ($latest_file['file_folder_name'] != '') ? '<a href="' . W2P_BASE_URL . '/index.php?m=files&tab=' . (count($file_types) + 1) . '&folder=' . $latest_file['file_folder_id'] . '">' . w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files') . $latest_file['file_folder_name'] . '</a>' : 'Root';?>
+		<td width="10%" nowrap="nowrap" align="left">
+            <?php
+                echo ($latest_file['file_folder_name'] != '') ? '<a href="' . W2P_BASE_URL . '/index.php?m=files&tab=' . (count($file_types) + 1) . '&folder=' . $latest_file['file_folder_id'] . '">' . w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files') . $latest_file['file_folder_name'] . '</a>' : 'Root';
+            ?>
 		</td>
 		<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task']; ?>"><?php echo $latest_file["task_name"]; ?></a></td>
 		<td width="15%" nowrap="nowrap"><?php echo $latest_file['contact_first_name'] . ' ' . $latest_file['contact_last_name']; ?></td>

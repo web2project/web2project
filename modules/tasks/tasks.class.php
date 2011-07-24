@@ -54,7 +54,6 @@ class CTask extends w2p_Core_BaseObject {
     public $task_order = null;
     public $task_client_publish = null;
     public $task_dynamic = null;
-    public $task_access = null;
     public $task_notify = null;
     public $task_departments = null;
     public $task_contacts = null;
@@ -141,6 +140,9 @@ class CTask extends w2p_Core_BaseObject {
                 $startTimestamp = strtotime($this->task_start_date);
                 $endTimestamp = strtotime($this->task_end_date);
 
+                if (60 > abs($endTimestamp - $startTimestamp)) {
+                    $endTimestamp = $startTimestamp;
+                }
                 if ($startTimestamp > $endTimestamp) {
                     $errorArray['bad_date_selection'] = $baseErrorMsg . 'task start date is after task end date';
                 }
@@ -779,6 +781,14 @@ class CTask extends w2p_Core_BaseObject {
             $q->setDelete('task_dependencies');
             $q->addWhere('dependencies_task_id IN (' . $implodedTaskList . ') OR
                 dependencies_req_task_id IN ('. $implodedTaskList .')');
+            if (!($q->exec())) {
+                return db_error();
+            }
+            $q->clear();
+
+            // delete affiliated task_dependencies
+            $q->setDelete('task_contacts');
+            $q->addWhere('task_id = '.$this->task_id);
             if (!($q->exec())) {
                 return db_error();
             }

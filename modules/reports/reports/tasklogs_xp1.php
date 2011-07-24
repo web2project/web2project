@@ -47,37 +47,15 @@ foreach ($rows as $row) {
 	$task_log_costcodes[$row['billingcode_id']] = $row['billingcode_name'];
 }
 
-?>
-<script language="javascript">
-function setDate( frm_name, f_date ) {
-	fld_date = eval( 'document.' + frm_name + '.' + f_date );
-	fld_real_date = eval( 'document.' + frm_name + '.' + 'log_' + f_date );
-	if (fld_date.value.length>0) {
-      if ((parseDate(fld_date.value))==null) {
-            alert('The Date/Time you typed does not match your prefered format, please retype.');
-            fld_real_date.value = '';
-            fld_date.style.backgroundColor = 'red';
-        } else {
-        	fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
-        	fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
-            fld_date.style.backgroundColor = '';
-  		}
-	} else {
-		fld_real_date.value = '';
-	}
+if (function_exists('styleRenderBoxTop')) {
+	echo styleRenderBoxTop();
 }
-</script>
-
+?>
 <form name="editFrm" action="" method="get" accept-charset="utf-8">
 <input type="hidden" name="m" value="reports" />
 <input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
-<?php
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
-?>
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>

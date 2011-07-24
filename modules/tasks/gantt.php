@@ -139,18 +139,6 @@ $task = new CTask();
 $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
 
-if ($caller == 'todo') {
-	$gantt_arr = array();
-	$displayed = array();
-	foreach($proTasks as $tmpTask) {
-		if(!isset($displayed[$tmpTask['task_id']])) {
-			$gantt_arr[][] = $tmpTask;
-			$displayed[$tmpTask['task_id']] = $tmpTask['task_id'];
-		}
-	}
-}
-$q->clear();
-
 $orrarr[] = array('task_id'=>0, 'order_up'=>0, 'order'=>'');
 $end_max = '0000-00-00 00:00:00';
 $start_min = date('Y-m-d H:i:s');
@@ -272,20 +260,28 @@ if (!$start_date || !$end_date) {
 }
 $gantt->setDateRange($start_date, $end_date);
 
+$gantt_arr = array();
 reset($projects);
+$displayed = array();
 foreach ($projects as $p) {
-	$parents = array();
     $tnums = count($p['tasks']);
 
 	for ($i = 0; $i < $tnums; $i++) {
 		$t = $p['tasks'][$i];
-        if (!isset($parents[$t['task_parent']])) {
-			$parents[$t['task_parent']] = false;
-		}
-		if ($t['task_parent'] == $t['task_id']) {
-			$parents[$t['task_parent']] = true;
-			showgtask($t);
-			findgchild($p['tasks'], $t['task_id']);
+        if ($caller == 'todo') {
+            if ($showDynTasks) {
+                if ($t['task_parent'] == $t['task_id']) {
+                    showgtask($t);
+                    findgchild($p['tasks'], $t['task_id']);
+                }
+            } else {
+                showgtask($t);
+            }
+        } else {
+            if ($t['task_parent'] == $t['task_id']) {
+                showgtask($t);
+                findgchild($p['tasks'], $t['task_id']);
+            }
 		}
 	}
 }
@@ -335,9 +331,8 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         if ($showLabels == '1') {
-            $res = $task->getAssignedUsers($task_id);
+            $res = $task->getAssignedUsers($a['task_id']);
             foreach ($res as $rw) {
-				$caption = '';
 				switch ($rw['perc_assignment']) {
 					case 100:
 						$caption .= $rw['contact_display_name'] . ';';

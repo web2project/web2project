@@ -1216,7 +1216,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         $departments = CProject::getDepartments($AppUI, 1);
 
-        $this->assertEquals(1,              count($departments));
+        $this->assertEquals(2,              count($departments));
         $this->assertEquals(1,              $departments[1]['dept_id']);
         $this->assertEquals('Department 1', $departments[1]['dept_name']);
         $this->assertEquals('',             $departments[1]['dept_phone']);

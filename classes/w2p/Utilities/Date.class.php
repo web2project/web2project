@@ -85,14 +85,7 @@ class w2p_Utilities_Date extends Date {
 	 * @author J. Christopher Pereira <kripper@users.sf.net>
 	 */
 	public function addDays($n) {
-		$timeStamp = $this->getTime();
-		$oldHour = $this->getHour();
-		$this->setDate($timeStamp + SEC_DAY * ceil($n), DATE_FORMAT_UNIXTIME);
-
-		if (($oldHour - $this->getHour()) || !is_int($n)) {
-			$timeStamp += ($oldHour - $this->getHour()) * SEC_HOUR;
-			$this->setDate($timeStamp + SEC_DAY * $n, DATE_FORMAT_UNIXTIME);
-		}
+		$this->addSeconds($n*24*60*60);
 	}
 
 	/**
@@ -150,6 +143,14 @@ class w2p_Utilities_Date extends Date {
 	public function isWorkingDay() {
 		global $AppUI;
 
+		if ($AppUI->isActiveModule('holiday')) {
+		    // Holiday module, check the holiday database
+		    require_once W2P_BASE_DIR."/modules/holiday/holiday_functions.class.php";
+		    if(HolidayFunctions::isHoliday($this)) {
+		        return false;
+		    }
+		}
+
 		$working_days = w2PgetConfig('cal_working_days');
 		$working_days = ((is_null($working_days)) ? array('1', '2', '3', '4', '5') : explode(',', $working_days));
 		return in_array($this->getDayOfWeek(), $working_days);
@@ -157,6 +158,18 @@ class w2p_Utilities_Date extends Date {
 
 	public function getAMPM() {
 		return (($this->getHour() > 11) ? 'pm' : 'am');
+	}
+
+	/* Check if two dates belong to the same day */
+	public function isSameDay($otherDay) {
+		return ($this->getDay() == $otherDay->getDay() &&
+			$this->getMonth() == $otherDay->getMonth() &&
+			$this->getYear() == $otherDay->getYear());
+	}
+
+	/* Return date diff in minutes */
+	public function diff($otherDate) {
+		return abs($otherDate->getTime() - $this->getTime())/60.0;
 	}
 
 	/* Return date obj for the end of the next working day
@@ -295,64 +308,75 @@ class w2p_Utilities_Date extends Date {
 	**
 	** Works in both directions: forwards/prospective and backwards/retrospective
 	** Respects non-working days
-	**
+	** SantosDiez - Credit for better variable names
 	**
 	** @param	obj	DateObject	may be viewed as end date
-	** @return	int							working duration in hours
+	** @return	float				working duration in hours
 	*/
-	public function calcDuration($e) {
+	public function calcDuration($endDate) {
 
 		// since one will alter the date ($this) one better copies it to a new instance
-		$s = new w2p_Utilities_Date();
-		$s->copy($this);
-
+		$startDate = new w2p_Utilities_Date();
+		$startDate->copy($this);
+		
 		// get w2P time constants
-		$cal_day_start = intval(w2PgetConfig('cal_day_start'));
-		$cal_day_end = intval(w2PgetConfig('cal_day_end'));
-		$dwh = intval(w2PgetConfig('daily_working_hours'));
+		$day_start_hour = intval(w2PgetConfig('cal_day_start'));
+		$day_end_hour = intval(w2PgetConfig('cal_day_end'));
+		$work_hours = intval(w2PgetConfig('daily_working_hours'));
+		
+		// It will change the resulting duration sign (backward/forward durations)
+		$sign = 1;
+	
+		// If end date is earlier than start date
+		if($endDate->before($startDate)) {
+			// Change sign and switch dates
+			$sign = -1;
+			$tmp = $endDate;
+			$endDate = $startDate;
+			$startDate = $tmp;
+		}
+	
+		$duration = 0.0;
 
-		// assume start is before end and set a default signum for the duration
-		$sgn = 1;
-
-		// check whether start before end, interchange otherwise
-		if ($e->before($s)) {
-			// calculated duration must be negative, set signum appropriately
-			$sgn = -1;
-
-			$dummy = clone $s;
-			$s->copy($e);
-			$e = $dummy;
+		if($startDate->isWorkingDay()) {
+			// Start date time in minutes
+			$dateDiff = $startDate->diff($endDate);
+			$start_date_minutes = $startDate->getHour()*60 + $startDate->getMinute();
+			
+			// Calculate the time worked the first day
+			$duration += min($work_hours*60, $day_end_hour*60 - $start_date_minutes, $dateDiff);
+		
+			// Jump to the second day
+			$startDate->addDays(1);
+		} else {
+			// Jump to the first working day
+			while(!$startDate->isWorkingDay()) {
+				$startDate->addDays(1);
+			}
+		}
+	
+		// Reset time to the beginning of the working day (just for safety)
+		$startDate->setTime($day_start_hour);
+	
+		// While we don't reach the end date		
+		while($startDate->before($endDate)) {
+			
+			// Just do things when the day is a working day
+			if($startDate->isWorkingDay()) {
+			
+				// Check if we're at the last day. If that's the case, just calculate hour differences
+				if($startDate->isSameDay($endDate)) {
+					$duration += min($endDate->getHour()*60 + $endDate->getMinute() - $day_start_hour*60, $work_hours*60);
+				} else {	// Else, add a whole working day
+					$duration += $work_hours*60;
+				}
+			}
+			
+			// Increment a day
+			$startDate->addDays(1);
 		}
 
-		// determine the (working + non-working) day difference between the two dates
-		$days = $e->dateDiff($s);
-
-		// if it is an intraday difference one is finished very easily
-		if ($days == 0) {
-			return min($dwh, abs($e->hour - $s->hour)) * $sgn;
-		}
-
-		// initialize the duration var
-		$duration = 0;
-
-		// process the first day
-
-		// take into account the first day if it is a working day!
-		$duration += $s->isWorkingDay() ? min($dwh, abs($cal_day_end - $s->hour)) : 0;
-		$s->addDays(1);
-
-		// end of processing the first day
-
-		// calc workingdays between start and end
-		for ($i = 1; $i < $days; $i++) {
-			$duration += $s->isWorkingDay() ? $dwh : 0;
-			$s->addDays(1);
-		}
-
-		// take into account the last day in span only if it is a working day!
-		$duration += $s->isWorkingDay() ? min($dwh, abs($e->hour - $cal_day_start)) : 0;
-
-		return $duration * $sgn;
+		return $sign * $duration / 60.0;
 	}
 
 	public function workingDaysInSpan($e) {
@@ -399,138 +423,55 @@ class w2p_Utilities_Date extends Date {
 	/* Calculating a future date considering a given duration
 	**
 	** Respects non-working days and the working hours and the begining and end of days
+	** SantosDiez - Credit for better variable names
 	**
-	**
-	** @param	durn		Duration to be added to the date
-	** @param	durnType	Duration Type: 1=hours, 24=days
+	** @param	duration		Duration to be added to the date
+	** @param	durationType	Duration Type: 1=hours, 24=days
 	** @return	w2p_Utilities_Date		The w2p_Utilities_Date object of the finish date
 	*/
-	public function calcFinish($durn, $durnType) {
-
+	public function calcFinish($duration, $durationType) {
+		
 		// since one will alter the date ($this) one better copies it to a new instance
-		$f = new w2p_Utilities_Date();
-		$f->copy($this);
-
+		$finishDate = new w2p_Utilities_Date();
+		$finishDate->copy($this);
+		
 		// get w2P time constants
-		$cal_day_start = intval(w2PgetConfig('cal_day_start'));
-		$cal_day_end = intval(w2PgetConfig('cal_day_end'));
-		$workHours = intval(w2PgetConfig('daily_working_hours'));
-		$workingDays = w2PgetConfig('cal_working_days');
-		$working_days = explode(',', $workingDays);
-
-		//temporary variables
-		$inc = floor($durn);
-		$hoursToAddToLastDay = 0;
-		$hoursToAddToFirstDay = $durn;
-		$fullWorkingDays = 0;
-		$int_st_hour = $f->getHour();
-		//catch the gap between the working hours and the open hours (like lunch periods)
-		$workGap = $cal_day_end - $cal_day_start - $workHours;
-
-		// calculate the number of non-working days
-		$k = 7 - count($working_days);
-
-		$durnMins = ($durn - $inc) * 60;
-		if (($f->getMinute() + $durnMins) >= 60) {
-			$inc++;
+		$day_start_hour = intval(w2PgetConfig('cal_day_start'));
+		$day_end_hour = intval(w2PgetConfig('cal_day_end'));
+		$work_hours = intval(w2PgetConfig('daily_working_hours'));
+		
+		$duration_in_minutes = ($durationType == 24) ? $duration*$work_hours*60 : $duration*60;
+		
+		// Jump to the first working day
+		while(!$finishDate->isWorkingDay()) {
+			$finishDate->addDays(1);
 		}
-
-		$mins = ($f->getMinute() + $durnMins) % 60;
-		if ($mins > 38) {
-			$f->setMinute(45);
-		} elseif ($mins > 23) {
-			$f->setMinute(30);
-		} elseif ($mins > 8) {
-			$f->setMinute(15);
-		} else {
-			$f->setMinute(0);
+		
+		$first_day_minutes = min($day_end_hour*60 - $finishDate->getHour()*60 - $finishDate->getMinute(), $work_hours*60, $duration_in_minutes);
+		
+		$finishDate->addSeconds($first_day_minutes*60);
+		
+		$duration_in_minutes -= $first_day_minutes;
+		
+		while($duration_in_minutes != 0) {
+			// Jump to the next day
+			$finishDate->addDays(1);
+			// Reset date's time to the first hour in the morning
+			$finishDate->setTime($day_start_hour);
+			
+			// Jump all non-working days
+			while(!$finishDate->isWorkingDay()) {
+				$finishDate->addDays(1);
+			}
+			
+			$day_work_minutes = min($work_hours*60, $duration_in_minutes);
+			
+			$finishDate->addSeconds($day_work_minutes*60);
+			$duration_in_minutes -= $day_work_minutes;
 		}
-
-		// jump over to the first working day
-		for ($i = 0; $i < $k; $i++) {
-			if (array_search($f->getDayOfWeek(), $working_days) === false) {
-				$f->addDays(1);
-			}
-		}
-
-		if ($durnType == 24) {
-			if ($f->getHour() == $cal_day_start && $f->getMinute() == 0) {
-				$fullWorkingDays = ceil($inc);
-				$f->setMinute(0);
-			} else {
-				$fullWorkingDays = ceil($inc) + 1;
-			}
-
-			// Include start day as a working day (if it is one)
-			if (!(array_search($f->getDayOfWeek(), $working_days) === false)) {
-				$fullWorkingDays--;
-			}
-
-			for ($i = 0; $i < $fullWorkingDays; $i++) {
-				$f->addDays(1);
-				if (array_search($f->getDayOfWeek(), $working_days) === false) {
-					$i--;
-				}
-			}
-
-			if ($f->getHour() == $cal_day_start && $f->getMinute() == 0) {
-				$f->setHour($cal_day_end);
-				$f->setMinute(0);
-			}
-		} else {
-			$hoursToAddToFirstDay = $inc;
-			if ($f->getHour() + $inc > ($cal_day_end - $workGap)) {
-				$hoursToAddToFirstDay = ($cal_day_end - $workGap) - $f->getHour();
-			}
-			if ($hoursToAddToFirstDay > $workHours) {
-				$hoursToAddToFirstDay = $workHours;
-			}
-			$inc -= $hoursToAddToFirstDay;
-			$hoursToAddToLastDay = $inc % $workHours;
-            $fullWorkingDays = floor(($inc - $hoursToAddToLastDay) / $workHours);
-
-			if ($hoursToAddToLastDay <= 0 && !($hoursToAddToFirstDay == $workHours)) {
-				$f->setHour($f->getHour() + $hoursToAddToFirstDay);
-			} elseif ($hoursToAddToLastDay == 0) {
-				$f->setHour($f->getHour() + $hoursToAddToFirstDay + $workGap);
-            } else {
-				$f->setHour($cal_day_start + $hoursToAddToLastDay);
-				$f->addDays(1);
-			}
-
-			if (($f->getHour() == $cal_day_end || ($f->getHour() - $int_st_hour) == ($workHours + $workGap)) && $mins > 0) {
-				$f->addDays(1);
-				$f->setHour($cal_day_start);
-			}
-
-			// boolean for setting later if we just found a non-working day
-			// and therefore do not have to add a day in the next loop
-			// (which would have caused to not respecting multiple non-working days after each other)
-			$g = false;
-			for ($i = 0, $i_cmp = ceil($fullWorkingDays); $i < $i_cmp; $i++) {
-				if (!$g) {
-					$f->addDays(1);
-				}
-				$g = false;
-				// calculate overriden non-working days
-				if (array_search($f->getDayOfWeek(), $working_days) === false) {
-					$f->addDays(1);
-					$i--;
-					$g = true;
-				}
-			}
-		}
-
-		// if there was no fullworkingday we have to check whether the end day is a working day
-		// and in the negative case postpone the end date by appropriate days
-		for ($i = 0, $i_cmp = 7 - count($working_days); $i < $i_cmp; $i++) {
-			// override  possible non-working enddays
-			if (array_search($f->getDayOfWeek(), $working_days) === false) {
-				$f->addDays(1);
-			}
-		}
-
-		return $f;
+		
+		return $finishDate;
+				
 	}
 
 	/**

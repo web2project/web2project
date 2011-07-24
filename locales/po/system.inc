@@ -272,6 +272,8 @@
 'ldap_allow_login_tooltip'=>'użytkownicy z bazy web2Project także będa mogli się zalogować',
 'ldap_base_dn_title'=>'Bazowa nazwa wyróżniająca (DN) LDAP',
 'ldap_base_dn_tooltip'=>'Bazowa nazwa wyróżniająca (DN) używana w zapytaniach LDAP.',
+'ldap_complete_string_title'=>'Full LDAP Connect String',
+'ldap_complete_string_tooltip'=>'If used, this setting overrides most other LDAP settings above.',
 'ldap_group_title'=>'Ustawienia LDAP',
 'ldap_host_title'=>'Host LDAP',
 'ldap_host_tooltip'=>'The Name or IP address of the LDAP host to authenticate against, when using LDAP Authentication.',

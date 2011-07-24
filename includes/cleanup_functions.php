@@ -29,15 +29,35 @@ function cleanText($text) {
 	return $text;
 }
 
-//This kludgy function echos children tasks as threads
+//
+/*
+ * 	gantt_arr [ project_id ] [ 0 ]  is a task "object" : 	task['task_id'], task['task_access'], task['task_owner'], task['task_name'], task['project_name']
+ * 															task['task_start_date'], task['task_end_date'], task['task_percent_complete'], ['task_milestone']
+ * 	gantt_arr [ project_id ] [ 1 ] 	is the level
+ * 
+ * 	project_id is "optional": a 0 value means we re not handling projects
+ *  
+ *	 adds a bidimensional array:
+ * 		-1st level: composed of integer project_id
+ * 		-2nd level: composed of an array of two items: task "object", integer level 						
+ */
 function showgtask(&$a, $level = 0, $project_id = 0) {
     /* Add tasks to gantt chart */
     global $gantt_arr;
-    if ($project_id) {
-        $gantt_arr[$project_id][] = array($a, $level);
-    } else {
+    if (!is_task_in_gantt_arr($a)) {
         $gantt_arr[] = array($a, $level);
     }
+}
+
+function is_task_in_gantt_arr($task) {
+    global $gantt_arr;
+    $n = count($gantt_arr);
+    for ($x = 0; $x < $n; $x++) {
+        if ($gantt_arr[$x][0]['task_id'] == $task['task_id']) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function findgchild(&$tarr, $parent, $level = 0) {
@@ -47,7 +67,7 @@ function findgchild(&$tarr, $parent, $level = 0) {
     for ($x = 0; $x < $n; $x++) {
         if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
             showgtask($tarr[$x], $level, $tarr[$x]['project_id']);
-            findgchild($tarr, $tarr[$x]['task_id'], $level, $tarr[$x]['project_id']);
+            findgchild($tarr, $tarr[$x]['task_id'], $tarr[$x]['project_id'], $level);
         }
     }
 }
@@ -384,7 +404,7 @@ function canAccess($mod) {
     return getPermission($mod, 'access');
 }
 
-// from modules/tasks/addedit.php
+// from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function getSpaces($amount) {
 	if ($amount == 0) {
 		return '';
@@ -392,16 +412,15 @@ function getSpaces($amount) {
 	return str_repeat('&nbsp;', $amount);
 }
 
-// from modules/tasks/addedit.php
+// from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function constructTaskTree($task_data, $depth = 0) {
 	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
 
 	$projTasks[$task_data['task_id']] = $task_data['task_name'];
-
+    $task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . '...' : $task_data['task_name'];
 	$selected = $task_data['task_id'] == $task_parent ? 'selected="selected"' : '';
-	$task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . '...' : $task_data['task_name'];
 
-	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
+	//$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
 
 	if (isset($parents[$task_data['task_id']])) {
 		foreach ($parents[$task_data['task_id']] as $child_task) {
@@ -411,8 +430,22 @@ function constructTaskTree($task_data, $depth = 0) {
 		}
 	}
 }
+function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
+	global $projTasks, $all_tasks, $task_parent_options, $task_parent, $task_id;
 
-// from modules/tasks/addedit.php
+	$projTasks[$task_data['task_id']] = $task_data['task_name'];
+	$task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . "..." : $task_data['task_name'];
+	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" >' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
+
+	if (isset($parents[$task_data['task_id']])) {
+		foreach ($parents[$task_data['task_id']] as $child_task) {
+			if ($child_task != $task_id)
+				constructTaskTree_pd($all_tasks[$child_task], $parents, $all_tasks, ($depth + 1));
+		}
+	}
+}
+
+// from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function build_date_list(&$date_array, $row) {
 	global $project;
 	// if this task_dynamic is not tracked, set end date to proj start date
@@ -588,11 +621,11 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
         $assigned_users = $arr['task_assigned_users'];
         $a_u_tmp_array = array();
 		if ($show_all_assignees) {
-			$s .= '<td align="center">';
+			$s .= '<td align="center" nowrap="nowrap">';
 			foreach ($assigned_users as $val) {
 				$a_u_tmp_array[] = ('<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
 			}
-			$s .= join(', ', $a_u_tmp_array) . '</td>';
+			$s .= join(', <br />', $a_u_tmp_array) . '</td>';
 		} else {
 			$s .= ('<td align="center" nowrap="nowrap">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['assignee'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
 			if ($arr['assignee_count'] > 1) {
@@ -841,6 +874,24 @@ function doChildren($list, $N, $id, $uid, $level, $maxlevels, $display_week_hour
 	return $tmp;
 }
 
+// from modules/reports/tasksperuser.php
+function doChildren_r($list, $Lusers, $N, $id, $uid, $level, $maxlevels, $display_week_hours, $ss, $se, $log_all_projects = false) {
+	$tmp = "";
+	if ($maxlevels == -1 || $level < $maxlevels) {
+		for ($c = 0; $c < $N; $c++) {
+			$task = $list[$c];
+			if (($task->task_parent == $id) and isChildTask($task)) {
+				// we have a child, do we have the user as a member?
+				if (isMemberOfTask_r($list, $Lusers, $N, $uid, $task)) {
+					$tmp .= displayTask_r($list, $task, $level, $display_week_hours, $ss, $se, $log_all_projects, $uid);
+					$tmp .= doChildren_r($list, $Lusers, $N, $task->task_id, $uid, $level + 1, $maxlevels, $display_week_hours, $ss, $se, $log_all_projects);
+				}
+			}
+		}
+	}
+	return $tmp;
+}
+
 // from modules/tasks/tasksperuser_sub.php
 function isMemberOfTask($list, $N, $user_id, $task) {
 
@@ -849,6 +900,33 @@ function isMemberOfTask($list, $N, $user_id, $task) {
 	if (isset($user_assigned_tasks[$user_id])) {
 		if (in_array($task->task_id, $user_assigned_tasks[$user_id])) {
 			return true;
+		}
+	}
+	return false;
+}
+
+// from modules/reports/tasksperuser.php
+function isMemberOfTask_r($list, $Lusers, $N, $user_id, $task) {
+
+	for ($i = 0; $i < $N && $list[$i]->task_id != $task->task_id; $i++)
+		;
+	$users = $Lusers[$i];
+
+	foreach ($users as $task_user_id => $user_data) {
+		if ($task_user_id == $user_id) {
+			return true;
+		}
+	}
+
+	// check child tasks if any
+
+	for ($c = 0; $c < $N; $c++) {
+		$ntask = $list[$c];
+		if (($ntask->task_parent == $task->task_id) and isChildTask($ntask)) {
+			// we have a child task
+			if (isMemberOfTask_r($list, $Lusers, $N, $user_id, $ntask)) {
+				return true;
+			}
 		}
 	}
 	return false;
@@ -945,6 +1023,54 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	return $tmp;
 }
 
+// from modules/reports/tasksperuser.php
+function displayTask_r($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $log_all_projects = false, $user_id = 0) {
+	global $AppUI;
+
+	$tmp = '';
+	$tmp .= '<tr><td align="left" nowrap="nowrap">&#160&#160&#160';
+	for ($i = 0; $i < $level; $i++) {
+		$tmp .= '&#160&#160&#160';
+	}
+	if ($level == 0) {
+		$tmp .= '<b>';
+	} elseif ($level == 1) {
+		$tmp .= '<i>';
+	}
+	$tmp .= $task->task_name;
+	if ($level == 0) {
+		$tmp .= '</b>';
+	} elseif ($level == 1) {
+		$tmp .= '</i>';
+	}
+	$tmp .= '&#160&#160&#160</td>';
+	if ($log_all_projects) {
+		//Show project name when we are logging all projects
+		$project = $task->getProject();
+		$tmp .= '<td nowrap="nowrap">';
+		if (!isChildTask($task)) {
+			//However only show the name on parent tasks and not the children to make it a bit cleaner
+			$tmp .= $project['project_name'];
+		}
+		$tmp .= '</td>';
+	}
+	$df = $AppUI->getPref('SHDATEFORMAT');
+
+	$tmp .= '<td nowrap="nowrap">';
+	$dt = new w2p_Utilities_Date($task->task_start_date);
+	$tmp .= $dt->format($df);
+	$tmp .= '&#160&#160&#160</td>';
+	$tmp .= '<td nowrap="nowrap">';
+	$dt = new w2p_Utilities_Date($task->task_end_date);
+	$tmp .= $dt->format($df);
+	$tmp .= '</td>';
+	if ($display_week_hours) {
+		$tmp .= displayWeeks_r($list, $task, $level, $fromPeriod, $toPeriod, $user_id);
+	}
+	$tmp .= "</tr>\n";
+	return $tmp;
+}
+
 // from modules/tasks/tasksperuser_sub.php
 function isChildTask($task) {
 	return $task->task_id != $task->task_parent;
@@ -975,6 +1101,31 @@ function weekDates($display_allocated_hours, $fromPeriod, $toPeriod) {
 	return $row;
 }
 
+// from modules/reports/tasksperuser.php
+function weekDates_r($display_allocated_hours, $fromPeriod, $toPeriod) {
+    global $AppUI;
+
+	if ($fromPeriod == -1) {
+		return '';
+	}
+	if (!$display_allocated_hours) {
+		return '';
+	}
+
+	$s = new w2p_Utilities_Date($fromPeriod);
+	$e = new w2p_Utilities_Date($toPeriod);
+	$sw = getBeginWeek($s);
+	$ew = getEndWeek($e); //intval($e->Format('%U'));
+
+	$row = '';
+	for ($i = $sw; $i <= $ew; $i++) {
+		$sdf = substr($AppUI->getPref('SHDATEFORMAT'), 3);
+		$row .= '<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $s->format($sdf) . '</b></font></td>';
+		$s->addSeconds(168 * 3600); // + one week
+	}
+	return $row;
+}
+
 // from modules/tasks/tasksperuser_sub.php
 function weekCells($display_allocated_hours, $fromPeriod, $toPeriod) {
 
@@ -990,6 +1141,24 @@ function weekCells($display_allocated_hours, $fromPeriod, $toPeriod) {
 	$sw = getBeginWeek($s);
 	$dw = ceil($e->dateDiff($s) / 7);
 	$ew = $sw + $dw;
+
+	return $ew - $sw + 1;
+}
+
+// from modules/reports/tasksperuser.php
+function weekCells_r($display_allocated_hours, $fromPeriod, $toPeriod) {
+
+	if ($fromPeriod == -1) {
+		return 0;
+	}
+	if (!$display_allocated_hours) {
+		return 0;
+	}
+
+	$s = new w2p_Utilities_Date($fromPeriod);
+	$e = new w2p_Utilities_Date($toPeriod);
+	$sw = getBeginWeek($s);
+	$ew = getEndWeek($e);
 
 	return $ew - $sw + 1;
 }
@@ -1035,7 +1204,58 @@ function displayWeeks($list, $task, $level, $fromPeriod, $toPeriod) {
 	return $row;
 }
 
+// Look for a user when he/she has been allocated
+// to this task and when. Report this in weeks
+// This function is called within 'displayTask_r()'
+// from modules/reports/tasksperuser.php
+function displayWeeks_r($list, $task, $level, $fromPeriod, $toPeriod, $user_id = 0) {
+
+	if ($fromPeriod == -1) {
+		return '';
+	}
+	$s = new w2p_Utilities_Date($fromPeriod);
+	$e = new w2p_Utilities_Date($toPeriod);
+	$sw = getBeginWeek($s);
+	$ew = getEndWeek($e);
+
+	$st = new w2p_Utilities_Date($task->task_start_date);
+	$et = new w2p_Utilities_Date($task->task_end_date);
+	$stw = getBeginWeek($st);
+	$etw = getEndWeek($et);
+
+	$row = '';
+	for ($i = $sw; $i <= $ew; $i++) {
+		$assignment = '';
+
+		if ($i >= $stw and $i < $etw) {
+			$color = '#0000FF';
+			if ($level == 0 and hasChildren($list, $task)) {
+				$color = '#C0C0FF';
+			} else {
+				if ($level == 1 and hasChildren($list, $task)) {
+					$color = '#9090FF';
+				}
+			}
+
+			if ($user_id) {
+				$users = $task->getAssignedUsers($task->task_id);
+				$assignment = ($users[$user_id]['perc_assignment']) ? $users[$user_id]['perc_assignment'].'%' : '';
+			}
+		} else {
+			$color = '#FFFFFF';
+		}
+		$row .= '<td bgcolor="' . $color . '" class="center">';
+		$row .= '<font color="'.bestColor($color).'">';
+		$row .= $assignment;
+		$row .= '</font>';
+		$row .= '</td>';
+	}
+
+	return $row;
+}
+
 // from modules/tasks/tasksperuser_sub.php
+// from modules/reports/tasksperuser.php
 function getBeginWeek($d) {
 	$dn = (int) $d->Format('%w');
 	$dd = new w2p_Utilities_Date($d);
@@ -1044,6 +1264,7 @@ function getBeginWeek($d) {
 }
 
 // from modules/tasks/tasksperuser_sub.php
+// from modules/reports/tasksperuser.php
 function getEndWeek($d) {
 
 	$dn = (int) $d->Format('%w');
@@ -1056,6 +1277,7 @@ function getEndWeek($d) {
 }
 
 // from modules/tasks/tasksperuser_sub.php
+// from modules/reports/tasksperuser.php
 function hasChildren($list, $task) {
 	foreach ($list as $t) {
 		if ($t->task_parent == $task->task_id) {
