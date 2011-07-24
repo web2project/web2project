@@ -148,6 +148,14 @@ class CTaskLog extends w2p_Core_BaseObject
     public $task_log_record_creator;
 
     /**
+     * Percent complete of a given task at the time of the specific tasklog
+     *
+     * @var int
+     * @access public
+     */
+    public $task_log_percent_complete;
+
+    /**
      * Constructor for class
      *
      * @return void
