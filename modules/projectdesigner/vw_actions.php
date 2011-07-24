@@ -72,7 +72,7 @@ $q->clear();
 foreach ($root_tasks as $root_task) {
 	build_date_list($projTasksWithEndDates, $root_task);
 	if ($root_task['task_id'] != $task_id) {
-		constructTaskTree($root_task, $parents, $all_tasks);
+		constructTaskTree_pd($root_task, $parents, $all_tasks);
 	}
 }
 

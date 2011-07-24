@@ -404,7 +404,7 @@ function canAccess($mod) {
     return getPermission($mod, 'access');
 }
 
-// from modules/tasks/addedit.php
+// from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function getSpaces($amount) {
 	if ($amount == 0) {
 		return '';
@@ -412,16 +412,15 @@ function getSpaces($amount) {
 	return str_repeat('&nbsp;', $amount);
 }
 
-// from modules/tasks/addedit.php
+// from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function constructTaskTree($task_data, $depth = 0) {
 	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
 
 	$projTasks[$task_data['task_id']] = $task_data['task_name'];
-
+    $task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . '...' : $task_data['task_name'];
 	$selected = $task_data['task_id'] == $task_parent ? 'selected="selected"' : '';
-	$task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . '...' : $task_data['task_name'];
 
-	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
+	//$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
 
 	if (isset($parents[$task_data['task_id']])) {
 		foreach ($parents[$task_data['task_id']] as $child_task) {
@@ -431,8 +430,22 @@ function constructTaskTree($task_data, $depth = 0) {
 		}
 	}
 }
+function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
+	global $projTasks, $all_tasks, $task_parent_options, $task_parent, $task_id;
 
-// from modules/tasks/addedit.php
+	$projTasks[$task_data['task_id']] = $task_data['task_name'];
+	$task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . "..." : $task_data['task_name'];
+	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" >' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
+
+	if (isset($parents[$task_data['task_id']])) {
+		foreach ($parents[$task_data['task_id']] as $child_task) {
+			if ($child_task != $task_id)
+				constructTaskTree_pd($all_tasks[$child_task], $parents, $all_tasks, ($depth + 1));
+		}
+	}
+}
+
+// from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function build_date_list(&$date_array, $row) {
 	global $project;
 	// if this task_dynamic is not tracked, set end date to proj start date
