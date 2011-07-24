@@ -87,7 +87,7 @@ foreach ($logs as $row) {
 		}
 	}
 	$s .= '<td align="center" valign="middle">' . $reference_image . '</td>';
-	$s .= '<td width="30%" style="' . $style . '">' . $row['task_log_name'] . '</td>';
+	$s .= '<td width="30%" style="' . $style . '">' . $row['task_log_name'] . '--'. $row['task_log_percent_complete'] . '</td>';
 	$s .= !empty($row['task_log_related_url']) ? '<td><a href="' . $row['task_log_related_url'] . '" title="' . $row['task_log_related_url'] . '">' . $AppUI->_('URL') . '</a></td>' : '<td></td>';
 	$s .= '<td width="100">' . $row['real_name'] . '</td>';
 	$s .= '<td width="100" align="right">' . sprintf('%.2f', $row['task_log_hours']) . '<br />(';
@@ -100,7 +100,7 @@ foreach ($logs as $row) {
 
 	// dylan_cuthbert: auto-transation system in-progress, leave these lines
 	$transbrk = "\n[translation]\n";
-  $descrip = w2p_textarea($row['task_log_description']);
+    $descrip = w2p_textarea($row['task_log_description']);
 	$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
 	if ($tranpos === false) {
 		$s .= $descrip;

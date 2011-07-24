@@ -32,7 +32,7 @@ if ($result) {
         $task->htmlDecode();
         $task->check();
         $task_end_date = new w2p_Utilities_Date($task->task_end_date);
-        $task->task_percent_complete = w2PgetParam($_POST, 'task_percent_complete', null);
+        $task->task_percent_complete = $obj->findPercentComplete($obj->task_log_task);
 
         if (w2PgetParam($_POST, 'task_end_date', '') != '') {
             $new_date = new w2p_Utilities_Date($_POST['task_end_date']);
@@ -40,7 +40,7 @@ if ($result) {
             $task->task_end_date = $new_date->format(FMT_DATETIME_MYSQL);
         }
 
-        if ($task->task_percent_complete >= 100 && (!$task->task_end_date || $task->task_end_date == '0000-00-00 00:00:00')) {
+        if ($obj->task_log_percent_complete >= 100) {
             $task->task_end_date = $obj->task_log_date;
         }
 

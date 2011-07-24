@@ -271,6 +271,28 @@ class CTaskLog extends w2p_Core_BaseObject
 	}
 
 	/**
+	 * This is used to find the most recent task log to determine the current 
+     *   percent complete. Notice that this is not necessarily the same as the 
+     *   maximum percent complete. After all, a project can have setbacks and 
+     *   lose progress.
+	 *
+	 * @param int $task_log_task that task id of task this task log is for
+	 *
+	 * @return void
+	 *
+	 * @access public
+	 */
+    public function findPercentComplete($task_log_task)
+    {
+		$q = new w2p_Database_Query();
+		$q->addQuery('task_log_percent_complete');
+		$q->addTable('task_log');
+		$q->addWhere('task_log_task = ' . (int)$task_log_task);
+        $q->addOrder('task_log_date DESC, task_log_id DESC');
+
+		return $q->loadResult();
+    }
+	/**
 	 * Trims all vars of this object of type string, except the task_log_description.
 	 *
 	 * @return void

@@ -166,8 +166,8 @@ function setDate( frm_name, f_date ) {
 		   <tr>
 		      <td>
 <?php
-echo ($canEditTask ? arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $obj->task_percent_complete) . '%' : '<input type="hidden" name="task_percent_complete" value="0" />');
-?>
+echo ($canEditTask ? arraySelect($percent, 'task_log_percent_complete', 'size="1" class="text"', $log->task_log_percent_complete) . '%' : '<input type="hidden" name="task_percent_complete" value="0" />');
+?> <label>(<?php echo $AppUI->_('At the time of this task log'); ?>)</label>
 		      </td>
 		      <td valign="middle" >
 			<?php
