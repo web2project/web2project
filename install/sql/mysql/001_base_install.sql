@@ -457,7 +457,6 @@ CREATE TABLE `files` (
   `file_co_reason` text,
   `file_version_id` int(10) NOT NULL default '0',
   `file_folder` int(10) NOT NULL default '0',
-  `file_helpdesk_item` int(10) NOT NULL default '0',
   PRIMARY KEY  (`file_id`),
   KEY `idx_file_task` (`file_task`),
   KEY `idx_file_project` (`file_project`),
@@ -2179,7 +2178,6 @@ CREATE TABLE `task_dependencies` (
 CREATE TABLE `task_log` (
   `task_log_id` int(10) NOT NULL auto_increment,
   `task_log_task` int(10) NOT NULL default '0',
-  `task_log_help_desk_id` int(10) NOT NULL default '0',
   `task_log_name` varchar(255) default NULL,
   `task_log_description` text,
   `task_log_creator` int(10) NOT NULL default '0',
