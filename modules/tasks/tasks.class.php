@@ -140,6 +140,9 @@ class CTask extends w2p_Core_BaseObject {
                 $startTimestamp = strtotime($this->task_start_date);
                 $endTimestamp = strtotime($this->task_end_date);
 
+                if (60 > abs($endTimestamp - $startTimestamp)) {
+                    $endTimestamp = $startTimestamp;
+                }
                 if ($startTimestamp > $endTimestamp) {
                     $errorArray['bad_date_selection'] = $baseErrorMsg . 'task start date is after task end date';
                 }
