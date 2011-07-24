@@ -10,3 +10,12 @@ UPDATE `task_log` SET `task_log_percent_complete` =
         WHERE tasks.task_id = task_log_task
         GROUP BY tasks.task_id
 );
+
+ALTER TABLE  `task_log` ADD  `task_log_task_end_date` DATETIME NOT NULL AFTER  `task_log_percent_complete`;
+
+UPDATE `task_log` SET `task_log_task_end_date` = 
+(
+    SELECT `task_end_date` FROM `tasks` 
+        WHERE tasks.task_id = task_log_task
+        GROUP BY tasks.task_id
+);
