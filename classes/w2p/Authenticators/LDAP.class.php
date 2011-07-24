@@ -50,7 +50,11 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
                  * This should be compliant with the old/previous LDAP settings
                  *   that we've used all along.
                  */
-                $ldap_bind_dn = 'CN='.$this->ldap_search_user.',OU=Users,'.$this->base_dn;
+                if (strpos($this->ldap_search_user, 'CN=') === false) {
+                    $ldap_bind_dn = 'CN='.$this->ldap_search_user.',OU=Users,'.$this->base_dn;
+                } else {
+                    $ldap_bind_dn = $this->ldap_search_user.','.$this->base_dn;
+                }
             } else {
                 /*
                  * In case the LDAP configuration is different than expected,
