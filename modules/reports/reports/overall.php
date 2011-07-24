@@ -25,28 +25,7 @@ if (!$log_start_date) {
 $end_date->setTime(23, 59, 59);
 
 $fullaccess = ($AppUI->user_type == 1);
-?>
-<script language="javascript">
-function setDate( frm_name, f_date ) {
-	fld_date = eval( 'document.' + frm_name + '.' + f_date );
-	fld_real_date = eval( 'document.' + frm_name + '.' + 'log_' + f_date );
-	if (fld_date.value.length>0) {
-      if ((parseDate(fld_date.value))==null) {
-            alert('The Date/Time you typed does not match your prefered format, please retype.');
-            fld_real_date.value = '';
-            fld_date.style.backgroundColor = 'red';
-        } else {
-        	fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
-        	fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
-            fld_date.style.backgroundColor = '';
-  		}
-	} else {
-      	fld_real_date.value = '';
-	}
-}
-</script>
 
-            <?php
 if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }

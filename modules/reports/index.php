@@ -1,4 +1,4 @@
-<?php /* $Id: index.php 1522 2010-12-08 05:08:07Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/reports/index.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -27,18 +27,6 @@ foreach ($projectList as $pr) {
     $project_list[$pr['project_id']] = '(' . $companyList[$pr['project_company']]['company_name'] . ') ' . $pr['project_name'];
 }
 
-if (!$suppressHeaders) {
-?>
-<script language="javascript" type="text/javascript">
-                                                                                
-function changeIt() {
-        var f=document.changeMe;
-        f.submit();
-}
-</script>
-
-<?php
-}
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
@@ -106,4 +94,20 @@ if ($report_type) {
 	}
 	$s .= '</table>';
 	echo $s;
+}
+
+if (!$suppressHeaders) {
+    ?>
+    <script language="javascript" type="text/javascript">
+
+    var format_error_msg = '<?php echo $AppUI->_('The Date/Time you typed does not match your prefered format, please retype.', UI_OUTPUT_JS); ?>';
+    var cal_sdf = '<?php echo $cal_sdf ?>';
+
+    function changeIt() {
+        var f=document.changeMe;
+        f.submit();
+    }
+    </script>
+    <?php
+    $AppUI->getModuleJS('reports', 'index');
 }
