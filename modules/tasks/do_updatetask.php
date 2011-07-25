@@ -27,36 +27,6 @@ if ($result) {
     $task = new CTask();
     $task->load($obj->task_log_task);
 
-    $canEditTask = $perms->checkModuleItem('tasks', 'edit', $task_id);
-    if ($canEditTask) {
-        $task->htmlDecode();
-        $task->check();
-        $task_end_date = new w2p_Utilities_Date($task->task_end_date);
-        $task->task_percent_complete = $obj->findPercentComplete($obj->task_log_task);
-
-        if (w2PgetParam($_POST, 'task_end_date', '') != '') {
-            $new_date = new w2p_Utilities_Date($_POST['task_end_date']);
-            $new_date->setTime($task_end_date->hour, $task_end_date->minute, $task_end_date->second);
-            $task->task_end_date = $new_date->format(FMT_DATETIME_MYSQL);
-        }
-
-        if ($obj->task_log_percent_complete >= 100) {
-            $task->task_end_date = $obj->task_log_date;
-        }
-
-        $msg = $task->store($AppUI);
-        if (is_array($msg)) {
-            $AppUI->setMsg($msg, UI_MSG_ERROR, true);
-        }
-
-        $new_task_end = new w2p_Utilities_Date($task->task_end_date);
-        if ($new_task_end->dateDiff($task_end_date)) {
-            $task->addReminder();
-        }
-
-        $task->pushDependencies($task->task_id, $task->task_end_date);
-    }
-
     if ('on' == $notify_owner) {
         if ($msg = $task->notifyOwner()) {
             $AppUI->setMsg($msg, UI_MSG_ERROR);

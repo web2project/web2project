@@ -163,20 +163,21 @@ function setDate( frm_name, f_date ) {
 	<td align="right"><?php echo ($canEditTask ? $AppUI->_('Progress') : ''); ?></td>
 	<td>
 		<table>
-		   <tr>
-		      <td>
-<?php
-echo ($canEditTask ? arraySelect($percent, 'task_log_percent_complete', 'size="1" class="text"', $log->task_log_percent_complete) . '%' : '<input type="hidden" name="task_percent_complete" value="0" />');
-?> <label>(<?php echo $AppUI->_('At the time of this task log'); ?>)</label>
-		      </td>
-		      <td valign="middle" >
-			<?php
-if ($obj->task_owner != $AppUI->user_id) {
-	echo '<input type="checkbox" name="task_log_notify_owner" id="task_log_notify_owner" /></td><td valign="middle"><label for="task_log_notify_owner">' . $AppUI->_('Notify creator') . '</label>';
-}
-?>
-		     </td>
-		   </tr>
+            <tr>
+                <td>
+                    <?php
+                    $percentComplete = ($log->task_log_percent_complete) ? $log->task_log_percent_complete : $obj->task_percent_complete;
+                    echo ($canEditTask ? arraySelect($percent, 'task_log_percent_complete', 'size="1" class="text"', $percentComplete) . '%' : '<input type="hidden" name="task_percent_complete" value="0" />');
+                    ?>
+                </td>
+                <td valign="middle" >
+                    <?php
+                    if ($obj->task_owner != $AppUI->user_id) {
+                    echo '<input type="checkbox" name="task_log_notify_owner" id="task_log_notify_owner" /></td><td valign="middle"><label for="task_log_notify_owner">' . $AppUI->_('Notify creator') . '</label>';
+                    }
+                    ?>
+                </td>
+            </tr>
 		</table>
 	</td>
 </tr>
@@ -245,9 +246,9 @@ if ($obj->canUserEditTimeInformation() && $canEditTask) {
 			<?php echo $AppUI->_('Task end date'); ?>
 		</td>
 		<td>
-			<input type="hidden" name="task_end_date" id="task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-			<input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-			<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
+			<input type="hidden" name="task_log_task_end_date" id="task_log_task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+			<input type="text" name="log_task_end_date" id="log_task_end_date" onchange="setDate('editFrm', 'log_task_end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+			<a href="javascript: void(0);" onclick="return showCalendar('log_task_end_date', '<?php echo $df ?>', 'editFrm', null, true)">
 				<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
 			</a>
 		</td>
