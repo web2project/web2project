@@ -1636,3 +1636,200 @@ function addDeptId($dataset, $parent) {
 		}
 	}
 }
+
+/*
+* Build an SQL to determine an appropriate time slot that will meet
+* The requirements for all participants, including the requestor.
+* 
+* From modules/calendar/clash.php
+*/
+function clash_process(CAppUI $AppUI) {
+	global $do_include;
+
+	$obj = new CEvent;
+	$obj->bind($_SESSION['add_event_post']);
+	$attendees = $_SESSION['add_event_attendees'];
+	$users = array();
+	if (isset($attendees) && $attendees) {
+		$users = explode(',', $attendees);
+	}
+	array_push($users, $obj->event_owner);
+	// First remove any duplicates
+	$users = array_unique($users);
+	// Now remove any null entries, so implode doesn't create a dud SQL
+	// Foreach is safer as it works on a copy of the array.
+	foreach ($users as $key => $user) {
+		if (!$user)
+			unset($users[$key]);
+	}
+
+	$start_date = new w2p_Utilities_Date($_POST['event_start_date'] . "000000");
+	$end_date = new w2p_Utilities_Date($_POST['event_end_date'] . "235959");
+
+	// First find any events in the range requested.
+	$event_list = $obj->getEventsInWindow($start_date->format(FMT_DATETIME_MYSQL), $end_date->format(FMT_DATETIME_MYSQL), (int)($_POST['start_time'] / 100), (int)($_POST['end_time'] / 100), $users);
+	$event_start_date = new w2p_Utilities_Date($_POST['event_start_date'] . $_POST['start_time']);
+	$event_end_date = new w2p_Utilities_Date($_POST['event_end_date'] . $_POST['end_time']);
+
+	if (!$event_list || !count($event_list)) {
+		// First available date/time is OK, seed addEdit with the details.
+		$obj->event_start_date = $event_start_date->format(FMT_DATETIME_MYSQL);
+		$obj->event_end_date = $event_end_date->format(FMT_DATETIME_MYSQL);
+		$_SESSION['add_event_post'] = get_object_vars($obj);
+		$AppUI->setMsg('No clashes in suggested timespan', UI_MSG_OK);
+		$_SESSION['event_is_clash'] = true;
+		$_GET['event_id'] = $obj->event_id;
+		$do_include = W2P_BASE_DIR . "/modules/calendar/addedit.php";
+		return;
+	}
+
+	// Now we grab the events, in date order, and compare against the
+	// required start and end times.
+	// Working in 30 minute increments from the start time, and remembering
+	// the end time stipulation, find the first hole in the times.
+	// Determine the duration in hours/minutes.
+	$start_hour = (int)($_POST['start_time'] / 10000);
+	$start_minutes = (int)(($_POST['start_time'] % 10000) / 100);
+	$start_time = $start_hour * 60 + $start_minutes;
+	$end_hour = (int)($_POST['end_time'] / 10000);
+	$end_minutes = (int)(($_POST['end_time'] % 10000) / 100);
+	$end_time = ($end_hour * 60 + $end_minutes) - $_POST['duration'];
+
+	// First, build a set of "slots" that give us the duration
+	// and start/end times we need
+	$first_day = $start_date->format('%E');
+	$end_day = $end_date->format('%E');
+	$days_between = ($end_day + 1) - $first_day;
+	$oneday = new Date_Span(array(1, 0, 0, 0));
+
+	$slots = array();
+	$slot_count = 0;
+	$first_date = new w2p_Utilities_Date($start_date);
+	for ($i = 0; $i < $days_between; $i++) {
+		if ($first_date->isWorkingDay()) {
+			$slots[$i] = array();
+			for ($j = $start_time; $j <= $end_time; $j += 30) {
+				$slot_count++;
+				$slots[$i][] = array('date' => $first_date->format('%Y-%m-%d'), 'start_time' => $j, 'end_time' => $j + $_POST['duration'], 'committed' => false);
+			}
+		}
+		$first_date->addSpan($oneday);
+	}
+
+	// Now process the events list
+	foreach ($event_list as $event) {
+		$sdate = new w2p_Utilities_Date($event['event_start_date']);
+		$edate = new w2p_Utilities_Date($event['event_end_date']);
+		$sday = $sdate->format('%E');
+		$day_offset = $sday - $first_day;
+
+		// Now find the slots on that day that match
+		list($syear, $smonth, $sday, $shour, $sminute, $ssecond) = sscanf($event['event_start_date'], "%4d-%2d-%2d %2d:%2d:%2d");
+		list($eyear, $emonth, $eday, $ehour, $eminute, $esecond) = sscanf($event['event_start_date'], "%4d-%2d-%2d %2d:%2d:%2d");
+		$start_mins = $shour * 60 + $sminute;
+		$end_mins = $ehour * 60 + $eminute;
+		if (isset($slots[$day_offset])) {
+			foreach ($slots[$day_offset] as $key => $slot) {
+				if ($start_mins <= $slot['end_time'] && $end_mins >= $slot['start_time']) {
+					$slots[$day_offset][$key]['committed'] = true;
+				}
+			}
+		}
+	}
+
+	// Third pass through, find the first uncommitted slot;
+	foreach ($slots as $day_offset => $day_slot) {
+		foreach ($day_slot as $slot) {
+			if (!$slot['committed']) {
+				$hour = (int)($slot['start_time'] / 60);
+				$min = $slot['start_time'] % 60;
+				$ehour = (int)($slot['end_time'] / 60);
+				$emin = $slot['end_time'] % 60;
+				$obj->event_start_date = $slot['date'] . ' ' . sprintf("%02d:%02d:00", $hour, $min);
+				$obj->event_end_date = $slot['date'] . ' ' . sprintf("%02d:%02d:00", $ehour, $emin);
+				$_SESSION['add_event_post'] = get_object_vars($obj);
+				$AppUI->setMsg('First available time slot', UI_MSG_OK);
+				$_SESSION['event_is_clash'] = true;
+				$_GET['event_id'] = $obj->event_id;
+				$do_include = W2P_BASE_DIR . '/modules/calendar/addedit.php';
+				return;
+			}
+		}
+	}
+	// If we get here we have found no available slots
+	clear_clash();
+	$AppUI->setMsg('No times match your parameters', UI_MSG_ALERT);
+	$AppUI->redirect();
+}
+
+/*
+* Cancel the event, but notify attendees of a possible meeting and request
+* they might like to contact author regarding the date.
+*
+* From modules/calendar/clash.php
+*/
+function clash_mail(CAppUI $AppUI) {
+	$obj = new CEvent;
+	if (!$obj->bind($_SESSION['add_event_post'])) {
+		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+	} else {
+		$obj->notify($_SESSION['add_event_post']['event_assigned'], w2PgetParam($_REQUEST, 'event_id', 0) ? false : true, true);
+		$AppUI->setMsg('Mail sent', UI_MSG_OK);
+	}
+	clear_clash();
+	$AppUI->redirect();
+}
+
+/*
+* Even though we end up with a clash, accept the detail.
+* 
+* From modules/calendar/clash.php
+*/
+function clash_accept(CAppUI $AppUI) {
+	global $do_redirect;
+
+	$AppUI->setMsg('Event');
+	$obj = new CEvent;
+	$obj->bind($_SESSION['add_event_post']);
+	$GLOBALS['a'] = $_SESSION['add_event_caller'];
+	$is_new = ($obj->event_id == 0);
+    $result = $obj->store($AppUI);
+
+    if ($result) {
+		if (isset($_SESSION['add_event_attendees']) && $_SESSION['add_event_attendees']){
+			$obj->updateAssigned(explode(',', $_SESSION['add_event_attendees']));
+        }
+		if (isset($_SESSION['add_event_mail']) && $_SESSION['add_event_mail'] == 'on') {
+			$obj->notify($_SESSION['add_event_attendees'], !$is_new);
+        }
+        $AppUI->setMsg('Event Stored', UI_MSG_OK, true);
+    } else {
+        $AppUI->setMsg($msg, UI_MSG_ERROR);
+    }
+	clear_clash();
+	$AppUI->redirect();
+}
+
+//From modules/calendar/clash.php
+function clear_clash() {
+	unset($_SESSION['add_event_caller']);
+	unset($_SESSION['add_event_post']);
+	unset($_SESSION['add_event_clash']);
+	unset($_SESSION['add_event_attendees']);
+	unset($_SESSION['add_event_mail']);
+}
+
+// Clash functions.
+/*
+* Cancel the event, simply clear the event details and return to the previous
+* page.
+* 
+* From modules/calendar/clash.php
+*/
+function clash_cancel(CAppUI $AppUI) {
+	global $a;
+	$a = $_SESSION['add_event_caller'];
+	clear_clash();
+	$AppUI->setMsg($AppUI->_('Event Cancelled'), UI_MSG_ALERT);
+	$AppUI->redirect();
+}
