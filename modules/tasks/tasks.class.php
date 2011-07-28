@@ -12,8 +12,6 @@ $status = w2PgetSysVal('TaskStatus');
 
 $priority = w2PgetSysVal('TaskPriority');
 
-// user based access
-$task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
 
 /*
 * CTask Class
@@ -29,6 +27,10 @@ class CTask extends w2p_Core_BaseObject {
      * @var string
      */
     public $task_name = null;
+
+    // user based access
+    // Needs to be inside the class, otherwise it doesn't find 'CTask'
+    public $task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
 
     /**
      * @var int
@@ -57,7 +59,6 @@ class CTask extends w2p_Core_BaseObject {
     public $task_order = null;
     public $task_client_publish = null;
     public $task_dynamic = null;
-    public $task_access = null;
     public $task_notify = null;
     public $task_departments = null;
     public $task_contacts = null;
@@ -2074,42 +2075,24 @@ class CTask extends w2p_Core_BaseObject {
 		global $locale_char_set, $AppUI;
 		$q = new w2p_Database_Query;
 
-		$df = $AppUI->getPref('SHDATEFORMAT');
-		$tf = $AppUI->getPref('TIMEFORMAT');
-		// If we don't have preferences set for these, use ISO defaults.
-		if (!$df) {
-			$df = '%Y-%m-%d';
-		}
-		if (!$tf) {
-			$tf = '%H:%m';
-		}
-		$df .= ' ' . $tf;
-
 		// At this stage we won't have an object yet
 		if (!$this->load($id)) {
-			return - 1; // No point it trying again later.
+            return - 1; // No point it trying again later.
 		}
 		$this->htmlDecode();
 
 		// Only remind on working days.
 		$today = new w2p_Utilities_Date();
 		if (!$today->isWorkingDay()) {
-			return true;
+            return true;
 		}
 
 		// Check if the task is completed
 		if ($this->task_percent_complete == 100) {
-			return - 1;
+            return - 1;
 		}
 
-		// Grab the assignee list
-		$q->addTable('user_tasks', 'ut');
-		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
-		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
-		$q->addWhere('ut.task_id = ' . (int)$id);
-		$contacts = $q->loadHashList('contact_id');
-		$q->clear();
+		$contacts = $this->getAssigned();
 
 		// Now we also check the owner of the task, as we will need
 		// to notify them as well.
@@ -2129,8 +2112,8 @@ class CTask extends w2p_Core_BaseObject {
 
 		// build the subject line, based on how soon the
 		// task will be overdue.
-		$starts = new w2p_Utilities_Date($this->task_start_date);
-		$expires = new w2p_Utilities_Date($this->task_end_date);
+        $starts = new w2p_Utilities_Date($this->task_start_date);
+        $expires = new w2p_Utilities_Date($this->task_end_date);
 		$now = new w2p_Utilities_Date();
 		$diff = $expires->dateDiff($now);
 		$diff *= w2p_Utilities_Date::compare($expires, $now);
@@ -2146,15 +2129,17 @@ class CTask extends w2p_Core_BaseObject {
 			$msg = $AppUI->_(array($diff, 'DAYS'));
 		}
 
-		$q->addTable('projects');
-		$q->addQuery('project_name');
-		$q->addWhere('project_id = ' . (int)$this->task_project);
-		$project_name = htmlspecialchars_decode($q->loadResult());
-		$q->clear();
+        $project = new CProject();
+        $project_name = $project->load($this->task_project)->project_name;
+
+        // Check to see that the project is both active and not a template
+        if (!$project->project_active || $project->project_status == w2PgetConfig('template_projects_status_id', 0)) {
+            return -1;
+        }
 
 		$subject = $prefix . ' ' . $msg . ' ' . $this->task_name . '::' . $project_name;
 
-		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': ' . $starts->format($df) . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . $expires->format($df) . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
+		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': START-TIME' . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': END-TIME' . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
 		foreach ($contacts as $contact) {
 			if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
 				$body .= ($contact['contact_first_name'] . ' ' . $contact['contact_last_name'] . ' <' . $contact['contact_email'] . ">\n");
@@ -2164,8 +2149,18 @@ class CTask extends w2p_Core_BaseObject {
 
 		$mail = new w2p_Utilities_Mail();
 		$mail->Subject($subject, $locale_char_set);
-		$mail->Body($body, $locale_char_set);
+
 		foreach ($contacts as $contact) {
+            $user_id = CUser::getUserIdByContactID($contact['contact_id']);
+            $AppUI->loadPrefs($user_id);
+
+            $df = $AppUI->getPref('DISPLAYFORMAT');
+            $tz = $AppUI->getPref('TIMEZONE');
+
+            $body = str_replace('START-TIME', $starts->convertTZ($tz)->format($df) , $body);
+            $body = str_replace('END-TIME'  , $expires->convertTZ($tz)->format($df), $body);
+            $mail->Body($body, $locale_char_set);
+
 			if ($mail->ValidEmail($contact['contact_email'])) {
 				$mail->To($contact['contact_email'], true);
 				$mail->Send();
@@ -2384,3 +2379,6 @@ class CTask extends w2p_Core_BaseObject {
         CProject::updateHoursWorked($project_id);
     }
 }
+
+// user based access
+$task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
