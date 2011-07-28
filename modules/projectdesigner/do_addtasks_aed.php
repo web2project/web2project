@@ -22,14 +22,14 @@ $pdo->store();
 
 //Lets store the task lines
 $elements = $_POST;
-$project_id = $elements['project'];
+$project_id = (int) w2PgetParam($_POST, 'project', 0);
 $taskErrors = array();
 
 foreach ($elements as $element => $on) {
 	if ((substr($element, 0, 14) == 'add_task_line_') && ($on != '')) {
 
 		$tline = new CTask();
-
+//TODO: clean this whole thing up..
 		$tline->task_id = 0;
 		$tline->task_name = $elements['add_task_name_' . $on];
 		$tline->task_project = $project_id;
