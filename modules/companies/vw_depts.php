@@ -11,43 +11,6 @@ global $AppUI, $company_id, $canEdit;
 
 $depts = CCompany::getDepartments($AppUI, $company_id);
 
-// function renamed to avoid naming clash
-function showchilddept_comp(&$a, $level = 0) {
-	global $AppUI;
-	$s = '
-	<td>
-		<a href="./index.php?m=departments&amp;a=addedit&amp;dept_id=' . $a["dept_id"] . '" title="' . $AppUI->_('edit') . '">
-			' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '
-	</td>
-	<td>';
-
-	for ($y = 0; $y < $level; $y++) {
-		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">';
-		} else {
-			$s .= '<img src="' . w2PfindImage('shim.gif') . '" width="16" height="12" border="0" alt="">';
-		}
-	}
-
-	$s .= '<a href="./index.php?m=departments&a=view&dept_id=' . $a['dept_id'] . '">' . $a['dept_name'] . '</a>';
-	$s .= '</td>';
-	$s .= '<td align="center">' . ($a['dept_users'] ? $a['dept_users'] : '') . '</td>';
-
-	echo '<tr>' . $s . '</tr>';
-}
-
-// function renamed to avoid naming clash
-function findchilddept_comp(&$tarr, $parent, $level = 0) {
-	$level = $level + 1;
-	$n = count($tarr);
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
-			showchilddept_comp($tarr[$x], $level);
-			findchilddept_comp($tarr, $tarr[$x]['dept_id'], $level);
-		}
-	}
-}
-
 $s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">';
 $s .= '<tr>';
 
