@@ -273,37 +273,14 @@ if (!$min_view) {
 	<input type="hidden" name="printpdf" value="<?php echo $printpdf; ?>" />
 	<input type="hidden" name="printpdfhr" value="<?php echo $printpdfhr; ?>" />
 	<input type="hidden" name="caller" value="<?php echo $a; ?>" />
-    <table border="0" cellpadding="4" cellspacing="0" class="std" width="100%">                        
-        <tr>
-			<input type="hidden" name="show_form" value="1" />
-            <td align="left" valign="bottom" nowrap="nowrap" >                
-                <table width="100%" border="0" cellpadding="1" cellspacing="1">
+	<input type="hidden" name="show_form" value="1" />
+                   
+                <table width="100%" border="0" cellpadding="1" cellspacing="0">
                     <tr>
-						<td align="center" valign="center" nowrap="nowrap">
-                            <input type="checkbox" name="showDynTasks" id="showDynTasks"  value="1" <?php echo $showDynTasks == 1? 'checked="checked"' : ''; ?> />
-                            <label for="showDynTasks" ><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-                        </td>
-                        <td align="center" valign="center" nowrap="nowrap">
-							<input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> />
-							<label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
-						</td>
-                        <td align="center" valign="center" nowrap="nowrap">
-                            <input type="checkbox" name="showPinned" id="showPinned" value="1" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
-                            <label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
-                        </td>
-                        <td align="center" valign="center" nowrap="nowrap">
-                            <input type="checkbox" name="showArcProjs" id="showArcProjs"  value="1" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-                            <label for="showArcProjs"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
-                        </td>                        
-                        <td align="center" valign="center" nowrap="nowrap">
-                            <input type="checkbox" name="showLowTasks" id="showLowTasks" value="1" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-                            <label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-                        </td>                        						
-                        <td align="center">
+						<td align="left" width="50%">
 							<?php
 								if ($other_users) {
-									?>
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>  <?php echo $AppUI->_('User')?>  </label>
+									?>									
 									<?php
 									$selectedUser = w2PgetParam($_POST, 'show_user_todo', $AppUI->user_id);
 									$users = $perms->getPermittedUsers('tasks');
@@ -311,11 +288,30 @@ if (!$min_view) {
 								}
 							?>
 						</td>
+						<td align="right" width="50%">
+                            <input type="checkbox" name="showDynTasks" id="showDynTasks"  value="1" <?php echo $showDynTasks == 1? 'checked="checked"' : ''; ?> />
+                            <label for="showDynTasks" ><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
+                        </td>
+                        <td nowrap="nowrap">
+							<input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> />
+							<label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
+						</td>
+                        <td nowrap="nowrap">
+                            <input type="checkbox" name="showPinned" id="showPinned" value="1" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
+                            <label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
+                        </td>
+                        <td nowrap="nowrap">
+                            <input type="checkbox" name="showArcProjs" id="showArcProjs"  value="1" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
+                            <label for="showArcProjs"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
+                        </td>                        
+                        <td nowrap="nowrap">
+                            <input type="checkbox" name="showLowTasks" id="showLowTasks" value="1" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
+                            <label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
+                        </td nowrap="nowrap">                        						                        
                     </tr>
                 </table>
-            </td>
-        </tr>                
-               
+           
+      <table border="0" cellpadding="4" cellspacing="0" class="std" width="100%">
         <tr>	
 			<td align="center" valign="bottom">                
                 <table width="100%" border="0" cellpadding="1" cellspacing="1">
