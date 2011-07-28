@@ -51,7 +51,8 @@ class CForum extends w2p_Core_BaseObject {
     }
 
     public function getMessages(CAppUI $AppUI, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
-        $q = new w2p_Database_Query;
+
+        $q = $this->_query;
         $q->addTable('forums');
         $q->addTable('forum_messages');
         $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email,
@@ -66,7 +67,8 @@ class CForum extends w2p_Core_BaseObject {
     }
 
     public function load(CAppUI $AppUI, $forum_id) {
-        $q = new w2p_Database_Query();
+
+        $q = $this->_query;
         $q->addQuery('*');
         $q->addTable('forums');
         $q->addWhere('forum_id = ' . (int) $forum_id);
@@ -74,7 +76,8 @@ class CForum extends w2p_Core_BaseObject {
     }
 
     public function loadFull(CAppUI $AppUI, $forum_id) {
-        $q = new w2p_Database_Query;
+
+        $q = $this->_query;
         $q->addTable('forums');
         $q->addTable('users', 'u');
         $q->addQuery('forum_id, forum_project,	forum_description, forum_owner, forum_name,
@@ -98,7 +101,7 @@ class CForum extends w2p_Core_BaseObject {
     {
         $project = new CProject();
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $q->addTable('forums');
         
         $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name');
@@ -179,7 +182,7 @@ class CForum extends w2p_Core_BaseObject {
         $this->_error = array();
 
         if ($perms->checkModuleItem('forums', 'delete', $this->forum_id)) {
-            $q = new w2p_Database_Query;
+            $q = $this->_query;
             $q->setDelete('forum_visits');
             $q->addWhere('visit_forum = ' . (int)$this->forum_id);
             $q->exec(); // No error if this fails, it is not important.

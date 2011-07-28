@@ -52,7 +52,7 @@ class CEvent extends w2p_Core_BaseObject {
 	}
 
 	public function loadFull($event_id) {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('events', 'e');
 		$q->addQuery('e.*, project_name, project_color_identifier, company_name');
 		$q->leftJoin('projects', 'p', 'event_project = project_id');
@@ -221,7 +221,7 @@ class CEvent extends w2p_Core_BaseObject {
 		$queries = array('q' => 'q', 'r' => 'r');
 
 		foreach ($queries as $query_set) {
-			$$query_set = new w2p_Database_Query;
+			$$query_set = $this->_query;
 			$$query_set->addTable('events', 'e');
 			$$query_set->addQuery('e.*');
 			$$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
@@ -321,7 +321,7 @@ class CEvent extends w2p_Core_BaseObject {
 	}
 
 	public function getAssigned() {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('users', 'u');
 		$q->addTable('user_events', 'ue');
 		$q->addTable('contacts', 'con');
@@ -339,7 +339,7 @@ class CEvent extends w2p_Core_BaseObject {
 	 * 
 	 */
 	public function getAssigneeList($assignee_list) {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
 		$q->addQuery('user_id, CONCAT_WS(\' \' , contact_first_name, contact_last_name)');
@@ -352,7 +352,8 @@ class CEvent extends w2p_Core_BaseObject {
 	public function updateAssigned($assigned) {
 		// First remove the assigned from the user_events table
 		global $AppUI;
-		$q = new w2p_Database_Query;
+
+		$q = $this->_query;
 		$q->setDelete('user_events');
 		$q->addWhere('event_id = ' . (int)$this->event_id);
 		$q->exec();
@@ -394,7 +395,7 @@ class CEvent extends w2p_Core_BaseObject {
 			return;
 		}
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
 		$q->addQuery('user_id, contact_first_name, contact_last_name, con.contact_id, contact_email');
@@ -479,7 +480,7 @@ class CEvent extends w2p_Core_BaseObject {
 		$end_date = new w2p_Utilities_Date($this->event_end_date);
 
 		// Now build a query to find matching events.
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('events', 'e');
 		$q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, e.event_start_date, e.event_end_date');
 		$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
@@ -527,7 +528,7 @@ class CEvent extends w2p_Core_BaseObject {
 		}
 
 		// Now build a query to find matching events.
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('events', 'e');
 		$q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, e.event_start_date, e.event_end_date');
 		$q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
@@ -648,7 +649,7 @@ class CEvent extends w2p_Core_BaseObject {
 		 * If you change them, it's probably going to break.  So don't do that.
 		 */
 
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addQuery('e.event_id as id');
 		$q->addQuery('event_title as name');
 		$q->addQuery('event_description as description');

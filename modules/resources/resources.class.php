@@ -55,14 +55,15 @@ class CResource extends w2p_Core_BaseObject {
 
 	public function getTypeName() {
 		$result = 'All Resources';
-		$this->_query->clear();
-		$this->_query->addTable('resource_types');
-		$this->_query->addWhere('resource_type_id = ' . (int)$this->resource_type);
-		$res = &$this->_query->exec(ADODB_FETCH_ASSOC);
-		if ($row = $this->_query->fetchRow()) {
+
+		$q = $this->_query;
+		$q->addTable('resource_types');
+		$q->addWhere('resource_type_id = ' . (int)$this->resource_type);
+		$res = &$q->exec(ADODB_FETCH_ASSOC);
+		if ($row = $q->fetchRow()) {
 			$result = $row['resource_type_name'];
 		}
-		$this->_query->clear();
+
 		return $result;
 	}
 

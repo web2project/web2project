@@ -139,7 +139,8 @@ class CProject extends w2p_Core_BaseObject {
 	}
 
 	public function loadFull(CAppUI $AppUI, $projectId) {
-        $q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addTable('projects');
 		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
 		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
@@ -166,7 +167,7 @@ class CProject extends w2p_Core_BaseObject {
          *   previous version didn't check it either, so we're no worse off.
          */
         if ($perms->checkModuleItem('projects', 'delete', $this->project_id)) {
-            $q = new w2p_Database_Query;
+            $q = $this->_query;
             $q->addTable('tasks');
             $q->addQuery('task_id');
             $q->addWhere('task_project = ' . (int)$this->project_id);
@@ -242,7 +243,7 @@ class CProject extends w2p_Core_BaseObject {
 		// Load the original
 		$origProject = new CProject();
 		$origProject->load($from_project_id);
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
 		$q->addWhere('task_project =' . (int)$from_project_id);
@@ -416,7 +417,7 @@ class CProject extends w2p_Core_BaseObject {
 		$oDpt = new CDepartment();
 		$aDptsAllowed = $oDpt->getAllowedRecords($uid, 'dept_id,dept_name');
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('projects');
 		$q->addQuery('projects.project_id');
 		$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
@@ -453,7 +454,8 @@ class CProject extends w2p_Core_BaseObject {
 
 	}
 	public function getAllowedProjectsInRows($userId) {
-		$q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
 		$q->addTable('projects', 'pr');
 		$q->addOrder('project_short_name');
@@ -470,7 +472,8 @@ class CProject extends w2p_Core_BaseObject {
 	 */
 	public function getCriticalTasks($project_id = null, $limit = 1) {
 		$project_id = !empty($project_id) ? $project_id : $this->project_id;
-		$q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addTable('tasks');
 		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_end_date IS NOT NULL AND task_end_date <>  \'0000-00-00 00:00:00\'');
 		$q->addOrder('task_end_date DESC');
@@ -539,7 +542,7 @@ class CProject extends w2p_Core_BaseObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $this->project_updated = $q->dbfnNowWithTZ();
         if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->project_id)) {
             if (($msg = parent::store())) {
@@ -563,7 +566,6 @@ class CProject extends w2p_Core_BaseObject {
         }
 
 		//split out related departments and store them seperatly.
-		$q = new w2p_Database_Query;
 		$q->setDelete('project_departments');
 		$q->addWhere('project_id=' . (int)$this->project_id);
 		$q->exec();
@@ -686,7 +688,8 @@ class CProject extends w2p_Core_BaseObject {
 		return '';
 	}
 	public function getAllowedProjects($userId, $activeOnly = true) {
-		$q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addTable('projects', 'pr');
 		$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date, project_company, project_parent');
 		if ($activeOnly) {
@@ -704,7 +707,7 @@ class CProject extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
 
 		if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
-            $q = new w2p_Database_Query;
+            $q = $this->_query;
             $q->addTable('contacts', 'c');
             $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
             $q->addQuery('contact_order_by, contact_email, contact_phone');
@@ -732,7 +735,7 @@ class CProject extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
 		if ($AppUI->isActiveModule('departments') && canView('departments')) {
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->addTable('departments', 'a');
 			$q->addTable('project_departments', 'b');
 			$q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
@@ -748,7 +751,7 @@ class CProject extends w2p_Core_BaseObject {
 		global $AppUI;
 
 		if ($AppUI->isActiveModule('forums') && canView('forums')) {
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->addTable('forums');
 			$q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name, forum_message_count,
 				DATE_FORMAT(forum_last_date, "%d-%b-%Y %H:%i" ) forum_last_date,
@@ -761,7 +764,7 @@ class CProject extends w2p_Core_BaseObject {
 		}
 	}
 	public static function getCompany($projectId) {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addQuery('project_company');
 		$q->addTable('projects');
 		$q->addWhere('project_id = ' . (int) $projectId);
@@ -769,7 +772,7 @@ class CProject extends w2p_Core_BaseObject {
 		return $q->loadResult();
 	}
 	public static function getBillingCodes($companyId, $all = false) {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('billingcode');
 		$q->addQuery('billingcode_id, billingcode_name');
 		$q->addOrder('billingcode_name');
@@ -794,7 +797,7 @@ class CProject extends w2p_Core_BaseObject {
 		return $task_log_costcodes;
 	}
 	public static function getOwners() {
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('projects', 'p');
 		$q->addQuery('user_id, contact_display_name');
 		$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
@@ -811,7 +814,7 @@ class CProject extends w2p_Core_BaseObject {
 		trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE );
         $perms = $AppUI->acl();
 		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->addTable('projects');
 			$q->addUpdate('project_status', $statusId);
 			$q->addWhere('project_id   = ' . (int) $projectId);
@@ -823,7 +826,7 @@ class CProject extends w2p_Core_BaseObject {
 			$project_actual_end_date, $project_task_count) {
 
 		if ($project_id && $task_id) {
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->addTable('projects');
 			$q->addUpdate('project_last_task',			$task_id);
 			$q->addUpdate('project_actual_end_date',	$project_actual_end_date);
@@ -839,7 +842,7 @@ class CProject extends w2p_Core_BaseObject {
 		trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE );
 
 		if (intval($projectId) > 0 && intval($taskCount)) {
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->addTable('projects');
 			$q->addUpdate('project_task_count', intval($taskCount));
 			$q->addWhere('project_id   = ' . (int) $projectId);
@@ -851,7 +854,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function hasChildProjects($projectId = 0) {
 		// Note that this returns the *count* of projects.  If this is zero, it
 		//   is evaluated as false, otherwise it is considered true.
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('projects');
 		$q->addQuery('COUNT(project_id)');
 		if ($projectId > 0) {
@@ -868,7 +871,7 @@ class CProject extends w2p_Core_BaseObject {
 	public static function hasTasks($projectId) {
         // Note that this returns the *count* of tasks.  If this is zero, it is
         //   evaluated as false, otherwise it is considered true.
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $q->addTable('tasks');
         $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
         $q->addWhere('task_project = ' . (int) $projectId);
@@ -876,7 +879,7 @@ class CProject extends w2p_Core_BaseObject {
         return $q->loadResult();
 	}
 	public static function updateHoursWorked($project_id) {
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $q->addTable('task_log');
         $q->addTable('tasks');
         $q->addQuery('ROUND(SUM(task_log_hours),2)');
@@ -895,7 +898,7 @@ class CProject extends w2p_Core_BaseObject {
     public static function updatePercentComplete($project_id) {
         $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $q->addTable('projects');
         $q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
         $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
@@ -922,7 +925,7 @@ class CProject extends w2p_Core_BaseObject {
 		// now milestones are summed up, too, for consistence with the tasks duration sum
 		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
 		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('tasks');
 		$q->addQuery('ROUND(SUM(task_duration),2)');
 		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
@@ -941,7 +944,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function getTaskLogs(CAppUI $AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
         global $AppUI;
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('task_log');
 		$q->addQuery('DISTINCT task_log.*, user_username, task_id');
 		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
@@ -990,6 +993,7 @@ class CProject extends w2p_Core_BaseObject {
     }
 }
 
+//TODO: clean up these methods
 /* The next lines of code have resided in projects/index.php before
 ** and have been moved into this 'encapsulated' function
 ** for reusability of that central code.

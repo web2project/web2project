@@ -233,17 +233,16 @@ abstract class w2p_Core_BaseObject
 			return get_class($this) . '::store-check failed ' . $msg;
 		}
 		$k = $this->_tbl_key;
+
+        $q = $this->_query;
 		if ($this->$k) {
 			$store_type = 'update';
-			$q = new w2p_Database_Query;
 			$ret = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
-			$q->clear();
 		} else {
 			$store_type = 'add';
-			$q = new w2p_Database_Query;
 			$ret = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
-			$q->clear();
 		}
+        $q->clear();
 
 		if ($ret) {
 			// only record history if an update or insert actually occurs.
@@ -280,7 +279,7 @@ abstract class w2p_Core_BaseObject
 			$select = $k;
 			$join = '';
 
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->addTable($this->_tbl);
 			$q->addWhere($k . ' = \'' . $this->$k . '\'');
 			$q->addGroup($k);
@@ -332,7 +331,7 @@ abstract class w2p_Core_BaseObject
 			return $msg;
 		}
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->setDelete($this->_tbl);
 		$q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
 		$result = ((!$q->exec()) ? db_error() : null);

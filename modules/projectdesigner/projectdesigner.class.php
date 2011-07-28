@@ -26,7 +26,7 @@ class CProjectDesignerOptions extends w2p_Core_BaseObject {
 	public function store(CAppUI $AppUI = null) {
 		global $AppUI;
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
 		$q->addTable('project_designer_options');
 		$q->addReplace('pd_option_user', $this->pd_option_user);
 		$q->addReplace('pd_option_view_project', $this->pd_option_view_project);
@@ -42,6 +42,7 @@ class CProjectDesignerOptions extends w2p_Core_BaseObject {
 	}
 }
 
+//TODO: collect these methods back to core
 /** Retrieve tasks with first task_end_dates within given project
  * @param int Project_id
  * @param int SQL-limit to limit the number of returned tasks
@@ -54,7 +55,7 @@ function getCriticalTasksInverted($project_id = null, $limit = 1) {
 		$result[0]['task_end_date'] = '0000-00-00 00:00:00';
 		return $result;
 	} else {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('tasks');
 		$q->addWhere('task_project = ' . (int)$project_id  . ' AND NOT ISNULL( task_end_date ) AND task_end_date <>  \'0000-00-00 00:00:00\'');
 		$q->addOrder('task_start_date ASC');
@@ -94,7 +95,8 @@ function taskstyle_pd($task) {
 
 function get_actual_end_date_pd($task_id, $task) {
 	global $AppUI;
-	$q = new w2p_Database_Query;
+
+    $q = $this->_query;
 	$mods = $AppUI->getActiveModules();
 
 	if (!empty($mods['history']) && canView('history')) {

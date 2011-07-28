@@ -24,7 +24,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function getAllowedRecords($uid) {
 		global $AppUI;
 
-        $q = new w2p_Database_Query();
+        $q = $this->_query;
 		$q->addTable('file_folders');
 		$q->addQuery('*');
 		$q->addOrder('file_folder_parent');
@@ -52,7 +52,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function canDelete($msg, $oid = 0, $joins = null) {
         $msg = array();
 
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('file_folders');
 		$q->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
 		$q->addWhere('file_folder_parent=' . $oid);
@@ -62,7 +62,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 		}
 		$q->clear();
 
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('files');
 		$q->addQuery('COUNT(DISTINCT file_id) AS num_of_files');
 		$q->addWhere('file_folder=' . $oid);
@@ -109,7 +109,8 @@ class CFileFolder extends w2p_Core_BaseObject {
 	/**
  	@return string Returns the name of the parent folder or null if no parent was found **/
 	public function getParentFolderName() {
-		$q = new w2p_Database_Query();
+
+        $q = $this->_query;
 		$q->addTable('file_folders');
 		$q->addQuery('file_folder_name');
 		$q->addWhere('file_folder_id=' . $this->file_folder_parent);
@@ -118,7 +119,8 @@ class CFileFolder extends w2p_Core_BaseObject {
 	}
 
 	public function countFolders() {
-		$q = new w2p_Database_Query();
+
+        $q = $this->_query;
 		$q->addTable('file_folders');
 		$q->addQuery('COUNT(file_folder_id)');
 
@@ -128,7 +130,7 @@ class CFileFolder extends w2p_Core_BaseObject {
     public function getFileCountByFolder(CAppUI $AppUI, $folder_id, $task_id, $project_id, $company_id) {
 
         // SQL text for count the total recs from the selected option
-        $q = new w2p_Database_Query();
+        $q = $this->_query;
         $q->addTable('files');
         $q->addQuery('count(files.file_id)');
         $q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -170,7 +172,8 @@ class CFileFolder extends w2p_Core_BaseObject {
     }
 
     public function getFoldersByParent($parent = 0) {
-        $q = new w2p_Database_Query();
+
+        $q = $this->_query;
         $q->addTable('file_folders');
         $q->addQuery('*');
         $q->addWhere('file_folder_parent = '. (int) $parent);
@@ -255,7 +258,7 @@ function countFiles($folder) {
 	global $AppUI, $company_id, $allowed_companies, $tab;
 	global $deny1, $deny2, $project_id, $task_id, $showProject, $file_types;
 
-	$q = new w2p_Database_Query();
+	$q = $this->_query;
 	$q->addTable('files');
 	$q->addQuery('count(files.file_id)', 'file_in_folder');
 	$q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -296,7 +299,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	$tf = $AppUI->getPref('TIMEFORMAT');
 
 	// SETUP FOR FILE LIST
-	$q = new w2p_Database_Query();
+	$q = $this->_query;
 	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(file_version), 2) as file_lastversion');
 	$q->addQuery('ff.*');
 	$q->addTable('files', 'f');
@@ -332,7 +335,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	$q->addWhere('file_folder = ' . (int)$folder_id);
 	$q->addGroup('file_version_id DESC');
 
-	$qv = new w2p_Database_Query();
+	$qv = $this->_query;
 	$qv->addTable('files');
 	$qv->addQuery('file_id, file_version, file_project, file_name, file_task,
 		file_description, u.user_username as file_owner, file_size, file_category,

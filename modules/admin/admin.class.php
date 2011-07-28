@@ -82,7 +82,7 @@ class CUser extends w2p_Core_BaseObject {
         if ($stored) {
             $perms->$perm_func($this->user_id, $this->user_username);
 
-            $q = new w2p_Database_Query;
+            $q = $this->_query;
 			//Lets check if the user has allready default users preferences set, if not insert the default ones
 			$q->addTable('user_preferences', 'upr');
 			$q->addWhere('upr.pref_user = ' . $this->user_id);
@@ -184,7 +184,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public function loadFull($userId) {
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('users', 'u');
 		$q->addQuery('u.*');
 		$q->addQuery('con.contact_email AS user_email');
@@ -200,7 +200,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
     public function hook_cron() {
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
         $q->setDelete('sessions');
         $q->addWhere("session_user ='' OR session_user IS NULL");
         $q->exec();
@@ -210,7 +210,7 @@ class CUser extends w2p_Core_BaseObject {
     }
 
 	public function validatePassword($userId, $password) {
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('users');
 		$q->addQuery('user_id');
 		$q->addWhere('user_password = \'' . md5($password) . '\'');
@@ -220,7 +220,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getUserIdByToken($token) {
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addQuery('feed_user');
 		$q->addTable('user_feeds');
 		$q->addWhere("feed_token = '$token'");
@@ -230,7 +230,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getUserIdByContactID($contactId) {
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addQuery('user_id');
 		$q->addTable('users');
 		$q->addWhere('user_contact = '.(int) $contactId);
@@ -240,7 +240,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
 	public static function generateUserToken($userId, $token = '') {
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->setDelete('user_feeds');
 		$q->addWhere('feed_user = ' . $userId);
 		$q->addWhere("feed_token = '$token'");
@@ -259,7 +259,7 @@ class CUser extends w2p_Core_BaseObject {
 	public static function getFirstLetters() {
 		$letters = '';
 
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('users', 'u');
 		$q->addQuery('DISTINCT SUBSTRING(user_username, 1, 1) as L');
 		$arr = $q->loadList();
@@ -271,7 +271,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
 	public static function exists($username) {
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('users', 'u');
 		$q->addQuery('user_username');
 		$q->addWhere("user_username = '$username'");
@@ -281,7 +281,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getUserDeptId($user_id) {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addQuery('con.contact_department');
 		$q->addTable('users', 'u');
 		$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
@@ -293,7 +293,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getLogs($userId, $startDate, $endDate) {
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('user_access_log', 'ual');
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'c');
@@ -311,7 +311,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
 	public function getFullUserName() {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('contacts', 'c');
 		$q->addQuery('c.*');
 		$q->addWhere('contact_id = ' . (int)$this->user_contact);
@@ -339,7 +339,7 @@ class CUser extends w2p_Core_BaseObject {
 	public static function getUserList() {
 		global $AppUI;
 		
-		$q = new w2p_Database_Query;  		
+		$q = $this->_query;
         $q->addQuery('users.user_contact,users.user_id,co.contact_first_name,co.contact_last_name,co.contact_id');
         $q->addTable('users');
         $q->addJoin('contacts','co','co.contact_id = users.user_contact','inner');
