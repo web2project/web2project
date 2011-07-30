@@ -62,7 +62,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
-        
+
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
         $this->contact_owner = (int) $this->contact_owner;
@@ -72,6 +72,7 @@ class CContact extends w2p_Core_BaseObject {
         $this->contact_last_name = ($this->contact_last_name == null) ? '' : $this->contact_last_name;
         $this->contact_order_by = ($this->contact_order_by == null) ? '' : $this->contact_order_by;
         $this->contact_display_name = ($this->contact_display_name == null) ? '' : $this->contact_display_name;
+        $this->contact_birthday = ($this->contact_birthday == '') ? null : $this->contact_birthday;
 
         /*
         *  This  validates that any Contact saved will have a Display Name as
