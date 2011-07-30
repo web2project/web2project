@@ -31,7 +31,6 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-// TODO: To be completed later as needed.
 class CSetupLinks {
 
 	public function configure() {

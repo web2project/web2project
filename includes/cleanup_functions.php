@@ -3044,3 +3044,256 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 
 	return $parsed;
 }
+
+// From: modules/reports/reports/allocateduserhours.php
+function userUsageWeeks() {
+	global $task_start_date, $task_end_date, $day_difference, $hours_added, $actual_date, $users, $user_data, $user_usage, $use_assigned_percentage, $user_tasks_counted_in, $task, $start_date, $end_date;
+
+	$task_duration_per_week = $task->getTaskDurationPerWeek($use_assigned_percentage);
+	$ted = new w2p_Utilities_Date(Date_Calc::endOfWeek($task_end_date->day, $task_end_date->month, $task_end_date->year));
+	$tsd = new w2p_Utilities_Date(Date_Calc::beginOfWeek($task_start_date->day, $task_start_date->month, $task_start_date->year));
+	$ed = new w2p_Utilities_Date(Date_Calc::endOfWeek($end_date->day, $end_date->month, $end_date->year));
+	$sd = new w2p_Utilities_Date(Date_Calc::beginOfWeek($start_date->day, $start_date->month, $start_date->year));
+
+	$week_difference = $end_date->workingDaysInSpan($start_date) / count(explode(',', w2PgetConfig('cal_working_days')));
+
+	$actual_date = $start_date;
+
+	for ($i = 0; $i <= $week_difference; $i++) {
+		if (!$actual_date->before($tsd) && !$actual_date->after($ted)) {
+			$awoy = $actual_date->year . Date_Calc::weekOfYear($actual_date->day, $actual_date->month, $actual_date->year);
+			foreach ($users as $user_id => $user_data) {
+				if (!isset($user_usage[$user_id][$awoy])) {
+					$user_usage[$user_id][$awoy] = 0;
+				}
+				$percentage_assigned = $use_assigned_percentage ? ($user_data['perc_assignment'] / 100) : 1;
+				$hours_added = $task_duration_per_week * $percentage_assigned;
+				$user_usage[$user_id][$awoy] += $hours_added;
+				if ($user_usage[$user_id][$awoy] < 0.005) {
+					//We want to show at least 0.01 even when the assigned time is very small so we know
+					//that at that time the user has a running task
+					$user_usage[$user_id][$awoy] += 0.006;
+					$hours_added += 0.006;
+				}
+
+				// Let's register the tasks counted in for calculation
+				if (!array_key_exists($user_id, $user_tasks_counted_in)) {
+					$user_tasks_counted_in[$user_id] = array();
+				}
+
+				if (!array_key_exists($task->task_project, $user_tasks_counted_in[$user_id])) {
+					$user_tasks_counted_in[$user_id][$task->task_project] = array();
+				}
+
+				if (!array_key_exists($task->task_id, $user_tasks_counted_in[$user_id][$task->task_project])) {
+					$user_tasks_counted_in[$user_id][$task->task_project][$task->task_id] = 0;
+				}
+				// We add it up
+				$user_tasks_counted_in[$user_id][$task->task_project][$task->task_id] += $hours_added;
+			}
+		}
+		$actual_date->addSeconds(168 * 3600); // + one week
+	}
+}
+
+// From: modules/reports/reports/allocateduserhours.php
+function showWeeks() {
+	global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $hideNonWd, $table_header, $table_rows, $df, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
+
+	$working_days_count = 0;
+	$allocated_hours_sum = 0;
+
+	$ed = new w2p_Utilities_Date(Date_Calc::endOfWeek($end_date->day, $end_date->month, $end_date->year));
+	$sd = new w2p_Utilities_Date(Date_Calc::beginOfWeek($start_date->day, $start_date->month, $start_date->year));
+
+	$week_difference = ceil($ed->workingDaysInSpan($sd) / count(explode(',', w2PgetConfig('cal_working_days'))));
+
+	$actual_date = $sd;
+
+	$table_header = '<tr><th>' . $AppUI->_('User') . '</th>';
+	for ($i = 0; $i < $week_difference; $i++) {
+		$actual_date->addSeconds(168 * 3600); // + one week
+		$working_days_count = $working_days_count + count(explode(',', w2PgetConfig('cal_working_days')));
+	}
+	$table_header .= '<th nowrap="nowrap" colspan="2">' . $AppUI->_('Allocated') . '</th></tr>';
+
+	$table_rows = '';
+
+	foreach ($user_list as $user_id => $user_data) {
+		$user_names[$user_id] = $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'];
+		if (isset($user_usage[$user_id])) {
+			$table_rows .= '<tr><td nowrap="nowrap">(' . $user_data['user_username'] . ') ' . $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'] . '</td>';
+			$actual_date = $sd;
+			$array_sum = array_sum($user_usage[$user_id]);
+
+			$average_user_usage = number_format(($array_sum / ($week_difference * count(explode(',', w2PgetConfig('cal_working_days'))) * w2PgetConfig('daily_working_hours'))) * 100, 2);
+			$allocated_hours_sum += $array_sum;
+
+			$bar_color = 'blue';
+			if ($average_user_usage > 100) {
+				$bar_color = 'red';
+				$average_user_usage = 100;
+			}
+			$table_rows .= '<td ><div align="left">' . round($array_sum, 2) . ' ' . $AppUI->_('hours') . '</td> <td align="right"> ' . $average_user_usage;
+			$table_rows .= '%</div>';
+			$table_rows .= '<div align="left" style="height:2px;width:' . $average_user_usage . '%; background-color:' . $bar_color . '">&nbsp;</div></td>';
+			$table_rows .= '</tr>';
+		}
+	}
+	$total_hours_capacity = $working_days_count / 2 * w2PgetConfig('daily_working_hours') * count($user_usage);
+	$total_hours_capacity_all = $working_days_count / 2 * w2PgetConfig('daily_working_hours') * count($user_list);
+}
+
+// From: modules/reports/reports/allocateduserhours.php
+function userUsageDays() {
+	global $task_start_date, $task_end_date, $day_difference, $hours_added, $actual_date, $users, $user_data, $user_usage, $use_assigned_percentage, $user_tasks_counted_in, $task, $start_date, $end_date;
+
+	$task_duration_per_day = $task->getTaskDurationPerDay($use_assigned_percentage);
+
+	for ($i = 0; $i <= $day_difference; $i++) {
+		if (!$actual_date->before($start_date) && !$actual_date->after($end_date) && $actual_date->isWorkingDay()) {
+
+			foreach ($users as $user_id => $user_data) {
+				if (!isset($user_usage[$user_id][$actual_date->format('%Y%m%d')])) {
+					$user_usage[$user_id][$actual_date->format('%Y%m%d')] = 0;
+				}
+				$percentage_assigned = $use_assigned_percentage ? ($user_data['perc_assignment'] / 100) : 1;
+				$hours_added = $task_duration_per_day * $percentage_assigned;
+				$user_usage[$user_id][$actual_date->format('%Y%m%d')] += $hours_added;
+				if ($user_usage[$user_id][$actual_date->format('%Y%m%d')] < 0.005) {
+					//We want to show at least 0.01 even when the assigned time is very small so we know
+					//that at that time the user has a running task
+					$user_usage[$user_id][$actual_date->format('%Y%m%d')] += 0.006;
+					$hours_added += 0.006;
+				}
+
+				// Let's register the tasks counted in for calculation
+				if (!array_key_exists($user_id, $user_tasks_counted_in)) {
+					$user_tasks_counted_in[$user_id] = array();
+				}
+
+				if (!array_key_exists($task->task_project, $user_tasks_counted_in[$user_id])) {
+					$user_tasks_counted_in[$user_id][$task->task_project] = array();
+				}
+
+				if (!array_key_exists($task->task_id, $user_tasks_counted_in[$user_id][$task->task_project])) {
+					$user_tasks_counted_in[$user_id][$task->task_project][$task->task_id] = 0;
+				}
+				// We add it up
+				$user_tasks_counted_in[$user_id][$task->task_project][$task->task_id] += $hours_added;
+			}
+		}
+		$actual_date->addDays(1);
+	}
+}
+
+// From: modules/reports/reports/allocateduserhours.php
+function showDays() {
+	global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $hideNonWd, $table_header, $table_rows, $df, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
+
+	$days_difference = $end_date->dateDiff($start_date);
+
+	$actual_date = $start_date;
+	$working_days_count = 0;
+	$allocated_hours_sum = 0;
+
+	$table_header = '<tr><th>' . $AppUI->_('User') . '</th>';
+	for ($i = 0; $i <= $days_difference; $i++) {
+		if (($actual_date->isWorkingDay()) || (!$actual_date->isWorkingDay() && !$hideNonWd)) {
+		}
+		if ($actual_date->isWorkingDay()) {
+			$working_days_count++;
+		}
+		$actual_date->addDays(1);
+	}
+	$table_header .= '<th nowrap="nowrap" colspan="2">' . $AppUI->_('Allocated') . '</th></tr>';
+
+	$table_rows = '';
+
+	foreach ($user_list as $user_id => $user_data) {
+		$user_names[$user_id] = $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'];
+		if (isset($user_usage[$user_id])) {
+			$table_rows .= '<tr><td nowrap="nowrap">(' . $user_data['user_username'] . ') ' . $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'] . '</td>';
+			$actual_date = $start_date;
+			$array_sum = array_sum($user_usage[$user_id]);
+			$average_user_usage = number_format(($array_sum / ($working_days_count * w2PgetConfig('daily_working_hours'))) * 100, 2);
+			$allocated_hours_sum += $array_sum;
+
+			$bar_color = 'blue';
+			if ($average_user_usage > 100) {
+				$bar_color = 'red';
+				$average_user_usage = 100;
+			}
+			$table_rows .= '<td ><div align="left">' . round($array_sum, 2) . ' ' . $AppUI->_('hours') . '</td> <td align="right"> ' . $average_user_usage;
+			$table_rows .= '%</div>';
+			$table_rows .= '<div align="left" style="height:2px;width:' . $average_user_usage . '%; background-color:' . $bar_color . '">&nbsp;</div></td>';
+			$table_rows .= '</tr>';
+
+		}
+	}
+	$total_hours_capacity = $working_days_count * w2PgetConfig('daily_working_hours') * count($user_usage);
+	$total_hours_capacity_all = $working_days_count * w2PgetConfig('daily_working_hours') * count($user_list);
+}
+
+// From: modules/system/syskeys/index.php
+function showRow($id = '', $key = 0, $title = '', $value = '') {
+  global $canEdit, $sysval_id, $AppUI, $keys;
+  global $fixedSysVals;
+  $s = '';
+  if (($sysval_id == $title) && $canEdit) {
+    // edit form
+    $s .= '<tr><td><input type="hidden" name="sysval_id" value="' . $title . '" />&nbsp;</td>';
+    $s .= '<td valign="top"><a name="'.$title.'"> </a>' . arraySelect($keys, 'sysval_key_id', 'size="1" class="text"', $key) . '</td>';
+    $s .= '<td valign="top"><input type="text" name="sysval_title" value="' . w2PformSafe($title) . '" class="text" /></td>';
+    $s .= '<td valign="top"><textarea name="sysval_value" class="small" rows="5" cols="40">' . $value . '</textarea></td>';
+    $s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'save' : 'add') . '" class="button" /></td><td>&nbsp;</td>';
+  } else {
+    $s = '<tr><td width="12" valign="top">';
+    if ($canEdit) {
+      $s .= '<a href="?m=system&u=syskeys&sysval_id=' . $title . '#'.$title.'" title="' . $AppUI->_('edit') . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a></td>';
+    }
+    $s .= '<td valign="top">' . $keys[$key] . '</td>';
+    $s .= '<td valign="top">' . w2PformSafe($title) . '</td>';
+    $s .= '<td valign="top" colspan="2">' . $value . '</td>';
+    $s .= '<td valign="top" width="16">';
+    if ($canEdit && !in_array($title, $fixedSysVals)) {
+      $s .= '<a href="javascript:delIt(\'' . $title . '\')" title="' . $AppUI->_('delete') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
+    }
+    $s .= '</td>';
+  }
+  $s .= '</tr>';
+  return $s;
+}
+
+// From: modules/system/syskeys/keys.php
+function showRow_keys($id = 0, $name = '', $label = '') {
+	global $canEdit, $syskey_id, $CR, $AppUI;
+	$s = '';
+	if ($syskey_id == $id && $canEdit) {
+		$s .= '<form name="sysKeyFrm" method="post" action="?m=system&u=syskeys&a=do_syskey_aed" accept-charset="utf-8">';
+		$s .= '<input type="hidden" name="del" value="0" />';
+		$s .= '<input type="hidden" name="syskey_id" value="' . $id . '" />';
+		$s .= '<tr>';
+		$s .= '<td>&nbsp;</td>';
+		$s .= '<td><input type="text" name="syskey_name" value="' . $name . '" class="text" /></td>';
+		$s .= '<td><textarea name="syskey_label" class="small" rows="2" cols="40">' . $label . '</textarea></td>';
+		$s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button" /></td>';
+		$s .= '<td>&nbsp;</td>';
+	} else {
+		$s .= '<tr>';
+		$s .= '<td width="12">';
+		if ($canEdit) {
+			$s .= '<a href="?m=system&u=syskeys&a=keys&syskey_id=' . $id . '"><img src="' . w2PfindImage('icons/pencil.gif') . '" alt="edit" border="0"></a>';
+			$s .= '</td>' . $CR;
+		}
+		$s .= '<td>' . $name . '</td>' . $CR;
+		$s .= '<td colspan="2">' . $label . '</td>' . $CR;
+		$s .= '<td width="16">';
+		if ($canEdit) {
+			$s .= '<a href="javascript:delIt(' . $id . ')"><img align="absmiddle" src="' . w2PfindImage('icons/trash.gif') . '" width="16" height="16" alt="' . $AppUI->_('delete') . '" border="0"></a>';
+		}
+		$s .= '</td>' . $CR;
+	}
+	$s .= '</tr>' . $CR;
+	return $s;
+}
