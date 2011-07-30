@@ -373,7 +373,7 @@ class CContact extends w2p_Core_BaseObject {
                                   OR contact_notes like '%$searchString%'";
 		}
 		// assemble the sql statement
-		$q = $this->_query;
+		$q = new w2p_Database_Query();
 		$q->addQuery('contact_id, contact_order_by');
 		$q->addQuery($showfields);
 		$q->addQuery('contact_first_name, contact_last_name, contact_title');
@@ -406,7 +406,7 @@ class CContact extends w2p_Core_BaseObject {
 		$letters = '';
 
 		$search_map = array('contact_first_name', 'contact_last_name');
-        $q = $this->_query;
+        $q = new w2p_Database_Query();
 
 		foreach ($search_map as $search_name) {
 			$q->addTable('contacts');
@@ -427,7 +427,7 @@ class CContact extends w2p_Core_BaseObject {
 
 	public static function getContactByUsername($username) {
 
-        $q = $this->_query;
+        $q = new w2p_Database_Query();
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
@@ -441,7 +441,7 @@ class CContact extends w2p_Core_BaseObject {
 
     public static function getContactByUserid($userId) {
 
-        $q = $this->_query;
+        $q = new w2p_Database_Query();
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
@@ -455,7 +455,7 @@ class CContact extends w2p_Core_BaseObject {
 	
 	public static function getContactByEmail($email) {
 
-        $q = $this->_query;
+        $q = new w2p_Database_Query();
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
@@ -472,7 +472,7 @@ class CContact extends w2p_Core_BaseObject {
 	
 	public static function getContactByUpdatekey($updateKey) {
 
-        $q = $this->_query;
+        $q = new w2p_Database_Query();
 		$q->addTable('contacts');
 		$q->addQuery('contact_id');
 		$q->addWhere("contact_updatekey= '$updateKey'");
@@ -482,7 +482,7 @@ class CContact extends w2p_Core_BaseObject {
 	
 	public static function getProjects($contactId) {
 
-        $q = $this->_query;
+        $q = new w2p_Database_Query();
 		$q->addQuery('p.project_id, p.project_name');
 		$q->addTable('project_contacts', 'pc');
 		$q->addJoin('projects', 'p', 'p.project_id = pc.project_id', 'inner');

@@ -930,7 +930,8 @@ class CTask extends w2p_Core_BaseObject {
 	 *		  @return		 string		   comma delimited list of tasks id's
 	 **/
 	public function staticGetDependencies($taskId) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query;
 		if (empty($taskId)) {
 			return '';
 		}
@@ -1374,7 +1375,8 @@ class CTask extends w2p_Core_BaseObject {
 	 *		 @param	 boolean		 false for no recursion (needed for calc_end_date)
 	 **/
 	public function dependentTasks($taskId = false, $isDep = false, $recurse = true) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query;
 		static $aDeps = false;
 		// Initialize the dependencies array
 		if (($taskId == false) && ($isDep == false)) {
@@ -2346,7 +2348,8 @@ class CTask extends w2p_Core_BaseObject {
 		return $q->loadResult();
 	}
 	public static function pinUserTask($userId, $taskId) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query;
 		$q->addTable('user_task_pin');
 		$q->addInsert('user_id', (int)$userId);
 		$q->addInsert('task_id', (int)$taskId);
@@ -2357,8 +2360,10 @@ class CTask extends w2p_Core_BaseObject {
 			return true;
 		}
 	}
+
 	public static function unpinUserTask($userId, $taskId) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query;
 		$q->setDelete('user_task_pin');
 		$q->addWhere('user_id = ' . (int)$userId);
 		$q->addWhere('task_id = ' . (int)$taskId);
@@ -2369,7 +2374,9 @@ class CTask extends w2p_Core_BaseObject {
 			return true;
 		}
 	}
+
     public static function updateHoursWorked($taskId, $totalHours) {
+
         $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addUpdate('task_hours_worked', $totalHours + 0);

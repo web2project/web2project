@@ -220,7 +220,8 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getUserIdByToken($token) {
-		$q = $this->_query;
+
+        $q = new w2p_Database_Query();
 		$q->addQuery('feed_user');
 		$q->addTable('user_feeds');
 		$q->addWhere("feed_token = '$token'");
@@ -230,7 +231,8 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getUserIdByContactID($contactId) {
-		$q = $this->_query;
+
+        $q = new w2p_Database_Query();
 		$q->addQuery('user_id');
 		$q->addTable('users');
 		$q->addWhere('user_contact = '.(int) $contactId);
@@ -240,7 +242,8 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
 	public static function generateUserToken($userId, $token = '') {
-		$q = $this->_query;
+
+        $q = new w2p_Database_Query();
 		$q->setDelete('user_feeds');
 		$q->addWhere('feed_user = ' . $userId);
 		$q->addWhere("feed_token = '$token'");
@@ -259,7 +262,7 @@ class CUser extends w2p_Core_BaseObject {
 	public static function getFirstLetters() {
 		$letters = '';
 
-		$q = $this->_query;
+		$q = new w2p_Database_Query();
 		$q->addTable('users', 'u');
 		$q->addQuery('DISTINCT SUBSTRING(user_username, 1, 1) as L');
 		$arr = $q->loadList();
@@ -271,7 +274,8 @@ class CUser extends w2p_Core_BaseObject {
 	}
 	
 	public static function exists($username) {
-		$q = $this->_query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('users', 'u');
 		$q->addQuery('user_username');
 		$q->addWhere("user_username = '$username'");
@@ -281,7 +285,8 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getUserDeptId($user_id) {
-		$q = $this->_query;
+
+        $q = new w2p_Database_Query();
 		$q->addQuery('con.contact_department');
 		$q->addTable('users', 'u');
 		$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
@@ -293,7 +298,8 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public static function getLogs($userId, $startDate, $endDate) {
-		$q = $this->_query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('user_access_log', 'ual');
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'c');
@@ -338,8 +344,8 @@ class CUser extends w2p_Core_BaseObject {
 	
 	public static function getUserList() {
 		global $AppUI;
-		
-		$q = $this->_query;
+
+		$q = new w2p_Database_Query();
         $q->addQuery('users.user_contact,users.user_id,co.contact_first_name,co.contact_last_name,co.contact_id');
         $q->addTable('users');
         $q->addJoin('contacts','co','co.contact_id = users.user_contact','inner');

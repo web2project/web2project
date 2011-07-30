@@ -349,10 +349,11 @@ class CDepartment extends w2p_Core_BaseObject {
 			$query->addWhere('((0=1) OR ' . ((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IS NULL)');
 		}
 	}
+
 	public static function getDepartmentList(CAppUI $AppUI = null, $companyId, $departmentId = 0) {
 		global $AppUI;
 
-        $q = $this->_query;
+        $q = new w2p_Database_Query();
 		$q->addTable('departments');
 		$q->addQuery('dept_id, dept_name');
 		if (is_int($departmentId)) {
@@ -365,11 +366,12 @@ class CDepartment extends w2p_Core_BaseObject {
 
 		return $q->loadHashList('dept_id');
 	}
+
 	public static function getContactList(CAppUI $AppUI = null, $deptId) {
 		global $AppUI;
 
         if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $deptId > 0) {
-            $q = $this->_query;
+            $q = new w2p_Database_Query();
             $q->addTable('contacts', 'con');
             $q->addQuery('con.contact_id, con.contact_first_name');
             $q->addQuery('con.contact_last_name');

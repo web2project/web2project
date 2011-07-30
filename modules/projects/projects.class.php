@@ -453,6 +453,7 @@ class CProject extends w2p_Core_BaseObject {
 		return array_merge($aBuf1, $aBuf2);
 
 	}
+
 	public function getAllowedProjectsInRows($userId) {
 
         $q = $this->_query;
@@ -735,7 +736,7 @@ class CProject extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
 		if ($AppUI->isActiveModule('departments') && canView('departments')) {
-			$q = $this->_query;
+			$q = new w2p_Database_Query();
 			$q->addTable('departments', 'a');
 			$q->addTable('project_departments', 'b');
 			$q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
@@ -751,7 +752,7 @@ class CProject extends w2p_Core_BaseObject {
 		global $AppUI;
 
 		if ($AppUI->isActiveModule('forums') && canView('forums')) {
-			$q = $this->_query;
+			$q = new w2p_Database_Query();
 			$q->addTable('forums');
 			$q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name, forum_message_count,
 				DATE_FORMAT(forum_last_date, "%d-%b-%Y %H:%i" ) forum_last_date,
@@ -764,7 +765,8 @@ class CProject extends w2p_Core_BaseObject {
 		}
 	}
 	public static function getCompany($projectId) {
-		$q = $this->_query;
+
+        $q = new w2p_Database_Query();
 		$q->addQuery('project_company');
 		$q->addTable('projects');
 		$q->addWhere('project_id = ' . (int) $projectId);
@@ -772,7 +774,8 @@ class CProject extends w2p_Core_BaseObject {
 		return $q->loadResult();
 	}
 	public static function getBillingCodes($companyId, $all = false) {
-		$q = $this->_query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('billingcode');
 		$q->addQuery('billingcode_id, billingcode_name');
 		$q->addOrder('billingcode_name');
@@ -797,7 +800,8 @@ class CProject extends w2p_Core_BaseObject {
 		return $task_log_costcodes;
 	}
 	public static function getOwners() {
-		$q = $this->_query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('projects', 'p');
 		$q->addQuery('user_id, contact_display_name');
 		$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
@@ -814,7 +818,7 @@ class CProject extends w2p_Core_BaseObject {
 		trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE );
         $perms = $AppUI->acl();
 		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-			$q = $this->_query;
+			$q = new w2p_Database_Query();
 			$q->addTable('projects');
 			$q->addUpdate('project_status', $statusId);
 			$q->addWhere('project_id   = ' . (int) $projectId);
@@ -826,7 +830,7 @@ class CProject extends w2p_Core_BaseObject {
 			$project_actual_end_date, $project_task_count) {
 
 		if ($project_id && $task_id) {
-			$q = $this->_query;
+			$q = new w2p_Database_Query();
 			$q->addTable('projects');
 			$q->addUpdate('project_last_task',			$task_id);
 			$q->addUpdate('project_actual_end_date',	$project_actual_end_date);
@@ -842,7 +846,7 @@ class CProject extends w2p_Core_BaseObject {
 		trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE );
 
 		if (intval($projectId) > 0 && intval($taskCount)) {
-			$q = $this->_query;
+			$q = new w2p_Database_Query();
 			$q->addTable('projects');
 			$q->addUpdate('project_task_count', intval($taskCount));
 			$q->addWhere('project_id   = ' . (int) $projectId);
@@ -871,7 +875,8 @@ class CProject extends w2p_Core_BaseObject {
 	public static function hasTasks($projectId) {
         // Note that this returns the *count* of tasks.  If this is zero, it is
         //   evaluated as false, otherwise it is considered true.
-        $q = $this->_query;
+
+        $q = new w2p_Database_Query();
         $q->addTable('tasks');
         $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
         $q->addWhere('task_project = ' . (int) $projectId);
@@ -879,7 +884,8 @@ class CProject extends w2p_Core_BaseObject {
         return $q->loadResult();
 	}
 	public static function updateHoursWorked($project_id) {
-        $q = $this->_query;
+
+        $q = new w2p_Database_Query();
         $q->addTable('task_log');
         $q->addTable('tasks');
         $q->addQuery('ROUND(SUM(task_log_hours),2)');
@@ -898,7 +904,7 @@ class CProject extends w2p_Core_BaseObject {
     public static function updatePercentComplete($project_id) {
         $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
 
-        $q = $this->_query;
+        $q = new w2p_Database_Query();
         $q->addTable('projects');
         $q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
         $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
