@@ -2544,7 +2544,8 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'selected_task\', ' . $a['task_id'] . ',\'project_' . $a['task_project'] . '_level-' . $level . '-task_' . $a['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $a['task_id'] . '" name="selected_task[' . $a['task_id'] . ']" value="' . $a['task_id'] . '"/></td>';
 	}
 	$s .= '</tr>';
-	echo $s;
+
+	return $s;
 }
 
 //TODO: modules/projectdesigner/projectdesigner.class.php
@@ -2556,7 +2557,7 @@ function findchild_pd(&$tarr, $parent, $level = 0) {
 
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			showtask_pd($tarr[$x], $level);
+			echo showtask_pd($tarr[$x], $level);
 			findchild_pd($tarr, $tarr[$x]['task_id'], $level);
 		}
 	}

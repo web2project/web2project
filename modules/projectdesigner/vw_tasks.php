@@ -246,7 +246,7 @@ foreach ($projects as $k => $p) {
 		for ($i = 0; $i < $tnums; $i++) {
 			$t = $p['tasks'][$i];
 			if ($t['task_parent'] == $t['task_id']) {
-				showtask_pd($t, 0);
+				echo showtask_pd($t, 0);
 				findchild_pd($p['tasks'], $t['task_id']);
 			}
 		}
