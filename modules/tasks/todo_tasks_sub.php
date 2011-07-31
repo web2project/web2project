@@ -111,7 +111,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
         $history_active = false;
         // showing tasks
         foreach ($tasks as $task) {
-            showtask($task, 0, false, true);
+            echo showtask($task, 0, false, true);
         }
         if (w2PgetConfig('direct_edit_assignment')) {
         ?>

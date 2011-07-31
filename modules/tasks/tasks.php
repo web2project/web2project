@@ -601,7 +601,7 @@ if ($project_id) {
 							//check for child
 							$no_children = empty($children_of[$t1['task_id']]);
 	
-							showtask($t1, 0, true, false, $no_children);
+							echo showtask($t1, 0, true, false, $no_children);
 							$shown_tasks[$t1['task_id']] = $t1['task_id'];
 							findchild($p['tasks'], $t1['task_id']);
 						} elseif ($t1['task_parent'] == $task_id && $task_id) {
@@ -610,7 +610,7 @@ if ($project_id) {
 							//check for child
 							$no_children = empty($children_of[$t1['task_id']]);
 	
-							showtask($t1, 0, true, false, $no_children);
+							echo showtask($t1, 0, true, false, $no_children);
 							$shown_tasks[$t1['task_id']] = $t1['task_id'];
 							findchild($p['tasks'], $t1['task_id']);
 						}
@@ -626,7 +626,7 @@ if ($project_id) {
 							//The IF condition makes sure:
 							//1) The parent task has been displayed and passed through the findchild first, so child tasks are not erroneously displayed as orphan (parentless) 
 							//2) Only not displayed yet tasks are shown so we don't show duplicates due to findchild that may cause duplicate showtasks for level 1 (and higher) tasks.
-							showtask($t1, -1, true, false, true);
+							echo showtask($t1, -1, true, false, true);
 							$shown_tasks[] = $t1['task_id'];
 						}
 					}

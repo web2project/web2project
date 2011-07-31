@@ -658,7 +658,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$s .= ('<td align="center">' . '<input type="checkbox" name="selected_task[' . $arr['task_id'] . ']" value="' . $arr['task_id'] . '"/></td>');
 	}
 	$s .= '</tr>'."\n";
-	echo $s;
+	return $s;
 }
 // from modules/tasks/tasks.class.php
 function findchild(&$tarr, $parent, $level = 0) {
@@ -669,7 +669,7 @@ function findchild(&$tarr, $parent, $level = 0) {
 
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			showtask($tarr[$x], $level, true);
+			echo showtask($tarr[$x], $level, true);
 			$shown_tasks[$tarr[$x]['task_id']] = $tarr[$x]['task_id'];
 			findchild($tarr, $tarr[$x]['task_id'], $level);
 		}
