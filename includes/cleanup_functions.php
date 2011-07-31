@@ -783,7 +783,7 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	if ($show_icon) {
 		$s .= '&nbsp;<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" border="0" alt="" />';
 	}
-	echo $s.'</a>';
+	return $s.'</a>';
 }
 
 // from modules/tasks/tasks.class.php

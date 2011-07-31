@@ -461,17 +461,17 @@ if ($project_id) {
 		<th width="10"><?php echo $AppUI->_('Pin'); ?></th>
 		<th width="10"><?php echo $AppUI->_('Log'); ?></th>
 		<th width="20"><?php echo $AppUI->_('Work'); ?></th>
-		<th align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
-		<th align="center"><?php sort_by_item_title('U', 'user_task_priority', SORT_NUMERIC); ?></th>
-		<th width="200"><?php sort_by_item_title('Task Name', 'task_name', SORT_STRING); ?></th>
-		<th nowrap="nowrap"><?php sort_by_item_title('Task Owner', 'user_username', SORT_STRING); ?></th>
+		<th align="center"><?php echo sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
+		<th align="center"><?php echo sort_by_item_title('U', 'user_task_priority', SORT_NUMERIC); ?></th>
+		<th width="200"><?php echo sort_by_item_title('Task Name', 'task_name', SORT_STRING); ?></th>
+		<th nowrap="nowrap"><?php echo sort_by_item_title('Task Owner', 'user_username', SORT_STRING); ?></th>
 		<th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users') ?></th>
-		<th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC); ?></th>
-		<th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC); ?>&nbsp;&nbsp;</th>
-		<th nowrap="nowrap"><?php sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC); ?></th>
+		<th nowrap="nowrap"><?php echo sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC); ?></th>
+		<th nowrap="nowrap"><?php echo sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC); ?>&nbsp;&nbsp;</th>
+		<th nowrap="nowrap"><?php echo sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC); ?></th>
 		<?php 
 			if (!empty($mods['history']) && canView('history')) {
-				?><th nowrap="nowrap"><?php sort_by_item_title('Last Update', 'last_update', SORT_NUMERIC); ?></th><?php
+				?><th nowrap="nowrap"><?php echo sort_by_item_title('Last Update', 'last_update', SORT_NUMERIC); ?></th><?php
 			} else {
 				$cols--;
 			}
