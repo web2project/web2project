@@ -28,7 +28,7 @@ echo $s;
 if (count($depts)) {
 	foreach ($depts as $dept) {
 		if ($dept['dept_parent'] == 0) {
-			showchilddept_comp($dept);
+			echo showchilddept_comp($dept);
 			findchilddept_comp($depts, $dept['dept_id']);
 		}
 	}

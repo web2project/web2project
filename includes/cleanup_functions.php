@@ -1855,7 +1855,7 @@ function showchilddept_comp(&$a, $level = 0) {
 	$s .= '</td>';
 	$s .= '<td align="center">' . ($a['dept_users'] ? $a['dept_users'] : '') . '</td>';
 
-	echo '<tr>' . $s . '</tr>';
+	return '<tr>' . $s . '</tr>';
 }
 
 // function renamed to avoid naming clash
@@ -1865,7 +1865,7 @@ function findchilddept_comp(&$tarr, $parent, $level = 0) {
 	$n = count($tarr);
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
-			showchilddept_comp($tarr[$x], $level);
+			echo showchilddept_comp($tarr[$x], $level);
 			findchilddept_comp($tarr, $tarr[$x]['dept_id'], $level);
 		}
 	}
