@@ -1414,7 +1414,7 @@ function showcodes(&$a) {
 	<td nowrap="nowrap" align="center">' . $a['billingcode_value'] . '</td>
 	<td nowrap="nowrap">' . $a['billingcode_desc'] . '</td>
 </tr>';
-	echo $s;
+	return $s;
 }
 
 // from modules/smartsearch/smartsearch.class.php
