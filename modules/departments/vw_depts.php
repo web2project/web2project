@@ -33,7 +33,7 @@ $deptList = $dept->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_
 if (count($deptList) > 0) {
 	foreach ($deptList as $dept) {
 		if ($dept['dept_parent'] == 0) {
-			showchilddept($dept);
+			echo showchilddept($dept);
 			findchilddept($deptList, $dept['dept_id']);
 		}
 		echo '<tr><td>' . (mb_trim($dept['dept_desc']) ? w2PtoolTip($dept['dept_name'], $dept['dept_desc']) : '') . '<a href="./index.php?m=departments&a=view&dept_id=' . $dept['dept_id'] . '" >' . $dept['dept_name'] . '</a>' . (mb_trim($dept['dept_desc']) ? w2PendTip() : '') . '</td>';

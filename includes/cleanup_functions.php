@@ -1606,9 +1606,8 @@ function showchilddept(&$a, $level = 1) {
 	}
 
 	$s .= '&nbsp;&nbsp;' . $a['dept_name'] . '</option>';
-	$buffer .= $s;
 
-	//	echo $s;
+    return $s;
 }
 
 //comes from modules/departments/departments.class.php
@@ -1618,7 +1617,7 @@ function findchilddept(&$tarr, $parent, $level = 1) {
 	$n = count($tarr);
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
-			showchilddept($tarr[$x], $level);
+			echo showchilddept($tarr[$x], $level);
 			findchilddept($tarr, $tarr[$x]['dept_id'], $level);
 		}
 	}
@@ -1929,17 +1928,8 @@ function getFolders($parent, $level = 0) {
                 $s .= "</div>";
             }
 		}
-		// call this function again to display this
-		// child's children
-		// getFolders *always* returns true, so there's no point in checking it
-		//$s .= getFolders($row['file_folder_id'], $level + 1).'</li></ul>';
 	}
-	/*
-	 *  getFolders  would *alway* return true and would echo the results.  It
-	 * makes more sense to simply return the results.  Then the calling code can
-	 * echo it, capture it for parsing, or whatever else needs to be done.  There
-	 * should be less inadvertent actions as a result.
-	 */
+
 	return $s;
 }
 
@@ -2640,7 +2630,8 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 	$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
 	$s .= '</td>';
 	$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($last_update ? $last_update->format($df . ' ' . $tf) : '-') . '</td>';
-	echo $s;
+
+	return $s;
 }
 
 //TODO: modules/projectdesigner/projectdesigner.class.php
@@ -2652,7 +2643,7 @@ function findchild_pr(&$tarr, $parent, $level = 0) {
 
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			showtask_pr($tarr[$x], $level);
+			echo showtask_pr($tarr[$x], $level);
 			findchild_pr($tarr, $tarr[$x]['task_id'], $level);
 		}
 	}
@@ -2907,7 +2898,7 @@ function projects_list_data($user_id = false) {
 			if ($row['dept_parent'] == 0) {
 				if ($key == $row['company_id']) {
 					if ($row['dept_parent'] != null) {
-						showchilddept($row);
+						echo showchilddept($row);
 						findchilddept($rows, $row['dept_id']);
 					}
 				}
