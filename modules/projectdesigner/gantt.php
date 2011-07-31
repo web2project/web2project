@@ -173,7 +173,7 @@ foreach ($projects as $p) {
 		$t = $p['tasks'][$i];
 		if ($t['task_parent'] == $t['task_id']) {
 			showgtask($t);
-			findgchild($p['tasks'], $t['task_id']);
+			findchild_gantt($p['tasks'], $t['task_id']);
 		}
 	}
 }

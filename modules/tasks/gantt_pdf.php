@@ -182,7 +182,7 @@ foreach ($projects as $p) {
         }
         if ($t['task_parent'] == $t['task_id']) {
             showgtask($t);
-            findgchild($p['tasks'], $t['task_id']);
+            findchild_gantt($p['tasks'], $t['task_id']);
         }
     }
 }
@@ -285,7 +285,7 @@ foreach ($gtask_sliced as $gts) {
             if ($t['task_parent'] == $t['task_id']) {
                 $parents[$t['task_parent']] = true;
                 showgtask($t);
-                findgchild($p['tasks'], $t['task_id']);
+                findchild_gantt($p['tasks'], $t['task_id']);
             }
         }
     }
