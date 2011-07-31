@@ -65,6 +65,17 @@ abstract class w2p_Core_BaseObject
 		$this->_query = new w2p_Database_Query;
 	}
 
+    /**
+     * Since Dependency injection isn't feasible due to the sheer number of 
+     *   calls to the above constructor, this is a way to hijack the current 
+     *   $this->_query and manipulate it however we want.
+     * 
+     *   @param Object A database connection (real or mocked)
+     */
+    public function overrideDatabase($override) {
+        $this->_query = $override;
+    }
+
 	/**
 	 *	@return string or array Returns the error message
 	 */
