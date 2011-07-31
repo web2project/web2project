@@ -1231,10 +1231,8 @@ function displayWeeks_r($list, $task, $level, $fromPeriod, $toPeriod, $user_id =
 			$color = '#0000FF';
 			if ($level == 0 and hasChildren($list, $task)) {
 				$color = '#C0C0FF';
-			} else {
-				if ($level == 1 and hasChildren($list, $task)) {
-					$color = '#9090FF';
-				}
+			} elseif ($level == 1 and hasChildren($list, $task)) {
+                $color = '#9090FF';
 			}
 
 			if ($user_id) {
