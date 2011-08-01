@@ -170,8 +170,8 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
   }
   public function test_w2p_check_email()
   {
-    $this->assertTrue(w2p_check_email('tests@web2project.net'));
-    $this->assertTrue(w2p_check_email('tests@bugs.web2project.net'));
+    $this->assertEquals('tests@web2project.net', w2p_check_email('tests@web2project.net'));
+    $this->assertEquals('tests@bugs.web2project.net', w2p_check_email('tests@bugs.web2project.net'));
 
     $this->assertFalse(w2p_check_email('@web2project.net'));
     $this->assertFalse(w2p_check_email('testsweb2project.net'));

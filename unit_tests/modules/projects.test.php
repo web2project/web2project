@@ -193,8 +193,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->project_percent_complete);
         $this->assertNull($this->obj->project_color_identifier);
         $this->assertNull($this->obj->project_description);
-        $this->assertNull($this->obj->project_target_budget);
-        $this->assertNull($this->obj->project_actual_buget);
+        $this->assertEquals(0, $this->obj->project_target_budget);
+        $this->assertEquals(0, $this->obj->project_actual_buget);
         $this->assertNull($this->obj->project_scheduled_hours);
         $this->assertNull($this->obj->project_worked_hours);
         $this->assertNull($this->obj->project_task_count);
