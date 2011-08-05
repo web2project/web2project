@@ -735,10 +735,11 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	}
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif', $m) . '" width="16" height="12" border="0" alt="" />';
+			$image = w2PfindImage('corner-dots.gif', $m);
 		} else {
-			$s .= '<img src="' . w2PfindImage('shim.gif', $m) . '" width="16" height="12"  border="0" alt="" />';
+			$image = w2PfindImage('shim.gif', $m);
 		}
+        $s .= '<img src="' . $image . '" width="16" height="12"  border="0" alt="" />';
 	}
 	// name link
 	if ($a['task_description']) {
