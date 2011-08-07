@@ -53,6 +53,23 @@ class CSysVal extends w2p_Core_BaseObject {
 		$this->sysval_value = $value;
 	}
 
+    /*
+     * NOTE: This function is a simplified version from the w2p_Core_BaseObject
+     *   because that version of the function applies filtering that kills our
+     *   required fields which legitimately have <'s and >'s.
+     */
+	public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
+	{
+		if (!is_array($hash)) {
+			$this->_error = get_class($this) . '::bind failed.';
+			return false;
+		} else {
+			$q = $this->_query;
+			$q->bindHashToObject($hash, $this, $prefix, $checkSlashes, $bindAll);
+			return true;
+		}
+	}
+
 	public function store() {
 		$this->w2PTrimAll();
 
