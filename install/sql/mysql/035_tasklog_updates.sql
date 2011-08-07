@@ -19,3 +19,7 @@ UPDATE `task_log` SET `task_log_task_end_date` =
         WHERE tasks.task_id = task_log_task
         GROUP BY tasks.task_id
 );
+
+-- These are some random fixes scheduled for this release.
+
+DELETE FROM `module_config` WHERE `module_config_value` = 'project_scheduled_hours';
