@@ -105,34 +105,3 @@ function delIt(id) {
     ?>
   </table>
 </form>
-
-<?php
-
-function showRow($id = '', $key = 0, $title = '', $value = '') {
-  global $canEdit, $sysval_id, $AppUI, $keys;
-  global $fixedSysVals;
-  $s = '';
-  if (($sysval_id == $title) && $canEdit) {
-    // edit form
-    $s .= '<tr><td><input type="hidden" name="sysval_id" value="' . $title . '" />&nbsp;</td>';
-    $s .= '<td valign="top"><a name="'.$title.'"> </a>' . arraySelect($keys, 'sysval_key_id', 'size="1" class="text"', $key) . '</td>';
-    $s .= '<td valign="top"><input type="text" name="sysval_title" value="' . w2PformSafe($title) . '" class="text" /></td>';
-    $s .= '<td valign="top"><textarea name="sysval_value" class="small" rows="5" cols="40">' . $value . '</textarea></td>';
-    $s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'save' : 'add') . '" class="button" /></td><td>&nbsp;</td>';
-  } else {
-    $s = '<tr><td width="12" valign="top">';
-    if ($canEdit) {
-      $s .= '<a href="?m=system&u=syskeys&sysval_id=' . $title . '#'.$title.'" title="' . $AppUI->_('edit') . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a></td>';
-    }
-    $s .= '<td valign="top">' . $keys[$key] . '</td>';
-    $s .= '<td valign="top">' . w2PformSafe($title) . '</td>';
-    $s .= '<td valign="top" colspan="2">' . $value . '</td>';
-    $s .= '<td valign="top" width="16">';
-    if ($canEdit && !in_array($title, $fixedSysVals)) {
-      $s .= '<a href="javascript:delIt(\'' . $title . '\')" title="' . $AppUI->_('delete') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
-    }
-    $s .= '</td>';
-  }
-  $s .= '</tr>';
-  return $s;
-}

@@ -86,7 +86,7 @@ function delIt2(id) {
 
 <?php
 foreach ($billingcodes as $code) {
-	showcodes($code);
+	echo showcodes($code);
 }
 
 if (isset($_GET['billingcode_id'])) {

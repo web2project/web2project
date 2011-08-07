@@ -1,4 +1,4 @@
-<?php /* $Id: view.php 1525 2010-12-11 08:46:05Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/view.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -97,13 +97,13 @@ function updateTask() {
     // else users would be able to arbitrarily run 'bad' functions
     if ($canEdit) {
     ?>
-    if (isNaN( parseInt( f.task_percent_complete.value+0 ) )) {
+    if (isNaN( parseInt( f.task_log_percent_complete.value+0 ) )) {
         alert( '<?php echo $AppUI->_('tasksPercent', UI_OUTPUT_JS); ?>' );
-        f.task_percent_complete.focus();
+        f.task_log_percent_complete.focus();
         return;
-	} else if(f.task_percent_complete.value  < 0 || f.task_percent_complete.value > 100) {
+	} else if(f.task_log_percent_complete.value  < 0 || f.task_log_percent_complete.value > 100) {
         alert( '<?php echo $AppUI->_('tasksPercentValue', UI_OUTPUT_JS); ?>' );
-        f.task_percent_complete.focus();
+        f.task_log_percent_complete.focus();
         return;
 	}
     <?php } ?>

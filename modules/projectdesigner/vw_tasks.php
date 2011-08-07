@@ -1,4 +1,4 @@
-<?php /* $Id: vw_tasks.php 1525 2010-12-11 08:46:05Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projectdesigner/vw_tasks.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -246,7 +246,7 @@ foreach ($projects as $k => $p) {
 		for ($i = 0; $i < $tnums; $i++) {
 			$t = $p['tasks'][$i];
 			if ($t['task_parent'] == $t['task_id']) {
-				showtask_pd($t, 0);
+				echo showtask_pd($t, 0);
 				findchild_pd($p['tasks'], $t['task_id']);
 			}
 		}

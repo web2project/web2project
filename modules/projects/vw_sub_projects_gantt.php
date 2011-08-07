@@ -175,7 +175,7 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                     $task = $p['tasks'][$i];
                     if ($task['task_parent'] == $task['task_id']) {
                         showgtask($task, 0, $p['project_id']);
-                        findgchild($p['tasks'], $task['task_id'], 0, $p['project_id']);
+                        findchild_gantt($p['tasks'], $task['task_id'], 0, $p['project_id']);
                     }
                 }
             }

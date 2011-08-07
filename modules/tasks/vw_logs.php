@@ -1,4 +1,4 @@
-<?php /* $Id: vw_logs.php 1474 2010-10-18 01:00:44Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/tasks/vw_logs.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -100,7 +100,7 @@ foreach ($logs as $row) {
 
 	// dylan_cuthbert: auto-transation system in-progress, leave these lines
 	$transbrk = "\n[translation]\n";
-  $descrip = w2p_textarea($row['task_log_description']);
+    $descrip = w2p_textarea($row['task_log_description']);
 	$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
 	if ($tranpos === false) {
 		$s .= $descrip;
