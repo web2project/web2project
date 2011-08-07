@@ -163,10 +163,9 @@ $q->addGroup('ta.task_id');
 $q->addOrder('ta.task_end_date');
 $q->addOrder('task_priority DESC');
 $tasks = $q->loadList();
-$q->clear();
 
 /* we have to calculate the end_date via start_date+duration for
-** end='0000-00-00 00:00:00' 
+** end='0000-00-00 00:00:00'
 */
 for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
 
