@@ -1,4 +1,4 @@
-<?php /* $Id: system.class.php 1527 2010-12-13 07:56:13Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/system/system.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -180,7 +180,7 @@ class bcode extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
 
         $this->_error = array();
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('billingcode');
 		$q->addUpdate('billingcode_status', '1');
 		$q->addWhere('billingcode_id = ' . (int)$this->_billingcode_id);
@@ -199,7 +199,7 @@ class bcode extends w2p_Core_BaseObject {
         $stored = false;
         $this->_error = array();
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
 		$q->addQuery('billingcode_id');
 		$q->addTable('billingcode');
 		$q->addWhere('billingcode_name = \'' . $this->billingcode_name . '\'');

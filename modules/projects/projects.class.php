@@ -139,7 +139,8 @@ class CProject extends w2p_Core_BaseObject {
 	}
 
 	public function loadFull(CAppUI $AppUI, $projectId) {
-        $q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addTable('projects');
 		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
 		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
@@ -166,7 +167,7 @@ class CProject extends w2p_Core_BaseObject {
          *   previous version didn't check it either, so we're no worse off.
          */
         if ($perms->checkModuleItem('projects', 'delete', $this->project_id)) {
-            $q = new w2p_Database_Query;
+            $q = $this->_query;
             $q->addTable('tasks');
             $q->addQuery('task_id');
             $q->addWhere('task_project = ' . (int)$this->project_id);
@@ -242,7 +243,7 @@ class CProject extends w2p_Core_BaseObject {
 		// Load the original
 		$origProject = new CProject();
 		$origProject->load($from_project_id);
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
 		$q->addWhere('task_project =' . (int)$from_project_id);
@@ -416,7 +417,7 @@ class CProject extends w2p_Core_BaseObject {
 		$oDpt = new CDepartment();
 		$aDptsAllowed = $oDpt->getAllowedRecords($uid, 'dept_id,dept_name');
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('projects');
 		$q->addQuery('projects.project_id');
 		$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
@@ -452,8 +453,10 @@ class CProject extends w2p_Core_BaseObject {
 		return array_merge($aBuf1, $aBuf2);
 
 	}
+
 	public function getAllowedProjectsInRows($userId) {
-		$q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
 		$q->addTable('projects', 'pr');
 		$q->addOrder('project_short_name');
@@ -470,7 +473,8 @@ class CProject extends w2p_Core_BaseObject {
 	 */
 	public function getCriticalTasks($project_id = null, $limit = 1) {
 		$project_id = !empty($project_id) ? $project_id : $this->project_id;
-		$q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addTable('tasks');
 		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_end_date IS NOT NULL AND task_end_date <>  \'0000-00-00 00:00:00\'');
 		$q->addOrder('task_end_date DESC');
@@ -539,7 +543,7 @@ class CProject extends w2p_Core_BaseObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $this->project_updated = $q->dbfnNowWithTZ();
         if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->project_id)) {
             if (($msg = parent::store())) {
@@ -563,7 +567,6 @@ class CProject extends w2p_Core_BaseObject {
         }
 
 		//split out related departments and store them seperatly.
-		$q = new w2p_Database_Query;
 		$q->setDelete('project_departments');
 		$q->addWhere('project_id=' . (int)$this->project_id);
 		$q->exec();
@@ -686,7 +689,8 @@ class CProject extends w2p_Core_BaseObject {
 		return '';
 	}
 	public function getAllowedProjects($userId, $activeOnly = true) {
-		$q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addTable('projects', 'pr');
 		$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date, project_company, project_parent');
 		if ($activeOnly) {
@@ -698,13 +702,14 @@ class CProject extends w2p_Core_BaseObject {
 
 		return $q->loadHashList('project_id');
 	}
+
 	public static function getContacts(CAppUI $AppUI = null, $projectId) {
         global $AppUI;
 
         $perms = $AppUI->acl();
 
 		if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
-            $q = new w2p_Database_Query;
+            $q = new w2p_Database_Query();
             $q->addTable('contacts', 'c');
             $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
             $q->addQuery('contact_order_by, contact_email, contact_phone');
@@ -732,7 +737,7 @@ class CProject extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
 		if ($AppUI->isActiveModule('departments') && canView('departments')) {
-			$q = new w2p_Database_Query;
+			$q = new w2p_Database_Query();
 			$q->addTable('departments', 'a');
 			$q->addTable('project_departments', 'b');
 			$q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
@@ -748,7 +753,7 @@ class CProject extends w2p_Core_BaseObject {
 		global $AppUI;
 
 		if ($AppUI->isActiveModule('forums') && canView('forums')) {
-			$q = new w2p_Database_Query;
+			$q = new w2p_Database_Query();
 			$q->addTable('forums');
 			$q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name, forum_message_count,
 				DATE_FORMAT(forum_last_date, "%d-%b-%Y %H:%i" ) forum_last_date,
@@ -761,7 +766,8 @@ class CProject extends w2p_Core_BaseObject {
 		}
 	}
 	public static function getCompany($projectId) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
 		$q->addQuery('project_company');
 		$q->addTable('projects');
 		$q->addWhere('project_id = ' . (int) $projectId);
@@ -769,7 +775,8 @@ class CProject extends w2p_Core_BaseObject {
 		return $q->loadResult();
 	}
 	public static function getBillingCodes($companyId, $all = false) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('billingcode');
 		$q->addQuery('billingcode_id, billingcode_name');
 		$q->addOrder('billingcode_name');
@@ -794,7 +801,8 @@ class CProject extends w2p_Core_BaseObject {
 		return $task_log_costcodes;
 	}
 	public static function getOwners() {
-		$q = new w2p_Database_Query();
+
+        $q = new w2p_Database_Query();
 		$q->addTable('projects', 'p');
 		$q->addQuery('user_id, contact_display_name');
 		$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
@@ -811,7 +819,7 @@ class CProject extends w2p_Core_BaseObject {
 		trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE );
         $perms = $AppUI->acl();
 		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-			$q = new w2p_Database_Query;
+			$q = new w2p_Database_Query();
 			$q->addTable('projects');
 			$q->addUpdate('project_status', $statusId);
 			$q->addWhere('project_id   = ' . (int) $projectId);
@@ -823,7 +831,7 @@ class CProject extends w2p_Core_BaseObject {
 			$project_actual_end_date, $project_task_count) {
 
 		if ($project_id && $task_id) {
-			$q = new w2p_Database_Query;
+			$q = new w2p_Database_Query();
 			$q->addTable('projects');
 			$q->addUpdate('project_last_task',			$task_id);
 			$q->addUpdate('project_actual_end_date',	$project_actual_end_date);
@@ -839,7 +847,7 @@ class CProject extends w2p_Core_BaseObject {
 		trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE );
 
 		if (intval($projectId) > 0 && intval($taskCount)) {
-			$q = new w2p_Database_Query;
+			$q = new w2p_Database_Query();
 			$q->addTable('projects');
 			$q->addUpdate('project_task_count', intval($taskCount));
 			$q->addWhere('project_id   = ' . (int) $projectId);
@@ -851,7 +859,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function hasChildProjects($projectId = 0) {
 		// Note that this returns the *count* of projects.  If this is zero, it
 		//   is evaluated as false, otherwise it is considered true.
-		$q = new w2p_Database_Query();
+		$q = $this->_query;
 		$q->addTable('projects');
 		$q->addQuery('COUNT(project_id)');
 		if ($projectId > 0) {
@@ -868,7 +876,8 @@ class CProject extends w2p_Core_BaseObject {
 	public static function hasTasks($projectId) {
         // Note that this returns the *count* of tasks.  If this is zero, it is
         //   evaluated as false, otherwise it is considered true.
-        $q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
         $q->addTable('tasks');
         $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
         $q->addWhere('task_project = ' . (int) $projectId);
@@ -876,7 +885,8 @@ class CProject extends w2p_Core_BaseObject {
         return $q->loadResult();
 	}
 	public static function updateHoursWorked($project_id) {
-        $q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
         $q->addTable('task_log');
         $q->addTable('tasks');
         $q->addQuery('ROUND(SUM(task_log_hours),2)');
@@ -895,7 +905,7 @@ class CProject extends w2p_Core_BaseObject {
     public static function updatePercentComplete($project_id) {
         $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
 
-        $q = new w2p_Database_Query;
+        $q = new w2p_Database_Query();
         $q->addTable('projects');
         $q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
         $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
@@ -922,7 +932,7 @@ class CProject extends w2p_Core_BaseObject {
 		// now milestones are summed up, too, for consistence with the tasks duration sum
 		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
 		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('tasks');
 		$q->addQuery('ROUND(SUM(task_duration),2)');
 		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
@@ -941,7 +951,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function getTaskLogs(CAppUI $AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
         global $AppUI;
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('task_log');
 		$q->addQuery('DISTINCT task_log.*, user_username, task_id');
 		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
@@ -988,305 +998,4 @@ class CProject extends w2p_Core_BaseObject {
 
         return $search;
     }
-}
-
-/* The next lines of code have resided in projects/index.php before
-** and have been moved into this 'encapsulated' function
-** for reusability of that central code.
-**
-** @date 20060225
-** @responsible gregorerhardt
-**
-** E.g. this code is used as well in a tab for the admin/viewuser site
-**
-** @mixed user_id 	userId as filter for tasks/projects that are shown, if nothing is specified,
-current viewing user $AppUI->user_id is used.
-*/
-
-function projects_list_data($user_id = false) {
-	global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix,
-        $deny, $department, $dept_ids, $w2Pconfig, $orderby, $orderdir,
-        $tasks_problems, $owner, $projectTypeId, $search_text, $project_type;
-
-	$addProjectsWithAssignedTasks = $AppUI->getState('addProjWithTasks') ? $AppUI->getState('addProjWithTasks') : 0;
-
-	// get any records denied from viewing
-	$obj = new CProject();
-	$deny = $obj->getDeniedRecords($AppUI->user_id);
-
-	// Let's delete temproary tables
-	$q = new w2p_Database_Query;
-	$q->setDelete('tasks_problems');
-	$q->exec();
-	$q->clear();
-
-	$q->setDelete('tasks_users');
-	$q->exec();
-	$q->clear();
-
-	// support task problem logs
-	$q->addInsertSelect('tasks_problems');
-	$q->addTable('tasks');
-	$q->addQuery('task_project, task_log_problem');
-	$q->addJoin('task_log', 'tl', 'tl.task_log_task = task_id', 'inner');
-	$q->addWhere('task_log_problem = 1');
-	$q->addGroup('task_project');
-	$tasks_problems = $q->exec();
-	$q->clear();
-
-	if ($addProjectsWithAssignedTasks) {
-		// support users tasks
-		$q->addInsertSelect('tasks_users');
-		$q->addTable('tasks');
-		$q->addQuery('task_project');
-		$q->addQuery('ut.user_id');
-		$q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
-		if ($user_id) {
-			$q->addWhere('ut.user_id = ' . (int)$user_id);
-		}
-		$q->addOrder('task_end_date DESC');
-		$q->addGroup('task_project');
-		$tasks_users = $q->exec();
-		$q->clear();
-	}
-
-	// add Projects where the Project Owner is in the given department
-	if ($addPwOiD && isset($department)) {
-		$owner_ids = array();
-		$q->addTable('users');
-		$q->addQuery('user_id');
-		$q->addJoin('contacts', 'c', 'c.contact_id = user_contact', 'inner');
-		$q->addWhere('c.contact_department = ' . (int)$department);
-		$owner_ids = $q->loadColumn();
-		$q->clear();
-	}
-
-	if (isset($department)) {
-		//If a department is specified, we want to display projects from the department, and all departments under that, so we need to build that list of departments
-		$dept_ids = array();
-		$q->addTable('departments');
-		$q->addQuery('dept_id, dept_parent');
-		$q->addOrder('dept_parent,dept_name');
-		$rows = $q->loadList();
-		addDeptId($rows, $department);
-		$dept_ids[] = isset($department->dept_id) ? $department->dept_id : 0;
-		$dept_ids[] = ($department > 0) ? $department : 0;
-	}
-	$q->clear();
-
-	// retrieve list of records
-	// modified for speed
-	// by Pablo Roca (pabloroca@mvps.org)
-	// 16 August 2003
-	// get the list of permitted companies
-	$obj = new CCompany();
-	$companies = $obj->getAllowedRecords($AppUI->user_id, 'companies.company_id,companies.company_name', 'companies.company_name');
-	if (count($companies) == 0) {
-		$companies = array();
-	}
-
-	$q->addTable('projects', 'pr');
-	$q->addQuery('pr.project_id, project_status, project_color_identifier,
-		project_type, project_name, project_description, project_scheduled_hours as project_duration,
-		project_parent, project_original_parent, project_percent_complete,
-		project_color_identifier, project_company,
-        company_name, project_status, project_last_task as critical_task,
-        tp.task_log_problem, user_username, project_active');
-
-	$fields = w2p_Core_Module::getSettings('projects', 'index_list');
-	unset($fields['department_list']);  // added as an alias below
-	foreach ($fields as $field => $text) {
-		$q->addQuery($field);
-	}
-	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
-	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
-	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
-	$q->addJoin('tasks_problems', 'tp', 'pr.project_id = tp.task_project');
-	if ($addProjectsWithAssignedTasks) {
-		$q->addJoin('tasks_users', 'tu', 'pr.project_id = tu.task_project');
-	}
-	if (!isset($department) && $company_id && !$addPwOiD) {
-		$q->addWhere('pr.project_company = ' . (int)$company_id);
-	}
-	if ($project_type > -1) {
-		$q->addWhere('pr.project_type = ' . (int)$project_type);
-	}
-	if (isset($department) && !$addPwOiD) {
-		$q->addWhere('project_departments.department_id in ( ' . implode(',', $dept_ids) . ' )');
-	}
-	if ($user_id && $addProjectsWithAssignedTasks) {
-		$q->addWhere('(tu.user_id = ' . (int)$user_id . ' OR pr.project_owner = ' . (int)$user_id . ' )');
-	} elseif ($user_id) {
-		$q->addWhere('pr.project_owner = ' . (int)$user_id);
-	}
-	if ($owner > 0) {
-		$q->addWhere('pr.project_owner = ' . (int)$owner);
-	}
-	if (mb_trim($search_text)) {
-		$q->addWhere('pr.project_name LIKE \'%' . $search_text . '%\' OR pr.project_description LIKE \'%' . $search_text . '%\'');
-	}
-	// Show Projects where the Project Owner is in the given department
-	if ($addPwOiD && !empty($owner_ids)) {
-		$q->addWhere('pr.project_owner IN (' . implode(',', $owner_ids) . ')');
-	}
-    $orderby = ('project_company' == $orderby) ? 'company_name' : $orderby;
-	$q->addGroup('pr.project_id');
-	$q->addOrder($orderby . ' ' .$orderdir);
-	$prj = new CProject();
-	$prj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-	$dpt = new CDepartment();
-	$projects = $q->loadList();
-
-	// get the list of permitted companies
-	$companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
-	$company_array = $companies;
-
-	//get list of all departments, filtered by the list of permitted companies.
-	$q->clear();
-	$q->addTable('companies');
-	$q->addQuery('company_id, company_name, dep.*');
-	$q->addJoin('departments', 'dep', 'companies.company_id = dep.dept_company');
-	$q->addOrder('company_name,dept_parent,dept_name');
-	$obj->setAllowedSQL($AppUI->user_id, $q);
-	$dpt->setAllowedSQL($AppUI->user_id, $q);
-	$rows = $q->loadList();
-
-	//display the select list
-	$buffer = '<select name="department" id="department" onChange="document.pickCompany.submit()" class="text" style="width: 200px;">';
-	$company = '';
-
-	foreach ($company_array as $key => $c_name) {
-		$buffer .= '<option value="' . $company_prefix . $key . '" style="font-weight:bold;"' . ($company_id == $key ? 'selected="selected"' : '') . '>' . $c_name . '</option>' . "\n";
-		foreach ($rows as $row) {
-			if ($row['dept_parent'] == 0) {
-				if ($key == $row['company_id']) {
-					if ($row['dept_parent'] != null) {
-						showchilddept($row);
-						findchilddept($rows, $row['dept_id']);
-					}
-				}
-			}
-		}
-	}
-	$buffer .= '</select>';
-
-    return $projects;
-}
-
-function getProjects() {
-	global $AppUI;
-	$st_projects = array(0 => '');
-	$q = new w2p_Database_Query();
-	$q->addTable('projects');
-	$q->addQuery('project_id, project_name, project_parent');
-	$q->addOrder('project_name');
-	$st_projects = $q->loadHashList('project_id');
-	reset_project_parents($st_projects);
-	return $st_projects;
-}
-
-function reset_project_parents(&$projects) {
-	foreach ($projects as $key => $project) {
-		if ($project['project_id'] == $project['project_parent'])
-			$projects[$key][2] = '';
-	}
-}
-
-//This kludgy function echos children projects as threads
-function show_st_project(&$a, $level = 0) {
-	global $st_projects_arr;
-	$st_projects_arr[] = array($a, $level);
-}
-
-function find_proj_child(&$tarr, $parent, $level = 0) {
-	$level = $level + 1;
-	$n = count($tarr);
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['project_parent'] == $parent && $tarr[$x]['project_parent'] != $tarr[$x]['project_id']) {
-			show_st_project($tarr[$x], $level);
-			find_proj_child($tarr, $tarr[$x]['project_id'], $level);
-		}
-	}
-}
-
-function getStructuredProjects($original_project_id = 0, $project_status = -1, $active_only = false) {
-	global $AppUI, $st_projects_arr;
-	$st_projects = array(0 => '');
-	$q = new w2p_Database_Query();
-	$q->addTable('projects');
-	$q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-	$q->addQuery('DISTINCT(projects.project_id), project_name, project_parent');
-	if ($original_project_id) {
-		$q->addWhere('project_original_parent = ' . (int)$original_project_id);
-	}
-	if ($project_status >= 0) {
-		$q->addWhere('project_status = ' . (int)$project_status);
-	}
-	if ($active_only) {
-		$q->addWhere('project_active = 1');
-	}
-	$q->addOrder('project_start_date, project_end_date');
-
-	$obj = new CCompany();
-	$obj->setAllowedSQL($AppUI->user_id, $q);
-	$dpt = new CDepartment();
-	$dpt->setAllowedSQL($AppUI->user_id, $q);
-    $q->leftJoin('project_departments', 'pd', 'pd.project_id = projects.project_id' );
-    $q->leftJoin('departments', 'd', 'd.dept_id = pd.department_id' );
-
-	$st_projects = $q->loadList();
-	$tnums = count($st_projects);
-	for ($i = 0; $i < $tnums; $i++) {
-		$st_project = $st_projects[$i];
-		if (($st_project['project_parent'] == $st_project['project_id'])) {
-			show_st_project($st_project);
-			find_proj_child($st_projects, $st_project['project_id']);
-		}
-	}
-}
-
-/**
- * getProjectIndex() gets the key nr of a project record within an array of projects finding its primary key within the records so that you can call that array record to get the projects data
- *
- * @param mixed $arraylist array list of project elements to search
- * @param mixed $project_id project id to search for
- * @return int returns the array key of the project record in the array list or false if not found
- */
-function getProjectIndex($arraylist, $project_id) {
-	$result = false;
-	foreach ($arraylist as $key => $data) {
-		if ($data['project_id'] == $project_id) {
-			return $key;
-		}
-	}
-	return $result;
-}
-
-/**
- * getDepartmentSelectionList() returns a tree of departments in <option> tags (originally used on the addedit interface to display the departments of a project)
- *
- * @param mixed $company_id the id of the company we are searching departments
- * @param mixed $checked_array an array with the ids of the departments that should be selected on the list
- * @param integer $dept_parent used when to determine the starting level on the tree, or by recursion
- * @param integer $spaces used by recursion to add spaces to form the visual tree on the <select> element
- * @return string returns the html <option> elements
- */
-function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent = 0, $spaces = 0) {
-	global $departments_count, $AppUI;
-	$parsed = '';
-
-	if ($departments_count < 6) {
-		$departments_count++;
-	}
-
-	$depts_list = CDepartment::getDepartmentList($AppUI, $company_id, $dept_parent);
-
-	foreach ($depts_list as $dept_id => $dept_info) {
-		$selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
-
-		$parsed .= '<option value="' . $dept_id . '"' . $selected . '>' . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>';
-		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces + 5);
-	}
-
-	return $parsed;
 }

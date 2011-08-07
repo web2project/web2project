@@ -148,6 +148,15 @@ class CTaskLog extends w2p_Core_BaseObject
     public $task_log_record_creator;
 
     /**
+     * Percent complete of a given task at the time of the specific tasklog
+     *
+     * @var int
+     * @access public
+     */
+    public $task_log_percent_complete;
+    public $task_log_task_end_date;
+
+    /**
      * Constructor for class
      *
      * @return void
@@ -201,7 +210,7 @@ class CTaskLog extends w2p_Core_BaseObject
 				return $msg;
 			}
 			$stored = true;
-			$this->updateHoursWorked($this->task_log_task);
+			$this->updateTaskSummary($AppUI, $this->task_log_task);
 		}
 		if (0 == $this->task_log_id && $perms->checkModuleItem('task_log', 'add')) {
 			$this->task_log_created = $q->dbfnNowWithTZ();
@@ -209,7 +218,7 @@ class CTaskLog extends w2p_Core_BaseObject
 				return $msg;
 			}
 			$stored = true;
-			$this->updateHoursWorked($this->task_log_task);
+			$this->updateTaskSummary($AppUI, $this->task_log_task);
 		}
 
 		return $stored;
@@ -230,36 +239,76 @@ class CTaskLog extends w2p_Core_BaseObject
         $this->_error = array();
 
 		$this->load($this->task_log_id);
-		//$task_log_task = $this->task_log_task;
+		$task_id = $this->task_log_task;
 
 		if ($perms->checkModuleItem('task_log', 'delete', $this->task_log_id)) {
 			if ($msg = parent::delete()) {
 				return $msg;
 			}
-			$this->updateHoursWorked($this->task_log_task);
+			$this->updateTaskSummary($AppUI, $task_id);
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Updates the total hours worked cache on task.
+	 * Updates the variable information on the task.
 	 *
 	 * @param int $task_log_task that task id of task this task log is for
 	 *
 	 * @return void
 	 *
-	 * @access public
+	 * @access private
 	 */
-	private function updateHoursWorked($task_log_task)
+	private function updateTaskSummary(CAppUI $AppUI, $task_id)
 	{
-		$q = new w2p_Database_Query();
+        $perms = $AppUI->acl();
+        $q = $this->_query;
+
+        if($perms->checkModuleItem('tasks', 'edit', $task_id)) {
+            
+            if ($this->task_log_percent_complete < 100) {
+                $q->addQuery('task_log_percent_complete, task_log_date, task_log_task_end_date');
+                $q->addTable('task_log');
+                $q->addWhere('task_log_task = ' . (int)$task_id);
+                $q->addOrder('task_log_date DESC, task_log_id DESC');
+                $q->setLimit(1);
+                $results = $q->loadHash();
+                $q->clear();
+
+                $percentComplete = $results['task_log_percent_complete'];
+                /*
+                 * TODO: In theory, we shouldn't just use the task_log_task_end_date, 
+                 *   because if we're after that date and someone is still adding 
+                 *   logs to a task, obviously the task isn't complete. We may want 
+                 *   to check to see if task_log_date > task_log_task_end_date and 
+                 *   use the later one as the end date.. not sure yet.
+                 */
+                $taskEndDate = $results['task_log_task_end_date'];
+            } else {
+                $percentComplete = 100;
+                $taskEndDate = $this->task_log_date;
+            }
+
+            $task = new CTask();
+            $task->load($task_id);
+            $task->task_percent_complete = $percentComplete;
+            $task->task_end_date = $taskEndDate;
+            $msg = $task->store($AppUI);
+
+            if (is_array($msg)) {
+                $AppUI->setMsg($msg, UI_MSG_ERROR, true);
+            }
+
+            $task->pushDependencies($task_id, $task->task_end_date);
+        }
+
 		$q->addQuery('SUM(task_log_hours)');
 		$q->addTable('task_log');
 		$q->addWhere('task_log_task = ' . (int)$task_log_task);
 		$totalHours = $q->loadResult();
 
-		CTask::updateHoursWorked($task_log_task, $totalHours);
+		CTask::updateHoursWorked($task_id, $totalHours);
 	}
 
 	/**

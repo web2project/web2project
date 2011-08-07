@@ -97,7 +97,7 @@ class CForumMessage extends w2p_Core_BaseObject {
         $this->_error = array();
 
         if ($perms->checkModuleItem('forums', 'delete', $this->project_id)) {
-            $q = new w2p_Database_Query;
+            $q = $this->_query;
             $q->setDelete('forum_visits');
             $q->addWhere('visit_message = ' . (int)$this->message_id);
             $q->exec(); // No error if this fails, it is not important.
@@ -134,7 +134,8 @@ class CForumMessage extends w2p_Core_BaseObject {
 	}
 
     public function loadByParent($parent_id = 0) {
-        $q = new w2p_Database_Query();
+
+        $q = $this->_query;
         $q->addTable('forum_messages');
         $q->addWhere('message_parent = ' . $parent_id);
         $q->addOrder('message_id DESC'); // fetch last message first
@@ -148,7 +149,7 @@ class CForumMessage extends w2p_Core_BaseObject {
 		$body_msg = $AppUI->_('forumEmailBody', UI_OUTPUT_RAW);
 
 		// Get the message from details.
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('users', 'u');
 		$q->addQuery('contact_first_name, contact_last_name, contact_email');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
