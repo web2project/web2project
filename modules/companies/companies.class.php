@@ -61,7 +61,7 @@ class CCompany extends w2p_Core_BaseObject {
       if ('' != $this->company_primary_url && !w2p_check_url($this->company_primary_url)) {
         $errorArray['company_primary_url'] = $baseErrorMsg . 'company primary url is not formatted properly';
       }
-      if ('' != $this->company_email && !w2p_check_email($this->company_email)) {
+      if (!w2p_check_email($this->company_email)) {
         $errorArray['company_email'] = $baseErrorMsg . 'company email is not formatted properly';
       }
 
