@@ -221,7 +221,7 @@ class CEvent extends w2p_Core_BaseObject {
 		$queries = array('q' => 'q', 'r' => 'r');
 
 		foreach ($queries as $query_set) {
-			$$query_set = $this->_query;
+			$$query_set = new w2p_Database_Query();
 			$$query_set->addTable('events', 'e');
 			$$query_set->addQuery('e.*');
 			$$query_set->addOrder('e.event_start_date, e.event_end_date ASC');

@@ -1257,7 +1257,7 @@ class CTask extends w2p_Core_BaseObject {
 	public function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null) {
 		global $AppUI;
 
-		$q = $this->_query;
+		$q = new w2p_Database_Query();
 		// convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
