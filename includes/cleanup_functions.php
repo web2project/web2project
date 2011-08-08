@@ -1941,7 +1941,6 @@ function findchilddept(&$tarr, $parent, $level = 1) {
 	$n = count($tarr);
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
-			echo showchilddept($tarr[$x], $level);
 			findchilddept($tarr, $tarr[$x]['dept_id'], $level);
 		}
 	}
@@ -2899,7 +2898,6 @@ function projects_list_data($user_id = false) {
 			if ($row['dept_parent'] == 0) {
 				if ($key == $row['company_id']) {
 					if ($row['dept_parent'] != null) {
-						echo showchilddept($row);
 						findchilddept($rows, $row['dept_id']);
 					}
 				}
