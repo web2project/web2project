@@ -5,6 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 // Add / Edit Company
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
+$dept_parent = (int) w2PgetParam($_GET, 'dept_parent', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
 // check permissions for this record
@@ -171,7 +172,8 @@ function submitIt() {
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department Parent'); ?>:</td>
 					<td>
 						<?php
-							echo arraySelect($depts, 'dept_parent', 'class=text size=1', $department->dept_parent);
+                            $dept_parent = ($department->dept_parent) ? $department->dept_parent : $dept_parent;
+							echo arraySelect($depts, 'dept_parent', 'class=text size=1', $dept_parent);
 						?>
 					</td>
 				</tr>
