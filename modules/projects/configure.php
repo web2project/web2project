@@ -6,13 +6,14 @@ if (!defined('W2P_BASE_DIR')) {
 $filter = array('project_id', 'project_status', 'project_active',
 	'project_parent', 'project_color_identifier',
 	'project_original_parent', 'project_departments', 'project_contacts',
-	'project_private', 'project_type', 'project_last_task');
+	'project_private', 'project_type', 'project_last_task', 'project_scheduled_hours');
 
 $project = new CProject();
 $properties = get_class_vars(get_class($project));
 foreach ($filter as $field => $value) {
 	unset($properties[$value]);
 }
+$properties['department_list'] = '';
 
 // setup the title block
 $titleBlock = new CTitleBlock('Configure Projects Module', 'modules/system/control-center.png', $m, $m . '.' . $a);

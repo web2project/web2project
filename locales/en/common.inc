@@ -254,3 +254,4 @@
 'Working time',
 'Reports',
 'Global Search',
+'ProjectDesigner',

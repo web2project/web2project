@@ -139,7 +139,6 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $contact = new CContact();
 
-        $this->assertInstanceOf('CContact', $contact);
         $this->assertObjectHasAttribute('contact_display_name',     $contact);
     }
 
@@ -305,7 +304,7 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * expectedException PHPUnit_Framework_Error
      */
     public function testIs_Alpha()
     {
@@ -316,19 +315,6 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertFalse($contact->is_alpha('monkey'));
         $this->assertFalse($contact->is_alpha('3.14159'));
         $this->assertFalse($contact->is_alpha(3.14159));
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetCompanyName()
-    {
-        $contact = new CContact();
-        $contact->contact_company = 1;
-        $this->assertEquals('UnitTestCompany',  $contact->getCompanyName());
-
-        $contact->contact_company = 2;
-        $this->assertEquals('CreatedCompany',  $contact->getCompanyName());
     }
 
     public function testGetCompanyDetails()

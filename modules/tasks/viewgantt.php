@@ -95,23 +95,7 @@ foreach ($proTasks as $row) {
 }
 unset($proTasks);
 $parents = array();
-function showfiltertask(&$a, $level=0) {
-     /* Add tasks to the filter task aray */
-     global $filter_task_list, $parents;
-     $filter_task_list[] = array($a, $level);
-     $parents[$a['task_parent']] = true;
-}
-function findfiltertaskchild(&$tarr, $parent, $level=0) {
-     GLOBAL $projects, $filter_task_list;
-     $level = $level + 1;
-     $n = count($tarr);
-     for ($x=0; $x < $n; $x++) {
-          if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']){
-               showfiltertask($tarr[$x], $level);
-               findfiltertaskchild($tarr, $tarr[$x]['task_id'], $level);
-          }
-     }
-}
+
 foreach ($projects as $p) {
      global $parents, $task_id;
      $parents = array();

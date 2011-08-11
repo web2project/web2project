@@ -22,15 +22,6 @@ class CHistory extends w2p_Core_BaseObject {
         parent::__construct('history', 'history_id');
     }
 
-    public function check() {
-        // ensure the integrity of some variables
-        $errorArray = array();
-        $baseErrorMsg = get_class($this) . '::store-check failed - ';
-        //there aren't any checks yet
-
-        return $errorArray;
-    }
-
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 

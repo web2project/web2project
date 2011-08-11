@@ -265,6 +265,17 @@ if ($is_tabbed) {
                                 $s .= $row[$field] ? '</a>' : '';
                                 $s .= '</td>';
                                 break;
+                            case 'department_list':
+                                $dept_array = CProject::getDepartments($AppUI, $row['project_id']);
+                                $s .= '<td>';
+                                foreach ($dept_array as $dept) {
+                                    $s .= '<a href="?m=departments&a=view&dept_id='.$dept['dept_id'].'">';
+                                    $s .= $dept['dept_name'];
+                                    $s .= '</a>';
+                                    $s .= '<br />';
+                                }
+                                $s .= '</td>';
+                                break;
                             default:
                                 $s .= w2p_Output_HTMLHelper::renderColumn($AppUI, $field, $row);
                         }

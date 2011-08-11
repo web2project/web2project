@@ -12,7 +12,9 @@ if (!canEdit('system')) {
 $del = (int) w2PgetParam($_POST, 'del', 0);
 
 $obj = new CSysVal();
-$post = array('sysval_title' => w2PgetParam($_POST, 'sysval_title'), 'sysval_key_id' => w2PgetParam($_POST, 'sysval_key_id'), 'sysval_value' => w2PgetParam($_POST, 'sysval_value'), );
+$post = array('sysval_title' => w2PgetParam($_POST, 'sysval_title'),
+                'sysval_key_id' => w2PgetParam($_POST, 'sysval_key_id'),
+                'sysval_value' => w2PgetParam($_POST, 'sysval_value'), );
 $svid = array('sysval_title' => w2PgetParam($_POST, 'sysval_id'));
 
 if ($del) {

@@ -31,7 +31,6 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-// TODO: To be completed later as needed.
 class CSetupLinks {
 
 	public function configure() {
@@ -78,7 +77,7 @@ class CSetupLinks {
 
         $i = 0;
         $linkTypes = array('Unknown', 'Document', 'Application');
-        foreach ($linkType as $linkTypes) {
+        foreach ($linkTypes as $linkType) {
             $q->clear();
             $q->addTable('sysvals');
             $q->addInsert('sysval_key_id', 1);

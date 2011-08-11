@@ -97,13 +97,13 @@ function updateTask() {
     // else users would be able to arbitrarily run 'bad' functions
     if ($canEdit) {
     ?>
-    if (isNaN( parseInt( f.task_percent_complete.value+0 ) )) {
+    if (isNaN( parseInt( f.task_log_percent_complete.value+0 ) )) {
         alert( '<?php echo $AppUI->_('tasksPercent', UI_OUTPUT_JS); ?>' );
-        f.task_percent_complete.focus();
+        f.task_log_percent_complete.focus();
         return;
-	} else if(f.task_percent_complete.value  < 0 || f.task_percent_complete.value > 100) {
+	} else if(f.task_log_percent_complete.value  < 0 || f.task_log_percent_complete.value > 100) {
         alert( '<?php echo $AppUI->_('tasksPercentValue', UI_OUTPUT_JS); ?>' );
-        f.task_percent_complete.focus();
+        f.task_log_percent_complete.focus();
         return;
 	}
     <?php } ?>

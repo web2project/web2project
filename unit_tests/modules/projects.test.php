@@ -142,7 +142,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewProjectAttributes()
     {
-    	$this->assertInstanceOf('CProject', $this->obj);
     	$this->assertObjectHasAttribute('project_id',                  $this->obj);
     	$this->assertObjectHasAttribute('project_company',             $this->obj);
     	$this->assertObjectHasAttribute('project_name',                $this->obj);
@@ -179,7 +178,6 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewProjectAttributeValues()
     {
-        $this->assertInstanceOf('CProject', $this->obj);
         $this->assertNull($this->obj->project_id);
         $this->assertNull($this->obj->project_company);
         $this->assertNull($this->obj->project_department);
@@ -195,8 +193,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->project_percent_complete);
         $this->assertNull($this->obj->project_color_identifier);
         $this->assertNull($this->obj->project_description);
-        $this->assertNull($this->obj->project_target_budget);
-        $this->assertNull($this->obj->project_actual_buget);
+        $this->assertEquals(0, $this->obj->project_target_budget);
+        $this->assertEquals(0, $this->obj->project_actual_buget);
         $this->assertNull($this->obj->project_scheduled_hours);
         $this->assertNull($this->obj->project_worked_hours);
         $this->assertNull($this->obj->project_task_count);
@@ -462,7 +460,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(0,                          $this->obj->project_active);
         $this->assertEquals(0,                          $this->obj->project_private);
         $this->assertEquals('',                         $this->obj->project_departments);
-        $this->assertEquals('',							$this->obj->project_contacts);
+        $this->assertEquals(1,							count($this->obj->project_contacts));
         $this->assertEquals(-1,                         $this->obj->project_priority);
         $this->assertEquals(0,                          $this->obj->project_type);
         $this->assertEquals(5,                          $this->obj->project_parent);
@@ -670,7 +668,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                                  $this->obj->project_active);
         $this->assertEquals(0,                                  $this->obj->project_private);
         $this->assertEquals('',                                 $this->obj->project_departments);
-        $this->assertEquals('',									$this->obj->project_contacts);
+        $this->assertEquals(1,                          		count($this->obj->project_contacts));
         $this->assertEquals(1,                                  $this->obj->project_priority);
         $this->assertEquals(1,                                  $this->obj->project_type);
         $this->assertEquals(1,                                  $this->obj->project_parent);
@@ -1310,7 +1308,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests updating a projects status
      *
-     * @expectedException PHPUnit_Framework_Error
+     * expectedException PHPUnit_Framework_Error
      */
     public function testUpdateStatus()
     {

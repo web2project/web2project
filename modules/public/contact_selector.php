@@ -43,16 +43,6 @@ function setContactIDs(method, querystring) {
 </script>
 <?php
 
-function remove_invalid($arr) {
-	$result = array();
-	foreach ($arr as $val) {
-		if (!empty($val) && mb_trim($val) !== '') {
-			$result[] = $val;
-		}
-	}
-	return $result;
-}
-
 if ($contacts_submited == 1) {
 	$call_back_string = !is_null($call_back) ? "window.opener.$call_back('$selected_contacts_id');" : '';
 ?>

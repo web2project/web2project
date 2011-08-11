@@ -279,6 +279,8 @@
 'ldap_allow_login_tooltip'=>'كاربران پايگاه داده نرم‌افزار هم اجازه ورود خواهند داشت',
 'ldap_base_dn_title'=>'LDAP Base DN',
 'ldap_base_dn_tooltip'=>'The Base Distinguished Name (DN) to use for LDAP queries.',
+'ldap_complete_string_title'=>'Full LDAP Connect String',
+'ldap_complete_string_tooltip'=>'If used, this setting overrides most other LDAP settings above.',
 'ldap_group_title'=>'تنظيمات ال‌دي‌اي‌پي',
 'ldap_host_title'=>'هاست ال‌دي‌اي‌پي',
 'ldap_host_tooltip'=>'The Name or IP address of the LDAP host to authenticate against, when using LDAP Authentication.',

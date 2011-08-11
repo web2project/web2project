@@ -3,17 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-function selPermWhere($obj, $idfld, $namefield, $prefix = '') {
-	global $AppUI;
-
-	$allowed = $obj->getAllowedRecords($AppUI->user_id, $idfld . ', ' . $namefield, '', '', '', $prefix);
-	if (count($allowed)) {
-		return ' ' . $idfld . ' IN (' . implode(',', array_keys($allowed)) . ') ';
-	} else {
-		return null;
-	}
-}
-
 $debug = false;
 $callback = w2PgetParam($_GET, 'callback', 0);
 $table = w2PgetParam($_GET, 'table', 0);

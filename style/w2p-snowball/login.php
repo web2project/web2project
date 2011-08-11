@@ -47,7 +47,9 @@ if (!defined('W2P_BASE_DIR')) {
                 <tr>
                     <td colspan="2">
                         <?php
+                        if (function_exists('styleRenderBoxTop')) {
                             echo styleRenderBoxTop();
+                        }
                         ?>
                     </td>
                 </tr>
@@ -77,7 +79,9 @@ if (!defined('W2P_BASE_DIR')) {
                 <tr>
                     <td colspan="2">
                         <?php
-                        echo styleRenderBoxBottom();
+                        if (function_exists('styleRenderBoxBottom')) {
+                            echo styleRenderBoxBottom();
+                        }
                         ?>
                     </td>
                 </tr>

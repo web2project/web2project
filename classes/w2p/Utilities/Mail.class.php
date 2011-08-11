@@ -368,7 +368,7 @@ class w2p_Utilities_Mail extends PHPMailer {
 
 		$ec = new w2p_Core_EventQueue();
 		$vars = get_object_vars($this);
-		return $ec->add(array('Mail', 'SendQueuedMail'), $vars, 'w2p_Utilities_Mail', true);
+		return $ec->add(array('w2p_Utilities_Mail', 'SendQueuedMail'), $vars, 'w2p_Utilities_Mail', true);
 	}
 
 	/**
@@ -377,7 +377,10 @@ class w2p_Utilities_Mail extends PHPMailer {
 	 * @access private
 	 */
 	public function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
-		extract($args);
+
+        foreach($args as $key=>$value) {
+            $this->$key = $value;
+        }
 		if ($this->transport == 'smtp') {
 			$this->IsSMTP();
 			return $this->Send();

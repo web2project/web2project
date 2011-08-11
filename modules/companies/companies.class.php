@@ -61,9 +61,11 @@ class CCompany extends w2p_Core_BaseObject {
       if ('' != $this->company_primary_url && !w2p_check_url($this->company_primary_url)) {
         $errorArray['company_primary_url'] = $baseErrorMsg . 'company primary url is not formatted properly';
       }
-      if ('' != $this->company_email && !w2p_check_email($this->company_email)) {
+      if (!w2p_check_email($this->company_email)) {
         $errorArray['company_email'] = $baseErrorMsg . 'company email is not formatted properly';
       }
+
+      $this->_error = $errorArray;
 	  return $errorArray;
 	}
 
@@ -79,6 +81,7 @@ class CCompany extends w2p_Core_BaseObject {
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
+        $this->_error = array();
         /*
          * TODO: This should probably use the canDelete method from above too to
          *   not only check permissions but to check dependencies... luckily the
@@ -97,10 +100,10 @@ class CCompany extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $stored = false;
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
         $this->company_id = (int) $this->company_id;
@@ -147,7 +150,7 @@ class CCompany extends w2p_Core_BaseObject {
   public function loadFull(CAppUI $AppUI = null, $companyId) {
     global $AppUI;
 
-    $q = new w2p_Database_Query;
+    $q = $this->_query;
     $q->addTable('companies');
     $q->addQuery('companies.*');
     $q->addQuery('con.contact_first_name');
@@ -160,7 +163,8 @@ class CCompany extends w2p_Core_BaseObject {
   }
 
   public function getCompanyList($AppUI, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
-  	$q = new w2p_Database_Query;
+
+    $q = $this->_query;
   	$q->addTable('companies', 'c');
   	$q->addQuery('c.company_id, c.company_name, c.company_type, c.company_description, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
   	$q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
@@ -187,7 +191,8 @@ class CCompany extends w2p_Core_BaseObject {
   }
 
   public function getCompanies(CAppUI $AppUI) {
-  	$q = new w2p_Database_Query;
+
+    $q = $this->_query;
   	$q->addTable('companies');
   	$q->addQuery('company_id, company_name');
   
@@ -202,7 +207,7 @@ class CCompany extends w2p_Core_BaseObject {
 				'project_status, project_target_budget, project_start_date, ' .
 				'project_priority, contact_first_name, contact_last_name';
 
-		$q = new w2p_Database_Query;
+		$q = new w2p_Database_Query();
 		$q->addTable('projects', 'pr');
 		$q->addQuery($fields);
 		$q->leftJoin('users', 'u', 'u.user_id = pr.project_owner');
@@ -228,7 +233,7 @@ class CCompany extends w2p_Core_BaseObject {
 		$perms = $AppUI->acl();
 
 		if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $companyId > 0) {
-			$q = new w2p_Database_Query;
+			$q = new w2p_Database_Query();
 			$q->addQuery('a.*');
 			$q->addQuery('dept_name');
 			$q->addTable('contacts', 'a');
@@ -253,7 +258,8 @@ class CCompany extends w2p_Core_BaseObject {
 	}
 
 	public static function getUsers(CAppUI $AppUI, $companyId) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('users');
 		$q->addQuery('user_id, user_username, contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'c', 'users.user_contact = contact_id', 'inner');
@@ -271,7 +277,7 @@ class CCompany extends w2p_Core_BaseObject {
 		$perms = $AppUI->acl();
 
 		if ($AppUI->isActiveModule('departments') && canView('departments')) {
-			$q = new w2p_Database_Query;
+			$q = new w2p_Database_Query();
 			$q->addTable('departments');
 			$q->addQuery('departments.*, COUNT(contact_department) dept_users');
 			$q->addJoin('contacts', 'c', 'c.contact_department = dept_id');

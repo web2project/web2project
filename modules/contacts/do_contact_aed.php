@@ -31,6 +31,7 @@ if ($result) {
 			$obj->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
 			$obj->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
 			$obj->contact_lastupdate = '';
+            $obj->store($AppUI);
 			$obj->notify();
 		}
     }

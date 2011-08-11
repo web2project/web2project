@@ -184,6 +184,8 @@
 'ldap_allow_login_tooltip'=>'Usuários baseados na DB serão admitidos',
 'ldap_base_dn_title'=>'LDAP Base DN',
 'ldap_base_dn_tooltip'=>'The Base Distinguished Name (DN) to use for LDAP queries.',
+'ldap_complete_string_title'=>'Full LDAP Connect String',
+'ldap_complete_string_tooltip'=>'If used, this setting overrides most other LDAP settings above.',
 'ldap_group_title'=>'Configuração LDAP',
 'ldap_host_title'=>'Host LDAP',
 'ldap_host_tooltip'=>'Nome ou IP do Host LDAP',

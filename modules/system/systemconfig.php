@@ -106,6 +106,8 @@ foreach ($rs as $c) {
 	</table>
 </form>
 <script language="javascript" type="text/javascript">
-	document.getElementById('w2Pcfg[system_timezone]').style.border = 'solid 3px #ff0000';
-	document.getElementById('w2Pcfg[admin_email]').style.border = 'solid 3px #ff0000';
+        $(document).ready(function(){
+            $("#w2Pcfg\\[system_timezone\\]").wrap("<div class='selectborder' />")
+            $("#w2Pcfg\\[admin_email\\]").wrap("<div class='selectborder' />")
+        });
 </script>

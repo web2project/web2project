@@ -107,7 +107,7 @@ function delIt() {
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder Name'); ?>:</td>
                         <td align="left">
-                            <input type="text" class="text" id="ffn" name="file_folder_name" value="<?php echo $obj->file_folder_name; ?>" maxlength="64" />
+                            <input type="text" class="text" id="ffn" name="file_folder_name" value="<?php echo $obj->file_folder_name; ?>" maxlength="255" />
                         </td>
                     </tr>
                     <tr>

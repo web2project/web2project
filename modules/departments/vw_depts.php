@@ -13,7 +13,6 @@ $dept_type_filter = $currentTabId-1;
 $dept = new CDepartment();
 $deptList = $dept->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
-
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 	<tr>
         <?php
@@ -29,11 +28,10 @@ $deptList = $dept->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_
         ?>
 	</tr>
 <?php
-
 if (count($deptList) > 0) {
-	foreach ($deptList as $dept) {
+	$displayList = array();
+    foreach ($deptList as $dept) {
 		if ($dept['dept_parent'] == 0) {
-			showchilddept($dept);
 			findchilddept($deptList, $dept['dept_id']);
 		}
 		echo '<tr><td>' . (mb_trim($dept['dept_desc']) ? w2PtoolTip($dept['dept_name'], $dept['dept_desc']) : '') . '<a href="./index.php?m=departments&a=view&dept_id=' . $dept['dept_id'] . '" >' . $dept['dept_name'] . '</a>' . (mb_trim($dept['dept_desc']) ? w2PendTip() : '') . '</td>';

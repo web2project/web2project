@@ -48,17 +48,6 @@ $cwd = explode(',', $w2Pconfig['cal_working_days']);
 $cwd_conv = array_map('cal_work_day_conv', $cwd);
 $cwd_hr = implode(', ', $cwd_conv);
 
-function cal_work_day_conv($val) {
-	global $locale_char_set, $AppUI;
-	setlocale(LC_TIME, 'en');
-	$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
-	setlocale(LC_ALL, $AppUI->user_lang);
-
-	$day_name = $AppUI->_($wk[($val - LOCALE_FIRST_DAY) % 7]);
-	$day_name = utf8_encode($day_name);
-
-	return htmlspecialchars($day_name, ENT_COMPAT, $locale_char_set);
-}
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -131,7 +120,7 @@ function setDate( frm_name, f_date ) {
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Expected Duration'); ?>:</td>
                 <td nowrap="nowrap">
-                    <input type="text" class="text" name="task_duration" maxlength="8" size="6" value="<?php echo isset($task->task_duration) ? $task->task_duration : 1; ?>" />
+					<input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo isset($task->task_duration) ? $task->task_duration : 1; ?>" />
                     <?php
                         echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $task->task_duration_type, true);
                     ?>
@@ -141,8 +130,8 @@ function setDate( frm_name, f_date ) {
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calculate'); ?>:</td>
                 <td nowrap="nowrap">
-                    <input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="calcDuration(document.datesFrm)" class="button" />
-                    <input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="calcFinish(document.datesFrm)" class="button" />
+                    <input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="xajax_calcDuration(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_end_date.value,document.datesFrm.end_hour.value,document.datesFrm.end_minute.value,document.datesFrm.task_duration_type.value);" class="button" />
+                    <input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="xajax_calcFinish(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_duration_type.value,document.datesFrm.task_duration.value)" class="button" />
                 </td>
                 <td><?php echo $AppUI->_('Working Days') . ': ' . $cwd_hr; ?></td>
             </tr>

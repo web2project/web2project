@@ -196,6 +196,8 @@
 'ldap_allow_login_tooltip'=>'SQLbasierte Anmeldung erlauben',
 'ldap_base_dn_title'=>'LDAP Basis DN',
 'ldap_base_dn_tooltip'=>'Der Basis Distinguished Name für LDAP-Anfragen.',
+'ldap_complete_string_title'=>'Full LDAP Connect String',
+'ldap_complete_string_tooltip'=>'If used, this setting overrides most other LDAP settings above.',
 'ldap_group_title'=>'LDAP-Einstellungen',
 'ldap_host_title'=>'LDAP Host',
 'ldap_host_tooltip'=>'Name oder IP des LDAP Hosts',

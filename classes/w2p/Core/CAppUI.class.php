@@ -977,15 +977,15 @@ class w2p_Core_CAppUI {
 
         $df = $this->getPref('SHDATEFORMAT');
         $df .= ' ' . $this->getPref('TIMEFORMAT');
-        $cf = $df;
-        $cal_df = $cf;
+        $this->user_prefs['DISPLAYFORMAT'] = $df;
+
+        $cal_df = $df;
         $cal_df = str_replace('%S', '%s', $cal_df);
         $cal_df = str_replace('%M', '%i', $cal_df);
         $cal_df = str_replace('%p', '%a', $cal_df);
         $cal_df = str_replace('%I', '%h', $cal_df);
         $cal_df = str_replace('%b', '%M', $cal_df);
         $cal_df = str_replace('%', '', $cal_df);
-        $df = $cal_df;
         $this->user_prefs['FULLDATEFORMAT'] = $cal_df;
 	}
 

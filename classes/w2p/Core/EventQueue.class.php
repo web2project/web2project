@@ -119,10 +119,6 @@ class w2p_Core_EventQueue {
 	public function execute(&$fields) {
 		global $AppUI;
 
-        if ($fields['queue_module'] == 'libmail') {
-            include_once W2P_BASE_DIR . '/classes/mail.class.php';
-        }
-
 		$args = unserialize($fields['queue_data']);
 		if (strpos($fields['queue_callback'], '::') !== false) {
 			list($class, $method) = explode('::', $fields['queue_callback']);

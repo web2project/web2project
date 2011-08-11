@@ -39,7 +39,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 			}
 	
 			$link['text'] = '<span style="color:' . bestColor($row['color']) . ';background-color:#' . $row['color'] . '">' . $row['short_name'] . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
-		}
+        }
 
 		// determine which day(s) to display the task
 		$start = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['task_start_date'], '%Y-%m-%d %T'));
@@ -53,6 +53,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 				$temp = $link;
 				if ($a != 'day_view') {
 					$temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], true, true, $tasks), true) . w2PshowImage('block-start-16.png') . $start->format($tf) . ' ' . $temp['text'] . ' ' . $end->format($tf) . w2PshowImage('block-end-16.png') . w2PendTip();
+                    $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
 				}
 			}
 			$links[$end->format(FMT_TIMESTAMP_DATE)][] = $temp;
@@ -65,6 +66,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 					$temp = $link;
 					if ($a != 'day_view') {
 						$temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], true, false, $tasks), true) . w2PshowImage('block-start-16.png') . $start->format($tf) . ' ' . $temp['text'] . w2PendTip();
+                        $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_start_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
 					}
 				}
 				$links[$start->format(FMT_TIMESTAMP_DATE)][] = $temp;
@@ -77,6 +79,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 					$temp = $link;
 					if ($a != 'day_view') {
 						$temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], false, true, $tasks), true) . ' ' . $temp['text'] . ' ' . $end->format($tf) . w2PshowImage('block-end-16.png') . w2PendTip();
+                        $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
 					}
 				}
 				$links[$end->format(FMT_TIMESTAMP_DATE)][] = $temp;	

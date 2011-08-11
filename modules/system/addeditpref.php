@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 ## add or edit a user preferences
 ##
 
-$user_id = w2PgetParam($_GET, 'user_id', '0');
+$user_id = (int) w2PgetParam($_GET, 'user_id', '0');
 $perms = &$AppUI->acl();
 // check permissions for this record
 $canEdit = canEdit('system');

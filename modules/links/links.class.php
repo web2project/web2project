@@ -25,7 +25,8 @@ class CLink extends w2p_Core_BaseObject {
     }
 
     public function loadFull(CAppUI $AppUI, $link_id) {
-        $q = new w2p_Database_Query();
+
+        $q = $this->_query;
         $q->addQuery('links.*');
         $q->addQuery('user_username');
         $q->addQuery('contact_first_name,  contact_last_name');
@@ -47,7 +48,7 @@ class CLink extends w2p_Core_BaseObject {
         $task = new CTask();
 
         // SETUP FOR LINK LIST
-        $q = new w2p_Database_Query();
+        $q = $this->_query;
         $q->addQuery('DISTINCT links.*');
         $q->addQuery('contact_first_name, contact_last_name');
         $q->addQuery('project_name, project_color_identifier, project_status');
@@ -96,11 +97,13 @@ class CLink extends w2p_Core_BaseObject {
             $errorArray['link_owner'] = $baseErrorMsg . 'link owner is not set';
         }
 
+        $this->_error = $errorArray;
         return $errorArray;
     }
 
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
+        $this->_error = array();
 
         if ($perms->checkModuleItem('links', 'delete', $this->link_id)) {
             if ($msg = parent::delete()) {
@@ -118,16 +121,16 @@ class CLink extends w2p_Core_BaseObject {
             $this->link_url = 'http://'.$this->link_url;
         }
 
-        $errorMsgArray = $this->check();
+        $this->_error = $this->check();
 
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        if (count($this->_error)) {
+            return $this->_error;
         }
         /*
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $this->link_date = $q->dbfnNowWithTZ();
         if ($this->link_id && $perms->checkModuleItem('links', 'edit', $this->link_id)) {
 

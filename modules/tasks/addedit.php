@@ -86,48 +86,6 @@ $project->load($task_project);
 //   populated by the "getPermittedUsers" function.
 $users = $perms->getPermittedUsers('tasks');
 
-function getSpaces($amount) {
-	if ($amount == 0) {
-		return '';
-	}
-	return str_repeat('&nbsp;', $amount);
-}
-
-function constructTaskTree($task_data, $depth = 0) {
-	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
-
-	$projTasks[$task_data['task_id']] = $task_data['task_name'];
-
-	$selected = $task_data['task_id'] == $task_parent ? 'selected="selected"' : '';
-	$task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . '...' : $task_data['task_name'];
-
-	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
-
-	if (isset($parents[$task_data['task_id']])) {
-		foreach ($parents[$task_data['task_id']] as $child_task) {
-			if ($child_task != $task_id) {
-				constructTaskTree($all_tasks[$child_task], ($depth + 1));
-			}
-		}
-	}
-}
-
-function build_date_list(&$date_array, $row) {
-	global $project;
-	// if this task_dynamic is not tracked, set end date to proj start date
-	if (!in_array($row['task_dynamic'], CTask::$tracked_dynamics)) {
-		$date = new w2p_Utilities_Date($project->project_start_date);
-	} elseif ($row['task_milestone'] == 0) {
-		$date = new w2p_Utilities_Date($row['task_end_date']);
-	} else {
-		$date = new w2p_Utilities_Date($row['task_start_date']);
-	}
-	$sdate = $date->format('%d/%m/%Y');
-	$shour = $date->format('%H');
-	$smin = $date->format('%M');
-
-	$date_array[$row['task_id']] = array($row['task_name'], $sdate, $shour, $smin);
-}
 
 // let's get root tasks
 $q = new w2p_Database_Query;
@@ -208,7 +166,11 @@ if (is_null($task->task_dynamic)) {
 
 $can_edit_time_information = $task->canUserEditTimeInformation();
 //get list of projects, for task move drop down list.
-$projects = $project->getAllowedProjects($AppUI->user_id);
+$tmpprojects = $project->getAllowedProjects($AppUI->user_id);
+$projects = array();
+foreach($tmpprojects as $proj) {
+    $projects[$proj['project_id']] = $proj['project_name'];
+}
 ?>
 <script language="javascript" type="text/javascript">
 var task_id = '<?php echo $task->task_id; ?>';

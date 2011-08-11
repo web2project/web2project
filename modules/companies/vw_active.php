@@ -21,8 +21,8 @@ $projects = CCompany::getProjects($AppUI, $company_id, 1, $sort);
 if (count($projects) > 0) {
 	?>
 	<tr>
-		<th><a style="color:white" href="index.php?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=project_priority"><?php echo $AppUI->_('P'); ?></a></th>
-		<th><a style="color:white" href="index.php?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=project_name"><?php echo $AppUI->_('Name'); ?></a></th>
+		<th><a href="index.php?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=project_priority"><?php echo $AppUI->_('P'); ?></a></th>
+		<th><a href="index.php?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=project_name"><?php echo $AppUI->_('Name'); ?></a></th>
 		<th><?php echo $AppUI->_('Owner'); ?></th>
 		<th><?php echo $AppUI->_('Started'); ?></th>
 		<th><?php echo $AppUI->_('Status'); ?></th>

@@ -151,6 +151,7 @@ input, textarea {
     margin-top  : 2px;
     -moz-border-radius : 4px;
     -webkit-border-radius:4px;
+    border-radius:4px;
 }
 
 /* Focus action  */
@@ -159,7 +160,7 @@ input:focus, textarea:focus {
     background-color : #FFFFCC;
 }
 
-.button{
+.button, .crumb ul li a{
   font-family   : tahoma,verdana,arial,Sans-Serif;
   color         : #666;
   text-align    : center;
@@ -180,6 +181,7 @@ input:focus, textarea:focus {
   cursor        : hand;
   -moz-border-radius : 3.5px;
   -webkit-border-radius:3.5px;
+  border-radius:3.5px;
 }
 
 /* Focus action  */
@@ -203,6 +205,8 @@ input:focus, textarea:focus {
   cursor        : pointer !important;
   cursor        : hand;
   -moz-border-radius : 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
 }
 
 /* web2Project Top Banner and Top Nav Customization */
@@ -331,6 +335,7 @@ table.std {
 	background : #D4D0C8;
     -moz-border-radius : 4px;
     -webkit-border-radius:4px;
+    border-radius: 4px;
 }
 table.std TH {
 	color            : #333;
@@ -368,12 +373,12 @@ A.hdr:link, A.hdr:active, A.hdr:visited {
 
 td.tabon {
 	background: #D4D0C8;
-    background-image: url('images/tabSelectedBg.png');
+    background-image: url('images/bar_top_Selectedmiddle.gif');
     font-weight: bold;
 }
 td.taboff {
 	background: #D4D0C8;
-	background-image: url('images/tabBg.png');
+	background-image: url('images/bar_top_middle.gif');
     background-position : bottom;
     background-repeat   : repeat-x;
     font-weight: normal;
@@ -649,6 +654,7 @@ table.tbl td.event td {
     text-decoration: none;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+    border-radius: 4px;
 }
 .crumb ul li a:active {
     color: #AD0000;
@@ -706,15 +712,15 @@ h4 {
 	text-shadow: 0 0 2px #000;
 	padding: 4px 8px;
 	border: 1px solid rgba(255,255,255,0.25);
-	background-color: rgb(25,25,25);
-	background-color: rgba(25,25,25,0.92);
+	background: rgb(25,25,25);
+	background: rgba(25,25,25,0.92);
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(transparent), to(#000));
-	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	box-shadow: 0 0 3px #555;
+	border-radius: 5px;
 	-webkit-box-shadow: 0 0 3px #555;
 	-moz-box-shadow: 0 0 3px #555;
+	box-shadow: 0 0 3px #555;
 }
 
 #tiptip_arrow, #tiptip_arrow_inner {
@@ -812,4 +818,10 @@ TD.weekendDay  {
 	border: 1px solid #ccc;
 	text-align: left;
 	background-color:#F0F0F0;
+}
+
+.selectborder {
+    border: 3px solid #FF0000;
+    padding: 1px 0 2px;
+    display: inline;
 }

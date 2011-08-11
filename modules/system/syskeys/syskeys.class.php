@@ -53,6 +53,23 @@ class CSysVal extends w2p_Core_BaseObject {
 		$this->sysval_value = $value;
 	}
 
+    /*
+     * NOTE: This function is a simplified version from the w2p_Core_BaseObject
+     *   because that version of the function applies filtering that kills our
+     *   required fields which legitimately have <'s and >'s.
+     */
+	public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
+	{
+		if (!is_array($hash)) {
+			$this->_error = get_class($this) . '::bind failed.';
+			return false;
+		} else {
+			$q = $this->_query;
+			$q->bindHashToObject($hash, $this, $prefix, $checkSlashes, $bindAll);
+			return true;
+		}
+	}
+
 	public function store() {
 		$this->w2PTrimAll();
 
@@ -62,7 +79,7 @@ class CSysVal extends w2p_Core_BaseObject {
 		}
 		$values = parseFormatSysval($this->sysval_value, $this->sysval_key_id);
 		//lets delete the old values
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		if ($this->sysval_key_id && $this->sysval_title) {
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_key_id = ' . (int)$this->sysval_key_id);
@@ -88,7 +105,8 @@ class CSysVal extends w2p_Core_BaseObject {
 	}
 
 	public function delete() {
-		$q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		if ($this->sysval_title) {
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
@@ -100,46 +118,4 @@ class CSysVal extends w2p_Core_BaseObject {
 		return null;
 	}
 
-}
-
-function parseFormatSysval($text, $syskey) {
-	$q = new w2p_Database_Query;
-	$q->addTable('syskeys');
-	$q->addQuery('syskey_type, syskey_sep1, syskey_sep2');
-	$q->addWhere('syskey_id = ' . (int)$syskey);
-	$q->exec();
-	$row = $q->fetchRow();
-	$q->clear();
-	// type 0 = list
-	$sep1 = $row['syskey_sep1']; // item separator
-	$sep2 = $row['syskey_sep2']; // alias separator
-
-	// A bit of magic to handle newlines and returns as separators
-	// Missing sep1 is treated as a newline.
-	if (!isset($sep1) || empty($sep1)) {
-		$sep1 = "\n";
-	}
-	if ($sep1 == "\\n") {
-		$sep1 = "\n";
-	}
-	if ($sep1 == "\\r") {
-		$sep1 = "\r";
-	}
-
-	$temp = explode($sep1, $text);
-	$arr = array();
-	// We use trim() to make sure a numeric that has spaces
-	// is properly treated as a numeric
-	foreach ($temp as $item) {
-		if ($item) {
-			$sep2 = empty($sep2) ? "\n" : $sep2;
-			$temp2 = explode($sep2, $item);
-			if (isset($temp2[1])) {
-				$arr[mb_trim($temp2[0])] = mb_trim($temp2[1]);
-			} else {
-				$arr[mb_trim($temp2[0])] = mb_trim($temp2[0]);
-			}
-		}
-	}
-	return $arr;
 }

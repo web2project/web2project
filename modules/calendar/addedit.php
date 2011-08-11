@@ -93,20 +93,10 @@ foreach ($projects as $project_id => $project_info) {
 }
 $projects = arrayMerge(array(0 => $all_projects), $projects);
 
-if ($event_id || $is_clash) {
-	$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_start_date, '%Y-%m-%d %T')) : null;
-	$end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_end_date, '%Y-%m-%d %T')) : $start_date;
-} else {
-	$start_date = new w2p_Utilities_Date($date);
-	$start_date->setTime(8, 0, 0);
-	$end_date = new w2p_Utilities_Date($date);
-	$end_date->setTime(17, 0, 0);
-}
-
 $inc = intval(w2PgetConfig('cal_day_increment')) ? intval(w2PgetConfig('cal_day_increment')) : 30;
 if (!$event_id && !$is_clash) {
 
-	$seldate = new w2p_Utilities_Date($date);
+	$seldate = new w2p_Utilities_Date($date, $AppUI->getPref('TIMEZONE'));
 	// If date is today, set start time to now + inc
 	if ($date == date('Ymd')) {
 		$h = date('H');
@@ -120,16 +110,24 @@ if (!$event_id && !$is_clash) {
 	}
 	if ($h && $h < w2PgetConfig('cal_day_end')) {
 		$seldate->setTime($h, $min, 0);
+        $seldate->convertTZ('UTC');
 		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
 		$seldate->addSeconds($inc * 60);
+        $seldate->convertTZ('UTC');
 		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
 	} else {
 		$seldate->setTime(w2PgetConfig('cal_day_start'), 0, 0);
+        $seldate->convertTZ('UTC');
 		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
+        $seldate->convertTZ($AppUI->getPref('TIMEZONE'));
 		$seldate->setTime(w2PgetConfig('cal_day_end'), 0, 0);
+        $seldate->convertTZ('UTC');
 		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
 	}
 }
+
+$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_start_date, '%Y-%m-%d %T')) : null;
+$end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_end_date, '%Y-%m-%d %T')) : $start_date;
 
 $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month', 'Quarterly', 'Every 6 months', 'Every Year');
 
@@ -223,7 +221,6 @@ function addUser() {
 			form.assigned.options[t] = opt
 		}
 	}
-
 }
 
 function removeUser() {

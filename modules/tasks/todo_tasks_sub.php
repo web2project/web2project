@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $showEditCheckbox, $tasks, $priorities;
+global $showEditCheckbox, $priorities;
 global $m, $a, $date, $other_users, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id, $task_type;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
@@ -72,13 +72,13 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
             <th width="10">&nbsp;</th>
             <th width="10"><?php echo $AppUI->_('Pin'); ?></th>
             <th width="20" colspan="2"><?php echo $AppUI->_('Progress'); ?></th>
-            <th width="15" align="center"><?php sort_by_item_title('P', 'task_priority', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-			<th width="15" align="center"><?php sort_by_item_title('U', 'user_task_priority', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <th colspan="2"><?php sort_by_item_title('Task / Project', 'task_name', SORT_STRING, '&amp;a=todo'); ?></th>
-            <th nowrap="nowrap"><?php sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <th nowrap="nowrap"><?php sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <th nowrap="nowrap"><?php sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <th nowrap="nowrap"><?php sort_by_item_title('Due In', 'task_due_in', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+            <th width="15" align="center"><?php echo sort_by_item_title('P', 'task_priority', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+			<th width="15" align="center"><?php echo sort_by_item_title('U', 'user_task_priority', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+            <th colspan="2"><?php echo sort_by_item_title('Task / Project', 'task_name', SORT_STRING, '&amp;a=todo'); ?></th>
+            <th nowrap="nowrap"><?php echo sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+            <th nowrap="nowrap"><?php echo sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+            <th nowrap="nowrap"><?php echo sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
+            <th nowrap="nowrap"><?php echo sort_by_item_title('Due In', 'task_due_in', SORT_NUMERIC, '&amp;a=todo'); ?></th>
             <?php if (w2PgetConfig('direct_edit_assignment')) { ?><th width="0">&nbsp;</th><?php } ?>
         </tr>
         <?php
@@ -111,7 +111,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
         $history_active = false;
         // showing tasks
         foreach ($tasks as $task) {
-            showtask($task, 0, false, true);
+            echo showtask($task, 0, false, true);
         }
         if (w2PgetConfig('direct_edit_assignment')) {
         ?>

@@ -67,9 +67,6 @@ function submitIt() {
 	if (form.contact_last_name.value.length < 1) {
 		alert( "<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>" );
 		form.contact_last_name.focus();
-	} else if (form.contact_order_by.value.length < 1) {
-		alert( "<?php echo $AppUI->_('contactsOrderBy', UI_OUTPUT_JS); ?>" );
-		form.contact_order_by.focus();
 	} else {
 		form.submit();
 	}
@@ -93,7 +90,6 @@ function orderByName( x ){
 	<input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id; ?>" />
 	<input type="hidden" name="contact_company" value="<?php echo $row->contact_company ? $row->contact_company : 0; ?>" />
 	<input type="hidden" name="contact_department" value="<?php echo $row->contact_department ? $row->contact_department : 0; ?>" />
-	<input type="hidden" class="text" size="25" name="contact_order_by" value="<?php echo $row->contact_order_by; ?>" maxlength="50" />
 
 	<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 		<tr>

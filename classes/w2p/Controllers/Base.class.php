@@ -50,9 +50,19 @@ class w2p_Controllers_Base
         $action = ($this->delete) ? 'deleted' : 'stored';
         $this->success = ($this->delete) ? $this->object->delete($AppUI) : $this->object->store($AppUI);
 
-        if (is_array($this->success)) {
+        if (is_array($this->success) || !$this->success) {
             $AppUI->holdObject($this->object);
-            $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);
+            /*
+             * TODO: This nasty structure was introduced in v3.0 and is only
+             *   transitional while the individual modules are updated to
+             *   stop using $this->success as both a boolean and the error array.
+             *   -- This was due to a bad design decision on my part. -caseydk
+             */
+            if (is_array($this->object->getError())) {
+                $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);
+            } else {
+                $AppUI->setMsg($this->success, UI_MSG_ERROR);
+            }
             $this->resultPath = $this->errorPath;
             return $AppUI;
         }

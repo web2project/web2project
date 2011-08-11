@@ -177,22 +177,38 @@ foreach ($messages as $row) {
 		$s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" border="0" width="14" height="11">' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . '</td>';
 		$s .= '<td valign="top" align="right" style="' . $style . '">';
 
+                // in some weird permission cases
+                // it can happen that the table gets opened but never closed,
+                // or the other way around, thus breaking the layout
+                // introducing these variables to help us out with proper
+                // table tag opening and closing.
+                $tableOpened = false;
+                $tableClosed = false;
 		//the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
 		if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-			$s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-			// edit message
-			$s .= '<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
-			$s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
-			$s .= '</td><td>';
+                    $tableOpened = true;
+                    $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+                    // edit message
+                    $s .= '<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
+                    $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
+                    $s .= '</td>';
 		}
 		if ($canDelete || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-			// delete message
-			$s .= '<a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
-			$s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
-			$s .= '</a>';
-			$s .= '</td></tr></table>';
-
+                    $tableClosed = true;
+                    if(!$tableOpened) {
+                        $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+                    }
+                    // delete message
+                    $s .= '<td><a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
+                    $s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
+                    $s .= '</a>';
+                    $s .= '</td></tr></table>';
 		}
+                
+                if($tableOpened and !$tableClosed) {
+                    $s .= '</tr></table>';
+                }
+                
 		$s .= '</td>';
 		$s .= '</tr>';
 	} else

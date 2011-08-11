@@ -47,6 +47,7 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 			$contactValues['contact_country'] = $ci['ADR'][0]['value'][6][0];
 			$contactValues['contact_notes'] = $ci['NOTE'][0]['value'][0][0];
 			$contactValues['contact_order_by'] = $contactValues['contact_first_name'] . ' ' . $contactValues['contact_last_name'];
+            $contactValues['contact_owner'] = $AppUI->user_id; 
 			$contactValues['contact_id'] = 0;
 
 			// bind array to object

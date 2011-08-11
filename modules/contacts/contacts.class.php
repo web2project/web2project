@@ -52,7 +52,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function loadFull(CAppUI $AppUI = null, $contactId) {
 		global $AppUI;
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $q->addTable('contacts');
         $q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
         $q->addWhere('contact_id = ' . (int) $contactId);
@@ -62,7 +62,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
-        
+
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
         $this->contact_owner = (int) $this->contact_owner;
@@ -72,6 +72,7 @@ class CContact extends w2p_Core_BaseObject {
         $this->contact_last_name = ($this->contact_last_name == null) ? '' : $this->contact_last_name;
         $this->contact_order_by = ($this->contact_order_by == null) ? '' : $this->contact_order_by;
         $this->contact_display_name = ($this->contact_display_name == null) ? '' : $this->contact_display_name;
+        $this->contact_birthday = ($this->contact_birthday == '') ? null : $this->contact_birthday;
 
         /*
         *  This  validates that any Contact saved will have a Display Name as
@@ -86,12 +87,12 @@ class CContact extends w2p_Core_BaseObject {
             $this->contact_display_name = mb_trim($this->contact_first_name.' '.$this->contact_last_name);
         }
 
-        $errorMsgArray = $this->check();
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
+        $this->_error = $this->check();
+        if (count($this->_error)) {
+            return $this->_error;
         }
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $this->contact_lastupdate = $q->dbfnNowWithTZ();
         /*
          * TODO: I don't like the duplication on each of these two branches, but I
@@ -131,14 +132,13 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function setContactMethods(array $methods) {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->setDelete('contacts_methods');
 		$q->addWhere('contact_id=' . (int)$this->contact_id);
 		$q->exec();
 		$q->clear();
 
 		if (!empty($methods)) {
-			$q = new w2p_Database_Query;
 			$q->addTable('contacts_methods');
 			$q->addInsert('contact_id', (int)$this->contact_id);
 			foreach ($methods as $name => $value) {
@@ -155,7 +155,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function getContactMethods($methodsArray = null) {
 		$results = array();
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
 		$q->addTable('contacts_methods');
 		$q->addQuery('method_name, method_value');
 		$q->addWhere('contact_id = ' . (int)$this->contact_id);
@@ -174,6 +174,7 @@ class CContact extends w2p_Core_BaseObject {
 
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
+        $this->_error = array();
 
         if ($msg = parent::delete()) {
             return $msg;
@@ -192,6 +193,7 @@ class CContact extends w2p_Core_BaseObject {
             $errorArray['contact_owner'] = $baseErrorMsg . 'contact owner is not set';
         }
 
+        $this->_error = $errorArray;
 	    return $errorArray;
 	}
 
@@ -210,7 +212,7 @@ class CContact extends w2p_Core_BaseObject {
 
 		if ($oid) {
 			// Check to see if there is a user
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->addTable('users');
 			$q->addQuery('count(user_id) as user_count');
 			$q->addWhere('user_contact = ' . (int)$oid);
@@ -267,7 +269,8 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function getUpdateKey() {
-		$q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addTable('contacts');
 		$q->addQuery('contact_updatekey');
 		$q->addWhere('contact_id = ' . (int)$this->contact_id);
@@ -278,7 +281,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function clearUpdateKey() {
 		global $AppUI;
 
-        $q = new w2p_Database_Query();
+        $q = $this->_query;
 		$this->contact_updatekey = '';
 		$this->contact_lastupdate = $q->dbfnNowWithTZ();
 		$this->store($AppUI);
@@ -371,7 +374,7 @@ class CContact extends w2p_Core_BaseObject {
                                   OR contact_notes like '%$searchString%'";
 		}
 		// assemble the sql statement
-		$q = new w2p_Database_Query;
+		$q = new w2p_Database_Query();
 		$q->addQuery('contact_id, contact_order_by');
 		$q->addQuery($showfields);
 		$q->addQuery('contact_first_name, contact_last_name, contact_title');
@@ -404,8 +407,9 @@ class CContact extends w2p_Core_BaseObject {
 		$letters = '';
 
 		$search_map = array('contact_first_name', 'contact_last_name');
+        $q = new w2p_Database_Query();
+
 		foreach ($search_map as $search_name) {
-			$q = new w2p_Database_Query;
 			$q->addTable('contacts');
 			$q->addQuery('DISTINCT SUBSTRING(' . $search_name . ', 1, 1) as L');
 			if ($onlyUsers) {
@@ -417,12 +421,14 @@ class CContact extends w2p_Core_BaseObject {
 			foreach ($arr as $L) {
 				$letters .= $L['L'];
 			}
+            $q->clear();
 		}
 		return strtoupper($letters);
 	}
 
 	public static function getContactByUsername($username) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
@@ -435,7 +441,8 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
     public static function getContactByUserid($userId) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
@@ -448,7 +455,8 @@ class CContact extends w2p_Core_BaseObject {
 	}
 	
 	public static function getContactByEmail($email) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('users');
 		$q->addQuery('contact_first_name, contact_last_name');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
@@ -464,7 +472,8 @@ class CContact extends w2p_Core_BaseObject {
 	}
 	
 	public static function getContactByUpdatekey($updateKey) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
 		$q->addTable('contacts');
 		$q->addQuery('contact_id');
 		$q->addWhere("contact_updatekey= '$updateKey'");
@@ -473,7 +482,8 @@ class CContact extends w2p_Core_BaseObject {
 	}
 	
 	public static function getProjects($contactId) {
-		$q = new w2p_Database_Query;
+
+        $q = new w2p_Database_Query();
 		$q->addQuery('p.project_id, p.project_name');
 		$q->addTable('project_contacts', 'pc');
 		$q->addJoin('projects', 'p', 'p.project_id = pc.project_id', 'inner');
@@ -483,7 +493,8 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function clearOldUpdatekeys($days_for_update) {
-		$q = new w2p_Database_Query;
+
+        $q = $this->_query;
 		$q->addTable('contacts');
 		$q->addUpdate('contact_updatekey', '');
 		$q->addWhere("(TO_DAYS(NOW()) - TO_DAYS(contact_updateasked) >= $days_for_update)");
@@ -493,7 +504,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function hook_cron() {
 		global $AppUI;
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $q->addTable('contacts');
 		$q->addQuery('contact_id');
 		$q->addWhere('contact_first_name IS NULL');
