@@ -388,7 +388,7 @@ function constructTaskTree($task_data, $depth = 0) {
     $task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . '...' : $task_data['task_name'];
 	$selected = $task_data['task_id'] == $task_parent ? 'selected="selected"' : '';
 
-	//$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
+	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
 
 	if (isset($parents[$task_data['task_id']])) {
 		foreach ($parents[$task_data['task_id']] as $child_task) {
