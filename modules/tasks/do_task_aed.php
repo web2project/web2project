@@ -164,49 +164,46 @@ if ($result) {
         // and shift the end date appropriately
         if ($adjustStartDate && !is_null($hdependencies)) {
 
-        // load already stored task data for this task
-        $tempTask = new CTask();
-        $tempTask->load($obj->task_id);
+            // load already stored task data for this task
+            $tempTask = new CTask();
+            $tempTask->load($obj->task_id);
 
-        // shift new start date to the last dependency end date
-        $nsd = new w2p_Utilities_Date($tempTask->get_deps_max_end_date($tempTask));
+            // shift new start date to the last dependency end date
+            $nsd = new w2p_Utilities_Date($tempTask->get_deps_max_end_date($tempTask));
 
-        // prefer Wed 8:00 over Tue 16:00 as start date
-        $nsd = $nsd->next_working_day();
+            // prefer Wed 8:00 over Tue 16:00 as start date
+            $nsd = $nsd->next_working_day();
 
-        // prepare the creation of the end date
-        $ned = new w2p_Utilities_Date();
-        $ned->copy($nsd);
+            // prepare the creation of the end date
+            $ned = new w2p_Utilities_Date();
+            $ned->copy($nsd);
 
-        if (empty($obj->task_start_date)) {
-            // appropriately calculated end date via start+duration
-            $ned->addDuration($obj->task_duration, $obj->task_duration_type);
+            if (empty($obj->task_start_date)) {
+                // appropriately calculated end date via start+duration
+                $ned->addDuration($obj->task_duration, $obj->task_duration_type);
+            } else {
+                // calc task time span start - end
+                //$d = $tsd->calcDuration($ted);
+                $d = $obj->task_duration;
+                // Re-add (keep) task time span for end date.
+                // This is independent from $obj->task_duration.
+                // The value returned by Date::Duration() is always in hours ('1')
+                $ned->addDuration($d, '1');
+            }
 
-        } else {
-            // calc task time span start - end
-            $d = $tsd->calcDuration($ted);
+            // prefer tue 16:00 over wed 8:00 as an end date
+            $ned = $ned->prev_working_day();
 
-            // Re-add (keep) task time span for end date.
-            // This is independent from $obj->task_duration.
-            // The value returned by Date::Duration() is always in hours ('1')
-            $ned->addDuration($d, '1');
+            $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+            $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+            $obj->task_start_date = $AppUI->convertToSystemTZ($obj->task_start_date);
+            $obj->task_end_date = $AppUI->convertToSystemTZ($obj->task_end_date);
 
-        }
-
-        // prefer tue 16:00 over wed 8:00 as an end date
-        $ned = $ned->prev_working_day();
-
-        $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-        $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
-
-        $q = new w2p_Database_Query;
-        $q->addTable('tasks', 't');
-        $q->addUpdate('task_start_date', $obj->task_start_date);
-        $q->addUpdate('task_end_date', $obj->task_end_date);
-        $q->addWhere('task_id = ' . (int)$obj->task_id);
-        $q->addWhere('task_dynamic <> 1');
-        $q->exec();
-        $q->clear();
+            $updateTask = new CTask();
+            $updateTask->load((int)$obj->task_id);
+            $updateTask->task_start_date = $obj->task_start_date;
+            $updateTask->task_end_date = $obj->task_end_date;
+            $updateTask->store($AppUI);
         }
         $obj->pushDependencies($obj->task_id, $obj->task_end_date);
     }
