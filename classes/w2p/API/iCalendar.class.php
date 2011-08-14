@@ -19,6 +19,7 @@ class w2p_API_iCalendar {
 
     public static function formatCalendarItem($calendarItem, $module_name) {
         global $AppUI;
+
         $name = $calendarItem['name'];
         $uid = (isset( $calendarItem['UID'])) ? $calendarItem['UID'] : $module_name.'_'.$calendarItem['id'];
         $description = '';
@@ -47,11 +48,14 @@ class w2p_API_iCalendar {
         return $eventItem;
     }
 
+    // TODO: This should get a review once we can make 5.3 our minimum version.
     private function formatDate($mysqlDate) {
-        $myDate = new w2p_Utilities_Date($mysqlDate);
+        $myDate = new DateTime($mysqlDate);
 
-        $myDatetime = $myDate->format('%Y%m%d %T');
-        $myDatetime = str_replace(':', '', $myDatetime);
+        $timestamp = strtotime($mysqlDate);
+        // The following line checks to see if the date is in DST range.
+        $timestamp -= $myDate->format('I')*60*60;
+        $myDatetime = date('Ymd His', $timestamp);
         $myDatetime = str_replace(' ', 'T', $myDatetime).'Z';
 
         return $myDatetime;
