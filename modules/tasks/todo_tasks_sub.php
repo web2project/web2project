@@ -3,10 +3,18 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $showEditCheckbox, $priorities, $tasks;
+global $showEditCheckbox, $priorities;
 global $m, $a, $date, $other_users, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id, $task_type;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
+
+/*
+ * TODO: This is a nasty, dirty hack because globals have stacked on top of
+ *   globals and have made a mess of things.. we need a better option.
+ */
+if(!count($tasks)) {
+    global $tasks;
+}
 $perms = &$AppUI->acl();
 $canDelete = $perms->checkModuleItem($m, 'delete');
 ?>
