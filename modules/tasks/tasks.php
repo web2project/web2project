@@ -58,9 +58,9 @@ $taskPriority = w2PgetSysVal('TaskPriority');
 
 $task_project = (int) w2PgetParam($_GET, 'task_project', null);
 
-$task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', '');
+$task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', 'task_start_date');
 $task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
-$task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', '');
+$task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', 'task_end_date');
 $task_sort_type2 = w2PgetParam($_GET, 'task_sort_type2', '');
 $task_sort_order1 = (int) w2PgetParam($_GET, 'task_sort_order1', 0);
 $task_sort_order2 = (int) w2PgetParam($_GET, 'task_sort_order2', 0);
