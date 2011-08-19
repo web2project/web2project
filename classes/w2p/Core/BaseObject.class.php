@@ -526,4 +526,32 @@ abstract class w2p_Core_BaseObject
 			$this->$k = htmlspecialchars_decode($v);
 		}
 	}
+
+    /*
+     *  This pre/post functions are only here for completeness.
+     */
+    protected function preCreate() {
+        return $this;
+    }
+    protected function postCreate() {
+        return $this;
+    }
+    protected function preUpdate() {
+        return $this;
+    }
+    protected function postUpdate() {
+        return $this;
+    }
+    protected function preLoad() {
+        return $this;
+    }
+    protected function postLoad() {
+        return $this;
+    }
+    protected function preDelete() {
+        return $this;
+    }
+    protected function postDelete() {
+        return $this;
+    }
 }
