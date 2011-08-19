@@ -124,7 +124,9 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function load($oid = null, $strip = true)
 	{
-		$k = $this->_tbl_key;
+		$this->preLoad();
+
+        $k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
 		}
@@ -142,7 +144,7 @@ abstract class w2p_Core_BaseObject
 		}
 		$q->bindHashToObject($hash, $this, null, $strip);
 
-		return $this;
+		return $this->postLoad();
 	}
 
 	/**
@@ -238,6 +240,9 @@ abstract class w2p_Core_BaseObject
 	{
 		global $AppUI;
 
+        // NOTE: I don't particularly like this but it wires things properly.
+        ($this->$k) ? $this->preUpdate() : $this->preCreate();
+
 		$this->w2PTrimAll();
 
 		$msg = $this->check();
@@ -254,11 +259,13 @@ abstract class w2p_Core_BaseObject
 			$store_type = 'add';
 			$ret = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
 		}
-        $q->clear();
 
 		if ($ret) {
 			// only record history if an update or insert actually occurs.
 			addHistory($this->_tbl, $this->$k, $store_type, $AppUI->_('ACTION') . ': ' . $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->$k);
+
+            // NOTE: I don't particularly like this but it wires things properly.
+            ($store_type == 'add') ? $this->postCreate() : $this->postUpdate();
 		}
 		return ((!$ret) ? (get_class($this) . '::store failed ' . db_error()) : null);
 	}
@@ -335,7 +342,9 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function delete($oid = null)
 	{
-		$k = $this->_tbl_key;
+		$this->preDelete();
+
+        $k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
 		}
@@ -351,8 +360,9 @@ abstract class w2p_Core_BaseObject
 		if (!$result) {
 			// only record history if deletion actually occurred
 			addHistory($this->_tbl, $this->$k, 'delete');
+            $this->postDelete();
 		}
-		$q->clear();
+
 		return $result;
 	}
 
@@ -530,29 +540,39 @@ abstract class w2p_Core_BaseObject
 
     /*
      *  This pre/post functions are only here for completeness.
+     *    NOTE: Each of these actions gets called after the permissions check.
+     *    NOTE: The pre* actions happen whether the desired action - create, 
+     *      update, load, and delete - actually occur.
+     *    NOTE: The post* actions only happen if the desired action - create, 
+     *      update, load, and delete - is successful.
      */
+    
     protected function preCreate() {
         return $this;
     }
     protected function postCreate() {
+        //NOTE: This only happens if the create was successful.
         return $this;
     }
     protected function preUpdate() {
         return $this;
     }
     protected function postUpdate() {
+        //NOTE: This only happens if the update was successful.
         return $this;
     }
     protected function preLoad() {
         return $this;
     }
     protected function postLoad() {
+        //NOTE: This only happens if the load was successful.
         return $this;
     }
     protected function preDelete() {
         return $this;
     }
     protected function postDelete() {
+        //NOTE: This only happens if the delete was successful.
         return $this;
     }
 }
