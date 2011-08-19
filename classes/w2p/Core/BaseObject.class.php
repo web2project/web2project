@@ -238,8 +238,7 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function store($updateNulls = false)
 	{
-		global $AppUI;
-
+        $k = $this->_tbl_key;
         // NOTE: I don't particularly like this but it wires things properly.
         ($this->$k) ? $this->preUpdate() : $this->preCreate();
 
@@ -261,9 +260,6 @@ abstract class w2p_Core_BaseObject
 		}
 
 		if ($ret) {
-			// only record history if an update or insert actually occurs.
-			addHistory($this->_tbl, $this->$k, $store_type, $AppUI->_('ACTION') . ': ' . $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->$k);
-
             // NOTE: I don't particularly like this but it wires things properly.
             ($store_type == 'add') ? $this->postCreate() : $this->postUpdate();
 		}
@@ -358,8 +354,6 @@ abstract class w2p_Core_BaseObject
 		$result = ((!$q->exec()) ? db_error() : null);
 
 		if (!$result) {
-			// only record history if deletion actually occurred
-			addHistory($this->_tbl, $this->$k, 'delete');
             $this->postDelete();
 		}
 
@@ -546,12 +540,18 @@ abstract class w2p_Core_BaseObject
      *    NOTE: The post* actions only happen if the desired action - create, 
      *      update, load, and delete - is successful.
      */
-    
+
     protected function preCreate() {
         return $this;
     }
     protected function postCreate() {
         //NOTE: This only happens if the create was successful.
+		global $AppUI;
+
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $AppUI->_('ACTION') . ': ' . 
+            $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . 
+            $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+
         return $this;
     }
     protected function preUpdate() {
@@ -559,6 +559,11 @@ abstract class w2p_Core_BaseObject
     }
     protected function postUpdate() {
         //NOTE: This only happens if the update was successful.
+		global $AppUI;
+
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $AppUI->_('ACTION') . ': ' . 
+            $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . 
+            $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
         return $this;
     }
     protected function preLoad() {
@@ -573,6 +578,9 @@ abstract class w2p_Core_BaseObject
     }
     protected function postDelete() {
         //NOTE: This only happens if the delete was successful.
+		global $AppUI;
+
+        addHistory($this->{$this->_tbl_key}, $this->$k, 'delete');
         return $this;
     }
 }
