@@ -110,8 +110,9 @@ abstract class w2p_Core_BaseObject
 					$filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
 				}
 			}
-			$this->_query->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
-			$this->_query->clear();
+            $q = $this->_query;
+			$q->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
+
 			return true;
 		}
 	}
@@ -131,16 +132,16 @@ abstract class w2p_Core_BaseObject
 		if ($oid === null) {
 			return false;
 		}
-		$this->_query->clear();
-		$this->_query->addTable($this->_tbl);
-		$this->_query->addWhere($this->_tbl_key . ' = ' . $oid);
-		$hash = $this->_query->loadHash();
+		$q = $this->_query;
+		$q->addTable($this->_tbl);
+		$q->addWhere($this->_tbl_key . ' = ' . $oid);
+		$hash = $q->loadHash();
 		//If no record was found send false because there is no data
 		if (!$hash) {
 			return false;
 		}
-		$this->_query->bindHashToObject($hash, $this, null, $strip);
-		$this->_query->clear();
+		$q->bindHashToObject($hash, $this, null, $strip);
+
 		return $this;
 	}
 
@@ -150,16 +151,16 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function loadAll($order = null, $where = null)
 	{
-		$this->_query->clear();
-		$this->_query->addTable($this->_tbl);
+        $q = $this->_query;
+		$q->addTable($this->_tbl);
 		if ($order) {
-			$this->_query->addOrder($order);
+			$q->addOrder($order);
 		}
 		if ($where) {
-			$this->_query->addWhere($where);
+			$q->addWhere($where);
 		}
-		$result = $this->_query->loadHashList($this->_tbl_key);
-		$this->_query->clear();
+		$result = $q->loadHashList($this->_tbl_key);
+
 		return $result;
 	}
 
@@ -170,9 +171,9 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function &getQuery($alias = null)
 	{
-		$this->_query->clear();
-		$this->_query->addTable($this->_tbl, $alias);
-		return $this->_query;
+		$q = $this->_query;
+        $q->addTable($this->_tbl, $alias);
+		return $q;
 	}
 
 	/**
@@ -387,22 +388,22 @@ abstract class w2p_Core_BaseObject
 		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
 
-		$this->_query->clear();
-		$this->_query->addQuery($fields);
-		$this->_query->addTable($this->_tbl);
+		$q = $this->_query;
+		$q->addQuery($fields);
+		$q->addTable($this->_tbl);
 
 		if (isset($extra['from'])) {
-			$this->_query->addTable($extra['from']);
+			$q->addTable($extra['from']);
 		}
 
 		if (isset($extra['join']) && isset($extra['on'])) {
-			$this->_query->addJoin($extra['join'], $extra['join'], $extra['on']);
+			$q->addJoin($extra['join'], $extra['join'], $extra['on']);
 		}
 
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
 				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$this->_query->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
+				$q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
 			} else {
 				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
 			}
@@ -410,27 +411,27 @@ abstract class w2p_Core_BaseObject
 			if (count($deny)) {
 				if ((array_search('0', $deny)) === false) {
 					//If 0 (All Items of a module) are not on the denial array then just deny the denied items
-					$this->_query->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
+					$q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
 				} elseif ((array_search('0', $allow)) === false) {
 					//If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
 				} else {
 					//if we allow everything and deny everything then denials have higher priority... Deny Everything!
-					$this->_query->addWhere('0=1');
+					$q->addWhere('0=1');
 				}
 			}
 		} else {
 			//if there are no allowances, deny!
-			$this->_query->addWhere('0=1');
+			$q->addWhere('0=1');
 		}
 
 		if (isset($extra['where'])) {
-			$this->_query->addWhere($extra['where']);
+			$q->addWhere($extra['where']);
 		}
 
 		if ($orderby) {
-			$this->_query->addOrder($orderby);
+			$q->addOrder($orderby);
 		}
-		return $this->_query->loadHashList($index);
+		return $q->loadHashList($index);
 	}
 
 	public function getAllowedSQL($uid, $index = null)
