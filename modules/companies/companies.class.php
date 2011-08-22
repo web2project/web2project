@@ -111,13 +111,13 @@ class CCompany extends w2p_Core_BaseObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        if ($this->company_id && canEdit('companies', $this->company_id)) {
+        if ($this->company_id && $perms->checkModuleItem('companies', 'edit', $this->company_id)) {
             if (($msg = parent::store())) {
                 return $msg;
             }
             $stored = true;
         }
-        if (0 == $this->company_id && canAdd('companies')) {
+        if (0 == $this->company_id && $perms->checkModuleItem('companies', 'add')) {
             if (($msg = parent::store())) {
                 return $msg;
             }
