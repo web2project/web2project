@@ -937,6 +937,7 @@ class CTask extends w2p_Core_BaseObject {
 		if (empty($taskId)) {
 			return '';
 		}
+        $q->clear();
 		$q->addTable('task_dependencies', 'td');
 		$q->addQuery('dependencies_req_task_id');
 		$q->addWhere('td.dependencies_task_id = ' . (int)$taskId);
@@ -1394,6 +1395,7 @@ class CTask extends w2p_Core_BaseObject {
 		if (empty($taskId)) {
 			return '';
 		}
+        $q->clear();
 		$q->addTable('task_dependencies', 'td');
 		$q->innerJoin('tasks', 't', 'td.dependencies_task_id = t.task_id');
 		$q->addQuery('dependencies_task_id');

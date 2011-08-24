@@ -52,7 +52,7 @@ if ($contact_id == 0 && $company_id > 0) {
 }
 
 $uistyle = 'web2project';
-$outsider = $row->contact_first_name . ' ' . $row->contact_last_name;
+$outsider = $row->contact_display_name;
 require W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 require W2P_BASE_DIR . '/style/' . $uistyle . '/header.php';
 

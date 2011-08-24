@@ -16,12 +16,12 @@ date_default_timezone_set($defaultTZ);
 /*
 CAPTCHA control condition...
 */
+$passed = false;
 if (strlen($_POST['spam_check']) > 0) {
 	$cid = md5_decrypt($_POST['cid']);
 	if ($cid == strtoupper($_POST['spam_check'])) {
 		$passed = true;
 	} else {
-		$passed = false;
 		echo "<script language='javascript'>
             alert('Error: You didn\'t provide the correct Anti Spam Security ID or all required data. Please try again.');
             history.go(-1);
@@ -29,7 +29,6 @@ if (strlen($_POST['spam_check']) > 0) {
 		exit;
 	}
 } else {
-	$passed = false;
 	echo "
           <script language='javascript'>
                 alert('Error: You didn\'t provide the Anti Spam Security ID. Please try again.');

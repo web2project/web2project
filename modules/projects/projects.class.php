@@ -198,8 +198,7 @@ class CProject extends w2p_Core_BaseObject {
 
             foreach ($files_to_delete as $file_id) {
                 $file = new CFile();
-                $file->file_id = $file_id;
-                $file->file_project = (int)$this->project_id;
+                $file->load($file_id);
                 $file->delete($AppUI);
             }
             $q->setDelete('events');

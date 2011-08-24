@@ -749,7 +749,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	* 2) project_id and module_id should be provided in order to filter history entries
 	*
 	*/
-	if (!w2PgetConfig('log_changes') || !$AppUI->isActiveModule('history')) {
+	if (!$AppUI->isActiveModule('history')) {
 		return;
 	}
 
