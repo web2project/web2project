@@ -3158,7 +3158,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                              count($task_logs));
         $this->assertEquals(1,                              $task_logs[0]['task_log_id']);
         $this->assertEquals(22,                             $task_logs[0]['task_log_task']);
-        $this->assertEquals(1,                              $task_logs[0]['task_log_help_desk_id']);
         $this->assertEquals('Task Log 1',                   $task_logs[0]['task_log_name']);
         $this->assertEquals('Did some working on task 22.', $task_logs[0]['task_log_description']);
         $this->assertEquals(1,                              $task_logs[0]['task_log_creator']);
@@ -3187,7 +3186,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                              count($task_logs));
         $this->assertEquals(2,                              $task_logs[0]['task_log_id']);
         $this->assertEquals(23,                             $task_logs[0]['task_log_task']);
-        $this->assertEquals(1,                              $task_logs[0]['task_log_help_desk_id']);
         $this->assertEquals('Task Log 2',                   $task_logs[0]['task_log_name']);
         $this->assertEquals('Did some working on task 23.', $task_logs[0]['task_log_description']);
         $this->assertEquals(1,                              $task_logs[0]['task_log_creator']);

@@ -4,7 +4,6 @@
     <table name="task_log">
         <column>task_log_id</column>
         <column>task_log_task</column>
-        <column>task_log_help_desk_id</column>
         <column>task_log_name</column>
         <column>task_log_description</column>
         <column>task_log_creator</column>
@@ -20,7 +19,6 @@
         <column>task_log_project</column>
         <column>task_log_company</column>
         <row>
-            <value>1</value>
             <value>1</value>
             <value>1</value>
             <value>Task Log 1</value>

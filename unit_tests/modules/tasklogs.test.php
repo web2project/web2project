@@ -110,7 +110,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 		$this->post_data = array(
             'task_log_id'                           => 0,
             'task_log_task'                         => 1,
-            'task_log_help_desk_id'                 => 1,
             'task_log_name'                         => 'This is a task log name.',
             'task_log_description'                  => 'This is a task log description.',
             'task_log_creator'                      => 1,
@@ -295,7 +294,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertEquals(0,                                              $this->obj->task_log_id);
         $this->assertEquals(1,                                              $this->obj->task_log_task);
-        $this->assertEquals(1,                                              $this->obj->task_log_help_desk_id);
         $this->assertEquals('This is a task log name.',                     $this->obj->task_log_name);
         $this->assertEquals(" \t\nThis is a task log description.\r\0\x0B", $this->obj->task_log_description);
         $this->assertEquals(1,                                              $this->obj->task_log_creator);
