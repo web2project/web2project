@@ -194,7 +194,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertNull($this->obj->project_color_identifier);
         $this->assertNull($this->obj->project_description);
         $this->assertEquals(0, $this->obj->project_target_budget);
-        $this->assertEquals(0, $this->obj->project_actual_buget);
+        $this->assertEquals(0, $this->obj->project_actual_budget);
         $this->assertNull($this->obj->project_scheduled_hours);
         $this->assertNull($this->obj->project_worked_hours);
         $this->assertNull($this->obj->project_task_count);
@@ -482,6 +482,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $q->addQuery('project_created');
         $q->addWhere('project_id = ' . $this->obj->project_id);
         $project_created = $q->loadResult();
+        $project_created = $AppUI->formatTZAwareTime($project_created, '%Y-%m-%d %T');
         $project_created = strtotime($project_created);
 
         /**
@@ -492,6 +493,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $q->addQuery('project_updated');
         $q->addWhere('project_id = ' . $this->obj->project_id);
         $project_updated = $q->loadResult();
+        $project_updated = $AppUI->formatTZAwareTime($project_updated, '%Y-%m-%d %T');
         $project_updated =  strtotime($project_updated);
 
         $now_secs = time();
@@ -690,6 +692,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $q->addQuery('project_updated');
         $q->addWhere('project_id = ' . $this->obj->project_id);
         $project_updated = $q->loadResult();
+        $project_updated = $AppUI->formatTZAwareTime($project_updated, '%Y-%m-%d %T');
         $project_updated =  strtotime($project_updated);
 
         $now_secs = time();
