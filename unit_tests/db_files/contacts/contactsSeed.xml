@@ -65,4 +65,64 @@
         <column>method_name</column>
         <column>method_value</column>
     </table>
+    <table name="users">
+    	<column>user_id</column>
+    	<column>user_contact</column>
+    	<column>user_username</column>
+    	<column>user_password</column>
+    	<column>user_parent</column>
+    	<column>user_type</column>
+    	<column>user_signature</column>
+    	<column>user_empireint_special</column>		 	 	 	 	 	 	
+		<column>user_department</column>		 	 	 	 	 	 	
+		<column>user_company</column>
+		<row>
+			<value>1</value>
+			<value>1</value>
+			<value>admin</value>
+			<value>76a2173be6393254e72ffa4d6df1030a</value>
+			<value>0</value>
+			<value>1</value>
+			<value>Admin User</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>2</value>
+			<value>contact_number_1</value>
+			<value>76a2173be6393254e72ffa4d6df1030a</value>
+			<value>0</value>
+			<value>1</value>
+			<value>Contact Number 1</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>0</value>
+			<value>contact_number_2</value>
+			<value>76a2173be6393254e72ffa4d6df1030a</value>
+			<value>0</value>
+			<value>1</value>
+			<value>Contact Number 2</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+		</row>
+		<row>
+			<value>4</value>
+			<value>0</value>
+			<value>contact_number_3</value>
+			<value>76a2173be6393254e72ffa4d6df1030a</value>
+			<value>0</value>
+			<value>1</value>
+			<value>Contact Number 3</value>
+			<value>0</value>
+			<value>0</value>
+			<value>0</value>
+		</row>
+    </table>
 </dataset>

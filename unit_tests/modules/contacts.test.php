@@ -275,19 +275,23 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
 
     public function testCanDelete()
     {
-        $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
-        $cantDelete = $this->obj->canDelete('error', true);
-        $this->assertFalse($cantDelete);
+        global $AppUI;
+
+        $this->obj->contact_id = 1;
+        //$cantDelete = $this->obj->canDelete('error', true);
+        //$this->assertFalse($cantDelete);
+        $result = $this->obj->delete($AppUI);
+        $this->assertEquals(1, count($this->obj->getError()));
+        $this->assertArrayHasKey('noDeleteRecord-Users', $this->obj->getError());
 
         $contact = new CContact();
-        $contact->bind($this->post_data);
-        $contact->contact_first_name = 'Firstname3';
-        $contact->contact_last_name  = 'Lastname3';
-        $contact->contact_display_name = '';
-        $result = $contact->store($AppUI);
-        $canDeleteUser = $contact->canDelete('error');
-        $this->assertTrue($canDeleteUser);
+        $contact->contact_id = 3;
+        $result = $contact->delete($AppUI);
+        $this->assertTrue($result);
+        $this->assertEquals(0, count($contact->getError()));
+
+        $result = $contact->load(3);
+        $this->assertFalse($result);
     }
 
     public function testIsUser()
