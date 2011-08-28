@@ -71,7 +71,7 @@ class w2p_Utilities_Date extends Date {
 					$comp_value = w2Psgn($d1->minute - $d2->minute);
 				} else {
 					if ($d1->second - $d2->second) {
-						$comp_value = w2Psgn($d1->second - $d2->second);
+                        $comp_value = w2Psgn($d1->second - $d2->second);
 					}
                 }
             }
@@ -486,22 +486,18 @@ class w2p_Utilities_Date extends Date {
 	 */
 	public function convertTZ($tz)
 	{
-		// convert to UTC
-		$offset = intval($this->tz['offset'] / 1000);
-		if ($this->tz['hasdst']) {
-			$offset += 3600;
-		}
-		$this->addSeconds(0 - $offset);
+        if(is_a($tz, 'Date_TimeZone')) {
+            $tz = $tz->getID();
+        }
+        $newTZ = new DateTimeZone($tz);
 
-		// convert UTC to new timezone
-		$tzID = (is_object($tz)) ? $tz->id : $tz;
-
-        $offset = intval($GLOBALS['_DATE_TIMEZONE_DATA'][$tzID]['offset'] / 1000);
-		if ($this->tz['hasdst']) {
-			$offset += 3600;
-		}
-		$this->addSeconds($offset);
-        $this->setTZ((is_object($tz)) ? $tz->id : $tz);
+        $dt = new DateTime(
+                    $this->format('%D %H%M%S'), 
+                    new DateTimeZone($this->tz['id'])
+                );
+        $dt->setTimezone($newTZ);
+        $this->setDate($dt->format('Y-m-d H:i:s'));
+        $this->setTZ($tz);
 
         return $this;
 	}
