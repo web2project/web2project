@@ -213,4 +213,81 @@ if (!function_exists('date_diff2')) {
         
         return round($difference / $factor, 0);
     }
+
+    /**
+     * DateInterval
+     * Alternative to DateInterval if we're using PHP pre-5.3.0
+     * http://www.php.net/manual/en/class.dateinterval.php
+     * 
+     * @todo Deprecate this as soon as possible.. web2project v4.0?
+     */
+    class DateInterval2 {
+        public $y = 0;
+        public $m = 0;
+        public $d = 0;
+        public $h = 0;
+        public $i = 0;
+        public $s = 0;
+        public $invert = 0;
+        public $days = 0;
+        
+        public function __construct($interval_spec) {
+            if ('P' != $interval_spec[0] ) {
+                // is this an exception?
+            }
+            $interval_spec = strtolower($interval_spec);
+            $units  = array_filter(preg_split("/[\d+.]/", $interval_spec));
+            $units  = array_merge(array(), $units);
+            $values = preg_split("/[\D+.]/", $interval_spec);
+
+            $pastMonth = false;
+            foreach ($units as $k => $unit) {
+                switch($unit) {
+                    case 'p':
+                        //do nothing
+                        break;
+                    case 'y':
+                        $this->y = $values[$k];
+                        break;
+                    case 'm':
+                        (!$pastMonth) ? $this->m = $values[$k] : $this->i = $values[$k];
+                        $pastMonth = true;
+                        break;
+                    case 'w':
+                        $this->d = 7 * $values[$k];
+                        $pastMonth = true;
+                        break;                        
+                    case 'd':
+                        $this->d = $values[$k];
+                        $pastMonth = true;
+                        break;
+                    case 'h':
+                        $this->h = $values[$k];
+                        $pastMonth = true;
+                        break;
+                    case 's':
+                        $this->s = $values[$k];
+                        $pastMonth = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+/*
+$interval = new DateInterval2('P2Y4D6H8M');
+$interval = new DateInterval2('P3WT6H8M');
+$interval = new DateInterval2('P1Y1D');
+$interval = new DateInterval2('P1Y1M37D500M');
+*/
+        }
+        public function _asArray() {
+            
+        }
+        public function createFromDateString() {
+            
+        }
+        public function format() {
+            
+        }
+    }
 }
