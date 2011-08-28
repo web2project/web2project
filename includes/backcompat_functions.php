@@ -180,7 +180,6 @@ if (!function_exists('date_diff2')) {
     function date_diff2(DateTime $date1, DateTime $date2, $units = '%d') {
         $timestamp1 = $date1->format('U');
         $timestamp2 = $date2->format('U');
-        $factor     = 1;
 
         if ($timestamp1 == $timestamp2) {
             return 0;
@@ -191,14 +190,20 @@ if (!function_exists('date_diff2')) {
             case '%y':                          // years
                 $factor = 60 * 60 * 24 * 365;
                 break;
-            case '%w':                          // weeks
-                $factor = 60 * 60 * 24 * 7;
-                break;
             case '%d':                          // days
-            default:
                 $factor = 60 * 60 * 24;
+                break;
+            case '%h':                          // hours
+                $factor = 60 * 60;
+                break;
+            case '%i':                          // minutes
+                $factor = 60;
+                break;
+            case '%s':                          // seconds
+            default:
+                $factor = 1;
         }
         
-        return round ($difference / $factor, 0);
+        return round($difference / $factor, 0);
     }
 }
