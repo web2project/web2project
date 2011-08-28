@@ -580,7 +580,7 @@ abstract class w2p_Core_BaseObject
         //NOTE: This only happens if the delete was successful.
 		global $AppUI;
 
-        addHistory($this->{$this->_tbl_key}, $this->$k, 'delete');
+        addHistory($this->{$this->_tbl_key}, $this->{$this->_tbl_key}, 'delete');
         return $this;
     }
 }

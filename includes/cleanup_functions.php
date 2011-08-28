@@ -139,18 +139,6 @@ function strUTF8Decode($text) {
 * @todo some of these functions are not needed, need to trim this down
 *
 */
-/*
-* 	Convert string char (ref : Vbulletin #3987)
-*/
-function strJpGraph($text) {
-    global $locale_char_set;
-    trigger_error("The strJpGraph function has been deprecated and will be removed in v3.0.", E_USER_NOTICE );
-    if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) {
-        return utf8_decode($text);
-    } else {
-        return $text;
-    }
-}
 // PYS : utf_8 decoding as suggested in Vbulletin #3987
 function strEzPdf($text) {
     global $locale_char_set;
@@ -248,11 +236,6 @@ function temp_filterArrayForSelectTree($projectData) {
 
     return array_values($projectData);
 }
-
-function atoi($a) {
-	return $a + 0;
-}
-
 
 // The includes/permissions.php file has been ported here because it held a group of public functions for permission checking.
 // And that is so it stays on one place only.
