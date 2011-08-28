@@ -225,18 +225,19 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
-        $this->assertTrue($result);
-        $original_id = $this->obj->contact_id;
-
+        $this->obj->contact_id = 1;
         $result = $this->obj->delete($AppUI);
-        $this->assertTrue($result);
+        $this->assertEquals(1, count($this->obj->getError()));
+        $this->assertArrayHasKey('noDeleteRecord-Users', $this->obj->getError());
 
         $contact = new CContact();
-        $contact->load($original_id);
-        $this->assertEquals('',              $contact->link_name);
-        $this->assertEquals('',              $contact->link_url);
+        $contact->contact_id = 3;
+        $result = $contact->delete($AppUI);
+        $this->assertTrue($result);
+        $this->assertEquals(0, count($contact->getError()));
+
+        $result = $contact->load(3);
+        $this->assertFalse($result);
     }
 
     public function testSetContactMethods()
@@ -271,27 +272,6 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->AssertEquals(2, count($results));
         $this->assertEquals($methods['phone_mobile'], $results['phone_mobile']);
         $this->assertEquals($methods['im_skype'],     $results['im_skype']);
-    }
-
-    public function testCanDelete()
-    {
-        global $AppUI;
-
-        $this->obj->contact_id = 1;
-        //$cantDelete = $this->obj->canDelete('error', true);
-        //$this->assertFalse($cantDelete);
-        $result = $this->obj->delete($AppUI);
-        $this->assertEquals(1, count($this->obj->getError()));
-        $this->assertArrayHasKey('noDeleteRecord-Users', $this->obj->getError());
-
-        $contact = new CContact();
-        $contact->contact_id = 3;
-        $result = $contact->delete($AppUI);
-        $this->assertTrue($result);
-        $this->assertEquals(0, count($contact->getError()));
-
-        $result = $contact->load(3);
-        $this->assertFalse($result);
     }
 
     public function testIsUser()

@@ -358,19 +358,22 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests the delete of a company
      */
-    public function testDeleteCompany()
+    public function testDelete()
     {
         global $AppUI;
 
         $this->obj->company_id = 1;
-        $msg = $this->obj->delete($AppUI);
-        $this->assertEquals('noDeleteRecord: Projects, Departments', $msg);
-
-        $this->obj->company_id = 3;
         $result = $this->obj->delete($AppUI);
+        $this->assertEquals(2, count($this->obj->getError()));
+        $this->assertArrayHasKey('noDeleteRecord-Projects', $this->obj->getError());
+        $this->assertArrayHasKey('noDeleteRecord-Departments', $this->obj->getError());
+
+        $company = new CCompany();
+        $company->company_id = 3;
+        $result = $company->delete($AppUI);
         $this->assertTrue($result);
 
-        $result = $this->obj->load(3);
+        $result = $company->load(3);
         $this->assertFalse($result);
 
         $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestDeleteCompany.xml');
