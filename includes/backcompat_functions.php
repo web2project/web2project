@@ -174,10 +174,14 @@ if (!function_exists('date_diff2')) {
      * @param string representing the desired unit
      * @return int in the desired unit
      * 
-     * TODO: This should return a DateInterval instead of a simple int.
+     * @todo TODO: This should return a DateInterval as the real date_diff does 
+     *   instead of a simple int.
+     * @todo TODO: The real date_diff supports months using 'M' but I'm going 
+     *   to pass on that for now because I can't tell how they decide what a 
+     *   "month" means..
      * 
      */
-    function date_diff2(DateTime $date1, DateTime $date2, $units = '%d') {
+    function date_diff2(DateTime $date1, DateTime $date2, $units = 'D') {
         $timestamp1 = $date1->format('U');
         $timestamp2 = $date2->format('U');
 
@@ -187,19 +191,22 @@ if (!function_exists('date_diff2')) {
 
         $difference = $timestamp2 - $timestamp1;
         switch ($units) {
-            case '%y':                          // years
+            case 'Y':                          // years
                 $factor = 60 * 60 * 24 * 365;
                 break;
-            case '%d':                          // days
+            case 'W':                          // weeks
+                $factor = 60 * 60 * 24 * 7;
+                break;
+            case 'D':                          // days
                 $factor = 60 * 60 * 24;
                 break;
-            case '%h':                          // hours
+            case 'H':                          // hours
                 $factor = 60 * 60;
                 break;
-            case '%i':                          // minutes
+            case 'I':                          // minutes
                 $factor = 60;
                 break;
-            case '%s':                          // seconds
+            case 'S':                          // seconds
             default:
                 $factor = 1;
         }

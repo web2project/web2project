@@ -35,14 +35,15 @@ class BackCompat_Functions_Test extends PHPUnit_Framework_TestCase {
         $plus5_weeks = new DateTime('+5 weeks');
 
         $this->assertEquals(0,      date_diff2($today,      $today));
-        $this->assertEquals(86400,  date_diff2($minus1_day, $today,      '%s'));
-        $this->assertEquals(-10080, date_diff2($plus7_days, $today,      '%i'));
-        $this->assertEquals(168,    date_diff2($today,      $plus7_days, '%h'));
-        $this->assertEquals(7,      date_diff2($today,      $plus7_days, '%d'));
-        $this->assertEquals(-8,     date_diff2($plus7_days, $minus1_day, '%d'));
-        $this->assertEquals(7305,   date_diff2($year2010,   $year2030,   '%d')); // don't forget leap days!
-        $this->assertEquals(20 ,    date_diff2($year2010,   $year2030,   '%y'));
-        $this->assertEquals(-20,    date_diff2($year2030,   $year2010,   '%y'));
+        $this->assertEquals(86400,  date_diff2($minus1_day, $today,      'S'));
+        $this->assertEquals(-10080, date_diff2($plus7_days, $today,      'I'));
+        $this->assertEquals(168,    date_diff2($today,      $plus7_days, 'H'));
+        $this->assertEquals(7,      date_diff2($today,      $plus7_days, 'D'));
+        $this->assertEquals(1,      date_diff2($today,      $plus7_days, 'W'));
+        $this->assertEquals(-8,     date_diff2($plus7_days, $minus1_day, 'D'));
+        $this->assertEquals(7305,   date_diff2($year2010,   $year2030,   'D')); // don't forget leap days!
+        $this->assertEquals(20 ,    date_diff2($year2010,   $year2030,   'Y'));
+        $this->assertEquals(-20,    date_diff2($year2030,   $year2010,   'Y'));
     }
     
 }
