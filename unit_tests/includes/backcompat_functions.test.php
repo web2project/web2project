@@ -47,12 +47,12 @@ class BackCompat_Functions_Test extends PHPUnit_Framework_TestCase {
 
     public function test_DateInterval_constructor() {
 
-        $interval = new DateInterval2('P2Y4D6H8M');
+        $interval = new DateInterval2('P2Y4DT6H8M');
         $this->assertEquals(
                 array('y' => 2, 'm' => 0, 'd' => 4, 'h' => 6, 'i' => 8, 
                     's' => 0, 'invert' => 0, 'days' => 0), get_object_vars($interval));
 
-        $interval = new DateInterval2('P3W6H8M');
+        $interval = new DateInterval2('P3WT6H8M');
         $this->assertEquals(
                 array('y' => 0, 'm' => 0, 'd' => 21, 'h' => 6, 'i' => 8, 
                     's' => 0, 'invert' => 0, 'days' => 0), get_object_vars($interval));
@@ -62,7 +62,7 @@ class BackCompat_Functions_Test extends PHPUnit_Framework_TestCase {
                 array('y' => 1, 'm' => 0, 'd' => 1, 'h' => 0, 'i' => 0, 
                     's' => 0, 'invert' => 0, 'days' => 0), get_object_vars($interval));
 
-        $interval = new DateInterval2('P1Y1M37D500M');
+        $interval = new DateInterval2('P1Y1M37DT500M');
         $this->assertEquals(
                 array('y' => 1, 'm' => 1, 'd' => 37, 'h' => 0, 'i' => 500, 
                     's' => 0, 'invert' => 0, 'days' => 0), get_object_vars($interval));

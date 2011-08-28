@@ -235,30 +235,29 @@ if (!function_exists('date_diff2')) {
             if ('P' != $interval_spec[0] ) {
                 // is this an exception?
             }
+
             $interval_spec = strtolower($interval_spec);
-            $units  = array_filter(preg_split("/[\d+.]/", $interval_spec));
-            $units  = array_merge(array(), $units);
+            $t_postion = strpos($interval_spec, 't');
+            if (false !== $t_postion) {
+                //replace the m right of the t with an i
+                $interval_spec = substr($interval_spec, 0, $t_postion) . 
+                    str_replace('m', 'i', substr($interval_spec, $t_postion + 1));
+            }
+            $units  = preg_split("/[\d+.]/", $interval_spec, null, 1);
             $values = preg_split("/[\D+.]/", $interval_spec);
 
-            $pastMonth = false;
             foreach ($units as $k => $unit) {
                 switch($unit) {
-                    case 'y':
-                        $this->{$unit} = $values[$k];
-                        break;
-                    case 'm':
-                        (!$pastMonth) ? $this->m = $values[$k] : $this->i = $values[$k];
-                        $pastMonth = true;
-                        break;
                     case 'w':
                         $this->d = 7 * $values[$k];
-                        $pastMonth = true;
-                        break;                        
+                        break;
+                    case 'y':
+                    case 'm':
                     case 'd':
                     case 'h':
+                    case 'i':
                     case 's':
                         $this->{$unit} = $values[$k];
-                        $pastMonth = true;
                         break;
                     case 'p':
                     default:
