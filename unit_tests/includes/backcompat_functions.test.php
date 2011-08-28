@@ -38,8 +38,8 @@ class BackCompat_Functions_Test extends PHPUnit_Framework_TestCase {
         $this->assertEquals('0',    date_diff2($today, $today));
         $this->assertEquals('7',    date_diff2($today, $plus7_days, '%d'));
         $this->assertEquals('-8',   date_diff2($plus7_days, $minus1_day, '%d'));
-        $this->assertEquals('-28',  date_diff2($plus5_weeks, $plus7_days, '%w'));
-        $this->assertEquals('7400', date_diff2($year2010, $year2030, '%d')); // don't forget leap days
+        $this->assertEquals('-4',   date_diff2($plus5_weeks, $plus7_days, '%w'));
+        $this->assertEquals('7305', date_diff2($year2010, $year2030, '%d')); // don't forget leap days!
         $this->assertEquals('20',   date_diff2($year2010, $year2030, '%y'));
         $this->assertEquals('-20',  date_diff2($year2030, $year2010, '%y'));
     }

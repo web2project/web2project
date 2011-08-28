@@ -161,3 +161,44 @@ if (!function_exists('htmlspecialchars_decode')) {
 		return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
 	}
 }
+
+
+if (!function_exists('date_diff2')) {    
+    /**
+     * date_diff()
+     * Alternative to date_diff if we're using PHP pre-5.3.0
+     * http://www.php.net/manual/en/function.date-diff.php
+     * 
+     * @param DateTime
+     * @param DateTime
+     * @param string representing the desired unit
+     * @return int in the desired unit
+     * 
+     * TODO: This should return a DateInterval instead of a simple int.
+     * 
+     */
+    function date_diff2(DateTime $date1, DateTime $date2, $units = '%d') {
+        $timestamp1 = $date1->format('U');
+        $timestamp2 = $date2->format('U');
+        $factor     = 1;
+
+        if ($timestamp1 == $timestamp2) {
+            return 0;
+        }
+
+        $difference = $timestamp2 - $timestamp1;
+        switch ($units) {
+            case '%y':                          // years
+                $factor = 60 * 60 * 24 * 365;
+                break;
+            case '%w':                          // weeks
+                $factor = 60 * 60 * 24 * 7;
+                break;
+            case '%d':                          // days
+            default:
+                $factor = 60 * 60 * 24;
+        }
+        
+        return round ($difference / $factor, 0);
+    }
+}
