@@ -50,7 +50,7 @@ class CTask extends w2p_Core_BaseObject {
     public $task_target_budget = null;
     public $task_related_url = null;
     public $task_creator = null;
-
+    public $task_access = null;
     public $task_order = null;
     public $task_client_publish = null;
     public $task_dynamic = null;
