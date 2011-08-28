@@ -213,4 +213,16 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('holidays', w2p_pluralize('holiday'));
         $this->assertEquals('todos', w2p_pluralize('todo'));
     }
+/*
+/**
+ * PHP doesn't come with a signum function
+function w2Psgn($x) {
+	return $x ? ($x > 0 ? 1 : -1) : 0;
+}
+ */
+    public function test_w2Psgn() {
+        $this->assertEquals(-1, w2Psgn(-56.2));
+        $this->assertEquals( 0, w2Psgn(0));
+        $this->assertEquals( 1, w2Psgn(0.01));
+    }
 }
