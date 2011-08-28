@@ -243,11 +243,8 @@ if (!function_exists('date_diff2')) {
             $pastMonth = false;
             foreach ($units as $k => $unit) {
                 switch($unit) {
-                    case 'p':
-                        //do nothing
-                        break;
                     case 'y':
-                        $this->y = $values[$k];
+                        $this->{$unit} = $values[$k];
                         break;
                     case 'm':
                         (!$pastMonth) ? $this->m = $values[$k] : $this->i = $values[$k];
@@ -258,30 +255,17 @@ if (!function_exists('date_diff2')) {
                         $pastMonth = true;
                         break;                        
                     case 'd':
-                        $this->d = $values[$k];
-                        $pastMonth = true;
-                        break;
                     case 'h':
-                        $this->h = $values[$k];
-                        $pastMonth = true;
-                        break;
                     case 's':
-                        $this->s = $values[$k];
+                        $this->{$unit} = $values[$k];
                         $pastMonth = true;
                         break;
+                    case 'p':
                     default:
+                        //do nothing
                         break;
                 }
             }
-/*
-$interval = new DateInterval2('P2Y4D6H8M');
-$interval = new DateInterval2('P3WT6H8M');
-$interval = new DateInterval2('P1Y1D');
-$interval = new DateInterval2('P1Y1M37D500M');
-*/
-        }
-        public function _asArray() {
-            
         }
         public function createFromDateString() {
             
