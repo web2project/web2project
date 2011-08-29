@@ -265,8 +265,7 @@ class CTaskLog extends w2p_Core_BaseObject
         $perms = $AppUI->acl();
         $q = $this->_query;
 
-        if($perms->checkModuleItem('tasks', 'edit', $task_id)) {
-            
+        if($perms->checkModuleItem('tasks', 'edit', $task_id)) {            
             if ($this->task_log_percent_complete < 100) {
                 $q->addQuery('task_log_percent_complete, task_log_date, task_log_task_end_date');
                 $q->addTable('task_log');
@@ -305,7 +304,7 @@ class CTaskLog extends w2p_Core_BaseObject
 
 		$q->addQuery('SUM(task_log_hours)');
 		$q->addTable('task_log');
-		$q->addWhere('task_log_task = ' . (int)$task_log_task);
+		$q->addWhere('task_log_task = ' . (int)$task_id);
 		$totalHours = $q->loadResult();
 
 		CTask::updateHoursWorked($task_id, $totalHours);
