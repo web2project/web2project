@@ -11,6 +11,8 @@
         <column>task_log_updator</column>
         <column>task_log_hours</column>
         <column>task_log_date</column>
+        <column>task_log_percent_complete</column>
+        <column>task_log_task_end_date</column>
         <column>task_log_costcode</column>
         <column>task_log_problem</column>
         <column>task_log_reference</column>
