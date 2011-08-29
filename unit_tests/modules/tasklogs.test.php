@@ -200,11 +200,15 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
          */
         $now_secs = time();
         $min_time = $now_secs - 10;
-//TODO: timezones!
-        $this->assertGreaterThanOrEqual($min_time, strtotime($this->obj->task_log_created));
-        $this->assertGreaterThanOrEqual($min_time, strtotime($this->obj->task_log_updated));
-        $this->assertLessThanOrEqual($now_secs, strtotime($this->obj->task_log_created));
-        $this->assertLessThanOrEqual($now_secs, strtotime($this->obj->task_log_updated));
+
+        $log_created = $AppUI->formatTZAwareTime($this->obj->task_log_created, '%Y-%m-%d %T');
+        $log_created = strtotime($log_created);
+        $log_updated = $AppUI->formatTZAwareTime($this->obj->task_log_updated, '%Y-%m-%d %T');
+        $log_updated = strtotime($log_updated);
+        $this->assertGreaterThanOrEqual($min_time, $log_created);
+        $this->assertGreaterThanOrEqual($min_time, $log_updated);
+        $this->assertLessThanOrEqual($now_secs, $log_created);
+        $this->assertLessThanOrEqual($now_secs, $log_updated);
     }
 
     /**
