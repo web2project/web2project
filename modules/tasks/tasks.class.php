@@ -294,7 +294,7 @@ class CTask extends w2p_Core_BaseObject {
         return parent::load($oid, $strip);
 	}
 
-	public function loadFull(CAppUI $AppUI = null, $taskId) {
+	public function loadFull(w2p_Core_CAppUI $AppUI = null, $taskId) {
         global $AppUI;
 
         $q = $this->_query;
@@ -530,7 +530,7 @@ class CTask extends w2p_Core_BaseObject {
 	/**
 	 * @todo Parent store could be partially used
 	 */
-	public function store(CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
         $stored = false;
@@ -706,7 +706,7 @@ class CTask extends w2p_Core_BaseObject {
      *   subproject.
      *
      */
-    public static function storeTokenTask(CAppUI $AppUI, $project_id) {
+    public static function storeTokenTask(w2p_Core_CAppUI $AppUI, $project_id) {
         $subProject = new CProject();
         $subProject->load($project_id);
 
@@ -749,7 +749,7 @@ class CTask extends w2p_Core_BaseObject {
 	 * @todo Parent store could be partially used
 	 * @todo Can't delete a task with children
 	 */
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
         $this->_error = array();
@@ -1726,7 +1726,7 @@ class CTask extends w2p_Core_BaseObject {
 
 		return $q->loadHashList('dependencies_task_id');
 	}
-	public function getTaskDepartments(CAppUI $AppUI = null, $taskId) {
+	public function getTaskDepartments(w2p_Core_CAppUI $AppUI = null, $taskId) {
 		global $AppUI;
 
         if ($AppUI->isActiveModule('departments')) {
@@ -1742,7 +1742,7 @@ class CTask extends w2p_Core_BaseObject {
 			return $q->loadHashList('dept_id');
 		}
 	}
-    public function getContacts(CAppUI $AppUI = null, $task_id) {
+    public function getContacts(w2p_Core_CAppUI $AppUI = null, $task_id) {
 		global $AppUI;
 
         $perms = $AppUI->acl();
@@ -1766,7 +1766,7 @@ class CTask extends w2p_Core_BaseObject {
 			return $q->loadHashList('contact_id');
 		}
     }
-	public function getTaskContacts(CAppUI $AppUI = null, $task_id) {
+	public function getTaskContacts(w2p_Core_CAppUI $AppUI = null, $task_id) {
         return $this->getContacts($AppUI, $task_id);
 	}
 
