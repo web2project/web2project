@@ -328,6 +328,7 @@ class CTask extends w2p_Core_BaseObject {
 
         //Has a parent or children, we will check if it is dynamic so that it's info is updated also
 		$q = $this->_query;
+        $q->clear();
 		$modified_task = new CTask();
 
 		if ($fromChildren) {
