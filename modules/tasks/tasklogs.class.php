@@ -264,8 +264,9 @@ class CTaskLog extends w2p_Core_BaseObject
 	{
         $perms = $AppUI->acl();
         $q = $this->_query;
+        $q->clear();
 
-        if($perms->checkModuleItem('tasks', 'edit', $task_id)) {            
+        if($perms->checkModuleItem('tasks', 'edit', $task_id)) {
             if ($this->task_log_percent_complete < 100) {
                 $q->addQuery('task_log_percent_complete, task_log_date, task_log_task_end_date');
                 $q->addTable('task_log');
@@ -277,10 +278,10 @@ class CTaskLog extends w2p_Core_BaseObject
 
                 $percentComplete = $results['task_log_percent_complete'];
                 /*
-                 * TODO: In theory, we shouldn't just use the task_log_task_end_date, 
-                 *   because if we're after that date and someone is still adding 
-                 *   logs to a task, obviously the task isn't complete. We may want 
-                 *   to check to see if task_log_date > task_log_task_end_date and 
+                 * TODO: In theory, we shouldn't just use the task_log_task_end_date,
+                 *   because if we're after that date and someone is still adding
+                 *   logs to a task, obviously the task isn't complete. We may want
+                 *   to check to see if task_log_date > task_log_task_end_date and
                  *   use the later one as the end date.. not sure yet.
                  */
                 $taskEndDate = $results['task_log_task_end_date'];

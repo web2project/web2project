@@ -1227,9 +1227,9 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,              $departments[1]['dept_id']);
         $this->assertEquals('Department 1', $departments[1]['dept_name']);
         $this->assertEquals('',             $departments[1]['dept_phone']);
-        $this->assertEquals(1,              $departments[1][0]);
-        $this->assertEquals('Department 1', $departments[1][1]);
-        $this->assertEquals('',             $departments[1][2]);
+        $this->assertEquals(2,              $departments[2]['dept_id']);
+        $this->assertEquals('Department 1', $departments[2]['dept_name']);
+        $this->assertEquals('',             $departments[2]['dept_phone']);
     }
 
     /**

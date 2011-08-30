@@ -63,27 +63,6 @@
             <value>1</value>
             <value>0</value>
         </row>
-        <row>
-            <value>3</value>
-            <value>1</value>
-            <value>This is a task log name.</value>
-            <value>This is a task log description.</value>
-            <value>1</value>
-            <value>Ignored</value>
-            <value>1</value>
-            <value>Ignored</value>
-            <value>2.75</value>
-            <value>2010-05-30</value>
-            <value>0</value>
-            <value>0000-00-00 00:00:00</value>
-            <value>1</value>
-            <value>1</value>
-            <value>1</value>
-            <value>http://www.example.com</value>
-            <value>1</value>
-            <value>1</value>
-            <value>0</value>
-        </row>
     </table>
     <table name="tasks">
         <column>task_id</column>
@@ -129,7 +108,7 @@
           <value>2009-07-05 00:00:00</value>
           <value>2</value>
           <value>24</value>
-          <value>25.5</value>
+          <value>22.75</value>
           <value>2009-07-15 00:00:00</value>
           <value>0</value>
           <value>0</value>
@@ -217,7 +196,7 @@
             <value>0.00</value>
             <value>0.00</value>
 	        <value>0</value>
-	        <value>25.5</value>
+	        <value>22.75</value>
 	        <value>0</value>
             <value>1</value>
             <value>0</value>
