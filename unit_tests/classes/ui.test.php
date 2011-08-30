@@ -416,8 +416,9 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
         $datetime     = new DateTime('now', $datetimezone);
+        $df           = $AppUI->getPref('FULLDATEFORMAT');
 
-        $this->assertEquals($datetime->format('d/M/Y h:i a'), $AppUI->getTZAwareTime());
+        $this->assertEquals($datetime->format($df), $AppUI->getTZAwareTime());
     }
 
     /**
