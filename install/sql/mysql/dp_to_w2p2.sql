@@ -114,7 +114,7 @@ UPDATE `config` SET `config_value` = "web2project" WHERE `config_name` = "host_s
 UPDATE `config` SET `config_value` = "[web2Project]" WHERE `config_name` = "email_prefix" AND `config_value` = "[dotProject]";
 
 #Add New sysvals:
-ALTER TABLE `sysvals` DROP INDEX `sysval_title`;
+ALTER TABLE `sysvals` DROP INDEX `idx_sysval_title`;
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES (1, 'GlobalYesNo', 'No', '0');
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES (1, 'GlobalYesNo', 'Yes', '1');
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) VALUES (1, 'UserType', 'Default User', '0');
