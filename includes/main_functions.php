@@ -16,7 +16,7 @@ require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
  * TODO: Personally, I'm already hating this autoloader... while it's great in
  * concept, we don't have anything that resembles a real class naming convention
  * so this ends up being nasty and getting nastier.  Hopefully, we can clean
- * these things up for v2.0
+ * these things up for v3.x
  */
 spl_autoload_register('w2p_autoload');
 
@@ -287,14 +287,6 @@ function w2p_url($link, $text = '')
     $result = '<a href="'.$link.'" target="_new">'.$text.'</a>';
   }
   return $result;
-}
-
-/*
-* This is deprecated because some users use local urls instead of real URLs.
-*/
-function w2p_check_url($link)
-{
-    return true;
 }
 
 function w2p_email($email, $name = '')
