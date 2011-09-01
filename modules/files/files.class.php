@@ -179,17 +179,18 @@ class CFile extends w2p_Core_BaseObject {
 		}
 
 		$result = false;
-		$this->_query->clear();
-		$this->_query->addTable('projects');
-		$this->_query->addQuery('project_owner');
-		$this->_query->addWhere('project_id = ' . (int)$this->file_project);
-		$res = $this->_query->exec(ADODB_FETCH_ASSOC);
-		if ($res && $row = $this->_query->fetchRow()) {
+        $q = $this->_query;
+		$q->clear();
+		$q->addTable('projects');
+		$q->addQuery('project_owner');
+		$q->addWhere('project_id = ' . (int)$this->file_project);
+		$res = $q->exec(ADODB_FETCH_ASSOC);
+		if ($res && $row = $q->fetchRow()) {
 			if ($row['project_owner'] == $AppUI->user_id) {
 				$result = true;
 			}
 		}
-		$this->_query->clear();
+
 		return $result;
 	}
 
@@ -608,15 +609,14 @@ class CFile extends w2p_Core_BaseObject {
 		if (!$this->file_owner)
 			return $owner;
 
-		$this->_query->clear();
-		$this->_query->addTable('users', 'a');
-		$this->_query->addJoin('contacts', 'b', 'b.contact_id = a.user_contact', 'inner');
-		$this->_query->addQuery('contact_first_name, contact_last_name');
-		$this->_query->addWhere('a.user_id = ' . (int)$this->file_owner);
-		if ($qid = &$this->_query->exec()) {
+		$q = $this->_query;
+		$q->addTable('users', 'a');
+		$q->addJoin('contacts', 'b', 'b.contact_id = a.user_contact', 'inner');
+		$q->addQuery('contact_first_name, contact_last_name');
+		$q->addWhere('a.user_id = ' . (int)$this->file_owner);
+		if ($qid = &$q->exec()) {
 			$owner = $qid->fields['contact_first_name'] . ' ' . $qid->fields['contact_last_name'];
 		}
-		$this->_query->clear();
 
 		return $owner;
 	}
@@ -626,18 +626,19 @@ class CFile extends w2p_Core_BaseObject {
 		if (!$this->file_task)
 			return $taskname;
 
-		$this->_query->clear();
-		$this->_query->addTable('tasks');
-		$this->_query->addQuery('task_name');
-		$this->_query->addWhere('task_id = ' . (int)$this->file_task);
-		if ($qid = &$this->_query->exec()) {
+        $q = $this->_query;
+		$q->clear();
+		$q->addTable('tasks');
+		$q->addQuery('task_name');
+		$q->addWhere('task_id = ' . (int)$this->file_task);
+		if ($qid = &$q->exec()) {
 			if ($qid->fields['task_name']) {
 				$taskname = $qid->fields['task_name'];
 			} else {
 				$taskname = $qid->fields[0];
 			}
 		}
-		$this->_query->clear();
+
 		return $taskname;
 	}
 

@@ -4,7 +4,6 @@
     <table name="task_log">
         <column>task_log_id</column>
         <column>task_log_task</column>
-        <column>task_log_help_desk_id</column>
         <column>task_log_name</column>
         <column>task_log_description</column>
         <column>task_log_creator</column>
@@ -13,6 +12,8 @@
         <column>task_log_updated</column>
         <column>task_log_hours</column>
         <column>task_log_date</column>
+        <column>task_log_percent_complete</column>
+        <column>task_log_task_end_date</column>
         <column>task_log_costcode</column>
         <column>task_log_problem</column>
         <column>task_log_reference</column>
@@ -20,7 +21,6 @@
         <column>task_log_project</column>
         <column>task_log_company</column>
         <row>
-            <value>1</value>
             <value>1</value>
             <value>1</value>
             <value>Task Log 1</value>
@@ -31,6 +31,8 @@
             <value>2009-10-19 00:00:00</value>
             <value>20</value>
             <value>2009-10-19</value>
+            <value>0</value>
+            <value>0000-00-00 00:00:00</value>
             <value>1</value>
             <null/>
             <null/>

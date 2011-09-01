@@ -456,6 +456,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function getAllowedProjectsInRows($userId) {
 
         $q = $this->_query;
+        $q->clear();
 		$q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
 		$q->addTable('projects', 'pr');
 		$q->addOrder('project_short_name');

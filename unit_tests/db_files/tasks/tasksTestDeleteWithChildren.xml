@@ -1156,7 +1156,6 @@
     <table name="task_log">
         <column>task_log_id</column>
         <column>task_log_task</column>
-        <column>task_log_help_desk_id</column>
         <column>task_log_name</column>
         <column>task_log_description</column>
         <column>task_log_creator</column>
@@ -1174,7 +1173,6 @@
         <row>
             <value>3</value>
             <value>25</value>
-            <value>1</value>
             <value>Task Log 3</value>
             <value>Did some working on task 25.</value>
             <value>1</value>
@@ -1194,7 +1192,6 @@
         <row>
             <value>4</value>
             <value>26</value>
-            <value>1</value>
             <value>Task Log 4</value>
             <value>Did some working on task 26.</value>
             <value>1</value>

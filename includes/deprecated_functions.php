@@ -39,3 +39,29 @@ function w2PcheckCharset($charset) {
 	trigger_error("The w2PcheckCharset function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
     return 'utf-8';
 }
+
+/*
+* 	Convert string char (ref : Vbulletin #3987)
+*
+* @deprecated
+*/
+function strJpGraph($text) {
+    global $locale_char_set;
+    trigger_error("The strJpGraph function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
+    if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) {
+        return utf8_decode($text);
+    } else {
+        return $text;
+    }
+}
+
+/**
+ * Casts the $a parameter to an integer
+ * TODO:  Remove for v4.0 - caseydk 26 August 2011
+ *
+ * @deprecated
+ */
+function atoi($a) {
+    trigger_error("The strJpGraph function has been deprecated and will be removed in v4.0. Please use int() instead.", E_USER_NOTICE );
+    return $a + 0;
+}

@@ -110,8 +110,9 @@ abstract class w2p_Core_BaseObject
 					$filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
 				}
 			}
-			$this->_query->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
-			$this->_query->clear();
+            $q = $this->_query;
+			$q->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
+
 			return true;
 		}
 	}
@@ -123,7 +124,9 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function load($oid = null, $strip = true)
 	{
-		$k = $this->_tbl_key;
+		$this->preLoad();
+
+        $k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
 		}
@@ -131,17 +134,17 @@ abstract class w2p_Core_BaseObject
 		if ($oid === null) {
 			return false;
 		}
-		$this->_query->clear();
-		$this->_query->addTable($this->_tbl);
-		$this->_query->addWhere($this->_tbl_key . ' = ' . $oid);
-		$hash = $this->_query->loadHash();
+		$q = $this->_query;
+		$q->addTable($this->_tbl);
+		$q->addWhere($this->_tbl_key . ' = ' . $oid);
+		$hash = $q->loadHash();
 		//If no record was found send false because there is no data
 		if (!$hash) {
 			return false;
 		}
-		$this->_query->bindHashToObject($hash, $this, null, $strip);
-		$this->_query->clear();
-		return $this;
+		$q->bindHashToObject($hash, $this, null, $strip);
+
+		return $this->postLoad();
 	}
 
 	/**
@@ -150,16 +153,16 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function loadAll($order = null, $where = null)
 	{
-		$this->_query->clear();
-		$this->_query->addTable($this->_tbl);
+        $q = $this->_query;
+		$q->addTable($this->_tbl);
 		if ($order) {
-			$this->_query->addOrder($order);
+			$q->addOrder($order);
 		}
 		if ($where) {
-			$this->_query->addWhere($where);
+			$q->addWhere($where);
 		}
-		$result = $this->_query->loadHashList($this->_tbl_key);
-		$this->_query->clear();
+		$result = $q->loadHashList($this->_tbl_key);
+
 		return $result;
 	}
 
@@ -170,9 +173,9 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function &getQuery($alias = null)
 	{
-		$this->_query->clear();
-		$this->_query->addTable($this->_tbl, $alias);
-		return $this->_query;
+		$q = $this->_query;
+        $q->addTable($this->_tbl, $alias);
+		return $q;
 	}
 
 	/**
@@ -235,7 +238,9 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function store($updateNulls = false)
 	{
-		global $AppUI;
+        $k = $this->_tbl_key;
+        // NOTE: I don't particularly like this but it wires things properly.
+        ($this->$k) ? $this->preUpdate() : $this->preCreate();
 
 		$this->w2PTrimAll();
 
@@ -253,11 +258,10 @@ abstract class w2p_Core_BaseObject
 			$store_type = 'add';
 			$ret = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
 		}
-        $q->clear();
 
 		if ($ret) {
-			// only record history if an update or insert actually occurs.
-			addHistory($this->_tbl, $this->$k, $store_type, $AppUI->_('ACTION') . ': ' . $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->$k);
+            // NOTE: I don't particularly like this but it wires things properly.
+            ($store_type == 'add') ? $this->postCreate() : $this->postUpdate();
 		}
 		return ((!$ret) ? (get_class($this) . '::store failed ' . db_error()) : null);
 	}
@@ -279,6 +283,7 @@ abstract class w2p_Core_BaseObject
 		$acl = &$AppUI->acl();
 		if (!$acl->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
 			$msg = $AppUI->_('noDeletePermission');
+            $this->_error['noDeletePermission'] = $msg;
 			return false;
 		}
 
@@ -302,21 +307,22 @@ abstract class w2p_Core_BaseObject
 			$q->loadObject($obj);
 			$q->clear();
 
-			if (!$obj) {
+			if (!$obj && '' != db_error()) {
 				$msg = db_error();
+                $this->_error['db_error'] = $msg;
 				return false;
 			}
 			$msg = array();
 			foreach ($joins as $table) {
 				$k = $table['idfield'];
 				if ($obj->$k) {
-					$msg[] = $AppUI->_($table['label']);
+					$msg[$table['label']] = $AppUI->_($table['label']);
+                    $this->_error['noDeleteRecord-'.$table['label']] = $table['label'];
 				}
 			}
 
 			if (count($msg)) {
 				$msg = $AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
-                $this->_error = $msg;
 				return false;
 			} else {
 				return true;
@@ -334,12 +340,14 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function delete($oid = null)
 	{
-		$k = $this->_tbl_key;
+		$this->preDelete();
+
+        $k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
 		}
 		if (!$this->canDelete($msg)) {
-			return $msg;
+            return $msg;
 		}
 
 		$q = $this->_query;
@@ -348,10 +356,9 @@ abstract class w2p_Core_BaseObject
 		$result = ((!$q->exec()) ? db_error() : null);
 
 		if (!$result) {
-			// only record history if deletion actually occurred
-			addHistory($this->_tbl, $this->$k, 'delete');
+            $this->postDelete();
 		}
-		$q->clear();
+
 		return $result;
 	}
 
@@ -387,22 +394,22 @@ abstract class w2p_Core_BaseObject
 		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
 
-		$this->_query->clear();
-		$this->_query->addQuery($fields);
-		$this->_query->addTable($this->_tbl);
+		$q = $this->_query;
+		$q->addQuery($fields);
+		$q->addTable($this->_tbl);
 
 		if (isset($extra['from'])) {
-			$this->_query->addTable($extra['from']);
+			$q->addTable($extra['from']);
 		}
 
 		if (isset($extra['join']) && isset($extra['on'])) {
-			$this->_query->addJoin($extra['join'], $extra['join'], $extra['on']);
+			$q->addJoin($extra['join'], $extra['join'], $extra['on']);
 		}
 
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
 				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$this->_query->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
+				$q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
 			} else {
 				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
 			}
@@ -410,27 +417,27 @@ abstract class w2p_Core_BaseObject
 			if (count($deny)) {
 				if ((array_search('0', $deny)) === false) {
 					//If 0 (All Items of a module) are not on the denial array then just deny the denied items
-					$this->_query->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
+					$q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
 				} elseif ((array_search('0', $allow)) === false) {
 					//If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
 				} else {
 					//if we allow everything and deny everything then denials have higher priority... Deny Everything!
-					$this->_query->addWhere('0=1');
+					$q->addWhere('0=1');
 				}
 			}
 		} else {
 			//if there are no allowances, deny!
-			$this->_query->addWhere('0=1');
+			$q->addWhere('0=1');
 		}
 
 		if (isset($extra['where'])) {
-			$this->_query->addWhere($extra['where']);
+			$q->addWhere($extra['where']);
 		}
 
 		if ($orderby) {
-			$this->_query->addOrder($orderby);
+			$q->addOrder($orderby);
 		}
-		return $this->_query->loadHashList($index);
+		return $q->loadHashList($index);
 	}
 
 	public function getAllowedSQL($uid, $index = null)
@@ -526,4 +533,56 @@ abstract class w2p_Core_BaseObject
 			$this->$k = htmlspecialchars_decode($v);
 		}
 	}
+
+    /*
+     *  This pre/post functions are only here for completeness.
+     *    NOTE: Each of these actions gets called after the permissions check.
+     *    NOTE: The pre* actions happen whether the desired action - create, 
+     *      update, load, and delete - actually occur.
+     *    NOTE: The post* actions only happen if the desired action - create, 
+     *      update, load, and delete - is successful.
+     */
+
+    protected function preCreate() {
+        return $this;
+    }
+    protected function postCreate() {
+        //NOTE: This only happens if the create was successful.
+		global $AppUI;
+
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $AppUI->_('ACTION') . ': ' . 
+            $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . 
+            $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+
+        return $this;
+    }
+    protected function preUpdate() {
+        return $this;
+    }
+    protected function postUpdate() {
+        //NOTE: This only happens if the update was successful.
+		global $AppUI;
+
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $AppUI->_('ACTION') . ': ' . 
+            $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . 
+            $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+        return $this;
+    }
+    protected function preLoad() {
+        return $this;
+    }
+    protected function postLoad() {
+        //NOTE: This only happens if the load was successful.
+        return $this;
+    }
+    protected function preDelete() {
+        return $this;
+    }
+    protected function postDelete() {
+        //NOTE: This only happens if the delete was successful.
+		global $AppUI;
+
+        addHistory($this->{$this->_tbl_key}, $this->{$this->_tbl_key}, 'delete');
+        return $this;
+    }
 }

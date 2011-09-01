@@ -48,7 +48,7 @@ class CSetupHistory {
 			PRIMARY KEY  (history_id),
 			INDEX index_history_module (history_table, history_item),
 		  	INDEX index_history_item (history_item) 
-			) TYPE=MyISAM';
+            ) ENGINE = MYISAM DEFAULT CHARSET=utf8';
 		$q->createDefinition($sql);
 		$q->exec();
 

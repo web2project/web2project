@@ -204,13 +204,11 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function isUser($oid = null) {
-		global $AppUI;
-
 		if (!$oid) {
 			$oid = $this->contact_id;
 		}
 
-		if ($oid) {
+		if ((int) $oid) {
 			// Check to see if there is a user
 			$q = $this->_query;
 			$q->addTable('users');

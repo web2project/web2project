@@ -139,6 +139,7 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $contact = new CContact();
 
+        $this->assertInstanceOf('CContact', $contact);
         $this->assertObjectHasAttribute('contact_display_name',     $contact);
     }
 
@@ -225,18 +226,19 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
-        $this->assertTrue($result);
-        $original_id = $this->obj->contact_id;
-
+        $this->obj->contact_id = 1;
         $result = $this->obj->delete($AppUI);
-        $this->assertTrue($result);
+        $this->assertEquals(1, count($this->obj->getError()));
+        $this->assertArrayHasKey('noDeleteRecord-Users', $this->obj->getError());
 
         $contact = new CContact();
-        $contact->load($original_id);
-        $this->assertEquals('',              $contact->link_name);
-        $this->assertEquals('',              $contact->link_url);
+        $contact->contact_id = 3;
+        $result = $contact->delete($AppUI);
+        $this->assertTrue($result);
+        $this->assertEquals(0, count($contact->getError()));
+
+        $result = $contact->load(3);
+        $this->assertFalse($result);
     }
 
     public function testSetContactMethods()
@@ -273,23 +275,6 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals($methods['im_skype'],     $results['im_skype']);
     }
 
-    public function testCanDelete()
-    {
-        $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
-        $cantDelete = $this->obj->canDelete('error', true);
-        $this->assertFalse($cantDelete);
-
-        $contact = new CContact();
-        $contact->bind($this->post_data);
-        $contact->contact_first_name = 'Firstname3';
-        $contact->contact_last_name  = 'Lastname3';
-        $contact->contact_display_name = '';
-        $result = $contact->store($AppUI);
-        $canDeleteUser = $contact->canDelete('error');
-        $this->assertTrue($canDeleteUser);
-    }
-
     public function testIsUser()
     {
         $contact = new CContact();
@@ -304,7 +289,7 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * expectedException PHPUnit_Framework_Error
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testIs_Alpha()
     {
@@ -315,6 +300,19 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertFalse($contact->is_alpha('monkey'));
         $this->assertFalse($contact->is_alpha('3.14159'));
         $this->assertFalse($contact->is_alpha(3.14159));
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testGetCompanyName()
+    {
+        $contact = new CContact();
+        $contact->contact_company = 1;
+        $this->assertEquals('UnitTestCompany',  $contact->getCompanyName());
+
+        $contact->contact_company = 2;
+        $this->assertEquals('CreatedCompany',  $contact->getCompanyName());
     }
 
     public function testGetCompanyDetails()

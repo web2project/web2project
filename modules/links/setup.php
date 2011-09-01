@@ -53,7 +53,9 @@ class CSetupLinks {
 	}
 
 	public function install() {
-		$q = new w2p_Database_Query();
+        global $AppUI;
+
+        $q = new w2p_Database_Query();
 		$q->createTable('links');
 		$q->createDefinition('(
             link_id int( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -71,7 +73,7 @@ class CSetupLinks {
             KEY idx_link_task ( link_task ) ,
             KEY idx_link_project ( link_project ) ,
             KEY idx_link_parent ( link_parent )
-            ) TYPE = MYISAM ');
+            ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
 
 		$q->exec($sql);
 
@@ -88,6 +90,7 @@ class CSetupLinks {
             $i++;
         }
 
-		return true;
+        $perms = $AppUI->acl();
+        return $perms->registerModule('Links', 'links');
 	}
 }

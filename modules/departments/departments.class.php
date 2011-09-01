@@ -225,22 +225,22 @@ class CDepartment extends w2p_Core_BaseObject {
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
 
-		$this->_query->clear();
-		$this->_query->addQuery($fields);
-		$this->_query->addTable($this->_tbl);
+		$q = $this->_query;
+		$q->addQuery($fields);
+		$q->addTable($this->_tbl);
 
 		if ($extra['from']) {
-			$this->_query->addTable($extra['from']);
+			$q->addTable($extra['from']);
 		}
 
 		if ($extra['join'] && $extra['on']) {
-			$this->_query->addJoin($extra['join'], $extra['join'], $extra['on']);
+			$q->addJoin($extra['join'], $extra['join'], $extra['on']);
 		}
 
 		if (count($allow)) {
 			if ((array_search('0', $allow)) === false) {
 				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$this->_query->addWhere('(' . $this->_tbl_key . ' IN (' . implode(',', $allow) . ') OR ' . $this->_tbl_key . ' IS NULL)');
+				$q->addWhere('(' . $this->_tbl_key . ' IN (' . implode(',', $allow) . ') OR ' . $this->_tbl_key . ' IS NULL)');
 			} else {
 				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
 			}
@@ -248,25 +248,25 @@ class CDepartment extends w2p_Core_BaseObject {
 			if (count($deny)) {
 				if ((array_search('0', $deny)) === false) {
 					//If 0 (All Items of a module) are not on the denial array then just deny the denied items
-					$this->_query->addWhere('(' . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ') OR ' . $this->_tbl_key . ' IS NULL)');
+					$q->addWhere('(' . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ') OR ' . $this->_tbl_key . ' IS NULL)');
 				} elseif ((array_search('0', $allow)) === false) {
 					//If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
 				} else {
 					//If 0 (All Items of a module) are denied then add a false where clause
-					$this->_query->addWhere('(' . $this->_tbl_key . ' IS NULL)');
+					$q->addWhere('(' . $this->_tbl_key . ' IS NULL)');
 				}
 			}
 		}
 
 		if (isset($extra['where'])) {
-			$this->_query->addWhere($extra['where']);
+			$q->addWhere($extra['where']);
 		}
 
 		if ($orderby) {
-			$this->_query->addOrder($orderby);
+			$q->addOrder($orderby);
 		}
-		//print_r($this->_query->prepare());
-		return $this->_query->loadHashList($index);
+
+		return $q->loadHashList($index);
 	}
 
 	public function getAllowedSQL($uid, $index = null) {

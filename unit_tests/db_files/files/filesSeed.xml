@@ -20,7 +20,6 @@
         <column>file_co_reason</column>
         <column>file_version_id</column>
         <column>file_folder</column>
-        <column>file_helpdesk_item</column>
         <column>file_indexed</column>
     </table>
 </dataset>
