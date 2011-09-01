@@ -12,6 +12,8 @@
         <column>task_log_updated</column>
         <column>task_log_hours</column>
         <column>task_log_date</column>
+        <column>task_log_percent_complete</column>
+        <column>task_log_task_end_date</column>
         <column>task_log_costcode</column>
         <column>task_log_problem</column>
         <column>task_log_reference</column>
@@ -29,6 +31,8 @@
             <value>2009-10-19 00:00:00</value>
             <value>20</value>
             <value>2009-10-19</value>
+            <value>0</value>
+            <value>0000-00-00 00:00:00</value>
             <value>1</value>
             <null/>
             <null/>

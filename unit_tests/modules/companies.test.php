@@ -132,6 +132,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewCompanyAttributes()
     {
+        $this->assertInstanceOf('CCompany', $this->obj);
         $this->assertObjectHasAttribute('company_id',           $this->obj);
         $this->assertObjectHasAttribute('company_name',         $this->obj);
         $this->assertObjectHasAttribute('company_phone1',       $this->obj);
@@ -156,6 +157,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewCompanyAttributeValues()
     {
+        $this->assertInstanceOf('CCompany', $this->obj);
         $this->assertEquals(0, $this->obj->company_id);
         $this->assertNull($this->obj->company_name);
         $this->assertNull($this->obj->company_phone1);
@@ -358,19 +360,22 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests the delete of a company
      */
-    public function testDeleteCompany()
+    public function testDelete()
     {
         global $AppUI;
 
         $this->obj->company_id = 1;
-        $msg = $this->obj->delete($AppUI);
-        $this->assertEquals('noDeleteRecord: Projects, Departments', $msg);
-
-        $this->obj->company_id = 3;
         $result = $this->obj->delete($AppUI);
+        $this->assertEquals(2, count($this->obj->getError()));
+        $this->assertArrayHasKey('noDeleteRecord-Projects', $this->obj->getError());
+        $this->assertArrayHasKey('noDeleteRecord-Departments', $this->obj->getError());
+
+        $company = new CCompany();
+        $company->company_id = 3;
+        $result = $company->delete($AppUI);
         $this->assertTrue($result);
 
-        $result = $this->obj->load(3);
+        $result = $company->load(3);
         $this->assertFalse($result);
 
         $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestDeleteCompany.xml');
@@ -386,6 +391,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
         $companies = $this->obj->getCompanyList($AppUI);
 
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
         $this->assertEquals(4,                             count($companies));
         $this->assertEquals(2,                             $companies[0]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[0]['company_name']);
@@ -430,6 +436,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
         $results = $this->obj->getCompanyList($AppUI, 3);
 
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
     }
 
@@ -442,6 +449,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
         $companies = $this->obj->getCompanyList($AppUI, 1);
 
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
         $this->assertEquals(1,                             count($companies));
         $this->assertEquals(2,                             $companies[0]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[0]['company_name']);
@@ -462,6 +470,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
         $results = $this->obj->getCompanyList($AppUI, -1, 'This is a company');
 
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
     }
 
@@ -474,6 +483,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
         $results = $this->obj->getCompanyList($AppUI, -1, '', 2);
 
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
     }
 
@@ -486,6 +496,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
         $companies = $this->obj->getCompanyList($AppUI, -1, '', 1);
 
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
         $this->assertEquals(4,                             count($companies));
         $this->assertEquals(2,                             $companies[0]['company_id']);
         $this->assertEquals('CreatedCompany',              $companies[0]['company_name']);
@@ -530,6 +541,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
         $projects = CCompany::getProjects($AppUI, 1);
 
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $projects);
         $this->assertEquals(1,                 count($projects));
         $this->assertEquals(1,                 $projects[0]['project_id']);
         $this->assertEquals('Test Project',    $projects[0]['project_name']);
@@ -555,6 +567,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
          * so we need to check both to make sure functionality depending on either does
          * not break.
          */
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $contacts);
         $this->assertEquals(2, 							count($contacts));
         $this->assertEquals(1,                          $contacts[1]['contact_id']);
         $this->assertEquals('Admin',                    $contacts[1]['contact_first_name']);
@@ -685,6 +698,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
          * so we need to check both to make sure functionality depending on either does
          * not break.
          */
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $users);
         $this->assertEquals(2,                  count($users));
         $this->assertEquals(3,                  $users[3]['user_id']);
         $this->assertEquals('contact_number_2', $users[3]['user_username']);
@@ -713,6 +727,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
         $departments = CCompany::getDepartments($AppUI, 1);
 
+        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $departments);
         $this->assertEquals(1,              count($departments));
         $this->assertEquals(1,              $departments[0]['dept_id']);
         $this->assertEquals(0,              $departments[0]['dept_parent']);

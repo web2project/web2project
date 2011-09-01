@@ -142,6 +142,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributes()
     {
+        $this->assertInstanceOf('CTaskLog',                     $this->obj);
         $this->assertObjectHasAttribute('task_log_id',          $this->obj);
         $this->assertObjectHasAttribute('task_log_task',        $this->obj);
         $this->assertObjectHasAttribute('task_log_name',        $this->obj);
@@ -162,6 +163,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributeValues()
     {
+        $this->assertInstanceOf('CTaskLog', $this->obj);
         $this->assertNull($this->obj->task_log_id);
         $this->assertNull($this->obj->task_log_task);
         $this->assertNull($this->obj->task_log_name);
@@ -182,6 +184,8 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testStoreCreate()
     {
+        global $AppUI;
+
         $this->obj->bind($this->post_data, null, true, true);
         $this->obj->store();
 
@@ -199,18 +203,14 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $q = new w2p_Database_Query;
-        $q->addTable('task_log');
-        $q->addQuery('task_log_created, task_log_updated');
-        $q->addWhere('task_log_id = 2');
-        $results = $q->loadList();
-
-        foreach($results as $dates) {
-            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_log_created']));
-            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_log_updated']));
-            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_log_created']));
-            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_log_updated']));
-        }
+        $log_created = $AppUI->formatTZAwareTime($this->obj->task_log_created, '%Y-%m-%d %T');
+        $log_created = strtotime($log_created);
+        $log_updated = $AppUI->formatTZAwareTime($this->obj->task_log_updated, '%Y-%m-%d %T');
+        $log_updated = strtotime($log_updated);
+        $this->assertGreaterThanOrEqual($min_time, $log_created);
+        $this->assertGreaterThanOrEqual($min_time, $log_updated);
+        $this->assertLessThanOrEqual($now_secs, $log_created);
+        $this->assertLessThanOrEqual($now_secs, $log_updated);
     }
 
     /**
@@ -218,10 +218,15 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testStoreUpdate()
     {
+        global $AppUI;
+
         $this->obj->bind($this->post_data, null, true, true);
-        $this->obj->task_log_id = 1;
-        unset($this->obj->task_log_created);
         $this->obj->store();
+
+        $tasklog = new CTaskLog();
+        $tasklog->load($this->obj->task_log_id);
+        $tasklog->task_log_hours = 5;
+        $tasklog->store();
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestStoreUpdate.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_created', 'task_log_updated')));
@@ -237,16 +242,11 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $q = new w2p_Database_Query;
-        $q->addTable('task_log');
-        $q->addQuery('task_log_updated');
-        $q->addWhere('task_log_id = 1');
-        $results = $q->loadList();
+        $log_updated = $AppUI->formatTZAwareTime($tasklog->task_log_updated, '%Y-%m-%d %T');
+        $log_updated = strtotime($log_updated);
 
-        foreach($results as $dates) {
-            $this->assertGreaterThanOrEqual($min_time, strtotime($dates['task_log_updated']));
-            $this->assertLessThanOrEqual($now_secs, strtotime($dates['task_log_updated']));
-        }
+        $this->assertGreaterThanOrEqual($log_updated, $now_secs);
+        $this->assertLessThanOrEqual($log_updated, $min_time);
     }
 
     /**

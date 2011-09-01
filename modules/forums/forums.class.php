@@ -193,6 +193,7 @@ class CForum extends w2p_Core_BaseObject {
             if (!$q->exec()) {
                 return db_error();
             }
+            $q->clear();
 
             if ($msg = parent::delete()) {
                 return $msg;

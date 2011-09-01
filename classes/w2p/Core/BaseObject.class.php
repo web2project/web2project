@@ -283,6 +283,7 @@ abstract class w2p_Core_BaseObject
 		$acl = &$AppUI->acl();
 		if (!$acl->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
 			$msg = $AppUI->_('noDeletePermission');
+            $this->_error['noDeletePermission'] = $msg;
 			return false;
 		}
 
@@ -306,21 +307,22 @@ abstract class w2p_Core_BaseObject
 			$q->loadObject($obj);
 			$q->clear();
 
-			if (!$obj) {
+			if (!$obj && '' != db_error()) {
 				$msg = db_error();
+                $this->_error['db_error'] = $msg;
 				return false;
 			}
 			$msg = array();
 			foreach ($joins as $table) {
 				$k = $table['idfield'];
 				if ($obj->$k) {
-					$msg[] = $AppUI->_($table['label']);
+					$msg[$table['label']] = $AppUI->_($table['label']);
+                    $this->_error['noDeleteRecord-'.$table['label']] = $table['label'];
 				}
 			}
 
 			if (count($msg)) {
 				$msg = $AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
-                $this->_error = $msg;
 				return false;
 			} else {
 				return true;
@@ -345,7 +347,7 @@ abstract class w2p_Core_BaseObject
 			$this->$k = intval($oid);
 		}
 		if (!$this->canDelete($msg)) {
-			return $msg;
+            return $msg;
 		}
 
 		$q = $this->_query;

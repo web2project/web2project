@@ -887,7 +887,7 @@
           <value>1</value>
           <value>0</value>
           <value>2009-11-01 00:00:00</value>
-          <value>2</value>
+          <value>0</value>
           <value>0</value>
           <value>25</value>
           <value>This is task 25</value>
@@ -922,7 +922,7 @@
           <value>24</value>
           <value>0</value>
           <value>2009-11-02 00:00:00</value>
-          <value>2</value>
+          <value>0</value>
           <value>0</value>
           <value>67</value>
           <value>This is task 26</value>

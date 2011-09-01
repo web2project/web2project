@@ -66,6 +66,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
         $AppUI = new CAppUI;
 
+        $this->assertInstanceOf('CAppUI',                   $AppUI);
         $this->assertObjectHasAttribute('state',            $AppUI);
         $this->assertObjectHasAttribute('user_id',          $AppUI);
         $this->assertObjectHasAttribute('user_first_name',  $AppUI);
@@ -305,7 +306,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
     /**
      * Tests getting a system class
      *
-     * expectedException PHPUnit_Framework_Error
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetSystemClassValid()
     {
@@ -317,7 +318,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
     /**
      * Tests getting a system class when no class name is passed
      *
-     * expectedException PHPUnit_Framework_Error
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetSystemClassNoName()
     {
@@ -416,8 +417,9 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
         $datetime     = new DateTime('now', $datetimezone);
+        $df           = $AppUI->getPref('FULLDATEFORMAT');
 
-        $this->assertEquals($datetime->format('d/M/Y h:i a'), $AppUI->getTZAwareTime());
+        $this->assertEquals($datetime->format($df), $AppUI->getTZAwareTime());
     }
 
     /**
@@ -573,8 +575,10 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
         $locales = $AppUI->readDirs('locales');
 
+        $this->assertInternalType('array', $locales);
+
         foreach ($locales as $locale) {
-            // TODO: implement validation here..
+            $this->assertInternalType('string', $locale);
         }
     }
 
