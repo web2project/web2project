@@ -48,24 +48,33 @@ class CRole {
 
 	public function check() {
 		// Not really much to check, just return OK for this iteration.
-		return null; // object is ok
+		return array(); // object is ok
 	}
 
 	public function store() {
-		$msg = $this->check();
-		if ($msg) {
-			return get_class($this) . '::store-check failed ' . $msg;
-		}
+		global $AppUI;
+
+        $perms = $AppUI->acl();
+        $stored = false;
+
+        $this->_error = $this->check();
+        if (count($this->_error)) {
+            return false;
+        }
+
 		if ($this->role_id) {
 			$ret = $this->perms->updateRole($this->role_id, $this->role_name, $this->role_description);
 		} else {
 			$ret = $this->perms->insertRole($this->role_name, $this->role_description);
 		}
+
 		if (!$ret) {
-			return get_class($this) . '::store failed';
+            $this->_error['store-check'] = get_class($this) . '::store failed';
 		} else {
-			return (int)$ret;
+			$stored = true;
 		}
+        
+        return $stored;
 	}
 
 	public function delete() {

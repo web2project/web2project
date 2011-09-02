@@ -61,7 +61,9 @@ class CContact extends w2p_Core_BaseObject {
 
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
+
         $perms = $AppUI->acl();
+        $stored = false;
 
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
@@ -100,15 +102,17 @@ class CContact extends w2p_Core_BaseObject {
          */
         if ($this->contact_id) {// && $perms->checkModuleItem('contacts', 'edit', $this->contact_id)) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         if (0 == $this->contact_id) {// && $perms->checkModuleItem('contacts', 'add')) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         if ($stored) {
             $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
@@ -174,12 +178,15 @@ class CContact extends w2p_Core_BaseObject {
 
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
-        $this->_error = array();
+        $perms = $AppUI->acl();
 
-        if ($msg = parent::delete()) {
-            return $msg;
-        }
-        return true;
+        //if ($perms->checkModuleItem('contacts', 'delete', $this->contact_id)) {
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+            return true;
+        //}
+        //return false;
 	}
 
 	public function check() {
@@ -197,7 +204,7 @@ class CContact extends w2p_Core_BaseObject {
 	    return $errorArray;
 	}
 
-	public function canDelete($msg, $oid = null, $joins = null) {
+	public function canDelete($msg = '', $oid = null, $joins = null) {
         $tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_contact');
 
 		return parent::canDelete($msg, $this->user_id, $tables);

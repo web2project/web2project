@@ -37,13 +37,17 @@ class CSysVal extends w2p_Core_BaseObject {
 	public $sysval_value = null;
 
 	public function check() {
-		if ($this->sysval_key_id == 0) {
-			return 'Key Type cannot be empty';
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+        if ($this->sysval_key_id == 0) {
+            $errorArray['sysval_key_id'] = $baseErrorMsg . 'key type is not set';
 		}
 		if (!$this->sysval_title) {
-			return 'Key Title cannot be empty';
+			$errorArray['sysval_title'] = $baseErrorMsg . 'key title is not set';
 		}
-		return null;
+
+		return $errorArray;
 	}
 
 	public function __construct($key = null, $title = null, $value = null) {
@@ -70,13 +74,17 @@ class CSysVal extends w2p_Core_BaseObject {
 		}
 	}
 
-	public function store() {
-		$this->w2PTrimAll();
+	public function store(CAppUI $AppUI = null) {
+		$perms = $AppUI->acl();
+        $stored = false;
 
-		$msg = $this->check();
-		if ($msg) {
-			return get_class($this) . '::store-check failed - ' . $msg;
-		}
+        $this->w2PTrimAll();
+
+        $this->_error = $this->check();
+
+        if (count($this->_error)) {
+            return $this->_error;
+        }
 		$values = parseFormatSysval($this->sysval_value, $this->sysval_key_id);
 		//lets delete the old values
 		$q = $this->_query;
@@ -85,10 +93,12 @@ class CSysVal extends w2p_Core_BaseObject {
 			$q->addWhere('sysval_key_id = ' . (int)$this->sysval_key_id);
 			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
 			if (!$q->exec()) {
-				$q->clear();
-				return get_class($this) . '::store failed: ' . db_error();
+				$msg = get_class($this) . '::store failed: ' . db_error();
+                $this->_error['store'] = $msg;
+                return false;
 			}
 		}
+        $q->clear();
 		foreach ($values as $key => $value) {
 			$q->addTable('sysvals');
 			$q->addInsert('sysval_key_id', $this->sysval_key_id);
@@ -96,15 +106,17 @@ class CSysVal extends w2p_Core_BaseObject {
 			$q->addInsert('sysval_value_id', $key);
 			$q->addInsert('sysval_value', $value);
 			if (!$q->exec()) {
-				$q->clear();
-				return get_class($this) . '::store failed: ' . db_error();
+				$msg = get_class($this) . '::store failed: ' . db_error();
+                $this->_error['store-failed'] = $msg;
+                return false;
 			}
 			$q->clear();
 		}
-		return null;
+		return true;
 	}
 
-	public function delete() {
+	public function delete(CAppUI $AppUI = null) {
+        $perms = $AppUI->acl();
 
         $q = $this->_query;
 		if ($this->sysval_title) {

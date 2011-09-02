@@ -39,6 +39,7 @@ class CUser extends w2p_Core_BaseObject {
 
 	public function store(CAppUI $AppUI = null) {
 		global $AppUI;
+
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -61,10 +62,10 @@ class CUser extends w2p_Core_BaseObject {
             }
 
             if (($msg = parent::store())) {
-                $this->_error = $msg;
-                return false;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
 
         if (0 == $this->user_id && $perms->checkModuleItem('users', 'add')) {
@@ -72,11 +73,10 @@ class CUser extends w2p_Core_BaseObject {
             $this->user_password = md5($this->user_password);
 
             if (($msg = parent::store())) {
-                $this->_error = $msg;
-                return false;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-
-            $stored = true;
         }
 
         if ($stored) {
@@ -105,8 +105,6 @@ class CUser extends w2p_Core_BaseObject {
 					$q->clear();
 				}
 			}
-
-            return $stored;
         }
 
         return $stored;
@@ -137,8 +135,6 @@ class CUser extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
-        $canDelete = (int) $this->canDelete();
-        $this->_error = array();
 
         if ($perms->checkModuleItem('users', 'delete', $this->user_id) && $canDelete) {
 

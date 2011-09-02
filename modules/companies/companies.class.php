@@ -70,7 +70,7 @@ class CCompany extends w2p_Core_BaseObject {
 	}
 
 	// overload canDelete
-	public function canDelete(&$msg, $oid = null, $joins = null) {
+	public function canDelete($msg = '', $oid = null, $joins = null) {
 		$tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
 		$tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
 		$tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');
@@ -81,12 +81,6 @@ class CCompany extends w2p_Core_BaseObject {
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
-        $this->_error = array();
-        /*
-         * TODO: This should probably use the canDelete method from above too to
-         *   not only check permissions but to check dependencies... luckily the
-         *   previous version didn't check it either, so we're no worse off.
-         */
         if ($perms->checkModuleItem('companies', 'delete', $this->company_id)) {
             if ($msg = parent::delete()) {
                 return $msg;
@@ -113,15 +107,17 @@ class CCompany extends w2p_Core_BaseObject {
          */
         if ($this->company_id && $perms->checkModuleItem('companies', 'edit', $this->company_id)) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         if (0 == $this->company_id && $perms->checkModuleItem('companies', 'add')) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         if ($stored) {
             $custom_fields = new w2p_Core_CustomFields('companies', 'addedit', $this->company_id, 'edit');

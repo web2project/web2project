@@ -103,7 +103,6 @@ class CLink extends w2p_Core_BaseObject {
 
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
-        $this->_error = array();
 
         if ($perms->checkModuleItem('links', 'delete', $this->link_id)) {
             if ($msg = parent::delete()) {
@@ -117,6 +116,7 @@ class CLink extends w2p_Core_BaseObject {
     public function store(CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $stored = false;
+
         if (strpos($this->link_url, ':') === false && strpos($this->link_url, "//") === false) {
             $this->link_url = 'http://'.$this->link_url;
         }
@@ -133,17 +133,18 @@ class CLink extends w2p_Core_BaseObject {
         $q = $this->_query;
         $this->link_date = $q->dbfnNowWithTZ();
         if ($this->link_id && $perms->checkModuleItem('links', 'edit', $this->link_id)) {
-
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         if (0 == $this->link_id && $perms->checkModuleItem('links', 'add')) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         return $stored;
     }

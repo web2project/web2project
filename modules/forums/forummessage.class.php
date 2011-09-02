@@ -56,35 +56,38 @@ class CForumMessage extends w2p_Core_BaseObject {
 			$q->exec();
 
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         if (0 == $this->message_id && $perms->checkModuleItem('forums', 'add')) {
             $this->message_date = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                
+                $q->addTable('forum_messages');
+                $q->addQuery('count(message_id), MAX(message_date)');
+                $q->addWhere('message_forum = ' . (int)$this->message_forum);
+                $reply = $q->fetchRow();
+
+                //update forum descriptor
+                $forum = new CForum();
+                $forum->load($AppUI, $this->message_forum);
+                $forum->forum_message_count = $reply[0];
+                /*
+                 * Note: the message_date here has already been adjusted for the
+                *    timezone above, so don't do it again!
+                 */
+                $forum->forum_last_date = $this->message_date;
+                $forum->forum_last_id = $this->message_id;
+                $forum->store($AppUI);
+
+                $this->sendWatchMail(false);
+
+                $stored = true;
             }
-
-			$q->addTable('forum_messages');
-			$q->addQuery('count(message_id), MAX(message_date)');
-			$q->addWhere('message_forum = ' . (int)$this->message_forum);
-            $reply = $q->fetchRow();
-
-			//update forum descriptor
-			$forum = new CForum();
-            $forum->load($AppUI, $this->message_forum);
-			$forum->forum_message_count = $reply[0];
-			/*
-             * Note: the message_date here has already been adjusted for the
-            *    timezone above, so don't do it again!
-             */
-            $forum->forum_last_date = $this->message_date;
-			$forum->forum_last_id = $this->message_id;
-			$forum->store($AppUI);
-
-			$this->sendWatchMail(false);
-            $stored = true;
         }
         return $stored;
 	}
@@ -94,7 +97,6 @@ class CForumMessage extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
         $result = false;
-        $this->_error = array();
 
         if ($perms->checkModuleItem('forums', 'delete', $this->project_id)) {
             $q = $this->_query;
@@ -111,10 +113,12 @@ class CForumMessage extends w2p_Core_BaseObject {
 
             $q->setDelete('forum_messages');
             $q->addWhere('message_id = ' . (int)$this->message_id);
-            if (!$q->exec()) {
-                $result = db_error();
-            } else {
+            if ($q->exec()) {
                 $result = null;
+            } else {
+                $result = db_error();
+                $this->_error['delete-messages'] = $result;
+                return $result;
             }
             $q->clear();
 

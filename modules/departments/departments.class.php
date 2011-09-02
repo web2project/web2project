@@ -156,15 +156,17 @@ class CDepartment extends w2p_Core_BaseObject {
 
         if ($this->dept_id && $perms->checkModuleItem('departments', 'edit', $this->dept_id)) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
 		}
         if (0 == $this->dept_id && $perms->checkModuleItem('departments', 'add')) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
 		}
         return $stored;
 	}
@@ -172,7 +174,6 @@ class CDepartment extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
-        $this->_error = array();
 
         if ($perms->checkModuleItem('departments', 'delete', $this->dept_id)) {
             $q = $this->_query;
@@ -183,8 +184,8 @@ class CDepartment extends w2p_Core_BaseObject {
             $q->clear();
 
             if (count($rows)) {
-                //return 'deptWithSub';
-                return false;
+                $this->_error['deptWithSub'] = 'deptWithSub';
+                return 'deptWithSub';
             }
 
             $q->addTable('project_departments', 'pd');
@@ -194,8 +195,8 @@ class CDepartment extends w2p_Core_BaseObject {
             $q->clear();
 
             if (count($rows)) {
-                //return 'deptWithProject';
-                return false;
+                $this->_error['deptWithProject'] = 'deptWithProject';
+                return 'deptWithProject';
             }
 
             if ($msg = parent::delete()) {

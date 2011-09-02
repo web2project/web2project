@@ -206,19 +206,21 @@ class CTaskLog extends w2p_Core_BaseObject
 		$this->task_log_costcode = cleanText($this->task_log_costcode);
 
 		if ($this->task_log_id && $perms->checkModuleItem('task_log', 'edit', $this->task_log_id)) {
-			if (($msg = parent::store())) {
-				return $msg;
-			}
-			$stored = true;
-			$this->updateTaskSummary($AppUI, $this->task_log_task);
+            if (($msg = parent::store())) {
+                $this->_error['store-check'] = $msg;
+            } else {
+                $stored = true;
+                $this->updateTaskSummary($AppUI, $this->task_log_task);
+            }
 		}
 		if (0 == $this->task_log_id && $perms->checkModuleItem('task_log', 'add')) {
 			$this->task_log_created = $q->dbfnNowWithTZ();
-			if (($msg = parent::store())) {
-				return $msg;
-			}
-			$stored = true;
-			$this->updateTaskSummary($AppUI, $this->task_log_task);
+            if (($msg = parent::store())) {
+                $this->_error['store-check'] = $msg;
+            } else {
+                $stored = true;
+                $this->updateTaskSummary($AppUI, $this->task_log_task);
+            }
 		}
 
 		return $stored;

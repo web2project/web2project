@@ -162,16 +162,18 @@ class CForum extends w2p_Core_BaseObject {
 
         if ($this->forum_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         if (0 == $this->forum_id && $perms->checkModuleItem('forums', 'add')) {
             $this->forum_create_date = $AppUI->convertToSystemTZ($this->forum_create_date);
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         return $stored;
 	}
@@ -179,7 +181,6 @@ class CForum extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
-        $this->_error = array();
 
         if ($perms->checkModuleItem('forums', 'delete', $this->forum_id)) {
             $q = $this->_query;
@@ -190,8 +191,12 @@ class CForum extends w2p_Core_BaseObject {
             $q->clear();
             $q->setDelete('forum_messages');
             $q->addWhere('message_forum = ' . (int)$this->forum_id);
-            if (!$q->exec()) {
-                return db_error();
+            if ($q->exec()) {
+                $result = null;
+            } else {
+                $result = db_error();
+                $this->_error['delete-messages'] = $result;
+                return $result;
             }
             $q->clear();
 
