@@ -127,12 +127,6 @@ class CProject extends w2p_Core_BaseObject {
         if (!is_int($this->project_status) && '' == $this->project_status) {
             $errorArray['project_status'] = $baseErrorMsg . 'project status is not set';
         }
-        if ('' != $this->project_url && !w2p_check_url($this->project_url)) {
-            $errorArray['project_url'] = $baseErrorMsg . 'project url is not formatted properly';
-        }
-        if ('' != $this->project_demo_url && !w2p_check_url($this->project_demo_url)) {
-            $errorArray['project_demo_url'] = $baseErrorMsg . 'project demo url is not formatted properly';
-        }
 
         $this->_error = $errorArray;
         return $errorArray;
