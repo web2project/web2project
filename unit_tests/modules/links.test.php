@@ -124,7 +124,7 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
     {
       $link = new CLink();
 
-      $this->assertInstanceOf('CLink', $link);
+      $this->assertType('CLink', $link);
       $this->assertObjectHasAttribute('link_id',          $link);
       $this->assertObjectHasAttribute('link_project',     $link);
       $this->assertObjectHasAttribute('link_url',         $link);
@@ -144,7 +144,7 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
     public function testNewLinkAttributeValues()
     {
         $link = new CLink();
-        $this->assertInstanceOf('CLink', $link);
+        $this->assertType('CLink', $link);
         $this->assertNull($link->link_id);
         $this->assertNull($link->link_project);
         $this->assertNull($link->link_url);

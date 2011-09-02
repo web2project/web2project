@@ -142,7 +142,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributes()
     {
-        $this->assertInstanceOf('CTaskLog',                     $this->obj);
+        $this->assertType('CTaskLog',                     $this->obj);
         $this->assertObjectHasAttribute('task_log_id',          $this->obj);
         $this->assertObjectHasAttribute('task_log_task',        $this->obj);
         $this->assertObjectHasAttribute('task_log_name',        $this->obj);
@@ -163,7 +163,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributeValues()
     {
-        $this->assertInstanceOf('CTaskLog', $this->obj);
+        $this->assertType('CTaskLog', $this->obj);
         $this->assertNull($this->obj->task_log_id);
         $this->assertNull($this->obj->task_log_task);
         $this->assertNull($this->obj->task_log_name);
@@ -218,8 +218,8 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testStoreUpdate()
     {
-        global $AppUI;
-
+        global $AppUI; 
+ 
         $this->obj->bind($this->post_data, null, true, true);
         $this->obj->store();
 
