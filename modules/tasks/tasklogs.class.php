@@ -365,56 +365,9 @@ class CTaskLog extends w2p_Core_BaseObject
 	 *
 	 * @return bool
 	 */
-	public function canDelete(&$msg, $oid = null, $joins = null)
+	public function canDelete(&$msg = '', $oid = null, $joins = null)
 	{
-		global $AppUI;
-		$q = new w2p_Database_Query;
-
-		// First things first.	Are we allowed to delete?
-		$acl = &$AppUI->acl();
-		if (!canDelete('task_log')) {
-			$msg = $AppUI->_('noDeletePermission');
-			return false;
-		}
-
-		$k = $this->_tbl_key;
-		if ($oid) {
-			$this->$k = (int) $oid;
-		}
-		if (is_array($joins)) {
-			$q->addTable($this->_tbl, 'k');
-			$q->addQuery($k);
-			$i = 0;
-			foreach ($joins as $table) {
-				$table_alias = 't' . $i++;
-				$q->leftJoin($table['name'], $table_alias, $table_alias . '.' . $table['joinfield'] . ' = ' . 'k' . '.' . $k);
-				$q->addQuery('COUNT(DISTINCT ' . $table_alias . '.' . $table['idfield'] . ') AS ' . $table['idfield']);
-			}
-			$q->addWhere($k . ' = ' . $this->$k);
-			$q->addGroup($k);
-			$obj = null;
-			$q->loadObject($obj);
-			$q->clear();
-
-			if (!$obj) {
-				$msg = db_error();
-				return false;
-			}
-			$msg = array();
-			foreach ($joins as $table) {
-				$k = $table['idfield'];
-				if ($obj->$k) {
-					$msg[] = $AppUI->_($table['label']);
-				}
-			}
-
-			if (count($msg)) {
-				$msg = $AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
-				return false;
-			}
-		}
-
-		return true;
+        return true;
 	}
 
 	/**
