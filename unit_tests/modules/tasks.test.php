@@ -173,7 +173,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTasksAttributes()
     {
-        $this->assertInstanceOf('CTask',                            $this->obj);
+        $this->assertType('CTask',                                  $this->obj);
         $this->assertObjectHasAttribute('task_id',                  $this->obj);
         $this->assertObjectHasAttribute('task_name',                $this->obj);
         $this->assertObjectHasAttribute('task_parent',              $this->obj);
@@ -211,7 +211,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTasktAttributeValues()
     {
-        $this->assertInstanceOf('CTask', $this->obj);
+        $this->assertType('CTask', $this->obj);
         $this->assertNull($this->obj->task_id);
         $this->assertNull($this->obj->task_name);
         $this->assertNull($this->obj->task_parent);
@@ -2263,7 +2263,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $allocation = $this->obj->getAllocation(null, null, false);
 
         $this->assertEquals(0,              count($allocation));
-        $this->assertInternalType('array',  $allocation);
+        $this->assertType('array',  $allocation);
 
         $w2Pconfig['check_overallocation'] = $old_check_overallocation;
 
@@ -2284,7 +2284,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $allocation = $this->obj->getAllocation(null, null, true);
 
         $this->assertEquals(2,                      count($allocation));
-        $this->assertInternalType('array',          $allocation);
+        $this->assertType('array',                  $allocation);
         $this->assertEquals(1,                      $allocation[1]['user_id']);
         $this->assertEquals('admin',                $allocation[1]['user_username']);
         $this->assertEquals('Person',               $allocation[1]['contact_last_name']);
@@ -3087,7 +3087,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
                        'where' => 'project_id = 2');
         $allowed_records = $this->obj->getAllowedRecords(1, '*', '', null, $extra);
 
-        $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $allowed_records);
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $allowed_records);
         $this->assertEquals(0, count($allowed_records));
     }
 
@@ -3296,7 +3296,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $task_list = $this->obj->getTaskList(1, -10000);
 
-        $this->assertInternalType('array',  $task_list);
+        $this->assertType('array',  $task_list);
         $this->assertEquals(0,            count($task_list));
     }
 

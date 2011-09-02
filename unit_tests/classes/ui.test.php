@@ -66,7 +66,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
         $AppUI = new CAppUI;
 
-        $this->assertInstanceOf('CAppUI',                   $AppUI);
+        $this->assertType('CAppUI',                         $AppUI);
         $this->assertObjectHasAttribute('state',            $AppUI);
         $this->assertObjectHasAttribute('user_id',          $AppUI);
         $this->assertObjectHasAttribute('user_first_name',  $AppUI);
@@ -575,10 +575,10 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
         $locales = $AppUI->readDirs('locales');
 
-        $this->assertInternalType('array', $locales);
+        $this->assertType('array', $locales);
 
         foreach ($locales as $locale) {
-            $this->assertInternalType('string', $locale);
+            $this->assertType('string', $locale);
         }
     }
 
