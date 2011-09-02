@@ -134,9 +134,6 @@ class CDepartment extends w2p_Core_BaseObject {
             if (0 == (int) $this->dept_owner) {
                 $errorArray['dept_owner'] = $baseErrorMsg . 'department owner is not set';
             }
-            if ('' != $this->dept_url && !w2p_check_url($this->dept_url)) {
-                $errorArray['dept_url'] = $baseErrorMsg . 'department url is not formatted properly';
-            }
 
             $this->_error = $errorArray;
             return $errorArray;

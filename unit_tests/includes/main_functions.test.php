@@ -111,45 +111,30 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 		$this->assertEquals(1, convert2days($days, $dayIndicator));
 	}
   
-  public function test__autoload()
-  {
-    $this->assertTrue(class_exists('CProject'));
-    $search = new smartsearch();
-    $this->assertTrue(class_exists('smartsearch'));
-  }
+    public function test__autoload()
+    {
+        $this->assertTrue(class_exists('CProject'));
+        $search = new smartsearch();
+        $this->assertTrue(class_exists('smartsearch'));
+    }
 
+    /**
+    * Tests the proper creation of a link
+    */
+    public function test_w2p_url()
+    {
+        $target = '<a href="http://web2project.net" target="_new">http://web2project.net</a>';
+        $linkText = w2p_url('http://web2project.net');
+        $this->assertEquals($target, $linkText);
 
-  /**
-   * Tests the proper creation of a link
-   */
-  public function test_w2p_url()
-  {
-    $target = '<a href="http://web2project.net" target="_new">http://web2project.net</a>';
-    $linkText = w2p_url('http://web2project.net');
-    $this->assertEquals($target, $linkText);
+        $target = '';
+        $linkText = w2p_url('');
+        $this->assertEquals($target, $linkText);
 
-    $target = '';
-    $linkText = w2p_url('');
-    $this->assertEquals($target, $linkText);
-
-    $target = '<a href="http://web2project.net" target="_new">web2project</a>';
-    $linkText = w2p_url('http://web2project.net', 'web2project');
-    $this->assertEquals($target, $linkText);
-  }
-  public function test_w2p_check_url()
-  {
-    $this->assertTrue(w2p_check_url('http://web2project.net'));
-    $this->assertTrue(w2p_check_url('http://bugs.web2project.net'));
-    $this->assertTrue(w2p_check_url('web2project.net'));
-    $this->assertTrue(w2p_check_url('http://forums.web2project.net/'));
-    $this->assertTrue(w2p_check_url('http://wiki.web2project.net/'));
-    $this->assertTrue(w2p_check_url('http://wiki.web2project.net/index.php?title=Main_Page'));
-    $this->assertTrue(w2p_check_url('wiki.web2project.net/index.php?title=Category:Frequently_Asked_Questions'));
-
-    //$this->assertFalse(w2p_check_url('httpweb2project.net'));
-    //$this->assertFalse(w2p_check_url('http://web2project'));
-    //$this->assertFalse(w2p_check_url('http://.net'));
-  }
+        $target = '<a href="http://web2project.net" target="_new">web2project</a>';
+        $linkText = w2p_url('http://web2project.net', 'web2project');
+        $this->assertEquals($target, $linkText);
+    }
 
   /**
    * Tests the proper creation of an email link
