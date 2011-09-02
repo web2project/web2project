@@ -228,7 +228,7 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->contact_id = 1;
         $result = $this->obj->delete($AppUI);
-        $this->assertEquals(1, count($this->obj->getError()));
+        $this->assertEquals(2, count($this->obj->getError()));
         $this->assertArrayHasKey('noDeleteRecord-Users', $this->obj->getError());
 
         $contact = new CContact();
@@ -237,6 +237,7 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTrue($result);
         $this->assertEquals(0, count($contact->getError()));
 
+        $contact = new CContact();
         $result = $contact->load(3);
         $this->assertFalse($result);
     }

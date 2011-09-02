@@ -292,10 +292,11 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCheckTaskNoStartDate()
     {
 		unset($this->post_data['task_start_date']);
-        $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->check();
 
-        $this->assertArrayHasKey('task_start_date', $errorArray);
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->check();
+
+        $this->assertArrayHasKey('task_start_date', $this->obj->getError());
     }
 
 	/**
@@ -306,9 +307,9 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 		unset($this->post_data['task_end_date']);
 
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->check();
+        $result = $this->obj->check();
 
-        $this->assertArrayHasKey('task_end_date', $errorArray);
+        $this->assertArrayHasKey('task_end_date', $this->obj->getError());
     }
 
     /**
