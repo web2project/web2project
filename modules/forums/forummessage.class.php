@@ -50,7 +50,8 @@ class CForumMessage extends w2p_Core_BaseObject {
 
         $q = new w2p_Database_Query;
 
-        if ($this->message_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
+//TODO: this is an oddball permissions object where the module doesn't determine the access..
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem('forums', 'edit', $this->{$this->_tbl_key})) {
             $q->setDelete('forum_visits');
             $q->addWhere('visit_message = ' . (int)$this->message_id);
 			$q->exec();
@@ -61,7 +62,7 @@ class CForumMessage extends w2p_Core_BaseObject {
                 $stored = true;
             }
         }
-        if (0 == $this->message_id && $perms->checkModuleItem('forums', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem('forums', 'add')) {
             $this->message_date = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
@@ -98,6 +99,7 @@ class CForumMessage extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $result = false;
 
+//TODO: this is an oddball permissions object where the module doesn't determine the access.. but another does?
         if ($perms->checkModuleItem('forums', 'delete', $this->project_id)) {
             $q = $this->_query;
             $q->setDelete('forum_visits');

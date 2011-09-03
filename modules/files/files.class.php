@@ -57,7 +57,7 @@ class CFile extends w2p_Core_BaseObject {
         }
         $this->file_date = $AppUI->convertToSystemTZ($this->file_date);
 
-        if ($this->file_id && $perms->checkModuleItem('files', 'edit', $this->file_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user. 
             // If not then we are just editing the file information alone. So we should leave the file_id as it is.
             $this->file_parent = $this->file_id;
@@ -71,7 +71,7 @@ class CFile extends w2p_Core_BaseObject {
                 $stored = true;
             }
         }
-        if (0 == $this->file_id && $perms->checkModuleItem('files', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
@@ -250,7 +250,7 @@ class CFile extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $this->_error = array();
 
-        if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             // remove the file from the file system
             if (!$this->deleteFile($AppUI)) {
                 $this->_error['file-delete'] = 'file-delete';

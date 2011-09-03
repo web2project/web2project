@@ -101,7 +101,7 @@ class CLink extends w2p_Core_BaseObject {
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
-        if ($perms->checkModuleItem('links', 'delete', $this->link_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
             }
@@ -129,14 +129,14 @@ class CLink extends w2p_Core_BaseObject {
          */
         $q = $this->_query;
         $this->link_date = $q->dbfnNowWithTZ();
-        if ($this->link_id && $perms->checkModuleItem('links', 'edit', $this->link_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
         }
-        if (0 == $this->link_id && $perms->checkModuleItem('links', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {

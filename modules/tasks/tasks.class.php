@@ -549,7 +549,7 @@ class CTask extends w2p_Core_BaseObject {
         $q = $this->_query;
         $this->task_updated = $q->dbfnNowWithTZ();
 
-        if ($this->task_id && $perms->checkModuleItem('tasks', 'edit', $this->task_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
 			// Load and globalize the old, not yet updated task object
 			// e.g. we need some info later to calculate the shifting time for depending tasks
 			// see function update_dep_dates
@@ -601,7 +601,7 @@ class CTask extends w2p_Core_BaseObject {
             }
 		}
 
-        if (0 == $this->task_id && $perms->checkModuleItem('tasks', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
 			$this->task_created = $q->dbfnNowWithTZ();
 			if ($this->task_start_date == '') {
 				$this->task_start_date = '0000-00-00 00:00:00';
@@ -754,7 +754,7 @@ class CTask extends w2p_Core_BaseObject {
 		global $AppUI;
         $perms = $AppUI->acl();
 
-        if ($perms->checkModuleItem('tasks', 'delete', $this->task_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             //load it before deleting it because we need info on it to update the parents later on
             $this->load($this->task_id);
 

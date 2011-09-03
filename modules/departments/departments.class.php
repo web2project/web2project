@@ -151,14 +151,14 @@ class CDepartment extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        if ($this->dept_id && $perms->checkModuleItem('departments', 'edit', $this->dept_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
 		}
-        if (0 == $this->dept_id && $perms->checkModuleItem('departments', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
@@ -172,7 +172,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		global $AppUI;
         $perms = $AppUI->acl();
 
-        if ($perms->checkModuleItem('departments', 'delete', $this->dept_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_query;
             $q->addTable('departments', 'dep');
             $q->addQuery('dep.dept_id');

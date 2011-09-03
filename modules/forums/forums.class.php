@@ -160,14 +160,14 @@ class CForum extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        if ($this->forum_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
         }
-        if (0 == $this->forum_id && $perms->checkModuleItem('forums', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->forum_create_date = $AppUI->convertToSystemTZ($this->forum_create_date);
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
@@ -182,7 +182,7 @@ class CForum extends w2p_Core_BaseObject {
         global $AppUI;
         $perms = $AppUI->acl();
 
-        if ($perms->checkModuleItem('forums', 'delete', $this->forum_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_query;
             $q->setDelete('forum_visits');
             $q->addWhere('visit_forum = ' . (int)$this->forum_id);

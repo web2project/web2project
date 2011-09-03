@@ -71,7 +71,7 @@ class CResource extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $this->_error = array();
 
-        if ($perms->checkModuleItem('resources', 'delete', $this->resource_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
             }

@@ -83,7 +83,7 @@ class CEvent extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
-        if ($this->canDelete($msg) && $perms->checkModuleItem('events', 'delete', $this->event_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
             }
@@ -614,14 +614,14 @@ class CEvent extends w2p_Core_BaseObject {
  * TODO: I don't like the duplication on each of these two branches, but I
  *   don't have a good idea on how to fix it at the moment...
  */
-        if ($this->event_id && $perms->checkModuleItem('events', 'edit', $this->event_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
         }
-        if (0 == $this->event_id && $perms->checkModuleItem('events', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {

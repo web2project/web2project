@@ -154,7 +154,7 @@ class CProject extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
         $result = false;
 
-        if ($perms->checkModuleItem('projects', 'delete', $this->project_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_query;
             $q->addTable('tasks');
             $q->addQuery('task_id');
@@ -534,14 +534,14 @@ class CProject extends w2p_Core_BaseObject {
          */
         $q = $this->_query;
         $this->project_updated = $q->dbfnNowWithTZ();
-        if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->project_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
         }
-        if (0 == $this->project_id && $perms->checkModuleItem('projects', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->project_created = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
