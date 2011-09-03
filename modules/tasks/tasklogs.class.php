@@ -205,20 +205,22 @@ class CTaskLog extends w2p_Core_BaseObject
 		$this->task_log_hours = $this->task_log_hours;
 		$this->task_log_costcode = cleanText($this->task_log_costcode);
 
-		if ($this->task_log_id && $perms->checkModuleItem('task_log', 'edit', $this->task_log_id)) {
-			if (($msg = parent::store())) {
-				return $msg;
-			}
-			$stored = true;
-			$this->updateTaskSummary($AppUI, $this->task_log_task);
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+            if (($msg = parent::store())) {
+                $this->_error['store-check'] = $msg;
+            } else {
+                $stored = true;
+                $this->updateTaskSummary($AppUI, $this->task_log_task);
+            }
 		}
-		if (0 == $this->task_log_id && $perms->checkModuleItem('task_log', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
 			$this->task_log_created = $q->dbfnNowWithTZ();
-			if (($msg = parent::store())) {
-				return $msg;
-			}
-			$stored = true;
-			$this->updateTaskSummary($AppUI, $this->task_log_task);
+            if (($msg = parent::store())) {
+                $this->_error['store-check'] = $msg;
+            } else {
+                $stored = true;
+                $this->updateTaskSummary($AppUI, $this->task_log_task);
+            }
 		}
 
 		return $stored;
@@ -241,7 +243,7 @@ class CTaskLog extends w2p_Core_BaseObject
 		$this->load($this->task_log_id);
 		$task_id = $this->task_log_task;
 
-		if ($perms->checkModuleItem('task_log', 'delete', $this->task_log_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
 			if ($msg = parent::delete()) {
 				return $msg;
 			}
@@ -363,56 +365,9 @@ class CTaskLog extends w2p_Core_BaseObject
 	 *
 	 * @return bool
 	 */
-	public function canDelete(&$msg, $oid = null, $joins = null)
+	public function canDelete(&$msg = '', $oid = null, $joins = null)
 	{
-		global $AppUI;
-		$q = new w2p_Database_Query;
-
-		// First things first.	Are we allowed to delete?
-		$acl = &$AppUI->acl();
-		if (!canDelete('task_log')) {
-			$msg = $AppUI->_('noDeletePermission');
-			return false;
-		}
-
-		$k = $this->_tbl_key;
-		if ($oid) {
-			$this->$k = (int) $oid;
-		}
-		if (is_array($joins)) {
-			$q->addTable($this->_tbl, 'k');
-			$q->addQuery($k);
-			$i = 0;
-			foreach ($joins as $table) {
-				$table_alias = 't' . $i++;
-				$q->leftJoin($table['name'], $table_alias, $table_alias . '.' . $table['joinfield'] . ' = ' . 'k' . '.' . $k);
-				$q->addQuery('COUNT(DISTINCT ' . $table_alias . '.' . $table['idfield'] . ') AS ' . $table['idfield']);
-			}
-			$q->addWhere($k . ' = ' . $this->$k);
-			$q->addGroup($k);
-			$obj = null;
-			$q->loadObject($obj);
-			$q->clear();
-
-			if (!$obj) {
-				$msg = db_error();
-				return false;
-			}
-			$msg = array();
-			foreach ($joins as $table) {
-				$k = $table['idfield'];
-				if ($obj->$k) {
-					$msg[] = $AppUI->_($table['label']);
-				}
-			}
-
-			if (count($msg)) {
-				$msg = $AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
-				return false;
-			}
-		}
-
-		return true;
+        return true;
 	}
 
 	/**

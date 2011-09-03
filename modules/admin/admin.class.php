@@ -39,6 +39,7 @@ class CUser extends w2p_Core_BaseObject {
 
 	public function store(CAppUI $AppUI = null) {
 		global $AppUI;
+
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -47,7 +48,7 @@ class CUser extends w2p_Core_BaseObject {
             return false;
         }
 
-        if ($this->user_id && $perms->checkModuleItem('users', 'edit', $this->user_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             $perm_func = 'updateLogin';
             $tmpUser = new CUser();
             $tmpUser->load($this->user_id);
@@ -61,22 +62,21 @@ class CUser extends w2p_Core_BaseObject {
             }
 
             if (($msg = parent::store())) {
-                $this->_error = $msg;
-                return false;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
 
-        if (0 == $this->user_id && $perms->checkModuleItem('users', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $perm_func = 'addLogin';
             $this->user_password = md5($this->user_password);
 
             if (($msg = parent::store())) {
-                $this->_error = $msg;
-                return false;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-
-            $stored = true;
         }
 
         if ($stored) {
@@ -105,8 +105,6 @@ class CUser extends w2p_Core_BaseObject {
 					$q->clear();
 				}
 			}
-
-            return $stored;
         }
 
         return $stored;
@@ -137,10 +135,8 @@ class CUser extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
-        $canDelete = (int) $this->canDelete();
-        $this->_error = array();
 
-        if ($perms->checkModuleItem('users', 'delete', $this->user_id) && $canDelete) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
 
             $perms->deleteLogin($this->user_id);
 

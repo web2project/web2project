@@ -13,7 +13,8 @@
  *	@author Andrew Eddie <eddieajau@users.sourceforge.net>
  *	@abstract
  */
-abstract class w2p_Core_BaseObject
+abstract class w2p_Core_BaseObject extends w2p_Core_Event
+    implements w2p_Core_ListenerInterface
 {
 	/**
 	 *	@var string Name of the table prefix in the db schema
@@ -42,6 +43,8 @@ abstract class w2p_Core_BaseObject
 	 */
 	protected $_tbl_module;
 
+    protected $_dispatcher;
+
 	/**
 	 *	Object constructor to set table and key field
 	 *
@@ -54,7 +57,8 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function __construct($table, $key, $module = '')
 	{
-		$this->_tbl = $table;
+		$this->_error = array();
+        $this->_tbl = $table;
 		$this->_tbl_key = $key;
 		if ($module) {
 			$this->_tbl_module = $module;
@@ -63,6 +67,23 @@ abstract class w2p_Core_BaseObject
 		}
 		$this->_tbl_prefix = w2PgetConfig('dbprefix', '');
 		$this->_query = new w2p_Database_Query;
+
+        /*
+         * This block does a lot and may need to be simplified.. but the point 
+         *   is that it sets up all of our base Events for later notifications, 
+         *   logging, etc. We also need a way to enable Core Modules (CProject, 
+         *   CTask, etc) and Add On Modules to add their own hooks.
+         */
+        $this->_dispatcher = new w2p_Core_Dispatcher();
+        $this->_dispatcher->subscribe($this, get_class($this), 'preCreateEvent');
+        $this->_dispatcher->subscribe($this, get_class($this), 'postCreateEvent');
+        $this->_dispatcher->subscribe($this, get_class($this), 'preUpdateEvent');
+        $this->_dispatcher->subscribe($this, get_class($this), 'postUpdateEvent');
+        $this->_dispatcher->subscribe($this, get_class($this), 'preDeleteEvent');
+        $this->_dispatcher->subscribe($this, get_class($this), 'postDeleteEvent');
+        $this->_dispatcher->subscribe($this, get_class($this), 'preLoadEvent');
+        $this->_dispatcher->subscribe($this, get_class($this), 'postLoadEvent');
+        parent::__construct($this->_tbl_module, get_class($this), array());
 	}
 
     /**
@@ -83,6 +104,11 @@ abstract class w2p_Core_BaseObject
 	{
 		return $this->_error;
 	}
+    public function clearErrors()
+    {
+        $this->_error = array();
+    }
+
 	/**
 	 *	Binds a named array/hash to this object
 	 *
@@ -124,7 +150,7 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function load($oid = null, $strip = true)
 	{
-		$this->preLoad();
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preLoadEvent'));
 
         $k = $this->_tbl_key;
 		if ($oid) {
@@ -143,8 +169,9 @@ abstract class w2p_Core_BaseObject
 			return false;
 		}
 		$q->bindHashToObject($hash, $this, null, $strip);
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postLoadEvent'));
 
-		return $this->postLoad();
+		return $this;
 	}
 
 	/**
@@ -186,8 +213,6 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function check()
 	{
-		$this->_errror = array();
-
         return $this->_errror;
 	}
 
@@ -239,17 +264,22 @@ abstract class w2p_Core_BaseObject
 	public function store($updateNulls = false)
 	{
         $k = $this->_tbl_key;
+
         // NOTE: I don't particularly like this but it wires things properly.
-        ($this->$k) ? $this->preUpdate() : $this->preCreate();
+        $event = ($this->$k) ? 'Update' : 'Create';
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre'.$event.'Event'));
 
 		$this->w2PTrimAll();
 
-		$msg = $this->check();
-		if ((is_array($msg) && count($msg)) || (!is_array($msg) && strlen($msg))) {
-			return get_class($this) . '::store-check failed ' . $msg;
+        // NOTE: This is *very* similar to the store() flow within delete()..
+        $this->_error = $this->check();
+        if (count($this->_error)) {
+			$msg = get_class($this) . '::store-check failed';
+            $this->_error['store-check'] = $msg;
+            return $msg;
 		}
-		$k = $this->_tbl_key;
 
+		$k = $this->_tbl_key;
         $q = $this->_query;
 		if ($this->$k) {
 			$store_type = 'update';
@@ -260,10 +290,15 @@ abstract class w2p_Core_BaseObject
 		}
 
 		if ($ret) {
-            // NOTE: I don't particularly like this but it wires things properly.
-            ($store_type == 'add') ? $this->postCreate() : $this->postUpdate();
-		}
-		return ((!$ret) ? (get_class($this) . '::store failed ' . db_error()) : null);
+            $result = null;
+            // NOTE: I don't particularly like how the name is generated but it wires things properly.
+            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post'.$event.'Event'));
+		} else {
+            $result = db_error();
+            $this->_error['store'] = $result;
+        }
+
+        return $result;
 	}
 
 	/**
@@ -275,9 +310,10 @@ abstract class w2p_Core_BaseObject
 	 *	@param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
 	 *	@return true|false
 	 */
-	public function canDelete(&$msg, $oid = null, $joins = null)
+	public function canDelete(&$msg = '', $oid = null, $joins = null)
 	{
 		global $AppUI;
+        $result = false;
 
 		// First things first.  Are we allowed to delete?
 		$acl = &$AppUI->acl();
@@ -305,7 +341,6 @@ abstract class w2p_Core_BaseObject
 			}
 			$obj = null;
 			$q->loadObject($obj);
-			$q->clear();
 
 			if (!$obj && '' != db_error()) {
 				$msg = db_error();
@@ -325,11 +360,21 @@ abstract class w2p_Core_BaseObject
 				$msg = $AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
 				return false;
 			} else {
-				return true;
-			}
+                $msg = array();
+                foreach ($joins as $table) {
+                    $k = $table['idfield'];
+                    if ($obj->$k) {
+                        $this->_error['canDelete-error-'.$table['name']] = db_error();
+                    }
+                }
+
+                if (0 == count($this->_errors)) {
+                    $result = true;
+                }
+            }
 		}
 
-		return true;
+		return $result;
 	}
 
 	/**
@@ -340,24 +385,31 @@ abstract class w2p_Core_BaseObject
 	 */
 	public function delete($oid = null)
 	{
-		$this->preDelete();
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
 
         $k = $this->_tbl_key;
 		if ($oid) {
 			$this->$k = intval($oid);
 		}
-		if (!$this->canDelete($msg)) {
+
+        // NOTE: This is *very* similar to the check() flow within store()..
+        $this->canDelete();
+		if (count($this->_error)) {
+			$msg = get_class($this) . '::delete-check failed';
+            $this->_error['delete-check'] = $msg;
             return $msg;
 		}
 
 		$q = $this->_query;
 		$q->setDelete($this->_tbl);
 		$q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
-		$result = ((!$q->exec()) ? db_error() : null);
-
-		if (!$result) {
-            $this->postDelete();
-		}
+        if ($q->exec()) {
+            $result = null;
+            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postDeleteEvent'));
+        } else {
+            $result = db_error();
+            $this->_error['delete'] = $result;
+        }
 
 		return $result;
 	}
@@ -478,7 +530,7 @@ abstract class w2p_Core_BaseObject
 		return $where;
 	}
 
-	public function setAllowedSQL($uid, &$query, $index = null, $key = null)
+	public function setAllowedSQL($uid, $query, $index = null, $key = null)
 	{
 		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
@@ -550,9 +602,11 @@ abstract class w2p_Core_BaseObject
         //NOTE: This only happens if the create was successful.
 		global $AppUI;
 
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $AppUI->_('ACTION') . ': ' . 
-            $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . 
-            $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+        $name = $this->{substr($this->_tbl, 0, -1).'_name'};
+        $name = (isset($name)) ? $name : '';
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
+            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' . 
+            $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
     }
@@ -562,10 +616,11 @@ abstract class w2p_Core_BaseObject
     protected function postUpdate() {
         //NOTE: This only happens if the update was successful.
 		global $AppUI;
-
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $AppUI->_('ACTION') . ': ' . 
-            $store_type . ' ' . $AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' . 
-            $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+        $name = $this->{substr($this->_tbl, 0, -1).'_name'};
+        $name = (isset($name)) ? $name : '';
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
+            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' . 
+            $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
         return $this;
     }
     protected function preLoad() {
@@ -582,7 +637,29 @@ abstract class w2p_Core_BaseObject
         //NOTE: This only happens if the delete was successful.
 		global $AppUI;
 
-        addHistory($this->{$this->_tbl_key}, $this->{$this->_tbl_key}, 'delete');
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete');
         return $this;
     }
+
+	public function publish(w2p_Core_Event $event)
+	{
+        switch($event->eventName) {
+            case 'preCreate':
+            case 'postCreate':
+            case 'preUpdate':
+            case 'postCreate':
+            case 'preUpdate':
+            case 'postUpdate':
+            case 'preLoad':
+            case 'postLoad':
+            case 'preDelete':
+            case 'postDelete':
+                $this->{$event->eventName};
+                break;
+            default:
+                //do nothing
+        }
+        
+        //error_log("{$event->resourceName} published a {$event->eventName}");
+	}
 }

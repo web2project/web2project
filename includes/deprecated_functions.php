@@ -65,3 +65,16 @@ function atoi($a) {
     trigger_error("The strJpGraph function has been deprecated and will be removed in v4.0. Please use int() instead.", E_USER_NOTICE );
     return $a + 0;
 }
+
+/*
+ * This used to check if a $link was a URL. Since some users use local network resources,
+ *   this was failing miserably and making our lives difficult.
+ * TODO:  Remove for v4.0 - caseydk 01 September 2011
+ *
+ * @deprecated
+*/
+function w2p_check_url($link)
+{
+    trigger_error("The w2p_check_url function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
+    return true;
+}

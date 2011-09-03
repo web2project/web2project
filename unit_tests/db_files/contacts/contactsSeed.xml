@@ -58,6 +58,35 @@
             <value>2010-01-01</value>
             <value>2010-10-01</value>
         </row>
+        <row>
+            <value>5</value>
+            <value>Firstname2</value>
+            <value>Lastname2</value>
+            <value>Firstname2 Lastname2</value>
+            <value>deprecated</value>
+            <value>Sir</value>
+            <value>2001-01-01</value>
+            <value>0</value>
+            <value>0</value>
+            <value>1</value>
+            <value>firstname1@example.org</value>
+            <value>703-555-1212</value>
+            <value>456 Fake Street</value>
+            <value>Apartment #2</value>
+            <value>Arlington</value>
+            <value>Virginia</value>
+            <value>22204</value>
+            <value>United States</value>
+            <value>no interesting notes</value>
+            <value>0</value>
+            <value>obj/contact</value>
+            <value>1</value>
+            <value>0</value>
+            <value>Prince</value>
+            <value>ASDFASDFASDF</value>
+            <value>2010-01-01</value>
+            <value>2010-10-01</value>
+        </row>
     </table>
     <table name="contacts_methods">
         <column>method_id</column>

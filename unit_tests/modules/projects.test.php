@@ -616,6 +616,9 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     {
       	global $AppUI;
 
+        $now_secs = time();
+        $min_time = $now_secs - 10;
+
     	$this->obj->load(1);
 
 		$this->post_data['dosql'] 						= 'do_project_aed';
@@ -686,21 +689,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
 
-        /**
-         * Get updated date to test against
-         */
-        $q = new w2p_Database_Query;
-        $q->addTable('projects');
-        $q->addQuery('project_updated');
-        $q->addWhere('project_id = ' . $this->obj->project_id);
-        $project_updated = $q->loadResult();
-        $project_updated = $AppUI->formatTZAwareTime($project_updated, '%Y-%m-%d %T');
-        $project_updated =  strtotime($project_updated);
-
-        $now_secs = time();
-        $min_time = $now_secs - 10;
-
-        $this->assertGreaterThanOrEqual($min_time, $project_updated);
+        $project_updated = $AppUI->formatTZAwareTime($this->obj->project_updated, '%Y-%m-%d %T');
+        $this->assertGreaterThanOrEqual($min_time,  strtotime($project_updated));
         $this->assertLessThanOrEqual($now_secs, $project_updated);
     }
 
@@ -789,8 +779,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         global $AppUI;
         foreach($results as $created) {
             $created = strtotime($AppUI->formatTZAwareTime($created, '%Y-%m-%d %T'));
-            $this->assertGreaterThanOrEqual($min_time, $created);
-            $this->assertLessThanOrEqual($now_secs, $created);
+            $this->assertGreaterThanOrEqual($created, $now_secs);
+            $this->assertLessThanOrEqual($created, $min_time);
         }
 
         /**
@@ -1225,12 +1215,12 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 
         $departments = CProject::getDepartments($AppUI, 1);
 
-        $this->assertEquals(1,              count($departments));
+        $this->assertEquals(2,              count($departments));
         $this->assertEquals(1,              $departments[1]['dept_id']);
         $this->assertEquals('Department 1', $departments[1]['dept_name']);
         $this->assertEquals('',             $departments[1]['dept_phone']);
         $this->assertEquals(2,              $departments[2]['dept_id']);
-        $this->assertEquals('Department 1', $departments[2]['dept_name']);
+        $this->assertEquals('Department 2', $departments[2]['dept_name']);
         $this->assertEquals('',             $departments[2]['dept_phone']);
     }
 

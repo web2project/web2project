@@ -325,17 +325,13 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateFile()
     {
-      global $AppUI;
+        global $AppUI;
 
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store($AppUI);
-      $this->assertTrue($errorArray);
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->store($AppUI);
+        $this->assertTrue($errorArray);
 
-      $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'filesTestCreate.xml');
-      $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('files' => array('project_created', 'project_updated')));
-      $xml_db_dataset = $this->getConnection()->createDataSet();
-      $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('files' => array('project_created', 'project_updated')));
-
-      $this->assertTablesEqual($xml_file_filtered_dataset->getTable('files'), $xml_db_filtered_dataset->getTable('files'));
+        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'filesTestCreate.xml');
+        $this->assertTablesEqual($xml_dataset->getTable('files'), $this->getConnection()->createDataSet()->getTable('files'));
     }
 }
