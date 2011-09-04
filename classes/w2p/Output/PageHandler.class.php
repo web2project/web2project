@@ -2,8 +2,7 @@
 
 class w2p_Output_PageHandler {
 
-    public function loadExtras(array $storage, CAppUI $AppUI, $m, $type = 'tabs') {
-
+    public function loadExtras(array &$storage, CAppUI $AppUI, $m, $type = 'tabs') {
         //Set up extra $type
         if (!isset($storage['all_'.$type][$m])) {
             // For some reason on some systems if you don't set this up
@@ -18,13 +17,14 @@ class w2p_Output_PageHandler {
                 if (!canAccess($dir)) {
                     continue;
                 }
-                $modules_tabs = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_tab.*\.php');
-                foreach ($modules_tabs as $tab) {
+                $modules_items = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/',
+                        '^' . $m . '_'.substr($type, 0, -1).'.*\.php');
+                foreach ($modules_items as $item) {
                     // Get the name as the subextension
                     // cut the module_tab. and the .php parts of the filename
                     // (begining and end)
-                    $nameparts = explode('.', $tab);
-                    $filename = substr($tab, 0, -4);
+                    $nameparts = explode('.', $item);
+                    $filename = substr($item, 0, -4);
                     if (count($nameparts) > 3) {
                         $file = $nameparts[1];
                         if (!isset($all_items[$file])) {
