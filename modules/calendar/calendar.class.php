@@ -324,7 +324,7 @@ class CEvent extends w2p_Core_BaseObject {
 		$q->addTable('users', 'u');
 		$q->addTable('user_events', 'ue');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('u.user_id, CONCAT_WS(\' \',contact_first_name, contact_last_name)');
+		$q->addQuery('u.user_id, contact_display_name');
 		$q->addWhere('ue.event_id = ' . (int)$this->event_id);
 		$q->addWhere('user_contact = contact_id');
 		$q->addWhere('ue.user_id = u.user_id');
@@ -341,7 +341,7 @@ class CEvent extends w2p_Core_BaseObject {
 		$q = $this->_query;
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('user_id, CONCAT_WS(\' \' , contact_first_name, contact_last_name)');
+		$q->addQuery('user_id, contact_display_name');
 		$q->addWhere('user_id IN ('.$assignee_list.')');
 		$q->addWhere('user_contact = contact_id');
 
@@ -506,7 +506,7 @@ class CEvent extends w2p_Core_BaseObject {
 			$q->addTable('users', 'u');
 			$q->addTable('contacts', 'con');
 			$q->addQuery('user_id');
-			$q->addQuery('CONCAT_WS(\' \',contact_first_name,contact_last_name)');
+			$q->addQuery('contact_display_name');
 			$q->addWhere('user_id IN (' . implode(',', $clash) . ')');
 			$q->addWhere('user_contact = contact_id');
 			return $q->loadHashList();

@@ -1835,7 +1835,7 @@ class CTask extends w2p_Core_BaseObject {
 			$q->leftJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 			$q->leftJoin('user_preferences', 'up', 'up.pref_user = u.user_id');
 			$q->addWhere("up.pref_name = 'TASKASSIGNMAX'");
-			$q->addQuery('u.user_id, CONCAT(CONCAT_WS(\' [\', CONCAT_WS(\' \', contact_first_name, contact_last_name), IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0)), \'%]\') AS userFC, IFNULL(SUM(ut.perc_assignment), 0) AS charge');
+			$q->addQuery('u.user_id, CONCAT(CONCAT_WS(\' [\', contact_display_name, IF(IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value) > 0, IFNULL((IFNULL(up.pref_value, ' . $scm . ') - SUM(ut.perc_assignment)), up.pref_value), 0)), \'%]\') AS userFC, IFNULL(SUM(ut.perc_assignment), 0) AS charge');
 			$q->addQuery('u.user_username, IFNULL(up.pref_value,' . $scm . ') AS chargeMax');
 			$q->addQuery('IFNULL(up.pref_value, ' . $scm . ') AS freeCapacity');
 
@@ -2255,7 +2255,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q->addTable('users', 'u');
 		$q->addTable('user_tasks', 'ut');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('u.user_id, CONCAT_WS(\' \',contact_first_name, contact_last_name) AS user_name, perc_assignment');
+		$q->addQuery('u.user_id, contact_display_name AS user_name, perc_assignment');
 		$q->addWhere('ut.task_id = ' . (int)$this->task_id);
 		$q->addWhere('user_contact = contact_id');
 		$q->addWhere('ut.user_id = u.user_id');

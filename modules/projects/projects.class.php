@@ -136,7 +136,7 @@ class CProject extends w2p_Core_BaseObject {
 
         $q = $this->_query;
 		$q->addTable('projects');
-		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
+		$q->addQuery('company_name, contact_display_name as user_name, projects.*');
 		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
 		$q->leftJoin('users', 'u', 'user_id = project_owner');
 		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
