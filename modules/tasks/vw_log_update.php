@@ -29,13 +29,13 @@ if ($task_log_id) {
 	$log->task_log_name = $obj->task_name;
 }
 
-$proj = new CProject();
-$proj->load($obj->task_project);
+$project = new CProject();
+$project->load($obj->task_project);
 $q = new w2p_Database_Query();
 $q->addTable('billingcode');
 $q->addQuery('billingcode_id, billingcode_name');
 $q->addWhere('billingcode_status=0');
-$q->addWhere('(company_id=' . $proj->project_company . ' OR company_id = 0)');
+$q->addWhere('(company_id=' . $project->project_company . ' OR company_id = 0)');
 $q->addOrder('billingcode_name');
 
 $task_log_costcodes[0] = '';
@@ -238,7 +238,7 @@ function setDate( frm_name, f_date ) {
 </tr>
 
 <?php
-if ($obj->canUserEditTimeInformation() && $canEditTask) {
+if ($obj->canUserEditTimeInformation($project->project_owner, $AppUI->user_id) && $canEditTask) {
 	$end_date = intval($obj->task_end_date) ? new w2p_Utilities_Date($obj->task_end_date) : null;
 ?>
 	<tr>

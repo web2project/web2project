@@ -162,7 +162,7 @@ if (is_null($task->task_dynamic)) {
 	$task->task_dynamic = 0;
 }
 
-$can_edit_time_information = $task->canUserEditTimeInformation();
+$can_edit_time_information = $task->canUserEditTimeInformation($project->project_owner, $AppUI->user_id);
 //get list of projects, for task move drop down list.
 $tmpprojects = $project->getAllowedProjects($AppUI->user_id);
 $projects = array();

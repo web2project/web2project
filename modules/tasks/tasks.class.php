@@ -2002,11 +2002,15 @@ class CTask extends w2p_Core_BaseObject {
 		}
 	}
 
-	public function canUserEditTimeInformation() {
+	public function canUserEditTimeInformation($project_owner = 0, $user_id = 0) {
 		global $AppUI;
 
-		$project = new CProject();
-		$project->load($this->task_project);
+        if (!$project_owner) {
+            $project = new CProject();
+            $project->load($this->task_project);
+            $project_owner = $project->project_owner;
+        }
+        $user_id = ($user_id) ? $user_id : $AppUI->user_id;
 
 		// Code to see if the current user is
 		// enabled to change time information related to task
@@ -2015,12 +2019,12 @@ class CTask extends w2p_Core_BaseObject {
 		if (w2PgetConfig('restrict_task_time_editing') == true && $this->task_id > 0) {
 
 			// Am I the task owner?
-			if ($this->task_owner == $AppUI->user_id) {
+			if ($this->task_owner == $user_id) {
 				$can_edit_time_information = true;
 			}
 
 			// Am I the project owner?
-			if ($project->project_owner == $AppUI->user_id) {
+			if ($project_owner == $user_id) {
 				$can_edit_time_information = true;
 			}
 
@@ -2029,11 +2033,12 @@ class CTask extends w2p_Core_BaseObject {
 				$can_edit_time_information = true;
 			}
 
-		} else
+		} else {
 			if (w2PgetConfig('restrict_task_time_editing') == false || $this->task_id == 0) {
 				// If all users are able, then don't check anything
 				$can_edit_time_information = true;
 			}
+        }
 
 		return $can_edit_time_information;
 	}
