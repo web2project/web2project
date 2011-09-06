@@ -75,6 +75,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
          *   CTask, etc) and Add On Modules to add their own hooks.
          */
         $this->_dispatcher = new w2p_Core_Dispatcher();
+        $this->_dispatcher->subscribe($this, get_class($this), 'preStoreEvent');
+        $this->_dispatcher->subscribe($this, get_class($this), 'postStoreEvent');
         $this->_dispatcher->subscribe($this, get_class($this), 'preCreateEvent');
         $this->_dispatcher->subscribe($this, get_class($this), 'postCreateEvent');
         $this->_dispatcher->subscribe($this, get_class($this), 'preUpdateEvent');
@@ -266,6 +268,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
         $k = $this->_tbl_key;
 
         // NOTE: I don't particularly like this but it wires things properly.
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preStoreEvent'));
         $event = ($this->$k) ? 'Update' : 'Create';
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre'.$event.'Event'));
 
@@ -293,6 +296,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
             $result = null;
             // NOTE: I don't particularly like how the name is generated but it wires things properly.
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post'.$event.'Event'));
+            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postStoreEvent'));
 		} else {
             $result = db_error();
             $this->_error['store'] = $result;
@@ -595,13 +599,30 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
      *      update, load, and delete - is successful.
      */
 
+    protected function preStore() {
+        return $this;
+    }
+
+    protected function postStore() {
+        //NOTE: This only happens if the create was successful.
+		global $AppUI;
+
+        $name = $this->{substr($this->_tbl, 0, -1).'_name'};
+        $name = (isset($name)) ? $name : '';
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
+            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' .
+            $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+
+        return $this;
+    }
+
     protected function preCreate() {
         return $this;
     }
     protected function postCreate() {
         //NOTE: This only happens if the create was successful.
 		global $AppUI;
-
+echo "hello!?"; die();
         $name = $this->{substr($this->_tbl, 0, -1).'_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
@@ -616,6 +637,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
     protected function postUpdate() {
         //NOTE: This only happens if the update was successful.
 		global $AppUI;
+echo "hello!?"; die();
         $name = $this->{substr($this->_tbl, 0, -1).'_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
@@ -643,7 +665,10 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 
 	public function publish(w2p_Core_Event $event)
 	{
+        $hook = substr($event->eventName, 0, -5);
         switch($event->eventName) {
+            case 'preStore':
+            case 'postStore':
             case 'preCreate':
             case 'postCreate':
             case 'preUpdate':
@@ -654,12 +679,12 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
             case 'postLoad':
             case 'preDelete':
             case 'postDelete':
-                $this->{$event->eventName};
+                $this->$hook;
                 break;
             default:
                 //do nothing
         }
         
-        //error_log("{$event->resourceName} published a {$event->eventName}");
+        //error_log("{$event->resourceName} published a {$event->eventName} calling $hook");
 	}
 }
