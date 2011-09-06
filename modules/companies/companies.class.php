@@ -58,9 +58,6 @@ class CCompany extends w2p_Core_BaseObject {
 	  if ((int) $this->company_owner == 0) {
     	$errorArray['company_owner'] = $baseErrorMsg . 'company owner is not set';
 	  }
-      if (!w2p_check_email($this->company_email)) {
-        $errorArray['company_email'] = $baseErrorMsg . 'company email is not formatted properly';
-      }
 
       $this->_error = $errorArray;
 	  return $errorArray;
