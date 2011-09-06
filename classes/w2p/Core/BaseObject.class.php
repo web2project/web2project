@@ -599,11 +599,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
      *      update, load, and delete - is successful.
      */
 
-    protected function preStore() {
+    protected function hook_preStore() {
         return $this;
     }
 
-    protected function postStore() {
+    protected function hook_postStore() {
         //NOTE: This only happens if the create was successful.
 		global $AppUI;
 
@@ -616,13 +616,13 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
         return $this;
     }
 
-    protected function preCreate() {
+    protected function hook_preCreate() {
         return $this;
     }
-    protected function postCreate() {
+    protected function hook_postCreate() {
         //NOTE: This only happens if the create was successful.
 		global $AppUI;
-echo "hello!?"; die();
+
         $name = $this->{substr($this->_tbl, 0, -1).'_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
@@ -631,13 +631,13 @@ echo "hello!?"; die();
 
         return $this;
     }
-    protected function preUpdate() {
+    protected function hook_preUpdate() {
         return $this;
     }
-    protected function postUpdate() {
+    protected function hook_postUpdate() {
         //NOTE: This only happens if the update was successful.
 		global $AppUI;
-echo "hello!?"; die();
+
         $name = $this->{substr($this->_tbl, 0, -1).'_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
@@ -645,17 +645,17 @@ echo "hello!?"; die();
             $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
         return $this;
     }
-    protected function preLoad() {
+    protected function hook_preLoad() {
         return $this;
     }
-    protected function postLoad() {
+    protected function hook_postLoad() {
         //NOTE: This only happens if the load was successful.
         return $this;
     }
-    protected function preDelete() {
+    protected function hook_preDelete() {
         return $this;
     }
-    protected function postDelete() {
+    protected function hook_postDelete() {
         //NOTE: This only happens if the delete was successful.
 		global $AppUI;
 
@@ -665,8 +665,9 @@ echo "hello!?"; die();
 
 	public function publish(w2p_Core_Event $event)
 	{
-        $hook = substr($event->eventName, 0, -5);
-        switch($event->eventName) {
+        $hook = substr($event->getEventName(), 0, -5);
+
+        switch($hook) {
             case 'preStore':
             case 'postStore':
             case 'preCreate':
@@ -679,12 +680,11 @@ echo "hello!?"; die();
             case 'postLoad':
             case 'preDelete':
             case 'postDelete':
-                $this->$hook;
+                $this->{'hook_'.$hook}();
                 break;
             default:
                 //do nothing
         }
-        
-        //error_log("{$event->resourceName} published a {$event->eventName} calling $hook");
+        //error_log("{$event->resourceName} published {$event->eventName} to call hook_$hook");
 	}
 }
