@@ -1,4 +1,4 @@
-<?php /* $Id: calendar.class.php 1516 2010-12-05 07:18:58Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/calendar.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -82,9 +82,8 @@ class CEvent extends w2p_Core_BaseObject {
 	 */
 	public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
-        $this->_error = array();
 
-        if ($this->canDelete($msg) && $perms->checkModuleItem('events', 'delete', $this->event_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
             }
@@ -325,7 +324,7 @@ class CEvent extends w2p_Core_BaseObject {
 		$q->addTable('users', 'u');
 		$q->addTable('user_events', 'ue');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('u.user_id, CONCAT_WS(\' \',contact_first_name, contact_last_name)');
+		$q->addQuery('u.user_id, contact_display_name');
 		$q->addWhere('ue.event_id = ' . (int)$this->event_id);
 		$q->addWhere('user_contact = contact_id');
 		$q->addWhere('ue.user_id = u.user_id');
@@ -342,7 +341,7 @@ class CEvent extends w2p_Core_BaseObject {
 		$q = $this->_query;
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('user_id, CONCAT_WS(\' \' , contact_first_name, contact_last_name)');
+		$q->addQuery('user_id, contact_display_name');
 		$q->addWhere('user_id IN ('.$assignee_list.')');
 		$q->addWhere('user_contact = contact_id');
 
@@ -507,7 +506,7 @@ class CEvent extends w2p_Core_BaseObject {
 			$q->addTable('users', 'u');
 			$q->addTable('contacts', 'con');
 			$q->addQuery('user_id');
-			$q->addQuery('CONCAT_WS(\' \',contact_first_name,contact_last_name)');
+			$q->addQuery('contact_display_name');
 			$q->addWhere('user_id IN (' . implode(',', $clash) . ')');
 			$q->addWhere('user_contact = contact_id');
 			return $q->loadHashList();
@@ -578,6 +577,7 @@ class CEvent extends w2p_Core_BaseObject {
 	}
 
     public function store(CAppUI $AppUI) {
+
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -614,17 +614,19 @@ class CEvent extends w2p_Core_BaseObject {
  * TODO: I don't like the duplication on each of these two branches, but I
  *   don't have a good idea on how to fix it at the moment...
  */
-        if ($this->event_id && $perms->checkModuleItem('events', 'edit', $this->event_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
-        if (0 == $this->event_id && $perms->checkModuleItem('events', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         if ($stored) {
 // TODO:  I *really* don't like using the POST inside here..

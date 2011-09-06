@@ -1,4 +1,4 @@
-<?php /* $Id: forums.class.php 1483 2010-10-26 17:11:59Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/forums/forums.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -160,18 +160,20 @@ class CForum extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        if ($this->forum_id && $perms->checkModuleItem('forums', 'edit', $this->forum_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
-        if (0 == $this->forum_id && $perms->checkModuleItem('forums', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->forum_create_date = $AppUI->convertToSystemTZ($this->forum_create_date);
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         return $stored;
 	}
@@ -179,9 +181,8 @@ class CForum extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
-        $this->_error = array();
 
-        if ($perms->checkModuleItem('forums', 'delete', $this->forum_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_query;
             $q->setDelete('forum_visits');
             $q->addWhere('visit_forum = ' . (int)$this->forum_id);
@@ -190,8 +191,12 @@ class CForum extends w2p_Core_BaseObject {
             $q->clear();
             $q->setDelete('forum_messages');
             $q->addWhere('message_forum = ' . (int)$this->forum_id);
-            if (!$q->exec()) {
-                return db_error();
+            if ($q->exec()) {
+                $result = null;
+            } else {
+                $result = db_error();
+                $this->_error['delete-messages'] = $result;
+                return $result;
             }
             $q->clear();
 

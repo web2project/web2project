@@ -6,8 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
 $status = w2PgetSysVal('TaskStatus');
 $priority = w2PgetSysVal('TaskPriority');
-// user based access
-$task_access = array(CTask::ACCESS_PUBLIC => 'Public', CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant', CTask::ACCESS_PRIVATE => 'Private');
 
 /**
  * Tasks :: Add/Edit Form
@@ -164,7 +162,7 @@ if (is_null($task->task_dynamic)) {
 	$task->task_dynamic = 0;
 }
 
-$can_edit_time_information = $task->canUserEditTimeInformation();
+$can_edit_time_information = $task->canUserEditTimeInformation($project->project_owner, $AppUI->user_id);
 //get list of projects, for task move drop down list.
 $tmpprojects = $project->getAllowedProjects($AppUI->user_id);
 $projects = array();

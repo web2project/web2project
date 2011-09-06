@@ -1,4 +1,4 @@
-<?php /* $Id: files.class.php 1517 2010-12-05 08:07:54Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/files/files.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -42,6 +42,7 @@ class CFile extends w2p_Core_BaseObject {
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
         global $helpdesk_available;
+
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -56,7 +57,7 @@ class CFile extends w2p_Core_BaseObject {
         }
         $this->file_date = $AppUI->convertToSystemTZ($this->file_date);
 
-        if ($this->file_id && $perms->checkModuleItem('files', 'edit', $this->file_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user. 
             // If not then we are just editing the file information alone. So we should leave the file_id as it is.
             $this->file_parent = $this->file_id;
@@ -65,18 +66,20 @@ class CFile extends w2p_Core_BaseObject {
                 $this->file_owner = $AppUI->user_id;
             }
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
-        if (0 == $this->file_id && $perms->checkModuleItem('files', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
 
-        return true;
+        return $stored;
 	}
 
 	public function hook_cron()
@@ -243,12 +246,14 @@ class CFile extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI = null) {
 		global $AppUI;
         global $helpdesk_available;
+
         $perms = $AppUI->acl();
         $this->_error = array();
 
-        if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             // remove the file from the file system
             if (!$this->deleteFile($AppUI)) {
+                $this->_error['file-delete'] = 'file-delete';
                 return false;
             }
 
@@ -262,8 +267,9 @@ class CFile extends w2p_Core_BaseObject {
             $q->addQuery('*');
             $q->addWhere('file_id = ' . (int)$this->file_id);
             if (!$q->exec()) {
-                $q->clear();
-                return db_error();
+                $result = db_error();
+                $this->_error['index-delete'] = $result;
+                return $result;
             }
             if ($helpdesk_available && $this->file_helpdesk_item != 0) {
                 $this->addHelpDeskTaskLog();
@@ -279,6 +285,10 @@ class CFile extends w2p_Core_BaseObject {
 		global $AppUI;
         $perms = $AppUI->acl();
 
+        if ('' == $this->file_real_filename || 
+                !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
+            return true;
+        }
         if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
             return @unlink(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename);
         }

@@ -127,8 +127,6 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($datetime->format('H'),   $date->hour);
         $this->assertEquals($datetime->format('i'),   $date->minute);
         $this->assertEquals($datetime->format('s'),   $date->second);
-
-        $this->assertEquals($datetime->getOffset(),   $date->tz['offset']/1000);
         $this->assertEquals($timezone->getName(),     $date->tz['id']);
     }
 

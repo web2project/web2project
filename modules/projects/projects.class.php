@@ -1,4 +1,4 @@
-<?php /* $Id: projects.class.php 1521 2010-12-07 08:18:17Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/projects/projects.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 /**
  *	@package web2Project
  *	@subpackage modules
- *	@version $Revision: 1521 $
+ *	@version $Revision$
  */
 
 // project statii
@@ -127,12 +127,6 @@ class CProject extends w2p_Core_BaseObject {
         if (!is_int($this->project_status) && '' == $this->project_status) {
             $errorArray['project_status'] = $baseErrorMsg . 'project status is not set';
         }
-        if ('' != $this->project_url && !w2p_check_url($this->project_url)) {
-            $errorArray['project_url'] = $baseErrorMsg . 'project url is not formatted properly';
-        }
-        if ('' != $this->project_demo_url && !w2p_check_url($this->project_demo_url)) {
-            $errorArray['project_demo_url'] = $baseErrorMsg . 'project demo url is not formatted properly';
-        }
 
         $this->_error = $errorArray;
         return $errorArray;
@@ -142,7 +136,7 @@ class CProject extends w2p_Core_BaseObject {
 
         $q = $this->_query;
 		$q->addTable('projects');
-		$q->addQuery('company_name, CONCAT_WS(\' \',contact_first_name,contact_last_name) user_name, projects.*');
+		$q->addQuery('company_name, contact_display_name as user_name, projects.*');
 		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
 		$q->leftJoin('users', 'u', 'user_id = project_owner');
 		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
@@ -159,14 +153,8 @@ class CProject extends w2p_Core_BaseObject {
 
         $perms = $AppUI->acl();
         $result = false;
-        $this->_error = array();
 
-        /*
-         * TODO: This should probably use the canDelete method from above too to
-         *   not only check permissions but to check dependencies... luckily the
-         *   previous version didn't check it either, so we're no worse off.
-         */
-        if ($perms->checkModuleItem('projects', 'delete', $this->project_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_query;
             $q->addTable('tasks');
             $q->addQuery('task_id');
@@ -462,6 +450,7 @@ class CProject extends w2p_Core_BaseObject {
 		$q->addOrder('project_short_name');
 		$this->setAllowedSQL($userId, $q, null, 'pr');
 		$allowedProjectRows = $q->exec();
+        $q->clear();
 
 		return $allowedProjectRows;
 	}
@@ -545,62 +534,66 @@ class CProject extends w2p_Core_BaseObject {
          */
         $q = $this->_query;
         $this->project_updated = $q->dbfnNowWithTZ();
-        if ($this->project_id && $perms->checkModuleItem('projects', 'edit', $this->project_id)) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
-        if (0 == $this->project_id && $perms->checkModuleItem('projects', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->project_created = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
-                return $msg;
-            }
-            if (0 == $this->project_parent || 0 == $this->project_original_parent) {
-                $this->project_parent = $this->project_id;
-                $this->project_original_parent = $this->project_id;
-                if (($msg = parent::store())) {
-                    return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
+                if (0 == $this->project_parent || 0 == $this->project_original_parent) {
+                    $this->project_parent = $this->project_id;
+                    $this->project_original_parent = $this->project_id;
+                    if (($msg = parent::store())) {
+                        $this->_error['store-check'] = $msg;
+                    } else {
+                        $stored = true;
+                    }
                 }
             }
-            $stored = true;
         }
 
-		//split out related departments and store them seperatly.
-		$q->setDelete('project_departments');
-		$q->addWhere('project_id=' . (int)$this->project_id);
-		$q->exec();
-		$q->clear();
-		if ($this->project_departments) {
-			foreach ($this->project_departments as $department) {
-				if ($department) {
-                    $q->addTable('project_departments');
-                    $q->addInsert('project_id', $this->project_id);
-                    $q->addInsert('department_id', $department);
-                    $q->exec();
-                    $q->clear();
-                }
-			}
-		}
-
-		//split out related contacts and store them seperatly.
-		$q->setDelete('project_contacts');
-		$q->addWhere('project_id=' . (int)$this->project_id);
-		$q->exec();
-		$q->clear();
-		if ($this->project_contacts) {
-			foreach ($this->project_contacts as $contact) {
-				if ($contact) {
-					$q->addTable('project_contacts');
-					$q->addInsert('project_id', $this->project_id);
-					$q->addInsert('contact_id', $contact);
-					$q->exec();
-					$q->clear();
-				}
-			}
-		}
-
         if ($stored) {
+            //split out related departments and store them seperatly.
+            $q->setDelete('project_departments');
+            $q->addWhere('project_id=' . (int)$this->project_id);
+            $q->exec();
+            $q->clear();
+            if ($this->project_departments) {
+                foreach ($this->project_departments as $department) {
+                    if ($department) {
+                        $q->addTable('project_departments');
+                        $q->addInsert('project_id', $this->project_id);
+                        $q->addInsert('department_id', $department);
+                        $q->exec();
+                        $q->clear();
+                    }
+                }
+            }
+
+            //split out related contacts and store them seperatly.
+            $q->setDelete('project_contacts');
+            $q->addWhere('project_id=' . (int)$this->project_id);
+            $q->exec();
+            $q->clear();
+            if ($this->project_contacts) {
+                foreach ($this->project_contacts as $contact) {
+                    if ($contact) {
+                        $q->addTable('project_contacts');
+                        $q->addInsert('project_id', $this->project_id);
+                        $q->addInsert('contact_id', $contact);
+                        $q->exec();
+                        $q->clear();
+                    }
+                }
+            }
+
             $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
             $custom_fields->bind($_POST);
             $sql = $custom_fields->store($this->project_id); // Store Custom Fields

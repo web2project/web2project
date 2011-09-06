@@ -366,7 +366,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->company_id = 1;
         $result = $this->obj->delete($AppUI);
-        $this->assertEquals(2, count($this->obj->getError()));
+        $this->assertEquals(3, count($this->obj->getError()));
         $this->assertArrayHasKey('noDeleteRecord-Projects', $this->obj->getError());
         $this->assertArrayHasKey('noDeleteRecord-Departments', $this->obj->getError());
 

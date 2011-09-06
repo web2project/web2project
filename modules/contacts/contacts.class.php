@@ -3,7 +3,7 @@
 /**
  *	@package web2Project
  *	@subpackage modules
- *	@version $Revision: 1515 $
+ *	@version $Revision$
  */
 
 /**
@@ -61,7 +61,9 @@ class CContact extends w2p_Core_BaseObject {
 
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
+
         $perms = $AppUI->acl();
+        $stored = false;
 
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
@@ -98,17 +100,23 @@ class CContact extends w2p_Core_BaseObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
+//TODO: There is something wrong with this permissions check..
+        //if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
         if ($this->contact_id) {// && $perms->checkModuleItem('contacts', 'edit', $this->contact_id)) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
+//TODO: There is something wrong with this permissions check..
+        //if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
         if (0 == $this->contact_id) {// && $perms->checkModuleItem('contacts', 'add')) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         if ($stored) {
             $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
@@ -174,12 +182,15 @@ class CContact extends w2p_Core_BaseObject {
 
 	public function delete(CAppUI $AppUI = null) {
         global $AppUI;
-        $this->_error = array();
+        $perms = $AppUI->acl();
 
-        if ($msg = parent::delete()) {
-            return $msg;
-        }
-        return true;
+        //if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+            if ($msg = parent::delete()) {
+                return $msg;
+            }
+            return true;
+        //}
+        //return false;
 	}
 
 	public function check() {
@@ -197,7 +208,7 @@ class CContact extends w2p_Core_BaseObject {
 	    return $errorArray;
 	}
 
-	public function canDelete($msg, $oid = null, $joins = null) {
+	public function canDelete($msg = '', $oid = null, $joins = null) {
         $tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_contact');
 
 		return parent::canDelete($msg, $this->user_id, $tables);
@@ -505,7 +516,7 @@ class CContact extends w2p_Core_BaseObject {
         $q = $this->_query;
         $q->addTable('contacts');
 		$q->addQuery('contact_id');
-		$q->addWhere('contact_first_name IS NULL');
+		$q->addWhere('contact_display_name IS NULL OR contact_display_name == ""');
 		$contactIdList = $q->loadList();
 
 		foreach($contactIdList as $contactId) {

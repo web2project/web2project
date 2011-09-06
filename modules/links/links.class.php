@@ -90,9 +90,6 @@ class CLink extends w2p_Core_BaseObject {
         if (7 >= strlen(trim($this->link_url))) {
             $errorArray['link_url'] = $baseErrorMsg . 'link url is not set';
         }
-        if (!w2p_check_url($this->link_url)) {
-            $errorArray['link_url'] = $baseErrorMsg . 'link url is not formatted properly';
-        }
         if (0 == (int) $this->link_owner) {
             $errorArray['link_owner'] = $baseErrorMsg . 'link owner is not set';
         }
@@ -103,9 +100,8 @@ class CLink extends w2p_Core_BaseObject {
 
     public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
-        $this->_error = array();
 
-        if ($perms->checkModuleItem('links', 'delete', $this->link_id)) {
+        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
             }
@@ -117,6 +113,7 @@ class CLink extends w2p_Core_BaseObject {
     public function store(CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $stored = false;
+
         if (strpos($this->link_url, ':') === false && strpos($this->link_url, "//") === false) {
             $this->link_url = 'http://'.$this->link_url;
         }
@@ -132,18 +129,19 @@ class CLink extends w2p_Core_BaseObject {
          */
         $q = $this->_query;
         $this->link_date = $q->dbfnNowWithTZ();
-        if ($this->link_id && $perms->checkModuleItem('links', 'edit', $this->link_id)) {
-
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
-        if (0 == $this->link_id && $perms->checkModuleItem('links', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         return $stored;
     }

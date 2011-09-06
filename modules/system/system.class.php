@@ -1,4 +1,4 @@
-<?php /* $Id: system.class.php 1527 2010-12-13 07:56:13Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/system/system.class.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -179,25 +179,25 @@ class bcode extends w2p_Core_BaseObject {
 
 	public function delete(CAppUI $AppUI = null) {
 
-        $this->_error = array();
 		$q = $this->_query;
 		$q->addTable('billingcode');
 		$q->addUpdate('billingcode_status', '1');
 		$q->addWhere('billingcode_id = ' . (int)$this->_billingcode_id);
-		if (!$q->exec()) {
-			$q->clear();
-			return db_error();
-		} else {
-			$q->clear();
-			return true;
-		}
+        if ($q->exec()) {
+            $result = null;
+        } else {
+            $result = db_error();
+            $this->_error['delete-messages'] = $result;
+            return $result;
+        }
+
+        return $result;
 	}
 
 	public function store(CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
         $stored = false;
-        $this->_error = array();
 
         $q = $this->_query;
 		$q->addQuery('billingcode_id');
@@ -208,13 +208,14 @@ class bcode extends w2p_Core_BaseObject {
 		$q->clear();
 
 		if ($found_id && $found_id != $this->_billingcode_id) {
-			return 'Billing Code::code already exists';
+			$this->_error['store'] = 'Billing Code::code already exists';
 		} else {
             if ($perms->checkModuleItem('system', 'edit')) {
                 if (($msg = parent::store())) {
-                    return $msg;
+                    $this->_error['store'] = $msg;
+                } else {
+                    $stored = true;
                 }
-                $stored = true;
             }
         }
         return $stored;

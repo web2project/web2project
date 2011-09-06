@@ -1,4 +1,4 @@
-<?php /* $Id: tasklogs.php 1489 2010-11-12 10:37:23Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/reports/reports/tasklogs.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -141,7 +141,7 @@ if ($do_report) {
 
 	$q = new w2p_Database_Query;
 	$q->addTable('task_log', 't');
-	$q->addQuery('t.*, CONCAT_WS(\' \',contact_first_name,contact_last_name) AS creator, billingcode_value, ROUND((billingcode_value * t.task_log_hours), 2) AS amount, c.company_name, project_name, ts.task_name');
+	$q->addQuery('t.*, contact_display_name AS creator, billingcode_value, ROUND((billingcode_value * t.task_log_hours), 2) AS amount, c.company_name, project_name, ts.task_name');
 
 	$q->addJoin('tasks', 'ts', 'ts.task_id = t.task_log_task');
 	$q->addJoin('projects', '', 'projects.project_id = ts.task_project');

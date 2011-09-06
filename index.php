@@ -271,11 +271,8 @@ if (W2P_PERFORMANCE_DEBUG) {
 
 
 $pageHandler = new w2p_Output_PageHandler();
-//Set up extra tabs
-$all_tabs = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'tabs');
-//Set up extra crumbs
+$all_tabs   = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'tabs');
 $all_crumbs = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'crumbs');
-
 
 $module_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $a . '.php';
 if (file_exists($module_file)) {

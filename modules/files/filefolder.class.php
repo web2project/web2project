@@ -35,12 +35,8 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function delete(CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
-        $this->_error = $this->canDelete(null, $this->file_folder_id);
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
-        if ($perms->checkModuleItem('files', 'edit')) {
+//TODO: this is an oddball permissions object where the module doesn't determine the access..
+        if ($perms->checkModuleItem('files', 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
             }
@@ -78,6 +74,7 @@ class CFileFolder extends w2p_Core_BaseObject {
     public function store(CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $stored = false;
+
         $this->file_folder_id = (int) $this->file_folder_id;
 		$this->file_folder_parent = (int) $this->file_folder_parent;
 
@@ -91,17 +88,20 @@ class CFileFolder extends w2p_Core_BaseObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        if ($this->file_folder_id && $perms->checkModuleItem('files', 'edit')) {
+//TODO: this is an oddball permissions object where the module doesn't determine the access..
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem('files', 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
-        if (0 == $this->file_folder_id && $perms->checkModuleItem('files', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem('files', 'add')) {
             if (($msg = parent::store())) {
-                return $msg;
+                $this->_error['store'] = $msg;
+            } else {
+                $stored = true;
             }
-            $stored = true;
         }
         return $stored;
     }
