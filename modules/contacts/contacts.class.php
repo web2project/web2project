@@ -222,15 +222,13 @@ class CContact extends w2p_Core_BaseObject {
 		if ((int) $oid) {
 			// Check to see if there is a user
 			$q = $this->_query;
+            $q->clear();
 			$q->addTable('users');
 			$q->addQuery('count(user_id) as user_count');
 			$q->addWhere('user_contact = ' . (int)$oid);
 			$user_count = $q->loadResult();
-			if ($user_count > 0) {
-				return true;
-			} else {
-				return false;
-			}
+            
+            return ($user_count) ? true : false;
 		} else {
 			return false;
 		}
