@@ -496,10 +496,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 		return $q->loadHashList($index);
 	}
 
-	public function getAllowedSQL($uid, $index = null)
-	{
-		$perms = &$GLOBALS['AppUI']->acl();
-		$uid = intval($uid);
+	public function getAllowedSQL($uid, $index = null) {
+		global $AppUI;
+
+        $perms = $AppUI->acl();
+        $uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
@@ -534,10 +535,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 		return $where;
 	}
 
-	public function setAllowedSQL($uid, $query, $index = null, $key = null)
-	{
-		$perms = &$GLOBALS['AppUI']->acl();
-		$uid = intval($uid);
+	public function setAllowedSQL($uid, $query, $index = null, $key = null) {
+		global $AppUI;
+
+        $perms = $AppUI->acl();
+		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
