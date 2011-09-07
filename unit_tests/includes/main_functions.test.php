@@ -20,10 +20,10 @@ $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
 
 require_once W2P_BASE_DIR . '/includes/session.php';
-require_once 'PHPUnit/Framework.php';
+
 /**
  * Main_Functions_Test Class.
- * 
+ *
  * Class to test the main_functions include
  * @author D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  * @package web2project
