@@ -7,7 +7,8 @@
  *
  * PHP version 5
  *
- * LICENSE: This source file is subject to Clear BSD License.
+ * LICENSE: This source file is subject to Clear BSD License. Please see the
+ *   LICENSE file in root of site for further details
  *
  * @category    Departments
  * @package     web2project
