@@ -220,13 +220,10 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $this->obj->bind($this->post_data, null, true, true);
-        $this->obj->store();
-
         $tasklog = new CTaskLog();
-        $tasklog->load($this->obj->task_log_id);
-        $tasklog->task_log_hours = 5;
-        $tasklog->store();
+        $this->obj->bind($this->post_data, null, true, true);
+        $this->obj->task_log_id = 1;
+        $this->obj->store();
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestStoreUpdate.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_created', 'task_log_updated')));
@@ -311,7 +308,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Test canDelete with proper permissions
+     * Test canDelete
      */
     public function testCanDelete()
     {
@@ -322,29 +319,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertTrue($return);
         $this->assertEquals('', $msg);
-    }
-
-    /**
-     * Test canDelete without permissions
-     */
-    public function testCanDeleteNoPermissions()
-    {
-        global $AppUI;
-        $msg = '';
-
-         // Login as another user for permission purposes
-        $old_AppUI = $AppUI;
-        $AppUI  = new CAppUI;
-        $_POST['login'] = 'login';
-        $_REQUEST['login'] = 'sql';
-
-        $return = $this->obj->canDelete($msg);
-
-        // Restore AppUI for following tests since its global, yuck!
-        $AppUI = $old_AppUI;
-
-        $this->assertFalse($return);
-        $this->assertEquals('noDeletePermission', $msg);
     }
 
     /**
