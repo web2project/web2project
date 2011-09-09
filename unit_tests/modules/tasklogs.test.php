@@ -322,28 +322,6 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Tests canDelete with passing an object id
-     */
-    public function testCanDeleteOid()
-    {
-        global $AppUI;
-        $msg = '';
-
-        $return = $this->obj->canDelete($msg, 2);
-
-        $this->assertTrue($return);
-        $this->assertEquals('', $msg);
-    }
-
-    /**
-     * Tests canDelete with passing an object id and a join array
-     */
-    public function testCanDeleteOidJoins()
-    {
-        $this->markTestSkipped('Nothing uses tasklog_id as a foreign key so joins won\'t work');
-    }
-
-    /**
      * Test getting allowed records with a uid passed
      */
     public function testGetAllowedRecordUid()
