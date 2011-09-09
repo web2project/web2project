@@ -1,12 +1,12 @@
 <?php /* $Id$ $URL$ */
 
-class CTitleBlock extends CTitleBlock_core {
+class CTitleBlock extends w2p_Theme_TitleBlock {
 }
 
 ##
 ##  This overrides the show function of the CTabBox_core function
 ##
-class CTabBox extends CTabBox_core {
+class CTabBox extends w2p_Theme_TabBox {
 	function show($extra = '', $js_tabs = false) {
 		global $AppUI, $w2Pconfig, $currentTabId, $currentTabName, $m, $a;
 		$this->loadExtras($m, $a);
