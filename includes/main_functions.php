@@ -56,6 +56,11 @@ function w2p_autoload($class_name) {
 			//TODO: remove this in v4.0
 			require_once W2P_BASE_DIR . '/classes/ajax.class.php';
             break;
+        case 'ctitleblock':
+            // Deprecated as of v3.0
+			//TODO: remove this in v4.0
+			require_once W2P_BASE_DIR . '/classes/w2p/Theme/TitleBlock.class.php';
+            break;
 
         /*
          * The following are all wirings for module classes that don't follow

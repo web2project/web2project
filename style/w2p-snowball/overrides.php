@@ -1,8 +1,5 @@
 <?php /* $Id$ $URL$ */
 
-class CTitleBlock extends w2p_Theme_TitleBlock {
-}
-
 ##
 ##  This overrides the show function of the CTabBox_core function
 ##
