@@ -20,41 +20,54 @@ $criticalTasksInverted = ($project_id > 0) ? getCriticalTasksInverted($project_i
 // pull valid projects and their percent complete information
 $projects = $project->getAllowedProjects($AppUI->user_id, false);
 
-// pull tasks
-$q = new w2p_Database_Query;
-$q->addTable('tasks', 't');
-$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, 
-    task_duration, task_duration_type, task_priority, task_percent_complete,
-    task_order, task_project, task_milestone, task_access, task_owner, project_name, task_dynamic');
-$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
-$q->addOrder('project_id, task_start_date');
-if ($project_id) {
-	$q->addWhere('task_project = ' . (int)$project_id);
-}
-switch ($f) {
-	case 'all':
-		$q->addWhere('task_status > -1');
-		break;
-	case 'myproj':
-		$q->addWhere('task_status > -1');
-		$q->addWhere('project_owner = ' . (int)$AppUI->user_id);
-		break;
-	case 'mycomp':
-		$q->addWhere('task_status > -1');
-		$q->addWhere('project_company = ' . (int)$AppUI->user_company);
-		break;
-	case 'myinact':
-		$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-		$q->addWhere('task_project = p.project_id');
-		$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
-		break;
-	default:
-		$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-		$q->addWhere('task_status > -1');
-		$q->addWhere('task_project = p.project_id');
-		$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
-		break;
-}
+    // pull tasks
+    $q = new w2p_Database_Query;
+    $q->addTable('tasks', 't');
+	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
+		' task_duration, task_duration_type, task_priority, task_percent_complete,'.
+		' task_order, task_project, task_milestone, task_access, task_owner, '.
+        ' project_name, project_color_identifier, task_dynamic');
+    $q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
+    $q->addOrder('project_id, task_start_date');
+
+
+
+
+
+
+
+
+
+
+
+    if ($project_id) {
+        $q->addWhere('task_project = ' . (int)$project_id);
+    }
+
+    switch ($f) {
+        case 'all':
+            $q->addWhere('task_status > -1');
+            break;
+        case 'myproj':
+            $q->addWhere('task_status > -1');
+            $q->addWhere('project_owner = ' . (int)$AppUI->user_id);
+            break;
+        case 'mycomp':
+            $q->addWhere('task_status > -1');
+            $q->addWhere('project_company = ' . (int)$AppUI->user_company);
+            break;
+        case 'myinact':
+            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+            $q->addWhere('task_project = p.project_id');
+            $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
+            break;
+        default:
+            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+            $q->addWhere('task_status > -1');
+            $q->addWhere('task_project = p.project_id');
+            $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
+            break;
+    }
 
 // get any specifically denied tasks
 $task = new CTask;
