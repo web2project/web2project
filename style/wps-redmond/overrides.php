@@ -11,6 +11,11 @@ class CTabBox extends w2p_Theme_TabBox {
 		if (!$uistyle) {
 			$uistyle = 'web2project';
 		}
+
+
+
+
+        
 		reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
