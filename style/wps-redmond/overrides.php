@@ -1,8 +1,5 @@
 <?php /* $Id$ $URL$ */
 
-class CTitleBlock extends w2p_Theme_TitleBlock {
-}
-
 ##
 ##  This overrides the show function of the CTabBox_core function
 ##
@@ -14,6 +11,11 @@ class CTabBox extends w2p_Theme_TabBox {
 		if (!$uistyle) {
 			$uistyle = 'web2project';
 		}
+
+
+
+
+        
 		reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
