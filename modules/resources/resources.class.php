@@ -67,6 +67,33 @@ class CResource extends w2p_Core_BaseObject {
 		return $result;
 	}
 
+    public function store(w2p_Core_CAppUI $AppUI) {
+        $perms = $AppUI->acl();
+        $stored = false;
+
+        $this->_error = $this->check();
+
+        if (count($this->error)) {
+            return $this->_error;
+        }
+
+        $q = $this->_query;
+        if ($this->resource_id && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        if (0 == $this->resource_id && $perms->checkModuleItem($this->_tbl_module, 'add')) {
+            if (($msg = parent::store())) {
+                return $msg;
+            }
+            $stored = true;
+        }
+        return $stored;
+    }
+
     public function delete(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $this->_error = array();
