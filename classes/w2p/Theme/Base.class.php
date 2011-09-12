@@ -2,7 +2,7 @@
 
 /**
  *	@package web2project
- *	@subpackage output
+ *	@subpackage theme
  *	@version $Revision$
  */
 
