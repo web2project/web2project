@@ -854,6 +854,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests getting a list of allowed project by user
      *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetAllowedProjectsInRows()
     {
