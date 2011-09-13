@@ -103,7 +103,6 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	include_once W2P_BASE_DIR . '/locales/core.php';
 	setlocale(LC_TIME, $AppUI->user_lang);
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
-		require W2P_BASE_DIR . '/includes/sendpass.php';
 		sendNewPass();
 	} else {
 		require W2P_BASE_DIR . '/style/' . $uistyle . '/lostpass.php';
