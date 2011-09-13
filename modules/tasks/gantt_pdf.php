@@ -79,10 +79,21 @@ if ($caller == 'todo') {
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
 		' task_duration, task_duration_type, task_priority, task_percent_complete,'.
-		' task_order, task_project, task_milestone, project_name, project_color_identifier,'.
-		' task_dynamic');
+		' task_order, task_project, task_milestone, task_access, task_owner, '.
+        ' project_name, project_color_identifier, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
+    $q->addOrder('p.project_id, t.task_end_date');
 
+
+
+
+
+
+
+
+
+
+    
 	if ($project_id) {
 		$q->addWhere('task_project = ' . (int)$project_id);
 	}
@@ -108,8 +119,6 @@ if ($caller == 'todo') {
 			$q->addWhere('ut.user_id = '.$AppUI->user_id);
 			break;
 	}
-
-    $q->addOrder('p.project_id, t.task_end_date');
 }
 
 // get any specifically denied tasks
@@ -342,13 +351,13 @@ foreach ($gtask_sliced as $gts) {
             $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
             $res = $q->loadList();
             foreach ($res as $rw) {
-			switch ($rw['perc_assignment']) {
-				case 100:
-					$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
-					break;
-				default:
-					$caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
-					break;
+                switch ($rw['perc_assignment']) {
+                    case 100:
+                        $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
+                        break;
+                    default:
+                        $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
+                        break;
                 }
             }
             $q->clear();
@@ -429,6 +438,7 @@ foreach ($gtask_sliced as $gts) {
                 //due to the round above, we don't want to print decimals unless they really exist
                 $dur = $work_hours;
             }
+
             $dur .= ' h';
             $enddate = new w2p_Utilities_Date($end);
             $startdate = new w2p_Utilities_Date($start);

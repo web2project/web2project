@@ -94,6 +94,7 @@ if ($caller == 'todo') {
 		' task_order, task_project, task_milestone, task_access, task_owner, '.
         ' project_name, project_color_identifier, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
+    $q->addOrder('p.project_id, t.task_end_date');
 
     // don't add milestones if box is checked//////////////////////////////////////////////////////////
     if ($showNoMilestones) {
@@ -131,7 +132,7 @@ if ($caller == 'todo') {
 			break;
 	}
 
-    $q->addOrder('p.project_id, t.task_end_date');
+    
 }
 
 // get any specifically denied tasks

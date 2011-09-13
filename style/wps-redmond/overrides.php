@@ -1,12 +1,9 @@
 <?php /* $Id$ $URL$ */
 
-class CTitleBlock extends CTitleBlock_core {
-}
-
 ##
 ##  This overrides the show function of the CTabBox_core function
 ##
-class CTabBox extends CTabBox_core {
+class CTabBox extends w2p_Theme_TabBox {
 	function show($extra = '', $js_tabs = false) {
 		global $AppUI, $w2Pconfig, $currentTabId, $currentTabName, $m, $a;
 		$this->loadExtras($m, $a);
@@ -14,6 +11,11 @@ class CTabBox extends CTabBox_core {
 		if (!$uistyle) {
 			$uistyle = 'web2project';
 		}
+
+
+
+
+        
 		reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
