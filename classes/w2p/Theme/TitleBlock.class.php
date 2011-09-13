@@ -2,8 +2,12 @@
 
 /**
  *	@package web2project
- *	@subpackage output
+ *	@subpackage theme
  *	@version $Revision$
+ */
+
+/**
+ * Title box abstract class
  */
 
 class w2p_Theme_TitleBlock {
