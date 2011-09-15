@@ -130,7 +130,7 @@ foreach ($moduleList as $module) {
 }
 
 // create the main calendar
-$cal = new CMonthCalendar($date);
+$cal = new w2p_Output_MonthCalendar($date);
 $cal->setStyles('motitle', 'mocal');
 $cal->setLinkFunctions('clickDay', 'clickWeek');
 $cal->setEvents($links);
@@ -139,7 +139,7 @@ echo $cal->show();
 //echo '<pre>';print_r($cal);echo '</pre>';
 
 // create the mini previous and next month calendars under
-$minical = new CMonthCalendar($cal->prev_month);
+$minical = new w2p_Output_MonthCalendar($cal->prev_month);
 $minical->setStyles('minititle', 'minical');
 $minical->showArrows = false;
 $minical->showWeek = false;

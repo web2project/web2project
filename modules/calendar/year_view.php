@@ -95,7 +95,7 @@ $next_year = (int)($next_year + 10000);
 				</tr>
 			</table>
 			<?php
-				$minical = new CMonthCalendar($date);
+				$minical = new w2p_Output_MonthCalendar($date);
 				$minical->setStyles('minititle', 'minical');
 				$minical->showArrows = false;
 				$minical->showWeek = true;

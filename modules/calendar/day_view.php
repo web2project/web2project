@@ -97,7 +97,7 @@ function clickDay( idate, fdate ) {
 <?php if ($w2Pconfig['cal_day_view_show_minical']) { ?>
         <td valign="top" width="175">
 <?php
-	$minical = new CMonthCalendar($this_day);
+	$minical = new w2p_Output_MonthCalendar($this_day);
 	$minical->setStyles('minititle', 'minical');
 	$minical->showArrows = false;
 	$minical->showWeek = false;

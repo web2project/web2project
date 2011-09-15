@@ -16,7 +16,7 @@ $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfi
 ?>
 <a href="javascript: void(0);" onclick="clickDay('', '');">clear date</a>
 <?php
-$cal = new CMonthCalendar($this_month);
+$cal = new w2p_Output_MonthCalendar($this_month);
 $cal->setStyles('poptitle', 'popcal');
 $cal->showWeek = false;
 $cal->callback = $callback;
