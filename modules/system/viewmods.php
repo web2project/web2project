@@ -25,7 +25,7 @@ $modules = $q->loadList();
 // get the modules actually installed on the file system
 $modFiles = $AppUI->readDirs('modules');
 
-$titleBlock = new CTitleBlock('Modules', 'power-management.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Modules', 'power-management.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
 ?>

@@ -32,7 +32,7 @@ $q->clear();
 
 $company_name = $company_list[$company_id];
 
-$titleBlock = new CTitleBlock('Edit Billing Codes', 'myevo-weather.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Edit Billing Codes', 'myevo-weather.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>

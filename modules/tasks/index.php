@@ -42,7 +42,7 @@ $companies = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name',
 $filters2 = arrayMerge(array('allcompanies' => $AppUI->_('All Companies', UI_OUTPUT_RAW)), $companies);
 
 // setup the title block
-$titleBlock = new CTitleBlock('Tasks', 'applet-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Tasks', 'applet-48.png', $m, $m . '.' . $a);
 
 // patch 2.12.04 text to search entry box
 if (isset($_POST['searchtext'])) {
@@ -82,7 +82,7 @@ if (w2PgetParam($_GET, 'inactive', '') == 'toggle') {
 $in = $AppUI->getState('inactive') == -1 ? '' : 'in';
 
 // use a new title block (a new row) to prevent from oversized sites
-$titleBlock = new CTitleBlock('', 'shim.gif');
+$titleBlock = new w2p_Theme_TitleBlock('', 'shim.gif');
 $titleBlock->showhelp = false;
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Task Filter') . ':');
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onChange="document.taskFilter.submit();"', $f, true), '', '<form action="?m=tasks" method="post" name="taskFilter" accept-charset="utf-8">', '</form>');

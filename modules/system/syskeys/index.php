@@ -62,7 +62,7 @@ foreach ($values as $key => $value) {
 
 $sysval_id = isset($_GET['sysval_id']) ? w2PgetParam($_GET, 'sysval_id', '') : '';
 
-$titleBlock = new CTitleBlock('System Lookup Values', 'myevo-weather.png', $m, $m . '.' . $u . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('System Lookup Values', 'myevo-weather.png', $m, $m . '.' . $u . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
 ?>

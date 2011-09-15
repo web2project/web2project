@@ -11,7 +11,7 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$titleBlock = new CTitleBlock('Import Contacts from LDAP Directory', '', 'admin', '');
+$titleBlock = new w2p_Theme_TitleBlock('Import Contacts from LDAP Directory', '', 'admin', '');
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 
