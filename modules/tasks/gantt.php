@@ -91,8 +91,8 @@ if ($caller == 'todo') {
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
 		' task_duration, task_duration_type, task_priority, task_percent_complete,'.
-		' task_order, task_project, task_milestone, task_access, task_owner, '.
-        ' project_name, project_color_identifier, task_dynamic');
+		' task_hours_worked, task_order, task_project, task_milestone, task_access,'.
+        ' task_owner, project_name, project_color_identifier, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
     $q->addOrder('p.project_id, t.task_end_date');
 
@@ -123,9 +123,6 @@ if ($caller == 'todo') {
 			$q->addWhere('project_company = ' . (int)$AppUI->user_company);
 			break;
 		case 'myinact':
-			$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-			$q->addWhere('ut.user_id = '.$AppUI->user_id);
-			break;
 		default:
 			$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
 			$q->addWhere('ut.user_id = '.$AppUI->user_id);
@@ -223,7 +220,7 @@ if ($showTaskNameOnly == '1') {
         $columnSizes = array(200, 160, 40, 75, 75);
     } else {
         $columnNames = array('Task name', $field, 'Start', 'Finish');
-        $columnSizes = array(250, 60, 80, 80);
+        $columnSizes = array(250, 50, 80, 80);
     }
 }
 $gantt->setColumnHeaders($columnNames, $columnSizes);
@@ -397,29 +394,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             }
 
             if ($showWork == '1') {
-                $work_hours = 0;
-                $q = new w2p_Database_Query;
-                $q->addTable('tasks', 't');
-                $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-                $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-                $q->addWhere('t.task_duration_type = 24');
-                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
-
-                $wh = $q->loadResult();
-                $work_hours = $wh * $w2Pconfig['daily_working_hours'];
-                $q->clear();
-
-                $q->addTable('tasks', 't');
-                $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-                $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-                $q->addWhere('t.task_duration_type = 1');
-                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
-
-                $wh2 = $q->loadResult();
-                $work_hours += $wh2;
-                $q->clear();
-                //due to the round above, we don't want to print decimals unless they really exist
-                $dur = $work_hours;
+                $dur = round($a['task_hours_worked'], 0);
             }
 
             $dur .= ' h';
