@@ -141,11 +141,6 @@ if (!$ok) {
 
 	window.onresize = window.onload = function setHeight(){
 
-		if (document.compatMode && document.compatMode != "BackCompat" && document.documentElement.clientHeight)
-			var wh = document.documentElement.clientHeight;
-		else
-			var wh = document.all ? document.body.clientHeight : window.innerHeight;
-   
 		var wh = getInnerHeight(window);
 		var selector = document.getElementById('selector');
 		var count = 0;

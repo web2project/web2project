@@ -530,17 +530,7 @@ function find_anchor(a) {
 
 // function getInnerHeight
 function getInnerHeight(win) {
-	var winHeight;
-	if (win.innerHeight) {
-		winHeight = win.innerHeight;
-	} else if (win.document.documentElement && win.document.documentElement.clientHeight) {
-		winHeight = win.document.documentElement.clientHeight;
-	} else if (win.document.body) {
-		winHeight = win.document.body.clientHeight;
-	} else {
-		winHeight = 0; // This should never happens
-	}
-	return winHeight;
+	return $(win).height();
 }
 
 /**
