@@ -98,7 +98,6 @@ $titleBlock->show();
 
 <table border="0" cellspacing="1" cellpadding="2" width="100%" style="margin-width:4px;background-color:white">
 <?php
-$column = 0;
 $show_day = $this_week;
 
 $today = new w2p_Utilities_Date();
