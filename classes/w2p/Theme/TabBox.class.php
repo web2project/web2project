@@ -172,9 +172,10 @@ class w2p_Theme_TabBox {
 		} else {
 			$tab_array = &$_SESSION['all_tabs'][$module];
 		}
+        $modules = $AppUI->getActiveModules();
 		$tab_count = 0;
 		foreach ($tab_array as $tab_elem) {
-			if (isset($tab_elem['module']) && $AppUI->isActiveModule($tab_elem['module'])) {
+            if (isset($tab_elem['module']) && isset($modules[$tab_elem['module']])) {
 				$tab_count++;
 				$this->add($tab_elem['file'], $tab_elem['name']);
 			}
