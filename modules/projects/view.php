@@ -55,7 +55,7 @@ $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilitie
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block
-$titleBlock = new CTitleBlock('View Project', 'applet3-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Project', 'applet3-48.png', $m, $m . '.' . $a);
 
 // patch 2.12.04 text to search entry box
 if (isset($_POST['searchtext'])) {

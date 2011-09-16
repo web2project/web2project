@@ -127,7 +127,7 @@ foreach ($hook_modules as $tmp) {
 
 
 <?php
-$titleBlock = new CTitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
 $titleBlock->show();
 ?>
 	<table class="std" width="100%" cellspacing="5" cellpadding="0" border="0">

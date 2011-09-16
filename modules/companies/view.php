@@ -37,7 +37,7 @@ if (!$company) {
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock('View Company', 'handshake.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('View Company', 'handshake.png', $m, "$m.$a");
 $titleBlock->addCell();
 if ($canAdd) {
   $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');	

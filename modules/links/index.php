@@ -23,7 +23,7 @@ $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,pr
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
 // setup the title block
-$titleBlock = new CTitleBlock('Links', 'folder5.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Links', 'folder5.png', $m, "$m.$a");
 $titleBlock->addCell($AppUI->_('Search') . ':');
 $search = '';
 $titleBlock->addCell('<input type="text" class="text" SIZE="10" name="search" onChange="document.searchfilter.submit();" value=' . "'$search'" . 'title="' . $AppUI->_('Search in name and description fields', UI_OUTPUT_JS) . '"/>', '', '<form action="?m=links" method="post" id="searchfilter" accept-charset="utf-8">', '</form>');

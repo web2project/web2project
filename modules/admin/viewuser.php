@@ -46,13 +46,13 @@ $methods = $contact->getContactMethods();
 $methodLabels = w2PgetSysVal('ContactMethods');
 
 if (!$user) {
-	$titleBlock = new CTitleBlock('Invalid User ID', 'helix-setup-user.png', $m, "$m.$a");
+	$titleBlock = new w2p_Theme_TitleBlock('Invalid User ID', 'helix-setup-user.png', $m, "$m.$a");
 	$titleBlock->addCrumb('?m=admin', 'users list');
 	$titleBlock->show();
 } else {
 	$countries = w2PgetSysVal('GlobalCountries');
 	// setup the title block
-	$titleBlock = new CTitleBlock('View User', 'helix-setup-user.png', $m, "$m.$a");
+	$titleBlock = new w2p_Theme_TitleBlock('View User', 'helix-setup-user.png', $m, "$m.$a");
 	if ($canRead) {
 		$titleBlock->addCrumb('?m=admin', 'users list');
 	}

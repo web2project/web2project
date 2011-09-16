@@ -74,7 +74,7 @@ $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:r
 
 // setup the title block
 $ttl = $project_id > 0 ? 'Edit Project' : 'New Project';
-$titleBlock = new CTitleBlock($ttl, 'applet3-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'applet3-48.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=projects', 'projects list');
 if ($project_id != 0) {
 	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');

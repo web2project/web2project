@@ -45,7 +45,7 @@ $owner_list = array(0 => $AppUI->_('All', UI_OUTPUT_RAW)) + $perms->getPermitted
 $owner_combo = arraySelect($owner_list, 'owner_filter_id', 'class="text" onchange="javascript:document.searchform.submit()"', $owner_filter_id, false);
 
 // setup the title block
-$titleBlock = new CTitleBlock('Departments', 'departments.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Departments', 'departments.png', $m, $m . '.' . $a);
 $titleBlock->addCell('<form name="searchform" action="?m=departments&amp;search_string=' . $search_string . '" method="post" accept-charset="utf-8">
 		<table>
 			<tr>

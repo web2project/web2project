@@ -278,7 +278,7 @@ if (file_exists($module_file)) {
 	require $module_file;
 } else {
 	// TODO: make this part of the public module?
-	$titleBlock = new CTitleBlock($AppUI->_('Warning'), 'log-error.gif');
+	$titleBlock = new w2p_Theme_TitleBlock($AppUI->_('Warning'), 'log-error.gif');
 	$titleBlock->show();
 
 	if (is_callable('styleRenderBoxTop')) {

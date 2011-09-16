@@ -52,7 +52,7 @@ $owner_list = is_array($allowedArray) ? ($baseArray + $allowedArray) : $baseArra
 $owner_combo = arraySelect($owner_list, 'owner_filter_id', 'class="text" onchange="javascript:document.searchform.submit()"', $owner_filter_id, false);
 
 // setup the title block
-$titleBlock = new CTitleBlock('Companies', 'handshake.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Companies', 'handshake.png', $m, $m . '.' . $a);
 $titleBlock->addCell('<form name="searchform" action="?m=companies&amp;search_string=' . $search_string . '" method="post" accept-charset="utf-8">
 						<table>
 							<tr>

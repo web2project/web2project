@@ -99,7 +99,7 @@ for ($c = 65; $c < 91; $c++) {
 $a2z .= '</tr><tr><td colspan="28">' . $form . '</td></tr></table>';
 
 // setup the title block
-$titleBlock = new CTitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCell($a2z);
 if ($canEdit) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new contact') . '">', '', '<form action="?m=contacts&a=addedit" method="post" accept-charset="utf-8">', '</form>');

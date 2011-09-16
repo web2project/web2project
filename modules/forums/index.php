@@ -32,7 +32,7 @@ $forum = new CForum();
 $forums = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $orderby, $orderdir);
 
 // setup the title block
-$titleBlock = new CTitleBlock('Forums', 'support.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Forums', 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true), '', '<form name="forum_filter" action="?m=forums" method="post" accept-charset="utf-8">', '</form>');
 
 $canAdd = canAdd($m);

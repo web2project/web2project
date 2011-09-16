@@ -46,7 +46,7 @@ for ($c = 65; $c < 91; $c++) {
 $a2z .= '</tr></table>';
 
 // setup the title block
-$titleBlock = new CTitleBlock('User Management', 'helix-setup-users.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('User Management', 'helix-setup-users.png', $m, "$m.$a");
 
 $where = w2PformSafe($where, true);
 

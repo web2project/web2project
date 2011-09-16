@@ -83,7 +83,7 @@ if ($file->file_checkout == 'final' && !$canAdmin) {
 // setup the title block
 $ttl = $file_id ? 'Edit File' : 'Add File';
 $ttl = $ci ? 'Checking in' : $ttl;
-$titleBlock = new CTitleBlock($ttl, 'folder5.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'folder5.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=files', 'files list');
 if ($canDelete && $file_id > 0 && !$ci) {
 	$titleBlock->addCrumbDelete('delete file', $canDelete, $msg);

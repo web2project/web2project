@@ -18,7 +18,7 @@ if ($resource_id && !$obj->load($resource_id)) {
 	$AppUI->redirect();
 }
 
-$titleBlock = new CTitleBlock(($resource_id ? 'Edit Resource' : 'Add Resource'), 'resources.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock(($resource_id ? 'Edit Resource' : 'Add Resource'), 'resources.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=resources', 'resource list');
 if ($resource_id) {
 	$titleBlock->addCrumb('?m=resources&a=view&resource_id=' . $resource_id, 'view this resource');

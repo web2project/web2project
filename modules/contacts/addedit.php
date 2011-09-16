@@ -56,7 +56,7 @@ $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 // setup the title block
 $ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';
-$titleBlock = new CTitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
 if ($canDelete && $contact_id) {
 	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);

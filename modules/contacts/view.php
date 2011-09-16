@@ -47,7 +47,7 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 
 // setup the title block
 $ttl = 'View Contact';
-$titleBlock = new CTitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
 if ($canEdit && $contact_id) {
 	$titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$contact_id, 'edit this contact');

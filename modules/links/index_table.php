@@ -14,7 +14,7 @@ if ($task_id && !$project_id) {
 $m = 'links';
 
 if ($canEdit) {
-    $titleBlock = new CTitleBlock( '', '', $m, "$m.$a" );
+    $titleBlock = new w2p_Theme_TitleBlock( '', '', $m, "$m.$a" );
     $titleBlock->addCell(
         '<input type="submit" class="button" value="'.$AppUI->_('new link').'">', '',
         '<form action="?m=links&a=addedit&project_id='.$project_id.'&task_id='.$task_id.'" method="post" accept-charset="utf-8">', '</form>'

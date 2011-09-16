@@ -92,7 +92,7 @@ $project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('Proje
 $bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>';
 
 // setup the title block
-$titleBlock = new CTitleBlock('Projects', 'applet3-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Projects', 'applet3-48.png', $m, $m . '.' . $a);
 $titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="searchfilter" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Search') . ':</td><td nowrap="nowrap" align="left">' . $bufferSearch . '</form></tr><tr><form action="?m=projects" method="post" name="typeIdForm" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Type') . '</td><td nowrap="nowrap" align="left">' . arraySelect($project_types, 'project_type', 'size="1" class="text" onChange="document.typeIdForm.submit();"', $project_type, false) . '</td></form></tr></table>', '', '', '');
 $titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="pickCompany" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Company') . '</td><td nowrap="nowrap" align="left">' . $buffer . '</td></form></tr><tr><form action="?m=projects" method="post" name="userIdForm" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Owner') . '</td><td nowrap="nowrap" align="left">' . arraySelect($user_list, 'project_owner', 'size="1" class="text" onChange="document.userIdForm.submit();"', $owner, false) . '</td></form></tr></table>', '', '', '');
 if ($canAuthor) {

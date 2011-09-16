@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock('Welcome', 'public.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Welcome', 'public.png', $m, $m . '.' . $a);
 $titleBlock->show();
 ?>
 

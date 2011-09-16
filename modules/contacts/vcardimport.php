@@ -75,7 +75,7 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 	}
 } elseif (isset($_GET['dialog']) && (w2PgetParam($_GET, 'dialog', null) == '0')) { //file upload formular
 
-	$titleBlock = new CTitleBlock('Import vCard', 'monkeychat-48.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Import vCard', 'monkeychat-48.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=contacts', 'contacts list');
 	$titleBlock->show();
 

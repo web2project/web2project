@@ -30,7 +30,7 @@ if (!$department) {
 $countries = w2PgetSysVal('GlobalCountries');
 $types = w2PgetSysVal('DepartmentType');
 
-$titleBlock = new CTitleBlock('View Department', 'departments.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Department', 'departments.png', $m, $m . '.' . $a);
 if ($canEdit) {
     $titleBlock->addCell();
     $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '">', '', '<form action="?m=departments&a=addedit&company_id=' . $department->dept_company . '&dept_parent=' . $dept_id . '" method="post" accept-charset="utf-8">', '</form>');
