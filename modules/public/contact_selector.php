@@ -54,7 +54,7 @@ if ($contacts_submited == 1) {
 }
 
 // Remove any empty elements
-$contacts_id = remove_invalid(explode(',', $selected_contacts_id));
+$contacts_id = array_filter(explode(',', $selected_contacts_id));
 $selected_contacts_id = implode(',', $contacts_id);
 
 $q = new w2p_Database_Query;
