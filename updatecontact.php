@@ -9,7 +9,7 @@ if (!isset($GLOBALS['OS_WIN'])) {
 // tweak for pathname consistence on windows machines
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-$AppUI = new CAppUI();
+$AppUI = new w2p_Core_CAppUI();
 
 $updatekey = w2PgetParam($_GET, 'updatekey', 0);
 $contact_id = CContact::getContactByUpdatekey($updatekey);

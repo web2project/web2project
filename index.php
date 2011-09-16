@@ -76,7 +76,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 		addHistory('login', $AppUI->user_id, 'logout', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 	}
 
-	$_SESSION['AppUI'] = new CAppUI;
+	$_SESSION['AppUI'] = new w2p_Core_CAppUI();
 }
 $AppUI = &$_SESSION['AppUI'];
 $last_insert_id = $AppUI->last_insert_id;

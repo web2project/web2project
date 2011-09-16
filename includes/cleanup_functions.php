@@ -1958,7 +1958,7 @@ function addDeptId($dataset, $parent) {
 * 
 * From modules/calendar/clash.php
 */
-function clash_process(CAppUI $AppUI) {
+function clash_process(w2p_Core_CAppUI $AppUI) {
 	global $do_include;
 
 	$obj = new CEvent;
@@ -2083,7 +2083,7 @@ function clash_process(CAppUI $AppUI) {
 *
 * From modules/calendar/clash.php
 */
-function clash_mail(CAppUI $AppUI) {
+function clash_mail(w2p_Core_CAppUI $AppUI) {
 	$obj = new CEvent;
 	if (!$obj->bind($_SESSION['add_event_post'])) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
@@ -2100,7 +2100,7 @@ function clash_mail(CAppUI $AppUI) {
 * 
 * From modules/calendar/clash.php
 */
-function clash_accept(CAppUI $AppUI) {
+function clash_accept(w2p_Core_CAppUI $AppUI) {
 	global $do_redirect;
 
 	$AppUI->setMsg('Event');
@@ -2141,7 +2141,7 @@ function clear_clash() {
 * 
 * From modules/calendar/clash.php
 */
-function clash_cancel(CAppUI $AppUI) {
+function clash_cancel(w2p_Core_CAppUI $AppUI) {
 	global $a;
 	$a = $_SESSION['add_event_caller'];
 	clear_clash();

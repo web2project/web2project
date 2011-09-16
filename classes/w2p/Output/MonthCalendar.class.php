@@ -10,7 +10,7 @@
  */
 
 if (!isset($AppUI)) {
-    $AppUI = new CAppUI;
+    $AppUI = new w2p_Core_CAppUI();
 }
 require_once $AppUI->getLibraryClass('PEAR/Date');
 

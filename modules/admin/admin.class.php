@@ -37,7 +37,7 @@ class CUser extends w2p_Core_BaseObject {
 		return $errorArray;
 	}
 
-	public function store(CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
 		global $AppUI;
 
         $perms = $AppUI->acl();
@@ -132,7 +132,7 @@ class CUser extends w2p_Core_BaseObject {
 		return parent::canDelete($msg, $this->user_id, $tables);
     }
 
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
 

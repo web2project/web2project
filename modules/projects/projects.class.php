@@ -132,7 +132,7 @@ class CProject extends w2p_Core_BaseObject {
         return $errorArray;
 	}
 
-	public function loadFull(CAppUI $AppUI, $projectId) {
+	public function loadFull(w2p_Core_CAppUI $AppUI, $projectId) {
 
         $q = $this->_query;
 		$q->addTable('projects');
@@ -148,7 +148,7 @@ class CProject extends w2p_Core_BaseObject {
 		$q->loadObject($this);
 	}
 
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
 
         $perms = $AppUI->acl();
@@ -472,7 +472,7 @@ class CProject extends w2p_Core_BaseObject {
 		return $q->loadList();
 	}
 
-	public function store(CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
 
         $perms = $AppUI->acl();
@@ -696,7 +696,7 @@ class CProject extends w2p_Core_BaseObject {
 		return $q->loadHashList('project_id');
 	}
 
-	public static function getContacts(CAppUI $AppUI = null, $projectId) {
+	public static function getContacts(w2p_Core_CAppUI $AppUI = null, $projectId) {
         global $AppUI;
 
         $perms = $AppUI->acl();
@@ -725,7 +725,7 @@ class CProject extends w2p_Core_BaseObject {
 			return $q->loadHashList('contact_id');
 		}
 	}
-	public static function getDepartments(CAppUI $AppUI = null, $projectId) {
+	public static function getDepartments(w2p_Core_CAppUI $AppUI = null, $projectId) {
 		global $AppUI;
 
         $perms = $AppUI->acl();
@@ -742,7 +742,7 @@ class CProject extends w2p_Core_BaseObject {
 			return $q->loadHashList('dept_id');
 		}
 	}
-	public static function getForums(CAppUI $AppUI = null, $projectId) {
+	public static function getForums(w2p_Core_CAppUI $AppUI = null, $projectId) {
 		global $AppUI;
 
 		if ($AppUI->isActiveModule('forums') && canView('forums')) {
@@ -807,7 +807,7 @@ class CProject extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 
-	public static function updateStatus(CAppUI $AppUI = null, $projectId, $statusId) {
+	public static function updateStatus(w2p_Core_CAppUI $AppUI = null, $projectId, $statusId) {
 		global $AppUI;
 		trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE );
         $perms = $AppUI->acl();
@@ -941,7 +941,7 @@ class CProject extends w2p_Core_BaseObject {
 
 		return rtrim($total_project_hours, '.');
 	}
-	public function getTaskLogs(CAppUI $AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
+	public function getTaskLogs(w2p_Core_CAppUI $AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
         global $AppUI;
 
 		$q = $this->_query;

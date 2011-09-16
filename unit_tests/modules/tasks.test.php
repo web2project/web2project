@@ -36,7 +36,7 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 /*
  * Need this to test actions that require permissions.
  */
-$AppUI  = new w2p_Core_CAppUI;
+$AppUI  = new w2p_Core_CAppUI();
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');

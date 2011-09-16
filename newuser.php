@@ -10,7 +10,7 @@ if (!isset($GLOBALS['OS_WIN'])) {
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 
-$AppUI = new CAppUI();
+$AppUI = new w2p_Core_CAppUI();
 
 if (w2PgetConfig('activate_external_user_creation') != 'true') {
 	echo $AppUI->_('You should not access this file directly');

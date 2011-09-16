@@ -67,7 +67,7 @@ class CResource extends w2p_Core_BaseObject {
 		return $result;
 	}
 
-    public function delete(CAppUI $AppUI) {
+    public function delete(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $this->_error = array();
 

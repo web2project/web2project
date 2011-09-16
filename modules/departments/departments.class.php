@@ -41,7 +41,7 @@ class CDepartment extends w2p_Core_BaseObject {
 
 		return $q->loadObject($this);
 	}
-	public function loadFull(CAppUI $AppUI = null, $deptId) {
+	public function loadFull(w2p_Core_CAppUI $AppUI = null, $deptId) {
         global $AppUI;
 
 		$q = $this->_query;
@@ -61,7 +61,7 @@ class CDepartment extends w2p_Core_BaseObject {
 
 		$q->loadObject($this);
 	}
-	public function loadOtherDepts(CAppUI $AppUI = null, $company_id, $removeDeptId = 0) {
+	public function loadOtherDepts(w2p_Core_CAppUI $AppUI = null, $company_id, $removeDeptId = 0) {
 		global $AppUI;
 
         $results = array();
@@ -82,7 +82,7 @@ class CDepartment extends w2p_Core_BaseObject {
         return $results;
 	}
 
-	public function getFilteredDepartmentList(CAppUI $AppUI = null, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
+	public function getFilteredDepartmentList(w2p_Core_CAppUI $AppUI = null, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
         global $AppUI;
 
         $orderby = (in_array($orderby, array('dept_name', 'dept_type', 'countp', 'inactive'))) ? $orderby : 'dept_name';
@@ -139,7 +139,7 @@ class CDepartment extends w2p_Core_BaseObject {
             return $errorArray;
 	}
 
-	public function store(CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
 
         $perms = $AppUI->acl();
@@ -168,7 +168,7 @@ class CDepartment extends w2p_Core_BaseObject {
         return $stored;
 	}
 
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
 
@@ -348,7 +348,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		}
 	}
 
-	public static function getDepartmentList(CAppUI $AppUI = null, $companyId, $departmentId = 0) {
+	public static function getDepartmentList(w2p_Core_CAppUI $AppUI = null, $companyId, $departmentId = 0) {
 		global $AppUI;
 
         $q = new w2p_Database_Query();
@@ -365,7 +365,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		return $q->loadHashList('dept_id');
 	}
 
-	public static function getContactList(CAppUI $AppUI = null, $deptId) {
+	public static function getContactList(w2p_Core_CAppUI $AppUI = null, $deptId) {
 		global $AppUI;
 
         if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $deptId > 0) {

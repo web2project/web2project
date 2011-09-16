@@ -72,7 +72,7 @@ class CCompany extends w2p_Core_BaseObject {
 		return parent::canDelete($msg, $oid, $tables);
 	}
 
-    public function delete(CAppUI $AppUI) {
+    public function delete(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
@@ -84,7 +84,7 @@ class CCompany extends w2p_Core_BaseObject {
         return false;
     }
 
-    public function store(CAppUI $AppUI) {
+    public function store(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -137,7 +137,7 @@ class CCompany extends w2p_Core_BaseObject {
     return $search;
   }
 
-  public function loadFull(CAppUI $AppUI = null, $companyId) {
+  public function loadFull(w2p_Core_CAppUI $AppUI = null, $companyId) {
     global $AppUI;
 
     $q = $this->_query;
@@ -180,7 +180,7 @@ class CCompany extends w2p_Core_BaseObject {
   	return $q->loadList();
   }
 
-  public function getCompanies(CAppUI $AppUI) {
+  public function getCompanies(w2p_Core_CAppUI $AppUI) {
 
     $q = $this->_query;
   	$q->addTable('companies');
@@ -192,7 +192,7 @@ class CCompany extends w2p_Core_BaseObject {
   	return $q->loadHashList('company_id');
   }
 
-	public static function getProjects(CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name') {
+	public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name') {
 		$fields = 'DISTINCT pr.project_id, project_name, project_start_date, ' .
 				'project_status, project_target_budget, project_start_date, ' .
 				'project_priority, contact_first_name, contact_last_name';
@@ -218,7 +218,7 @@ class CCompany extends w2p_Core_BaseObject {
 		return $q->loadList();
 	}
 	
-	public static function getContacts(CAppUI $AppUI, $companyId) {
+	public static function getContacts(w2p_Core_CAppUI $AppUI, $companyId) {
 		$results = array();
 		$perms = $AppUI->acl();
 
@@ -247,7 +247,7 @@ class CCompany extends w2p_Core_BaseObject {
 		return $results;
 	}
 
-	public static function getUsers(CAppUI $AppUI, $companyId) {
+	public static function getUsers(w2p_Core_CAppUI $AppUI, $companyId) {
 
         $q = new w2p_Database_Query();
 		$q->addTable('users');
@@ -263,7 +263,7 @@ class CCompany extends w2p_Core_BaseObject {
 		return $q->loadHashList('user_id');
 	}
 	
-	public static function getDepartments(CAppUI $AppUI, $companyId) {
+	public static function getDepartments(w2p_Core_CAppUI $AppUI, $companyId) {
 		$perms = $AppUI->acl();
 
 		if ($AppUI->isActiveModule('departments') && canView('departments')) {

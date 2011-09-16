@@ -50,7 +50,7 @@ class Base_Test extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->appUI = new CAppUI;
+        $this->appUI = new w2p_Core_CAppUI();
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
         $this->appUI->login('admin', 'passwd');

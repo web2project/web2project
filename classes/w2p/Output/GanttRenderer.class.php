@@ -20,7 +20,7 @@ class w2p_Output_GanttRenderer {
     private $taskArray = array();
     private $taskCount = 0;
 
-    public function __construct(CAppUI $AppUI, $width)
+    public function __construct(w2p_Core_CAppUI $AppUI, $width)
     {
         $this->graph = new GanttGraph($width);
         $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);

@@ -80,7 +80,7 @@ if (isset($_REQUEST['clash_action'])) {
 * 
 * TODO: I wanted to move this one but it's a big hairy mess..
 */
-function clash_suggest(CAppUI $AppUI, $cal_sdf) {
+function clash_suggest(w2p_Core_CAppUI $AppUI, $cal_sdf) {
 	global $m, $a;
 	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);

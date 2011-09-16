@@ -44,7 +44,7 @@ class CSystem {
             }
 
             if ($checkForUpdates) {
-                $AppUI = new CAppUI;
+                $AppUI = new w2p_Core_CAppUI();
                 $configList = array();
 
                 $moduleList = $AppUI->getLoadableModuleList();
@@ -131,7 +131,7 @@ class bcode extends w2p_Core_BaseObject {
 		parent::__construct('billingcode', 'billingcode_id');
 	}
 
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
 
 		$q = $this->_query;
 		$q->addTable('billingcode');
@@ -148,7 +148,7 @@ class bcode extends w2p_Core_BaseObject {
         return $result;
 	}
 
-	public function store(CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
         $stored = false;

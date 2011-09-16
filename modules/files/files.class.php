@@ -39,7 +39,7 @@ class CFile extends w2p_Core_BaseObject {
         parent::__construct('files', 'file_id');
 	}
 
-	public function store(CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
         global $helpdesk_available;
 
@@ -116,7 +116,7 @@ class CFile extends w2p_Core_BaseObject {
         return $search;
     }
 
-	public static function getFileList(CAppUI $AppUI = null, $company_id = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
+	public static function getFileList(w2p_Core_CAppUI $AppUI = null, $company_id = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
 		global $AppUI;
 
         $q = new w2p_Database_Query();
@@ -243,7 +243,7 @@ class CFile extends w2p_Core_BaseObject {
 
 	}
 
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
 		global $AppUI;
         global $helpdesk_available;
 
@@ -281,7 +281,7 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	// delete File from File System
-	public function deleteFile(CAppUI $AppUI = null) {
+	public function deleteFile(w2p_Core_CAppUI $AppUI = null) {
 		global $AppUI;
         $perms = $AppUI->acl();
 
@@ -359,7 +359,7 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	// parse file for indexing
-	public function indexStrings(CAppUI $AppUI) {
+	public function indexStrings(w2p_Core_CAppUI $AppUI) {
 		global $w2Pconfig;
         $nwords_indexed = 0;
 

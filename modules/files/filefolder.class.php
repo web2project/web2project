@@ -32,7 +32,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 
-	public function delete(CAppUI $AppUI) {
+	public function delete(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
@@ -71,7 +71,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	}
 
 
-    public function store(CAppUI $AppUI) {
+    public function store(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -127,7 +127,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 		return (int) $q->loadResult();
 	}
 
-    public function getFileCountByFolder(CAppUI $AppUI, $folder_id, $task_id, $project_id, $company_id) {
+    public function getFileCountByFolder(w2p_Core_CAppUI $AppUI, $folder_id, $task_id, $project_id, $company_id) {
 
         // SQL text for count the total recs from the selected option
         $q = $this->_query;

@@ -33,7 +33,7 @@ require_once W2P_BASE_DIR . '/includes/main_functions.php';
 /*
  * Need this to test actions that require permissions.
  */
-$AppUI  = new CAppUI;
+$AppUI  = new w2p_Core_CAppUI();
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
