@@ -12,6 +12,9 @@ $min_view = defVal($min_view, false);
 
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
+$project = new CProject();
+$project->load($project_id);
+
 // sdate and edate passed as unix time stamps
 $sdate = w2PgetParam($_POST, 'project_start_date', 0);
 $edate = w2PgetParam($_POST, 'project_end_date', 0);
@@ -416,12 +419,7 @@ if (!$min_view) {
         <td valign="top" align="center">
             <?php
             if ($a != 'todo') {
-                $q = new w2p_Database_Query;
-                $q->addTable('tasks');
-                $q->addQuery('COUNT(task_id) AS N');
-                $q->addWhere('task_project=' . (int)$project_id);
-                $cnt = $q->loadList();
-                $q->clear();
+                $cnt[0]['N'] = $project->project_task_count;
             } else {
                  $cnt[0]['N'] = ((empty($tasks)) ? 0 : 1);
             }
