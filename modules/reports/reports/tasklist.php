@@ -219,11 +219,9 @@ if ($do_report) {
 	echo '</table>';
 	if ($log_pdf) {
 		// make the PDF file
-		$q = new w2p_Database_Query;
-		$q->addTable('projects');
-		$q->addQuery('project_name');
-		$q->addWhere('project_id=' . (int)$project_id);
-		$pname = $q->loadResult();
+        $project = new CProject();
+        $project->load((int)$project_id);
+		$pname = $project->project_name;
 
 		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
