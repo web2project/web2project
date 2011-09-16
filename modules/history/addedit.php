@@ -63,12 +63,8 @@ if ($action) {
 	$AppUI->redirect();
 }
 
-// pull the history
-$q->addTable('history');
-$q->addQuery('*');
-$q->addWhere('history_id =' . $history_id);
-$history = $q->loadHash();
-$q->clear();
+$history = new CHistory();
+$history->load($history_id);
 
 $titleBlock = new w2p_Theme_TitleBlock($history_id ? 'Edit history' : 'New history', 'stock_book_blue_48.png', 'history', 'history.' . $a);
 if ($canDelete) {
@@ -107,14 +103,14 @@ $titleBlock->show();
 									$projects[$project_id] = $project_info['project_name'];
 								}
 								$projects = arrayMerge(array(0 => $all_projects), $projects);
-								echo arraySelect($projects, 'history_project', 'class="text"', $history['history_project']);
+								echo arraySelect($projects, 'history_project', 'class="text"', $history->history_project);
 							?>
 						</td>
 					</tr>
 					<tr>
 						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
 						<td width="60%">
-							<textarea name="history_description" class="textarea" cols="60" rows="5"><?php echo $history['history_description']; ?></textarea>
+							<textarea name="history_description" class="textarea" cols="60" rows="5"><?php echo $history->history_description; ?></textarea>
 						</td>
 					</tr>
 				</table>		
