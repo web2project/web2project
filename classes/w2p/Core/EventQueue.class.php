@@ -122,23 +122,23 @@ class w2p_Core_EventQueue {
 		$args = unserialize($fields['queue_data']);
 		if (strpos($fields['queue_callback'], '::') !== false) {
 			list($class, $method) = explode('::', $fields['queue_callback']);
-			if (!class_exists($class)) {
-				dprint(__file__, __line__, 2, 'Cannot process event: Class ' . $class . ' does not exist');
-				return false;
-			}
-			$object = new $class;
-			if (!method_exists($object, $method)) {
-				dprint(__file__, __line__, 2, 'Cannot process event: Method ' . $class . '::' . $method . ' does not exist');
-				return false;
-			}
-			return $object->$method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
+
+            try {
+                $object = new $class;
+                return $object->$method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
+            } catch (Exception $exc) {
+                dprint(__file__, __line__, 2, 'Cannot process event: ' . $class . '::' . $method . ' does not exist');
+                return false;
+            }
 		} else {
 			$method = $fields['queue_callback'];
-			if (!function_exists($method)) {
-				dprint(__file__, __line__, 2, 'Cannot process event: Function ' . $method . ' does not exist');
-				return false;
-			}
-			return $method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
+
+            try {
+                return $method($fields['queue_module'], $fields['queue_type'], $fields['queue_origin_id'], $fields['queue_owner'], $args);
+            } catch (Exception $exc) {
+                dprint(__file__, __line__, 2, 'Cannot process event: ' . $method . ' does not exist');
+                return false;
+            }
 		}
 	}
 
