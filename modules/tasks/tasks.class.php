@@ -210,7 +210,8 @@ class CTask extends w2p_Core_BaseObject {
 		// Have deps
 		if (array_sum($this_dependencies)) {
             if ($this->task_dynamic == 1) {
-				return array('BadDep_DynNoDep');
+                $errorArray['BadDep_DynNoDep'] = 'BadDep_DynNoDep';
+                return array('BadDep_DynNoDep');
 			}
 
 			$this_dependents = $this->task_id ? explode(',', $this->dependentTasks()) : array();
@@ -220,7 +221,7 @@ class CTask extends w2p_Core_BaseObject {
 				$dependent_task = new CTask();
 				$dependent_task->load($dependent);
 				if ($dependent_task->task_id != $dependent_task->task_parent) {
-					$more_dependents = explode(',', $this->dependentTasks($dependent_task->task_parent));
+                    $more_dependents = explode(',', $this->dependentTasks($dependent_task->task_parent));
 				}
 			}
 			$this_dependents = array_merge($this_dependents, $more_dependents);
@@ -229,6 +230,7 @@ class CTask extends w2p_Core_BaseObject {
 			$intersect = array_intersect($this_dependencies, $this_dependents);
 			if (array_sum($intersect)) {
 				$ids = '(' . implode(',', $intersect) . ')';
+                $errorArray['BadDep_CircularDep'] = 'BadDep_CircularDep';
 				return array('BadDep_CircularDep', $ids);
 			}
 		}
@@ -241,21 +243,25 @@ class CTask extends w2p_Core_BaseObject {
 			$parents_dependents = explode(',', $this_parent->dependentTasks());
 
             if (in_array($this_parent->task_id, $this_dependencies)) {
-				return array('BadDep_CannotDependOnParent');
+				$errorArray['BadDep_CannotDependOnParent'] = 'BadDep_CannotDependOnParent';
+                return array('BadDep_CannotDependOnParent');
 			}
 			// Task parent cannot be child of this task
 			if (in_array($this_parent->task_id, $this_children)) {
-				return array('BadParent_CircularParent');
+				$errorArray['BadParent_CircularParent'] = 'BadParent_CircularParent';
+                return array('BadParent_CircularParent');
 			}
 
 			if ($this_parent->task_parent != $this_parent->task_id) {
 				// ... or parent's parent, cannot be child of this task. Could go on ...
 				if (in_array($this_parent->task_parent, $this_children)) {
-					return array('BadParent_CircularGrandParent', '(' . $this_parent->task_parent . ')');
+					$errorArray['BadParent_CircularGrandParent'] = 'BadParent_CircularGrandParent';
+                    return array('BadParent_CircularGrandParent', '(' . $this_parent->task_parent . ')');
 				}
 				// parent's parent cannot be one of this task's dependencies
 				if (in_array($this_parent->task_parent, $this_dependencies)) {
-					return array('BadDep_CircularGrandParent', '(' . $this_parent->task_parent . ')');
+					$errorArray['BadParent_CircularGrandParent'] = 'BadParent_CircularGrandParent';
+                    return array('BadDep_CircularGrandParent', '(' . $this_parent->task_parent . ')');
 				}
 			} // grand parent
 
@@ -263,14 +269,16 @@ class CTask extends w2p_Core_BaseObject {
 				$intersect = array_intersect($this_dependencies, $parents_dependents);
 				if (array_sum($intersect)) {
 					$ids = '(' . implode(',', $intersect) . ')';
-					return array('BadDep_CircularDepOnParentDependent', $ids);
+					$errorArray['BadDep_CircularDepOnParentDependent'] = 'BadDep_CircularDepOnParentDependent';
+                    return array('BadDep_CircularDepOnParentDependent', $ids);
 				}
 			}
 			if ($this->task_dynamic == 1) {
 				// then task's children can not be dependent on parent
 				$intersect = array_intersect($this_children, $parents_dependents);
 				if (array_sum($intersect)) {
-					return array('BadParent_ChildDepOnParent');
+					$errorArray['BadParent_ChildDepOnParent'] = 'BadParent_ChildDepOnParent';
+                    return array('BadParent_ChildDepOnParent');
 				}
 			}
 		} // parent
