@@ -62,7 +62,7 @@ function strJpGraph($text) {
  * @deprecated
  */
 function atoi($a) {
-    trigger_error("The strJpGraph function has been deprecated and will be removed in v4.0. Please use int() instead.", E_USER_NOTICE );
+    trigger_error("The atoi function has been deprecated and will be removed in v4.0. Please use int() instead.", E_USER_NOTICE );
     return $a + 0;
 }
 
