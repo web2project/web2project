@@ -1,4 +1,4 @@
-<?php /* $Id: viewmods.php 1504 2010-12-01 07:07:21Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/system/viewmods.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -25,7 +25,7 @@ $modules = $q->loadList();
 // get the modules actually installed on the file system
 $modFiles = $AppUI->readDirs('modules');
 
-$titleBlock = new CTitleBlock('Modules', 'power-management.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Modules', 'power-management.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
 ?>

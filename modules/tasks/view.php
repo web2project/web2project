@@ -58,7 +58,7 @@ $users = $obj->getAssignedUsers($task_id);
 $durnTypes = w2PgetSysVal('TaskDurationType');
 
 // setup the title block
-$titleBlock = new CTitleBlock('View Task', 'applet-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Task', 'applet-48.png', $m, $m . '.' . $a);
 $titleBlock->addCell();
 if ($canEdit) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $obj->task_project . '&task_parent=' . $task_id . '" method="post" accept-charset="utf-8">', '</form>');

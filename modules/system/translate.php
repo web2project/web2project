@@ -68,7 +68,7 @@ if ($lang != 'en') {
 }
 ksort($trans);
 
-$titleBlock = new CTitleBlock('Translation Management', 'rdf2.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Translation Management', 'rdf2.png', $m, $m . '.' . $a);
 /*
  * TODO: While this implementation is close, I'd rather use the normal setMsg
  *   functionality as it handles marking the message as an error and inserting

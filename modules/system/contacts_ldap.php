@@ -1,4 +1,4 @@
-<?php /* $Id: contacts_ldap.php 1516 2010-12-05 07:18:58Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/system/contacts_ldap.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -11,7 +11,7 @@ if (!$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$titleBlock = new CTitleBlock('Import Contacts from LDAP Directory', '', 'admin', '');
+$titleBlock = new w2p_Theme_TitleBlock('Import Contacts from LDAP Directory', '', 'admin', '');
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 

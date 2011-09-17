@@ -9,7 +9,7 @@ if (!canView('system')) { // let's see if the user has sys access
 
 $AppUI->savePlace();
 
-$titleBlock = new CTitleBlock('System Administration', '48_my_computer.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('System Administration', '48_my_computer.png', $m, $m . '.' . $a);
 $titleBlock->show();
 
 ?>

@@ -9,7 +9,7 @@ if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$titleBlock = new CTitleBlock('Custom field editor', 'customfields.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Custom field editor', 'customfields.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 

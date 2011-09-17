@@ -24,7 +24,7 @@ $tab = $AppUI->processIntState('ConfigIdxTab', $_GET, 'tab', 0);
 
 $active = intval(!$AppUI->getState('ConfigIdxTab'));
 
-$titleBlock = new CTitleBlock('System Configuration', 'control-center.png', $m);
+$titleBlock = new w2p_Theme_TitleBlock('System Configuration', 'control-center.png', $m);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&a=addeditpref', 'default user preferences');
 $titleBlock->show();

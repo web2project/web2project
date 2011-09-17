@@ -31,7 +31,7 @@ if ($user_id) {
 	$user = 'Default';
 }
 
-$titleBlock = new CTitleBlock('Edit User Preferences', 'myevo-weather.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Edit User Preferences', 'myevo-weather.png', $m, $m . '.' . $a);
 $perms = &$AppUI->acl();
 if ($canEdit) {
 	$titleBlock->addCrumb('?m=system', 'system admin');
