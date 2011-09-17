@@ -99,70 +99,24 @@ class CSystem {
 }
 
 /**
- * Preferences class
+ * @deprecated
  */
-class CPreferences {
-	public $pref_user = null;
-	public $pref_name = null;
-	public $pref_value = null;
-
+class CPreferences extends w2p_Core_Preferences {
 	public function __construct() {
-		// empty constructor
-	}
-
-	public function bind($hash) {
-		if (!is_array($hash)) {
-			return 'CPreferences::bind failed';
-		} else {
-			$q = new w2p_Database_Query;
-			$q->bindHashToObject($hash, $this);
-			$q->clear();
-			return null;
-		}
-	}
-
-	public function check() {
-		// TODO MORE
-		return null; // object is ok
-	}
-
-	public function store() {
-		$msg = $this->check();
-		if ($msg) {
-			return 'CPreference::store-check failed ' . $msg;
-		}
-		if (($msg = $this->delete())) {
-			return 'CPreference::store-delete failed ' . $msg;
-		}
-		$q = new w2p_Database_Query;
-		if (!($ret = $q->insertObject('user_preferences', $this))) {
-			$q->clear();
-			return 'CPreference::store failed ' . db_error();
-		} else {
-			$q->clear();
-			return null;
-		}
-	}
-
-	public function delete() {
-		$q = new w2p_Database_Query;
-		$q->setDelete('user_preferences');
-		$q->addWhere('pref_user = ' . (int)$this->pref_user);
-		$q->addWhere('pref_name = \'' . $this->pref_name . '\'');
-		if (!$q->exec()) {
-			$q->clear();
-			return db_error();
-		} else {
-			$q->clear();
-			return null;
-		}
+		parent::__construct();
+        trigger_error("CPreferences has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_Preferences instead.", E_USER_NOTICE );
 	}
 }
 
 /**
  * @deprecated
  */
-class CConfig extends w2p_Core_Config { }
+class CConfig extends w2p_Core_Config {
+	public function __construct() {
+		parent::__construct();
+        trigger_error("CConfig has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_Config instead.", E_USER_NOTICE );
+	}
+}
 
 class bcode extends w2p_Core_BaseObject {
 	public $_billingcode_id = null;
