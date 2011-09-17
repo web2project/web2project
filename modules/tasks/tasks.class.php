@@ -700,7 +700,7 @@ class CTask extends w2p_Core_BaseObject {
 
     /**
      *
-     * @param CAppUI $AppUI
+     * @param w2p_Core_CAppUI $AppUI
      * @param CProject $projectId
      *
      * The point of this function is to create/update a task to represent a

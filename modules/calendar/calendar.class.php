@@ -81,7 +81,7 @@ class CEvent extends w2p_Core_BaseObject {
 	 *	@author caseydk
 	 *	@return true if it worked, false if it didn't
 	 */
-	public function delete(CAppUI $AppUI) {
+	public function delete(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
@@ -577,7 +577,7 @@ class CEvent extends w2p_Core_BaseObject {
 
 	}
 
-    public function store(CAppUI $AppUI) {
+    public function store(w2p_Core_CAppUI $AppUI) {
 
         $perms = $AppUI->acl();
         $stored = false;

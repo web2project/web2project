@@ -41,7 +41,7 @@ w2PsessionStart();
 // check if session has previously been initialised
 // if no ask for logging and do redirect
 if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
-	$_SESSION['AppUI'] = new CAppUI();
+	$_SESSION['AppUI'] = new w2p_Core_CAppUI();
 	$AppUI = &$_SESSION['AppUI'];
 	$AppUI->setConfig($w2Pconfig);
 	$AppUI->checkStyle();

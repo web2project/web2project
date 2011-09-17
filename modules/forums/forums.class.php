@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 if (!isset($AppUI)) {
-    $AppUI = new CAppUI;
+    $AppUI = new w2p_Core_CAppUI();
 }
 require_once ($AppUI->getLibraryClass('PEAR/BBCodeParser'));
 $bbparser = new HTML_BBCodeParser();
@@ -50,7 +50,7 @@ class CForum extends w2p_Core_BaseObject {
         return $errorArray;
     }
 
-    public function getMessages(CAppUI $AppUI, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
+    public function getMessages(w2p_Core_CAppUI $AppUI, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
 
         $q = $this->_query;
         $q->addTable('forums');
@@ -66,7 +66,7 @@ class CForum extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-    public function load(CAppUI $AppUI, $forum_id) {
+    public function load(w2p_Core_CAppUI $AppUI, $forum_id) {
 
         $q = $this->_query;
         $q->addQuery('*');
@@ -75,7 +75,7 @@ class CForum extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
     }
 
-    public function loadFull(CAppUI $AppUI, $forum_id) {
+    public function loadFull(w2p_Core_CAppUI $AppUI, $forum_id) {
 
         $q = $this->_query;
         $q->addTable('forums');
@@ -150,7 +150,7 @@ class CForum extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-	public function store(CAppUI $AppUI) {
+	public function store(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -178,7 +178,7 @@ class CForum extends w2p_Core_BaseObject {
         return $stored;
 	}
 
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
 

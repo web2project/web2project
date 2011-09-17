@@ -39,7 +39,7 @@ class w2p_Controllers_Base
         $this->accessDeniedPath = $path;
     }
 
-    public function process(CAppUI $AppUI, array $myArray) {
+    public function process(w2p_Core_CAppUI $AppUI, array $myArray) {
 
         if (!$this->object->bind($myArray)) {
             $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);

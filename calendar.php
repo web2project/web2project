@@ -5,7 +5,7 @@ require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 require_once W2P_BASE_DIR . '/classes/ui.class.php';
 
-$AppUI = new CAppUI;
+$AppUI = new w2p_Core_CAppUI();
 
 $token = w2PgetParam($_GET, 'token', '');
 $token = preg_replace("/[^A-Za-z0-9]/", "", $token );

@@ -179,7 +179,7 @@ class CTaskLog extends w2p_Core_BaseObject
 	 *
 	 * @access public
 	 */
-	public function store(CAppUI $AppUI = null)
+	public function store(w2p_Core_CAppUI $AppUI = null)
 	{
 		global $AppUI;
 		$perms = $AppUI->acl();
@@ -234,7 +234,7 @@ class CTaskLog extends w2p_Core_BaseObject
 	 *
 	 * @access public
 	 */
-	public function delete(CAppUI $AppUI = null)
+	public function delete(w2p_Core_CAppUI $AppUI = null)
 	{
 		global $AppUI;
 		$perms = $AppUI->acl();
@@ -262,7 +262,7 @@ class CTaskLog extends w2p_Core_BaseObject
 	 *
 	 * @access private
 	 */
-	private function updateTaskSummary(CAppUI $AppUI, $task_id)
+	private function updateTaskSummary(w2p_Core_CAppUI $AppUI, $task_id)
 	{
         $perms = $AppUI->acl();
         $q = $this->_query;

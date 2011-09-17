@@ -74,7 +74,7 @@ class CSysVal extends w2p_Core_BaseObject {
 		}
 	}
 
-	public function store(CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
 		$perms = $AppUI->acl();
         $stored = false;
 
@@ -115,7 +115,7 @@ class CSysVal extends w2p_Core_BaseObject {
 		return true;
 	}
 
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
 
         $q = $this->_query;

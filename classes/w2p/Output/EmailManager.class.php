@@ -23,7 +23,7 @@ class w2p_Output_EmailManager {
         //do nothing so far..
     }
 
-    public function getCalendarConflictEmail(CAppUI $AppUI) {
+    public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI) {
         $body = '';
         $body .= "You have been invited to an event by $AppUI->user_first_name $AppUI->user_last_name\n";
         $body .= "However, either you or another intended invitee has a competing event\n";
@@ -33,7 +33,7 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getContactUpdateNotify(CAppUI $AppUI, CContact $contact) {
+    public function getContactUpdateNotify(w2p_Core_CAppUI $AppUI, CContact $contact) {
         $q = new w2p_Database_Query;
         $q->addTable('companies');
         $q->addQuery('company_id, company_name');
@@ -56,7 +56,7 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getFileUpdateNotify(CAppUI $AppUI, CFile $file) {
+    public function getFileUpdateNotify(w2p_Core_CAppUI $AppUI, CFile $file) {
         $body  = "\n\nFile " . $file->file_name . ' was ' . $file->_message;
         $body .= ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
 

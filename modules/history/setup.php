@@ -29,7 +29,7 @@ if ($a == 'setup') {
 
 class CSetupHistory {
 
-	public function install(CAppUI $AppUI = null) {
+	public function install(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
 
 		$q = new w2p_Database_Query;
@@ -56,7 +56,7 @@ class CSetupHistory {
         return $perms->registerModule('History', 'history');
 	}
 
-	public function remove(CAppUI $AppUI = null) {
+	public function remove(w2p_Core_CAppUI $AppUI = null) {
 		global $AppUI;
 
         $q = new w2p_Database_Query;

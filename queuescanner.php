@@ -8,7 +8,7 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
 date_default_timezone_set($defaultTZ);
 
-$AppUI = new CAppUI;
+$AppUI = new w2p_Core_CAppUI();
 $AppUI->setUserLocale();
 
 $queue = new w2p_Core_EventQueue();

@@ -8,7 +8,7 @@
 
 class w2p_Output_HTMLHelper {
 
-    public static function renderContactList(CAppUI $AppUI, array $contactList) {
+    public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList) {
 
         $output  = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
         $output .= '<tr><th>'.$AppUI->_('Name').'</th><th>'.$AppUI->_('Email').'</th>';
@@ -29,7 +29,7 @@ class w2p_Output_HTMLHelper {
         return $output;
     }
 
-	public static function renderColumn(CAppUI $AppUI, $fieldName, $row) {
+	public static function renderColumn(w2p_Core_CAppUI $AppUI, $fieldName, $row) {
 
 		switch ($fieldName) {
 			case 'project_creator':

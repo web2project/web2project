@@ -136,7 +136,7 @@ function w2PsessionGC($maxlifetime) {
 		// And it isn't likely that it will be, we create it and run the
 		// queue scanner.
 		if (!isset($AppUI)) {
-			$AppUI = new CAppUI();
+			$AppUI = new w2p_Core_CAppUI();
 			$queue = new w2p_Core_EventQueue();
 			$queue->scan();
 		}

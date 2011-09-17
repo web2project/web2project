@@ -35,7 +35,7 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 /*
  * Need this to test actions that require permissions.
  */
-$AppUI  = new CAppUI;
+$AppUI  = new w2p_Core_CAppUI();
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
@@ -332,7 +332,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 
          // Login as another user for permission purposes
         $old_AppUI = $AppUI;
-        $AppUI  = new CAppUI;
+        $AppUI  = new w2p_Core_CAppUI();
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
 

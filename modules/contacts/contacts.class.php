@@ -49,7 +49,7 @@ class CContact extends w2p_Core_BaseObject {
         parent::__construct('contacts', 'contact_id');
 	}
 
-	public function loadFull(CAppUI $AppUI = null, $contactId) {
+	public function loadFull(w2p_Core_CAppUI $AppUI = null, $contactId) {
 		global $AppUI;
 
         $q = $this->_query;
@@ -59,7 +59,7 @@ class CContact extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
 	}
 
-	public function store(CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
 
         $perms = $AppUI->acl();
@@ -180,7 +180,7 @@ class CContact extends w2p_Core_BaseObject {
 		return $results;
 	}
 
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
         $perms = $AppUI->acl();
 
@@ -363,7 +363,7 @@ class CContact extends w2p_Core_BaseObject {
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
 
-	public static function searchContacts(CAppUI $AppUI = null, $where = '', $searchString = '') {
+	public static function searchContacts(w2p_Core_CAppUI $AppUI = null, $where = '', $searchString = '') {
 		global $AppUI;
 
         $showfields = array('contact_address1' => 'contact_address1',

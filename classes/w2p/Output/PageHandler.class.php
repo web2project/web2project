@@ -2,7 +2,7 @@
 
 class w2p_Output_PageHandler {
 
-    public function loadExtras(array &$storage, CAppUI $AppUI, $m, $type = 'tabs') {
+    public function loadExtras(array &$storage, w2p_Core_CAppUI $AppUI, $m, $type = 'tabs') {
         //Set up extra $type
         if (!isset($storage['all_'.$type][$m])) {
             // For some reason on some systems if you don't set this up

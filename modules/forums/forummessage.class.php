@@ -36,7 +36,7 @@ class CForumMessage extends w2p_Core_BaseObject {
         return $errorArray;
 	}
 
-	public function store(CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
 
         $perms = $AppUI->acl();
@@ -93,7 +93,7 @@ class CForumMessage extends w2p_Core_BaseObject {
         return $stored;
 	}
 
-	public function delete(CAppUI $AppUI = null) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
 
         $perms = $AppUI->acl();

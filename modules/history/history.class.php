@@ -22,13 +22,13 @@ class CHistory extends w2p_Core_BaseObject {
         parent::__construct('history', 'history_id');
     }
 
-    public function delete(CAppUI $AppUI) {
+    public function delete(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
         return true;
     }
 
-    public function store(CAppUI $AppUI) {
+    public function store(w2p_Core_CAppUI $AppUI) {
         global $AppUI;
         $perms = $AppUI->acl();
 
