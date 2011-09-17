@@ -1,4 +1,4 @@
-/* $Id: base.js 1619 2011-02-10 17:30:04Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/js/base.js $ */
+/* $Id$ $URL$ */
 /* Copyright 2003,2004 Adam Donnison <adam@saki.com.au>
 
     This file is part of the collected works of Adam Donnison.
@@ -530,17 +530,7 @@ function find_anchor(a) {
 
 // function getInnerHeight
 function getInnerHeight(win) {
-	var winHeight;
-	if (win.innerHeight) {
-		winHeight = win.innerHeight;
-	} else if (win.document.documentElement && win.document.documentElement.clientHeight) {
-		winHeight = win.document.documentElement.clientHeight;
-	} else if (win.document.body) {
-		winHeight = win.document.body.clientHeight;
-	} else {
-		winHeight = 0; // This should never happens
-	}
-	return winHeight;
+	return $(win).height();
 }
 
 /**
