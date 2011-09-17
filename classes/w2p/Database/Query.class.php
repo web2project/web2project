@@ -374,6 +374,7 @@ class w2p_Database_Query {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'ADD', 'type' => '', 'spec' => $name . ' ' . $type);
+        trigger_error("w2p_Database_Query->addField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
 	/**
@@ -386,6 +387,7 @@ class w2p_Database_Query {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'CHANGE', 'type' => '', 'spec' => $name . ' ' . $name . ' ' . $type);
+        trigger_error("w2p_Database_Query->alterField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
 	/** Drop a field from table definition or from an existing table
@@ -396,6 +398,7 @@ class w2p_Database_Query {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'DROP', 'type' => '', 'spec' => $name);
+        trigger_error("w2p_Database_Query->dropField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
 	/** Add an index. Fields should be separated by commas to create a multi-field index
@@ -405,6 +408,7 @@ class w2p_Database_Query {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'ADD', 'type' => 'INDEX', 'spec' => '(' . $name . ') ' . $type);
+        trigger_error("w2p_Database_Query->addIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
 	/** Add a primary key attribute. Fields should be separated by commas to create a multi-field primary key
@@ -414,6 +418,7 @@ class w2p_Database_Query {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'ADD', 'type' => 'PRIMARY KEY', 'spec' => '(' . $name . ')');
+        trigger_error("w2p_Database_Query->addPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
 	/** Drop an index
@@ -423,6 +428,7 @@ class w2p_Database_Query {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'DROP', 'type' => 'INDEX', 'spec' => $name);
+        trigger_error("w2p_Database_Query->dropIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
 	/** Remove a primary key attribute from a field
@@ -432,6 +438,7 @@ class w2p_Database_Query {
 			$this->create_definition = array();
 		}
 		$this->create_definition[] = array('action' => 'DROP', 'type' => 'PRIMARY KEY', 'spec' => '');
+        trigger_error("w2p_Database_Query->dropPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
 	/** Set a table creation definition from supplied array
