@@ -901,20 +901,18 @@ class w2p_Core_CAppUI {
 		$q->addInsert('user_ip', $_SERVER['REMOTE_ADDR']);
 		$q->exec();
 		$this->last_insert_id = db_insert_id();
-		$q->clear();
 	}
 
 	/**
 	 *@Function for register log out in web2project table "user_acces_log"
 	 */
 	public function registerLogout($user_id) {
-		$q = new w2p_Database_Query;
-		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_out', "'".$q->dbfnNowWithTZ()."'", false, true);
-		$q->addWhere('user_id = ' . (int)$user_id . ' AND (date_time_out = \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
 		if ($user_id > 0) {
+            $q = new w2p_Database_Query;
+            $q->addTable('user_access_log');
+            $q->addUpdate('date_time_out', "'".$q->dbfnNowWithTZ()."'", false, true);
+            $q->addWhere('user_id = ' . (int)$user_id . ' AND (date_time_out = \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
 			$q->exec();
-			$q->clear();
 		}
 	}
 
@@ -922,13 +920,12 @@ class w2p_Core_CAppUI {
 	 *@Function for update table user_acces_log in field date_time_lost_action
 	 */
 	public function updateLastAction($last_insert_id) {
-		$q = new w2p_Database_Query;
-		$q->addTable('user_access_log');
-		$q->addUpdate('date_time_last_action', "'".$q->dbfnNowWithTZ()."'", false, true);
-		$q->addWhere('user_access_log_id = ' . $last_insert_id);
 		if ($last_insert_id > 0) {
+            $q = new w2p_Database_Query;
+            $q->addTable('user_access_log');
+            $q->addUpdate('date_time_last_action', "'".$q->dbfnNowWithTZ()."'", false, true);
+            $q->addWhere('user_access_log_id = ' . $last_insert_id);
 			$q->exec();
-			$q->clear();
 		}
 	}
 	/************************************************************************************************************************
