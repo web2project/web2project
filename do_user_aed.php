@@ -43,7 +43,7 @@ if (!isset($GLOBALS['OS_WIN'])) {
 }
 
 
-$AppUI = new CAppUI();
+$AppUI = new w2p_Core_CAppUI();
 
 if (w2PgetConfig('activate_external_user_creation') != 'true') {
 	die('You should not access this file directly');

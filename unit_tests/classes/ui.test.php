@@ -38,7 +38,7 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 /*
  * Need this to test actions that require permissions.
  */
-$AppUI  = new CAppUI;
+$AppUI  = new w2p_Core_CAppUI();
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
@@ -64,7 +64,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
     {
         global $w2Pconfig;
 
-        $AppUI = new CAppUI;
+        $AppUI = new w2p_Core_CAppUI();
 
         $this->assertInstanceOf('CAppUI',                   $AppUI);
         $this->assertObjectHasAttribute('state',            $AppUI);
@@ -103,7 +103,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
     {
         global $w2Pconfig;
 
-        $AppUI = new CAppUI;
+        $AppUI = new w2p_Core_CAppUI();
 
         $user_lang = array (
             0 => 'en.ISO8859-15',
