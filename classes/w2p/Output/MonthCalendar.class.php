@@ -106,7 +106,7 @@ class w2p_Output_MonthCalendar {
 	// setting functions
 
 	/**
-	 * CMonthCalendar::setDate()
+	 * w2p_Output_MonthCalendar::setDate()
 	 *
 	 * { Description }
 	 *
@@ -141,7 +141,7 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * CMonthCalendar::setStyles()
+	 * w2p_Output_MonthCalendar::setStyles()
 	 *
 	 * { Description }
 	 *
@@ -152,7 +152,7 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * CMonthCalendar::setLinkFunctions()
+	 * w2p_Output_MonthCalendar::setLinkFunctions()
 	 *
 	 * { Description }
 	 *
@@ -165,7 +165,7 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * CMonthCalendar::setCallback()
+	 * w2p_Output_MonthCalendar::setCallback()
 	 *
 	 * { Description }
 	 *
@@ -175,7 +175,7 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * CMonthCalendar::setEvents()
+	 * w2p_Output_MonthCalendar::setEvents()
 	 *
 	 * { Description }
 	 *
@@ -185,7 +185,7 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * CMonthCalendar::setHighlightedDays()
+	 * w2p_Output_MonthCalendar::setHighlightedDays()
 	 * ie 	['20040517'] => '#ff0000',
 	 *
 	 * { Description }
@@ -197,7 +197,7 @@ class w2p_Output_MonthCalendar {
 
 	// drawing functions
 	/**
-	 * CMonthCalendar::show()
+	 * w2p_Output_MonthCalendar::show()
 	 *
 	 * { Description }
 	 *
@@ -221,7 +221,7 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * CMonthCalendar::_drawTitle()
+	 * w2p_Output_MonthCalendar::_drawTitle()
 	 *
 	 * { Description }
 	 *
@@ -264,7 +264,7 @@ class w2p_Output_MonthCalendar {
 		return $s;
 	}
 	/**
-	 * CMonthCalendar::_drawDays()
+	 * w2p_Output_MonthCalendar::_drawDays()
 	 *
 	 * { Description }
 	 *
@@ -286,7 +286,7 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * CMonthCalendar::_drawMain()
+	 * w2p_Output_MonthCalendar::_drawMain()
 	 *
 	 * { Description }
 	 *
@@ -385,7 +385,7 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * CMonthCalendar::_drawWeek()
+	 * w2p_Output_MonthCalendar::_drawWeek()
 	 *
 	 * { Description }
 	 *
@@ -401,7 +401,7 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * CMonthCalendar::_drawEvents()
+	 * w2p_Output_MonthCalendar::_drawEvents()
 	 *
 	 * { Description }
 	 *

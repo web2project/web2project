@@ -1,4 +1,4 @@
-<?php /* $Id: day_view.php 1514 2010-12-04 23:49:08Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/day_view.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -97,7 +97,7 @@ function clickDay( idate, fdate ) {
 <?php if ($w2Pconfig['cal_day_view_show_minical']) { ?>
         <td valign="top" width="175">
 <?php
-	$minical = new CMonthCalendar($this_day);
+	$minical = new w2p_Output_MonthCalendar($this_day);
 	$minical->setStyles('minititle', 'minical');
 	$minical->showArrows = false;
 	$minical->showWeek = false;

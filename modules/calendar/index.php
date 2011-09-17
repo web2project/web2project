@@ -1,4 +1,4 @@
-<?php /* $Id: index.php 1497 2010-11-27 22:08:59Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/index.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -130,7 +130,7 @@ foreach ($moduleList as $module) {
 }
 
 // create the main calendar
-$cal = new CMonthCalendar($date);
+$cal = new w2p_Output_MonthCalendar($date);
 $cal->setStyles('motitle', 'mocal');
 $cal->setLinkFunctions('clickDay', 'clickWeek');
 $cal->setEvents($links);
@@ -139,7 +139,7 @@ echo $cal->show();
 //echo '<pre>';print_r($cal);echo '</pre>';
 
 // create the mini previous and next month calendars under
-$minical = new CMonthCalendar($cal->prev_month);
+$minical = new w2p_Output_MonthCalendar($cal->prev_month);
 $minical->setStyles('minititle', 'minical');
 $minical->showArrows = false;
 $minical->showWeek = false;
