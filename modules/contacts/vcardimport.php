@@ -1,4 +1,4 @@
-<?php /* $Id: vcardimport.php 1515 2010-12-05 07:13:50Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/contacts/vcardimport.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -75,7 +75,7 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 	}
 } elseif (isset($_GET['dialog']) && (w2PgetParam($_GET, 'dialog', null) == '0')) { //file upload formular
 
-	$titleBlock = new CTitleBlock('Import vCard', 'monkeychat-48.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Import vCard', 'monkeychat-48.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=contacts', 'contacts list');
 	$titleBlock->show();
 

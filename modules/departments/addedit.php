@@ -44,7 +44,7 @@ if (!$department && $dept_id > 0) {
 }
 
 if (!$department && $dept_id > 0) {
-	$titleBlock = new CTitleBlock('Invalid Department ID', 'departments.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Invalid Department ID', 'departments.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=companies', 'companies list');
 	if ($company_id) {
 		$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
@@ -69,7 +69,7 @@ if (!$department && $dept_id > 0) {
 
 	// setup the title block
 	$ttl = $dept_id > 0 ? 'Edit Department' : 'Add Department';
-	$titleBlock = new CTitleBlock($ttl, 'departments.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'departments.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=departments', 'department list');
 	$titleBlock->addCrumb('?m=companies', 'companies list');
 	$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');

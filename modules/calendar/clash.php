@@ -45,7 +45,7 @@ if (isset($_REQUEST['clash_action'])) {
 </script>
 <?php
 
-	$titleBlock = new CTitleBlock(($obj->event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, $m.'.'.$a);
+	$titleBlock = new w2p_Theme_TitleBlock(($obj->event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, $m.'.'.$a);
 	$titleBlock->show();
 
 	$_SESSION['add_event_post'] = get_object_vars($obj);
@@ -92,7 +92,7 @@ function clash_suggest(w2p_Core_CAppUI $AppUI, $cal_sdf) {
 	$end_secs = $end_date->getTime();
 	$duration = (int)(($end_secs - $start_secs) / 60);
 
-	$titleBlock = new CTitleBlock('Suggest Alternative Event Time', 'myevo-appointments.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Suggest Alternative Event Time', 'myevo-appointments.png', $m, $m . '.' . $a);
 	$titleBlock->show();
 	$calurl = W2P_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
 	$times = array();

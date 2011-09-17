@@ -1,4 +1,4 @@
-<?php /* $Id: index_table.php 1466 2010-09-22 05:14:41Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/links/index_table.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -14,7 +14,7 @@ if ($task_id && !$project_id) {
 $m = 'links';
 
 if ($canEdit) {
-    $titleBlock = new CTitleBlock( '', '', $m, "$m.$a" );
+    $titleBlock = new w2p_Theme_TitleBlock( '', '', $m, "$m.$a" );
     $titleBlock->addCell(
         '<input type="submit" class="button" value="'.$AppUI->_('new link').'">', '',
         '<form action="?m=links&a=addedit&project_id='.$project_id.'&task_id='.$task_id.'" method="post" accept-charset="utf-8">', '</form>'

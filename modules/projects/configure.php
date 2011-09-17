@@ -16,7 +16,7 @@ foreach ($filter as $field => $value) {
 $properties['department_list'] = '';
 
 // setup the title block
-$titleBlock = new CTitleBlock('Configure Projects Module', 'modules/system/control-center.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Configure Projects Module', 'modules/system/control-center.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&a=viewmods', 'modules list');
 $titleBlock->show();

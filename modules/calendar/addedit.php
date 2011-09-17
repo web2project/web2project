@@ -73,7 +73,7 @@ if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->ev
 }
 
 // setup the title block
-$titleBlock = new CTitleBlock(($event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock(($event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=calendar', 'month view');
 if ($event_id) {
 	$titleBlock->addCrumb('?m=calendar&amp;a=view&event_id=' . $event_id, 'view this event');

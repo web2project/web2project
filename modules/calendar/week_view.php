@@ -1,4 +1,4 @@
-<?php /* $Id: week_view.php 1514 2010-12-04 23:49:08Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/calendar/week_view.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -71,7 +71,7 @@ $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_na
 $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 // setup the title block
-$titleBlock = new CTitleBlock('Week View', 'myevo-appointments.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Week View', 'myevo-appointments.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'year view');
 $titleBlock->addCrumb('?m=calendar&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'week view');

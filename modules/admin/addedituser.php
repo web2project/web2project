@@ -1,4 +1,4 @@
-<?php /* $Id: addedituser.php 1517 2010-12-05 08:07:54Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/admin/addedituser.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -56,7 +56,7 @@ if ($contact_id) {
 $user = $q->loadHash();
 
 if (!$user && $user_id > 0) {
-	$titleBlock = new CTitleBlock('Invalid User ID', 'helix-setup-user.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Invalid User ID', 'helix-setup-user.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=admin', 'users list');
 	$titleBlock->show();
 } else {
@@ -70,7 +70,7 @@ if (!$user && $user_id > 0) {
 
 	// setup the title block
 	$ttl = $user_id ? 'Edit User' : 'Add User';
-	$titleBlock = new CTitleBlock($ttl, 'helix-setup-user.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'helix-setup-user.png', $m, $m . '.' . $a);
 	if (canView('admin') && canView('users')) {
 		$titleBlock->addCrumb('?m=admin', 'users list');
 	}

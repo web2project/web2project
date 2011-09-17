@@ -41,7 +41,7 @@ if (!$company && $company_id > 0) {
 
 // setup the title block
 $ttl = $company_id > 0 ? 'Edit Company' : 'Add Company';
-$titleBlock = new CTitleBlock($ttl, 'handshake.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'handshake.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=companies', 'companies list');
 if ($company_id != 0) {
 	$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');

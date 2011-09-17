@@ -56,7 +56,7 @@ if (!$obj && $folder > 0) {
 $folders = getFolderSelectList();
 // setup the title block
 $ttl = $folder ? 'Edit File Folder' : 'Add File Folder';
-$titleBlock = new CTitleBlock($ttl, 'folder5.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'folder5.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=files', 'files list');
 if ($canEdit && $folder > 0) {
 	$titleBlock->addCrumbDelete('delete file folder', $canDelete, $msg);

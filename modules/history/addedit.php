@@ -70,7 +70,7 @@ $q->addWhere('history_id =' . $history_id);
 $history = $q->loadHash();
 $q->clear();
 
-$titleBlock = new CTitleBlock($history_id ? 'Edit history' : 'New history', 'stock_book_blue_48.png', 'history', 'history.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($history_id ? 'Edit history' : 'New history', 'stock_book_blue_48.png', 'history', 'history.' . $a);
 if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete history', $canDelete, $msg);
 }

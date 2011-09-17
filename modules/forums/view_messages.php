@@ -1,4 +1,4 @@
-<?php /* $Id: view_messages.php 1517 2010-12-05 08:07:54Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/forums/view_messages.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -68,7 +68,7 @@ if (function_exists('styleRenderBoxTop')) {
         <tr>
             <td align="left" nowrap="nowrap">
                 <?php
-                    $titleBlock = new CTitleBlock('', '', $m, "$m.$a");
+                    $titleBlock = new w2p_Theme_TitleBlock('', '', $m, "$m.$a");
                     $titleBlock->addCrumb('?m=forums', 'forums list');
                     $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'topics for this forum');
                     $titleBlock->addCrumb('?m=forums&a=view_pdf&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort . '&suppressHeaders=1', 'view PDF file');

@@ -11,7 +11,7 @@ if (!defined('W2P_BASE_DIR')) {
 ##
 
 $AppUI->savePlace();
-$titleBlock = new CTitleBlock('History', 'stock_book_blue_48.png', 'history', 'history.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('History', 'stock_book_blue_48.png', 'history', 'history.' . $a);
 $titleBlock->show();
 
 $filter_param = w2PgetParam($_REQUEST, 'filter', ''); 

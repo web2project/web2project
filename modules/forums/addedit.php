@@ -1,4 +1,4 @@
-<?php /* $Id: addedit.php 1483 2010-10-26 17:11:59Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/modules/forums/addedit.php $ */
+<?php /* $Id$ $URL$ */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -50,7 +50,7 @@ $projects = arrayMerge(array(0 => $all_projects), $projects);
 $users = $perms->getPermittedUsers('forums');
 
 $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
-$titleBlock = new CTitleBlock($ttl, 'support.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
 if ($canDelete && ($forum_id > 0)) {
 	$titleBlock->addCrumbRight('<table cellspacing="0" cellpadding="0" border="0"?<tr><td><a class="delete" href="javascript:delIt()"><span>' . $AppUI->_('delete forum') . '</span></a></td></tr></table>');
