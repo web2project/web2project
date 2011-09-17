@@ -30,18 +30,7 @@ class CDepartment extends w2p_Core_BaseObject {
         parent::__construct('departments', 'dept_id');
 	}
 
-	public function load($deptId) {
-
-        $q = $this->_query;
-		$q->addTable('departments', 'dep');
-		$q->addQuery('dep.*, company_name');
-		$q->addJoin('companies', 'com', 'com.company_id = dep.dept_company', 'inner');
-		$q->addWhere('dep.dept_id = ' . (int) $deptId);
-		$this->company_name = '';
-
-		return $q->loadObject($this);
-	}
-	public function loadFull(CAppUI $AppUI = null, $deptId) {
+	public function loadFull(w2p_Core_CAppUI $AppUI = null, $deptId) {
         global $AppUI;
 
 		$q = $this->_query;
