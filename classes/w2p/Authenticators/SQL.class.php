@@ -17,19 +17,12 @@ class w2p_Authenticators_SQL extends w2p_Authenticators_Base {
 		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addQuery('user_id, user_password');
-		$q->addWhere('user_username = \'' . $username . '\'');
-		if (!$rs = $q->exec()) {
-			$q->clear();
-			return false;
-		}
-		if (!$row = $q->fetchRow()) {
-			$q->clear();
-			return false;
-		}
+		$q->addWhere("user_username = '$username'");
+        $q->addWhere("user_password = '".MD5($password)."'");
+        $q->exec();
 
-		$this->user_id = $row['user_id'];
-		$q->clear();
-		if (MD5($password) == $row['user_password']) {
+		if ($row = $q->fetchRow()) {
+            $this->user_id = $row['user_id'];
 			return true;
 		}
 		return false;
