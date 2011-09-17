@@ -1850,17 +1850,6 @@ function resource_postsave() {
 	}
 }
 
-// from modules/public/contact_selector.php
-function remove_invalid($arr) {
-	$result = array();
-	foreach ($arr as $val) {
-		if (!empty($val) && mb_trim($val) !== '') {
-			$result[] = $val;
-		}
-	}
-	return $result;
-}
-
 // from modules/public/selector.php
 function selPermWhere($obj, $idfld, $namefield, $prefix = '') {
 	global $AppUI;
