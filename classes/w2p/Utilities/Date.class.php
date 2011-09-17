@@ -178,8 +178,8 @@ class w2p_Utilities_Date extends Date {
 	public function next_working_day($preserveHours = false) {
 		global $AppUI;
 		$do = clone $this;
-		$end = intval(w2PgetConfig('cal_day_end'));
-		$start = intval(w2PgetConfig('cal_day_start'));
+		$end = (int) w2PgetConfig('cal_day_end');
+		$start = (int) w2PgetConfig('cal_day_start');
 		while (!$this->isWorkingDay() || $this->getHour() > $end || ($preserveHours == false && $this->getHour() == $end && $this->getMinute() == '0')) {
 			$this->addDays(1);
 			$this->setTime($start, '0', '0');
@@ -198,8 +198,8 @@ class w2p_Utilities_Date extends Date {
 	public function prev_working_day($preserveHours = false) {
 		global $AppUI;
 		$do = clone $this;
-		$end = intval(w2PgetConfig('cal_day_end'));
-		$start = intval(w2PgetConfig('cal_day_start'));
+		$end = (int) w2PgetConfig('cal_day_end');
+		$start = (int) w2PgetConfig('cal_day_start');
 		while (!$this->isWorkingDay() || ($this->getHour() < $start) || ($this->getHour() == $start && $this->getMinute() == '0')) {
 			$this->addDays(-1);
 			$this->setTime($end, '0', '0');
@@ -234,9 +234,9 @@ class w2p_Utilities_Date extends Date {
 		} else
 			if ($durationType == '1') { // durationType is 1 hour
 				// get w2P time constants
-				$cal_day_start = intval(w2PgetConfig('cal_day_start'));
-				$cal_day_end = intval(w2PgetConfig('cal_day_end'));
-				$dwh = intval(w2PgetConfig('daily_working_hours'));
+                $cal_day_start = (int) w2PgetConfig('cal_day_start');
+                $cal_day_end = (int) w2PgetConfig('cal_day_end');
+				$dwh = (int) w2PgetConfig('daily_working_hours');
 
 				// move to the next working day if the first day is a non-working day
 				($sgn > 0) ? $this->next_working_day() : $this->prev_working_day();
@@ -318,15 +318,15 @@ class w2p_Utilities_Date extends Date {
 		// since one will alter the date ($this) one better copies it to a new instance
 		$startDate = new w2p_Utilities_Date();
 		$startDate->copy($this);
-		
+
 		// get w2P time constants
-		$day_start_hour = intval(w2PgetConfig('cal_day_start'));
-		$day_end_hour = intval(w2PgetConfig('cal_day_end'));
-		$work_hours = intval(w2PgetConfig('daily_working_hours'));
-		
+        $day_start_hour = (int) w2PgetConfig('cal_day_start');
+        $day_end_hour = (int) w2PgetConfig('cal_day_end');
+        $work_hours = (int) w2PgetConfig('daily_working_hours');
+
 		// It will change the resulting duration sign (backward/forward durations)
 		$sign = 1;
-	
+
 		// If end date is earlier than start date
 		if($endDate->before($startDate)) {
 			// Change sign and switch dates
@@ -335,17 +335,17 @@ class w2p_Utilities_Date extends Date {
 			$endDate = $startDate;
 			$startDate = $tmp;
 		}
-	
+
 		$duration = 0.0;
 
 		if($startDate->isWorkingDay()) {
 			// Start date time in minutes
 			$dateDiff = $startDate->diff($endDate);
 			$start_date_minutes = $startDate->getHour()*60 + $startDate->getMinute();
-			
+
 			// Calculate the time worked the first day
 			$duration += min($work_hours*60, $day_end_hour*60 - $start_date_minutes, $dateDiff);
-		
+
 			// Jump to the second day
 			$startDate->addDays(1);
 		} else {
@@ -354,16 +354,15 @@ class w2p_Utilities_Date extends Date {
 				$startDate->addDays(1);
 			}
 		}
-	
+
 		// Reset time to the beginning of the working day (just for safety)
 		$startDate->setTime($day_start_hour);
-	
-		// While we don't reach the end date		
+
+		// While we don't reach the end date
 		while($startDate->before($endDate)) {
-			
+
 			// Just do things when the day is a working day
 			if($startDate->isWorkingDay()) {
-			
 				// Check if we're at the last day. If that's the case, just calculate hour differences
 				if($startDate->isSameDay($endDate)) {
 					$duration += min($endDate->getHour()*60 + $endDate->getMinute() - $day_start_hour*60, $work_hours*60);
@@ -371,7 +370,7 @@ class w2p_Utilities_Date extends Date {
 					$duration += $work_hours*60;
 				}
 			}
-			
+
 			// Increment a day
 			$startDate->addDays(1);
 		}
