@@ -183,7 +183,7 @@ function expand(id){
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('files', 'index_list');
+        $fields = w2p_Core_Module::getSettings('files', 'index_table');
         if (count($fields) > 0) {
             foreach ($fields as $field => $text) {
                 $fieldList[] = $field;

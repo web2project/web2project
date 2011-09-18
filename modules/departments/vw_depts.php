@@ -18,7 +18,7 @@ $deptList = $dept->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('departments', 'index_list');
+        $fields = w2p_Core_Module::getSettings('departments', 'index_table');
         if (count($fields) > 0) {
             foreach ($fields as $field => $text) {
                 $fieldList[] = $field;

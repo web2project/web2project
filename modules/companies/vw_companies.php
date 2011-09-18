@@ -30,7 +30,7 @@ $companyList = $company->getCompanyList($AppUI, $company_type_filter, $search_st
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('companies', 'index_list');
+        $fields = w2p_Core_Module::getSettings('companies', 'index_table');
         if (count($fields) > 0) {
             foreach ($fields as $field => $text) {
                 $fieldList[] = $field;

@@ -53,7 +53,7 @@ echo buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('links', 'index_list');
+        $fields = w2p_Core_Module::getSettings('links', 'index_table');
         if (count($fields) > 0) {
             foreach ($fields as $field => $text) {
                 $fieldList[] = $field;
