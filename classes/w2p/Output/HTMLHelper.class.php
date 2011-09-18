@@ -29,8 +29,21 @@ class w2p_Output_HTMLHelper {
         return $output;
     }
 
+/*
+ * TODO: Check this out.
+ * NOTE: Our naming convention across tables is becoming more and more standard due to our 
+ *   clean ups and consistent usage.. can we use that to our advantage here?
+ * 
+ * Instead of treating project_description, task_description, and company_description
+ *   differently, why not use everything after the last underscore (or suffix) 
+ *   to determine the display formatting? Basically the fields become self-descriptive.
+ * 
+ * Examples: _budget, _date, _name, _owner
+ * 
+ * This may not work for things like company_type... but should work on fields 
+ *   like project_company, dept_company because we still have a common suffix.
+ */
 	public static function renderColumn(w2p_Core_CAppUI $AppUI, $fieldName, $row) {
-
 		switch ($fieldName) {
 			case 'project_creator':
 			case 'project_owner':
