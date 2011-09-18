@@ -46,12 +46,27 @@ $titleBlock->show();
 	<input type="hidden" name="dosql" value="do_watch_forum" />
 	<input type="hidden" name="watch" value="forum" />
 
-    <table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl">
+    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
         <tr>
-            <th nowrap="nowrap">&nbsp;</th>
             <?php
-            $fieldList = array('watch_user', 'forum_name', 'forum_topics', 'forum_replies', 'forum_last_date');
-            $fieldNames = array('Watch', 'Forum Name', 'Topics', 'Replies', 'Last Post Info');
+            $fieldList = array();
+            $fieldNames = array();
+            $fields = w2p_Core_Module::getSettings('files', 'index_table');
+            if (count($fields) > 0) {
+                foreach ($fields as $field => $text) {
+                    $fieldList[] = $field;
+                    $fieldNames[] = $text;
+                }
+            } else {
+                // TODO: This is only in place to provide an pre-upgrade-safe 
+                //   state for versions earlier than v3.0
+                //   At some point at/after v4.0, this should be deprecated
+                $fieldList = array('watch_user', 'forum_name', 'forum_topics',
+                    'forum_replies', 'forum_last_date');
+                $fieldNames = array('', 'Watch', 'Forum Name', 'Topics',
+                    'Replies', 'Last Post Info');
+            }
+
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
                     <a href="?m=forums&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">

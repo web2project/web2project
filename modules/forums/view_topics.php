@@ -54,7 +54,7 @@ if (function_exists('styleRenderBoxTop')) {
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_watch_forum" />
     <input type="hidden" name="watch" value="topic" />
-    <table width="100%" cellspacing="1" cellpadding="2" border="0" class="tbl">
+    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
         <tr><td colspan="5">
             <table width="100%" cellspacing="1" cellpadding="2" border="0">
             <tr>
@@ -69,8 +69,24 @@ if (function_exists('styleRenderBoxTop')) {
         </td></tr>
         <tr>
             <?php
-            $fieldList = array('watch_user', 'message_title', 'user_username', 'replies', 'latest_reply');
-            $fieldNames = array('Watch', 'Topics', 'Author', 'Replies', 'Last Post');
+            $fieldList = array();
+            $fieldNames = array();
+            $fields = w2p_Core_Module::getSettings('forums', 'view_topics');
+            if (count($fields) > 0) {
+                foreach ($fields as $field => $text) {
+                    $fieldList[] = $field;
+                    $fieldNames[] = $text;
+                }
+            } else {
+                // TODO: This is only in place to provide an pre-upgrade-safe 
+                //   state for versions earlier than v3.0
+                //   At some point at/after v4.0, this should be deprecated
+                $fieldList = array('watch_user', 'message_title', 
+                    'user_username', 'replies', 'latest_reply');
+                $fieldNames = array('Watch', 'Topics', 
+                    'Author', 'Replies', 'Last Post');
+            }
+
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
                     <a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
