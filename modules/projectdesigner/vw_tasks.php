@@ -2,17 +2,33 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+
 global $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
+global $history_active;
+
+/*
+ * TODO: This file looks a *lot* like the common task list rendering code in 
+ *   tasks/tasks.php
+ */
+
+
+
+
+
+
+
+
+
+
 
 if (empty($query_string)) {
 	$query_string = '?m=' . $m . '&amp;a=' . $a;
 }
-
-// Number of columns (used to calculate how many columns to span things through)
-$cols = 13;
+$mods = $AppUI->getActiveModules();
+$history_active = !empty($mods['history']) && canView('history');
 
 /****
 // Let's figure out which tasks are selected
@@ -125,8 +141,7 @@ $q->addQuery('tlog.task_log_problem');
 $q->addQuery('evtq.queue_id');
 
 $q->addTable('tasks');
-$mods = $AppUI->getActiveModules();
-if (!empty($mods['history']) && canView('history')) {
+if ($history_active) {
 	$q->addQuery('MAX(history_date) as last_update');
 	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
 }
@@ -201,34 +216,47 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
 ?>
 <form name="frm_tasks" accept-charset="utf-8"">
 <table id="tblTasks" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-<tr>
-  <td colspan="16" align='left'>
-		<?php echo $open_link; ?>
-  </td>
-</tr>
-<tr>
-        <th width="10">&nbsp;</th>
-        <th width="20"><?php echo $AppUI->_('Work'); ?></th>
-        <th align="center"><?php echo $AppUI->_('P'); ?></th>
-		<th align="center"><?php echo $AppUI->_('U'); ?></th>
-        <th align="center"><?php echo $AppUI->_('A'); ?></th>
-        <th align="center"><?php echo $AppUI->_('T'); ?></th>
-        <th align="center"><?php echo $AppUI->_('R'); ?></th>
-        <th align="center"><?php echo $AppUI->_('I'); ?></th>
-        <th align="center"><?php echo $AppUI->_('Log'); ?></th>
-        <th width="40%"><?php echo $AppUI->_('Task Name'); ?></th>
-<?php if ($PROJDESIGN_CONFIG['show_task_descriptions']) { ?>
-        <th width="200"><?php echo $AppUI->_('Task Description'); ?></th>
-<?php } ?>
-        <th nowrap="nowrap"><?php echo $AppUI->_('Task Owner'); ?></th>
-        <th nowrap="nowrap"><?php echo $AppUI->_('Start'); ?></th>
-        <th nowrap="nowrap"><?php echo $AppUI->_('Duration'); ?>&nbsp;&nbsp;</th>
-        <th nowrap="nowrap"><?php echo $AppUI->_('Finish'); ?></th>
-        <th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users') ?></th>
-        <?php if ($showEditCheckbox) {
-	echo '<th width="1"><input type="checkbox" onclick="mult_sel(this, \'selected_task_\', \'frm_tasks\')" name="multi_check"/></th>';
-} ?>
-</tr>
+    <tr>
+        <td colspan="16" align='left'>
+            <?php echo $open_link; ?>
+        </td>
+    </tr>
+
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('tasks', 'projectdesigner-view');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('');
+            $fieldNames = array('', 'Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log', 
+                'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish', 
+                'Assgined Users');
+        }
+        if ($showEditCheckbox) {
+            $fieldList[] = '';
+            $fieldNames[] = '';
+        }
+//TODO: $PROJDESIGN_CONFIG['show_task_descriptions'] will be on the config screen going forward..
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+                <?php echo $AppUI->_($fieldNames[$index]); ?>
+            </th><?php
+        }
+
+        // Number of columns (used to calculate how many columns to span things through)
+        $cols = count($fieldNames);
+
+        ?>
+    </tr>
 <?php
 reset($projects);
 

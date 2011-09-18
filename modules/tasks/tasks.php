@@ -482,7 +482,7 @@ if ($project_id) {
         }
         if ($showEditCheckbox) {
             $fieldList[] = '';
-            $fieldNames[] = '&nbsp';
+            $fieldNames[] = '';
         }
 /*
  * TODO: The link below is commented out because this module doesn't support sorting... yet.
