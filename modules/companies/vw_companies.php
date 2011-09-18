@@ -28,8 +28,22 @@ $companyList = $company->getCompanyList($AppUI, $company_type_filter, $search_st
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
     <tr>
         <?php
-        $fieldList = array('company_name', 'countp', 'inactive', 'company_type');
-        $fieldNames = array('Company Name', 'Active Projects', 'Archived Projects', 'Type');
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('companies', 'index_list');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('company_name', 'countp', 'inactive', 'company_type');
+            $fieldNames = array('Company Name', 'Active Projects', 'Archived Projects', 'Type');
+        }
+
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
                 <a href="?m=companies&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
