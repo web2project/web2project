@@ -11,10 +11,41 @@ global $AppUI, $company_id;
 
 $projects = CCompany::getProjects($AppUI, $company_id, 0);
 
-?><table cellpadding="2" cellspacing="1" border="0" width="100%" class="tbl"><?php
+?>
 
+<a name="projects-company_view"> </a>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('projects', 'company_view');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('project_priority', 'project_name', 'user_username',
+                'project_start_date', 'project_status', 'project_target_budget');
+            $fieldNames = array('P', 'Name', 'Owner', 'Started', 'Status', 
+                'Budget');
+        }
+
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+                <a href="?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=<?php echo $fieldList[$index]; ?>#projects-company_view" class="hdr">
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+                </a>
+            </th><?php
+        }
+        ?>
+    </tr>
+<?php
 if (count($projects) > 0) {
-	?><tr><th><?php echo $AppUI->_('Name'); ?></th><th><?php echo $AppUI->_('Owner'); ?></th></tr><?php
 	foreach ($projects as $project) {
 		?>
 		<tr>
