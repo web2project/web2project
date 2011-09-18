@@ -26,8 +26,6 @@ if (empty($query_string)) {
 	$query_string = '?m=' . $m . '&amp;a=' . $a;
 }
 
-// Number of columns (used to calculate how many columns to span things through)
-$cols = 20;
 
 /*
 * Let's figure out which tasks are selected
@@ -456,32 +454,52 @@ if ($project_id) {
 	</form>
 <?php } ?>
 <table id="tblProjects" width="100%" border="0" cellpadding="0" cellspacing="1" class="tbl">
-	<tr>
-		<th width="10">&nbsp;</th>
-		<th width="10"><?php echo $AppUI->_('Pin'); ?></th>
-		<th width="10"><?php echo $AppUI->_('Log'); ?></th>
-		<th width="20"><?php echo $AppUI->_('Work'); ?></th>
-		<th align="center"><?php echo sort_by_item_title('P', 'task_priority', SORT_NUMERIC); ?></th>
-		<th align="center"><?php echo sort_by_item_title('U', 'user_task_priority', SORT_NUMERIC); ?></th>
-		<th width="200"><?php echo sort_by_item_title('Task Name', 'task_name', SORT_STRING); ?></th>
-		<th nowrap="nowrap"><?php echo sort_by_item_title('Task Owner', 'user_username', SORT_STRING); ?></th>
-		<th nowrap="nowrap"><?php echo $AppUI->_('Assigned Users') ?></th>
-		<th nowrap="nowrap"><?php echo sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC); ?></th>
-		<th nowrap="nowrap"><?php echo sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC); ?>&nbsp;&nbsp;</th>
-		<th nowrap="nowrap"><?php echo sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC); ?></th>
-		<?php 
-			if (!empty($mods['history']) && canView('history')) {
-				?><th nowrap="nowrap"><?php echo sort_by_item_title('Last Update', 'last_update', SORT_NUMERIC); ?></th><?php
-			} else {
-				$cols--;
-			}
-			if ($showEditCheckbox) {
-				echo '<th width="1">&nbsp;</th>';
-			} else {
-				$cols--;
-			} 
-		?>
-	</tr>
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('tasks', 'index_table');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('', '', '', 'task_priority', 'user_task_priority',
+                'task_name', 'user_username', '', 'task_start_date', 
+                'task_duration', 'task_end_date');
+            $fieldNames = array('', 'Pin', 'Log', 'Work', 'P', 'U', 'Task Name',
+                'Task Owner', 'Assigned Users', 'Start Date', 'Duration', 
+                'Finish Date');
+        }
+        if (!empty($mods['history']) && canView('history')) {
+            $fieldList[] = 'last_update';
+            $fieldNames[] = 'Last Update';
+        }
+        if ($showEditCheckbox) {
+            $fieldList[] = '';
+            $fieldNames[] = '&nbsp';
+        }
+/*
+ * TODO: The link below is commented out because this module doesn't support sorting... yet.
+ *   For tasks, this is done with echo sort_by_item_title('P', 'task_priority', SORT_NUMERIC);
+ */
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+<!--                <a href="?m=files&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">-->
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+<!--                </a>-->
+            </th><?php
+        }
+
+        // Number of columns (used to calculate how many columns to span things through)
+        $cols = count($fieldNames);
+
+        ?>
+    </tr>
 	<?php
 		reset($projects);
 		
