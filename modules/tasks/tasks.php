@@ -7,6 +7,8 @@ global $m, $a, $project_id, $f, $min_view, $query_string, $durnTypes;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
+global $history_active;
+
 /*
 tasks.php
 
@@ -25,7 +27,8 @@ External used variables:
 if (empty($query_string)) {
 	$query_string = '?m=' . $m . '&amp;a=' . $a;
 }
-
+$mods = $AppUI->getActiveModules();
+$history_active = !empty($mods['history']) && canView('history');
 
 /*
 * Let's figure out which tasks are selected
@@ -153,8 +156,8 @@ $sq->clear();
 $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
 
 $q->addTable('tasks');
-$mods = $AppUI->getActiveModules();
-if (!empty($mods['history']) && canView('history')) {
+
+if ($history_active) {
 	$q->addQuery('MAX(history_date) as last_update');
 	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
 }
@@ -339,8 +342,6 @@ if (count($tasks) > 0) {
 }
 
 $showEditCheckbox = ((isset($canEdit) && $canEdit && w2PgetConfig('direct_edit_assignment')) ? true : false);
-global $history_active;
-$history_active = !empty($mods['history']) && canView('history');
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -475,7 +476,7 @@ if ($project_id) {
                 'Task Owner', 'Assigned Users', 'Start Date', 'Duration', 
                 'Finish Date');
         }
-        if (!empty($mods['history']) && canView('history')) {
+        if ($history_active) {
             $fieldList[] = 'last_update';
             $fieldNames[] = 'Last Update';
         }
