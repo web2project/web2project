@@ -155,8 +155,8 @@ $countries = w2PgetSysVal('GlobalCountries');
 // tabbed information boxes
 $moddir = W2P_BASE_DIR . '/modules/companies/';
 $tabBox = new CTabBox('?m=companies&a=view&company_id=' . $company_id, '', $tab);
-$tabBox->add($moddir . 'vw_active', 'Active Projects');
-$tabBox->add($moddir . 'vw_archived', 'Archived Projects');
+$tabBox->add($moddir . 'vw_projects', 'Active Projects');
+$tabBox->add($moddir . 'vw_projects', 'Archived Projects');
 if ($AppUI->isActiveModule('departments') && canView('departments')) {
     $tabBox->add($moddir . 'vw_depts', 'Departments');
 }
