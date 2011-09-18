@@ -14,19 +14,33 @@ $dept = new CDepartment();
 $deptList = $dept->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-	<tr>
+    <tr>
         <?php
-        $fieldList = array('dept_name', 'countp', 'inactive', 'dept_type');
-        $fieldNames = array('Department Name', 'Active Projects', 'Archived Projects', 'Type');
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('departments', 'index_list');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('dept_name', 'countp', 'inactive', 'dept_type');
+            $fieldNames = array('Department Name', 'Active Projects', 'Archived Projects', 'Type');
+        }
+//TODO: The link below is commented out because this module doesn't support sorting... yet.
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
-                <a href="?m=departments&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+<!--                <a href="?m=departments&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">-->
                     <?php echo $AppUI->_($fieldNames[$index]); ?>
-                </a>
+<!--                </a>-->
             </th><?php
         }
         ?>
-	</tr>
+    </tr>
 <?php
 if (count($deptList) > 0) {
 	$displayList = array();

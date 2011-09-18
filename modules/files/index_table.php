@@ -179,21 +179,38 @@ function expand(id){
 </script>
 
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-<tr>
-	<th nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Description'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Versions'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Category'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Folder'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Task Name'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Size'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></a></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Checkout Reason') ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('co') ?></th>
-	<th nowrap="nowrap" colspan="2">&nbsp;</th>
-</tr>
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('files', 'index_list');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('file_name', 'file_description', 'file_version', 
+                'file_category', 'file_folder', 'file_task', 'file_owner', 
+                'file_size', 'file_type', 'file_date', 'file_checkout_reason',
+                'file_checkout');
+            $fieldNames = array('File Name', 'Description', 'Versions', 'Category',
+                'Folder', 'Task Name', 'Owner', 'Size', 'Type', 'Date', 
+                'Checkout Reason', 'co', '', '');
+        }
+//TODO: The link below is commented out because this module doesn't support sorting... yet.
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+<!--                <a href="?m=files&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">-->
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+<!--                </a>-->
+            </th><?php
+        }
+        ?>
+    </tr>
 <?php
 	$fp = -1;
 	$file_date = new w2p_Utilities_Date();

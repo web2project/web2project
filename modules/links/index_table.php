@@ -49,15 +49,33 @@ echo buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
 
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-<tr>
-	<th nowrap="nowrap">&nbsp;</th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Link Name'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Description'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Category'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Task Name'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Date'); ?></th>
-</tr>
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('links', 'index_list');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('', 'link_name', 'link_description', 'link_category', 'link_task', 'link_owner', 'link_date');
+            $fieldNames = array('', 'Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
+        }
+//TODO: The link below is commented out because this module doesn't support sorting... yet.
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+<!--                <a href="?m=links&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">-->
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+<!--                </a>-->
+            </th><?php
+        }
+        ?>
+    </tr>
 <?php
 $fp = -1;
 
