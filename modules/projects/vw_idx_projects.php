@@ -205,6 +205,8 @@ if ($is_tabbed) {
 					} else {
 						$s .= '<tr>';
 					}
+
+                    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
                     foreach ($fieldList as $field) {
                         $count_projects = $tmpProject->hasChildProjects($row['project_id']);
 
@@ -281,7 +283,7 @@ if ($is_tabbed) {
                                 $s .= '</td>';
                                 break;
                             default:
-                                $s .= w2p_Output_HTMLHelper::renderColumn($AppUI, $field, $row);
+                                $s .= $htmlHelper->createColumn($field, $row);
                         }
                     }
 
