@@ -45,10 +45,7 @@ $contacts = CCompany::getContacts($AppUI, $company->company_id);
 
 <?php
 if (count($contacts) > 0) {
-    $contact = new CContact();
 	foreach ($contacts as $contact_id => $contact_data) {
-		$contact->contact_id = $contact_id;
-
         echo '<tr><td class="hilite">';
 		echo '<a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">'; 
 		echo $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'];
