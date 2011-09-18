@@ -10,18 +10,41 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $company;
 
 $contacts = CCompany::getContacts($AppUI, $company->company_id);
+?>
+<a name="contacts-company_view"> </a>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('contacts', 'company_view');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('contact_first_name', 'contact_job', 
+                'contact_email', 'contact_phone', 'dept_name');
+            $fieldNames = array('Name', 'Job Title', 'Email', 'Phone', 
+                'Department');
+        }
+//TODO: The link below is commented out because this view doesn't support sorting... yet.
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+<!--                <a href="?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=<?php echo $fieldList[$index]; ?>#contacts-company_view" class="hdr">-->
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+<!--                </a>-->
+            </th><?php
+        }
+        ?>
+    </tr>
 
-?><table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl"><?php
+<?php
 if (count($contacts) > 0) {
-	?>
-	<tr>
-		<th><?php echo $AppUI->_('Name'); ?></th>
-		<th><?php echo $AppUI->_('Job Title'); ?></th>
-		<th><?php echo $AppUI->_('e-mail'); ?></th>
-		<th><?php echo $AppUI->_('Phone'); ?></th>
-		<th><?php echo $AppUI->_('Department'); ?></th>
-	</tr>
-	<?php
     $contact = new CContact();
 	foreach ($contacts as $contact_id => $contact_data) {
 		$contact->contact_id = $contact_id;
