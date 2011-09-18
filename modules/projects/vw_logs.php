@@ -68,22 +68,42 @@ function delIt2(id) {
 <input type="hidden" name="tab" value="<?php echo $tab ?>"/>
 </form>
 </table>
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
 <form name="frmDelete2" action="./index.php?m=tasks" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="task_log_id" value="0" />
 </form>
-<tr>
-	<th></th>
-	<th><?php echo $AppUI->_('Date'); ?></th>
-	<th width="100"><?php echo $AppUI->_('Summary'); ?></th>
-	<th width="100"><?php echo $AppUI->_('User'); ?></th>
-	<th width="100"><?php echo $AppUI->_('Hours'); ?></th>
-	<th width="100"><?php echo $AppUI->_('Cost Code'); ?></th>
-	<th width="100%"><?php echo $AppUI->_('Comments'); ?></th>
-	<th></th>
-</tr>
+<a name="task_logs-projects_view"> </a>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('task_logs', 'projects_view');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('', 'task_log_date', 'task_log_name', 
+                'task_log_creator', 'task_log_hours', 'task_log_costcode', 'task_log_description');
+            $fieldNames = array('', 'Date', 'Summary', 'User', 'Hours', 
+                'Cost Code', 'Comments', '');
+        }
+//TODO: The link below is commented out because this module doesn't support sorting... yet.
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+<!--                <a href="?m=projects&a=view&project_id=<?php echo $project_id; ?>&sort=<?php echo $fieldList[$index]; ?>#task_logs-projects_view" class="hdr">-->
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+<!--                </a>-->
+            </th><?php
+        }
+        ?>
+    </tr>
 <?php
 // Winnow out the tasks we are not allowed to view.
 $perms = &$AppUI->acl();

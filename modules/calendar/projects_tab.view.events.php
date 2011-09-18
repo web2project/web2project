@@ -26,29 +26,66 @@ $tf = $AppUI->getPref('TIMEFORMAT');
 $df = $AppUI->getPref('SHDATEFORMAT');
 $types = w2PgetSysVal('EventType');
 
-$html = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
-$html .= '<tr><th>' . $AppUI->_('Date') . '</th><th>' . $AppUI->_('Type') . '</th><th>' . $AppUI->_('Event') . '</th></tr>';
-foreach ($events as $row) {
-	$html .= '<tr>';
-	$start = new w2p_Utilities_Date($row['event_start_date']);
-	$end = new w2p_Utilities_Date($row['event_end_date']);
-	$html .= '<td width="25%" nowrap="nowrap">' . $start->format($df . ' ' . $tf) . '&nbsp;-&nbsp;';
-	$html .= $end->format($df . ' ' . $tf) . '</td>';
+?>
+<a name="calendar-project_view"> </a>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('calendar', 'project_view');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('event_start_date', 'event_end_date', 'event_type',
+                'event_title');
+            $fieldNames = array('Start Date', 'End Date', 'Type', 'Event');
+        }
+//TODO: The link below is commented out because this view doesn't support sorting... yet.
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+<!--                <a href="?m=projects&a=view&project_id=<?php echo $project_id; ?>&sort=<?php echo $fieldList[$index]; ?>#calendar-project_view" class="hdr">-->
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+<!--                </a>-->
+            </th><?php
+        }
+        ?>
+    </tr>
+<?php
 
-	$href = '?m=calendar&a=view&event_id=' . $row['event_id'];
-	$alt = $row['event_description'];
+$html = '';
+if (count($events)) {
+    foreach ($events as $row) {
+        $html .= '<tr>';
+        $start = new w2p_Utilities_Date($row['event_start_date']);
+        $end = new w2p_Utilities_Date($row['event_end_date']);
+        $html .= '<td width="25%" nowrap="nowrap">' . $start->format($df . ' ' . $tf) . '</td>';
+        $html .= '<td width="25%" nowrap="nowrap">' . $end->format($df . ' ' . $tf) . '</td>';
 
-	$html .= '<td width="10%" nowrap="nowrap">';
-	$html .= w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar');
-	$html .= '&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b><td>';
+        $href = '?m=calendar&a=view&event_id=' . $row['event_id'];
+        $alt = $row['event_description'];
 
-    $html .= w2PtoolTip($row['event_title'], getEventTooltip($row['event_id']), true);
-	$html .= '<a href="' . $href . '" class="event">';
-	$html .= $row['event_title'];
-	$html .= '</a>';
-    $html .= w2PendTip();
+        $html .= '<td width="10%" nowrap="nowrap">';
+        $html .= w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar');
+        $html .= '&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b><td>';
 
-	$html .= '</td></tr>';
+        $html .= w2PtoolTip($row['event_title'], getEventTooltip($row['event_id']), true);
+        $html .= '<a href="' . $href . '" class="event">';
+        $html .= $row['event_title'];
+        $html .= '</a>';
+        $html .= w2PendTip();
+
+        $html .= '</td></tr>';
+    }
+} else {
+    echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
 }
-$html .= '</table>';
 echo $html;
+?>
+</table>

@@ -8,14 +8,35 @@ global $AppUI, $project_id;
 
 $forums = CProject::getForums($AppUI, $project_id);
 ?>
-
+<a name="forums-projects_view"> </a>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-	<tr>
-		<th nowrap="nowrap">&nbsp;</th>
-		<th nowrap="nowrap" width="100%"><?php echo $AppUI->_('Forum Name'); ?></th>
-		<th nowrap="nowrap"><?php echo $AppUI->_('Messages'); ?></th>
-		<th nowrap="nowrap"><?php echo $AppUI->_('Last Post'); ?></th>
-	</tr>
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+        $fields = w2p_Core_Module::getSettings('forums', 'projects_view');
+        if (count($fields) > 0) {
+            foreach ($fields as $field => $text) {
+                $fieldList[] = $field;
+                $fieldNames[] = $text;
+            }
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('', 'forum_name', '', '');
+            $fieldNames = array('', 'Forum Name', 'Messages', 'Last Post');
+        }
+//TODO: The link below is commented out because this module doesn't support sorting... yet.
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+<!--                <a href="?m=projects&a=view&project_id=<?php echo $project_id; ?>&sort=<?php echo $fieldList[$index]; ?>#forums-projects_view" class="hdr">-->
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+<!--                </a>-->
+            </th><?php
+        }
+        ?>
+    </tr>
 	<?php foreach ($forums as $forumId  => $forum_info) {?>
 		<tr>
 			<td nowrap="nowrap" align="center">
