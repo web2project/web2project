@@ -22,8 +22,7 @@ $events = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, $project_
 $start_hour = w2PgetConfig('cal_day_start');
 $end_hour = w2PgetConfig('cal_day_end');
 
-$tf = $AppUI->getPref('TIMEFORMAT');
-$df = $AppUI->getPref('SHDATEFORMAT');
+
 $types = w2PgetSysVal('EventType');
 
 ?>
@@ -61,12 +60,13 @@ $types = w2PgetSysVal('EventType');
 
 $html = '';
 if (count($events)) {
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+    $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+    
     foreach ($events as $row) {
         $html .= '<tr>';
-        $start = new w2p_Utilities_Date($row['event_start_date']);
-        $end = new w2p_Utilities_Date($row['event_end_date']);
-        $html .= '<td width="25%" nowrap="nowrap">' . $start->format($df . ' ' . $tf) . '</td>';
-        $html .= '<td width="25%" nowrap="nowrap">' . $end->format($df . ' ' . $tf) . '</td>';
+        $html .= $htmlHelper->createColumn('event_start_date', $row);
+        $html .= $htmlHelper->createColumn('event_end_date', $row);
 
         $href = '?m=calendar&a=view&event_id=' . $row['event_id'];
         $alt = $row['event_description'];

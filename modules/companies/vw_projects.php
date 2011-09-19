@@ -52,7 +52,7 @@ $projects = CCompany::getProjects($AppUI, $company_id, !$tab, $sort);
 <?php
 if (count($projects) > 0) {
 	foreach ($projects as $project) {
-		$start_date = new w2p_Utilities_Date($project['project_start_date']);
+		$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 		?>
 		<tr>
 			<td>
@@ -68,14 +68,9 @@ if (count($projects) > 0) {
 				<a href="?m=projects&a=view&project_id=<?php echo $project['project_id']; ?>"><?php echo $project['project_name']; ?></a>
 			</td>
 			<td nowrap="nowrap"><?php echo $project['contact_first_name']; ?>&nbsp;<?php echo $project['contact_last_name']; ?></td>
-			<td nowrap="nowrap"><?php echo $start_date->format($df); ?></td>
+            <?php echo $htmlHelper->createColumn('project_start_date', $project); ?>
 			<td nowrap="nowrap"><?php echo $AppUI->_($pstatus[$project['project_status']]); ?></td>
-			<td nowrap="nowrap">
-                <?php
-                    echo $w2Pconfig['currency_symbol'];
-                    echo formatCurrency($project['project_target_budget'], $AppUI->getPref('CURRENCYFORM'));
-                ?>
-            </td>
+            <?php echo $htmlHelper->createColumn('project_target_budget', $project); ?>
 		</tr>
 		<?php
 	}

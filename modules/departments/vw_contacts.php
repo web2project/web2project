@@ -12,13 +12,16 @@ global $dept_id, $dept, $company_id;
 <?php
 $contacts = CDepartment::getContactList($AppUI, $dept_id);
 
-$contact = new CContact();
-foreach ($contacts as $contact_id => $contact_data) {
-	$contact->contact_id = $contact_id;
+if (count($contacts) > 0) {
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+    foreach ($contacts as $contact_id => $contact_data) {
 
-    echo '<tr><td><a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</a></td>';
-    echo '<td>' . w2p_email($contact_data['contact_email']) . '</td>';
-	echo '<td>' . $contact_data['contact_phone'] . '</td></tr>';
+        echo '<tr><td><a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</a></td>';
+        echo $htmlHelper->createColumn('contact_email', $contact_data);
+        echo '<td>' . $contact_data['contact_phone'] . '</td></tr>';
+    }
+} else {
+    ?><tr><td colspan="5"><?php echo $AppUI->_('No data available') . '<br />' . $AppUI->getMsg(); ?></td></tr><?php
 }
 ?>
 	<tr>
