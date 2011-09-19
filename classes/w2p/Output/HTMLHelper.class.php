@@ -68,7 +68,7 @@ class w2p_Output_HTMLHelper {
 				break;
 			case '_budget':
 				$s .= '<td>';
-				$s .= $w2Pconfig['currency_symbol'];
+				$s .= w2PgetConfig('currency_symbol');
 				$s .= formatCurrency($row[$fieldName], $this->AppUI->getPref('CURRENCYFORM'));
 				$s .= '</td>';
 				break;
@@ -77,6 +77,11 @@ class w2p_Output_HTMLHelper {
 				$s .= w2p_url($row[$fieldName]);
 				$s .= '</td>';
 				break;
+            case '_email':
+                $s .= '<td>';
+                $s .= w2p_email($row[$fieldName]);
+                $s .= '</td>';
+                break;
 			case '_date':
 				$myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
 				$s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($this->df) : '-') . '</td>';
