@@ -32,32 +32,18 @@ $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 
 $obj->load($task_id);
 $task_project = $project_id ? $project_id : ($obj->task_project ? $obj->task_project : 0);
-// let's get root tasks
-$q = new w2p_Database_Query;
-$q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
-$q->addTable('tasks');
-$q->addWhere('task_project = ' . (int)$task_project);
-$q->addWhere('task_id = task_parent');
-$q->addOrder('task_start_date');
-$root_tasks = $q->loadHashList('task_id');
-$q->clear();
+
+$root_tasks = $obj->getRootTasks((int) $task_project);
+
 $projTasks = array();
 global $task_parent_options;
 $task_parent_options = '';
-
-// Now lets get non-root tasks, grouped by the task parent
-$q = new w2p_Database_Query;
-$q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
-$q->addTable('tasks');
-$q->addWhere('task_project = ' . (int)$task_project);
-$q->addWhere('task_id <> task_parent');
-$q->addOrder('task_start_date');
 
 $parents = array();
 $projTasksWithEndDates = array(0 => $AppUI->_('None')); //arrays contains task end date info for setting new task start date as maximum end date of dependenced tasks
 global $all_tasks;
 $all_tasks = array();
-$sub_tasks = $q->exec();
+$sub_tasks = $obj->getNonRootTasks((int)$task_project);
 
 if ($sub_tasks) {
 	while ($sub_task = $q->fetchRow()) {

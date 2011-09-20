@@ -1917,10 +1917,31 @@ class CTask extends w2p_Core_BaseObject {
 		$q->addQuery('task_id');
 		$q->addWhere('task_id <> ' . (int)$this->task_id . ' AND task_parent = ' . (int)$this->task_id);
 		$result = $q->loadColumn();
-		$q->clear();
 
 		return $result;
 	}
+
+    public function getRootTasks($project_id) {
+        $q = $this->_query;
+        $q->addTable('tasks');
+        $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
+        $q->addWhere('task_project = ' . (int)$project_id);
+        $q->addWhere('task_id = task_parent');
+        $q->addOrder('task_start_date');
+
+        return $q->loadHashList('task_id');
+    }
+
+    public function getNonRootTasks($project_id) {
+        $q = new w2p_Database_Query;
+        $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
+        $q->addTable('tasks');
+        $q->addWhere('task_project = ' . (int)$task_project);
+        $q->addWhere('task_id <> task_parent');
+        $q->addOrder('task_start_date');
+
+        return $q->exec();
+    }
 
 	// Returns task deep children IDs
 	public function getDeepChildren() {
