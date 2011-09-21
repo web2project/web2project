@@ -442,6 +442,7 @@ class CProject extends w2p_Core_BaseObject {
 	}
 
 	public function getAllowedProjectsInRows($userId) {
+        trigger_error("CProject->getAllowedProjectsInRows() has been deprecated in v3.0 and will be removed in v4.0", E_USER_NOTICE );
 
         $q = $this->_query;
         $q->clear();
