@@ -52,6 +52,13 @@ $pdo->pd_option_view_addtasks = w2PgetParam($_POST, 'opt_view_addtsks', 0);
 $pdo->pd_option_view_files = w2PgetParam($_POST, 'opt_view_files', 0);
 $pdo->store();
 
+$updateFields = array('bulk_task_percent_complete' => $bulk_task_percent_complete,
+        'bulk_task_owner' => $bulk_task_owner, 'bulk_task_priority' => $bulk_task_priority,
+        'bulk_task_access' => $bulk_task_access, 'bulk_task_type' => $bulk_task_type,
+        
+        
+        );
+
 if (is_array($selected) && count($selected)) {
 	$upd_task = new CTask();
 	foreach ($selected as $key => $val) {
@@ -59,16 +66,17 @@ if (is_array($selected) && count($selected)) {
 			$upd_task->load($key);
 		}
 
-		//Action: Modify Percent Complete
-		if ($bulk_task_percent_complete != '' && ((int) $_POST['bulk_task_percent_complete'] == (int) $bulk_task_percent_complete)) {
-			if ($upd_task->task_id) {
-				$upd_task->task_percent_complete = $bulk_task_percent_complete;
-				$result = $upd_task->store($AppUI);
-                if (is_array($result)) {
-                    break;
+        foreach ($updateFields as $name => $value) {
+            if ($value != '' && ((int) $_POST[$name] == (int) $value)) {
+                if ($upd_task->task_id) {
+                    $upd_task->{str_replace('bulk_', '', $name)} = $value;
+                    $result = $upd_task->store($AppUI);
+                    if (is_array($result)) {
+                        break;
+                    }
                 }
-			}
-		}
+            }
+        }
 
 		//Action: Move Task Date
 		if (isset($_POST['bulk_move_date']) && $bulk_move_date != '' && $bulk_move_date) {
@@ -84,7 +92,6 @@ if (is_array($selected) && count($selected)) {
                 if (is_array($result)) {
                     break;
                 }
-				$upd_task->shiftDependentTasks();
 			}
 		}
 
@@ -96,7 +103,6 @@ if (is_array($selected) && count($selected)) {
                 if (is_array($result)) {
                     break;
                 }
-				$upd_task->pushDependencies($upd_task->task_id, $upd_task->task_end_date);
 			}
 		}
 
@@ -117,17 +123,6 @@ if (is_array($selected) && count($selected)) {
 				$upd_task->task_duration = $bulk_task_duration;
 				//set duration type to hours (1)
 				$upd_task->task_duration_type = $bulk_task_durntype ? $bulk_task_durntype : 1;
-				$result = $upd_task->store($AppUI);
-                if (is_array($result)) {
-                    break;
-                }
-			}
-		}
-
-		//Action: Modify Task Owner
-		if (isset($_POST['bulk_task_owner']) && $bulk_task_owner != '' && $bulk_task_owner) {
-			if ($upd_task->task_id) {
-				$upd_task->task_owner = $bulk_task_owner;
 				$result = $upd_task->store($AppUI);
                 if (is_array($result)) {
                     break;
@@ -196,39 +191,6 @@ if (is_array($selected) && count($selected)) {
 						$dep_task->shiftDependentTasks();
 					}
 				}
-			}
-		}
-
-		//Action: Modify priority
-		if (isset($_POST['bulk_task_priority']) && $bulk_task_priority != '') {
-			if ($upd_task->task_id) {
-				$upd_task->task_priority = $bulk_task_priority;
-				$result = $upd_task->store($AppUI);
-                if (is_array($result)) {
-                    break;
-                }
-			}
-		}
-
-		//Action: Modify Access
-		if (isset($_POST['bulk_task_access']) && $bulk_task_access != '') {
-			if ($upd_task->task_id) {
-				$upd_task->task_access = $bulk_task_access;
-				$result = $upd_task->store($AppUI);
-                if (is_array($result)) {
-                    break;
-                }
-			}
-		}
-
-		//Action: Modify Type
-		if (isset($_POST['bulk_task_type']) && $bulk_task_type != '') {
-			if ($upd_task->task_id) {
-				$upd_task->task_type = $bulk_task_type;
-				$result = $upd_task->store($AppUI);
-                if (is_array($result)) {
-                    break;
-                }
 			}
 		}
 
