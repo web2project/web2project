@@ -92,7 +92,14 @@ $task_parent_options = '';
 $parents = array();
 $projTasksWithEndDates = array($task->task_id => $AppUI->_('None')); //arrays contains task end date info for setting new task start date as maximum end date of dependenced tasks
 $all_tasks = array();
-$sub_tasks = $task->getNonRootTasks((int)$task_project);
+
+$q = new w2p_Database_Query;
+$q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
+$q->addTable('tasks');
+$q->addWhere('task_project = ' . (int)$task_project);
+$q->addWhere('task_id <> task_parent');
+$q->addOrder('task_start_date');
+$sub_tasks = $q->exec();
 
 if ($sub_tasks) {
 	while ($sub_task = $q->fetchRow()) {
