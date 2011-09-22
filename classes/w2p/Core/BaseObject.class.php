@@ -215,7 +215,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	 */
 	public function check()
 	{
-        return $this->_errror;
+        return $this->_error;
 	}
 
 	/**
