@@ -628,15 +628,21 @@ class CEvent extends w2p_Core_BaseObject {
             }
         }
         if ($stored) {
-// TODO:  I *really* don't like using the POST inside here..
-            $this->updateAssigned(explode(',', $_POST['event_assigned']));
 
-			$custom_fields = new w2p_Core_CustomFields('calendar', 'addedit', $this->event_id, 'edit');
-			$custom_fields->bind($_POST);
-			$sql = $custom_fields->store($this->event_id); // Store Custom Fields
         }
 
         return $stored;
+    }
+
+    protected function hook_postStore() {
+        // TODO:  I *really* don't like using the POST inside here..
+        $this->updateAssigned(explode(',', $_POST['event_assigned']));
+
+        $custom_fields = new w2p_Core_CustomFields('calendar', 'addedit', $this->event_id, 'edit');
+        $custom_fields->bind($_POST);
+        $sql = $custom_fields->store($this->event_id); // Store Custom Fields
+
+        parent::hook_postStore();
     }
 
 	public function hook_calendar($userId) {

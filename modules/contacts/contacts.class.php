@@ -128,16 +128,24 @@ class CContact extends w2p_Core_BaseObject {
          *  TODO: I don't like using the $_POST in here..
          */
         if ($stored) {
-            $methods = array();
-            if (!empty($_POST['contact_methods'])) {
-                foreach ($_POST['contact_methods']['field'] as $key => $field) {
-                    $methods[$field] = $_POST['contact_methods']['value'][$key];
-                }
-            }
-            $this->setContactMethods($methods);
+
         }
         return $stored;
 	}
+
+    protected function hook_postStore() {
+        $methods = array();
+
+        // TODO:  I *really* don't like using the POST inside here..
+        if (!empty($_POST['contact_methods'])) {
+            foreach ($_POST['contact_methods']['field'] as $key => $field) {
+                $methods[$field] = $_POST['contact_methods']['value'][$key];
+            }
+        }
+        $this->setContactMethods($methods);
+
+        parent::hook_postStore();
+    }
 
 	public function setContactMethods(array $methods) {
 		$q = $this->_query;
