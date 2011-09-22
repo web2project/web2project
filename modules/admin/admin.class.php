@@ -86,6 +86,7 @@ class CUser extends w2p_Core_BaseObject {
         $perms->{$this->perm_func}($this->user_id, $this->user_username);
 
         $q = $this->_query;
+        $q->clear();
         //Lets check if the user has allready default users preferences set, if not insert the default ones
         $q->addTable('user_preferences', 'upr');
         $q->addWhere('upr.pref_user = ' . $this->user_id);
@@ -196,7 +197,7 @@ class CUser extends w2p_Core_BaseObject {
 
 		$q->loadObject($this, true, false);
 	}
-	
+
     public function hook_cron() {
 		$q = $this->_query;
         $q->setDelete('sessions');
@@ -238,7 +239,7 @@ class CUser extends w2p_Core_BaseObject {
 
 		return $userId;
 	}
-	
+
 	public static function generateUserToken($userId, $token = '') {
 
         $q = new w2p_Database_Query();
@@ -256,7 +257,7 @@ class CUser extends w2p_Core_BaseObject {
 
 		return true;
 	}
-	
+
 	public static function getFirstLetters() {
 		$letters = '';
 
@@ -270,7 +271,7 @@ class CUser extends w2p_Core_BaseObject {
 		}
 		return strtoupper($letters);
 	}
-	
+
 	public static function exists($username) {
 
         $q = new w2p_Database_Query();
@@ -290,7 +291,7 @@ class CUser extends w2p_Core_BaseObject {
 		$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
 		$q->addWhere('u.user_id = ' . (int)$user_id);
 		$user_dept = $q->loadColumn();
-		$q->clear();		
+		$q->clear();
 
 		return $user_dept;
 	}
@@ -313,19 +314,19 @@ class CUser extends w2p_Core_BaseObject {
 
 		return $q->loadList();
 	}
-	
+
 	public function getFullUserName() {
 		$q = $this->_query;
 		$q->addTable('contacts', 'c');
 		$q->addQuery('c.*');
 		$q->addWhere('contact_id = ' . (int)$this->user_contact);
 		$res = $q->loadList();
-		
+
 		if (count($res) == 1) {
-			return $res[0]['contact_first_name'] . ' ' . $res[0]['contact_last_name']; 	
+			return $res[0]['contact_first_name'] . ' ' . $res[0]['contact_last_name'];
 
 		}
-		
+
 		return $this->user_username;
 	}
 
@@ -336,10 +337,10 @@ class CUser extends w2p_Core_BaseObject {
 	public static function isUserActive($user_id) {
 		global $AppUI;
 		$perms = &$AppUI->acl();
-		
+
 		return $perms->isUserPermitted($user_id);
 	}
-	
+
 	public static function getUserList() {
 		global $AppUI;
 
@@ -357,6 +358,6 @@ class CUser extends w2p_Core_BaseObject {
                 $retres[] = $user;
             }
         }
-		return $retres;  	
+		return $retres;
   }
 }
