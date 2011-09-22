@@ -597,15 +597,6 @@ class CTask extends w2p_Core_BaseObject {
                 if (($this->task_end_date != $oTsk->task_end_date) || ($this->task_dynamic != $oTsk->task_dynamic) || ($this->task_milestone == '1')) {
                     $this->shiftDependentTasks();
                 }
-
-                if (!$this->task_parent) {
-                    $q->addTable('tasks');
-                    $q->addUpdate('task_parent', $this->task_id);
-                    $q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
-                    $q->addWhere('task_id = ' . (int)$this->task_id);
-                    $q->exec();
-                    $q->clear();
-                }
             }
 		}
 
@@ -621,14 +612,7 @@ class CTask extends w2p_Core_BaseObject {
                 $this->_error['store'] = $msg;
             } else {
                 $q->clear();
-                if (!$this->task_parent) {
-                    $q->addTable('tasks');
-                    $q->addUpdate('task_parent', $this->task_id);
-                    $q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
-                    $q->addWhere('task_id = ' . (int)$this->task_id);
-                    $q->exec();
-                    $q->clear();
-                } else {
+                if ($this->task_parent) {
                     // importing tasks do not update dynamics
                     $importing_tasks = true;
                 }
@@ -637,6 +621,14 @@ class CTask extends w2p_Core_BaseObject {
 		}
 
         if ($stored) {
+            if (!$this->task_parent) {
+                $q->addTable('tasks');
+                $q->addUpdate('task_parent', $this->task_id);
+                $q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
+                $q->addWhere('task_id = ' . (int)$this->task_id);
+                $q->exec();
+                $q->clear();
+            }
             $last_task_data = $this->getLastTaskData($this->task_project);
             CProject::updateTaskCache(
                         $this->task_project,
@@ -2326,6 +2318,7 @@ class CTask extends w2p_Core_BaseObject {
 
 		return $taskArray;
 	}
+
     public function hook_search() {
         $search['table'] = 'tasks';
         $search['table_module'] = 'tasks';
