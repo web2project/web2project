@@ -49,7 +49,7 @@ class CUser extends w2p_Core_BaseObject {
         }
 
         if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
-            $perm_func = 'updateLogin';
+            $this->perm_func = 'updateLogin';
             $tmpUser = new CUser();
             $tmpUser->load($this->user_id);
 
@@ -69,7 +69,7 @@ class CUser extends w2p_Core_BaseObject {
         }
 
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
-            $perm_func = 'addLogin';
+            $this->perm_func = 'addLogin';
             $this->user_password = md5($this->user_password);
 
             if (($msg = parent::store())) {
@@ -79,36 +79,38 @@ class CUser extends w2p_Core_BaseObject {
             }
         }
 
-        if ($stored) {
-            $perms->$perm_func($this->user_id, $this->user_username);
-
-            $q = $this->_query;
-			//Lets check if the user has allready default users preferences set, if not insert the default ones
-			$q->addTable('user_preferences', 'upr');
-			$q->addWhere('upr.pref_user = ' . $this->user_id);
-			$uprefs = $q->loadList();
-			$q->clear();
-
-			if (!count($uprefs) && $this->user_id > 0) {
-				//Lets get the default users preferences
-				$q->addTable('user_preferences', 'dup');
-				$q->addWhere('dup.pref_user = 0');
-				$w2prefs = $q->loadList();
-				$q->clear();
-
-				foreach ($w2prefs as $w2prefskey => $w2prefsvalue) {
-					$q->addTable('user_preferences', 'up');
-					$q->addInsert('pref_user', $this->user_id);
-					$q->addInsert('pref_name', $w2prefsvalue['pref_name']);
-					$q->addInsert('pref_value', $w2prefsvalue['pref_value']);
-					$q->exec();
-					$q->clear();
-				}
-			}
-        }
-
         return $stored;
 	}
+
+    protected function hook_postStore() {
+        $perms->{$this->perm_func}($this->user_id, $this->user_username);
+
+        $q = $this->_query;
+        //Lets check if the user has allready default users preferences set, if not insert the default ones
+        $q->addTable('user_preferences', 'upr');
+        $q->addWhere('upr.pref_user = ' . $this->user_id);
+        $uprefs = $q->loadList();
+        $q->clear();
+
+        if (!count($uprefs) && $this->user_id > 0) {
+            //Lets get the default users preferences
+            $q->addTable('user_preferences', 'dup');
+            $q->addWhere('dup.pref_user = 0');
+            $w2prefs = $q->loadList();
+            $q->clear();
+
+            foreach ($w2prefs as $w2prefskey => $w2prefsvalue) {
+                $q->addTable('user_preferences', 'up');
+                $q->addInsert('pref_user', $this->user_id);
+                $q->addInsert('pref_name', $w2prefsvalue['pref_name']);
+                $q->addInsert('pref_value', $w2prefsvalue['pref_value']);
+                $q->exec();
+                $q->clear();
+            }
+        }
+
+        parent::hook_postStore();
+    }
 
     public function canDelete() {
         $tables[] = array('label' => 'Companies', 'name' => 'companies', 'idfield' => 'company_id', 'joinfield' => 'company_owner');
