@@ -620,83 +620,85 @@ class CTask extends w2p_Core_BaseObject {
             }
 		}
 
-        if ($stored) {
-            if (!$this->task_parent) {
-                $q->addTable('tasks');
-                $q->addUpdate('task_parent', $this->task_id);
-                $q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
-                $q->addWhere('task_id = ' . (int)$this->task_id);
+        return $stored;
+	}
+
+    protected function hook_postStore() {
+        $q = $this->_query;
+
+        if (!$this->task_parent) {
+            $q->addTable('tasks');
+            $q->addUpdate('task_parent', $this->task_id);
+            $q->addUpdate('task_updated', "'".$q->dbfnNowWithTZ()."'", false, true);
+            $q->addWhere('task_id = ' . (int)$this->task_id);
+            $q->exec();
+            $q->clear();
+        }
+        $last_task_data = $this->getLastTaskData($this->task_project);
+        CProject::updateTaskCache(
+                    $this->task_project,
+                    $last_task_data['task_id'],
+                    $last_task_data['last_date'],
+                    $this->getTaskCount($this->task_project));
+        $this->pushDependencies($this->task_id, $this->task_end_date);
+
+        //split out related departments and store them seperatly.
+        $q->setDelete('task_departments');
+        $q->addWhere('task_id=' . (int)$this->task_id);
+        $q->exec();
+        $q->clear();
+        if (!empty($this->task_departments)) {
+            $departments = explode(',', $this->task_departments);
+            foreach ($departments as $department) {
+                $q->addTable('task_departments');
+                $q->addInsert('task_id', $this->task_id);
+                $q->addInsert('department_id', $department);
                 $q->exec();
                 $q->clear();
             }
-            $last_task_data = $this->getLastTaskData($this->task_project);
-            CProject::updateTaskCache(
-                        $this->task_project,
-                        $last_task_data['task_id'],
-                        $last_task_data['last_date'],
-                        $this->getTaskCount($this->task_project));
-            $this->pushDependencies($this->task_id, $this->task_end_date);
+        }
 
-            //split out related departments and store them seperatly.
-            $q->setDelete('task_departments');
-            $q->addWhere('task_id=' . (int)$this->task_id);
-            $q->exec();
-            $q->clear();
-            if (!empty($this->task_departments)) {
-                $departments = explode(',', $this->task_departments);
-                foreach ($departments as $department) {
-                    $q->addTable('task_departments');
+        //split out related contacts and store them seperatly.
+        $q->setDelete('task_contacts');
+        $q->addWhere('task_id=' . (int)$this->task_id);
+
+        $q->exec();
+        $q->clear();
+        if ($this->task_contacts) {
+            foreach ($this->task_contacts as $contact) {
+                if ($contact) {
+                    $q->addTable('task_contacts');
                     $q->addInsert('task_id', $this->task_id);
-                    $q->addInsert('department_id', $department);
+                    $q->addInsert('contact_id', $contact);
                     $q->exec();
                     $q->clear();
                 }
             }
+        }
 
-            //split out related contacts and store them seperatly.
-            $q->setDelete('task_contacts');
-            $q->addWhere('task_id=' . (int)$this->task_id);
+        // if is child update parent task
+        if ($this->task_parent && $this->task_parent != $this->task_id) {
 
-            $q->exec();
-            $q->clear();
-            if ($this->task_contacts) {
-                foreach ($this->task_contacts as $contact) {
-                    if ($contact) {
-                        $q->addTable('task_contacts');
-                        $q->addInsert('task_id', $this->task_id);
-                        $q->addInsert('contact_id', $contact);
-                        $q->exec();
-                        $q->clear();
-                    }
-                }
+            if (!$importing_tasks) {
+                $this->updateDynamics(true);
             }
 
-            // if is child update parent task
-            if ($this->task_parent && $this->task_parent != $this->task_id) {
+            $pTask = new CTask();
+            $pTask->load($this->task_parent);
+            $pTask->updateDynamics();
 
-                if (!$importing_tasks) {
-                    $this->updateDynamics(true);
-                }
-
-                $pTask = new CTask();
-                $pTask->load($this->task_parent);
-                $pTask->updateDynamics();
-
-                if ($oTsk->task_parent != $this->task_parent) {
-                    $old_parent = new CTask();
-                    $old_parent->load($oTsk->task_parent);
-                    $old_parent->updateDynamics();
-                }
-            }
-
-            // update dependencies
-            if (!empty($this->task_id)) {
-                $this->updateDependencies($this->getDependencies(), $this->task_parent);
+            if ($oTsk->task_parent != $this->task_parent) {
+                $old_parent = new CTask();
+                $old_parent->load($oTsk->task_parent);
+                $old_parent->updateDynamics();
             }
         }
 
-        return $stored;
-	}
+        // update dependencies
+        if (!empty($this->task_id)) {
+            $this->updateDependencies($this->getDependencies(), $this->task_parent);
+        }
+    }
 
     /**
      *
