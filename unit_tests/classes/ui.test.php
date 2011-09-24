@@ -66,7 +66,7 @@ class CAppUI_Test extends PHPUnit_Framework_TestCase
 
         $AppUI = new w2p_Core_CAppUI();
 
-        $this->assertInstanceOf('CAppUI',                   $AppUI);
+        $this->assertInstanceOf('w2p_Core_CAppUI',          $AppUI);
         $this->assertObjectHasAttribute('state',            $AppUI);
         $this->assertObjectHasAttribute('user_id',          $AppUI);
         $this->assertObjectHasAttribute('user_first_name',  $AppUI);
