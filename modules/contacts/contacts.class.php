@@ -118,18 +118,7 @@ class CContact extends w2p_Core_BaseObject {
                 $stored = true;
             }
         }
-        if ($stored) {
-            $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
-            $custom_fields->bind($_POST);
-            $sql = $custom_fields->store($this->contact_id); // Store Custom Fields
-        }
 
-        /*
-         *  TODO: I don't like using the $_POST in here..
-         */
-        if ($stored) {
-
-        }
         return $stored;
 	}
 
@@ -142,6 +131,10 @@ class CContact extends w2p_Core_BaseObject {
                 $methods[$field] = $_POST['contact_methods']['value'][$key];
             }
         }
+
+        $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
+        $custom_fields->bind($_POST);
+        $sql = $custom_fields->store($this->contact_id); // Store Custom Fields
         $this->setContactMethods($methods);
 
         parent::hook_postStore();

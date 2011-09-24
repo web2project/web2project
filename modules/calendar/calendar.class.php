@@ -627,9 +627,6 @@ class CEvent extends w2p_Core_BaseObject {
                 $stored = true;
             }
         }
-        if ($stored) {
-
-        }
 
         return $stored;
     }
