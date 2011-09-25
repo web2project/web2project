@@ -239,7 +239,7 @@ class CForum extends w2p_Core_BaseObject {
         $search['table_key'] = 'f.forum_id';
         $search['table_link'] = 'index.php?m=forums&a=viewer&forum_id='; // first part of link
         $search['table_key2'] = 'fm.message_id';
-        $search['table_link2'] = '&message_id='; // first part of link
+        $search['table_link2'] = '&message_id='; // second part of link
 
         $search['table_title'] = 'Forums';
         $search['table_orderby'] = 'forum_name';

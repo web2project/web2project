@@ -89,7 +89,7 @@ foreach ($logs as $row) {
 			$s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=1';
 
 		}
-		$s .= '&task_log_id=' . $row['task_log_id'] . '#log">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a>';
+		$s .= '&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a>';
 	}
 	$s .= '</td>';
 	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($sf) : '-') . '<br /><br />';
