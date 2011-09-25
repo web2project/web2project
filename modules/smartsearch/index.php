@@ -79,19 +79,15 @@ if ($ssearch['advanced_search'] == 'on') {
 	
 	function selModAll() {
 		<?php
-$objarray = array();
 foreach ($hook_modules as $tmp) {
 	$temp = $temp;
-?>
-		document.frmSearch.mod_<?php echo $tmp ?>.checked=true;
-			<?php
+    ?>document.frmSearch.mod_<?php echo $tmp ?>.checked=true;<?php
 }
 ?>
 	}		
 
 	function deselModAll() {
 		<?php
-$objarray = array();
 foreach ($hook_modules as $tmp) {
 	$temp = $tmp;
 ?>
@@ -106,10 +102,9 @@ foreach ($hook_modules as $tmp) {
 
 </script>
 
-
 <?php
-$titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
-$titleBlock->show();
+    $titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
+    $titleBlock->show();
 ?>
 	<table class="std" width="100%" cellspacing="5" cellpadding="0" border="0">
 	<form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">
@@ -155,9 +150,7 @@ $titleBlock->show();
                 ?>
     				  </td>
             </tr>
-		  <?php }
-          $objarray = array();
-		  ?>
+		  <?php } ?>
 				</table>
 			</div>
 	</td></tr>
