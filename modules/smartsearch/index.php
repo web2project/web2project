@@ -4,18 +4,11 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 //--MSy--
-$files = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $m . '/searchobjects', '\.php$');
 $ssearch = array();
 $ssearch['keywords'] = array();
-
 $ssearch['advanced_search'] = w2PgetParam($_POST, 'advancedsearch', '');
-
 $ssearch['mod_selection'] = w2PgetParam($_POST, 'modselection', '');
-sort($files);
-foreach ($files as $tmp) {
-	$temp = substr($tmp, 0, -8);
-	$ssearch['mod_' . $temp] = w2PgetParam($_POST, 'mod_' . $temp, '');
-}
+
 $hook_modules = array();
 $moduleList = $AppUI->getLoadableModuleList();
 asort($moduleList);
@@ -87,12 +80,6 @@ if ($ssearch['advanced_search'] == 'on') {
 	function selModAll() {
 		<?php
 $objarray = array();
-foreach ($files as $tmp) {
-	$temp = substr($tmp, 0, -8);
-?>							
-		document.frmSearch.mod_<?php echo $temp ?>.checked=true;
-			<?php
-}
 foreach ($hook_modules as $tmp) {
 	$temp = $temp;
 ?>
@@ -105,12 +92,6 @@ foreach ($hook_modules as $tmp) {
 	function deselModAll() {
 		<?php
 $objarray = array();
-foreach ($files as $tmp) {
-	$temp = substr($tmp, 0, -8);
-?>							
-		document.frmSearch.mod_<?php echo $temp ?>.checked=false;
-			<?php
-}
 foreach ($hook_modules as $tmp) {
 	$temp = $tmp;
 ?>
@@ -176,24 +157,6 @@ $titleBlock->show();
             </tr>
 		  <?php }
           $objarray = array();
-          foreach ($files as $tmp) {
-          	require_once ('./modules/' . $m . '/searchobjects/' . $tmp);
-          	$temp = substr($tmp, 0, -8);
-          	$tempf = $temp . '()';
-          	eval("\$class_obj = new $tempf;");
-          	$temp_title = $class_obj->table_title;
-          	$objarray[$temp] = $temp_title;
-            ?>
-    		<tr>
-              <td width="10" align="left"><input name="mod_<?php echo $temp; ?>" id="mod_<?php echo $temp; ?>" type="checkbox" 
-      				  <?php
-                  echo ($ssearch['mod_' . $temp] == 'on') ? 'checked="checked"' : '';
-    	             echo ' /></td><td align="left"><label for="mod_' . $temp . '">' . $AppUI->_($objarray[$temp]) . '</label>';
-                ?> 
-    				  </td>
-            </tr>
-  		  <?php
-		  }
 		  ?>
 				</table>
 			</div>
@@ -261,22 +224,7 @@ if (isset($_POST['keyword'])) {
   <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
   	<?php
     	$perms = &$AppUI->acl();
-    	sort($files);
     	$reccount = 0;
-    	foreach ($files as $tmp) {
-    		require_once ('./modules/' . $m . '/searchobjects/' . $tmp);
-    		$temp = substr($tmp, 0, -8);
-    		if ($ssearch['mod_selection'] == '' || $ssearch['mod_' . $temp] == 'on') {
-    			$temp .= '()';
-    			eval("\$class_search = new $temp;");
-    			$class_search->setKeyword($search->keyword);
-    			if (method_exists($class_search, 'setAdvanced')) {
-    				$class_search->setAdvanced($ssearch);
-    			}
-    			$results = $class_search->fetchResults($perms, $reccount);
-    			echo $results;
-    		}
-    	}
 
 		reset($moduleList);
         foreach ($moduleList as $module) {
