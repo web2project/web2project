@@ -234,13 +234,20 @@ class CForum extends w2p_Core_BaseObject {
 
     public function hook_search() {
         $search['table'] = 'forums';
+        $search['table_alias'] = 'f';
         $search['table_module'] = 'forums';
-        $search['table_key'] = 'forum_id';
+        $search['table_key'] = 'f.forum_id';
         $search['table_link'] = 'index.php?m=forums&a=viewer&forum_id='; // first part of link
+        $search['table_key2'] = 'fm.message_id';
+        $search['table_link2'] = '&message_id='; // first part of link
+
         $search['table_title'] = 'Forums';
         $search['table_orderby'] = 'forum_name';
-        $search['search_fields'] = array('forum_name', 'forum_description');
+        $search['search_fields'] = array('forum_name', 'forum_description',
+            'message_title', 'message_body');
         $search['display_fields'] = $search['search_fields'];
+        $search['table_joins'] = array(array('table' => 'forum_messages',
+            'alias' => 'fm', 'join' => 'f.forum_id = fm.message_forum'));
 
         return $search;
     }
