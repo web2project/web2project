@@ -21,7 +21,7 @@ class w2p_Core_Preferences {
 
 	public function bind($hash) {
 		if (!is_array($hash)) {
-			return 'CPreferences::bind failed';
+			return 'w2p_Core_Preferences::bind failed';
 		} else {
 			$q = new w2p_Database_Query;
 			$q->bindHashToObject($hash, $this);

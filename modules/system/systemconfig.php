@@ -15,7 +15,7 @@ if ($reset == 1) {
 	$obj->recalcPermissions();
 } 
 
-$w2Pcfg = new CConfig();
+$w2Pcfg = new w2p_Core_Config();
 
 // retrieve the system configuration data
 $rs = $w2Pcfg->loadAll('config_group');

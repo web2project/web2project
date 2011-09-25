@@ -8,7 +8,7 @@ if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$obj = new CConfig();
+$obj = new w2p_Core_Config();
 
 // set all checkboxes to false
 // overwrite the true/enabled/checked checkboxes later
