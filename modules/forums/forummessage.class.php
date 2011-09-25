@@ -156,6 +156,7 @@ class CForumMessage extends w2p_Core_BaseObject {
 
 		// Get the message from details.
 		$q = $this->_query;
+        $q->clear();
 		$q->addTable('users', 'u');
 		$q->addQuery('contact_first_name, contact_last_name, contact_email');
 		$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
