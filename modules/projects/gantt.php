@@ -3,9 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $company_id, $dept_ids, $department, $locale_char_set, 
-    $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt,
-    $user_id, $w2Pconfig, $sortTasksByName;
+global $AppUI, $dept_ids, $w2Pconfig;
 
 w2PsetExecutionConditions($w2Pconfig);
 
@@ -13,7 +11,6 @@ w2PsetExecutionConditions($w2Pconfig);
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $projectStatus = w2PgetSysVal('ProjectStatus');
-$projectStatus = arrayMerge(array('-2' => $AppUI->_('All w/o in progress')), $projectStatus);
 $user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
 
 // prepare the type filter

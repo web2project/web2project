@@ -3,9 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $caller, $locale_char_set, $showWork,              $showLabels,
-                $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, 
-    $showLowTasks, $user_id;
+global $caller, $showWork, $showLabels, $showPinned, $showArcProjs,
+        $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
 
 w2PsetExecutionConditions($w2Pconfig);
 
