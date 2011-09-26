@@ -16,11 +16,6 @@ $projectStatus = w2PgetSysVal('ProjectStatus');
 $projectStatus = arrayMerge(array('-2' => $AppUI->_('All w/o in progress')), $projectStatus);
 $user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
 
-if ($AppUI->user_id == $user_id) {
-	$projectStatus = arrayMerge(array('-3' => $AppUI->_('My projects')), $projectStatus);
-} else {
-	$projectStatus = arrayMerge(array('-3' => $AppUI->_('User\'s projects')), $projectStatus);
-}
 // prepare the type filter
 if (isset($_POST['project_type'])) {
 	$AppUI->setState('ProjIdxType', intval($_POST['project_type']));
@@ -33,7 +28,7 @@ if (isset($_POST['project_owner'])) {
 }
 $owner = $AppUI->getState('ProjIdxowner') !== null ? $AppUI->getState('ProjIdxowner') : 0;
 
-$proFilter = w2PgetParam($_REQUEST, 'proFilter', '-1');
+$statusFilter = (int) w2PgetParam($_REQUEST, 'proFilter', -1);
 $company_id = w2PgetParam($_REQUEST, 'company_id', 0);
 $department = w2PgetParam($_REQUEST, 'department', 0);
 $showLabels = w2PgetParam($_REQUEST, 'showLabels', 0);
@@ -76,10 +71,8 @@ if ($project_type > -1) {
 if ($owner > 0) {
 	$q->addWhere('pr.project_owner = ' . (int)$owner);
 }
-if ($proFilter == '-3') {
-	$q->addWhere('pr.project_owner = ' . (int)$user_id);
-} elseif ($proFilter != '-1') {
-	$q->addWhere('pr.project_status = ' . (int)$proFilter);
+if ($statusFilter > -1) {
+	$q->addWhere('pr.project_status = ' . (int)$statusFilter);
 }
 if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
 	$q->addWhere('pr.project_company = ' . (int)$company_id);
@@ -111,7 +104,7 @@ $showAllGantt = w2PgetParam($_REQUEST, 'showAllGantt', '0');
 $gantt = new w2p_Output_GanttRenderer($AppUI, $width);
 $gantt->localize();
 
-$tableTitle = ($proFilter == '-1') ? $AppUI->_('All Projects') : $projectStatus[$proFilter];
+$tableTitle = ($statusFilter == '-1') ? $AppUI->_('All Projects') : $projectStatus[$statusFilter];
 $gantt->setTitle($tableTitle);
 $columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End');
 $columnSizes = array(160, 75, 75, 75);

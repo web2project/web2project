@@ -39,14 +39,6 @@ if (isset($_POST['proFilter'])) {
 $proFilter = $AppUI->getState('ProjectIdxFilter') !== null ? $AppUI->getState('ProjectIdxFilter') : '-1';
 
 $projFilter = arrayMerge(array('-1' => 'All Projects'), $projectStatus);
-if ($AppUI->user_id == $user_id) {
-	$projFilter = arrayMerge(array('-3' => 'My projects'), $projFilter);
-} else {
-	$projFilter = arrayMerge(array('-3' => 'User\'s projects'), $projFilter);
-}
-
-natsort($projFilter);
-
 // months to scroll
 $scroll_date = 1;
 
