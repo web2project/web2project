@@ -74,6 +74,22 @@ class CFile extends w2p_Core_BaseObject {
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->file_owner = $AppUI->user_id;
 
+            $q = $this->_query;
+            $q->addTable('files');
+            $q->clear();
+            if (!$this->file_version_id) {
+                $q->addQuery('file_version_id');
+                $q->addOrder('file_version_id DESC');
+                $q->setLimit(1);
+                $latest_file_version = $q->loadResult();
+                $this->file_version_id = $latest_file_version + 1;
+            } else {
+                $q->addUpdate('file_checkout', '');
+                $q->addWhere('file_version_id = ' . (int)$this->file_version_id);
+                $q->exec();
+            }
+            $q->clear();
+
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {

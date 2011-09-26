@@ -74,6 +74,7 @@ if ($duplicate) {
 		$AppUI->redirect();
 	} else {
 		$new_file->file_real_filename = $dup_realname;
+        //TODO: remove this db reference..
 		$new_file->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
         $result = $new_file->store($AppUI);
 
@@ -149,26 +150,6 @@ if ($file_id && ($obj->file_project != $oldObj->file_project)) {
 	if (!$res) {
 		$AppUI->setMsg('File could not be moved', UI_MSG_ERROR);
 		$AppUI->redirect($redirect);
-	}
-}
-
-if (!$file_id) {
-	if (!$obj->file_version_id) {
-		$q = new w2p_Database_Query;
-		$q->addTable('files');
-		$q->addQuery('file_version_id');
-		$q->addOrder('file_version_id DESC');
-		$q->setLimit(1);
-		$latest_file_version = $q->loadResult();
-		$q->clear();
-		$obj->file_version_id = $latest_file_version + 1;
-	} else {
-		$q = new w2p_Database_Query;
-		$q->addTable('files');
-		$q->addUpdate('file_checkout', '');
-		$q->addWhere('file_version_id = ' . (int)$obj->file_version_id);
-		$q->exec();
-		$q->clear();
 	}
 }
 
