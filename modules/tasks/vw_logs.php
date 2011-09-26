@@ -83,12 +83,8 @@ foreach ($logs as $row) {
 
 	$s .= '<tr bgcolor="white" valign="top"><td>';
 	if ($canEdit) {
-		if ($tab == -1) {
-			$s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=' . $AppUI->getState('TaskLogVwTab');
-		} else {
-			$s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=1';
-
-		}
+		$s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=';
+        $s .= ($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1';
 		$s .= '&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a>';
 	}
 	$s .= '</td>';
