@@ -72,6 +72,8 @@ class CFile extends w2p_Core_BaseObject {
             }
         }
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
+            $this->file_owner = $AppUI->user_id;
+
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {

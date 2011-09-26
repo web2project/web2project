@@ -75,8 +75,10 @@ if ($duplicate) {
 	} else {
 		$new_file->file_real_filename = $dup_realname;
 		$new_file->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
-		if (($msg = $new_file->store($AppUI))) {
-			$AppUI->setMsg($msg, UI_MSG_ERROR);
+        $result = $new_file->store($AppUI);
+
+        if (count($new_file->getError())) {
+			$AppUI->setMsg($new_file->getError(), UI_MSG_ERROR);
 			$AppUI->redirect($redirect);
 		} else {
 			$AppUI->setMsg('duplicated', UI_MSG_OK, true);
@@ -87,10 +89,14 @@ if ($duplicate) {
 
 // delete the file
 if ($del) {
-	if (($msg = $obj->delete($AppUI))) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
+	$result = $obj->delete($AppUI);
+
+    if (count($obj->getError())) {
+		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 		$AppUI->redirect();
-	} else {
+	}
+
+    if ($result) {
 		$obj->notify($notify);
         $obj->notifyContacts($notifyContacts);
 
@@ -117,7 +123,8 @@ if (isset($_FILES['formfile'])) {
 	if ($upload['size'] < 1) {
 		if (!$file_id) {
 			$AppUI->setMsg('Upload file size is zero. Process aborted.', UI_MSG_ERROR);
-			$AppUI->redirect($redirect);
+            $AppUI->holdObject($obj);
+			$AppUI->redirect('m=files&a=addedit');
 		}
 	} else {
 
@@ -146,7 +153,6 @@ if ($file_id && ($obj->file_project != $oldObj->file_project)) {
 }
 
 if (!$file_id) {
-	$obj->file_owner = $AppUI->user_id;
 	if (!$obj->file_version_id) {
 		$q = new w2p_Database_Query;
 		$q->addTable('files');
@@ -168,14 +174,13 @@ if (!$file_id) {
 
 $result = $obj->store($AppUI);
 
-if (is_array($result)) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
+if (count($obj->getError())) {
+    $AppUI->setMsg($obj->getError(), UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
     $AppUI->redirect('m=files&a=addedit');
 }
 if ($result) {
 	// Notification
-	$obj->load($obj->file_id);
 	$obj->notify($notify);
     $obj->notifyContacts($notifyContacts);
 
