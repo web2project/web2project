@@ -11,7 +11,6 @@ $project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 $f = w2PgetParam($_REQUEST, 'f', 0);
 
 $showLabels = (int) w2PgetParam($_REQUEST, 'showLabels', 0);
-$sortByName = (int) w2PgetParam($_REQUEST, 'sortByName', 0);
 $showWork = (int) w2PgetParam($_REQUEST, 'showWork', 0);
 
 $ganttTaskFilter = (int) w2PgetParam($_REQUEST, 'ganttTaskFilter', 0);
