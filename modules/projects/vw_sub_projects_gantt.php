@@ -182,12 +182,8 @@ if (!is_array($projects) || sizeof($projects) == 0) {
         }
 
         foreach ($projects as $p) {
-            if ($locale_char_set == 'utf-8') {
-                $name = strlen(utf8_decode($p['project_name'])) > 25 ? substr(utf8_decode($p['project_name']), 0, 22) . '...' : utf8_decode($p['project_name']);
-            } else {
-                //while using charset different than UTF-8 we need not to use utf8_deocde
-                $name = strlen($p['project_name']) > 25 ? substr($p['project_name'], 0, 22) : $p['project_name'];
-            }
+            $name = strlen(utf8_decode($p['project_name'])) > 25 ? substr(utf8_decode($p['project_name']), 0, 22) . '...' : utf8_decode($p['project_name']);
+
             //using new jpGraph determines using Date object instead of string
             $start = ($p['project_start_date'] > '0000-00-00 00:00:00') ? $p['project_start_date'] : date('Y-m-d H:i:s');
             $start = new w2p_Utilities_Date($start);
