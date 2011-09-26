@@ -13,8 +13,10 @@
 class w2p_Authenticators_PostNuke extends w2p_Authenticators_SQL {
 
 	public function __construct() {
-		global $w2Pconfig;
+        global $w2Pconfig;
 		$this->fallback = isset($w2Pconfig['postnuke_allow_login']) ? $w2Pconfig['postnuke_allow_login'] : false;
+
+        trigger_error("w2p_Authenticators_PostNuke has been deprecated in v3.0 and will be removed by v4.0. There is no replacement as PostNuke is a dead project.", E_USER_NOTICE );
 	}
 
 	public function authenticate($username, $password) {
