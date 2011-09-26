@@ -3,11 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $caller, $locale_char_set, $showWork, $sortByName, $showLabels, 
-    $gantt_arr, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks,
-    $showLowTasks, $user_id, $w2Pconfig, $project_id;
-global $show_days, $start_date_min, $end_date_max, $day_diff;
-global $gtask_sliced, $printpdfhr, $showNoMilestones;
+global $gantt_arr, $w2Pconfig, $project_id, $gtask_sliced, $printpdfhr, $showNoMilestones;
 
 w2PsetExecutionConditions($w2Pconfig);
 
