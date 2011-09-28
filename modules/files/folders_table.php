@@ -48,7 +48,7 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 $file_types = w2PgetSysVal('FileType');
 
 $myFolder = new CFileFolder();
-$xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $project_id, $company_id);
+$xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $project_id, $company_id, $allowed_companies);
 ?>
 <script language="javascript" type="text/javascript">
 function expand(id){
