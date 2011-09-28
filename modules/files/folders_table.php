@@ -15,6 +15,11 @@ if ($folder_id) {
     $msg = '';
     $canDelete = $cfObj->canDelete($msg, $folder);
 }
+if(!$folder_id && isset($_GET['folder_id'])) {
+    $folder_id = w2PgetParam($_REQUEST, 'folder_id', 0);
+    $cfObj = new CFileFolder();
+    $cfObj->load($folder_id);
+}
 // Files modules: index page re-usable sub-table
 
 // add to allow for returning to other modules besides Files
@@ -51,10 +56,21 @@ $myFolder = new CFileFolder();
 $xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $project_id, $company_id);
 ?>
 <script language="javascript" type="text/javascript">
-function expand(id){
-	var element = document.getElementById(id);
-	element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
-}
+    $('body').ready(function(){
+        $('.filestbl').hide();
+    });
+    $('body').delegate('a.has-files', 'click', function(e){
+        var folderId = $(this).attr('id');
+        var fileTableId = '#filestbl_' + folderId.slice(folderId.lastIndexOf("_")+1);
+        var elem = $(fileTableId);
+        elem.toggle();
+        if(elem.is(':visible')){
+            elem.html(elem.html().replace('-', '+'));
+        } else {
+            elem.html(elem.html().replace('-', '+'));
+        }
+        return false;
+    });
 function addBulkComponent(li) {
 //IE
 	if (document.all || navigator.appName == 'Microsoft Internet Explorer') {

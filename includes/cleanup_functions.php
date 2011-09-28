@@ -2156,7 +2156,7 @@ function getFolderSelectList() {
  */
 // From: modules/files/filefolder.class.php
 function getFolders($parent, $level = 0) {
-	global $AppUI, $allowed_folders_ary, $denied_folders_ary, $tab, $m, $a, $company_id, $allowed_companies, $project_id, $task_id, $current_uri, $file_types;
+	global $AppUI, $allowed_folders_ary, $tab, $m, $a, $company_id, $project_id, $task_id;
 	// retrieve all children of $parent
 
     $file_folder = new CFileFolder();
@@ -2164,39 +2164,33 @@ function getFolders($parent, $level = 0) {
 
 	$s = '';
 	// display each child
-	foreach ($folders as $row) {
-		if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
+    foreach ($folders as $row) {
+        if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
             $file_count = countFiles($row['file_folder_id']);
 
             $s .= '<tr><td colspan="20">';
-            if ($m == 'files') {
-                $s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&folder=' . $row['file_folder_id'] . '" name="ff' . $row['file_folder_id'] . '">';
-            }
+            $s .= '<a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . $tab . '&folder_id=' . $row['file_folder_id'] . '&project_id=' . $project_id . '">';
             $s .= '<img src="' . w2PfindImage('folder5_small.png', 'files') . '" width="16" height="16" style="float: left; border: 0px;" />';
             $s .= $row['file_folder_name'];
-            if ($m == 'files') {
-                $s .= '</a>';
-            }
+            $s .= '</a>';
             if ($file_count > 0) {
-                $s .= ' <a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a>';
+                $s .= ' <a href="" id="folder_' . $row['file_folder_id'] . '" class="has-files">(' . $file_count . ' files) +</a>';
             }
             $s .= '<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
                     <input type="hidden" name="dosql" value="do_folder_aed" />
                     <input type="hidden" name="del" value="1" />
                     <input type="hidden" name="file_folder_id" value="' . $row['file_folder_id'] . '" />
                     </form>';
-            $s .= '<a style="float:left;" href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '16', '16', 'edit icon', 'edit this folder', 'files') . '</a>' .
-                  '<a style="float:left;" href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'new folder', 'add a new subfolder', 'files') . '</a>' .
-                  '<a style="float:right;" href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>' .
-                  '<a style="float:left;" href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id . '&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a>';
+            $s .= '<a style="float:left;" href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '16', '16', 'Edit Folder', 'Edit this folder', 'files') . '</a>' .
+                    '<a style="float:left;" href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'New Folder', 'Add a new subfolder', 'files') . '</a>' .
+                    '<a style="float:right;" href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'Delete Folder', 'Delete this folder', 'files') . '</a>' .
+                    '<a style="float:left;" href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id . '&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a>';
             $s .= '</td></tr>';
             if ($file_count > 0) {
-                $s .= '<div class="files-list" id="files_' . $row['file_folder_id'] . '" style="display: none;">';
-                $s .= displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id);
-                $s .= "</div>";
+                $s .= displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id, false, true);
             }
-		}
-	}
+        }
+    }
 
 	return $s;
 }
@@ -2239,7 +2233,7 @@ function countFiles($folder) {
 }
 
 // From: modules/files/filefolder.class.php
-function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
+function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $skip_headers=false, $skip_projects=false) {
 	global $m, $a, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types, 
             $cfObj, $xpg_totalrecs, $xpg_total_pages, $page, $company_id,
             $allowed_companies, $current_uri, $w2Pconfig, $canEdit, $canRead;
@@ -2322,9 +2316,9 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 		return 0;
 	}
 
-	$s = '
-		<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
-		<tr>
+	$s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" id="filestbl_' . $folder_id . '" class="tbl filestbl">';
+        if (!$skip_headers) {
+        $s .= '<tr>
 			<th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
 			<th>' . $AppUI->_('Description') . '</th>
 			<th>' . $AppUI->_('Versions') . '</th>
@@ -2339,7 +2333,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 			<th nowrap="nowrap" width="5%"></th>
 			<th nowrap="nowrap" width="1"></th>
 		</tr>';
-
+    }
 	$fp = -1;
 	$file_date = new w2p_Utilities_Date();
 
@@ -2349,11 +2343,11 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 		$file_date = new w2p_Utilities_Date($latest_file['file_date']);
 
 		if ($fp != $latest_file['file_project']) {
-			if (!$latest_file['file_project']) {
+			if (!$latest_file['file_project']){
 				$latest_file['project_name'] = $AppUI->_('Not attached to a project');
 				$latest_file['project_color_identifier'] = 'f4efe3';
 			}
-			if ($showProject) {
+			if ($showProject && !$skip_projects) {
 				$style = 'background-color:#' . $latest_file['project_color_identifier'] . ';color:' . bestColor($latest_file['project_color_identifier']);
 				$s .= '<tr>';
 				$s .= '<td colspan="20" style="border: outset 2px #eeeeee;' . $style . '">';
@@ -2427,7 +2421,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 					$hidden_table .= '</td><tr>';
 				}
 			}
-			$hidden_table .= '</table>';
+			$hidden_table .= '';
 		}
 		$s .= '</td>
 				<td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
