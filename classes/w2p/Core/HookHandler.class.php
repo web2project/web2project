@@ -28,6 +28,11 @@ class w2p_Core_HookHandler
         $this->AppUI = $AppUI;
     }
 
+    /*
+     * This is the generic hook handler that counts on no result, feedback, etc.
+     *   In general, this may be enough, but the additional methods may be
+     *   useful too.
+     */
     public function process($name)
     {
         $hookname = 'hook_'.$name;
@@ -41,5 +46,29 @@ class w2p_Core_HookHandler
                 }
             }
         }
+    }
+
+    public function calendar()
+    {
+        $hookname = 'hook_calendar';
+        $moduleList = $this->AppUI->getLoadableModuleList();
+
+        foreach ($moduleList as $module) {
+            if (class_exists($module['mod_main_class'])) {
+                $object = new $module['mod_main_class']();
+                if (is_callable(array($object, $hookname))) {
+                    $itemList = $object->{$hookname}($this->user_id);
+                    foreach ($itemList as $calendarItem) {
+                        $buffer .= w2p_API_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
+                    }
+                }
+            }
+        }
+
+        return $buffer;
+    }
+
+    public function setUser($user_id) {
+        $this->user_id = $user_id;
     }
 }
