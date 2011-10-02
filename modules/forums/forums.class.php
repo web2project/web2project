@@ -52,7 +52,7 @@ class CForum extends w2p_Core_BaseObject {
 
     public function getMessages(w2p_Core_CAppUI $AppUI, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addTable('forums');
         $q->addTable('forum_messages');
         $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email,
@@ -68,7 +68,7 @@ class CForum extends w2p_Core_BaseObject {
 
     public function load(w2p_Core_CAppUI $AppUI, $forum_id) {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addQuery('*');
         $q->addTable('forums');
         $q->addWhere('forum_id = ' . (int) $forum_id);
@@ -77,7 +77,7 @@ class CForum extends w2p_Core_BaseObject {
 
     public function loadFull(w2p_Core_CAppUI $AppUI, $forum_id) {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addTable('forums');
         $q->addTable('users', 'u');
         $q->addQuery('forum_id, forum_project,	forum_description, forum_owner, forum_name,
@@ -101,9 +101,9 @@ class CForum extends w2p_Core_BaseObject {
     {
         $project = new CProject();
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addTable('forums');
-        
+
         $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name');
         $q->addQuery('forum_moderated, forum_create_date, forum_last_date');
         $q->addQuery('sum(if(c.message_parent=-1,1,0)) as forum_topics, sum(if(c.message_parent>0,1,0)) as forum_replies');
@@ -183,7 +183,7 @@ class CForum extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
-            $q = $this->_query;
+            $q = $this->_getQuery();
             $q->setDelete('forum_visits');
             $q->addWhere('visit_forum = ' . (int)$this->forum_id);
             $q->exec(); // No error if this fails, it is not important.
