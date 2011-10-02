@@ -127,7 +127,8 @@ class CFileFolder extends w2p_Core_BaseObject {
 		return (int) $q->loadResult();
 	}
 
-    public function getFileCountByFolder(w2p_Core_CAppUI $AppUI, $folder_id, $task_id, $project_id, $company_id) {
+    public function getFileCountByFolder(w2p_Core_CAppUI $AppUI, $folder_id,
+            $task_id, $project_id, $company_id, $allowed_companies) {
 
         global $allowed_companies; //FIXME: Had to introduce this since it wasnt defined
         

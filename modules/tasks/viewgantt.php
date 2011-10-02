@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 global $AppUI, $min_view, $m, $a, $user_id, $tab, $tasks, $cal_sdf;
-GLOBAL $sortByName, $project_id, $gantt_map, $currentGanttImgSource, $filter_task_list, $caller;
+GLOBAL $gantt_map, $currentGanttImgSource, $filter_task_list, $caller;
 $AppUI->loadCalendarJS();
 
 $base_url = w2PgetConfig('base_url');
@@ -425,16 +425,16 @@ if (!$min_view) {
             }
             if ($cnt[0]['N'] > 0) {
 				 $src = ('?m=tasks&a=gantt&suppressHeaders=1&project_id=' . $project_id 
-						 . (($display_option == 'all') ? '' 
-						    : ('&start_date=' . $start_date->format('%Y-%m-%d') 
-						       . '&end_date=' . $end_date->format('%Y-%m-%d'))) 
-						 . "&width=' + ((navigator.appName=='Netscape'" 
-						 . "?window.innerWidth:document.body.offsetWidth)*0.95) + '" 
-						 . '&showLabels=' . $showLabels . '&showWork=' . $showWork 
-						 . '&sortByName=' . $sortByName . '&showTaskNameOnly=' . $showTaskNameOnly 
-						   . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned 
-						 . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs 
-						 . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks 
+						 . (($display_option == 'all') ? ''
+						    : ('&start_date=' . $start_date->format('%Y-%m-%d')
+						       . '&end_date=' . $end_date->format('%Y-%m-%d')))
+						 . "&width=' + ((navigator.appName=='Netscape'"
+						 . "?window.innerWidth:document.body.offsetWidth)*0.95) + '"
+						 . '&showLabels=' . $showLabels . '&showWork=' . $showWork
+						 . '&showTaskNameOnly=' . $showTaskNameOnly
+						   . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
+						 . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs
+						 . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks
 						 . '&caller=' . $a . '&user_id=' . $user_id
 						   . '&printpdf=' . $printpdf . '&showNoMilestones=' . $showNoMilestones . '&showMilestonesOnly=' . $showMilestonesOnly
 						   . '&addLinksToGantt=' . $addLinksToGantt . '&ganttTaskFilter=' . $ganttTaskFilter
@@ -468,16 +468,15 @@ if (!$min_view) {
 				$_POST['end_date'] = $end_date->format('%Y-%m-%d');
 				$_POST['display_option'] = $display_option;
 				$_POST['showLabels']= $showLabels;
-				$_POST['showWork']= $showWork; 
-				$_POST['sortByName']= $sortByName;
-				$_POST['showTaskNameOnly']= $showTaskNameOnly; 
+				$_POST['showWork']= $showWork;
+				$_POST['showTaskNameOnly']= $showTaskNameOnly;
 				$_POST['showhgrid']= $showhgrid;
-				$_POST['showPinned']= $showPinned; 
+				$_POST['showPinned']= $showPinned;
 				$_POST['showArcProjs']= $showArcProjs;
-				$_POST['showHoldProjs']= $showHoldProjs; 
+				$_POST['showHoldProjs']= $showHoldProjs;
 				$_POST['showDynTasks']= $showDynTasks;
-				$_POST['showLowTasks']= $showLowTasks; 
-				$_POST['caller']= $a; 
+				$_POST['showLowTasks']= $showLowTasks;
+				$_POST['caller']= $a;
 				$_POST['user_id']= $user_id;
 				$_POST['printpdfhr']= $printpdfhr;
 				$_POST['showPinned']= $showPinned;

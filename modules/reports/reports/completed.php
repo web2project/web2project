@@ -26,11 +26,8 @@ require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 $pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
 $pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 $pdf->selectFont($font_dir . '/Helvetica.afm');
-if ($locale_char_set == 'utf-8') {
-	$pdf->ezText(utf8_decode(w2PgetConfig('company_name')), 12);
-} else {
-	$pdf->ezText(w2PgetConfig('company_name'), 12);
-}
+$pdf->ezText(utf8_decode(w2PgetConfig('company_name')), 12);
+
 $date = new w2p_Utilities_Date();
 $pdf->ezText("\n" . $date->format($df), 8);
 $last_week = new w2p_Utilities_Date($date);
@@ -38,14 +35,11 @@ $last_week->subtractSpan(new Date_Span(array(7, 0, 0, 0)));
 
 $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
 $pdf->ezText("\n" . $AppUI->_('Project Completed Task Report'), 12);
-if ($locale_char_set == 'utf-8') {
-	$pdf->ezText(utf8_decode($pname), 15);
-} else {
-	$pdf->ezText($pname, 15);
-}
+$pdf->ezText(utf8_decode($pname), 15);
 $pdf->ezText($AppUI->_('Tasks Completed Since') . ' ' . $last_week->format($df), 10);
 $pdf->ezText("\n");
 $pdf->selectFont($font_dir . '/Helvetica.afm');
+
 $title = null;
 $options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'left', 'width' => 120), 2 => array('justification' => 'center', 'width' => 120), 3 => array('justification' => 'center', 'width' => 75), 4 => array('justification' => 'center', 'width' => 75)));
 

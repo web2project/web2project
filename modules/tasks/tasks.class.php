@@ -1720,8 +1720,11 @@ class CTask extends w2p_Core_BaseObject {
 		return $q->loadHashList('user_id');
 	}
 
+    /*
+     * This looks quite similar to getDependentTaskList below but this gets a
+     *   list of the dependencies for $taskId (aka tasks leading into $taskId).
+     */
 	public function getDependencyList($taskId) {
-
         $q = $this->_query;
 		$q->addQuery('td.dependencies_req_task_id, t.task_name, t.task_percent_complete');
 		$q->addTable('tasks', 't');
@@ -1731,8 +1734,12 @@ class CTask extends w2p_Core_BaseObject {
 
 		return $q->loadHashList('dependencies_req_task_id');
 	}
-	public function getDependentTaskList($taskId) {
 
+    /*
+     * This looks quite similar to getDependencyList above but this gets a list
+     *   of tasks that are dependent on $taskId (aka coming after $taskId).
+     */
+	public function getDependentTaskList($taskId) {
         $q = $this->_query;
 		$q->addQuery('td.dependencies_task_id, t.task_name, t.task_percent_complete');
 		$q->addTable('tasks', 't');

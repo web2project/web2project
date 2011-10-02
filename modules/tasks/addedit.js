@@ -231,9 +231,11 @@ function toggleMilestone() {
 }
 /**
 * @modify_reason calculating duration does not include time information and cal_working_days stored in config.php
+*
+* @deprecated in favor of includes/ajax_functions.php which calculates the duration
+*   on the backend and passes it back via the xajax library.
 */
 function calcDuration(f) {
-
 	var int_st_date = new String(f.task_start_date.value + f.start_hour.value + f.start_minute.value);
 	var int_en_date = new String(f.task_end_date.value + f.end_hour.value + f.end_minute.value);
 
@@ -325,7 +327,9 @@ function calcDuration(f) {
 	}
 }
 /**
-* Get the end of the previous working day 
+* Get the end of the previous working day
+*
+* @deprecated (not used)
 */
 function prev_working_day( dateObj ) {
 	while ( ! isInArray(working_days, dateObj.getDay()) || dateObj.getHours() < cal_day_start ||
@@ -339,7 +343,9 @@ function prev_working_day( dateObj ) {
 	return dateObj;
 }
 /**
-* Get the start of the next working day 
+* Get the start of the next working day
+*
+* @deprecated (not used)
 */
 function next_working_day( dateObj ) {
 	while ( ! isInArray(working_days, dateObj.getDay()) || dateObj.getHours() >= cal_day_end ) {
@@ -351,7 +357,10 @@ function next_working_day( dateObj ) {
 	return dateObj;
 }
 /**
-* @modify reason calcFinish does not use time info and working_days array 
+* @modify reason calcFinish does not use time info and working_days array
+*
+* @deprecated in favor of includes/ajax_functions.php which calculates the finish
+*   date on the backend and passes it back via the xajax library.
 */
 function calcFinish(f) {
 	//var int_st_date = new String(f.task_start_date.value);

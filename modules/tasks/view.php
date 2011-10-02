@@ -242,14 +242,13 @@ function delIt() {
                         ?>
                     </td>
                 </tr>
-
-                <?php $taskDep = $obj->getDependencyList($task_id); ?>
                 <tr>
                     <td colspan="3"><strong><?php echo $AppUI->_('Dependencies'); ?></strong></td>
                 </tr>
                 <tr>
                     <td colspan="3">
                     <?php
+                        $taskDep = $obj->getDependencyList($task_id);
                         $s = count($taskDep) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
                         foreach ($taskDep as $key => $array) {
                             $s .= '<tr><td class="hilite">';
@@ -262,13 +261,13 @@ function delIt() {
                     ?>
                     </td>
                 </tr>
-                <?php $dependingTasks = $obj->getDependentTaskList($task_id); ?>
                 <tr>
                     <td colspan="3"><strong><?php echo $AppUI->_('Tasks depending on this Task'); ?></strong></td>
                 </tr>
                 <tr>
                     <td colspan="3">
                     <?php
+                        $dependingTasks = $obj->getDependentTaskList($task_id);
                         $s = count($dependingTasks) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
                         foreach ($dependingTasks as $key => $array) {
                             $s .= '<tr><td class="hilite">';
