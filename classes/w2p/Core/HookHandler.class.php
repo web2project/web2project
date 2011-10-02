@@ -57,7 +57,7 @@ class w2p_Core_HookHandler
             if (class_exists($module['mod_main_class'])) {
                 $object = new $module['mod_main_class']();
                 if (is_callable(array($object, $hookname))) {
-                    $itemList = $object->{$hookname}($this->user_id);
+                    $itemList = $object->{$hookname}($this->AppUI->user_id);
                     foreach ($itemList as $calendarItem) {
                         $buffer .= w2p_API_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
                     }
@@ -68,7 +68,24 @@ class w2p_Core_HookHandler
         return $buffer;
     }
 
-    public function setUser($user_id) {
-        $this->user_id = $user_id;
+    public function calendar_links()
+    {
+        $hookname = 'hook_calendar_links';
+        $moduleList = $this->AppUI->getLoadableModuleList();
+
+        foreach ($moduleList as $module) {
+            if (class_exists($module['mod_main_class'])) {
+                $object = new $module['mod_main_class']();
+                if (is_callable(array($object, 'hook_calendar')) && is_callable(array($object, 'getCalendarLink'))) {
+                    $itemList = $object->{$hookname}($this->AppUI->user_id);
+                    foreach ($itemList as $item) {
+                        $dateIndex = str_replace('/', '', $item['startDate']);
+                        $this->links[$dateIndex][] = $object->getCalendarLink($AppUI, $item);
+                    }
+                }
+            }
+        }
+
+        return $this->links;
     }
 }
