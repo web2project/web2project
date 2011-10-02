@@ -2233,7 +2233,7 @@ function countFiles($folder) {
 }
 
 // From: modules/files/filefolder.class.php
-function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $skip_headers=false, $skip_projects=false) {
+function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $skip_headers=false, $skip_projects=false, $display_contents=true) {
 	global $m, $a, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types, 
             $cfObj, $xpg_totalrecs, $xpg_total_pages, $page, $company_id,
             $allowed_companies, $current_uri, $w2Pconfig, $canEdit, $canRead;
@@ -2315,8 +2315,8 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
 	if ($files === array()) {
 		return 0;
 	}
-
-	$s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" id="filestbl_' . $folder_id . '" class="tbl filestbl">';
+        $dispFiles =($display_contents) ? "show-files" : "";
+	$s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" id="filestbl_' . $folder_id . '" class="tbl filestbl'. $dispFiles.'">';
         if (!$skip_headers) {
         $s .= '<tr>
 			<th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
