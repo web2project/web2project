@@ -56,7 +56,7 @@ class CResource extends w2p_Core_BaseObject {
 	public function getTypeName() {
 		$result = 'All Resources';
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('resource_types');
 		$q->addWhere('resource_type_id = ' . (int)$this->resource_type);
 		$res = &$q->exec(ADODB_FETCH_ASSOC);
@@ -77,7 +77,7 @@ class CResource extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         if ($this->resource_id && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
 
             if (($msg = parent::store())) {
