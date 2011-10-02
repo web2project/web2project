@@ -515,7 +515,7 @@ class CContact extends w2p_Core_BaseObject {
         $q = $this->_query;
         $q->addTable('contacts');
 		$q->addQuery('contact_id');
-		$q->addWhere('contact_display_name IS NULL OR contact_display_name == ""');
+		$q->addWhere('contact_display_name IS NULL OR contact_display_name = ""');
 		$contactIdList = $q->loadList();
 
 		foreach($contactIdList as $contactId) {
