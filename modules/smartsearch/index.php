@@ -13,14 +13,13 @@ $hook_modules = array();
 $moduleList = $AppUI->getLoadableModuleList();
 asort($moduleList);
 foreach ($moduleList as $module) {
-	if (!in_array($module['mod_main_class'], get_declared_classes())) {
-		require_once ($AppUI->getModuleClass($module['mod_directory']));
-	}
-	$object = new $module['mod_main_class']();
-	if (is_callable(array($object, 'hook_search'))) {
-		$ssearch['mod_' . $module['mod_directory']] = w2PgetParam($_POST, 'mod_' . $module['mod_directory'], '');
-		$hook_modules[] = $module['mod_directory'];
-	}
+    if (class_exists($module['mod_main_class'])) {
+        $object = new $module['mod_main_class']();
+        if (is_callable(array($object, 'hook_search'))) {
+            $ssearch['mod_' . $module['mod_directory']] = w2PgetParam($_POST, 'mod_' . $module['mod_directory'], '');
+            $hook_modules[] = $module['mod_directory'];
+        }
+    }
 }
 
 $ssearch['all_words'] = w2PgetParam($_POST, 'allwords', '');
@@ -222,17 +221,19 @@ if (isset($_POST['keyword'])) {
 		reset($moduleList);
         foreach ($moduleList as $module) {
     		if ($ssearch['mod_selection'] == '' || $ssearch['mod_' . $module['mod_directory']] == 'on') {
-				$object = new $module['mod_main_class']();
-				if (is_callable(array($object, 'hook_search'))) {
-					$search = new smartsearch();
-					$searchArray = $object->hook_search();
-					foreach($searchArray as $key => $value) {
-						$search->{$key} = $value;
-					}
-					$search->setKeyword($search->keyword);
-					$search->setAdvanced($ssearch);
-					echo $search->fetchResults($perms, $reccount);
-				}
+				if (class_exists($module['mod_main_class'])) {
+                    $object = new $module['mod_main_class']();
+                    if (is_callable(array($object, 'hook_search'))) {
+                        $search = new smartsearch();
+                        $searchArray = $object->hook_search();
+                        foreach($searchArray as $key => $value) {
+                            $search->{$key} = $value;
+                        }
+                        $search->setKeyword($search->keyword);
+                        $search->setAdvanced($ssearch);
+                        echo $search->fetchResults($perms, $reccount);
+                    }
+                }
 			}
         }
     	echo '<tr><td><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>';
