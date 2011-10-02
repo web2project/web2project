@@ -37,7 +37,7 @@ class w2p_Core_HookHandler
             if (class_exists($module['mod_main_class'])) {
                 $object = new $module['mod_main_class']();
                 if (is_callable(array($object, $hookname))) {
-                    $object->hook_cron();
+                    $object->{$hookname}();
                 }
             }
         }
