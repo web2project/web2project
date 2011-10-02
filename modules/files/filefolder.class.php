@@ -129,6 +129,8 @@ class CFileFolder extends w2p_Core_BaseObject {
 
     public function getFileCountByFolder(w2p_Core_CAppUI $AppUI, $folder_id, $task_id, $project_id, $company_id) {
 
+        global $allowed_companies; //FIXME: Had to introduce this since it wasnt defined
+        
         // SQL text for count the total recs from the selected option
         $q = $this->_query;
         $q->addTable('files');
