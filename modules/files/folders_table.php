@@ -20,6 +20,9 @@ if(!$folder_id && isset($_GET['folder_id'])) {
     $cfObj = new CFileFolder();
     $cfObj->load($folder_id);
 }
+if(!$folder_id) {
+    $folder_id = 0;
+}
 // Files modules: index page re-usable sub-table
 
 // add to allow for returning to other modules besides Files
@@ -57,7 +60,7 @@ $xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $
 ?>
 <script language="javascript" type="text/javascript">
     $('body').ready(function(){
-        $('.filestbl').hide();
+        $('.filestbl,not:(show-files)').hide();
     });
     $('body').delegate('a.has-files', 'click', function(e){
         var folderId = $(this).attr('id');
@@ -67,7 +70,7 @@ $xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $
         if(elem.is(':visible')){
             elem.html(elem.html().replace('-', '+'));
         } else {
-            elem.html(elem.html().replace('-', '+'));
+            elem.html(elem.html().replace('+', '-'));
         }
         return false;
     });
@@ -180,8 +183,8 @@ function removeBulkComponent(li) {
         </td>
     </tr>
     <?php
-    if (countFiles($folder) > 0) {
-        echo displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id);
+    if (countFiles($folder_id) > 0) {
+        echo displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, true);
     } elseif (!$limited or $folder_id != 0) {
         echo '<tr><td colspan="20">' . $AppUI->_('no files') . '</td></tr>';
     }
