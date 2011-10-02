@@ -37,7 +37,6 @@ if ($userId > 0) {
     $calendarFooter = "END:VCALENDAR";
 
     $hooks = new w2p_Core_HookHandler($AppUI);
-    $hooks->setUser($userId);
     $buffer = $hooks->calendar();
 
     echo $calendarHeader.$buffer.$calendarFooter;
