@@ -75,4 +75,30 @@ class w2p_Output_EmailManager {
 
         return $body;
     }
+
+    public function notifyHR($uusername, $logname, $uaddress, $userid) {
+        $body = 'A new user has signed up on ' . w2PgetConfig('company_name');
+        $body .= ". Please go through the user details below:\n";
+        $body .= 'Name:	' . $uusername . "\n" . 'Username:	' . $logname . "\n";
+        $body .= 'Email:	' . $uaddress . "\n\n";
+        $body .= 'You may check this account at the following URL: ' . W2P_BASE_URL;
+        $body .= '/index.php?m=admin&a=viewuser&user_id=' . $userid . "\n\n";
+        $body .= "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name');
+        $body .= " Taskforce.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
+
+        return $body;
+    }
+
+    public function notifyNewExternalUser($logname, $logpwd) {
+        $body = 'You have signed up for a new account on ' . w2PgetConfig('company_name');
+        $body .= ".\n\n" . "Once the administrator approves your request, you will receive an email with confirmation.\n";
+        $body .= "Your login information are below for your own record:\n\n";
+        $body .= 'Username:	' . $logname . "\n" . 'Password:	' . $logpwd . "\n\n";
+        $body .= "You may login at the following URL: " . W2P_BASE_URL;
+        $body .= "\n\n" . "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name');
+        $body .= " Support Staff.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
+
+        return $body;
+    }
+//		$mail->Body();
 }
