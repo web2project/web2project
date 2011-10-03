@@ -184,7 +184,7 @@ function removeBulkComponent(li) {
     </tr>
     <?php
     if (countFiles($folder_id) > 0) {
-        echo displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, true);
+        echo '<tr><td colspan="20">' . displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, true, true, false) . '</td></tr>';
     } elseif (!$limited or $folder_id != 0) {
         echo '<tr><td colspan="20">' . $AppUI->_('no files') . '</td></tr>';
     }

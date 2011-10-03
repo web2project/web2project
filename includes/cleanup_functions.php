@@ -2187,7 +2187,7 @@ function getFolders($parent, $level = 0) {
                     '<a style="float:left;" href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id . '&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a>';
             $s .= '</td></tr>';
             if ($file_count > 0) {
-                $s .= displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id, false, true);
+                $s .= '<tr><td colspan="20">' . displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id, false, true) . '</td></tr>';
             }
         }
     }
@@ -2316,7 +2316,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
 		return 0;
 	}
         $dispFiles =($display_contents) ? "show-files" : "";
-	$s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" id="filestbl_' . $folder_id . '" class="tbl filestbl'. $dispFiles.'">';
+	$s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" id="filestbl_' . $folder_id . '" class="tbl filestbl '. $dispFiles.'">';
         if (!$skip_headers) {
         $s .= '<tr>
 			<th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
@@ -2418,7 +2418,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
 					if ($canEdit && $w2Pconfig['files_show_versions_edit']) {
 						$hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
 					}
-					$hidden_table .= '</td><tr>';
+					$hidden_table .= '</table></td><tr>';
 				}
 			}
 			$hidden_table .= '';
@@ -2456,7 +2456,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
 			$s .= '<input type="checkbox" ' . $bulk_op . ' name="chk_sel_file_' . $latest_file['file_id'] . '" />';
 		}
 		$s .= '</td></tr>';
-		$s .= $hidden_table;
+		$s .= '</table>';
 		$hidden_table = '';
 	}
 	return $s;
