@@ -341,6 +341,7 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
 
         $contact->contact_department = 1;
         $results = $contact->getDepartmentDetails();
+
         $this->AssertEquals(2,                      count($results));
         $this->assertEquals(1,                      $results['dept_id']);
         $this->assertEquals('Department 1',         $results['dept_name']);

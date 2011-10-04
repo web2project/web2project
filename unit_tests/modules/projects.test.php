@@ -1741,18 +1741,18 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Test Project',     $st_projects_arr[0][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[0][0]['project_parent']);
         $this->assertEquals(0,                  $st_projects_arr[0][1]);
-        $this->assertEquals(2,                  $st_projects_arr[3][0]['project_id']);
-        $this->assertEquals('Test Project 2',   $st_projects_arr[3][0]['project_name']);
-        $this->assertEquals(1,                  $st_projects_arr[3][0]['project_parent']);
-        $this->assertEquals(1,                  $st_projects_arr[3][1]);
-        $this->assertEquals(3,                  $st_projects_arr[1][0]['project_id']);
-        $this->assertEquals('Test Project 3',   $st_projects_arr[1][0]['project_name']);
+        $this->assertEquals(2,                  $st_projects_arr[1][0]['project_id']);
+        $this->assertEquals('Test Project 2',   $st_projects_arr[1][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[1][0]['project_parent']);
         $this->assertEquals(1,                  $st_projects_arr[1][1]);
-        $this->assertEquals(4,                  $st_projects_arr[2][0]['project_id']);
-        $this->assertEquals('Test Project 4',   $st_projects_arr[2][0]['project_name']);
+        $this->assertEquals(3,                  $st_projects_arr[2][0]['project_id']);
+        $this->assertEquals('Test Project 3',   $st_projects_arr[2][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[2][0]['project_parent']);
         $this->assertEquals(1,                  $st_projects_arr[2][1]);
+        $this->assertEquals(4,                  $st_projects_arr[3][0]['project_id']);
+        $this->assertEquals('Test Project 4',   $st_projects_arr[3][0]['project_name']);
+        $this->assertEquals(1,                  $st_projects_arr[3][0]['project_parent']);
+        $this->assertEquals(1,                  $st_projects_arr[3][1]);
     }
 
     /**
@@ -1774,18 +1774,18 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Test Project',     $st_projects_arr[0][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[0][0]['project_parent']);
         $this->assertEquals(0,                  $st_projects_arr[0][1]);
-        $this->assertEquals(2,                  $st_projects_arr[3][0]['project_id']);
-        $this->assertEquals('Test Project 2',   $st_projects_arr[3][0]['project_name']);
-        $this->assertEquals(1,                  $st_projects_arr[3][0]['project_parent']);
-        $this->assertEquals(1,                  $st_projects_arr[3][1]);
-        $this->assertEquals(3,                  $st_projects_arr[1][0]['project_id']);
-        $this->assertEquals('Test Project 3',   $st_projects_arr[1][0]['project_name']);
+        $this->assertEquals(2,                  $st_projects_arr[1][0]['project_id']);
+        $this->assertEquals('Test Project 2',   $st_projects_arr[1][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[1][0]['project_parent']);
         $this->assertEquals(1,                  $st_projects_arr[1][1]);
-        $this->assertEquals(4,                  $st_projects_arr[2][0]['project_id']);
-        $this->assertEquals('Test Project 4',   $st_projects_arr[2][0]['project_name']);
+        $this->assertEquals(3,                  $st_projects_arr[2][0]['project_id']);
+        $this->assertEquals('Test Project 3',   $st_projects_arr[2][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[2][0]['project_parent']);
         $this->assertEquals(1,                  $st_projects_arr[2][1]);
+        $this->assertEquals(4,                  $st_projects_arr[3][0]['project_id']);
+        $this->assertEquals('Test Project 4',   $st_projects_arr[3][0]['project_name']);
+        $this->assertEquals(1,                  $st_projects_arr[3][0]['project_parent']);
+        $this->assertEquals(1,                  $st_projects_arr[3][1]);
     }
 
     /**
