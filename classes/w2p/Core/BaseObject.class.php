@@ -39,7 +39,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	protected $_query;
 
 	/**
-	 * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table 
+	 * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table
 	 */
 	protected $_tbl_module;
 
@@ -69,9 +69,9 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 		$this->_query = new w2p_Database_Query;
 
         /*
-         * This block does a lot and may need to be simplified.. but the point 
-         *   is that it sets up all of our base Events for later notifications, 
-         *   logging, etc. We also need a way to enable Core Modules (CProject, 
+         * This block does a lot and may need to be simplified.. but the point
+         *   is that it sets up all of our base Events for later notifications,
+         *   logging, etc. We also need a way to enable Core Modules (CProject,
          *   CTask, etc) and Add On Modules to add their own hooks.
          */
         $this->_dispatcher = new w2p_Core_Dispatcher();
@@ -89,10 +89,10 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	}
 
     /**
-     * Since Dependency injection isn't feasible due to the sheer number of 
-     *   calls to the above constructor, this is a way to hijack the current 
+     * Since Dependency injection isn't feasible due to the sheer number of
+     *   calls to the above constructor, this is a way to hijack the current
      *   $this->_query and manipulate it however we want.
-     * 
+     *
      *   @param Object A database connection (real or mocked)
      */
     public function overrideDatabase($override) {
@@ -138,7 +138,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 					$filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
 				}
 			}
-            $q = $this->_query;
+            $q = $this->_getQuery();
 			$q->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
 
 			return true;
@@ -162,7 +162,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 		if ($oid === null) {
 			return false;
 		}
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable($this->_tbl);
 		$q->addWhere($this->_tbl_key . ' = ' . $oid);
 		$hash = $q->loadHash();
@@ -182,7 +182,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	 */
 	public function loadAll($order = null, $where = null)
 	{
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable($this->_tbl);
 		if ($order) {
 			$q->addOrder($order);
@@ -202,7 +202,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	 */
 	public function &getQuery($alias = null)
 	{
-		$q = $this->_query;
+		$q = $this->_getQuery();
         $q->addTable($this->_tbl, $alias);
 		return $q;
 	}
@@ -283,7 +283,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 		}
 
 		$k = $this->_tbl_key;
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		if ($this->$k) {
 			$store_type = 'update';
 			$ret = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
@@ -335,7 +335,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 			$select = $k;
 			$join = '';
 
-			$q = $this->_query;
+			$q = $this->_getQuery();
 			$q->addTable($this->_tbl);
 			$q->addWhere($k . ' = \'' . $this->$k . '\'');
 			$q->addGroup($k);
@@ -404,7 +404,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
             return $msg;
 		}
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->setDelete($this->_tbl);
 		$q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
         if ($q->exec()) {
@@ -450,7 +450,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addQuery($fields);
 		$q->addTable($this->_tbl);
 
@@ -595,9 +595,9 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
     /*
      *  This pre/post functions are only here for completeness.
      *    NOTE: Each of these actions gets called after the permissions check.
-     *    NOTE: The pre* actions happen whether the desired action - create, 
+     *    NOTE: The pre* actions happen whether the desired action - create,
      *      update, load, and delete - actually occur.
-     *    NOTE: The post* actions only happen if the desired action - create, 
+     *    NOTE: The post* actions only happen if the desired action - create,
      *      update, load, and delete - is successful.
      */
 
@@ -628,7 +628,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
         $name = $this->{substr($this->_tbl, 0, -1).'_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' . 
+            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' .
             $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
@@ -643,7 +643,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
         $name = $this->{substr($this->_tbl, 0, -1).'_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
-            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' . 
+            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' .
             $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
         return $this;
     }
@@ -689,4 +689,19 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
         }
         //error_log("{$event->resourceName} published {$event->eventName} to call hook_$hook");
 	}
+
+    /**
+     * Returns a clean query object
+     *
+     * Clears out the query and then returns it for use
+     *
+     * @access protected
+     *
+     * @return w2p_Database_Query Clean query object
+     */
+    protected function _getQuery()
+    {
+        $this->_query->clear();
+        return $this->_query;
+    }
 }

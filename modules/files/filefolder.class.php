@@ -24,7 +24,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function getAllowedRecords($uid) {
 		global $AppUI;
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('*');
 		$q->addOrder('file_folder_parent');
@@ -48,7 +48,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function canDelete($msg, $oid = 0, $joins = null) {
         $msg = array();
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
 		$q->addWhere('file_folder_parent=' . $oid);
@@ -58,7 +58,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 		}
 		$q->clear();
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('files');
 		$q->addQuery('COUNT(DISTINCT file_id) AS num_of_files');
 		$q->addWhere('file_folder=' . $oid);
@@ -110,7 +110,7 @@ class CFileFolder extends w2p_Core_BaseObject {
  	@return string Returns the name of the parent folder or null if no parent was found **/
 	public function getParentFolderName() {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('file_folder_name');
 		$q->addWhere('file_folder_id=' . $this->file_folder_parent);
@@ -120,7 +120,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 
 	public function countFolders() {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('COUNT(file_folder_id)');
 
@@ -131,7 +131,7 @@ class CFileFolder extends w2p_Core_BaseObject {
             $task_id, $project_id, $company_id, $allowed_companies) {
 
         // SQL text for count the total recs from the selected option
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addTable('files');
         $q->addQuery('count(files.file_id)');
         $q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -174,7 +174,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 
     public function getFoldersByParent($parent = 0) {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addTable('file_folders');
         $q->addQuery('*');
         $q->addWhere('file_folder_parent = '. (int) $parent);

@@ -58,7 +58,7 @@ class CFile extends w2p_Core_BaseObject {
         $this->file_date = $AppUI->convertToSystemTZ($this->file_date);
 
         if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
-            // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user. 
+            // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user.
             // If not then we are just editing the file information alone. So we should leave the file_id as it is.
             $this->file_parent = $this->file_id;
             if ((int)$this->file_size > 0) {
@@ -74,7 +74,7 @@ class CFile extends w2p_Core_BaseObject {
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->file_owner = $AppUI->user_id;
 
-            $q = $this->_query;
+            $q = $this->_getQuery();
             $q->addTable('files');
             $q->clear();
             if (!$this->file_version_id) {
@@ -200,7 +200,7 @@ class CFile extends w2p_Core_BaseObject {
 		}
 
 		$result = false;
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->clear();
 		$q->addTable('projects');
 		$q->addQuery('project_owner');
@@ -303,7 +303,7 @@ class CFile extends w2p_Core_BaseObject {
 		global $AppUI;
         $perms = $AppUI->acl();
 
-        if ('' == $this->file_real_filename || 
+        if ('' == $this->file_real_filename ||
                 !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
             return true;
         }
@@ -507,18 +507,18 @@ class CFile extends w2p_Core_BaseObject {
                     //preparing users array
                     $q = new w2p_Database_Query;
                     $q->addTable('tasks', 't');
-                    $q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as 
+                    $q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as
                             creator_first_name, cc.contact_last_name as creator_last_name,
                             oc.contact_email as owner_email, oc.contact_first_name as owner_first_name,
                             oc.contact_last_name as owner_last_name, a.user_id as assignee_id,
                             ac.contact_email as assignee_email, ac.contact_first_name as
-                            assignee_first_name, ac.contact_last_name as assignee_last_name'); 
+                            assignee_first_name, ac.contact_last_name as assignee_last_name');
                     $q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
                     $q->addJoin('users', 'o', 'o.user_id = t.task_owner');
                     $q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
                     $q->addJoin('users', 'c', 'c.user_id = t.task_creator');
                     $q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
-                    $q->addJoin('users', 'a', 'a.user_id = u.user_id'); 
+                    $q->addJoin('users', 'a', 'a.user_id = u.user_id');
                     $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
                     $q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
                     $this->_users = $q->loadList();
@@ -592,14 +592,14 @@ class CFile extends w2p_Core_BaseObject {
 
                     $q = new w2p_Database_Query;
                     $q->addTable('project_contacts', 'pc');
-                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name'); 
+                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                     $q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
                     $sql = '(' . $q->prepare() . ')';
                     $q->clear();
                     $sql .= ' UNION ';
                     $q->addTable('task_contacts', 'tc');
-                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name'); 
+                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
                     $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
                 } else {
@@ -637,7 +637,7 @@ class CFile extends w2p_Core_BaseObject {
 		if (!$this->file_owner)
 			return $owner;
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('users', 'a');
 		$q->addJoin('contacts', 'b', 'b.contact_id = a.user_contact', 'inner');
 		$q->addQuery('contact_first_name, contact_last_name');
@@ -654,7 +654,7 @@ class CFile extends w2p_Core_BaseObject {
 		if (!$this->file_task)
 			return $taskname;
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->clear();
 		$q->addTable('tasks');
 		$q->addQuery('task_name');

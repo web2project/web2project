@@ -145,7 +145,7 @@ class CCompany extends w2p_Core_BaseObject {
   public function loadFull(w2p_Core_CAppUI $AppUI = null, $companyId) {
     global $AppUI;
 
-    $q = $this->_query;
+    $q = $this->_getQuery();
     $q->addTable('companies');
     $q->addQuery('companies.*');
     $q->addQuery('con.contact_first_name');
@@ -159,17 +159,17 @@ class CCompany extends w2p_Core_BaseObject {
 
   public function getCompanyList($AppUI, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
 
-    $q = $this->_query;
+    $q = $this->_getQuery();
   	$q->addTable('companies', 'c');
   	$q->addQuery('c.company_id, c.company_name, c.company_type, c.company_description, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
   	$q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
   	$q->addJoin('users', 'u', 'c.company_owner = u.user_id');
   	$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
   	$q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
-  
+
   	$where = $this->getAllowedSQL($AppUI->user_id, 'c.company_id');
   	$q->addWhere($where);
-  
+
   	if ($companyType > -1) {
   		$q->addWhere('c.company_type = ' . (int) $companyType);
   	}
@@ -181,16 +181,16 @@ class CCompany extends w2p_Core_BaseObject {
   	}
   	$q->addGroup('c.company_id');
   	$q->addOrder($orderby . ' ' . $orderdir);
-  
+
   	return $q->loadList();
   }
 
   public function getCompanies(w2p_Core_CAppUI $AppUI) {
 
-    $q = $this->_query;
+    $q = $this->_getQuery();
   	$q->addTable('companies');
   	$q->addQuery('company_id, company_name');
-  
+
   	$where = $this->getAllowedSQL($AppUI->user_id, 'company_id');
   	$q->addWhere($where);
 
@@ -222,7 +222,7 @@ class CCompany extends w2p_Core_BaseObject {
 
 		return $q->loadList();
 	}
-	
+
 	public static function getContacts(w2p_Core_CAppUI $AppUI, $companyId) {
 		$results = array();
 		$perms = $AppUI->acl();
@@ -267,7 +267,7 @@ class CCompany extends w2p_Core_BaseObject {
 
 		return $q->loadHashList('user_id');
 	}
-	
+
 	public static function getDepartments(w2p_Core_CAppUI $AppUI, $companyId) {
 		$perms = $AppUI->acl();
 

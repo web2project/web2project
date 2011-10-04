@@ -85,7 +85,7 @@ class CUser extends w2p_Core_BaseObject {
     protected function hook_postStore() {
         $perms->{$this->perm_func}($this->user_id, $this->user_username);
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->clear();
         //Lets check if the user has allready default users preferences set, if not insert the default ones
         $q->addTable('user_preferences', 'upr');
@@ -183,7 +183,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public function loadFull($userId) {
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('users', 'u');
 		$q->addQuery('u.*');
 		$q->addQuery('con.contact_email AS user_email');
@@ -199,7 +199,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
     public function hook_cron() {
-		$q = $this->_query;
+		$q = $this->_getQuery();
         $q->setDelete('sessions');
         $q->addWhere("session_user ='' OR session_user IS NULL");
         $q->exec();
@@ -209,7 +209,7 @@ class CUser extends w2p_Core_BaseObject {
     }
 
 	public function validatePassword($userId, $password) {
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('users');
 		$q->addQuery('user_id');
 		$q->addWhere('user_password = \'' . md5($password) . '\'');
@@ -316,7 +316,7 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
 	public function getFullUserName() {
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('contacts', 'c');
 		$q->addQuery('c.*');
 		$q->addWhere('contact_id = ' . (int)$this->user_contact);
