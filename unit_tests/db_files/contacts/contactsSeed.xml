@@ -102,8 +102,8 @@
     	<column>user_parent</column>
     	<column>user_type</column>
     	<column>user_signature</column>
-    	<column>user_empireint_special</column>		 	 	 	 	 	 	
-		<column>user_department</column>		 	 	 	 	 	 	
+    	<column>user_empireint_special</column>
+		<column>user_department</column>
 		<column>user_company</column>
 		<row>
 			<value>1</value>
@@ -141,5 +141,15 @@
 			<value>0</value>
 			<value>0</value>
 		</row>
+    </table>
+    <table name="departments">
+        <column>dept_name</column>
+        <column>dept_id</column>
+        <column>dept_company</column>
+        <row>
+            <value>Department 1</value>
+            <value>1</value>
+            <value>1</value>
+        </row>
     </table>
 </dataset>

@@ -3227,21 +3227,32 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     {
         $search_data = $this->obj->hook_search();
 
-        $this->assertEquals(8,                                      count($search_data));
+        $this->assertEquals(12,                                     count($search_data));
         $this->assertEquals('tasks',                                $search_data['table']);
+        $this->assertEquals('t',                                    $search_data['table_alias']);
         $this->assertEquals('tasks',                                $search_data['table_module']);
-        $this->assertEquals('task_id',                              $search_data['table_key']);
+        $this->assertEquals('t.task_id',                            $search_data['table_key']);
         $this->assertEquals('index.php?m=tasks&a=view&task_id=',    $search_data['table_link']);
+        $this->assertEquals('tl.task_log_id',                       $search_data['table_key2']);
+        $this->assertEquals('&task_log_id=',                        $search_data['table_link2']);
         $this->assertEquals('Tasks',                                $search_data['table_title']);
         $this->assertEquals('task_name',                            $search_data['table_orderby']);
-        $this->assertEquals(3,                                      count($search_data['search_fields']));
+        $this->assertEquals(5,                                      count($search_data['search_fields']));
         $this->assertEquals('task_name',                            $search_data['search_fields'][0]);
         $this->assertEquals('task_description',                     $search_data['search_fields'][1]);
         $this->assertEquals('task_related_url',                     $search_data['search_fields'][2]);
-        $this->assertEquals(3,                                      count($search_data['display_fields']));
+        $this->assertEquals('task_log_name',                        $search_data['search_fields'][3]);
+        $this->assertEquals('task_log_description',                 $search_data['search_fields'][4]);
+        $this->assertEquals(5,                                      count($search_data['display_fields']));
         $this->assertEquals('task_name',                            $search_data['display_fields'][0]);
         $this->assertEquals('task_description',                     $search_data['display_fields'][1]);
         $this->assertEquals('task_related_url',                     $search_data['display_fields'][2]);
+        $this->assertEquals('task_log_name',                        $search_data['display_fields'][3]);
+        $this->assertEquals('task_log_description',                 $search_data['display_fields'][4]);
+        $this->assertEquals(1,                                      count($search_data['table_joins']));
+        $this->assertEquals('task_log',                             $search_data['table_joins'][0]['table']);
+        $this->assertEquals('tl',                                   $search_data['table_joins'][0]['alias']);
+        $this->assertEquals('t.task_id = tl.task_log_task',         $search_data['table_joins'][0]['join']);
     }
 
     /**
