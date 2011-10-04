@@ -100,5 +100,16 @@ class w2p_Output_EmailManager {
 
         return $body;
     }
-//		$mail->Body();
+
+    public function notifyNewUserCredentials($username, $logname, $logpwd) {
+        $body = $username . ",\n\n";
+        $body .= "An access account has been created for you in our web2Project project management system.\n\n";
+        $body .= "You can access it here at " . w2PgetConfig('base_url');
+        $body .= "\n\n" . "Your username is: " . $logname . "\n";
+        $body .= "Your password is: " . $logpwd . "\n\n";
+        $body .= "This account will allow you to see and interact with projects. If you have any questions please contact us.";
+
+        return $body;
+    }
+
 }
