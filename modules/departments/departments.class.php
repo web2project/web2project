@@ -33,7 +33,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	public function loadFull(w2p_Core_CAppUI $AppUI = null, $deptId) {
         global $AppUI;
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('companies', 'com');
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.*, company_name');
@@ -54,7 +54,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		global $AppUI;
 
         $results = array();
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('departments', 'dep');
 		$q->addQuery('dept_id, dept_name, dept_parent');
 		$q->addWhere('dep.dept_company = ' . (int) $company_id);
@@ -75,7 +75,7 @@ class CDepartment extends w2p_Core_BaseObject {
         global $AppUI;
 
         $orderby = (in_array($orderby, array('dept_name', 'dept_type', 'countp', 'inactive'))) ? $orderby : 'dept_name';
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addTable('departments');
         $q->addQuery('departments.*, COUNT(ct.contact_department) dept_users, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
         $q->addJoin('companies', 'c', 'c.company_id = departments.dept_company');
@@ -162,7 +162,7 @@ class CDepartment extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
-            $q = $this->_query;
+            $q = $this->_getQuery();
             $q->addTable('departments', 'dep');
             $q->addQuery('dep.dept_id');
             $q->addWhere('dep.dept_parent = ' . (int)$this->dept_id);
@@ -212,7 +212,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
 		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addQuery($fields);
 		$q->addTable($this->_tbl);
 

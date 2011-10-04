@@ -68,7 +68,7 @@ class CSysVal extends w2p_Core_BaseObject {
 			$this->_error = get_class($this) . '::bind failed.';
 			return false;
 		} else {
-			$q = $this->_query;
+			$q = $this->_getQuery();
 			$q->bindHashToObject($hash, $this, $prefix, $checkSlashes, $bindAll);
 			return true;
 		}
@@ -87,7 +87,7 @@ class CSysVal extends w2p_Core_BaseObject {
         }
 		$values = parseFormatSysval($this->sysval_value, $this->sysval_key_id);
 		//lets delete the old values
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		if ($this->sysval_key_id && $this->sysval_title) {
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_key_id = ' . (int)$this->sysval_key_id);
@@ -118,7 +118,7 @@ class CSysVal extends w2p_Core_BaseObject {
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		if ($this->sysval_title) {
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');

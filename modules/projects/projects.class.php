@@ -134,7 +134,7 @@ class CProject extends w2p_Core_BaseObject {
 
 	public function loadFull(w2p_Core_CAppUI $AppUI, $projectId) {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('projects');
 		$q->addQuery('company_name, contact_display_name as user_name, projects.*');
 		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
@@ -155,7 +155,7 @@ class CProject extends w2p_Core_BaseObject {
         $result = false;
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
-            $q = $this->_query;
+            $q = $this->_getQuery();
             $q->addTable('tasks');
             $q->addQuery('task_id');
             $q->addWhere('task_project = ' . (int)$this->project_id);
@@ -230,7 +230,7 @@ class CProject extends w2p_Core_BaseObject {
 		// Load the original
 		$origProject = new CProject();
 		$origProject->load($from_project_id);
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('tasks');
 		$q->addQuery('task_id');
 		$q->addWhere('task_project =' . (int)$from_project_id);
@@ -404,7 +404,7 @@ class CProject extends w2p_Core_BaseObject {
 		$oDpt = new CDepartment();
 		$aDptsAllowed = $oDpt->getAllowedRecords($uid, 'dept_id,dept_name');
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('projects');
 		$q->addQuery('projects.project_id');
 		$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
@@ -444,7 +444,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function getAllowedProjectsInRows($userId) {
         trigger_error("CProject->getAllowedProjectsInRows() has been deprecated in v3.0 and will be removed in v4.0", E_USER_NOTICE );
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->clear();
 		$q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
 		$q->addTable('projects', 'pr');
@@ -464,7 +464,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function getCriticalTasks($project_id = null, $limit = 1) {
 		$project_id = !empty($project_id) ? $project_id : $this->project_id;
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('tasks');
 		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_end_date IS NOT NULL AND task_end_date <>  \'0000-00-00 00:00:00\'');
 		$q->addOrder('task_end_date DESC');
@@ -533,7 +533,7 @@ class CProject extends w2p_Core_BaseObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $this->project_updated = $q->dbfnNowWithTZ();
         if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
@@ -684,7 +684,7 @@ class CProject extends w2p_Core_BaseObject {
 	}
 	public function getAllowedProjects($userId, $activeOnly = true) {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('projects', 'pr');
 		$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date, project_company, project_parent');
 		if ($activeOnly) {
@@ -853,7 +853,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function hasChildProjects($projectId = 0) {
 		// Note that this returns the *count* of projects.  If this is zero, it
 		//   is evaluated as false, otherwise it is considered true.
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('projects');
 		$q->addQuery('COUNT(project_id)');
 		if ($projectId > 0) {
@@ -926,7 +926,7 @@ class CProject extends w2p_Core_BaseObject {
 		// now milestones are summed up, too, for consistence with the tasks duration sum
 		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
 		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('tasks');
 		$q->addQuery('ROUND(SUM(task_duration),2)');
 		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
@@ -945,7 +945,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function getTaskLogs(w2p_Core_CAppUI $AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
         global $AppUI;
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('task_log');
 		$q->addQuery('DISTINCT task_log.*, user_username, task_id');
 		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
