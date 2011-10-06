@@ -399,61 +399,65 @@ class CFile extends w2p_Core_BaseObject {
             }
             // buffer the file
             $this->_filepath = W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename;
-            $fp = fopen($this->_filepath, 'rb');
-            $x = fread($fp, $this->file_size);
-            fclose($fp);
-            // parse it
-            $parser = $parser . ' ' . $this->_filepath;
-            $pos = strpos($parser, '/pdf');
+            if (file_exists($this->_filepath)) {
+                $fp = fopen($this->_filepath, 'rb');
+                $x = fread($fp, $this->file_size);
+                fclose($fp);
+                // parse it
+                $parser = $parser . ' ' . $this->_filepath;
+                $pos = strpos($parser, '/pdf');
 
-            /*
-             * TODO: I *really* hate using error surpression here and I would
-             *   normally just detect if safe_mode is on and if it was, skip
-             *   this call. Unfortunately, safe_mode has been deprecated in
-             *   5.3 and will be removed in 5.4
-             */
-            if (false !== $pos) {
-                $x = @shell_exec(`$parser -`);
-            } else {
-                $x = @shell_exec(`$parser`);
-            }
-            // if nothing, return
-            if (strlen($x) < 1) {
-                return 0;
-            }
-            // remove punctuation and parse the strings
-            $x = str_replace(array('.', ',', '!', '@', '(', ')'), ' ', $x);
-            $warr = explode(' ', $x);
-
-            $wordarr = array();
-            $nwords = count($warr);
-            for ($x = 0; $x < $nwords; $x++) {
-                $newword = $warr[$x];
-                if (!preg_match('[!"#$%&\'()*+,\-./:;<=>?@[\\\]^_`{|}~]', $newword)
-                    && mb_strlen(mb_trim($newword)) > 2
-                    && !preg_match('[0-9]', $newword)) {
-                        $wordarr[$newword] = $x;
+                /*
+                 * TODO: I *really* hate using error surpression here and I would
+                 *   normally just detect if safe_mode is on and if it was, skip
+                 *   this call. Unfortunately, safe_mode has been deprecated in
+                 *   5.3 and will be removed in 5.4
+                 */
+                if (false !== $pos) {
+                    $x = @shell_exec(`$parser -`);
+                } else {
+                    $x = @shell_exec(`$parser`);
                 }
-            }
+                // if nothing, return
+                if (strlen($x) < 1) {
+                    return 0;
+                }
+                // remove punctuation and parse the strings
+                $x = str_replace(array('.', ',', '!', '@', '(', ')'), ' ', $x);
+                $warr = explode(' ', $x);
 
-            // filter out common strings
-            $ignore = w2PgetSysVal('FileIndexIgnoreWords');
-            $ignore = str_replace(' ,', ',', $ignore);
-            $ignore = str_replace(', ', ',', $ignore);
-            $ignore = explode(',', $ignore);
-            foreach ($ignore as $w) {
-                unset($wordarr[$w]);
-            }
-            $nwords_indexed = count($wordarr);
-            // insert the strings into the table
-            while (list($key, $val) = each($wordarr)) {
-                $q = new w2p_Database_Query;
-                $q->addTable('files_index');
-                $q->addReplace('file_id', $this->file_id);
-                $q->addReplace('word', $key);
-                $q->addReplace('word_placement', $val);
-                $q->exec();
-                $q->clear();
+                $wordarr = array();
+                $nwords = count($warr);
+                for ($x = 0; $x < $nwords; $x++) {
+                    $newword = $warr[$x];
+                    if (!preg_match('[!"#$%&\'()*+,\-./:;<=>?@[\\\]^_`{|}~]', $newword)
+                        && mb_strlen(mb_trim($newword)) > 2
+                        && !preg_match('[0-9]', $newword)) {
+                            $wordarr[$newword] = $x;
+                    }
+                }
+
+                // filter out common strings
+                $ignore = w2PgetSysVal('FileIndexIgnoreWords');
+                $ignore = str_replace(' ,', ',', $ignore);
+                $ignore = str_replace(', ', ',', $ignore);
+                $ignore = explode(',', $ignore);
+                foreach ($ignore as $w) {
+                    unset($wordarr[$w]);
+                }
+                $nwords_indexed = count($wordarr);
+                // insert the strings into the table
+                while (list($key, $val) = each($wordarr)) {
+                    $q = new w2p_Database_Query;
+                    $q->addTable('files_index');
+                    $q->addReplace('file_id', $this->file_id);
+                    $q->addReplace('word', $key);
+                    $q->addReplace('word_placement', $val);
+                    $q->exec();
+                    $q->clear();
+                }
+            } else {
+                //TODO: if the file doesn't exist.. should we delete the db record?
             }
         }
 		$q = new w2p_Database_Query;

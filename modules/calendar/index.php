@@ -111,23 +111,9 @@ getTaskLinks($first_time, $last_time, $links, 20, $company_id);
 require_once (W2P_BASE_DIR . '/modules/calendar/links_events.php');
 getEventLinks($first_time, $last_time, $links, 20);
 
-$moduleList = $AppUI->getLoadableModuleList();
-foreach ($moduleList as $module) {
-	if (!in_array($module['mod_main_class'], get_declared_classes())) {
-		require_once ($AppUI->getModuleClass($module['mod_directory']));
-	}
-	$object = new $module['mod_main_class']();
-    if (is_callable(array($object, 'hook_calendar')) &&
-        is_callable(array($object, 'getCalendarLink'))) {
-        $itemList = $object->hook_calendar($AppUI->user_id);
-        if (is_array($itemList)) {
-            foreach ($itemList as $item) {
-                $dateIndex = str_replace('/', '', $item['startDate']);
-                $links[$dateIndex][] = $object->getCalendarLink($AppUI, $item);
-            }
-        }
-    }
-}
+$hooks = new w2p_Core_HookHandler($AppUI);
+$hooks->links = $links;
+$links = $hooks->calendar_links();
 
 // create the main calendar
 $cal = new w2p_Output_MonthCalendar($date);
