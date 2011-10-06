@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-class smartsearch {
+class CSmartSearch {
 
 	public $table = null;
 	public $table_alias = null;
@@ -157,5 +157,12 @@ class smartsearch {
 		} else {
 			return null;
 		}
+	}
+}
+
+class smartsearch extends CSmartSearch {
+    
+	public function __construct() {
+        trigger_error("smartsearch has been deprecated in v3.0 and will be removed by v4.0. Please use CSmartSearch instead.", E_USER_NOTICE );
 	}
 }

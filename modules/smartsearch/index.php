@@ -157,7 +157,7 @@ foreach ($hook_modules as $tmp) {
 	</table>
 <?php
 if (isset($_POST['keyword'])) {
-	$search = new smartsearch();
+	$search = new CSmartSearch();
   $search->keyword = addslashes($_POST['keyword']);
 
 	if (isset($_POST['keyword']) && mb_strlen($_POST['keyword']) > 0) {
@@ -224,7 +224,7 @@ if (isset($_POST['keyword'])) {
 				if (class_exists($module['mod_main_class'])) {
                     $object = new $module['mod_main_class']();
                     if (is_callable(array($object, 'hook_search'))) {
-                        $search = new smartsearch();
+                        $search = new CSmartSearch();
                         $searchArray = $object->hook_search();
                         foreach($searchArray as $key => $value) {
                             $search->{$key} = $value;

@@ -133,7 +133,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                                 </td>
                                 <?php if ($AppUI->user_id > 0) { ?>
                                     <td width="170" valign="middle" nowrap="nowrap"><table><tr><td><form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
-                                        <?php if (canAccess('smartsearch')) { ?>
+                                        <?php if (canAccess('CSmartSearch')) { ?>
                                             <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
                                         <?php } else {
                                         echo '&nbsp;';
