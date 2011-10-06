@@ -364,7 +364,7 @@ class CContact extends w2p_Core_BaseObject {
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
 
-	public static function searchContacts(w2p_Core_CAppUI $AppUI = null, $where = '', $searchString = '') {
+	public static function searchContacts(w2p_Core_CAppUI $AppUI = null, $where = '', $searchString = '', $days = 0) {
 		global $AppUI;
 
         $showfields = array('contact_address1' => 'contact_address1',
@@ -394,6 +394,9 @@ class CContact extends w2p_Core_BaseObject {
 		$q->leftJoin('departments', '', 'contact_department = dept_id');
 		$q->leftJoin('users', '', 'contact_id = user_contact');
 		$q->addWhere("(contact_first_name LIKE '$where%' OR contact_last_name LIKE '$where%' " . $additional_filter . ")");
+        if ($days) {
+            $q->addWhere('contact_lastupdate >= ' . $q->dbfnDateAdd($q->dbfnNow(), -$days, 'DAY'));
+        }
 		$q->addWhere('
 			(contact_private=0
 				OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
