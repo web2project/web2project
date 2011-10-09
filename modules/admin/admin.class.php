@@ -18,6 +18,8 @@ class CUser extends w2p_Core_BaseObject {
 	public $user_contact = null;
 	public $user_signature = null;
 
+    private $perm_func = null;
+
 	public function __construct() {
         parent::__construct('users', 'user_id');
 	}
@@ -37,7 +39,7 @@ class CUser extends w2p_Core_BaseObject {
 		return $errorArray;
 	}
 
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store(w2p_Core_CAppUI $AppUI = null, $externally_created_user = false) {
 		global $AppUI;
 
         $perms = $AppUI->acl();
@@ -68,7 +70,7 @@ class CUser extends w2p_Core_BaseObject {
             }
         }
 
-        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && ($perms->checkModuleItem($this->_tbl_module, 'add') || ($externally_created_user && w2PgetConfig('activate_external_user_creation', false)))) {
             $this->perm_func = 'addLogin';
             $this->user_password = md5($this->user_password);
 
@@ -83,6 +85,9 @@ class CUser extends w2p_Core_BaseObject {
 	}
 
     protected function hook_postStore() {
+        global $AppUI;
+
+        $perms = $AppUI->acl();
         $perms->{$this->perm_func}($this->user_id, $this->user_username);
 
         $q = $this->_getQuery();
