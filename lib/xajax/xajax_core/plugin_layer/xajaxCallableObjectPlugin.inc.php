@@ -26,7 +26,7 @@
 if (!defined ('XAJAX_CALLABLE_OBJECT')) define ('XAJAX_CALLABLE_OBJECT', 'callable object');
 
 //SkipAIO
-require dirname(__FILE__) . '/support/xajaxCallableObject.inc.php';
+require_once dirname(__FILE__) . '/support/xajaxCallableObject.inc.php';
 //EndSkipAIO
 
 /*

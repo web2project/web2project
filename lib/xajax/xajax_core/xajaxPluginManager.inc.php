@@ -112,7 +112,7 @@ final class xajaxPluginManager
 						$sFileName = substr($sName, 0, $nLength - 8);
 						$sExtension = substr($sName, $nLength - 8, 8);
 						if ('.inc.php' == $sExtension) {
-							require $sFolder . '/' . $sFileName . $sExtension;
+							require_once $sFolder . '/' . $sFileName . $sExtension;
 						}
 					}
 				}
