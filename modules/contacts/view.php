@@ -148,10 +148,12 @@ function delIt(){
 					<td align="right"><?php echo $AppUI->_('Email'); ?>:</td>
 					<td nowrap="nowrap" class="hilite" width="100%"><?php echo w2p_email($contact->contact_email); ?></td>
 				</tr>
-                <?php foreach ($methods as $method => $value): ?>
+                <?php
+                    $fields = $methods['fields'];
+                    foreach ($fields as $key => $field): ?>
                     <tr>
-                        <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$method]); ?>:</td>
-                        <td class="hilite" width="100%"><?php echo $value; ?></td>
+                        <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$field]); ?>:</td>
+                        <td class="hilite" width="100%"><?php echo $methods['values'][$key]; ?></td>
                     </tr>
                 <?php endforeach; ?>
 			</table>
