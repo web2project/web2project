@@ -124,22 +124,31 @@ class CContact extends w2p_Core_BaseObject {
 
     protected function hook_postStore() {
         $methods = array();
+        $fields  = array();
+        $values  = array();
 
         // TODO:  I *really* don't like using the POST inside here..
-        if (!empty($_POST['contact_methods'])) {
-            foreach ($_POST['contact_methods']['field'] as $key => $field) {
-                $methods[$field] = $_POST['contact_methods']['value'][$key];
+        $contact_methods = empty($_POST['contact_methods']) ? array() : $_POST['contact_methods'];
+        if (count($contact_methods)) {
+            foreach ($contact_methods['field'] as $key => $field) {
+                $fields[] = $contact_methods['field'][$key];
+                $values[] = $contact_methods['value'][$key];
             }
         }
+        $methods['fields'] = $fields;
+        $methods['values'] = $values;
+        $this->setContactMethods($methods);
 
         $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
         $custom_fields->bind($_POST);
         $sql = $custom_fields->store($this->contact_id); // Store Custom Fields
-        $this->setContactMethods($methods);
 
         parent::hook_postStore();
     }
 
+    /*
+     * This is an ugly bit of code that should handle *both* data structures..
+     */
 	public function setContactMethods(array $methods) {
 		$q = $this->_getQuery();
 		$q->setDelete('contacts_methods');
@@ -147,22 +156,34 @@ class CContact extends w2p_Core_BaseObject {
 		$q->exec();
 		$q->clear();
 
-		if (!empty($methods)) {
+		if (count($methods)) {
 			$q->addTable('contacts_methods');
 			$q->addInsert('contact_id', (int)$this->contact_id);
-			foreach ($methods as $name => $value) {
-				if (!empty($value)) {
-					$q->addInsert('method_name', $name);
-					$q->addInsert('method_value', $value);
-					$q->exec();
-				}
-			}
+            if (isset($methods['fields'])) {
+                foreach ($methods['fields'] as $key => $field) {
+                    if ('' != $field || '' != $methods['values'][$key]) {
+                        $q->addInsert('method_name', $field);
+                        $q->addInsert('method_value', $methods['values'][$key]);
+                        $q->exec();
+                    }
+                }
+            } else {
+                foreach ($methods as $name => $value) {
+                    if (!empty($value)) {
+                        $q->addInsert('method_name', $name);
+                        $q->addInsert('method_value', $value);
+                        $q->exec();
+                    }
+                }
+            }
 			$q->clear();
 		}
 	}
 
 	public function getContactMethods($methodsArray = null) {
 		$results = array();
+        $fields  = array();
+        $values  = array();
 
         $q = $this->_getQuery();
 		$q->addTable('contacts_methods');
@@ -175,8 +196,11 @@ class CContact extends w2p_Core_BaseObject {
 		$contacts = $q->loadList();
 
         foreach($contacts as $row => $data) {
-            $results[$data['method_name']] = $data['method_value'];
+            $fields[] = $data['method_name'];
+            $values[] = $data['method_value'];
         }
+        $results['fields'] = $fields;
+        $results['values'] = $values;
 
 		return $results;
 	}
