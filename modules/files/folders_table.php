@@ -62,77 +62,10 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
     $df = $AppUI->getPref('SHDATEFORMAT');
     $tf = $AppUI->getPref('TIMEFORMAT');
 
-    // SETUP FOR FILE LIST
-    $q = new w2p_Database_Query();
-    $q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(file_version), 2) as file_lastversion');
-    $q->addQuery('ff.*');
-    $q->addTable('files', 'f');
-    $q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-    $q->addJoin('projects', 'p', 'p.project_id = file_project');
-    $q->addJoin('tasks', 't', 't.task_id = file_task');
-    $q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-    $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-
-    //TODO: apply permissions properly
-    $project = new CProject();
-    $deny1 = $project->getDeniedRecords($AppUI->user_id);
-    if (count($deny1) > 0) {
-        $q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
-    }
-    
-    //TODO: apply permissions properly
-    $task = new CTask();
-    $deny2 = $task->getDeniedRecords($AppUI->user_id);
-    if (count($deny2) > 0) {
-        $q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
-    }
-
-    if ($project_id) {
-        $q->addWhere('file_project = ' . (int) $project_id);
-    }
-    if ($task_id) {
-        $q->addWhere('file_task = ' . (int) $task_id);
-    }
-    if ($company_id) {
-        $q->addWhere('project_company = ' . (int) $company_id);
-    }
-    $q->setLimit($xpg_pagesize, $xpg_min);
-    $q->addWhere('file_folder = ' . (int) $folder_id);
-    $q->addGroup('file_version_id DESC');
-
-    $qv = new w2p_Database_Query();
-    $qv->addTable('files');
-    $qv->addQuery('file_id, file_version, file_project, file_name, file_task,
-		file_description, u.user_username as file_owner, file_size, file_category,
-		task_name, file_version_id,  file_checkout, file_co_reason, file_type,
-		file_date, cu.user_username as co_user, project_name,
-		project_color_identifier, project_owner, con.contact_first_name,
-		con.contact_last_name, co.contact_first_name as co_contact_first_name,
-		co.contact_last_name as co_contact_last_name ');
-    $qv->addJoin('projects', 'p', 'p.project_id = file_project');
-    $qv->addJoin('users', 'u', 'u.user_id = file_owner');
-    $qv->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
-    $qv->addJoin('tasks', 't', 't.task_id = file_task');
-    $qv->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-    if ($project_id) {
-        $qv->addWhere('file_project = ' . (int) $project_id);
-    }
-    if ($task_id) {
-        $qv->addWhere('file_task = ' . (int) $task_id);
-    }
-    if ($company_id) {
-        $qv->addWhere('project_company = ' . (int) $company_id);
-    }
-    $qv->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-    $qv->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
-    $qv->addWhere('file_folder = ' . (int) $folder_id);
-
-    $files = array();
+    $cfiles = new CFile();
+    $files = $cfiles->getAllowedRecords($AppUI->user_id, $folder_id);
     $file_versions = array();
-    $files = $q->loadList();
-    $file_versions = $qv->loadHashList('file_id');
-    $q->clear();
-    $qv->clear();
+    $file_versions = $cfiles->getFileVersions($AppUI->user_id, $folder_id);
 
     if ($files === array()) {
         return 0;
