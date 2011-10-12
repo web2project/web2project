@@ -114,8 +114,8 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
     public function test__autoload()
     {
         $this->assertTrue(class_exists('CProject'));
-        $search = new smartsearch();
-        $this->assertTrue(class_exists('smartsearch'));
+        $search = new CSmartSearch();
+        $this->assertTrue(class_exists('CSmartSearch'));
     }
 
     /**

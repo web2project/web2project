@@ -233,8 +233,10 @@ function removeContactMethod(index) {
 }
 
 $(document).ready(function() {
-<?php foreach ($methods as $method => $value): ?>
-    addContactMethod("<?php echo $method; ?>", "<?php echo $value; ?>");
+<?php
+$fields = $methods['fields'];
+foreach ($fields as $key => $field): ?>
+    addContactMethod("<?php echo $field; ?>", "<?php echo $methods['values'][$key]; ?>");
 <?php endforeach; ?>
     addContactMethod();
 });

@@ -265,7 +265,7 @@ class CTaskLog extends w2p_Core_BaseObject
 	private function updateTaskSummary(w2p_Core_CAppUI $AppUI, $task_id)
 	{
         $perms = $AppUI->acl();
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->clear();
 
         if($perms->checkModuleItem('tasks', 'edit', $task_id)) {

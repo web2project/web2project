@@ -52,7 +52,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function loadFull(w2p_Core_CAppUI $AppUI = null, $contactId) {
 		global $AppUI;
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addTable('contacts');
         $q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
         $q->addWhere('contact_id = ' . (int) $contactId);
@@ -94,7 +94,7 @@ class CContact extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $this->contact_lastupdate = $q->dbfnNowWithTZ();
         /*
          * TODO: I don't like the duplication on each of these two branches, but I
@@ -124,47 +124,68 @@ class CContact extends w2p_Core_BaseObject {
 
     protected function hook_postStore() {
         $methods = array();
+        $fields  = array();
+        $values  = array();
 
         // TODO:  I *really* don't like using the POST inside here..
-        if (!empty($_POST['contact_methods'])) {
-            foreach ($_POST['contact_methods']['field'] as $key => $field) {
-                $methods[$field] = $_POST['contact_methods']['value'][$key];
+        $contact_methods = empty($_POST['contact_methods']) ? array() : $_POST['contact_methods'];
+        if (count($contact_methods)) {
+            foreach ($contact_methods['field'] as $key => $field) {
+                $fields[] = $contact_methods['field'][$key];
+                $values[] = $contact_methods['value'][$key];
             }
         }
+        $methods['fields'] = $fields;
+        $methods['values'] = $values;
+        $this->setContactMethods($methods);
 
         $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
         $custom_fields->bind($_POST);
         $sql = $custom_fields->store($this->contact_id); // Store Custom Fields
-        $this->setContactMethods($methods);
 
         parent::hook_postStore();
     }
 
+    /*
+     * This is an ugly bit of code that should handle *both* data structures..
+     */
 	public function setContactMethods(array $methods) {
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->setDelete('contacts_methods');
 		$q->addWhere('contact_id=' . (int)$this->contact_id);
 		$q->exec();
 		$q->clear();
 
-		if (!empty($methods)) {
+		if (count($methods)) {
 			$q->addTable('contacts_methods');
 			$q->addInsert('contact_id', (int)$this->contact_id);
-			foreach ($methods as $name => $value) {
-				if (!empty($value)) {
-					$q->addInsert('method_name', $name);
-					$q->addInsert('method_value', $value);
-					$q->exec();
-				}
-			}
+            if (isset($methods['fields'])) {
+                foreach ($methods['fields'] as $key => $field) {
+                    if ('' != $field || '' != $methods['values'][$key]) {
+                        $q->addInsert('method_name', $field);
+                        $q->addInsert('method_value', $methods['values'][$key]);
+                        $q->exec();
+                    }
+                }
+            } else {
+                foreach ($methods as $name => $value) {
+                    if (!empty($value)) {
+                        $q->addInsert('method_name', $name);
+                        $q->addInsert('method_value', $value);
+                        $q->exec();
+                    }
+                }
+            }
 			$q->clear();
 		}
 	}
 
 	public function getContactMethods($methodsArray = null) {
 		$results = array();
+        $fields  = array();
+        $values  = array();
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('contacts_methods');
 		$q->addQuery('method_name, method_value');
 		$q->addWhere('contact_id = ' . (int)$this->contact_id);
@@ -175,8 +196,11 @@ class CContact extends w2p_Core_BaseObject {
 		$contacts = $q->loadList();
 
         foreach($contacts as $row => $data) {
-            $results[$data['method_name']] = $data['method_value'];
+            $fields[] = $data['method_name'];
+            $values[] = $data['method_value'];
         }
+        $results['fields'] = $fields;
+        $results['values'] = $values;
 
 		return $results;
 	}
@@ -222,13 +246,13 @@ class CContact extends w2p_Core_BaseObject {
 
 		if ((int) $oid) {
 			// Check to see if there is a user
-			$q = $this->_query;
+			$q = $this->_getQuery();
             $q->clear();
 			$q->addTable('users');
 			$q->addQuery('count(user_id) as user_count');
 			$q->addWhere('user_contact = ' . (int)$oid);
 			$user_count = $q->loadResult();
-            
+
             return ($user_count) ? true : false;
 		} else {
 			return false;
@@ -278,18 +302,18 @@ class CContact extends w2p_Core_BaseObject {
 
 	public function getUpdateKey() {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('contacts');
 		$q->addQuery('contact_updatekey');
 		$q->addWhere('contact_id = ' . (int)$this->contact_id);
 
 		return $q->loadResult();
 	}
-	
+
 	public function clearUpdateKey() {
 		global $AppUI;
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$this->contact_updatekey = '';
 		$this->contact_lastupdate = $q->dbfnNowWithTZ();
 		$this->store($AppUI);
@@ -364,7 +388,7 @@ class CContact extends w2p_Core_BaseObject {
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
 
-	public static function searchContacts(w2p_Core_CAppUI $AppUI = null, $where = '', $searchString = '') {
+	public static function searchContacts(w2p_Core_CAppUI $AppUI = null, $where = '', $searchString = '', $days = 0) {
 		global $AppUI;
 
         $showfields = array('contact_address1' => 'contact_address1',
@@ -394,6 +418,9 @@ class CContact extends w2p_Core_BaseObject {
 		$q->leftJoin('departments', '', 'contact_department = dept_id');
 		$q->leftJoin('users', '', 'contact_id = user_contact');
 		$q->addWhere("(contact_first_name LIKE '$where%' OR contact_last_name LIKE '$where%' " . $additional_filter . ")");
+        if ($days) {
+            $q->addWhere('contact_lastupdate >= ' . $q->dbfnDateAdd($q->dbfnNow(), -$days, 'DAY'));
+        }
 		$q->addWhere('
 			(contact_private=0
 				OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
@@ -410,7 +437,7 @@ class CContact extends w2p_Core_BaseObject {
 
 		return $q->loadList();
 	}
-	
+
 	public static function getFirstLetters($userId, $onlyUsers = false) {
 		$letters = '';
 
@@ -461,7 +488,7 @@ class CContact extends w2p_Core_BaseObject {
 
 		return $result;
 	}
-	
+
 	public static function getContactByEmail($email) {
 
         $q = new w2p_Database_Query();
@@ -478,7 +505,7 @@ class CContact extends w2p_Core_BaseObject {
 
 		return $result;
 	}
-	
+
 	public static function getContactByUpdatekey($updateKey) {
 
         $q = new w2p_Database_Query();
@@ -488,7 +515,7 @@ class CContact extends w2p_Core_BaseObject {
 
 		return $q->loadResult();
 	}
-	
+
 	public static function getProjects($contactId) {
 
         $q = new w2p_Database_Query();
@@ -502,20 +529,20 @@ class CContact extends w2p_Core_BaseObject {
 
 	public function clearOldUpdatekeys($days_for_update) {
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->addTable('contacts');
 		$q->addUpdate('contact_updatekey', '');
 		$q->addWhere("(TO_DAYS(NOW()) - TO_DAYS(contact_updateasked) >= $days_for_update)");
 		$q->exec();
 	}
-	
+
 	public function hook_cron() {
 		global $AppUI;
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addTable('contacts');
 		$q->addQuery('contact_id');
-		$q->addWhere('contact_display_name IS NULL OR contact_display_name == ""');
+		$q->addWhere('contact_display_name IS NULL OR contact_display_name = ""');
 		$contactIdList = $q->loadList();
 
 		foreach($contactIdList as $contactId) {

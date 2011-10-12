@@ -7,6 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
+$AppUI = new w2p_Core_CAppUI();
 require_once $AppUI->getLibraryClass('captcha/Functions');
 
 $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
@@ -41,9 +42,6 @@ if (strlen($_POST['spam_check']) > 0) {
 if (!isset($GLOBALS['OS_WIN'])) {
 	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, 'WIN') !== false);
 }
-
-
-$AppUI = new w2p_Core_CAppUI();
 
 if (w2PgetConfig('activate_external_user_creation') != 'true') {
 	die('You should not access this file directly');
@@ -103,7 +101,7 @@ if ($isNewUser) {
 $result = $contact->store($AppUI);
 if ($result) {
     $user->user_contact = $contact->contact_id;
-    if (($msg = $user->store())) {
+    if (($msg = $user->store(null, true))) {
         $AppUI->setMsg($msg, UI_MSG_ERROR);
     } else {
         if ($isNewUser) {

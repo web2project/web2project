@@ -26,7 +26,7 @@ if ($contact_id) {
 	$vcard = new Contact_Vcard_Build();
 
 	// set a formatted name
-	$vcard->setFormattedName($contact->contact_first_name . ' ' . $contact->contact_last_name);
+	$vcard->setFormattedName($contact->contact_display_name);
 
 	// set the structured name parts
 	$vcard->setName($contact->contact_last_name, $contact->contact_first_name, $contact->contact_type, $contact->contact_title, '');
@@ -51,12 +51,20 @@ if ($contact_id) {
 	$vcard->addTelephone($contact->contact_phone);
 	$vcard->addParam('TYPE', 'PF');
 
+
+    $fields = $contactMethods['fields'];
 	// add a phone number
-	$vcard->addTelephone($contactMethods['phone_alt']);
+    $index = array_search('phone_alt', $fields);
+    if (false !== $index) {
+        $vcard->addTelephone($contactMethods['values'][$index]);
+    }
 
 	// add a mobile phone number
-	$vcard->addTelephone($contactMethods['phone_mobile']);
-	$vcard->addParam('TYPE', 'car');
+    $index = array_search('phone_mobile', $fields);
+    if (false !== $index) {
+        $vcard->addTelephone($contactMethods['values'][$index]);
+        $vcard->addParam('TYPE', 'car');
+    }
 
 	// add a work email.  note that we add the value
 	// first and the param after -- Contact_Vcard_Build
@@ -66,7 +74,10 @@ if ($contact_id) {
 	$vcard->addParam('TYPE', 'PF');
 
 	// add a home/preferred email
-	$vcard->addEmail($contactMethods['email_alt']);
+    $index = array_search('email_alt', $fields);
+    if (false !== $index) {
+        $vcard->addEmail($contactMethods['values'][$index]);
+    }
 
 	// add an address
 	$vcard->addAddress('', $contact->contact_address2, $contact->contact_address1, $contact->contact_city, $contact->contact_state, $contact->contact_zip, $contact->contact_country);

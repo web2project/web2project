@@ -58,7 +58,7 @@ class CFile extends w2p_Core_BaseObject {
         $this->file_date = $AppUI->convertToSystemTZ($this->file_date);
 
         if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
-            // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user. 
+            // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user.
             // If not then we are just editing the file information alone. So we should leave the file_id as it is.
             $this->file_parent = $this->file_id;
             if ((int)$this->file_size > 0) {
@@ -74,7 +74,7 @@ class CFile extends w2p_Core_BaseObject {
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->file_owner = $AppUI->user_id;
 
-            $q = $this->_query;
+            $q = $this->_getQuery();
             $q->addTable('files');
             $q->clear();
             if (!$this->file_version_id) {
@@ -200,7 +200,7 @@ class CFile extends w2p_Core_BaseObject {
 		}
 
 		$result = false;
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->clear();
 		$q->addTable('projects');
 		$q->addQuery('project_owner');
@@ -303,7 +303,7 @@ class CFile extends w2p_Core_BaseObject {
 		global $AppUI;
         $perms = $AppUI->acl();
 
-        if ('' == $this->file_real_filename || 
+        if ('' == $this->file_real_filename ||
                 !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
             return true;
         }
@@ -399,61 +399,65 @@ class CFile extends w2p_Core_BaseObject {
             }
             // buffer the file
             $this->_filepath = W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename;
-            $fp = fopen($this->_filepath, 'rb');
-            $x = fread($fp, $this->file_size);
-            fclose($fp);
-            // parse it
-            $parser = $parser . ' ' . $this->_filepath;
-            $pos = strpos($parser, '/pdf');
+            if (file_exists($this->_filepath)) {
+                $fp = fopen($this->_filepath, 'rb');
+                $x = fread($fp, $this->file_size);
+                fclose($fp);
+                // parse it
+                $parser = $parser . ' ' . $this->_filepath;
+                $pos = strpos($parser, '/pdf');
 
-            /*
-             * TODO: I *really* hate using error surpression here and I would
-             *   normally just detect if safe_mode is on and if it was, skip
-             *   this call. Unfortunately, safe_mode has been deprecated in
-             *   5.3 and will be removed in 5.4
-             */
-            if (false !== $pos) {
-                $x = @shell_exec(`$parser -`);
-            } else {
-                $x = @shell_exec(`$parser`);
-            }
-            // if nothing, return
-            if (strlen($x) < 1) {
-                return 0;
-            }
-            // remove punctuation and parse the strings
-            $x = str_replace(array('.', ',', '!', '@', '(', ')'), ' ', $x);
-            $warr = explode(' ', $x);
-
-            $wordarr = array();
-            $nwords = count($warr);
-            for ($x = 0; $x < $nwords; $x++) {
-                $newword = $warr[$x];
-                if (!preg_match('[!"#$%&\'()*+,\-./:;<=>?@[\\\]^_`{|}~]', $newword)
-                    && mb_strlen(mb_trim($newword)) > 2
-                    && !preg_match('[0-9]', $newword)) {
-                        $wordarr[$newword] = $x;
+                /*
+                 * TODO: I *really* hate using error surpression here and I would
+                 *   normally just detect if safe_mode is on and if it was, skip
+                 *   this call. Unfortunately, safe_mode has been deprecated in
+                 *   5.3 and will be removed in 5.4
+                 */
+                if (false !== $pos) {
+                    $x = @shell_exec(`$parser -`);
+                } else {
+                    $x = @shell_exec(`$parser`);
                 }
-            }
+                // if nothing, return
+                if (strlen($x) < 1) {
+                    return 0;
+                }
+                // remove punctuation and parse the strings
+                $x = str_replace(array('.', ',', '!', '@', '(', ')'), ' ', $x);
+                $warr = explode(' ', $x);
 
-            // filter out common strings
-            $ignore = w2PgetSysVal('FileIndexIgnoreWords');
-            $ignore = str_replace(' ,', ',', $ignore);
-            $ignore = str_replace(', ', ',', $ignore);
-            $ignore = explode(',', $ignore);
-            foreach ($ignore as $w) {
-                unset($wordarr[$w]);
-            }
-            $nwords_indexed = count($wordarr);
-            // insert the strings into the table
-            while (list($key, $val) = each($wordarr)) {
-                $q = new w2p_Database_Query;
-                $q->addTable('files_index');
-                $q->addReplace('file_id', $this->file_id);
-                $q->addReplace('word', $key);
-                $q->addReplace('word_placement', $val);
-                $q->exec();
-                $q->clear();
+                $wordarr = array();
+                $nwords = count($warr);
+                for ($x = 0; $x < $nwords; $x++) {
+                    $newword = $warr[$x];
+                    if (!preg_match('[!"#$%&\'()*+,\-./:;<=>?@[\\\]^_`{|}~]', $newword)
+                        && mb_strlen(mb_trim($newword)) > 2
+                        && !preg_match('[0-9]', $newword)) {
+                            $wordarr[$newword] = $x;
+                    }
+                }
+
+                // filter out common strings
+                $ignore = w2PgetSysVal('FileIndexIgnoreWords');
+                $ignore = str_replace(' ,', ',', $ignore);
+                $ignore = str_replace(', ', ',', $ignore);
+                $ignore = explode(',', $ignore);
+                foreach ($ignore as $w) {
+                    unset($wordarr[$w]);
+                }
+                $nwords_indexed = count($wordarr);
+                // insert the strings into the table
+                while (list($key, $val) = each($wordarr)) {
+                    $q = new w2p_Database_Query;
+                    $q->addTable('files_index');
+                    $q->addReplace('file_id', $this->file_id);
+                    $q->addReplace('word', $key);
+                    $q->addReplace('word_placement', $val);
+                    $q->exec();
+                    $q->clear();
+                }
+            } else {
+                //TODO: if the file doesn't exist.. should we delete the db record?
             }
         }
 		$q = new w2p_Database_Query;
@@ -507,18 +511,18 @@ class CFile extends w2p_Core_BaseObject {
                     //preparing users array
                     $q = new w2p_Database_Query;
                     $q->addTable('tasks', 't');
-                    $q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as 
+                    $q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as
                             creator_first_name, cc.contact_last_name as creator_last_name,
                             oc.contact_email as owner_email, oc.contact_first_name as owner_first_name,
                             oc.contact_last_name as owner_last_name, a.user_id as assignee_id,
                             ac.contact_email as assignee_email, ac.contact_first_name as
-                            assignee_first_name, ac.contact_last_name as assignee_last_name'); 
+                            assignee_first_name, ac.contact_last_name as assignee_last_name');
                     $q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
                     $q->addJoin('users', 'o', 'o.user_id = t.task_owner');
                     $q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
                     $q->addJoin('users', 'c', 'c.user_id = t.task_creator');
                     $q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
-                    $q->addJoin('users', 'a', 'a.user_id = u.user_id'); 
+                    $q->addJoin('users', 'a', 'a.user_id = u.user_id');
                     $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
                     $q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
                     $this->_users = $q->loadList();
@@ -592,14 +596,14 @@ class CFile extends w2p_Core_BaseObject {
 
                     $q = new w2p_Database_Query;
                     $q->addTable('project_contacts', 'pc');
-                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name'); 
+                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                     $q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
                     $sql = '(' . $q->prepare() . ')';
                     $q->clear();
                     $sql .= ' UNION ';
                     $q->addTable('task_contacts', 'tc');
-                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name'); 
+                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
                     $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
                 } else {
@@ -637,7 +641,7 @@ class CFile extends w2p_Core_BaseObject {
 		if (!$this->file_owner)
 			return $owner;
 
-		$q = $this->_query;
+		$q = $this->_getQuery();
 		$q->addTable('users', 'a');
 		$q->addJoin('contacts', 'b', 'b.contact_id = a.user_contact', 'inner');
 		$q->addQuery('contact_first_name, contact_last_name');
@@ -654,7 +658,7 @@ class CFile extends w2p_Core_BaseObject {
 		if (!$this->file_task)
 			return $taskname;
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 		$q->clear();
 		$q->addTable('tasks');
 		$q->addQuery('task_name');
