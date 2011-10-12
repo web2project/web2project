@@ -3,8 +3,8 @@
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
-global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary,
- $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id,
+global $AppUI, $canRead, $canEdit, $allowed_folders_ary,
+$tab, $folder, $cfObj, $m, $a, $company_id,
  $allowed_companies, $showProject;
 
 /*
@@ -56,9 +56,8 @@ function getFolders($parent) {
 }
 
 function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $skip_headers = false, $skip_projects = false, $display_contents = true) {
-    global $m, $a, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
-    $cfObj, $xpg_totalrecs, $xpg_total_pages, $page, $company_id,
-    $allowed_companies, $current_uri, $w2Pconfig, $canEdit, $canRead;
+    global $xpg_min, $xpg_pagesize, $showProject, $file_types,
+    $company_id, $current_uri, $w2Pconfig, $canEdit;
 
     $df = $AppUI->getPref('SHDATEFORMAT');
     $tf = $AppUI->getPref('TIMEFORMAT');
@@ -223,7 +222,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
             foreach ($file_versions as $file) {
                 if ($file['file_version_id'] == $latest_file['file_version_id']) {
                     $file_icon = getIcon($file['file_type']);
-                    $hdate = new w2p_Utilities_Date($file['file_date']);
                     $hidden_table .= '<tr><td nowrap="8%"><a href="./fileviewer.php?file_id=' . $file['file_id'] . '" title="' . $file['file_description'] . '">' . '<img border="0" width="16" heigth="16" src="' . w2PfindImage($file_icon, 'files') . '" alt="" />&nbsp;' . $file['file_name'] . '
 					  </a></td>
 					  <td width="20%">' . $file['file_description'] . '</td>
@@ -303,8 +301,6 @@ if (!$folder_id) {
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'];
 
-$page = (int) w2PgetParam($_GET, 'page', 1);
-
 if (!isset($project_id)) {
     $project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 }
@@ -324,13 +320,6 @@ if (!isset($task_id)) {
     $task_id = (int) w2PgetParam($_REQUEST, 'task_id', 0);
 }
 
-$xpg_pagesize = w2PgetConfig('page_size', 50);
-$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-
-$file_types = w2PgetSysVal('FileType');
-
-$myFolder = new CFileFolder();
-$xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $project_id, $company_id, $allowed_companies);
 ?>
 <script language="javascript" type="text/javascript">
     $('body').ready(function(){
@@ -470,7 +459,7 @@ $xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $
     $project = new CProject();
     $sprojects = $project->getAllowedProjects($AppUI, false);
     foreach ($sprojects as $prj_id => $proj_info) {
-        $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
+        $sprojects[$prj_id] = $proj_info['project_name'];
     }
     asort($sprojects);
     $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
