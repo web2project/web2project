@@ -79,6 +79,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
     if (count($deny1) > 0) {
         $q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
     }
+    
     //TODO: apply permissions properly
     $task = new CTask();
     $deny2 = $task->getDeniedRecords($AppUI->user_id);
@@ -459,7 +460,7 @@ if (!isset($task_id)) {
     $project = new CProject();
     $sprojects = $project->getAllowedProjects($AppUI, false);
     foreach ($sprojects as $prj_id => $proj_info) {
-        $sprojects[$prj_id] = $proj_info['project_name'];
+        $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
     }
     asort($sprojects);
     $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
