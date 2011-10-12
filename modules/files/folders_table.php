@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 global $AppUI, $canRead, $canEdit, $allowed_folders_ary,
-$tab, $folder, $cfObj, $m, $a, $company_id,
+ $tab, $folder, $cfObj, $m, $a, $company_id,
  $allowed_companies, $showProject;
 
 /*
@@ -47,37 +47,37 @@ function getFolders($parent) {
                     '<a style="float:left;" href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id . '&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a>';
             $s .= '</td></tr>';
             if ($file_count > 0) {
-                $s .= '<tr><td colspan="20">' . displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id, false, true) . '</td></tr>';
+                $s .= '<tr id="filestbl_' . $row['file_folder_id'] . '" class="filestbl"><td colspan="20">' . displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id, true, true) . '</td></tr>';
             }
         }
     }
 
     return $s;
 }
-function buildFolderURL($f){
+
+function buildFolderURL($f) {
     global $m, $a, $tab;
-    
+
     $task_id = w2PgetParam($_GET, 'task_id');
     $project_id = w2PgetParam($_GET, 'project_id');
     $company_id = w2PgetParam($_GET, 'company_id');
-    
+
     $url = "./index.php?m=$m&amp;&a=$a&amp;tab=$tab&folder=$f";
-    if(!empty($task_id)) {
+    if (!empty($task_id)) {
         $url .= "&task_id=$task_id";
     }
-    if(!empty($project_id)) {
+    if (!empty($project_id)) {
         $url .= "&project_id=$project_id";
     }
-    if(!empty($company_id)) {
+    if (!empty($company_id)) {
         $url .= "&company_id=$company_id";
     }
-    
+
     return $url;
 }
 
-function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $skip_headers = false, $skip_projects = false, $display_contents = true) {
-    global $xpg_min, $xpg_pagesize, $showProject, $file_types,
-    $company_id, $current_uri, $w2Pconfig, $canEdit;
+function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $skip_headers = false, $skip_projects = false) {
+    global $xpg_min, $xpg_pagesize, $showProject, $file_types, $current_uri, $w2Pconfig, $canEdit;
 
     $df = $AppUI->getPref('SHDATEFORMAT');
     $tf = $AppUI->getPref('TIMEFORMAT');
@@ -85,13 +85,12 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
     $cfiles = new CFile();
     $files = $cfiles->getAllowedRecords($AppUI->user_id, $folder_id);
     $file_versions = array();
-    $file_versions = $cfiles->getFileVersions($AppUI->user_id, $folder_id);
+    $file_versions = $cfiles->getFileVersions($folder_id);
 
     if ($files === array()) {
         return 0;
     }
-    $dispFiles = ($display_contents) ? "show-files" : "";
-    $s = '<table width="100%" border="0" cellpadding="2" cellspacing="1" id="filestbl_' . $folder_id . '" class="tbl filestbl ' . $dispFiles . '">';
+    $s = '<table width="100%" border="0" cellpadding="2" cellspacing="1"  class="tbl">';
     if (!$skip_headers) {
         $s .= '<tr>
 			<th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
@@ -138,7 +137,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
         $fp = $latest_file['file_project'];
 
         $s .= '<tr>
-				<td nowrap="8%">
+		<td nowrap="8%">
                     <form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
                         <input type="hidden" name="dosql" value="do_file_aed" />
                         <input type="hidden" name="del" value="1" />
@@ -158,9 +157,9 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
         $hidden_table = '';
         $s .= $row['file_lastversion'];
         if ($row['file_versions'] > 1) {
-            $s .= ' <a href="javascript: void(0);" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
-            $hidden_table = '<tr><td colspan="20">
-							<table style="display: none" id="versions_' . $latest_file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+            $s .= ' <a href="" id="versiontbl_' . $latest_file['file_id'] . '" class="toggle-file-versions">(' . $row['file_versions'] . ')</a>';
+            $hidden_table .= '<tr id="versions_' . $latest_file['file_id'] . '" style="display: none"><td colspan="20">
+				<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
 							<tr>
 							        <th nowrap="nowrap">' . $AppUI->_('File Name') . '</th>
 							        <th>' . $AppUI->_('Description') . '</th>
@@ -188,12 +187,12 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
 					  <td nowrap="nowrap">' . $file['file_type'] . '</td>
 					  <td width="5%" nowrap="nowrap" align="center">' . $AppUI->formatTZAwareTime($file['file_date'], $df . ' ' . $tf) . '</td>';
                     if ($canEdit && $w2Pconfig['files_show_versions_edit']) {
-                        $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
+                        $hidden_table .= '<td nowrap="nowrap"><a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a></td>";
                     }
-                    $hidden_table .= '</table></td><tr>';
+                    $hidden_table .= '</tr>';
                 }
             }
-            $hidden_table .= '';
+            $hidden_table .= '</table></td></tr>';
         }
         $s .= '</td>
 				<td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
@@ -228,8 +227,8 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $s
             $s .= '<input type="checkbox" ' . $bulk_op . ' name="chk_sel_file_' . $latest_file['file_id'] . '" />';
         }
         $s .= '</td></tr>';
+        $s .= $hidden_table;
         $s .= '</table>';
-        $hidden_table = '';
     }
     return $s;
 }
@@ -273,22 +272,29 @@ $allowed_companies = implode(',', array_keys($allowed_companies_ary));
 if (!isset($task_id)) {
     $task_id = (int) w2PgetParam($_REQUEST, 'task_id', 0);
 }
-
 ?>
 <script language="javascript" type="text/javascript">
     $('body').ready(function(){
         $('.filestbl,not:(show-files)').hide();
     });
+    
+    // JS delegate that handles expand/hide folder file lists
     $('body').delegate('a.has-files', 'click', function(e){
         var folderId = $(this).attr('id');
         var fileTableId = '#filestbl_' + folderId.slice(folderId.lastIndexOf("_")+1);
         var elem = $(fileTableId);
         elem.toggle();
-        if(elem.is(':visible')){
-            elem.html(elem.html().replace('-', '+'));
-        } else {
-            elem.html(elem.html().replace('+', '-'));
-        }
+
+        return false;
+    });
+    
+    // jQuery delegate that handles expand/hide file version lists
+    $('body').delegate('a.toggle-file-versions', 'click', function(e){
+        var fileId = $(this).attr('id');
+        var versionTableId = '#versions_' + fileId.slice(fileId.lastIndexOf("_")+1);
+        var elem = $(versionTableId);
+        elem.toggle();
+        
         return false;
     });
     function addBulkComponent(li) {
@@ -383,9 +389,9 @@ if (!isset($task_id)) {
             /*             * ** Main Program *** */
             if ($folder_id) {
                 ?>
-            <a style="float: left" href="<?php echo buildFolderURL('0') ?>"><?php echo w2PshowImage('home.png', '22', '22', 'To Root', 'Back to root folder', 'files'); ?></a>
+                <a style="float: left" href="<?php echo buildFolderURL('0') ?>"><?php echo w2PshowImage('home.png', '22', '22', 'To Root', 'Back to root folder', 'files'); ?></a>
                 <?php if (array_key_exists($cfObj->file_folder_parent, $allowed_folders_ary)): ?>
-                    <a style="float: left" href="<?php echo buildFolderURL($cfObj->file_folder_parent);?>"><?php echo w2PshowImage('back.png', '22', '22', 'To Parent', 'Back to parent folder', 'files'); ?></a>
+                    <a style="float: left" href="<?php echo buildFolderURL($cfObj->file_folder_parent); ?>"><?php echo w2PshowImage('back.png', '22', '22', 'To Parent', 'Back to parent folder', 'files'); ?></a>
                 <?php endif; ?>
                 <a style="float: left; margin-right: 1em" href="<?php echo buildFolderURL($cfObj->file_folder_parent) . "&a=addedit_folder&folder=" . $cfObj->file_folder_id ?>" title="Edit <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'Edit', 'Edit folder', 'files'); ?></a>
             <?php } ?>
