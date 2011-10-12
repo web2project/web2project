@@ -54,6 +54,26 @@ function getFolders($parent) {
 
     return $s;
 }
+function buildFolderURL($f){
+    global $m, $a, $tab;
+    
+    $task_id = w2PgetParam($_GET, 'task_id');
+    $project_id = w2PgetParam($_GET, 'project_id');
+    $company_id = w2PgetParam($_GET, 'company_id');
+    
+    $url = "./index.php?m=$m&amp;&a=$a&amp;tab=$tab&folder=$f";
+    if(!empty($task_id)) {
+        $url .= "&task_id=$task_id";
+    }
+    if(!empty($project_id)) {
+        $url .= "&project_id=$project_id";
+    }
+    if(!empty($company_id)) {
+        $url .= "&company_id=$company_id";
+    }
+    
+    return $url;
+}
 
 function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $skip_headers = false, $skip_projects = false, $display_contents = true) {
     global $xpg_min, $xpg_pagesize, $showProject, $file_types,
@@ -363,11 +383,11 @@ if (!isset($task_id)) {
             /*             * ** Main Program *** */
             if ($folder_id) {
                 ?>
-                <a style="float: left" href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'folder icon', 'back to root folder', 'files'); ?></a>
+            <a style="float: left" href="<?php echo buildFolderURL('0') ?>"><?php echo w2PshowImage('home.png', '22', '22', 'To Root', 'Back to root folder', 'files'); ?></a>
                 <?php if (array_key_exists($cfObj->file_folder_parent, $allowed_folders_ary)): ?>
-                    <a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo w2PshowImage('back.png', '22', '22', 'folder icon', 'back to parent folder', 'files'); ?></a>
+                    <a style="float: left" href="<?php echo buildFolderURL($cfObj->file_folder_parent);?>"><?php echo w2PshowImage('back.png', '22', '22', 'To Parent', 'Back to parent folder', 'files'); ?></a>
                 <?php endif; ?>
-                <a style="float: left; margin-right: 1em" href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a>
+                <a style="float: left; margin-right: 1em" href="<?php echo buildFolderURL($cfObj->file_folder_parent) . "&a=addedit_folder&folder=" . $cfObj->file_folder_id ?>" title="Edit <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'Edit', 'Edit folder', 'files'); ?></a>
             <?php } ?>
             <img src="<?php echo w2PfindImage('folder5_small.png', 'files'); ?>" width="16" height="16" style="float: left;" />
             <span class="folder-name-current" style="float: left;"><?php echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root"; ?></span>
@@ -393,7 +413,7 @@ if (!isset($task_id)) {
     $project = new CProject();
     $sprojects = $project->getAllowedProjects($AppUI, false);
     foreach ($sprojects as $prj_id => $proj_info) {
-        $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
+        $sprojects[$prj_id] = $proj_info['project_name'];
     }
     asort($sprojects);
     $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
