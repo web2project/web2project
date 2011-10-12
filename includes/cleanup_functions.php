@@ -2155,51 +2155,6 @@ function getFolderSelectList() {
 	return $folders;
 }
 
-/*
- * $parent is the parent of the children we want to see
- * $level is increased when we go deeper into the tree, used to display a nice indented tree
- */
-// From: modules/files/filefolder.class.php
-function getFolders($parent, $level = 0) {
-	global $AppUI, $allowed_folders_ary, $tab, $m, $a, $company_id, $project_id, $task_id;
-	// retrieve all children of $parent
-
-    $file_folder = new CFileFolder();
-    $folders = $file_folder->getFoldersByParent($parent);
-
-	$s = '';
-	// display each child
-    foreach ($folders as $row) {
-        if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
-            $file_count = countFiles($row['file_folder_id']);
-
-            $s .= '<tr><td colspan="20">';
-            $s .= '<a href="./index.php?m=' . $m . '&a=' . $a . '&tab=' . $tab . '&folder_id=' . $row['file_folder_id'] . '&project_id=' . $project_id . '">';
-            $s .= '<img src="' . w2PfindImage('folder5_small.png', 'files') . '" width="16" height="16" style="float: left; border: 0px;" />';
-            $s .= $row['file_folder_name'];
-            $s .= '</a>';
-            if ($file_count > 0) {
-                $s .= ' <a href="" id="folder_' . $row['file_folder_id'] . '" class="has-files">(' . $file_count . ' files) +</a>';
-            }
-            $s .= '<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="dosql" value="do_folder_aed" />
-                    <input type="hidden" name="del" value="1" />
-                    <input type="hidden" name="file_folder_id" value="' . $row['file_folder_id'] . '" />
-                    </form>';
-            $s .= '<a style="float:left;" href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '16', '16', 'Edit Folder', 'Edit this folder', 'files') . '</a>' .
-                    '<a style="float:left;" href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'New Folder', 'Add a new subfolder', 'files') . '</a>' .
-                    '<a style="float:right;" href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'Delete Folder', 'Delete this folder', 'files') . '</a>' .
-                    '<a style="float:left;" href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id . '&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a>';
-            $s .= '</td></tr>';
-            if ($file_count > 0) {
-                $s .= '<tr><td colspan="20">' . displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id, false, true) . '</td></tr>';
-            }
-        }
-    }
-
-	return $s;
-}
-
 // From: modules/files/filefolder.class.php
 function countFiles($folder) {
 	global $AppUI, $company_id, $allowed_companies, $tab;
