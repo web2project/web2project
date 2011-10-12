@@ -15,9 +15,8 @@ $countries = w2PgetSysVal('GlobalCountries');
 
 // retrieve any state parameters
 $searchString = w2PgetParam($_GET, 'search_string', '');
-if ($searchString != '') {
-	$AppUI->setState('ContIdxWhere', $searchString);
-}
+$AppUI->setState('ContIdxWhere', $searchString);
+
 $where = $AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '%';
 $tab = $AppUI->processIntState('ContactsIdxTab', $_GET, 'tab', 0);
 $days = ($tab == 0) ? 30 : 0;
@@ -81,14 +80,14 @@ $form = '<form action="./index.php" method="get" accept-charset="utf-8">' . $App
            <input type="text" class="text" name="search_string" value="' . $default_search_string . '" />
 		   <input type="hidden" name="m" value="contacts" />
 		   <input type="submit" value=">" />
-		   <a href="./index.php?m=contacts&amp;search_string=0">' . $AppUI->_('Reset search') . '</a>
+		   <a href="./index.php?m=contacts&amp;search_string=">' . $AppUI->_('Reset search') . '</a>
 		 </form>';
 // En of contact search form
 
 $a2z = '<table cellpadding="2" cellspacing="1" border="0">';
 $a2z .= '<tr>';
 $a2z .= '<td width="100%" align="right">' . $AppUI->_('Show') . ': </td>';
-$a2z .= '<td><a href="./index.php?m=contacts&where=0">' . $AppUI->_('All') . '</a></td>';
+$a2z .= '<td><a href="./index.php?m=contacts&where=">' . $AppUI->_('All') . '</a></td>';
 
 // Pull First Letters
 $letters = CContact::getFirstLetters($AppUI->user_id);
@@ -110,7 +109,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$tabBox = new CTabBox('?m=contacts', W2P_BASE_DIR . '/modules/contacts/', $tab);
+$tabBox = new CTabBox('?m=contacts&search_string='.$default_search_string, W2P_BASE_DIR . '/modules/contacts/', $tab);
 $tabBox->add('vw_idx_updated', $AppUI->_('Recently Updated'));
 $tabBox->add('vw_idx_contacts', $AppUI->_('All Contacts'));
 $tabBox->show();
