@@ -2207,52 +2207,46 @@ function last_file($file_versions, $file_name, $file_project) {
 
 // From: modules/files/files.class.php
 function getIcon($file_type) {
-	global $w2Pconfig, $uistyle;
-	$result = '';
-	$mime = str_replace('/', '-', $file_type);
-	$icon = 'gnome-mime-' . $mime;
-	if (is_file(W2P_BASE_DIR . '/styles/' . $uistyle . '/images/modules/files/icons/' . $icon . '.png')) {
-		$result = 'icons/' . $icon . '.png';
-	} else {
-    $mime = explode('/', $file_type);
-		switch ($mime[0]) {
-			case 'audio':
-				$result = 'icons/wav.png';
-				break;
-			case 'image':
-				$result = 'icons/image.png';
-				break;
-			case 'text':
-				$result = 'icons/text.png';
-				break;
-			case 'video':
-				$result = 'icons/video.png';
-				break;
-		}
-		if ($mime[0] == 'application') {
-			switch ($mime[1]) {
-				case 'vnd.ms-excel':
-					$result = 'icons/spreadsheet.png';
-					break;
-				case 'vnd.ms-powerpoint':
-					$result = 'icons/quicktime.png';
-					break;
-				case 'octet-stream':
-					$result = 'icons/source_c.png';
-					break;
-				default:
-					$result = 'icons/documents.png';
-			}
-		}
-	}
+    global $w2Pconfig, $uistyle;
+    $result = 'icons/unknown.png';
+    $mime = str_replace('/', '-', $file_type);
+    $icon = 'gnome-mime-' . $mime;
+    if (is_file(W2P_BASE_DIR . '/styles/' . $uistyle . '/images/modules/files/icons/' . $icon . '.png')) {
+        $result = 'icons/' . $icon . '.png';
+    } else {
+        $mime = explode('/', $file_type);
+        switch ($mime[0]) {
+            case 'audio':
+                $result = 'icons/wav.png';
+                break;
+            case 'image':
+                $result = 'icons/image.png';
+                break;
+            case 'text':
+                $result = 'icons/text.png';
+                break;
+            case 'video':
+                $result = 'icons/video.png';
+                break;
+            case 'application':
+                switch ($mime[1]) {
+                    case 'vnd.ms-excel':
+                        $result = 'icons/spreadsheet.png';
+                        break;
+                    case 'vnd.ms-powerpoint':
+                        $result = 'icons/quicktime.png';
+                        break;
+                    case 'octet-stream':
+                        $result = 'icons/source_c.png';
+                        break;
+                    default:
+                        $result = 'icons/documents.png';
+                }
+                break;
+        }
+    }
 
-	if ($result == '') {
-		switch ($obj->$file_category) {
-			default: // no idea what's going on
-				$result = 'icons/unknown.png';
-		}
-	}
-	return $result;
+    return $result;
 }
 
 // From: modules/files/files.class.php
