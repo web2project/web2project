@@ -118,6 +118,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 
         $history_active = false;
         // showing tasks
+        $tasks = is_array($tasks) ? $tasks : array();
         foreach ($tasks as $task) {
             echo showtask($task, 0, false, true);
         }
