@@ -1,7 +1,7 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-'About Modules'=>'Sobre os Modulos',
+'About Modules'=>'Sobre os Módulos',
 'Access Denied'=>'Acesso Negado',
 'Adding a Company'=>'Criando uma Empresa',
 'Adding a Project'=>'Criando um Projeto',

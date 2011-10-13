@@ -10,7 +10,7 @@
 'Forum Messages'=>'Mensagens de Fóruns',
 'Ignore case'=>'Maiúsculas/minúsculas',
 'Ignore special chars'=>'Ignorar caracteres especiais',
-'Modules selection'=>'Seleção de Modulos',
+'Modules selection'=>'Seleção de Módulos',
 'Search'=>'Pesquisar',
 'Select all'=>'Selecionar tudo',
 'Show empty'=>'Mostrar vazios',

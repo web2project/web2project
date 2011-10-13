@@ -3,9 +3,9 @@
 ##
 'Add Resource'=>'Adicionar Recurso',
 'All Resources'=>'Todos os Recursos',
-'back'=>'back',
+'back'=>'voltar',
 'Details'=>'Detalhes',
-'doDelete'=>'doDelete',
+'doDelete'=>'Confirma exclusão',
 'Equipment'=>'Equipamento',
 'ID'=>'ID',
 'Max Alloc %'=>'Max. % Atrib.',
@@ -19,4 +19,4 @@
 'submit'=>'enviar',
 'Tool'=>'Ferramenta',
 'Type'=>'Tipo',
-'Venue'=>'Direito',
+'Venue'=>'Local',

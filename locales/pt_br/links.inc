@@ -6,7 +6,7 @@
 'All Links'=>'Todos os Links',
 'All Projects'=>'Todos os Projetos',
 'Application'=>'Aplicação',
-'Are you sure you want to cancel?'=>'Tem a certeza de que deseja cancelar?',
+'Are you sure you want to cancel?'=>'Tem certeza que deseja cancelar?',
 'Attach a link'=>'Incluir um Link',
 'cancel'=>'cancelar',
 'Category'=>'Categoria',
@@ -33,5 +33,5 @@
 'Task'=>'Tarefa',
 'Task Name'=>'Nome da Tarefa',
 'Unknown'=>'Desconhecido',
-'Uploaded By'=>'Upload Por',
+'Uploaded By'=>'Enviado Por',
 
