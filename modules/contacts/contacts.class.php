@@ -163,7 +163,7 @@ class CContact extends w2p_Core_BaseObject {
                 foreach ($methods['fields'] as $key => $field) {
                     if ('' != $field || '' != $methods['values'][$key]) {
                         $q->addInsert('method_name', $field);
-                        $q->addInsert('method_value', $methods['values'][$key]);
+                        $q->addInsert('method_value', strtolower($methods['values'][$key]));
                         $q->exec();
                     }
                 }
@@ -171,7 +171,7 @@ class CContact extends w2p_Core_BaseObject {
                 foreach ($methods as $name => $value) {
                     if (!empty($value)) {
                         $q->addInsert('method_name', $name);
-                        $q->addInsert('method_value', $value);
+                        $q->addInsert('method_value', strtolower($value));
                         $q->exec();
                     }
                 }
