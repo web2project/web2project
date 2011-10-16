@@ -82,6 +82,8 @@ $titleBlock->show();
 
 $task_types = w2PgetSysVal('TaskType');
 
+$helper = new w2p_Output_HTMLHelper($AppUI);
+
 ?>
 <script language="javascript" type="text/javascript">
 function updateTask() {
@@ -118,16 +120,15 @@ function delIt() {
 <?php } ?>
 </script>
 
-
 <form name="frmDelete" action="./index.php?m=tasks" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_task_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
 </form>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
-    <tr valign="top">
-        <td width="50%">
+<table class="std view">
+    <tr>
+        <td width="50%" valign="top" class="view-column">
             <table width="100%" cellspacing="1" cellpadding="2">
                 <tr>
                     <td nowrap="nowrap" colspan="2"><strong><?php echo $AppUI->_('Details'); ?></strong></td>
@@ -160,7 +161,8 @@ function delIt() {
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
                     <td class="hilite"> <?php echo $obj->username; ?></td>
-                </tr>				<tr>
+                </tr>
+                <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
                     <td class="hilite">
                         <?php
@@ -171,7 +173,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Web Address'); ?>:</td>
-                    <td class="hilite" width="300"><a href="<?php echo $obj->task_related_url; ?>" target="task<?php echo $task_id; ?>"><?php echo $obj->task_related_url; ?></a></td>
+                    <?php echo $helper->createCell('task_related_url', $obj->task_related_url); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Milestone'); ?>:</td>
@@ -208,12 +210,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-                    <td class="hilite" width="300">
-                        <?php
-                            echo $w2Pconfig['currency_symbol'];
-                            echo formatCurrency($obj->task_target_budget, $AppUI->getPref('CURRENCYFORM'));
-                        ?>
-                    </td>
+                    <?php echo $helper->createCell('task_target_budget', $obj->task_target_budget); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Type'); ?> :</td>
@@ -222,7 +219,7 @@ function delIt() {
             </table>
         </td>
 
-        <td width="50%">
+        <td width="50%" valign="top" class="view-column">
             <table cellspacing="1" cellpadding="2" border="0" width="100%">
                 <tr>
                     <td colspan="3"><strong><?php echo $AppUI->_('Assigned Users'); ?></strong></td>
@@ -234,8 +231,10 @@ function delIt() {
                             $s = count($users) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
                             foreach ($users as $row) {
                                 $s .= '<tr>';
-                                $s .= '<td class="hilite"><a href="mailto:' . $row['user_email'] . '">' . $row['contact_display_name'] . '</a></td>';
-                                $s .= '<td class="hilite center" align="right" width="20%">' . $row['perc_assignment'] . '%</td>';
+                                $s .= '<td class="hilite" width=80%>';
+                                $s .= w2p_email($row['user_email'], $row['contact_display_name']);
+                                $s .= '</td>';
+                                $s .= $helper->createCell('perc_assignment', $row['perc_assignment']);
                                 $s .= '</tr>';
                             }
                             echo '<table width="100%" cellspacing="1" bgcolor="black">' . $s . '</table>';
@@ -251,11 +250,12 @@ function delIt() {
                         $taskDep = $obj->getDependencyList($task_id);
                         $s = count($taskDep) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
                         foreach ($taskDep as $key => $array) {
-                            $s .= '<tr><td class="hilite">';
+                            $s .= '<tr><td class="hilite" width=80%>';
                             $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
-							$s .= '</td><td class="hilite center" width="20%">';
-							$s .= $array['task_percent_complete'];
-                            $s .= '%</td></tr>';
+							$s .= '</td>';
+                            $s .= $helper->createCell('task_percent_complete', $array['task_percent_complete']);
+                            $s .= '</tr>';
+
                         }
                         echo '<table width="100%" cellspacing="1" bgcolor="black">' . $s . '</table>';
                     ?>
@@ -270,13 +270,13 @@ function delIt() {
                         $dependingTasks = $obj->getDependentTaskList($task_id);
                         $s = count($dependingTasks) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
                         foreach ($dependingTasks as $key => $array) {
-                            $s .= '<tr><td class="hilite">';
+                            $s .= '<tr><td class="hilite" width=80%>';
                             $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
-							$s .= '</td><td class="hilite center" width="20%">';
-							$s .= $array['task_percent_complete'];
-                            $s .= '%</td></tr>';
+							$s .= '</td>';
+                            $s .= $helper->createCell('task_percent_complete', $array['task_percent_complete']);
+                            $s .= '</tr>';
                         }
-                        echo '<table width="100%" cellspacing="1" bgcolor="black">' . $s . '</table>';
+                        echo '<table width="100%" cellspacing="1" bgcolor="black" class="list">' . $s . '</table>';
                     ?>
                     </td>
                 </tr>
@@ -298,15 +298,15 @@ function delIt() {
                 </tr>
                 <tr>
                     <td colspan="3" class="hilite">
-                        <?php
-                                foreach ($depts as $dept_id => $dept_info) {
-                                    echo '<div>' . $dept_info['dept_name'];
-                                    if ($dept_info['dept_phone'] != '') {
-                                        echo '( ' . $dept_info['dept_phone'] . ' )';
-                                    }
-                                    echo '</div>';
-                                }
-                            ?>
+                    <?php
+                    foreach ($depts as $dept_id => $dept_info) {
+                        echo '<div>' . $dept_info['dept_name'];
+                        if ($dept_info['dept_phone'] != '') {
+                            echo '( ' . $dept_info['dept_phone'] . ' )';
+                        }
+                        echo '</div>';
+                    }
+                    ?>
                     </td>
                 </tr>
                 <?php }
