@@ -62,7 +62,7 @@ class w2p_Output_HTMLHelper {
         switch ($shortname) {
 			case '_creator':
 			case '_owner':
-                $nowrap = true;
+                $additional = 'nowrap="nowrap"';
 				$cell = w2PgetUsernameFromID($value);
 				break;
 			case '_budget':
@@ -76,7 +76,7 @@ class w2p_Output_HTMLHelper {
                 $cell = w2p_email($value);
                 break;
 			case '_date':
-				$nowrap = true;
+				$additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
 				$cell = $myDate ? $myDate->format($this->df) : '-';
 				break;
@@ -87,13 +87,21 @@ class w2p_Output_HTMLHelper {
                 $class = 'center';
                 $cell = $value;
                 break;
+            case '_complete':
+            case '_assignment':
+                $class = 'center';
+                $cell = $value.'%';
+                break;
+            case '_url':
+                $cell = w2p_url($value);
+                break;
             case '_hours':
 			default:
-				$nowrap = true;
+				$additional = 'nowrap="nowrap"';
 				$cell = htmlspecialchars($value, ENT_QUOTES);
 		}
 
-        $begin = '<td '.($nowrap ? 'nowrap="nowrap"' : '').' class="data '.$class.'">';
+        $begin = '<td '.$additional.' class="data '.$class.'">';
         $end = '</td>';
 
 		return $begin.$cell.$end;
