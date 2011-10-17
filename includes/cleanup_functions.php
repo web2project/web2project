@@ -51,7 +51,7 @@ function notifyNewExternalUser($address, $username, $logname, $logpwd) {
 		}
 
 		$mail->To($address);
-        $emailManager = new w2p_Output_EmailManager();
+        $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
 		$mail->Subject('New Account Created');
         $mail->Body($body);
@@ -70,7 +70,7 @@ function notifyHR($address, $username, $uaddress, $uusername, $logname, $logpwd,
 		}
 
 		$mail->To($address);
-        $emailManager = new w2p_Output_EmailManager();
+        $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
 		$mail->Subject('New External User Created');
 		$mail->Body($body);
@@ -89,7 +89,7 @@ function notifyNewUser($address, $username) {
 		}
 
 		$mail->To($address);
-        $emailManager = new w2p_Output_EmailManager();
+        $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->getNotifyNewUser($username);
         $mail->Subject('New Account Created');
 		$mail->Body($body);
@@ -108,7 +108,7 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd) {
 		}
 
 		$mail->To($address);
-        $emailManager = new w2p_Output_EmailManager();
+        $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->notifyNewUserCredentials($username, $logname, $logpwd);
 		$mail->Subject('New Account Created - web2Project Project Management System');
 		$mail->Body($body);

@@ -23,17 +23,21 @@ class w2p_Output_EmailManager {
         $this->AppUI = $AppUI;
     }
 
-    public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI) {
+    public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI = null) {
+        $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
+
         $body = '';
-        $body .= "You have been invited to an event by $AppUI->user_first_name $AppUI->user_last_name\n";
+        $body .= "You have been invited to an event by $this->AppUI->user_first_name $this->AppUI->user_last_name\n";
         $body .= "However, either you or another intended invitee has a competing event\n";
-        $body .= "$AppUI->user_first_name $AppUI->user_last_name has requested that you reply to this message\n";
+        $body .= "$this->AppUI->user_first_name $this->AppUI->user_last_name has requested that you reply to this message\n";
         $body .= "and confirm if you can or can not make the requested time.\n\n";
 
         return $body;
     }
 
-    public function getContactUpdateNotify(w2p_Core_CAppUI $AppUI, CContact $contact) {
+    public function getContactUpdateNotify(w2p_Core_CAppUI $AppUI = null, CContact $contact) {
+        $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
+
         $q = new w2p_Database_Query;
         $q->addTable('companies');
         $q->addQuery('company_id, company_name');
@@ -47,18 +51,20 @@ class w2p_Output_EmailManager {
         $body .= " Thank you for all the time that you spent with me.";
         $body .= "\n\nI have entered the data from your business card into my contact data base so that we may keep in touch.";
         $body .= "\n\nWe have implemented a system which allows you to view the information that I've recorded and give you the opportunity to correct it or add information as you see fit. Please click on this link to view what I've recorded...";
-        $body .= "\n\n" . $AppUI->_('URL') . ":     " . W2P_BASE_URL . "/updatecontact.php?updatekey=$contact->contact_updatekey";
+        $body .= "\n\n" . $this->AppUI->_('URL') . ":     " . W2P_BASE_URL . "/updatecontact.php?updatekey=$contact->contact_updatekey";
         $body .= "\n\nI assure you that the information will be held in strict confidence and will not be available to anyone other than me. I realize that you may not feel comfortable filling out the entire form so please supply only what you're comfortable with.";
         $body .= "\n\nThank you. I look forward to seeing you again, soon.";
         $body .= "\n\nBest Regards,";
-        $body .= "\n\n$AppUI->user_first_name $AppUI->user_last_name";
+        $body .= "\n\n$this->AppUI->user_first_name $this->AppUI->user_last_name";
 
         return $body;
     }
 
-    public function getFileUpdateNotify(w2p_Core_CAppUI $AppUI, CFile $file) {
+    public function getFileUpdateNotify(w2p_Core_CAppUI $AppUI = null, CFile $file) {
+        $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
+
         $body  = "\n\nFile " . $file->file_name . ' was ' . $file->_message;
-        $body .= ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
+        $body .= ' by ' . $this->AppUI->user_first_name . ' ' . $this->AppUI->user_last_name;
 
         return $body;
     }
@@ -125,5 +131,5 @@ class w2p_Output_EmailManager {
     }
     
 
-
+//TODO: cleanup email generation
 }
