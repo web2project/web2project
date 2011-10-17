@@ -91,7 +91,7 @@ if (!$user) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Real Name'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user->contact_first_name . ' ' . $user->contact_last_name; ?></td>
+			<td class="hilite" width="100%"><?php echo $user->contact_display_name; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>

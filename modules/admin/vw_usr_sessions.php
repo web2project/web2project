@@ -68,7 +68,9 @@ if ($_GET['out_user_id'] && $_GET['out_name'] && $canEdit && $canDelete) {
 
 $q = new w2p_Database_Query;
 $q->addTable('sessions', 's');
-$q->addQuery('DISTINCT(session_id), user_access_log_id, u.user_id as u_user_id, user_username, contact_last_name, contact_first_name, company_name, contact_company, date_time_in, user_ip');
+$q->addQuery('DISTINCT(session_id), user_access_log_id, u.user_id as u_user_id, 
+    user_username, contact_last_name, contact_display_name, contact_first_name, 
+    company_name, contact_company, date_time_in, user_ip');
 
 $q->addJoin('user_access_log', 'ual', 'session_user = user_access_log_id');
 $q->addJoin('users', 'u', 'ual.user_id = u.user_id');
@@ -102,18 +104,14 @@ foreach ($rows as $row) {
 	$s = '<tr>';
 	$s .= '<td align="center" nowrap="nowrap">';
 	if ($canEdit && $canDelete) {
-		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_session') . '" onclick="javascript:window.location=\'./index.php?m=admin&tab=3&out_session=' . $row['session_id'] . '&out_user_log_id=' . $row['user_access_log_id'] . '&out_user_id=' . $row['u_user_id'] . '&out_name=' . $row['contact_first_name'] . '%20' . $row['contact_last_name'] . '\';"></input>';
+		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_session') . '" onclick="javascript:window.location=\'./index.php?m=admin&tab=3&out_session=' . $row['session_id'] . '&out_user_log_id=' . $row['user_access_log_id'] . '&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']). '\';"></input>';
 	}
 	$s .= '</td><td align="center" nowrap="nowrap">';
 	if ($canEdit && $canDelete && $logoutUserFlag) {
-		$s .= '<input type="button" class=button value="' . $AppUI->_('logout_user') . '" onclick="javascript:window.location=\'./index.php?m=admin&tab=3&out_user_id=' . $row['u_user_id'] . '&out_name=' . $row['contact_first_name'] . '%20' . $row['contact_last_name'] . '\';"></input>';
+		$s .= '<input type="button" class=button value="' . $AppUI->_('logout_user') . '" onclick="javascript:window.location=\'./index.php?m=admin&tab=3&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']) . '\';"></input>';
 	}
 	$s .= '</td><td><a href="./index.php?m=admin&a=viewuser&user_id=' . $row['u_user_id'] . '">' . $row['user_username'] . '</a></td><td>';
-	if ($row['contact_first_name'] || $row['contact_last_name']) {
-		$s .= ($row['contact_first_name'] . ' ' . $row['contact_last_name']);
-	} else {
-		$s .= ('<span style="font-style: italic">unknown</span>');
-	}
+    $s .= $row['contact_display_name'] ;
 	$s .= '</td><td><a href="./index.php?m=companies&a=view&company_id=' . $row['contact_company'] . '">' . $row['company_name'] . '</a></td>';
 	$s .= '<td>' . $row['date_time_in'] . '</td><td>' . $row['user_ip'] . '</td></tr>';
 	echo $s;

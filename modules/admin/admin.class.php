@@ -328,7 +328,7 @@ class CUser extends w2p_Core_BaseObject {
 		$res = $q->loadList();
 
 		if (count($res) == 1) {
-			return $res[0]['contact_first_name'] . ' ' . $res[0]['contact_last_name'];
+			return $res[0]['contact_display_name'];
 
 		}
 
