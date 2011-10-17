@@ -4355,9 +4355,6 @@ function w2PgetTimezonesForInstall() {
 function sendNewPass() {
 	global $AppUI;
 
-	$_live_site = w2PgetConfig('base_url');
-	$_sitename = w2PgetConfig('company_name');
-
 	// ensure no malicous sql gets past
 	$checkusername = trim(w2PgetParam($_POST, 'checkusername', ''));
 	$checkusername = db_escape($checkusername);
@@ -4397,24 +4394,25 @@ function sendNewPass() {
 	}
 
 	$newpass = makePass();
-	$message = $AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' ' . $checkusername . ' ' . $AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' ' . $_live_site . ' ' . $AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' ' . $newpass . ' ' . $AppUI->_('sendpass3', UI_OUTPUT_RAW);
-	$subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
-
-	$m = new w2p_Utilities_Mail; // create the mail
-	$m->To($confirmEmail);
-	$m->Subject($subject);
-	$m->Body($message, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
-	$m->Send(); // send the mail
-
-	$newpass = md5($newpass);
 	$q->addTable('users');
-	$q->addUpdate('user_password', $newpass);
+	$q->addUpdate('user_password', md5($newpass));
 	$q->addWhere('user_id=' . $user_id);
 	$cur = $q->exec();
+
 	if (!$cur) {
 		die('SQL error' . $database->stderr(true));
 	} else {
-		$AppUI->setMsg('New User Password created and emailed to you');
+        $emailManager = new w2p_Output_EmailManager($AppUI);
+        $body = $emailManager->notifyPasswordReset($checkusername, $newpass);
+
+        $m = new w2p_Utilities_Mail; // create the mail
+        $m->To($confirmEmail);
+        $subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
+        $m->Subject($subject);
+        $m->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
+        $m->Send(); // send the mail
+
+        $AppUI->setMsg('New User Password created and emailed to you');
 		$AppUI->redirect();
 	}
 }

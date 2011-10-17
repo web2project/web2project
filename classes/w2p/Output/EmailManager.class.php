@@ -19,8 +19,8 @@ class w2p_Output_EmailManager {
     public $subject = '';
     public $body = '';
 
-    public function __construct() {
-        //do nothing so far..
+    public function __construct(w2p_Core_CAppUI $AppUI = null) {
+        $this->AppUI = $AppUI;
     }
 
     public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI) {
@@ -76,11 +76,11 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function notifyHR($uusername, $logname, $uaddress, $userid) {
+    public function notifyHR($username, $logname, $address, $userid) {
         $body = 'A new user has signed up on ' . w2PgetConfig('company_name');
         $body .= ". Please go through the user details below:\n";
-        $body .= 'Name:	' . $uusername . "\n" . 'Username:	' . $logname . "\n";
-        $body .= 'Email:	' . $uaddress . "\n\n";
+        $body .= 'Name:	' . $username . "\n" . 'Username:	' . $logname . "\n";
+        $body .= 'Email:	' . $address . "\n\n";
         $body .= 'You may check this account at the following URL: ' . W2P_BASE_URL;
         $body .= '/index.php?m=admin&a=viewuser&user_id=' . $userid . "\n\n";
         $body .= "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name');
@@ -111,5 +111,19 @@ class w2p_Output_EmailManager {
 
         return $body;
     }
+
+    public function notifyPasswordReset($username, $password) {
+        $_live_site = w2PgetConfig('base_url');
+        $_sitename = w2PgetConfig('company_name');
+        
+        $body = $this->AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' ' .
+                $username . ' ' . $this->AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' ' .
+                $_live_site . ' ' . $this->AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' ' .
+                $password . ' ' . $this->AppUI->_('sendpass3', UI_OUTPUT_RAW);
+
+        return $body;
+    }
+    
+
 
 }
