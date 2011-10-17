@@ -416,10 +416,10 @@ class CEvent extends w2p_Core_BaseObject {
 		} else {
 			$mail->Subject($type . ' ' . $AppUI->_('Event') . ': ' . $this->event_title, $locale_char_set);
 		}
-
+//TODO: cleanup email generation
+        $emailManager = new w2p_Output_EmailManager($AppUI);
 		$body = '';
 		if ($clash) {
-			$emailManager = new w2p_Output_EmailManager($AppUI);
             $body .= $emailManager->getCalendarConflictEmail();
 		}
 		$body .= $AppUI->_('Event') . ":\t" . $this->event_title . "\n";
@@ -448,7 +448,7 @@ class CEvent extends w2p_Core_BaseObject {
 
 		$body .= $body_attend . "\n\n" . $this->event_description . "\n";
 
-		$mail->Body($body, $locale_char_set);
+$mail->Body($body, $locale_char_set);
 		foreach ($users as $user) {
 			if (!$mail_owner && $user['user_id'] == $this->event_owner) {
 				continue;
