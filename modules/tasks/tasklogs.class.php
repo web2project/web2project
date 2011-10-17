@@ -295,11 +295,24 @@ class CTaskLog extends w2p_Core_BaseObject
             $task = new CTask();
             $task->load($task_id);
             $task->task_percent_complete = $percentComplete;
-            $task->task_end_date = $taskEndDate;
-            $msg = $task->store($AppUI);
 
-            if (is_array($msg)) {
-                $AppUI->setMsg($msg, UI_MSG_ERROR, true);
+            /*
+             * Note: This handles a specific scenario where a task starts &
+             *   ends on the same day. Since we don't capture the actual *time*
+             *   of the tasklog (just the date), we have a situation where the
+             *   end date would have 00:00 as the time while the start could
+             *   have 09:00.
+             * Issue:  http://bugs.web2project.net/view.php?id=957
+             */
+
+            if (strtotime($taskEndDate) < strtotime($task->task_start_date)) {
+                $taskEndDate = $task->task_start_date;
+            }
+            $task->task_end_date = $taskEndDate;
+            $success = $task->store($AppUI);
+
+            if (!$success) {
+                $AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
             }
 
             $task->pushDependencies($task_id, $task->task_end_date);
