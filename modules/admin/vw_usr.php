@@ -56,7 +56,7 @@ foreach ($users as $row) {
 ?>
 <tr>
 	<td width="30" align="center" nowrap="nowrap">
-<?php if ($canEdit) { ?>
+        <?php if ($canEdit) { ?>
 		<table cellspacing="0" cellpadding="0" border="0">
 		<tr>
 			<td>
@@ -70,20 +70,13 @@ foreach ($users as $row) {
 				</a>
 			</td>
 			<td>
-<?php
-		$user_display = addslashes($row['contact_first_name'] . ' ' . $row['contact_last_name']);
-
-		$user_display = mb_trim($user_display);
-		if (empty($user_display))
-			$user_display = $row['user_username'];
-?>
-				<a href="javascript:delMe(<?php echo $row['user_id']; ?>, '<?php echo $user_display; ?>')" title="<?php echo $AppUI->_('delete'); ?>">
+				<a href="javascript:delMe(<?php echo $row['user_id']; ?>, '<?php echo addslashes($row['contact_display_name']); ?>')" title="<?php echo $AppUI->_('delete'); ?>">
 					<?php echo w2PshowImage('icons/stock_delete-16.png', 16, 16, ''); ?>
 				</a>
 			</td>
 		</tr>
 		</table>
-<?php } ?>
+        <?php } ?>
 	</td>
 	<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
 	<td>
@@ -115,13 +108,7 @@ foreach ($users as $row) {
 	</td>
 	<td>
 		<a href="mailto:<?php echo $row['contact_email']; ?>"><img src="<?php echo w2PfindImage('obj/email.gif'); ?>" width="16" height="16" border="0" alt="email" /></a>
-<?php
-	if ($row['contact_last_name'] || $row['contact_first_name']) {
-		echo $row['contact_first_name'] . ' ' . $row['contact_last_name'];
-	} else {
-		echo '<span style="font-style: italic">unknown</span>';
-	}
-?>
+        <?php echo $row['contact_display_name']; ?>
 	</td>
 	<td>
 		<?php echo $utypes[$row['user_type']]; ?>
