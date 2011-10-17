@@ -328,8 +328,8 @@ class CContact extends w2p_Core_BaseObject {
 		$mail->Subject('Hello', $locale_char_set);
 
 		if ($this->contact_email) {
-            $emailManager = new w2p_Output_EmailManager();
-            $body = $emailManager->getContactUpdateNotify($AppUI, $this);
+            $emailManager = new w2p_Output_EmailManager($AppUI);
+            $body = $emailManager->getContactUpdateNotify(null, $this);
 
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}

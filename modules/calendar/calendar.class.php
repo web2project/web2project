@@ -418,8 +418,8 @@ class CEvent extends w2p_Core_BaseObject {
 
 		$body = '';
 		if ($clash) {
-			$emailManager = new w2p_Output_EmailManager();
-            $body .= $emailManager->getCalendarConflictEmail($AppUI);
+			$emailManager = new w2p_Output_EmailManager($AppUI);
+            $body .= $emailManager->getCalendarConflictEmail();
 		}
 		$body .= $AppUI->_('Event') . ":\t" . $this->event_title . "\n";
 		if (!$clash) {
