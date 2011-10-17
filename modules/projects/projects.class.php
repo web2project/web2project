@@ -617,7 +617,7 @@ class CProject extends w2p_Core_BaseObject {
 
 		$user = new CUser();
 		$user->loadFull($this->project_owner);
-
+//TODO: cleanup email generation
 		if ($user && $mail->ValidEmail($user->user_email)) {
 			if (intval($isNotNew)) {
 				$body = $AppUI->_('Project') . ": $this->project_name Has Been Updated Via Project Manager. You can view the Project by clicking: ";
@@ -637,7 +637,7 @@ class CProject extends w2p_Core_BaseObject {
 				$body .= "\n\nProject " . $this->project_name . ' was ' . $this->_message . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
 			}
 
-			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 			$mail->To($user->user_email, true);
 			$mail->Send();
 		}
@@ -649,7 +649,7 @@ class CProject extends w2p_Core_BaseObject {
 		$subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
 		$users = CProject::getContacts($AppUI, $this->project_id);
-
+//TODO: cleanup email generation
 		if (count($users)) {
 			if (intval($isNotNew)) {
 				$body = $AppUI->_('Project') . ": $this->project_name Has Been Updated Via Project Manager. You can view the Project by clicking: ";
@@ -671,7 +671,7 @@ class CProject extends w2p_Core_BaseObject {
 
 			foreach ($users as $row) {
 				$mail = new w2p_Utilities_Mail;
-				$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 				$mail->Subject($subject, $locale_char_set);
 
 				if ($mail->ValidEmail($row['contact_email'])) {

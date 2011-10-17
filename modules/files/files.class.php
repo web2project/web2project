@@ -499,7 +499,7 @@ class CFile extends w2p_Core_BaseObject {
                     $this->_task->load($this->file_task);
                     $mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
                 }
-
+//TODO: cleanup email generation
                 $body = $AppUI->_('Project') . ': ' . $this->_project->project_name;
                 $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id;
 
@@ -543,7 +543,7 @@ class CFile extends w2p_Core_BaseObject {
                 }
 
                 //send mail
-                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
                 if (intval($this->_task->task_id) != 0) {
                     foreach ($this->_users as $row) {
@@ -585,7 +585,7 @@ class CFile extends w2p_Core_BaseObject {
                   $this->_task->load($this->file_task);
                   $mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
                 }
-
+//TODO: cleanup email generation
                 $body = $AppUI->_('Project') . ': ' . $this->_project->project_name;
                 $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id;
 
@@ -623,7 +623,7 @@ class CFile extends w2p_Core_BaseObject {
                 }
 
                 //send mail
-                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
                 foreach ($this->_users as $row) {
                     if ($mail->ValidEmail($row['contact_email'])) {

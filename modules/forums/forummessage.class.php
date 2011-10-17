@@ -209,7 +209,7 @@ class CForumMessage extends w2p_Core_BaseObject {
 
 		$mail = new w2p_Utilities_Mail();
 		$mail->Subject($subj_prefix . ' ' . $this->message_title, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-
+//TODO: cleanup email generation
 		$body = $body_msg;
 
 		$body .= "\n\n" . $AppUI->_('Forum', UI_OUTPUT_RAW) . ': ' . $forum_name;
@@ -218,7 +218,7 @@ class CForumMessage extends w2p_Core_BaseObject {
 		$body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=' . $this->message_forum;
 		$body .= "\n\n" . $this->message_body;
 
-		$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
 		while ($row = $q->fetchRow()) {
 			if ($mail->ValidEmail($row['contact_email'])) {

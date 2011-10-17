@@ -1004,10 +1004,10 @@ class CTask extends w2p_Core_BaseObject {
 		$users = $q->loadList();
 		$q->clear();
 
+//TODO: cleanup email generation        
 		if (count($users)) {
 			$body = ($AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ':	' . $this->task_name . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $this->task_description . "\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW) . ': ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . "\n\n" . $AppUI->_('Progress', UI_OUTPUT_RAW) . ': ' . $this->task_percent_complete . '%' . "\n\n" . w2PgetParam($_POST, 'task_log_description'));
-
-			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}
 
 		if ($mail->ValidEmail($users[0]['owner_email'])) {
@@ -1062,7 +1062,7 @@ class CTask extends w2p_Core_BaseObject {
 		if (count($users)) {
             $task_start_date = intval($this->task_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($this->task_start_date, '%Y-%m-%d %T')) : null;
             $task_finish_date = intval($this->task_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($this->task_end_date, '%Y-%m-%d %T')) : null;
-
+//TODO: cleanup email generation
 			$body  = $AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
             $body .= $AppUI->_('Task', UI_OUTPUT_RAW)    . ':	     ' . $this->task_name."\n";
 			//Priority not working for some reason, will wait till later
@@ -1077,7 +1077,7 @@ class CTask extends w2p_Core_BaseObject {
 			if ($comment != '') {
 				$body .= "\n\n" . $comment;
 			}
-			$mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
+$mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
 		}
 
 		$mail_owner = $AppUI->getPref('MAILALL');
@@ -1210,7 +1210,7 @@ class CTask extends w2p_Core_BaseObject {
 			$q->addWhere('project_id=' . (int)$this->task_project);
 			$projname = htmlspecialchars_decode($q->loadResult());
 			$q->clear();
-
+//TODO: cleanup email generation
 			$body = $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n";
 			if ($this->task_parent != $this->task_id) {
 				$q->addTable('tasks');
@@ -1242,7 +1242,7 @@ class CTask extends w2p_Core_BaseObject {
 				}
 			}
 			$q->clear();
-			$mail->Body($body, $char_set);
+$mail->Body($body, $char_set);
 
 			$recipient_list = '';
 			$toList = array();
@@ -2208,7 +2208,7 @@ class CTask extends w2p_Core_BaseObject {
         }
 
 		$subject = $prefix . ' ' . $msg . ' ' . $this->task_name . '::' . $project_name;
-
+//TODO: cleanup email generation
 		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': START-TIME' . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': END-TIME' . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
 		foreach ($contacts as $contact) {
 			if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
@@ -2229,7 +2229,7 @@ class CTask extends w2p_Core_BaseObject {
 
             $body = str_replace('START-TIME', $starts->convertTZ($tz)->format($df) , $body);
             $body = str_replace('END-TIME'  , $expires->convertTZ($tz)->format($df), $body);
-            $mail->Body($body, $locale_char_set);
+$mail->Body($body, $locale_char_set);
 
 			if ($mail->ValidEmail($contact['contact_email'])) {
 				$mail->To($contact['contact_email'], true);
