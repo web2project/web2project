@@ -132,9 +132,9 @@ class w2p_Extensions_Permissions extends gacl_api {
 		$id = $this->get_object_id('user', $login, 'aro');
 		if ($id) {
 			$id = $this->del_object($id, 'aro', true);
-		}
-		if (!$id) {
-			dprint(__file__, __line__, 0, 'Failed to remove user permission object');
+		} else {
+			//TODO: There was no permissions object to delete.. is this actuall an error?
+            //dprint(__file__, __line__, 0, 'Failed to remove user permission object');
 		}
 		$recalc = $this->removePermissions($login);
 		if (!$recalc) {
@@ -147,8 +147,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 		$res = $this->add_object('app', $modname, $mod, 1, 0, 'axo');
 		if ($res) {
 			$res = $this->addGroupItem($mod);
-		}
-		if (!$res) {
+		} else  {
 			dprint(__file__, __line__, 0, 'Failed to add module permission object');
 		}
 		$recalc = $this->recalcPermissions(null, null, null, $mod);
