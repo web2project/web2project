@@ -536,7 +536,7 @@ class CFile extends w2p_Core_BaseObject {
                     $q->addWhere('p.project_id = ' . (int)$this->file_project);
                     $this->_users = $q->loadList();
                 }
-                $body .= "\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
+                $body .= "\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' . $AppUI->user_display_name;
                 if ($this->_message != 'deleted') {
                     $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $this->file_id;
                     $body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->file_description;
