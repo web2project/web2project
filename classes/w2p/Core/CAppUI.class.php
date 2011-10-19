@@ -42,6 +42,9 @@ class w2p_Core_CAppUI {
 	/**
  	@var string */
 	public $user_last_name = null;
+    /**
+ 	@var string */
+	public $user_display_name = null;
 	/**
  	@var string */
 	public $user_company = null;
@@ -840,7 +843,9 @@ class w2p_Core_CAppUI {
 
 		$q = new w2p_Database_Query;
 		$q->addTable('users');
-		$q->addQuery('user_id, contact_first_name as user_first_name, contact_last_name as user_last_name, contact_company as user_company, contact_department as user_department, user_type');
+		$q->addQuery('user_id, contact_first_name as user_first_name, 
+            contact_last_name as user_last_name, contact_display_name as user_display_name,
+            contact_company as user_company, contact_department as user_department, user_type');
 		$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
 
         /* Begin Hack */

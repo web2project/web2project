@@ -86,70 +86,70 @@ if ($task_id) {
 }
 $q->addGroup('file_version_id');
 
-	// SETUP FOR FILE LIST
-	$q2 = new w2p_Database_Query;
-	$q2->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(f.file_version),2) as file_lastversion');
-	$q2->addQuery('ff.*');
-	$q2->addTable('files', 'f');
-	$q2->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-	$q2->addJoin('projects', 'p', 'p.project_id = file_project');
-	$q2->addJoin('tasks', 't', 't.task_id = file_task');
-	$q2->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-	$q2->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-	if (count($allowedProjects)) {
-		$q2->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
-	}
-	if (count($allowedTasks)) {
-		$q2->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
-	}
-	if ($project_id) {
-		$q2->addWhere('file_project = ' . (int)$project_id);
-	}
-	if ($task_id) {
-		$q2->addWhere('file_task = ' . (int)$task_id);
-	}
-	if ($company_id) {
-		$q2->addWhere('project_company = ' . (int)$company_id);
-	}
-	if ($catsql) {
-		$q2->addWhere($catsql);
-	}
-	$q2->setLimit($xpg_pagesize, $xpg_min);
-	// Adding an Order by that is different to a group by can cause
-	// performance issues. It is far better to rearrange the group
-	// by to get the correct ordering.
-	$q2->addGroup('p.project_id');
-	$q2->addGroup('file_version_id DESC');
+// SETUP FOR FILE LIST
+$q2 = new w2p_Database_Query;
+$q2->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(f.file_version),2) as file_lastversion');
+$q2->addQuery('ff.*');
+$q2->addTable('files', 'f');
+$q2->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
+$q2->addJoin('projects', 'p', 'p.project_id = file_project');
+$q2->addJoin('tasks', 't', 't.task_id = file_task');
+$q2->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
+$q2->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
+if (count($allowedProjects)) {
+    $q2->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+}
+if (count($allowedTasks)) {
+    $q2->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
+}
+if ($project_id) {
+    $q2->addWhere('file_project = ' . (int)$project_id);
+}
+if ($task_id) {
+    $q2->addWhere('file_task = ' . (int)$task_id);
+}
+if ($company_id) {
+    $q2->addWhere('project_company = ' . (int)$company_id);
+}
+if ($catsql) {
+    $q2->addWhere($catsql);
+}
+$q2->setLimit($xpg_pagesize, $xpg_min);
+// Adding an Order by that is different to a group by can cause
+// performance issues. It is far better to rearrange the group
+// by to get the correct ordering.
+$q2->addGroup('p.project_id');
+$q2->addGroup('file_version_id DESC');
 
-	$q3 = new w2p_Database_Query;
-	$q3->addTable('files');
-	$q3->addQuery('file_id, file_version, file_project, file_name, file_task,
-		file_description, u.user_username as file_owner, file_size, file_category,
-		task_name, file_version_id,  file_checkout, file_co_reason, file_type,
-		file_date, cu.user_username as co_user, project_name,
-		project_color_identifier, project_owner, con.contact_first_name,
-		con.contact_last_name, co.contact_first_name as co_contact_first_name,
-		co.contact_last_name as co_contact_last_name');
-    $q3->addQuery('file_folder_id, file_folder_name');
-	$q3->addJoin('projects', 'p', 'p.project_id = file_project');
-	$q3->addJoin('users', 'u', 'u.user_id = file_owner');
-	$q3->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
-	$q3->addJoin('tasks', 't', 't.task_id = file_task');
-	$q3->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-	if ($project_id) {
-		$q3->addWhere('file_project = ' . (int)$project_id);
-	}
-	if ($task_id) {
-		$q3->addWhere('file_task = ' . (int)$task_id);
-	}
-	if ($company_id) {
-		$q3->addWhere('project_company = ' . (int)$company_id);
-	}
-	$q3->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-	$q3->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
+$q3 = new w2p_Database_Query;
+$q3->addTable('files');
+$q3->addQuery('file_id, file_version, file_project, file_name, file_task,
+    file_description, u.user_username as file_owner, file_size, file_category,
+    task_name, file_version_id,  file_checkout, file_co_reason, file_type,
+    file_date, cu.user_username as co_user, project_name,
+    project_color_identifier, project_owner, con.contact_first_name,
+    con.contact_last_name, co.contact_first_name as co_contact_first_name,
+    co.contact_last_name as co_contact_last_name');
+$q3->addQuery('file_folder_id, file_folder_name');
+$q3->addJoin('projects', 'p', 'p.project_id = file_project');
+$q3->addJoin('users', 'u', 'u.user_id = file_owner');
+$q3->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
+$q3->addJoin('tasks', 't', 't.task_id = file_task');
+$q3->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
+if ($project_id) {
+    $q3->addWhere('file_project = ' . (int)$project_id);
+}
+if ($task_id) {
+    $q3->addWhere('file_task = ' . (int)$task_id);
+}
+if ($company_id) {
+    $q3->addWhere('project_company = ' . (int)$company_id);
+}
+$q3->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
+$q3->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
 
-	$q3->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-	$q3->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
+$q3->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
+$q3->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 if (count($allowedProjects)) {
 	$q3->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
 }
@@ -168,8 +168,8 @@ if ($canRead) {
 }
 // counts total recs from selection
 $xpg_totalrecs = count($q->loadList());
-//TODO: I don't like the ++$tab construct here... seems kludgy.
-echo buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
+$pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
+echo $pageNav;
 ?>
 <script language="javascript" type="text/javascript">
 function expand(id){
@@ -213,12 +213,10 @@ function expand(id){
     </tr>
 <?php
 	$fp = -1;
-	$file_date = new w2p_Utilities_Date();
 
 	$id = 0;
 	foreach ($files as $file_row) {
 		$latest_file = $file_versions[$file_row['latest_id']];
-		$file_date = new w2p_Utilities_Date($latest_file['file_date']);
 
 		if ($fp != $latest_file['file_project']) {
 			if (!$latest_file['file_project']) {
@@ -359,4 +357,4 @@ function expand(id){
 	} ?>
 </table>
 <?php
-echo buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
+echo $pageNav;
