@@ -45,8 +45,8 @@ $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 // counts total recs from selection
 $xpg_totalrecs = count($links);
-echo buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
-
+$pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
+echo $pageNav;
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
     <tr>
@@ -126,4 +126,4 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 <?php } ?>
 </table>
 <?php
-echo buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
+echo $pageNav;

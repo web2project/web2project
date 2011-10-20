@@ -94,8 +94,8 @@ if ($is_tabbed) {
 	}
 
 	$xpg_totalrecs = count($projects);
-	echo buildPaginationNav($AppUI, $m, $currentTabId, $xpg_totalrecs, $xpg_pagesize, $page);
-
+	$pageNav = buildPaginationNav($AppUI, $m, $currentTabId, $xpg_totalrecs, $xpg_pagesize, $page);
+    echo $pageNav;
 } else {
 	//flat view
 	$project_status_filter = $currentTabId;
@@ -325,5 +325,5 @@ if ($is_tabbed) {
 </form>
 <?php
 if ($is_tabbed) {
-	echo buildPaginationNav($AppUI, $m, $currentTabId, $xpg_totalrecs, $xpg_pagesize, $page);
+	echo $pageNav;
 }
