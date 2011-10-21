@@ -63,8 +63,9 @@ foreach ($elements as $element => $on) {
 		}
 
         $result = $tline->store();
-        if (is_array($result)) {
-            $taskErrors[] = $result;
+        $tline->updateAssigned($AppUI->user_id, array($AppUI->user_id => 100));
+        if (count($tline->getError())) {
+            $taskErrors[] = $tline->getError();
         }
 	}
 }
