@@ -156,16 +156,16 @@ if (!is_array($projects) || 0 == count($projects)) {
         $pname = (mb_strlen($pname) > 30) ? (mb_substr($pname, 0, 25) . '...') : $pname;
 
 		//using new jpGraph determines using Date object instead of string
-		$start = ($p['project_start_date'] > '1969-12-31 19:00:00') ? $p['project_start_date'] : '';
-		$end_date = ($p['project_end_date'] > '1969-12-31 19:00:00') ? $p['project_end_date'] : $p['project_actual_end_date'];
+        $start_date = (int) ($p['project_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($p['project_start_date'], '%Y-%m-%d %T')) : new w2p_Utilities_Date();
+        $start = $start_date->getDate();
 
-		$end_date = new w2p_Utilities_Date($end_date);
+        $end_date = (int) ($p['project_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($p['project_end_date'], '%Y-%m-%d %T')) : new w2p_Utilities_Date();
 		$end = $end_date->getDate();
 
-		$start = new w2p_Utilities_Date($start);
-		$start = $start->getDate();
+        $actual_end = (int) ($p['project_actual_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($p['project_actual_end_date'], '%Y-%m-%d %T')) : $end_date;
+        $actual_end = $actual_end->getDate();
 
-		$progress = (int) $p['project_percent_complete'];
+        $progress = (int) $p['project_percent_complete'];
 
 		$caption = '';
 		if (!$start || $start == '0000-00-00') {
@@ -176,17 +176,12 @@ if (!is_array($projects) || 0 == count($projects)) {
 		if (!$end) {
 			$end = $start;
 			$caption .= ' ' . $AppUI->_('(no end date)');
-		} else {
-			$cap = '';
 		}
 
-		if ($showLabels) {
+		if ($showLabels == '1') {
 			$caption .= $AppUI->_($projectStatus[$p['project_status']]) . ', ';
-			$caption .= $p['project_active'] != 0 ? $AppUI->_('active') : $AppUI->_('archived');
-		}
-		$enddate = new w2p_Utilities_Date($end);
-		$startdate = new w2p_Utilities_Date($start);
-		$actual_end = intval($p['project_actual_end_date']) ? $p['project_actual_end_date'] : $end;
+			$caption .= ($p['project_active']) ? $AppUI->_('active') : $AppUI->_('archived');
+		}		
 
         $columnValues = array('project_name' => $pname, 'start_date' => $start,
                           'end_date' => $end, 'actual_end' => $actual_end);

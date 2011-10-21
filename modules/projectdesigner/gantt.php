@@ -221,14 +221,11 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         $pname = (mb_strlen($pname) > 25) ? (mb_substr($pname, 0, 20) . '...') : $pname;
 
         //using new jpGraph determines using Date object instead of string
-        $start = $a['task_start_date'];
-        $end_date = $a['task_end_date'];
-
-        $end_date = new w2p_Utilities_Date($end_date);
-        $end = $end_date->getDate();
-
-        $start = new w2p_Utilities_Date($start);
+        $start = (int) ($a['task_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T')) : new w2p_Utilities_Date();
         $start = $start->getDate();
+
+        $end   = (int) ($a['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($a['task_end_date'], '%Y-%m-%d %T')) : new w2p_Utilities_Date();
+		$end = $end->getDate();
 
         $progress = (int) $a['task_percent_complete'];
 
@@ -240,24 +237,20 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
         $flags = ($a['task_milestone'] ? 'm' : '');
 
-        $cap = '';
-        if (!$start || $start == '0000-00-00') {
-            $start = !$end ? date('Y-m-d') : $end;
-            $cap .= '(no start date)';
-        }
+		$caption = '';
+		if (!$start || $start == '0000-00-00') {
+			$start = !$end ? date('Y-m-d') : $end;
+			$caption .= $AppUI->_('(no start date)');
+		}
 
-        if (!$end) {
-            $end = $start;
-            $cap .= ' (no end date)';
-        } else {
-            $cap = '';
-        }
+		if (!$end) {
+			$end = $start;
+			$caption .= ' ' . $AppUI->_('(no end date)');
+		}
 
-        $caption = '';
         if ($showLabels == '1') {
             $res = $task->getAssignedUsers($task_id);
             foreach ($res as $rw) {
-				$caption = '';
 				switch ($rw['perc_assignment']) {
 					case 100:
 						$caption .= $rw['contact_display_name'] . ';';
