@@ -224,7 +224,7 @@ class CEvent extends w2p_Core_BaseObject {
 		foreach ($queries as $query_set) {
 			$$query_set = new w2p_Database_Query();
 			$$query_set->addTable('events', 'e');
-			$$query_set->addQuery('e.*');
+			$$query_set->addQuery('distinct(e.event_id), e.*');
 			$$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
 
 			$$query_set->leftJoin('projects', 'p', 'p.project_id =  e.event_project');
