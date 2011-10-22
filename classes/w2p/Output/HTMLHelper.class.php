@@ -54,7 +54,7 @@ class w2p_Output_HTMLHelper {
      *   fields like project_company, dept_company because we still have a 
      *   common suffix.
      */
-	public function createColumn($fieldName, $row) {
+	public function createCell($fieldName, $value) {
 
         $last_underscore = strrpos($fieldName, '_');
         $shortname = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
@@ -62,37 +62,41 @@ class w2p_Output_HTMLHelper {
         switch ($shortname) {
 			case '_creator':
 			case '_owner':
-				$s .= '<td nowrap="nowrap">';
-				$s .= w2PgetUsernameFromID($row[$fieldName]);
-				$s .= '</td>';
+                $nowrap = true;
+				$cell = w2PgetUsernameFromID($value);
 				break;
 			case '_budget':
-				$s .= '<td>';
-				$s .= w2PgetConfig('currency_symbol');
-				$s .= formatCurrency($row[$fieldName], $this->AppUI->getPref('CURRENCYFORM'));
-				$s .= '</td>';
+				$cell = w2PgetConfig('currency_symbol');
+				$cell .= formatCurrency($value, $this->AppUI->getPref('CURRENCYFORM'));
 				break;
 			case '_url':
-				$s .= '<td>';
-				$s .= w2p_url($row[$fieldName]);
-				$s .= '</td>';
+				$cell = w2p_url($value);
 				break;
             case '_email':
-                $s .= '<td>';
-                $s .= w2p_email($row[$fieldName]);
-                $s .= '</td>';
+                $cell = w2p_email($value);
                 break;
 			case '_date':
-				$myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
-				$s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($this->df) : '-') . '</td>';
+				$nowrap = true;
+                $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
+				$cell = $myDate ? $myDate->format($this->df) : '-';
 				break;
+            case '_description':
+                $cell = w2p_textarea($value);
+                break;
+            case '_count':
+                $class = 'center';
+                $cell = $value;
+                break;
+            case '_hours':
 			default:
-				$s .= '<td nowrap="nowrap" class="center">';
-				$s .= htmlspecialchars($row[$fieldName], ENT_QUOTES);
-				$s .= '</td>';
+				$nowrap = true;
+				$cell = htmlspecialchars($value, ENT_QUOTES);
 		}
 
-		return $s;
+        $begin = '<td '.($nowrap ? 'nowrap="nowrap"' : '').' class="data '.$class.'">';
+        $end = '</td>';
+
+		return $begin.$cell.$end;
 	}
 
     /*
