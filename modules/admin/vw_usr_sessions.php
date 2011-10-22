@@ -68,8 +68,8 @@ if ($_GET['out_user_id'] && $_GET['out_name'] && $canEdit && $canDelete) {
 
 $q = new w2p_Database_Query;
 $q->addTable('sessions', 's');
-$q->addQuery('DISTINCT(session_id), user_access_log_id, u.user_id as u_user_id, 
-    user_username, contact_last_name, contact_display_name, contact_first_name, 
+$q->addQuery('DISTINCT(session_id), user_access_log_id, u.user_id as u_user_id,
+    user_username, contact_last_name, contact_display_name, contact_first_name,
     company_name, contact_company, date_time_in, user_ip');
 
 $q->addJoin('user_access_log', 'ual', 'session_user = user_access_log_id');
