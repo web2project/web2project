@@ -787,3 +787,27 @@ TD.weekendDay  {
     padding: 1px 0 2px;
     display: inline;
 }
+
+.view {
+    border-spacing: 0px;
+    padding-left: 0px;
+    text-align: left;
+    width: 100%;
+}
+
+#view-header {
+    margin-bottom: 5px;
+    padding: 4px;
+}
+
+.view-column {
+    padding-left: 4px;
+    padding-top: 4px;
+}
+
+.view td.data {
+    background-color: #FFFFFF;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    border-radius:3px;
+}
