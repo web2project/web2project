@@ -86,6 +86,8 @@ if ($canEdit) {
 	}
 }
 $titleBlock->show();
+
+$helper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 function expand_multiproject(id, table_name) {
@@ -123,44 +125,43 @@ function delIt() {
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
-<table id="tblProjects" border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+<table class="std view">
 <tr>
-	<td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2">
+	<td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2" id="view-header">
 	<?php
-echo '<font color="' . bestColor($project->project_color_identifier) . '"><strong>' . $project->project_name . '<strong></font>';
-?>
+        echo '<font color="' . bestColor($project->project_color_identifier) . '"><strong>' . $project->project_name . '<strong></font>';
+    ?>
 	</td>
 </tr>
-
 <tr>
-	<td width="50%" valign="top">
+	<td width="50%" valign="top" class="view-column">
 		<strong><?php echo $AppUI->_('Details'); ?></strong>
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-			<td class="hilite" width="100%">
-				<?php if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
-					<?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
-				<?php } else { ?>
-	  			<?php echo htmlspecialchars($project->company_name, ENT_QUOTES); ?>
-				<?php } ?>
-			</td>
+            <?php if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
+                <td class="hilite" width="100%">
+                    <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
+                </td>
+            <?php } else { ?>
+                <?php echo $helper->createCell('company_name', $project->company_name); ?>
+            <?php } ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
-			<td class="hilite"><?php echo $project->project_location; ?></td>
+            <?php echo $helper->createCell('project_location', $project->project_location); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
-			<td class="hilite"><?php echo htmlspecialchars($project->project_short_name, ENT_QUOTES); ?></td>
+            <?php echo $helper->createCell('project_short_name', $project->project_short_name); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
-			<td class="hilite"><?php echo $start_date ? $start_date->format($df) : '-'; ?></td>
+            <?php echo $helper->createCell('start_date', $start_date); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target End Date'); ?>:</td>
-			<td class="hilite"><?php echo $end_date ? $end_date->format($df) : '-'; ?></td>
+            <?php echo $helper->createCell('end_date', $end_date); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual End Date'); ?>:</td>
@@ -178,24 +179,19 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-			<td class="hilite">
-                <?php
-                    echo $w2Pconfig['currency_symbol'];
-                    echo formatCurrency($project->project_target_budget, $AppUI->getPref('CURRENCYFORM'));
-                ?>
-            </td>
+            <?php echo $helper->createCell('project_target_budget', $project->project_target_budget); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-			<td class="hilite"><?php echo $project->user_name; ?></td>
+            <?php echo $helper->createCell('user_name', $project->user_name); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-      <td class="hilite"><?php echo w2p_url($project->project_url); ?></td>
+            <?php echo $helper->createCell('project_url', $project->project_url); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
-      <td class="hilite"><?php echo w2p_url($project->project_demo_url); ?></td>
+            <?php echo $helper->createCell('project_demo_url', $project->project_demo_url); ?>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -210,16 +206,14 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 			<strong><?php echo $AppUI->_('Description'); ?></strong><br />
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 			<tr>
-				<td class="hilite">
-					<?php echo w2p_textarea($project->project_description); ?>&nbsp;
-				</td>
+                <?php echo $helper->createCell('project_description', $project->project_description); ?>
 			</tr>
 			</table>
 			</td>
 		</tr>
 		</table>
 	</td>
-	<td width="50%" rowspan="1" valign="top">
+    <td width="50%" valign="top" rowspan="1" class="view-column">
 		<strong><?php echo $AppUI->_('Summary'); ?></strong><br />
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
@@ -236,7 +230,7 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-			<td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
+            <td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
@@ -244,15 +238,15 @@ echo '<font color="' . bestColor($project->project_color_identifier) . '"><stron
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $project->project_worked_hours; ?></td>
+            <?php echo $helper->createCell('project_worked_hours', $project->project_worked_hours); ?>
 		</tr>	
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $total_hours ?></td>
+            <?php echo $helper->createCell('total_hours', $total_hours); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Hours'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $total_project_hours ?></td>
+            <?php echo $helper->createCell('total_project_hours', $total_project_hours); ?>
 		</tr>				
 		<?php
 		$depts = CProject::getDepartments($AppUI, $project->project_id);
