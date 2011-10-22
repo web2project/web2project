@@ -45,6 +45,8 @@ $contact->contact_id = $user->user_contact;
 $methods = $contact->getContactMethods();
 $methodLabels = w2PgetSysVal('ContactMethods');
 
+$helper = new w2p_Output_HTMLHelper($AppUI);
+
 if (!$user) {
 	$titleBlock = new w2p_Theme_TitleBlock('Invalid User ID', 'helix-setup-user.png', $m, "$m.$a");
 	$titleBlock->addCrumb('?m=admin', 'users list');
@@ -77,7 +79,7 @@ if (!$user) {
 	}
 	<?php } ?>
 </script>
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
 <tr valign="top">
 	<td width="50%">
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
@@ -133,26 +135,18 @@ if (!$user) {
 		<table width="100%">
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Birthday'); ?>:</td>
-                <td class="hilite" width="100%">
-                    <?php
-                    $bday = new w2p_Utilities_Date($user->contact_birthday);
-                    $df = $AppUI->getPref('SHDATEFORMAT');
-                    echo $bday->format($df);
-                    ?>
-                </td>
+                <?php echo $helper->createCell('_date', $user->contact_birthday); ?>
             </tr>
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-                <td class="hilite" width="100%">
-                    <?php echo w2p_email($user->contact_email); ?>
-                </td>
+                <?php echo $helper->createCell('contact_email', $user->contact_email); ?>
             </tr>
             <?php
                 $fields = $methods['fields'];
                 foreach ($fields as $key => $field): ?>
                 <tr>
                     <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$field]); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $methods['values'][$key]; ?></td>
+                    <?php echo $helper->createCell('_'.substr($field, 0, strpos($field, '_')), $methods['values'][$key]); ?>
                 </tr>
             <?php endforeach; ?>
             <tr>

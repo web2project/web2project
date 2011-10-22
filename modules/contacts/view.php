@@ -56,6 +56,7 @@ if ($canDelete && $contact_id) {
 	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
 }
 $titleBlock->show();
+$helper = new w2p_Output_HTMLHelper($AppUI);
 
 $last_ask = new w2p_Utilities_Date($contact->contact_updateasked);
 $lastupdated = new w2p_Utilities_Date($contact->contact_lastupdate);
@@ -77,25 +78,25 @@ function delIt(){
 }
 </script>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
 	<tr>
 		<td valign="top">
 			<table border="0" cellpadding="1" cellspacing="1">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('First Name'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_first_name; ?></td>
+                    <?php echo $helper->createCell('contact_first_name', $contact->contact_first_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap">&nbsp;&nbsp;<?php echo $AppUI->_('Last Name'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_last_name; ?></td>
+                    <?php echo $helper->createCell('contact_last_name', $contact->contact_last_name); ?>
 				</tr>
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Display Name'); ?>: </td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_display_name; ?></td>
+                    <?php echo $helper->createCell('contact_display_name', $contact->contact_display_name); ?>
 				</tr>
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Job Title'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_job; ?></td>
+                    <?php echo $helper->createCell('contact_job', $contact->contact_job); ?>
 				</tr>
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Company'); ?>:</td>
@@ -109,15 +110,15 @@ function delIt(){
 				</tr>
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Department'); ?>:</td>
-					<td nowrap="nowrap" class="hilite" width="100%"><?php echo $dept_detail['dept_name']; ?></td>
+                    <?php echo $helper->createCell('dept_name', $dept_detail['dept_name']); ?>
 				</tr>
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Title'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_title; ?></td>
+                    <?php echo $helper->createCell('contact_title', $contact->contact_title); ?>
 				</tr>
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Type'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $contact->contact_type; ?></td>
+                    <?php echo $helper->createCell('contact_type', $contact->contact_type); ?>
 				</tr>
 				<tr>
 					<td align="right" valign="top" width="100"><?php echo $AppUI->_('Address'); ?>:</td>
@@ -138,22 +139,22 @@ function delIt(){
             <table border="0" cellpadding="1" cellspacing="1">
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Birthday'); ?>:</td>
-					<td nowrap="nowrap" class="hilite" width="100%"><?php echo substr($contact->contact_birthday, 0, 10); ?></td>
+                    <?php echo $helper->createCell('_date', $contact->contact_birthday); ?>
 				</tr>
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
-					<td nowrap="nowrap" class="hilite" width="100%"><?php echo $contact->contact_phone; ?></td>
+                    <?php echo $helper->createCell('contact_phone', $contact->contact_phone); ?>
 				</tr>
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Email'); ?>:</td>
-					<td nowrap="nowrap" class="hilite" width="100%"><?php echo w2p_email($contact->contact_email); ?></td>
+                    <?php echo $helper->createCell('contact_email', $contact->contact_email); ?>
 				</tr>
                 <?php
                     $fields = $methods['fields'];
                     foreach ($fields as $key => $field): ?>
                     <tr>
                         <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$field]); ?>:</td>
-                        <td class="hilite" width="100%"><?php echo $methods['values'][$key]; ?></td>
+                        <?php echo $helper->createCell('_'.substr($field, 0, strpos($field, '_')), $methods['values'][$key]); ?>
                     </tr>
                 <?php endforeach; ?>
 			</table>
