@@ -107,6 +107,12 @@ class w2p_Output_HTMLHelper {
 		return $begin.$cell.$end;
 	}
 
+    public function createColumn($fieldName, $value) {        
+        trigger_error("The method createColumn has been deprecated in v3.0 and will be removed by v4.0. Please use createCell instead.", E_USER_NOTICE );
+
+        return $this->createCell($fieldName, $value[$fieldName]);
+    }
+
     /*
      * 
      * @deprecated 
