@@ -53,7 +53,7 @@ if (count($contacts) > 0) {
 		echo '</a>';
 		echo '</td>';
 		echo '<td class="hilite">' . $contact_data['contact_job'] . '</td>';
-        echo $htmlHelper->createColumn('contact_email', $contact_data);
+        echo $htmlHelper->createCell('contact_email', $contact_data['contact_email']);
 		echo '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
 		echo '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
 		echo '</tr>';

@@ -65,8 +65,8 @@ if (count($events)) {
     
     foreach ($events as $row) {
         $html .= '<tr>';
-        $html .= $htmlHelper->createColumn('event_start_date', $row);
-        $html .= $htmlHelper->createColumn('event_end_date', $row);
+        $html .= $htmlHelper->createCell('event_start_date', $row['event_start_date']);
+        $html .= $htmlHelper->createCell('event_start_date', $row['event_end_date']);
 
         $href = '?m=calendar&a=view&event_id=' . $row['event_id'];
         $alt = $row['event_description'];

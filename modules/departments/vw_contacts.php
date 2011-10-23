@@ -15,9 +15,8 @@ $contacts = CDepartment::getContactList($AppUI, $dept_id);
 if (count($contacts) > 0) {
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     foreach ($contacts as $contact_id => $contact_data) {
-
         echo '<tr><td><a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">' . $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'] . '</a></td>';
-        echo $htmlHelper->createColumn('contact_email', $contact_data);
+        echo $htmlHelper->createCell('contact_email', $contact_data['contact_email']);
         echo '<td>' . $contact_data['contact_phone'] . '</td></tr>';
     }
 } else {

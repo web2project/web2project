@@ -283,7 +283,7 @@ if ($is_tabbed) {
                                 $s .= '</td>';
                                 break;
                             default:
-                                $s .= $htmlHelper->createColumn($field, $row);
+                                $s .= $htmlHelper->createCell($field, $row[$field]);
                         }
                     }
 

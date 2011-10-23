@@ -68,9 +68,9 @@ if (count($projects) > 0) {
 				<a href="?m=projects&a=view&project_id=<?php echo $project['project_id']; ?>"><?php echo $project['project_name']; ?></a>
 			</td>
 			<td nowrap="nowrap"><?php echo $project['contact_first_name']; ?>&nbsp;<?php echo $project['contact_last_name']; ?></td>
-            <?php echo $htmlHelper->createColumn('project_start_date', $project); ?>
+            <?php echo $htmlHelper->createCell('project_start_date', $project['project_start_date']); ?>
 			<td nowrap="nowrap"><?php echo $AppUI->_($pstatus[$project['project_status']]); ?></td>
-            <?php echo $htmlHelper->createColumn('project_target_budget', $project); ?>
+            <?php echo $htmlHelper->createCell('project_target_budget', $project['project_target_budget']); ?>
 		</tr>
 		<?php
 	}

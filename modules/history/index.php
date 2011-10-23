@@ -139,7 +139,7 @@ foreach ($history as $row) {
     ?>
     <tr>
         <td align="center"><a href='<?php echo '?m=history&a=addedit&history_id=' . $row['history_id'] ?>'><img src="<?php echo w2PfindImage('icons/pencil.gif'); ?>" alt="<?php echo $AppUI->_('Edit History') ?>" border="0" width="12" height="12" /></a></td>
-        <?php echo $htmlHelper->createColumn('history_datetime', $row); ?>
+        <?php echo $htmlHelper->createCell('history_datetime', $row['history_datetime']); ?>
         <td><?php echo $historyItem->show_history($row) ?></td>
         <td align="left"><?php echo $row['history_display_name'] ?></td>
     </tr>
