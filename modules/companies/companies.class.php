@@ -150,6 +150,7 @@ class CCompany extends w2p_Core_BaseObject {
     $q->addQuery('companies.*');
     $q->addQuery('con.contact_first_name');
     $q->addQuery('con.contact_last_name');
+    $q->addQuery('con.contact_display_name as contact_name');
     $q->leftJoin('users', 'u', 'u.user_id = companies.company_owner');
     $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
     $q->addWhere('companies.company_id = ' . (int) $companyId);
@@ -200,7 +201,8 @@ class CCompany extends w2p_Core_BaseObject {
 	public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name') {
 		$fields = 'DISTINCT pr.project_id, project_name, project_start_date, ' .
 				'project_status, project_target_budget, project_start_date, ' .
-				'project_priority, contact_first_name, contact_last_name';
+				'project_priority, contact_first_name, contact_last_name, ' .
+                'contact_display_name as contact_name';
 
 		$q = new w2p_Database_Query();
 		$q->addTable('projects', 'pr');
@@ -229,10 +231,11 @@ class CCompany extends w2p_Core_BaseObject {
 
 		if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $companyId > 0) {
 			$q = new w2p_Database_Query();
-			$q->addQuery('a.*');
+			$q->addQuery('c.*');
+            $q->addQuery('c.contact_display_name as contact_name');
 			$q->addQuery('dept_name');
-			$q->addTable('contacts', 'a');
-			$q->leftJoin('companies', 'b', 'a.contact_company = b.company_id');
+			$q->addTable('contacts', 'c');
+			$q->leftJoin('companies', 'b', 'c.contact_company = b.company_id');
 			$q->leftJoin('departments', '', 'contact_department = dept_id');
 			$q->addWhere('contact_company = ' . (int) $companyId);
 			$q->addWhere('
@@ -257,6 +260,7 @@ class CCompany extends w2p_Core_BaseObject {
         $q = new w2p_Database_Query();
 		$q->addTable('users');
 		$q->addQuery('user_id, user_username, contact_first_name, contact_last_name');
+        $q->addQuery('contact_display_name as contact_name');
 		$q->addJoin('contacts', 'c', 'users.user_contact = contact_id', 'inner');
 		$q->addJoin('departments', 'd', 'd.dept_id = contact_department');
 		$q->addWhere('contact_company = ' . (int) $companyId);
