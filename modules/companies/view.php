@@ -55,6 +55,7 @@ if ($canEdit) {
 	}
 }
 $titleBlock->show();
+$html = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <?php
 // security improvement:
@@ -84,36 +85,34 @@ $types = w2PgetSysVal('CompanyType');
 $countries = w2PgetSysVal('GlobalCountries');
 ?>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
 	<tr>
 		<td valign="top" width="50%">
 			<strong><?php echo $AppUI->_('Details'); ?></strong>
 			<table cellspacing="1" cellpadding="2" width="100%">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $company->company_name; ?></td>
+                    <?php echo $html->createCell('company_name', $company->company_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $company->contact_first_name . ' ' . $company->contact_last_name; ?></td>
+                    <?php echo $html->createCell('contact_display_name', $company->contact_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-					<td class="hilite" width="100%">
-            <?php echo w2p_email($company->company_email); ?>
-          </td>
+                    <?php echo $html->createCell('company_email', $company->company_email); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-					<td class="hilite"><?php echo $company->company_phone1; ?></td>
+                    <?php echo $html->createCell('company_phone1', $company->company_phone1); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>2:</td>
-					<td class="hilite"><?php echo $company->company_phone2; ?></td>
+                    <?php echo $html->createCell('company_phone2', $company->company_phone2); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-					<td class="hilite"><?php echo $company->company_fax; ?></td>
+                    <?php echo $html->createCell('company_fax', $company->company_fax); ?>
 				</tr>
 				<tr valign="top">
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
@@ -126,11 +125,11 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-					<td class="hilite"><?php echo w2p_url($company->company_primary_url); ?></td>
+                    <?php echo $html->createCell('company_primary_url', $company->company_primary_url); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-					<td class="hilite"><?php echo $AppUI->_($types[$company->company_type]); ?></td>
+                    <?php echo $html->createCell('company_type', $AppUI->_($types[$company->company_type])); ?>
 				</tr>
 			</table>
 		</td>
@@ -138,9 +137,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 			<strong><?php echo $AppUI->_('Description'); ?></strong>
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 				<tr>
-					<td class="hilite">
-            <?php echo w2p_textarea($company->company_description); ?>
-					</td>
+                    <?php echo $html->createCell('company_description', $company->company_description); ?>
 				</tr>		
 			</table>
 			<?php
