@@ -27,7 +27,7 @@ $contacts = CCompany::getContacts($AppUI, $company->company_id);
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('contact_first_name', 'contact_job', 
+            $fieldList = array('contact_name', 'contact_job', 
                 'contact_email', 'contact_phone', 'dept_name');
             $fieldNames = array('Name', 'Job Title', 'Email', 'Phone', 
                 'Department');
@@ -49,13 +49,13 @@ if (count($contacts) > 0) {
     foreach ($contacts as $contact_id => $contact_data) {
         echo '<tr><td class="hilite">';
 		echo '<a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">';
-		echo $contact_data['contact_first_name'] . ' ' . $contact_data['contact_last_name'];
+		echo $contact_data['contact_name'];
 		echo '</a>';
 		echo '</td>';
-		echo '<td class="hilite">' . $contact_data['contact_job'] . '</td>';
+        echo $htmlHelper->createCell('contact_job', $contact_data['contact_job']);
         echo $htmlHelper->createCell('contact_email', $contact_data['contact_email']);
-		echo '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
-		echo '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
+        echo $htmlHelper->createCell('contact_phone', $contact_data['contact_phone']);
+        echo $htmlHelper->createCell('dept_name', $contact_data['dept_name']);
 		echo '</tr>';
 	}
 } else {

@@ -43,14 +43,13 @@ $userList = CCompany::getUsers($AppUI, $company_id);
 <?php
 
 if (count($userList) > 0) {
-    $s = '';
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     foreach ($userList as $user) {
-        $s .= '<tr><td>';
-        $s .= '<a href="./index.php?m=admin&a=viewuser&user_id=' . $user['user_id'] . '">' . $user['user_username'] . '</a>';
-        $s .= '<td>' . $user['contact_first_name'] . ' ' . $user['contact_last_name'] . '</td>';
-        $s .= '</tr>';
+        echo '<tr><td>';
+        echo '<a href="./index.php?m=admin&a=viewuser&user_id=' . $user['user_id'] . '">' . $user['user_username'] . '</a>';
+        echo $htmlHelper->createCell('contact_name', $user['contact_name']);
+        echo '</tr>';
     }
-    echo $s;
 } else {
 	echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
 }
