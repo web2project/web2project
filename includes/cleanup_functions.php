@@ -438,6 +438,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	global $AppUI, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $m, $a, $history_active, $expanded;
 
+    $helper = new w2p_Output_HTMLHelper($AppUI);
 	//Check for Tasks Access
 	$canAccess = canTaskAccess($arr['task_id'], $arr['task_access'], $arr['task_owner']);
 	if (!$canAccess) {
@@ -601,7 +602,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	}
 	// duration or milestone
     $s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($fdf) : '-') . '</td>';
-    $s .= '<td align="right" nowrap="nowrap" style="' . $style . '">' . $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1) . '</td>';
+    $s .= $helper->createCell('task_duration', $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1));
     $s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($fdf) : '-') . '</td>';
 	if ($today_view) {
 		$s .= ('<td nowrap="nowrap" align="center" style="' . $style . '">' . $arr['task_due_in'] . '</td>');

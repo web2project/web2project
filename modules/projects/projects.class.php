@@ -949,6 +949,7 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 		$q->addTable('task_log');
 		$q->addQuery('DISTINCT task_log.*, user_username, task_id');
 		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
+        $q->addQuery('contact_display_name as contact_name');
 		$q->addQuery('billingcode_name as task_log_costcode');
 		$q->addJoin('users', 'u', 'user_id = task_log_creator');
 		$q->addJoin('tasks', 't', 'task_log_task = t.task_id');

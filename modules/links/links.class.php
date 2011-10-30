@@ -29,7 +29,7 @@ class CLink extends w2p_Core_BaseObject {
         $q = $this->_getQuery();
         $q->addQuery('links.*');
         $q->addQuery('user_username');
-        $q->addQuery('contact_first_name,  contact_last_name');
+        $q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
         $q->addQuery('project_id');
         $q->addQuery('task_id, task_name');
         $q->addTable('links');
@@ -50,7 +50,7 @@ class CLink extends w2p_Core_BaseObject {
         // SETUP FOR LINK LIST
         $q = $this->_getQuery();
         $q->addQuery('DISTINCT links.*');
-        $q->addQuery('contact_first_name, contact_last_name');
+        $q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
         $q->addQuery('project_name, project_color_identifier, project_status');
         $q->addQuery('task_name, task_id');
 
