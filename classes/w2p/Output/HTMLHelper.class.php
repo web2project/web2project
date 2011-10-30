@@ -95,6 +95,10 @@ class w2p_Output_HTMLHelper {
             case '_url':
                 $cell = w2p_url($value);
                 break;
+            case '_duration':
+                $class = 'right';
+                $cell = $value;
+                break;
             case '_hours':
 			default:
 				$additional = 'nowrap="nowrap"';
