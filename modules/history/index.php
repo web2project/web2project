@@ -10,7 +10,6 @@ if (!defined('W2P_BASE_DIR')) {
 ## IMATRONIX
 ##
 
-$AppUI->savePlace();
 $titleBlock = new w2p_Theme_TitleBlock('History', 'stock_book_blue_48.png', 'history', 'history.' . $a);
 $titleBlock->show();
 
@@ -62,7 +61,7 @@ if ($filter_param != '' || $page) {
 
 	$q = new w2p_Database_Query;
 	$q->addQuery('history_date as history_datetime, history_id, history_item, history_table, history_description, history_action');
-	$q->addQuery('contact_display_name AS history_display_name');
+	$q->addQuery('contact_display_name AS contact_name');
 	$q->addTable('history', 'h');
 	$q->addTable('users');
 	$q->addWhere('history_user = user_id');
@@ -141,7 +140,7 @@ foreach ($history as $row) {
         <td align="center"><a href='<?php echo '?m=history&a=addedit&history_id=' . $row['history_id'] ?>'><img src="<?php echo w2PfindImage('icons/pencil.gif'); ?>" alt="<?php echo $AppUI->_('Edit History') ?>" border="0" width="12" height="12" /></a></td>
         <?php echo $htmlHelper->createCell('history_datetime', $row['history_datetime']); ?>
         <td><?php echo $historyItem->show_history($row) ?></td>
-        <td align="left"><?php echo $row['history_display_name'] ?></td>
+        <?php echo $htmlHelper->createCell('contact_name', $row['contact_name']); ?>
     </tr>
     <?php
 }

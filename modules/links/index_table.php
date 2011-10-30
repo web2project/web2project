@@ -78,7 +78,8 @@ echo $pageNav;
     </tr>
 <?php
 $fp = -1;
-
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 $id = 0;
 for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
 	$row = $links[$i];
@@ -102,27 +103,24 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 		}
 	}
 	$fp = $row['link_project'];
-?>
-<tr>
-	<td nowrap="nowrap" width="20">
-	<?php if ($canEdit) {
-		echo '<a href="./index.php?m=' . $m . '&a=addedit&link_id=' . $row['link_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', '16', '16') . '</a>';
-	}
-?>
-	</td>
-	<td nowrap="8%">
-		<?php echo '<a href="' . $row['link_url'] . '" target="_blank">' . $row['link_name'] . '</a>'; ?>
-	</td>
-	<td width="20%"><?php echo $row['link_description']; ?></td>
-        <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']]; ?></td> 
-	<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['task_id']; ?>"><?php echo $row['task_name']; ?></a></td>
-	<td width="15%" nowrap="nowrap"><?php echo $row['contact_first_name'] . ' ' . $row['contact_last_name']; ?></td>
-	<td width="15%" nowrap="nowrap" align="center">
-        <?php
-            echo $AppUI->formatTZAwareTime($row['link_date'], $df . ' ' . $tf);
+    ?>
+    <tr>
+        <td nowrap="nowrap" width="20">
+        <?php if ($canEdit) {
+            echo '<a href="./index.php?m=' . $m . '&a=addedit&link_id=' . $row['link_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', '16', '16') . '</a>';
+        }
         ?>
-    </td>
-</tr>
+        </td>
+        <td nowrap="8%">
+            <?php echo '<a href="' . $row['link_url'] . '" target="_blank">' . $row['link_name'] . '</a>'; ?>
+        </td>
+        <td width="20%"><?php echo $row['link_description']; ?></td>
+        <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']]; ?></td> 
+        <td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['task_id']; ?>"><?php echo $row['task_name']; ?></a></td>
+        <?php echo $htmlHelper->createCell('contact_name', $row['contact_name']); ?>
+<!-- TODO: adjust for timezones -->
+        <?php echo $htmlHelper->createCell('link_date', $row['link_date']); ?>
+    </tr>
 <?php } ?>
 </table>
 <?php
