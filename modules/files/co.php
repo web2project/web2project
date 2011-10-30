@@ -52,6 +52,7 @@ $extra = array('where' => 'project_active<>0');
 $project = new CProject();
 $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
 $projects = arrayMerge(array('0' => $AppUI->_('All')), $projects);
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -68,7 +69,7 @@ function popFile( params ) {
     <input type="hidden" name="file_checkout" value="<?php echo $AppUI->user_id; ?>" />
     <input type="hidden" name="file_version_id" value="<?php echo $obj->file_version_id; ?>" />
         
-    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
+    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std view">
         <tr>
             <td width="100%" valign="top" align="center">
                 <table cellspacing="1" cellpadding="2" width="60%">
@@ -79,15 +80,15 @@ function popFile( params ) {
                 </tr>
                 <tr valign="top">
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-                    <td align="left" class="hilite"><?php echo $obj->file_type; ?></td>
+                    <?php echo $htmlHelper->createCell('file_type', $obj->file_type); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Size'); ?>:</td>
-                    <td align="left" class="hilite"><?php echo $obj->file_size; ?></td>
+                    <?php echo $htmlHelper->createCell('file_size', $obj->file_size); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By'); ?>:</td>
-                    <td align="left" class="hilite"><?php echo $obj->getOwner(); ?></td>
+                    <?php echo $htmlHelper->createCell('file_owner', $obj->file_owner); ?>
                 </tr>
             <?php } ?>
                 <tr>

@@ -644,10 +644,10 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 		$q = $this->_getQuery();
 		$q->addTable('users', 'a');
 		$q->addJoin('contacts', 'b', 'b.contact_id = a.user_contact', 'inner');
-		$q->addQuery('contact_first_name, contact_last_name');
+		$q->addQuery('contact_first_name, contact_last_name, contact_display_name');
 		$q->addWhere('a.user_id = ' . (int)$this->file_owner);
 		if ($qid = &$q->exec()) {
-			$owner = $qid->fields['contact_first_name'] . ' ' . $qid->fields['contact_last_name'];
+			$owner = $qid->fields['contact_display_name'];
 		}
 
 		return $owner;

@@ -113,8 +113,8 @@ if ($file->file_task) {
 if (isset($file->file_helpdesk_item)) {
 	$file_helpdesk_item = $file->file_helpdesk_item;
 }
-$myFolder = new CFileFolder();
 $folders = getFolderSelectList();
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
@@ -175,7 +175,7 @@ function setTask( key, val ) {
 	<input type="hidden" name="file_version_id" value="<?php echo $file->file_version_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
 	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />
-	<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
+	<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std view">
 		<tr>
 			<td width="80%" valign="top" align="center">
 				<table cellspacing="1" cellpadding="2" width="60%">
@@ -199,15 +199,15 @@ function setTask( key, val ) {
 						</tr>
 						<tr valign="top">
 							<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-							<td align="left" class="hilite"><?php echo $file->file_type; ?></td>
+                            <?php echo $htmlHelper->createCell('file_type', $file->file_type); ?>
 						</tr>
 						<tr>
 							<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Size'); ?>:</td>
-							<td align="left" class="hilite"><?php echo $file->file_size; ?></td>
+                            <?php echo $htmlHelper->createCell('file_size', $file->file_size); ?>
 						</tr>
 						<tr>
 							<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By'); ?>:</td>
-							<td align="left" class="hilite"><?php echo $file->getOwner(); ?></td>
+                            <?php echo $htmlHelper->createCell('file_owner', $file->file_owner); ?>
 						</tr>
 					<?php } ?>
 					<?php echo file_show_attr(); ?>
