@@ -87,7 +87,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$helper = new w2p_Output_HTMLHelper($AppUI);
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 function expand_multiproject(id, table_name) {
@@ -125,7 +125,7 @@ function delIt() {
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
-<table class="std view">
+<table id="tblProjects" border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
 <tr>
 	<td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2" id="view-header">
 	<?php
@@ -144,24 +144,24 @@ function delIt() {
                     <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
                 </td>
             <?php } else { ?>
-                <?php echo $helper->createCell('company_name', $project->company_name); ?>
+                <?php echo $htmlHelper->createCell('company_name', $project->company_name); ?>
             <?php } ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
-            <?php echo $helper->createCell('project_location', $project->project_location); ?>
+            <?php echo $htmlHelper->createCell('project_location', $project->project_location); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
-            <?php echo $helper->createCell('project_short_name', $project->project_short_name); ?>
+            <?php echo $htmlHelper->createCell('project_short_name', $project->project_short_name); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
-            <?php echo $helper->createCell('start_date', $start_date); ?>
+            <?php echo $htmlHelper->createCell('start_date', $start_date); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target End Date'); ?>:</td>
-            <?php echo $helper->createCell('end_date', $end_date); ?>
+            <?php echo $htmlHelper->createCell('end_date', $end_date); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual End Date'); ?>:</td>
@@ -179,19 +179,19 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-            <?php echo $helper->createCell('project_target_budget', $project->project_target_budget); ?>
+            <?php echo $htmlHelper->createCell('project_target_budget', $project->project_target_budget); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-            <?php echo $helper->createCell('user_name', $project->user_name); ?>
+            <?php echo $htmlHelper->createCell('user_name', $project->user_name); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-            <?php echo $helper->createCell('project_url', $project->project_url); ?>
+            <?php echo $htmlHelper->createCell('project_url', $project->project_url); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
-            <?php echo $helper->createCell('project_demo_url', $project->project_demo_url); ?>
+            <?php echo $htmlHelper->createCell('project_demo_url', $project->project_demo_url); ?>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -206,7 +206,7 @@ function delIt() {
 			<strong><?php echo $AppUI->_('Description'); ?></strong><br />
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 			<tr>
-                <?php echo $helper->createCell('project_description', $project->project_description); ?>
+                <?php echo $htmlHelper->createCell('project_description', $project->project_description); ?>
 			</tr>
 			</table>
 			</td>
@@ -218,7 +218,7 @@ function delIt() {
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($pstatus[$project->project_status]); ?></td>
+            <?php echo $htmlHelper->createCell('project_status', $AppUI->_($pstatus[$project->project_status])); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
@@ -226,10 +226,11 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($ptype[$project->project_type]); ?></td>
+            <?php echo $htmlHelper->createCell('project_type', $AppUI->_($ptype[$project->project_type])); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
+<!-- TODO: we can't use the createCell helper here because it centers things while we need it left-aligned -->
             <td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
 		</tr>
 		<tr>
@@ -238,15 +239,15 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
-            <?php echo $helper->createCell('project_worked_hours', $project->project_worked_hours); ?>
+            <?php echo $htmlHelper->createCell('project_worked_hours', $project->project_worked_hours); ?>
 		</tr>	
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
-            <?php echo $helper->createCell('total_hours', $total_hours); ?>
+            <?php echo $htmlHelper->createCell('total_hours', $total_hours); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Hours'); ?>:</td>
-            <?php echo $helper->createCell('total_project_hours', $total_project_hours); ?>
+            <?php echo $htmlHelper->createCell('total_project_hours', $total_project_hours); ?>
 		</tr>				
 		<?php
 		$depts = CProject::getDepartments($AppUI, $project->project_id);

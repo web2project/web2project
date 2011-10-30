@@ -24,8 +24,6 @@ $company = new CCompany();
 $allowedCompanies = $company->getAllowedRecords($AppUI->user_id, 'company_id, company_name');
 
 $companyList = $company->getCompanyList($AppUI, $company_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
-
-$html = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
     <tr>
@@ -57,6 +55,7 @@ $html = new w2p_Output_HTMLHelper($AppUI);
     </tr>
     <?php
         if (count($companyList) > 0) {
+            $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
             foreach ($companyList as $company) {
                 echo '<tr>';
                 echo '<td width="60%">' . (mb_trim($company['company_description']) ? w2PtoolTip($company['company_name'], $company['company_description']) : '') . '<a href="./index.php?m=companies&a=view&company_id=' . $company['company_id'] . '" >' . $company['company_name'] . '</a>' . (mb_trim($company['company_description']) ? w2PendTip() : '') . '</td>';

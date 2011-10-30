@@ -37,23 +37,28 @@ $forums = CProject::getForums($AppUI, $project_id);
         }
         ?>
     </tr>
-	<?php foreach ($forums as $forumId  => $forum_info) {?>
-		<tr>
-			<td nowrap="nowrap" align="center">
-		<?php
-			if ($forum_info["forum_owner"] == $AppUI->user_id) { ?>
-				<a href="./index.php?m=forums&a=addedit&forum_id=<?php echo $forum_info['forum_id']; ?>"><img src="<?php echo w2PfindImage('icons/pencil.gif'); ?>" alt="expand forum" border="0" width=12 height=12></a>
-		<?php } ?>
-			</td>
-			<td nowrap="nowrap"><a href="./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_info["forum_id"]; ?>"><?php echo $forum_info['forum_name']; ?></a></td>
-			<td nowrap="nowrap"><?php echo $forum_info['forum_message_count']; ?></td>
-			<td nowrap="nowrap">
-				<?php echo (intval($forum_info['forum_last_date']) > 0) ? $forum_info['forum_last_date'] : 'n/a'; ?>
-			</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td colspan="3"><?php echo $forum_info['forum_description']; ?></td>
-		</tr>
-	<?php } ?>
+	<?php
+    if (count($forums) > 0) {
+        $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+        foreach ($forums as $forumId  => $forum_info) {?>
+            <tr>
+                <td nowrap="nowrap" align="center">
+            <?php
+                if ($forum_info["forum_owner"] == $AppUI->user_id) { ?>
+                    <a href="./index.php?m=forums&a=addedit&forum_id=<?php echo $forum_info['forum_id']; ?>"><img src="<?php echo w2PfindImage('icons/pencil.gif'); ?>" alt="expand forum" border="0" width=12 height=12></a>
+            <?php } ?>
+                </td>
+                <td nowrap="nowrap"><a href="./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_info["forum_id"]; ?>"><?php echo $forum_info['forum_name']; ?></a></td>
+                <?php echo $htmlHelper->createCell('forum_message_count', $forum_info['forum_message_count']); ?>
+                <td nowrap="nowrap">
+                    <?php echo (intval($forum_info['forum_last_date']) > 0) ? $forum_info['forum_last_date'] : 'n/a'; ?>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="3"><?php echo $forum_info['forum_description']; ?></td>
+            </tr>
+        <?php 
+        }
+    } ?>
 </table>
