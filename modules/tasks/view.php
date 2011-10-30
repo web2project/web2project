@@ -56,6 +56,7 @@ $canReadProject = canView('projects', $obj->task_project);
 $users = $obj->getAssignedUsers($task_id);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
+$task_types = w2PgetSysVal('TaskType');
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Task', 'applet-48.png', $m, $m . '.' . $a);
@@ -79,11 +80,7 @@ if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete task', $canDelete, $msg);
 }
 $titleBlock->show();
-
-$task_types = w2PgetSysVal('TaskType');
-
-$helper = new w2p_Output_HTMLHelper($AppUI);
-
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 function updateTask() {
@@ -161,6 +158,7 @@ function delIt() {
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
                     <td class="hilite"> <?php echo $obj->username; ?></td>
+                    <?php echo $htmlHelper->createCell('task_owner', $obj->username); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
@@ -173,7 +171,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Web Address'); ?>:</td>
-                    <?php echo $helper->createCell('task_related_url', $obj->task_related_url); ?>
+                    <?php echo $htmlHelper->createCell('task_related_url', $obj->task_related_url); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Milestone'); ?>:</td>
@@ -191,7 +189,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
-                    <td class="hilite" width="300"><?php echo $obj->task_hours_worked; ?></td>
+                    <?php echo $htmlHelper->createCell('task_hours_worked', $obj->task_hours_worked); ?>
                 </tr>
                 <tr>
                     <td nowrap="nowrap" colspan="2"><strong><?php echo $AppUI->_('Dates and Targets'); ?></strong></td>
@@ -210,11 +208,11 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-                    <?php echo $helper->createCell('task_target_budget', $obj->task_target_budget); ?>
+                    <?php echo $htmlHelper->createCell('task_target_budget', $obj->task_target_budget); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Type'); ?> :</td>
-                    <td class="hilite" width="300"><?php echo $AppUI->_($task_types[$obj->task_type]); ?></td>
+                    <?php echo $htmlHelper->createCell('task_type', $AppUI->_($task_types[$obj->task_type])); ?>
                 </tr>
             </table>
         </td>
@@ -234,7 +232,7 @@ function delIt() {
                                 $s .= '<td class="hilite" width=80%>';
                                 $s .= w2p_email($row['user_email'], $row['contact_display_name']);
                                 $s .= '</td>';
-                                $s .= $helper->createCell('perc_assignment', $row['perc_assignment']);
+                                $s .= $htmlHelper->createCell('perc_assignment', $row['perc_assignment']);
                                 $s .= '</tr>';
                             }
                             echo '<table width="100%" cellspacing="1" bgcolor="black">' . $s . '</table>';
@@ -253,7 +251,7 @@ function delIt() {
                             $s .= '<tr><td class="hilite" width=80%>';
                             $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
 							$s .= '</td>';
-                            $s .= $helper->createCell('task_percent_complete', $array['task_percent_complete']);
+                            $s .= $htmlHelper->createCell('task_percent_complete', $array['task_percent_complete']);
                             $s .= '</tr>';
 
                         }
@@ -273,7 +271,7 @@ function delIt() {
                             $s .= '<tr><td class="hilite" width=80%>';
                             $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
 							$s .= '</td>';
-                            $s .= $helper->createCell('task_percent_complete', $array['task_percent_complete']);
+                            $s .= $htmlHelper->createCell('task_percent_complete', $array['task_percent_complete']);
                             $s .= '</tr>';
                         }
                         echo '<table width="100%" cellspacing="1" bgcolor="black" class="list">' . $s . '</table>';
@@ -286,9 +284,7 @@ function delIt() {
                     </td>
                  </tr>
                 <tr>
-                    <td class="hilite" colspan="3">
-                        <?php echo w2p_textarea($obj->task_description); ?>
-                    </td>
+                    <?php echo $htmlHelper->createCell('task_description', $obj->task_description); ?>
                 </tr>
                 <?php
                 $depts = $obj->getTaskDepartments($AppUI, $task_id);

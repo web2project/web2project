@@ -55,7 +55,7 @@ if ($canEdit) {
 	}
 }
 $titleBlock->show();
-$html = new w2p_Output_HTMLHelper($AppUI);
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <?php
 // security improvement:
@@ -92,27 +92,27 @@ $countries = w2PgetSysVal('GlobalCountries');
 			<table cellspacing="1" cellpadding="2" width="100%">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-                    <?php echo $html->createCell('company_name', $company->company_name); ?>
+                    <?php echo $htmlHelper->createCell('company_name', $company->company_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-                    <?php echo $html->createCell('contact_display_name', $company->contact_name); ?>
+                    <?php echo $htmlHelper->createCell('contact_display_name', $company->contact_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-                    <?php echo $html->createCell('company_email', $company->company_email); ?>
+                    <?php echo $htmlHelper->createCell('company_email', $company->company_email); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-                    <?php echo $html->createCell('company_phone1', $company->company_phone1); ?>
+                    <?php echo $htmlHelper->createCell('company_phone1', $company->company_phone1); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>2:</td>
-                    <?php echo $html->createCell('company_phone2', $company->company_phone2); ?>
+                    <?php echo $htmlHelper->createCell('company_phone2', $company->company_phone2); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-                    <?php echo $html->createCell('company_fax', $company->company_fax); ?>
+                    <?php echo $htmlHelper->createCell('company_fax', $company->company_fax); ?>
 				</tr>
 				<tr valign="top">
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
@@ -125,11 +125,11 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-                    <?php echo $html->createCell('company_primary_url', $company->company_primary_url); ?>
+                    <?php echo $htmlHelper->createCell('company_primary_url', $company->company_primary_url); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-                    <?php echo $html->createCell('company_type', $AppUI->_($types[$company->company_type])); ?>
+                    <?php echo $htmlHelper->createCell('company_type', $AppUI->_($types[$company->company_type])); ?>
 				</tr>
 			</table>
 		</td>
@@ -137,7 +137,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 			<strong><?php echo $AppUI->_('Description'); ?></strong>
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 				<tr>
-                    <?php echo $html->createCell('company_description', $company->company_description); ?>
+                    <?php echo $htmlHelper->createCell('company_description', $company->company_description); ?>
 				</tr>		
 			</table>
 			<?php
