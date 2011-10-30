@@ -22,9 +22,8 @@ class CFileFolder extends w2p_Core_BaseObject {
 	}
 
 	public function getAllowedRecords($uid) {
-		global $AppUI;
 
-        $q = $this->_getQuery();
+                $q = $this->_getQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('*');
 		$q->addOrder('file_folder_parent');
@@ -35,7 +34,7 @@ class CFileFolder extends w2p_Core_BaseObject {
 	public function delete(w2p_Core_CAppUI $AppUI) {
         $perms = $AppUI->acl();
 
-//TODO: this is an oddball permissions object where the module doesn't determine the access..
+        //TODO: this is an oddball permissions object where the module doesn't determine the access..
         if ($perms->checkModuleItem('files', 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
@@ -88,7 +87,7 @@ class CFileFolder extends w2p_Core_BaseObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-//TODO: this is an oddball permissions object where the module doesn't determine the access..
+        //TODO: this is an oddball permissions object where the module doesn't determine the access..
         if ($this->{$this->_tbl_key} && $perms->checkModuleItem('files', 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
@@ -130,6 +129,8 @@ class CFileFolder extends w2p_Core_BaseObject {
     public function getFileCountByFolder(w2p_Core_CAppUI $AppUI, $folder_id,
             $task_id, $project_id, $company_id, $allowed_companies) {
 
+        global $allowed_companies; //FIXME: Had to introduce this since it wasnt defined
+        
         // SQL text for count the total recs from the selected option
         $q = $this->_getQuery();
         $q->addTable('files');
