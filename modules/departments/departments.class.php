@@ -34,19 +34,18 @@ class CDepartment extends w2p_Core_BaseObject {
         global $AppUI;
 
 		$q = $this->_getQuery();
-		$q->addTable('companies', 'com');
-		$q->addTable('departments', 'dep');
 		$q->addQuery('dep.*, company_name');
-		$q->addQuery('con.contact_first_name');
-		$q->addQuery('con.contact_last_name');
-		$q->addJoin('users', 'u', 'u.user_id = dep.dept_owner');
-		$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+		$q->addQuery('con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name');
+        $q->addTable('departments', 'dep');
+		$q->addJoin('users', '', 'user_id = dep.dept_owner');
+        $q->addJoin('contacts', 'con', 'con.contact_id = user_contact');
+        $q->addJoin('companies', 'com', 'company_id = dep.dept_company');
 		$q->addWhere('dep.dept_id = ' . (int) $deptId);
-		$q->addWhere('dep.dept_company = company_id');
 
 		$this->company_name = '';
 		$this->contact_first_name = '';
 		$this->contact_last_name = '';
+        $this->contact_name = '';
 
 		$q->loadObject($this);
 	}
@@ -360,8 +359,7 @@ class CDepartment extends w2p_Core_BaseObject {
         if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $deptId > 0) {
             $q = new w2p_Database_Query();
             $q->addTable('contacts', 'con');
-            $q->addQuery('con.contact_id, con.contact_first_name');
-            $q->addQuery('con.contact_last_name');
+            $q->addQuery('con.*, con.contact_display_name as contact_name');
             $q->addWhere('contact_department = ' . (int) $deptId);
             $q->addWhere('(contact_owner = ' . (int) $AppUI->user_id . ' OR contact_private = 0)');
             $q->addOrder('contact_first_name');

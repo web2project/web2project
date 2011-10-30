@@ -46,6 +46,8 @@ if ($canEdit) {
     }
 }
 $titleBlock->show();
+
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 <?php
@@ -68,7 +70,7 @@ function delIt() {
 	<input type="hidden" name="dept_id" value="<?php echo $dept_id; ?>" />
 </form>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
 	<tr valign="top">
 		<td width="50%">
 			<strong><?php echo $AppUI->_('Details'); ?></strong>
@@ -85,27 +87,27 @@ function delIt() {
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $department->dept_name; ?></td>
+                    <?php echo $htmlHelper->createCell('dept_name', $department->dept_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $department->contact_first_name . ' ' . $department->contact_last_name; ?></td>
+                    <?php echo $htmlHelper->createCell('contact_name', $department->contact_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $types[$department->dept_type]; ?></td>
+                    <?php echo $htmlHelper->createCell('dept_type', $types[$department->dept_type]); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo w2p_email($department->dept_email); ?></td>
+                    <?php echo $htmlHelper->createCell('dept_email', $department->dept_email); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $department->dept_phone; ?></td>
+                    <?php echo $htmlHelper->createCell('dept_phone', $department->dept_phone); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fax'); ?>:</td>
-					<td class="hilite" width="100%"><?php echo $department->dept_fax; ?></td>
+                    <?php echo $htmlHelper->createCell('dept_fax', $department->dept_fax); ?>
 				</tr>
 				<tr valign="top">
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
@@ -117,7 +119,7 @@ function delIt() {
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-          <td class="hilite"><?php echo w2p_url($department->dept_url); ?></td>
+                    <?php echo $htmlHelper->createCell('dept_url', $department->dept_url); ?>
 				</tr>
 			</table>
 		</td>
@@ -125,7 +127,7 @@ function delIt() {
 			<strong><?php echo $AppUI->_('Description'); ?></strong>
 			<table cellspacing="1" cellpadding="2" border="0" width="100%">
 			<tr>
-				<td class="hilite" width="100%"><?php echo w2p_textarea($department->dept_desc); ?>&nbsp;</td>
+                <?php echo $htmlHelper->createCell('dept_desc', $department->dept_desc); ?>
 			</tr>
 			</table>
 		</td>
