@@ -40,6 +40,7 @@ if ($canAdd) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new forum') . '">', '', '<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->show();
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 
 <form name="watcher" action="./index.php?m=forums&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
@@ -125,8 +126,8 @@ $titleBlock->show();
                     <?php echo $AppUI->_('Started') . ' ' . $create_date; ?>
                     </font>
                 </td>
-                <td nowrap="nowrap" align="center"><?php echo $row['forum_topics']; ?></td>
-                <td nowrap="nowrap" align="center"><?php echo $row['forum_replies']; ?></td>
+                <?php echo $htmlHelper->createCell('topic_count', $row['forum_topics']); ?>
+                <?php echo $htmlHelper->createCell('reply_count', $row['forum_replies']); ?>
                 <td width="225">
                     <?php
                     if ($message_date !== null) {

@@ -10,11 +10,10 @@ $hideEmail = w2PgetConfig('hide_email_addresses', false);
 
 $forum = new CForum();
 $messages = $forum->getMessages($AppUI, $forum_id, $message_id, $sort);
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
-<?php
-if ($viewtype != 'normal') {
-?>
+<?php if ($viewtype != 'normal') { ?>
 	function toggle(id) {
         <?php if ($viewtype == 'single') { ?>
 		var elems = document.getElementsByTagName('div');
@@ -124,7 +123,7 @@ foreach ($messages as $row) {
 	$q = new w2p_Database_Query;
 	$q->addTable('forum_messages');
 	$q->addTable('users');
-	$q->addQuery('DISTINCT contact_first_name, contact_last_name, user_username, contact_email');
+	$q->addQuery('DISTINCT contact_first_name, contact_last_name, contact_display_name as contact_name, user_username, contact_email');
 	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 	$q->addWhere('users.user_id = ' . (int)$row['message_editor']);
 	$editor = $q->loadList();
@@ -144,7 +143,7 @@ foreach ($messages as $row) {
 		if (!$hideEmail) {
 			$s .= '<a href="mailto:' . $row['contact_email'] . '">';
 		}
-		$s .= '<font size="2">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</font>';
+		$s .= '<font size="2">' . $row['contact_name'] . '</font>';
 		if (!$hideEmail) {
 			$s .= '</a>';
 		}
@@ -154,7 +153,7 @@ foreach ($messages as $row) {
 			if (!$hideEmail) {
 				$s .= '<a href="mailto:' . $editor[0]['contact_email'] . '">';
 			}
-			$s .= '<font size="1">' . $editor[0]['contact_first_name'] . ' ' . $editor[0]['contact_last_name'] . '</font>';
+			$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font>';
 			if (!$hideEmail) {
 				$s .= '</a>';
 			}
@@ -217,12 +216,12 @@ foreach ($messages as $row) {
 
 			$s .= '<td valign="top" style="' . $style . '" >';
 			$s .= '<a href="mailto:' . $row['contact_email'] . '">';
-			$s .= '<font size="2">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</font></a>';
+			$s .= '<font size="2">' . $row['contact_name'] . ' ' . $row['contact_name'] . '</font></a>';
 			$s .= ' (' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ') ';
 			if (sizeof($editor) > 0) {
 				$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
 				$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-				$s .= '<font size="1">' . $editor[0]['contact_first_name'] . ' ' . $editor[0]['contact_last_name'] . '</font></a>';
+				$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
 			}
 			$s .= '<a name="' . $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
 			$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
@@ -239,12 +238,12 @@ foreach ($messages as $row) {
 				$s .= '<td valign="top" style="' . $style . '">';
 				$s .= $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ' - ';
 				$s .= '<a href="mailto:' . $row['contact_email'] . '">';
-				$s .= '<font size="2">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '</font></a>';
+				$s .= '<font size="2">' . $row['contact_name'] . '</font></a>';
 				$s .= '<br />';
 				if (sizeof($editor) > 0) {
 					$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
 					$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-					$s .= '<font size="1">' . $editor[0]['contact_first_name'] . ' ' . $editor[0]['contact_last_name'] . '</font></a>';
+					$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
 				}
 				$s .= '<a href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
 				$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';

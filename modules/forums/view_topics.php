@@ -20,7 +20,7 @@ $q->addTable('forum_messages', 'fm1');
 $q->addQuery('fm1.*');
 $q->addQuery('COUNT(distinct fm2.message_id) AS replies');
 $q->addQuery('MAX(fm2.message_date) AS latest_reply');
-$q->addQuery('user_username, contact_first_name, contact_last_name, watch_user');
+$q->addQuery('user_username, contact_first_name, contact_last_name, contact_display_name as contact_name, watch_user');
 $q->addQuery('count(distinct v1.visit_message) as reply_visits');
 $q->addQuery('v1.visit_user');
 $q->leftJoin('users', 'u', 'fm1.message_author = u.user_id');
@@ -44,6 +44,7 @@ $topics = $q->loadList();
 
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <br />
 <?php
@@ -119,8 +120,8 @@ if (function_exists('styleRenderBoxTop')) {
             <a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id . '&message_id=' . $row["message_id"]; ?>"><?php echo $row['message_title']; ?></a>
             </span>
         </td>
-        <td bgcolor="#dddddd" width="10%"><?php echo $row['contact_first_name'] . ' ' . $row['contact_last_name']; ?></td>
-        <td align="center" width="10%"><?php echo $row['replies']; ?></td>
+        <?php echo $htmlHelper->createCell('contact_name', $row['contact_name']); ?>
+        <?php echo $htmlHelper->createCell('reply_count', $row['replies']); ?>
         <td bgcolor="#dddddd" width="150" nowrap="nowrap">
     <?php if ($row['latest_reply']) {
                 echo $AppUI->formatTZAwareTime($row['latest_reply'], $df . ' ' . $tf)  . '<br /><font color="#999966">(';
