@@ -14,6 +14,7 @@ $problem = (int) w2PgetParam($_GET, 'problem', null);
 // get sysvals
 $taskLogReference = w2PgetSysVal('TaskLogReference');
 $taskLogReferenceImage = w2PgetSysVal('TaskLogReferenceImage');
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 <?php
@@ -71,7 +72,7 @@ function delIt2(id) {
     </tr>
 <?php
 // Pull the task comments
- $task= new CTask();
+$task= new CTask();
 $logs = $task->getTaskLogs($task_id, $problem);
 
 $s = '';
@@ -87,6 +88,7 @@ foreach ($logs as $row) {
         $s .= ($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1';
 		$s .= '&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a>';
 	}
+    $s .= '<a name="tasklog' . $row['task_log_id'] . '"></a>';
 	$s .= '</td>';
 	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($sf) : '-') . '<br /><br />';
     $task_log_updated = intval($row['task_log_updated']) ? $row['task_log_updated'] : null;
@@ -101,33 +103,14 @@ foreach ($logs as $row) {
 		}
 	}
 	$s .= '<td align="center" valign="middle">' . $reference_image . '</td>';
-	$s .= '<td width="30%" style="' . $style . '">' . $row['task_log_name'] . '</td>';
+    $s .= $htmlHelper->createCell('task_log_name', $row['task_log_name']);
 	$s .= !empty($row['task_log_related_url']) ? '<td><a href="' . $row['task_log_related_url'] . '" title="' . $row['task_log_related_url'] . '">' . $AppUI->_('URL') . '</a></td>' : '<td></td>';
-	$s .= '<td width="100">' . $row['real_name'] . '</td>';
-	$s .= '<td width="100" align="right">' . sprintf('%.2f', $row['task_log_hours']) . '<br />(';
+    $s .= $htmlHelper->createCell('real_name', $row['real_name']);
+    $s .= $htmlHelper->createCell('task_log_hours', sprintf('%.2f', $row['task_log_hours']));
+    $s .= $htmlHelper->createCell('task_log_costcode', $row['task_log_costcode']);
+    $s .= $htmlHelper->createCell('task_log_description', $row['task_log_description']);
 
-	$minutes = ($row['task_log_hours'] - floor($row['task_log_hours'])) * 60;
-	$minutes = round($minutes, 0, PHP_ROUND_HALF_UP);
-	$minutes = (($minutes < 10) ? ('0' . $minutes) : $minutes);
-	$s .= (int)$row['task_log_hours'] . ':' . $minutes . ')</td>';
-	$s .= '<td width="100">' . $row['task_log_costcode'] . '</td><td>' . '<a name="tasklog' . $row['task_log_id'] . '"></a>';
-
-	// dylan_cuthbert: auto-transation system in-progress, leave these lines
-	$transbrk = "\n[translation]\n";
-    $descrip = w2p_textarea($row['task_log_description']);
-	$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
-	if ($tranpos === false) {
-		$s .= $descrip;
-	} else {
-		$descrip = mb_substr($descrip, 0, $tranpos);
-		$tranpos = mb_strpos($row['task_log_description'], $transbrk);
-		$transla = mb_substr($row['task_log_description'], $tranpos + mb_strlen($transbrk));
-		$transla = mb_trim(mb_str_replace("'", '"', $transla));
-		$s .= $descrip.'gsd' . '<div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
-	}
-	// end auto-translation code
-
-	$s .= '</td><td>';
+	$s .= '<td>';
 	if ($canDelete) {
 		$s .= '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' . $AppUI->_('delete log') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
 	}
@@ -136,12 +119,13 @@ foreach ($logs as $row) {
 }
 $s .= '<tr bgcolor="white" valign="top">';
 $s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
-$s .= '<td align="right">' . sprintf('%.2f', $hrs) . '</td>';
-$s .= '<td align="right" colspan="3"><form action="?m=tasks&a=view&tab=1&task_id=' . $task_id . '" method="post" accept-charset="utf-8">';
+$s .= $htmlHelper->createCell('task_log_hours', $hrs);
+$s .= '<td align="right" colspan="3">';
 if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
-	$s .= '<input type="submit" class="button" value="' . $AppUI->_('new log') . '"></form></td>';
+	$s .= '<form action="?m=tasks&a=view&tab=1&task_id=' . $task_id . '" method="post" accept-charset="utf-8">';
+    $s .= '<input type="submit" class="button" value="' . $AppUI->_('new log') . '"></form>';
 }
-$s .= '</tr>';
+$s .= '</td></tr>';
 echo $s;
 ?>
 </table>
