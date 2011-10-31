@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /* $Id: header.php 2159 2011-10-28 16:00:39Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/style/wps-redmond/header.php $ */
 $dialog = w2PgetParam($_GET, 'dialog', 0);
 if ($dialog) {
 	$page_title = '';
@@ -17,7 +17,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
         <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
         <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
         <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-        <title><?php echo @w2PgetConfig('page_title'); ?></title>
+        <title><?php echo @w2PgetConfig('page_title') . ' :: ' . $AppUI->_($m) . ' ' . $AppUI->_($a); ?></title>
         <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
         <link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
         <style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>

@@ -17,7 +17,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
         <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
         <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
         <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-        <title><?php echo @w2PgetConfig('page_title'); ?></title>
+        <title><?php echo @w2PgetConfig('page_title') . ' :: ' . $AppUI->_($m) . ' ' . $AppUI->_($a); ?></title>
         <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
         <link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
         <style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
@@ -41,7 +41,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                             &nbsp;
                         </th>
                         <th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="right" width="123"><a href='http://www.web2project.net/' <?php if ($dialog)
-                        echo 'target="_blank"'; ?>><?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?><img src="style/<?php echo $uistyle; ?>/images/title.jpg" border="0" class="banner" align="left" alt="click to visit web2Project site" /><?php echo w2PendTip();?></th>
+                        echo 'target="_blank"'; ?>><?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?><img src="style/<?php echo $uistyle; ?>/images/title.jpg" border="0" class="banner" align="left" alt="click to visit web2Project site" /><?php echo w2PendTip();?></a></th>
                         <th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="right" width="5">
                             <!--a little spacer-->
                             &nbsp;
