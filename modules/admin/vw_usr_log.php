@@ -89,7 +89,7 @@ if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
     $userId = isset($userId) ? $userId : 0;
     $logs = CUser::getLogs($userId, $start_date, $end_date);
     ?>
-	<table align="center" class="tbl" width="50%">
+    <table width="50%" border="0" cellpadding="2" cellspacing="1" class="tbl list" align="center">
 		<tr>
 			<th nowrap="nowrap" ><?php echo $AppUI->_('Name(s)'); ?></th>
 			<th nowrap="nowrap" ><?php echo $AppUI->_('Last Name'); ?></th>

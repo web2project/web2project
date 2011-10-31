@@ -51,7 +51,7 @@ function clearIt(){
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 <tr><td width="50%" valign="top">
 
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
 <tr>
 	<th width="100%"><?php echo $AppUI->_('Role'); ?></th>
 	<th>&nbsp;</th>

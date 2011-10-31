@@ -148,7 +148,7 @@ function setDept( key, val ) {
 	<input type="hidden" name="dosql" value="do_user_aed" />
 	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />
 	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>)" />
-    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
+    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std addedit">
         <tr>
             <td align="right" width="35%" nowrap="nowrap">* <?php echo $AppUI->_('Login Name'); ?>:</td>
             <td>
