@@ -40,7 +40,7 @@ function delIt(id) {
 <?php } ?>
 </script>
 
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
+<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl list">
 <tr>
 	<th>&nbsp;</th>
 	<th><?php echo $AppUI->_('Name'); ?></th>

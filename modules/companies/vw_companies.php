@@ -25,7 +25,7 @@ $allowedCompanies = $company->getAllowedRecords($AppUI->user_id, 'company_id, co
 
 $companyList = $company->getCompanyList($AppUI, $company_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
     <tr>
         <?php
         $fieldList = array();
@@ -59,9 +59,9 @@ $companyList = $company->getCompanyList($AppUI, $company_type_filter, $search_st
             foreach ($companyList as $company) {
                 echo '<tr>';
                 echo '<td width="60%">' . (mb_trim($company['company_description']) ? w2PtoolTip($company['company_name'], $company['company_description']) : '') . '<a href="./index.php?m=companies&a=view&company_id=' . $company['company_id'] . '" >' . $company['company_name'] . '</a>' . (mb_trim($company['company_description']) ? w2PendTip() : '') . '</td>';
-                echo $html->createCell('active_project_count', $company['countp']);
-                echo $html->createCell('inactive_project_count', $company['inactive']);
-                echo $html->createCell('company_type', $AppUI->_($types[$company['company_type']]));
+                echo $htmlHelper->createCell('active_project_count', $company['countp']);
+                echo $htmlHelper->createCell('inactive_project_count', $company['inactive']);
+                echo $htmlHelper->createCell('company_type', $AppUI->_($types[$company['company_type']]));
                 echo '</tr>';
             }
         } else {

@@ -250,7 +250,7 @@ foreach ($fields as $key => $field): ?>
     <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
     <input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id; ?>" />
 
-    <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit">
         <tr>
             <td>
                 <table border="0" cellpadding="1" cellspacing="1">

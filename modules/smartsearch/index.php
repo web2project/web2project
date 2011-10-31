@@ -105,7 +105,7 @@ foreach ($hook_modules as $tmp) {
     $titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
     $titleBlock->show();
 ?>
-	<table class="std" width="100%" cellspacing="5" cellpadding="0" border="0">
+	<table class="std list" width="100%" cellspacing="5" cellpadding="0" border="0">
 	<form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">
 	<tr><td>
 			<table cellspacing="5" cellpadding="0" border="0">

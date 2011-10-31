@@ -96,7 +96,7 @@ $titleBlock->show();
 <form action="?m=system&a=translate_save" method="post" name="editlang" accept-charset="utf-8">
 <input type="hidden" name="module" value="<?php echo $modules[$module]; ?>" />
 <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
-<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="tbl list">
 <tr>
 	<th width="15%" nowrap="nowrap"><?php echo $AppUI->_('Abbreviation'); ?></th>
 	<th width="40%" nowrap="nowrap"><?php echo $AppUI->_('English String'); ?></th>

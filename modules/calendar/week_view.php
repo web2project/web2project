@@ -85,7 +85,7 @@ $titleBlock->show();
 </tr>
 </table>
 
-<table border="0" cellspacing="1" cellpadding="2" width="100%" style="margin-width:4px;background-color:white">
+<table border="0" cellspacing="1" cellpadding="2" width="100%" style="margin-width:4px;background-color:white" class="view">
 <?php
 $show_day = $this_week;
 

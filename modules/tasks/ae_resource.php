@@ -38,7 +38,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
     <input type="hidden" name="dosql" value="do_task_aed" />
     <input name="hperc_assign" type="hidden" value="<?php echo $initPercAsignment; ?>"/>
     <input type="hidden" name="hassign" />
-    <table width="100%" border="1" cellpadding="4" cellspacing="0" class="std">
+    <table width="100%" border="1" cellpadding="4" cellspacing="0" class="std addedit">
         <tr>
             <td valign="top" align="center">
                 <table cellspacing="0" cellpadding="2" border="0">

@@ -30,7 +30,7 @@ $typelist = $obj->typeSelect();
 <form name="editfrm" action="?m=resources" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_resource_aed" />
     <input type="hidden" name="resource_id" value="<?php echo w2PformSafe($resource_id); ?>" />
-    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std">
+    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit">
         <tr>
             <td align="center" >
                 <table>

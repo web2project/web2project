@@ -117,7 +117,7 @@ function deleteItem(id) {
     <input type="hidden" name="field_id" value="<?php echo $field_id; ?>" />
     <input type="hidden" name="module" value="<?php echo $module_id ?>" />
     <input type="hidden" name="dosql" id="dosql" value="do_customfield_aed" />
-    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
+    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
         <tr>
             <th colspan="2"><?php echo $ttl; ?></th>
         </tr>

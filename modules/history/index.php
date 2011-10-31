@@ -118,7 +118,7 @@ if ($pages > 1) {
 	<td align="right"><input class="button" type="button" value="<?php echo $AppUI->_('Add history'); ?>" onclick="window.location='?m=history&a=addedit'"></td>
 </table>
 
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
 <tr>
 	<th width="10">&nbsp;</th>
 	<th width="200"><?php echo $AppUI->_('Date'); ?></th>

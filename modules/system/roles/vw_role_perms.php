@@ -103,7 +103,7 @@ function setPermItem( key, val ) {
 <tr>
 	<td width="50%" valign="top">
 
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
 <tr>
 	<th width="100%"><?php echo $AppUI->_('Item'); ?></th>
 	<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></th>

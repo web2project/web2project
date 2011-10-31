@@ -244,7 +244,7 @@ function removeUser() {
 	<input type="hidden" name="dosql" value="do_event_aed" />
 	<input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />
 	<input type="hidden" name="event_assigned" value="" />
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit">
 <tr>
 	<td colspan="2">
 		<table width="100%" border="0" cellpadding="1" cellspacing="1">

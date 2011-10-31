@@ -73,7 +73,7 @@ function testURL( x ) {
 	<input type="hidden" name="dosql" value="do_company_aed" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 
-	<table cellspacing="1" cellpadding="1" border="0" width="100%" class="std">
+	<table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit">
 		<tr>
 			<td>
 				<table>				

@@ -30,7 +30,7 @@ function delIt(field_id) {
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="field_id" value="<?php echo $project_id; ?>" />
 </form>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
     <?php foreach ($modules as $module) { ?>
     <tr>
         <td colspan="10">

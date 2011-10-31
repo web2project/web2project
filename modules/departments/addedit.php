@@ -100,7 +100,7 @@ function submitIt() {
 	<input type="hidden" name="dosql" value="do_dept_aed" />
 	<input type="hidden" name="dept_id" value="<?php echo $dept_id; ?>" />
 	<input type="hidden" name="dept_company" value="<?php echo $company_id; ?>" />
-	<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+	<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std addedit">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department Company'); ?>:</td>
 			<td><strong><?php echo $companyName; ?></strong></td>

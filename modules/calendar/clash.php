@@ -133,7 +133,7 @@ function clash_suggest(w2p_Core_CAppUI $AppUI, $cal_sdf) {
 
     </script>
     <form name="editFrm" method="post" action="<?php echo $calurl.'&clash_action=process'; ?>" accept-charset="utf-8">
-    <table width='100%' class='std'>
+    <table width='100%' class='std addedit'>
     <tr>
       <td width='50%' align='right'><?php echo $AppUI->_('Earliest Date'); ?>:</td>
       <td width='50%' align='left' nowrap="nowrap">

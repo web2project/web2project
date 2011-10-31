@@ -60,7 +60,7 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_id" value="0" />
 </form>
-<table border="0" cellpadding="4" cellspacing="1" width="100%" class="std" align="center">
+<table border="0" cellpadding="4" cellspacing="1" width="100%" class="std view" align="center">
 
 <tr><td colspan="2">
 	<table width="100%" cellspacing="1" cellpadding="2" border="0" align="center">

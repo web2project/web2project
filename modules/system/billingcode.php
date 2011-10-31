@@ -63,7 +63,7 @@ function delIt2(id) {
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 	<input type="hidden" name="billingcode_id" value="" />
 </form>
-<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std">
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std list">
 <tr>
 	<td>
 	<form name="changeMe" action="./index.php?m=system&amp;a=billingcode" method="post" accept-charset="utf-8">

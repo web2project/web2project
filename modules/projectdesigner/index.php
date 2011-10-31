@@ -444,14 +444,13 @@ function setDate( frm_name, f_date ) {
 		echo styleRenderBoxTop();
 	}
 ?>
-<table border="0" cellpadding="0" cellspacing="0" width="100%" class="std">
-
 <form name="frmDelete" action="./index.php?m=projects" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
 
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="std view">
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
             <table border="0" cellpadding="4" cellspacing="0" width="100%">

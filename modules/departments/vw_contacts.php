@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $dept_id, $dept, $company_id;
 ?>
 
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl">
+<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl list">
 
 <tr><th><?php echo $AppUI->_('Name'); ?></th><th><?php echo $AppUI->_('Email'); ?></th><th><?php echo $AppUI->_('Telephone'); ?></th></tr>
 <?php

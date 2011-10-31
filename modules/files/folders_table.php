@@ -140,7 +140,7 @@ function removeBulkComponent(li) {
 	background: #F9F9F9;
 }
 </style>
-<table id="tblFolders" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
+<table id="tblFolders" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl list">
 <?php
     /**** Main Program ****/
     if ($folder_id) { ?>

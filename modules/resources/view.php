@@ -60,7 +60,7 @@ if ($canDelete) {
 <?php
 }
 ?>
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
 <tr>
   <td valign="top" width="100%">
 		<strong><?php echo $AppUI->_('Details'); ?></strong>

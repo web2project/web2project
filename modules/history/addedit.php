@@ -88,7 +88,7 @@ $titleBlock->show();
 
 <form name="frmEdit" method="post" accept-charset="utf-8">
 	<input name="action" type="hidden" value="<?php echo $history_id ? 'update' : 'add' ?>" />
-	<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+	<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit">
 		<tr>
 			<td>
 				<table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">		

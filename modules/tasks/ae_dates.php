@@ -73,7 +73,7 @@ function setDate( frm_name, f_date ) {
 <form name="datesFrm" action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" accept-charset="utf-8">
     <input name="dosql" type="hidden" value="do_task_aed" />
     <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
-    <table width="100%" border="0" cellpadding="4" cellspacing="0" class="std">
+    <table width="100%" border="0" cellpadding="4" cellspacing="0" class="std addedit">
         <?php if ($can_edit_time_information) { ?>
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?></td>

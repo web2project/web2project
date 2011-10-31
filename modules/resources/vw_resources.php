@@ -18,7 +18,7 @@ if ($currentTabId) {
 }
 $res = &$query->exec();
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
 <tr>
 	<th nowrap="nowrap" width="20%">
     	<?php echo $AppUI->_('ID'); ?>

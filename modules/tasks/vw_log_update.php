@@ -143,7 +143,7 @@ function setDate( frm_name, f_date ) {
 	<input type="hidden" name="task_log_task" value="<?php echo $log->task_log_task; ?>" />
 	<input type="hidden" name="task_log_name" value="Update :<?php echo $log->task_log_name; ?>" />
     <input type="hidden" name="task_log_record_creator" value="<?php echo (0 == $task_log_id ? $AppUI->user_id : $log->task_log_record_creator); ?>" />
-<table cellspacing="1" cellpadding="2" border="0" width="100%">
+<table cellspacing="1" cellpadding="2" border="0" width="100%" class="std addedit">
 <tr>
     <td width='40%' valign='top'>
       <table width='100%'>

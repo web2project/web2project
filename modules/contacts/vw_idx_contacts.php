@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $carr, $carrWidth, $carrHeight, $showfields, $contactMethods, $methodLabels;
 
 ?>
-<table width="100%" border="0" cellpadding="1" cellspacing="0" class="contacts">
+<table width="100%" border="0" cellpadding="1" cellspacing="0" class="contacts list">
 	<tr>
 		<?php for ($z = 0; $z < $carrWidth; $z++) { ?>
 			<td valign="top" align="left" width="<?php echo $tdw; ?>%">

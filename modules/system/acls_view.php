@@ -45,7 +45,7 @@ $modules = array(0 => 'All Modules') + $modules;
 
 $actions = array(0 => 'All Actions', 'access' => 'access', 'add' => 'add', 'delete' => 'delete', 'edit' => 'edit', 'view' => 'view');
 
-$table = '<table class="tbl" width="100%" cellspacing="1" cellpadding="2" border="0">';
+$table = '<table class="tbl view" width="100%" cellspacing="1" cellpadding="2" border="0">';
 $table .= '<tr><th colspan="9"><b>Permission Result Table</b></th></tr>';
 $table .= '<tr><th>UserID</th><th>User</th><th>User Name</th><th>Module</th><th>Item</th><th>Item Name</th><th>Action</th><th>Allow</th><th>ACL_ID</th></tr>';
 foreach ($permissions as $permission) {

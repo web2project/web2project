@@ -454,7 +454,7 @@ if ($project_id) {
 		</table>
 	</form>
 <?php } ?>
-<table id="tblProjects" width="100%" border="0" cellpadding="0" cellspacing="1" class="tbl">
+<table id="tblProjects" width="100%" border="0" cellpadding="0" cellspacing="1" class="tbl list">
     <tr>
         <?php
         $fieldList = array();

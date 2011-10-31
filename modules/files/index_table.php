@@ -179,7 +179,7 @@ function expand(id){
 }
 </script>
 
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
     <tr>
         <?php
         $fieldList = array();

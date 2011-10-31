@@ -91,7 +91,7 @@ function delIt() {
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_folder_id" value="<?php echo $folder; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
-    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
+    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
         <tr>
             <td width="100%" valign="top" align="center">
                 <table cellspacing="1" cellpadding="2" width="60%">

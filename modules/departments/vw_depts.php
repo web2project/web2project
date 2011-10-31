@@ -14,7 +14,7 @@ $dept = new CDepartment();
 $deptList = $dept->getFilteredDepartmentList($AppUI, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
     <tr>
         <?php
         $fieldList = array();

@@ -111,7 +111,7 @@ function setTask( key, val ) {
     <input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
     <input type="hidden" name="link_owner" value="<?php echo $AppUI->user_id; ?>" />
 
-    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
+    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
         <tr>
             <td width="100%" valign="top" align="center">
               <table cellspacing="1" cellpadding="2" width="60%">

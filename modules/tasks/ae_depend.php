@@ -61,7 +61,7 @@ $q->clear();
     <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
     <input type="hidden" name="hdependencies" />
 
-    <table width="100%" border="0" cellpadding="4" cellspacing="0" class="std">
+    <table width="100%" border="0" cellpadding="4" cellspacing="0" class="std addedit">
         <?php if ($can_edit_time_information) { ?>
         <tr>
             <td align="center" nowrap="nowrap" colspan="3"><b><?php echo $AppUI->_('Dependency Tracking'); ?></b></td>

@@ -48,7 +48,7 @@ $projects = projects_list_data($user_id);
 	<form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject" accept-charset="utf-8"><td align="right" nowrap="nowrap"><?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?></td></form>
 </tr>
 </table>
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
+<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl list">
     <tr>
         <?php
         $fieldList = array('project_color_identifier', 'project_priority',
