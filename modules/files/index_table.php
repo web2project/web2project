@@ -127,8 +127,9 @@ $q3->addQuery('file_id, file_version, file_project, file_name, file_task,
     file_description, u.user_username as file_owner, file_size, file_category,
     task_name, file_version_id,  file_checkout, file_co_reason, file_type,
     file_date, cu.user_username as co_user, project_name,
-    project_color_identifier, project_owner, con.contact_display_name,
-    co.contact_display_name as co_contact_display_name');
+    project_color_identifier, project_owner,
+    con.contact_display_name as contact_name,
+    co.contact_display_name as co_contact_name');
 $q3->addQuery('file_folder_id, file_folder_name');
 $q3->addJoin('projects', 'p', 'p.project_id = file_project');
 $q3->addJoin('users', 'u', 'u.user_id = file_owner');
@@ -288,7 +289,7 @@ function expand(id){
 					  <td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
 					  <td width="10%" nowrap="nowrap" align="left">' . (($file['file_folder_name'] != '') ? '<a href="' . W2P_BASE_URL . '/index.php?m=files&tab=' . (count($file_types) + 1) . '&folder=' . $file['file_folder_id'] . '">' . w2PshowImage('folder5_small.png', '16', '16', 'folder icon', 'show only this folder', 'files') . $file['file_folder_name'] . '</a>' : 'Root') . '</td>
 					  <td width="5%" align="center"><a href="./index.php?m=tasks&a=view&task_id=' . $file['file_task'] . '">' . $file['task_name'] . '</a></td>
-					  <td width="15%" nowrap="nowrap">' . $file['contact_display_name'] . '</td>
+					  <td width="15%" nowrap="nowrap">' . $file['contact_name'] . '</td>
 					  <td width="5%" nowrap="nowrap" align="right">' . file_size(intval($file['file_size'])) . '</td>
 					  <td nowrap="nowrap">' . $file['file_type'] . '</td>
 					  <td width="15%" nowrap="nowrap" align="center">' . $AppUI->formatTZAwareTime($file['file_date'], $df . ' ' . $tf) . '</td>
@@ -310,7 +311,7 @@ function expand(id){
             ?>
 		</td>
 		<td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $latest_file['file_task']; ?>"><?php echo $latest_file["task_name"]; ?></a></td>
-        <?php echo $htmlHelper->createCell('contact_display_name', $latest_file['contact_display_name']); ?>
+        <?php echo $htmlHelper->createCell('contact_name', $latest_file['contact_name']); ?>
         <?php echo $htmlHelper->createCell('file_size', file_size(intval($latest_file["file_size"]))); ?>
         <?php echo $htmlHelper->createCell('file_type', $file['file_type']); ?>
 		<td nowrap="nowrap" align="center"><?php echo $AppUI->formatTZAwareTime($latest_file['file_date'], $df . ' ' . $tf); ?></td>
@@ -327,7 +328,7 @@ function expand(id){
 			if ($latest_file['file_checkout'] == 'final') {
 				echo 'final';
 			} else {
-				echo $latest_file['co_contact_display_name'] . '<br>(' . $latest_file['co_user'] . ')';
+				echo $latest_file['co_contact_name'] . '<br>(' . $latest_file['co_user'] . ')';
 			}
 		}
     }
