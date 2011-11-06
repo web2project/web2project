@@ -432,7 +432,4 @@ function setDepartment(department_id_string){
                         </table>
                     </tr>
                 </table>
-            </td>
-        </tr>
-    </table>
 </form>
