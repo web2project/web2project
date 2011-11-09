@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 global $showEditCheckbox, $priorities;
-global $m, $a, $date, $other_users, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id, $task_type;
+global $m, $a, $date, $other_users, $showPinned, $showInProgress, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id, $task_type;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 
@@ -32,6 +32,12 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
             </td>
             <td align="right" width="50%">
                 <?php echo $AppUI->_('Show'); ?>:
+            </td>
+             <td>
+                <input type="checkbox" name="show_inprogress" id="show_inprogress" onclick="document.form_buttons.submit()" <?php echo $showInProgress ? 'checked="checked"' : ''; ?> />
+            </td>
+             <td>
+                <label for="show_inprogress"><?php echo $AppUI->_('In Progress Only'); ?></label>
             </td>
             <td>
                 <input type="checkbox" name="show_pinned" id="show_pinned" onclick="document.form_buttons.submit()" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
