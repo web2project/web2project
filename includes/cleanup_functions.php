@@ -572,7 +572,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	if ($today_view) { // Show the project name
 		$s .= ('<td width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<span style="padding:2px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</span>' . '</a></td>');
 	} else {
-		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $arr['user_id'] . '">' . $arr['owner'] . '</a>' . '</td>');
+		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $arr['user_id'] . '">' . $arr['contact_name'] . '</a>' . '</td>');
 	}
 
 	if (count($arr['task_assigned_users'])) {
@@ -624,6 +624,8 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 function showtask_pd(&$a, $level = 0, $today_view = false) {
 	global $AppUI, $w2Pconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $task_access, $task_priority, $PROJDESIGN_CONFIG, $m, $expanded;
+
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
 	$types = w2Pgetsysval('TaskType');
 
@@ -764,7 +766,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 		$s .= '<td align="justified">' . $a['task_description'] . '</td>';
 	}
 	// task owner
-	$s .= '<td align="left">' . '<a href="?m=admin&a=viewuser&user_id=' . $a['user_id'] . '">' . $a['contact_first_name'] . ' ' . $a['contact_last_name'] . '</a></td>';
+	$s .= '<td align="left">' . '<a href="?m=admin&a=viewuser&user_id=' . $a['user_id'] . '">' . $a['contact_name'] . '</a></td>';
 	$s .= '<td id="ignore_td_' . $a['task_id'] . '" nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
 	// duration or milestone
 	$s .= '<td id="ignore_td_' . $a['task_id'] . '" align="right" nowrap="nowrap" style="' . $style . '">';
@@ -778,7 +780,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 			foreach ($assigned_users as $val) {
 				$aInfo = '<a href="?m=admin&a=viewuser&user_id=' . $val['user_id'] . '"';
 				$aInfo .= 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">';
-				$aInfo .= $val['contact_first_name'] . ' ' . $val['contact_last_name'] . ' (' . $val['perc_assignment'] . '%)</a>';
+				$aInfo .= $val['contact_name'] . ' (' . $val['perc_assignment'] . '%)</a>';
 				$a_u_tmp_array[] = $aInfo;
 			}
 			$s .= join(', ', $a_u_tmp_array);
@@ -787,7 +789,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 			$s .= '<td align="left" nowrap="nowrap">';
 			$s .= '<a href="?m=admin&a=viewuser&user_id=' . $assigned_users[0]['user_id'] . '"';
 			$s .= 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">';
-			$s .= $assigned_users[0]['contact_first_name'] . ' ' . $assigned_users[0]['contact_last_name'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>';
+			$s .= $assigned_users[0]['contact_name'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>';
 			if ($a['assignee_count'] > 1) {
 				$id = $a['task_id'];
 				$s .= '<a href="javascript: void(0);"  onclick="toggle_users(\'users_' . $id . '\');" title="' . join(', ', $a_u_tmp_array) . '">(+' . ($a['assignee_count'] - 1) . ')</a>';
@@ -797,7 +799,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 					$a_u_tmp_array[] = $assigned_users[$i]['user_username'];
 					$s .= '<br /><a href="?m=admin&a=viewuser&user_id=';
 					$s .= $assigned_users[$i]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%' : '') . '">';
-					$s .= $assigned_users[$i]['contact_first_name'] . ' ' . $assigned_users[$i]['contact_last_name'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>';
+					$s .= $assigned_users[$i]['contact_name'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>';
 				}
 				$s .= '</span>';
 			}
@@ -1292,7 +1294,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$sep = $us = '';
 	foreach ($users as $key => $row) {
 		if ($row['user_id']) {
-			$us .= '<a href="?m=admin&a=viewuser&user_id=' . $row[0] . '">' . $sep . $row['contact_first_name'] . '&nbsp;' . $row['contact_last_name'] . '&nbsp;(' . $row['perc_assignment'] . '%)</a>';
+			$us .= '<a href="?m=admin&a=viewuser&user_id=' . $row[0] . '">' . $sep . $row['contact_name'] . '&nbsp;(' . $row['perc_assignment'] . '%)</a>';
 			$sep = ', ';
 		}
 	}
@@ -2298,9 +2300,10 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 		file_description, u.user_username as file_owner, file_size, file_category,
 		task_name, file_version_id,  file_checkout, file_co_reason, file_type,
 		file_date, cu.user_username as co_user, project_name,
-		project_color_identifier, project_owner, con.contact_first_name,
-		con.contact_last_name, co.contact_first_name as co_contact_first_name,
-		co.contact_last_name as co_contact_last_name ');
+		project_color_identifier, project_owner,
+        con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name,
+        co.contact_first_name as co_contact_first_name, co.contact_last_name as co_contact_last_name,
+        co.contact_display_name as co_contact_name ');
 	$qv->addJoin('projects', 'p', 'p.project_id = file_project');
 	$qv->addJoin('users', 'u', 'u.user_id = file_owner');
 	$qv->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');

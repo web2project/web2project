@@ -134,7 +134,7 @@ $q->addQuery('task_description, task_owner, task_status');
 $q->addQuery('usernames.user_username, usernames.user_id');
 $q->addQuery('assignees.user_username as assignee_username');
 $q->addQuery('count(distinct assignees.user_id) as assignee_count');
-$q->addQuery('co.contact_first_name, co.contact_last_name');
+$q->addQuery('co.contact_first_name, co.contact_last_name, co.contact_display_name as contact_name');
 $q->addQuery('task_milestone');
 $q->addQuery('count(distinct f.file_task) as file_count');
 $q->addQuery('tlog.task_log_problem');
@@ -179,7 +179,7 @@ foreach ($tasks as $row) {
 	$q->clear();
 	$q->addQuery('ut.user_id,	u.user_username');
 	$q->addQuery('ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
-	$q->addQuery('contact_first_name, contact_last_name');
+	$q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
 	$q->addTable('user_tasks', 'ut');
 	$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
 	$q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
