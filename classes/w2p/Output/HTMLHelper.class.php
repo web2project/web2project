@@ -13,6 +13,7 @@ class w2p_Output_HTMLHelper {
     public function __construct(w2p_Core_CAppUI $AppUI) {
         $this->AppUI = $AppUI;
         $this->df    = $AppUI->getPref('SHDATEFORMAT');
+        $this->dtf   = $this->df . ' ' . $AppUI->getPref('TIMEFORMAT');
     }
 
     public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList) {
@@ -79,6 +80,11 @@ class w2p_Output_HTMLHelper {
 				$additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
 				$cell = $myDate ? $myDate->format($this->df) : '-';
+				break;
+			case '_datetime':
+				$additional = 'nowrap="nowrap"';
+                $myDate = intval($value) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
+				$cell = $myDate ? $myDate->format($this->dtf) : '-';
 				break;
             case '_description':
                 $cell = w2p_textarea($value);
