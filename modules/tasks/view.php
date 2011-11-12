@@ -42,14 +42,6 @@ if ($reminded) {
 
 $tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);
 
-// get the prefered date format
-$sf = $df = $AppUI->getPref('SHDATEFORMAT');
-//Also view the time
-$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-
-$start_date = intval($obj->task_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->task_start_date, '%Y-%m-%d %T')) : null;
-$end_date = intval($obj->task_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->task_end_date, '%Y-%m-%d %T')) : null;
-
 //check permissions for the associated project
 $canReadProject = canView('projects', $obj->task_project);
 
@@ -196,11 +188,11 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
-                    <td class="hilite" width="300"><?php echo $start_date ? $start_date->format($df) : '-'; ?></td>
+                    <?php echo $htmlHelper->createCell('task_start_datetime', $obj->task_start_date); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finish Date'); ?>:</td>
-                    <td class="hilite" width="300"><?php echo $end_date ? $end_date->format($df) : '-'; ?></td>
+                    <?php echo $htmlHelper->createCell('task_end_datetime', $obj->task_end_date); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap" valign="top"><?php echo $AppUI->_('Expected Duration'); ?>:</td>
