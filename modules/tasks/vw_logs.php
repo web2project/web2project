@@ -78,6 +78,7 @@ $logs = $task->getTaskLogs($task_id, $problem);
 $s = '';
 $hrs = 0;
 $canEdit = canEdit('task_log');
+$sf = $AppUI->getPref('SHDATEFORMAT');
 foreach ($logs as $row) {
 	$task_log_date = intval($row['task_log_date']) ? new w2p_Utilities_Date($row['task_log_date']) : null;
 	$style = $row['task_log_problem'] ? 'background-color:#cc6666;color:#ffffff' : '';
