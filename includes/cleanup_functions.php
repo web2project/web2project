@@ -536,10 +536,11 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	}
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">';
+			$image = w2PfindImage('corner-dots.gif', $m);
 		} else {
-			$s .= '';
+			$image = w2PfindImage('shim.gif', $m);
 		}
+        $s .= '<img src="' . $image . '" width="16" height="12"  border="0" alt="" />';
 	}
 	if ($arr['task_description']) {
 		$s .= w2PtoolTip('Task Description', $arr['task_description'], true);
@@ -853,10 +854,11 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 	$s .= '<td nowrap width="20%">';
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif', $m) . '" width="16" height="12" border="0" alt="" />';
+			$image = w2PfindImage('corner-dots.gif', $m);
 		} else {
-			$s .= '<img src="' . w2PfindImage('shim.gif', $m) . '" width="16" height="12"  border="0" alt="" />';
+			$image = w2PfindImage('shim.gif', $m);
 		}
+        $s .= '<img src="' . $image . '" width="16" height="12"  border="0" alt="" />';
 	}
 	// name link
 	$alt = mb_strlen($a['task_description']) > 80 ? mb_substr($a['task_description'], 0, 80) . '...' : $a['task_description'];
