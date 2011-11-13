@@ -137,6 +137,25 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
+    public function getProjectNotifyOwner(CProject $project, $isNotNew) {
+
+        $status = (intval($isNotNew)) ? 'Updated' : 'Created';
+
+        $body = $this->AppUI->_('Project') . ": $project->project_name Has Been $status Via Project Manager. You can view the Project by clicking: ";
+        $body .= "\n" . $this->AppUI->_('URL') . ':     ' . w2PgetConfig('base_url') . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
+        $body .= "\n\n(You are receiving this message because you are the owner of this Project)";
+        $body .= "\n\n" . $this->AppUI->_('Description') . ':' . "\n $project->project_description \n\n";
+
+        $body .= (intval($isNotNew)) ? $this->AppUI->_('Updater') : $this->AppUI->_('Creator');
+        $body .= ': ' . $this->AppUI->user_display_name;
+
+        if ($project->_message == 'deleted') {
+            $body .= "\n\nProject " . $project->project_name . ' was ' . $project->_message . ' by ' . $this->AppUI->user_display_name;
+        }
+
+        return $body;
+    }
+
     public function getProjectNotifyContacts(CProject $project, $isNotNew) {
 
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';

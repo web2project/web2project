@@ -609,35 +609,16 @@ class CProject extends w2p_Core_BaseObject {
 
 		$mail = new w2p_Utilities_Mail;
 
-		if (intval($isNotNew)) {
-			$mail->Subject("Project Updated: $this->project_name ", $locale_char_set);
-		} else {
-			$mail->Subject("Project Submitted: $this->project_name ", $locale_char_set);
-		}
+        $subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
 		$user = new CUser();
 		$user->loadFull($this->project_owner);
-//TODO: cleanup email generation
+
 		if ($user && $mail->ValidEmail($user->user_email)) {
-			if (intval($isNotNew)) {
-				$body = $AppUI->_('Project') . ": $this->project_name Has Been Updated Via Project Manager. You can view the Project by clicking: ";
-			} else {
-				$body = $AppUI->_('Project') . ": $this->project_name Has Been Submitted Via Project Manager. You can view the Project by clicking: ";
-			}
-			$body .= "\n" . $AppUI->_('URL') . ':     ' . w2PgetConfig('base_url') . '/index.php?m=projects&a=view&project_id=' . $this->project_id;
-			$body .= "\n\n(You are receiving this email because you are the owner to this project)";
-			$body .= "\n\n" . $AppUI->_('Description') . ':' . "\n$this->project_description";
-			if (intval($isNotNew)) {
-				$body .= "\n\n" . $AppUI->_('Updater') . ': ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
-			} else {
-				$body .= "\n\n" . $AppUI->_('Creator') . ': ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
-			}
+			$emailManager = new w2p_Output_EmailManager($AppUI);
+            $body = $emailManager->getProjectNotifyOwner($this, $isNotNew);
 
-			if ($this->_message == 'deleted') {
-				$body .= "\n\nProject " . $this->project_name . ' was ' . $this->_message . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
-			}
-
-$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+            $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 			$mail->To($user->user_email, true);
 			$mail->Send();
 		}
