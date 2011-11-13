@@ -1093,17 +1093,17 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 		if ((int)$this->task_id > 0 && (int)$this->task_project > 0) {
 			$q->addTable('users', 'u');
 			$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-			$q->addQuery('c.contact_first_name, c.contact_last_name');
+            $q->addQuery('c.contact_display_name as contact_name');
 			$q->addWhere('u.user_id=' . (int)$log->task_log_creator);
 			$row = $q->loadHash();
-			$creatorname = htmlspecialchars_decode($row['contact_first_name']) . ' ' . htmlspecialchars_decode($row['contact_last_name']);
+			$creatorname = $row['contact_name'];
 			$q->clear();
 
 			if (isset($assignees) && $assignees == 'on') {
 				$q->addTable('user_tasks', 'ut');
 				$q->leftJoin('users', 'ua', 'ua.user_id = ut.user_id');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = ua.user_contact');
-				$q->addQuery('c.contact_first_name, c.contact_last_name, c.contact_email');
+				$q->addQuery('c.contact_email, c.contact_display_name as contact_name');
 				$q->addWhere('ut.task_id = ' . $this->task_id);
 				if (!$AppUI->getPref('MAILALL')) {
 					$q->addWhere('ua.user_id <>' . (int)$AppUI->user_id);
@@ -1112,44 +1112,44 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 				$q->clear();
 
 				foreach ($assigneeList as $myContact) {
-					$mail_recipients[$myContact['contact_email']] = mb_trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
+					$mail_recipients[$myContact['contact_email']] = $myContact['contact_name'];
 				}
 			}
 			if (isset($task_contacts) && $task_contacts == 'on') {
 				$q->addTable('task_contacts', 'tc');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-				$q->addQuery('c.contact_first_name, c.contact_last_name, c.contact_email');
+				$q->addQuery('c.contact_email, c.contact_display_name as contact_name');
 				$q->addWhere('tc.task_id = ' . $this->task_id);
 				$contactList = $q->loadList();
 				$q->clear();
 
 				foreach ($contactList as $myContact) {
-					$mail_recipients[$myContact['contact_email']] = mb_trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
+                    $mail_recipients[$myContact['contact_email']] = $myContact['contact_name'];
 				}
 			}
 			if (isset($project_contacts) && $project_contacts == 'on') {
 				$q->addTable('project_contacts', 'pc');
 				$q->leftJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-				$q->addQuery('c.contact_first_name, c.contact_last_name, c.contact_email');
+				$q->addQuery('c.contact_email, c.contact_display_name as contact_name');
 				$q->addWhere('pc.project_id = ' . $this->task_project);
 				$projectContactList = $q->loadList();
 				$q->clear();
 
 				foreach ($projectContactList as $myContact) {
-					$mail_recipients[$myContact['contact_email']] = mb_trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
+                    $mail_recipients[$myContact['contact_email']] = $myContact['contact_name'];
 				}
 			}
 			if (isset($others)) {
 				$others = trim($others, " \r\n\t,"); // get rid of empty elements.
 				if (strlen($others) > 0) {
 					$q->addTable('contacts', 'c');
-					$q->addQuery('c.contact_first_name, c.contact_last_name, c.contact_email');
+					$q->addQuery('c.contact_email, c.contact_display_name as contact_name');
 					$q->addWhere('c.contact_id IN (' . $others . ')');
 					$otherContacts = $q->loadList();
 					$q->clear();
 
 					foreach ($otherContacts as $myContact) {
-						$mail_recipients[$myContact['contact_email']] = mb_trim($myContact['contact_first_name'] . ' ' . $myContact['contact_last_name']);
+                        $mail_recipients[$myContact['contact_email']] = $myContact['contact_name'];
 					}
 				}
 			}
@@ -1168,16 +1168,12 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
             if (isset($specific_user) && $specific_user) {
                 $q->addTable('users', 'u');
                 $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-				$q->addQuery('c.contact_first_name, c.contact_last_name');
-                $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = c.contact_id');
-                $q->addWhere("cm.method_name = 'email_primary'");
-                $q->addQuery('cm.method_value AS contact_email');
+                $q->addQuery('c.contact_email, c.contact_display_name as contact_name');
                 $q->addWhere('u.user_id = ' . $specific_user);
-
                 $su_list = $q->loadList();
 
                 foreach ($su_list as $su_contact) {
-                    $mail_recipients[$su_contact['contact_email']] = mb_trim($su_contact['contact_first_name'] . ' ' . $su_contact['contact_last_name']);
+                    $mail_recipients[$su_contact['contact_email']] = $su_contact['contact_name'];
                 }
             }
 
