@@ -36,9 +36,9 @@ class w2p_Output_EmailManager {
         $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
 
         $body = '';
-        $body .= "You have been invited to an event by $this->AppUI->user_first_name $this->AppUI->user_last_name\n";
+        $body .= "You have been invited to an event by $this->AppUI->user_display_name \n";
         $body .= "However, either you or another intended invitee has a competing event\n";
-        $body .= "$this->AppUI->user_first_name $this->AppUI->user_last_name has requested that you reply to this message\n";
+        $body .= "$this->AppUI->user_display_name has requested that you reply to this message\n";
         $body .= "and confirm if you can or can not make the requested time.\n\n";
 
         return $body;
@@ -111,7 +111,7 @@ class w2p_Output_EmailManager {
         $body .= "\n\nI assure you that the information will be held in strict confidence and will not be available to anyone other than me. I realize that you may not feel comfortable filling out the entire form so please supply only what you're comfortable with.";
         $body .= "\n\nThank you. I look forward to seeing you again, soon.";
         $body .= "\n\nBest Regards,";
-        $body .= "\n\n$this->AppUI->user_first_name $this->AppUI->user_last_name";
+        $body .= "\n\n$this->AppUI->user_display_name";
 
         return $body;
     }
@@ -120,7 +120,19 @@ class w2p_Output_EmailManager {
         $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
 
         $body  = "\n\nFile " . $file->file_name . ' was ' . $file->_message;
-        $body .= ' by ' . $this->AppUI->user_first_name . ' ' . $this->AppUI->user_last_name;
+        $body .= ' by ' . $this->AppUI->user_display_name;
+
+        return $body;
+    }
+
+    public function getForumWatchEmail(CForumMessage $message, $forum_name, $message_from) {
+
+        $body = $this->AppUI->_('forumEmailBody', UI_OUTPUT_RAW);;
+		$body .= "\n\n" . $this->AppUI->_('Forum', UI_OUTPUT_RAW) . ': ' .  $forum_name;
+		$body .= "\n" . $this->AppUI->_('Subject', UI_OUTPUT_RAW) . ': ' . $message->message_title;
+		$body .= "\n" . $this->AppUI->_('Message From', UI_OUTPUT_RAW) . ': ' . $message_from;
+		$body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=' . $message->message_forum;
+		$body .= "\n\n" . $message->message_body;
 
         return $body;
     }
@@ -185,7 +197,4 @@ class w2p_Output_EmailManager {
 
         return $body;
     }
-    
-
-//TODO: cleanup email generation
 }
