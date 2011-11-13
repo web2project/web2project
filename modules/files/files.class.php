@@ -499,15 +499,10 @@ class CFile extends w2p_Core_BaseObject {
                     $this->_task->load($this->file_task);
                     $mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
                 }
-//TODO: cleanup email generation
-                $body = $AppUI->_('Project') . ': ' . $this->_project->project_name;
-                $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $this->_project->project_id;
+                $emailManager = new w2p_Output_EmailManager($AppUI);
+                $body = $emailManager->getFileNotify($this);
 
                 if (intval($this->_task->task_id) != 0) {
-                    $body .= "\n\n" . $AppUI->_('Task') . ':    ' . $this->_task->task_name;
-                    $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->_task->task_id;
-                    $body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->_task->task_description;
-
                     //preparing users array
                     $q = new w2p_Database_Query;
                     $q->addTable('tasks', 't');
@@ -536,15 +531,8 @@ class CFile extends w2p_Core_BaseObject {
                     $q->addWhere('p.project_id = ' . (int)$this->file_project);
                     $this->_users = $q->loadList();
                 }
-                $body .= "\n\nFile " . $this->file_name . ' was ' . $this->_message . ' by ' . $AppUI->user_display_name;
-                if ($this->_message != 'deleted') {
-                    $body .= "\n" . $AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $this->file_id;
-                    $body .= "\n" . $AppUI->_('Description') . ':' . "\n" . $this->file_description;
-                }
 
-                //send mail
-$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-
+                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
                 if (intval($this->_task->task_id) != 0) {
                     foreach ($this->_users as $row) {
                         if ($row['assignee_id'] != $AppUI->user_id) {

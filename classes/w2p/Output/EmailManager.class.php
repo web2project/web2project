@@ -137,6 +137,25 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
+    public function getFileNotify(CFile $file) {
+
+        $body = $this->AppUI->_('Project') . ': ' . $file->_project->project_name;
+        $body .= "\n" . $this->AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $file->_project->project_id;
+
+        if (intval($file->_task->task_id) != 0) {
+            $body .= "\n\n" . $this->AppUI->_('Task') . ':    ' . $file->_task->task_name;
+            $body .= "\n" . $this->AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $file->_task->task_id;
+            $body .= "\n" . $this->AppUI->_('Description') . ':' . "\n" . $file->_task->task_description;
+        }
+        $body .= "\n\nFile " . $file->file_name . ' was ' . $file->_message . ' by ' . $this->AppUI->user_display_name;
+        if ($this->_message != 'deleted') {
+            $body .= "\n" . $this->AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $file->file_id;
+            $body .= "\n\n" . $this->AppUI->_('Description') . ':' . "\n" . $file->file_description;
+        }
+
+        return $body;
+    }
+
     public function getProjectNotifyOwner(CProject $project, $isNotNew) {
 
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
