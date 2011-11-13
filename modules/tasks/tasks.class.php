@@ -2156,7 +2156,8 @@ $mail->Body($body, $char_set);
         $q = $this->_getQuery();
 		$q->addTable('users', 'u');
 		$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-		$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_email');
+		$q->addQuery('c.contact_id, contact_first_name, contact_last_name,
+            contact_display_name as contact_name, contact_email');
 		$q->addWhere('u.user_id = ' . (int)$this->task_owner);
 		if ($q->exec(ADODB_FETCH_NUM)) {
 			list($owner_contact, $owner_first_name, $owner_last_name, $owner_email) = $q->fetchRow();
@@ -2195,14 +2196,9 @@ $mail->Body($body, $char_set);
         }
 
 		$subject = $prefix . ' ' . $msg . ' ' . $this->task_name . '::' . $project_name;
-//TODO: cleanup email generation
-		$body = ($AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n" . $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n" . $AppUI->_('Start Date', UI_OUTPUT_RAW) . ': START-TIME' . "\n" . $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': END-TIME' . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . '&reminded=1' . "\n\n" . $AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n");
-		foreach ($contacts as $contact) {
-			if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
-				$body .= ($contact['contact_first_name'] . ' ' . $contact['contact_last_name'] . ' <' . $contact['contact_email'] . ">\n");
-			}
-		}
-		$body .= ("\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $this->task_description . "\n");
+
+        $emailManager = new w2p_Output_EmailManager($AppUI);
+        $body = $emailManager->getTaskRemind($this, $msg, $project_name, $contacts);
 
 		$mail = new w2p_Utilities_Mail();
 		$mail->Subject($subject, $locale_char_set);
@@ -2216,7 +2212,7 @@ $mail->Body($body, $char_set);
 
             $body = str_replace('START-TIME', $starts->convertTZ($tz)->format($df) , $body);
             $body = str_replace('END-TIME'  , $expires->convertTZ($tz)->format($df), $body);
-$mail->Body($body, $locale_char_set);
+            $mail->Body($body, $locale_char_set);
 
 			if ($mail->ValidEmail($contact['contact_email'])) {
 				$mail->To($contact['contact_email'], true);

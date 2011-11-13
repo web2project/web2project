@@ -188,6 +188,26 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
+    public function getTaskRemind(CTask $task, $msg, $project_name, $contacts) {
+
+        $body  = $this->AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n";
+        $body .= $this->AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n";
+        $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $task->task_name . "\n";
+        $body .= $this->AppUI->_('Start Date', UI_OUTPUT_RAW) . ': START-TIME' . "\n";
+        $body .= $this->AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': END-TIME' . "\n";
+        $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . '&reminded=1';
+        $body .= "\n\n" . $this->AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n";
+
+		foreach ($contacts as $contact) {
+			if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
+				$body .= ($contact['contact_name'] . ' <' . $contact['contact_email'] . ">\n");
+			}
+		}
+		$body .= ("\n" . $this->AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n");
+
+        return $body;
+    }
+
     public function getProjectNotifyOwner(CProject $project, $isNotNew) {
 
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
