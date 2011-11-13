@@ -198,14 +198,11 @@ class w2p_Utilities_Mail extends PHPMailer {
 	 *    $cc : email address(es), accept both array and string
 	 */
 	public function Cc($cc) {
-		if (is_array($cc)) {
-			$this->acc = $cc;
-		} else {
-			$this->acc = explode(',', $cc);
-		}
+
+        $this->acc = (is_array($cc)) ? explode(',', $cc) : $cc;
 
 		if ($this->checkAddress == true) {
-			$this->CheckAdresses($this->acc);
+			$this->CheckAddresses($this->acc);
 		}
 
 		foreach ($this->acc as $cc_address) {
@@ -226,14 +223,11 @@ class w2p_Utilities_Mail extends PHPMailer {
 	 *    $bcc : email address(es), accept both array and string
 	 */
 	public function Bcc($bcc) {
-		if (is_array($bcc)) {
-			$this->abcc = $bcc;
-		} else {
-			$this->abcc = explode(',', $bcc);
-		}
+
+        $this->abcc = (is_array($bcc)) ? explode(',', $bcc) : $bcc;
 
 		if ($this->checkAddress == true) {
-			$this->CheckAdresses($this->abcc);
+			$this->CheckAddresses($this->abcc);
 		}
 
 		foreach ($this->abcc as $bcc_address) {
@@ -363,7 +357,7 @@ class w2p_Utilities_Mail extends PHPMailer {
 	 *
 	 * @access private
 	 */
-	public function QueueMail() {
+	private function QueueMail() {
 		global $AppUI;
 
 		$ec = new w2p_Core_EventQueue();
@@ -376,18 +370,15 @@ class w2p_Utilities_Mail extends PHPMailer {
 	 *
 	 * @access private
 	 */
-	public function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
+	private function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
 
         foreach($args as $key=>$value) {
             $this->$key = $value;
         }
-		if ($this->transport == 'smtp') {
-			$this->IsSMTP();
-			return $this->Send();
-		} else {
-			$this->IsMail();
-			return $this->Send();
-		}
+
+		($this->transport == 'smtp') ? $this->IsSMTP() : $this->IsMail();
+
+        return $this->Send();
 	}
 
 	/**
@@ -417,11 +408,19 @@ class w2p_Utilities_Mail extends PHPMailer {
 	}
 
 	/**
+     *    @deprecated
+	 */
+	public function CheckAdresses($aad) {
+        trigger_error("CheckAdresses() has been deprecated in v3.0 and will be removed by v4.0. Please use CheckAddresses() instead.", E_USER_NOTICE );
+        return $this->CheckAddresses($aad);
+	}
+
+	/**
 	 *    check validity of email addresses
 	 *    @param    array $aad -
 	 *    @return if unvalid, output an error message and exit, this may -should- be customized
 	 */
-	public function CheckAdresses($aad) {
+	public function CheckAddresses($aad) {
 		foreach ($aad as $ad) {
 			if (!$this->ValidEmail($ad)) {
 				echo 'Class Mail, method Mail : invalid address ' . $ad;
@@ -429,12 +428,5 @@ class w2p_Utilities_Mail extends PHPMailer {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * alias for the mispelled CheckAdresses
-	 */
-	public function CheckAddresses($aad) {
-		return $this->CheckAdresses($aad);
 	}
 }
