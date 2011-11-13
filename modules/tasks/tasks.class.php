@@ -1197,39 +1197,10 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 			$q->addWhere('project_id=' . (int)$this->task_project);
 			$projname = htmlspecialchars_decode($q->loadResult());
 			$q->clear();
-//TODO: cleanup email generation
-			$body = $AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n";
-			if ($this->task_parent != $this->task_id) {
-				$q->addTable('tasks');
-				$q->addQuery('task_name');
-				$q->addWhere('task_id = ' . (int)$this->task_parent);
-				$req = &$q->exec(QUERY_STYLE_NUM);
-				if ($req) {
-					$body .= $AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': ' . htmlspecialchars_decode($req->fields[0]) . "\n";
-				}
-				$q->clear();
-			}
-			$body .= $AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $this->task_name . "\n";
-			$task_types = w2PgetSysVal('TaskType');
-			$body .= $AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$this->task_type] . "\n";
-			$body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n";
-			$body .= "------------------------\n\n";
-			$body .= $AppUI->_('User', UI_OUTPUT_RAW) . ': ' . $creatorname . "\n";
-			$body .= $AppUI->_('Hours', UI_OUTPUT_RAW) . ': ' . $log->task_log_hours . "\n";
-			$body .= $AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . $log->task_log_name . "\n\n";
-			$body .= $log->task_log_description;
 
-			// Append the user signature to the email - if it exists.
-			$q->addTable('users');
-			$q->addQuery('user_signature');
-			$q->addWhere('user_id = ' . (int)$AppUI->user_id);
-			if ($res = $q->exec()) {
-				if ($res->fields['user_signature']) {
-					$body .= "\n--\n" . $res->fields['user_signature'];
-				}
-			}
-			$q->clear();
-$mail->Body($body, $char_set);
+            $emailManager = new w2p_Output_EmailManager($AppUI);
+            $body = $emailManager->getTaskEmailLog($this, $log, $projname);
+            $mail->Body($body, $char_set);
 
 			$recipient_list = '';
 			$toList = array();
@@ -1249,7 +1220,8 @@ $mail->Body($body, $char_set);
 			// Now update the log
 			$save_email = $AppUI->getPref('TASKLOGNOTE');
 			if ($save_email) {
-				//TODO: This is where #38 - http://bugs.web2project.net/view.php?id=38 - should be applied if a change is necessary.
+//TODO: This is where #38 - http://bugs.web2project.net/view.php?id=38 - should be applied if a change is necessary.
+//TODO: This datetime should be added/displayed in UTC/GMT.
 				$log->task_log_description .= "\n" . 'Emailed ' . date('l F j, Y H:i:s') . ' to:' . "\n" . $recipient_list;
 				return true;
 			}

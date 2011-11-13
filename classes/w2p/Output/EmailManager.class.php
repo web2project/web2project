@@ -208,6 +208,30 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
+    public function getTaskEmailLog(CTask $task, CTaskLog $log, $projname) {
+
+        $body = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n";
+        if ($task->task_parent != $task->task_id) {
+            $tmpTask = new CTask();
+            $taskname = $tmpTask->load($task->task_parent)->task_name;
+            $body .= $this->AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': ' . $taskname . "\n";
+        }
+        $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $task->task_name . "\n";
+        $task_types = w2PgetSysVal('TaskType');
+        $body .= $this->AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$task->task_type] . "\n";
+        $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
+        $body .= "------------------------\n\n";
+        $body .= $this->AppUI->_('User', UI_OUTPUT_RAW) . ': ' . $creatorname . "\n";
+        $body .= $this->AppUI->_('Hours', UI_OUTPUT_RAW) . ': ' . $log->task_log_hours . "\n";
+        $body .= $this->AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . $log->task_log_name . "\n\n";
+        $body .= $log->task_log_description;
+
+        $user = new CUser();
+        $body .= "\n--\n" . $user->load($this->AppUI->user_id)->user_signature;
+
+        return $body;
+    }
+
     public function getProjectNotifyOwner(CProject $project, $isNotNew) {
 
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
