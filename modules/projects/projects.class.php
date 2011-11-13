@@ -649,29 +649,13 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 		$subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
 		$users = CProject::getContacts($AppUI, $this->project_id);
-//TODO: cleanup email generation
 		if (count($users)) {
-			if (intval($isNotNew)) {
-				$body = $AppUI->_('Project') . ": $this->project_name Has Been Updated Via Project Manager. You can view the Project by clicking: ";
-			} else {
-				$body = $AppUI->_('Project') . ": $this->project_name Has Been Submitted Via Project Manager. You can view the Project by clicking: ";
-			}
-			$body .= "\n" . $AppUI->_('URL') . ':     ' . w2PgetConfig('base_url') . '/index.php?m=projects&a=view&project_id=' . $this->project_id;
-			$body .= "\n\n(You are receiving this message because you are a contact or assignee for this Project)";
-			$body .= "\n\n" . $AppUI->_('Description') . ':' . "\n$this->project_description";
-			if (intval($isNotNew)) {
-				$body .= "\n\n" . $AppUI->_('Updater') . ': ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
-			} else {
-				$body .= "\n\n" . $AppUI->_('Creator') . ': ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
-			}
-
-			if ($this->_message == 'deleted') {
-				$body .= "\n\nProject " . $this->project_name . ' was ' . $this->_message . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
-			}
+			$emailManager = new w2p_Output_EmailManager($AppUI);
+            $body = $emailManager->getProjectNotifyContacts($this, $isNotNew);
 
 			foreach ($users as $row) {
 				$mail = new w2p_Utilities_Mail;
-$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 				$mail->Subject($subject, $locale_char_set);
 
 				if ($mail->ValidEmail($row['contact_email'])) {
