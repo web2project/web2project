@@ -499,12 +499,14 @@ class CFile extends w2p_Core_BaseObject {
                     $this->_task->load($this->file_task);
                     $mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
                 }
+
                 $emailManager = new w2p_Output_EmailManager($AppUI);
                 $body = $emailManager->getFileNotify($this);
+                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
+                $q = $this->_getQuery();
                 if (intval($this->_task->task_id) != 0) {
                     //preparing users array
-                    $q = new w2p_Database_Query;
                     $q->addTable('tasks', 't');
                     $q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as
                             creator_first_name, cc.contact_last_name as creator_last_name,
@@ -520,19 +522,17 @@ class CFile extends w2p_Core_BaseObject {
                     $q->addJoin('users', 'a', 'a.user_id = u.user_id');
                     $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
                     $q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
-                    $this->_users = $q->loadList();
+                    
                 } else {
                     //find project owner and notify him about new or modified file
-                    $q = new w2p_Database_Query;
                     $q->addTable('users', 'u');
                     $q->addTable('projects', 'p');
                     $q->addQuery('u.user_id, u.user_contact AS owner_contact_id');
                     $q->addWhere('p.project_owner = u.user_id');
                     $q->addWhere('p.project_id = ' . (int)$this->file_project);
-                    $this->_users = $q->loadList();
                 }
+                $this->_users = $q->loadList();
 
-                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
                 if (intval($this->_task->task_id) != 0) {
                     foreach ($this->_users as $row) {
                         if ($row['assignee_id'] != $AppUI->user_id) {
@@ -576,10 +576,11 @@ class CFile extends w2p_Core_BaseObject {
 
                 $emailManager = new w2p_Output_EmailManager($AppUI);
                 $body = $emailManager->getFileNotifyContacts($this);
+                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
+                $q = $this->_getQuery();
+                $q->addTable('project_contacts', 'pc');
                 if (intval($this->_task->task_id) != 0) {
-                    $q = new w2p_Database_Query;
-                    $q->addTable('project_contacts', 'pc');
                     $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                     $q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
@@ -591,17 +592,12 @@ class CFile extends w2p_Core_BaseObject {
                     $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
                     $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
                 } else {
-                    $q = new w2p_Database_Query;
-                    $q->addTable('project_contacts', 'pc');
                     $q->addQuery('pc.project_id, pc.contact_id');
                     $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                     $q->addWhere('pc.project_id = ' . (int)$this->file_project);
                 }
                 $this->_users = $q->loadList();
-
-                //send mail
-                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
                 foreach ($this->_users as $row) {
                     if ($mail->ValidEmail($row['contact_email'])) {
