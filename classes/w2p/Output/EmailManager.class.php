@@ -20,10 +20,19 @@ class w2p_Output_EmailManager {
     public $body = '';
 
     public function __construct(w2p_Core_CAppUI $AppUI = null) {
+        if(is_null($AppUI)) {
+            trigger_error('The w2p_Output_EmailManager constructor should receive $AppUI (an w2p_Core_CAppUI object) for proper usage.', E_USER_NOTICE );
+        }
+
         $this->AppUI = $AppUI;
     }
 
+    /*
+     * @deprecated
+     */
     public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI = null) {
+        trigger_error("getCalendarConflictEmail has been deprecated in v3.0 and will be removed by v4.0. Please use getEventNotify() instead.", E_USER_NOTICE );
+
         $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
 
         $body = '';
@@ -31,6 +40,53 @@ class w2p_Output_EmailManager {
         $body .= "However, either you or another intended invitee has a competing event\n";
         $body .= "$this->AppUI->user_first_name $this->AppUI->user_last_name has requested that you reply to this message\n";
         $body .= "and confirm if you can or can not make the requested time.\n\n";
+
+        return $body;
+    }
+
+    public function getEventNotify(CEvent $event, $clash, $users, $types) {
+        
+        if ($clash) {
+            $body = "You have been invited to an event by $this->AppUI->user_display_name \n";
+            $body .= "However, either you or another intended invitee has a competing event\n";
+            $body .= "$this->AppUI->user_display_name has requested that you reply to this message\n";
+            $body .= "and confirm if you can or can not make the requested time.\n\n";
+        }
+
+		$body .= $this->AppUI->_('Event') . ":\t" . $event->event_title . "\n";
+		if (!$clash) {
+			$body .= $this->AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=calendar&a=view&event_id=" . $event->event_id . "\n";
+		}
+
+		$date_format = $this->AppUI->getPref('SHDATEFORMAT');
+		$time_format = $this->AppUI->getPref('TIMEFORMAT');
+		$fmt = $date_format . ' ' . $time_format;
+
+		$start_date = new w2p_Utilities_Date($event->event_start_date);
+		$end_date = new w2p_Utilities_Date($event->event_end_date);
+
+//TODO: customize these date formats based on the *receivers'* timezone setting
+		$body .= $this->AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
+		$body .= $this->AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
+
+		// Find the project name.
+		if ($event->event_project) {
+			$project = new CProject();
+            $project->load($event->event_project);
+            $body .= $this->AppUI->_('Project') . ":\t" . $project->project_name . "\n";
+		}
+
+		$types = w2PgetSysVal('EventType');
+
+		$body .= $this->AppUI->_('Type') . ":\t" . $this->AppUI->_($types[$event->event_type]) . "\n";
+		$body .= $this->AppUI->_('Attendees') . ":\t";
+
+		$body_attend = '';
+		foreach ($users as $user) {
+			$body_attend .= ((($body_attend) ? ', ' : '') . $user['contact_name']);
+		}
+
+		$body .= $body_attend . "\n\n" . $event->event_description . "\n";
 
         return $body;
     }
@@ -45,7 +101,7 @@ class w2p_Output_EmailManager {
         $contact_company = $q->loadHashList();
         $q->clear();
 
-        $body  = "Dear: $contact->contact_title $contact->contact_first_name $contact->contact_last_name,";
+        $body  = "Dear: $contact->contact_title $contact->contact_display_name,";
         $body .= "\n\nIt was very nice to visit you";
         $body .= ($contact->contact_company) ? " and " . $contact_company[$contact->contact_company] . "." : ".";
         $body .= " Thank you for all the time that you spent with me.";

@@ -397,17 +397,11 @@ class CEvent extends w2p_Core_BaseObject {
 		$q = $this->_getQuery();
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'con');
-		$q->addQuery('user_id, contact_first_name, contact_last_name, con.contact_id, contact_email');
+		$q->addQuery('user_id, con.contact_id, contact_email');
+        $q->addQuery('contact_display_name, contact_display_name as contact_name');
 		$q->addWhere('u.user_contact = con.contact_id');
 		$q->addWhere('user_id in (' . implode(',', $assignee_list) . ')');
 		$users = $q->loadHashList('user_id');
-
-		$date_format = $AppUI->getPref('SHDATEFORMAT');
-		$time_format = $AppUI->getPref('TIMEFORMAT');
-		$fmt = $date_format . ' ' . $time_format;
-
-		$start_date = new w2p_Utilities_Date($this->event_start_date);
-		$end_date = new w2p_Utilities_Date($this->event_end_date);
 
 		$mail = new w2p_Utilities_Mail();
 		$type = $update ? $AppUI->_('Updated') : $AppUI->_('New');
@@ -416,39 +410,11 @@ class CEvent extends w2p_Core_BaseObject {
 		} else {
 			$mail->Subject($type . ' ' . $AppUI->_('Event') . ': ' . $this->event_title, $locale_char_set);
 		}
-//TODO: cleanup email generation
+
         $emailManager = new w2p_Output_EmailManager($AppUI);
-		$body = '';
-		if ($clash) {
-            $body .= $emailManager->getCalendarConflictEmail();
-		}
-		$body .= $AppUI->_('Event') . ":\t" . $this->event_title . "\n";
-		if (!$clash) {
-			$body .= $AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=calendar&a=view&event_id=" . $this->event_id . "\n";
-		}
-		$body .= $AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
-		$body .= $AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
+        $body = $emailManager->getEventNotify($this, $clash, $users, $types);
 
-		// Find the project name.
-		if ($this->event_project) {
-			$project = new CProject();
-            $project->load($this->event_project);
-            $body .= $AppUI->_('Project') . ":\t" . $project->project_name . "\n";
-		}
-
-		$types = w2PgetSysVal('EventType');
-
-		$body .= $AppUI->_('Type') . ":\t" . $AppUI->_($types[$this->event_type]) . "\n";
-		$body .= $AppUI->_('Attendees') . ":\t";
-
-		$body_attend = '';
-		foreach ($users as $user) {
-			$body_attend .= ((($body_attend) ? ', ' : '') . $user['contact_first_name'] . ' ' . $user['contact_last_name']);
-		}
-
-		$body .= $body_attend . "\n\n" . $this->event_description . "\n";
-
-$mail->Body($body, $locale_char_set);
+        $mail->Body($body, $locale_char_set);
 		foreach ($users as $user) {
 			if (!$mail_owner && $user['user_id'] == $this->event_owner) {
 				continue;
