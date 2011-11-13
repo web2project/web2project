@@ -65,7 +65,7 @@ if ($is_clash) {
     unset($_SESSION['event_is_clash']);
 } else {
 	if ($event_id == 0) {
-		$assigned[$AppUI->user_id] = $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
+		$assigned[$AppUI->user_id] = $AppUI->user_display_name;
 	} else {
 		$assigned = $obj->getAssigned();
 	}
