@@ -971,19 +971,13 @@ class CTask extends w2p_Core_BaseObject {
 	public function notifyOwner() {
         global $AppUI, $locale_char_set;
 
-        $q = $this->_getQuery();
-		$q->addTable('projects');
-		$q->addQuery('project_name');
-		$q->addWhere('project_id=' . (int)$this->task_project);
-		$projname = htmlspecialchars_decode($q->loadResult());
-		$q->clear();
 		$mail = new w2p_Utilities_Mail();
-
 		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
 		// c = creator
 		// a = assignee
 		// o = owner
+        $q = $this->_getQuery();
 		$q->addTable('tasks', 't');
 		$q->leftJoin('user_tasks', 'u', 'u.task_id = t.task_id');
 
@@ -999,15 +993,15 @@ class CTask extends w2p_Core_BaseObject {
         $q->leftJoin('contacts', 'ac', 'ac.contact_id = a.user_contact');
         $q->addQuery('ac.contact_id as assignee_contact_id');
 
-		$q->addQuery('t.task_id, cc.contact_email as creator_email' . ', cc.contact_first_name as creator_first_name' . ', cc.contact_last_name as creator_last_name' . ', oc.contact_email as owner_email' . ', oc.contact_first_name as owner_first_name' . ', oc.contact_last_name as owner_last_name' . ', a.user_id as assignee_id, ac.contact_email as assignee_email' . ', ac.contact_first_name as assignee_first_name' . ', ac.contact_last_name as assignee_last_name');
+		$q->addQuery('t.task_id, oc.contact_email as owner_email');
 		$q->addWhere(' t.task_id = ' . (int)$this->task_id);
 		$users = $q->loadList();
 		$q->clear();
 
-//TODO: cleanup email generation
 		if (count($users)) {
-			$body = ($AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n" . $AppUI->_('Task', UI_OUTPUT_RAW) . ':	' . $this->task_name . "\n" . $AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n" . $AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $this->task_description . "\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW) . ': ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name . "\n\n" . $AppUI->_('Progress', UI_OUTPUT_RAW) . ': ' . $this->task_percent_complete . '%' . "\n\n" . w2PgetParam($_POST, 'task_log_description'));
-$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+            $emailManager = new w2p_Output_EmailManager($AppUI);
+            $body = $emailManager->getTaskNotifyOwner($this);
+            $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}
 
 		if ($mail->ValidEmail($users[0]['owner_email'])) {

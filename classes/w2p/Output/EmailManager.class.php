@@ -190,6 +190,23 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
+    public function getTaskNotifyOwner(CTask $task, $users) {
+        $project = new CProject();
+        $projname = $project->load($task->task_project)->project_name;
+
+        $body  = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
+        $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW)    . ':	     ' . $task->task_name."\n";
+        $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
+        $body .= $this->AppUI->_('Task Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
+        $body .= $this->AppUI->_('Creator', UI_OUTPUT_RAW) . ': ' . $this->AppUI->user_display_name . "\n\n";
+        $body .= $this->AppUI->_('Progress', UI_OUTPUT_RAW) . ': ' . $task->task_percent_complete . '%' . "\n\n";
+//TODO: why is POST used here? Poor form - dkc 13 Nov 2011
+        $body .= $this->AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . "\n\n";
+        $body .= w2PgetParam($_POST, 'task_log_description');
+
+        return $body;
+    }
+
     public function getTaskRemind(CTask $task, $msg, $project_name, $contacts) {
 
         $body  = $this->AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n";
@@ -197,15 +214,15 @@ class w2p_Output_EmailManager {
         $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $task->task_name . "\n";
         $body .= $this->AppUI->_('Start Date', UI_OUTPUT_RAW) . ': START-TIME' . "\n";
         $body .= $this->AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': END-TIME' . "\n";
-        $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . '&reminded=1';
-        $body .= "\n\n" . $this->AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n";
+        $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . '&reminded=1' . "\n\n";
+        $body .= $this->AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n";
 
 		foreach ($contacts as $contact) {
 			if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
 				$body .= ($contact['contact_name'] . ' <' . $contact['contact_email'] . ">\n");
 			}
 		}
-		$body .= ("\n" . $this->AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n");
+		$body .= $this->AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
 
         return $body;
     }
