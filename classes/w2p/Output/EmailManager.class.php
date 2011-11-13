@@ -62,10 +62,9 @@ class w2p_Output_EmailManager {
 		$time_format = $this->AppUI->getPref('TIMEFORMAT');
 		$fmt = $date_format . ' ' . $time_format;
 
+//TODO: customize these date formats based on the *receivers'* timezone setting
 		$start_date = new w2p_Utilities_Date($event->event_start_date);
 		$end_date = new w2p_Utilities_Date($event->event_end_date);
-
-//TODO: customize these date formats based on the *receivers'* timezone setting
 		$body .= $this->AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
 		$body .= $this->AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
 
@@ -158,6 +157,35 @@ class w2p_Output_EmailManager {
 
     public function getFileNotifyContacts(CFile $file) {
         return $this->getFileNotify($file);
+    }
+
+    public function getTaskNotify(CTask $task, $projname, $users) {
+
+        $body  = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
+        $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW)    . ':	     ' . $task->task_name."\n";
+//TODO: Priority not working for some reason, will wait till later
+
+		$date_format = $this->AppUI->getPref('SHDATEFORMAT');
+		$time_format = $this->AppUI->getPref('TIMEFORMAT');
+		$fmt = $date_format . ' ' . $time_format;
+
+//TODO: customize these date formats based on the *receivers'* timezone setting
+		$start_date = new w2p_Utilities_Date($task->task_start_date);
+		$end_date = new w2p_Utilities_Date($task->task_end_date);
+		$body .= $this->AppUI->_('Start Date') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
+		$body .= $this->AppUI->_('Finish Date') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
+
+        $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
+        $body .= $this->AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $task->task_description;
+        if ($users[0]['creator_email']) {
+            $body .= ("\n\n" . $this->AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['creator_name'] . ', ' . $users[0]['creator_email']);
+        }
+        $body .= ("\n\n" . $this->AppUI->_('Owner', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['owner_name'] . ', ' . $users[0]['owner_email']);
+        if ($comment != '') {
+            $body .= "\n\n" . $comment;
+        }
+
+        return $body;
     }
 
     public function getProjectNotifyOwner(CProject $project, $isNotNew) {

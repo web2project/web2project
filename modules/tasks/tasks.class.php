@@ -1022,9 +1022,6 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 	public function notify($comment = '') {
 		global $AppUI, $locale_char_set;
 
-		$df = $AppUI->getPref('SHDATEFORMAT');
-		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-
         $q = $this->_getQuery();
 		$q->addTable('projects');
 		$q->addQuery('project_name');
@@ -1054,30 +1051,20 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 		$q->leftJoin('contacts', 'ac', 'ac.contact_id = a.user_contact');
         $q->addQuery('ac.contact_id as assignee_contact_id');
 
-		$q->addQuery('t.task_id, cc.contact_email as creator_email' . ', cc.contact_first_name as creator_first_name' . ', cc.contact_last_name as creator_last_name' . ', oc.contact_email as owner_email' . ', oc.contact_first_name as owner_first_name' . ', oc.contact_last_name as owner_last_name' . ', a.user_id as assignee_id, ac.contact_email as assignee_email' . ', ac.contact_first_name as assignee_first_name' . ', ac.contact_last_name as assignee_last_name');
+		$q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_display_name as creator_name,
+            cc.contact_first_name as creator_first_name, cc.contact_last_name as creator_last_name,
+            oc.contact_email as owner_email, oc.contact_display_name as owner_name,
+            oc.contact_first_name as owner_first_name, oc.contact_last_name as owner_last_name,
+            a.user_id as assignee_id, ac.contact_email as assignee_email');
 		$q->addWhere(' t.task_id = ' . (int)$this->task_id);
 		$users = $q->loadList();
 		$q->clear();
 
 		if (count($users)) {
-            $task_start_date = intval($this->task_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($this->task_start_date, '%Y-%m-%d %T')) : null;
-            $task_finish_date = intval($this->task_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($this->task_end_date, '%Y-%m-%d %T')) : null;
-//TODO: cleanup email generation
-			$body  = $AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
-            $body .= $AppUI->_('Task', UI_OUTPUT_RAW)    . ':	     ' . $this->task_name."\n";
-			//Priority not working for some reason, will wait till later
-			$body .= $AppUI->_('Start Date', UI_OUTPUT_RAW)  . ':  ' . ((is_null($task_start_date)) ? '' : $task_start_date->format($df)) . "\n";
-            $body .= $AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': ' . ((is_null($task_finish_date))? '' : $task_finish_date->format($df)) . "\n";
-            $body .= $AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $this->task_id . "\n\n";
-            $body .= $AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $this->task_description;
-			if ($users[0]['creator_email']) {
-				$body .= ("\n\n" . $AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['creator_first_name'] . ' ' . $users[0]['creator_last_name'] . ', ' . $users[0]['creator_email']);
-			}
-			$body .= ("\n\n" . $AppUI->_('Owner', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['owner_first_name'] . ' ' . $users[0]['owner_last_name'] . ', ' . $users[0]['owner_email']);
-			if ($comment != '') {
-				$body .= "\n\n" . $comment;
-			}
-$mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
+            $emailManager = new w2p_Output_EmailManager($AppUI);
+            $body = $emailManager->getTaskNotify($this, $projname, $users);
+
+            $mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
 		}
 
 		$mail_owner = $AppUI->getPref('MAILALL');
