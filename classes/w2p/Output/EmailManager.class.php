@@ -159,7 +159,9 @@ class w2p_Output_EmailManager {
         return $this->getFileNotify($file);
     }
 
-    public function getTaskNotify(CTask $task, $projname, $users) {
+    public function getTaskNotify(CTask $task, $users) {
+        $project = new CProject();
+        $projname = $project->load($task->task_project)->project_name;
 
         $body  = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
         $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW)    . ':	     ' . $task->task_name."\n";
@@ -208,7 +210,9 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getTaskEmailLog(CTask $task, CTaskLog $log, $projname) {
+    public function getTaskEmailLog(CTask $task, CTaskLog $log) {
+        $project = new CProject();
+        $projname = $project->load($task->task_project)->project_name;
 
         $body = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n";
         if ($task->task_parent != $task->task_id) {

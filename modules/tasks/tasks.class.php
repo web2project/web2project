@@ -1022,13 +1022,6 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 	public function notify($comment = '') {
 		global $AppUI, $locale_char_set;
 
-        $q = $this->_getQuery();
-		$q->addTable('projects');
-		$q->addQuery('project_name');
-		$q->addWhere('project_id=' . (int)$this->task_project);
-		$projname = htmlspecialchars_decode($q->loadResult());
-		$q->clear();
-
 		$mail = new w2p_Utilities_Mail();
 
 		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
@@ -1036,6 +1029,7 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 		// c = creator
 		// a = assignee
 		// o = owner
+        $q = $this->_getQuery();
 		$q->addTable('tasks', 't');
 		$q->leftJoin('user_tasks', 'u', 'u.task_id = t.task_id');
 
@@ -1062,7 +1056,7 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 
 		if (count($users)) {
             $emailManager = new w2p_Output_EmailManager($AppUI);
-            $body = $emailManager->getTaskNotify($this, $projname, $users);
+            $body = $emailManager->getTaskNotify($this, $users);
 
             $mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
 		}
@@ -1188,14 +1182,8 @@ $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_se
 			$prefix = $AppUI->getPref('TASKLOGSUBJ');
 			$mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
 
-			$q->addTable('projects');
-			$q->addQuery('project_name');
-			$q->addWhere('project_id=' . (int)$this->task_project);
-			$projname = htmlspecialchars_decode($q->loadResult());
-			$q->clear();
-
             $emailManager = new w2p_Output_EmailManager($AppUI);
-            $body = $emailManager->getTaskEmailLog($this, $log, $projname);
+            $body = $emailManager->getTaskEmailLog($this, $log);
             $mail->Body($body, $char_set);
 
 			$recipient_list = '';
