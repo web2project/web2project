@@ -395,8 +395,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             }
 
             $dur .= ' h';
-            $enddate = new w2p_Utilities_Date($end);
-            $startdate = new w2p_Utilities_Date($start);
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
             if ($showTaskNameOnly == '1') {
                 $columnValues = array('task_name' => $name);
