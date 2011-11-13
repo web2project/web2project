@@ -156,6 +156,10 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
+    public function getFileNotifyContacts(CFile $file) {
+        return $this->getFileNotify($file);
+    }
+
     public function getProjectNotifyOwner(CProject $project, $isNotNew) {
 
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
