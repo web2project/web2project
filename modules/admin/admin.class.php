@@ -50,7 +50,10 @@ class CUser extends w2p_Core_BaseObject {
             return false;
         }
 
-        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} &&
+                ($perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})
+                    || $this->{$this->_tbl_key} == $AppUI->user_id)
+           ) {
             $this->perm_func = 'updateLogin';
             $tmpUser = new CUser();
             $tmpUser->load($this->user_id);
