@@ -49,3 +49,8 @@ td.today span img, td.empty span img
     -webkit-border-radius:3px;
     border-radius:3px;
 }
+
+.addedit textarea.customfield {
+    height: 75px;
+    width:  100%;
+}
