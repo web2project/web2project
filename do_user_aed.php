@@ -107,16 +107,9 @@ if ($result) {
         if ($isNewUser) {
             notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password']);
         }
-        notifyHR(w2PgetConfig('admin_email', 'admin@web2project.net'), 'w2P System Human Resources', 
+        notifyHR(w2PgetConfig('admin_email', 'admin@web2project.net'), 'w2P System Human Resources',
             $contact->contact_email, $contact->contact_first_name, $user->user_username,
             $_POST['user_password'], $user->user_id);
-
-        $q = new w2p_Database_Query;
-        $q->addTable('users', 'u');
-        $q->addQuery('contact_email');
-        $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-        $q->addWhere('u.user_username = \'admin\'');
-        $admin_user = $q->loadList();
     }
 } else {
     $AppUI->setMsg($msg, UI_MSG_ERROR);
