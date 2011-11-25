@@ -1259,7 +1259,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 		$tmp .= '<b>';
 	}
 	if ($level >= 1) {
-		$tmp .= w2PshowImage('corner-dots.gif', 16, 12, 'Subtask', '', 'tasks') . '&nbsp;';
+        $tmp .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" alt="" style="float: left;">';
 	}
 	$tmp .= '<a href="?m=tasks&a=view&task_id=' . $task->task_id . '">' . $task->task_name . '</a>';
 	if ($task->task_milestone == true) {
