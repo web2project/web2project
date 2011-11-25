@@ -17,25 +17,9 @@ $isNotNew = $task_id;
 
 $action = ($del) ? 'deleted' : 'stored';
 
-// Include any files for handling module-specific requirements
-foreach (findTabModules('tasks', 'addedit') as $mod) {
-    $fname = W2P_BASE_DIR . '/modules/' . $mod . '/tasks_dosql.addedit.php';
-    if (file_exists($fname)) {
-        require_once $fname;
-    }
-}
-
-$obj = new CTask();
-
-// If we have an array of pre_save functions, perform them in turn.
-if (isset($pre_save)) {
-    foreach ($pre_save as $pre_save_function) {
-        $pre_save_function();
-    }
-}
-
 // Find the task if we are set
 $task_end_date = null;
+$obj = new CTask();
 if ($task_id) {
     $obj->load($task_id);
     $task_end_date = new w2p_Utilities_Date($obj->task_end_date);
