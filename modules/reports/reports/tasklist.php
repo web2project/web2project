@@ -108,6 +108,7 @@ if (function_exists('styleRenderBoxTop')) {
 </form>
 <?php
 if ($do_report) {
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
 	if ($project_id == 0) {
 		$q = new w2p_Database_Query;
@@ -175,7 +176,7 @@ if ($do_report) {
 		$q->addWhere('task_id = ' . (int)$task_id);
 		$sql_user = $q->exec();
 
-		$users = null;
+		$users = array();
 		while ($Task_User = db_fetch_assoc($sql_user)) {
             $users[] = CContact::getContactByUserid((int)$Task_User['user_id']);
 		}
@@ -188,11 +189,9 @@ if ($do_report) {
         $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $Tasks['task_id'] . '">' . $Tasks['task_name'] . '</a></td>';
 		$str .= '<td>' . nl2br($Tasks['task_description']) . '</td>';
 		$str .= '<td>' . implode($users, ', ') . '</td>';
-		$str .= '<td align="center">';
-		($start_date != ' ') ? $str .= $start_date->format($df) . '</td>' : $str .= ' </td>';
-		$str .= '<td align="center">';
-		($end_date != ' ') ? $str .= $end_date->format($df) . '</td>' : $str .= ' ' . '</td>';
-		$str .= '<td align="right">' . $Tasks['task_percent_complete'] . '%</td>';
+        $str .= $htmlHelper->createCell('task_start_date', $Tasks['task_start_date']);
+        $str .= $htmlHelper->createCell('task_end_date', $Tasks['task_end_date']);
+        $str .= $htmlHelper->createCell('task_percent_complete', $Tasks['task_percent_complete']);
 		$str .= '</tr>';
 		echo $str;
 		if ($project_id == 0) {
