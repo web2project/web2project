@@ -429,32 +429,31 @@ if (isset($canEdit) && $canEdit && $w2Pconfig['direct_edit_assignment']) { ?>
 global $expanded;
 //if we are on a task view context then all subtasks are expanded by default, on other contexts config option stands.
 $expanded = $task_id ? true : $AppUI->getPref('TASKSEXPANDED');
-if ($project_id) {
-	$open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' alt="" /><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' alt="" /></a>' . w2PendTip();
-	?>
-	<form name="task_list_options" method="post" action=""<?php echo $query_string; ?>" accept-charset="utf-8">
-		<input type='hidden' name='show_task_options' value='1' />
-		<table width='100%' border='0' cellpadding='1' cellspacing='0'>
-			<tr>
-			  <td align='left'>
-					<?php echo $open_link; ?>
-			  </td>
-			  <td align='right'>
-					<table>
-						<tr>
-						  <td><?php echo $AppUI->_('Show'); ?>:</td>
-						  <td>
-						  <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();" 
-						   <?php echo $showIncomplete ? 'checked="checked"' : ''; ?> />
-						  </td>
-						  <td><label for="show_incomplete"><?php echo $AppUI->_('Incomplete Tasks Only'); ?></label></td>
-						</tr>
-					</table>
-			  </td>
-			</tr>
-		</table>
-	</form>
-<?php } ?>
+$open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' alt="" /><img onclick="expand_collapse(\'project_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' alt="" /></a>' . w2PendTip();
+?>
+<form name="task_list_options" method="post" action=""<?php echo $query_string; ?>" accept-charset="utf-8">
+    <input type='hidden' name='show_task_options' value='1' />
+    <table width='100%' border='0' cellpadding='1' cellspacing='0'>
+        <tr>
+          <td align='left'>
+                <?php echo $open_link; ?>
+          </td>
+          <td align='right'>
+                <table>
+                    <tr>
+                      <td><?php echo $AppUI->_('Show'); ?>:</td>
+                      <td>
+                      <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();"
+                       <?php echo $showIncomplete ? 'checked="checked"' : ''; ?> />
+                      </td>
+                      <td><label for="show_incomplete"><?php echo $AppUI->_('Incomplete Tasks Only'); ?></label></td>
+                    </tr>
+                </table>
+          </td>
+        </tr>
+    </table>
+</form>
+
 <table id="tblProjects" width="100%" border="0" cellpadding="0" cellspacing="1" class="tbl list">
     <tr>
         <?php
