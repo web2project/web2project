@@ -75,7 +75,9 @@ class CSysVal extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-		$perms = $AppUI->acl();
+		global $AppUI;
+
+        $perms = $AppUI->acl();
         $stored = false;
 
         $this->w2PTrimAll();
