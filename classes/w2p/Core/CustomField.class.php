@@ -68,20 +68,20 @@ class w2p_Core_CustomField {
 
 		if ($object_id) {
 			$this->value_intvalue = (int) $this->value_intvalue;
-			$ins_charvalue = $this->value_charvalue == null ? '' : stripslashes($this->value_charvalue);
+			$ins_charvalue = $this->value_charvalue;
 
             $q = new w2p_Database_Query;
             $q->addTable('custom_fields_values');
 
 			if ($this->value_id) {
-				$q->addUpdate('value_charvalue', $ins_charvalue);
+				$q->addUpdate('value_charvalue', $this->value_charvalue);
 				$q->addUpdate('value_intvalue', $this->value_intvalue);
 				$q->addWhere('value_id = ' . $this->value_id);
 			} else {
 				$q->addInsert('value_module', '');
 				$q->addInsert('value_field_id', $this->field_id);
 				$q->addInsert('value_object_id', $object_id);
-				$q->addInsert('value_charvalue', $ins_charvalue);
+				$q->addInsert('value_charvalue', $this->value_charvalue);
 				$q->addInsert('value_intvalue', $this->value_intvalue);
 			}
 			$rs = $q->exec();
