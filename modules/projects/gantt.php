@@ -85,6 +85,10 @@ if ($showInactive != '1') {
 		$q->addWhere('pr.project_status <> ' . $template_status);
 	}
 }
+$search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
+if (mb_trim($search_text)) {
+    $q->addWhere('pr.project_name LIKE \'%' . $search_text . '%\' OR pr.project_description LIKE \'%' . $search_text . '%\'');
+}
 $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $q->addGroup('pr.project_id');
 $q->addOrder('pr.project_name, task_end_date DESC');
