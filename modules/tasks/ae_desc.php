@@ -6,6 +6,12 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $task_id, $task, $users, $task_access, $department_selection_list;
 global $task_parent_options, $w2Pconfig, $projects, $task_project, $can_edit_time_information, $tab;
 
+/*
+ * TODO: when we have an error and bouce back to this screen for the flash
+ *   message, the arrays - task_access and others - are not being reset to
+ *   good/safe values. I'm not sure of the best approach at the moment.
+ *   ~ caseydk - 25 Nov 2011
+ */
 $perms = &$AppUI->acl();
 ?>
 <form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" name="detailFrm" accept-charset="utf-8">
@@ -24,7 +30,11 @@ $perms = &$AppUI->acl();
                             <?php } ?>
                             <?php echo $AppUI->_('Access'); ?>
                             <br />
-                            <?php echo arraySelect($task_access, 'task_access', 'class="text"', (int) $task->task_access, true); ?>
+                            <?php if(is_array($task_access)) { ?>
+                                <?php echo arraySelect($task_access, 'task_access', 'class="text"', (int) $task->task_access, true); ?>
+                            <?php } else { ?>
+                                <input name="task_access" type="hidden" value="<?php echo (int) $task->task_access; ?>" />
+                            <?php } ?>
                             <br /><?php echo $AppUI->_('Web Address'); ?>
                             <br /><input type="text" class="text" name="task_related_url" value="<?php echo $task->task_related_url; ?>" size="40" maxlength="255" />
                         </td>
