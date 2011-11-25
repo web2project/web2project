@@ -95,15 +95,9 @@ foreach ($logs as $row) {
     $task_log_updated = intval($row['task_log_updated']) ? $row['task_log_updated'] : null;
     $s .= '(' . $AppUI->_('Logged').': ' . ($task_log_updated ? $AppUI->formatTZAwareTime($task_log_updated, $df) : '-') . ')';
     $s .= '</td>';
-	$reference_image = '-';
-	if ($row['task_log_reference'] > 0) {
-		if (isset($taskLogReferenceImage[$row['task_log_reference']])) {
-			$reference_image = w2PshowImage($taskLogReferenceImage[$row['task_log_reference']], 16, 16, $taskLogReference[$row['task_log_reference']], $taskLogReference[$row['task_log_reference']]);
-		} elseif (isset($taskLogReference[$row['task_log_reference']])) {
-			$reference_image = $taskLogReference[$row['task_log_reference']];
-		}
-	}
-	$s .= '<td align="center" valign="middle">' . $reference_image . '</td>';
+
+    $reference = ($row['task_log_reference'] > 0) ? $taskLogReference[$row['task_log_reference']] : '-';
+	$s .= '<td align="center" valign="middle">' . $reference . '</td>';
     $s .= $htmlHelper->createCell('task_log_name', $row['task_log_name']);
 	$s .= !empty($row['task_log_related_url']) ? '<td><a href="' . $row['task_log_related_url'] . '" title="' . $row['task_log_related_url'] . '">' . $AppUI->_('URL') . '</a></td>' : '<td></td>';
     $s .= $htmlHelper->createCell('real_name', $row['real_name']);
