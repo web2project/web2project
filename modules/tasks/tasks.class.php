@@ -677,10 +677,9 @@ class CTask extends w2p_Core_BaseObject {
         }
 
         // if is child update parent task
-        if ($this->task_parent && $this->task_parent != $this->task_id) {
-
+        if ($this->task_parent != $this->task_id) {
             if (!$importing_tasks) {
-                $this->updateDynamics(true);
+                $this->updateDynamics();
             }
 
             $pTask = new CTask();
