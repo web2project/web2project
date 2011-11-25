@@ -1652,7 +1652,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q->addTable('users', 'u');
 		$q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
 		$q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
-		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority,
+		$q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, contact_display_name,
             co.contact_last_name, co.contact_first_name, contact_display_name as contact_name');
 		$q->addQuery('co.contact_email AS user_email, co.contact_phone AS user_phone');
 		$q->addWhere('ut.task_id = ' . (int)$taskId);
@@ -1719,7 +1719,8 @@ class CTask extends w2p_Core_BaseObject {
 
 			$q->addJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id', 'inner');
 			$q->addWhere('tc.task_id = ' . (int) $task_id);
-			$q->addQuery('c.contact_id, contact_first_name, contact_last_name, contact_order_by, contact_email');
+			$q->addQuery('c.contact_id, contact_first_name, contact_last_name,
+                contact_display_name, contact_display_name as contact_name, contact_email');
 
 			$q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
 
