@@ -317,7 +317,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	public function canDelete(&$msg = '', $oid = null, $joins = null)
 	{
 		global $AppUI;
-        $result = false;
+        $result = true;
 
 		// First things first.  Are we allowed to delete?
 		$acl = &$AppUI->acl();

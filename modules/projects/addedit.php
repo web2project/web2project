@@ -32,6 +32,7 @@ $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => ''), $companies);
 
+$canDelete = $project->canDelete($msg, $project_id);
 // load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
@@ -78,6 +79,9 @@ $titleBlock = new w2p_Theme_TitleBlock($ttl, 'applet3-48.png', $m, $m . '.' . $a
 $titleBlock->addCrumb('?m=projects', 'projects list');
 if ($project_id != 0) {
 	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
+    if ($canDelete) {
+        $titleBlock->addCrumbDelete('delete project', $canDelete, $msg);
+    }
 }
 $titleBlock->show();
 
