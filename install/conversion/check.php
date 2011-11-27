@@ -40,27 +40,27 @@
 	<tr>
 		<td class="item">GD Support (for GANTT Charts)</td>
 		<td align="left">
-		<?php 
+            <?php
 			if (!extension_loaded('gd')) {
 				echo '<b class="error">'.$failedImg.'</b> <span class="item">GANTT Chart functionality may not work correctly.</span>';
 				$continue = false;
 			} else {
 				echo '<b class="ok">'.$okImg.'</b>';
 			}
-		?>
+            ?>
 		</td>
 	</tr>
 	<tr>
 		<td class="item">File Uploads</td>
 		<td align="left">
-		<?php 
+        	<?php
 			if (!ini_get('file_uploads') && is_writable(W2P_BASE_DIR.'/files')) {
-        echo '<b class="error">'.$failedImg.'</b> <span class="warning">Upload functionality will not be available, please make the ./files directory writable.</span>';
+                echo '<b class="error">'.$failedImg.'</b> <span class="warning">Upload functionality will not be available, please make the ./files directory writable.</span>';
 				$continue = false;
 			} else {
 				echo '<b class="ok">'.$okImg.'</b> <span class="item">(Max File Upload Size: '. $manager->getMaxFileUpload() .')</span>';
 			}
-		?>
+    		?>
 		</td>
 	</tr>
 	<tr>
@@ -70,29 +70,44 @@
 		<td class="item">Session Save Path writable?</td>
 		<td align="left">
 			<?php 
-				$sspath = ini_get('session.save_path');
-				if (! $sspath) {
-					echo '<b class="error">'.$failedImg.'</b> <span class="warning">session.save_path</span> <b class="error">is not set</b>';
-				} else if (is_dir($sspath) && is_writable($sspath)) {
-					echo "<b class='ok'>$okImg</b> <span class='item'>($sspath)</span>";
-				} else {
-					echo '<b class="error">'.$failedImg.'</b> <span class="warning">'.$sspath.'</span><b class="error"> not existing or not writable</b>';
-				}
+            $sspath = ini_get('session.save_path');
+            if (! $sspath) {
+                echo '<b class="error">'.$failedImg.'</b> <span class="warning">session.save_path</span> <b class="error">is not set</b>';
+            } else if (is_dir($sspath) && is_writable($sspath)) {
+                echo "<b class='ok'>$okImg</b> <span class='item'>($sspath)</span>";
+            } else {
+                echo '<b class="error">'.$failedImg.'</b> <span class="warning">'.$sspath.'</span><b class="error"> not existing or not writable</b>';
+            }
 			?>
 		</td>
 	</tr>
-  <tr>
-    <td class="item">Server API</td>
-    <td align="left">
-    <?php 
-      if (strpos(strtolower(php_sapi_name()), 'cgi') !== false) {
-        echo '<b class="error">'.$failedImg.' CGI mode is likely to have problems</b>';
-      } else {
-        echo '<b class="ok">'.$okImg.'</b> <span class="item">('.php_sapi_name().')</span>';
-      }
-    ?>
-    </td>
-  </tr>
+    <tr>
+        <td class="item">Server API</td>
+        <td align="left">
+            <?php
+            if (strpos(strtolower(php_sapi_name()), 'cgi') !== false) {
+                echo '<b class="error">'.$failedImg.' CGI mode is likely to have problems</b>';
+            } else {
+                echo '<b class="ok">'.$okImg.'</b> <span class="item">('.php_sapi_name().')</span>';
+            }
+            ?>
+        </td>
+    </tr>
+	<tr>
+		<td class="title" colspan="2"><br />Special note: Timezones in web2project vs dotProject</td>
+	</tr>
+    <tr>
+        <td class="item" colspan="2">
+            To put it simply dotproject did not support time zone at all. Web2Project also did not support time zone until v2.0 in June 2010. Therefore, when you convert your dotProject system to web2project, you may have some oddities with things like Task & Event times.<br /><br />
+
+            Within Web2Project, there are three different time zone which work  together for everything to function properly:
+            <ul>
+                <li>The first is the <strong>time zone in each User's Preferences</strong>. When you enter a time, the system will assume you've entered it relative to your own timezone and transparently adjust it to GMT/UTC for the database.</li>
+                <li>The second is the <strong>time zone in the System Configuration</strong>. Since many modules use "date created" or "date updated" fields, the system will use create timestamps on the server and use the Server Timezone to adjust them to GMT/UTC.</li>
+                <li>Finally, the third relevant time zone is setting is for the <strong>time zone in the Default User Preferences</strong>. New Users will automatically get this setting, so it may be useful to set the correct value immediately.</li>
+            </ul>
+        </td>
+    </tr>
 	<tr>
 		<td colspan="2">&nbsp;</td>
 	</tr>
