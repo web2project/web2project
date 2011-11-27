@@ -95,9 +95,11 @@ if (isset($user_id) && isset($_GET['logout'])) {
 	$AppUI->registerLogout($user_id);
 }
 
+// set the default ui style
+$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
+
 // check is the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
-	$uistyle = w2PgetConfig('host_style');
 	$AppUI->setUserLocale();
 	@include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
 	include_once W2P_BASE_DIR . '/locales/core.php';
@@ -131,9 +133,6 @@ if (isset($_POST['login'])) {
 	addHistory('login', $AppUI->user_id, 'login', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 	$AppUI->redirect('' . $redirect);
 }
-
-// set the default ui style
-$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 
 // clear out main url parameters
 $m = '';
