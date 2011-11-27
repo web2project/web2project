@@ -347,10 +347,10 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $start = new w2p_Utilities_Date($start_date);
                 $start->addDays(0);
                 $start_mile = $start->getDate();
-                $s = $start_date->format($df);
+                $s = $start->format($df);
                 $today_date = date('m/d/Y');
                 $today_date_stamp = strtotime($today_date);
-                $mile_date = $start_date->format($df);
+                $mile_date = $start->format($df);
                 $mile_date_stamp = strtotime($mile_date);
                 // honour the choice to show task names only///////////////////////////////////////////////////
                 if ($showTaskNameOnly == '1') {
