@@ -314,11 +314,19 @@ $query_string = '?m=projects&a=view&project_id=' . $project_id;
 $canViewTask = canView('tasks');
 $canViewTaskLog = canView('task_log');
 
+//TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
+$status = w2PgetSysVal('TaskStatus');
 if ($canViewTask) {
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks');
-	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks (Inactive)');
+    unset($status[0]);
+    $tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks (Inactive)');
+    unset($status[-1]);
+
+    foreach ($status as $id => $statusName) {
+        $tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', $AppUI->_('Tasks') . ' (' . $AppUI->_($statusName) . ')');
+    }
 }
-if ( $AppUI->isActiveModule('forums') ) { 
+if ( $AppUI->isActiveModule('forums') ) {
 	if (canView('forums')) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_forums', 'Forums');
 	}
