@@ -49,6 +49,7 @@ $users = $obj->getAssignedUsers($task_id);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $task_types = w2PgetSysVal('TaskType');
+$billingCategory = w2PgetSysVal('BudgetCategory');
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Task', 'applet-48.png', $m, $m . '.' . $a);
@@ -77,27 +78,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 <script language="javascript" type="text/javascript">
 function updateTask() {
 	var f = document.editFrm;
-	if (f.task_log_description.value.length < 1) {
-        alert( '<?php echo $AppUI->_('tasksComment', UI_OUTPUT_JS); ?>' );
-        f.task_log_description.focus();
-        return;
-    }
-    <?php
-    // security improvement:
-    // some javascript functions may not appear on client side in case of user not having write permissions
-    // else users would be able to arbitrarily run 'bad' functions
-    if ($canEdit) {
-    ?>
-    if (isNaN( parseInt( f.task_log_percent_complete.value+0 ) )) {
-        alert( '<?php echo $AppUI->_('tasksPercent', UI_OUTPUT_JS); ?>' );
-        f.task_log_percent_complete.focus();
-        return;
-	} else if(f.task_log_percent_complete.value  < 0 || f.task_log_percent_complete.value > 100) {
-        alert( '<?php echo $AppUI->_('tasksPercentValue', UI_OUTPUT_JS); ?>' );
-        f.task_log_percent_complete.focus();
-        return;
-	}
-    <?php } ?>
+
 	f.submit();
 }
 <?php if ($canDelete) { ?>
@@ -199,12 +180,106 @@ function delIt() {
                     <td class="hilite" width="300"><?php echo $obj->task_duration . ' ' . $AppUI->_($durnTypes[$obj->task_duration_type]); ?></td>
                 </tr>
                 <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('task_target_budget', $obj->task_target_budget); ?>
-                </tr>
-                <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Type'); ?> :</td>
                     <?php echo $htmlHelper->createCell('task_type', $AppUI->_($task_types[$obj->task_type])); ?>
+                </tr>
+				<tr>
+                    <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
+                    <td align="center" nowrap="nowrap">
+                        <table cellspacing="1" cellpadding="2" border="0" width="100%">
+                            <tr>
+                                <td class="hilite" align="center">
+                                    <?php echo $AppUI->_('Target Budgets'); ?>:
+                                </td>
+                                <td class="hilite" align="center">
+                                    <?php echo $AppUI->_('Actual Costs'); ?>:
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hilite">
+                                    <table cellspacing="1" cellpadding="2" border="0" width="100%">
+                                        <?php
+                                        $totalBudget = 0;
+                                        foreach ($billingCategory as $id => $category) {
+                                            $amount = $obj->budget[$id]['budget_amount'];
+                                            $totalBudget += $amount;
+                                            ?>
+                                            <tr>
+                                                <td align="right" nowrap="nowrap">
+                                                    <?php echo $AppUI->_($category); ?>
+                                                </td>
+                                                <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
+                                                    <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                    <?php echo formatCurrency($amount, $AppUI->getPref('CURRENCYFORM')); ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td align="right" nowrap="nowrap">&nbsp;</td>
+                                            <td align="right" nowrap="nowrap">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" nowrap="nowrap">
+                                                <?php echo $AppUI->_('Total Budget'); ?>
+                                            </td>
+                                            <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
+                                                <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="hilite">
+                                    <table cellspacing="1" cellpadding="2" border="0" width="100%">
+                                        <?php
+                                        $bcode = new bcode();
+                                        $results = $bcode->calculateTaskCost($task_id);
+                                        foreach ($billingCategory as $id => $category) {
+                                            ?>
+                                            <tr>
+                                                <td align="right" nowrap="nowrap">
+                                                    <?php echo $AppUI->_($category); ?>
+                                                </td>
+                                                <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
+                                                    <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                    <?php echo formatCurrency($results[$id], $AppUI->getPref('CURRENCYFORM')); ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td align="right" nowrap="nowrap">
+                                                <?php echo $AppUI->_('Unidentified Costs'); ?>
+                                            </td>
+                                            <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
+                                                <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                <?php echo formatCurrency($results['otherCosts'], $AppUI->getPref('CURRENCYFORM')); ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" nowrap="nowrap">
+                                                <?php echo $AppUI->_('Total Cost'); ?>
+                                            </td>
+                                            <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
+                                                <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                <?php echo formatCurrency($results['totalCosts'], $AppUI->getPref('CURRENCYFORM')); ?>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <?php if ($results['uncountedHours']) { ?>
+                            <tr>
+                                <td colspan="2" align="center" class="hilite">
+                                    <?php echo '<span style="float:right; font-style: italic;">'.$results['uncountedHours'].' hours without billing codes</span>'; ?>
+                                </td>
+                            </tr>
+                            <?php } ?>
+                        </table>
+                    </td>
                 </tr>
             </table>
         </td>

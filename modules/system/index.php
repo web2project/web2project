@@ -94,17 +94,32 @@ $titleBlock->show();
       <?php echo $AppUI->_('Preferences'); ?>
     </td>
   </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td align="left">
-      <a href="?m=system&a=systemconfig"><?php echo $AppUI->_('System Configuration'); ?></a><br />
-      <a href="?m=system&a=addeditpref"><?php echo $AppUI->_('Default User Preferences'); ?></a><br />
-      <a href="?m=system&u=syskeys&a=keys"><?php echo $AppUI->_('System Lookup Keys'); ?></a><br />
-      <a href="?m=system&u=syskeys"><?php echo $AppUI->_('System Lookup Values'); ?></a><br />
-      <a href="?m=system&u=customfields"><?php echo $AppUI->_('Custom Field Editor'); ?></a><br />
-      <a href="?m=system&a=billingcode"><?php echo $AppUI->_('Billing Code Table'); ?></a>
-    </td>
-  </tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td align="left">
+			<a href="?m=system&a=systemconfig"><?php echo $AppUI->_('System Configuration'); ?></a><br />
+			<a href="?m=system&a=addeditpref"><?php echo $AppUI->_('Default User Preferences'); ?></a><br />
+			<a href="?m=system&u=syskeys&a=keys"><?php echo $AppUI->_('System Lookup Keys'); ?></a><br />
+			<a href="?m=system&u=syskeys"><?php echo $AppUI->_('System Lookup Values'); ?></a><br />
+			<a href="?m=system&a=custom_field_editor"><?php echo $AppUI->_('Custom Field Editor'); ?></a><br />
+		</td>
+	</tr>
+	<tr>
+		<td width="42">
+			<?php echo w2PshowImage('control-center.png', 42, 42, ''); ?>
+		</td>
+		<td align="left" class="subtitle">
+			<?php echo $AppUI->_('Budgeting Setup'); ?>
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td align="left">
+			<a href="?m=system&a=billingcode"><?php echo $AppUI->_('Billing Code Table'); ?></a><br />
+			<a href="?m=system&a=budgeting"><?php echo $AppUI->_('Setup Budgets'); ?></a><br />
+			<a href="?m=system&a=budgeting_allocated"><?php echo $AppUI->_('Budget Allocated'); ?></a>
+		</td>
+	</tr>
   <tr>
     <td>
       <?php echo w2PshowImage('power-management.png', 42, 42, ''); ?>

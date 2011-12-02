@@ -14,7 +14,10 @@ $problem = (int) w2PgetParam($_GET, 'problem', null);
 // get sysvals
 $taskLogReference = w2PgetSysVal('TaskLogReference');
 $taskLogReferenceImage = w2PgetSysVal('TaskLogReferenceImage');
+$billingCategory = w2PgetSysVal('BudgetCategory');
+
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
 ?>
 <script language="javascript" type="text/javascript">
 <?php
@@ -73,6 +76,7 @@ function delIt2(id) {
 <?php
 // Pull the task comments
 $task= new CTask();
+//TODO: this method should be moved to CTaskLog
 $logs = $task->getTaskLogs($task_id, $problem);
 
 $s = '';
@@ -102,7 +106,7 @@ foreach ($logs as $row) {
 	$s .= !empty($row['task_log_related_url']) ? '<td><a href="' . $row['task_log_related_url'] . '" title="' . $row['task_log_related_url'] . '">' . $AppUI->_('URL') . '</a></td>' : '<td></td>';
     $s .= $htmlHelper->createCell('real_name', $row['real_name']);
     $s .= $htmlHelper->createCell('task_log_hours', sprintf('%.2f', $row['task_log_hours']));
-    $s .= $htmlHelper->createCell('task_log_costcode', $row['task_log_costcode']);
+	$s .= '<td width="100">' . $row['task_log_costcode'] .' ('.$billingCategory[$row['billingcode_category']]. ')</td>';
     $s .= $htmlHelper->createCell('task_log_description', $row['task_log_description']);
 
 	$s .= '<td>';

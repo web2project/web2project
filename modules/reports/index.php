@@ -37,17 +37,17 @@ if (!$suppressHeaders) {
 	$titleBlock = new w2p_Theme_TitleBlock('Project Reports', 'printer.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	if ($project_id) {
-		$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
+		$titleBlock->addCrumb('?m=projects&amp;a=view&amp;project_id=' . $project_id, 'view this project');
 	}
 	if ($report_type) {
-		$titleBlock->addCrumb('?m=reports&project_id=' . $project_id, 'reports index');
+		$titleBlock->addCrumb('?m=reports&amp;project_id=' . $project_id, 'reports index');
 	}
 	$titleBlock->show();
 }
 
 $report_type_var = w2PgetParam($_GET, 'report_type', '');
 if (!empty($report_type_var)) {
-	$report_type_var = '&report_type=' . $report_type;
+	$report_type_var = '&amp;report_type=' . $report_type;
 }
 
 if (!$suppressHeaders) {

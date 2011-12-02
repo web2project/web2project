@@ -109,7 +109,14 @@ if (is_array($result)) {
 }
 
 if ($result) {
-    $task_parent = (int) w2PgetParam($_POST, 'task_parent', 0);
+	$billingCategory = w2PgetSysVal('BudgetCategory');
+	$budgets = array();
+	foreach ($billingCategory as $id => $category) {
+		$budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
+	}
+	$obj->storeBudget($budgets);
+
+	$task_parent = (int) w2PgetParam($_POST, 'task_parent', 0);
     $old_task_parent = (int) w2PgetParam($_POST, 'old_task_parent', 0);
     if ($task_parent != $old_task_parent) {
         $oldTask = new CTask();

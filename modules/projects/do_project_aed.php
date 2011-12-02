@@ -25,33 +25,40 @@ $notfiyTrigger = ($del) ? 1 : $obj->project_id;
 $importTask_projectId = (int) w2PgetParam($_POST, 'import_tasks_from', '0');
 
 if (is_array($result)) {
-  $AppUI->setMsg($result, UI_MSG_ERROR);
-  $AppUI->holdObject($obj);
-  $AppUI->redirect('m=projects&a=addedit');
+    $AppUI->setMsg($result, UI_MSG_ERROR);
+    $AppUI->holdObject($obj);
+    $AppUI->redirect('m=projects&a=addedit');
 }
 if ($result) {
-  if ($importTask_projectId) {
-      $import_result = $obj->importTasks($importTask_projectId);
-
-      if (is_array($import_result) && count($import_result)) {
-        $AppUI->setMsg($import_result, UI_MSG_ERROR, true);
-        $AppUI->holdObject($obj);
-        $AppUI->redirect('m=projects&a=addedit');
-      }
-  }
-  if ('on' == $notify_owner) {
-    if ($msg = $obj->notifyOwner($notfiyTrigger)) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR);
+    if (!$del) {
+        $billingCategory = w2PgetSysVal('BudgetCategory');
+        $budgets = array();
+        foreach ($billingCategory as $id => $category) {
+            $budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
+        }
+        $obj->storeBudget($budgets);
     }
-  }
-  if ('on' == $notify_contacts) {
-    if ($msg = $obj->notifyContacts($notfiyTrigger)) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR);
-    }
-  }
+    if ($importTask_projectId) {
+        $import_result = $obj->importTasks($importTask_projectId);
 
-	$AppUI->setMsg('Project '.$action, UI_MSG_OK, true);
-	$AppUI->redirect($redirect);
+        if (is_array($import_result) && count($import_result)) {
+            $AppUI->setMsg($import_result, UI_MSG_ERROR, true);
+            $AppUI->holdObject($obj);
+            $AppUI->redirect('m=projects&a=addedit');
+        }
+    }
+    if ('on' == $notify_owner) {
+        if ($msg = $obj->notifyOwner($notfiyTrigger)) {
+            $AppUI->setMsg($msg, UI_MSG_ERROR);
+        }
+    }
+    if ('on' == $notify_contacts) {
+        if ($msg = $obj->notifyContacts($notfiyTrigger)) {
+            $AppUI->setMsg($msg, UI_MSG_ERROR);
+        }
+    }
+    $AppUI->setMsg('Project '.$action, UI_MSG_OK, true);
+    $AppUI->redirect('m=projects');
 } else {
-	$AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect('m=public&a=access_denied');
 }

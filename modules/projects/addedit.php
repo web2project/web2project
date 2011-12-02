@@ -287,9 +287,30 @@ function setDepartment(department_id_string){
                                 </td>
                             </tr>
                             <tr>
-                                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
+                                <td colspan="2" align="center"><?php echo $AppUI->_('Target Budgets'); ?> </td>
+                            </tr>
+                            <?php
+                                $billingCategory = w2PgetSysVal('BudgetCategory');
+                                $totalBudget = 0;
+                                foreach ($billingCategory as $id => $category) {
+                                    $amount = $project->budget[$id]['budget_amount'];
+                                    $totalBudget += $amount;
+                                    ?>
+                                    <tr>
+                                        <td align="right" nowrap="nowrap">
+                                            <?php echo $AppUI->_($category); ?>
+                                        </td>
+                                        <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
+                                            <?php echo $w2Pconfig['currency_symbol']; ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" size="10" class="text" />
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                            ?>
+                            <tr>
+                                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
                                 <td>
-                                    <input type="Text" name="project_target_budget" value="<?php echo $project->project_target_budget; ?>" maxlength="15" class="text" />
+                                    <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
                                 </td>
                             </tr>
                             <tr>
@@ -311,8 +332,14 @@ function setDepartment(department_id_string){
                             </tr>
                             <tr>
                                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
-                                <td>
-                                    <input type="text" name="project_actual_budget" value="<?php echo $project->project_actual_budget; ?>" size="10" maxlength="10" class="text"/>
+                                <td nowrap="nowrap">
+                                <?php
+                                    if ($project_id > 0) {
+                                        echo formatCurrency($project->project_actual_budget, $AppUI->getPref('CURRENCYFORM'));
+                                    } else {
+                                        echo $AppUI->_('Dynamically calculated');
+                                    }
+                                ?>
                                 </td>
                             </tr>
                             <tr>

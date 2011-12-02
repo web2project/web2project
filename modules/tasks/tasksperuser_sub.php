@@ -327,7 +327,7 @@ if ($do_report) {
 	} elseif ($max_levels == '') {
 		$max_levels = -1;
 	} else {
-		$max_levels = atoi($max_levels);
+		$max_levels = (int) $max_levels;
 	}
 	if ($max_levels == 0) {
 		$max_levels = 1;

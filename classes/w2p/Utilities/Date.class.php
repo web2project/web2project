@@ -156,6 +156,31 @@ class w2p_Utilities_Date extends Date {
 		return in_array($this->getDayOfWeek(), $working_days);
 	}
 
+    public function findDaysInRangeOverlap($rangeA_start, $rangeA_end, $rangeB_start, $rangeB_end) {
+        $newStart = null;
+        $newEnd   = null;
+
+        if (0 <= $this->compare($rangeA_start, $rangeB_end)) {
+            return 0;
+        }
+        if (0 <= $this->compare($rangeB_start, $rangeA_end)) {
+            return 0;
+        }
+
+        if (0 >= $this->compare($rangeA_start, $rangeB_start)) {
+            $newStart = $rangeB_start;
+        } else {
+            $newStart = $rangeA_start;
+        }
+        if (0 >= $this->compare($rangeB_end, $rangeA_end)) {
+            $newEnd = $rangeB_end;
+        } else {
+            $newEnd = $rangeA_end;
+        }
+
+        return $newStart->workingDaysInSpan($newEnd);
+    }
+
 	public function getAMPM() {
 		return (($this->getHour() > 11) ? 'pm' : 'am');
 	}

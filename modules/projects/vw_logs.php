@@ -8,6 +8,7 @@ global $AppUI, $project_id, $df, $canEdit, $m, $tab;
 $company_id = CProject::getCompany($project_id);
 
 $task_log_costcodes =  array(0 => '(all)') + CProject::getBillingCodes($company_id, true);
+$billingCategory = w2PgetSysVal('BudgetCategory');
 
 $users = w2PgetUsers();
 
@@ -55,11 +56,12 @@ function delIt2(id) {
 	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive') ?></label></td>
 	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_complete" id="hide_complete" <?php echo $hide_complete ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_complete"><?php echo $AppUI->_('Hide 100% Complete') ?></label></td>
 	<!--
-	disabled this filter for now... something is wrong with the userId portion...
+TODO: disabled this filter for now... something is wrong with the userId portion...
 	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('User Filter') ?></td>
 	<td width="1%"><?php echo arraySelect($users, 'user_id', 'size="1" class="text" id="medium" onchange="document.frmFilter.submit()"', $user_id) ?></td>
 	-->
 	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('Cost Code Filter') ?></td>
+    <!-- TODO: add in optgroups to display company groupings for cost codes -->
 	<td width="1%"><?php echo arraySelect($task_log_costcodes, 'cost_code', 'size="1" class="text" onchange="document.frmFilter.submit()"', $cost_code) ?></td>
 </tr>
 <input type="hidden" name="m" value="projects"/>
@@ -111,6 +113,7 @@ $canDelete = canDelete('task_log');
 
 // Pull the task comments
 $project = new CProject;
+//TODO: this method should be moved to CTaskLog
 $logs = $project->getTaskLogs($AppUI, $project_id, $user_id, $hide_inactive, $hide_complete, $cost_code);
 
 $s = '';
@@ -135,7 +138,7 @@ if (count($logs)) {
         $s .= '<td width="30%"><a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=0">' . $row['task_log_name'] . '</a></td>';
         $s .= $htmlHelper->createCell('contact_name', $row['contact_name']);
         $s .= $htmlHelper->createCell('task_log_duration', sprintf('%.2f', $row['task_log_hours']));
-        $s .= $htmlHelper->createCell('task_log_costcode', $row['task_log_costcode']);
+        $s .= '<td width="100">' . $row['task_log_costcode'] .' ('.$billingCategory[$row['billingcode_category']]. ')</td>';
         $s .= $htmlHelper->createCell('task_log_description', $row['task_log_description']);
 
         $s .= '<td>';

@@ -91,11 +91,11 @@ function w2p_autoload($class_name) {
             require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
             break;
         case 'bcode':
-            require_once W2P_BASE_DIR.'/modules/system/system.class.php';
+            require_once W2P_BASE_DIR.'/modules/system/bcode.class.php';
             break;
-//        case 'chistory':
-//            require_once W2P_BASE_DIR.'/modules/history/history.class.php';
-//            break;
+        case 'budgets':
+			require_once W2P_BASE_DIR.'/modules/system/budgets.class.php';
+            break;
 
         default:
 			if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {

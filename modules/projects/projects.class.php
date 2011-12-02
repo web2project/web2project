@@ -146,6 +146,7 @@ class CProject extends w2p_Core_BaseObject {
 		$this->company_name = '';
 		$this->user_name = '';
 		$q->loadObject($this);
+        $this->budget = $this->getBudget();
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
@@ -473,6 +474,34 @@ class CProject extends w2p_Core_BaseObject {
 		return $q->loadList();
 	}
 
+    public function getBudget() {
+        $q = $this->_getQuery();
+        $q->addQuery('budget_category, budget_amount');
+        $q->addTable('budgets_assigned');
+        $q->addWhere('budget_project =' . (int) $this->project_id);
+
+        return $q->loadHashList('budget_category');
+    }
+
+    public function storeBudget(array $budgets) {
+        $q = $this->_getQuery();
+        $q->setDelete('budgets_assigned');
+        $q->addWhere('budget_project =' . (int) $this->project_id);
+        $q->exec();
+
+        $q->clear();
+        foreach ($budgets as $category => $amount) {
+            $q->addTable('budgets_assigned');
+            $q->addInsert('budget_project', $this->project_id);
+            $q->addInsert('budget_category', $category);
+            $q->addInsert('budget_amount', $amount);
+            $q->exec();
+            $q->clear();
+        }
+
+        return true;
+    }
+
 	public function store(w2p_Core_CAppUI $AppUI = null) {
         global $AppUI;
 
@@ -486,7 +515,6 @@ class CProject extends w2p_Core_BaseObject {
         $this->project_private = (int) $this->project_private;
 
         $this->project_target_budget = filterCurrency($this->project_target_budget);
-        $this->project_actual_budget = filterCurrency($this->project_actual_budget);
 
         // Make sure project_short_name is the right size (issue for languages with encoded characters)
         $this->project_short_name = mb_substr($this->project_short_name, 0, 10);
@@ -740,7 +768,7 @@ class CProject extends w2p_Core_BaseObject {
 		$q->addQuery('billingcode_id, billingcode_name');
 		$q->addOrder('billingcode_name');
 		$q->addWhere('billingcode_status = 0');
-		$q->addWhere('(company_id = 0 OR company_id = ' . (int) $companyId . ')');
+		$q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
 		$task_log_costcodes = $q->loadHashList();
 
 		if ($all) {
@@ -749,7 +777,7 @@ class CProject extends w2p_Core_BaseObject {
 			$q->addQuery('billingcode_id, billingcode_name');
 			$q->addOrder('billingcode_name');
 			$q->addWhere('billingcode_status = 1');
-			$q->addWhere('(company_id = 0 OR company_id = ' . (int) $companyId . ')');
+			$q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
 
 			$billingCodeList = $q->loadHashList();
 			foreach($billingCodeList as $id => $code) {
@@ -907,7 +935,11 @@ class CProject extends w2p_Core_BaseObject {
 
 		return rtrim($total_project_hours, '.');
 	}
-	public function getTaskLogs(w2p_Core_CAppUI $AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
+
+//TODO: this method should be moved to CTaskLog
+	public function getTaskLogs(w2p_Core_CAppUI $AppUI = null, $projectId, $user_id = 0,
+            $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
+
         global $AppUI;
 
 		$q = $this->_getQuery();
@@ -915,7 +947,7 @@ class CProject extends w2p_Core_BaseObject {
 		$q->addQuery('DISTINCT task_log.*, user_username, task_id');
 		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
         $q->addQuery('contact_display_name as contact_name');
-		$q->addQuery('billingcode_name as task_log_costcode');
+		$q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
 		$q->addJoin('users', 'u', 'user_id = task_log_creator');
 		$q->addJoin('tasks', 't', 'task_log_task = t.task_id');
 		$q->addJoin('contacts', 'ct', 'contact_id = user_contact');

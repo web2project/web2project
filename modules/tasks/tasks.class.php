@@ -316,6 +316,7 @@ class CTask extends w2p_Core_BaseObject {
 
         $q->loadObject($this, true, false);
         $this->task_hours_worked += 0;
+		$this->budget = $this->getBudget();
 	}
 
 	/*
@@ -530,6 +531,34 @@ class CTask extends w2p_Core_BaseObject {
 		$this->task_contacts = explode(',', $this->task_contacts);
 
 		return true;
+    }
+
+    public function getBudget() {
+        $q = $this->_getQuery();
+        $q->addQuery('budget_category, budget_amount');
+        $q->addTable('budgets_assigned');
+        $q->addWhere('budget_task =' . (int) $this->task_id);
+
+        return $q->loadHashList('budget_category');
+    }
+
+    public function storeBudget(array $budgets) {
+        $q = $this->_getQuery();
+        $q->setDelete('budgets_assigned');
+        $q->addWhere('budget_task =' . (int) $this->task_id);
+        $q->exec();
+
+        $q->clear();
+        foreach ($budgets as $category => $amount) {
+            $q->addTable('budgets_assigned');
+            $q->addInsert('budget_task', $this->task_id);
+            $q->addInsert('budget_category', $category);
+            $q->addInsert('budget_amount', $amount);
+            $q->exec();
+            $q->clear();
+        }
+
+        return true;
     }
 
 	/**
@@ -2226,12 +2255,13 @@ class CTask extends w2p_Core_BaseObject {
 		$assigned = $q->loadHashList('user_id');
 		return $assigned;
 	}
-
+//TODO: this method should be moved to CTaskLog
     public function getTaskLogs($taskId, $problem = false) {
 
         $q = $this->_getQuery();
         $q->addTable('task_log');
-        $q->addQuery('task_log.*, user_username, billingcode_name as task_log_costcode');
+        $q->addQuery('task_log.*, user_username');
+        $q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
         $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS real_name');
         $q->addWhere('task_log_task = ' . (int) $taskId . ($problem ? ' AND task_log_problem > 0' : ''));
         $q->addOrder('task_log_date');

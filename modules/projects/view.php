@@ -31,6 +31,7 @@ $canDelete = $project->canDelete($msg, $project_id);
 // get ProjectPriority from sysvals
 $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
+$billingCategory = w2PgetSysVal('BudgetCategory');
 
 // load the record data
 $project->loadFull($AppUI, $project_id);
@@ -43,7 +44,7 @@ if (!$project) {
 	$AppUI->savePlace();
 }
 
-$total_project_hours = $total_hours = $project->getTotalProjectHours();
+$total_hours = $project->getTotalProjectHours();
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -247,64 +248,195 @@ function delIt() {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Hours'); ?>:</td>
             <?php echo $htmlHelper->createCell('total_project_hours', $total_project_hours); ?>
-		</tr>				
-		<?php
-		$depts = CProject::getDepartments($AppUI, $project->project_id);
+		</tr>
+        <tr>
+        <td width="50%" rowspan="1" valign="top">
+            <strong><?php echo $AppUI->_('Summary'); ?></strong><br />
+            <table cellspacing="1" cellpadding="2" border="0" width="100%">
+                <tr>
+                    <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
+                    <td align="center" nowrap="nowrap">
+                        <table cellspacing="1" cellpadding="2" border="0" width="100%">
+                            <tr>
+                                <td class="hilite" align="center">
+                                    <?php echo $AppUI->_('Target Budgets'); ?>:
+                                </td>
+                                <td class="hilite" align="center">
+                                    <?php echo $AppUI->_('Actual Costs'); ?>:
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="hilite">
+                                    <table cellspacing="1" cellpadding="2" border="0" width="100%">
+                                        <?php
+                                        $totalBudget = 0;
+                                        foreach ($billingCategory as $id => $category) {
+                                            $amount = $project->budget[$id]['budget_amount'];
+                                            $totalBudget += $amount;
+                                            ?>
+                                            <tr>
+                                                <td align="right" nowrap="nowrap">
+                                                    <?php echo $AppUI->_($category); ?>
+                                                </td>
+                                                <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
+                                                    <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                    <?php echo formatCurrency($amount, $AppUI->getPref('CURRENCYFORM')); ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td align="right" nowrap="nowrap">&nbsp;</td>
+                                            <td align="right" nowrap="nowrap">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" nowrap="nowrap">
+                                                <?php echo $AppUI->_('Total Budget'); ?>
+                                            </td>
+                                            <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
+                                                <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="hilite">
+                                    <table cellspacing="1" cellpadding="2" border="0" width="100%">
+                                        <?php
+                                        $bcode = new bcode();
+                                        $results = $bcode->calculateProjectCost($project_id);
+                                        foreach ($billingCategory as $id => $category) {
+                                            ?>
+                                            <tr>
+                                                <td align="right" nowrap="nowrap">
+                                                    <?php echo $AppUI->_($category); ?>
+                                                </td>
+                                                <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
+                                                    <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                    <?php echo formatCurrency($results[$id], $AppUI->getPref('CURRENCYFORM')); ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td align="right" nowrap="nowrap">
+                                                <?php echo $AppUI->_('Unidentified Costs'); ?>
+                                            </td>
+                                            <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
+                                                <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                <?php echo formatCurrency($results['otherCosts'], $AppUI->getPref('CURRENCYFORM')); ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" nowrap="nowrap">
+                                                <?php echo $AppUI->_('Total Cost'); ?>
+                                            </td>
+                                            <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
+                                                <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
+                                                <?php echo formatCurrency($results['totalCosts'], $AppUI->getPref('CURRENCYFORM')); ?>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <?php if ($results['uncountedHours']) { ?>
+                            <tr>
+                                <td colspan="2" align="center" class="hilite">
+                                    <?php echo '<span style="float:right; font-style: italic;">'.$results['uncountedHours'].' hours without billing codes</span>'; ?>
+                                </td>
+                            </tr>
+                            <?php } ?>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
+                    <td class="hilite"><?php echo $project->user_name; ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
+                    <td class="hilite" width="100%"><?php echo $AppUI->_($pstatus[$project->project_status]); ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
+                    <td class="hilite" width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
+                    <td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
+                    <td class="hilite" width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
+                    <td class="hilite" width="100%"><?php echo $total_hours ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
+                    <td class="hilite" width="100%"><?php echo $project->project_worked_hours; ?></td>
+                </tr>
 
-		if (count($depts) > 0) { ?>
-		    <tr>
-		    	<td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
-		    </tr>
-		    <tr>
-		    	<td colspan='3' class="hilite">
-		    		<?php
-							foreach ($depts as $dept_id => $dept_info) {
-								echo '<div>';
-								echo '<a href="?m=departments&a=view&dept_id='.$dept_id.'">'.$dept_info['dept_name'].'</a>';
-								if ($dept_info['dept_phone'] != '') {
-									echo '( ' . $dept_info['dept_phone'] . ' )';
-								}
-								echo '</div>';
-							}
-						?>
-		    	</td>
-		    </tr>
-			<?php
-		}
-		$contacts = CProject::getContacts($AppUI, $project->project_id);
-        if (count($contacts)) {
-            echo '<tr><td><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
-            echo '<tr><td colspan="3" class="hilite">';
-            echo w2p_Output_HTMLHelper::renderContactList($AppUI, $contacts);
-            echo '</td></tr>';
-        }
+                <?php
+                $depts = CProject::getDepartments($AppUI, $project->project_id);
+
+                if (count($depts) > 0) { ?>
+                    <tr>
+                        <td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan='3' class="hilite">
+                            <?php
+                                    foreach ($depts as $dept_id => $dept_info) {
+                                        echo '<div>';
+                                        echo '<a href="?m=departments&a=view&dept_id='.$dept_id.'">'.$dept_info['dept_name'].'</a>';
+                                        if ($dept_info['dept_phone'] != '') {
+                                            echo '( ' . $dept_info['dept_phone'] . ' )';
+                                        }
+                                        echo '</div>';
+                                    }
+                                ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                $contacts = CProject::getContacts($AppUI, $project->project_id);
+                if (count($contacts)) {
+                    echo '<tr><td><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
+                    echo '<tr><td colspan="3" class="hilite">';
+                    echo w2p_Output_HTMLHelper::renderContactList($AppUI, $contacts);
+                    echo '</td></tr>';
+                }
+                ?>
+                </table>
+            </td>
+        </tr>
+        <?php
+        //lets add the subprojects table
+        $canReadMultiProjects = canView('admin');
+        if ($project->hasChildProjects() && $canReadMultiProjects) { ?>
+            <tr>
+                <td colspan="2">
+                    <?php
+                        echo w2PtoolTip('Multiproject', 'Click to Show/Hide Structure', true) . '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject\', \'tblProjects\')"><img id="multiproject_expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0" alt=""><img id="multiproject_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . w2PendTip();
+                        echo '<strong>' . $AppUI->_('This Project is Part of the Following Multi-Project Structure') . ':<strong>';
+                    ?>
+                </td>
+            </tr>
+            <tr id="multiproject" style="visibility:collapse;display:none;">
+                <td colspan="2" class="hilite">
+                    <?php
+                        require W2P_BASE_DIR . '/modules/projects/vw_sub_projects.php';
+                    ?>
+                </td>
+            </tr>
+        <?php }
+        //here finishes the subproject structure
         ?>
-		</table>
-	</td>
-</tr>
-<?php
-	//lets add the subprojects table
-	$canReadMultiProjects = canView('admin');
-	if ($project->hasChildProjects() && $canReadMultiProjects) { ?>
-		<tr>
-			<td colspan="2">
-				<?php
-					echo w2PtoolTip('Multiproject', 'Click to Show/Hide Structure', true) . '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject\', \'tblProjects\')"><img id="multiproject_expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0" alt=""><img id="multiproject_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . w2PendTip();
-					echo '<strong>' . $AppUI->_('This Project is Part of the Following Multi-Project Structure') . ':<strong>';
-				?>
-			</td>
-		</tr>
-		<tr id="multiproject" style="visibility:collapse;display:none;">
-			<td colspan="2" class="hilite">
-				<?php
-					require W2P_BASE_DIR . '/modules/projects/vw_sub_projects.php';
-				?>
-			</td>
-		</tr>
-	<?php }
-	//here finishes the subproject structure
-?>
-</table>
+        </table>
 
 <?php
 $tabBox = new CTabBox('?m=projects&a=view&project_id=' . $project_id, '', $tab);

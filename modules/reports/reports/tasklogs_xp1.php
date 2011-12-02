@@ -138,18 +138,18 @@ if ($do_report) {
 
 	$q = new w2p_Database_Query;
 	$q->addTable('task_log', 't');
-	$q->addQuery('distinct(task_log_id), t.*, contact_display_name AS creator, billingcode_value, ROUND((billingcode_value * t.task_log_hours), 2) AS amount, c.company_name, project_name, ts.task_name');
+	$q->addQuery('distinct(task_log_id), contact_display_name AS creator,
+        billingcode_value, billingcode_name, ROUND((billingcode_value * t.task_log_hours), 2) AS amount,
+        c.company_name, project_name, ts.task_name');
 
 	$q->addJoin('tasks', 'ts', 'ts.task_id = t.task_log_task');
 	$q->addJoin('projects', '', 'projects.project_id = ts.task_project');
 	$q->addJoin('users', 'u', 'user_id = task_log_creator');
 	$q->addJoin('contacts', '', 'user_contact = contact_id');
 	$q->addJoin('companies', 'c', 'c.company_id = projects.project_company');
-	$q->addJoin('billingcode', '', 'billingcode_id = task_log_costcode');
-
+	$q->leftJoin('billingcode', '', 'billingcode_id = task_log_costcode');
 	$q->addJoin('project_departments', '', 'project_departments.project_id = projects.project_id');
 	$q->addJoin('departments', '', 'department_id = dept_id');
-
 	$q->addWhere('task_log_task > 0');
 
 	if ($project_id) {
@@ -192,7 +192,7 @@ if ($do_report) {
 		<th><?php echo $AppUI->_('Task'); ?></th>
 		<th><?php echo $AppUI->_('Date'); ?></th>
 		<th><?php echo $AppUI->_('Description'); ?></th>
-		<th><?php echo $AppUI->_('Cost Code'); ?></th>
+		<th><?php echo $AppUI->_('Billing Code'); ?></th>
 		<th><?php echo $AppUI->_('Hours'); ?></th>
 		<th><?php echo $AppUI->_('Cost'); ?></th>
 		<th><?php echo $AppUI->_('Amount'); ?></th>
@@ -207,13 +207,13 @@ if ($do_report) {
 		$hours += $log['task_log_hours'];
 		$tamount += $log['amount'];
 
-		$pdfdata[] = array($log['creator'], $log['company_name'], $log['project_name'], $log['task_name'], $date->format($df), $log['task_log_description'], $task_log_costcodes[$log['task_log_costcode']], sprintf("%.2f", $log['task_log_hours']), sprintf("%.2f", $log['billingcode_value']), sprintf("%.2f", $log['amount']), );
+		$pdfdata[] = array($log['creator'], $log['company_name'], $log['project_name'], $log['task_name'], $date->format($df), $log['task_log_description'], $log['billingcode_name'], sprintf("%.2f", $log['task_log_hours']), sprintf("%.2f", $log['billingcode_value']), sprintf("%.2f", $log['amount']), );
 ?>
 	<tr>
 		<td><?php echo $log['creator']; ?></td>
 		<td><?php echo $log['company_name']; ?></td>
 		<td><?php echo $log['project_name']; ?></td>
-		<td><a href="?m=tasks&a=view&task_id=<?php echo $log['task_log_task']; ?>"><?php echo $log['task_name']; ?></a></td>
+		<td><a href="?m=tasks&amp;a=view&amp;task_id=<?php echo $log['task_log_task']; ?>"><?php echo $log['task_name']; ?></a></td>
 		<td><?php echo $date->format($df); ?></td>
 		<td><?php
 		// dylan_cuthbert: auto-transation system in-progress, leave these lines for time-being
@@ -221,18 +221,17 @@ if ($do_report) {
 		$descrip = mb_str_replace("\n", '<br />', $log['task_log_description']);
 		$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
 		if ($tranpos === false) {
-			echo '<a href="?m=tasks&a=view&task_id=' . $log['task_log_task'] . '&tab=1&task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a>';
-		} else {
+			echo '<a href="?m=tasks&amp;a=view&amp;task_id=' . $log['task_log_task'] . '&amp;tab=1&amp;task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a>';
+        } else {
 			$descrip = mb_substr($descrip, 0, $tranpos);
 			$tranpos = mb_strpos($log['task_log_description'], $transbrk);
 			$transla = mb_substr($log['task_log_description'], $tranpos + mb_strlen($transbrk));
 			$transla = mb_trim(mb_str_replace("'", '"', $transla));
-			echo '<a href="?m=tasks&a=view&task_id=' . $log['task_log_task'] . '&tab=1&task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a><div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
+			echo '<a href="?m=tasks&amp;a=view&amp;task_id=' . $log['task_log_task'] . '&amp;tab=1&amp;task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a><div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
 		}
 		// dylan_cuthbert; auto-translation end
-
 ?></td>
-		<td><?php echo $task_log_costcodes[$log['task_log_costcode']]; ?></td>
+		<td><?php echo $log['billingcode_name']; ?></td>
 		<td align="right"><?php printf('%.2f', $log['task_log_hours']); ?></td>
 		<td align="right"><?php printf('%.2f', $log['billingcode_value']); ?></td>
 		<td align="right"><?php printf('%.2f', $log['amount']); ?></td>
@@ -252,26 +251,20 @@ if ($do_report) {
 	if ($log_pdf) {
 		// make the PDF file
 		if ($project_id) {
-			$q = new w2p_Database_Query;
-			$q->addTable('projects');
-			$q->addQuery('project_name');
-			$q->addWhere('project_id=' . (int)$project_id);
-			$pname = 'Project: ' . $q->loadResult();
+			$project = new CProject();
+            $project->load($project_id);
+			$pname = 'Project: ' . $project->project_name;
 		} else {
 			$pname = 'All Companies and All Projects';
 		}
-		echo db_error();
 
 		if ($company_id) {
-			$q = new w2p_Database_Query;
-			$q->addTable('companies');
-			$q->addQuery('company_name');
-			$q->addWhere('company_id=' . (int)$company_id);
-			$cname = 'Company: ' . $q->loadResult();
+			$company = new CCompany();
+            $company->load($company_id);
+			$cname = 'Company: ' . $company->company_name;
 		} else {
 			$cname = 'All Companies and All Projects';
 		}
-		echo db_error();
 
 		if ($log_userfilter) {
 			$q = new w2p_Database_Query;
@@ -319,7 +312,7 @@ if ($do_report) {
 
 		$title = 'Task Logs';
 
-		$pdfheaders = array($AppUI->_('Creator', UI_OUTPUT_JS), $AppUI->_('Company', UI_OUTPUT_JS), $AppUI->_('Project', UI_OUTPUT_JS), $AppUI->_('Task', UI_OUTPUT_JS), $AppUI->_('Date', UI_OUTPUT_JS), $AppUI->_('Description', UI_OUTPUT_JS), $AppUI->_('CCode', UI_OUTPUT_JS), $AppUI->_('Hours', UI_OUTPUT_JS), $AppUI->_('Cost', UI_OUTPUT_JS), $AppUI->_('Amount', UI_OUTPUT_JS));
+		$pdfheaders = array($AppUI->_('Creator', UI_OUTPUT_JS), $AppUI->_('Company', UI_OUTPUT_JS), $AppUI->_('Project', UI_OUTPUT_JS), $AppUI->_('Task', UI_OUTPUT_JS), $AppUI->_('Date', UI_OUTPUT_JS), $AppUI->_('Description', UI_OUTPUT_JS), $AppUI->_('Billing Code', UI_OUTPUT_JS), $AppUI->_('Hours', UI_OUTPUT_JS), $AppUI->_('Cost', UI_OUTPUT_JS), $AppUI->_('Amount', UI_OUTPUT_JS));
 
 		$options = array('showLines' => 1, 'fontSize' => 7, 'rowGap' => 1, 'colGap' => 1, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 50), 1 => array('justification' => 'left', 'width' => 60), 2 => array('justification' => 'left', 'width' => 60), 3 => array('justification' => 'left', 'width' => 60), 4 => array('justification' => 'center', 'width' => 40), 5 => array('justification' => 'left', 'width' => 110), 6 => array('justification' => 'left', 'width' => 30), 7 => array('justification' => 'right', 'width' => 30), 8 => array('justification' => 'right', 'width' => 30), 9 => array('justification' => 'right', 'width' => 40), ));
 

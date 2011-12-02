@@ -58,7 +58,36 @@ $perms = &$AppUI->acl();
                     </tr>
                     <tr>
                         <td><?php echo $AppUI->_('Task Parent'); ?>:</td>
-                        <td><?php echo $AppUI->_('Target Budget'); ?>:</td>
+                        <td rowspan="4">
+                            <table>
+                                <tr>
+                                    <td></td>
+                                    <td><?php echo $AppUI->_('Target Budgets'); ?>:</td>
+                                </tr>
+                                <?php
+                                $billingCategory = w2PgetSysVal('BudgetCategory');
+                                $totalBudget = 0;
+                                foreach ($billingCategory as $id => $category) {
+                                    $amount = $task->budget[$id]['budget_amount'];
+                                    $totalBudget += $amount;
+                                    ?>
+                                    <tr>
+                                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_($category); ?></td>
+                                        <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
+                                            <?php echo $w2Pconfig['currency_symbol'] ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" size="10" class="text" />
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
+                                <tr>
+                                    <td nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
+                                    <td align="right">
+                                        <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 <tr>
                     <td>
@@ -67,7 +96,7 @@ $perms = &$AppUI->acl();
                             <?php echo $task_parent_options; ?>
                         </select>
                     </td>
-                    <td><?php echo $w2Pconfig['currency_symbol'] ?><input type="text" class="text" name="task_target_budget" value="<?php echo $task->task_target_budget; ?>" size="10" maxlength="10" /></td>
+<!--                    <td><?php echo $w2Pconfig['currency_symbol'] ?><input type="text" class="text" name="task_target_budget" value="<?php echo $task->task_target_budget; ?>" size="10" maxlength="10" /></td>-->
                 </tr>
             <?php if ($task_id > 0) { ?>
                 <tr>
