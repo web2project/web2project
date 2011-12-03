@@ -64,12 +64,12 @@ CREATE TABLE IF NOT EXISTS `budgets_assigned` (
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
     VALUES(1, 'BudgetCategory', 'Not Specified', '0');
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Labor', '3');
+    VALUES(1, 'BudgetCategory', 'Labor', '1');
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
     VALUES(1, 'BudgetCategory', 'Travel', '2');
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Licensing', '1');
+    VALUES(1, 'BudgetCategory', 'Licensing', '3');
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Software', '1');
+    VALUES(1, 'BudgetCategory', 'Software', '4');
 INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Administrative', '1');
+    VALUES(1, 'BudgetCategory', 'Administrative', '5');
