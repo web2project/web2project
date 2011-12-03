@@ -214,45 +214,41 @@ function delIt() {
 		</table>
 	</td>
     <td width="50%" valign="top" rowspan="1" class="view-column">
-		<strong><?php echo $AppUI->_('Summary'); ?></strong><br />
-		<table cellspacing="1" cellpadding="2" border="0" width="100%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_status', $AppUI->_($pstatus[$project->project_status])); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
-			<td class="hilite" width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_type', $AppUI->_($ptype[$project->project_type])); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-<!-- TODO: we can't use the createCell helper here because it centers things while we need it left-aligned -->
-            <td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_worked_hours', $project->project_worked_hours); ?>
-		</tr>	
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
-            <?php echo $htmlHelper->createCell('total_hours', $total_hours); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Hours'); ?>:</td>
-            <?php echo $htmlHelper->createCell('total_project_hours', $total_project_hours); ?>
-		</tr>
-        <tr>
-        <td width="50%" rowspan="1" valign="top">
             <strong><?php echo $AppUI->_('Summary'); ?></strong><br />
             <table cellspacing="1" cellpadding="2" border="0" width="100%">
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('project_status', $AppUI->_($pstatus[$project->project_status])); ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('project_type', $AppUI->_($ptype[$project->project_type])); ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
+                    <td class="hilite" width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
+<!-- TODO: we can't use the createCell helper here because it centers things while we need it left-aligned -->
+                    <td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
+                    <td class="hilite" width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('total_hours', $total_hours); ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('project_worked_hours', $project->project_worked_hours); ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Hours'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('total_project_hours', $total_project_hours); ?>
+                </tr>
                 <tr>
                     <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
                     <td align="center" nowrap="nowrap">
@@ -351,35 +347,6 @@ function delIt() {
                         </table>
                     </td>
                 </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-                    <td class="hilite"><?php echo $project->user_name; ?></td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $AppUI->_($pstatus[$project->project_status]); ?></td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
-                    <td class="hilite" width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-                    <td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $total_hours ?></td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $project->project_worked_hours; ?></td>
-                </tr>
-
                 <?php
                 $depts = CProject::getDepartments($AppUI, $project->project_id);
 
