@@ -178,10 +178,6 @@ function delIt() {
 			</td>
 		</tr>
 		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_target_budget', $project->project_target_budget); ?>
-		</tr>
-		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
             <?php echo $htmlHelper->createCell('user_name', $project->user_name); ?>
 		</tr>
@@ -244,10 +240,6 @@ function delIt() {
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
                     <?php echo $htmlHelper->createCell('project_worked_hours', $project->project_worked_hours); ?>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Hours'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('total_project_hours', $total_project_hours); ?>
                 </tr>
                 <tr>
                     <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
