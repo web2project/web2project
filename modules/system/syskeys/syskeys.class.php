@@ -118,6 +118,7 @@ class CSysVal extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
+        global $AppUI;
         $perms = $AppUI->acl();
 
         $q = $this->_getQuery();
