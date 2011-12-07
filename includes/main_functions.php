@@ -32,34 +32,28 @@ function w2p_autoload($class_name) {
     }
 
     $name = strtolower($class_name);
-error_log("1 - Looking for class: $name");
     switch ($name) {
         case 'libmail':
-			// Deprecated as of v2.3
-			//TODO: remove this in v4.0
+			// Deprecated as of v2.3, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/mail.class.php';
             break;
         case 'w2pacl':
-			// Deprecated as of v3.0
-			//TODO: remove this in v4.0
+			// Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/permissions.class.php';
             break;
         case 'cappui':
-			// Deprecated as of v3.0
-			//TODO: remove this in v4.0
+			// Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/ui.class.php';
             break;
         case 'xajax':
             require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
             break;
         case 'w2pajaxresponse':
-            // Deprecated as of v3.0
-			//TODO: remove this in v4.0
+            // Deprecated as of v3.0, TODO: remove this in v4.0
 			require_once W2P_BASE_DIR . '/classes/ajax.class.php';
             break;
         case 'ctitleblock':
-            // Deprecated as of v3.0
-			//TODO: remove this in v4.0
+            // Deprecated as of v3.0, TODO: remove this in v4.0
 			require_once W2P_BASE_DIR . '/classes/w2p/Theme/TitleBlock.class.php';
             break;
 
@@ -74,9 +68,11 @@ error_log("1 - Looking for class: $name");
             require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
             break;
         case 'cfilefolder':
+            // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR.'/modules/files/filefolder.class.php';
             break;
         case 'ctasklog':
+            // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
             break;
         case 'cforummessage':
@@ -86,6 +82,7 @@ error_log("1 - Looking for class: $name");
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
 		case 'crole':
+            // Deprecated as of v3.0, TODO: remove this in v4.0
 			require_once W2P_BASE_DIR .'/modules/system/roles/roles.class.php';
 			break;
         case 'csyskey':
@@ -100,8 +97,7 @@ error_log("1 - Looking for class: $name");
 
         default:
 			if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
-                // Deprecated as of v3.0
-                //TODO: remove this in v4.0
+                // Deprecated as of v3.0, TODO: remove this in v4.0
                 trigger_error("The /classes/$name.class.php 'naming convention' has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
                 require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
 			    return;
@@ -113,15 +109,18 @@ error_log("1 - Looking for class: $name");
             $pieces = (strpos($name, '_') === false) ? 
                     array($name, $name) : explode('_', $name);
             $path = implode('/', $pieces);
-
+trigger_error("Looking for ".W2P_BASE_DIR.'/modules/'.$path.'.class.php', E_USER_NOTICE );
 			if (file_exists(W2P_BASE_DIR.'/modules/'.$path.'.class.php')) {
 			    require_once W2P_BASE_DIR.'/modules/'.$path.'.class.php';
 			    return;
 			}
 
             $pieces = array_map(w2p_pluralize, $pieces);
+            if ('systems' == $pieces[0]) {
+                $pieces[0] = 'system';
+            }
             $path = implode('/', $pieces);
-            
+trigger_error("Looking for ".W2P_BASE_DIR.'/modules/'.$path.'.class.php', E_USER_NOTICE );
 			if (file_exists(W2P_BASE_DIR.'/modules/'.$path.'.class.php')) {
 			    require_once W2P_BASE_DIR.'/modules/'.$path.'.class.php';
 			    return;

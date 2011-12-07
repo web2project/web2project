@@ -23,7 +23,7 @@ if (!defined('W2P_BASE_DIR')) {
  * be deleted, and then the user id mappings.  Note that the user ARO is _never_
  * deleted, unless the user is.
  */
-class CRole {
+class CSystem_Role_Role {
 	public $role_id = null;
 	public $role_name = null;
 	public $role_description = null;
@@ -233,4 +233,11 @@ class CRole {
 		}
 		return true;
 	}	
+}
+
+class CRole extends CSystem_Role_Role {
+	public function __construct($name = '', $description = '') {
+        parent::__construct($name, $description);
+        trigger_error("CRole has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_Role_Role instead.", E_USER_NOTICE );
+	}
 }
