@@ -32,6 +32,7 @@ function w2p_autoload($class_name) {
     }
 
     $name = strtolower($class_name);
+error_log("1 - Looking for class: $name");
     switch ($name) {
         case 'libmail':
 			// Deprecated as of v2.3
@@ -99,22 +100,30 @@ function w2p_autoload($class_name) {
 
         default:
 			if (file_exists(W2P_BASE_DIR.'/classes/'.$name.'.class.php')) {
-				require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
+                // Deprecated as of v3.0
+                //TODO: remove this in v4.0
+                trigger_error("The /classes/$name.class.php 'naming convention' has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
+                require_once W2P_BASE_DIR.'/classes/'.$name.'.class.php';
 			    return;
 			}
 
 			if ($name[0] == 'c') {
 				$name = substr($name, 1);
 			}
-			if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-			    require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+            $pieces = (strpos($name, '_') === false) ? 
+                    array($name, $name) : explode('_', $name);
+            $path = implode('/', $pieces);
+
+			if (file_exists(W2P_BASE_DIR.'/modules/'.$path.'.class.php')) {
+			    require_once W2P_BASE_DIR.'/modules/'.$path.'.class.php';
 			    return;
 			}
-			if (!in_array($name, array('system'))) {
-			    $name = w2p_pluralize($name);
-			}
-			if (file_exists(W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php')) {
-			    require_once W2P_BASE_DIR.'/modules/'.$name.'/'.$name.'.class.php';
+
+            $pieces = array_map(w2p_pluralize, $pieces);
+            $path = implode('/', $pieces);
+            
+			if (file_exists(W2P_BASE_DIR.'/modules/'.$path.'.class.php')) {
+			    require_once W2P_BASE_DIR.'/modules/'.$path.'.class.php';
 			    return;
 			}
 			break;
