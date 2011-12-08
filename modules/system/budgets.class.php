@@ -35,7 +35,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
         return $q->loadHashList('budget_id');
     }
 
-	public function store(CAppUI $AppUI) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
         $stored = false;
 
