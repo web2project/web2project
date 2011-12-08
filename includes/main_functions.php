@@ -119,23 +119,28 @@ function w2p_autoload($class_name) {
 			}
             $pieces = (strpos($name, '_') === false) ? 
                     array($name, $name) : explode('_', $name);
+
+            /*
+             * I switched the order of the path resolution on the modules. The 
+             *   vast majority of module names/structures fall into this 
+             *   category, so we'll have marginally faster resolution.
+             */
+            $plural_pieces = array_map(w2p_pluralize, $pieces);
+            if ('systems' == $plural_pieces[0]) {
+                $plural_pieces[0] = 'system';
+            }
+            $path = implode('/', $plural_pieces);
+			if (file_exists(W2P_BASE_DIR.'/modules/'.$path.'.class.php')) {
+			    require_once W2P_BASE_DIR.'/modules/'.$path.'.class.php';
+			    return;
+			}
+            
             $path = implode('/', $pieces);
-trigger_error("Looking for ".W2P_BASE_DIR.'/modules/'.$path.'.class.php', E_USER_NOTICE );
 			if (file_exists(W2P_BASE_DIR.'/modules/'.$path.'.class.php')) {
 			    require_once W2P_BASE_DIR.'/modules/'.$path.'.class.php';
 			    return;
 			}
 
-            $pieces = array_map(w2p_pluralize, $pieces);
-            if ('systems' == $pieces[0]) {
-                $pieces[0] = 'system';
-            }
-            $path = implode('/', $pieces);
-trigger_error("Looking for ".W2P_BASE_DIR.'/modules/'.$path.'.class.php', E_USER_NOTICE );
-			if (file_exists(W2P_BASE_DIR.'/modules/'.$path.'.class.php')) {
-			    require_once W2P_BASE_DIR.'/modules/'.$path.'.class.php';
-			    return;
-			}
 			break;
     }
 }
