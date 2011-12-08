@@ -3,15 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-class CMonthCalendar extends w2p_Output_MonthCalendar {
-
-	public function __construct($date = null) {
-		parent::__construct($date);
-        trigger_error("CMonthCalendar has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Output_MonthCalendar instead.", E_USER_NOTICE );
-	}
-
-}
-
 ##
 ## Calendar classes
 ##
@@ -24,7 +15,7 @@ $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'al
  * { Description }
  *
  */
-class CEvent extends w2p_Core_BaseObject {
+class CCalendar extends w2p_Core_BaseObject {
 	/**
  	@var int */
 	public $event_id = null;
@@ -639,5 +630,19 @@ class CEvent extends w2p_Core_BaseObject {
 		$q->addOrder('event_start_date');
 
 		return $q->loadList();
+	}
+}
+
+class CEvent extends CCalendar {
+	public function __construct() {
+		parent::__construct();
+        trigger_error("CEvent has been deprecated in v3.0 and will be removed by v4.0. Please use CCalendar instead.", E_USER_NOTICE );
+	}
+}
+
+class CMonthCalendar extends w2p_Output_MonthCalendar {
+	public function __construct($date = null) {
+		parent::__construct($date);
+        trigger_error("CMonthCalendar has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Output_MonthCalendar instead.", E_USER_NOTICE );
 	}
 }

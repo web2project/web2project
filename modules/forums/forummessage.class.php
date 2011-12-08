@@ -1,6 +1,6 @@
 <?php
 
-class CForumMessage extends w2p_Core_BaseObject {
+class CForum_Message extends w2p_Core_BaseObject {
 	public $message_id = null;
 	public $message_forum = null;
 	public $message_parent = null;
@@ -221,5 +221,12 @@ class CForumMessage extends w2p_Core_BaseObject {
 		}
 		$q->clear();
 		return;
+	}
+}
+
+class CForumMessage extends CForum_Message {
+	public function __construct() {
+        parent::__construct();
+        trigger_error("CForumMessage has been deprecated in v3.0 and will be removed by v4.0. Please use CForum_Message instead.", E_USER_NOTICE );
 	}
 }

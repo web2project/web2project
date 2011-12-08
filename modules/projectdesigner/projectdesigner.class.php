@@ -9,7 +9,7 @@ include_once (W2P_BASE_DIR. '/modules/projectdesigner/config.php');
 /**
  * CProjectDesignerOptions Class
  */
-class CProjectDesignerOptions extends w2p_Core_BaseObject {
+class CProjectDesigner extends w2p_Core_BaseObject {
 	public $pd_option_id = null;
 	public $pd_option_user = null;
 	public $pd_option_view_project = null;
@@ -39,5 +39,12 @@ class CProjectDesignerOptions extends w2p_Core_BaseObject {
 		$q->exec();
 
         return true;
+	}
+}
+
+class CProjectDesignerOptions extends CProjectDesigner {
+	public function __construct() {
+		parent::__construct();
+        trigger_error("CProjectDesignerOptions has been deprecated in v3.0 and will be removed by v4.0. Please use CProjectDesigner instead.", E_USER_NOTICE );
 	}
 }
