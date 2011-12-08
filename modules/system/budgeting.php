@@ -24,7 +24,7 @@ $budgetCategory = arrayMerge(array('0' => $AppUI->_('None specified')), $budgetC
 $budget = new budgets();
 $budget->load($budget_id);
 
-$titleBlock = new CTitleBlock('Setup Budgets', 'myevo-weather.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Setup Budgets', 'myevo-weather.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&a=budgeting_allocated', 'budgets allocated');
 $titleBlock->show();

@@ -140,7 +140,7 @@ function w2p_autoload($class_name) {
 			    require_once W2P_BASE_DIR.'/modules/'.$path.'.class.php';
 			    return;
 			}
-
+            
 			break;
     }
 }
