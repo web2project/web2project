@@ -167,6 +167,7 @@ function setDept( key, val ) {
             <td align="right" nowrap="nowrap"> <?php echo $AppUI->_('User Type'); ?>:</td>
             <td>
                 <?php
+                $utypes = w2PgetSysVal('UserType');
                 echo arraySelect($utypes, 'user_type', 'class=text size=1', $user['user_type'], true);
                 ?>
             </td>

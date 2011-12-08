@@ -9,7 +9,7 @@ $utypes = w2PgetSysVal('UserType');
 /**
  * User Class
  */
-class CUser extends w2p_Core_BaseObject {
+class CAdmin_User extends w2p_Core_BaseObject {
 	public $user_id = null;
 	public $user_username = null;
 	public $user_password = null;
@@ -368,4 +368,11 @@ class CUser extends w2p_Core_BaseObject {
         }
 		return $retres;
   }
+}
+
+class CUser extends CAdmin_User {
+	public function __construct() {
+		parent::__construct();
+        trigger_error("CUser has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User instead.", E_USER_NOTICE );
+	}
 }

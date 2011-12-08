@@ -62,10 +62,12 @@ function w2p_autoload($class_name) {
          * our naming conventions.
          */
         case 'cevent':
+            // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
             break;
         case 'cuser':
-            require_once W2P_BASE_DIR.'/modules/admin/admin.class.php';
+            // Deprecated as of v3.0, TODO: remove this in v4.0
+            require_once W2P_BASE_DIR.'/modules/admin/users.class.php';
             break;
         case 'cfilefolder':
             // Deprecated as of v3.0, TODO: remove this in v4.0
@@ -76,9 +78,11 @@ function w2p_autoload($class_name) {
             require_once W2P_BASE_DIR.'/modules/tasks/tasklogs.class.php';
             break;
         case 'cforummessage':
+            // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR.'/modules/forums/forummessage.class.php';
             break;
         case 'cprojectdesigneroptions':
+            // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR.'/modules/projectdesigner/projectdesigner.class.php';
             break;
 		case 'crole':
