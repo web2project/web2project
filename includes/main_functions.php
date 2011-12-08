@@ -83,16 +83,23 @@ function w2p_autoload($class_name) {
             break;
 		case 'crole':
             // Deprecated as of v3.0, TODO: remove this in v4.0
-			require_once W2P_BASE_DIR .'/modules/system/roles/roles.class.php';
+			require_once W2P_BASE_DIR .'/modules/system/roles.class.php';
 			break;
         case 'csyskey':
-            require_once W2P_BASE_DIR.'/modules/system/syskeys/syskeys.class.php';
+            // Deprecated as of v3.0, TODO: remove this in v4.0
+            require_once W2P_BASE_DIR.'/modules/system/syskeys.class.php';
+            break;
+        case 'csysval':
+            // Deprecated as of v3.0, TODO: remove this in v4.0
+            require_once W2P_BASE_DIR.'/modules/system/sysvals.class.php';
             break;
         case 'bcode':
-            require_once W2P_BASE_DIR.'/modules/system/bcode.class.php';
+            // Deprecated as of v3.0, TODO: remove this in v4.0
+            require_once W2P_BASE_DIR.'/modules/system/bcodes.class.php';
             break;
         case 'budgets':
-			require_once W2P_BASE_DIR.'/modules/system/budgets.class.php';
+			// Deprecated as of v3.0, TODO: remove this in v4.0
+            require_once W2P_BASE_DIR.'/modules/system/budgets.class.php';
             break;
 
         default:

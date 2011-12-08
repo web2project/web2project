@@ -1,35 +1,10 @@
 <?php /* $Id$ $URL$ */
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
-
-##
-## CSysKey Class
-##
-
-class CSysKey extends w2p_Core_BaseObject {
-	public $syskey_id = null;
-	public $syskey_name = null;
-	public $syskey_label = null;
-	public $syskey_type = null;
-	public $syskey_sep1 = null;
-	public $syskey_sep2 = null;
-
-	public function __construct($name = null, $label = null, $type = '0', $sep1 = "\n", $sep2 = '|') {
-        parent::__construct('syskeys', 'syskey_id');
-		$this->syskey_name = $name;
-		$this->syskey_label = $label;
-		$this->syskey_type = $type;
-		$this->syskey_sep1 = $sep1;
-		$this->syskey_sep2 = $sep2;
-	}
-}
 
 ##
 ## CSysVal Class
 ##
 
-class CSysVal extends w2p_Core_BaseObject {
+class CSystem_SysVal extends w2p_Core_BaseObject {
 	public $sysval_id = null;
 	public $sysval_key_id = null;
 	public $sysval_title = null;
@@ -132,5 +107,11 @@ class CSysVal extends w2p_Core_BaseObject {
 		}
 		return null;
 	}
+}
 
+class CSysVal extends CSystem_SysVal {
+	public function __construct($key = null, $title = null, $value = null) {
+        parent::__construct($key, $title, $value);
+        trigger_error("CSysVal has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_SysVal instead.", E_USER_NOTICE );
+	}
 }

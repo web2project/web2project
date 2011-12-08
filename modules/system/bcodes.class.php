@@ -1,6 +1,6 @@
 <?php
 
-class bcode extends w2p_Core_BaseObject {
+class CSystem_Bcode extends w2p_Core_BaseObject {
 	public $_billingcode_id = null;
 	public $billingcode_company = 0;
 	public $billingcode_id = null;
@@ -144,4 +144,11 @@ class bcode extends w2p_Core_BaseObject {
 
         return $results;
     }
+}
+
+class bcode extends CSystem_Bcode {
+	public function __construct() {
+        parent::__construct();
+        trigger_error("bcode has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_Bcode instead.", E_USER_NOTICE );
+	}
 }
