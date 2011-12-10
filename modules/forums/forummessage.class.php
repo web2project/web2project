@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @deprecated
+ */
 class CForumMessage extends CForum_Message {
 	public function __construct() {
         parent::__construct();

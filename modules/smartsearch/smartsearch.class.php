@@ -157,6 +157,9 @@ class CSmartSearch {
 	}
 }
 
+/**
+ * @deprecated
+ */
 class smartsearch extends CSmartSearch {
     
 	public function __construct() {

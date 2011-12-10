@@ -181,6 +181,9 @@ class CFile_Folder extends w2p_Core_BaseObject {
     }
 }
 
+/**
+ * @deprecated
+ */
 class CFileFolder extends CFile_Folder
 {
     public function __construct()

@@ -237,6 +237,9 @@ class CSystem_Role {
 	}	
 }
 
+/**
+ * @deprecated
+ */
 class CRole extends CSystem_Role {
 	public function __construct($name = '', $description = '') {
         parent::__construct($name, $description);

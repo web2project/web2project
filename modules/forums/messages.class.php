@@ -59,6 +59,7 @@ class CForum_Message extends w2p_Core_BaseObject {
                 $stored = true;
             }
         }
+
         if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem('forums', 'add')) {
             $this->message_date = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {

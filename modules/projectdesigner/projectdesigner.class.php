@@ -37,6 +37,9 @@ class CProjectDesigner extends w2p_Core_BaseObject {
 	}
 }
 
+/**
+ * @deprecated
+ */
 class CProjectDesignerOptions extends CProjectDesigner {
 	public function __construct() {
 		parent::__construct();

@@ -1,5 +1,8 @@
 <?php /* $Id$ $URL$ */
 
+/**
+ * @deprecated
+ */
 class CTaskLog extends CTask_Log
 {
     public function __construct()

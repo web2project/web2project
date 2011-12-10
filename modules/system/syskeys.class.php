@@ -22,6 +22,9 @@ class CSystem_SysKey extends w2p_Core_BaseObject {
 	}
 }
 
+/**
+ * @deprecated
+ */
 class CSysKey extends CSystem_SysKey {
 	public function __construct($name = null, $label = null, $type = '0', $sep1 = "\n", $sep2 = '|') {
         parent::__construct($name, $label, $type, $sep1, $sep2);

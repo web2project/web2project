@@ -11,7 +11,7 @@ if (!canEdit('system')) {
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
 
-$obj = new CSysVal();
+$obj = new CSystem_SysVal();
 $post = array('sysval_title' => w2PgetParam($_POST, 'sysval_title'),
                 'sysval_key_id' => w2PgetParam($_POST, 'sysval_key_id'),
                 'sysval_value' => w2PgetParam($_POST, 'sysval_value'), );

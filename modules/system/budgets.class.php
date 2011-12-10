@@ -88,6 +88,9 @@ class CSystem_Budget extends w2p_Core_BaseObject
     }
 }
 
+/**
+ * @deprecated
+ */
 class budgets extends CSystem_Budget {
 	public function __construct() {
         parent::__construct();
