@@ -18,27 +18,26 @@ $module = new w2p_Core_Module();
 $module->load($mod_id);
 
 //TODO: generate per-module filter list
-$filter = array();
+$filter = array($module->permissions_item_field);
 //$filter = array('project_id', 'project_status', 'project_active',
 //	'project_parent', 'project_color_identifier',
 //	'project_original_parent', 'project_departments', 'project_contacts',
 //	'project_private', 'project_type', 'project_last_task', 'project_scheduled_hours');
 
 $object = new $module->mod_main_class();
-$properties = get_class_vars(get_class($object));
+$properties = get_class_vars($module->mod_main_class);
 foreach ($filter as $field => $value) {
-	unset($properties[$value]);
+    unset($properties[$value]);
 }
-$properties['department_list'] = '';
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Configure '.$module->mod_name.' Module :: '.
-        $view.' '. $AppUI->_('View'), 'modules/system/control-center.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Customize '.$module->mod_name.' Module :: '.
+        $view, 'modules/system/control-center.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&a=viewmods', 'modules list');
 $titleBlock->show();
 
-$fields = w2p_Core_Module::getSettings($m, $view);
+$fields = w2p_Core_Module::getSettings($module->mod_directory, $view);
 $fields = array_diff($fields, $filter);
 foreach ($fields as $field => $text) {
     $fieldList[] = $field;
@@ -49,8 +48,8 @@ $orderMax = count($properties) + count($fields);
 ?>
 <form name="frmConfig" id="frmConfig" action="./index.php?m=system&u=modules" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_module_config_aed" />
-	<input type="hidden" name="module_id" value="<?php echo $module->mod_directory; ?>" />
-	<input type="hidden" name="module_config_name" value="<?php $view ?>" />
+	<input type="hidden" name="mod_id" value="<?php echo $mod_id; ?>" />
+	<input type="hidden" name="module_config_name" value="<?php echo $view ?>" />
 
 	<table id="tblConfig" border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 		<tr>
