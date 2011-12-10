@@ -131,7 +131,7 @@ $titleBlock->show();
   <tr>
     <td>&nbsp;</td>
     <td align="left">
-      <a href="?m=system&a=viewmods"><?php echo $AppUI->_('View Modules'); ?></a>
+      <a href="?m=system&u=modules"><?php echo $AppUI->_('View Modules'); ?></a>
     </td>
   </tr>
   <tr>

@@ -22,9 +22,10 @@ if ($mod_id) {
 	$obj->mod_directory = $mod_directory;
 }
 
-$ok = include_once(W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
-
-if (!$ok) {
+//check for a setup file
+$ok = file_exists(W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
+if ($ok) {
+    include_once (W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
 	if ($obj->mod_type != 'core') {
 		$AppUI->setMsg('Module setup file could not be found', UI_MSG_ERROR);
 		if ($cmd == 'remove') {
