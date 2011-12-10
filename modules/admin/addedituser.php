@@ -20,7 +20,7 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 }
 
 $perms = &$AppUI->acl();
-$crole = new CRole;
+$crole = new CSystem_Role;
 $roles = $crole->getRoles();
 // Format the roles for use in arraySelect
 $roles_arr = array();
