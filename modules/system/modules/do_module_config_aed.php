@@ -1,5 +1,9 @@
 <?php
 
+echo '<pre>';
+print_r($_POST);
+die();
+
 $moduleName		= w2PgetParam($_POST, 'module_name', '');
 $configName		= w2PgetParam($_POST, 'module_config_name', '');
 $displayColumns	= w2PgetParam($_POST, 'display', array());

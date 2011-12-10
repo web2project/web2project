@@ -95,7 +95,9 @@ $titleBlock->show();
         $views = $module->getCustomizableViews($row['mod_directory']);
         if (count($views)) {
             foreach ($views as $view) {
-                $s .= $view.'<br />';
+                $s .= '<a href="?m=system&u=modules&a=addedit&mod_id='.$row['mod_id'].'&v='.$view.'">';
+                $s .= $view;
+                $s .= '</a><br />';
             }
         }
         
