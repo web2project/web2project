@@ -96,7 +96,7 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
     //TODO: rotate the headers by 90 degrees?
     $task = new CTask();
     $taskList = $task->getAllowedTaskList(null, $project_id);
-    $bcode = new bcode();
+    $bcode = new CSystem_Bcode();
 
     if (count($taskList)) {
         foreach ($taskList as $taskItem) {

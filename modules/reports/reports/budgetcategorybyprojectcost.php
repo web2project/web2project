@@ -124,7 +124,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     $activeOnly = ($active_projects) ? true : false;
     $symbol = $w2Pconfig['currency_symbol'];
     $projectList = CCompany::getProjects($AppUI, $company_id, $activeOnly);
-    $bcode = new bcode();
+    $bcode = new CSystem_Bcode();
     $project = new CProject();
     $totalBudget = array();
     $totalConsumed = array();
