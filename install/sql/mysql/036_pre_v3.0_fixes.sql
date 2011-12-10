@@ -10,7 +10,7 @@ ALTER TABLE  `custom_fields_values` DROP INDEX  `value_charvalue`;
 
 ALTER TABLE  `custom_fields_values` ADD INDEX (  `value_charvalue` );
 
--- This is just a tweak to get rid of the deprecation notice in the Hooks subststem
+-- This is just a tweak to get rid of the deprecation notice in the Hooks subsystem
 
 UPDATE modules SET mod_main_class = 'CSmartSearch' WHERE mod_directory = 'smartsearch';
 
