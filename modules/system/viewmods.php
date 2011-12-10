@@ -13,6 +13,8 @@ if (!$canRead) {
 
 $AppUI->savePlace();
 
+$module = new w2p_Core_Module();
+
 $hidden_modules = array('public', 'install', );
 $q = new w2p_Database_Query;
 $q->addQuery('*');
@@ -34,6 +36,7 @@ $titleBlock->show();
     <tr>
         <th colspan="2"><?php echo $AppUI->_('Module'); ?></th>
         <th><?php echo $AppUI->_('Status'); ?></th>
+        <th><?php echo $AppUI->_('Customize'); ?></th>
         <th><?php echo $AppUI->_('Type'); ?></th>
         <th><?php echo $AppUI->_('Version'); ?></th>
         <th><?php echo $AppUI->_('Menu Text'); ?></th>
@@ -73,24 +76,29 @@ $titleBlock->show();
             $s .= ' | <a href="' . $query_string . '&cmd=remove" onclick="return window.confirm(' . "'" . $AppUI->_('This will delete all data associated with the module!') . "\\n\\n" . $AppUI->_('Are you sure?') . "\\n" . "'" . ');">' . $AppUI->_('remove') . '</a>';
         }
 
-        // check for upgrades
+        //check for a setup file
         $ok = file_exists(W2P_BASE_DIR . '/modules/' . $row['mod_directory'] . '/setup.php');
         if ($ok) {
             include_once (W2P_BASE_DIR . '/modules/' . $row['mod_directory'] . '/setup.php');
-        }
-        if ($ok) {
+
+            // check for upgrades
             if ($config['mod_version'] != $row['mod_version'] && $canEdit) {
                 $s .= ' | <a href="' . $query_string . '&cmd=upgrade" onclick="return window.confirm(' . "'" . $AppUI->_('Are you sure?') . "'" . ');" >' . $AppUI->_('upgrade') . '</a>';
             }
-        }
-
-        // check for configuration
-        if ($ok) {
+            // check for configuration
             if (isset($config['mod_config']) && $config['mod_config'] == true && $canEdit) {
                 $s .= ' | <a href="' . $query_string . '&cmd=configure">' . $AppUI->_('configure') . '</a>';
             }
         }
-
+        $s .= '</td>';
+        $s .= '<td>';
+        $views = $module->getCustomizableViews($row['mod_directory']);
+        if (count($views)) {
+            foreach ($views as $view) {
+                $s .= $view.'<br />';
+            }
+        }
+        
         $s .= '</td>';
         $s .= '<td>' . $row['mod_type'] . '</td>';
         $s .= '<td>' . $row['mod_version'] . '</td>';

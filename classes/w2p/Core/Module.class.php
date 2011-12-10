@@ -264,6 +264,15 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 		return null;
 	}
 
+    public function getCustomizableViews($module) {
+		$q = new w2p_Database_Query();
+		$q->addTable('module_config');
+		$q->addQuery('distinct(module_config_name)');
+		$q->addWhere("module_name = '$module'");
+		$q->addOrder('module_config_name ASC');
+		return $q->loadColumn();
+    }
+
     public static function getSettings($module, $configName = '') {
 		$q = new w2p_Database_Query();
 		$q->addTable('module_config');
