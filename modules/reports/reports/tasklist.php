@@ -135,7 +135,7 @@ if ($do_report) {
 	if (count($allowedTasks)) {
 		$obj->getAllowedSQL($AppUI->user_id, $q);
 	}
-	$q->addOrder('task_project', 'task_parent', 'task_start_date');
+	$q->addOrder('task_project, task_start_date, task_end_date');
 	$Task_List = $q->exec();
 
 	if (function_exists('styleRenderBoxBottom')) {
