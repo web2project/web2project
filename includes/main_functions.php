@@ -117,12 +117,12 @@ function w2p_autoload($class_name) {
 			if ($name[0] == 'c') {
 				$name = substr($name, 1);
 			}
-            $pieces = (strpos($name, '_') === false) ? 
+            $pieces = (strpos($name, '_') === false) ?
                     array($name, $name) : explode('_', $name);
 
             /*
-             * I switched the order of the path resolution on the modules. The 
-             *   vast majority of module names/structures fall into this 
+             * I switched the order of the path resolution on the modules. The
+             *   vast majority of module names/structures fall into this
              *   category, so we'll have marginally faster resolution.
              */
             $plural_pieces = array_map(w2p_pluralize, $pieces);
