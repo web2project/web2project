@@ -59,17 +59,3 @@ CREATE TABLE IF NOT EXISTS `budgets_assigned` (
   KEY `budget_project` (`budget_project`),
   KEY `budget_task` (`budget_task`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Not Specified', '0');
-INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Labor', '1');
-INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Travel', '2');
-INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Licensing', '3');
-INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Software', '4');
-INSERT INTO `sysvals` (`sysval_key_id`, `sysval_title`, `sysval_value`, `sysval_value_id`) 
-    VALUES(1, 'BudgetCategory', 'Administrative', '5');
