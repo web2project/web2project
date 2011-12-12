@@ -103,7 +103,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 	{
 		parent::setUp();
 
-		$this->obj = new CTaskLog();
+		$this->obj = new CTask_Log();
 
 		$this->post_data = array(
             'task_log_id'                           => 0,
@@ -140,7 +140,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributes()
     {
-        $this->assertInstanceOf('CTaskLog',                     $this->obj);
+        $this->assertInstanceOf('CTask_Log',                     $this->obj);
         $this->assertObjectHasAttribute('task_log_id',          $this->obj);
         $this->assertObjectHasAttribute('task_log_task',        $this->obj);
         $this->assertObjectHasAttribute('task_log_name',        $this->obj);
@@ -161,7 +161,7 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testNewTaskLogsAttributeValues()
     {
-        $this->assertInstanceOf('CTaskLog', $this->obj);
+        $this->assertInstanceOf('CTask_Log', $this->obj);
         $this->assertNull($this->obj->task_log_id);
         $this->assertNull($this->obj->task_log_task);
         $this->assertNull($this->obj->task_log_name);
@@ -213,12 +213,15 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 
     /**
      * Tests storing task log in database
+     *
+     * TODO: This is to handle the deprecation notice in v3.0, remove in v4.0
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testStoreUpdate()
     {
         global $AppUI;
 
-        $tasklog = new CTaskLog();
+        $tasklog = new CTask_Log();
         $this->obj->bind($this->post_data, null, true, true);
         $this->obj->task_log_id = 1;
         $this->obj->store();
@@ -246,6 +249,9 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 
     /**
      * Test deleting a tasklog
+     *
+     * TODO: This is to handle the deprecation notice in v3.0, remove in v4.0
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testDelete()
     {
