@@ -138,7 +138,6 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 		}
 
 		if ($new_ui_order && ($new_ui_order <= count($modules) + 1)) { //make sure we aren't going "up" to 0
-			$q = new DBQuery;
 			$q->addTable('modules');
 			$q->addUpdate('mod_ui_order', $new_ui_order);
 			$q->addWhere('mod_id = ' . (int)$this->mod_id);
