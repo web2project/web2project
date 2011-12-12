@@ -330,6 +330,9 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTrue($errorArray);
 
         $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'filesTestCreate.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('files'), $this->getConnection()->createDataSet()->getTable('files'));
+        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_dataset, array('files' => array('file_date')));
+        $xml_db_dataset = $this->getConnection()->createDataSet();
+        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('files' => array('file_date')));
+        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('files'), $xml_db_filtered_dataset->getTable('files'));
     }
 }
