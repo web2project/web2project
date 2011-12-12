@@ -76,7 +76,7 @@ class w2p_Core_HookHandler
         foreach ($moduleList as $module) {
             if (class_exists($module['mod_main_class'])) {
                 $object = new $module['mod_main_class']();
-                if (is_callable(array($object, 'hook_calendar')) && is_callable(array($object, 'getCalendarLink'))) {
+                if (is_callable(array($object, $hookname)) && is_callable(array($object, 'getCalendarLink'))) {
                     $itemList = $object->{$hookname}($this->AppUI->user_id);
                     foreach ($itemList as $item) {
                         $dateIndex = str_replace('/', '', $item['startDate']);
