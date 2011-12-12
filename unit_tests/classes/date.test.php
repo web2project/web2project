@@ -1848,16 +1848,16 @@ class Date_Test extends PHPUnit_Framework_TestCase
 
     public function testFindDaysInRangeOverlap()
     {
-        $base        = new CDate();
+        $base        = new w2p_Utilities_Date();
 
-        $Jan_01_2010 = new CDate('2010-01-01');
-        $Jan_15_2010 = new CDate('2010-01-15');
-        $Jan_01_2011 = new CDate('2011-01-01');
-        $Jan_15_2011 = new CDate('2011-01-15');
-        $Jan_31_2011 = new CDate('2011-01-31');
-        $Feb_15_2011 = new CDate('2011-02-15');
-        $Jan_16_2012 = new CDate('2012-01-16');
-        $Jan_31_2012 = new CDate('2012-01-31');
+        $Jan_01_2010 = new w2p_Utilities_Date('2010-01-01');
+        $Jan_15_2010 = new w2p_Utilities_Date('2010-01-15');
+        $Jan_01_2011 = new w2p_Utilities_Date('2011-01-01');
+        $Jan_15_2011 = new w2p_Utilities_Date('2011-01-15');
+        $Jan_31_2011 = new w2p_Utilities_Date('2011-01-31');
+        $Feb_15_2011 = new w2p_Utilities_Date('2011-02-15');
+        $Jan_16_2012 = new w2p_Utilities_Date('2012-01-16');
+        $Jan_31_2012 = new w2p_Utilities_Date('2012-01-31');
 
         // No overlap, Range B after Range A
         $this->assertEquals(0, $base->findDaysInRangeOverlap($Jan_01_2011, $Jan_15_2011, $Jan_16_2012, $Jan_31_2012));
@@ -1865,36 +1865,36 @@ class Date_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $base->findDaysInRangeOverlap($Jan_01_2011, $Jan_15_2011, $Jan_01_2010, $Jan_15_2010));
 
         // Range B exactly matches Range A
-        $Jan_01_2011 = new CDate('2011-01-01');
-        $Jan_31_2011 = new CDate('2011-01-31');
+        $Jan_01_2011 = new w2p_Utilities_Date('2011-01-01');
+        $Jan_31_2011 = new w2p_Utilities_Date('2011-01-31');
         $this->assertEquals(21, $base->findDaysInRangeOverlap($Jan_01_2011, $Jan_31_2011, $Jan_01_2011, $Jan_31_2011));
 
         // Range B Start within Range A, Range B End after Range A
-        $Jan_01_2011 = new CDate('2011-01-01');
-        $Jan_15_2011 = new CDate('2011-01-15');
-        $Jan_31_2011 = new CDate('2011-01-31');
-        $Feb_15_2011 = new CDate('2011-02-15');
+        $Jan_01_2011 = new w2p_Utilities_Date('2011-01-01');
+        $Jan_15_2011 = new w2p_Utilities_Date('2011-01-15');
+        $Jan_31_2011 = new w2p_Utilities_Date('2011-01-31');
+        $Feb_15_2011 = new w2p_Utilities_Date('2011-02-15');
         $this->assertEquals(11, $base->findDaysInRangeOverlap($Jan_01_2011, $Jan_31_2011, $Jan_15_2011, $Feb_15_2011));
 
         // Range A entirely within Range B
-        $Jan_01_2010 = new CDate('2010-01-01');
-        $Jan_15_2011 = new CDate('2011-01-15');
-        $Feb_15_2011 = new CDate('2011-02-15');
-        $Jan_31_2012 = new CDate('2012-01-31');
+        $Jan_01_2010 = new w2p_Utilities_Date('2010-01-01');
+        $Jan_15_2011 = new w2p_Utilities_Date('2011-01-15');
+        $Feb_15_2011 = new w2p_Utilities_Date('2011-02-15');
+        $Jan_31_2012 = new w2p_Utilities_Date('2012-01-31');
         $this->assertEquals(22, $base->findDaysInRangeOverlap($Jan_15_2011, $Feb_15_2011, $Jan_01_2010, $Jan_31_2012));
 
         // Range B entirely within Range A
-        $Jan_01_2010 = new CDate('2010-01-01');
-        $Jan_15_2011 = new CDate('2011-01-15');
-        $Feb_15_2011 = new CDate('2011-02-15');
-        $Jan_31_2012 = new CDate('2012-01-31');
+        $Jan_01_2010 = new w2p_Utilities_Date('2010-01-01');
+        $Jan_15_2011 = new w2p_Utilities_Date('2011-01-15');
+        $Feb_15_2011 = new w2p_Utilities_Date('2011-02-15');
+        $Jan_31_2012 = new w2p_Utilities_Date('2012-01-31');
         $this->assertEquals(22, $base->findDaysInRangeOverlap($Jan_01_2010, $Jan_31_2012, $Jan_15_2011, $Feb_15_2011));
 
         // Range B Start before Range A, Range B End within Range A
-        $Jan_01_2010 = new CDate('2010-01-01');
-        $Jan_15_2011 = new CDate('2011-01-15');
-        $Jan_31_2011 = new CDate('2011-01-31');
-        $Feb_15_2011 = new CDate('2011-02-15');
+        $Jan_01_2010 = new w2p_Utilities_Date('2010-01-01');
+        $Jan_15_2011 = new w2p_Utilities_Date('2011-01-15');
+        $Jan_31_2011 = new w2p_Utilities_Date('2011-01-31');
+        $Feb_15_2011 = new w2p_Utilities_Date('2011-02-15');
         $this->assertEquals(11, $base->findDaysInRangeOverlap($Jan_15_2011, $Feb_15_2011, $Jan_01_2010, $Jan_31_2011));
     }
 }
