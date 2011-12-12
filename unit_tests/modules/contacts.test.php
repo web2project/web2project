@@ -252,8 +252,8 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
 
         $results = $contact->getContactMethods();
         foreach ($methods as $key => $value) {
-            $this->assertArrayHasKey($key,      $results);
-            $this->assertEquals($value,         $results[$key]);
+            $this->assertContains($key,   $results['fields']);
+            $this->assertContains($value, $results['values']);
         }
     }
 
@@ -269,9 +269,13 @@ class Contacts_Test extends PHPUnit_Extensions_Database_TestCase
 
         $results = $contact->getContactMethods(array('phone_mobile', 'im_skype'));
 
-        $this->AssertEquals(2, count($results));
-        $this->assertEquals($methods['phone_mobile'], $results['phone_mobile']);
-        $this->assertEquals($methods['im_skype'],     $results['im_skype']);
+        $this->AssertEquals(2, count($results['fields']));
+
+        $id = array_search('phone_mobile', $results['fields']);
+        $this->assertEquals($methods['phone_mobile'], $results['values'][$id]);
+
+        $id = array_search('im_skype', $results['fields']);
+        $this->assertEquals($methods['im_skype'],     $results['values'][$id]);
     }
 
     public function testIsUser()
