@@ -17,7 +17,7 @@ $canViewTask = $perms->checkModuleItem('tasks', 'view', $obj->task_id);
 $canEdit = canEdit('task_log');
 $canAdd = canAdd('task_log');
 
-$log = new CTaskLog();
+$log = new CTask_Log();
 if ($task_log_id) {
 	if (!$canEdit || !$canViewTask) {
 		$AppUI->redirect('m=public&a=access_denied');
@@ -34,7 +34,7 @@ if ($task_log_id) {
 $project = new CProject();
 $project->load($obj->task_project);
 
-$bcode = new bcode();
+$bcode = new CSystem_Bcode();
 $companyBC = $bcode->getBillingCodes($proj->project_company);
 $neutralBC = $bcode->getBillingCodes(0);
 $taskLogReference = w2PgetSysVal('TaskLogReference');
@@ -244,7 +244,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                     </tr>
                     <?php
                     if ($obj->canUserEditTimeInformation($project->project_owner, $AppUI->user_id) && $canEditTask) {
-                        $end_date = intval($obj->task_end_date) ? new CDate($obj->task_end_date) : null;
+                        $end_date = intval($obj->task_end_date) ? new w2p_Utilities_Date($obj->task_end_date) : null;
                         ?>
                         <tr>
                             <td align='right'>

@@ -227,7 +227,7 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getTaskEmailLog(CTask $task, CTaskLog $log) {
+    public function getTaskEmailLog(CTask $task, CTask_Log $log) {
         $project = new CProject();
         $projname = $project->load($task->task_project)->project_name;
 

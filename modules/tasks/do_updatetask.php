@@ -7,7 +7,7 @@ $del = (int) w2PgetParam($_POST, 'del', 0);
 $notify_owner = w2PgetParam($_POST, 'task_log_notify_owner', 'off');
 $isNotNew = (int) w2PgetParam($_POST, 'task_log_id', 0);
 
-$obj = new CTaskLog();
+$obj = new CTask_Log();
 if (!$obj->bind($_POST)) {
     $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
     $AppUI->redirect();
