@@ -4,7 +4,7 @@
 --   Resolves http://bugs.web2project.net/view.php?id=940
 
 ALTER TABLE  `custom_fields_values` CHANGE  `value_charvalue`  `value_charvalue`
-    LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE  `custom_fields_values` DROP INDEX  `value_charvalue`;
 
