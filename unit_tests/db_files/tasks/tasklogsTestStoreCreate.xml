@@ -54,7 +54,7 @@
             <value>2.75</value>
             <value>2010-05-30</value>
             <value>0</value>
-            <value>0000-00-00 00:00:00</value>
+            <value>2009-07-15 00:00:00</value>
             <value>1</value>
             <value>1</value>
             <value>1</value>
@@ -101,7 +101,7 @@
         <row>
           <value>1</value>
           <value>Task 1</value>
-          <value>0</value>
+          <value>1</value>
           <value>0</value>
           <value>1</value>
           <value>1</value>
