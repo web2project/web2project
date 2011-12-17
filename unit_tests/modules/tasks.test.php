@@ -287,6 +287,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 	/**
      * Tests the check function returns the proper error message when no start date is passed
      */
+//TODO: this is based on check_task_dates being set to true..
     public function testCheckTaskNoStartDate()
     {
 		unset($this->post_data['task_start_date']);
@@ -1666,8 +1667,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $this->obj->getTasksForPeriod($start_date, $end_date);
 
         $this->assertEquals(2,                      count($results));
-        $this->assertEquals(14,                     count($results[1]));
-        $this->assertEquals(14,                     count($results[2]));
         $this->assertEquals(1,                      $results[1]['task_id']);
         $this->assertEquals('Task 1',               $results[1]['task_name']);
         $this->assertEquals('2009-07-05 00:00:00',  $results[1]['task_start_date']);
@@ -1712,8 +1711,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $this->obj->getTasksForPeriod($start_date, $end_date, 1);
 
         $this->assertEquals(2,                      count($results));
-        $this->assertEquals(14,                     count($results[1]));
-        $this->assertEquals(14,                     count($results[2]));
         $this->assertEquals(1,                      $results[1]['task_id']);
         $this->assertEquals('Task 1',               $results[1]['task_name']);
         $this->assertEquals('2009-07-05 00:00:00',  $results[1]['task_start_date']);
@@ -1762,8 +1759,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $this->obj->getTasksForPeriod($start_date, $end_date, 1, 1);
 
         $this->assertEquals(2,                      count($results));
-        $this->assertEquals(14,                     count($results[1]));
-        $this->assertEquals(14,                     count($results[2]));
         $this->assertEquals(1,                      $results[1]['task_id']);
         $this->assertEquals('Task 1',               $results[1]['task_name']);
         $this->assertEquals('2009-07-05 00:00:00',  $results[1]['task_start_date']);
@@ -3651,7 +3646,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $allowed_task_list = $this->obj->getAllowedTaskList($AppUI);
 
         $this->assertEquals(1,          count($allowed_task_list));
-        $this->assertEquals(8,          count($allowed_task_list[0]));
         $this->assertEquals(1,          $allowed_task_list[0]['task_id']);
         $this->assertEquals('Task 1',   $allowed_task_list[0]['task_name']);
         $this->assertEquals(0,          $allowed_task_list[0]['task_parent']);
