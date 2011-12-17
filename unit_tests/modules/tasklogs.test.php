@@ -250,15 +250,13 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $log_updated = $AppUI->formatTZAwareTime($tasklog->task_log_updated, '%Y-%m-%d %T');
         $log_updated = strtotime($log_updated);
 
-        $this->assertGreaterThanOrEqual($log_updated, $now_secs);
-        $this->assertLessThanOrEqual($log_updated, $min_time);
+        $this->assertLessThanOrEqual($log_updated, $now_secs);
+        $this->assertGreaterThanOrEqual($min_time, $log_updated);
     }
 
     /**
      * Test deleting a tasklog
      *
-     * TODO: This is to handle the deprecation notice in v3.0, remove in v4.0
-     * @expectedException PHPUnit_Framework_Error
      */
     public function testDelete()
     {
