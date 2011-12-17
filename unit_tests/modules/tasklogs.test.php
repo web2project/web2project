@@ -214,15 +214,12 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $log_updated = strtotime($log_updated);
         $this->assertGreaterThanOrEqual($min_time, $log_created);
         $this->assertGreaterThanOrEqual($min_time, $log_updated);
-        $this->assertLessThanOrEqual($now_secs, $log_created);
-        $this->assertLessThanOrEqual($now_secs, $log_updated);
+        $this->assertLessThanOrEqual($log_created, $now_secs);
+        $this->assertLessThanOrEqual($log_updated, $now_secs);
     }
 
     /**
      * Tests storing task log in database
-     *
-     * TODO: This is to handle the deprecation notice in v3.0, remove in v4.0
-     * @expectedException PHPUnit_Framework_Error
      */
     public function testStoreUpdate()
     {

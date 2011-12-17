@@ -2148,23 +2148,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Admin Person',                     $assigned_users[1]['contact_display_name']);
 		$this->assertEquals('',									$assigned_users[1]['user_email']);
         $this->assertEquals('',									$assigned_users[1]['user_phone']);
-        $this->assertEquals(1,                                  $assigned_users[1][0]);
-        $this->assertEquals(1,                                  $assigned_users[1][1]);
-        $this->assertEquals('admin',                            $assigned_users[1][2]);
-        $this->assertEquals('76a2173be6393254e72ffa4d6df1030a', $assigned_users[1][3]);
-        $this->assertEquals(0,                                  $assigned_users[1][4]);
-        $this->assertEquals(1,                                  $assigned_users[1][5]);
-        $this->assertEquals('Admin User',                       $assigned_users[1][6]);
-        $this->assertEquals(0,                                  $assigned_users[1][7]);
-        $this->assertEquals(0,                                  $assigned_users[1][8]);
-        $this->assertEquals(0,                                  $assigned_users[1][9]);
-        $this->assertEquals(50,                                 $assigned_users[1][10]);
-        $this->assertEquals(42,                                 $assigned_users[1][11]);
-        $this->assertEquals('Person',                           $assigned_users[1][12]);
-		$this->assertEquals('Admin',							$assigned_users[1][13]);
-        $this->assertEquals('Admin Person',                     $assigned_users[1][14]);
-		$this->assertEquals('',									$assigned_users[1][15]);
-        $this->assertEquals('',									$assigned_users[1][16]);
     }
     /**
      * Test getting a list of dependencies
@@ -2211,11 +2194,6 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('Person',               $task_contacts[1]['contact_last_name']);
         $this->assertEquals('',                     $task_contacts[1]['contact_order_by']);
         $this->assertEquals('',                     $task_contacts[1]['dept_name']);
-        $this->assertEquals(1,                      $task_contacts[1][0]);
-        $this->assertEquals('Admin',                $task_contacts[1][1]);
-        $this->assertEquals('Person',               $task_contacts[1][2]);
-        $this->assertEquals('',                     $task_contacts[1][3]);
-        $this->assertEquals('',                     $task_contacts[1][4]);
 
         // Login as another user for permission purposes
         $old_AppUI = $AppUI;
