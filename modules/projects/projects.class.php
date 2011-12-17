@@ -255,6 +255,8 @@ class CProject extends w2p_Core_BaseObject {
 			$objTask = new CTask();
             $objTask->load($orig);
             $destTask = $objTask->copy($this->project_id);
+            $destTask->task_parent = (0 == $destTask->task_parent) ? $destTask->task_id : $destTask->task_parent;
+            $destTask->store();
 			$tasks[$orig] = $destTask;
 			$deps[$orig] = $objTask->getDependencies();
 		}
