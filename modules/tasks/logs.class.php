@@ -262,7 +262,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @access private
 	 */
-	private function updateTaskSummary(w2p_Core_CAppUI $AppUI, $task_id)
+	protected function updateTaskSummary(w2p_Core_CAppUI $AppUI, $task_id)
 	{
         $perms = $AppUI->acl();
         $q = $this->_getQuery();
@@ -270,45 +270,22 @@ class CTask_Log extends w2p_Core_BaseObject
 
         if($perms->checkModuleItem('tasks', 'edit', $task_id)) {
             if ($this->task_log_percent_complete < 100) {
-                $q->addQuery('task_log_percent_complete, task_log_date, task_log_task_end_date');
+                $q->addQuery('task_log_percent_complete, task_log_date');
                 $q->addTable('task_log');
                 $q->addWhere('task_log_task = ' . (int)$task_id);
                 $q->addOrder('task_log_date DESC, task_log_id DESC');
                 $q->setLimit(1);
                 $results = $q->loadHash();
-                $q->clear();
-
                 $percentComplete = $results['task_log_percent_complete'];
-                /*
-                 * TODO: In theory, we shouldn't just use the task_log_task_end_date,
-                 *   because if we're after that date and someone is still adding
-                 *   logs to a task, obviously the task isn't complete. We may want
-                 *   to check to see if task_log_date > task_log_task_end_date and
-                 *   use the later one as the end date.. not sure yet.
-                 */
-                $taskEndDate = $results['task_log_task_end_date'];
             } else {
                 $percentComplete = 100;
-                $taskEndDate = $this->task_log_date;
             }
 
             $task = new CTask();
             $task->load($task_id);
             $task->task_percent_complete = $percentComplete;
-
-            /*
-             * Note: This handles a specific scenario where a task starts &
-             *   ends on the same day. Since we don't capture the actual *time*
-             *   of the tasklog (just the date), we have a situation where the
-             *   end date would have 00:00 as the time while the start could
-             *   have 09:00.
-             * Issue:  http://bugs.web2project.net/view.php?id=957
-             */
-
-            if (strtotime($taskEndDate) < strtotime($task->task_start_date)) {
-                $taskEndDate = $task->task_start_date;
-            }
-            $task->task_end_date = $taskEndDate;
+            $diff = strtotime($this->task_log_task_end_date) - strtotime($task->task_end_date);
+            $task->task_end_date = (0 == $diff) ? $task->task_end_date : $this->task_log_task_end_date;
             $success = $task->store($AppUI);
 
             if (!$success) {
