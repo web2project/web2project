@@ -14,9 +14,20 @@
 
 class w2p_Database_Mock extends w2p_Database_Query {
 
+    protected $data = array();
+
     public function __construct($prefix = null, $query_db = null) {
         parent::__construct($prefix, $query_db);
     }
+
+    public function stageData($stageData) {
+        $this->data[] = $stageData;
+    }
+
+    public function loadHash() {
+        return array_shift($this->data);
+    }
+
 
     public function exec() {
         return true;

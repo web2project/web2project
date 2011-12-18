@@ -63,6 +63,7 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
     protected $backupGlobals = FALSE;
     protected $obj = null;
     protected $post_data = array();
+    protected $mockDB = null;
 
     /**
      * Return database connection for tests
@@ -92,7 +93,10 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
     {
       parent::setUp();
 
-      $this->obj = new CLink();
+      $this->obj    = new CLink();
+      $this->mockDB = new w2p_Database_Mock();
+      $this->obj->overrideDatabase($this->mockDB);
+
       $this->post_data = array(
           'dosql'             => 'do_link_aed',
           'link_id'           => 0,
@@ -303,19 +307,20 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeleteLink()
     {
-      global $AppUI;
+        global $AppUI;
 
-      $this->obj->bind($this->post_data);
-      $result = $this->obj->store($AppUI);
-      $this->assertTrue($result);
-      $original_id = $this->obj->link_id;
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
+        $original_id = $this->obj->link_id;
+        $result = $this->obj->delete($AppUI);
 
-      $result = $this->obj->delete($AppUI);
-      $this->assertTrue($result);
+        $link = new CLink();
+        $link->overrideDatabase($this->mockDB);
+        $this->mockDB->stageData(array('link_name' => '', 'link_url' => ''));
+        $link->load($original_id);
 
-      $link = new CLink();
-      $link->load($original_id);
-      $this->assertEquals('',              $link->link_name);
-      $this->assertEquals('',              $link->link_url);
+        $this->assertEquals('',              $link->link_name);
+        $this->assertEquals('',              $link->link_url);
     }
 }
