@@ -400,6 +400,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
         $this->canDelete();
 		if (count($this->_error)) {
 			$msg = get_class($this) . '::delete-check failed';
+//TODO: no clue why this is required..
+unset($this->_error['store']);
             $this->_error['delete-check'] = $msg;
             return $msg;
 		}
