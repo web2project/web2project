@@ -48,7 +48,7 @@ require_once 'PHPUnit/Framework.php';
  * @package web2project
  * @subpackage unit_tests
  */
-class Date_Test extends PHPUnit_Framework_TestCase
+class w2p_Utilities_Date_Test extends PHPUnit_Framework_TestCase
 {
 
     /**

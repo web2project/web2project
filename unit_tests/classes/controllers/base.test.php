@@ -33,7 +33,7 @@ require_once 'PHPUnit/Framework.php';
  * @package web2project
  * @subpackage unit_tests
  */
-class Base_Test extends PHPUnit_Framework_TestCase
+class w2p_Controllers_Base_Test extends PHPUnit_Framework_TestCase
 {
 
     /**

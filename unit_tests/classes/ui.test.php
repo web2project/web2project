@@ -54,7 +54,7 @@ require_once 'PHPUnit/Framework.php';
  * @package web2project
  * @subpackage unit_tests
  */
-class CAppUI_Test extends PHPUnit_Framework_TestCase
+class w2p_Core_CAppUI_Test extends PHPUnit_Framework_TestCase
 {
 
     /**
