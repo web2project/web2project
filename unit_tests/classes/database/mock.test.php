@@ -49,6 +49,17 @@ class w2p_Database_Mock_Test extends PHPUnit_Framework_TestCase {
         $this->assertNotEquals('value2', $this->mockDB->loadResult());
     }
 
+    public function testLoadList() {
+        $this->mockDB->stageList(array('key1' => 'value1', 'key2' => 'value2'));
+        $this->mockDB->stageList(array('key3' => 'value3', 'key4' => 'value4'));
+        $this->assertEquals(2, count($this->mockDB->loadList()));
+
+        $this->mockDB->stageList(array('key5' => 'value5', 'key6' => 'value6'));
+        $this->assertEquals(3, count($this->mockDB->loadList()));
+
+        $list = $this->mockDB->loadList();
+        $this->assertEquals('value4', $list[1]['key4']);
+    }
 
 //    public function loadObject(&$object, $bindAll = false, $strip = true) {
 //        $hash = $this->loadHash();

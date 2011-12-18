@@ -16,6 +16,7 @@ class w2p_Database_Mock extends w2p_Database_Query {
 
     protected $hash = array();
     protected $result = '';
+    protected $list = array();
 
     public function __construct($prefix = null, $query_db = null) {
         parent::__construct($prefix, $query_db);
@@ -33,6 +34,13 @@ class w2p_Database_Mock extends w2p_Database_Query {
     }
     public function loadResult() {
         return $this->result;
+    }
+
+    public function stageList(array $array) {
+        $this->list[] = $array;
+    }
+    public function loadList($maxrows = -1, $index = -1) {
+        return $this->list;
     }
 
     public function loadObject(&$object, $bindAll = false, $strip = true) {
