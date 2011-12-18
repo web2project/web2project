@@ -65,18 +65,6 @@ class Links_Test extends PHPUnit_Framework_TestCase
     protected $post_data = array();
     protected $mockDB = null;
 
-    /**
-     * Return database connection for tests
-     */
-    protected function getConnection()
-    {
-        $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' .
-                       w2PgetConfig('dbhost') . ';dbname=' .
-                       w2PgetConfig('dbname'),
-                       w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
-        return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
-    }
-
     protected function setUp()
     {
       parent::setUp();
@@ -241,25 +229,27 @@ class Links_Test extends PHPUnit_Framework_TestCase
      */
     public function testLoad()
     {
-      global $AppUI;
+        global $AppUI;
 
-      $this->obj->bind($this->post_data);
-      $result = $this->obj->store($AppUI);
-      $this->assertTrue($result);
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
 
-      $link = new CLink();
-      $link->load($this->obj->link_id);
+        $item = new CLink();
+        $item->overrideDatabase($this->mockDB);
+        $this->post_data['link_id'] = $this->obj->link_id;
+        $this->mockDB->stageHash($this->post_data);
+        $item->load($this->obj->link_id);
 
-      $this->assertEquals($this->obj->link_name,              $link->link_name);
-      $this->assertEquals($this->obj->link_project,           $link->link_project);
-      $this->assertEquals($this->obj->link_task,              $link->link_task);
-      $this->assertEquals($this->obj->link_url,               $link->link_url);
-      $this->assertEquals($this->obj->link_parent,            $link->link_parent);
-      $this->assertEquals($this->obj->link_description,       $link->link_description);
-      $this->assertEquals($this->obj->link_owner,             $link->link_owner);
-      $this->assertEquals('obj/',                             $link->link_icon);
-      $this->assertEquals($this->obj->link_category,          $link->link_category);
-      $this->assertEquals($this->obj->link_id,                $link->link_id);
+        $this->assertEquals($this->obj->link_name,              $item->link_name);
+        $this->assertEquals($this->obj->link_project,           $item->link_project);
+        $this->assertEquals($this->obj->link_task,              $item->link_task);
+        $this->assertEquals($this->obj->link_url,               $item->link_url);
+        $this->assertEquals($this->obj->link_parent,            $item->link_parent);
+        $this->assertEquals($this->obj->link_description,       $item->link_description);
+        $this->assertEquals($this->obj->link_owner,             $item->link_owner);
+        $this->assertEquals($this->obj->link_category,          $item->link_category);
+        $this->assertEquals($this->obj->link_id,                $item->link_id);
     }
 
     /**
@@ -289,7 +279,7 @@ class Links_Test extends PHPUnit_Framework_TestCase
     /**
      * Tests the delete of a link
      */
-    public function testDeleteLink()
+    public function testDelete()
     {
         global $AppUI;
 
@@ -299,12 +289,12 @@ class Links_Test extends PHPUnit_Framework_TestCase
         $original_id = $this->obj->link_id;
         $result = $this->obj->delete($AppUI);
 
-        $link = new CLink();
-        $link->overrideDatabase($this->mockDB);
-        $this->mockDB->stageData(array('link_name' => '', 'link_url' => ''));
-        $link->load($original_id);
+        $item = new CLink();
+        $item->overrideDatabase($this->mockDB);
+        $this->mockDB->stageHash(array('link_name' => '', 'link_url' => ''));
+        $item->load($original_id);
 
-        $this->assertEquals('',              $link->link_name);
-        $this->assertEquals('',              $link->link_url);
+        $this->assertEquals('',              $item->link_name);
+        $this->assertEquals('',              $item->link_url);
     }
 }
