@@ -58,7 +58,7 @@ require_once W2P_BASE_DIR . '/includes/session.php';
  * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class Links_Test extends PHPUnit_Extensions_Database_TestCase
+class Links_Test extends PHPUnit_Framework_TestCase
 {
     protected $backupGlobals = FALSE;
     protected $obj = null;
@@ -75,18 +75,6 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
                        w2PgetConfig('dbname'),
                        w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
         return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
-    }
-
-    /**
-     * Set up default dataset for testing
-     */
-    protected function getDataSet()
-    {
-      return $this->createXMLDataSet($this->getDataSetPath().'linksSeed.xml');
-    }
-    protected function getDataSetPath()
-    {
-      return dirname(dirname(__FILE__)).'/db_files/links/';
     }
 
     protected function setUp()
@@ -113,10 +101,6 @@ class Links_Test extends PHPUnit_Extensions_Database_TestCase
       );
     }
 
-    protected function tearDown()
-    {
-      $this->getDataSet();
-    }
     /**
      * Tests the Attributes of a new Links object.
      */
