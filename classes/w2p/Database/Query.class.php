@@ -65,7 +65,7 @@ class w2p_Database_Query {
 	 * @access private
 	 * @var array
 	 */
-	private $_db_funcs;
+	protected $_db_funcs;
 
 	/** w2p_Database_Query constructor
 	 *
