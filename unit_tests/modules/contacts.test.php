@@ -67,18 +67,6 @@ class Contacts_Test extends PHPUnit_Framework_TestCase
     protected $post_data = array();
     protected $mockDB = null;
 
-    /**
-     * Return database connection for tests
-     */
-    protected function getConnection()
-    {
-        $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' .
-                       w2PgetConfig('dbhost') . ';dbname=' .
-                       w2PgetConfig('dbname'),
-                       w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
-        return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
-    }
-
     protected function setUp()
     {
         parent::setUp();
@@ -174,20 +162,20 @@ class Contacts_Test extends PHPUnit_Framework_TestCase
         $result = $this->obj->store($AppUI);
         $this->assertTrue($result);
 
-        $contact = new CContact();
-        $contact->overrideDatabase($this->mockDB);
+        $item = new CContact();
+        $item->overrideDatabase($this->mockDB);
         $this->post_data['contact_id'] = $this->obj->contact_id;
         $this->mockDB->stageHash($this->post_data);
-        $contact->load($this->obj->contact_id);
+        $item->load($this->obj->contact_id);
 
-        $this->assertEquals($this->obj->contact_first_name,     $contact->contact_first_name);
-        $this->assertEquals($this->obj->contact_last_name,      $contact->contact_last_name);
-        $this->assertEquals($this->obj->contact_display_name,   $contact->contact_display_name);
-        $this->assertEquals($this->obj->contact_company,        $contact->contact_company);
-        $this->assertEquals($this->obj->contact_department,     $contact->contact_department);
-        $this->assertEquals($this->obj->contact_icon,           $contact->contact_icon);
-        $this->assertEquals($this->obj->contact_owner,          $contact->contact_owner);
-        $this->assertEquals($this->obj->contact_id,             $contact->contact_id);
+        $this->assertEquals($this->obj->contact_first_name,     $item->contact_first_name);
+        $this->assertEquals($this->obj->contact_last_name,      $item->contact_last_name);
+        $this->assertEquals($this->obj->contact_display_name,   $item->contact_display_name);
+        $this->assertEquals($this->obj->contact_company,        $item->contact_company);
+        $this->assertEquals($this->obj->contact_department,     $item->contact_department);
+        $this->assertEquals($this->obj->contact_icon,           $item->contact_icon);
+        $this->assertEquals($this->obj->contact_owner,          $item->contact_owner);
+        $this->assertEquals($this->obj->contact_id,             $item->contact_id);
     }
 
     public function testUpdate()
