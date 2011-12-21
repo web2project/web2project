@@ -318,10 +318,18 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
       $this->assertArrayHasKey('file_size', $errorArray);
     }
 
+    public function testDelete()
+    {
+        $this->markTestIncomplete(
+                "I tried basing this on the CLink_Test->testDelete method and
+                no matter what I get 'bindHashToObject : object expected' as
+                the error message.");
+    }
+
     /**
      * Tests the proper creation of a project.
      */
-    public function testCreateFile()
+    public function testStoreCreate()
     {
         global $AppUI;
 
@@ -334,5 +342,10 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('files' => array('file_date')));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('files'), $xml_db_filtered_dataset->getTable('files'));
+    }
+
+    public function testStoreUpdate()
+    {
+        $this->markTestIncomplete("Still under development");
     }
 }

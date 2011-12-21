@@ -1248,7 +1248,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
 	/**
 	 * Tests the store function with proper arguments passed.
 	 */
-	public function testStore()
+	public function testStoreCreate()
 	{
 		global $AppUI;
 

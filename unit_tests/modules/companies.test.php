@@ -228,7 +228,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests the proper creation of a company
      */
-    public function testCreateCompany()
+    public function testStoreCreate()
     {
         global $AppUI;
 
@@ -312,7 +312,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests the update of a company
      */
-    public function testUpdateCompany()
+    public function testStoreUpdate()
     {
         global $AppUI;
         $this->obj->load(1);

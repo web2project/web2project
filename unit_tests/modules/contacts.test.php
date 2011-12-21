@@ -136,7 +136,7 @@ class Contacts_Test extends PHPUnit_Framework_TestCase
         $this->AssertEquals(0, $this->obj->contact_id);
     }
 
-    public function testStore()
+    public function testStoreCreate()
     {
         global $AppUI;
 
@@ -178,7 +178,7 @@ class Contacts_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->obj->contact_id,             $item->contact_id);
     }
 
-    public function testUpdate()
+    public function testStoreUpdate()
     {
         global $AppUI;
 

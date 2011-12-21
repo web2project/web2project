@@ -247,7 +247,7 @@ class Departments_Test extends PHPUnit_Framework_TestCase
     /**
      * Tests the proper creation of a dept
      */
-    public function testCreateDepartment()
+    public function testStoreCreate()
     {
       global $AppUI;
 
@@ -266,7 +266,7 @@ class Departments_Test extends PHPUnit_Framework_TestCase
     /**
      * Tests the update of a dept
      */
-    public function testUpdateDepartment()
+    public function testStoreUpdate()
     {
         global $AppUI;
 

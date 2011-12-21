@@ -204,7 +204,7 @@ class Links_Test extends PHPUnit_Framework_TestCase
     /**
      * Tests the proper creation of a link
      */
-    public function testCreateLink()
+    public function testStoreCreate()
     {
       global $AppUI;
 
@@ -255,7 +255,7 @@ class Links_Test extends PHPUnit_Framework_TestCase
     /**
      * Tests the update of a link
      */
-    public function testUpdateLink()
+    public function testStoreUpdate()
     {
       global $AppUI;
 

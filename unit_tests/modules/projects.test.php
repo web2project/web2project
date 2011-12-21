@@ -428,7 +428,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests the proper creation of a project.
      */
-    public function testCreateProject()
+    public function testCreate()
     {
         global $AppUI;
 
@@ -610,7 +610,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests the update of a project.
      */
-    public function testUpdateProject()
+    public function testStoreUpdate()
     {
       	global $AppUI;
 
@@ -703,7 +703,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests deletion of a project.
      */
-    public function testDeleteProject()
+    public function testDelete()
     {
         global $AppUI;
 
@@ -1058,7 +1058,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      * departments saving. The basic functionality is covered in the
      * create and update tests.
      */
-    public function testStore()
+    public function testStoreCreate()
     {
 		global $AppUI;
 
