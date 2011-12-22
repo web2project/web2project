@@ -1,2 +1,0 @@
-Budgets by Project and Budget Category
-Gives an overall snapshot of budgeted costs vs actual costs for all projects within a company
