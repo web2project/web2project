@@ -8,7 +8,7 @@ $forum_id = w2PgetParam($_REQUEST, 'forum_id', 0);
 $message_id = w2PgetParam($_REQUEST, 'message_id', 0);
 
 $perms = &$AppUI->acl();
-if (!$perms->checkModuleItem('forums', 'view', $message_id)) {
+if (!$perms->checkModuleItem('forums', 'view', $forum_id)) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 

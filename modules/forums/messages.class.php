@@ -51,7 +51,7 @@ class CForum_Message extends w2p_Core_BaseObject {
         $q = new w2p_Database_Query;
 
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
-        if ($this->{$this->_tbl_key} && $perms->checkModuleItem('forums', 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $perms->checkModuleItem('forums', 'edit', $this->{$this->_tbl_module})) {
             $q->setDelete('forum_visits');
             $q->addWhere('visit_message = ' . (int)$this->message_id);
 			$q->exec();
