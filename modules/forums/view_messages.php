@@ -117,8 +117,9 @@ $new_messages = array();
 
 foreach ($messages as $row) {
 	// Find the parent message - the topic.
-	if ($row['message_id'] == $message_id)
+	if ($row['message_id'] == $message_id) {
 		$topic = $row['message_title'];
+    }
 
 	$q = new w2p_Database_Query;
 	$q->addTable('forum_messages');
@@ -140,13 +141,16 @@ foreach ($messages as $row) {
 		$s .= '<tr>';
 
 		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
+        $s .= '<a href="?m=admin&a=viewuser&user_id='.$row['message_author'].'">';
+        $s .= $row['contact_name'];
+        $s .= '</a>';
 		if (!$hideEmail) {
-			$s .= '<a href="mailto:' . $row['contact_email'] . '">';
-		}
-		$s .= '<font size="2">' . $row['contact_name'] . '</font>';
-		if (!$hideEmail) {
+			$s .= '&nbsp;';
+            $s .= '<a href="mailto:' . $row['contact_email'] . '">';
+    		$s .= '<img src="' . w2PfindImage('email.gif') . '" width="16" height="16" border="0" alt="email" />';
 			$s .= '</a>';
 		}
+
 		if (sizeof($editor) > 0) {
 			$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
 			$s .= ':<br/>';
@@ -275,7 +279,6 @@ if ($viewtype == 'single') {
 <tr><td colspan="2">
 	<table border="0" cellpadding="2" cellspacing="1" width="100%">
 	<tr>
-		<td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
 		<td width="100%" align="right">
 			<input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
 		<?php if ($canAuthor) { ?>

@@ -56,7 +56,7 @@ class CForum extends w2p_Core_BaseObject {
         $q->addTable('forums');
         $q->addTable('forum_messages');
         $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email,
-            contact_display_name, user_username, forum_moderated, visit_user');
+            contact_display_name, contact_display_name as contact_name, user_username, forum_moderated, visit_user');
         $q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = ' . (int) $forum_id . ' AND visit_message = forum_messages.message_id');
         $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
