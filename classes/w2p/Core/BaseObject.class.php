@@ -343,7 +343,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 				$q->addQuery('COUNT(DISTINCT ' . $table['idfield'] . ') AS ' . $table['idfield']);
 				$q->addJoin($table['name'], $table['name'], $table['joinfield'] . ' = ' . $k);
 			}
-			$obj = null;
+			$obj = new stdClass();
 			$q->loadObject($obj);
 
 			if (!$obj && '' != db_error()) {
