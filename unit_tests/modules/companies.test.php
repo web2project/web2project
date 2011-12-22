@@ -60,37 +60,13 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
  * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class Companies_Test extends PHPUnit_Extensions_Database_TestCase
+class Companies_Test extends PHPUnit_Framework_TestCase
 {
 
     protected $backupGlobals = FALSE;
 	protected $obj = null;
 	protected $post_data = array();
     protected $mockDB = null;
-
-    /**
-     * Return database connection for tests
-     */
-    protected function getConnection()
-    {
-        $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' .
-                       w2PgetConfig('dbhost') . ';dbname=' .
-                       w2PgetConfig('dbname'),
-                       w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
-        return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
-    }
-
-    /**
-     * Set up default dataset for testing
-     */
-    protected function getDataSet()
-    {
-        return $this->createXMLDataSet($this->getDataSetPath().'companiesSeed.xml');
-    }
-    protected function getDataSetPath()
-    {
-    	return dirname(dirname(__FILE__)).'/db_files/companies/';
-    }
 
 	public function setUp()
 	{
@@ -251,9 +227,7 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                          $this->obj->company_owner);
         $this->assertEquals(2,                          $this->obj->company_type);
         $this->assertEquals('This is a company.' ,      $this->obj->company_description);
-
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestCreateCompany.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
+        $this->assertNotEquals(0,                       $this->obj->company_id);
     }
 
     /**
@@ -286,6 +260,10 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
+        $item = new CCompany();
+        $item->overrideDatabase($this->mockDB);
+        $this->mockDB->stageHash($this->post_data);
+
         $this->obj->loadFull($AppUI, 1);
 
         $this->assertEquals('UnitTestCompany',          $this->obj->company_name);
@@ -303,10 +281,6 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                          $this->obj->company_owner);
         $this->assertEquals(2,                          $this->obj->company_type);
         $this->assertEquals('This is a company.' ,      $this->obj->company_description);
-        $this->assertEquals(0,                          $this->obj->company_module);
-        $this->assertEquals(0,                          $this->obj->company_private);
-        $this->assertEquals('Admin',                    $this->obj->contact_first_name);
-        $this->assertEquals('Person',                   $this->obj->contact_last_name);
     }
 
     /**
@@ -315,47 +289,21 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
     public function testStoreUpdate()
     {
         global $AppUI;
-        $this->obj->load(1);
-
-        $this->post_data['dosql']               = 'do_company_aed';
-        $this->post_data['company_id']          = $this->obj->company_id;
-        $this->post_data['company_name']        = 'UpdatedCompany';
-        $this->post_data['company_email']       = 'updated@example.org';
-        $this->post_data['company_phone1']      = '1.777.999.9999';
-        $this->post_data['company_phone2']      = '1.777.999.9998';
-        $this->post_data['company_fax']         = '1.777.999.9997';
-        $this->post_data['company_address1']    = 'Updated Address 1';
-        $this->post_data['company_address2']    = 'Updated Address 2';
-        $this->post_data['company_city']        = 'Updated City';
-        $this->post_data['company_state']       = 'NS';
-        $this->post_data['company_zip']         = 'A2A 2B2';
-        $this->post_data['company_country']     = 'CA';
-        $this->post_data['company_primary_url']	= 'ut.web2project.net';
-        $this->post_data['company_owner']       = 1;
-        $this->post_data['company_type']        = 2;
-        $this->post_data['company_description'] = 'This is an updated company.';
 
         $this->obj->bind($this->post_data);
-        $this->obj->store($AppUI);
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
+        $original_id = $this->obj->company_id;
 
-        $this->assertEquals('UpdatedCompany',               $this->obj->company_name);
-        $this->assertEquals('updated@example.org',          $this->obj->company_email);
-        $this->assertEquals('1.777.999.9999',               $this->obj->company_phone1);
-        $this->assertEquals('1.777.999.9998',               $this->obj->company_phone2);
-        $this->assertEquals('1.777.999.9997',               $this->obj->company_fax);
-        $this->assertEquals('Updated Address 1',            $this->obj->company_address1);
-        $this->assertEquals('Updated Address 2',            $this->obj->company_address2);
-        $this->assertEquals('Updated City',                 $this->obj->company_city);
-        $this->assertEquals('NS',                           $this->obj->company_state);
-        $this->assertEquals('A2A 2B2',                      $this->obj->company_zip);
-        $this->assertEquals('CA',                           $this->obj->company_country);
-        $this->assertEquals('ut.web2project.net',           $this->obj->company_primary_url);
-        $this->assertEquals(1,                              $this->obj->company_owner);
-        $this->assertEquals(2,                              $this->obj->company_type);
-        $this->assertEquals('This is an updated company.',  $this->obj->company_description);
+        $this->obj->company_name = 'UpdatedCompany';
+        $this->obj->company_address1 = 'Updated Address 1';
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
+        $new_id = $this->obj->company_id;
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestUpdateCompany.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
+        $this->assertEquals($original_id,        $new_id);
+        $this->assertEquals('UpdatedCompany',    $this->obj->company_name);
+        $this->assertEquals('Updated Address 1', $this->obj->company_address1);
     }
 
     /**
@@ -363,28 +311,21 @@ class Companies_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete(
-                "I tried basing this on the CLink_Test->testDelete method and
-                no matter what I get 'bindHashToObject : object expected' as
-                the error message.");
-//        global $AppUI;
-//
-//        $this->obj->company_id = 1;
-//        $result = $this->obj->delete($AppUI);
-//        $this->assertEquals(3, count($this->obj->getError()));
-//        $this->assertArrayHasKey('noDeleteRecord-Projects', $this->obj->getError());
-//        $this->assertArrayHasKey('noDeleteRecord-Departments', $this->obj->getError());
-//
-//        $company = new CCompany();
-//        $company->company_id = 3;
-//        $result = $company->delete($AppUI);
-//        $this->assertTrue($result);
-//
-//        $result = $company->load(3);
-//        $this->assertFalse($result);
-//
-//        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'companiesTestDeleteCompany.xml');
-//        $this->assertTablesEqual($xml_dataset->getTable('companies'), $this->getConnection()->createDataSet()->getTable('companies'));
+        global $AppUI;
+
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
+        $original_id = $this->obj->company_id;
+        $result = $this->obj->delete($AppUI);
+
+        $item = new CCompany();
+        $item->overrideDatabase($this->mockDB);
+        $this->mockDB->stageHash(array('company_name' => '', 'company_owner' => ''));
+        $item->load($original_id);
+
+        $this->assertEquals('',              $item->company_name);
+        $this->assertEquals('',              $item->company_owner);
     }
 
     /**
