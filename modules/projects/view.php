@@ -292,7 +292,7 @@ function delIt() {
                                 <td class="hilite">
                                     <table cellspacing="1" cellpadding="2" border="0" width="100%">
                                         <?php
-                                        $bcode = new bcode();
+                                        $bcode = new CSystem_Bcode();
                                         $results = $bcode->calculateProjectCost($project_id);
                                         foreach ($billingCategory as $id => $category) {
                                             ?>

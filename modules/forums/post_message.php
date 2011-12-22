@@ -38,12 +38,12 @@ foreach ($_GET as $k => $v) {
 $back_url = implode('&', $back_url_params);
 
 //pull message information
-$message = new CForumMessage();
+$message = new CForum_Message();
 $message->load($message_id);
 
 //pull message information from last response
 if ($message_parent != -1) {
-    $last_message = new CForumMessage();
+    $last_message = new CForum_Message();
     $last_message->load($message_parent);
     if (!$last_message->message_id) { // if it's first response, use original message
         $last_message = clone $message;

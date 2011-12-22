@@ -65,6 +65,7 @@ function w2p_autoload($class_name) {
             // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR.'/modules/calendar/calendar.class.php';
             break;
+        case 'cadmin_user':
         case 'cuser':
             // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR.'/modules/admin/users.class.php';

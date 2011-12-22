@@ -15,8 +15,8 @@ $log_pdf = w2PgetParam($_POST, 'log_pdf', 0);
 $log_start_date = w2PgetParam($_POST, 'log_start_date', '2008-01-01');
 $log_end_date   = w2PgetParam($_POST, 'log_end_date',   '2014-01-01');
 // create Date objects from the datetime fields
-$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
-$end_date = intval($log_end_date) ? new CDate($log_end_date) : new CDate();
+$start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();
+$end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
 	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
@@ -104,8 +104,8 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
             $costs = $bcode->calculateTaskCost($taskItem['task_id'],
                     $start_date->format(FMT_DATETIME_MYSQL),
                     $end_date->format(FMT_DATETIME_MYSQL));
-            $tstart = new CDate($task->task_start_date);
-            $tend   = new CDate($task->task_end_date);
+            $tstart = new w2p_Utilities_Date($task->task_start_date);
+            $tend   = new w2p_Utilities_Date($task->task_end_date);
             $filterStart = $start_date;
             $filterEnd = $end_date;
             $workingDaysInSpans = $filterStart->findDaysInRangeOverlap($tstart, $tend, $filterStart, $filterEnd);

@@ -177,7 +177,7 @@ class w2p_Utilities_Mail extends PHPMailer {
 		}
 
 		if ($this->checkAddress == true) {
-			$this->CheckAdresses($this->ato);
+			$this->CheckAddresses($this->ato);
 		}
 		
 		foreach ($this->ato as $to_address) {

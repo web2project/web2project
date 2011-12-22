@@ -37,7 +37,7 @@ if (!(strpos($department, $company_prefix) === false)) {
 $tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
 
 // pull data
-$user = new CUser();
+$user = new CAdmin_User();
 $user->loadFull($user_id);
 
 $contact = new CContact();

@@ -19,8 +19,8 @@ $log_pdf = w2PgetParam($_POST, 'log_pdf', 0);
 $log_start_date = w2PgetParam($_POST, 'log_start_date', '2008-01-01');
 $log_end_date   = w2PgetParam($_POST, 'log_end_date',   '2012-01-01');
 // create Date objects from the datetime fields
-$start_date = intval($log_start_date) ? new CDate($log_start_date) : new CDate();
-$end_date = intval($log_end_date) ? new CDate($log_end_date) : new CDate();
+$start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();
+$end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
 	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
@@ -137,8 +137,8 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $costs = $bcode->calculateProjectCost($projectItem['project_id'],
                     $start_date->format(FMT_DATETIME_MYSQL),
                     $end_date->format(FMT_DATETIME_MYSQL));
-            $pstart = new CDate($project->project_start_date);
-            $pend = intval($criticalTasks[0]['task_end_date']) ? new CDate($criticalTasks[0]['task_end_date']) : new CDate();
+            $pstart = new w2p_Utilities_Date($project->project_start_date);
+            $pend = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : new w2p_Utilities_Date();
             $filterStart = $start_date;
             $filterEnd = $end_date;
             $workingDaysInSpans = $filterStart->findDaysInRangeOverlap($pstart, $pend, $filterStart, $filterEnd);

@@ -124,7 +124,7 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getForumWatchEmail(CForumMessage $message, $forum_name, $message_from) {
+    public function getForumWatchEmail(CForum_Message $message, $forum_name, $message_from) {
 
         $body = $this->AppUI->_('forumEmailBody', UI_OUTPUT_RAW);;
 		$body .= "\n\n" . $this->AppUI->_('Forum', UI_OUTPUT_RAW) . ': ' .  $forum_name;
