@@ -52,5 +52,4 @@ $options = array('showLines' => 1, 'showHeadings' => 1, 'fontSize' => 8,
                     2 => array('justification' => 'left', 'width' => 350), ));
 
 $pdf->ezTable($pdfdata, $pdfhead, null, $options);
-
-$pdf->ezStream();
+$pdf->ezStream(array('Content-Disposition' => 'forum-thread-' . $forum_id . '.pdf'));
