@@ -194,6 +194,8 @@ if ($do_report) {
         $str .= $htmlHelper->createCell('task_percent_complete', $Tasks['task_percent_complete']);
 		$str .= '</tr>';
 		echo $str;
+
+        $users = implode(",", $users);
 		if ($project_id == 0) {
 			$pdfdata[] = array($Tasks['project_name'], $Tasks['task_name'], $Tasks['task_description'], $users, (($start_date != ' ') ? $start_date->format($df) : ' '), (($end_date != ' ') ? $end_date->format($df) : ' '), $Tasks['task_percent_complete'] . '%', );
 		} else {
