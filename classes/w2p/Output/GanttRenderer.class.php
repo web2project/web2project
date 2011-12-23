@@ -94,6 +94,9 @@ class w2p_Output_GanttRenderer {
             $this->graph->scale->day->SetFont(FF_CUSTOM, FS_NORMAL,  7);
         }
 
+        $start_date = is_object($start_date) ? $start_date->format(FMT_DATETIME_MYSQL) : $start_date;
+        $end_date   = is_object($end_date)   ? $end_date->format(FMT_DATETIME_MYSQL)   : $end_date;
+
         $this->graph->SetDateRange($start_date, $end_date);
     }
 
