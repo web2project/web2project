@@ -18,9 +18,9 @@ $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);
 $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);
 $log_all = (int) w2PgetParam($_POST, 'log_all', 1);
 $log_all_projects = (int) w2PgetParam($_POST, 'log_all_projects', 1);
-$use_period = (int) w2PgetParam($_POST, 'use_period', 0);
+$use_period = w2PgetParam($_POST, 'use_period', 'off');
 $show_orphaned = w2PgetParam($_POST, 'show_orphaned', 'off');
-$display_week_hours = (int) w2PgetParam($_POST, 'display_week_hours', 0);
+$display_week_hours = w2PgetParam($_POST, 'display_week_hours', 'off');
 $max_levels = w2PgetParam($_POST, 'max_levels', 'max');
 $log_userfilter = (int) w2PgetParam($_POST, 'log_userfilter', -1);
 $company_id = (int) w2PgetParam($_POST, 'company_id', 'all');
@@ -206,9 +206,9 @@ function chPriority(user_id) {
                 ?>
 			</td>
 			<td nowrap="nowrap">
-				<input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ($display_week_hours) { echo 'checked="checked"'; } ?> />
+				<input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ('on' == $display_week_hours) { echo 'checked="checked"'; } ?> />
 				<label for="display_week_hours"><?php echo $AppUI->_('Display allocated hours/week'); ?></label><br />
-				<input type="checkbox" name="use_period" id="use_period" <?php if ($use_period) { echo 'checked="checked"'; } ?> />
+				<input type="checkbox" name="use_period" id="use_period" <?php if ('on' == $use_period) { echo 'checked="checked"'; } ?> />
 				<label for="use_period"><?php echo $AppUI->_('Use the period'); ?></label>
 			</td>
 			<td align="left" width="50%" nowrap="nowrap">
@@ -271,7 +271,7 @@ if ($do_report) {
 		$q->addWhere('pr.project_status <> ' . (int)$template_status);
 	}
 
-	if ($use_period) {
+	if ('on' == $use_period) {
 		$q->addWhere('(( task_start_date >= ' . $ss . ' AND task_start_date <= ' . $se . ' ) OR ' . '  ( task_end_date <= ' . $se . ' AND task_end_date >= ' . $ss . ' ))');
 	}
 	$q->addWhere('(task_percent_complete < 100)');
@@ -344,11 +344,11 @@ if ($do_report) {
 
 		$sss = $ss;
 		$sse = $se;
-		if (!$use_period) {
+		if ('on' != $use_period) {
 			$sss = -1;
 			$sse = -1;
 		}
-		if ($display_week_hours and !$use_period) {
+		if ('on' == $display_week_hours && ('on' != $use_period)) {
 			foreach ($task_list as $t) {
 				if ($sss == -1) {
 					$sss = $t->task_start_date;
@@ -364,7 +364,15 @@ if ($do_report) {
 			}
 		}
 
-		$table_header = '<tr>' . '<th nowrap="nowrap"></th>' . '<th nowrap="nowrap">' . $AppUI->_('P') . '</th>' . '<th nowrap="nowrap">' . $AppUI->_('Task') . '</th>' . '<th nowrap="nowrap">' . $AppUI->_('Proj.') . '</th>' . '<th nowrap="nowrap">' . $AppUI->_('Duration') . '</th>' . '<th nowrap="nowrap">' . $AppUI->_('Start Date') . '</th>' . '<th nowrap="nowrap">' . $AppUI->_('End[d]') . '</th>' . weekDates($display_week_hours, $sss, $sse) . '<th nowrap="nowrap">' . $AppUI->_('Current Assignees') . '</th>' . '<th nowrap="nowrap">' . $AppUI->_('Possible Assignees') . '</th></tr>';
+		$table_header = '<tr>' . '<th nowrap="nowrap"></th>' .
+            '<th nowrap="nowrap">' . $AppUI->_('P') . '</th>' .
+            '<th nowrap="nowrap">' . $AppUI->_('Task') . '</th>' .
+            '<th nowrap="nowrap">' . $AppUI->_('Proj.') . '</th>' .
+            '<th nowrap="nowrap">' . $AppUI->_('Duration') . '</th>' .
+            '<th nowrap="nowrap">' . $AppUI->_('Start Date') . '</th>' .
+            '<th nowrap="nowrap">' . $AppUI->_('End[d]') . '</th>' . weekDates($display_week_hours, $sss, $sse) .
+            '<th nowrap="nowrap">' . $AppUI->_('Current Assignees') . '</th>' .
+            '<th nowrap="nowrap">' . $AppUI->_('Possible Assignees') . '</th></tr>';
 		$table_rows = '';
 
 		foreach ($user_list as $user_id => $user_data) {
