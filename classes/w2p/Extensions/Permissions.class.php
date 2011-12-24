@@ -21,6 +21,8 @@ class w2p_Extensions_Permissions extends gacl_api {
 	public $config_file = '';
 	public $_db_acl_prefix = 'gacl_';
 
+    protected $_query;
+
 	public function __construct($opts = null) {
 		global $db;
 
@@ -41,7 +43,18 @@ class w2p_Extensions_Permissions extends gacl_api {
 			$this->_debug = true;
 		}
 		parent::gacl_api($opts);
+        $this->_query = new w2p_Database_Query();
 	}
+    /**
+     * Since Dependency injection isn't feasible due to the sheer number of
+     *   calls to the above constructor, this is a way to hijack the current
+     *   $this->_query and manipulate it however we want.
+     *
+     *   @param Object A database connection (real or mocked)
+     */
+    protected function _overrideDatabase($override) {
+        $this->_query = $override;
+    }
 
 	public function checkLogin($login) {
 		// Simple ARO<->ACO check, no AXO's required.
@@ -233,7 +246,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 		$res = null;
 
 		// Fetching module-associated ACL ID's
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable('gacl_axo_map');
 		$q->addQuery('acl_id');
 		$q->addWhere('value = \'' . $mod . '\'');
@@ -398,7 +411,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 			return false;
 		}
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($table, 'g1');
 		$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
 		$q->addOrder('g1.value');
@@ -459,7 +472,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 		// Check to see if the user ACL exists first.
 		$id = $this->get_object_id('user', $user, 'aro');
 		if (!$id) {
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->addTable('users');
 			$q->addQuery('user_username');
 			$q->addWhere('user_id = ' . $user);
@@ -510,7 +523,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 			return false;
 		}
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($this->_db_acl_prefix . 'aro', 'a');
 		$q->addTable($this->_db_acl_prefix . 'aro_groups', 'g1');
 		$q->addTable($this->_db_acl_prefix . 'groups_aro_map', 'g2');
@@ -536,7 +549,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 	// Returns the group of users that have a role (and therefore can login)
 	// Not provided in original phpGacl, but useful.
 	public function getUsersWithRole() {
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($this->_db_acl_prefix . 'groups_aro_map', 'g');
 		$q->addQuery('DISTINCT(g.aro_id)');
 
@@ -616,7 +629,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 			return false;
 		}
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($table, 'g1');
 		$q->addTable($map_table, 'g2');
 		$q->addQuery('g1.id, g1.name, g1.value, g1.parent_id');
@@ -662,7 +675,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 
 		$this->debug_text("get_object(): Section Value: $section_value Object Type: $object_type");
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($table);
 		$q->addQuery('id, section_value, name, value, order_value, hidden');
 
@@ -720,7 +733,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 
 		$this->debug_text("get_objects(): Section Value: $section_value Object Type: $object_type");
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($table);
 		$q->addQuery('id, section_value, name, value, order_value, hidden');
 
@@ -772,7 +785,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 		$this->debug_text("get_objects(): Section Value: $section_value Object Type: $object_type");
 
 		// $query = 'SELECT id, value, name, order_value, hidden FROM '. $table;
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($table);
 		$q->addQuery('id, value, name, order_value, hidden');
 
@@ -931,7 +944,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 		if (!$acl_id) {
 			return 'Can not remove acl permissions: no acl id given.';
 		}
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
 		$q->addWhere('acl_id = \'' . $acl_id . '\'');
 		$result = $q->exec();
@@ -949,7 +962,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 		if (!$module) {
 			return 'Can not remove modules permissions: no module name given.';
 		}
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
 		$q->addWhere('module = \'' . $module . '\'');
 		$result = $q->exec();
@@ -967,7 +980,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 		if (!$user_id) {
 			return 'Can not remove users permissions: no user given.';
 		}
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
 		$q->addWhere('user_id = \'' . $user_id . '\'');
 		$result = $q->exec();
@@ -986,7 +999,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 	 */
 	public function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $method = 1) {
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($this->_db_acl_prefix . 'aco_sections', 'a');
 		$q->addQuery('a.value AS a_value, a.name AS a_name,
 					b.value AS b_value, b.name AS b_name,
@@ -1059,13 +1072,13 @@ class w2p_Extensions_Permissions extends gacl_api {
 		}
 
 		// Now that we have the users permissions lets delete the existing ones and insert the new ones
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->setDelete($this->_db_acl_prefix . 'permissions');
 		if ($user_id) {
 			$q->addWhere('user_id = \'' . $user_id . '\'');
 		}
 		if ($user_aro_id) {
-			$qui = new w2p_Database_Query;
+			$qui = $this->_query;
 			$qui->addTable($this->_db_acl_prefix . 'aro');
 			$qui->addQuery('value');
 			$qui->addWhere('id = \'' . $user_aro_id . '\'');
@@ -1089,7 +1102,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 		$q->exec();
 		$q->clear();
 
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		foreach ($user_permissions as $user => $permissions) {
 			foreach ($permissions as $permission) {
 				//Only show permissions with acl_id and item_id when item permissions are to show
@@ -1127,7 +1140,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 	 */
 	public function w2Pacl_check($application = 'application', $op, $user = 'user', $userid, $app = 'app', $module) {
 		global $w2p_performance_acltime, $w2p_performance_aclchecks;
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($this->_db_acl_prefix . 'permissions');
 		$q->addQuery('access');
 		$q->addWhere('module = \'' . $module . '\'');
@@ -1155,7 +1168,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 		}
 
 		if (!count($mod_class)) {
-			$q = new w2p_Database_Query;
+			$q = $this->_query;
 			$q->addTable('modules');
 			$q->addQuery('mod_main_class, permissions_item_table, permissions_item_field, permissions_item_label, mod_directory');
 			$q->addWhere('mod_directory = \'' . $module . '\'');
@@ -1245,7 +1258,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 				}
 				return array();
 			} else {
-				$q = new w2p_Database_Query;
+				$q = $this->_query;
 				$q->addTable($this->_db_acl_prefix . 'permissions');
 				$q->addQuery('access, acl_id');
 				$q->addWhere('module = \'' . $module . '\'');
@@ -1253,7 +1266,6 @@ class w2p_Extensions_Permissions extends gacl_api {
 				$q->addWhere('user_id = ' . (int)$userid);
 				$q->addWhere('(item_id = ' . (int)$item . ' OR item_id = 0)');
 				$q->addOrder('item_id DESC, acl_id DESC');
-				$result = array();
 				$result = $q->loadList();
 				if (W2P_PERFORMANCE_DEBUG) {
 					++$w2p_performance_aclchecks;
@@ -1266,7 +1278,7 @@ class w2p_Extensions_Permissions extends gacl_api {
 
 	public function w2Psearch_acl($application = 'application', $op, $user = 'user', $userid, $module) {
 		global $w2p_performance_acltime, $w2p_performance_aclchecks;
-		$q = new w2p_Database_Query;
+		$q = $this->_query;
 		$q->addTable($this->_db_acl_prefix . 'permissions');
 		$q->addQuery('acl_id, access, item_id');
 		$q->addWhere('module = \'' . $module . '\'');
@@ -1291,7 +1303,7 @@ class w2p_Extensions_Permissions extends gacl_api {
      * searching but it does not apply any permissions of its own.
      */
     public function registerModule($module_name, $module_value, $section_value = 'app') {
-        $q = new w2p_Database_Query();
+        $q = $this->_query;
         $q->addTable('gacl_axo');
         $q->addInsert('name', $module_name);
         $q->addInsert('value', $module_value);
@@ -1302,7 +1314,7 @@ class w2p_Extensions_Permissions extends gacl_api {
     }
     public function unregisterModule($module_value) {
         if ($module_value != '') {
-            $q = new w2p_Database_Query();
+            $q = $this->_query;
             $q->setDelete('gacl_axo');
             $q->addWhere("value = '$module_value'");
             $q->exec();
