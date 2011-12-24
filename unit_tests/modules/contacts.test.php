@@ -72,7 +72,7 @@ class Contacts_Test extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->obj = new CContact();
-        $this->mockDB = new w2p_Database_Mock();
+        $this->mockDB = new w2p_Mocks_Query();
         $this->obj->overrideDatabase($this->mockDB);
 
         $this->post_data = array(
