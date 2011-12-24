@@ -55,7 +55,6 @@ class CFile extends w2p_Core_BaseObject {
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
             $this->addHelpDeskTaskLog();
         }
-        $this->file_date = $AppUI->convertToSystemTZ($this->file_date);
 
         if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user.
@@ -73,7 +72,6 @@ class CFile extends w2p_Core_BaseObject {
         }
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->file_owner = $AppUI->user_id;
-
             $q = $this->_getQuery();
             $q->addTable('files');
             $q->clear();
@@ -90,6 +88,7 @@ class CFile extends w2p_Core_BaseObject {
             }
             $q->clear();
 
+            $this->file_date = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {

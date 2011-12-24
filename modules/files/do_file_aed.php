@@ -17,8 +17,6 @@ $isNotNew = (int) w2PgetParam($_POST, 'file_id', '0');
 $cancel = (int) w2PgetParam($_POST, 'cancel', 0);
 $duplicate = (int) w2PgetParam($_POST, 'duplicate', 0);
 $redirect = w2PgetParam($_POST, 'redirect', '');
-global $db;
-
 $notify = w2PgetParam($_POST, 'notify', '0');
 $notify = ($notify != '0') ? '1' : '0';
 
@@ -74,8 +72,6 @@ if ($duplicate) {
 		$AppUI->redirect();
 	} else {
 		$new_file->file_real_filename = $dup_realname;
-        //TODO: remove this db reference..
-		$new_file->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
         $result = $new_file->store($AppUI);
 
         if (count($new_file->getError())) {
@@ -133,7 +129,6 @@ if (isset($_FILES['formfile'])) {
 		$obj->file_name = $upload['name'];
 		$obj->file_type = $upload['type'];
 		$obj->file_size = $upload['size'];
-		$obj->file_date = str_replace("'", '', $db->DBTimeStamp(time()));
 		$obj->file_real_filename = uniqid(rand());
 
 		$res = $obj->moveTemp($upload);
