@@ -73,6 +73,8 @@ class Links_Test extends PHPUnit_Framework_TestCase
       $this->mockDB = new w2p_Mocks_Query();
       $this->obj->overrideDatabase($this->mockDB);
 
+      $GLOBALS['acl'] = new w2p_Mocks_Permissions();
+
       $this->post_data = array(
           'dosql'             => 'do_link_aed',
           'link_id'           => 0,
@@ -145,7 +147,7 @@ class Links_Test extends PHPUnit_Framework_TestCase
       /**
        * Verify we got the proper error message
        */
-      $this->AssertEquals(1, count($errorArray));
+      $this->assertEquals(1, count($errorArray));
       $this->assertArrayHasKey('link_name', $errorArray);
 
       /**
@@ -249,7 +251,7 @@ class Links_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->obj->link_description,       $item->link_description);
         $this->assertEquals($this->obj->link_owner,             $item->link_owner);
         $this->assertEquals($this->obj->link_category,          $item->link_category);
-        $this->assertEquals($this->obj->link_id,                $item->link_id);
+        $this->assertNotEquals($this->obj->link_date,           '');
     }
 
     /**
@@ -294,6 +296,7 @@ class Links_Test extends PHPUnit_Framework_TestCase
         $this->mockDB->stageHash(array('link_name' => '', 'link_url' => ''));
         $item->load($original_id);
 
+        $this->assertTrue(is_a($item, 'CLink'));
         $this->assertEquals('',              $item->link_name);
         $this->assertEquals('',              $item->link_url);
     }
