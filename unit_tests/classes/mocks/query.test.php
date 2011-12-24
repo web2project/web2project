@@ -8,7 +8,7 @@
  *  @author     Keith casey
  */
 
-class w2p_Database_Mock_Test extends PHPUnit_Framework_TestCase {
+class w2p_Mocks_Query_Test extends PHPUnit_Framework_TestCase {
 
     /**
      * An AppUI object for validation
@@ -23,7 +23,7 @@ class w2p_Database_Mock_Test extends PHPUnit_Framework_TestCase {
      */
     protected function setUp()
     {
-        $this->mockDB = new w2p_Database_Mock();
+        $this->mockDB = new w2p_Mocks_Query();
     }
 
     public function testLoadHash() {
