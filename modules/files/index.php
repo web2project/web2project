@@ -44,7 +44,7 @@ $titleBlock->addCell(arraySelect($projects, 'project_id', 'onChange="document.pi
 
 // override the $canEdit variable passed from the main index.php in order to check folder permissions
 /** get permitted folders **/
-$cfObj = new CFileFolder();
+$cfObj = new CFile_Folder();
 $allowed_folders_ary = $cfObj->getAllowedRecords($AppUI->user_id);
 $denied_folders_ary = $cfObj->getDeniedRecords($AppUI->user_id);
 

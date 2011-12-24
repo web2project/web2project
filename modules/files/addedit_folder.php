@@ -34,7 +34,7 @@ if (!$canEdit) {
 
 // check if this record has dependancies to prevent deletion
 $msg = '';
-$obj = new CFileFolder();
+$obj = new CFile_Folder();
 if ($folder > 0) {
 	$canDelete = $obj->canDelete($msg, $folder);
 }
