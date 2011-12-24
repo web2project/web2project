@@ -55,45 +55,27 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
  * @category    Files
  * @package     web2project
  * @subpackage  unit_tests
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class Files_Test extends PHPUnit_Extensions_Database_TestCase
+class Files_Test extends PHPUnit_Framework_TestCase
 {
 
     protected $backupGlobals = FALSE;
     protected $obj = null;
     protected $post_data = array();
-
-    /**
-     * Return database connection for tests
-     */
-    protected function getConnection()
-    {
-      $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' .
-                     w2PgetConfig('dbhost') . ';dbname=' .
-                     w2PgetConfig('dbname'),
-                     w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
-      return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
-    }
-
-    /**
-     * Set up default dataset for testing
-     */
-    protected function getDataSet()
-    {
-      return $this->createXMLDataSet($this->getDataSetPath().'filesSeed.xml');
-    }
-    protected function getDataSetPath()
-    {
-      return dirname(dirname(__FILE__)).'/db_files/files/';
-    }
+    protected $mockDB = null;
 
     protected function setUp()
     {
       parent::setUp();
 
       $this->obj = new CFile();
+      $this->mockDB = new w2p_Mocks_Query();
+      $this->obj->overrideDatabase($this->mockDB);
+
+      $GLOBALS['acl'] = new w2p_Mocks_Permissions();
+
       $this->post_data = array(
           'dosql' =>              'do_file_aed',
           'file_id' =>            0,
@@ -105,7 +87,6 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
           'file_description' =>   'File description',
           'file_type' =>          'image/jpeg',
           'file_owner' =>         '1',
-          'file_date' =>          '20090728',
           'file_size' =>          '0',
           'file_version' =>       1,
 		  'file_version_id' =>    1,
@@ -312,40 +293,96 @@ class Files_Test extends PHPUnit_Extensions_Database_TestCase
        */
       $this->AssertEquals(5, count($errorArray));
       $this->assertArrayHasKey('file_real_filename', $errorArray);
-      $this->assertArrayHasKey('file_name', $errorArray);
-      $this->assertArrayHasKey('file_parent', $errorArray);
-      $this->assertArrayHasKey('file_type', $errorArray);
-      $this->assertArrayHasKey('file_size', $errorArray);
+      $this->assertArrayHasKey('file_name',          $errorArray);
+      $this->assertArrayHasKey('file_parent',        $errorArray);
+      $this->assertArrayHasKey('file_type',          $errorArray);
+      $this->assertArrayHasKey('file_size',          $errorArray);
     }
 
     public function testDelete()
     {
-        $this->markTestIncomplete(
-                "I tried basing this on the CLink_Test->testDelete method and
-                no matter what I get 'bindHashToObject : object expected' as
-                the error message.");
+        global $AppUI;
+
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
+        $original_id = $this->obj->link_id;
+        $result = $this->obj->delete($AppUI);
+
+        $item = new CFile();
+        $item->overrideDatabase($this->mockDB);
+        $this->mockDB->stageHash(
+                array('file_real_filename' => '', 'file_name' => '', 'file_parent' => '',
+                    'file_type' => '', 'file_size' => '')
+        );
+        $item->load($original_id);
+
+        $this->assertTrue(is_a($item, 'CFile'));
+        $this->assertEquals('',              $item->link_name);
+        $this->assertEquals('',              $item->link_url);
+    }
+
+    public function testLoad()
+    {
+        global $AppUI;
+
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
+
+        $item = new CFile();
+        $item->overrideDatabase($this->mockDB);
+        $this->post_data['file_id'] = $this->obj->file_id;
+        $this->mockDB->stageHash($this->post_data);
+        $item->load($this->obj->file_id);
+
+        $this->assertEquals($this->obj->file_name,              $item->file_name);
+        $this->assertEquals($this->obj->file_real_filename,     $item->file_real_filename);
+        $this->assertEquals($this->obj->file_parent,            $item->file_parent);
+        $this->assertEquals($this->obj->file_description,       $item->file_description);
+        $this->assertNotEquals($this->obj->file_date,           '');
     }
 
     /**
-     * Tests the proper creation of a project.
+     * Tests the proper creation of a file
      */
     public function testStoreCreate()
     {
         global $AppUI;
 
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
-        $this->assertTrue($errorArray);
+        $result = $this->obj->store($AppUI);
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'filesTestCreate.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_dataset, array('files' => array('file_date')));
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('files' => array('file_date')));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('files'), $xml_db_filtered_dataset->getTable('files'));
+        $this->assertTrue($result);
+        $this->assertEquals('TheRealFileName',   $this->obj->file_real_filename);
+        $this->assertEquals('thisIsTheFilename', $this->obj->file_name);
+        $this->assertEquals(1,                   $this->obj->file_parent);
+        $this->assertEquals('File description',  $this->obj->file_description);
+        $this->assertNotEquals(0,                $this->obj->file_id);
     }
 
+    /**
+     * Tests the update of a file
+     */
     public function testStoreUpdate()
     {
-        $this->markTestIncomplete("Still under development");
+      global $AppUI;
+
+      $this->obj->bind($this->post_data);
+      $result = $this->obj->store($AppUI);
+      $this->assertTrue($result);
+      $original_id = $this->obj->file_id;
+      $original_date = $this->obj->file_date;   // Once created, this should not change
+
+      $this->obj->file_name = 'Some new file name';
+      $this->obj->file_description = 'A new file description';
+      $result = $this->obj->store($AppUI);
+      $this->assertTrue($result);
+      $new_id = $this->obj->file_id;
+
+      $this->assertEquals($original_id,             $new_id);
+      $this->assertEquals($original_date,           $this->obj->file_date);
+      $this->assertEquals('Some new file name',     $this->obj->file_name);
+      $this->assertEquals('A new file description', $this->obj->file_description);
     }
 }
