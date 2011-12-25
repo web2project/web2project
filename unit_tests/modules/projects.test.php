@@ -14,7 +14,7 @@
  * @package     web2project
  * @subpackage  unit_tests
  * @author      Trevor Morse <trevor.morse@gmail.com>
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
 
@@ -67,6 +67,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     protected $backupGlobals = FALSE;
 	protected $obj = null;
 	protected $post_data = array();
+    protected $mockDB = null;
 
     /**
      * Return database connection for tests
@@ -97,6 +98,8 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
 		parent::setUp();
 
 		$this->obj = new CProject();
+        $this->mockDB = new w2p_Mocks_Query();
+//        $this->obj->overrideDatabase($this->mockDB);
 
 		$this->post_data = array(
 			'dosql' =>                      'do_project_aed',
@@ -428,81 +431,41 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     /**
      * Tests the proper creation of a project.
      */
-    public function testCreate()
+    public function testStoreCreate()
     {
         global $AppUI;
-
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
         $results = $this->obj->store($AppUI);
 
         $this->assertTrue($results);
-        $this->assertEquals(5,                          $this->obj->project_id);
-        $this->assertEquals(1,                          $this->obj->project_company);
-        $this->assertEquals('',                         $this->obj->project_department);
-        $this->assertEquals('New Project',              $this->obj->project_name);
-        $this->assertEquals('nproject',                 $this->obj->project_short_name);
-        $this->assertEquals(1,                          $this->obj->project_owner);
-        $this->assertEquals('project.example.org',      $this->obj->project_url);
-        $this->assertEquals('projectdemo.example.org',  $this->obj->project_demo_url);
-        $this->assertEquals('2009-06-28 00:00:00',      $this->obj->project_start_date);
-        $this->assertEquals('2009-07-28 23:59:59',      $this->obj->project_end_date);
-        $this->assertEquals('',                         $this->obj->project_actual_end_date);
-        $this->assertEquals(0,                          $this->obj->project_status);
-        $this->assertEquals('',                         $this->obj->project_percent_complete);
-        $this->assertEquals('FFFFFF',                   $this->obj->project_color_identifier);
-        $this->assertEquals('This is a project.',       $this->obj->project_description);
-        $this->assertEquals(5,                          $this->obj->project_target_budget);
-        $this->assertEquals(10,                         $this->obj->project_actual_budget);
-        $this->assertEquals(0,                          $this->obj->project_scheduled_hours);
-        $this->assertEquals(0,                          $this->obj->project_worked_hours);
-        $this->assertEquals(0,                          $this->obj->project_task_count);
-        $this->assertEquals(1,                          $this->obj->project_creator);
-        $this->assertEquals(0,                          $this->obj->project_active);
-        $this->assertEquals(0,                          $this->obj->project_private);
-        $this->assertEquals('',                         $this->obj->project_departments);
-        $this->assertEquals(1,							count($this->obj->project_contacts));
-        $this->assertEquals(-1,                         $this->obj->project_priority);
-        $this->assertEquals(0,                          $this->obj->project_type);
-        $this->assertEquals(5,                          $this->obj->project_parent);
-        $this->assertEquals(5,                          $this->obj->project_original_parent);
-        $this->assertEquals('',                         $this->obj->project_location);
-
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestCreateProject.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('projects' => array('project_created', 'project_updated')));
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('projects' => array('project_created', 'project_updated')));
-
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
-
-        /**
-         * Get created date to test against
+        $this->assertEquals(1,                              $this->obj->project_id);
+        /*
+         *  These fields are all auto-generated in the CProject->store method.
          */
-        $q = new w2p_Database_Query;
-        $q->addTable('projects');
-        $q->addQuery('project_created');
-        $q->addWhere('project_id = ' . $this->obj->project_id);
-        $project_created = $q->loadResult();
-        $project_created = $AppUI->formatTZAwareTime($project_created, '%Y-%m-%d %T');
-        $project_created = strtotime($project_created);
-
-        /**
-         * Get updated date to test against
+        $this->assertEquals(1,                                $this->obj->project_parent);
+        $this->assertEquals(1,                                $this->obj->project_original_parent);
+        $this->assertEquals(1,                                $this->obj->project_company);
+        $this->assertEquals($this->mockDB->dbfnNowWithTZ(),   $this->obj->project_updated);
+        /*
+         *  These fields are formatted by the CProject->store method.
          */
-        $q = new w2p_Database_Query;
-        $q->addTable('projects');
-        $q->addQuery('project_updated');
-        $q->addWhere('project_id = ' . $this->obj->project_id);
-        $project_updated = $q->loadResult();
-        $project_updated = $AppUI->formatTZAwareTime($project_updated, '%Y-%m-%d %T');
-        $project_updated =  strtotime($project_updated);
-
-        $now_secs = time();
-        $min_time = $now_secs - 10;
-
-        $this->assertGreaterThanOrEqual($min_time, $project_created);
-        $this->assertLessThanOrEqual($now_secs, $project_created);
-        $this->assertGreaterThanOrEqual($min_time, $project_updated);
-        $this->assertLessThanOrEqual($now_secs, $project_updated);
+        $this->assertEquals('project.example.org',            $this->obj->project_url);
+        $this->assertEquals('projectdemo.example.org',        $this->obj->project_demo_url);
+        /*
+         *  These fields come from the $_POST data and should be pass throughs.
+         */
+        $this->assertEquals('New Project',                    $this->obj->project_name);
+        $this->assertEquals('nproject',                       $this->obj->project_short_name);
+        $this->assertEquals(1,                                $this->obj->project_owner);
+        $this->assertEquals('2009-06-28 00:00:00',            $this->obj->project_start_date);
+        $this->assertEquals('2009-07-28 23:59:59',            $this->obj->project_end_date);
+        $this->assertEquals('FFFFFF',                         $this->obj->project_color_identifier);
+        /*
+         *  These fields are deprecated and should always be empty.
+         */
+        $this->assertEquals('',                               $this->obj->project_department);
+        $this->assertEquals(array(0 => ''),                   $this->obj->project_contacts);
     }
 
     /**
@@ -613,83 +576,30 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testStoreUpdate()
     {
       	global $AppUI;
-
-        $now_secs = time();
-        $min_time = $now_secs - 10;
-
-    	$this->obj->load(1);
-
-		$this->post_data['dosql'] 						= 'do_project_aed';
-		$this->post_data['project_id'] 					= 1;
-		$this->post_data['project_creator'] 			= 1;
-		$this->post_data['project_contacts'] 			= '';
-		$this->post_data['project_name'] 				= 'Updated Project';
-		$this->post_data['project_parent'] 				= '';
-		$this->post_data['project_owner'] 				= 1;
-		$this->post_data['project_company'] 			= 1;
-		$this->post_data['project_location'] 			= 'Somewhere Updated';
-		$this->post_data['project_start_date'] 			= '20090728';
-		$this->post_data['project_end_date'] 			= '20090828';
-		$this->post_data['project_scheduled_hours'] 	= 0;
-		$this->post_data['project_worked_hours'] 		= 0;
-		$this->post_data['project_task_count'] 			= 0;
-		$this->post_data['project_target_budget'] 		= 15;
-		$this->post_data['project_actual_budget'] 		= 15;
-		$this->post_data['project_url'] 				= 'project-update.example.org';
-		$this->post_data['project_demo_url'] 			= 'project-updatedemo.example.org';
-		$this->post_data['project_priority'] 			= '1';
-		$this->post_data['project_short_name'] 			= 'uproject';
-		$this->post_data['project_color_identifier']	= 'CCCEEE';
-		$this->post_data['project_type'] 				= 1;
-		$this->post_data['project_status'] 				= 1;
-		$this->post_data['project_description'] 		= 'This is an updated project.';
-		$this->post_data['email_project_owner'] 		= 1;
-		$this->post_data['email_project_contacts'] 		= 0;
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
 
         $this->obj->bind($this->post_data);
-        $results = $this->obj->store($AppUI);
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
+        $original_id = $this->obj->project_id;
 
-        $this->assertTrue($results);
-        $this->assertEquals(1,                                  $this->obj->project_id);
-        $this->assertEquals(1,                                  $this->obj->project_company);
-        $this->assertEquals('Updated Project',                  $this->obj->project_name);
-        $this->assertEquals('uproject',                         $this->obj->project_short_name);
-        $this->assertEquals(1,                                  $this->obj->project_owner);
-        $this->assertEquals('project-update.example.org',       $this->obj->project_url);
-        $this->assertEquals('project-updatedemo.example.org',   $this->obj->project_demo_url);
-        $this->assertEquals('2009-07-28 00:00:00',              $this->obj->project_start_date);
-        $this->assertEquals('2009-08-28 23:59:59',              $this->obj->project_end_date);
-        $this->assertEquals('2009-08-15 00:00:00',              $this->obj->project_actual_end_date);
-        $this->assertEquals(1,                                  $this->obj->project_status);
-        $this->assertEquals(0.00,                               $this->obj->project_percent_complete);
-        $this->assertEquals('CCCEEE',                           $this->obj->project_color_identifier);
-        $this->assertEquals('This is an updated project.',      $this->obj->project_description);
-        $this->assertEquals(15,                                 $this->obj->project_target_budget);
-        $this->assertEquals(15,                                 $this->obj->project_actual_budget);
-        $this->assertEquals(0,                                  $this->obj->project_scheduled_hours);
-        $this->assertEquals(0,                                  $this->obj->project_worked_hours);
-        $this->assertEquals(0,                                  $this->obj->project_task_count);
-        $this->assertEquals(1,                                  $this->obj->project_creator);
-        $this->assertEquals(1,                                  $this->obj->project_active);
-        $this->assertEquals(0,                                  $this->obj->project_private);
-        $this->assertEquals('',                                 $this->obj->project_departments);
-        $this->assertEquals(1,                          		count($this->obj->project_contacts));
-        $this->assertEquals(1,                                  $this->obj->project_priority);
-        $this->assertEquals(1,                                  $this->obj->project_type);
-        $this->assertEquals(1,                                  $this->obj->project_parent);
-        $this->assertEquals(1,                                  $this->obj->project_original_parent);
-        $this->assertEquals('Somewhere Updated',                $this->obj->project_location);
+        $this->obj->project_name        = 'Updated Project';
+        $this->obj->project_location    = 'Somewhere Updated';
 
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestUpdateProject.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('projects' => array('project_updated')));
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('projects' => array('project_updated')));
+        /*
+         * This sleep() is used because we need at least a second to pass for the
+         *   project_updated time to be different than the project_created earlier
+         *   in this test.
+         */
+        sleep(1);
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
+        $new_id = $this->obj->project_id;
 
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
-
-        $project_updated = $AppUI->formatTZAwareTime($this->obj->project_updated, '%Y-%m-%d %T');
-        $this->assertGreaterThanOrEqual($min_time,  strtotime($project_updated));
-        $this->assertLessThanOrEqual($now_secs, $project_updated);
+        $this->assertEquals($original_id,                   $new_id);
+        $this->assertEquals('Updated Project',              $this->obj->project_name);
+        $this->assertEquals('Somewhere Updated',            $this->obj->project_location);
+        $this->assertNotEquals($this->obj->project_created, $this->obj->project_updated);
     }
 
     /**
@@ -1058,7 +968,7 @@ class Projects_Test extends PHPUnit_Extensions_Database_TestCase
      * departments saving. The basic functionality is covered in the
      * create and update tests.
      */
-    public function testStoreCreate()
+    public function testStoreCreateContactsDepartments()
     {
 		global $AppUI;
 
