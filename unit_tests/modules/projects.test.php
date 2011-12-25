@@ -523,38 +523,18 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
     public function testLoadFull()
     {
         global $AppUI;
-
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
+$this->mockDB->stageHash(
+        array('project_id' => 1, 'project_url' => 'http://project1.example.org',
+            'project_start_date' => '2009-07-05 00:00:00',
+            'company_name' => 'UnitTestCompany', 'user_name' => 'Admin Person'
+        )
+);
         $this->obj->loadFull($AppUI, 1);
 
     	$this->assertEquals(1,                                  $this->obj->project_id);
-      	$this->assertEquals(1,                                  $this->obj->project_company);
-      	$this->assertEquals('Test Project',                     $this->obj->project_name);
-      	$this->assertEquals('TP',                               $this->obj->project_short_name);
-      	$this->assertEquals(1,                                  $this->obj->project_owner);
       	$this->assertEquals('http://project1.example.org',      $this->obj->project_url);
-      	$this->assertEquals('http://project1-demo.example.org', $this->obj->project_demo_url);
       	$this->assertEquals('2009-07-05 00:00:00',              $this->obj->project_start_date);
-      	$this->assertEquals('2009-07-15 23:59:59',              $this->obj->project_end_date);
-      	$this->assertEquals('2009-08-15 00:00:00',              $this->obj->project_actual_end_date);
-      	$this->assertEquals(0,                                  $this->obj->project_status);
-      	$this->assertEquals(0.00,                               $this->obj->project_percent_complete);
-      	$this->assertEquals('FFFFFF',                           $this->obj->project_color_identifier);
-      	$this->assertEquals('This is a project',                $this->obj->project_description);
-      	$this->assertEquals('15.00',                            $this->obj->project_target_budget);
-      	$this->assertEquals('5.00',                             $this->obj->project_actual_budget);
-      	$this->assertEquals(0,                                  $this->obj->project_scheduled_hours);
-      	$this->assertEquals(0,                                  $this->obj->project_worked_hours);
-      	$this->assertEquals(0,                                  $this->obj->project_task_count);
-      	$this->assertEquals(1,                                  $this->obj->project_creator);
-      	$this->assertEquals(1,                                  $this->obj->project_active);
-      	$this->assertEquals(0,                                  $this->obj->project_private);
-      	$this->assertEquals('',                                 $this->obj->project_departments);
-      	$this->assertEquals('',                                 $this->obj->project_contacts);
-      	$this->assertEquals(-1,                                 $this->obj->project_priority);
-      	$this->assertEquals(0,                                  $this->obj->project_type);
-      	$this->assertEquals(1,                                  $this->obj->project_parent);
-      	$this->assertEquals(1,                                  $this->obj->project_original_parent);
-      	$this->assertEquals('Somewhere',                        $this->obj->project_location);
       	$this->assertEquals('UnitTestCompany',                  $this->obj->company_name);
       	$this->assertEquals('Admin Person',                     $this->obj->user_name);
     }
