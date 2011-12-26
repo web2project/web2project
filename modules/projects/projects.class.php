@@ -597,34 +597,40 @@ class CProject extends w2p_Core_BaseObject {
             $q->addWhere('project_id=' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+            $stored_departments = array();
             if ($this->project_departments) {
                 foreach ($this->project_departments as $department) {
                     if ($department) {
                         $q->addTable('project_departments');
                         $q->addInsert('project_id', $this->project_id);
                         $q->addInsert('department_id', $department);
+                        $stored_departments[$department] = $this->project_id;
                         $q->exec();
                         $q->clear();
                     }
                 }
             }
+            $this->stored_departments = $stored_departments;
 
             //split out related contacts and store them seperatly.
             $q->setDelete('project_contacts');
             $q->addWhere('project_id=' . (int)$this->project_id);
             $q->exec();
             $q->clear();
+            $stored_contacts = array();
             if ($this->project_contacts) {
                 foreach ($this->project_contacts as $contact) {
                     if ($contact) {
                         $q->addTable('project_contacts');
                         $q->addInsert('project_id', $this->project_id);
                         $q->addInsert('contact_id', $contact);
+                        $stored_contacts[$contact] = $this->project_id;
                         $q->exec();
                         $q->clear();
                     }
                 }
             }
+            $this->stored_contacts = $stored_contacts;
 
             $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
             $custom_fields->bind($_POST);
