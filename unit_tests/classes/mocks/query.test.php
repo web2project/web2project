@@ -61,6 +61,17 @@ class w2p_Mocks_Query_Test extends PHPUnit_Framework_TestCase {
         $this->assertEquals('value4', $list[1]['key4']);
     }
 
+    public function testLoadHashList() {
+        $this->mockDB->stageHashList(1, array('key1' => 'value1', 'key2' => 'value2'));
+        $this->mockDB->stageHashList(5, array('key3' => 'value3', 'key4' => 'value4'));
+        $this->assertEquals(2, count($this->mockDB->loadHashList()));
+
+        $this->mockDB->stageHashList(7, array('key5' => 'value5', 'key6' => 'value6'));
+        $this->assertEquals(3, count($this->mockDB->loadHashList()));
+
+        $hashlist = $this->mockDB->loadHashList();
+        $this->assertEquals('value5', $hashlist[7]['key5']);
+    }
 //    public function loadObject(&$object, $bindAll = false, $strip = true) {
 //        $hash = $this->loadHash();
 //

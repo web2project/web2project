@@ -17,6 +17,7 @@ class w2p_Mocks_Query extends w2p_Database_Query {
     protected $hash = array();
     protected $result = '';
     protected $list = array();
+    protected $hashlist = array();
 
     public function __construct($prefix = null, $query_db = null) {
         parent::__construct($prefix, $query_db);
@@ -41,6 +42,13 @@ class w2p_Mocks_Query extends w2p_Database_Query {
     }
     public function loadList($maxrows = -1, $index = -1) {
         return $this->list;
+    }
+
+    public function stageHashList($index, array $array) {
+        $this->hashlist[$index] = $array;
+    }
+    public function loadHashList($index = null) {
+        return $this->hashlist;
     }
 
     public function loadObject(&$object, $bindAll = false, $strip = true) {
