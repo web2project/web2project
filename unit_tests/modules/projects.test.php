@@ -524,12 +524,11 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
     {
         global $AppUI;
 $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
-$this->mockDB->stageHash(
-        array('project_id' => 1, 'project_url' => 'http://project1.example.org',
-            'project_start_date' => '2009-07-05 00:00:00',
-            'company_name' => 'UnitTestCompany', 'user_name' => 'Admin Person'
-        )
-);
+        $this->mockDB->stageHash(
+                array('project_id' => 1, 'project_url' => 'http://project1.example.org',
+                    'project_start_date' => '2009-07-05 00:00:00',
+                    'company_name' => 'UnitTestCompany', 'user_name' => 'Admin Person')
+        );
         $this->obj->loadFull($AppUI, 1);
 
     	$this->assertEquals(1,                                  $this->obj->project_id);
@@ -546,7 +545,6 @@ $this->mockDB->stageHash(
     {
       	global $AppUI;
 $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
-
         $this->obj->bind($this->post_data);
         $result = $this->obj->store($AppUI);
         $this->assertTrue($result);
@@ -940,46 +938,24 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
     public function testStoreCreateContactsDepartments()
     {
 		global $AppUI;
-
-		$this->obj->load(1);
-
-		$this->post_data['dosql'] = 'do_project_aed';
-		$this->post_data['project_id'] = 1;
-		$this->post_data['project_creator'] = 1;
-		$this->post_data['project_contacts'] = '';
-		$this->post_data['project_name'] = 'Updated Project';
-		$this->post_data['project_parent'] = '';
-		$this->post_data['project_owner'] = 1;
-		$this->post_data['project_company'] = 1;
-		$this->post_data['project_location'] = 'Somewhere Updated';
-		$this->post_data['project_start_date'] = '20090728';
-		$this->post_data['project_end_data'] = '20090828';
-		$this->post_data['project_target_budget'] = 15;
-		$this->post_data['project_actual_budget'] = 15;
-		$this->post_data['project_scheduled_hours'] = 0;
-		$this->post_data['project_worked_hours'] = 0;
-		$this->post_data['project_task_count'] = 0;
-		$this->post_data['project_url'] = 'project-update.example.org';
-		$this->post_data['project_demo_url'] = 'project-updatedemo.example.org';
-		$this->post_data['project_priority'] = '1';
-		$this->post_data['project_short_name'] = 'uproject';
-		$this->post_data['project_color_identifier'] = 'CCCEEE';
-		$this->post_data['project_type'] = 1;
-		$this->post_data['project_status'] = 1;
-		$this->post_data['project_description'] = 'This is an updated project.';
-		$this->post_data['email_project_owner'] = 1;
-		$this->post_data['email_project_contacts'] = 0;
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
 		$this->post_data['project_departments'] = array(1,2);
 		$this->post_data['project_contacts'] = array(3,4);
-
         $this->obj->bind($this->post_data);
-        $results = $this->obj->store($AppUI);
+        $result = $this->obj->store($AppUI);
 
-        $this->assertTrue($results);
-
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestStore.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('project_departments'), $this->getConnection()->createDataSet()->getTable('project_departments'));
-        $this->assertTablesEqual($xml_dataset->getTable('project_contacts'), $this->getConnection()->createDataSet()->getTable('project_contacts'));
+        $this->assertTrue($result);
+        $this->assertEquals(1,                   $this->obj->project_id);
+        /*
+         * All of the rest of the fields are tested in the testStoreCreate and
+         *   testStoreUpdate methods, so no need to retest here.
+         */
+        $this->assertEquals(2,                   count($this->obj->stored_departments));
+        $this->assertTrue(isset($this->obj->stored_departments[1]));
+        $this->assertTrue(isset($this->obj->stored_departments[2]));
+        $this->assertEquals(2,                   count($this->obj->stored_contacts));
+        $this->assertTrue(isset($this->obj->stored_contacts[3]));
+        $this->assertTrue(isset($this->obj->stored_contacts[4]));
     }
 
     /**
