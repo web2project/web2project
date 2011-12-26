@@ -1068,13 +1068,35 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
 
     /**
      * Test finding of departments of project
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetDepartments()
     {
         global $AppUI;
-
         $departments = CProject::getDepartments($AppUI, 1);
+        /*
+         * Beyond the deprecation notice, nothing else should be tested here. The
+         *   useful test is CProject->testGetDepartmentList().
+         */
+    }
 
+    /**
+     * Test finding of departments of project
+     *
+     */
+    public function testGetDepartmentList()
+    {
+        global $AppUI;
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
+        $this->obj->project_id = 1;
+
+        $this->mockDB->stageHashList(1,
+                array('dept_id' => 1, 'dept_name' => 'Department 1', 'dept_phone' => ''));
+        $this->mockDB->stageHashList(2,
+                array('dept_id' => 2, 'dept_name' => 'Department 2', 'dept_phone' => ''));
+
+        $departments = $this->obj->getDepartmentList();
         $this->assertEquals(2,              count($departments));
         $this->assertEquals(1,              $departments[1]['dept_id']);
         $this->assertEquals('Department 1', $departments[1]['dept_name']);

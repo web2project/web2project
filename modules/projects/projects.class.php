@@ -85,8 +85,11 @@ class CProject extends w2p_Core_BaseObject {
     public $project_departments = null;
     public $project_contacts = null;
 
-    public function __construct() {
+    public function __construct(w2p_Core_CAppUI $AppUI_tmp = null) {
+        global $AppUI;
+        
         parent::__construct('projects', 'project_id');
+        $this->_AppUI = is_null($AppUI_tmp) ? $AppUI : $AppUI_tmp;
     }
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
@@ -728,23 +731,32 @@ class CProject extends w2p_Core_BaseObject {
 			return $q->loadHashList('contact_id');
 		}
 	}
-	public static function getDepartments(w2p_Core_CAppUI $AppUI = null, $projectId) {
-		global $AppUI;
 
-        $perms = $AppUI->acl();
-		if ($AppUI->isActiveModule('departments') && canView('departments')) {
-			$q = new w2p_Database_Query();
+    public function getDepartmentList() {
+		if ($this->_AppUI->isActiveModule('departments') && canView('departments')) {
+			$q = $this->_getQuery();
 			$q->addTable('departments', 'a');
 			$q->addTable('project_departments', 'b');
 			$q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
-			$q->addWhere('a.dept_id = b.department_id and b.project_id = ' . (int) $projectId);
+			$q->addWhere('a.dept_id = b.department_id and b.project_id = ' . (int) $this->project_id);
 
-			$department = new CDepartment;
-			$department->setAllowedSQL($AppUI->user_id, $q);
+			$department = new CDepartment();
+			$department->setAllowedSQL($this->_AppUI->user_id, $q);
 
 			return $q->loadHashList('dept_id');
 		}
+    }
+
+	public static function getDepartments(w2p_Core_CAppUI $AppUI = null, $projectId) {
+		trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE );
+        global $AppUI;
+
+        $project = new CProject($AppUI);
+        $project->project_id = $projectId;
+
+        return $project->getDepartmentList();
 	}
+
 	public static function getForums(w2p_Core_CAppUI $AppUI = null, $projectId) {
 		global $AppUI;
 
@@ -811,8 +823,10 @@ class CProject extends w2p_Core_BaseObject {
 	}
 
 	public static function updateStatus(w2p_Core_CAppUI $AppUI = null, $projectId, $statusId) {
-		global $AppUI;
 		trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE );
+
+        global $AppUI;
+
         $perms = $AppUI->acl();
 		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
 			$q = new w2p_Database_Query();
