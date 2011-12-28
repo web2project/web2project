@@ -43,6 +43,7 @@ if (isset($_POST['show_form'])) {
 	$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'show_dyn_task', 0));
 	$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'show_pinned', 0));
 	$AppUI->setState('TaskDayShowEmptyDate', w2PgetParam($_POST, 'show_empty_date', 0));
+	$AppUI->setState('TaskDayShowInProgress', w2PgetParam($_POST, 'show_inprogress', 0));
 }
 
 // Required for today view.
@@ -52,6 +53,7 @@ $showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
 $showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
 $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
+$showInProgress = $AppUI->getState('TaskDayShowInProgress', 0);
 
 $task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', '');
 $task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
@@ -132,6 +134,9 @@ if (!$showArcProjs) {
 }
 if (!$showLowTasks) {
 	$q->addWhere('task_priority >= 0');
+}
+if ($showInProgress) {
+	$q->addWhere('project_status = 3');
 }
 if (!$showHoldProjs) {
 	if (($on_hold_status = w2PgetConfig('on_hold_projects_status_id')) != '') {

@@ -73,9 +73,9 @@ class CFile extends w2p_Core_BaseObject {
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->file_owner = $AppUI->user_id;
             $q = $this->_getQuery();
-            $q->addTable('files');
             $q->clear();
-            if (!$this->file_version_id) {
+            $q->addTable('files');
+           if (!$this->file_version_id) {
                 $q->addQuery('file_version_id');
                 $q->addOrder('file_version_id DESC');
                 $q->setLimit(1);
