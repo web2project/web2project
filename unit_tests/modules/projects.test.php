@@ -1484,26 +1484,20 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
     public function testShowStProject()
     {
         global $st_projects_arr;
-        $st_projects_arr = array();
 
-        $st_projects = array(0 => '');
-	    $q = new w2p_Database_Query();
-	    $q->addTable('projects');
-	    $q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-	    $q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
-	    $q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
-	    $q->addQuery('projects.project_id, project_name, project_parent');
-		$q->addWhere('projects.project_id = 1');
-		$st_projects = $q->loadList();
+        $this->post_data['project_id'] = 1;
+        $this->post_data['project_parent'] = 1;
+        $this->post_data['project_name'] = 'Test Project';
+        $st_projects = array(0 => '', 1 => $this->post_data);
 
 		show_st_project($st_projects[1]);
 
-		$this->assertEquals(1, count($st_projects_arr));
-		$this->assertEquals(2, count($st_projects_arr[0]));
-		$this->assertEquals(1, $st_projects_arr[0][0]['project_id']);
+		$this->assertEquals(1,              count($st_projects_arr));
+		$this->assertEquals(2,              count($st_projects_arr[0]));
+		$this->assertEquals(1,              $st_projects_arr[0][0]['project_id']);
 		$this->assertEquals('Test Project', $st_projects_arr[0][0]['project_name']);
-		$this->assertEquals(1, $st_projects_arr[0][0]['project_parent']);
-		$this->assertEquals(0, $st_projects_arr[0][1]);
+		$this->assertEquals(1,              $st_projects_arr[0][0]['project_parent']);
+		$this->assertEquals(0,              $st_projects_arr[0][1]);
     }
 
     /**
@@ -1514,14 +1508,17 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
         global $st_projects_arr;
         $st_projects_arr = array();
 
-        $st_projects = array(0 => '');
-	    $q = new w2p_Database_Query();
-	    $q->addTable('projects');
-	    $q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-	    $q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
-	    $q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
-	    $q->addQuery('projects.project_id, project_name, project_parent');
-		$st_projects = $q->loadList();
+        $this->mockDB->stageList(
+                array('project_id' => 1, 'project_name' => 'Test Project', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 1, 'project_name' => 'Test Project', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 2, 'project_name' => 'Test Project 2', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 3, 'project_name' => 'Test Project 3', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 4, 'project_name' => 'Test Project 4', 'project_parent' => 1));
+		$st_projects = $this->mockDB->loadList();
 
 		find_proj_child($st_projects, 1);
 
@@ -1556,14 +1553,17 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
         global $st_projects_arr;
         $st_projects_arr = array();
 
-        $st_projects = array(0 => '');
-	    $q = new w2p_Database_Query();
-	    $q->addTable('projects');
-	    $q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-	    $q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
-	    $q->addJoin('departments', 'dep', 'pd.department_id = dep.dept_id');
-	    $q->addQuery('projects.project_id, project_name, project_parent');
-		$st_projects = $q->loadList();
+        $this->mockDB->stageList(
+                array('project_id' => 1, 'project_name' => 'Test Project', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 1, 'project_name' => 'Test Project', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 2, 'project_name' => 'Test Project 2', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 3, 'project_name' => 'Test Project 3', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 4, 'project_name' => 'Test Project 4', 'project_parent' => 1));
+		$st_projects = $this->mockDB->loadList();
 
 		find_proj_child($st_projects, 1, 2);
 
