@@ -583,18 +583,28 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
     public function testDelete()
     {
         global $AppUI;
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
 
-        $this->obj->load(1);
-        $this->obj->delete($AppUI);
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store($AppUI);
+        $this->assertTrue($result);
+        $original_id = $this->obj->project_id;
+        $result = $this->obj->delete($AppUI);
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestDeleteProject.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('projects'),            $this->getConnection()->createDataSet()->getTable('projects'));
-        $this->assertTablesEqual($xml_dataset->getTable('project_contacts'),    $this->getConnection()->createDataSet()->getTable('project_contacts'));
-        $this->assertTablesEqual($xml_dataset->getTable('tasks'),               $this->getConnection()->createDataSet()->getTable('tasks'));
-        $this->assertTablesEqual($xml_dataset->getTable('user_tasks'),          $this->getConnection()->createDataSet()->getTable('user_tasks'));
-        $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'),   $this->getConnection()->createDataSet()->getTable('task_dependencies'));
-        $this->assertTablesEqual($xml_dataset->getTable('files'),               $this->getConnection()->createDataSet()->getTable('files'));
-        $this->assertTablesEqual($xml_dataset->getTable('events'),              $this->getConnection()->createDataSet()->getTable('events'));
+        $item = new CProject();
+        $item->overrideDatabase($this->mockDB);
+        $this->mockDB->stageHash(array('project_name' => '', 'project_url' => ''));
+        $item->load($original_id);
+
+        $this->assertTrue(is_a($item, 'CProject'));
+        $this->assertEquals('',              $item->project_name);
+        $this->assertEquals('',              $item->project_url);
+
+        /*
+         * TODO: Not sure on how to test the cascading deletes. They're handled
+         *   in PHP, not in the database, so we need some assurance that they
+         *   actually happen..
+         */
     }
 
     /**
