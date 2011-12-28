@@ -37,6 +37,10 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	 * @var object Query Handler
 	 */
 	protected $_query;
+	/**
+	 * @var object permissions/preference/translation object
+	 */
+	protected $_AppUI;
 
 	/**
 	 * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table
@@ -60,13 +64,18 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 		$this->_error = array();
         $this->_tbl = $table;
 		$this->_tbl_key = $key;
-		if ($module) {
-			$this->_tbl_module = $module;
-		} else {
-			$this->_tbl_module = $table;
-		}
+        $this->_tbl_module = ('' == $module) ? $table : $module;
+
 		$this->_tbl_prefix = w2PgetConfig('dbprefix', '');
 		$this->_query = new w2p_Database_Query;
+
+        /*
+         * I hate this global but this will allow us to get rid of all the
+         *   others, so I think it's the best approach for now.
+         *                                           ~ caseydk 27 Dec 2011
+         */
+        global $AppUI;
+        $this->_AppUI = $AppUI;
 
         /*
          * This block does a lot and may need to be simplified.. but the point
@@ -97,6 +106,17 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
      */
     public function overrideDatabase($override) {
         $this->_query = $override;
+    }
+
+    /**
+     * Since Dependency injection isn't feasible due to the sheer number of
+     *   calls to the above constructor, this is a way to hijack the current
+     *   $this->_AppUI and manipulate it however we want.
+     *
+     *   @param Object A permissions/preferences object (real or mocked)
+     */
+    public function overrideAppUI($override) {
+        $this->_AppUI = $override;
     }
 
 	/**

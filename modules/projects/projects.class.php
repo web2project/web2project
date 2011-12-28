@@ -85,11 +85,8 @@ class CProject extends w2p_Core_BaseObject {
     public $project_departments = null;
     public $project_contacts = null;
 
-    public function __construct(w2p_Core_CAppUI $AppUI_tmp = null) {
-        global $AppUI;
-        
+    public function __construct() {
         parent::__construct('projects', 'project_id');
-        $this->_AppUI = is_null($AppUI_tmp) ? $AppUI : $AppUI_tmp;
     }
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
