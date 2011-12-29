@@ -332,6 +332,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		$q->addWhere('dept_company = ' . (int) $companyId);
 		$q->addOrder('dept_name');
 		$department = new CDepartment;
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 		$department->setAllowedSQL($AppUI->user_id, $q);
 
 		return $q->loadHashList('dept_id');

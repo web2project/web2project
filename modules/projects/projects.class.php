@@ -245,6 +245,8 @@ class CProject extends w2p_Core_BaseObject {
 		// Dependencies array
 		$deps = array();
 
+        $objTask = new CTask();
+        $objTask->overrideDatabase($this->_query);
 		// Copy each task into this project and get their deps
         $objTask = new CTask();
         $objTask->overrideDatabase($this->_query);
@@ -727,6 +729,7 @@ class CProject extends w2p_Core_BaseObject {
 				)');
 
 			$department = new CDepartment;
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 			$department->setAllowedSQL($AppUI->user_id, $q);
 
 			return $q->loadHashList('contact_id');
@@ -753,6 +756,7 @@ class CProject extends w2p_Core_BaseObject {
 		trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE );
 
         $project = new CProject();
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $project->project_id = $projectId;
 
         return $project->getDepartmentList();

@@ -214,6 +214,7 @@ class CTask extends w2p_Core_BaseObject {
 			// If the dependents' have parents add them to list of dependents
 			foreach ($this_dependents as $dependent) {
 				$dependent_task = new CTask();
+                $dependent_task->overrideDatabase($this->_query);
 				$dependent_task->load($dependent);
 				if ($dependent_task->task_id != $dependent_task->task_parent) {
                     $more_dependents = explode(',', $this->dependentTasks($dependent_task->task_parent));
@@ -234,6 +235,7 @@ class CTask extends w2p_Core_BaseObject {
 		if ($this->task_id && $this->task_parent && $this->task_id != $this->task_parent) {
 			$this_children = $this->getChildren();
 			$this_parent = new CTask();
+            $this_parent->overrideDatabase($this->_query);
 			$this_parent->load($this->task_parent);
 			$parents_dependents = explode(',', $this_parent->dependentTasks());
 
@@ -327,6 +329,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q = $this->_getQuery();
         $q->clear();
 		$modified_task = new CTask();
+        $modified_task->overrideDatabase($this->_query);
 
 		if ($fromChildren) {
 			$modified_task = &$this;
@@ -493,6 +496,7 @@ class CTask extends w2p_Core_BaseObject {
 		$new_id = $newObj->task_id;
 		if (!empty($children)) {
 			$tempTask = new CTask();
+            $tempTask->overrideDatabase($this->_query);
 			foreach ($children as $child) {
 				$tempTask->load($child);
 				$tempTask->htmlDecode($child);
@@ -696,11 +700,13 @@ class CTask extends w2p_Core_BaseObject {
             }
 
             $pTask = new CTask();
+            $pTask->overrideDatabase($this->_query);
             $pTask->load($this->task_parent);
             $pTask->updateDynamics();
 
             if ($oTsk->task_parent != $this->task_parent) {
                 $old_parent = new CTask();
+                $old_parent->overrideDatabase($this->_query);
                 $old_parent->load($oTsk->task_parent);
                 $old_parent->updateDynamics();
             }
@@ -723,6 +729,7 @@ class CTask extends w2p_Core_BaseObject {
      */
     public static function storeTokenTask(w2p_Core_CAppUI $AppUI, $project_id) {
         $subProject = new CProject();
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $subProject->load($project_id);
 
         if ($subProject->project_id != $subProject->project_parent) {
@@ -740,6 +747,7 @@ class CTask extends w2p_Core_BaseObject {
             $task_id = $q->loadResult();
 
             $task = new CTask();
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
             if ($task_id) {
                 $task->load($task_id);
             } else {
@@ -775,6 +783,7 @@ class CTask extends w2p_Core_BaseObject {
             $childrenlist = $this->getChildren();
             foreach($childrenlist as $child) {
                 $task = new CTask();
+                $task->overrideDatabase($this->_query);
                 $task->task_id = $child;
                 $task->delete($this->_AppUI);
             }
@@ -1233,12 +1242,14 @@ class CTask extends w2p_Core_BaseObject {
 		$tasks_filter = '';
 		// check permissions on projects
 		$proj = new CProject();
+        $proj->overrideDatabase($this->_query);
 		$task_filter_where = $proj->getAllowedSQL($this->_AppUI->user_id, 't.task_project');
 		// exclude read denied projects
 		$deny = $proj->getDeniedRecords($this->_AppUI->user_id);
 		// check permissions on tasks
 		$obj = new CTask();
-		$allow = $obj->getAllowedSQL($this->_AppUI->user_id, 't.task_id');
+        $obj->overrideDatabase($this->_query);
+		$allow = $obj->getAllowedSQL($AppUI->user_id, 't.task_id');
 
 		$q->addTable('tasks', 't');
 		if ($user_id) {
@@ -1405,6 +1416,7 @@ class CTask extends w2p_Core_BaseObject {
 		// Stage 2: Now shift the dependent tasks' dependents
 		foreach ($csDeps as $task_id) {
 			$newTask = new CTask();
+            $newTask->overrideDatabase($this->_query);
 			$newTask->load($task_id);
 			$newTask->shiftDependentTasks();
 		}
@@ -1422,6 +1434,7 @@ class CTask extends w2p_Core_BaseObject {
 	public function update_dep_dates($task_id) {
 
 		$newTask = new CTask();
+        $newTask->overrideDatabase($this->_query);
 		$newTask->load($task_id);
 
 		// Do not update tasks that are not tracking dependencies
@@ -1499,6 +1512,7 @@ class CTask extends w2p_Core_BaseObject {
 
 		$deps = $taskObj->getDependencies();
 		$obj = new CTask();
+        $obj->overrideDatabase($this->_query);
 
 		$last_end_date = false;
         $q = $this->_getQuery();
@@ -1702,6 +1716,7 @@ class CTask extends w2p_Core_BaseObject {
 			$q->addQuery('dept_id, dept_name, dept_phone');
 
 			$department = new CDepartment;
+            $department->overrideDatabase($this->_query);
 			$department->setAllowedSQL($this->_AppUI->user_id, $q);
 			return $q->loadHashList('dept_id');
 		}
@@ -1724,6 +1739,7 @@ class CTask extends w2p_Core_BaseObject {
 			$q->addWhere('(contact_owner = ' . (int)$this->_AppUI->user_id . ' OR contact_private = 0)');
 
 			$department = new CDepartment;
+            $department->overrideDatabase($this->_query);
 			$department->setAllowedSQL($this->_AppUI->user_id, $q);
 
 			return $q->loadHashList('contact_id');
@@ -1791,12 +1807,14 @@ class CTask extends w2p_Core_BaseObject {
 			$q->addOrder('contact_first_name, contact_last_name');
 			// get CCompany() to filter by company
 			$obj = new CCompany();
+            $obj->overrideDatabase($this->_query);
 			$companies = $obj->getAllowedSQL($this->_AppUI->user_id, 'company_id');
 			$q->addJoin('companies', 'com', 'company_id = contact_company');
 			if ($companies) {
 				$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 			}
 			$dpt = new CDepartment();
+            $dpt->overrideDatabase($this->_query);
 			$depts = $dpt->getAllowedSQL($this->_AppUI->user_id, 'dept_id');
 			$q->addJoin('departments', 'dep', 'dept_id = contact_department');
 			if ($depts) {
@@ -1887,6 +1905,7 @@ class CTask extends w2p_Core_BaseObject {
 		if ($children) {
 			$deep_children = array();
 			$tempTask = new CTask();
+            $tempTask->overrideDatabase($this->_query);
 			foreach ($children as $child) {
 				$tempTask->load($child);
 				$deep_children = array_merge($deep_children, $tempTask->getDeepChildren());
@@ -1971,6 +1990,7 @@ class CTask extends w2p_Core_BaseObject {
 	public function canUserEditTimeInformation($project_owner = 0, $user_id = 0) {
         if (!$project_owner) {
             $project = new CProject();
+            $project->overrideDatabase($this->_query);
             $project->load($this->task_project);
             $project_owner = $project->project_owner;
         }
@@ -2135,6 +2155,7 @@ class CTask extends w2p_Core_BaseObject {
 		}
 
         $project = new CProject();
+        $project->overrideDatabase($this->_query);
         $project_name = $project->load($this->task_project)->project_name;
 
         // Check to see that the project is both active and not a template
@@ -2187,6 +2208,7 @@ class CTask extends w2p_Core_BaseObject {
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		$oPrj = new CProject();
+        $oPrj->overrideDatabase($this->_query);
 
 		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
 		if (count($aPrjs)) {

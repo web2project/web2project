@@ -213,6 +213,7 @@ class CCompany extends w2p_Core_BaseObject {
 		}
 
 		$projObj = new CProject();
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 		$projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
 		$q->addWhere('pr.project_active = '. (int) $active);
@@ -243,6 +244,7 @@ class CCompany extends w2p_Core_BaseObject {
 					OR contact_owner IS NULL OR contact_owner = 0
 				)');
 			$department = new CDepartment;
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 			$department->setAllowedSQL($AppUI->user_id, $q);
 
 			$q->addOrder('contact_first_name');
@@ -266,6 +268,7 @@ class CCompany extends w2p_Core_BaseObject {
 		$q->addOrder('contact_last_name, contact_first_name');
 
 		$department = new CDepartment;
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 		$department->setAllowedSQL($AppUI->user_id, $q);
 
 		return $q->loadHashList('user_id');
@@ -284,6 +287,7 @@ class CCompany extends w2p_Core_BaseObject {
 			$q->addOrder('dept_parent, dept_name');
 
 			$department = new CDepartment;
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 			$department->setAllowedSQL($AppUI->user_id, $q);
 
 			return $q->loadList();

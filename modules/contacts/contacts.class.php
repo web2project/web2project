@@ -424,9 +424,11 @@ class CContact extends w2p_Core_BaseObject {
 				OR contact_owner IS NULL OR contact_owner = 0
 			)');
 		$company = new CCompany;
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 		$company->setAllowedSQL($AppUI->user_id, $q);
 
 		$department = new CDepartment;
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 		$department->setAllowedSQL($AppUI->user_id, $q);
 
 		$q->addOrder('contact_first_name');

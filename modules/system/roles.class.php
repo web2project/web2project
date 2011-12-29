@@ -20,6 +20,11 @@
  * be deleted, and then the user id mappings.  Note that the user ARO is _never_
  * deleted, unless the user is.
  */
+
+/*
+ * TODO: This should probably extend our w2p_Core_BaseObject class as there is
+ *   a lot of duplicated functionality that we could just eliminate from here.
+ */
 class CSystem_Role {
 	public $role_id = null;
 	public $role_name = null;

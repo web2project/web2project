@@ -46,7 +46,7 @@ class CForum_Message extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
 
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
         if ($this->{$this->_tbl_key} && $perms->checkModuleItem('forums', 'edit', $this->{$this->_tbl_module})) {

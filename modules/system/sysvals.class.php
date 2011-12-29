@@ -98,7 +98,6 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
 			if (!$q->exec()) {
-				$q->clear();
 				return get_class($this) . '::delete failed <br />' . db_error();
 			}
 		}

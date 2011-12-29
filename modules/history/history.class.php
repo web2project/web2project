@@ -65,7 +65,7 @@ class CHistory extends w2p_Core_BaseObject {
             return $this->_AppUI->_('Deleted') . ' "' . $history['history_description'] . '" ' . $this->_AppUI->_('from') . ' ' . $this->_AppUI->_($module) . ' ' . $this->_AppUI->_('module');
         }
 
-        $q = $this->_query;
+        $q = $this->_getQuery();
         $q->addTable($module);
         $q->addQuery($table_id.$secondary_key);
         $q->addWhere($table_id . ' =' . $id);

@@ -139,6 +139,7 @@ class CFile extends w2p_Core_BaseObject {
 		$q->addJoin('tasks', 't', 't.task_id = file_task');
 
 		$project = new CProject();
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 		$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 		if (count($allowedProjects)) {
 			$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
@@ -165,6 +166,7 @@ class CFile extends w2p_Core_BaseObject {
 
 			// create task log with information about the file that was uploaded
 			$task_log = new CHDTaskLog();
+            $task_log->overrideDatabase($this->_query);
 			$task_log->task_log_help_desk_id = $this->_hditem->item_id;
 			if ($this->_message != 'deleted') {
 				$task_log->task_log_name = 'File ' . $this->file_name . ' uploaded';
@@ -466,9 +468,11 @@ class CFile extends w2p_Core_BaseObject {
             // if helpdesk_item is available send notification to assigned users
             if ($helpdesk_available && $this->file_helpdesk_item != 0) {
                 $this->_hditem = new CHelpDeskItem();
+                $this->_hditem->overrideDatabase($this->_query);
                 $this->_hditem->load($this->file_helpdesk_item);
 
                 $task_log = new CHDTaskLog();
+                $task_log->overrideDatabase($this->_query);
                 $task_log_help_desk_id = $this->_hditem->item_id;
                 // send notifcation about new log entry
                 // 2 = TASK_LOG
