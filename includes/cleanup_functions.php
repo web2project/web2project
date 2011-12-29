@@ -3944,7 +3944,7 @@ function formatCurrency($number, $format) {
 	global $AppUI, $locale_char_set;
 
 	if (!$format) {
-		$format = $AppUI->getPref('SHCURRFORMAT');
+		$format = $AppUI->getPref('CURRENCYFORM');
 	}
 	// If the requested locale doesn't work, don't fail,
 	// revert to the system default.
