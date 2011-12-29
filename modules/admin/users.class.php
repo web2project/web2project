@@ -151,7 +151,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
 
             $perms->deleteLogin($this->user_id);
 
-			$q = new w2p_Database_Query;
+			$q = $this->_getQuery();
 			$q->setDelete('user_preferences');
 			$q->addWhere('pref_user = ' . $this->user_id);
 			$q->exec();

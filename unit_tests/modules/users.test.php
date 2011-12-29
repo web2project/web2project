@@ -69,6 +69,9 @@ class Admin_Users_Test extends PHPUnit_Framework_TestCase
     {
       parent::setUp();
 
+      global $AppUI;
+      $AppUI->user_id = 1;
+
       $this->obj    = new CAdmin_User();
       $this->mockDB = new w2p_Mocks_Query();
       $this->obj->overrideDatabase($this->mockDB);
@@ -97,12 +100,12 @@ class Admin_Users_Test extends PHPUnit_Framework_TestCase
      */
     public function testAttributes()
     {
-      $this->assertInstanceOf('CAdmin_User',            $this->obj);
-      $this->assertObjectHasAttribute('user_username',  $this->obj);
-      $this->assertObjectHasAttribute('user_password',  $this->obj);
-      $this->assertObjectHasAttribute('user_type',      $this->obj);
-      $this->assertObjectHasAttribute('user_contact',   $this->obj);
-      $this->assertObjectHasAttribute('user_signature', $this->obj);
+        $this->assertInstanceOf('CAdmin_User',            $this->obj);
+        $this->assertObjectHasAttribute('user_username',  $this->obj);
+        $this->assertObjectHasAttribute('user_password',  $this->obj);
+        $this->assertObjectHasAttribute('user_type',      $this->obj);
+        $this->assertObjectHasAttribute('user_contact',   $this->obj);
+        $this->assertObjectHasAttribute('user_signature', $this->obj);
     }
 
     /**
@@ -153,25 +156,26 @@ class Admin_Users_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the proper creation of a link
+     * Tests the proper creation of a user & contact
      */
     public function testStoreCreate()
     {
-        $this->markTestIncomplete("Fleshing out the test.");
-//        $this->obj->bind($this->post_data);
-//        $result = $this->obj->store($AppUI);
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store();
 
-//        $this->assertTrue($result);
-//        $this->assertEquals('web2project homepage',   $this->obj->link_name);
-//        $this->assertEquals(0,                        $this->obj->link_project);
-//        $this->assertEquals(0,                        $this->obj->link_task);
-//        $this->assertEquals('http://web2project.net', $this->obj->link_url);
-//        $this->assertEquals(0,                        $this->obj->link_parent);
-//        $this->assertEquals('This is web2project',    $this->obj->link_description);
-//        $this->assertEquals(1,                        $this->obj->link_owner);
-//        $this->assertEquals('',                       $this->obj->link_icon);
-//        $this->assertEquals(0,                        $this->obj->link_category);
-//        $this->assertNotEquals(0,                     $this->obj->link_id);
+        $contact = new CContact();
+        $contact->overrideDatabase($this->mockDB);
+        $contact->bind($this->post_data);
+        $result = $contact->store();
+
+        $this->assertTrue($result);
+        $this->assertNotEquals(0,                 $contact->contact_id);
+
+        $this->obj->user_contact = $contact->contact_id;
+        $result = $this->obj->store();
+
+        $this->assertTrue($result);
+        $this->assertNotEquals(0,                 $this->obj->user_id);
     }
 
     /**
