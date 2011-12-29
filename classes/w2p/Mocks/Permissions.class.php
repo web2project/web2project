@@ -1,4 +1,21 @@
 <?php /* $Id$ $URL$ */
+
+/**
+ *	@package    web2project
+ *	@subpackage mocks
+ *	@version    $Revision$
+ */
+
+/**
+ *	w2p_Mocks_Permissions Class
+ *
+ * Permissions system extends the phpgacl class.  Very few changes have been
+ *   made, however the main one is to provide the database details from the
+ *   main w2P environment.
+ *
+ *	@author D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
+ */
+
 /*
 * Permissions system extends the phpgacl class.  Very few changes have
 * been made, however the main one is to provide the database details from
@@ -8,7 +25,6 @@
 class w2p_Mocks_Permissions extends w2p_Extensions_Permissions {
 
 	public function __construct($opts = null) {
-
         parent::__construct($opts);
     }
 
