@@ -67,7 +67,7 @@ class CContact extends w2p_Core_BaseObject {
 
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
-        $this->contact_owner = (int) $this->contact_owner;
+        $this->contact_owner = ((int) $this->contact_owner) ? (int) $this->contact_owner : (int) $this->_AppUI->user_id;
         $this->contact_private = (int) $this->contact_private;
 
         $this->contact_first_name = ($this->contact_first_name == null) ? '' : $this->contact_first_name;
