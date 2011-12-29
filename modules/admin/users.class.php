@@ -31,7 +31,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
 		if (!$this->user_id && '' == trim($this->user_password)) {
             $errorArray['user_password'] = $baseErrorMsg . 'user password is not set';
 		}
-        if (!$this->user_id && CUser::exists($this->user_username)) {
+        if (!$this->user_id && CAdmin_User::exists($this->user_username)) {
             $errorArray['user_exists'] = $baseErrorMsg . 'this user already exists';
         }
 
@@ -55,7 +55,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
                     || $this->{$this->_tbl_key} == $AppUI->user_id)
            ) {
             $this->perm_func = 'updateLogin';
-            $tmpUser = new CUser();
+            $tmpUser = new CAdmin_User();
             $tmpUser->load($this->user_id);
 
             if ('' == trim($this->user_password)) {
