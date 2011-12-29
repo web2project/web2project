@@ -62,7 +62,7 @@ function strJpGraph($text) {
  * @deprecated
  */
 function atoi($a) {
-    trigger_error("The atoi function has been deprecated and will be removed in v4.0. Please use int() instead.", E_USER_NOTICE );
+    trigger_error("The atoi function has been deprecated and will be removed in v4.0. Please use (int) instead.", E_USER_NOTICE );
     return $a + 0;
 }
 
@@ -82,6 +82,7 @@ function w2p_check_url($link)
 /*
  * This was used to remove zero length strings from the contacts array in
  *   modules/public/contact_selector.php but can be replaced with array_filter.
+ * TODO:  Remove for v4.0 - caseydk 28 December 2011
  *
  * @deprecated
  *
