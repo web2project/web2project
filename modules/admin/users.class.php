@@ -180,10 +180,12 @@ class CAdmin_User extends w2p_Core_BaseObject {
 	}
 
 	/*
-	 * DEPRECATED
+	 * @deprecated
 	 */
 	public function fullLoad($userId) {
-		$this->loadFull($userId);
+		trigger_error("The fullLoad method has been deprecated and will be removed by v4.0.", E_USER_NOTICE );
+
+        $this->loadFull($userId);
 	}
 
 	public function loadFull($userId) {
@@ -222,9 +224,8 @@ class CAdmin_User extends w2p_Core_BaseObject {
 		return ($q->loadResult() == $userId);
 	}
 
-	public static function getUserIdByToken($token) {
-
-        $q = new w2p_Database_Query();
+	public function getIdByToken($token) {
+        $q = $this->_getQuery();
 		$q->addQuery('feed_user');
 		$q->addTable('user_feeds');
 		$q->addWhere("feed_token = '$token'");
@@ -232,10 +233,18 @@ class CAdmin_User extends w2p_Core_BaseObject {
 
 		return $userId;
 	}
+	/*
+	 * @deprecated
+	 */
+	public static function getUserIdByToken($token) {
+        trigger_error("CAdmin_User::getUserIdByToken has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->getIdByToken() instead.", E_USER_NOTICE );
+        $user = new CAdmin_User();
 
-	public static function getUserIdByContactID($contactId) {
+		return $user->getIdByToken($token);
+	}
 
-        $q = new w2p_Database_Query();
+	public function getIdByContactId($contactId) {
+        $q = $this->_getQuery();
 		$q->addQuery('user_id');
 		$q->addTable('users');
 		$q->addWhere('user_contact = '.(int) $contactId);
@@ -243,23 +252,40 @@ class CAdmin_User extends w2p_Core_BaseObject {
 
 		return $userId;
 	}
+	/*
+	 * @deprecated
+	 */
+	public static function getUserIdByContactID($contactId) {
+        trigger_error("CAdmin_User::getUserIdByContactID has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->getIdByContactId() instead.", E_USER_NOTICE );
+        $user = new CAdmin_User();
 
-	public static function generateUserToken($userId, $token = '') {
+        return $user->getIdByContactId($contactId);
+	}
 
-        $q = new w2p_Database_Query();
+	public function generateToken($userId, $token = '') {
+        $q = $this->_getQuery();
 		$q->setDelete('user_feeds');
 		$q->addWhere('feed_user = ' . $userId);
 		$q->addWhere("feed_token = '$token'");
 		$q->exec();
-		$q->clear();
 
-		$token = md5(time().$userId.$token.time());
+        $token = md5(time().$userId.$token.time());
+        $q = $this->_getQuery();
 		$q->addTable('user_feeds');
 		$q->addInsert('feed_user', $userId);
 		$q->addInsert('feed_token', $token);
 		$q->exec();
 
 		return true;
+	}
+	/*
+	 * @deprecated
+	 */
+	public static function generateUserToken($userId, $token = '') {
+        trigger_error("CAdmin_User::generateUserToken has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->generateToken() instead.", E_USER_NOTICE );
+        $user = new CAdmin_User();
+
+        return $user->generateToken($userId, $token);
 	}
 
 	public static function getFirstLetters() {
@@ -287,22 +313,23 @@ class CAdmin_User extends w2p_Core_BaseObject {
 		return (count($users) > 0) ? true : false;
 	}
 
+	public function getDeptId($userId) {
+        $this->loadFull($userId);
+
+        return $this->contact_department;
+	}
+	/*
+	 * @deprecated
+	 */
 	public static function getUserDeptId($user_id) {
+        trigger_error("CAdmin_User::getUserDeptId has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->getDeptId() instead.", E_USER_NOTICE );
+        $user = new CAdmin_User();
 
-        $q = new w2p_Database_Query();
-		$q->addQuery('con.contact_department');
-		$q->addTable('users', 'u');
-		$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
-		$q->addWhere('u.user_id = ' . (int)$user_id);
-		$user_dept = $q->loadColumn();
-		$q->clear();
-
-		return $user_dept;
+        return $user->getDeptId($user_id);
 	}
 
-	public static function getLogs($userId, $startDate, $endDate) {
-
-        $q = new w2p_Database_Query();
+	public function getLogList($userId, $startDate, $endDate) {
+        $q = $this->_getQuery();
 		$q->addTable('user_access_log', 'ual');
 		$q->addTable('users', 'u');
 		$q->addTable('contacts', 'c');
@@ -317,6 +344,15 @@ class CAdmin_User extends w2p_Core_BaseObject {
 		$q->addGroup('ual.date_time_last_action DESC');
 
 		return $q->loadList();
+	}
+	/*
+	 * @deprecated
+	 */
+	public static function getLogs($userId, $startDate, $endDate) {
+        trigger_error("CAdmin_User::getLogs has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->getLogList() instead.", E_USER_NOTICE );
+        $user = new CAdmin_User();
+
+        return $user->getLogList($userId, $startDate, $endDate);
 	}
 
 	public function getFullUserName() {
@@ -334,15 +370,24 @@ class CAdmin_User extends w2p_Core_BaseObject {
 		return $this->user_username;
 	}
 
-	/**Function that checks if a user is active or not (i.e. are they able to login to the system)
+	/**
+     * Function that checks if a user is active or not (i.e. are they able to login to the system)
 	 * @param int $user_id id of the use to check
 	 * @return boolean	true if active, false o/w
 	 */
-	public static function isUserActive($user_id) {
-		global $AppUI;
-		$perms = &$AppUI->acl();
+	public function isActive($userId) {
+		$perms = &$this->_AppUI->acl();
 
-		return $perms->isUserPermitted($user_id);
+		return $perms->isUserPermitted($userId);
+	}
+	/*
+	 * @deprecated
+	 */
+	public static function isUserActive($user_id) {
+        trigger_error("CAdmin_User::isUserActive has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->isActive() instead.", E_USER_NOTICE );
+        $user = new CAdmin_User();
+
+        return $user->isActive($user_id);
 	}
 
 	public static function getUserList() {
