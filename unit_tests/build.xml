@@ -14,6 +14,7 @@
         <batchtest>
           <fileset dir="modules">
             <include name="**/*.test.php"/>
+            <include name="**/*Test.php"/>
           </fileset>
 
             <!--
@@ -25,10 +26,12 @@
             -->
           <fileset dir="classes">
             <include name="**/*.test.php"/>
+            <include name="**/*Test.php"/>
           </fileset>
 
           <fileset dir="includes">
             <include name="**/*.test.php"/>
+            <include name="**/*Test.php"/>
           </fileset>
         </batchtest>
       <formatter  type="xml" todir="reports" outfile="logfile.xml"/>
