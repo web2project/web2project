@@ -60,7 +60,7 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
  * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class Companies_Test extends PHPUnit_Framework_TestCase
+class CCompanies_Test extends PHPUnit_Framework_TestCase
 {
 
     protected $backupGlobals = FALSE;
@@ -499,34 +499,92 @@ class Companies_Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-    * Tests loading list of Projects for this company.
-    */
-    public function testGetProjects()
-    {
-        $this->markTestIncomplete();
+     * @todo Implement testCheck().
+     */
+    public function testCheck() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
     }
 
     /**
-    * Tests loading list of Contacts for this company.
-    */
-    public function testGetContacts()
-    {
-        $this->markTestIncomplete();
+     * @todo Implement testCanDelete().
+     */
+    public function testCanDelete() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
     }
 
     /**
-    * Tests loading list of Users for this company.
-    */
-    public function testGetUsers()
-    {
-        $this->markTestIncomplete();
+     * @todo Implement testHook_search().
+     */
+    public function testHook_search() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
     }
 
     /**
-    * Tests loading list of Departments for this company.
-    */
-    public function testGetDepartments()
-    {
-        $this->markTestIncomplete();
+     * @todo Implement testGetCompanyList().
+     */
+    public function testGetCompanyList() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetCompanies().
+     */
+    public function testGetCompanies() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetProjects().
+     */
+    public function testGetProjects() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetContacts().
+     */
+    public function testGetContacts() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetUsers().
+     */
+    public function testGetUsers() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetDepartments().
+     */
+    public function testGetDepartments() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
     }
 }

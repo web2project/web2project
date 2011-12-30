@@ -394,4 +394,24 @@ class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1, count($allowed_records));
         $this->assertEquals(1, $allowed_records[1]);
     }
+
+    /**
+     * @todo Implement testCheck().
+     */
+    public function testCheck() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetAllowedRecords().
+     */
+    public function testGetAllowedRecords() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
 }

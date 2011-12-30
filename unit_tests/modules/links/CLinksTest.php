@@ -58,7 +58,7 @@ require_once W2P_BASE_DIR . '/includes/session.php';
  * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class Links_Test extends PHPUnit_Framework_TestCase
+class CLinks_Test extends PHPUnit_Framework_TestCase
 {
     protected $backupGlobals = FALSE;
     protected $obj = null;
@@ -299,5 +299,45 @@ class Links_Test extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_a($item, 'CLink'));
         $this->assertEquals('',              $item->link_name);
         $this->assertEquals('',              $item->link_url);
+    }
+
+    /**
+     * @todo Implement testLoadFull().
+     */
+    public function testLoadFull() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetProjectTaskLinksByCategory().
+     */
+    public function testGetProjectTaskLinksByCategory() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testCheck().
+     */
+    public function testCheck() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testHook_search().
+     */
+    public function testHook_search() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
     }
 }

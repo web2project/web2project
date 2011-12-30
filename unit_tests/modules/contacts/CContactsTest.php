@@ -60,7 +60,7 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
  * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class Contacts_Test extends PHPUnit_Framework_TestCase
+class CContacts_Test extends PHPUnit_Framework_TestCase
 {
     protected $backupGlobals = FALSE;
     protected $obj = null;
@@ -384,5 +384,85 @@ class Contacts_Test extends PHPUnit_Framework_TestCase
 
     public function testGetUpcomingBirthdays() {
         $this->markTestSkipped('This test has not been implemented yet.');
+    }
+
+    /**
+     * @todo Implement testLoadFull().
+     */
+    public function testLoadFull() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testCheck().
+     */
+    public function testCheck() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testCanDelete().
+     */
+    public function testCanDelete() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetCompanyID().
+     */
+    public function testGetCompanyID() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testNotify().
+     */
+    public function testNotify() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testHook_cron().
+     */
+    public function testHook_cron() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testHook_search().
+     */
+    public function testHook_search() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testHook_calendar().
+     */
+    public function testHook_calendar() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
     }
 }

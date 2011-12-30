@@ -1,6 +1,6 @@
 <?php
 /**
- * Necessary global variables 
+ * Necessary global variables
  */
 global $db;
 global $ADODB_FETCH_MODE;
@@ -113,8 +113,124 @@ class w2p_Core_UpgradeManager_Test extends PHPUnit_Framework_TestCase
 				$this->fail('w2p_Core_UpgradeManager action was not matched.');
 		}
 	}
-	public function testConvertDotProject()
-	{
-		$this->markTestSkipped("Not a clue how to test this one...");
-	}
+
+    /**
+     * @todo Implement testGetActionRequired().
+     */
+    public function testGetActionRequired() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetConfigDir().
+     */
+    public function testGetConfigDir() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetConfigFile().
+     */
+    public function testGetConfigFile() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetUploadDir().
+     */
+    public function testGetUploadDir() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetLanguageDir().
+     */
+    public function testGetLanguageDir() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetTempDir().
+     */
+    public function testGetTempDir() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetConfigOptions().
+     */
+    public function testGetConfigOptions() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testUpgradeSystem().
+     */
+    public function testUpgradeSystem() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetUpdatesApplied().
+     */
+    public function testGetUpdatesApplied() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testConvertDotProject().
+     */
+    public function testConvertDotProject() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'Not a clue how to test this one...'
+        );
+    }
+
+    /**
+     * @todo Implement testTestDatabaseCredentials().
+     */
+    public function testTestDatabaseCredentials() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testUpgradeRequired().
+     */
+    public function testUpgradeRequired() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
 }

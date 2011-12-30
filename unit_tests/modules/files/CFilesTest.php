@@ -58,7 +58,7 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
  * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class Files_Test extends PHPUnit_Framework_TestCase
+class CFiles_Test extends PHPUnit_Framework_TestCase
 {
 
     protected $backupGlobals = FALSE;
@@ -384,5 +384,165 @@ class Files_Test extends PHPUnit_Framework_TestCase
       $this->assertEquals($original_date,           $this->obj->file_date);
       $this->assertEquals('Some new file name',     $this->obj->file_name);
       $this->assertEquals('A new file description', $this->obj->file_description);
+    }
+
+    /**
+     * @todo Implement testHook_cron().
+     */
+    public function testHook_cron() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testHook_search().
+     */
+    public function testHook_search() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetFileList().
+     */
+    public function testGetFileList() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testAddHelpDeskTaskLog().
+     */
+    public function testAddHelpDeskTaskLog() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testCanAdmin().
+     */
+    public function testCanAdmin() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testCheckout().
+     */
+    public function testCheckout() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testCancelCheckout().
+     */
+    public function testCancelCheckout() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testDeleteFile().
+     */
+    public function testDeleteFile() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testMoveFile().
+     */
+    public function testMoveFile() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testDuplicateFile().
+     */
+    public function testDuplicateFile() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testMoveTemp().
+     */
+    public function testMoveTemp() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testIndexStrings().
+     */
+    public function testIndexStrings() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testNotify().
+     */
+    public function testNotify() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testNotifyContacts().
+     */
+    public function testNotifyContacts() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetOwner().
+     */
+    public function testGetOwner() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testGetTaskName().
+     */
+    public function testGetTaskName() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
     }
 }
