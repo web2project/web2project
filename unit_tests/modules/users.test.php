@@ -178,78 +178,27 @@ class Admin_Users_Test extends PHPUnit_Framework_TestCase
         $this->assertNotEquals(0,                 $this->obj->user_id);
     }
 
-    /**
-     * Tests loading the Link Object
+    /*
+     * These tests are all marked as Skipped because we don't have a way of
+     *   testing the static methods without hitting the database.
      */
-//    public function testLoad()
-//    {
-//        global $AppUI;
-//
-//        $this->obj->bind($this->post_data);
-//        $result = $this->obj->store($AppUI);
-//        $this->assertTrue($result);
-//
-//        $item = new CLink();
-//        $item->overrideDatabase($this->mockDB);
-//        $this->post_data['link_id'] = $this->obj->link_id;
-//        $this->mockDB->stageHash($this->post_data);
-//        $item->load($this->obj->link_id);
-//
-//        $this->assertEquals($this->obj->link_name,              $item->link_name);
-//        $this->assertEquals($this->obj->link_project,           $item->link_project);
-//        $this->assertEquals($this->obj->link_task,              $item->link_task);
-//        $this->assertEquals($this->obj->link_url,               $item->link_url);
-//        $this->assertEquals($this->obj->link_parent,            $item->link_parent);
-//        $this->assertEquals($this->obj->link_description,       $item->link_description);
-//        $this->assertEquals($this->obj->link_owner,             $item->link_owner);
-//        $this->assertEquals($this->obj->link_category,          $item->link_category);
-//        $this->assertNotEquals($this->obj->link_date,           '');
-//    }
+    public function testExists() {                  $this->markTestSkipped(); }
+    public function testGenerateUserToken() {       $this->markTestSkipped(); }
+    public function testGetFirstLetters() {         $this->markTestSkipped(); }
+    public function testGetLogs() {                 $this->markTestSkipped(); }
+    public function testGetUserDeptId() {           $this->markTestSkipped(); }
+    public function testGetUserIdByContactID() {    $this->markTestSkipped(); }
+    public function testGetUserIdByToken() {        $this->markTestSkipped(); }
+    public function testGetUserList() {             $this->markTestSkipped(); }
+    public function testIsUserActive() {            $this->markTestSkipped(); }
 
     /**
-     * Tests the update of a link
+     * These tests are incomplete.
      */
-//    public function testStoreUpdate()
-//    {
-//      global $AppUI;
-//
-//      $this->obj->bind($this->post_data);
-//      $result = $this->obj->store($AppUI);
-//      $this->assertTrue($result);
-//      $original_id = $this->obj->link_id;
-//
-//      $this->obj->link_name = 'web2project Forums';
-//      $this->obj->link_url = 'http://forums.web2project.net';
-//      $result = $this->obj->store($AppUI);
-//      $this->assertTrue($result);
-//      $new_id = $this->obj->link_id;
-//
-//      $this->assertEquals($original_id,                    $new_id);
-//      $this->assertEquals('web2project Forums',            $this->obj->link_name);
-//      $this->assertEquals('http://forums.web2project.net', $this->obj->link_url);
-//      $this->assertEquals('This is web2project',           $this->obj->link_description);
-//    }
-
-    /**
-     * Tests the delete of a link
-     */
-//    public function testDelete()
-//    {
-//        global $AppUI;
-//
-//        $this->obj->bind($this->post_data);
-//        $result = $this->obj->store($AppUI);
-//        $this->assertTrue($result);
-//        $original_id = $this->obj->link_id;
-//        $result = $this->obj->delete($AppUI);
-//
-//        $item = new CLink();
-//        $item->overrideDatabase($this->mockDB);
-//        $this->mockDB->stageHash(array('link_name' => '', 'link_url' => ''));
-//        $item->load($original_id);
-//
-//        $this->assertTrue(is_a($item, 'CLink'));
-//        $this->assertEquals('',              $item->link_name);
-//        $this->assertEquals('',              $item->link_url);
-//    }
+    public function testCanDelete() {               $this->markTestIncomplete(); }
+    public function testDelete() {                  $this->markTestIncomplete(); }
+    public function testGetAllowedRecords() {       $this->markTestIncomplete(); }
+    public function testGetFullUserName() {         $this->markTestIncomplete(); }
+    public function testLoadFull() {                $this->markTestIncomplete(); }
+    public function testValidatePassword() {        $this->markTestIncomplete(); }
 }
