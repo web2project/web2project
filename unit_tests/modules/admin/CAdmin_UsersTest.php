@@ -58,7 +58,7 @@ require_once W2P_BASE_DIR . '/includes/session.php';
  * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class Admin_Users_Test extends PHPUnit_Framework_TestCase
+class CAdmin_Users_Test extends PHPUnit_Framework_TestCase
 {
     protected $backupGlobals = FALSE;
     protected $obj = null;

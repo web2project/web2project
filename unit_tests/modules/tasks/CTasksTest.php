@@ -89,7 +89,7 @@ class Tasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
     protected function getDataSetPath()
     {
-    	return dirname(dirname(__FILE__)).'/db_files/tasks/';
+    	return dirname(dirname(__FILE__)).'/../db_files/tasks/';
     }
 
 	public function setUp()
