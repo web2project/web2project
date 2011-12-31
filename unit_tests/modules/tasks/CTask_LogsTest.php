@@ -10,63 +10,20 @@
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @category    Tasks
- * @package     web2project
- * @subpackage  unit_tests
- * @author      Trevor Morse <trevor.morse@gmail.com>
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
- * @link        http://www.web2project.net
- */
-
-/**
- * Necessary global variables
- */
-global $db;
-global $ADODB_FETCH_MODE;
-global $w2p_performance_dbtime;
-global $w2p_performance_old_dbqueries;
-global $AppUI;
-
-require_once '../base.php';
-require_once W2P_BASE_DIR . '/includes/config.php';
-require_once W2P_BASE_DIR . '/includes/main_functions.php';
-require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-
-/*
- * Need this to test actions that require permissions.
- */
-$AppUI  = new w2p_Core_CAppUI();
-$_POST['login'] = 'login';
-$_REQUEST['login'] = 'sql';
-$AppUI->login('admin', 'passwd');
-/*
- * Need this to not get the annoying timezone warnings in tests.
- */
-$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
-$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
-date_default_timezone_set($defaultTZ);
-
-require_once W2P_BASE_DIR . '/includes/session.php';
-require_once 'PHPUnit/Framework.php';
-require_once 'PHPUnit/Extensions/Database/TestCase.php';
-require_once 'PHPUnit/Extensions/Database/DataSet/DataSetFilter.php';
-
-/**
- * This class tests functionality for Task Logs
- *
  * @author      Trevor Morse <trevor.morse@gmail.com>
  * @category    Task Logs
  * @package     web2project
  * @subpackage  unit_tests
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class TaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
-{
 
-    protected $backupGlobals = FALSE;
-	protected $obj = null;
-	protected $post_data = array();
+// NOTE: This path is relative to Phing's build.xml, not this test.
+include_once 'CommonSetup.php';
+require_once 'PHPUnit/Extensions/Database/DataSet/DataSetFilter.php';
+
+class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
+{
 
     /**
      * Return database connection for tests

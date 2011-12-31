@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Class for testing Date functionality
+ * Class for testing w2p_Controllers_Base_Test functionality
  *
  *
  * PHP version 5
@@ -12,28 +12,19 @@
  * (at your option) any later version. Please see the LICENSE file in root of site
  * for further details
  *
- * @category    Date
+ * @author      Trevor Morse
+ * @category    w2p_Controllers_Base
  * @package     web2project
  * @subpackage  unit_tests
- * @author      D. Keith Casey, Jr.
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+ * @license     Clear BSD
  * @link        http://www.web2project.net
  */
 
-require_once '../base.php';
-require_once W2P_BASE_DIR . '/includes/main_functions.php';
+// NOTE: This path is relative to Phing's build.xml, not this test.
+include_once 'CommonSetup.php';
 
-require_once 'PHPUnit/Framework.php';
-
-/**
- * BaseTest Class.
- *
- * Class to test the base controller
- * @author Trevor Morse
- * @package web2project
- * @subpackage unit_tests
- */
-class w2p_Controllers_Base_Test extends PHPUnit_Framework_TestCase
+class w2p_Controllers_Base_Test extends CommonSetup
 {
 
     /**

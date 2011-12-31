@@ -1,14 +1,28 @@
-<?php /* $Id$ $URL$ */
+<?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- *	@package    web2project
- *	@subpackage unit_tests
- *	@version    $Revision$
- *  @license	Clear BSD
- *  @author     Keith casey
+ * Class for testing Permissions Mock functionality
+ *
+ *
+ * PHP version 5
+ *
+ * LICENSE: This source file is subject to Clear BSD License. Please see the
+ *   LICENSE file in root of site for further details
+ *
+ * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category    w2p_Mocks_Permissions
+ * @package     web2project
+ * @subpackage  unit_tests
+ * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+ * @license     Clear BSD
+ * @link        http://www.web2project.net
  */
 
-class w2p_Mocks_Permissions_Test extends PHPUnit_Framework_TestCase
+// NOTE: This path is relative to Phing's build.xml, not this test.
+include_once 'CommonSetup.php';
+
+class w2p_Mocks_Permissions_Test extends CommonSetup
 {
     protected $perms = null;
 

@@ -10,47 +10,6 @@
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @category    Links
- * @package     web2project
- * @subpackage  unit_tests
- * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
- * @link        http://www.web2project.net
- */
-
-/**
- * Necessary global variables
- */
-global $db;
-global $ADODB_FETCH_MODE;
-global $w2p_performance_dbtime;
-global $w2p_performance_old_dbqueries;
-global $AppUI;
-
-require_once '../base.php';
-require_once W2P_BASE_DIR . '/includes/config.php';
-require_once W2P_BASE_DIR . '/includes/main_functions.php';
-require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-
-/*
- * Need this to test actions that require permissions.
- */
-$AppUI  = new w2p_Core_CAppUI();
-$_POST['login'] = 'login';
-$_REQUEST['login'] = 'sql';
-$AppUI->login('admin', 'passwd');
-/*
- * Need this to not get the annoying timezone warnings in tests.
- */
-$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
-$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
-date_default_timezone_set($defaultTZ);
-
-require_once W2P_BASE_DIR . '/includes/session.php';
-
-/**
- * This class tests functionality for Files
- *
  * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
  * @category    Links
  * @package     web2project
@@ -58,12 +17,12 @@ require_once W2P_BASE_DIR . '/includes/session.php';
  * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
  * @link        http://www.web2project.net
  */
-class CLinks_Test extends PHPUnit_Framework_TestCase
+
+// NOTE: This path is relative to Phing's build.xml, not this test.
+include_once 'CommonSetup.php';
+
+class CLinks_Test extends CommonSetup
 {
-    protected $backupGlobals = FALSE;
-    protected $obj = null;
-    protected $post_data = array();
-    protected $mockDB = null;
 
     protected function setUp()
     {

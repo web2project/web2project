@@ -12,7 +12,7 @@
  * (at your option) any later version. Please see the LICENSE file in root of site
  * for further details
  *
- * @category    Date
+ * @category    w2p_Utilities_Date_Test
  * @package     web2project
  * @subpackage  unit_tests
  * @author      D. Keith Casey, Jr.
@@ -20,35 +20,10 @@
  * @link        http://www.web2project.net
  */
 
-/**
- * Necessary global variables
- */
-global $AppUI;
-global $_DATE_TIMEZONE_DATA;
-global $w2Pconfig;
+// NOTE: This path is relative to Phing's build.xml, not this test.
+include_once 'CommonSetup.php';
 
-require_once '../base.php';
-require_once W2P_BASE_DIR . '/includes/main_functions.php';
-
-/*
- * Need this to test actions that require permissions.
- */
-$AppUI  = new w2p_Core_CAppUI();
-$_POST['login'] = 'login';
-$_REQUEST['login'] = 'sql';
-//$AppUI->login('admin', 'passwd');
-
-require_once 'PHPUnit/Framework.php';
-
-/**
- * DateTest Class.
- *
- * Class to test the date include
- * @author D. Keith Casey, Jr.
- * @package web2project
- * @subpackage unit_tests
- */
-class w2p_Utilities_Date_Test extends PHPUnit_Framework_TestCase
+class w2p_Utilities_Date_Test extends CommonSetup
 {
 
     /**

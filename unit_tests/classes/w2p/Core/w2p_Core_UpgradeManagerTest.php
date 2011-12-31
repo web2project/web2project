@@ -1,29 +1,28 @@
 <?php
-/**
- * Necessary global variables
- */
-global $db;
-global $ADODB_FETCH_MODE;
-global $w2p_performance_dbtime;
-global $w2p_performance_old_dbqueries;
-global $AppUI;
-
-require_once '../base.php';
-require_once W2P_BASE_DIR . '/includes/config.php';
-require_once W2P_BASE_DIR . '/includes/main_functions.php';
-require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-
-require_once 'PHPUnit/Framework.php';
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * w2p_Core_UpgradeManagerTest Class.
- * 
- * Class to test the upgrade manager class
- * @author D. Keith Casey, Jr<caseydk@users.sourceforge.net>
- * @package web2project
- * @subpackage unit_tests
+ * Class for testing UpgradeManager functionality
+ *
+ *
+ * PHP version 5
+ *
+ * LICENSE: This source file is subject to Clear BSD License. Please see the
+ *   LICENSE file in root of site for further details
+ *
+ * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category    w2p_Core_UpgradeManager
+ * @package     web2project
+ * @subpackage  unit_tests
+ * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+ * @license     Clear BSD
+ * @link        http://www.web2project.net
  */
-class w2p_Core_UpgradeManager_Test extends PHPUnit_Framework_TestCase
+
+// NOTE: This path is relative to Phing's build.xml, not this test.
+include_once 'CommonSetup.php';
+
+class w2p_Core_UpgradeManager_Test extends CommonSetup
 {
 	public function testManagerSetup()
 	{
