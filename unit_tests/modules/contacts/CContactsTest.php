@@ -116,26 +116,6 @@ class CContacts_Test extends PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('contact_display_name',     $this->obj);
     }
 
-    public function testStoreNoOwner()
-    {
-        global $AppUI;
-
-        unset($this->post_data['contact_owner']);
-        $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
-
-        /**
-        * Verify we got the proper error message
-        */
-        $this->AssertEquals(1, count($errorArray));
-        $this->assertArrayHasKey('contact_owner', $errorArray);
-
-        /**
-        * Verify that link id was not set
-        */
-        $this->AssertEquals(0, $this->obj->contact_id);
-    }
-
     public function testStoreCreate()
     {
         global $AppUI;
