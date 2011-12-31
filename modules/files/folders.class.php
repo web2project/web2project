@@ -142,12 +142,14 @@ class CFile_Folder extends w2p_Core_BaseObject {
 
         //TODO: apply permissions properly
         $project = new CProject();
+        $project->overrideDatabase($this->_query);
         $deny1 = $project->getDeniedRecords($AppUI->user_id);
         if (count($deny1) > 0) {
             $q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
         }
         //TODO: apply permissions properly
         $task = new CTask();
+        $task->overrideDatabase($this->_query);
         $deny2 = $task->getDeniedRecords($AppUI->user_id);
         if (count($deny2) > 0) {
             $q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');

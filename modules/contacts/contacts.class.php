@@ -279,6 +279,7 @@ class CContact extends w2p_Core_BaseObject {
         trigger_error("getCompanyName has been deprecated and will be removed in v4.0. Please use getCompanyDetails() instead.", E_USER_NOTICE );
 
         $company = new CCompany();
+        $company->overrideDatabase($this->_query);
         $company->load((int) $this->contact_company);
 
 		return $company->company_name;
@@ -287,6 +288,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function getCompanyDetails() {
 
         $company = new CCompany();
+        $company->overrideDatabase($this->_query);
         $company->load((int) $this->contact_company);
 
         return array('company_id' => $company->company_id, 'company_name' => $company->company_name);
@@ -295,6 +297,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function getDepartmentDetails() {
 
         $dept = new CDepartment();
+        $dept->overrideDatabase($this->_query);
         $dept->load((int) $this->contact_department);
 
         return array('dept_id' => $dept->dept_id, 'dept_name' => $dept->dept_name);
@@ -357,6 +360,7 @@ class CContact extends w2p_Core_BaseObject {
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
 		$oCpy = new CCompany();
+        $oCpy->overrideDatabase($this->_query);
 
 		$aCpies = $oCpy->getAllowedRecords($uid, 'company_id, company_name');
 		if (count($aCpies)) {
@@ -364,6 +368,7 @@ class CContact extends w2p_Core_BaseObject {
 
 			//Department permissions
 			$oDpt = new CDepartment();
+            $oDpt->overrideDatabase($this->_query);
 			$aDpts = $oDpt->getAllowedRecords($uid, 'dept_id, dept_name');
 			if (count($aDpts)) {
 				$dpt_buffer = '(contact_department IN (' . implode(',', array_keys($aDpts)) . ') OR contact_department = 0)';
@@ -550,6 +555,7 @@ class CContact extends w2p_Core_BaseObject {
 
 		foreach($contactIdList as $contactId) {
 			$myContact = new CContact();
+            $myContact->overrideDatabase($this->_query);
 			$myContact = $myContact->load($contactId['contact_id']);
 			$myContact->store($AppUI);
 		}

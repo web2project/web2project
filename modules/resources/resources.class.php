@@ -25,18 +25,17 @@ class CResource extends w2p_Core_BaseObject {
 		if (isset($_SESSION['resource_type_list'])) {
 			$typelist = &$_SESSION['resource_type_list'];
 		} else {
-			$this->_query->clear();
-			$this->_query->addTable('resource_types');
-			$this->_query->addQuery('resource_type_id, resource_type_name');
-			$this->_query->addOrder('resource_type_name');
+			$q = $this->_getQuery();
+			$q->addTable('resource_types');
+			$q->addQuery('resource_type_id, resource_type_name');
+			$q->addOrder('resource_type_name');
 
-			$res = &$this->_query->exec(ADODB_FETCH_ASSOC);
+			$res = &$q->exec(ADODB_FETCH_ASSOC);
 			$typelist = array();
 			$typelist[0] = array('resource_type_id' => 0, 'resource_type_name' => 'All Resources');
-			while ($row = $this->_query->fetchRow()) {
+			while ($row = $q->fetchRow()) {
 				$typelist[] = $row;
 			}
-			$this->_query->clear();
 			$_SESSION['resource_type_list'] = &$typelist;
 		}
 		return $typelist;

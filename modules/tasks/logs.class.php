@@ -182,7 +182,7 @@ class CTask_Log extends w2p_Core_BaseObject
 			return $this->_error;
 		}
 
-		$q = new w2p_Database_Query();
+		$q = $this->_getQuery();
 		$this->task_log_updated = $q->dbfnNowWithTZ();
 
 		if ($this->task_log_date) {
@@ -258,7 +258,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	{
         $perms = $AppUI->acl();
         $q = $this->_getQuery();
-        $q->clear();
 
         if($perms->checkModuleItem('tasks', 'edit', $task_id)) {
             if ($this->task_log_percent_complete < 100) {
@@ -274,6 +273,7 @@ class CTask_Log extends w2p_Core_BaseObject
             }
 
             $task = new CTask();
+            $task->overrideDatabase($this->_query);
             $task->load($task_id);
             $task->task_percent_complete = $percentComplete;
             $diff = strtotime($this->task_log_task_end_date) - strtotime($task->task_end_date);

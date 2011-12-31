@@ -193,6 +193,7 @@ class CCalendar extends w2p_Core_BaseObject {
 		}
 
 		$project = new CProject();
+        $project->overrideDatabase($this->_query);
 		if ($project_id) {
 			$p = &$AppUI->acl();
 
@@ -209,7 +210,7 @@ class CCalendar extends w2p_Core_BaseObject {
 		$queries = array('q' => 'q', 'r' => 'r');
 
 		foreach ($queries as $query_set) {
-			$$query_set = new w2p_Database_Query();
+			$$query_set = $this->_getQuery();
 			$$query_set->addTable('events', 'e');
 			$$query_set->addQuery('distinct(e.event_id), e.*');
 			$$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
@@ -507,6 +508,7 @@ class CCalendar extends w2p_Core_BaseObject {
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
 		$oPrj = new CProject();
+        $oPrj->overrideDatabase($this->_query);
 
 		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
 		if (count($aPrjs)) {

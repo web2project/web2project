@@ -35,7 +35,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 	}
 
 	public function install() {
-		$q = new w2p_Database_Query();
+		$q = $this->_getQuery();
 		$q->addTable('modules');
 		$q->addQuery('mod_directory');
 		$q->addWhere('mod_directory = \'' . $this->mod_directory . '\'');
@@ -68,7 +68,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 	}
 
     protected function _compactModuleUIOrder() {
-		$q = new w2p_Database_Query();
+		$q = $this->_getQuery();
 		$q->addTable('modules');
 		$q->addQuery('mod_id');
 		$q->addOrder('mod_ui_order ASC');
@@ -87,7 +87,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 	}
 
 	public function remove() {
-		$q = new w2p_Database_Query();
+		$q = $this->_getQuery();
 		$q->setDelete('modules');
 		$q->addWhere('mod_id = ' . (int)$this->mod_id);
 		if (!$q->exec()) {
@@ -116,7 +116,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 	public function move($dirn) {
 		$new_ui_order = $this->mod_ui_order;
 
-		$q = new w2p_Database_Query();
+		$q = $this->_getQuery();
 		$q->addTable('modules');
 		$q->addWhere('mod_id <> ' . (int)$this->mod_id);
 		$q->addOrder('mod_ui_order');

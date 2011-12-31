@@ -45,7 +45,9 @@ class CLink extends w2p_Core_BaseObject {
         // load the following classes to retrieved denied records
 
         $project = new CProject();
+        $project->overrideDatabase($this->_query);
         $task = new CTask();
+        $task->overrideDatabase($this->_query);
 
         // SETUP FOR LINK LIST
         $q = $this->_getQuery();

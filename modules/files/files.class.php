@@ -485,6 +485,7 @@ class CFile extends w2p_Core_BaseObject {
             //if no project specified than we will not do anything
             if ($this->file_project != 0) {
                 $this->_project = new CProject();
+                $this->_project->overrideDatabase($this->_query);
                 $this->_project->load($this->file_project);
                 $mail = new w2p_Utilities_Mail();
 
@@ -492,6 +493,7 @@ class CFile extends w2p_Core_BaseObject {
                     $mail->Subject($this->_project->project_name . '::' . $this->file_name, $locale_char_set);
                 } else { //notify all assigned users
                     $this->_task = new CTask();
+                    $this->_task->overrideDatabase($this->_query);
                     $this->_task->load($this->file_task);
                     $mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
                 }
@@ -559,6 +561,7 @@ class CFile extends w2p_Core_BaseObject {
             //if no project specified than we will not do anything
             if ($this->file_project != 0) {
                 $this->_project = new CProject();
+                $this->_project->overrideDatabase($this->_query);
                 $this->_project->load($this->file_project);
                 $mail = new w2p_Utilities_Mail();
 
@@ -566,6 +569,7 @@ class CFile extends w2p_Core_BaseObject {
                   $mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name, $locale_char_set);
                 } else { //notify all assigned users
                   $this->_task = new CTask();
+                  $this->_task->overrideDatabase($this->_query);
                   $this->_task->load($this->file_task);
                   $mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
                 }

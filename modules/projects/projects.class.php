@@ -228,6 +228,7 @@ class CProject extends w2p_Core_BaseObject {
 
 		// Load the original
 		$origProject = new CProject();
+        $origProject->overrideDatabase($this->_query);
 		$origProject->load($from_project_id);
 		$q = $this->_getQuery();
 		$q->addTable('tasks');
@@ -249,8 +250,9 @@ class CProject extends w2p_Core_BaseObject {
 		$deps = array();
 
 		// Copy each task into this project and get their deps
+        $objTask = new CTask();
+        $objTask->overrideDatabase($this->_query);
 		foreach ($tasks as $orig => $void) {
-			$objTask = new CTask();
             $objTask->load($orig);
             $destTask = $objTask->copy($this->project_id);
             $destTask->task_parent = (0 == $destTask->task_parent) ? $destTask->task_id : $destTask->task_parent;
@@ -308,8 +310,9 @@ class CProject extends w2p_Core_BaseObject {
 
         // We have errors, so rollback everything we've done so far
         if (count($errors)) {
+            $delTask = new CTask();
+            $delTask->overrideDatabase($this->_query);
             foreach($importedTasks as $badTask) {
-                $delTask = new CTask();
                 $delTask->task_id = $badTask;
                 $delTask->delete($AppUI);
             }
@@ -327,6 +330,7 @@ class CProject extends w2p_Core_BaseObject {
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
 		$oCpy = new CCompany();
+        $oCpy->overrideDatabase($this->_query);
 
 		$aCpies = $oCpy->getAllowedRecords($uid, 'company_id, company_name');
 		if (count($aCpies)) {
@@ -341,6 +345,7 @@ class CProject extends w2p_Core_BaseObject {
 			}
 			//Department permissions
 			$oDpt = new CDepartment();
+            $oDpt->overrideDatabase($this->_query);
 			$aDpts = $oDpt->getAllowedRecords($uid, 'dept_id, dept_name');
 			if (count($aDpts)) {
 				$dpt_buffer = '(department_id IN (' . implode(',', array_keys($aDpts)) . ') OR department_id IS NULL)';
@@ -368,9 +373,11 @@ class CProject extends w2p_Core_BaseObject {
 
 	public function getAllowedSQL($uid, $index = null) {
 		$oCpy = new CCompany();
+        $oCpy->overrideDatabase($this->_query);
 		$where = $oCpy->getAllowedSQL($uid, 'project_company');
 
 		$oDpt = new CDepartment();
+        $oDpt->overrideDatabase($this->_query);
 		$where += $oDpt->getAllowedSQL($uid, 'dept_id');
 
 		$project_where = parent::getAllowedSQL($uid, $index);
@@ -379,10 +386,12 @@ class CProject extends w2p_Core_BaseObject {
 
 	public function setAllowedSQL($uid, &$query, $index = null, $key = 'pr') {
 		$oCpy = new CCompany;
+        $oCpy->overrideDatabase($this->_query);
 		parent::setAllowedSQL($uid, $query, $index, $key);
 		$oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '').'project_company');
 		//Department permissions
 		$oDpt = new CDepartment();
+        $oDpt->overrideDatabase($this->_query);
 		$query->leftJoin('project_departments', '', $key.'.project_id = project_departments.project_id');
 		$oDpt->setAllowedSQL($uid, $query, 'project_departments.department_id');
 	}
@@ -398,11 +407,13 @@ class CProject extends w2p_Core_BaseObject {
 		$aBuf1 = parent::getDeniedRecords($uid);
 
 		$oCpy = new CCompany();
+        $oCpy->overrideDatabase($this->_query);
 		// Retrieve which projects are allowed due to the company rules
 		$aCpiesAllowed = $oCpy->getAllowedRecords($uid, 'company_id,company_name');
 
 		//Department permissions
 		$oDpt = new CDepartment();
+        $oDpt->overrideDatabase($this->_query);
 		$aDptsAllowed = $oDpt->getAllowedRecords($uid, 'dept_id,dept_name');
 
 		$q = $this->_getQuery();
@@ -550,6 +561,7 @@ class CProject extends w2p_Core_BaseObject {
             $this->project_original_parent = $this->project_id;
         } else {
             $parent_project = new CProject();
+            $parent_project->overrideDatabase($this->_query);
             $parent_project->load($this->project_parent);
             $this->project_original_parent = $parent_project->project_original_parent;
         }
@@ -645,7 +657,8 @@ class CProject extends w2p_Core_BaseObject {
 
         $subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
-		$user = new CUser();
+		$user = new CAdmin_User();
+        $user->overrideDatabase($this->_query);
 		$user->loadFull($this->project_owner);
 
 		if ($user && $mail->ValidEmail($user->user_email)) {
@@ -735,6 +748,7 @@ class CProject extends w2p_Core_BaseObject {
 			$q->addWhere('a.dept_id = b.department_id and b.project_id = ' . (int) $this->project_id);
 
 			$department = new CDepartment();
+            $department->overrideDatabase($this->_query);
 			$department->setAllowedSQL($this->_AppUI->user_id, $q);
 
 			return $q->loadHashList('dept_id');

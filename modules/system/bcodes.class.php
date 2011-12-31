@@ -18,7 +18,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem('system', 'delete')) {
-            $q = new w2p_Database_Query();
+            $q = $this->_getQuery();
             $q->addTable('billingcode');
             $q->addUpdate('billingcode_status', '1');
             $q->addWhere('billingcode_id = ' . (int) $this->billingcode_id);
@@ -55,7 +55,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
 		$q->addQuery('billingcode_id');
 		$q->addTable('billingcode');
 		$q->addWhere('billingcode_name = \'' . $this->billingcode_name . '\'');
@@ -70,7 +70,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
     }
 
     public function getBillingCodes($company_id = -1, $activeOnly = true) {
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
         $q->addTable('billingcode', 'bc');
         $q->addQuery('bc.*, c.company_name');
         $q->leftJoin('companies', 'c', 'c.company_id = bc.billingcode_company');
@@ -86,7 +86,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
     }
 
     public function calculateTaskCost($task_id, $start_date = null, $end_date = null) {
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
         $q->addTable('task_log', 'tl');
         $q->addQuery('task_log_hours, billingcode_value, billingcode_category');
         $q->leftJoin('billingcode', 'bc', 'bc.billingcode_id = tl.task_log_costcode');
@@ -116,7 +116,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
     }
 
     public function calculateProjectCost($project_id, $start_date = null, $end_date = null) {
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
         $q->addTable('task_log', 'tl');
         $q->addQuery('task_log_hours, billingcode_value, billingcode_category');
         $q->addJoin('tasks', 't', 't.task_id = tl.task_log_task');

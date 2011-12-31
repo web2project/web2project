@@ -85,6 +85,7 @@ class CDepartment extends w2p_Core_BaseObject {
         $q->addOrder('dept_parent, dept_name');
 
         $oCpy = new CCompany();
+        $oCpy->overrideDatabase($this->_query);
         $where = $oCpy->getAllowedSQL($AppUI->user_id, 'c.company_id');
         $q->addWhere($where);
 

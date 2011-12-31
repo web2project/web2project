@@ -75,6 +75,7 @@ class CForum_Message extends w2p_Core_BaseObject {
 
                 //update forum descriptor
                 $forum = new CForum();
+                $forum->overrideDatabase($this->_query);
                 $forum->load($AppUI, $this->message_forum);
                 $forum->forum_message_count = $reply[0];
                 /*

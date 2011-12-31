@@ -9,12 +9,12 @@ class w2p_Core_Config extends w2p_Core_BaseObject {
 	}
 
 	public function getChildren($id) {
-		$this->_query->clear();
-		$this->_query->addTable('config_list');
-		$this->_query->addOrder('config_list_id');
-		$this->_query->addWhere('config_id = ' . (int)$id);
-		$result = $this->_query->loadHashList('config_list_id');
-		$this->_query->clear();
+		$q = $this->_getQuery();
+		$q->addTable('config_list');
+		$q->addOrder('config_list_id');
+		$q->addWhere('config_id = ' . (int)$id);
+		$result = $q->loadHashList('config_list_id');
+
 		return $result;
 	}
 }

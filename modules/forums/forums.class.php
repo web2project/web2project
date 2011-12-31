@@ -97,6 +97,7 @@ class CForum extends w2p_Core_BaseObject {
     public function getAllowedForums($user_id, $company_id, $filter = -1, $orderby = 'forum_name', $orderdir = 'asc', $max_msg_length = 30)
     {
         $project = new CProject();
+        $project->overrideDatabase($this->_query);
 
         $q = $this->_getQuery();
         $q->addTable('forums');
@@ -208,6 +209,7 @@ class CForum extends w2p_Core_BaseObject {
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
 		global $AppUI;
 		$oPrj = new CProject();
+        $oPrj->overrideDatabase($this->_query);
 
 		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
 		if (count($aPrjs)) {

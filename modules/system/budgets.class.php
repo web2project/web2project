@@ -20,7 +20,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
 	}
 
     public function getBudgetAmounts($company_id = -1, $dept_id = -1) {
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
         $q->addTable('budgets', 'b');
         $q->addQuery('b.*, c.company_name');
         $q->leftJoin('companies', 'c', 'c.company_id = b.budget_company');

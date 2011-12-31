@@ -56,6 +56,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
            ) {
             $this->perm_func = 'updateLogin';
             $tmpUser = new CAdmin_User();
+            $tmpUser->overrideDatabase($this->_query);
             $tmpUser->load($this->user_id);
 
             if ('' == trim($this->user_password)) {
