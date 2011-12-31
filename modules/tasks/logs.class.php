@@ -254,7 +254,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @access private
 	 */
-	protected function updateTaskSummary(w2p_Core_CAppUI $AppUI, $task_id)
+	protected function updateTaskSummary(w2p_Core_CAppUI $AppUI = null, $task_id)
 	{
         $perms = $AppUI->acl();
         $q = $this->_getQuery();
@@ -278,7 +278,7 @@ class CTask_Log extends w2p_Core_BaseObject
             $task->task_percent_complete = $percentComplete;
             $diff = strtotime($this->task_log_task_end_date) - strtotime($task->task_end_date);
             $task->task_end_date = (0 == $diff) ? $task->task_end_date : $this->task_log_task_end_date;
-            $success = $task->store($AppUI);
+            $success = $task->store();
 
             if (!$success) {
                 $AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);

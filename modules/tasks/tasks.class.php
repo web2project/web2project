@@ -109,8 +109,6 @@ class CTask extends w2p_Core_BaseObject {
 
 	// overload check
 	public function check() {
-		global $AppUI;
-
 		$errorArray = array();
 		$baseErrorMsg = get_class($this) . '::store-check failed - ';
 
@@ -165,7 +163,7 @@ class CTask extends w2p_Core_BaseObject {
 			}
 		}
 		if (!$this->task_creator) {
-			$this->task_creator = $AppUI->user_id;
+			$this->task_creator = $this->_AppUI->user_id;
 		}
 		if (!$this->task_duration_type) {
 			$this->task_duration_type = 1;
@@ -297,8 +295,6 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function loadFull(w2p_Core_CAppUI $AppUI = null, $taskId) {
-        global $AppUI;
-
         $q = $this->_getQuery();
         $q->addTable('tasks');
         $q->leftJoin('users', 'u1', 'u1.user_id = task_owner', 'outer');
@@ -327,8 +323,6 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function updateDynamics($fromChildren = false) {
-		global $AppUI;
-
         //Has a parent or children, we will check if it is dynamic so that it's info is updated also
 		$q = $this->_getQuery();
         $q->clear();
@@ -437,7 +431,7 @@ class CTask extends w2p_Core_BaseObject {
 			//If we are updating a dynamic task from its children we don't want to store() it
 			//when the method exists the next line in the store calling function will do that
 			if ($fromChildren == false) {
-				$modified_task->store($AppUI);
+				$modified_task->store();
 			}
 		}
 	}
@@ -450,8 +444,6 @@ class CTask extends w2p_Core_BaseObject {
 	* @return object The new record object or null if error
 	*/
 	public function copy($destProject_id = 0, $destTask_id = -1) {
-		global $AppUI;
-
         $newObj = $this->duplicate();
 
 		// Copy this task to another project if it's specified
@@ -469,7 +461,7 @@ class CTask extends w2p_Core_BaseObject {
 		if ($newObj->task_parent == $this->task_id) {
 			$newObj->task_parent = '';
         }
-		$newObj->store($AppUI);
+		$newObj->store($this->_AppUI);
 		$this->copyAssignedUsers($newObj->task_id);
 
 		return $newObj;
@@ -491,14 +483,11 @@ class CTask extends w2p_Core_BaseObject {
 			$q->addReplace('user_task_priority', $user_task['user_task_priority']);
 			$q->addTable('user_tasks', 'ut');
 			$q->exec();
-			$q->clear();
 		}
 
 	}
 
 	public function deepCopy($destProject_id = 0, $destTask_id = 0) {
-		global $AppUI;
-
         $children = $this->getChildren();
 		$newObj = $this->copy($destProject_id, $destTask_id);
 		$new_id = $newObj->task_id;
@@ -508,7 +497,7 @@ class CTask extends w2p_Core_BaseObject {
 				$tempTask->load($child);
 				$tempTask->htmlDecode($child);
 				$newChild = $tempTask->deepCopy($destProject_id, $new_id);
-				$newChild->store($AppUI);
+				$newChild->store();
 			}
 		}
 
@@ -516,14 +505,12 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
-        global $AppUI;
-
         $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
         if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
-            $this->task_start_date = $AppUI->convertToSystemTZ($this->task_start_date);
+            $this->task_start_date = $this->_AppUI->convertToSystemTZ($this->task_start_date);
         }
         if ($this->task_end_date != '' && $this->task_end_date != '0000-00-00 00:00:00') {
-            $this->task_end_date = $AppUI->convertToSystemTZ($this->task_end_date);
+            $this->task_end_date = $this->_AppUI->convertToSystemTZ($this->task_end_date);
         }
 		$this->task_contacts = explode(',', $this->task_contacts);
 
@@ -562,13 +549,12 @@ class CTask extends w2p_Core_BaseObject {
 	 * @todo Parent store could be partially used
 	 */
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
 		$this->w2PTrimAll();
         if (!$this->task_owner) {
-            $this->task_owner = $AppUI->user_id;
+            $this->task_owner = $this->_AppUI->user_id;
         }
 
 		$importing_tasks = false;
@@ -768,7 +754,7 @@ class CTask extends w2p_Core_BaseObject {
             $task->task_start_date = $projectDates[0]['min_task_start_date'];
             $task->task_end_date = $projectDates[0]['max_task_end_date'];
             $task->task_percent_complete = $subProject->project_percent_complete;
-            $result = $task->store($AppUI);
+            $result = $task->store();
             //TODO: we should do something with this store result?
         }
     }
@@ -778,8 +764,7 @@ class CTask extends w2p_Core_BaseObject {
 	 * @todo Can't delete a task with children
 	 */
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-		global $AppUI;
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             //load it before deleting it because we need info on it to update the parents later on
@@ -790,7 +775,7 @@ class CTask extends w2p_Core_BaseObject {
             foreach($childrenlist as $child) {
                 $task = new CTask();
                 $task->task_id = $child;
-                $task->delete($AppUI);
+                $task->delete($this->_AppUI);
             }
 
             $taskList = $childrenlist + array($this->task_id);
@@ -988,10 +973,10 @@ class CTask extends w2p_Core_BaseObject {
 	} // end of staticGetDependencies ()
 
 	public function notifyOwner() {
-        global $AppUI, $locale_char_set;
+        global $locale_char_set;
 
 		$mail = new w2p_Utilities_Mail();
-		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
+		$mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
 		// c = creator
 		// a = assignee
@@ -1018,7 +1003,7 @@ class CTask extends w2p_Core_BaseObject {
 		$q->clear();
 
 		if (count($users)) {
-            $emailManager = new w2p_Output_EmailManager($AppUI);
+            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getTaskNotifyOwner($this);
             $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 		}
@@ -1033,11 +1018,11 @@ class CTask extends w2p_Core_BaseObject {
 
 	//additional comment will be included in email body
 	public function notify($comment = '') {
-		global $AppUI, $locale_char_set;
+		global $locale_char_set;
 
 		$mail = new w2p_Utilities_Mail();
 
-		$mail->Subject($projname . '::' . $this->task_name . ' ' . $AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
+		$mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
 		// c = creator
 		// a = assignee
@@ -1068,16 +1053,16 @@ class CTask extends w2p_Core_BaseObject {
 		$q->clear();
 
 		if (count($users)) {
-            $emailManager = new w2p_Output_EmailManager($AppUI);
+            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getTaskNotify($this, $users);
 
             $mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
 		}
 
-		$mail_owner = $AppUI->getPref('MAILALL');
+		$mail_owner = $this->_AppUI->getPref('MAILALL');
 
 		foreach ($users as $row) {
-			if ($mail_owner || $row['assignee_id'] != $AppUI->user_id) {
+			if ($mail_owner || $row['assignee_id'] != $this->_AppUI->user_id) {
 				if ($mail->ValidEmail($row['assignee_email'])) {
 					$mail->To($row['assignee_email'], true);
 					$mail->Send();
@@ -1093,7 +1078,7 @@ class CTask extends w2p_Core_BaseObject {
 	 * based upon the information supplied by the user.
 	 */
 	public function email_log(&$log, $assignees, $task_contacts, $project_contacts, $others, $extras, $specific_user=0) {
-		global $AppUI, $locale_char_set, $w2Pconfig;
+		global $locale_char_set, $w2Pconfig;
 
 		$mail_recipients = array();
 		$q = $this->_getQuery();
@@ -1112,8 +1097,8 @@ class CTask extends w2p_Core_BaseObject {
 				$q->leftJoin('contacts', 'c', 'c.contact_id = ua.user_contact');
 				$q->addQuery('c.contact_email, c.contact_display_name as contact_name');
 				$q->addWhere('ut.task_id = ' . $this->task_id);
-				if (!$AppUI->getPref('MAILALL')) {
-					$q->addWhere('ua.user_id <>' . (int)$AppUI->user_id);
+				if (!$this->_AppUI->getPref('MAILALL')) {
+					$q->addWhere('ua.user_id <>' . (int)$this->_AppUI->user_id);
 				}
 				$assigneeList = $q->loadList();
 				$q->clear();
@@ -1192,10 +1177,10 @@ class CTask extends w2p_Core_BaseObject {
 			$char_set = isset($locale_char_set) ? $locale_char_set : '';
 			$mail = new w2p_Utilities_Mail();
 			// Grab the subject from user preferences
-			$prefix = $AppUI->getPref('TASKLOGSUBJ');
+			$prefix = $this->_AppUI->getPref('TASKLOGSUBJ');
 			$mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
 
-            $emailManager = new w2p_Output_EmailManager($AppUI);
+            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getTaskEmailLog($this, $log);
             $mail->Body($body, $char_set);
 
@@ -1215,7 +1200,7 @@ class CTask extends w2p_Core_BaseObject {
 			$mail->SendSeparatelyTo($sendToList);
 
 			// Now update the log
-			$save_email = $AppUI->getPref('TASKLOGNOTE');
+			$save_email = $this->_AppUI->getPref('TASKLOGNOTE');
 			if ($save_email) {
 //TODO: This is where #38 - http://bugs.web2project.net/view.php?id=38 - should be applied if a change is necessary.
 //TODO: This datetime should be added/displayed in UTC/GMT.
@@ -1233,8 +1218,6 @@ class CTask extends w2p_Core_BaseObject {
 	 * @param integer The target company
 	 */
 	public function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null) {
-		global $AppUI;
-
 		$q = new w2p_Database_Query();
 		// convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
@@ -1242,19 +1225,19 @@ class CTask extends w2p_Core_BaseObject {
 
 		// Allow for possible passing of user_id 0 to stop user filtering
 		if (!isset($user_id)) {
-			$user_id = $AppUI->user_id;
+			$user_id = $this->_AppUI->user_id;
 		}
 
 		// filter tasks for not allowed projects
 		$tasks_filter = '';
 		// check permissions on projects
 		$proj = new CProject();
-		$task_filter_where = $proj->getAllowedSQL($AppUI->user_id, 't.task_project');
+		$task_filter_where = $proj->getAllowedSQL($this->_AppUI->user_id, 't.task_project');
 		// exclude read denied projects
-		$deny = $proj->getDeniedRecords($AppUI->user_id);
+		$deny = $proj->getDeniedRecords($this->_AppUI->user_id);
 		// check permissions on tasks
 		$obj = new CTask();
-		$allow = $obj->getAllowedSQL($AppUI->user_id, 't.task_id');
+		$allow = $obj->getAllowedSQL($this->_AppUI->user_id, 't.task_id');
 
 		$q->addTable('tasks', 't');
 		if ($user_id) {
@@ -1709,9 +1692,7 @@ class CTask extends w2p_Core_BaseObject {
 		return $q->loadHashList('dependencies_task_id');
 	}
 	public function getTaskDepartments(w2p_Core_CAppUI $AppUI = null, $taskId) {
-		global $AppUI;
-
-        if ($AppUI->isActiveModule('departments')) {
+        if ($this->_AppUI->isActiveModule('departments')) {
 			$q = $this->_getQuery();
 			$q->addTable('departments', 'd');
 			$q->addTable('task_departments', 't');
@@ -1720,14 +1701,12 @@ class CTask extends w2p_Core_BaseObject {
 			$q->addQuery('dept_id, dept_name, dept_phone');
 
 			$department = new CDepartment;
-			$department->setAllowedSQL($AppUI->user_id, $q);
+			$department->setAllowedSQL($this->_AppUI->user_id, $q);
 			return $q->loadHashList('dept_id');
 		}
 	}
     public function getContacts(w2p_Core_CAppUI $AppUI = null, $task_id) {
-		global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 		if (canView('contacts')) {
 			$q = $this->_getQuery();
 			$q->addTable('contacts', 'c');
@@ -1741,16 +1720,16 @@ class CTask extends w2p_Core_BaseObject {
 			$q->addQuery('c.contact_id, contact_first_name, contact_last_name,
                 contact_display_name, contact_display_name as contact_name, contact_email');
 
-			$q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
+			$q->addWhere('(contact_owner = ' . (int)$this->_AppUI->user_id . ' OR contact_private = 0)');
 
 			$department = new CDepartment;
-			$department->setAllowedSQL($AppUI->user_id, $q);
+			$department->setAllowedSQL($this->_AppUI->user_id, $q);
 
 			return $q->loadHashList('contact_id');
 		}
     }
 	public function getTaskContacts(w2p_Core_CAppUI $AppUI = null, $task_id) {
-        return $this->getContacts($AppUI, $task_id);
+        return $this->getContacts($this->_AppUI, $task_id);
 	}
 
 	/**
@@ -1766,8 +1745,6 @@ class CTask extends w2p_Core_BaseObject {
 		* management) is a complex subject which is currently not even close to be
 		* handled properly.
 		*/
-
-		global $AppUI;
 
 		if (!w2PgetConfig('check_overallocation', false)) {
 			if ($get_user_list) {
@@ -1813,13 +1790,13 @@ class CTask extends w2p_Core_BaseObject {
 			$q->addOrder('contact_first_name, contact_last_name');
 			// get CCompany() to filter by company
 			$obj = new CCompany();
-			$companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
+			$companies = $obj->getAllowedSQL($this->_AppUI->user_id, 'company_id');
 			$q->addJoin('companies', 'com', 'company_id = contact_company');
 			if ($companies) {
 				$q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
 			}
 			$dpt = new CDepartment();
-			$depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
+			$depts = $dpt->getAllowedSQL($this->_AppUI->user_id, 'dept_id');
 			$q->addJoin('departments', 'dep', 'dept_id = contact_department');
 			if ($depts) {
 				$q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
@@ -1991,14 +1968,12 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function canUserEditTimeInformation($project_owner = 0, $user_id = 0) {
-		global $AppUI;
-
         if (!$project_owner) {
             $project = new CProject();
             $project->load($this->task_project);
             $project_owner = $project->project_owner;
         }
-        $user_id = ($user_id) ? $user_id : $AppUI->user_id;
+        $user_id = ($user_id) ? $user_id : $this->_AppUI->user_id;
 
 		// Code to see if the current user is
 		// enabled to change time information related to task
@@ -2100,7 +2075,7 @@ class CTask extends w2p_Core_BaseObject {
 	 * -1, event is destroyed.
 	 */
 	public function remind($module, $type, $id, $owner, &$args) {
-		global $locale_char_set, $AppUI;
+		global $locale_char_set;
 
 		// At this stage we won't have an object yet
 		if (!$this->load($id)) {
@@ -2146,16 +2121,16 @@ class CTask extends w2p_Core_BaseObject {
 		$now = new w2p_Utilities_Date();
 		$diff = $expires->dateDiff($now);
 		$diff *= w2p_Utilities_Date::compare($expires, $now);
-		$prefix = $AppUI->_('Task Due', UI_OUTPUT_RAW);
+		$prefix = $this->_AppUI->_('Task Due', UI_OUTPUT_RAW);
 		if ($diff == 0) {
-			$msg = $AppUI->_('TODAY', UI_OUTPUT_RAW);
+			$msg = $this->_AppUI->_('TODAY', UI_OUTPUT_RAW);
 		} elseif ($diff == 1) {
-			$msg = $AppUI->_('TOMORROW', UI_OUTPUT_RAW);
+			$msg = $this->_AppUI->_('TOMORROW', UI_OUTPUT_RAW);
 		} elseif ($diff < 0) {
-			$msg = $AppUI->_(array('OVERDUE', abs($diff), 'DAYS'));
-			$prefix = $AppUI->_('Task', UI_OUTPUT_RAW);
+			$msg = $this->_AppUI->_(array('OVERDUE', abs($diff), 'DAYS'));
+			$prefix = $this->_AppUI->_('Task', UI_OUTPUT_RAW);
 		} else {
-			$msg = $AppUI->_(array($diff, 'DAYS'));
+			$msg = $this->_AppUI->_(array($diff, 'DAYS'));
 		}
 
         $project = new CProject();
@@ -2168,7 +2143,7 @@ class CTask extends w2p_Core_BaseObject {
 
 		$subject = $prefix . ' ' . $msg . ' ' . $this->task_name . '::' . $project_name;
 
-        $emailManager = new w2p_Output_EmailManager($AppUI);
+        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
         $body = $emailManager->getTaskRemind($this, $msg, $project_name, $contacts);
 
 		$mail = new w2p_Utilities_Mail();
@@ -2176,10 +2151,10 @@ class CTask extends w2p_Core_BaseObject {
 
 		foreach ($contacts as $contact) {
             $user_id = CUser::getUserIdByContactID($contact['contact_id']);
-            $AppUI->loadPrefs($user_id);
+            $this->_AppUI->loadPrefs($user_id);
 
-            $df = $AppUI->getPref('DISPLAYFORMAT');
-            $tz = $AppUI->getPref('TIMEZONE');
+            $df = $this->_AppUI->getPref('DISPLAYFORMAT');
+            $tz = $this->_AppUI->getPref('TIMEZONE');
 
             $body = str_replace('START-TIME', $starts->convertTZ($tz)->format($df) , $body);
             $body = str_replace('END-TIME'  , $expires->convertTZ($tz)->format($df), $body);
@@ -2210,7 +2185,6 @@ class CTask extends w2p_Core_BaseObject {
 	}
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
-		global $AppUI;
 		$oPrj = new CProject();
 
 		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
@@ -2339,7 +2313,7 @@ class CTask extends w2p_Core_BaseObject {
 		return $q->loadList();
 	}
 
-	public function getAllowedTaskList($AppUI, $task_project = 0) {
+	public function getAllowedTaskList($AppUI = null, $task_project = 0) {
 		$results = array();
 
         $q = $this->_getQuery();

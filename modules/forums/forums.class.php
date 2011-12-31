@@ -47,7 +47,7 @@ class CForum extends w2p_Core_BaseObject {
         return $errorArray;
     }
 
-    public function getMessages(w2p_Core_CAppUI $AppUI, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
+    public function getMessages(w2p_Core_CAppUI $AppUI = null, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
 
         $q = $this->_getQuery();
         $q->addTable('forums');
@@ -63,7 +63,7 @@ class CForum extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-    public function load(w2p_Core_CAppUI $AppUI, $forum_id) {
+    public function load(w2p_Core_CAppUI $AppUI = null, $forum_id) {
 
         $q = $this->_getQuery();
         $q->addQuery('*');
@@ -72,7 +72,7 @@ class CForum extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
     }
 
-    public function loadFull(w2p_Core_CAppUI $AppUI, $forum_id) {
+    public function loadFull(w2p_Core_CAppUI $AppUI = null, $forum_id) {
 
         $q = $this->_getQuery();
         $q->addTable('forums');
@@ -148,7 +148,7 @@ class CForum extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-	public function store(w2p_Core_CAppUI $AppUI) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
         $stored = false;
 

@@ -58,6 +58,8 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
         $this->mockDB = new w2p_Mocks_Query();
 //        $this->obj->overrideDatabase($this->mockDB);
 
+        $GLOBALS['acl'] = new w2p_Mocks_Permissions();
+
 		$this->post_data = array(
 			'dosql' =>                      'do_project_aed',
             'project_id' =>                 0,
@@ -390,11 +392,10 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testStoreCreate()
     {
-        global $AppUI;
 $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
-        $results = $this->obj->store($AppUI);
 
+        $results = $this->obj->store();
         $this->assertTrue($results);
         $this->assertEquals(1,                              $this->obj->project_id);
         /*

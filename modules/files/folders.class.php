@@ -22,8 +22,6 @@ class CFile_Folder extends w2p_Core_BaseObject {
 	}
 
 	public function getAllowedRecords($uid) {
-		global $AppUI;
-
         $q = $this->_getQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('*');
@@ -32,7 +30,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 
-	public function delete(w2p_Core_CAppUI $AppUI) {
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
 
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
@@ -71,7 +69,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 	}
 
 
-    public function store(w2p_Core_CAppUI $AppUI) {
+    public function store(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -127,7 +125,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return (int) $q->loadResult();
 	}
 
-    public function getFileCountByFolder(w2p_Core_CAppUI $AppUI, $folder_id,
+    public function getFileCountByFolder(w2p_Core_CAppUI $AppUI = null, $folder_id,
             $task_id, $project_id, $company_id, $allowed_companies) {
 
         // SQL text for count the total recs from the selected option

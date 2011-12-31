@@ -129,7 +129,7 @@ class CProject extends w2p_Core_BaseObject {
         return $errorArray;
 	}
 
-	public function loadFull(w2p_Core_CAppUI $AppUI, $projectId) {
+	public function loadFull(w2p_Core_CAppUI $AppUI = null, $projectId) {
 
         $q = $this->_getQuery();
 		$q->addTable('projects');
@@ -164,7 +164,7 @@ class CProject extends w2p_Core_BaseObject {
             $task->overrideDatabase($this->_query);
             foreach ($tasks_to_delete as $task_id) {
                 $task->task_id = $task_id;
-                $task->delete($AppUI);
+                $task->delete();
             }
 
             $q->addTable('files');
@@ -177,7 +177,7 @@ class CProject extends w2p_Core_BaseObject {
             $file->overrideDatabase($this->_query);
             foreach ($files_to_delete as $file_id) {
                 $file->file_id = $file_id;
-                $file->delete($AppUI);
+                $file->delete();
             }
 
             $q->addTable('events');
@@ -190,7 +190,7 @@ class CProject extends w2p_Core_BaseObject {
             $event->overrideDatabase($this->_query);
             foreach ($events_to_delete as $event_id) {
                 $event->event_id = $event_id;
-                $event->delete($AppUI);
+                $event->delete();
             }
 
             // remove the project-contacts and project-departments map
@@ -297,7 +297,7 @@ class CProject extends w2p_Core_BaseObject {
 				$csList = implode(',', $newDeps);
 				$newTask->updateDependencies($csList);
 			} // end of update dependencies
-            $result = $newTask->store($AppUI);
+            $result = $newTask->store();
 			$newTask->addReminder();
             $importedTasks[] = $newTask->task_id;
 
@@ -314,7 +314,7 @@ class CProject extends w2p_Core_BaseObject {
             $delTask->overrideDatabase($this->_query);
             foreach($importedTasks as $badTask) {
                 $delTask->task_id = $badTask;
-                $delTask->delete($AppUI);
+                $delTask->delete();
             }
         }
         return $errors;
@@ -757,9 +757,8 @@ class CProject extends w2p_Core_BaseObject {
 
 	public static function getDepartments(w2p_Core_CAppUI $AppUI = null, $projectId) {
 		trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE );
-        global $AppUI;
 
-        $project = new CProject($AppUI);
+        $project = new CProject();
         $project->project_id = $projectId;
 
         return $project->getDepartmentList();

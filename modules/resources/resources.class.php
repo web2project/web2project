@@ -64,7 +64,7 @@ class CResource extends w2p_Core_BaseObject {
 		return $result;
 	}
 
-    public function store(w2p_Core_CAppUI $AppUI) {
+    public function store(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -91,7 +91,7 @@ class CResource extends w2p_Core_BaseObject {
         return $stored;
     }
 
-    public function delete(w2p_Core_CAppUI $AppUI) {
+    public function delete(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
         $this->_error = array();
 

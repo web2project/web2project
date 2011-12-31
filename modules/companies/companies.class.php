@@ -72,7 +72,7 @@ class CCompany extends w2p_Core_BaseObject {
 		return parent::canDelete($msg, $oid, $tables);
 	}
 
-    public function delete(w2p_Core_CAppUI $AppUI) {
+    public function delete(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
@@ -84,7 +84,7 @@ class CCompany extends w2p_Core_BaseObject {
         return false;
     }
 
-    public function store(w2p_Core_CAppUI $AppUI) {
+    public function store(w2p_Core_CAppUI $AppUI = null) {
         $perms = $AppUI->acl();
         $stored = false;
 
@@ -158,7 +158,7 @@ class CCompany extends w2p_Core_BaseObject {
     $q->loadObject($this, true, false);
   }
 
-  public function getCompanyList($AppUI, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
+  public function getCompanyList($AppUI = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
 
     $q = $this->_getQuery();
   	$q->addTable('companies', 'c');
@@ -187,7 +187,7 @@ class CCompany extends w2p_Core_BaseObject {
   	return $q->loadList();
   }
 
-  public function getCompanies(w2p_Core_CAppUI $AppUI) {
+  public function getCompanies(w2p_Core_CAppUI $AppUI = null) {
 
     $q = $this->_getQuery();
   	$q->addTable('companies');
