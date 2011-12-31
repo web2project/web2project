@@ -7,12 +7,10 @@
  *
  * PHP version 5
  *
- * LICENSE: This source file is subject to GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version. Please see the LICENSE file in root of site
- * for further details
+ * LICENSE: This source file is subject to Clear BSD License. Please see the
+ *   LICENSE file in root of site for further details
  *
- * @author      Trevor Morse
+ * @author      Trevor Morse <trevor.morse@gmail.com>
  * @category    w2p_Controllers_Base
  * @package     web2project
  * @subpackage  unit_tests

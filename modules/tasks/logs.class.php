@@ -7,25 +7,17 @@
  *
  * PHP version 5
  *
- * LICENSE: This source file is subject to GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version. Please see the LICENSE file in root of site
- * for further details
+ * LICENSE: This source file is subject to Clear BSD License. Please see the
+ *   LICENSE file in root of site for further details
  *
- * @category    Tasks
- * @package     Task Logs
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @category    CTask_Logs
+ * @package     web2project
+ * @subpackage  modules
+ * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+ * @license     Clear BSD
  * @link        http://www.web2project.net
  */
 
-/**
- * This class contains functionality for Task Logs
- *
- * @category    Tasks
- * @package     Task Logs
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
- * @link        http://www.web2project.net
- */
 class CTask_Log extends w2p_Core_BaseObject
 {
 

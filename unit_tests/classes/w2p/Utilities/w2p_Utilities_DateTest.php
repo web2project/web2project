@@ -7,16 +7,15 @@
  *
  * PHP version 5
  *
- * LICENSE: This source file is subject to GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version. Please see the LICENSE file in root of site
- * for further details
+ * LICENSE: This source file is subject to Clear BSD License. Please see the
+ *   LICENSE file in root of site for further details
  *
+ * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
  * @category    w2p_Utilities_Date_Test
  * @package     web2project
  * @subpackage  unit_tests
- * @author      D. Keith Casey, Jr.
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+ * @license     Clear BSD
  * @link        http://www.web2project.net
  */
 

@@ -4,8 +4,6 @@
  *	@package web2Project
  *	@subpackage modules
  *	@version $Revision$
- *  // Copyright 2004, Adam Donnison <adam@saki.com.au>
- *  // Released under GNU General Public License version 2 or later
  *
  */
 

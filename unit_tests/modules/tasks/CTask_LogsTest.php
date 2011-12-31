@@ -11,10 +11,11 @@
  *   LICENSE file in root of site for further details
  *
  * @author      Trevor Morse <trevor.morse@gmail.com>
- * @category    Task Logs
+ * @category    CTask_Logs
  * @package     web2project
  * @subpackage  unit_tests
  * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+ * @license     Clear BSD
  * @link        http://www.web2project.net
  */
 

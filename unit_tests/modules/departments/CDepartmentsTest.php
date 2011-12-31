@@ -11,10 +11,11 @@
  *   LICENSE file in root of site for further details
  *
  * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    Departments
+ * @category    CDepartments
  * @package     web2project
  * @subpackage  unit_tests
- * @copyright   2007-2010 The web2Project Development Team <w2p-developers@web2project.net>
+ * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+ * @license     Clear BSD
  * @link        http://www.web2project.net
  */
 

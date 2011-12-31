@@ -10,11 +10,12 @@
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @category    Tasks
+ * @author      Trevor Morse <trevor.morse@gmail.com>
+ * @category    CTasks
  * @package     web2project
  * @subpackage  unit_tests
- * @author      Trevor Morse <trevor.morse@gmail.com>
  * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+ * @license     Clear BSD
  * @link        http://www.web2project.net
  */
 

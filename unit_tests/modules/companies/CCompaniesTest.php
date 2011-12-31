@@ -11,10 +11,11 @@
  *   LICENSE file in root of site for further details
  *
  * @author      Trevor Morse <trevor.morse@gmail.com>
- * @category    Companies
+ * @category    CCompanies
  * @package     web2project
  * @subpackage  unit_tests
  * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+ * @license     Clear BSD
  * @link        http://www.web2project.net
  */
 
