@@ -33,7 +33,6 @@ class CAdmin_Users_Test extends CommonSetup
       $AppUI->user_id = 1;
 
       $this->obj    = new CAdmin_User();
-      $this->mockDB = new w2p_Mocks_Query();
       $this->obj->overrideDatabase($this->mockDB);
 
       $GLOBALS['acl'] = new w2p_Mocks_Permissions();

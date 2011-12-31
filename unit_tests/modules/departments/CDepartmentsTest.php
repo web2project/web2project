@@ -30,7 +30,6 @@ class CDepartments_Test extends CommonSetup
       parent::setUp();
 
       $this->obj = new CDepartment();
-      $this->mockDB = new w2p_Mocks_Query();
       $this->obj->overrideDatabase($this->mockDB);
 
       $this->post_data = array(

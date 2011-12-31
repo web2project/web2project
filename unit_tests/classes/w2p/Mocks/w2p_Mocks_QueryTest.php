@@ -30,7 +30,7 @@ class w2p_Mocks_Query_Test extends CommonSetup
      */
     protected function setUp()
     {
-        $this->mockDB = new w2p_Mocks_Query();
+        parent::setUp();
     }
 
     public function testLoadHash() {

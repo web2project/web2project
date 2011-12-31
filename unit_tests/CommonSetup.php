@@ -48,6 +48,8 @@ class CommonSetup extends PHPUnit_Framework_TestCase {
 
     protected function setUp() {
         parent::setUp();
+
+        $this->mockDB = new w2p_Mocks_Query();
     }
 
 }
