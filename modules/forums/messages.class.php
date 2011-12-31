@@ -37,9 +37,7 @@ class CForum_Message extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -48,7 +46,7 @@ class CForum_Message extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
 
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
         if ($this->{$this->_tbl_key} && $perms->checkModuleItem('forums', 'edit', $this->{$this->_tbl_module})) {
@@ -76,7 +74,7 @@ class CForum_Message extends w2p_Core_BaseObject {
                 //update forum descriptor
                 $forum = new CForum();
                 $forum->overrideDatabase($this->_query);
-                $forum->load($AppUI, $this->message_forum);
+                $forum->load(null, $this->message_forum);
                 $forum->forum_message_count = $reply[0];
                 /*
                  * Note: the message_date here has already been adjusted for the
@@ -84,7 +82,7 @@ class CForum_Message extends w2p_Core_BaseObject {
                  */
                 $forum->forum_last_date = $this->message_date;
                 $forum->forum_last_id = $this->message_id;
-                $forum->store($AppUI);
+                $forum->store();
 
                 $this->sendWatchMail(false);
 
@@ -95,9 +93,7 @@ class CForum_Message extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $result = false;
 
 //TODO: this is an oddball permissions object where the module doesn't determine the access.. but another does?
@@ -151,7 +147,7 @@ class CForum_Message extends w2p_Core_BaseObject {
     }
 
 	public function sendWatchMail($debug = false) {
-		global $AppUI, $debug, $w2Pconfig;
+		global $debug, $w2Pconfig;
 
 		// Get the message from details.
 		$q = $this->_getQuery();
@@ -207,10 +203,10 @@ class CForum_Message extends w2p_Core_BaseObject {
 		}
 
 		$mail = new w2p_Utilities_Mail();
-        $subj_prefix = $AppUI->_('forumEmailSubj', UI_OUTPUT_RAW);
+        $subj_prefix = $this->_AppUI->_('forumEmailSubj', UI_OUTPUT_RAW);
 		$mail->Subject($subj_prefix . ' ' . $this->message_title, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
-        $emailManager = new w2p_Output_EmailManager($AppUI);
+        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
         $body = $emailManager->getForumWatchEmail($this, $forum_name, $message_from);
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 

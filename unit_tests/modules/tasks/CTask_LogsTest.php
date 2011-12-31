@@ -183,7 +183,6 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     {
         global $AppUI;
 
-        $tasklog = new CTask_Log();
         $this->obj->bind($this->post_data, null, true, true);
         $this->obj->task_log_id = 1;
         $this->obj->store();
@@ -202,7 +201,7 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
-        $log_updated = $AppUI->formatTZAwareTime($tasklog->task_log_updated, '%Y-%m-%d %T');
+        $log_updated = $AppUI->formatTZAwareTime($this->obj->task_log_updated, '%Y-%m-%d %T');
         $log_updated = strtotime($log_updated);
 
         $this->assertLessThanOrEqual($log_updated, $now_secs);

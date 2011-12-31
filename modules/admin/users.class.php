@@ -40,9 +40,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = null, $externally_created_user = false) {
-		global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -52,7 +50,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
 
         if ($this->{$this->_tbl_key} &&
                 ($perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})
-                    || $this->{$this->_tbl_key} == $AppUI->user_id)
+                    || $this->{$this->_tbl_key} == $this->_AppUI->user_id)
            ) {
             $this->perm_func = 'updateLogin';
             $tmpUser = new CAdmin_User();
@@ -89,9 +87,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
 	}
 
     protected function hook_postStore() {
-        global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $perms->{$this->perm_func}($this->user_id, $this->user_username);
 
         $q = $this->_getQuery();
@@ -145,8 +141,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
     }
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-		global $AppUI;
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
 

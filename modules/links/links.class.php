@@ -74,8 +74,8 @@ class CLink extends w2p_Core_BaseObject {
             $q->addWhere('link_category = '.$category_id);
         }
         // Permissions
-        $project->setAllowedSQL($AppUI->user_id, $q, 'link_project');
-        $task->setAllowedSQL($AppUI->user_id, $q, 'link_task and task_project = link_project');
+        $project->setAllowedSQL($this->_AppUI->user_id, $q, 'link_project');
+        $task->setAllowedSQL($this->_AppUI->user_id, $q, 'link_task and task_project = link_project');
         $q->addOrder('project_name, link_name');
 
         return $q->loadList();
@@ -101,7 +101,7 @@ class CLink extends w2p_Core_BaseObject {
     }
 
     public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
@@ -113,7 +113,7 @@ class CLink extends w2p_Core_BaseObject {
     }
 
     public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         if (strpos($this->link_url, ':') === false && strpos($this->link_url, "//") === false) {

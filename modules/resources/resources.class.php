@@ -65,7 +65,7 @@ class CResource extends w2p_Core_BaseObject {
 	}
 
     public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -92,7 +92,7 @@ class CResource extends w2p_Core_BaseObject {
     }
 
     public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $this->_error = array();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {

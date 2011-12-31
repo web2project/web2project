@@ -69,8 +69,8 @@ class CCalendar extends w2p_Core_BaseObject {
 	 *	@author caseydk
 	 *	@return true if it worked, false if it didn't
 	 */
-	public function delete(w2p_Core_CAppUI $AppUI) {
-        $perms = $AppUI->acl();
+	public function delete(w2p_Core_CAppUI $AppUI = null) {
+        $perms = $this->_AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
@@ -180,22 +180,20 @@ class CCalendar extends w2p_Core_BaseObject {
 	 * @return array A list of events
 	 */
 	public function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0) {
-		global $AppUI;
-
 		// convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
-		$db_start = $AppUI->convertToSystemTZ($db_start);
+		$db_start = $this->_AppUI->convertToSystemTZ($db_start);
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
-		$db_end = $AppUI->convertToSystemTZ($db_end);
+		$db_end = $this->_AppUI->convertToSystemTZ($db_end);
 
 		if (!isset($user_id)) {
-			$user_id = $AppUI->user_id;
+			$user_id = $this->_AppUI->user_id;
 		}
 
 		$project = new CProject();
         $project->overrideDatabase($this->_query);
 		if ($project_id) {
-			$p = &$AppUI->acl();
+			$p = &$this->_AppUI->acl();
 
 			if ($p->checkModuleItem('projects', 'view', $project_id, $user_id)) {
 				$allowedProjects = array('p.project_id = ' . (int)$project_id);
@@ -203,7 +201,7 @@ class CCalendar extends w2p_Core_BaseObject {
 				$allowedProjects = array('1=0');
 			}
 		} else {
-			$allowedProjects = $project->getAllowedSQL(($user_id ? $user_id : $AppUI->user_id), 'event_project');
+			$allowedProjects = $project->getAllowedSQL(($user_id ? $user_id : $this->_AppUI->user_id), 'event_project');
 		}
 
 		//do similiar actions for recurring and non-recurring events
@@ -221,13 +219,13 @@ class CCalendar extends w2p_Core_BaseObject {
 			if ($company_id) {
 				$$query_set->addWhere('project_company = ' . (int)$company_id);
 			} else {
-				if (($AppUI->getState('CalIdxCompany'))) {
-					$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
+				if (($this->_AppUI->getState('CalIdxCompany'))) {
+					$$query_set->addWhere('project_company = ' . $this->_AppUI->getState('CalIdxCompany'));
 				}
 			}
 
 			if (count($allowedProjects)) {
-				$$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ' ) ' . (($AppUI->getState('CalIdxCompany')) ? '' : ($project_id ? '' : ' OR event_project = 0 ')) . ')');
+				$$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ' ) ' . (($this->_AppUI->getState('CalIdxCompany')) ? '' : ($project_id ? '' : ' OR event_project = 0 ')) . ')');
 			}
 
 			switch ($filter) {
@@ -257,7 +255,7 @@ class CCalendar extends w2p_Core_BaseObject {
 		//Calculate the Length of Period (Daily, Weekly, Monthly View)
 		setlocale(LC_TIME, 'en');
 		$periodLength = Date_Calc::dateDiff($start_date->getDay(), $start_date->getMonth(), $start_date->getYear(), $end_date->getDay(), $end_date->getMonth(), $end_date->getYear());
-		setlocale(LC_ALL, $AppUI->user_lang);
+		setlocale(LC_ALL, $this->_AppUI->user_lang);
 
 		// AJD: Should this be going off the end of the array?  I don't think so.
 		// If it should then a comment to that effect would be nice.
@@ -275,7 +273,7 @@ class CCalendar extends w2p_Core_BaseObject {
 				//only show hourly recurrent event one time and add string 'hourly'
 				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j == 0) {
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
-					$eventListRec[$i]['event_title'] = $eventListRec[$i]['event_title'] . ' (' . $AppUI->_('Hourly') . ')';
+					$eventListRec[$i]['event_title'] = $eventListRec[$i]['event_title'] . ' (' . $this->_AppUI->_('Hourly') . ')';
 				}
 				//Weekly and Monthly View and higher recurrence mode
 				//show all events of recurrence > 1
@@ -298,8 +296,8 @@ class CCalendar extends w2p_Core_BaseObject {
 
 		$i = 0;
 		foreach($eventList as $event) {
-			$eventList[$i]['event_start_date'] = $AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
-			$eventList[$i]['event_end_date'] = $AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
+			$eventList[$i]['event_start_date'] = $this->_AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
+			$eventList[$i]['event_end_date'] = $this->_AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
 			$i++;
 		}
 //echo '<pre>'; print_r($eventList); echo '</pre>';
@@ -338,8 +336,6 @@ class CCalendar extends w2p_Core_BaseObject {
 
 	public function updateAssigned($assigned) {
 		// First remove the assigned from the user_events table
-		global $AppUI;
-
 		$q = $this->_getQuery();
 		$q->setDelete('user_events');
 		$q->addWhere('event_id = ' . (int)$this->event_id);
@@ -359,14 +355,15 @@ class CCalendar extends w2p_Core_BaseObject {
 			}
 
 			if ($msg = db_error()) {
-				$AppUI->setMsg($msg, UI_MSG_ERROR);
+				$this->_AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}
 	}
 
 	public function notify($assignees, $update = false, $clash = false) {
-		global $AppUI, $locale_char_set, $w2Pconfig;
-		$mail_owner = $AppUI->getPref('MAILALL');
+		global $locale_char_set, $w2Pconfig;
+
+		$mail_owner = $this->_AppUI->getPref('MAILALL');
 		$assignee_list = explode(',', $assignees);
 		$owner_is_assigned = in_array($this->event_owner, $assignee_list);
 		if ($mail_owner && !$owner_is_assigned && $this->event_owner) {
@@ -392,14 +389,14 @@ class CCalendar extends w2p_Core_BaseObject {
 		$users = $q->loadHashList('user_id');
 
 		$mail = new w2p_Utilities_Mail();
-		$type = $update ? $AppUI->_('Updated') : $AppUI->_('New');
+		$type = $update ? $this->_AppUI->_('Updated') : $this->_AppUI->_('New');
 		if ($clash) {
-			$mail->Subject($AppUI->_('Requested Event') . ': ' . $this->event_title, $locale_char_set);
+			$mail->Subject($this->_AppUI->_('Requested Event') . ': ' . $this->event_title, $locale_char_set);
 		} else {
-			$mail->Subject($type . ' ' . $AppUI->_('Event') . ': ' . $this->event_title, $locale_char_set);
+			$mail->Subject($type . ' ' . $this->_AppUI->_('Event') . ': ' . $this->event_title, $locale_char_set);
 		}
 
-        $emailManager = new w2p_Output_EmailManager($AppUI);
+        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
         $body = $emailManager->getEventNotify($this, $clash, $users, $types);
 
         $mail->Body($body, $locale_char_set);
@@ -413,14 +410,13 @@ class CCalendar extends w2p_Core_BaseObject {
 	}
 
 	public function checkClash($userlist = null) {
-		global $AppUI;
 		if (!isset($userlist)) {
 			return false;
 		}
 		$users = explode(',', $userlist);
 
 		// Now, remove the owner from the list, as we will always clash on this.
-		$key = array_search($AppUI->user_id, $users);
+		$key = array_search($this->_AppUI->user_id, $users);
 		if (isset($key) && $key !== false) { // Need both for change in php 4.2.0
 			unset($users[$key]);
 		}
@@ -471,8 +467,6 @@ class CCalendar extends w2p_Core_BaseObject {
 	}
 
 	public function getEventsInWindow($start_date, $end_date, $start_time, $end_time, $users = null) {
-		global $AppUI;
-
 		if (!isset($users)) {
 			return false;
 		}
@@ -506,7 +500,6 @@ class CCalendar extends w2p_Core_BaseObject {
 	}
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
-		global $AppUI;
 		$oPrj = new CProject();
         $oPrj->overrideDatabase($this->_query);
 
@@ -531,9 +524,8 @@ class CCalendar extends w2p_Core_BaseObject {
 
 	}
 
-    public function store(w2p_Core_CAppUI $AppUI) {
-
-        $perms = $AppUI->acl();
+    public function store(w2p_Core_CAppUI $AppUI = null) {
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         if (!$this->event_recurs) {
@@ -563,8 +555,8 @@ class CCalendar extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        $this->event_start_date = $AppUI->convertToSystemTZ($this->event_start_date);
-        $this->event_end_date = $AppUI->convertToSystemTZ($this->event_end_date);
+        $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
+        $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
 /*
  * TODO: I don't like the duplication on each of these two branches, but I
  *   don't have a good idea on how to fix it at the moment...

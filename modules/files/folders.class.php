@@ -31,7 +31,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
         if ($perms->checkModuleItem('files', 'delete', $this->{$this->_tbl_key})) {
@@ -70,7 +70,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 
 
     public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->file_folder_id = (int) $this->file_folder_id;
@@ -141,14 +141,14 @@ class CFile_Folder extends w2p_Core_BaseObject {
         //TODO: apply permissions properly
         $project = new CProject();
         $project->overrideDatabase($this->_query);
-        $deny1 = $project->getDeniedRecords($AppUI->user_id);
+        $deny1 = $project->getDeniedRecords($this->_AppUI->user_id);
         if (count($deny1) > 0) {
             $q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
         }
         //TODO: apply permissions properly
         $task = new CTask();
         $task->overrideDatabase($this->_query);
-        $deny2 = $task->getDeniedRecords($AppUI->user_id);
+        $deny2 = $task->getDeniedRecords($this->_AppUI->user_id);
         if (count($deny2) > 0) {
             $q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
         }

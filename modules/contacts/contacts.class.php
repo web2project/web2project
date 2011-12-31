@@ -50,8 +50,6 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function loadFull(w2p_Core_CAppUI $AppUI = null, $contactId) {
-		global $AppUI;
-
         $q = $this->_getQuery();
         $q->addTable('contacts');
         $q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
@@ -60,9 +58,7 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->contact_company = (int) $this->contact_company;
@@ -206,8 +202,7 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
         //if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
@@ -314,24 +309,22 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function clearUpdateKey() {
-		global $AppUI;
-
         $q = $this->_getQuery();
 		$this->contact_updatekey = '';
 		$this->contact_lastupdate = $q->dbfnNowWithTZ();
-		$this->store($AppUI);
+		$this->store();
 	}
 
     public function notify() {
-        global $AppUI, $w2Pconfig, $locale_char_set;
-		$df = $AppUI->getPref('SHDATEFORMAT');
-		$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+        global $w2Pconfig, $locale_char_set;
+		$df = $this->_AppUI->getPref('SHDATEFORMAT');
+		$df .= ' ' . $this->_AppUI->getPref('TIMEFORMAT');
 
 		$mail = new w2p_Utilities_Mail();
 		$mail->Subject('Hello', $locale_char_set);
 
 		if ($this->contact_email) {
-            $emailManager = new w2p_Output_EmailManager($AppUI);
+            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getContactUpdateNotify(null, $this);
 
 			$mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
@@ -358,7 +351,6 @@ class CContact extends w2p_Core_BaseObject {
 	 **/
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
-		global $AppUI;
 		$oCpy = new CCompany();
         $oCpy->overrideDatabase($this->_query);
 
@@ -545,8 +537,6 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function hook_cron() {
-		global $AppUI;
-
         $q = $this->_getQuery();
         $q->addTable('contacts');
 		$q->addQuery('contact_id');
@@ -557,7 +547,7 @@ class CContact extends w2p_Core_BaseObject {
 			$myContact = new CContact();
             $myContact->overrideDatabase($this->_query);
 			$myContact = $myContact->load($contactId['contact_id']);
-			$myContact->store($AppUI);
+			$myContact->store();
 		}
 
 		//To Bruce: Clean updatekeys based on datediff to warn about long waiting.

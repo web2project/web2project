@@ -28,8 +28,6 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function loadFull(w2p_Core_CAppUI $AppUI = null, $deptId) {
-        global $AppUI;
-
 		$q = $this->_getQuery();
 		$q->addQuery('dep.*, company_name');
 		$q->addQuery('con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name');
@@ -46,9 +44,8 @@ class CDepartment extends w2p_Core_BaseObject {
 
 		$q->loadObject($this);
 	}
-	public function loadOtherDepts(w2p_Core_CAppUI $AppUI = null, $company_id, $removeDeptId = 0) {
-		global $AppUI;
 
+	public function loadOtherDepts(w2p_Core_CAppUI $AppUI = null, $company_id, $removeDeptId = 0) {
         $results = array();
         $q = $this->_getQuery();
 		$q->addTable('departments', 'dep');
@@ -57,7 +54,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		if ($removeDeptId > 0) {
 			$q->addWhere('dep.dept_id <> ' . $removeDeptId);
 		}
-		$this->setAllowedSQL($AppUI->user_id, $q);
+		$this->setAllowedSQL($this->_AppUI->user_id, $q);
         $q->addOrder('dept_name');
         $deptList = $q->loadList();
 
@@ -68,8 +65,6 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function getFilteredDepartmentList(w2p_Core_CAppUI $AppUI = null, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
-        global $AppUI;
-
         $orderby = (in_array($orderby, array('dept_name', 'dept_type', 'countp', 'inactive'))) ? $orderby : 'dept_name';
         $q = $this->_getQuery();
         $q->addTable('departments');
@@ -86,7 +81,7 @@ class CDepartment extends w2p_Core_BaseObject {
 
         $oCpy = new CCompany();
         $oCpy->overrideDatabase($this->_query);
-        $where = $oCpy->getAllowedSQL($AppUI->user_id, 'c.company_id');
+        $where = $oCpy->getAllowedSQL($this->_AppUI->user_id, 'c.company_id');
         $q->addWhere($where);
 
         if ($deptType > -1) {
@@ -126,9 +121,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -155,8 +148,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-		global $AppUI;
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_getQuery();
@@ -201,9 +193,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	// returns a list of records exposed to the user
 //TODO: this modifies the core $_query property
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
-		global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
@@ -254,9 +244,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function getAllowedSQL($uid, $index = null) {
-		global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
@@ -293,9 +281,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
-		global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl, $uid);

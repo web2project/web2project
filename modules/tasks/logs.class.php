@@ -173,8 +173,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	public function store(w2p_Core_CAppUI $AppUI = null)
 	{
-		global $AppUI;
-		$perms = $AppUI->acl();
+		$perms = $this->_AppUI->acl();
 
 		$this->_error = $this->check();
 
@@ -202,7 +201,7 @@ class CTask_Log extends w2p_Core_BaseObject
                 $this->_error['store-check'] = $msg;
             } else {
                 $stored = true;
-                $this->updateTaskSummary($AppUI, $this->task_log_task);
+                $this->updateTaskSummary($this->_AppUI, $this->task_log_task);
             }
 		}
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
@@ -211,7 +210,7 @@ class CTask_Log extends w2p_Core_BaseObject
                 $this->_error['store-check'] = $msg;
             } else {
                 $stored = true;
-                $this->updateTaskSummary($AppUI, $this->task_log_task);
+                $this->updateTaskSummary(null, $this->task_log_task);
             }
 		}
 
@@ -228,8 +227,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	public function delete(w2p_Core_CAppUI $AppUI = null)
 	{
-		global $AppUI;
-		$perms = $AppUI->acl();
+		$perms = $this->_AppUI->acl();
         $this->_error = array();
 
 		$this->load($this->task_log_id);
@@ -239,7 +237,7 @@ class CTask_Log extends w2p_Core_BaseObject
 			if ($msg = parent::delete()) {
 				return $msg;
 			}
-			$this->updateTaskSummary($AppUI, $task_id);
+			$this->updateTaskSummary(null, $task_id);
 			return true;
 		}
 		return false;
@@ -256,7 +254,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	protected function updateTaskSummary(w2p_Core_CAppUI $AppUI = null, $task_id)
 	{
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $q = $this->_getQuery();
 
         if($perms->checkModuleItem('tasks', 'edit', $task_id)) {
@@ -281,7 +279,7 @@ class CTask_Log extends w2p_Core_BaseObject
             $success = $task->store();
 
             if (!$success) {
-                $AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
+                $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
             }
 
             $task->pushDependencies($task_id, $task->task_end_date);
@@ -366,8 +364,8 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)
 	{
-		global $AppUI;
 		$oTsk = new CTask();
+        $oTsk->overrideDatabase($this->_query);
 
 		$aTasks = $oTsk->getAllowedRecords($uid, 'task_id, task_name');
 		if (count($aTasks)) {

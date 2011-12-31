@@ -29,7 +29,7 @@ class CFile extends w2p_Core_BaseObject {
 	//public $file_helpdesk_item = NULL;
 
 	public function __construct() {
-        global $AppUI, $helpdesk_available;
+        global $helpdesk_available;
         if ($helpdesk_available) {
           $this->file_helpdesk_item = null;
         }
@@ -37,10 +37,9 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
         global $helpdesk_available;
 
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -59,7 +58,7 @@ class CFile extends w2p_Core_BaseObject {
             $this->file_parent = $this->file_id;
             if ((int)$this->file_size > 0) {
                 $this->file_id = 0;
-                $this->file_owner = $AppUI->user_id;
+                $this->file_owner = $this->_AppUI->user_id;
             }
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
@@ -68,7 +67,7 @@ class CFile extends w2p_Core_BaseObject {
             }
         }
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
-            $this->file_owner = $AppUI->user_id;
+            $this->file_owner = $this->_AppUI->user_id;
             $q = $this->_getQuery();
             $q->clear();
             $q->addTable('files');
@@ -98,9 +97,7 @@ class CFile extends w2p_Core_BaseObject {
 
 	public function hook_cron()
 	{
-		global $AppUI;
-
-		$q = new w2p_Database_Query();
+		$q = $this->_getQuery();
 		$q->addQuery('file_id, file_name');
 		$q->addTable('files');
 		$q->addWhere('file_indexed = 0');
@@ -108,7 +105,7 @@ class CFile extends w2p_Core_BaseObject {
 
 		foreach($unindexedFiles as $file_id => $metadata) {
 			$this->load($file_id);
-			$this->indexStrings($AppUI);
+			$this->indexStrings($this->_AppUI);
 		}
 	}
 
@@ -163,7 +160,7 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	public function addHelpDeskTaskLog() {
-		global $AppUI, $helpdesk_available;
+		global $helpdesk_available;
 		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 
 			// create task log with information about the file that was uploaded
@@ -175,19 +172,17 @@ class CFile extends w2p_Core_BaseObject {
 				$task_log->task_log_name = 'File ' . $this->file_name . ' deleted';
 			}
 			$task_log->task_log_description = $this->file_description;
-			$task_log->task_log_creator = $AppUI->user_id;
+			$task_log->task_log_creator = $this->_AppUI->user_id;
 			$date = new w2p_Utilities_Date();
 			$task_log->task_log_date = $date->format(FMT_DATETIME_MYSQL);
 			if ($msg = $task_log->store()) {
-				$AppUI->setMsg($msg, UI_MSG_ERROR);
+				$this->_AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}
 		return null;
 	}
 
 	public function canAdmin() {
-		global $AppUI;
-
 		if (!$this->file_project) {
 			return false;
 		}
@@ -203,7 +198,7 @@ class CFile extends w2p_Core_BaseObject {
 		$q->addWhere('project_id = ' . (int)$this->file_project);
 		$res = $q->exec(ADODB_FETCH_ASSOC);
 		if ($res && $row = $q->fetchRow()) {
-			if ($row['project_owner'] == $AppUI->user_id) {
+			if ($row['project_owner'] == $this->_AppUI->user_id) {
 				$result = true;
 			}
 		}
@@ -258,15 +253,14 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-		global $AppUI;
         global $helpdesk_available;
 
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $this->_error = array();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             // remove the file from the file system
-            if (!$this->deleteFile($AppUI)) {
+            if (!$this->deleteFile()) {
                 $this->_error['file-delete'] = 'file-delete';
                 return false;
             }
@@ -276,7 +270,7 @@ class CFile extends w2p_Core_BaseObject {
             }
 
             // delete any index entries
-            $q = new w2p_Database_Query;
+            $q = $this->_query;
             $q->setDelete('files_index');
             $q->addQuery('*');
             $q->addWhere('file_id = ' . (int)$this->file_id);
@@ -296,8 +290,7 @@ class CFile extends w2p_Core_BaseObject {
 
 	// delete File from File System
 	public function deleteFile(w2p_Core_CAppUI $AppUI = null) {
-		global $AppUI;
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
         if ('' == $this->file_real_filename ||
                 !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
@@ -310,11 +303,11 @@ class CFile extends w2p_Core_BaseObject {
 
 	// move the file if the affiliated project was changed
 	public function moveFile($oldProj, $realname) {
-		global $AppUI, $w2Pconfig;
+		global $w2Pconfig;
 		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
 			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0777);
 			if (!$res) {
-				$AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
+				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
 				return false;
 			}
 		}
@@ -328,11 +321,11 @@ class CFile extends w2p_Core_BaseObject {
 
 	// duplicate a file into root
 	public function duplicateFile($oldProj, $realname) {
-		global $AppUI, $w2Pconfig;
+		global $w2Pconfig;
 		if (!is_dir(W2P_BASE_DIR . '/files/0')) {
 			$res = mkdir(W2P_BASE_DIR . '/files/0', 0777);
 			if (!$res) {
-				$AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
+				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
 				return false;
 			}
 		}
@@ -347,7 +340,7 @@ class CFile extends w2p_Core_BaseObject {
 
 	// move a file from a temporary (uploaded) location to the file system
 	public function moveTemp($upload) {
-		global $AppUI, $w2Pconfig;
+		global $w2Pconfig;
 		// check that directories are created
 		if (!is_dir(W2P_BASE_DIR . '/files')) {
 			$res = mkdir(W2P_BASE_DIR . '/files', 0777);
@@ -358,7 +351,7 @@ class CFile extends w2p_Core_BaseObject {
 		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
 			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0777);
 			if (!$res) {
-				$AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
+				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
 				return false;
 			}
 		}
@@ -373,7 +366,7 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	// parse file for indexing
-	public function indexStrings(w2p_Core_CAppUI $AppUI) {
+	public function indexStrings(w2p_Core_CAppUI $AppUI = null) {
 		global $w2Pconfig;
         $nwords_indexed = 0;
 
@@ -467,7 +460,7 @@ class CFile extends w2p_Core_BaseObject {
 
 	//function notifies about file changing
 	public function notify($notify) {
-        global $AppUI, $w2Pconfig, $locale_char_set, $helpdesk_available;
+        global $w2Pconfig, $locale_char_set, $helpdesk_available;
 
         if ($notify == '1') {
             // if helpdesk_item is available send notification to assigned users
@@ -498,7 +491,7 @@ class CFile extends w2p_Core_BaseObject {
                     $mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
                 }
 
-                $emailManager = new w2p_Output_EmailManager($AppUI);
+                $emailManager = new w2p_Output_EmailManager($this->_AppUI);
                 $body = $emailManager->getFileNotify($this);
                 $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
@@ -533,7 +526,7 @@ class CFile extends w2p_Core_BaseObject {
 
                 if (intval($this->_task->task_id) != 0) {
                     foreach ($this->_users as $row) {
-                        if ($row['assignee_id'] != $AppUI->user_id) {
+                        if ($row['assignee_id'] != $this->_AppUI->user_id) {
                             if ($mail->ValidEmail($row['assignee_email'])) {
                                 $mail->To($row['assignee_email'], true);
                                 $mail->Send();
@@ -542,7 +535,7 @@ class CFile extends w2p_Core_BaseObject {
                     }
                 } else { //sending mail to project owner
                     foreach ($this->_users as $row) { //there should be only one row
-                        if ($row['user_id'] != $AppUI->user_id) {
+                        if ($row['user_id'] != $this->_AppUI->user_id) {
                             if ($mail->ValidEmail($row['owner_email'])) {
                                 $mail->To($row['owner_email'], true);
                                 $mail->Send();
@@ -555,7 +548,7 @@ class CFile extends w2p_Core_BaseObject {
 	} //notify
 
 	public function notifyContacts($notifyContacts) {
-		global $AppUI, $w2Pconfig, $locale_char_set;
+		global $w2Pconfig, $locale_char_set;
 
         if ($notifyContacts) {
             //if no project specified than we will not do anything
@@ -566,15 +559,15 @@ class CFile extends w2p_Core_BaseObject {
                 $mail = new w2p_Utilities_Mail();
 
                 if ($this->file_task == 0) { //notify all developers
-                  $mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name, $locale_char_set);
+                  $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name, $locale_char_set);
                 } else { //notify all assigned users
                   $this->_task = new CTask();
                   $this->_task->overrideDatabase($this->_query);
                   $this->_task->load($this->file_task);
-                  $mail->Subject($AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
+                  $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $locale_char_set);
                 }
 
-                $emailManager = new w2p_Output_EmailManager($AppUI);
+                $emailManager = new w2p_Output_EmailManager($this->_AppUI);
                 $body = $emailManager->getFileNotifyContacts($this);
                 $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 

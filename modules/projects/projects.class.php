@@ -147,9 +147,7 @@ class CProject extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $result = false;
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
@@ -222,8 +220,6 @@ class CProject extends w2p_Core_BaseObject {
 	 *	@return	bool
 	 **/
 	public function importTasks($from_project_id) {
-        global $AppUI;
-
         $errors = array();
 
 		// Load the original
@@ -514,9 +510,7 @@ class CProject extends w2p_Core_BaseObject {
     }
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->w2PTrimAll();
@@ -645,13 +639,13 @@ class CProject extends w2p_Core_BaseObject {
             $custom_fields->bind($_POST);
             $sql = $custom_fields->store($this->project_id); // Store Custom Fields
 
-            CTask::storeTokenTask($AppUI, $this->project_id);
+            CTask::storeTokenTask($this->_AppUI, $this->project_id);
         }
 		return $stored;
 	}
 
 	public function notifyOwner($isNotNew) {
-		global $AppUI, $w2Pconfig, $locale_char_set;
+		global $w2Pconfig, $locale_char_set;
 
 		$mail = new w2p_Utilities_Mail;
 
@@ -662,7 +656,7 @@ class CProject extends w2p_Core_BaseObject {
 		$user->loadFull($this->project_owner);
 
 		if ($user && $mail->ValidEmail($user->user_email)) {
-			$emailManager = new w2p_Output_EmailManager($AppUI);
+			$emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getProjectNotifyOwner($this, $isNotNew);
 
             $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
@@ -672,13 +666,13 @@ class CProject extends w2p_Core_BaseObject {
 	}
 
 	public function notifyContacts($isNotNew) {
-		global $AppUI, $w2Pconfig, $locale_char_set;
+		global $w2Pconfig, $locale_char_set;
 
 		$subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
-		$users = CProject::getContacts($AppUI, $this->project_id);
+		$users = CProject::getContacts($this->_AppUI, $this->project_id);
 		if (count($users)) {
-			$emailManager = new w2p_Output_EmailManager($AppUI);
+			$emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getProjectNotifyContacts($this, $isNotNew);
 
 			foreach ($users as $row) {
@@ -970,9 +964,7 @@ class CProject extends w2p_Core_BaseObject {
 	public function getTaskLogs(w2p_Core_CAppUI $AppUI = null, $projectId, $user_id = 0,
             $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
 
-        global $AppUI;
-
-		$q = $this->_getQuery();
+        $q = $this->_getQuery();
 		$q->addTable('task_log');
 		$q->addQuery('DISTINCT task_log.*, user_username, task_id');
 		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
@@ -998,7 +990,7 @@ class CProject extends w2p_Core_BaseObject {
 		}
 		$q->addOrder('task_log_date');
 		$q->addOrder('task_log_created');
-		$this->setAllowedSQL($AppUI->user_id, $q, 'task_project');
+		$this->setAllowedSQL($this->_AppUI->user_id, $q, 'task_project');
 
 		return $q->loadList();
 	}

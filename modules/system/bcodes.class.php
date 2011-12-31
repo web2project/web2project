@@ -15,7 +15,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
         if ($perms->checkModuleItem('system', 'delete')) {
             $q = $this->_getQuery();
@@ -32,7 +32,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = nul) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $errorMsgArray = $this->check();

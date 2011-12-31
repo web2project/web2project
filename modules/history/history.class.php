@@ -23,21 +23,16 @@ class CHistory extends w2p_Core_BaseObject {
     }
 
     public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
 
         return true;
     }
 
     public function store(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-        $perms = $AppUI->acl();
 
         return true;
     }
 
     public function show_history($history) {
-        global $AppUI;
-
         $id = $history['history_item'];
         $module = $history['history_table'];
         $secondary_key = '';
@@ -59,18 +54,18 @@ class CHistory extends w2p_Core_BaseObject {
         }
 
         if ($module == 'login') {
-            return $AppUI->_('User') . ' "' . $history['history_description'] . '" ' . $AppUI->_($history['history_action']);
+            return $this->_AppUI->_('User') . ' "' . $history['history_description'] . '" ' . $this->_AppUI->_($history['history_action']);
         }
 
         if ($history['history_action'] == 'add') {
-            $msg = $AppUI->_('Added new') . ' ';
+            $msg = $this->_AppUI->_('Added new') . ' ';
         } elseif ($history['history_action'] == 'update') {
-            $msg = $AppUI->_('Modified') . ' ';
+            $msg = $this->_AppUI->_('Modified') . ' ';
         } elseif ($history['history_action'] == 'delete') {
-            return $AppUI->_('Deleted') . ' "' . $history['history_description'] . '" ' . $AppUI->_('from') . ' ' . $AppUI->_($module) . ' ' . $AppUI->_('module');
+            return $this->_AppUI->_('Deleted') . ' "' . $history['history_description'] . '" ' . $this->_AppUI->_('from') . ' ' . $this->_AppUI->_($module) . ' ' . $this->_AppUI->_('module');
         }
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $q->addTable($module);
         $q->addQuery($table_id.$secondary_key);
         $q->addWhere($table_id . ' =' . $id);
@@ -111,7 +106,7 @@ class CHistory extends w2p_Core_BaseObject {
         } else {
             $link = $history['history_description'];
         }
-        $msg .= $AppUI->_('item') . " '$link' " . $AppUI->_('in') . ' ' . $AppUI->_(ucfirst($module)) . ' ' . $AppUI->_('module'); // . $history;
+        $msg .= $this->_AppUI->_('item') . " '$link' " . $this->_AppUI->_('in') . ' ' . $this->_AppUI->_(ucfirst($module)) . ' ' . $this->_AppUI->_('module'); // . $history;
 
         return $msg;
     }

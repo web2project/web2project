@@ -73,7 +73,7 @@ class CCompany extends w2p_Core_BaseObject {
 	}
 
     public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
@@ -85,7 +85,7 @@ class CCompany extends w2p_Core_BaseObject {
     }
 
     public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -143,8 +143,6 @@ class CCompany extends w2p_Core_BaseObject {
   }
 
   public function loadFull(w2p_Core_CAppUI $AppUI = null, $companyId) {
-    global $AppUI;
-
     $q = $this->_getQuery();
     $q->addTable('companies');
     $q->addQuery('companies.*');
@@ -169,7 +167,7 @@ class CCompany extends w2p_Core_BaseObject {
   	$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
   	$q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
 
-  	$where = $this->getAllowedSQL($AppUI->user_id, 'c.company_id');
+  	$where = $this->getAllowedSQL($this->_AppUI->user_id, 'c.company_id');
   	$q->addWhere($where);
 
   	if ($companyType > -1) {
@@ -193,7 +191,7 @@ class CCompany extends w2p_Core_BaseObject {
   	$q->addTable('companies');
   	$q->addQuery('company_id, company_name');
 
-  	$where = $this->getAllowedSQL($AppUI->user_id, 'company_id');
+  	$where = $this->getAllowedSQL($this->_AppUI->user_id, 'company_id');
   	$q->addWhere($where);
 
   	return $q->loadHashList('company_id');

@@ -36,7 +36,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
     }
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $errorMsgArray = $this->check();

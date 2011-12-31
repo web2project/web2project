@@ -575,6 +575,7 @@ class CTask extends w2p_Core_BaseObject {
 			// see function update_dep_dates
 			global $oTsk;
 			$oTsk = new CTask();
+            $oTsk->overrideDatabase($this->_query);
 			$oTsk->load($this->task_id);
 
 			if ($this->task_start_date == '') {

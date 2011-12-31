@@ -54,7 +54,7 @@ class CForum extends w2p_Core_BaseObject {
         $q->addTable('forum_messages');
         $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email,
             contact_display_name, contact_display_name as contact_name, user_username, forum_moderated, visit_user');
-        $q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$AppUI->user_id . ' AND visit_forum = ' . (int) $forum_id . ' AND visit_message = forum_messages.message_id');
+        $q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$this->_AppUI->user_id . ' AND visit_forum = ' . (int) $forum_id . ' AND visit_message = forum_messages.message_id');
         $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere('forum_id = message_forum AND (message_id = ' . (int)$message_id . ' OR message_parent = ' . (int)$message_id . ')');
@@ -149,7 +149,7 @@ class CForum extends w2p_Core_BaseObject {
     }
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -166,7 +166,7 @@ class CForum extends w2p_Core_BaseObject {
             }
         }
         if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
-            $this->forum_create_date = $AppUI->convertToSystemTZ($this->forum_create_date);
+            $this->forum_create_date = $this->_AppUI->convertToSystemTZ($this->forum_create_date);
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
@@ -177,8 +177,7 @@ class CForum extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        global $AppUI;
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 
         if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_getQuery();
@@ -207,7 +206,6 @@ class CForum extends w2p_Core_BaseObject {
 	}
 
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
-		global $AppUI;
 		$oPrj = new CProject();
         $oPrj->overrideDatabase($this->_query);
 
