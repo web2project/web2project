@@ -1,8 +1,4 @@
 <?php
-if (!defined('W2P_BASE_DIR')) {
-	die('This file should not be called directly.');
-}
-
 // Message No Constants
 define('UI_MSG_OK', 1);
 define('UI_MSG_ALERT', 2);

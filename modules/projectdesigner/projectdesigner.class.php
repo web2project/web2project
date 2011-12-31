@@ -1,7 +1,4 @@
 <?php /* $Id$ $URL$ */
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
 //Lets require the main classes needed
 include_once (W2P_BASE_DIR. '/modules/projectdesigner/config.php');
