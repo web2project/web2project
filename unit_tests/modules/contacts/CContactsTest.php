@@ -137,15 +137,15 @@ class CContacts_Test extends CommonSetup
                 the error message.");
     }
 
-    public function testSetContactMethods()
+    public function testGetContactMethods()
     {
         $methods = array('phone_mobile' => '202-555-1212', 'url' => 'http://web2project.net',
                         'email_alt' => 'alternate@example.org', 'im_skype' => 'example_s',
                         'im_google' => 'example_g');
 
-        $this->obj->contact_id = 1;
-        $this->obj->overrideDatabase($this->mockDB);
-        $this->obj->setContactMethods($methods);
+        foreach($methods as $key => $value) {
+            $this->mockDB->stageList(array('method_name' => $key, 'method_value' => $value));
+        }
 
         $results = $this->obj->getContactMethods();
         foreach ($methods as $key => $value) {
@@ -154,35 +154,18 @@ class CContacts_Test extends CommonSetup
         }
     }
 
-    public function testGetContactMethods()
-    {
-        $methods = array('phone_mobile' => '202-555-1212', 'url' => 'http://web2project.net',
-                        'email_alt' => 'alternate@example.org', 'im_skype' => 'example_s',
-                        'im_google' => 'example_g');
-
-        $this->obj->contact_id = 1;
-        $this->obj->setContactMethods($methods);
-
-        $results = $this->obj->getContactMethods(array('phone_mobile', 'im_skype'));
-
-        $this->AssertEquals(2, count($results['fields']));
-
-        $id = array_search('phone_mobile', $results['fields']);
-        $this->assertEquals($methods['phone_mobile'], $results['values'][$id]);
-
-        $id = array_search('im_skype', $results['fields']);
-        $this->assertEquals($methods['im_skype'],     $results['values'][$id]);
-    }
-
     public function testIsUser()
     {
         $this->obj->contact_id = 1;
+        $this->mockDB->stageResult(1);
         $this->assertTrue($this->obj->isUser());
 
         $contact->contact_id = 13;
+        $this->mockDB->stageResult(0);
         $this->assertFalse($this->obj->isUser());
 
         $contact->contact_id = 'monkey!';
+        $this->mockDB->stageResult(0);
         $this->assertFalse($this->obj->isUser());
     }
 
@@ -212,11 +195,13 @@ class CContacts_Test extends CommonSetup
 
     public function testGetCompanyDetails()
     {
+        $this->mockDB->stageHash(array('company_id' => 0, 'company_name' => ''));
         $results = $this->obj->getCompanyDetails();
         $this->AssertEquals(2,                      count($results));
         $this->assertEquals(0,                      $results['company_id']);
         $this->assertEquals('',                     $results['company_name']);
 
+        $this->mockDB->stageHash(array('company_id' => 1, 'company_name' => 'UnitTestCompany'));
         $this->obj->contact_company = 1;
         $results = $this->obj->getCompanyDetails();
         $this->AssertEquals(2,                      count($results));
@@ -226,14 +211,15 @@ class CContacts_Test extends CommonSetup
 
     public function testGetDepartmentDetails()
     {
+        $this->mockDB->stageHash(array('dept_id' => 0, 'dept_name' => ''));
         $results = $this->obj->getDepartmentDetails();
         $this->AssertEquals(2,                      count($results));
         $this->assertEquals(0,                      $results['dept_id']);
         $this->assertEquals('',                     $results['dept_name']);
 
+        $this->mockDB->stageHash(array('dept_id' => 1, 'dept_name' => 'Department 1'));
         $this->obj->contact_department = 1;
         $results = $this->obj->getDepartmentDetails();
-
         $this->AssertEquals(2,                      count($results));
         $this->assertEquals(1,                      $results['dept_id']);
         $this->assertEquals('Department 1',         $results['dept_name']);
