@@ -253,7 +253,9 @@ class w2p_Core_CAppUI_Test extends CommonSetup
      */
 	public function testSetMsg()
 	{
-	  global $AppUI;
+	  global $AppUI, $w2Pconfig;
+
+      $w2Pconfig['locale_warn'] = false;
 
 	  $msg = 'This is a test';
 	  $AppUI->setMsg($msg, 0, false);
