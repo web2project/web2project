@@ -60,6 +60,7 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
     protected function setUp ()
 	{
 		parent::setUp();
+$this->mockDB = new w2p_Mocks_Query();      //TODO: move to the new setUp
 
 		$this->obj = new CTask_Log();
 
@@ -67,7 +68,7 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
             'task_log_id'                           => 0,
             'task_log_task'                         => 1,
             'task_log_name'                         => 'This is a task log name.',
-            'task_log_description'                  => 'This is a task log description.',
+            'task_log_description'                  => 'This is a description.',
             'task_log_creator'                      => 1,
             'task_log_hours'                        => 2.75,
             'task_log_date'                         => '2010-05-30 09:15:30',
@@ -140,40 +141,33 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testStoreCreate()
     {
-        global $AppUI;
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
+        $this->obj->bind($this->post_data);
 
-        $this->obj->bind($this->post_data, null, true, true);
-        $this->obj->store();
-
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestStoreCreate.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset,
-                array('task_log' => array('task_log_created', 'task_log_updated', 'task_log_task_end_date')),
-                array('tasks' => array('task_updated'))
-        );
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset,
-                array('task_log' => array('task_log_created', 'task_log_updated', 'task_log_task_end_date')),
-                array('tasks' => array('task_updated'))
-        );
-
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
-
-        /**
-         * Get updated dates to test against
+        $results = $this->obj->store();
+        $this->assertTrue($results);
+        $this->assertEquals(1,                            $this->obj->task_log_id);
+        /*
+         *  This field is auto-generated in the CTask_Log->store method.
          */
-        $now_secs = time();
-        $min_time = $now_secs - 10;
+        $this->assertNotNull($this->obj->task_log_created);
+        $this->assertEquals($this->obj->task_log_created, $this->obj->task_log_updated);
+        /*
+         *  These fields are formatted by the CTask_Log->store method.
+         */
+        
+        $this->assertEquals('2010-05-30 09:15:30',        $this->obj->task_log_date);
+        $this->assertEquals(2.75,                         $this->obj->task_log_hours);
+        /*
+         *  These fields come from the $_POST data and should be pass throughs.
+         */
+        $this->assertEquals('This is a task log name.',   $this->obj->task_log_name);
+        $this->assertEquals('This is a description.',     $this->obj->task_log_description);
+        $this->assertEquals('http://www.example.com',     $this->obj->task_log_related_url);
+        $this->assertEquals(1,                            $this->obj->task_log_record_creator);
 
-        $log_created = $AppUI->formatTZAwareTime($this->obj->task_log_created, '%Y-%m-%d %T');
-        $log_created = strtotime($log_created);
-        $log_updated = $AppUI->formatTZAwareTime($this->obj->task_log_updated, '%Y-%m-%d %T');
-        $log_updated = strtotime($log_updated);
-        $this->assertGreaterThanOrEqual($min_time, $log_created);
-        $this->assertGreaterThanOrEqual($min_time, $log_updated);
-        $this->assertLessThanOrEqual($log_created, $now_secs);
-        $this->assertLessThanOrEqual($log_updated, $now_secs);
+        //TODO: figure out a way to test the CTask cascading totals
+        //TODO: figure out a way to test the CProject cascading totals
     }
 
     /**
@@ -181,31 +175,32 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testStoreUpdate()
     {
-        global $AppUI;
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store();
+        $this->assertTrue($result);
+        $original_id = $this->obj->task_log_id;
 
-        $this->obj->bind($this->post_data, null, true, true);
-        $this->obj->task_log_id = 1;
-        $this->obj->store();
+        $this->obj->task_log_name        = 'Updated Task Log';
+        $this->obj->task_log_description = 'My new description';
 
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestStoreUpdate.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_created', 'task_log_updated')));
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('task_log' => array('task_log_created', 'task_log_updated')));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
-
-        /**
-         * Get updated dates to test against
+        /*
+         * This sleep() is used because we need at least a second to pass for the
+         *   project_updated time to be different than the project_created earlier
+         *   in this test.
          */
-        $now_secs = time();
-        $min_time = $now_secs - 10;
+        sleep(1);
+        $result = $this->obj->store();
+        $this->assertTrue($result);
+        $new_id = $this->obj->task_log_id;
 
-        $log_updated = $AppUI->formatTZAwareTime($this->obj->task_log_updated, '%Y-%m-%d %T');
-        $log_updated = strtotime($log_updated);
+        $this->assertEquals($original_id,                    $new_id);
+        $this->assertEquals('Updated Task Log',              $this->obj->task_log_name);
+        $this->assertEquals('My new description',            $this->obj->task_log_description);
+        $this->assertNotEquals($this->obj->task_log_created, $this->obj->task_log_updated);
 
-        $this->assertLessThanOrEqual($log_updated, $now_secs);
-        $this->assertGreaterThanOrEqual($min_time, $log_updated);
+        //TODO: figure out a way to test the CTask cascading totals
+        //TODO: figure out a way to test the CProject cascading totals
     }
 
     /**
@@ -214,16 +209,24 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDelete()
     {
-        $this->obj->load(1);
-        $msg = $this->obj->delete();
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store();
+        $this->assertTrue($result);
+        $original_id = $this->obj->task_log_id;
+        $result = $this->obj->delete();
 
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasklogsTestDelete.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('task_log' => array('task_log_updated')));
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('task_log' => array('task_log_updated')));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_log'), $xml_db_filtered_dataset->getTable('task_log'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('projects'), $xml_db_filtered_dataset->getTable('projects'));
+        $item = new CTask_Log();
+        $item->overrideDatabase($this->mockDB);
+        $this->mockDB->stageHash(array('task_log_name' => '', 'task_log_description' => ''));
+        $item->load($original_id);
+
+        $this->assertTrue(is_a($item, 'CTask_Log'));
+        $this->assertEquals('',              $item->task_log_name);
+        $this->assertEquals('',              $item->task_log_description);
+
+        //TODO: figure out a way to test the CTask cascading totals
+        //TODO: figure out a way to test the CProject cascading totals
     }
 
     /**
@@ -250,22 +253,22 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->w2PTrimAll();
 
-        $this->assertEquals(0,                                              $this->obj->task_log_id);
-        $this->assertEquals(1,                                              $this->obj->task_log_task);
-        $this->assertEquals('This is a task log name.',                     $this->obj->task_log_name);
-        $this->assertEquals(" \t\nThis is a task log description.\r\0\x0B", $this->obj->task_log_description);
-        $this->assertEquals(1,                                              $this->obj->task_log_creator);
-        $this->assertEquals(2.75,                                           $this->obj->task_log_hours);
-        $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_date);
-        $this->assertEquals(1,                                              $this->obj->task_log_costcode);
-        $this->assertEquals(1,                                              $this->obj->task_log_problem);
-        $this->assertEquals(1,                                              $this->obj->task_log_reference);
-        $this->assertEquals('http://www.example.com',                       $this->obj->task_log_related_url);
-        $this->assertEquals(1,                                              $this->obj->task_log_project);
-        $this->assertEquals(1,                                              $this->obj->task_log_company);
-        $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_created);
-        $this->assertEquals('2010-05-30 09:15:30',                          $this->obj->task_log_updated);
-        $this->assertEquals(1,                                              $this->obj->task_log_updator);
+        $this->assertEquals(0,                                     $this->obj->task_log_id);
+        $this->assertEquals(1,                                     $this->obj->task_log_task);
+        $this->assertEquals('This is a task log name.',            $this->obj->task_log_name);
+        $this->assertEquals(" \t\nThis is a description.\r\0\x0B", $this->obj->task_log_description);
+        $this->assertEquals(1,                                     $this->obj->task_log_creator);
+        $this->assertEquals(2.75,                                  $this->obj->task_log_hours);
+        $this->assertEquals('2010-05-30 09:15:30',                 $this->obj->task_log_date);
+        $this->assertEquals(1,                                     $this->obj->task_log_costcode);
+        $this->assertEquals(1,                                     $this->obj->task_log_problem);
+        $this->assertEquals(1,                                     $this->obj->task_log_reference);
+        $this->assertEquals('http://www.example.com',              $this->obj->task_log_related_url);
+        $this->assertEquals(1,                                     $this->obj->task_log_project);
+        $this->assertEquals(1,                                     $this->obj->task_log_company);
+        $this->assertEquals('2010-05-30 09:15:30',                 $this->obj->task_log_created);
+        $this->assertEquals('2010-05-30 09:15:30',                 $this->obj->task_log_updated);
+        $this->assertEquals(1,                                     $this->obj->task_log_updator);
     }
 
     /**
@@ -286,8 +289,10 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordUid()
     {
-        $allowed_records = $this->obj->getAllowedRecords(1);
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
+        $this->mockDB->stageHashList(1, 1);
 
+        $allowed_records = $this->obj->getAllowedRecords(1);
         $this->assertEquals(1, count($allowed_records));
         $this->assertEquals(1, $allowed_records[1]);
     }
@@ -297,8 +302,10 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordsFields()
     {
-        $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_task, task_log.task_log_name');
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
+        $this->mockDB->stageHashList(1, 'Task Log 1');
 
+        $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_task, task_log.task_log_name');
         $this->assertEquals(1,              count($allowed_records));
         $this->assertEquals('Task Log 1',   $allowed_records[1]);
     }
@@ -309,8 +316,10 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordsOrderBy()
     {
-        $allowed_records = $this->obj->getAllowedRecords(1, '*', 'task_log.task_log_hours');
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
+        $this->mockDB->stageHashList(1, 1);
 
+        $allowed_records = $this->obj->getAllowedRecords(1, '*', 'task_log.task_log_hours');
         $this->assertEquals(1, count($allowed_records));
         $this->assertEquals(1, $allowed_records[1]);
     }
@@ -320,8 +329,10 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordsIndex()
     {
-        $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_name', '', 'task_log_name');
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
+        $this->mockDB->stageHashList('Task Log 1', array('Task Log 1', 'task_log_name' => 'Task Log 1'));
 
+        $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_name', '', 'task_log_name');
         $this->assertEquals(1,              count($allowed_records));
         $this->assertEquals(2,              count($allowed_records['Task Log 1']));
         $this->assertEquals('Task Log 1',   $allowed_records['Task Log 1']['task_log_name']);
@@ -333,10 +344,12 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordsExtra()
     {
+$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $extra = array('from' => 'task_log', 'join' => 'tasks', 'on' => 'task_id = task_log_task',
                        'where' => 'task_id = 1');
-        $allowed_records = $this->obj->getAllowedRecords(1, '*', '', null, $extra);
+        $this->mockDB->stageHashList(1, 1);
 
+        $allowed_records = $this->obj->getAllowedRecords(1, '*', '', null, $extra);
         $this->assertEquals(1, count($allowed_records));
         $this->assertEquals(1, $allowed_records[1]);
     }
@@ -345,16 +358,6 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      * @todo Implement testCheck().
      */
     public function testCheck() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetAllowedRecords().
-     */
-    public function testGetAllowedRecords() {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
