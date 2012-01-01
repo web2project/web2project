@@ -21,48 +21,16 @@
 
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'CommonSetup.php';
-require_once 'PHPUnit/Extensions/Database/DataSet/DataSetFilter.php';
 
-class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
+class CTaskLogs_Test extends CommonSetup
 {
 
-    /**
-     * Return database connection for tests
-     */
-    protected function getConnection()
-    {
-        $pdo = new PDO(w2PgetConfig('dbtype') . ':host=' .
-                       w2PgetConfig('dbhost') . ';dbname=' .
-                       w2PgetConfig('dbname'),
-                       w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
-        return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
-    }
-
-    /**
-     * Set up default dataset for testing
-     */
-    protected function getDataSet()
-    {
-        return $this->createXMLDataSet($this->getDataSetPath().'tasklogsSeed.xml');
-    }
-
-    /**
-     * Get path to dataset
-     */
-    protected function getDataSetPath()
-    {
-    	return dirname(dirname(__FILE__)).'/../db_files/tasks/';
-    }
-
-    /**
-     * Set Up function to be run before tests
-     */
     protected function setUp ()
 	{
 		parent::setUp();
-$this->mockDB = new w2p_Mocks_Query();      //TODO: move to the new setUp
 
 		$this->obj = new CTask_Log();
+        $this->obj->overrideDatabase($this->mockDB);
 
 		$this->post_data = array(
             'task_log_id'                           => 0,
@@ -76,11 +44,11 @@ $this->mockDB = new w2p_Mocks_Query();      //TODO: move to the new setUp
             'task_log_problem'                      => 1,
             'task_log_reference'                    => 1,
             'task_log_related_url'                  => 'http://www.example.com',
-            'task_log_project'                      => 1,
-            'task_log_company'                      => 1,
             'task_log_created'                      => '2010-05-30 09:15:30',
             'task_log_updated'                      => '2010-05-30 09:15:30',
-            'task_log_updator'                      => 1
+            'task_log_record_creator'               => 1,
+            'task_log_percent_complete'             => 20,
+            'task_log_task_end_date'                => '20111007'
 		);
 	}
 
@@ -181,12 +149,13 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
         $this->assertTrue($result);
         $original_id = $this->obj->task_log_id;
 
-        $this->obj->task_log_name        = 'Updated Task Log';
-        $this->obj->task_log_description = 'My new description';
+        $this->obj->task_log_name           = 'Updated Task Log';
+        $this->obj->task_log_description    = 'My new description';
+        $this->obj->task_log_record_creator = 2;
 
         /*
          * This sleep() is used because we need at least a second to pass for the
-         *   project_updated time to be different than the project_created earlier
+         *   task_log_updated time to be different than the task_log_created earlier
          *   in this test.
          */
         sleep(1);
@@ -197,6 +166,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
         $this->assertEquals($original_id,                    $new_id);
         $this->assertEquals('Updated Task Log',              $this->obj->task_log_name);
         $this->assertEquals('My new description',            $this->obj->task_log_description);
+        $this->assertEquals(2,                               $this->obj->task_log_record_creator);
         $this->assertNotEquals($this->obj->task_log_created, $this->obj->task_log_updated);
 
         //TODO: figure out a way to test the CTask cascading totals
@@ -264,11 +234,9 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
         $this->assertEquals(1,                                     $this->obj->task_log_problem);
         $this->assertEquals(1,                                     $this->obj->task_log_reference);
         $this->assertEquals('http://www.example.com',              $this->obj->task_log_related_url);
-        $this->assertEquals(1,                                     $this->obj->task_log_project);
-        $this->assertEquals(1,                                     $this->obj->task_log_company);
         $this->assertEquals('2010-05-30 09:15:30',                 $this->obj->task_log_created);
         $this->assertEquals('2010-05-30 09:15:30',                 $this->obj->task_log_updated);
-        $this->assertEquals(1,                                     $this->obj->task_log_updator);
+        $this->assertEquals(1,                                     $this->obj->task_log_creator);
     }
 
     /**
