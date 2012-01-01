@@ -44,8 +44,8 @@ class w2p_Mocks_Query extends w2p_Database_Query {
         return $this->list;
     }
 
-    public function stageHashList($index, array $array) {
-        $this->hashlist[$index] = $array;
+    public function stageHashList($index, $value) {
+        $this->hashlist[$index] = $value;
     }
     public function loadHashList($index = null) {
         return $this->hashlist;
