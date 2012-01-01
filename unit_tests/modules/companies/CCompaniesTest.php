@@ -120,11 +120,9 @@ class CCompanies_Test extends CommonSetup
      */
     public function testCreateCompanyNoOwner()
     {
-		global $AppUI;
-
 		unset($this->post_data['company_owner']);
 		$this->obj->bind($this->post_data);
-		$errorArray = $this->obj->store($AppUI);
+		$errorArray = $this->obj->store();
 
 		/**
 		 * Verify we got the proper error message
@@ -143,11 +141,9 @@ class CCompanies_Test extends CommonSetup
      */
     public function testCreateCompanyNoName()
     {
-		global $AppUI;
-
 		unset($this->post_data['company_name']);
 		$this->obj->bind($this->post_data);
-		$errorArray = $this->obj->store($AppUI);
+		$errorArray = $this->obj->store();
 
 		/**
 		 * Verify we got the proper error message
@@ -165,10 +161,8 @@ class CCompanies_Test extends CommonSetup
      */
     public function testStoreCreate()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
 
         $this->assertTrue($result);
         $this->assertEquals('UnitTestCompany',          $this->obj->company_name);
@@ -194,10 +188,8 @@ class CCompanies_Test extends CommonSetup
      */
     public function testLoad()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
 
         $item = new CCompany();
@@ -217,13 +209,9 @@ class CCompanies_Test extends CommonSetup
      */
     public function testLoadFull()
     {
-        global $AppUI;
-
-        $item = new CCompany();
-        $item->overrideDatabase($this->mockDB);
         $this->mockDB->stageHash($this->post_data);
 
-        $this->obj->loadFull($AppUI, 1);
+        $this->obj->loadFull(null, 1);
 
         $this->assertEquals('UnitTestCompany',          $this->obj->company_name);
         $this->assertEquals('web2project@example.org',  $this->obj->company_email);
@@ -247,16 +235,14 @@ class CCompanies_Test extends CommonSetup
      */
     public function testStoreUpdate()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $original_id = $this->obj->company_id;
 
         $this->obj->company_name = 'UpdatedCompany';
         $this->obj->company_address1 = 'Updated Address 1';
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $new_id = $this->obj->company_id;
 
@@ -270,13 +256,11 @@ class CCompanies_Test extends CommonSetup
      */
     public function testDelete()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $original_id = $this->obj->company_id;
-        $result = $this->obj->delete($AppUI);
+        $result = $this->obj->delete();
 
         $item = new CCompany();
         $item->overrideDatabase($this->mockDB);
@@ -292,7 +276,6 @@ class CCompanies_Test extends CommonSetup
      */
     public function testGetCompanyListNoCriteria()
     {
-        global $AppUI;
 
         $this->mockDB->stageList(
                 array('company_id' => 2, 'company_name' => 'CreatedCompany',
@@ -311,7 +294,7 @@ class CCompanies_Test extends CommonSetup
                     'company_type' => 2, 'countp' => 0,
                     'contact_display_name' => 'Admin Person'));
 
-        $companies = $this->obj->getCompanyList($AppUI);
+        $companies = $this->obj->getCompanyList();
 
         $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
         $this->assertEquals(4,                             count($companies));
@@ -345,9 +328,7 @@ class CCompanies_Test extends CommonSetup
     */
     public function testGetCompanyListByTypeNoMatch()
     {
-        global $AppUI;
-
-        $results = $this->obj->getCompanyList($AppUI, 3);
+        $results = $this->obj->getCompanyList(null, 3);
 
         $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
@@ -358,14 +339,12 @@ class CCompanies_Test extends CommonSetup
     */
     public function testGetCompanyListByType()
     {
-        global $AppUI;
-
         $this->mockDB->stageList(
                 array('company_id' => 2, 'company_name' => 'CreatedCompany',
                     'company_type' => 1, 'countp' => 1,
                     'contact_display_name' => 'Admin Person'));
 
-        $companies = $this->obj->getCompanyList($AppUI, 1);
+        $companies = $this->obj->getCompanyList(null, 1);
 
         $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
         $this->assertEquals(1,                             count($companies));
@@ -381,9 +360,7 @@ class CCompanies_Test extends CommonSetup
     */
     public function testGetCompanyListByStringNoMatch()
     {
-        global $AppUI;
-
-        $results = $this->obj->getCompanyList($AppUI, -1, 'This is a company');
+        $results = $this->obj->getCompanyList(null, -1, 'This is a company');
 
         $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
@@ -394,9 +371,7 @@ class CCompanies_Test extends CommonSetup
     */
     public function testGetCompanyListByOwnerIDNoMatch()
     {
-        global $AppUI;
-
-        $results = $this->obj->getCompanyList($AppUI, -1, '', 2);
+        $results = $this->obj->getCompanyList(null, -1, '', 2);
 
         $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $results);
         $this->assertEquals(0, count($results));
@@ -407,8 +382,6 @@ class CCompanies_Test extends CommonSetup
     */
     public function testGetCompanyListByOwnerID()
     {
-        global $AppUI;
-
         $this->mockDB->stageList(
                 array('company_id' => 2, 'company_name' => 'CreatedCompany',
                     'company_type' => 1, 'countp' => 1,
@@ -426,7 +399,7 @@ class CCompanies_Test extends CommonSetup
                     'company_type' => 2, 'countp' => 0,
                     'contact_display_name' => 'Admin Person'));
 
-        $companies = $this->obj->getCompanyList($AppUI, -1, '', 1);
+        $companies = $this->obj->getCompanyList(null, -1, '', 1);
 
         $this->assertInternalType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $companies);
         $this->assertEquals(4,                             count($companies));

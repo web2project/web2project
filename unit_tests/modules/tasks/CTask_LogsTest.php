@@ -214,8 +214,6 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDelete()
     {
-        global $AppUI;
-
         $this->obj->load(1);
         $msg = $this->obj->delete();
 
@@ -275,7 +273,6 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCanDelete()
     {
-        global $AppUI;
         $msg = '';
 
         $return = $this->obj->canDelete($msg);
@@ -289,8 +286,6 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordUid()
     {
-        global $AppUI;
-
         $allowed_records = $this->obj->getAllowedRecords(1);
 
         $this->assertEquals(1, count($allowed_records));
@@ -302,8 +297,6 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordsFields()
     {
-        global $AppUI;
-
         $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_task, task_log.task_log_name');
 
         $this->assertEquals(1,              count($allowed_records));
@@ -316,8 +309,6 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordsOrderBy()
     {
-        global $AppUI;
-
         $allowed_records = $this->obj->getAllowedRecords(1, '*', 'task_log.task_log_hours');
 
         $this->assertEquals(1, count($allowed_records));
@@ -329,8 +320,6 @@ class CTaskLogs_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordsIndex()
     {
-        global $AppUI;
-
         $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_name', '', 'task_log_name');
 
         $this->assertEquals(1,              count($allowed_records));

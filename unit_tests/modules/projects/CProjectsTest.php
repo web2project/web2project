@@ -184,11 +184,9 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoName()
     {
-        global $AppUI;
-
 		unset($this->post_data['project_name']);
         $this->obj->bind($post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
@@ -206,12 +204,10 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoCompany()
     {
-        global $AppUI;
-
 		unset($this->post_data['project_company']);
 
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
@@ -229,12 +225,10 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoPriority()
     {
-        global $AppUI;
-
 		unset($this->post_data['project_priority']);
 
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
@@ -252,12 +246,10 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoShortName()
     {
-        global $AppUI;
-
 		unset($this->post_data['project_short_name']);
 
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
@@ -275,14 +267,12 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoColorIdentifier()
     {
-        global $AppUI;
-
         $project = new CProject();
 
 		unset($this->post_data['project_color_identifier']);
 
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
@@ -300,12 +290,10 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoType()
     {
-        global $AppUI;
-
 		unset($this->post_data['project_type']);
 
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
@@ -323,12 +311,10 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoStatus()
     {
-        global $AppUI;
-
 		unset($this->post_data['project_status']);
 
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
@@ -346,12 +332,10 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoOwner()
     {
-        global $AppUI;
-
 		unset($this->post_data['project_owner']);
 
         $this->obj->bind($this->post_data);
-        $results = $this->obj->store($AppUI);
+        $results = $this->obj->store();
 
         /**
          * Verify we got the proper error message
@@ -369,12 +353,10 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoCreator()
     {
-        global $AppUI;
-
-		unset($this->post_data['project_creator']);
+ 		unset($this->post_data['project_creator']);
 
         $this->obj->bind($this->post_data);
-        $results = $this->obj->store($AppUI);
+        $results = $this->obj->store();
 
         /**
          * Verify we got the proper error message
@@ -453,13 +435,12 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testLoad()
     {
-        global $AppUI;
 $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
         $this->assertEquals($this->obj->project_created,    '');
         $this->assertEquals($this->obj->project_updated,    '');
 
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
 
         $item = new CProject();
@@ -480,14 +461,13 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testLoadFull()
     {
-        global $AppUI;
 $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->mockDB->stageHash(
                 array('project_id' => 1, 'project_url' => 'http://project1.example.org',
                     'project_start_date' => '2009-07-05 00:00:00',
                     'company_name' => 'UnitTestCompany', 'user_name' => 'Admin Person')
         );
-        $this->obj->loadFull($AppUI, 1);
+        $this->obj->loadFull(null, 1);
 
     	$this->assertEquals(1,                                  $this->obj->project_id);
       	$this->assertEquals('http://project1.example.org',      $this->obj->project_url);
@@ -501,10 +481,9 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testStoreUpdate()
     {
-      	global $AppUI;
 $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $original_id = $this->obj->project_id;
 
@@ -517,7 +496,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
          *   in this test.
          */
         sleep(1);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $new_id = $this->obj->project_id;
 
@@ -540,14 +519,13 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testDelete()
     {
-        global $AppUI;
 $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
 
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $original_id = $this->obj->project_id;
-        $result = $this->obj->delete($AppUI);
+        $result = $this->obj->delete();
 
         $item = new CProject();
         $item->overrideDatabase($this->mockDB);
@@ -905,12 +883,11 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testStoreCreateContactsDepartments()
     {
-		global $AppUI;
 $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
 		$this->post_data['project_departments'] = array(1,2);
 		$this->post_data['project_contacts'] = array(3,4);
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
 
         $this->assertTrue($result);
         $this->assertEquals(1,                   $this->obj->project_id);
@@ -1017,9 +994,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetContacts()
     {
-        global $AppUI;
-
-        $contacts = CProject::getContacts($AppUI, 1);
+        $contacts = CProject::getContacts(null, 1);
 
         $this->assertEquals(1,                      count($contacts));
         $this->assertEquals(1,                      $contacts[1]['contact_id']);
@@ -1041,8 +1016,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetDepartments()
     {
-        global $AppUI;
-        $departments = CProject::getDepartments($AppUI, 1);
+        $departments = CProject::getDepartments(null, 1);
         /*
          * Beyond the deprecation notice, nothing else should be tested here. The
          *   useful test is CProject->testGetDepartmentList().
@@ -1055,7 +1029,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetDepartmentList()
     {
-        global $AppUI;
 $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->project_id = 1;
 
@@ -1079,9 +1052,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetForums()
     {
-        global $AppUI;
-
-        $forums = CProject::getForums($AppUI, 1);
+        $forums = CProject::getForums(null, 1);
 
         $this->assertEquals(1,                  count($forums));
         $this->assertEquals(1,                  $forums[1]['forum_id']);
@@ -1161,9 +1132,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testUpdateStatus()
     {
-        global $AppUI;
-
-        CProject::updateStatus($AppUI, 1, 2);
+        CProject::updateStatus(null, 1, 2);
         $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestUpdateStatus.xml');
         $this->assertTablesEqual($xml_dataset->getTable('projects'), $this->getConnection()->createDataSet()->getTable('projects'));
     }
@@ -1250,9 +1219,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetTaskLogsNoArgs()
     {
-        global $AppUI;
-
-        $task_logs = $this->obj->getTaskLogs($AppUI, 1);
+        $task_logs = $this->obj->getTaskLogs(null, 1);
 
         $this->assertEquals(4,                  count($task_logs));
         $this->assertEquals(1,                  $task_logs[0]['task_log_id']);
@@ -1282,9 +1249,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetTaskLogsUserID()
     {
-        global $AppUI;
-
-        $task_logs = $this->obj->getTaskLogs($AppUI, 1, 2);
+        $task_logs = $this->obj->getTaskLogs(null, 1, 2);
 
         $this->assertEquals(1,                  count($task_logs));
         $this->assertEquals(4,                  $task_logs[0]['task_log_id']);
@@ -1299,9 +1264,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetTaskLogsHideInactive()
     {
-        global $AppUI;
-
-        $task_logs = $this->obj->getTaskLogs($AppUI, 1, 0, true);
+        $task_logs = $this->obj->getTaskLogs(null, 1, 0, true);
 
         $this->assertEquals(2,                  count($task_logs));
         $this->assertEquals(1,                  $task_logs[0]['task_log_id']);
@@ -1321,9 +1284,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetTaskLogsHideComplete()
     {
-        global $AppUI;
-
-        $task_logs = $this->obj->getTaskLogs($AppUI, 1, 0, false, true);
+        $task_logs = $this->obj->getTaskLogs(null, 1, 0, false, true);
 
         $this->assertEquals(2,                  count($task_logs));
         $this->assertEquals(1,                  $task_logs[0]['task_log_id']);
@@ -1343,9 +1304,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetTaskLogsWithCostCode()
     {
-        global $AppUI;
-
-        $task_logs = $this->obj->getTaskLogs($AppUI, 1, 0, false, false, 2);
+        $task_logs = $this->obj->getTaskLogs(null, 1, 0, false, false, 2);
 
         $this->assertEquals(1,                  count($task_logs));
         $this->assertEquals(4,                  $task_logs[0]['task_log_id']);
@@ -1410,7 +1369,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testResetProjectParents()
     {
-        global $AppUI;
 	    $st_projects = array(0 => '');
 	    $q = new w2p_Database_Query();
 	    $q->addTable('projects');
@@ -1563,7 +1521,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetStructedProjectsNoArgs()
     {
-        global $AppUI, $st_projects_arr;
+        global $st_projects_arr;
         $st_projects_arr = array();
 
         getStructuredProjects();
@@ -1595,7 +1553,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetStructuredProjectsOriginalProjectID()
     {
-        global $AppUI, $st_projects_arr;
+        global $st_projects_arr;
         $st_projects_arr = array();
 
         getStructuredProjects(1);
@@ -1628,7 +1586,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetStructuredProjectsProjectStatus()
     {
-        global $AppUI, $st_projects_arr;
+        global $st_projects_arr;
         $st_projects_arr = array();
 
         getStructuredProjects(0, 0);
@@ -1646,7 +1604,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetStructedProjectsActiveOnly()
     {
-        global $AppUI, $st_projects_arr;
+        global $st_projects_arr;
         $st_projects_arr = array();
 
         getStructuredProjects(0, -1, true);
@@ -1680,7 +1638,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetDepartmentSelectionListIDOnly()
     {
-        global $AppUI, $departments_count;
+        global $departments_count;
         $departments_count = 0;
 
         $options = getDepartmentSelectionList(1);
@@ -1693,7 +1651,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetDepartmentSelectionListCheckedArray()
     {
-        global $AppUI, $departments_count;
+        global $departments_count;
         $departments_count = 0;
         $checked = array(1);
 
@@ -1707,7 +1665,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetDepartmentSelectionListDeptParent()
     {
-        global $AppUI, $departments_count;
+        global $departments_count;
         $departments_count = 0;
 
         $options = getDepartmentSelectionList(1, array(), 1);
@@ -1721,7 +1679,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetDepartmentSelectionListSpaces()
     {
-        global $AppUI, $departments_count;
+        global $departments_count;
         $departments_count = 0;
 
         $options = getDepartmentSelectionList(1, array(), 0, 1);

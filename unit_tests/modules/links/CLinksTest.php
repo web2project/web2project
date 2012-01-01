@@ -98,11 +98,9 @@ class CLinks_Test extends CommonSetup
      */
     public function testCreateLinkNoName()
     {
-      global $AppUI;
-
       unset($this->post_data['link_name']);
       $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store($AppUI);
+      $errorArray = $this->obj->store();
 
       /**
        * Verify we got the proper error message
@@ -122,11 +120,9 @@ class CLinks_Test extends CommonSetup
      */
     public function testCreateLinkNoUrl()
     {
-      global $AppUI;
-
       $this->post_data['link_url'] = '';
       $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store($AppUI);
+      $errorArray = $this->obj->store();
 
       /**
        * Verify we got the proper error message
@@ -146,11 +142,9 @@ class CLinks_Test extends CommonSetup
      */
     public function testCreateLinkNoOwner()
     {
-      global $AppUI;
-
       unset($this->post_data['link_owner']);
       $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store($AppUI);
+      $errorArray = $this->obj->store();
       /**
        * Verify we got the proper error message
        */
@@ -168,10 +162,8 @@ class CLinks_Test extends CommonSetup
      */
     public function testStoreCreate()
     {
-      global $AppUI;
-
       $this->obj->bind($this->post_data);
-      $result = $this->obj->store($AppUI);
+      $result = $this->obj->store();
 
       $this->assertTrue($result);
       $this->assertEquals('web2project homepage',   $this->obj->link_name);
@@ -191,10 +183,8 @@ class CLinks_Test extends CommonSetup
      */
     public function testLoad()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
 
         $item = new CLink();
@@ -219,16 +209,14 @@ class CLinks_Test extends CommonSetup
      */
     public function testStoreUpdate()
     {
-      global $AppUI;
-
       $this->obj->bind($this->post_data);
-      $result = $this->obj->store($AppUI);
+      $result = $this->obj->store();
       $this->assertTrue($result);
       $original_id = $this->obj->link_id;
 
       $this->obj->link_name = 'web2project Forums';
       $this->obj->link_url = 'http://forums.web2project.net';
-      $result = $this->obj->store($AppUI);
+      $result = $this->obj->store();
       $this->assertTrue($result);
       $new_id = $this->obj->link_id;
 
@@ -243,13 +231,11 @@ class CLinks_Test extends CommonSetup
      */
     public function testDelete()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $original_id = $this->obj->link_id;
-        $result = $this->obj->delete($AppUI);
+        $result = $this->obj->delete();
 
         $item = new CLink();
         $item->overrideDatabase($this->mockDB);

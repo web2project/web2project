@@ -114,11 +114,9 @@ class CDepartments_Test extends CommonSetup
      */
     public function testCreateDepartmentNoName()
     {
-        global $AppUI;
-
         unset($this->post_data['dept_name']);
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
 
         /**
         * Verify we got the proper error message
@@ -138,11 +136,9 @@ class CDepartments_Test extends CommonSetup
     */
     public function testCreateDepartmentNoCompany()
     {
-        global $AppUI;
-
         $this->post_data['dept_company'] = '';
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
 
         /**
         * Verify we got the proper error message
@@ -162,11 +158,9 @@ class CDepartments_Test extends CommonSetup
     */
     public function testCreateDepartmentNoOwner()
     {
-        global $AppUI;
-
         unset($this->post_data['dept_owner']);
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store($AppUI);
+        $errorArray = $this->obj->store();
         /**
         * Verify we got the proper error message
         */
@@ -184,10 +178,8 @@ class CDepartments_Test extends CommonSetup
      */
     public function testLoad()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
 
         $item = new CDepartment();
@@ -209,10 +201,8 @@ class CDepartments_Test extends CommonSetup
      */
     public function testStoreCreate()
     {
-      global $AppUI;
-
       $this->obj->bind($this->post_data);
-      $result = $this->obj->store($AppUI);
+      $result = $this->obj->store();
 
       $this->assertTrue($result);
       $this->assertEquals('My Department',  $this->obj->dept_name);
@@ -228,15 +218,13 @@ class CDepartments_Test extends CommonSetup
      */
     public function testStoreUpdate()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $original_id = $this->obj->dept_id;
 
         $this->obj->dept_name = 'Change the department name';
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
 
         $this->assertTrue($result);
         $new_id = $this->obj->dept_id;
@@ -250,13 +238,11 @@ class CDepartments_Test extends CommonSetup
      */
     public function testDelete()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $original_id = $this->obj->dept_id;
-        $result = $this->obj->delete($AppUI);
+        $result = $this->obj->delete();
 
         $item = new CDepartment();
         $item->overrideDatabase($this->mockDB);

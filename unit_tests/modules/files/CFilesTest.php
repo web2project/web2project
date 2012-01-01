@@ -120,11 +120,9 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoRealName()
     {
-      global $AppUI;
-
       unset($this->post_data['file_real_filename']);
       $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store($AppUI);
+      $errorArray = $this->obj->store();
 
       /**
        * Verify we got the proper error message
@@ -144,11 +142,9 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoName()
     {
-      global $AppUI;
-
       unset($this->post_data['file_name']);
       $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store($AppUI);
+      $errorArray = $this->obj->store();
 
       /**
        * Verify we got the proper error message
@@ -167,11 +163,9 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoParent()
     {
-      global $AppUI;
-
       unset($this->post_data['file_parent']);
       $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store($AppUI);
+      $errorArray = $this->obj->store();
 
       /**
        * Verify we got the proper error message
@@ -190,11 +184,9 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoType()
     {
-      global $AppUI;
-
       unset($this->post_data['file_type']);
       $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store($AppUI);
+      $errorArray = $this->obj->store();
 
       /**
        * Verify we got the proper error message
@@ -214,11 +206,9 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoFilesize()
     {
-      global $AppUI;
-
       unset($this->post_data['file_size']);
       $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store($AppUI);
+      $errorArray = $this->obj->store();
 
       /**
        * Verify we got the proper error message
@@ -237,8 +227,6 @@ class CFiles_Test extends CommonSetup
      */
     public function testCheck()
     {
-      global $AppUI;
-
       unset($this->post_data['file_real_filename']);
       unset($this->post_data['file_name']);
       unset($this->post_data['file_parent']);
@@ -260,13 +248,11 @@ class CFiles_Test extends CommonSetup
 
     public function testDelete()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $original_id = $this->obj->link_id;
-        $result = $this->obj->delete($AppUI);
+        $result = $this->obj->delete();
 
         $item = new CFile();
         $item->overrideDatabase($this->mockDB);
@@ -283,10 +269,8 @@ class CFiles_Test extends CommonSetup
 
     public function testLoad()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
 
         $item = new CFile();
@@ -307,10 +291,8 @@ class CFiles_Test extends CommonSetup
      */
     public function testStoreCreate()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
 
         $this->assertTrue($result);
         $this->assertEquals('TheRealFileName',   $this->obj->file_real_filename);
@@ -325,17 +307,15 @@ class CFiles_Test extends CommonSetup
      */
     public function testStoreUpdate()
     {
-      global $AppUI;
-
       $this->obj->bind($this->post_data);
-      $result = $this->obj->store($AppUI);
+      $result = $this->obj->store();
       $this->assertTrue($result);
       $original_id = $this->obj->file_id;
       $original_date = $this->obj->file_date;   // Once created, this should not change
 
       $this->obj->file_name = 'Some new file name';
       $this->obj->file_description = 'A new file description';
-      $result = $this->obj->store($AppUI);
+      $result = $this->obj->store();
       $this->assertTrue($result);
       $new_id = $this->obj->file_id;
 

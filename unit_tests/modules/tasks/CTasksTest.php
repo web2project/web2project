@@ -113,8 +113,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      *   pre-testing.
      */
     protected function _preCalcData() {
-        global $AppUI;
-        $taskList = $this->obj->getAllowedTaskList($AppUI, 1);
+        $taskList = $this->obj->getAllowedTaskList(null, 1);
         foreach ($taskList as $item) {
             $tmpTask = new CTask();
             $tmpTask->load($item['task_id']);
@@ -553,9 +552,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testLoadFull()
     {
-      	global $AppUI;
-
-        $this->obj->loadFull($AppUI, 18);
+        $this->obj->loadFull(null, 18);
 
         $this->assertEquals(18,                     $this->obj->task_id);
         $this->assertEquals('Task 18',              $this->obj->task_name);
@@ -679,8 +676,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testUpdateDynamicsNotFromChildrenInDays()
     {
-        global $AppUI;
-
         $this->obj->load(22);
         $this->obj->updateDynamics(false);
         $this->obj->load(21);
@@ -718,6 +713,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $this->obj->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $this->obj->task_created);
 
+        global $AppUI;
         $log_updated = $AppUI->formatTZAwareTime($this->obj->task_updated, '%Y-%m-%d %T');
         $this->assertGreaterThanOrEqual($min_time,  strtotime($log_updated));
         $log_updated = $AppUI->formatTZAwareTime($this->obj->task_updated, '%Y-%m-%d %T');
@@ -775,8 +771,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testUpdateDynamicsNotFromChildrenInHours()
     {
-        global $AppUI;
-
         $this->obj->load(25);
         $this->obj->updateDynamics(false);
         $this->obj->load(24);
@@ -814,6 +808,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $this->obj->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $this->obj->task_created);
 
+        global $AppUI;
         $log_updated = $AppUI->formatTZAwareTime($this->obj->task_updated, '%Y-%m-%d %T');
         $this->assertGreaterThanOrEqual($min_time,  strtotime($log_updated));
         $log_updated = $AppUI->formatTZAwareTime($this->obj->task_updated, '%Y-%m-%d %T');
@@ -831,8 +826,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCopyNoProjectNoTask()
     {
-        global $AppUI;
-
         $this->obj->load(26);
         $new_task = $this->obj->copy();
 
@@ -868,6 +861,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
 
+        global $AppUI;
         $task_created = $AppUI->formatTZAwareTime($new_task->task_log_created, '%Y-%m-%d %T');
         $task_created = strtotime($task_created);
         $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -890,8 +884,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCopyProjectNoTask()
     {
-        global $AppUI;
-
         $this->obj->load(26);
         $new_task = $this->obj->copy(2);
 
@@ -927,6 +919,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $new_task->task_type);
         $this->assertEquals(1,                      $new_task->task_updator);
 
+        global $AppUI;
         $task_created = $AppUI->formatTZAwareTime($new_task->task_log_created, '%Y-%m-%d %T');
         $task_created = strtotime($task_created);
         $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -949,8 +942,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCopyNoProjectTask()
     {
-        global $AppUI;
-
         $this->obj->load(26);
         $new_task = $this->obj->copy(0, 1);
 
@@ -986,6 +977,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
+        global $AppUI;
         $task_created = $AppUI->formatTZAwareTime($new_task->task_log_created, '%Y-%m-%d %T');
         $task_created = strtotime($task_created);
         $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -1008,8 +1000,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCopyProjectTask()
     {
-        global $AppUI;
-
         $this->obj->load(26);
         $new_task = $this->obj->copy(2, 1);
 
@@ -1045,6 +1035,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
+        global $AppUI;
         $task_created = $AppUI->formatTZAwareTime($new_task->task_log_created, '%Y-%m-%d %T');
         $task_created = strtotime($task_created);
         $this->assertGreaterThanOrEqual($min_time, $task_created);

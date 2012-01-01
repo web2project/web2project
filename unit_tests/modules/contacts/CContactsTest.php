@@ -76,10 +76,8 @@ class CContacts_Test extends CommonSetup
 
     public function testStoreCreate()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
 
         $this->assertTrue($result);
         $this->assertEquals('Firstname2',           $this->obj->contact_first_name);
@@ -94,10 +92,8 @@ class CContacts_Test extends CommonSetup
 
     public function testLoad()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
 
         $item = new CContact();
@@ -118,16 +114,14 @@ class CContacts_Test extends CommonSetup
 
     public function testStoreUpdate()
     {
-        global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $original_id = $this->obj->contact_id;
 
         $this->obj->contact_first_name = 'Firstname2';
         $this->obj->contact_display_name = 'Some other name';
-        $result = $this->obj->store($AppUI);
+        $result = $this->obj->store();
         $this->assertTrue($result);
         $new_id = $this->obj->contact_id;
 
@@ -152,6 +146,7 @@ class CContacts_Test extends CommonSetup
 
         $contact = new CContact();
         $contact->contact_id = 1;
+        $contact->overrideDatabase($this->mockDB);
         $contact->setContactMethods($methods);
 
         $results = $contact->getContactMethods();
@@ -169,6 +164,7 @@ class CContacts_Test extends CommonSetup
 
         $contact = new CContact();
         $contact->contact_id = 1;
+        $contact->overrideDatabase($this->mockDB);
         $contact->setContactMethods($methods);
 
         $results = $contact->getContactMethods(array('phone_mobile', 'im_skype'));
@@ -186,6 +182,7 @@ class CContacts_Test extends CommonSetup
     {
         $contact = new CContact();
         $contact->contact_id = 1;
+        $contact->overrideDatabase($this->mockDB);
         $this->assertTrue($contact->isUser());
 
         $contact->contact_id = 13;
