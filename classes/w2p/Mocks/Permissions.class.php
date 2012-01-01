@@ -38,4 +38,9 @@ class w2p_Mocks_Permissions extends w2p_Extensions_Permissions {
 
         return true;
     }
+
+    public function w2Pacl_query($application = 'application', $op, $user = 'user', $userid, $module, $item) {
+
+        return array('access' => 1, 'acl_id' => 'checked');
+    }
 }
