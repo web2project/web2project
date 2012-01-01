@@ -63,27 +63,25 @@ class CFiles_Test extends CommonSetup
      */
     public function testNewFilesAttributes()
     {
-      $file = new CFile();
-
-      $this->assertInstanceOf('CFile',                            $file);
-      $this->assertObjectHasAttribute('file_id',                  $file);
-      $this->assertObjectHasAttribute('file_real_filename',       $file);
-      $this->assertObjectHasAttribute('file_project',             $file);
-      $this->assertObjectHasAttribute('file_task',                $file);
-      $this->assertObjectHasAttribute('file_name',                $file);
-      $this->assertObjectHasAttribute('file_parent',              $file);
-      $this->assertObjectHasAttribute('file_description',         $file);
-      $this->assertObjectHasAttribute('file_type',                $file);
-      $this->assertObjectHasAttribute('file_owner',               $file);
-      $this->assertObjectHasAttribute('file_date',                $file);
-      $this->assertObjectHasAttribute('file_size',                $file);
-      $this->assertObjectHasAttribute('file_version',             $file);
-      $this->assertObjectHasAttribute('file_icon',                $file);
-      $this->assertObjectHasAttribute('file_category',            $file);
-      $this->assertObjectHasAttribute('file_checkout',            $file);
-      $this->assertObjectHasAttribute('file_co_reason',           $file);
-      $this->assertObjectHasAttribute('file_folder',              $file);
-      $this->assertObjectHasAttribute('file_indexed',             $file);
+      $this->assertInstanceOf('CFile',                            $this->obj);
+      $this->assertObjectHasAttribute('file_id',                  $this->obj);
+      $this->assertObjectHasAttribute('file_real_filename',       $this->obj);
+      $this->assertObjectHasAttribute('file_project',             $this->obj);
+      $this->assertObjectHasAttribute('file_task',                $this->obj);
+      $this->assertObjectHasAttribute('file_name',                $this->obj);
+      $this->assertObjectHasAttribute('file_parent',              $this->obj);
+      $this->assertObjectHasAttribute('file_description',         $this->obj);
+      $this->assertObjectHasAttribute('file_type',                $this->obj);
+      $this->assertObjectHasAttribute('file_owner',               $this->obj);
+      $this->assertObjectHasAttribute('file_date',                $this->obj);
+      $this->assertObjectHasAttribute('file_size',                $this->obj);
+      $this->assertObjectHasAttribute('file_version',             $this->obj);
+      $this->assertObjectHasAttribute('file_icon',                $this->obj);
+      $this->assertObjectHasAttribute('file_category',            $this->obj);
+      $this->assertObjectHasAttribute('file_checkout',            $this->obj);
+      $this->assertObjectHasAttribute('file_co_reason',           $this->obj);
+      $this->assertObjectHasAttribute('file_folder',              $this->obj);
+      $this->assertObjectHasAttribute('file_indexed',             $this->obj);
     }
 
     /**
@@ -91,27 +89,25 @@ class CFiles_Test extends CommonSetup
      */
     public function testNewFilesAttributeValues()
     {
-      $file = new CFile();
-
-      $this->assertInstanceOf('CFile', $file);
-      $this->assertNull($file->file_id);
-      $this->assertNull($file->file_real_filename);
-      $this->assertNull($file->file_project);
-      $this->assertNull($file->file_task);
-      $this->assertNull($file->file_name);
-      $this->assertNull($file->file_parent);
-      $this->assertNull($file->file_description);
-      $this->assertNull($file->file_type);
-      $this->assertNull($file->file_owner);
-      $this->assertNull($file->file_date);
-      $this->assertNull($file->file_size);
-      $this->assertNull($file->file_version);
-      $this->assertNull($file->file_icon);
-      $this->assertNull($file->file_category);
-      $this->assertNull($file->file_checkout);
-      $this->assertNull($file->file_co_reason);
-      $this->assertNull($file->file_folder);
-      $this->assertNull($file->file_indexed);
+      $this->assertInstanceOf('CFile', $this->obj);
+      $this->assertNull($this->obj->file_id);
+      $this->assertNull($this->obj->file_real_filename);
+      $this->assertNull($this->obj->file_project);
+      $this->assertNull($this->obj->file_task);
+      $this->assertNull($this->obj->file_name);
+      $this->assertNull($this->obj->file_parent);
+      $this->assertNull($this->obj->file_description);
+      $this->assertNull($this->obj->file_type);
+      $this->assertNull($this->obj->file_owner);
+      $this->assertNull($this->obj->file_date);
+      $this->assertNull($this->obj->file_size);
+      $this->assertNull($this->obj->file_version);
+      $this->assertNull($this->obj->file_icon);
+      $this->assertNull($this->obj->file_category);
+      $this->assertNull($this->obj->file_checkout);
+      $this->assertNull($this->obj->file_co_reason);
+      $this->assertNull($this->obj->file_folder);
+      $this->assertNull($this->obj->file_indexed);
     }
 
     /**

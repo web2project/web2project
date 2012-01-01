@@ -56,20 +56,18 @@ class CLinks_Test extends CommonSetup
      */
     public function testNewLinkAttributes()
     {
-      $link = new CLink();
-
-      $this->assertInstanceOf('CLink', $link);
-      $this->assertObjectHasAttribute('link_id',          $link);
-      $this->assertObjectHasAttribute('link_project',     $link);
-      $this->assertObjectHasAttribute('link_url',         $link);
-      $this->assertObjectHasAttribute('link_task',        $link);
-      $this->assertObjectHasAttribute('link_name',        $link);
-      $this->assertObjectHasAttribute('link_parent',      $link);
-      $this->assertObjectHasAttribute('link_description', $link);
-      $this->assertObjectHasAttribute('link_owner',       $link);
-      $this->assertObjectHasAttribute('link_date',        $link);
-      $this->assertObjectHasAttribute('link_icon',        $link);
-      $this->assertObjectHasAttribute('link_category',    $link);
+      $this->assertInstanceOf('CLink', $this->obj);
+      $this->assertObjectHasAttribute('link_id',          $this->obj);
+      $this->assertObjectHasAttribute('link_project',     $this->obj);
+      $this->assertObjectHasAttribute('link_url',         $this->obj);
+      $this->assertObjectHasAttribute('link_task',        $this->obj);
+      $this->assertObjectHasAttribute('link_name',        $this->obj);
+      $this->assertObjectHasAttribute('link_parent',      $this->obj);
+      $this->assertObjectHasAttribute('link_description', $this->obj);
+      $this->assertObjectHasAttribute('link_owner',       $this->obj);
+      $this->assertObjectHasAttribute('link_date',        $this->obj);
+      $this->assertObjectHasAttribute('link_icon',        $this->obj);
+      $this->assertObjectHasAttribute('link_category',    $this->obj);
     }
 
     /**
@@ -77,19 +75,18 @@ class CLinks_Test extends CommonSetup
      */
     public function testNewLinkAttributeValues()
     {
-        $link = new CLink();
-        $this->assertInstanceOf('CLink', $link);
-        $this->assertNull($link->link_id);
-        $this->assertNull($link->link_project);
-        $this->assertNull($link->link_url);
-        $this->assertNull($link->link_task);
-        $this->assertNull($link->link_name);
-        $this->assertNull($link->link_parent);
-        $this->assertNull($link->link_description);
-        $this->assertNull($link->link_owner);
-        $this->assertNull($link->link_date);
-        $this->assertNull($link->link_icon);
-        $this->assertNull($link->link_category);
+        $this->assertInstanceOf('CLink', $this->obj);
+        $this->assertNull($this->obj->link_id);
+        $this->assertNull($this->obj->link_project);
+        $this->assertNull($this->obj->link_url);
+        $this->assertNull($this->obj->link_task);
+        $this->assertNull($this->obj->link_name);
+        $this->assertNull($this->obj->link_parent);
+        $this->assertNull($this->obj->link_description);
+        $this->assertNull($this->obj->link_owner);
+        $this->assertNull($this->obj->link_date);
+        $this->assertNull($this->obj->link_icon);
+        $this->assertNull($this->obj->link_category);
     }
 
     /**

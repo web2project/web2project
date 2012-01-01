@@ -144,12 +144,11 @@ class CContacts_Test extends CommonSetup
                         'email_alt' => 'alternate@example.org', 'im_skype' => 'example_s',
                         'im_google' => 'example_g');
 
-        $contact = new CContact();
-        $contact->contact_id = 1;
-        $contact->overrideDatabase($this->mockDB);
-        $contact->setContactMethods($methods);
+        $this->obj->contact_id = 1;
+        $this->obj->overrideDatabase($this->mockDB);
+        $this->obj->setContactMethods($methods);
 
-        $results = $contact->getContactMethods();
+        $results = $this->obj->getContactMethods();
         foreach ($methods as $key => $value) {
             $this->assertContains($key,   $results['fields']);
             $this->assertContains($value, $results['values']);
@@ -162,12 +161,10 @@ class CContacts_Test extends CommonSetup
                         'email_alt' => 'alternate@example.org', 'im_skype' => 'example_s',
                         'im_google' => 'example_g');
 
-        $contact = new CContact();
-        $contact->contact_id = 1;
-        $contact->overrideDatabase($this->mockDB);
-        $contact->setContactMethods($methods);
+        $this->obj->contact_id = 1;
+        $this->obj->setContactMethods($methods);
 
-        $results = $contact->getContactMethods(array('phone_mobile', 'im_skype'));
+        $results = $this->obj->getContactMethods(array('phone_mobile', 'im_skype'));
 
         $this->AssertEquals(2, count($results['fields']));
 
@@ -180,16 +177,14 @@ class CContacts_Test extends CommonSetup
 
     public function testIsUser()
     {
-        $contact = new CContact();
-        $contact->contact_id = 1;
-        $contact->overrideDatabase($this->mockDB);
-        $this->assertTrue($contact->isUser());
+        $this->obj->contact_id = 1;
+        $this->assertTrue($this->obj->isUser());
 
         $contact->contact_id = 13;
-        $this->assertFalse($contact->isUser());
+        $this->assertFalse($this->obj->isUser());
 
         $contact->contact_id = 'monkey!';
-        $this->assertFalse($contact->isUser());
+        $this->assertFalse($this->obj->isUser());
     }
 
     /**
@@ -197,13 +192,11 @@ class CContacts_Test extends CommonSetup
      */
     public function testIs_Alpha()
     {
-        $contact = new CContact();
-
-        $this->assertTrue($contact->is_alpha(123));
-        $this->assertTrue($contact->is_alpha('123'));
-        $this->assertFalse($contact->is_alpha('monkey'));
-        $this->assertFalse($contact->is_alpha('3.14159'));
-        $this->assertFalse($contact->is_alpha(3.14159));
+        $this->assertTrue($this->obj->is_alpha(123));
+        $this->assertTrue($this->obj->is_alpha('123'));
+        $this->assertFalse($this->obj->is_alpha('monkey'));
+        $this->assertFalse($this->obj->is_alpha('3.14159'));
+        $this->assertFalse($this->obj->is_alpha(3.14159));
     }
 
     /**
@@ -211,25 +204,22 @@ class CContacts_Test extends CommonSetup
      */
     public function testGetCompanyName()
     {
-        $contact = new CContact();
-        $contact->contact_company = 1;
-        $this->assertEquals('UnitTestCompany',  $contact->getCompanyName());
+        $this->obj->contact_company = 1;
+        $this->assertEquals('UnitTestCompany',  $this->obj->getCompanyName());
 
-        $contact->contact_company = 2;
-        $this->assertEquals('CreatedCompany',  $contact->getCompanyName());
+        $this->obj->contact_company = 2;
+        $this->assertEquals('CreatedCompany',  $this->obj->getCompanyName());
     }
 
     public function testGetCompanyDetails()
     {
-        $contact = new CContact();
-
-        $results = $contact->getCompanyDetails();
+        $results = $this->obj->getCompanyDetails();
         $this->AssertEquals(2,                      count($results));
         $this->assertEquals(0,                      $results['company_id']);
         $this->assertEquals('',                     $results['company_name']);
 
-        $contact->contact_company = 1;
-        $results = $contact->getCompanyDetails();
+        $this->obj->contact_company = 1;
+        $results = $this->obj->getCompanyDetails();
         $this->AssertEquals(2,                      count($results));
         $this->assertEquals(1,                      $results['company_id']);
         $this->assertEquals('UnitTestCompany',      $results['company_name']);
@@ -237,15 +227,13 @@ class CContacts_Test extends CommonSetup
 
     public function testGetDepartmentDetails()
     {
-        $contact = new CContact();
-
-        $results = $contact->getDepartmentDetails();
+        $results = $this->obj->getDepartmentDetails();
         $this->AssertEquals(2,                      count($results));
         $this->assertEquals(0,                      $results['dept_id']);
         $this->assertEquals('',                     $results['dept_name']);
 
-        $contact->contact_department = 1;
-        $results = $contact->getDepartmentDetails();
+        $this->obj->contact_department = 1;
+        $results = $this->obj->getDepartmentDetails();
 
         $this->AssertEquals(2,                      count($results));
         $this->assertEquals(1,                      $results['dept_id']);
@@ -253,28 +241,22 @@ class CContacts_Test extends CommonSetup
     }
 
     public function testGetUpdateKey() {
-        $contact = new CContact();
-        $contact->contact_id = 1;
-        $contact->overrideDatabase($this->mockDB);
         $this->mockDB->stageResult('ASDFASDFASDF');
 
-        $this->assertEquals('ASDFASDFASDF',         $contact->getUpdateKey());
+        $this->assertEquals('ASDFASDFASDF',         $this->obj->getUpdateKey());
     }
 
     public function testClearUpdateKey() {
-        $contact = new CContact();
-        $contact->overrideDatabase($this->mockDB);
         $this->mockDB->stageHash(array('contact_updatekey' => 'ASDFASDFASDF'));
 
-        $contact->load(1);
-        $this->assertEquals('ASDFASDFASDF',         $contact->contact_updatekey);
+        $this->obj->load(1);
+        $this->assertEquals('ASDFASDFASDF',         $this->obj->contact_updatekey);
 
-        $contact->clearUpdateKey();
-        $this->assertEquals('',                     $contact->contact_updatekey);
+        $this->obj->clearUpdateKey();
+        $this->assertEquals('',                     $this->obj->contact_updatekey);
 
-        $contact = new CContact();
-        $contact->contact_id = 1;
-        $this->assertEquals('',                     $contact->getUpdateKey());
+        $this->obj->contact_id = 1;
+        $this->assertEquals('',                     $this->obj->getUpdateKey());
     }
 
     public function testUpdateNotify() {
@@ -325,16 +307,6 @@ class CContacts_Test extends CommonSetup
      * @todo Implement testLoadFull().
      */
     public function testLoadFull() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testCheck().
-     */
-    public function testCheck() {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

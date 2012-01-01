@@ -267,8 +267,6 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCreateProjectNoColorIdentifier()
     {
-        $project = new CProject();
-
 		unset($this->post_data['project_color_identifier']);
 
         $this->obj->bind($this->post_data);
