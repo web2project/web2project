@@ -109,7 +109,6 @@ class CTaskLogs_Test extends CommonSetup
      */
     public function testStoreCreate()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
 
         $results = $this->obj->store();
@@ -143,7 +142,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testStoreUpdate()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
@@ -179,7 +177,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testDelete()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
@@ -257,7 +254,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetAllowedRecordUid()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->mockDB->stageHashList(1, 1);
 
         $allowed_records = $this->obj->getAllowedRecords(1);
@@ -270,7 +266,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetAllowedRecordsFields()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->mockDB->stageHashList(1, 'Task Log 1');
 
         $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_task, task_log.task_log_name');
@@ -284,7 +279,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetAllowedRecordsOrderBy()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->mockDB->stageHashList(1, 1);
 
         $allowed_records = $this->obj->getAllowedRecords(1, '*', 'task_log.task_log_hours');
@@ -297,7 +291,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetAllowedRecordsIndex()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->mockDB->stageHashList('Task Log 1', array('Task Log 1', 'task_log_name' => 'Task Log 1'));
 
         $allowed_records = $this->obj->getAllowedRecords(1, 'task_log.task_log_name', '', 'task_log_name');
@@ -312,7 +305,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetAllowedRecordsExtra()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $extra = array('from' => 'task_log', 'join' => 'tasks', 'on' => 'task_id = task_log_task',
                        'where' => 'task_id = 1');
         $this->mockDB->stageHashList(1, 1);
