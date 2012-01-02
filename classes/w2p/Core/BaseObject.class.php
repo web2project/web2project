@@ -336,13 +336,12 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	 */
 	public function canDelete(&$msg = '', $oid = null, $joins = null)
 	{
-		global $AppUI;
         $result = true;
 
 		// First things first.  Are we allowed to delete?
-		$acl = &$AppUI->acl();
+		$acl = &$this->_AppUI->acl();
 		if (!$acl->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
-			$msg = $AppUI->_('noDeletePermission');
+			$msg = $this->_AppUI->_('noDeletePermission');
             $this->_error['noDeletePermission'] = $msg;
 			return false;
 		}
@@ -375,13 +374,13 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 			foreach ($joins as $table) {
 				$k = $table['idfield'];
 				if ($obj->$k) {
-					$msg[$table['label']] = $AppUI->_($table['label']);
+					$msg[$table['label']] = $this->_AppUI->_($table['label']);
                     $this->_error['noDeleteRecord-'.$table['label']] = $table['label'];
 				}
 			}
 
 			if (count($msg)) {
-				$msg = $AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
+				$msg = $this->_AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
 				return false;
 			} else {
                 $msg = array();
@@ -410,6 +409,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	public function delete($oid = null)
 	{
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
+        $result = false;
 
         $k = $this->_tbl_key;
 		if ($oid) {
@@ -419,22 +419,20 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
         // NOTE: This is *very* similar to the check() flow within store()..
         $this->canDelete();
 		if (count($this->_error)) {
-			$msg = get_class($this) . '::delete-check failed';
+            $msg = get_class($this) . '::delete-check failed';
 //TODO: no clue why this is required..
 unset($this->_error['store']);
             $this->_error['delete-check'] = $msg;
-            return $msg;
 		}
 
 		$q = $this->_getQuery();
 		$q->setDelete($this->_tbl);
 		$q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
         if ($q->exec()) {
-            $result = null;
+            $result = true;
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postDeleteEvent'));
         } else {
-            $result = db_error();
-            $this->_error['delete'] = $result;
+            $this->_error['delete'] = db_error();
         }
 
 		return $result;
@@ -519,9 +517,7 @@ unset($this->_error['store']);
 	}
 
 	public function getAllowedSQL($uid, $index = null) {
-		global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
         $uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
@@ -558,9 +554,7 @@ unset($this->_error['store']);
 	}
 
 	public function setAllowedSQL($uid, $query, $index = null, $key = null) {
-		global $AppUI;
-
-        $perms = $AppUI->acl();
+        $perms = $this->_AppUI->acl();
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
@@ -629,13 +623,12 @@ unset($this->_error['store']);
 
     protected function hook_postStore() {
         //NOTE: This only happens if the create was successful.
-		global $AppUI;
 
         $name = $this->{substr($this->_tbl, 0, -1).'_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' .
-            $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+            $this->_AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+            $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
     }
@@ -645,13 +638,12 @@ unset($this->_error['store']);
     }
     protected function hook_postCreate() {
         //NOTE: This only happens if the create was successful.
-		global $AppUI;
 
         $name = $this->{substr($this->_tbl, 0, -1).'_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' .
-            $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+            $this->_AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+            $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
     }
@@ -660,13 +652,12 @@ unset($this->_error['store']);
     }
     protected function hook_postUpdate() {
         //NOTE: This only happens if the update was successful.
-		global $AppUI;
 
         $name = $this->{substr($this->_tbl, 0, -1).'_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
-            $AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $AppUI->_('TABLE') . ': ' .
-            $this->_tbl . ' ' . $AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+            $this->_AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+            $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
         return $this;
     }
     protected function hook_preLoad() {
@@ -681,7 +672,6 @@ unset($this->_error['store']);
     }
     protected function hook_postDelete() {
         //NOTE: This only happens if the delete was successful.
-		global $AppUI;
 
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete');
         return $this;
