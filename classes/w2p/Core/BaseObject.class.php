@@ -41,6 +41,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
 	 * @var object permissions/preference/translation object
 	 */
 	protected $_AppUI;
+    protected $_perms;
 
 	/**
 	 * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table
@@ -76,6 +77,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
          */
         global $AppUI;
         $this->_AppUI = $AppUI;
+        $this->_perms = $this->_AppUI->acl();
 
         /*
          * This block does a lot and may need to be simplified.. but the point
@@ -117,6 +119,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
      */
     public function overrideAppUI($override) {
         $this->_AppUI = $override;
+        $this->_perms = $this->_AppUI->acl();
     }
 
 	/**
