@@ -21,7 +21,7 @@ $budgetCategory = w2PgetSysVal('BudgetCategory');
 $budgetCategory = arrayMerge(array('0' => $AppUI->_('None specified')), $budgetCategory);
 
 // load the record data
-$budget = new budgets();
+$budget = new CSystem_Budget();
 $budget->load($budget_id);
 
 $titleBlock = new w2p_Theme_TitleBlock('Budget Allocated', 'myevo-weather.png', $m, $m . '.' . $a);
