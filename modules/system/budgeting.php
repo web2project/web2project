@@ -21,7 +21,7 @@ $budgetCategory = w2PgetSysVal('BudgetCategory');
 $budgetCategory = arrayMerge(array('0' => $AppUI->_('None specified')), $budgetCategory);
 
 // load the record data
-$budget = new budgets();
+$budget = new CSystem_Budget();
 $budget->load($budget_id);
 
 $titleBlock = new w2p_Theme_TitleBlock('Setup Budgets', 'myevo-weather.png', $m, $m . '.' . $a);
@@ -51,10 +51,28 @@ $titleBlock->show();
 	function submitIt(){
 		document.frmAddcode.submit();
 	}
+<?php
+// security improvement:
+// some javascript functions may not appear on client side in case of user not having write permissions
+// else users would be able to arbitrarily run 'bad' functions
+if ($canDelete) {
+?>
+function delIt(input) {
+	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Budget', UI_OUTPUT_JS) . '?'; ?>' )) {
+		document.frmDelete.budget_id.value = input;
+        document.frmDelete.submit();
+	}
+}
+<?php } ?>
 </script>
+<form name="frmDelete" action="./index.php?m=system" method="post" accept-charset="utf-8">
+	<input type="hidden" name="dosql" value="do_budgeting_aed" />
+	<input type="hidden" name="del" value="1" />
+	<input type="hidden" name="budget_id" value="0" />
+</form>
 <form name="frmAddcode" action="./index.php?m=system" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_budgeting_aed" />
-    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="budget_id" value="<?php echo $budget_id; ?>" />
     <table width="100%" border="0" cellpadding="1" cellspacing="1" class="std">
         <tr>
             <th>&nbsp;</th>
@@ -75,6 +93,9 @@ $titleBlock->show();
                 <td>
                     <a href="?m=system&a=budgeting&budget_id=<?php echo $amounts['budget_id']; ?>" title="<?php echo $AppUI->_('edit'); ?>">
                         <img src="<?php echo w2PfindImage('icons/stock_edit-16.png'); ?>" border="0" alt="<?php echo $AppUI->_('edit'); ?>" />
+                    </a>
+                    <a href="javascript:delIt(<?php echo (int) $amounts['budget_id']; ?>)" title="<?php echo $AppUI->_('delete'); ?>">
+                        <img src="<?php echo w2PfindImage('icons/stock_delete-16.png'); ?>" border="0" alt="<?php echo $AppUI->_('edit'); ?>" style="float: right;" />
                     </a>
                 </td>
                 <td align="left">&nbsp;<?php echo (('' != $amounts['company_name']) ? $amounts['company_name'] : 'None specified'); ?></td>
