@@ -178,22 +178,26 @@ class CCalendar extends w2p_Core_BaseObject {
 	 * @param Date Start date of the period
 	 * @param Date End date of the period
 	 * @return array A list of events
+     *
+     * WARNING: This is actually called staticly so $this is not available.
 	 */
 	public function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0) {
-		// convert to default db time stamp
+		global $AppUI;
+        $q = new w2p_Database_Query();
+
+        // convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
-		$db_start = $this->_AppUI->convertToSystemTZ($db_start);
+		$db_start = $AppUI->convertToSystemTZ($db_start);
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
-		$db_end = $this->_AppUI->convertToSystemTZ($db_end);
+		$db_end = $AppUI->convertToSystemTZ($db_end);
 
 		if (!isset($user_id)) {
-			$user_id = $this->_AppUI->user_id;
+			$user_id = $AppUI->user_id;
 		}
 
 		$project = new CProject();
-        $project->overrideDatabase($this->_query);
 		if ($project_id) {
-			$p = &$this->_AppUI->acl();
+			$p = &$AppUI->acl();
 
 			if ($p->checkModuleItem('projects', 'view', $project_id, $user_id)) {
 				$allowedProjects = array('p.project_id = ' . (int)$project_id);
@@ -201,14 +205,14 @@ class CCalendar extends w2p_Core_BaseObject {
 				$allowedProjects = array('1=0');
 			}
 		} else {
-			$allowedProjects = $project->getAllowedSQL(($user_id ? $user_id : $this->_AppUI->user_id), 'event_project');
+			$allowedProjects = $project->getAllowedSQL(($user_id ? $user_id : $AppUI->user_id), 'event_project');
 		}
 
 		//do similiar actions for recurring and non-recurring events
 		$queries = array('q' => 'q', 'r' => 'r');
 
 		foreach ($queries as $query_set) {
-			$$query_set = $this->_getQuery();
+			$$query_set = new w2p_Database_Query();
 			$$query_set->addTable('events', 'e');
 			$$query_set->addQuery('distinct(e.event_id), e.*');
 			$$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
@@ -219,13 +223,13 @@ class CCalendar extends w2p_Core_BaseObject {
 			if ($company_id) {
 				$$query_set->addWhere('project_company = ' . (int)$company_id);
 			} else {
-				if (($this->_AppUI->getState('CalIdxCompany'))) {
-					$$query_set->addWhere('project_company = ' . $this->_AppUI->getState('CalIdxCompany'));
+				if (($AppUI->getState('CalIdxCompany'))) {
+					$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
 				}
 			}
 
 			if (count($allowedProjects)) {
-				$$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ' ) ' . (($this->_AppUI->getState('CalIdxCompany')) ? '' : ($project_id ? '' : ' OR event_project = 0 ')) . ')');
+				$$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ' ) ' . (($AppUI->getState('CalIdxCompany')) ? '' : ($project_id ? '' : ' OR event_project = 0 ')) . ')');
 			}
 
 			switch ($filter) {
@@ -255,7 +259,7 @@ class CCalendar extends w2p_Core_BaseObject {
 		//Calculate the Length of Period (Daily, Weekly, Monthly View)
 		setlocale(LC_TIME, 'en');
 		$periodLength = Date_Calc::dateDiff($start_date->getDay(), $start_date->getMonth(), $start_date->getYear(), $end_date->getDay(), $end_date->getMonth(), $end_date->getYear());
-		setlocale(LC_ALL, $this->_AppUI->user_lang);
+		setlocale(LC_ALL, $AppUI->user_lang);
 
 		// AJD: Should this be going off the end of the array?  I don't think so.
 		// If it should then a comment to that effect would be nice.
@@ -296,7 +300,7 @@ class CCalendar extends w2p_Core_BaseObject {
 
 		$i = 0;
 		foreach($eventList as $event) {
-			$eventList[$i]['event_start_date'] = $this->_AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
+			$eventList[$i]['event_start_date'] = $AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
 			$eventList[$i]['event_end_date'] = $this->_AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
 			$i++;
 		}
@@ -355,7 +359,7 @@ class CCalendar extends w2p_Core_BaseObject {
 			}
 
 			if ($msg = db_error()) {
-				$this->_AppUI->setMsg($msg, UI_MSG_ERROR);
+				$AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}
 	}

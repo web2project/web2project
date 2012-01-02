@@ -1226,29 +1226,31 @@ class CTask extends w2p_Core_BaseObject {
 	 * @param Date Start date of the period
 	 * @param Date End date of the period
 	 * @param integer The target company
+     *
+     * WARNING: This is actually called staticly so $this is not available.
 	 */
 	public function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null) {
-		$q = new w2p_Database_Query();
-		// convert to default db time stamp
+		global $AppUI;
+        $q = new w2p_Database_Query();
+
+        // convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
 		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
 
 		// Allow for possible passing of user_id 0 to stop user filtering
 		if (!isset($user_id)) {
-			$user_id = $this->_AppUI->user_id;
+			$user_id = $AppUI->user_id;
 		}
 
 		// filter tasks for not allowed projects
 		$tasks_filter = '';
 		// check permissions on projects
 		$proj = new CProject();
-        $proj->overrideDatabase($this->_query);
-		$task_filter_where = $proj->getAllowedSQL($this->_AppUI->user_id, 't.task_project');
+		$task_filter_where = $proj->getAllowedSQL($AppUI->user_id, 't.task_project');
 		// exclude read denied projects
-		$deny = $proj->getDeniedRecords($this->_AppUI->user_id);
+		$deny = $proj->getDeniedRecords($AppUI->user_id);
 		// check permissions on tasks
 		$obj = new CTask();
-        $obj->overrideDatabase($this->_query);
 		$allow = $obj->getAllowedSQL($AppUI->user_id, 't.task_id');
 
 		$q->addTable('tasks', 't');
@@ -1286,7 +1288,6 @@ class CTask extends w2p_Core_BaseObject {
 
 		// assemble query
 		$tasks = $q->loadList(-1, 'task_id');
-		$q->clear();
 
 		// check tasks access
 		$result = array();
