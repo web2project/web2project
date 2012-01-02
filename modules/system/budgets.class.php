@@ -7,17 +7,30 @@
 
 class CSystem_Budget extends w2p_Core_BaseObject
 {
-	public $budget_id = 0;
-	public $budget_company = 0;
-	public $budget_dept = 0;
+	public $budget_id = null;
+	public $budget_company = null;
+	public $budget_dept = null;
 	public $budget_start_date = null;
 	public $budget_end_date = null;
-	public $budget_amount = 0;
-	public $budget_category = '';
+	public $budget_amount = null;
+	public $budget_category = null;
 
 	public function __construct() {
-		parent::__construct('budgets', 'budget_id');
+		parent::__construct('budgets', 'budget_id', 'system');
 	}
+
+    public function check() {
+        // ensure the integrity of some variables
+        $errorArray = array();
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+        if (0 == trim($this->budget_amount)) {
+            $errorArray['budget_amount'] = $baseErrorMsg . 'budget amount must be greater than zero';
+        }
+
+        $this->_error = $errorArray;
+        return $errorArray;
+    }
 
     public function getBudgetAmounts($company_id = -1, $dept_id = -1) {
         $q = $this->_getQuery();
@@ -62,6 +75,19 @@ class CSystem_Budget extends w2p_Core_BaseObject
         }
         return $stored;
 	}
+
+    public function delete(w2p_Core_CAppUI $AppUI = null) {
+        $perms = $this->_AppUI->acl();
+        $result = false;
+
+        if ($perms->checkModuleItem('system', 'edit')) {
+            if ($msg = parent::delete()) {
+                return $result;
+            }
+            $result = true;
+        }
+        return $result;
+    }
 }
 
 class budgets extends CSystem_Budget {
