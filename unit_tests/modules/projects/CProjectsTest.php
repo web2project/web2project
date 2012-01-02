@@ -387,13 +387,16 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
         $this->assertNotNull($this->obj->project_created);
         $this->assertEquals($this->obj->project_created, $this->obj->project_updated);
         /*
+         *  These fields are from the $_POST but are modified in the store().
+         */
+        $this->assertEquals('2009-06-28 00:00:00',       $this->obj->project_start_date);
+        $this->assertEquals('2009-07-28 23:59:59',       $this->obj->project_end_date);
+        /*
          *  These fields come from the $_POST data and should be pass throughs.
          */
         $this->assertEquals('New Project',               $this->obj->project_name);
         $this->assertEquals('nproject',                  $this->obj->project_short_name);
         $this->assertEquals(1,                           $this->obj->project_owner);
-        $this->assertEquals('2009-06-28 00:00:00',       $this->obj->project_start_date);
-        $this->assertEquals('2009-07-28 23:59:59',       $this->obj->project_end_date);
         $this->assertEquals('FFFFFF',                    $this->obj->project_color_identifier);
         $this->assertEquals('project.example.org',       $this->obj->project_url);
         $this->assertEquals('projectdemo.example.org',   $this->obj->project_demo_url);
