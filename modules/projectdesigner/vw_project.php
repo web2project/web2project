@@ -111,9 +111,9 @@ if (!defined('W2P_BASE_DIR')) {
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Hours'); ?>:</td>
 			<td class="hilite" width="100%"><?php echo $total_project_hours ?></td>
-		</tr>				
+		</tr>
         <?php
-        $depts = CProject::getDepartments($AppUI, $obj->project_id);
+        $depts = $obj->getDepartmentList();
 
         if (count($depts) > 0) { ?>
             <tr>
@@ -135,7 +135,7 @@ if (!defined('W2P_BASE_DIR')) {
         <?php
         }
 
-        $contacts = CProject::getContacts($AppUI, $obj->project_id);
+        $contacts = $obj->getContactList();
         if (count($contacts)) {
             echo '<tr><td><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
             echo '<tr><td colspan="3" class="hilite">';

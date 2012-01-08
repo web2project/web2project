@@ -340,7 +340,7 @@ function delIt() {
                     </td>
                 </tr>
                 <?php
-                $depts = CProject::getDepartments($AppUI, $project->project_id);
+                $depts = $project->getDepartmentList();
 
                 if (count($depts) > 0) { ?>
                     <tr>
@@ -362,7 +362,8 @@ function delIt() {
                     </tr>
                     <?php
                 }
-                $contacts = CProject::getContacts($AppUI, $project->project_id);
+
+                $contacts = $project->getContactList();
                 if (count($contacts)) {
                     echo '<tr><td><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
                     echo '<tr><td colspan="3" class="hilite">';
