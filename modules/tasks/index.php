@@ -35,6 +35,10 @@ if (isset($_GET['project_id'])) {
 	$AppUI->setState('TaskIdxProject', w2PgetParam($_GET, 'project_id', null));
 }
 $project_id = $AppUI->getState('TaskIdxProject') ? $AppUI->getState('TaskIdxProject') : 0;
+if (isset($_POST['show_task_options'])) {
+	$AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
+}
+$showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
 // get CCompany() to filter tasks by company
 $obj = new CCompany();
@@ -96,6 +100,16 @@ if (w2PgetParam($_GET, 'pinned') == 1) {
 }
 $titleBlock->addCrumb('?m=tasks&amp;inactive=toggle', 'show ' . $in . 'active tasks');
 $titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
+if (!$project_id) {
+    $titleBlock->addCell('
+        <form name="task_list_options" method="post" action="'. $query_string . '" accept-charset="utf-8">
+            <input type="hidden" name="show_task_options" value="1" />
+            <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();"' .
+                ($showIncomplete ? 'checked="checked"' : '') . '/>
+            <label for="show_incomplete">' . $AppUI->_("Incomplete Tasks Only") . '</label>
+        </form>');
+
+}
 
 $titleBlock->show();
 
