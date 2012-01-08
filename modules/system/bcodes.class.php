@@ -31,7 +31,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
         return false;
 	}
 
-	public function store(w2p_Core_CAppUI $AppUI = nul) {
+	public function store(w2p_Core_CAppUI $AppUI = null) {
         $perms = $this->_AppUI->acl();
         $stored = false;
 
