@@ -1070,8 +1070,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeepCopyNoProjectNoTask()
     {
-        global $AppUI;
-
         $this->_preCalcData();
 
         $this->obj->load(24);
@@ -1095,6 +1093,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q->addWhere('task_id IN(31,32,33)');
         $results = $q->loadList();
 
+        global $AppUI;
         foreach($results as $dates) {
             $task_created = $AppUI->formatTZAwareTime($dates['task_created'], '%Y-%m-%d %T');
             $task_created = strtotime($task_created);
@@ -1113,8 +1112,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeepCopyNoProjectTask()
     {
-        global $AppUI;
-
         $this->_preCalcData();
 
         $this->obj->load(24);
@@ -1138,6 +1135,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q->addWhere('task_id  IN(31,32,33)');
         $results = $q->loadList();
 
+        global $AppUI;
         foreach($results as $dates) {
             $task_created = $AppUI->formatTZAwareTime($dates['task_created'], '%Y-%m-%d %T');
             $task_created = strtotime($task_created);
@@ -1156,8 +1154,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testDeepCopyProjectTask()
     {
-        global $AppUI;
-
         $this->_preCalcData();
 
         $this->obj->load(24);
@@ -1181,6 +1177,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q->addWhere('task_id IN(31,32,33)');
         $results = $q->loadList();
 
+        global $AppUI;
         foreach($results as $dates) {
             $task_created = $AppUI->formatTZAwareTime($dates['task_created'], '%Y-%m-%d %T');
             $task_created = strtotime($task_created);
@@ -1199,14 +1196,13 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 	 */
 	public function testStoreCreate()
 	{
-		global $AppUI;
-
         $this->obj->bind($this->post_data);
-        $errorMsg = $this->obj->store($AppUI);
+        $errorMsg = $this->obj->store();
 
 		$now_secs = time();
         $min_time = $now_secs - 10;
 
+        global $AppUI;
         $task_updated = $AppUI->formatTZAwareTime($this->obj->task_updated, '%Y-%m-%d %T');
         $task_updated = strtotime($task_updated);
         $this->assertGreaterThanOrEqual($min_time, $task_updated);
@@ -1224,8 +1220,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 	 */
 	public function testStoreSubTasks()
 	{
-		global $AppUI;
-
 		$this->post_data['task_id']               = 24;
 		$this->post_data['task_project']          = 2;
 		$this->post_data['task_name']             = 'Test Task';
@@ -1233,7 +1227,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 		$this->post_data['task_parent']           = 1;
 
         $this->obj->bind($this->post_data);
-        $errorMsg = $this->obj->store($AppUI);
+        $errorMsg = $this->obj->store();
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreSubTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
@@ -1244,6 +1238,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $now_secs = time();
         $min_time = $now_secs - 10;
 
+        global $AppUI;
         $task_updated = $AppUI->formatTZAwareTime($this->obj->task_updated, '%Y-%m-%d %T');
         $task_updated = strtotime($task_updated);
         $this->assertGreaterThanOrEqual($min_time, $task_updated);
@@ -1255,8 +1250,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 	 */
 	public function testStoreUpdateDynamics()
 	{
-		global $AppUI;
-
 		$this->obj->load(24);
 		$this->obj->updateDynamics(true);
 
@@ -1297,8 +1290,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 	 */
 	public function testStoreShiftDependentTasks()
 	{
-		global $AppUI;
-
         $this->obj->load(27);
 		$this->post_data['task_id'] 		= 27;
 		$this->post_data['task_end_date']	= '200912011700';
@@ -1317,6 +1308,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $now_secs = time();
 
+        global $AppUI;
         $task_updated = $AppUI->formatTZAwareTime($this->obj->task_updated, '%Y-%m-%d %T');
         $task_updated = strtotime($task_updated);
         $this->assertGreaterThanOrEqual($min_time, $task_updated);
@@ -1328,8 +1320,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 	 */
 	public function testStoreNoTaskParent()
 	{
-		global $AppUI;
-
         $this->obj->load(27);
 		$this->post_data['task_id'] = 27;
 
@@ -1347,6 +1337,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 		$now_secs = time();
         $min_time = $now_secs - 10;
 
+        global $AppUI;
         $task_updated = $AppUI->formatTZAwareTime($this->obj->task_updated, '%Y-%m-%d %T');
         $task_updated = strtotime($task_updated);
         $this->assertGreaterThanOrEqual($min_time, $task_updated);
@@ -1358,8 +1349,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 	 */
 	public function testStoreCreateNoParent()
 	{
-		global $AppUI;
-
         unset($this->post_data['task_parent'], $this->post_data['task_id']);
 		$this->post_data['task_departments'] = '1,2';
 		$this->post_data['task_contacts'] = '1,2';
@@ -1378,6 +1367,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 		$now_secs = time();
         $min_time = $now_secs - 10;
 
+        global $AppUI;
         $task_created = $AppUI->formatTZAwareTime($this->obj->task_created, '%Y-%m-%d %T');
         $task_created = strtotime($task_created);
         $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -1531,8 +1521,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testPushDependencies()
     {
-		global $AppUI;
-
         $this->obj->pushDependencies(28, '2009-09-10');
 
         $now_secs = time();
@@ -1546,6 +1534,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->load(29);
 
+        global $AppUI;
         $task_updated = $AppUI->formatTZAwareTime($this->obj->task_updated, '%Y-%m-%d %T');
         $task_updated = strtotime($task_updated);
         $this->assertGreaterThanOrEqual($min_time, $task_updated);
@@ -1608,8 +1597,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetTasksForPeriodNoCompanyNoUser()
     {
-        global $AppUI;
-
         $start_date = new w2p_Utilities_Date('2009-07-05');
         $end_date   = new w2p_Utilities_Date('2009-07-16');
 
@@ -1652,8 +1639,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetTaskForPeriodCompanyNoUser()
     {
-        global $AppUI;
-
         $start_date = new w2p_Utilities_Date('2009-07-05');
         $end_date   = new w2p_Utilities_Date('2009-07-16');
 
@@ -1700,8 +1685,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetTaskForPeriodCompanyUser()
     {
-        global $AppUI;
-
         $start_date = new w2p_Utilities_Date('2009-07-05');
         $end_date   = new w2p_Utilities_Date('2009-07-16');
 
@@ -1755,9 +1738,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCanAccess()
     {
-
-        global $AppUI;
-
         $this->obj->load(1);
 
         // This @ stuff is kind of gross, but we need to do it until we get to
@@ -1767,6 +1747,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $result = @$this->obj->canAccess(1);
         $this->assertTrue($result);
 
+        global $AppUI;
         // Login as another user for permission purposes
         $old_AppUI = $AppUI;
         $AppUI  = new w2p_Core_CAppUI;
@@ -1850,8 +1831,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testShiftDependentTasks()
     {
-        global $AppUI;
-
         $this->obj->load(27);
         $this->obj->shiftDependentTasks();
 
@@ -1873,6 +1852,8 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $results = $q->loadList();
 
+
+        global $AppUI;
         foreach($results as $dates) {
             $task_updated = $AppUI->formatTZAwareTime($dates['task_updated'], '%Y-%m-%d %T');
             $task_updated = strtotime($task_updated);
@@ -1896,8 +1877,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testUpdateDepDate()
     {
-        global $AppUI;
-
         $this->obj->update_dep_dates(28);
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateDepDates.xml');
@@ -1919,6 +1898,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $results = $q->loadList();
 
+        global $AppUI;
         foreach($results as $dates) {
             $task_updated = $AppUI->formatTZAwareTime($dates['task_updated'], '%Y-%m-%d %T');
             $task_updated = strtotime($task_updated);
@@ -2133,9 +2113,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetContacts()
     {
-        global $AppUI;
-
-        $task_contacts = $this->obj->getContacts($AppUI, 1);
+        $task_contacts = $this->obj->getContacts(null, 1);
 
         $this->assertEquals(1,                      count($task_contacts));
         $this->assertEquals(1,                      $task_contacts[1]['contact_id']);
@@ -2144,13 +2122,14 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals('',                     $task_contacts[1]['contact_order_by']);
         $this->assertEquals('',                     $task_contacts[1]['dept_name']);
 
+        global $AppUI;
         // Login as another user for permission purposes
         $old_AppUI = $AppUI;
         $AppUI  = new w2p_Core_CAppUI;
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
 
-        $task_contacts = $this->obj->getContacts($AppUI, 2);
+        $task_contacts = $this->obj->getContacts(null, 2);
 
         $this->assertNull($task_contacts);
 
@@ -2164,7 +2143,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllocationNoGetUserListNoCheckOverallocation()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         // Ensure our global setting for check_overallocation is set properly for this
@@ -2186,7 +2164,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllocationGetUserListNoCheckallocation()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         // Ensure our global setting for check_overallocation is set properly for this
@@ -2252,7 +2229,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllocationCheckOverAllocation()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         // Ensure our global setting for check_overallocation is set properly for this
@@ -2271,7 +2247,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllocationCheckOverAllocationHash()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         // Ensure our global setting for check_overallocation is set properly for this
@@ -2301,7 +2276,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllocationCheckOverAllocationUsers()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         // Ensure our global setting for check_overallocation is set properly for this
@@ -2485,7 +2459,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCanUserEditTimeInformationTaskOwner()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->obj->load(1);
@@ -2504,7 +2477,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCanUserEditTimeInformationProjectOwner()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->obj->load(4);
@@ -2523,7 +2495,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCanUserEditTimeInformationAdmin()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->obj->load(4);
@@ -2542,7 +2513,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCanUserEditTimeInformationNoAccess()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->obj->load(4);
@@ -2551,6 +2521,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $old_restrict_task_time_editing = $w2Pconfig['restrict_task_time_editing'];
         $w2Pconfig['restrict_task_time_editing'] = true;
 
+        global $AppUI;
         // Login as another user for permission purposes
         $old_AppUI = $AppUI;
         $AppUI  = new w2p_Core_CAppUI;
@@ -2568,7 +2539,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCanUserEditTimeInformationNoRestriction()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->obj->load(4);
@@ -2587,7 +2557,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testaddReminderNoTaskReminderControl()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->obj->load(1);
@@ -2606,7 +2575,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testAddReminderNoTaskEndDate()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         unset($this->obj->task_end_date);
@@ -2629,7 +2597,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testAddReminderComplete()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->obj->load(1);
@@ -2653,7 +2620,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testAddReminder()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->obj->load(1);
@@ -2699,7 +2665,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testRemindNotWorkingDay()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->obj->load(1);
@@ -2720,7 +2685,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testRemindTaskComplete()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         $this->post_data['task_percent_complete'] = '100';
@@ -2744,7 +2708,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testRemind()
     {
-        global $AppUI;
         global $w2Pconfig;
 
         // Ensure our global setting for task_reminder_control is set properly for this
@@ -2805,8 +2768,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedRecordUid()
     {
-        global $AppUI;
-
         $allowed_records = $this->obj->getAllowedRecords(1);
 
         $this->assertEquals(30,        count($allowed_records));
@@ -3230,9 +3191,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedTaskListAllowedNoProject()
     {
-        global $AppUI;
-
-        $allowed_task_list = $this->obj->getAllowedTaskList($AppUI);
+        $allowed_task_list = $this->obj->getAllowedTaskList();
 
         $this->assertEquals(30,         count($allowed_task_list));
         $this->assertEquals(1,          $allowed_task_list[0]['task_id']);
@@ -3396,9 +3355,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testGetAllowedTaskListAllowedProject()
     {
-        global $AppUI;
-
-        $allowed_task_list = $this->obj->getAllowedTaskList($AppUI, 1);
+        $allowed_task_list = $this->obj->getAllowedTaskList(null, 1);
 
         $this->assertEquals(30,         count($allowed_task_list));
         $this->assertEquals(1,          $allowed_task_list[0]['task_id']);
@@ -3570,7 +3527,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
 
-        $allowed_task_list = $this->obj->getAllowedTaskList($AppUI);
+        $allowed_task_list = $this->obj->getAllowedTaskList();
 
         $this->assertEquals(1,          count($allowed_task_list));
         $this->assertEquals(1,          $allowed_task_list[0]['task_id']);
@@ -3595,7 +3552,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
 
-        $allowed_task_list = $this->obj->getAllowedTaskList($AppUI, 2);
+        $allowed_task_list = $this->obj->getAllowedTaskList(null, 2);
         $this->assertEquals(0,          count($allowed_task_list));
 
         // Restore AppUI for following tests since its global, yuck!
