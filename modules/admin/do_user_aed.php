@@ -46,7 +46,7 @@ $obj->user_username = strtolower($obj->user_username);
 
 // !User's contact information not deleted - left for history.
 if ($del) {
-    $result = $obj->delete($AppUI);
+    $result = $obj->delete();
     $message = ($result) ? 'User deleted' : $obj->getError();
     $path    = ($result) ? 'm=admin'      : 'm=public&a=access_denied';
     $status  = ($result) ? UI_MSG_ALERT   : UI_MSG_ERROR;
@@ -58,13 +58,13 @@ if ($del) {
 $contact->contact_owner = ($contact->contact_owner) ? $contact->contact_owner : $AppUI->user_id;
 
 $contactArray = $contact->getContactMethods();
-$result = $contact->store($AppUI);
+$result = $contact->store();
 
 if ($result) {
 	$contact->setContactMethods($contactArray);
 	$obj->user_contact = $contact->contact_id;
 
-    if ($obj->store($AppUI)) {
+    if ($obj->store()) {
         if ($isNewUser && w2PgetParam($_POST, 'send_user_mail', 0)) {
             notifyNewUserCredentials($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
 		}

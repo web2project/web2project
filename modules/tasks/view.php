@@ -21,7 +21,7 @@ $perms = &$AppUI->acl();
 // check if this record has dependencies to prevent deletion
 $msg = '';
 $obj = new CTask();
-$obj->loadFull($AppUI, $task_id);
+$obj->loadFull(null, $task_id);
 
 if (!$obj) {
 	$AppUI->setMsg('Task');
@@ -354,7 +354,7 @@ function delIt() {
                     <?php echo $htmlHelper->createCell('task_description', $obj->task_description); ?>
                 </tr>
                 <?php
-                $depts = $obj->getTaskDepartments($AppUI, $task_id);
+                $depts = $obj->getTaskDepartments(null, $task_id);
                 if (count($depts)) { ?>
                 <tr>
                     <td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
@@ -373,7 +373,7 @@ function delIt() {
                     </td>
                 </tr>
                 <?php }
-                $contacts = $obj->getContacts($AppUI, $task_id);
+                $contacts = $obj->getContacts(null, $task_id);
                 if (count($contacts)) {
                     echo '<tr><td><strong>' . $AppUI->_('Task Contacts') . '</strong></td></tr>';
                     echo '<tr><td colspan="3" class="hilite">';

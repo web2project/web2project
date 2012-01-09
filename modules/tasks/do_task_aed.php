@@ -100,7 +100,7 @@ if ($del) {
     }
 }
 
-$result = $obj->store($AppUI);
+$result = $obj->store();
 
 if (is_array($result)) {
     $AppUI->setMsg($result, UI_MSG_ERROR, true);
@@ -194,7 +194,7 @@ if ($result) {
             $updateTask->load((int)$obj->task_id);
             $updateTask->task_start_date = $obj->task_start_date;
             $updateTask->task_end_date = $obj->task_end_date;
-            $updateTask->store($AppUI);
+            $updateTask->store();
         }
         $obj->pushDependencies($obj->task_id, $obj->task_end_date);
     }

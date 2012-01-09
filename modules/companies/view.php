@@ -20,7 +20,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete', $company_id);
 $tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
 
 $company = new CCompany();
-$company->loadFull($AppUI, $company_id);
+$company->loadFull(null, $company_id);
 
 // check if this record has dependencies to prevent deletion
 $msg = '';

@@ -18,7 +18,7 @@ if (!$canRead) {
 }
 
 $department = new CDepartment();
-$department->loadFull($AppUI, $dept_id);
+$department->loadFull(null, $dept_id);
 if (!$department) {
 	$AppUI->setMsg('Department');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);

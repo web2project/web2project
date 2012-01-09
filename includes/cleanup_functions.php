@@ -2107,7 +2107,7 @@ function clash_accept(w2p_Core_CAppUI $AppUI) {
 	$obj->bind($_SESSION['add_event_post']);
 	$GLOBALS['a'] = $_SESSION['add_event_caller'];
 	$is_new = ($obj->event_id == 0);
-    $result = $obj->store($AppUI);
+    $result = $obj->store();
 
     if ($result) {
 		if (isset($_SESSION['add_event_attendees']) && $_SESSION['add_event_attendees']){

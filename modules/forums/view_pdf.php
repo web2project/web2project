@@ -13,9 +13,9 @@ if (!$perms->checkModuleItem('forums', 'view', $forum_id)) {
 }
 
 $forum = new CForum();
-$forum->loadFull($AppUI, $forum_id);
+$forum->loadFull(null, $forum_id);
 
-$messages = $forum->getMessages($AppUI, $forum_id, $message_id, $sort);
+$messages = $forum->getMessages(null, $forum_id, $message_id, $sort);
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');

@@ -15,7 +15,7 @@ if (!w2PgetParam($_POST, 'project_departments', 0)) {
 }
 
 $action   = ($del) ? 'deleted' : 'stored';
-$result   = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
+$result   = ($del) ? $obj->delete() : $obj->store();
 $redirect = ($del) ? 'm=projects' : 'm=projects&a=view&project_id='.$obj->project_id;
 
 $notify_owner = w2PgetParam($_POST, 'email_project_owner_box', 'off');

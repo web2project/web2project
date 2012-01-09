@@ -16,7 +16,7 @@ switch ($table_name) {
 		$dataId = $company_id;
 
 		$company = new CCompany;
-		$companyList = $company->getCompanyList($AppUI);
+		$companyList = $company->getCompanyList();
 
 		foreach($companyList as $comp) {
 			$select_list[$comp['company_id']] = $comp['company_name'];
@@ -28,7 +28,7 @@ switch ($table_name) {
 		$selection_string = 'Department';
 		$dataId = $dept_id;
 
-		$deptList = CDepartment::getDepartmentList($AppUI, $company_id, null);
+		$deptList = CDepartment::getDepartmentList(null, $company_id, null);
 		foreach($deptList as $dept) {
 			$select_list[$dept['dept_id']] = $dept['dept_name'];
 		}

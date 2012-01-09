@@ -19,7 +19,7 @@ if ($obj) {
     $field = $obj;
     $field_id = $field->field_id;
 } else {
-    $field->load($AppUI, $field_id);
+    $field->load(null, $field_id);
 }
 $module = new w2p_Core_Module();
 $module->load($module_id);

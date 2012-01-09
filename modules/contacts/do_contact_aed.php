@@ -12,7 +12,7 @@ if (!$obj->bind($_POST)) {
 }
 
 $action = ($del) ? 'deleted' : 'stored';
-$result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
+$result = ($del) ? $obj->delete() : $obj->store();
 $redirect = ($del) ? 'm=contacts' : 'm=contacts&a=view&contact_id='.$obj->contact_id;
 
 if (is_array($result)) {
@@ -31,7 +31,7 @@ if ($result) {
 			$obj->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
 			$obj->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
 			$obj->contact_lastupdate = '';
-            $obj->store($AppUI);
+            $obj->store();
 			$obj->notify();
 		}
     }

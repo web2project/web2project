@@ -32,7 +32,7 @@ $types = w2Pgetsysval('TaskType');
 
 $project = new CProject();
 // load the record data
-$project->loadFull($AppUI, $project_id);
+$project->loadFull(null, $project_id);
 $obj = $project;
 if (!$project) {
 	$AppUI->setMsg('Project');

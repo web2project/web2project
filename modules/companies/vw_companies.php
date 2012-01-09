@@ -23,7 +23,7 @@ $company_type_filter = ($currentTabName == 'All Companies') ? -1 : $company_type
 $company = new CCompany();
 $allowedCompanies = $company->getAllowedRecords($AppUI->user_id, 'company_id, company_name');
 
-$companyList = $company->getCompanyList($AppUI, $company_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
+$companyList = $company->getCompanyList(null, $company_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
     <tr>

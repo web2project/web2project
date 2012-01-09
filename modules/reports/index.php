@@ -18,7 +18,7 @@ $projectObj = new CProject();
 $projectList = $projectObj->getAllowedProjects($AppUI->user_id, false);
 
 $company = new CCompany();
-$companyList = $company->getCompanies($AppUI);
+$companyList = $company->getCompanies();
 
 foreach ($projectList as $pr) {
     if ($pr['project_id'] == $project_id) {

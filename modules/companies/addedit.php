@@ -31,7 +31,7 @@ if ($obj) {
   $company = $obj;
   $company_id = $company->company_id;
 } else {
-  $company->loadFull($AppUI, $company_id);
+  $company->loadFull(null, $company_id);
 }
 
 if (!$company && $company_id > 0) {

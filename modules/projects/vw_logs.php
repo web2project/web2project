@@ -114,7 +114,7 @@ $canDelete = canDelete('task_log');
 // Pull the task comments
 $project = new CProject;
 //TODO: this method should be moved to CTaskLog
-$logs = $project->getTaskLogs($AppUI, $project_id, $user_id, $hide_inactive, $hide_complete, $cost_code);
+$logs = $project->getTaskLogs(null, $project_id, $user_id, $hide_inactive, $hide_complete, $cost_code);
 
 $s = '';
 $hrs = 0;

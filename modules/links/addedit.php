@@ -32,7 +32,7 @@ if ($obj) {
   $link = $obj;
   $link_id = $link->link_id;
 } else {
-  $link->loadFull($AppUI, $link_id);
+  $link->loadFull(null, $link_id);
 }
 if (!$link && $link_id > 0) {
     $AppUI->setMsg('Link');

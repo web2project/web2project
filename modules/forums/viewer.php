@@ -23,7 +23,7 @@ if (!$canRead) {
 }
 
 $forum = new CForum();
-$forum->loadFull($AppUI, $forum_id);
+$forum->loadFull(null, $forum_id);
 
 if (!$forum) {
 	$AppUI->setMsg('Forum');

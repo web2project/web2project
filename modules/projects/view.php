@@ -34,7 +34,7 @@ $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
 $billingCategory = w2PgetSysVal('BudgetCategory');
 
 // load the record data
-$project->loadFull($AppUI, $project_id);
+$project->loadFull(null, $project_id);
 
 if (!$project) {
 	$AppUI->setMsg('Project');

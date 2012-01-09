@@ -18,7 +18,7 @@ if (!$obj->bind($_POST)) {
 }
 
 $action = ($del) ? 'deleted' : 'stored';
-$result = ($del) ? $obj->delete($AppUI) : $obj->store($AppUI);
+$result = ($del) ? $obj->delete() : $obj->store();
 
 if (count($obj->getError())) {
     $AppUI->setMsg($result, UI_MSG_ERROR, true);

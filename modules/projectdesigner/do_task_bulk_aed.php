@@ -70,7 +70,7 @@ if (is_array($selected) && count($selected)) {
             if ($value != '' && ((int) $_POST[$name] == (int) $value)) {
                 if ($upd_task->task_id) {
                     $upd_task->{str_replace('bulk_', '', $name)} = $value;
-                    $result = $upd_task->store($AppUI);
+                    $result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
@@ -88,7 +88,7 @@ if (is_array($selected) && count($selected)) {
 				$end_date = new w2p_Utilities_Date($upd_task->task_end_date);
 				$end_date->addDays($offSet);
 				$upd_task->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
-				$result = $upd_task->store($AppUI);
+				$result = $upd_task->store();
                 if (is_array($result)) {
                     break;
                 }
@@ -99,7 +99,7 @@ if (is_array($selected) && count($selected)) {
 		if (isset($_POST['add_task_bulk_end_date']) && $bulk_task_end_date != '' && $bulk_end_date) {
 			if ($upd_task->task_id) {
 				$upd_task->task_end_date = $bulk_end_date;
-				$result = $upd_task->store($AppUI);
+				$result = $upd_task->store();
                 if (is_array($result)) {
                     break;
                 }
@@ -110,7 +110,7 @@ if (is_array($selected) && count($selected)) {
 		if (isset($_POST['add_task_bulk_start_date']) && $bulk_task_start_date != '' && $bulk_start_date) {
 			if ($upd_task->task_id) {
 				$upd_task->task_start_date = $bulk_start_date;
-				$result = $upd_task->store($AppUI);
+				$result = $upd_task->store();
                 if (is_array($result)) {
                     break;
                 }
@@ -123,7 +123,7 @@ if (is_array($selected) && count($selected)) {
 				$upd_task->task_duration = $bulk_task_duration;
 				//set duration type to hours (1)
 				$upd_task->task_duration_type = $bulk_task_durntype ? $bulk_task_durntype : 1;
-				$result = $upd_task->store($AppUI);
+				$result = $upd_task->store();
                 if (is_array($result)) {
                     break;
                 }
@@ -136,7 +136,7 @@ if (is_array($selected) && count($selected)) {
 				$upd_task->task_project = $bulk_task_project;
 				//Set parent to self task
 				$upd_task->task_parent = $key;
-				$result = $upd_task->store($AppUI);
+				$result = $upd_task->store();
                 if (is_array($result)) {
                     break;
                 }
@@ -149,14 +149,14 @@ if (is_array($selected) && count($selected)) {
 				//If parent is self task
 				if ($bulk_task_parent == '0') {
 					$upd_task->task_parent = $key;
-					$result = $upd_task->store($AppUI);
+					$result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
 					//if not, then the task will be child to the selected parent
 				} else {
 					$upd_task->task_parent = $bulk_task_parent;
-					$result = $upd_task->store($AppUI);
+					$result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
@@ -171,14 +171,14 @@ if (is_array($selected) && count($selected)) {
 				//print_r($bulk_task_dependency);die;
 				if ($bulk_task_dependency == '0') {
 					$upd_task->task_dynamic = 0;
-					$upd_task->store($AppUI);
+					$upd_task->store();
 					$q = new w2p_Database_Query;
 					$q->setDelete('task_dependencies');
 					$q->addWhere('dependencies_task_id=' . $upd_task->task_id);
 					$q->exec();
 				} elseif (!($bulk_task_dependency == $upd_task->task_id)) {
 					$upd_task->task_dynamic = 31;
-					$upd_task->store($AppUI);
+					$upd_task->store();
 					$q = new w2p_Database_Query;
 					$q->addTable('task_dependencies');
 					$q->addReplace('dependencies_task_id', $upd_task->task_id);
@@ -236,7 +236,7 @@ if (is_array($selected) && count($selected)) {
             $upd_task->load($key);
             if ($upd_task->task_id) {
                 $upd_task->task_allow_other_user_tasklogs = $bulk_task_allow_other_user_tasklogs;
-                $result = $upd_task->store($AppUI);
+                $result = $upd_task->store();
                 if (is_array($result)) {
                     break;
                 }
@@ -255,35 +255,35 @@ if (is_array($selected) && count($selected)) {
 						$end_date = new w2p_Utilities_Date();
 						$upd_task->task_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 					}
-					$result = $upd_task->store($AppUI);
+					$result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
 					//Option 2 - Mark as milestone
 				} elseif ($bulk_task_other == '2') {
 					$upd_task->task_milestone = 1;
-					$result = $upd_task->store($AppUI);
+					$result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
 					//Option 3 - Mark as non milestone
 				} elseif ($bulk_task_other == '3') {
 					$upd_task->task_milestone = 0;
-					$result = $upd_task->store($AppUI);
+					$result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
 					//Option 4 - Mark as dynamic
 				} elseif ($bulk_task_other == '4') {
 					$upd_task->task_dynamic = 1;
-					$result = $upd_task->store($AppUI);
+					$result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
 					//Option 5 - Mark as non dynamic
 				} elseif ($bulk_task_other == '5') {
 					$upd_task->task_dynamic = 0;
-					$result = $upd_task->store($AppUI);
+					$result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
@@ -296,27 +296,27 @@ if (is_array($selected) && count($selected)) {
 					//Option 8 - Mark as active
 				} elseif ($bulk_task_other == '8') {
 					$upd_task->task_status = '0';
-					$result = $upd_task->store($AppUI);
+					$result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
                     // Option 9 - Mark as inactive
                 } elseif ($bulk_task_other == '9') {
                     $upd_task->task_status = '-1';
-                    $result = $upd_task->store($AppUI);
+                    $result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
 					//Option 10 - Empty tasks description
 				} elseif ($bulk_task_other == '10') {
 					$upd_task->task_description = '';
-					$result = $upd_task->store($AppUI);
+					$result = $upd_task->store();
                     if (is_array($result)) {
                         break;
                     }
 					//Option 99 (always at the bottom) - Delete
 				} elseif ($bulk_task_other == '99') {
-					$result = $upd_task->delete($AppUI);
+					$result = $upd_task->delete();
                     if (is_array($result)) {
                         break;
                     }

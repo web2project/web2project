@@ -13,7 +13,7 @@ $pdo->pd_option_view_tasks = w2PgetParam($_POST, 'opt_view_tasks', 0);
 $pdo->pd_option_view_actions = w2PgetParam($_POST, 'opt_view_actions', 0);
 $pdo->pd_option_view_addtasks = w2PgetParam($_POST, 'opt_view_addtsks', 0);
 $pdo->pd_option_view_files = w2PgetParam($_POST, 'opt_view_files', 0);
-$pdo->store($AppUI);
+$pdo->store();
 
 $project_id = (int) w2PgetParam($_POST, 'project_id', 0);
 

@@ -16,7 +16,7 @@ if (isset($_GET['update_project_status']) && isset($_GET['project_status']) && i
 	foreach ($projects_id as $project_id) {
 		$project->load($project_id);
 		$project->project_status = $statusId;
-		$project->store($AppUI);
+		$project->store();
 	}
 }
 

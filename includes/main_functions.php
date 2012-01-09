@@ -178,7 +178,7 @@ function w2PgetConfig($key, $default = null) {
 			$obj = new w2p_Core_Config();
 			$obj->config_name = $key;
 			$obj->config_value = $default;
-			$obj->store($AppUI);
+			$obj->store();
 		}
 		return $default;
 	}

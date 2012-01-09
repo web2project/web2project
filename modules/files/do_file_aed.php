@@ -72,7 +72,7 @@ if ($duplicate) {
 		$AppUI->redirect();
 	} else {
 		$new_file->file_real_filename = $dup_realname;
-        $result = $new_file->store($AppUI);
+        $result = $new_file->store();
 
         if (count($new_file->getError())) {
 			$AppUI->setMsg($new_file->getError(), UI_MSG_ERROR);
@@ -86,7 +86,7 @@ if ($duplicate) {
 
 // delete the file
 if ($del) {
-	$result = $obj->delete($AppUI);
+	$result = $obj->delete();
 
     if (count($obj->getError())) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
@@ -148,7 +148,7 @@ if ($file_id && ($obj->file_project != $oldObj->file_project)) {
 	}
 }
 
-$result = $obj->store($AppUI);
+$result = $obj->store();
 
 if (count($obj->getError())) {
     $AppUI->setMsg($obj->getError(), UI_MSG_ERROR, true);

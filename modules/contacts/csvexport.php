@@ -52,7 +52,7 @@ foreach ($custom_fields as $f) {
 }
 $text .= sprintf("%s\r\n", "");
 
-$contactList = CContact::searchContacts($AppUI);
+$contactList = CContact::searchContacts();
 	
 foreach ($contactList as $contact) {
 	$myContact = new CContact();

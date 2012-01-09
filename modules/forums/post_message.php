@@ -19,7 +19,7 @@ if (!$canEdit && !$canAdd) {
 
 //Pull forum information
 $myForum = new CForum();
-$myForum->load($AppUI, $forum_id);
+$myForum->load(null, $forum_id);
 if (!$myForum) {
 	$AppUI->setMsg('Forum');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);

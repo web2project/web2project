@@ -30,7 +30,7 @@ if (is_array($st_projects_arr)) {
         $level = $project[1];
         if ($line['project_id']) {
             $s_project = new CProject();
-            $s_project->loadFull($AppUI, $line['project_id']);
+            $s_project->loadFull(null, $line['project_id']);
             $start_date = intval($s_project->project_start_date) ? new w2p_Utilities_Date($s_project->project_start_date) : null;
             $end_date = intval($s_project->project_end_date) ? new w2p_Utilities_Date($s_project->project_end_date) : null;
             $actual_end_date = intval($s_project->project_actual_end_date) ? new w2p_Utilities_Date($s_project->project_actual_end_date) : null;

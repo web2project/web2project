@@ -199,7 +199,7 @@ if (!is_array($projects) || 0 == count($projects)) {
 
             $task = new CTask();
             $orderBy = ($sortTasksByName) ? 'task_name' : 'task_end_date ASC';
-            $tasks = $task->getAllowedTaskList($AppUI, $p['project_id'], $orderBy);
+            $tasks = $task->getAllowedTaskList(null, $p['project_id'], $orderBy);
             $bestColor = bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000');
 
 			foreach ($tasks as $t) {

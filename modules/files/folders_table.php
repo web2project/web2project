@@ -48,7 +48,7 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 $file_types = w2PgetSysVal('FileType');
 
 $myFolder = new CFile_Folder();
-$xpg_totalrecs = $myFolder->getFileCountByFolder($AppUI, $folder_id, $task_id, $project_id, $company_id, $allowed_companies);
+$xpg_totalrecs = $myFolder->getFileCountByFolder(null, $folder_id, $task_id, $project_id, $company_id, $allowed_companies);
 ?>
 <script language="javascript" type="text/javascript">
 function expand(id){
@@ -178,7 +178,7 @@ function removeBulkComponent(li) {
     $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
 
     $project = new CProject();
-    $sprojects = $project->getAllowedProjects($AppUI, false);
+    $sprojects = $project->getAllowedProjects(null, false);
     foreach ($sprojects as $prj_id => $proj_info) {
         $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
     }

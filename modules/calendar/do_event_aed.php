@@ -24,14 +24,14 @@ $action = ($del) ? 'deleted' : 'stored';
 $clashRedirect = false;
 
 if ($del) {
-    $result = $obj->delete($AppUI);
+    $result = $obj->delete();
 } else {
     if ($_POST['event_assigned'] > '' && ($clash = $obj->checkClash($_POST['event_assigned']))) {
 		$last_a = $a;
 		$GLOBALS['a'] = "clash";
         $clashRedirect = true;
 	} else {
-        $result = $obj->store($AppUI);
+        $result = $obj->store();
         if (isset($_POST['event_assigned'])) {
             $obj->updateAssigned(explode(',', $_POST['event_assigned']));
         }

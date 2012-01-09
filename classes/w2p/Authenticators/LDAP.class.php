@@ -84,7 +84,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 								$hash_pass = MD5($password);
 								if($hash_pass != $tmpUser->user_password) {
 									$tmpUser->user_password = $hash_pass;
-									$tmpUser->store($AppUI);
+									$tmpUser->store();
 								}
 								return true;
 							} else {
@@ -146,7 +146,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
             $c->contact_email = $ldap_attribs['mail'][0];
             $c->contact_phone = $ldap_attribs['telephonenumber'][0];
             $c->contact_owner = $AppUI->user_id;
-            $c->store($AppUI);
+            $c->store();
             $contactArray = array('phone_mobile' => $ldap_attribs['mobile'][0]);
             $c->setContactMethods($contactArray);
 		}
@@ -157,7 +157,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
         $u->user_password = $hash_pass;
         $u->user_type = 0;              // Changed from 1 (administrator) to 0 (Default user)
         $u->user_contact = (int) $contact_id;
-        $u->store($AppUI);
+        $u->store();
         $user_id = $u->user_id;
 		$this->user_id = $user_id;
 

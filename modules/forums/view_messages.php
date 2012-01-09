@@ -9,7 +9,7 @@ $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
 $hideEmail = w2PgetConfig('hide_email_addresses', false);
 
 $forum = new CForum();
-$messages = $forum->getMessages($AppUI, $forum_id, $message_id, $sort);
+$messages = $forum->getMessages(null, $forum_id, $message_id, $sort);
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">

@@ -95,12 +95,12 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
     <?php
     //TODO: rotate the headers by 90 degrees?
     $task = new CTask();
-    $taskList = $task->getAllowedTaskList($AppUI, $project_id);
+    $taskList = $task->getAllowedTaskList(null, $project_id);
     $bcode = new bcode();
 
     if (count($taskList)) {
         foreach ($taskList as $taskItem) {
-            $task->loadFull($AppUI, $taskItem['task_id']);
+            $task->loadFull(null, $taskItem['task_id']);
             $costs = $bcode->calculateTaskCost($taskItem['task_id'],
                     $start_date->format(FMT_DATETIME_MYSQL),
                     $end_date->format(FMT_DATETIME_MYSQL));

@@ -15,7 +15,7 @@ if (!$canRead) {
 if ($contact_id) {
 
 	$contact = new CContact();
-	$contact->loadFull($AppUI, $contact_id);
+	$contact->loadFull(null, $contact_id);
     $contactMethods = $contact->getContactMethods();
 	
 	// include PEAR vCard class

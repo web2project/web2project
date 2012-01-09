@@ -85,7 +85,7 @@ switch ($table) {
 	  $task_project = (int) w2PgetParam($_GET, 'task_project', 0);
 
 	  $myTask = new CTask();
-	  $task_list = $myTask->getAllowedTaskList($AppUI, $task_project);
+	  $task_list = $myTask->getAllowedTaskList(null, $task_project);
 
       $level = 0;
       $query_result = array();

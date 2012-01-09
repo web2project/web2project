@@ -98,7 +98,7 @@ if ($isNewUser) {
 	}
 }
 
-$result = $contact->store($AppUI);
+$result = $contact->store();
 if ($result) {
     $user->user_contact = $contact->contact_id;
     if (($msg = $user->store(null, true))) {

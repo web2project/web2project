@@ -131,7 +131,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
 
     if (count($projectList)) {
         foreach ($projectList as $projectItem) {
-            $project->loadFull($AppUI, $projectItem['project_id']);
+            $project->loadFull(null, $projectItem['project_id']);
             $criticalTasks = $project->getCriticalTasks($projectItem['project_id']);
 
             $costs = $bcode->calculateProjectCost($projectItem['project_id'],

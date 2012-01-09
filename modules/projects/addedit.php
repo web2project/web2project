@@ -39,7 +39,7 @@ if ($obj) {
   $project = $obj;
   $project_id = $project->project_id;
 } else {
-  $project->loadFull($AppUI, $project_id);
+  $project->loadFull(null, $project_id);
 }
 if (!$project && $project_id > 0) {
 	$AppUI->setMsg('Project');

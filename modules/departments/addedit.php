@@ -34,7 +34,7 @@ if ($obj) {
   $department = $obj;
   $dept_id = $department->dept_id;
 } else {
-  $department->loadFull($AppUI, $dept_id);
+  $department->loadFull(null, $dept_id);
 }
 $companyName = $department->company_name;
 if (!$department && $dept_id > 0) {
@@ -61,9 +61,9 @@ if (!$department && $dept_id > 0) {
 	// collect all the departments in the company
 	if ($company_id) {
 		$company = new CCompany();
-    $company->loadFull($AppUI, $company_id);
+    $company->loadFull(null, $company_id);
     $companyName = $company->company_name;
-    $depts = $department->loadOtherDepts($AppUI, $company_id, 0);
+    $depts = $department->loadOtherDepts(null, $company_id, 0);
 		$depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Department') . ' -'), $depts);
 	}
 

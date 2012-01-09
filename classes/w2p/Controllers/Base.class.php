@@ -48,7 +48,7 @@ class w2p_Controllers_Base
         }
 
         $action = ($this->delete) ? 'deleted' : 'stored';
-        $this->success = ($this->delete) ? $this->object->delete($AppUI) : $this->object->store($AppUI);
+        $this->success = ($this->delete) ? $this->object->delete() : $this->object->store();
 
         if (is_array($this->success) || !$this->success) {
             $AppUI->holdObject($this->object);

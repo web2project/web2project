@@ -22,7 +22,7 @@ if ($obj) {
   $task = $obj;
   $task_id = $task->task_id;
 } else {
-  $task->loadFull($AppUI, $task_id);
+  $task->loadFull(null, $task_id);
 }
 if (!$task && $task_id > 0) {
 	$AppUI->setMsg('Task');
@@ -134,7 +134,7 @@ $titleBlock->show();
 $selected_contacts = array();
 
 if ($task_id) {
-	$myContacts = $task->getContacts($AppUI, $task_id);
+	$myContacts = $task->getContacts(null, $task_id);
 	$selected_contacts = array_keys($myContacts);
 }
 if ($task_id == 0 && $contact_id > 0) {
