@@ -3525,7 +3525,7 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 	$q = new w2p_Database_Query;
 	$q->addTable('users');
 	$q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
-		 company_name, contact_company, dept_id, dept_name, CONCAT(contact_first_name,\' \',contact_last_name) contact_name, user_type');
+		 company_name, contact_company, dept_id, dept_name, contact_display_name as contact_name, user_type');
 	$q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
 	if ($stub) {
 		$q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
