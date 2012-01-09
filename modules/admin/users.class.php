@@ -397,7 +397,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
         $q->addQuery('users.user_contact,users.user_id,co.contact_first_name,co.contact_last_name,co.contact_id');
         $q->addTable('users');
         $q->addJoin('contacts','co','co.contact_id = users.user_contact','inner');
-        $q->addWhere('users.user_contact = ' . $AppUI->user_id . ' or (' . getPermsWhereClause('companies', 'user_company') . ')' );
+        $q->addWhere('users.user_contact = ' . $AppUI->user_id);
         $q->addOrder('contact_first_name, contact_last_name');
         $result = $q->loadList();
         $retres = array();
