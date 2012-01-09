@@ -239,7 +239,6 @@ class CContact extends w2p_Core_BaseObject {
 		if ((int) $oid) {
 			// Check to see if there is a user
 			$q = $this->_getQuery();
-            $q->clear();
 			$q->addTable('users');
 			$q->addQuery('count(user_id) as user_count');
 			$q->addWhere('user_contact = ' . (int)$oid);
@@ -296,13 +295,9 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function getUpdateKey() {
+        $result = $this->loadAll('contact_id', 'contact_id = ' . (int)$this->contact_id);
 
-        $q = $this->_getQuery();
-		$q->addTable('contacts');
-		$q->addQuery('contact_updatekey');
-		$q->addWhere('contact_id = ' . (int)$this->contact_id);
-
-		return $q->loadResult();
+        return $result[$this->contact_id];
 	}
 
 	public function clearUpdateKey() {
