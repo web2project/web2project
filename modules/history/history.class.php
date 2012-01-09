@@ -22,12 +22,12 @@ class CHistory extends w2p_Core_BaseObject {
         parent::__construct('history', 'history_id');
     }
 
-    public function delete(w2p_Core_CAppUI $AppUI = null) {
+    public function delete() {
 
         return true;
     }
 
-    public function store(w2p_Core_CAppUI $AppUI = null) {
+    public function store() {
 
         return true;
     }

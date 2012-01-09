@@ -30,7 +30,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
         if ($this->_perms->checkModuleItem('files', 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
@@ -67,7 +67,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 	}
 
 
-    public function store(w2p_Core_CAppUI $AppUI = null) {
+    public function store() {
         $stored = false;
 
         $this->file_folder_id = (int) $this->file_folder_id;
@@ -122,7 +122,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return (int) $q->loadResult();
 	}
 
-    public function getFileCountByFolder(w2p_Core_CAppUI $AppUI = null, $folder_id,
+    public function getFileCountByFolder($AppUI = null, $folder_id,
             $task_id, $project_id, $company_id, $allowed_companies) {
 
         // SQL text for count the total recs from the selected option

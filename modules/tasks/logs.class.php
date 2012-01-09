@@ -171,7 +171,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @access public
 	 */
-	public function store(w2p_Core_CAppUI $AppUI = null)
+	public function store()
 	{
 		$this->_error = $this->check();
 
@@ -223,7 +223,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @access public
 	 */
-	public function delete(w2p_Core_CAppUI $AppUI = null)
+	public function delete()
 	{
         $this->_error = array();
 
@@ -249,7 +249,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @access private
 	 */
-	protected function updateTaskSummary(w2p_Core_CAppUI $AppUI = null, $task_id)
+	protected function updateTaskSummary($AppUI = null, $task_id)
 	{
         $q = $this->_getQuery();
 

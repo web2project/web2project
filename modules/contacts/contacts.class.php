@@ -49,7 +49,7 @@ class CContact extends w2p_Core_BaseObject {
         parent::__construct('contacts', 'contact_id');
 	}
 
-	public function loadFull(w2p_Core_CAppUI $AppUI = null, $contactId) {
+	public function loadFull($AppUI = null, $contactId) {
         $q = $this->_getQuery();
         $q->addTable('contacts');
         $q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
@@ -57,7 +57,7 @@ class CContact extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
 	}
 
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store() {
         $stored = false;
 
         $this->contact_company = (int) $this->contact_company;
@@ -200,7 +200,7 @@ class CContact extends w2p_Core_BaseObject {
 		return $results;
 	}
 
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
         //if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
@@ -382,7 +382,7 @@ class CContact extends w2p_Core_BaseObject {
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
 
-	public static function searchContacts(w2p_Core_CAppUI $AppUI = null, $where = '', $searchString = '', $days = 0) {
+	public static function searchContacts($AppUI = null, $where = '', $searchString = '', $days = 0) {
 		global $AppUI;
 
         $showfields = array('contact_address1' => 'contact_address1',

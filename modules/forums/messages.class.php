@@ -36,7 +36,7 @@ class CForum_Message extends w2p_Core_BaseObject {
         return $errorArray;
 	}
 
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store() {
         $stored = false;
 
         $this->_error = $this->check();
@@ -91,7 +91,7 @@ class CForum_Message extends w2p_Core_BaseObject {
         return $stored;
 	}
 
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
         $result = false;
 
 //TODO: this is an oddball permissions object where the module doesn't determine the access.. but another does?

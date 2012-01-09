@@ -39,7 +39,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
 		return $errorArray;
 	}
 
-	public function store(w2p_Core_CAppUI $AppUI = null, $externally_created_user = false) {
+	public function store($AppUI = null, $externally_created_user = false) {
         $stored = false;
 
         $this->_error = $this->check();
@@ -138,7 +138,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
 		return parent::canDelete($msg, $this->user_id, $tables);
     }
 
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
 
             $this->_perms->deleteLogin($this->user_id);

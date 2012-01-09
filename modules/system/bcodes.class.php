@@ -14,7 +14,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
 		parent::__construct('billingcode', 'billingcode_id');
 	}
 
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
         if ($this->_perms->checkModuleItem('system', 'delete')) {
             $q = $this->_getQuery();
             $q->addTable('billingcode');
@@ -29,7 +29,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
         return false;
 	}
 
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store() {
         $stored = false;
 
         $errorMsgArray = $this->check();

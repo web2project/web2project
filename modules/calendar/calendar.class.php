@@ -69,7 +69,7 @@ class CCalendar extends w2p_Core_BaseObject {
 	 *	@author caseydk
 	 *	@return true if it worked, false if it didn't
 	 */
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
@@ -526,7 +526,7 @@ class CCalendar extends w2p_Core_BaseObject {
 
 	}
 
-    public function store(w2p_Core_CAppUI $AppUI = null) {
+    public function store() {
         $stored = false;
 
         if (!$this->event_recurs) {

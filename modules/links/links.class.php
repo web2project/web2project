@@ -24,7 +24,7 @@ class CLink extends w2p_Core_BaseObject {
         parent::__construct('links', 'link_id');
     }
 
-    public function loadFull(w2p_Core_CAppUI $AppUI = null, $link_id) {
+    public function loadFull($AppUI = null, $link_id) {
 
         $q = $this->_getQuery();
         $q->addQuery('links.*');
@@ -41,7 +41,7 @@ class CLink extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
     }
 
-    public function getProjectTaskLinksByCategory(w2p_Core_CAppUI $AppUI = null, $project_id = 0, $task_id = 0, $category_id = 0, $search = '') {
+    public function getProjectTaskLinksByCategory($AppUI = null, $project_id = 0, $task_id = 0, $category_id = 0, $search = '') {
         // load the following classes to retrieved denied records
 
         $project = new CProject();
@@ -100,7 +100,7 @@ class CLink extends w2p_Core_BaseObject {
         return $errorArray;
     }
 
-    public function delete(w2p_Core_CAppUI $AppUI = null) {
+    public function delete() {
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
@@ -110,7 +110,7 @@ class CLink extends w2p_Core_BaseObject {
         return false;
     }
 
-    public function store(w2p_Core_CAppUI $AppUI = null) {
+    public function store() {
         $stored = false;
 
         if (strpos($this->link_url, ':') === false && strpos($this->link_url, "//") === false) {

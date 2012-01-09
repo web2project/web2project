@@ -47,7 +47,7 @@ class CForum extends w2p_Core_BaseObject {
         return $errorArray;
     }
 
-    public function getMessages(w2p_Core_CAppUI $AppUI = null, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
+    public function getMessages($AppUI = null, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
 
         $q = $this->_getQuery();
         $q->addTable('forums');
@@ -63,7 +63,7 @@ class CForum extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-    public function load(w2p_Core_CAppUI $AppUI = null, $forum_id) {
+    public function load($AppUI = null, $forum_id) {
 
         $q = $this->_getQuery();
         $q->addQuery('*');
@@ -72,7 +72,7 @@ class CForum extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
     }
 
-    public function loadFull(w2p_Core_CAppUI $AppUI = null, $forum_id) {
+    public function loadFull($AppUI = null, $forum_id) {
 
         $q = $this->_getQuery();
         $q->addTable('forums');
@@ -148,7 +148,7 @@ class CForum extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store() {
         $stored = false;
 
         $this->_error = $this->check();
@@ -175,7 +175,7 @@ class CForum extends w2p_Core_BaseObject {
         return $stored;
 	}
 
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_getQuery();
             $q->setDelete('forum_visits');

@@ -48,7 +48,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
         return $q->loadHashList('budget_id');
     }
 
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store() {
         $stored = false;
 
         $errorMsgArray = $this->check();
@@ -75,7 +75,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
         return $stored;
 	}
 
-    public function delete(w2p_Core_CAppUI $AppUI = null) {
+    public function delete() {
         $result = false;
 
         if ($this->_perms->checkModuleItem('system', 'edit')) {

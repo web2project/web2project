@@ -20,7 +20,7 @@ class CProjectDesigner extends w2p_Core_BaseObject {
         parent::__construct('project_designer_options', 'pd_option_id');
 	}
 
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store() {
         $q = $this->_getQuery();
 		$q->addTable('project_designer_options');
 		$q->addReplace('pd_option_user', $this->pd_option_user);

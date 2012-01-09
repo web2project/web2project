@@ -49,7 +49,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 		}
 	}
 
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store() {
         $stored = false;
 
         $this->w2PTrimAll();
@@ -89,7 +89,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 		return true;
 	}
 
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
         $q = $this->_getQuery();
 		if ($this->sysval_title) {
 			$q->setDelete('sysvals');

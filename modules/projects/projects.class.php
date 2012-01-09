@@ -129,7 +129,7 @@ class CProject extends w2p_Core_BaseObject {
         return $errorArray;
 	}
 
-	public function loadFull(w2p_Core_CAppUI $AppUI = null, $projectId) {
+	public function loadFull($AppUI = null, $projectId) {
 
         $q = $this->_getQuery();
 		$q->addTable('projects');
@@ -146,7 +146,7 @@ class CProject extends w2p_Core_BaseObject {
         $this->budget = $this->getBudget();
 	}
 
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
         $result = false;
 
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
@@ -510,7 +510,7 @@ class CProject extends w2p_Core_BaseObject {
         return true;
     }
 
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store() {
         $stored = false;
 
         $this->w2PTrimAll();
@@ -731,7 +731,7 @@ class CProject extends w2p_Core_BaseObject {
 		}
 	}
 
-	public static function getContacts(w2p_Core_CAppUI $AppUI = null, $projectId) {
+	public static function getContacts($AppUI = null, $projectId) {
 		trigger_error("CProject::getContacts has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getContactList() instead.", E_USER_NOTICE );
 
         $project = new CProject();
@@ -757,7 +757,7 @@ class CProject extends w2p_Core_BaseObject {
 		}
     }
 
-	public static function getDepartments(w2p_Core_CAppUI $AppUI = null, $projectId) {
+	public static function getDepartments($AppUI = null, $projectId) {
 		trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE );
 
         $project = new CProject();
@@ -767,7 +767,7 @@ class CProject extends w2p_Core_BaseObject {
         return $project->getDepartmentList();
 	}
 
-	public static function getForums(w2p_Core_CAppUI $AppUI = null, $projectId) {
+	public static function getForums($AppUI = null, $projectId) {
 		global $AppUI;
 
 		if ($AppUI->isActiveModule('forums') && canView('forums')) {
@@ -832,7 +832,7 @@ class CProject extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 
-	public static function updateStatus(w2p_Core_CAppUI $AppUI = null, $projectId, $statusId) {
+	public static function updateStatus($AppUI = null, $projectId, $statusId) {
 		trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE );
 
         global $AppUI;
@@ -970,7 +970,7 @@ class CProject extends w2p_Core_BaseObject {
 	}
 
 //TODO: this method should be moved to CTaskLog
-	public function getTaskLogs(w2p_Core_CAppUI $AppUI = null, $projectId, $user_id = 0,
+	public function getTaskLogs($AppUI = null, $projectId, $user_id = 0,
             $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
 
         $q = $this->_getQuery();

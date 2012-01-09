@@ -296,7 +296,7 @@ class CTask extends w2p_Core_BaseObject {
         return parent::load($oid, $strip);
 	}
 
-	public function loadFull(w2p_Core_CAppUI $AppUI = null, $taskId) {
+	public function loadFull($AppUI = null, $taskId) {
         $q = $this->_getQuery();
         $q->addTable('tasks');
         $q->leftJoin('users', 'u1', 'u1.user_id = task_owner', 'outer');
@@ -552,7 +552,7 @@ class CTask extends w2p_Core_BaseObject {
 	/**
 	 * @todo Parent store could be partially used
 	 */
-	public function store(w2p_Core_CAppUI $AppUI = null) {
+	public function store() {
         $stored = false;
 
 		$this->w2PTrimAll();
@@ -771,7 +771,7 @@ class CTask extends w2p_Core_BaseObject {
 	 * @todo Parent store could be partially used
 	 * @todo Can't delete a task with children
 	 */
-	public function delete(w2p_Core_CAppUI $AppUI = null) {
+	public function delete() {
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             //load it before deleting it because we need info on it to update the parents later on
             $this->load($this->task_id);
@@ -1704,7 +1704,7 @@ class CTask extends w2p_Core_BaseObject {
 
 		return $q->loadHashList('dependencies_task_id');
 	}
-	public function getTaskDepartments(w2p_Core_CAppUI $AppUI = null, $taskId) {
+	public function getTaskDepartments($AppUI = null, $taskId) {
         if ($this->_AppUI->isActiveModule('departments')) {
 			$q = $this->_getQuery();
 			$q->addTable('departments', 'd');
@@ -1719,7 +1719,7 @@ class CTask extends w2p_Core_BaseObject {
 			return $q->loadHashList('dept_id');
 		}
 	}
-    public function getContacts(w2p_Core_CAppUI $AppUI = null, $task_id) {
+    public function getContacts($AppUI = null, $task_id) {
 		if (canView('contacts')) {
 			$q = $this->_getQuery();
 			$q->addTable('contacts', 'c');
@@ -1742,7 +1742,7 @@ class CTask extends w2p_Core_BaseObject {
 			return $q->loadHashList('contact_id');
 		}
     }
-	public function getTaskContacts(w2p_Core_CAppUI $AppUI = null, $task_id) {
+	public function getTaskContacts($AppUI = null, $task_id) {
         return $this->getContacts($this->_AppUI, $task_id);
 	}
 

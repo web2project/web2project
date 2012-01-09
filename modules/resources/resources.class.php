@@ -64,7 +64,7 @@ class CResource extends w2p_Core_BaseObject {
 		return $result;
 	}
 
-    public function store(w2p_Core_CAppUI $AppUI = null) {
+    public function store() {
         $stored = false;
 
         $this->_error = $this->check();
@@ -90,7 +90,7 @@ class CResource extends w2p_Core_BaseObject {
         return $stored;
     }
 
-    public function delete(w2p_Core_CAppUI $AppUI = null) {
+    public function delete() {
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
