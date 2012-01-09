@@ -35,8 +35,7 @@ if ($result) {
 			$obj->notify();
 		}
     }
-
-    $AppUI->redirect($redirect);
 } else {
-    $AppUI->redirect('m=public&a=access_denied');
+    $redirect = 'm=public&a=access_denied';
 }
+$AppUI->redirect($redirect);

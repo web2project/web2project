@@ -20,11 +20,10 @@ if ($del) {
 	if ($obj->del_acl($_POST['permission_id'])) {
 		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
 		$obj->recalcPermissions(null, $_POST['permission_user']);
-		$AppUI->redirect();
 	} else {
 		$AppUI->setMsg($msg, UI_MSG_ERROR);
-		$AppUI->redirect();
 	}
+    $AppUI->redirect();
 } else {
 	if ($obj->addUserPermission()) {
 		$AppUI->setMsg($isNotNew ? 'updated' : 'added', UI_MSG_OK, true);

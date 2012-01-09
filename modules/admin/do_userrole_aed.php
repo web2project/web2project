@@ -29,11 +29,10 @@ if ($user_id) {
 if ($del) {
 	if ($perms->deleteUserRole(w2PgetParam($_POST, 'role_id', 0), w2PgetParam($_POST, 'user_id', 0))) {
 		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
-		$AppUI->redirect();
 	} else {
 		$AppUI->setMsg('failed to delete role', UI_MSG_ERROR);
-		$AppUI->redirect();
 	}
+    $AppUI->redirect();
 	return;
 }
 
@@ -43,9 +42,8 @@ if (isset($_POST['user_role']) && $_POST['user_role']) {
             notifyNewUser($contact->contact_email, $contact->contact_first_name);
 		}
 		$AppUI->setMsg('added', UI_MSG_ALERT, true);
-		$AppUI->redirect();
 	} else {
 		$AppUI->setMsg('failed to add role', UI_MSG_ERROR);
-		$AppUI->redirect();
 	}
+    $AppUI->redirect();
 }

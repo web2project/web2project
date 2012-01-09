@@ -76,11 +76,10 @@ if ($duplicate) {
 
         if (count($new_file->getError())) {
 			$AppUI->setMsg($new_file->getError(), UI_MSG_ERROR);
-			$AppUI->redirect($redirect);
 		} else {
 			$AppUI->setMsg('duplicated', UI_MSG_OK, true);
-			$AppUI->redirect($redirect);
 		}
+        $AppUI->redirect($redirect);
 	}
 }
 
