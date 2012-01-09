@@ -242,9 +242,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
 	public function getIdByContactId($contactId) {
         $users = $this->loadAll('user_id', 'user_contact = '.(int) $contactId);
 
-        foreach ($users as $id => $user) {
-            return $user['user_id'];
-        }
+        return (string) $users[$contactId]['user_id'];
 	}
 
 	/*

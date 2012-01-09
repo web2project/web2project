@@ -147,7 +147,7 @@ class CAdmin_Users_Test extends CommonSetup
     }
 
     public function testGetIdByContactId() {
-
+        // Don't load a hashlist so the lookup fails
         $result = $this->obj->getIdByContactId(1);
         $this->assertEquals('',                     $result);
 
@@ -155,6 +155,16 @@ class CAdmin_Users_Test extends CommonSetup
         $this->mockDB->stageHashList(1, $this->post_data);
         $result = $this->obj->getIdByContactId(1);
         $this->assertEquals(1,                      $result);
+    }
+
+    public function testValidatePassword() {
+        // Don't load a dataset so the validation fails.
+        $result = $this->obj->validatePassword(1, 'password');
+        $this->assertFalse($result);
+
+        $this->mockDB->stageResult(1);
+        $result = $this->obj->validatePassword(1, 'password');
+        $this->assertTrue($result);
     }
 
     /*
@@ -177,5 +187,4 @@ class CAdmin_Users_Test extends CommonSetup
     public function testGetAllowedRecords() {       $this->markTestIncomplete(); }
     public function testGetFullUserName() {         $this->markTestIncomplete(); }
     public function testLoadFull() {                $this->markTestIncomplete(); }
-    public function testValidatePassword() {        $this->markTestIncomplete(); }
 }
