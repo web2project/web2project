@@ -467,14 +467,18 @@ class CCompanies_Test extends CommonSetup
         );
     }
 
-    /**
-     * @todo Implement testGetCompanies().
-     */
     public function testGetCompanies() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+
+        $results = $this->obj->getCompanies();
+        $this->assertEquals(0,                  count($results));
+
+        $this->mockDB->stageHashList(1, array('company_id' => 1, 'company_name' => 'First Company'));
+        $this->mockDB->stageHashList(2, array('company_id' => 2, 'company_name' => 'Second Company'));
+        $results = $this->obj->getCompanies();
+
+        $this->assertEquals(2,                  count($results));
+        $this->assertEquals('First Company',    $results[1]['company_name']);
+        $this->assertEquals('Second Company',   $results[2]['company_name']);
     }
 
     /**

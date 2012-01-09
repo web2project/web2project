@@ -182,17 +182,11 @@ class CCompany extends w2p_Core_BaseObject {
   	return $q->loadList();
   }
 
-  public function getCompanies() {
+    public function getCompanies() {
+        $where = $this->getAllowedSQL($this->_AppUI->user_id, 'company_id');
 
-    $q = $this->_getQuery();
-  	$q->addTable('companies');
-  	$q->addQuery('company_id, company_name');
-
-  	$where = $this->getAllowedSQL($this->_AppUI->user_id, 'company_id');
-  	$q->addWhere($where);
-
-  	return $q->loadHashList('company_id');
-  }
+        return $this->loadAll('company_id', $where);
+    }
 
 	public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name') {
 		$fields = 'DISTINCT pr.project_id, project_name, project_start_date, ' .
