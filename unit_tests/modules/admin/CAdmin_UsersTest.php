@@ -162,7 +162,7 @@ class CAdmin_Users_Test extends CommonSetup
         $result = $this->obj->validatePassword(1, 'password');
         $this->assertFalse($result);
 
-        $this->mockDB->stageResult(1);
+        $this->mockDB->stageHashList(1, $this->post_data);
         $result = $this->obj->validatePassword(1, 'password');
         $this->assertTrue($result);
     }

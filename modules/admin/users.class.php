@@ -89,7 +89,6 @@ class CAdmin_User extends w2p_Core_BaseObject {
         $this->_perms->{$this->perm_func}($this->user_id, $this->user_username);
 
         $q = $this->_getQuery();
-        $q->clear();
         //Lets check if the user has allready default users preferences set, if not insert the default ones
         $q->addTable('user_preferences', 'upr');
         $q->addWhere('upr.pref_user = ' . $this->user_id);
@@ -211,13 +210,9 @@ class CAdmin_User extends w2p_Core_BaseObject {
     }
 
 	public function validatePassword($userId, $password) {
-		$q = $this->_getQuery();
-		$q->addTable('users');
-		$q->addQuery('user_id');
-		$q->addWhere('user_password = \'' . md5($password) . '\'');
-		$q->addWhere('user_id = ' . (int) $userId);
+        $users = $this->loadAll('user_id', 'user_password = \'' . md5($password) . '\' AND user_id = ' . (int) $userId);
 
-		return ($q->loadResult() == $userId);
+        return isset($users[$userId]);
 	}
 
 	public function getIdByToken($token) {
