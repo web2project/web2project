@@ -128,25 +128,42 @@ class CAdmin_Users_Test extends CommonSetup
         $result = $contact->store();
 
         $this->assertTrue($result);
-        $this->assertNotEquals(0,                 $contact->contact_id);
+        $this->assertNotEquals(0,                   $contact->contact_id);
 
         $this->obj->user_contact = $contact->contact_id;
         $result = $this->obj->store();
 
         $this->assertTrue($result);
-        $this->assertNotEquals(0,                 $this->obj->user_id);
+        $this->assertNotEquals(0,                   $this->obj->user_id);
+    }
+
+    public function testExists() {
+        $result = $this->obj->user_exists('admin');
+        $this->assertFalse($result);
+
+        $this->mockDB->stageHashList(1, $this->post_data);
+        $result = $this->obj->user_exists('myusername');
+        $this->assertTrue($result);
+    }
+
+    public function testGetIdByContactId() {
+
+        $result = $this->obj->getIdByContactId(1);
+        $this->assertEquals('',                     $result);
+
+        $this->mockDB->stageResult(1);
+        $result = $this->obj->getIdByContactId(1);
+        $this->assertEquals(1,                      $result);
     }
 
     /*
      * These tests are all marked as Skipped because we don't have a way of
      *   testing the static methods without hitting the database.
      */
-    public function testExists() {                  $this->markTestSkipped(); }
     public function testGenerateUserToken() {       $this->markTestSkipped(); }
     public function testGetFirstLetters() {         $this->markTestSkipped(); }
     public function testGetLogs() {                 $this->markTestSkipped(); }
     public function testGetUserDeptId() {           $this->markTestSkipped(); }
-    public function testGetUserIdByContactID() {    $this->markTestSkipped(); }
     public function testGetUserIdByToken() {        $this->markTestSkipped(); }
     public function testGetUserList() {             $this->markTestSkipped(); }
     public function testIsUserActive() {            $this->markTestSkipped(); }
