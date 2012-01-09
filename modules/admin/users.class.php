@@ -31,7 +31,7 @@ class CAdmin_User extends w2p_Core_BaseObject {
 		if (!$this->user_id && '' == trim($this->user_password)) {
             $errorArray['user_password'] = $baseErrorMsg . 'user password is not set';
 		}
-        if (!$this->user_id && CAdmin_User::exists($this->user_username)) {
+        if (!$this->user_id && $this->user_exists($this->user_username)) {
             $errorArray['user_exists'] = $baseErrorMsg . 'this user already exists';
         }
 
@@ -240,14 +240,13 @@ class CAdmin_User extends w2p_Core_BaseObject {
 	}
 
 	public function getIdByContactId($contactId) {
-        $q = $this->_getQuery();
-		$q->addQuery('user_id');
-		$q->addTable('users');
-		$q->addWhere('user_contact = '.(int) $contactId);
-		$userId = $q->loadResult();
+        $users = $this->loadAll('user_id', 'user_contact = '.(int) $contactId);
 
-		return $userId;
+        foreach ($users as $id => $user) {
+            return $user['user_id'];
+        }
 	}
+
 	/*
 	 * @deprecated
 	 */
@@ -298,15 +297,17 @@ class CAdmin_User extends w2p_Core_BaseObject {
 		return strtoupper($letters);
 	}
 
+    public function user_exists($username) {
+        $users = $this->loadAll('user_id', "user_username = '$username'");
+
+        return (count($users) > 0) ? true : false;
+    }
+
 	public static function exists($username) {
+        trigger_error("CAdmin_User::exists has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->user_exists() instead.", E_USER_NOTICE );
 
-        $q = new w2p_Database_Query();
-		$q->addTable('users', 'u');
-		$q->addQuery('user_username');
-		$q->addWhere("user_username = '$username'");
-		$users = $q->loadList();
-
-		return (count($users) > 0) ? true : false;
+        $user = new CAdmin_User();
+        return $user->user_exists($username);
 	}
 
 	public function getDeptId($userId) {

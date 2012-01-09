@@ -142,7 +142,7 @@ class CAdmin_Users_Test extends CommonSetup
         $this->assertFalse($result);
 
         $this->mockDB->stageHashList(1, $this->post_data);
-        $result = $this->obj->user_exists('myusername');
+        $result = $this->obj->user_exists('admin');
         $this->assertTrue($result);
     }
 
@@ -151,7 +151,8 @@ class CAdmin_Users_Test extends CommonSetup
         $result = $this->obj->getIdByContactId(1);
         $this->assertEquals('',                     $result);
 
-        $this->mockDB->stageResult(1);
+        $this->post_data['user_id'] = 1;
+        $this->mockDB->stageHashList(1, $this->post_data);
         $result = $this->obj->getIdByContactId(1);
         $this->assertEquals(1,                      $result);
     }
