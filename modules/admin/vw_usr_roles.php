@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $perms = &$AppUI->acl();
 $user_roles = $perms->getUserRoles($user_id);
-$crole = new CRole;
+$crole = new CSystem_Role;
 $roles = $crole->getRoles();
 // Format the roles for use in arraySelect
 $roles_arr = array();

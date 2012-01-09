@@ -12,7 +12,7 @@ if (!canEdit('roles')) {
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $copy_role_id = w2PgetParam($_POST, 'copy_role_id', null);
 
-$role = new CRole();
+$role = new CSystem_Role();
 
 if (($msg = $role->bind($_POST))) {
 	$AppUI->setMsg($msg, UI_MSG_ERROR);
