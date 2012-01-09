@@ -123,64 +123,63 @@ class CCompany extends w2p_Core_BaseObject {
         parent::hook_postStore();
     }
 
-  public function hook_search()
-  {
-    $search['table'] = 'companies';
-    $search['table_module'] = $search['table'];
-    $search['table_key'] = 'company_id';
-    $search['table_link'] = 'index.php?m=companies&a=view&company_id=';
-    $search['table_title'] = 'Companies';
-    $search['table_orderby'] = 'company_name';
-    $search['search_fields'] = array('company_name', 'company_address1',
-        'company_address2', 'company_city', 'company_state', 'company_zip',
-        'company_primary_url', 'company_description', 'company_email');
-    $search['display_fields'] = $search['search_fields'];
+    public function hook_search() {
+        $search['table'] = 'companies';
+        $search['table_module'] = $search['table'];
+        $search['table_key'] = 'company_id';
+        $search['table_link'] = 'index.php?m=companies&a=view&company_id=';
+        $search['table_title'] = 'Companies';
+        $search['table_orderby'] = 'company_name';
+        $search['search_fields'] = array('company_name', 'company_address1',
+            'company_address2', 'company_city', 'company_state', 'company_zip',
+            'company_primary_url', 'company_description', 'company_email');
+        $search['display_fields'] = $search['search_fields'];
 
-    return $search;
-  }
+        return $search;
+    }
 
-  public function loadFull($AppUI = null, $companyId) {
-    $q = $this->_getQuery();
-    $q->addTable('companies');
-    $q->addQuery('companies.*');
-    $q->addQuery('con.contact_first_name');
-    $q->addQuery('con.contact_last_name');
-    $q->addQuery('con.contact_display_name as contact_name');
-    $q->leftJoin('users', 'u', 'u.user_id = companies.company_owner');
-    $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-    $q->addWhere('companies.company_id = ' . (int) $companyId);
+    public function loadFull($AppUI = null, $companyId) {
+        $q = $this->_getQuery();
+        $q->addTable('companies');
+        $q->addQuery('companies.*');
+        $q->addQuery('con.contact_first_name');
+        $q->addQuery('con.contact_last_name');
+        $q->addQuery('con.contact_display_name as contact_name');
+        $q->leftJoin('users', 'u', 'u.user_id = companies.company_owner');
+        $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+        $q->addWhere('companies.company_id = ' . (int) $companyId);
 
-    $q->loadObject($this, true, false);
-  }
+        $q->loadObject($this, true, false);
+    }
 
-  public function getCompanyList($AppUI = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
+    public function getCompanyList($AppUI = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
 
-    $q = $this->_getQuery();
-  	$q->addTable('companies', 'c');
-  	$q->addQuery('c.company_id, c.company_name, c.company_type, c.company_description, count(distinct p.project_id) as countp,
+        $q = $this->_getQuery();
+        $q->addTable('companies', 'c');
+        $q->addQuery('c.company_id, c.company_name, c.company_type, c.company_description, count(distinct p.project_id) as countp,
         count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name, con.contact_display_name');
-  	$q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
-  	$q->addJoin('users', 'u', 'c.company_owner = u.user_id');
-  	$q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-  	$q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
+        $q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
+        $q->addJoin('users', 'u', 'c.company_owner = u.user_id');
+        $q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+        $q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
 
-  	$where = $this->getAllowedSQL($this->_AppUI->user_id, 'c.company_id');
-  	$q->addWhere($where);
+        $where = $this->getAllowedSQL($this->_AppUI->user_id, 'c.company_id');
+        $q->addWhere($where);
 
-  	if ($companyType > -1) {
-  		$q->addWhere('c.company_type = ' . (int) $companyType);
-  	}
-  	if ($searchString != '') {
-  		$q->addWhere('c.company_name LIKE "%'.$searchString.'%"');
-  	}
-  	if ($ownerId > 0) {
-  		$q->addWhere('c.company_owner = '.$ownerId);
-  	}
-  	$q->addGroup('c.company_id');
-  	$q->addOrder($orderby . ' ' . $orderdir);
+        if ($companyType > -1) {
+        $q->addWhere('c.company_type = ' . (int) $companyType);
+        }
+        if ($searchString != '') {
+        $q->addWhere('c.company_name LIKE "%'.$searchString.'%"');
+        }
+        if ($ownerId > 0) {
+        $q->addWhere('c.company_owner = '.$ownerId);
+        }
+        $q->addGroup('c.company_id');
+        $q->addOrder($orderby . ' ' . $orderdir);
 
-  	return $q->loadList();
-  }
+        return $q->loadList();
+    }
 
     public function getCompanies() {
         $where = $this->getAllowedSQL($this->_AppUI->user_id, 'company_id');
