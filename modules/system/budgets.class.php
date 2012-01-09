@@ -49,7 +49,6 @@ class CSystem_Budget extends w2p_Core_BaseObject
     }
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $errorMsgArray = $this->check();
@@ -67,7 +66,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
             $this->budget_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
 
-        if ($perms->checkModuleItem('system', 'edit')) {
+        if ($this->_perms->checkModuleItem('system', 'edit')) {
             if (($msg = parent::store())) {
                 return $msg;
             }
@@ -77,10 +76,9 @@ class CSystem_Budget extends w2p_Core_BaseObject
 	}
 
     public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
         $result = false;
 
-        if ($perms->checkModuleItem('system', 'edit')) {
+        if ($this->_perms->checkModuleItem('system', 'edit')) {
             if ($msg = parent::delete()) {
                 return $result;
             }

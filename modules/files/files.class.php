@@ -39,7 +39,6 @@ class CFile extends w2p_Core_BaseObject {
 	public function store(w2p_Core_CAppUI $AppUI = null) {
         global $helpdesk_available;
 
-        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -52,7 +51,7 @@ class CFile extends w2p_Core_BaseObject {
             $this->addHelpDeskTaskLog();
         }
 
-        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user.
             // If not then we are just editing the file information alone. So we should leave the file_id as it is.
             $this->file_parent = $this->file_id;
@@ -66,7 +65,7 @@ class CFile extends w2p_Core_BaseObject {
                 $stored = true;
             }
         }
-        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
             $this->file_owner = $this->_AppUI->user_id;
             $q = $this->_getQuery();
             $q->clear();
@@ -257,10 +256,9 @@ class CFile extends w2p_Core_BaseObject {
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
         global $helpdesk_available;
 
-        $perms = $this->_AppUI->acl();
         $this->_error = array();
 
-        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             // remove the file from the file system
             if (!$this->deleteFile()) {
                 $this->_error['file-delete'] = 'file-delete';
@@ -292,13 +290,11 @@ class CFile extends w2p_Core_BaseObject {
 
 	// delete File from File System
 	public function deleteFile(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
-
         if ('' == $this->file_real_filename ||
                 !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
             return true;
         }
-        if ($perms->checkModuleItem('files', 'delete', $this->file_id)) {
+        if ($this->_perms->checkModuleItem('files', 'delete', $this->file_id)) {
             return @unlink(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename);
         }
 	}

@@ -173,8 +173,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	public function store(w2p_Core_CAppUI $AppUI = null)
 	{
-		$perms = $this->_AppUI->acl();
-
 		$this->_error = $this->check();
 
 		if (count($this->_error)) {
@@ -196,7 +194,7 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->task_log_hours = $this->task_log_hours;
 		$this->task_log_costcode = cleanText($this->task_log_costcode);
 
-        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store-check'] = $msg;
             } else {
@@ -204,7 +202,7 @@ class CTask_Log extends w2p_Core_BaseObject
                 $this->updateTaskSummary($this->_AppUI, $this->task_log_task);
             }
 		}
-        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
 			$this->task_log_created = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 $this->_error['store-check'] = $msg;
@@ -227,13 +225,12 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	public function delete(w2p_Core_CAppUI $AppUI = null)
 	{
-		$perms = $this->_AppUI->acl();
         $this->_error = array();
 
 		$this->load($this->task_log_id);
 		$task_id = $this->task_log_task;
 
-        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
 			if ($msg = parent::delete()) {
 				return $msg;
 			}
@@ -254,10 +251,9 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	protected function updateTaskSummary(w2p_Core_CAppUI $AppUI = null, $task_id)
 	{
-        $perms = $this->_AppUI->acl();
         $q = $this->_getQuery();
 
-        if($perms->checkModuleItem('tasks', 'edit', $task_id)) {
+        if($this->_perms->checkModuleItem('tasks', 'edit', $task_id)) {
             if ($this->task_log_percent_complete < 100) {
                 $q->addQuery('task_log_percent_complete, task_log_date');
                 $q->addTable('task_log');

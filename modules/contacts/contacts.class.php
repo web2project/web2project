@@ -58,7 +58,6 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->contact_company = (int) $this->contact_company;
@@ -97,8 +96,8 @@ class CContact extends w2p_Core_BaseObject {
          *   don't have a good idea on how to fix it at the moment...
          */
 //TODO: There is something wrong with this permissions check..
-        //if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
-        if ($this->contact_id) {// && $perms->checkModuleItem('contacts', 'edit', $this->contact_id)) {
+        //if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->contact_id) {// && $this->_perms->checkModuleItem('contacts', 'edit', $this->contact_id)) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
@@ -106,8 +105,8 @@ class CContact extends w2p_Core_BaseObject {
             }
         }
 //TODO: There is something wrong with this permissions check..
-        //if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
-        if (0 == $this->contact_id) {// && $perms->checkModuleItem('contacts', 'add')) {
+        //if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->contact_id) {// && $this->_perms->checkModuleItem('contacts', 'add')) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
@@ -202,9 +201,7 @@ class CContact extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
-
-        //if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        //if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
             }

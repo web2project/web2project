@@ -451,8 +451,7 @@ unset($this->_error['store']);
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getDeniedRecords failed, user id = 0');
 
-		$perms = &$GLOBALS['AppUI']->acl();
-		return $perms->getDeniedItems($this->_tbl_module, $uid);
+		return $this->_perms->getDeniedItems($this->_tbl_module, $uid);
 	}
 
 	/**
@@ -467,11 +466,10 @@ unset($this->_error['store']);
 	// returns a list of records exposed to the user
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
 	{
-		$perms = &$GLOBALS['AppUI']->acl();
 		$uid = intval($uid);
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
-		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
-		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
+		$deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
+		$allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
 
 		$q = $this->_getQuery();
 		$q->addQuery($fields);
@@ -520,11 +518,10 @@ unset($this->_error['store']);
 	}
 
 	public function getAllowedSQL($uid, $index = null) {
-        $perms = $this->_AppUI->acl();
         $uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
-		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
-		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
+		$deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
+		$allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
 
 		if (!isset($index)) {
 			$index = $this->_tbl_key;
@@ -557,11 +554,10 @@ unset($this->_error['store']);
 	}
 
 	public function setAllowedSQL($uid, $query, $index = null, $key = null) {
-        $perms = $this->_AppUI->acl();
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
-		$deny = &$perms->getDeniedItems($this->_tbl_module, $uid);
-		$allow = &$perms->getAllowedItems($this->_tbl_module, $uid);
+		$deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
+		$allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
 		// Make sure that we add the table otherwise dependencies break
 		if (isset($index)) {
 			if (!$key) {

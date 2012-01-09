@@ -121,7 +121,6 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -130,14 +129,14 @@ class CDepartment extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        if ($this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
 		}
-        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
@@ -148,9 +147,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
-
-        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_getQuery();
             $q->addTable('departments', 'dep');
             $q->addQuery('dep.dept_id');
@@ -193,11 +190,10 @@ class CDepartment extends w2p_Core_BaseObject {
 	// returns a list of records exposed to the user
 //TODO: this modifies the core $_query property
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
-        $perms = $this->_AppUI->acl();
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
-		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
-		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
+		$deny = $this->_perms->getDeniedItems($this->_tbl, $uid);
+		$allow = $this->_perms->getAllowedItems($this->_tbl, $uid);
 
 		$q = $this->_getQuery();
 		$q->addQuery($fields);
@@ -244,11 +240,10 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function getAllowedSQL($uid, $index = null) {
-        $perms = $this->_AppUI->acl();
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
-		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
-		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
+		$deny = $this->_perms->getDeniedItems($this->_tbl, $uid);
+		$allow = $this->_perms->getAllowedItems($this->_tbl, $uid);
 
 		if (!isset($index)) {
 			$index = $this->_tbl_key;
@@ -281,11 +276,10 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
-        $perms = $this->_AppUI->acl();
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
-		$deny = &$perms->getDeniedItems($this->_tbl, $uid);
-		$allow = &$perms->getAllowedItems($this->_tbl, $uid);
+		$deny = $this->_perms->getDeniedItems($this->_tbl, $uid);
+		$allow = $this->_perms->getAllowedItems($this->_tbl, $uid);
 		// Make sure that we add the table otherwise dependencies break
 		if (isset($index)) {
 			if (!$key) {

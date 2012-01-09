@@ -31,10 +31,8 @@ class CFile_Folder extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
-
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
-        if ($perms->checkModuleItem('files', 'delete', $this->{$this->_tbl_key})) {
+        if ($this->_perms->checkModuleItem('files', 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
             }
@@ -70,7 +68,6 @@ class CFile_Folder extends w2p_Core_BaseObject {
 
 
     public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->file_folder_id = (int) $this->file_folder_id;
@@ -87,14 +84,14 @@ class CFile_Folder extends w2p_Core_BaseObject {
          *   don't have a good idea on how to fix it at the moment...
          */
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
-        if ($this->{$this->_tbl_key} && $perms->checkModuleItem('files', 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem('files', 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
         }
-        if (0 == $this->{$this->_tbl_key} && $perms->checkModuleItem('files', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem('files', 'add')) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {

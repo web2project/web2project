@@ -65,7 +65,6 @@ class CResource extends w2p_Core_BaseObject {
 	}
 
     public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -75,14 +74,14 @@ class CResource extends w2p_Core_BaseObject {
         }
 
         $q = $this->_getQuery();
-        if ($this->resource_id && $perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->resource_id && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
 
             if (($msg = parent::store())) {
                 return $msg;
             }
             $stored = true;
         }
-        if (0 == $this->resource_id && $perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->resource_id && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
                 return $msg;
             }
@@ -92,10 +91,7 @@ class CResource extends w2p_Core_BaseObject {
     }
 
     public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
-        $this->_error = array();
-
-        if ($perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
             }

@@ -15,9 +15,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
 	}
 
 	public function delete(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
-
-        if ($perms->checkModuleItem('system', 'delete')) {
+        if ($this->_perms->checkModuleItem('system', 'delete')) {
             $q = $this->_getQuery();
             $q->addTable('billingcode');
             $q->addUpdate('billingcode_status', '1');
@@ -32,7 +30,6 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
 	}
 
 	public function store(w2p_Core_CAppUI $AppUI = null) {
-        $perms = $this->_AppUI->acl();
         $stored = false;
 
         $errorMsgArray = $this->check();
@@ -41,7 +38,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
             return $errorMsgArray;
         }
 
-        if ($perms->checkModuleItem('system', 'edit')) {
+        if ($this->_perms->checkModuleItem('system', 'edit')) {
             if (($msg = parent::store())) {
                 return $msg;
             }
