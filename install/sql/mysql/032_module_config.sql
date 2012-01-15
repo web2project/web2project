@@ -1,4 +1,8 @@
 
+-- This table allows us to have module-specific configurations. At present, 
+--   it's only used for the flexible fields functionality on the list pages, 
+--   but more is possible.
+
 CREATE TABLE IF NOT EXISTS `module_config` (
     `module_config_id` int(10) NOT NULL AUTO_INCREMENT,
     `module_name` varchar(50) NOT NULL,
