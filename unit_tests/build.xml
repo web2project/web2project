@@ -37,27 +37,26 @@
       <formatter  type="xml" todir="reports" outfile="logfile.xml"/>
     </phpunit>
     <phpunitreport  infile="reports/logfile.xml"
-        styledir="/usr/share/php/data/phing/etc/"
+        styledir="${phing.home}/etc/"
         todir="reports"
         format="noframes" />
     </target>
 
-  <target name="standards" depends="lint">
-    <!-- This is setup to run as separate tasks due to memory/performance reasons. -->
+    <target name="standards" depends="lint">
 
-    <phpcodesniffer standard="PEAR" format="summary"
-        file="../index.php" allowedFileExtensions="php" />
-    <phpcodesniffer standard="PEAR" format="summary"
-        file="../classes" allowedFileExtensions="php" />
-    <phpcodesniffer standard="PEAR" format="summary"
-        file="../includes" allowedFileExtensions="php" />
-    <phpcodesniffer standard="PEAR" format="summary"
-        file="../install" allowedFileExtensions="php" />
-    <phpcodesniffer standard="PEAR" format="summary"
-        file="../modules" allowedFileExtensions="php" />
-    <phpcodesniffer standard="PEAR" format="summary"
-        file="." allowedFileExtensions="php" />
-  </target>
+        <!-- This is setup to run as separate includes due to memory/performance reasons. -->
+        <phpcodesniffer standard="PEAR" format="summary" verbosity="1">
+            <fileset dir="..">
+                <include name="*.php"/>
+                <include name="classes/**/*.php"/>
+                <include name="includes/*.php"/>
+                <include name="install/**/*.php"/>
+                <include name="modules/**/*.php"/>
+                <include name="style/**/*.php"/>
+            </fileset>
+            <formatter type="summary" usefile="false"/>
+        </phpcodesniffer>
+    </target>
 
 
   <target name="package">
