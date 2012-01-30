@@ -1,12 +1,15 @@
 <?php /* $Id$ $URL$ */
 
 /**
- *	@package web2project
+ *	@package    web2project
  *	@subpackage database
- *	@version $Revision$
- *  @copyright (c) 2003 Adam Donnison
- *  @license	GPL version 2 or later.
- *  @author	Adam Donnison <adam@saki.com.au>
+ *	@version    $Revision$
+ *  @license	Clear BSD
+ *
+ * Note: Previously, this class was mis-licensed as GPL in an otherwise BSD
+ *   application. The GPL attempt was in 2003 while the project itself was not
+ *   relicensed from BSD to GPL in 2005. In 2007, all further development was
+ *   done under the Clear BSD license and all GPL modifications were removed.
  */
 
 /**
