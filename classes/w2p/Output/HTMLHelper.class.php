@@ -57,9 +57,7 @@ class w2p_Output_HTMLHelper
      *   fields like project_company, dept_company because we still have a 
      *   common suffix.
      */
-
-    public function createCell($fieldName, $value)
-    {
+	public function createCell($fieldName, $value, $custom = array()) {
 
         $last_underscore = strrpos($fieldName, '_');
         $shortname = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
@@ -68,8 +66,20 @@ class w2p_Output_HTMLHelper
         $class = '';
 
         switch ($shortname) {
+			case '_task':
+                $task = new CTask();
+                $task->load($value);
+                $cell = '<a href="?m=tasks&a=view&task_id='.$value.'">'.$task->task_name.'</a>';
+                break;
+
+
+
+            case '_category':
+                $class = 'center';
+                $cell = $custom[$fieldName][$value];
+                break;
             case '_creator':
-            case '_owner':
+			case '_owner':
                 $additional = 'nowrap="nowrap"';
                 $cell = w2PgetUsernameFromID($value);
                 break;

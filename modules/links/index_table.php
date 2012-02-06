@@ -63,10 +63,14 @@ echo $pageNav;
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('', 'link_name', 'link_description', 'link_category', 'link_task', 'link_owner', 'link_date');
-            $fieldNames = array('', 'Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
+            $fieldList = array('link_name', 'link_description', 'link_category', 'link_task', 'link_owner', 'link_date');
+            $fieldNames = array('Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
+
+            $module = new w2p_Core_Module();
+            $module->storeSettings('links', 'index_table', $fieldList, $fieldNames);
         }
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
+        echo '<th></th>';
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
 <!--                <a href="?m=links&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">-->
@@ -81,6 +85,7 @@ $fp = -1;
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 $id = 0;
+//TODO:  put columns in order
 for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
 	$row = $links[$i];
 
@@ -109,17 +114,15 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
         <?php if ($canEdit) {
             echo '<a href="./index.php?m=' . $m . '&a=addedit&link_id=' . $row['link_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', '16', '16') . '</a>';
         }
+        echo '<a href="' . $row['link_url'] . '" target="_blank">' . w2PshowImage('forward.png', '16', '16') . '</a>';
         ?>
         </td>
-        <td nowrap="8%">
-            <?php echo '<a href="' . $row['link_url'] . '" target="_blank">' . $row['link_name'] . '</a>'; ?>
-        </td>
-        <td width="20%"><?php echo $row['link_description']; ?></td>
-        <td width="10%" nowrap="nowrap" align="center"><?php echo $link_types[$row['link_category']]; ?></td> 
-        <td width="5%" align="left"><a href="./index.php?m=tasks&a=view&task_id=<?php echo $row['task_id']; ?>"><?php echo $row['task_name']; ?></a></td>
-        <?php echo $htmlHelper->createCell('contact_name', $row['contact_name']); ?>
-<!-- TODO: adjust for timezones -->
-        <?php echo $htmlHelper->createCell('link_date', $row['link_date']); ?>
+        <?php
+        $customLookups = array('link_category' => $link_types);
+        foreach ($fieldList as $index => $column) {
+            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+        }
+        ?>
     </tr>
 <?php } ?>
 </table>
