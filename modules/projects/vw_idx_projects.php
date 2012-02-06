@@ -128,15 +128,15 @@ if ($is_tabbed) {
                 // TODO: This is only in place to provide an pre-upgrade-safe 
                 //   state for versions earlier than v2.3
                 //   At some point at/after v4.0, this should be deprecated
-                // TODO: Or alternatively, if the system is post-v2.3, we could
-                //   just store these fields directly and never hit this loop 
-                //   again..
                 $fieldList = array('project_color_identifier', 'project_priority',
                     'project_name', 'company_name', 'project_start_date',
                     'project_end_date', 'project_actual_end_date', 'task_log_problem',
                     'user_username', 'project_task_count');
                 $fieldNames = array('Color', 'P', 'Project Name', 'Company',
                     'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
+
+                $module = new w2p_Core_Module();
+                $module->storeSettings('projects', 'index_list', $fieldList, $fieldNames);
             }
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
