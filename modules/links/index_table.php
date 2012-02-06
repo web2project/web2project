@@ -53,7 +53,7 @@ echo $pageNav;
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('links', 'index_table');
+        $fields = w2p_Core_Module::getSettings('links', 'index_list');
         if (count($fields) > 0) {
             foreach ($fields as $field => $text) {
                 $fieldList[] = $field;
@@ -67,7 +67,7 @@ echo $pageNav;
             $fieldNames = array('Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
 
             $module = new w2p_Core_Module();
-            $module->storeSettings('links', 'index_table', $fieldList, $fieldNames);
+            $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
         }
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
         echo '<th></th>';
