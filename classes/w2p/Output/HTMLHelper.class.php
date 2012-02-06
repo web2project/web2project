@@ -75,7 +75,6 @@ class w2p_Output_HTMLHelper
 
 
             case '_category':
-                $class = 'center';
                 $cell = $custom[$fieldName][$value];
                 break;
             case '_creator':
@@ -107,19 +106,16 @@ class w2p_Output_HTMLHelper
                 $cell = w2p_textarea($value);
                 break;
             case '_count':
-                $class = 'center';
                 $cell = $value;
                 break;
             case '_complete':
             case '_assignment':
-                $class = 'center';
-                $cell = $value . '%';
+                $cell = $value.'%';
                 break;
             case '_url':
                 $cell = w2p_url($value);
                 break;
             case '_duration':
-                $class = 'right';
                 $cell = $value;
                 break;
             case '_hours':
@@ -128,7 +124,7 @@ class w2p_Output_HTMLHelper
                 $cell = htmlspecialchars($value, ENT_QUOTES);
         }
 
-        $begin = '<td ' . $additional . ' class="data ' . $class . '">';
+        $begin = '<td '.$additional.' class="data '.$shortname.'">';
         $end = '</td>';
 
         return $begin . $cell . $end;

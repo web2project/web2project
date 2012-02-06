@@ -55,6 +55,20 @@ td.today span img, td.empty span img
     width:  100%;
 }
 
+.list ._date {
+    text-align: center;
+}
+
+.view ._date {
+    text-align: left;
+}
+._category, ._count, ._complete, ._assignment, ._count, ._owner, ._username {
+    text-align: center;
+}
+
+._duration {
+    text-align: right;
+}
 .highlight0 { background-color: #FFFF66; }
 .highlight1 { background-color: #ADD8E6; }
 .highlight2 { background-color: #90EE8A; }
