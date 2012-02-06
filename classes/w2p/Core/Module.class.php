@@ -273,6 +273,30 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 		return $q->loadColumn();
     }
 
+    public function loadSettings() {
+//TODO: flesh this out        
+    }
+    
+    public function storeSettings($moduleName, $configName, $displayColumns, $displayText) {
+		if ('' == $moduleName || '' == $configName) {
+			return false;
+		}
+
+		$i = 0;
+        $q = $this->_getQuery();
+		foreach ($displayColumns as $index => $column) {
+            $q->addTable('module_config');
+            $q->addInsert('module_name',			$moduleName);
+            $q->addInsert('module_config_name',		$configName);
+            $q->addInsert('module_config_value',	$column);
+            $q->addInsert('module_config_text',		$displayText[$index]);
+            $q->addInsert('module_config_order',	$i);
+            $q->exec();
+            $q->clear();
+            $i++;
+		}
+    }
+
     public static function getSettings($module, $configName = '') {
 		$q = new w2p_Database_Query();
 		$q->addTable('module_config');
@@ -301,7 +325,7 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 
 		$i = 0;
 		foreach ($configValue as $index => $field) {
-			if (isset($displayColumns[$field])) {
+            if (isset($displayColumns[$field])) {
 				$q->addTable('module_config');
 				$q->addInsert('module_name',			$moduleName);
 				$q->addInsert('module_config_name',		$configName);
