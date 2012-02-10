@@ -9,6 +9,7 @@ class w2p_Output_HTMLHelper
 {
 
     protected $AppUI = null;
+    protected $tableRowData = array();
 
     public function __construct(w2p_Core_CAppUI $AppUI)
     {
@@ -40,6 +41,14 @@ class w2p_Output_HTMLHelper
     }
 
     /*
+     * I really hate this option, but I'm not sure of a better way to get the 
+     *   _name case of createCell's switch statement. I'm option to suggestions.
+     *          ~ caseydk 09 Feb 2012
+     */
+    public function stageRowData($myArray) {
+        $this->tableRowData = $myArray;
+    }
+    /*
      * createColumn is handy because it can take any input $fieldName and use
      *   suffix to determine how the field should be displayed.
      * 
@@ -60,14 +69,24 @@ class w2p_Output_HTMLHelper
 	public function createCell($fieldName, $value, $custom = array()) {
 
         $last_underscore = strrpos($fieldName, '_');
+        $prefix = ($last_underscore !== false) ? substr($fieldName, 0, $last_underscore) : $fieldName;
         $suffix = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
 
         switch ($suffix) {
+/*
+ * TODO: The following case is likely to change once we have an approach to 
+ *   handle module-level objects and their proper mapping/linkings.
+*/
             case '_task':
                 $task = new CTask();
                 $task->load($value);
                 $cell = '<a href="?m=tasks&a=view&task_id='.$value.'">'.$task->task_name.'</a>';
                 break;
+            case '_name':
+                $link = '?m='. w2p_pluralize($prefix) .'&a=view&'.$prefix.'_id='.$this->tableRowData[$prefix.'_id'];
+                $cell = '<a href="'.$link.'">'.$value.'</a>';
+                break;
+
             case '_category':
             case '_type':
                 $cell = $custom[$fieldName][$value];
@@ -114,10 +133,11 @@ class w2p_Output_HTMLHelper
                 $cell = $value;
                 break;
             case '_hours':
-            default:
-                $additional = 'nowrap="nowrap"';
-                $cell = htmlspecialchars($value, ENT_QUOTES);
-        }
+			default:
+//TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
+				$additional = 'nowrap="nowrap"';
+				$cell = htmlspecialchars($value, ENT_QUOTES);
+		}
 
         $begin = '<td '.$additional.' class="data '.$suffix.'">';
         $end = '</td>';
@@ -125,9 +145,12 @@ class w2p_Output_HTMLHelper
         return $begin . $cell . $end;
     }
 
-    public function createColumn($fieldName, $value)
-    {
-        trigger_error("The method createColumn has been deprecated in v3.0 and will be removed by v4.0. Please use createCell instead.", E_USER_NOTICE);
+    /*
+     *
+     * @deprecated
+     */
+    public function createColumn($fieldName, $value) {
+        trigger_error("The method createColumn has been deprecated in v3.0 and will be removed by v4.0. Please use createCell instead.", E_USER_NOTICE );
 
         return $this->createCell($fieldName, $value[$fieldName]);
     }
