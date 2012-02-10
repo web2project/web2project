@@ -29,11 +29,6 @@ if (!isset($project_id)) {
 	$project_id = (int) w2PgetParam($_POST, 'project_id', 0);
 }
 
-$df = $AppUI->getPref('SHDATEFORMAT');
-$tf = $AppUI->getPref('TIMEFORMAT');
-
-$link_types = w2PgetSysVal('LinkType');
-
 if ($canRead) {
 	$link = new CLink();
 	$links = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $tab-1, $search);
@@ -118,6 +113,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
         ?>
         </td>
         <?php
+        $link_types = w2PgetSysVal('LinkType');
         $customLookups = array('link_category' => $link_types);
         foreach ($fieldList as $index => $column) {
             echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
