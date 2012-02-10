@@ -88,6 +88,7 @@ class w2p_Output_HTMLHelper
                 break;
 
             case '_category':
+            case '_status':
             case '_type':
                 $cell = $custom[$fieldName][$value];
                 break;
@@ -118,6 +119,11 @@ class w2p_Output_HTMLHelper
                 break;
             case '_description':
                 $cell = w2p_textarea($value);
+                break;
+            case '_priority':
+                $mod = ($value > 0) ? '+' : '-';
+                $image = '<img src="' . w2PfindImage('icons/priority' . $mod . abs($value) . '.gif') . '" width="13" height="16" alt="">';
+                $cell = ($value != 0) ? $image : '';
                 break;
             case '_count':
                 $cell = $value;

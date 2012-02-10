@@ -55,7 +55,7 @@ td.today span img, td.empty span img
     width:  100%;
 }
 
-.list ._date {
+.list ._date, .list ._hours {
     text-align: center;
 }
 
@@ -63,8 +63,8 @@ td.today span img, td.empty span img
     text-align: left;
 }
 
-._category, ._count, ._complete, ._assignment, ._count, ._owner, ._username, 
-    .inactive, .countp {
+._category, ._count, ._complete, ._assignment, ._owner, ._username, 
+    .inactive, .countp, ._users {
     text-align: center;
 }
 
