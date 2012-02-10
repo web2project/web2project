@@ -12,10 +12,6 @@ global $type_filter;
 global $orderby;
 global $orderdir;
 
-// load the company types
-
-$types = w2PgetSysVal('CompanyType');
-
 $company_type_filter = $currentTabId;
 $company_type_filter = ($currentTabName == 'Not Applicable') ? 0 : $company_type_filter;
 $company_type_filter = ($currentTabName == 'All Companies') ? -1 : $company_type_filter; 
@@ -30,18 +26,20 @@ $companyList = $company->getCompanyList(null, $company_type_filter, $search_stri
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('companies', 'index_table');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('companies', 'index_list');
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
             $fieldList = array('company_name', 'countp', 'inactive', 'company_type');
             $fieldNames = array('Company Name', 'Active Projects', 'Archived Projects', 'Type');
+
+            $module->storeSettings('companies', 'index_list', $fieldList, $fieldNames);
         }
 
         foreach ($fieldNames as $index => $name) {
@@ -56,14 +54,21 @@ $companyList = $company->getCompanyList(null, $company_type_filter, $search_stri
     <?php
         if (count($companyList) > 0) {
             $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-            foreach ($companyList as $company) {
+
+            $company_types = w2PgetSysVal('CompanyType');
+            $customLookups = array('company_type' => $company_types);
+
+            foreach ($companyList as $row) {
                 echo '<tr>';
-                echo '<td width="60%">' . (mb_trim($company['company_description']) ? w2PtoolTip($company['company_name'], $company['company_description']) : '') . '<a href="./index.php?m=companies&a=view&company_id=' . $company['company_id'] . '" >' . $company['company_name'] . '</a>' . (mb_trim($company['company_description']) ? w2PendTip() : '') . '</td>';
-                echo $htmlHelper->createCell('active_project_count', $company['countp']);
-                echo $htmlHelper->createCell('inactive_project_count', $company['inactive']);
-                echo $htmlHelper->createCell('company_type', $AppUI->_($types[$company['company_type']]));
+                $htmlHelper->stageRowData($row);
+//TODO: The company_name used to have a Tool Tip with the description.. let's see if anyone notices/cares.
+                foreach ($fieldList as $index => $column) {
+                    echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+                }
                 echo '</tr>';
+                
             }
+
         } else {
             echo '<tr><td colspan="5">' . $AppUI->_('No companies available') . '</td></tr>';
         }
