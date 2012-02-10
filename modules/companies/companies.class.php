@@ -188,10 +188,8 @@ class CCompany extends w2p_Core_BaseObject {
     }
 
 	public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name') {
-		$fields = 'DISTINCT pr.project_id, project_name, project_start_date, ' .
-				'project_status, project_target_budget, project_start_date, ' .
-				'project_priority, contact_first_name, contact_last_name, ' .
-                'contact_display_name as contact_name';
+		$fields = 'DISTINCT pr.project_id, pr.*, contact_first_name, ' .
+                'contact_last_name, contact_display_name as contact_name';
 
 		$q = new w2p_Database_Query();
 		$q->addTable('projects', 'pr');
