@@ -53,12 +53,13 @@ echo $pageNav;
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('links', 'index_list');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('links', 'index_list');
+
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
@@ -66,7 +67,6 @@ echo $pageNav;
             $fieldList = array('link_name', 'link_description', 'link_category', 'link_task', 'link_owner', 'link_date');
             $fieldNames = array('Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
 
-            $module = new w2p_Core_Module();
             $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
         }
 //TODO: The link below is commented out because this module doesn't support sorting... yet.

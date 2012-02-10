@@ -273,8 +273,15 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 		return $q->loadColumn();
     }
 
-    public function loadSettings() {
-//TODO: flesh this out        
+    public function loadSettings($module, $configName = 'index_list') {
+		$q = $this->_getQuery();
+		$q->addTable('module_config');
+		$q->addQuery('module_config_value, module_config_text');
+		$q->addWhere("module_name = '$module'");
+        $q->addWhere("module_config_name = '$configName'");
+		$q->addOrder('module_config_order, module_config_value ASC');
+
+		return $q->loadHashList();
     }
     
     public function storeSettings($moduleName, $configName, $displayColumns, $displayText) {
