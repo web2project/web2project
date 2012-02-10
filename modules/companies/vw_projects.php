@@ -24,20 +24,22 @@ $projects = CCompany::getProjects($AppUI, $company_id, !$tab, $sort);
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('projects', 'company_view');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('projects', 'company_view');
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('project_priority', 'project_name', 'user_username',
+            $fieldList = array('project_priority', 'project_name', 'contact_name',
                 'project_start_date', 'project_status', 'project_target_budget');
             $fieldNames = array('P', 'Name', 'Owner', 'Started', 'Status', 
                 'Budget');
+
+            $module->storeSettings('projects', 'company_view', $fieldList, $fieldNames);
         }
 
         foreach ($fieldNames as $index => $name) {
@@ -52,27 +54,20 @@ $projects = CCompany::getProjects($AppUI, $company_id, !$tab, $sort);
 <?php
 if (count($projects) > 0) {
 	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-    foreach ($projects as $project) {
-		?>
-		<tr>
-			<td>
-				<?php
-					if ($project['project_priority'] < 0) {
-						echo '<img src="' . w2PfindImage('icons/priority-' . -$project['project_priority'] . '.gif') . '" width="13" height="16" alt="">';
-					} elseif ($project["project_priority"] > 0) {
-						echo '<img src="' . w2PfindImage('icons/priority+' . $project['project_priority'] . '.gif') . '" width="13" height="16" alt="">';
-					} 
-				?>
-			</td>
-			<td>
-				<a href="?m=projects&a=view&project_id=<?php echo $project['project_id']; ?>"><?php echo $project['project_name']; ?></a>
-			</td>
-            <?php echo $htmlHelper->createCell('contact_name', $project['contact_name']); ?>
-            <?php echo $htmlHelper->createCell('project_start_date', $project['project_start_date']); ?>
-            <?php echo $htmlHelper->createCell('project_status', $AppUI->_($pstatus[$project['project_status']])); ?>
-            <?php echo $htmlHelper->createCell('project_target_budget', $project['project_target_budget']); ?>
-		</tr>
-		<?php
+
+    $pstatus = w2PgetSysVal('ProjectStatus');
+    $countries = w2PgetSysVal('GlobalCountries');
+    $company_types = w2PgetSysVal('CompanyType');
+    $customLookups = array('project_status' => $pstatus, 
+        'company_type' => $company_types, 'company_country' => $countries);
+
+    foreach ($projects as $row) {
+        echo '<tr>';
+        $htmlHelper->stageRowData($row);
+        foreach ($fieldList as $index => $column) {
+            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+        }
+        echo '</tr>';
 	}
 } else {
 	?><tr><td colspan="5"><?php echo $AppUI->_('No data available') . '<br />' . $AppUI->getMsg(); ?></td></tr><?php
