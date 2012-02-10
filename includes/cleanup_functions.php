@@ -2813,8 +2813,8 @@ function projects_list_data($user_id = false) {
 	$q->addQuery('pr.project_id, project_status, project_color_identifier,
 		project_type, project_name, project_description, project_scheduled_hours as project_duration,
 		project_parent, project_original_parent, project_percent_complete,
-		project_color_identifier, project_company,
-        company_name, company_description, project_status, project_last_task as critical_task,
+		project_color_identifier, project_company, company_id, company_name, 
+        project_status, project_last_task as critical_task,
         tp.task_log_problem, user_username, project_active');
 
 	$fields = w2p_Core_Module::getSettings('projects', 'index_list');

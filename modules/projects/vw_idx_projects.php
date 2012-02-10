@@ -179,6 +179,7 @@ if ($is_tabbed) {
 
 				$tmpProject = new CProject();
 
+                $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 				foreach ($st_projects_arr as $st_project) {
                     $multiproject_id = 0;
                     $project_id = (isset($st_project[0])) ? $st_project[0]['project_id'] : 0;
@@ -204,7 +205,7 @@ if ($is_tabbed) {
 						$s .= '<tr>';
 					}
 
-                    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+                    $htmlHelper->stageRowData($row);
                     foreach ($fieldList as $field) {
                         $count_projects = $tmpProject->hasChildProjects($row['project_id']);
 
