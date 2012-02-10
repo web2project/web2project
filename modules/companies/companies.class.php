@@ -156,7 +156,7 @@ class CCompany extends w2p_Core_BaseObject {
 
         $q = $this->_getQuery();
         $q->addTable('companies', 'c');
-        $q->addQuery('c.company_id, c.company_name, c.company_type, c.company_description, count(distinct p.project_id) as countp,
+        $q->addQuery('c.*, count(distinct p.project_id) as countp,
         count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name, con.contact_display_name');
         $q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
         $q->addJoin('users', 'u', 'c.company_owner = u.user_id');
