@@ -78,9 +78,9 @@ class w2p_Output_HTMLHelper
  *   handle module-level objects and their proper mapping/linkings.
 */
             case '_task':
-                $task = new CTask();
-                $task->load($value);
-                $cell = '<a href="?m=tasks&a=view&task_id='.$value.'">'.$task->task_name.'</a>';
+                $obj = new CTask();
+                $obj->load($value);
+                $cell = '<a href="?m=tasks&a=view&task_id='.$value.'">'.$obj->task_name.'</a>';
                 break;
             case '_name':
                 $link = '?m='. w2p_pluralize($prefix) .'&a=view&'.$prefix.'_id='.$this->tableRowData[$prefix.'_id'];
