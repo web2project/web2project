@@ -62,7 +62,9 @@ td.today span img, td.empty span img
 .view ._date {
     text-align: left;
 }
-._category, ._count, ._complete, ._assignment, ._count, ._owner, ._username {
+
+._category, ._count, ._complete, ._assignment, ._count, ._owner, ._username, 
+    .inactive, .countp {
     text-align: center;
 }
 

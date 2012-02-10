@@ -75,6 +75,7 @@ class w2p_Output_HTMLHelper
 
 
             case '_category':
+            case '_type':
                 $cell = $custom[$fieldName][$value];
                 break;
             case '_creator':
