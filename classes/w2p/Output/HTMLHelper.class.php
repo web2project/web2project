@@ -60,20 +60,14 @@ class w2p_Output_HTMLHelper
 	public function createCell($fieldName, $value, $custom = array()) {
 
         $last_underscore = strrpos($fieldName, '_');
-        $shortname = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
+        $suffix = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
 
-        $additional = '';
-        $class = '';
-
-        switch ($shortname) {
-			case '_task':
+        switch ($suffix) {
+            case '_task':
                 $task = new CTask();
                 $task->load($value);
                 $cell = '<a href="?m=tasks&a=view&task_id='.$value.'">'.$task->task_name.'</a>';
                 break;
-
-
-
             case '_category':
             case '_type':
                 $cell = $custom[$fieldName][$value];
@@ -125,7 +119,7 @@ class w2p_Output_HTMLHelper
                 $cell = htmlspecialchars($value, ENT_QUOTES);
         }
 
-        $begin = '<td '.$additional.' class="data '.$shortname.'">';
+        $begin = '<td '.$additional.' class="data '.$suffix.'">';
         $end = '</td>';
 
         return $begin . $cell . $end;
@@ -139,8 +133,8 @@ class w2p_Output_HTMLHelper
     }
 
     /*
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
 
     public static function renderColumn(w2p_Core_CAppUI $AppUI, $fieldName, $row)
@@ -149,38 +143,37 @@ class w2p_Output_HTMLHelper
         trigger_error("The static method renderColumn has been deprecated and will be removed by v4.0.", E_USER_NOTICE);
 
         $last_underscore = strrpos($fieldName, '_');
-        $shortname = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
+        $suffix = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
 
-        switch ($shortname) {
-            case '_creator':
-            case '_owner':
-                $s .= '<td nowrap="nowrap">';
-                $s .= w2PgetUsernameFromID($row[$fieldName]);
-                $s .= '</td>';
-                break;
-            case '_budget':
-                $s .= '<td>';
-                $s .= $w2Pconfig['currency_symbol'];
-                $s .= formatCurrency($row[$fieldName], $AppUI->getPref('CURRENCYFORM'));
-                $s .= '</td>';
-                break;
-            case '_url':
-                $s .= '<td>';
-                $s .= w2p_url($row[$fieldName]);
-                $s .= '</td>';
-                break;
-            case '_date':
-                $df = $AppUI->getPref('SHDATEFORMAT');
-                $myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
-                $s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($df) : '-') . '</td>';
-                break;
-            default:
-                $s .= '<td nowrap="nowrap" class="center">';
-                $s .= htmlspecialchars($row[$fieldName], ENT_QUOTES);
-                $s .= '</td>';
-        }
+        switch ($suffix) {
+			case '_creator':
+			case '_owner':
+				$s .= '<td nowrap="nowrap">';
+				$s .= w2PgetUsernameFromID($row[$fieldName]);
+				$s .= '</td>';
+				break;
+			case '_budget':
+				$s .= '<td>';
+				$s .= $w2Pconfig['currency_symbol'];
+				$s .= formatCurrency($row[$fieldName], $AppUI->getPref('CURRENCYFORM'));
+				$s .= '</td>';
+				break;
+			case '_url':
+				$s .= '<td>';
+				$s .= w2p_url($row[$fieldName]);
+				$s .= '</td>';
+				break;
+			case '_date':
+				$df = $AppUI->getPref('SHDATEFORMAT');
+				$myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
+				$s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($df) : '-') . '</td>';
+				break;
+			default:
+				$s .= '<td nowrap="nowrap" class="center">';
+				$s .= htmlspecialchars($row[$fieldName], ENT_QUOTES);
+				$s .= '</td>';
+		}
 
-        return $s;
-    }
-
+		return $s;
+	}
 }
