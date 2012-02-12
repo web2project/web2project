@@ -195,211 +195,207 @@ class CEvent extends w2p_Core_BaseObject
         $q = new w2p_Database_Query();
 
         // convert to default db time stamp
-        $db_start = $start_date->format(FMT_DATETIME_MYSQL);
-        $db_start = $AppUI->convertToSystemTZ($db_start);
-        $db_end = $end_date->format(FMT_DATETIME_MYSQL);
-        $db_end = $AppUI->convertToSystemTZ($db_end);
+		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
+		$db_start = $AppUI->convertToSystemTZ($db_start);
+		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
+		$db_end = $AppUI->convertToSystemTZ($db_end);
 
-        if (!isset($user_id)) {
-            $user_id = $AppUI->user_id;
-        }
+		if (!isset($user_id)) {
+			$user_id = $AppUI->user_id;
+		}
 
-        $project = new CProject();
-        if ($project_id) {
-            $p = &$AppUI->acl();
+		$project = new CProject();
+		if ($project_id) {
+			$p = &$AppUI->acl();
 
-            if ($p->checkModuleItem('projects', 'view', $project_id, $user_id)) {
-                $allowedProjects = array('p.project_id = ' . (int) $project_id);
-            } else {
-                $allowedProjects = array('1=0');
-            }
-        } else {
-            $allowedProjects = $project->getAllowedSQL(($user_id ? $user_id : $AppUI->user_id), 'event_project');
-        }
+			if ($p->checkModuleItem('projects', 'view', $project_id, $user_id)) {
+				$allowedProjects = array('p.project_id = ' . (int)$project_id);
+			} else {
+				$allowedProjects = array('1=0');
+			}
+		} else {
+			$allowedProjects = $project->getAllowedSQL(($user_id ? $user_id : $AppUI->user_id), 'event_project');
+		}
 
-        //do similiar actions for recurring and non-recurring events
-        $queries = array('q' => 'q', 'r' => 'r');
+		//do similiar actions for recurring and non-recurring events
+		$queries = array('q' => 'q', 'r' => 'r');
 
-        foreach ($queries as $query_set) {
-            $$query_set = new w2p_Database_Query();
-            $$query_set->addTable('events', 'e');
-            $$query_set->addQuery('distinct(e.event_id), e.*');
-            $$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
+		foreach ($queries as $query_set) {
+			$$query_set = new w2p_Database_Query();
+			$$query_set->addTable('events', 'e');
+			$$query_set->addQuery('distinct(e.event_id), e.*');
+			$$query_set->addOrder('e.event_start_date, e.event_end_date ASC');
 
-            $$query_set->leftJoin('projects', 'p', 'p.project_id =  e.event_project');
-            $$query_set->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-            $$query_set->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-            if ($company_id) {
-                $$query_set->addWhere('project_company = ' . (int) $company_id);
-            } else {
-                if (($AppUI->getState('CalIdxCompany'))) {
-                    $$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
-                }
-            }
+			$$query_set->leftJoin('projects', 'p', 'p.project_id =  e.event_project');
+			$$query_set->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
+			$$query_set->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
+			if ($company_id) {
+				$$query_set->addWhere('project_company = ' . (int)$company_id);
+			} else {
+				if (($AppUI->getState('CalIdxCompany'))) {
+					$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
+				}
+			}
 
-            if (count($allowedProjects)) {
-                $$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ' ) ' . (($AppUI->getState('CalIdxCompany')) ? '' : ($project_id ? '' : ' OR event_project = 0 ')) . ')');
-            }
+			if (count($allowedProjects)) {
+				$$query_set->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ' ) ' . (($AppUI->getState('CalIdxCompany')) ? '' : ($project_id ? '' : ' OR event_project = 0 ')) . ')');
+			}
 
-            switch ($filter) {
-                case 'my':
-                    $$query_set->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id =' . $user_id);
-                    $$query_set->addWhere('(ue.user_id = ' . (int) $user_id . ') AND (event_private = 0 OR event_owner=' . (int) $user_id . ')');
-                    break;
-                case 'own':
-                    $$query_set->addWhere('event_owner =' . (int) $user_id);
-                    break;
-                case 'all':     // this falls through on purpose
-                default:
-                    $$query_set->addWhere('(event_private = 0 OR event_owner=' . (int) $user_id . ')');
-            }
+			switch ($filter) {
+				case 'my':
+					$$query_set->addJoin('user_events', 'ue', 'ue.event_id = e.event_id AND ue.user_id =' . $user_id);
+					$$query_set->addWhere('(ue.user_id = ' . (int)$user_id . ') AND (event_private = 0 OR event_owner=' . (int)$user_id . ')');
+					break;
+				case 'own':
+					$$query_set->addWhere('event_owner =' . (int)$user_id);
+					break;
+				case 'all':     // this falls through on purpose
+				default:
+					$$query_set->addWhere('(event_private = 0 OR event_owner=' . (int)$user_id . ')');
+			}
 
-            if ($query_set == 'q') { // assemble query for non-recursive events
-                $$query_set->addWhere('(event_recurs <= 0)');
-                // following line is only good for *non-recursive* events
-                $$query_set->addWhere('(event_start_date <= \'' . $db_end . '\' AND event_end_date >= \'' . $db_start . '\' OR event_start_date BETWEEN \'' . $db_start . '\' AND \'' . $db_end . '\')');
-                $eventList = $$query_set->loadList();
-            } elseif ($query_set == 'r') { // assemble query for recursive events
-                $$query_set->addWhere('(event_recurs > 0)');
-                $eventListRec = $$query_set->loadList();
-            }
-        }
+			if ($query_set == 'q') { // assemble query for non-recursive events
+				$$query_set->addWhere('(event_recurs <= 0)');
+				// following line is only good for *non-recursive* events
+				$$query_set->addWhere('(event_start_date <= \'' . $db_end . '\' AND event_end_date >= \'' . $db_start . '\' OR event_start_date BETWEEN \'' . $db_start . '\' AND \'' . $db_end . '\')');
+				$eventList = $$query_set->loadList();
+			} elseif ($query_set == 'r') { // assemble query for recursive events
+				$$query_set->addWhere('(event_recurs > 0)');
+				$eventListRec = $$query_set->loadList();
+			}
+		}
 
-        //Calculate the Length of Period (Daily, Weekly, Monthly View)
-        setlocale(LC_TIME, 'en');
-        $periodLength = Date_Calc::dateDiff($start_date->getDay(), $start_date->getMonth(), $start_date->getYear(), $end_date->getDay(), $end_date->getMonth(), $end_date->getYear());
-        setlocale(LC_ALL, $AppUI->user_lang);
+		//Calculate the Length of Period (Daily, Weekly, Monthly View)
+		setlocale(LC_TIME, 'en');
+		$periodLength = Date_Calc::dateDiff($start_date->getDay(), $start_date->getMonth(), $start_date->getYear(), $end_date->getDay(), $end_date->getMonth(), $end_date->getYear());
+		setlocale(LC_ALL, $AppUI->user_lang);
 
-        // AJD: Should this be going off the end of the array?  I don't think so.
-        // If it should then a comment to that effect would be nice.
-        for ($i = 0, $i_cmp = sizeof($eventListRec); $i < $i_cmp; $i++) {
-            //note from merlinyoda: j=0 is the original event according to getRecurrentEventforPeriod
-            // So, since the event is *recurring* x times, the loop condition should be j <= x, not j < x.
-            // This way the original and all recurrances are covered.
-            for ($j = 0, $j_cmp = intval($eventListRec[$i]['event_times_recuring']); $j <= $j_cmp; $j++) {
-                //Daily View
-                //show all
-                if ($periodLength <= 1) {
-                    $recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
-                }
-                //Weekly or Monthly View and Hourly Recurrent Events
-                //only show hourly recurrent event one time and add string 'hourly'
-                elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j == 0) {
-                    $recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
-                    $eventListRec[$i]['event_title'] = $eventListRec[$i]['event_title'] . ' (' . $this->_AppUI->_('Hourly') . ')';
-                }
-                //Weekly and Monthly View and higher recurrence mode
-                //show all events of recurrence > 1
-                elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] > 1) {
-                    $recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
-                }
+		// AJD: Should this be going off the end of the array?  I don't think so.
+		// If it should then a comment to that effect would be nice.
+		for ($i = 0, $i_cmp = sizeof($eventListRec); $i < $i_cmp; $i++) {
+			//note from merlinyoda: j=0 is the original event according to getRecurrentEventforPeriod
+			// So, since the event is *recurring* x times, the loop condition should be j <= x, not j < x.
+			// This way the original and all recurrances are covered.
+			for ($j = 0, $j_cmp = intval($eventListRec[$i]['event_times_recuring']); $j <= $j_cmp; $j++) {
+				//Daily View
+				//show all
+				if ($periodLength <= 1) {
+					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
+				}
+				//Weekly or Monthly View and Hourly Recurrent Events
+				//only show hourly recurrent event one time and add string 'hourly'
+				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j == 0) {
+					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
+					$eventListRec[$i]['event_title'] = $eventListRec[$i]['event_title'] . ' (' . $this->_AppUI->_('Hourly') . ')';
+				}
+				//Weekly and Monthly View and higher recurrence mode
+				//show all events of recurrence > 1
+				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] > 1) {
+					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
+				}
 
-                //add values to the eventsArray if check for recurrent event was positive
-                if (sizeof($recEventDate) > 0) {
-                    $eList[0] = $eventListRec[$i];
-                    $eList[0]['event_start_date'] = $recEventDate[0]->format(FMT_DATETIME_MYSQL);
-                    $eList[0]['event_end_date'] = $recEventDate[1]->format(FMT_DATETIME_MYSQL);
-                    $eventList = array_merge($eventList, $eList);
-                }
-                // clear array of positive recurrent events for the case that next loop recEventDate is empty in order to avoid double display
-                $recEventDate = array();
-            }
-        }
+				//add values to the eventsArray if check for recurrent event was positive
+				if (sizeof($recEventDate) > 0) {
+					$eList[0] = $eventListRec[$i];
+					$eList[0]['event_start_date'] = $recEventDate[0]->format(FMT_DATETIME_MYSQL);
+					$eList[0]['event_end_date'] = $recEventDate[1]->format(FMT_DATETIME_MYSQL);
+					$eventList = array_merge($eventList, $eList);
+				}
+				// clear array of positive recurrent events for the case that next loop recEventDate is empty in order to avoid double display
+				$recEventDate = array();
+			}
 
-        $i = 0;
-        foreach ($eventList as $event) {
-            $eventList[$i]['event_start_date'] = $AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
-            $eventList[$i]['event_end_date'] = $AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
-            $i++;
-        }
+		}
 
-        //return a list of non-recurrent and recurrent events
-        return $eventList;
-    }
+		$i = 0;
+		foreach($eventList as $event) {
+			$eventList[$i]['event_start_date'] = $AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
+			$eventList[$i]['event_end_date'] = $AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
+			$i++;
+		}
+//echo '<pre>'; print_r($eventList); echo '</pre>';
+		//return a list of non-recurrent and recurrent events
+		return $eventList;
+	}
 
-    public function getAssigned()
-    {
-        $q = $this->_getQuery();
-        $q->addTable('users', 'u');
-        $q->addTable('user_events', 'ue');
-        $q->addTable('contacts', 'con');
-        $q->addQuery('u.user_id, contact_display_name');
-        $q->addWhere('ue.event_id = ' . (int) $this->event_id);
-        $q->addWhere('user_contact = contact_id');
-        $q->addWhere('ue.user_id = u.user_id');
+	public function getAssigned() {
+		$q = $this->_getQuery();
+		$q->addTable('users', 'u');
+		$q->addTable('user_events', 'ue');
+		$q->addTable('contacts', 'con');
+		$q->addQuery('u.user_id, contact_display_name');
+		$q->addWhere('ue.event_id = ' . (int)$this->event_id);
+		$q->addWhere('user_contact = contact_id');
+		$q->addWhere('ue.user_id = u.user_id');
 
-        return $q->loadHashList();
-    }
+		return $q->loadHashList();
+	}
 
-    /*
-     *  I'm  not sure of the logic behind this method.  It was implemented in
-     * addedit.php but what it actually does is kind of a mess...
-     *
-     */
+	/*
+	 *  I'm  not sure of the logic behind this method.  It was implemented in
+	 * addedit.php but what it actually does is kind of a mess...
+	 *
+	 */
+	public function getAssigneeList($assignee_list) {
+		$q = $this->_getQuery();
+		$q->addTable('users', 'u');
+		$q->addTable('contacts', 'con');
+		$q->addQuery('user_id, contact_display_name');
+		$q->addWhere('user_id IN ('.$assignee_list.')');
+		$q->addWhere('user_contact = contact_id');
 
-    public function getAssigneeList($assignee_list)
-    {
-        $q = $this->_getQuery();
-        $q->addTable('users', 'u');
-        $q->addTable('contacts', 'con');
-        $q->addQuery('user_id, contact_display_name');
-        $q->addWhere('user_id IN (' . $assignee_list . ')');
-        $q->addWhere('user_contact = contact_id');
+		return $q->loadHashList();
+	}
 
-        return $q->loadHashList();
-    }
+	public function updateAssigned($assigned) {
+		// First remove the assigned from the user_events table
+		$q = $this->_getQuery();
+		$q->setDelete('user_events');
+		$q->addWhere('event_id = ' . (int)$this->event_id);
+		$q->exec();
+		$q->clear();
 
-    public function updateAssigned($assigned)
-    {
-        // First remove the assigned from the user_events table
-        $q = $this->_getQuery();
-        $q->setDelete('user_events');
-        $q->addWhere('event_id = ' . (int) $this->event_id);
-        $q->exec();
-        $q->clear();
+		if (is_array($assigned) && count($assigned)) {
 
-        if (is_array($assigned) && count($assigned)) {
+			foreach ($assigned as $uid) {
+				if ($uid) {
+					$q->addTable('user_events', 'ue');
+					$q->addInsert('event_id', $this->event_id);
+					$q->addInsert('user_id', (int) $uid);
+					$q->exec();
+					$q->clear();
+				}
+			}
 
-            foreach ($assigned as $uid) {
-                if ($uid) {
-                    $q->addTable('user_events', 'ue');
-                    $q->addInsert('event_id', $this->event_id);
-                    $q->addInsert('user_id', (int) $uid);
-                    $q->exec();
-                    $q->clear();
-                }
-            }
+			if ($msg = db_error()) {
+				$this->_AppUI->setMsg($msg, UI_MSG_ERROR);
+			}
+		}
+	}
 
-            if ($msg = db_error()) {
-                $this->_AppUI->setMsg($msg, UI_MSG_ERROR);
-            }
-        }
-    }
+	public function notify($assignees, $update = false, $clash = false) {
+		global $locale_char_set, $w2Pconfig;
 
-    public function notify($assignees, $update = false, $clash = false)
-    {
-        global $locale_char_set, $w2Pconfig;
+		$mail_owner = $this->_AppUI->getPref('MAILALL');
+		$assignee_list = explode(',', $assignees);
+		$owner_is_assigned = in_array($this->event_owner, $assignee_list);
+		if ($mail_owner && !$owner_is_assigned && $this->event_owner) {
+			array_push($assignee_list, $this->event_owner);
+		}
+		// Remove any empty elements otherwise implode has a problem
+		foreach ($assignee_list as $key => $x) {
+			if (!$x) {
+				unset($assignee_list[$key]);
+			}
+		}
+		if (!count($assignee_list)) {
+			return;
+		}
 
-        $mail_owner = $this->_AppUI->getPref('MAILALL');
-        $assignee_list = explode(',', $assignees);
-        $owner_is_assigned = in_array($this->event_owner, $assignee_list);
-        if ($mail_owner && !$owner_is_assigned && $this->event_owner) {
-            array_push($assignee_list, $this->event_owner);
-        }
-        // Remove any empty elements otherwise implode has a problem
-        foreach ($assignee_list as $key => $x) {
-            if (!$x) {
-                unset($assignee_list[$key]);
-            }
-        }
-        if (!count($assignee_list)) {
-            return;
-        }
-
-        $q = $this->_getQuery();
-        $q->addTable('users', 'u');
-        $q->addTable('contacts', 'con');
-        $q->addQuery('user_id, con.contact_id, contact_email');
+		$q = $this->_getQuery();
+		$q->addTable('users', 'u');
+		$q->addTable('contacts', 'con');
+		$q->addQuery('user_id, con.contact_id, contact_email');
         $q->addQuery('contact_display_name, contact_display_name as contact_name');
         $q->addWhere('u.user_contact = con.contact_id');
         $q->addWhere('user_id in (' . implode(',', $assignee_list) . ')');
