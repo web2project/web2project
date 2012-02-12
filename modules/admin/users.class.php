@@ -436,7 +436,8 @@ class CUser extends w2p_Core_BaseObject
                 $retres[] = $user;
             }
         }
-        return $retres;
-    }
-
+		return $retres;
+  }
 }
+
+class CAdmin_User extends CUser { }
