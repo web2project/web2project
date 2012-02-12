@@ -18,7 +18,7 @@ $module = new w2p_Core_Module();
 $module->load($mod_id);
 
 //TODO: generate per-module filter list
-$filter = array($module->permissions_item_field);
+$filter = array($module->permissions_item_field, 'user_password', 'user_parent');
 //$filter = array('project_id', 'project_status', 'project_active',
 //	'project_parent', 'project_color_identifier',
 //	'project_original_parent', 'project_departments', 'project_contacts',
