@@ -98,6 +98,20 @@ class w2p_Output_HTMLHelper
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->dept_name.'</a>';
                 break;
+            case '_contact':
+                $obj = new CContact();
+                $obj->load($value);
+                $mod = substr($suffix, 1);
+                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
+                $cell = '<a href="'.$link.'">'.$obj->contact_name.'ss</a>';
+                break;
+            case '_username':
+                $obj = new CAdmin_User();
+                $obj->load($this->tableRowData['user_id']);
+                $mod = substr($suffix, 1);
+                $link = '?m=admin&a=viewuser&user_id='.$obj->user_id;
+                $cell = '<a href="'.$link.'">'.$value.'</a>';
+                break;
 
             case '_name':
                 $prefix = ($prefix == 'dept') ? 'department' : $prefix;
@@ -143,9 +157,6 @@ class w2p_Output_HTMLHelper
                 $image = '<img src="' . w2PfindImage('icons/priority' . $mod . abs($value) . '.gif') . '" width="13" height="16" alt="">';
                 $cell = ($value != 0) ? $image : '';
                 break;
-            case '_count':
-                $cell = $value;
-                break;
             case '_complete':
             case '_assignment':
                 $cell = $value.'%';
@@ -153,8 +164,12 @@ class w2p_Output_HTMLHelper
             case '_url':
                 $cell = w2p_url($value);
                 break;
+            case '_count':
             case '_duration':
                 $cell = $value;
+                break;
+            case '_password':
+                $cell = '('.$this->_AppUI->_('hidden').')';
                 break;
             case '_hours':
 			default:
