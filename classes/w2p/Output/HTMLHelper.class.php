@@ -91,7 +91,13 @@ class w2p_Output_HTMLHelper
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->company_name.'</a>';
                 break;
-
+            case '_department':
+                $obj = new CDepartment();
+                $obj->load($value);
+                $mod = substr($suffix, 1);
+                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
+                $cell = '<a href="'.$link.'">'.$obj->dept_name.'</a>';
+                break;
 
             case '_name':
                 $prefix = ($prefix == 'dept') ? 'department' : $prefix;
