@@ -17,18 +17,20 @@ $userList = CCompany::getUsers($AppUI, $company_id);
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('users', 'company_view');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('admin', 'company_view');
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('user_username', 'contact_last_name');
+            $fieldList = array('user_username', 'contact_name');
             $fieldNames = array('Username', 'Name');
+            
+            $module->storeSettings('admin', 'company_view', $fieldList, $fieldNames);
         }
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
         foreach ($fieldNames as $index => $name) {
@@ -44,11 +46,18 @@ $userList = CCompany::getUsers($AppUI, $company_id);
 
 if (count($userList) > 0) {
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-    foreach ($userList as $user) {
-        echo '<tr><td>';
-        echo '<a href="./index.php?m=admin&a=viewuser&user_id=' . $user['user_id'] . '">' . $user['user_username'] . '</a>';
-        echo $htmlHelper->createCell('contact_name', $user['contact_name']);
+
+    $user_types = w2PgetSysVal('UserType');
+    $customLookups = array('user_type' => $user_types);
+
+    foreach ($userList as $row) {
+        echo '<tr>';
+        $htmlHelper->stageRowData($row);
+        foreach ($fieldList as $index => $column) {
+            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+        }
         echo '</tr>';
+
     }
 } else {
 	echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
