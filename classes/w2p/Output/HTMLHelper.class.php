@@ -8,14 +8,14 @@
 class w2p_Output_HTMLHelper
 {
 
-    protected $AppUI = null;
+    protected $_AppUI = null;
     protected $tableRowData = array();
 
     public function __construct(w2p_Core_CAppUI $AppUI)
     {
-        $this->AppUI = $AppUI;
-        $this->df = $AppUI->getPref('SHDATEFORMAT');
-        $this->dtf = $this->df . ' ' . $AppUI->getPref('TIMEFORMAT');
+        $this->_AppUI = $AppUI;
+        $this->df     = $AppUI->getPref('SHDATEFORMAT');
+        $this->dtf    = $this->df . ' ' . $AppUI->getPref('TIMEFORMAT');
     }
 
     public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList)
@@ -112,15 +112,15 @@ class w2p_Output_HTMLHelper
             case '_creator':
 			case '_owner':
                 $additional = 'nowrap="nowrap"';
-                $cell = w2PgetUsernameFromID($value);
-                break;
-            case '_budget':
-                $cell = w2PgetConfig('currency_symbol');
-                $cell .= formatCurrency($value, $this->AppUI->getPref('CURRENCYFORM'));
-                break;
-            case '_url':
-                $cell = w2p_url($value);
-                break;
+				$cell = w2PgetUsernameFromID($value);
+				break;
+			case '_budget':
+				$cell = w2PgetConfig('currency_symbol');
+				$cell .= formatCurrency($value, $this->_AppUI->getPref('CURRENCYFORM'));
+				break;
+			case '_url':
+				$cell = w2p_url($value);
+				break;
             case '_email':
                 $cell = w2p_email($value);
                 break;
@@ -128,13 +128,13 @@ class w2p_Output_HTMLHelper
 			case '_date':
 				$additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
-                $cell = $myDate ? $myDate->format($this->df) : '-';
-                break;
-            case '_datetime':
-                $additional = 'nowrap="nowrap"';
-                $myDate = intval($value) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
-                $cell = $myDate ? $myDate->format($this->dtf) : '-';
-                break;
+				$cell = $myDate ? $myDate->format($this->df) : '-';
+				break;
+			case '_datetime':
+				$additional = 'nowrap="nowrap"';
+                $myDate = intval($value) ? new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
+				$cell = $myDate ? $myDate->format($this->dtf) : '-';
+				break;
             case '_description':
                 $cell = w2p_textarea($value);
                 break;
