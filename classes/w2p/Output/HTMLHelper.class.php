@@ -80,13 +80,24 @@ class w2p_Output_HTMLHelper
             case '_task':
                 $obj = new CTask();
                 $obj->load($value);
-                $cell = '<a href="?m=tasks&a=view&task_id='.$value.'">'.$obj->task_name.'</a>';
+                $mod = substr($suffix, 1);
+                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
+                $cell = '<a href="'.$link.'">'.$obj->task_name.'</a>';
                 break;
+            case '_company':
+                $obj = new CCompany();
+                $obj->load($value);
+                $mod = substr($suffix, 1);
+                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
+                $cell = '<a href="'.$link.'">'.$obj->company_name.'</a>';
+                break;
+
+
             case '_name':
+                $prefix = ($prefix == 'dept') ? 'department' : $prefix;
                 $link = '?m='. w2p_pluralize($prefix) .'&a=view&'.$prefix.'_id='.$this->tableRowData[$prefix.'_id'];
                 $cell = '<a href="'.$link.'">'.$value.'</a>';
                 break;
-
             case '_category':
             case '_status':
             case '_type':
