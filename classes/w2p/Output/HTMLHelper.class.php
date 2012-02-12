@@ -118,8 +118,9 @@ class w2p_Output_HTMLHelper
             case '_email':
                 $cell = w2p_email($value);
                 break;
-            case '_date':
-                $additional = 'nowrap="nowrap"';
+            case '_birthday':
+			case '_date':
+				$additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
                 $cell = $myDate ? $myDate->format($this->df) : '-';
                 break;
