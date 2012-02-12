@@ -17,12 +17,13 @@ $contacts = CCompany::getContacts($AppUI, $company->company_id);
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('contacts', 'company_view');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('contacts', 'company_view');
+
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
@@ -31,6 +32,8 @@ $contacts = CCompany::getContacts($AppUI, $company->company_id);
                 'contact_email', 'contact_phone', 'dept_name');
             $fieldNames = array('Name', 'Job Title', 'Email', 'Phone', 
                 'Department');
+
+            $module->storeSettings('contacts', 'company_view', $fieldList, $fieldNames);
         }
 //TODO: The link below is commented out because this view doesn't support sorting... yet.
         foreach ($fieldNames as $index => $name) {
@@ -46,17 +49,14 @@ $contacts = CCompany::getContacts($AppUI, $company->company_id);
 <?php
 if (count($contacts) > 0) {
 	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-    foreach ($contacts as $contact_id => $contact_data) {
-        echo '<tr><td class="hilite">';
-		echo '<a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">';
-		echo $contact_data['contact_name'];
-		echo '</a>';
-		echo '</td>';
-        echo $htmlHelper->createCell('contact_job', $contact_data['contact_job']);
-        echo $htmlHelper->createCell('contact_email', $contact_data['contact_email']);
-        echo $htmlHelper->createCell('contact_phone', $contact_data['contact_phone']);
-        echo $htmlHelper->createCell('dept_name', $contact_data['dept_name']);
-		echo '</tr>';
+
+    foreach ($contacts as $row) {
+        echo '<tr>';
+        $htmlHelper->stageRowData($row);        
+        foreach ($fieldList as $index => $column) {
+            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]]);
+        }
+        echo '</tr>';
 	}
 } else {
 	?><tr><td colspan="5"><?php echo $AppUI->_('No data available') . '<br />' . $AppUI->getMsg(); ?></td></tr><?php
