@@ -118,12 +118,13 @@ if ($is_tabbed) {
             <?php
             $fieldList = array();
             $fieldNames = array();
-            $fields = w2p_Core_Module::getSettings('projects', 'index_list');
+
+            $module = new w2p_Core_Module();
+            $fields = $module->loadSettings('projects', 'index_list');
+
             if (count($fields) > 0) {
-                foreach ($fields as $field => $text) {
-                    $fieldList[] = $field;
-                    $fieldNames[] = $text;
-                }
+                $fieldList = array_keys($fields);
+                $fieldNames = array_values($fields);
             } else {
                 // TODO: This is only in place to provide an pre-upgrade-safe 
                 //   state for versions earlier than v2.3
@@ -233,13 +234,6 @@ if ($is_tabbed) {
                                 }
                                 $s .= '</td>';
                                 break;
-                            case 'project_company':
-                                $s .= '<td width="30%">';
-                                $s .= '<a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" >';
-                                $s .= htmlspecialchars($row['company_name'], ENT_QUOTES);
-                                $s .= '</a>';
-                                $s .= '</td>';
-                                break;
 							case 'project_color_identifier':
                                 $s .= '<td class="center" width="1" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
                                 $s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
@@ -253,16 +247,6 @@ if ($is_tabbed) {
                                 $s .= '</a>';
                                 $s .= '</td>';
                                 break;
-                            case 'project_priority':
-                                $s .= '<td class="center">';
-                                if ($row[$field] < 0) {
-                                    $s .= '<img src="' . w2PfindImage('icons/priority-' . -$row[$field] . '.gif') . '" width=13 height=16>';
-                                } elseif ($row['project_priority'] > 0) {
-                                    $s .= '<img src="' . w2PfindImage('icons/priority+' . $row[$field] . '.gif') . '"  width=13 height=16>';
-                                }
-                                $s .= '</td>';
-                                break;
-
                             case 'task_log_problem':
                                 $s .= '<td class="center">';
                                 $s .= $row[$field] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';

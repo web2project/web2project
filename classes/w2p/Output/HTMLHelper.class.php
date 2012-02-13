@@ -66,7 +66,7 @@ class w2p_Output_HTMLHelper
      *   fields like project_company, dept_company because we still have a 
      *   common suffix.
      */
-	public function createCell($fieldName, $value, $custom = array()) {
+    public function createCell($fieldName, $value, $custom = array()) {
 
         $last_underscore = strrpos($fieldName, '_');
         $prefix = ($last_underscore !== false) ? substr($fieldName, 0, $last_underscore) : $fieldName;
