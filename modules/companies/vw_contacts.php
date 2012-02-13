@@ -59,12 +59,12 @@ if (count($contacts) > 0) {
         echo '</tr>';
 	}
 } else {
-	?><tr><td colspan="5"><?php echo $AppUI->_('No data available') . '<br />' . $AppUI->getMsg(); ?></td></tr><?php
+	?><tr><td colspan="<?php echo count($fieldList); ?>"><?php echo $AppUI->_('No data available') . '<br />' . $AppUI->getMsg(); ?></td></tr><?php
 }
 ?>
 
 	<tr>
-		<td colspan="5" align="right" valign="top" style="background-color:#ffffff">
+		<td colspan="<?php echo count($fieldList); ?>" align="right" valign="top" style="background-color:#ffffff">
 			<input type="button" class=button value="<?php echo $AppUI->_('new contact') ?>" onClick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company->company_id; ?>'">
 		</td>
 	</tr>

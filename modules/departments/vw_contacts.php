@@ -4,30 +4,64 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 global $dept_id, $dept, $company_id;
-?>
 
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl list">
-
-<tr><th><?php echo $AppUI->_('Name'); ?></th><th><?php echo $AppUI->_('Email'); ?></th><th><?php echo $AppUI->_('Telephone'); ?></th></tr>
-<?php
 $contacts = CDepartment::getContactList($AppUI, $dept_id);
+?>
+<a name="contacts-department_view"> </a>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
 
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('contacts', 'department_view');
+
+        if (count($fields) > 0) {
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('contact_name', 'contact_job', 
+                'contact_email', 'contact_phone', 'dept_name');
+            $fieldNames = array('Name', 'Job Title', 'Email', 'Phone', 
+                'Department');
+
+            $module->storeSettings('contacts', 'department_view', $fieldList, $fieldNames);
+        }
+//TODO: The link below is commented out because this view doesn't support sorting... yet.
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+<!--                <a href="?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=<?php echo $fieldList[$index]; ?>#contacts-company_view" class="hdr">-->
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+<!--                </a>-->
+            </th><?php
+        }
+        ?>
+    </tr>
+
+<?php
 if (count($contacts) > 0) {
-    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-    foreach ($contacts as $contact_id => $contact_data) {
+	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+    foreach ($contacts as $row) {
         echo '<tr>';
-        echo '<td><a href="./index.php?m=contacts&a=view&contact_id=' . $contact_data['contact_id'] . '">' . $contact_data['contact_name'] . '</a></td>';
-        echo $htmlHelper->createCell('contact_email', $contact_data['contact_email']);
-        echo $htmlHelper->createCell('contact_phone', $contact_data['contact_phone']);
+        $htmlHelper->stageRowData($row);        
+        foreach ($fieldList as $index => $column) {
+            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]]);
+        }
         echo '</tr>';
-    }
+	}
 } else {
-    ?><tr><td colspan="5"><?php echo $AppUI->_('No data available') . '<br />' . $AppUI->getMsg(); ?></td></tr><?php
+	?><tr><td colspan="<?php echo count($fieldList); ?>"><?php echo $AppUI->_('No data available') . '<br />' . $AppUI->getMsg(); ?></td></tr><?php
 }
 ?>
+
 	<tr>
-		<td colspan="3" align="right" valign="top" style="background-color:#ffffff">
-			<input type="button" class="button" value="<?php echo $AppUI->_('new contact'); ?>" onclick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company_id; ?>&company_name=<?php echo $dept['company_name']; ?>&dept_id=<?php echo $dept['dept_id']; ?>&dept_name=<?php echo $dept['dept_name']; ?>'">			
+		<td colspan="<?php echo count($fieldList); ?>" align="right" valign="top" style="background-color:#ffffff">
+			<input type="button" class=button value="<?php echo $AppUI->_('new contact') ?>" onClick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company->company_id; ?>'">
 		</td>
 	</tr>
 </table>
