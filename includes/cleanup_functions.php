@@ -1895,31 +1895,6 @@ function showchilddept(&$a, $level = 1) {
     return $s;
 }
 
-// From:  modules/companies/vw_depts.php
-function showchilddept_comp(&$a, $level = 0) {
-	global $AppUI;
-	$s = '
-	<td>
-		<a href="./index.php?m=departments&amp;a=addedit&amp;dept_id=' . $a["dept_id"] . '" title="' . $AppUI->_('edit') . '">
-			' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '
-	</td>
-	<td>';
-
-	for ($y = 0; $y < $level; $y++) {
-		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">';
-		} else {
-			$s .= '<img src="' . w2PfindImage('shim.gif') . '" width="16" height="12" border="0" alt="">';
-		}
-	}
-
-	$s .= '<a href="./index.php?m=departments&a=view&dept_id=' . $a['dept_id'] . '">' . $a['dept_name'] . '</a>';
-	$s .= '</td>';
-	$s .= '<td align="center">' . ($a['dept_users'] ? $a['dept_users'] : '') . '</td>';
-
-	return '<tr>' . $s . '</tr>';
-}
-
 //comes from modules/departments/departments.class.php
 //recursive function to display children departments.
 function findchilddept(&$tarr, $parent, $level = 1) {
@@ -1928,18 +1903,6 @@ function findchilddept(&$tarr, $parent, $level = 1) {
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
 			findchilddept($tarr, $tarr[$x]['dept_id'], $level);
-		}
-	}
-}
-
-// From:  modules/companies/vw_depts.php
-function findchilddept_comp(&$tarr, $parent, $level = 0) {
-	$level = $level + 1;
-	$n = count($tarr);
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
-			echo showchilddept_comp($tarr[$x], $level);
-			findchilddept_comp($tarr, $tarr[$x]['dept_id'], $level);
 		}
 	}
 }

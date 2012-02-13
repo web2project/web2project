@@ -91,3 +91,57 @@ function remove_invalid($arr) {
     trigger_error("The remove_invalid function has been deprecated and will be removed in v4.0. Use array_filter instead.", E_USER_NOTICE );
     return array_filter($arr);
 }
+
+
+/*
+ * This was used to retrieve and display the child departments starting from 
+ *   any ancestor. More importantly, it displays the relationship visually 
+ *   with little icons. There are a couple other variations of this function.
+ * TODO:  Remove for v4.0 - caseydk 13 Feb 2012
+ * 
+ * @deprecated
+ */
+// From:  modules/companies/vw_depts.php
+function findchilddept_comp(&$tarr, $parent, $level = 0) {
+	$level = $level + 1;
+	$n = count($tarr);
+	for ($x = 0; $x < $n; $x++) {
+		if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
+			echo showchilddept_comp($tarr[$x], $level);
+			findchilddept_comp($tarr, $tarr[$x]['dept_id'], $level);
+		}
+	}
+}
+
+/*
+ * This was used to display the child departments one row at a time. More 
+ *   importantly, it displays the relationship visually with little icons. 
+ *   There are a couple other variations of this function.
+ * TODO:  Remove for v4.0 - caseydk 13 Feb 2012
+ * 
+ * @deprecated
+ */
+// From:  modules/companies/vw_depts.php
+function showchilddept_comp(&$a, $level = 0) {
+	global $AppUI;
+	$s = '
+	<td>
+		<a href="./index.php?m=departments&amp;a=addedit&amp;dept_id=' . $a["dept_id"] . '" title="' . $AppUI->_('edit') . '">
+			' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '
+	</td>
+	<td>';
+
+	for ($y = 0; $y < $level; $y++) {
+		if ($y + 1 == $level) {
+			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">';
+		} else {
+			$s .= '<img src="' . w2PfindImage('shim.gif') . '" width="16" height="12" border="0" alt="">';
+		}
+	}
+
+	$s .= '<a href="./index.php?m=departments&a=view&dept_id=' . $a['dept_id'] . '">' . $a['dept_name'] . '</a>';
+	$s .= '</td>';
+	$s .= '<td align="center">' . ($a['dept_users'] ? $a['dept_users'] : '') . '</td>';
+
+	return '<tr>' . $s . '</tr>';
+}
