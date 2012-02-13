@@ -17,18 +17,20 @@ $depts = CCompany::getDepartments($AppUI, $company_id);
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('departments', 'company_view');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('departments', 'company_view');
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('', 'dept_name', '');
-            $fieldNames = array('', 'Name', 'Users');
+            $fieldList = array('dept_name', 'dept_users');
+            $fieldNames = array('Name', 'Users');
+
+            $module->storeSettings('departments', 'company_view', $fieldList, $fieldNames);
         }
 //TODO: The link below is commented out because this view doesn't support sorting... yet.
         foreach ($fieldNames as $index => $name) {
@@ -42,11 +44,16 @@ $depts = CCompany::getDepartments($AppUI, $company_id);
     </tr>
 <?php
 if (count($depts)) {
-	foreach ($depts as $dept) {
-		if ($dept['dept_parent'] == 0) {
-			echo showchilddept_comp($dept);
-			findchilddept_comp($depts, $dept['dept_id']);
-		}
+	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+    foreach ($depts as $row) {
+        echo '<tr>';
+        $htmlHelper->stageRowData($row);
+//TODO: how do we tweak this to get the parent/child relationship to display?
+        foreach ($fieldList as $index => $column) {
+            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+        }
+        echo '</tr>';
 	}
 } else {
     echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
@@ -54,7 +61,7 @@ if (count($depts)) {
 
 echo '
 <tr>
-	<td colspan="3" nowrap="nowrap" rowspan="99" align="right" valign="top" style="background-color:#ffffff">';
+	<td colspan="'.count($fieldNames).'" nowrap="nowrap" rowspan="99" align="right" valign="top" style="background-color:#ffffff">';
 if ($canEdit) {
 	echo '<input type="button" class=button value="' . $AppUI->_('new department') . '" onclick="javascript:window.location=\'./index.php?m=departments&amp;a=addedit&amp;company_id=' . $company_id . '\';" />';
 }

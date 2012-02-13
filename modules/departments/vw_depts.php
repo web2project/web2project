@@ -11,20 +11,20 @@ $dept_type_filter = $currentTabId-1;
 // get any records denied from viewing
 
 $dept = new CDepartment();
-$deptList = $dept->getFilteredDepartmentList(null, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$depts = $dept->getFilteredDepartmentList(null, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
     <tr>
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('departments', 'index_table');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('departments', 'index_list');
+
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
@@ -43,20 +43,20 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         ?>
     </tr>
 <?php
-if (count($deptList) > 0) {
-	$displayList = array();
-    foreach ($deptList as $dept) {
-		if ($dept['dept_parent'] == 0) {
-			findchilddept($deptList, $dept['dept_id']);
-		}
-		echo '<tr><td>' . (mb_trim($dept['dept_desc']) ? w2PtoolTip($dept['dept_name'], $dept['dept_desc']) : '') . '<a href="./index.php?m=departments&a=view&dept_id=' . $dept['dept_id'] . '" >' . $dept['dept_name'] . '</a>' . (mb_trim($dept['dept_desc']) ? w2PendTip() : '') . '</td>';
-        echo $htmlHelper->createCell('project_count', $dept['countp']);
-        echo $htmlHelper->createCell('project_count', $dept['inactive']);
-        echo $htmlHelper->createCell('dept_type', $AppUI->_($types[$dept['dept_type']]));
+if (count($depts)) {
+	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+    foreach ($depts as $row) {
+        echo '<tr>';
+        $htmlHelper->stageRowData($row);
+//TODO: how do we tweak this to get the parent/child relationship to display?
+        foreach ($fieldList as $index => $column) {
+            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+        }
         echo '</tr>';
 	}
 } else {
-	echo '<tr><td colspan="4">' . $AppUI->_('No data available') . '</td></tr>';
+    echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
 }
 ?>
 </table>
