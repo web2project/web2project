@@ -113,7 +113,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     //TODO: rotate the headers by 90 degrees?
     $activeOnly = ($active_projects) ? true : false;
     $projectList = CCompany::getProjects($AppUI, $company_id, $activeOnly);
-    $bcode = new bcode();
+    $bcode = new CSystem_Bcode();
     $project = new CProject();
 
     if (count($projectList)) {

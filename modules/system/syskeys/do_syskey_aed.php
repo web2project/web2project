@@ -11,7 +11,7 @@ if (!canEdit('system')) {
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
 
-$obj = new CSysKey();
+$obj = new CSystem_SysKey();
 
 if (!$obj->bind($_POST)) {
 	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);

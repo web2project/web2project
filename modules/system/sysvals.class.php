@@ -102,6 +102,9 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 	}
 }
 
+/**
+ * @deprecated
+ */
 class CSysVal extends CSystem_SysVal {
 	public function __construct($key = null, $title = null, $value = null) {
         parent::__construct($key, $title, $value);

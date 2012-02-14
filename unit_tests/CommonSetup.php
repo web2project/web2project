@@ -28,8 +28,17 @@ $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
 $defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
 require_once W2P_BASE_DIR . '/includes/session.php';
-require_once 'PHPUnit/Framework.php';
-require_once 'PHPUnit/Extensions/Database/TestCase.php';
+
+if (file_exists('PHPUnit/Framework.php')) {
+    //PHPUnit 3.5.15
+    require_once 'PHPUnit/Framework.php';
+    require_once 'PHPUnit/Extensions/Database/TestCase.php';
+} else {
+    /*
+     * For PHPUnit 3.6+, we don't need to explicitly require anything, it's 
+     *   all handled via an autoloader.
+     */
+}
 
 /*
  * Need this to test actions that require permissions.

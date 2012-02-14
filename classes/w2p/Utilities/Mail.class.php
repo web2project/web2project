@@ -368,9 +368,9 @@ class w2p_Utilities_Mail extends PHPMailer {
 	/**
 	 * Dequeue the email and transfer it.  Called from the queue manager.
 	 *
-	 * @access private
+	 * @access public
 	 */
-	private function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
+	public function SendQueuedMail($mod, $type, $originator, $owner, &$args) {
 
         foreach($args as $key=>$value) {
             $this->$key = $value;

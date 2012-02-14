@@ -11,7 +11,7 @@ $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'al
  * { Description }
  *
  */
-class CCalendar extends w2p_Core_BaseObject {
+class CEvent extends w2p_Core_BaseObject {
 	/**
  	@var int */
 	public $event_id = null;
@@ -621,13 +621,6 @@ class CCalendar extends w2p_Core_BaseObject {
 		$q->addOrder('event_start_date');
 
 		return $q->loadList();
-	}
-}
-
-class CEvent extends CCalendar {
-	public function __construct() {
-		parent::__construct();
-        trigger_error("CEvent has been deprecated in v3.0 and will be removed by v4.0. Please use CCalendar instead.", E_USER_NOTICE );
 	}
 }
 

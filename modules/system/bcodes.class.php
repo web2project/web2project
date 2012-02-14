@@ -143,6 +143,9 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
     }
 }
 
+/**
+ * @deprecated
+ */
 class bcode extends CSystem_Bcode {
 	public function __construct() {
         parent::__construct();

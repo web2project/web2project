@@ -10,7 +10,7 @@ if (!canEdit('system')) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$bcode = new bcode();
+$bcode = new CSystem_Bcode();
 $bcode->load($billingcode_id);
 $billingcodes = $bcode->getBillingCodes($company_id, false);
 
