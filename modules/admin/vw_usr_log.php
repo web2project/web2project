@@ -87,7 +87,8 @@ if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
     $end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_POST, 'log_end_date', date('Y-m-d'))));
     $end_date = $AppUI->convertToSystemTZ($end_date);
     $userId = isset($userId) ? $userId : 0;
-    $logs = CUser::getLogs($userId, $start_date, $end_date);
+    $user = new CUser();
+    $logs = $user->getLogList($userId, $start_date, $end_date);
     ?>
     <table width="50%" border="0" cellpadding="2" cellspacing="1" class="tbl list" align="center">
 		<tr>
