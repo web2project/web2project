@@ -88,7 +88,7 @@ function w2PsessionDestroy($id, $user_access_log_id = 0) {
 
 	$q = new w2p_Database_Query;
 	$q->addTable('user_access_log');
-	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
+	$q->addUpdate('date_time_out', $q->dbfnNowWithTZ());
 	$q2 = new w2p_Database_Query;
 	$q2->addTable('sessions');
 	$q2->addQuery('session_user');
@@ -116,7 +116,7 @@ function w2PsessionGC($maxlifetime) {
 	$where = 'UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > ' . $idle . ' OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > ' . $max;
 	$q = new w2p_Database_Query;
 	$q->addTable('user_access_log');
-	$q->addUpdate('date_time_out', date('Y-m-d H:i:s'));
+	$q->addUpdate('date_time_out', $q->dbfnNowWithTZ());
 	$q2 = new w2p_Database_Query;
 	$q2->addTable('sessions');
 	$q2->addQuery('session_user');
