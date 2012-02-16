@@ -11,9 +11,8 @@ if ($task_id && !$project_id) {
 }
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
-$m = 'links';
 
-if ($canEdit) {
+if ($canEdit && 'links' != $m) {
     $titleBlock = new w2p_Theme_TitleBlock( '', '', $m, "$m.$a" );
     $titleBlock->addCell(
         '<input type="submit" class="button" value="'.$AppUI->_('new link').'">', '',
@@ -117,6 +116,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
         ?>
         </td>
         <?php
+        $htmlHelper->stageRowData($row);
         foreach ($fieldList as $index => $column) {
             echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
         }
