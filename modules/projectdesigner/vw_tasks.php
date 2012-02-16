@@ -241,15 +241,16 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
                 'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish', 
                 'Assgined Users');
         }
-        if ($showEditCheckbox) {
-            $fieldList[] = '';
-            $fieldNames[] = '';
-        }
 //TODO: $PROJDESIGN_CONFIG['show_task_descriptions'] will be on the config screen going forward..
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
                 <?php echo $AppUI->_($fieldNames[$index]); ?>
             </th><?php
+        }
+        if ($showEditCheckbox) {
+            $fieldList[] = '';
+            $fieldNames[] = '';
+            echo '<th width="1"><input type="checkbox" onclick="mult_sel(this, \'selected_task_\', \'frm_tasks\')" name="multi_check"/></th>';
         }
 
         // Number of columns (used to calculate how many columns to span things through)
