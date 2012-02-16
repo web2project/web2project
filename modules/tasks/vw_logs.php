@@ -11,12 +11,6 @@ if (!canView('task_log')) {
 }
 
 $problem = (int) w2PgetParam($_GET, 'problem', null);
-// get sysvals
-$taskLogReference = w2PgetSysVal('TaskLogReference');
-$taskLogReferenceImage = w2PgetSysVal('TaskLogReferenceImage');
-$billingCategory = w2PgetSysVal('BudgetCategory');
-
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
 ?>
 <script language="javascript" type="text/javascript">
@@ -47,23 +41,27 @@ function delIt2(id) {
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('task_logs', 'tasks_view');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('tasks', 'task_logs_tasks_view');
+
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('', 'task_log_date', 'task_log_reference',
+            $fieldList = array('task_log_date', 'task_log_reference',
                 'task_log_name', 'task_log_related_url', 'task_log_creator',
                 'task_log_hours', 'task_log_costcode', 'task_log_description');
-            $fieldNames = array('', 'Date', 'Ref', 'Summary', 'URL', 'User',
+            $fieldNames = array('Date', 'Ref', 'Summary', 'URL', 'User',
                 'Hours', 'Cost Code', 'Comments', '');
+
+            $module->storeSettings('tasks', 'task_logs_tasks_view', $fieldList, $fieldNames);
         }
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
+        echo '<th></th>';
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
 <!--                <a href="?m=projects&a=view&project_id=<?php echo $project_id; ?>&sort=<?php echo $fieldList[$index]; ?>#task_logs-tasks_view" class="hdr">-->
@@ -71,6 +69,7 @@ function delIt2(id) {
 <!--                </a>-->
             </th><?php
         }
+        echo '<th></th>';
         ?>
     </tr>
 <?php
@@ -82,49 +81,55 @@ $logs = $task->getTaskLogs($task_id, $problem);
 $s = '';
 $hrs = 0;
 $canEdit = canEdit('task_log');
-$sf = $AppUI->getPref('SHDATEFORMAT');
-foreach ($logs as $row) {
-	$task_log_date = intval($row['task_log_date']) ? new w2p_Utilities_Date($row['task_log_date']) : null;
-	$style = $row['task_log_problem'] ? 'background-color:#cc6666;color:#ffffff' : '';
 
-	$s .= '<tr bgcolor="white" valign="top"><td>';
-	if ($canEdit) {
-		$s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=';
-        $s .= ($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1';
-		$s .= '&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a>';
-	}
-    $s .= '<a name="tasklog' . $row['task_log_id'] . '"></a>';
-	$s .= '</td>';
-	$s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($sf) : '-') . '<br /><br />';
-    $task_log_updated = intval($row['task_log_updated']) ? $row['task_log_updated'] : null;
-    $s .= '(' . $AppUI->_('Logged').': ' . ($task_log_updated ? $AppUI->formatTZAwareTime($task_log_updated, $df) : '-') . ')';
-    $s .= '</td>';
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
-    $reference = ($row['task_log_reference'] > 0) ? $taskLogReference[$row['task_log_reference']] : '-';
-	$s .= '<td align="center" valign="middle">' . $reference . '</td>';
-    $s .= $htmlHelper->createCell('task_log_name', $row['task_log_name']);
-	$s .= !empty($row['task_log_related_url']) ? '<td><a href="' . $row['task_log_related_url'] . '" title="' . $row['task_log_related_url'] . '">' . $AppUI->_('URL') . '</a></td>' : '<td></td>';
-    $s .= $htmlHelper->createCell('real_name', $row['real_name']);
-    $s .= $htmlHelper->createCell('task_log_hours', sprintf('%.2f', $row['task_log_hours']));
-	$s .= '<td width="100">' . $row['task_log_costcode'] .' ('.$billingCategory[$row['billingcode_category']]. ')</td>';
-    $s .= $htmlHelper->createCell('task_log_description', $row['task_log_description']);
+$billingCategory = w2PgetSysVal('BudgetCategory');
+$durnTypes = w2PgetSysVal('TaskDurationType');
+$taskLogReference = w2PgetSysVal('TaskLogReference');
+$status = w2PgetSysVal('TaskStatus');
+$task_types = w2PgetSysVal('TaskType');
 
-	$s .= '<td>';
-	if ($canDelete) {
-		$s .= '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' . $AppUI->_('delete log') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
-	}
-	$s .= '</td></tr>';
-	$hrs += (float)$row['task_log_hours'];
+$customLookups = array('budget_category' => $billingCategory, 'task_duration_type' => $durnTypes,
+        'task_log_reference' => $taskLogReference, 'task_status' => $status, 'task_type' => $task_types);
+
+if (count($logs)) {
+    foreach ($logs as $row) {
+        $s .= '<tr bgcolor="white" valign="top"><td>';
+
+        if ($canEdit) {
+            $s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=';
+            $s .= ($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1';
+            $s .= '&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a>';
+        }
+        $s .= '<a name="tasklog' . $row['task_log_id'] . '"></a>';
+        $s .= '</td>';
+
+        $htmlHelper->stageRowData($row);
+        foreach ($fieldList as $index => $column) {
+            $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+        }
+
+        $s .= '<td>';
+        if ($canDelete) {
+            $s .= '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' . $AppUI->_('delete log') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
+        }
+
+        $s .= '</td></tr>';
+        $hrs += (float)$row['task_log_hours'];
+    }
 }
+
 $s .= '<tr bgcolor="white" valign="top">';
 $s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
-$s .= $htmlHelper->createCell('task_log_hours', $hrs);
+$s .= $htmlHelper->createCell('total_duration', sprintf('%.2f', $hrs));
 $s .= '<td align="right" colspan="3">';
 if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
 	$s .= '<form action="?m=tasks&a=view&tab=1&task_id=' . $task_id . '" method="post" accept-charset="utf-8">';
     $s .= '<input type="submit" class="button" value="' . $AppUI->_('new log') . '"></form>';
 }
 $s .= '</td></tr>';
+
 echo $s;
 ?>
 </table>

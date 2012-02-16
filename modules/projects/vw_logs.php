@@ -125,11 +125,14 @@ $hrs = 0;
 $canEdit = canEdit('task_log');
 
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 $billingCategory = w2PgetSysVal('BudgetCategory');
 $durnTypes = w2PgetSysVal('TaskDurationType');
-$customLookups = array('budget_category' => $billingCategory, 'task_duration_type' => $durnTypes);
+$status = w2PgetSysVal('TaskStatus');
+$task_types = w2PgetSysVal('TaskType');
+
+$customLookups = array('budget_category' => $billingCategory, 'task_duration_type' => $durnTypes,
+        'task_status' => $status, 'task_type' => $task_types);
 
 if (count($logs)) {
     foreach ($logs as $row) {
