@@ -129,11 +129,12 @@ if (function_exists('styleRenderBoxTop')) {
         </tr>
         <?php
         if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
+            $messageAuthor = isset($message->message_author) ? $message->message_author : $AppUI->user_id;
             $date = intval($message->message_date) ? new w2p_Utilities_Date($message->message_date) : new w2p_Utilities_Date();
             ?>
             <tr>
                 <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
-                <td align="left"><?php echo CContact::getContactByUserid($message->message_author); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td>
+                <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td>
             </tr>
             <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message->message_title ?></td></tr>
             <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
