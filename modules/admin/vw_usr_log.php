@@ -87,25 +87,30 @@ if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
     $end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_POST, 'log_end_date', date('Y-m-d'))));
     $end_date = $AppUI->convertToSystemTZ($end_date);
     $userId = isset($userId) ? $userId : 0;
-    $logs = CUser::getLogs($userId, $start_date, $end_date);
+    $user = new CUser();
+    $logs = $user->getLogList($userId, $start_date, $end_date);
     ?>
     <table width="50%" border="0" cellpadding="2" cellspacing="1" class="tbl list" align="center">
-		<tr>
-			<th nowrap="nowrap" ><?php echo $AppUI->_('Name(s)'); ?></th>
-			<th nowrap="nowrap" ><?php echo $AppUI->_('Last Name'); ?></th>
-			<th nowrap="nowrap" ><?php echo $AppUI->_('Internet Address'); ?></th>
-			<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time IN'); ?></th>
-			<th nowrap="nowrap" ><?php echo $AppUI->_('Date Time OUT'); ?></th>
-		</tr>
-		<?php foreach ($logs as $detail) { ?>
-			<tr>
-				<td align="center"><?php echo $detail['contact_first_name']; ?></td>
-				<td align="center"><?php echo $detail['contact_last_name']; ?></td>
-				<td align="center"><?php echo $detail['user_ip']; ?></td>
-				<td align="center"><?php echo $detail['date_time_in']; ?></td>
-				<td align="center"><?php echo $detail['date_time_out']; ?></td>
-			</tr>
-		<?php } ?>
-	</table>
+        <tr>
+            <th nowrap="nowrap" ><?php echo $AppUI->_('Name(s)'); ?></th>
+            <th nowrap="nowrap" ><?php echo $AppUI->_('Last Name'); ?></th>
+            <th nowrap="nowrap" ><?php echo $AppUI->_('Internet Address'); ?></th>
+            <th nowrap="nowrap" ><?php echo $AppUI->_('Date Time IN'); ?></th>
+            <th nowrap="nowrap" ><?php echo $AppUI->_('Date Time OUT'); ?></th>
+        </tr>
+        <?php foreach ($logs as $detail) { ?>
+            <tr>
+                <td align="center"><?php echo $detail['contact_first_name']; ?></td>
+                <td align="center"><?php echo $detail['contact_last_name']; ?></td>
+                <td align="center"><?php echo $detail['user_ip']; ?></td>
+                <td align="center"><?php echo $AppUI->formatTZAwareTime($detail['date_time_in']); ?></td>
+                <td align="center">
+                    <?php if ($detail['date_time_out'] != '0000-00-00 00:00:00'): ?>
+                        <?php echo $AppUI->formatTZAwareTime($detail['date_time_out']); ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
     <?php
 }
