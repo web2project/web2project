@@ -651,7 +651,7 @@ class CProject extends w2p_Core_BaseObject {
 
         $subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
-		$user = new CAdmin_User();
+		$user = new CUser();
         $user->overrideDatabase($this->_query);
 		$user->loadFull($this->project_owner);
 
