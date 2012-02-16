@@ -95,18 +95,16 @@ class CContact extends w2p_Core_BaseObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-//TODO: There is something wrong with this permissions check..
-        //if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
-        if ($this->contact_id) {// && $this->_perms->checkModuleItem('contacts', 'edit', $this->contact_id)) {
+        
+        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
         }
-//TODO: There is something wrong with this permissions check..
-        //if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
-        if (0 == $this->contact_id) {// && $this->_perms->checkModuleItem('contacts', 'add')) {
+
+        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
