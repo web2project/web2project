@@ -11,7 +11,7 @@
  *   LICENSE file in root of site for further details
  *
  * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    CAdmin_Users
+ * @category    CUsers
  * @package     web2project
  * @subpackage  unit_tests
  * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
@@ -22,7 +22,7 @@
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'CommonSetup.php';
 
-class CAdmin_Users_Test extends CommonSetup
+class CUsers_Test extends CommonSetup
 {
 
     protected function setUp()
@@ -32,7 +32,7 @@ class CAdmin_Users_Test extends CommonSetup
       global $AppUI;
       $AppUI->user_id = 1;
 
-      $this->obj    = new CAdmin_User();
+      $this->obj    = new CUser();
       $this->obj->overrideDatabase($this->mockDB);
 
       $GLOBALS['acl'] = new w2p_Mocks_Permissions();
@@ -55,11 +55,11 @@ class CAdmin_Users_Test extends CommonSetup
     }
 
     /**
-     * Tests the Attributes of a new CAdmin_Users object.
+     * Tests the Attributes of a new CUsers object.
      */
     public function testAttributes()
     {
-        $this->assertInstanceOf('CAdmin_User',            $this->obj);
+        $this->assertInstanceOf('CUser',            $this->obj);
         $this->assertObjectHasAttribute('user_username',  $this->obj);
         $this->assertObjectHasAttribute('user_password',  $this->obj);
         $this->assertObjectHasAttribute('user_type',      $this->obj);
@@ -72,7 +72,7 @@ class CAdmin_Users_Test extends CommonSetup
      */
     public function testAttributeValues()
     {
-        $this->assertInstanceOf('CAdmin_User',            $this->obj);
+        $this->assertInstanceOf('CUser',            $this->obj);
         $this->assertNull($this->obj->user_username);
         $this->assertNull($this->obj->user_password);
         $this->assertNull($this->obj->user_type);
@@ -110,7 +110,7 @@ class CAdmin_Users_Test extends CommonSetup
     public function testCreateUserExists()
     {
         $this->markTestIncomplete("Unfortunately, we can't test this one because
-            the CAdmin_User::exists() method is static and we don't have a way
+            the CUser::exists() method is static and we don't have a way
             to override its database call.");
     }
 

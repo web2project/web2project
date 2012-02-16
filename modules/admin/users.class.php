@@ -52,7 +52,7 @@ class CUser extends w2p_Core_BaseObject {
                     || $this->{$this->_tbl_key} == $this->_AppUI->user_id)
            ) {
             $this->perm_func = 'updateLogin';
-            $tmpUser = new CAdmin_User();
+            $tmpUser = new CUser();
             $tmpUser->overrideDatabase($this->_query);
             $tmpUser->load($this->user_id);
 
@@ -228,8 +228,8 @@ class CUser extends w2p_Core_BaseObject {
 	 * @deprecated
 	 */
 	public static function getUserIdByToken($token) {
-        trigger_error("CAdmin_User::getUserIdByToken has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->getIdByToken() instead.", E_USER_NOTICE );
-        $user = new CAdmin_User();
+        trigger_error("CUser::getUserIdByToken has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getIdByToken() instead.", E_USER_NOTICE );
+        $user = new CUser();
 
 		return $user->getIdByToken($token);
 	}
@@ -244,8 +244,8 @@ class CUser extends w2p_Core_BaseObject {
 	 * @deprecated
 	 */
 	public static function getUserIdByContactID($contactId) {
-        trigger_error("CAdmin_User::getUserIdByContactID has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->getIdByContactId() instead.", E_USER_NOTICE );
-        $user = new CAdmin_User();
+        trigger_error("CUser::getUserIdByContactID has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getIdByContactId() instead.", E_USER_NOTICE );
+        $user = new CUser();
 
         return $user->getIdByContactId($contactId);
 	}
@@ -270,8 +270,8 @@ class CUser extends w2p_Core_BaseObject {
 	 * @deprecated
 	 */
 	public static function generateUserToken($userId, $token = '') {
-        trigger_error("CAdmin_User::generateUserToken has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->generateToken() instead.", E_USER_NOTICE );
-        $user = new CAdmin_User();
+        trigger_error("CUser::generateUserToken has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->generateToken() instead.", E_USER_NOTICE );
+        $user = new CUser();
 
         return $user->generateToken($userId, $token);
 	}
@@ -297,9 +297,9 @@ class CUser extends w2p_Core_BaseObject {
     }
 
 	public static function exists($username) {
-        trigger_error("CAdmin_User::exists has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->user_exists() instead.", E_USER_NOTICE );
+        trigger_error("CUser::exists has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->user_exists() instead.", E_USER_NOTICE );
 
-        $user = new CAdmin_User();
+        $user = new CUser();
         return $user->user_exists($username);
 	}
 
@@ -312,8 +312,8 @@ class CUser extends w2p_Core_BaseObject {
 	 * @deprecated
 	 */
 	public static function getUserDeptId($user_id) {
-        trigger_error("CAdmin_User::getUserDeptId has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->getDeptId() instead.", E_USER_NOTICE );
-        $user = new CAdmin_User();
+        trigger_error("CUser::getUserDeptId has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getDeptId() instead.", E_USER_NOTICE );
+        $user = new CUser();
 
         return $user->getDeptId($user_id);
 	}
@@ -339,8 +339,8 @@ class CUser extends w2p_Core_BaseObject {
 	 * @deprecated
 	 */
 	public static function getLogs($userId, $startDate, $endDate) {
-        trigger_error("CAdmin_User::getLogs has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->getLogList() instead.", E_USER_NOTICE );
-        $user = new CAdmin_User();
+        trigger_error("CUser::getLogs has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getLogList() instead.", E_USER_NOTICE );
+        $user = new CUser();
 
         return $user->getLogList($userId, $startDate, $endDate);
 	}
@@ -372,8 +372,8 @@ class CUser extends w2p_Core_BaseObject {
 	 * @deprecated
 	 */
 	public static function isUserActive($user_id) {
-        trigger_error("CAdmin_User::isUserActive has been deprecated in v3.0 and will be removed by v4.0. Please use CAdmin_User->isActive() instead.", E_USER_NOTICE );
-        $user = new CAdmin_User();
+        trigger_error("CUser::isUserActive has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->isActive() instead.", E_USER_NOTICE );
+        $user = new CUser();
 
         return $user->isActive($user_id);
 	}
