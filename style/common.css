@@ -55,7 +55,8 @@ td.today span img, td.empty span img
     width:  100%;
 }
 
-.list ._date, .list ._hours {
+.list ._complete, .list ._created, .list ._date, .list ._duration, 
+    .list ._hours, .list ._updated, .list ._worked  {
     text-align: center;
 }
 

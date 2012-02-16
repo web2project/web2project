@@ -133,6 +133,7 @@ class w2p_Output_HTMLHelper
                 break;
             case '_creator':
 			case '_owner':
+            case '_updator':
                 $additional = 'nowrap="nowrap"';
 				$cell = w2PgetUsernameFromID($value);
 				break;
@@ -152,7 +153,9 @@ class w2p_Output_HTMLHelper
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
 				$cell = $myDate ? $myDate->format($this->df) : '-';
 				break;
-			case '_datetime':
+			case '_created':
+            case '_datetime':
+            case '_updated':
 				$additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
 				$cell = $myDate ? $myDate->format($this->dtf) : '-';
@@ -168,9 +171,6 @@ class w2p_Output_HTMLHelper
             case '_complete':
             case '_assignment':
                 $cell = $value.'%';
-                break;
-            case '_url':
-                $cell = w2p_url($value);
                 break;
             case '_count':
             case '_duration':
