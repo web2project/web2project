@@ -206,7 +206,7 @@
 'Task name'=>'Nom tâche',
 'Tasks'=>'Tâches',
 'Tasks (In-Active)'=>'Tâches (inactives)',
-'Tasks (Inactive)'=>'Tâches (active)',
+'Tasks (Inactive)'=>'Tâches (inactive)',
 'Tasks created by'=>'Tâches créées par',
 'Team Size'=>'Taille équipe',
 'Template'=>'Modèle',
