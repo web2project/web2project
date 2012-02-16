@@ -3,12 +3,11 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $project_id, $df, $canEdit, $m, $tab;
+global $AppUI, $project_id, $canEdit, $m, $tab;
 
 $company_id = CProject::getCompany($project_id);
 
 $task_log_costcodes =  array(0 => '(all)') + CProject::getBillingCodes($company_id, true);
-$billingCategory = w2PgetSysVal('BudgetCategory');
 
 $users = w2PgetUsers();
 
@@ -81,22 +80,26 @@ TODO: disabled this filter for now... something is wrong with the userId portion
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('task_logs', 'projects_view');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('tasks', 'task_logs_projects_view');
+
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
             // TODO: This is only in place to provide an pre-upgrade-safe 
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('', 'task_log_date', 'task_log_name', 
+            $fieldList = array('task_log_date', 'task_log_name', 
                 'task_log_creator', 'task_log_hours', 'task_log_costcode', 'task_log_description');
-            $fieldNames = array('', 'Date', 'Summary', 'User', 'Hours', 
+            $fieldNames = array('Date', 'Summary', 'User', 'Hours', 
                 'Cost Code', 'Comments', '');
+
+            $module->storeSettings('tasks', 'task_logs_projects_view', $fieldList, $fieldNames);
         }
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
+        echo '<th></th>';
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
 <!--                <a href="?m=projects&a=view&project_id=<?php echo $project_id; ?>&sort=<?php echo $fieldList[$index]; ?>#task_logs-projects_view" class="hdr">-->
@@ -104,6 +107,7 @@ TODO: disabled this filter for now... something is wrong with the userId portion
 <!--                </a>-->
             </th><?php
         }
+        echo '<th></th>';
         ?>
     </tr>
 <?php
@@ -119,43 +123,36 @@ $logs = $project->getTaskLogs(null, $project_id, $user_id, $hide_inactive, $hide
 $s = '';
 $hrs = 0;
 $canEdit = canEdit('task_log');
-$sf = $df;
-$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
+$billingCategory = w2PgetSysVal('BudgetCategory');
+$durnTypes = w2PgetSysVal('TaskDurationType');
+$customLookups = array('budget_category' => $billingCategory, 'task_duration_type' => $durnTypes);
+
 if (count($logs)) {
     foreach ($logs as $row) {
-        $task_log_date = intval($row['task_log_date']) ? new w2p_Utilities_Date($row['task_log_date']) : null;
-
         $s .= '<tr bgcolor="white" valign="top"><td>';
         if ($canEdit) {
             $s .= '<a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=1&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
         }
         $s .= '</td>';
-        $s .= '<td nowrap="nowrap">' . ($task_log_date ? $task_log_date->format($sf) : '-') . '<br /><br />';
-        $task_log_updated = intval($row['task_log_updated']) ? new w2p_Utilities_Date($row['task_log_updated']) : null;
-        $s .= '(' . $AppUI->_('Logged').': ' . ($task_log_updated ? $task_log_updated->format($df) : '-') . ')';
-        $s .= '</td>';
-        $s .= '<td width="30%"><a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=0">' . $row['task_log_name'] . '</a></td>';
-        $s .= $htmlHelper->createCell('contact_name', $row['contact_name']);
-        $s .= $htmlHelper->createCell('task_log_duration', sprintf('%.2f', $row['task_log_hours']));
-        
-        $billinCodeCategory = '';
-        if (isset($billingCategory[$row['billingcode_category']])) {
-            $billinCodeCategory = $billingCategory[$row['billingcode_category']];
+        foreach ($fieldList as $index => $column) {
+            $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
         }
-        $s .= '<td width="100">' . $row['task_log_costcode'] .' ('. $billinCodeCategory . ')</td>';
-        $s .= $htmlHelper->createCell('task_log_description', $row['task_log_description']);
 
         $s .= '<td>';
         if ($canDelete) {
             $s .= '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' . $AppUI->_('delete log') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
         }
         $s .= '</td></tr>';
+        
         $hrs += (float)$row['task_log_hours'];
     }
 }
 $s .= '<tr bgcolor="white" valign="top">';
-$s .= '<td colspan="4" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
+$s .= '<td colspan="'.count($fieldList).'" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= $htmlHelper->createCell('total_duration', sprintf('%.2f', $hrs));
 $s .= '</tr>';
 echo $s;
