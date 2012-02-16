@@ -1016,37 +1016,39 @@ class CProject extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
 		$q->addTable('task_log');
-		$q->addQuery('DISTINCT task_log.*, user_username, t.*');
+		$q->addQuery('DISTINCT task_log.*, user_username, t.*');        
+//BEGIN: We can probably drop these lines, the fields are unneeded
 		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
-        $q->addQuery('contact_display_name as contact_name');
-        $q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
         $q->addJoin('users', 'u', 'user_id = task_log_creator');
-        $q->addJoin('tasks', 't', 'task_log_task = t.task_id');
         $q->addJoin('contacts', 'ct', 'contact_id = user_contact');
-        $q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
+//END: We can probably drop these lines, the fields are unneeded
+        $q->addQuery('contact_display_name as contact_name');
+		$q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
+		$q->addJoin('tasks', 't', 'task_log_task = t.task_id');
+		
+		$q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
 
-        $q->addWhere('task_project = ' . (int) $projectId);
-        if ($user_id > 0) {
-            $q->addWhere('task_log_creator=' . $user_id);
-        }
-        if ($hide_inactive) {
-            $q->addWhere('task_status>=0');
-        }
-        if ($hide_complete) {
-            $q->addWhere('task_percent_complete < 100');
-        }
-        if ($cost_code > 0) {
-            $q->addWhere("billingcode_id = $cost_code");
-        }
-        $q->addOrder('task_log_date');
-        $q->addOrder('task_log_created');
-        $this->setAllowedSQL($this->_AppUI->user_id, $q, 'task_project');
+		$q->addWhere('task_project = ' . (int) $projectId);
+		if ($user_id > 0) {
+			$q->addWhere('task_log_creator=' . $user_id);
+		}
+		if ($hide_inactive) {
+			$q->addWhere('task_status>=0');
+		}
+		if ($hide_complete) {
+			$q->addWhere('task_percent_complete < 100');
+		}
+		if ($cost_code > 0) {
+			$q->addWhere("billingcode_id = $cost_code");
+		}
+		$q->addOrder('task_log_date');
+		$q->addOrder('task_log_created');
+		$this->setAllowedSQL($this->_AppUI->user_id, $q, 'task_project');
 
-        return $q->loadList();
-    }
+		return $q->loadList();
+	}
 
-    public function hook_search()
-    {
+    public function hook_search() {
         $search['table'] = 'projects';
         $search['table_alias'] = 'p';
         $search['table_module'] = 'projects';
