@@ -127,13 +127,17 @@ class w2p_Output_HTMLHelper
  * TODO: These two prefix adjustments are an ugly hack because our departments 
  *   table doesn't follow the same convention as every other table we have. 
  *   This needs to be fixed in v4.0 - caseydk 13 Feb 2012
+ *
+ * TODO: And unfortunately, the forums module is screwy using 'viewer' instead 
+ *   of our standard 'view' for the page. ~ caseydk 16 Feb 2012
 */
-                $prefix = ($prefix == 'dept') ? 'department' : $prefix;
-                $link  = '?m='. w2p_pluralize($prefix) .'&a=view&';
+                $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
+                $page   = ($prefix == 'forum') ? 'viewer' : 'view';
+                $link   = '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
-                $link .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];
-                $link .= ($prefix == 'task_log') ? '&tab=1&task_id='.$this->tableRowData['task_id'] : '';
-                $cell = '<a href="'.$link.'">'.$value.'</a>';
+                $link  .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];
+                $link  .= ($prefix == 'task_log') ? '&tab=1&task_id='.$this->tableRowData['task_id'] : '';
+                $cell   = '<a href="'.$link.'">'.$value.'</a>';
 //TODO: task_logs are another oddball..
                 $cell = ($prefix == 'task_log') ? str_replace('task_logs', 'tasks', $cell) : $cell;
                 break;
