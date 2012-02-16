@@ -79,6 +79,10 @@ echo $pageNav;
 $fp = -1;
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
+$link_types = w2PgetSysVal('LinkType');
+$customLookups = array('link_category' => $link_types);
+
 $id = 0;
 //TODO:  put columns in order
 for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
@@ -113,8 +117,6 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
         ?>
         </td>
         <?php
-        $link_types = w2PgetSysVal('LinkType');
-        $customLookups = array('link_category' => $link_types);
         foreach ($fieldList as $index => $column) {
             echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
         }
