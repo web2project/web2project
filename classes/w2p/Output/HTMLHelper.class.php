@@ -73,10 +73,18 @@ class w2p_Output_HTMLHelper
         $suffix = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
 
         switch ($suffix) {
+//BEGIN: object-based linkings
 /*
- * TODO: The following case is likely to change once we have an approach to 
+ * TODO: The following cases are likely to change once we have an approach to 
  *   handle module-level objects and their proper mapping/linkings.
 */
+            case '_project':
+                $obj = new CProject();
+                $obj->load($value);
+                $mod = substr($suffix, 1);
+                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
+                $cell = '<a href="'.$link.'">'.$obj->project_name.'</a>';
+                break;
             case '_task':
                 $obj = new CTask();
                 $obj->load($value);
@@ -112,6 +120,7 @@ class w2p_Output_HTMLHelper
                 $link = '?m=admin&a=viewuser&user_id='.$obj->user_id;
                 $cell = '<a href="'.$link.'">'.$value.'</a>';
                 break;
+//END: object-based linkings
 
             case '_name':
 /*
@@ -125,6 +134,8 @@ class w2p_Output_HTMLHelper
                 $link .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];
                 $link .= ($prefix == 'task_log') ? '&tab=1&task_id='.$this->tableRowData['task_id'] : '';
                 $cell = '<a href="'.$link.'">'.$value.'</a>';
+//TODO: task_logs are another oddball..
+                $cell = ($prefix == 'task_log') ? str_replace('task_logs', 'tasks', $cell) : $cell;
                 break;
             case '_category':
             case '_status':
