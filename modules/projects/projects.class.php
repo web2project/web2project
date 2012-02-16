@@ -1015,9 +1015,9 @@ class CProject extends w2p_Core_BaseObject
     {
 
         $q = $this->_getQuery();
-        $q->addTable('task_log');
-        $q->addQuery('DISTINCT task_log.*, user_username, task_id');
-        $q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
+		$q->addTable('task_log');
+		$q->addQuery('DISTINCT task_log.*, user_username, t.*');
+		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
         $q->addQuery('contact_display_name as contact_name');
         $q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
         $q->addJoin('users', 'u', 'user_id = task_log_creator');

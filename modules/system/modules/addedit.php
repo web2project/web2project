@@ -18,7 +18,12 @@ $module = new w2p_Core_Module();
 $module->load($mod_id);
 
 //TODO: generate per-module filter list
-$filter = array($module->permissions_item_field, 'user_password', 'user_parent');
+$filter = array($module->permissions_item_field, 'user_password', 'user_parent',
+        'task_updator', 'task_order', 'task_client_publish', 'task_dynamic',
+        'task_notify', 'task_departments', 'task_contacts', 'task_custom',
+        'task_allow_other_user_tasklogs', 'tracked_dynamics', 'tracking_dynamics',
+        'task_target_budget', 'task_project', 'task_parent', 'task_milestone',
+        'task_access');
 //$filter = array('project_id', 'project_status', 'project_active',
 //	'project_parent', 'project_color_identifier',
 //	'project_original_parent', 'project_departments', 'project_contacts',

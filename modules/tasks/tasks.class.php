@@ -2321,7 +2321,7 @@ class CTask extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addTable('task_log');
-        $q->addQuery('task_log.*, user_username');
+        $q->addQuery('task_log.*, task_log_task as task_id, user_username');
         $q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
         $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS real_name');
         $q->addWhere('task_log_task = ' . (int) $taskId . ($problem ? ' AND task_log_problem > 0' : ''));
