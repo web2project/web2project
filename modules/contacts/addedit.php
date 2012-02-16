@@ -90,9 +90,12 @@ function submitIt() {
     if (form.contact_birthday.value == '0000-00-00') {
         form.contact_birthday.value = '';
     }
-	if (form.contact_last_name.value.length < 1) {
-		alert( '<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>' );
-		form.contact_last_name.focus();
+    if (form.contact_last_name.value.length < 1) {
+        alert( '<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>' );
+        form.contact_last_name.focus();
+    } else if (form.contact_first_name.value.length < 1) {
+        alert( '<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>' );
+        form.contact_first_name.focus();
     } else if (form.contact_birthday.value.length > 0) {
         dar = form.contact_birthday.value.split("-");
         if (dar.length < 3) {

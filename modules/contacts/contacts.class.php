@@ -214,6 +214,12 @@ class CContact extends w2p_Core_BaseObject {
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
+        // we *need* a first name, that's the rule later on for the ACL checks
+        // fixes #980
+        if(mb_strlen($this->contact_first_name) <= 1) {
+            $errorArray['contact_first_name'] = $baseErrorMsg . 'contact first name is not set';
+        }
+        
         if(mb_strlen($this->contact_display_name) <= 1) {
             $errorArray['contact_display_name'] = $baseErrorMsg . 'contact display name is not set';
         }
