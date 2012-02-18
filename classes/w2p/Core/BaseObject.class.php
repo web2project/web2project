@@ -1,74 +1,77 @@
 <?php /* $Id$ $URL$ */
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
+ * 	@package web2project
+ * 	@subpackage core
+ * 	@version $Revision$
  */
 
 /**
- *	w2p_Core_BaseObject Abstract Class.
+ * 	w2p_Core_BaseObject Abstract Class.
  *
- *	Parent class to all database table derived objects
- *	@author Andrew Eddie <eddieajau@users.sourceforge.net>
- *	@abstract
+ * 	Parent class to all database table derived objects
+ * 	@author Andrew Eddie <eddieajau@users.sourceforge.net>
+ * 	@abstract
  */
-abstract class w2p_Core_BaseObject extends w2p_Core_Event
-    implements w2p_Core_ListenerInterface
+abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_ListenerInterface
 {
-	/**
-	 *	@var string Name of the table prefix in the db schema
-	 */
-	protected $_tbl_prefix = '';
-	/**
-	 *	@var string Name of the table in the db schema relating to child class
-	 */
-	protected $_tbl = '';
-	/**
-	 *	@var string Name of the primary key field in the table
-	 */
-	protected $_tbl_key = '';
-	/**
-	 *	@var string Error message
-	 */
-	protected $_error = '';
 
-	/**
-	 * @var object Query Handler
-	 */
-	protected $_query;
-	/**
-	 * @var object permissions/preference/translation object
-	 */
-	protected $_AppUI;
+    /**
+     * 	@var string Name of the table prefix in the db schema
+     */
+    protected $_tbl_prefix = '';
+
+    /**
+     * 	@var string Name of the table in the db schema relating to child class
+     */
+    protected $_tbl = '';
+
+    /**
+     * 	@var string Name of the primary key field in the table
+     */
+    protected $_tbl_key = '';
+
+    /**
+     * 	@var string Error message
+     */
+    protected $_error = '';
+
+    /**
+     * @var object Query Handler
+     */
+    protected $_query;
+
+    /**
+     * @var object permissions/preference/translation object
+     */
+    protected $_AppUI;
     protected $_perms;
 
-	/**
-	 * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table
-	 */
-	protected $_tbl_module;
-
+    /**
+     * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table
+     */
+    protected $_tbl_module;
     protected $_dispatcher;
 
-	/**
-	 *	Object constructor to set table and key field
-	 *
-	 *	Can be overloaded/supplemented by the child class
-	 *	@param string $table name of the table in the db schema relating to child class
-	 *	@param string $key name of the primary key field in the table
-	 *	@param (OPTIONAL) string $module name as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table.
-	 *          It is used for permission checking in situations where the table name is different from the module folder name.
-	 *          For compatibility sake this variable is set equal to the $table if not set as failsafe.
-	 */
-	public function __construct($table, $key, $module = '')
-	{
-		$this->_error = array();
+    /**
+     * 	Object constructor to set table and key field
+     *
+     * 	Can be overloaded/supplemented by the child class
+     * 	@param string $table name of the table in the db schema relating to child class
+     * 	@param string $key name of the primary key field in the table
+     * 	@param (OPTIONAL) string $module name as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table.
+     *          It is used for permission checking in situations where the table name is different from the module folder name.
+     *          For compatibility sake this variable is set equal to the $table if not set as failsafe.
+     */
+    public function __construct($table, $key, $module = '')
+    {
+        $this->_error = array();
         $this->_tbl = $table;
-		$this->_tbl_key = $key;
+        $this->_tbl_key = $key;
         $this->_tbl_module = ('' == $module) ? $table : $module;
 
-		$this->_tbl_prefix = w2PgetConfig('dbprefix', '');
-		$this->_query = new w2p_Database_Query;
+        $this->_tbl_prefix = w2PgetConfig('dbprefix', '');
+        $this->_query = new w2p_Database_Query;
 
         /*
          * I hate this global but this will allow us to get rid of all the
@@ -97,7 +100,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
         $this->_dispatcher->subscribe($this, get_class($this), 'preLoadEvent');
         $this->_dispatcher->subscribe($this, get_class($this), 'postLoadEvent');
         parent::__construct($this->_tbl_module, get_class($this), array());
-	}
+    }
 
     /**
      * Since Dependency injection isn't feasible due to the sheer number of
@@ -106,7 +109,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
      *
      *   @param Object A database connection (real or mocked)
      */
-    public function overrideDatabase($override) {
+    public function overrideDatabase($override)
+    {
         $this->_query = $override;
     }
 
@@ -117,280 +121,282 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
      *
      *   @param Object A permissions/preferences object (real or mocked)
      */
-    public function overrideAppUI($override) {
+    public function overrideAppUI($override)
+    {
         $this->_AppUI = $override;
         $this->_perms = $this->_AppUI->acl();
     }
 
-	/**
-	 *	@return string or array Returns the error message
-	 */
-	public function getError()
-	{
-		return $this->_error;
-	}
+    /**
+     * 	@return string or array Returns the error message
+     */
+    public function getError()
+    {
+        return $this->_error;
+    }
+
     public function clearErrors()
     {
         $this->_error = array();
     }
 
-	/**
-	 *	Binds a named array/hash to this object
-	 *
-	 *	can be overloaded/supplemented by the child class
-	 *	@param array $hash named array
-	 *  @param $prefix Defaults to null, prefix to use with hash keys
-	 *  @param $checkSlashes Defaults to true, strip any slashes from the hash values
-	 *  @param $bindAll Bind all values regardless of their existance as defined instance variables
-	 *	@return null|string	null is operation was satisfactory, otherwise returns an error
-	 */
-	public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
-	{
-		if (!is_array($hash)) {
-			$this->_error = get_class($this) . '::bind failed.';
-			return false;
-		} else {
-			/*
-			* We need to filter out any object values from the array/hash so the bindHashToObject()
-			* doesn't die. We also avoid issues such as passing objects to non-object functions
-			* and copying object references instead of cloning objects. Object cloning (if needed)
-			* should be handled seperatly anyway.
-			*/
-			foreach ($hash as $k => $v) {
-				if (!(is_object($hash[$k]))) {
-					$filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
-				}
-			}
+    /**
+     * 	Binds a named array/hash to this object
+     *
+     * 	can be overloaded/supplemented by the child class
+     * 	@param array $hash named array
+     *  @param $prefix Defaults to null, prefix to use with hash keys
+     *  @param $checkSlashes Defaults to true, strip any slashes from the hash values
+     *  @param $bindAll Bind all values regardless of their existance as defined instance variables
+     * 	@return null|string	null is operation was satisfactory, otherwise returns an error
+     */
+    public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
+    {
+        if (!is_array($hash)) {
+            $this->_error = get_class($this) . '::bind failed.';
+            return false;
+        } else {
+            /*
+             * We need to filter out any object values from the array/hash so the bindHashToObject()
+             * doesn't die. We also avoid issues such as passing objects to non-object functions
+             * and copying object references instead of cloning objects. Object cloning (if needed)
+             * should be handled seperatly anyway.
+             */
+            foreach ($hash as $k => $v) {
+                if (!(is_object($hash[$k]))) {
+                    $filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
+                }
+            }
             $q = $this->_getQuery();
-			$q->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
+            $q->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
 
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 
-	/**
-	 *	Binds an array/hash to this object
-	 *	@param int $oid optional argument, if not specifed then the value of current key is used
-	 *	@return any result from the database operation
-	 */
-	public function load($oid = null, $strip = true)
-	{
+    /**
+     * 	Binds an array/hash to this object
+     * 	@param int $oid optional argument, if not specifed then the value of current key is used
+     * 	@return any result from the database operation
+     */
+    public function load($oid = null, $strip = true)
+    {
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preLoadEvent'));
 
         $k = $this->_tbl_key;
-		if ($oid) {
-			$this->$k = intval($oid);
-		}
-		$oid = $this->$k;
-		if ($oid === null) {
-			return false;
-		}
-		$q = $this->_getQuery();
-		$q->addTable($this->_tbl);
-		$q->addWhere($this->_tbl_key . ' = ' . $oid);
-		$hash = $q->loadHash();
-		//If no record was found send false because there is no data
-		if (!$hash) {
-			return false;
-		}
-		$q->bindHashToObject($hash, $this, null, $strip);
+        if ($oid) {
+            $this->$k = intval($oid);
+        }
+        $oid = $this->$k;
+        if ($oid === null) {
+            return false;
+        }
+        $q = $this->_getQuery();
+        $q->addTable($this->_tbl);
+        $q->addWhere($this->_tbl_key . ' = ' . $oid);
+        $hash = $q->loadHash();
+        //If no record was found send false because there is no data
+        if (!$hash) {
+            return false;
+        }
+        $q->bindHashToObject($hash, $this, null, $strip);
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postLoadEvent'));
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 *	Returns an array, keyed by the key field, of all elements that meet
-	 *	the where clause provided. Ordered by $order key.
-	 */
-	public function loadAll($order = null, $where = null)
-	{
+    /**
+     * 	Returns an array, keyed by the key field, of all elements that meet
+     * 	the where clause provided. Ordered by $order key.
+     */
+    public function loadAll($order = null, $where = null)
+    {
         $q = $this->_getQuery();
-		$q->addTable($this->_tbl);
-		if ($order) {
-			$q->addOrder($order);
-		}
-		if ($where) {
-			$q->addWhere($where);
-		}
-		$result = $q->loadHashList($this->_tbl_key);
+        $q->addTable($this->_tbl);
+        if ($order) {
+            $q->addOrder($order);
+        }
+        if ($where) {
+            $q->addWhere($where);
+        }
+        $result = $q->loadHashList($this->_tbl_key);
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 *	Return a w2p_Database_Query object seeded with the table name.
-	 *	@param string $alias optional alias for table queries.
-	 *	@return w2p_Database_Query object
-	 */
-	public function &getQuery($alias = null)
-	{
-		$q = $this->_getQuery();
+    /**
+     * 	Return a w2p_Database_Query object seeded with the table name.
+     * 	@param string $alias optional alias for table queries.
+     * 	@return w2p_Database_Query object
+     */
+    public function &getQuery($alias = null)
+    {
+        $q = $this->_getQuery();
         $q->addTable($this->_tbl, $alias);
-		return $q;
-	}
+        return $q;
+    }
 
-	/**
-	 *	Generic check method
-	 *
-	 *	Can be overloaded/supplemented by the child class
-	 *	@return array() of size zero if the object is ok
-	 */
-	public function check()
-	{
+    /**
+     * 	Generic check method
+     *
+     * 	Can be overloaded/supplemented by the child class
+     * 	@return array() of size zero if the object is ok
+     */
+    public function check()
+    {
         return $this->_error;
-	}
+    }
 
-	/**
-	 *	Clone the current record
-	 *
-	 *	@author	handco <handco@users.sourceforge.net>
-	 *	@return	object	The new record object or null if error
-	 **/
-	public function duplicate()
-	{
-		/*
-		*  PHP4 is no longer supported or allowed. The
-		*    installer/upgrader/converter simply stops executing.
-		*  This method also appears (modified) in the w2p_Utilities_Date and w2p_Database_Query class.
-		*/
+    /**
+     * 	Clone the current record
+     *
+     * 	@author	handco <handco@users.sourceforge.net>
+     * 	@return	object	The new record object or null if error
+     * */
+    public function duplicate()
+    {
+        /*
+         *  PHP4 is no longer supported or allowed. The
+         *    installer/upgrader/converter simply stops executing.
+         *  This method also appears (modified) in the w2p_Utilities_Date and w2p_Database_Query class.
+         */
 
-		$_key = $this->_tbl_key;
+        $_key = $this->_tbl_key;
 
-		$newObj = clone ($this);
-		$newObj->$_key = '';
+        $newObj = clone ($this);
+        $newObj->$_key = '';
 
-		return $newObj;
-	}
+        return $newObj;
+    }
 
-	/**
-	 *	Default trimming method for class variables of type string
-	 *
-	 *	@param object Object to trim class variables for
-	 *	Can be overloaded/supplemented by the child class
-	 *	@return none
-	 */
-	public function w2PTrimAll()
-	{
-		$trim_arr = get_object_vars($this);
-		foreach ($trim_arr as $trim_key => $trim_val) {
-			if (!(strcasecmp(gettype($trim_val), 'string'))) {
-				$this->{$trim_key} = trim($trim_val, " \t\r\n\0\x0B");
-			}
-		}
-	}
+    /**
+     * 	Default trimming method for class variables of type string
+     *
+     * 	@param object Object to trim class variables for
+     * 	Can be overloaded/supplemented by the child class
+     * 	@return none
+     */
+    public function w2PTrimAll()
+    {
+        $trim_arr = get_object_vars($this);
+        foreach ($trim_arr as $trim_key => $trim_val) {
+            if (!(strcasecmp(gettype($trim_val), 'string'))) {
+                $this->{$trim_key} = trim($trim_val, " \t\r\n\0\x0B");
+            }
+        }
+    }
 
-	/**
-	 *	Inserts a new row if id is zero or updates an existing row in the database table
-	 *
-	 *	Can be overloaded/supplemented by the child class
-	 *	@return null|string null if successful otherwise returns and error message
-	 */
-	public function store($updateNulls = false)
-	{
+    /**
+     * 	Inserts a new row if id is zero or updates an existing row in the database table
+     *
+     * 	Can be overloaded/supplemented by the child class
+     * 	@return null|string null if successful otherwise returns and error message
+     */
+    public function store($updateNulls = false)
+    {
         $k = $this->_tbl_key;
 
         // NOTE: I don't particularly like this but it wires things properly.
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preStoreEvent'));
         $event = ($this->$k) ? 'Update' : 'Create';
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre'.$event.'Event'));
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $event . 'Event'));
 
-		$this->w2PTrimAll();
+        $this->w2PTrimAll();
 
         // NOTE: This is *very* similar to the store() flow within delete()..
         $this->_error = $this->check();
         if (count($this->_error)) {
-			$msg = get_class($this) . '::store-check failed';
+            $msg = get_class($this) . '::store-check failed';
             $this->_error['store-check'] = $msg;
             return $msg;
-		}
+        }
 
-		$k = $this->_tbl_key;
+        $k = $this->_tbl_key;
         $q = $this->_getQuery();
-		if ($this->$k) {
-			$store_type = 'update';
-			$ret = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
-		} else {
-			$store_type = 'add';
-			$ret = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
-		}
+        if ($this->$k) {
+            $store_type = 'update';
+            $ret = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
+        } else {
+            $store_type = 'add';
+            $ret = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
+        }
 
-		if ($ret) {
+        if ($ret) {
             $result = null;
             // NOTE: I don't particularly like how the name is generated but it wires things properly.
-            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post'.$event.'Event'));
+            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post' . $event . 'Event'));
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postStoreEvent'));
-		} else {
+        } else {
             $result = db_error();
             $this->_error['store'] = $result;
         }
 
         return $result;
-	}
+    }
 
-	/**
-	 *	Generic check for whether dependencies exist for this object in the db schema
-	 *
-	 *	Can be overloaded/supplemented by the child class
-	 *	@param string $msg Error message returned
-	 *	@param int Optional key index
-	 *	@param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
-	 *	@return true|false
-	 */
-	public function canDelete(&$msg = '', $oid = null, $joins = null)
-	{
+    /**
+     * 	Generic check for whether dependencies exist for this object in the db schema
+     *
+     * 	Can be overloaded/supplemented by the child class
+     * 	@param string $msg Error message returned
+     * 	@param int Optional key index
+     * 	@param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
+     * 	@return true|false
+     */
+    public function canDelete(&$msg = '', $oid = null, $joins = null)
+    {
         $result = true;
 
-		// First things first.  Are we allowed to delete?
-		$acl = &$this->_AppUI->acl();
-		if (!$acl->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
-			$msg = $this->_AppUI->_('noDeletePermission');
+        // First things first.  Are we allowed to delete?
+        $acl = &$this->_AppUI->acl();
+        if (!$acl->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
+            $msg = $this->_AppUI->_('noDeletePermission');
             $this->_error['noDeletePermission'] = $msg;
-			return false;
-		}
+            return false;
+        }
 
-		$k = $this->_tbl_key;
-		if ($oid) {
-			$this->$k = intval($oid);
-		}
-		if (is_array($joins)) {
-			$select = $k;
-			$join = '';
+        $k = $this->_tbl_key;
+        if ($oid) {
+            $this->$k = intval($oid);
+        }
+        if (is_array($joins)) {
+            $select = $k;
+            $join = '';
 
-			$q = $this->_getQuery();
-			$q->addTable($this->_tbl);
-			$q->addWhere($k . ' = \'' . $this->$k . '\'');
-			$q->addGroup($k);
-			foreach ($joins as $table) {
-				$q->addQuery('COUNT(DISTINCT ' . $table['idfield'] . ') AS ' . $table['idfield']);
-				$q->addJoin($table['name'], $table['name'], $table['joinfield'] . ' = ' . $k);
-			}
-			$obj = new stdClass();
-			$q->loadObject($obj);
+            $q = $this->_getQuery();
+            $q->addTable($this->_tbl);
+            $q->addWhere($k . ' = \'' . $this->$k . '\'');
+            $q->addGroup($k);
+            foreach ($joins as $table) {
+                $q->addQuery('COUNT(DISTINCT ' . $table['idfield'] . ') AS ' . $table['idfield']);
+                $q->addJoin($table['name'], $table['name'], $table['joinfield'] . ' = ' . $k);
+            }
+            $obj = new stdClass();
+            $q->loadObject($obj);
 
-			if (!$obj && '' != db_error()) {
-				$msg = db_error();
+            if (!$obj && '' != db_error()) {
+                $msg = db_error();
                 $this->_error['db_error'] = $msg;
-				return false;
-			}
-			$msg = array();
-			foreach ($joins as $table) {
-				$k = $table['idfield'];
-				if ($obj->$k) {
-					$msg[$table['label']] = $this->_AppUI->_($table['label']);
-                    $this->_error['noDeleteRecord-'.$table['label']] = $table['label'];
-				}
-			}
+                return false;
+            }
+            $msg = array();
+            foreach ($joins as $table) {
+                $k = $table['idfield'];
+                if ($obj->$k) {
+                    $msg[$table['label']] = $this->_AppUI->_($table['label']);
+                    $this->_error['noDeleteRecord-' . $table['label']] = $table['label'];
+                }
+            }
 
-			if (count($msg)) {
-				$msg = $this->_AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
-				return false;
-			} else {
+            if (count($msg)) {
+                $msg = $this->_AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
+                return false;
+            } else {
                 $msg = array();
                 foreach ($joins as $table) {
                     $k = $table['idfield'];
                     if ($obj->$k) {
-                        $this->_error['canDelete-error-'.$table['name']] = db_error();
+                        $this->_error['canDelete-error-' . $table['name']] = db_error();
                     }
                 }
 
@@ -398,39 +404,39 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event
                     $result = true;
                 }
             }
-		}
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 *	Default delete method
-	 *
-	 *	Can be overloaded/supplemented by the child class
-	 *	@return null|string null if successful otherwise returns and error message
-	 */
-	public function delete($oid = null)
-	{
+    /**
+     * 	Default delete method
+     *
+     * 	Can be overloaded/supplemented by the child class
+     * 	@return null|string null if successful otherwise returns and error message
+     */
+    public function delete($oid = null)
+    {
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
         $result = false;
 
         $k = $this->_tbl_key;
-		if ($oid) {
-			$this->$k = intval($oid);
-		}
+        if ($oid) {
+            $this->$k = intval($oid);
+        }
 
         // NOTE: This is *very* similar to the check() flow within store()..
         $this->canDelete();
-		if (count($this->_error)) {
+        if (count($this->_error)) {
             $msg = get_class($this) . '::delete-check failed';
-//TODO: no clue why this is required..
-unset($this->_error['store']);
+            //TODO: no clue why this is required..
+            unset($this->_error['store']);
             $this->_error['delete-check'] = $msg;
-		}
+        }
 
-		$q = $this->_getQuery();
-		$q->setDelete($this->_tbl);
-		$q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
+        $q = $this->_getQuery();
+        $q->setDelete($this->_tbl);
+        $q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
         if ($q->exec()) {
             $result = true;
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postDeleteEvent'));
@@ -438,174 +444,175 @@ unset($this->_error['store']);
             $this->_error['delete'] = db_error();
         }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 *	Get specifically denied records from a table/module based on a user
-	 *	@param int User id number
-	 *	@return array
-	 */
-	public function getDeniedRecords($uid)
-	{
-		$uid = intval($uid);
-		$uid || exit('FATAL ERROR ' . get_class($this) . '::getDeniedRecords failed, user id = 0');
+    /**
+     * 	Get specifically denied records from a table/module based on a user
+     * 	@param int User id number
+     * 	@return array
+     */
+    public function getDeniedRecords($uid)
+    {
+        $uid = intval($uid);
+        $uid || exit('FATAL ERROR ' . get_class($this) . '::getDeniedRecords failed, user id = 0');
 
-		return $this->_perms->getDeniedItems($this->_tbl_module, $uid);
-	}
+        return $this->_perms->getDeniedItems($this->_tbl_module, $uid);
+    }
 
-	/**
-	 *	Returns a list of records exposed to the user
-	 *	@param int User id number
-	 *	@param string Optional fields to be returned by the query, default is all
-	 *	@param string Optional sort order for the query
-	 *	@param string Optional name of field to index the returned array
-	 *	@param array Optional array of additional sql parameters (from and where supported)
-	 *	@return array
-	 */
-	// returns a list of records exposed to the user
-	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
-	{
-		$uid = intval($uid);
-		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
-		$deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
-		$allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
+    /**
+     * 	Returns a list of records exposed to the user
+     * 	@param int User id number
+     * 	@param string Optional fields to be returned by the query, default is all
+     * 	@param string Optional sort order for the query
+     * 	@param string Optional name of field to index the returned array
+     * 	@param array Optional array of additional sql parameters (from and where supported)
+     * 	@return array
+     */
+    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
+    {
+        $uid = intval($uid);
+        $uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
+        $deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
+        $allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
 
-		$q = $this->_getQuery();
-		$q->addQuery($fields);
-		$q->addTable($this->_tbl);
+        $q = $this->_getQuery();
+        $q->addQuery($fields);
+        $q->addTable($this->_tbl);
 
-		if (isset($extra['from'])) {
-			$q->addTable($extra['from']);
-		}
+        if (isset($extra['from'])) {
+            $q->addTable($extra['from']);
+        }
 
-		if (isset($extra['join']) && isset($extra['on'])) {
-			$q->addJoin($extra['join'], $extra['join'], $extra['on']);
-		}
+        if (isset($extra['join']) && isset($extra['on'])) {
+            $q->addJoin($extra['join'], $extra['join'], $extra['on']);
+        }
 
-		if (count($allow)) {
-			if ((array_search('0', $allow)) === false) {
-				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
-			} else {
-				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
-			}
-			//Denials are only required if we were able to see anything in the first place so now we handle the denials
-			if (count($deny)) {
-				if ((array_search('0', $deny)) === false) {
-					//If 0 (All Items of a module) are not on the denial array then just deny the denied items
-					$q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
-				} elseif ((array_search('0', $allow)) === false) {
-					//If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
-				} else {
-					//if we allow everything and deny everything then denials have higher priority... Deny Everything!
-					$q->addWhere('0=1');
-				}
-			}
-		} else {
-			//if there are no allowances, deny!
-			$q->addWhere('0=1');
-		}
+        if (count($allow)) {
+            if ((array_search('0', $allow)) === false) {
+                //If 0 (All Items of a module) are not permited then just add the allowed items only
+                $q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
+            } else {
+                //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+            }
+            //Denials are only required if we were able to see anything in the first place so now we handle the denials
+            if (count($deny)) {
+                if ((array_search('0', $deny)) === false) {
+                    //If 0 (All Items of a module) are not on the denial array then just deny the denied items
+                    $q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
+                } elseif ((array_search('0', $allow)) === false) {
+                    //If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
+                } else {
+                    //if we allow everything and deny everything then denials have higher priority... Deny Everything!
+                    $q->addWhere('0=1');
+                }
+            }
+        } else {
+            //if there are no allowances, deny!
+            $q->addWhere('0=1');
+        }
 
-		if (isset($extra['where'])) {
-			$q->addWhere($extra['where']);
-		}
+        if (isset($extra['where'])) {
+            $q->addWhere($extra['where']);
+        }
 
-		if ($orderby) {
-			$q->addOrder($orderby);
-		}
-		return $q->loadHashList($index);
-	}
+        if ($orderby) {
+            $q->addOrder($orderby);
+        }
+        return $q->loadHashList($index);
+    }
 
-	public function getAllowedSQL($uid, $index = null) {
+    public function getAllowedSQL($uid, $index = null)
+    {
         $uid = (int) $uid;
-		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
-		$deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
-		$allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
+        $uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
+        $deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
+        $allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
 
-		if (!isset($index)) {
-			$index = $this->_tbl_key;
-		}
-		$where = array();
-		if (count($allow)) {
-			if ((array_search('0', $allow)) === false) {
-				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$where[] = $index . ' IN (' . implode(',', $allow) . ')';
-			} else {
-				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
-			}
-			//Denials are only required if we were able to see anything in the first place so now we handle the denials
-			if (count($deny)) {
-				if ((array_search('0', $deny)) === false) {
-					//If 0 (All Items of a module) are not on the denial array then just deny the denied items
-					$where[] = $index . ' NOT IN (' . implode(',', $deny) . ')';
-				} elseif ((array_search('0', $allow)) === false) {
-					//If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
-				} else {
-					//if we allow everything and deny everything then denials have higher priority... Deny Everything!
-					$where[] = '0=1';
-				}
-			}
-		} else {
-			//if there are no allowances, deny!
-			$where[] = '0=1';
-		}
-		return $where;
-	}
+        if (!isset($index)) {
+            $index = $this->_tbl_key;
+        }
+        $where = array();
+        if (count($allow)) {
+            if ((array_search('0', $allow)) === false) {
+                //If 0 (All Items of a module) are not permited then just add the allowed items only
+                $where[] = $index . ' IN (' . implode(',', $allow) . ')';
+            } else {
+                //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+            }
+            //Denials are only required if we were able to see anything in the first place so now we handle the denials
+            if (count($deny)) {
+                if ((array_search('0', $deny)) === false) {
+                    //If 0 (All Items of a module) are not on the denial array then just deny the denied items
+                    $where[] = $index . ' NOT IN (' . implode(',', $deny) . ')';
+                } elseif ((array_search('0', $allow)) === false) {
+                    //If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
+                } else {
+                    //if we allow everything and deny everything then denials have higher priority... Deny Everything!
+                    $where[] = '0=1';
+                }
+            }
+        } else {
+            //if there are no allowances, deny!
+            $where[] = '0=1';
+        }
+        return $where;
+    }
 
-	public function setAllowedSQL($uid, $query, $index = null, $key = null) {
-		$uid = (int) $uid;
-		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
-		$deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
-		$allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
-		// Make sure that we add the table otherwise dependencies break
-		if (isset($index)) {
-			if (!$key) {
-				$key = substr($this->_tbl, 0, 2);
-			}
-			$query->leftJoin($this->_tbl, $key, $key . '.' . $this->_tbl_key . ' = ' . $index);
-		}
+    public function setAllowedSQL($uid, $query, $index = null, $key = null)
+    {
+        $uid = (int) $uid;
+        $uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
+        $deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
+        $allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
+        // Make sure that we add the table otherwise dependencies break
+        if (isset($index)) {
+            if (!$key) {
+                $key = substr($this->_tbl, 0, 2);
+            }
+            $query->leftJoin($this->_tbl, $key, $key . '.' . $this->_tbl_key . ' = ' . $index);
+        }
 
-		if (count($allow)) {
-			if ((array_search('0', $allow)) === false) {
-				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
-			} else {
-				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
-			}
-			//Denials are only required if we were able to see anything in the first place so now we handle the denials
-			if (count($deny)) {
-				if ((array_search('0', $deny)) === false) {
-					//If 0 (All Items of a module) are not on the denial array then just deny the denied items
-					$query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
-				} elseif ((array_search('0', $allow)) === false) {
-					//If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
-				} else {
-					//if we allow everything and deny everything then denials have higher priority... Deny Everything!
-					$query->addWhere('0=1');
-				}
-			}
-		} else {
-			//if there are no allowances, deny!
-			$query->addWhere('0=1');
-		}
-	}
+        if (count($allow)) {
+            if ((array_search('0', $allow)) === false) {
+                //If 0 (All Items of a module) are not permited then just add the allowed items only
+                $query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
+            } else {
+                //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+            }
+            //Denials are only required if we were able to see anything in the first place so now we handle the denials
+            if (count($deny)) {
+                if ((array_search('0', $deny)) === false) {
+                    //If 0 (All Items of a module) are not on the denial array then just deny the denied items
+                    $query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
+                } elseif ((array_search('0', $allow)) === false) {
+                    //If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
+                } else {
+                    //if we allow everything and deny everything then denials have higher priority... Deny Everything!
+                    $query->addWhere('0=1');
+                }
+            }
+        } else {
+            //if there are no allowances, deny!
+            $query->addWhere('0=1');
+        }
+    }
 
-	/*
-	* Decode HTML entities in object vars
-	*/
-	public function htmlDecode()
-	{
-		foreach (get_object_vars($this) as $k => $v) {
-			if (is_array($v) or is_object($v) or $v == null) {
-				continue;
-			}
-			if ($k[0] == '_') { // internal field
-				continue;
-			}
-			$this->$k = htmlspecialchars_decode($v);
-		}
-	}
+    /*
+     * Decode HTML entities in object vars
+     */
+    public function htmlDecode()
+    {
+        foreach (get_object_vars($this) as $k => $v) {
+            if (is_array($v) or is_object($v) or $v == null) {
+                continue;
+            }
+            if ($k[0] == '_') { // internal field
+                continue;
+            }
+            $this->$k = htmlspecialchars_decode($v);
+        }
+    }
 
     /*
      *  This pre/post functions are only here for completeness.
@@ -616,71 +623,88 @@ unset($this->_error['store']);
      *      update, load, and delete - is successful.
      */
 
-    protected function hook_preStore() {
+    protected function hook_preStore()
+    {
         return $this;
     }
 
-    protected function hook_postStore() {
+    protected function hook_postStore()
+    {
         //NOTE: This only happens if the create was successful.
 
-        $name = $this->{substr($this->_tbl, 0, -1).'_name'};
+        $name = $this->{substr($this->_tbl, 0, -1) . '_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-            $this->_AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-            $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+                $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
     }
 
-    protected function hook_preCreate() {
+    protected function hook_preCreate()
+    {
         return $this;
     }
-    protected function hook_postCreate() {
+
+    protected function hook_postCreate()
+    {
         //NOTE: This only happens if the create was successful.
 
-        $name = $this->{substr($this->_tbl, 0, -1).'_name'};
+        $name = $this->{substr($this->_tbl, 0, -1) . '_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-            $this->_AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-            $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+                $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
     }
-    protected function hook_preUpdate() {
+
+    protected function hook_preUpdate()
+    {
         return $this;
     }
-    protected function hook_postUpdate() {
+
+    protected function hook_postUpdate()
+    {
         //NOTE: This only happens if the update was successful.
 
-        $name = $this->{substr($this->_tbl, 0, -1).'_name'};
+        $name = $this->{substr($this->_tbl, 0, -1) . '_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
-            $this->_AppUI->_('ACTION') . ': ' .  $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-            $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+                $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
         return $this;
     }
-    protected function hook_preLoad() {
+
+    protected function hook_preLoad()
+    {
         return $this;
     }
-    protected function hook_postLoad() {
+
+    protected function hook_postLoad()
+    {
         //NOTE: This only happens if the load was successful.
         return $this;
     }
-    protected function hook_preDelete() {
+
+    protected function hook_preDelete()
+    {
         return $this;
     }
-    protected function hook_postDelete() {
+
+    protected function hook_postDelete()
+    {
         //NOTE: This only happens if the delete was successful.
 
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete');
         return $this;
     }
 
-	public function publish(w2p_Core_Event $event)
-	{
+    public function publish(w2p_Core_Event $event)
+    {
         $hook = substr($event->getEventName(), 0, -5);
 
-        switch($hook) {
+        switch ($hook) {
             case 'preStore':
             case 'postStore':
             case 'preCreate':
@@ -693,13 +717,13 @@ unset($this->_error['store']);
             case 'postLoad':
             case 'preDelete':
             case 'postDelete':
-                $this->{'hook_'.$hook}();
+                $this->{'hook_' . $hook}();
                 break;
             default:
-                //do nothing
+            //do nothing
         }
         //error_log("{$event->resourceName} published {$event->eventName} to call hook_$hook");
-	}
+    }
 
     /**
      * Returns a clean query object
@@ -715,4 +739,5 @@ unset($this->_error['store']);
         $this->_query->clear();
         return $this->_query;
     }
+
 }
