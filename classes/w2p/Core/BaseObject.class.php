@@ -162,6 +162,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
              * and copying object references instead of cloning objects. Object cloning (if needed)
              * should be handled seperatly anyway.
              */
+            $filtered_hash = array();
+            
             foreach ($hash as $k => $v) {
                 if (!(is_object($hash[$k]))) {
                     $filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
