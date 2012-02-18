@@ -2,8 +2,8 @@
 
 // If you experience a 'white screen of death' or other problems,
 // change the following line of code to this:
-//ini_set('display_errors', 1);
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
+//ini_set('display_errors', 0);
 
 if(defined('E_DEPRECATED')){
 	// since php 5.3
@@ -11,7 +11,7 @@ if(defined('E_DEPRECATED')){
 } else {
 	error_reporting(E_ALL & ~ E_NOTICE);
 }
-//error_reporting(-1);
+error_reporting(-1);
 
 define('W2P_PERFORMANCE_DEBUG', false);
 define('MIN_PHP_VERSION', '5.2.0');

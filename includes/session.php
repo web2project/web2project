@@ -186,15 +186,24 @@ function w2PsessionStart($start_vars = 'AppUI') {
 	} else {
 		$max_time = 0; // Browser session only.
 	}
+        
+        $url_parts = array();
+        $cookie_dir = '';
+        
 	// Try and get the correct path to the base URL.
 	preg_match('_^(https?://)([^/]+)(:0-9]+)?(/.*)?$_i', w2PgetConfig('base_url'), $url_parts);
-	$cookie_dir = $url_parts[4];
+        
+        if (isset($url_parts[4])) {
+            $cookie_dir = $url_parts[4];
+        }
+        
 	if (substr($cookie_dir, 0, 1) != '/') {
 		$cookie_dir = '/' . $cookie_dir;
 	}
 	if (substr($cookie_dir, -1) != '/') {
 		$cookie_dir .= '/';
 	}
+        
 	session_set_cookie_params($max_time, $cookie_dir);
 	session_start();
 }
