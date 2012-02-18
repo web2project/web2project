@@ -309,7 +309,7 @@ class CEvent extends w2p_Core_BaseObject
         $i = 0;
         foreach ($eventList as $event) {
             $eventList[$i]['event_start_date'] = $AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
-            $eventList[$i]['event_end_date'] = $this->_AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
+            $eventList[$i]['event_end_date'] = $AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
             $i++;
         }
 

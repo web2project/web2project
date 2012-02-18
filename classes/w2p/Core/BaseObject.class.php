@@ -384,7 +384,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             $msg = array();
             foreach ($joins as $table) {
                 $k = $table['idfield'];
-                if ($obj->$k) {
+                if (isset($obj->$k) && $obj->$k) {
                     $msg[$table['label']] = $this->_AppUI->_($table['label']);
                     $this->_error['noDeleteRecord-' . $table['label']] = $table['label'];
                 }
@@ -397,12 +397,12 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
                 $msg = array();
                 foreach ($joins as $table) {
                     $k = $table['idfield'];
-                    if ($obj->$k) {
+                    if (isset($obj->$k) && $obj->$k) {
                         $this->_error['canDelete-error-' . $table['name']] = db_error();
                     }
                 }
 
-                if (0 == count($this->_errors)) {
+                if (0 == count($this->_error)) {
                     $result = true;
                 }
             }

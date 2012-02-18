@@ -2441,7 +2441,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 			$hidden_table .= '</table>';
 		}
 		$s .= '</td>
-				<td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
+				<td width="10%" nowrap="nowrap" align="left">' . $file_types[$latest_file['file_category']] . '</td>
 				<td nowrap="nowrap" align="left"><a href="./index.php?m=tasks&a=view&task_id=' . $latest_file['file_task'] . '">' . $latest_file['task_name'] . '</a></td>
 				<td nowrap="nowrap">' . $latest_file['contact_first_name'] . ' ' . $latest_file['contact_last_name'] . '</td>
 				<td width="5%" nowrap="nowrap" align="right">' . intval($latest_file['file_size'] / 1024) . ' kb</td>
