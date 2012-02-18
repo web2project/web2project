@@ -5,43 +5,43 @@
 ini_set('display_errors', 1);
 //ini_set('display_errors', 0);
 
-if(defined('E_DEPRECATED')){
-	// since php 5.3
-	error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+if (defined('E_DEPRECATED')) {
+    // since php 5.3
+    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 } else {
-	error_reporting(E_ALL & ~ E_NOTICE);
+    error_reporting(E_ALL & ~ E_NOTICE);
 }
 error_reporting(-1);
 
 define('W2P_PERFORMANCE_DEBUG', false);
 define('MIN_PHP_VERSION', '5.2.0');
 //date_default_timezone_set('America/New_York');
-
 //Performance Debug Initialization
 if (W2P_PERFORMANCE_DEBUG) {
-	global $w2p_performance_time, $w2p_performance_dbtime, $w2p_performance_old_dbqueries, $w2p_performance_dbqueries, $w2p_performance_acltime, $w2p_performance_aclchecks, $w2p_performance_memory_marker, $w2p_performance_setuptime;
-	$w2p_performance_time = array_sum(explode(' ', microtime()));
-	if (function_exists('memory_get_usage')) {
-		$w2p_performance_memory_marker = memory_get_usage();
-	}
-	$w2p_performance_acltime = 0;
-	$w2p_performance_aclchecks = 0;
-	$w2p_performance_dbtime = 0;
-	$w2p_performance_old_dbqueries = 0;
-	$w2p_performance_dbqueries = 0;
+    global $w2p_performance_time, $w2p_performance_dbtime, $w2p_performance_old_dbqueries, $w2p_performance_dbqueries, $w2p_performance_acltime, $w2p_performance_aclchecks, $w2p_performance_memory_marker, $w2p_performance_setuptime;
+    $w2p_performance_time = array_sum(explode(' ', microtime()));
+    if (function_exists('memory_get_usage')) {
+        $w2p_performance_memory_marker = memory_get_usage();
+    }
+    $w2p_performance_acltime = 0;
+    $w2p_performance_aclchecks = 0;
+    $w2p_performance_dbtime = 0;
+    $w2p_performance_old_dbqueries = 0;
+    $w2p_performance_dbqueries = 0;
 }
 
 $baseDir = dirname(__file__);
 
 // only rely on env variables if not using a apache handler
-function safe_get_env($name) {
-	if (isset($_SERVER[$name])) {
-		return $_SERVER[$name];
-	} elseif (strpos(php_sapi_name(), 'apache') === false) {
-		getenv($name);
-	} else {
-		return '';
-	}
+function safe_get_env($name)
+{
+    if (isset($_SERVER[$name])) {
+        return $_SERVER[$name];
+    } elseif (strpos(php_sapi_name(), 'apache') === false) {
+        getenv($name);
+    } else {
+        return '';
+    }
 }
 
 // automatically define the base url
@@ -56,7 +56,7 @@ define('W2P_BASE_URL', $baseUrl);
 
 // Set the ADODB directory
 if (!defined('ADODB_DIR')) {
-	define('ADODB_DIR', W2P_BASE_DIR . '/lib/adodb');
+    define('ADODB_DIR', W2P_BASE_DIR . '/lib/adodb');
 }
 
 /*
@@ -73,5 +73,5 @@ $w2Pconfig = array();
 
 // Start up mb_string UTF-8 if available
 if (function_exists('mb_internal_encoding')) {
-	mb_internal_encoding('UTF-8');
+    mb_internal_encoding('UTF-8');
 }
