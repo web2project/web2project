@@ -1002,6 +1002,11 @@ function array_csort() { //coded by Ichier2003
 				if ($marray[$j]['task_end_date'] == '0000-00-00 00:00:00') {
 					$marray[$j]['task_end_date'] = calcEndByStartAndDuration($marray[$j]);
 				}
+                                
+                                // TODO: In some cases, $arg can be an empty string
+                                // which will throw a notice. Don't want to touch it
+                                // who knows what will break, it uses eval after all
+                                // robertbasic, 2012-02-18
 				$sortarr[$i][] = $marray[$j][$arg];
 			}
 		} else {

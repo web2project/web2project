@@ -134,6 +134,12 @@ class CSystem_Bcode extends w2p_Core_BaseObject {
                 $results['uncountedHours'] += $tasklog['task_log_hours'];
             } else {
                 $category = ('' == ($tasklog['billingcode_category'])) ? 'otherCosts' : $tasklog['billingcode_category'];
+                if (!isset($results[$category])) {
+                    $results[$category] = 0;
+                }
+                if (!isset($results['totalCosts'])) {
+                    $results['totalCosts'] = 0;
+                }
                 $results[$category] += $tasklog['task_log_hours'] * $tasklog['billingcode_value'];
                 $results['totalCosts'] += $tasklog['task_log_hours'] * $tasklog['billingcode_value'];
             }

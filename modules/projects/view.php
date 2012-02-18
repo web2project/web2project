@@ -51,7 +51,10 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 // create Date objects from the datetime fields
 $end_date = intval($project->project_end_date) ? new w2p_Utilities_Date($project->project_end_date) : null;
-$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
+$actual_end_date = null;
+if (isset($criticalTasks)) {
+    $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
+}
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block
@@ -259,7 +262,10 @@ function delIt() {
                                         <?php
                                         $totalBudget = 0;
                                         foreach ($billingCategory as $id => $category) {
-                                            $amount = $project->budget[$id]['budget_amount'];
+                                            $amount = 0;
+                                            if (isset($project->budget[$id])) {
+                                                $amount = $project->budget[$id]['budget_amount'];
+                                            }
                                             $totalBudget += $amount;
                                             ?>
                                             <tr>
@@ -302,7 +308,13 @@ function delIt() {
                                                 </td>
                                                 <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
                                                     <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
-                                                    <?php echo formatCurrency($results[$id], $AppUI->getPref('CURRENCYFORM')); ?>
+                                                    <?php
+                                                    $amount = 0;
+                                                    if (isset($results[$id])) {
+                                                        $amount = $results[$id];
+                                                    }
+                                                    formatCurrency($amount, $AppUI->getPref('CURRENCYFORM'));
+                                                    ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -329,7 +341,7 @@ function delIt() {
                                     </table>
                                 </td>
                             </tr>
-                            <?php if ($results['uncountedHours']) { ?>
+                            <?php if (isset($results['uncountedHours']) && $results['uncountedHours']) { ?>
                             <tr>
                                 <td colspan="2" align="center" class="hilite">
                                     <?php echo '<span style="float:right; font-style: italic;">'.$results['uncountedHours'].' hours without billing codes</span>'; ?>
