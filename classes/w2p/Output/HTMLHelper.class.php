@@ -60,6 +60,8 @@ class w2p_Output_HTMLHelper {
         $last_underscore = strrpos($fieldName, '_');
         $shortname = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
 
+        $additional = '';
+        
         switch ($shortname) {
 			case '_creator':
 			case '_owner':
