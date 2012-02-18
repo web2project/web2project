@@ -65,6 +65,7 @@ class w2p_Output_HTMLHelper
         $shortname = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
 
         $additional = '';
+        $class = '';
 
         switch ($shortname) {
             case '_creator':
