@@ -1,26 +1,28 @@
 <?php /* $Id$ $URL$ */
 
 /**
- *	@package web2project
- *	@subpackage output
- *	@version $Revision$
+ * 	@package web2project
+ * 	@subpackage output
+ * 	@version $Revision$
  */
-
-class w2p_Output_HTMLHelper {
+class w2p_Output_HTMLHelper
+{
 
     protected $AppUI = null;
 
-    public function __construct(w2p_Core_CAppUI $AppUI) {
+    public function __construct(w2p_Core_CAppUI $AppUI)
+    {
         $this->AppUI = $AppUI;
-        $this->df    = $AppUI->getPref('SHDATEFORMAT');
-        $this->dtf   = $this->df . ' ' . $AppUI->getPref('TIMEFORMAT');
+        $this->df = $AppUI->getPref('SHDATEFORMAT');
+        $this->dtf = $this->df . ' ' . $AppUI->getPref('TIMEFORMAT');
     }
 
-    public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList) {
+    public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList)
+    {
 
-        $output  = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
-        $output .= '<tr><th>'.$AppUI->_('Name').'</th><th>'.$AppUI->_('Email').'</th>';
-        $output .= '<th>'.$AppUI->_('Phone').'</th><th>'.$AppUI->_('Department').'</th></tr>';
+        $output = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
+        $output .= '<tr><th>' . $AppUI->_('Name') . '</th><th>' . $AppUI->_('Email') . '</th>';
+        $output .= '<th>' . $AppUI->_('Phone') . '</th><th>' . $AppUI->_('Department') . '</th></tr>';
         foreach ($contactList as $contact_id => $contact_data) {
             $contact = new CContact();
             $contact->contact_id = $contact_id;
@@ -55,39 +57,41 @@ class w2p_Output_HTMLHelper {
      *   fields like project_company, dept_company because we still have a 
      *   common suffix.
      */
-	public function createCell($fieldName, $value) {
+
+    public function createCell($fieldName, $value)
+    {
 
         $last_underscore = strrpos($fieldName, '_');
         $shortname = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
 
         $additional = '';
-        
+
         switch ($shortname) {
-			case '_creator':
-			case '_owner':
+            case '_creator':
+            case '_owner':
                 $additional = 'nowrap="nowrap"';
-				$cell = w2PgetUsernameFromID($value);
-				break;
-			case '_budget':
-				$cell = w2PgetConfig('currency_symbol');
-				$cell .= formatCurrency($value, $this->AppUI->getPref('CURRENCYFORM'));
-				break;
-			case '_url':
-				$cell = w2p_url($value);
-				break;
+                $cell = w2PgetUsernameFromID($value);
+                break;
+            case '_budget':
+                $cell = w2PgetConfig('currency_symbol');
+                $cell .= formatCurrency($value, $this->AppUI->getPref('CURRENCYFORM'));
+                break;
+            case '_url':
+                $cell = w2p_url($value);
+                break;
             case '_email':
                 $cell = w2p_email($value);
                 break;
-			case '_date':
-				$additional = 'nowrap="nowrap"';
+            case '_date':
+                $additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
-				$cell = $myDate ? $myDate->format($this->df) : '-';
-				break;
-			case '_datetime':
-				$additional = 'nowrap="nowrap"';
+                $cell = $myDate ? $myDate->format($this->df) : '-';
+                break;
+            case '_datetime':
+                $additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
-				$cell = $myDate ? $myDate->format($this->dtf) : '-';
-				break;
+                $cell = $myDate ? $myDate->format($this->dtf) : '-';
+                break;
             case '_description':
                 $cell = w2p_textarea($value);
                 break;
@@ -98,7 +102,7 @@ class w2p_Output_HTMLHelper {
             case '_complete':
             case '_assignment':
                 $class = 'center';
-                $cell = $value.'%';
+                $cell = $value . '%';
                 break;
             case '_url':
                 $cell = w2p_url($value);
@@ -108,19 +112,20 @@ class w2p_Output_HTMLHelper {
                 $cell = $value;
                 break;
             case '_hours':
-			default:
-				$additional = 'nowrap="nowrap"';
-				$cell = htmlspecialchars($value, ENT_QUOTES);
-		}
+            default:
+                $additional = 'nowrap="nowrap"';
+                $cell = htmlspecialchars($value, ENT_QUOTES);
+        }
 
-        $begin = '<td '.$additional.' class="data '.$class.'">';
+        $begin = '<td ' . $additional . ' class="data ' . $class . '">';
         $end = '</td>';
 
-		return $begin.$cell.$end;
-	}
+        return $begin . $cell . $end;
+    }
 
-    public function createColumn($fieldName, $value) {        
-        trigger_error("The method createColumn has been deprecated in v3.0 and will be removed by v4.0. Please use createCell instead.", E_USER_NOTICE );
+    public function createColumn($fieldName, $value)
+    {
+        trigger_error("The method createColumn has been deprecated in v3.0 and will be removed by v4.0. Please use createCell instead.", E_USER_NOTICE);
 
         return $this->createCell($fieldName, $value[$fieldName]);
     }
@@ -129,42 +134,45 @@ class w2p_Output_HTMLHelper {
      * 
      * @deprecated 
      */
-	public static function renderColumn(w2p_Core_CAppUI $AppUI, $fieldName, $row) {
 
-        trigger_error("The static method renderColumn has been deprecated and will be removed by v4.0.", E_USER_NOTICE );
+    public static function renderColumn(w2p_Core_CAppUI $AppUI, $fieldName, $row)
+    {
+
+        trigger_error("The static method renderColumn has been deprecated and will be removed by v4.0.", E_USER_NOTICE);
 
         $last_underscore = strrpos($fieldName, '_');
         $shortname = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
 
         switch ($shortname) {
-			case '_creator':
-			case '_owner':
-				$s .= '<td nowrap="nowrap">';
-				$s .= w2PgetUsernameFromID($row[$fieldName]);
-				$s .= '</td>';
-				break;
-			case '_budget':
-				$s .= '<td>';
-				$s .= $w2Pconfig['currency_symbol'];
-				$s .= formatCurrency($row[$fieldName], $AppUI->getPref('CURRENCYFORM'));
-				$s .= '</td>';
-				break;
-			case '_url':
-				$s .= '<td>';
-				$s .= w2p_url($row[$fieldName]);
-				$s .= '</td>';
-				break;
-			case '_date':
-				$df = $AppUI->getPref('SHDATEFORMAT');
-				$myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
-				$s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($df) : '-') . '</td>';
-				break;
-			default:
-				$s .= '<td nowrap="nowrap" class="center">';
-				$s .= htmlspecialchars($row[$fieldName], ENT_QUOTES);
-				$s .= '</td>';
-		}
+            case '_creator':
+            case '_owner':
+                $s .= '<td nowrap="nowrap">';
+                $s .= w2PgetUsernameFromID($row[$fieldName]);
+                $s .= '</td>';
+                break;
+            case '_budget':
+                $s .= '<td>';
+                $s .= $w2Pconfig['currency_symbol'];
+                $s .= formatCurrency($row[$fieldName], $AppUI->getPref('CURRENCYFORM'));
+                $s .= '</td>';
+                break;
+            case '_url':
+                $s .= '<td>';
+                $s .= w2p_url($row[$fieldName]);
+                $s .= '</td>';
+                break;
+            case '_date':
+                $df = $AppUI->getPref('SHDATEFORMAT');
+                $myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
+                $s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($df) : '-') . '</td>';
+                break;
+            default:
+                $s .= '<td nowrap="nowrap" class="center">';
+                $s .= htmlspecialchars($row[$fieldName], ENT_QUOTES);
+                $s .= '</td>';
+        }
 
-		return $s;
-	}
+        return $s;
+    }
+
 }
