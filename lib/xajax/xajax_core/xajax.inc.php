@@ -1007,7 +1007,11 @@ final class xajax
 		}
 
 		// Add the path and the query string
-		$sURL.= $aURL['path'].@$aURL['query'];
+		$sURL.= $aURL['path'];
+                
+                if (isset($aURL['query'])) {
+                    $sURL .= $aURL['query'];
+                }
 
 		// Clean up
 		unset($aURL);

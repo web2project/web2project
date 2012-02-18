@@ -7,11 +7,11 @@ ini_set('display_errors', 1);
 
 if (defined('E_DEPRECATED')) {
     // since php 5.3
-    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+    error_reporting(E_ALL & ~ E_STRICT);
 } else {
-    error_reporting(E_ALL & ~ E_NOTICE);
+    error_reporting(E_ALL & ~ E_STRICT);
 }
-error_reporting(-1);
+//error_reporting(-1);
 
 define('W2P_PERFORMANCE_DEBUG', false);
 define('MIN_PHP_VERSION', '5.2.0');
