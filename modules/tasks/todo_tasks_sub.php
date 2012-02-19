@@ -12,7 +12,7 @@ global $task_sort_item2, $task_sort_type2, $task_sort_order2;
  * TODO: This is a nasty, dirty hack because globals have stacked on top of
  *   globals and have made a mess of things.. we need a better option.
  */
-if(!count($tasks)) {
+if(!isset($tasks) || !count($tasks)) {
     global $tasks;
 }
 $perms = &$AppUI->acl();

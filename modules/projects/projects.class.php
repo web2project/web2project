@@ -344,7 +344,7 @@ class CProject extends w2p_Core_BaseObject
             if (!isset($extra['from']) && !isset($extra['join'])) {
                 $extra['join'] = 'project_departments';
                 $extra['on'] = 'projects.project_id = project_departments.project_id';
-            } elseif ($extra['from'] != 'project_departments' && !isset($extra['join'])) {
+            } elseif ((isset($extra['from']) && $extra['from'] != 'project_departments') && !isset($extra['join'])) {
                 $extra['join'] = 'project_departments';
                 $extra['on'] = 'projects.project_id = project_departments.project_id';
             }
