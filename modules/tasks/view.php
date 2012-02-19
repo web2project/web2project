@@ -244,7 +244,13 @@ function delIt() {
                                                 </td>
                                                 <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
                                                     <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
-                                                    <?php echo formatCurrency($results[$id], $AppUI->getPref('CURRENCYFORM')); ?>
+                                                    <?php
+                                                    $amount = 0;
+                                                    if (isset($results[$id])) {
+                                                        $amount = $results[$id];
+                                                    }
+                                                    echo formatCurrency($amount, $AppUI->getPref('CURRENCYFORM'));
+                                                    ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -283,7 +289,7 @@ function delIt() {
                                     </table>
                                 </td>
                             </tr>
-                            <?php if ($results['uncountedHours']) { ?>
+                            <?php if (isset($results['uncountedHours']) && $results['uncountedHours']) { ?>
                             <tr>
                                 <td colspan="2" align="center" class="hilite">
                                     <?php echo '<span style="float:right; font-style: italic;">'.$results['uncountedHours'].' hours without billing codes</span>'; ?>
@@ -393,7 +399,9 @@ function delIt() {
                     echo '</td></tr>';
                 }
 
-                $contacts = CProject::getContacts($AppUI, $obj->task_project);
+                $project = new CProject();
+                $project->project_id = $obj->task_project;
+                $contacts = $project->getContactList();
                 if (count($contacts)) {
                     echo '<tr><td><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
                     echo '<tr><td colspan="3" class="hilite">';

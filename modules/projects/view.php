@@ -313,7 +313,7 @@ function delIt() {
                                                     if (isset($results[$id])) {
                                                         $amount = $results[$id];
                                                     }
-                                                    formatCurrency($amount, $AppUI->getPref('CURRENCYFORM'));
+                                                    echo formatCurrency($amount, $AppUI->getPref('CURRENCYFORM'));
                                                     ?>
                                                 </td>
                                             </tr>
