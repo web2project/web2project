@@ -634,7 +634,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     {
         //NOTE: This only happens if the create was successful.
 
-        $name = $this->{substr($this->_tbl, 0, -1) . '_name'};
+        $store_type = '';
+        
+        $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
+        
+        $name = $this->{$prefix . '_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
                 $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
@@ -652,7 +656,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     {
         //NOTE: This only happens if the create was successful.
 
-        $name = $this->{substr($this->_tbl, 0, -1) . '_name'};
+        $store_type = '';
+        
+        $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
+        
+        $name = $this->{$prefix . '_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
                 $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
@@ -670,7 +678,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     {
         //NOTE: This only happens if the update was successful.
 
-        $name = $this->{substr($this->_tbl, 0, -1) . '_name'};
+        $store_type = '';
+        
+        $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
+        
+        $name = $this->{$prefix . '_name'};
         $name = (isset($name)) ? $name : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
                 $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
@@ -742,4 +754,15 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         return $this->_query;
     }
 
+    // TODO: create a proper "unpluralize" from this?
+    protected function _getColumnPrefixFromTableName($tableName)
+    {
+        $prefix = substr($tableName, 0, -1);
+        // companies -> company
+        if (substr($prefix, -2) === 'ie') {
+            $prefix = substr($prefix, 0, -2) . 'y';
+        }
+        
+        return $prefix;
+    }
 }
