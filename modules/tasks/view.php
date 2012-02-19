@@ -256,7 +256,13 @@ function delIt() {
                                             </td>
                                             <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
                                                 <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
-                                                <?php echo formatCurrency($results['otherCosts'], $AppUI->getPref('CURRENCYFORM')); ?>
+                                                <?php 
+                                                $otherCosts = 0;
+                                                if (isset($results['otherCosts'])) {
+                                                    $otherCosts = $results['otherCosts'];
+                                                }
+                                                echo formatCurrency($otherCosts, $AppUI->getPref('CURRENCYFORM'));
+                                                ?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -265,7 +271,13 @@ function delIt() {
                                             </td>
                                             <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
                                                 <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
-                                                <?php echo formatCurrency($results['totalCosts'], $AppUI->getPref('CURRENCYFORM')); ?>
+                                                <?php
+                                                $totalCosts = 0;
+                                                if (isset($results['totalCosts'])) {
+                                                    $totalCosts = $results['totalCosts'];
+                                                }
+                                                echo formatCurrency($totalCosts, $AppUI->getPref('CURRENCYFORM'));
+                                                ?>
                                             </td>
                                         </tr>
                                     </table>
