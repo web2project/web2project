@@ -1,5 +1,5 @@
 <?php /* $Id$ $URL$ */
-global $AppUI, $user_id, $canEdit, $canDelete, $tab;
+global $AppUI, $user_id, $user_name, $canEdit, $canDelete, $tab;
 
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
