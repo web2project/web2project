@@ -3,13 +3,13 @@
 // If you experience a 'white screen of death' or other problems,
 // change the following line of code to this:
 ini_set('display_errors', 1);
-//ini_set('display_errors', 0);
+ini_set('display_errors', 0);
 
-if (defined('E_DEPRECATED')) {
-    // since php 5.3
-    error_reporting(E_ALL & ~ E_STRICT);
+if(defined('E_DEPRECATED')){
+// since php 5.3
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 } else {
-    error_reporting(E_ALL & ~ E_STRICT);
+error_reporting(E_ALL & ~ E_NOTICE);
 }
 //error_reporting(-1);
 
