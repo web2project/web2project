@@ -1,25 +1,28 @@
 <?php
-/**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
- */
 
+/**
+ * 	@package web2project
+ * 	@subpackage core
+ * 	@version $Revision$
+ */
 class CSystem_Budget extends w2p_Core_BaseObject
 {
-	public $budget_id = null;
-	public $budget_company = null;
-	public $budget_dept = null;
-	public $budget_start_date = null;
-	public $budget_end_date = null;
-	public $budget_amount = null;
-	public $budget_category = null;
 
-	public function __construct() {
-		parent::__construct('budgets', 'budget_id', 'system');
-	}
+    public $budget_id = null;
+    public $budget_company = null;
+    public $budget_dept = null;
+    public $budget_start_date = null;
+    public $budget_end_date = null;
+    public $budget_amount = null;
+    public $budget_category = null;
 
-    public function check() {
+    public function __construct()
+    {
+        parent::__construct('budgets', 'budget_id', 'system');
+    }
+
+    public function check()
+    {
         // ensure the integrity of some variables
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
@@ -32,7 +35,8 @@ class CSystem_Budget extends w2p_Core_BaseObject
         return $errorArray;
     }
 
-    public function getBudgetAmounts($company_id = -1, $dept_id = -1) {
+    public function getBudgetAmounts($company_id = -1, $dept_id = -1)
+    {
         $q = $this->_getQuery();
         $q->addTable('budgets', 'b');
         $q->addQuery('b.*, c.company_name');
@@ -48,7 +52,8 @@ class CSystem_Budget extends w2p_Core_BaseObject
         return $q->loadHashList('budget_id');
     }
 
-	public function store() {
+    public function store()
+    {
         $stored = false;
 
         $errorMsgArray = $this->check();
@@ -73,9 +78,10 @@ class CSystem_Budget extends w2p_Core_BaseObject
             $stored = true;
         }
         return $stored;
-	}
+    }
 
-    public function delete() {
+    public function delete()
+    {
         $result = false;
 
         if ($this->_perms->checkModuleItem('system', 'edit')) {
@@ -86,14 +92,19 @@ class CSystem_Budget extends w2p_Core_BaseObject
         }
         return $result;
     }
+
 }
 
 /**
  * @deprecated
  */
-class budgets extends CSystem_Budget {
-	public function __construct() {
+class budgets extends CSystem_Budget
+{
+
+    public function __construct()
+    {
         parent::__construct();
-        trigger_error("budgets has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_Budget instead.", E_USER_NOTICE );
-	}
+        trigger_error("budgets has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_Budget instead.", E_USER_NOTICE);
+    }
+
 }
