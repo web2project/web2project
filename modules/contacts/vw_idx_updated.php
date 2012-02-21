@@ -74,7 +74,7 @@ global $carr, $carrWidth, $carrHeight, $showfields, $contactMethods, $methodLabe
 											reset($showfields);
 											$s = '';
 											while (list($key, $val) = each($showfields)) {
-												if (mb_strlen($carr[$z][$x][$key]) > 0) {
+												if (isset($carr[$z][$x][$key]) && mb_strlen($carr[$z][$x][$key]) > 0) {
 													if ($val == 'contact_email') {
                                                         $s .= '<td class="hilite" colspan="2">' . w2p_email($carr[$z][$x][$key]) . '</td></tr>';
                                                     } elseif ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {
