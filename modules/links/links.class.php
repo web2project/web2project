@@ -1,12 +1,12 @@
 <?php /* $Id$ $URL$ */
 
 /**
- *	@package web2Project
- *	@subpackage modules
- *	@version $Revision$
+ * 	@package web2Project
+ * 	@subpackage modules
+ * 	@version $Revision$
  */
-
-class CLink extends w2p_Core_BaseObject {
+class CLink extends w2p_Core_BaseObject
+{
 
     public $link_id = null;
     public $link_project = null;
@@ -20,11 +20,13 @@ class CLink extends w2p_Core_BaseObject {
     public $link_icon = null;
     public $link_category = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct('links', 'link_id');
     }
 
-    public function loadFull($AppUI = null, $link_id) {
+    public function loadFull($AppUI = null, $link_id)
+    {
 
         $q = $this->_getQuery();
         $q->addQuery('links.*');
@@ -37,11 +39,12 @@ class CLink extends w2p_Core_BaseObject {
         $q->leftJoin('contacts', 'c', 'user_contact = contact_id');
         $q->leftJoin('projects', 'p', 'project_id = link_project');
         $q->leftJoin('tasks', 't', 'task_id = link_task');
-        $q->addWhere('link_id = ' . (int)$link_id);
+        $q->addWhere('link_id = ' . (int) $link_id);
         $q->loadObject($this, true, false);
     }
 
-    public function getProjectTaskLinksByCategory($AppUI = null, $project_id = 0, $task_id = 0, $category_id = 0, $search = '') {
+    public function getProjectTaskLinksByCategory($AppUI = null, $project_id = 0, $task_id = 0, $category_id = 0, $search = '')
+    {
         // load the following classes to retrieved denied records
 
         $project = new CProject();
@@ -65,13 +68,13 @@ class CLink extends w2p_Core_BaseObject {
             $q->addWhere('(link_name LIKE \'%' . $search . '%\' OR link_description LIKE \'%' . $search . '%\')');
         }
         if ($project_id > 0) { // Project
-            $q->addWhere('link_project = ' . (int)$project_id);
+            $q->addWhere('link_project = ' . (int) $project_id);
         }
         if ($task_id > 0) { // Task
-            $q->addWhere('link_task = ' . (int)$task_id);
+            $q->addWhere('link_task = ' . (int) $task_id);
         }
         if ($category_id >= 0) { // Category
-            $q->addWhere('link_category = '.$category_id);
+            $q->addWhere('link_category = ' . $category_id);
         }
         // Permissions
         $project->setAllowedSQL($this->_AppUI->user_id, $q, 'link_project');
@@ -81,7 +84,8 @@ class CLink extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-    public function check() {
+    public function check()
+    {
         // ensure the integrity of some variables
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
@@ -100,7 +104,8 @@ class CLink extends w2p_Core_BaseObject {
         return $errorArray;
     }
 
-    public function delete() {
+    public function delete()
+    {
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             if ($msg = parent::delete()) {
                 return $msg;
@@ -110,11 +115,12 @@ class CLink extends w2p_Core_BaseObject {
         return false;
     }
 
-    public function store() {
+    public function store()
+    {
         $stored = false;
 
         if (strpos($this->link_url, ':') === false && strpos($this->link_url, "//") === false) {
-            $this->link_url = 'http://'.$this->link_url;
+            $this->link_url = 'http://' . $this->link_url;
         }
 
         $this->_error = $this->check();
@@ -159,4 +165,5 @@ class CLink extends w2p_Core_BaseObject {
 
         return $search;
     }
+
 }
