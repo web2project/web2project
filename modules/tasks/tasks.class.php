@@ -2412,10 +2412,10 @@ class CTask extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
-    public function getAllowedTaskList($AppUI = null, $task_project = 0)
+    public function getAllowedTaskList($AppUI = null, $task_project = 0, $orderby='')
     {
         $results = array();
-
+        
         $q = $this->_getQuery();
         $q->addQuery('task_id, task_name, task_parent, task_access, task_owner');
         $q->addQuery('task_start_date, task_end_date, task_percent_complete');
