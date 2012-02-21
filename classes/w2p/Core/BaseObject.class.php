@@ -638,8 +638,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         
-        $name = $this->{$prefix . '_name'};
-        $name = (isset($name)) ? $name : '';
+        $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
                 $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
                 $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
@@ -660,8 +659,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         
-        $name = $this->{$prefix . '_name'};
-        $name = (isset($name)) ? $name : '';
+        $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
                 $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
                 $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
@@ -682,8 +680,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         
-        $name = $this->{$prefix . '_name'};
-        $name = (isset($name)) ? $name : '';
+        $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
                 $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
                 $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
