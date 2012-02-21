@@ -3,15 +3,20 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $carr, $carrWidth, $carrHeight, $showfields, $contactMethods, $methodLabels;
+global $carr, $carrWidth, $carrHeight, $showfields, $contactMethods, $methodLabels, $tdw;
 
 ?>
 <table width="100%" border="0" cellpadding="1" cellspacing="0" class="contacts list">
 	<tr>
 		<?php for ($z = 0; $z < $carrWidth; $z++) { ?>
 			<td valign="top" align="left" width="<?php echo $tdw; ?>%">
+                            <?php
+                            if (!isset($carr[$z])){
+                                continue;
+                            }
+                            ?>
 				<table width="100%" cellspacing="2" cellpadding="1">
-					<?php for ($x = 0, $x_cmp = @count($carr[$z]); $x < $x_cmp; $x++) { ?>
+					<?php for ($x = 0, $x_cmp = count($carr[$z]); $x < $x_cmp; $x++) { ?>
 						<tr>
 							<td>
 								<table width="100%" cellspacing="0" cellpadding="1" class="std">
