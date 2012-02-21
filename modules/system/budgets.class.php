@@ -45,7 +45,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
         if ($company_id > -1) {
             $q->addWhere('b.budget_company = ' . (int) $company_id);
         }
-        if ($deptId > -1) {
+        if ($dept_id > -1) {
             $q->addWhere('b.budget_dept = ' . (int) $dept_id);
         }
 
