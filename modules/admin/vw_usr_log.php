@@ -52,7 +52,7 @@ function setDate( frm_name, f_date ) {
 </table>
 
 <form action="index.php?m=admin<?php echo $a; ?>" method="post" name="frmDate" accept-charset="utf-8">
-    <input type="hidden" name="user_id" id="user_id" value="<?php $user_id; ?>" />
+    <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id; ?>" />
     <table align="center" width="100%">
         <tr align="center">
             <td align="right" width="45%" ><?php echo $AppUI->_('Start Date'); ?></td>
@@ -86,9 +86,9 @@ if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
     $start_date = $AppUI->convertToSystemTZ($start_date);
     $end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_POST, 'log_end_date', date('Y-m-d'))));
     $end_date = $AppUI->convertToSystemTZ($end_date);
-    $userId = isset($userId) ? $userId : 0;
+    $user_id = isset($user_id) ? $user_id : 0;
     $user = new CUser();
-    $logs = $user->getLogList($userId, $start_date, $end_date);
+    $logs = $user->getLogList($user_id, $start_date, $end_date);
     ?>
     <table width="50%" border="0" cellpadding="2" cellspacing="1" class="tbl list" align="center">
         <tr>
