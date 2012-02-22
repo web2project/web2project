@@ -64,7 +64,7 @@ td.today span img, td.empty span img
     text-align: left;
 }
 
-._category, ._count, ._complete, ._assignment, ._owner, ._username, 
+._category, ._count, ._complete, ._assignment, ._owner, .replies, ._username, 
     .inactive, .countp, ._users {
     text-align: center;
 }
