@@ -162,6 +162,7 @@ class w2p_Output_HTMLHelper
                 $image = '<img src="'.w2PfindImage('folder5_small.png', 'files').'" />';
                 $link = '?m=files&tab=4&folder=' . $value;
                 $cell = '<a href="'.$link.'">' . $image . ' ' . $foldername . '</a>';
+                $additional = 'nowrap="nowrap"';
                 break;
             case '_user':
             case '_username':
@@ -198,7 +199,8 @@ class w2p_Output_HTMLHelper
             case '_category':
             case '_status':
             case '_type':
-                $cell = $custom[$fieldName][$value];
+//TODO: another oddball
+                $cell = ($fieldName == 'file_type') ? $value : $custom[$fieldName][$value];
                 break;
             case '_author':
             case '_creator':

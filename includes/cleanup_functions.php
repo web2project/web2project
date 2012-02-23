@@ -439,6 +439,8 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	global $m, $a, $history_active, $expanded;
 
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+    $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
 	//Check for Tasks Access
 	$canAccess = canTaskAccess($arr['task_id'], $arr['task_access'], $arr['task_owner']);
 	if (!$canAccess) {
@@ -512,21 +514,9 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$s .= '<td align="center">' . $AppUI->_('-') . '</td>';
 	}
 	// percent complete and priority
-	$s .= ('<td align="right">' . (int) $arr['task_percent_complete'] . '%</td><td align="center" nowrap="nowrap">');
-	if ($arr['task_priority'] < 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['task_priority'] . '.gif') . '" alt="" />';
-	} elseif ($arr['task_priority'] > 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['task_priority'] . '.gif') . '" alt="" />';
-	}
-	$s .= '</td><td align="center" nowrap="nowrap">';
-	if (isset($arr['user_task_priority'])) {
-		if ($arr['user_task_priority'] < 0) {
-			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$arr['user_task_priority'] . '.gif') . '" alt="" />';
-		} elseif ($arr['user_task_priority'] > 0) {
-			$s .= '<img src="' . w2PfindImage('icons/priority+' . $arr['user_task_priority'] . '.gif') . '" alt="" />';
-		}
-	}
-	$s .= '</td>';
+    $s .= $htmlHelper->createCell('task_percent_complete', $arr['task_percent_complete']);
+    $s .= $htmlHelper->createCell('task_priority', $arr['task_priority']);
+    $s .= $htmlHelper->createCell('user_task_priority', $arr['user_task_priority']);
 
 	// dots
 	$s .= '<td width="' . (($today_view) ? '50%' : '90%') . '">';
@@ -626,6 +616,8 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	global $task_access, $task_priority, $PROJDESIGN_CONFIG, $m, $expanded;
 
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+    $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+    $htmlHelper->stageRowData($a);
 
 	$types = w2Pgetsysval('TaskType');
 
@@ -680,22 +672,10 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 		$s .= '<a href="?m=tasks&a=addedit&task_id=' . $a['task_id'] . '">' . w2PtoolTip('edit tasks panel', 'click to edit this task') . w2PshowImage('icons/pencil.gif', 12, 12) . w2PendTip() . '</a>';
 	}
 	$s .= '</td>';
-	// percent complete
-	$s .= '<td align="right">' . (int) $a['task_percent_complete'] . '%</td>';
-	// priority
-	$s .= '<td align="center" nowrap="nowrap">';
-	if ($a['task_priority'] < 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$a['task_priority'] . '.gif') . '" width="13" height="16" alt="" />';
-	} elseif ($a['task_priority'] > 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['task_priority'] . '.gif') . '" width="13" height="16" alt="" />';
-	}
-	$s .= '</td><td align="center" nowrap="nowrap">';
-	if ($a['user_task_priority'] < 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority-' . -$a['user_task_priority'] . '.gif') . '" alt="" />';
-	} elseif ($a['user_task_priority'] > 0) {
-		$s .= '<img src="' . w2PfindImage('icons/priority+' . $a['user_task_priority'] . '.gif') . '" alt="" />';
-	}
-	$s .= '</td>';
+	// percent complete and priority
+    $s .= $htmlHelper->createCell('task_percent_complete', $a['task_percent_complete']);
+    $s .= $htmlHelper->createCell('task_priority', $a['task_priority']);
+    $s .= $htmlHelper->createCell('user_task_priority', $a['user_task_priority']);
 
 	// access
 	$s .= '<td nowrap="nowrap">';
@@ -832,6 +812,8 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 	$fdf = $df . ' ' . $tf;
 	$perms = &$AppUI->acl();
 	$show_all_assignees = $w2Pconfig['show_all_task_assignees'] ? true : false;
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+    $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 	$done[] = $a['task_id'];
 
@@ -878,8 +860,9 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 	} else {
 		$s .= $a['task_name'];
 	}
+
+    $s .= $htmlHelper->createCell('task_percent_complete', $a['task_percent_complete']);
 	// percent complete
-	$s .= '<td align="right">' . (int) $a['task_percent_complete'] . '%</td>';
 	$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
 	$s .= '</td>';
 	$s .= '<td nowrap="nowrap" align="center" style="' . $style . '">' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
@@ -2310,10 +2293,8 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     $fields = $module->loadSettings('files', 'index_list');
 
     if (count($fields) > 0) {
-        foreach ($fields as $field => $text) {
-            $fieldList[] = $field;
-            $fieldNames[] = $text;
-        }
+        $fieldList = array_keys($fields);
+        $fieldNames = array_values($fields);
     } else {
         // TODO: This is only in place to provide an pre-upgrade-safe 
         //   state for versions earlier than v3.0
@@ -2325,7 +2306,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
             'Folder', 'Task Name', 'Owner', 'Size', 'Type', 'Date', 
             'Checkout Reason');
 
-        //$module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
+        $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
     }
 
     $s  = '<tr>';
