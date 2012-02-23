@@ -40,6 +40,48 @@ class w2p_Output_HTMLHelper
         return $output;
     }
 
+    public function renderContactTable($moduleName, array $contactList) {
+
+        $fieldList = array();
+        $fieldNames = array();
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('contacts', $moduleName.'_view');
+
+        if (count($fields) > 0) {
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe 
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('contact_name', 'contact_email', 'contact_phone', 'dept_name');
+            $fieldNames = array('Name', 'Email', 'Phone', 'Department');
+
+            $module->storeSettings('contacts', $moduleName.'_view', $fieldList, $fieldNames);
+        }
+        $output  = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
+        $output .= '<tr>';
+        foreach ($fieldNames as $index => $name) {
+            $output .= '<th nowrap="nowrap">';
+//TODO: Should we support sorting here?
+            $output .= $this->_AppUI->_($fieldNames[$index]);
+            $output .= '</th>';
+        }
+        $output .= '</tr>';
+        
+        foreach ($contactList as $row) {
+            $output .= '<tr>';
+            $this->stageRowData($row);
+            foreach ($fieldList as $index => $column) {
+                $output .= $this->createCell($fieldList[$index], $row[$fieldList[$index]]);
+            }
+            $output .= '</tr>';
+        }
+        $output .= '</table>';
+
+        return $output;
+    }
     /*
      * I really hate this option, but I'm not sure of a better way to get the 
      *   _name case of createCell's switch statement. I'm option to suggestions.

@@ -393,9 +393,9 @@ function delIt() {
                 <?php }
                 $contacts = $obj->getContacts(null, $task_id);
                 if (count($contacts)) {
-                    echo '<tr><td><strong>' . $AppUI->_('Task Contacts') . '</strong></td></tr>';
+                    echo '<tr><td colspan="3"><strong>' . $AppUI->_('Task Contacts') . '</strong></td></tr>';
                     echo '<tr><td colspan="3" class="hilite">';
-                    echo w2p_Output_HTMLHelper::renderContactList($AppUI, $contacts);
+                    echo $htmlHelper->renderContactTable('tasks', $contacts);
                     echo '</td></tr>';
                 }
 
@@ -403,9 +403,9 @@ function delIt() {
                 $project->project_id = $obj->task_project;
                 $contacts = $project->getContactList();
                 if (count($contacts)) {
-                    echo '<tr><td><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
+                    echo '<tr><td colspan="3"><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
                     echo '<tr><td colspan="3" class="hilite">';
-                    echo w2p_Output_HTMLHelper::renderContactList($AppUI, $contacts);
+                    echo $htmlHelper->renderContactTable('projects', $contacts);
                     echo '</td></tr>';
                 }
                 ?>
