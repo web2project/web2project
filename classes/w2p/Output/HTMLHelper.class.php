@@ -113,6 +113,7 @@ class w2p_Output_HTMLHelper
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->contact_name.'ss</a>';
                 break;
+            case '_user':
             case '_username':
                 $obj = new CAdmin_User();
                 $obj->load($this->tableRowData['user_id']);
@@ -132,7 +133,8 @@ class w2p_Output_HTMLHelper
  *   of our standard 'view' for the page. ~ caseydk 16 Feb 2012
 */
                 $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
-                $page   = ($prefix == 'forum') ? 'viewer' : 'view';
+                $prefix = ($prefix == 'message')  ? 'forum' : $prefix;
+                $page   = ($prefix == 'forum') ? 'viewer&message_id='.$this->tableRowData['message_id'] : 'view';
                 $link   = '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
                 $link  .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];
@@ -146,6 +148,7 @@ class w2p_Output_HTMLHelper
             case '_type':
                 $cell = $custom[$fieldName][$value];
                 break;
+            case '_author':
             case '_creator':
 			case '_owner':
             case '_updator':
