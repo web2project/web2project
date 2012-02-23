@@ -153,7 +153,15 @@ class w2p_Output_HTMLHelper
                 $obj->load($value);
                 $mod = substr($suffix, 1);
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->contact_name.'ss</a>';
+                $cell = '<a href="'.$link.'">'.$obj->contact_name.'</a>';
+                break;
+            case '_folder':
+                $obj = new CFile_Folder();
+                $obj->load($value);
+                $foldername = ($value) ? $obj->file_folder_name : 'Root';
+                $image = '<img src="'.w2PfindImage('folder5_small.png', 'files').'" />';
+                $link = '?m=files&tab=4&folder=' . $value;
+                $cell = '<a href="'.$link.'">' . $image . ' ' . $foldername . '</a>';
                 break;
             case '_user':
             case '_username':
@@ -165,7 +173,6 @@ class w2p_Output_HTMLHelper
                 break;
 //END: object-based linkings
 
-            case '_name':
 /*
  * TODO: These two prefix adjustments are an ugly hack because our departments 
  *   table doesn't follow the same convention as every other table we have. 
@@ -174,14 +181,17 @@ class w2p_Output_HTMLHelper
  * TODO: And unfortunately, the forums module is screwy using 'viewer' instead 
  *   of our standard 'view' for the page. ~ caseydk 16 Feb 2012
 */
+            case '_name':
                 $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
                 $prefix = ($prefix == 'message')  ? 'forum' : $prefix;
                 $page   = ($prefix == 'forum') ? 'viewer&message_id='.$this->tableRowData['message_id'] : 'view';
-                $link   = '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
+                $link   = ($prefix == 'file') ? 'fileviewer.php?' : '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
                 $link  .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];
                 $link  .= ($prefix == 'task_log') ? '&tab=1&task_id='.$this->tableRowData['task_id'] : '';
-                $cell   = '<a href="'.$link.'">'.$value.'</a>';
+                $icon   = ($fieldName == 'file_name') ? '<img src="' . 
+                    w2PfindImage(getIcon($this->tableRowData['file_type']), 'files') . '" />&nbsp;' : '';
+                $cell   = '<a href="'.$link.'">'.$icon.$value.'</a>';
 //TODO: task_logs are another oddball..
                 $cell = ($prefix == 'task_log') ? str_replace('task_logs', 'tasks', $cell) : $cell;
                 break;
@@ -197,6 +207,10 @@ class w2p_Output_HTMLHelper
                 $additional = 'nowrap="nowrap"';
 				$cell = w2PgetUsernameFromID($value);
 				break;
+            case '_size':
+                $additional = 'nowrap="nowrap"';
+                $cell = file_size($value);
+                break;
 			case '_budget':
 				$cell = w2PgetConfig('currency_symbol');
 				$cell .= formatCurrency($value, $this->_AppUI->getPref('CURRENCYFORM'));
