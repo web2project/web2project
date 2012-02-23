@@ -56,7 +56,7 @@ td.today span img, td.empty span img
 }
 
 .list ._complete, .list ._created, .list ._date, .list ._duration, 
-    .list ._hours, .list ._updated, .list ._worked  {
+    .list ._hours, .list ._update, .list ._updated, .list ._worked  {
     text-align: center;
 }
 
@@ -64,15 +64,38 @@ td.today span img, td.empty span img
     text-align: left;
 }
 
-._category, ._count, ._complete, ._assignment, ._owner, .replies, ._username, 
-    .inactive, .countp, ._users {
+._assignment, ._category, ._count, ._complete, ._in, ._owner, ._priority, .replies, ._username, 
+    .inactive, .countp, ._users, ._version {
     text-align: center;
 }
 
 ._duration {
     text-align: right;
 }
-.highlight0 { background-color: #FFFF66; }
+
+
+
+
+/*
+ * These are the colors/formats for the tasks that are on time, overdue, etc.
+ */
+tr.done td._date, tr.done td._duration, tr.done td._in {
+    background-color:#aaddaa;
+    color:#00000;
+}
+
+tr.late td._date, tr.late td._duration, tr.late td._in {
+    background-color:#cc6666;
+    color: #fff;
+}
+
+tr.notstarted td._date, tr.notstarted td._duration, tr.notstarted td._in {
+    background-color:#ffeebb;
+}
+
+tr.active td._date, tr.active td._duration, tr.active td._in {
+    background-color:#e6eedd;
+}.highlight0 { background-color: #FFFF66; }
 .highlight1 { background-color: #ADD8E6; }
 .highlight2 { background-color: #90EE8A; }
 .highlight3 { background-color: #FF99FF; }
