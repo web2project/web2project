@@ -1771,6 +1771,7 @@ class CTask extends w2p_Core_BaseObject
             $department = new CDepartment;
             $department->overrideDatabase($this->_query);
             $department->setAllowedSQL($this->_AppUI->user_id, $q);
+
             return $q->loadHashList('dept_id');
         }
     }
@@ -1780,7 +1781,7 @@ class CTask extends w2p_Core_BaseObject
         if (canView('contacts')) {
             $q = $this->_getQuery();
             $q->addTable('contacts', 'c');
-            $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
+            $q->addQuery('c.*, dept_id');
 
             $q->leftJoin('departments', 'd', 'dept_id = contact_department');
             $q->addQuery('dept_name');

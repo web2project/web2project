@@ -727,8 +727,7 @@ class CProject extends w2p_Core_BaseObject
         if ($this->_AppUI->isActiveModule('contacts') && canView('contacts')) {
             $q = new w2p_Database_Query();
             $q->addTable('contacts', 'c');
-            $q->addQuery('c.contact_id, contact_first_name, contact_last_name');
-            $q->addQuery('contact_order_by, contact_email, contact_phone');
+            $q->addQuery('c.*, d.dept_id');
 
             $q->leftJoin('departments', 'd', 'd.dept_id = c.contact_department');
             $q->addQuery('dept_name');
