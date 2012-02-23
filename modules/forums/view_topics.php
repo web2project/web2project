@@ -17,7 +17,7 @@ $orderdir = $AppUI->getState('ForumVwOrderDir') ? $AppUI->getState('ForumVwOrder
 //Pull All Messages
 $q = new w2p_Database_Query;
 $q->addTable('forum_messages', 'fm1');
-$q->addQuery('fm1.*');
+$q->addQuery('fm1.*, u.*, fm1.message_title as message_name, fm1.message_forum as forum_id');
 $q->addQuery('COUNT(distinct fm2.message_id) AS replies');
 $q->addQuery('MAX(fm2.message_date) AS latest_reply');
 $q->addQuery('user_username, contact_first_name, contact_last_name, contact_display_name as contact_name, watch_user');
@@ -45,6 +45,7 @@ $topics = $q->loadList();
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+//$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 ?>
 <br />
 <?php
@@ -55,8 +56,8 @@ if (function_exists('styleRenderBoxTop')) {
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_watch_forum" />
     <input type="hidden" name="watch" value="topic" />
-    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl view">
-        <tr><td colspan="5">
+    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+        <tr><td colspan="25">
             <table width="100%" cellspacing="1" cellpadding="2" border="0">
             <tr>
                 <td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
@@ -72,22 +73,26 @@ if (function_exists('styleRenderBoxTop')) {
             <?php
             $fieldList = array();
             $fieldNames = array();
-            $fields = w2p_Core_Module::getSettings('forums', 'view_topics');
+
+            $module = new w2p_Core_Module();
+            $fields = $module->loadSettings('forums', 'view_topics');
+
             if (count($fields) > 0) {
-                foreach ($fields as $field => $text) {
-                    $fieldList[] = $field;
-                    $fieldNames[] = $text;
-                }
+                $fieldList = array_keys($fields);
+                $fieldNames = array_values($fields);
             } else {
                 // TODO: This is only in place to provide an pre-upgrade-safe 
                 //   state for versions earlier than v3.0
                 //   At some point at/after v4.0, this should be deprecated
-                $fieldList = array('watch_user', 'message_title', 
-                    'user_username', 'replies', 'latest_reply');
+                $fieldList = array('watch_user', 'message_name', 
+                    'message_author', 'replies', 'latest_reply');
                 $fieldNames = array('Watch', 'Topics', 
                     'Author', 'Replies', 'Last Post');
+
+                $module->storeSettings('forums', 'view_topics', $fieldList, $fieldNames);
             }
 
+            echo '<th></th>';
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
                     <a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
@@ -102,39 +107,21 @@ if (function_exists('styleRenderBoxTop')) {
     $now = new w2p_Utilities_Date();
 
     foreach ($topics as $row) {
-        $last = intval($row['latest_reply']) ? new w2p_Utilities_Date($row['latest_reply']) : null;
-
-        //JBF limit displayed messages to first-in-thread
+echo '<pre>'; print_r($row);
         if ($row["message_parent"] < 0) { ?>
-    <tr>
-        <td nowrap="nowrap" align="center" width="1%">
-            <input type="checkbox" name="forum_<?php echo $row['message_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
-        </td>
-        <td>
+            <tr bgcolor="white" valign="top">
+                <td nowrap="nowrap" align="center" width="1%">
+                    <input type="checkbox" name="forum_<?php echo $row['message_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
+                </td>
+                <?php
+//TODO: add the checkbox
+                $htmlHelper->stageRowData($row);
+                foreach ($fieldList as $index => $column) {
+                    echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+                }
+                ?>
+            </tr>
             <?php
-            if ($row['visit_user'] != $AppUI->user_id || $row['reply_visits'] == $row['replies']) {
-                echo w2PshowImage('icons/stock_new_small.png', false, false, 'You have unread posts in this topic');
-            }
-    ?>
-            <span style="font-size:10pt;">
-            <a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id . '&message_id=' . $row["message_id"]; ?>"><?php echo $row['message_title']; ?></a>
-            </span>
-        </td>
-        <?php echo $htmlHelper->createCell('contact_name', $row['contact_name']); ?>
-        <?php echo $htmlHelper->createCell('reply_count', $row['replies']); ?>
-        <td bgcolor="#dddddd" width="150" nowrap="nowrap">
-    <?php if ($row['latest_reply']) {
-                echo $AppUI->formatTZAwareTime($row['latest_reply'], $df . ' ' . $tf)  . '<br /><font color="#999966">(';
-                $diff = $now->dateDiff($last);
-                echo (int)$diff . ' ' . $AppUI->_('days ago');
-                echo ')</font>';
-            } else {
-                echo $AppUI->_('No replies');
-            }
-    ?>
-        </td>
-    </tr>
-    <?php
         }
     } ?>
     </table>
