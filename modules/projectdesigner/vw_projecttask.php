@@ -236,21 +236,41 @@ $showEditCheckbox = isset($canEditTasks) && $canEditTasks || canView('admin');
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $tempoTask = new CTask();
 $userAlloc = $tempoTask->getAllocation('user_id');
-?>
-<table width="100%" border="0" cellpadding="1" cellspacing="3" class="prjprint">
-<tr class="prjprint">
-        <th width="50%"><?php echo $AppUI->_('Task Name'); ?></th>
-        <th width="50" nowrap="nowrap"><?php echo $AppUI->_('Work'); ?></th>
-        <th nowrap="nowrap"><?php echo $AppUI->_('Start'); ?></th>
-        <th nowrap="nowrap"><?php echo $AppUI->_('Finish'); ?></th>
-        <th nowrap="nowrap"><?php echo $AppUI->_('Last Update'); ?></th>
-</tr>
-<?php
+
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('projectdesigner', 'task_list_print');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe 
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('task_name', 'task_percent_complete',
+        'task_start_date', 'task_end_date', 'task_updated');
+    $fieldNames = array('Task Name', 'Work', 'Start', 'Finish', 'Last Update');
+
+    $module->storeSettings('projectdesigner', 'task_list_print', $fieldList, $fieldNames);
+}
+
+echo '<table width="100%" border="0" cellpadding="1" cellspacing="3" class="prjprint tbl list"><tr class="prjprint">';
+foreach ($fieldNames as $index => $name) {
+    ?><th nowrap="nowrap">
+        <?php echo $AppUI->_($fieldNames[$index]); ?>
+    </th><?php
+}
+echo '</tr>';
+
 reset($projects);
 
-foreach ($projects as $k => $p) {
+foreach ($projects as $p) {
 	$tnums = count($p['tasks']);
-	//echo '<pre>'; print_r($p['tasks']); echo '</pre>';
+
 	if ($tnums > 0 || $project_id == $p['project_id']) {
 		if ($task_sort_item1 != '') {
 			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
