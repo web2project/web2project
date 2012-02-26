@@ -459,7 +459,7 @@ table.mocal td.weekend {
 }
 
 table.mocal td.event {
-  background-color: #ffffcc;
+  background-color: #ffff99;
   text-align: left;
   vertical-align: top;
 }
@@ -508,11 +508,11 @@ table.minical td.weekend {
   text-align: center;
 }
 table.minical td.event {
-  background-color: #ffffcc;
+  background-color: #ffff99;
   text-align: center;
 }
 table.minical td.task {
-  background-color: #ccccff;
+  background-color: #ababff;
   text-align: center;
 }
 table.minical td.eventtask {
@@ -520,12 +520,12 @@ table.minical td.eventtask {
   text-align: center;
 }
 table.minical td.eventtoday {
-  background-color: #ffffcc;
+  background-color: #ffff99;
   text-align: center;
 		border     : 1px dotted red;
 }
 table.minical td.tasktoday {
-  background-color: #ccccff;
+  background-color: #ababff;
   text-align: center;
 		border     : 1px dotted red;
 }
