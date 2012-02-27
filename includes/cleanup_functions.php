@@ -807,31 +807,10 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
-	$types = w2Pgetsysval('TaskType');
-
-    
-	$now = new w2p_Utilities_Date();
-	$tf = $AppUI->getPref('TIMEFORMAT');
-	$df = $AppUI->getPref('SHDATEFORMAT');
-	$fdf = $df . ' ' . $tf;
 	$perms = &$AppUI->acl();
 	$show_all_assignees = $w2Pconfig['show_all_task_assignees'] ? true : false;
 
 	$done[] = $a['task_id'];
-
-	$start_date = intval($a['task_start_date']) ? new w2p_Utilities_Date($a['task_start_date']) : null;
-	$end_date = intval($a['task_end_date']) ? new w2p_Utilities_Date($a['task_end_date']) : null;
-	$last_update = isset($a['last_update']) && intval($a['last_update']) ? new w2p_Utilities_Date($a['last_update']) : null;
-
-	// prepare coloured highlight of task time information
-	$sign = 1;
-	if ($start_date) {
-		if (!$end_date) {
-			$end_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
-		}
-
-		$days = $now->dateDiff($end_date) * $sign;
-	}
 
 	$s = '<tr>';
 
@@ -854,21 +833,20 @@ function showtask_pr(&$a, $level = 0, $today_view = false) {
 
 	$open_link = w2PshowImage('collapse.gif');
 	if ($a['task_milestone'] > 0) {
-		$s .= '&nbsp;<b>' . $a["task_name"] . '</b><!--</a>--> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" alt="" /></td>';
+		$s .= '&nbsp;<b>' . $a["task_name"] . '</b><!--</a>--> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" alt="" />';
 	} elseif ($a['task_dynamic'] == '1') {
 		$s .= $open_link;
 		$s .= '<strong>' . $a['task_name'] . '</strong>';
 	} else {
 		$s .= $a['task_name'];
 	}
+    $s .= '</td>';
 
     $s .= $htmlHelper->createCell('task_percent_complete', $a['task_percent_complete']);
-	// percent complete
-	$s .= '<td nowrap="nowrap" align="center">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
-	$s .= '</td>';
-	$s .= '<td nowrap="nowrap" align="center">' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
-	$s .= '</td>';
-	$s .= '<td nowrap="nowrap" align="center">' . ($last_update ? $last_update->format($df . ' ' . $tf) : '-') . '</td>';
+    $s .= $htmlHelper->createCell('task_start_date',       $a['task_start_date']);
+    $s .= $htmlHelper->createCell('task_end_date',         $a['task_end_date']);
+    $s .= $htmlHelper->createCell('last_update',           $a['last_update']);
+    $s .= '</tr>';
 
 	return $s;
 }
