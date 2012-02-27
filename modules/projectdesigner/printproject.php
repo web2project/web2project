@@ -71,37 +71,38 @@ $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inact
         <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
         <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
         <title><?php echo @w2PgetConfig('page_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
         <style type="text/css">
-        /* Standard table 'spreadsheet' style */
-        TABLE.prjprint {
-            background: #ffffff;
-        }
+            /* Standard table 'spreadsheet' style */
+            TABLE.prjprint {
+                background: #ffffff;
+            }
 
-        TABLE.prjprint TH {
-            background-color: #ffffff;
-            color: black;
-            list-style-type: disc;
-            list-style-position: inside;
-            border:solid 1px;
-            font-weight: normal;
-            font-size:15px;
-        }
+            TABLE.prjprint TH {
+                background-color: #ffffff;
+                color: black;
+                list-style-type: disc;
+                list-style-position: inside;
+                border:solid 1px;
+                font-weight: normal;
+                font-size:15px;
+            }
 
-        TABLE.prjprint TD {
-            background-color: #ffffff;
-            font-size:14px;
-        }
+            TABLE.prjprint TD {
+                background-color: #ffffff;
+                font-size:14px;
+            }
 
-        TABLE.prjprint TR {
-            padding:5px;
-        }
+            TABLE.prjprint TR {
+                padding:5px;
+            }
         </style>
     </head>
 <body>
 <table width="100%" class="prjprint">
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="3">  
-		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint">	
+		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint tbl">
             <tr>
             	<td width="22">
             	&nbsp;
