@@ -231,6 +231,7 @@ class w2p_Output_HTMLHelper
 				break;
 			case '_created':
             case '_datetime':
+            case '_update':
             case '_updated':
 				$additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
@@ -254,6 +255,9 @@ class w2p_Output_HTMLHelper
                 break;
             case '_password':
                 $cell = '('.$this->_AppUI->_('hidden').')';
+                break;
+            case '_version':
+                $cell = number_format($value, 2);
                 break;
             case '_hours':
 			default:

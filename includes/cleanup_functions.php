@@ -562,7 +562,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	if ($today_view) { // Show the project name
 		$s .= ('<td width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<span style="padding:2px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</span>' . '</a></td>');
 	} else {
-		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $arr['user_id'] . '">' . $arr['contact_name'] . '</a>' . '</td>');
+        $s .= $htmlHelper->createCell('task_owner', $arr['task_owner']);
 	}
 
 	if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
@@ -592,13 +592,13 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$s .= '<td align="center">-</td>';
 	}
 	// duration or milestone
-    $s .= '<td nowrap="nowrap" class="_date">' . ($start_date ? $start_date->format($fdf) : '-') . '</td>';
+    $s .= $htmlHelper->createCell('task_start_date', $arr['task_start_date']);
     $s .= $htmlHelper->createCell('task_duration', $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1));
-    $s .= '<td nowrap="nowrap" class="_date">' . ($end_date ? $end_date->format($fdf) : '-') . '</td>';
+    $s .= $htmlHelper->createCell('task_end_date', $arr['task_end_date']);
 	if ($today_view) {
-		$s .= ('<td nowrap="nowrap" class="_in">' . $arr['task_due_in'] . '</td>');
+        $s .= $htmlHelper->createCell('task_due_in', $arr['task_due_in']);
 	} elseif ($history_active) {
-		$s .= ('<td nowrap="nowrap" class="_update">' . ($last_update ? $last_update->format($fdf) : '-') . '</td>');
+        $s .= $htmlHelper->createCell('last_update', $arr['last_update']);
 	}
 
 	// Assignment checkbox
