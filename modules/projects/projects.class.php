@@ -164,6 +164,7 @@ class CProject extends w2p_Core_BaseObject {
                 $task->delete();
             }
 
+            $q->clear();
             $q->addTable('files');
             $q->addQuery('file_id');
             $q->addWhere('file_project = ' . (int)$this->project_id);
