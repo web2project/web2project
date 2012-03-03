@@ -73,7 +73,9 @@ td.today span img, td.empty span img
     text-align: right;
 }
 
-
+input[type="checkbox"] {
+    margin-left: 10px;
+}
 
 
 /*

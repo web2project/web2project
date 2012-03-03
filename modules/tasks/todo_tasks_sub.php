@@ -32,11 +32,9 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
             </td>
             <td align="right" width="50%">
                 <?php echo $AppUI->_('Show'); ?>:
-            </td>
-             <td>
                 <input type="checkbox" name="show_inprogress" id="show_inprogress" onclick="document.form_buttons.submit()" <?php echo $showInProgress ? 'checked="checked"' : ''; ?> />
             </td>
-             <td>
+             <td nowrap="nowrap">
                 <label for="show_inprogress"><?php echo $AppUI->_('In Progress Only'); ?></label>
             </td>
             <td>
