@@ -447,19 +447,13 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		return (false);
 	}
 
-	$now = new w2p_Utilities_Date();
-	$tf = $AppUI->getPref('TIMEFORMAT');
-	$df = $AppUI->getPref('SHDATEFORMAT');
-	$fdf = $df . ' ' . $tf;
 	$show_all_assignees = w2PgetConfig('show_all_task_assignees', false);
 
 	$start_date = intval($arr['task_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($arr['task_start_date'], '%Y-%m-%d %T')) : null;
 	$end_date = intval($arr['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($arr['task_end_date'], '%Y-%m-%d %T')) : null;
-	$last_update = isset($arr['last_update']) && intval($arr['last_update']) ? new w2p_Utilities_Date( $AppUI->formatTZAwareTime($arr['last_update'], '%Y-%m-%d %T')) : null;
 
 	// prepare coloured highlight of task time information
-	$sign = 1;
-	$style = '';
+	$class = '';
 	if ($start_date) {
 		if (!$end_date) {
 			/*
@@ -471,28 +465,26 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 			$end_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
 		}
 
+        $now = new w2p_Utilities_Date();
 		if ($now->after($start_date) && $arr['task_percent_complete'] == 0) {
-            $style = 'notstarted';
+            $class = 'notstarted';
 		} elseif ($now->after($start_date) && $arr['task_percent_complete'] < 100) {
-            $style = 'active';
+            $class = 'active';
 		}
 
 		if ($now->after($end_date)) {
-			$sign = -1;
-            $style = 'late';
+            $class = 'late';
 		}
 		if ($arr['task_percent_complete'] == 100) {
-            $style = 'done';
+            $class = 'done';
 		}
-
-		$days = $now->dateDiff($end_date) * $sign;
 	}
 
     $jsTaskId = 'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_';
 	if ($expanded) {
-		$s = '<tr id="' . $jsTaskId . '" class="'.$style.'">';
+		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'">';
 	} else {
-		$s = '<tr id="' . $jsTaskId . '" class="'.$style.'" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
+		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
 	}
 	// edit icon
 	$s .= '<td align="center">';
@@ -621,10 +613,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 
 	$types = w2Pgetsysval('TaskType');
 
-	$now = new w2p_Utilities_Date();
-	$tf = $AppUI->getPref('TIMEFORMAT');
-	$df = $AppUI->getPref('SHDATEFORMAT');
-	$fdf = $df . ' ' . $tf;
+	
 	$perms = &$AppUI->acl();
 	$show_all_assignees = $w2Pconfig['show_all_task_assignees'] ? true : false;
 
@@ -632,38 +621,34 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 
 	$start_date = intval($a['task_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T')) : null;
 	$end_date = intval($a['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($a['task_end_date'], '%Y-%m-%d %T')) : null;
-	$last_update = isset($a['last_update']) && intval($a['last_update']) ? new w2p_Utilities_Date( $AppUI->formatTZAwareTime($a['last_update'], '%Y-%m-%d %T')) : null;
 
 	// prepare coloured highlight of task time information
-	$sign = 1;
-	$style = '';
+	$class = '';
 	if ($start_date) {
 		if (!$end_date) {
 			$end_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
 		}
 
+        $now = new w2p_Utilities_Date();
 		if ($now->after($start_date) && $a['task_percent_complete'] == 0) {
-			$style = 'notstarted';
+			$class = 'notstarted';
 		} elseif ($now->after($start_date) && $a['task_percent_complete'] < 100) {
-			$style = 'active';
+			$class = 'active';
 		}
 
 		if ($now->after($end_date)) {
-			$sign = -1;
-			$style = 'late';
+			$class = 'late';
 		}
 		if ($a['task_percent_complete'] == 100) {
-			$style = 'done';
+			$class = 'done';
 		}
-
-		$days = $now->dateDiff($end_date) * $sign;
 	}
 
 	$jsTaskId = 'task_proj_' . $a['task_project'] . '_level-' . $level . '-task_' . $a['task_id'] . '_';
 	if ($expanded) {
-		$s = '<tr id="' . $jsTaskId . '" class="'.$style.'" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'' . $jsTaskId . '\',\'frm_tasks\')">'; // edit icon
+		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'' . $jsTaskId . '\',\'frm_tasks\')">'; // edit icon
 	} else {
-		$s = '<tr id="' . $jsTaskId . '" class="'.$style.'" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'' . $jsTaskId . '\',\'frm_tasks\')" ' . ($level ? 'style="display:none"' : '') . '>'; // edit icon
+		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'' . $jsTaskId . '\',\'frm_tasks\')" ' . ($level ? 'style="display:none"' : '') . '>'; // edit icon
 	}
 	$s .= '<td>';
 	$canEdit = ($a['task_represents_project']) ? false : true;
@@ -746,13 +731,11 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 		$s .= '<td align="justified">' . $a['task_description'] . '</td>';
 	}
 	// task owner
-	$s .= '<td align="left">' . '<a href="?m=admin&a=viewuser&user_id=' . $a['user_id'] . '">' . $a['contact_name'] . '</a></td>';
-	$s .= '<td id="ignore_td_' . $a['task_id'] . '" nowrap="nowrap" class="_date">' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
+    $s .= $htmlHelper->createCell('task_owner', $a['task_owner']);
+    $s .= $htmlHelper->createCell('task_start_datetime', $a['task_start_date']);
 	// duration or milestone
-	$s .= '<td id="ignore_td_' . $a['task_id'] . '" align="right" nowrap="nowrap" class="_duration">';
-	$s .= $a['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$a['task_duration_type']]), 0, 1);
-	$s .= '</td>';
-	$s .= '<td id="ignore_td_' . $a['task_id'] . '" nowrap="nowrap" class="_date">' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
+    $s .= $htmlHelper->createCell('task_duration', $a['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$a['task_duration_type']]), 0, 1));
+    $s .= $htmlHelper->createCell('task_end_datetime', $a['task_end_date']);
 	if (isset($a['task_assigned_users']) && ($assigned_users = $a['task_assigned_users'])) {
 		$a_u_tmp_array = array();
 		if ($show_all_assignees) {
