@@ -54,3 +54,12 @@ td.today span img, td.empty span img
     height: 75px;
     width:  100%;
 }
+
+.highlight0 { background-color: #FFFF66; }
+.highlight1 { background-color: #ADD8E6; }
+.highlight2 { background-color: #90EE8A; }
+.highlight3 { background-color: #FF99FF; }
+.highlight4 { background-color: #FFA500; }
+.highlight5 { background-color: #ADFF2F; }
+.highlight6 { background-color: #00FFFF; }
+.highlight7 { background-color: #FF69B4; }
