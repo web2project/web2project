@@ -185,22 +185,28 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
   }
 
     public function test_w2p_pluralize() {
-        $this->assertEquals('projects', w2p_pluralize('project'));
-        $this->assertEquals('links', w2p_pluralize('link'));
+        $this->assertEquals('projects',  w2p_pluralize('project'));
+        $this->assertEquals('links',     w2p_pluralize('link'));
         $this->assertEquals('companies', w2p_pluralize('company'));
-        $this->assertEquals('holidays', w2p_pluralize('holiday'));
-        $this->assertEquals('todos', w2p_pluralize('todo'));
+        $this->assertEquals('holidays',  w2p_pluralize('holiday'));
+        $this->assertEquals('todos',     w2p_pluralize('todo'));
     }
-/*
-/**
- * PHP doesn't come with a signum function
-function w2Psgn($x) {
-	return $x ? ($x > 0 ? 1 : -1) : 0;
-}
- */
+
     public function test_w2Psgn() {
         $this->assertEquals(-1, w2Psgn(-56.2));
         $this->assertEquals( 0, w2Psgn(0));
         $this->assertEquals( 1, w2Psgn(0.01));
+    }
+
+    public function test_w2pFindTaskComplete() {
+        $empty   = null;    //we don't care what this value is
+        $past    = date('Y-m-d', strtotime('-1 week'));
+        $future  = date('Y-m-d', strtotime('+1 week'));
+
+        $this->assertEquals('done',       w2pFindTaskComplete($empty,  $empty,  100));
+        $this->assertEquals('',           w2pFindTaskComplete($future, $empty,  0));
+        $this->assertEquals('active',     w2pFindTaskComplete($past,   $future, 50));
+        $this->assertEquals('notstarted', w2pFindTaskComplete($past,   $future, 0));
+        $this->assertEquals('late',       w2pFindTaskComplete($past,   $empty,  0));
     }
 }

@@ -453,32 +453,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	$end_date = intval($arr['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($arr['task_end_date'], '%Y-%m-%d %T')) : null;
 
 	// prepare coloured highlight of task time information
-	$class = '';
-	if ($start_date) {
-		if (!$end_date) {
-			/*
-			** end date calc has been moved to calcEndByStartAndDuration()-function
-			** called from array_csort and tasks.php
-			** perhaps this fallback if-clause could be deleted in the future,
-			** didn't want to remove it shortly before the 2.0.2
-			*/
-			$end_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
-		}
-
-        $now = new w2p_Utilities_Date();
-		if ($now->after($start_date) && $arr['task_percent_complete'] == 0) {
-            $class = 'notstarted';
-		} elseif ($now->after($start_date) && $arr['task_percent_complete'] < 100) {
-            $class = 'active';
-		}
-
-		if ($now->after($end_date)) {
-            $class = 'late';
-		}
-		if ($arr['task_percent_complete'] == 100) {
-            $class = 'done';
-		}
-	}
+	$class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete']);
 
     $jsTaskId = 'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_';
 	if ($expanded) {
@@ -623,26 +598,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	$end_date = intval($a['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($a['task_end_date'], '%Y-%m-%d %T')) : null;
 
 	// prepare coloured highlight of task time information
-	$class = '';
-	if ($start_date) {
-		if (!$end_date) {
-			$end_date = new w2p_Utilities_Date('0000-00-00 00:00:00');
-		}
-
-        $now = new w2p_Utilities_Date();
-		if ($now->after($start_date) && $a['task_percent_complete'] == 0) {
-			$class = 'notstarted';
-		} elseif ($now->after($start_date) && $a['task_percent_complete'] < 100) {
-			$class = 'active';
-		}
-
-		if ($now->after($end_date)) {
-			$class = 'late';
-		}
-		if ($a['task_percent_complete'] == 100) {
-			$class = 'done';
-		}
-	}
+    $class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete']);
 
 	$jsTaskId = 'task_proj_' . $a['task_project'] . '_level-' . $level . '-task_' . $a['task_id'] . '_';
 	if ($expanded) {

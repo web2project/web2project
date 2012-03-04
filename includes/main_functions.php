@@ -306,6 +306,18 @@ function filterCurrency($number)
     return $number;
 }
 
+function w2pFindTaskComplete($start_date, $end_date, $percent) {
+    $start = strtotime($start_date);
+    $end   = strtotime($end_date);
+    $now   = time();
+
+    if ($percent >= 100) { return 'done'; }
+    if ($now < $start)   { return ''; }
+    if ($now > $end)     { return 'late'; }
+    if ($now > $start && $percent > 0) { return 'active'; }
+    if ($now > $start && $percent == 0) { return 'notstarted'; }
+}
+
 /**
  * PHP doesn't come with a signum function
  */
