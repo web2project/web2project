@@ -103,7 +103,9 @@ function remove_invalid($arr) {
  */
 // From:  modules/companies/vw_depts.php
 function findchilddept_comp(&$tarr, $parent, $level = 0) {
-	$level = $level + 1;
+	trigger_error("The findchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
+
+    $level = $level + 1;
 	$n = count($tarr);
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
@@ -123,7 +125,9 @@ function findchilddept_comp(&$tarr, $parent, $level = 0) {
  */
 // From:  modules/companies/vw_depts.php
 function showchilddept_comp(&$a, $level = 0) {
-	global $AppUI;
+	trigger_error("The showchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
+
+    global $AppUI;
 	$s = '
 	<td>
 		<a href="./index.php?m=departments&amp;a=addedit&amp;dept_id=' . $a["dept_id"] . '" title="' . $AppUI->_('edit') . '">
@@ -144,4 +148,32 @@ function showchilddept_comp(&$a, $level = 0) {
 	$s .= '<td align="center">' . ($a['dept_users'] ? $a['dept_users'] : '') . '</td>';
 
 	return '<tr>' . $s . '</tr>';
+}
+
+/*
+ * This was used to designate if a task was on not started, late, on time, or
+ *   some other combination thereof.
+ * TODO:  Remove for v4.0 - caseydk 04 Mar 2012
+ *
+ * @deprecated
+ */
+//From: modules/projectdesigner/projectdesigner.class.php
+function taskstyle_pd($task) {
+	trigger_error("The taskstyle_pd function has been deprecated and will be removed in v4.0. Use w2pFindTaskComplete() instead.", E_USER_NOTICE );
+
+    $style = w2pFindTaskComplete($task['task_start_date'], $task['task_end_date'], $task['task_percent_complete']);
+
+    switch($style) {
+        case 'done':
+        case 'late':
+        case 'notstarted':
+            $style = 'task_'.$style;
+            break;
+        case 'active':
+            $style = 'task_started';
+            break;
+        default:
+            $style = 'task_future';
+            break;
+    }
 }

@@ -194,7 +194,6 @@ foreach ($tasks as $row) {
 	$q->addWhere('task_parent = ' . (int)$row['task_id']);
 	$q->addWhere('task_id <> task_parent');
 	$row['children'] = $q->loadResult();
-	$row['style'] = taskstyle_pd($row);
 	$i = count($projects[$row['task_project']]['tasks']) + 1;
 	$row['task_number'] = $i;
 	$row['node_id'] = 'node_' . $i . '-' . $row['task_id'];

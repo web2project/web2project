@@ -449,9 +449,6 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 
 	$show_all_assignees = w2PgetConfig('show_all_task_assignees', false);
 
-	$start_date = intval($arr['task_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($arr['task_start_date'], '%Y-%m-%d %T')) : null;
-	$end_date = intval($arr['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($arr['task_end_date'], '%Y-%m-%d %T')) : null;
-
 	// prepare coloured highlight of task time information
 	$class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete']);
 
@@ -593,9 +590,6 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 	$show_all_assignees = $w2Pconfig['show_all_task_assignees'] ? true : false;
 
 	$done[] = $a['task_id'];
-
-	$start_date = intval($a['task_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T')) : null;
-	$end_date = intval($a['task_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($a['task_end_date'], '%Y-%m-%d %T')) : null;
 
 	// prepare coloured highlight of task time information
     $class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete']);
@@ -2477,35 +2471,6 @@ function getCriticalTasksInverted($project_id = null, $limit = 1) {
 
 		return $q->loadList();
 	}
-}
-
-//TODO: modules/projectdesigner/projectdesigner.class.php
-function taskstyle_pd($task) {
-	$now = new w2p_Utilities_Date();
-	$start_date = intval($task['task_start_date']) ? new w2p_Utilities_Date($task['task_start_date']) : null;
-	$end_date = intval($task['task_end_date']) ? new w2p_Utilities_Date($task['task_end_date']) : null;
-
-	if ($start_date && !$end_date) {
-		$end_date = $start_date;
-		$end_date->addSeconds($task['task_duration'] * $task['task_duration_type'] * SEC_HOUR);
-	} else
-		if (!$start_date) {
-			return '';
-		}
-
-	$style = 'class=';
-	if ($task['task_percent_complete'] == 0) {
-		$style .= (($now->before($start_date)) ? '"task_future"' : '"task_notstarted"');
-	} else
-		if ($task['task_percent_complete'] == 100) {
-			$t = new CTask();
-			$t->load($task['task_id']);
-			$actual_end_date = new w2p_Utilities_Date(get_actual_end_date_pd($t->task_id, $t));
-			$style .= (($actual_end_date->after($end_date)) ? '"task_late"' : '"task_done"');
-		} else {
-			$style .= (($now->after($end_date)) ? '"task_overdue"' : '"task_started"');
-		}
-		return $style;
 }
 
 //TODO: modules/projectdesigner/projectdesigner.class.php
