@@ -596,9 +596,9 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 
 	$jsTaskId = 'task_proj_' . $a['task_project'] . '_level-' . $level . '-task_' . $a['task_id'] . '_';
 	if ($expanded) {
-		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'' . $jsTaskId . '\',\'frm_tasks\')">'; // edit icon
+		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'" onclick="select_row(\'selected_task\', \'' . $a['task_id'] . '\', \'frm_tasks\')">'; // edit icon
 	} else {
-		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'" onmouseover="highlight_tds(this, true, ' . $a['task_id'] . ')" onmouseout="highlight_tds(this, false, ' . $a['task_id'] . ')" onclick="select_box(\'selected_task\', \'' . $a['task_id'] . '\', \'' . $jsTaskId . '\',\'frm_tasks\')" ' . ($level ? 'style="display:none"' : '') . '>'; // edit icon
+		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'" onclick="select_row(\'selected_task\', \'' . $a['task_id'] . '\', \'frm_tasks\')" ' . ($level ? 'style="display:none"' : '') . '>'; // edit icon
 	}
 	$s .= '<td>';
 	$canEdit = ($a['task_represents_project']) ? false : true;
@@ -725,7 +725,7 @@ function showtask_pd(&$a, $level = 0, $today_view = false) {
 
 	// Assignment checkbox
 	if ($showEditCheckbox && 0 == $a['task_represents_project']) {
-		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'selected_task\', ' . $a['task_id'] . ',\'project_' . $a['task_project'] . '_level-' . $level . '-task_' . $a['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $a['task_id'] . '" name="selected_task[' . $a['task_id'] . ']" value="' . $a['task_id'] . '"/></td>';
+		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'selected_task\', ' . $a['task_id'] . ',\'project_' . $a['task_project'] . '_level-' . $level . '-task_' . $a['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $a['task_id'] . '" name="selected_task" value="' . $a['task_id'] . '"/></td>';
 	}
 	$s .= '</tr>';
 

@@ -194,7 +194,20 @@ function getStyle(nodeName, sStyle, iStyle) {
       } else {
             var value = eval("element.currentStyle." + iStyle);
       }
-      return value;      
+      return value;
+}
+
+function select_all_rows(cmbObj, elements_name) {
+    var checked = cmbObj.checked;
+    var checkboxes = document.getElementsByName(elements_name);
+
+    // check all
+    for each (var checkbox in checkboxes) {
+        id = checkbox.value;
+        checkbox.checked = checked;
+
+        result = (checked) ? addBulkComponent(id) : removeBulkComponent(id);
+    }
 }
 
 function mult_sel(cmbObj, box_name, form_name) {
@@ -234,6 +247,12 @@ function mult_sel(cmbObj, box_name, form_name) {
       }
 }
 
+/*
+ *  This has been deprecated in favor of css-based highlighting using :hover
+ *    instead of Javascript.
+ *
+ *  @deprecated
+ */
 function highlight_tds(row, high, id) {
 //high = 0 or false => remove highlight
 //high = 1 or true => highlight
@@ -270,6 +289,26 @@ function highlight_tds(row, high, id) {
 }
 
 var is_check;
+function select_row(box, id, form_name){
+	var f = eval('document.'+form_name);
+	if (eval('f.selected_task_'+id)) {
+		var check = eval('f.'+box+'_'+id+'.checked');
+		boxObj = eval('f.elements["'+box+'_'+id+'"]');
+		if ((is_check && boxObj.checked && !boxObj.disabled) || (!is_check && !boxObj.checked && !boxObj.disabled)) {
+			boxObj.checked = true;
+			addBulkComponent(id);
+		} else if ((is_check && !boxObj.checked && !boxObj.disabled) || (!is_check && boxObj.checked && !boxObj.disabled)) {
+			boxObj.checked = false;
+			removeBulkComponent(id);
+		}
+	}
+}
+
+/*
+ *  This has been deprecated in favor of using nothing else to designate the row.
+ *
+ *  @deprecated
+ */
 function select_box(box, id, row_id, form_name){
 	var f = eval('document.'+form_name);
 	if (eval('f.selected_task_'+id)) {
