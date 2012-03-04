@@ -1184,6 +1184,8 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 		return;
 	}
 
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
 	$zi++;
 	$users = $task->task_assigned_users;
 	$task->userPriority = $task->getUserSpecificTaskPriority($user_id);
@@ -1192,13 +1194,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$tmp .= '<td align="center" nowrap="nowrap">';
 	$tmp .= '<input type="checkbox" name="selected_task[' . $task->task_id . ']" value="' . $task->task_id . '" />';
 	$tmp .= '</td>';
-	$tmp .= '<td align="center" nowrap="nowrap">';
-	if ($task->userPriority < 0) {
-		$tmp .= '<img src="' . w2PfindImage('icons/priority-' . -$task->userPriority . '.gif') . '" width="13" height="16" alt="">';
-	} elseif ($task->userPriority > 0) {
-		$tmp .= '<img src="' . w2PfindImage('icons/priority+' . $task->userPriority . '.gif') . '" width="13" height="16" alt="">';
-	}
-	$tmp .= '</td>';
+    $tmp .= $htmlHelper->createCell('user_priority', $task->userPriority);
 	$tmp .= '<td>';
 
 	for ($i = 0; $i < $level; $i++) {
@@ -1224,19 +1220,9 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$tmp .= '<td align="left">';
 	$tmp .= '<a href="?m=projects&a=view&project_id=' . $task->task_project . '" style="background-color:#' . $project['project_color_identifier'] . '; color:' . bestColor($project['project_color_identifier']) . '">' . $project['project_name'] . '</a>';
 	$tmp .= '</td>';
-	$tmp .= '<td align="right" nowrap="nowrap">';
-	$tmp .= $task->task_duration . '&nbsp;' . mb_substr($AppUI->_($durnTypes[$task->task_duration_type]),0,1);
-	$tmp .= '</td>';
-	$tmp .= '<td align="center" nowrap="nowrap">';
-	$dt = new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T'));
-	$tmp .= $dt->format($df);
-	$tmp .= '&#160&#160&#160</td>';
-	$tmp .= '<td align="right" nowrap="nowrap">';
-	$ed = new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T'));
-	$dt = $now->dateDiff($ed);
-	$sgn = $now->compare($ed, $now);
-	$tmp .= ($dt * $sgn);
-	$tmp .= '</td>';
+    $tmp .= $htmlHelper->createCell('task_duration', $task->task_duration . ' ' . mb_substr($AppUI->_($durnTypes[$task->task_duration_type]), 0, 1));
+    $tmp .= $htmlHelper->createCell('task_start_date', $task->task_start_date);
+    $tmp .= $htmlHelper->createCell('task_end_date', $task->task_end_date);
 	if ($display_week_hours) {
 		$tmp .= displayWeeks($list, $task, $level, $fromPeriod, $toPeriod);
 	}
@@ -1269,6 +1255,8 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 function displayTask_r($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $log_all_projects = false, $user_id = 0) {
 	global $AppUI;
 
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
 	$tmp = '';
 	$tmp .= '<tr><td align="left" nowrap="nowrap">&#160&#160&#160';
 	for ($i = 0; $i < $level; $i++) {
@@ -1296,16 +1284,10 @@ function displayTask_r($list, $task, $level, $display_week_hours, $fromPeriod, $
 		}
 		$tmp .= '</td>';
 	}
-	$df = $AppUI->getPref('SHDATEFORMAT');
 
-	$tmp .= '<td nowrap="nowrap">';
-	$dt = new w2p_Utilities_Date($task->task_start_date);
-	$tmp .= $dt->format($df);
-	$tmp .= '&#160&#160&#160</td>';
-	$tmp .= '<td nowrap="nowrap">';
-	$dt = new w2p_Utilities_Date($task->task_end_date);
-	$tmp .= $dt->format($df);
-	$tmp .= '</td>';
+    $tmp .= $htmlHelper->createCell('task_start_date', $task->task_start_date);
+    $tmp .= $htmlHelper->createCell('task_end_date', $task->task_end_date);
+
 	if ($display_week_hours) {
 		$tmp .= displayWeeks_r($list, $task, $level, $fromPeriod, $toPeriod, $user_id);
 	}
