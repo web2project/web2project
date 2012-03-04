@@ -226,20 +226,23 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('tasks', 'projectdesigner-view');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('tasks', 'projectdesigner-view');
+
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
+            // TODO: This is only in place to provide an pre-upgrade-safe
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
             $fieldList = array('');
-            $fieldNames = array('', 'Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log', 
-                'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish', 
+            $fieldNames = array('', 'Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
+                'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
                 'Assgined Users');
+
+            //$module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
         }
 //TODO: $PROJDESIGN_CONFIG['show_task_descriptions'] will be on the config screen going forward..
         foreach ($fieldNames as $index => $name) {

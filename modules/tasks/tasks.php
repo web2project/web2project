@@ -463,22 +463,25 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
         <?php
         $fieldList = array();
         $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('tasks', 'index_table');
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('tasks', 'index_list');
+
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
+            // TODO: This is only in place to provide an pre-upgrade-safe
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
             $fieldList = array('', '', '', 'task_priority', 'user_task_priority',
                 'task_name', 'user_username', '', 'task_start_date', 
                 'task_duration', 'task_end_date');
             $fieldNames = array('', 'Pin', 'Log', 'Work', 'P', 'U', 'Task Name',
-                'Task Owner', 'Assigned Users', 'Start Date', 'Duration', 
+                'Task Owner', 'Assigned Users', 'Start Date', 'Duration',
                 'Finish Date');
+
+            //$module->storeSettings('tasks', 'index_list', $fieldList, $fieldNames);
         }
         if ($history_active) {
             $fieldList[] = 'last_update';
