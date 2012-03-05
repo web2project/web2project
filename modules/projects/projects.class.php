@@ -728,6 +728,7 @@ class CProject extends w2p_Core_BaseObject
             $q = new w2p_Database_Query();
             $q->addTable('contacts', 'c');
             $q->addQuery('c.*, d.dept_id');
+            $q->addQuery('contact_display_name as contact_name');
 
             $q->leftJoin('departments', 'd', 'd.dept_id = c.contact_department');
             $q->addQuery('dept_name');

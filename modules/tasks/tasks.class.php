@@ -1782,14 +1782,13 @@ class CTask extends w2p_Core_BaseObject
             $q = $this->_getQuery();
             $q->addTable('contacts', 'c');
             $q->addQuery('c.*, dept_id');
+            $q->addQuery('contact_display_name as contact_name');
 
             $q->leftJoin('departments', 'd', 'dept_id = contact_department');
             $q->addQuery('dept_name');
 
             $q->addJoin('task_contacts', 'tc', 'tc.contact_id = c.contact_id', 'inner');
             $q->addWhere('tc.task_id = ' . (int) $task_id);
-            $q->addQuery('c.contact_id, contact_first_name, contact_last_name,
-                contact_display_name, contact_display_name as contact_name, contact_email');
 
             $q->addWhere('(contact_owner = ' . (int) $this->_AppUI->user_id . ' OR contact_private = 0)');
 
