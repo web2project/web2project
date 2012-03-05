@@ -1,9 +1,11 @@
-<?php /* $Id$ $URL$ */
+<?php
+
+/* $Id$ $URL$ */
 
 /**
- *	@package web2project
- *	@subpackage output
- *	@version $Revision$
+ * 	@package web2project
+ * 	@subpackage output
+ * 	@version $Revision$
  *
  *  As of v2.1, this class doesn't do much, it's just a place to collect all
  *    of the email templates from throughout the system. Immediately, this will
@@ -13,15 +15,17 @@
  *    translated.
  *
  */
+class w2p_Output_EmailManager
+{
 
-class w2p_Output_EmailManager {
     public $from = '';
     public $subject = '';
     public $body = '';
 
-    public function __construct(w2p_Core_CAppUI $AppUI = null) {
-        if(is_null($AppUI)) {
-            trigger_error('The w2p_Output_EmailManager constructor should receive $AppUI (an w2p_Core_CAppUI object) for proper usage.', E_USER_NOTICE );
+    public function __construct(w2p_Core_CAppUI $AppUI = null)
+    {
+        if (is_null($AppUI)) {
+            trigger_error('The w2p_Output_EmailManager constructor should receive $AppUI (an w2p_Core_CAppUI object) for proper usage.', E_USER_NOTICE);
         }
 
         $this->AppUI = $AppUI;
@@ -30,8 +34,10 @@ class w2p_Output_EmailManager {
     /*
      * @deprecated
      */
-    public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI = null) {
-        trigger_error("getCalendarConflictEmail has been deprecated in v3.0 and will be removed by v4.0. Please use getEventNotify() instead.", E_USER_NOTICE );
+
+    public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI = null)
+    {
+        trigger_error("getCalendarConflictEmail has been deprecated in v3.0 and will be removed by v4.0. Please use getEventNotify() instead.", E_USER_NOTICE);
 
         $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
 
@@ -44,8 +50,9 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getEventNotify(CEvent $event, $clash, $users, $types) {
-        
+    public function getEventNotify(CEvent $event, $clash, $users, $types)
+    {
+
         if ($clash) {
             $body = "You have been invited to an event by $this->AppUI->user_display_name \n";
             $body .= "However, either you or another intended invitee has a competing event\n";
@@ -53,54 +60,55 @@ class w2p_Output_EmailManager {
             $body .= "and confirm if you can or can not make the requested time.\n\n";
         }
 
-		$body .= $this->AppUI->_('Event') . ":\t" . $event->event_title . "\n";
-		if (!$clash) {
-			$body .= $this->AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=calendar&a=view&event_id=" . $event->event_id . "\n";
-		}
+        $body .= $this->AppUI->_('Event') . ":\t" . $event->event_title . "\n";
+        if (!$clash) {
+            $body .= $this->AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=calendar&a=view&event_id=" . $event->event_id . "\n";
+        }
 
-		$date_format = $this->AppUI->getPref('SHDATEFORMAT');
-		$time_format = $this->AppUI->getPref('TIMEFORMAT');
-		$fmt = $date_format . ' ' . $time_format;
+        $date_format = $this->AppUI->getPref('SHDATEFORMAT');
+        $time_format = $this->AppUI->getPref('TIMEFORMAT');
+        $fmt = $date_format . ' ' . $time_format;
 
 //TODO: customize these date formats based on the *receivers'* timezone setting
-		$start_date = new w2p_Utilities_Date($event->event_start_date);
-		$end_date = new w2p_Utilities_Date($event->event_end_date);
-		$body .= $this->AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
-		$body .= $this->AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
+        $start_date = new w2p_Utilities_Date($event->event_start_date);
+        $end_date = new w2p_Utilities_Date($event->event_end_date);
+        $body .= $this->AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
+        $body .= $this->AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
 
-		// Find the project name.
-		if ($event->event_project) {
-			$project = new CProject();
+        // Find the project name.
+        if ($event->event_project) {
+            $project = new CProject();
             $project->load($event->event_project);
             $body .= $this->AppUI->_('Project') . ":\t" . $project->project_name . "\n";
-		}
+        }
 
-		$types = w2PgetSysVal('EventType');
+        $types = w2PgetSysVal('EventType');
 
-		$body .= $this->AppUI->_('Type') . ":\t" . $this->AppUI->_($types[$event->event_type]) . "\n";
-		$body .= $this->AppUI->_('Attendees') . ":\t";
+        $body .= $this->AppUI->_('Type') . ":\t" . $this->AppUI->_($types[$event->event_type]) . "\n";
+        $body .= $this->AppUI->_('Attendees') . ":\t";
 
-		$body_attend = '';
-		foreach ($users as $user) {
-			$body_attend .= ((($body_attend) ? ', ' : '') . $user['contact_name']);
-		}
+        $body_attend = '';
+        foreach ($users as $user) {
+            $body_attend .= ((($body_attend) ? ', ' : '') . $user['contact_name']);
+        }
 
-		$body .= $body_attend . "\n\n" . $event->event_description . "\n";
+        $body .= $body_attend . "\n\n" . $event->event_description . "\n";
 
         return $body;
     }
 
-    public function getContactUpdateNotify(w2p_Core_CAppUI $AppUI = null, CContact $contact) {
+    public function getContactUpdateNotify(w2p_Core_CAppUI $AppUI = null, CContact $contact)
+    {
         $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
 
         $q = new w2p_Database_Query;
         $q->addTable('companies');
         $q->addQuery('company_id, company_name');
-        $q->addWhere('company_id = ' . (int)$contact->contact_company);
+        $q->addWhere('company_id = ' . (int) $contact->contact_company);
         $contact_company = $q->loadHashList();
         $q->clear();
 
-        $body  = "Dear: $contact->contact_title $contact->contact_display_name,";
+        $body = "Dear: $contact->contact_title $contact->contact_display_name,";
         $body .= "\n\nIt was very nice to visit you";
         $body .= ($contact->contact_company) ? " and " . $contact_company[$contact->contact_company] . "." : ".";
         $body .= " Thank you for all the time that you spent with me.";
@@ -115,28 +123,32 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getFileUpdateNotify(w2p_Core_CAppUI $AppUI = null, CFile $file) {
+    public function getFileUpdateNotify(w2p_Core_CAppUI $AppUI = null, CFile $file)
+    {
         $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
 
-        $body  = "\n\nFile " . $file->file_name . ' was ' . $file->_message;
+        $body = "\n\nFile " . $file->file_name . ' was ' . $file->_message;
         $body .= ' by ' . $this->AppUI->user_display_name;
 
         return $body;
     }
 
-    public function getForumWatchEmail(CForum_Message $message, $forum_name, $message_from) {
+    public function getForumWatchEmail(CForum_Message $message, $forum_name, $message_from)
+    {
 
-        $body = $this->AppUI->_('forumEmailBody', UI_OUTPUT_RAW);;
-		$body .= "\n\n" . $this->AppUI->_('Forum', UI_OUTPUT_RAW) . ': ' .  $forum_name;
-		$body .= "\n" . $this->AppUI->_('Subject', UI_OUTPUT_RAW) . ': ' . $message->message_title;
-		$body .= "\n" . $this->AppUI->_('Message From', UI_OUTPUT_RAW) . ': ' . $message_from;
-		$body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=' . $message->message_forum;
-		$body .= "\n\n" . $message->message_body;
+        $body = $this->AppUI->_('forumEmailBody', UI_OUTPUT_RAW);
+        ;
+        $body .= "\n\n" . $this->AppUI->_('Forum', UI_OUTPUT_RAW) . ': ' . $forum_name;
+        $body .= "\n" . $this->AppUI->_('Subject', UI_OUTPUT_RAW) . ': ' . $message->message_title;
+        $body .= "\n" . $this->AppUI->_('Message From', UI_OUTPUT_RAW) . ': ' . $message_from;
+        $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=' . $message->message_forum;
+        $body .= "\n\n" . $message->message_body;
 
         return $body;
     }
 
-    public function getFileNotify(CFile $file) {
+    public function getFileNotify(CFile $file)
+    {
 
         $body = $this->AppUI->_('Project') . ': ' . $file->_project->project_name;
         $body .= "\n" . $this->AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $file->_project->project_id;
@@ -155,27 +167,29 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getFileNotifyContacts(CFile $file) {
+    public function getFileNotifyContacts(CFile $file)
+    {
         return $this->getFileNotify($file);
     }
 
-    public function getTaskNotify(CTask $task, $users) {
+    public function getTaskNotify(CTask $task, $users)
+    {
         $project = new CProject();
         $projname = $project->load($task->task_project)->project_name;
 
-        $body  = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
-        $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW)    . ':	     ' . $task->task_name."\n";
+        $body = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
+        $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW) . ':	     ' . $task->task_name . "\n";
 //TODO: Priority not working for some reason, will wait till later
 
-		$date_format = $this->AppUI->getPref('SHDATEFORMAT');
-		$time_format = $this->AppUI->getPref('TIMEFORMAT');
-		$fmt = $date_format . ' ' . $time_format;
+        $date_format = $this->AppUI->getPref('SHDATEFORMAT');
+        $time_format = $this->AppUI->getPref('TIMEFORMAT');
+        $fmt = $date_format . ' ' . $time_format;
 
 //TODO: customize these date formats based on the *receivers'* timezone setting
-		$start_date = new w2p_Utilities_Date($task->task_start_date);
-		$end_date = new w2p_Utilities_Date($task->task_end_date);
-		$body .= $this->AppUI->_('Start Date') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
-		$body .= $this->AppUI->_('Finish Date') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
+        $start_date = new w2p_Utilities_Date($task->task_start_date);
+        $end_date = new w2p_Utilities_Date($task->task_end_date);
+        $body .= $this->AppUI->_('Start Date') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
+        $body .= $this->AppUI->_('Finish Date') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
 
         $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
         $body .= $this->AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $task->task_description;
@@ -183,19 +197,20 @@ class w2p_Output_EmailManager {
             $body .= ("\n\n" . $this->AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['creator_name'] . ', ' . $users[0]['creator_email']);
         }
         $body .= ("\n\n" . $this->AppUI->_('Owner', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['owner_name'] . ', ' . $users[0]['owner_email']);
-        if ($comment != '') {
+        if (isset($comment) && $comment != '') {
             $body .= "\n\n" . $comment;
         }
 
         return $body;
     }
 
-    public function getTaskNotifyOwner(CTask $task, $users) {
+    public function getTaskNotifyOwner(CTask $task, $users)
+    {
         $project = new CProject();
         $projname = $project->load($task->task_project)->project_name;
 
-        $body  = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
-        $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW)    . ':	     ' . $task->task_name."\n";
+        $body = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
+        $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW) . ':	     ' . $task->task_name . "\n";
         $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
         $body .= $this->AppUI->_('Task Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
         $body .= $this->AppUI->_('Creator', UI_OUTPUT_RAW) . ': ' . $this->AppUI->user_display_name . "\n\n";
@@ -207,9 +222,10 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getTaskRemind(CTask $task, $msg, $project_name, $contacts) {
+    public function getTaskRemind(CTask $task, $msg, $project_name, $contacts)
+    {
 
-        $body  = $this->AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n";
+        $body = $this->AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n";
         $body .= $this->AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n";
         $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $task->task_name . "\n";
         $body .= $this->AppUI->_('Start Date', UI_OUTPUT_RAW) . ': START-TIME' . "\n";
@@ -217,17 +233,18 @@ class w2p_Output_EmailManager {
         $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . '&reminded=1' . "\n\n";
         $body .= $this->AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n";
 
-		foreach ($contacts as $contact) {
-			if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
-				$body .= ($contact['contact_name'] . ' <' . $contact['contact_email'] . ">\n");
-			}
-		}
-		$body .= $this->AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
+        foreach ($contacts as $contact) {
+            if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
+                $body .= ($contact['contact_name'] . ' <' . $contact['contact_email'] . ">\n");
+            }
+        }
+        $body .= $this->AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
 
         return $body;
     }
 
-    public function getTaskEmailLog(CTask $task, CTask_Log $log) {
+    public function getTaskEmailLog(CTask $task, CTask_Log $log)
+    {
         $project = new CProject();
         $projname = $project->load($task->task_project)->project_name;
 
@@ -253,7 +270,8 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getProjectNotifyOwner(CProject $project, $isNotNew) {
+    public function getProjectNotifyOwner(CProject $project, $isNotNew)
+    {
 
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
 
@@ -272,7 +290,8 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getProjectNotifyContacts(CProject $project, $isNotNew) {
+    public function getProjectNotifyContacts(CProject $project, $isNotNew)
+    {
 
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
 
@@ -291,9 +310,10 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function getNotifyNewUser($username) {
+    public function getNotifyNewUser($username)
+    {
         $body = "Dear $username,\n\n" .
-        $body .= "Congratulations! Your account has been activated by the administrator.\n";
+                $body .= "Congratulations! Your account has been activated by the administrator.\n";
         $body .= "Please use the login information provided earlier.\n\n";
         $body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\n";
         $body .= "If you have any difficulties or questions, please ask the administrator for help.\n";
@@ -304,7 +324,8 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function notifyHR($username, $logname, $address, $userid) {
+    public function notifyHR($username, $logname, $address, $userid)
+    {
         $body = 'A new user has signed up on ' . w2PgetConfig('company_name');
         $body .= ". Please go through the user details below:\n";
         $body .= 'Name:	' . $username . "\n" . 'Username:	' . $logname . "\n";
@@ -317,7 +338,8 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function notifyNewExternalUser($logname, $logpwd) {
+    public function notifyNewExternalUser($logname, $logpwd)
+    {
         $body = 'You have signed up for a new account on ' . w2PgetConfig('company_name');
         $body .= ".\n\n" . "Once the administrator approves your request, you will receive an email with confirmation.\n";
         $body .= "Your login information are below for your own record:\n\n";
@@ -329,7 +351,8 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function notifyNewUserCredentials($username, $logname, $logpwd) {
+    public function notifyNewUserCredentials($username, $logname, $logpwd)
+    {
         $body = $username . ",\n\n";
         $body .= "An access account has been created for you in our web2Project project management system.\n\n";
         $body .= "You can access it here at " . w2PgetConfig('base_url');
@@ -340,10 +363,11 @@ class w2p_Output_EmailManager {
         return $body;
     }
 
-    public function notifyPasswordReset($username, $password) {
+    public function notifyPasswordReset($username, $password)
+    {
         $_live_site = w2PgetConfig('base_url');
         $_sitename = w2PgetConfig('company_name');
-        
+
         $body = $this->AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' ' .
                 $username . ' ' . $this->AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' ' .
                 $_live_site . ' ' . $this->AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' ' .
@@ -351,4 +375,5 @@ class w2p_Output_EmailManager {
 
         return $body;
     }
+
 }

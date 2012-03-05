@@ -35,7 +35,7 @@ $project = new CProject();
 $project->load($obj->task_project);
 
 $bcode = new CSystem_Bcode();
-$companyBC = $bcode->getBillingCodes($proj->project_company);
+$companyBC = $bcode->getBillingCodes($project->project_company);
 $neutralBC = $bcode->getBillingCodes(0);
 $taskLogReference = w2PgetSysVal('TaskLogReference');
 $billingCategory = w2PgetSysVal('BudgetCategory');

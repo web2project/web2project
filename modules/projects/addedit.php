@@ -89,7 +89,7 @@ $titleBlock->show();
 $selected_contacts = array();
 
 if ($project_id) {
-	$myContacts = CProject::getContacts($AppUI, $project_id);
+	$myContacts = $project->getContactList();
 	$selected_contacts = array_keys($myContacts);
 }
 if ($project_id == 0 && $contact_id > 0) {
@@ -256,7 +256,7 @@ function setDepartment(department_id_string){
                                             $company_id = $project->project_company;
                                             $selected_departments = array();
                                             if ($project_id) {
-                                                $myDepartments = CProject::getDepartments($AppUI, $project_id);
+                                                $myDepartments = $project->getDepartmentList();
                                                 $selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
                                             }
 
@@ -293,7 +293,10 @@ function setDepartment(department_id_string){
                                 $billingCategory = w2PgetSysVal('BudgetCategory');
                                 $totalBudget = 0;
                                 foreach ($billingCategory as $id => $category) {
-                                    $amount = $project->budget[$id]['budget_amount'];
+                                    $amount = 0;
+                                    if (isset($project->budget[$id])) {
+                                        $amount = $project->budget[$id]['budget_amount'];
+                                    }
                                     $totalBudget += $amount;
                                     ?>
                                     <tr>

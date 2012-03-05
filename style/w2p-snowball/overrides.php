@@ -91,7 +91,7 @@ class CTabBox extends w2p_Theme_TabBox {
 			$s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 4 + 1) . '" class="tabox">';
 			echo $s;
 			//Will be null if the previous selection tab is not available in the new window eg. Children tasks
-			if ($this->tabs[$this->active][0] != '') {
+			if (isset($this->tabs[$this->active][0]) && $this->tabs[$this->active][0] != '') {
 				$currentTabId = $this->active;
 				$currentTabName = $this->tabs[$this->active][1];
 				if (!$js_tabs) {

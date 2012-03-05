@@ -25,6 +25,7 @@ $max_levels = w2PgetParam($_POST, 'max_levels', 'max');
 $log_userfilter = (int) w2PgetParam($_POST, 'log_userfilter', -1);
 $company_id = (int) w2PgetParam($_POST, 'company_id', 'all');
 $project_id = (int) w2PgetParam($_POST, 'project_id', 'all');
+$report_type = (int) w2PgetParam($_POST, 'report_type', '');
 
 // get CProject() to filter tasks by company
 $proj = new CProject();

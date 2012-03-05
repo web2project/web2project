@@ -41,7 +41,7 @@ if (!defined('W2P_BASE_DIR')) {
         <!--please leave action argument empty -->
         <form method="post" name="lostpassform" accept-charset="utf-8">
             <input type="hidden" name="lostpass" value="1" />
-            <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
+            <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
             <table style="border-style:none;" align="center" border="0" width="250" cellpadding="0" cellspacing="0" class="std">
                 <tr>
                     <td colspan="2"><?php echo styleRenderBoxTop(); ?></td>

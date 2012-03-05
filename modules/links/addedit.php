@@ -58,6 +58,9 @@ $titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'folder5.png', $m, $m . 
 $titleBlock->addCrumb('?m=' . $m, 'links list');
 $canDelete = $perms->checkModuleItem($m, 'delete', $link_id);
 if ($canDelete && $link_id) {
+        if (!isset($msg)) {
+            $msg = '';
+        }
 	$titleBlock->addCrumbDelete('delete link', $canDelete, $msg);
 }
 $titleBlock->show();
@@ -146,7 +149,7 @@ function setTask( key, val ) {
                   <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task'); ?>:</td>
                   <td align="left" colspan="2" valign="top">
                     <input type="hidden" name="link_task" value="<?php echo $link->link_task; ?>" />
-                    <input type="text" class="text" name="task_name" value="<?php echo $link->task_name; ?>" size="40" disabled="disabled" />
+                    <input type="text" class="text" name="task_name" value="<?php echo isset($link->task_name) ? $link->task_name : ''; ?>" size="40" disabled="disabled" />
                     <input type="button" class="button" value="<?php echo $AppUI->_('select task'); ?>..." onclick="popTask()" />
                   </td>
                 </tr>

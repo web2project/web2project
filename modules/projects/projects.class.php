@@ -1,11 +1,10 @@
 <?php /* $Id$ $URL$ */
 
 /**
- *	@package web2Project
- *	@subpackage modules
- *	@version $Revision$
+ * 	@package web2Project
+ * 	@subpackage modules
+ * 	@version $Revision$
  */
-
 // project statii
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
@@ -15,38 +14,40 @@ $ppriority_color = w2PgetSysVal('ProjectPriorityColor');
 
 $priority = array();
 foreach ($ppriority_name as $key => $val) {
-	$priority[$key]['name'] = $val;
+    $priority[$key]['name'] = $val;
 }
 foreach ($ppriority_color as $key => $val) {
-	$priority[$key]['color'] = $val;
+    $priority[$key]['color'] = $val;
 }
 
 /*
-// kept for reference
-$priority = array(
--1 => array(
-'name' => 'low',
-'color' => '#E5F7FF'
-),
-0 => array(
-'name' => 'normal',
-'color' => ''//#CCFFCA
-),
-1 => array(
-'name' => 'high',
-'color' => '#FFDCB3'
-),
-2 => array(
-'name' => 'immediate',
-'color' => '#FF887C'
-)
-);
-*/
+  // kept for reference
+  $priority = array(
+  -1 => array(
+  'name' => 'low',
+  'color' => '#E5F7FF'
+  ),
+  0 => array(
+  'name' => 'normal',
+  'color' => ''//#CCFFCA
+  ),
+  1 => array(
+  'name' => 'high',
+  'color' => '#FFDCB3'
+  ),
+  2 => array(
+  'name' => 'immediate',
+  'color' => '#FF887C'
+  )
+  );
+ */
 
 /**
  * The Project Class
  */
-class CProject extends w2p_Core_BaseObject {
+class CProject extends w2p_Core_BaseObject
+{
+
     public $project_id = null;
     public $project_company = null;
     public $project_name = null;
@@ -73,27 +74,29 @@ class CProject extends w2p_Core_BaseObject {
     public $project_type = null;
     public $project_parent = null;
     public $project_location = '';
-	public $project_last_task = 0;
-
-	public $project_original_parent = null;
-	/*
-	 * @deprecated fields, kept to make sure the bind() works properly
-	 */
+    public $project_last_task = 0;
+    public $project_original_parent = null;
+    /*
+     * @deprecated fields, kept to make sure the bind() works properly
+     */
     public $project_departments = null;
     public $project_contacts = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct('projects', 'project_id');
     }
 
-    public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false) {
+    public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
+    {
         $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
         $this->project_contacts = is_array($this->project_contacts) ? $this->project_contacts : explode(',', $this->project_contacts);
 
         return $result;
     }
 
-	public function check() {
+    public function check()
+    {
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
@@ -127,33 +130,35 @@ class CProject extends w2p_Core_BaseObject {
 
         $this->_error = $errorArray;
         return $errorArray;
-	}
+    }
 
-	public function loadFull($AppUI = null, $projectId) {
+    public function loadFull($AppUI = null, $projectId)
+    {
 
         $q = $this->_getQuery();
-		$q->addTable('projects');
-		$q->addQuery('company_name, contact_display_name as user_name, projects.*');
-		$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
-		$q->leftJoin('users', 'u', 'user_id = project_owner');
-		$q->leftJoin('contacts', 'con', 'contact_id = user_contact');
-		$q->addWhere('project_id = ' . (int) $projectId);
-		$q->addGroup('project_id');
+        $q->addTable('projects');
+        $q->addQuery('company_name, contact_display_name as user_name, projects.*');
+        $q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
+        $q->leftJoin('users', 'u', 'user_id = project_owner');
+        $q->leftJoin('contacts', 'con', 'contact_id = user_contact');
+        $q->addWhere('project_id = ' . (int) $projectId);
+        $q->addGroup('project_id');
 
-		$this->company_name = '';
-		$this->user_name = '';
-		$q->loadObject($this);
+        $this->company_name = '';
+        $this->user_name = '';
+        $q->loadObject($this);
         $this->budget = $this->getBudget();
-	}
+    }
 
-	public function delete() {
+    public function delete()
+    {
         $result = false;
 
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_getQuery();
             $q->addTable('tasks');
             $q->addQuery('task_id');
-            $q->addWhere('task_project = ' . (int)$this->project_id);
+            $q->addWhere('task_project = ' . (int) $this->project_id);
             $tasks_to_delete = $q->loadColumn();
             $q->clear();
 
@@ -166,7 +171,7 @@ class CProject extends w2p_Core_BaseObject {
 
             $q->addTable('files');
             $q->addQuery('file_id');
-            $q->addWhere('file_project = ' . (int)$this->project_id);
+            $q->addWhere('file_project = ' . (int) $this->project_id);
             $files_to_delete = $q->loadColumn();
             $q->clear();
 
@@ -179,7 +184,7 @@ class CProject extends w2p_Core_BaseObject {
 
             $q->addTable('events');
             $q->addQuery('event_id');
-            $q->addWhere('event_project = ' . (int)$this->project_id);
+            $q->addWhere('event_project = ' . (int) $this->project_id);
             $events_to_delete = $q->loadColumn();
             $q->clear();
 
@@ -192,17 +197,17 @@ class CProject extends w2p_Core_BaseObject {
 
             // remove the project-contacts and project-departments map
             $q->setDelete('project_contacts');
-            $q->addWhere('project_id =' . (int)$this->project_id);
+            $q->addWhere('project_id =' . (int) $this->project_id);
             $q->exec();
             $q->clear();
 
             $q->setDelete('project_departments');
-            $q->addWhere('project_id =' . (int)$this->project_id);
+            $q->addWhere('project_id =' . (int) $this->project_id);
             $q->exec();
             $q->clear();
 
             $q->setDelete('tasks');
-            $q->addWhere('task_represents_project =' . (int)$this->project_id);
+            $q->addWhere('task_represents_project =' . (int) $this->project_id);
             $q->clear();
 
             if ($msg = parent::delete()) {
@@ -210,92 +215,94 @@ class CProject extends w2p_Core_BaseObject {
             }
             return true;
         }
-		return $result;
-	}
+        return $result;
+    }
 
-	/**	Import tasks from another project
-	 *
-	 *	@param	int		Project ID of the tasks come from.
-	 *	@return	bool
-	 **/
-	public function importTasks($from_project_id) {
+    /** 	
+     * Import tasks from another project
+     *
+     * 	@param	int Project ID of the tasks come from.
+     * 	@return	bool
+     * */
+    public function importTasks($from_project_id)
+    {
         $errors = array();
 
-		// Load the original
-		$origProject = new CProject();
+        // Load the original
+        $origProject = new CProject();
         $origProject->overrideDatabase($this->_query);
-		$origProject->load($from_project_id);
-		$q = $this->_getQuery();
-		$q->addTable('tasks');
-		$q->addQuery('task_id');
-		$q->addWhere('task_project =' . (int)$from_project_id);
-		$tasks = array_flip($q->loadColumn());
-		$q->clear();
+        $origProject->load($from_project_id);
+        $q = $this->_getQuery();
+        $q->addTable('tasks');
+        $q->addQuery('task_id');
+        $q->addWhere('task_project =' . (int) $from_project_id);
+        $tasks = array_flip($q->loadColumn());
+        $q->clear();
 
-		$origDate = new w2p_Utilities_Date($origProject->project_start_date);
+        $origDate = new w2p_Utilities_Date($origProject->project_start_date);
 
-		$destDate = new w2p_Utilities_Date($this->project_start_date);
+        $destDate = new w2p_Utilities_Date($this->project_start_date);
 
-		$timeOffset = $origDate->dateDiff($destDate);
-		if ($origDate->compare($origDate, $destDate) > 0) {
-			$timeOffset = -1 * $timeOffset;
-		}
+        $timeOffset = $origDate->dateDiff($destDate);
+        if ($origDate->compare($origDate, $destDate) > 0) {
+            $timeOffset = -1 * $timeOffset;
+        }
 
-		// Dependencies array
-		$deps = array();
+        // Dependencies array
+        $deps = array();
 
         $objTask = new CTask();
         $objTask->overrideDatabase($this->_query);
-		// Copy each task into this project and get their deps
+        // Copy each task into this project and get their deps
         $objTask = new CTask();
         $objTask->overrideDatabase($this->_query);
-		foreach ($tasks as $orig => $void) {
+        foreach ($tasks as $orig => $void) {
             $objTask->load($orig);
             $destTask = $objTask->copy($this->project_id);
             $destTask->task_parent = (0 == $destTask->task_parent) ? $destTask->task_id : $destTask->task_parent;
             $destTask->store();
-			$tasks[$orig] = $destTask;
-			$deps[$orig] = $objTask->getDependencies();
-		}
+            $tasks[$orig] = $destTask;
+            $deps[$orig] = $objTask->getDependencies();
+        }
 
-		// Fix record integrity
-		foreach ($tasks as $old_id => $newTask) {
+        // Fix record integrity
+        foreach ($tasks as $old_id => $newTask) {
 
-			// Fix parent Task
-			// This task had a parent task, adjust it to new parent task_id
-			if ($newTask->task_id != $newTask->task_parent) {
-				$newTask->task_parent = $tasks[$newTask->task_parent]->task_id;
-			}
+            // Fix parent Task
+            // This task had a parent task, adjust it to new parent task_id
+            if ($newTask->task_id != $newTask->task_parent) {
+                $newTask->task_parent = $tasks[$newTask->task_parent]->task_id;
+            }
 
-			// Fix task start date from project start date offset
-			$origDate->setDate($newTask->task_start_date);
-			$origDate->addDays($timeOffset);
-			$destDate = $origDate;
-			$newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);
+            // Fix task start date from project start date offset
+            $origDate->setDate($newTask->task_start_date);
+            $origDate->addDays($timeOffset);
+            $destDate = $origDate;
+            $newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);
 
-			// Fix task end date from start date + work duration
-			if (!empty($newTask->task_end_date) && $newTask->task_end_date != '0000-00-00 00:00:00') {
-				$origDate->setDate($newTask->task_end_date);
-				$origDate->addDays($timeOffset);
-				$destDate = $origDate;
-				$newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
-			}
+            // Fix task end date from start date + work duration
+            if (!empty($newTask->task_end_date) && $newTask->task_end_date != '0000-00-00 00:00:00') {
+                $origDate->setDate($newTask->task_end_date);
+                $origDate->addDays($timeOffset);
+                $destDate = $origDate;
+                $newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
+            }
 
-			// Dependencies
-			if (!empty($deps[$old_id])) {
-				$oldDeps = explode(',', $deps[$old_id]);
-				// New dependencies array
-				$newDeps = array();
-				foreach ($oldDeps as $dep) {
-					$newDeps[] = $tasks[$dep]->task_id;
-				}
+            // Dependencies
+            if (!empty($deps[$old_id])) {
+                $oldDeps = explode(',', $deps[$old_id]);
+                // New dependencies array
+                $newDeps = array();
+                foreach ($oldDeps as $dep) {
+                    $newDeps[] = $tasks[$dep]->task_id;
+                }
 
-				// Update the new task dependencies
-				$csList = implode(',', $newDeps);
-				$newTask->updateDependencies($csList);
-			} // end of update dependencies
+                // Update the new task dependencies
+                $csList = implode(',', $newDeps);
+                $newTask->updateDependencies($csList);
+            } // end of update dependencies
             $result = $newTask->store();
-			$newTask->addReminder();
+            $newTask->addReminder();
             $importedTasks[] = $newTask->task_id;
 
             if (is_array($result) && count($result)) {
@@ -304,185 +311,190 @@ class CProject extends w2p_Core_BaseObject {
                 }
             }
         } // end Fix record integrity
-
         // We have errors, so rollback everything we've done so far
         if (count($errors)) {
             $delTask = new CTask();
             $delTask->overrideDatabase($this->_query);
-            foreach($importedTasks as $badTask) {
+            foreach ($importedTasks as $badTask) {
                 $delTask->task_id = $badTask;
                 $delTask->delete();
             }
         }
         return $errors;
-    } // end of importTasks
+    }
 
-	/**
-	 **	Overload of the w2PObject::getAllowedRecords
-	 **	to ensure that the allowed projects are owned by allowed companies.
-	 **
-	 **	@author	handco <handco@sourceforge.net>
-	 **	@see	w2PObject::getAllowedRecords
-	 **/
+    // end of importTasks
 
-	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '') {
-		$oCpy = new CCompany();
+    /**
+     * *	Overload of the w2PObject::getAllowedRecords
+     * *	to ensure that the allowed projects are owned by allowed companies.
+     * *
+     * *	@author	handco <handco@sourceforge.net>
+     * *	@see	w2PObject::getAllowedRecords
+     * */
+    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
+    {
+        $oCpy = new CCompany();
         $oCpy->overrideDatabase($this->_query);
 
-		$aCpies = $oCpy->getAllowedRecords($uid, 'company_id, company_name');
-		if (count($aCpies)) {
-			$buffer = '(project_company IN (' . implode(',', array_keys($aCpies)) . '))';
+        $aCpies = $oCpy->getAllowedRecords($uid, 'company_id, company_name');
+        if (count($aCpies)) {
+            $buffer = '(project_company IN (' . implode(',', array_keys($aCpies)) . '))';
 
-			if (!isset($extra['from']) && !isset($extra['join'])) {
-				$extra['join'] = 'project_departments';
-				$extra['on'] = 'projects.project_id = project_departments.project_id';
-			} elseif ($extra['from'] != 'project_departments' && !isset($extra['join'])) {
-				$extra['join'] = 'project_departments';
-				$extra['on'] = 'projects.project_id = project_departments.project_id';
-			}
-			//Department permissions
-			$oDpt = new CDepartment();
+            if (!isset($extra['from']) && !isset($extra['join'])) {
+                $extra['join'] = 'project_departments';
+                $extra['on'] = 'projects.project_id = project_departments.project_id';
+            } elseif ((isset($extra['from']) && $extra['from'] != 'project_departments') && !isset($extra['join'])) {
+                $extra['join'] = 'project_departments';
+                $extra['on'] = 'projects.project_id = project_departments.project_id';
+            }
+            //Department permissions
+            $oDpt = new CDepartment();
             $oDpt->overrideDatabase($this->_query);
-			$aDpts = $oDpt->getAllowedRecords($uid, 'dept_id, dept_name');
-			if (count($aDpts)) {
-				$dpt_buffer = '(department_id IN (' . implode(',', array_keys($aDpts)) . ') OR department_id IS NULL)';
-			} else {
-				// There are no allowed departments, so allow projects with no department.
-				$dpt_buffer = '(department_id IS NULL)';
-			}
+            $aDpts = $oDpt->getAllowedRecords($uid, 'dept_id, dept_name');
+            if (count($aDpts)) {
+                $dpt_buffer = '(department_id IN (' . implode(',', array_keys($aDpts)) . ') OR department_id IS NULL)';
+            } else {
+                // There are no allowed departments, so allow projects with no department.
+                $dpt_buffer = '(department_id IS NULL)';
+            }
 
-			if (isset($extra['where']) && $extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND ' . $buffer . ' AND ' . $dpt_buffer;
-			} else {
-				$extra['where'] = $buffer . ' AND ' . $dpt_buffer;
-			}
-		} else {
-			// There are no allowed companies, so don't allow projects.
-			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND 1 = 0 ';
-			} else {
-				$extra['where'] = '1 = 0';
-			}
-		}
-		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra, $table_alias);
+            if (isset($extra['where']) && $extra['where'] != '') {
+                $extra['where'] = $extra['where'] . ' AND ' . $buffer . ' AND ' . $dpt_buffer;
+            } else {
+                $extra['where'] = $buffer . ' AND ' . $dpt_buffer;
+            }
+        } else {
+            // There are no allowed companies, so don't allow projects.
+            if ($extra['where'] != '') {
+                $extra['where'] = $extra['where'] . ' AND 1 = 0 ';
+            } else {
+                $extra['where'] = '1 = 0';
+            }
+        }
+        return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra, $table_alias);
+    }
 
-	}
-
-	public function getAllowedSQL($uid, $index = null) {
-		$oCpy = new CCompany();
+    public function getAllowedSQL($uid, $index = null)
+    {
+        $oCpy = new CCompany();
         $oCpy->overrideDatabase($this->_query);
-		$where = $oCpy->getAllowedSQL($uid, 'project_company');
+        $where = $oCpy->getAllowedSQL($uid, 'project_company');
 
-		$oDpt = new CDepartment();
+        $oDpt = new CDepartment();
         $oDpt->overrideDatabase($this->_query);
-		$where += $oDpt->getAllowedSQL($uid, 'dept_id');
+        $where += $oDpt->getAllowedSQL($uid, 'dept_id');
 
-		$project_where = parent::getAllowedSQL($uid, $index);
-		return array_merge($where, $project_where);
-	}
+        $project_where = parent::getAllowedSQL($uid, $index);
+        return array_merge($where, $project_where);
+    }
 
-	public function setAllowedSQL($uid, &$query, $index = null, $key = 'pr') {
-		$oCpy = new CCompany;
+    public function setAllowedSQL($uid, &$query, $index = null, $key = 'pr')
+    {
+        $oCpy = new CCompany;
         $oCpy->overrideDatabase($this->_query);
-		parent::setAllowedSQL($uid, $query, $index, $key);
-		$oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '').'project_company');
-		//Department permissions
-		$oDpt = new CDepartment();
+        parent::setAllowedSQL($uid, $query, $index, $key);
+        $oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '') . 'project_company');
+        //Department permissions
+        $oDpt = new CDepartment();
         $oDpt->overrideDatabase($this->_query);
-		$query->leftJoin('project_departments', '', $key.'.project_id = project_departments.project_id');
-		$oDpt->setAllowedSQL($uid, $query, 'project_departments.department_id');
-	}
+        $query->leftJoin('project_departments', '', $key . '.project_id = project_departments.project_id');
+        $oDpt->setAllowedSQL($uid, $query, 'project_departments.department_id');
+    }
 
-	/**
-	 *	Overload of the w2PObject::getDeniedRecords
-	 *	to ensure that the projects owned by denied companies are denied.
-	 *
-	 *	@author	handco <handco@sourceforge.net>
-	 *	@see	w2PObject::getAllowedRecords
-	 */
-	public function getDeniedRecords($uid) {
-		$aBuf1 = parent::getDeniedRecords($uid);
+    /**
+     * 	Overload of the w2PObject::getDeniedRecords
+     * 	to ensure that the projects owned by denied companies are denied.
+     *
+     * 	@author	handco <handco@sourceforge.net>
+     * 	@see	w2PObject::getAllowedRecords
+     */
+    public function getDeniedRecords($uid)
+    {
+        $aBuf1 = parent::getDeniedRecords($uid);
 
-		$oCpy = new CCompany();
+        $oCpy = new CCompany();
         $oCpy->overrideDatabase($this->_query);
-		// Retrieve which projects are allowed due to the company rules
-		$aCpiesAllowed = $oCpy->getAllowedRecords($uid, 'company_id,company_name');
+        // Retrieve which projects are allowed due to the company rules
+        $aCpiesAllowed = $oCpy->getAllowedRecords($uid, 'company_id,company_name');
 
-		//Department permissions
-		$oDpt = new CDepartment();
+        //Department permissions
+        $oDpt = new CDepartment();
         $oDpt->overrideDatabase($this->_query);
-		$aDptsAllowed = $oDpt->getAllowedRecords($uid, 'dept_id,dept_name');
+        $aDptsAllowed = $oDpt->getAllowedRecords($uid, 'dept_id,dept_name');
 
-		$q = $this->_getQuery();
-		$q->addTable('projects');
-		$q->addQuery('projects.project_id');
-		$q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
+        $q = $this->_getQuery();
+        $q->addTable('projects');
+        $q->addQuery('projects.project_id');
+        $q->addJoin('project_departments', 'pd', 'pd.project_id = projects.project_id');
 
-		if (count($aCpiesAllowed)) {
-			if ((array_search('0', $aCpiesAllowed)) === false) {
-				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$q->addWhere('NOT (project_company IN (' . implode(',', array_keys($aCpiesAllowed)) . '))');
-			} else {
-				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
-			}
-		} else {
-			//if the user is not allowed any company then lets shut him off
-			$q->addWhere('0=1');
-		}
+        if (count($aCpiesAllowed)) {
+            if ((array_search('0', $aCpiesAllowed)) === false) {
+                //If 0 (All Items of a module) are not permited then just add the allowed items only
+                $q->addWhere('NOT (project_company IN (' . implode(',', array_keys($aCpiesAllowed)) . '))');
+            } else {
+                //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+            }
+        } else {
+            //if the user is not allowed any company then lets shut him off
+            $q->addWhere('0=1');
+        }
 
-		if (count($aDptsAllowed)) {
-			if ((array_search('0', $aDptsAllowed)) === false) {
-				//If 0 (All Items of a module) are not permited then just add the allowed items only
-				$q->addWhere('NOT (department_id IN (' . implode(',', array_keys($aDptsAllowed)) . '))');
-			} else {
-				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
-				$q->addWhere('NOT (department_id IS NULL)');
-			}
-		} else {
-			//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
-			$q->addWhere('NOT (department_id IS NULL)');
-		}
+        if (count($aDptsAllowed)) {
+            if ((array_search('0', $aDptsAllowed)) === false) {
+                //If 0 (All Items of a module) are not permited then just add the allowed items only
+                $q->addWhere('NOT (department_id IN (' . implode(',', array_keys($aDptsAllowed)) . '))');
+            } else {
+                //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+                $q->addWhere('NOT (department_id IS NULL)');
+            }
+        } else {
+            //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+            $q->addWhere('NOT (department_id IS NULL)');
+        }
 
-		$aBuf2 = $q->loadColumn();
-		$q->clear();
+        $aBuf2 = $q->loadColumn();
+        $q->clear();
 
-		return array_merge($aBuf1, $aBuf2);
+        return array_merge($aBuf1, $aBuf2);
+    }
 
-	}
-
-	public function getAllowedProjectsInRows($userId) {
-        trigger_error("CProject->getAllowedProjectsInRows() has been deprecated in v3.0 and will be removed in v4.0", E_USER_NOTICE );
+    public function getAllowedProjectsInRows($userId)
+    {
+        trigger_error("CProject->getAllowedProjectsInRows() has been deprecated in v3.0 and will be removed in v4.0", E_USER_NOTICE);
 
         $q = $this->_getQuery();
         $q->clear();
-		$q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
-		$q->addTable('projects', 'pr');
-		$q->addOrder('project_short_name');
-		$this->setAllowedSQL($userId, $q, null, 'pr');
-		$allowedProjectRows = $q->exec();
+        $q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
+        $q->addTable('projects', 'pr');
+        $q->addOrder('project_short_name');
+        $this->setAllowedSQL($userId, $q, null, 'pr');
+        $allowedProjectRows = $q->exec();
         $q->clear();
 
-		return $allowedProjectRows;
-	}
+        return $allowedProjectRows;
+    }
 
-	/** Retrieve tasks with latest task_end_dates within given project
-	 * @param int Project_id
-	 * @param int SQL-limit to limit the number of returned tasks
-	 * @return array List of criticalTasks
-	 */
-	public function getCriticalTasks($project_id = null, $limit = 1) {
-		$project_id = !empty($project_id) ? $project_id : $this->project_id;
+    /** Retrieve tasks with latest task_end_dates within given project
+     * @param int Project_id
+     * @param int SQL-limit to limit the number of returned tasks
+     * @return array List of criticalTasks
+     */
+    public function getCriticalTasks($project_id = null, $limit = 1)
+    {
+        $project_id = !empty($project_id) ? $project_id : $this->project_id;
 
         $q = $this->_getQuery();
-		$q->addTable('tasks');
-		$q->addWhere('task_project = ' . (int)$project_id . ' AND task_end_date IS NOT NULL AND task_end_date <>  \'0000-00-00 00:00:00\'');
-		$q->addOrder('task_end_date DESC');
-		$q->setLimit($limit);
+        $q->addTable('tasks');
+        $q->addWhere('task_project = ' . (int) $project_id . ' AND task_end_date IS NOT NULL AND task_end_date <>  \'0000-00-00 00:00:00\'');
+        $q->addOrder('task_end_date DESC');
+        $q->setLimit($limit);
 
-		return $q->loadList();
-	}
+        return $q->loadList();
+    }
 
-    public function getBudget() {
+    public function getBudget()
+    {
         $q = $this->_getQuery();
         $q->addQuery('budget_category, budget_amount');
         $q->addTable('budgets_assigned');
@@ -491,7 +503,8 @@ class CProject extends w2p_Core_BaseObject {
         return $q->loadHashList('budget_category');
     }
 
-    public function storeBudget(array $budgets) {
+    public function storeBudget(array $budgets)
+    {
         $q = $this->_getQuery();
         $q->setDelete('budgets_assigned');
         $q->addWhere('budget_project =' . (int) $this->project_id);
@@ -510,7 +523,8 @@ class CProject extends w2p_Core_BaseObject {
         return true;
     }
 
-	public function store() {
+    public function store()
+    {
         $stored = false;
 
         $this->w2PTrimAll();
@@ -597,7 +611,7 @@ class CProject extends w2p_Core_BaseObject {
         if ($stored) {
             //split out related departments and store them seperatly.
             $q->setDelete('project_departments');
-            $q->addWhere('project_id=' . (int)$this->project_id);
+            $q->addWhere('project_id=' . (int) $this->project_id);
             $q->exec();
             $q->clear();
             $stored_departments = array();
@@ -617,7 +631,7 @@ class CProject extends w2p_Core_BaseObject {
 
             //split out related contacts and store them seperatly.
             $q->setDelete('project_contacts');
-            $q->addWhere('project_id=' . (int)$this->project_id);
+            $q->addWhere('project_id=' . (int) $this->project_id);
             $q->exec();
             $q->clear();
             $stored_contacts = array();
@@ -641,69 +655,74 @@ class CProject extends w2p_Core_BaseObject {
 
             CTask::storeTokenTask($this->_AppUI, $this->project_id);
         }
-		return $stored;
-	}
+        return $stored;
+    }
 
-	public function notifyOwner($isNotNew) {
-		global $w2Pconfig, $locale_char_set;
+    public function notifyOwner($isNotNew)
+    {
+        global $w2Pconfig, $locale_char_set;
 
-		$mail = new w2p_Utilities_Mail;
+        $mail = new w2p_Utilities_Mail;
 
         $subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
-		$user = new CUser();
+        $user = new CUser();
         $user->overrideDatabase($this->_query);
-		$user->loadFull($this->project_owner);
+        $user->loadFull($this->project_owner);
 
-		if ($user && $mail->ValidEmail($user->user_email)) {
-			$emailManager = new w2p_Output_EmailManager($this->_AppUI);
+        if ($user && $mail->ValidEmail($user->user_email)) {
+            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getProjectNotifyOwner($this, $isNotNew);
 
             $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-			$mail->To($user->user_email, true);
-			$mail->Send();
-		}
-	}
+            $mail->To($user->user_email, true);
+            $mail->Send();
+        }
+    }
 
-	public function notifyContacts($isNotNew) {
-		global $w2Pconfig, $locale_char_set;
+    public function notifyContacts($isNotNew)
+    {
+        global $w2Pconfig, $locale_char_set;
 
-		$subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
+        $subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
-		$users = CProject::getContacts($this->_AppUI, $this->project_id);
-		if (count($users)) {
-			$emailManager = new w2p_Output_EmailManager($this->_AppUI);
+        $users = CProject::getContacts($this->_AppUI, $this->project_id);
+        if (count($users)) {
+            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getProjectNotifyContacts($this, $isNotNew);
 
-			foreach ($users as $row) {
-				$mail = new w2p_Utilities_Mail;
+            foreach ($users as $row) {
+                $mail = new w2p_Utilities_Mail;
                 $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-				$mail->Subject($subject, $locale_char_set);
+                $mail->Subject($subject, $locale_char_set);
 
-				if ($mail->ValidEmail($row['contact_email'])) {
-					$mail->To($row['contact_email'], true);
-					$mail->Send();
-				}
-			}
-		}
-		return '';
-	}
-	public function getAllowedProjects($userId, $activeOnly = true) {
+                if ($mail->ValidEmail($row['contact_email'])) {
+                    $mail->To($row['contact_email'], true);
+                    $mail->Send();
+                }
+            }
+        }
+        return '';
+    }
+
+    public function getAllowedProjects($userId, $activeOnly = true)
+    {
 
         $q = $this->_getQuery();
-		$q->addTable('projects', 'pr');
-		$q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date, project_company, project_parent');
-		if ($activeOnly) {
-			$q->addWhere('project_active = 1');
-		}
-		$q->addGroup('pr.project_id');
-		$q->addOrder('project_name');
-		$this->setAllowedSQL($userId, $q, null, 'pr');
+        $q->addTable('projects', 'pr');
+        $q->addQuery('pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date, project_company, project_parent');
+        if ($activeOnly) {
+            $q->addWhere('project_active = 1');
+        }
+        $q->addGroup('pr.project_id');
+        $q->addOrder('project_name');
+        $this->setAllowedSQL($userId, $q, null, 'pr');
 
-		return $q->loadHashList('project_id');
-	}
+        return $q->loadHashList('project_id');
+    }
 
-	public function getContactList() {
+    public function getContactList()
+    {
         if ($this->_AppUI->isActiveModule('contacts') && canView('contacts')) {
             $q = new w2p_Database_Query();
             $q->addTable('contacts', 'c');
@@ -713,187 +732,201 @@ class CProject extends w2p_Core_BaseObject {
             $q->leftJoin('departments', 'd', 'd.dept_id = c.contact_department');
             $q->addQuery('dept_name');
 
-			$q->addJoin('project_contacts', 'pc', 'pc.contact_id = c.contact_id', 'inner');
-			$q->addWhere('pc.project_id = ' . (int) $this->project_id);
+            $q->addJoin('project_contacts', 'pc', 'pc.contact_id = c.contact_id', 'inner');
+            $q->addWhere('pc.project_id = ' . (int) $this->project_id);
 
-			$q->addWhere('
+            $q->addWhere('
 				(contact_private=0
 					OR (contact_private=1 AND contact_owner=' . $this->_AppUI->user_id . ')
 					OR contact_owner IS NULL OR contact_owner = 0
 				)');
 
-			$department = new CDepartment;
+            $department = new CDepartment;
             $department->overrideDatabase($this->_query);
-//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-			$department->setAllowedSQL($this->_AppUI->user_id, $q);
+            //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
+            $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
-			return $q->loadHashList('contact_id');
-		}
-	}
+            return $q->loadHashList('contact_id');
+        }
+    }
 
-	public static function getContacts($AppUI = null, $projectId) {
-		trigger_error("CProject::getContacts has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getContactList() instead.", E_USER_NOTICE );
+    public static function getContacts($AppUI = null, $projectId)
+    {
+        trigger_error("CProject::getContacts has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getContactList() instead.", E_USER_NOTICE);
 
         $project = new CProject();
-//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
+        //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $project->project_id = $projectId;
 
         return $project->getContactList();
-	}
-
-    public function getDepartmentList() {
-		if ($this->_AppUI->isActiveModule('departments') && canView('departments')) {
-			$q = $this->_getQuery();
-			$q->addTable('departments', 'a');
-			$q->addTable('project_departments', 'b');
-			$q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
-			$q->addWhere('a.dept_id = b.department_id and b.project_id = ' . (int) $this->project_id);
-
-			$department = new CDepartment();
-            $department->overrideDatabase($this->_query);
-			$department->setAllowedSQL($this->_AppUI->user_id, $q);
-
-			return $q->loadHashList('dept_id');
-		}
     }
 
-	public static function getDepartments($AppUI = null, $projectId) {
-		trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE );
+    public function getDepartmentList()
+    {
+        if ($this->_AppUI->isActiveModule('departments') && canView('departments')) {
+            $q = $this->_getQuery();
+            $q->addTable('departments', 'a');
+            $q->addTable('project_departments', 'b');
+            $q->addQuery('a.dept_id, a.dept_name, a.dept_phone');
+            $q->addWhere('a.dept_id = b.department_id and b.project_id = ' . (int) $this->project_id);
+
+            $department = new CDepartment();
+            $department->overrideDatabase($this->_query);
+            $department->setAllowedSQL($this->_AppUI->user_id, $q);
+
+            return $q->loadHashList('dept_id');
+        }
+    }
+
+    public static function getDepartments($AppUI = null, $projectId)
+    {
+        trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE);
 
         $project = new CProject();
-//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
+        //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $project->project_id = $projectId;
 
         return $project->getDepartmentList();
-	}
+    }
 
-	public static function getForums($AppUI = null, $projectId) {
-		global $AppUI;
+    public static function getForums($AppUI = null, $projectId)
+    {
+        global $AppUI;
 
-		if ($AppUI->isActiveModule('forums') && canView('forums')) {
-			$q = new w2p_Database_Query();
-			$q->addTable('forums');
-			$q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name, forum_message_count,
+        if ($AppUI->isActiveModule('forums') && canView('forums')) {
+            $q = new w2p_Database_Query();
+            $q->addTable('forums');
+            $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name, forum_message_count,
 				DATE_FORMAT(forum_last_date, "%d-%b-%Y %H:%i" ) forum_last_date,
 				project_name, project_color_identifier, project_id');
-			$q->addJoin('projects', 'p', 'project_id = forum_project', 'inner');
-			$q->addWhere('forum_project = ' . (int) $projectId);
-			$q->addOrder('forum_project, forum_name');
+            $q->addJoin('projects', 'p', 'project_id = forum_project', 'inner');
+            $q->addWhere('forum_project = ' . (int) $projectId);
+            $q->addOrder('forum_project, forum_name');
 
-			return $q->loadHashList('forum_id');
-		}
-	}
-	public static function getCompany($projectId) {
+            return $q->loadHashList('forum_id');
+        }
+    }
 
-        $q = new w2p_Database_Query();
-		$q->addQuery('project_company');
-		$q->addTable('projects');
-		$q->addWhere('project_id = ' . (int) $projectId);
-
-		return $q->loadResult();
-	}
-	public static function getBillingCodes($companyId, $all = false) {
+    public static function getCompany($projectId)
+    {
 
         $q = new w2p_Database_Query();
-		$q->addTable('billingcode');
-		$q->addQuery('billingcode_id, billingcode_name');
-		$q->addOrder('billingcode_name');
-		$q->addWhere('billingcode_status = 0');
-		$q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
-		$task_log_costcodes = $q->loadHashList();
+        $q->addQuery('project_company');
+        $q->addTable('projects');
+        $q->addWhere('project_id = ' . (int) $projectId);
 
-		if ($all) {
-			$q->clear();
-			$q->addTable('billingcode');
-			$q->addQuery('billingcode_id, billingcode_name');
-			$q->addOrder('billingcode_name');
-			$q->addWhere('billingcode_status = 1');
-			$q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
+        return $q->loadResult();
+    }
 
-			$billingCodeList = $q->loadHashList();
-			foreach($billingCodeList as $id => $code) {
-				$task_log_costcodes[$id] = $code;
-			}
-		}
-
-		return $task_log_costcodes;
-	}
-	public static function getOwners() {
+    public static function getBillingCodes($companyId, $all = false)
+    {
 
         $q = new w2p_Database_Query();
-		$q->addTable('projects', 'p');
-		$q->addQuery('user_id, contact_display_name');
-		$q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
-		$q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-		$q->addOrder('contact_first_name, contact_last_name');
-		$q->addWhere('user_id > 0');
-		$q->addWhere('p.project_owner IS NOT NULL');
+        $q->addTable('billingcode');
+        $q->addQuery('billingcode_id, billingcode_name');
+        $q->addOrder('billingcode_name');
+        $q->addWhere('billingcode_status = 0');
+        $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
+        $task_log_costcodes = $q->loadHashList();
 
-		return $q->loadHashList();
-	}
+        if ($all) {
+            $q->clear();
+            $q->addTable('billingcode');
+            $q->addQuery('billingcode_id, billingcode_name');
+            $q->addOrder('billingcode_name');
+            $q->addWhere('billingcode_status = 1');
+            $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
 
-	public static function updateStatus($AppUI = null, $projectId, $statusId) {
-		trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE );
+            $billingCodeList = $q->loadHashList();
+            foreach ($billingCodeList as $id => $code) {
+                $task_log_costcodes[$id] = $code;
+            }
+        }
+
+        return $task_log_costcodes;
+    }
+
+    public static function getOwners()
+    {
+
+        $q = new w2p_Database_Query();
+        $q->addTable('projects', 'p');
+        $q->addQuery('user_id, contact_display_name');
+        $q->leftJoin('users', 'u', 'u.user_id = p.project_owner');
+        $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
+        $q->addOrder('contact_first_name, contact_last_name');
+        $q->addWhere('user_id > 0');
+        $q->addWhere('p.project_owner IS NOT NULL');
+
+        return $q->loadHashList();
+    }
+
+    public static function updateStatus($AppUI = null, $projectId, $statusId)
+    {
+        trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE);
 
         global $AppUI;
 
         $perms = $AppUI->acl();
-		if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-			$q = new w2p_Database_Query();
-			$q->addTable('projects');
-			$q->addUpdate('project_status', $statusId);
-			$q->addWhere('project_id   = ' . (int) $projectId);
-			$q->exec();
-		}
-	}
+        if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
+            $q = new w2p_Database_Query();
+            $q->addTable('projects');
+            $q->addUpdate('project_status', $statusId);
+            $q->addWhere('project_id   = ' . (int) $projectId);
+            $q->exec();
+        }
+    }
 
-	public static function updateTaskCache($project_id, $task_id,
-			$project_actual_end_date, $project_task_count) {
+    public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count)
+    {
 
-		if ($project_id && $task_id) {
-			$q = new w2p_Database_Query();
-			$q->addTable('projects');
-			$q->addUpdate('project_last_task',			$task_id);
-			$q->addUpdate('project_actual_end_date',	$project_actual_end_date);
-			$q->addUpdate('project_task_count',			$project_task_count);
-			$q->addWhere('project_id   = ' . (int) $project_id);
-			$q->exec();
-			self::updatePercentComplete($project_id);
-		}
-	}
+        if ($project_id && $task_id) {
+            $q = new w2p_Database_Query();
+            $q->addTable('projects');
+            $q->addUpdate('project_last_task', $task_id);
+            $q->addUpdate('project_actual_end_date', $project_actual_end_date);
+            $q->addUpdate('project_task_count', $project_task_count);
+            $q->addWhere('project_id   = ' . (int) $project_id);
+            $q->exec();
+            self::updatePercentComplete($project_id);
+        }
+    }
 
-	public static function updateTaskCount($projectId, $taskCount) {
+    public static function updateTaskCount($projectId, $taskCount)
+    {
 
-		trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE );
+        trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE);
 
-		if (intval($projectId) > 0 && intval($taskCount)) {
-			$q = new w2p_Database_Query();
-			$q->addTable('projects');
-			$q->addUpdate('project_task_count', intval($taskCount));
-			$q->addWhere('project_id   = ' . (int) $projectId);
-			$q->exec();
-			self::updatePercentComplete($projectId);
-		}
-	}
+        if (intval($projectId) > 0 && intval($taskCount)) {
+            $q = new w2p_Database_Query();
+            $q->addTable('projects');
+            $q->addUpdate('project_task_count', intval($taskCount));
+            $q->addWhere('project_id   = ' . (int) $projectId);
+            $q->exec();
+            self::updatePercentComplete($projectId);
+        }
+    }
 
-	public function hasChildProjects($projectId = 0) {
-		// Note that this returns the *count* of projects.  If this is zero, it
-		//   is evaluated as false, otherwise it is considered true.
-		$q = $this->_getQuery();
-		$q->addTable('projects');
-		$q->addQuery('COUNT(project_id)');
-		if ($projectId > 0) {
-			$q->addWhere('project_original_parent = ' . $projectId);
-		} else {
-			$q->addWhere('project_original_parent = ' . (int)($this->project_original_parent ? $this->project_original_parent : $this->project_id));
-		}
+    public function hasChildProjects($projectId = 0)
+    {
+        // Note that this returns the *count* of projects.  If this is zero, it
+        //   is evaluated as false, otherwise it is considered true.
+        $q = $this->_getQuery();
+        $q->addTable('projects');
+        $q->addQuery('COUNT(project_id)');
+        if ($projectId > 0) {
+            $q->addWhere('project_original_parent = ' . $projectId);
+        } else {
+            $q->addWhere('project_original_parent = ' . (int) ($this->project_original_parent ? $this->project_original_parent : $this->project_id));
+        }
 
-		// I hate how this one works... since the default project parent is
-		//   itself, so this will always have at least one result.
-		return ($q->loadResult()-1);
-	}
+        // I hate how this one works... since the default project parent is
+        //   itself, so this will always have at least one result.
+        return ($q->loadResult() - 1);
+    }
 
-	public static function hasTasks($projectId) {
+    public static function hasTasks($projectId)
+    {
         // Note that this returns the *count* of tasks.  If this is zero, it is
         //   evaluated as false, otherwise it is considered true.
 
@@ -903,8 +936,10 @@ class CProject extends w2p_Core_BaseObject {
         $q->addWhere('task_project = ' . (int) $projectId);
 
         return $q->loadResult();
-	}
-	public static function updateHoursWorked($project_id) {
+    }
+
+    public static function updateHoursWorked($project_id)
+    {
 
         $q = new w2p_Database_Query();
         $q->addTable('task_log');
@@ -920,9 +955,10 @@ class CProject extends w2p_Core_BaseObject {
         $q->addWhere('project_id  = ' . (int) $project_id);
         $q->exec();
         self::updatePercentComplete($project_id);
-	}
+    }
 
-    public static function updatePercentComplete($project_id) {
+    public static function updatePercentComplete($project_id)
+    {
         $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
 
         $q = new w2p_Database_Query();
@@ -941,70 +977,75 @@ class CProject extends w2p_Core_BaseObject {
         global $AppUI;
         CTask::storeTokenTask($AppUI, $project_id);
     }
-	public function getTotalHours() {
-        trigger_error("CProject->getTotalHours() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE );
 
-		return $this->getTotalProjectHours();
-	}
-	public function getTotalProjectHours() {
-		global $w2Pconfig;
+    public function getTotalHours()
+    {
+        trigger_error("CProject->getTotalHours() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE);
 
-		// now milestones are summed up, too, for consistence with the tasks duration sum
-		// the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
-		// more info on http://www.mysql.com/doc/en/Problems_with_float.html
-		$q = $this->_getQuery();
-		$q->addTable('tasks');
-		$q->addQuery('ROUND(SUM(task_duration),2)');
-		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
-		$days = $q->loadResult();
-		$q->clear();
+        return $this->getTotalProjectHours();
+    }
 
-		$q->addTable('tasks');
-		$q->addQuery('ROUND(SUM(task_duration),2)');
-		$q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 1 AND task_dynamic <> 1');
-		$hours = $q->loadResult();
+    public function getTotalProjectHours()
+    {
+        global $w2Pconfig;
 
-		$total_project_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
+        // now milestones are summed up, too, for consistence with the tasks duration sum
+        // the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
+        // more info on http://www.mysql.com/doc/en/Problems_with_float.html
+        $q = $this->_getQuery();
+        $q->addTable('tasks');
+        $q->addQuery('ROUND(SUM(task_duration),2)');
+        $q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
+        $days = $q->loadResult();
+        $q->clear();
 
-		return rtrim($total_project_hours, '.');
-	}
+        $q->addTable('tasks');
+        $q->addQuery('ROUND(SUM(task_duration),2)');
+        $q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 1 AND task_dynamic <> 1');
+        $hours = $q->loadResult();
 
-//TODO: this method should be moved to CTaskLog
-	public function getTaskLogs($AppUI = null, $projectId, $user_id = 0,
-            $hide_inactive = false, $hide_complete = false, $cost_code = 0) {
+        $total_project_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
+
+        return rtrim($total_project_hours, '.');
+    }
+
+    //TODO: this method should be moved to CTaskLog
+    public function getTaskLogs($AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0)
+    {
 
         $q = $this->_getQuery();
-		$q->addTable('task_log');
-		$q->addQuery('DISTINCT task_log.*, user_username, task_id');
-		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
+        $q->addTable('task_log');
+        $q->addQuery('DISTINCT task_log.*, user_username, task_id');
+        $q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
         $q->addQuery('contact_display_name as contact_name');
-		$q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
-		$q->addJoin('users', 'u', 'user_id = task_log_creator');
-		$q->addJoin('tasks', 't', 'task_log_task = t.task_id');
-		$q->addJoin('contacts', 'ct', 'contact_id = user_contact');
-		$q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
+        $q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
+        $q->addJoin('users', 'u', 'user_id = task_log_creator');
+        $q->addJoin('tasks', 't', 'task_log_task = t.task_id');
+        $q->addJoin('contacts', 'ct', 'contact_id = user_contact');
+        $q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
 
-		$q->addWhere('task_project = ' . (int) $projectId);
-		if ($user_id > 0) {
-			$q->addWhere('task_log_creator=' . $user_id);
-		}
-		if ($hide_inactive) {
-			$q->addWhere('task_status>=0');
-		}
-		if ($hide_complete) {
-			$q->addWhere('task_percent_complete < 100');
-		}
-		if ($cost_code > 0) {
-			$q->addWhere("billingcode_id = $cost_code");
-		}
-		$q->addOrder('task_log_date');
-		$q->addOrder('task_log_created');
-		$this->setAllowedSQL($this->_AppUI->user_id, $q, 'task_project');
+        $q->addWhere('task_project = ' . (int) $projectId);
+        if ($user_id > 0) {
+            $q->addWhere('task_log_creator=' . $user_id);
+        }
+        if ($hide_inactive) {
+            $q->addWhere('task_status>=0');
+        }
+        if ($hide_complete) {
+            $q->addWhere('task_percent_complete < 100');
+        }
+        if ($cost_code > 0) {
+            $q->addWhere("billingcode_id = $cost_code");
+        }
+        $q->addOrder('task_log_date');
+        $q->addOrder('task_log_created');
+        $this->setAllowedSQL($this->_AppUI->user_id, $q, 'task_project');
 
-		return $q->loadList();
-	}
+        return $q->loadList();
+    }
 
-    public function hook_search() {
+    public function hook_search()
+    {
         $search['table'] = 'projects';
         $search['table_alias'] = 'p';
         $search['table_module'] = 'projects';
@@ -1012,13 +1053,21 @@ class CProject extends w2p_Core_BaseObject {
         $search['table_link'] = 'index.php?m=projects&a=view&project_id='; // first part of link
         $search['table_title'] = 'Projects';
         $search['table_orderby'] = 'project_name';
-        $search['search_fields'] = array('p.project_id', 'p.project_name',
+        $search['search_fields'] = array(
+            'p.project_id', 'p.project_name',
             'p.project_short_name', 'p.project_location', 'p.project_description',
-            'p.project_url', 'p.project_demo_url');
+            'p.project_url', 'p.project_demo_url'
+        );
         $search['display_fields'] = $search['search_fields'];
-        $search['table_joins'] = array(array('table' => 'project_contacts',
-            'alias' => 'pc', 'join' => 'p.project_id = pc.project_id'));
+        $search['table_joins'] = array(
+            array(
+                'table' => 'project_contacts',
+                'alias' => 'pc',
+                'join' => 'p.project_id = pc.project_id'
+            )
+        );
 
         return $search;
     }
+
 }

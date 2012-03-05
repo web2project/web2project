@@ -138,7 +138,12 @@ if (count($logs)) {
         $s .= '<td width="30%"><a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=0">' . $row['task_log_name'] . '</a></td>';
         $s .= $htmlHelper->createCell('contact_name', $row['contact_name']);
         $s .= $htmlHelper->createCell('task_log_duration', sprintf('%.2f', $row['task_log_hours']));
-        $s .= '<td width="100">' . $row['task_log_costcode'] .' ('.$billingCategory[$row['billingcode_category']]. ')</td>';
+        
+        $billinCodeCategory = '';
+        if (isset($billingCategory[$row['billingcode_category']])) {
+            $billinCodeCategory = $billingCategory[$row['billingcode_category']];
+        }
+        $s .= '<td width="100">' . $row['task_log_costcode'] .' ('. $billinCodeCategory . ')</td>';
         $s .= $htmlHelper->createCell('task_log_description', $row['task_log_description']);
 
         $s .= '<td>';

@@ -12,7 +12,7 @@ global $task_sort_item2, $task_sort_type2, $task_sort_order2;
  * TODO: This is a nasty, dirty hack because globals have stacked on top of
  *   globals and have made a mess of things.. we need a better option.
  */
-if(!count($tasks)) {
+if(!isset($tasks) || !count($tasks)) {
     global $tasks;
 }
 $perms = &$AppUI->acl();
@@ -136,13 +136,16 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
             </td>
             <td colspan="3" align="center">
             <?php
-                foreach ($priorities as $k => $v) {
-                    $options[$k] = $AppUI->_('set priority to ' . $v, UI_OUTPUT_RAW);
+                if (is_array($priorities)) {
+                    foreach ($priorities as $k => $v) {
+                        $options[$k] = $AppUI->_('set priority to ' . $v, UI_OUTPUT_RAW);
+                    }
                 }
                 $options['c'] = $AppUI->_('mark as finished', UI_OUTPUT_RAW);
                 if ($canDelete) {
                     $options['d'] = $AppUI->_('delete', UI_OUTPUT_RAW);
                 }
+                
                 echo arraySelect($options, 'task_priority', 'size="1" class="text"', '0');
             }
             ?>

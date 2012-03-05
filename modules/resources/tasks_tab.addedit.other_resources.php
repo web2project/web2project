@@ -27,6 +27,8 @@ $q->clear();
 
 $assigned_resources = array();
 
+$initResAssignment = '';
+
 $resources = array();
 if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
 	$initResAssignment = '';

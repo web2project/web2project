@@ -6,6 +6,8 @@ if (!defined('W2P_BASE_DIR')) {
 global $addPwT, $company_id, $dept_ids, $department, $min_view, $m, $a;
 $user_id = isset($_GET['user_id']) ? w2PgetParam($_GET, 'user_id', 0) : 0;
 
+$utypes = w2PgetSysVal('UserType');
+
 if ($user_id != $AppUI->user_id && (!$perms->checkModuleItem('admin', 'view', $user_id) || !$perms->checkModuleItem('users', 'view', $user_id))) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
@@ -113,11 +115,11 @@ if (!$user) {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Home Phone'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user->contact_phone2; ?></td>
+			<td class="hilite" width="100%"><?php echo isset($user->contact_phone2) ? $user->contact_phone2 : ''; ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Mobile'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user->contact_mobile; ?></td>
+			<td class="hilite" width="100%"><?php echo isset($user->contact_mobile) ? $user->contact_mobile : ''; ?></td>
 		</tr>
 		<tr valign="top">
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>

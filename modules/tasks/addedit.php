@@ -58,7 +58,7 @@ if ($task_id) {
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied&err=noedit');
 }
-if ($task->task_represents_project) {
+if (isset($task->task_represents_project) && $task->task_represents_project) {
     $AppUI->setMsg('The selected task represents a subproject. Please view/edit this project instead.', UI_MSG_ERROR);
     $AppUI->redirect('m=projects&a=view&project_id='.$task->task_represents_project);
 }
@@ -137,7 +137,7 @@ if ($task_id) {
 	$myContacts = $task->getContacts(null, $task_id);
 	$selected_contacts = array_keys($myContacts);
 }
-if ($task_id == 0 && $contact_id > 0) {
+if ($task_id == 0 && (isset($contact_id) && $contact_id > 0)) {
 	$selected_contacts[] = '' . $contact_id;
 }
 
