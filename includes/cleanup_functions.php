@@ -2104,7 +2104,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	// SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
 	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(file_version), 2) as file_lastversion');
-	$q->addQuery('ff.*, f.file_date as file_datetime');
+	$q->addQuery('ff.*, max(file_version) as file_version, f.file_date as file_datetime');
 	$q->addTable('files', 'f');
 	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
 	$q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -2139,6 +2139,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
         $q->addWhere('file_folder = ' . (int)$folder_id);
     }
 	$q->addGroup('file_version_id DESC');
+    $q->addOrder('file_project');
 
 	$qv = new w2p_Database_Query();
 	$qv->addTable('files');
@@ -2179,7 +2180,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 		return 0;
 	}
 
-
     $fieldList = array();
     $fieldNames = array();
 
@@ -2196,7 +2196,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
         $fieldList = array('file_name', 'file_description',
             'file_version', 'file_category', 'file_folder', 'file_task',
             'file_owner', 'file_size', 'file_type', 'file_datetime', 'file_checkout_reason');
-        $fieldNames = array('File Name', 'Description', 'Versions', 'Category',
+        $fieldNames = array('File Name', 'Description', 'Version', 'Category',
             'Folder', 'Task Name', 'Owner', 'Size', 'Type', 'Date', 
             'Checkout Reason');
 
@@ -2225,7 +2225,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	$id = 0;
 	foreach ($files as $row) {
 		$latest_file = $file_versions[$row['latest_id']];
-		//$file_date = new w2p_Utilities_Date($latest_file['file_date']);
 
 		if ($fp != $latest_file['file_project']) {
 			if (!$latest_file['file_project']) {
@@ -2270,24 +2269,59 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
                 }
             }
         }
-		$s .= '</td>';
-        foreach ($fieldList as $index => $column) {
-            $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+
+        $version_link = '';
+        if ($row['file_versions'] > 1) {
+            $version_link = '&nbsp<a href="javascript: void(0);" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
+            $hidden_table = '<tr><td colspan="20">
+                <table style="display: none" id="versions_' . $latest_file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+                <tr>';
+            foreach ($fieldNames as $index => $name) {
+                $hidden_table .= '<th nowrap="nowrap">';
+                $hidden_table .= $AppUI->_($fieldNames[$index]);
+                $hidden_table .= '</th>';
+            }
+            $hidden_table .= '</tr>';
+
+            $sub_htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+            $sub_htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
+            foreach ($file_versions as $file) {
+                $sub_htmlHelper->stageRowData($file);
+
+                if ($file['file_version_id'] == $latest_file['file_version_id']) {
+                    $file_icon = getIcon($file['file_type']);
+                    $hdate = new w2p_Utilities_Date($file['file_date']);
+
+                    foreach ($fieldList as $index => $column) {
+                        $hidden_table .= $sub_htmlHelper->createCell($fieldList[$index], $file[$fieldList[$index]], $customLookups);
+                    }
+
+                    if ($canEdit && $w2Pconfig['files_show_versions_edit']) {
+                        $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
+                    }
+                    $hidden_table .= '</td><tr>';
+                }
+            }
+            $hidden_table .= '</table>';
         }
+		$s .= '</td>';
+
+        foreach ($fieldList as $index => $column) {
+            $cell = $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+            if ('file_version' == $fieldList[$index]) {
+                $cell = str_replace('</td>', $version_link.'</td>', $cell);
+            }
+            $s .= $cell;
+        }
+
         $s .= '<td>';
         $s .= '<form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
             <input type="hidden" name="dosql" value="do_file_aed" />
             <input type="hidden" name="del" value="1" />
             <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
             <input type="hidden" name="redirect" value="' . $current_uri . '" />
-            </form>
-            <form name="frm_duplicate_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-            <input type="hidden" name="dosql" value="do_file_aed" />
-            <input type="hidden" name="duplicate" value="1" />
-            <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
-            <input type="hidden" name="redirect" value="' . $current_uri . '" />
-            </form>
-            ';
+            </form>';
         $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
         $s .= '</td>';
         $s .= '</tr>';
