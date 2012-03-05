@@ -126,6 +126,7 @@ class w2p_Output_HTMLHelper
                 $mod = substr($suffix, 1);
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->project_name.'</a>';
+                $suffix .= ' _name';
                 break;
             case '_task':
                 $obj = new CTask();
@@ -133,6 +134,7 @@ class w2p_Output_HTMLHelper
                 $mod = substr($suffix, 1);
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->task_name.'</a>';
+                $suffix .= ' _name';
                 break;
             case '_company':
                 $obj = new CCompany();
@@ -140,6 +142,7 @@ class w2p_Output_HTMLHelper
                 $mod = substr($suffix, 1);
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->company_name.'</a>';
+                $suffix .= ' _name';
                 break;
             case '_department':
                 $obj = new CDepartment();
@@ -147,6 +150,7 @@ class w2p_Output_HTMLHelper
                 $mod = substr($suffix, 1);
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->dept_name.'</a>';
+                $suffix .= ' _name';
                 break;
             case '_contact':
                 $obj = new CContact();
@@ -154,6 +158,7 @@ class w2p_Output_HTMLHelper
                 $mod = substr($suffix, 1);
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->contact_name.'</a>';
+                $suffix .= ' _name';
                 break;
             case '_folder':
                 $obj = new CFile_Folder();
@@ -162,7 +167,7 @@ class w2p_Output_HTMLHelper
                 $image = '<img src="'.w2PfindImage('folder5_small.png', 'files').'" />';
                 $link = '?m=files&tab=4&folder=' . $value;
                 $cell = '<a href="'.$link.'">' . $image . ' ' . $foldername . '</a>';
-                $additional = 'nowrap="nowrap"';
+                $suffix .= ' _name';
                 break;
             case '_user':
             case '_username':
@@ -206,8 +211,7 @@ class w2p_Output_HTMLHelper
             case '_creator':
 			case '_owner':
             case '_updator':
-                $additional = 'nowrap="nowrap"';
-				$cell = w2PgetUsernameFromID($value);
+				$cell = $value.'x'.w2PgetUsernameFromID($value);
 				break;
             case '_size':
                 $additional = 'nowrap="nowrap"';
