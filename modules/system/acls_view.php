@@ -12,16 +12,20 @@ if (!canView('system')) {
 $user_permissions = array();
 $users = w2PgetUsers();
 
+$user_id = (int) w2PgetParam($_POST, 'user', 0);
+$module = w2PgetParam($_POST, 'module', '');
+$action = w2PgetParam($_POST, 'action', '');
+
 if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
     $q = new w2p_Database_Query;
     $q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
     $q->addQuery('gp.*');
-    $q->addWhere('user_id = ' . (int)$_POST['user']);
-    if ($_POST['module']) {
-        $q->addWhere('module = \'' . $_POST['module'] . '\'');
+    $q->addWhere('user_id = ' . $user_id);
+    if ('' != $module) {
+        $q->addWhere('module = \'' . $module . '\'');
     }
-    if ($_POST['action']) {
-        $q->addWhere('action = \'' . $_POST['action'] . '\'');
+    if ('' != $action) {
+        $q->addWhere('action = \'' . $action . '\'');
     }
 
     $q->addOrder('user_name');
@@ -67,11 +71,8 @@ foreach ($permissions as $permission) {
 }
 $table .= '</table>';
 $users = array('' => '(' . $AppUI->_('Select User') . ')') + $users;
-$user = (isset($_POST['user']) && $_POST['user'] != '') ?  $_POST['user'] : '';
-$user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user);
-$module = (isset($_POST['module']) && $_POST['module'] != '') ?  $_POST['module'] : '';
+$user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id);
 $module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module);
-$action = (isset($_POST['action']) && $_POST['action'] != '') ?  $_POST['action'] : '';
 $action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action);
 echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
 echo $table;
