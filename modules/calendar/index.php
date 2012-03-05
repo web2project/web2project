@@ -44,6 +44,7 @@ $titleBlock->addCell($AppUI->_('Company') . ':');
 $titleBlock->addCell(arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id), '', '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany" accept-charset="utf-8">', '</form>');
 $titleBlock->addCell($AppUI->_('Event Filter') . ':');
 $titleBlock->addCell(arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"', $event_filter, true), '', '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8">', '</form>');
+$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new event') . '">', '', '<form action="?m=calendar&a=addedit&date=' . $today . '" method="post" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 ?>
 
