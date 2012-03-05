@@ -45,7 +45,7 @@ if ($forum_id) {
 foreach ($projects as $project_id => $project_info) {
 	$projects[$project_id] = $project_info['project_name'];
 }
-$projects = arrayMerge(array(0 => $all_projects), $projects);
+$projects = arrayMerge(array(0 => $AppUI->_('All Projects')), $projects);
 
 $users = $perms->getPermittedUsers('forums');
 

@@ -504,7 +504,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	$pin_prefix = $arr['task_pinned'] ? '' : 'un';
 	$s .= ('<td><a href="?m=tasks&amp;pin=' . ($arr['task_pinned'] ? 0 : 1) . '&amp;task_id=' . $arr['task_id'] . '">' . w2PtoolTip('Pin', 'pin/unpin task') . '<img src="' . w2PfindImage('icons/' . $pin_prefix . 'pin.gif') . '" border="0" alt="" />' . w2PendTip() . '</a></td>');
 	// New Log
-	if ($arr['task_log_problem'] > 0) {
+	if (isset($arr['task_log_problem']) && $arr['task_log_problem'] > 0) {
 		$s .= ('<td valign="middle"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
 	} elseif ($canViewLog && $arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
 		$s .= ('<td align="center"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a></td>');
@@ -547,7 +547,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	}
 
 	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' alt="" /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif') . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' alt="" /></a>';
-	if ($arr['task_nr_of_children']) {
+	if (isset($arr['task_nr_of_children']) && $arr['task_nr_of_children']) {
 		$is_parent = true;
 	} else {
 		$is_parent = false;
@@ -575,7 +575,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 		$s .= ('<td nowrap="nowrap" align="center">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $arr['user_id'] . '">' . $arr['contact_name'] . '</a>' . '</td>');
 	}
 
-	if (count($arr['task_assigned_users'])) {
+	if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
         $assigned_users = $arr['task_assigned_users'];
         $a_u_tmp_array = array();
 		if ($show_all_assignees) {
@@ -1002,6 +1002,11 @@ function array_csort() { //coded by Ichier2003
 				if ($marray[$j]['task_end_date'] == '0000-00-00 00:00:00') {
 					$marray[$j]['task_end_date'] = calcEndByStartAndDuration($marray[$j]);
 				}
+                                
+                                // TODO: In some cases, $arg can be an empty string
+                                // which will throw a notice. Don't want to touch it
+                                // who knows what will break, it uses eval after all
+                                // robertbasic, 2012-02-18
 				$sortarr[$i][] = $marray[$j][$arg];
 			}
 		} else {
@@ -2441,7 +2446,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 			$hidden_table .= '</table>';
 		}
 		$s .= '</td>
-				<td width="10%" nowrap="nowrap" align="left">' . $file_types[$file['file_category']] . '</td>
+				<td width="10%" nowrap="nowrap" align="left">' . $file_types[$latest_file['file_category']] . '</td>
 				<td nowrap="nowrap" align="left"><a href="./index.php?m=tasks&a=view&task_id=' . $latest_file['file_task'] . '">' . $latest_file['task_name'] . '</a></td>
 				<td nowrap="nowrap">' . $latest_file['contact_first_name'] . ' ' . $latest_file['contact_last_name'] . '</td>
 				<td width="5%" nowrap="nowrap" align="right">' . intval($latest_file['file_size'] / 1024) . ' kb</td>
@@ -2810,7 +2815,7 @@ function projects_list_data($user_id = false) {
 		project_type, project_name, project_description, project_scheduled_hours as project_duration,
 		project_parent, project_original_parent, project_percent_complete,
 		project_color_identifier, project_company,
-        company_name, project_status, project_last_task as critical_task,
+        company_name, company_description, project_status, project_last_task as critical_task,
         tp.task_log_problem, user_username, project_active');
 
 	$fields = w2p_Core_Module::getSettings('projects', 'index_list');

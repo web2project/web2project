@@ -53,6 +53,8 @@ if ($contacts_submited == 1) {
 <?php
 }
 
+$company_name = '';
+
 // Remove any empty elements
 $contacts_id = array_filter(explode(',', $selected_contacts_id));
 $selected_contacts_id = implode(',', $contacts_id);
@@ -87,10 +89,10 @@ $q->leftJoin('departments', 'c', 'dept_id = contact_department');
 $q->addQuery('contact_id, contact_first_name, contact_last_name, contact_company, contact_department');
 $q->addQuery('company_name');
 $q->addQuery('dept_name');
-if ($where) { // Don't assume where is set. Change needed to fix Mantis Bug 0002056
+if (isset($where) && $where) { // Don't assume where is set. Change needed to fix Mantis Bug 0002056
 	$q->addWhere($where);
 }
-if ($where_dept) { // Don't assume where is set. Change needed to fix Mantis Bug 0002056
+if (isset($where_dept) && $where_dept) { // Don't assume where is set. Change needed to fix Mantis Bug 0002056
 	$q->addWhere($where_dept);
 }
 $oCpy = new CCompany();

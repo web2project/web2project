@@ -35,6 +35,14 @@ $printpdf = (($printpdf != '0') ? '1' : $printpdf);
 $printpdfhr = w2PgetParam($_POST, 'printpdfhr', '0');
 $printpdfhr = (($printpdfhr != '0') ? '1' : $printpdfhr);
 
+$showMilestonesOnly = '';
+$showNoMilestones = '';
+$addLinksToGantt = '';
+$ganttTaskFilter = '';
+$monospacefont = '';
+$showTaskNameOnly = '';
+$showhgrid = '';
+
 if ($a == 'todo') {
 	if (isset($_POST['show_form'])) {
 		$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'showArcProjs', 0));
@@ -87,7 +95,7 @@ $q->addWhere('project_status != 7 AND task_dynamic = 1');
 if ($project_id) {
      $q->addWhere('task_project = ' . $project_id);
 }
-$task =& new CTask;
+$task = new CTask;
 $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
 $q->clear();
@@ -102,7 +110,10 @@ $parents = array();
 foreach ($projects as $p) {
      global $parents, $task_id;
      $parents = array();
-     $tnums = count($p['tasks']);
+     $tnums = 0;
+     if (isset($p['tasks'])) {
+        $tnums = count($p['tasks']);
+     }
      for ($i=0; $i < $tnums; $i++) {
           $t = $p['tasks'][$i];
           if (!(isset($parents[$t['task_parent']]))) {

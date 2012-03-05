@@ -13,6 +13,10 @@ $company_id = $AppUI->getState('CompanyIdxFilter') ? $AppUI->getState('CompanyId
 $log_all_projects = true; // show tasks for all projects
 $df = $AppUI->getPref('SHDATEFORMAT'); // get the prefered date format
 
+if (!isset($user_id)) {
+    $user_id = $AppUI->user_id;
+}
+
 // get CCompany() to filter tasks by company
 $comp = new CCompany();
 $companies = $comp->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');

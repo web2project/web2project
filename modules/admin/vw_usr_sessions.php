@@ -11,7 +11,9 @@ global $w2Pconfig, $canEdit, $canDelete, $stub, $where, $orderby;
 */
 $logoutUserFlag = true;
 
-if ($_GET['out_user_id'] && $_GET['out_name'] && $canEdit && $canDelete) {
+if (isset($_GET['out_user_id']) && $_GET['out_user_id']
+        && isset($_GET['out_name']) && $_GET['out_name']
+        && $canEdit && $canDelete) {
 	$boot_user_id = w2PgetParam($_GET, 'out_user_id', null);
 	$boot_user_name = $_GET['out_name'];
 	$details = $boot_user_name . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;

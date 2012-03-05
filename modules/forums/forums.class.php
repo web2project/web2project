@@ -8,30 +8,34 @@ $bbparser = new HTML_BBCodeParser();
 
 $filters = array('- Filters -');
 
-if ($a == 'viewer') {
-	array_push($filters, 'My Watched', 'Last 30 days');
+if (isset($a) && $a == 'viewer') {
+    array_push($filters, 'My Watched', 'Last 30 days');
 } else {
-	array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
+    array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
 }
 
-class CForum extends w2p_Core_BaseObject {
-	public $forum_id = null;
-	public $forum_project = null;
-	public $forum_status = null;
-	public $forum_owner = null;
-	public $forum_name = null;
-	public $forum_create_date = null;
-	public $forum_last_date = null;
-	public $forum_last_id = null;
-	public $forum_message_count = null;
-	public $forum_description = null;
-	public $forum_moderated = null;
+class CForum extends w2p_Core_BaseObject
+{
 
-	public function __construct() {
+    public $forum_id = null;
+    public $forum_project = null;
+    public $forum_status = null;
+    public $forum_owner = null;
+    public $forum_name = null;
+    public $forum_create_date = null;
+    public $forum_last_date = null;
+    public $forum_last_id = null;
+    public $forum_message_count = null;
+    public $forum_description = null;
+    public $forum_moderated = null;
+
+    public function __construct()
+    {
         parent::__construct('forums', 'forum_id');
-	}
+    }
 
-    public function check() {
+    public function check()
+    {
         // ensure the integrity of some variables
         $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
@@ -47,24 +51,24 @@ class CForum extends w2p_Core_BaseObject {
         return $errorArray;
     }
 
-    public function getMessages($AppUI = null, $forum_id = 0, $message_id = 0, $sortDir = 'asc') {
-
+    public function getMessages($AppUI = null, $forum_id = 0, $message_id = 0, $sortDir = 'asc')
+    {
         $q = $this->_getQuery();
         $q->addTable('forums');
         $q->addTable('forum_messages');
         $q->addQuery('forum_messages.*,	contact_first_name, contact_last_name, contact_email,
             contact_display_name, contact_display_name as contact_name, user_username, forum_moderated, visit_user');
-        $q->addJoin('forum_visits', 'v', 'visit_user = ' . (int)$this->_AppUI->user_id . ' AND visit_forum = ' . (int) $forum_id . ' AND visit_message = forum_messages.message_id');
+        $q->addJoin('forum_visits', 'v', 'visit_user = ' . (int) $this->_AppUI->user_id . ' AND visit_forum = ' . (int) $forum_id . ' AND visit_message = forum_messages.message_id');
         $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-        $q->addWhere('forum_id = message_forum AND (message_id = ' . (int)$message_id . ' OR message_parent = ' . (int)$message_id . ')');
+        $q->addWhere('forum_id = message_forum AND (message_id = ' . (int) $message_id . ' OR message_parent = ' . (int) $message_id . ')');
         $q->addOrder('message_date ' . $sortDir);
 
         return $q->loadList();
     }
 
-    public function load($AppUI = null, $forum_id) {
-
+    public function load($AppUI = null, $forum_id)
+    {
         $q = $this->_getQuery();
         $q->addQuery('*');
         $q->addTable('forums');
@@ -72,8 +76,8 @@ class CForum extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
     }
 
-    public function loadFull($AppUI = null, $forum_id) {
-
+    public function loadFull($AppUI = null, $forum_id)
+    {
         $q = $this->_getQuery();
         $q->addTable('forums');
         $q->addTable('users', 'u');
@@ -84,7 +88,7 @@ class CForum extends w2p_Core_BaseObject {
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addJoin('projects', 'p', 'p.project_id = forum_project', 'left');
         $q->addWhere('user_id = forum_owner');
-        $q->addWhere('forum_id = ' . (int)$forum_id);
+        $q->addWhere('forum_id = ' . (int) $forum_id);
 
         $this->project_name = '';
         $this->project_color_identifier = '';
@@ -148,7 +152,8 @@ class CForum extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-	public function store() {
+    public function store()
+    {
         $stored = false;
 
         $this->_error = $this->check();
@@ -173,18 +178,19 @@ class CForum extends w2p_Core_BaseObject {
             }
         }
         return $stored;
-	}
+    }
 
-	public function delete() {
+    public function delete()
+    {
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
             $q = $this->_getQuery();
             $q->setDelete('forum_visits');
-            $q->addWhere('visit_forum = ' . (int)$this->forum_id);
+            $q->addWhere('visit_forum = ' . (int) $this->forum_id);
             $q->exec(); // No error if this fails, it is not important.
 
             $q->clear();
             $q->setDelete('forum_messages');
-            $q->addWhere('message_forum = ' . (int)$this->forum_id);
+            $q->addWhere('message_forum = ' . (int) $this->forum_id);
             if ($q->exec()) {
                 $result = null;
             } else {
@@ -199,34 +205,36 @@ class CForum extends w2p_Core_BaseObject {
             }
             return true;
         }
-		return false;
-	}
+        return false;
+    }
 
-	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
-		$oPrj = new CProject();
+    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)
+    {
+        $oPrj = new CProject();
         $oPrj->overrideDatabase($this->_query);
 
-		$aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
-		if (count($aPrjs)) {
-			$buffer = '(forum_project IN (' . implode(',', array_keys($aPrjs)) . ') OR forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
+        $aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
+        if (count($aPrjs)) {
+            $buffer = '(forum_project IN (' . implode(',', array_keys($aPrjs)) . ') OR forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
 
-			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND ' . $buffer;
-			} else {
-				$extra['where'] = $buffer;
-			}
-		} else {
-			// There are no allowed projects, so only allow forums with no project associated.
-			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND (forum_project IS NULL OR forum_project = \'\' OR forum_project = 0) ';
-			} else {
-				$extra['where'] = '(forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
-			}
-		}
-		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
-	}
+            if ($extra['where'] != '') {
+                $extra['where'] = $extra['where'] . ' AND ' . $buffer;
+            } else {
+                $extra['where'] = $buffer;
+            }
+        } else {
+            // There are no allowed projects, so only allow forums with no project associated.
+            if ($extra['where'] != '') {
+                $extra['where'] = $extra['where'] . ' AND (forum_project IS NULL OR forum_project = \'\' OR forum_project = 0) ';
+            } else {
+                $extra['where'] = '(forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
+            }
+        }
+        return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
+    }
 
-    public function hook_search() {
+    public function hook_search()
+    {
         $search['table'] = 'forums';
         $search['table_alias'] = 'f';
         $search['table_module'] = 'forums';
@@ -237,12 +245,20 @@ class CForum extends w2p_Core_BaseObject {
 
         $search['table_title'] = 'Forums';
         $search['table_orderby'] = 'forum_name';
-        $search['search_fields'] = array('forum_name', 'forum_description',
-            'message_title', 'message_body');
+        $search['search_fields'] = array(
+            'forum_name', 'forum_description',
+            'message_title', 'message_body'
+        );
         $search['display_fields'] = $search['search_fields'];
-        $search['table_joins'] = array(array('table' => 'forum_messages',
-            'alias' => 'fm', 'join' => 'f.forum_id = fm.message_forum'));
+        $search['table_joins'] = array(
+            array(
+                'table' => 'forum_messages',
+                'alias' => 'fm',
+                'join' => 'f.forum_id = fm.message_forum'
+            )
+        );
 
         return $search;
     }
+
 }

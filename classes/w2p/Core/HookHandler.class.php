@@ -1,13 +1,13 @@
 <?php /* $Id$ $URL$ */
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
+ * 	@package web2project
+ * 	@subpackage core
+ * 	@version $Revision$
  */
 
 /**
- *	w2p_Core_HookHandler Class
+ * 	w2p_Core_HookHandler Class
  *
  * This class processes all of the hooks in a consistent and error-resistant
  *   manner.
@@ -16,11 +16,12 @@
  *   laying out and interacting with hooks.  It should not be considered
  *   complete at this time.
  *
- *	@author Keith Casey <caseydk@sourceforge.net>
+ * 	@author Keith Casey <caseydk@sourceforge.net>
  *
  */
 class w2p_Core_HookHandler
 {
+
     protected $AppUI = null;
 
     public function __construct(w2p_Core_CAppUI $AppUI)
@@ -33,9 +34,10 @@ class w2p_Core_HookHandler
      *   In general, this may be enough, but the additional methods may be
      *   useful too.
      */
+
     public function process($name)
     {
-        $hookname = 'hook_'.$name;
+        $hookname = 'hook_' . $name;
         $moduleList = $this->AppUI->getLoadableModuleList();
 
         foreach ($moduleList as $module) {
@@ -88,4 +90,5 @@ class w2p_Core_HookHandler
 
         return $this->links;
     }
+
 }

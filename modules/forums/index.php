@@ -62,7 +62,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
                 // TODO: This is only in place to provide an pre-upgrade-safe 
                 //   state for versions earlier than v3.0
                 //   At some point at/after v4.0, this should be deprecated
-                $fieldList = array('watch_user', 'forum_name', 'forum_topics',
+                $fieldList = array('', 'watch_user', 'forum_name', 'forum_topics',
                     'forum_replies', 'forum_last_date');
                 $fieldNames = array('', 'Watch', 'Forum Name', 'Topics',
                     'Replies', 'Last Post Info');

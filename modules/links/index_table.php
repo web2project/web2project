@@ -2,7 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-global $AppUI, $deny1, $canRead, $canEdit, $project_id, $task_id, $showProject;
+global $AppUI, $deny1, $canRead, $canEdit, $project_id, $task_id, $showProject, $tab;
 
 if ($task_id && !$project_id) {
     $task = new CTask;
