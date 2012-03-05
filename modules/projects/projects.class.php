@@ -169,6 +169,7 @@ class CProject extends w2p_Core_BaseObject
                 $task->delete();
             }
 
+            $q->clear();
             $q->addTable('files');
             $q->addQuery('file_id');
             $q->addWhere('file_project = ' . (int) $this->project_id);
@@ -188,7 +189,7 @@ class CProject extends w2p_Core_BaseObject
             $events_to_delete = $q->loadColumn();
             $q->clear();
 
-            $event = new CCalendar();
+            $event = new CEvent();
             $event->overrideDatabase($this->_query);
             foreach ($events_to_delete as $event_id) {
                 $event->event_id = $event_id;
