@@ -18,7 +18,7 @@ $canAdd = canAdd('roles');
 $canEdit = canEdit('roles');
 $canDelete = canDelete('roles');
 
-$crole = new CSystem_Role_Role;
+$crole = new CSystem_Role;
 $roles = $crole->getRoles();
 
 $role_id = (int) w2PgetParam($_GET, 'role_id', 0);
