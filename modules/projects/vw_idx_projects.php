@@ -212,7 +212,7 @@ if ($is_tabbed) {
 
                         switch ($field) {
                             case 'project_name':
-                                $s .= '<td width="40%">';
+                                $s .= '<td width="40%" class="data _name">';
                                 if ($level) {
                                     $s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1));
                                     $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;';
@@ -235,20 +235,20 @@ if ($is_tabbed) {
                                 $s .= '</td>';
                                 break;
 							case 'project_color_identifier':
-                                $s .= '<td class="center" width="1" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
+                                $s .= '<td class="data _identifier" width="1" style="background-color:#' . $row['project_color_identifier'] . '">';
                                 $s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
                                 $s .= '</td>';
                                 break;
                             case 'project_actual_end_date':
                                 $myDate = intval($row[$field]) ? new w2p_Utilities_Date($row[$field]) : null;
-                                $s .= '<td class="center">';
+                                $s .= '<td class="data _date">';
                                 $s .= '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">';
                                 $s .= ($myDate ? $myDate->format($df) : '-');
                                 $s .= '</a>';
                                 $s .= '</td>';
                                 break;
                             case 'task_log_problem':
-                                $s .= '<td class="center">';
+                                $s .= '<td class="data _problem">';
                                 $s .= $row[$field] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
                                 $s .= $row[$field] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
                                 $s .= $row[$field] ? '</a>' : '';
@@ -256,7 +256,7 @@ if ($is_tabbed) {
                                 break;
                             case 'department_list':
                                 $dept_array = CProject::getDepartments($AppUI, $row['project_id']);
-                                $s .= '<td>';
+                                $s .= '<td class="data _list">';
                                 foreach ($dept_array as $dept) {
                                     $s .= '<a href="?m=departments&a=view&dept_id='.$dept['dept_id'].'">';
                                     $s .= $dept['dept_name'];
@@ -271,7 +271,7 @@ if ($is_tabbed) {
                     }
 
 					if ($show_all_projects) {
-						$s .= '<td class="left" nowrap="nowrap">';
+						$s .= '<td class="data _status" nowrap="nowrap">';
 						$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectStatuses[0] ? $AppUI->_($project_statuses[$row['project_status'] + 2]) : $AppUI->_($project_statuses[$row['project_status'] + 1]));
 						$s .= '</td>';
 					}

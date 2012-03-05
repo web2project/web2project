@@ -483,7 +483,7 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
     $s .= $htmlHelper->createCell('user_task_priority', $arr['user_task_priority']);
 
 	// dots
-	$s .= '<td width="' . (($today_view) ? '50%' : '90%') . '">';
+	$s .= '<td style="width: ' . (($today_view) ? '50%' : '90%') . '" class="data _name">';
 	//level
 	if ($level == -1) {
 		$s .= '...';
@@ -634,12 +634,9 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 		$s .= '<a href="?m=tasks&a=view&tab=1&project_id=' . $arr['task_project'] . '&task_id=' . $arr['task_id'] . '">' . w2PtoolTip('tasks', 'add work log to this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
 	}
 	$s .= '</td>';
+
 	// dots
-	if ($today_view) {
-		$s .= '<td>';
-	} else {
-		$s .= '<td width="20%">';
-	}
+    $s .= '<td style="width: ' . (($today_view) ? '20%' : '50%') . '" class="data _name">';
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
 			$image = w2PfindImage('corner-dots.gif', $m);
@@ -748,7 +745,7 @@ function showtask_pr(&$arr, $level = 0, $today_view = false) {
 	$s = '<tr>';
 
 	// dots
-	$s .= '<td nowrap width="20%">';
+    $s .= '<td style="width: ' . (($today_view) ? '20%' : '50%') . '" class="data _name">';
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
 			$image = w2PfindImage('corner-dots.gif', $m);
