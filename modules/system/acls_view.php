@@ -12,28 +12,26 @@ if (!canView('system')) {
 $user_permissions = array();
 $users = w2PgetUsers();
 
-if (isset($_POST['user']) && $_POST['user'] != '') {
-	$q = new w2p_Database_Query;
-	$q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
-	$q->addQuery('gp.*');
-	$q->addWhere('user_id IN (' . implode(',', array_keys($users)) . ')');
-	if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
-		$q->addWhere('user_id = ' . (int)$_POST['user']);
-	}
-	if ($_POST['module']) {
-		$q->addWhere('module = \'' . $_POST['module'] . '\'');
-	}
-	if ($_POST['action']) {
-		$q->addWhere('action = \'' . $_POST['action'] . '\'');
-	}
-	$q->addOrder('user_name');
-	$q->addOrder('module');
-	$q->addOrder('action');
-	$q->addOrder('item_id');
-	$q->addOrder('acl_id');
-	$permissions = $q->loadList();
+if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
+    $q = new w2p_Database_Query;
+    $q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
+    $q->addQuery('gp.*');
+    $q->addWhere('user_id = ' . (int)$_POST['user']);
+    if ($_POST['module']) {
+        $q->addWhere('module = \'' . $_POST['module'] . '\'');
+    }
+    if ($_POST['action']) {
+        $q->addWhere('action = \'' . $_POST['action'] . '\'');
+    }
+
+    $q->addOrder('user_name');
+    $q->addOrder('module');
+    $q->addOrder('action');
+    $q->addOrder('item_id');
+    $q->addOrder('acl_id');
+    $permissions = $q->loadList();
 } else {
-	$permissions = array();
+    $permissions = array();
 }
 
 $avail_modules = $perms->getModuleList();
@@ -69,7 +67,7 @@ foreach ($permissions as $permission) {
 }
 $table .= '</table>';
 $users = array('' => '(' . $AppUI->_('Select User') . ')') + $users;
-$user = (isset($_POST['user']) && $_POST['user'] != '') ?  $_POST['user'] : $AppUI->user_id;
+$user = (isset($_POST['user']) && $_POST['user'] != '') ?  $_POST['user'] : '';
 $user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user);
 $module = (isset($_POST['module']) && $_POST['module'] != '') ?  $_POST['module'] : '';
 $module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module);
