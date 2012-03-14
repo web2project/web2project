@@ -1280,9 +1280,9 @@ class w2p_Extensions_Permissions extends gacl_api
         if ($module == 'task_log') {
             $mod_class = array('mod_main_class' => 'CTask_Log', 'permissions_item_table' => 'task_log', 'permissions_item_field' => 'task_log_id', 'permissions_item_label' => 'task_log_name', 'mod_directory' => 'tasks');
         } elseif ($module == 'admin') {
-            $mod_class = array('mod_main_class' => 'CAdmin_User', 'permissions_item_table' => 'users', 'permissions_item_field' => 'user_id', 'permissions_item_label' => 'user_username', 'mod_directory' => 'admin');
+            $mod_class = array('mod_main_class' => 'CUser', 'permissions_item_table' => 'users', 'permissions_item_field' => 'user_id', 'permissions_item_label' => 'user_username', 'mod_directory' => 'admin');
         } elseif ($module == 'users') {
-            $mod_class = array('mod_main_class' => 'CAdmin_User', 'permissions_item_table' => 'users', 'permissions_item_field' => 'user_id', 'permissions_item_label' => 'user_username', 'mod_directory' => 'admin');
+            $mod_class = array('mod_main_class' => 'CUser', 'permissions_item_table' => 'users', 'permissions_item_field' => 'user_id', 'permissions_item_label' => 'user_username', 'mod_directory' => 'admin');
         } elseif ($module == 'events') {
             $mod_class = array('mod_main_class' => 'CCalendar', 'permissions_item_table' => 'events', 'permissions_item_field' => 'event_id', 'permissions_item_label' => 'event_title', 'mod_directory' => 'calendar');
         }
