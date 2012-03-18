@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `budgets` (
   PRIMARY KEY (`budget_id`),
   KEY `budget_start_date` (`budget_start_date`),
   KEY `budget_end_date` (`budget_end_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `budgets_assigned` (
   `budget_id` int(10) NOT NULL AUTO_INCREMENT,
@@ -58,4 +58,4 @@ CREATE TABLE IF NOT EXISTS `budgets_assigned` (
   PRIMARY KEY (`budget_id`),
   KEY `budget_project` (`budget_project`),
   KEY `budget_task` (`budget_task`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

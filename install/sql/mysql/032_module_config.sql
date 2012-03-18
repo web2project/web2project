@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `module_config` (
     `module_config_text` varchar(50) NOT NULL,
     `module_config_order` int(10) NOT NULL,
     PRIMARY KEY (`module_config_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 INSERT INTO `module_config` (`module_name`, `module_config_name`, `module_config_value`, 
 	`module_config_text`, `module_config_order`) VALUES
