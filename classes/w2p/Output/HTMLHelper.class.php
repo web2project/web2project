@@ -211,7 +211,7 @@ class w2p_Output_HTMLHelper
             case '_creator':
 			case '_owner':
             case '_updator':
-				$cell = $value.'x'.w2PgetUsernameFromID($value);
+				$cell = $value;
 				break;
             case '_size':
                 $additional = 'nowrap="nowrap"';

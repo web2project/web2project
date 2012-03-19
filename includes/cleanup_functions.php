@@ -526,9 +526,8 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	if ($today_view) { // Show the project name
 		$s .= ('<td width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<span style="padding:2px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</span>' . '</a></td>');
 	} else {
-        $s .= $htmlHelper->createCell('task_owner', $arr['task_owner']);
+        $s .= $htmlHelper->createCell('task_owner', $arr['owner']);
 	}
-
 	if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
         $assigned_users = $arr['task_assigned_users'];
         $a_u_tmp_array = array();
@@ -678,7 +677,7 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 		$s .= '<td align="justified">' . $arr['task_description'] . '</td>';
 	}
 	// task owner
-    $s .= $htmlHelper->createCell('task_owner', $arr['task_owner']);
+    $s .= $htmlHelper->createCell('task_owner', $arr['contact_name']);
     $s .= $htmlHelper->createCell('task_start_datetime', $arr['task_start_date']);
 	// duration or milestone
     $s .= $htmlHelper->createCell('task_duration', $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1));
