@@ -474,12 +474,11 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
             // TODO: This is only in place to provide an pre-upgrade-safe
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('', '', '', 'task_priority', 'user_task_priority',
+            $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority',
                 'task_name', 'user_username', '', 'task_start_date', 
                 'task_duration', 'task_end_date');
-            $fieldNames = array('', 'Pin', 'Log', 'Work', 'P', 'U', 'Task Name',
-                'Task Owner', 'Assigned Users', 'Start Date', 'Duration',
-                'Finish Date');
+            $fieldNames = array('Work', 'P', 'U', 'Task Name', 'Task Owner', 
+                'Assigned Users', 'Start Date', 'Duration', 'Finish Date');
 
             //$module->storeSettings('tasks', 'index_list', $fieldList, $fieldNames);
         }
@@ -495,6 +494,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
  * TODO: The link below is commented out because this module doesn't support sorting... yet.
  *   For tasks, this is done with echo sort_by_item_title('P', 'task_priority', SORT_NUMERIC);
  */
+        echo '<th></th><th></th><th></th>';
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
 <!--                <a href="?m=files&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">-->
@@ -504,7 +504,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
         }
 
         // Number of columns (used to calculate how many columns to span things through)
-        $cols = count($fieldNames);
+        $cols = count($fieldNames) + 3;
 
         ?>
     </tr>
@@ -541,7 +541,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
 					  <td>
 					   <?php echo $open_link; ?>
 					  </td>
-					  <td colspan="<?php echo $w2Pconfig['direct_edit_assignment'] ? $cols - 4 : $cols - 1; ?>">
+					  <td colspan="<?php echo $cols; ?>">
 						  <table width="100%" border="0">
 							  <tr>
 									<!-- patch 2.12.04 display company name next to project name -->
@@ -661,12 +661,12 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
 				if ($tnums && $w2Pconfig['enable_gantt_charts'] && !$min_view) {
 					?>
 					<tr>
-					  <td colspan="<?php echo $cols; ?>" align="right">
-					  <input type="button" class="button" value="<?php echo $AppUI->_('Reports'); ?>" 
-					   onclick="javascript:window.location='index.php?m=reports&amp;project_id=<?php echo $k; ?>';" />
-					  <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart'); ?>" 
-					   onclick="javascript:window.location='index.php?m=tasks&amp;a=viewgantt&amp;project_id=<?php echo $k; ?>';" />
-					  </td>
+                        <td colspan="<?php echo $cols; ?>" align="right">
+                            <input type="button" class="button" value="<?php echo $AppUI->_('Reports'); ?>" 
+                                   onclick="javascript:window.location='index.php?m=reports&amp;project_id=<?php echo $k; ?>';" />
+                            <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart'); ?>" 
+                                   onclick="javascript:window.location='index.php?m=tasks&amp;a=viewgantt&amp;project_id=<?php echo $k; ?>';" />
+                        </td>
 					</tr>
 					</form>
 					<?php
