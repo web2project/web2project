@@ -88,10 +88,24 @@ function w2p_check_url($link)
  *
  */
 function remove_invalid($arr) {
-    trigger_error("The remove_invalid function has been deprecated and will be removed in v4.0. Use array_filter instead.", E_USER_NOTICE );
+    trigger_error("The remove_invalid function has been deprecated and will be removed in v4.0. Please use array_filter instead.", E_USER_NOTICE );
     return array_filter($arr);
 }
 
+/*
+ * This was a recursive function to generate the task list tree used in the
+ *   Project Designer module. It was the exact duplciate of the findchild_pr,
+ *   so this version has been deprecated.
+ * Original location: modules/projectdesigner/projectdesigner.class.php
+ * TODO:  Remove for v4.0 - caseydk 21 March 2012
+ * 
+ * @deprecated
+ * 
+ */
+function findchild_pr(&$tarr, $parent, $level = 0) {
+	trigger_error("The findchild_pr function has been deprecated and will be removed in v4.0. Please use findchild_pd instead.", E_USER_NOTICE );
+    findchild_pd($tarr, $parent, $level = 0);
+}
 
 /*
  * This was used to retrieve and display the child departments starting from 
