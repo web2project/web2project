@@ -108,6 +108,18 @@ function findchild_pr(&$tarr, $parent, $level = 0) {
 }
 
 /*
+ * This was a function that simply did a str_repeat.. no clue why it didn't
+ *   just use the regular str_repeat.
+ * TODO:  Remove for v4.0 - caseydk 22 March 2012
+ * 
+ * @deprecated
+ */
+// from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
+function getSpaces($amount) {
+	trigger_error("The getSpaces function has been deprecated and will be removed in v4.0. Please use str_repeat instead.", E_USER_NOTICE );
+	return str_repeat('&nbsp;', $amount);
+}
+/*
  * This was used to retrieve and display the child departments starting from 
  *   any ancestor. More importantly, it displays the relationship visually 
  *   with little icons. There are a couple other variations of this function.

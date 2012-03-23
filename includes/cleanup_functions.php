@@ -361,14 +361,6 @@ function canAccess($mod) {
 }
 
 // from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
-function getSpaces($amount) {
-	if ($amount == 0) {
-		return '';
-	}
-	return str_repeat('&nbsp;', $amount);
-}
-
-// from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function constructTaskTree($task_data, $depth = 0) {
 	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
 
@@ -376,7 +368,7 @@ function constructTaskTree($task_data, $depth = 0) {
     $task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . '...' : $task_data['task_name'];
 	$selected = $task_data['task_id'] == $task_parent ? 'selected="selected"' : '';
 
-	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
+	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" ' . $selected . '>' . str_repeat('&nbsp;', $depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
 
 	if (isset($parents[$task_data['task_id']])) {
 		foreach ($parents[$task_data['task_id']] as $child_task) {
@@ -391,7 +383,7 @@ function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
 
 	$projTasks[$task_data['task_id']] = $task_data['task_name'];
 	$task_data['task_name'] = mb_strlen($task_data[1]) > 45 ? mb_substr($task_data['task_name'], 0, 45) . "..." : $task_data['task_name'];
-	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" >' . getSpaces($depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
+	$task_parent_options .= '<option value="' . $task_data['task_id'] . '" >' . str_repeat('&nbsp;', $depth * 3) . w2PFormSafe($task_data['task_name']) . '</option>';
 
 	if (isset($parents[$task_data['task_id']])) {
 		foreach ($parents[$task_data['task_id']] as $child_task) {
