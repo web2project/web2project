@@ -480,7 +480,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
             $fieldNames = array('Work', 'P', 'U', 'Task Name', 'Task Owner', 
                 'Assigned Users', 'Start Date', 'Duration', 'Finish Date');
 
-            //$module->storeSettings('tasks', 'index_list', $fieldList, $fieldNames);
+//TODO: $module->storeSettings('tasks', 'index_list', $fieldList, $fieldNames);
         }
         if ($history_active) {
             $fieldList[] = 'last_update';

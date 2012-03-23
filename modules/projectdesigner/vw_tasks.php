@@ -241,7 +241,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
                 'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
                 'Assgined Users');
 
-            //$module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
+//TODO: $module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
         }
 //TODO: $PROJDESIGN_CONFIG['show_task_descriptions'] will be on the config screen going forward..
         foreach ($fieldNames as $index => $name) {
