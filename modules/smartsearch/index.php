@@ -213,7 +213,7 @@ if (isset($_POST['keyword'])) {
 	}
 
   ?>
-  <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+  <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
   	<?php
     	$perms = &$AppUI->acl();
     	$reccount = 0;
@@ -236,7 +236,7 @@ if (isset($_POST['keyword'])) {
                 }
 			}
         }
-    	echo '<tr><td><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>';
+    	echo '<tr><td colspan="25"><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>';
     ?>
   </table>
 <?php
