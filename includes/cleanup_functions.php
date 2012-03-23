@@ -2099,12 +2099,14 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 
 	// SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
-	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(file_version), 2) as file_lastversion');
+	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, 
+        round(max(file_version), 2) as file_lastversion, u.user_username as file_owner');
 	$q->addQuery('ff.*, max(file_version) as file_version, f.file_date as file_datetime');
 	$q->addTable('files', 'f');
 	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
 	$q->addJoin('projects', 'p', 'p.project_id = file_project');
 	$q->addJoin('tasks', 't', 't.task_id = file_task');
+    $q->addJoin('users', 'u', 'u.user_id = file_owner');
 	$q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 	$q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 
