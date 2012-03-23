@@ -178,7 +178,7 @@ function removeBulkComponent(li) {
     $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
 
     $project = new CProject();
-    $sprojects = $project->getAllowedProjects(null, false);
+    $sprojects = $project->getAllowedProjects($AppUI->user_id, false);
     foreach ($sprojects as $prj_id => $proj_info) {
         $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
     }
