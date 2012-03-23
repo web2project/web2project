@@ -120,28 +120,17 @@ class w2p_Output_HTMLHelper
  * TODO: The following cases are likely to change once we have an approach to 
  *   handle module-level objects and their proper mapping/linkings.
 */
-            case '_project':
-                $obj = new CProject();
-                $obj->load($value);
-                $mod = substr($suffix, 1);
-                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->project_name.'</a>';
-                $suffix .= ' _name';
-                break;
-            case '_task':
-                $obj = new CTask();
-                $obj->load($value);
-                $mod = substr($suffix, 1);
-                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->task_name.'</a>';
-                $suffix .= ' _name';
-                break;
             case '_company':
-                $obj = new CCompany();
+            case '_contact':
+            case '_project':
+            case '_task':
+                $module = substr($suffix, 1);
+                $class  = 'C'.ucfirst($module);
+
+                $obj = new $class();
                 $obj->load($value);
-                $mod = substr($suffix, 1);
-                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->company_name.'</a>';
+                $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.$value;
+                $cell = '<a href="'.$link.'">'.$obj->{"$module"._name}.'</a>';
                 $suffix .= ' _name';
                 break;
             case '_department':
@@ -150,14 +139,6 @@ class w2p_Output_HTMLHelper
                 $mod = substr($suffix, 1);
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->dept_name.'</a>';
-                $suffix .= ' _name';
-                break;
-            case '_contact':
-                $obj = new CContact();
-                $obj->load($value);
-                $mod = substr($suffix, 1);
-                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->contact_name.'</a>';
                 $suffix .= ' _name';
                 break;
             case '_folder':
