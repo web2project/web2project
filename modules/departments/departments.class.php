@@ -149,13 +149,8 @@ class CDepartment extends w2p_Core_BaseObject {
 
 	public function delete() {
         if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
-            $q = $this->_getQuery();
-            $q->addTable('departments', 'dep');
-            $q->addQuery('dep.dept_id');
-            $q->addWhere('dep.dept_parent = ' . (int)$this->dept_id);
-            $rows = $q->loadList();
-            $q->clear();
 
+            $rows = $this->loadAll(null, 'dept_parent = '. (int)$this->dept_id);
             if (count($rows)) {
                 $this->_error['deptWithSub'] = 'deptWithSub';
                 return 'deptWithSub';

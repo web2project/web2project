@@ -271,7 +271,6 @@ class CContact extends w2p_Core_BaseObject
     /*
      * @deprecated
      */
-
     public function is_alpha($val)
     {
         trigger_error("is_alpha() has been deprecated in v2.3 and will be removed by v4.0. Please cast values with (int) instead.", E_USER_NOTICE);
@@ -288,6 +287,9 @@ class CContact extends w2p_Core_BaseObject
         return (int) $this->contact_company;
     }
 
+    /*
+     * @deprecated
+     */
     public function getCompanyName()
     {
         trigger_error("getCompanyName has been deprecated and will be removed in v4.0. Please use getCompanyDetails() instead.", E_USER_NOTICE);
