@@ -24,17 +24,16 @@ if ($mod_id) {
 
 //check for a setup file
 $ok = file_exists(W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
-if ($ok) {
-    include_once (W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
-	if ($obj->mod_type != 'core') {
-		$AppUI->setMsg('Module setup file could not be found', UI_MSG_ERROR);
-		if ($cmd == 'remove') {
-			$obj->remove();
-			$AppUI->setMsg('Module has been removed from the modules list - please check your database for additional tables that may need to be removed', UI_MSG_ERROR);
-		}
-		$AppUI->redirect();
-	}
+if (!$ok && $obj->mod_type != 'core') {
+    $AppUI->setMsg('Module setup file could not be found', UI_MSG_ERROR);
+    if ($cmd == 'remove') {
+        $obj->remove();
+        $AppUI->setMsg('Module has been removed from the modules list - please check your database for additional tables that may need to be removed', UI_MSG_ERROR);
+    }
+    $AppUI->redirect();
 }
+include_once (W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
+
 $setupclass = $config['mod_setup_class'];
 if (!$setupclass) {
 	if ($obj->mod_type != 'core') {

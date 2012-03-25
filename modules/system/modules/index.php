@@ -133,7 +133,7 @@ $titleBlock->show();
             $s .= '<td>';
             $s .= '<img src="' . w2PfindImage('obj/dotgrey.gif') . '" alt="" />&nbsp;';
             if ($canEdit) {
-                $s .= '<a href="?m=' . $m . '&a=domodsql&cmd=install&mod_directory=' . $v . '">';
+                $s .= '<a href="?m=' . $m . '&u=modules&a=domodsql&cmd=install&mod_directory=' . $v . '">';
             }
             $s .= $AppUI->_('install');
             if ($canEdit) {
