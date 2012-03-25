@@ -69,7 +69,7 @@ foreach ($rs as $c) {
             if (strpos($c['config_name'], '_pass') !== false) {
                 $c['config_type'] = 'password';
                 $value = str_repeat('x', strlen($value));
-                $entry = '<input class="text" type="password" name="w2Pcfg[' . $c['config_name'] . ']" value="' . $value . '" ' . $extra . ' onClick="document.getElementById(\''.$c['config_name'].'_mod\').value=\'1\';" />';
+                $entry = '<input class="text" type="password" name="w2Pcfg[' . $c['config_name'] . ']" value="' . $value . '" ' . $extra . ' onChange="document.getElementById(\''.$c['config_name'].'_mod\').value=\'1\';" />';
                 $entry .= '<input type="hidden" name="'.$c['config_name'].'_mod" id="'.$c['config_name'].'_mod" value="" />';
             } else {
                 $entry = '<input class="text" type="' . $c['config_type'] . '" name="w2Pcfg[' . $c['config_name'] . ']" id="w2Pcfg[' . $c['config_name'] . ']" value="' . $value . '" ' . $extra . '/>';
