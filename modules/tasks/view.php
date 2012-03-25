@@ -73,6 +73,7 @@ if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete task', $canDelete, $msg);
 }
 $titleBlock->show();
+
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
@@ -130,8 +131,7 @@ function delIt() {
                 <?php } ?>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-                    <td class="hilite"> <?php echo $obj->username; ?></td>
-                    <?php echo $htmlHelper->createCell('task_owner', $obj->username); ?>
+                    <?php echo $htmlHelper->createCell('task_owner', $obj->task_owner_name); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>

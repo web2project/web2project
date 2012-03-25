@@ -57,7 +57,7 @@ td.today span img, td.empty span img
 
 
 
-.view ._date {
+.view ._date, .view ._owner {
     text-align: left;
 }
 .list ._name {          width: 25%; }

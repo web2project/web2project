@@ -182,7 +182,7 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-            <?php echo $htmlHelper->createCell('user_name', $project->user_name); ?>
+            <?php echo $htmlHelper->createCell('project_owner', $project->project_owner_name); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>

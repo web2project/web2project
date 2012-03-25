@@ -313,8 +313,11 @@ class CTask extends w2p_Core_BaseObject
         $q->addWhere('task_id = ' . (int) $taskId);
         $q->addQuery('tasks.*');
         $q->addQuery('company_name, project_name, project_color_identifier');
-        $q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) as username');
+        $q->addQuery('contact_display_name as username');                       //TODO: deprecate?
+        $q->addQuery('contact_display_name as task_owner_name');
         $q->addGroup('task_id');
+
+        $this->task_owner_name = '';
 
         $q->loadObject($this, true, false);
         $this->task_hours_worked += 0;

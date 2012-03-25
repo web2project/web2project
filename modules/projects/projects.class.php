@@ -137,7 +137,9 @@ class CProject extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addTable('projects');
-        $q->addQuery('company_name, contact_display_name as user_name, projects.*');
+        $q->addQuery('company_name, projects.*');
+        $q->addQuery('contact_display_name as user_name');                      //TODO: deprecate?
+        $q->addQuery('contact_display_name as project_owner_name');
         $q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
         $q->leftJoin('users', 'u', 'user_id = project_owner');
         $q->leftJoin('contacts', 'con', 'contact_id = user_contact');
@@ -145,7 +147,9 @@ class CProject extends w2p_Core_BaseObject
         $q->addGroup('project_id');
 
         $this->company_name = '';
+        $this->project_owner_name = '';
         $this->user_name = '';
+
         $q->loadObject($this);
         $this->budget = $this->getBudget();
     }
