@@ -330,7 +330,7 @@ if (count($tasks) > 0) {
 		$q->clear();
 		$q->addQuery('ut.user_id,	u.user_username');
 		$q->addQuery('ut.perc_assignment');
-		$q->addQuery('CONCAT(contact_first_name, \' \',contact_last_name) AS assignee, contact_email');
+		$q->addQuery('contact_display_name AS assignee, contact_email');
 		$q->addTable('user_tasks', 'ut');
 		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
 		$q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id', 'inner');

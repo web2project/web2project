@@ -2610,7 +2610,7 @@ function projects_list_data($user_id = false) {
 	foreach ($fields as $field => $text) {
 		$q->addQuery($field);
 	}
-	$q->addQuery('CONCAT(ct.contact_first_name, \' \', ct.contact_last_name) AS owner_name');
+	$q->addQuery('ct.contact_display_name AS owner_name');
 	$q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
 	$q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
 	$q->addJoin('tasks_problems', 'tp', 'pr.project_id = tp.task_project');

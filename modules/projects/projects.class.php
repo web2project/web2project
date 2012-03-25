@@ -1022,9 +1022,9 @@ class CProject extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
 		$q->addTable('task_log');
-		$q->addQuery('DISTINCT task_log.*, user_username, t.*');        
+		$q->addQuery('DISTINCT task_log.*, user_username, t.*');
 //BEGIN: We can probably drop these lines, the fields are unneeded
-		$q->addQuery("CONCAT(contact_first_name, ' ', contact_last_name) AS real_name");
+		$q->addQuery("contact_display_name AS real_name");
         $q->addJoin('users', 'u', 'user_id = task_log_creator');
         $q->addJoin('contacts', 'ct', 'contact_id = user_contact');
 //END: We can probably drop these lines, the fields are unneeded

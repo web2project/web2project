@@ -269,7 +269,7 @@ if ($do_report) {
 		if ($log_userfilter) {
 			$q = new w2p_Database_Query;
 			$q->addTable('contacts');
-			$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name)');
+			$q->addQuery('contact_display_name');
 			$q->addJoin('users', '', 'user_contact = contact_id', 'inner');
 			$q->addWhere('user_id =' . (int)$log_userfilter);
 			$uname = 'User: ' . $q->loadResult();

@@ -62,7 +62,7 @@ $columns[] = '<b>' . $AppUI->_('Finish Date') . '</b>';
 // Grab the completed items in the last week
 $q = new w2p_Database_Query();
 $q->addQuery('a.*');
-$q->addQuery('CONCAT(contact_first_name, \' \', contact_last_name) AS user_username');
+$q->addQuery('contact_display_name AS user_username');
 $q->addTable('tasks', 'a');
 $q->addTable('projects', 'pr');
 $q->addWhere('a.task_project = pr.project_id');

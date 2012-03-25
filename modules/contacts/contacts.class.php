@@ -422,7 +422,7 @@ class CContact extends w2p_Core_BaseObject
         if ($searchString != '') {
             $additional_filter = "OR contact_first_name like '%$searchString%'
                                   OR contact_last_name  like '%$searchString%'
-			                      OR CONCAT(contact_first_name, ' ', contact_last_name)  like '%$searchString%'
+			                      OR contact_display_name like '%$searchString%'
                                   OR company_name like '%$searchString%'
                                   OR contact_notes like '%$searchString%'";
         }
