@@ -128,3 +128,5 @@ table.list tr:hover td._name {
 .highlight5 { background-color: #ADFF2F; }
 .highlight6 { background-color: #00FFFF; }
 .highlight7 { background-color: #FF69B4; }
+
+#headerNav .module { font-style: italic; font-size:  small; }
