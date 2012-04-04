@@ -47,6 +47,7 @@ $AppUI  = new w2p_Core_CAppUI();
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
+$AppUI->user_email = 'something@something.com';
 
 class CommonSetup extends PHPUnit_Framework_TestCase {
 
