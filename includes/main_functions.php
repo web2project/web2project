@@ -172,7 +172,7 @@ function arrayMerge($a1, $a2)
  * @param $default string The default value to return if the key not found.
  * @return The value of the setting, or the default value if not found.
  */
-function w2PgetConfig($key, $default = null)
+function w2PgetConfig($key, $default = null, $dbConn = null)
 {
     global $w2Pconfig, $AppUI;
 
@@ -181,6 +181,7 @@ function w2PgetConfig($key, $default = null)
     } else {
         if (!is_null($default)) {
             $obj = new w2p_Core_Config();
+            $obj->overrideDatabase($dbConn);
             $obj->config_name = $key;
             $obj->config_value = $default;
             $obj->store();

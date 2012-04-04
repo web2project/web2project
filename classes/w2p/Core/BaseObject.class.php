@@ -111,7 +111,9 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function overrideDatabase($override)
     {
-        $this->_query = $override;
+        if (!is_null($override)) {
+            $this->_query = $override;
+        }
     }
 
     /**
