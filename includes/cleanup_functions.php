@@ -40,25 +40,6 @@ function is_task_in_gantt_arr($task) {
     return false;
 }
 
-function notifyNewExternalUser($address, $username, $logname, $logpwd) {
-	global $AppUI;
-	$mail = new w2p_Utilities_Mail();
-	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
-			$email = $AppUI->user_email;
-		} else {
-			$email = 'web2project@web2project.net';
-		}
-
-		$mail->To($address);
-        $emailManager = new w2p_Output_EmailManager($AppUI);
-        $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
-		$mail->Subject('New Account Created');
-        $mail->Body($body);
-		$mail->Send();
-	}
-}
-
 function notifyHR($address, $username, $uaddress, $uusername, $logname, $logpwd, $userid) {
 	global $AppUI;
 	$mail = new w2p_Utilities_Mail();
@@ -73,25 +54,6 @@ function notifyHR($address, $username, $uaddress, $uusername, $logname, $logpwd,
         $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
 		$mail->Subject('New External User Created');
-		$mail->Body($body);
-		$mail->Send();
-	}
-}
-
-function notifyNewUser($address, $username) {
-	global $AppUI;
-	$mail = new w2p_Utilities_Mail();
-	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
-			$email = $AppUI->user_email;
-		} else {
-			return false;
-		}
-
-		$mail->To($address);
-        $emailManager = new w2p_Output_EmailManager($AppUI);
-        $body = $emailManager->getNotifyNewUser($username);
-        $mail->Subject('New Account Created');
 		$mail->Body($body);
 		$mail->Send();
 	}
