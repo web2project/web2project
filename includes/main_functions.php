@@ -379,19 +379,20 @@ function w2p_textarea($content)
     return $result;
 }
 
-function notifyNewExternalUser($address, $username, $logname, 
+function notifyNewExternalUser($emailAddress, $username, $logname, 
         $logpwd, $emailUtility = null) {
 
     global $AppUI;
 	$mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
+	if ($mail->ValidEmail($emailAddress)) {
+//TODO: why aren't we actually using this $email variable?
+        if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
 		} else {
-			$email = 'web2project@web2project.net';
+//TODO: this email should be set to something sane
+            $email = 'web2project@web2project.net';
 		}
-
-		$mail->To($address);
+		$mail->To($emailAddress);
         $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
 		$mail->Subject('New Account Created');
@@ -400,17 +401,19 @@ function notifyNewExternalUser($address, $username, $logname,
 	}
 }
 
-function notifyNewUser($address, $username, $emailUtility = null) {
+function notifyNewUser($emailAddress, $username, $emailUtility = null) {
 	global $AppUI;
 	$mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
+	if ($mail->ValidEmail($emailAddress)) {
+//TODO: why aren't we actually using this $email variable?
+        if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
 		} else {
-			return false;
+//TODO: this email should be set to something sane
+            return false;
 		}
 
-		$mail->To($address);
+		$mail->To($emailAddress);
         $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->getNotifyNewUser($username);
         $mail->Subject('New Account Created');

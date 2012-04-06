@@ -44,10 +44,12 @@ function notifyHR($address, $username, $uaddress, $uusername, $logname, $logpwd,
 	global $AppUI;
 	$mail = new w2p_Utilities_Mail();
 	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
+//TODO: why aren't we actually using this $email variable?
+        if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
 		} else {
-			$email = 'web2project@web2project.net';
+//TODO: this email should be set to something sane
+            $email = 'web2project@web2project.net';
 		}
 
 		$mail->To($address);
@@ -63,10 +65,12 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd) {
 	global $AppUI, $w2Pconfig;
 	$mail = new w2p_Utilities_Mail();
 	if ($mail->ValidEmail($address)) {
-		if ($mail->ValidEmail($AppUI->user_email)) {
+//TODO: why aren't we actually using this $email variable?
+        if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
 		} else {
-			$email = "web2project@" . $AppUI->cfg['site_domain'];
+//TODO: this email should be set to something sane
+            $email = "web2project@" . $AppUI->cfg['site_domain'];
 		}
 
 		$mail->To($address);
