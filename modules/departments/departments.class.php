@@ -156,6 +156,7 @@ class CDepartment extends w2p_Core_BaseObject {
                 return 'deptWithSub';
             }
 
+            $q = $this->_getQuery();
             $q->addTable('project_departments', 'pd');
             $q->addQuery('pd.project_id');
             $q->addWhere('pd.department_id = ' . (int)$this->dept_id);
