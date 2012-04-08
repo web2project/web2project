@@ -37,7 +37,9 @@ class CEvent extends w2p_Core_BaseObject
     public $event_type = null;
     public $event_notify = null;
     public $event_cwd = null;
-
+    public $event_created = null;
+    public $event_updated = null;
+    public $event_creator = null;
     public function __construct()
     {
         parent::__construct('events', 'event_id');
@@ -62,6 +64,9 @@ class CEvent extends w2p_Core_BaseObject
 
         if ($this->event_start_date > $this->event_end_date) {
             $errorArray['start_after_end'] = $baseErrorMsg . 'start date is after end date';
+        }
+        if (!$this->event_creator) {
+            $this->event_creator = $this->_AppUI->user_id;
         }
 
         $this->_error = $errorArray;
@@ -541,6 +546,7 @@ class CEvent extends w2p_Core_BaseObject
     public function store()
     {
         $stored = false;
+        $q = $this->_getQuery();
 
         if (!$this->event_recurs) {
             $this->event_times_recuring = 0;
@@ -576,6 +582,7 @@ class CEvent extends w2p_Core_BaseObject
          *   don't have a good idea on how to fix it at the moment...
          */
         if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+            $this->event_updated = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
@@ -583,6 +590,8 @@ class CEvent extends w2p_Core_BaseObject
             }
         }
         if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+            $this->event_created = $q->dbfnNowWithTZ();
+            $this->event_updated = $this->event_created;
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
