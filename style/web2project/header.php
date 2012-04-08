@@ -72,7 +72,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                                 <tbody>
                                     <tr class="nav">
                                         <td>
-                                            <?php echo buildHeaderNavigation($AppUI, 'ul', 'li'); ?>
+                                            <?php echo buildHeaderNavigation($AppUI, 'ul', 'li', '', $m); ?>
                                         </td>
                                         <td nowrap="nowrap" align="right">
                                         <?php

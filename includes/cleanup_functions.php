@@ -3520,25 +3520,26 @@ function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $pa
   return $s;
 }
 
-function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '') {
-	$s = '';
-  $nav = $AppUI->getMenuModules();
-  $perms = $AppUI->acl();
+function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '', $m = '') {
+    $s = '';
+    $nav = $AppUI->getMenuModules();
+    $perms = $AppUI->acl();
 
-  $s .= ($rootTag != '') ? "<$rootTag id=\"headerNav\">" : '';
-  $links = array();
-  foreach ($nav as $module) {
-  	if (canAccess($module['mod_directory'])) {
-  		$link = ($innerTag != '') ? "<$innerTag>" : '';
-      $link .= '<a href="?m=' . $module['mod_directory'] . '">' . $AppUI->_($module['mod_ui_name']) . '</a>';
-      $link .= ($innerTag != '') ? "</$innerTag>" : '';
-      $links[] = $link;
-  	}
-  }
-  $s .= implode($dividingToken, $links);
-  $s .= ($rootTag != '') ? "</$rootTag>" : '';
+    $s .= ($rootTag != '') ? "<$rootTag id=\"headerNav\">" : '';
+    $links = array();
+    foreach ($nav as $module) {
+        if (canAccess($module['mod_directory'])) {
+            $link = ($innerTag != '') ? "<$innerTag>" : '';
+            $class = ($m == $module['mod_directory']) ? ' class="module"' : '';
+            $link .= '<a href="?m=' . $module['mod_directory'] . '"'.$class.'>' . $AppUI->_($module['mod_ui_name']) . '</a>';
+            $link .= ($innerTag != '') ? "</$innerTag>" : '';
+            $links[] = $link;
+        }
+    }
+    $s .= implode($dividingToken, $links);
+    $s .= ($rootTag != '') ? "</$rootTag>" : '';
 
-  return $s;
+    return $s;
 }
 
 /**
