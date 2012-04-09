@@ -633,7 +633,7 @@ class CEvent extends w2p_Core_BaseObject
         $q->addQuery('event_description as description');
         $q->addQuery('event_start_date as startDate');
         $q->addQuery('event_end_date as endDate');
-        $q->addQuery("'" . $q->dbfnNowWithTZ() . "' as updatedDate");
+        $q->addQuery('event_updated  as updatedDate');
         $q->addQuery('CONCAT(\'' . W2P_BASE_URL . '/index.php?m=calendar&a=view&event_id=' . '\', e.event_id) as url');
         $q->addQuery('projects.project_id, projects.project_name');
         $q->addTable('events', 'e');
