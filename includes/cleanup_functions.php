@@ -3718,7 +3718,8 @@ function formatTime($uts) {
 }
 
 function file_size($size) {
-	if ($size > 1024 * 1024 * 1024)
+	$size = (int) $size;
+    if ($size > 1024 * 1024 * 1024)
 		return round($size / 1024 / 1024 / 1024, 2) . ' Gb';
 	if ($size > 1024 * 1024)
 		return round($size / 1024 / 1024, 2) . ' Mb';

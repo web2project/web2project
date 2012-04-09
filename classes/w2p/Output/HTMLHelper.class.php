@@ -236,15 +236,16 @@ class w2p_Output_HTMLHelper
                 break;
             case '_count':
             case '_duration':
+            case '_hours':
                 $cell = $value;
                 break;
             case '_password':
                 $cell = '('.$this->_AppUI->_('hidden').')';
                 break;
             case '_version':
-                $cell = number_format($value, 2);
+                $value = (int) (100 * $value);
+                $cell = number_format($value/100, 2);
                 break;
-            case '_hours':
 			default:
 //TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
 				$additional = 'nowrap="nowrap"';
