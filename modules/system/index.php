@@ -13,7 +13,7 @@ $titleBlock = new w2p_Theme_TitleBlock('System Administration', '48_my_computer.
 $titleBlock->show();
 
 ?>
-<table class="std" width="100%" border="0" cellpadding="0" cellspacing="5">
+<table class="std list" width="100%" border="0" cellpadding="0" cellspacing="5">
   <tr>
     <td width="42">
       <?php echo w2PshowImage('control-center.png', 42, 42, ''); ?>
