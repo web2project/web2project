@@ -182,7 +182,15 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_owner', $project->project_owner_name); ?>
+            <td class="hilite">
+                <?php
+                $pusername = $project->user_name;
+                $puserid = $project->project_owner;
+
+                //TODO HTML helper not working properly due to field having suffix _owner, avoiding helper until fix
+                echo "<a href=\"?m=contacts&a=view&contact_id=$puserid\" alt=\"$pusername\">$pusername</a>";
+                ?>
+            </td>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
