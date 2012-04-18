@@ -21,13 +21,3 @@ class CSystem_SysKey extends w2p_Core_BaseObject {
 		$this->syskey_sep2 = $sep2;
 	}
 }
-
-/**
- * @deprecated
- */
-class CSysKey extends CSystem_SysKey {
-	public function __construct($name = null, $label = null, $type = '0', $sep1 = "\n", $sep2 = '|') {
-        parent::__construct($name, $label, $type, $sep1, $sep2);
-        trigger_error("CSysKey has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_SysKey instead.", E_USER_NOTICE );
-	}
-}

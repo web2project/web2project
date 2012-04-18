@@ -640,22 +640,3 @@ class CEvent extends w2p_Core_BaseObject
     }
 
 }
-
-class CMonthCalendar extends w2p_Output_MonthCalendar
-{
-
-    public function __construct($date = null)
-    {
-        parent::__construct($date);
-        trigger_error("CMonthCalendar has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Output_MonthCalendar instead.", E_USER_NOTICE);
-    }
-
-}
-
-class CCalendar extends CEvent {
-    public function __construct($date = null)
-    {
-        parent::__construct($date);
-        trigger_error("CCalendar has been deprecated in v3.0 and will be removed by v4.0. Please use CEvent instead.", E_USER_NOTICE);
-    }
-}

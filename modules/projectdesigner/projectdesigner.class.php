@@ -41,17 +41,3 @@ class CProjectDesigner extends w2p_Core_BaseObject
     }
 
 }
-
-/**
- * @deprecated
- */
-class CProjectDesignerOptions extends CProjectDesigner
-{
-
-    public function __construct()
-    {
-        parent::__construct();
-        trigger_error("CProjectDesignerOptions has been deprecated in v3.0 and will be removed by v4.0. Please use CProjectDesigner instead.", E_USER_NOTICE);
-    }
-
-}

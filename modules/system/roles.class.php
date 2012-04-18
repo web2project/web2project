@@ -234,15 +234,5 @@ class CSystem_Role {
 			}
 		}
 		return true;
-	}	
-}
-
-/**
- * @deprecated
- */
-class CRole extends CSystem_Role {
-	public function __construct($name = '', $description = '') {
-        parent::__construct($name, $description);
-        trigger_error("CRole has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_Role instead.", E_USER_NOTICE );
 	}
 }

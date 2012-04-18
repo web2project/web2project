@@ -101,13 +101,3 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 		return null;
 	}
 }
-
-/**
- * @deprecated
- */
-class CSysVal extends CSystem_SysVal {
-	public function __construct($key = null, $title = null, $value = null) {
-        parent::__construct($key, $title, $value);
-        trigger_error("CSysVal has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_SysVal instead.", E_USER_NOTICE );
-	}
-}

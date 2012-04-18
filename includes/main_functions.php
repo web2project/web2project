@@ -35,28 +35,35 @@ function w2p_autoload($class_name)
 
     $name = strtolower($class_name);
     switch ($name) {
-        case 'libmail':
-            // Deprecated as of v2.3, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/classes/mail.class.php';
+        case 'bcode':                   // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'budgets':                 // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cappui':                  // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'ccalendar':               // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cdate':                   // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cfilefolder':             // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cforummessage':           // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cinfotabbox':             // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cmonthcalendar':          // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cprojectdesigneroptions': // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'crole':                   // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'csyskey':                 // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'csysval':                 // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'ctabbox_core':            // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'ctasklog':                // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'ctitleblock':             // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'ctitleblock_core':        // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'customfields':            // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cw2pobject':              // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'dbquery':                 // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'libmail':                 // Deprecated as of v2.3, TODO: remove this in v4.0
+        case 'w2pacl':                  // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'w2pajaxresponse':         // Deprecated as of v3.0, TODO: remove this in v4.0
+            require_once W2P_BASE_DIR . '/classes/deprecated.class.php';
             break;
-        case 'w2pacl':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/classes/permissions.class.php';
-            break;
-        case 'cappui':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/classes/ui.class.php';
-            break;
+
+
         case 'xajax':
             require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
-            break;
-        case 'w2pajaxresponse':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/classes/ajax.class.php';
-            break;
-        case 'ctitleblock':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/classes/w2p/Theme/TitleBlock.class.php';
             break;
 
         /*
@@ -72,43 +79,6 @@ function w2p_autoload($class_name)
             // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/modules/admin/users.class.php';
             break;
-        case 'cfilefolder':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/files/folders.class.php';
-            break;
-        case 'ctasklog':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/tasks/tasklogs.class.php';
-            break;
-        case 'cforummessage':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/forums/forummessage.class.php';
-            break;
-        case 'cprojectdesigneroptions':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/projectdesigner/projectdesigner.class.php';
-            break;
-        case 'crole':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/system/roles.class.php';
-            break;
-        case 'csyskey':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/system/syskeys.class.php';
-            break;
-        case 'csysval':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/system/sysvals.class.php';
-            break;
-        case 'bcode':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/system/bcodes.class.php';
-            break;
-        case 'budgets':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/system/budgets.class.php';
-            break;
-
         default:
             if (file_exists(W2P_BASE_DIR . '/classes/' . $name . '.class.php')) {
                 // Deprecated as of v3.0, TODO: remove this in v4.0

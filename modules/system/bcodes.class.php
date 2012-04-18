@@ -158,17 +158,3 @@ class CSystem_Bcode extends w2p_Core_BaseObject
     }
 
 }
-
-/**
- * @deprecated
- */
-class bcode extends CSystem_Bcode
-{
-
-    public function __construct()
-    {
-        parent::__construct();
-        trigger_error("bcode has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_Bcode instead.", E_USER_NOTICE);
-    }
-
-}
