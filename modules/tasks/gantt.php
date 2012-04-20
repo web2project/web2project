@@ -344,7 +344,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         if ($flags == 'm') {
             // if hide milestones is ticked this bit is not processed//////////////////////////////////////////
             if ($showNoMilestones != '1') {
-                $start = new w2p_Utilities_Date($start_date);
+                $start = new w2p_Utilities_Date($start);
                 $start->addDays(0);
                 $start_mile = $start->getDate();
                 $s = $start->format($df);
