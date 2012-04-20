@@ -344,7 +344,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         if ($flags == 'm') {
             // if hide milestones is ticked this bit is not processed//////////////////////////////////////////
             if ($showNoMilestones != '1') {
-                $start = new w2p_Utilities_Date($start);
+                $start = new w2p_Utilities_Date($start_date);
                 $start->addDays(0);
                 $start_mile = $start->getDate();
                 $s = $start->format($df);
@@ -381,7 +381,14 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                         }
                     }
                 }
-                $gantt->addMilestone($fieldArray, $a['task_start_date'], $color);
+
+                // if the milestone is near the end of the date range for which we are showing the chart
+                // make the caption go on the left side of the milestone marker
+                if ($mile_date_stamp > strtotime($end_date)) {
+                    $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, 0, true);
+                } else {
+                    $gantt->addMilestone($fieldArray, $a['task_start_date'], $color);
+                }
             }	//this closes the code that is not processed if hide milestones is checked ///////////////
         } else {
             $type = $a['task_duration_type'];

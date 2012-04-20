@@ -230,7 +230,7 @@ class w2p_Output_GanttRenderer {
 
         if ($captionToTheLeft) {
             $bar->caption->Align("right", "center");
-            $bar->SetCaptionMargin(-10);
+            $bar->SetCaptionMargin(-15);
         }
 
         $this->graph->Add($this->addDependencies($bar, $identifier));
