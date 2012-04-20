@@ -344,14 +344,14 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         if ($flags == 'm') {
             // if hide milestones is ticked this bit is not processed//////////////////////////////////////////
             if ($showNoMilestones != '1') {
-                $start = new w2p_Utilities_Date($start_date);
+                $start = new w2p_Utilities_Date($start);
                 $start->addDays(0);
                 $start_mile = $start->getDate();
                 $s = $start->format($df);
                 $today_date = date('m/d/Y');
                 $today_date_stamp = strtotime($today_date);
                 $mile_date = $start->format($df);
-                $mile_date_stamp = strtotime($mile_date);
+                $mile_date_stamp = strtotime($start_mile);
                 // honour the choice to show task names only///////////////////////////////////////////////////
                 if ($showTaskNameOnly == '1') {
                     $fieldArray = array($name);
@@ -371,7 +371,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 if ($a['task_percent_complete'] == 100)  {
                     $color = '#006600';
                 } else {
-                    if (strtotime($mile_date) < strtotime($today_date)) {
+                    if ($mile_date_stamp < $today_date_stamp) {
                         $color = '#990000';
                     } else {
                         if ($a['task_percent_complete'] == 0)  {
