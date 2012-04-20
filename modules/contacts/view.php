@@ -85,15 +85,24 @@ function delIt(){
 			<table border="0" cellpadding="1" cellspacing="1">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('First Name'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('contact_first_name', $contact->contact_first_name); ?>
+                    <?php
+
+                    // TODO HTMLhelper was confused renamed field name so HTMLhelper is sane...
+                    echo $htmlHelper->createCell('contact_firstname', $contact->contact_first_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap">&nbsp;&nbsp;<?php echo $AppUI->_('Last Name'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('contact_last_name', $contact->contact_last_name); ?>
+                    <?php
+
+                    // TODO HTMLhelper was confused renamed field name so HTMLhelper is sane...
+                    echo $htmlHelper->createCell('contact_lastname', $contact->contact_last_name); ?>
 				</tr>
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Display Name'); ?>: </td>
-                    <?php echo $htmlHelper->createCell('contact_display_name', $contact->contact_display_name); ?>
+                    <?php
+
+                    // TODO HTMLhelper was confused renamed field name so HTMLhelper is sane...
+                    echo $htmlHelper->createCell('contact_displayname', $contact->contact_display_name); ?>
 				</tr>
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Job Title'); ?>:</td>
@@ -111,7 +120,7 @@ function delIt(){
 				</tr>
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Department'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('dept_name', $dept_detail['dept_name']); ?>
+                    <?php echo $htmlHelper->createCell('contact_department', $contact->contact_department); ?>
 				</tr>
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Title'); ?>:</td>
