@@ -138,7 +138,7 @@ class w2p_Output_HTMLHelper
                 $obj = new CDepartment();
                 $obj->load($value);
                 $mod = substr($suffix, 1);
-                $link = '?m='. w2p_pluralize($mod) .'&a=view&'.$mod.'_id='.$value;
+                $link = '?m='. w2p_pluralize($mod) .'&a=view&dept_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->dept_name.'</a>';
                 $suffix .= ' _name';
                 break;
