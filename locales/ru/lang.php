@@ -14,4 +14,4 @@ $dir = basename(dirname(__file__));
 // in case of experienceing troubles you may try one of the following
 //$LANGUAGES['de_DE'] = array($dir, 'German', 'Deutsch', 'deu', 'ISO-8859-1');
 //$LANGUAGES['de_DE'] = array($dir, 'German', 'Deutsch', 'deu', 'ISO-8859-15');
-$LANGUAGES['ru_RU'] = array($dir, 'Russian (ru)', 'Русский (ru)', 'ru', 'utf-8');
+$LANGUAGES['ru_RU'] = array($dir, 'Russian (ru)', 'Русский (ru)', 'ru_RU', 'utf-8');

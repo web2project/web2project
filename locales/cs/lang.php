@@ -11,4 +11,4 @@
 
 $dir = basename(dirname(__file__));
 
-$LANGUAGES['cs'] = array($dir, 'Czech (CS)', 'Čeština (CS)', 'csy', 'utf-8');
+$LANGUAGES['cs_CZ'] = array($dir, 'Czech (CS)', 'Čeština (CS)', 'cs_CZ', 'utf-8');
