@@ -216,7 +216,7 @@ class w2p_Output_GanttRenderer {
     }
 
     public function addMilestone(array $columnValues, $start,
-        $color = '#CC0000', $identifier = 0)
+        $color = '#CC0000', $identifier = 0, $captionToTheLeft=false)
     {
         $tStartObj = new w2p_Utilities_Date($start);
 
@@ -227,6 +227,11 @@ class w2p_Output_GanttRenderer {
         $bar->mark->SetWidth(10);
         $bar->mark->SetColor($color);
         $bar->mark->SetFillColor($color);
+
+        if ($captionToTheLeft) {
+            $bar->caption->Align("right", "center");
+            $bar->SetCaptionMargin(-15);
+        }
 
         $this->graph->Add($this->addDependencies($bar, $identifier));
     }

@@ -268,10 +268,19 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             $start = new w2p_Utilities_Date($start);
             $start->addDays(0);
             $s = $start->format($df);
+
+            $captionToTheLeft = false;
+
+            if (strtotime($start->getDate()) >= strtotime($end_date)) {
+                $captionToTheLeft = true;
+            }
+
+            $color = "#CC0000";
+
             if ($caller == 'todo') {
-                $gantt->addMilestone(array($name, $pname, '', $s, $s), $a['task_start_date']);
+                $gantt->addMilestone(array($name, $pname, '', $s, $s), $a['task_start_date'], $color, 0, $captionToTheLeft);
             } else {
-                $gantt->addMilestone(array($name, '', $s, $s), $a['task_start_date']);
+                $gantt->addMilestone(array($name, '', $s, $s), $a['task_start_date'], $color, 0, $captionToTheLeft);
             }
         } else {
             $type = $a['task_duration_type'];
