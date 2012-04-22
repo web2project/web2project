@@ -253,6 +253,9 @@ if (!$start_date || !$end_date) {
 		}
 	}
 }
+$start_date = $AppUI->formatTZAwareTime($start_date, '%Y-%m-%d %T');
+$end_date = $AppUI->formatTZAwareTime($end_date, '%Y-%m-%d %T');
+
 $gantt->setDateRange($start_date, $end_date);
 
 $gantt_arr = array();
@@ -384,10 +387,11 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
                 // if the milestone is near the end of the date range for which we are showing the chart
                 // make the caption go on the left side of the milestone marker
-                if ($mile_date_stamp > strtotime($end_date)) {
-                    $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, 0, true);
+                $task_start_date = $AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T');
+                if ($mile_date_stamp >= strtotime($end_date)) {
+                    $gantt->addMilestone($fieldArray, $task_start_date, $color, 0, true);
                 } else {
-                    $gantt->addMilestone($fieldArray, $a['task_start_date'], $color);
+                    $gantt->addMilestone($fieldArray, $task_start_date, $color);
                 }
             }	//this closes the code that is not processed if hide milestones is checked ///////////////
         } else {
