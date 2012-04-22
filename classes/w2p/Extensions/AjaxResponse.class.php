@@ -1,6 +1,7 @@
 <?php /* $Id$ $URL$ */
 
 include_once $AppUI->getLibraryClass('xajax/xajax_core/xajax.inc');
+include_once $AppUI->getLibraryClass('xajax/xajax_core/xajaxResponse.inc');
 
 class w2p_Extensions_AjaxResponse extends xajaxResponse {
 
