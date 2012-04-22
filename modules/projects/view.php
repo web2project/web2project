@@ -156,7 +156,11 @@ function delIt() {
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_short_name', $project->project_short_name); ?>
+            <?php
+
+            // TODO Need to rename field to avoid confusing HTMLhelper
+            echo $htmlHelper->createCell('project_short', $project->project_short_name);
+            ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
