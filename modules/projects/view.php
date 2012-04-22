@@ -159,7 +159,7 @@ function delIt() {
             <?php
 
             // TODO Need to rename field to avoid confusing HTMLhelper
-            echo $htmlHelper->createCell('project_short', $project->project_short_name);
+            echo $htmlHelper->createCell('project_shortname', $project->project_short_name);
             ?>
 		</tr>
 		<tr>
