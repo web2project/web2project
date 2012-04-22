@@ -22,7 +22,7 @@ class CEvent extends w2p_Core_BaseObject
     /**
       @var string The title of the event */
     //TODO: because this is title instead of name, it doesn't match our convention. Ugh. - kc 19 Sept 2011
-    public $event_title = null;
+    public $event_name = null;
     public $event_start_date = null;
     public $event_end_date = null;
     public $event_parent = null;
@@ -107,7 +107,7 @@ class CEvent extends w2p_Core_BaseObject
         $search['table_title'] = 'Events';
         $search['table_orderby'] = 'event_start_date';
         $search['search_fields'] = array(
-            'event_title', 'event_description',
+            'event_name', 'event_description',
             'event_start_date', 'event_end_date'
         );
         $search['display_fields'] = $search['search_fields'];
@@ -291,7 +291,7 @@ class CEvent extends w2p_Core_BaseObject
 				//only show hourly recurrent event one time and add string 'hourly'
 				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j == 0) {
 					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
-					$eventListRec[$i]['event_title'] = $eventListRec[$i]['event_title'] . ' (' . $this->_AppUI->_('Hourly') . ')';
+					$eventListRec[$i]['event_name'] = $eventListRec[$i]['event_name'] . ' (' . $this->_AppUI->_('Hourly') . ')';
 				}
 				//Weekly and Monthly View and higher recurrence mode
 				//show all events of recurrence > 1
@@ -409,9 +409,9 @@ class CEvent extends w2p_Core_BaseObject
         $mail = new w2p_Utilities_Mail();
         $type = $update ? $this->_AppUI->_('Updated') : $this->_AppUI->_('New');
         if ($clash) {
-            $mail->Subject($this->_AppUI->_('Requested Event') . ': ' . $this->event_title, $locale_char_set);
+            $mail->Subject($this->_AppUI->_('Requested Event') . ': ' . $this->event_name, $locale_char_set);
         } else {
-            $mail->Subject($type . ' ' . $this->_AppUI->_('Event') . ': ' . $this->event_title, $locale_char_set);
+            $mail->Subject($type . ' ' . $this->_AppUI->_('Event') . ': ' . $this->event_name, $locale_char_set);
         }
 
         $emailManager = new w2p_Output_EmailManager($this->_AppUI);
@@ -629,7 +629,7 @@ class CEvent extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addQuery('e.event_id as id');
-        $q->addQuery('event_title as name');
+        $q->addQuery('event_name as name');
         $q->addQuery('event_description as description');
         $q->addQuery('event_start_date as startDate');
         $q->addQuery('event_end_date as endDate');

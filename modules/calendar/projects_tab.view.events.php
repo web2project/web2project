@@ -43,7 +43,7 @@ $types = w2PgetSysVal('EventType');
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
             $fieldList = array('event_start_date', 'event_end_date', 'event_type',
-                'event_title');
+                'event_name');
             $fieldNames = array('Start Date', 'End Date', 'Type', 'Event');
         }
 //TODO: The link below is commented out because this view doesn't support sorting... yet.
@@ -75,9 +75,9 @@ if (count($events)) {
         $html .= w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar');
         $html .= '&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b><td>';
 
-        $html .= w2PtoolTip($row['event_title'], getEventTooltip($row['event_id']), true);
+        $html .= w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true);
         $html .= '<a href="' . $href . '" class="event">';
-        $html .= $row['event_title'];
+        $html .= $row['event_name'];
         $html .= '</a>';
         $html .= w2PendTip();
 

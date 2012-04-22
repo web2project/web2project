@@ -39,7 +39,7 @@ foreach ($events as $row) {
 	$html .= w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar');
 	$html .= '&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b><td>';
 	$html .= $href ? '<a href="' . $href . '" class="event" title="' . $alt . '">' : '';
-	$html .= $row['event_title'];
+	$html .= $row['event_name'];
 	$html .= $href ? '</a>' : '';
 	$html .= '</td></tr>';
 }

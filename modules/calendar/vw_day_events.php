@@ -103,9 +103,9 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 			$html .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
 			$html .= '<td>' . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar');
 			$html .= '</td><td>&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b></td></tr></table>';
-			$html .= w2PtoolTip($row['event_title'], getEventTooltip($row['event_id']), true);
+			$html .= w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true);
 			$html .= $href ? '<a href="' . $href . '" class="event">' : '';
-			$html .= $row['event_title'];
+			$html .= $row['event_name'];
 			$html .= $href ? '</a>' : '';
 			$html .= w2PendTip();
 			$html .= '</td>';

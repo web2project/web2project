@@ -150,9 +150,9 @@ for ($minutes = 0; $minutes < ((24 * 60) / $inc); $minutes++) {
 <script language="javascript" type="text/javascript">
 function submitIt(){
 	var form = document.editFrm;
-	if (form.event_title.value.length < 1) {
+	if (form.event_name.value.length < 1) {
 		alert('<?php echo $AppUI->_('Please enter a valid event title', UI_OUTPUT_JS); ?>');
-		form.event_title.focus();
+		form.event_name.focus();
 		return;
 	}
 	if (form.event_start_date.value.length < 1){
@@ -251,7 +251,7 @@ function removeUser() {
 			<tr>
 				<td width="20%" align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title'); ?>:</td>
 				<td width="20%">
-					<input type="text" class="text" size="25" name="event_title" value="<?php echo $obj->event_title; ?>" maxlength="255" />
+					<input type="text" class="text" size="25" name="event_name" value="<?php echo $obj->event_name; ?>" maxlength="255" />
 				</td>
 				<td align="left" rowspan="4" valign="top" colspan="2" width="40%">
 					<?php echo $AppUI->_('Description'); ?> :<br/>

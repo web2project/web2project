@@ -103,7 +103,7 @@ function delIt() {
 			<table cellspacing="1" cellpadding="2" width="100%">
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title'); ?>:</td>
-                <?php echo $htmlHelper->createCell('event_title', $event->event_title); ?>
+                <?php echo $htmlHelper->createCell('event_name', $event->event_name); ?>
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
