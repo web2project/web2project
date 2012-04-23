@@ -38,6 +38,11 @@ class CTask extends w2p_Core_BaseObject
     public $task_duration_type = null;
 
     /**
+     * @var bool
+     */
+    public $task_import = false; // Introduced this to address bug #1064. Used to keep var between store and postStore.
+
+    /**
      * @deprecated
      */
     public $task_hours_worked = null;
@@ -582,7 +587,7 @@ class CTask extends w2p_Core_BaseObject
             $this->task_owner = $this->_AppUI->user_id;
         }
 
-        $importing_tasks = false;
+        $this->task_import = false;
         $this->_error = $this->check();
 
         if (count($this->_error)) {
@@ -595,6 +600,7 @@ class CTask extends w2p_Core_BaseObject
         $this->task_updated = $q->dbfnNowWithTZ();
 
         if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+
             // Load and globalize the old, not yet updated task object
             // e.g. we need some info later to calculate the shifting time for depending tasks
             // see function update_dep_dates
@@ -652,7 +658,7 @@ class CTask extends w2p_Core_BaseObject
                 $q->clear();
                 if ($this->task_parent) {
                     // importing tasks do not update dynamics
-                    $importing_tasks = true;
+                    $this->task_import = true;
                 }
                 $stored = true;
             }
@@ -663,6 +669,12 @@ class CTask extends w2p_Core_BaseObject
 
     protected function hook_postStore()
     {
+        parent::hook_postStore();
+
+         // TODO $oTsk is a global set by store() and is the task before update.
+         // Using it here as a global is probably a bad idea, but the only way until the old task is stored somewhere
+         // else than a global variable...
+        global $oTsk;
         $q = $this->_query;
 
         if (!$this->task_parent) {
@@ -720,7 +732,7 @@ class CTask extends w2p_Core_BaseObject
 
         // if is child update parent task
         if ($this->task_parent != $this->task_id) {
-            if (!$importing_tasks) {
+            if (!$this->task_import) {
                 $this->updateDynamics();
             }
 
