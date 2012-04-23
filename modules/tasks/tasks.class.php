@@ -40,7 +40,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      * @var bool
      */
-    public $task_import = false; // Introduced this to address bug #1064. Used to keep var between store and postStore.
+    public $importing_tasks = false; // Introduced this to address bug #1064. Used to keep var between store and postStore.
 
     /**
      * @deprecated
@@ -587,7 +587,7 @@ class CTask extends w2p_Core_BaseObject
             $this->task_owner = $this->_AppUI->user_id;
         }
 
-        $this->task_import = false;
+        $this->importing_tasks = false;
         $this->_error = $this->check();
 
         if (count($this->_error)) {
@@ -658,7 +658,7 @@ class CTask extends w2p_Core_BaseObject
                 $q->clear();
                 if ($this->task_parent) {
                     // importing tasks do not update dynamics
-                    $this->task_import = true;
+                    $this->importing_tasks = true;
                 }
                 $stored = true;
             }
@@ -732,7 +732,7 @@ class CTask extends w2p_Core_BaseObject
 
         // if is child update parent task
         if ($this->task_parent != $this->task_id) {
-            if (!$this->task_import) {
+            if (!$this->importing_tasks) {
                 $this->updateDynamics();
             }
 
