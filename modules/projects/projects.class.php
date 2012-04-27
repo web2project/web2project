@@ -326,6 +326,14 @@ class CProject extends w2p_Core_BaseObject
                 $delTask->task_id = $badTask;
                 $delTask->delete();
             }
+        } else {
+
+            // All is OK! Now update task cache
+            $numTasks = count($importedTasks);
+            $lastImportIndex = $numTasks-1;
+
+            // TODO Unsure if we should update the end date from tasks... Thoughts?
+            $this->updateTaskCache($this->project_id, $importedTasks[$lastImportIndex], $this->project_actual_end_date, $numTasks);
         }
         return $errors;
     }
