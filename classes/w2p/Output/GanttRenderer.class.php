@@ -35,9 +35,9 @@ class w2p_Output_GanttRenderer {
     {
         $AppUI = $this->AppUI;
         $pLocale = setlocale(LC_TIME, 0); // get current locale for LC_TIME
-        $res = setlocale(LC_TIME, $AppUI->user_locale);
+        $res = setlocale(LC_TIME, $AppUI->user_lang[1]);
         if ($res) { // Setting locale doesn't fail
-            $this->graph->scale->SetDateLocale($AppUI->user_locale);
+            $this->graph->scale->SetDateLocale($AppUI->user_lang[1]);
         }
         setlocale(LC_TIME, $pLocale);
         $this->df = $AppUI->getPref('SHDATEFORMAT');
