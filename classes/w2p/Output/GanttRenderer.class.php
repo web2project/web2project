@@ -194,6 +194,8 @@ class w2p_Output_GanttRenderer {
             $bar->leftMark->SetFillColor('black');
 
             $bar->SetPattern(BAND_SOLID, 'black');
+
+            $bar->title->SetFont(FF_CUSTOM, FS_BOLD, 9);
         }
 
         //adding captions
