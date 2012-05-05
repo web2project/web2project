@@ -1,4 +1,4 @@
-<?php /* $Id: header.php 2159 2011-10-28 16:00:39Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/style/wps-redmond/header.php $ */
+<?php /* $Id: header.php 2421 2012-04-11 03:36:52Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/style/wps-redmond/header.php $ */
 $dialog = w2PgetParam($_GET, 'dialog', 0);
 if ($dialog) {
 	$page_title = '';
@@ -67,7 +67,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                                 <tbody>
                                     <tr class="nav">
                                         <td>
-                                            <?php echo buildHeaderNavigation($AppUI, '', '', ' | '); ?>
+                                            <?php echo buildHeaderNavigation($AppUI, '', '', ' | ', $m); ?>
                                         </td>
                                         <td nowrap="nowrap" align="right">
                                         <?php

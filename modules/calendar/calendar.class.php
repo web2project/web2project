@@ -40,6 +40,7 @@ class CEvent extends w2p_Core_BaseObject
     public $event_created = null;
     public $event_updated = null;
     public $event_creator = null;
+
     public function __construct()
     {
         parent::__construct('events', 'event_id');
@@ -65,6 +66,7 @@ class CEvent extends w2p_Core_BaseObject
         if ($this->event_start_date > $this->event_end_date) {
             $errorArray['start_after_end'] = $baseErrorMsg . 'start date is after end date';
         }
+//TODO: check() should never modify anything, just validate the object
         if (!$this->event_creator) {
             $this->event_creator = $this->_AppUI->user_id;
         }

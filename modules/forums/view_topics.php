@@ -107,7 +107,6 @@ if (function_exists('styleRenderBoxTop')) {
     $now = new w2p_Utilities_Date();
 
     foreach ($topics as $row) {
-echo '<pre>'; print_r($row);
         if ($row["message_parent"] < 0) { ?>
             <tr bgcolor="white" valign="top">
                 <td nowrap="nowrap" align="center" width="1%">
