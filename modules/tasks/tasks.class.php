@@ -2240,8 +2240,9 @@ class CTask extends w2p_Core_BaseObject
         $mail = new w2p_Utilities_Mail();
         $mail->Subject($subject, $locale_char_set);
 
+        $user = new CUser();
         foreach ($contacts as $contact) {
-            $user_id = CUser::getUserIdByContactID($contact['contact_id']);
+            $user_id = $user->getIdByContactId($contact['contact_id']);
             $this->_AppUI->loadPrefs($user_id);
 
             $df = $this->_AppUI->getPref('DISPLAYFORMAT');
