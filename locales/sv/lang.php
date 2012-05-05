@@ -4,4 +4,4 @@
 // support.  See the English version for details of its format.
 $dir = basename(dirname(__FILE__));
 
-$LANGUAGES['sv_SE'] = array( $dir, 'Swedish', 'Svenska', 'sve', 'utf-8');
+$LANGUAGES['sv_SE'] = array( $dir, 'Swedish', 'Svenska', 'sv_SE', 'utf-8');

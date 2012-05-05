@@ -11,4 +11,4 @@
 
 $dir = basename(dirname(__file__));
 
-$LANGUAGES['fa'] = array($dir, 'Persian', 'Persian', 'Persian_Iran', 'utf-8');
+$LANGUAGES['fa_IR'] = array($dir, 'Persian', 'Persian', 'fa_IR', 'utf-8');
