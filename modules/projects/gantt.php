@@ -110,6 +110,7 @@ $gantt->setTitle($tableTitle);
 $columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End');
 $columnSizes = array(160, 75, 75, 75);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
+$gantt->setProperties(array('showhgrid' => true));
 
 if (!$start_date || !$end_date) {
     // find out DateRange from $projects array
