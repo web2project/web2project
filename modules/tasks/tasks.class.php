@@ -1094,24 +1094,22 @@ class CTask extends w2p_Core_BaseObject
         $users = $q->loadList();
         $q->clear();
 
-        if (count($users)) {
-            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-            $body = $emailManager->getTaskNotify($this, $users);
-
-            $mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
-        }
-
         $mail_owner = $this->_AppUI->getPref('MAILALL');
 
         foreach ($users as $row) {
             if ($mail_owner || $row['assignee_id'] != $this->_AppUI->user_id) {
                 if ($mail->ValidEmail($row['assignee_email'])) {
+
+                    $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+                    $body = $emailManager->getTaskNotify($this, $row);
+
+                    $mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
+
                     $mail->To($row['assignee_email'], true);
                     $mail->Send();
                 }
             }
         }
-
         return '';
     }
 

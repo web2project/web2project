@@ -172,7 +172,7 @@ class w2p_Output_EmailManager
         return $this->getFileNotify($file);
     }
 
-    public function getTaskNotify(CTask $task, $users)
+    public function getTaskNotify(CTask $task, $user)
     {
         $project = new CProject();
         $projname = $project->load($task->task_project)->project_name;
@@ -181,22 +181,27 @@ class w2p_Output_EmailManager
         $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW) . ':	     ' . $task->task_name . "\n";
 //TODO: Priority not working for some reason, will wait till later
 
-        $date_format = $this->AppUI->getPref('SHDATEFORMAT');
-        $time_format = $this->AppUI->getPref('TIMEFORMAT');
-        $fmt = $date_format . ' ' . $time_format;
 
-//TODO: customize these date formats based on the *receivers'* timezone setting
+        // Fetch user preferences
+        $prefObj = $this->AppUI->loadPrefs($user['assignee_id'], true);
+        $fmt = $prefObj['DISPLAYFORMAT'];
+
+        $timezoneObj = new Date_TimeZone($prefObj['TIMEZONE']);
+        $tzString = $timezoneObj->getShortName();
+
         $start_date = new w2p_Utilities_Date($task->task_start_date);
         $end_date = new w2p_Utilities_Date($task->task_end_date);
-        $body .= $this->AppUI->_('Start Date') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
-        $body .= $this->AppUI->_('Finish Date') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
+
+        // Format dates using preferences but add T as Timezone abbreviation
+        $body .= $this->AppUI->_('Start Date') . ":\t" . $start_date->format($fmt) . "\t$tzString\n";
+        $body .= $this->AppUI->_('Finish Date') . ":\t" . $end_date->format($fmt) . "\t$tzString\n";
 
         $body .= $this->AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
         $body .= $this->AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $task->task_description;
-        if ($users[0]['creator_email']) {
-            $body .= ("\n\n" . $this->AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['creator_name'] . ', ' . $users[0]['creator_email']);
+        if ($user['creator_email']) {
+            $body .= ("\n\n" . $this->AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $user['creator_name'] . ', ' . $user['creator_email']);
         }
-        $body .= ("\n\n" . $this->AppUI->_('Owner', UI_OUTPUT_RAW) . ':' . "\n" . $users[0]['owner_name'] . ', ' . $users[0]['owner_email']);
+        $body .= ("\n\n" . $this->AppUI->_('Owner', UI_OUTPUT_RAW) . ':' . "\n" . $user['owner_name'] . ', ' . $user['owner_email']);
         if (isset($comment) && $comment != '') {
             $body .= "\n\n" . $comment;
         }
