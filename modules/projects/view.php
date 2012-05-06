@@ -49,6 +49,8 @@ $total_hours = $project->getTotalProjectHours();
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
+$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
+
 // create Date objects from the datetime fields
 $end_date = intval($project->project_end_date) ? new w2p_Utilities_Date($project->project_end_date) : null;
 $actual_end_date = null;
