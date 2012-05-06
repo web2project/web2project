@@ -1030,19 +1030,21 @@ class w2p_Core_CAppUI
      * Loads the stored user preferences from the database into the internal
      * preferences variable.
      * @param int User id number
+     * @param bool If false (default) then sture internally, if true return pref array
      */
-    public function loadPrefs($uid = 0)
+    public function loadPrefs($uid = 0, $return = false)
     {
+        // Temp pref object to store result in
+
         $q = new w2p_Database_Query;
         $q->addTable('user_preferences');
         $q->addQuery('pref_name, pref_value');
         $q->addWhere('pref_user = ' . (int) $uid);
         $prefs = $q->loadHashList();
-        $this->user_prefs = array_merge($this->user_prefs, $prefs);
 
         $df = $this->getPref('SHDATEFORMAT');
         $df .= ' ' . $this->getPref('TIMEFORMAT');
-        $this->user_prefs['DISPLAYFORMAT'] = $df;
+        $prefs['DISPLAYFORMAT'] = $df;
 
         $cal_df = $df;
         $cal_df = str_replace('%S', '%s', $cal_df);
@@ -1051,7 +1053,14 @@ class w2p_Core_CAppUI
         $cal_df = str_replace('%I', '%h', $cal_df);
         $cal_df = str_replace('%b', '%M', $cal_df);
         $cal_df = str_replace('%', '', $cal_df);
-        $this->user_prefs['FULLDATEFORMAT'] = $cal_df;
+        $prefs['FULLDATEFORMAT'] = $cal_df;
+
+        if($return) {
+            return $prefs;
+        }
+        else {
+            $this->user_prefs = array_merge($this->user_prefs, $prefs);
+        }
     }
 
     // --- Module connectors
