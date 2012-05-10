@@ -12,7 +12,7 @@
 'Repeat New Password'=>'Répeter nouveau mot de passe',
 'View all allowed companies'=>'Voir toutes sociétés autorisées',
 '[none]'=>'[aucune]',
-'accessDeniedMsg'=>'Vous tentez d\'accéder à un article de dotproject sans les autorisations nécessaires. Merci de contacter l\'administrateur du système.',
+'accessDeniedMsg'=>'Vous tentez d\'accéder à un article de web2project sans les autorisations nécessaires. Merci de contacter l\'administrateur du système.',
 'chgpwLogin'=>'L\'utilisateur n\'existe pas',
 'chgpwUpdated'=>'Votre mot de passe a été mis à jour',
 'chgpwWrongPW'=>'Votre ancien mot de passe est erroné',

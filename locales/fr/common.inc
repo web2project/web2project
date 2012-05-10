@@ -105,6 +105,7 @@
 'New User Password created and emailed to you'=>'Un nouveau mot de passe a été créé et vous a été envoyé par courriel',
 'No'=>'Non',
 'No data available'=>'Pas de donnée disponible',
+'No information available'=>'Aucune information n\'est disponible',
 'None'=>'Aucun',
 'Not Applicable'=>'Non Applicable',
 'Not Defined'=>'Non défini',
