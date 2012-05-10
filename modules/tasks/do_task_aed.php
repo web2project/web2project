@@ -198,8 +198,16 @@ if ($result) {
         }
         $obj->pushDependencies($obj->task_id, $obj->task_end_date);
     }
-    // If there is a set of post_save functions, then we process them
+    // TODO: This is a hotfix for 1083, tasks_dosql.addedit.php is no longer run which is the root of the problem
+    // as no pre or post_save function is defined anymore (i could not find the core reason for this so ergo hotfix
+    if($AppUI->isActiveModule('resources')) {
+        global $other_resources;
+        $other_resources = w2PgetParam($_POST, 'hresource_assign');
 
+        resource_postsave();
+    }
+
+    // If there is a set of post_save functions, then we process them
     if (isset($post_save)) {
         foreach ($post_save as $post_save_function) {
             $post_save_function();
