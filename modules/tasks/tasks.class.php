@@ -40,7 +40,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      * @var bool
      */
-    public $importing_tasks = false; // Introduced this to address bug #1064. Used to keep var between store and postStore.
+    protected $importing_tasks = false; // Introduced this to address bug #1064. Used to keep var between store and postStore.
 
     /**
      * @deprecated
