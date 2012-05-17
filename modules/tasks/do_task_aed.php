@@ -3,6 +3,10 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+/*
+ * TODO: This controller is doing a lot of non-controller things that are making
+ *   things not reusable and generally difficult to maintain.
+ */
 $adjustStartDate = w2PgetParam($_POST, 'set_task_start_date');
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $task_id = (int) w2PgetParam($_POST, 'task_id', 0);
