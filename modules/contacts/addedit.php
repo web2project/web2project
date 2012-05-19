@@ -29,6 +29,10 @@ if (!$canEdit && $contact_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+// $msg is a global, and is used to return messages from functions. This provides an empty fallback string, see bug#1065
+if (!isset($msg)) {
+    $msg = '';
+}
 if ($msg == $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS)) {
 	$userDeleteProtect = true;
 }
