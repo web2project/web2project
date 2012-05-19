@@ -237,8 +237,6 @@
 'days'=>'Dagar',
 'delete log'=>'radera logg',
 'delete task'=>'radera uppdrag',
-'due In'=>'förfaller om',
-'due in'=>'förfaller om',
 'duration'=>'längd',
 'edit this task'=>'redigera detta uppdrag',
 'finish date'=>'slutdatum',

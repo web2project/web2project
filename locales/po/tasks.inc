@@ -231,8 +231,6 @@
 'days'=>'dni',
 'delete log'=>'usuń log',
 'delete task'=>'usuń zadanie',
-'due In'=>'ze względu na',
-'due in'=>'ze względu na',
 'duration'=>'czas trwania',
 'edit this task'=>'edytuj to zadanie',
 'finish date'=>'czas zakończenia',
