@@ -3,19 +3,22 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
-$config = array(
-    'mod_name' => 'Resources',
-    'mod_version' => '1.0.1',
-    'mod_directory' => 'resources',
-    'mod_setup_class' => 'SResource',
-    'mod_type' => 'user',
-    'mod_ui_name' => 'Resources',
-    'mod_ui_icon' => 'resources.png',
-    'mod_description' => '',
-    'permissions_item_table' => 'resources',
-    'permissions_item_field' => 'resource_id',
-    'permissions_item_label' => 'resource_name',
-    'mod_main_class' => 'CResource');
+
+$config = array();
+$config['mod_name']        = 'Resources';           // name the module
+$config['mod_version']     = '1.0.1';               // add a version number
+$config['mod_directory']   = 'resources';           // tell web2project where to find this module
+$config['mod_setup_class'] = 'SResource';           // the name of the PHP setup class (used below)
+$config['mod_type']        = 'user';                // 'core' for modules distributed with w2p by standard, 'user' for additional modules
+$config['mod_ui_name']	   = $config['mod_name'];   // the name that is shown in the main menu of the User Interface
+$config['mod_ui_icon']     = 'resources.png';       // name of a related icon
+$config['mod_description'] = 'Resources';           // some description of the module
+$config['mod_config']      = false;                 // show 'configure' link in viewmods
+$config['mod_main_class']  = 'CResource';
+
+$config['permissions_item_table'] = 'resources';
+$config['permissions_item_field'] = 'resource_id';
+$config['permissions_item_label'] = 'resource_name';
 
 if ($a == 'setup') {
     echo w2PshowModuleConfig($config);
