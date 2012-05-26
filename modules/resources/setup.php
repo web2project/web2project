@@ -87,21 +87,24 @@ class SResource {
         $q->dropTable('resource_types');
         $q->exec();
 
-        return null;
+        global $AppUI;
+        $perms = $AppUI->acl();
+        return $perms->unregisterModule('resources');
     }
 
     public function upgrade($old_version) {
-        $ok = true;
+        $result = false;
+
+        // NOTE: All cases should fall through so all updates are executed.
         switch ($old_version) {
             case '1.0':
                 $q = new w2p_Database_Query;
                 $q->addTable('resources');
                 $q->addField('resource_key', 'varchar(64) not null default ""');
-                $ok = $ok && $q->exec();
-                // FALLTHROUGH
+                $result = $q->exec();
             default:
                 break;
         }
-        return $ok;
+        return $result;
     }
 }
