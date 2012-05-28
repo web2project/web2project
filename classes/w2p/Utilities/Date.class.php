@@ -39,7 +39,7 @@ class w2p_Utilities_Date extends Date {
 		parent::__construct($datetime);
 		if ($tz == '')
 		{
-			$this->setTZ(date_default_timezone_get());
+			$this->setTZ(w2PgetConfig('system_timezone', 'Europe/London'));
 		} else
 		{
 			$this->setTZ($tz);
