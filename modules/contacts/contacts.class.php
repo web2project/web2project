@@ -210,13 +210,13 @@ class CContact extends w2p_Core_BaseObject
 
     public function delete()
     {
-        //if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
-        if ($msg = parent::delete()) {
-            return $msg;
+        if ($this->canDelete() && $this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+            if ($msg = parent::delete()) {
+                return true;
+            }
         }
-        return true;
-        //}
-        //return false;
+
+        return false;
     }
 
     public function check()

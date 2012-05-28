@@ -310,7 +310,7 @@ class w2p_Core_CAppUI
     {
         $userTimezone = $this->getPref('TIMEZONE');
         $userTZ = new DateTimeZone($userTimezone);
-        $systemTZ = new DateTimeZone('Europe/London');
+        $systemTZ = new DateTimeZone(w2PgetConfig('system_timezone', 'Europe/London'));
         $ts = new DateTime($datetime, $systemTZ);
         $ts->setTimezone($userTZ);
 

@@ -3,6 +3,10 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+/*
+ * TODO: This controller is doing a lot of non-controller things that are making
+ *   things not reusable and generally difficult to maintain.
+ */
 $adjustStartDate = w2PgetParam($_POST, 'set_task_start_date');
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $task_id = (int) w2PgetParam($_POST, 'task_id', 0);
@@ -32,7 +36,8 @@ if (!$obj->bind($_POST)) {
 
 // Check to see if the task_project has changed
 if ($new_task_project != 0 and $obj->task_project != $new_task_project) {
-    $taskRecount = ($obj->task_project) ? $obj->task_project : 0;
+    $taskCount = $obj->getTaskCount($obj->task_project);
+    CProject::updateTaskCount($obj->task_project, --$taskCount);
     $obj->task_project = $new_task_project;
     $obj->task_parent = $obj->task_id;
 }
@@ -144,8 +149,8 @@ if ($result) {
         // there are dependencies set!
 
         // backup initial start and end dates
-        $tsd = new w2p_Utilities_Date($obj->task_start_date);
-        $ted = new w2p_Utilities_Date($obj->task_end_date);
+        $tsd = new w2p_Utilities_Date($obj->task_start_date, w2PgetConfig('system_timezone', 'Europe/London'));
+        $ted = new w2p_Utilities_Date($obj->task_end_date, w2PgetConfig('system_timezone', 'Europe/London'));
 
         // updating the table recording the
         // dependency relations with this task
@@ -160,13 +165,14 @@ if ($result) {
             $tempTask->load($obj->task_id);
 
             // shift new start date to the last dependency end date
-            $nsd = new w2p_Utilities_Date($tempTask->get_deps_max_end_date($tempTask));
+            $nsd = new w2p_Utilities_Date($tempTask->get_deps_max_end_date($tempTask), w2PgetConfig('system_timezone', 'Europe/London'));
 
             // prefer Wed 8:00 over Tue 16:00 as start date
             $nsd = $nsd->next_working_day();
 
             // prepare the creation of the end date
             $ned = new w2p_Utilities_Date();
+            $ned->setTZ(w2PgetConfig('system_timezone', 'Europe/London'));
             $ned->copy($nsd);
 
             if (empty($obj->task_start_date)) {

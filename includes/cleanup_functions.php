@@ -398,6 +398,10 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+    
+    // Reformat time strings to take timezones into account
+    $startDateStr = $AppUI->formatTZAwareTime($arr['task_start_date'], '%Y-%m-%d %T');
+    $endDateStr = $AppUI->formatTZAwareTime($arr['task_end_date'], '%Y-%m-%d %T');
 
 	//Check for Tasks Access
 	$canAccess = canTaskAccess($arr['task_id'], $arr['task_access'], $arr['task_owner']);
