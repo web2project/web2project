@@ -73,8 +73,6 @@
 'Do you want to accept this changes?'=>'Souhlasíte se změnami?',
 'Done'=>'Dokončený',
 'Due In'=>'Zbývá dní',
-'due In'=>'zbývá dnů',
-'due in'=>'zbývá dnů',
 'Dur.'=>'Trv.',
 'Duration'=>'Trvání',
 'duration'=>'trvání',

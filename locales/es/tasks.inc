@@ -233,8 +233,6 @@
 'days'=>'días',
 'delete log'=>'borrar log',
 'delete task'=>'eliminar tarea',
-'due In'=>'para',
-'due in'=>'para',
 'duration'=>'duración',
 'edit this task'=>'editar esta tarea',
 'finish date'=>'fecha de finalización',

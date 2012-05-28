@@ -79,8 +79,6 @@
 'Done'=>'Feito',
 'Do not track this task'=>'Não Acompanhar esta Tarefa',
 'Do you want to accept this changes?'=>'Aceita estas modificações?',
-'due in'=>'limite em',
-'due In'=>'limite Em',
 'Due In'=>'Limite em',
 'Dur.'=>'Dur.',
 'duration'=>'duração',

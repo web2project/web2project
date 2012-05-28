@@ -238,8 +238,6 @@
 'days'=>'giorni',
 'delete log'=>'elimina log',
 'delete task'=>'elimina attività',
-'due In'=>'Entro il',
-'due in'=>'entro il',
 'duration'=>'durata',
 'edit this task'=>'modifica questa attività',
 'finish date'=>'data finale',
