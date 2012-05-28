@@ -241,7 +241,7 @@ class CContact extends w2p_Core_BaseObject
         return $errorArray;
     }
 
-    public function canDelete($msg = '', $oid = null, $joins = null)
+    public function canDelete(&$msg = '', $oid = null, $joins = null)
     {
         $tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_contact');
 
