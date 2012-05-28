@@ -231,8 +231,6 @@
 'days'=>'jours',
 'delete log'=>'Supprimer temps passé',
 'delete task'=>'effacer tâche',
-'due In'=>'attendue dans',
-'due in'=>'attendue dans',
 'duration'=>'durée',
 'edit this task'=>'Editer cette tâche',
 'finish date'=>'date de fin',

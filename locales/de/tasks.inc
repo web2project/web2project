@@ -172,8 +172,6 @@
 'badTaskProject'=>'Die Aufgabe kann nicht erstellt werden. Angabe des zugehörigen Projekts fehlt.',
 'days'=>'Tage',
 'delete task'=>'Aufgabe löschen',
-'due In'=>'fällig in',
-'due in'=>'fällig in',
 'duration'=>'Dauer',
 'edit this task'=>'diese Aufgabe bearbeiten',
 'finish date'=>'Enddatum',
