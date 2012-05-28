@@ -144,8 +144,8 @@ if ($result) {
         // there are dependencies set!
 
         // backup initial start and end dates
-        $tsd = new w2p_Utilities_Date($obj->task_start_date);
-        $ted = new w2p_Utilities_Date($obj->task_end_date);
+        $tsd = new w2p_Utilities_Date($obj->task_start_date, w2PgetConfig('system_timezone', 'Europe/London'));
+        $ted = new w2p_Utilities_Date($obj->task_end_date, w2PgetConfig('system_timezone', 'Europe/London'));
 
         // updating the table recording the
         // dependency relations with this task
@@ -160,13 +160,14 @@ if ($result) {
             $tempTask->load($obj->task_id);
 
             // shift new start date to the last dependency end date
-            $nsd = new w2p_Utilities_Date($tempTask->get_deps_max_end_date($tempTask));
+            $nsd = new w2p_Utilities_Date($tempTask->get_deps_max_end_date($tempTask), w2PgetConfig('system_timezone', 'Europe/London'));
 
             // prefer Wed 8:00 over Tue 16:00 as start date
             $nsd = $nsd->next_working_day();
 
             // prepare the creation of the end date
             $ned = new w2p_Utilities_Date();
+            $ned->setTZ(w2PgetConfig('system_timezone', 'Europe/London'));
             $ned->copy($nsd);
 
             if (empty($obj->task_start_date)) {
