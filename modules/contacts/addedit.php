@@ -43,9 +43,9 @@ if ($obj) {
   $row->loadFull(null, $contact_id);
 }
 if (!$row && $contact_id > 0) {
-  $AppUI->setMsg('Link');
-  $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-  $AppUI->redirect();
+    $AppUI->setMsg('Contact');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
 }
 
 $canDelete = $row->canDelete($msg, $contact_id);
@@ -156,17 +156,15 @@ function setCompany( key, val ){
     }
 }
 
+<?php if ($canDelete) { ?>
 function delIt(){
-    <?php if ($userDeleteProtect) { ?>
-	alert('<?php echo $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS); ?>');
-    <?php } else { ?>
 	var form = document.changecontact;
 	if(confirm('<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>')) {
 		form.del.value = '<?php echo $contact_id; ?>';
 		form.submit();
 	}
-    <?php } ?>
 }
+<?php } ?>
 
 function orderByName( x ){
 	var form = document.changecontact;

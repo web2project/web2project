@@ -21,8 +21,6 @@ $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 // load the record data
 $msg = '';
 $contact = new CContact();
-$canDelete = $contact->canDelete($msg, $contact_id);
-$is_user = $contact->isUser($contact_id);
 
 $canEdit = $perms->checkModuleItem($m, 'edit', $contact_id);
 
@@ -34,6 +32,9 @@ if (!$contact->load($contact_id) && $contact_id > 0) {
 	// check only owner can edit
 	$AppUI->redirect('m=public&a=access_denied');
 }
+
+$canDelete = $contact->canDelete($msg, $contact_id);
+$is_user = $contact->isUser($contact_id);
 
 $countries = w2PgetSysVal('GlobalCountries');
 
@@ -69,15 +70,17 @@ $lastupdated = new w2p_Utilities_Date($contact->contact_lastupdate);
         <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
         <input type="hidden" name="contact_owner" value="<?php echo $contact->contact_owner ? $contact->contact_owner : $AppUI->user_id; ?>" />
 </form>
+<?php if ($canDelete) { ?>
 <script language="javascript" type="text/javascript">
 function delIt(){
-        var form = document.changecontact;
-        if(confirm( '<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>' )) {
-                form.del.value = '<?php echo $contact_id; ?>';
-                form.submit();
-        }
+	var form = document.changecontact;
+	if(confirm('<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>')) {
+		form.del.value = '<?php echo $contact_id; ?>';
+		form.submit();
+	}
 }
 </script>
+<?php } ?>
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
 	<tr>
