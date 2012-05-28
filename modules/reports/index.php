@@ -99,15 +99,10 @@ if ($report_type) {
 if (!$suppressHeaders) {
     ?>
     <script language="javascript" type="text/javascript">
-
-    var format_error_msg = '<?php echo $AppUI->_('The Date/Time you typed does not match your prefered format, please retype.', UI_OUTPUT_JS); ?>';
-    var cal_sdf = '<?php echo $cal_sdf ?>';
-
     function changeIt() {
         var f=document.changeMe;
         f.submit();
     }
     </script>
     <?php
-    $AppUI->getModuleJS('reports', 'index');
 }
