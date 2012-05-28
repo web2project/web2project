@@ -156,17 +156,15 @@ function setCompany( key, val ){
     }
 }
 
+<?php if ($canDelete) { ?>
 function delIt(){
-    <?php if ($userDeleteProtect) { ?>
-	alert('<?php echo $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS); ?>');
-    <?php } else { ?>
 	var form = document.changecontact;
 	if(confirm('<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>')) {
 		form.del.value = '<?php echo $contact_id; ?>';
 		form.submit();
 	}
-    <?php } ?>
 }
+<?php } ?>
 
 function orderByName( x ){
 	var form = document.changecontact;
