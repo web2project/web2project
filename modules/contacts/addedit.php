@@ -43,9 +43,9 @@ if ($obj) {
   $row->loadFull(null, $contact_id);
 }
 if (!$row && $contact_id > 0) {
-  $AppUI->setMsg('Link');
-  $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-  $AppUI->redirect();
+    $AppUI->setMsg('Contact');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
 }
 
 $canDelete = $row->canDelete($msg, $contact_id);
