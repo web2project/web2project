@@ -33,6 +33,8 @@ if ($a == 'setup') {
 
 class SResource {
     public function install() {
+        global $AppUI;
+
         $ok = true;
         $q = new w2p_Database_Query;
         $sql = '(
@@ -73,7 +75,7 @@ class SResource {
 
         $resourceTypes = array('Equipment', 'Tool', 'Venue');
         $q->addTable('resource_types');
-        foreach ($resourceTypes as $resouceType) {
+        foreach ($resourceTypes as $resourceType) {
             $q->addInsert('resource_type_name', $resourceType);
             $ok = $ok && $q->exec();
         }
