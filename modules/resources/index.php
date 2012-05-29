@@ -3,6 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$tab = $AppUI->processIntState('ResourceTypeTab', $_GET, 'tab', 0);
+
 $AppUI->savePlace();
 
 $obj = new CResource();
@@ -16,16 +18,14 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-if (isset($_GET['tab'])) {
-	$AppUI->setState('ResourcesIdxTab', w2PgetParam($_GET, 'tab', null));
+$resource_types = w2PgetSysVal('ResourceTypes');
+if ($tab != -1) {
+	array_unshift($resource_types, 'All Resources');
 }
-$resourceTab = $AppUI->getState('ResourcesIdxTab', 0);
-$tabBox = new CTabBox('?m=resources', W2P_BASE_DIR . '/modules/resources/', $resourceTab);
-$tabbed = $tabBox->isTabbed();
-foreach ($obj->loadTypes() as $type) {
-	if ($type['resource_type_id'] == 0 && !$tabbed)
-		continue;
-	$tabBox->add('vw_resources', $type['resource_type_name']);
-}
+array_map(array($AppUI, '_'), $resource_types);
 
+$tabBox = new CTabBox('?m=resources', W2P_BASE_DIR . '/modules/resources/', $tab);
+foreach ($resource_types as $resource_type) {
+	$tabBox->add('vw_resources', $resource_type);
+}
 $tabBox->show();
