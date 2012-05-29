@@ -69,49 +69,49 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
 ?>
 </script>
 <form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" name="otherFrm" accept-charset="utf-8">
-<input type="hidden" name="sub_form" value="1" />
-<input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
-<input type="hidden" name="dosql" value="do_task_aed" />
-	<input name="hresource_assign" type="hidden" value="<?php echo $initResAssignment; ?>"/>
-<table width="100%" border="1" cellpadding="4" cellspacing="0" class="std addedit">
-<tr>
-	<td valign="top" align="center">
-		<table cellspacing="0" cellpadding="2" border="0">
-			<tr>
-				<td><?php echo $AppUI->_('Resources'); ?>:</td>
-				<td><?php echo $AppUI->_('Assigned to Task'); ?>:</td>
-			</tr>
-			<tr>
-				<td>
-					<?php echo arraySelect($all_resources, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
-				</td>
-				<td>
-					<?php echo arraySelect($resources, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
-				</td>
-			<tr>
-				<td colspan="2" align="center">
-					<table>
-					<tr>
-						<td align="right"><input type="button" class="button" value="&gt;" onclick="addResource(document.otherFrm)" /></td>
-						<td>
-							<select name="resource_assignment" class="text">
-							<?php
-for ($i = 5; $i <= 100; $i += 5) {
-	echo "<option " . (($i == 100) ? "selected=\"true\"" : "") . " value=\"" . $i . "\">" . $i . "%</option>";
-}
-?>
-							</select>
-						</td>				
-						<td align="left"><input type="button" class="button" value="&lt;" onclick="removeResource(document.otherFrm)" /></td>					
-					</tr>
-					</table>
-				</td>
-			</tr>
-			</tr>
-		</table>
-	</td>
-</tr>
-</table>
+    <input type="hidden" name="sub_form" value="1" />
+    <input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
+    <input type="hidden" name="dosql" value="do_task_aed" />
+    <input name="hresource_assign" type="hidden" value="<?php echo $initResAssignment; ?>"/>
+    <table width="100%" border="1" cellpadding="4" cellspacing="0" class="std addedit">
+        <tr>
+            <td valign="top" align="center">
+                <table cellspacing="0" cellpadding="2" border="0">
+                    <tr>
+                        <td><?php echo $AppUI->_('Resources'); ?>:</td>
+                        <td><?php echo $AppUI->_('Assigned to Task'); ?>:</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php echo arraySelect($all_resources, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
+                        </td>
+                        <td>
+                            <?php echo arraySelect($resources, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <table>
+                            <tr>
+                                <td align="right"><input type="button" class="button" value="&gt;" onclick="addResource(document.otherFrm)" /></td>
+                                <td>
+                                    <select name="resource_assignment" class="text">
+                                    <?php
+        for ($i = 5; $i <= 100; $i += 5) {
+            echo "<option " . (($i == 100) ? "selected=\"true\"" : "") . " value=\"" . $i . "\">" . $i . "%</option>";
+        }
+        ?>
+                                    </select>
+                                </td>
+                                <td align="left"><input type="button" class="button" value="&lt;" onclick="removeResource(document.otherFrm)" /></td>
+                            </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </form>
 <script language="javascript" type="text/javascript">
   subForm.push(new FormDefinition(<?php echo $tab; ?>, document.otherFrm, checkOther, saveOther));
