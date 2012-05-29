@@ -46,6 +46,9 @@ if ($canEdit) {
 $titleBlock->show();
 
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$types = w2PgetSysVal('ResourceTypes');
+$types[0] = 'Not Specified';
+$customLookups = array('resource_type' => $types);
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
@@ -70,9 +73,9 @@ if ($canDelete) {
     <tr>
         <td valign="top" width="100%">
             <strong><?php echo $AppUI->_('Details'); ?></strong>
-            <table cellspacing="1" cellpadding="2" width="100%">
+            <table cellspacing="1" cellpadding="2" width="50%">
                 <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Resource ID'); ?>:</td>
+                    <td align="right" nowrap="nowrap" width="5%"><?php echo $AppUI->_('Resource ID'); ?>:</td>
                     <?php echo $htmlHelper->createCell('resource_key', $resource->resource_key); ?>
                 </tr>
                 <tr>
@@ -81,7 +84,7 @@ if ($canDelete) {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $resource->getTypeName(); ?></td>
+                    <?php echo $htmlHelper->createCell('resource_type', $resource->resource_type, $customLookups); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Max Allocation %'); ?>:</td>
