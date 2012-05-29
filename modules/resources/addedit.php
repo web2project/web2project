@@ -3,72 +3,109 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$resource_id = (int) w2PgetParam($_GET, 'resource_id', null);
+$resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
+
 $perms = &$AppUI->acl();
-$canDelete = $perms->checkModuleItem('resources', 'delete', $resource_id);
-if ((!$resource_id && !canAdd('resources')) || !$canEdit) {
+$canAuthor = canAdd('links');
+$canEdit = $perms->checkModuleItem('links', 'edit', $link_id);
+
+// check permissions
+if (!$canAuthor && !$resource_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$obj = new CResource();
-if ($resource_id && !$obj->load($resource_id)) {
-	$AppUI->setMsg('Resource');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
+if (!$canEdit && $resource_id) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$titleBlock = new w2p_Theme_TitleBlock(($resource_id ? 'Edit Resource' : 'Add Resource'), 'resources.png', $m, $m . '.' . $a);
-$titleBlock->addCrumb('?m=resources', 'resource list');
+// load the record data
+$resource = new CResource();
+$obj = $AppUI->restoreObject();
+if ($obj) {
+    $resource = $obj;
+    $resource_id = $resource->resource_id;
+} else {
+    $resource->load($resource_id);
+}
+
+if (!$resource_id && $resource_id > 0) {
+    $AppUI->setMsg('Resource');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
+}
+
+// setup the title block
+$ttl = $resource_id ? 'Edit Resource' : 'Add Resource';
+$titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'resources.png', $m, $m . '.' . $a);
+$titleBlock->addCrumb('?m=' . $m, $m . ' list');
+
 if ($resource_id) {
 	$titleBlock->addCrumb('?m=resources&a=view&resource_id=' . $resource_id, 'view this resource');
 }
+
+$canDelete = $perms->checkModuleItem($m, 'delete', $resource_id);
+if ($canDelete && $resource_id) {
+    if (!isset($msg)) {
+        $msg = '';
+    }
+	$titleBlock->addCrumbDelete('delete resource', $canDelete, $msg);
+}
 $titleBlock->show();
 
-$typelist = $obj->typeSelect();
+$typelist = $resource->typeSelect();
 ?>
+<script language="javascript" type="text/javascript">
+function submitIt() {
+	var form = document.editfrm;
+	if (form.resource_name.value.length < 3) {
+		alert( "<?php echo $AppUI->_('You must enter a name for the resource', UI_OUTPUT_JS); ?>" );
+		form.resource_name.focus();
+	} else {
+		form.submit();
+	}
+}
+</script>
 <form name="editfrm" action="?m=resources" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_resource_aed" />
-    <input type="hidden" name="resource_id" value="<?php echo w2PformSafe($resource_id); ?>" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
+
     <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit">
         <tr>
             <td align="center" >
                 <table>
                 <tr>
                     <td align="right"><?php echo $AppUI->_('Resource ID'); ?></td>
-                    <td align="left"><input type="text" class="text" size="15" maxlength="64" name="resource_key" value="<?php echo w2PformSafe($obj->resource_key); ?>" /></td>
+                    <td align="left"><input type="text" class="text" size="15" maxlength="64" name="resource_key" value="<?php echo w2PformSafe($resource->resource_key); ?>" /></td>
                 </tr>
                 <tr>
                     <td align="right"><?php echo $AppUI->_('Resource Name'); ?></td>
-                    <td align="left"><input type="text" class="text" size="30" maxlength="255" name="resource_name" value="<?php echo w2PformSafe($obj->resource_name); ?>" /></td>
+                    <td align="left"><input type="text" class="text" size="30" maxlength="255" name="resource_name" value="<?php echo w2PformSafe($resource->resource_name); ?>" /></td>
                 </tr>
                 <tr>
                     <td align="right"><?php echo $AppUI->_('Type'); ?></td>
-                    <td align="left"><?php echo arraySelect($typelist, 'resource_type', 'class="text"', $obj->resource_type, true); ?></td>
+                    <td align="left"><?php echo arraySelect($typelist, 'resource_type', 'class="text"', $resource->resource_type, true); ?></td>
                 </tr>
+                <?php
+                $resource->resource_max_allocation = ($resource->resource_max_allocation) ? $resource->resource_max_allocation : 100;
+                ?>
                 <tr>
                     <td align="right"><?php echo $AppUI->_('Maximum Allocation Percentage'); ?></td>
-                    <td><input type="text" class="text" style="text-align:right;" size="5" maxlength="5" value="<?php
-            if ($obj->resource_max_allocation) {
-                echo w2PformSafe($obj->resource_max_allocation);
-            } else {
-                echo '100';
-            }
-                ?>"
-                    name="resource_max_allocation" /></td>
+                    <td><input type="text" class="text" style="text-align:right;" size="5" maxlength="5" value="<?php echo $resource->resource_max_allocation; ?>" name="resource_max_allocation" /></td>
                 </tr>
                 <tr>
                     <td align="right"><?php echo $AppUI->_('Notes'); ?></td>
-                    <td><textarea name="resource_note" cols="60" rows="7"><?php echo w2PformSafe($obj->resource_note); ?></textarea></td>
+                    <td><textarea name="resource_note" cols="60" rows="7"><?php echo w2PformSafe($resource->resource_note); ?></textarea></td>
                 </tr>
                 </table>
             </td>
         </tr>
         <tr>
             <td>
-                <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back(-1);" />
+                <input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=resources';}" />
             </td>
             <td align="right">
-                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button" onclick="submitIt(document.editfrm);" />
+                <input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
             </td>
         </tr>
     </table>
