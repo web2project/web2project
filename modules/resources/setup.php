@@ -3,6 +3,13 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
+/*
+ * The original work is copyright 2004 by Adam Donnison <adam@saki.com.au> on
+ *   behalf of the dotproject project.
+ *
+ * Major updates occured in 2012 by Keith Casey <keith@caseysoftware.com> for
+ *   use with web2project, the dotproject fork.
+ */
 
 $config = array();
 $config['mod_name']        = 'Resources';           // name the module

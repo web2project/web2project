@@ -3,7 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-// Copyright 2004 Adam Donnison <adam@saki.com.au>
 $resource_id = (int) w2PgetParam($_GET, 'resource_id', null);
 $perms = &$AppUI->acl();
 $canDelete = $perms->checkModuleItem('resources', 'delete', $resource_id);
