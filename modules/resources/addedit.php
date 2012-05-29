@@ -52,7 +52,7 @@ if ($canDelete && $resource_id) {
 }
 $titleBlock->show();
 
-$typelist = $resource->typeSelect();
+$typelist = w2PgetSysVal('ResourceTypes');
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
@@ -65,6 +65,21 @@ function submitIt() {
 	}
 }
 </script>
+<?php if ($canDelete) { ?>
+  <script language="javascript" type="text/javascript">
+    function delIt() {
+    	if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Resource') . '?'; ?>' )) {
+    		document.frmDelete.submit();
+    	}
+    }
+  </script>
+
+	<form name="frmDelete" action="./index.php?m=resources" method="post" accept-charset="utf-8">
+		<input type="hidden" name="dosql" value="do_resource_aed" />
+		<input type="hidden" name="del" value="1" />
+		<input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
+	</form>
+<?php } ?>
 <form name="editfrm" action="?m=resources" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_resource_aed" />
     <input type="hidden" name="del" value="0" />
