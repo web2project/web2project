@@ -13,7 +13,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $config = array();
 $config['mod_name']        = 'Resources';           // name the module
-$config['mod_version']     = '1.0.1';               // add a version number
+$config['mod_version']     = '1.1.0';               // add a version number
 $config['mod_directory']   = 'resources';           // tell web2project where to find this module
 $config['mod_setup_class'] = 'SResource';           // the name of the PHP setup class (used below)
 $config['mod_type']        = 'user';                // 'core' for modules distributed with w2p by standard, 'user' for additional modules
@@ -35,7 +35,6 @@ class SResource {
     public function install() {
         global $AppUI;
 
-        $ok = true;
         $q = new w2p_Database_Query;
         $sql = '(
             resource_id integer not null auto_increment,
@@ -49,19 +48,11 @@ class SResource {
             key (resource_type)
         )';
         $q->createTable('resources', $sql);
-        $ok = $ok && $q->exec();
-        $q->clear();
+		if (!$q->exec()) {
+            return false;
+        }
 
-        $sql = '(
-            resource_type_id integer not null auto_increment,
-            resource_type_name varchar(255) not null default "",
-            resource_type_note text,
-            primary key (resource_type_id)
-        )';
-        $q->createTable('resource_types', $sql);
-        $ok = $ok && $q->exec();
         $q->clear();
-
         $sql = '(
             resource_id integer not null default 0,
             task_id integer not null default 0,
@@ -70,19 +61,11 @@ class SResource {
             key (task_id, resource_id)
         )';
         $q->createTable('resource_tasks', $sql);
-        $ok = $ok && $q->exec();
-        $q->clear();
-
-        $resourceTypes = array('Equipment', 'Tool', 'Venue');
-        $q->addTable('resource_types');
-        foreach ($resourceTypes as $resourceType) {
-            $q->addInsert('resource_type_name', $resourceType);
-            $ok = $ok && $q->exec();
-        }
-
-        if (!$ok) {
+		if (!$q->exec()) {
             return false;
         }
+
+        $this->addTypes();
 
         $perms = $AppUI->acl();
         return $perms->registerModule('Resources', 'resources');
@@ -95,9 +78,6 @@ class SResource {
         $q->clear();
         $q->dropTable('resource_tasks');
         $q->exec();
-        $q->clear();
-        $q->dropTable('resource_types');
-        $q->exec();
 
         global $AppUI;
         $perms = $AppUI->acl();
@@ -107,16 +87,43 @@ class SResource {
     public function upgrade($old_version) {
         $result = false;
 
+        $q = new w2p_Database_Query;
+
         // NOTE: All cases should fall through so all updates are executed.
         switch ($old_version) {
             case '1.0':
-                $q = new w2p_Database_Query;
                 $q->addTable('resources');
                 $q->addField('resource_key', 'varchar(64) not null default ""');
                 $result = $q->exec();
+                $q->clear();
+            case '1.0.1':
+                $resource = new CResource();
+                $resource->convertTypes();
+            case '1.1.0':
+                //current version
             default:
                 break;
         }
         return $result;
+    }
+
+    private function addTypes()
+    {
+//TODO: refactor as proper sysvals handling
+        $q = new w2p_Database_Query();
+
+        $i = 1;
+        $resourceTypes = array('All resources', 'Equipment', 'Tool', 'Venue');
+        foreach ($resourceTypes as $type) {
+            $q->addTable('sysvals');
+            $q->addInsert('sysval_key_id', 1);
+            $q->addInsert('sysval_title', 'ResourceTypes');
+            $q->addInsert('sysval_value', $type);
+            $q->addInsert('sysval_value_id', $i);
+            $q->exec();
+            $q->clear();
+            $i++;
+        }
+        return true;
     }
 }
