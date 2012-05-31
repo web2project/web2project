@@ -5,26 +5,25 @@ if (!defined('W2P_BASE_DIR')) {
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
-// check permissions for this record
-$perms = &$AppUI->acl();
+$company = new CCompany();
+$company->company_id = $company_id;
 
-$canRead = $perms->checkModuleItem($m, 'view', $company_id);
+$canRead = $company->canView();
 if (!$canRead) {
   $AppUI->redirect('m=public&a=access_denied');
 }
 
-$canAdd = $perms->checkModuleItem($m, 'add');
-$canEdit = $perms->checkModuleItem($m, 'edit', $company_id);
-$canDelete = $perms->checkModuleItem($m, 'delete', $company_id);
+$canAdd = $company->canCreate();
+$canEdit = $company->canEdit();
+$canDelete = $company->canDelete();
+//TODO: delete the next line one the $deletable variable is renamed properly
+$deletable = $canDelete;
+
+$company->loadFull(null, $company_id);
 
 $tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
 
-$company = new CCompany();
-$company->loadFull(null, $company_id);
 
-// check if this record has dependencies to prevent deletion
-$msg = '';
-$deletable = $company->canDelete($msg, $company_id);
 
 // load the record data
 
@@ -61,7 +60,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-if ($canDelete && $deletable) {
+if ($canDelete) {
 ?>
   <script language="javascript" type="text/javascript">
     function delIt() {
