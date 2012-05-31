@@ -73,7 +73,7 @@ class CCompany extends w2p_Core_BaseObject {
 	}
 
     public function delete() {
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
             if ($msg = parent::delete()) {
                 return $msg;
             }
@@ -96,14 +96,14 @@ class CCompany extends w2p_Core_BaseObject {
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
         }
-        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
@@ -215,9 +215,8 @@ class CCompany extends w2p_Core_BaseObject {
 
 	public static function getContacts(w2p_Core_CAppUI $AppUI, $companyId) {
 		$results = array();
-		$perms = $AppUI->acl();
 
-		if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $companyId > 0) {
+        if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $companyId > 0) {
 			$q = new w2p_Database_Query();
 			$q->addQuery('c.*');
             $q->addQuery('c.contact_display_name as contact_name');
@@ -263,8 +262,6 @@ class CCompany extends w2p_Core_BaseObject {
 	}
 
 	public static function getDepartments(w2p_Core_CAppUI $AppUI, $companyId) {
-		$perms = $AppUI->acl();
-
 		if ($AppUI->isActiveModule('departments') && canView('departments')) {
 			$q = new w2p_Database_Query();
 			$q->addTable('departments');
