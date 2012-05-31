@@ -338,6 +338,16 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         return $result;
     }
 
+    public function canCreate() {
+        return $this->_perms->checkModuleItem($this->_tbl_module, 'add');
+    }
+    public function canEdit() { 
+        return $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key});
+    }
+    public function canView() {
+        return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->{$this->_tbl_key});
+    }
+
     /**
      * 	Generic check for whether dependencies exist for this object in the db schema
      *
@@ -352,8 +362,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $result = true;
 
         // First things first.  Are we allowed to delete?
-        $acl = &$this->_AppUI->acl();
-        if (!$acl->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
+        if (!$this->_perms->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
             $msg = $this->_AppUI->_('noDeletePermission');
             $this->_error['noDeletePermission'] = $msg;
             return false;
