@@ -599,7 +599,7 @@ class CTask extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $this->task_updated = $q->dbfnNowWithTZ();
 
-        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
 
             // Load and globalize the old, not yet updated task object
             // e.g. we need some info later to calculate the shifting time for depending tasks
@@ -644,7 +644,7 @@ class CTask extends w2p_Core_BaseObject
             }
         }
 
-        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->task_created = $q->dbfnNowWithTZ();
             if ($this->task_start_date == '') {
                 $this->task_start_date = '0000-00-00 00:00:00';

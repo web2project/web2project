@@ -583,7 +583,7 @@ class CEvent extends w2p_Core_BaseObject
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $this->event_updated = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
@@ -591,7 +591,7 @@ class CEvent extends w2p_Core_BaseObject
                 $stored = true;
             }
         }
-        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->event_created = $q->dbfnNowWithTZ();
             $this->event_updated = $this->event_created;
             if (($msg = parent::store())) {

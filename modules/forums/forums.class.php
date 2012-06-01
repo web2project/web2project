@@ -162,14 +162,14 @@ class CForum extends w2p_Core_BaseObject
             return $this->_error;
         }
 
-        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
         }
-        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->forum_create_date = $this->_AppUI->convertToSystemTZ($this->forum_create_date);
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;

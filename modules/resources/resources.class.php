@@ -74,14 +74,13 @@ class CResource extends w2p_Core_BaseObject {
         }
 
         $q = $this->_getQuery();
-        if ($this->resource_id && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
-
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             if (($msg = parent::store())) {
                 return $msg;
             }
             $stored = true;
         }
-        if (0 == $this->resource_id && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             if (($msg = parent::store())) {
                 return $msg;
             }

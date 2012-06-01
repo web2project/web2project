@@ -51,7 +51,7 @@ class CFile extends w2p_Core_BaseObject {
             $this->addHelpDeskTaskLog();
         }
 
-        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user.
             // If not then we are just editing the file information alone. So we should leave the file_id as it is.
             $this->file_parent = $this->file_id;
@@ -65,7 +65,7 @@ class CFile extends w2p_Core_BaseObject {
                 $stored = true;
             }
         }
-        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->file_owner = $this->_AppUI->user_id;
             $q = $this->_getQuery();
             $q->clear();
