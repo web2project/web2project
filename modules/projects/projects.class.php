@@ -158,7 +158,7 @@ class CProject extends w2p_Core_BaseObject
     {
         $result = false;
 
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->addTable('tasks');
             $q->addQuery('task_id');
@@ -598,14 +598,14 @@ class CProject extends w2p_Core_BaseObject
          */
         $q = $this->_getQuery();
         $this->project_updated = $q->dbfnNowWithTZ();
-        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
         }
-        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->project_created = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;

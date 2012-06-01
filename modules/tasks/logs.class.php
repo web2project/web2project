@@ -194,7 +194,7 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->task_log_hours = $this->task_log_hours;
 		$this->task_log_costcode = cleanText($this->task_log_costcode);
 
-        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             if (($msg = parent::store())) {
                 $this->_error['store-check'] = $msg;
             } else {
@@ -202,7 +202,7 @@ class CTask_Log extends w2p_Core_BaseObject
                 $this->updateTaskSummary($this->_AppUI, $this->task_log_task);
             }
 		}
-        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
 			$this->task_log_created = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 $this->_error['store-check'] = $msg;
@@ -230,7 +230,7 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->load($this->task_log_id);
 		$task_id = $this->task_log_task;
 
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
 			if ($msg = parent::delete()) {
 				return $msg;
 			}

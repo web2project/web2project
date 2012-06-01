@@ -130,14 +130,15 @@ class CDepartment extends w2p_Core_BaseObject {
             return $this->_error;
         }
 
-        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
                 $stored = true;
             }
 		}
-        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem($this->_tbl_module, 'add')) {
+
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
             } else {
@@ -148,7 +149,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	}
 
 	public function delete() {
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
 
             $rows = $this->loadAll(null, 'dept_parent = '. (int)$this->dept_id);
             if (count($rows)) {

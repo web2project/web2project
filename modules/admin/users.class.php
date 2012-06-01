@@ -53,9 +53,7 @@ class CUser extends w2p_Core_BaseObject
         }
 
         if ($this->{$this->_tbl_key} &&
-                ($this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})
-                || $this->{$this->_tbl_key} == $this->_AppUI->user_id)
-        ) {
+                ($this->canEdit() || $this->{$this->_tbl_key} == $this->_AppUI->user_id)) {
             $this->perm_func = 'updateLogin';
             $tmpUser = new CUser();
             $tmpUser->overrideDatabase($this->_query);
@@ -76,7 +74,7 @@ class CUser extends w2p_Core_BaseObject
             }
         }
 
-        if (0 == $this->{$this->_tbl_key} && ($this->_perms->checkModuleItem($this->_tbl_module, 'add') || ($externally_created_user && w2PgetConfig('activate_external_user_creation', false)))) {
+        if (0 == $this->{$this->_tbl_key} && ($this->canCreate() || ($externally_created_user && w2PgetConfig('activate_external_user_creation', false)))) {
             $this->perm_func = 'addLogin';
             $this->user_password = md5($this->user_password);
 
@@ -146,7 +144,7 @@ class CUser extends w2p_Core_BaseObject
 
     public function delete()
     {
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
 
             $this->_perms->deleteLogin($this->user_id);
 
