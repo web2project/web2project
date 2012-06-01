@@ -8,73 +8,65 @@ $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 $dept_parent = (int) w2PgetParam($_GET, 'dept_parent', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
-// check permissions for this record
-$perms = &$AppUI->acl();
-$canAuthor = canAdd('departments');
-$canEdit = $perms->checkModuleItem('departments', 'edit', $dept_id);
+$department = new CDepartment();
+$department->dept_id = $dept_id;
 
-// check permissions
+$canAuthor = $department->canCreate();
 if (!$canAuthor && !$dept_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+$canEdit = $department->canEdit();
 if (!$canEdit && $dept_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
+
+// load the record data
+$obj = $AppUI->restoreObject();
+if ($obj) {
+    $department = $obj;
+    $dept_id = $department->dept_id;
+} else {
+    $department->loadFull(null, $dept_id);
+}
+if (!$department && $dept_id > 0) {
+    $AppUI->setMsg('Department');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
+}
+
+$companyName = $department->company_name;
+
+$company_id = $dept_id ? $department->dept_company : $company_id;
+
+if (!$dept_id && $department->company_name === null) {
+    $AppUI->setMsg('badCompany', UI_MSG_ERROR);
+    $AppUI->redirect();
+}
+
+// collect all the departments in the company
+if ($company_id) {
+    $company = new CCompany();
+    $company->loadFull(null, $company_id);
+    $companyName = $company->company_name;
+    $depts = $department->loadOtherDepts(null, $company_id, 0);
+    $depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Department') . ' -'), $depts);
+}
+
+// setup the title block
+$ttl = $dept_id > 0 ? 'Edit Department' : 'Add Department';
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'departments.png', $m, $m . '.' . $a);
+$titleBlock->addCrumb('?m=departments', 'department list');
+$titleBlock->addCrumb('?m=companies', 'companies list');
+$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
+$titleBlock->addCrumb('?m=departments&a=view&dept_id=' . $dept_id, 'view this department');
+$titleBlock->show();
 
 // load the department types
 $types = w2PgetSysVal('DepartmentType');
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
 		array('-' => '----') + w2PgetSysVal('GlobalCountries');
 
-// load the record data
-$department = new CDepartment();
-$obj = $AppUI->restoreObject();
-if ($obj) {
-  $department = $obj;
-  $dept_id = $department->dept_id;
-} else {
-  $department->loadFull(null, $dept_id);
-}
-$companyName = $department->company_name;
-if (!$department && $dept_id > 0) {
-  $AppUI->setMsg('Department');
-  $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-  $AppUI->redirect();
-}
-
-if (!$department && $dept_id > 0) {
-	$titleBlock = new w2p_Theme_TitleBlock('Invalid Department ID', 'departments.png', $m, $m . '.' . $a);
-	$titleBlock->addCrumb('?m=companies', 'companies list');
-	if ($company_id) {
-		$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
-	}
-	$titleBlock->show();
-} else {
-	$company_id = $dept_id ? $department->dept_company : $company_id;
-
-	if (!$dept_id && $department->company_name === null) {
-		$AppUI->setMsg('badCompany', UI_MSG_ERROR);
-		$AppUI->redirect();
-	}
-
-	// collect all the departments in the company
-	if ($company_id) {
-		$company = new CCompany();
-    $company->loadFull(null, $company_id);
-    $companyName = $company->company_name;
-    $depts = $department->loadOtherDepts(null, $company_id, 0);
-		$depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Department') . ' -'), $depts);
-	}
-
-	// setup the title block
-	$ttl = $dept_id > 0 ? 'Edit Department' : 'Add Department';
-	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'departments.png', $m, $m . '.' . $a);
-	$titleBlock->addCrumb('?m=departments', 'department list');
-	$titleBlock->addCrumb('?m=companies', 'companies list');
-	$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
-	$titleBlock->addCrumb('?m=departments&a=view&dept_id=' . $dept_id, 'view this department');
-	$titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
 function testURL( x ) {
@@ -186,6 +178,8 @@ function submitIt() {
 			<td align="right"><?php echo $AppUI->_('Owner'); ?>:</td>
 			<td>
 				<?php
+                    // check permissions for this record
+                    $perms = &$AppUI->acl();
 					// collect all active users for the department owner list
 					$users = $perms->getPermittedUsers('projects');
 					$owners =array('' => $AppUI->_('(Select a user)')) +  $users;
@@ -218,4 +212,3 @@ function submitIt() {
 		</tr>
 	</table>
 </form>
-<?php } ?>

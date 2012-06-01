@@ -4,41 +4,38 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $link_id    = (int) w2PgetParam($_GET, 'link_id', 0);
+$task_id    = (int) w2PgetParam($_GET, 'task_id', 0);
+$project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
-// We are adding, so load task and project if available
-if (0 == $link_id) {
-    $task_id    = (int) w2PgetParam($_GET, 'task_id', 0);
-    $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
-}
 
-// check permissions for this record
-$perms = &$AppUI->acl();
-$canAuthor = canAdd('links');
-$canEdit = $perms->checkModuleItem('links', 'edit', $link_id);
+$link = new CLink();
+$link->link_id = $link_id;
 
-// check permissions
+$canAuthor = $link->canCreate();
 if (!$canAuthor && !$link_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+$canEdit = $link->canEdit();
 if (!$canEdit && $link_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// load the record data
-$link = new CLink();
+
 $obj = $AppUI->restoreObject();
 if ($obj) {
-  $link = $obj;
-  $link_id = $link->link_id;
+    $link = $obj;
+    $link_id = $link->link_id;
 } else {
-  $link->loadFull(null, $link_id);
+    $link->loadFull(null, $link_id);
 }
 if (!$link && $link_id > 0) {
     $AppUI->setMsg('Link');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect();
-} elseif (0 == $link_id && ($project_id || $task_id)) {
+}
+
+if (0 == $link_id && ($project_id || $task_id)) {
 
     // We are creating a link, so if we have them lets figure out the project
     // and task id
@@ -52,11 +49,15 @@ if (!$link && $link_id > 0) {
     }
 }
 
+
+
+
+
 // setup the title block
 $ttl = $link_id ? 'Edit Link' : 'Add Link';
 $titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'folder5.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, 'links list');
-$canDelete = $perms->checkModuleItem($m, 'delete', $link_id);
+$canDelete = $link->canDelete();
 if ($canDelete && $link_id) {
         if (!isset($msg)) {
             $msg = '';

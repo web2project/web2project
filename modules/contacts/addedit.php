@@ -7,6 +7,34 @@ $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
+
+$row = new CContact();
+$row->contact_id = $contact_id;
+
+$canAuthor = $row->canCreate();
+if (!$canAuthor && !$contact_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+$canEdit = $row->canEdit();
+if (!$canEdit && $contact_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+// load the record data
+$obj = $AppUI->restoreObject();
+if ($obj) {
+    $row = $obj;
+    $contact_id = $row->contact_id;
+} else {
+    $row->loadFull(null, $contact_id);
+}
+if (!$row && $contact_id > 0) {
+    $AppUI->setMsg('Contact');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
+}
+
 $company = new CCompany();
 $company->load($company_id);
 $company_name = $company->company_name;
@@ -15,49 +43,21 @@ $dept = new CDepartment();
 $dept->load($dept_id);
 $dept_name = $dept->dept_name;
 
-// check permissions for this record
-$perms = &$AppUI->acl();
-$canAuthor = canAdd('contacts');
-$canEdit = $perms->checkModuleItem('contacts', 'edit', $contact_id);
-
-// check permissions
-if (!$canAuthor && !$contact_id) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
-
-if (!$canEdit && $contact_id) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
-
-if ($msg == $AppUI->_('contactsDeleteUserError', UI_OUTPUT_JS)) {
-	$userDeleteProtect = true;
-}
-
-// load the record data
-$row = new CContact();
-$obj = $AppUI->restoreObject();
-if ($obj) {
-  $row = $obj;
-  $contact_id = $row->contact_id;
-} else {
-  $row->loadFull(null, $contact_id);
-}
-if (!$row && $contact_id > 0) {
-    $AppUI->setMsg('Contact');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
-$canDelete = $row->canDelete($msg, $contact_id);
 $is_user = $row->isUser($contact_id);
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
+
+
+
+
+
 // setup the title block
 $ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
+$canDelete = $row->canDelete();
 if ($canDelete && $contact_id) {
 	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
 }

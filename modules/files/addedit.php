@@ -8,18 +8,31 @@ $file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 $ci = w2PgetParam($_GET, 'ci', 0) == 1 ? true : false;
 $preserve = $w2Pconfig['files_ci_preserve_attr'];
 
-// check permissions for this record
-$perms = &$AppUI->acl();
-$canAuthor = canAdd('files');
-$canEdit = $perms->checkModuleItem('files', 'edit', $file_id);
+$file = new CFile();
+$file->file_id = $file_id;
 
-// check permissions
+$canAuthor = $file->canCreate();
 if (!$canAuthor && !$file_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+$canEdit = $file->canEdit();
 if (!$canEdit && $file_id) {
 	$AppUI->redirect('m=public&a=access_denied');
+}
+
+// load the record data
+$obj = $AppUI->restoreObject();
+if ($obj) {
+    $file = $obj;
+    $file_id = $file->file_id;
+} else {
+    $obj = $file->load($file_id);
+}
+if (!$file && $file_id > 0) {
+	$AppUI->setMsg('File');
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+	$AppUI->redirect();
 }
 
 if (file_exists(W2P_BASE_DIR . '/modules/helpdesk/config.php')) {
@@ -35,29 +48,9 @@ $file_parent = (int) w2PgetParam($_GET, 'file_parent', 0);
 $file_project = (int) w2PgetParam($_GET, 'project_id', 0);
 $file_helpdesk_item = (int) w2PgetParam($_GET, 'file_helpdesk_item', 0);
 
-$q = new w2p_Database_Query;
-
-$file = new CFile();
-$obj = $AppUI->restoreObject();
-if ($obj) {
-  $file = $obj;
-  $file_id = $file->file_id;
-} else {
-  $obj = $file->load($file_id);
-}
-
-// check if this record has dependencies to prevent deletion
-$msg = '';
-$canDelete = $file->canDelete($msg, $file_id);
-
-// load the record data
-if (!$file && $file_id > 0) {
-	$AppUI->setMsg('File');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-}
 if ($file_id > 0) {
 	// Check to see if the task or the project is also allowed.
+    $perms = &$AppUI->acl();
 	if ($file->file_task) {
 		if (!$perms->checkModuleItem('tasks', 'view', $file->file_task)) {
 			$AppUI->redirect('m=public&a=access_denied');
@@ -85,6 +78,8 @@ $ttl = $file_id ? 'Edit File' : 'Add File';
 $ttl = $ci ? 'Checking in' : $ttl;
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'folder5.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=files', 'files list');
+$canDelete = $file->canDelete();
+
 if ($canDelete && $file_id > 0 && !$ci) {
 	$titleBlock->addCrumbDelete('delete file', $canDelete, $msg);
 }

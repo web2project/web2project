@@ -14,19 +14,36 @@ $AppUI->isNotNew = ($project_id == 0) ? 0 : 1;
 //---------------------------------------------------------
 $company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
+$project = new CProject();
+$project->project_id = $project_id;
 
-$perms = &$AppUI->acl();
-// check permissions for this record
-$canEdit = $perms->checkModuleItem('projects', 'edit', $project_id);
-$canAuthor = $perms->checkModuleItem('projects', 'add');
-if ((!$canEdit && $project_id > 0) || (!$canAuthor && $project_id == 0)) {
+$canAuthor = $project->canCreate();
+if (!$canAuthor && !$project_id) {
 	$AppUI->redirect('m=public&a=access_denied');
+}
+
+$canEdit = $project->canEdit();
+if (!$canEdit && $project_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+// load the record data
+$obj = $AppUI->restoreObject();
+if ($obj) {
+    $project = $obj;
+    $project_id = $project->project_id;
+} else {
+    $project->loadFull(null, $project_id);
+}
+if (!$project && $project_id > 0) {
+	$AppUI->setMsg('Project');
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+	$AppUI->redirect();
 }
 
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
 
-$project = new CProject();
 $structprojs = getProjects();
 $structprojs = $project->getAllowedProjects($AppUI->user_id, false);
 unset($structprojs[$project_id]);
@@ -38,20 +55,7 @@ $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => ''), $companies);
 
-$canDelete = $project->canDelete($msg, $project_id);
-// load the record data
-$obj = $AppUI->restoreObject();
-if ($obj) {
-  $project = $obj;
-  $project_id = $project->project_id;
-} else {
-  $project->loadFull(null, $project_id);
-}
-if (!$project && $project_id > 0) {
-	$AppUI->setMsg('Project');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-} elseif (count($companies) < 2 && $project_id == 0) {
+if (count($companies) < 2 && $project_id == 0) {
 	$AppUI->setMsg('noCompanies', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
@@ -83,6 +87,7 @@ $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:r
 $ttl = $project_id > 0 ? 'Edit Project' : 'New Project';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'applet3-48.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=projects', 'projects list');
+$canDelete = $project->canDelete();
 if ($project_id != 0) {
 	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
     if ($canDelete) {
@@ -208,6 +213,7 @@ function setDepartment(department_id_string){
                                 <td colspan="2">
                                     <?php
                                         // pull users
+                                        $perms = &$AppUI->acl();
                                         $users = $perms->getPermittedUsers('projects');
                                         echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id);
                                     ?>
