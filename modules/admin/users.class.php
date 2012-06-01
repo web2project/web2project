@@ -146,7 +146,7 @@ class CUser extends w2p_Core_BaseObject
 
     public function delete()
     {
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
 
             $this->_perms->deleteLogin($this->user_id);
 

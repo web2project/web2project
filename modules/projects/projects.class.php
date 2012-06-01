@@ -158,7 +158,7 @@ class CProject extends w2p_Core_BaseObject
     {
         $result = false;
 
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->addTable('tasks');
             $q->addQuery('task_id');

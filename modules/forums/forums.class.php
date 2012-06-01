@@ -182,7 +182,7 @@ class CForum extends w2p_Core_BaseObject
 
     public function delete()
     {
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->setDelete('forum_visits');
             $q->addWhere('visit_forum = ' . (int) $this->forum_id);

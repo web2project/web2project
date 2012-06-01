@@ -812,7 +812,7 @@ class CTask extends w2p_Core_BaseObject
      */
     public function delete()
     {
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
             //load it before deleting it because we need info on it to update the parents later on
             $this->load($this->task_id);
 

@@ -258,7 +258,7 @@ class CFile extends w2p_Core_BaseObject {
 
         $this->_error = array();
 
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
             // remove the file from the file system
             if (!$this->deleteFile()) {
                 $this->_error['file-delete'] = 'file-delete';

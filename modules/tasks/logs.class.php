@@ -230,7 +230,7 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->load($this->task_log_id);
 		$task_id = $this->task_log_task;
 
-        if ($this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->{$this->_tbl_key})) {
+        if ($this->canDelete()) {
 			if ($msg = parent::delete()) {
 				return $msg;
 			}
