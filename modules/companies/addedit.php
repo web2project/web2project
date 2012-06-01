@@ -5,16 +5,10 @@ if (!defined('W2P_BASE_DIR')) {
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
-// check permissions for this company
-$perms = &$AppUI->acl();
-// If the company exists we need edit permission,
-// If it is a new company we need add permission on the module.
-if ($company_id) {
-	$canEdit = $perms->checkModuleItem('companies', 'edit', $company_id);
-} else {
-	$canEdit = canAdd('companies');
-}
+$company = new CCompany();
+$company->company_id = $company_id;
 
+$canEdit = ($company_id) ? $company->canEdit() : $company->canCreate();
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
@@ -24,8 +18,6 @@ $types = w2PgetSysVal('CompanyType');
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
 		array('-' => '----') + w2PgetSysVal('GlobalCountries');
 
-// load the record data
-$company = new CCompany();
 $obj = $AppUI->restoreObject();
 if ($obj) {
   $company = $obj;
@@ -151,7 +143,8 @@ function testURL( x ) {
 						<td align="right"><?php echo $AppUI->_('Company Owner'); ?>:</td>
 						<td>
 							<?php
-								$users = $perms->getPermittedUsers('companies');
+								$perms = &$AppUI->acl();
+                                $users = $perms->getPermittedUsers('companies');
 								echo arraySelect($users, 'company_owner', 'size="1" class="text"', $company->company_owner ? $company->company_owner : $AppUI->user_id);
 							?>
 						</td>
