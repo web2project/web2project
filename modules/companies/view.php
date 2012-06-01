@@ -10,7 +10,7 @@ $company->company_id = $company_id;
 
 $canRead = $company->canView();
 if (!$canRead) {
-  $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect('m=public&a=access_denied');
 }
 
 $canAdd = $company->canCreate();
@@ -19,13 +19,10 @@ $canDelete = $company->canDelete();
 //TODO: delete the next line one the $deletable variable is renamed properly
 $deletable = $canDelete;
 
+// load the record data
 $company->loadFull(null, $company_id);
 
 $tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
-
-
-
-// load the record data
 
 if (!$company) {
 	$AppUI->setMsg('Company');
