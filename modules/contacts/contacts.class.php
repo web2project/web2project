@@ -241,6 +241,19 @@ class CContact extends w2p_Core_BaseObject
         return $errorArray;
     }
 
+    public function canEdit()
+    {
+        $thisCanEdit = false;
+        $baseCanEdit = parent::canEdit();
+
+        $tmp = new CContact();
+        $tmp->load($this->contact_id);
+        if ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id)) {
+            $thisCanEdit = true;
+        }
+
+        return ($thisCanEdit && $baseCanEdit);
+    }
     public function canDelete($msg = '', $oid = null, $joins = null)
     {
         $tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_contact');

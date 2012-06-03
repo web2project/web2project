@@ -52,8 +52,7 @@ class CUser extends w2p_Core_BaseObject
             return false;
         }
 
-        if ($this->{$this->_tbl_key} &&
-                ($this->canEdit() || $this->{$this->_tbl_key} == $this->_AppUI->user_id)) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $this->perm_func = 'updateLogin';
             $tmpUser = new CUser();
             $tmpUser->overrideDatabase($this->_query);
@@ -74,7 +73,7 @@ class CUser extends w2p_Core_BaseObject
             }
         }
 
-        if (0 == $this->{$this->_tbl_key} && ($this->canCreate() || ($externally_created_user && w2PgetConfig('activate_external_user_creation', false)))) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->perm_func = 'addLogin';
             $this->user_password = md5($this->user_password);
 
@@ -117,6 +116,23 @@ class CUser extends w2p_Core_BaseObject
         }
 
         parent::hook_postStore();
+    }
+
+    public function canEdit()
+    {
+        $result = false;
+        if (parent::canEdit() || $this->user_id == $this->_AppUI->user_id) {
+            $result = true;
+        }
+        return $result;
+    }
+    public function canCreate()
+    {
+        $result = false;
+        if (parent::canCreate() || ($externally_created_user && w2PgetConfig('activate_external_user_creation', false))) {
+            $result = true;
+        }
+        return $result;
     }
 
     public function canDelete()
