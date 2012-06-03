@@ -123,24 +123,6 @@ function setShort() {
 	}
 }
 
-function setDate( frm_name, f_date ) {
-	fld_date = eval( 'document.' + frm_name + '.' + f_date );
-	fld_real_date = eval( 'document.' + frm_name + '.' + 'project_' + f_date );
-	if (fld_date.value.length>0) {
-      if ((parseDate(fld_date.value))==null) {
-            alert('The Date/Time you typed does not match your prefered format, please retype.');
-            fld_real_date.value = '';
-            fld_date.style.backgroundColor = 'red';
-        } else {
-        	fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
-        	fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
-            fld_date.style.backgroundColor = '';
-  		}
-	} else {
-      	fld_real_date.value = '';
-	}
-}
-
 function submitIt() {
 	var f = document.editFrm;
 	var msg = '';
@@ -195,6 +177,7 @@ function setDepartment(department_id_string){
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 	<input type="hidden" name="project_creator" value="<?php echo is_null($project->project_creator) ? $AppUI->user_id : $project->project_creator; ?>" />
 	<input type="hidden" name="project_contacts" id="project_contacts" value="<?php echo implode(',', $selected_contacts); ?>" />
+    <input type="hidden" name="datePicker" value="project" />
     <table cellspacing="1" cellpadding="1" border="0" width='100%' class="std addedit">
         <tr>
             <td>
@@ -240,8 +223,8 @@ function setDepartment(department_id_string){
                                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?></td>
                                 <td nowrap="nowrap">
                                     <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                                    <input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                                    <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
+                                    <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                                    <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                                         <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                                     </a>
                                 </td>
@@ -280,8 +263,8 @@ function setDepartment(department_id_string){
                                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Finish Date'); ?></td>
                                 <td nowrap="nowrap">
                                     <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                                    <input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                                    <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
+                                    <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                                    <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                                         <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                                     </a>
                                 </td>
@@ -466,4 +449,7 @@ function setDepartment(department_id_string){
                         </table>
                     </tr>
                 </table>
+            </td>
+        </tr>
+    </table>
 </form>

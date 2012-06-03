@@ -18,28 +18,11 @@ $AppUI->loadCalendarJS();
 ?>
 <script language="javascript" type="text/javascript">
 function checkDate(){
-           if (document.frmDate.log_start_date.value == '' || document.frmDate.log_end_date.value== ''){
-                alert('<?php echo $AppUI->_('You must fill fields', UI_OUTPUT_JS) ?>');
-                return false;
-           } 
-           return true;
-}
-function setDate( frm_name, f_date ) {
-	fld_date = eval( 'document.' + frm_name + '.' + f_date );
-	fld_real_date = eval( 'document.' + frm_name + '.' + 'log_' + f_date );
-	if (fld_date.value.length>0) {
-      if ((parseDate(fld_date.value))==null) {
-            alert('The Date/Time you typed does not match your prefered format, please retype.');
-            fld_real_date.value = '';
-            fld_date.style.backgroundColor = 'red';
-        } else {
-        	fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
-        	fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
-            fld_date.style.backgroundColor = '';
-  		}
-	} else {
-      	fld_real_date.value = '';
-	}
+    if (document.frmDate.log_start_date.value == '' || document.frmDate.log_end_date.value== ''){
+        alert('<?php echo $AppUI->_('You must fill fields', UI_OUTPUT_JS) ?>');
+        return false;
+    }
+    return true;
 }
 </script>
 
@@ -53,13 +36,14 @@ function setDate( frm_name, f_date ) {
 
 <form action="index.php?m=admin<?php echo $a; ?>" method="post" name="frmDate" accept-charset="utf-8">
     <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id; ?>" />
+    <input type="hidden" name="datePicker" value="log" />
     <table align="center" width="100%">
         <tr align="center">
             <td align="right" width="45%" ><?php echo $AppUI->_('Start Date'); ?></td>
             <td width="55%" align="left">
                 <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate('frmDate', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'frmDate', null, true)">
+                <input type="text" name="start_date" id="start_date" onchange="setDate_new('frmDate', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'frmDate', null, true, true)">
                 <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" /></a>
             </td>
         </tr>
@@ -67,8 +51,8 @@ function setDate( frm_name, f_date ) {
             <td align="right" width="45%"><?php echo $AppUI->_('End Date'); ?></td>
             <td width="55%" align="left">
                 <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate('frmDate', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'frmDate', null, true)">
+                <input type="text" name="end_date" id="end_date" onchange="setDate_new('frmDate', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'frmDate', null, true, true)">
                 <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" /></a>
             </td>
         </tr>

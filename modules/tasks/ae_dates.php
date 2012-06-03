@@ -50,37 +50,19 @@ $cwd_hr = implode(', ', $cwd_conv);
 
 ?>
 
-<script language="javascript" type="text/javascript">
-function setDate( frm_name, f_date ) {
-	fld_date = eval( 'document.' + frm_name + '.' + f_date );
-	fld_real_date = eval( 'document.' + frm_name + '.' + 'task_' + f_date );
-	if (fld_date.value.length>0) {
-      if ((parseDate(fld_date.value))==null) {
-            alert('The Date/Time you typed does not match your prefered format, please retype.');
-            fld_real_date.value = '';
-            fld_date.style.backgroundColor = 'red';
-        } else {
-        	fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
-        	fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
-            fld_date.style.backgroundColor = '';
-  		}
-	} else {
-      	fld_real_date.value = '';
-	}
-}
-</script>
-
 <form name="datesFrm" action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" accept-charset="utf-8">
     <input name="dosql" type="hidden" value="do_task_aed" />
     <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
+    <input type="hidden" name="datePicker" value="task" />
+
     <table width="100%" border="0" cellpadding="4" cellspacing="0" class="std addedit">
         <?php if ($can_edit_time_information) { ?>
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?></td>
                 <td nowrap="nowrap">
                     <input type='hidden' id='task_start_date' name='task_start_date' value='<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
-                    <input type='text' onchange="setDate('datesFrm', 'start_date');" class='text' style='width:120px;' id='start_date' name='start_date' value='<?php echo $start_date ? $start_date->format($df) : ''; ?>' />
-                    <a onclick="return showCalendar('start_date', '<?php echo $df ?>', 'datesFrm', null, true)" href="javascript: void(0);">
+                    <input type='text' onchange="setDate_new('datesFrm', 'start_date');" class='text' style='width:120px;' id='start_date' name='start_date' value='<?php echo $start_date ? $start_date->format($df) : ''; ?>' />
+                    <a onclick="return showCalendar('start_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
                         <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                     </a>
                 </td>
@@ -100,8 +82,8 @@ function setDate( frm_name, f_date ) {
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finish Date'); ?></td>
                 <td nowrap="nowrap">
                     <input type='hidden' id='task_end_date' name='task_end_date' value='<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
-                    <input type='text' onchange="setDate('datesFrm', 'end_date');" class='text' style='width:120px;' id='end_date' name='end_date' value='<?php echo $end_date ? $end_date->format($df) : ''; ?>' />
-                    <a onclick="return showCalendar('end_date', '<?php echo $df ?>', 'datesFrm', null, true)" href="javascript: void(0);">
+                    <input type='text' onchange="setDate_new('datesFrm', 'end_date');" class='text' style='width:120px;' id='end_date' name='end_date' value='<?php echo $end_date ? $end_date->format($df) : ''; ?>' />
+                    <a onclick="return showCalendar('end_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
                         <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                     </a>
                 </td>
