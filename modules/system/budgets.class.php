@@ -71,7 +71,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
             $this->budget_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
 
-        if ($this->_perms->checkModuleItem('system', 'edit')) {
+        if ($this->canEdit()) {
             if (($msg = parent::store())) {
                 return $msg;
             }
@@ -84,7 +84,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
     {
         $result = false;
 
-        if ($this->_perms->checkModuleItem('system', 'edit')) {
+        if ($this->canDelete()) {
             if ($msg = parent::delete()) {
                 return $result;
             }

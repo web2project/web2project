@@ -157,7 +157,7 @@ class CTask_Log extends w2p_Core_BaseObject
      */
 	public function __construct()
 	{
-		parent::__construct('task_log', 'task_log_id');
+		parent::__construct('task_log', 'task_log_id', 'tasks');
 
 		// ensure changes to checkboxes are honoured
 		$this->task_log_problem = (int) $this->task_log_problem;

@@ -15,7 +15,7 @@ class CForum_Message extends w2p_Core_BaseObject
 
     public function __construct()
     {
-        parent::__construct('forum_messages', 'message_id');
+        parent::__construct('forum_messages', 'message_id', 'forums');
     }
 
     public function check()
@@ -52,8 +52,7 @@ class CForum_Message extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
 
-//TODO: this is an oddball permissions object where the module doesn't determine the access..
-        if ($this->{$this->_tbl_key} && $this->_perms->checkModuleItem('forums', 'edit', $this->{$this->_tbl_module})) {
+        if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $q->setDelete('forum_visits');
             $q->addWhere('visit_message = ' . (int) $this->message_id);
             $q->exec();
@@ -65,7 +64,7 @@ class CForum_Message extends w2p_Core_BaseObject
             }
         }
 
-        if (0 == $this->{$this->_tbl_key} && $this->_perms->checkModuleItem('forums', 'add')) {
+        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->message_date = $q->dbfnNowWithTZ();
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
@@ -101,8 +100,7 @@ class CForum_Message extends w2p_Core_BaseObject
     {
         $result = false;
 
-//TODO: this is an oddball permissions object where the module doesn't determine the access.. but another does?
-        if ($this->_perms->checkModuleItem('forums', 'delete', $this->project_id)) {
+        if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->setDelete('forum_visits');
             $q->addWhere('visit_message = ' . (int) $this->message_id);

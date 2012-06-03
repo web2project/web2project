@@ -43,7 +43,7 @@ class CEvent extends w2p_Core_BaseObject
 
     public function __construct()
     {
-        parent::__construct('events', 'event_id');
+        parent::__construct('events', 'event_id', 'calendar');
     }
 
     public function loadFull($event_id)
