@@ -3,8 +3,35 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$user_id = (int) w2PgetParam($_GET, 'user_id', 0);
+
+
+
+$user = new CUser();
+$user->user_id = $user_id;
+
+$canEdit   = $user->canEdit();
+$canRead   = $user->canView();
+$canAdd    = $user->canCreate();
+$canAccess = $user->canAccess();
+$canDelete = $user->canDelete();
+
+if (!$canAccess || !$canRead) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+$user->loadFull($user_id);
+if (!$user) {
+	$AppUI->setMsg('User');
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+	$AppUI->redirect();
+} else {
+	$AppUI->savePlace();
+}
+
+$tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
+
 global $addPwT, $company_id, $dept_ids, $department, $min_view, $m, $a;
-$user_id = isset($_GET['user_id']) ? w2PgetParam($_GET, 'user_id', 0) : 0;
 
 $utypes = w2PgetSysVal('UserType');
 
@@ -36,12 +63,6 @@ if (!(strpos($department, $company_prefix) === false)) {
 	unset($department);
 }
 
-$tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
-
-// pull data
-$user = new CUser();
-$user->loadFull($user_id);
-
 $contact = new CContact();
 $contact->contact_id = $user->user_contact;
 $methods = $contact->getContactMethods();
@@ -49,25 +70,20 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 
 $helper = new w2p_Output_HTMLHelper($AppUI);
 
-if (!$user) {
-	$titleBlock = new w2p_Theme_TitleBlock('Invalid User ID', 'helix-setup-user.png', $m, "$m.$a");
-	$titleBlock->addCrumb('?m=admin', 'users list');
-	$titleBlock->show();
-} else {
-	$countries = w2PgetSysVal('GlobalCountries');
-	// setup the title block
-	$titleBlock = new w2p_Theme_TitleBlock('View User', 'helix-setup-user.png', $m, "$m.$a");
-	if ($canRead) {
-		$titleBlock->addCrumb('?m=admin', 'users list');
-	}
-	if ($canEdit || $user_id == $AppUI->user_id) {
-		$titleBlock->addCrumb('?m=admin&a=addedituser&user_id='.$user_id, 'edit this user');
-		$titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$user->contact_id, 'edit this contact');
-		$titleBlock->addCrumb('?m=system&a=addeditpref&user_id='.$user_id, 'edit preferences');
-		$titleBlock->addCrumbRight('<div class="crumb"><ul style="float:right;"><li><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
-		$titleBlock->addCell('<td align="right" width="100%"><input type="button" class=button value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>');
-	}
-	$titleBlock->show();
+$countries = w2PgetSysVal('GlobalCountries');
+// setup the title block
+$titleBlock = new w2p_Theme_TitleBlock('View User', 'helix-setup-user.png', $m, "$m.$a");
+if ($canRead) {
+    $titleBlock->addCrumb('?m=admin', 'users list');
+}
+if ($canEdit || $user_id == $AppUI->user_id) {
+    $titleBlock->addCrumb('?m=admin&a=addedituser&user_id='.$user_id, 'edit this user');
+    $titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$user->contact_id, 'edit this contact');
+    $titleBlock->addCrumb('?m=system&a=addeditpref&user_id='.$user_id, 'edit preferences');
+    $titleBlock->addCrumbRight('<div class="crumb"><ul style="float:right;"><li><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
+    $titleBlock->addCell('<td align="right" width="100%"><input type="button" class=button value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>');
+}
+$titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
 	<?php
@@ -182,11 +198,10 @@ if (!$user) {
 </table>
 
 <?php
-	// tabbed information boxes
-	$min_view = true;
-	$tabBox = new CTabBox('?m=admin&a=viewuser&user_id='.$user_id, '', $tab);
-	$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_log', 'User Log');
-	$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_perms', 'Permissions');
-	$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_roles', 'Roles');
-	$tabBox->show();
-}
+// tabbed information boxes
+$min_view = true;
+$tabBox = new CTabBox('?m=admin&a=viewuser&user_id='.$user_id, '', $tab);
+$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_log', 'User Log');
+$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_perms', 'Permissions');
+$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_roles', 'Roles');
+$tabBox->show();

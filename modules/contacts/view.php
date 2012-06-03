@@ -5,12 +5,28 @@ if (!defined('W2P_BASE_DIR')) {
 
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
-//check permissions for this record
-$perms = &$AppUI->acl();
-$canRead = $perms->checkModuleItem($m, 'view', $contact_id);
 
-if (!$canRead) {
+
+$contact = new CContact();
+$contact->contact_id = $contact_id;
+
+$canEdit   = $contact->canEdit();
+$canRead   = $contact->canView();
+$canCreate = $contact->canCreate();
+$canAccess = $contact->canAccess();
+$canDelete = $contact->canDelete();
+
+if (!$canAccess || !$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
+}
+
+$contact->load($contact_id);
+if (!$contact) {
+	$AppUI->setMsg('Contact');
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+	$AppUI->redirect();
+} else {
+	$AppUI->savePlace();
 }
 
 $tab = $AppUI->processIntState('ContactVwTab', $_GET, 'tab', 0);
@@ -18,22 +34,7 @@ $tab = $AppUI->processIntState('ContactVwTab', $_GET, 'tab', 0);
 $df = $AppUI->getPref('SHDATEFORMAT');
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
-// load the record data
-$msg = '';
-$contact = new CContact();
 
-$canEdit = $perms->checkModuleItem($m, 'edit', $contact_id);
-
-if (!$contact->load($contact_id) && $contact_id > 0) {
-	$AppUI->setMsg('Contact');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-} elseif ($contact->contact_private && $contact->contact_owner != $AppUI->user_id && $contact->contact_owner && $contact_id != 0) {
-	// check only owner can edit
-	$AppUI->redirect('m=public&a=access_denied');
-}
-
-$canDelete = $contact->canDelete($msg, $contact_id);
 $is_user = $contact->isUser($contact_id);
 
 $countries = w2PgetSysVal('GlobalCountries');
@@ -114,7 +115,9 @@ function delIt(){
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Company'); ?>:</td>
 					<td nowrap="nowrap" class="hilite" width="100%">
-						<?php if ($perms->checkModuleItem('companies', 'access', $contact->contact_company)) { ?>
+						<?php
+                        $perms = &$AppUI->acl();
+                        if ($perms->checkModuleItem('companies', 'access', $contact->contact_company)) { ?>
 							<?php echo "<a href='?m=companies&a=view&company_id=" . $contact->contact_company . "'>" . htmlspecialchars($company_detail['company_name'], ENT_QUOTES) . '</a>'; ?>
 						<?php } else { ?>
 							<?php echo htmlspecialchars($company_detail['company_name'], ENT_QUOTES); ?>

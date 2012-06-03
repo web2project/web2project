@@ -5,25 +5,22 @@ if (!defined('W2P_BASE_DIR')) {
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
+
+
 $company = new CCompany();
 $company->company_id = $company_id;
 
-$canRead = $company->canView();
-if (!$canRead) {
-    $AppUI->redirect('m=public&a=access_denied');
+$canEdit   = $company->canEdit();
+$canRead   = $company->canView();
+$canAdd    = $company->canCreate();
+$canAccess = $company->canAccess();
+$canDelete = $company->canDelete();
+$deletable = $canDelete;            //TODO: this should be removed once the $deletable variable is removed
+if (!$canAccess || !$canRead) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$canAdd = $company->canCreate();
-$canEdit = $company->canEdit();
-$canDelete = $company->canDelete();
-//TODO: delete the next line one the $deletable variable is renamed properly
-$deletable = $canDelete;
-
-// load the record data
 $company->loadFull(null, $company_id);
-
-$tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
-
 if (!$company) {
 	$AppUI->setMsg('Company');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -31,6 +28,9 @@ if (!$company) {
 } else {
 	$AppUI->savePlace();
 }
+
+$tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
+
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Company', 'handshake.png', $m, "$m.$a");

@@ -5,22 +5,21 @@ if (!defined('W2P_BASE_DIR')) {
 
 $resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
 
-// check permissions for this record
-$perms = &$AppUI->acl();
+$obj = new CResource();
+$obj->resource_id = $resource_id;
 
-$canView = $perms->checkModuleItem($m, 'view', $resource_id);
-if (!$canView) {
-  $AppUI->redirect('m=public&a=access_denied');
+$canEdit   = $obj->canEdit();
+$canView   = $obj->canView();
+$canAdd    = $obj->canCreate();
+$canAccess = $obj->canAccess();
+$canDelete = $obj->canDelete();
+
+if (!$canAccess || !$canView) {
+	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$canAdd = $perms->checkModuleItem($m, 'add');
-$canEdit = $perms->checkModuleItem($m, 'edit', $resource_id);
-$canDelete = $perms->checkModuleItem($m, 'delete', $resource_id);
-
-$resource = new CResource();
-$resource->load($resource_id);
-
-if (!$resource) {
+$obj->load($resource_id);
+if (!$obj) {
 	$AppUI->setMsg('Resource');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
@@ -28,9 +27,8 @@ if (!$resource) {
 	$AppUI->savePlace();
 }
 
-// setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Resource', 'resources.png', $m, $m . '.' . $a);
-$titleBlock->addCell();
+
 if ($canAdd) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new resource') . '" />', '', '<form action="?m=resources&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
