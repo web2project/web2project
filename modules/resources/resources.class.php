@@ -94,6 +94,32 @@ class CResource extends w2p_Core_BaseObject {
         return false;
     }
 
+    public function getResourcesByTask($task_id)
+    {
+        $q = $this->_getQuery();
+        $q->addQuery('a.*');
+        $q->addQuery('b.percent_allocated');
+        $q->addTable('resources', 'a');
+        $q->addJoin('resource_tasks', 'b', 'b.resource_id = a.resource_id', 'inner');
+        $q->addWhere('b.task_id = ' . (int)$task_id);
+
+        return $q->loadHashList('resource_id');
+    }
+
+    public function getTasksByResources($resources, $start_date, $end_date)
+    {
+        $q = new w2p_Database_Query();
+        $q->addQuery('b.resource_id, sum(b.percent_allocated) as total_allocated');
+        $q->addTable('tasks', 'a');
+        $q->addJoin('resource_tasks', 'b', 'b.task_id = a.task_id', 'inner');
+        $q->addWhere('b.resource_id IN (' . implode(',', array_keys($resources)) . ')');
+        $q->addWhere("task_start_date <= '$end_date'");
+        $q->addWhere("task_end_date   >= '$start_date'");
+        $q->addGroup('resource_id');
+
+        return $q->loadHashList();
+    }
+
     /*
      * This method should only be run once to upgrade the module from v1.0.1 to
      *   v1.1.0 which happened around the web2project v3.0 release.
