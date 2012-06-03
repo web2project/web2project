@@ -69,23 +69,6 @@ if (!$min_view) {
 ?>
 
 <script language="javascript" type="text/javascript">
-function setDate( frm_name, f_date ) {
-	fld_date = eval( 'document.' + frm_name + '.' + f_date );
-	fld_real_date = eval( 'document.' + frm_name + '.' + 'project_' + f_date );
-	if (fld_date.value.length>0) {
-      if ((parseDate(fld_date.value))==null) {
-            alert('The Date/Time you typed does not match your prefered format, please retype.');
-            fld_real_date.value = '';
-            fld_date.style.backgroundColor = 'red';
-        } else {
-        	fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
-        	fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
-            fld_date.style.backgroundColor = '';
-  		}
-	} else {
-      	fld_real_date.value = '';
-	}
-}
 
 function scrollPrev() {
 	f = document.editFrm;
@@ -131,6 +114,8 @@ function showFullProject() {
 </script>
 <form name="editFrm" method="post" action="?<?php echo 'm=' . $m . '&a=' . $a . (isset($user_id) ? '&user_id=' . $user_id : '') . '&tab=' . $tab; ?>" accept-charset="utf-8">
     <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
+    <input type="hidden" name="datePicker" value="project" />
+
     <table class="tbl" width="100%" border="0" cellpadding="4" cellspacing="0">
         <tr>
             <td>
@@ -147,16 +132,16 @@ function showFullProject() {
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('From'); ?>:</td>
                         <td align="left" nowrap="nowrap">
                             <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                            <input type="text" name="start_date" id="start_date" onchange="setDate('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true)">
+                            <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                             <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
                         </td>
 
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('To'); ?>:</td>
                         <td align="left" nowrap="nowrap">
                             <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                            <input type="text" name="end_date" id="end_date" onchange="setDate('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
+                            <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                             <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
                         <td>
                             <?php echo arraySelect($projFilter, 'proFilter', 'size="1" class="text"', $proFilter, true); ?>

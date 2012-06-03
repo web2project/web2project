@@ -63,4 +63,25 @@ function parseDate(val) {
     }
 	return null;
 }
+
+function setDate_new(frm_name, f_date)
+{
+    module = eval('document.' + frm_name + '.datePicker.value');
+    fld_date = eval( 'document.' + frm_name + '.' + f_date );
+    fld_real_date = eval( 'document.' + frm_name + '.' + module + '_' + f_date );
+
+    if (fld_date.value.length>0) {
+        if ((parseDate(fld_date.value))==null) {
+            alert('The Date/Time you typed does not match your prefered format, please retype.');
+            fld_real_date.value = '';
+            fld_date.style.backgroundColor = 'red';
+        } else {
+            fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
+            fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
+            fld_date.style.backgroundColor = '';
+        }
+    } else {
+        fld_real_date.value = '';
+    }
+}
 </script>

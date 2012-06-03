@@ -16,13 +16,25 @@ function isInArray(myArray, intValue) {
 	return false;
 }
 
-// This function gets called when the end-user clicks on some date.
+/*
+ * This function gets called when the end-user clicks on some date.
+ *
+ * @Deprecated
+ */
 function selected(cal, date) {
-//    cal.sel.value = date; // just update the date in the input field.
-// Pedro A. : Lets pass the date in a Ymd format and let our formatDate function to the rest.
-    cal.sel.value = (cal.date.print("%Y%m%d%H%M"));    
+    // Pedro A. : Lets pass the date in a Ymd format and let our formatDate function to the rest.
+    cal.sel.value = (cal.date.print("%Y%m%d%H%M"));
     setDate(cal.form, cal.sel.name);
-  if (cal.dateClicked && (cal.sel.id == "ini_date" || cal.sel.id == "end_date"))
+    if (cal.dateClicked && (cal.sel.id == "ini_date" || cal.sel.id == "end_date"))
+    // if we add this call we close the calendar on single-click.
+    cal.callCloseHandler();
+}
+
+function selected_new(cal, date) {
+    // Pedro A. : Lets pass the date in a Ymd format and let our formatDate function to the rest.
+    cal.sel.value = (cal.date.print("%Y%m%d%H%M"));
+    setDate_new(cal.form, cal.sel.name);
+    if (cal.dateClicked && (cal.sel.id == "ini_date" || cal.sel.id == "end_date"))
     // if we add this call we close the calendar on single-click.
     cal.callCloseHandler();
 }
@@ -38,16 +50,20 @@ function closeHandler(cal) {
 // This function shows the calendar under the element having the given id.
 // It takes care of catching "mousedown" signals on document and hiding the
 // calendar if the click was outside.
-function showCalendar(id, format, form_name, showsTime, showsOtherMonths) {
+function showCalendar(id, format, form_name, showsTime, showsOtherMonths, newSelector) {
   var el = document.getElementById(id);
   if (_dynarch_popupCalendar != null) {
     // we already have some calendar created
     _dynarch_popupCalendar.hide();                 // so we hide it first.
   } else {
     // first-time call, create the calendar.
-    var cal = new Calendar(1, null, selected, closeHandler);
-    // uncomment the following line to hide the week numbers
-    // cal.weekNumbers = false;
+    if (newSelector) {
+        var cal = new Calendar(1, null, selected_new, closeHandler);
+    } else {
+        var cal = new Calendar(1, null, selected, closeHandler);
+    }
+
+    cal.weekNumbers = true;
     if (typeof showsTime == "string") {
       cal.showsTime = true;
       cal.time24 = (showsTime == "24");

@@ -30,24 +30,6 @@ $titleBlock->addCrumb('?m=system&a=budgeting_allocated', 'budgets allocated');
 $titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
-    function setDate( frm_name, f_date ) {
-        fld_date = eval( 'document.' + frm_name + '.' + f_date );
-        fld_real_date = eval( 'document.' + frm_name + '.' + 'budget_' + f_date );
-        if (fld_date.value.length > 0) {
-            if ((parseDate(fld_date.value))==null) {
-                alert('The Date/Time you typed does not match your prefered format, please retype.');
-                fld_real_date.value = '';
-                fld_date.style.backgroundColor = 'red';
-            } else {
-                fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
-                fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
-                fld_date.style.backgroundColor = '';
-            }
-        } else {
-            fld_real_date.value = '';
-        }
-    }
-
 	function submitIt(){
 		document.frmAddcode.submit();
 	}
@@ -73,6 +55,7 @@ function delIt(input) {
 <form name="frmAddcode" action="./index.php?m=system" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_budgeting_aed" />
     <input type="hidden" name="budget_id" value="<?php echo $budget_id; ?>" />
+    <input type="hidden" name="datePicker" value="budget" />
     <table width="100%" border="0" cellpadding="1" cellspacing="1" class="std">
         <tr>
             <th>&nbsp;</th>
@@ -117,15 +100,15 @@ function delIt(input) {
 			</td>
             <td align="center">
                 <input type="hidden" name="budget_start_date" id="budget_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate('frmAddcode', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'frmAddcode', null, true)">
+                <input type="text" name="start_date" id="start_date" onchange="setDate_new('frmAddcode', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'frmAddcode', null, true, true)">
                     <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                 </a>
             </td>
             <td align="center">
                 <input type="hidden" name="budget_end_date" id="budget_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate('frmAddcode', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'frmAddcode', null, true)">
+                <input type="text" name="end_date" id="end_date" onchange="setDate_new('frmAddcode', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'frmAddcode', null, true, true)">
                     <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                 </a>
             </td>
