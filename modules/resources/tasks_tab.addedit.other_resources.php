@@ -8,22 +8,14 @@ global $projTasksWithEndDates, $tab, $loadFromTab;
 
 // Need to get all of the resources that this user is allowed to view
 $resource = new CResource();
+$resources = $resource->loadAll();
 
-$resource_types = &$resource->typeSelect();
-$q = new w2p_Database_Query();
+$resource_types = w2PgetSysVal('ResourceTypes');
 
-$q->addTable('resources');
-$q->addOrder('resource_type', 'resource_name');
-$res = $q->exec(ADODB_FETCH_ASSOC);
 $all_resources = array();
-$resource_max = array();
-
-while ($row = $q->fetchRow()) {
-	$type = $row['resource_type'];
-	$all_resources[$row['resource_id']] = $resource_types[$row['resource_type']] . ': ' . $row['resource_name'];
-	$resource_max[$row['resource_id']] = $row['resource_max_allocation'];
+foreach($resources as $row) {
+    $all_resources[$row['resource_id']] = $resource_types[$row['resource_type']] . ': ' . $row['resource_name'];
 }
-$q->clear();
 
 $assigned_resources = array();
 
@@ -56,14 +48,14 @@ if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
 	$q->clear();
 }
 
-	$AppUI->getModuleJS('resources', 'tabs');
+$percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
+$AppUI->getModuleJS('resources', 'tabs');
 ?>
 <script language="javascript" type="text/javascript">
 <?php
 echo "var projTasksWithEndDates=new Array();\n";
 $keys = array_keys($projTasksWithEndDates);
 for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
-	//array[task_is] = end_date, end_hour, end_minutes
 	echo 'projTasksWithEndDates[' . $keys[$i] . "]=new Array(\"" . $projTasksWithEndDates[$keys[$i]][1] . "\", \"" . $projTasksWithEndDates[$keys[$i]][2] . "\", \"" . $projTasksWithEndDates[$keys[$i]][3] . "\");\n";
 }
 ?>
@@ -95,13 +87,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
                             <tr>
                                 <td align="right"><input type="button" class="button" value="&gt;" onclick="addResource(document.otherFrm)" /></td>
                                 <td>
-                                    <select name="resource_assignment" class="text">
-                                    <?php
-        for ($i = 5; $i <= 100; $i += 5) {
-            echo "<option " . (($i == 100) ? "selected=\"true\"" : "") . " value=\"" . $i . "\">" . $i . "%</option>";
-        }
-        ?>
-                                    </select>
+                                    <?php echo arraySelect($percent, 'resource_assignment', 'size="1" class="text"', 100) . '%'; ?>
                                 </td>
                                 <td align="left"><input type="button" class="button" value="&lt;" onclick="removeResource(document.otherFrm)" /></td>
                             </tr>
