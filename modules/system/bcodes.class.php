@@ -14,12 +14,12 @@ class CSystem_Bcode extends w2p_Core_BaseObject
 
     public function __construct()
     {
-        parent::__construct('billingcode', 'billingcode_id');
+        parent::__construct('billingcode', 'billingcode_id', 'system');
     }
 
     public function delete()
     {
-        if ($this->_perms->checkModuleItem('system', 'delete')) {
+        if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->addTable('billingcode');
             $q->addUpdate('billingcode_status', '1');
@@ -43,7 +43,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
             return $errorMsgArray;
         }
 
-        if ($this->_perms->checkModuleItem('system', 'edit')) {
+        if ($this->canEdit()) {
             if (($msg = parent::store())) {
                 return $msg;
             }

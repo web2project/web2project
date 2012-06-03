@@ -26,7 +26,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 	}
 
 	public function __construct($key = null, $title = null, $value = null) {
-        parent::__construct('sysvals', 'sysval_id');
+        parent::__construct('sysvals', 'sysval_id', 'system');
 		$this->sysval_key_id = $key;
 		$this->sysval_title = $title;
 		$this->sysval_value = $value;

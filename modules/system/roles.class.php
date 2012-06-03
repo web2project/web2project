@@ -30,11 +30,19 @@ class CSystem_Role {
 	public $role_name = null;
 	public $role_description = null;
 	public $perms = null;
+    /**
+     * @var object permissions/preference/translation object
+     */
+    protected $_AppUI;
 
 	public function __construct($name = '', $description = '') {
 		$this->role_name = $name;
 		$this->role_description = $description;
 		$this->perms = &$GLOBALS['AppUI']->acl();
+
+        global $AppUI;
+        $this->_AppUI = $AppUI;
+        $this->perms = $this->_AppUI->acl();
 	}
 
 	public function bind($hash) {
@@ -54,9 +62,6 @@ class CSystem_Role {
 	}
 
 	public function store() {
-		global $AppUI;
-
-        $perms = $AppUI->acl();
         $stored = false;
 
         $this->_error = $this->check();
@@ -95,7 +100,9 @@ class CSystem_Role {
 	}
 
 	public function __wakeup() {
-		$this->perms = &$GLOBALS['AppUI']->acl();
+        global $AppUI;
+        $this->_AppUI = $AppUI;
+        $this->perms = $this->_AppUI->acl();
 	}
 
 	/**
@@ -130,15 +137,12 @@ class CSystem_Role {
 	 * @return true if sucessful
 	 */
 	public function copyPermissions($copy_role_id = null, $role_id = null) {
-		global $AppUI;
-		
 		if (!$copy_role_id || !$role_id) {
 			return false;
 		}
 		
-		$perms = &$AppUI->acl();
 		//catch to be copied Role ACLs IDs
-		$role_acls = $perms->getRoleACLs($copy_role_id);
+		$role_acls = $this->perms->getRoleACLs($copy_role_id);
 		
 		foreach ($role_acls as $acl) {
 			//initialize acl data, so we don't fall on the situation of bleeding permissions from one ACL rule to the other.
@@ -153,7 +157,7 @@ class CSystem_Role {
 			
 			//catch the permissions of that acl.
 			//ex: Array ( [note] => [return_value] => [enabled] => 1 [allow] => 1 [acl_id] => 14 [aco] => Array ( [application] => Array ( [0] => access ) ) [aro] => Array ( ) [axo] => Array ( ) [aro_groups] => Array ( [0] => 12 ) [axo_groups] => Array ( [0] => 13 ) ) 
-			$permission = $perms->get_acl($acl);
+			$permission = $this->perms->get_acl($acl);
 		
 			if (is_array($permission)) {
 				$modlist = array();
@@ -162,7 +166,7 @@ class CSystem_Role {
 					foreach ($permission['axo_groups'] as $group_id) {
 						//catche Group of Permissions (All, All Non-Admin, and Admin) or Module Permissions
 						//ex: Array ( [0] => 13 [id] => 13 [1] => 10 [parent_id] => 10 [2] => non_admin [value] => non_admin [3] => Non-Admin Modules [name] => Non-Admin Modules [4] => 6 [lft] => 6 [5] => 7 [rgt] => 7 ) 
-						$group_data = $perms->get_group_data($group_id, 'axo');
+						$group_data = $this->perms->get_group_data($group_id, 'axo');
 					}
 				}
 				if (is_array($permission['axo'])) {
@@ -170,7 +174,7 @@ class CSystem_Role {
 						foreach ($section as $id) {
 							//catch Module and Module Item permissions
 							//ex.: Array ( [id] => 36 [section_value] => companies [name] => 6 [value] => 6 [order_value] => 0 [hidden] => 0 ) 
-							$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
+							$mod_data = $this->perms->get_object_full($id, $key, 1, 'axo');
 						}
 					}
 				}
@@ -180,7 +184,7 @@ class CSystem_Role {
 						foreach ($section as $value) {
 							//catch Actions of the Permission.
 							//ex: Array ( [id] => 11 [section_value] => application [name] => Access [value] => access [order_value] => 1 [hidden] => 0 ) 
-							$perm = $perms->get_object_full($value, $key, 1, 'aco');
+							$perm = $this->perms->get_object_full($value, $key, 1, 'aco');
 							$permission_type[] = $perm['id'];
 						}
 					}
@@ -208,15 +212,15 @@ class CSystem_Role {
 						$mod_mod[$permission_table][] = $permission_item;
 						// check if the item already exists, if not create it.
 						// First need to check if the section exists.
-						if (!$perms->get_object_section_section_id(null, $permission_table, 'axo')) {
-							$perms->addModuleSection($permission_table);
+						if (!$this->perms->get_object_section_section_id(null, $permission_table, 'axo')) {
+							$this->perms->addModuleSection($permission_table);
 						}
-						if (!$perms->get_object_id($permission_table, $permission_item, 'axo')) {
-							$perms->addModuleItem($permission_table, $permission_item, $permission_item);
+						if (!$this->perms->get_object_id($permission_table, $permission_item, 'axo')) {
+							$this->perms->addModuleItem($permission_table, $permission_item, $permission_item);
 						}
 					} else {
 						// Get the module information
-						$mod_info = $perms->get_object_data($mod_id, 'axo');
+						$mod_info = $this->perms->get_object_data($mod_id, 'axo');
 						$mod_mod = array();
 						$mod_mod[$mod_info[0][0]][] = $mod_info[0][1];
 					}
@@ -225,12 +229,12 @@ class CSystem_Role {
 				// Build the permissions info
 				$type_map = array();
 				foreach ($permission_type as $tid) {
-					$type = $perms->get_object_data($tid, 'aco');
+					$type = $this->perms->get_object_data($tid, 'aco');
 					foreach ($type as $t) {
 						$type_map[$t[0]][] = $t[1];
 					}
 				}
-				$res = $perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
+				$res = $this->perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
 			}
 		}
 		return true;

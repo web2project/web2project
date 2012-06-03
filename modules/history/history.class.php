@@ -23,12 +23,22 @@ class CHistory extends w2p_Core_BaseObject {
     }
 
     public function delete() {
-
-        return true;
+//TODO: History items (aka the audit log) should not be deletable via the system directly.
+        return false;
     }
 
     public function store() {
+//TODO: This needs to be fleshed out.
+        return true;
+    }
 
+    public function canCreate() {
+        return true;
+    }
+    public function canEdit() {
+        return false;
+    }
+    public function canView() {
         return true;
     }
 
