@@ -150,7 +150,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                                                 </td>
                                                 <?php if (canAccess('tasks')) { ?>
                                                     <td nowrap="nowrap" align="right">
-                                                    <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('Todo'); ?></b></span></a>
+                                                    <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
                                                     </td><?php
                                                 }
                                                 if (canAccess('calendar')) {

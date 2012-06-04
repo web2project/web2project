@@ -142,7 +142,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                                                 if (canAccess('tasks')) {
                                                     ?>
                                                     <td nowrap="nowrap" align="right">
-                                                        <input type="button" class="button" value="<?php echo $AppUI->_('Todo'); ?>" onclick="javascript:window.location='./index.php?m=tasks&amp;a=todo'" />
+                                                        <input type="button" class="button" value="<?php echo $AppUI->_('My Tasks'); ?>" onclick="javascript:window.location='./index.php?m=tasks&amp;a=todo'" />
                                                     </td>
                                                     <?php
                                                 }
