@@ -6,8 +6,8 @@ if (!defined('W2P_BASE_DIR')) {
 $resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
 
 $perms = &$AppUI->acl();
-$canAuthor = canAdd('links');
-$canEdit = $perms->checkModuleItem('links', 'edit', $link_id);
+$canAuthor = canAdd('resources');
+$canEdit = $perms->checkModuleItem('resources', 'edit', $resource_id);
 
 // check permissions
 if (!$canAuthor && !$resource_id) {
