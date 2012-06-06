@@ -233,6 +233,7 @@ class w2p_Output_HTMLHelper
                 break;
             case '_complete':
             case '_assignment':
+            case '_allocated':
                 $cell = $value.'%';
                 break;
             case '_count':
