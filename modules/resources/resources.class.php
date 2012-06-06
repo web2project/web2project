@@ -19,49 +19,44 @@ class CResource extends w2p_Core_BaseObject {
         parent::__construct('resources', 'resource_id');
 	}
 
+    /*
+     * This is only here for backwards compatibility
+     *
+     * @deprecated
+     */
 	public function &loadTypes() {
-		// If we have loaded the resource types before then we don't need to
-		// load them again.
-		if (isset($_SESSION['resource_type_list'])) {
-			$typelist = &$_SESSION['resource_type_list'];
-		} else {
-			$q = $this->_getQuery();
-			$q->addTable('resource_types');
-			$q->addQuery('resource_type_id, resource_type_name');
-			$q->addOrder('resource_type_name');
+		trigger_error("CResource->loadTypes() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
 
-			$res = &$q->exec(ADODB_FETCH_ASSOC);
-			$typelist = array();
-			$typelist[0] = array('resource_type_id' => 0, 'resource_type_name' => 'All Resources');
-			while ($row = $q->fetchRow()) {
-				$typelist[] = $row;
-			}
-			$_SESSION['resource_type_list'] = &$typelist;
-		}
+        return $this->typeSelect();
+	}
+
+    /*
+     * This is only here for backwards compatibility
+     *
+     * @deprecated
+     */
+	public function typeSelect() {
+        trigger_error("CResource->typeSelect() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
+
+        $typelist = w2PgetSysVal('ResourceTypes');
+        if (!count($typelist)) {
+            $this->convertTypes();
+            $typelist = w2PgetSysVal('ResourceTypes');
+        }
+
 		return $typelist;
 	}
 
-	public function typeSelect() {
-		$typelist = &$this->loadTypes();
-		$result = array();
-		foreach ($typelist as $type) {
-			$result[$type['resource_type_id']] = $type['resource_type_name'];
-		}
-		return $result;
-	}
-
+    /*
+     * This is only here for backwards compatibility
+     *
+     * @deprecated
+     */
 	public function getTypeName() {
-		$result = 'All Resources';
+        trigger_error("CResource->getTypeName() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
 
-		$q = $this->_getQuery();
-		$q->addTable('resource_types');
-		$q->addWhere('resource_type_id = ' . (int)$this->resource_type);
-		$res = &$q->exec(ADODB_FETCH_ASSOC);
-		if ($row = $q->fetchRow()) {
-			$result = $row['resource_type_name'];
-		}
-
-		return $result;
+        $typelist = $this->typeSelect();
+        return $typelist[$this->resource_type];
 	}
 
     public function store() {
@@ -97,6 +92,63 @@ class CResource extends w2p_Core_BaseObject {
             return true;
         }
         return false;
+    }
+
+    public function getResourcesByTask($task_id)
+    {
+        $q = $this->_getQuery();
+        $q->addQuery('a.*');
+        $q->addQuery('b.percent_allocated');
+        $q->addTable('resources', 'a');
+        $q->addJoin('resource_tasks', 'b', 'b.resource_id = a.resource_id', 'inner');
+        $q->addWhere('b.task_id = ' . (int)$task_id);
+
+        return $q->loadHashList('resource_id');
+    }
+
+    public function getTasksByResources($resources, $start_date, $end_date)
+    {
+        $q = new w2p_Database_Query();
+        $q->addQuery('b.resource_id, sum(b.percent_allocated) as total_allocated');
+        $q->addTable('tasks', 'a');
+        $q->addJoin('resource_tasks', 'b', 'b.task_id = a.task_id', 'inner');
+        $q->addWhere('b.resource_id IN (' . implode(',', array_keys($resources)) . ')');
+        $q->addWhere("task_start_date <= '$end_date'");
+        $q->addWhere("task_end_date   >= '$start_date'");
+        $q->addGroup('resource_id');
+
+        return $q->loadHashList();
+    }
+
+    /*
+     * This method should only be run once to upgrade the module from v1.0.1 to
+     *   v1.1.0 which happened around the web2project v3.0 release.
+     */
+    public function convertTypes()
+    {
+        $q = $this->_getQuery();
+        $q->addTable('resource_types');
+        $q->addQuery('*');
+        $types = $q->loadList();
+
+        $resourceTypes = array();
+        foreach($types as $type) {
+            $resourceTypes[$type['resource_type_id']] = $type['resource_type_name'];
+        }
+
+        foreach ($resourceTypes as $id => $type) {
+            $q->addTable('sysvals');
+            $q->addInsert('sysval_key_id', 1);
+            $q->addInsert('sysval_title', 'ResourceTypes');
+            $q->addInsert('sysval_value', $type);
+            $q->addInsert('sysval_value_id', $id);
+            $q->exec();
+            $q->clear();
+        }
+
+        // This removes the dead table.
+        $q->dropTable('resource_types');
+        $result = $q->exec();
     }
 
     public function hook_search() {

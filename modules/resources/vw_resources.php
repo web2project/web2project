@@ -3,53 +3,52 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $tabbed, $currentTabName, $currentTabId, $AppUI;
+global $AppUI, $tab;
+
 $obj = new CResource();
+$where = ($tab) ? 'resource_type = '. $tab : '';
+$items = $obj->loadAll('resource_name', $where);
 
-$query = new w2p_Database_Query();
-$obj->setAllowedSQL($AppUI->user_id, $query);
-$query->addTable('resources');
-if (!$tabbed) {
-	$currentTabId++;
-}
-
-if ($currentTabId) {
-	$query->addWhere('resource_type = ' . (int)$_SESSION['resource_type_list'][$currentTabId]['resource_type_id']);
-}
-$res = &$query->exec();
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
-<tr>
-	<th nowrap="nowrap" width="20%">
-    	<?php echo $AppUI->_('ID'); ?>
-	</th>
-	<th nowrap="nowrap" width="70%">
-    	<?php echo $AppUI->_('Resource Name'); ?>
-	</th>
-	<th nowrap="nowrap" width="10%">
-		<?php echo $AppUI->_('Max Alloc %'); ?>
-	</th>
-</tr>
-<?php
-for ($res; !$res->EOF; $res->MoveNext()) {
-?>
-<tr>
-	<td>
-	    <a href="index.php?m=resources&a=view&resource_id=<?php echo $res->fields['resource_id']; ?>">
-	    <?php echo $res->fields['resource_key']; ?>
-	    </a>
-	</td>
-	<td>
-	    <a href="index.php?m=resources&a=view&resource_id=<?php echo $res->fields['resource_id']; ?>">
-	    <?php echo $res->fields['resource_name']; ?>
-		</a>
-	</td>
-	<td align="right">
-    	<?php echo $res->fields['resource_max_allocation']; ?>
-	</td>
-</tr>
-<?php
-}
-$query->clear();
-?>
+    <tr>
+        <?php
+        $fieldList = array();
+        $fieldNames = array();
+
+        $module = new w2p_Core_Module();
+        $fields = $module->loadSettings('resources', 'index_list');
+
+        if (count($fields) > 0) {
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
+        } else {
+            // TODO: This is only in place to provide an pre-upgrade-safe
+            //   state for versions earlier than v3.0
+            //   At some point at/after v4.0, this should be deprecated
+            $fieldList = array('resource_key', 'resource_name', 'resource_max_allocation');
+            $fieldNames = array('Identifier', 'Resource Name', 'Max Alloc %');
+
+            $module->storeSettings('resources', 'index_list', $fieldList, $fieldNames);
+        }
+//TODO: The link below is commented out because this module doesn't support sorting... yet.
+        foreach ($fieldNames as $index => $name) {
+            ?><th nowrap="nowrap">
+<!--                <a href="?m=links&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">-->
+                    <?php echo $AppUI->_($fieldNames[$index]); ?>
+<!--                </a>-->
+            </th><?php
+        }
+        ?>
+    </tr>
+    <?php
+    foreach ($items as $row) {
+        $htmlHelper->stageRowData($row);
+        ?><tr><?php
+        foreach ($fieldList as $index => $column) {
+            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+        }
+        ?></tr><?php
+    } ?>
 </table>
