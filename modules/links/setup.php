@@ -27,16 +27,6 @@ $config['permissions_item_table'] = 'links';
 $config['permissions_item_field'] = 'link_id';
 $config['permissions_item_label'] = 'link_name';
 
-$config['requirements'] = array(
-        array('require' => 'php',           'comparator' => '>=', 'version' => '5.2.8'),
-        array('require' => 'web2project',   'comparator' => '>=', 'version' => '3'),
-        array('require' => 'json',          'comparator' => 'exists'),
-        array('require' => 'mysql',         'comparator' => '==', 'version' => '1.0'),
-        array('require' => 'Phar',          'comparator' => 'exists'),
-        array('require' => 'gd_info',       'comparator' => 'exists'),
-        array('require' => 'curl',          'comparator' => 'exists'),
-    );
-
 if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
