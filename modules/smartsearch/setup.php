@@ -18,20 +18,4 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class SSearchNS {
-
-	public function install() {
-    global $AppUI;
-    
-    $perms = $AppUI->acl();
-    return $perms->registerModule('Smart Search', 'smartsearch');
-	}
-
-	public function remove() {
-		return true;
-	}
-
-	public function upgrade() {
-		return true;
-	}
-}
+class SSearchNS extends w2p_Core_Setup { }

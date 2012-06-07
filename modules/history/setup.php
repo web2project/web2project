@@ -27,12 +27,12 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupHistory {
-
+class CSetupHistory extends w2p_Core_Setup
+{
 	public function install() {
         global $AppUI;
 
-		$q = new w2p_Database_Query;
+		$q = $this->_getQuery();
 		$q->createTable('history');
         $sql = ' (
 			history_id int(10) unsigned NOT NULL auto_increment,
@@ -52,23 +52,14 @@ class CSetupHistory {
 		$q->createDefinition($sql);
 		$q->exec();
 
-        $perms = $AppUI->acl();
-        return $perms->registerModule('History', 'history');
+        return parent::install();
 	}
 
 	public function remove() {
-		global $AppUI;
-
-        $q = new w2p_Database_Query;
+        $q = $this->_getQuery();
 		$q->dropTable('history');
 		$q->exec();
 
-        $perms = $AppUI->acl();
-        return $perms->unregisterModule('history');
-	}
-
-	public function upgrade($old_version) {
-
-        return true;
+        return parent::remove();
 	}
 }
