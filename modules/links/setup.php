@@ -27,15 +27,94 @@ $config['permissions_item_table'] = 'links';
 $config['permissions_item_field'] = 'link_id';
 $config['permissions_item_label'] = 'link_name';
 
+$config['requirements'] = array(
+        array('require' => 'php',   'comparator' => '>=', 'version' => '5.3.8'),
+        array('require' => 'web2project',   'comparator' => '>=', 'version' => '4.0.0'),
+        array('require' => 'libxml',   'comparator' => '>=', 'version' => '5.4.0'),
+        array('require' => 'json', 'comparator' => '>=', 'version' => '5.3.0'),
+        array('require' => 'mysql', 'comparator' => '>=', 'version' => '5.3.0'),
+        array('require' => 'ldap', 'comparator' => '>=', 'version' => '5.3.0'),
+        array('require' => 'mbstring', 'comparator' => '>=', 'version' => '5.3.0'),
+        array('require' => 'Phar', 'comparator' => '>=', 'version' => '5.3.0'),
+        array('require' => 'gd_info', 'comparator' => '>=', 'version' => '5.3.0'),
+        array('require' => 'curl', 'comparator' => '>=', 'version' => '5.3.0'),
+    );
+
 if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
 class CSetupLinks {
-
+    protected $_errors;
+    
 	public function configure() {
 		return true;
 	}
+
+    /**
+     * 	@return string or array Returns the error message
+     */
+    public function getErrors()
+    {
+        return $this->_errors;
+    }
+    protected function checkRequirements(array $requirements = null)
+    {
+global $AppUI;
+        $result = true;
+
+        foreach ($requirements as $requirement) {
+            switch ($requirement['require']) {
+                case 'web2project':
+                    $version = $AppUI->getVersion();
+                    break;
+                case 'php':
+                    $version = PHP_VERSION;
+                    break;
+                case 'gd_info':
+                    $version = 0;
+                    if (function_exists('gd_info')) {
+                        $lib_version = gd_info();
+                        $version = $lib_version['GD Version'];
+                    }
+                    break;
+                case 'curl':
+                    $version = 0;
+                    if (function_exists('curl_version')) {
+                        $lib_version = curl_version();
+                        $version = $lib_version['version'];
+                    }
+                    break;
+                default:
+                    $version = phpversion($requirement['require']);
+            }
+            switch ($requirement['comparator']) {
+                case 'exists':
+                    $requirement['version'] = 0;
+                    $requirement['comparator'] = '>';
+                    break;
+                case '>':
+                case '<':
+                case '==':
+                case '<=':
+                case '>=':
+                    $result = version_compare($version, $requirement['version'], $requirement['comparator']);
+                    break;
+                default:
+                    
+                    //do nothing
+            }
+            if (!$result) {
+                $version = ('' == $version) ? 'n/a' : $version;
+                $this->_errors[$requirement['require']] = $requirement['require'] .
+                        ' version should be ' . $requirement['comparator'] . ' ' .
+                        $requirement['version'] . ' instead it is '.$version;
+            }
+            
+        }
+        return $result;
+        
+    }
 
 	public function remove() {
 		$q = new w2p_Database_Query();
@@ -52,9 +131,19 @@ class CSetupLinks {
 		return true;
 	}
 
-	public function install() {
+	public function install(array $config = null) {
         global $AppUI;
 
+        if (isset($config['requirements'])) {
+            $result = $this->checkRequirements($config['requirements']);
+        } else {
+            $result = true;
+        }
+echo '<pre>'; print_r($this->getErrors()); echo '</pre>';
+        if (!$result) {
+            $AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
+        }
+die();
         $q = new w2p_Database_Query();
 		$q->createTable('links');
 		$q->createDefinition('(
