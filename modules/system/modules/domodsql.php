@@ -41,7 +41,7 @@ if (!$setupclass) {
 		$AppUI->redirect();
 	}
 } else {
-	$setup = new $setupclass($AppUI, $config);
+	$setup = new $setupclass($AppUI, $config, new w2p_Database_Query());
 }
 
 switch ($cmd) {

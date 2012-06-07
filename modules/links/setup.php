@@ -31,14 +31,15 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupLinks extends w2p_Core_Setup {
-
-	public function remove() {
-		$q = new w2p_Database_Query();
+class CSetupLinks extends w2p_Core_Setup
+{
+	public function remove()
+    {
+		$q = $this->_getQuery();
 		$q->dropTable('links');
 		$q->exec();
 
-		$q->clear();
+		$q = $this->_getQuery();
 		$q->setDelete('sysvals');
 		$q->addWhere('sysval_title = \'LinkType\'');
 		$q->exec();
@@ -46,15 +47,15 @@ class CSetupLinks extends w2p_Core_Setup {
         return parent::remove();
 	}
 
-	public function install() {
-
-        $result = $this->checkRequirements();
+	public function install()
+    {
+        $result = $this->_checkRequirements();
 
         if (!$result) {
             $AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
         }
 
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
 		$q->createTable('links');
 		$q->createDefinition('(
             link_id int( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -79,7 +80,7 @@ class CSetupLinks extends w2p_Core_Setup {
         $i = 0;
         $linkTypes = array('Unknown', 'Document', 'Application');
         foreach ($linkTypes as $linkType) {
-            $q->clear();
+            $q = $this->_getQuery();
             $q->addTable('sysvals');
             $q->addInsert('sysval_key_id', 1);
             $q->addInsert('sysval_title', 'LinkType');

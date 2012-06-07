@@ -7,10 +7,12 @@ abstract class w2p_Core_Setup {
     protected $_perms;
     protected $_config;
 
-    public function __construct(w2p_Core_CAppUI $AppUI = null, array $config = null)
+    public function __construct(w2p_Core_CAppUI $AppUI = null, 
+            array $config = null, w2p_Database_Query $query = null)
     {
         $this->_AppUI = $AppUI;
         $this->_perms = $this->_AppUI->acl();
+        $this->_query = (is_null($query)) ? new w2p_Database_Query() : $query;
 
         $this->_config = $config;
     }
@@ -68,7 +70,7 @@ abstract class w2p_Core_Setup {
      *     array('require' => 'curl',        'comparator' => 'exists'));
      * @return boolean
      */
-    protected function checkRequirements()
+    protected function _checkRequirements()
     {
         $result = true;
 
@@ -127,5 +129,20 @@ abstract class w2p_Core_Setup {
             
         }
         return $result;
+    }
+
+    /**
+     * Returns a clean query object
+     *
+     * Clears out the query and then returns it for use
+     *
+     * @access protected
+     *
+     * @return w2p_Database_Query Clean query object
+     */
+    protected function _getQuery()
+    {
+        $this->_query->clear();
+        return $this->_query;
     }
 }
