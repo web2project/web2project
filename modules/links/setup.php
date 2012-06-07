@@ -31,7 +31,7 @@ $config['requirements'] = array(
         array('require' => 'php',           'comparator' => '>=', 'version' => '5.2.8'),
         array('require' => 'web2project',   'comparator' => '>=', 'version' => '3'),
         array('require' => 'json',          'comparator' => 'exists'),
-        array('require' => 'mysql',         'comparator' => 'exists'),
+        array('require' => 'mysql',         'comparator' => '==', 'version' => '1.0'),
         array('require' => 'Phar',          'comparator' => 'exists'),
         array('require' => 'gd_info',       'comparator' => 'exists'),
         array('require' => 'curl',          'comparator' => 'exists'),
@@ -41,77 +41,7 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupLinks {
-    protected $_errors;
-    
-	public function configure() {
-		return true;
-	}
-
-    /**
-     * 	@return string or array Returns the error message
-     */
-    public function getErrors()
-    {
-        return $this->_errors;
-    }
-    protected function checkRequirements(array $requirements = null)
-    {
-global $AppUI;
-        $result = true;
-
-        foreach ($requirements as $requirement) {
-            switch ($requirement['require']) {
-                case 'web2project':
-                    $version = $AppUI->getVersion();
-                    break;
-                case 'php':
-                    $version = PHP_VERSION;
-                    break;
-                case 'gd_info':
-                    $version = 0;
-                    if (function_exists('gd_info')) {
-                        $lib_version = gd_info();
-                        $version = $lib_version['GD Version'];
-                    }
-                    break;
-                case 'curl':
-                    $version = 0;
-                    if (function_exists('curl_version')) {
-                        $lib_version = curl_version();
-                        $version = $lib_version['version'];
-                    }
-                    break;
-                default:
-                    $version = phpversion($requirement['require']);
-            }
-            switch ($requirement['comparator']) {
-                case 'exists':
-                    $requirement['version'] = '0';
-                    $requirement['comparator'] = '>=';
-                case '>':
-                case '<':
-                case '==':
-                case '<=':
-                case '>=':
-                    $version = preg_replace("/[^0-9.]/", "", $version );
-                    $result = version_compare($version, $requirement['version'], $requirement['comparator']);
-                    break;
-                default:
-                    
-                    //do nothing
-            }
-            if (!$result) {
-                $version = ('' == $version) ? 'n/a' : $version;
-                $this->_errors[$requirement['require']] = $requirement['require'] .
-                        ' version should be ' . $requirement['comparator'] . ' ' .
-                        $requirement['version'] . ' instead it is '.$version;
-            }
-            
-        }
-        return $result;
-        
-    }
+class CSetupLinks extends w2p_Core_Setup {
 
 	public function remove() {
 		$q = new w2p_Database_Query();
@@ -123,21 +53,12 @@ global $AppUI;
 		$q->addWhere('sysval_title = \'LinkType\'');
 		$q->exec();
 
-        global $AppUI;
-        $perms = $AppUI->acl();
-        return $perms->unregisterModule('links');
+        return parent::remove();
 	}
 
-	public function upgrade($old_version) {
-		return true;
-	}
+	public function install() {
 
-	public function install(array $config = null) {
-        if (isset($config['requirements'])) {
-            $result = $this->checkRequirements($config['requirements']);
-        } else {
-            $result = true;
-        }
+        $result = $this->checkRequirements();
 
         if (!$result) {
             $AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
@@ -178,8 +99,6 @@ global $AppUI;
             $i++;
         }
 
-        global $AppUI;
-        $perms = $AppUI->acl();
-        return $perms->registerModule('Links', 'links');
+        return parent::install();
 	}
 }
