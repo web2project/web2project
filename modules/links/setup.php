@@ -28,16 +28,13 @@ $config['permissions_item_field'] = 'link_id';
 $config['permissions_item_label'] = 'link_name';
 
 $config['requirements'] = array(
-        array('require' => 'php',   'comparator' => '>=', 'version' => '5.3.8'),
-        array('require' => 'web2project',   'comparator' => '>=', 'version' => '4.0.0'),
-        array('require' => 'libxml',   'comparator' => '>=', 'version' => '5.4.0'),
-        array('require' => 'json', 'comparator' => '>=', 'version' => '5.3.0'),
-        array('require' => 'mysql', 'comparator' => '>=', 'version' => '5.3.0'),
-        array('require' => 'ldap', 'comparator' => '>=', 'version' => '5.3.0'),
-        array('require' => 'mbstring', 'comparator' => '>=', 'version' => '5.3.0'),
-        array('require' => 'Phar', 'comparator' => '>=', 'version' => '5.3.0'),
-        array('require' => 'gd_info', 'comparator' => '>=', 'version' => '5.3.0'),
-        array('require' => 'curl', 'comparator' => '>=', 'version' => '5.3.0'),
+        array('require' => 'php',           'comparator' => '>=', 'version' => '5.2.8'),
+        array('require' => 'web2project',   'comparator' => '>=', 'version' => '3'),
+        array('require' => 'json',          'comparator' => 'exists'),
+        array('require' => 'mysql',         'comparator' => 'exists'),
+        array('require' => 'Phar',          'comparator' => 'exists'),
+        array('require' => 'gd_info',       'comparator' => 'exists'),
+        array('require' => 'curl',          'comparator' => 'exists'),
     );
 
 if ($a == 'setup') {
@@ -90,14 +87,14 @@ global $AppUI;
             }
             switch ($requirement['comparator']) {
                 case 'exists':
-                    $requirement['version'] = 0;
-                    $requirement['comparator'] = '>';
-                    break;
+                    $requirement['version'] = '0';
+                    $requirement['comparator'] = '>=';
                 case '>':
                 case '<':
                 case '==':
                 case '<=':
                 case '>=':
+                    $version = preg_replace("/[^0-9.]/", "", $version );
                     $result = version_compare($version, $requirement['version'], $requirement['comparator']);
                     break;
                 default:
@@ -125,6 +122,10 @@ global $AppUI;
 		$q->setDelete('sysvals');
 		$q->addWhere('sysval_title = \'LinkType\'');
 		$q->exec();
+
+        global $AppUI;
+        $perms = $AppUI->acl();
+        return $perms->unregisterModule('links');
 	}
 
 	public function upgrade($old_version) {
@@ -132,18 +133,16 @@ global $AppUI;
 	}
 
 	public function install(array $config = null) {
-        global $AppUI;
-
         if (isset($config['requirements'])) {
             $result = $this->checkRequirements($config['requirements']);
         } else {
             $result = true;
         }
-echo '<pre>'; print_r($this->getErrors()); echo '</pre>';
+
         if (!$result) {
             $AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
         }
-die();
+
         $q = new w2p_Database_Query();
 		$q->createTable('links');
 		$q->createDefinition('(
@@ -179,6 +178,7 @@ die();
             $i++;
         }
 
+        global $AppUI;
         $perms = $AppUI->acl();
         return $perms->registerModule('Links', 'links');
 	}
