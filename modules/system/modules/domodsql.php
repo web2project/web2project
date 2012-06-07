@@ -41,7 +41,7 @@ if (!$setupclass) {
 		$AppUI->redirect();
 	}
 } else {
-	$setup = new $setupclass();
+	$setup = new $setupclass($AppUI);
 }
 
 switch ($cmd) {
