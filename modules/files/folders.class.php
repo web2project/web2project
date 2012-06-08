@@ -30,16 +30,6 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 
-    public function delete()
-    {
-        $result = false;
-
-        if ($this->canDelete()) {
-            $result = parent::delete();
-        }
-        return $result;
-    }
-
 	public function canDelete($msg, $oid = 0, $joins = null) {
         $msg = array();
 

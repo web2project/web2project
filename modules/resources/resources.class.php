@@ -84,16 +84,6 @@ class CResource extends w2p_Core_BaseObject {
         return $stored;
     }
 
-    public function delete()
-    {
-        $result = false;
-
-        if ($this->canDelete()) {
-            $result = parent::delete();
-        }
-        return $result;
-    }
-
     public function getResourcesByTask($task_id)
     {
         $q = $this->_getQuery();

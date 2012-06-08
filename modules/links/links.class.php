@@ -104,16 +104,6 @@ class CLink extends w2p_Core_BaseObject
         return $errorArray;
     }
 
-    public function delete()
-    {
-        $result = false;
-
-        if ($this->canDelete()) {
-            $result = parent::delete();
-        }
-        return $result;
-    }
-
     public function store()
     {
         $stored = false;
