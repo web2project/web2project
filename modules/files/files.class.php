@@ -59,11 +59,7 @@ class CFile extends w2p_Core_BaseObject {
                 $this->file_id = 0;
                 $this->file_owner = $this->_AppUI->user_id;
             }
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->file_owner = $this->_AppUI->user_id;
@@ -84,11 +80,7 @@ class CFile extends w2p_Core_BaseObject {
             $q->clear();
 
             $this->file_date = $q->dbfnNowWithTZ();
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
 
         return $stored;
