@@ -100,26 +100,25 @@ class CDepartment extends w2p_Core_BaseObject {
         return $q->loadList();
 	}
 
-	public function check() {
-            $errorArray = array();
-            $baseErrorMsg = get_class($this) . '::store-check failed - ';
+    public function isValid()
+    {
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-            if (0 == (int) $this->dept_company) {
-                $errorArray['dept_company'] = $baseErrorMsg . 'department company is not set';
-            }
-            if ('' == trim($this->dept_name)) {
-                $errorArray['dept_name'] = $baseErrorMsg . 'department name is not set';
-            }
-            if (0 != $this->dept_id && $this->dept_id == $this->dept_parent) {
-                $errorArray['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
-            }
-            if (0 == (int) $this->dept_owner) {
-                $errorArray['dept_owner'] = $baseErrorMsg . 'department owner is not set';
-            }
+        if (0 == (int) $this->dept_company) {
+            $this->_error['dept_company'] = $baseErrorMsg . 'department company is not set';
+        }
+        if ('' == trim($this->dept_name)) {
+            $this->_error['dept_name'] = $baseErrorMsg . 'department name is not set';
+        }
+        if (0 != $this->dept_id && $this->dept_id == $this->dept_parent) {
+            $this->_error['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
+        }
+        if (0 == (int) $this->dept_owner) {
+            $this->_error['dept_owner'] = $baseErrorMsg . 'department owner is not set';
+        }
 
-            $this->_error = $errorArray;
-            return $errorArray;
-	}
+        return (count($this->_error)) ? false : true;
+    }
 
 	public function store() {
         $stored = false;

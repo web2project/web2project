@@ -59,10 +59,8 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         return $stored;
     }
 
-    public function check()
+    public function isValid()
     {
-        // ensure the integrity of some variables
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         $q = $this->_getQuery();
@@ -73,10 +71,10 @@ class CSystem_Bcode extends w2p_Core_BaseObject
 
         $found_id = $q->loadResult();
         if ($found_id && $found_id != $this->billingcode_id) {
-            $errorArray['billingcode_name'] = $baseErrorMsg . 'code already exists';
+            $this->_error['billingcode_name'] = $baseErrorMsg . 'code already exists';
         }
 
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     public function getBillingCodes($company_id = -1, $activeOnly = true)

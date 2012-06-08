@@ -19,6 +19,19 @@ class CResource extends w2p_Core_BaseObject {
         parent::__construct('resources', 'resource_id');
 	}
 
+    public function isValid()
+    {
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+        if ('' == trim($this->resource_name)) {
+            $this->_error['resource_name'] = $baseErrorMsg . 'resource name is not set';
+        }
+        if ((int) $this->resource_key == 0) {
+            $this->_error['resource_key'] = $baseErrorMsg . 'resource key is not set';
+        }
+
+        return (count($this->_error)) ? false : true;
+    }
     /*
      * This is only here for backwards compatibility
      *

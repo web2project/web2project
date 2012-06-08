@@ -95,41 +95,39 @@ class CProject extends w2p_Core_BaseObject
         return $result;
     }
 
-    public function check()
+    public function isValid()
     {
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if ('' == $this->project_name) {
-            $errorArray['project_name'] = $baseErrorMsg . 'project name is not set';
+            $this->_error['project_name'] = $baseErrorMsg . 'project name is not set';
         }
         if ('' == $this->project_short_name) {
-            $errorArray['project_short_name'] = $baseErrorMsg . 'project short name is not set';
+            $this->_error['project_short_name'] = $baseErrorMsg . 'project short name is not set';
         }
         if (0 == (int) $this->project_company) {
-            $errorArray['project_company'] = $baseErrorMsg . 'project company is not set';
+            $this->_error['project_company'] = $baseErrorMsg . 'project company is not set';
         }
         if (0 == (int) $this->project_owner) {
-            $errorArray['project_owner'] = $baseErrorMsg . 'project owner is not set';
+            $this->_error['project_owner'] = $baseErrorMsg . 'project owner is not set';
         }
         if (0 == (int) $this->project_creator) {
-            $errorArray['project_creator'] = $baseErrorMsg . 'project creator is not set';
+            $this->_error['project_creator'] = $baseErrorMsg . 'project creator is not set';
         }
         if (!is_int($this->project_priority) && '' == $this->project_priority) {
-            $errorArray['project_priority'] = $baseErrorMsg . 'project priority is not set';
+            $this->_error['project_priority'] = $baseErrorMsg . 'project priority is not set';
         }
         if ('' == $this->project_color_identifier) {
-            $errorArray['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not set';
+            $this->_error['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not set';
         }
         if (!is_int($this->project_type) && '' == $this->project_type) {
-            $errorArray['project_type'] = $baseErrorMsg . 'project type is not set';
+            $this->_error['project_type'] = $baseErrorMsg . 'project type is not set';
         }
         if (!is_int($this->project_status) && '' == $this->project_status) {
-            $errorArray['project_status'] = $baseErrorMsg . 'project status is not set';
+            $this->_error['project_status'] = $baseErrorMsg . 'project status is not set';
         }
 
-        $this->_error = $errorArray;
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     public function loadFull($AppUI = null, $projectId)

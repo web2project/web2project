@@ -34,21 +34,18 @@ class CForum extends w2p_Core_BaseObject
         parent::__construct('forums', 'forum_id');
     }
 
-    public function check()
+    public function isValid()
     {
-        // ensure the integrity of some variables
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if ('' == trim($this->forum_name)) {
-            $errorArray['forum_name'] = $baseErrorMsg . 'forum name is not set';
+            $this->_error['forum_name'] = $baseErrorMsg . 'forum name is not set';
         }
         if (0 == (int) $this->forum_owner) {
-            $errorArray['forum_owner'] = $baseErrorMsg . 'forum owner is not set';
+            $this->_error['forum_owner'] = $baseErrorMsg . 'forum owner is not set';
         }
 
-        $this->_error = $errorArray;
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     public function getMessages($AppUI = null, $forum_id = 0, $message_id = 0, $sortDir = 'asc')

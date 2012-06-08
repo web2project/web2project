@@ -55,6 +55,16 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return $msg;
 	}
 
+    public function isValid()
+    {
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
+
+        if ('' == trim($this->file_folder_name)) {
+            $this->_error['file_folder_name'] = $baseErrorMsg . 'folder name is not set';
+        }
+
+        return (count($this->_error)) ? false : true;
+    }
 
     public function store() {
         $stored = false;

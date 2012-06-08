@@ -57,22 +57,19 @@ class CEvent extends w2p_Core_BaseObject
         $q->loadObject($this, true, false);
     }
 
-    // overload check operation
-    public function check()
+    public function isValid()
     {
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if ($this->event_start_date > $this->event_end_date) {
-            $errorArray['start_after_end'] = $baseErrorMsg . 'start date is after end date';
+            $this->_error['start_after_end'] = $baseErrorMsg . 'start date is after end date';
         }
-//TODO: check() should never modify anything, just validate the object
+//TODO: I really don't like this. isValid() should never modify anything, just validate the object
         if (!$this->event_creator) {
             $this->event_creator = $this->_AppUI->user_id;
         }
 
-        $this->_error = $errorArray;
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     /**
