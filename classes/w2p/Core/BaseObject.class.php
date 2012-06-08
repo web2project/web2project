@@ -298,6 +298,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function store($updateNulls = false)
     {
+        $result = false;
+
         $k = $this->_tbl_key;
 
         // NOTE: I don't particularly like this but it wires things properly.
@@ -310,29 +312,26 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         // NOTE: This is *very* similar to the store() flow within delete()..
         $this->_error = $this->check();
         if (count($this->_error)) {
-            $msg = get_class($this) . '::store-check failed';
-            $this->_error['store-check'] = $msg;
-            return $msg;
+            $this->_error['store-check'] = get_class($this) . '::store-check failed';
+            return false;
         }
 
         $k = $this->_tbl_key;
         $q = $this->_getQuery();
         if ($this->$k) {
             $store_type = 'update';
-            $ret = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
+            $result = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
         } else {
             $store_type = 'add';
-            $ret = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
+            $result = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
         }
 
-        if ($ret) {
-            $result = null;
+        if ($result) {
             // NOTE: I don't particularly like how the name is generated but it wires things properly.
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post' . $event . 'Event'));
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postStoreEvent'));
         } else {
-            $result = db_error();
-            $this->_error['store'] = $result;
+            $this->_error['store'] = db_error();
         }
 
         return $result;
