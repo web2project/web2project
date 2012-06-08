@@ -103,19 +103,11 @@ class CContact extends w2p_Core_BaseObject
          */
         
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
 
         return $stored;
