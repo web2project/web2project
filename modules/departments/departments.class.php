@@ -148,13 +148,16 @@ class CDepartment extends w2p_Core_BaseObject {
         return $stored;
 	}
 
-	public function delete() {
+	public function delete()
+    {
+        $result = false;
+
         if ($this->canDelete()) {
 
             $rows = $this->loadAll(null, 'dept_parent = '. (int)$this->dept_id);
             if (count($rows)) {
                 $this->_error['deptWithSub'] = 'deptWithSub';
-                return 'deptWithSub';
+                return false;
             }
 
             $q = $this->_getQuery();
@@ -166,15 +169,12 @@ class CDepartment extends w2p_Core_BaseObject {
 
             if (count($rows)) {
                 $this->_error['deptWithProject'] = 'deptWithProject';
-                return 'deptWithProject';
+                return false;
             }
 
-            if ($msg = parent::delete()) {
-                return $msg;
-            }
-            return true;
+            $result = parent::delete();
         }
-        return false;
+        return $result;
 	}
 	/**
 	 *	Returns a list of records exposed to the user
