@@ -316,6 +316,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $this->clearErrors();
 
         $k = $this->_tbl_key;
+        
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preStoreEvent'));
 
         $this->w2PTrimAll();
 
@@ -324,7 +326,6 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         }
 
         // NOTE: I don't particularly like this but it wires things properly.
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preStoreEvent'));
         $event = ($this->$k) ? 'Update' : 'Create';
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $event . 'Event'));
 
