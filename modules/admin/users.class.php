@@ -66,22 +66,14 @@ class CUser extends w2p_Core_BaseObject
                 $this->user_password = $tmpUser->user_password;
             }
 
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->perm_func = 'addLogin';
             $this->user_password = md5($this->user_password);
 
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
 
         return $stored;
