@@ -302,11 +302,6 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
         $k = $this->_tbl_key;
 
-        // NOTE: I don't particularly like this but it wires things properly.
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preStoreEvent'));
-        $event = ($this->$k) ? 'Update' : 'Create';
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $event . 'Event'));
-
         $this->w2PTrimAll();
 
         // NOTE: This is *very* similar to the store() flow within delete()..
@@ -315,6 +310,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             $this->_error['store-check'] = get_class($this) . '::store-check failed';
             return false;
         }
+
+        // NOTE: I don't particularly like this but it wires things properly.
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preStoreEvent'));
+        $event = ($this->$k) ? 'Update' : 'Create';
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $event . 'Event'));
 
         $k = $this->_tbl_key;
         $q = $this->_getQuery();
