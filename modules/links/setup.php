@@ -52,7 +52,7 @@ class CSetupLinks extends w2p_Core_Setup
         $result = $this->_checkRequirements();
 
         if (!$result) {
-            $AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
+            return false;
         }
 
         $q = $this->_getQuery();
@@ -74,11 +74,13 @@ class CSetupLinks extends w2p_Core_Setup
             KEY idx_link_project ( link_project ) ,
             KEY idx_link_parent ( link_parent )
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
-
-		$q->exec($sql);
+		if (!$q->exec()) {
+            return false;
+        }
 
         $i = 0;
         $linkTypes = array('Unknown', 'Document', 'Application');
+//TODO: refactor as proper sysvals handling
         foreach ($linkTypes as $linkType) {
             $q = $this->_getQuery();
             $q->addTable('sysvals');
