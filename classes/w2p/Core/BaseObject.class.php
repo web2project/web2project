@@ -319,10 +319,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
         $this->w2PTrimAll();
 
-        // NOTE: This is *very* similar to the store() flow within delete()..
-        $this->_error = $this->check();
-        if (count($this->_error)) {
-            $this->_error['store-check'] = get_class($this) . '::store-check failed';
+        if (!$this->isValid()) {
             return false;
         }
 
