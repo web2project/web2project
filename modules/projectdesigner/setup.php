@@ -41,7 +41,9 @@ class projectDesigner extends w2p_Core_Setup
                 pd_option_view_files INT(1) NOT NULL default 1,
                 PRIMARY KEY (pd_option_id)
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
-        $q->exec($sql);
+		if (!$q->exec()) {
+            return false;
+        }
 
         return parent::install();
 	}
