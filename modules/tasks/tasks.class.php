@@ -116,30 +116,35 @@ class CTask extends w2p_Core_BaseObject
         return $this->link . '/' . $this->type . '/' . $this->length;
     }
 
-    // overload check
-    public function check()
+    
+/*
+ * TODO: The check() this is based on is a ridiculous hairy mess that has numerous
+ *   levels of nesting, data modification, and various other things.
+ * 
+ * In short, Here Be Dragons.
+ */ 
+    public function isValid()
     {
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         $this->task_id = (int) $this->task_id;
 
         if (is_null($this->task_priority) || !is_numeric((int) $this->task_priority)) {
-            $errorArray['task_priority'] = $baseErrorMsg . 'task priority is NULL';
+            $this->_error['task_priority'] = $baseErrorMsg . 'task priority is NULL';
         }
         if ($this->task_name == '') {
-            $errorArray['task_name'] = $baseErrorMsg . 'task name is NULL';
+            $this->_error['task_name'] = $baseErrorMsg . 'task name is NULL';
         }
         if (is_null($this->task_project) || 0 == (int) $this->task_project) {
-            $errorArray['task_project'] = $baseErrorMsg . 'task project is not set';
+            $this->_error['task_project'] = $baseErrorMsg . 'task project is not set';
         }
         //Only check the task dates if the config option "check_task_dates" is on
         if (w2PgetConfig('check_task_dates')) {
             if ($this->task_start_date == '' || $this->task_start_date == '0000-00-00 00:00:00') {
-                $errorArray['task_start_date'] = $baseErrorMsg . 'task start date is NULL';
+                $this->_error['task_start_date'] = $baseErrorMsg . 'task start date is NULL';
             }
             if ($this->task_end_date == '' || $this->task_end_date == '0000-00-00 00:00:00') {
-                $errorArray['task_end_date'] = $baseErrorMsg . 'task end date is NULL';
+                $this->_error['task_end_date'] = $baseErrorMsg . 'task end date is NULL';
             }
             if (!isset($errorArray['task_start_date']) && !isset($errorArray['task_end_date'])) {
                 $startTimestamp = strtotime($this->task_start_date);
@@ -149,7 +154,7 @@ class CTask extends w2p_Core_BaseObject
                     $endTimestamp = $startTimestamp;
                 }
                 if ($startTimestamp > $endTimestamp) {
-                    $errorArray['bad_date_selection'] = $baseErrorMsg . 'task start date is after task end date';
+                    $this->_error['bad_date_selection'] = $baseErrorMsg . 'task start date is after task end date';
                 }
             }
         }
@@ -215,8 +220,8 @@ class CTask extends w2p_Core_BaseObject
         // Have deps
         if (array_sum($this_dependencies)) {
             if ($this->task_dynamic == 1) {
-                $errorArray['BadDep_DynNoDep'] = 'BadDep_DynNoDep';
-                return array('BadDep_DynNoDep');
+                $this->_error['BadDep_DynNoDep'] = 'BadDep_DynNoDep';
+                return false;
             }
 
             $this_dependents = $this->task_id ? explode(',', $this->dependentTasks()) : array();
@@ -236,8 +241,8 @@ class CTask extends w2p_Core_BaseObject
             $intersect = array_intersect($this_dependencies, $this_dependents);
             if (array_sum($intersect)) {
                 $ids = '(' . implode(',', $intersect) . ')';
-                $errorArray['BadDep_CircularDep'] = 'BadDep_CircularDep';
-                return array('BadDep_CircularDep', $ids);
+                $this->_error['BadDep_CircularDep'] = 'BadDep_CircularDep';
+                return false;
             }
         }
 
@@ -250,25 +255,25 @@ class CTask extends w2p_Core_BaseObject
             $parents_dependents = explode(',', $this_parent->dependentTasks());
 
             if (in_array($this_parent->task_id, $this_dependencies)) {
-                $errorArray['BadDep_CannotDependOnParent'] = 'BadDep_CannotDependOnParent';
-                return array('BadDep_CannotDependOnParent');
+                $this->_error['BadDep_CannotDependOnParent'] = 'BadDep_CannotDependOnParent';
+                return false;
             }
             // Task parent cannot be child of this task
             if (in_array($this_parent->task_id, $this_children)) {
-                $errorArray['BadParent_CircularParent'] = 'BadParent_CircularParent';
-                return array('BadParent_CircularParent');
+                $this->_error['BadParent_CircularParent'] = 'BadParent_CircularParent';
+                return false;
             }
 
             if ($this_parent->task_parent != $this_parent->task_id) {
                 // ... or parent's parent, cannot be child of this task. Could go on ...
                 if (in_array($this_parent->task_parent, $this_children)) {
-                    $errorArray['BadParent_CircularGrandParent'] = 'BadParent_CircularGrandParent';
-                    return array('BadParent_CircularGrandParent', '(' . $this_parent->task_parent . ')');
+                    $this->_error['BadParent_CircularGrandParent'] = 'BadParent_CircularGrandParent';
+                    return false;
                 }
                 // parent's parent cannot be one of this task's dependencies
                 if (in_array($this_parent->task_parent, $this_dependencies)) {
-                    $errorArray['BadParent_CircularGrandParent'] = 'BadParent_CircularGrandParent';
-                    return array('BadDep_CircularGrandParent', '(' . $this_parent->task_parent . ')');
+                    $this->_error['BadParent_CircularGrandParent'] = 'BadParent_CircularGrandParent';
+                    return false;
                 }
             } // grand parent
 
@@ -276,21 +281,21 @@ class CTask extends w2p_Core_BaseObject
                 $intersect = array_intersect($this_dependencies, $parents_dependents);
                 if (array_sum($intersect)) {
                     $ids = '(' . implode(',', $intersect) . ')';
-                    $errorArray['BadDep_CircularDepOnParentDependent'] = 'BadDep_CircularDepOnParentDependent';
-                    return array('BadDep_CircularDepOnParentDependent', $ids);
+                    $this->_error['BadDep_CircularDepOnParentDependent'] = 'BadDep_CircularDepOnParentDependent';
+                    return false;
                 }
             }
             if ($this->task_dynamic == 1) {
                 // then task's children can not be dependent on parent
                 $intersect = array_intersect($this_children, $parents_dependents);
                 if (array_sum($intersect)) {
-                    $errorArray['BadParent_ChildDepOnParent'] = 'BadParent_ChildDepOnParent';
-                    return array('BadParent_ChildDepOnParent');
+                    $this->_error['BadParent_ChildDepOnParent'] = 'BadParent_ChildDepOnParent';
+                    return false;
                 }
             }
         } // parent
 
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     /*

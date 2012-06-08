@@ -299,17 +299,11 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->task_log_description = $spacedDescription;
 	}
 
-	/**
-	 * Checks the class for validity
-	 *
-	 * @return null
-	 */
-	public function check()
-	{
-		// ensure the integrity of some variables
-		$errorArray = array();
-		$baseErrorMsg = get_class($this) . '::store-check failed - ';
+    public function isValid()
+    {
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
+//TODO: I *really* hate that this is modifying the underlying object, isValid should not change anything.
 		if (!((float)$this->task_log_hours)) {
 			// before evaluating a non-float work hour as 0 lets try to check if user is trying
 			// to enter in hour:minute format and convert it to decimal. If that is not the format
@@ -322,9 +316,8 @@ class CTask_Log extends w2p_Core_BaseObject
 			}
 		}
 
-        $this->_error = $errorArray;
-		return $errorArray;
-	}
+        return (count($this->_error)) ? false : true;
+    }
 
 	/**
 	 * Determines whether the currently logged in user can delete this task log.
