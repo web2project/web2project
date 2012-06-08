@@ -67,12 +67,9 @@ class CSystem_Budget extends w2p_Core_BaseObject
             $date = new w2p_Utilities_Date($this->budget_end_date);
             $this->budget_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
-
+//TODO: Why isn't there a canCreate branch here?
         if ($this->canEdit()) {
-            if (($msg = parent::store())) {
-                return $msg;
-            }
-            $stored = true;
+            $stored = parent::store();
         }
         return $stored;
     }
