@@ -47,22 +47,20 @@ class CCompany extends w2p_Core_BaseObject {
 	  parent::__construct('companies', 'company_id');
 	}
 
-	// overload check
-	public function check() {
-	  $errorArray = array();
-	  $baseErrorMsg = get_class($this) . '::store-check failed - ';
+    public function isValid()
+    {
+        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-	  if ('' == trim($this->company_name)) {
-	    $errorArray['company_name'] = $baseErrorMsg . 'company name is not set';
-	  }
-	  if ((int) $this->company_owner == 0) {
-    	$errorArray['company_owner'] = $baseErrorMsg . 'company owner is not set';
-	  }
+        if ('' == trim($this->company_name)) {
+            $this->_error = $baseErrorMsg . 'company name is not set';
+        }
+        if ((int) $this->company_owner == 0) {
+            $this->_error = $baseErrorMsg . 'company owner is not set';
+        }
 
-      $this->_error = $errorArray;
-	  return $errorArray;
-	}
-
+        return !count($this->_error);
+    }
+    
 	// overload canDelete
 	public function canDelete($msg = '', $oid = null, $joins = null) {
 		$tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
