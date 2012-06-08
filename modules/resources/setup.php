@@ -31,12 +31,12 @@ if ($a == 'setup') {
     echo w2PshowModuleConfig($config);
 }
 
-class SResource {
+class SResource extends w2p_Core_Setup
+{
     public function install() {
-        global $AppUI;
-
-        $q = new w2p_Database_Query;
-        $sql = '(
+        $q = $this->_getQuery();
+		$q->createTable('resources');
+		$q->createDefinition('(
             resource_id integer not null auto_increment,
             resource_name varchar(255) not null default "",
             resource_key varchar(64) not null default "",
@@ -46,48 +46,43 @@ class SResource {
             primary key (resource_id),
             key (resource_name),
             key (resource_type)
-        )';
-        $q->createTable('resources', $sql);
-		if (!$q->exec()) {
-            return false;
-        }
+            ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
+		if (!$q->exec()) { return false; }
 
         $q->clear();
-        $sql = '(
+        $q->createTable('resource_tasks');
+		$q->createDefinition('(
             resource_id integer not null default 0,
             task_id integer not null default 0,
             percent_allocated integer not null default 100,
             key (resource_id),
             key (task_id, resource_id)
-        )';
-        $q->createTable('resource_tasks', $sql);
+            ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
 		if (!$q->exec()) {
             return false;
         }
 
         $this->addTypes();
 
-        $perms = $AppUI->acl();
-        return $perms->registerModule('Resources', 'resources');
+        return parent::install();
     }
 
     public function remove() {
-        $q = new w2p_Database_Query;
-        $q->dropTable('resources');
-        $q->exec();
+        $q = $this->_getQuery();
+		$q->dropTable('history');
+		$q->exec();
+
         $q->clear();
         $q->dropTable('resource_tasks');
         $q->exec();
 
-        global $AppUI;
-        $perms = $AppUI->acl();
-        return $perms->unregisterModule('resources');
+        return parent::remove();
     }
 
     public function upgrade($old_version) {
         $result = false;
 
-        $q = new w2p_Database_Query;
+        $q = $this->_getQuery();
 
         // NOTE: All cases should fall through so all updates are executed.
         switch ($old_version) {
