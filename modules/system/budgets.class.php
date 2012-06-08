@@ -85,12 +85,8 @@ class CSystem_Budget extends w2p_Core_BaseObject
         $result = false;
 
         if ($this->canDelete()) {
-            if ($msg = parent::delete()) {
-                return $result;
-            }
-            $result = true;
+            $result = parent::delete();
         }
         return $result;
     }
-
 }

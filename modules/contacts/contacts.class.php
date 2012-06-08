@@ -210,13 +210,12 @@ class CContact extends w2p_Core_BaseObject
 
     public function delete()
     {
-        if ($this->canDelete()) {
-            if ($msg = parent::delete()) {
-                return true;
-            }
-        }
+        $result = false;
 
-        return false;
+        if ($this->canDelete()) {
+            $result = parent::delete();
+        }
+        return $result;
     }
 
     public function check()

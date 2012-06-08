@@ -72,16 +72,17 @@ class CCompany extends w2p_Core_BaseObject {
 		return parent::canDelete($msg, $oid, $tables);
 	}
 
-    public function delete() {
+    /*
+     * TODO: the parent delete() method does a canDelete(), why do we need to do it here too?
+     */
+    public function delete()
+    {
+        $result = false;
 
-//TODO: the parent delete() method does a canDelete(), why do we need to do it here too?
         if ($this->canDelete()) {
-            if ($msg = parent::delete()) {
-                return $msg;
-            }
-            return true;
+            $result = parent::delete();
         }
-        return false;
+        return $result;
     }
 
     public function store() {
