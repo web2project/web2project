@@ -109,11 +109,6 @@ class CLink extends w2p_Core_BaseObject
             $this->link_url = 'http://' . $this->link_url;
         }
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
         /*
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...

@@ -41,12 +41,6 @@ class CFile extends w2p_Core_BaseObject {
 
         $stored = false;
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
             $this->addHelpDeskTaskLog();
         }

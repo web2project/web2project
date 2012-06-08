@@ -54,11 +54,6 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 
         $this->w2PTrimAll();
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
 		$values = parseFormatSysval($this->sysval_value, $this->sysval_key_id);
 		//lets delete the old values
 		$q = $this->_getQuery();

@@ -53,12 +53,6 @@ class CSystem_Budget extends w2p_Core_BaseObject
     {
         $stored = false;
 
-        $errorMsgArray = $this->check();
-
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
-        }
-
         if ($this->budget_start_date) {
             $date = new w2p_Utilities_Date($this->budget_start_date);
             $this->budget_start_date = $date->format(FMT_DATETIME_MYSQL);

@@ -545,12 +545,6 @@ class CProject extends w2p_Core_BaseObject
             $this->project_end_date = null;
         }
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
         $this->project_id = (int) $this->project_id;
         // convert dates to SQL format first
         if ($this->project_start_date) {

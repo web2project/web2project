@@ -45,11 +45,6 @@ class CUser extends w2p_Core_BaseObject
     {
         $stored = false;
 
-        $this->_error = $this->check();
-        if (count($this->_error)) {
-            return false;
-        }
-
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $this->perm_func = 'updateLogin';
             $tmpUser = new CUser();

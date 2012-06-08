@@ -75,13 +75,6 @@ class CResource extends w2p_Core_BaseObject {
     public function store() {
         $stored = false;
 
-        $this->_error = $this->check();
-
-        if (count($this->error)) {
-            return $this->_error;
-        }
-
-        $q = $this->_getQuery();
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $stored = parent::store();
         }

@@ -593,11 +593,6 @@ class CTask extends w2p_Core_BaseObject
         }
 
         $this->importing_tasks = false;
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
 
         $this->task_target_budget = filterCurrency($this->task_target_budget);
 

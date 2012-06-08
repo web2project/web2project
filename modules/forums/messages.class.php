@@ -42,12 +42,6 @@ class CForum_Message extends w2p_Core_BaseObject
     {
         $stored = false;
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
         $q = $this->_getQuery();
 
         if ($this->{$this->_tbl_key} && $this->canEdit()) {

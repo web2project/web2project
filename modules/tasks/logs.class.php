@@ -173,12 +173,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	public function store()
 	{
-		$this->_error = $this->check();
-
-		if (count($this->_error)) {
-			return $this->_error;
-		}
-
 		$q = $this->_getQuery();
 		$this->task_log_updated = $q->dbfnNowWithTZ();
 
