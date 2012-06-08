@@ -52,13 +52,13 @@ class CCompany extends w2p_Core_BaseObject {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if ('' == trim($this->company_name)) {
-            $this->_error = $baseErrorMsg . 'company name is not set';
+            $this->_error['company_name'] = $baseErrorMsg . 'company name is not set';
         }
         if ((int) $this->company_owner == 0) {
-            $this->_error = $baseErrorMsg . 'company owner is not set';
+            $this->_error['company_owner'] = $baseErrorMsg . 'company owner is not set';
         }
 
-        return !count($this->_error);
+        return (count($this->_error)) ? false : true;
     }
     
 	// overload canDelete
