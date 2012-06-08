@@ -55,19 +55,15 @@ class CForum_Message extends w2p_Core_BaseObject
             $q->addWhere('visit_message = ' . (int) $this->message_id);
             $q->exec();
 
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->message_date = $q->dbfnNowWithTZ();
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
+            
+            $stored = parent::store();
 
+            if ($stored) {
                 $q->addTable('forum_messages');
                 $q->addQuery('count(message_id), MAX(message_date)');
                 $q->addWhere('message_forum = ' . (int) $this->message_forum);
@@ -87,8 +83,6 @@ class CForum_Message extends w2p_Core_BaseObject
                 $forum->store();
 
                 $this->sendWatchMail(false);
-
-                $stored = true;
             }
         }
         return $stored;
