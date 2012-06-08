@@ -90,11 +90,6 @@ class CContact extends w2p_Core_BaseObject
             $this->contact_display_name = mb_trim($this->contact_first_name . ' ' . $this->contact_last_name);
         }
 
-        $this->_error = $this->check();
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
         $q = $this->_getQuery();
         $this->contact_lastupdate = $q->dbfnNowWithTZ();
         /*

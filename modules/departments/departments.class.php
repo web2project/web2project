@@ -123,12 +123,6 @@ class CDepartment extends w2p_Core_BaseObject {
 	public function store() {
         $stored = false;
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $stored = parent::store();
 		}

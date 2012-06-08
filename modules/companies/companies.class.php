@@ -73,12 +73,6 @@ class CCompany extends w2p_Core_BaseObject {
     public function store() {
         $stored = false;
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
         $this->company_id = (int) $this->company_id;
         /*
          * TODO: I don't like the duplication on each of these two branches, but I
