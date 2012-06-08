@@ -225,19 +225,15 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	public function delete()
 	{
-        $this->_error = array();
-
 		$this->load($this->task_log_id);
 		$task_id = $this->task_log_task;
 
         if ($this->canDelete()) {
-			if ($msg = parent::delete()) {
-				return $msg;
-			}
+			$result = parent::delete();
+
 			$this->updateTaskSummary(null, $task_id);
-			return true;
 		}
-		return false;
+		return $result;
 	}
 
 	/**
