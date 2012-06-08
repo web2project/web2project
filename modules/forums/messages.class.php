@@ -115,14 +115,8 @@ class CForum_Message extends w2p_Core_BaseObject
 
             $q->setDelete('forum_messages');
             $q->addWhere('message_id = ' . (int) $this->message_id);
-            if ($q->exec()) {
-                $result = null;
-            } else {
-                $result = db_error();
-                $this->_error['delete-messages'] = $result;
-                return $result;
-            }
-            $q->clear();
+            
+            $result = parent::delete();
 
             $q->addTable('forum_messages');
             $q->addQuery('COUNT(message_id)');
@@ -134,7 +128,6 @@ class CForum_Message extends w2p_Core_BaseObject
             $q->addUpdate('forum_message_count', $messageCount);
             $q->addWhere('forum_id = ' . (int) $forumId);
             $q->exec();
-            $result = true;
         }
         return $result;
     }

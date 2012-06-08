@@ -182,6 +182,8 @@ class CForum extends w2p_Core_BaseObject
 
     public function delete()
     {
+        $result = false;
+
         if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->setDelete('forum_visits');
@@ -191,21 +193,14 @@ class CForum extends w2p_Core_BaseObject
             $q->clear();
             $q->setDelete('forum_messages');
             $q->addWhere('message_forum = ' . (int) $this->forum_id);
-            if ($q->exec()) {
-                $result = null;
-            } else {
-                $result = db_error();
-                $this->_error['delete-messages'] = $result;
-                return $result;
+            if (!$q->exec()) {
+                $this->_error['delete-messages'] = db_error();
+                return false;
             }
-            $q->clear();
 
-            if ($msg = parent::delete()) {
-                return $msg;
-            }
-            return true;
+            $result = parent::delete();
         }
-        return false;
+        return $result;
     }
 
     public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)

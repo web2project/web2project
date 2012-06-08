@@ -253,8 +253,10 @@ class CFile extends w2p_Core_BaseObject {
 
 	}
 
-	public function delete() {
+	public function delete()
+    {
         global $helpdesk_available;
+        $result = false;
 
         $this->_error = array();
 
@@ -265,27 +267,22 @@ class CFile extends w2p_Core_BaseObject {
                 return false;
             }
 
-            if ($msg = parent::delete()) {
-                return $msg;
-            }
-
             // delete any index entries
             $q = $this->_query;
             $q->setDelete('files_index');
             $q->addQuery('*');
             $q->addWhere('file_id = ' . (int)$this->file_id);
             if (!$q->exec()) {
-                $result = db_error();
-                $this->_error['index-delete'] = $result;
-                return $result;
+                $this->_error['index-delete'] = db_error();
+                return false;
             }
             if ($helpdesk_available && $this->file_helpdesk_item != 0) {
                 $this->addHelpDeskTaskLog();
             }
 
-            return true;
+            $result = parent::delete();
         }
-		return false;
+		return $result;
 	}
 
 	// delete File from File System
