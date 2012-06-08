@@ -362,12 +362,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function canDelete(&$msg = '', $oid = null, $joins = null)
     {
-        $result = true;
+        $result = false;
 
         // First things first.  Are we allowed to delete?
         if (!$this->_perms->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
-            $msg = $this->_AppUI->_('noDeletePermission');
-            $this->_error['noDeletePermission'] = $msg;
+            $this->_error['noDeletePermission'] = $this->_AppUI->_('noDeletePermission');
             return false;
         }
 
@@ -390,8 +389,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
             $obj = (object) $q->loadHash();
             if (!$obj && '' != db_error()) {
-                $msg = db_error();
-                $this->_error['db_error'] = $msg;
+                $this->_error['db_error'] = db_error();
                 return false;
             }
             $msg = array();
