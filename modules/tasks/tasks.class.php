@@ -812,6 +812,8 @@ class CTask extends w2p_Core_BaseObject
      */
     public function delete()
     {
+        $result = false;
+
         if ($this->canDelete()) {
             //load it before deleting it because we need info on it to update the parents later on
             $this->load($this->task_id);
@@ -833,9 +835,8 @@ class CTask extends w2p_Core_BaseObject
             $q->setDelete('user_tasks');
             $q->addWhere('task_id IN (' . $implodedTaskList . ')');
             if (!($q->exec())) {
-                $result = db_error();
-                $this->_error['delete-user-assignments'] = $result;
-                return $result;
+                $this->_error['delete-user-assignments'] = db_error();
+                return false;
             }
             $q->clear();
 
@@ -843,29 +844,21 @@ class CTask extends w2p_Core_BaseObject
             $q->setDelete('task_dependencies');
             $q->addWhere('dependencies_task_id IN (' . $implodedTaskList . ') OR
                 dependencies_req_task_id IN (' . $implodedTaskList . ')');
-            if ($q->exec()) {
-                $result = null;
-            } else {
-                $result = db_error();
-                $this->_error['delete-dependencies'] = $result;
-                return $result;
+            if (!$q->exec()) {
+                $this->_error['delete-dependencies'] = db_error();
+                return false;
             }
             $q->clear();
 
             // delete affiliated contacts
             $q->setDelete('task_contacts');
             $q->addWhere('task_id = ' . $this->task_id);
-            if ($q->exec()) {
-                $result = null;
-            } else {
-                $result = db_error();
-                $this->_error['delete-contacts'] = $result;
-                return $result;
+            if (!$q->exec()) {
+                $this->_error['delete-contacts'] = db_error();
+                return false;
             }
 
-            if ($msg = parent::delete()) {
-                return $msg;
-            }
+            $result = parent::delete();
 
             if ($this->task_parent != $this->task_id) {
                 $this->updateDynamics();
@@ -874,11 +867,9 @@ class CTask extends w2p_Core_BaseObject
             $last_task_data = $this->getLastTaskData($this->task_project);
             CProject::updateTaskCache(
                     $this->task_project, $last_task_data['task_id'], $last_task_data['last_date'], $this->getTaskCount($this->task_project));
-
-            return true;
         }
 
-        return false;
+        return $result;
     }
 
     /** Retrieve tasks with latest task_end_dates within given project
