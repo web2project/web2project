@@ -312,6 +312,9 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function store($updateNulls = false)
     {
+        $result = false;
+        $this->clearErrors();
+
         $k = $this->_tbl_key;
 
         // NOTE: I don't particularly like this but it wires things properly.
@@ -445,6 +448,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     public function delete($oid = null)
     {
         $result = false;
+        $this->clearErrors();
 
         $k = $this->_tbl_key;
         if ($oid) {
