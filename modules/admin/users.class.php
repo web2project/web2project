@@ -160,6 +160,8 @@ class CUser extends w2p_Core_BaseObject
 
     public function delete()
     {
+        $result = false;
+
         if ($this->canDelete()) {
 
             $this->_perms->deleteLogin($this->user_id);
@@ -169,13 +171,10 @@ class CUser extends w2p_Core_BaseObject
             $q->addWhere('pref_user = ' . $this->user_id);
             $q->exec();
 
-            if ($msg = parent::delete()) {
-                return $msg;
-            }
-            return true;
+            $result = parent::delete();
         }
 
-        return false;
+        return $result;
     }
 
     public function hook_search()

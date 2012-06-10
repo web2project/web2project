@@ -362,12 +362,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function canDelete(&$msg = '', $oid = null, $joins = null)
     {
-        $result = true;
+        $result = false;
 
         // First things first.  Are we allowed to delete?
         if (!$this->_perms->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
-            $msg = $this->_AppUI->_('noDeletePermission');
-            $this->_error['noDeletePermission'] = $msg;
+            $this->_error['noDeletePermission'] = $this->_AppUI->_('noDeletePermission');
             return false;
         }
 
@@ -390,8 +389,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
             $obj = (object) $q->loadHash();
             if (!$obj && '' != db_error()) {
-                $msg = db_error();
-                $this->_error['db_error'] = $msg;
+                $this->_error['db_error'] = db_error();
                 return false;
             }
             $msg = array();
@@ -432,7 +430,6 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function delete($oid = null)
     {
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
         $result = false;
 
         $k = $this->_tbl_key;
@@ -443,17 +440,19 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         // NOTE: This is *very* similar to the check() flow within store()..
         $this->canDelete();
         if (count($this->_error)) {
-            $msg = get_class($this) . '::delete-check failed';
             //TODO: no clue why this is required..
             unset($this->_error['store']);
-            $this->_error['delete-check'] = $msg;
+            $this->_error['delete-check'] = get_class($this) . '::delete-check failed';
         }
+
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
 
         $q = $this->_getQuery();
         $q->setDelete($this->_tbl);
         $q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
-        if ($q->exec()) {
-            $result = true;
+        $result = $q->exec();
+        
+        if ($result) {
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postDeleteEvent'));
         } else {
             $this->_error['delete'] = db_error();

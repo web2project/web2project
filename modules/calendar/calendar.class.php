@@ -83,20 +83,18 @@ class CEvent extends w2p_Core_BaseObject
      */
     public function delete()
     {
-        if ($this->canDelete()) {
-            if ($msg = parent::delete()) {
-                return $msg;
-            }
+        $result = false;
 
+        if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->setDelete('user_events');
             $q->addWhere('event_id = ' . (int) $this->event_id);
             $q->exec();
-
-            return true;
+            
+            $result = parent::delete();
         }
 
-        return false;
+        return $result;
     }
 
     public function hook_search()

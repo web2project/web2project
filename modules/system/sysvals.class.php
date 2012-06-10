@@ -90,14 +90,18 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 	}
 
 	public function delete() {
-        $q = $this->_getQuery();
+        $result = false;
+
 		if ($this->sysval_title) {
+            $q = $this->_getQuery();
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
-			if (!$q->exec()) {
-				return get_class($this) . '::delete failed <br />' . db_error();
-			}
+
+            $result = $q->exec();
+            if(!$result) {
+                $this->_errors[] = db_error();
+            }
 		}
-		return null;
+		return $result;
 	}
 }
