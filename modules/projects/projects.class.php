@@ -152,71 +152,66 @@ class CProject extends w2p_Core_BaseObject
         $this->budget = $this->getBudget();
     }
 
-    public function delete()
+    protected function hook_preDelete()
     {
-        $result = false;
+        $q = $this->_getQuery();
+        $q->addTable('tasks');
+        $q->addQuery('task_id');
+        $q->addWhere('task_project = ' . (int) $this->project_id);
+        $tasks_to_delete = $q->loadColumn();
 
-        if ($this->canDelete()) {
-            $q = $this->_getQuery();
-            $q->addTable('tasks');
-            $q->addQuery('task_id');
-            $q->addWhere('task_project = ' . (int) $this->project_id);
-            $tasks_to_delete = $q->loadColumn();
-
-            $q->clear();
-            $task = new CTask();
-            $task->overrideDatabase($this->_query);
-            foreach ($tasks_to_delete as $task_id) {
-                $task->task_id = $task_id;
-                $task->delete();
-            }
-
-            $q->clear();
-            $q->addTable('files');
-            $q->addQuery('file_id');
-            $q->addWhere('file_project = ' . (int) $this->project_id);
-            $files_to_delete = $q->loadColumn();
-
-            $q->clear();
-            $file = new CFile();
-            $file->overrideDatabase($this->_query);
-            foreach ($files_to_delete as $file_id) {
-                $file->file_id = $file_id;
-                $file->delete();
-            }
-
-            $q->clear();
-            $q->addTable('events');
-            $q->addQuery('event_id');
-            $q->addWhere('event_project = ' . (int) $this->project_id);
-            $events_to_delete = $q->loadColumn();
-
-            $q->clear();
-            $event = new CEvent();
-            $event->overrideDatabase($this->_query);
-            foreach ($events_to_delete as $event_id) {
-                $event->event_id = $event_id;
-                $event->delete();
-            }
-
-            $q->clear();
-            // remove the project-contacts and project-departments map
-            $q->setDelete('project_contacts');
-            $q->addWhere('project_id =' . (int) $this->project_id);
-            $q->exec();
-
-            $q->clear();
-            $q->setDelete('project_departments');
-            $q->addWhere('project_id =' . (int) $this->project_id);
-            $q->exec();
-
-            $q->clear();
-            $q->setDelete('tasks');
-            $q->addWhere('task_represents_project =' . (int) $this->project_id);
-
-            $result = parent::delete();
+        $q->clear();
+        $task = new CTask();
+        $task->overrideDatabase($this->_query);
+        foreach ($tasks_to_delete as $task_id) {
+            $task->task_id = $task_id;
+            $task->delete();
         }
-        return $result;
+
+        $q->clear();
+        $q->addTable('files');
+        $q->addQuery('file_id');
+        $q->addWhere('file_project = ' . (int) $this->project_id);
+        $files_to_delete = $q->loadColumn();
+
+        $q->clear();
+        $file = new CFile();
+        $file->overrideDatabase($this->_query);
+        foreach ($files_to_delete as $file_id) {
+            $file->file_id = $file_id;
+            $file->delete();
+        }
+
+        $q->clear();
+        $q->addTable('events');
+        $q->addQuery('event_id');
+        $q->addWhere('event_project = ' . (int) $this->project_id);
+        $events_to_delete = $q->loadColumn();
+
+        $q->clear();
+        $event = new CEvent();
+        $event->overrideDatabase($this->_query);
+        foreach ($events_to_delete as $event_id) {
+            $event->event_id = $event_id;
+            $event->delete();
+        }
+
+        $q->clear();
+        // remove the project-contacts and project-departments map
+        $q->setDelete('project_contacts');
+        $q->addWhere('project_id =' . (int) $this->project_id);
+        $q->exec();
+
+        $q->clear();
+        $q->setDelete('project_departments');
+        $q->addWhere('project_id =' . (int) $this->project_id);
+        $q->exec();
+
+        $q->clear();
+        $q->setDelete('tasks');
+        $q->addWhere('task_represents_project =' . (int) $this->project_id);
+
+        parent::hook_preDelete();
     }
 
     /** 	
