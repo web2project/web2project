@@ -21,18 +21,15 @@ class CSystem_Budget extends w2p_Core_BaseObject
         parent::__construct('budgets', 'budget_id', 'system');
     }
 
-    public function check()
+    public function isValid()
     {
-        // ensure the integrity of some variables
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if (0 == trim($this->budget_amount)) {
-            $errorArray['budget_amount'] = $baseErrorMsg . 'budget amount must be greater than zero';
+            $this->_error['budget_amount'] = $baseErrorMsg . 'budget amount must be greater than zero';
         }
 
-        $this->_error = $errorArray;
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     public function getBudgetAmounts($company_id = -1, $dept_id = -1)

@@ -208,26 +208,22 @@ class CContact extends w2p_Core_BaseObject
         return $results;
     }
 
-    public function check()
+    public function isValid()
     {
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        // we *need* a first name, that's the rule later on for the ACL checks
-        // fixes #980
         if(mb_strlen($this->contact_first_name) <= 1) {
-            $errorArray['contact_first_name'] = $baseErrorMsg . 'contact first name is not set';
+            $this->_error['contact_first_name'] = $baseErrorMsg . 'contact first name is not set';
         }
         
         if(mb_strlen($this->contact_display_name) <= 1) {
-            $errorArray['contact_display_name'] = $baseErrorMsg . 'contact display name is not set';
+            $this->_error['contact_display_name'] = $baseErrorMsg . 'contact display name is not set';
         }
         if (0 == (int) $this->contact_owner) {
-            $errorArray['contact_owner'] = $baseErrorMsg . 'contact owner is not set';
+            $this->_error['contact_owner'] = $baseErrorMsg . 'contact owner is not set';
         }
 
-        $this->_error = $errorArray;
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     public function canEdit()

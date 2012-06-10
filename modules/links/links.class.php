@@ -84,24 +84,21 @@ class CLink extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
-    public function check()
+    public function isValid()
     {
-        // ensure the integrity of some variables
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if ('' == trim($this->link_name)) {
-            $errorArray['link_name'] = $baseErrorMsg . 'link name is not set';
+            $this->_error['link_name'] = $baseErrorMsg . 'link name is not set';
         }
         if (7 >= strlen(trim($this->link_url))) {
-            $errorArray['link_url'] = $baseErrorMsg . 'link url is not set';
+            $this->_error['link_url'] = $baseErrorMsg . 'link url is not set';
         }
         if (0 == (int) $this->link_owner) {
-            $errorArray['link_owner'] = $baseErrorMsg . 'link owner is not set';
+            $this->_error['link_owner'] = $baseErrorMsg . 'link owner is not set';
         }
 
-        $this->_error = $errorArray;
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     public function store()

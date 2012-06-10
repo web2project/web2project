@@ -248,9 +248,23 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function check()
     {
-        return $this->_error;
+        $this->isValid();
+
+        return $this->getError();
     }
 
+    /*
+     * This function does just what you think it does. The nice thing is that
+     *    since it always returns a boolean (storing the errors in the
+     *    $this->_errors, we can make decisions based on it even if we don't
+     *    care about the errors.
+     * 
+     * @return boolean
+     */
+    public function isValid()
+    {
+        return true;
+    }
     /**
      * 	Clone the current record
      *
