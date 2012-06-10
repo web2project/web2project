@@ -18,26 +18,24 @@ class CForum_Message extends w2p_Core_BaseObject
         parent::__construct('forum_messages', 'message_id', 'forums');
     }
 
-    public function check()
+    public function isValid()
     {
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if (0 == (int) $this->message_forum) {
-            $errorArray['message_forum'] = $baseErrorMsg . 'forum is not set';
+            $this->_error['message_forum'] = $baseErrorMsg . 'forum is not set';
         }
         if (0 == (int) $this->message_author) {
-            $errorArray['message_author'] = $baseErrorMsg . 'message author is not set';
+            $this->_error['message_author'] = $baseErrorMsg . 'message author is not set';
         }
         if ('' == trim($this->message_title)) {
-            $errorArray['message_title'] = $baseErrorMsg . 'message title is not set';
+            $this->_error['message_title'] = $baseErrorMsg . 'message title is not set';
         }
         if ('' == trim($this->message_body)) {
-            $errorArray['message_body'] = $baseErrorMsg . 'message body is not set';
+            $this->_error['message_body'] = $baseErrorMsg . 'message body is not set';
         }
 
-        $this->_error = $errorArray;
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     public function store()

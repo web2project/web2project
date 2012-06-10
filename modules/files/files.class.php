@@ -207,29 +207,28 @@ class CFile extends w2p_Core_BaseObject {
 		return $result;
 	}
 
-	public function check() {
-        $errorArray = array();
+    public function isValid()
+    {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if ($this->file_id == 0 && '' == $this->file_real_filename) {
-            $errorArray['file_real_filename'] = $baseErrorMsg . 'file real name is not set';
+            $this->_error['file_real_filename'] = $baseErrorMsg . 'file real name is not set';
         }
         if ($this->file_id == 0 && '' == $this->file_name) {
-            $errorArray['file_name'] = $baseErrorMsg . 'file name is not set';
+            $this->_error['file_name'] = $baseErrorMsg . 'file name is not set';
         }
         if (!is_int($this->file_parent) && '' == $this->file_parent) {
-            $errorArray['file_parent'] = $baseErrorMsg . 'file parent id is not set';
+            $this->_error['file_parent'] = $baseErrorMsg . 'file parent id is not set';
         }
         if ($this->file_id == 0 && !is_int($this->file_size) && '' == $this->file_size) {
-            $errorArray['file_size'] = $baseErrorMsg . 'file size is not set';
+            $this->_error['file_size'] = $baseErrorMsg . 'file size is not set';
         }
         if ($this->file_id == 0 && '' == $this->file_type) {
-            $errorArray['file_type'] = $baseErrorMsg . 'file type is not set';
+            $this->_error['file_type'] = $baseErrorMsg . 'file type is not set';
         }
 
-        $this->_error = $errorArray;
-        return $errorArray;
-	}
+        return (count($this->_error)) ? false : true;
+    }
 
 	public function checkout($userId, $fileId, $coReason) {
 		$q = new w2p_Database_Query;

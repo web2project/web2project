@@ -11,19 +11,19 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 	public $sysval_value_id = null;
 	public $sysval_value = null;
 
-	public function check() {
-        $errorArray = array();
+    public function isValid()
+    {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if ($this->sysval_key_id == 0) {
-            $errorArray['sysval_key_id'] = $baseErrorMsg . 'key type is not set';
+            $this->_error['sysval_key_id'] = $baseErrorMsg . 'key type is not set';
 		}
 		if (!$this->sysval_title) {
-			$errorArray['sysval_title'] = $baseErrorMsg . 'key title is not set';
+			$this->_error['sysval_title'] = $baseErrorMsg . 'key title is not set';
 		}
 
-		return $errorArray;
-	}
+        return (count($this->_error)) ? false : true;
+    }
 
 	public function __construct($key = null, $title = null, $value = null) {
         parent::__construct('sysvals', 'sysval_id', 'system');

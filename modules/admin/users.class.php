@@ -27,20 +27,18 @@ class CUser extends w2p_Core_BaseObject
         parent::__construct('users', 'user_id');
     }
 
-    public function check()
+    public function isValid()
     {
-        $errorArray = array();
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
         if (!$this->user_id && '' == trim($this->user_password)) {
-            $errorArray['user_password'] = $baseErrorMsg . 'user password is not set';
+            $this->_error['user_password'] = $baseErrorMsg . 'user password is not set';
         }
         if (!$this->user_id && $this->user_exists($this->user_username)) {
-            $errorArray['user_exists'] = $baseErrorMsg . 'this user already exists';
+            $this->_error['user_exists'] = $baseErrorMsg . 'this user already exists';
         }
 
-        $this->_error = $errorArray;
-        return $errorArray;
+        return (count($this->_error)) ? false : true;
     }
 
     public function store($AppUI = null, $externally_created_user = false)
