@@ -83,20 +83,18 @@ class CEvent extends w2p_Core_BaseObject
      */
     public function delete()
     {
-        if ($this->canDelete()) {
-            if ($msg = parent::delete()) {
-                return $msg;
-            }
+        $result = false;
 
+        if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->setDelete('user_events');
             $q->addWhere('event_id = ' . (int) $this->event_id);
             $q->exec();
-
-            return true;
+            
+            $result = parent::delete();
         }
 
-        return false;
+        return $result;
     }
 
     public function hook_search()
@@ -574,7 +572,7 @@ class CEvent extends w2p_Core_BaseObject
 
         $this->_error = $this->check();
         if (count($this->_error)) {
-            return $this->_error;
+            return false;
         }
 
         $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
@@ -585,20 +583,14 @@ class CEvent extends w2p_Core_BaseObject
          */
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $this->event_updated = $q->dbfnNowWithTZ();
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+
+            $stored = parent::store();
         }
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->event_created = $q->dbfnNowWithTZ();
             $this->event_updated = $this->event_created;
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+
+            $stored = parent::store();
         }
 
         return $stored;

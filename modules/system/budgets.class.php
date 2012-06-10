@@ -79,18 +79,4 @@ class CSystem_Budget extends w2p_Core_BaseObject
         }
         return $stored;
     }
-
-    public function delete()
-    {
-        $result = false;
-
-        if ($this->canDelete()) {
-            if ($msg = parent::delete()) {
-                return $result;
-            }
-            $result = true;
-        }
-        return $result;
-    }
-
 }

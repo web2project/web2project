@@ -17,20 +17,27 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         parent::__construct('billingcode', 'billingcode_id', 'system');
     }
 
+    /*
+     * This very specifically does not call the parent::delete() because we
+     *    don't want to destroy the old data. We just want to deactivate the
+     *    billing code.
+     */
     public function delete()
     {
+        $result = false;
+
         if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->addTable('billingcode');
             $q->addUpdate('billingcode_status', '1');
             $q->addWhere('billingcode_id = ' . (int) $this->billingcode_id);
 
-            if (!$q->exec()) {
-                return db_error();
+            $result = $q->exec();
+            if(!$result) {
+                $this->_errors[] = db_error();
             }
-            return true;
         }
-        return false;
+        return $result;
     }
 
     public function store()

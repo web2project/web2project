@@ -66,22 +66,14 @@ class CUser extends w2p_Core_BaseObject
                 $this->user_password = $tmpUser->user_password;
             }
 
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->perm_func = 'addLogin';
             $this->user_password = md5($this->user_password);
 
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
 
         return $stored;
@@ -160,6 +152,8 @@ class CUser extends w2p_Core_BaseObject
 
     public function delete()
     {
+        $result = false;
+
         if ($this->canDelete()) {
 
             $this->_perms->deleteLogin($this->user_id);
@@ -169,13 +163,10 @@ class CUser extends w2p_Core_BaseObject
             $q->addWhere('pref_user = ' . $this->user_id);
             $q->exec();
 
-            if ($msg = parent::delete()) {
-                return $msg;
-            }
-            return true;
+            $result = parent::delete();
         }
 
-        return false;
+        return $result;
     }
 
     public function hook_search()
