@@ -16,7 +16,7 @@ $config['mod_description'] = 'A module to design projects';
 $config['mod_config'] = true;
 
 if ($a == 'setup') {
-	echo dPshowModuleConfig($config);
+	echo w2PshowModuleConfig($config);
 }
 
 class projectDesigner {
