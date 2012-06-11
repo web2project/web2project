@@ -76,12 +76,15 @@ abstract class w2p_Core_Setup {
 
         $requirements = (isset($this->_config['requirements'])) ? 
                 $this->_config['requirements'] : array();
+        $modules = $this->_AppUI->getActiveModules();
 
         foreach ($requirements as $requirement) {
             switch ($requirement['require']) {
+                // This gets the web2project version
                 case 'web2project':
                     $version = $this->_AppUI->getVersion();
                     break;
+                // This gets the PHP version
                 case 'php':
                     $version = PHP_VERSION;
                     break;
@@ -100,7 +103,17 @@ abstract class w2p_Core_Setup {
                     }
                     break;
                 default:
-                    $version = phpversion($requirement['require']);
+                    if (isset($modules[$requirement['require']])) {
+                        // This gets the version of a specific module
+                        $q = $this->_getQuery();
+                        $q->addTable('modules');
+                        $q->addQuery('mod_version');
+                        $q->addWhere("mod_directory = '".$requirement['require']."'");
+                        $version = $q->loadResult();
+                    } else {
+                        // And if all else fails, we check php libraries
+                        $version = phpversion($requirement['require']);
+                    }
             }
             
             switch ($requirement['comparator']) {
