@@ -57,11 +57,9 @@ class projectDesigner extends w2p_Core_Setup
 	}
 
 	public function configure() {
-		global $AppUI;
+		$this->_AppUI->redirect('m=projectdesigner&a=configure');
 
-		$AppUI->redirect('m=projectdesigner&a=configure');
-
-		return true;
+		return parent::configure();
 	}
 
 }
