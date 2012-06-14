@@ -69,39 +69,32 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                                     echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
                                 }
                             ?>
-                            <table width="100%" cellpadding="0" cellspacing="0">
-                                <tbody>
-                                    <tr class="nav">
-                                        <td>
-                                            <?php echo buildHeaderNavigation($AppUI, 'ul', 'li', '', $m); ?>
-                                        </td>
-                                        <td nowrap="nowrap" align="right">
-                                        <?php
-                                            if ($AppUI->user_id > 0) {
-                                                //Do this check in case we are not using any user id, for example for external uses
-                                                $newItem = array('' => '- New Item -');
-                                                
-                                                $items = array('companies' => 'Company', 'projects' => 'Project',
-                                                    'contacts' => 'Contact', 'calendar' => 'Events', 'files' => 'File',
-                                                    'admin' => 'User');
-                                                foreach ($items as $module => $name) {
-                                                    if (canAdd($module)) {
-                                                        $newItem[$module] = $name;
-                                                    }
-                                                }
 
-                                                echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
+                            <div class="header">
+                                <div class="left nav">
+                                    <?php echo buildHeaderNavigation($AppUI, 'ul', 'li', '', $m); ?>
+                                </div>
+                                <div class="right" style="margin: 4px;">
+                                    <?php
+                                    if ($AppUI->user_id > 0) {
+                                        //Do this check in case we are not using any user id, for example for external uses
+                                        $newItem = array('' => '- New Item -');
+
+                                        $items = array('companies' => 'Company', 'projects' => 'Project',
+                                            'contacts' => 'Contact', 'calendar' => 'Events', 'files' => 'File',
+                                            'admin' => 'User');
+                                        foreach ($items as $module => $name) {
+                                            if (canAdd($module)) {
+                                                $newItem[$module] = $name;
                                             }
-                                        ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" valign="top" style="background: url(style/<?php echo $uistyle; ?>/images/nav_shadow.jpg);" align="left">
-                                            <img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg" alt=""/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        }
+
+                                        echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="std shadow">&nbsp;</div>
                         </form>
                     </td>
                 </tr>
