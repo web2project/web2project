@@ -87,7 +87,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
             </form>
         <?php } ?>
         <div>
-            <div class="left icon">
+            <div class="left" style="margin: 5px;">
                 <?php
                     echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_display_name : $outsider);
                     echo '<br />';
@@ -96,58 +96,28 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                     }
                 ?>
             </div>
+            <?php if ($AppUI->user_id > 0) { ?>
+                <div class="right quicknav">
+                    <div class="left">
+                    <?php if (canAccess('smartsearch')) { ?>
+                        <form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
+                            <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
+                        </form>
+                        <?php } ?>
+                    </div>
+                    <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
+                    <a class="button" href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
+                    <?php if (canAccess('tasks')) { ?>
+                        <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
+                    <?php } ?>
+                    <?php if (canAccess('calendar')) { 
+                        $now = new w2p_Utilities_Date(); ?>
+                        <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
+                    <?php } ?>
+                    <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
+                </div>
+            <?php } ?>
         </div>
-
-        <table width="100%" cellpadding="0" cellspacing="0" border="0">
-            <?php
-            if (!$dialog) {
-                $perms = &$AppUI->acl(); ?>
-                <tr>
-                    <td>
-                        <table cellspacing="0" cellpadding="3" border="0" width="100%">
-                            <tr>
-                                <td width="75%">xxx</td>
-                                <?php if ($AppUI->user_id > 0) { ?>
-                                    <td width="170" valign="middle" nowrap="nowrap"><table><tr><td><form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
-                                        <?php if (canAccess('smartsearch')) { ?>
-                                            <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
-                                        <?php } else {
-                                        echo '&nbsp;';
-                                        } ?></form></td></tr></table>
-                                    </td>
-                                    <td width="275" nowrap="nowrap">
-                                        <table cellspacing="0" cellpadding="3" border="0" width="100%">
-                                            <tr>
-                                                <td nowrap="nowrap" align="right">
-                                                    <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
-                                                </td>
-                                                <td nowrap="nowrap" align="right">
-                                                    <a class="button" href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
-                                                </td>
-                                                <?php if (canAccess('tasks')) { ?>
-                                                    <td nowrap="nowrap" align="right">
-                                                    <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
-                                                    </td><?php
-                                                }
-                                                if (canAccess('calendar')) {
-                                                    $now = new w2p_Utilities_Date(); ?>
-                                                    <td nowrap="nowrap" align="right">
-                                                        <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
-                                                    </td><?php
-                                                } ?>
-                                                <td nowrap="nowrap" align="right">
-                                                    <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                <?php } ?>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            <?php } // END showMenu ?>
-        </table>
 
         <table width="100%" cellspacing="0" cellpadding="4" border="0">
             <tr>
