@@ -6,11 +6,19 @@
         Purpose of the stylesheet follows.
 */
 
+div {
+    font-size:  8pt;
+}
+
 div.std { 
-	background: #fafafa; 
+	background: #fafafa;
     height:     1%;
     overflow:   hidden;
     width:      100%;
+}
+
+div.titlebar {
+    background: url(images/title_bkgd.jpg);
 }
 
 .main {
@@ -33,6 +41,9 @@ div.std {
     margin:     10px;
 }
 
+
+
+/* The following declarations are all used by the header navigation that shows up on every page. */
 div.header {
     background: url(images/nav_bkgd.gif);
     color:      #000;

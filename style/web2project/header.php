@@ -32,91 +32,81 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
     </head>
 
     <body onload="this.focus();">
+        <div class="std titlebar">
+            <div class="right">
+                <a href="http://www.web2project.net/" target="_new">
+                    <?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?>
+                        <img src="style/<?php echo $uistyle; ?>/images/title.jpg" border="0" class="banner" align="left" alt="click to visit web2Project site" />
+                    <?php echo w2PendTip();?>
+                </a>
+            </div>
+        </div>
+        <?php
+        if (!$dialog) {
+            $perms = &$AppUI->acl(); ?>
+            <form name="frm_new" method="get" action="./index.php" accept-charset="utf-8">
+                <input type="hidden" name="a" value="addedit" />
+                <?php
+                    //build URI string
+                    if (isset($company_id)) {
+                        echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';
+                    }
+                    if (isset($task_id)) {
+                        echo '<input type="hidden" name="task_parent" value="' . $task_id . '" />';
+                    }
+                    if (isset($file_id)) {
+                        echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
+                    }
+                ?>
+
+                <div class="header">
+                    <div class="left nav">
+                        <?php echo buildHeaderNavigation($AppUI, 'ul', 'li', '', $m); ?>
+                    </div>
+                    <div class="right" style="margin: 4px;">
+                        <?php
+                        if ($AppUI->user_id > 0) {
+                            //Do this check in case we are not using any user id, for example for external uses
+                            $newItem = array('' => '- New Item -');
+
+                            $items = array('companies' => 'Company', 'projects' => 'Project',
+                                'contacts' => 'Contact', 'calendar' => 'Events', 'files' => 'File',
+                                'admin' => 'User');
+                            foreach ($items as $module => $name) {
+                                if (canAdd($module)) {
+                                    $newItem[$module] = $name;
+                                }
+                            }
+
+                            echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="std shadow">&nbsp;</div>
+            </form>
+        <?php } ?>
+        <div>
+            <div class="left icon">
+                <?php
+                    echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_display_name : $outsider);
+                    echo '<br />';
+                    if ($AppUI->user_id > 0) {
+                        echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
+                    }
+                ?>
+            </div>
+        </div>
+
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tr>
-                <td>
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                            <th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="left">
-                                <!-- Product Version would go here-->
-                                &nbsp;
-                            </th>
-                            <th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="right" width="123"><a href='http://www.web2project.net/' <?php if ($dialog)
-                            echo 'target="_blank"'; ?>><?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?><img src="style/<?php echo $uistyle; ?>/images/title.jpg" border="0" class="banner" align="left" alt="click to visit web2Project site" /><?php echo w2PendTip();?></a></th>
-                            <th style="background: url(style/<?php echo $uistyle; ?>/images/title_bkgd.jpg);" align="right" width="5">
-                                <!--a little spacer-->
-                                &nbsp;
-                            </th>
-                        </tr>
-                    </table>
-                </td>
-            </tr><?php
+            <?php
             if (!$dialog) {
                 $perms = &$AppUI->acl(); ?>
-                <tr>
-                    <td align="left">
-                        <form name="frm_new" method="get" action="./index.php" accept-charset="utf-8">
-                            <input type="hidden" name="a" value="addedit" />
-                            <?php
-                                //build URI string
-                                if (isset($company_id)) {
-                                    echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';
-                                }
-                                if (isset($task_id)) {
-                                    echo '<input type="hidden" name="task_parent" value="' . $task_id . '" />';
-                                }
-                                if (isset($file_id)) {
-                                    echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
-                                }
-                            ?>
-
-                            <div class="header">
-                                <div class="left nav">
-                                    <?php echo buildHeaderNavigation($AppUI, 'ul', 'li', '', $m); ?>
-                                </div>
-                                <div class="right" style="margin: 4px;">
-                                    <?php
-                                    if ($AppUI->user_id > 0) {
-                                        //Do this check in case we are not using any user id, for example for external uses
-                                        $newItem = array('' => '- New Item -');
-
-                                        $items = array('companies' => 'Company', 'projects' => 'Project',
-                                            'contacts' => 'Contact', 'calendar' => 'Events', 'files' => 'File',
-                                            'admin' => 'User');
-                                        foreach ($items as $module => $name) {
-                                            if (canAdd($module)) {
-                                                $newItem[$module] = $name;
-                                            }
-                                        }
-
-                                        echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <div class="std shadow">&nbsp;</div>
-                        </form>
-                    </td>
-                </tr>
                 <tr>
                     <td>
                         <table cellspacing="0" cellpadding="3" border="0" width="100%">
                             <tr>
-                                <td width="75%">
-                                    <table cellspacing="0" cellpadding="3" border="0" width="100%">
-                                    <tr>
-                                        <td>
-                                            <?php
-                                                echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_first_name . ' ' . $AppUI->user_last_name : $outsider);
-                                                echo '<br />';
-                                                if ($AppUI->user_id > 0) {
-                                                    echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
-                                                }
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    </table>
-                                </td>
+                                <td width="75%">xxx</td>
                                 <?php if ($AppUI->user_id > 0) { ?>
                                     <td width="170" valign="middle" nowrap="nowrap"><table><tr><td><form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
                                         <?php if (canAccess('smartsearch')) { ?>
