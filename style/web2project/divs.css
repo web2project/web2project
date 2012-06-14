@@ -1,0 +1,35 @@
+/* 
+    Document   : divs.css
+    Created on : Jun 14, 2012, 3:17:49 PM
+    Author     : keithcasey
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+div.std { 
+	background: #fafafa; 
+    height:1%;
+    overflow:hidden;
+    width: 100%;
+}
+
+.main {
+    border-style:double;
+    margin-top: 20px;
+    min-width: 250px;
+    width: 45%;
+}
+
+.left {
+    float: left;
+    text-align: left;
+}
+
+.right {
+    float: right;
+}
+
+.icon {
+    margin: 10px;
+}
+

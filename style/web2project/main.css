@@ -243,7 +243,7 @@ table {
 }
 
 /* a 'standard' table */
-table.std, div.std { 
+table.std { 
 	background: #fafafa; 
 	border-color: #acacac; 
 	border-style: solid; 
@@ -251,12 +251,6 @@ table.std, div.std {
 	-moz-border-radius:3px; 
     -webkit-border-radius:3px;
     border-radius:3px;
-}
-
-div.std {
-    height:1%;
-    overflow:hidden;
-    width: 100%;
 }
 
 table.std TH {	
