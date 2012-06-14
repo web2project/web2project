@@ -13,12 +13,12 @@ $titleBlock = new w2p_Theme_TitleBlock('System Administration', '48_my_computer.
 $titleBlock->show();
 
 ?>
-<div class="std" style="overflow:hidden; height:1%; width: 100%;">
-    <div style="float: left; width: 45%;">
-        <div style="float: left; margin: 10px;">
+<div class="std">
+    <div class="left main">
+        <div class="left icon">
             <?php echo w2PshowImage('control-center.png', 42, 42, ''); ?>
         </div>
-        <div style="float: left;">
+        <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('System Status'); ?></span><br />
             <a href="?m=system&a=systemconfig"><?php echo $AppUI->_('System Configuration'); ?></a>
             <?php
@@ -68,11 +68,11 @@ $titleBlock->show();
             ?>
         </div>
     </div>
-    <div style="float: right; width: 45%;">
-        <div style="float: left; margin: 10px;">
+    <div class="right main">
+        <div class="left icon">
             <?php echo w2PshowImage('myevo-weather.png', 42, 42, ''); ?>
         </div>
-        <div style="float: left;">
+        <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Preferences'); ?></span><br />
             <a href="?m=system&a=addeditpref"><?php echo $AppUI->_('Default User Preferences'); ?></a><br />
             <a href="?m=system&u=syskeys&a=keys"><?php echo $AppUI->_('System Lookup Keys'); ?></a><br />
@@ -81,30 +81,30 @@ $titleBlock->show();
         </div>
     </div>
 
-    <div style="float: left; width: 45%; margin-top: 20px;">
-        <div style="float: left; margin: 10px;">
+    <div class="left main">
+        <div class="left icon">
             <?php echo w2PshowImage('power-management.png', 42, 42, ''); ?>
         </div>
-        <div style="float: left;">
+        <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Modules'); ?></span><br />
             <a href="?m=system&u=modules"><?php echo $AppUI->_('View Modules'); ?></a>
         </div>
     </div>
-    <div style="float: right; width: 45%; margin-top: 20px;">
-        <div style="float: left; margin: 10px;">
+    <div class="right main">
+        <div class="left icon">
             <?php echo w2PshowImage('rdf2.png', 42, 42, ''); ?>
         </div>
-        <div style="float: left;">
+        <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Language Support'); ?></span><br />
             <a href="?m=system&a=translate"><?php echo $AppUI->_('Translation Management'); ?></a>
         </div>
     </div>
 
-    <div style="float: left; width: 45%; margin-top: 20px;">
-        <div style="float: left; margin: 10px;">
+    <div class="left main">
+        <div class="left icon">
             <?php echo w2PshowImage('main-settings.png', 42, 42, ''); ?>
         </div>
-        <div style="float: left;">
+        <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Administration'); ?></span><br />
             <a href="?m=system&u=roles"><?php echo $AppUI->_('User Roles'); ?></a><br />
             <a href="?m=system&a=acls_view"><?php echo $AppUI->_('Users Permissions Information'); ?></a><br />
@@ -112,11 +112,11 @@ $titleBlock->show();
             <a href="?m=system&a=phpinfo&suppressHeaders=1" target="_blank"><?php echo $AppUI->_('PHP Info'); ?></a>
         </div>
     </div>
-    <div style="float: right; width: 45%; margin-top: 20px;">
-        <div style="float: left; margin: 10px;">
+    <div class="right main">
+        <div class="left icon">
             <?php echo w2PshowImage('control-center.png', 42, 42, ''); ?>
         </div>
-        <div style="float: left;">
+        <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Budgeting Setup'); ?></span><br />
             <a href="?m=system&a=billingcode"><?php echo $AppUI->_('Billing Code Table'); ?></a><br />
             <a href="?m=system&a=budgeting"><?php echo $AppUI->_('Setup Budgets'); ?></a><br />
