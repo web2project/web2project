@@ -80,24 +80,16 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                                             if ($AppUI->user_id > 0) {
                                                 //Do this check in case we are not using any user id, for example for external uses
                                                 $newItem = array('' => '- New Item -');
-                                                if (canAdd('companies')) {
-                                                    $newItem['companies'] = 'Company';
+                                                
+                                                $items = array('companies' => 'Company', 'projects' => 'Project',
+                                                    'contacts' => 'Contact', 'calendar' => 'Events', 'files' => 'File',
+                                                    'admin' => 'User');
+                                                foreach ($items as $module => $name) {
+                                                    if (canAdd($module)) {
+                                                        $newItem[$module] = $name;
+                                                    }
                                                 }
-                                                if (canAdd('contacts')) {
-                                                    $newItem['contacts'] = 'Contact';
-                                                }
-                                                if (canAdd('calendar')) {
-                                                    $newItem['calendar'] = 'Event';
-                                                }
-                                                if (canAdd('files')) {
-                                                    $newItem['files'] = 'File';
-                                                }
-                                                if (canAdd('projects')) {
-                                                    $newItem['projects'] = 'Project';
-                                                }
-                                                if (canAdd('admin')) {
-                                                    $newItem['admin'] = 'User';
-                                                }
+
                                                 echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
                                             }
                                         ?>
