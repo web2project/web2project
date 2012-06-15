@@ -312,6 +312,9 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function store($updateNulls = false)
     {
+        $result = false;
+        $this->clearErrors();
+
         $k = $this->_tbl_key;
 
         // NOTE: I don't particularly like this but it wires things properly.
@@ -326,7 +329,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         if (count($this->_error)) {
             $msg = get_class($this) . '::store-check failed';
             $this->_error['store-check'] = $msg;
-            return $msg;
+            return false;
         }
 
         $k = $this->_tbl_key;
@@ -445,18 +448,18 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     public function delete($oid = null)
     {
         $result = false;
+        $this->clearErrors();
 
         $k = $this->_tbl_key;
         if ($oid) {
             $this->$k = intval($oid);
         }
 
-        // NOTE: This is *very* similar to the check() flow within store()..
-        $this->canDelete();
-        if (count($this->_error)) {
+        if (!$this->canDelete()) {
             //TODO: no clue why this is required..
             unset($this->_error['store']);
             $this->_error['delete-check'] = get_class($this) . '::delete-check failed';
+            return false;
         }
 
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
@@ -465,7 +468,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $q->setDelete($this->_tbl);
         $q->addWhere($this->_tbl_key . ' = \'' . $this->$k . '\'');
         $result = $q->exec();
-        
+
         if ($result) {
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postDeleteEvent'));
         } else {

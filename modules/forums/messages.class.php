@@ -99,12 +99,6 @@ class CForum_Message extends w2p_Core_BaseObject
         $result = false;
 
         if ($this->canDelete()) {
-            $q = $this->_getQuery();
-            $q->setDelete('forum_visits');
-            $q->addWhere('visit_message = ' . (int) $this->message_id);
-            $q->exec(); // No error if this fails, it is not important.
-            $q->clear();
-
             $q->addTable('forum_messages');
             $q->addQuery('message_forum');
             $q->addWhere('message_id = ' . (int) $this->message_id);
@@ -128,6 +122,15 @@ class CForum_Message extends w2p_Core_BaseObject
             $q->exec();
         }
         return $result;
+    }
+
+    protected function hook_preDelete()
+    {
+        $q = $this->_getQuery();
+        $q->setDelete('forum_visits');
+        $q->addWhere('visit_message = ' . (int) $this->message_id);
+        $q->exec(); // No error if this fails, it is not important.
+        $q->clear();
     }
 
     public function loadByParent($parent_id = 0)
