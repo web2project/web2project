@@ -156,23 +156,14 @@ class CUser extends w2p_Core_BaseObject
         return parent::canDelete($msg, $this->user_id, $tables);
     }
 
-    public function delete()
+    protected function hook_preDelete()
     {
-        $result = false;
+        $this->_perms->deleteLogin($this->user_id);
 
-        if ($this->canDelete()) {
-
-            $this->_perms->deleteLogin($this->user_id);
-
-            $q = $this->_getQuery();
-            $q->setDelete('user_preferences');
-            $q->addWhere('pref_user = ' . $this->user_id);
-            $q->exec();
-
-            $result = parent::delete();
-        }
-
-        return $result;
+        $q = $this->_getQuery();
+        $q->setDelete('user_preferences');
+        $q->addWhere('pref_user = ' . $this->user_id);
+        $q->exec();
     }
 
     public function hook_search()

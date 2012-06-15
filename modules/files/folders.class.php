@@ -31,17 +31,14 @@ class CFile_Folder extends w2p_Core_BaseObject {
 	}
 
 	public function canDelete($msg, $oid = 0, $joins = null) {
-        $msg = array();
-
 		$q = $this->_getQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
 		$q->addWhere('file_folder_parent=' . $oid);
 		$res1 = $q->loadResult();
 		if ($res1) {
-			$msg[] = "Can't delete folder, it has subfolders.";//') . ': ' . implode(', ', $msg);
+            $this->_error['subfolders'] = "Can't delete folder, it has subfolders.";
 		}
-		$q->clear();
 
 		$q = $this->_getQuery();
 		$q->addTable('files');
@@ -49,10 +46,10 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		$q->addWhere('file_folder=' . $oid);
 		$res2 = $q->loadResult();
 		if ($res2) {
-			$msg[] = "Can't delete folder, it has files within it.";//') . ': ' . implode(', ', $msg);
+            $this->_error['files'] = "Can't delete folder, it has files within it.";
 		}
 
-		return $msg;
+		return (count($this->_error)) ? false : true;
 	}
 
     public function isValid()

@@ -183,11 +183,6 @@ class CForum extends w2p_Core_BaseObject
 
         if ($this->canDelete()) {
             $q = $this->_getQuery();
-            $q->setDelete('forum_visits');
-            $q->addWhere('visit_forum = ' . (int) $this->forum_id);
-            $q->exec(); // No error if this fails, it is not important.
-
-            $q->clear();
             $q->setDelete('forum_messages');
             $q->addWhere('message_forum = ' . (int) $this->forum_id);
             if (!$q->exec()) {
@@ -198,6 +193,14 @@ class CForum extends w2p_Core_BaseObject
             $result = parent::delete();
         }
         return $result;
+    }
+
+    protected function hook_preDelete()
+    {
+        $q = $this->_getQuery();
+        $q->setDelete('forum_visits');
+        $q->addWhere('visit_forum = ' . (int) $this->forum_id);
+        $q->exec();
     }
 
     public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)

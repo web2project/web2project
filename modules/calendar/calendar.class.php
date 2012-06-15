@@ -72,26 +72,12 @@ class CEvent extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    /**
-     * 	Overloaded delete method
-     *
-     * 	@author caseydk
-     * 	@return true if it worked, false if it didn't
-     */
-    public function delete()
+    protected function hook_preDelete()
     {
-        $result = false;
-
-        if ($this->canDelete()) {
-            $q = $this->_getQuery();
-            $q->setDelete('user_events');
-            $q->addWhere('event_id = ' . (int) $this->event_id);
-            $q->exec();
-            
-            $result = parent::delete();
-        }
-
-        return $result;
+        $q = $this->_getQuery();
+        $q->setDelete('user_events');
+        $q->addWhere('event_id = ' . (int) $this->event_id);
+        $q->exec();
     }
 
     public function hook_search()

@@ -147,34 +147,28 @@ class CDepartment extends w2p_Core_BaseObject {
         return $stored;
 	}
 
-	public function delete()
+    public function canDelete()
     {
-        $result = false;
-
-        if ($this->canDelete()) {
-
-            $rows = $this->loadAll(null, 'dept_parent = '. (int)$this->dept_id);
-            if (count($rows)) {
-                $this->_error['deptWithSub'] = 'deptWithSub';
-                return false;
-            }
-
-            $q = $this->_getQuery();
-            $q->addTable('project_departments', 'pd');
-            $q->addQuery('pd.project_id');
-            $q->addWhere('pd.department_id = ' . (int)$this->dept_id);
-            $rows = $q->loadList();
-            $q->clear();
-
-            if (count($rows)) {
-                $this->_error['deptWithProject'] = 'deptWithProject';
-                return false;
-            }
-
-            $result = parent::delete();
+        $rows = $this->loadAll('dept_id', 'dept_parent = '. (int)$this->dept_id);
+        if (count($rows)) {
+            $this->_error['deptWithSub'] = 'deptWithSub';
+            return false;
         }
-        return $result;
-	}
+
+        $q = $this->_getQuery();
+        $q->addTable('project_departments', 'pd');
+        $q->addQuery('pd.project_id');
+        $q->addWhere('pd.department_id = ' . (int)$this->dept_id);
+        $rows = $q->loadList();
+
+        if (count($rows)) {
+            $this->_error['deptWithProject'] = 'deptWithProject';
+            return false;
+        }
+
+        return true;
+    }
+
 	/**
 	 *	Returns a list of records exposed to the user
 	 *	@param int User id number
