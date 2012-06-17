@@ -39,10 +39,6 @@ if (strlen($_POST['spam_check']) > 0) {
 	exit;
 }
 
-if (!isset($GLOBALS['OS_WIN'])) {
-	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, 'WIN') !== false);
-}
-
 if (w2PgetConfig('activate_external_user_creation') != 'true') {
 	die('You should not access this file directly');
 }
