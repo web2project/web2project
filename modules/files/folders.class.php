@@ -69,30 +69,16 @@ class CFile_Folder extends w2p_Core_BaseObject {
         $this->file_folder_id = (int) $this->file_folder_id;
 		$this->file_folder_parent = (int) $this->file_folder_parent;
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
         /*
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
 //TODO: this is an oddball permissions object where the module doesn't determine the access..
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
         return $stored;
     }

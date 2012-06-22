@@ -553,11 +553,6 @@ class CEvent extends w2p_Core_BaseObject
         $this->event_type = (int) $this->event_type;
         $this->event_cwd = (int) $this->event_cwd;
 
-        $this->_error = $this->check();
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
         $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
         $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
         /*
@@ -566,20 +561,14 @@ class CEvent extends w2p_Core_BaseObject
          */
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $this->event_updated = $q->dbfnNowWithTZ();
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+
+            $stored = parent::store();
         }
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->event_created = $q->dbfnNowWithTZ();
             $this->event_updated = $this->event_created;
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+
+            $stored = parent::store();
         }
 
         return $stored;

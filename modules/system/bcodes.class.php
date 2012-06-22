@@ -44,17 +44,9 @@ class CSystem_Bcode extends w2p_Core_BaseObject
     {
         $stored = false;
 
-        $errorMsgArray = $this->check();
-
-        if (count($errorMsgArray) > 0) {
-            return $errorMsgArray;
-        }
-
+//TODO: Why isn't there a canCreate branch here?
         if ($this->canEdit()) {
-            if (($msg = parent::store())) {
-                return $msg;
-            }
-            $stored = true;
+            $stored = parent::store();
         }
         return $stored;
     }

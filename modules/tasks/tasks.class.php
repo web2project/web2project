@@ -593,11 +593,6 @@ class CTask extends w2p_Core_BaseObject
         }
 
         $this->importing_tasks = false;
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
 
         $this->task_target_budget = filterCurrency($this->task_target_budget);
 
@@ -636,11 +631,9 @@ class CTask extends w2p_Core_BaseObject
             if ($this->task_dynamic == 1) {
                 $this->updateDynamics(true);
             }
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
+            $stored = parent::store();
 
+            if ($stored) {
                 // Milestone or task end date, or dynamic status has changed,
                 // shift the dates of the tasks that depend on this task
                 if (($this->task_end_date != $oTsk->task_end_date) || ($this->task_dynamic != $oTsk->task_dynamic) || ($this->task_milestone == '1')) {
@@ -657,15 +650,13 @@ class CTask extends w2p_Core_BaseObject
             if ($this->task_end_date == '') {
                 $this->task_end_date = '0000-00-00 00:00:00';
             }
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $q->clear();
+            $stored = parent::store();
+
+            if ($stored) {
                 if ($this->task_parent) {
                     // importing tasks do not update dynamics
                     $this->importing_tasks = true;
                 }
-                $stored = true;
             }
         }
 

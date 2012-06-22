@@ -54,11 +54,6 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 
         $this->w2PTrimAll();
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
 		$values = parseFormatSysval($this->sysval_value, $this->sysval_key_id);
 		//lets delete the old values
 		$q = $this->_getQuery();
@@ -67,8 +62,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 			$q->addWhere('sysval_key_id = ' . (int)$this->sysval_key_id);
 			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
 			if (!$q->exec()) {
-				$msg = get_class($this) . '::store failed: ' . db_error();
-                $this->_error['store'] = $msg;
+                $this->_error['store'] = get_class($this) . '::store failed: ' . db_error();
                 return false;
 			}
 		}
@@ -80,8 +74,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 			$q->addInsert('sysval_value_id', $key);
 			$q->addInsert('sysval_value', $value);
 			if (!$q->exec()) {
-				$msg = get_class($this) . '::store failed: ' . db_error();
-                $this->_error['store-failed'] = $msg;
+				$this->_error['store'] = get_class($this) . '::store failed: ' . db_error();
                 return false;
 			}
 			$q->clear();
