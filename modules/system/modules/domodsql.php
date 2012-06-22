@@ -41,7 +41,7 @@ if (!$setupclass) {
 		$AppUI->redirect();
 	}
 } else {
-	$setup = new $setupclass();
+	$setup = new $setupclass($AppUI, $config, new w2p_Database_Query());
 }
 
 switch ($cmd) {
@@ -65,31 +65,44 @@ switch ($cmd) {
 		$AppUI->setMsg('Module menu state changed', UI_MSG_OK);
 		break;
 	case 'install':
-		// do the module specific stuff
-		$AppUI->setMsg($setup->install());
-		$obj->bind($config);
-		// add to the installed modules table
-		$obj->install();
-		$AppUI->setMsg('Module installed', UI_MSG_OK, true);
+        $result = $setup->install($config);
+
+        if (!$result) {
+            $AppUI->setMsg($setup->getErrors(), UI_MSG_ERROR);
+        } else {
+            $obj->bind($config);
+            // add to the installed modules table
+            $obj->install();
+            $AppUI->setMsg('Module installed', UI_MSG_OK, true);
+        }
 		break;
 	case 'remove':
-		// do the module specific stuff
-		$AppUI->setMsg($setup->remove());
-		// remove from the installed modules table
-		$obj->remove();
-		$AppUI->setMsg('Module removed', UI_MSG_ALERT, true);
+		$result = $setup->remove();
+
+        if (!$result) {
+            $AppUI->setMsg($setup->getErrors(), UI_MSG_ERROR);
+        } else {
+            $obj->bind($config);
+            // remove from the installed modules table
+            $obj->remove();
+            $AppUI->setMsg('Module removed', UI_MSG_OK, true);
+        }
 		break;
 	case 'upgrade':
-		if ($setup->upgrade($obj->mod_version)) { // returns true if upgrade succeeded
-			$obj->bind($config);
-			$obj->store();
-			$AppUI->setMsg('Module upgraded', UI_MSG_OK);
-		} else {
-			$AppUI->setMsg('Module not upgraded', UI_MSG_ERROR);
-		}
+        $result = $setup->upgrade($obj->mod_version);
+
+        if (!$result) {
+            $AppUI->setMsg($setup->getErrors(), UI_MSG_ERROR);
+        } else {
+            $obj->bind($config);
+            $obj->remove();
+            $AppUI->setMsg('Module upgraded', UI_MSG_OK, true);
+        }
 		break;
 	case 'configure':
-		if (!$setup->configure()) { //returns true if configure succeeded
+		$result = $setup->configure();
+
+        if (!$result) { //returns true if configure succeeded
 			$AppUI->setMsg('Module configuration failed', UI_MSG_ERROR);
 		}
 		break;

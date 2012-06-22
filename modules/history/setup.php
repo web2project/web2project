@@ -27,14 +27,12 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupHistory {
-
+class CSetupHistory extends w2p_Core_Setup
+{
 	public function install() {
-        global $AppUI;
-
-		$q = new w2p_Database_Query;
+		$q = $this->_getQuery();
 		$q->createTable('history');
-        $sql = ' (
+		$q->createDefinition('(
 			history_id int(10) unsigned NOT NULL auto_increment,
 			history_date datetime NOT NULL default \'0000-00-00 00:00:00\',		  
 			history_user int(10) NOT NULL default \'0\',
@@ -48,27 +46,19 @@ class CSetupHistory {
 			PRIMARY KEY  (history_id),
 			INDEX index_history_module (history_table, history_item),
 		  	INDEX index_history_item (history_item) 
-            ) ENGINE = MYISAM DEFAULT CHARSET=utf8';
-		$q->createDefinition($sql);
-		$q->exec();
+            ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
+		if (!$q->exec()) {
+            return false;
+        }
 
-        $perms = $AppUI->acl();
-        return $perms->registerModule('History', 'history');
+        return parent::install();
 	}
 
 	public function remove() {
-		global $AppUI;
-
-        $q = new w2p_Database_Query;
+        $q = $this->_getQuery();
 		$q->dropTable('history');
 		$q->exec();
 
-        $perms = $AppUI->acl();
-        return $perms->unregisterModule('history');
-	}
-
-	public function upgrade($old_version) {
-
-        return true;
+        return parent::remove();
 	}
 }

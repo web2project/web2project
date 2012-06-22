@@ -16,59 +16,50 @@ $config['mod_description'] = 'A module to design projects';
 $config['mod_config'] = true;
 
 if ($a == 'setup') {
-	echo dPshowModuleConfig($config);
+	echo w2PshowModuleConfig($config);
 }
 
-class projectDesigner {
-
+class projectDesigner extends w2p_Core_Setup
+{
 	public function install() {
-		$success = 1;
+		$result = $this->_checkRequirements();
 
-		$bulk_sql[] = '
-                  CREATE TABLE project_designer_options (
-                    pd_option_id INT(11) NOT NULL auto_increment,
-                    pd_option_user INT(11) NOT NULL default 0 UNIQUE,
-                    pd_option_view_project INT(1) NOT NULL default 1,
-                    pd_option_view_gantt INT(1) NOT NULL default 1,
-                    pd_option_view_tasks INT(1) NOT NULL default 1,
-                    pd_option_view_actions INT(1) NOT NULL default 1,
-                    pd_option_view_addtasks INT(1) NOT NULL default 1,
-                    pd_option_view_files INT(1) NOT NULL default 1,
-                    PRIMARY KEY (pd_option_id) 
-                  ) TYPE=MyISAM;';
-		foreach ($bulk_sql as $s) {
-			db_exec($s);
+        if (!$result) {
+            $AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
+        }
 
-			if (db_error()) {
-				$success = 0;
-			}
-		}
-		return $success;
+        $q = $this->_getQuery();
+		$q->createTable('project_designer_options');
+		$q->createDefinition('(
+                pd_option_id INT(11) NOT NULL auto_increment,
+                pd_option_user INT(11) NOT NULL default 0 UNIQUE,
+                pd_option_view_project INT(1) NOT NULL default 1,
+                pd_option_view_gantt INT(1) NOT NULL default 1,
+                pd_option_view_tasks INT(1) NOT NULL default 1,
+                pd_option_view_actions INT(1) NOT NULL default 1,
+                pd_option_view_addtasks INT(1) NOT NULL default 1,
+                pd_option_view_files INT(1) NOT NULL default 1,
+                PRIMARY KEY (pd_option_id)
+            ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
+		if (!$q->exec()) {
+            return false;
+        }
+
+        return parent::install();
 	}
 
 	public function remove() {
-		$success = 1;
+		$q = $this->_getQuery();
+		$q->dropTable('project_designer_options');
+		$q->exec();
 
-		$bulk_sql[] = 'DROP TABLE project_designer_options';
-		foreach ($bulk_sql as $s) {
-			db_exec($s);
-			if (db_error()) {
-				$success = 0;
-			}
-		}
-		return $success;
-	}
-
-	public function upgrade() {
-		return null;
+        return parent::remove();
 	}
 
 	public function configure() {
-		global $AppUI;
+		$this->_AppUI->redirect('m=projectdesigner&a=configure');
 
-		$AppUI->redirect('m=projectdesigner&a=configure');
-
-		return true;
+		return parent::configure();
 	}
 
 }

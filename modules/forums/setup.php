@@ -28,8 +28,8 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupForums {
-
+class CSetupForums extends w2p_Core_Setup
+{
 	public function configure() { // configure this module
 		global $AppUI;
 		$AppUI->redirect('m=forums&a=configure'); // load module specific configuration page
