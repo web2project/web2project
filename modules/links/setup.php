@@ -13,16 +13,16 @@ if (!defined('W2P_BASE_DIR')) {
  */
 
 $config = array();
-$config['mod_name'] = 'Links'; // name the module
-$config['mod_version'] = '1.0'; // add a version number
-$config['mod_directory'] = 'links'; // tell web2Project where to find this module
-$config['mod_setup_class'] = 'CSetupLinks'; // the name of the PHP setup class (used below)
-$config['mod_type'] = 'user'; // 'core' for modules distributed with w2P by standard, 'user' for additional modules from dotmods
-$config['mod_ui_name'] = 'Links'; // the name that is shown in the main menu of the User Interface
-$config['mod_ui_icon'] = 'communicate.gif'; // name of a related icon
-$config['mod_description'] = 'Links related to tasks'; // some description of the module
-$config['mod_config'] = false; // show 'configure' link in viewmods
-$config['mod_main_class'] = 'CLink'; // the name of the PHP class used by the module
+$config['mod_name'] = 'Links';
+$config['mod_version'] = '1.0';
+$config['mod_directory'] = 'links';                     // tell web2Project where to find this module
+$config['mod_setup_class'] = 'CSetupLinks';             // the name of the PHP setup class (used below)
+$config['mod_type'] = 'user';                           // 'core' for modules distributed with w2P by standard, 'user' for additional modules from dotmods
+$config['mod_ui_name'] = 'Links';
+$config['mod_ui_icon'] = 'communicate.gif';
+$config['mod_description'] = 'Links related to tasks';
+$config['mod_config'] = false;                          // show 'configure' link in viewmods
+$config['mod_main_class'] = 'CLink';
 $config['permissions_item_table'] = 'links';
 $config['permissions_item_field'] = 'link_id';
 $config['permissions_item_label'] = 'link_name';
@@ -31,31 +31,31 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupLinks {
-
-	public function configure() {
-		return true;
-	}
-
-	public function remove() {
-		$q = new w2p_Database_Query();
+class CSetupLinks extends w2p_Core_Setup
+{
+	public function remove()
+    {
+		$q = $this->_getQuery();
 		$q->dropTable('links');
 		$q->exec();
 
-		$q->clear();
+		$q = $this->_getQuery();
 		$q->setDelete('sysvals');
 		$q->addWhere('sysval_title = \'LinkType\'');
 		$q->exec();
+
+        return parent::remove();
 	}
 
-	public function upgrade($old_version) {
-		return true;
-	}
+	public function install()
+    {
+        $result = $this->_checkRequirements();
 
-	public function install() {
-        global $AppUI;
+        if (!$result) {
+            return false;
+        }
 
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
 		$q->createTable('links');
 		$q->createDefinition('(
             link_id int( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -74,13 +74,15 @@ class CSetupLinks {
             KEY idx_link_project ( link_project ) ,
             KEY idx_link_parent ( link_parent )
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
-
-		$q->exec($sql);
+		if (!$q->exec()) {
+            return false;
+        }
 
         $i = 0;
         $linkTypes = array('Unknown', 'Document', 'Application');
+//TODO: refactor as proper sysvals handling
         foreach ($linkTypes as $linkType) {
-            $q->clear();
+            $q = $this->_getQuery();
             $q->addTable('sysvals');
             $q->addInsert('sysval_key_id', 1);
             $q->addInsert('sysval_title', 'LinkType');
@@ -90,7 +92,6 @@ class CSetupLinks {
             $i++;
         }
 
-        $perms = $AppUI->acl();
-        return $perms->registerModule('Links', 'links');
+        return parent::install();
 	}
 }

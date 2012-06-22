@@ -17,17 +17,4 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupReports {
-
-	public function install() {
-		return true;
-	}
-
-	public function remove() {
-		return true;
-	}
-
-	public function upgrade() {
-		return true;
-	}
-}
+class CSetupReports extends w2p_Core_Setup { }

@@ -13,7 +13,7 @@ full text of this license is included in LICENSE.
 web2Project is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Clear BSD License for more details.
 
 */
 
