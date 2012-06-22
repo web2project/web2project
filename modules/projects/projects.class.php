@@ -545,12 +545,6 @@ class CProject extends w2p_Core_BaseObject
             $this->project_end_date = null;
         }
 
-        $this->_error = $this->check();
-
-        if (count($this->_error)) {
-            return $this->_error;
-        }
-
         $this->project_id = (int) $this->project_id;
         // convert dates to SQL format first
         if ($this->project_start_date) {
@@ -588,26 +582,18 @@ class CProject extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $this->project_updated = $q->dbfnNowWithTZ();
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
-            }
+            $stored = parent::store();
         }
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->project_created = $q->dbfnNowWithTZ();
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-            } else {
-                $stored = true;
+            $stored = parent::store();
+            
+            if ($stored) {
                 if (0 == $this->project_parent || 0 == $this->project_original_parent) {
                     $this->project_parent = $this->project_id;
                     $this->project_original_parent = $this->project_id;
-                    if (($msg = parent::store())) {
-                        $this->_error['store-check'] = $msg;
-                    } else {
-                        $stored = true;
-                    }
+//TODO: I *really* hate how we have to do the store() twice when we create the project.
+                    $stored = parent::store();
                 }
             }
         }

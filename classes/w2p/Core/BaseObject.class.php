@@ -308,48 +308,52 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      * 	Inserts a new row if id is zero or updates an existing row in the database table
      *
      * 	Can be overloaded/supplemented by the child class
-     * 	@return null|string null if successful otherwise returns and error message
+     * 	@return boolean - true if successful otherwise false, errors 
      */
     public function store($updateNulls = false)
     {
         $result = false;
         $this->clearErrors();
 
-        $k = $this->_tbl_key;
-
-        // NOTE: I don't particularly like this but it wires things properly.
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preStoreEvent'));
-        $event = ($this->$k) ? 'Update' : 'Create';
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $event . 'Event'));
 
         $this->w2PTrimAll();
 
-        // NOTE: This is *very* similar to the store() flow within delete()..
-        $this->_error = $this->check();
-        if (count($this->_error)) {
-            $msg = get_class($this) . '::store-check failed';
-            $this->_error['store-check'] = $msg;
+        if (!$this->isValid()) {
             return false;
         }
 
         $k = $this->_tbl_key;
+        // NOTE: I don't particularly like this but it wires things properly.
+        $event = ($this->$k) ? 'Update' : 'Create';
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $event . 'Event'));
+
+        $k = $this->_tbl_key;
         $q = $this->_getQuery();
-        if ($this->$k) {
+
+        /*
+         * Note that we have to check and perform the edit *first* because the
+         *    create/add fills in the id that we're checking. Therefore, if we
+         *    did the create/add first, we'd have a valid id and then we'd
+         *    *always* immediately do an update on the object we just created.
+         */
+        if ($this->$k && $this->canEdit()) {
             $store_type = 'update';
-            $ret = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
-        } else {
-            $store_type = 'add';
-            $ret = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
+            $result = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
         }
 
-        if ($ret) {
-            $result = null;
+        if (0 == $this->$k && $this->canCreate()) {
+            $store_type = 'add';
+            $result = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
+        }
+        $result = (is_null($result)) ? true : false;
+
+        if ($result) {
             // NOTE: I don't particularly like how the name is generated but it wires things properly.
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post' . $event . 'Event'));
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postStoreEvent'));
         } else {
-            $result = db_error();
-            $this->_error['store'] = $result;
+            $this->_error['store'] = db_error();
         }
 
         return $result;
