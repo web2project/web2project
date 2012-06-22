@@ -1,12 +1,6 @@
 <?php /* $Id$ $URL$ */
 require_once 'base.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
-
-if (!isset($GLOBALS['OS_WIN'])) {
-	$GLOBALS['OS_WIN'] = (stristr(PHP_OS, "WIN") !== false);
-}
-
-// tweak for pathname consistence on windows machines
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 $AppUI = new w2p_Core_CAppUI();
