@@ -79,7 +79,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
          *                                           ~ caseydk 27 Dec 2011
          */
         global $AppUI;
-        $this->_AppUI = $AppUI;
+        $this->_AppUI = is_null($AppUI) ? new w2p_Core_CAppUI() : $AppUI;
         $this->_perms = $this->_AppUI->acl();
 
         /*
