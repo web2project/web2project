@@ -187,8 +187,12 @@ class w2p_Output_HTMLHelper
             case '_creator':
 			case '_owner':
             case '_updator':
-				$cell = $value;
-				break;
+                // The above are all contact/user display names, the below are numbers.
+            case '_count':
+            case '_duration':
+            case '_hours':
+                $cell = $value;
+                break;
             case '_size':
                 $additional = 'nowrap="nowrap"';
                 $cell = file_size($value);
@@ -229,11 +233,6 @@ class w2p_Output_HTMLHelper
             case '_assignment':
             case '_allocated':
                 $cell = $value.'%';
-                break;
-            case '_count':
-            case '_duration':
-            case '_hours':
-                $cell = $value;
                 break;
             case '_password':
                 $cell = '('.$this->_AppUI->_('hidden').')';
