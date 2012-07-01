@@ -157,6 +157,10 @@ $AppUI->setUserLocale();
 // bring in the rest of the support and localisation files
 $perms = &$AppUI->acl();
 
+/*
+ * TODO: We should validate that the module identified by $m is actually
+ *   installed & active. If not, we should go back to the defaults.
+ */
 $def_a = 'index';
 if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 	if (!$perms->checkModule($w2Pconfig['default_view_m'], 'view', $AppUI->user_id)) {
