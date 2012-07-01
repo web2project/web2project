@@ -131,3 +131,4 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                         if ($m == 'help' && function_exists('styleRenderBoxTop')) {
                             echo styleRenderBoxTop();
                         }
+//TODO: Basically this entire file is exactly the same as the other two header.php files in core web2project except for the left header image.. - caseydk 2012-07-01
