@@ -183,18 +183,16 @@ class w2p_Output_HTMLHelper
 //TODO: task_logs are another oddball..
                 $cell = ($prefix == 'task_log') ? str_replace('task_logs', 'tasks', $cell) : $cell;
                 break;
-            case '_category':
-            case '_status':
-            case '_type':
-//TODO: another oddball
-                $cell = ($fieldName == 'file_type') ? $value : $custom[$fieldName][$value];
-                break;
             case '_author':
             case '_creator':
 			case '_owner':
             case '_updator':
-				$cell = $value;
-				break;
+                // The above are all contact/user display names, the below are numbers.
+            case '_count':
+            case '_duration':
+            case '_hours':
+                $cell = $value;
+                break;
             case '_size':
                 $additional = 'nowrap="nowrap"';
                 $cell = file_size($value);
@@ -236,11 +234,6 @@ class w2p_Output_HTMLHelper
             case '_allocated':
                 $cell = $value.'%';
                 break;
-            case '_count':
-            case '_duration':
-            case '_hours':
-                $cell = $value;
-                break;
             case '_password':
                 $cell = '('.$this->_AppUI->_('hidden').')';
                 break;
@@ -251,6 +244,7 @@ class w2p_Output_HTMLHelper
 			default:
 //TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
 				$additional = 'nowrap="nowrap"';
+                $value = (isset($custom[$fieldName])) ? $custom[$fieldName][$value] : $value;
 				$cell = htmlspecialchars($value, ENT_QUOTES);
 		}
 

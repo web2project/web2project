@@ -95,7 +95,7 @@ switch ($cmd) {
             $AppUI->setMsg($setup->getErrors(), UI_MSG_ERROR);
         } else {
             $obj->bind($config);
-            $obj->remove();
+            $obj->store();
             $AppUI->setMsg('Module upgraded', UI_MSG_OK, true);
         }
 		break;
