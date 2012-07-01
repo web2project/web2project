@@ -5,6 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 ob_start();
 
+$AppUI->user_locale = ('' == $AppUI->user_locale) ? 'en' : $AppUI->user_locale;
+
 if (isset($perms)) {
   foreach ($AppUI->getActiveModules() as $dir => $module) {
     if (!canAccess($dir)) {

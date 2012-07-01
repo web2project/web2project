@@ -69,11 +69,16 @@ class SResource extends w2p_Core_Setup
 
     public function remove() {
         $q = $this->_getQuery();
-		$q->dropTable('history');
+		$q->dropTable('resources');
 		$q->exec();
 
         $q->clear();
         $q->dropTable('resource_tasks');
+        $q->exec();
+
+		$q->clear();
+		$q->setDelete('sysvals');
+		$q->addWhere("sysval_title = 'ResourceTypes'");
         $q->exec();
 
         return parent::remove();

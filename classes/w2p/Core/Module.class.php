@@ -30,16 +30,17 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
     protected $modules;
 
 	public function __construct() {
-        parent::__construct('modules', 'mod_id');
+        parent::__construct('modules', 'mod_id', 'system');
         $this->modules  = W2P_BASE_DIR.'/modules/';
 	}
 
 	public function install() {
 		$q = $this->_getQuery();
 		$q->addTable('modules');
-		$q->addQuery('mod_directory');
+		$q->addQuery('mod_id');
 		$q->addWhere('mod_directory = \'' . $this->mod_directory . '\'');
-		if ($temp = $q->loadHash()) {
+        $result = (int) $q->loadResult();
+		if ($result) {
 			// the module is already installed
 			// TODO: check for older version - upgrade
 			return false;
@@ -167,6 +168,13 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
         $baseErrorMsg = get_class($this) . '::deploy-check failed - ';
 
         return $errorArray;
+    }
+
+    public function canEdit() {
+        return $this->_perms->checkModule($this->_tbl_module, 'edit');
+    }
+    public function canCreate() {
+        return $this->_perms->checkModule($this->_tbl_module, 'add');
     }
 
     public function validate() {
