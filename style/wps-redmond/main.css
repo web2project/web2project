@@ -781,3 +781,9 @@ TD.weekendDay  {
 	text-align: left;
 	background-color:#F0F0F0;
 }
+
+/* Begin: Header Bar & Navigation for all pages */
+div.titlebar {
+    background: url(images/titlegrad.jpg);
+}
+/* End: Header Bar & Navigation for all pages */
