@@ -96,6 +96,28 @@ h3 {
     text-transform: uppercase;
 }
 
+/* Begin: Header Bar & Navigation for all pages */
+div.titlebar {
+    background: url(images/titlegrad.jpg);
+}
+
+div.header {
+    background: url(images/nav_bkgd.gif);
+    color:      #000;
+    height:     24px;
+}
+
+div.shadow {
+    background: url(images/nav_shadow.jpg);
+}
+
+.nav a:hover{
+	background: #2E91C6 url(images/nav_item_hover.gif) repeat-x scroll 0%;
+	color:      #FFFFFF;
+	text-decoration:none;
+}
+/* End: Header Bar & Navigation for all pages */
+
 bordertable {
 	border: 1px black solid;
 }
@@ -781,9 +803,3 @@ TD.weekendDay  {
 	text-align: left;
 	background-color:#F0F0F0;
 }
-
-/* Begin: Header Bar & Navigation for all pages */
-div.titlebar {
-    background: url(images/titlegrad.jpg);
-}
-/* End: Header Bar & Navigation for all pages */
