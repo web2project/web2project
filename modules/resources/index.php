@@ -5,8 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 $tab = $AppUI->processIntState('ResourceTypeTab', $_GET, 'tab', 0);
 
-$AppUI->savePlace();
-
 $obj = new CResource();
 
 $perms = &$AppUI->acl();
