@@ -54,12 +54,10 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
             $fieldNames = array();
             $fields = w2p_Core_Module::getSettings('files', 'index_table');
             if (count($fields) > 0) {
-                foreach ($fields as $field => $text) {
-                    $fieldList[] = $field;
-                    $fieldNames[] = $text;
-                }
+                $fieldList = array_keys($fields);
+                $fieldNames = array_values($fields);
             } else {
-                // TODO: This is only in place to provide an pre-upgrade-safe 
+                // TODO: This is only in place to provide an pre-upgrade-safe
                 //   state for versions earlier than v3.0
                 //   At some point at/after v4.0, this should be deprecated
                 $fieldList = array('', 'watch_user', 'forum_name', 'forum_topics',

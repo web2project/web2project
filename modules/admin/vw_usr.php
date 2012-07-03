@@ -13,12 +13,10 @@ $display_last_login = !((int) w2PgetParam($_REQUEST, 'tab', 0));
         $fieldNames = array();
         $fields = w2p_Core_Module::getSettings('users', 'index_table');
         if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
+            $fieldList = array_keys($fields);
+            $fieldNames = array_values($fields);
         } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
+            // TODO: This is only in place to provide an pre-upgrade-safe
             //   state for versions earlier than v3.0
             //   At some point at/after v4.0, this should be deprecated
             $fieldList = array('user_username', 'contact_last_name', 
