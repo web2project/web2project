@@ -41,12 +41,8 @@ if ($tab != -1) {
 array_map(array($AppUI, '_'), $link_types);
 
 $tabBox = new CTabBox('?m=links', W2P_BASE_DIR . '/modules/links/', $tab);
-
-$i = 0;
-
 foreach ($link_types as $link_type) {
 	$tabBox->add('index_table', $link_type);
-	++$i;
 }
 $showProject = true;
 $tabBox->show();
