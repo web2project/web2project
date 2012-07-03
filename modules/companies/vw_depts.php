@@ -12,7 +12,7 @@ global $AppUI, $company_id, $canEdit;
 $depts = CCompany::getDepartments($AppUI, $company_id);
 ?>
 <a name="departments-company_view"> </a>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
         $fieldList = array();

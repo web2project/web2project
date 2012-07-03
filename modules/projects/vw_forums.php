@@ -9,7 +9,7 @@ global $AppUI, $project_id;
 $forums = CProject::getForums($AppUI, $project_id);
 ?>
 <a name="forums-projects_view"> </a>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
         $fieldList = array();

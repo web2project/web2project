@@ -6,7 +6,7 @@ $utypes = w2PgetSysVal('UserType');
 
 $display_last_login = !((int) w2PgetParam($_REQUEST, 'tab', 0));
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
         $fieldList = array();

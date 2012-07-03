@@ -13,7 +13,7 @@ $dept_type_filter = $currentTabId-1;
 $dept = new CDepartment();
 $depts = $dept->getFilteredDepartmentList(null, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
         $fieldList = array();

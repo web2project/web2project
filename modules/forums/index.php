@@ -47,7 +47,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 	<input type="hidden" name="dosql" value="do_watch_forum" />
 	<input type="hidden" name="watch" value="forum" />
 
-    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+    <table class="tbl list">
         <tr>
             <?php
             $fieldList = array();

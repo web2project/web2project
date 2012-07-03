@@ -21,7 +21,7 @@ $allowedCompanies = $company->getAllowedRecords($AppUI->user_id, 'company_id, co
 
 $companyList = $company->getCompanyList(null, $company_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
         $fieldList = array();

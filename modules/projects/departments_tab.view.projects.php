@@ -58,7 +58,7 @@ $department = $tmpDepartments;
 
 ?>
 
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl list">
+<table class="tbl list">
 <tr>
 	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by'); ?>:&nbsp;</td>
 	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td>
@@ -75,7 +75,7 @@ $department = $tmpDepartments;
     </td>
 </tr>
 </table>
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
+<table class="tbl list">
     <tr>
         <?php
         $fieldList = array('project_color_identifier', 'project_priority',

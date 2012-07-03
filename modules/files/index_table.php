@@ -98,7 +98,7 @@ function expand(id){
   element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
 }
 </script>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <?php 
     global $showProject;
     $showProject = true;

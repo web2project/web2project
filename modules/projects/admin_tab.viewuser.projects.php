@@ -40,7 +40,7 @@ $project = new CProject();
 $projects = projects_list_data($user_id);
 ?>
 
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
+<table class="tbl list">
 <tr>
 	<td align="center" width="100%" nowrap="nowrap" colspan="7">&nbsp;</td>
 	<form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="checkPwT" accept-charset="utf-8"><td align="right" nowrap="nowrap"><input type="checkbox" name="add_pwt" id="add_pwt" onclick="document.checkPwT.submit()" <?php echo $addPwT ? 'checked="checked"' : ''; ?> /></td><td align="right" nowrap="nowrap"><label for="add_pwt"><?php echo $AppUI->_('Show Projects with assigned Tasks'); ?>?</label><input type="hidden" name="show_form" value="1" /></td></form>
@@ -48,7 +48,7 @@ $projects = projects_list_data($user_id);
 	<form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject" accept-charset="utf-8"><td align="right" nowrap="nowrap"><?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?></td></form>
 </tr>
 </table>
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
         $fieldList = array('project_color_identifier', 'project_priority',

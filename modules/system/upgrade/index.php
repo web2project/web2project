@@ -18,7 +18,7 @@ $okImg = w2PshowImage('log-notice.gif', 16, 16, $AppUI->_('OK'));
 
 $continue = true;
 ?>
-<table class="std list" width="100%" border="0" cellpadding="0" cellspacing="5">
+<table class="tbl list">
 	<tr>
 		<td class="title" colspan="2">Step 1: Check System Settings</td>
 	</tr>

@@ -2226,7 +2226,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
         if ($row['file_versions'] > 1) {
             $version_link = '&nbsp<a href="javascript: void(0);" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
             $hidden_table = '<tr><td colspan="20">
-                <table style="display: none" id="versions_' . $latest_file['file_id'] . '" width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+                <table style="display: none" id="versions_' . $latest_file['file_id'] . '" class="tbl list">
                 <tr>';
             foreach ($fieldNames as $index => $name) {
                 $hidden_table .= '<th nowrap="nowrap">';

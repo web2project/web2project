@@ -75,7 +75,7 @@ TODO: disabled this filter for now... something is wrong with the userId portion
 	<input type="hidden" name="task_log_id" value="0" />
 </form>
 <a name="task_logs-projects_view"> </a>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
         $fieldList = array();

@@ -168,6 +168,12 @@ tr.active td._date, tr.active td._datetime, tr.active td._duration, tr.active td
     background-color:#e6eedd;
 }
 
+table.list {
+    border-spacing: 1px;
+    padding: 2px;
+    width: 100%;
+}
+
 /*
  * These two styles handle all of the mouseover highlighting for all lists
  *   whether it's projects, tasks, links, or anything else.

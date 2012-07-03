@@ -458,7 +458,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
     </table>
 </form>
 <?php } ?>
-<table id="tblProjects" width="100%" border="0" cellpadding="0" cellspacing="1" class="tbl list">
+<table id="tblProjects" class="tbl list">
     <tr>
         <?php
         $fieldList = array();

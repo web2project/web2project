@@ -12,7 +12,7 @@ global $AppUI, $company_id;
 $userList = CCompany::getUsers($AppUI, $company_id);
 ?>
 <a name="users-company_view"> </a>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
         $fieldList = array();

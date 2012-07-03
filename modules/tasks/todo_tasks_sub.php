@@ -80,7 +80,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 </form>
 <!-- TODO: Add the Flexifield support here too -->
 <form name="form" method="post" action="index.php?<?php echo "m=$m&amp;a=$a&amp;date=$date"; ?>" accept-charset="utf-8">
-    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+    <table class="tbl list">
         <tr>
             <th width="10">&nbsp;</th>
             <th width="10"><?php echo $AppUI->_('Pin'); ?></th>

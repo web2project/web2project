@@ -113,7 +113,7 @@ if ($is_tabbed) {
 
 <form action="./index.php" method="get" accept-charset="utf-8">
 
-	<table id="tblProjects-list" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl list">
+    <table id="tblProjects-list" class="tbl list">
 		<tr>
             <?php
             $fieldList = array();

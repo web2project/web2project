@@ -257,7 +257,7 @@ if (count($fields) > 0) {
     //$module->storeSettings('projectdesigner', 'task_list_print', $fieldList, $fieldNames);
 }
 
-echo '<table width="100%" border="0" cellpadding="1" cellspacing="3" class="prjprint tbl list"><tr class="prjprint">';
+echo '<table class="tbl list prjprint"><tr class="prjprint">';
 foreach ($fieldNames as $index => $name) {
     ?><th nowrap="nowrap">
         <?php echo $AppUI->_($fieldNames[$index]); ?>
