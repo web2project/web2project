@@ -136,7 +136,7 @@ function setTask( key, val ) {
                 <tr>
                   <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Category'); ?>:</td>
                   <td align="left">
-                    <?php echo arraySelect(w2PgetSysVal('LinkType'), 'link_category', '', $link->link_category, true); ?>
+                    <?php echo arraySelect(w2PgetSysVal('LinkType'), 'link_category', 'size="1" class="text"', $link->link_category, true); ?>
                   <td>
                 </tr>
                 <tr>
@@ -161,7 +161,7 @@ function setTask( key, val ) {
                 </tr>
                 <tr>
                   <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link URL'); ?>:</td>
-                  <td align="left"><input type="field" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>"></td>
+                  <td align="left"><input type="text" class="text" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>"></td>
                 </tr>
               </table>
             </td>
