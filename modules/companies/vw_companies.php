@@ -20,28 +20,28 @@ $company = new CCompany();
 $allowedCompanies = $company->getAllowedRecords($AppUI->user_id, 'company_id, company_name');
 
 $companyList = $company->getCompanyList(null, $company_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('companies', 'index_list');
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('company_name', 'countp', 'inactive', 'company_type');
+    $fieldNames = array('Company Name', 'Active Projects', 'Archived Projects', 'Type');
+
+    $module->storeSettings('companies', 'index_list', $fieldList, $fieldNames);
+}
 ?>
 <table class="tbl list">
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
-
-        $module = new w2p_Core_Module();
-        $fields = $module->loadSettings('companies', 'index_list');
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('company_name', 'countp', 'inactive', 'company_type');
-            $fieldNames = array('Company Name', 'Active Projects', 'Archived Projects', 'Type');
-
-            $module->storeSettings('companies', 'index_list', $fieldList, $fieldNames);
-        }
-
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
                 <a href="?m=companies&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">

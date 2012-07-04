@@ -254,7 +254,7 @@ if (count($fields) > 0) {
         'task_start_date', 'task_end_date', 'task_updated');
     $fieldNames = array('Task Name', 'Work', 'Start', 'Finish', 'Last Update');
 
-    //$module->storeSettings('projectdesigner', 'task_list_print', $fieldList, $fieldNames);
+    $module->storeSettings('projectdesigner', 'task_list_print', $fieldList, $fieldNames);
 }
 
 echo '<table class="tbl list prjprint"><tr class="prjprint">';

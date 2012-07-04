@@ -34,32 +34,34 @@ function delIt2(id) {
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="task_log_id" value="0" />
 </form>
+<?php
+$fieldList = array();
+$fieldNames = array();
 
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('tasks', 'task_logs_tasks_view');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('task_log_date', 'task_log_reference',
+        'task_log_name', 'task_log_related_url', 'task_log_creator',
+        'task_log_hours', 'task_log_costcode', 'task_log_description');
+    $fieldNames = array('Date', 'Ref', 'Summary', 'URL', 'User',
+        'Hours', 'Cost Code', 'Comments', '');
+
+    $module->storeSettings('tasks', 'task_logs_tasks_view', $fieldList, $fieldNames);
+}
+?>
 <a name="task_logs-tasks_view"> </a>
 <table class="tbl list">
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
 
-        $module = new w2p_Core_Module();
-        $fields = $module->loadSettings('tasks', 'task_logs_tasks_view');
-
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('task_log_date', 'task_log_reference',
-                'task_log_name', 'task_log_related_url', 'task_log_creator',
-                'task_log_hours', 'task_log_costcode', 'task_log_description');
-            $fieldNames = array('Date', 'Ref', 'Summary', 'URL', 'User',
-                'Hours', 'Cost Code', 'Comments', '');
-
-            $module->storeSettings('tasks', 'task_logs_tasks_view', $fieldList, $fieldNames);
-        }
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
         echo '<th></th>';
         foreach ($fieldNames as $index => $name) {

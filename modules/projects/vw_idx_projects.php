@@ -109,36 +109,36 @@ if ($is_tabbed) {
 	$xpg_totalrecs = count($projects);
 	$xpg_pagesize = count($projects);
 }
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('projects', 'index_list');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v2.3
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('project_color_identifier', 'project_priority',
+        'project_name', 'company_name', 'project_start_date',
+        'project_end_date', 'project_actual_end_date', 'task_log_problem',
+        'user_username', 'project_task_count');
+    $fieldNames = array('Color', 'P', 'Project Name', 'Company',
+        'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
+
+    $module = new w2p_Core_Module();
+    $module->storeSettings('projects', 'index_list', $fieldList, $fieldNames);
+}
 ?>
 
 <form action="./index.php" method="get" accept-charset="utf-8">
-
     <table id="tblProjects-list" class="tbl list">
 		<tr>
             <?php
-            $fieldList = array();
-            $fieldNames = array();
-
-            $module = new w2p_Core_Module();
-            $fields = $module->loadSettings('projects', 'index_list');
-
-            if (count($fields) > 0) {
-                $fieldList = array_keys($fields);
-                $fieldNames = array_values($fields);
-            } else {
-                // TODO: This is only in place to provide an pre-upgrade-safe 
-                //   state for versions earlier than v2.3
-                //   At some point at/after v4.0, this should be deprecated
-                $fieldList = array('project_color_identifier', 'project_priority',
-                    'project_name', 'company_name', 'project_start_date',
-                    'project_end_date', 'project_actual_end_date', 'task_log_problem',
-                    'user_username', 'project_task_count');
-                $fieldNames = array('Color', 'P', 'Project Name', 'Company',
-                    'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
-
-                $module = new w2p_Core_Module();
-                $module->storeSettings('projects', 'index_list', $fieldList, $fieldNames);
-            }
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
                     <a href="?m=projects&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">

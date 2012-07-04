@@ -212,6 +212,27 @@ $userAlloc = $tempoTask->getAllocation('user_id');
 global $expanded;
 $expanded = $AppUI->getPref('TASKSEXPANDED');
 $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'task_proj_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="task_proj_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'task_proj_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="task_proj_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' alt="" /></a>' . w2PendTip();
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('tasks', 'projectdesigner-view');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('');
+    $fieldNames = array('', 'Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
+        'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
+        'Assgined Users');
+
+    $module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
+}
 ?>
 <form name="frm_tasks" accept-charset="utf-8"">
 <table id="tblTasks" class="tbl list">
@@ -223,26 +244,6 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
 
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
-
-        $module = new w2p_Core_Module();
-        $fields = $module->loadSettings('tasks', 'projectdesigner-view');
-
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('');
-            $fieldNames = array('', 'Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
-                'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
-                'Assgined Users');
-
-//TODO: $module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
-        }
 //TODO: $PROJDESIGN_CONFIG['show_task_descriptions'] will be on the config screen going forward..
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">

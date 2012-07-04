@@ -7,29 +7,30 @@ global $AppUI, $project_id;
 // Forums mini-table in project view action
 
 $forums = CProject::getForums($AppUI, $project_id);
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('forums', 'projects_view');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('forum_name', 'forum_message_count', 'forum_last_date');
+    $fieldNames = array('Forum Name', 'Messages', 'Last Post');
+
+    $module->storeSettings('forums', 'projects_view', $fieldList, $fieldNames);
+}
 ?>
 <a name="forums-projects_view"> </a>
 <table class="tbl list">
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
-
-        $module = new w2p_Core_Module();
-        $fields = $module->loadSettings('forums', 'projects_view');
-
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('forum_name', 'forum_message_count', 'forum_last_date');
-            $fieldNames = array('Forum Name', 'Messages', 'Last Post');
-
-            $module->storeSettings('forums', 'projects_view', $fieldList, $fieldNames);
-        }
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
         echo '<th></th>';
         foreach ($fieldNames as $index => $name) {

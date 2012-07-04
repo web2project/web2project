@@ -17,31 +17,30 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 $projects = CCompany::getProjects($AppUI, $company_id, !$tab, $sort);
 
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('projects', 'company_view');
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('project_priority', 'project_name', 'contact_name',
+        'project_start_date', 'project_status', 'project_target_budget');
+    $fieldNames = array('P', 'Name', 'Owner', 'Started', 'Status',
+        'Budget');
+
+    $module->storeSettings('projects', 'company_view', $fieldList, $fieldNames);
+}
 ?>
 <a name="projects-company_view"> </a>
 <table class="tbl list">
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
-
-        $module = new w2p_Core_Module();
-        $fields = $module->loadSettings('projects', 'company_view');
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('project_priority', 'project_name', 'contact_name',
-                'project_start_date', 'project_status', 'project_target_budget');
-            $fieldNames = array('P', 'Name', 'Owner', 'Started', 'Status', 
-                'Budget');
-
-            $module->storeSettings('projects', 'company_view', $fieldList, $fieldNames);
-        }
-
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
                 <a href="?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=<?php echo $fieldList[$index]; ?>#projects-company_view" class="hdr">

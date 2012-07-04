@@ -25,25 +25,28 @@ $end_hour = w2PgetConfig('cal_day_end');
 
 $types = w2PgetSysVal('EventType');
 
+$fieldList = array();
+$fieldNames = array();
+$fields = $module->loadSettings('calendar', 'project_view');
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('event_start_date', 'event_end_date', 'event_type',
+        'event_name');
+    $fieldNames = array('Start Date', 'End Date', 'Type', 'Event');
+
+    $module->storeSettings('calendar', 'project_view', $fieldList, $fieldNames);
+}
 ?>
 <a name="calendar-project_view"> </a>
 <table class="tbl list">
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('calendar', 'project_view');
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('event_start_date', 'event_end_date', 'event_type',
-                'event_name');
-            $fieldNames = array('Start Date', 'End Date', 'Type', 'Event');
-        }
+
 //TODO: The link below is commented out because this view doesn't support sorting... yet.
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
