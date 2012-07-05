@@ -46,6 +46,28 @@ class CDepartment extends w2p_Core_BaseObject {
 		$q->loadObject($this);
 	}
 
+    /*
+     * I already don't like this one..
+     *
+     * @deprecated
+     */
+    public function getProjects($department_id)
+    {
+        $q = $this->_getQuery();
+		$q->addTable('projects', 'p');
+		$q->addQuery('project_color_identifier, project_priority, project_name,
+            company_name, project_start_date, project_scheduled_hours as project_duration,
+            project_end_date, project_actual_end_date, project_task_count, project_status');
+        $q->addQuery('contact_display_name as owner_name');
+        $q->addJoin('companies', 'c', 'company_id = project_company');
+		$q->addJoin('users', '', 'user_id = p.project_owner');
+        $q->addJoin('contacts', 'con', 'con.contact_id = user_contact');
+        $q->addJoin('project_departments', 'd', 'd.project_id = p.project_id');
+        $q->addWhere('department_id = ' . (int) $department_id);
+
+        return $q->loadList();
+    }
+
 	public function loadOtherDepts($AppUI = null, $company_id, $removeDeptId = 0) {
         $results = array();
         $q = $this->_getQuery();
