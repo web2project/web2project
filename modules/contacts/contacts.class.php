@@ -220,7 +220,7 @@ class CContact extends w2p_Core_BaseObject
 
         $tmp = new CContact();
         $tmp->load($this->contact_id);
-        if ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id)) {
+        if (!$tmp->contact_private || ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id))) {
             $thisCanEdit = true;
         }
 
