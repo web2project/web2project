@@ -677,6 +677,10 @@ span > img {
     position: relative;
 }
 
+._problem span > img {
+    display: inherit;
+}
+
 /*tooltip*/
 
 h4 {
@@ -833,4 +837,9 @@ TD.weekendDay  {
 
 .view td.data {
     background-color: #E8F3FE;
+}
+
+.list ._identifier {
+    padding: 5px;
+    width: 40px;
 }

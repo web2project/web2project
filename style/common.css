@@ -132,7 +132,7 @@ td.today span img, td.empty span img
     white-space:nowrap;
 }
 ._assignment, ._category, ._count, .countp, ._complete, ._in, .inactive,
-    ._owner, ._priority, ._problem, .replies, ._status, ._username, ._users, ._version {
+    ._owner, ._priority, ._problem, ._problem, .replies, ._status, ._username, ._users, ._version {
     text-align: center;
 }
 ._duration {
