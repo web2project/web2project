@@ -241,6 +241,20 @@ class w2p_Output_HTMLHelper
                 $value = (int) (100 * $value);
                 $cell = number_format($value/100, 2);
                 break;
+            case '_identifier':
+                $suffix .= ' center';
+                $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'"';
+                $cell = $this->tableRowData['project_percent_complete'].'%';
+                break;
+            case '_problem':
+                if ($value) {
+                    $cell  = '<a href="?m=tasks&a=index&f=all&project_id=' . $this->tableRowData['project_id'] . '">';
+                    $cell .= w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem');
+                    $cell .= '</a>';
+                } else {
+                    $cell = '-';
+                }
+                break;
 			default:
 //TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
 				$additional = 'nowrap="nowrap"';
