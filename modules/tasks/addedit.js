@@ -65,9 +65,9 @@ function setContacts(contact_id_string) {
 
 function submitIt(form){
 	if (form.task_name.value.length < 3) {
-			alert( task_name_msg );
-			form.task_name.focus();
-			return false;
+        alert( task_name_msg );
+        form.task_name.focus();
+        return false;
 	}
         
 	// Check the sub forms
@@ -638,11 +638,11 @@ function copyForm(form, to, extras) {
 			case 'hidden':
 				to.appendChild(h.addHidden(elem.name, elem.value, elem.type));
 				break;
-                        case 'textarea':
-                                to.appendChild(h.addHidden(elem.name, elem.value, elem.type));
-                                var newHidden = document.getElementById(elem.name);
-                                newHidden.value = elem.value;
-                                break;
+            case 'textarea':
+                to.appendChild(h.addHidden(elem.name, elem.value, elem.type));
+                var newHidden = document.getElementById(elem.name);
+                newHidden.value = elem.value;
+                break;
 			case 'select-one':
 				if (elem.options.length > 0) {
 					to.appendChild(h.addHidden(elem.name, elem.options[elem.selectedIndex].value));
