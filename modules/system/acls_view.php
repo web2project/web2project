@@ -21,11 +21,11 @@ if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
     $q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
     $q->addQuery('gp.*');
     $q->addWhere('user_id = ' . $user_id);
-    if ('' != $module) {
-        $q->addWhere('module = \'' . $module . '\'');
+    if ('all' != $module) {
+        $q->addWhere("module = '$module'");
     }
-    if ('' != $action) {
-        $q->addWhere('action = \'' . $action . '\'');
+    if ('all' != $action) {
+        $q->addWhere("action = '$action'");
     }
 
     $q->addOrder('user_name');
@@ -43,9 +43,9 @@ $modules = array();
 foreach ($avail_modules as $avail_module) {
 	$modules[$avail_module['value']] = $avail_module['value'];
 }
-$modules = array(0 => 'All Modules') + $modules;
+$modules = array('all' => 'All Modules') + $modules;
 
-$actions = array(0 => 'All Actions', 'access' => 'access', 'add' => 'add', 'delete' => 'delete', 'edit' => 'edit', 'view' => 'view');
+$actions = array('all' => 'All Actions', 'access' => 'access', 'add' => 'add', 'delete' => 'delete', 'edit' => 'edit', 'view' => 'view');
 
 $table = '<table class="tbl view" width="100%" cellspacing="1" cellpadding="2" border="0">';
 $table .= '<tr><th colspan="9"><b>Permission Result Table</b></th></tr>';
