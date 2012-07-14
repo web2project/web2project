@@ -21,7 +21,7 @@ $redirect = ($del) ? 'm=projects' : 'm=projects&a=view&project_id='.$obj->projec
 $notify_owner = w2PgetParam($_POST, 'email_project_owner_box', 'off');
 $notify_contacts = w2PgetParam($_POST, 'email_project_contacts_box', 'off');
 
-$notfiyTrigger = ($del) ? 1 : $obj->project_id;
+$notfiyTrigger = $AppUI->isNotNew;
 $importTask_projectId = (int) w2PgetParam($_POST, 'import_tasks_from', '0');
 
 if (is_array($result)) {
