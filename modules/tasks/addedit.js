@@ -559,7 +559,7 @@ function fd_save()
 {
 	if (this.saveHandler) {
 		var copy_list = this.saveHandler(this.form);
-		return copyForm(this.form, document.editFrm, copy_list);
+		return copyForm(this.form, document.getElementById('hiddenSubforms'), copy_list);
 	} else {
 		return this.form.submit();
 	}
