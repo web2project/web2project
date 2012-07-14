@@ -4,6 +4,8 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $deny1, $canRead, $canEdit, $project_id, $task_id, $showProject, $tab;
 
+$tab = ($m == 'links') ? $tab-1 : -1;
+
 if ($task_id && !$project_id) {
     $task = new CTask;
     $task->load($task_id);
@@ -30,7 +32,7 @@ if (!isset($project_id)) {
 
 if ($canRead) {
 	$link = new CLink();
-	$links = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $tab-1, $search);
+	$links = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $tab, $search);
 } else {
 	$AppUI->redirect('m=public&a=access_denied');
 }
