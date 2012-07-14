@@ -13,11 +13,13 @@ global $currentTabId;
 global $currentTabName;
 global $tabbed, $m;
 
+$tab = $currentTabId;
+
 // add to allow for returning to other modules besides Files
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'];
 
-$tab = ((!$company_id && !$project_id && !$task_id) || $m == 'files') ? $currentTabId : 0;
+$tab = ($m == 'files') ? $tab-1 : -1;
 $page = w2PgetParam($_GET, 'page', 1);
 if (!isset($project_id)) {
 	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
