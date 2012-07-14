@@ -262,6 +262,7 @@ function popContacts() {
             </td>
         </tr>
     </table>
+    <div name="hiddenSubforms" id="hiddenSubforms" style="display: none;"></div>
 </form>
 <?php
 $tab = $AppUI->processIntState('TaskAeTabIdx', $_GET, 'tab', 0);

@@ -149,13 +149,18 @@ function w2PgetConfig($key, $default = null, $dbConn = null)
     if (isset($w2Pconfig[$key])) {
         return $w2Pconfig[$key];
     } else {
-        if (!is_null($default)) {
-            $obj = new w2p_Core_Config();
-            $obj->overrideDatabase($dbConn);
-            $obj->config_name = $key;
-            $obj->config_value = $default;
-            $obj->store();
-        }
+//TODO: This block had to be removed because if the w2pgetConfig was called before
+//  we had a valid database object, creating the w2p_Core_Config object below would
+//  call its parent - w2p_Core_BaseObject - which would try to get an w2p_Core_AppUI
+//  which would in turn get back to here.. nasty loop.
+//
+//        if (!is_null($default)) {
+//            $obj = new w2p_Core_Config();
+//            $obj->overrideDatabase($dbConn);
+//            $obj->config_name = $key;
+//            $obj->config_value = $default;
+//            $obj->store();
+//        }
         return $default;
     }
 }
