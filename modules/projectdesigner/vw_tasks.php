@@ -227,9 +227,9 @@ if (count($fields) > 0) {
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
     $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority',
-        'task_name', 'user_username', '', 'task_start_date',
-        'task_duration', 'task_end_date');
-    $fieldNames = array('', 'Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
+        'task_access', 'task_type', 'task_1', 'task_2', 'task_3', 'task_name',
+        'task_owner', 'task_start_date', 'task_duration', 'task_end_date', 'task_4');
+    $fieldNames = array('Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
         'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
         'Assgined Users');
 
@@ -247,6 +247,7 @@ if (count($fields) > 0) {
     <tr>
         <?php
 //TODO: $PROJDESIGN_CONFIG['show_task_descriptions'] will be on the config screen going forward..
+        echo '<th></th>';
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
                 <?php echo $AppUI->_($fieldNames[$index]); ?>
