@@ -226,7 +226,9 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('');
+    $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority',
+        'task_name', 'user_username', '', 'task_start_date',
+        'task_duration', 'task_end_date');
     $fieldNames = array('', 'Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
         'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
         'Assgined Users');
