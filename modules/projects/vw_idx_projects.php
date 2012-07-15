@@ -109,39 +109,40 @@ if ($is_tabbed) {
 	$xpg_totalrecs = count($projects);
 	$xpg_pagesize = count($projects);
 }
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('projects', 'index_list');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v2.3
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('project_color_identifier', 'project_priority',
+        'project_name', 'company_name', 'project_start_date',
+        'project_end_date', 'project_actual_end_date', 'task_log_problem',
+        'user_username', 'project_task_count');
+    $fieldNames = array('%', 'P', 'Project Name', 'Company',
+        'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
+
+    $module = new w2p_Core_Module();
+    $module->storeSettings('projects', 'index_list', $fieldList, $fieldNames);
+}
 ?>
 
 <form action="./index.php" method="get" accept-charset="utf-8">
-
-	<table id="tblProjects-list" width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl list">
+    <table id="tblProjects-list" class="tbl list">
 		<tr>
             <?php
-            $fieldList = array();
-            $fieldNames = array();
-
-            $module = new w2p_Core_Module();
-            $fields = $module->loadSettings('projects', 'index_list');
-
-            if (count($fields) > 0) {
-                $fieldList = array_keys($fields);
-                $fieldNames = array_values($fields);
-            } else {
-                // TODO: This is only in place to provide an pre-upgrade-safe 
-                //   state for versions earlier than v2.3
-                //   At some point at/after v4.0, this should be deprecated
-                $fieldList = array('project_color_identifier', 'project_priority',
-                    'project_name', 'company_name', 'project_start_date',
-                    'project_end_date', 'project_actual_end_date', 'task_log_problem',
-                    'user_username', 'project_task_count');
-                $fieldNames = array('Color', 'P', 'Project Name', 'Company',
-                    'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
-
-                $module = new w2p_Core_Module();
-                $module->storeSettings('projects', 'index_list', $fieldList, $fieldNames);
-            }
             foreach ($fieldNames as $index => $name) {
+                $column = ('project_color_identifier' == $fieldList[$index]) ? 'project_percent_complete' : $fieldList[$index];
                 ?><th nowrap="nowrap">
-                    <a href="?m=projects&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                    <a href="?m=projects&orderby=<?php echo $column; ?>" class="hdr">
                         <?php echo $AppUI->_($fieldNames[$index]); ?>
                     </a>
                 </th><?php
@@ -234,24 +235,12 @@ if ($is_tabbed) {
                                 }
                                 $s .= '</td>';
                                 break;
-							case 'project_color_identifier':
-                                $s .= '<td class="data _identifier" width="1" style="background-color:#' . $row['project_color_identifier'] . '">';
-                                $s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
-                                $s .= '</td>';
-                                break;
                             case 'project_actual_end_date':
                                 $myDate = intval($row[$field]) ? new w2p_Utilities_Date($row[$field]) : null;
                                 $s .= '<td class="data _date">';
                                 $s .= '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">';
                                 $s .= ($myDate ? $myDate->format($df) : '-');
                                 $s .= '</a>';
-                                $s .= '</td>';
-                                break;
-                            case 'task_log_problem':
-                                $s .= '<td class="data _problem">';
-                                $s .= $row[$field] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
-                                $s .= $row[$field] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
-                                $s .= $row[$field] ? '</a>' : '';
                                 $s .= '</td>';
                                 break;
                             case 'department_list':

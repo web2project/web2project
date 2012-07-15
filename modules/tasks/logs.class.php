@@ -253,10 +253,19 @@ class CTask_Log extends w2p_Core_BaseObject
             $task = new CTask();
             $task->overrideDatabase($this->_query);
             $task->load($task_id);
-            $task->task_percent_complete = $percentComplete;
             $diff = strtotime($this->task_log_task_end_date) - strtotime($task->task_end_date);
-            $task->task_end_date = (0 == $diff) ? $task->task_end_date : $this->task_log_task_end_date;
-            $success = $task->store();
+            $task_end_date = (0 == $diff) ? $task->task_end_date : $this->task_log_task_end_date;
+
+            /*
+             * We're using a database update here instead of store() because a
+             *   bunch of other things happen when you call store().. like the
+             *   processing of contacts, departments, etc.
+             */
+            $q = $this->_getQuery();
+            $q->addTable('tasks');
+            $q->addUpdate('task_percent_complete', $percentComplete);
+            $q->addUpdate('task_end_date', $task_end_date);
+            $success = $q->exec();
 
             if (!$success) {
                 $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
@@ -308,20 +317,45 @@ class CTask_Log extends w2p_Core_BaseObject
     }
 
 	/**
-	 * Determines whether the currently logged in user can delete this task log.
-	 *
-	 * @global AppUI $AppUI global user permissions
-	 *
-	 * @param string by ref $msg error msg to be populated on failure
-	 * @param int optional $oid key to check
-	 * @param array $joins optional list of tables to join on
+     * You are allowed to delete a task log if you are:
+     *   a) the creator of the log; OR
+     *   b) the subject of the log; OR
+     *   c) have edit permissions on the corresponding task.
 	 *
 	 * @return bool
 	 */
 	public function canDelete(&$msg = '', $oid = null, $joins = null)
 	{
-        return true;
+        if($this->_AppUI->user_id == $this->task_log_creator ||
+                $this->_AppUI->user_id == $this->task_log_record_creator ||
+                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+
+            return true;
+        }
 	}
+
+    public function canCreate() {
+        return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task);
+    }
+
+    /*
+     * You are allowed to edit a task log if you are:
+     *   a) the creator of the log; OR
+     *   b) the subject of the log; OR
+     *   c) have edit permissions on the corresponding task.
+     *
+     * @return bool
+     */
+    public function canEdit() {
+        if($this->_AppUI->user_id == $this->task_log_creator ||
+                $this->_AppUI->user_id == $this->task_log_record_creator ||
+                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+
+            return true;
+        }
+
+        return false;
+    }
 
 	/**
 	 * Get a list of task logs the current user is allowed to access

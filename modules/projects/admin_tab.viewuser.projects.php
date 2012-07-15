@@ -38,9 +38,32 @@ $extraGet = '&user_id=' . $user_id;
 // collect the full projects list data via function in projects.class.php
 $project = new CProject();
 $projects = projects_list_data($user_id);
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('admin', 'project-list');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('project_color_identifier', 'project_priority',
+        'project_name', 'company_name', 'project_start_date', 'project_duration',
+        'project_end_date', 'project_actual_end_date', 'task_log_problem',
+        'user_username', 'project_task_count', 'project_status');
+    $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
+        'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
+
+    $module->storeSettings('admin', 'project-list', $fieldList, $fieldNames);
+}
 ?>
 
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
+<table class="tbl list">
 <tr>
 	<td align="center" width="100%" nowrap="nowrap" colspan="7">&nbsp;</td>
 	<form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="checkPwT" accept-charset="utf-8"><td align="right" nowrap="nowrap"><input type="checkbox" name="add_pwt" id="add_pwt" onclick="document.checkPwT.submit()" <?php echo $addPwT ? 'checked="checked"' : ''; ?> /></td><td align="right" nowrap="nowrap"><label for="add_pwt"><?php echo $AppUI->_('Show Projects with assigned Tasks'); ?>?</label><input type="hidden" name="show_form" value="1" /></td></form>
@@ -48,15 +71,9 @@ $projects = projects_list_data($user_id);
 	<form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject" accept-charset="utf-8"><td align="right" nowrap="nowrap"><?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?></td></form>
 </tr>
 </table>
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
-        $fieldList = array('project_color_identifier', 'project_priority',
-            'project_name', 'company_name', 'project_start_date', 'project_duration',
-            'project_end_date', 'project_actual_end_date', 'task_log_problem',
-            'user_username', 'project_task_count', 'project_status');
-        $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
-            'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
         $baseUrl = '?m='.$m.(isset($a) ? '&a=' . $a : '').(isset($extraGet) ? $extraGet : '');
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">

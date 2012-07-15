@@ -105,8 +105,8 @@ foreach ($hook_modules as $tmp) {
     $titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
     $titleBlock->show();
 ?>
-	<table class="std list" width="100%" cellspacing="5" cellpadding="0" border="0">
-	<form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">
+<form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">
+<table class="tbl list">
 	<tr><td>
 			<table cellspacing="5" cellpadding="0" border="0">
 				<tr>
@@ -153,8 +153,8 @@ foreach ($hook_modules as $tmp) {
 				</table>
 			</div>
 	</td></tr>
-	</form>
 	</table>
+</form>
 <?php
 if (isset($_POST['keyword'])) {
 	$search = new CSmartSearch();
@@ -213,7 +213,7 @@ if (isset($_POST['keyword'])) {
 	}
 
   ?>
-  <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+  <table class="tbl list">
   	<?php
     	$perms = &$AppUI->acl();
     	$reccount = 0;

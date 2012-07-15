@@ -26,7 +26,6 @@ $date = w2PgetParam($_GET, 'date', null);
 // get the passed timestamp (today if none)
 $event_project = (int) w2PgetParam($_GET, 'event_project', 0);
 
-
 // load the record data
 $obj = new CEvent();
 
@@ -39,7 +38,7 @@ if ($is_clash) {
 		$AppUI->redirect();
 	}
 }
-$obj->event_project = $event_project;
+$obj->event_project = ($event_project) ? $event_project : $obj->event_project;
 
 // load the event types
 $types = w2PgetSysVal('EventType');
@@ -254,7 +253,7 @@ function removeUser() {
 				<td align="right"><?php echo $AppUI->_('Project'); ?>:</td>
 				<td>
 					<?php
-					echo arraySelect($projects, 'event_project', 'size="1" class="text"', ($obj->event_project ? $obj->event_project : 0));
+					echo arraySelect($projects, 'event_project', 'size="1" class="text"', $obj->event_project);
 					?>
 				</td>
 			</tr>

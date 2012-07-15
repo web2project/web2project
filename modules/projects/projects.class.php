@@ -1012,6 +1012,7 @@ class CProject extends w2p_Core_BaseObject
         $q->addJoin('contacts', 'ct', 'contact_id = user_contact');
 //END: We can probably drop these lines, the fields are unneeded
         $q->addQuery('contact_display_name as contact_name');
+        $q->addQuery('contact_display_name as task_log_creator');
 		$q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
 		$q->addJoin('tasks', 't', 'task_log_task = t.task_id');
 		

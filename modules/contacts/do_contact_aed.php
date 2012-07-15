@@ -21,20 +21,21 @@ if (is_array($result)) {
     $AppUI->redirect('m=contacts&a=addedit');
 }
 if ($result) {
-    $AppUI->setMsg('Contact '.$action, UI_MSG_OK, true);
-
     if (!$del) {
         $updatekey = $obj->getUpdateKey();
         $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
-		if ($notifyasked && !$updatekey) {
+		if ($notifyasked && !strlen($updatekey)) {
 			$rnow = new w2p_Utilities_Date();
 			$obj->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
 			$obj->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
 			$obj->contact_lastupdate = '';
             $obj->store();
 			$obj->notify();
+            $action .= '. Update request sent';
 		}
     }
+
+    $AppUI->setMsg('Contact '.$action, UI_MSG_OK, true);
 } else {
     $redirect = 'm=public&a=access_denied';
 }

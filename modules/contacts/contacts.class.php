@@ -220,7 +220,7 @@ class CContact extends w2p_Core_BaseObject
 
         $tmp = new CContact();
         $tmp->load($this->contact_id);
-        if ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id)) {
+        if (!$tmp->contact_private || ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id))) {
             $thisCanEdit = true;
         }
 
@@ -310,7 +310,7 @@ class CContact extends w2p_Core_BaseObject
     {
         $result = $this->loadAll('contact_id', 'contact_id = ' . (int) $this->contact_id);
 
-        return $result[$this->contact_id];
+        return $result[$this->contact_id]['contact_updatekey'];
     }
 
     public function clearUpdateKey()
@@ -323,6 +323,7 @@ class CContact extends w2p_Core_BaseObject
 
     public function notify()
     {
+        $result = false;
         global $w2Pconfig, $locale_char_set;
         $df = $this->_AppUI->getPref('SHDATEFORMAT');
         $df .= ' ' . $this->_AppUI->getPref('TIMEFORMAT');
@@ -339,9 +340,12 @@ class CContact extends w2p_Core_BaseObject
 
         if ($mail->ValidEmail($this->contact_email)) {
             $mail->To($this->contact_email, true);
-            $mail->Send();
+            $result = $mail->Send();
+        } else {
+            $this->_error['email_address'] = 'This is not a validate email address';
         }
-        return '';
+
+        return $result;
     }
 
     public function updateNotify()

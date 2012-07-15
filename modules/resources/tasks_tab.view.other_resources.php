@@ -36,7 +36,7 @@ if (count($fields) > 0) {
     $module->storeSettings('resources', 'task_view', $fieldList, $fieldNames);
 }
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
         foreach ($fieldNames as $index => $name) {

@@ -174,6 +174,7 @@ class w2p_Output_HTMLHelper
                 $prefix = ($prefix == 'message')  ? 'forum' : $prefix;
                 $page   = ($prefix == 'forum') ? 'viewer&message_id='.$this->tableRowData['message_id'] : 'view';
                 $link   = ($prefix == 'file') ? 'fileviewer.php?' : '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
+                $link   = ($prefix == 'event') ? '?m=calendar&a='.$page.'&' : $link;
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
                 $link  .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];
                 $link  .= ($prefix == 'task_log') ? '&tab=1&task_id='.$this->tableRowData['task_id'] : '';
@@ -194,7 +195,6 @@ class w2p_Output_HTMLHelper
                 $cell = $value;
                 break;
             case '_size':
-                $additional = 'nowrap="nowrap"';
                 $cell = file_size($value);
                 break;
 			case '_budget':
@@ -209,7 +209,6 @@ class w2p_Output_HTMLHelper
                 break;
             case '_birthday':
 			case '_date':
-				$additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
 				$cell = $myDate ? $myDate->format($this->df) : '-';
 				break;
@@ -240,6 +239,19 @@ class w2p_Output_HTMLHelper
             case '_version':
                 $value = (int) (100 * $value);
                 $cell = number_format($value/100, 2);
+                break;
+            case '_identifier':
+                $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'"';
+                $cell = $this->tableRowData['project_percent_complete'].'%';
+                break;
+            case '_problem':
+                if ($value) {
+                    $cell  = '<a href="?m=tasks&a=index&f=all&project_id=' . $this->tableRowData['project_id'] . '">';
+                    $cell .= w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem');
+                    $cell .= '</a>';
+                } else {
+                    $cell = '-';
+                }
                 break;
 			default:
 //TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
