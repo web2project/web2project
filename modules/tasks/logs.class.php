@@ -308,20 +308,45 @@ class CTask_Log extends w2p_Core_BaseObject
     }
 
 	/**
-	 * Determines whether the currently logged in user can delete this task log.
-	 *
-	 * @global AppUI $AppUI global user permissions
-	 *
-	 * @param string by ref $msg error msg to be populated on failure
-	 * @param int optional $oid key to check
-	 * @param array $joins optional list of tables to join on
+     * You are allowed to delete a task log if you are:
+     *   a) the creator of the log; OR
+     *   b) the subject of the log; OR
+     *   c) have edit permissions on the corresponding task.
 	 *
 	 * @return bool
 	 */
 	public function canDelete(&$msg = '', $oid = null, $joins = null)
 	{
-        return true;
+        if($this->_AppUI->user_id == $this->task_log_creator ||
+                $this->_AppUI->user_id == $this->task_log_record_creator ||
+                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+
+            return true;
+        }
 	}
+
+    public function canCreate() {
+        return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task);
+    }
+
+    /*
+     * You are allowed to edit a task log if you are:
+     *   a) the creator of the log; OR
+     *   b) the subject of the log; OR
+     *   c) have edit permissions on the corresponding task.
+     *
+     * @return bool
+     */
+    public function canEdit() {
+        if($this->_AppUI->user_id == $this->task_log_creator ||
+                $this->_AppUI->user_id == $this->task_log_record_creator ||
+                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+
+            return true;
+        }
+
+        return false;
+    }
 
 	/**
 	 * Get a list of task logs the current user is allowed to access
