@@ -5,7 +5,7 @@
 class w2p_Core_Config extends w2p_Core_BaseObject {
 
 	public function __construct() {
-        parent::__construct('config', 'config_id');
+        parent::__construct('config', 'config_id', 'system');
 	}
 
 	public function getChildren($id) {
@@ -17,4 +17,11 @@ class w2p_Core_Config extends w2p_Core_BaseObject {
 
 		return $result;
 	}
+
+    public function canCreate() {
+        return $this->_perms->checkModule($this->_tbl_module, 'add');
+    }
+    public function canEdit() {
+        return $this->_perms->checkModule($this->_tbl_module, 'edit');
+    }
 }

@@ -6,31 +6,32 @@ if (!defined('W2P_BASE_DIR')) {
 global $dept_id, $dept, $company_id;
 
 $contacts = CDepartment::getContactList($AppUI, $dept_id);
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('contacts', 'department_view');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('contact_name', 'contact_job',
+        'contact_email', 'contact_phone', 'dept_name');
+    $fieldNames = array('Name', 'Job Title', 'Email', 'Phone',
+        'Department');
+
+    $module->storeSettings('contacts', 'department_view', $fieldList, $fieldNames);
+}
 ?>
 <a name="contacts-department_view"> </a>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
-
-        $module = new w2p_Core_Module();
-        $fields = $module->loadSettings('contacts', 'department_view');
-
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('contact_name', 'contact_job', 
-                'contact_email', 'contact_phone', 'dept_name');
-            $fieldNames = array('Name', 'Job Title', 'Email', 'Phone', 
-                'Department');
-
-            $module->storeSettings('contacts', 'department_view', $fieldList, $fieldNames);
-        }
 //TODO: The link below is commented out because this view doesn't support sorting... yet.
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">

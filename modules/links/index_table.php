@@ -43,28 +43,29 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 $xpg_totalrecs = count($links);
 $pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
 echo $pageNav;
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('links', 'index_list');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('link_name', 'link_description', 'link_category', 'link_task', 'contact_name', 'link_date');
+    $fieldNames = array('Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
+
+    $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
+}
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
-
-        $module = new w2p_Core_Module();
-        $fields = $module->loadSettings('links', 'index_list');
-
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('link_name', 'link_description', 'link_category', 'link_task', 'contact_name', 'link_date');
-            $fieldNames = array('Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
-
-            $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
-        }
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
         echo '<th></th><th></th>';
         foreach ($fieldNames as $index => $name) {

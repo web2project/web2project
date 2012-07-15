@@ -56,9 +56,31 @@ $project = new CProject();
 $projects = projects_list_data($user_id);
 $department = $tmpDepartments;
 
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('departments', 'project-list');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('project_color_identifier', 'project_priority',
+        'project_name', 'company_name', 'project_start_date', 'project_duration',
+        'project_end_date', 'project_actual_end_date', 'task_log_problem',
+        'user_username', 'project_task_count', 'project_status');
+    $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
+        'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
+
+    $module->storeSettings('departments', 'project-list', $fieldList, $fieldNames);
+}
 ?>
 
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl list">
+<table class="tbl list">
 <tr>
 	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by'); ?>:&nbsp;</td>
 	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td>
@@ -75,15 +97,9 @@ $department = $tmpDepartments;
     </td>
 </tr>
 </table>
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="tbl">
+<table class="tbl list">
     <tr>
         <?php
-        $fieldList = array('project_color_identifier', 'project_priority',
-            'project_name', 'company_name', 'project_start_date', 'project_duration',
-            'project_end_date', 'project_actual_end_date', 'task_log_problem',
-            'user_username', 'project_task_count', 'project_status');
-        $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
-            'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
         $baseUrl = '?m='.$m.(isset($a) ? '&a=' . $a : '').(isset($extraGet) ? $extraGet : '');
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">

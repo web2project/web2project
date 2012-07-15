@@ -32,7 +32,7 @@ $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
 ?>
 
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="tbl list">
+<table class="tbl list">
     <tr>
         <th colspan="2"><?php echo $AppUI->_('Module'); ?></th>
         <th><?php echo $AppUI->_('Status'); ?></th>

@@ -74,7 +74,7 @@ if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
     $user = new CUser();
     $logs = $user->getLogList($user_id, $start_date, $end_date);
     ?>
-    <table width="50%" border="0" cellpadding="2" cellspacing="1" class="tbl list" align="center">
+    <table class="tbl list center" width="50%">
         <tr>
             <th nowrap="nowrap" ><?php echo $AppUI->_('Name(s)'); ?></th>
             <th nowrap="nowrap" ><?php echo $AppUI->_('Last Name'); ?></th>

@@ -85,8 +85,7 @@ $q->clear();
 $tab = w2PgetParam($_REQUEST, 'tab', 0);
 
 ?>
-
-<table cellpadding="2" cellspacing="1" border="0" width="100%" class="tbl list">
+<table class="tbl list">
     <tr>
         <th colspan="2">&nbsp; <?php echo $AppUI->_('sort by'); ?>:&nbsp;</th>
         <?php

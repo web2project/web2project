@@ -5,37 +5,36 @@ if (!defined('W2P_BASE_DIR')) {
 $utypes = w2PgetSysVal('UserType');
 
 $display_last_login = !((int) w2PgetParam($_REQUEST, 'tab', 0));
+
+        $fieldList = array();
+$fieldNames = array();
+$fields = w2p_Core_Module::getSettings('users', 'index_table');
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('user_username', 'contact_last_name',
+        'user_type', 'company_name', 'dept_name');
+    $fieldNames = array('Login Name', 'Real Name', 'Type',
+        'Company', 'Department');
+}
+if ($display_last_login) {
+    array_unshift($fieldList,  '');
+    array_unshift($fieldNames, 'Login History');
+}
+/*
+* TODO: This is an oddity because the inserted column (login history) has to
+*   get inserted as the *second* entry instead of the first.. ugh.
+*
+*/
+array_unshift($fieldNames,  '');
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
-        $fields = w2p_Core_Module::getSettings('users', 'index_table');
-        if (count($fields) > 0) {
-            foreach ($fields as $field => $text) {
-                $fieldList[] = $field;
-                $fieldNames[] = $text;
-            }
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('user_username', 'contact_last_name', 
-                'user_type', 'company_name', 'dept_name');
-            $fieldNames = array('Login Name', 'Real Name', 'Type', 
-                'Company', 'Department');
-        }
-        if ($display_last_login) {
-            array_unshift($fieldList,  '');
-            array_unshift($fieldNames, 'Login History');
-        }
-/*
- * TODO: This is an oddity because the inserted column (login history) has to 
- *   get inserted as the *second* entry instead of the first.. ugh.
- * 
- */
-        array_unshift($fieldNames,  '');
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">

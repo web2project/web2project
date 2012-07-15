@@ -125,14 +125,18 @@ td.today span img, td.empty span img
 .list ._description {   width: 30%; }
 
 .list ._complete, .list ._created, .list ._date, .list ._datetime, .list ._duration,
-    .list ._hours, .list ._update, .list ._updated, .list ._worked  {
+    .list ._hours, .list ._update, .list ._updated, .list ._worked, .list ._identifier,
+    .list ._size {
     text-align: center;
 }
-.list ._author, .list ._creator, .list ._name, .list ._owner, .list ._updator {
-    white-space:nowrap;
+.list ._author, .list ._creator, .list ._name, .list ._owner, .list ._updator,
+    .list ._size, .list ._birthday, .list ._date, .list ._created, .list ._datetime,
+    .list ._update, .list ._updated {
+        white-space:nowrap;
 }
 ._assignment, ._category, ._count, .countp, ._complete, ._in, .inactive,
-    ._owner, ._priority, ._problem, .replies, ._status, ._username, ._users, ._version {
+    ._owner, ._priority, ._problem, ._problem, .replies, ._status, ._username,
+    ._users, ._version {
     text-align: center;
 }
 ._duration {
@@ -166,6 +170,12 @@ tr.notstarted td._date, tr.notstarted td._datetime, tr.notstarted td._duration, 
 
 tr.active td._date, tr.active td._datetime, tr.active td._duration, tr.active td._in {
     background-color:#e6eedd;
+}
+
+table.list {
+    border-spacing: 1px;
+    padding: 2px;
+    width: 100%;
 }
 
 /*

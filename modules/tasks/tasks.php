@@ -457,43 +457,41 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
         </tr>
     </table>
 </form>
-<?php } ?>
-<table id="tblProjects" width="100%" border="0" cellpadding="0" cellspacing="1" class="tbl list">
+<?php }
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('tasks', 'index_list');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority',
+        'task_name', 'user_username', '', 'task_start_date',
+        'task_duration', 'task_end_date');
+    $fieldNames = array('Work', 'P', 'U', 'Task Name', 'Task Owner',
+        'Assigned Users', 'Start Date', 'Duration', 'Finish Date');
+
+    $module->storeSettings('tasks', 'index_list', $fieldList, $fieldNames);
+}
+if ($history_active) {
+    $fieldList[] = 'last_update';
+    $fieldNames[] = 'Last Update';
+}
+if ($showEditCheckbox) {
+    $fieldList[] = '';
+    $fieldNames[] = '';
+}
+?>
+<table id="tblProjects" class="tbl list">
     <tr>
         <?php
-        $fieldList = array();
-        $fieldNames = array();
-
-        $module = new w2p_Core_Module();
-        $fields = $module->loadSettings('tasks', 'index_list');
-
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
-            $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority',
-                'task_name', 'user_username', '', 'task_start_date', 
-                'task_duration', 'task_end_date');
-            $fieldNames = array('Work', 'P', 'U', 'Task Name', 'Task Owner', 
-                'Assigned Users', 'Start Date', 'Duration', 'Finish Date');
-
-//TODO: $module->storeSettings('tasks', 'index_list', $fieldList, $fieldNames);
-        }
-        if ($history_active) {
-            $fieldList[] = 'last_update';
-            $fieldNames[] = 'Last Update';
-        }
-        if ($showEditCheckbox) {
-            $fieldList[] = '';
-            $fieldNames[] = '';
-        }
-/*
- * TODO: The link below is commented out because this module doesn't support sorting... yet.
- *   For tasks, this is done with echo sort_by_item_title('P', 'task_priority', SORT_NUMERIC);
- */
         echo '<th></th><th></th><th></th>';
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">

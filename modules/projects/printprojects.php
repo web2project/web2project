@@ -58,29 +58,38 @@ $projects = projects_list_data();
 ?>
 <style type="text/css">
 /* Standard table 'spreadsheet' style */
-TABLE.prjprint {
+.prjprint {
 	background: #ffffff;
+    font-size:13px;
+    width: 100%;
 }
 
-TABLE.prjprint TH {
+.prjprint TH {
 	background-color: #ffffff;
+    border:solid 1px;
 	color: black;
+    font-weight: normal;
 	list-style-type: disc;
 	list-style-position: inside;
-	border:solid 1px;
-	font-weight: normal;
-	font-size:13px;
 }
-
-TABLE.prjprint TD {
+.prjprint TD {
 	background-color: #ffffff;
 	font-size:13px;
+    text-align: center;
 }
-
-TABLE.prjprint TR {
-	padding:5px;
+.prjprint a {
+    color: black;
+    text-decoration: none;
 }
-	
+.prjprint ._identifier {
+    background-color: #0033FF;
+    border: 2px outset #EEEEEE;
+    text-align: center;
+    width: 55px;
+}
+.prjprint ._name {
+    text-align: left;
+}
 </style>
 <table width="100%" class="prjprint">
 	<tr>
