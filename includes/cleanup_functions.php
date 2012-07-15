@@ -396,18 +396,18 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	global $AppUI, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $m, $a, $history_active, $expanded;
 
+	//Check for Tasks Access
+	$canAccess = canTaskAccess($arr['task_id']);
+	if (!$canAccess) {
+		return (false);
+	}
+
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
     
     // Reformat time strings to take timezones into account
     $startDateStr = $AppUI->formatTZAwareTime($arr['task_start_date'], '%Y-%m-%d %T');
     $endDateStr = $AppUI->formatTZAwareTime($arr['task_end_date'], '%Y-%m-%d %T');
-
-	//Check for Tasks Access
-	$canAccess = canTaskAccess($arr['task_id'], $arr['task_access'], $arr['task_owner']);
-	if (!$canAccess) {
-		return (false);
-	}
 
 	$show_all_assignees = w2PgetConfig('show_all_task_assignees', false);
 
@@ -539,6 +539,12 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 function showtask_pd(&$arr, $level = 0, $today_view = false) {
 	global $AppUI, $w2Pconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $task_access, $task_priority, $PROJDESIGN_CONFIG, $m, $expanded;
+
+	//Check for Tasks Access
+	$canAccess = canTaskAccess($arr['task_id']);
+	if (!$canAccess) {
+		return (false);
+	}
 
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
@@ -694,6 +700,12 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 function showtask_pr(&$arr, $level = 0, $today_view = false) {
 	global $AppUI, $w2Pconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $task_access, $task_priority;
+
+	//Check for Tasks Access
+	$canAccess = canTaskAccess($arr['task_id']);
+	if (!$canAccess) {
+		return (false);
+	}
 
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
@@ -932,63 +944,15 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
  * @param mixed $task_owner
  * @return true if user has task access to it, or false if he doesn't
  */
-function canTaskAccess($task_id, $task_access, $task_owner) {
-	global $AppUI;
-	$q = new w2p_Database_Query;
+function canTaskAccess($task_id, $task_access = 0, $task_owner = 0) {
+    //trigger_error("canTaskAccess has been deprecated in v3.0 and will be removed by v4.0. Please use CTask->canAccess() instead.", E_USER_NOTICE);
 
-	if (!$task_id || !isset($task_access)) {
-		return false;
-	}
+    global $AppUI;
 
-	//if for some weird reason we have tasks without an owner, lets make them visible at least for admins, or else we take the risk of having phantom tasks.
-	if (!$task_owner) {
-		$task_owner = $AppUI->user_id;
-	}
+    $task = new CTask();
+    $task->load($task_id);
 
-	$user_id = $AppUI->user_id;
-	// Let's see if this user has admin privileges, if so return true
-	if ($AppUI->user_is_admin) {
-		return true;
-	}
-
-	switch ($task_access) {
-		case 0:
-			// public
-			$retval = true;
-			break;
-		case 1:
-			// protected
-			$q->addTable('users');
-			$q->addQuery('user_company');
-			$q->addWhere('user_id=' . (int)$user_id . ' OR user_id=' . (int)$task_owner);
-			$user_owner_companies = $q->loadColumn();
-			$q->clear();
-			$company_match = true;
-			foreach ($user_owner_companies as $current_company) {
-				$company_match = $company_match && ((!(isset($last_company))) || $last_company == $current_company);
-				$last_company = $current_company;
-			}
-
-		case 2:
-			// participant
-			$company_match = ((isset($company_match)) ? $company_match : true);
-			$q->addTable('user_tasks');
-			$q->addQuery('COUNT(task_id)');
-			$q->addWhere('user_id=' . (int)$user_id . ' AND task_id=' . (int)$task_id);
-			$count = $q->loadResult();
-			$q->clear();
-			$retval = (($company_match && $count > 0) || ($count > 0) || $task_owner == $user_id);
-			break;
-		case 3:
-			// private
-			$retval = ($task_owner == $user_id);
-			break;
-		default:
-			$retval = false;
-			break;
-	}
-
-	return $retval;
+    return $task->canAccess($AppUI->user_id);
 }
 
 // from modules/tasks/tasksperuser_sub.php
