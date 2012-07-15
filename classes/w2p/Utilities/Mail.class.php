@@ -1,5 +1,6 @@
 <?php /* $Id$ $URL$ */
 
+$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 require_once $AppUI->getLibraryClass('PHPMailer/class.phpmailer');
 
 /**
@@ -326,7 +327,8 @@ class w2p_Utilities_Mail extends PHPMailer
     public function SendSeparatelyTo($to = array())
     {
         if (is_array($to) && count($to)) {
-            $this->ato = $to;
+            $newArray = array_flip($to) + array_flip($this->ato);
+            $this->ato = array_keys($newArray);
         } elseif (is_array($this->ato) && count($this->ato)) {
             //Do nothing, ato is good to go
         } else {
@@ -335,7 +337,7 @@ class w2p_Utilities_Mail extends PHPMailer
         }
 
         if ($this->checkAddress == true) {
-            $this->CheckAdresses($this->ato);
+            $this->CheckAddresses($this->ato);
         }
 
         foreach ($this->ato as $to_address) {
@@ -346,13 +348,8 @@ class w2p_Utilities_Mail extends PHPMailer
                 }
             }
             $this->ClearAddresses();
-            $this->ClearAttachments();
             $this->AddAddress($to_address);
-            if ($this->defer) {
-                $this->QueueMail();
-            } else {
-                PHPMailer::Send();
-            }
+            $this->Send();
         }
         return true;
     }
