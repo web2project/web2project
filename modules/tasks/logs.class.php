@@ -253,10 +253,19 @@ class CTask_Log extends w2p_Core_BaseObject
             $task = new CTask();
             $task->overrideDatabase($this->_query);
             $task->load($task_id);
-            $task->task_percent_complete = $percentComplete;
             $diff = strtotime($this->task_log_task_end_date) - strtotime($task->task_end_date);
-            $task->task_end_date = (0 == $diff) ? $task->task_end_date : $this->task_log_task_end_date;
-            $success = $task->store();
+            $task_end_date = (0 == $diff) ? $task->task_end_date : $this->task_log_task_end_date;
+
+            /*
+             * We're using a database update here instead of store() because a
+             *   bunch of other things happen when you call store().. like the
+             *   processing of contacts, departments, etc.
+             */
+            $q = $this->_getQuery();
+            $q->addTable('tasks');
+            $q->addUpdate('task_percent_complete', $percentComplete);
+            $q->addUpdate('task_end_date', $task_end_date);
+            $success = $q->exec();
 
             if (!$success) {
                 $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);

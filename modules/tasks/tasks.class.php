@@ -714,7 +714,7 @@ class CTask extends w2p_Core_BaseObject
 
         $q->exec();
         $q->clear();
-        if ($this->task_contacts) {
+        if ($this->task_contacts && is_array($this->task_contacts)) {
             foreach ($this->task_contacts as $contact) {
                 if ($contact) {
                     $q->addTable('task_contacts');
