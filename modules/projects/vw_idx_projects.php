@@ -127,7 +127,7 @@ if (count($fields) > 0) {
         'project_name', 'company_name', 'project_start_date',
         'project_end_date', 'project_actual_end_date', 'task_log_problem',
         'user_username', 'project_task_count');
-    $fieldNames = array('Color', 'P', 'Project Name', 'Company',
+    $fieldNames = array('%', 'P', 'Project Name', 'Company',
         'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
 
     $module = new w2p_Core_Module();
@@ -140,8 +140,9 @@ if (count($fields) > 0) {
 		<tr>
             <?php
             foreach ($fieldNames as $index => $name) {
+                $column = ('project_color_identifier' == $fieldList[$index]) ? 'project_percent_complete' : $fieldList[$index];
                 ?><th nowrap="nowrap">
-                    <a href="?m=projects&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+                    <a href="?m=projects&orderby=<?php echo $column; ?>" class="hdr">
                         <?php echo $AppUI->_($fieldNames[$index]); ?>
                     </a>
                 </th><?php
