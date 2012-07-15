@@ -195,7 +195,6 @@ class w2p_Output_HTMLHelper
                 $cell = $value;
                 break;
             case '_size':
-                $additional = 'nowrap="nowrap"';
                 $cell = file_size($value);
                 break;
 			case '_budget':
@@ -210,7 +209,6 @@ class w2p_Output_HTMLHelper
                 break;
             case '_birthday':
 			case '_date':
-				$additional = 'nowrap="nowrap"';
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
 				$cell = $myDate ? $myDate->format($this->df) : '-';
 				break;
@@ -243,7 +241,6 @@ class w2p_Output_HTMLHelper
                 $cell = number_format($value/100, 2);
                 break;
             case '_identifier':
-                $suffix .= ' center';
                 $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'"';
                 $cell = $this->tableRowData['project_percent_complete'].'%';
                 break;

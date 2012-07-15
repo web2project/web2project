@@ -235,24 +235,12 @@ if (count($fields) > 0) {
                                 }
                                 $s .= '</td>';
                                 break;
-							case 'project_color_identifier':
-                                $s .= '<td class="data _identifier" width="1" style="background-color:#' . $row['project_color_identifier'] . '">';
-                                $s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font>';
-                                $s .= '</td>';
-                                break;
                             case 'project_actual_end_date':
                                 $myDate = intval($row[$field]) ? new w2p_Utilities_Date($row[$field]) : null;
                                 $s .= '<td class="data _date">';
                                 $s .= '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">';
                                 $s .= ($myDate ? $myDate->format($df) : '-');
                                 $s .= '</a>';
-                                $s .= '</td>';
-                                break;
-                            case 'task_log_problem':
-                                $s .= '<td class="data _problem">';
-                                $s .= $row[$field] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
-                                $s .= $row[$field] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
-                                $s .= $row[$field] ? '</a>' : '';
                                 $s .= '</td>';
                                 break;
                             case 'department_list':
