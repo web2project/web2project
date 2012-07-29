@@ -5,33 +5,34 @@ if (!defined('W2P_BASE_DIR')) {
 
 $forum_id = (int) w2PgetParam($_GET, 'forum_id', 0);
 
-// check permissions for this record
-$perms = &$AppUI->acl();
-$canAuthor = canAdd('forums');
-$canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
 
-// check permissions
+
+
+$forum = new CForum();
+$forum->forum_id = $forum_id;
+
+$canAuthor = $forum->canCreate();
 if (!$canAuthor && !$forum_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+$canEdit = $forum->canEdit();
 if (!$canEdit && $forum_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// load the record data
-$forum = new CForum();
+
 $obj = $AppUI->restoreObject();
 if ($obj) {
-  $forum = $obj;
-  $forum_id = $forum->forum_id;
+    $forum = $obj;
+    $forum_id = $forum->forum_id;
 } else {
-  $forum->load(null, $forum_id);
+    $forum->load(null, $forum_id);
 }
 if (!$forum && $forum_id > 0) {
-  $AppUI->setMsg('Forum');
-  $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-  $AppUI->redirect();
+    $AppUI->setMsg('Forum');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
 }
 
 $status = isset($forum->forum_status) ? $forum->forum_status : -1;
@@ -47,8 +48,12 @@ foreach ($projects as $project_id => $project_info) {
 }
 $projects = arrayMerge(array(0 => $AppUI->_('All Projects')), $projects);
 
+// check permissions for this record
+$perms = &$AppUI->acl();
 $users = $perms->getPermittedUsers('forums');
 
+
+// setup the title block
 $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');

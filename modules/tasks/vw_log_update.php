@@ -8,23 +8,33 @@ global $AppUI, $obj, $percent, $can_edit_time_information, $cal_sdf;
 $task        = $obj;
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
 
+$log = new CTask_Log();
+$log->task_log_id = $task_log_id;
+
+$canAuthor = $task->canCreate();
+if (!$canAuthor && !$task_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+$canEdit = $task->canEdit();
+if (!$canEdit && $task_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
 $AppUI->loadCalendarJS();
 
 // check permissions
 $perms = &$AppUI->acl();
 $canEditTask = $perms->checkModuleItem('tasks', 'edit', $obj->task_id);
 $canViewTask = $perms->checkModuleItem('tasks', 'view', $obj->task_id);
-$canEdit = canEdit('task_log');
-$canAdd = canAdd('task_log');
 
-$log = new CTask_Log();
 if ($task_log_id) {
 	if (!$canEdit || !$canViewTask) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 	$log->load($task_log_id);
 } else {
-	if (!$canAdd || !$canViewTask) {
+	if (!$canAuthor || !$canViewTask) {
 		$AppUI->redirect('m=public&a=access_denied');
 	}
 	$log->task_log_task = $obj->task_id;

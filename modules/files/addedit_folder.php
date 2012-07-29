@@ -4,61 +4,61 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $file_folder_parent = intval(w2PgetParam($_GET, 'file_folder_parent', 0));
-$folder = intval(w2PgetParam($_GET, 'folder', 0));
+$folder_id = intval(w2PgetParam($_GET, 'folder', 0));
+
+
+
+$folder = new CFile_Folder();
+$folder->file_folder_id = $folder_id;
+
+$canAuthor = $folder->canCreate();
+if (!$canAuthor && !$folder_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+$canEdit = $folder->canEdit();
+if (!$canEdit && $folder_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+// load the record data
+$obj = $AppUI->restoreObject();
+if ($obj) {
+    $folder = $obj;
+    $folder_id = $folder->file_folder_id;
+} else {
+    $obj = $folder->load($folder_id);
+}
+if (!$folder && $folder_id > 0) {
+	$AppUI->setMsg('File Folder');
+	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+	$AppUI->redirect();
+}
 
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'] . $referrerArray['fragment'];
 
 // check permissions for this record
-$perms = &$AppUI->acl();
-$canAuthor = canAdd('files');
-$canEdit = canEdit('files');
-
-// check permissions
-if (!$canAuthor && !$folder) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
-
-if (!$canEdit && $folder) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
-
-// check permissions for this record
-if ($folder == 0) {
+if ($folder_id == 0) {
 	$canEdit = $canAuthor;
 }
 if (!$canEdit) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-// check if this record has dependancies to prevent deletion
-$msg = '';
-$obj = new CFile_Folder();
-if ($folder > 0) {
-	$canDelete = $obj->canDelete($msg, $folder);
-}
-
-$q = new w2p_Database_Query();
-$q->addTable('file_folders');
-$q->addQuery('file_folders.*');
-$q->addWhere('file_folder_id=' . $folder);
-$obj = null;
-$q->loadObject($obj);
-
-// load the record data
-if (!$obj && $folder > 0) {
-	$AppUI->setMsg('File Folder');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-}
-
 $folders = getFolderSelectList();
+
+
+
+
+
 // setup the title block
-$ttl = $folder ? 'Edit File Folder' : 'Add File Folder';
+$ttl = $folder_id ? 'Edit File Folder' : 'Add File Folder';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'folder5.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=files', 'files list');
-if ($canEdit && $folder > 0) {
+$canDelete = $folder->canDelete();
+if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete file folder', $canDelete, $msg);
 }
 $titleBlock->show();
@@ -89,7 +89,7 @@ function delIt() {
 <form name="folderFrm" action="?m=files" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="dosql" value="do_folder_aed" />
 	<input type="hidden" name="del" value="0" />
-	<input type="hidden" name="file_folder_id" value="<?php echo $folder; ?>" />
+	<input type="hidden" name="file_folder_id" value="<?php echo $folder_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
     <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
         <tr>
@@ -99,7 +99,7 @@ function delIt() {
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Subfolder of'); ?>:</td>
                         <td align="left">
                         <?php
-                            $parent_folder = ($folder > 0) ? $obj->file_folder_parent : $file_folder_parent;
+                            $parent_folder = ($folder_id > 0) ? $folder->file_folder_parent : $file_folder_parent;
                             echo arraySelectTree($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder);
                         ?>
                         </td>
@@ -107,13 +107,13 @@ function delIt() {
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder Name'); ?>:</td>
                         <td align="left">
-                            <input type="text" class="text" id="ffn" name="file_folder_name" value="<?php echo $obj->file_folder_name; ?>" maxlength="255" />
+                            <input type="text" class="text" id="ffn" name="file_folder_name" value="<?php echo $folder->file_folder_name; ?>" maxlength="255" />
                         </td>
                     </tr>
                     <tr>
                         <td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
                         <td align="left">
-                            <textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $obj->file_folder_description; ?></textarea>
+                            <textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $folder->file_folder_description; ?></textarea>
                         </td>
                     </tr>
                 </table>

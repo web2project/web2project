@@ -3,32 +3,41 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
-$status = w2PgetSysVal('TaskStatus');
-$priority = w2PgetSysVal('TaskPriority');
-
-/**
- * Tasks :: Add/Edit Form
- *
- */
-
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
-$perms = &$AppUI->acl();
+
+
+
+
+$task = new CTask();
+$task->task_id = $task_id;
+
+$canAuthor = $task->canCreate();
+if (!$canAuthor && !$task_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+$canEdit = $task->canEdit();
+if (!$canEdit && $task_id) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
 
 // load the record data
-$task = new CTask();
 $obj = $AppUI->restoreObject();
 if ($obj) {
-  $task = $obj;
-  $task_id = $task->task_id;
+    $task = $obj;
+    $task_id = $task->task_id;
 } else {
-  $task->loadFull(null, $task_id);
+    $task->loadFull(null, $task_id);
 }
 if (!$task && $task_id > 0) {
 	$AppUI->setMsg('Task');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
+
+$percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
+$status = w2PgetSysVal('TaskStatus');
+$priority = w2PgetSysVal('TaskPriority');
 
 $task_parent = (int) w2PgetParam($_GET, 'task_parent', $task->task_parent);
 
@@ -43,15 +52,13 @@ if (!$task_project) {
 }
 
 // check permissions
-if ($task_id) {
-	// we are editing an existing task
-	$canEdit = $perms->checkModuleItem('tasks', 'edit', $task_id);
-} else {
+$perms = &$AppUI->acl();
+if (!$task_id) {
 	// do we have access on this project?
 	$canEdit = $perms->checkModuleItem('projects', 'view', $task_project);
 	// And do we have add permission to tasks?
 	if ($canEdit) {
-		$canEdit = canAdd('tasks');
+		$canEdit = $canAuthor;
 	}
 }
 

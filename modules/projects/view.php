@@ -5,37 +5,22 @@ if (!defined('W2P_BASE_DIR')) {
 
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
-// check permissions for this record
-$perms = &$AppUI->acl();
-$canRead = $perms->checkModuleItem($m, 'view', $project_id);
-$canEdit = $perms->checkModuleItem($m, 'edit', $project_id);
-$canEditT = canAdd('tasks');
 
-if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
 
-$tab = $AppUI->processIntState('ProjVwTab', $_GET, 'tab', 0);
-
-// check if this record has dependencies to prevent deletion
-$msg = '';
 $project = new CProject();
-// Now check if the proect is editable/viewable.
-$denied = $project->getDeniedRecords($AppUI->user_id);
-if (in_array($project_id, $denied)) {
+$project->project_id = $project_id;
+
+$canEdit   = $project->canEdit();
+$canRead   = $project->canView();
+$canCreate = $project->canCreate();
+$canAccess = $project->canAccess();
+$canDelete = $project->canDelete();
+
+if (!$canAccess || !$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$canDelete = $project->canDelete($msg, $project_id);
-
-// get ProjectPriority from sysvals
-$projectPriority = w2PgetSysVal('ProjectPriority');
-$projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
-$billingCategory = w2PgetSysVal('BudgetCategory');
-
-// load the record data
 $project->loadFull(null, $project_id);
-
 if (!$project) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -43,6 +28,20 @@ if (!$project) {
 } else {
 	$AppUI->savePlace();
 }
+
+$tab = $AppUI->processIntState('ProjVwTab', $_GET, 'tab', 0);
+
+//TODO: is this different from the above checks for some reason?
+// Now check if the proect is editable/viewable.
+$denied = $project->getDeniedRecords($AppUI->user_id);
+if (in_array($project_id, $denied)) {
+	$AppUI->redirect('m=public&a=access_denied');
+}
+
+// get ProjectPriority from sysvals
+$projectPriority = w2PgetSysVal('ProjectPriority');
+$projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
+$billingCategory = w2PgetSysVal('BudgetCategory');
 
 $total_hours = $project->getTotalProjectHours();
 
@@ -72,6 +71,7 @@ $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':
 $titleBlock->addCell('<input type="text" class="text" SIZE="10" name="searchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>',
 		'', '<form action="?m=projects&a=view&project_id=' . $project_id . '" method="post" id="searchfilter" accept-charset="utf-8">', '</form>');
 
+$canEditT = canAdd('tasks');
 if ($canEditT) {
 	$titleBlock->addCell();
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '" />', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
@@ -144,7 +144,9 @@ function delIt() {
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-            <?php if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
+            <?php
+            $perms = &$AppUI->acl();
+            if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
                 <td class="hilite" width="100%">
                     <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
                 </td>
