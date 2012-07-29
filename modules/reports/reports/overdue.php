@@ -139,11 +139,12 @@ if ($hasResources && count($tasks)) {
 // Build the data columns
 foreach ($tasks as $task_id => $detail) {
 	$row = &$pdfdata[];
-	$row[] = $detail['task_name'];
-	$row[] = $detail['user_username'];
-	$row[] = implode("\n", $assigned_users[$task_id]);
-	if ($hasResources)
-		$row[] = implode("\n", $resources[$task_id]);
+	$row[] = utf8_decode($detail['task_name']);
+	$row[] = utf8_decode($detail['user_username']);
+	$row[] = utf8_decode(implode("\n", $assigned_users[$task_id]));
+	if ($hasResources) {
+		$row[] = utf8_decode(implode("\n", $resources[$task_id]));
+    }
 	$end_date = new w2p_Utilities_Date($detail['task_end_date']);
 	$row[] = $end_date->format($df);
 }
