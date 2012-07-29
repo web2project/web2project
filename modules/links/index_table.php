@@ -63,7 +63,7 @@ if (count($fields) > 0) {
     $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
 }
 ?>
-<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl list">
+<table class="tbl list">
     <tr>
         <?php
 //TODO: The link below is commented out because this module doesn't support sorting... yet.
