@@ -84,11 +84,11 @@ if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
         </tr>
         <?php foreach ($logs as $detail) { ?>
             <tr>
-                <td align="center"><?php echo $detail['contact_first_name']; ?></td>
-                <td align="center"><?php echo $detail['contact_last_name']; ?></td>
-                <td align="center"><?php echo $detail['user_ip']; ?></td>
-                <td align="center"><?php echo $AppUI->formatTZAwareTime($detail['date_time_in']); ?></td>
-                <td align="center">
+                <td><?php echo $detail['contact_first_name']; ?></td>
+                <td><?php echo $detail['contact_last_name']; ?></td>
+                <td><?php echo $detail['user_ip']; ?></td>
+                <td><?php echo $AppUI->formatTZAwareTime($detail['date_time_in']); ?></td>
+                <td>
                     <?php if ($detail['date_time_out'] != '0000-00-00 00:00:00'): ?>
                         <?php echo $AppUI->formatTZAwareTime($detail['date_time_out']); ?>
                     <?php endif; ?>
