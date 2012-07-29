@@ -437,6 +437,15 @@ function setDate( frm_name, f_date ) {
 		fld_task_date.value = '';
 	}
 }
+
+function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
+    var start_value = start_date.value;
+    var end_value = end_date.value;
+
+    xajax_calcDuration(start_value.substring(0,8), start_value.substring(8,10), start_value.substring(10,12),
+                       end_value.substring(0,8), end_value.substring(8,10), end_value.substring(10,12), durntype_fld, duration_fld.name);
+}
+
 </script>
 
 <?php
