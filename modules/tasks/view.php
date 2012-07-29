@@ -7,22 +7,20 @@ $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
 $reminded = (int) w2PgetParam($_GET, 'reminded', 0);
 
-// check permissions for this record
-$canRead = canView($m, $task_id);
-$canEdit = canEdit($m, $task_id);
-$canDelete = canDelete($m, $task_id);
+$obj = new CTask();
+$obj->task_id = $task_id;
 
-if (!$canRead) {
+$canEdit   = $obj->canEdit();
+$canRead   = $obj->canView();
+$canCreate = $obj->canCreate();
+$canAccess = $obj->canAccess();
+$canDelete = $obj->canDelete();
+
+if (!$canAccess || !$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$perms = &$AppUI->acl();
-
-// check if this record has dependencies to prevent deletion
-$msg = '';
-$obj = new CTask();
 $obj->loadFull(null, $task_id);
-
 if (!$obj) {
 	$AppUI->setMsg('Task');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -31,16 +29,12 @@ if (!$obj) {
 	$AppUI->savePlace();
 }
 
-if (!$obj->canAccess($AppUI->user_id)) {
-	$AppUI->redirect('m=public&a=access_denied');
-}
+$tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);
 
 // Clear any reminders
 if ($reminded) {
 	$obj->clearReminder();
 }
-
-$tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);
 
 //check permissions for the associated project
 $canReadProject = canView('projects', $obj->task_project);
@@ -65,7 +59,6 @@ if ($canReadProject) {
 if ($canEdit && 0 == $obj->task_represents_project) {
 	$titleBlock->addCrumb('?m=tasks&a=addedit&task_id=' . $task_id, 'edit this task');
 }
-//$obj->task_represents_project
 if ($obj->task_represents_project) {
     $titleBlock->addCrumb('?m=projects&a=view&project_id=' . $obj->task_represents_project, 'view subproject');
 }
@@ -108,7 +101,9 @@ function delIt() {
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
                     <td style="background-color:#<?php echo $obj->project_color_identifier; ?>">
                         <font color="<?php echo bestColor($obj->project_color_identifier); ?>">
-                            <?php if ($perms->checkModuleItem('projects', 'access', $obj->task_project)) { ?>
+                            <?php
+                            $perms = &$AppUI->acl();
+                            if ($perms->checkModuleItem('projects', 'access', $obj->task_project)) { ?>
                                 <?php echo "<a href='?m=projects&a=view&project_id=" . $obj->task_project . "'>" . htmlspecialchars($obj->project_name, ENT_QUOTES) . '</a>'; ?>
                             <?php } else { ?>
                                 <?php echo htmlspecialchars($company_detail['company_name'], ENT_QUOTES); ?>

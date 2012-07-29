@@ -5,21 +5,22 @@ if (!defined('W2P_BASE_DIR')) {
 
 $event_id = (int) w2PgetParam($_GET, 'event_id', 0);
 
-// check permissions for this record
-$perms = &$AppUI->acl();
-$canRead = $perms->checkModuleItem($m, 'view', $event_id);
-if (!$canRead) {
+
+
+$event = new CEvent();
+$event->event_id = $event_id;
+
+$canEdit   = $event->canEdit();
+$canRead   = $event->canView();
+$canAdd    = $event->canCreate();
+$canAccess = $event->canAccess();
+$canDelete = $event->canDelete();
+
+if (!$canAccess || !$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
-$canEdit = $perms->checkModuleItem($m, 'edit', $event_id);
 
-// check if this record has dependencies to prevent deletion
-$msg = '';
-$event = new CEvent();
 $event->loadFull($event_id);
-$canDelete = canDelete($m, $event_id);
-
-// load the record data
 if (!$event) {
 	$AppUI->setMsg('Event');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -27,6 +28,12 @@ if (!$event) {
 } else {
 	$AppUI->savePlace();
 }
+
+
+
+// check permissions for this record
+$perms = &$AppUI->acl();
+
 
 //check if the user has view permission over the project
 if ($event->event_project && !$perms->checkModuleItem('projects', 'view', $event->event_project)) {

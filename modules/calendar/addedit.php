@@ -8,15 +8,15 @@ $AppUI->loadCalendarJS();
 $event_id = intval(w2PgetParam($_GET, 'event_id', 0));
 $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
 
-$perms = &$AppUI->acl();
-$canAuthor = canAdd('calendar');
-$canEdit = $perms->checkModuleItem('calendar', 'edit', $event_id);
+$obj = new CEvent();
+$obj->event_id = $event_id;
 
-// check permissions
+$canAuthor = $obj->canCreate();
 if (!$canAuthor && !$event_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
+$canEdit = $obj->canEdit();
 if (!$canEdit && $event_id) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
@@ -27,8 +27,6 @@ $date = w2PgetParam($_GET, 'date', null);
 $event_project = (int) w2PgetParam($_GET, 'event_project', 0);
 
 // load the record data
-$obj = new CEvent();
-
 if ($is_clash) {
 	$obj->bind($_SESSION['add_event_post']);
 } else {
@@ -44,6 +42,7 @@ $obj->event_project = ($event_project) ? $event_project : $obj->event_project;
 $types = w2PgetSysVal('EventType');
 
 // Load the users
+$perms = &$AppUI->acl();
 $users = $perms->getPermittedUsers('calendar');
 
 // Load the assignees

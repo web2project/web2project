@@ -3,21 +3,23 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $department, $min_view;
-
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
-$tab = $AppUI->processIntState('DeptVwTab', $_GET, 'tab', 0);
 
-// check permissions
-$canRead = canView($m, $dept_id);
-$canEdit = canEdit($m, $dept_id);
 
-if (!$canRead) {
+$department = new CDepartment();
+$department->dept_id = $dept_id;
+
+$canEdit   = $department->canEdit();
+$canRead   = $department->canView();
+$canCreate = $department->canCreate();
+$canAccess = $department->canAccess();
+$canDelete = $department->canDelete();
+
+if (!$canAccess || !$canRead) {
 	$AppUI->redirect('m=public&a=access_denied');
 }
 
-$department = new CDepartment();
 $department->loadFull(null, $dept_id);
 if (!$department) {
 	$AppUI->setMsg('Department');
@@ -26,6 +28,12 @@ if (!$department) {
 } else {
 	$AppUI->savePlace();
 }
+
+$tab = $AppUI->processIntState('DeptVwTab', $_GET, 'tab', 0);
+
+
+
+
 
 $countries = w2PgetSysVal('GlobalCountries');
 $types = w2PgetSysVal('DepartmentType');
