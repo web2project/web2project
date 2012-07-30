@@ -94,7 +94,6 @@ $users = $perms->getPermittedUsers('tasks');
 $root_tasks = $task->getRootTasks((int)$task_project);
 
 $projTasks = array();
-$task_parent_options = '';
 
 $parents = array();
 $projTasksWithEndDates = array($task->task_id => $AppUI->_('None')); //arrays contains task end date info for setting new task start date as maximum end date of dependenced tasks
@@ -118,11 +117,12 @@ if ($sub_tasks) {
 }
 $q->clear();
 
+$task_parent_options = '';
 // let's iterate root tasks
 foreach ($root_tasks as $root_task) {
-	build_date_list($projTasksWithEndDates, $root_task);
+    build_date_list($projTasksWithEndDates, $root_task);
 	if ($root_task['task_id'] != $task_id) {
-		constructTaskTree($root_task);
+        $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, $task_parent, $task_id);
 	}
 }
 
