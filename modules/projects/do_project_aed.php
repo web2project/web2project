@@ -4,6 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
+$notfiyTrigger = (int) w2PgetParam($_POST, 'project_id', 0);
 
 $obj = new CProject();
 if (!$obj->bind($_POST)) {
@@ -21,7 +22,6 @@ $redirect = ($del) ? 'm=projects' : 'm=projects&a=view&project_id='.$obj->projec
 $notify_owner = w2PgetParam($_POST, 'email_project_owner_box', 'off');
 $notify_contacts = w2PgetParam($_POST, 'email_project_contacts_box', 'off');
 
-$notfiyTrigger = $AppUI->isNotNew;
 $importTask_projectId = (int) w2PgetParam($_POST, 'import_tasks_from', '0');
 
 if (is_array($result)) {
@@ -37,26 +37,29 @@ if ($result) {
             $budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
         }
         $obj->storeBudget($budgets);
-    }
-    if ($importTask_projectId) {
-        $import_result = $obj->importTasks($importTask_projectId);
 
-        if (is_array($import_result) && count($import_result)) {
-            $AppUI->setMsg($import_result, UI_MSG_ERROR, true);
-            $AppUI->holdObject($obj);
-            $AppUI->redirect('m=projects&a=addedit');
+        if ($importTask_projectId) {
+            $import_result = $obj->importTasks($importTask_projectId);
+
+            if (is_array($import_result) && count($import_result)) {
+                $AppUI->setMsg($import_result, UI_MSG_ERROR, true);
+                $AppUI->holdObject($obj);
+                $AppUI->redirect('m=projects&a=addedit');
+            }
+        }
+
+        if ('on' == $notify_owner) {
+            if ($msg = $obj->notifyOwner($notfiyTrigger)) {
+                $AppUI->setMsg($msg, UI_MSG_ERROR);
+            }
+        }
+        if ('on' == $notify_contacts) {
+            if ($msg = $obj->notifyContacts($notfiyTrigger)) {
+                $AppUI->setMsg($msg, UI_MSG_ERROR);
+            }
         }
     }
-    if ('on' == $notify_owner) {
-        if ($msg = $obj->notifyOwner($notfiyTrigger)) {
-            $AppUI->setMsg($msg, UI_MSG_ERROR);
-        }
-    }
-    if ('on' == $notify_contacts) {
-        if ($msg = $obj->notifyContacts($notfiyTrigger)) {
-            $AppUI->setMsg($msg, UI_MSG_ERROR);
-        }
-    }
+
     $AppUI->setMsg('Project '.$action, UI_MSG_OK, true);
     $AppUI->redirect('m=projects');
 } else {
