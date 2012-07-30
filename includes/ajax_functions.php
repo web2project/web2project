@@ -32,7 +32,9 @@ function calcFinish($start_date, $start_hour, $start_minute, $duration_type, $ta
     return $response;
 }
 
-function calcDuration($start_date, $start_hour, $start_minute, $end_date, $end_hour, $end_minute, $duration_type) {
+function calcDuration($start_date, $start_hour, $start_minute,
+        $end_date, $end_hour, $end_minute, $duration_type,
+        $duration_output_field = 'task_duration') {
 	
     $year = substr($start_date,0,4);
     $month = substr($start_date,4,2);
@@ -56,7 +58,7 @@ function calcDuration($start_date, $start_hour, $start_minute, $end_date, $end_h
     }
 
     $response = new xajaxResponse();
-    $response->assign('task_duration', 'value', $duration);
+    $response->assign($duration_output_field, 'value', $duration);
 
     return $response;
 	
