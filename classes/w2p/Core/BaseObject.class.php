@@ -381,64 +381,31 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function canDelete(&$msg = '', $oid = null, $joins = null)
     {
-        $result = false;
-
-        // First things first.  Are we allowed to delete?
-        if (!$this->_perms->checkModuleItem($this->_tbl_module, 'delete', $oid)) {
-            $this->_error['noDeletePermission'] = $this->_AppUI->_('noDeletePermission');
-            return false;
-        }
-
         $k = $this->_tbl_key;
         if ($oid) {
             $this->$k = intval($oid);
         }
+
+        // First things first.  Are we allowed to delete?
+        if (!$this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->$k)) {
+            $this->_error['noDeletePermission'] = $this->_AppUI->_('noDeletePermission');
+            return false;
+        }
+
         if (is_array($joins)) {
-            $select = $k;
-            $join = '';
-
-            $q = $this->_getQuery();
-            $q->addTable($this->_tbl);
-            $q->addWhere($k . ' = \'' . $this->$k . '\'');
-            $q->addGroup($k);
             foreach ($joins as $table) {
-                $q->addQuery('COUNT(DISTINCT ' . $table['idfield'] . ') AS ' . $table['idfield']);
-                $q->addJoin($table['name'], $table['name'], $table['joinfield'] . ' = ' . $k);
-            }
-
-            $obj = (object) $q->loadHash();
-            if (!$obj && '' != db_error()) {
-                $this->_error['db_error'] = db_error();
-                return false;
-            }
-            $msg = array();
-            foreach ($joins as $table) {
-                $k = $table['idfield'];
-                if (isset($obj->$k) && $obj->$k) {
-                    $msg[$table['label']] = $this->_AppUI->_($table['label']);
-                    $this->_error['noDeleteRecord-' . $table['label']] = $table['label'];
-                }
-            }
-
-            if (count($msg)) {
-                $msg = $this->_AppUI->_('noDeleteRecord') . ': ' . implode(', ', $msg);
-                return false;
-            } else {
-                $msg = array();
-                foreach ($joins as $table) {
-                    $k = $table['idfield'];
-                    if (isset($obj->$k) && $obj->$k) {
-                        $this->_error['canDelete-error-' . $table['name']] = db_error();
-                    }
-                }
-
-                if (0 == count($this->_error)) {
-                    $result = true;
+                $q = $this->_getQuery();
+                $q->addQuery('COUNT(*)');
+                $q->addTable($table['name']);
+                $q->addWhere($table['joinfield'] . ' = \'' . $this->$k . '\'');
+                $records = (int) $q->loadResult();
+                if ($records) {
+                    $this->_error['noDeleteRecord-' . $table['label']] = $this->_AppUI->_('You cannot delete this item.');
                 }
             }
         }
 
-        return $result;
+        return (count($this->_error)) ? false : true;
     }
 
     /**
