@@ -6,12 +6,6 @@ global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
-//---------------------------------------------------------
-// if $project_id = 0 ---> new created project (submitted), otherwise project already exists and can only be updated!
-// if new created project: $isNotNew = 0
-// if not new: $isNotNew = 1
-$AppUI->isNotNew = ($project_id == 0) ? 0 : 1;
-//---------------------------------------------------------
 $company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 $project = new CProject();
