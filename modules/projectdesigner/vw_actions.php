@@ -33,32 +33,27 @@ $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 $obj->load($task_id);
 $task_project = $project_id ? $project_id : ($obj->task_project ? $obj->task_project : 0);
 
-$root_tasks = $obj->getRootTasks((int) $task_project);
-
 $projTasks = array();
-global $task_parent_options;
-$task_parent_options = '';
 
 $parents = array();
 $projTasksWithEndDates = array(0 => $AppUI->_('None')); //arrays contains task end date info for setting new task start date as maximum end date of dependenced tasks
-global $all_tasks;
 $all_tasks = array();
-$sub_tasks = $obj->getNonRootTasks((int)$task_project);
 
-if ($sub_tasks) {
-	while ($sub_task = $q->fetchRow()) {
-		// Build parent/child task list
-		$parents[$sub_task['task_parent']][] = $sub_task['task_id'];
-		$all_tasks[$sub_task['task_id']] = $sub_task;
-		build_date_list($projTasksWithEndDates, $sub_task);
-	}
+$subtasks = $task->getNonRootTasks($task_project);
+foreach ($subtasks as $sub_task) {
+    // Build parent/child task list
+    $parents[$sub_task['task_parent']][] = $sub_task['task_id'];
+    $all_tasks[$sub_task['task_id']] = $sub_task;
+    build_date_list($projTasksWithEndDates, $sub_task);
 }
-$q->clear();
-// let's iterate root tasks
+
+$task_parent_options = '';
+
+$root_tasks = $obj->getRootTasks((int) $task_project);
 foreach ($root_tasks as $root_task) {
-	build_date_list($projTasksWithEndDates, $root_task);
+    build_date_list($projTasksWithEndDates, $root_task);
 	if ($root_task['task_id'] != $task_id) {
-		constructTaskTree_pd($root_task, $parents, $all_tasks);
+        $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, $task_parent, $task_id);
 	}
 }
 

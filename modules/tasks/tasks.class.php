@@ -1951,14 +1951,14 @@ class CTask extends w2p_Core_BaseObject
 
     public function getNonRootTasks($project_id)
     {
-        $q = new w2p_Database_Query;
+        $q = $this->_getQuery();
         $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
         $q->addTable('tasks');
-        $q->addWhere('task_project = ' . (int) $task_project);
+        $q->addWhere('task_project = ' . (int) $project_id);
         $q->addWhere('task_id <> task_parent');
         $q->addOrder('task_start_date');
 
-        return $q->exec();
+        return $q->loadHashList('task_id');
     }
 
     // Returns task deep children IDs
