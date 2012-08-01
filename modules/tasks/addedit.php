@@ -91,7 +91,7 @@ $project->load($task_project);
 //   populated by the "getPermittedUsers" function.
 $users = $perms->getPermittedUsers('tasks');
 
-$root_tasks = $task->getRootTasks((int)$task_project);
+
 
 $projTasks = array();
 
@@ -99,26 +99,17 @@ $parents = array();
 $projTasksWithEndDates = array($task->task_id => $AppUI->_('None')); //arrays contains task end date info for setting new task start date as maximum end date of dependenced tasks
 $all_tasks = array();
 
-$q = new w2p_Database_Query;
-$q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
-$q->addTable('tasks');
-$q->addWhere('task_project = ' . (int)$task_project);
-$q->addWhere('task_id <> task_parent');
-$q->addOrder('task_start_date');
-$sub_tasks = $q->exec();
-
-if ($sub_tasks) {
-	while ($sub_task = $q->fetchRow()) {
-		// Build parent/child task list
-		$parents[$sub_task['task_parent']][] = $sub_task['task_id'];
-		$all_tasks[$sub_task['task_id']] = $sub_task;
-		build_date_list($projTasksWithEndDates, $sub_task);
-	}
+$subtasks = $task->getNonRootTasks($task_project);
+foreach ($subtasks as $sub_task) {
+    // Build parent/child task list
+    $parents[$sub_task['task_parent']][] = $sub_task['task_id'];
+    $all_tasks[$sub_task['task_id']] = $sub_task;
+    build_date_list($projTasksWithEndDates, $sub_task);
 }
-$q->clear();
 
 $task_parent_options = '';
-// let's iterate root tasks
+
+$root_tasks = $task->getRootTasks((int)$task_project);
 foreach ($root_tasks as $root_task) {
     build_date_list($projTasksWithEndDates, $root_task);
 	if ($root_task['task_id'] != $task_id) {
@@ -275,8 +266,8 @@ function popContacts() {
 $tab = $AppUI->processIntState('TaskAeTabIdx', $_GET, 'tab', 0);
 
 $tabBox = new CTabBox('?m=tasks&a=addedit&task_id=' . $task_id, '', $tab, '');
-$tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_desc', 'Details');
-$tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_dates', 'Dates');
+//$tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_desc', 'Details');
+//$tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_dates', 'Dates');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_depend', 'Dependencies');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_resource', 'Human Resources');
 $tabBox->show('', true);
