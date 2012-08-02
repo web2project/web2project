@@ -393,7 +393,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 // if the milestone is near the end of the date range for which we are showing the chart
                 // make the caption go on the left side of the milestone marker
                 $task_start_date = $AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T');
-
                 /*
                  * TODO: This is an ugly hack to correct the placement of the
                  *   milestones on the gantt charts. I have no clue why this
@@ -403,11 +402,11 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $my_time = strtotime($task_start_date) + 24 *60*60;
                 $task_start_date = date('Y-m-d', $my_time);
 
-                if ($mile_date_stamp >= strtotime($end_date)) {
-                    $gantt->addMilestone($fieldArray, $task_start_date, $color, 0, true);
-                } else {
-                    $gantt->addMilestone($fieldArray, $task_start_date, $color);
+                $captionToTheLeft = false;
+                if ($mile_date_stamp + 72*60*60 >= strtotime($end_date)) {
+                    $captionToTheLeft = true;
                 }
+                $gantt->addMilestone($fieldArray, $task_start_date, $color, 0, $captionToTheLeft);
             }	//this closes the code that is not processed if hide milestones is checked ///////////////
         } else {
             $type = $a['task_duration_type'];

@@ -278,12 +278,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             $today_date = $today->format($df . ' ' . $AppUI->getPref('TIMEFORMAT'));
             $today_date_stamp = strtotime($today_mile);
 
-            $captionToTheLeft = false;
-
-            if ($mile_date_stamp + 72*60*60 >= strtotime($end_date)) {
-                $captionToTheLeft = true;
-            }
-
             ///////////////////////////////////////////////////////////////////////////////////////
             //set color for milestone according to progress
             //red for 'not started' #990000
@@ -310,6 +304,22 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $fieldArray = array($name, '', $s, $s);
             }
 
+            // if the milestone is near the end of the date range for which we are showing the chart
+            // make the caption go on the left side of the milestone marker
+            $task_start_date = $AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T');
+            /*
+             * TODO: This is an ugly hack to correct the placement of the
+             *   milestones on the gantt charts. I have no clue why this
+             *   adjustment is needed, but it is..
+             *                  ~ caseydk 02 August 2012
+             */
+            $my_time = strtotime($task_start_date) + 24 *60*60;
+            $task_start_date = date('Y-m-d', $my_time);
+
+            $captionToTheLeft = false;
+            if ($mile_date_stamp + 72*60*60 >= strtotime($end_date)) {
+                $captionToTheLeft = true;
+            }
             $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, 0, $captionToTheLeft);
         } else {
             $type = $a['task_duration_type'];
