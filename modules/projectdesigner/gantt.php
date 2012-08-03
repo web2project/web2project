@@ -267,21 +267,60 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         if ($flags == 'm') {
             $start = new w2p_Utilities_Date($start);
             $start->addDays(0);
+            $start_mile = $start->getDate();
             $s = $start->format($df);
+            $mile_date = $start->format($df . ' ' . $AppUI->getPref('TIMEFORMAT'));
+            $mile_date_stamp = strtotime($start_mile);
 
-            $captionToTheLeft = false;
+            $today = date('m/d/Y H:i:s');
+            $today = new w2p_Utilities_Date($AppUI->formatTZAwareTime($today, '%Y-%m-%d %T'));
+            $today_mile = $today->getDate();
+            $today_date = $today->format($df . ' ' . $AppUI->getPref('TIMEFORMAT'));
+            $today_date_stamp = strtotime($today_mile);
 
-            if (strtotime($start->getDate()) >= strtotime($end_date)) {
-                $captionToTheLeft = true;
+            ///////////////////////////////////////////////////////////////////////////////////////
+            //set color for milestone according to progress
+            //red for 'not started' #990000
+            //yellow for 'in progress' #FF9900
+            //green for 'achieved' #006600
+            // blue for 'planned' #0000FF
+            if ($a['task_percent_complete'] == 100)  {
+                $color = '#006600';
+            } else {
+                if ($mile_date_stamp < $today_date_stamp) {
+                    $color = '#990000';
+                } else {
+                    if ($a['task_percent_complete'] == 0)  {
+                        $color = '#0000FF';
+                    } else {
+                        $color = '#FF9900';
+                    }
+                }
             }
-
-            $color = "#CC0000";
 
             if ($caller == 'todo') {
-                $gantt->addMilestone(array($name, $pname, '', $s, $s), $a['task_start_date'], $color, 0, $captionToTheLeft);
+                $fieldArray = array($name, $pname, '', $s, $s);
             } else {
-                $gantt->addMilestone(array($name, '', $s, $s), $a['task_start_date'], $color, 0, $captionToTheLeft);
+                $fieldArray = array($name, '', $s, $s);
             }
+
+            // if the milestone is near the end of the date range for which we are showing the chart
+            // make the caption go on the left side of the milestone marker
+            $task_start_date = $AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T');
+            /*
+             * TODO: This is an ugly hack to correct the placement of the
+             *   milestones on the gantt charts. I have no clue why this
+             *   adjustment is needed, but it is..
+             *                  ~ caseydk 02 August 2012
+             */
+            $my_time = strtotime($task_start_date) + 24 *60*60;
+            $task_start_date = date('Y-m-d', $my_time);
+
+            $captionToTheLeft = false;
+            if ($mile_date_stamp + 72*60*60 >= strtotime($end_date)) {
+                $captionToTheLeft = true;
+            }
+            $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, 0, $captionToTheLeft);
         } else {
             $type = $a['task_duration_type'];
             $dur = $a['task_duration'];
