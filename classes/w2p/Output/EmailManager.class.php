@@ -179,26 +179,28 @@ class w2p_Output_EmailManager
         $project = new CProject();
         $projname = $project->load($task->task_project)->project_name;
 
-        $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
-        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ':	     ' . $task->task_name . "\n";
+        $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ":\t" . $projname . "\n";
+        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ":\t\t" . $task->task_name . "\n";
 //TODO: Priority not working for some reason, will wait till later
 
+        $tmp_tz = $this->_AppUI->getPref('TIMEZONE');
+        $user_prefs = $this->_AppUI->loadPrefs($user['assignee_id'], true);
+        $this->_AppUI->user_prefs['TIMEZONE'] = $user_prefs['TIMEZONE'];
 
-        // Fetch user preferences
-        $prefObj = $this->_AppUI->loadPrefs($user['assignee_id'], true);
-        $fmt = $prefObj['DISPLAYFORMAT'];
+        $start_date = new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T'));
+        $fmt_start_date = $start_date->format($user_prefs['DISPLAYFORMAT']);
+        $end_date = new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T'));
+        $fmt_end_date = $end_date->format($user_prefs['DISPLAYFORMAT']);
 
-        $timezoneObj = new Date_TimeZone($prefObj['TIMEZONE']);
+        $timezoneObj = new Date_TimeZone($user_prefs['TIMEZONE']);
         $tzString = $timezoneObj->getShortName();
-
-        $start_date = new w2p_Utilities_Date($task->task_start_date);
-        $end_date = new w2p_Utilities_Date($task->task_end_date);
+        $this->_AppUI->user_prefs['TIMEZONE'] = $tmp_tz;
 
         // Format dates using preferences but add T as Timezone abbreviation
-        $body .= $this->_AppUI->_('Start Date') . ":\t" . $start_date->format($fmt) . "\t$tzString\n";
-        $body .= $this->_AppUI->_('Finish Date') . ":\t" . $end_date->format($fmt) . "\t$tzString\n";
+        $body .= $this->_AppUI->_('Start Date') . ":\t" . $fmt_start_date . " $tzString\n";
+        $body .= $this->_AppUI->_('Finish Date') . ":\t" . $fmt_end_date . " $tzString\n";
 
-        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
+        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ":\t\t" . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
         $body .= $this->_AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $task->task_description;
         if ($user['creator_email']) {
             $body .= ("\n\n" . $this->_AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $user['creator_name'] . ', ' . $user['creator_email']);
