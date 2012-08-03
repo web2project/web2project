@@ -266,8 +266,8 @@ function popContacts() {
 $tab = $AppUI->processIntState('TaskAeTabIdx', $_GET, 'tab', 0);
 
 $tabBox = new CTabBox('?m=tasks&a=addedit&task_id=' . $task_id, '', $tab, '');
-//$tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_desc', 'Details');
-//$tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_dates', 'Dates');
+$tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_desc', 'Details');
+$tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_dates', 'Dates');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_depend', 'Dependencies');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_resource', 'Human Resources');
 $tabBox->show('', true);
