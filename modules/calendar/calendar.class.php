@@ -586,6 +586,22 @@ class CEvent extends w2p_Core_BaseObject
         parent::hook_postStore();
     }
 
+    protected function  hook_postUpdate() {
+        parent::hook_postUpdate();
+
+        $q = $this->_query;
+        /*
+         * TODO: I don't like that we have to run an update immediately after the store
+         *   but I don't have a better solution at the moment.
+         *                                      ~ caseydk 2012 Aug 04
+         */
+        $q->addTable('events');
+        $q->addUpdate('event_sequence', "event_sequence+1", false, true);
+        $q->addUpdate('event_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
+        $q->addWhere('event_id = ' . (int) $this->event_id);
+        $q->exec();
+    }
+
     public function hook_calendar($userId)
     {
         return $this->getCalendarEvents($userId);
@@ -601,7 +617,7 @@ class CEvent extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addQuery('e.event_id as id');
-        $q->addQuery('event_name as name');
+        $q->addQuery('event_name as name, event_sequence as sequence');
         $q->addQuery('event_description as description');
         $q->addQuery('event_start_date as startDate');
         $q->addQuery('event_end_date as endDate');

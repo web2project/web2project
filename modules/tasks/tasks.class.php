@@ -672,7 +672,11 @@ class CTask extends w2p_Core_BaseObject
          // else than a global variable...
         global $oTsk;
         $q = $this->_query;
-
+        /*
+         * TODO: I don't like that we have to run an update immediately after the store
+         *   but I don't have a better solution at the moment.
+         *                                      ~ caseydk 2012 Aug 04
+         */
         if (!$this->task_parent) {
             $q->addTable('tasks');
             $q->addUpdate('task_parent', $this->task_id);
@@ -749,6 +753,22 @@ class CTask extends w2p_Core_BaseObject
         if (!empty($this->task_id)) {
             $this->updateDependencies($this->getDependencies(), $this->task_parent);
         }
+    }
+
+    protected function  hook_postUpdate() {
+        parent::hook_postUpdate();
+
+        $q = $this->_query;
+        /*
+         * TODO: I don't like that we have to run an update immediately after the store
+         *   but I don't have a better solution at the moment.
+         *                                      ~ caseydk 2012 Aug 04
+         */
+        $q->addTable('tasks');
+        $q->addUpdate('task_sequence', "task_sequence+1", false, true);
+        $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
+        $q->addWhere('task_id = ' . (int) $this->task_id);
+        $q->exec();
     }
 
     /**
@@ -2349,8 +2369,12 @@ class CTask extends w2p_Core_BaseObject
         //TODO: A user should be able to select if they get distinct start/end dates or two tasks for each task.
         foreach ($taskList as $taskItem) {
             //$taskArray[] = $taskItem;
-            $taskArray[] = array_merge($taskItem, array('endDate' => $taskItem['startDate'], 'name' => 'Start: ' . $taskItem['name'], 'UID' => 'tasks_' . $taskItem['id'] . 'S'));
-            $taskArray[] = array_merge($taskItem, array('startDate' => $taskItem['endDate'], 'name' => 'End: ' . $taskItem['name'], 'UID' => 'tasks_' . $taskItem['id'] . 'E'));
+            $taskArray[] = array_merge($taskItem, array('sequence' => $taskItem['sequence'],
+                'endDate' => $taskItem['startDate'], 'name' => 'Start: ' . $taskItem['name'],
+                'UID' => 'tasks_' . $taskItem['id'] . 'S'));
+            $taskArray[] = array_merge($taskItem, array('sequence' => $taskItem['sequence'],
+                'startDate' => $taskItem['endDate'], 'name' => 'End: ' . $taskItem['name'],
+                'UID' => 'tasks_' . $taskItem['id'] . 'E'));
         }
 
         return $taskArray;
@@ -2387,7 +2411,7 @@ class CTask extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addQuery('t.task_id as id');
-        $q->addQuery('task_name as name');
+        $q->addQuery('task_name as name, task_sequence');
         $q->addQuery('task_description as description');
         $q->addQuery('task_start_date as startDate');
         $q->addQuery('task_end_date as endDate');
