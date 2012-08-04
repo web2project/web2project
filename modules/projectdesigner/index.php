@@ -406,6 +406,7 @@ var cal_day_end = <?php echo (int) w2PgetConfig('cal_day_end'); ?>;
 var daily_working_hours = <?php echo (int) w2PgetConfig('daily_working_hours'); ?>;
 var oldProj = '<?php echo htmlentities($obj->project_name, ENT_QUOTES) . ':'; ?>';
 
+/* TODO: This needs to be refactored to use the core setDate_new function. */
 function setDate( frm_name, f_date ) {
 	fld_date = eval( 'document.' + frm_name + '.' + f_date );
 	fld_task_date = eval( 'document.' + frm_name + '.' + 'add_task_' + f_date );

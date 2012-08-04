@@ -105,7 +105,7 @@ function clash_suggest(w2p_Core_CAppUI $AppUI, $cal_sdf) {
 		$times[$t->format('%H%M%S')] = $t->format(LOCALE_TIME_FORMAT);
 		$t->addSeconds(1800);
 	}
-
+/* TODO: This needs to be refactored to use the core setDate_new function. */
     ?>
     <script language="javascript" type="text/javascript">
     function setDate( frm_name, f_date ) {
