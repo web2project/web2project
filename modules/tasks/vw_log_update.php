@@ -112,24 +112,6 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
 	function timerSet() {
 		total_minutes = Math.round(document.editFrm.task_log_hours.value * 60) -1;
 	}
-
-    function setDate( frm_name, f_date ) {
-        fld_date = eval( 'document.' + frm_name + '.' + f_date );
-        fld_real_date = eval( 'document.' + frm_name + '.' + 'task_' + f_date );
-        if (fld_date.value.length > 0) {
-            if ((parseDate(fld_date.value))==null) {
-                alert('The Date/Time you typed does not match your prefered format, please retype.');
-                fld_real_date.value = '';
-                fld_date.style.backgroundColor = 'red';
-            } else {
-                fld_real_date.value = formatDate(parseDate(fld_date.value), 'yyyyMMdd');
-                fld_date.value = formatDate(parseDate(fld_date.value), '<?php echo $cal_sdf ?>');
-                fld_date.style.backgroundColor = '';
-            }
-        } else {
-            fld_real_date.value = '';
-        }
-    }
 </script>
 <!-- END OF TIMER RELATED SCRIPTS -->
 
@@ -142,6 +124,8 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
 	<input type="hidden" name="task_log_task" value="<?php echo $log->task_log_task; ?>" />
 	<input type="hidden" name="task_log_name" value="Update :<?php echo $log->task_log_name; ?>" />
     <input type="hidden" name="task_log_record_creator" value="<?php echo (0 == $task_log_id ? $AppUI->user_id : $log->task_log_record_creator); ?>" />
+    <input type="hidden" name="datePicker" value="task" />
+
     <table cellspacing="1" cellpadding="2" border="0" width="100%">
         <tr>
             <td width='40%' valign='top'>
@@ -152,8 +136,8 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                         </td>
                         <td nowrap="nowrap">
                             <input type="hidden" name="task_log_date" id="task_log_date" value="<?php echo $log_date ? $log_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                            <input type="text" name="log_date" id="log_date" onchange="setDate('editFrm', 'log_date');" value="<?php echo $log_date ? $log_date->format($df) : ''; ?>" class="text" />
-                            <a href="javascript: void(0);" onclick="return showCalendar('log_date', '<?php echo $df ?>', 'editFrm', null, true)">
+                            <input type="text" name="log_date" id="log_date" onchange="setDate_new('editFrm', 'log_date');" value="<?php echo $log_date ? $log_date->format($df) : ''; ?>" class="text" />
+                            <a href="javascript: void(0);" onclick="return showCalendar('log_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                                 <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                             </a>
                         </td>
@@ -263,7 +247,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                             <td>
                                 <input type="hidden" name="task_end_date" id="task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date', 'task');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true)">
+                                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                                     <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                                 </a>
                             </td>
