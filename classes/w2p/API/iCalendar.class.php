@@ -41,9 +41,11 @@ class w2p_API_iCalendar {
         $startDate = self::formatDate($calendarItem['startDate']);
         $endDate = self::formatDate($calendarItem['endDate']);
         $updatedDate = self::formatDate($calendarItem['updatedDate']);
-        $sequence = 0;
+        $sequence = (int) $calendarItem['sequence'];
 
-        $eventItem = "BEGIN:VEVENT\r\nDTSTART;VALUE=DATE-TIME:{$startDate}\r\nDTEND;VALUE=DATE-TIME:{$endDate}\r\nUID:{$uid}\r\nSUMMARY:{$name}\r\nDESCRIPTION:{$description}\r\n{$attachments}\r\nDTSTAMP:{$updatedDate}\r\nSEQUENCE:{$sequence}\r\nEND:VEVENT\r\n";
+        $eventItem = "BEGIN:VEVENT\r\nDTSTART;VALUE=DATE-TIME:{$startDate}\r\n" .
+            "DTEND;VALUE=DATE-TIME:{$endDate}\r\nUID:{$uid}\r\nSUMMARY:{$name}\r\n" .
+            "DESCRIPTION:{$description}\r\n{$attachments}\r\nDTSTAMP:{$updatedDate}\r\nSEQUENCE:{$sequence}\r\nEND:VEVENT\r\n";
 
         return $eventItem;
     }
