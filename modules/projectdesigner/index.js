@@ -1,9 +1,9 @@
 /* $Id$ $URL$ */
 function update_workspace(id) {
 	var tr = document.getElementById(id);
-	(tr.style.display == "none") ? eval('document.frmWorkspace.opt_view_'+id+'.value=0') : eval('document.frmWorkspace.opt_view_'+id+'.value=1');      
-	(tr.style.display == "none") ? eval('document.editFrm.opt_view_'+id+'.value=0') : eval('document.editFrm.opt_view_'+id+'.value=1');      
-	(tr.style.display == "none") ? eval('document.frm_bulk.opt_view_'+id+'.value=0') : eval('document.frm_bulk.opt_view_'+id+'.value=1');      
+	(tr.style.display == "none") ? eval('document.frmWorkspace.opt_view_'+id+'.value=0') : eval('document.frmWorkspace.opt_view_'+id+'.value=1');
+	(tr.style.display == "none") ? eval('document.editFrm.opt_view_'+id+'.value=0') : eval('document.editFrm.opt_view_'+id+'.value=1');
+	(tr.style.display == "none") ? eval('document.frm_bulk.opt_view_'+id+'.value=0') : eval('document.frm_bulk.opt_view_'+id+'.value=1');
 }
 
 function expandAll() {
@@ -93,14 +93,14 @@ function removeBulkComponent(li) {
 
 
 function getStyle(nodeName, sStyle, iStyle) {
-      var element = document.getElementById(nodeName);
-      if (window.getComputedStyle) {
-            var style=document.defaultView.getComputedStyle(element,null);
-      	var value = style.getPropertyValue(sStyle);
-      } else {
-            var value = eval("element.currentStyle." + iStyle);
-      }
-      return value;
+    var element = document.getElementById(nodeName);
+    if (window.getComputedStyle) {
+        var style=document.defaultView.getComputedStyle(element,null);
+        var value = style.getPropertyValue(sStyle);
+    } else {
+        var value = eval("element.currentStyle." + iStyle);
+    }
+    return value;
 }
 
 function select_all_rows(cmbObj, elements_name) {
@@ -108,7 +108,7 @@ function select_all_rows(cmbObj, elements_name) {
     var checkboxes = document.getElementsByName(elements_name);
 
     // check all
-    for each (var checkbox in checkboxes) {
+    for (var checkbox in checkboxes) {
         id = checkbox.value;
         checkbox.checked = checked;
 
@@ -210,13 +210,8 @@ function select_row(box, id, form_name){
 	}
 }
 
-/*
- *  This has been deprecated in favor of using nothing else to designate the row.
- *
- *  @deprecated
- */
 function select_box(box, id, row_id, form_name){
-	var f = eval('document.'+form_name);
+    var f = eval('document.'+form_name);
 	if (eval('f.selected_task_'+id)) {
 		var check = eval('f.'+box+'_'+id+'.checked');
 		boxObj = eval('f.elements["'+box+'_'+id+'"]');
