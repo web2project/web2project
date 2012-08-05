@@ -196,10 +196,6 @@ class CTask_Log extends w2p_Core_BaseObject
             $stored = parent::store();
 		}
 
-        if ($stored) {
-            $this->updateTaskSummary(null, $this->task_log_task);
-        }
-
 		return $stored;
 	}
 
@@ -214,16 +210,24 @@ class CTask_Log extends w2p_Core_BaseObject
 	public function delete()
 	{
 		$this->load($this->task_log_id);
-		$task_id = $this->task_log_task;
+		$this->_task_id = $this->task_log_task;
 
-        if ($this->canDelete()) {
-			$result = parent::delete();
-
-			$this->updateTaskSummary(null, $task_id);
-		}
-		return $result;
+        return parent::delete();
 	}
 
+    protected function hook_postStore()
+    {
+        $this->updateTaskSummary(null, $this->task_log_task);
+
+        parent::hook_postStore();
+    }
+
+    protected function hook_postDelete()
+    {
+        $this->updateTaskSummary(null, $this->_task_id);
+
+        parent::hook_postStore();
+    }
 	/**
 	 * Updates the variable information on the task.
 	 *
@@ -231,7 +235,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @return void
 	 *
-	 * @access private
+	 * @access protected
 	 */
 	protected function updateTaskSummary($AppUI = null, $task_id)
 	{
@@ -265,6 +269,7 @@ class CTask_Log extends w2p_Core_BaseObject
             $q->addTable('tasks');
             $q->addUpdate('task_percent_complete', $percentComplete);
             $q->addUpdate('task_end_date', $task_end_date);
+            $q->addWhere('task_id = ' . (int)$task_id);
             $success = $q->exec();
 
             if (!$success) {
