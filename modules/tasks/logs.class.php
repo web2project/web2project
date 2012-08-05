@@ -269,6 +269,7 @@ class CTask_Log extends w2p_Core_BaseObject
             $q->addTable('tasks');
             $q->addUpdate('task_percent_complete', $percentComplete);
             $q->addUpdate('task_end_date', $task_end_date);
+            $q->addWhere('task_id = ' . (int)$task_id);
             $success = $q->exec();
 
             if (!$success) {
