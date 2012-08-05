@@ -23,20 +23,10 @@ if (strlen($_POST['spam_check']) > 0) {
 	if ($cid == strtoupper($_POST['spam_check'])) {
 		$passed = true;
 	} else {
-		echo "<script language='javascript'>
-            alert('Error: You didn\'t provide the correct Anti Spam Security ID or all required data. Please try again.');
-            history.go(-1);
-	        </script>";
-		exit;
+		header('Location: newuser.php?msg=data');
 	}
 } else {
-	echo "
-          <script language='javascript'>
-                alert('Error: You didn\'t provide the Anti Spam Security ID. Please try again.');
-                history.go(-1);
-          </script>
-         ";
-	exit;
+	header('Location: newuser.php?msg=spam');
 }
 
 if (w2PgetConfig('activate_external_user_creation') != 'true') {
@@ -44,74 +34,44 @@ if (w2PgetConfig('activate_external_user_creation') != 'true') {
 }
 
 $username = w2PgetParam($_POST, 'user_username', 0);
-$contactListByUsername = CContact::getContactByUsername($username);
-
-if ($contactListByUsername != 'User Not Found') {
-	error_reporting(0);
-	echo "<script language='javascript'>
-          alert('The username you selected already exists, please select another or if that user name is yours request the password recovery through the dedicated link.');
-          history.go(-2);
-        </script>";
-	die();
+$user = new CAdmin_User();
+$result = $user->loadAll(null, "user_username = '$username'");
+if (count($result)) {
+    header('Location: newuser.php?msg=existing-user');
 }
 
 $email = w2PgetParam($_POST, 'contact_email', 0);
-$contactListByEmail = CContact::getContactByEmail($email);
-
-if ($contactListByEmail != 'User Not Found') {
-	error_reporting(0);
-	echo "<script language='javascript'>
-          alert('The email you selected already exists, please select another or if that email is yours request the password recovery through the dedicated link.');
-          history.go(-2);
-        </script>";
-	die();
+$contact = new CContact();
+$result = $contact->loadAll(null, "contact_email = '$email'");
+if (count($result)) {
+	header('Location: newuser.php?msg=existing-email');
 }
 
-$user = new CUser();
 if (!$user->bind($_POST)) {
 	$AppUI->setMsg($user->getError(), UI_MSG_ERROR);
-	$AppUI->redirect();
+    header('Location: newuser.php?msg=user');
 }
 
-$contact = new CContact();
 if (!$contact->bind($_POST)) {
 	$AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
-	$AppUI->redirect();
-}
-
-// prepare (and translate) the module name ready for the suffix
-$AppUI->setMsg('User');
-
-$isNewUser = !(w2PgetParam($_REQUEST, 'user_id', 0));
-
-if ($isNewUser) {
-	// check if a user with the param Username already exists
-	if( is_array($contactListByUsername)) {
-		$AppUI->setMsg('This username is not available, please try another.', UI_MSG_ERROR, true);
-		$AppUI->redirect();		
-	} else {
-		$contact->contact_owner = $AppUI->user_id;
-	}
+	header('Location: newuser.php?msg=contact');
 }
 
 $result = $contact->store();
-if ($result) {
+if (count($contact->getError())) {
+    header('Location: newuser.php?msg=contact');
+} else {
     $user->user_contact = $contact->contact_id;
-    if (($msg = $user->store(null, true))) {
-        $AppUI->setMsg($msg, UI_MSG_ERROR);
+    $result = $user->store(null, true);
+    if (count($user->getError())) {
+        header('Location: newuser.php?msg=user');
     } else {
-        if ($isNewUser) {
-            notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password']);
-        }
+        notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password']);
         notifyHR(w2PgetConfig('admin_email', 'admin@web2project.net'), 'w2P System Human Resources',
             $contact->contact_email, $contact->contact_first_name, $user->user_username,
             $_POST['user_password'], $user->user_id);
+        $AppUI->setMsg('The User Administrator has been notified to grant you access to the system and an email message was sent to you with your login info. Thank you.', UI_MSG_OK);
     }
-} else {
-    $AppUI->setMsg($msg, UI_MSG_ERROR);
 }
 
-echo "<script language='javascript'>
-	      alert('The User Administrator has been notified to grant you access to the system and an email message was sent to you with your login info. Thank you very much.');
-	      history.go(-2);
-      </script>";
+$AppUI->redirect();

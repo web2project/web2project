@@ -213,6 +213,20 @@ class CContact extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
+    public function canCreate()
+    {
+        $recordCount = $this->loadAll(null, "contact_email = '".$this->contact_email."'");
+        if (count($recordCount)) {
+            $this->_error['canCreate'] = 'A contact with this email address already exists';
+            return false;
+        }
+        if ('true' == w2PgetConfig('activate_external_user_creation')) {
+            return true;
+        }
+
+        return parent::canCreate();
+    }
+
     public function canEdit()
     {
         $thisCanEdit = false;

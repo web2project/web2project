@@ -7,6 +7,7 @@ require_once $AppUI->getLibraryClass('captcha/Captcha.class');
 require_once $AppUI->getLibraryClass('captcha/Functions');
 require_once W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 
+$AppUI = new w2p_Core_CAppUI();
 /*
 Re-Generating variables for html form...
 */
@@ -14,6 +15,33 @@ Re-Generating variables for html form...
 $rnd = strtoupper(rnd_string());
 $uid = urlencode(md5_encrypt($rnd));
 $cid = md5_encrypt($rnd);
+
+$msg = w2PgetParam($_GET, 'msg', '');
+
+switch($msg) {
+    case 'data':
+        $msg = "You didn't provide the correct Anti Spam Security ID or all required data. Please try again.";
+        break;
+    case 'spam':
+        $msg = "You didn't provide the Anti Spam Security ID. Please try again.";
+        break;
+    case 'existing-user':
+        $msg = 'The username you selected already exists, please select another or if that user name is yours request the password recovery through the dedicated link.';
+        break;
+    case 'existing-email':
+        $msg = 'The email you selected already exists, please select another or if that email is yours request the password recovery through the dedicated link.';
+        break;
+    case 'user':
+    case 'contact':
+        $msg = "There was an error creating your $msg. No further information is available at this time.";
+        break;
+    case 'ok':
+        $msg = 'The User Administrator has been notified to grant you access to the system and an email message was sent to you with your login info. Thank you very much.';
+        break;
+    default:
+        $msg = 'No clue what you just tried, but stop it.';
+}
+$AppUI->setMsg($msg, UI_MSG_ERROR);
 
 // Can not load the passwordstrength.js file via AppUI->addJavascriptFile()
 // because AppUI->loadFooterJS() is never called...
@@ -60,6 +88,9 @@ function submitIt(){
 		</td>
 	</tr>
 </table>
+<div align="center" width="700">
+    <?php echo $AppUI->getMsg(); ?>
+</div>
 <table align="center" border="0" width="700" cellpadding="0" cellspacing="0" class="">
 	<tr>
 		<td style="padding-top:10px;padding-bottom:10px;" align="left" valign="top" class="txt"><h1>New Signup to web2Project!</h1>
