@@ -20,6 +20,7 @@ class CUser extends w2p_Core_BaseObject
     public $user_type = null;
     public $user_contact = null;
     public $user_signature = null;
+    protected $externally_created_user = false;
     private $perm_func = null;
 
     public function __construct()
@@ -44,6 +45,7 @@ class CUser extends w2p_Core_BaseObject
     public function store($AppUI = null, $externally_created_user = false)
     {
         $stored = false;
+        $this->externally_created_user = $externally_created_user;
 
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $this->perm_func = 'updateLogin';
@@ -111,13 +113,20 @@ class CUser extends w2p_Core_BaseObject
         }
         return $result;
     }
+
     public function canCreate()
     {
-        $result = false;
-        if (parent::canCreate() || ($externally_created_user && w2PgetConfig('activate_external_user_creation', false))) {
-            $result = true;
+        $recordCount = $this->loadAll(null, "user_username = '".$this->user_username."'");
+        if (count($recordCount)) {
+            $this->_error['canCreate'] = 'A user with this username already exists';
+            return false;
+         }
+
+        if (parent::canCreate() || ($this->externally_created_user && 'true' == w2PgetConfig('activate_external_user_creation', 'false'))) {
+            return true;
         }
-        return $result;
+
+        return false;
     }
 
     public function canDelete()
