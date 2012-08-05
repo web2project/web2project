@@ -231,7 +231,7 @@ class w2p_Output_HTMLHelper
             case '_complete':
             case '_assignment':
             case '_allocated':
-                $cell = $value.'%';
+                $cell = round($value).'%';
                 break;
             case '_password':
                 $cell = '('.$this->_AppUI->_('hidden').')';

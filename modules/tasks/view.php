@@ -153,7 +153,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-                    <td class="hilite" width="300"><?php echo $obj->task_percent_complete; ?>%</td>
+                    <td class="hilite" width="300"><?php echo ($obj->task_percent_complete) ? $obj->task_percent_complete : 0; ?>%</td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
