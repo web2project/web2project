@@ -145,8 +145,9 @@ $gantt->setTitle($pname, '#'.$projects[$project_id]['project_color_identifier'])
 
 $field = ($showWork == '1') ? 'Work' : 'Dur';
 $columnNames = array('Task name', $field, 'Start', 'Finish');
-$columnSizes = array(200, 50, 75, 75);
+$columnSizes = array(200, 50, 80, 80);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
+$gantt->setProperties(array('showhgrid' => true));
 
 if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
