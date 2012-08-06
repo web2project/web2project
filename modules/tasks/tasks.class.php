@@ -960,15 +960,8 @@ class CTask extends w2p_Core_BaseObject
         $q->clear();
 
         foreach ($cascadingTasks as $nextTask) {
-            /*
-             * We calculate the duration between the existing start and end dates.
-             *
-             * We do this instead of just adding duration because a task could have
-             *    start and end dates a week apart but only 8 hours of work.
-             */
-            $tsd = new w2p_Utilities_Date($nextTask['task_start_date']);
-            $ted = new w2p_Utilities_Date($nextTask['task_end_date']);
-            $d = $tsd->calcDuration($ted);
+            $multiplier = ('24' == $nextTask['task_duration_type']) ? 3 : 1;
+            $d = $nextTask['task_duration'] * $multiplier;
 
             $nsd = new w2p_Utilities_Date($lastEndDate);
             $ned = new w2p_Utilities_Date();
