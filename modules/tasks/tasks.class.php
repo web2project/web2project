@@ -1352,9 +1352,9 @@ class CTask extends w2p_Core_BaseObject
         return $result;
     }
 
-    public function canAccess($user_id)
+    public function canAccess($user_id = 0)
     {
-
+        $user_id = ($user_id) ? $user_id : $this->_AppUI->user_id;
         // Let's see if this user has admin privileges
         if (canView('admin')) {
             return true;
