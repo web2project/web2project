@@ -980,9 +980,8 @@ class CTask extends w2p_Core_BaseObject
             $ned = $ned->next_working_day();
 
             $task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-
-            $task_end_date = $this->_AppUI->convertToSystemTZ($task_end_date);
             $task_start_date = $this->_AppUI->convertToSystemTZ($task_start_date);
+            $task_end_date = $this->_AppUI->convertToSystemTZ($task_end_date);
 
             $q->addTable('tasks', 't');
             $q->addUpdate('task_start_date', $task_start_date);
