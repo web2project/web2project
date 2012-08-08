@@ -140,7 +140,7 @@ foreach ($history as $row) {
         <td align="center"><a href='<?php echo '?m=history&a=addedit&history_id=' . $row['history_id'] ?>'><img src="<?php echo w2PfindImage('icons/pencil.gif'); ?>" alt="<?php echo $AppUI->_('Edit History') ?>" border="0" width="12" height="12" /></a></td>
         <?php echo $htmlHelper->createCell('history_datetime', $row['history_datetime']); ?>
         <td><?php echo $historyItem->show_history($row) ?></td>
-        <?php echo $htmlHelper->createCell('contact_name', $row['contact_name']); ?>
+        <?php echo $htmlHelper->createCell('contact_name-unformatted', $row['contact_name']); ?>
     </tr>
     <?php
 }

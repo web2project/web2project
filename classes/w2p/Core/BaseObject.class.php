@@ -325,8 +325,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
         $k = $this->_tbl_key;
         // NOTE: I don't particularly like this but it wires things properly.
-        $event = ($this->$k) ? 'Update' : 'Create';
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $event . 'Event'));
+        $this->_event = ($this->$k) ? 'Update' : 'Create';
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $this->_event . 'Event'));
 
         $k = $this->_tbl_key;
         $q = $this->_getQuery();
@@ -348,7 +348,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
         if ($result) {
             // NOTE: I don't particularly like how the name is generated but it wires things properly.
-            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post' . $event . 'Event'));
+            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post' . $this->_event . 'Event'));
             $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postStoreEvent'));
         } else {
             $this->_error['store'] = db_error();
@@ -615,12 +615,20 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     }
 
     /*
-     *  This pre/post functions are only here for completeness.
-     *    NOTE: Each of these actions gets called after the permissions check.
-     *    NOTE: The pre* actions happen whether the desired action - create,
-     *      update, load, and delete - actually occur.
-     *    NOTE: The post* actions only happen if the desired action - create,
-     *      update, load, and delete - is successful.
+     *  This pre/post functions are only here for completeness. They are meant to
+     *    be overridden by subclasses as needed.
+     *
+     *  It is important to remember the hook_pre* methods are called:
+     *    -  before the object validation occurs. If you need to do something to
+     *       make the object valid, this is where you do it.
+     *    -  before the permissions check. So don't do anything dependent on specific
+     *       access rights unless you check them yourself.
+     *
+     *  It is important to remember the hook_post* methods are called:
+     *    -  if and only if the corresponding method executed successfully.
+     *    -  For example, hook_postDelete() will execute only after the object is
+     *       deleted as expected. In this case, don't count on using object properties.
+     *
      */
 
     protected function hook_preStore()
@@ -631,14 +639,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     protected function hook_postStore()
     {
         //NOTE: This only happens if the create was successful.
-
-        $store_type = '';
-        
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         
         $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
                 $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
@@ -652,14 +657,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     protected function hook_postCreate()
     {
         //NOTE: This only happens if the create was successful.
-
-        $store_type = '';
-        
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         
         $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
                 $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
@@ -673,14 +675,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     protected function hook_postUpdate()
     {
         //NOTE: This only happens if the update was successful.
-
-        $store_type = '';
-        
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         
         $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $store_type . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
                 $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
         return $this;
     }

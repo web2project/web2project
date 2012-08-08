@@ -135,7 +135,7 @@ table.list tr:hover td._name {
     border-radius:3px;
 }
 
-.view ._date, .view ._owner {
+.view ._date, .view ._owner, .view ._status {
     text-align: left;
 }
 .list ._name {          width: 25%; }

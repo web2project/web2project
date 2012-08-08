@@ -217,7 +217,7 @@ if ($showTaskNameOnly == '1') {
         $columnSizes = array(200, 160, 40, 75, 75);
     } else {
         $columnNames = array('Task name', $field, 'Start', 'Finish');
-        $columnSizes = array(250, 50, 80, 80);
+        $columnSizes = array(200, 50, 80, 80);
     }
 }
 $gantt->setColumnHeaders($columnNames, $columnSizes);

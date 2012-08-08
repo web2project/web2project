@@ -145,8 +145,9 @@ $gantt->setTitle($pname, '#'.$projects[$project_id]['project_color_identifier'])
 
 $field = ($showWork == '1') ? 'Work' : 'Dur';
 $columnNames = array('Task name', $field, 'Start', 'Finish');
-$columnSizes = array(200, 50, 75, 75);
+$columnSizes = array(200, 50, 80, 80);
 $gantt->setColumnHeaders($columnNames, $columnSizes);
+$gantt->setProperties(array('showhgrid' => true));
 
 if (!$start_date || !$end_date) {
 	// find out DateRange from gant_arr
@@ -329,34 +330,10 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             }
 
             if ($showWork == '1') {
-                $work_hours = 0;
-                $q = new w2p_Database_Query;
-                $q->addTable('tasks', 't');
-                $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-                $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-                $q->addWhere('t.task_duration_type = 24');
-                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
-
-                $wh = $q->loadResult();
-                $work_hours = $wh * $w2Pconfig['daily_working_hours'];
-                $q->clear();
-
-                $q->addTable('tasks', 't');
-                $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id', 'inner');
-                $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-                $q->addWhere('t.task_duration_type = 1');
-                $q->addWhere('t.task_id = ' . (int)$a['task_id']);
-
-                $wh2 = $q->loadResult();
-                $work_hours += $wh2;
-                $q->clear();
-                //due to the round above, we don't want to print decimals unless they really exist
-                $dur = $work_hours;
+                $dur = round($a['task_hours_worked'], 0);
             }
 
             $dur .= ' h';
-            $enddate = new w2p_Utilities_Date($end);
-            $startdate = new w2p_Utilities_Date($start);
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
             if ($caller == 'todo') {
                 $columnValues = array('task_name' => $name, 'project_name' => $pname,

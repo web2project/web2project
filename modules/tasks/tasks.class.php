@@ -933,6 +933,16 @@ class CTask extends w2p_Core_BaseObject
         }
     }
 
+    /*
+     * This function is run immediately after a Task is stored. It uses that Task's
+     *    end date and checks for dependent tasks beginning before that date.
+     *
+     * If there are any dependencies that match those criteria, it updates those
+     *    and recurses.
+     * If not, it returns.
+     *
+     * @todo TODO: This entire function needs to be timezone aware.. current it isn't.
+     */
     public function pushDependencies($taskId, $lastEndDate)
     {
 
@@ -950,32 +960,21 @@ class CTask extends w2p_Core_BaseObject
         $q->clear();
 
         foreach ($cascadingTasks as $nextTask) {
-            /** BEGIN: nasty task update code - very similar to lines 192 in do_task_aed.php * */
-            $tsd = new w2p_Utilities_Date($nextTask['task_start_date']);
-            $ted = new w2p_Utilities_Date($nextTask['task_end_date']);
+            $multiplier = ('24' == $nextTask['task_duration_type']) ? 3 : 1;
+            $d = $nextTask['task_duration'] * $multiplier;
 
             $nsd = new w2p_Utilities_Date($lastEndDate);
-            $nsd = $nsd->next_working_day();
             $ned = new w2p_Utilities_Date();
+            $nsd = $nsd->next_working_day();
             $ned->copy($nsd);
+            $ned->addDuration($d);
 
-            if (empty($tsd)) {
-                // appropriately calculated end date via start+duration
-                $ned->addDuration($nextTask['task_duration'], $nextTask['task_duration_type']);
-            } else {
-                // calc task time span start - end
-                $d = $tsd->calcDuration($ted);
-
-                // Re-add (keep) task time span for end date.
-                // This is independent from $obj->task_duration.
-                // The value returned by Date::Duration() is always in hours ('1')
-                $ned->addDuration($d, '1');
-            }
-            // prefer tue 16:00 over wed 8:00 as an end date
-            $ned = $ned->prev_working_day();
+            $task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+            $ned = $ned->next_working_day();
 
             $task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-            $task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+            $task_start_date = $this->_AppUI->convertToSystemTZ($task_start_date);
+            $task_end_date = $this->_AppUI->convertToSystemTZ($task_end_date);
 
             $q->addTable('tasks', 't');
             $q->addUpdate('task_start_date', $task_start_date);
@@ -984,7 +983,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere('task_id = ' . $nextTask['dependencies_task_id']);
             $q->exec();
             $q->clear();
-            /** END: nasty task update code - very similar to lines 192 in do_task_aed.php * */
+
             $this->pushDependencies($nextTask['dependencies_task_id'], $task_end_date);
         }
     }
@@ -1352,9 +1351,9 @@ class CTask extends w2p_Core_BaseObject
         return $result;
     }
 
-    public function canAccess($user_id)
+    public function canAccess($user_id = 0)
     {
-
+        $user_id = ($user_id) ? $user_id : $this->_AppUI->user_id;
         // Let's see if this user has admin privileges
         if (canView('admin')) {
             return true;
