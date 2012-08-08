@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI;
 
 //Lets store the panels view options of the user:
-$pdo = new CProjectDesignerOptions();
+$pdo = new CProjectDesigner();
 $pdo->pd_option_user = $AppUI->user_id;
 $pdo->pd_option_view_project = w2PgetParam($_POST, 'opt_view_project', 0);
 $pdo->pd_option_view_gantt = w2PgetParam($_POST, 'opt_view_gantt', 0);

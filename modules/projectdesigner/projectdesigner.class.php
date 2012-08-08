@@ -4,7 +4,7 @@
 include_once (W2P_BASE_DIR . '/modules/projectdesigner/config.php');
 
 /**
- * CProjectDesignerOptions Class
+ * CProjectDesigner Class
  */
 class CProjectDesigner extends w2p_Core_BaseObject
 {
