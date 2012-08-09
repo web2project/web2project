@@ -54,6 +54,7 @@ foreach ($elements as $element => $on) {
 		$tline->task_access = $elements['add_task_access_' . $on];
 		$tline->task_description = $elements['add_task_description_' . $on] ? $elements['add_task_description_' . $on] : '';
 		$tline->task_owner = $AppUI->user_id;
+        $tline->task_dynamic = 31;
 		if ($elements['add_task_extra_' . $on] == '1') {
 			$tline->task_milestone = '1';
 		} elseif ($elements['add_task_extra_' . $on] == '2') {

@@ -697,7 +697,7 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 
 	// Assignment checkbox
 	if ($showEditCheckbox && 0 == $arr['task_represents_project']) {
-		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'selected_task\', ' . $arr['task_id'] . ',\'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $arr['task_id'] . '" name="selected_task" value="' . $arr['task_id'] . '"/></td>';
+		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'multi_check\', ' . $arr['task_id'] . ',\'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $arr['task_id'] . '" name="selected_task" value="' . $arr['task_id'] . '"/></td>';
 	}
 	$s .= '</tr>';
 
