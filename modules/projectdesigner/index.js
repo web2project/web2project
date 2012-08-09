@@ -108,9 +108,9 @@ function select_all_rows(cmbObj, elements_name) {
     var checkboxes = document.getElementsByName(elements_name);
 
     // check all
-    for (var checkbox in checkboxes) {
-        id = checkbox.value;
-        checkbox.checked = checked;
+    for (var i in checkboxes) {
+        id = checkboxes[i].value;
+        checkboxes[i].checked = checked;
 
         result = (checked) ? addBulkComponent(id) : removeBulkComponent(id);
     }
