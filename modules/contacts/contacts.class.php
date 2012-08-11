@@ -62,10 +62,7 @@ class CContact extends w2p_Core_BaseObject
         $q->loadObject($this, true, false);
     }
 
-    public function store()
-    {
-        $stored = false;
-
+    protected function hook_preStore() {
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
         $this->contact_owner = ((int) $this->contact_owner) ? (int) $this->contact_owner : (int) $this->_AppUI->user_id;
@@ -92,20 +89,8 @@ class CContact extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $this->contact_lastupdate = $q->dbfnNowWithTZ();
-        /*
-         * TODO: I don't like the duplication on each of these two branches, but I
-         *   don't have a good idea on how to fix it at the moment...
-         */
-        
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-        }
 
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $stored = parent::store();
-        }
-
-        return $stored;
+        parent::hook_preStore();
     }
 
     protected function hook_postStore()
