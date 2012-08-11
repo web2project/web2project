@@ -647,7 +647,15 @@ function hide_tabs() {
 hide_tab_function = gt_hide_tabs;
 show_tab_function = gt_show_tab;
 
-function expand_collapse(id, table_name, option, opt_level, root) {      
+/*
+ * TODO: Good God this is ugly, we should replace it with something jQuery driven like
+ *   http://roshanbh.com.np/2008/03/expandable-collapsible-toggle-pane-jquery.html or
+ *   http://www.snilesh.com/resources/jquery/jquery-expand-collapse-expand-all-collapse-all/ or
+ *   http://www.adipalaz.com/experiments/jquery/expand.html (best imho)
+ *
+ *   - caseydk 2012-07-01
+ */
+function expand_collapse(id, table_name, option, opt_level, root) {
     var expand = (option == 'expand' ? 1 : 0);
     var collapse = (option == 'collapse' ? 1 : 0);
     var level = (opt_level == 0 ? 0 : (opt_level > 0 ? opt_level : -1));
