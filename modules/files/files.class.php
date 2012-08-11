@@ -36,49 +36,52 @@ class CFile extends w2p_Core_BaseObject {
         parent::__construct('files', 'file_id');
 	}
 
-	public function store() {
+    protected function hook_preStore() {
         global $helpdesk_available;
-
-        $stored = false;
 
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
             $this->addHelpDeskTaskLog();
         }
 
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            // If while editing a file we attach a new file, then we go ahead and set file_id to 0 so a new file object is created. We also set its owner to the current user.
-            // If not then we are just editing the file information alone. So we should leave the file_id as it is.
-            $this->file_parent = $this->file_id;
-            if ((int)$this->file_size > 0) {
-                $this->file_id = 0;
-                $this->file_owner = $this->_AppUI->user_id;
-            }
-            $stored = parent::store();
-        }
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $this->file_owner = $this->_AppUI->user_id;
-            $q = $this->_getQuery();
-            $q->clear();
-            $q->addTable('files');
-           if (!$this->file_version_id) {
-                $q->addQuery('file_version_id');
-                $q->addOrder('file_version_id DESC');
-                $q->setLimit(1);
-                $latest_file_version = $q->loadResult();
-                $this->file_version_id = $latest_file_version + 1;
-            } else {
-                $q->addUpdate('file_checkout', '');
-                $q->addWhere('file_version_id = ' . (int)$this->file_version_id);
-                $q->exec();
-            }
-            $q->clear();
-
-            $this->file_date = $q->dbfnNowWithTZ();
-            $stored = parent::store();
-        }
-
-        return $stored;
+        parent::hook_preStore();
 	}
+
+    protected function hook_preCreate() {
+        $q = $this->_getQuery();
+        $q->addTable('files');
+
+        $this->file_owner = $this->_AppUI->user_id;
+        if (!$this->file_version_id) {
+            $q->addQuery('file_version_id');
+            $q->addOrder('file_version_id DESC');
+            $q->setLimit(1);
+            $latest_file_version = $q->loadResult();
+            $this->file_version_id = $latest_file_version + 1;
+        } else {
+            $q->addUpdate('file_checkout', '');
+            $q->addWhere('file_version_id = ' . (int)$this->file_version_id);
+            $q->exec();
+         }
+
+        $this->file_date = $q->dbfnNowWithTZ();
+        parent::hook_preCreate();
+    }
+
+    /*
+     * If while editing a file we attach a new file, then we go ahead and set
+     *   file_id to 0 so a new file object is created. We also set its owner to
+     *   the current user.
+     * If not then we are just editing the file information alone. So we should
+     *   leave the file_id as it is.
+     */
+    protected function hook_preUpdate() {
+        $this->file_parent = $this->file_id;
+        if ((int)$this->file_size > 0) {
+            $this->file_id = 0;
+            $this->file_owner = $this->_AppUI->user_id;
+        }
+        parent::hook_preUpdate();
+    }
 
 	public function hook_cron()
 	{
