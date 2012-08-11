@@ -112,13 +112,12 @@ class CDepartments_Test extends CommonSetup
     {
         unset($this->post_data['dept_name']);
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
 
         /**
         * Verify we got the proper error message
         */
-        $this->AssertEquals(1, count($errorArray));
-        $this->assertArrayHasKey('dept_name', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('dept_name', $this->obj->getError());
 
         /**
         * Verify that dept id was not set
@@ -134,13 +133,12 @@ class CDepartments_Test extends CommonSetup
     {
         $this->post_data['dept_company'] = '';
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
 
         /**
         * Verify we got the proper error message
         */
-        $this->AssertEquals(1, count($errorArray));
-        $this->assertArrayHasKey('dept_company', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('dept_company', $this->obj->getError());
 
         /**
         * Verify that dept id was not set
@@ -156,12 +154,12 @@ class CDepartments_Test extends CommonSetup
     {
         unset($this->post_data['dept_owner']);
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
+
         /**
         * Verify we got the proper error message
         */
-        $this->AssertEquals(1, count($errorArray));
-        $this->assertArrayHasKey('dept_owner', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('dept_owner', $this->obj->getError());
 
         /**
         * Verify that dept id was not set

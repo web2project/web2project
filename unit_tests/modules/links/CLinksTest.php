@@ -94,20 +94,19 @@ class CLinks_Test extends CommonSetup
      */
     public function testCreateLinkNoName()
     {
-      unset($this->post_data['link_name']);
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store();
+        unset($this->post_data['link_name']);
+        $this->obj->bind($this->post_data);
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->assertEquals(1, count($errorArray));
-      $this->assertArrayHasKey('link_name', $errorArray);
+        /**
+        * Verify we got the proper error message
+        */
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('link_name', $this->obj->getError());
 
-      /**
-       * Verify that link id was not set
-       */
-      $this->AssertEquals(0, $this->obj->link_id);
+        /**
+        * Verify that link id was not set
+        */
+        $this->AssertEquals(0, $this->obj->link_id);
     }
 
     /**
@@ -116,20 +115,19 @@ class CLinks_Test extends CommonSetup
      */
     public function testCreateLinkNoUrl()
     {
-      $this->post_data['link_url'] = '';
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store();
+        $this->post_data['link_url'] = '';
+        $this->obj->bind($this->post_data);
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->AssertEquals(1, count($errorArray));
-      $this->assertArrayHasKey('link_url', $errorArray);
+        /**
+        * Verify we got the proper error message
+        */
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('link_url', $this->obj->getError());
 
-      /**
-       * Verify that link id was not set
-       */
-      $this->AssertEquals(0, $this->obj->link_id);
+        /**
+        * Verify that link id was not set
+        */
+        $this->AssertEquals(0, $this->obj->link_id);
     }
 
     /**
@@ -138,19 +136,19 @@ class CLinks_Test extends CommonSetup
      */
     public function testCreateLinkNoOwner()
     {
-      unset($this->post_data['link_owner']);
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store();
-      /**
-       * Verify we got the proper error message
-       */
-      $this->AssertEquals(1, count($errorArray));
-      $this->assertArrayHasKey('link_owner', $errorArray);
+        unset($this->post_data['link_owner']);
+        $this->obj->bind($this->post_data);
 
-      /**
-       * Verify that link id was not set
-       */
-      $this->AssertEquals(0, $this->obj->link_id);
+        /**
+        * Verify we got the proper error message
+        */
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('link_owner', $this->obj->getError());
+
+        /**
+        * Verify that link id was not set
+        */
+        $this->AssertEquals(0, $this->obj->link_id);
     }
 
     /**
@@ -158,20 +156,20 @@ class CLinks_Test extends CommonSetup
      */
     public function testStoreCreate()
     {
-      $this->obj->bind($this->post_data);
-      $result = $this->obj->store();
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store();
 
-      $this->assertTrue($result);
-      $this->assertEquals('web2project homepage',   $this->obj->link_name);
-      $this->assertEquals(0,                        $this->obj->link_project);
-      $this->assertEquals(0,                        $this->obj->link_task);
-      $this->assertEquals('http://web2project.net', $this->obj->link_url);
-      $this->assertEquals(0,                        $this->obj->link_parent);
-      $this->assertEquals('This is web2project',    $this->obj->link_description);
-      $this->assertEquals(1,                        $this->obj->link_owner);
-      $this->assertEquals('',                       $this->obj->link_icon);
-      $this->assertEquals(0,                        $this->obj->link_category);
-      $this->assertNotEquals(0,                     $this->obj->link_id);
+        $this->assertTrue($result);
+        $this->assertEquals('web2project homepage',   $this->obj->link_name);
+        $this->assertEquals(0,                        $this->obj->link_project);
+        $this->assertEquals(0,                        $this->obj->link_task);
+        $this->assertEquals('http://web2project.net', $this->obj->link_url);
+        $this->assertEquals(0,                        $this->obj->link_parent);
+        $this->assertEquals('This is web2project',    $this->obj->link_description);
+        $this->assertEquals(1,                        $this->obj->link_owner);
+        $this->assertEquals('',                       $this->obj->link_icon);
+        $this->assertEquals(0,                        $this->obj->link_category);
+        $this->assertNotEquals(0,                     $this->obj->link_id);
     }
 
     /**
@@ -205,21 +203,21 @@ class CLinks_Test extends CommonSetup
      */
     public function testStoreUpdate()
     {
-      $this->obj->bind($this->post_data);
-      $result = $this->obj->store();
-      $this->assertTrue($result);
-      $original_id = $this->obj->link_id;
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store();
+        $this->assertTrue($result);
+        $original_id = $this->obj->link_id;
 
-      $this->obj->link_name = 'web2project Forums';
-      $this->obj->link_url = 'http://forums.web2project.net';
-      $result = $this->obj->store();
-      $this->assertTrue($result);
-      $new_id = $this->obj->link_id;
+        $this->obj->link_name = 'web2project Forums';
+        $this->obj->link_url = 'http://forums.web2project.net';
+        $result = $this->obj->store();
+        $this->assertTrue($result);
+        $new_id = $this->obj->link_id;
 
-      $this->assertEquals($original_id,                    $new_id);
-      $this->assertEquals('web2project Forums',            $this->obj->link_name);
-      $this->assertEquals('http://forums.web2project.net', $this->obj->link_url);
-      $this->assertEquals('This is web2project',           $this->obj->link_description);
+        $this->assertEquals($original_id,                    $new_id);
+        $this->assertEquals('web2project Forums',            $this->obj->link_name);
+        $this->assertEquals('http://forums.web2project.net', $this->obj->link_url);
+        $this->assertEquals('This is web2project',           $this->obj->link_description);
     }
 
     /**

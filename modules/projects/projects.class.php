@@ -532,6 +532,9 @@ class CProject extends w2p_Core_BaseObject
         $stored = false;
 
         $this->w2PTrimAll();
+        if (!$this->isValid()) {
+            return false;
+        }
 
         // ensure changes of state in checkboxes is captured
         $this->project_active = (int) $this->project_active;

@@ -115,20 +115,19 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoRealName()
     {
-      unset($this->post_data['file_real_filename']);
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store();
+        unset($this->post_data['file_real_filename']);
+        $this->obj->bind($this->post_data);
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->AssertEquals(1, count($errorArray));
-      $this->assertArrayHasKey('file_real_filename', $errorArray);
+        /**
+        * Verify we got the proper error message
+        */
+        $this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('file_real_filename', $this->obj->getError());
 
-      /**
-       * Verify that project id was not set
-       */
-      $this->AssertEquals(0, $this->obj->file_id);
+        /**
+        * Verify that project id was not set
+        */
+        $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -137,20 +136,19 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoName()
     {
-      unset($this->post_data['file_name']);
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store();
+        unset($this->post_data['file_name']);
+        $this->obj->bind($this->post_data);
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->AssertEquals(1, count($errorArray));
-      $this->assertArrayHasKey('file_name', $errorArray);
+        /**
+        * Verify we got the proper error message
+        */
+        $this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('file_name', $this->obj->getError());
 
-      /**
-       * Verify that project id was not set
-       */
-      $this->AssertEquals(0, $this->obj->file_id);
+        /**
+        * Verify that project id was not set
+        */
+        $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -158,20 +156,19 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoParent()
     {
-      unset($this->post_data['file_parent']);
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store();
+        unset($this->post_data['file_parent']);
+        $this->obj->bind($this->post_data);
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->AssertEquals(1, count($errorArray));
-      $this->assertArrayHasKey('file_parent', $errorArray);
+        /**
+        * Verify we got the proper error message
+        */
+        $this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('file_parent', $this->obj->getError());
 
-      /**
-       * Verify that project id was not set
-       */
-      $this->AssertEquals(0, $this->obj->file_id);
+        /**
+        * Verify that project id was not set
+        */
+        $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -179,20 +176,19 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoType()
     {
-      unset($this->post_data['file_type']);
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store();
+        unset($this->post_data['file_type']);
+        $this->obj->bind($this->post_data);
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->AssertEquals(1, count($errorArray));
-      $this->assertArrayHasKey('file_type', $errorArray);
+        /**
+        * Verify we got the proper error message
+        */
+        $this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('file_type', $this->obj->getError());
 
-      /**
-       * Verify that project id was not set
-       */
-      $this->AssertEquals(0, $this->obj->file_id);
+        /**
+        * Verify that project id was not set
+        */
+        $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -201,20 +197,19 @@ class CFiles_Test extends CommonSetup
      */
     public function testCreateFileNoFilesize()
     {
-      unset($this->post_data['file_size']);
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->store();
+        unset($this->post_data['file_size']);
+        $this->obj->bind($this->post_data);
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->AssertEquals(1, count($errorArray));
-      $this->assertArrayHasKey('file_size', $errorArray);
+        /**
+        * Verify we got the proper error message
+        */
+        $this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('file_size', $this->obj->getError());
 
-      /**
-       * Verify that project id was not set
-       */
-      $this->AssertEquals(0, $this->obj->file_id);
+        /**
+        * Verify that project id was not set
+        */
+        $this->AssertEquals(0, $this->obj->file_id);
     }
 
     /**
@@ -222,23 +217,23 @@ class CFiles_Test extends CommonSetup
      */
     public function testCheck()
     {
-      unset($this->post_data['file_real_filename']);
-      unset($this->post_data['file_name']);
-      unset($this->post_data['file_parent']);
-      unset($this->post_data['file_type']);
-      unset($this->post_data['file_size']);
-      $this->obj->bind($this->post_data);
-      $errorArray = $this->obj->check();
+        unset($this->post_data['file_real_filename']);
+        unset($this->post_data['file_name']);
+        unset($this->post_data['file_parent']);
+        unset($this->post_data['file_type']);
+        unset($this->post_data['file_size']);
+        $this->obj->bind($this->post_data);
+        $errorArray = $this->obj->check();
 
-      /**
-       * Verify we got the proper error message
-       */
-      $this->AssertEquals(5, count($errorArray));
-      $this->assertArrayHasKey('file_real_filename', $errorArray);
-      $this->assertArrayHasKey('file_name',          $errorArray);
-      $this->assertArrayHasKey('file_parent',        $errorArray);
-      $this->assertArrayHasKey('file_type',          $errorArray);
-      $this->assertArrayHasKey('file_size',          $errorArray);
+        /**
+        * Verify we got the proper error message
+        */
+        $this->AssertEquals(5, count($errorArray));
+        $this->assertArrayHasKey('file_real_filename', $errorArray);
+        $this->assertArrayHasKey('file_name',          $errorArray);
+        $this->assertArrayHasKey('file_parent',        $errorArray);
+        $this->assertArrayHasKey('file_type',          $errorArray);
+        $this->assertArrayHasKey('file_size',          $errorArray);
     }
 
     public function testDelete()

@@ -47,6 +47,10 @@ class CUser extends w2p_Core_BaseObject
         $stored = false;
         $this->externally_created_user = $externally_created_user;
 
+        if (!$this->isValid()) {
+            return false;
+        }
+
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $this->perm_func = 'updateLogin';
             $tmpUser = new CUser();

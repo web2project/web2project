@@ -84,13 +84,12 @@ class CSystemBudget_Test extends CommonSetup
     {
         unset($this->post_data['budget_amount']);
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
 
         /**
         * Verify we got the proper error message
         */
-        $this->assertEquals(1, count($errorArray));
-        $this->assertArrayHasKey('budget_amount', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('budget_amount', $this->obj->getError());
 
         /**
         * Verify that link id was not set
