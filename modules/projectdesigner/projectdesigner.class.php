@@ -22,22 +22,4 @@ class CProjectDesigner extends w2p_Core_BaseObject
     {
         parent::__construct('project_designer_options', 'pd_option_id');
     }
-
-    public function store()
-    {
-        $q = $this->_getQuery();
-        $q->addTable('project_designer_options');
-        $q->addReplace('pd_option_user', $this->pd_option_user);
-        $q->addReplace('pd_option_view_project', $this->pd_option_view_project);
-        $q->addReplace('pd_option_view_gantt', $this->pd_option_view_gantt);
-        $q->addReplace('pd_option_view_tasks', $this->pd_option_view_tasks);
-        $q->addReplace('pd_option_view_actions', $this->pd_option_view_actions);
-        $q->addReplace('pd_option_view_addtasks', $this->pd_option_view_addtasks);
-        $q->addReplace('pd_option_view_files', $this->pd_option_view_files);
-        $q->addWhere('pd_option_user = ' . (int) $this->pd_option_user);
-        $q->exec();
-
-        return true;
-    }
-
 }
