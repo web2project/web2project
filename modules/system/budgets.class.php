@@ -49,10 +49,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
         return $q->loadHashList('budget_id');
     }
 
-    public function store()
-    {
-        $stored = false;
-
+    protected function  hook_preStore() {
         if ($this->budget_start_date) {
             $date = new w2p_Utilities_Date($this->budget_start_date);
             $this->budget_start_date = $date->format(FMT_DATETIME_MYSQL);
@@ -61,10 +58,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
             $date = new w2p_Utilities_Date($this->budget_end_date);
             $this->budget_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
-//TODO: Why isn't there a canCreate branch here?
-        if ($this->canEdit()) {
-            $stored = parent::store();
-        }
-        return $stored;
+
+        parent::hook_preStore();
     }
 }
