@@ -42,6 +42,30 @@ class CUser extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
+    protected function  hook_preCreate() {
+        $this->perm_func = 'updateLogin';
+        $tmpUser = new CUser();
+        $tmpUser->overrideDatabase($this->_query);
+        $tmpUser->load($this->user_id);
+
+        if ('' == trim($this->user_password)) {
+            $this->user_password = $tmpUser->user_password;
+        } elseif ($tmpUser->user_password != md5($this->user_password)) {
+            $this->user_password = md5($this->user_password);
+        } else {
+            $this->user_password = $tmpUser->user_password;
+        }
+
+        parent::hook_preCreate();
+    }
+
+    protected function  hook_preUpdate() {
+        $this->perm_func = 'addLogin';
+        $this->user_password = md5($this->user_password);
+
+        parent::hook_preUpdate();
+    }
+
     public function store($AppUI = null, $externally_created_user = false)
     {
         $stored = false;
@@ -51,31 +75,7 @@ class CUser extends w2p_Core_BaseObject
             return false;
         }
 
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $this->perm_func = 'updateLogin';
-            $tmpUser = new CUser();
-            $tmpUser->overrideDatabase($this->_query);
-            $tmpUser->load($this->user_id);
-
-            if ('' == trim($this->user_password)) {
-                $this->user_password = $tmpUser->user_password;
-            } elseif ($tmpUser->user_password != md5($this->user_password)) {
-                $this->user_password = md5($this->user_password);
-            } else {
-                $this->user_password = $tmpUser->user_password;
-            }
-
-            $stored = parent::store();
-        }
-
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $this->perm_func = 'addLogin';
-            $this->user_password = md5($this->user_password);
-
-            $stored = parent::store();
-        }
-
-        return $stored;
+        return parent::store();
     }
 
     protected function hook_postStore()
