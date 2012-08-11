@@ -53,9 +53,7 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
         return true;
     }
 
-    public function delete(w2p_Core_CAppUI $AppUI) {
-        $perms = $AppUI->acl();
-
+    public function delete() {
         if (canEdit('system')) {
             if ($msg = parent::delete()) {
                 return $msg;
@@ -65,8 +63,7 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
         return false;
     }
 
-    public function store(w2p_Core_CAppUI $AppUI) {
-        $perms = $AppUI->acl();
+    public function store() {
         $stored = false;
 
         $errorMsgArray = $this->check();
