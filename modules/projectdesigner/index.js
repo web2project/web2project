@@ -1,9 +1,9 @@
 /* $Id$ $URL$ */
 function update_workspace(id) {
 	var tr = document.getElementById(id);
-	(tr.style.display == "none") ? eval('document.frmWorkspace.opt_view_'+id+'.value=0') : eval('document.frmWorkspace.opt_view_'+id+'.value=1');
-	(tr.style.display == "none") ? eval('document.editFrm.opt_view_'+id+'.value=0') : eval('document.editFrm.opt_view_'+id+'.value=1');
-	(tr.style.display == "none") ? eval('document.frm_bulk.opt_view_'+id+'.value=0') : eval('document.frm_bulk.opt_view_'+id+'.value=1');
+	(tr.style.display == "none") ? eval('document.frmWorkspace.pd_option_view_'+id+'.value=0') : eval('document.frmWorkspace.pd_option_view_'+id+'.value=1');
+	(tr.style.display == "none") ? eval('document.editFrm.pd_option_view_'+id+'.value=0') : eval('document.editFrm.pd_option_view_'+id+'.value=1');
+	(tr.style.display == "none") ? eval('document.frm_bulk.pd_option_view_'+id+'.value=0') : eval('document.frm_bulk.pd_option_view_'+id+'.value=1');
 }
 
 function expandAll() {
@@ -11,13 +11,13 @@ function expandAll() {
       expand_collapse('gantt', 'tblProjects', 'expand');
       expand_collapse('tasks', 'tblProjects', 'expand');
       expand_collapse('actions', 'tblProjects', 'expand');
-      expand_collapse('addtsks', 'tblProjects', 'expand');
+      expand_collapse('addtasks', 'tblProjects', 'expand');
       expand_collapse('files', 'tblProjects', 'expand');
       update_workspace('project');
       update_workspace('gantt');
       update_workspace('tasks');
       update_workspace('actions');
-      update_workspace('addtsks');
+      update_workspace('addtasks');
       update_workspace('files');
 }
 
@@ -26,13 +26,13 @@ function collapseAll() {
       expand_collapse('gantt', 'tblProjects', 'collapse');
       expand_collapse('tasks', 'tblProjects', 'collapse');
       expand_collapse('actions', 'tblProjects', 'collapse');
-      expand_collapse('addtsks', 'tblProjects', 'collapse');
+      expand_collapse('addtasks', 'tblProjects', 'collapse');
       expand_collapse('files', 'tblProjects', 'collapse');
       update_workspace('project');
       update_workspace('gantt');
       update_workspace('tasks');
       update_workspace('actions');
-      update_workspace('addtsks');
+      update_workspace('addtasks');
       update_workspace('files');
 }
 /**

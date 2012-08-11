@@ -215,12 +215,12 @@ if (!$project_id) {
 <form name="frmWorkspace" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_projectdesigner_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
-	<input type="hidden" name="opt_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
-	<input type="hidden" name="opt_view_gantt" value="<?php echo (isset($view_options[0]['pd_option_view_gantt']) ? $view_options[0]['pd_option_view_gantt'] : 1); ?>" />
-	<input type="hidden" name="opt_view_tasks" value="<?php echo (isset($view_options[0]['pd_option_view_tasks']) ? $view_options[0]['pd_option_view_tasks'] : 1); ?>" />
-	<input type="hidden" name="opt_view_actions" value="<?php echo (isset($view_options[0]['pd_option_view_actions']) ? $view_options[0]['pd_option_view_actions'] : 1); ?>" />
-	<input type="hidden" name="opt_view_addtsks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
-	<input type="hidden" name="opt_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
+	<input type="hidden" name="pd_option_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
+	<input type="hidden" name="pd_option_view_gantt" value="<?php echo (isset($view_options[0]['pd_option_view_gantt']) ? $view_options[0]['pd_option_view_gantt'] : 1); ?>" />
+	<input type="hidden" name="pd_option_view_tasks" value="<?php echo (isset($view_options[0]['pd_option_view_tasks']) ? $view_options[0]['pd_option_view_tasks'] : 1); ?>" />
+	<input type="hidden" name="pd_option_view_actions" value="<?php echo (isset($view_options[0]['pd_option_view_actions']) ? $view_options[0]['pd_option_view_actions'] : 1); ?>" />
+	<input type="hidden" name="pd_option_view_addtasks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
+	<input type="hidden" name="pd_option_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
 </form>
 
 <?php
@@ -680,7 +680,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
             <tr>
             	<td colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fat" style="display:block" onclick="expand_collapse(\'addtsks\', \'tblProjects\');update_workspace(\'addtsks\');">'
+	echo '<a href="javascript: void(0);" name="fat" style="display:block" onclick="expand_collapse(\'addtasks\', \'tblProjects\');update_workspace(\'addtasks\');">'
 ?>
             	<?php
 	echo '<strong>' . $AppUI->_('Add Tasks') . '<strong></font>';
@@ -691,10 +691,10 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
             	</td>
             	<td width="12" align="right" colspan="1">
            	<?php
-	echo '<a href="javascript: void(0);" name="fat" style="display:block" onclick="expand_collapse(\'addtsks\', \'tblProjects\');update_workspace(\'addtsks\');">'
+	echo '<a href="javascript: void(0);" name="fat" style="display:block" onclick="expand_collapse(\'addtasks\', \'tblProjects\');update_workspace(\'addtasks\');">'
 ?>
             	<?php
-	echo '<img id="addtsks_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" alt="" ' . (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="addtsks_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
+	echo '<img id="addtasks_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" alt="" ' . (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="addtasks_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
 ?>
            	<?php
 	echo '</a>'
@@ -704,7 +704,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
       	</table>
 	</td>
 </tr>
-<tr id="addtsks" <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
+<tr id="addtasks" <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
 	<td colspan="2" class="hilite">
 	<?php
 	if ($canAddTasks) {
