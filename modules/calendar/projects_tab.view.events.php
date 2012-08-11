@@ -27,6 +27,8 @@ $types = w2PgetSysVal('EventType');
 
 $fieldList = array();
 $fieldNames = array();
+
+$module = new w2p_Core_Module();
 $fields = $module->loadSettings('calendar', 'project_view');
 if (count($fields) > 0) {
     $fieldList = array_keys($fields);
@@ -46,13 +48,9 @@ if (count($fields) > 0) {
 <table class="tbl list">
     <tr>
         <?php
-
-//TODO: The link below is commented out because this view doesn't support sorting... yet.
         foreach ($fieldNames as $index => $name) {
             ?><th nowrap="nowrap">
-<!--                <a href="?m=projects&a=view&project_id=<?php echo $project_id; ?>&sort=<?php echo $fieldList[$index]; ?>#calendar-project_view" class="hdr">-->
                     <?php echo $AppUI->_($fieldNames[$index]); ?>
-<!--                </a>-->
             </th><?php
         }
         ?>

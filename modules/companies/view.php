@@ -52,6 +52,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$htmlHelper->stageRowData(get_object_vars($company));
 ?>
 <?php
 // security improvement:
@@ -92,7 +93,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('contact_display_name', $company->contact_name); ?>
+                    <?php echo $htmlHelper->createCell('contact_displayname', $company->contact_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
