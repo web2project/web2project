@@ -233,10 +233,22 @@ class CContact extends w2p_Core_BaseObject
         $baseCanEdit = parent::canEdit();
 
         $tmp = new CContact();
+        $tmp->overrideDatabase($this->_query);
         $tmp->load($this->contact_id);
-        if (!$tmp->contact_private || ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id))) {
+        /*
+         * This check is one of the more complex ones.. it will only allow the user
+         *   to edit the contact if either:
+         *     a) the contact is not private; OR
+         *     b) the contact is private and the user is the contact owner.
+         */
+        if (!$tmp->contact_private ||
+                ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id))) {
             $thisCanEdit = true;
         }
+        /* A user can *always* edit themselves. */
+        if ($tmp->contact_id == $this->_AppUI->user_id) {
+            $baseCanEdit = $thisCanEdit = true;
+         }
 
         return ($thisCanEdit && $baseCanEdit);
     }
