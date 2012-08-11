@@ -163,16 +163,8 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->task_log_problem = (int) $this->task_log_problem;
 	}
 
-	/**
-	 * Stores the current task log in the database updating the task_log_updated
-	 * field appropriately. Then updates total hours worked cache on task.
-	 *
-	 * @return void
-	 *
-	 * @access public
-	 */
-	public function store()
-	{
+    protected function hook_preStore()
+    {
 		$q = $this->_getQuery();
 		$this->task_log_updated = $q->dbfnNowWithTZ();
 
@@ -188,16 +180,27 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->task_log_hours = $this->task_log_hours;
 		$this->task_log_costcode = cleanText($this->task_log_costcode);
 
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-		}
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-			$this->task_log_created = $q->dbfnNowWithTZ();
-            $stored = parent::store();
+		if (!((float)$this->task_log_hours)) {
+			// before evaluating a non-float work hour as 0 lets try to check if user is trying
+			// to enter in hour:minute format and convert it to decimal. If that is not the format
+			// then we consider that there was no time worked at all (i.e. 0 time worked)
+			$log_time_hour = $log_time_minute = 0;
+			list($log_time_hour, $log_time_minute) = explode(':', $this->task_log_hours);
+			$this->task_log_hours = ((int)$log_time_hour) + (((int)$log_time_minute) / 60);
+			if (!((float)$this->task_log_hours)) {
+				$this->task_log_hours = 0;
+			}
 		}
 
-		return $stored;
-	}
+        parent::hook_preStore();
+    }
+
+    protected function  hook_preCreate() {
+        $q = $this->_getQuery();
+        $this->task_log_created = $q->dbfnNowWithTZ();
+
+        parent::hook_preCreate();
+    }
 
 	/**
 	 * Deletes the current task log from the database. Then updated total hours
@@ -304,19 +307,6 @@ class CTask_Log extends w2p_Core_BaseObject
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
-
-//TODO: I *really* hate that this is modifying the underlying object, isValid should not change anything.
-		if (!((float)$this->task_log_hours)) {
-			// before evaluating a non-float work hour as 0 lets try to check if user is trying
-			// to enter in hour:minute format and convert it to decimal. If that is not the format
-			// then we consider that there was no time worked at all (i.e. 0 time worked)
-			$log_time_hour = $log_time_minute = 0;
-			list($log_time_hour, $log_time_minute) = explode(':', $this->task_log_hours);
-			$this->task_log_hours = ((int)$log_time_hour) + (((int)$log_time_minute) / 60);
-			if (!((float)$this->task_log_hours)) {
-				$this->task_log_hours = 0;
-			}
-		}
 
         return (count($this->_error)) ? false : true;
     }
