@@ -22,4 +22,13 @@ class CProjectDesigner extends w2p_Core_BaseObject
     {
         parent::__construct('project_designer_options', 'pd_option_id');
     }
+
+    /*
+     * Since these are user-based settings, we should always allow the user
+     *   to create/edit settings as needed.
+     *
+     */
+    public function canCreate() {   return true;    }
+    public function canEdit()   {   return true;    }
+    public function canDelete() {   return true;    }
 }
