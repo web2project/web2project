@@ -9,7 +9,7 @@ include_once (W2P_BASE_DIR . '/modules/projectdesigner/config.php');
 class CProjectDesigner extends w2p_Core_BaseObject
 {
 
-    public $pd_option_id = null;
+    public $pd_option_id = 0;
     public $pd_option_user = null;
     public $pd_option_view_project = null;
     public $pd_option_view_gantt = null;
@@ -23,21 +23,27 @@ class CProjectDesigner extends w2p_Core_BaseObject
         parent::__construct('project_designer_options', 'pd_option_id');
     }
 
-    public function store()
+    protected function hook_preStore()
     {
-        $q = $this->_getQuery();
-        $q->addTable('project_designer_options');
-        $q->addReplace('pd_option_user', $this->pd_option_user);
-        $q->addReplace('pd_option_view_project', $this->pd_option_view_project);
-        $q->addReplace('pd_option_view_gantt', $this->pd_option_view_gantt);
-        $q->addReplace('pd_option_view_tasks', $this->pd_option_view_tasks);
-        $q->addReplace('pd_option_view_actions', $this->pd_option_view_actions);
-        $q->addReplace('pd_option_view_addtasks', $this->pd_option_view_addtasks);
-        $q->addReplace('pd_option_view_files', $this->pd_option_view_files);
-        $q->addWhere('pd_option_user = ' . (int) $this->pd_option_user);
-        $q->exec();
+        $this->pd_option_user = $this->_AppUI->user_id;
 
-        return true;
+        $pd_options = $this->loadAll(null, 'pd_option_user = ' . $this->pd_option_user);
+        if (count($pd_options)) {
+            foreach($pd_options as $options) {
+                $pd_options_id = $options['pd_option_id'];
+            }
+        }
+        $this->pd_option_id = $pd_options_id;
+
+        parent::hook_preStore();
     }
 
+    /*
+     * Since these are user-based settings, we should always allow the user
+     *   to create/edit settings as needed.
+     *
+     */
+    public function canCreate() {   return true;    }
+    public function canEdit()   {   return true;    }
+    public function canDelete() {   return true;    }
 }
