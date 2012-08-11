@@ -70,22 +70,10 @@ class CCompany extends w2p_Core_BaseObject {
 		return parent::canDelete($msg, $oid, $tables);
 	}
 
-    public function store() {
-        $stored = false;
-
+    protected function  hook_preStore() {
         $this->company_id = (int) $this->company_id;
-        /*
-         * TODO: I don't like the duplication on each of these two branches, but I
-         *   don't have a good idea on how to fix it at the moment...
-         */
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-        }
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $stored = parent::store();
-        }
 
-        return $stored;
+        parent::hook_preStore();
     }
 
     protected function hook_postStore() {
