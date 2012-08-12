@@ -22,7 +22,7 @@
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'CommonSetup.php';
 
-class CSystemBudget_Test extends CommonSetup
+class CSystemBudgets_Test extends CommonSetup
 {
 
     protected function setUp()

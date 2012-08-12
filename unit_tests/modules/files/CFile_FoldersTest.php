@@ -22,7 +22,7 @@
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'CommonSetup.php';
 
-class CFolders_Test extends CommonSetup
+class CFileFolders_Test extends CommonSetup
 {
 
     protected function setUp()
