@@ -180,6 +180,18 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->task_log_hours = $this->task_log_hours;
 		$this->task_log_costcode = cleanText($this->task_log_costcode);
 
+		if (!((float)$this->task_log_hours)) {
+			// before evaluating a non-float work hour as 0 lets try to check if user is trying
+			// to enter in hour:minute format and convert it to decimal. If that is not the format
+			// then we consider that there was no time worked at all (i.e. 0 time worked)
+			$log_time_hour = $log_time_minute = 0;
+			list($log_time_hour, $log_time_minute) = explode(':', $this->task_log_hours);
+			$this->task_log_hours = ((int)$log_time_hour) + (((int)$log_time_minute) / 60);
+			if (!((float)$this->task_log_hours)) {
+				$this->task_log_hours = 0;
+			}
+		}
+
         parent::hook_preStore();
     }
 
@@ -295,19 +307,6 @@ class CTask_Log extends w2p_Core_BaseObject
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
-
-//TODO: I *really* hate that this is modifying the underlying object, isValid should not change anything.
-		if (!((float)$this->task_log_hours)) {
-			// before evaluating a non-float work hour as 0 lets try to check if user is trying
-			// to enter in hour:minute format and convert it to decimal. If that is not the format
-			// then we consider that there was no time worked at all (i.e. 0 time worked)
-			$log_time_hour = $log_time_minute = 0;
-			list($log_time_hour, $log_time_minute) = explode(':', $this->task_log_hours);
-			$this->task_log_hours = ((int)$log_time_hour) + (((int)$log_time_minute) / 60);
-			if (!((float)$this->task_log_hours)) {
-				$this->task_log_hours = 0;
-			}
-		}
 
         return (count($this->_error)) ? false : true;
     }
