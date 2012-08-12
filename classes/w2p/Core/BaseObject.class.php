@@ -328,7 +328,6 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $this->_event = ($this->$k) ? 'Update' : 'Create';
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $this->_event . 'Event'));
 
-        $k = $this->_tbl_key;
         $q = $this->_getQuery();
 
         /*
