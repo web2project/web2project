@@ -30,11 +30,12 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 
-	public function canDelete($msg, $oid = 0, $joins = null) {
+	public function canDelete()
+    {
 		$q = $this->_getQuery();
 		$q->addTable('file_folders');
 		$q->addQuery('COUNT(DISTINCT file_folder_id) AS num_of_subfolders');
-		$q->addWhere('file_folder_parent=' . $oid);
+		$q->addWhere('file_folder_parent=' . (int) $this->file_folder_id);
 		$res1 = $q->loadResult();
 		if ($res1) {
             $this->_error['subfolders'] = "Can't delete folder, it has subfolders.";
@@ -43,7 +44,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		$q = $this->_getQuery();
 		$q->addTable('files');
 		$q->addQuery('COUNT(DISTINCT file_id) AS num_of_files');
-		$q->addWhere('file_folder=' . $oid);
+		$q->addWhere('file_folder=' . (int) $this->file_folder_id);
 		$res2 = $q->loadResult();
 		if ($res2) {
             $this->_error['files'] = "Can't delete folder, it has files within it.";
@@ -63,24 +64,11 @@ class CFile_Folder extends w2p_Core_BaseObject {
         return (count($this->_error)) ? false : true;
     }
 
-    public function store() {
-        $stored = false;
-
+    protected function  hook_preStore() {
         $this->file_folder_id = (int) $this->file_folder_id;
 		$this->file_folder_parent = (int) $this->file_folder_parent;
 
-        /*
-         * TODO: I don't like the duplication on each of these two branches, but I
-         *   don't have a good idea on how to fix it at the moment...
-         */
-//TODO: this is an oddball permissions object where the module doesn't determine the access..
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-        }
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $stored = parent::store();
-        }
-        return $stored;
+        parent::hook_preStore();
     }
 
 	/**
