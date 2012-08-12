@@ -149,18 +149,10 @@ class CForum extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
-    public function store()
-    {
-        $stored = false;
+    protected function hook_preCreate() {
+        $this->forum_create_date = $this->_AppUI->convertToSystemTZ($this->forum_create_date);
 
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-        }
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $this->forum_create_date = $this->_AppUI->convertToSystemTZ($this->forum_create_date);
-            $stored = parent::store();
-        }
-        return $stored;
+        parent::hook_preCreate();
     }
 
     public function delete()
