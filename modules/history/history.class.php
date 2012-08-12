@@ -22,7 +22,7 @@ class CHistory extends w2p_Core_BaseObject {
         parent::__construct('history', 'history_id');
     }
 
-    public function delete() {
+    public function canDelete() {
 //TODO: History items (aka the audit log) should not be deletable via the system directly.
         return false;
     }
