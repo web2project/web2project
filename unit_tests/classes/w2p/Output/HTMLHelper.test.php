@@ -75,16 +75,15 @@ class w2p_Output_HTMLHelper_Test extends CommonSetup
           );
 
         $cell = $this->obj->createCell('file_type', 'default value', $custom);
-        $this->assertEquals('<td  class="data _type">default value</td>', $cell);
-
+        $this->assertEquals('<td  class="data _type nowrap">default value</td>', $cell);
         $cell = $this->obj->createCell('x_category', 'one', $custom);
-        $this->assertEquals('<td  class="data _category">a</td>', $cell);
+        $this->assertEquals('<td  class="data _category nowrap">a</td>', $cell);
         $cell = $this->obj->createCell('x_category', 'notthere', $custom);
-        $this->assertEquals('<td  class="data _category"></td>', $cell);
+        $this->assertEquals('<td  class="data _category nowrap"></td>', $cell);
         $cell = $this->obj->createCell('x_status', 'three', $custom);
-        $this->assertEquals('<td  class="data _status">c</td>', $cell);
+        $this->assertEquals('<td  class="data _status nowrap">c</td>', $cell);
         $cell = $this->obj->createCell('x_type', 'five', $custom);
-        $this->assertEquals('<td  class="data _type">e</td>', $cell);
+        $this->assertEquals('<td  class="data _type nowrap">e</td>', $cell);
     }
 
     /*
@@ -127,7 +126,7 @@ class w2p_Output_HTMLHelper_Test extends CommonSetup
     public function testCreateCell_common()
     {
         $cell = $this->obj->createCell('x_budget', 12345.67);
-        $this->assertEquals('<td  class="data _budget">$USD 12,345.67</td>', $cell);
+        $this->assertEquals('<td  class="data _budget">$USD12,345.67</td>', $cell);
 
         $cell = $this->obj->createCell('x_url', 'http://web2project.net');
         $this->assertEquals('<td  class="data _url"><a href="http://web2project.net" target="_new">http://web2project.net</a></td>', $cell);
@@ -137,9 +136,9 @@ class w2p_Output_HTMLHelper_Test extends CommonSetup
 
         // The formatting for _complete and _assignment are the same.
         $cell = $this->obj->createCell('x_complete', '37.7');
-        $this->assertEquals('<td  class="data _complete">37.7%</td>', $cell);
+        $this->assertEquals('<td  class="data _complete">38%</td>', $cell);
         $cell = $this->obj->createCell('x_assignment', 'xxx');
-        $this->assertEquals('<td  class="data _assignment">xxx%</td>', $cell);
+        $this->assertEquals('<td  class="data _assignment">0%</td>', $cell);
 
         $cell = $this->obj->createCell('x_password', 'monkey');
         $this->assertEquals('<td  class="data _password">(hidden)</td>', $cell);
