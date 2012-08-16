@@ -257,7 +257,6 @@ class w2p_Output_HTMLHelper
                 break;
 			default:
 //TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
-				//$additional = 'nowrap="nowrap"';
                 $suffix .= ' nowrap';
                 $value = (isset($custom[$fieldName])) ? $custom[$fieldName][$value] : $value;
 				$cell = htmlspecialchars($value, ENT_QUOTES);

@@ -114,9 +114,9 @@ class w2p_Output_HTMLHelper_Test extends CommonSetup
     public function testCreateCell_size()
     {
         $cell = $this->obj->createCell('x_size', 5000);
-        $this->assertEquals('<td nowrap="nowrap" class="data _size">4.88 Kb</td>', $cell);
+        $this->assertEquals('<td class="data _size nowrap">4.88 Kb</td>', $cell);
         $cell = $this->obj->createCell('x_size', 'monkey');
-        $this->assertEquals('<td nowrap="nowrap" class="data _size">0 B</td>', $cell);
+        $this->assertEquals('<td class="data _size nowrap">0 B</td>', $cell);
     }
 
     /*
@@ -169,21 +169,21 @@ class w2p_Output_HTMLHelper_Test extends CommonSetup
     {
         // The formatting for _birthday and _date are exactly the same
         $cell = $this->obj->createCell('x_birthday', '1776-07-04');
-        $this->assertEquals('<td nowrap="nowrap" class="data _birthday">04/Jul/1776</td>', $cell);
+        $this->assertEquals('<td class="data _birthday nowrap">04/Jul/1776</td>', $cell);
         $cell = $this->obj->createCell('x_date', '1776-07-04');
-        $this->assertEquals('<td nowrap="nowrap" class="data _date">04/Jul/1776</td>', $cell);
+        $this->assertEquals('<td class="data _date nowrap">04/Jul/1776</td>', $cell);
         $cell = $this->obj->createCell('x_date', 0);
-        $this->assertEquals('<td nowrap="nowrap" class="data _date">-</td>', $cell);
+        $this->assertEquals('<td class="data _date nowrap">-</td>', $cell);
 
         // The formatting for _created, _datetime, _update, _updated are the same
         $cell = $this->obj->createCell('x_created', '2012-04-01 12:00:00');
-        $this->assertEquals('<td nowrap="nowrap" class="data _created">01/Apr/2012 06:00 am</td>', $cell);
+        $this->assertEquals('<td class="data _created nowrap">01/Apr/2012 06:00 am</td>', $cell);
         $cell = $this->obj->createCell('x_datetime', null);
-        $this->assertEquals('<td nowrap="nowrap" class="data _datetime">-</td>', $cell);
+        $this->assertEquals('<td class="data _datetime nowrap">-</td>', $cell);
         $cell = $this->obj->createCell('x_update', '2012-04-01 15:00:00');
-        $this->assertEquals('<td nowrap="nowrap" class="data _update">01/Apr/2012 09:00 am</td>', $cell);
+        $this->assertEquals('<td class="data _update nowrap">01/Apr/2012 09:00 am</td>', $cell);
         $cell = $this->obj->createCell('x_updated', '2012-04-01 01:00:00');
-        $this->assertEquals('<td nowrap="nowrap" class="data _updated">31/Mar/2012 07:00 pm</td>', $cell);
+        $this->assertEquals('<td class="data _updated nowrap">31/Mar/2012 07:00 pm</td>', $cell);
     }
 
     /*
