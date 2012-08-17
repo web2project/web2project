@@ -5,7 +5,7 @@
 ##
 
 class CDepartment extends w2p_Core_BaseObject {
-	public $dept_id = 0;
+	public $dept_id = null;
 	public $dept_parent = null;
 	public $dept_company = null;
 	public $dept_name = null;
