@@ -54,18 +54,9 @@ class CUsers_Test extends CommonSetup
       );
     }
 
-    /**
-     * Tests the Attributes of a new object.
-     */
     public function testObjectProperties()
     {
-        $this->assertInstanceOf('CUser',            $this->obj);
-        $params = get_object_vars($this->obj);
-        $this->assertEquals(7,  count($params));
-        
-        foreach($params as $key => $value) {
-            $this->assertNull($this->obj->{$key});
-        }
+        parent::testObjectProperties('CUser', 7);
     }
 
     /**

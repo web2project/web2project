@@ -90,78 +90,9 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
 		);
 	}
 
-    /**
-     * Tests the Attributes of a new Projec object.
-     */
-    public function testNewProjectAttributes()
+    public function testObjectProperties()
     {
-    	$this->assertInstanceOf('CProject', $this->obj);
-    	$this->assertObjectHasAttribute('project_id',                  $this->obj);
-    	$this->assertObjectHasAttribute('project_company',             $this->obj);
-    	$this->assertObjectHasAttribute('project_name',                $this->obj);
-    	$this->assertObjectHasAttribute('project_short_name',          $this->obj);
-    	$this->assertObjectHasAttribute('project_owner',               $this->obj);
-    	$this->assertObjectHasAttribute('project_url',                 $this->obj);
-    	$this->assertObjectHasAttribute('project_demo_url',            $this->obj);
-    	$this->assertObjectHasAttribute('project_start_date',          $this->obj);
-    	$this->assertObjectHasAttribute('project_end_date',            $this->obj);
-    	$this->assertObjectHasAttribute('project_actual_end_date',     $this->obj);
-    	$this->assertObjectHasAttribute('project_status',              $this->obj);
-    	$this->assertObjectHasAttribute('project_percent_complete',    $this->obj);
-    	$this->assertObjectHasAttribute('project_color_identifier',    $this->obj);
-    	$this->assertObjectHasAttribute('project_description',         $this->obj);
-    	$this->assertObjectHasAttribute('project_target_budget',       $this->obj);
-    	$this->assertObjectHasAttribute('project_actual_budget',       $this->obj);
-        $this->assertObjectHasAttribute('project_scheduled_hours',     $this->obj);
-        $this->assertObjectHasAttribute('project_worked_hours',        $this->obj);
-        $this->assertObjectHasAttribute('project_task_count',          $this->obj);
-    	$this->assertObjectHasAttribute('project_creator',             $this->obj);
-    	$this->assertObjectHasAttribute('project_active',              $this->obj);
-    	$this->assertObjectHasAttribute('project_private',             $this->obj);
-    	$this->assertObjectHasAttribute('project_departments',         $this->obj);
-    	$this->assertObjectHasAttribute('project_contacts',            $this->obj);
-    	$this->assertObjectHasAttribute('project_priority',            $this->obj);
-    	$this->assertObjectHasAttribute('project_type',                $this->obj);
-    	$this->assertObjectHasAttribute('project_parent',              $this->obj);
-    	$this->assertObjectHasAttribute('project_original_parent',     $this->obj);
-    	$this->assertObjectHasAttribute('project_location',            $this->obj);
-    }
-
-    /**
-     * Tests the Attribute Values of a new Project object.
-     */
-    public function testNewProjectAttributeValues()
-    {
-        $this->assertInstanceOf('CProject', $this->obj);
-        $this->assertNull($this->obj->project_id);
-        $this->assertNull($this->obj->project_company);
-        $this->assertNull($this->obj->project_department);
-        $this->assertNull($this->obj->project_name);
-        $this->assertNull($this->obj->project_short_name);
-        $this->assertNull($this->obj->project_owner);
-        $this->assertNull($this->obj->project_url);
-        $this->assertNull($this->obj->project_demo_url);
-        $this->assertNull($this->obj->project_start_date);
-        $this->assertNull($this->obj->project_end_date);
-        $this->assertNull($this->obj->project_actual_end_date);
-        $this->assertNull($this->obj->project_status);
-        $this->assertNull($this->obj->project_percent_complete);
-        $this->assertNull($this->obj->project_color_identifier);
-        $this->assertNull($this->obj->project_description);
-        $this->assertEquals(0, $this->obj->project_target_budget);
-        $this->assertEquals(0, $this->obj->project_actual_budget);
-        $this->assertNull($this->obj->project_scheduled_hours);
-        $this->assertNull($this->obj->project_worked_hours);
-        $this->assertNull($this->obj->project_task_count);
-        $this->assertNull($this->obj->project_creator);
-        $this->assertNull($this->obj->project_active);
-        $this->assertNull($this->obj->project_private);
-        $this->assertNull($this->obj->project_departments);
-        $this->assertNull($this->obj->project_contacts);
-        $this->assertNull($this->obj->project_priority);
-        $this->assertNull($this->obj->project_type);
-        $this->assertNull($this->obj->project_parent);
-        $this->assertNull($this->obj->project_original_parent);
+        parent::testObjectProperties('CProject', 29);
     }
 
     /**

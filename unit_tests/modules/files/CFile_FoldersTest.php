@@ -43,18 +43,9 @@ class CFileFolders_Test extends CommonSetup
       );
     }
 
-    /**
-     * Tests the Attributes of a new object.
-     */
     public function testObjectProperties()
     {
-        $this->assertInstanceOf('CFile_Folder',            $this->obj);
-        $params = get_object_vars($this->obj);
-        $this->assertEquals(4,  count($params));
-        
-        foreach($params as $key => $value) {
-            $this->assertNull($this->obj->{$key});
-        }
+        parent::testObjectProperties('CFile_Folder', 4);
     }
 
     /**

@@ -52,19 +52,11 @@ class CTaskLogs_Test extends CommonSetup
 		);
 	}
 
-    /**
-     * Tests the Attributes of a new object.
-     */
     public function testObjectProperties()
     {
-        $this->assertInstanceOf('CTask_Log',            $this->obj);
-        $params = get_object_vars($this->obj);
-        unset($params['task_log_problem']);
-        $this->assertEquals(15,  count($params));
-        
-        foreach($params as $key => $value) {
-            $this->assertNull($this->obj->{$key});
-        }
+        $unset = array('task_log_problem');
+
+        parent::testObjectProperties('CTask_Log', 15, $unset);
     }
 
     /**

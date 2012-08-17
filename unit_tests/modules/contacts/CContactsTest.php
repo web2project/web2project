@@ -64,19 +64,11 @@ class CContacts_Test extends CommonSetup
         );
     }
 
-    /**
-     * Tests the Attributes of a new object.
-     */
     public function testObjectProperties()
     {
-        $this->assertInstanceOf('CContact',            $this->obj);
-        $params = get_object_vars($this->obj);
-        unset($params['contact_methods']);
-        $this->assertEquals(26,  count($params));
-        
-        foreach($params as $key => $value) {
-            $this->assertNull($this->obj->{$key});
-        }
+        $unset = array('contact_methods');
+
+        parent::testObjectProperties('CContact', 26, $unset);
     }
 
     public function testStoreCreate()
