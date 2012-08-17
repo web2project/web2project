@@ -97,13 +97,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 		);
 	}
 
-	public function tearDown()
-	{
-		parent::tearDown();
-
-		unset($this->obj, $this->post_data);
-	}
-
     /*
      * This was written because the old CTask->load() actually performed updates
      *   instead of just loading which is just screwy. The standard

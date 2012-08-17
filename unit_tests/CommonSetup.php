@@ -57,13 +57,21 @@ class CommonSetup extends PHPUnit_Framework_TestCase {
     protected $mockDB = null;
     protected $_AppUI = null;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         parent::setUp();
 
         global $AppUI;
         $this->_AppUI  = $AppUI;
 
         $this->mockDB = new w2p_Mocks_Query();
+    }
+
+    protected function tearDown()
+    {
+        unset($this->obj, $this->post_data);
+
+        parent::tearDown();
     }
 
     /**

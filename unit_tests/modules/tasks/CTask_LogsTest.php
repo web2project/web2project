@@ -53,16 +53,6 @@ class CTaskLogs_Test extends CommonSetup
 	}
 
     /**
-     * Tear Down function to be run after tests
-     */
-    public function tearDown()
-	{
-		parent::tearDown();
-
-		unset($this->obj, $this->post_data);
-	}
-
-    /**
      * Tests the Attributes of a new object.
      */
     public function testObjectProperties()

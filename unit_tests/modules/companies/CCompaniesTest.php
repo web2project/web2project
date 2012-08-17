@@ -56,13 +56,6 @@ class CCompanies_Test extends CommonSetup
 		);
 	}
 
-	public function tearDown()
-	{
-		parent::tearDown();
-
-		unset($this->obj, $this->post_data);
-	}
-
     /**
      * Tests the Attributes of a new object.
      */
