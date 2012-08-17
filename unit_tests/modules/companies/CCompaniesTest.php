@@ -64,53 +64,17 @@ class CCompanies_Test extends CommonSetup
 	}
 
     /**
-     * Tests the Attributes of a new Companies object.
+     * Tests the Attributes of a new object.
      */
-    public function testNewCompanyAttributes()
+    public function testObjectProperties()
     {
-        $this->assertInstanceOf('CCompany', $this->obj);
-        $this->assertObjectHasAttribute('company_id',           $this->obj);
-        $this->assertObjectHasAttribute('company_name',         $this->obj);
-        $this->assertObjectHasAttribute('company_phone1',       $this->obj);
-        $this->assertObjectHasAttribute('company_phone2',       $this->obj);
-        $this->assertObjectHasAttribute('company_fax',          $this->obj);
-        $this->assertObjectHasAttribute('company_address1',     $this->obj);
-        $this->assertObjectHasAttribute('company_address2',     $this->obj);
-        $this->assertObjectHasAttribute('company_city',         $this->obj);
-        $this->assertObjectHasAttribute('company_state',        $this->obj);
-        $this->assertObjectHasAttribute('company_zip',          $this->obj);
-        $this->assertObjectHasAttribute('company_country',      $this->obj);
-        $this->assertObjectHasAttribute('company_email',        $this->obj);
-        $this->assertObjectHasAttribute('company_primary_url',  $this->obj);
-        $this->assertObjectHasAttribute('company_owner',        $this->obj);
-        $this->assertObjectHasAttribute('company_description',  $this->obj);
-        $this->assertObjectHasAttribute('company_type',         $this->obj);
-        $this->assertObjectHasAttribute('company_custom',       $this->obj);
-    }
-
-    /**
-     * Tests the Attribute Values of a new Company object.
-     */
-    public function testNewCompanyAttributeValues()
-    {
-        $this->assertInstanceOf('CCompany', $this->obj);
-        $this->assertEquals(0, $this->obj->company_id);
-        $this->assertNull($this->obj->company_name);
-        $this->assertNull($this->obj->company_phone1);
-        $this->assertNull($this->obj->company_phone2);
-        $this->assertNull($this->obj->company_fax);
-        $this->assertNull($this->obj->company_address1);
-        $this->assertNull($this->obj->company_address2);
-        $this->assertNull($this->obj->company_city);
-        $this->assertNull($this->obj->company_state);
-        $this->assertNull($this->obj->company_zip);
-        $this->assertNull($this->obj->company_country);
-        $this->assertNull($this->obj->company_email);
-        $this->assertNull($this->obj->company_primary_url);
-        $this->assertNull($this->obj->company_owner);
-        $this->assertNull($this->obj->company_description);
-        $this->assertNull($this->obj->company_type);
-        $this->assertNull($this->obj->company_custom);
+        $this->assertInstanceOf('CCompany',            $this->obj);
+        $params = get_object_vars($this->obj);
+        $this->assertEquals(17,  count($params));
+        
+        foreach($params as $key => $value) {
+            $this->assertNull($this->obj->{$key});
+        }
     }
 
     /**

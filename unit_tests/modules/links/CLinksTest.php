@@ -51,41 +51,17 @@ class CLinks_Test extends CommonSetup
     }
 
     /**
-     * Tests the Attributes of a new Links object.
+     * Tests the Attributes of a new object.
      */
-    public function testNewLinkAttributes()
+    public function testObjectProperties()
     {
-      $this->assertInstanceOf('CLink', $this->obj);
-      $this->assertObjectHasAttribute('link_id',          $this->obj);
-      $this->assertObjectHasAttribute('link_project',     $this->obj);
-      $this->assertObjectHasAttribute('link_url',         $this->obj);
-      $this->assertObjectHasAttribute('link_task',        $this->obj);
-      $this->assertObjectHasAttribute('link_name',        $this->obj);
-      $this->assertObjectHasAttribute('link_parent',      $this->obj);
-      $this->assertObjectHasAttribute('link_description', $this->obj);
-      $this->assertObjectHasAttribute('link_owner',       $this->obj);
-      $this->assertObjectHasAttribute('link_date',        $this->obj);
-      $this->assertObjectHasAttribute('link_icon',        $this->obj);
-      $this->assertObjectHasAttribute('link_category',    $this->obj);
-    }
-
-    /**
-     * Tests the Attribute Values of a new Link object.
-     */
-    public function testNewLinkAttributeValues()
-    {
-        $this->assertInstanceOf('CLink', $this->obj);
-        $this->assertNull($this->obj->link_id);
-        $this->assertNull($this->obj->link_project);
-        $this->assertNull($this->obj->link_url);
-        $this->assertNull($this->obj->link_task);
-        $this->assertNull($this->obj->link_name);
-        $this->assertNull($this->obj->link_parent);
-        $this->assertNull($this->obj->link_description);
-        $this->assertNull($this->obj->link_owner);
-        $this->assertNull($this->obj->link_date);
-        $this->assertNull($this->obj->link_icon);
-        $this->assertNull($this->obj->link_category);
+        $this->assertInstanceOf('CLink',            $this->obj);
+        $params = get_object_vars($this->obj);
+        $this->assertEquals(11,  count($params));
+        
+        foreach($params as $key => $value) {
+            $this->assertNull($this->obj->{$key});
+        }
     }
 
     /**

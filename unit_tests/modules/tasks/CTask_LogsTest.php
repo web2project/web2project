@@ -63,45 +63,18 @@ class CTaskLogs_Test extends CommonSetup
 	}
 
     /**
-     * Tests the attributes of a new TaskLog object
+     * Tests the Attributes of a new object.
      */
-    public function testNewTaskLogsAttributes()
+    public function testObjectProperties()
     {
-        $this->assertInstanceOf('CTask_Log',                     $this->obj);
-        $this->assertObjectHasAttribute('task_log_id',          $this->obj);
-        $this->assertObjectHasAttribute('task_log_task',        $this->obj);
-        $this->assertObjectHasAttribute('task_log_name',        $this->obj);
-        $this->assertObjectHasAttribute('task_log_description', $this->obj);
-        $this->assertObjectHasAttribute('task_log_creator',     $this->obj);
-        $this->assertObjectHasAttribute('task_log_hours',       $this->obj);
-        $this->assertObjectHasAttribute('task_log_date',        $this->obj);
-        $this->assertObjectHasAttribute('task_log_costcode',    $this->obj);
-        $this->assertObjectHasAttribute('task_log_problem',     $this->obj);
-        $this->assertObjectHasAttribute('task_log_reference',   $this->obj);
-        $this->assertObjectHasAttribute('task_log_related_url', $this->obj);
-        $this->assertObjectHasAttribute('task_log_created',     $this->obj);
-        $this->assertObjectHasAttribute('task_log_updated',     $this->obj);
-    }
-
-    /**
-     * Tests the values of attributes of a new TaskLog object
-     */
-    public function testNewTaskLogsAttributeValues()
-    {
-        $this->assertInstanceOf('CTask_Log', $this->obj);
-        $this->assertNull($this->obj->task_log_id);
-        $this->assertNull($this->obj->task_log_task);
-        $this->assertNull($this->obj->task_log_name);
-        $this->assertNull($this->obj->task_log_description);
-        $this->assertNull($this->obj->task_log_creator);
-        $this->assertNull($this->obj->task_log_hours);
-        $this->assertNull($this->obj->task_log_date);
-        $this->assertNull($this->obj->task_log_costcode);
-        $this->assertNull($this->obj->task_log_reference);
-        $this->assertNull($this->obj->task_log_related_url);
-        $this->assertNull($this->obj->task_log_created);
-        $this->assertNull($this->obj->task_log_updated);
-        $this->assertEquals(0,              $this->obj->task_log_problem);
+        $this->assertInstanceOf('CTask_Log',            $this->obj);
+        $params = get_object_vars($this->obj);
+        unset($params['task_log_problem']);
+        $this->assertEquals(15,  count($params));
+        
+        foreach($params as $key => $value) {
+            $this->assertNull($this->obj->{$key});
+        }
     }
 
     /**

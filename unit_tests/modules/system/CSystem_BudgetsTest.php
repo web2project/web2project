@@ -47,33 +47,17 @@ class CSystemBudgets_Test extends CommonSetup
     }
 
     /**
-     * Tests the Attributes of a new CSystem_Budget object.
+     * Tests the Attributes of a new object.
      */
-    public function testNewAttributes()
+    public function testObjectProperties()
     {
-      $this->assertInstanceOf('CSystem_Budget',            $this->obj);
-      $this->assertObjectHasAttribute('budget_id',         $this->obj);
-      $this->assertObjectHasAttribute('budget_company',    $this->obj);
-      $this->assertObjectHasAttribute('budget_dept',       $this->obj);
-      $this->assertObjectHasAttribute('budget_start_date', $this->obj);
-      $this->assertObjectHasAttribute('budget_end_date',   $this->obj);
-      $this->assertObjectHasAttribute('budget_amount',     $this->obj);
-      $this->assertObjectHasAttribute('budget_category',   $this->obj);
-    }
-
-    /**
-     * Tests the Attribute Values of a new CSystem_Budget object.
-     */
-    public function testNewAttributeValues()
-    {
-        $this->assertInstanceOf('CSystem_Budget', $this->obj);
-        $this->assertNull($this->obj->budget_id);
-        $this->assertNull($this->obj->budget_company);
-        $this->assertNull($this->obj->budget_dept);
-        $this->assertNull($this->obj->budget_start_date);
-        $this->assertNull($this->obj->budget_end_date);
-        $this->assertNull($this->obj->budget_amount);
-        $this->assertNull($this->obj->budget_category);
+        $this->assertInstanceOf('CSystem_Budget',            $this->obj);
+        $params = get_object_vars($this->obj);
+        $this->assertEquals(7,  count($params));
+        
+        foreach($params as $key => $value) {
+            $this->assertNull($this->obj->{$key});
+        }
     }
 
     /**

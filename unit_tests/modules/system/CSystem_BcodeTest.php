@@ -47,33 +47,17 @@ class CSystemBcode_Test extends CommonSetup
     }
 
     /**
-     * Tests the Attributes of a new CSystem_Budget object.
+     * Tests the Attributes of a new object.
      */
-    public function testNewAttributes()
+    public function testObjectProperties()
     {
-      $this->assertInstanceOf('CSystem_Bcode',                  $this->obj);
-      $this->assertObjectHasAttribute('billingcode_id',         $this->obj);
-      $this->assertObjectHasAttribute('billingcode_company',    $this->obj);
-      $this->assertObjectHasAttribute('billingcode_desc',       $this->obj);
-      $this->assertObjectHasAttribute('billingcode_name',       $this->obj);
-      $this->assertObjectHasAttribute('billingcode_value',      $this->obj);
-      $this->assertObjectHasAttribute('billingcode_status',     $this->obj);
-      $this->assertObjectHasAttribute('billingcode_category',   $this->obj);
-    }
-
-    /**
-     * Tests the Attribute Values of a new CSystem_Budget object.
-     */
-    public function testNewAttributeValues()
-    {
-        $this->assertInstanceOf('CSystem_Bcode', $this->obj);
-        $this->assertNull($this->obj->billingcode_id);
-        $this->assertNull($this->obj->billingcode_company);
-        $this->assertNull($this->obj->billingcode_desc);
-        $this->assertNull($this->obj->billingcode_name);
-        $this->assertNull($this->obj->billingcode_value);
-        $this->assertNull($this->obj->billingcode_status);
-        $this->assertNull($this->obj->billingcode_category);
+        $this->assertInstanceOf('CSystem_Bcode',            $this->obj);
+        $params = get_object_vars($this->obj);
+        $this->assertEquals(8,  count($params));
+        
+        foreach($params as $key => $value) {
+            $this->assertNull($this->obj->{$key});
+        }
     }
 
     /**

@@ -64,13 +64,19 @@ class CContacts_Test extends CommonSetup
         );
     }
 
-    /*
-     * I'm just using this one to test recent class changes.
+    /**
+     * Tests the Attributes of a new object.
      */
-    public function testNewContactAttributes()
+    public function testObjectProperties()
     {
-        $this->assertInstanceOf('CContact', $this->obj);
-        $this->assertObjectHasAttribute('contact_display_name',     $this->obj);
+        $this->assertInstanceOf('CContact',            $this->obj);
+        $params = get_object_vars($this->obj);
+        unset($params['contact_methods']);
+        $this->assertEquals(26,  count($params));
+        
+        foreach($params as $key => $value) {
+            $this->assertNull($this->obj->{$key});
+        }
     }
 
     public function testStoreCreate()
