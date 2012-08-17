@@ -80,12 +80,15 @@ class CommonSetup extends PHPUnit_Framework_TestCase {
     public function testObjectProperties($classname, $fieldCount, $removeFields = array())
     {
         $params = get_object_vars($this->obj);
+        foreach($removeFields as $key => $value) {
+            unset($params[$value]);
+        }
 
         $this->assertInstanceOf($classname,     $this->obj);
         $this->assertEquals($fieldCount,        count($params));
         
         foreach($params as $key => $value) {
-            $this->assertNull($this->obj->{$key});
+            $this->assertNull($this->obj->{$key}, "$classname::$key did not pass validation");
         }
     }
 }
