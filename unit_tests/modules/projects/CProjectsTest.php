@@ -21,10 +21,9 @@
 
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'CommonSetup.php';
-require_once 'PHPUnit/Extensions/Database/DataSet/DataSetFilter.php';
+//require_once 'PHPUnit/Extensions/Database/DataSet/DataSetFilter.php';
 
 class CProjects_Test extends CommonSetup
-//class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
 {
 	protected function setUp ()
 	{
@@ -264,7 +263,6 @@ $this->obj->overrideDatabase($this->mockDB);
      */
     public function testStoreCreate()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
 
         $results = $this->obj->store();
@@ -326,7 +324,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testLoad()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
         $this->assertEquals($this->obj->project_created,    '');
         $this->assertEquals($this->obj->project_updated,    '');
@@ -352,7 +349,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testLoadFull()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->mockDB->stageHash(
                 array('project_id' => 1, 'project_url' => 'http://project1.example.org',
                     'project_start_date' => '2009-07-05 00:00:00',
@@ -372,7 +368,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testStoreUpdate()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
@@ -410,8 +405,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testDelete()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
-
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
@@ -449,15 +442,15 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
         $this->assertEquals('Task: BadDep_CircularDep', $response[0]);
         $this->assertEquals('Task: (5)', $response[1]);
 
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
-        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
-        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
+//        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
+//        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
+//        $xml_db_dataset = $this->getConnection()->createDataSet();
+//        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
+//        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
 
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
-        $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
+//        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
+//        $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
+//        $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
     }
 
     /**
@@ -530,6 +523,8 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetAllowedRecordsWithWhere()
     {
+        $this->mockDB->stageHashList(1, 'Test Project');
+        
         $extra = array('where' => 'project_active = 1');
         $allowed_records = $this->obj->getAllowedRecords(1, 'projects.project_id,project_name', null, null, $extra);
 
@@ -614,6 +609,13 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetCriticalTasksNoArgs()
     {
+        $this->mockDB->stageList(
+                array('task_id' => 1, 'task_name' => 'Task',
+                    'task_start_date' => '2009-07-05 00:00:00',
+                    'task_end_date' => '2009-07-15 00:00:00',
+                    'task_created' => '2009-07-05 15:43:00', 'task_updated' => '2009-07-05 15:43:00')
+        );
+        
         $this->obj->load(1);
 
         $critical_tasks = $this->obj->getCriticalTasks();
@@ -621,35 +623,10 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
         $this->assertEquals(1,                      count($critical_tasks));
         $this->assertEquals(1,                      $critical_tasks[0]['task_id']);
         $this->assertEquals('Task',                 $critical_tasks[0]['task_name']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_parent']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_milestone']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_project']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_owner']);
         $this->assertEquals('2009-07-05 00:00:00',  $critical_tasks[0]['task_start_date']);
-        $this->assertEquals(2,                      $critical_tasks[0]['task_duration']);
-        $this->assertEquals(24,                     $critical_tasks[0]['task_duration_type']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_hours_worked']);
         $this->assertEquals('2009-07-15 00:00:00',  $critical_tasks[0]['task_end_date']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_status']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_priority']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_percent_complete']);
-        $this->assertEquals('This is task 1',       $critical_tasks[0]['task_description']);
-        $this->assertEquals('0.00',                 $critical_tasks[0]['task_target_budget']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_related_url']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_creator']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_order']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_client_publish']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_dynamic']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_access']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_notify']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_departments']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_contacts']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_custom']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_type']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_updator']);
         $this->assertEquals('2009-07-05 15:43:00',  $critical_tasks[0]['task_created']);
         $this->assertEquals('2009-07-05 15:43:00',  $critical_tasks[0]['task_updated']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_dep_reset_dates']);
     }
 
     /**
@@ -658,40 +635,22 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetCriticalTasksProjectID()
     {
+        $this->mockDB->stageList(
+                array('task_id' => 1, 'task_name' => 'Task',
+                    'task_start_date' => '2009-07-05 00:00:00',
+                    'task_end_date' => '2009-07-15 00:00:00',
+                    'task_created' => '2009-07-05 15:43:00', 'task_updated' => '2009-07-05 15:43:00')
+        );
+
         $critical_tasks = $this->obj->getCriticalTasks(1);
 
         $this->assertEquals(1,                      count($critical_tasks));
         $this->assertEquals(1,                      $critical_tasks[0]['task_id']);
         $this->assertEquals('Task',                 $critical_tasks[0]['task_name']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_parent']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_milestone']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_project']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_owner']);
         $this->assertEquals('2009-07-05 00:00:00',  $critical_tasks[0]['task_start_date']);
-        $this->assertEquals(2,                      $critical_tasks[0]['task_duration']);
-        $this->assertEquals(24,                     $critical_tasks[0]['task_duration_type']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_hours_worked']);
         $this->assertEquals('2009-07-15 00:00:00',  $critical_tasks[0]['task_end_date']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_status']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_priority']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_percent_complete']);
-        $this->assertEquals('This is task 1',       $critical_tasks[0]['task_description']);
-        $this->assertEquals('0.00',                 $critical_tasks[0]['task_target_budget']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_related_url']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_creator']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_order']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_client_publish']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_dynamic']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_access']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_notify']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_departments']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_contacts']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_custom']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_type']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_updator']);
         $this->assertEquals('2009-07-05 15:43:00',  $critical_tasks[0]['task_created']);
         $this->assertEquals('2009-07-05 15:43:00',  $critical_tasks[0]['task_updated']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_dep_reset_dates']);
     }
 
     /**
@@ -700,71 +659,31 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetCriticalTasksProjectIDAndLimit()
     {
+        $this->mockDB->stageList(
+                array('task_id' => 1, 'task_name' => 'Task',
+                    'task_start_date' => '2009-07-05 00:00:00',
+                    'task_end_date' => '2009-07-15 00:00:00',
+                    'task_created' => '2009-07-05 15:43:00', 'task_updated' => '2009-07-05 15:43:00'));
+        $this->mockDB->stageList(
+                array('task_id' => 2, 'task_name' => 'Task 2',
+                    'task_start_date' => '2009-07-06 00:00:00',
+                    'task_end_date' => '2009-07-15 00:00:00',
+                    'task_created' => '2009-07-08 15:43:00', 'task_updated' => '2009-07-08 15:43:00'));
         $critical_tasks = $this->obj->getCriticalTasks(1,2);
 
         $this->assertEquals(2,                      count($critical_tasks));
         $this->assertEquals(1,                      $critical_tasks[0]['task_id']);
         $this->assertEquals('Task',                 $critical_tasks[0]['task_name']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_parent']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_milestone']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_project']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_owner']);
         $this->assertEquals('2009-07-05 00:00:00',  $critical_tasks[0]['task_start_date']);
-        $this->assertEquals(2,                      $critical_tasks[0]['task_duration']);
-        $this->assertEquals(24,                     $critical_tasks[0]['task_duration_type']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_hours_worked']);
         $this->assertEquals('2009-07-15 00:00:00',  $critical_tasks[0]['task_end_date']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_status']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_priority']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_percent_complete']);
-        $this->assertEquals('This is task 1',       $critical_tasks[0]['task_description']);
-        $this->assertEquals('0.00',                 $critical_tasks[0]['task_target_budget']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_related_url']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_creator']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_order']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_client_publish']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_dynamic']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_access']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_notify']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_departments']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_contacts']);
-        $this->assertEquals('',                     $critical_tasks[0]['task_custom']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_type']);
-        $this->assertEquals(1,                      $critical_tasks[0]['task_updator']);
         $this->assertEquals('2009-07-05 15:43:00',  $critical_tasks[0]['task_created']);
         $this->assertEquals('2009-07-05 15:43:00',  $critical_tasks[0]['task_updated']);
-        $this->assertEquals(0,                      $critical_tasks[0]['task_dep_reset_dates']);
-        $this->assertEquals(2,                      $critical_tasks[1]['task_id']);
+
         $this->assertEquals('Task 2',               $critical_tasks[1]['task_name']);
-        $this->assertEquals(0,                      $critical_tasks[1]['task_parent']);
-        $this->assertEquals(0,                      $critical_tasks[1]['task_milestone']);
-        $this->assertEquals(1,                      $critical_tasks[1]['task_project']);
-        $this->assertEquals(1,                      $critical_tasks[1]['task_owner']);
         $this->assertEquals('2009-07-06 00:00:00',  $critical_tasks[1]['task_start_date']);
-        $this->assertEquals(3,                      $critical_tasks[1]['task_duration']);
-        $this->assertEquals(1,                      $critical_tasks[1]['task_duration_type']);
-        $this->assertEquals(0,                      $critical_tasks[1]['task_hours_worked']);
         $this->assertEquals('2009-07-15 00:00:00',  $critical_tasks[1]['task_end_date']);
-        $this->assertEquals(-1,                     $critical_tasks[1]['task_status']);
-        $this->assertEquals(0,                      $critical_tasks[1]['task_priority']);
-        $this->assertEquals(100,                    $critical_tasks[1]['task_percent_complete']);
-        $this->assertEquals('This is task 2',       $critical_tasks[1]['task_description']);
-        $this->assertEquals('0.00',                 $critical_tasks[1]['task_target_budget']);
-        $this->assertEquals('',                     $critical_tasks[1]['task_related_url']);
-        $this->assertEquals(1,                      $critical_tasks[1]['task_creator']);
-        $this->assertEquals(2,                      $critical_tasks[1]['task_order']);
-        $this->assertEquals(1,                      $critical_tasks[1]['task_client_publish']);
-        $this->assertEquals(0,                      $critical_tasks[1]['task_dynamic']);
-        $this->assertEquals(1,                      $critical_tasks[1]['task_access']);
-        $this->assertEquals(1,                      $critical_tasks[1]['task_notify']);
-        $this->assertEquals('',                     $critical_tasks[1]['task_departments']);
-        $this->assertEquals('',                     $critical_tasks[1]['task_contacts']);
-        $this->assertEquals('',                     $critical_tasks[1]['task_custom']);
-        $this->assertEquals(1,                      $critical_tasks[1]['task_type']);
-        $this->assertEquals(1,                      $critical_tasks[1]['task_updator']);
         $this->assertEquals('2009-07-08 15:43:00',  $critical_tasks[1]['task_created']);
         $this->assertEquals('2009-07-08 15:43:00',  $critical_tasks[1]['task_updated']);
-        $this->assertEquals(0,                      $critical_tasks[1]['task_dep_reset_dates']);
     }
 
     /**
@@ -774,7 +693,6 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testStoreCreateContactsDepartments()
     {
-$this->obj->overrideDatabase($this->mockDB);                //TODO: remove this to the setup
 		$this->post_data['project_departments'] = array(1,2);
 		$this->post_data['project_contacts'] = array(3,4);
         $this->obj->bind($this->post_data);
@@ -815,6 +733,7 @@ $this->obj->overrideDatabase($this->mockDB);                //TODO: remove this 
      */
     public function testGetAllowedProjectsActiveOnly()
     {
+//$this->mockDB->stageHashList(1, 'Test Project');
         $allowed_projects = $this->obj->getAllowedProjects(1);
 
         $this->assertEquals(1,                      count($allowed_projects));
