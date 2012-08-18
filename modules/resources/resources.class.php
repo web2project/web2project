@@ -72,18 +72,6 @@ class CResource extends w2p_Core_BaseObject {
         return $typelist[$this->resource_type];
 	}
 
-    public function store() {
-        $stored = false;
-
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-        }
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $stored = parent::store();
-        }
-        return $stored;
-    }
-
     public function getResourcesByTask($task_id)
     {
         $q = $this->_getQuery();

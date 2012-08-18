@@ -1655,9 +1655,9 @@ class w2p_Database_Query {
 				}
 			}
 			return $this->exec();
-		} else {
-			return true;
 		}
+
+        return true;
 	}
 
 	/**

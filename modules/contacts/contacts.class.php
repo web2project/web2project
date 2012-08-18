@@ -62,10 +62,7 @@ class CContact extends w2p_Core_BaseObject
         $q->loadObject($this, true, false);
     }
 
-    public function store()
-    {
-        $stored = false;
-
+    protected function hook_preStore() {
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
         $this->contact_owner = ((int) $this->contact_owner) ? (int) $this->contact_owner : (int) $this->_AppUI->user_id;
@@ -92,20 +89,8 @@ class CContact extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $this->contact_lastupdate = $q->dbfnNowWithTZ();
-        /*
-         * TODO: I don't like the duplication on each of these two branches, but I
-         *   don't have a good idea on how to fix it at the moment...
-         */
-        
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-        }
 
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $stored = parent::store();
-        }
-
-        return $stored;
+        parent::hook_preStore();
     }
 
     protected function hook_postStore()
@@ -233,10 +218,22 @@ class CContact extends w2p_Core_BaseObject
         $baseCanEdit = parent::canEdit();
 
         $tmp = new CContact();
+        $tmp->overrideDatabase($this->_query);
         $tmp->load($this->contact_id);
-        if (!$tmp->contact_private || ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id))) {
+        /*
+         * This check is one of the more complex ones.. it will only allow the user
+         *   to edit the contact if either:
+         *     a) the contact is not private; OR
+         *     b) the contact is private and the user is the contact owner.
+         */
+        if (!$tmp->contact_private ||
+                ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id))) {
             $thisCanEdit = true;
         }
+        /* A user can *always* edit themselves. */
+        if ($tmp->contact_id == $this->_AppUI->user_id) {
+            $baseCanEdit = $thisCanEdit = true;
+         }
 
         return ($thisCanEdit && $baseCanEdit);
     }
@@ -324,7 +321,7 @@ class CContact extends w2p_Core_BaseObject
     {
         $result = $this->loadAll('contact_id', 'contact_id = ' . (int) $this->contact_id);
 
-        return $result[$this->contact_id]['contact_updatekey'];
+        return $result[$this->contact_id];
     }
 
     public function clearUpdateKey()

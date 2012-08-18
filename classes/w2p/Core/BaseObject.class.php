@@ -155,7 +155,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
     {
         if (!is_array($hash)) {
-            $this->_error = get_class($this) . '::bind failed.';
+            $this->_error[] = get_class($this) . '::bind failed.';
             return false;
         } else {
             /*
@@ -328,7 +328,6 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $this->_event = ($this->$k) ? 'Update' : 'Create';
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $this->_event . 'Event'));
 
-        $k = $this->_tbl_key;
         $q = $this->_getQuery();
 
         /*
@@ -345,6 +344,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             $store_type = 'add';
             $result = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
         }
+        $result = ('' == $result) ? true : $result;
 
         if ($result) {
             // NOTE: I don't particularly like how the name is generated but it wires things properly.

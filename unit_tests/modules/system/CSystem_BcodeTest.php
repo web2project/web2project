@@ -22,14 +22,14 @@
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'CommonSetup.php';
 
-class CSystemBudgets_Test extends CommonSetup
+class CSystemBcode_Test extends CommonSetup
 {
 
     protected function setUp()
     {
       parent::setUp();
 
-      $this->obj    = new CSystem_Budget();
+      $this->obj    = new CSystem_Bcode();
       $this->obj->overrideDatabase($this->mockDB);
 
       $GLOBALS['acl'] = new w2p_Mocks_Permissions();
@@ -51,14 +51,14 @@ class CSystemBudgets_Test extends CommonSetup
      */
     public function testNewAttributes()
     {
-      $this->assertInstanceOf('CSystem_Budget',            $this->obj);
-      $this->assertObjectHasAttribute('budget_id',         $this->obj);
-      $this->assertObjectHasAttribute('budget_company',    $this->obj);
-      $this->assertObjectHasAttribute('budget_dept',       $this->obj);
-      $this->assertObjectHasAttribute('budget_start_date', $this->obj);
-      $this->assertObjectHasAttribute('budget_end_date',   $this->obj);
-      $this->assertObjectHasAttribute('budget_amount',     $this->obj);
-      $this->assertObjectHasAttribute('budget_category',   $this->obj);
+      $this->assertInstanceOf('CSystem_Bcode',                  $this->obj);
+      $this->assertObjectHasAttribute('billingcode_id',         $this->obj);
+      $this->assertObjectHasAttribute('billingcode_company',    $this->obj);
+      $this->assertObjectHasAttribute('billingcode_desc',       $this->obj);
+      $this->assertObjectHasAttribute('billingcode_name',       $this->obj);
+      $this->assertObjectHasAttribute('billingcode_value',      $this->obj);
+      $this->assertObjectHasAttribute('billingcode_status',     $this->obj);
+      $this->assertObjectHasAttribute('billingcode_category',   $this->obj);
     }
 
     /**
@@ -66,42 +66,32 @@ class CSystemBudgets_Test extends CommonSetup
      */
     public function testNewAttributeValues()
     {
-        $this->assertInstanceOf('CSystem_Budget', $this->obj);
-        $this->assertNull($this->obj->budget_id);
-        $this->assertNull($this->obj->budget_company);
-        $this->assertNull($this->obj->budget_dept);
-        $this->assertNull($this->obj->budget_start_date);
-        $this->assertNull($this->obj->budget_end_date);
-        $this->assertNull($this->obj->budget_amount);
-        $this->assertNull($this->obj->budget_category);
+        $this->assertInstanceOf('CSystem_Bcode', $this->obj);
+        $this->assertNull($this->obj->billingcode_id);
+        $this->assertNull($this->obj->billingcode_company);
+        $this->assertNull($this->obj->billingcode_desc);
+        $this->assertNull($this->obj->billingcode_name);
+        $this->assertNull($this->obj->billingcode_value);
+        $this->assertNull($this->obj->billingcode_status);
+        $this->assertNull($this->obj->billingcode_category);
     }
 
     /**
      * Tests that the proper error message is returned when a budget of zero
      *   is attempted.
      */
-    public function testCreateBudgetNoBalance()
+    public function testCreateDuplicateCode()
     {
-        unset($this->post_data['budget_amount']);
-        $this->obj->bind($this->post_data);
-
-        /**
-        * Verify we got the proper error message
-        */
-		$this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('budget_amount', $this->obj->getError());
-
-        /**
-        * Verify that link id was not set
-        */
-        $this->assertEquals(0, $this->obj->budget_id);
+        $this->markTestIncomplete("Not sure how to test this one..");
     }
 
     /**
-     * Tests the proper creation of a budget
+     * Tests the proper creation of a bcode
      */
     public function testStoreCreate()
     {
+        $this->markTestIncomplete("Underway..");
+
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
 
@@ -123,10 +113,12 @@ class CSystemBudgets_Test extends CommonSetup
     }
 
     /**
-     * Tests loading the CSystem_Budget Object
+     * Tests loading the CSystem_Bcode Object
      */
     public function testLoad()
     {
+        $this->markTestIncomplete("Underway..");
+
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
@@ -146,10 +138,12 @@ class CSystemBudgets_Test extends CommonSetup
     }
 
     /**
-     * Tests the update of a CSystem_Budget Object
+     * Tests the update of a CSystem_Bcode Object
      */
     public function testStoreUpdate()
     {
+        $this->markTestIncomplete("Underway..");
+
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
@@ -166,10 +160,12 @@ class CSystemBudgets_Test extends CommonSetup
     }
 
     /**
-     * Tests the delete of a link
+     * Tests the delete of a bcode
      */
     public function testDelete()
     {
+        $this->markTestIncomplete("Underway..");
+
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
