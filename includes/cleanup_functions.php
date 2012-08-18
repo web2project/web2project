@@ -346,27 +346,6 @@ function buildTaskTree($task_data, $depth = 0, $projTasks, $all_tasks, $parents,
     return $output;
 }
 
-/*
- * Deprecated in favor of buildTaskTree which doesn't use any globals.
- *
- * @deprecated
- */
-function constructTaskTree($task_data, $depth = 0) {
-	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
-
-    return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
-}
-/*
- * Deprecated in favor of buildTaskTree which doesn't use any globals.
- *
- * @deprecated
- */
-function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
-	global $projTasks, $all_tasks, $task_parent_options, $task_parent, $task_id;
-
-    return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
-}
-
 // from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function build_date_list(&$date_array, $row) {
 	global $project;
@@ -939,28 +918,6 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 		$s .= '&nbsp;<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" border="0" alt="" />';
 	}
 	return $s.'</a>';
-}
-
-// from modules/tasks/tasks.class.php
-/**
- * canTaskAccess()
- * Used to check if a user has task_access to see the task in task list context
- * (This function was optimized to try to use the DB the least possible)
- *
- * @param mixed $task_id
- * @param mixed $task_access
- * @param mixed $task_owner
- * @return true if user has task access to it, or false if he doesn't
- */
-function canTaskAccess($task_id, $task_access = 0, $task_owner = 0) {
-    trigger_error("canTaskAccess has been deprecated in v3.0 and will be removed by v4.0. Please use CTask->canAccess() instead.", E_USER_NOTICE);
-
-    global $AppUI;
-
-    $task = new CTask();
-    $task->load($task_id);
-
-    return $task->canAccess($AppUI->user_id);
 }
 
 // from modules/tasks/tasksperuser_sub.php
@@ -2671,16 +2628,6 @@ function find_proj_child(&$tarr, $parent, $level = 0) {
 			find_proj_child($tarr, $tarr[$x]['project_id'], $level);
 		}
 	}
-}
-
-// From: modules/projects/project.class.php
-function getStructuredProjects($original_project_id = 0, $project_status = -1, $active_only = false) {
-    trigger_error("getStructuredProjects has been deprecated in v3.0 and will be removed in v4.0. Please use CProject->getStructuredProjects() instead.", E_USER_NOTICE);
-
-    $project = new CProject();
-    $project->project_original_parent = $original_project_id;
-    $project->project_status = $project_status;
-    return $project->getStructuredProjects($active_only);
 }
 
 /**
