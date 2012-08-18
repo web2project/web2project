@@ -9,7 +9,7 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectStatus = w2PgetSysVal('ProjectStatus');
 
 $original_project_id = $project->project_original_parent;
-$structprojects = getStructuredProjects($original_project_id);
+$st_projects_arr = $project->getStructuredProjects();
 ?>
 <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="black">
 <tr>

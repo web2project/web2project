@@ -168,18 +168,20 @@ if (count($fields) > 0) {
 				((!$row['project_active'] && $project_status_filter == -3) && !$is_tabbed) //flat archived projects
 				) {
 
+                $tmpProject = new CProject();
+
 				$st_projects_arr = array();
 				if ($row['project_id'] == $row['project_original_parent']) {
-					if ($project_status_filter == -2) {
-						$structprojects = getStructuredProjects($row['project_original_parent'], '-1', true);
+					$tmpProject->project_original_parent = $row['project_original_parent'];
+                    $tmpProject->project_status = -1;
+                    if ($project_status_filter == -2) {
+						$st_projects_arr = $tmpProject->getStructuredProjects(true);
 					} else {
-						$structprojects = getStructuredProjects($row['project_original_parent'], '-1');
+						$st_projects_arr = $tmpProject->getStructuredProjects();
 					}
 				} else {
 					$st_projects_arr[0][1] = 0;
 				}
-
-				$tmpProject = new CProject();
 
                 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 				foreach ($st_projects_arr as $st_project) {
