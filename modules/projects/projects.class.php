@@ -484,9 +484,9 @@ class CProject extends w2p_Core_BaseObject
      * @param int SQL-limit to limit the number of returned tasks
      * @return array List of criticalTasks
      */
-    public function getCriticalTasks($project_id = null, $limit = 1)
+    public function getCriticalTasks($project_id = 0, $limit = 1)
     {
-        $project_id = !empty($project_id) ? $project_id : $this->project_id;
+        $project_id = ($project_id) ? $project_id : $this->project_id;
 
         $q = $this->_getQuery();
         $q->addTable('tasks');
