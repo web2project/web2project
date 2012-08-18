@@ -913,18 +913,15 @@ class CProject extends w2p_Core_BaseObject
     {
         // Note that this returns the *count* of projects.  If this is zero, it
         //   is evaluated as false, otherwise it is considered true.
+        $project_id = ($projectId) ? ($this->project_original_parent ? $this->project_original_parent : $this->project_id) : $projectId;
+
         $q = $this->_getQuery();
         $q->addTable('projects');
         $q->addQuery('COUNT(project_id)');
-        if ($projectId > 0) {
-            $q->addWhere('project_original_parent = ' . $projectId);
-        } else {
-            $q->addWhere('project_original_parent = ' . (int) ($this->project_original_parent ? $this->project_original_parent : $this->project_id));
-        }
+        $q->addWhere('project_original_parent = ' . (int) $project_id);
+        $q->addWhere('project_id <> ' . (int) $project_id);
 
-        // I hate how this one works... since the default project parent is
-        //   itself, so this will always have at least one result.
-        return ($q->loadResult() - 1);
+        return $q->loadResult();
     }
 
     public static function hasTasks($projectId)
@@ -1075,4 +1072,47 @@ class CProject extends w2p_Core_BaseObject
         return $search;
     }
 
+    public function getStructuredProjects($active_only = false)
+    {
+        global $st_projects_arr;
+        $st_projects = array(0 => '');
+
+        $q = $this->getQuery();
+        $q->addTable('projects');
+        $q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
+        $q->addQuery('DISTINCT(projects.project_id), project_name, project_parent');
+        if ($this->project_original_parent) {
+            $q->addWhere('project_original_parent = ' . (int) $this->project_original_parent);
+        }
+        if ($this->project_status >= 0) {
+            $q->addWhere('project_status = ' . (int) $this->project_status);
+        }
+        if ($active_only) {
+            $q->addWhere('project_active = 1');
+        }
+        $q->addOrder('project_start_date, project_end_date');
+
+        $obj = new CCompany();
+        $obj->overrideDatabase($this->_query);
+        $obj->setAllowedSQL($this->_AppUI->user_id, $q);
+
+        $dpt = new CDepartment();
+        $dpt->overrideDatabase($this->_query);
+        $dpt->setAllowedSQL($this->_AppUI->user_id, $q);
+
+        $q->leftJoin('project_departments', 'pd', 'pd.project_id = projects.project_id' );
+        $q->leftJoin('departments', 'd', 'd.dept_id = pd.department_id' );
+
+        $st_projects = $q->loadList();
+        $tnums = count($st_projects);
+        for ($i = 0; $i < $tnums; $i++) {
+            $st_project = $st_projects[$i];
+            if (($st_project['project_parent'] == $st_project['project_id'])) {
+                show_st_project($st_project);
+                find_proj_child($st_projects, $st_project['project_id']);
+            }
+        }
+
+        return $st_projects_arr;
+    }
 }

@@ -953,7 +953,7 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
  * @return true if user has task access to it, or false if he doesn't
  */
 function canTaskAccess($task_id, $task_access = 0, $task_owner = 0) {
-    //trigger_error("canTaskAccess has been deprecated in v3.0 and will be removed by v4.0. Please use CTask->canAccess() instead.", E_USER_NOTICE);
+    trigger_error("canTaskAccess has been deprecated in v3.0 and will be removed by v4.0. Please use CTask->canAccess() instead.", E_USER_NOTICE);
 
     global $AppUI;
 
@@ -2675,39 +2675,12 @@ function find_proj_child(&$tarr, $parent, $level = 0) {
 
 // From: modules/projects/project.class.php
 function getStructuredProjects($original_project_id = 0, $project_status = -1, $active_only = false) {
-	global $AppUI, $st_projects_arr;
-	$st_projects = array(0 => '');
-	$q = new w2p_Database_Query();
-	$q->addTable('projects');
-	$q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-	$q->addQuery('DISTINCT(projects.project_id), project_name, project_parent');
-	if ($original_project_id) {
-		$q->addWhere('project_original_parent = ' . (int)$original_project_id);
-	}
-	if ($project_status >= 0) {
-		$q->addWhere('project_status = ' . (int)$project_status);
-	}
-	if ($active_only) {
-		$q->addWhere('project_active = 1');
-	}
-	$q->addOrder('project_start_date, project_end_date');
+    trigger_error("getStructuredProjects has been deprecated in v3.0 and will be removed in v4.0. Please use CProject->getStructuredProjects() instead.", E_USER_NOTICE);
 
-	$obj = new CCompany();
-	$obj->setAllowedSQL($AppUI->user_id, $q);
-	$dpt = new CDepartment();
-	$dpt->setAllowedSQL($AppUI->user_id, $q);
-    $q->leftJoin('project_departments', 'pd', 'pd.project_id = projects.project_id' );
-    $q->leftJoin('departments', 'd', 'd.dept_id = pd.department_id' );
-
-	$st_projects = $q->loadList();
-	$tnums = count($st_projects);
-	for ($i = 0; $i < $tnums; $i++) {
-		$st_project = $st_projects[$i];
-		if (($st_project['project_parent'] == $st_project['project_id'])) {
-			show_st_project($st_project);
-			find_proj_child($st_projects, $st_project['project_id']);
-		}
-	}
+    $project = new CProject();
+    $project->project_original_parent = $original_project_id;
+    $project->project_status = $project_status;
+    return $project->getStructuredProjects($active_only);
 }
 
 /**
