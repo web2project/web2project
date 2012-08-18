@@ -121,12 +121,12 @@ class CCompanies_Test extends CommonSetup
     {
 		unset($this->post_data['company_owner']);
 		$this->obj->bind($this->post_data);
-		$errorArray = $this->obj->store();
 
 		/**
 		 * Verify we got the proper error message
 		 */
-		$this->assertArrayHasKey('company_owner', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('company_owner', $this->obj->getError());
 
 		/**
 		 * Verify that company id was not set
@@ -142,12 +142,12 @@ class CCompanies_Test extends CommonSetup
     {
 		unset($this->post_data['company_name']);
 		$this->obj->bind($this->post_data);
-		$errorArray = $this->obj->store();
 
 		/**
 		 * Verify we got the proper error message
 		 */
-		$this->assertArrayHasKey('company_name', $errorArray);
+        $this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('company_name', $this->obj->getError());
 
 		/**
 		 * Verify that company id was not set

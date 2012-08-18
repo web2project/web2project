@@ -140,19 +140,6 @@ class CDepartment extends w2p_Core_BaseObject {
         return (count($this->_error)) ? false : true;
     }
 
-	public function store() {
-        $stored = false;
-
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-		}
-
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $stored = parent::store();
-		}
-        return $stored;
-	}
-
     public function canDelete()
     {
         $rows = $this->loadAll('dept_id', 'dept_parent = '. (int)$this->dept_id);

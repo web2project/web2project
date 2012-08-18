@@ -4,13 +4,13 @@ class CSystem_Bcode extends w2p_Core_BaseObject
 {
 
     public $_billingcode_id = null;
-    public $billingcode_company = 0;
+    public $billingcode_company = null;
     public $billingcode_id = null;
     public $billingcode_desc = null;
     public $billingcode_name = null;
     public $billingcode_value = null;
     public $billingcode_status = null;
-    public $billingcode_category = '';
+    public $billingcode_category = null;
 
     public function __construct()
     {
@@ -34,10 +34,15 @@ class CSystem_Bcode extends w2p_Core_BaseObject
 
             $result = $q->exec();
             if(!$result) {
-                $this->_errors[] = db_error();
+                $this->_errors['delete'] = db_error();
             }
         }
         return $result;
+    }
+
+    public function canDelete()
+    {
+        return $this->_perms->checkModuleItem('system', 'delete');
     }
 
     public function store()

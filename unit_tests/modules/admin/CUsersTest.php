@@ -88,14 +88,12 @@ class CUsers_Test extends CommonSetup
     {
         unset($this->post_data['user_password']);
         $this->obj->bind($this->post_data);
-        $this->obj->store();
 
-        /**
-        * Verify we got the proper error message
-        */
-        $errorArray = $this->obj->getError();
-        $this->assertEquals(1,                    count($errorArray));
-        $this->assertArrayHasKey('user_password', $errorArray);
+		/**
+		 * Verify we got the proper error message
+		 */
+        $this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('user_password', $this->obj->getError());
 
         /**
         * Verify that user_id was not set

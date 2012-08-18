@@ -185,18 +185,18 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateProjectNoName()
     {
 		unset($this->post_data['project_name']);
-        $this->obj->bind($post_data);
-        $errorArray = $this->obj->store();
+        $this->obj->bind($this->post_data);
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertArrayHasKey('project_name', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('project_name', $this->obj->getError());
 
         /**
          * Verify that project id was not set
          */
-        $this->AssertNull($this->obj->project_id);
+        $this->AssertEquals(0, $this->obj->project_id);
     }
 
     /**
@@ -205,14 +205,13 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateProjectNoCompany()
     {
 		unset($this->post_data['project_company']);
-
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertArrayHasKey('project_company', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('project_company', $this->obj->getError());
 
         /**
          * Verify that project id was not set
@@ -226,14 +225,13 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateProjectNoPriority()
     {
 		unset($this->post_data['project_priority']);
-
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertArrayHasKey('project_priority', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('project_priority', $this->obj->getError());
 
         /**
          * Verify that project id was not set
@@ -247,14 +245,13 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateProjectNoShortName()
     {
 		unset($this->post_data['project_short_name']);
-
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertArrayHasKey('project_short_name', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('project_short_name', $this->obj->getError());
 
         /**
          * Verify that project id was not set
@@ -268,14 +265,13 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateProjectNoColorIdentifier()
     {
 		unset($this->post_data['project_color_identifier']);
-
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertArrayHasKey('project_color_identifier', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('project_color_identifier', $this->obj->getError());
 
         /**
          * Verify that project id was not set
@@ -289,14 +285,13 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateProjectNoType()
     {
 		unset($this->post_data['project_type']);
-
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertArrayHasKey('project_type', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('project_type', $this->obj->getError());
 
         /**
          * Verify that project id was not set
@@ -310,14 +305,13 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateProjectNoStatus()
     {
 		unset($this->post_data['project_status']);
-
         $this->obj->bind($this->post_data);
-        $errorArray = $this->obj->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertArrayHasKey('project_status', $errorArray);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('project_status', $this->obj->getError());
 
         /**
          * Verify that project id was not set
@@ -331,14 +325,13 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateProjectNoOwner()
     {
 		unset($this->post_data['project_owner']);
-
         $this->obj->bind($this->post_data);
-        $results = $this->obj->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertArrayHasKey('project_owner', $results);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('project_owner', $this->obj->getError());
 
         /**
          * Verify that project id was not set
@@ -352,14 +345,13 @@ class CProjects_Test extends PHPUnit_Extensions_Database_TestCase
     public function testCreateProjectNoCreator()
     {
  		unset($this->post_data['project_creator']);
-
         $this->obj->bind($this->post_data);
-        $results = $this->obj->store();
 
         /**
          * Verify we got the proper error message
          */
-        $this->assertArrayHasKey('project_creator', $results);
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('project_creator', $this->obj->getError());
 
         /**
          * Verify that project id was not set
