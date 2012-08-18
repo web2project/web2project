@@ -417,7 +417,7 @@ function delIt() {
         <?php
         //lets add the subprojects table
         $canReadMultiProjects = canView('admin');
-        if ($project->hasChildProjects() && $canReadMultiProjects) { ?>
+        if ($project->hasChildProjects($project_id) && $canReadMultiProjects) { ?>
             <tr>
                 <td colspan="2">
                     <?php
