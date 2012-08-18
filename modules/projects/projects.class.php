@@ -717,7 +717,7 @@ class CProject extends w2p_Core_BaseObject
     public function getContactList()
     {
         if ($this->_AppUI->isActiveModule('contacts') && canView('contacts')) {
-            $q = new w2p_Database_Query();
+            $q = $this->getQuery();
             $q->addTable('contacts', 'c');
             $q->addQuery('c.*, d.dept_id');
             $q->addQuery('contact_display_name as contact_name');
@@ -782,12 +782,10 @@ class CProject extends w2p_Core_BaseObject
         return $project->getDepartmentList();
     }
 
-    public static function getForums($AppUI = null, $projectId)
+    public function getForumList()
     {
-        global $AppUI;
-
-		if ($AppUI->isActiveModule('forums') && canView('forums')) {
-			$q = new w2p_Database_Query();
+		if ($this->_AppUI->isActiveModule('forums') && canView('forums')) {
+			$q = $this->_getQuery();
 			$q->addTable('forums');
 			$q->addQuery('forum_id, forum_project, forum_description, forum_owner,
                 forum_name, forum_message_count, forum_create_date, forum_last_date,
@@ -798,6 +796,17 @@ class CProject extends w2p_Core_BaseObject
 
             return $q->loadHashList('forum_id');
         }
+    }
+
+    public static function getForums($AppUI = null, $projectId)
+    {
+        trigger_error("CProject::getForums has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getForumList() instead.", E_USER_NOTICE);
+
+        $project = new CProject();
+        //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
+        $project->project_id = $projectId;
+
+        return $project->getForumList();
     }
 
     public static function getCompany($projectId)
