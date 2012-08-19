@@ -1519,8 +1519,9 @@ class w2p_Utilities_Date_Test extends CommonSetup
     public function testGetDateUnixtime()
     {
         $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
-        $this->markTestIncomplete("This test breaks because of the timezone differences..");
-        $this->assertEquals(1288954800, $date->getDate(DATE_FORMAT_UNIXTIME));
+        $offset = $date->tz['offset']/1000 + $date->tz['hasdst']*3600;
+
+        $this->assertEquals(1288954800-$offset, $date->getDate(DATE_FORMAT_UNIXTIME));
     }
 
     /**
