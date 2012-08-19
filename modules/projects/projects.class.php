@@ -924,17 +924,13 @@ class CProject extends w2p_Core_BaseObject
         return $q->loadResult();
     }
 
-    public static function hasTasks($projectId)
+    public static function hasTasks($projectId, $override = null)
     {
-        // Note that this returns the *count* of tasks.  If this is zero, it is
-        //   evaluated as false, otherwise it is considered true.
+        trigger_error("CProject::hasTasks() has been deprecated in v3.0 and will be removed in v4.0. Please use CTask->getTaskCount() instead.", E_USER_NOTICE);
 
-        $q = new w2p_Database_Query();
-        $q->addTable('tasks');
-        $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
-        $q->addWhere('task_project = ' . (int) $projectId);
-
-        return $q->loadResult();
+        $task = new CTask();
+        $task->overrideDatabase($override);
+        return $task->getTaskCount($projectId);
     }
 
     public static function updateHoursWorked($project_id)
@@ -988,6 +984,7 @@ class CProject extends w2p_Core_BaseObject
     {
         global $w2Pconfig;
 
+        return (int) $this->project_scheduled_hours;
         // now milestones are summed up, too, for consistence with the tasks duration sum
         // the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
         // more info on http://www.mysql.com/doc/en/Problems_with_float.html

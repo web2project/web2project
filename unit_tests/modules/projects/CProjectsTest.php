@@ -965,34 +965,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests finding if project has tasks associated with it.
-     */
-    public function testHasTasks()
-    {
-        $has_tasks_1 = $this->obj->hasTasks(1);
-        $has_tasks_2 = $this->obj->hasTasks(2);
-
-        $this->assertEquals(2, $has_tasks_1);
-        $this->assertEquals(0, $has_tasks_2);
-    }
-
-    /**
-     * Tests getting total hours worked
-     */
-    public function testGetWorkedHours()
-    {
-        $this->markTestSkipped('This test has been deprecated by calculating the total hours at tasklog update.');
-    }
-
-    /**
-     * Tests getting total hours assigned to tasks within the project
-     */
-    public function testGetTotalHours()
-    {
-        $this->markTestSkipped('Being deprecated.');
-    }
-
-    /**
      * Tests getting total hours assigned to tasks within the project
      */
     public function testGetTotalProjectHours()
