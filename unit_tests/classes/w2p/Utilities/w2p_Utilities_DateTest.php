@@ -1219,46 +1219,46 @@ class w2p_Utilities_Date_Test extends CommonSetup
     }
 
     /**
-     * Tests calcFinish when the minute is > 38 so should be rounded to 45
+     * Tests calcFinish when the minute is > (half the cal_day_increment) so should be rounded to 45
      */
     public function testCalcFinish45()
     {
         $date   = new w2p_Utilities_Date('2010-09-15 10:39:00');
         $finish = $date->calcFinish(1, 1);
-        $this->markTestIncomplete("This test implies that calcFinish should round using the cal_day_increment but it doesn't..");
+
         $this->assertEquals('2010-09-15 11:45:00', $finish->getDate(DATE_FORMAT_ISO));
     }
 
     /**
-     * Tests calcFinish when the minute is > 23 so should be rounded to 30
+     * Tests calcFinish when the minute is > (half the cal_day_increment) so should be rounded to 30
      */
     public function testCalcFinish30()
     {
         $date   = new w2p_Utilities_Date('2010-09-15 10:24:00');
         $finish = $date->calcFinish(1, 1);
-        $this->markTestIncomplete("This test implies that calcFinish should round using the cal_day_increment but it doesn't..");
+
         $this->assertEquals('2010-09-15 11:30:00', $finish->getDate(DATE_FORMAT_ISO));
     }
 
     /**
-     * Tests calcFinish when the minute is > 8 so should be rounded to 15
+     * Tests calcFinish when the minute is > (half the cal_day_increment) so should be rounded to 15
      */
     public function testCalcFinish15()
     {
         $date   = new w2p_Utilities_Date('2010-09-15 10:09:00');
         $finish = $date->calcFinish(1, 1);
-        $this->markTestIncomplete("This test implies that calcFinish should round using the cal_day_increment but it doesn't..");
+
         $this->assertEquals('2010-09-15 11:15:00', $finish->getDate(DATE_FORMAT_ISO));
     }
 
     /**
-     * Tests calcFinish when the minute is < 9 so should be rounded to 0
+     * Tests calcFinish when the minute is < (half the cal_day_increment) so should be rounded to 0
      */
     public function testCalcFinish00()
     {
-        $date   = new w2p_Utilities_Date('2010-09-15 10:08:00');
+        $date   = new w2p_Utilities_Date('2010-09-15 10:07:00');
         $finish = $date->calcFinish(1, 1);
-        $this->markTestIncomplete("This test implies that calcFinish should round using the cal_day_increment but it doesn't..");
+
         $this->assertEquals('2010-09-15 11:00:00', $finish->getDate(DATE_FORMAT_ISO));
     }
 

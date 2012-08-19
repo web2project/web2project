@@ -455,29 +455,40 @@ class w2p_Utilities_Date extends Date {
 	** @return	w2p_Utilities_Date		The w2p_Utilities_Date object of the finish date
 	*/
 	public function calcFinish($duration, $durationType) {
-		
+
 		// since one will alter the date ($this) one better copies it to a new instance
 		$finishDate = new w2p_Utilities_Date();
 		$finishDate->copy($this);
-		
+
 		// get w2P time constants
-		$day_start_hour = intval(w2PgetConfig('cal_day_start'));
-		$day_end_hour = intval(w2PgetConfig('cal_day_end'));
-		$work_hours = intval(w2PgetConfig('daily_working_hours'));
-		
+		$day_start_hour = (int) w2PgetConfig('cal_day_start');
+		$day_end_hour   = (int) w2PgetConfig('cal_day_end');
+		$work_hours     = (int) w2PgetConfig('daily_working_hours');
+        $min_increment  = (int) w2PgetConfig('cal_day_increment');
+
 		$duration_in_minutes = ($durationType == 24) ? $duration*$work_hours*60 : $duration*60;
-		
+
 		// Jump to the first working day
 		while(!$finishDate->isWorkingDay()) {
 			$finishDate->addDays(1);
 		}
-		
+
 		$first_day_minutes = min($day_end_hour*60 - $finishDate->getHour()*60 - $finishDate->getMinute(), $work_hours*60, $duration_in_minutes);
-		
+
 		$finishDate->addSeconds($first_day_minutes*60);
-		
+
 		$duration_in_minutes -= $first_day_minutes;
-		
+
+        $minutes = $this->getMinute();
+        $mod = $minutes % $min_increment;
+
+        if ($mod > $min_increment/2) {
+            $multiplier = (int) (1 + $minutes / $min_increment);
+        } else {
+            $multiplier = (int) ($minutes / $min_increment);
+        }
+        $finishDate->setMinute($multiplier * $min_increment);
+
 		while($duration_in_minutes != 0) {
 			// Jump to the next day
 			$finishDate->addDays(1);
@@ -490,13 +501,12 @@ class w2p_Utilities_Date extends Date {
 			}
 			
 			$day_work_minutes = min($work_hours*60, $duration_in_minutes);
-			
+
 			$finishDate->addSeconds($day_work_minutes*60);
 			$duration_in_minutes -= $day_work_minutes;
 		}
-		
+
 		return $finishDate;
-				
 	}
 
 	/**
