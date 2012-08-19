@@ -68,7 +68,7 @@ class CContacts_Test extends CommonSetup
     {
         $unset = array('contact_methods');
 
-        parent::testObjectProperties('CContact', 26, $unset);
+        parent::objectPropertiesTest('CContact', 26, $unset);
     }
 
     public function testStoreCreate()
@@ -196,8 +196,9 @@ class CContacts_Test extends CommonSetup
         $this->mockDB->stageHash(array('company_id' => 0, 'company_name' => ''));
         $results = $this->obj->getCompanyDetails();
         $this->AssertEquals(2,                      count($results));
-        $this->assertEquals(0,                      $results['company_id']);
-        $this->assertEquals('',                     $results['company_name']);
+        $this->assertNull($results['company_id']);
+        $this->assertNull($results['company_name']);
+        $this->mockDB->clearHash();
 
         $this->mockDB->stageHash(array('company_id' => 1, 'company_name' => 'UnitTestCompany'));
         $this->obj->contact_company = 1;
@@ -212,8 +213,9 @@ class CContacts_Test extends CommonSetup
         $this->mockDB->stageHash(array('dept_id' => 0, 'dept_name' => ''));
         $results = $this->obj->getDepartmentDetails();
         $this->AssertEquals(2,                      count($results));
-        $this->assertEquals(0,                      $results['dept_id']);
-        $this->assertEquals('',                     $results['dept_name']);
+        $this->assertNull($results['dept_id']);
+        $this->assertNull($results['dept_name']);
+        $this->mockDB->clearHash();
 
         $this->mockDB->stageHash(array('dept_id' => 1, 'dept_name' => 'Department 1'));
         $this->obj->contact_department = 1;
