@@ -129,60 +129,61 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($target, $linkText);
     }
 
-  /**
-   * Tests the proper creation of an email link
-   */
-  public function test_w2p_email()
-  {
-    $target = '<a href="mailto:test@test.com">test@test.com</a>';
-    $linkText = w2p_email('test@test.com');
-    $this->assertEquals($target, $linkText);
+    /**
+    * Tests the proper creation of an email link
+    */
+    public function test_w2p_email()
+    {
+        $target = '<a href="mailto:test@test.com">test@test.com</a>';
+        $linkText = w2p_email('test@test.com');
+        $this->assertEquals($target, $linkText);
 
-    $target = '';
-    $linkText = w2p_email('');
-    $this->assertEquals($target, $linkText);
+        $target = '';
+        $linkText = w2p_email('');
+        $this->assertEquals($target, $linkText);
 
-    $target = '<a href="mailto:test@test.com">web2project</a>';
-    $linkText = w2p_email('test@test.com', 'web2project');
-    $this->assertEquals($target, $linkText);
-  }
-  public function test_w2p_check_email()
-  {
-    $this->assertEquals('tests@web2project.net', w2p_check_email('tests@web2project.net'));
-    $this->assertEquals('tests@bugs.web2project.net', w2p_check_email('tests@bugs.web2project.net'));
+        $target = '<a href="mailto:test@test.com">web2project</a>';
+        $linkText = w2p_email('test@test.com', 'web2project');
+        $this->assertEquals($target, $linkText);
+    }
 
-    $this->assertFalse(w2p_check_email('@web2project.net'));
-    $this->assertFalse(w2p_check_email('testsweb2project.net'));
-    $this->assertFalse(w2p_check_email('tests@web2project'));
-    $this->assertFalse(w2p_check_email('tests@'));
-    $this->assertFalse(w2p_check_email('tests@.net'));
-  }
+    public function test_w2p_check_email()
+    {
+        $this->assertEquals('tests@web2project.net', w2p_check_email('tests@web2project.net'));
+        $this->assertEquals('tests@bugs.web2project.net', w2p_check_email('tests@bugs.web2project.net'));
 
-  /**
-   * Tests the proper creation of an email link
-   */
-  public function test_w2p_textarea()
-  {
-    $target = '';
-    $linkText = w2p_textarea('');
-    $this->assertEquals($target, $linkText);
+        $this->assertFalse(w2p_check_email('@web2project.net'));
+        $this->assertFalse(w2p_check_email('testsweb2project.net'));
+        $this->assertFalse(w2p_check_email('tests@web2project'));
+        $this->assertFalse(w2p_check_email('tests@'));
+        $this->assertFalse(w2p_check_email('tests@.net'));
+    }
 
-    $target = 'Have you seen this - <a href="http://web2project.net" target="_blank">http://web2project.net</a> ?';
-    $linkText = w2p_textarea('Have you seen this - http://web2project.net ?');
-    $this->assertEquals($target, $linkText);
+    /**
+    * Tests the proper creation of an email link
+    */
+    public function test_w2p_textarea()
+    {
+        $target = '';
+        $linkText = w2p_textarea('');
+        $this->assertEquals($target, $linkText);
 
-    $target = '<a href="http://web2project.net" target="_blank">http://web2project.net</a> is a fork of <a href="http://dotproject.net" target="_blank">http://dotproject.net</a>';
-    $linkText = w2p_textarea('http://web2project.net is a fork of http://dotproject.net');
-    $this->assertEquals($target, $linkText);
+        $target = 'Have you seen this - <a href="http://web2project.net" target="_blank">http://web2project.net</a> ?';
+        $linkText = w2p_textarea('Have you seen this - http://web2project.net ?');
+        $this->assertEquals($target, $linkText);
 
-    $target = '<a href="http://web2project.net" target="_blank">http://web2project.net</a> is a great site';
-    $linkText = w2p_textarea('http://web2project.net is a great site');
-    $this->assertEquals($target, $linkText);
+        $target = '<a href="http://web2project.net" target="_blank">http://web2project.net</a> is a fork of <a href="http://dotproject.net" target="_blank">http://dotproject.net</a>';
+        $linkText = w2p_textarea('http://web2project.net is a fork of http://dotproject.net');
+        $this->assertEquals($target, $linkText);
 
-    $target = 'Please check out <a href="http://web2project.net" target="_blank">http://web2project.net</a>';
-    $linkText = w2p_textarea('Please check out http://web2project.net');
-    $this->assertEquals($target, $linkText);
-  }
+        $target = '<a href="http://web2project.net" target="_blank">http://web2project.net</a> is a great site';
+        $linkText = w2p_textarea('http://web2project.net is a great site');
+        $this->assertEquals($target, $linkText);
+
+        $target = 'Please check out <a href="http://web2project.net" target="_blank">http://web2project.net</a>';
+        $linkText = w2p_textarea('Please check out http://web2project.net');
+        $this->assertEquals($target, $linkText);
+    }
 
     public function test_w2p_pluralize() {
         $this->assertEquals('projects',  w2p_pluralize('project'));
