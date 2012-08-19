@@ -126,7 +126,7 @@ class w2p_Output_HTMLHelper_Test extends CommonSetup
     public function testCreateCell_common()
     {
         $cell = $this->obj->createCell('x_budget', 12345.67);
-        $this->assertEquals('<td  class="data _budget">$USD12,345.67</td>', $cell);
+        $this->assertEquals('<td  class="data _budget">$USD 12,345.67</td>', $cell);
 
         $cell = $this->obj->createCell('x_url', 'http://web2project.net');
         $this->assertEquals('<td  class="data _url"><a href="http://web2project.net" target="_new">http://web2project.net</a></td>', $cell);
