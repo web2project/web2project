@@ -243,7 +243,7 @@ class w2p_Output_HTMLHelper
                 $cell = number_format($value/100, 2);
                 break;
             case '_identifier':
-                $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'"';
+                $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'" ';
                 $cell = $this->tableRowData['project_percent_complete'].'%';
                 break;
             case '_problem':
@@ -262,7 +262,7 @@ class w2p_Output_HTMLHelper
 				$cell = htmlspecialchars($value, ENT_QUOTES);
 		}
 
-        $begin = '<td '.$additional.' class="data '.$suffix.'">';
+        $begin = '<td '.$additional.'class="data '.$suffix.'">';
         $end = '</td>';
 
         return $begin . $cell . $end;
