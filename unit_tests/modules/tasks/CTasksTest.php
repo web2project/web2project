@@ -118,7 +118,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /*
-     * TODO: deprecate the following two tests in favor of CommonSetup->testObjectProperties
+     * TODO: deprecate the following two tests in favor of CommonSetup->objectPropertiesTest
      *   but we can't do that until we get the Mocks refactoring complete
      */
     /**

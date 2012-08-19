@@ -48,7 +48,7 @@ class CSystemBcode_Test extends CommonSetup
 
     public function testObjectProperties()
     {
-        parent::testObjectProperties('CSystem_Bcode', 8);
+        parent::objectPropertiesTest('CSystem_Bcode', 8);
     }
 
     /**

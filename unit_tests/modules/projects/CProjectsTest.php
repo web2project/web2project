@@ -67,7 +67,7 @@ $this->obj->overrideDatabase($this->mockDB);
 
     public function testObjectProperties()
     {
-        parent::testObjectProperties('CProject', 29);
+        parent::objectPropertiesTest('CProject', 29);
     }
 
     /**

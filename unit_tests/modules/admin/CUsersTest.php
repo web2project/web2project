@@ -56,7 +56,7 @@ class CUsers_Test extends CommonSetup
 
     public function testObjectProperties()
     {
-        parent::testObjectProperties('CUser', 7);
+        parent::objectPropertiesTest('CUser', 7);
     }
 
     /**

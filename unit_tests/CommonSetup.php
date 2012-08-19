@@ -76,8 +76,10 @@ class CommonSetup extends PHPUnit_Framework_TestCase {
 
     /**
      * Tests the Attributes of a new object.
+     *
+     * This method is not prefixed with 'test' because it is a helper and should not be tested on its own.
      */
-    public function testObjectProperties($classname, $fieldCount, $removeFields = array())
+    public function objectPropertiesTest($classname, $fieldCount, $removeFields = array())
     {
         $params = get_object_vars($this->obj);
         foreach($removeFields as $key => $value) {

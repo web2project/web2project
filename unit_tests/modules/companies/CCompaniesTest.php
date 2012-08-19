@@ -58,7 +58,7 @@ class CCompanies_Test extends CommonSetup
 
     public function testObjectProperties()
     {
-        parent::testObjectProperties('CCompany', 17);
+        parent::objectPropertiesTest('CCompany', 17);
     }
 
     /**

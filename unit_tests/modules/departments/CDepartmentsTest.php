@@ -56,7 +56,7 @@ class CDepartments_Test extends CommonSetup
 
     public function testObjectProperties()
     {
-        parent::testObjectProperties('CDepartment', 17);
+        parent::objectPropertiesTest('CDepartment', 17);
     }
 
     /**

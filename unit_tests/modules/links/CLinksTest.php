@@ -52,7 +52,7 @@ class CLinks_Test extends CommonSetup
 
     public function testObjectProperties()
     {
-        parent::testObjectProperties('CLink', 11);
+        parent::objectPropertiesTest('CLink', 11);
     }
 
     /**

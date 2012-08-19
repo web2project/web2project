@@ -45,7 +45,7 @@ class CFileFolders_Test extends CommonSetup
 
     public function testObjectProperties()
     {
-        parent::testObjectProperties('CFile_Folder', 4);
+        parent::objectPropertiesTest('CFile_Folder', 4);
     }
 
     /**

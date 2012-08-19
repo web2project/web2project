@@ -48,7 +48,7 @@ class CSystemBudgets_Test extends CommonSetup
 
     public function testObjectProperties()
     {
-        parent::testObjectProperties('CSystem_Budget', 7);
+        parent::objectPropertiesTest('CSystem_Budget', 7);
     }
 
     /**
