@@ -376,29 +376,9 @@ class CCompanies_Test extends CommonSetup
     }
 
     /**
-     * @todo Implement testCheck().
-     */
-    public function testCheck() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @todo Implement testCanDelete().
      */
     public function testCanDelete() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testHook_search().
-     */
-    public function testHook_search() {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
