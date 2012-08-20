@@ -35,14 +35,14 @@ class CSystemBcode_Test extends CommonSetup
       $GLOBALS['acl'] = new w2p_Mocks_Permissions();
 
       $this->post_data = array(
-          'dosql'             => 'do_budgeting_aed',
-          'budget_id'         => 0,
-          'budget_company'    => 0,
-          'budget_dept'       => 0,
-          'budget_start_date' => '20120105',
-          'budget_end_date'   => '20120119',
-          'budget_amount'     => 500.21,
-          'budget_category'   => 1
+          'dosql'                => 'do_billingcode_aed',
+          'billingcode_id'       => 0,
+          'billingcode_company'  => 1,
+          'billingcode_desc'     => 'A description',
+          'billingcode_name'     => 'bc-name',
+          'billingcode_value'    => 5000,
+          'billingcode_status'   => 1,
+          'billingcode_category' => 1
       );
     }
 
@@ -57,7 +57,19 @@ class CSystemBcode_Test extends CommonSetup
      */
     public function testCreateDuplicateCode()
     {
-        $this->markTestIncomplete("Not sure how to test this one..");
+        $this->mockDB->stageResult(7);
+        $this->obj->bind($this->post_data);
+
+        /**
+        * Verify we got the proper error message
+        */
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('billingcode_name', $this->obj->getError());
+
+        /**
+        * Verify that the id was not set
+        */
+        $this->AssertEquals(0, $this->obj->billingcode_id);
     }
 
     /**
@@ -65,26 +77,13 @@ class CSystemBcode_Test extends CommonSetup
      */
     public function testStoreCreate()
     {
-        $this->markTestIncomplete("Underway..");
-
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
 
         $this->assertTrue($result);
-
-        /*
-         *  These fields come from the $_POST data and should be pass throughs.
-         */
-        $this->assertEquals(0,                     $this->obj->budget_company);
-        $this->assertEquals(0,                     $this->obj->budget_dept);
-        $this->assertEquals(500.21,                $this->obj->budget_amount);
-        $this->assertEquals(1,                     $this->obj->budget_category);
-        /*
-         *  These fields are from the $_POST but are modified in the store().
-         */
-        $this->assertEquals('2012-01-05 00:00:00', $this->obj->budget_start_date);
-        $this->assertEquals('2012-01-19 00:00:00', $this->obj->budget_end_date);
-        $this->assertNotEquals(0,                  $this->obj->budget_id);
+        $this->assertEquals('bc-name',          $this->obj->billingcode_name);
+        $this->assertEquals('A description',    $this->obj->billingcode_desc);
+        $this->assertNotEquals(0,               $this->obj->billingcode_id);
     }
 
     /**
@@ -92,24 +91,19 @@ class CSystemBcode_Test extends CommonSetup
      */
     public function testLoad()
     {
-        $this->markTestIncomplete("Underway..");
-
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
 
-        $item = new CSystem_Budget();
+        $item = new CSystem_Bcode();
         $item->overrideDatabase($this->mockDB);
-        $this->post_data['budget_id'] = $this->obj->budget_id;
+        $this->post_data['billingcode_id'] = $this->obj->billingcode_id;
         $this->mockDB->stageHash($this->post_data);
-        $item->load($this->obj->budget_id);
+        $item->load($this->obj->billingcode_id);
 
-        $this->assertEquals($this->obj->budget_company,    $item->budget_company);
-        $this->assertEquals($this->obj->budget_dept,       $item->budget_dept);
-        $this->assertEquals($this->obj->budget_start_date, '2012-01-05 00:00:00');
-        $this->assertEquals($this->obj->budget_end_date,   '2012-01-19 00:00:00');
-        $this->assertEquals($this->obj->budget_amount,     $item->budget_amount);
-        $this->assertEquals($this->obj->budget_category,   $item->budget_category);
+        $this->assertEquals($this->obj->billingcode_id,     $item->billingcode_id);
+        $this->assertEquals($this->obj->billingcode_name,   $item->billingcode_name);
+        $this->assertEquals($this->obj->billingcode_desc,   $item->billingcode_desc);
     }
 
     /**
@@ -117,21 +111,19 @@ class CSystemBcode_Test extends CommonSetup
      */
     public function testStoreUpdate()
     {
-        $this->markTestIncomplete("Underway..");
-
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
-        $original_id = $this->obj->budget_id;
+        $original_id = $this->obj->billingcode_id;
 
-        $this->obj->budget_amount       = 8000;
+        $this->obj->billingcode_value       = 8000;
 
         $result = $this->obj->store();
         $this->assertTrue($result);
-        $new_id = $this->obj->budget_id;
+        $new_id = $this->obj->billingcode_id;
 
         $this->assertEquals($original_id, $new_id);
-        $this->assertEquals(8000,         $this->obj->budget_amount);
+        $this->assertEquals(8000,         $this->obj->billingcode_value);
     }
 
     /**
@@ -139,8 +131,6 @@ class CSystemBcode_Test extends CommonSetup
      */
     public function testDelete()
     {
-        $this->markTestIncomplete("Underway..");
-
         $this->obj->bind($this->post_data);
         $result = $this->obj->store();
         $this->assertTrue($result);
