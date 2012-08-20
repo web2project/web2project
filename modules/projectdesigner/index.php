@@ -156,7 +156,7 @@ if (!$project_id) {
 	}
 
 	$worked_hours = $obj->project_worked_hours;
-	$total_project_hours = $total_hours = $obj->getTotalProjectHours();
+	$total_project_hours = $total_hours = $obj->project_scheduled_hours;
 
 	// create Date objects from the datetime fields
 	$start_date = intval($obj->project_start_date) ? new w2p_Utilities_Date($obj->project_start_date) : null;

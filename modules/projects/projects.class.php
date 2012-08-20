@@ -973,36 +973,26 @@ class CProject extends w2p_Core_BaseObject
         CTask::storeTokenTask($AppUI, $project_id);
     }
 
-    public function getTotalHours()
-    {
-        trigger_error("CProject->getTotalHours() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE);
-
-        return $this->getTotalProjectHours();
-    }
-
+    /*
+     * This is an unnecessary function as of v2.x. Instead of calculating this on
+     *   demand every single time, we calculate it when a Task is created or deleted
+     *   and then store it on the projects table. Then we can just return that column.
+     *
+     * Also, we have to do the check below just in case the object hasn't been
+     *   loaded.
+     *
+     * @deprecated
+     */
     public function getTotalProjectHours()
     {
-        global $w2Pconfig;
+        trigger_error("CProject->getTotalProjectHours() has been deprecated in v3.0 and will be removed in v4.0. Please use the project_scheduled_hours column instead.", E_USER_NOTICE);
 
-        return (int) $this->project_scheduled_hours;
-        // now milestones are summed up, too, for consistence with the tasks duration sum
-        // the sums have to be rounded to prevent the sum form having many (unwanted) decimals because of the mysql floating point issue
-        // more info on http://www.mysql.com/doc/en/Problems_with_float.html
-        $q = $this->_getQuery();
-        $q->addTable('tasks');
-        $q->addQuery('ROUND(SUM(task_duration),2)');
-        $q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 24 AND task_dynamic <> 1');
-        $days = $q->loadResult();
-        $q->clear();
+        if ('' == $this->project_name)
+        {
+            $this->load($this->project_id);
+        }
 
-        $q->addTable('tasks');
-        $q->addQuery('ROUND(SUM(task_duration),2)');
-        $q->addWhere('task_project = ' . (int) $this->project_id . ' AND task_duration_type = 1 AND task_dynamic <> 1');
-        $hours = $q->loadResult();
-
-        $total_project_hours = $days * $w2Pconfig['daily_working_hours'] + $hours;
-
-        return rtrim($total_project_hours, '.');
+        return $this->project_scheduled_hours;
     }
 
     //TODO: this method should be moved to CTaskLog

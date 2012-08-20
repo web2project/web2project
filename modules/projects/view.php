@@ -43,8 +43,6 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
 $billingCategory = w2PgetSysVal('BudgetCategory');
 
-$total_hours = $project->getTotalProjectHours();
-
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
@@ -254,7 +252,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('total_hours', $total_hours); ?>
+                    <?php echo $htmlHelper->createCell('total_hours', $project->project_scheduled_hours); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>

@@ -52,7 +52,7 @@ $hasTasks = $project->project_task_count;
 
 if ($hasTasks) {
 	$worked_hours = $project->project_worked_hours;
-    $total_project_hours = $project->getTotalProjectHours();
+    $total_project_hours = $project->project_scheduled_hours;
 } else { //no tasks in project so "fake" project data
 	$worked_hours = $total_hours = $total_project_hours = 0.00;
 }
