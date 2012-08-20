@@ -4,8 +4,8 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $AppUI->savePlace();
-
-$structprojs = getProjects();
+$project = new CProject();
+$structprojs = $project->getProjects();
 
 // Let's update project status!
 if (isset($_GET['update_project_status']) && isset($_GET['project_status']) && isset($_GET['project_id'])) {
