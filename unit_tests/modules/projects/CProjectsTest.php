@@ -965,27 +965,23 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests getting total hours assigned to tasks within the project
-     */
-    public function testGetTotalProjectHours()
-    {
-        global $w2Pconfig;
-
-        $this->obj->load(1);
-        $total_hours_1 = $this->obj->getTotalProjectHours();
-
-        $this->obj->load(2);
-        $total_hours_2 = $this->obj->getTotalProjectHours();
-
-        $this->assertEquals(19,     $total_hours_1);
-        $this->assertEquals(0,      $total_hours_2);
-    }
-
-    /**
      * Tests getting task logs with no filters passed
      */
     public function testGetTaskLogsNoArgs()
     {
+        $this->mockDB->stageList(
+                array('task_log_id' => 1, 'task_log_task' => 1, 'task_log_description' => 'Task Log 1',
+                    'user_username' => 'admin', 'real_name' => 'Admin Person'));
+        $this->mockDB->stageList(
+                array('task_log_id' => 2, 'task_log_task' => 1, 'task_log_description' => 'Task Log 2',
+                    'user_username' => 'admin', 'real_name' => 'Admin Person'));
+        $this->mockDB->stageList(
+                array('task_log_id' => 3, 'task_log_task' => 2, 'task_log_description' => 'Task Log 3',
+                    'user_username' => 'admin', 'real_name' => 'Admin Person'));
+        $this->mockDB->stageList(
+                array('task_log_id' => 4, 'task_log_task' => 2, 'task_log_description' => 'Task Log 4',
+                    'user_username' => 'another_admin', 'real_name' => 'Contact Number 1'));
+
         $task_logs = $this->obj->getTaskLogs(null, 1);
 
         $this->assertEquals(4,                  count($task_logs));
@@ -1008,7 +1004,7 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->assertEquals(2,                  $task_logs[3]['task_log_task']);
         $this->assertEquals('Task Log 4',       $task_logs[3]['task_log_description']);
         $this->assertEquals('another_admin',    $task_logs[3]['user_username']);
-        $this->assertEquals('Contact Number 1',$task_logs[3]['real_name']);
+        $this->assertEquals('Contact Number 1', $task_logs[3]['real_name']);
     }
 
     /**
@@ -1016,6 +1012,9 @@ $this->obj->overrideDatabase($this->mockDB);
      */
     public function testGetTaskLogsUserID()
     {
+        $this->mockDB->stageList(
+                array('task_log_id' => 4, 'task_log_task' => 2, 'task_log_description' => 'Task Log 4',
+                    'user_username' => 'another_admin', 'real_name' => 'Contact Number 1'));
         $task_logs = $this->obj->getTaskLogs(null, 1, 2);
 
         $this->assertEquals(1,                  count($task_logs));
@@ -1031,6 +1030,12 @@ $this->obj->overrideDatabase($this->mockDB);
      */
     public function testGetTaskLogsHideInactive()
     {
+        $this->mockDB->stageList(
+                array('task_log_id' => 1, 'task_log_task' => 1, 'task_log_description' => 'Task Log 1',
+                    'user_username' => 'admin', 'real_name' => 'Admin Person'));
+        $this->mockDB->stageList(
+                array('task_log_id' => 2, 'task_log_task' => 1, 'task_log_description' => 'Task Log 2',
+                    'user_username' => 'admin', 'real_name' => 'Admin Person'));
         $task_logs = $this->obj->getTaskLogs(null, 1, 0, true);
 
         $this->assertEquals(2,                  count($task_logs));
@@ -1051,6 +1056,12 @@ $this->obj->overrideDatabase($this->mockDB);
      */
     public function testGetTaskLogsHideComplete()
     {
+        $this->mockDB->stageList(
+                array('task_log_id' => 1, 'task_log_task' => 1, 'task_log_description' => 'Task Log 1',
+                    'user_username' => 'admin', 'real_name' => 'Admin Person'));
+        $this->mockDB->stageList(
+                array('task_log_id' => 2, 'task_log_task' => 1, 'task_log_description' => 'Task Log 2',
+                    'user_username' => 'admin', 'real_name' => 'Admin Person'));
         $task_logs = $this->obj->getTaskLogs(null, 1, 0, false, true);
 
         $this->assertEquals(2,                  count($task_logs));
@@ -1071,6 +1082,9 @@ $this->obj->overrideDatabase($this->mockDB);
      */
     public function testGetTaskLogsWithCostCode()
     {
+        $this->mockDB->stageList(
+                array('task_log_id' => 4, 'task_log_task' => 2, 'task_log_description' => 'Task Log 4',
+                    'user_username' => 'another_admin', 'real_name' => 'Contact Number 1'));
         $task_logs = $this->obj->getTaskLogs(null, 1, 0, false, false, 2);
 
         $this->assertEquals(1,                  count($task_logs));
@@ -1102,95 +1116,29 @@ $this->obj->overrideDatabase($this->mockDB);
      */
     public function testGetProjects()
     {
-        $projects = getProjects();
+        $this->mockDB->stageHashList(1,
+                array('project_id' => 1, 'project_name' => 'Test Project', 'project_parent' => 1));
+        $this->mockDB->stageHashList(2,
+                array('project_id' => 2, 'project_name' => 'Test Project 2', 'project_parent' => 1));
+        $this->mockDB->stageHashList(3,
+                array('project_id' => 3, 'project_name' => 'Test Project 3', 'project_parent' => 1));
+        $this->mockDB->stageHashList(4,
+                array('project_id' => 4, 'project_name' => 'Test Project 4', 'project_parent' => 1));
+        $projects = $this->obj->getProjects();
 
         $this->assertEquals(4,                  count($projects));
         $this->assertEquals(1,                  $projects[1]['project_id']);
         $this->assertEquals('Test Project',     $projects[1]['project_name']);
         $this->assertEquals(1,                  $projects[1]['project_parent']);
-//        $this->assertEquals(1,                  $projects[1][0]);
-//        $this->assertEquals('Test Project',     $projects[1][1]);
-//        $this->assertEquals('',                 $projects[1][2]);
         $this->assertEquals(2,                  $projects[2]['project_id']);
         $this->assertEquals('Test Project 2',   $projects[2]['project_name']);
         $this->assertEquals(1,                  $projects[2]['project_parent']);
-//        $this->assertEquals(2,                  $projects[2][0]);
-//        $this->assertEquals('Test Project 2',   $projects[2][1]);
-//        $this->assertEquals(1,                  $projects[2][2]);
         $this->assertEquals(3,                  $projects[3]['project_id']);
         $this->assertEquals('Test Project 3',   $projects[3]['project_name']);
         $this->assertEquals(1,                  $projects[3]['project_parent']);
-//        $this->assertEquals(3,                  $projects[3][0]);
-//        $this->assertEquals('Test Project 3',   $projects[3][1]);
-//        $this->assertEquals(1,                  $projects[3][2]);
         $this->assertEquals(4,                  $projects[4]['project_id']);
         $this->assertEquals('Test Project 4',   $projects[4]['project_name']);
         $this->assertEquals(1,                  $projects[4]['project_parent']);
-//        $this->assertEquals(4,                  $projects[4][0]);
-//        $this->assertEquals('Test Project 4',   $projects[4][1]);
-//        $this->assertEquals(1,                  $projects[4][2]);
-    }
-
-    /**
-     * Tests resetting project parents.
-     */
-    public function testResetProjectParents()
-    {
-	    $st_projects = array(0 => '');
-	    $q = new w2p_Database_Query();
-	    $q->addTable('projects');
-	    $q->addQuery('project_id, project_name, project_parent');
-	    $q->addOrder('project_name');
-	    $st_projects = $q->loadHashList('project_id');
-	    reset_project_parents($st_projects);
-
-	    $this->assertEquals(4,                  count($st_projects));
-        $this->assertEquals(1,                  $st_projects[1]['project_id']);
-        $this->assertEquals('Test Project',     $st_projects[1]['project_name']);
-        $this->assertEquals(1,                  $st_projects[1]['project_parent']);
-//        $this->assertEquals(1,                  $st_projects[1][0]);
-//        $this->assertEquals('Test Project',     $st_projects[1][1]);
-//        $this->assertEquals('',                 $st_projects[1][2]);
-        $this->assertEquals(2,                  $st_projects[2]['project_id']);
-        $this->assertEquals('Test Project 2',   $st_projects[2]['project_name']);
-        $this->assertEquals(1,                  $st_projects[2]['project_parent']);
-//        $this->assertEquals(2,                  $st_projects[2][0]);
-//        $this->assertEquals('Test Project 2',   $st_projects[2][1]);
-//        $this->assertEquals(1,                  $st_projects[2][2]);
-        $this->assertEquals(3,                  $st_projects[3]['project_id']);
-        $this->assertEquals('Test Project 3',   $st_projects[3]['project_name']);
-        $this->assertEquals(1,                  $st_projects[3]['project_parent']);
-//        $this->assertEquals(3,                  $st_projects[3][0]);
-//        $this->assertEquals('Test Project 3',   $st_projects[3][1]);
-//        $this->assertEquals(1,                  $st_projects[3][2]);
-        $this->assertEquals(4,                  $st_projects[4]['project_id']);
-        $this->assertEquals('Test Project 4',   $st_projects[4]['project_name']);
-        $this->assertEquals(1,                  $st_projects[4]['project_parent']);
-//        $this->assertEquals(4,                  $st_projects[4][0]);
-//        $this->assertEquals('Test Project 4',   $st_projects[4][1]);
-//        $this->assertEquals(1,                  $st_projects[4][2]);
-    }
-
-    /**
-     * Tests show_st_project function
-     */
-    public function testShowStProject()
-    {
-        //global $st_projects_arr;
-
-        $this->post_data['project_id'] = 1;
-        $this->post_data['project_parent'] = 1;
-        $this->post_data['project_name'] = 'Test Project';
-        $st_projects = array(0 => '', 1 => $this->post_data);
-
-		show_st_project($st_projects[1]);
-
-		$this->assertEquals(1,              count($st_projects_arr));
-		$this->assertEquals(2,              count($st_projects_arr[0]));
-		$this->assertEquals(1,              $st_projects_arr[0][0]['project_id']);
-		$this->assertEquals('Test Project', $st_projects_arr[0][0]['project_name']);
-		$this->assertEquals(1,              $st_projects_arr[0][0]['project_parent']);
-		$this->assertEquals(0,              $st_projects_arr[0][1]);
     }
 
     /**
@@ -1198,9 +1146,6 @@ $this->obj->overrideDatabase($this->mockDB);
      */
     public function testFindProjChildNoLevel()
     {
-//        global $st_projects_arr;
-//        $st_projects_arr = array();
-
         $this->mockDB->stageList(
                 array('project_id' => 1, 'project_name' => 'Test Project', 'project_parent' => 1));
         $this->mockDB->stageList(
@@ -1213,7 +1158,7 @@ $this->obj->overrideDatabase($this->mockDB);
                 array('project_id' => 4, 'project_name' => 'Test Project 4', 'project_parent' => 1));
 		$st_projects = $this->mockDB->loadList();
 
-		find_proj_child($st_projects, 1);
+		$this->obj->find_proj_child($st_projects, 1);
 
 		$this->assertEquals(5,                  count($st_projects));
 		$this->assertEquals(3,                  count($st_projects[0]));
@@ -1258,7 +1203,7 @@ $this->obj->overrideDatabase($this->mockDB);
                 array('project_id' => 4, 'project_name' => 'Test Project 4', 'project_parent' => 1));
 		$st_projects = $this->mockDB->loadList();
 
-		find_proj_child($st_projects, 1, 2);
+		$this->obj->find_proj_child($st_projects, 1, 2);
 
         $this->assertEquals(5,                  count($st_projects));
 		$this->assertEquals(3,                  count($st_projects[0]));
@@ -1288,10 +1233,15 @@ $this->obj->overrideDatabase($this->mockDB);
      */
     public function testGetStructedProjectsNoArgs()
     {
-        global $st_projects_arr;
-        $st_projects_arr = array();
-
-        getStructuredProjects();
+        $this->mockDB->stageList(
+                array('project_id' => 1, 'project_name' => 'Test Project', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 2, 'project_name' => 'Test Project 2', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 3, 'project_name' => 'Test Project 3', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 4, 'project_name' => 'Test Project 4', 'project_parent' => 1));
+        $st_projects_arr = $this->obj->getStructuredProjects();
 
         $this->assertEquals(4,                  count($st_projects_arr));
         $this->assertEquals(3,                  count($st_projects_arr[0][0]));
@@ -1320,10 +1270,15 @@ $this->obj->overrideDatabase($this->mockDB);
      */
     public function testGetStructuredProjectsOriginalProjectID()
     {
-        global $st_projects_arr;
-        $st_projects_arr = array();
-
-        getStructuredProjects(1);
+        $this->mockDB->stageList(
+                array('project_id' => 1, 'project_name' => 'Test Project', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 2, 'project_name' => 'Test Project 2', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 3, 'project_name' => 'Test Project 3', 'project_parent' => 1));
+        $this->mockDB->stageList(
+                array('project_id' => 4, 'project_name' => 'Test Project 4', 'project_parent' => 1));
+        $st_projects_arr = $this->obj->getStructuredProjects(1);
 
         $this->assertEquals(4,                  count($st_projects_arr));
         $this->assertEquals(3,                  count($st_projects_arr[0][0]));

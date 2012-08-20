@@ -1059,9 +1059,12 @@ class CProject extends w2p_Core_BaseObject
         return $search;
     }
 
+    /*
+     * TODO: Everything below this is UGLY and needs cleanup.
+     */
     public function getStructuredProjects($active_only = false)
     {
-        global $st_projects_arr;
+        //global $st_projects_arr;
         $st_projects = array(0 => '');
 
         $q = $this->getQuery();
@@ -1095,11 +1098,48 @@ class CProject extends w2p_Core_BaseObject
         for ($i = 0; $i < $tnums; $i++) {
             $st_project = $st_projects[$i];
             if (($st_project['project_parent'] == $st_project['project_id'])) {
-                show_st_project($st_project);
-                find_proj_child($st_projects, $st_project['project_id']);
+                $this->show_st_project($st_project);
+                $this->find_proj_child($st_projects, $st_project['project_id']);
             }
         }
 
-        return $st_projects_arr;
+        return $this->st_projects_arr;
+    }
+
+    public function find_proj_child(&$tarr, $parent, $level = 0) {
+        $level = $level + 1;
+        $n = count($tarr);
+        for ($x = 0; $x < $n; $x++) {
+            if ($tarr[$x]['project_parent'] == $parent && $tarr[$x]['project_parent'] != $tarr[$x]['project_id']) {
+                $this->show_st_project($tarr[$x], $level);
+                $this->find_proj_child($tarr, $tarr[$x]['project_id'], $level);
+            }
+        }
+    }
+
+    protected function show_st_project(&$a, $level = 0) {
+        $this->st_projects_arr[] = array($a, $level);
+    }
+
+    public function getProjects()
+    {
+        $st_projects = array(0 => '');
+
+        $q = $this->_getQuery();
+        $q->addTable('projects');
+        $q->addQuery('project_id, project_name, project_parent');
+        $q->addOrder('project_name');
+        $st_projects = $q->loadHashList('project_id');
+
+        $this->reset_project_parents($st_projects);
+        return $st_projects;
+    }
+
+    protected function reset_project_parents(&$projects)
+    {
+        foreach ($projects as $key => $project) {
+            if ($project['project_id'] == $project['project_parent'])
+                $projects[$key][2] = '';
+        }
     }
 }
