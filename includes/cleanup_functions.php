@@ -2590,46 +2590,6 @@ function projects_list_data($user_id = false) {
     return $projects;
 }
 
-// From: modules/projects/project.class.php
-function getProjects() {
-	global $AppUI;
-	$st_projects = array(0 => '');
-	$q = new w2p_Database_Query();
-	$q->addTable('projects');
-	$q->addQuery('project_id, project_name, project_parent');
-	$q->addOrder('project_name');
-	$st_projects = $q->loadHashList('project_id');
-	reset_project_parents($st_projects);
-	return $st_projects;
-}
-
-// From: modules/projects/project.class.php
-function reset_project_parents(&$projects) {
-	foreach ($projects as $key => $project) {
-		if ($project['project_id'] == $project['project_parent'])
-			$projects[$key][2] = '';
-	}
-}
-
-//This kludgy function echos children projects as threads
-// From: modules/projects/project.class.php
-function show_st_project(&$a, $level = 0) {
-	global $st_projects_arr;
-	$st_projects_arr[] = array($a, $level);
-}
-
-// From: modules/projects/project.class.php
-function find_proj_child(&$tarr, $parent, $level = 0) {
-	$level = $level + 1;
-	$n = count($tarr);
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['project_parent'] == $parent && $tarr[$x]['project_parent'] != $tarr[$x]['project_id']) {
-			show_st_project($tarr[$x], $level);
-			find_proj_child($tarr, $tarr[$x]['project_id'], $level);
-		}
-	}
-}
-
 /**
  * getProjectIndex() gets the key nr of a project record within an array of projects finding its primary key within the records so that you can call that array record to get the projects data
  *
