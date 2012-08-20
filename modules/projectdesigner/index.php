@@ -172,7 +172,7 @@ if (!$project_id) {
 	$titleBlock->addCrumb('?m=' . $m, 'select another project');
 	$titleBlock->addCrumb('?m=projects&a=view&bypass=1&project_id=' . $project_id, 'normal view project');
 
-	if ($canAddProject) {
+	if ($canAddProjects) {
 		$titleBlock->addCell();
 		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 	}
