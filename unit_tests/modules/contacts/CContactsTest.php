@@ -129,10 +129,20 @@ class CContacts_Test extends CommonSetup
 
     public function testDelete()
     {
-        $this->markTestIncomplete(
-                "I tried basing this on the CLink_Test->testDelete method and
-                no matter what I get 'bindHashToObject : object expected' as
-                the error message.");
+        $this->obj->bind($this->post_data);
+        $result = $this->obj->store();
+        $this->assertTrue($result);
+        $original_id = $this->obj->contact_id;
+        $result = $this->obj->delete();
+
+        $item = new CContact();
+        $item->overrideDatabase($this->mockDB);
+        $this->mockDB->stageHash(array('contact_first_name' => '', 'contact_display_name' => ''));
+        $item->load($original_id);
+
+        $this->assertTrue(is_a($item, 'CContact'));
+        $this->assertEquals('',              $item->contact_first_name);
+        $this->assertEquals('',              $item->contact_display_name);
     }
 
     public function testGetContactMethods()
@@ -254,108 +264,54 @@ class CContacts_Test extends CommonSetup
     }
 
     public function testSearchContacts() {
-        $this->markTestSkipped('This test has not been implemented yet.');
+        $this->markTestSkipped('This method is static.');
     }
 
     public function testGetFirstLetters() {
-        $this->markTestSkipped('This test has not been implemented yet.');
+        $this->markTestSkipped('This method is static.');
     }
 
     public function testGetContactByUsername() {
-        $this->markTestSkipped('This test has not been implemented yet.');
+        $this->markTestSkipped('This method is static.');
     }
 
     public function testGetContactByUserid() {
-        $this->markTestSkipped('This test has not been implemented yet.');
+        $this->markTestSkipped('This method is static.');
     }
 
     public function testGetContactByEmail() {
-        $this->markTestSkipped('This test has not been implemented yet.');
+        $this->markTestSkipped('This method is static.');
     }
 
     public function testGetContactByUpdatekey() {
-        $this->markTestSkipped('This test has not been implemented yet.');
+        $this->markTestSkipped('This method is static.');
     }
 
     public function testGetProjects() {
-        $this->markTestSkipped('This test has not been implemented yet.');
+        $this->markTestSkipped('This method is static.');
     }
 
     public function testClearOldUpdatekeys() {
         $this->markTestSkipped('This test has not been implemented yet.');
     }
 
-    public function testGetUpcomingBirthdays() {
-        $this->markTestSkipped('This test has not been implemented yet.');
-    }
-
-    /**
-     * @todo Implement testLoadFull().
-     */
     public function testLoadFull() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    /**
-     * @todo Implement testCanDelete().
-     */
     public function testCanDelete() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    /**
-     * @todo Implement testGetCompanyID().
-     */
     public function testGetCompanyID() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    /**
-     * @todo Implement testNotify().
-     */
     public function testNotify() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    /**
-     * @todo Implement testHook_cron().
-     */
-    public function testHook_cron() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testHook_search().
-     */
-    public function testHook_search() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testHook_calendar().
-     */
     public function testHook_calendar() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 }

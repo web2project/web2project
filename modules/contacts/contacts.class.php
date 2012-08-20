@@ -613,7 +613,6 @@ class CContact extends w2p_Core_BaseObject
 
     public function hook_calendar($userId)
     {
-//    return $this->getUpcomingBirthdays($userId);
         return null;
     }
 
