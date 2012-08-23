@@ -10,15 +10,17 @@ $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
 $row = new CContact();
 $row->contact_id = $contact_id;
+//TODO: CContact->canCreate() needs tweaking
+$row->contact_email = 'placeholder to pass canCreate()';
 
 $canAuthor = $row->canCreate();
 if (!$canAuthor && !$contact_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect('m=public&a=access_denied');
 }
 
 $canEdit = $row->canEdit();
 if (!$canEdit && $contact_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect('m=public&a=access_denied');
 }
 
 // load the record data
