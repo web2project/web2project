@@ -52,56 +52,11 @@ class CTaskLogs_Test extends CommonSetup
 		);
 	}
 
-    /**
-     * Tear Down function to be run after tests
-     */
-    public function tearDown()
-	{
-		parent::tearDown();
-
-		unset($this->obj, $this->post_data);
-	}
-
-    /**
-     * Tests the attributes of a new TaskLog object
-     */
-    public function testNewTaskLogsAttributes()
+    public function testObjectProperties()
     {
-        $this->assertInstanceOf('CTask_Log',                     $this->obj);
-        $this->assertObjectHasAttribute('task_log_id',          $this->obj);
-        $this->assertObjectHasAttribute('task_log_task',        $this->obj);
-        $this->assertObjectHasAttribute('task_log_name',        $this->obj);
-        $this->assertObjectHasAttribute('task_log_description', $this->obj);
-        $this->assertObjectHasAttribute('task_log_creator',     $this->obj);
-        $this->assertObjectHasAttribute('task_log_hours',       $this->obj);
-        $this->assertObjectHasAttribute('task_log_date',        $this->obj);
-        $this->assertObjectHasAttribute('task_log_costcode',    $this->obj);
-        $this->assertObjectHasAttribute('task_log_problem',     $this->obj);
-        $this->assertObjectHasAttribute('task_log_reference',   $this->obj);
-        $this->assertObjectHasAttribute('task_log_related_url', $this->obj);
-        $this->assertObjectHasAttribute('task_log_created',     $this->obj);
-        $this->assertObjectHasAttribute('task_log_updated',     $this->obj);
-    }
+        $unset = array('task_log_problem');
 
-    /**
-     * Tests the values of attributes of a new TaskLog object
-     */
-    public function testNewTaskLogsAttributeValues()
-    {
-        $this->assertInstanceOf('CTask_Log', $this->obj);
-        $this->assertNull($this->obj->task_log_id);
-        $this->assertNull($this->obj->task_log_task);
-        $this->assertNull($this->obj->task_log_name);
-        $this->assertNull($this->obj->task_log_description);
-        $this->assertNull($this->obj->task_log_creator);
-        $this->assertNull($this->obj->task_log_hours);
-        $this->assertNull($this->obj->task_log_date);
-        $this->assertNull($this->obj->task_log_costcode);
-        $this->assertNull($this->obj->task_log_reference);
-        $this->assertNull($this->obj->task_log_related_url);
-        $this->assertNull($this->obj->task_log_created);
-        $this->assertNull($this->obj->task_log_updated);
-        $this->assertEquals(0,              $this->obj->task_log_problem);
+        parent::objectPropertiesTest('CTask_Log', 15, $unset);
     }
 
     /**
@@ -315,12 +270,65 @@ class CTaskLogs_Test extends CommonSetup
     }
 
     /**
-     * @todo Implement testCheck().
+     * Tests that the proper error message is returned when a task log is attempted
+     * to be created without a task.
      */
-    public function testCheck() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+    public function testCreateTaskLogNoTask()
+    {
+        unset($this->post_data['task_log_task']);
+        $this->obj->bind($this->post_data);
+
+        /**
+        * Verify we got the proper error message
+        */
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('task_log_task', $this->obj->getError());
+
+        /**
+        * Verify that the id was not set
+        */
+        $this->AssertEquals(0, $this->obj->task_log_id);
+    }
+
+    /**
+     * Tests that the proper error message is returned when a task log is attempted
+     * to be created without a name.
+     */
+    public function testCreateTaskLogNoName()
+    {
+        $this->post_data['task_log_name'] = '';
+        $this->obj->bind($this->post_data);
+
+        /**
+        * Verify we got the proper error message
+        */
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('task_log_name', $this->obj->getError());
+
+        /**
+        * Verify that the id was not set
+        */
+        $this->AssertEquals(0, $this->obj->task_log_id);
+    }
+
+    /**
+     * Tests that the proper error message is returned when a task log is attempted
+     * to be created without a creator.
+     */
+    public function testCreateLinkNoOwner()
+    {
+        unset($this->post_data['task_log_creator']);
+        $this->obj->bind($this->post_data);
+
+        /**
+        * Verify we got the proper error message
+        */
+		$this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('task_log_creator', $this->obj->getError());
+
+        /**
+        * Verify that the id was not set
+        */
+        $this->AssertEquals(0, $this->obj->task_log_id);
     }
 }

@@ -54,30 +54,9 @@ class CUsers_Test extends CommonSetup
       );
     }
 
-    /**
-     * Tests the Attributes of a new CUsers object.
-     */
-    public function testAttributes()
+    public function testObjectProperties()
     {
-        $this->assertInstanceOf('CUser',            $this->obj);
-        $this->assertObjectHasAttribute('user_username',  $this->obj);
-        $this->assertObjectHasAttribute('user_password',  $this->obj);
-        $this->assertObjectHasAttribute('user_type',      $this->obj);
-        $this->assertObjectHasAttribute('user_contact',   $this->obj);
-        $this->assertObjectHasAttribute('user_signature', $this->obj);
-    }
-
-    /**
-     * Tests the Attribute Values of a new Link object.
-     */
-    public function testAttributeValues()
-    {
-        $this->assertInstanceOf('CUser',            $this->obj);
-        $this->assertNull($this->obj->user_username);
-        $this->assertNull($this->obj->user_password);
-        $this->assertNull($this->obj->user_type);
-        $this->assertNull($this->obj->user_contact);
-        $this->assertNull($this->obj->user_signature);
+        parent::objectPropertiesTest('CUser', 7);
     }
 
     /**

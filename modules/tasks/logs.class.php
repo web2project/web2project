@@ -308,6 +308,16 @@ class CTask_Log extends w2p_Core_BaseObject
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
+        if (0 == (int) $this->task_log_task) {
+            $this->_error['task_log_task'] = $baseErrorMsg . 'task log task is NULL';
+        }
+        if ('' == trim($this->task_log_name)) {
+            $this->_error['task_log_name'] = $baseErrorMsg . 'task log name is not set';
+        }
+        if (0 == (int) $this->task_log_creator) {
+            $this->_error['task_log_creator'] = $baseErrorMsg . 'task log creator is NULL';
+        }
+
         return (count($this->_error)) ? false : true;
     }
 

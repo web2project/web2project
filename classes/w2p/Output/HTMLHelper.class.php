@@ -195,6 +195,7 @@ class w2p_Output_HTMLHelper
                 $cell = $value;
                 break;
             case '_size':
+                $suffix .= ' nowrap';
                 $cell = file_size($value);
                 break;
 			case '_budget':
@@ -209,6 +210,7 @@ class w2p_Output_HTMLHelper
                 break;
             case '_birthday':
 			case '_date':
+                $suffix .= ' nowrap';
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
 				$cell = $myDate ? $myDate->format($this->df) : '-';
 				break;
@@ -216,7 +218,7 @@ class w2p_Output_HTMLHelper
             case '_datetime':
             case '_update':
             case '_updated':
-				$additional = 'nowrap="nowrap"';
+				$suffix .= ' nowrap';
                 $myDate = intval($value) ? new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
 				$cell = $myDate ? $myDate->format($this->dtf) : '-';
 				break;
@@ -241,7 +243,7 @@ class w2p_Output_HTMLHelper
                 $cell = number_format($value/100, 2);
                 break;
             case '_identifier':
-                $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'"';
+                $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'" ';
                 $cell = $this->tableRowData['project_percent_complete'].'%';
                 break;
             case '_problem':
@@ -255,12 +257,12 @@ class w2p_Output_HTMLHelper
                 break;
 			default:
 //TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
-				$additional = 'nowrap="nowrap"';
+                $suffix .= ' nowrap';
                 $value = (isset($custom[$fieldName])) ? $custom[$fieldName][$value] : $value;
 				$cell = htmlspecialchars($value, ENT_QUOTES);
 		}
 
-        $begin = '<td '.$additional.' class="data '.$suffix.'">';
+        $begin = '<td '.$additional.'class="data '.$suffix.'">';
         $end = '</td>';
 
         return $begin . $cell . $end;

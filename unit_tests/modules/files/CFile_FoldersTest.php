@@ -43,28 +43,9 @@ class CFileFolders_Test extends CommonSetup
       );
     }
 
-    /**
-     * Tests the Attributes of a new Links object.
-     */
-    public function testNewFolderAttributes()
+    public function testObjectProperties()
     {
-      $this->assertInstanceOf('CFile_Folder', $this->obj);
-      $this->assertObjectHasAttribute('file_folder_id',          $this->obj);
-      $this->assertObjectHasAttribute('file_folder_parent',      $this->obj);
-      $this->assertObjectHasAttribute('file_folder_name',        $this->obj);
-      $this->assertObjectHasAttribute('file_folder_description', $this->obj);
-    }
-
-    /**
-     * Tests the Attribute Values of a new Link object.
-     */
-    public function testNewLinkAttributeValues()
-    {
-        $this->assertInstanceOf('CFile_Folder', $this->obj);
-        $this->assertNull($this->obj->file_folder_id);
-        $this->assertNull($this->obj->file_folder_parent);
-        $this->assertNull($this->obj->file_folder_name);
-        $this->assertNull($this->obj->file_folder_description);
+        parent::objectPropertiesTest('CFile_Folder', 4);
     }
 
     /**

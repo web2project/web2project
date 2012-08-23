@@ -2,7 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-/*
+/**
 * This file exists in order to identify individual functions which will be
 *   deprecated in coming releases.  In the documentation for each function,
 *   you must describe two things:
@@ -40,7 +40,7 @@ function w2PcheckCharset($charset) {
     return 'utf-8';
 }
 
-/*
+/**
 * 	Convert string char (ref : Vbulletin #3987)
 *
 * @deprecated
@@ -66,7 +66,7 @@ function atoi($a) {
     return $a + 0;
 }
 
-/*
+/**
  * This was used to check if a $link was a URL. Since some users use local
  *   network resources, this was failing miserably and making our lives difficult.
  * TODO:  Remove for v4.0 - caseydk 01 September 2011
@@ -79,7 +79,7 @@ function w2p_check_url($link)
     return true;
 }
 
-/*
+/**
  * This was used to remove zero length strings from the contacts array in
  *   modules/public/contact_selector.php but can be replaced with array_filter.
  * TODO:  Remove for v4.0 - caseydk 28 December 2011
@@ -92,7 +92,7 @@ function remove_invalid($arr) {
     return array_filter($arr);
 }
 
-/*
+/**
  * This was a recursive function to generate the task list tree used in the
  *   Project Designer module. It was the exact duplciate of the findchild_pr,
  *   so this version has been deprecated.
@@ -107,7 +107,7 @@ function findchild_pr(&$tarr, $parent, $level = 0) {
     findchild_pd($tarr, $parent, $level = 0);
 }
 
-/*
+/**
  * This was a function that simply did a str_repeat.. no clue why it didn't
  *   just use the regular str_repeat.
  * TODO:  Remove for v4.0 - caseydk 22 March 2012
@@ -119,9 +119,9 @@ function getSpaces($amount) {
 	trigger_error("The getSpaces function has been deprecated and will be removed in v4.0. Please use str_repeat instead.", E_USER_NOTICE );
 	return str_repeat('&nbsp;', $amount);
 }
-/*
- * This was used to retrieve and display the child departments starting from 
- *   any ancestor. More importantly, it displays the relationship visually 
+/**
+ * This was used to retrieve and display the child departments starting from
+ *   any ancestor. More importantly, it displays the relationship visually
  *   with little icons. There are a couple other variations of this function.
  * TODO:  Remove for v4.0 - caseydk 13 Feb 2012
  * 
@@ -141,9 +141,9 @@ function findchilddept_comp(&$tarr, $parent, $level = 0) {
 	}
 }
 
-/*
- * This was used to display the child departments one row at a time. More 
- *   importantly, it displays the relationship visually with little icons. 
+/**
+ * This was used to display the child departments one row at a time. More
+ *   importantly, it displays the relationship visually with little icons.
  *   There are a couple other variations of this function.
  * TODO:  Remove for v4.0 - caseydk 13 Feb 2012
  * 
@@ -176,14 +176,13 @@ function showchilddept_comp(&$a, $level = 0) {
 	return '<tr>' . $s . '</tr>';
 }
 
-/*
+/**
  * This was used to designate if a task was on not started, late, on time, or
  *   some other combination thereof.
  * TODO:  Remove for v4.0 - caseydk 04 Mar 2012
  *
  * @deprecated
  */
-//From: modules/projectdesigner/projectdesigner.class.php
 function taskstyle_pd($task) {
 	trigger_error("The taskstyle_pd function has been deprecated and will be removed in v4.0. Use w2pFindTaskComplete() instead.", E_USER_NOTICE );
 
@@ -202,4 +201,99 @@ function taskstyle_pd($task) {
             $style = 'task_future';
             break;
     }
+}
+
+/**
+ * @deprecated
+ */
+function getStructuredProjects($original_project_id = 0, $project_status = -1, $active_only = false) {
+    trigger_error("getStructuredProjects has been deprecated in v3.0 and will be removed in v4.0. Please use CProject->getStructuredProjects() instead.", E_USER_NOTICE);
+
+    $project = new CProject();
+    $project->project_original_parent = $original_project_id;
+    $project->project_status = $project_status;
+    return $project->getStructuredProjects($active_only);
+}
+
+/**
+ * Deprecated in favor of buildTaskTree which doesn't use any globals.
+ *
+ * @deprecated
+ */
+function constructTaskTree($task_data, $depth = 0) {
+	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
+    trigger_error("The constructTaskTree function has been deprecated and will be removed in v4.0. Use buildTaskTree() instead.", E_USER_NOTICE );
+
+    return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
+}
+/**
+ * Deprecated in favor of buildTaskTree which doesn't use any globals.
+ *
+ * @deprecated
+ */
+function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
+	global $projTasks, $all_tasks, $task_parent_options, $task_parent, $task_id;
+    trigger_error("The constructTaskTree_pd function has been deprecated and will be removed in v4.0. Use buildTaskTree() instead.", E_USER_NOTICE );
+
+    return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
+}
+
+// from modules/tasks/tasks.class.php
+/**
+ * canTaskAccess()
+ * Used to check if a user has task_access to see the task in task list context
+ * (This function was optimized to try to use the DB the least possible)
+ *
+ * @param mixed $task_id
+ * @param mixed $task_access
+ * @param mixed $task_owner
+ * @return true if user has task access to it, or false if he doesn't
+ *
+ * @deprecated
+ */
+function canTaskAccess($task_id, $task_access = 0, $task_owner = 0) {
+    trigger_error("canTaskAccess has been deprecated in v3.0 and will be removed by v4.0. Please use CTask->canAccess() instead.", E_USER_NOTICE);
+
+    global $AppUI;
+
+    $task = new CTask();
+    $task->load($task_id);
+
+    return $task->canAccess($AppUI->user_id);
+}
+
+/**
+ * @deprecated
+ */
+function getProjects() {
+	trigger_error("getProjects() has been deprecated in v3.0 and will be removed in v4.0. Please use CProject->getProjects() instead.", E_USER_NOTICE);
+
+    $project = new CProject();
+    return $project->getProjects();
+}
+
+/**
+ * @deprecated
+ */
+function show_st_project(&$a, $level = 0) {
+	trigger_error("show_st_project() has been deprecated in v3.0 and will be removed in v4.0. There is no replacement.", E_USER_NOTICE);
+
+    global $st_projects_arr;
+	$st_projects_arr[] = array($a, $level);
+}
+
+/**
+ * @deprecated
+ */
+function find_proj_child(&$tarr, $parent, $level = 0) {
+	trigger_error("find_proj_child() has been deprecated in v3.0 and will be removed in v4.0. There is no replacement.", E_USER_NOTICE);
+
+    $level = $level + 1;
+	$n = count($tarr);
+	for ($x = 0; $x < $n; $x++) {
+		if ($tarr[$x]['project_parent'] == $parent && $tarr[$x]['project_parent'] != $tarr[$x]['project_id']) {
+			show_st_project($tarr[$x], $level);
+			find_proj_child($tarr, $tarr[$x]['project_id'], $level);
+		}
+	}
 }

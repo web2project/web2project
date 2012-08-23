@@ -19,12 +19,10 @@ class w2p_Controllers_Base
     protected $prefix = '';
     protected $successPath = '';
     protected $errorPath = '';
-    protected $accessDeniedPath = 'm=public&a=access_denied';
 
     public $object = null;
     public $success = false;
     public $resultPath = '';
-    public $resultMessage = '';
 
     public function __construct(w2p_Core_BaseObject $object, $delete,
              $prefix, $successPath, $errorPath) {
@@ -33,10 +31,6 @@ class w2p_Controllers_Base
         $this->prefix = $prefix;
         $this->successPath = $successPath;
         $this->errorPath = $errorPath;
-    }
-
-    public function setAccessDeniedPath($path) {
-        $this->accessDeniedPath = $path;
     }
 
     public function process(w2p_Core_CAppUI $AppUI, array $myArray) {
