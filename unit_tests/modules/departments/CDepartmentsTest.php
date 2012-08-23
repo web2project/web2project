@@ -54,54 +54,9 @@ class CDepartments_Test extends CommonSetup
       );
     }
 
-    /**
-     * Tests the Attributes of a new Departments object.
-     */
-    public function testNewDepartmentAttributes()
+    public function testObjectProperties()
     {
-      $this->assertInstanceOf('CDepartment',              $this->obj);
-      $this->assertObjectHasAttribute('dept_id',          $this->obj);
-      $this->assertObjectHasAttribute('dept_parent',      $this->obj);
-      $this->assertObjectHasAttribute('dept_company',     $this->obj);
-      $this->assertObjectHasAttribute('dept_name',        $this->obj);
-      $this->assertObjectHasAttribute('dept_phone',       $this->obj);
-      $this->assertObjectHasAttribute('dept_fax',         $this->obj);
-      $this->assertObjectHasAttribute('dept_address1',    $this->obj);
-      $this->assertObjectHasAttribute('dept_address2',    $this->obj);
-      $this->assertObjectHasAttribute('dept_city',        $this->obj);
-      $this->assertObjectHasAttribute('dept_state',       $this->obj);
-      $this->assertObjectHasAttribute('dept_zip',         $this->obj);
-      $this->assertObjectHasAttribute('dept_country',     $this->obj);
-      $this->assertObjectHasAttribute('dept_url',         $this->obj);
-      $this->assertObjectHasAttribute('dept_desc',        $this->obj);
-      $this->assertObjectHasAttribute('dept_owner',       $this->obj);
-      $this->assertObjectHasAttribute('dept_email',       $this->obj);
-      $this->assertObjectHasAttribute('dept_type',        $this->obj);
-    }
-
-    /**
-     * Tests the Attribute Values of a new Department object.
-     */
-    public function testNewDepartmentAttributeValues()
-    {
-        $this->assertInstanceOf('CDepartment', $this->obj);
-        $this->assertEquals(0, $this->obj->dept_id);
-        $this->assertNull($this->obj->dept_parent);
-        $this->assertNull($this->obj->dept_company);
-        $this->assertNull($this->obj->dept_name);
-        $this->assertNull($this->obj->dept_phone);
-        $this->assertNull($this->obj->dept_fax);
-        $this->assertNull($this->obj->dept_address1);
-        $this->assertNull($this->obj->dept_address2);
-        $this->assertNull($this->obj->dept_city);
-        $this->assertNull($this->obj->dept_state);
-        $this->assertNull($this->obj->dept_zip);
-        $this->assertNull($this->obj->dept_country);
-        $this->assertNull($this->obj->dept_url);
-        $this->assertNull($this->obj->dept_desc);
-        $this->assertNull($this->obj->dept_owner);
-        $this->assertNull($this->obj->dept_email);
-        $this->assertNull($this->obj->dept_type);
+        parent::objectPropertiesTest('CDepartment', 17);
     }
 
     /**

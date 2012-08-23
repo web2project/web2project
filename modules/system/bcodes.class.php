@@ -65,9 +65,11 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         $q->addTable('billingcode');
         $q->addWhere('billingcode_name = \'' . $this->billingcode_name . '\'');
         $q->addWhere('billingcode_company = ' . (int) $this->billingcode_company);
+        $q->addWhere('billingcode_id <> ' . (int) $this->billingcode_id);
 
         $found_id = $q->loadResult();
-        if ($found_id && $found_id != $this->billingcode_id) {
+
+        if ($found_id) {
             $this->_error['billingcode_name'] = $baseErrorMsg . 'code already exists';
         }
 

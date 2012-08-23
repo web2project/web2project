@@ -227,3 +227,6 @@ table.list tr:hover td._name {
     width:      45%;
 }
 
+.nowrap {
+    white-space:nowrap;
+}

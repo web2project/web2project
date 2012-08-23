@@ -346,27 +346,6 @@ function buildTaskTree($task_data, $depth = 0, $projTasks, $all_tasks, $parents,
     return $output;
 }
 
-/*
- * Deprecated in favor of buildTaskTree which doesn't use any globals.
- *
- * @deprecated
- */
-function constructTaskTree($task_data, $depth = 0) {
-	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
-
-    return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
-}
-/*
- * Deprecated in favor of buildTaskTree which doesn't use any globals.
- *
- * @deprecated
- */
-function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
-	global $projTasks, $all_tasks, $task_parent_options, $task_parent, $task_id;
-
-    return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
-}
-
 // from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function build_date_list(&$date_array, $row) {
 	global $project;
@@ -939,28 +918,6 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 		$s .= '&nbsp;<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" border="0" alt="" />';
 	}
 	return $s.'</a>';
-}
-
-// from modules/tasks/tasks.class.php
-/**
- * canTaskAccess()
- * Used to check if a user has task_access to see the task in task list context
- * (This function was optimized to try to use the DB the least possible)
- *
- * @param mixed $task_id
- * @param mixed $task_access
- * @param mixed $task_owner
- * @return true if user has task access to it, or false if he doesn't
- */
-function canTaskAccess($task_id, $task_access = 0, $task_owner = 0) {
-    //trigger_error("canTaskAccess has been deprecated in v3.0 and will be removed by v4.0. Please use CTask->canAccess() instead.", E_USER_NOTICE);
-
-    global $AppUI;
-
-    $task = new CTask();
-    $task->load($task_id);
-
-    return $task->canAccess($AppUI->user_id);
 }
 
 // from modules/tasks/tasksperuser_sub.php
@@ -2631,83 +2588,6 @@ function projects_list_data($user_id = false) {
 	$buffer .= '</select>';
 
     return $projects;
-}
-
-// From: modules/projects/project.class.php
-function getProjects() {
-	global $AppUI;
-	$st_projects = array(0 => '');
-	$q = new w2p_Database_Query();
-	$q->addTable('projects');
-	$q->addQuery('project_id, project_name, project_parent');
-	$q->addOrder('project_name');
-	$st_projects = $q->loadHashList('project_id');
-	reset_project_parents($st_projects);
-	return $st_projects;
-}
-
-// From: modules/projects/project.class.php
-function reset_project_parents(&$projects) {
-	foreach ($projects as $key => $project) {
-		if ($project['project_id'] == $project['project_parent'])
-			$projects[$key][2] = '';
-	}
-}
-
-//This kludgy function echos children projects as threads
-// From: modules/projects/project.class.php
-function show_st_project(&$a, $level = 0) {
-	global $st_projects_arr;
-	$st_projects_arr[] = array($a, $level);
-}
-
-// From: modules/projects/project.class.php
-function find_proj_child(&$tarr, $parent, $level = 0) {
-	$level = $level + 1;
-	$n = count($tarr);
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['project_parent'] == $parent && $tarr[$x]['project_parent'] != $tarr[$x]['project_id']) {
-			show_st_project($tarr[$x], $level);
-			find_proj_child($tarr, $tarr[$x]['project_id'], $level);
-		}
-	}
-}
-
-// From: modules/projects/project.class.php
-function getStructuredProjects($original_project_id = 0, $project_status = -1, $active_only = false) {
-	global $AppUI, $st_projects_arr;
-	$st_projects = array(0 => '');
-	$q = new w2p_Database_Query();
-	$q->addTable('projects');
-	$q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-	$q->addQuery('DISTINCT(projects.project_id), project_name, project_parent');
-	if ($original_project_id) {
-		$q->addWhere('project_original_parent = ' . (int)$original_project_id);
-	}
-	if ($project_status >= 0) {
-		$q->addWhere('project_status = ' . (int)$project_status);
-	}
-	if ($active_only) {
-		$q->addWhere('project_active = 1');
-	}
-	$q->addOrder('project_start_date, project_end_date');
-
-	$obj = new CCompany();
-	$obj->setAllowedSQL($AppUI->user_id, $q);
-	$dpt = new CDepartment();
-	$dpt->setAllowedSQL($AppUI->user_id, $q);
-    $q->leftJoin('project_departments', 'pd', 'pd.project_id = projects.project_id' );
-    $q->leftJoin('departments', 'd', 'd.dept_id = pd.department_id' );
-
-	$st_projects = $q->loadList();
-	$tnums = count($st_projects);
-	for ($i = 0; $i < $tnums; $i++) {
-		$st_project = $st_projects[$i];
-		if (($st_project['project_parent'] == $st_project['project_id'])) {
-			show_st_project($st_project);
-			find_proj_child($st_projects, $st_project['project_id']);
-		}
-	}
 }
 
 /**
