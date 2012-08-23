@@ -22,7 +22,7 @@
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'unit_tests/CommonSetup.php';
 
-class w2p_Mocks_Query_Test extends CommonSetup
+class w2p_Mocks_QueryTest extends CommonSetup
 {
 
     /**
