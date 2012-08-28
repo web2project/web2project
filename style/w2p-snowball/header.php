@@ -83,39 +83,39 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                 </div>
                 <div class="std shadow">&nbsp;</div>
             </form>
-        <?php } ?>
-        <div>
-            <div class="left" style="margin: 5px;">
-                <?php
-                    echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_display_name : $outsider);
-                    echo '<br />';
-                    if ($AppUI->user_id > 0) {
-                        echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
-                    }
-                ?>
-            </div>
-            <?php if ($AppUI->user_id > 0) { ?>
-                <div class="right quicknav">
-                    <div class="left">
-                    <?php if (canAccess('smartsearch')) { ?>
-                        <form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
-                            <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
-                        </form>
-                        <?php } ?>
-                    </div>
-                    <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
-                    <a class="button" href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
-                    <?php if (canAccess('tasks')) { ?>
-                        <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
-                    <?php } ?>
-                    <?php if (canAccess('calendar')) { 
-                        $now = new w2p_Utilities_Date(); ?>
-                        <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
-                    <?php } ?>
-                    <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
+            <div>
+                <div class="left" style="margin: 5px;">
+                    <?php
+                        echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_display_name : $outsider);
+                        echo '<br />';
+                        if ($AppUI->user_id > 0) {
+                            echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
+                        }
+                    ?>
                 </div>
-            <?php } ?>
-        </div>
+                <?php if ($AppUI->user_id > 0) { ?>
+                    <div class="right quicknav">
+                        <div class="left">
+                        <?php if (canAccess('smartsearch')) { ?>
+                            <form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
+                                <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
+                            </form>
+                            <?php } ?>
+                        </div>
+                        <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
+                        <a class="button" href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
+                        <?php if (canAccess('tasks')) { ?>
+                            <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
+                        <?php } ?>
+                        <?php if (canAccess('calendar')) {
+                            $now = new w2p_Utilities_Date(); ?>
+                            <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
+                        <?php } ?>
+                        <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
+                    </div>
+                <?php } ?>
+            </div>
+        <?php } ?>
 
         <table width="100%" cellspacing="0" cellpadding="4" border="0">
             <tr>
