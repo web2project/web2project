@@ -187,7 +187,7 @@ class CContact extends w2p_Core_BaseObject
         if(mb_strlen($this->contact_first_name) <= 1) {
             $this->_error['contact_first_name'] = $baseErrorMsg . 'contact first name is not set';
         }
-        
+
         if(mb_strlen($this->contact_display_name) <= 1) {
             $this->_error['contact_display_name'] = $baseErrorMsg . 'contact display name is not set';
         }
@@ -201,7 +201,7 @@ class CContact extends w2p_Core_BaseObject
     public function canCreate()
     {
         $recordCount = $this->loadAll(null, "contact_email = '".$this->contact_email."'");
-        if (count($recordCount)) {
+        if (count($recordCount) && $this->contact_email != null) {
             $this->_error['canCreate'] = 'A contact with this email address already exists';
             return false;
         }
