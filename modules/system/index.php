@@ -81,6 +81,8 @@ $titleBlock->show();
         </div>
     </div>
 
+    <div class="clear"/>
+
     <div class="left main">
         <div class="left icon">
             <?php echo w2PshowImage('power-management.png', 42, 42, ''); ?>
@@ -99,6 +101,8 @@ $titleBlock->show();
             <a href="?m=system&a=translate"><?php echo $AppUI->_('Translation Management'); ?></a>
         </div>
     </div>
+
+    <div class="clear"/>
 
     <div class="left main">
         <div class="left icon">
