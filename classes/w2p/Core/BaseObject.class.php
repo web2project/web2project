@@ -201,6 +201,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $hash = $q->loadHash();
         //If no record was found send false because there is no data
         if (!$hash) {
+            $this->$k = null;
             return false;
         }
         $q->bindHashToObject($hash, $this, null, $strip);
