@@ -10,9 +10,8 @@ $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
 $row = new CContact();
 $row->contact_id = $contact_id;
-//TODO: CContact->canCreate() needs tweaking
-$row->contact_email = 'placeholder to pass canCreate()';
 
+//TODO: CContact->canCreate() needs tweaking
 $canAuthor = $row->canCreate();
 if (!$canAuthor && !$contact_id) {
     $AppUI->redirect('m=public&a=access_denied');
@@ -181,7 +180,7 @@ function companyChange() {
 	var f = document.changecontact;
 	if ( f.contact_company.value != window.company_value ){
 		f.contact_department.value = '';
-	} 
+	}
 }
 
 function updateVerify() {
@@ -208,7 +207,7 @@ function addContactMethod(field, value) {
 
     /* Create select menu for contact method type */
     function addOption(select, value, text, selected) {
-        var option = document.createElement('option'); 
+        var option = document.createElement('option');
         option.setAttribute("value", value);
         option.innerHTML = text;
         option.selected = (value == selected);
@@ -223,10 +222,10 @@ function addContactMethod(field, value) {
     /* Add text field for the contact method value to the table row */
     $('#contact_methods_' + index + '_').append('<td><input type="text" name="contact_methods[value][' + index + ']" size="25" maxlength="255" class="text" value="' + (value ? value : "") + '" /><?php echo w2PtoolTip('Contact Method', 'Remove') ?><a id="remove_contact_method" href="javascript:removeContactMethod(\'' + index + '\')"><img src="<?php echo w2PfindImage('icons/remove.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?></td>');
     addOption('#method_select_' + index, "", "");
-    <?php foreach ($methodLabels as $value => $text): ?> 
+    <?php foreach ($methodLabels as $value => $text): ?>
     addOption('#method_select_' + index, "<?php echo $value; ?>", "<?php echo $text; ?>", field);
     <?php endforeach; ?>
-    /* Make sure the newly added remove span has its tooltip working*/ 
+    /* Make sure the newly added remove span has its tooltip working*/
     $("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});
 }
 
