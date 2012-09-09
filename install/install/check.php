@@ -2,10 +2,10 @@
 	if (!defined('W2P_BASE_DIR')) {
 		die('You should not access this file directly.');
 	}
-	
+
 	$failedImg = '<img src="../style/web2project/images/log-error.gif" width="16" height="16" align="middle" alt="Failed"/>';
 	$okImg = '<img src="../style/web2project/images/log-notice.gif" width="16" height="16" align="middle" alt="OK"/>';
-	
+
 	$continue = true;
 ?>
 
@@ -15,10 +15,10 @@
 	</tr>
 	<tr>
 		<td colspan="2">
-			There is an initial Check for (minimal) requirements appended below for 
-			troubleshooting. At minimum, a database and corresponding database 
-			connection must be available in addition to PHP5, the GD libraries 
-			installed for Gantt charts, and file_uploads should be allowed.  In 
+			There is an initial Check for (minimal) requirements appended below for
+			troubleshooting. At minimum, a database and corresponding database
+			connection must be available in addition to PHP5, the GD libraries
+			installed for Gantt charts, and file_uploads should be allowed.  In
 			addition ../includes/config.php should be writable for the webserver.
 		</td>
 	</tr>
@@ -41,7 +41,7 @@
 	<tr>
 		<td class="item">GD Support (for GANTT Charts)</td>
 		<td align="left">
-		<?php 
+		<?php
 			if (!extension_loaded('gd')) {
 				echo '<b class="error">'.$failedImg.'</b> <span class="item">GANTT Chart functionality may not work correctly.</span>';
 				$continue = false;
@@ -54,7 +54,7 @@
 	<tr>
 		<td class="item">File Uploads</td>
 		<td align="left">
-		<?php 
+		<?php
 			if (!ini_get('file_uploads') && is_writable(W2P_BASE_DIR.'/files')) {
         echo '<b class="error">'.$failedImg.'</b> <span class="warning">Upload functionality will not be available, please make the ./files directory writable.</span>';
 				$continue = false;
@@ -69,16 +69,16 @@
 	</tr>
 	<tr>
 		<td class="item" colspan="2">
-			<p>The next tests check for database support compiled with php. We use 
-			the ADODB database abstraction layer which comes with drivers for many 
-			databases. Consult the ADODB documentation for details.  For the moment 
+			<p>The next tests check for database support compiled with php. We use
+			the ADODB database abstraction layer which comes with drivers for many
+			databases. Consult the ADODB documentation for details.  For the moment
 			only MySQL is fully supported, so you need to make sure it is available.</p>
 		</td>
 	</tr>
 	<tr>
 		<td class="item">MySQL Support</td>
 		<td align="left">
-		<?php 
+		<?php
 			if (!function_exists('mysql_connect')) {
 				echo '<b class="error"><span class="warning">'.$failedImg.' Not available</span>';
 				$continue = false;
@@ -92,9 +92,9 @@
 		<td class="title" colspan="2"><br />Check for Directory and File Permissions</td>
 	</tr>
 	<tr>
-		<td class="item" colspan="2">If the message 'World Writable' appears after 
-		a file/directory, then Permissions for this File have been set to allow 
-		all users to write to this file/directory.  Consider changing this to a 
+		<td class="item" colspan="2">If the message 'World Writable' appears after
+		a file/directory, then Permissions for this File have been set to allow
+		all users to write to this file/directory.  Consider changing this to a
 		more restrictive setting to improve security. You will need to do this manually.</td>
 	</tr>
 	<?php
@@ -168,7 +168,7 @@
 	<tr>
 		<td class="item">Zlib compression Support</td>
 		<td align="left">
-		<?php 
+		<?php
 			echo (!extension_loaded('zlib')) ? '<b class="error">'.$failedImg.'</b> <span class="item">Some non-core modules may have restricted operation.</span>' : '<b class="ok">'.$okImg.'</b>';
 		?>
 		</td>
@@ -176,7 +176,7 @@
 	<tr>
 		<td class="item">Session Save Path writable?</td>
 		<td align="left">
-			<?php 
+			<?php
 				$sspath = ini_get('session.save_path');
 				if (! $sspath) {
 					echo '<b class="error">'.$failedImg.'</b> <span class="warning">session.save_path</span> <b class="error">is not set</b>';
@@ -191,7 +191,7 @@
   <tr>
     <td class="item">Server API</td>
     <td align="left">
-    <?php 
+    <?php
       if (strpos(strtolower(php_sapi_name()), 'cgi') !== false) {
         echo '<b class="error">'.$failedImg.' CGI mode is likely to have problems</b>';
       } else {
@@ -217,7 +217,7 @@
 	</tr>
 	<tr>
 	  <td class="item">Session Use Trans Sid = OFF?</td>
-	  <td align="left"><?php echo (!ini_get('session.use_only_cookies') && !ini_get('session.use_trans_sid')) ? '<b class="ok">'.$okImg.'</b>' : '<b class="error">'.$failedImg.'</b><span class="warning"> There are security risks with this turned ON</span>';?></td>
+	  <td align="left"><?php echo ((!ini_get('session.use_only_cookies') && !ini_get('session.use_trans_sid')) || ini_get('session.use_only_cookies')) ? '<b class="ok">'.$okImg.'</b>' : '<b class="error">'.$failedImg.'</b><span class="warning"> There are security risks with this turned ON</span>';?></td>
 	</tr>
 	<tr>
 	  <td class="title" colspan="2"><br/>Other Recommendations</td>
@@ -255,7 +255,7 @@
 		  		<input class="button" type="submit" name="next" value="Set System Credentials &raquo;" />
 		  	<?php } else { ?>
 		  		<input class="button" type="button" value="Installation Stopped" onClick="alert('The above issues must be fixed before continuing.')" />
-		  	<?php } ?> 
+		  	<?php } ?>
 			</form>
 		</td>
 	</tr>
