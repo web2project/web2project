@@ -112,7 +112,7 @@ $q->clear();
         </tr>
         <tr>
             <td colspan="2">
-            <input type="checkbox" name="set_task_start_date" id="set_task_start_date" /><label for="set_task_start_date"><?php echo $AppUI->_('Set task start date based on dependency'); ?></label>
+            <input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?>  /><label for="set_task_start_date"><?php echo $AppUI->_('Set task start date based on dependency'); ?></label>
             </td>
         </tr>
         <tr>
