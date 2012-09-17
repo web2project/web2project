@@ -32,6 +32,9 @@ class CUser extends w2p_Core_BaseObject
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
+        if ('' == trim($this->user_username)) {
+            $this->_error['user_username'] = $baseErrorMsg . 'username is not set';
+        }
         if (!$this->user_id && '' == trim($this->user_password)) {
             $this->_error['user_password'] = $baseErrorMsg . 'user password is not set';
         }
