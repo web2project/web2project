@@ -2202,25 +2202,16 @@ class CTask extends w2p_Core_BaseObject
             return - 1;
         }
 
-        $contacts = $this->getAssigned();
+        $contacts = array();
+        $contacts = $this->getAssigned('contact_id');
 
-        // Now we also check the owner of the task, as we will need
-        // to notify them as well.
-        $owner_is_not_assignee = false;
-        $q = $this->_getQuery();
-        $q->addTable('users', 'u');
-        $q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
-        $q->addQuery('c.contact_id, contact_first_name, contact_last_name,
-            contact_display_name as contact_name, contact_email');
-        $q->addWhere('u.user_id = ' . (int) $this->task_owner);
-        if ($q->exec(ADODB_FETCH_NUM)) {
-            list($owner_contact, $owner_first_name, $owner_last_name, $owner_email) = $q->fetchRow();
-            if (!isset($contacts[$owner_contact])) {
-                $owner_is_not_assignee = true;
-                $contacts[$owner_contact] = array('contact_id' => $owner_contact, 'contact_first_name' => $owner_first_name, 'contact_last_name' => $owner_last_name, 'contact_email' => $owner_email);
-            }
-        }
-        $q->clear();
+        $contact = new CContact();
+        $owner = $contact->findContactByUserId($this->task_owner);
+        $contacts[$owner->contact_id] = array(
+                                    'user_id' => $this->task_owner,
+                                    'contact_id' => $owner->contact_id,
+                                    'contact_name' => $owner->contact_display_name,
+                                    'contact_email' => $owner->contact_email);
 
         // build the subject line, based on how soon the
         // task will be overdue.
@@ -2260,7 +2251,7 @@ class CTask extends w2p_Core_BaseObject
 
         $user = new CUser();
         foreach ($contacts as $contact) {
-            $user_id = $user->getIdByContactId($contact['contact_id']);
+            $user_id = $contact['user_id'];
             $this->_AppUI->loadPrefs($user_id);
 
             $df = $this->_AppUI->getPref('DISPLAYFORMAT');
@@ -2320,18 +2311,18 @@ class CTask extends w2p_Core_BaseObject
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
 
-    public function getAssigned()
+    public function getAssigned($index = 'user_id')
     {
-
         $q = $this->_getQuery();
         $q->addTable('users', 'u');
         $q->addTable('user_tasks', 'ut');
         $q->addTable('contacts', 'con');
-        $q->addQuery('u.user_id, contact_display_name AS user_name, perc_assignment');
+        $q->addQuery('u.user_id, perc_assignment');
+        $q->addQuery('contact_id, contact_display_name AS user_name, contact_display_name AS contact_name, contact_email');
         $q->addWhere('ut.task_id = ' . (int) $this->task_id);
         $q->addWhere('user_contact = contact_id');
         $q->addWhere('ut.user_id = u.user_id');
-        $assigned = $q->loadHashList('user_id');
+        $assigned = $q->loadHashList($index);
         return $assigned;
     }
 
