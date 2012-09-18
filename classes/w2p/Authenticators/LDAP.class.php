@@ -5,7 +5,7 @@
  * @subpackage authenticators
  */
 
-class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
+class w2p_Authenticators_LDAP extends w2p_Authenticators_Base {
 	public $ldap_host;
 	public $ldap_port;
 	public $ldap_version;
@@ -81,7 +81,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 								// Update password if different
 								$tmpUser = new CUser();
 								$tmpUser->load($this->userId($username));
-								$hash_pass = MD5($password);
+								$hash_pass = $this->hashPassword($password);
 								if($hash_pass != $tmpUser->user_password) {
 									$tmpUser->user_password = $hash_pass;
 									$tmpUser->store();
@@ -98,7 +98,8 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 		}
 
 	    if ($this->fallback == true) {
-		    return (parent::authenticate($username, $password));
+		    $sqlAuth = new w2p_Authenticators_SQL();
+            return $sqlAuth->authenticate($username, $password);
 	    }
 
 		return false;
@@ -131,7 +132,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_SQL {
 
 	public function createsqluser($username, $password, $ldap_attribs = array()) {
 		global $AppUI;
-		$hash_pass = MD5($password);
+		$hash_pass = $this->hashPassword($password);
 
 		if (!count($ldap_attribs) == 0) {
 			// Contact information based on the inetOrgPerson class schema

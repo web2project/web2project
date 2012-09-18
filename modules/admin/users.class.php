@@ -20,12 +20,17 @@ class CUser extends w2p_Core_BaseObject
     public $user_type = null;
     public $user_contact = null;
     public $user_signature = null;
+
     protected $externally_created_user = false;
-    private $perm_func = null;
+    protected $authenticator = null;
+
+    private $perm_func = null;    
 
     public function __construct()
     {
         parent::__construct('users', 'user_id');
+        
+        $this->authenticator = new w2p_Authenticators_SQL();
     }
 
     public function isValid()
@@ -53,8 +58,8 @@ class CUser extends w2p_Core_BaseObject
 
         if ('' == trim($this->user_password)) {
             $this->user_password = $tmpUser->user_password;
-        } elseif ($tmpUser->user_password != md5($this->user_password)) {
-            $this->user_password = md5($this->user_password);
+        } elseif ($tmpUser->user_password != $this->authenticator->hashPassword($this->user_password)) {
+            $this->user_password = $this->authenticator->hashPassword($this->user_password);
         } else {
             $this->user_password = $tmpUser->user_password;
         }
@@ -64,7 +69,7 @@ class CUser extends w2p_Core_BaseObject
 
     protected function  hook_preUpdate() {
         $this->perm_func = 'addLogin';
-        $this->user_password = md5($this->user_password);
+        $this->user_password = $this->authenticator->hashPassword($this->user_password);
 
         parent::hook_preUpdate();
     }
@@ -229,7 +234,9 @@ class CUser extends w2p_Core_BaseObject
 
     public function validatePassword($userId, $password)
     {
-        $users = $this->loadAll('user_id', 'user_password = \'' . md5($password) . '\' AND user_id = ' . (int) $userId);
+        $hash = $this->authenticator->hashPassword($password);
+        
+        $users = $this->loadAll('user_id', 'user_password = \'' . $hash . '\' AND user_id = ' . (int) $userId);
 
         return isset($users[$userId]);
     }
