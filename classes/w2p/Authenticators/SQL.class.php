@@ -18,7 +18,7 @@ class w2p_Authenticators_SQL extends w2p_Authenticators_Base {
 		$q->addTable('users');
 		$q->addQuery('user_id, user_password');
 		$q->addWhere("user_username = '$username'");
-        $q->addWhere("user_password = '".MD5($password)."'");
+        $q->addWhere("user_password = '".$this->hashPassword($password)."'");
         $q->exec();
 
 		if ($row = $q->fetchRow()) {

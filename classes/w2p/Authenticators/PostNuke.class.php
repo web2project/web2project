@@ -10,7 +10,7 @@
  * passed in on the login request.  This needs to
  * be extracted and verified.
  */
-class w2p_Authenticators_PostNuke extends w2p_Authenticators_SQL {
+class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base {
 
 	public function __construct() {
         global $w2Pconfig;
@@ -23,7 +23,8 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_SQL {
 		global $db, $AppUI;
 		if (!isset($_REQUEST['userdata'])) { // fallback to SQL Authentication if PostNuke fails.
 			if ($this->fallback) {
-				return parent::authenticate($username, $password);
+                $sqlAuth = new w2p_Authenticators_SQL();
+                return $sqlAuth->authenticate($username, $password);
 			} else {
 				die($AppUI->_('You have not configured your PostNuke site correctly'));
 			}
@@ -35,7 +36,7 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_SQL {
 		if (!$userdata = gzuncompress($compressed_data)) {
 			die($AppUI->_('The credentials supplied were missing or corrupted') . ' (2)');
 		}
-		if (!$_REQUEST['check'] = md5($userdata)) {
+		if (!$_REQUEST['check'] = $this->hashPassword($userdata)) {
 			die($AppUI->_('The credentials supplied were issing or corrupted') . ' (3)');
 		}
 		$user_data = unserialize($userdata);
