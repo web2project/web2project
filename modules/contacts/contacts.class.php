@@ -501,6 +501,20 @@ class CContact extends w2p_Core_BaseObject
         return $result;
     }
 
+    public function findContactByUserid($userId)
+    {
+        $q = $this->_query;
+        $q->addTable('users');
+        $q->addQuery('con.*, contact_display_name as contact_name');
+        $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+        $q->addWhere('user_id = ' . (int) $userId);
+        $result = $q->loadHash();
+
+        $this->bind($result);
+
+        return $this;
+    }
+
     public static function getContactByUserid($userId)
     {
 
