@@ -18,18 +18,6 @@ if (!defined('W2P_BASE_DIR')) {
 */
 
 /**
- * This function is now deprecated and will be removed.
- * In the interim it now does nothing.
- * TODO:  Remove for v3.0 - dkc 27 Nov 2010
- *
- * @deprecated
- */
-function dpRealPath($file) {
-	trigger_error("The dpRealPath function has been deprecated and will be removed in v3.0.", E_USER_NOTICE );
-    return $file;
-}
-
-/**
  * Corrects the charset name if needed be
  * TODO:  Remove for v4.0 - dkc 08 May 2011
  *
@@ -41,10 +29,11 @@ function w2PcheckCharset($charset) {
 }
 
 /**
-* 	Convert string char (ref : Vbulletin #3987)
-*
-* @deprecated
-*/
+ * Convert string char (ref : Vbulletin #3987)
+ * TODO:  Remove for v4.0 - caseydk 20 September 2012
+ *
+ * @deprecated
+ */
 function strJpGraph($text) {
     global $locale_char_set;
     trigger_error("The strJpGraph function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
@@ -204,6 +193,8 @@ function taskstyle_pd($task) {
 }
 
 /**
+ * TODO:  Remove for v4.0 - caseydk 20 September 2012
+ * 
  * @deprecated
  */
 function getStructuredProjects($original_project_id = 0, $project_status = -1, $active_only = false) {
@@ -217,6 +208,7 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
 
 /**
  * Deprecated in favor of buildTaskTree which doesn't use any globals.
+ * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @deprecated
  */
@@ -228,6 +220,7 @@ function constructTaskTree($task_data, $depth = 0) {
 }
 /**
  * Deprecated in favor of buildTaskTree which doesn't use any globals.
+ * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @deprecated
  */
@@ -243,6 +236,7 @@ function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
  * canTaskAccess()
  * Used to check if a user has task_access to see the task in task list context
  * (This function was optimized to try to use the DB the least possible)
+ * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @param mixed $task_id
  * @param mixed $task_access
@@ -263,6 +257,8 @@ function canTaskAccess($task_id, $task_access = 0, $task_owner = 0) {
 }
 
 /**
+ * TODO:  Remove for v4.0 - caseydk 20 September 2012
+ * 
  * @deprecated
  */
 function getProjects() {
@@ -273,6 +269,8 @@ function getProjects() {
 }
 
 /**
+ * TODO:  Remove for v4.0 - caseydk 20 September 2012
+ * 
  * @deprecated
  */
 function show_st_project(&$a, $level = 0) {
@@ -283,6 +281,8 @@ function show_st_project(&$a, $level = 0) {
 }
 
 /**
+ * TODO:  Remove for v4.0 - caseydk 20 September 2012
+ * 
  * @deprecated
  */
 function find_proj_child(&$tarr, $parent, $level = 0) {
