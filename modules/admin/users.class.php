@@ -143,8 +143,8 @@ class CUser extends w2p_Core_BaseObject
 
     public function canDelete()
     {
-        $tables[] = array('label' => 'Companies', 'name' => 'companies', 'idfield' => 'company_id', 'joinfield' => 'company_owner');
-        $tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_owner');
+        $tables[] = array('label' => 'Company Owner', 'name' => 'companies', 'idfield' => 'company_id', 'joinfield' => 'company_owner');
+        $tables[] = array('label' => 'Department Owner', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_owner');
         $tables[] = array('label' => 'Project Owner', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_owner');
         $tables[] = array('label' => 'Project Creator', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_creator');
         $tables[] = array('label' => 'Project Updator', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_updator');
@@ -152,14 +152,14 @@ class CUser extends w2p_Core_BaseObject
         $tables[] = array('label' => 'Task Creator', 'name' => 'tasks', 'idfield' => 'task_id', 'joinfield' => 'task_creator');
         $tables[] = array('label' => 'Task Updator', 'name' => 'tasks', 'idfield' => 'task_id', 'joinfield' => 'task_updator');
         $tables[] = array('label' => 'Task Assignee', 'name' => 'user_tasks', 'idfield' => 'task_id', 'joinfield' => 'user_id');
-        $tables[] = array('label' => 'Events', 'name' => 'events', 'idfield' => 'event_id', 'joinfield' => 'event_owner');
-        $tables[] = array('label' => 'Event Attendees', 'name' => 'user_events', 'idfield' => 'event_id', 'joinfield' => 'user_id');
-        $tables[] = array('label' => 'Files', 'name' => 'files', 'idfield' => 'file_id', 'joinfield' => 'file_owner');
+        $tables[] = array('label' => 'Event Owner', 'name' => 'events', 'idfield' => 'event_id', 'joinfield' => 'event_owner');
+        $tables[] = array('label' => 'Event Attendee', 'name' => 'user_events', 'idfield' => 'event_id', 'joinfield' => 'user_id');
+        $tables[] = array('label' => 'File Owner', 'name' => 'files', 'idfield' => 'file_id', 'joinfield' => 'file_owner');
         $tables[] = array('label' => 'Forum Owner', 'name' => 'forums', 'idfield' => 'forum_id', 'joinfield' => 'forum_owner');
         $tables[] = array('label' => 'Forum Moderator', 'name' => 'forums', 'idfield' => 'forum_id', 'joinfield' => 'forum_moderated');
-        $tables[] = array('label' => 'Forum Messages', 'name' => 'forum_messages', 'idfield' => 'message_id', 'joinfield' => 'message_author');
+        $tables[] = array('label' => 'Forum Message Author', 'name' => 'forum_messages', 'idfield' => 'message_id', 'joinfield' => 'message_author');
         $tables[] = array('label' => 'Forum Message Editor', 'name' => 'forum_messages', 'idfield' => 'message_id', 'joinfield' => 'message_editor');
-        $tables[] = array('label' => 'Links', 'name' => 'links', 'idfield' => 'link_id', 'joinfield' => 'link_owner');
+        $tables[] = array('label' => 'Link Owner', 'name' => 'links', 'idfield' => 'link_id', 'joinfield' => 'link_owner');
 
         return parent::canDelete($msg, $this->user_id, $tables);
     }

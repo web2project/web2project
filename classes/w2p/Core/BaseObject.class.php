@@ -401,7 +401,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
                 $q->addWhere($table['joinfield'] . ' = \'' . $this->$k . '\'');
                 $records = (int) $q->loadResult();
                 if ($records) {
-                    $this->_error['noDeleteRecord-' . $table['label']] = $this->_AppUI->_('You cannot delete this item.');
+                    $this->_error['noDeleteRecord-' . $table['label']] = 
+                            $this->_AppUI->_('You cannot delete this item. It is currently considered a ' . $table['label']);
                 }
             }
         }
