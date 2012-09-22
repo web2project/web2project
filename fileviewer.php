@@ -19,8 +19,9 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	$AppUI->setConfig($w2Pconfig);
 	$AppUI->checkStyle();
 
-	if ($AppUI->doLogin())
+	if ($AppUI->doLogin()) {
 		$AppUI->loadPrefs(0);
+    }
 	// check if the user is trying to log in
 	if (isset($_POST['login'])) {
 		$username = w2PgetParam($_POST, 'username', '');
