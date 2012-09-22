@@ -106,17 +106,9 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base {
 	}
 
 	public function userExists($username) {
-		global $db;
-		$q = new w2p_Database_Query;
-		$result = false;
-		$q->addTable('users');
-		$q->addWhere('user_username = \'' . $username . '\'');
-		$rs = $q->exec();
-		if ($rs->RecordCount() > 0) {
-			$result = true;
-		}
 
-		return $result;
+        $user = new CUser();
+        return $user->user_exists($username);
 	}
 
 	public function userId($username) {
