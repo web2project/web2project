@@ -29,5 +29,8 @@ abstract class w2p_Authenticators_Base
 
         return $hash;
     }
-    
+
+	public function userId() {
+		return (int) $this->user_id;
+	}
 }

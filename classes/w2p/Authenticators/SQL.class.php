@@ -27,8 +27,4 @@ class w2p_Authenticators_SQL extends w2p_Authenticators_Base {
 		}
 		return false;
 	}
-
-	public function userId() {
-		return $this->user_id;
-	}
 }
