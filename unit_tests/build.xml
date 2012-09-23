@@ -59,81 +59,73 @@
     </target>
 
 
-  <target name="package">
-    <property name="releaseName" value="trunk" override="true"/>
-    <input propertyname="releaseName">What version should be packaged?</input>
+    <target name="package">
+        <property name="releaseName" value="master" override="true"/>
+        <input propertyname="releaseName">What version should be packaged?</input>
 
-    <if>
-      <equals arg1="${releaseName}" arg2="trunk" />
-      <then>
-      	<echo message="trunk!" />
-	  	<property name="version" value="${releaseName}" override="true"/>
-	  </then>
-	  <else>
-      	<echo message="version${releaseName}!" />
-        <property name="version" value="tags/version${releaseName}" override="true"/>
-	  </else>
-    </if>
+        <if>
+            <equals arg1="${releaseName}" arg2="master" />
+            <then>
+                <echo message="master!" />
+                <property name="version" value="${releaseName}" override="true"/>
+            </then>
+            <else>
+                <echo message="version${releaseName}!" />
+                <property name="version" value="tags/version${releaseName}" override="true"/>
+            </else>
+        </if>
+<!-- TODO: package tags in addition to master -->
+        <property name="gitUrl" value="https://github.com/web2project/web2project.git" override="true"/>
+        <echo message="Working with ${gitUrl}..." />
+    
+        <gitclone repository="${gitUrl}" targetPath="packaging/web2project" />
+        <delete dir=".git" />
+        <delete dir="packaging/web2project/unit_tests/" />
 
-    <property name="svnUrl" value="https://web2project.svn.sourceforge.net/svnroot/web2project/${version}/" override="true"/>
-    <echo message="Working with ${svnUrl}..." />
+        <copy todir="packaging/web2project-${releaseName}" overwrite="true">
+            <fileset dir="packaging/web2project">
+                <include name="**/*.css" />
+                <include name="**/*.js" />
+                <exclude name=".git" />
+            </fileset>
+            <filterchain>
+                <tabtospaces tablength="2" />
+                <stripwhitespace />
+                <replaceregexp>
+                    <regexp pattern="  " replace="" />
+                </replaceregexp>
+            </filterchain>
+        </copy>
+        <copy todir="packaging/web2project-${releaseName}" overwrite="true">
+            <fileset dir="packaging/web2project">
+                <include name="**/**" />
+                <exclude name="**/*.css" />
+                <exclude name="**/*.js" />
+                <exclude name=".git" />
+            </fileset>
+        </copy>
+<!-- TODO: generate change log! -->
+<!-- git log -since=8/17/2011 > changelog -->
+        <delete dir="packaging/web2project" />
+        
+        <phplint haltonfailure="true">
+            <fileset dir="packaging/web2project-${releaseName}">
+                <include name="**/*.php" />
+                <exclude name="lib/" />
+            </fileset>
+        </phplint>
 
-    <svncheckout
-      svnpath="/usr/bin/svn"
-      username="anony"
-      password="anony"
-      nocache="true"
-      repositoryurl="${svnUrl}"
-          todir="packaging/web2project-svn"/>
-    <svnexport
-        svnpath="/usr/bin/svn"
-        repositoryurl="${svnUrl}"
-        todir="packaging/web2project"/>
-
-    <exec command="svn log -v packaging/web2project-svn > packaging/web2project/ChangeLog" dir="." passthru="true" />
-  	<delete dir="packaging/web2project-svn/" />
-
-    <copy todir="packaging/web2project-${releaseName}" overwrite="true">
-      <fileset dir="packaging/web2project">
-        <include name="**/*.css" />
-        <include name="**/*.js" />
-      </fileset>
-      <filterchain>
-        <tabtospaces tablength="4" />
-        <stripwhitespace />
-        <replaceregexp>
-          <regexp pattern="  " replace="" />
-        </replaceregexp>
-      </filterchain>
-    </copy>
-    <copy todir="packaging/web2project-${releaseName}" overwrite="true">
-      <fileset dir="packaging/web2project">
-        <include name="**/**" />
-        <exclude name="**/*.css" />
-        <exclude name="**/*.js" />
-      </fileset>
-    </copy>
-    <delete dir="packaging/web2project" />
-
-    <delete dir="packaging/web2project-${releaseName}/unit_tests/" />
-    <phplint haltonfailure="true">
-      <fileset dir="packaging/web2project-${releaseName}">
-        <include name="**/*.php" />
-        <exclude name="lib/" />
-      </fileset>
-    </phplint>
-
-    <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
-      <fileset dir="packaging/">
-        <include name="**/**" />
-      </fileset>
-    </tar>
-    <zip destfile="web2project-${releaseName}.zip">
-      <fileset dir="packaging/">
-        <include name="**/**" />
-      </fileset>
-    </zip>
-    <delete dir="packaging/" />
+        <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
+            <fileset dir="packaging/">
+                <include name="**/**" />
+            </fileset>
+        </tar>
+        <zip destfile="web2project-${releaseName}.zip">
+            <fileset dir="packaging/">
+                <include name="**/**" />
+            </fileset>
+        </zip>
+        <delete dir="packaging/" />
   </target>
 
   <target name="lint">
