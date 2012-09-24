@@ -14,70 +14,6 @@ if (!defined('W2P_BASE_DIR')) {
 *   allow us to change minimum version for PHP compatibility.
 */
 
-if (!function_exists('mb_strlen')) {
-	/**
-	 * mb_strlen()
-	 * Alternative mb_strlen in case mb_string is not available
-	 *
-	 * @param mixed $str
-	 * @return
-	 */
-	function mb_strlen($str) {
-		global $locale_char_set;
-
-		if (!$locale_char_set) {
-			$locale_char_set = 'utf-8';
-		}
-		return $locale_char_set == 'utf-8' ? strlen(utf8_decode($str)) : strlen($str);
-	}
-}
-
-if (!function_exists('mb_substr')) {
-	/**
-	 * mb_substr()
-	 * Alternative mb_substr in case mb_string is not available
-	 *
-	 * @param mixed $str
-	 * @param mixed $start
-	 * @param mixed $length
-	 * @return
-	 */
-	function mb_substr($str, $start, $length = null) {
-		global $locale_char_set;
-
-		if (!$locale_char_set) {
-			$locale_char_set = 'utf-8';
-		}
-		if ($locale_char_set == 'utf-8') {
-			return ($length === null) ?
-				utf8_encode(substr(utf8_decode($str), $start)) :
-				utf8_encode(substr(utf8_decode($str), $start, $length));
-		} else {
-			return ($length === null) ?
-				substr($str, $start) :
-				substr($str, $start, $length);
-		}
-	}
-}
-
-if (!function_exists('mb_strpos')) {
-	/**
-	 * mb_strpos()
-	 * Alternative mb_strpos in case mb_string is not available
-	 *
-	 * @param mixed $str
-	 * @return
-	 */
-	function mb_strpos($haystack, $needle, $offset = null) {
-		global $locale_char_set;
-
-		if (!$locale_char_set) {
-			$locale_char_set = 'utf-8';
-		}
-		return $locale_char_set == 'utf-8' ? strpos(utf8_decode($haystack), utf8_decode($needle), $offset) : strpos($haystack, $needle, $offset);
-	}
-}
-
 if(!function_exists('mb_str_replace')) {
     /**
      * mb_str_replace()
@@ -149,15 +85,5 @@ if(!function_exists('mb_trim')) {
 			$pattern_middle = $right_pattern;
 		}
 		return preg_replace("/$pattern_middle/usSD", '', $string);
-	}
-}
-
-/*
-* Make function htmlspecialchar_decode for older PHP versions
-*/
-if (!function_exists('htmlspecialchars_decode')) {
-	trigger_error("The htmlspecialchars_decode function is in PHP core as of 5.1.0 so this will be removed in v3.0.", E_USER_NOTICE );
-    function htmlspecialchars_decode($str) {
-		return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
 	}
 }
