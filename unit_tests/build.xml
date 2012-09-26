@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 <project name="web2project" basedir="." default="warning">
-  <target name="warning">
-    <echo message="Running Unit Tests is a destructive process and will drop/restore your database multiple times." />
-    <echo message="Please only run Unit Tests against your development or test databases." />
-    
-    <echo message="To run tests, use the command: phing run-tests" />
-  </target>
+    <target name="warning">
+        <echo message="Running Unit Tests is a destructive process and will drop/restore your database multiple times." />
+        <echo message="Please only run Unit Tests against your development or test databases." />
+        <echo message="To run tests, use the command: phing run-tests" />
+    </target>
 
   <target name="run-tests">
     <mkdir dir="reports" />
@@ -15,6 +14,7 @@
           <fileset dir="modules">
             <include name="**/*.test.php"/>
             <include name="**/*Test.php"/>
+            <exclude name="**/CTasksTest.php"/>
           </fileset>
 
             <!--
@@ -42,7 +42,7 @@
         format="noframes" />
     </target>
 
-    <target name="standards" depends="lint">
+    <target name="standards">
 
         <!-- This is setup to run as separate includes due to memory/performance reasons. -->
         <phpcodesniffer standard="PEAR" format="summary" verbosity="1">
@@ -128,12 +128,31 @@
         <delete dir="packaging/" />
   </target>
 
-  <target name="lint">
-    <phplint haltonfailure="true">
-      <fileset dir="..">
-        <include name="**/*.php" />
-        <exclude name="lib/" />
-      </fileset>
-    </phplint>
+    <target name="lint">
+        <phplint haltonfailure="true">
+            <fileset dir="..">
+                <include name="**/*.php" />
+                <exclude name="lib/" />
+            </fileset>
+        </phplint>
+    </target>
+
+    <target name="cpd">
+        <phpcpd>
+            <fileset dir="..">
+                <include name="**/*.php" />
+            </fileset>
+            <formatter type="pmd" outfile="reports/pmd-cpd.xml" />
+        </phpcpd>
+    </target>
+
+
+    <target name="metrics">
+        <phpcpd>
+            <fileset dir="..">
+                <include name="**/*.php" />
+            </fileset>
+            <formatter type="pmd" outfile="reports/pmd-cpd.xml" />
+        </phpcpd>
     </target>
 </project>
