@@ -68,11 +68,11 @@
         <delete dir=".git" />
         <delete dir="packaging/web2project/unit_tests/" />
 
-        <jsMin targetDir="packaging/web2project-${releaseName}" failOnError="false">
+<!--        <jsMin targetDir="packaging/web2project-${releaseName}" failOnError="false">
             <fileset dir="..">
                 <include name="**/*.js"/>
             </fileset>
-        </jsMin>
+        </jsMin>-->
 
         <copy todir="packaging/web2project-${releaseName}" overwrite="true">
             <fileset dir="packaging/web2project">
