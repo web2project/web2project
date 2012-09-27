@@ -42,24 +42,10 @@
         format="noframes" />
     </target>
 
-    <target name="standards">
+    <target name="metrics" depends="cpd, phpmd, depend, codesniffer" />
+    <target name="standards" depends="lint, metrics" />
 
-        <!-- This is setup to run as separate includes due to memory/performance reasons. -->
-        <phpcodesniffer standard="PEAR" format="summary" verbosity="1">
-            <fileset dir="..">
-                <include name="*.php"/>
-                <include name="classes/**/*.php"/>
-                <include name="includes/*.php"/>
-                <include name="install/**/*.php"/>
-                <include name="modules/**/*.php"/>
-                <include name="style/**/*.php"/>
-            </fileset>
-            <formatter type="summary" usefile="false"/>
-        </phpcodesniffer>
-    </target>
-
-
-    <target name="package">
+    <target name="package" depends="lint, jsmin">
         <property name="releaseName" value="master" override="true"/>
         <input propertyname="releaseName">What version should be packaged?</input>
 
@@ -82,10 +68,15 @@
         <delete dir=".git" />
         <delete dir="packaging/web2project/unit_tests/" />
 
+        <jsMin targetDir="packaging/web2project-${releaseName}" failOnError="false">
+            <fileset dir="..">
+                <include name="**/*.js"/>
+            </fileset>
+        </jsMin>
+
         <copy todir="packaging/web2project-${releaseName}" overwrite="true">
             <fileset dir="packaging/web2project">
                 <include name="**/*.css" />
-                <include name="**/*.js" />
                 <exclude name=".git" />
             </fileset>
             <filterchain>
@@ -126,33 +117,56 @@
             </fileset>
         </zip>
         <delete dir="packaging/" />
-  </target>
+    </target>
 
     <target name="lint">
         <phplint haltonfailure="true">
-            <fileset dir="..">
-                <include name="**/*.php" />
-                <exclude name="lib/" />
-            </fileset>
+            <fileset refid="project.source" />
+            <formatter type="default" outfile="reports/cpd.xml" />
         </phplint>
+    </target>
+
+    <target name="jsmin">
+        <jsMin targetDir="output" failOnError="false">
+            <fileset dir="..">
+                <include name="**/*.js"/>
+            </fileset>
+        </jsMin>
     </target>
 
     <target name="cpd">
         <phpcpd>
-            <fileset dir="..">
-                <include name="**/*.php" />
-            </fileset>
-            <formatter type="pmd" outfile="reports/pmd-cpd.xml" />
+            <fileset refid="project.source" />
+            <formatter type="default" outfile="reports/cpd.xml" />
         </phpcpd>
     </target>
 
-
-    <target name="metrics">
-        <phpcpd>
-            <fileset dir="..">
-                <include name="**/*.php" />
-            </fileset>
-            <formatter type="pmd" outfile="reports/pmd-cpd.xml" />
-        </phpcpd>
+    <target name="phpmd">
+        <phpmd>
+            <fileset refid="project.source" />
+            <formatter type="xml" outfile="reports/pmd.xml"/>
+        </phpmd>
     </target>
+
+    <target name="depend">
+        <phpdepend>
+            <fileset refid="project.source" />
+            <logger type="jdepend-xml" outfile="reports/jdepend.xml"/>
+            <analyzer type="coderank-mode" value="method"/>
+        </phpdepend>
+    </target>
+
+    <target name="codesniffer">
+        <!-- This is setup to run as separate includes due to memory/performance reasons. -->
+        <phpcodesniffer standard="PEAR" format="summary" verbosity="1">
+            <fileset refid="project.source" />
+            <formatter type="summary" usefile="false"/>
+        </phpcodesniffer>
+    </target>
+
+    <fileset dir=".." id="project.source">
+        <include name="**/*.php" />
+        <exclude name="lib/" />
+        <exclude name="unit_tests/" />
+    </fileset>
 </project>
