@@ -45,7 +45,7 @@
     <target name="metrics" depends="cpd, phpmd, depend, codesniffer" />
     <target name="standards" depends="lint, metrics" />
 
-    <target name="package" depends="lint, jsmin">
+    <target name="package" depends="lint">
         <property name="releaseName" value="master" override="true"/>
         <input propertyname="releaseName">What version should be packaged?</input>
 
@@ -68,11 +68,11 @@
         <delete dir=".git" />
         <delete dir="packaging/web2project/unit_tests/" />
 
-<!--        <jsMin targetDir="packaging/web2project-${releaseName}" failOnError="false">
+        <jsMin targetDir="packaging/web2project-${releaseName}" suffix="" failOnError="false">
             <fileset dir="..">
                 <include name="**/*.js"/>
             </fileset>
-        </jsMin>-->
+        </jsMin>
 
         <copy todir="packaging/web2project-${releaseName}" overwrite="true">
             <fileset dir="packaging/web2project">
@@ -98,13 +98,6 @@
 <!-- TODO: generate change log! -->
 <!-- git log -since=8/17/2011 > changelog -->
         <delete dir="packaging/web2project" />
-        
-        <phplint haltonfailure="true">
-            <fileset dir="packaging/web2project-${releaseName}">
-                <include name="**/*.php" />
-                <exclude name="lib/" />
-            </fileset>
-        </phplint>
 
         <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
             <fileset dir="packaging/">
@@ -122,16 +115,7 @@
     <target name="lint">
         <phplint haltonfailure="true">
             <fileset refid="project.source" />
-            <formatter type="default" outfile="reports/cpd.xml" />
         </phplint>
-    </target>
-
-    <target name="jsmin">
-        <jsMin targetDir="output" failOnError="false">
-            <fileset dir="..">
-                <include name="**/*.js"/>
-            </fileset>
-        </jsMin>
     </target>
 
     <target name="cpd">
@@ -140,7 +124,7 @@
             <formatter type="default" outfile="reports/cpd.xml" />
         </phpcpd>
     </target>
-
+    
     <target name="phpmd">
         <phpmd>
             <fileset refid="project.source" />
