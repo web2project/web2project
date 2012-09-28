@@ -142,9 +142,9 @@
 
     <target name="codesniffer">
         <!-- This is setup to run as separate includes due to memory/performance reasons. -->
-        <phpcodesniffer standard="PEAR" format="summary" verbosity="1">
+        <phpcodesniffer standard="PEAR" verbosity="1">
             <fileset refid="project.source" />
-            <formatter type="summary" usefile="false"/>
+            <formatter type="checkstyle" usefile="true" outfile="reports/codesniffer.xml"/>
         </phpcodesniffer>
     </target>
 
