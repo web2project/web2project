@@ -34,18 +34,39 @@
                     <include name="**/*Test.php"/>
                 </fileset>
             </batchtest>
-            <formatter  type="xml" todir="reports" outfile="logfile.xml"/>
+            <formatter  type="xml" todir="reports" outfile="test-logs.xml"/>
         </phpunit>
-        <phpunitreport  infile="reports/logfile.xml"
-            styledir="${phing.home}/etc/"
+        <if>
+            <equals arg1="${phing.home}" arg2="false" />
+            <then>
+                <property name="phing.path" value="/usr/local/data/phing/" override="true"/>
+            </then>
+            <else>
+                <property name="phing.path" value="${phing.home}" override="true"/>
+            </else>
+        </if>
+        <phpunitreport  infile="reports/test-logs.xml"
+            styledir="${phing.path}/etc/"
             todir="reports"
             format="noframes" />
     </target>
 
-    <target name="metrics" depends="cpd, phpmd, depend, codesniffer" />
+    <target name="metrics">
+        <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
+        <mkdir dir="reports/" />
+        <phingcall target="cpd" />
+        <phingcall target="phpmd" />
+        <phingcall target="depend" />
+        <phingcall target="codesniffer" />
+    </target>
     <target name="standards" depends="lint, metrics" />
 
-    <target name="package">
+    <target name="prepare">
+        <mkdir dir="packaging/" />
+        <mkdir dir="packaging/web2project" />
+    </target>
+
+    <target name="package" depends="prepare">
         <property name="releaseName" value="master" override="true"/>
         <input propertyname="releaseName">What version should be packaged?</input>
 
@@ -63,17 +84,17 @@
 <!-- TODO: package tags in addition to master -->
         <property name="gitUrl" value="https://github.com/web2project/web2project.git" override="true"/>
         <echo message="Working with ${gitUrl}..." />
-    
+   
         <gitclone repository="${gitUrl}" targetPath="packaging/web2project" />
+<!--        <exec command="git clone ${gitUrl} -b ${releaseName} -v" dir="packaging/web2project" />-->
+
         <delete dir=".git" />
-        <delete dir="packaging/web2project/unit_tests/" />
 
         <jsMin targetDir="packaging/web2project-${releaseName}" failOnError="false">
             <fileset dir="..">
                 <include name="**/*.js"/>
             </fileset>
         </jsMin>
-
         <copy todir="packaging/web2project-${releaseName}" overwrite="true">
             <fileset dir="packaging/web2project">
                 <include name="**/*.css" />
@@ -97,6 +118,7 @@
 <!-- TODO: generate change log! -->
 <!-- git log -since=8/17/2011 > changelog -->
         <delete dir="packaging/web2project" />
+        <delete dir="packaging/web2project/unit_tests" />
         
         <phplint haltonfailure="true">
             <fileset dir="packaging/web2project-${releaseName}">
@@ -152,16 +174,15 @@
     </target>
 
     <target name="codesniffer">
-        <!-- This is setup to run as separate includes due to memory/performance reasons. -->
-        <phpcodesniffer standard="PEAR" format="summary" verbosity="1">
+        <phpcodesniffer standard="PEAR" verbosity="1">
             <fileset refid="project.source" />
-            <formatter type="summary" usefile="false"/>
+            <formatter type="checkstyle" outfile="reports/codesniffer.xml"/>
+            <formatter type="summary" outfile="reports/codesniffer-summary.xml"/>
         </phpcodesniffer>
     </target>
 
     <fileset dir=".." id="project.source">
         <include name="**/*.php" />
         <exclude name="lib/" />
-        <exclude name="unit_tests/" />
     </fileset>
 </project>
