@@ -1,17 +1,36 @@
 <?xml version="1.0"?>
-<project name="web2project" basedir="." default="warning">
+<project name="web2project" basedir=".." default="warning">
     <target name="warning">
         <echo message="Running Unit Tests is a destructive process and will drop/restore your database multiple times." />
         <echo message="Please only run Unit Tests against your development or test databases." />
         <echo message="To run tests, use the command: phing run-tests" />
     </target>
 
-    <target name="run-tests">
-        <mkdir dir="reports" />
+    <property name="dir.build"   value="build" />
+    <property name="dir.reports" value="${dir.build}/reports" />
+    <property name="dir.package" value="${dir.build}/${phing.project.name}" />
+    <property name="dir.tests"   value="unit_tests" />
+
+    <target name="prepare">
+        <mkdir dir="${dir.build}" />
+        <mkdir dir="${dir.reports}" />
+
+        <if>
+            <equals arg1="${phing.home}" arg2="false" />
+            <then>
+                <property name="phing.path" value="/usr/local/data/phing/" override="true"/>
+            </then>
+            <else>
+                <property name="phing.path" value="${phing.home}" override="true"/>
+            </else>
+        </if>
+    </target>
+
+    <target name="run-tests" depends="prepare">
         <phpunit codecoverage="false" haltonfailure="false" haltonerror="false">
             <formatter type="plain" usefile="false"/>
             <batchtest>
-                <fileset dir="modules">
+                <fileset dir="${dir.tests}/modules">
                     <include name="**/*.test.php"/>
                     <include name="**/*Test.php"/>
                     <exclude name="**/CTasksTest.php"/>
@@ -24,30 +43,21 @@
                 ideas on how to do this successfully would be greatly
                 appreciated.  - caseydk 02 July 2009
                 -->
-                <fileset dir="classes">
+                <fileset dir="${dir.tests}/classes">
                     <include name="**/*.test.php"/>
                     <include name="**/*Test.php"/>
                 </fileset>
 
-                <fileset dir="includes">
+                <fileset dir="${dir.tests}/includes">
                     <include name="**/*.test.php"/>
                     <include name="**/*Test.php"/>
                 </fileset>
             </batchtest>
-            <formatter  type="xml" todir="reports" outfile="test-logs.xml"/>
+            <formatter  type="xml" todir="${dir.reports}" outfile="test-logs.xml"/>
         </phpunit>
-        <if>
-            <equals arg1="${phing.home}" arg2="false" />
-            <then>
-                <property name="phing.path" value="/usr/local/data/phing/" override="true"/>
-            </then>
-            <else>
-                <property name="phing.path" value="${phing.home}" override="true"/>
-            </else>
-        </if>
-        <phpunitreport  infile="reports/test-logs.xml"
+        <phpunitreport  infile="${dir.reports}/test-logs.xml"
             styledir="${phing.path}/etc/"
-            todir="reports"
+            todir="${dir.reports}"
             format="noframes" />
     </target>
 
@@ -61,12 +71,9 @@
     </target>
     <target name="standards" depends="lint, metrics" />
 
-    <target name="prepare">
-        <mkdir dir="packaging/" />
-        <mkdir dir="packaging/web2project" />
-    </target>
-
     <target name="package" depends="prepare">
+        <mkdir dir="${dir.package}" />
+
         <property name="releaseName" value="master" override="true"/>
         <input propertyname="releaseName">What version should be packaged?</input>
 
@@ -85,17 +92,17 @@
         <property name="gitUrl" value="https://github.com/web2project/web2project.git" override="true"/>
         <echo message="Working with ${gitUrl}..." />
    
-        <gitclone repository="${gitUrl}" targetPath="packaging/web2project" />
-<!--        <exec command="git clone ${gitUrl} -b ${releaseName} -v" dir="packaging/web2project" />-->
+        <gitclone repository="${gitUrl}" targetPath="unit_tests/packaging/web2project" />
+<!--        <exec command="git clone ${gitUrl} -b ${releaseName} -v" dir="unit_tests/packaging/web2project" />-->
 
         <delete dir=".git" />
 
-        <jsMin targetDir="packaging/web2project-${releaseName}" failOnError="false">
+        <jsMin targetDir="unit_tests/packaging/web2project-${releaseName}" failOnError="false">
             <fileset dir="..">
                 <include name="**/*.js"/>
             </fileset>
         </jsMin>
-        <copy todir="packaging/web2project-${releaseName}" overwrite="true">
+        <copy todir="unit_tests/packaging/web2project-${releaseName}" overwrite="true">
             <fileset dir="packaging/web2project">
                 <include name="**/*.css" />
                 <exclude name=".git" />
@@ -108,8 +115,8 @@
                 </replaceregexp>
             </filterchain>
         </copy>
-        <copy todir="packaging/web2project-${releaseName}" overwrite="true">
-            <fileset dir="packaging/web2project">
+        <copy todir="unit_tests/packaging/web2project-${releaseName}" overwrite="true">
+            <fileset dir="unit_tests/packaging/web2project">
                 <include name="**/**" />
                 <exclude name="**/*.css" />
                 <exclude name="**/*.js" />
@@ -117,23 +124,23 @@
         </copy>
 <!-- TODO: generate change log! -->
 <!-- git log -since=8/17/2011 > changelog -->
-        <delete dir="packaging/web2project" />
-        <delete dir="packaging/web2project/unit_tests" />
+        <delete dir="unit_tests/packaging/web2project" />
+        <delete dir="unit_tests/packaging/web2project/unit_tests" />
         
         <phplint haltonfailure="true">
-            <fileset dir="packaging/web2project-${releaseName}">
+            <fileset dir="unit_tests/packaging/web2project-${releaseName}">
                 <include name="**/*.php" />
                 <exclude name="lib/" />
             </fileset>
         </phplint>
 
         <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
-            <fileset dir="packaging/">
+            <fileset dir="unit_tests/packaging/">
                 <include name="**/**" />
             </fileset>
         </tar>
         <zip destfile="web2project-${releaseName}.zip">
-            <fileset dir="packaging/">
+            <fileset dir="unit_tests/packaging/">
                 <include name="**/**" />
             </fileset>
         </zip>
@@ -142,7 +149,7 @@
     </target>
 
     <target name="cleanup">
-        <delete dir="packaging/" />
+        <delete dir="unit_tests/packaging/" />
     </target>
 
     <target name="lint">
@@ -154,21 +161,21 @@
     <target name="cpd">
         <phpcpd>
             <fileset refid="project.source" />
-            <formatter type="default" outfile="reports/cpd.xml" />
+            <formatter type="default" outfile="unit_tests/reports/cpd.xml" />
         </phpcpd>
     </target>
 
     <target name="phpmd">
         <phpmd>
             <fileset refid="project.source" />
-            <formatter type="xml" outfile="reports/pmd.xml"/>
+            <formatter type="xml" outfile="unit_tests/reports/pmd.xml"/>
         </phpmd>
     </target>
 
     <target name="depend">
         <phpdepend>
             <fileset refid="project.source" />
-            <logger type="jdepend-xml" outfile="reports/jdepend.xml"/>
+            <logger type="jdepend-xml" outfile="unit_tests/reports/jdepend.xml"/>
             <analyzer type="coderank-mode" value="method"/>
         </phpdepend>
     </target>
@@ -176,12 +183,12 @@
     <target name="codesniffer">
         <phpcodesniffer standard="PEAR" verbosity="1">
             <fileset refid="project.source" />
-            <formatter type="checkstyle" outfile="reports/codesniffer.xml"/>
-            <formatter type="summary" outfile="reports/codesniffer-summary.xml"/>
+            <formatter type="checkstyle" outfile="unit_tests/reports/codesniffer.xml"/>
+            <formatter type="summary" outfile="unit_tests/reports/codesniffer-summary.xml"/>
         </phpcodesniffer>
     </target>
 
-    <fileset dir=".." id="project.source">
+    <fileset dir="." id="project.source">
         <include name="**/*.php" />
         <exclude name="lib/" />
     </fileset>
