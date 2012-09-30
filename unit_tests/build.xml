@@ -6,46 +6,46 @@
         <echo message="To run tests, use the command: phing run-tests" />
     </target>
 
-  <target name="run-tests">
-    <mkdir dir="reports" />
-    <phpunit codecoverage="false" haltonfailure="false" haltonerror="false">
-      <formatter type="plain" usefile="false"/>
-        <batchtest>
-          <fileset dir="modules">
-            <include name="**/*.test.php"/>
-            <include name="**/*Test.php"/>
-            <exclude name="**/CTasksTest.php"/>
-          </fileset>
+    <target name="run-tests">
+        <mkdir dir="reports" />
+        <phpunit codecoverage="false" haltonfailure="false" haltonerror="false">
+            <formatter type="plain" usefile="false"/>
+            <batchtest>
+                <fileset dir="modules">
+                    <include name="**/*.test.php"/>
+                    <include name="**/*Test.php"/>
+                    <exclude name="**/CTasksTest.php"/>
+                </fileset>
 
-            <!--
-              The UpgradeManager_Test (manager.test.php) should be
-              executed separately and before any/all of the other
-              tests because it can build up a database for us.  Any
-              ideas on how to do this successfully would be greatly
-              appreciated.  - caseydk 02 July 2009
-            -->
-          <fileset dir="classes">
-            <include name="**/*.test.php"/>
-            <include name="**/*Test.php"/>
-          </fileset>
+                <!--
+                The UpgradeManager_Test (manager.test.php) should be
+                executed separately and before any/all of the other
+                tests because it can build up a database for us.  Any
+                ideas on how to do this successfully would be greatly
+                appreciated.  - caseydk 02 July 2009
+                -->
+                <fileset dir="classes">
+                    <include name="**/*.test.php"/>
+                    <include name="**/*Test.php"/>
+                </fileset>
 
-          <fileset dir="includes">
-            <include name="**/*.test.php"/>
-            <include name="**/*Test.php"/>
-          </fileset>
-        </batchtest>
-      <formatter  type="xml" todir="reports" outfile="logfile.xml"/>
-    </phpunit>
-    <phpunitreport  infile="reports/logfile.xml"
-        styledir="${phing.home}/etc/"
-        todir="reports"
-        format="noframes" />
+                <fileset dir="includes">
+                    <include name="**/*.test.php"/>
+                    <include name="**/*Test.php"/>
+                </fileset>
+            </batchtest>
+            <formatter  type="xml" todir="reports" outfile="logfile.xml"/>
+        </phpunit>
+        <phpunitreport  infile="reports/logfile.xml"
+            styledir="${phing.home}/etc/"
+            todir="reports"
+            format="noframes" />
     </target>
 
     <target name="metrics" depends="cpd, phpmd, depend, codesniffer" />
     <target name="standards" depends="lint, metrics" />
 
-    <target name="package" depends="lint">
+    <target name="package">
         <property name="releaseName" value="master" override="true"/>
         <input propertyname="releaseName">What version should be packaged?</input>
 
@@ -68,7 +68,7 @@
         <delete dir=".git" />
         <delete dir="packaging/web2project/unit_tests/" />
 
-        <jsMin targetDir="packaging/web2project-${releaseName}" suffix="" failOnError="false">
+        <jsMin targetDir="packaging/web2project-${releaseName}" failOnError="false">
             <fileset dir="..">
                 <include name="**/*.js"/>
             </fileset>
@@ -92,12 +92,18 @@
                 <include name="**/**" />
                 <exclude name="**/*.css" />
                 <exclude name="**/*.js" />
-                <exclude name=".git" />
             </fileset>
         </copy>
 <!-- TODO: generate change log! -->
 <!-- git log -since=8/17/2011 > changelog -->
         <delete dir="packaging/web2project" />
+        
+        <phplint haltonfailure="true">
+            <fileset dir="packaging/web2project-${releaseName}">
+                <include name="**/*.php" />
+                <exclude name="lib/" />
+            </fileset>
+        </phplint>
 
         <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
             <fileset dir="packaging/">
@@ -109,11 +115,16 @@
                 <include name="**/**" />
             </fileset>
         </zip>
+
+        <phingcall target="cleanup" />
+    </target>
+
+    <target name="cleanup">
         <delete dir="packaging/" />
     </target>
 
     <target name="lint">
-        <phplint haltonfailure="true">
+        <phplint haltonfailure="true" level="verbose">
             <fileset refid="project.source" />
         </phplint>
     </target>
@@ -124,7 +135,7 @@
             <formatter type="default" outfile="reports/cpd.xml" />
         </phpcpd>
     </target>
-    
+
     <target name="phpmd">
         <phpmd>
             <fileset refid="project.source" />
@@ -142,9 +153,9 @@
 
     <target name="codesniffer">
         <!-- This is setup to run as separate includes due to memory/performance reasons. -->
-        <phpcodesniffer standard="PEAR" verbosity="1">
+        <phpcodesniffer standard="PEAR" format="summary" verbosity="1">
             <fileset refid="project.source" />
-            <formatter type="checkstyle" usefile="true" outfile="reports/codesniffer.xml"/>
+            <formatter type="summary" usefile="false"/>
         </phpcodesniffer>
     </target>
 
