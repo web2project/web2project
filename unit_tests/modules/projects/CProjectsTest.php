@@ -20,7 +20,7 @@
  */
 
 // NOTE: This path is relative to Phing's build.xml, not this test.
-include_once 'CommonSetup.php';
+include_once 'unit_tests/CommonSetup.php';
 //require_once 'PHPUnit/Extensions/Database/DataSet/DataSetFilter.php';
 
 class CProjects_Test extends CommonSetup
