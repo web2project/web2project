@@ -1,17 +1,47 @@
 <?xml version="1.0"?>
-<project name="web2project" basedir="." default="warning">
+<project name="web2project" basedir=".." default="warning">
     <target name="warning">
         <echo message="Running Unit Tests is a destructive process and will drop/restore your database multiple times." />
         <echo message="Please only run Unit Tests against your development or test databases." />
         <echo message="To run tests, use the command: phing run-tests" />
     </target>
 
-    <target name="run-tests">
-        <mkdir dir="reports" />
+    <!-- Change these for your specific project -->
+    <property name="dir.build" value="unit_tests" />
+    <property name="dir.tests" value="unit_tests" />
+    <property name="dir.lib"   value="lib" />
+
+    <!-- You might not have to change these.. but maybe -->
+    <property name="dir.reports" value="${dir.build}/reports" />
+    <property name="dir.package" value="${dir.build}/packaging" />
+
+    <fileset dir="." id="project.source">
+        <include name="**/*.php" />
+        <exclude name="${dir.lib}/" />
+        <exclude name="${dir.tests}/" />
+        <exclude name="${dir.build}/" />
+    </fileset>
+
+    <target name="prepare">
+        <mkdir dir="${dir.build}" />
+        <mkdir dir="${dir.reports}" />
+
+        <if>
+            <equals arg1="${phing.home}" arg2="false" />
+            <then>
+                <property name="phing.path" value="/usr/local/data/phing/" override="true"/>
+            </then>
+            <else>
+                <property name="phing.path" value="${phing.home}" override="true"/>
+            </else>
+        </if>
+    </target>
+
+    <target name="run-tests" depends="prepare">
         <phpunit codecoverage="false" haltonfailure="false" haltonerror="false">
             <formatter type="plain" usefile="false"/>
             <batchtest>
-                <fileset dir="modules">
+                <fileset dir="${dir.tests}/modules">
                     <include name="**/*.test.php"/>
                     <include name="**/*Test.php"/>
                     <exclude name="**/CTasksTest.php"/>
@@ -24,28 +54,38 @@
                 ideas on how to do this successfully would be greatly
                 appreciated.  - caseydk 02 July 2009
                 -->
-                <fileset dir="classes">
+                <fileset dir="${dir.tests}/classes">
                     <include name="**/*.test.php"/>
                     <include name="**/*Test.php"/>
                 </fileset>
 
-                <fileset dir="includes">
+                <fileset dir="${dir.tests}/includes">
                     <include name="**/*.test.php"/>
                     <include name="**/*Test.php"/>
                 </fileset>
             </batchtest>
-            <formatter  type="xml" todir="reports" outfile="logfile.xml"/>
+            <formatter  type="xml" todir="${dir.reports}" outfile="test-logs.xml"/>
         </phpunit>
-        <phpunitreport  infile="reports/logfile.xml"
-            styledir="${phing.home}/etc/"
-            todir="reports"
+        <phpunitreport  infile="${dir.reports}/test-logs.xml"
+            styledir="${phing.path}/etc/"
+            todir="${dir.reports}"
             format="noframes" />
     </target>
 
-    <target name="metrics" depends="cpd, phpmd, depend, codesniffer" />
+    <target name="metrics" depends="prepare">
+        <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
+        <phingcall target="cpd" />
+        <phingcall target="phploc" />
+        <phingcall target="phpmd" />
+        <phingcall target="depend" />
+        <phingcall target="codesniffer" />
+    </target>
+
     <target name="standards" depends="lint, metrics" />
 
-    <target name="package">
+    <target name="package" depends="prepare">
+        <mkdir dir="${dir.package}" />
+
         <property name="releaseName" value="master" override="true"/>
         <input propertyname="releaseName">What version should be packaged?</input>
 
@@ -63,19 +103,19 @@
 <!-- TODO: package tags in addition to master -->
         <property name="gitUrl" value="https://github.com/web2project/web2project.git" override="true"/>
         <echo message="Working with ${gitUrl}..." />
-    
-        <gitclone repository="${gitUrl}" targetPath="packaging/web2project" />
-        <delete dir=".git" />
-        <delete dir="packaging/web2project/unit_tests/" />
+   
+        <gitclone repository="${gitUrl}" targetPath="${dir.package}/${phing.project.name}" />
+<!--        <exec command="git clone ${gitUrl} -b ${releaseName} -v" dir="unit_tests/packaging/web2project" />-->
 
-        <jsMin targetDir="packaging/web2project-${releaseName}" failOnError="false">
+        <delete dir=".git" />
+
+        <jsMin targetDir="${dir.package}/${phing.project.name}-${releaseName}" failOnError="false">
             <fileset dir="..">
                 <include name="**/*.js"/>
             </fileset>
         </jsMin>
-
-        <copy todir="packaging/web2project-${releaseName}" overwrite="true">
-            <fileset dir="packaging/web2project">
+        <copy todir="${dir.package}/${phing.project.name}-${releaseName}" overwrite="true">
+            <fileset dir="${dir.package}">
                 <include name="**/*.css" />
                 <exclude name=".git" />
             </fileset>
@@ -87,8 +127,8 @@
                 </replaceregexp>
             </filterchain>
         </copy>
-        <copy todir="packaging/web2project-${releaseName}" overwrite="true">
-            <fileset dir="packaging/web2project">
+        <copy todir="${dir.package}/${phing.project.name}-${releaseName}" overwrite="true">
+            <fileset dir="${dir.package}">
                 <include name="**/**" />
                 <exclude name="**/*.css" />
                 <exclude name="**/*.js" />
@@ -96,22 +136,23 @@
         </copy>
 <!-- TODO: generate change log! -->
 <!-- git log -since=8/17/2011 > changelog -->
-        <delete dir="packaging/web2project" />
+        <delete dir="${dir.package}/${phing.project.name}" />
+        <delete dir="${dir.package}/${phing.project.name}-${releaseName}/unit_tests" />
         
         <phplint haltonfailure="true">
-            <fileset dir="packaging/web2project-${releaseName}">
+            <fileset dir="${dir.package}/${phing.project.name}-${releaseName}">
                 <include name="**/*.php" />
                 <exclude name="lib/" />
             </fileset>
         </phplint>
 
-        <tar destfile="web2project-${releaseName}.tar.gz" compression="gzip">
-            <fileset dir="packaging/">
+        <tar destfile="${phing.project.name}-${releaseName}.tar.gz" compression="gzip">
+            <fileset dir="unit_tests/packaging/">
                 <include name="**/**" />
             </fileset>
         </tar>
-        <zip destfile="web2project-${releaseName}.zip">
-            <fileset dir="packaging/">
+        <zip destfile="${phing.project.name}-${releaseName}.zip">
+            <fileset dir="unit_tests/packaging/">
                 <include name="**/**" />
             </fileset>
         </zip>
@@ -120,7 +161,7 @@
     </target>
 
     <target name="cleanup">
-        <delete dir="packaging/" />
+        <delete dir="${dir.package}" />
     </target>
 
     <target name="lint">
@@ -129,39 +170,37 @@
         </phplint>
     </target>
 
-    <target name="cpd">
+    <target name="cpd" depends="prepare">
         <phpcpd>
             <fileset refid="project.source" />
-            <formatter type="default" outfile="reports/cpd.xml" />
+            <formatter type="default" outfile="${dir.reports}/cpd.xml" />
         </phpcpd>
     </target>
 
-    <target name="phpmd">
+    <target name="phpmd" depends="prepare">
         <phpmd>
             <fileset refid="project.source" />
-            <formatter type="xml" outfile="reports/pmd.xml"/>
+            <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
         </phpmd>
     </target>
 
-    <target name="depend">
+    <target name="depend" depends="prepare">
         <phpdepend>
             <fileset refid="project.source" />
-            <logger type="jdepend-xml" outfile="reports/jdepend.xml"/>
+            <logger type="jdepend-xml" outfile="${dir.reports}/jdepend.xml"/>
             <analyzer type="coderank-mode" value="method"/>
         </phpdepend>
     </target>
 
-    <target name="codesniffer">
-        <!-- This is setup to run as separate includes due to memory/performance reasons. -->
-        <phpcodesniffer standard="PEAR" format="summary" verbosity="1">
+    <target name="codesniffer" depends="prepare">
+        <phpcodesniffer standard="PEAR" verbosity="1">
             <fileset refid="project.source" />
-            <formatter type="summary" usefile="false"/>
+            <formatter type="checkstyle" outfile="${dir.reports}/codesniffer.xml"/>
+            <formatter type="summary" outfile="${dir.reports}/codesniffer-summary.xml"/>
         </phpcodesniffer>
     </target>
-
-    <fileset dir=".." id="project.source">
-        <include name="**/*.php" />
-        <exclude name="lib/" />
-        <exclude name="unit_tests/" />
-    </fileset>
+    
+    <target name="phploc" depends="prepare">
+        <exec command="phploc --log-xml ${dir.reports}/phploc.xml --exclude xxx ${project.basedir}/" />
+    </target>
 </project>
