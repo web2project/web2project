@@ -6,16 +6,20 @@
         <echo message="To run tests, use the command: phing run-tests" />
     </target>
 
-    <property name="dir.build"   value="unit_tests" />
+    <!-- Change these for your specific project -->
+    <property name="dir.build" value="unit_tests" />
+    <property name="dir.tests" value="unit_tests" />
+    <property name="dir.lib"   value="lib" />
+
+    <!-- You might not have to change these.. but maybe -->
     <property name="dir.reports" value="${dir.build}/reports" />
     <property name="dir.package" value="${dir.build}/packaging" />
-    <property name="dir.tests"   value="unit_tests" />
 
     <fileset dir="." id="project.source">
         <include name="**/*.php" />
-        <exclude name="lib/" />
-        <exclude name="${dir.build}/" />
+        <exclude name="${dir.lib}/" />
         <exclude name="${dir.tests}/" />
+        <exclude name="${dir.build}/" />
     </fileset>
 
     <target name="prepare">
@@ -71,6 +75,7 @@
     <target name="metrics" depends="prepare">
         <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
         <phingcall target="cpd" />
+        <phingcall target="phploc" />
         <phingcall target="phpmd" />
         <phingcall target="depend" />
         <phingcall target="codesniffer" />
@@ -193,5 +198,9 @@
             <formatter type="checkstyle" outfile="${dir.reports}/codesniffer.xml"/>
             <formatter type="summary" outfile="${dir.reports}/codesniffer-summary.xml"/>
         </phpcodesniffer>
+    </target>
+    
+    <target name="phploc" depends="prepare">
+        <exec command="phploc --log-xml ${dir.reports}/phploc.xml --exclude xxx ${project.basedir}/" />
     </target>
 </project>
