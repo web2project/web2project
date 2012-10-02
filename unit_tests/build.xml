@@ -203,4 +203,6 @@
     <target name="phploc" depends="prepare">
         <exec command="phploc --log-xml ${dir.reports}/phploc.xml --exclude xxx ${project.basedir}/" />
     </target>
+
+<!-- add phpdoc or docblock -->
 </project>
