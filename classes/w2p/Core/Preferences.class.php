@@ -10,6 +10,7 @@
 
  */
 
+//TODO: couldn't this just extend the BaseObject?
 class w2p_Core_Preferences {
 	public $pref_user = null;
 	public $pref_name = null;
