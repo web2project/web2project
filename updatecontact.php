@@ -27,7 +27,8 @@ if (!$row->load($contact_id) && $contact_id > 0) {
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 } else {
-	if ($row->contact_private && $row->contact_owner != $AppUI->user_id && $row->contact_owner && $contact_id != 0) {
+	//TODO: replace with the proper canEdit()
+    if ($row->contact_private && $row->contact_owner != $AppUI->user_id && $row->contact_owner && $contact_id != 0) {
 		// check only owner can edit
 		$AppUI->redirect('m=public&a=access_denied');
 	}
