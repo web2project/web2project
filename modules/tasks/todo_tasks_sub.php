@@ -4,9 +4,29 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 global $showEditCheckbox, $priorities;
-global $m, $a, $date, $other_users, $showPinned, $showInProgress, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id, $task_type;
+global $m, $a, $date, $other_users, $user_id, $task_type;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
+
+// retrieve any state parameters
+if (isset($_POST['show_form'])) {
+	$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'show_arc_proj', 0));
+	$AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'show_low_task', 0));
+	$AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'show_hold_proj', 0));
+	$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'show_dyn_task', 0));
+	$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'show_pinned', 0));
+	$AppUI->setState('TaskDayShowEmptyDate', w2PgetParam($_POST, 'show_empty_date', 0));
+	$AppUI->setState('TaskDayShowInProgress', w2PgetParam($_POST, 'show_inprogress', 0));
+}
+
+// Required for today view.
+$showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
+$showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
+$showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
+$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
+$showPinned = $AppUI->getState('TaskDayShowPin', 0);
+$showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
+$showInProgress = $AppUI->getState('TaskDayShowInProgress', 0);
 
 /*
  * TODO: This is a nasty, dirty hack because globals have stacked on top of
