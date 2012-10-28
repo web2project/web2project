@@ -10,7 +10,8 @@ $token = w2PgetParam($_GET, 'token', '');
 $token = preg_replace("/[^A-Za-z0-9]/", "", $token );
 $format = w2PgetParam($_GET, 'format', 'ical');
 
-$userId = CUser::getUserIdByToken($token);
+$user = new CUser();
+$userId = $user->getIdByToken($token);
 $AppUI->loadPrefs($userId);
 $AppUI->user_id = $userId;
 $AppUI->setUserLocale();
