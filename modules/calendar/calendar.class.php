@@ -479,7 +479,11 @@ class CEvent extends w2p_Core_BaseObject
         // Now build a query to find matching events.
         $q = $this->_getQuery();
         $q->addTable('events', 'e');
-        $q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, e.event_start_date, e.event_end_date');
+        $q->addQuery('e.event_id, event_name, event_sequence, event_owner, event_description,
+            ue.user_id, event_cwd, event_start_date, event_end_date, event_updated, event_recurs');
+        $q->addQuery('projects.project_id, projects.project_name');
+        $q->addTable('events', 'e');
+        $q->leftJoin('projects', 'projects', 'e.event_project = projects.project_id');
         $q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
         $q->addWhere('event_start_date >= \'' . $start_date . '\'
      	  		AND event_end_date <= \'' . $end_date . '\'
@@ -487,18 +491,8 @@ class CEvent extends w2p_Core_BaseObject
      	  		AND EXTRACT(HOUR_MINUTE FROM e.event_start_date) <= \'' . $end_time . '\'
      	  		AND ( e.event_owner in (' . implode(',', $users) . ')
      	 		OR ue.user_id in (' . implode(',', $users) . ') )');
-        $result = $q->exec();
-        if (!$result) {
-            return false;
-        }
 
-        $eventlist = array();
-        while ($row = $q->fetchRow()) {
-            $eventlist[] = $row;
-        }
-        $q->clear();
-
-        return $eventlist;
+        return $q->loadList();
     }
 
     public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)
@@ -609,31 +603,36 @@ class CEvent extends w2p_Core_BaseObject
 
     public function getCalendarEvents($userId, $days = 30)
     {
-        /*
-         * This list of fields - id, name, description, startDate, endDate,
-         * updatedDate - are named specifically for the iCal creation.
-         * If you change them, it's probably going to break.  So don't do that.
-         */
+        $eventList = array();
 
-        $q = $this->_getQuery();
-        $q->addQuery('e.event_id as id');
-        $q->addQuery('event_name as name, event_sequence as sequence');
-        $q->addQuery('event_description as description');
-        $q->addQuery('event_start_date as startDate');
-        $q->addQuery('event_end_date as endDate');
-        $q->addQuery('event_updated  as updatedDate');
-        $q->addQuery('CONCAT(\'' . W2P_BASE_URL . '/index.php?m=calendar&a=view&event_id=' . '\', e.event_id) as url');
-        $q->addQuery('projects.project_id, projects.project_name');
-        $q->addTable('events', 'e');
-        $q->leftJoin('projects', 'projects', 'e.event_project = projects.project_id');
+        $now   = time();
+        $nowFormatted = date('Y-m-d H:i:s', $now);
+        $Ndays = $now + $days * 24 * 60 * 60;
+        $NdaysFormatted = date('Y-m-d H:i:s', $Ndays);
 
-        $q->addWhere('(event_start_date > ' . $q->dbfnNow() . ' OR event_end_date > ' . $q->dbfnNow() . ')');
-        $q->addWhere('(event_start_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ' OR event_end_date < ' . $q->dbfnDateAdd($q->dbfnNow(), $days, 'DAY') . ')');
-        $q->innerJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-        $q->addWhere('ue.user_id = ' . $userId);
-        $q->addOrder('event_start_date');
+        $events = $this->getEventsInWindow($nowFormatted, $NdaysFormatted, '0000', '2359', array($userId));
 
-        return $q->loadList();
+        $start = new w2p_Utilities_Date($nowFormatted);
+        $end   = new w2p_Utilities_Date($NdaysFormatted);
+
+        foreach($events as $event) {
+            for ($j = 0 ; $j <= $event['event_recurs']; $j++) {
+                $myDates = $this->getRecurrentEventforPeriod($start, $end, $event['event_start_date'], $event['event_end_date'],
+                                $event['event_recurs'], $event['event_times_recuring'], $j);
+                /*
+                 * This list of fields - id, name, description, startDate, endDate,
+                 * updatedDate - are named specifically for the iCal creation.
+                 * If you change them, it's probably going to break.  So don't do that.
+                 */
+                $url = W2P_BASE_URL . '/index.php?m=calendar&a=view&event_id=' . $event['event_id'];
+                $eventList[] = array('id' => $event['event_id'], 'name' => $event['event_name'],
+                            'sequence' => $event['event_sequence'], 'description' => $event['event_description'],
+                            'startDate' => $myDates[0]->format(FMT_DATETIME_MYSQL), 'endDate' => $myDates[1]->format(FMT_DATETIME_MYSQL),
+                            'updatedDate' => $event['event_updated'], 'url' => $url);
+            }
+        }
+
+        return $eventList;
     }
 
 }

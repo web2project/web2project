@@ -627,7 +627,7 @@ class CContact extends w2p_Core_BaseObject
 
     public function hook_calendar($userId)
     {
-        return null;
+        return array();
     }
 
 }
