@@ -21,11 +21,11 @@ if ($user_id) {
 		$user = new CUser();
 
 		if ($canAdminEdit || $user->validatePassword($user_id, $old_pwd)) {
-			$user->user_id = $user_id;
+            $user->load($user_id);
 			$user->user_password = $new_pwd1;
+            $result = $user->store();
 
-			if (($msg = $user->store())) {
-				$AppUI->setMsg($msg, UI_MSG_ERROR);
+            if ($result) {
                 ?>
                 <script language="javascript" type="text/javascript">
                     window.onload = function() {
@@ -34,7 +34,7 @@ if ($user_id) {
                 </script>
                 <?php
 			} else {
-				echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
+                echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
 				if (function_exists('styleRenderBoxTop')) {
 					echo styleRenderBoxTop();
 				}
