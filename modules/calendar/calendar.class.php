@@ -609,19 +609,20 @@ class CEvent extends w2p_Core_BaseObject
 
     public function getCalendarEvents($userId, $days = 30)
     {
+        $eventList = array();
+
         /*
          * This list of fields - id, name, description, startDate, endDate,
          * updatedDate - are named specifically for the iCal creation.
          * If you change them, it's probably going to break.  So don't do that.
          */
+        $now   = time();
+        $nowFormatted = date('Y-m-d H:i:s', $now);
+        $Ndays = $now + $days * 24 * 60 * 60;
+        $NdaysFormatted = date('Y-m-d H:i:s', $Ndays);
 
         $q = $this->_getQuery();
-        $q->addQuery('e.event_id as id');
-        $q->addQuery('event_name as name, event_sequence as sequence');
-        $q->addQuery('event_description as description');
-        $q->addQuery('event_start_date as startDate');
-        $q->addQuery('event_end_date as endDate');
-        $q->addQuery('event_updated  as updatedDate');
+        $q->addQuery('e.*');
         $q->addQuery('CONCAT(\'' . W2P_BASE_URL . '/index.php?m=calendar&a=view&event_id=' . '\', e.event_id) as url');
         $q->addQuery('projects.project_id, projects.project_name');
         $q->addTable('events', 'e');
@@ -632,8 +633,24 @@ class CEvent extends w2p_Core_BaseObject
         $q->innerJoin('user_events', 'ue', 'ue.event_id = e.event_id');
         $q->addWhere('ue.user_id = ' . $userId);
         $q->addOrder('event_start_date');
+        $events = $q->loadList();
 
-        return $q->loadList();
+        $start = new w2p_Utilities_Date($nowFormatted);
+        $end   = new w2p_Utilities_Date($NdaysFormatted);
+
+        foreach($events as $event) {
+            for ($j = 0 ; $j <= $event['event_recurs']; $j++) {
+                $myDates = $this->getRecurrentEventforPeriod($start, $end, $event['event_start_date'], $event['event_end_date'],
+                                $event['event_recurs'], $event['event_times_recuring'], $j);
+
+                $eventList[] = array('id' => $event['event_id'], 'name' => $event['event_name'],
+                            'sequence' => $event['event_sequence'], 'description' => $event['event_description'],
+                            'startDate' => $myDates[0]->format(FMT_DATETIME_MYSQL), 'endDate' => $myDates[1]->format(FMT_DATETIME_MYSQL),
+                            'updatedDate' => $event['event_updated'], 'id' => $event['event_id'], 'id' => $event['event_id']);
+            }
+        }
+
+        return $eventList;
     }
 
 }
