@@ -383,8 +383,10 @@ function showtask(&$arr, $level = 0, $is_opened = true, $today_view = false, $hi
 	global $AppUI, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $m, $a, $history_active, $expanded;
 
-	//Check for Tasks Access
-	$canAccess = canTaskAccess($arr['task_id']);
+    //Check for Tasks Access
+    $tmpTask = new CTask();
+    $tmpTask->load($arr['task_id']);
+    $canAccess = $tmpTask->canAccess();
 	if (!$canAccess) {
 		return (false);
 	}
@@ -527,8 +529,10 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 	global $AppUI, $w2Pconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $task_access, $task_priority, $PROJDESIGN_CONFIG, $m, $expanded;
 
-	//Check for Tasks Access
-	$canAccess = canTaskAccess($arr['task_id']);
+    //Check for Tasks Access
+    $tmpTask = new CTask();
+    $tmpTask->load($arr['task_id']);
+    $canAccess = $tmpTask->canAccess();
 	if (!$canAccess) {
 		return (false);
 	}
@@ -688,8 +692,10 @@ function showtask_pr(&$arr, $level = 0, $today_view = false) {
 	global $AppUI, $w2Pconfig, $done, $query_string, $durnTypes, $userAlloc, $showEditCheckbox;
 	global $task_access, $task_priority;
 
-	//Check for Tasks Access
-	$canAccess = canTaskAccess($arr['task_id']);
+    //Check for Tasks Access
+    $tmpTask = new CTask();
+    $tmpTask->load($arr['task_id']);
+    $canAccess = $tmpTask->canAccess();
 	if (!$canAccess) {
 		return (false);
 	}

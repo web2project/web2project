@@ -1341,8 +1341,9 @@ class CTask extends w2p_Core_BaseObject
         // check tasks access
         $result = array();
         foreach ($tasks as $key => $row) {
-            $access_granted = canTaskAccess($row['task_id'], $row['task_access'], $row['task_owner']);
-            if (!$access_granted) {
+            $obj->load($row['task_id']);
+            $canAccess = $obj->canAccess();
+            if (!$canAccess) {
                 continue;
             }
             $result[$key] = $row;
@@ -2447,8 +2448,11 @@ class CTask extends w2p_Core_BaseObject
         }
         $task_list = $q->loadList();
 
+        $obj = new CTask();
         foreach ($task_list as $task) {
-            if (canTaskAccess($task['task_id'], $task['task_access'], $task['task_owner'])) {
+            $obj->load($task['task_id']);
+            $canAccess = $obj->canAccess();
+            if ($canAccess) {
                 $results[] = $task;
             }
         }

@@ -284,7 +284,7 @@ foreach ($projects as $p) {
 
 			if ($t['task_parent'] == $t['task_id']) {
 				echo showtask_pr($t, 0);
-				findchild_pr($p['tasks'], $t['task_id']);
+				findchild_pd($p['tasks'], $t['task_id']);
 			}
 		}
 	}

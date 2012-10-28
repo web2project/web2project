@@ -291,7 +291,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $level = $gantt_arr[$i][1];
 	$caption = '';
 
-    $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
+    $tmpTask = new CTask();
+    $tmpTask->load($a['task_id']);
+    $canAccess = $tmpTask->canAccess();
     if ($canAccess) {
         $name = $a['task_name'];
         $name = ((mb_strlen($name) > 35) ? (mb_substr($name, 0, 30) . '...') : $name);
