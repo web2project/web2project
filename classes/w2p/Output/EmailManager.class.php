@@ -257,6 +257,9 @@ class w2p_Output_EmailManager
         $project = new CProject();
         $projname = $project->load($task->task_project)->project_name;
 
+        $contact = new CContact();
+        $creatorname = $contact->findContactByUserid($log->task_log_creator)->contact_display_name;
+
         $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n";
         if ($task->task_parent != $task->task_id) {
             $tmpTask = new CTask();
