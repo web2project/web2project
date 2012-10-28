@@ -208,7 +208,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 	$a = $gantt_arr[$i][0];
 	$level = $gantt_arr[$i][1];
 
-    $canAccess = canTaskAccess($a['task_id'], $a['task_access'], $a['task_owner']);
+    $tmpTask = new CTask();
+    $tmpTask->load($a['task_id']);
+    $canAccess = $tmpTask->canAccess();
     if ($canAccess) {
         if ($hide_task_groups) {
             $level = 0;
