@@ -2247,7 +2247,7 @@ class CTask extends w2p_Core_BaseObject
             $user_id = $contact['user_id'];
             $this->_AppUI->loadPrefs($user_id);
 
-            $df = $this->_AppUI->getPref('DISPLAYFORMAT');
+            $df = $this->_AppUI->getPref('SHDATEFORMAT');
             $tz = $this->_AppUI->getPref('TIMEZONE');
 
             $body = str_replace('START-TIME', $starts->convertTZ($tz)->format($df), $body);
