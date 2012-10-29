@@ -126,9 +126,9 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base {
 		global $AppUI;
 		$hash_pass = $this->hashPassword($password);
 
-		if (!count($ldap_attribs) == 0) {
+        $c = new CContact();
+		if (count($ldap_attribs)) {
 			// Contact information based on the inetOrgPerson class schema
-			$c = new CContact();
 			$c->contact_first_name = $ldap_attribs['givenname'][0];
 			$c->contact_last_name = $ldap_attribs['sn'][0];
 			$c->contact_city = $ldap_attribs['l'][0];
@@ -139,18 +139,18 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base {
             $c->contact_email = $ldap_attribs['mail'][0];
             $c->contact_phone = $ldap_attribs['telephonenumber'][0];
             $c->contact_owner = $AppUI->user_id;
-            $c->store();
+            $result = $c->store();
             $contactArray = array('phone_mobile' => $ldap_attribs['mobile'][0]);
             $c->setContactMethods($contactArray);
 		}
-		$contact_id = ($c->contact_id == null) ? 'NULL' : $c->contact_id;
 
         $u = new CUser();
         $u->user_username = $username;
         $u->user_password = $hash_pass;
         $u->user_type = 0;              // Changed from 1 (administrator) to 0 (Default user)
-        $u->user_contact = (int) $contact_id;
-        $u->store();
+        $u->user_contact = (int) $c->contact_id;
+        $result = $u->store(null, true);
+
         $user_id = $u->user_id;
 		$this->user_id = $user_id;
 
