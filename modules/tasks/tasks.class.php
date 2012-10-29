@@ -1142,14 +1142,6 @@ class CTask extends w2p_Core_BaseObject
         $mail_recipients = array();
         $q = $this->_getQuery();
         if ((int) $this->task_id > 0 && (int) $this->task_project > 0) {
-            $q->addTable('users', 'u');
-            $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-            $q->addQuery('c.contact_display_name as contact_name');
-            $q->addWhere('u.user_id=' . (int) $log->task_log_creator);
-            $row = $q->loadHash();
-            $creatorname = $row['contact_name'];
-            $q->clear();
-
             if (isset($assignees) && $assignees == 'on') {
                 $q->addTable('user_tasks', 'ut');
                 $q->leftJoin('users', 'ua', 'ua.user_id = ut.user_id');
