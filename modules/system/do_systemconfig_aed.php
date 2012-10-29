@@ -47,4 +47,5 @@ foreach ($_POST['w2Pcfg'] as $name => $value) {
         }
     }
 }
+$obj->cleanUp();
 $AppUI->redirect();
