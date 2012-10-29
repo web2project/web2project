@@ -3,7 +3,8 @@
  * Configuration class
  */
 class w2p_Core_Config extends w2p_Core_BaseObject {
-
+    protected $keepReminders = false;
+    
 	public function __construct() {
         parent::__construct('config', 'config_id', 'system');
 	}
@@ -23,5 +24,22 @@ class w2p_Core_Config extends w2p_Core_BaseObject {
     }
     public function canEdit() {
         return $this->_perms->checkModule($this->_tbl_module, 'edit');
+    }
+
+    public function hook_postStore()
+    {
+        if ('task_reminder_control' == $this->config_name) {
+            $this->keepReminders = true;
+        }
+    }
+
+    public function cleanUp()
+    {
+        if (!$this->keepReminders) {
+            $queue = new w2p_Core_EventQueue();
+            $reminders = $queue->find('tasks', 'remind');
+            $queue->delete_list = array_keys($reminders);
+            $queue->commit_updates();
+        }
     }
 }
