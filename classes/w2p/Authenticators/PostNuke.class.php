@@ -89,27 +89,24 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base {
 	}
 
 	public function createsqluser($username, $password, $email, $first, $last) {
-		global $db, $AppUI;
+		global $AppUI;
+        $hash_pass = $this->hashPassword($password);
 
 		$c = new CContact();
 		$c->contact_first_name = $first;
 		$c->contact_last_name = $last;
-		$c->contact_order_by = $first . ' ' . $last;
         $c->contact_email = $email;
         $c->store();
 
-		$q = new w2p_Database_Query;
-		$q->addTable('users');
-		$q->addInsert('user_username', $username);
-		$q->addInsert('user_password', $password);
-		$q->addInsert('user_type', '1');
-		$q->addInsert('user_contact', $c->contact_id);
-		if (!$q->exec()) {
-			die($AppUI->_('Failed to create user credentials'));
-		}
-		$user_id = $db->Insert_ID();
+        $u = new CUser();
+        $u->user_username = $username;
+        $u->user_password = $hash_pass;
+        $u->user_type = 0;              // Changed from 1 (administrator) to 0 (Default user)
+        $u->user_contact = (int) $c->contact_id;
+        $result = $u->store(null, true);
+
+        $user_id = $u->user_id;
 		$this->user_id = $user_id;
-		$q->clear();
 
 		$acl = &$AppUI->acl();
 		$acl->insertUserRole($acl->get_group_id('anon'), $this->user_id);
