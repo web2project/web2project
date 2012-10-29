@@ -2510,12 +2510,9 @@ function projects_list_data($user_id = false) {
 	}
 
 	$q->addTable('projects', 'pr');
-	$q->addQuery('pr.project_id, project_status, project_color_identifier,
-		project_type, project_name, project_description, project_scheduled_hours as project_duration, project_scheduled_hours,
-		project_parent, project_original_parent, project_percent_complete,
-		project_color_identifier, project_company, company_id, company_name,
-        project_status, project_last_task as critical_task,
-        tp.task_log_problem, user_username, project_active');
+	$q->addQuery('pr.*, project_scheduled_hours as project_duration,
+        company_id, company_name, project_last_task as critical_task,
+        tp.task_log_problem, user_username, task_log_problem, u.user_id');
 
 	$fields = w2p_Core_Module::getSettings('projects', 'index_list');
 	unset($fields['department_list']);  // added as an alias below
