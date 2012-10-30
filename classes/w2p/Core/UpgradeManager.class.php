@@ -167,7 +167,7 @@ class w2p_Core_UpgradeManager {
     }
 
     public function createConfigString($dbConfig) {
-        $configFile = file_get_contents('../includes/config-dist.php');
+        $configFile = file_get_contents('./includes/config-dist.php');
         $configFile = str_replace('[DBTYPE]', $dbConfig['dbtype'], $configFile);
         $configFile = str_replace('[DBHOST]', $dbConfig['dbhost'], $configFile);
         $configFile = str_replace('[DBNAME]', $dbConfig['dbname'], $configFile);
