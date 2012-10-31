@@ -47,7 +47,7 @@ class w2p_Core_CustomField {
 		$q->addTable('custom_fields_values');
 		$q->addWhere('value_field_id = ' . $this->field_id);
 		$q->addWhere('value_object_id = ' . (int) $object_id);
-		$rs = $q->exec();
+		$q->exec();
 		$row = $q->fetchRow();
 
 		$value_id = $row['value_id'];
@@ -68,7 +68,6 @@ class w2p_Core_CustomField {
 
 		if ($object_id) {
 			$this->value_intvalue = (int) $this->value_intvalue;
-			$ins_charvalue = $this->value_charvalue;
 
             $q = new w2p_Database_Query;
             $q->addTable('custom_fields_values');

@@ -109,7 +109,7 @@ class w2p_Utilities_Mail extends PHPMailer
      *    Define the subject line of the email
      *    @param string $subject any monoline string
      */
-    public function Subject($subject, $charset = '')
+    public function Subject($subject, $notUsed = '')
     {
         $this->Subject = w2PgetConfig('email_prefix') . ' ' . $subject;
         return true;
@@ -372,8 +372,6 @@ class w2p_Utilities_Mail extends PHPMailer
      */
     private function QueueMail()
     {
-        global $AppUI;
-
         $ec = new w2p_Core_EventQueue();
         $vars = get_object_vars($this);
         return $ec->add(array('w2p_Utilities_Mail', 'SendQueuedMail'), $vars, 'w2p_Utilities_Mail', true);
@@ -384,7 +382,7 @@ class w2p_Utilities_Mail extends PHPMailer
      *
      * @access public
      */
-    public function SendQueuedMail($mod, $type, $originator, $owner, &$args)
+    public function SendQueuedMail($notUsed, $notUsed2, $notUsed3, $notUsed4, &$args)
     {
 
         foreach ($args as $key => $value) {

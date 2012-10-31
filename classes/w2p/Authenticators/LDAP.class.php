@@ -34,7 +34,6 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base {
 	}
 
     public function authenticate($username, $password) {
-		global $w2Pconfig;
 		$this->username = $username;
 
 		if (strlen($password) == 0) {
@@ -64,7 +63,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base {
             }
 	    	$ldap_bind_pw = empty($this->ldap_search_pass) ? null : $this->ldap_search_pass;
 
-		    if ($bindok = ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw)) {
+		    if (ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw)) {
 			    $filter_r = html_entity_decode(str_replace('%USERNAME%', $username, $this->filter), ENT_COMPAT, 'UTF-8');
 			    $result = ldap_search($rs, $this->base_dn, $filter_r);
 
@@ -76,7 +75,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base {
 						$ldap_user_dn = $first_user['dn'];
 
 						// Bind with the dn of the user that matched our filter (only one user should match sAMAccountName or uid etc..)
-						if ($bind_user = ldap_bind($rs, $ldap_user_dn, $password)) {
+						if (ldap_bind($rs, $ldap_user_dn, $password)) {
 							if ($this->userExists($username)) {
 								// Update password if different
 								$tmpUser = new CUser();
@@ -112,13 +111,12 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base {
 	}
 
 	public function userId($username) {
-		global $db;
 		$q = new w2p_Database_Query;
 		$q->addTable('users');
 		$q->addWhere('user_username = \'' . $username . '\'');
 		$rs = $q->exec();
 		$row = $rs->FetchRow();
-		$q->clear();
+
 		return $row['user_id'];
 	}
 

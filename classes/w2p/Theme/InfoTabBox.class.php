@@ -13,7 +13,7 @@
 class w2p_Theme_InfoTabBox extends w2p_Theme_TabBox {
 
 	public function show($extra = '', $js_tabs = false, $alignment = 'left') {
-		global $AppUI, $w2Pconfig, $currentInfoTabId, $currentInfoTabName, $m, $a;
+		global $AppUI, $w2Pconfig, $currentInfoTabId, $currentInfoTabName, $m;
 		$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
 		if (!$uistyle) {
 			$uistyle = 'web2project';

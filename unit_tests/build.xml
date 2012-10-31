@@ -17,6 +17,7 @@
 
     <fileset dir="." id="project.source">
         <include name="**/*.php" />
+        <exclude name="classes/deprecated.class.php" />
         <exclude name="${dir.lib}/" />
         <exclude name="${dir.tests}/" />
         <exclude name="${dir.build}/" />
@@ -29,7 +30,7 @@
         <if>
             <equals arg1="${phing.home}" arg2="false" />
             <then>
-                <property name="phing.path" value="/usr/local/data/phing/" override="true"/>
+                <property name="phing.path" value="/usr/share/php/data/phing/" override="true"/>
             </then>
             <else>
                 <property name="phing.path" value="${phing.home}" override="true"/>
@@ -171,16 +172,16 @@
     </target>
 
     <target name="cpd" depends="prepare">
-        <phpcpd>
+<!--        <phpcpd>
             <fileset refid="project.source" />
             <formatter type="default" outfile="${dir.reports}/cpd.xml" />
-        </phpcpd>
+        </phpcpd>-->
     </target>
 
     <target name="phpmd" depends="prepare">
         <phpmd>
             <fileset refid="project.source" />
-            <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
+            <formatter type="html" outfile="${dir.reports}/pmd.html"/>
         </phpmd>
     </target>
 

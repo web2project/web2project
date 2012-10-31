@@ -22,7 +22,7 @@ class w2p_Utilities_HTTPRequest {
         $this->urlParams = $urlParams;
     }
 
-    public function processRequest($method = 'POST')
+    public function processRequest()
     {
         $params = http_build_query($this->urlParams);
 

@@ -81,7 +81,7 @@ class w2p_Theme_TabBox {
 	 */
 	public function show($extra = '', $js_tabs = false) {
 		global $AppUI, $currentTabId, $currentTabName;
-		$this->loadExtras($m, $a);
+		$this->loadExtras($notUsed, $notUsed2);
 		reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
@@ -184,7 +184,7 @@ class w2p_Theme_TabBox {
 	}
 
 	public function findTabModule($tab) {
-		global $AppUI, $m, $a;
+		global $m, $a;
 
 		if (!isset($_SESSION['all_tabs']) || !isset($_SESSION['all_tabs'][$m])) {
 			return false;

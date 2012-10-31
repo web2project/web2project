@@ -213,7 +213,7 @@ class w2p_Output_EmailManager
         return $body;
     }
 
-    public function getTaskNotifyOwner(CTask $task, $users)
+    public function getTaskNotifyOwner(CTask $task)
     {
         $project = new CProject();
         $projname = $project->load($task->task_project)->project_name;
@@ -378,7 +378,6 @@ class w2p_Output_EmailManager
     public function notifyPasswordReset($username, $password)
     {
         $_live_site = w2PgetConfig('base_url');
-        $_sitename = w2PgetConfig('company_name');
 
         $body = $this->_AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' ' .
                 $username . ' ' . $this->_AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' ' .
