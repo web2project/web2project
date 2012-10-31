@@ -382,22 +382,6 @@ class w2p_Output_MonthCalendar {
 	}
 
 	/**
-	 * w2p_Output_MonthCalendar::_drawWeek()
-	 *
-	 * { Description }
-	 *
-	 */
-	private function _drawWeek($dateObj) {
-		$href = "javascript:$this->weekFunc(" . $dateObj->getTimestamp() . ',\'' . $dateObj->toString() . '\')';
-		$w = '        <td class="week">';
-		$w .= $this->dayFunc ? '<a href="' . $href . '">' : '';
-		$w .= '<img src="' . w2PfindImage('view.week.gif') . '" width="16" height="15" border="0" alt="Week View" /></a>';
-		$w .= $this->dayFunc ? '</a>' : '';
-		$w .= '</td>';
-		return $w;
-	}
-
-	/**
 	 * w2p_Output_MonthCalendar::_drawEvents()
 	 *
 	 * { Description }
