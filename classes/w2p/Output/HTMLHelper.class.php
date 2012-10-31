@@ -62,7 +62,7 @@ class w2p_Output_HTMLHelper
         }
         $output  = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
         $output .= '<tr>';
-        foreach ($fieldNames as $index => $name) {
+        foreach ($fieldNames as $index => $notUsed) {
             $output .= '<th nowrap="nowrap">';
 //TODO: Should we support sorting here?
             $output .= $this->_AppUI->_($fieldNames[$index]);
@@ -73,7 +73,7 @@ class w2p_Output_HTMLHelper
         foreach ($contactList as $row) {
             $output .= '<tr>';
             $this->stageRowData($row);
-            foreach ($fieldList as $index => $column) {
+            foreach ($fieldList as $index => $notUsed) {
                 $output .= $this->createCell($fieldList[$index], $row[$fieldList[$index]]);
             }
             $output .= '</tr>';
@@ -285,7 +285,6 @@ class w2p_Output_HTMLHelper
 
     public static function renderColumn(w2p_Core_CAppUI $AppUI, $fieldName, $row)
     {
-
         trigger_error("The static method renderColumn has been deprecated and will be removed by v4.0.", E_USER_NOTICE);
 
         $last_underscore = strrpos($fieldName, '_');
@@ -300,6 +299,7 @@ class w2p_Output_HTMLHelper
 				break;
 			case '_budget':
 				$s .= '<td>';
+                global $w2Pconfig;
 				$s .= $w2Pconfig['currency_symbol'];
 				$s .= formatCurrency($row[$fieldName], $AppUI->getPref('CURRENCYFORM'));
 				$s .= '</td>';

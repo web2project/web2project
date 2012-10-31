@@ -9,9 +9,7 @@
  *
  */
 
-if (!isset($AppUI)) {
-    $AppUI = new w2p_Core_CAppUI();
-}
+$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 require_once $AppUI->getLibraryClass('PEAR/Date');
 
 /**
@@ -319,7 +317,6 @@ class w2p_Output_MonthCalendar {
 
 			foreach ($week as $day) {
 				$this_day = new w2p_Utilities_Date($day);
-				$y = intval(substr($day, 0, 4));
 				$m = intval(substr($day, 4, 2));
 				$d = intval(substr($day, 6, 2));
 				$dow = intval(substr($day, 8, 1));
@@ -382,22 +379,6 @@ class w2p_Output_MonthCalendar {
 			$html .= '</tr>';
 		}
 		return $html;
-	}
-
-	/**
-	 * w2p_Output_MonthCalendar::_drawWeek()
-	 *
-	 * { Description }
-	 *
-	 */
-	private function _drawWeek($dateObj) {
-		$href = "javascript:$this->weekFunc(" . $dateObj->getTimestamp() . ',\'' . $dateObj->toString() . '\')';
-		$w = '        <td class="week">';
-		$w .= $this->dayFunc ? '<a href="' . $href . '">' : '';
-		$w .= '<img src="' . w2PfindImage('view.week.gif') . '" width="16" height="15" border="0" alt="Week View" /></a>';
-		$w .= $this->dayFunc ? '</a>' : '';
-		$w .= '</td>';
-		return $w;
 	}
 
 	/**

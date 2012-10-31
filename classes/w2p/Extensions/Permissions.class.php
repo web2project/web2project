@@ -143,7 +143,7 @@ class w2p_Extensions_Permissions extends gacl_api
             return $this->addLogin($login, $username);
         }
         // Check if the details have changed.
-        list($osec, $val, $oord, $oname, $ohid) = $this->get_object_data($id, 'aro');
+        list($notUsed, $notUsed2, $notUsed3, $oname, $notUsed4) = $this->get_object_data($id, 'aro');
         if ($oname != $username) {
             $res = $this->edit_object($id, 'user', $username, $login, 1, 0, 'aro');
             if (!$res) {
@@ -245,7 +245,7 @@ class w2p_Extensions_Permissions extends gacl_api
         if (!$recalc) {
             dprint(__file__, __line__, 0, 'Failed to recalc module Permissions');
         }
-        return $id . $res;
+        return $id;
     }
 
     /*
@@ -274,7 +274,7 @@ class w2p_Extensions_Permissions extends gacl_api
         $acls = $q->loadHashList('acl_id');
         $q->clear();
 
-        foreach ($acls as $acl => $k) {
+        foreach ($acls as $acl => $notUsed) {
             // Deleting gacl_aco_map entries
             $q->setDelete('gacl_aco_map');
             $q->addWhere('acl_id = ' . $acl);
@@ -849,7 +849,7 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $q->addOrder('order_value');
 
-        $rs = $q->exec();
+        $q->exec();
 
         $retarr = array();
 
@@ -1047,7 +1047,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $module
      * @return
      */
-    public function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $method = 1)
+    public function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $notUsed = null)
     {
 
         $q = new w2p_Database_Query;
@@ -1087,8 +1087,6 @@ class w2p_Extensions_Permissions extends gacl_api
         $q->addWhere('f.value IS NOT NULL');
         $rows = $q->loadList();
         $q->clear();
-
-        $total_rows = count($rows);
 
         $acls = array();
 
@@ -1154,7 +1152,7 @@ class w2p_Extensions_Permissions extends gacl_api
         $q->clear();
 
         $q = new w2p_Database_Query;
-        foreach ($user_permissions as $user => $permissions) {
+        foreach ($user_permissions as $notUsed => $permissions) {
             foreach ($permissions as $permission) {
                 //Only show permissions with acl_id and item_id when item permissions are to show
                 //Don't show login ACOs
@@ -1189,7 +1187,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $module it passes the modules name
      * @return
      */
-    public function w2Pacl_check($application = 'application', $op, $user = 'user', $userid, $app = 'app', $module)
+    public function w2Pacl_check($notUsed = null, $op, $notUsed2 = null, $userid, $notUsed3 = null, $module)
     {
         global $w2p_performance_acltime, $w2p_performance_aclchecks;
         $q = new w2p_Database_Query;
@@ -1265,7 +1263,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $item
      * @return
      */
-    public function w2Pacl_query($application = 'application', $op, $user = 'user', $userid, $module, $item)
+    public function w2Pacl_query($notUsed = null, $op, $notUsed2 = null, $userid, $module, $item)
     {
         global $w2p_performance_acltime, $w2p_performance_aclchecks;
         //Basically the view action is nuclear when it comes to cascading, therefore all the others are straight forward
@@ -1329,7 +1327,7 @@ class w2p_Extensions_Permissions extends gacl_api
         }
     }
 
-    public function w2Psearch_acl($application = 'application', $op, $user = 'user', $userid, $module)
+    public function w2Psearch_acl($notUsed = null, $op, $notUsed2 = null, $userid, $module)
     {
         global $w2p_performance_acltime, $w2p_performance_aclchecks;
         $q = new w2p_Database_Query;

@@ -121,8 +121,6 @@ class w2p_Core_EventQueue {
 	 * method to execute and passing the arguments to it.
 	 */
 	public function execute(&$fields) {
-		global $AppUI;
-
 		$args = unserialize($fields['queue_data']);
 		if (strpos($fields['queue_callback'], '::') !== false) {
 			list($class, $method) = explode('::', $fields['queue_callback']);

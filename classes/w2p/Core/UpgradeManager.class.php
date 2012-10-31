@@ -148,7 +148,7 @@ class w2p_Core_UpgradeManager {
                 $errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
 
-                $recordsUpdated = $this->_scrubDotProjectData($dbConn);
+                $this->_scrubDotProjectData($dbConn);
 
                 $errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
@@ -296,7 +296,7 @@ class w2p_Core_UpgradeManager {
                 if (strpos($pieces[$i], '[USER_TIMEZONE]') !== false) {
                     $pieces[$i] = str_replace('[USER_TIMEZONE]', $this->configOptions['user_timezone'], $pieces[$i]);
                 }
-                if (!$result = $dbConn->Execute($pieces[$i])) {
+                if (!$dbConn->Execute($pieces[$i])) {
                     $errorMessage = $dbConn->ErrorMsg();
                     /*
                      * TODO: I'm not happy with this solution but have yet to come up
@@ -307,7 +307,6 @@ class w2p_Core_UpgradeManager {
                       strpos($errorMessage, 'Multiple primary key defined') &&
                       strpos($errorMessage, 'Duplicate key name') ) {
 
-                      $dbErr = true;
                       $errorMessages[] = $errorMessage;
                     }
                 }

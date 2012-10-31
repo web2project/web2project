@@ -202,7 +202,6 @@ class w2p_Utilities_Date extends Date {
 	** @param	bool	Determine whether to set time to start of day or preserve the time of the given object
 	*/
 	public function next_working_day($preserveHours = false) {
-		global $AppUI;
 		$do = clone $this;
 		$end = (int) w2PgetConfig('cal_day_end');
 		$start = (int) w2PgetConfig('cal_day_start');
@@ -222,7 +221,6 @@ class w2p_Utilities_Date extends Date {
 	** @param	bool	Determine whether to set time to end of day or preserve the time of the given object
 	*/
 	public function prev_working_day($preserveHours = false) {
-		global $AppUI;
 		$do = clone $this;
 		$end = (int) w2PgetConfig('cal_day_end');
 		$start = (int) w2PgetConfig('cal_day_start');
@@ -405,8 +403,6 @@ class w2p_Utilities_Date extends Date {
 	}
 
 	public function workingDaysInSpan($e) {
-		global $AppUI;
-
 		// assume start is before end and set a default signum for the duration
 		$sgn = 1;
 

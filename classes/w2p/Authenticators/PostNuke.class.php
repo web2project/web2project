@@ -103,7 +103,7 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base {
         $u->user_password = $hash_pass;
         $u->user_type = 0;              // Changed from 1 (administrator) to 0 (Default user)
         $u->user_contact = (int) $c->contact_id;
-        $result = $u->store(null, true);
+        $u->store(null, true);
 
         $user_id = $u->user_id;
 		$this->user_id = $user_id;

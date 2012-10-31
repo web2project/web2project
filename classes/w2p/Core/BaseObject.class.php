@@ -380,7 +380,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      * 	@param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
      * 	@return true|false
      */
-    public function canDelete(&$msg = '', $oid = null, $joins = null)
+    public function canDelete($notUsed = '', $oid = null, $joins = null)
     {
         $k = $this->_tbl_key;
         if ($oid) {

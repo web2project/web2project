@@ -960,7 +960,7 @@ class w2p_Database_Query {
 			if (is_array($this->table_list)) {
 				reset($this->table_list);
 				// Grab the first record
-				list($key, $table) = each($this->table_list);
+				list($notUsed, $table) = each($this->table_list);
 			} else {
 				$table = $this->table_list;
 			}
@@ -1238,7 +1238,7 @@ class w2p_Database_Query {
 	 *
 	 * @deprecated
 	 */
-	public function loadArrayList($index = 0) {
+	public function loadArrayList() {
         trigger_error("loadArrayList has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
 
@@ -1327,7 +1327,7 @@ class w2p_Database_Query {
 	/**
 	 * @deprecated
 	 */
-	public function execXML($xml, $mode = 'REPLACE') {
+	public function execXML() {
 		trigger_error("execXML has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
 
@@ -1360,7 +1360,6 @@ class w2p_Database_Query {
 		}
 		if (is_array($where_clause)) {
 			if (count($where_clause)) {
-				$started = false;
 				$result = ' WHERE ' . implode(' AND ', $where_clause);
 			}
 		} elseif (strlen($where_clause) > 0) {
@@ -1381,7 +1380,6 @@ class w2p_Database_Query {
 		}
 
 		if (is_array($order_clause)) {
-			$started = false;
 			$result = ' ORDER BY ' . implode(',', $order_clause);
 		} elseif (strlen($order_clause) > 0) {
 			$result = ' ORDER BY ' . $order_clause;
@@ -1401,7 +1399,6 @@ class w2p_Database_Query {
 		}
 
 		if (is_array($group_clause)) {
-			$started = false;
 			$result = ' GROUP BY ' . implode(',', $group_clause);
 		} elseif (strlen($group_clause) > 0) {
 			$result = ' GROUP BY ' . $group_clause;
@@ -1451,7 +1448,6 @@ class w2p_Database_Query {
 		}
 		if (is_array($having_clause)) {
 			if (count($having_clause)) {
-				$started = false;
 				$result = ' HAVING ' . implode(' AND ', $having_clause);
 			}
 		} elseif (strlen($having_clause) > 0) {
@@ -1517,12 +1513,8 @@ class w2p_Database_Query {
 
 	/**
 	 * Document::insertArray()
-	 *
-	 * { Description }
-	 *
-	 * @param [type] $verbose
 	 */
-	public function insertArray($table, &$hash, $verbose = false) {
+	public function insertArray($table, &$hash) {
 		$this->addTable($table);
 		foreach ($hash as $k => $v) {
 			if (is_array($v) or is_object($v) or $v == null) {
@@ -1548,12 +1540,8 @@ class w2p_Database_Query {
 
 	/**
 	 * Document::updateArray()
-	 *
-	 * { Description }
-	 *
-	 * @param [type] $verbose
 	 */
-	public function updateArray($table, &$hash, $keyName, $verbose = false) {
+	public function updateArray($table, &$hash, $keyName) {
 		$this->addTable($table);
 		foreach ($hash as $k => $v) {
 			if (is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field

@@ -24,7 +24,7 @@ class w2p_Core_CustomFields {
 
 	public $fields;
 
-	public function __construct($m, $a, $obj_id = null, $mode = 'edit', $published = 0) {
+	public function __construct($m, $notUsed, $obj_id = null, $mode = 'edit', $published = 0) {
 		$this->m = $m;
 		$this->a = 'addedit'; // only addedit pages can carry the custom field for now
 		$this->obj_id = $obj_id;
@@ -71,7 +71,7 @@ class w2p_Core_CustomFields {
 
 			if ($obj_id > 0) {
 				//Load Values
-				foreach ($this->fields as $key => $cfield) {
+				foreach ($this->fields as $key => $notUsed) {
 					$this->fields[$key]->load($this->obj_id);
 				}
 			}
@@ -143,7 +143,7 @@ class w2p_Core_CustomFields {
 	}
 
 	public function fieldWithId($field_id) {
-		foreach ($this->fields as $k => $v) {
+		foreach ($this->fields as $k => $notUsed) {
 			if ($this->fields[$k]->field_id == $field_id) {
 				return $this->fields[$k];
 			}
@@ -152,7 +152,7 @@ class w2p_Core_CustomFields {
 
 	public function bind(&$formvars) {
 		if (!count($this->fields) == 0) {
-			foreach ($this->fields as $k => $v) {
+			foreach ($this->fields as $k => $notUsed) {
 				$this->fields[$k]->setValue(@$formvars[$k]);
 			}
 		}
@@ -161,7 +161,7 @@ class w2p_Core_CustomFields {
 	public function store($object_id) {
 		if (!count($this->fields) == 0) {
 			$store_errors = '';
-			foreach ($this->fields as $k => $cf) {
+			foreach ($this->fields as $k => $notUsed) {
 				$result = $this->fields[$k]->store($object_id);
 				if ($result) {
 					$store_errors .= 'Error storing custom field ' . $k . ':' . $result;
@@ -237,8 +237,7 @@ class w2p_Core_CustomFields {
 
 		return $q->loadList();
 	}
-	public static function getCustomFieldByModule($AppUI, $module, $objectId) {
-		$perms = $AppUI->acl();
+	public static function getCustomFieldByModule($notUsed, $module, $objectId) {
 		$canRead = canView($module, $objectId);
 
 		if ($canRead) {

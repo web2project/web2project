@@ -13,7 +13,7 @@ class w2p_Output_PageHandler {
             }
             $storage['all_'.$type][$m] = array();
             $all_items = &$storage['all_'.$type][$m];
-            foreach ($AppUI->getActiveModules() as $dir => $module) {
+            foreach ($AppUI->getActiveModules() as $dir => $notUsed) {
                 if (!canAccess($dir)) {
                     continue;
                 }

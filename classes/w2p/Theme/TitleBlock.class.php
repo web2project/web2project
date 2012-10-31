@@ -78,7 +78,7 @@ class w2p_Theme_TitleBlock {
 	 * The drawing function
 	 */
 	public function show() {
-		global $AppUI, $a, $m, $tab, $infotab;
+		global $AppUI, $a, $m, $w2Pconfig;
 		$this->loadExtraCrumbs($m, $a);
 		$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
 		if (!$uistyle) {
@@ -155,7 +155,7 @@ class w2p_Theme_TitleBlock {
 	}
 
 	public function findCrumbModule($crumb) {
-		global $AppUI, $m, $a;
+		global $m, $a;
 
 		if (!isset($_SESSION['all_crumbs']) || !isset($_SESSION['all_crumbs'][$m])) {
 			return false;

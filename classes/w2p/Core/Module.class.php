@@ -165,7 +165,6 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 
     public function check() {
         $errorArray = array();
-        $baseErrorMsg = get_class($this) . '::deploy-check failed - ';
 
         return $errorArray;
     }

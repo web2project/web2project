@@ -223,7 +223,6 @@ class w2p_Core_CAppUI
      */
     public function getVersion()
     {
-        global $w2Pconfig;
         if (!isset($this->version_major)) {
             include W2P_BASE_DIR . '/includes/version.php';
             $this->version_major = $w2p_version_major;
@@ -447,7 +446,7 @@ class w2p_Core_CAppUI
             }
             $lang = $LANGUAGES[$loc];
         }
-        list($base_locale, $english_string, $native_string, $default_language, $lcs) = $lang;
+        list($base_locale, $notUsed, $notUsed2, $default_language, $lcs) = $lang;
         if (!isset($lcs)) {
             $lcs = (isset($locale_char_set)) ? $locale_char_set : 'utf-8';
         }
@@ -478,7 +477,7 @@ class w2p_Core_CAppUI
         // Just use the country code and try and find it in the
         // languages list.
         $first_entry = null;
-        foreach ($LANGUAGES as $lang => $info) {
+        foreach ($LANGUAGES as $lang => $notUsed) {
             list($l, $c) = explode('_', $lang);
             if ($l == $language) {
                 if (!$first_entry) {
