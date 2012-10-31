@@ -36,7 +36,7 @@ abstract class w2p_Core_Setup {
     /*
     * By default, upgrade should always work because it doesn't do anything.
     */
-    public function upgrade($old_version)
+    public function upgrade()
     {
         return true;
     }

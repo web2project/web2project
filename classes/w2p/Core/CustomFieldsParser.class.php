@@ -42,7 +42,6 @@ class w2p_Core_CustomFieldsParser {
 				$this->id_field_name = 'company_id';
 				break;
 			default:
-				$AppUI->setMsg('Invalid custom field record type: ' . $custom_record_type);
 				break;
 		}
 
@@ -176,8 +175,7 @@ class w2p_Core_CustomFieldsParser {
 			$visible_keys = $this->_getVisibleKeysForType($record_type);
 		}
 
-		foreach ($this->fields_array as $key => $field) {
-			$field_config = unserialize($field);
+		foreach ($this->fields_array as $key => $notUsed) {
 			if ($edit) {
 				$fnc_name = 'parseEditField';
 			} else {
@@ -233,7 +231,7 @@ class w2p_Core_CustomFieldsParser {
 	public function parseShowFunctions() {
 		$parsed = '';
 
-		foreach ($this->custom_record_types as $key => $record_type) {
+		foreach ($this->custom_record_types as $key => $notUsed) {
 			$parsed .= $this->_parseShowFunction($key);
 		}
 		return $parsed;

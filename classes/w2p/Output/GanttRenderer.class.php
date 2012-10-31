@@ -100,7 +100,7 @@ class w2p_Output_GanttRenderer {
         $this->graph->SetDateRange($start_date, $end_date);
     }
 
-    public function setTitle($tableTitle = '', $background = '#eeeeee')
+    public function setTitle($tableTitle = '', $notUsed = null)
     {
         $this->graph->title->Set($tableTitle);
         // Use TTF font if it exists

@@ -10,8 +10,6 @@ class w2p_Authenticators_SQL extends w2p_Authenticators_Base {
 	public $username;
 
 	public function authenticate($username, $password) {
-		global $db, $AppUI;
-
 		$this->username = $username;
 
 		$q = new w2p_Database_Query;

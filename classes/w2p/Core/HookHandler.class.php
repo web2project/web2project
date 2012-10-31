@@ -82,7 +82,7 @@ class w2p_Core_HookHandler
                     $itemList = $object->{$hookname}($this->AppUI->user_id);
                     foreach ($itemList as $item) {
                         $dateIndex = str_replace('/', '', $item['startDate']);
-                        $this->links[$dateIndex][] = $object->getCalendarLink($AppUI, $item);
+                        $this->links[$dateIndex][] = $object->getCalendarLink(null, $item);
                     }
                 }
             }

@@ -25,8 +25,7 @@ class w2p_Core_CustomOptionList {
 		$q->addTable('custom_fields_lists');
 		$q->addWhere('field_id = ' . $this->field_id);
 		$q->addOrder('list_value');
-		if (!$rs = $q->exec()) {
-			$q->clear();
+		if (!$q->exec()) {
 			return $db->ErrorMsg();
 		}
 
