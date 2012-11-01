@@ -23,7 +23,7 @@ if (!defined('W2P_BASE_DIR')) {
  *
  * @deprecated
  */
-function w2PcheckCharset($charset) {
+function w2PcheckCharset() {
 	trigger_error("The w2PcheckCharset function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
     return 'utf-8';
 }
@@ -62,7 +62,7 @@ function atoi($a) {
  *
  * @deprecated
 */
-function w2p_check_url($link)
+function w2p_check_url()
 {
     trigger_error("The w2p_check_url function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
     return true;
@@ -213,7 +213,7 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
  * @deprecated
  */
 function constructTaskTree($task_data, $depth = 0) {
-	global $projTasks, $all_tasks, $parents, $task_parent_options, $task_parent, $task_id;
+	global $projTasks, $all_tasks, $parents, $task_parent, $task_id;
     trigger_error("The constructTaskTree function has been deprecated and will be removed in v4.0. Use buildTaskTree() instead.", E_USER_NOTICE );
 
     return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
@@ -225,7 +225,7 @@ function constructTaskTree($task_data, $depth = 0) {
  * @deprecated
  */
 function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
-	global $projTasks, $all_tasks, $task_parent_options, $task_parent, $task_id;
+	global $projTasks, $all_tasks, $task_parent, $task_id;
     trigger_error("The constructTaskTree_pd function has been deprecated and will be removed in v4.0. Use buildTaskTree() instead.", E_USER_NOTICE );
 
     return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
@@ -245,7 +245,7 @@ function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
  *
  * @deprecated
  */
-function canTaskAccess($task_id, $task_access = 0, $task_owner = 0) {
+function canTaskAccess($task_id) {
     trigger_error("canTaskAccess has been deprecated in v3.0 and will be removed by v4.0. Please use CTask->canAccess() instead.", E_USER_NOTICE);
 
     global $AppUI;

@@ -92,7 +92,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return (int) $q->loadResult();
 	}
 
-    public function getFileCountByFolder($AppUI = null, $folder_id,
+    public function getFileCountByFolder($notUsed = null, $folder_id,
             $task_id, $project_id, $company_id, $allowed_companies) {
 
         // SQL text for count the total recs from the selected option

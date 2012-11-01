@@ -240,7 +240,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @access protected
 	 */
-	protected function updateTaskSummary($AppUI = null, $task_id)
+	protected function updateTaskSummary($notUsed = null, $task_id)
 	{
         $q = $this->_getQuery();
 

@@ -146,7 +146,7 @@ function styleRenderBoxTop() {
 }
 
 function styleRenderBoxBottom() {
-	global $AppUI, $currentInfoTabId;
+	global $AppUI;
 	$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 	if (!$uistyle) {
 		$uistyle = 'web2project';

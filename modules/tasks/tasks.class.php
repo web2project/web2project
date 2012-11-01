@@ -312,7 +312,7 @@ class CTask extends w2p_Core_BaseObject
         return parent::load($oid, $strip);
     }
 
-    public function loadFull($AppUI = null, $taskId)
+    public function loadFull($notUsed = null, $taskId)
     {
         $q = $this->_getQuery();
         $q->addTable('tasks');
@@ -538,7 +538,7 @@ class CTask extends w2p_Core_BaseObject
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
     {
-        $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
+        parent::bind($hash, $prefix, $checkSlashes, $bindAll);
         if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
             $this->task_start_date = $this->_AppUI->convertToSystemTZ($this->task_start_date);
         }
@@ -817,7 +817,7 @@ class CTask extends w2p_Core_BaseObject
             $task->task_start_date = $projectDates[0]['min_task_start_date'];
             $task->task_end_date = $projectDates[0]['max_task_end_date'];
             $task->task_percent_complete = $subProject->project_percent_complete;
-            $result = $task->store();
+            $task->store();
             //TODO: we should do something with this store result?
         }
     }
@@ -922,7 +922,7 @@ class CTask extends w2p_Core_BaseObject
         $tarr = array_flip($tarr);
         unset($tarr[$parent_id]);
 
-        foreach ($tarr as $task_id => $value) {
+        foreach ($tarr as $task_id => $notUsed) {
             if ((int) $task_id) {
                 $q->addTable('task_dependencies');
                 $q->addReplace('dependencies_task_id', $this->task_id);
@@ -1075,7 +1075,8 @@ class CTask extends w2p_Core_BaseObject
         return '';
     }
 
-    //additional comment will be included in email body
+//TODO: additional comment will be included in email body
+//TODO: should we resolve $projname ?
     public function notify($comment = '')
     {
         global $locale_char_set;
@@ -1137,7 +1138,7 @@ class CTask extends w2p_Core_BaseObject
      */
     public function email_log(&$log, $assignees, $task_contacts, $project_contacts, $others, $extras, $specific_user = 0)
     {
-        global $locale_char_set, $w2Pconfig;
+        global $locale_char_set;
 
         $mail_recipients = array();
         $q = $this->_getQuery();
@@ -1283,8 +1284,6 @@ class CTask extends w2p_Core_BaseObject
             $user_id = $AppUI->user_id;
         }
 
-        // filter tasks for not allowed projects
-        $tasks_filter = '';
         // check permissions on projects
         $proj = new CProject();
         $task_filter_where = $proj->getAllowedSQL($AppUI->user_id, 't.task_project');
@@ -1770,7 +1769,7 @@ class CTask extends w2p_Core_BaseObject
         return $q->loadHashList('dependencies_task_id');
     }
 
-    public function getTaskDepartments($AppUI = null, $taskId)
+    public function getTaskDepartments($notUsed = null, $taskId)
     {
         if ($this->_AppUI->isActiveModule('departments')) {
             $q = $this->_getQuery();
@@ -1788,7 +1787,7 @@ class CTask extends w2p_Core_BaseObject
         }
     }
 
-    public function getContacts($AppUI = null, $task_id)
+    public function getContacts($notUsed = null, $task_id)
     {
         if (canView('contacts')) {
             $q = $this->_getQuery();
@@ -1812,7 +1811,7 @@ class CTask extends w2p_Core_BaseObject
         }
     }
 
-    public function getTaskContacts($AppUI = null, $task_id)
+    public function getTaskContacts($notUsed = null, $task_id)
     {
         return $this->getContacts($this->_AppUI, $task_id);
     }
@@ -2144,7 +2143,7 @@ class CTask extends w2p_Core_BaseObject
              * It shouldn't be possible to have more than one reminder,
              * but if we do, we may as well clean them up now.
              */
-            foreach ($old_reminders as $old_id => $old_data) {
+            foreach ($old_reminders as $old_id => $notUsed) {
                 $eq->remove($old_id);
             }
         }
@@ -2174,7 +2173,7 @@ class CTask extends w2p_Core_BaseObject
      * @return		  mixed		   true, dequeue event, false, event stays in queue.
      * -1, event is destroyed.
      */
-    public function remind($module, $type, $id, $owner, &$args)
+    public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed = null)
     {
         global $locale_char_set;
 
@@ -2242,7 +2241,6 @@ class CTask extends w2p_Core_BaseObject
         $mail = new w2p_Utilities_Mail();
         $mail->Subject($subject, $locale_char_set);
 
-        $user = new CUser();
         foreach ($contacts as $contact) {
             $user_id = $contact['user_id'];
             $this->_AppUI->loadPrefs($user_id);
@@ -2271,7 +2269,7 @@ class CTask extends w2p_Core_BaseObject
 
         $event_list = $ev->find('tasks', 'remind', $this->task_id);
         if (count($event_list)) {
-            foreach ($event_list as $id => $data) {
+            foreach ($event_list as $id => $notUsed) {
                 if ($dont_check || $this->task_percent_complete >= 100) {
                     $ev->remove($id);
                 }
@@ -2421,7 +2419,7 @@ class CTask extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
-    public function getAllowedTaskList($AppUI = null, $task_project = 0, $orderby='')
+    public function getAllowedTaskList($notUsed = null, $task_project = 0, $orderby='')
     {
         $results = array();
         

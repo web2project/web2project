@@ -180,7 +180,6 @@ class CEvent extends w2p_Core_BaseObject
     public function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0)
     {
         global $AppUI;
-        $q = new w2p_Database_Query();
 
         // convert to default db time stamp
 		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
@@ -362,7 +361,7 @@ class CEvent extends w2p_Core_BaseObject
 	}
 
 	public function notify($assignees, $update = false, $clash = false) {
-		global $locale_char_set, $w2Pconfig;
+		global $locale_char_set;
 
 		$mail_owner = $this->_AppUI->getPref('MAILALL');
 		$assignee_list = explode(',', $assignees);
@@ -398,7 +397,7 @@ class CEvent extends w2p_Core_BaseObject
         }
 
         $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-        $body = $emailManager->getEventNotify($this, $clash, $users, $types);
+        $body = $emailManager->getEventNotify($this, $clash, $users);
 
         $mail->Body($body, $locale_char_set);
         foreach ($users as $user) {
@@ -575,7 +574,7 @@ class CEvent extends w2p_Core_BaseObject
 
         $custom_fields = new w2p_Core_CustomFields('calendar', 'addedit', $this->event_id, 'edit');
         $custom_fields->bind($_POST);
-        $sql = $custom_fields->store($this->event_id); // Store Custom Fields
+        $custom_fields->store($this->event_id); // Store Custom Fields
 
         parent::hook_postStore();
     }

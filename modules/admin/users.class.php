@@ -74,9 +74,8 @@ class CUser extends w2p_Core_BaseObject
         parent::hook_preUpdate();
     }
 
-    public function store($AppUI = null, $externally_created_user = false)
+    public function store($notUsed = null, $externally_created_user = false)
     {
-        $stored = false;
         $this->externally_created_user = $externally_created_user;
 
         if (!$this->isValid()) {
@@ -104,7 +103,7 @@ class CUser extends w2p_Core_BaseObject
             $w2prefs = $q->loadList();
             $q->clear();
 
-            foreach ($w2prefs as $w2prefskey => $w2prefsvalue) {
+            foreach ($w2prefs as $notUsed => $w2prefsvalue) {
                 $q->addTable('user_preferences', 'up');
                 $q->addInsert('pref_user', $this->user_id);
                 $q->addInsert('pref_name', $w2prefsvalue['pref_name']);
@@ -161,7 +160,7 @@ class CUser extends w2p_Core_BaseObject
         $tables[] = array('label' => 'Forum Message Editor', 'name' => 'forum_messages', 'idfield' => 'message_id', 'joinfield' => 'message_editor');
         $tables[] = array('label' => 'Link Owner', 'name' => 'links', 'idfield' => 'link_id', 'joinfield' => 'link_owner');
 
-        return parent::canDelete($msg, $this->user_id, $tables);
+        return parent::canDelete(null, $this->user_id, $tables);
     }
 
     protected function hook_preDelete()

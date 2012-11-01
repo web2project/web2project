@@ -129,7 +129,7 @@ class CProject extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    public function loadFull($AppUI = null, $projectId)
+    public function loadFull($notUsed = null, $projectId)
     {
 
         $q = $this->_getQuery();
@@ -249,10 +249,7 @@ class CProject extends w2p_Core_BaseObject
 
         $objTask = new CTask();
         $objTask->overrideDatabase($this->_query);
-        // Copy each task into this project and get their deps
-        $objTask = new CTask();
-        $objTask->overrideDatabase($this->_query);
-        foreach ($tasks as $orig => $void) {
+        foreach ($tasks as $orig => $notUsed) {
             $objTask->load($orig);
             $destTask = $objTask->copy($this->project_id);
             $destTask->task_parent = (0 == $destTask->task_parent) ? $destTask->task_id : $destTask->task_parent;
@@ -302,7 +299,7 @@ class CProject extends w2p_Core_BaseObject
             $importedTasks[] = $newTask->task_id;
 
             if (is_array($result) && count($result)) {
-                foreach ($result as $key => $error_msg) {
+                foreach ($result as $notUsed => $error_msg) {
                     $errors[] = $newTask->task_name . ': ' . $error_msg;
                 }
             }
@@ -644,7 +641,7 @@ class CProject extends w2p_Core_BaseObject
 
             $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
             $custom_fields->bind($_POST);
-            $sql = $custom_fields->store($this->project_id); // Store Custom Fields
+            $custom_fields->store($this->project_id); // Store Custom Fields
 
             CTask::storeTokenTask($this->_AppUI, $this->project_id);
         }
@@ -653,7 +650,7 @@ class CProject extends w2p_Core_BaseObject
 
     public function notifyOwner($isNotNew)
     {
-        global $w2Pconfig, $locale_char_set;
+        global $locale_char_set;
 
         $mail = new w2p_Utilities_Mail;
 
@@ -667,6 +664,7 @@ class CProject extends w2p_Core_BaseObject
             $emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getProjectNotifyOwner($this, $isNotNew);
 
+            $mail->Subject($subject, $locale_char_set);
             $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
             $mail->To($user->user_email, true);
             $mail->Send();
@@ -675,7 +673,7 @@ class CProject extends w2p_Core_BaseObject
 
     public function notifyContacts($isNotNew)
     {
-        global $w2Pconfig, $locale_char_set;
+        global $locale_char_set;
 
         $subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
 
@@ -743,7 +741,7 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
-    public static function getContacts($AppUI = null, $projectId)
+    public static function getContacts($notUsed = null, $projectId)
     {
         trigger_error("CProject::getContacts has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getContactList() instead.", E_USER_NOTICE);
 
@@ -771,7 +769,7 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
-    public static function getDepartments($AppUI = null, $projectId)
+    public static function getDepartments($notUsed = null, $projectId)
     {
         trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE);
 
@@ -791,14 +789,14 @@ class CProject extends w2p_Core_BaseObject
                 forum_name, forum_message_count, forum_create_date, forum_last_date,
 				project_name, project_color_identifier, project_id');
             $q->addJoin('projects', 'p', 'project_id = forum_project', 'inner');
-            $q->addWhere('forum_project = ' . (int) $projectId);
+            $q->addWhere('forum_project = ' . (int) $this->project_id);
             $q->addOrder('forum_project, forum_name');
 
             return $q->loadHashList('forum_id');
         }
     }
 
-    public static function getForums($AppUI = null, $projectId)
+    public static function getForums($notUsed = null, $projectId)
     {
         trigger_error("CProject::getForums has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getForumList() instead.", E_USER_NOTICE);
 
@@ -996,9 +994,8 @@ class CProject extends w2p_Core_BaseObject
     }
 
     //TODO: this method should be moved to CTaskLog
-    public function getTaskLogs($AppUI = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0)
+    public function getTaskLogs($notUsed = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0)
     {
-
         $q = $this->_getQuery();
 		$q->addTable('task_log');
 		$q->addQuery('DISTINCT task_log.*, user_username, t.*');

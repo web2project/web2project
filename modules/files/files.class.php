@@ -91,7 +91,7 @@ class CFile extends w2p_Core_BaseObject {
 		$q->addWhere('file_indexed = 0');
 		$unindexedFiles = $q->loadList(5, 'file_id');
 
-		foreach($unindexedFiles as $file_id => $metadata) {
+		foreach($unindexedFiles as $file_id => $notUsed) {
 			$this->load($file_id);
 			$this->indexStrings($this->_AppUI);
 		}
@@ -286,7 +286,6 @@ class CFile extends w2p_Core_BaseObject {
 
 	// move the file if the affiliated project was changed
 	public function moveFile($oldProj, $realname) {
-		global $w2Pconfig;
 		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
 			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0777);
 			if (!$res) {
@@ -304,7 +303,6 @@ class CFile extends w2p_Core_BaseObject {
 
 	// duplicate a file into root
 	public function duplicateFile($oldProj, $realname) {
-		global $w2Pconfig;
 		if (!is_dir(W2P_BASE_DIR . '/files/0')) {
 			$res = mkdir(W2P_BASE_DIR . '/files/0', 0777);
 			if (!$res) {
@@ -323,7 +321,6 @@ class CFile extends w2p_Core_BaseObject {
 
 	// move a file from a temporary (uploaded) location to the file system
 	public function moveTemp($upload) {
-		global $w2Pconfig;
 		// check that directories are created
 		if (!is_dir(W2P_BASE_DIR . '/files')) {
 			$res = mkdir(W2P_BASE_DIR . '/files', 0777);
@@ -443,7 +440,7 @@ class CFile extends w2p_Core_BaseObject {
 
 	//function notifies about file changing
 	public function notify($notify) {
-        global $w2Pconfig, $locale_char_set, $helpdesk_available;
+        global $locale_char_set, $helpdesk_available;
 
         if ($notify == '1') {
             // if helpdesk_item is available send notification to assigned users
@@ -454,7 +451,6 @@ class CFile extends w2p_Core_BaseObject {
 
                 $task_log = new CHDTaskLog();
                 $task_log->overrideDatabase($this->_query);
-                $task_log_help_desk_id = $this->_hditem->item_id;
                 // send notifcation about new log entry
                 // 2 = TASK_LOG
                 $this->_hditem->notify(2, $task_log->task_log_id);
@@ -533,7 +529,7 @@ class CFile extends w2p_Core_BaseObject {
 	} //notify
 
 	public function notifyContacts($notifyContacts) {
-		global $w2Pconfig, $locale_char_set;
+		global $locale_char_set;
 
         if ($notifyContacts) {
             //if no project specified than we will not do anything

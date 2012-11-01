@@ -126,7 +126,7 @@ class CResource extends w2p_Core_BaseObject {
 
         // This removes the dead table.
         $q->dropTable('resource_types');
-        $result = $q->exec();
+        $q->exec();
     }
 
     public function hook_search() {
