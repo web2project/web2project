@@ -6,6 +6,7 @@
  *	@version $Revision$
  */
 
+$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 include_once $AppUI->getLibraryClass('jpgraph/src/jpgraph');
 include_once $AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt');
 
