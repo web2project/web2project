@@ -22,7 +22,7 @@ if (!defined('W2P_BASE_DIR')) {
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 
-function w2PsessionOpen($save_path, $session_name)
+function w2PsessionOpen()
 {
     return true;
 }
@@ -88,10 +88,8 @@ function w2PsessionWrite($id, $data)
     return true;
 }
 
-function w2PsessionDestroy($id, $user_access_log_id = 0)
+function w2PsessionDestroy($id)
 {
-    global $AppUI;
-
     $q = new w2p_Database_Query;
     $q->addTable('user_access_log');
     $q->addUpdate('date_time_out', $q->dbfnNowWithTZ());
@@ -112,11 +110,10 @@ function w2PsessionDestroy($id, $user_access_log_id = 0)
     return true;
 }
 
-function w2PsessionGC($maxlifetime)
+function w2PsessionGC()
 {
     global $AppUI;
 
-    $now = time();
     $max = w2PsessionConvertTime('max_lifetime');
     $idle = w2PsessionConvertTime('idle_time');
     // First pass is to kill any users that are logged in at the time of the session.
@@ -181,7 +178,7 @@ function w2PsessionConvertTime($key)
     return $numpart;
 }
 
-function w2PsessionStart($start_vars = 'AppUI')
+function w2PsessionStart()
 {
     session_name('web2project');
     if (ini_get('session.auto_start') > 0) {

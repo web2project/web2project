@@ -134,7 +134,7 @@ class CForum_Message extends w2p_Core_BaseObject
 
     public function sendWatchMail($debug = false)
     {
-        global $debug, $w2Pconfig;
+        global $debug;
 
         // Get the message from details.
         $q = $this->_getQuery();
@@ -143,7 +143,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->addQuery('contact_first_name, contact_last_name, contact_email');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere('user_id = ' . (int) $this->message_author);
-        $res = $q->exec();
+        $q->exec();
         if ($row = $q->fetchRow()) {
             $message_from = $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '<' . $row['contact_email'] . '>';
         } else {

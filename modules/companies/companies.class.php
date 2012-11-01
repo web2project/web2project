@@ -80,7 +80,7 @@ class CCompany extends w2p_Core_BaseObject {
         $custom_fields = new w2p_Core_CustomFields('companies', 'addedit', $this->company_id, 'edit');
         //TODO: I still don't like the POST here..
         $custom_fields->bind($_POST);
-        $sql = $custom_fields->store($this->company_id); // Store Custom Fields
+        $custom_fields->store($this->company_id); // Store Custom Fields
 
         parent::hook_postStore();
     }
@@ -100,7 +100,7 @@ class CCompany extends w2p_Core_BaseObject {
         return $search;
     }
 
-    public function loadFull($AppUI = null, $companyId) {
+    public function loadFull($notUsed = null, $companyId) {
         $q = $this->_getQuery();
         $q->addTable('companies');
         $q->addQuery('companies.*');
@@ -114,7 +114,7 @@ class CCompany extends w2p_Core_BaseObject {
         $q->loadObject($this, true, false);
     }
 
-    public function getCompanyList($AppUI = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
+    public function getCompanyList($notUsed = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
 
         $q = $this->_getQuery();
         $q->addTable('companies', 'c');

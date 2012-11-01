@@ -104,13 +104,9 @@ class CSystem_Bcode extends w2p_Core_BaseObject
             $q->addWhere("tl.task_log_date >= '$start_date'");
             $q->addWhere("tl.task_log_date <= '$end_date'");
         }
-
         $logs = $q->loadList();
 
-        $actualCost = 0;
-        $uncountedHours = 0;
         $results = array();
-
         foreach ($logs as $tasklog) {
             if (is_null($tasklog['billingcode_value'])) {
                 $results['uncountedHours'] += $tasklog['task_log_hours'];
@@ -138,10 +134,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         }
         $logs = $q->loadList();
 
-        $actualCost = 0;
-        $uncountedHours = 0;
         $results = array();
-
         foreach ($logs as $tasklog) {
             if (is_null($tasklog['billingcode_value'])) {
                 $results['uncountedHours'] += $tasklog['task_log_hours'];

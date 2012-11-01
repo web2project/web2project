@@ -25,7 +25,7 @@ class projectDesigner extends w2p_Core_Setup
 		$result = $this->_checkRequirements();
 
         if (!$result) {
-            $AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
+            //$AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
         }
 
         $q = $this->_getQuery();

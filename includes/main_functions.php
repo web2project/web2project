@@ -23,7 +23,6 @@ spl_autoload_register('w2p_autoload');
 
 function w2p_autoload($class_name)
 {
-    global $AppUI;
     $name = $class_name;
 
     if (false !== strpos($name, 'w2p_')) {
@@ -142,9 +141,9 @@ function arrayMerge($a1, $a2)
  * @param $default string The default value to return if the key not found.
  * @return The value of the setting, or the default value if not found.
  */
-function w2PgetConfig($key, $default = null, $dbConn = null)
+function w2PgetConfig($key, $default = null)
 {
-    global $w2Pconfig, $AppUI;
+    global $w2Pconfig;
 
     if (isset($w2Pconfig[$key])) {
         return $w2Pconfig[$key];

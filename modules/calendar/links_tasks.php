@@ -14,15 +14,13 @@ if (!defined('W2P_BASE_DIR')) {
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
 function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id = 0, $minical = false) {
-	global $a, $AppUI, $w2Pconfig;
+	global $a, $AppUI;
 	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, 0);
-	$df = $AppUI->getPref('SHDATEFORMAT');
 	$tf = $AppUI->getPref('TIMEFORMAT');
 	//subtract one second so we don't have to compare the start dates for exact matches with the startPeriod which is 00:00 of a given day.
 	$startPeriod->subtractSeconds(1);
 
 	$link = array();
-	$sid = 3600 * 24;
 	
 	// assemble the links for the tasks
 	foreach ($tasks as $row) {
@@ -88,7 +86,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 	}
 }
 
-function getTaskTooltip($task_id, $starts = false, $ends = false, $tasks_tips ) {
+function getTaskTooltip($task_id, $starts = false, $ends = false ) {
 	global $AppUI;
 
 	if (!$task_id) {
